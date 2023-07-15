@@ -56,6 +56,8 @@ class Series < ApplicationRecord
     where("creatorships.pseud_id IN (?)", pseuds.collect(&:id))
   }
 
+  scope :for_blurb, -> { includes(:work_tags, :pseuds) }
+
   def posted_works
     self.works.posted
   end

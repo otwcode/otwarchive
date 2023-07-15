@@ -11,6 +11,9 @@ class AbuseReport < ApplicationRecord
                                              characters long.',
                                 max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
+  # It doesn't have the type set properly in the database, so override it here:
+  attribute :summary_sanitizer_version, :integer, default: 0
+
   validate :check_for_spam
   def check_for_spam
     approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
@@ -36,30 +39,66 @@ class AbuseReport < ApplicationRecord
 
   scope :by_date, -> { order('created_at DESC') }
 
-  # Clean work or profile URLs so we can prevent the same URLs from
-  # getting reported too many times.
-  # If the URL ends without a / at the end, add it:
-  # url_is_not_over_reported uses the / so "/works/1234" isn't a match
-  # for "/works/123"
-  before_validation :clean_url, on: :create
-  def clean_url
-    # Work URLs: "works/123"
-    # Profile URLs: "users/username"
-    if url =~ /(works\/\d+)/ || url =~ /(users\/\w+)/
-      uri = Addressable::URI.parse url
-      uri.query = nil
-      uri.fragment = nil
-      uri.path += "/" unless uri.path.end_with? "/"
-      self.url = uri.to_s
-    else
-      url
-    end
+  # Standardize the format of work, chapter, and profile URLs to get it ready
+  # for the url_is_not_over_reported validation.
+  # Work URLs: "works/123"
+  # Chapter URLs: "chapters/123"
+  # Profile URLs: "users/username"
+  before_validation :standardize_url, on: :create
+  def standardize_url
+    return unless url =~ %r{((chapters|works)/\d+)} || url =~ %r{(users\/\w+)}
+
+    self.url = add_scheme_to_url(url)
+    self.url = clean_url(url)
+    self.url = add_work_id_to_url(self.url)
   end
 
-  app_url_regex = Regexp.new('^(https?:\/\/)?(www\.|(insecure\.))?(archiveofourown|ao3)\.(org|com).*', true)
-  validates_format_of :url, with: app_url_regex,
-                            message: ts('does not appear to be on this site.'),
-                            multiline: true
+  def add_scheme_to_url(url)
+    uri = Addressable::URI.parse(url)
+    return url unless uri.scheme.nil?
+
+    "https://#{uri}"
+  end
+
+  # Clean work or profile URLs so we can prevent the same URLs from getting
+  # reported too many times.
+  # If the URL ends without a / at the end, add it: url_is_not_over_reported
+  # uses the / so "/works/1234" isn't a match for "/works/123"
+  def clean_url(url)
+    uri = Addressable::URI.parse(url)
+
+    uri.query = nil
+    uri.fragment = nil
+    uri.path += "/" unless uri.path.end_with? "/"
+
+    uri.to_s
+  end
+
+  # Get the chapter id from the URL and try to get the work id
+  # If successful, add the work id to the URL in front of "/chapters"
+  def add_work_id_to_url(url)
+    return url unless url =~ %r{(chapters/\d+)} && url !~ %r{(works/\d+)}
+
+    chapter_regex = %r{(chapters/)(\d+)}
+    regex_groups = chapter_regex.match url
+    chapter_id = regex_groups[2]
+    work_id = Chapter.find_by(id: chapter_id).try(:work_id)
+
+    return url if work_id.nil?
+    
+    uri = Addressable::URI.parse(url)
+    uri.path = "/works/#{work_id}" + uri.path
+
+    uri.to_s
+  end
+
+  validate :url_on_archive, if: :will_save_change_to_url?
+  def url_on_archive
+    parsed_url = Addressable::URI.heuristic_parse(url)
+    errors.add(:url, :not_on_archive) unless ArchiveConfig.PERMITTED_HOSTS.include?(parsed_url.host)
+  rescue Addressable::URI::InvalidURIError
+    errors.add(:url, :not_on_archive)
+  end
 
   def email_and_send
     UserMailer.abuse_report(id).deliver_later
@@ -96,7 +135,7 @@ class AbuseReport < ApplicationRecord
                                                  1.month.ago,
                                                  "%#{work_params_only}%").count
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
-        errors[:base] << message
+        errors.add(:base, message)
       end
     elsif url =~ /\/users\/\w+/
       user_params_only = url.match(/\/users\/\w+\//).to_s
@@ -105,7 +144,7 @@ class AbuseReport < ApplicationRecord
                                                  1.month.ago,
                                                  "%#{user_params_only}%").count
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
-        errors[:base] << message
+        errors.add(:base, message)
       end
     end
   end
@@ -117,9 +156,9 @@ class AbuseReport < ApplicationRecord
                                                email).count
     return if existing_reports_total < ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX
 
-    errors[:base] << ts("You have reached our daily reporting limit. To keep our
-                        volunteers from being overwhelmed, please do not seek
-                        out violations to report, but only report violations you
-                        encounter during your normal browsing.")
+    errors.add(:base, ts("You have reached our daily reporting limit. To keep our
+                          volunteers from being overwhelmed, please do not seek
+                          out violations to report, but only report violations you
+                          encounter during your normal browsing."))
   end
 end

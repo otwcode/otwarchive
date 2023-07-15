@@ -53,6 +53,12 @@ end
 @javascript = false
 Before "@javascript" do
   @javascript = true
+
+  Capybara.app_host = CAPYBARA_URL
+end
+
+Before "not @javascript" do
+  Capybara.app_host = "http://www.example.com"
 end
 
 Before "@disable_caching" do
@@ -63,7 +69,14 @@ After "@disable_caching" do
   ActionController::Base.perform_caching = true
 end
 
-Before "@skins" do
+Before "@set-default-skin" do
   # Create a default skin:
+  AdminSetting.current.update_attribute(:default_skin, Skin.default)
+end
+
+Before "@load-default-skin" do
+  # Load the site skin and make it the default:
+  Skin.load_site_css
+  Skin.set_default_to_current_version
   AdminSetting.current.update_attribute(:default_skin, Skin.default)
 end

@@ -85,7 +85,6 @@ describe User do
           it "does not save" do
             expect(bad_email.save).to be_falsey
             expect(bad_email.errors[:email]).to include("should look like an email address.")
-            expect(bad_email.errors[:email]).to include("does not seem to be a valid address.")
           end
         end
       end
@@ -115,19 +114,19 @@ describe User do
         it "does not save a duplicate login" do
           new_user.login = existing_user.login
           expect(new_user.save).to be_falsey
-          expect(new_user.errors[:login].first).to eq("has already been taken")
+          expect(new_user.errors[:login].first).to include("has already been taken")
         end
 
         it "does not save a duplicate email" do
           new_user.email = existing_user.email
           expect(new_user.save).to be_falsey
-          expect(new_user.errors[:email].first).to eq("has already been taken")
+          expect(new_user.errors[:email].first).to include("has already been taken")
         end
 
         it "does not save a duplicate email with different capitalization" do
           new_user.email = existing_user.email.capitalize
           expect(new_user.save).to be_falsey
-          expect(new_user.errors[:email].first).to eq("has already been taken")
+          expect(new_user.errors[:email].first).to include("has already been taken")
         end
       end
     end

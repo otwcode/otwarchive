@@ -124,7 +124,7 @@
                 <%= link_to_help "languages-help" %>
               </dt>
               <dd>
-                <%= p.collection_select(:language_id, sorted_languages, :id, :name, prompt: " ") %>
+                <%= p.select(:language_id, language_options_for_select(sorted_languages, "id"), prompt: " ") %>
               </dd>
 
               <dt class="translation"><%= p.check_box :translation %></dt>
@@ -258,8 +258,8 @@
 
   <!-- privacy settings -->
   <fieldset class="privacy" role="article">
-    <legend><%= ts("Privacy") %></legend>
-    <h3 class="landmark heading"><%= ts("Privacy") %></h3>
+    <legend><%= t("works.permissions.privacy") %></legend>
+    <h3 class="landmark heading"><%= t("works.permissions.privacy") %></h3>
     <dl>
       <!-- Privacy dropdown (storyprivacy) -->
       <dt class="restrict">
@@ -267,7 +267,7 @@
       </dt>
 
       <dd class="restrict">
-        <%= f.label :restricted, ts("Only show your work to registered users") %>
+        <%= f.label :restricted, t("works.permissions.visibility.restricted") %>
         <%= link_to_help "registered-users" %>
       </dd>
 
@@ -275,21 +275,21 @@
         <%= f.check_box :moderated_commenting_enabled %>
       </dt>
       <dd class="moderated comments">
-        <%= f.label :moderated_commenting_enabled, ts("Enable comment moderation") %>
+        <%= f.label :moderated_commenting_enabled, t("comments.commentable.permissions.moderated_commenting.enable") %>
         <%= link_to_help "comments-moderated" %>
       </dd>
 
       <dt class="permissions comments">
-        <%= ts("Who can comment on this work") %>
+        <%= t("comments.commentable.permissions.options.label") %>
         <%= link_to_help "who-can-comment-on-this-work" %>
       </dt>
       <dd class="permissions comments">
         <fieldset>
           <%=
             radio_button_list(f, :comment_permissions, [
-              [:enable_all, ts("Registered users and guests can comment")],
-              [:disable_anon, ts("Only registered users can comment")],
-              [:disable_all, ts("No one can comment")]
+              [:enable_all, t("comments.commentable.permissions.options.enable_all")],
+              [:disable_anon, t("comments.commentable.permissions.options.disable_anon")],
+              [:disable_all, t("comments.commentable.permissions.options.disable_all")]
             ])
           %>
         </fieldset>

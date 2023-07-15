@@ -185,33 +185,117 @@ describe Admin::AdminUsersController do
     end
   end
 
+  describe "POST #update_next_of_kin" do
+    let(:admin) { create(:admin) }
+    let(:user) { create(:user) }
+    let(:kin) { create(:user) }
+
+    before { fake_login_admin(admin) }
+
+    shared_examples "unauthorized admin cannot add next of kin" do
+      it "redirects with error" do
+        post :update_next_of_kin, params: {
+          user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
+        }
+        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        expect(user.reload.fannish_next_of_kin).to be_nil
+      end
+    end
+
+    shared_examples "authorized admin can add next of kin" do
+      it "adds next of kin and redirects with notice" do
+        post :update_next_of_kin, params: {
+          user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
+        }
+        it_redirects_to_with_notice(admin_user_path(user), "Fannish next of kin was updated.")
+        expect(user.reload.fannish_next_of_kin.kin).to eq(kin)
+        expect(user.reload.fannish_next_of_kin.kin_email).to eq(kin.email)
+      end
+    end
+
+    context "when admin does not have correct authorization" do
+      before { admin.update(roles: []) }
+
+      it_behaves_like "unauthorized admin cannot add next of kin"
+    end
+
+    %w[superadmin policy_and_abuse support].each do |role|
+      context "when admin has #{role} role" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it_behaves_like "authorized admin can add next of kin"
+      end
+    end
+  end
+
   describe "POST #update_status" do
     let(:admin) { create(:admin) }
     let(:user) { create(:user) }
 
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update(roles: [])
-        fake_login_admin(admin)
-        post :update_status, params: {
-          user_login: user.login, admin_action: "suspend", suspend_days: "3", admin_note: "User violated community guidelines"
-        }
+    before { fake_login_admin(admin) }
 
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+    shared_examples "unauthorized admin cannot add note to user" do
+      it "redirects with error" do
+        post :update_status, params: {
+          user_login: user.login, admin_action: "note", admin_note: "User likes me, user likes me not."
+        }
+        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
 
-    context "when admin has correct authorization" do
-      it "allows admins to suspend user with note" do
-        admin.update(roles: ["policy_and_abuse"])
-        fake_login_admin(admin)
+    shared_examples "authorized admin can add note to user" do
+      it "saves note and redirects with notice" do
+        admin_note = "User likes me, user likes me not."
+        post :update_status, params: {
+          user_login: user.login, admin_action: "note", admin_note: admin_note
+        }
+        it_redirects_to_with_notice(admin_user_path(user), "Note was recorded.")
+        expect(user.reload.log_items.last.action).to eq(ArchiveConfig.ACTION_NOTE)
+        expect(user.log_items.last.note).to eq(admin_note)
+      end
+    end
+
+    shared_examples "unauthorized admin cannot suspend user" do
+      it "redirects with error" do
         post :update_status, params: {
           user_login: user.login, admin_action: "suspend", suspend_days: "3", admin_note: "User violated community guidelines"
         }
-
-        user.reload
-        expect(user.suspended).to be_truthy
+        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        expect(user.reload.suspended).to be_falsey
       end
+    end
+
+    shared_examples "authorized admin can suspend user" do
+      it "suspends user and redirects with notice" do
+        post :update_status, params: {
+          user_login: user.login, admin_action: "suspend", suspend_days: "3", admin_note: "User violated community guidelines"
+        }
+        it_redirects_to_with_notice(admin_user_path(user), "User has been temporarily suspended.")
+        expect(user.reload.suspended).to be_truthy
+      end
+    end
+
+    context "when admin does not have correct authorization" do
+      before { admin.update(roles: []) }
+
+      it_behaves_like "unauthorized admin cannot add note to user"
+      it_behaves_like "unauthorized admin cannot suspend user"
+    end
+
+    %w[superadmin policy_and_abuse].each do |role|
+      context "when admin has #{role} role" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it_behaves_like "authorized admin can add note to user"
+        it_behaves_like "authorized admin can suspend user"
+      end
+    end
+
+    context "when admin has support role" do
+      let(:admin) { create(:support_admin) }
+
+      it_behaves_like "authorized admin can add note to user"
+      it_behaves_like "unauthorized admin cannot suspend user"
     end
   end
 
@@ -339,31 +423,6 @@ describe Admin::AdminUsersController do
         post :activate, params: { id: user.login }
 
         it_redirects_to_with_notice(admin_user_path(id: user.login), "User Account Activated")
-      end
-    end
-  end
-
-  describe "POST #send_activation" do
-    let(:admin) { create(:admin) }
-    let(:user) { create(:user, :unconfirmed) }
-
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update(roles: [])
-        fake_login_admin(admin)
-        post :send_activation, params: { id: user.login }
-
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
-    end
-
-    context "when admin has correct authorization" do
-      it "succeeds with notice" do
-        admin.update(roles: ["support"])
-        fake_login_admin(admin)
-        post :send_activation, params: { id: user.login }
-
-        it_redirects_to_with_notice(admin_user_path(id: user.login), "Activation email sent")
       end
     end
   end

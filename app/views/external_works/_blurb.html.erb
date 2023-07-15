@@ -39,7 +39,7 @@
   <dl class="stats">
     <% unless external_work.language.blank? %>
     <dt class="language"><%= ts("Language:") %></dt>
-    <dd class="language"><%= external_work.language.name %></dd>
+    <dd class="language" lang="<%= external_work.language.short %>"><%= external_work.language.name %></dd>
     <% end %>
     <% if Bookmark.count_visible_bookmarks(external_work) > 0 %>
     <dt><%= ts("Bookmarks") + ": " %></dt>
@@ -50,7 +50,7 @@
     <dd><%= link_to external_work.related_works.count.to_s, external_work  %></dd>
   </dl>
 
-  <% if can_access_admin_options? %>
+  <% if policy(external_work).show_admin_options? %>
     <%= render "admin/admin_options", item: external_work %>
   <% end %>
 

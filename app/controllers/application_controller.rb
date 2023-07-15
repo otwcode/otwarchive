@@ -74,6 +74,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_admin
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
+  helper_method :guest?
 
   # Title helpers
   helper_method :process_title
@@ -173,11 +174,6 @@ protected
   end
 
 public
-
-  before_action :fetch_admin_settings
-  def fetch_admin_settings
-    @admin_settings = AdminSetting.current
-  end
 
   before_action :load_admin_banner
   def load_admin_banner
@@ -384,13 +380,6 @@ public
     @page_title.html_safe
   end
 
-  # Define media for fandoms menu
-  before_action :set_media
-  def set_media
-    uncategorized = Media.uncategorized
-    @menu_media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
-  end
-
   public
 
   #### -- AUTHORIZATION -- ####
@@ -421,7 +410,7 @@ public
   end
 
   def use_caching?
-    %w(staging production test).include?(Rails.env) && @admin_settings.enable_test_caching?
+    %w(staging production test).include?(Rails.env) && AdminSetting.current.enable_test_caching?
   end
 
   protected
@@ -471,7 +460,7 @@ public
 
   # Make sure user is allowed to access tag wrangling pages
   def check_permission_to_wrangle
-    if @admin_settings.tag_wrangling_off? && !logged_in_as_admin?
+    if AdminSetting.current.tag_wrangling_off? && !logged_in_as_admin?
       flash[:error] = "Wrangling is disabled at the moment. Please check back later."
       redirect_to root_path
     else
@@ -527,10 +516,8 @@ public
   end
 
   # Don't get unnecessary data for json requests
-  skip_before_action  :fetch_admin_settings,
-                      :load_admin_banner,
+  skip_before_action  :load_admin_banner,
                       :set_redirects,
-                      :set_media,
                       :store_location,
                       if: proc { %w(js json).include?(request.format) }
 

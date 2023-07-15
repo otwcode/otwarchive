@@ -206,7 +206,7 @@ end
 ### WHEN
 
 When /^the periodic tag count task is run$/i do
-  Tag.write_redis_to_database
+  RedisJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^the periodic filter count task is run$/i do
