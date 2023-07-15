@@ -46,3 +46,19 @@ Feature: Marking comments as spam
 
     When I follow "Default Admin Post"
     Then I should see "Comments (1)"
+
+  Scenario: Author can mark comments as spam
+    Given I am logged in as "author"
+      And I post the work "Popular Fic"
+      And I log out
+    When I view the work "Popular Fic" with comments
+      And I post a spam comment
+      And I post a guest comment
+    When I am logged in as "author"
+      And I view the work "Popular Fic" with comments
+      Then I should see "Comments (2)"
+      Then I should see "Buy my product"
+    When I mark the comment as spam
+      Then I should see "Comments (1)"
+      Then I should not see "Buy my product"
+      Then all comments by "spammer" are marked as spam

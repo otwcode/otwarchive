@@ -302,3 +302,7 @@ When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
     click_link("Yes, delete!") # TODO: Fix along with comment deletion.
   end
 end
+
+When /^I mark the comment as spam$/ do
+  click_link("Spam")
+end
