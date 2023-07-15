@@ -6,6 +6,15 @@ describe ArchiveFaqsController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  let(:non_standard_locale) { create(:locale) }
+  let(:user_locale) { create(:locale) }
+  let(:user) do
+    user = create(:user)
+    user.preference.update!(preferred_locale: user_locale.id)
+    $rollout.activate_user(:set_locale_preference, user)
+    user
+  end
+
   describe "GET #index" do
     context "when there's no locale in session" do
       it "redirects to the default locale when the locale param is invalid" do
@@ -28,12 +37,12 @@ describe ArchiveFaqsController do
     end
 
     context "when logged in as a regular user" do
-      before { fake_login }
+      before { fake_login_known_user(user) }
 
-      it "renders the index page of the user preferred locale when the locale param is invalid" do
+      it "redirects to the user preferred locale when the locale param is invalid" do
         expect(I18n).not_to receive(:with_locale)
         get :index, params: { language_id: "eldritch" }
-        it_redirects_to(archive_faqs_path(language_id: "en"))
+        it_redirects_to(archive_faqs_path(language_id: user_locale.iso))
       end
     end
 
@@ -49,22 +58,31 @@ describe ArchiveFaqsController do
     end
 
     context "when there's a locale in session" do
-      let(:locale) { create(:locale) }
-
       before do
-        get :index, params: { language_id: locale.iso }
+        get :index, params: { language_id: non_standard_locale.iso }
         expect(response).to render_template(:index)
-        expect(session[:language_id]).to eq(locale.iso)
+        expect(session[:language_id]).to eq(non_standard_locale.iso)
       end
 
       it "redirects to the previous locale when the locale param is empty" do
         get :index
-        it_redirects_to(archive_faqs_path(language_id: locale.iso))
+        it_redirects_to(archive_faqs_path(language_id: non_standard_locale.iso))
       end
 
       it "redirects to the previous locale when the locale param is invalid" do
         get :index, params: { language_id: "eldritch" }
-        it_redirects_to(archive_faqs_path(language_id: locale.iso))
+        it_redirects_to(archive_faqs_path(language_id: non_standard_locale.iso))
+      end
+
+      context "when logged in as a regular user" do
+        before do
+          fake_login_known_user(user)
+        end
+
+        it "still redirects to the previous locale when the locale param is invalid" do
+          get :index, params: { language_id: "eldritch" }
+          it_redirects_to(archive_faqs_path(language_id: non_standard_locale.iso))
+        end
       end
     end
   end
