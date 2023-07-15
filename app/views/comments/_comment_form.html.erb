@@ -107,7 +107,7 @@
         <% elsif comment.persisted? %>
           <%= cancel_edit_comment_link(comment) %>
         <% elsif commentable.is_a?(Comment) || commentable.is_a?(CommentDecorator) %>
-          <%= cancel_comment_reply_link(commentable, remote = !(params[:add_comment_reply_id] && params[:add_comment_reply_id] == commentable.id.to_s)) %>
+          <%= cancel_comment_reply_link(commentable, remote: !(params[:add_comment_reply_id] && params[:add_comment_reply_id] == commentable.id.to_s)) %>
         <% end %>
       </p>
     </fieldset>
