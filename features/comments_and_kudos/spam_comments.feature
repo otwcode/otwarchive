@@ -71,5 +71,6 @@ Feature: Marking comments as spam
       And I view the work "Popular Fic" with comments
     Then I should see "Comments (2)"
     When I mark the comment as spam
+      And I confirm I want to mark the comment as spam
       And I view the work "Popular Fic" with comments
     Then I should see "Comments (1)"
