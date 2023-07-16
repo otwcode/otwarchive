@@ -302,3 +302,15 @@ When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
     click_link("Yes, delete!") # TODO: Fix along with comment deletion.
   end
 end
+
+When "I display comments" do
+  click_link("Comments")
+end
+
+When "I open the reply box" do
+  click_link("Reply")
+end
+
+When "I cancel the reply box" do
+  click_link("Cancel")
+end

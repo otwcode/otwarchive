@@ -216,3 +216,19 @@ Scenario: It hides comment actions when a reply form is open
   When I follow "Reply"
     Then I should see "Comment as commenter"
     Then I should not see "Thread"
+
+@javascript
+Scenario: It shows and hides cancel buttons properly
+  Given the work "Aftermath" by "creator"
+    And a comment "Ugh." by "pest" on the work "Aftermath"
+  When I am logged in as "creator"
+    And I view the work "Aftermath"
+    And I display comments
+  Then I should see "Ugh."
+  When I open the reply box
+    Then I should see "Cancel"
+    Then I should not see "Reply"
+  When I cancel the reply box
+    Then I should not see "Cancel"
+    Then I should see "Reply"
+
