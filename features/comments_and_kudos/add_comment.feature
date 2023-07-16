@@ -232,3 +232,20 @@ Scenario: It shows and hides cancel buttons properly
     Then I should not see "Cancel"
     Then I should see "Reply"
 
+@javascript
+Scenario: It shows and hides cancel buttons properly even on a new page
+  Given the work "Aftermath" by "creator"
+    And a comment "Ugh." by "pest" on the work "Aftermath"
+  When I am logged in as "creator"
+    And I view the work "Aftermath"
+    And I display comments
+  Then I should see "Ugh."
+  When I reply to the work comment "Ugh." on a new page
+    Then I should see "Aftermath"
+    Then I should see "Cancel"
+    Then I should not see "Reply"
+  When I cancel the reply box
+    And I fix the domain name
+    Then I should see "Aftermath"
+    Then I should not see "Cancel"
+
