@@ -207,3 +207,12 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, with 
       """
       And I press "Comment"
     Then I should see "Comment created!"
+
+Scenario: It hides comment actions when a reply form is open
+  When I am logged in as "author"
+    And I post the work "The One Where Neal is Awesome"
+  When I am logged in as "commenter"
+    And I post the comment "I loved this!" on the work "The One Where Neal is Awesome"
+  When I follow "Reply"
+    Then I should see "Comment as commenter"
+    Then I should not see "Thread"
