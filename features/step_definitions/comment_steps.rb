@@ -316,10 +316,10 @@ When "I cancel the reply box" do
 end
 
 When /^I reply to the work comment "([^"]*)" on a new page$/ do |comment_content|
-  comment = Comment.find_by_comment_content(comment_content)
+  comment = Comment.find_by(comment_content: comment_content)
   visit work_path(
     comment.commentable,
     add_comment_reply_id: comment.id,
-    show_comments: true,
+    show_comments: true
   )
 end
