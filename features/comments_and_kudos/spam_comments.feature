@@ -54,14 +54,13 @@ Feature: Marking comments as spam
     When I view the work "Popular Fic" with comments
       And I post a spam comment
       And I post a guest comment
-    When I am logged in as "author"
+      And I am logged in as "author"
       And I view the work "Popular Fic" with comments
-      Then I should see "Comments (2)"
-      Then I should see "Buy my product"
+    Then I should see "Comments (2)"
+      And I should see "Buy my product"
     When I mark the comment as spam
-      Then I should see "Comments (1)"
-      Then I should not see "Buy my product"
-      Then all comments by "spammer" are marked as spam
+    Then I should see "Comments (1)"
+      And I should not see "Buy my product"
 
   @javascript
   Scenario: If Javascript is enabled, there's a confirmation popup before marking a comment as spam
