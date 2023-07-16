@@ -322,6 +322,6 @@ end
 
 When "I fix the domain name" do
   parsed = URI.parse(current_url)
-  dest = "#{parsed.path}?#{(parsed.query || "")}##{(parsed.fragment || "")}"
+  dest = "#{parsed.path}?#{parsed.query || ''}##{parsed.fragment || ''}"
   visit dest
 end
