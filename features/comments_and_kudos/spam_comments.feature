@@ -69,7 +69,7 @@ Feature: Marking comments as spam
       And a guest comment on the work "Popular Fic"
     When I am logged in as "author"
       And I view the work "Popular Fic" with comments
-      Then I should see "Comments (2)"
+    Then I should see "Comments (2)"
     When I mark the comment as spam
-    When I view the work "Popular Fic" with comments
-      Then I should see "Comments (1)"
+      And I view the work "Popular Fic" with comments
+    Then I should see "Comments (1)"
