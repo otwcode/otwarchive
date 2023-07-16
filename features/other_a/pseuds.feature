@@ -158,8 +158,8 @@ Scenario: Many pseuds
     And I should see "All Pseuds (4)" within "ul.expandable"
 
   When I go to my "Slartibartfast" pseud page
-  Then I should see "Slartibartfast" within "li.pseud > a"
-    And I should not see "Slartibartfast" within "ul.expandable"
+  Then I should see "Pseuds" within "li.pseud > a"
+    And I should see "Slartibartfast" within "ul.expandable"
 
   When I go to my pseuds page
   Then I should not see "Zaphod (Zaphod)" within "ul.pseud.index"
