@@ -29,7 +29,7 @@ describe ArchiveFaqsController do
         it_redirects_to(archive_faqs_path(language_id: I18n.default_locale))
       end
 
-      it "redirects to the default locale when the locale param and the session locale are empty" do
+      it "redirects to the default locale when the locale param and the session locale are _explicty_ empty (legacy session behavior)" do
         expect(I18n).not_to receive(:with_locale)
         get :index, params: { language_id: "" }, session: { language_id: "" }
         it_redirects_to(archive_faqs_path(language_id: "en"))
