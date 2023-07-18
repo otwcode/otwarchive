@@ -156,30 +156,30 @@ module UsersHelper
 
 
     case action
-      when ArchiveConfig.ACTION_ACTIVATE
-        t("users_helper.log_validated", default: "Account Validated")
-      when ArchiveConfig.ACTION_ADD_ROLE
-        t("users_helper.log_role_added", default: "Role Added: ")
-      when ArchiveConfig.ACTION_REMOVE_ROLE
-        t("users_helper.log_role_removed", default: "Role Removed: ")
-      when ArchiveConfig.ACTION_SUSPEND
-        t("users_helper.log_suspended", default: "Suspended until ")
-      when ArchiveConfig.ACTION_UNSUSPEND
-        t("users_helper.log_lift_suspension", default: "Suspension Lifted")
-      when ArchiveConfig.ACTION_BAN
-        t("users_helper.log_ban", default: "Suspended Permanently")
-      when ArchiveConfig.ACTION_WARN
-        t("users_helper.log_warn", default: "Warned")
-      when ArchiveConfig.ACTION_RENAME
-        t("users_helper.log_rename", default: "Username Changed")
-      when ArchiveConfig.ACTION_PASSWORD_RESET
-        t("users_helper.log_password_change", default: "Password Changed")
-      when ArchiveConfig.ACTION_NEW_EMAIL
-        t("users_helper.log_email_change", default: "Email Changed")
-      when ArchiveConfig.ACTION_TROUBLESHOOT
-        t("users_helper.log_troubleshot", default: "Account Troubleshot")
-      when ArchiveConfig.ACTION_NOTE
-        t("users_helper.log_note", default: "Note Added")
+    when ArchiveConfig.ACTION_ACTIVATE
+      t("users_helper.log_validated", default: "Account Validated")
+    when ArchiveConfig.ACTION_ADD_ROLE
+      t("users_helper.log_role_added", default: "Role Added: ")
+    when ArchiveConfig.ACTION_REMOVE_ROLE
+      t("users_helper.log_role_removed", default: "Role Removed: ")
+    when ArchiveConfig.ACTION_SUSPEND
+      t("users_helper.log_suspended", default: "Suspended until ")
+    when ArchiveConfig.ACTION_UNSUSPEND
+      t("users_helper.log_lift_suspension", default: "Suspension Lifted")
+    when ArchiveConfig.ACTION_BAN
+      t("users_helper.log_ban", default: "Suspended Permanently")
+    when ArchiveConfig.ACTION_WARN
+      t("users_helper.log_warn", default: "Warned")
+    when ArchiveConfig.ACTION_RENAME
+      t("users_helper.log_rename", default: "Username Changed")
+    when ArchiveConfig.ACTION_PASSWORD_RESET
+      t("users_helper.log_password_change", default: "Password Changed")
+    when ArchiveConfig.ACTION_NEW_EMAIL
+      t("users_helper.log_email_change", default: "Email Changed")
+    when ArchiveConfig.ACTION_TROUBLESHOOT
+      t("users_helper.log_troubleshot", default: "Account Troubleshot")
+    when ArchiveConfig.ACTION_NOTE
+      t("users_helper.log_note", default: "Note Added")
     end
   end
 
