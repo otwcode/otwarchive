@@ -119,7 +119,42 @@ module UsersHelper
     items.html_safe
   end
 
-  def log_item_action_name(action)
+  def log_item_action_name(item, user)
+    action = item.action
+
+    if [ArchiveConfig.ACTION_ADD_FNOK, ArchiveConfig.ACTION_REMOVE_FNOK].include?(action)
+      if item.fnok_user_id == user.id
+        if action == ArchiveConfig.ACTION_REMOVE_FNOK
+          return t(
+            'users_helper.log_removed_as_fnok',
+            default: 'Removed as Fannish Next of Kin for: %{user_id}',
+            user_id: item.user_id
+          )
+        end
+
+        return t(
+          'users_helper.log_added_as_fnok',
+          default: 'Added as Fannish Next of Kin for: %{user_id}',
+          user_id: item.user_id
+        )
+      end
+
+      if action == ArchiveConfig.ACTION_REMOVE_FNOK
+        return t(
+          'users_helper.log_remove_fnok',
+          default: 'Fannish Next of Kin Removed: %{user_id}',
+          user_id: item.fnok_user_id
+        )
+      end
+
+      return t(
+        'users_helper.log_add_fnok',
+        default: 'Fannish Next of Kin Added: %{user_id}',
+        user_id: item.fnok_user_id
+      )
+    end
+
+
     case action
       when ArchiveConfig.ACTION_ACTIVATE
         t('users_helper.log_validated', default: 'Account Validated')
@@ -145,10 +180,6 @@ module UsersHelper
         t('users_helper.log_troubleshot', default: 'Account Troubleshot')
       when ArchiveConfig.ACTION_NOTE
         t('users_helper.log_note', default: 'Note Added')
-      when ArchiveConfig.ACTION_ADD_FNOK
-        t('users_helper.log_add_fnok', default: 'Fannish Next of Kin Added')
-      when ArchiveConfig.ACTION_REMOVE_FNOK
-        t('users_helper.log_add_fnok', default: 'Fannish Next of Kin Removed')
     end
   end
 

@@ -47,7 +47,7 @@ class Admin::AdminUsersController < Admin::BaseController
     @user = authorize User.find_by!(login: params[:id])
     @hide_dashboard = true
     @page_subtitle = t(".page_title", login: @user.login)
-    @log_items = @user.log_items.sort_by(&:created_at).reverse
+    fetch_log_items
   end
 
   # POST admin/users/update
@@ -100,7 +100,7 @@ class Admin::AdminUsersController < Admin::BaseController
       redirect_to admin_user_path(@user)
     else
       @hide_dashboard = true
-      @log_items = @user.log_items.sort_by(&:created_at).reverse
+      fetch_log_items
       render :show
     end
   end
@@ -179,5 +179,9 @@ class Admin::AdminUsersController < Admin::BaseController
       flash[:error] = ts("Attempt to activate account failed.")
       redirect_to action: :show
     end
+  end
+
+  def fetch_log_items
+    @log_items ||= (@user.log_items + LogItem.where(fnok_user_id: @user.id)).sort_by(&:created_at).reverse
   end
 end
