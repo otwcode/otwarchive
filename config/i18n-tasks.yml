@@ -166,6 +166,10 @@ ignore_missing:
   - users_helper.log_troubleshot
   - users_helper.log_validated
   - users_helper.log_warn
+  - users_helper.log_add_fnok
+  - users_helper.log_remove_fnok
+  - users_helper.log_added_as_fnok
+  - users_helper.log_removed_as_fnok
   # Files: app/views/admin/_admin_nav.html.erb and app/views/admin_posts/show.html.erb
   - admin.admin_nav.delete
   # File: app/views/admin/admin_invitations/find.html.erb
