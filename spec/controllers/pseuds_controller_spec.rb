@@ -91,7 +91,8 @@ describe PseudsController do
       it "creates admin activity" do
         expect do
           put :update, params: params
-        end.to change { AdminActivity.count }.by(1)
+        end.to change { AdminActivity.count }
+          .by(1)
         expect(AdminActivity.last.target).to eq(pseud)
         expect(AdminActivity.last.admin).to eq(admin)
         expect(AdminActivity.last.summary).to eq("<a href=\"#{ticket_url}\">Ticket #1</a> for User ##{user.id}")

@@ -13,7 +13,7 @@ class PseudPolicy < ApplicationPolicy
   }.freeze
 
   def permitted_attributes
-    if user&.is_a?(Admin)
+    if user.is_a?(Admin)
       ALLOWED_ATTRIBUTES_BY_ROLES.values_at(*user.roles).compact.flatten
     else
       [:name, :description, :is_default, :icon, :delete_icon, :icon_alt_text,
