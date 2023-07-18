@@ -227,7 +227,7 @@ describe Admin::AdminUsersController do
       end
     end
 
-    it 'logs adding a fannish next of kin' do
+    it "logs adding a fannish next of kin" do
       admin = create(:support_admin)
       fake_login_admin(admin)
 
@@ -243,7 +243,7 @@ describe Admin::AdminUsersController do
       expect(log_item.note).to eq("Change made by #{admin.login}")
     end
 
-    it 'logs removing a fannish next of kin' do
+    it "logs removing a fannish next of kin" do
       admin = create(:support_admin)
       fake_login_admin(admin)
       kin_user_id = create(:fannish_next_of_kin, user: user).kin_id

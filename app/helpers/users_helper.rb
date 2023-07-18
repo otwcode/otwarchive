@@ -154,7 +154,6 @@ module UsersHelper
       )
     end
 
-
     case action
     when ArchiveConfig.ACTION_ACTIVATE
       t("users_helper.log_validated", default: "Account Validated")
