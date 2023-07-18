@@ -15,6 +15,7 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Fannish next of kin's email" with "testy@foo.com"
       And I press "Update Fannish Next of Kin"
     Then I should see "Fannish next of kin was updated."
+    Then I should see "Fannish Next of Kin Added"
 
     When I go to the manage users page
       And I fill in "Name" with "harrykim"
@@ -23,6 +24,9 @@ Feature: Admin Fannish Next Of Kind actions
 
     When I follow "libby"
     Then I should be on libby's user page
+
+    When I go to the user administration page for "libby"
+    Then I should see "Added as Fannish Next of Kin"
 
   Scenario: An invalid Fannish Next of Kin username is added
     Given the fannish next of kin "libby" for the user "harrykim"
@@ -66,6 +70,9 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Fannish next of kin's email" with ""
       And I press "Update Fannish Next of Kin"
     Then I should see "Fannish next of kin was removed."
+      And I should see "Fannish Next of Kin Removed"
+    When I go to the user administration page for "libby"
+    Then I should see "Removed as Fannish Next of Kin"
 
   Scenario: A Fannish Next of Kin updates when the next of kin user changes their username
     Given the fannish next of kin "libby" for the user "harrykim"
