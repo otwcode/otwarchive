@@ -145,6 +145,10 @@ module UsersHelper
         t('users_helper.log_troubleshot', default: 'Account Troubleshot')
       when ArchiveConfig.ACTION_NOTE
         t('users_helper.log_note', default: 'Note Added')
+      when ArchiveConfig.ACTION_ADD_FNOK
+        t('users_helper.log_add_fnok', default: 'Fannish Next of Kin Added')
+      when ArchiveConfig.ACTION_REMOVE_FNOK
+        t('users_helper.log_add_fnok', default: 'Fannish Next of Kin Removed')
     end
   end
 
