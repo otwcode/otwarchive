@@ -961,7 +961,7 @@ describe ChaptersController do
       context "when work has one chapter" do
         it "redirects to edit work" do
           delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
-          it_redirects_to_with_error(edit_work_path(work), "You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
+          it_redirects_to_with_error(edit_work_path(work), "You can't delete the only chapter in your work. If you want to delete the work, choose \"Delete Work\".")
         end
       end
 
@@ -1065,6 +1065,15 @@ describe ChaptersController do
           end.to change { work.number_of_chapters }
             .from(2).to(1)
             .and avoid_changing { work.number_of_posted_chapters }
+        end
+      end
+
+      context "when work has more than one chapter and all but one are drafts" do
+        let!(:chapter2) { create(:chapter, work: work, posted: false, position: 2, authors: [user.pseuds.first]) }
+
+        it "cannot delete the posted chapter" do
+          delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
+          it_redirects_to_with_error(edit_work_path(work), "You can't delete the only chapter in your work. If you want to delete the work, choose \"Delete Work\".")
         end
       end
     end

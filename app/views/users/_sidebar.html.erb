@@ -7,7 +7,7 @@
     <li class="pseud" aria-haspopup="true">
       <a href="#" title="<%= ts("Pseud Switcher") %>"><%= ts("Pseuds") %></a>
       <ul class="expandable secondary">
-        <%= print_pseud_selector(@user.pseuds) %>
+        <%= pseud_selector(pseuds_for_sidebar(@user, @pseud)) %>
         <li><%= span_if_current ts("All Pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
       </ul>
     </li>
