@@ -7,8 +7,8 @@
       <p class="footnote"><%= t(".change_matching_pseud_html", change_username_link: link_to(t(".change_username"), change_username_user_path(@user))) %></p>
     <% else %>
       <%= f.text_field :name, class: "observe_textlength", disabled: logged_in_as_admin? %>
+      <%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) %>
     <% end %>
-    <%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) if @pseud&.name == @user.login %>
   </dd>
   
   <dt><%= f.label :is_default, t(".make_default") %></dt>
