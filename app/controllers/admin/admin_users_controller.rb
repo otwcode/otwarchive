@@ -47,7 +47,7 @@ class Admin::AdminUsersController < Admin::BaseController
     @user = authorize User.find_by!(login: params[:id])
     @hide_dashboard = true
     @page_subtitle = t(".page_title", login: @user.login)
-    fetch_log_items
+    log_items
   end
 
   # POST admin/users/update
@@ -76,11 +76,11 @@ class Admin::AdminUsersController < Admin::BaseController
       if fnok.present?
         fnok.destroy
         @user.create_log_item({
-          action: ArchiveConfig.ACTION_REMOVE_FNOK,
-          fnok_user_id: fnok.kin.id,
-          admin_id: current_admin.id,
-          note: "Change made by #{current_admin.login}"
-        })
+                                action: ArchiveConfig.ACTION_REMOVE_FNOK,
+                                fnok_user_id: fnok.kin.id,
+                                admin_id: current_admin.id,
+                                note: "Change made by #{current_admin.login}"
+                              })
         flash[:notice] = ts("Fannish next of kin was removed.")
       end
       redirect_to admin_user_path(@user)
@@ -91,16 +91,16 @@ class Admin::AdminUsersController < Admin::BaseController
     fnok.assign_attributes(kin: kin, kin_email: kin_email)
     if fnok.save
       @user.create_log_item({
-        action: ArchiveConfig.ACTION_ADD_FNOK,
-        fnok_user_id: fnok.kin.id,
-        admin_id: current_admin.id,
-        note: "Change made by #{current_admin.login}"
-      })
+                              action: ArchiveConfig.ACTION_ADD_FNOK,
+                              fnok_user_id: fnok.kin.id,
+                              admin_id: current_admin.id,
+                              note: "Change made by #{current_admin.login}"
+                            })
       flash[:notice] = ts("Fannish next of kin was updated.")
       redirect_to admin_user_path(@user)
     else
       @hide_dashboard = true
-      fetch_log_items
+      log_items
       render :show
     end
   end
@@ -181,7 +181,7 @@ class Admin::AdminUsersController < Admin::BaseController
     end
   end
 
-  def fetch_log_items
+  def log_items
     @log_items ||= (@user.log_items + LogItem.where(fnok_user_id: @user.id)).sort_by(&:created_at).reverse
   end
 end

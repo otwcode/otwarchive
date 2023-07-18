@@ -126,30 +126,30 @@ module UsersHelper
       if item.fnok_user_id == user.id
         if action == ArchiveConfig.ACTION_REMOVE_FNOK
           return t(
-            'users_helper.log_removed_as_fnok',
-            default: 'Removed as Fannish Next of Kin for: %{user_id}',
+            "users_helper.log_removed_as_fnok",
+            default: "Removed as Fannish Next of Kin for: %{user_id}",
             user_id: item.user_id
           )
         end
 
         return t(
-          'users_helper.log_added_as_fnok',
-          default: 'Added as Fannish Next of Kin for: %{user_id}',
+          "users_helper.log_added_as_fnok",
+          default: "Added as Fannish Next of Kin for: %{user_id}",
           user_id: item.user_id
         )
       end
 
       if action == ArchiveConfig.ACTION_REMOVE_FNOK
         return t(
-          'users_helper.log_remove_fnok',
-          default: 'Fannish Next of Kin Removed: %{user_id}',
+          "users_helper.log_remove_fnok",
+          default: "Fannish Next of Kin Removed: %{user_id}",
           user_id: item.fnok_user_id
         )
       end
 
       return t(
-        'users_helper.log_add_fnok',
-        default: 'Fannish Next of Kin Added: %{user_id}',
+        "users_helper.log_add_fnok",
+        default: "Fannish Next of Kin Added: %{user_id}",
         user_id: item.fnok_user_id
       )
     end
@@ -157,29 +157,29 @@ module UsersHelper
 
     case action
       when ArchiveConfig.ACTION_ACTIVATE
-        t('users_helper.log_validated', default: 'Account Validated')
+        t("users_helper.log_validated", default: "Account Validated")
       when ArchiveConfig.ACTION_ADD_ROLE
-        t('users_helper.log_role_added', default: 'Role Added: ')
+        t("users_helper.log_role_added", default: "Role Added: ")
       when ArchiveConfig.ACTION_REMOVE_ROLE
-        t('users_helper.log_role_removed', default: 'Role Removed: ')
+        t("users_helper.log_role_removed", default: "Role Removed: ")
       when ArchiveConfig.ACTION_SUSPEND
-        t('users_helper.log_suspended', default: 'Suspended until ')
+        t("users_helper.log_suspended", default: "Suspended until ")
       when ArchiveConfig.ACTION_UNSUSPEND
-        t('users_helper.log_lift_suspension', default: 'Suspension Lifted')
+        t("users_helper.log_lift_suspension", default: "Suspension Lifted")
       when ArchiveConfig.ACTION_BAN
-        t('users_helper.log_ban', default: 'Suspended Permanently')
+        t("users_helper.log_ban", default: "Suspended Permanently")
       when ArchiveConfig.ACTION_WARN
-        t('users_helper.log_warn', default: 'Warned')
+        t("users_helper.log_warn", default: "Warned")
       when ArchiveConfig.ACTION_RENAME
-        t('users_helper.log_rename', default: 'Username Changed')
+        t("users_helper.log_rename", default: "Username Changed")
       when ArchiveConfig.ACTION_PASSWORD_RESET
-        t('users_helper.log_password_change', default: 'Password Changed')
+        t("users_helper.log_password_change", default: "Password Changed")
       when ArchiveConfig.ACTION_NEW_EMAIL
-        t('users_helper.log_email_change', default: 'Email Changed')
+        t("users_helper.log_email_change", default: "Email Changed")
       when ArchiveConfig.ACTION_TROUBLESHOOT
-        t('users_helper.log_troubleshot', default: 'Account Troubleshot')
+        t("users_helper.log_troubleshot", default: "Account Troubleshot")
       when ArchiveConfig.ACTION_NOTE
-        t('users_helper.log_note', default: 'Note Added')
+        t("users_helper.log_note", default: "Note Added")
     end
   end
 
