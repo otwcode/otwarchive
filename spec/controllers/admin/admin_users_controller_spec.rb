@@ -239,6 +239,8 @@ describe Admin::AdminUsersController do
       log_item = user.log_items.last
       expect(log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
       expect(log_item.fnok_user.id).to eq(kin.id)
+      expect(log_item.admin_id).to eq(admin.id)
+      expect(log_item.note).to eq("Change made by #{admin.login}")
     end
 
     it 'logs removing a fannish next of kin' do
@@ -254,6 +256,8 @@ describe Admin::AdminUsersController do
       log_item = user.log_items.last
       expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
       expect(log_item.fnok_user.id).to eq(kin_user_id)
+      expect(log_item.admin_id).to eq(admin.id)
+      expect(log_item.note).to eq("Change made by #{admin.login}")
     end
   end
 

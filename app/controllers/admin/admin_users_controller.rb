@@ -77,7 +77,9 @@ class Admin::AdminUsersController < Admin::BaseController
         fnok.destroy
         @user.create_log_item({
           action: ArchiveConfig.ACTION_REMOVE_FNOK,
-          fnok_user_id: fnok.kin.id
+          fnok_user_id: fnok.kin.id,
+          admin_id: current_admin.id,
+          note: "Change made by #{current_admin.login}"
         })
         flash[:notice] = ts("Fannish next of kin was removed.")
       end
@@ -90,7 +92,9 @@ class Admin::AdminUsersController < Admin::BaseController
     if fnok.save
       @user.create_log_item({
         action: ArchiveConfig.ACTION_ADD_FNOK,
-        fnok_user_id: fnok.kin.id
+        fnok_user_id: fnok.kin.id,
+        admin_id: current_admin.id,
+        note: "Change made by #{current_admin.login}"
       })
       flash[:notice] = ts("Fannish next of kin was updated.")
       redirect_to admin_user_path(@user)
