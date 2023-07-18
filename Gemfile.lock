@@ -98,6 +98,9 @@ GEM
       activerecord (>= 4.2)
       activesupport
     akismetor (1.0.0)
+    alterity (1.4.2)
+      mysql2 (>= 0.3)
+      rails (>= 6.1)
     ast (2.4.2)
     audited (4.10.0)
       activerecord (>= 4.2, < 6.2)
@@ -608,6 +611,7 @@ DEPENDENCIES
   addressable
   after_commit_everywhere
   akismetor
+  alterity
   audited (~> 4.4)
   awesome_print
   aws-sdk-s3
