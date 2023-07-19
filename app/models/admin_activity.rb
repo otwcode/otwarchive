@@ -17,7 +17,7 @@ class AdminActivity < ApplicationRecord
 
   def target_name
     if target.is_a?(Pseud)
-      "Pseud #{target&.name} (#{target&.user&.login})"
+      "Pseud #{target.name} (#{target&.user&.login})"
     else
       "#{target_type} #{target_id}"
     end

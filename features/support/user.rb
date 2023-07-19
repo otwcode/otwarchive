@@ -28,6 +28,11 @@ module UserHelpers
     user = User.find_by(login: login)
     return user unless user.nil?
 
+    # If we're logged in as an admin when we try to use a step that invokes this
+    # method to create a user, user creation will fail because only some admins
+    # can edit certain fields on pseuds. Setting current_user to nil will bypass
+    # that.
+    User.current_user = nil
     FactoryBot.create(:user, login: login).tap do |u|
       u.default_pseud.add_to_autocomplete
     end
