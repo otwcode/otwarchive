@@ -63,6 +63,8 @@ en:
       series/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
+      skin/skin_parents:
+        parent_skin: Parent skin
       work:
         chapter_total_display: Chapters
         summary: Summary
@@ -139,12 +141,14 @@ en:
               protected: You can't use the related works function to cite works by the protected user %{login}.
           format: "%{message}"
         skin/skin_parents:
-          format: "%{message}"
+          attributes:
+            base:
+              format: "%{message}"
         skin_parent:
           attributes:
             base:
               site_parent: You can't use %{title} as a parent unless replacing the default archive skin.
-          format: "%{message}"
+              format: "%{message}"
         user:
           attributes:
             login:
