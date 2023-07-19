@@ -147,8 +147,8 @@ en:
         skin_parent:
           attributes:
             base:
-              site_parent: You can't use %{title} as a parent unless replacing the default archive skin.
               format: "%{message}"
+              site_parent: You can't use %{title} as a parent unless replacing the default archive skin.
         user:
           attributes:
             login:
