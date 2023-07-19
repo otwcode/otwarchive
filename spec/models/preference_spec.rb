@@ -3,6 +3,7 @@ require "spec_helper"
 describe Preference do
   it { is_expected.to allow_value("Test_Title-1 .,").for(:work_title_format) }
   it { is_expected.not_to allow_value("@; Test").for(:work_title_format) }
+  it { is_expected.not_to allow_value("Sneaky\n\\").for(:work_title_format) }
 
   describe ".disable_work_skin?" do
     it "returns false for creator" do

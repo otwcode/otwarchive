@@ -4,8 +4,7 @@ class Preference < ApplicationRecord
 
   validates :work_title_format,
             format: {
-              with: /^[a-zA-Z0-9_\-,\. ]+$/,
-              multiline: true,
+              with: /\A[a-zA-Z0-9_\-,\. ]+\z/,
               message: ts("can only contain letters, numbers, spaces, and some limited punctuation (comma, period, dash, underscore).")
             }
 
