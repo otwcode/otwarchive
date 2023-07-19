@@ -56,7 +56,7 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
   end
 end
 
-When /^I reorder the (\d+)(?:st|nd|rd|th) and (\d+)(?:st|nd|rd|th) work downwards in the series list$/ do |n1, n2|
+When /^I reorder the (\d+)(?:st|nd|rd|th) work to be below the (\d+)(?:st|nd|rd|th) work in the series$/ do |n1, n2|
   # Step only accounts for downward changes through a downward offset.
   assert n1 < n2
 

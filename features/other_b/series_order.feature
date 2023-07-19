@@ -43,7 +43,7 @@ Feature: Rearrange works within a series
     When I view the work "Things Get Worse"
     When I view the series "Tale of Woe"
       And I follow "Reorder Series"
-      And I reorder the 2nd and 3rd work downwards in the series list
+      And I reorder the 2nd work to be below the 3rd work in the series
       And I press "Update Positions"
     Then I should see "Series order has been successfully updated"
     When I follow "Reorder Series"
