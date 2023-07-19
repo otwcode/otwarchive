@@ -834,7 +834,8 @@ describe WorksController, work_search: true do
         delete :destroy, params: { id: banned_users_work.id }
 
         it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{banned_users_work.title} was deleted.")
-        expect { banned_users_work.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect { banned_users_work.reload }
+          .to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
   end
