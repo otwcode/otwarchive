@@ -379,7 +379,7 @@ describe ChaptersController do
           end
         end
 
-        context "When logged in user is banned" do
+        context "When the logged in user is banned" do
           before do
             fake_login_known_user(banned_user)
           end
@@ -1090,9 +1090,12 @@ describe ChaptersController do
         end
       end
 
-      context "when user is banned" do
-        it "gives a notice that the chapter was deleted and redirects to work" do
+      context "when the logged in user is banned" do
+        before do
           fake_login_known_user(banned_user)
+        end
+
+        it "gives a notice that the chapter was deleted and redirects to work" do
           delete :destroy, params: { work_id: banned_users_work.id, id: banned_users_work_chapter2.id }
           it_redirects_to_with_notice(banned_users_work, "The chapter was successfully deleted.")
         end
