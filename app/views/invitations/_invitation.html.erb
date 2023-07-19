@@ -11,7 +11,8 @@
     <% else %>
     <dd>
       <%= form_for(invitation) do |f| %>
-        <p><label for="invitee_email">Enter an email address:</label> <%= f.text_field :invitee_email %></p>
+        <%= error_messages_for invitation %>
+        <p><%= f.label :invitee_email, t(".email_address_label") %> <%= f.text_field :invitee_email %></p>
         <p><%= hidden_field_tag :user_id, @user.try(:login) %></p>
         <p class="submit actions"><%= f.submit %></p>
       <% end %>

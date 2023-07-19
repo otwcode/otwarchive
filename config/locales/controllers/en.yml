@@ -13,6 +13,8 @@ en:
       destroy:
         unblocked: You have unblocked the user %{name}.
   chapters:
+    destroy:
+      only_chapter: You can't delete the only chapter in your work. If you want to delete the work, choose "Delete Work".
     show:
       anonymous: Anonymous
       chapter_position: " - Chapter %{position}"
