@@ -38,13 +38,17 @@ describe ArchiveFaqsController do
     context "when logged in as a regular user" do
       before { fake_login_known_user(user) }
 
-      it "redirects to the default locale when the locale param is invalid" do
-        expect(I18n).not_to receive(:with_locale)
-        get :index, params: { language_id: "eldritch" }
-        it_redirects_to(archive_faqs_path(language_id: I18n.default_locale))
+      context "when the set locale preference feature flag is off" do
+        before { $rollout.deactivate_user(:set_locale_preference, user) }
+
+        it "redirects to the default locale when the locale param is invalid" do
+          expect(I18n).not_to receive(:with_locale)
+          get :index, params: { language_id: "eldritch" }
+          it_redirects_to(archive_faqs_path(language_id: I18n.default_locale))
+        end
       end
 
-      context "with set_locale_preference" do
+      context "when the set locale preference feature flag is on" do
         before { $rollout.activate_user(:set_locale_preference, user) }
 
         it "redirects to the user preferred locale when the locale param is invalid" do
