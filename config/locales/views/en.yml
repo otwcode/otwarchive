@@ -423,7 +423,7 @@ en:
         tag_changes: Requests to canonize or change tags
         work_problems: Works labeled with the wrong language or duplicate works
       status:
-        current: 'For current updates on Archive performance or downtime, please check the %{twitter_link} or %{tumbler_link}.'
+        current: 'For current updates on Archive performance or downtime, please check the %{twitter_link} or %{tumblr_link}.'
         tumblr: "ao3org Tumblr"
         twitter: "@AO3_Status Twitter feed"
   home:
