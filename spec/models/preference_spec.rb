@@ -29,24 +29,14 @@ describe Preference do
         User.current_user = user
       end
 
-      context "when the user's preference has skins enabled" do
-        before do
-          user.preference.update!(disable_work_skins: false)
-        end
-
-        it "returns false" do
-          expect(Preference.disable_work_skin?("foo")).to be(false)
-        end
+      it "returns false when the user's preference has skins enabled" do
+        user.preference.update!(disable_work_skins: false)
+        expect(Preference.disable_work_skin?("foo")).to be(false)
       end
 
-      context "when the user's preference has skins disabled" do
-        before do
-          user.preference.update!(disable_work_skins: true)
-        end
-
-        it "returns true" do
-          expect(Preference.disable_work_skin?("foo")).to be(true)
-        end
+      it "returns true when the user's preference has skins disabled" do
+        user.preference.update!(disable_work_skins: true)
+        expect(Preference.disable_work_skin?("foo")).to be(true)
       end
     end
   end
