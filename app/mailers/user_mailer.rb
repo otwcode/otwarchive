@@ -141,6 +141,9 @@ class UserMailer < ApplicationMailer
     # make sure we only notify once per creation
     @creations.uniq!
 
+    main_creation = @creations.first
+    additional_creations_count = @creations.count - 1
+
     subject = @subscription.subject_text(@creations.first)
     if @creations.count > 1
       subject += " and #{@creations.count - 1} more"

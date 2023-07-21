@@ -163,4 +163,141 @@ describe MailerHelper do
       end
     end
   end
+
+  describe "#subscription_subject" do
+    subject { subscription_subject(subscription, creation, additional_entries) }
+    let(:creator) { create(:user, login: "creator").default_pseud }
+    let(:cocreator) { create(:user, login: "cocreator").default_pseud }
+    let(:cocreated_work) { create(:work, authors: [creator, cocreator]) }
+    let(:creator_byline) { creation.pseuds.first.byline }
+    let(:cocreator_byline) { creation.pseuds.last.byline }
+    let(:chapter_header) { creation.chapter_header }
+
+    [0, 1, 2].each do |number|
+      context "when notification has #{number} additional entries" do
+        let(:additional_entries) { number }
+        let(:more) { additional_entries.zero? ? "" : " and #{additional_entries} more"}
+
+        context "when subscription is to a series" do
+          let(:series) { create(:series_with_a_work) }
+          let(:subscription) { create(:subscription, subscribable: series) }
+
+          context "when main creation is a chapter" do
+            let(:work) { series.works.first }
+            let(:creation) { create(:chapter, work: work) }
+
+            it { is_expected.to eq("#{creator_byline} posted #{chapter_header} of #{work.title} in the #{series.title} series#{more}") }
+
+            context "when work is anonymous" do
+              before do
+                work.collections = [create(:anonymous_collection)]
+                work.save
+              end
+
+              it { is_expected.to eq("Anonymous posted #{chapter_header} of #{work.title} in the #{series.title} series#{more}") }
+            end
+
+            context "when chapter is co-created" do
+              let(:creation) { create(:chapter, work: work, authors: [work.pseuds.first, cocreator]) }
+
+              it { is_expected.to eq("#{creator_byline} and #{cocreator_byline} posted #{chapter_header} of #{work.title} in the #{series.title} series#{more}") }
+            end
+          end
+
+          context "when main creation is a work" do
+            let(:creation) { create(:work, series: [series]) }
+
+            it { is_expected.to eq("#{creator_byline} posted #{creation.title} in the #{series.title} series#{more}") }
+
+            context "when work is anonymous" do
+              let(:creation) { create(:work, collections: [create(:anonymous_collection)], series: [series]) }
+
+              it { is_expected.to eq("Anonymous posted #{work.title} in the #{series.title} series#{more}") }
+            end
+
+            context "when work is co-created" do
+              let(:creation) { create(:work, authors: [series.pseuds.first, cocreator], series: [series]) }
+
+              it { is_expected.to eq("#{creator_byline} and #{cocreator_byline} posted #{work.title} in the #{series.title} series#{more}") }
+            end
+          end
+        end
+
+        context "when subscription is to a user" do
+          let(:work) { create(:work, authors: [creator]) }
+          let(:anonymous_work) { create(:work, authors: [creator], collections: [create(:anonymous_collection)]) }
+          let(:subscription) { create(:subscription, subscribable: creator.user) }
+
+          context "when main creation is a chapter" do
+            let(:creation) { create(:chapter, work: work, authors: [creator]) }
+
+            it { is_expected.to eq("#{creator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+
+            context "when work is anonymous" do
+              let(:work) { anonymous_work }
+
+              it { is_expected.to be_nil }
+            end
+
+            context "when chapter is co-created" do
+              let(:creation) { create(:chapter, work: work, authors: [creator, cocreator]) }
+
+              it { is_expected.to eq("#{creator_byline} and #{cocreator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+            end
+
+            context "when work is co-created but chapter is not" do
+              let(:creation) { create(:chapter, work: cocreated_work, authors: [creator]) }
+
+              it { is_expected.to eq("#{creator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+            end
+          end
+
+          context "when main creation is a work" do
+            let(:creation) { work }
+
+            it { is_expected.to eq("#{creator_byline} posted #{creation.title}#{more}") }
+
+            context "when work is co-created" do
+              let(:creation) { cocreated_work }
+
+              it { is_expected.to eq("#{creator_byline} and #{cocreator_byline} posted #{creation.title}#{more}") }
+            end
+
+            context "when work is anonymous" do
+              let(:creation) { create(:work, collections: [create(:anonymous_collection)]) }
+
+              it { is_expected.to be_nil }
+            end
+          end
+        end
+
+        context "when subscription is to a work" do
+          let(:work) { create(:work, authors: [creator]) }
+          let(:creation) { create(:chapter, work: work, authors: [creator]) }
+          let(:subscription) { create(:subscription, subscribable: work) }
+
+          it { is_expected.to eq("#{creator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+
+          context "when work is anonymous" do
+            let(:work) { create(:work, collections: [create(:anonymous_collection)]) }
+
+            it { is_expected.to eq("Anonymous posted #{chapter_header} of #{work.title}#{more}") }
+          end
+
+          context "when chapter is co-created" do
+            let(:creation) { create(:chapter, work: work, authors: [creator, cocreator]) }
+
+            it { is_expected.to eq("#{creator_byline} and #{cocreator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+          end
+
+          context "when work is co-created but chapter is not" do
+            let(:work) { cocreated_work }
+            let(:creation) { create(:chapter, work: work, authors: [creator]) }
+
+            it { is_expected.to eq("#{creator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+          end
+        end
+      end
+    end
+  end
 end

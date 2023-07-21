@@ -3,17 +3,23 @@
 <% @seen_summary = {} %>
 <% @creations.each_with_index do |creation, index| %>
 <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
+<% dating_key = this_work.backdate ? "backdated" : "new" %>
+<% work_with_word_count = creation_title_with_word_count(this_work) %>
 <% cache "/v1/subscription-email-txt-preface-#{creation.cache_key}" do %>
-<% if creation.is_a?(Work) %>
-<%= t(".preface.work.#{this_work.backdate ? "backdated" : "new"}.text", creators: creator_text(this_work)) %>
+<% if creation.is_a?(Work) && this_work.anonymous? %>
+<%= t(".anon.preface.work.#{dating_key}") %>
+<% elsif creation.is_a?(Chapter) && this_work.anonymous? %>
+<%= t(".anon.preface.chapter.text", work_title_with_word_count: work_with_word_count) %>
+<% elsif creation.is_a?(Work) %>
+<%= t(".named.preface.work.#{dating_key}.text", creators: creator_text(this_work), count: this_work.creators.size) %>
 <% else %>
-<%= t(".preface.chapter.text", creators: creator_text(this_work), work_title_with_word_count: creation_title_with_word_count(this_work)) %>
+<%= t(".named.preface.chapter.text", creators: creator_text(this_work), count: this_work.creators.size, work_title_with_word_count: work_with_word_count) %>
 <% end %>
 <%= creation.is_a?(Work) ? work_url(this_work) : work_chapter_url(this_work, creation) %>
 <% end %>
 
 <%= creation_title_with_word_count(creation) %><% unless @seen[this_work.id] %>
-<%= t(".creation_byline.text", creators: creator_text(this_work)) %><% end %>
+<%= creation_attribution_text(this_work) %><% end %>
 
 <% if !creation.summary.blank? && creation.is_a?(Chapter) %>
 <%= work_metadata_label(t(".chapter_summary")) %><%= raw to_plain_text(sanitize_field(creation, :summary)) %>

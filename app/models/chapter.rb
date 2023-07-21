@@ -116,7 +116,7 @@ class Chapter < ApplicationRecord
   end
 
   def chapter_header
-    "#{ts("Chapter")} #{position}"
+    I18n.t("activerecord.attributes.chapters.chapter_header", position: position)
   end
 
   def chapter_title
@@ -199,5 +199,9 @@ class Chapter < ApplicationRecord
   def expire_comments_count
     super
     work&.expire_comments_count
+  end
+
+  def anonymous?
+    work.anonymous?
   end
 end
