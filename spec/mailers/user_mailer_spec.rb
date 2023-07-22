@@ -565,7 +565,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{subscription.subject_text(work)} and 1 more"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{creator.byline} posted #{work.title} and 1 more"
       expect(email).to have_subject(subject)
     end
 
