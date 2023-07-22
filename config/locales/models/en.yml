@@ -21,7 +21,7 @@ en:
           one: 'Category:'
           other: 'Categories:'
       chapters:
-        chapter_header: 'Chapter %{position}'
+        chapter_header: Chapter %{position}
       chapters/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud

@@ -11,6 +11,8 @@
 <% elsif creation.is_a?(Chapter) && this_work.anonymous? %>
 <%= t(".anon.preface.chapter.text", work_title_with_word_count: work_with_word_count) %>
 <% elsif creation.is_a?(Work) %>
+<%# i18n-tasks-use t("user_mailer.batch_subscription_notification.named.preface.work.backdated.text")
+    i18n-tasks-use t("user_mailer.batch_subscription_notification.named.preface.work.new.text")-%>
 <%= t(".named.preface.work.#{dating_key}.text", creators: creator_text(this_work), count: this_work.creators.size) %>
 <% else %>
 <%= t(".named.preface.chapter.text", creators: creator_text(this_work), count: this_work.creators.size, work_title_with_word_count: work_with_word_count) %>

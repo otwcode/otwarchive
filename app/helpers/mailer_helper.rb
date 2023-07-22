@@ -214,9 +214,24 @@ module MailerHelper
     creation_key = subscribable_type == "series" ? "series.#{creation_type}" : creation_type
     entries_key = additional_creations_count.zero? ? "one_entry" : "multiple_entries"
 
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.anon.chapter.multiple_entries")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.anon.chapter.one_entry")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.anon.series.chapter.multiple_entries")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.anon.series.chapter.one_entry")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.anon.series.work.multiple_entries")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.anon.series.work.one_entry")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.named.chapter.multiple_entries")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.named.chapter.one_entry")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.named.series.chapter.multiple_entries")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.named.series.chapter.one_entry")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.named.series.work.multiple_entries")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.named.series.work.one_entry")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.named.work.multiple_entries")
+    # i18n-tasks-use t(".user_mailer.batch_subscription_notification.subject.named.work.one_entry")
     computed_key = "#{base_key}.#{creator_key}.#{creation_key}.#{entries_key}"
 
     # "and X more," translated separately so we can pluralize based on X.
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.more")
     more_translation = t("#{base_key}.more", count: additional_creations_count) unless additional_creations_count.zero?
 
     variables = {}
