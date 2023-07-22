@@ -193,11 +193,6 @@ module WorksHelper
   end
 
   def get_open_assignments(user)
-    if user == User.orphan_account
-      # orphan_account has too many pseuds to feasibly get. This lets admins access the work form without timing out.
-      return []
-    end
-
     offer_signups = ChallengeAssignment.offer_signups_by(user).undefaulted.unstarted.sent
     pinch_hits = ChallengeAssignment.pinch_hits_by(user).undefaulted.unstarted.sent
 
