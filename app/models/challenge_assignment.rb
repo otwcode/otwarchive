@@ -53,6 +53,15 @@ class ChallengeAssignment < ApplicationRecord
 
   scope :order_by_offering_pseud, -> { joins(OFFERING_PSEUD_JOIN).order("pseuds.name") }
 
+  scope :offer_signups_by, lambda { |user|
+    joins(offer_signup: { pseud: :user })
+      .where(users: { id: user.id })
+  }
+
+  scope :pinch_hits_by, lambda { |user|
+    joins(pinch_hitter: :user)
+      .where(users: { id: user.id })
+  }
 
   # Get all of a user's assignments
   scope :by_offering_user, lambda {|user|

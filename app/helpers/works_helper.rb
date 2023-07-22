@@ -198,6 +198,9 @@ module WorksHelper
       return []
     end
 
-    ChallengeAssignment.by_offering_user(user).undefaulted.unstarted.sent
+    offer_signups = ChallengeAssignment.offer_signups_by(user).undefaulted.unstarted.sent
+    pinch_hits = ChallengeAssignment.pinch_hits_by(user).undefaulted.unstarted.sent
+
+    (offer_signups + pinch_hits).uniq
   end
 end
