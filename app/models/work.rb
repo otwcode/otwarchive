@@ -287,7 +287,7 @@ class Work < ApplicationRecord
   end
 
   def self.work_blurb_version_key(id)
-    "/v3/work_blurb_tag_cache_key/#{id}"
+    "/v4/work_blurb_tag_cache_key/#{id}"
   end
 
   def self.work_blurb_version(id)
