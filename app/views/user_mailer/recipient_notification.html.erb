@@ -14,7 +14,7 @@
     <% url = @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
     <%= creation_link_with_word_count(@work, url) %>
     <br>
-    by <%= creator_links(@work) %>
+    <%= creation_attribution_links(@work) %>
   </p>
 
   <%= render "work_info", work: @work %>

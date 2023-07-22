@@ -133,26 +133,23 @@ module MailerHelper
       creation_title: title, word_count: creation_word_count(creation))
   end
 
-  # The bylines used in subscription emails to prevent exposing the name(s) of
-  # anonymous creator(s).
+  # TODO: Update all mailers to use creator_links or creator_text as
+  # appropriate to eliminate pseuds.map { etc }.to_sentence in the views. Note
+  # that these should never be used on anonymous creations. Text dealing with
+  # Anonymous creations should always have a separate translation, as in the
+  # creation_attribution_ and batch_subscription_subject methods below.
   def creator_links(creation)
-    if creation.anonymous?
-      "Anonymous"
-    else
-      creation.pseuds.map { |p| style_pseud_link(p) }.to_sentence.html_safe
-    end
+    creation.pseuds.map { |p| style_pseud_link(p) }.to_sentence.html_safe
   end
 
   def creator_text(creation)
-    if creation.anonymous?
-      "Anonymous"
-    else
-      creation.pseuds.map { |p| text_pseud(p) }.to_sentence.html_safe
-    end
+    creation.pseuds.map { |p| text_pseud(p) }.to_sentence.html_safe
   end
 
-  # by name, which appears under or after creation titles
-  # plain text if anonymous
+  # "by name" or "by name, name, and name", which appears under or after
+  # creation titles.
+  # It's always plain text if the creation is anonymous, so we share that
+  # translation between two methods.
   def creation_attribution_links(creation)
     if creation.anonymous?
       t("mailer.general.creation.attribution.anon")
