@@ -11,6 +11,7 @@ class UserMailer < ApplicationMailer
   helper :date
   helper :series
   include HtmlCleaner
+  include MailerHelper
 
   # Send an email letting a creator know that their work has been added to a collection by an archivist
   def archivist_added_to_collection_notification(user_id, work_id, collection_id)
@@ -141,17 +142,12 @@ class UserMailer < ApplicationMailer
     # make sure we only notify once per creation
     @creations.uniq!
 
-    main_creation = @creations.first
     additional_creations_count = @creations.count - 1
 
-    subject = @subscription.subject_text(@creations.first)
-    if @creations.count > 1
-      subject += " and #{@creations.count - 1} more"
-    end
     I18n.with_locale(Locale.find(@subscription.user.preference.preferred_locale).iso) do
       mail(
         to: @subscription.user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] #{subject}"
+        subject: batch_subscription_subject(@subscription, @creations.first, additional_creations_count)
       )
     end
   end

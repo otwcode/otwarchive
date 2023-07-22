@@ -169,45 +169,6 @@ module MailerHelper
     end
   end
 
-  # The subject of batch_subscription_notification is based on the first
-  # creation in the email. It uses that creation's creator, so if you subscribe
-  # to user X, who has co-created a work with user Y, and Y posts a chapter that
-  # is not co-created, the subject line will say just "Y posted" even though the
-  # subscription is for X.
-  def subscription_subject(subscription, creation, additional_creations_count)
-    return if subscription.subscribable_type == "User" && creation.anonymous?
-
-    subscribable_type = subscription.subscribable_type.downcase
-
-    creation_type = creation.is_a?(Chapter) ? "chapter" : "work"
-
-    work = creation.is_a?(Chapter) ? creation.work : creation
-    series = subscription.subscribable if subscribable_type == "series"
-    creator_list = creation.pseuds.map(&:byline).to_sentence unless creation.anonymous?
-    creators_count = creation.pseuds.size unless creation.anonymous?
-    chapter_header = creation.chapter_header if creation_type == "chapter"
-
-    base_key = "user_mailer.batch_subscription_notification.subject"
-    creator_key = creation.anonymous? ? "anon" : "named"
-    creation_key = subscribable_type == "series" ? "series.#{creation_type}" : creation_type
-    entries_key = additional_creations_count.zero? ? "one_entry" : "multiple_entries"
-
-    computed_key = "#{base_key}.#{creator_key}.#{creation_key}.#{entries_key}"
-
-    # "and X more," translated separately so we can pluralize based on X.
-    more_translation = t("#{base_key}.more", count: additional_creations_count) unless additional_creations_count.zero?
-
-    variables = {}
-    variables[:creators] = creator_list unless creation.anonymous?
-    variables[:count] = creators_count unless creation.anonymous?
-    variables[:chapter_header] = chapter_header if creation_type == "chapter"
-    variables[:work_title] = work.title
-    variables[:series_title] = series.title if subscribable_type == "series"
-    variables[:more] = more_translation unless additional_creations_count.zero?
-
-    t("#{computed_key}", **variables)
-  end
-
   def work_metadata_label(text)
     text.html_safe + t("mailer.general.metadata_label_indicator")
   end
@@ -231,6 +192,46 @@ module MailerHelper
 
     label = style_bold(work_tag_metadata_label(tags))
     "#{label}#{style_work_tag_metadata_list(tags)}".html_safe
+  end
+
+  # The subject of batch_subscription_notification is based on the first
+  # creation in the email. It uses that creation's creator, so if you subscribe
+  # to user X, who has co-created a work with user Y, and Y posts a chapter that
+  # is not co-created, the subject line will say just "Y posted" even though the
+  # subscription is for X.
+  def batch_subscription_subject(subscription, creation, additional_creations_count)
+    return if subscription.subscribable_type == "User" && creation.anonymous?
+
+    subscribable_type = subscription.subscribable_type.downcase
+
+    creation_type = creation.is_a?(Chapter) ? "chapter" : "work"
+
+    work = creation.is_a?(Chapter) ? creation.work : creation
+    series = subscription.subscribable if subscribable_type == "series"
+    creator_list = creation.pseuds.map(&:byline).to_sentence unless creation.anonymous?
+    creators_count = creation.pseuds.size unless creation.anonymous?
+    chapter_header = creation.chapter_header if creation_type == "chapter"
+
+    base_key = "user_mailer.batch_subscription_notification.subject"
+    creator_key = creation.anonymous? ? "anon" : "named"
+    creation_key = subscribable_type == "series" ? "series.#{creation_type}" : creation_type
+    entries_key = additional_creations_count.zero? ? "one_entry" : "multiple_entries"
+
+    computed_key = "#{base_key}.#{creator_key}.#{creation_key}.#{entries_key}"
+
+    # "and X more," translated separately so we can pluralize based on X.
+    more_translation = t("#{base_key}.more", count: additional_creations_count) unless additional_creations_count.zero?
+
+    variables = {}
+    variables[:app_name] = ArchiveConfig.APP_SHORT_NAME
+    variables[:creators] = creator_list unless creation.anonymous?
+    variables[:count] = creators_count unless creation.anonymous?
+    variables[:chapter_header] = chapter_header if creation_type == "chapter"
+    variables[:work_title] = work.title
+    variables[:series_title] = series.title if subscribable_type == "series"
+    variables[:more] = more_translation unless additional_creations_count.zero?
+
+    t("#{computed_key}", **variables)
   end
 
   private

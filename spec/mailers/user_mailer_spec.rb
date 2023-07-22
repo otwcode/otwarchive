@@ -543,9 +543,10 @@ describe UserMailer do
   describe "batch_subscription_notification" do
     subject(:email) { UserMailer.batch_subscription_notification(subscription.id, entries) }
 
-    let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
-    let(:chapter) { create(:chapter, work: work, summary: "<p><b>Another</b> HTML summary.</p>") }
-    let(:subscription) { create(:subscription, subscribable: work) }
+    let(:creator) { create(:pseud) }
+    let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>", authors: [creator]) }
+    let(:chapter) { create(:chapter, work: work, summary: "<p><b>Another</b> HTML summary.</p>", authors: [creator]) }
+    let(:subscription) { create(:subscription, subscribable: creator.user) }
     let(:entries) { ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json }
 
     context "when the user is unavailable" do
@@ -607,12 +608,11 @@ describe UserMailer do
     end
 
     context "when creation is a backdated work" do
+      let(:work) { create(:work, backdate: true, authors: [creator]) }
+      let(:subscription) { create(:subscription, subscribable: work.pseuds.first.user) }
       let(:entries) { ["Work_#{work.id}"].to_json }
 
       context "when creator is not anonymous" do
-        let(:creator) { work.pseuds.first }
-        let(:work) { create(:work, backdate: true) }
-
         it "has the correct subject line" do
           subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{creator.byline} posted #{work.title}"
           expect(email).to have_subject(subject)
@@ -628,10 +628,12 @@ describe UserMailer do
       end
 
       context "when creator is anonymous" do
-        let(:work) { create(:work, backdate: true, collections: [create(:anonymous_collection)]) }
+        let(:series) { create(:series) }
+        let(:subscription) { create(:subscription, subscribable: series) }
+        let(:work) { create(:work, backdate: true, collections: [create(:anonymous_collection)], series: [series]) }
 
         it "has the correct subject line" do
-          subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Anonymous posted #{work.title}"
+          subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Anonymous posted #{work.title} in the #{series.title} series"
           expect(email).to have_subject(subject)
         end
 
@@ -650,6 +652,7 @@ describe UserMailer do
 
       context "when work creator is anonymous" do
         let(:work) { create(:work, collections: [create(:anonymous_collection)]) }
+        let(:subscription) { create(:subscription, subscribable: work) }
         let(:chapter) { create(:chapter, work: work) }
 
         it "has the correct subject line" do

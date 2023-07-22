@@ -35,18 +35,6 @@ class Subscription < ApplicationRecord
     end
   end
 
-  def subject_text(creation)
-    authors = if self.class.anonymous_creation?(creation)
-                "Anonymous"
-              else
-                creation.pseuds.map(&:byline).to_sentence
-              end
-    chapter_text = creation.is_a?(Chapter) ? "#{creation.chapter_header} of " : ""
-    work_title = creation.is_a?(Chapter) ? creation.work.title : creation.title
-    text = "#{authors} posted #{chapter_text}#{work_title}"
-    text += subscribable_type == "Series" ? " in the #{self.name} series" : ""
-  end
-
   def self.anonymous_creation?(creation)
     (creation.is_a?(Work) && creation.anonymous?) || (creation.is_a?(Chapter) && creation.work.anonymous?)
   end
