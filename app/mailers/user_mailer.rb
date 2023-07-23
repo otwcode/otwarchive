@@ -123,10 +123,6 @@ class UserMailer < ApplicationMailer
     creation_entries.each do |creation_info|
       creation_type, creation_id = creation_info.split("_")
       creation = creation_type.constantize.where(id: creation_id).first
-      next unless creation && creation.try(:posted)
-      next if (creation.is_a?(Chapter) && !creation.work.try(:posted))
-      next if creation.pseuds.any? {|p| p.user == User.orphan_account} # no notifications for orphan works
-      # TODO: allow subscriptions to orphan_account to receive notifications
 
       # Guard against scenarios that may break anonymity or other things.
       next unless @subscription.valid_notification_entry?(creation)
@@ -144,7 +140,8 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(Locale.find(@subscription.user.preference.preferred_locale).iso) do
       mail(
         to: @subscription.user.email,
-        subject: batch_subscription_subject(@subscription, @creations.first, additional_creations_count)
+        subject: batch_subscription_subject(@subscription,
+          @creations.first, additional_creations_count)
       )
     end
   end
