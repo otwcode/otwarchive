@@ -699,12 +699,12 @@ describe UserMailer do
           expect(email).to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby #{text_pseud(creator1)} and #{text_pseud(creator2)}")
         end
 
-        xit "has the correct chapter link with chapter attribution in the HTML version", pending("AO3-5804: Fix chapter attribution when different from work") do
+        xit "has the correct chapter link with chapter attribution in the HTML version", pending("AO3-5805: Fix chapter attribution when different from work") do
           chapter_link = "<i><b>#{style_link(chapter.full_chapter_title.html_safe, work_chapter_url(work, chapter))}</b></i>"
           expect(email).to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br>by #{style_pseud_link(creator1)}")
         end
 
-        xit "has the correct chapter title with chapter attribution in the text version", pending("AO3-5804: Fix chapter attribution when different from work") do
+        xit "has the correct chapter title with chapter attribution in the text version", pending("AO3-5805: Fix chapter attribution when different from work") do
           expect(email).to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby #{text_pseud(creator1)}")
         end
       end
