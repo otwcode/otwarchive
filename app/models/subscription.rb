@@ -36,14 +36,21 @@ class Subscription < ApplicationRecord
   end
 
   # Guard against scenarios that may break anonymity or other things.
-  # Subscriptions can only contain works or chapters.
-  # Subs to users should never contain anon works or chapters.
-  # Subs to works should never contain anything but chapters. Chapters can't
-  # have a different anon status from the work, so no need to be paranoid there.
-  # Subs to anon works or series should never contain non-anon works or
-  # chapters, or vice versa.
+  # Emails should only contain works or chapters.
+  # Emails should only contain posted works or chapters.
+  # Emails should never contain chapters of draft works.
+  # Emails should never contain orphaned works or chapters.
+  # TODO: AO3-3620 & AO3-5696: Allow subscriptions to orphan_account to receive
+  # notifications.
+  # Emails for user subs should never contain anon works or chapters.
+  # Emails for work subs should never contain anything but chapters.
+  # Emails for subs to anon works or series should never contain non-anon works
+  # or chapters, or vice versa.
   def valid_notification_entry?(creation)
     return false unless creation.is_a?(Chapter) || creation.is_a?(Work)
+    return false unless creation.try(:posted)
+    return false if creation.is_a?(Chapter) && !creation.work.try(:posted)
+    return false if creation.pseuds.any? { |p| p.user == User.orphan_account }
     return false if subscribable_type == "User" && creation.anonymous?
     return false if subscribable_type == "Work" && !creation.is_a?(Chapter)
     return false if subscribable.respond_to?(:anonymous?) &&
