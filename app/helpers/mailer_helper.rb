@@ -197,7 +197,7 @@ module MailerHelper
   # is not co-created, the subject line will say just "Y posted" even though the
   # subscription is for X.
   def batch_subscription_subject(subscription, creation, additional_creations_count)
-    return if subscription.subscribable_type == "User" && creation.anonymous?
+    return if !subscription.valid_notification_entry?(creation)
 
     subscribable_type = subscription.subscribable_type.downcase
 

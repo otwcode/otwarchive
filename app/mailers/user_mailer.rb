@@ -128,11 +128,8 @@ class UserMailer < ApplicationMailer
       next if creation.pseuds.any? {|p| p.user == User.orphan_account} # no notifications for orphan works
       # TODO: allow subscriptions to orphan_account to receive notifications
 
-      # If the subscription notification is for a user subscription, we don't
-      # want to send updates about works that have recently become anonymous.
-      if @subscription.subscribable_type == 'User'
-        next if Subscription.anonymous_creation?(creation)
-      end
+      # Guard against scenarios that may break anonymity or other things.
+      next unless @subscription.valid_notification_entry?(creation)
 
       @creations << creation
     end

@@ -38,4 +38,21 @@ class Subscription < ApplicationRecord
   def self.anonymous_creation?(creation)
     (creation.is_a?(Work) && creation.anonymous?) || (creation.is_a?(Chapter) && creation.work.anonymous?)
   end
+
+  # Guard against scenarios that may break anonymity or other things.
+  # Subscriptions can only contain works or chapters.
+  # Subs to users should never contain anon works or chapters.
+  # Subs to works should never contain anything but chapters. Chapters can't
+  # have a different anon status from the work, so no need to be paranoid there.
+  # Subs to anon works or series should never contain non-anon works or
+  # chapters, or vice versa.
+  def valid_notification_entry?(creation)
+    return false unless creation.is_a?(Chapter) || creation.is_a?(Work)
+    return false if subscribable_type == "User" && creation.anonymous?
+    return false if subscribable_type == "Work" && !creation.is_a?(Chapter)
+    return false if subscribable.respond_to?(:anonymous?) &&
+      subscribable.anonymous? != creation.anonymous?
+
+    return true
+  end
 end
