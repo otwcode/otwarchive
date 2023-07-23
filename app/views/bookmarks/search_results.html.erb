@@ -1,9 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
+<%= render "muted/muted_items_notice" %>
+
 <h2 class="heading"><%= ts('Search Results') %></h2>
 
 <h4 class="heading">
   <%= ts("You searched for:") %>
-  <%= (strip_tags @search.summary).html_safe %>
+  <%= (sanitize @search.summary, tags: %w[span], attributes: %w[lang]).html_safe %>
 </h4>
 <!--/descriptions-->
 

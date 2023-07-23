@@ -14,7 +14,7 @@ class PseudsController < ApplicationController
   # GET /pseuds.xml
   def index
     if @user
-      @pseuds = @user.pseuds
+      @pseuds = @user.pseuds.alphabetical.paginate(page: params[:page])
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
       @page_subtitle = @user.login

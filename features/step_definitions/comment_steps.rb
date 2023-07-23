@@ -14,11 +14,6 @@ Given /^I have the receive no comment notifications setup$/ do
   user.preference.save
 end
 
-Given "a guest comment on the work {string}" do |title|
-  work = Work.find_by(title: title)
-  FactoryBot.create(:comment, :by_guest, commentable: work.first_chapter)
-end
-
 ParameterType(
   name: "commentable",
   regexp: /the (work|admin post|tag) "([^"]*)"/,
@@ -34,6 +29,11 @@ ParameterType(
     end
   }
 )
+
+Given "a guest comment on {commentable}" do |commentable|
+  commentable = Comment.commentable_object(commentable)
+  FactoryBot.create(:comment, :by_guest, commentable: commentable)
+end
 
 Given "a comment {string} by {string} on {commentable}" do |text, user, commentable|
   user = ensure_user(user)

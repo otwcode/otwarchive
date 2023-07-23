@@ -131,6 +131,16 @@ describe "rake work:reset_word_counts" do
       expect(en_work.word_count).to eq(3000)
       expect(es_work.word_count).to eq(6)
     end
+
+    it "updates works in all languages" do
+      subject.invoke
+
+      en_work.reload
+      es_work.reload
+
+      expect(en_work.word_count).to eq(3)
+      expect(es_work.word_count).to eq(6)
+    end
   end
 
   context "when a work has multiple chapters" do

@@ -62,6 +62,16 @@ Feature: Invite requests
       And I should not see "Sorry, you have no unsent invitations right now."
       And I should see "You have 2 open invitations and 0 that have been sent but not yet used."
 
+  Scenario: User can see an error after trying to invite an invalid email address
+
+    Given I am logged in as "user1"
+      And "user1" has "1" invitation
+      And I am on user1's manage invitations page
+    When I follow the link for "user1" first invite
+      And I fill in "Enter an email address" with "test@"
+      And I press "Update Invitation"
+    Then I should see "Invitee email should look like an email address"
+
   Scenario: User can send out invites they have been granted, and the recipient can sign up
 
     Given invitations are required
@@ -115,15 +125,15 @@ Feature: Invite requests
   Scenario: An admin can get to a user's invitations page
     Given I am logged in as a "support" admin
       And the user "steven" exists and is activated
-    When I go to the abuse administration page for "steven"
-      And I follow "Add User Invitations"
+    When I go to the user administration page for "steven"
+      And I follow "Add Invitations"
     Then I should be on steven's invitations page
 
   Scenario: An admin can get to a user's manage invitations page
     Given I am logged in as a "support" admin
       And the user "steven" exists and is activated
-    When I go to the abuse administration page for "steven"
-      And I follow "Manage User Invitations"
+    When I go to the user administration page for "steven"
+      And I follow "Manage Invitations"
     Then I should be on steven's manage invitations page
 
   Scenario: An admin can create a user's invitations

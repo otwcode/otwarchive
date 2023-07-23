@@ -20,7 +20,7 @@ class UrlActiveValidator < ActiveModel::EachValidator
     rescue
       status = false
     end
-    record.errors[attribute] << (options[:message] || inactive_url_msg) unless status
+    record.errors.add(attribute, options[:message] || inactive_url_msg) unless status
   end
     
 end

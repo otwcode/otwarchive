@@ -13,7 +13,7 @@ on:
 jobs:
   automated-tests:
     name: ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     env:
       CI: true
@@ -104,10 +104,6 @@ jobs:
           sudo apt-get install -y redis-server
           ./script/gh-actions/multiple_redis.sh
 
-      - name: Install phantomjs
-        if: ${{ matrix.tests.command == 'cucumber' }}
-        run: sudo apt-get install -y phantomjs
-
       - name: Cache wkhtmltopdf package
         if: ${{ matrix.tests.ebook }}
         uses: actions/cache@v3
@@ -158,6 +154,16 @@ jobs:
 
       - name: Run test group
         run: bundle exec ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          # Optional for public repos. However, individual forks can set this
+          # secret to reduce the chance of being rate-limited by GitHub.
+          #
+          # https://github.com/marketplace/actions/codecov#usage
+          # https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload failure screenshots
         if: ${{ failure() && matrix.tests.command == 'cucumber' }}

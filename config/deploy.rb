@@ -70,7 +70,7 @@ namespace :deploy do
   task :restart  do
     find_servers(roles: [:app, :web]).each do |server|
       puts "restart on #{server.host}"
-      run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins RAILS_ENV=#{rails_env}" , hosts: server.host
+      run "cd ~/app/current ; bundle exec rake skins:cache_chooser_skins RAILS_ENV=#{rails_env}", hosts: server.host
       run "/home/ao3app/bin/unicorns_reload", hosts: server.host
     end
   end
@@ -108,7 +108,7 @@ namespace :deploy do
   task :reload_site_skins do
     find_servers(roles: :web).each do |server|
       puts "Caching skins on #{server.host}"
-      run "cd ~/app/current ; bundle exec rake skins:cache_all_site_skins  RAILS_ENV=#{rails_env} ; cd ~/app ; rm web_old ; ln -f -s `readlink -f current` web_new ; mv web web_old ; mv web_new web", hosts: server.host
+      run "cd ~/app/current ; bundle exec rake skins:cache_chooser_skins  RAILS_ENV=#{rails_env} ; cd ~/app ; rm web_old ; ln -f -s `readlink -f current` web_new ; mv web web_old ; mv web_new web", hosts: server.host
       sleep (10)
     end
   end
