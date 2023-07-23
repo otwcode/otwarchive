@@ -35,10 +35,6 @@ class Subscription < ApplicationRecord
     end
   end
 
-  def self.anonymous_creation?(creation)
-    (creation.is_a?(Work) && creation.anonymous?) || (creation.is_a?(Chapter) && creation.work.anonymous?)
-  end
-
   # Guard against scenarios that may break anonymity or other things.
   # Subscriptions can only contain works or chapters.
   # Subs to users should never contain anon works or chapters.
