@@ -6,20 +6,19 @@
     <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
     <% creation_url = creation.is_a?(Work) ? work_url(this_work) : work_chapter_url(this_work, creation) %>
     <% dating_key = this_work.backdate ? "backdated" : "new" %>
-    <% work_with_word_count = creation_link_with_word_count(this_work, work_url(this_work)) %>
 
     <% cache("/v1/subscription-email-preface-#{creation.cache_key}") do %>
       <p>
-        <% if creation.is_a?(Work) && this_work.anonymous? %>
+        <% if creation.is_a?(Work) && creation.anonymous? %>
           <%= t(".anon.preface.work.#{dating_key}") %>
-        <% elsif creation.is_a?(Chapter) && this_work.anonymous? %>
-          <%= t(".anon.preface.chapter.html", work_link_with_word_count: work_with_word_count) %>
+        <% elsif creation.is_a?(Chapter) && creation.anonymous? %>
+          <%= t(".anon.preface.chapter.html", work_link_with_word_count: creation_link_with_word_count(this_work, work_url(this_work)) %>
         <% elsif creation.is_a?(Work) %>
           <%# i18n-tasks-use t("user_mailer.batch_subscription_notification.named.preface.work.backdated.html")
               i18n-tasks-use t("user_mailer.batch_subscription_notification.named.preface.work.new.html")-%>
           <%= t(".named.preface.work.#{dating_key}.html", creator_links: creator_links(this_work), count: this_work.creators.size) %>
         <% else %>
-          <%= t(".named.preface.chapter.html", creator_links: creator_links(this_work), count: this_work.creators.size, work_link_with_word_count: work_with_word_count ) %>
+          <%= t(".named.preface.chapter.html", creator_links: creator_links(this_work), count: this_work.creators.size, work_link_with_word_count: creation_link_with_word_count(this_work, work_url(this_work)) %>
         <% end %>
       </p>
     <% end %>
