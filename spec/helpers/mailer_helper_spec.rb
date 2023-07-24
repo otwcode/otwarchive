@@ -362,4 +362,202 @@ describe MailerHelper do
       end
     end
   end
+
+  describe "#batch_subscription_text_preface" do
+    subject do
+      batch_subscription_text_preface(creation)
+    end
+
+    let(:anon_work) do
+      create(:work, collections: [create(:anonymous_collection)])
+    end
+    let(:cocreated_work) do
+      create(:work, authors: [create(:pseud), create(:pseud)])
+    end
+
+    context "when creation is a chapter" do
+      let(:work_title) { "\"#{creation.work.title}\"" }
+      let(:work_word_count) { creation.work.word_count }
+      let(:work_creators) { creator_text(creation.work) }
+
+      context "when work has one creator" do
+        let(:creation) { create(:chapter) }
+
+        it "includes the work creator and their URL, says \"new chapter\", and includes the work title and word count" do
+          expect(subject).to eq("#{work_creators} posted a new chapter of #{work_title} (#{work_word_count} words):")
+        end
+      end
+
+      context "when work has two creators" do
+        let(:creation) { create(:chapter, work: cocreated_work) }
+
+        it "includes the work creators and their URLs, says \"new chapter\", and includes the work title and word count" do
+          expect(subject).to eq("#{work_creators} posted a new chapter of #{work_title} (#{work_word_count} words):")
+        end
+      end
+
+      context "when work is anonymous" do
+        let(:creation) { create(:chapter, work: anon_work) }
+
+        it { is_expected.to eq("Anonymous posted a new chapter of #{work_title} (#{work_word_count} words):") }
+      end
+    end
+
+    context "when creation is a work" do
+      let(:work_creators) { creator_text(creation) }
+
+      context "when work is new" do
+        context "when work has one creator" do
+          let(:creation) { create(:work) }
+
+          it "includes the work creator and their URL and says \"new work\"" do
+            expect(subject).to eq("#{work_creators} posted a new work:")
+          end
+        end
+
+        context "when work has two creators" do
+          let(:creation) { cocreated_work }
+
+          it "includes the work creators and their URLs and says \"new work\"" do
+            expect(subject).to eq("#{work_creators} posted a new work:")
+          end
+        end
+
+        context "when work is anonymous" do
+          let(:creation) { anon_work }
+
+          it { is_expected.to eq("Anonymous posted a new work:") }
+        end
+      end
+
+      context "when work is backdated" do
+        context "when work has one creator" do
+          let(:creation) { create(:work, backdate: true) }
+
+          it "includes the work creator and their URL and says \"backdated work\"" do
+            expect(subject).to eq("#{work_creators} posted a backdated work:")
+          end
+        end
+
+        context "when work has two creators" do
+          let(:creation)  { cocreated_work }
+
+          before { creation.update(backdate: true) }
+
+          it "includes the work creators and their URLs and says \"backdated work\"" do
+            expect(subject).to eq("#{work_creators} posted a backdated work:")
+          end
+        end
+
+        context "when work is anonymous" do
+          let(:creation)  { anon_work }
+
+          before { creation.update(backdate: true) }
+
+          it { is_expected.to eq("Anonymous posted a backdated work:") }
+        end
+      end
+    end
+  end
+
+  describe "#batch_subscription_html_preface" do
+    subject do
+      batch_subscription_html_preface(creation)
+    end
+
+    let(:anon_work) do
+      create(:work, collections: [create(:anonymous_collection)])
+    end
+    let(:cocreated_work) do
+      create(:work, authors: [create(:pseud), create(:pseud)])
+    end
+
+    context "when creation is a chapter" do
+      let(:work_link) do
+        style_creation_link(creation.work.title, work_url(creation.work))
+      end
+      let(:work_word_count) { creation.work.word_count }
+      let(:work_creator_links) { creator_links(creation.work) }
+
+      context "when work has one creator" do
+        let(:creation) { create(:chapter) }
+
+        it "links to the work creator, says \"new chapter\", links to the work, and provides the work word count" do
+          expect(subject).to eq("#{work_creator_links} posted a new chapter of #{work_link} (#{work_word_count} words):")
+        end
+      end
+
+      context "when work has two creators" do
+        let(:creation) { create(:chapter, work: cocreated_work) }
+
+        it "links to the work creators, says \"new chapter\", links to the work, and provides the work word count" do
+          expect(subject).to eq("#{work_creator_links} posted a new chapter of #{work_link} (#{work_word_count} words):")
+        end
+      end
+
+      context "when work is anonymous" do
+        let(:creation) { create(:chapter, work: anon_work) }
+
+        it "says \"Anonymous posted a new chapter,\" links to the work, and provides the work word count" do
+          expect(subject).to eq("Anonymous posted a new chapter of #{work_link} (#{work_word_count} words):")
+        end
+      end
+    end
+
+    context "when creation is a work" do
+      let(:work_creator_links) { creator_links(creation) }
+
+      context "when work is new" do
+        context "when work has one creator" do
+          let(:creation) { create(:work) }
+
+          it "links to the work creator and says \"posted a new work\"" do
+            expect(subject).to eq("#{work_creator_links} posted a new work:")
+          end
+        end
+
+        context "when work has two creators" do
+          let(:creation) { cocreated_work }
+
+          it "links to the work creators and says \"posted a new work\"" do
+            expect(subject).to eq("#{work_creator_links} posted a new work:")
+          end
+        end
+
+        context "when work is anonymous" do
+          let(:creation) { anon_work }
+
+          it { is_expected.to eq("Anonymous posted a new work:") }
+        end
+      end
+
+      context "when work is backdated" do
+        context "when work has one creator" do
+          let(:creation) { create(:work, backdate: true) }
+
+          it "links to the work creator and says \"posted a backdated work\"" do
+            expect(subject).to eq("#{work_creator_links} posted a backdated work:")
+          end
+        end
+
+        context "when work has two creators" do
+          let(:creation)  { cocreated_work }
+
+          before { creation.update(backdate: true) }
+
+          it "links to the work creators and says \"posted a backdated work\"" do
+            expect(subject).to eq("#{work_creator_links} posted a backdated work:")
+          end
+        end
+
+        context "when work is anonymous" do
+          let(:creation) { anon_work }
+
+          before { creation.update(backdate: true) }
+
+          it { is_expected.to eq("Anonymous posted a backdated work:") }
+        end
+      end
+    end
+  end
 end

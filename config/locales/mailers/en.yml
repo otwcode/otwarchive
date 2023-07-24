@@ -170,20 +170,19 @@ en:
         html: The collection maintainers of %{collection_link} have added your work %{work_link} to their collection!
         text: The collection maintainers of "%{collection_title}" (%{collection_url}) have added your work "%{work_title}" (%{work_url}) to their collection!
     batch_subscription_notification:
-      anon:
-        preface:
+      chapter_summary: Chapter Summary
+      footer_note:
+        html: You're receiving this email because you've subscribed to %{subscription_link}. Follow the link to unsubscribe if you no longer wish to receive updates.
+        text: 'You''re receiving this email because you''ve subscribed to %{subscription_name}. Follow the link to unsubscribe if you no longer wish to receive updates: %{unsubscribe_url}'
+      preface:
+        anon:
           chapter:
             html: 'Anonymous posted a new chapter of %{work_link_with_word_count}:'
             text: 'Anonymous posted a new chapter of %{work_title_with_word_count}:'
           work:
             backdated: 'Anonymous posted a backdated work:'
             new: 'Anonymous posted a new work:'
-      chapter_summary: Chapter Summary
-      footer_note:
-        html: You're receiving this email because you've subscribed to %{subscription_link}. Follow the link to unsubscribe if you no longer wish to receive updates.
-        text: 'You''re receiving this email because you''ve subscribed to %{subscription_name}. Follow the link to unsubscribe if you no longer wish to receive updates: %{unsubscribe_url}'
-      named:
-        preface:
+        named:
           chapter:
             html:
               one: "%{creator_links} posted a new chapter of %{work_link_with_word_count}:"

@@ -248,6 +248,28 @@ module MailerHelper
     t(computed_key, **variables)
   end
 
+  def batch_subscription_text_preface(creation)
+    work = creation.is_a?(Chapter) ? creation.work : creation
+
+    variables = {}
+    variables[:creators] = creator_text(work) unless creation.anonymous?
+    variables[:work_title_with_word_count] = creation_title_with_word_count(creation.work) unless creation.is_a?(Work)
+    variables[:count] = creation.pseuds.size unless creation.anonymous?
+
+    t(batch_subscription_preface_key(creation, email_format: "text"), **variables)
+  end
+
+  def batch_subscription_html_preface(creation)
+    work = creation.is_a?(Chapter) ? creation.work : creation
+
+    variables = {}
+    variables[:creator_links] = creator_links(work) unless creation.anonymous?
+    variables[:work_link_with_word_count] = creation_link_with_word_count(creation.work, work_url(creation.work)) unless creation.is_a?(Work)
+    variables[:count] = creation.pseuds.size unless creation.anonymous?
+
+    t(batch_subscription_preface_key(creation, email_format: "html"), **variables)
+  end
+
   private
 
   # e.g., 1 word or 50 words
@@ -286,5 +308,29 @@ module MailerHelper
     else
       work_tag_metadata_list(tags)
     end
+  end
+
+  def batch_subscription_preface_key(creation, email_format:)
+    work = creation.is_a?(Chapter) ? creation.work : creation
+
+    base_key = "user_mailer.batch_subscription_notification.preface"
+    creator_key = creation.anonymous? ? "anon" : "named"
+    creation_key = creation.is_a?(Chapter) ? "chapter" : "work"
+    dating_key = creation.backdate ? ".backdated" : ".new" if creation.is_a?(Work)
+    format_key = ".#{email_format}" unless creation.is_a?(Work) && creation.anonymous?
+
+    # Note the lack of . before dating and format keys, which are not always
+    # included.
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.chapter.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.chapter.text")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.work.backdated")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.work.new")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.chapter.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.chapter.text")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.backdated.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.backdated.text")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.new.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.naemd.work.new.text")
+    computed_key = "#{base_key}.#{creator_key}.#{creation_key}#{dating_key}#{format_key}"
   end
 end # end of MailerHelper
