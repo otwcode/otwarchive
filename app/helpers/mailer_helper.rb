@@ -311,8 +311,6 @@ module MailerHelper
   end
 
   def batch_subscription_preface_key(creation, email_format:)
-    work = creation.is_a?(Chapter) ? creation.work : creation
-
     base_key = "user_mailer.batch_subscription_notification.preface"
     creator_key = creation.anonymous? ? "anon" : "named"
     creation_key = creation.is_a?(Chapter) ? "chapter" : "work"
@@ -331,6 +329,6 @@ module MailerHelper
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.backdated.text")
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.new.html")
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.naemd.work.new.text")
-    computed_key = "#{base_key}.#{creator_key}.#{creation_key}#{dating_key}#{format_key}"
+    "#{base_key}.#{creator_key}.#{creation_key}#{dating_key}#{format_key}"
   end
 end # end of MailerHelper

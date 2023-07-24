@@ -440,7 +440,7 @@ describe MailerHelper do
         end
 
         context "when work has two creators" do
-          let(:creation)  { cocreated_work }
+          let(:creation) { cocreated_work }
 
           before { creation.update(backdate: true) }
 
@@ -450,7 +450,7 @@ describe MailerHelper do
         end
 
         context "when work is anonymous" do
-          let(:creation)  { anon_work }
+          let(:creation) { anon_work }
 
           before { creation.update(backdate: true) }
 
@@ -541,7 +541,7 @@ describe MailerHelper do
         end
 
         context "when work has two creators" do
-          let(:creation)  { cocreated_work }
+          let(:creation) { cocreated_work }
 
           before { creation.update(backdate: true) }
 
