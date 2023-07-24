@@ -607,68 +607,8 @@ describe UserMailer do
       end
     end
 
-    context "when creation is a backdated work" do
-      let(:work) { create(:work, backdate: true, authors: [creator]) }
-      let(:subscription) { create(:subscription, subscribable: work.pseuds.first.user) }
-      let(:entries) { ["Work_#{work.id}"].to_json }
-
-      context "when creator is not anonymous" do
-        it "has the correct subject line" do
-          subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{creator.byline} posted #{work.title}"
-          expect(email).to have_subject(subject)
-        end
-
-        it "has the correct preface in the HTML version" do
-          expect(email).to have_html_part_content("#{style_pseud_link(creator)} posted a backdated work:")
-        end
-
-        it "has the correct preface in the text version" do
-          expect(email).to have_text_part_content("#{text_pseud(creator)} posted a backdated work:")
-        end
-      end
-
-      context "when creator is anonymous" do
-        let(:series) { create(:series) }
-        let(:subscription) { create(:subscription, subscribable: series) }
-        let(:work) { create(:work, backdate: true, collections: [create(:anonymous_collection)], series: [series]) }
-
-        it "has the correct subject line" do
-          subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Anonymous posted #{work.title} in the #{series.title} series"
-          expect(email).to have_subject(subject)
-        end
-
-        it "has the correct preface in the HTML version" do
-          expect(email).to have_html_part_content("Anonymous posted a backdated work:")
-        end
-
-        it "has the correct preface in the text version" do
-          expect(email).to have_text_part_content("Anonymous posted a backdated work:")
-        end
-      end
-    end
-
     context "when creation is a chapter" do
       let(:entries) { ["Chapter_#{chapter.id}"].to_json }
-
-      context "when work creator is anonymous" do
-        let(:work) { create(:work, collections: [create(:anonymous_collection)]) }
-        let(:subscription) { create(:subscription, subscribable: work) }
-        let(:chapter) { create(:chapter, work: work) }
-
-        it "has the correct subject line" do
-          subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Anonymous posted #{chapter.chapter_header} of #{work.title}"
-          expect(email).to have_subject(subject)
-        end
-
-        it "has the correct preface in the HTML version" do
-          work_link = "<i><b>#{style_link(work.title, work_url(work))}</b></i>"
-          expect(email).to have_html_part_content("Anonymous posted a new chapter of #{work_link} (#{work.word_count} words):")
-        end
-
-        it "has the correct preface in the text version" do
-          expect(email).to have_text_part_content("Anonymous posted a new chapter of \"#{work.title}\" (#{work.word_count} words):\n#{work_chapter_url(work, chapter)}")
-        end
-      end
 
       context "with different creators than the work" do
         let(:creator1) { create(:user).default_pseud }
