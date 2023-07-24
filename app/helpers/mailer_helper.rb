@@ -207,6 +207,7 @@ module MailerHelper
     work = creation.is_a?(Chapter) ? creation.work : creation
     series = subscription.subscribable if subscribable_type == "series"
     creator_list = creation.pseuds.map(&:byline).to_sentence unless creation.anonymous?
+    # For pluralization: creator publicó, creator y creator2 publicaron.
     creators_count = creation.pseuds.size unless creation.anonymous?
     chapter_header = creation.chapter_header if creation_type == "chapter"
 
@@ -231,7 +232,7 @@ module MailerHelper
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.work.one_entry")
     computed_key = "#{base_key}.#{creator_key}.#{creation_key}.#{entries_key}"
 
-    # "and X more," translated separately so we can pluralize based on X.
+    # "and X more," translated separately so we can pluralize "more" based on X.
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.more")
     more_translation = t("#{base_key}.more", count: additional_creations_count) unless additional_creations_count.zero?
 
@@ -242,7 +243,7 @@ module MailerHelper
     variables[:chapter_header] = chapter_header if creation_type == "chapter"
     variables[:work_title] = work.title
     variables[:series_title] = series.title if subscribable_type == "series"
-    variables[:more] = more_translation unless additional_creations_count.zero?
+    variables[:more] = more_translation
 
     t(computed_key, **variables)
   end
