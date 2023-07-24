@@ -427,6 +427,14 @@ public
     end
   end
 
+  # Prevents temporarily suspended users from deleting content
+  def check_user_not_suspended
+    if current_user.is_a?(User) && (current_user.suspended?)
+      flash[:error] = t('suspension_notice', default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+      redirect_to current_user
+    end
+  end
+
   # Does the current user own a specific object?
   def current_user_owns?(item)
   	!item.nil? && current_user.is_a?(User) && (item.is_a?(User) ? current_user == item : current_user.is_author_of?(item))

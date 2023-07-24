@@ -13,6 +13,14 @@ describe WorksController, work_search: true do
     work
   end
 
+  let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.since) }
+  let(:suspended_users_work) do
+    suspended_user.update(suspended: false, suspended_until: nil)
+    work = create(:work, authors: [suspended_user.pseuds.first, co_creator.pseuds.first])
+    suspended_user.update(suspended: true, suspended_until: 1.week.since)
+    work
+  end
+  
   describe "before_action #clean_work_search_params" do
     let(:params) { {} }
 
@@ -822,6 +830,20 @@ describe WorksController, work_search: true do
         it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{work_title} was deleted.")
         expect { work.reload }.to raise_exception(ActiveRecord::RecordNotFound)
         expect(Comment.count).to eq(0)
+      end
+    end
+
+    context "when a logged in user is suspended" do
+      before do
+        fake_login_known_user(suspended_user)
+      end
+
+      it "deletes the work and redirects to the user's works with a notice" do
+        delete :destroy, params: { id: suspended_users_work.id }
+
+        it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{suspended_users_work.title} was deleted.")
+        expect { suspended_users_work.reload }
+          .to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 

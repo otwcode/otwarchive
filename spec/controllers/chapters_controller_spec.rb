@@ -24,6 +24,20 @@ describe ChaptersController do
     chapter
   end
 
+  let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.since) }
+  let(:suspended_users_work) do
+    suspended_user.update(suspended: false, suspended_until: nil)
+    work = create(:work, authors: [suspended_user.pseuds.first, co_creator.pseuds.first])
+    suspended_user.update(suspended: true, suspended_until: 1.week.since)
+    work
+  end
+  let(:suspended_users_work_chapter2) do
+    suspended_user.update(suspended: false, suspended_until: nil)
+    chapter = create(:chapter, work: suspended_users_work, position: 2, authors: [suspended_user.pseuds.first, co_creator.pseuds.first])
+    suspended_user.update(suspended: true, suspended_until: 1.week.since)
+    chapter
+  end
+
   describe "index" do
     it "redirects to work" do
       get :index, params: { work_id: work.id }
@@ -289,6 +303,13 @@ describe ChaptersController do
         expect(response).to render_template(:new)
       end
 
+      it "errors and redirects to user page when user is suspended" do
+        fake_login_known_user(suspended_user)
+        get :new, params: { work_id: suspended_users_work.id }
+        it_redirects_to_simple(user_path(suspended_user))
+        expect(flash[:error]).to include("Your account has been suspended")
+      end
+
       it "errors and redirects to user page when user is banned" do
         fake_login_known_user(banned_user)
         get :new, params: { work_id: banned_users_work.id }
@@ -325,6 +346,13 @@ describe ChaptersController do
       it "renders edit template" do
         get :edit, params: { work_id: work.id, id: work.chapters.first.id }
         expect(response).to render_template(:edit)
+      end
+
+      it "errors and redirects to user page when user is suspended" do
+        fake_login_known_user(suspended_user)
+        get :edit, params: { work_id: suspended_users_work.id, id: suspended_users_work.chapters.first.id }
+        it_redirects_to_simple(user_path(suspended_user))
+        expect(flash[:error]).to include("Your account has been suspended")
       end
 
       it "renders edit template when user is banned" do
@@ -379,6 +407,18 @@ describe ChaptersController do
           end
         end
 
+        context "When the logged in user is suspended" do
+          before do
+            fake_login_known_user(suspended_user)
+          end
+
+          it "errors and redirects to user page" do
+            get :edit, params: { work_id: suspended_users_work.id, id: suspended_users_work_chapter2.id, remove: "me" }
+
+            expect(flash[:error]).to include("Your account has been suspended")
+          end
+        end
+
         context "When the logged in user is banned" do
           before do
             fake_login_known_user(banned_user)
@@ -411,6 +451,13 @@ describe ChaptersController do
       before do
         fake_login_known_user(user)
         chapter_attributes[:author_attributes] = { ids: [user.pseuds.first.id] }
+      end
+
+      it "errors and redirects to user page when user is suspended" do
+        fake_login_known_user(suspended_user)
+        post :create, params: { work_id: suspended_users_work.id, chapter: chapter_attributes }
+        it_redirects_to_simple(user_path(suspended_user))
+        expect(flash[:error]).to include("Your account has been suspended")
       end
 
       it "errors and redirects to user page when user is banned" do
@@ -596,6 +643,13 @@ describe ChaptersController do
     context "when work owner is logged in" do
       before do
         fake_login_known_user(user)
+      end
+
+      it "errors and redirects to user page when user is suspended" do
+        fake_login_known_user(suspended_user)
+        put :update, params: { work_id: suspended_users_work.id, id: suspended_users_work.chapters.first.id, chapter: chapter_attributes }
+        it_redirects_to_simple(user_path(suspended_user))
+        expect(flash[:error]).to include("Your account has been suspended")
       end
 
       it "errors and redirects to user page when user is banned" do
@@ -1096,6 +1150,17 @@ describe ChaptersController do
         it "cannot delete the posted chapter" do
           delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
           it_redirects_to_with_error(edit_work_path(work), "You can't delete the only chapter in your work. If you want to delete the work, choose \"Delete Work\".")
+        end
+      end
+
+      context "when the logged in user is suspended" do
+        before do
+          fake_login_known_user(suspended_user)
+        end
+
+        it "errors and redirects to user page" do
+          delete :destroy, params: { work_id: suspended_users_work.id, id: suspended_users_work_chapter2.id }
+          expect(flash[:error]).to include("Your account has been suspended")
         end
       end
 
