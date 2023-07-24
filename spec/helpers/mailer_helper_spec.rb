@@ -168,6 +168,7 @@ describe MailerHelper do
     subject do
       batch_subscription_subject(subscription, creation, additional_entries)
     end
+
     let(:creator) { create(:user, login: "creator").default_pseud }
     let(:cocreator) { create(:user, login: "cocreator").default_pseud }
     let(:creator_byline) { creation.pseuds.first.byline }

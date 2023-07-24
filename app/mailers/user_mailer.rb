@@ -141,9 +141,8 @@ class UserMailer < ApplicationMailer
       mail(
         to: @subscription.user.email,
         subject: batch_subscription_subject(
-                  @subscription,
-                  @creations.first, additional_creations_count)
-      )
+          @subscription,
+          @creations.first, additional_creations_count))
     end
   end
 
