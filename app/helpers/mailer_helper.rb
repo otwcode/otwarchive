@@ -207,7 +207,7 @@ module MailerHelper
     work = creation.is_a?(Chapter) ? creation.work : creation
     series = subscription.subscribable if subscribable_type == "series"
     creator_list = creation.pseuds.map(&:byline).to_sentence unless creation.anonymous?
-    # For pluralization: creator publicó, creator y creator2 publicaron.
+    # For pluralization: creator publico, creator y creator2 publicaron.
     creators_count = creation.pseuds.size unless creation.anonymous?
     chapter_header = creation.chapter_header if creation_type == "chapter"
 
