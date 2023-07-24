@@ -16,7 +16,7 @@ describe WorksController, work_search: true do
   let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.since) }
   let(:suspended_users_work) do
     suspended_user.update(suspended: false, suspended_until: nil)
-    work = create(:work, authors: [suspended_user.pseuds.first, co_creator.pseuds.first])
+    work = create(:work, authors: [suspended_user.pseuds.first])
     suspended_user.update(suspended: true, suspended_until: 1.week.since)
     work
   end
@@ -838,12 +838,12 @@ describe WorksController, work_search: true do
         fake_login_known_user(suspended_user)
       end
 
-      it "deletes the work and redirects to the user's works with a notice" do
+      it "errors and redirects to user page" do
+        fake_login_known_user(suspended_user)
         delete :destroy, params: { id: suspended_users_work.id }
-
-        it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{suspended_users_work.title} was deleted.")
-        expect { suspended_users_work.reload }
-          .to raise_exception(ActiveRecord::RecordNotFound)
+        
+        it_redirects_to_simple(user_path(suspended_user))
+        expect(flash[:error]).to include("Your account has been suspended")
       end
     end
 
