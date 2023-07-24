@@ -328,7 +328,7 @@ module MailerHelper
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.backdated.html")
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.backdated.text")
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.new.html")
-    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.naemd.work.new.text")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.new.text")
     "#{base_key}.#{creator_key}.#{creation_key}#{dating_key}#{format_key}"
   end
 end # end of MailerHelper
