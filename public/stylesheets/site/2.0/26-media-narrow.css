@@ -182,7 +182,7 @@ body .narrow-shown {
   padding: 0;
 }
 
-.splash div.module, .logged-in .splash div.module {
+.splash div.module, .splash nav.module, .logged-in .splash div.module, .logged-in .splash nav.module {
   clear: both;
   margin-left: 0;
   margin-right: 0;
