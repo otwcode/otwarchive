@@ -54,8 +54,8 @@ class Subscription < ApplicationRecord
     return false if subscribable_type == "User" && creation.anonymous?
     return false if subscribable_type == "Work" && !creation.is_a?(Chapter)
     return false if subscribable.respond_to?(:anonymous?) &&
-      subscribable.anonymous? != creation.anonymous?
+                    subscribable.anonymous? != creation.anonymous?
 
-    return true
+    true
   end
 end

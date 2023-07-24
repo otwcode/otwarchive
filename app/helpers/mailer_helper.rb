@@ -196,6 +196,9 @@ module MailerHelper
   # to user X, who has co-created a work with user Y, and Y posts a chapter that
   # is not co-created, the subject line will say just "Y posted" even though the
   # subscription is for X.
+  # Note that we assume this is being used in batch_subscription_notification,
+  # after a subscription.valid_notification_entry?(creation) check. You can
+  # otherwise pass invalid or anonymity-breaking combinations of data to this.
   def batch_subscription_subject(subscription, creation, additional_creations_count)
     subscribable_type = subscription.subscribable_type.downcase
 
@@ -241,7 +244,7 @@ module MailerHelper
     variables[:series_title] = series.title if subscribable_type == "series"
     variables[:more] = more_translation unless additional_creations_count.zero?
 
-    t("#{computed_key}", **variables)
+    t(computed_key, **variables)
   end
 
   private

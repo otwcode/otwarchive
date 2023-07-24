@@ -40,6 +40,8 @@ class Chapter < ApplicationRecord
     end
   end
 
+  delegate :anonymous?, to: :work
+
   before_save :strip_title
   before_save :set_word_count
   before_save :validate_published_at
@@ -199,9 +201,5 @@ class Chapter < ApplicationRecord
   def expire_comments_count
     super
     work&.expire_comments_count
-  end
-
-  def anonymous?
-    work.anonymous?
   end
 end

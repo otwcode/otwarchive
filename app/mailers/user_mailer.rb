@@ -140,8 +140,9 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(Locale.find(@subscription.user.preference.preferred_locale).iso) do
       mail(
         to: @subscription.user.email,
-        subject: batch_subscription_subject(@subscription,
-          @creations.first, additional_creations_count)
+        subject: batch_subscription_subject(
+                  @subscription,
+                  @creations.first, additional_creations_count)
       )
     end
   end

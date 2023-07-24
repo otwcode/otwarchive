@@ -184,7 +184,8 @@ describe MailerHelper do
 
         context "when subscription is to a series" do
           let(:work) do
-            create(:work,
+            create(
+              :work,
               authors: [creator],
               series: [create(:series, title: "Series Title")],
               title: "Work Title"
@@ -200,7 +201,8 @@ describe MailerHelper do
 
             context "when chapter is co-created" do
               let(:creation) do
-                create(:chapter,
+                create(
+                  :chapter,
                   authors: [creator, cocreator],
                   work: work
                 )
@@ -211,7 +213,8 @@ describe MailerHelper do
 
             context "when work is anonymous" do
               let(:work) do
-                create(:work,
+                create(
+                  :work,
                   authors: [creator],
                   collections: [create(:anonymous_collection)],
                   title: "Work Title",
@@ -225,7 +228,8 @@ describe MailerHelper do
 
           context "when main creation is a work" do
             let(:creation) do
-              create(:work,
+              create(
+                :work,
                 authors: [creator],
                 series: [series],
                 title: "Work Title"
@@ -236,7 +240,8 @@ describe MailerHelper do
 
             context "when work is co-created" do
               let(:creation) do
-                create(:work,
+                create(
+                  :work,
                   authors: [creator, cocreator],
                   series: [series],
                   title: "Work Title"
@@ -248,11 +253,12 @@ describe MailerHelper do
 
             context "when work is anonymous" do
               let(:creation) do
-                create(:work,
+                create(
+                  :work,
                   collections: [create(:anonymous_collection)],
                   series: [series],
                   title: "Work Title"
-                  )
+                )
               end
 
               it { is_expected.to eq("#{app_nick} Anonymous posted #{work.title} in the #{series.title} series#{more}") }
@@ -263,7 +269,8 @@ describe MailerHelper do
         context "when subscription is to a user" do
           let(:work) { create(:work, authors: [creator], title: "Work Title") }
           let(:anonymous_work) do
-            create(:work,
+            create(
+              :work,
               authors: [creator],
               collections: [create(:anonymous_collection)],
               title: "Work Title"
@@ -280,7 +287,7 @@ describe MailerHelper do
 
             context "when chapter is co-created" do
               let(:creation) do
-                create(:chapter, authors: [creator, cocreator], work: work )
+                create(:chapter, authors: [creator, cocreator], work: work)
               end
 
               it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted #{chapter_header} of #{work.title}#{more}") }
@@ -288,8 +295,8 @@ describe MailerHelper do
 
             context "when work is co-created but chapter is not" do
               let(:work) do
-                create(:work,
-                  authors: [creator, cocreator], title: "Work Title"
+                create(
+                  :work, authors: [creator, cocreator], title: "Work Title"
                 )
               end
               let(:creation) do
@@ -309,9 +316,8 @@ describe MailerHelper do
 
             context "when work is co-created" do
               let(:creation) do
-                create(:work,
-                  authors: [creator, cocreator],
-                  title: "Work Title"
+                create(
+                  :work, authors: [creator, cocreator], title: "Work Title"
                 )
               end
 
@@ -345,16 +351,9 @@ describe MailerHelper do
 
           context "when work is co-created but chapter is not" do
             let(:work) do
-              create(:work,
-                authors: [creator, cocreator], title: "Work Title"
-              )
+              create(:work, authors: [creator, cocreator], title: "Work Title")
             end
-            let(:creation) do
-              create(:chapter,
-                authors: [creator],
-                work: work
-              )
-            end
+            let(:creation) { create(:chapter, authors: [creator], work: work) }
 
             it { is_expected.to eq("#{app_nick} #{creator_byline} posted #{chapter_header} of #{work.title}#{more}") }
           end
