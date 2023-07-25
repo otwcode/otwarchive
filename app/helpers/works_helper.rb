@@ -193,9 +193,9 @@ module WorksHelper
   end
 
   def get_open_assignments(user)
-    offer_signups = ChallengeAssignment.offer_signups_by(user).undefaulted.unstarted.sent
-    pinch_hits = ChallengeAssignment.pinch_hits_by(user).undefaulted.unstarted.sent
+    offer_signups = user.offer_assignments.undefaulted.unstarted.sent
+    pinch_hits = user.pinch_hit_assignments.undefaulted.unstarted.sent
 
-    (offer_signups + pinch_hits).uniq
+    (offer_signups + pinch_hits)
   end
 end
