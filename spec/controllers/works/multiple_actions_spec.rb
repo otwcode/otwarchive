@@ -138,8 +138,10 @@ describe WorksController do
 
       # already covered - just for completeness
       it "deletes all the works" do
-        expect { Work.find(multiple_work1.id) }.to raise_exception(ActiveRecord::RecordNotFound)
-        expect { Work.find(multiple_work2.id) }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect { Work.find(multiple_work1.id) }
+          .to raise_exception(ActiveRecord::RecordNotFound)
+        expect { Work.find(multiple_work2.id) }
+          .to raise_exception(ActiveRecord::RecordNotFound)
       end
 
       it "displays a notice" do
