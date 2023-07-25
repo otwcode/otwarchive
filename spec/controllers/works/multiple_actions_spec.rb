@@ -120,16 +120,16 @@ describe WorksController do
 
   describe "delete_multiple" do
     context "when logged in as a user" do
-      let(:multiple_work1) {
+      let(:multiple_work1) do
         create(:work,
-              authors: [multiple_works_user.default_pseud],
-              title: "Work 1")
-      }
-      let(:multiple_work2) {
+               authors: [multiple_works_user.default_pseud],
+               title: "Work 1")
+      end
+      let(:multiple_work2) do
         create(:work,
-              authors: [multiple_works_user.default_pseud],
-              title: "Work 2")
-      }
+               authors: [multiple_works_user.default_pseud],
+               title: "Work 2")
+      end
 
       before do
         fake_login_known_user(multiple_works_user)
