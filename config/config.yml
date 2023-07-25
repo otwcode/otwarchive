@@ -354,7 +354,7 @@ SUPPORTED_CSS_SHORTHAND_PROPERTIES:
 - overflow
 - padding
 - page-break
-- pause,
+- pause
 - scrollbar
 - text
 - transform
