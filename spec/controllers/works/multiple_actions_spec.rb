@@ -151,16 +151,16 @@ describe WorksController do
       let(:multiple_work1) do
         banned_user.update(banned: false)
         work = create(:work,
-              authors: [banned_user.default_pseud],
-              title: "Work 1")
+                      authors: [banned_user.default_pseud],
+                      title: "Work 1")
         banned_user.update(banned: true)
         work
       end
       let(:multiple_work2) do
         banned_user.update(banned: false)
         work = create(:work,
-              authors: [banned_user.default_pseud],
-              title: "Work 2")
+                      authors: [banned_user.default_pseud],
+                      title: "Work 2")
         banned_user.update(banned: true)
         work
       end
@@ -172,8 +172,10 @@ describe WorksController do
 
       # already covered - just for completeness
       it "deletes all the works" do
-        expect { Work.find(multiple_work1.id) }.to raise_exception(ActiveRecord::RecordNotFound)
-        expect { Work.find(multiple_work2.id) }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect { Work.find(multiple_work1.id) }
+          .to raise_exception(ActiveRecord::RecordNotFound)
+        expect { Work.find(multiple_work2.id) }
+          .to raise_exception(ActiveRecord::RecordNotFound)
       end
 
       it "displays a notice" do
@@ -185,16 +187,16 @@ describe WorksController do
       let(:multiple_work1) do
         suspended_user.update(suspended: false, suspended_until: nil)
         work = create(:work,
-              authors: [suspended_user.default_pseud],
-              title: "Work 1")
+                      authors: [suspended_user.default_pseud],
+                      title: "Work 1")
         suspended_user.update(suspended: true, suspended_until: 1.week.since)
         work
       end
       let(:multiple_work2) do
         suspended_user.update(suspended: false, suspended_until: nil)
         work = create(:work,
-              authors: [suspended_user.default_pseud],
-              title: "Work 2")
+                      authors: [suspended_user.default_pseud],
+                      title: "Work 2")
         suspended_user.update(suspended: true, suspended_until: 1.week.since)
         work
       end
@@ -426,14 +428,14 @@ describe WorksController do
     end
 
     context "when user is banned" do
-      let(:work_params) {
+      let(:work_params) do
         {
           work: {
             comment_permissions: "enable_all",
             moderated_commenting_enabled: "0"
           }
         }
-      }
+      end
       
       it "errors and redirects to user page" do
         params = params # loads params variable, so that works are created before the user is banned, otherwise they will be lazily-created after the user is banned which would be a validation error
