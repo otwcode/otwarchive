@@ -460,6 +460,15 @@ describe ChaptersController do
             expect(assigns[:chapter].posted).to be true
           end
 
+          it "updates cached chapter counts" do
+            expect do
+              post :create, params: { work_id: work.id, chapter: chapter_attributes, post_without_preview_button: true }
+            end.to change { work.number_of_chapters }
+              .from(1).to(2)
+              .and change { work.number_of_posted_chapters }
+              .from(1).to(2)
+          end
+
           it "posts the work if the work was not posted before" do
             post :create, params: { work_id: unposted_work.id, chapter: chapter_attributes, post_without_preview_button: true }
             expect(assigns[:work].posted).to be true
@@ -499,6 +508,14 @@ describe ChaptersController do
           it "does not post the chapter" do
             post :create, params: { work_id: work.id, chapter: chapter_attributes, preview_button: true }
             expect(assigns[:chapter].posted).to be false
+          end
+
+          it "updates cached chapter counts" do
+            expect do
+              post :create, params: { work_id: work.id, chapter: chapter_attributes, preview_button: true }
+            end.to change { work.number_of_chapters }
+              .from(1).to(2)
+              .and avoid_changing { work.number_of_posted_chapters }
           end
 
           it "gives a notice that the chapter is a draft and redirects to the chapter preview" do
@@ -944,7 +961,7 @@ describe ChaptersController do
       context "when work has one chapter" do
         it "redirects to edit work" do
           delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
-          it_redirects_to_with_error(edit_work_path(work), "You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
+          it_redirects_to_with_error(edit_work_path(work), "You can't delete the only chapter in your work. If you want to delete the work, choose \"Delete Work\".")
         end
       end
 
@@ -966,6 +983,15 @@ describe ChaptersController do
 
           delete :destroy, params: { work_id: work.id, id: chapter2.id }
           expect(assigns[:work].updated_at).not_to eq(old_updated_at)
+        end
+
+        it "updates cached chapter counts" do
+          expect do
+            delete :destroy, params: { work_id: work.id, id: chapter2.id }
+          end.to change { work.number_of_chapters }
+            .from(2).to(1)
+            .and change { work.number_of_posted_chapters }
+            .from(2).to(1)
         end
 
         it "gives a notice that the chapter was deleted and redirects to work" do
@@ -1027,6 +1053,27 @@ describe ChaptersController do
           all_chapters = work.chapters_in_order(include_drafts: true)
           expect(all_chapters).to eq([chapter1, chapter3, chapter4])
           expect(all_chapters.map(&:position)).to eq([1, 2, 3])
+        end
+      end
+
+      context "when work has more than one chapter and one is a draft" do
+        let!(:chapter2) { create(:chapter, work: work, posted: false, position: 2, authors: [user.pseuds.first]) }
+
+        it "updates cached chapter counts" do
+          expect do
+            delete :destroy, params: { work_id: work.id, id: chapter2.id }
+          end.to change { work.number_of_chapters }
+            .from(2).to(1)
+            .and avoid_changing { work.number_of_posted_chapters }
+        end
+      end
+
+      context "when work has more than one chapter and all but one are drafts" do
+        let!(:chapter2) { create(:chapter, work: work, posted: false, position: 2, authors: [user.pseuds.first]) }
+
+        it "cannot delete the posted chapter" do
+          delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
+          it_redirects_to_with_error(edit_work_path(work), "You can't delete the only chapter in your work. If you want to delete the work, choose \"Delete Work\".")
         end
       end
     end

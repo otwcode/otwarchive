@@ -1,5 +1,4 @@
 class KnownIssue < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   # why is this included here? FIXME?
   include HtmlCleaner
 
@@ -18,5 +17,4 @@ class KnownIssue < ApplicationRecord
 
   validates_length_of :content, maximum: ArchiveConfig.CONTENT_MAX,
     too_long: ts("cannot be more than %{max} characters long.", max: ArchiveConfig.CONTENT_MAX)
-
 end

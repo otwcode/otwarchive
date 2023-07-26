@@ -3,7 +3,7 @@
   <% commentable = @commentable %>
 <% end %>
 <div class="post comment" id="comment_form_for_<%= commentable.id %>">
-  <%= form_for value_for_comment_form(commentable, comment), :remote => !comment.new_record?, :html => {:id => "comment_for_#{commentable.id}"} do |f| %>
+  <%= form_for value_for_comment_form(commentable, comment), remote: !comment.new_record?, authenticity_token: true, html: { id: "comment_for_#{commentable.id}" } do |f| %>
     <fieldset>
       <legend><%= ts("Post Comment") %></legend>
 
@@ -48,7 +48,7 @@
                 <span><%= ts("to") %> <%= get_commenter_pseud_or_name(commentable) %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
               <% end %>
             <% end %>
-            (<%= allowed_html_instructions(show_list=false) %>)
+            (<%= allowed_html_instructions %>)
           </h4>
         <% else %>
           <h4 class="heading"><%= ts("Comment as") %> <span class="byline"><%= current_user.default_pseud.name %></span>
@@ -103,7 +103,7 @@
       <p class="submit actions">
         <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}", data: {disable_with: ts("Please wait...")} %>
         <% if controller.controller_name == 'inbox' %>
-          <a name="comment_cancel" id="comment_cancel"><%= ts("Close") %></a>
+          <a name="comment_cancel" id="comment_cancel"><%= ts("Cancel") %></a>
         <% elsif comment.persisted? %>
           <%= cancel_edit_comment_link(comment) %>
         <% elsif commentable.is_a?(Comment) || commentable.is_a?(CommentDecorator) %>

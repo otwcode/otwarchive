@@ -17,6 +17,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as a "policy_and_abuse" admin
+      And all emails have been delivered
       And I view the work "ToS Violation"
       And I follow "Hide Work"
     Then I should see "Item has been hidden."
@@ -33,8 +34,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I view the work "ToS Violation"
       And I follow "Hide Work"
       And all indexing jobs have been run
-    Then I should see "Item has been hidden."
       And all emails have been delivered
+    Then I should see "Item has been hidden."
     When I follow "Make Work Visible"
       And all indexing jobs have been run
     Then I should see "Item is no longer hidden."
@@ -46,6 +47,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as a "policy_and_abuse" admin
+      # Don't let the admin password email mess up the count.
+      And all emails have been delivered
       And I view the work "ToS Violation"
       And I follow "Delete Work"
       And all indexing jobs have been run
@@ -119,6 +122,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
   Scenario: Can edit external works
     Given basic tags
+      And basic languages
       And I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
     When I am logged in as a "policy_and_abuse" admin
@@ -134,6 +138,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I fill in "Characters" with "Admin-Added Character"
       And I fill in "Additional Tags" with "Admin-Added Freeform"
       And I check "M/M"
+      And I select "Deutsch" from "Language"
       And it is currently 1 second from now
     When I press "Update External work"
     Then I should see "Admin-Added Creator"
@@ -145,6 +150,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should see "Admin-Added Character"
       And I should see "Admin-Added Freeform"
       And I should see "M/M"
+      And I should see "Language: Deutsch"
 
   Scenario: Can delete external works
     Given basic tags
@@ -360,3 +366,9 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "Over Tag Limit: No"
     When I view the work "Over the Limit"
     Then I should see "Over Tag Limit: Yes"
+
+  Scenario: Policy abuse admins can see original work creators
+    Given a work "Orphaned" with the original creator "orphaneer"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Orphaned"
+    Then I should see the original creator "orphaneer"

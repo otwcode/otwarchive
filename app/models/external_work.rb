@@ -1,6 +1,4 @@
 class ExternalWork < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   include UrlHelpers
   include Bookmarkable
   include Filterable
@@ -12,6 +10,8 @@ class ExternalWork < ApplicationRecord
 
   # .duplicate.count.size returns the number of URLs with multiple external works
   scope :duplicate, -> { group(:url).having("count(DISTINCT id) > 1") }
+
+  scope :for_blurb, -> { includes(:language, :tags) }
 
   AUTHOR_LENGTH_MAX = 500
 
@@ -27,9 +27,9 @@ class ExternalWork < ApplicationRecord
                                 too_long: ts("must be less than %{max} characters long.",
                                              max: ArchiveConfig.SUMMARY_MAX)
 
-  validates_presence_of :author, message: ts('^Creator can\'t be blank')
+  validates :author, presence: { message: ts("can't be blank") }
   validates_length_of :author, maximum: AUTHOR_LENGTH_MAX,
-                               too_long: ts('^Creator must be less than %{max} characters long.',
+                               too_long: ts("must be less than %{max} characters long.",
                                             max: AUTHOR_LENGTH_MAX)
 
   validates :user_defined_tags_count,

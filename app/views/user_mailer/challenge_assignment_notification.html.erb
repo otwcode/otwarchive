@@ -1,5 +1,5 @@
 <% content_for :message do %>
-  <p><%= t(".html.part1", link: style_link(@collection.title, collection_url(@collection))).html_safe %></p>
+  <p><%= t(".assignment.html", link: style_link(@collection.title, collection_url(@collection))) %></p>
 
   <p>
     <%= style_bold(t(".recipient")) %> <%= @request.nil? ? t(".recipient_missing") : style_link(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud)) %>

@@ -5,7 +5,7 @@ rails_root = ENV["RAILS_ROOT"] || File.dirname(__FILE__) + "/../../.."
 rails_env = ENV["RAILS_ENV"] || "development"
 
 unless ENV["CI"]
-  if rails_env == "test" && !ENV["OTWA_NO_START_REDIS"]
+  if rails_env == "test" && !ENV["DOCKER"]
     # https://gist.github.com/441072
     start_redis!(rails_root, :cucumber)
   end

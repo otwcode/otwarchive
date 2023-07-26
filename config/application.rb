@@ -38,7 +38,7 @@ module Otwarchive
     I18n.config.enforce_available_locales = false
     I18n.config.available_locales = [
       :en, :af, :ar, :bg, :bn, :ca, :cs, :cy, :da, :de, :el, :es, :fa, :fi,
-      :fil, :fr, :he, :hi, :hr, :hu, :id, :it, :ja, :ko, :ky, :lt, :lv, :mk,
+      :fil, :fr, :he, :hi, :hr, :hu, :id, :it, :ja, :ko, :lt, :lv, :mk,
       :mr, :ms, :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :sk, :sl, :sr, :sv,
       :th, :tr, :uk, :vi, :"zh-CN"
     ]
@@ -74,6 +74,9 @@ module Otwarchive
 
     # Keeps updated_at in cache keys
     config.active_record.cache_versioning = false
+
+    # This class is not allowed by deafult when upgrading Rails to 6.0.5.1 patch
+    config.active_record.yaml_column_permitted_classes = [ActiveSupport::TimeWithZone, Time, ActiveSupport::TimeZone]
 
     # handle errors with custom error pages:
     config.exceptions_app = self.routes

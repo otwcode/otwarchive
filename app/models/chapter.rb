@@ -1,7 +1,6 @@
 # encoding=utf-8
 
 class Chapter < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include HtmlCleaner
   include WorkChapterCountCaching
   include CreationNotifier
@@ -148,6 +147,10 @@ class Chapter < ApplicationRecord
   # check if this chapter is the only chapter of its work
   def is_only_chapter?
     self.work.chapters.count == 1
+  end
+
+  def only_non_draft_chapter?
+    self.posted? && self.work.chapters.posted.count == 1
   end
 
   # Virtual attribute for work wip_length

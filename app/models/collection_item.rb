@@ -1,6 +1,4 @@
 class CollectionItem < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   APPROVAL_OPTIONS = [
     ["", :unreviewed],
     [ts("Approved"), :approved],
@@ -99,47 +97,38 @@ class CollectionItem < ApplicationRecord
     end
   end
 
+  after_create_commit :notify_archivist_added
+  # Sends emails to item creator(s) in the case that an archivist
+  # has added them to the collection.
+  def notify_archivist_added
+    return unless User.current_user&.archivist && collection.user_is_maintainer?(User.current_user)
+
+    item.users.each do |email_recipient|
+      next if email_recipient.preference.collection_emails_off
+
+      UserMailer.archivist_added_to_collection_notification(
+        email_recipient.id,
+        item.id,
+        collection.id
+      ).deliver_later
+    end
+  end
+
   before_save :approve_automatically
   def approve_automatically
-    if self.new_record?
-      # approve with the current user, who is the person who has just
-      # added this item -- might be either moderator or owner
-      approve(User.current_user == :false ? nil : User.current_user)
+    return unless self.new_record?
 
-      # if the collection is open or the user who owns this work is a member, go ahead and approve
-      # for the collection
-      if !approved_by_collection? && collection
-        if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || collection.user_is_posting_participant?(User.current_user)
-          approve_by_collection
-        end
-      end
+    # approve with the current user, who is the person who has just
+    # added this item -- might be either moderator or owner
+    # rubocop:disable Lint/BooleanSymbol
+    approve(User.current_user == :false ? nil : User.current_user)
+    # rubocop:enable Lint/BooleanSymbol
 
-      # if at least one of the owners of the items automatically approves
-      # adding, go ahead and approve by user
-      if !approved_by_user?
-        case item_type
-        when "Work"
-          users = item.users || [User.current_user] # if the work has no users, it is also new and being created by the current user
-        when "Bookmark"
-          users = [item.pseud.user] || [User.current_user]
-        end
+    # if the collection is open or the user who owns this work is a member, go ahead and approve
+    # for the collection
+    return unless !approved_by_collection? && collection
 
-        users.each do |user|
-          if user.preference.automatically_approve_collections
-            # if the work is being added by a collection maintainer and at
-            # least ONE of the works owners allows automatic inclusion in
-            # collections, add the work to the collection
-            approve_by_user
-            users.each do |email_user|
-              unless email_user.preference.collection_emails_off
-                UserMailer.added_to_collection_notification(email_user.id, item.id, collection.id).deliver_now
-              end
-            end
-            break
-          end
-        end
-      end
-    end
+    approve_by_collection if !collection.moderated? || collection.user_is_maintainer?(User.current_user) || collection.user_is_posting_participant?(User.current_user)
   end
 
   before_save :send_work_invitation
@@ -193,7 +182,8 @@ class CollectionItem < ApplicationRecord
   end
 
   def user_allowed_to_destroy?(user)
-    user.is_author_of?(self.item) || self.collection.user_is_maintainer?(user)
+    user.is_author_of?(self.item) ||
+      (self.collection.user_is_maintainer?(user) && !self.rejected_by_user?)
   end
 
   def approve_by_user
@@ -213,9 +203,13 @@ class CollectionItem < ApplicationRecord
       # this is being run via rake task eg for importing collections
       approve_by_user
       approve_by_collection
+    else
+      author_of_item = user.is_author_of?(item) ||
+                       (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?)
+      archivist_maintainer = user.archivist && self.collection.user_is_maintainer?(user)
+      approve_by_user if author_of_item || archivist_maintainer
+      approve_by_collection if self.collection.user_is_maintainer?(user)
     end
-    approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
-    approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end
 
   def posted?

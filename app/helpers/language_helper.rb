@@ -28,4 +28,12 @@ module LanguageHelper
     end
     questions
   end
+
+  def language_options_for_select(languages, value_attribute)
+    languages.map { |language| [language.name, language[value_attribute], { lang: language.short }] }
+  end
+
+  def locale_options_for_select(locales, value_attribute)
+    locales.map { |locale| [locale.name, locale[value_attribute], { lang: locale.language.short }] }
+  end
 end

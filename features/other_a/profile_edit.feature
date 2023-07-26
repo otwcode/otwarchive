@@ -69,7 +69,7 @@ Scenario: Changing email address requires reauthenticating
 Scenario: Changing email address - entering an invalid email address
 
   When I enter an invalid email
-  Then I should see "Email does not seem to be a valid address"
+  Then I should see "Email should look like an email address"
     And 0 emails should be delivered
 
 Scenario: Changing email address - case-insensitive confirmation
@@ -112,12 +112,15 @@ Scenario: Changing email address and viewing
     And the email should not contain "translation missing"
   When I change my preferences to display my email address
   Then I should see "My email address: valid2@archiveofourown.org"
+  When I log out
+    And I go to editname's profile page
+  Then I should see "My email address: valid2@archiveofourown.org"
 
 Scenario: Changing email address after requesting password reset
 
   When I am logged out
     And I follow "Forgot password?"
-    And I fill in "Email address or user name:" with "editname"
+    And I fill in "Email address or user name" with "editname"
     And I press "Reset Password"
   Then 1 email should be delivered to "bar@ao3.org"
   When all emails have been delivered
@@ -153,6 +156,9 @@ Scenario: Entering date of birth and displaying
   When I change my preferences to display my date of birth
   Then I should see "My birthday: 1980-11-30"
     And 0 emails should be delivered
+  When I log out
+    And I go to editname's profile page
+  Then I should see "My birthday: 1980-11-30"
 
 Scenario: Change password - mistake in typing old password
 

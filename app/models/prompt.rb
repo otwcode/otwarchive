@@ -1,6 +1,4 @@
 class Prompt < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   include UrlHelpers
   include TagTypeHelper
 
@@ -38,33 +36,27 @@ class Prompt < ApplicationRecord
 
   # VALIDATIONS
 
+  before_validation :inherit_from_signup, on: :create, if: :challenge_signup
+  def inherit_from_signup
+    self.pseud = challenge_signup.pseud
+    self.collection = challenge_signup.collection
+  end
+
   validates_presence_of :collection_id
 
   validates_presence_of :challenge_signup
-  before_save :set_pseud
-  def set_pseud
-    unless self.pseud
-      self.pseud = self.challenge_signup.pseud
-    end
-    true
-  end
 
   # based on the prompt restriction
   validates_presence_of :url, if: :url_required?
   validates_presence_of :description, if: :description_required?
   validates_presence_of :title, if: :title_required?
-  def url_required?
-    (restriction = get_prompt_restriction) && restriction.url_required
-  end
-  def description_required?
-    (restriction = get_prompt_restriction) && restriction.description_required
-  end
+
+  delegate :url_required?, :description_required?, :title_required?,
+           to: :prompt_restriction, allow_nil: true
+
   validates_length_of :description,
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
-  def title_required?
-    (restriction = get_prompt_restriction) && restriction.title_required
-  end
   validates_length_of :title,
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
@@ -79,7 +71,7 @@ class Prompt < ApplicationRecord
   validate :correct_number_of_tags
   def correct_number_of_tags
     prompt_type = self.class.name
-    restriction = get_prompt_restriction
+    restriction = prompt_restriction
     if restriction
       # make sure tagset has no more/less than the required/allowed number of tags of each type
       TagSet::TAG_TYPES.each do |tag_type|
@@ -123,7 +115,7 @@ class Prompt < ApplicationRecord
   # are within that set, or otherwise canonical
   validate :allowed_tags
   def allowed_tags
-    restriction = get_prompt_restriction
+    restriction = prompt_restriction
     if restriction && tag_set
       TagSet::TAG_TYPES.each do |tag_type|
         # if we have a specified set of tags of this type, make sure that all the
@@ -155,7 +147,7 @@ class Prompt < ApplicationRecord
   # actually in the fandom they have chosen.
   validate :restricted_tags
   def restricted_tags
-    restriction = get_prompt_restriction
+    restriction = prompt_restriction
     if restriction
       TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
         if restriction.send("#{tag_type}_restrict_to_fandom")
@@ -250,12 +242,8 @@ class Prompt < ApplicationRecord
     send("any_#{type.downcase}")
   end
 
-  def get_prompt_restriction
-    if collection && collection.challenge
-      collection.challenge.prompt_restriction
-    else
-      nil
-    end
+  def prompt_restriction
+    raise "Base-type Prompt objects cannot have prompt restrictions. Try creating a Request or an Offer."
   end
 
   # tag groups

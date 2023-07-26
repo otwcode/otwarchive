@@ -11,6 +11,26 @@ describe MailerHelper do
     end
   end
 
+  describe "#creation_title" do
+    context "when creation is a series" do
+      it "returns the series title" do
+        expect(creation_title(series)).to eq(series.title)
+      end
+    end
+
+    context "when creation is a work" do
+      it "returns the work title" do
+        expect(creation_title(work)).to eq(work.title)
+      end
+    end
+
+    context "when creation is a chapter" do
+      it "returns the work title with the chapter number" do
+        expect(creation_title(chapter)).to eq("Chapter #{chapter.position} of #{work.title}")
+      end
+    end
+  end
+
   describe "#creation_link_with_word_count" do
     context "when creation is a chapter" do
       it "returns hyperlinked full_chapter_title and parenthetical word count" do

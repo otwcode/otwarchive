@@ -1,5 +1,4 @@
 class Pseud < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Searchable
   include WorksOwner
 
@@ -52,9 +51,9 @@ class Pseud < ApplicationRecord
   has_many :tag_set_ownerships, dependent: :destroy
   has_many :tag_sets, through: :tag_set_ownerships
   has_many :challenge_signups, dependent: :destroy
-  has_many :gifts, -> { where(rejected: false) }
+  has_many :gifts, -> { where(rejected: false) }, inverse_of: :pseud, dependent: :destroy
   has_many :gift_works, through: :gifts, source: :work
-  has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift"
+  has_many :rejected_gifts, -> { where(rejected: true) }, class_name: "Gift", inverse_of: :pseud, dependent: :destroy
   has_many :rejected_gift_works, through: :rejected_gifts, source: :work
 
   has_many :offer_assignments, -> { where("challenge_assignments.sent_at IS NOT NULL") }, through: :challenge_signups
@@ -69,7 +68,7 @@ class Pseud < ApplicationRecord
     within: NAME_LENGTH_MIN..NAME_LENGTH_MAX,
     too_short: ts("is too short (minimum is %{min} characters)", min: NAME_LENGTH_MIN),
     too_long: ts("is too long (maximum is %{max} characters)", max: NAME_LENGTH_MAX)
-  validates_uniqueness_of :name, scope: :user_id, case_sensitive: false
+  validates :name, uniqueness: { scope: :user_id }
   validates_format_of :name,
     message: ts('can contain letters, numbers, spaces, underscores, and dashes.'),
     with: /\A[\p{Word} -]+\Z/u
@@ -87,43 +86,9 @@ class Pseud < ApplicationRecord
   after_update :expire_caches
   after_commit :reindex_creations, :touch_comments
 
-  scope :on_works, lambda {|owned_works|
-    select("DISTINCT pseuds.*").
-    joins(:works).
-    where(works: {id: owned_works.collect(&:id)}).
-    order(:name)
-  }
-
-  scope :with_works, -> {
-    select("pseuds.*, count(pseuds.id) AS work_count").
-    joins(:works).
-    group(:id).
-    order(:name)
-  }
-
-  scope :with_posted_works, -> { with_works.merge(Work.visible_to_registered_user) }
-  scope :with_public_works, -> { with_works.merge(Work.visible_to_all) }
-
-  scope :with_bookmarks, -> {
-    select("pseuds.*, count(pseuds.id) AS bookmark_count").
-    joins(:bookmarks).
-    group(:id).
-    order(:name)
-  }
-
-  # conditions: {bookmarks: {private: false, hidden_by_admin: false}},
-  scope :with_public_bookmarks, -> { with_bookmarks.merge(Bookmark.is_public) }
-
-  scope :with_public_recs, -> {
-    select("pseuds.*, count(pseuds.id) AS rec_count").
-    joins(:bookmarks).
-    group(:id).
-    order(:name).
-    merge(Bookmark.is_public.recs)
-  }
-
   scope :alphabetical, -> { order(:name) }
-  scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
+  scope :default_alphabetical, -> { order(is_default: :desc).alphabetical }
+  scope :abbreviated_list, -> { default_alphabetical.limit(ArchiveConfig.ITEMS_PER_PAGE) }
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -137,20 +102,6 @@ class Pseud < ApplicationRecord
 
   def to_param
     name
-  end
-
-  # Gets the number of works by this user that the current user can see
-  def visible_works_count
-    if User.current_user.nil?
-      self.works.posted.unhidden.unrestricted.count
-    else
-      self.works.posted.unhidden.count
-    end
-  end
-
-  # Gets the number of recs by this user
-  def visible_recs_count
-    self.recs.is_public.size
   end
 
   scope :public_work_count_for, -> (pseud_ids) {
@@ -403,6 +354,7 @@ class Pseud < ApplicationRecord
           comment.update_attribute(:pseud_id, pseud.id)
         end
       end
+
       # make sure changes affect caching/search/author fields
       creation.save
     end

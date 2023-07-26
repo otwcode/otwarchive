@@ -45,6 +45,9 @@ class KudosController < ApplicationController
       error_message = @kudo.errors.full_messages.first
       respond_to do |format|
         format.html do
+          # If user is suspended or banned, JavaScript disabled, redirect user to dashboard with message instead.
+          return if check_user_status
+
           flash[:kudos_error] = error_message
           redirect_to request.referer and return
         end

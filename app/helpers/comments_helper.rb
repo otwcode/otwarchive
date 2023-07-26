@@ -99,13 +99,16 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
+    admin_settings = AdminSetting.current
+    
     !(comment.unreviewed? ||
       comment.iced? ||
       comment.hidden_by_admin? ||
       parent_disallows_comments?(comment) ||
       comment_parent_hidden?(comment) ||
       blocked_by_comment?(comment) ||
-      blocked_by?(comment.ultimate_parent))
+      blocked_by?(comment.ultimate_parent) ||
+      guest? && admin_settings.guest_comments_off?)
   end
 
   def can_edit_comment?(comment)
@@ -153,6 +156,12 @@ module CommentsHelper
 
   def can_hide_comment?(comment)
     policy(comment).can_hide_comment?
+  end
+
+  def can_see_hidden_comment?(comment)
+    !comment.hidden_by_admin? ||
+      is_author_of?(comment) ||
+      can_hide_comment?(comment)
   end
 
   def comment_parent_hidden?(comment)
