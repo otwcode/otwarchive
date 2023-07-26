@@ -606,6 +606,14 @@ en:
         options_info: You can delete them, but please consider %{orphaning_link} them instead!
         works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
+    registrations:
+      new:
+        cancel: Cancel
+        heading: Create Account
+        legend:
+          legal: Legal Agreements
+          user: User Details
+        submit: Create Account
     sessions:
       new:
         beta_reminder:
