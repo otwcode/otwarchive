@@ -810,7 +810,7 @@ class WorksController < ApplicationController
     end
 
     if params[:claim_id]
-      @posting_claim = ChallengeClaim.find(params[:claim_id])
+      @posting_claim = ChallengeClaim.find_by(id: params[:claim_id])
     end
   end
 
