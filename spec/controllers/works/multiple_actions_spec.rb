@@ -179,21 +179,21 @@ describe WorksController do
 
   describe "update_multiple" do
     let(:multiple_works_user) { create(:user) }
-    let!(:multiple_work1) {
+    let!(:multiple_work1) do
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 1",
              comment_permissions: :disable_anon,
              moderated_commenting_enabled: true)
-    }
-    let!(:multiple_work2) {
+    end
+    let!(:multiple_work2) do
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 2",
              comment_permissions: :disable_all,
              moderated_commenting_enabled: true)
-    }
-    let(:params) {
+    end
+    let(:params) do
       {
         work_ids: [multiple_work1.id, multiple_work2.id],
         work: {
@@ -212,7 +212,7 @@ describe WorksController do
           moderated_commenting_enabled: ""
         }
       }.merge(work_params)
-    }
+    end
 
     before do
       fake_login_known_user(multiple_works_user)
