@@ -10,11 +10,11 @@
     <%= t(".no_email_html", contact_support_link: (link_to t(".contact_support"), new_feedback_report_path)) %>
   </p>
   <p>
-    <% # We do days_to_purge_unactivated * 7 because it's actually weeks %>
-    <%= t(".must_activate_html", days_before_purge: AdminSetting.current.days_to_purge_unactivated? ? (AdminSetting.current.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED) %>
+    <%# We do days_to_purge_unactivated * 7 because it's actually weeks %>
+    <%= t(".must_activate_html", count: AdminSetting.current.days_to_purge_unactivated? ? (AdminSetting.current.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED) %>
   </p>
   <p>
-    <%= link_to t('.go_back'), root_path %>
+    <%= link_to t(".go_back"), root_path %>
   </p>
 </div>
 <!--/content-->
