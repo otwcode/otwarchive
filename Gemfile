@@ -121,7 +121,6 @@ group :test do
   gem "cucumber"
   gem 'database_cleaner'
   gem "selenium-webdriver"
-  gem "webdrivers"
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
