@@ -614,6 +614,7 @@ en:
           legal: Legal Agreements
           user: User Details
         submit: Create Account
+        wait: Please wait...
     sessions:
       new:
         beta_reminder:

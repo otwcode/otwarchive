@@ -22,7 +22,7 @@
     <legend><%= t(".submit") %></legend>
     <p class="submit cancel actions">
       <%= link_to t(".cancel"), root_path %>
-      <%= submit_tag t(".submit") %>
+      <%= submit_tag t(".submit"), data: { disable_with: t(".wait") } %>
     </p>
   </fieldset>
 <% end %>
