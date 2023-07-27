@@ -13,25 +13,25 @@ describe OrphansController do
   let(:second_work) { create(:work, authors: user.pseuds) }
   let(:series) { create(:series, works: [work], authors: [pseud]) }
 
-  let!(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.since) }
+  let!(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.from_now) }
   let!(:suspended_pseud) { create(:pseud, user: suspended_user) }
   let!(:suspended_second_pseud) { create(:pseud, user: suspended_user) }
   let!(:suspended_users_work) do
     suspended_user.update(suspended: false, suspended_until: nil)
     work = create(:work, authors: [suspended_pseud])
-    suspended_user.update(suspended: true, suspended_until: 1.week.since)
+    suspended_user.update(suspended: true, suspended_until: 1.week.from_now)
     work
   end
   let!(:suspended_users_second_work) do
     suspended_user.update(suspended: false, suspended_until: nil)
     work = create(:work, authors: suspended_user.pseuds)
-    suspended_user.update(suspended: true, suspended_until: 1.week.since)
+    suspended_user.update(suspended: true, suspended_until: 1.week.from_now)
     work
   end
   let(:suspended_users_series) do
     suspended_user.update(suspended: false, suspended_until: nil)
     series = create(:series, works: [work], authors: [suspended_pseud])
-    suspended_user.update(suspended: true, suspended_until: 1.week.since)
+    suspended_user.update(suspended: true, suspended_until: 1.week.from_now)
     series
   end
 
@@ -65,7 +65,7 @@ describe OrphansController do
 
     context "when logged in as the owner" do
       before { fake_login_known_user(user.reload) }
-      
+
       it "shows the form for orphaning a work" do
         get :new, params: { work_id: work }
         expect(response).to render_template(partial: "orphans/_orphan_work")
@@ -95,31 +95,31 @@ describe OrphansController do
     context "when logged in as a suspended user" do
       before { fake_login_known_user(suspended_user.reload) }
       
-      it "shows the form for orphaning a work" do
+      it "errors and redirects to user page" do
         get :new, params: { work_id: suspended_users_work }
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")
       end
 
-      it "shows the form for orphaning multiple works" do
+      it "errors and redirects to user page" do
         get :new, params: { work_ids: [suspended_users_work, suspended_users_second_work] }
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")
       end
 
-      it "shows the form for orphaning a series" do
+      it "errors and redirects to user page" do
         get :new, params: { series_id: suspended_users_series }
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")
       end
 
-      it "shows the form for orphaning a pseud" do
-        get :new, params: { pseud_id: suspended_pseud.id }
+      it "errors and redirects to user page" do
+        get :new, params: { pseud_id: suspended_user.pseuds.first }
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")
       end
 
-      it "shows the form for orphaning all your works" do
+      it "errors and redirects to user page" do
         get :new, params: {}
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")
@@ -241,14 +241,14 @@ describe OrphansController do
     context "when logged in as a suspended user" do
       before { fake_login_known_user(suspended_user.reload) }
 
-      it "successfully orphans a single work and redirects" do
+      it "errors and redirects to user page" do
         post :create, params: { work_ids: [suspended_users_work], use_default: "true" }
         expect(suspended_users_work.reload.users).to include(suspended_user)
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")
       end
 
-      it "successfully orphans multiple works and redirects" do
+      it "errors and redirects to user page" do
         post :create, params: { work_ids: [suspended_users_work, suspended_users_second_work], use_default: "true" }
         expect(suspended_users_work.reload.users).to include(suspended_user)
         expect(suspended_users_second_work.reload.users).to include(suspended_user)
@@ -261,31 +261,31 @@ describe OrphansController do
         let(:work) do
           suspended_user.update(suspended: false, suspended_until: nil)
           work = create(:work, authors: [suspended_pseud, suspended_second_pseud])
-          suspended_user.update(suspended: true, suspended_until: 1.week.since)
+          suspended_user.update(suspended: true, suspended_until: 1.week.from_now)
           work
         end
 
-        it "only saves the original creator once" do
+        it "errors and redirects to user page" do
           post :create, params: { work_ids: [suspended_users_work], use_default: "true" }
           it_redirects_to_simple(user_path(suspended_user))
           expect(flash[:error]).to include("Your account has been suspended")
         end
       end
 
-      it "successfully orphans a series and redirects" do
+      it "errors and redirects to user page" do
         post :create, params: { series_id: suspended_users_series, use_default: "true" }
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")
       end
 
-      it "successfully orphans a pseud and redirects" do
+      it "errors and redirects to user page" do
         post :create, params: { work_ids: banned_pseud.works.pluck(:id),
                                 pseud_id: banned_pseud.id, use_default: "true" }
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")
       end
 
-      it "errors and redirects if you don't specify any works or series" do
+      it "errors and redirects to user page" do
         post :create, params: { pseud_id: banned_pseud.id, use_default: "true" }
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")

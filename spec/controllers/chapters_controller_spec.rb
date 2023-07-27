@@ -12,29 +12,29 @@ describe ChaptersController do
 
   let(:banned_user) { create(:user, banned: true) }
   let(:banned_users_work) do
-    banned_user.update(banned: false)
+    banned_user.update!(banned: false)
     work = create(:work, authors: [banned_user.pseuds.first, co_creator.pseuds.first])
-    banned_user.update(banned: true)
+    banned_user.update!(banned: true)
     work
   end
   let(:banned_users_work_chapter2) do
-    banned_user.update(banned: false)
+    banned_user.update!(banned: false)
     chapter = create(:chapter, work: banned_users_work, position: 2, authors: [banned_user.pseuds.first, co_creator.pseuds.first])
-    banned_user.update(banned: true)
+    banned_user.update!(banned: true)
     chapter
   end
 
-  let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.since) }
+  let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.from_now) }
   let(:suspended_users_work) do
-    suspended_user.update(suspended: false, suspended_until: nil)
+    suspended_user.update!(suspended: false, suspended_until: nil)
     work = create(:work, authors: [suspended_user.pseuds.first, co_creator.pseuds.first])
-    suspended_user.update(suspended: true, suspended_until: 1.week.since)
+    suspended_user.update!(suspended: true, suspended_until: 1.week.from_now)
     work
   end
   let(:suspended_users_work_chapter2) do
-    suspended_user.update(suspended: false, suspended_until: nil)
+    suspended_user.update!(suspended: false, suspended_until: nil)
     chapter = create(:chapter, work: suspended_users_work, position: 2, authors: [suspended_user.pseuds.first, co_creator.pseuds.first])
-    suspended_user.update(suspended: true, suspended_until: 1.week.since)
+    suspended_user.update!(suspended: true, suspended_until: 1.week.from_now)
     chapter
   end
 
@@ -407,7 +407,7 @@ describe ChaptersController do
           end
         end
 
-        context "When the logged in user is suspended" do
+        context "when the logged in user is suspended" do
           before do
             fake_login_known_user(suspended_user)
           end
@@ -419,7 +419,7 @@ describe ChaptersController do
           end
         end
 
-        context "When the logged in user is banned" do
+        context "when the logged in user is banned" do
           before do
             fake_login_known_user(banned_user)
           end

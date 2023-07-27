@@ -7,17 +7,17 @@ describe WorksController, work_search: true do
 
   let(:banned_user) { create(:user, banned: true) }
   let(:banned_users_work) do
-    banned_user.update(banned: false)
+    banned_user.update!(banned: false)
     work = create(:work, authors: [banned_user.pseuds.first])
-    banned_user.update(banned: true)
+    banned_user.update!(banned: true)
     work
   end
 
-  let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.since) }
+  let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.from_now) }
   let(:suspended_users_work) do
-    suspended_user.update(suspended: false, suspended_until: nil)
+    suspended_user.update!(suspended: false, suspended_until: nil)
     work = create(:work, authors: [suspended_user.pseuds.first])
-    suspended_user.update(suspended: true, suspended_until: 1.week.since)
+    suspended_user.update!(suspended: true, suspended_until: 1.week.from_now)
     work
   end
   

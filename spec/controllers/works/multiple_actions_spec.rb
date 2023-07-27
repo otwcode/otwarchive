@@ -7,7 +7,7 @@ describe WorksController do
 
   let(:multiple_works_user) { create(:user) }
   let(:banned_user) { create(:user, banned: true) }
-  let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.since) }
+  let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.from_now) }
 
   describe "show_multiple" do
     context "when logged in as a user" do
@@ -64,7 +64,7 @@ describe WorksController do
 
     context "when logged in as a suspended user" do
       it "errors and redirects to user page" do
-        multiple_works_user.update(suspended: true, suspended_until: 1.week.since)
+        multiple_works_user.update(suspended: true, suspended_until: 1.week.from_now)
         post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
 
         it_redirects_to_simple(user_path(multiple_works_user))
@@ -103,7 +103,7 @@ describe WorksController do
 
     context "when logged in as a suspended user" do
       it "errors and redirects to user page" do
-        multiple_works_user.update(suspended: true, suspended_until: 1.week.since)
+        multiple_works_user.update(suspended: true, suspended_until: 1.week.from_now)
 
         post :confirm_delete_multiple, params: params
         it_redirects_to_simple(user_path(multiple_works_user))
@@ -166,7 +166,7 @@ describe WorksController do
 
     context "when logged in as a suspended user" do
       before do
-        multiple_works_user.update(suspended: true, suspended_until: 1.week.since)
+        multiple_works_user.update(suspended: true, suspended_until: 1.week.from_now)
         post :delete_multiple, params: { id: multiple_work1.id, work_ids: [multiple_work1.id, multiple_work2.id] }
       end
 
@@ -421,7 +421,7 @@ describe WorksController do
       end
 
       it "errors and redirects to user page" do
-        multiple_works_user.update(suspended: true, suspended_until: 1.week.since)
+        multiple_works_user.update(suspended: true, suspended_until: 1.week.from_now)
         put :update_multiple, params: params
         
         it_redirects_to_simple(user_path(multiple_works_user))
