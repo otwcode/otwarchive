@@ -279,14 +279,14 @@ describe OrphansController do
       end
 
       it "errors and redirects to user page" do
-        post :create, params: { work_ids: banned_pseud.works.pluck(:id),
-                                pseud_id: banned_pseud.id, use_default: "true" }
+        post :create, params: { work_ids: suspended_pseud.works.pluck(:id),
+                                pseud_id: suspended_pseud.id, use_default: "true" }
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")
       end
 
       it "errors and redirects to user page" do
-        post :create, params: { pseud_id: banned_pseud.id, use_default: "true" }
+        post :create, params: { pseud_id: suspended_pseud.id, use_default: "true" }
         it_redirects_to_simple(user_path(suspended_user))
         expect(flash[:error]).to include("Your account has been suspended")
       end
