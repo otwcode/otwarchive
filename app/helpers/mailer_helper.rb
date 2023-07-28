@@ -139,11 +139,11 @@ module MailerHelper
   # Anonymous creations should always have a separate translation, as in the
   # creation_attribution_ and batch_subscription_subject methods below.
   def creator_links(creation)
-    creation.pseuds.map { |p| style_pseud_link(p) }.to_sentence.html_safe
+    to_sentence(creation.pseuds.map { |p| style_pseud_link(p) })
   end
 
   def creator_text(creation)
-    creation.pseuds.map { |p| text_pseud(p) }.to_sentence.html_safe
+    to_sentence(creation.pseuds.map { |p| text_pseud(p) })
   end
 
   # "by name" or "by name, name, and name", which appears under or after
@@ -304,7 +304,7 @@ module MailerHelper
     type = tags.first.type
     # Fandom tags are linked and to_sentence'd.
     if type == "Fandom"
-      tags.map { |f| style_link(f.name, fandom_url(f)) }.to_sentence.html_safe
+      to_sentence(tags.map { |f| style_link(f.name, fandom_url(f)) })
     else
       work_tag_metadata_list(tags)
     end
