@@ -3,7 +3,7 @@
     <fieldset class="tagset">
       <legend><%= ts("Fandom %{index}", index: index + 1) %></legend>
       <dl>
-        <dt><%= nom_form.label :tagname, ts("Fandom %{index}", :index => index+1) %></dt>
+        <dt><%= nom_form.label :tagname, ts("Fandom %{index}", index: index + 1) %></dt>
         <dd>
           <% if nom.approved || nom.rejected %>
             <%= nom.tagname %>  <%= nomination_status(nom) %>
