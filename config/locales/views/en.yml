@@ -588,12 +588,13 @@ en:
     confirmation:
       contact_support: contact Support
       go_back: Return to Archive front page
-      must_activate_html:
-        one: "<strong>Important!</strong> You must activate your account within %{count} day, or your account will expire. If this happens, you can sign up again using the same invitation."
-        other: "<strong>Important!</strong> You must activate your account within %{count} days, or your account will expire. If this happens, you can sign up again using the same invitation."
+      important: Important!
+      must_activate:
+        one: You must activate your account within %{count} day, or your account will expire. If this happens, you can sign up again using the same invitation.
+        other: You must activate your account within %{count} days, or your account will expire. If this happens, you can sign up again using the same invitation.
       no_email_html: If you haven't received this email within 24 hours, and you don't find our email in your spam filter or Social folder, please %{contact_support_link} for help.
       page_heading: Almost Done!
-      receive_email_html: You should soon receive an activation email at the address you gave us. This will have the link you need to follow in order to activate your account and complete the account creation process. The activation email will come from <strong>%{return_address}</strong> -- you might want to add this to your address book to make sure you get the email.
+      receive_email: You should soon receive an activation email at the address you gave us. This will have the link you need to follow in order to activate your account and complete the account creation process. The activation email will come from %{return_address} -- you might want to add this to your address book to make sure you get the email.
     delete_preview:
       cancel: Cancel
       co_creations:
