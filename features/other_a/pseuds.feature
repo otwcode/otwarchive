@@ -158,8 +158,17 @@ Scenario: Many pseuds
     And I should see "All Pseuds (4)" within "ul.expandable"
 
   When I go to my "Slartibartfast" pseud page
-  Then I should see "Slartibartfast" within "li.pseud > a"
-    And I should not see "Slartibartfast" within "ul.expandable"
+  Then I should see "Pseuds" within "li.pseud > a"
+    And I should see "Slartibartfast" within "ul.expandable"
+
+  When I go to my pseuds page
+  Then I should not see "Zaphod (Zaphod)" within "ul.pseud.index"
+    But I should see "Agrajag (Zaphod)" within "ul.pseud.index"
+    And I should see "Betelgeuse (Zaphod)" within "ul.pseud.index"
+    And I should see "Slartibartfast (Zaphod)" within "ul.pseud.index"
+    And I should see "Next" within ".pagination"
+  When I follow "Next" within ".pagination"
+  Then I should see "Zaphod (Zaphod)" within "ul.pseud.index"
 
   When there are 10 pseuds per page
     And I view my profile

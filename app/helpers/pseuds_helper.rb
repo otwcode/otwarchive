@@ -37,9 +37,15 @@ module PseudsHelper
     end
   end
 
+  def pseuds_for_sidebar(user, pseud)
+    pseuds = user.pseuds.abbreviated_list - [pseud]
+    pseuds = pseuds.sort
+    pseuds = [pseud] + pseuds if pseud && !pseud.new_record?
+    pseuds
+  end
+
   # used in the sidebar
-  def print_pseud_selector(pseuds)
-    pseuds -= [@pseud] if @pseud && @pseud.new_record?
-    list = pseuds.sort.collect {|pseud| "<li>" + span_if_current(pseud.name, [pseud.user, pseud]) + "</li>"}.join("").html_safe
+  def pseud_selector(pseuds)
+    pseuds.collect { |pseud| "<li>#{span_if_current(pseud.name, [pseud.user, pseud])}</li>" }.join.html_safe
   end
 end
