@@ -4,7 +4,7 @@
 <!--main content-->
 <div class="userstuff">
   <p>
-    <%= t(".receive_email", return_address: "<strong>" + ArchiveConfig.RETURN_ADDRESS + "</strong>").html_safe %>
+    <%= t(".receive_email_html", return_address: tag.strong(ArchiveConfig.RETURN_ADDRESS)) %>
   </p>
   <p>
     <%= t(".no_email_html", contact_support_link: (link_to t(".contact_support"), new_feedback_report_path)) %>
