@@ -7,7 +7,7 @@
     <%= t(".receive_email_html", return_address: tag.strong(ArchiveConfig.RETURN_ADDRESS)) %>
   </p>
   <p>
-    <%= t(".no_email_html", contact_support_link: (link_to t(".contact_support"), new_feedback_report_path)) %>
+    <%= t(".no_email_html", contact_support_link: link_to(t(".contact_support"), new_feedback_report_path)) %>
   </p>
   <p>
     <%# We do days_to_purge_unactivated * 7 because it's actually weeks %>
