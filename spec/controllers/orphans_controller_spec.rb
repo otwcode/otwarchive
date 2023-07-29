@@ -17,21 +17,21 @@ describe OrphansController do
   let!(:suspended_pseud) { create(:pseud, user: suspended_user) }
   let!(:suspended_second_pseud) { create(:pseud, user: suspended_user) }
   let!(:suspended_users_work) do
-    suspended_user.update(suspended: false, suspended_until: nil)
+    suspended_user.update!(suspended: false, suspended_until: nil)
     work = create(:work, authors: [suspended_pseud])
-    suspended_user.update(suspended: true, suspended_until: 1.week.from_now)
+    suspended_user.update!(suspended: true, suspended_until: 1.week.from_now)
     work
   end
   let!(:suspended_users_second_work) do
-    suspended_user.update(suspended: false, suspended_until: nil)
+    suspended_user.update!(suspended: false, suspended_until: nil)
     work = create(:work, authors: suspended_user.pseuds)
-    suspended_user.update(suspended: true, suspended_until: 1.week.from_now)
+    suspended_user.update!(suspended: true, suspended_until: 1.week.from_now)
     work
   end
   let(:suspended_users_series) do
-    suspended_user.update(suspended: false, suspended_until: nil)
+    suspended_user.update!(suspended: false, suspended_until: nil)
     series = create(:series, works: [work], authors: [suspended_pseud])
-    suspended_user.update(suspended: true, suspended_until: 1.week.from_now)
+    suspended_user.update!(suspended: true, suspended_until: 1.week.from_now)
     series
   end
 
@@ -39,21 +39,21 @@ describe OrphansController do
   let!(:banned_pseud) { create(:pseud, user: banned_user) }
   let!(:banned_second_pseud) { create(:pseud, user: banned_user) }
   let!(:banned_users_work) do
-    banned_user.update(banned: false)
+    banned_user.update!(banned: false)
     work = create(:work, authors: [banned_pseud])
-    banned_user.update(banned: true)
+    banned_user.update!(banned: true)
     work
   end
   let!(:banned_users_second_work) do
-    banned_user.update(banned: false)
+    banned_user.update!(banned: false)
     work = create(:work, authors: banned_user.pseuds)
-    banned_user.update(banned: true)
+    banned_user.update!(banned: true)
     work
   end
   let(:banned_users_series) do
-    banned_user.update(banned: false)
+    banned_user.update!(banned: false)
     series = create(:series, works: [work], authors: [banned_pseud])
-    banned_user.update(banned: true)
+    banned_user.update!(banned: true)
     series
   end
 
