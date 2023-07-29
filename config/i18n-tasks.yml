@@ -122,8 +122,8 @@ ignore_missing:
   - sent # should be admin.admin_invitations.create.sent
   - user_not_found # should be admin.admin_invitations.find.user_not_found
   # File: app/controllers/application_controller.rb
-  - ban_notice_html # should be application.check_user_status.ban_notice_html
-  - suspension_notice_html # should be application.check_user_status.suspension_notice_html
+  - ban_notice # should be application.check_user_status.ban_notice
+  - suspension_notice # should be application.check_user_status.suspension_notice
   # File: app/controllers/challenge_assignments_controller.rb
   - challenge_assignments.assignments_not_sent
   - challenge_assignments.assignments_sent
