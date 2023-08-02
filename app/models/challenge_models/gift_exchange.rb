@@ -21,13 +21,15 @@ class GiftExchange < ApplicationRecord
     allow_blank: true,
     maximum: ArchiveConfig.INFO_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.INFO_MAX)
   }
-  validates :requests_num_required, numericality: { greater_than_or_equal_to: 1, only_integer: true }
-  validates :offers_num_required, numericality: { greater_than_or_equal_to: 1, only_integer: true }
 
   PROMPT_TYPES.each do |type|
     %w[required allowed].each do |setting|
       prompt_limit_field = "#{type}_num_#{setting}"
-      validates prompt_limit_field, numericality: { only_integer: true, less_than_or_equal_to: ArchiveConfig.PROMPTS_MAX, greater_than_or_equal_to: 0 }
+      validates prompt_limit_field, numericality: {
+        only_integer: true,
+        less_than_or_equal_to: ArchiveConfig.PROMPTS_MAX,
+        greater_than_or_equal_to: 1
+      }
     end
   end
 
