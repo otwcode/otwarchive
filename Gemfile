@@ -100,7 +100,7 @@ gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
-gem 'audited', '~> 4.4'
+gem 'audited', '~> 5.3'
 
 # For controlling application behavour dynamically
 gem 'rollout'
@@ -121,7 +121,6 @@ group :test do
   gem "cucumber"
   gem 'database_cleaner'
   gem "selenium-webdriver"
-  gem "webdrivers"
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page

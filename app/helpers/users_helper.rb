@@ -15,17 +15,6 @@ module UsersHelper
     current_user.is_a?(User) ? current_user.maintained_collections.present? : false
   end
 
-  def sidebar_pseud_link_text(user, pseud)
-    text = if current_page?(user)
-             ts('Pseuds')
-           elsif pseud.present? && !pseud.new_record?
-             pseud.name
-           else
-             user.login
-           end
-    (text + ' &#8595;').html_safe
-  end
-
   # Prints user pseuds with links to anchors for each pseud on the page and the description as the title
   def print_pseuds(user)
     user.pseuds.collect(&:name).join(', ')
