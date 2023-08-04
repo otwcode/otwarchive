@@ -454,9 +454,11 @@ class Work < ApplicationRecord
 
   # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
+    valid_users = (self.users + [User.current_user]).compact
+
     self.challenge_assignments =
-      ids.map { |id| id.blank? ? nil : ChallengeAssignment.find(id) }.compact.
-      select { |assign| (self.users + [User.current_user]).compact.include?(assign.offering_user) }
+      ChallengeAssignment.where(id: ids)
+        .select { |assign| valid_users.include?(assign.offering_user) }
   end
 
   def recipients=(recipient_names)
