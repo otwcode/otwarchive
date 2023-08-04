@@ -191,7 +191,7 @@ class ChallengeAssignmentsController < ApplicationController
       when "cover"
         # cover_[assignment_id] = pinch hitter pseud
         next if val.blank? || assignment.pinch_hitter.try(:byline) == val
-        pseud = Pseud.parse_byline(val).first
+        pseud = Pseud.parse_byline(val)
         if pseud.nil?
           @errors << ts("We couldn't find the user #{val} to assign that to.")
         else
