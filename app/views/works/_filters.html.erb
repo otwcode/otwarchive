@@ -154,7 +154,7 @@
             <%= f.label :language_id, ts("Language") %>
           </dt>
           <dd class="language">
-            <%= f.collection_select(:language_id, Language.default_order, :short, :name, include_blank: true) %>
+            <%= f.select(:language_id, language_options_for_select(Language.default_order, "short"), include_blank: true) %>
           </dd>
         </dl>
       </dd>

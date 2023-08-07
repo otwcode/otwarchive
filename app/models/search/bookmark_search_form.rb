@@ -107,7 +107,7 @@ class BookmarkSearchForm
     if self.language_id.present?
       language = Language.find_by(short: self.language_id)
       if language.present?
-        summary << "Work language: #{language.name}"
+        summary << "Work language: <span lang=#{language.short}>#{language.name}</span>"
       end
     end
     if %w(1 true).include?(self.rec.to_s)

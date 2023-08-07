@@ -3,6 +3,6 @@
   <p><%= label_tag :tag, ts("Tag:") %>
   <%= select_tag :tag, ('<option></option>' + options_from_collection_for_select(@tags, :id, :name, params[:tag])).html_safe %>
   <%= label_tag :language_id, ts("Language:") %>
-  <%= select_tag :language_id, options_from_collection_for_select(@news_languages, :short, :name, params[:language_id] || Language.default.short) %>
+  <%= select_tag :language_id, options_for_select(language_options_for_select(@news_languages, "short"), params[:language_id] || Language.default.short) %>
   <%= submit_tag ts('Go') %></p>
 <% end %>
