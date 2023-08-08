@@ -129,4 +129,24 @@ describe BookmarkQuery do
         include({ term: { "language_id.keyword": "ig" } })
     end
   end
+
+  describe "a faceted query" do
+    let(:bookmark_query) { BookmarkQuery.new(faceted: true) }
+    let(:aggregations) { bookmark_query.generated_query[:aggs] }
+
+    it "includes aggregations for the bookmark tags" do
+      expect(aggregations[:tag]).to \
+        include({ terms: { field: "tag_ids" } })
+    end
+
+    Tag::FILTERS.each do |type|
+      it "includes #{type.underscore.humanize.downcase} aggregations for the bookmarkable" do
+        expect(aggregations.dig(:bookmarkable)).to \
+          include({ parent: { type: "bookmark" } })
+
+        expect(aggregations.dig(:bookmarkable, :aggs, type.underscore)).to \
+          include({ terms: { field: "#{type.underscore}_ids" } })
+      end
+    end
+  end
 end
