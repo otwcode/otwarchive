@@ -7,7 +7,7 @@ class AddFnokUserIdToLogItems < ActiveRecord::Migration[6.1]
         Schema Change Command:
 
         pt-online-schema-change D=#{database},t=log_items \\
-          --alter "ADD `fnok_user_id` int DEFAULT NULL,
+          --alter "ADD `fnok_user_id` int,
                   ADD INDEX `index_log_items_on_fnok_user_id` (`fnok_user_id`)" \\
           --no-drop-old-table \\
           -uroot --ask-pass --chunk-size=5k --max-flow-ctl 0 --pause-file /tmp/pauseme \\
@@ -20,7 +20,7 @@ class AddFnokUserIdToLogItems < ActiveRecord::Migration[6.1]
         DROP TABLE IF EXISTS `#{database}`.`_log_items_old`;
       PTOSC
     else
-      add_column :log_items, :fnok_user_id, :integer, nullable: true, default: nil
+      add_column :log_items, :fnok_user_id, :integer, nullable: true
       add_index :log_items, :fnok_user_id
     end
   end
