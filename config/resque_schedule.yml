@@ -106,3 +106,12 @@ cleanup_work_original_creators:
   description: >-
     Remove original_creators for works orphaned/moved more than
     ORIGINAL_CREATOR_TTL_HOURS hours ago.
+
+disable_admin_post_comments:
+  every: 1d
+  class: "AdminPost"
+  queue: utilities
+  args: disable_old_post_comments
+  description: >-
+    Disables all comments on admin (news) posts older than the
+    configured window.
