@@ -200,20 +200,13 @@ module MailerHelper
   # after a subscription.valid_notification_entry?(creation) check. You can
   # otherwise pass invalid or anonymity-breaking combinations of data to this.
   def batch_subscription_subject(subscription, creation, additional_creations_count)
-    subscribable_type = subscription.subscribable_type.downcase
-
-    creation_type = creation.is_a?(Chapter) ? "chapter" : "work"
-
     work = creation.is_a?(Chapter) ? creation.work : creation
-    series = subscription.subscribable if subscribable_type == "series"
-    creator_list = creation.pseuds.map(&:byline).to_sentence unless creation.anonymous?
-    # For pluralization: creator publico, creator y creator2 publicaron.
-    creators_count = creation.pseuds.size unless creation.anonymous?
-    chapter_header = creation.chapter_header if creation_type == "chapter"
+    series = subscription.subscribable if subscription.subscribable_type == "Series"
 
     base_key = "user_mailer.batch_subscription_notification.subject"
     creator_key = creation.anonymous? ? "anon" : "named"
-    creation_key = subscribable_type == "series" ? "series.#{creation_type}" : creation_type
+    creation_type = creation.model_name.i18n_key
+    creation_key = series ? "series.#{creation_type}" : creation_type
     entries_key = additional_creations_count.zero? ? "one_entry" : "multiple_entries"
 
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.chapter.multiple_entries")
@@ -232,42 +225,46 @@ module MailerHelper
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.work.one_entry")
     computed_key = "#{base_key}.#{creator_key}.#{creation_key}.#{entries_key}"
 
+    creator_list = to_sentence(creation.pseuds.map(&:byline)) unless creation.anonymous?
+    # For pluralization: creator publico, creator y creator2 publicaron.
+    creators_count = creation.pseuds.size unless creation.anonymous?
+    chapter_header = creation.chapter_header if creation_type == :chapter
     # "and X more," translated separately so we can pluralize "more" based on X.
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.more")
     more_translation = t("#{base_key}.more", count: additional_creations_count) unless additional_creations_count.zero?
 
-    variables = {}
-    variables[:app_name] = ArchiveConfig.APP_SHORT_NAME
-    variables[:creators] = creator_list unless creation.anonymous?
-    variables[:count] = creators_count unless creation.anonymous?
-    variables[:chapter_header] = chapter_header if creation_type == "chapter"
-    variables[:work_title] = work.title
-    variables[:series_title] = series.title if subscribable_type == "series"
-    variables[:more] = more_translation
+    interpolations = {}
+    interpolations[:app_name] = ArchiveConfig.APP_SHORT_NAME
+    interpolations[:creators] = creator_list
+    interpolations[:count] = creators_count
+    interpolations[:chapter_header] = chapter_header
+    interpolations[:work_title] = work.title
+    interpolations[:series_title] = series&.title
+    interpolations[:more] = more_translation
 
-    t(computed_key, **variables)
+    t(computed_key, **interpolations)
   end
 
   def batch_subscription_text_preface(creation)
     work = creation.is_a?(Chapter) ? creation.work : creation
 
-    variables = {}
-    variables[:creators] = creator_text(work) unless creation.anonymous?
-    variables[:work_title_with_word_count] = creation_title_with_word_count(creation.work) unless creation.is_a?(Work)
-    variables[:count] = creation.pseuds.size unless creation.anonymous?
+    interpolations = {}
+    interpolations[:creators] = creator_text(work) unless creation.anonymous?
+    interpolations[:work_title_with_word_count] = creation_title_with_word_count(creation.work) unless creation.is_a?(Work)
+    interpolations[:count] = creation.pseuds.size unless creation.anonymous?
 
-    t(batch_subscription_preface_key(creation, email_format: "text"), **variables)
+    t(batch_subscription_preface_key(creation, email_format: "text"), **interpolations)
   end
 
   def batch_subscription_html_preface(creation)
     work = creation.is_a?(Chapter) ? creation.work : creation
 
-    variables = {}
-    variables[:creator_links] = creator_links(work) unless creation.anonymous?
-    variables[:work_link_with_word_count] = creation_link_with_word_count(creation.work, work_url(creation.work)) unless creation.is_a?(Work)
-    variables[:count] = creation.pseuds.size unless creation.anonymous?
+    interpolations = {}
+    interpolations[:creator_links] = creator_links(work) unless creation.anonymous?
+    interpolations[:work_link_with_word_count] = creation_link_with_word_count(creation.work, work_url(creation.work)) unless creation.is_a?(Work)
+    interpolations[:count] = creation.pseuds.size unless creation.anonymous?
 
-    t(batch_subscription_preface_key(creation, email_format: "html"), **variables)
+    t(batch_subscription_preface_key(creation, email_format: "html"), **interpolations)
   end
 
   private
@@ -313,7 +310,7 @@ module MailerHelper
   def batch_subscription_preface_key(creation, email_format:)
     base_key = "user_mailer.batch_subscription_notification.preface"
     creator_key = creation.anonymous? ? "anon" : "named"
-    creation_key = creation.is_a?(Chapter) ? "chapter" : "work"
+    creation_key = creation.model_name.i18n_key
     dating_key = creation.backdate ? ".backdated" : ".new" if creation.is_a?(Work)
     format_key = ".#{email_format}" unless creation.is_a?(Work) && creation.anonymous?
 

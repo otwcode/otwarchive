@@ -6,7 +6,7 @@
     <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
     <% creation_url = creation.is_a?(Work) ? work_url(this_work) : work_chapter_url(this_work, creation) %>
 
-    <% cache("/v1/subscription-email-preface-#{creation.cache_key}") do %>
+    <% cache("/subscription-email-preface-#{creation.cache_key}") do %>
       <p><%= batch_subscription_html_preface(creation) %></p>
     <% end %>
 
@@ -20,7 +20,7 @@
     <% end %>
 
     <% unless @seen[this_work.id] %>
-      <% cache("/v1/subscription-email-meta-#{creation.cache_key}") do %>
+      <% cache("/subscription-email-meta-#{creation.cache_key}") do %>
         <p><%= render "work_info", work: this_work, suppress_summary: true %></p>
       <% end %>
 
