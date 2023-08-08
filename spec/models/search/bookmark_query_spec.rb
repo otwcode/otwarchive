@@ -141,7 +141,7 @@ describe BookmarkQuery do
 
     Tag::FILTERS.each do |type|
       it "includes #{type.underscore.humanize.downcase} aggregations for the bookmarkable" do
-        expect(aggregations.dig(:bookmarkable)).to \
+        expect(aggregations[:bookmarkable]).to \
           include({ parent: { type: "bookmark" } })
 
         expect(aggregations.dig(:bookmarkable, :aggs, type.underscore)).to \

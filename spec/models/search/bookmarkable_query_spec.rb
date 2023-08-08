@@ -51,7 +51,7 @@ describe BookmarkableQuery do
 
       it "includes aggregations for the bookmark tags" do
         # Top-level aggregation to get all children:
-        expect(aggregations.dig(:bookmarks)).to \
+        expect(aggregations[:bookmarks]).to \
           include({ children: { type: "bookmark" } })
 
         # Nested aggregation to filter the children:
