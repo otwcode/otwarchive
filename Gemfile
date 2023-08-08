@@ -176,7 +176,6 @@ gem 'unicorn', '~> 5.5', require: false
 gem 'god', '~> 0.13.7'
 
 group :staging, :production do
-  gem "alterity"
   # Place the New Relic gem as low in the list as possible, allowing the
   # frameworks above it to be instrumented when the gem initializes.
   gem "newrelic_rpm"
