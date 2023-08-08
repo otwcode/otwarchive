@@ -100,7 +100,7 @@ gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
-gem 'audited', '~> 4.4'
+gem 'audited', '~> 5.3'
 
 # For controlling application behavour dynamically
 gem 'rollout'
@@ -121,7 +121,6 @@ group :test do
   gem "cucumber"
   gem 'database_cleaner'
   gem "selenium-webdriver"
-  gem "webdrivers"
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
@@ -154,10 +153,10 @@ group :development do
 end
 
 group :linters do
-  gem "erb_lint", "0.0.29"
-  gem "rubocop", "0.83.0"
-  gem "rubocop-rails", "2.6.0"
-  gem "rubocop-rspec", "1.41.0"
+  gem "erb_lint", "0.4.0"
+  gem "rubocop", "1.22.1"
+  gem "rubocop-rails", "2.12.4"
+  gem "rubocop-rspec", "2.6.0"
 end
 
 group :test, :development, :staging do

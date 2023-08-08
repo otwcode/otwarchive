@@ -16,7 +16,7 @@ describe Admin::BannersController do
       end
     end
 
-    %w[translation tag_wrangling docs policy_and_abuse open_doors].each do |role|
+    (Admin::VALID_ROLES - %w[support communications superadmin board]).each do |role|
       it "displays an error to #{role} admins" do
         fake_login_admin(create(:admin, roles: [role]))
         subject

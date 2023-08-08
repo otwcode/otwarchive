@@ -11,6 +11,8 @@ linters:
     rubocop_config:
       inherit_from:
         - .rubocop.yml
+        # Uncomment the following line to ignore known issues
+        # - .rubocop_todo_erb.yml
       Layout/ArgumentAlignment:
         EnforcedStyle: with_fixed_indentation
       Layout/InitialIndentation:

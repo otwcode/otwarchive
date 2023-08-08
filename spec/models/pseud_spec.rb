@@ -65,4 +65,38 @@ describe Pseud do
       end.to change { comment.reload.updated_at }
     end
   end
+
+  describe ".default_alphabetical" do
+    let(:user) { create(:user, login: "Zaphod") }
+    let(:subject) { user.pseuds.default_alphabetical }
+
+    before do
+      create(:pseud, user: user, name: "Slartibartfast")
+      create(:pseud, user: user, name: "Agrajag")
+      create(:pseud, user: user, name: "Betelgeuse")
+      allow(ArchiveConfig).to receive(:ITEMS_PER_PAGE).and_return(3)
+    end
+
+    it "gets default pseud, then all pseuds in alphabetical order" do
+      expect(subject.map(&:name)).to eq(%w[Zaphod Agrajag Betelgeuse Slartibartfast])
+    end
+  end
+
+  describe ".abbreviated_list" do
+    let(:user) { create(:user, login: "Zaphod") }
+    let(:subject) { user.pseuds.abbreviated_list }
+
+    before do
+      create(:pseud, user: user, name: "Slartibartfast")
+      create(:pseud, user: user, name: "Agrajag")
+      create(:pseud, user: user, name: "Betelgeuse")
+      allow(ArchiveConfig).to receive(:ITEMS_PER_PAGE).and_return(3)
+    end
+
+    it "gets default pseud, then shortened alphabetical list of other pseuds" do
+      expect(subject.map(&:name)).to eq(%w[Zaphod Agrajag Betelgeuse])
+      expect(subject.map(&:name)).not_to include("Slartibartfast")
+      expect(subject.length).to eq(ArchiveConfig.ITEMS_PER_PAGE)
+    end
+  end
 end
