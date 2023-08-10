@@ -17,8 +17,8 @@ class Creatorship < ApplicationRecord
   validates_uniqueness_of :pseud, scope: [:creation_type, :creation_id], on: :create
 
   validate :check_invalid, on: :create
-  validate :check_disallowed, on: :create
   validate :check_banned, on: :create
+  validate :check_disallowed, on: :create
   validate :check_approved_becoming_false, on: :update
 
   # Update approval status if this creatorship should be automatically approved.
@@ -41,22 +41,23 @@ class Creatorship < ApplicationRecord
     end
   end
 
-  # Make sure that if this is an invitation, we're not inviting someone who has
-  # disabled invitations.
-  def check_disallowed
-    return if approved? || pseud.nil?
-    # Prevents this error from appearing in addition to the errorfor banned or suspended users. 
-    return if pseud&.user&.banned || pseud&.user&.suspended
-    return if pseud&.user&.preference&.allow_cocreator
-    errors.add(:base, ts("%{name} does not allow others to invite them to be a co-creator.",
-                         name: pseud.byline))
-  end
-
   # Make sure that the user isn't banned or suspended.
   def check_banned
     return unless pseud&.user&.banned || pseud&.user&.suspended
 
     errors.add(:base, ts("%{name} cannot be listed as a co-creator.",
+                         name: pseud.byline))
+    throw :abort
+  end
+
+  # Make sure that if this is an invitation, we're not inviting someone who has
+  # disabled invitations.
+  def check_disallowed
+    return if approved? || pseud.nil?
+    # Prevents this error from appearing in addition to the error for banned or suspended users. 
+    return if pseud&.user&.banned || pseud&.user&.suspended
+    return if pseud&.user&.preference&.allow_cocreator
+    errors.add(:base, ts("%{name} does not allow others to invite them to be a co-creator.",
                          name: pseud.byline))
   end
 
