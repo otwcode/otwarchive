@@ -36,3 +36,7 @@ Disallow: /
 
 User-agent: Slurp
 Crawl-delay: 30
+
+#Disallow chatGPT access to any of the site to scrape.
+User-agent: GPTBot
+Disallow: /
