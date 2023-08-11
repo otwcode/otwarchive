@@ -28,6 +28,13 @@
                                         @search.bookmarkable_type) %>
       </dd>
       <dt>
+        <%= f.label :word_count, ts("Word Count") %>
+        <%= link_to_help "bookmark-search-numerical-help" %>
+      </dt>
+      <dd>
+        <%= f.text_field :word_count %>
+      </dd>
+      <dt>
         <%= f.label :language_id, ts("Work language") %>
       </dt>
       <dd>

@@ -93,12 +93,17 @@ class BookmarkableQuery < Query
   ####################
 
   # When sorting by bookmarkable date, we use the revised_at field to order the
-  # results. When sorting by created_at, we use _score to sort (because the
-  # only way to sort by a child's fields is to store the value in the _score
-  # field and sort by score).
+  # results. When sorting by word count, we use the bookmarkable's word count.
+  # When sorting by created_at, we use _score to sort (because the only way to
+  # sort by a child's fields is to store the value in the _score field and sort
+  # by score).
   def sort
     if sort_column == "bookmarkable_date"
       sort_hash = { revised_at: { order: sort_direction, unmapped_type: "date" } }
+    elsif sort_column == "bookmarkable_word_count"
+      sort_hash = { word_count: { order: sort_direction } }
+    elsif sort_column == "bookmarkable_guest_word_count"
+      sort_hash = { guest_visible_word_count: { order: sort_direction } }
     else
       sort_hash = { _score: { order: sort_direction } }
     end
@@ -151,7 +156,8 @@ class BookmarkableQuery < Query
       language_filter,
       filter_id_filter,
       named_tag_inclusion_filter,
-      date_filter
+      date_filter,
+      word_count_filter
     ].flatten.compact
   end
 
@@ -221,6 +227,25 @@ class BookmarkableQuery < Query
 
   def language_filter
     term_filter(:"language_id.keyword", options[:language_id]) if options[:language_id].present?
+  end
+
+  # This only checks :words_from and :words_to if :word_count isn't present
+  def word_count_filter
+    return unless options[:words_from].present? || options[:words_to].present? || options[:word_count].present?
+
+    if options[:word_count].present?
+      range = SearchRange.parsed(options[:word_count])
+    else
+      range = {}
+      range[:gte] = options[:words_from].delete(",._").to_i if options[:words_from].present?
+      range[:lte] = options[:words_to].delete(",._").to_i if options[:words_to].present?
+    end
+    
+    if User.current_user.is_a?(User)
+      { range: { word_count: range } }
+    else
+      { range: { guest_visible_word_count: range } }
+    end
   end
 
   def filter_id_filter

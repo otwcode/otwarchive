@@ -13,6 +13,49 @@ describe BookmarkSearchForm, bookmark_search: true do
 
   describe "bookmarkable_search_results" do
     describe "sorting" do
+      context "by word count" do
+        let(:tag) { create(:canonical_fandom) }
+
+        let!(:work_5) { create(:work, fandom_string: tag.name) }
+        let!(:work_10r) { create(:work, fandom_string: tag.name, restricted: true) }
+        let!(:work_10) { create(:work, fandom_string: tag.name, title: "Ten") }
+        # work "Ten" has word_count 10
+        let!(:work_bookmark) { create(:bookmark, bookmarkable: work_10) }
+
+        let!(:series) { create(:series, title: "Series") }
+        let!(:serial_work1) { create(:serial_work, series: series, work: work_5) }
+        let!(:serial_work2) { create(:serial_work, series: series, work: work_10r) }
+        # series "Series" word_count is 5 or 15
+        let!(:series_bookmark) { create(:bookmark, bookmarkable: series) }
+
+        before do
+          work_5.chapters.first.update(content: "This word count is five.")
+          work_5.save
+
+          work_10.chapters.first.update(content: "This is a work with a word count of ten.")
+          work_10.save
+
+          work_10r.chapters.first.update(content: "This is a work with a word count of ten.")
+          work_10r.save
+  
+          run_all_indexing_jobs
+        end
+
+        it "sorts bookmarkables correctly when logged in" do
+          user = User.new
+          user.id = 5
+          User.current_user = user
+          results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
+          expect(results.map(&:title)).to eq %w[Series Ten]
+        end
+
+        it "sorts bookmarkables correctly when not logged in" do
+          User.current_user = nil
+          results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results 
+          expect(results.map(&:title)).to eq %w[Ten Series]
+        end
+      end
+
       context "when everything is created at a different time" do
         let(:tag) { create(:canonical_fandom) }
 
@@ -134,6 +177,66 @@ describe BookmarkSearchForm, bookmark_search: true do
     end
 
     describe "searching" do
+      context "by word count" do
+        let!(:work_5) { create(:work) }
+        let!(:work_10) { create(:work, restricted: true) }
+        let!(:work_bookmark) { create(:bookmark, bookmarkable: work_10) }
+
+        let!(:series) { create(:series) }
+        let!(:serial_work1) { create(:serial_work, series: series, work: work_5) }
+        let!(:serial_work2) { create(:serial_work, series: series, work: work_10) }
+        # series word_count will be 5 or 15
+        let!(:series_bookmark) { create(:bookmark, bookmarkable: series) }
+
+        let!(:external_work) { create(:external_work) }
+        let!(:external_work_bookmark) { create(:bookmark, bookmarkable: external_work) }
+
+        before do
+          work_5.chapters.first.update(content: "This word count is five.")
+          work_5.save
+
+          work_10.chapters.first.update(content: "This is a work with a word count of ten.")
+          work_10.save
+  
+          run_all_indexing_jobs
+        end
+
+        it "finds bookmarkables with matching word counts" do
+          user = User.new
+          user.id = 5
+          User.current_user = user
+          bookmark_search = BookmarkSearchForm.new(word_count: "10")
+          expect(bookmark_search.bookmarkable_search_results).to include work_10
+        end
+
+        it "excludes bookmarkables without matching word counts" do
+          user = User.new
+          user.id = 5
+          User.current_user = user
+          bookmark_search = BookmarkSearchForm.new(word_count: "<10")
+          expect(bookmark_search.bookmarkable_search_results).not_to include work_10
+        end
+
+        it "uses total series word count when logged in" do
+          user = User.new
+          user.id = 5
+          User.current_user = user
+          bookmark_search = BookmarkSearchForm.new(word_count: "15")
+          expect(bookmark_search.bookmarkable_search_results).to include series
+        end
+
+        it "uses guest-visible series word count when not logged in" do
+          User.current_user = nil
+          bookmark_search = BookmarkSearchForm.new(word_count: "5")
+          expect(bookmark_search.bookmarkable_search_results).to include series
+        end
+
+        it "excludes external works" do
+          bookmark_search = BookmarkSearchForm.new(word_count: ">=0")
+          expect(bookmark_search.bookmarkable_search_results).not_to include external_work
+        end
+      end
+
       context "by work language" do
         let(:language) { create(:language, short: "ptBR") }
 
@@ -259,7 +362,88 @@ describe BookmarkSearchForm, bookmark_search: true do
   end
 
   describe "search_results" do
-    describe "sorting" do
+    context "when sorting or filtering by word count" do
+      let(:tag) { create(:canonical_fandom) }
+
+      let!(:work_5) { create(:work, fandom_string: tag.name) }
+      let!(:work_10r) { create(:work, fandom_string: tag.name, restricted: true) }
+      let!(:work_10) { create(:work, fandom_string: tag.name) }
+      # work has word_count 10
+      let!(:work_bookmark) { create(:bookmark, bookmarkable: work_10) }
+
+      let!(:series) { create(:series) }
+      let!(:serial_work1) { create(:serial_work, series: series, work: work_5) }
+      let!(:serial_work2) { create(:serial_work, series: series, work: work_10r) }
+      # series word_count is 5 or 15
+      let!(:series_bookmark) { create(:bookmark, bookmarkable: series) }
+
+      let!(:external_work) { create(:external_work) }
+      let!(:external_work_bookmark) { create(:bookmark, bookmarkable: external_work) }
+
+      before do
+        work_5.chapters.first.update(content: "This word count is five.")
+        work_5.save
+
+        work_10.chapters.first.update(content: "This is a work with a word count of ten.")
+        work_10.save
+
+        work_10r.chapters.first.update(content: "This is a work with a word count of ten.")
+        work_10r.save
+
+        run_all_indexing_jobs
+      end
+
+      it "sorts bookmarks correctly when logged in" do
+        user = User.new
+        user.id = 5
+        User.current_user = user
+        results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").search_results
+        expect(results.map(&:bookmarkable_type)).to eq %w[Series Work]
+      end
+
+      it "sorts bookmarks correctly when not logged in" do
+        User.current_user = nil
+        results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").search_results
+        expect(results.map(&:bookmarkable_type)).to eq %w[Work Series]
+      end
+
+      it "includes bookmarks with matching word counts" do
+        user = User.new
+        user.id = 5
+        User.current_user = user
+        bookmark_search = BookmarkSearchForm.new(word_count: "10")
+        expect(bookmark_search.search_results).to include work_bookmark
+      end
+
+      it "excludes bookmarks without matching word counts" do
+        user = User.new
+        user.id = 5
+        User.current_user = user
+        bookmark_search = BookmarkSearchForm.new(word_count: "<10")
+        expect(bookmark_search.search_results).not_to include work_bookmark
+      end
+
+      it "uses total series word count when logged in" do
+        user = User.new
+        user.id = 5
+        User.current_user = user
+        bookmark_search = BookmarkSearchForm.new(word_count: "15")
+        expect(bookmark_search.search_results).to include series_bookmark
+      end
+
+      it "uses guest-visible series word count when not logged in" do
+        User.current_user = nil
+        bookmark_search = BookmarkSearchForm.new(word_count: "5")
+        expect(bookmark_search.search_results).to include series_bookmark
+      end
+
+      it "excludes external works when filtering by word count" do
+        bookmark_search = BookmarkSearchForm.new(word_count: ">=0")
+        expect(bookmark_search.search_results).not_to include external_work_bookmark
+      end
+    end
+
+    describe "sorting by date" do
       before { freeze_time }
 
       let!(:work1) { create(:work) }
@@ -366,15 +550,17 @@ describe BookmarkSearchForm, bookmark_search: true do
       expect(searcher.options[:notes]).to eq("Mordor")
     end
 
-    it "unescapes angle brackets for date fields" do
+    it "unescapes angle brackets for date or word count fields" do
       options = {
         date: "&lt;1 week ago",
         bookmarkable_date: "&gt;1 year ago",
+        word_count: "&gt;10",
         title: "escaped &gt;.&lt; field"
       }
       searcher = BookmarkSearchForm.new(options)
       expect(searcher.options[:date]).to eq("<1 week ago")
       expect(searcher.options[:bookmarkable_date]).to eq(">1 year ago")
+      expect(searcher.options[:word_count]).to eq(">10")
       expect(searcher.options[:title]).to eq("escaped &gt;.&lt; field")
     end
 

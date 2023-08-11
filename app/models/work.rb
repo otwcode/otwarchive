@@ -1137,7 +1137,11 @@ class Work < ApplicationRecord
       pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
       user_ids: anonymous? || unrevealed? ? nil : user_ids,
       bookmarkable_type: 'Work',
-      bookmarkable_join: { name: "bookmarkable" }
+      bookmarkable_join: { name: "bookmarkable" },
+      # This really only has meaning for series, since if a work
+      # is restricted, a guest can't see it anyway, but we need it
+      # for sorting bookmarkables.
+      guest_visible_word_count: word_count
     )
   end
 

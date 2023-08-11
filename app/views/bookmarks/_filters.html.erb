@@ -85,6 +85,15 @@
       </dt>
       <dd class="more group">
         <dl>
+          <dt id="toggle_work_words" class="filter-toggle words"><%= ts("Word Count") %></dt>
+          <dd id="work_words" class="expandable">
+            <dl class="range">
+              <dt><%= f.label :words_from, ts("From") %></dt>
+              <dd><%= f.text_field :words_from %></dd>
+              <dt><%= f.label :words_to, ts("To") %></dt>
+              <dd><%= f.text_field :words_to %></dd>
+            </dl>
+          </dd>
           <dt class="search">
             <%= f.label :bookmarkable_query, ts("Search within results") %>
             <%= link_to_help "bookmark-search-text-help" %>

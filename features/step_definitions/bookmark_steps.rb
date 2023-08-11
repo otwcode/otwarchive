@@ -28,6 +28,32 @@ Given /^I have a bookmark of a deleted work$/ do
   step %{all indexing jobs have been run}
 end
 
+Given /^I have bookmarks with various word counts to search$/ do
+  # set up some works
+  work5 = FactoryBot.create(:work, title: "Five")
+  work10 = FactoryBot.create(:work, title: "Ten")
+  work15 = FactoryBot.create(:work, title: "Fifteen")
+  work20 = FactoryBot.create(:work, title: "Twenty")
+
+  # set up some word counts
+  work5.chapters.first.update(content: "This word count is five.")
+  work5.save
+  work10.chapters.first.update(content: "This is a work with a word count of ten.")
+  work10.save
+  work15.chapters.first.update(content: "This is a work with a word count of fifteen which is more than ten.")
+  work15.save
+  work20.chapters.first.update(content: "This is a work with a word count of twenty which is more than fifteen by five more wordsy words.")
+  work20.save
+
+  # set up the bookmarks
+  FactoryBot.create(:bookmark, bookmarkable: work5)
+  FactoryBot.create(:bookmark, bookmarkable: work10)
+  FactoryBot.create(:bookmark, bookmarkable: work15)
+  FactoryBot.create(:bookmark, bookmarkable: work20)
+
+  step %{all indexing jobs have been run}
+end
+
 Given /^I have bookmarks to search$/ do
   # set up a user
   user1 = FactoryBot.create(:user, login: "testuser")

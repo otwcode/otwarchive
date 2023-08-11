@@ -227,7 +227,8 @@ class Series < ApplicationRecord
         :revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
         :relationship_ids, :freeform_ids, :creators,
-        :word_count, :work_types]
+        :word_count, :guest_visible_word_count, :work_types
+      ]
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
@@ -245,6 +246,10 @@ class Series < ApplicationRecord
 
   def word_count
     self.works.posted.pluck(:word_count).compact.sum
+  end
+
+  def guest_visible_word_count
+    self.works.posted.unrestricted.pluck(:word_count).compact.sum
   end
 
   # FIXME: should series have their own language?

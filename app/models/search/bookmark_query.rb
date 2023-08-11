@@ -109,9 +109,21 @@ class BookmarkQuery < Query
   # SORTING AND AGGREGATIONS
   ####################
 
+  def disambiguate(column)
+    if column == "word_count"
+      if User.current_user.is_a?(User)
+        "bookmarkable_word_count"
+      else
+        "bookmarkable_guest_word_count"
+      end
+    else
+      column
+    end
+  end
+
   def sort_column
     @sort_column ||=
-      options[:sort_column].present? ? options[:sort_column] : default_sort
+      options[:sort_column].present? ? disambiguate(options[:sort_column]) : default_sort
   end
 
   def sort_direction

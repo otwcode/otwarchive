@@ -214,4 +214,16 @@ class Bookmark < ApplicationRecord
       bookmarkable.updated_at
     end
   end
+
+  def bookmarkable_word_count
+    bookmarkable.word_count if bookmarkable.respond_to?(:word_count)
+  end
+
+  def bookmarkable_guest_word_count
+    if bookmarkable.respond_to?(:guest_visible_word_count)
+      bookmarkable.guest_visible_word_count
+    else
+      bookmarkable_word_count
+    end
+  end
 end

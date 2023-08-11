@@ -87,7 +87,10 @@ class BookmarkIndexer < Indexer
         :id, :created_at, :bookmarkable_type, :bookmarkable_id, :user_id,
         :private, :updated_at, :hidden_by_admin, :pseud_id, :rec
       ],
-      methods: [:bookmarker, :collection_ids, :with_notes, :bookmarkable_date]
+      methods: [
+        :bookmarker, :collection_ids, :with_notes, :bookmarkable_date, 
+        :bookmarkable_word_count, :bookmarkable_guest_word_count
+      ]
     ).merge(
       user_id: object.pseud&.user_id,
       tag: tags.map(&:name),
