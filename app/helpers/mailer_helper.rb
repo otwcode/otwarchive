@@ -10,7 +10,7 @@ module MailerHelper
   end
 
   def style_role(text)
-    "<i><b>(#{text})</b></i>".html_safe
+    "<em><strong>(#{text})</strong></em>".html_safe
   end
 
   # For work, chapter, and series links
@@ -181,27 +181,19 @@ module MailerHelper
   end
 
   def commenter_pseud_or_name_link(comment)
-    if comment.comment_owner
-      if comment.by_anonymous_creator?
-        style_bold("Anonymous Creator")
-      else
-        style_link(comment.comment_owner_name, polymorphic_url(comment.comment_owner, only_path: false))
-      end
-    else
-      style_bold(comment.comment_owner_name) + style_role("Guest")
-    end
+    style_bold(comment.comment_owner_name) + style_role("Guest") unless comment.comment_owner
+
+    style_bold("Anonymous Creator") if comment.by_anonymous_creator?
+      
+    style_link(comment.comment_owner_name, polymorphic_url(comment.comment_owner, only_path: false))
   end
 
   def commenter_pseud_or_name_text(comment)
-    if comment.comment_owner
-      if comment.by_anonymous_creator?
-        "Anonymous Creator"
-      else
-        "#{comment.comment_owner_name} (#{polymorphic_url(comment.comment_owner, only_path: false)})"
-      end
-    else
-      "#{comment.comment_owner_name} (Guest)"
-    end
+    "#{comment.comment_owner_name} (Guest)" unless comment.comment_owner
+    
+    "Anonymous Creator" if comment.by_anonymous_creator?
+    
+    "#{comment.comment_owner_name} (#{polymorphic_url(comment.comment_owner, only_path: false)})"
   end
 
   private
