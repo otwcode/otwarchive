@@ -10,7 +10,7 @@ module MailerHelper
   end
 
   def style_role(text)
-    ("<i><b>(#{text})</b></i>").html_safe
+    "<i><b>(#{text})</b></i>".html_safe
   end
 
   # For work, chapter, and series links
@@ -185,7 +185,7 @@ module MailerHelper
       if comment.by_anonymous_creator?
         style_bold("Anonymous Creator")
       else
-        style_link(comment.comment_owner_name, polymorphic_url(comment.comment_owner, :only_path => false))
+        style_link(comment.comment_owner_name, polymorphic_url(comment.comment_owner, only_path: false))
       end
     else
       style_bold(comment.comment_owner_name) + style_role("Guest")
@@ -197,10 +197,10 @@ module MailerHelper
       if comment.by_anonymous_creator?
         "Anonymous Creator"
       else
-        comment.comment_owner_name + " (" + polymorphic_url(@comment.comment_owner, :only_path => false) + ")"
+        "#{comment.comment_owner_name} (#{polymorphic_url(comment.comment_owner, only_path: false)})"
       end
     else
-      comment.comment_owner_name + " (Guest)"
+      "#{comment.comment_owner_name} (Guest)"
     end
   end
 
