@@ -9,7 +9,7 @@ class WorkSkin < Skin
     return if self.css.blank?
     check = lambda {|ruleset, property, value|
       if property == "position" && value == "fixed"
-        errors.add(:base, ts("The %{property} property in %{selectors} cannot have the value %{value} in Work skins, sorry!", property: property, selectors: ruleset.selectors.join(', '), value: value))
+        errors.add(:base, ts("The %{property} property in %{selectors} cannot have the value %{value} in Work skins, sorry!", property: property, selectors: ruleset.selectors.join(", "), value: value))
         return false
       end
       return true

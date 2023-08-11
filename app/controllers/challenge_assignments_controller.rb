@@ -181,11 +181,11 @@ class ChallengeAssignmentsController < ApplicationController
       case action
       when "default"
         # default_assignment_id = y/n
-        assignment.default || @errors << ts("We couldn't default the assignment for %{offer}", offer: assignment.offer_byline)
+        assignment.default || (@errors << ts("We couldn't default the assignment for %{offer}", offer: assignment.offer_byline))
       when "undefault"
         # undefault_[assignment_id] = y/n - if set, undefault
         assignment.defaulted_at = nil
-        assignment.save || @errors << ts("We couldn't undefault the assignment covering %{request}.", request: assignment.request_byline)
+        assignment.save || (@errors << ts("We couldn't undefault the assignment covering %{request}.", request: assignment.request_byline))
       when "approve"
         assignment.get_collection_item.approve_by_collection if assignment.get_collection_item
       when "cover"
@@ -195,7 +195,7 @@ class ChallengeAssignmentsController < ApplicationController
         if pseud.nil?
           @errors << ts("We couldn't find the user %{val} to assign that to.", val: val)
         else
-          assignment.cover(pseud) || @errors << ts("We couldn't assign %{val} to cover %{request}.", val: val, request: assignment.request_byline)
+          assignment.cover(pseud) || (@errors << ts("We couldn't assign %{val} to cover %{request}.", val: val, request: assignment.request_byline))
         end
       end
     end

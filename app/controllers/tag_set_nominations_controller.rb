@@ -315,7 +315,7 @@ class TagSetNominationsController < ApplicationController
               @errors << ts("Couldn't find a #{type} nomination for %{name}", name: name)
               @force_expand[type] = true
             elsif !tagnom.change_tagname?(val)
-              @errors << ts("Invalid name change for %{name} to %{val}: %{msg}", name: name, val: val, msg: tagnom.errors.full_messages.join(', '))
+              @errors << ts("Invalid name change for %{name} to %{val}: %{msg}", name: name, val: val, msg: tagnom.errors.full_messages.join(", "))
               @force_expand[type] = true
             elsif action == "synonym"
               @synonym[type] << val
