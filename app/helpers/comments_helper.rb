@@ -43,7 +43,7 @@ module CommentsHelper
         link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]
       end
     else
-      content_tag(:span, comment.name) + content_tag(:span, " " + ts("(Guest)"), class: "role")
+      content_tag(:span, comment.name) + content_tag(:span, " #{ts("(Guest)")}", class: "role")
     end
   end
 
