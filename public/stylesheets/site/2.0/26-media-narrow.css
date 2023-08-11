@@ -163,13 +163,17 @@ body .narrow-shown {
 }
 
 .comment .icon {
-  height: 50px;
+  height: 55px;
   margin-bottom: 0;
-  width: 50px;
+  width: 55px;
+}
+
+.comment .icon .anonymous {
+  background: url(/images/imageset.png) no-repeat -75px -395px;
 }
 
 .comment .icon .visitor {
-  background: url(/images/imageset.png) no-repeat 0px -525px transparent;
+  background: url(/images/imageset.png) no-repeat -130px -395px;
 }
 
 .comment h4.byline {

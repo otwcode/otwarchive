@@ -9,6 +9,10 @@ module MailerHelper
     link_to(body.html_safe, url, html_options)
   end
 
+  def style_role(text)
+    ("<i><b>(#{text})</b></i>").html_safe
+  end
+
   # For work, chapter, and series links
   def style_creation_link(title, url, html_options = {})
     html_options[:style] = "color:#990000"
@@ -174,6 +178,30 @@ module MailerHelper
 
     label = style_bold(work_tag_metadata_label(tags))
     "#{label}#{style_work_tag_metadata_list(tags)}".html_safe
+  end
+
+  def commenter_pseud_or_name_link(comment)
+    if comment.comment_owner
+      if comment.by_anonymous_creator?
+        style_bold("Anonymous Creator")
+      else
+        style_link(comment.comment_owner_name, polymorphic_url(comment.comment_owner, :only_path => false))
+      end
+    else
+      style_bold(comment.comment_owner_name) + style_role("Guest")
+    end
+  end
+
+  def commenter_pseud_or_name_text(comment)
+    if comment.comment_owner
+      if comment.by_anonymous_creator?
+        "Anonymous Creator"
+      else
+        comment.comment_owner_name + " (" + polymorphic_url(@comment.comment_owner, :only_path => false) + ")"
+      end
+    else
+      comment.comment_owner_name + " (Guest)"
+    end
   end
 
   private
