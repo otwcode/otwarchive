@@ -15,7 +15,7 @@
   </p>
     
   <p>
-    <%= style_bold(responder) %> responded:
+    <%= commenter_pseud_or_name_link(@comment) %> responded:
     <%= style_quote(raw @comment.sanitized_content) %>  
   </p>
 
