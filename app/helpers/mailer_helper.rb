@@ -181,17 +181,17 @@ module MailerHelper
   end
 
   def commenter_pseud_or_name_link(comment)
-    style_bold(comment.comment_owner_name) + style_role("Guest") unless comment.comment_owner
+    return style_bold(comment.comment_owner_name) + style_role("Guest") unless comment.comment_owner
 
-    style_bold("Anonymous Creator") if comment.by_anonymous_creator?
+    return style_bold("Anonymous Creator") if comment.by_anonymous_creator?
       
     style_link(comment.comment_owner_name, polymorphic_url(comment.comment_owner, only_path: false))
   end
 
   def commenter_pseud_or_name_text(comment)
-    "#{comment.comment_owner_name} (Guest)" unless comment.comment_owner
+    return "#{comment.comment_owner_name} (Guest)" unless comment.comment_owner
     
-    "Anonymous Creator" if comment.by_anonymous_creator?
+    return "Anonymous Creator" if comment.by_anonymous_creator?
     
     "#{comment.comment_owner_name} (#{polymorphic_url(comment.comment_owner, only_path: false)})"
   end
