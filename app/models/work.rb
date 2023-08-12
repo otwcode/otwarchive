@@ -1008,7 +1008,7 @@ class Work < ApplicationRecord
   }
 
   scope :with_includes_for_blurb, lambda {
-    includes(:pseuds)
+    includes(:pseuds, :approved_collections, :stat_counter)
   }
 
   scope :for_blurb, -> { with_columns_for_blurb.with_includes_for_blurb }
