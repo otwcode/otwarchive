@@ -12,7 +12,7 @@ describe LanguagesController do
       end
     end
     
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors translation superadmin].each do |role|
+    Admin::VALID_ROLES.each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -33,7 +33,7 @@ describe LanguagesController do
       end
     end
 
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors translation superadmin].each do |role|
+    Admin::VALID_ROLES.each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -53,7 +53,7 @@ describe LanguagesController do
       end
     end
 
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
         
@@ -99,7 +99,7 @@ describe LanguagesController do
       end
     end
 
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
         
@@ -146,7 +146,7 @@ describe LanguagesController do
       end
     end
     
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
         
@@ -195,7 +195,7 @@ describe LanguagesController do
       end
     end
 
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
         

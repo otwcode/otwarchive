@@ -23,7 +23,7 @@
     <% unless bookmark.collections.blank? %>
       <% bookmark.collections.each do |modded| %>
         <% if modded.moderated? && !bookmark.approved_collections.include?(modded) && is_author_of?(bookmark)  %>
-          <p class="notice"><%= ts("The collection #{modded.title} is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there.") %></p>
+          <p class="notice"><%= ts("The collection %{title} is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there.", title: modded.title) %></p>
         <% end %>
       <% end %>
       <% unless bookmark.approved_collections.empty? && !is_author_of?(bookmark) %>

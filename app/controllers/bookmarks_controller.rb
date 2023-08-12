@@ -203,12 +203,12 @@ class BookmarksController < ApplicationController
     bookmark_params[:collection_names]&.split(",")&.map(&:strip)&.uniq&.each do |collection_name|
       collection = Collection.find_by(name: collection_name)
       if collection.nil?
-        errors << ts("#{collection_name} does not exist.")
+        errors << ts("%{name} does not exist.", name: collection_name)
       else
         if @bookmark.collections.include?(collection)
           next
         elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
-          errors << ts("#{collection.title} is closed to new submissions.")
+          errors << ts("%{title} is closed to new submissions.", title: collection.title)
         elsif @bookmark.add_to_collection(collection) && @bookmark.save
           if @bookmark.approved_collections.include?(collection)
             new_collections << collection
@@ -216,7 +216,7 @@ class BookmarksController < ApplicationController
             unapproved_collections << collection
           end
         else
-          errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!")
+          errors << ts("Something went wrong trying to add collection %{title}, sorry!", title: collection.title)
         end
       end
     end
