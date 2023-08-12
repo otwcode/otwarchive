@@ -188,18 +188,16 @@ class User < ApplicationRecord
   validates :login,
             length: {
               within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
-              too_short: ts("^User name is too short (minimum is %{min_login} characters)",
-                            min_login: ArchiveConfig.LOGIN_LENGTH_MIN),
-              too_long: ts("^User name is too long (maximum is %{max_login} characters)",
-                           max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
+              too_short: I18n.t("user.login.too_short", min_login: ArchiveConfig.LOGIN_LENGTH_MIN),
+              too_long: I18n.t("user.login.too_long", max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
             },
             format: {
               with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/,
-              message: ts("^User name must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).",
-                          min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
-                          max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
+              message: I18n.t("user.login.bad_format",
+                              min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
+                              max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
             },
-            uniqueness: { message: ts("^User name has already been taken") }
+            uniqueness: true
   validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
   validate :login, :username_not_forbidden, if: :will_save_change_to_login?
 
