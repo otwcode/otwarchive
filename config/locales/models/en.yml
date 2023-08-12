@@ -145,6 +145,7 @@ en:
               changed_too_recently:
                 one: can only be changed once per day. You last changed your user name on %{renamed_at}.
                 other: can only be changed once every %{count} days. You last changed your user name on %{renamed_at}.
+              forbidden: "%{value} is not allowed"
             password_confirmation:
               confirmation: doesn't match new password.
         work:

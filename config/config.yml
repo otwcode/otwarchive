@@ -518,3 +518,7 @@ WRANGLING_REPORT_LIMIT: 1000
 # After this window, all comments are disabled. Setting this value to
 # something below 1 -- or commenting it out -- will turn off comment disabling.
 ADMIN_POST_COMMENTING_EXPIRATION_DAYS: 14
+
+# Usernames in this list are not allowed to avoid potential confusion (like
+# a user who has the username 'admin', for example).
+FORBIDDEN_USERNAMES: []
