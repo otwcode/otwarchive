@@ -197,9 +197,9 @@ class User < ApplicationRecord
                               min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
                               max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
             },
-            uniqueness: true
-  validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
-  validate :login, :username_not_forbidden, if: :will_save_change_to_login?
+            uniqueness: true,
+            not_forbidden_name: true
+  validate :username_is_not_recently_changed, if: :will_save_change_to_login?
 
   # allow nil so can save existing users
   validates_length_of :password,
@@ -580,12 +580,6 @@ class User < ApplicationRecord
   def remove_stale_from_autocomplete
     Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
-  end
-
-  def username_not_forbidden
-    return unless ArchiveConfig.FORBIDDEN_USERNAMES.include?(login.downcase)
-
-    errors.add(:login, :forbidden)
   end
 
   def username_is_not_recently_changed

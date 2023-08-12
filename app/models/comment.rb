@@ -14,8 +14,7 @@ class Comment < ApplicationRecord
 
   has_many :thread_comments, class_name: 'Comment', foreign_key: :thread
 
-  validates_presence_of :name, unless: :pseud_id
-  validate :name, :name_not_forbidden, if: :will_save_change_to_name?
+  validates :name, presence: { unless: :pseud_id }, not_forbidden_name: true
   validates :email, email_format: { on: :create, unless: :pseud_id }, email_blacklist: { on: :create, unless: :pseud_id }
 
   validates_presence_of :comment_content
@@ -41,12 +40,6 @@ class Comment < ApplicationRecord
     unless: :on_tag?,
     message: :blocked_comment
   }
-
-  def name_not_forbidden
-    return unless ArchiveConfig.FORBIDDEN_USERNAMES.include?(name&.downcase)
-
-    errors.add(:name, :forbidden)
-  end
 
   def on_tag?
     parent_type == "Tag"
