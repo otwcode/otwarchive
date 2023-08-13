@@ -16,20 +16,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def create
     @hide_dashboard = true
-    if params[:cancel_create_account]
-      redirect_to root_path
-    else
-      build_resource(sign_up_params)
+    build_resource(sign_up_params)
 
-      resource.transaction do
-        # skip sending the Devise confirmation notification
-        resource.skip_confirmation_notification!
-        resource.invitation_token = params[:invitation_token]
-        if resource.save
-          notify_and_show_confirmation_screen
-        else
-          render action: 'new'
-        end
+    resource.transaction do
+      # skip sending the Devise confirmation notification
+      resource.skip_confirmation_notification!
+      resource.invitation_token = params[:invitation_token]
+      if resource.save
+        notify_and_show_confirmation_screen
+      else
+        render action: "new"
       end
     end
   end
