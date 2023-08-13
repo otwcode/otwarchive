@@ -60,15 +60,15 @@ en:
         violation_html: You have encountered content on the Archive that violates the %{tos_link}.
   admin:
     admin_invitations:
+      find:
+        email: Enter all or part of an email address
+        token: Enter an invite token
+        user_name: Enter a user name
       index:
         navigation:
           queue: Manage Queue
           requests: Manage Requests
         page_heading: Invite New Users
-      find:
-        user_name: Enter a user name
-        email: Enter all or part of an email address
-        token: Enter an invite token
     admin_options:
       delete:
         bookmark: Delete Bookmark
