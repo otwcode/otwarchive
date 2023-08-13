@@ -320,6 +320,10 @@ Feature: Admin Actions to Manage Invitations
     When I fill in "Enter a user name" with "dax"
       And I press "Go"
     Then I should see "No results were found. Try another search"
+    When I fill in "Enter a user name" with ""
+      And I fill in "Enter all or part of an email address" with "nonexistent@domain.com"
+      And I press "Go"
+    Then I should see "No results were found. Try another search"
 
   Scenario: An admin can invite people from the queue
     Given I am logged in as an admin

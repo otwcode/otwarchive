@@ -65,6 +65,10 @@ en:
           queue: Manage Queue
           requests: Manage Requests
         page_heading: Invite New Users
+      find:
+        user_name: Enter a user name
+        email: Enter all or part of an email address
+        token: Enter an invite token
     admin_options:
       delete:
         bookmark: Delete Bookmark
