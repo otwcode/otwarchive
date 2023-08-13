@@ -429,6 +429,14 @@ en:
   home:
     donate:
       page_title: Donate or Volunteer
+    fandoms:
+      all_fandoms: All Fandoms
+    index:
+      browse_or_favorite:
+        one: Browse fandoms by media or favorite up to %{count} tag to have it listed here!
+        other: Browse fandoms by media or favorite up to %{count} tags to have them listed here!
+      find_your_favorites: Find your favorites
+      media_navigation_label: Media
   invitations:
     invitation:
       email_address_label: Enter an email address

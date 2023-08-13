@@ -5,7 +5,7 @@
 
   <% if logged_in? && @homepage.favorite_tags.present? %>
     <div class="favorite module">
-      <h3 class="heading"><%= ts('Find your favorites') %></h3>
+      <h3 class="heading"><%= t(".find_your_favorites") %></h3>
       <ul>
         <% @homepage.favorite_tags.each do |favorite_tag| %>
           <li>
@@ -15,13 +15,13 @@
       </ul>
     </div>
   <% else %>
-    <div class="browse module">
-      <h3 class="heading"><%= ts('Find your favorites') %></h3>
+    <nav aria-label="<%= t(".media_navigation_label") %>" class="browse module">
+      <h3 class="heading"><%= t(".find_your_favorites") %></h3>
       <% if logged_in? %>
-        <p class="note"><%= ts('Browse fandoms by media or favorite up to %{maximum} tags to have them listed here!', maximum: ArchiveConfig.MAX_FAVORITE_TAGS) %></p>
+        <p class="note"><%= t(".browse_or_favorite", count: ArchiveConfig.MAX_FAVORITE_TAGS) %></p>
       <% end %>
-      <%= render 'menu/menu_fandoms' %>
-    </div>
+      <%= render 'fandoms' %>
+    </nav>
   <% end %>
 
   <% if @homepage.admin_posts.present? %>
