@@ -74,6 +74,16 @@ body .narrow-shown {
   margin-left: 45px;
 }
 
+#header .dropdown, #greeting .user {
+  position: static;
+}
+
+#header .menu {
+  width: 100%;
+  position: absolute;
+  left: 0;
+}
+
 /* 04 region dashboard */
 
 #dashboard, #dashboard.own {
@@ -172,7 +182,7 @@ body .narrow-shown {
   padding: 0;
 }
 
-.splash div.module, .logged-in .splash div.module {
+.splash div.module, .splash nav.module, .logged-in .splash div.module, .logged-in .splash nav.module {
   clear: both;
   margin-left: 0;
   margin-right: 0;

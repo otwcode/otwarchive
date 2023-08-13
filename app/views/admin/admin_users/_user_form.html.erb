@@ -12,7 +12,7 @@
   <td><%= text_field_tag "user[email]", user.email, title: ts("Email"), disabled: !admin_can_update_user_email? %></td>
   <% for role in @roles %>
     <td>
-      <%= check_box_tag "user[roles][]", role.id, user.roles.include?(role), title: role.name, id: "user_roles_#{role.id}", disabled: !admin_can_update_user_roles? %>
+      <%= check_box_tag "user[roles][]", role.id, user.roles.include?(role), title: role.name, id: "user_roles_#{role.id}", disabled: !policy(User).can_edit_user_role?(role) %>
     </td>
   <% end %>
   <td>

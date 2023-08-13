@@ -86,6 +86,10 @@ class Pseud < ApplicationRecord
   after_update :expire_caches
   after_commit :reindex_creations, :touch_comments
 
+  scope :alphabetical, -> { order(:name) }
+  scope :default_alphabetical, -> { order(is_default: :desc).alphabetical }
+  scope :abbreviated_list, -> { default_alphabetical.limit(ArchiveConfig.ITEMS_PER_PAGE) }
+
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
   end
@@ -156,16 +160,6 @@ class Pseud < ApplicationRecord
     @unposted_works = self.works.where(posted: false).order(created_at: :desc)
   end
 
-
-  # look up by byline
-  scope :by_byline, -> (byline) {
-    joins(:user)
-      .where('users.login = ? AND pseuds.name = ?',
-        (byline.include?('(') ? byline.split('(', 2)[1].strip.chop : byline),
-        (byline.include?('(') ? byline.split('(', 2)[0].strip : byline)
-      )
-  }
-
   # Produces a byline that indicates the user's name if pseud is not unique
   def byline
     (name != user_name) ? "#{name} (#{user_name})" : name
@@ -179,52 +173,58 @@ class Pseud < ApplicationRecord
     (past_name != past_user_name) ? "#{past_name} (#{past_user_name})" : past_name
   end
 
-  # Parse a string of the "pseud.name (user.login)" format into a pseud
-  def self.parse_byline(byline, options = {})
-    pseud_name = ""
-    login = ""
-    if byline.include?("(")
-      pseud_name, login = byline.split('(', 2)
-      pseud_name = pseud_name.strip
-      login = login.strip.chop
-      conditions = ['users.login = ? AND pseuds.name = ?', login, pseud_name]
+  # Parse a string of the "pseud.name (user.login)" format into an array
+  # [pseud.name, user.login]. If there is no parenthesized login after the
+  # pseud name, returns [pseud.name, nil].
+  def self.split_byline(byline)
+    pseud_name, login = byline.split("(", 2)
+    [pseud_name&.strip, login&.strip&.delete_suffix(")")]
+  end
+
+  # Parse a string of the "pseud.name (user.login)" format into a pseud. If the
+  # form is just "pseud.name" with no parenthesized login, assumes that
+  # pseud.name = user.login and goes from there.
+  def self.parse_byline(byline)
+    pseud_name, login = split_byline(byline)
+    login ||= pseud_name
+
+    Pseud.joins(:user).find_by(pseuds: { name: pseud_name }, users: { login: login })
+  end
+
+  # Parse a string of the "pseud.name (user.login)" format into a list of
+  # pseuds. Usually this will be just one pseud, but if the byline is of the
+  # form "pseud.name" with no parenthesized user name, it'll look for any pseud
+  # with that name.
+  def self.parse_byline_ambiguous(byline)
+    pseud_name, login = split_byline(byline)
+
+    if login
+      Pseud.joins(:user).where(pseuds: { name: pseud_name }, users: { login: login })
     else
-      pseud_name = byline.strip
-      if options[:assume_matching_login]
-        conditions = ['users.login = ? AND pseuds.name = ?', pseud_name, pseud_name]
-      else
-        conditions = ['pseuds.name = ?', pseud_name]
-      end
+      Pseud.where(name: pseud_name)
     end
-    Pseud.joins(:user).where(conditions)
   end
 
   # Takes a comma-separated list of bylines
   # Returns a hash containing an array of pseuds and an array of bylines that couldn't be found
-  def self.parse_bylines(list, options = {})
+  def self.parse_bylines(bylines)
     valid_pseuds = []
-    ambiguous_pseuds = {}
     failures = []
     banned_pseuds = []
-    bylines = list.split ","
-    for byline in bylines
-      pseuds = Pseud.parse_byline(byline, options)
-      if pseuds.length == 1
-        pseud = pseuds.first
-        if pseud.user.banned? || pseud.user.suspended?
-          banned_pseuds << pseud
-        else
-          valid_pseuds << pseud
-        end
-      elsif pseuds.length > 1
-        ambiguous_pseuds[pseuds.first.name] = pseuds
-      else
+
+    bylines.split(",").each do |byline|
+      pseud = parse_byline(byline)
+      if pseud.nil?
         failures << byline.strip
+      elsif pseud.user.banned? || pseud.user.suspended?
+        banned_pseuds << pseud
+      else
+        valid_pseuds << pseud
       end
     end
+
     {
       pseuds: valid_pseuds.flatten.uniq,
-      ambiguous_pseuds: ambiguous_pseuds,
       invalid_pseuds: failures,
       banned_pseuds: banned_pseuds.flatten.uniq.map(&:byline)
     }
@@ -274,7 +274,6 @@ class Pseud < ApplicationRecord
   #
   # This is a particular case for the Pseud model
   def remove_stale_from_autocomplete_before_save
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 

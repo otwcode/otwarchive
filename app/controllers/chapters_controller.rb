@@ -1,7 +1,8 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
   before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
-  before_action :check_user_status, only: [:new, :create, :edit, :update]
+  before_action :check_user_status, only: [:new, :create, :update]
+  before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy]
   before_action :load_work
   # only authors of a work should be able to edit its chapters
   before_action :check_ownership, except: [:index, :show]
@@ -213,21 +214,22 @@ class ChaptersController < ApplicationController
   # DELETE /work/:work_id/chapters/1
   # DELETE /work/:work_id/chapters/1.xml
   def destroy
-    if @chapter.is_only_chapter?
-      flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
+    if @chapter.is_only_chapter? || @chapter.only_non_draft_chapter?
+      flash[:error] = t(".only_chapter")
       redirect_to(edit_work_path(@work))
-    else
-      was_draft = !@chapter.posted?
-      if @chapter.destroy
-        @work.minor_version = @work.minor_version + 1
-        @work.set_revised_at
-        @work.save
-        flash[:notice] = ts("The chapter #{was_draft ? 'draft ' : ''}was successfully deleted.")
-      else
-        flash[:error] = ts("Something went wrong. Please try again.")
-      end
-      redirect_to controller: 'works', action: 'show', id: @work
+      return
     end
+
+    was_draft = !@chapter.posted?
+    if @chapter.destroy
+      @work.minor_version = @work.minor_version + 1
+      @work.set_revised_at
+      @work.save
+      flash[:notice] = ts("The chapter #{was_draft ? 'draft ' : ''}was successfully deleted.")
+    else
+      flash[:error] = ts("Something went wrong. Please try again.")
+    end
+    redirect_to controller: "works", action: "show", id: @work
   end
 
   private

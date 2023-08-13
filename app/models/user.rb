@@ -210,7 +210,7 @@ class User < ApplicationRecord
   validates :login, uniqueness: { message: ts("^User name has already been taken") }
   validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
 
-  validates :email, email_veracity: true, email_format: true, uniqueness: true
+  validates :email, email_format: true, uniqueness: true
 
   # Virtual attribute for age check and terms of service
     attr_accessor :age_over_13
@@ -219,12 +219,12 @@ class User < ApplicationRecord
 
   validates_acceptance_of :terms_of_service,
                           allow_nil: false,
-                          message: ts("Sorry, you need to accept the Terms of Service in order to sign up."),
+                          message: ts("^Sorry, you need to accept the Terms of Service in order to sign up."),
                           if: :first_save?
 
   validates_acceptance_of :age_over_13,
                           allow_nil: false,
-                          message: ts("Sorry, you have to be over 13!"),
+                          message: ts("^Sorry, you have to be over 13!"),
                           if: :first_save?
 
   def to_param
@@ -578,7 +578,6 @@ class User < ApplicationRecord
   end
 
   def remove_stale_from_autocomplete
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 

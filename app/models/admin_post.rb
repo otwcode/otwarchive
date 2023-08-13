@@ -79,6 +79,23 @@ class AdminPost < ApplicationRecord
     errors.add(:translated_post_id, "cannot be same language as original post")
   end
 
+  ####################
+  # DELAYED JOBS
+  ####################
+
+  include AsyncWithResque
+  @queue = :utilities
+
+  # Turns off comments for all posts that are older than the configured time period.
+  # If the configured period is nil or less than 1 day, no action is taken.
+  def self.disable_old_post_comments
+    return unless ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS&.positive?
+
+    where.not(comment_permissions: :disable_all)
+      .where(created_at: ..ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago)
+      .update_all(comment_permissions: :disable_all)
+  end
+
   private
 
   def expire_cached_home_admin_posts
