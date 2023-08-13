@@ -15,6 +15,9 @@ en:
   chapters:
     destroy:
       only_chapter: You can't delete the only chapter in your work. If you want to delete the work, choose "Delete Work".
+    draft_flash:
+      posted_work: This is a draft chapter in a posted work. It will be kept unless the work is deleted.
+      unposted_work_html: This is a draft chapter in an unposted work. The work will be <strong>scheduled for deletion</strong> on %{deletion_date}.
     show:
       anonymous: Anonymous
       chapter_position: " - Chapter %{position}"

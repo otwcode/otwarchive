@@ -556,6 +556,9 @@ en:
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
         random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
+  time:
+    formats:
+      date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
   troubleshooting:
     show:
       fix_associations:
@@ -683,3 +686,7 @@ en:
         multiple_works_restricted: Only show to registered users
         restricted: Only show your work to registered users
         unrestricted: Show to all
+    show:
+      unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    work_module:
+      draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
