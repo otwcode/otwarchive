@@ -12,8 +12,8 @@
     <dd><%= text_field_tag "invitation[user_name]", params[:invitation][:user_name]  %></dd>
     <dt><%= label_tag "invitation[token]", t(".token") %>:</dt>
     <dd><%= text_field_tag "invitation[token]", params[:invitation][:token]  %></dd>
-    <dt><%= label_tag "invitation[invitee_email]", t(".email") %>:</dt>
-    <dd><%= text_field_tag "invitation[invitee_email]", params[:invitation][:invitee_email] %></dd>
+    <dt><%= label_tag "invitee_email", t(".email") %>:</dt>
+    <dd><%= text_field_tag "invitation[invitee_email]", params[:invitation][:invitee_email], id: "invitee_email" %></dd>
   </dl>
   <p class="submit actions"><%= submit_tag "Go" %></p>
 <% end %>
