@@ -346,7 +346,7 @@ Feature: Admin Actions to Manage Invitations
       And press "Invite from queue"
     Then I should see "1 person from the invite queue is being invited"
     When I press "Go"
-      And I fill in "Enter all or part of an email address:" with "test@example.com"
+      And I fill in "Enter all or part of an email address" with "test@example.com"
       And I press "Go"
     Then I should see "Sender testadmin-support"
 
@@ -362,9 +362,9 @@ Feature: Admin Actions to Manage Invitations
       And I fill in "Enter an invite token" with "dax's" invite code
       And I press "Go"
     Then I should see "copy and use"
-    When I fill in "invitation_invitee_email" with "oldman@ds9.com"
+    When I fill in "Enter an email address" with "oldman@ds9.com"
       And I press "Update Invitation"
-    Then I should see "oldman@ds9.com" in the "invitation_invitee_email" input
+    Then I should see "oldman@ds9.com" in the "Enter an email address" input
 
   Scenario: An admin can search the invitation queue, and search parameters are
   kept even if deleting without JavaScript
