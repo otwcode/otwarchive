@@ -47,9 +47,10 @@ class Admin::AdminInvitationsController < Admin::BaseController
       @invitations = Invitation.where("invitee_email LIKE ?", "%#{invitation_params[:invitee_email]}%")
       @invitation = @invitations.first
     end
-    unless @user || @invitation.present? || @invitations.present?
-      flash.now[:error] = t('user_not_found', default: "No results were found. Try another search.")
-    end
+
+    return if @user || @invitation.present? || @invitations.present?
+
+    flash.now[:error] = t(".user_not_found")
   end
 
   private
