@@ -2,12 +2,12 @@
 en:
   admin:
     admin_invitations:
+      find:
+        user_not_found: No results were found. Try another search.
       invite_from_queue:
         success:
           one: "%{count} person from the invite queue is being invited."
           other: "%{count} people from the invite queue are being invited."
-      find:
-        user_not_found: No results were found. Try another search.
   blocked:
     users:
       create:
