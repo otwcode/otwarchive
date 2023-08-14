@@ -1,7 +1,7 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
   before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
-  before_action :check_user_status, only: [:new, :create, :update]
+  before_action :check_user_status, only: [:new, :create, :update, :update_positions]
   before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy]
   before_action :load_work
   # only authors of a work should be able to edit its chapters
