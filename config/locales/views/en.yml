@@ -673,6 +673,14 @@ en:
         link_tos: Terms of Service
         welcome_text: Hi! It looks like you've just logged into the Archive for the first time. %{help_link} or dismiss this message permanently.
   works:
+    adult:
+      caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.
+      footnote: If you accept cookies from our site and you choose "Yes, Continue", you will not be asked again during this session (that is, until you close your browser). If you log in you can store your preference and never be asked again.
+      navigation:
+        back: No, Go Back
+        continue: Yes, Continue
+        preferences: Set your preferences now
+      page_title: Adult Content Warning
     meta:
       original_creators:
         one: 'Original Creator ID:'
