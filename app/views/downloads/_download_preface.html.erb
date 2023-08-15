@@ -67,11 +67,10 @@
 
     <% related_works = @work.parent_work_relationships.reject { |wr| !wr.parent } %>
     <% if related_works.length > 0 %>
-      <%# i18n-tasks-use t("downloads.download_preface.html.external_related_work_html")
+      <%# i18n-tasks-use t("downloads.download_preface.html.inspired_by.unrevealed")
+          i18n-tasks-use t("downloads.download_preface.html.inspired_by.revealed_html")
           i18n-tasks-use t("downloads.download_preface.html.translation_of.unrevealed")
-          i18n-tasks-use t("downloads.download_preface.html.translation_of.revealed_html")
-          i18n-tasks-use t("downloads.download_preface.html.inspired_by.unrevealed")
-          i18n-tasks-use t("downloads.download_preface.html.inspired_by.revealed_html")-%>
+          i18n-tasks-use t("downloads.download_preface.html.translation_of.revealed_html") %>
       <ul>
         <% related_works.each do |work| %>
           <li>
@@ -79,16 +78,12 @@
             <% work_link = link_to work.parent.title, polymorphic_url(work.parent) %>
             <% creator_link = byline(work.parent, visibility: "public", only_path: false) %>
 
-            <% if work.parent.is_a?(ExternalWork) %>
-              <%= t(".external_related_work_html",
-                  work_link: work_link,
-                  creator_link: creator_link) %>
-            <% elsif work.parent.unrevealed? %>
-              <%= t(".#{relation}.unrevealed") %>
-            <% else %>
+            <% if work.parent.is_a?(ExternalWork) || !work.parent.unrevealed? %>
               <%= t(".#{relation}.revealed_html",
                   work_link: work_link,
                   creator_link: creator_link) %>
+            <% else %>
+              <%= t(".#{relation}.unrevealed") %>
             <% end %>
           </li>
         <% end %>

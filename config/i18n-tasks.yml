@@ -264,11 +264,10 @@ ignore_missing:
   # File: app/views/series/manage.html.erb
   - series.manage.manage_series
   # File: app/views/downloads/_download_preface.html.erb
-  - downloads.download_preface.external_related_work_html
   - downloads.download_preface.inspired_by.revealed_html
   - downloads.download_preface.translation_of.unrevealed
-  - downloads.download_preface.translation_of.revealed_html
   - downloads.download_preface.inspired_by.unrevealed
+  - downloads.download_preface.translation_of.revealed_html
 
 ## Consider these keys used:
 ignore_unused:

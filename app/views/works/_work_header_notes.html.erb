@@ -36,7 +36,7 @@
           <% creator_link = byline(related_work.parent) %>
 
           <% if related_work.parent.is_a?(ExternalWork) %>
-            <%= t(".external_related_work_html",
+            <%= t(".#{relation}.revealed_html",
                 work_link: work_link,
                 creator_link: creator_link) %>
           <% elsif related_work.parent.unrevealed? %>
