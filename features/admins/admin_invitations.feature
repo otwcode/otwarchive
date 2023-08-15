@@ -314,6 +314,21 @@ Feature: Admin Actions to Manage Invitations
       And I press "Go"
     Then I should see "copy and use"
 
+  Scenario: An admin can find all invitations via email partial match
+    Given I am logged in as an admin
+      And an invitation request for "fred@bedrock.com"
+      And an invitation request for "barney@bedrock.com"
+      And all emails have been delivered
+      And I follow "Invite New Users"
+    Then I should see "There are 2 requests in the queue."
+    When I fill in "Number of people to invite" with "2"
+      And I press "Invite from queue"
+    Then I should see "2 people from the invite queue are being invited"
+    When I fill in "Enter all or part of an email address" with "@"
+      And I press "Go"
+    Then I should see "fred@bedrock.com"
+      And I should see "barney@bedrock.com"
+
   Scenario: An admin can't find a invitation for a nonexistent user
     Given I am logged in as an admin
       And I follow "Invite New Users"
