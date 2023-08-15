@@ -1,6 +1,6 @@
 # Based on https://github.com/tk0miya/action-erblint/blob/main/README.md#example-usage
 
-name: Reviewdog ERB Lint
+name: Reviewdog
 
 on: [pull_request]
 
