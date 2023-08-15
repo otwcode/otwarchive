@@ -261,8 +261,14 @@ ignore_missing:
   # File: app/views/pseuds/show.html.erb
   - pseuds.show.edit_link
   - pseuds.show.index_link
-  # File: app/views/series/manage.html.er
+  # File: app/views/series/manage.html.erb
   - series.manage.manage_series
+  # File: app/views/downloads/_download_preface.html.erb
+  - downloads.download_preface.external_related_work_html
+  - downloads.download_preface.inspired_by.revealed_html
+  - downloads.download_preface.translation_of.unrevealed
+  - downloads.download_preface.translation_of.revealed_html
+  - downloads.download_preface.inspired_by.unrevealed
 
 ## Consider these keys used:
 ignore_unused:

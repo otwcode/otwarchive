@@ -254,7 +254,7 @@ Scenario: Listing external works as inspirations
   Then I should see "Draft was successfully created"
   When I press "Post"
   Then I should see "Work was successfully posted"
-    And I should see "A translation of Worldbuilding by BNF"
+    And I should see "Translation of Worldbuilding by BNF"
   When I edit the work "Followup"
     And I check "parent-options-show"
     And I fill in "URL" with "http://example.org/301"
@@ -268,7 +268,7 @@ Scenario: Listing external works as inspirations
   Then I should see "Preview"
   When I press "Update"
   Then I should see "Work was successfully updated"
-    And I should see "A translation of Worldbuilding by BNF"
+    And I should see "Translation of Worldbuilding by BNF"
     And I should see "Inspired by Worldbuilding Two by BNF"
   When I view my related works
   Then I should see "From N/A to English"
@@ -305,7 +305,7 @@ Scenario: External work language
   Then I should see "Draft was successfully created"
   When I press "Post"
   Then I should see "Work was successfully posted"
-    And I should see "A translation of German Worldbuilding by BNF"
+    And I should see "Translation of German Worldbuilding by BNF"
   When I view my related works
   Then I should see "From Deutsch to English"
     And I should not see "From N/A to English"
@@ -659,12 +659,15 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I should not see "Worldbuilding Translated by translator"
       And I should not see "From English to Deutsch"
 
-  Scenario: A work that is inspired by a work in an unrevealed collection does not list the title or creator of the unrevealed work in its notes
+  Scenario: Notes of related work do not break anonymity of parent work in an unrevealed collection
     Given a hidden collection "Hidden"
       And I have related works setup
     When I am logged in as "inspiration"
-      And I add the work "Worldbuilding" to the collection "Hidden"
+      And I edit the work "Worldbuilding" to be in the collection "Hidden"
       And I post a related work as remixer
+      And I post a translation as translator
+
+    # Check remix
     When I view the work "Followup"
     Then I should not see "Worldbuilding"
       And I should not see "inspiration"
@@ -673,3 +676,11 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Then I should not see "Worldbuilding"
       And I should not see "inspiration"
       And I should see "Inspired by a work in an unrevealed collection."
+
+    # Check translated work
+    When I view the work "Worldbuilding Translated"
+      Then I should not see "inspiration"
+      And I should see "Translation of a work in an unrevealed collection."
+      And I follow "HTML"
+    Then I should not see "inspiration"
+      And I should see "Translation of a work in an unrevealed collection."

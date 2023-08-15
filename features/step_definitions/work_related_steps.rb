@@ -170,7 +170,7 @@ end
 Then /^a parent translated work should be seen$/ do
   step %{I should see "Work was successfully posted"}
   step %{I should find a list for associations}
-  step %{I should see "A translation of Worldbuilding by inspiration" within ".preface .notes"}
+  step %{I should see "Translation of Worldbuilding by inspiration" within ".preface .notes"}
 end
 
 Then /^I should see the translation in the beginning notes$/ do

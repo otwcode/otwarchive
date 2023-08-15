@@ -31,20 +31,22 @@
     <% for related_work in @work.parents_after_saving %>
       <% if related_work.parent %>
         <li>
-          <% if related_work.translation %>
-            <%= ts('A translation of') %>
-          <% else %>
-            <%= ts('Inspired by') %>
-          <% end %>
+          <% relation = related_work.translation ? "translation_of" : "inspired_by" %>
+          <% work_link = link_to related_work.parent.title, related_work.parent %>
+          <% creator_link = byline(related_work.parent) %>
 
           <% if related_work.parent.is_a?(ExternalWork) %>
-            <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>.
+            <%= t(".external_related_work_html",
+                work_link: work_link,
+                creator_link: creator_link) %>
           <% elsif related_work.parent.unrevealed? %>
-            <%= ts("a work in an unrevealed collection.") %>
+            <%= t(".#{relation}.unrevealed") %>
           <% elsif related_work.parent.restricted? && !logged_in? %>
-            <%= ts("[Restricted Work] by") %> <%= byline(related_work.parent) %>. <%= ts("Log in to view.") %>
+            <%= t(".#{relation}.restricted_html", creator_link: creator_link ) %>
           <% else %>
-            <%= link_to related_work.parent.title.html_safe, related_work.parent %> <%= ts("by") %> <%= byline(related_work.parent) %>.
+            <%= t(".#{relation}.revealed_html",
+                work_link: work_link,
+                creator_link: creator_link) %>
           <% end %>
         </li>
       <% end %>

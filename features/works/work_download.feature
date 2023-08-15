@@ -202,3 +202,41 @@ Feature: Download a work
   When I am logged in as a "policy_and_abuse" admin
     And I hide the work "TOS Violation"
   Then I should not see "Download"
+
+  Scenario: Downloads of related work expire when parent work is added to an unrevealed collection.
+
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+    And I log out
+  When I view the work "Followup"
+      And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"
+  When I view the work "Worldbuilding Translated"
+      And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"
+
+  # Going from revealed to unrevealed
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding" to be in the collection "Hidden"
+    And I log out
+  When I view the work "Followup"
+      And I follow "HTML"
+  Then I should not see "inspiration"
+    And I should see "Inspired by a work in an unrevealed collection."
+  When I view the work "Worldbuilding Translated"
+      And I follow "HTML"
+  Then I should not see "inspiration"
+    And I should see "Translation of a work in an unrevealed collection."
+
+  # Going from unrevealed to revealed
+  When I am logged in as "inspiration"
+    And I reveal works for "Hidden"
+    And I log out
+  When I view the work "Followup"
+      And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"
+  When I view the work "Worldbuilding Translated"
+      And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"

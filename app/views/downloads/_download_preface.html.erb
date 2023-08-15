@@ -67,23 +67,29 @@
 
     <% related_works = @work.parent_work_relationships.reject { |wr| !wr.parent } %>
     <% if related_works.length > 0 %>
+      <%# i18n-tasks-use t("downloads.download_preface.html.external_related_work_html")
+          i18n-tasks-use t("downloads.download_preface.html.translation_of.unrevealed")
+          i18n-tasks-use t("downloads.download_preface.html.translation_of.revealed_html")
+          i18n-tasks-use t("downloads.download_preface.html.inspired_by.unrevealed")
+          i18n-tasks-use t("downloads.download_preface.html.inspired_by.revealed_html")-%>
       <ul>
         <% related_works.each do |work| %>
           <li>
-            <%  work_info = if work.parent.unrevealed?
-                              "a work in an unrevealed collection"
-                            else
-                              "%{work_link} by %{author_link}"
-                            end
-                relation_text = if work.translation
-                                  "A translation of %{work_info}."
-                                else
-                                  "Inspired by %{work_info}."
-                                end %>
-            <% work_link = link_to work.parent.title.html_safe, polymorphic_url(work.parent) %>
-            <% author_link = byline(work.parent, visibility: 'public', only_path: false) %>
+            <% relation = work.translation ? "translation_of" : "inspired_by" %>
+            <% work_link = link_to work.parent.title, polymorphic_url(work.parent) %>
+            <% creator_link = byline(work.parent, visibility: "public", only_path: false) %>
 
-            <%= ts(relation_text, work_link: work_link, author_link: author_link, work_info: work_info).html_safe %>
+            <% if work.parent.is_a?(ExternalWork) %>
+              <%= t(".external_related_work_html",
+                  work_link: work_link,
+                  creator_link: creator_link) %>
+            <% elsif work.parent.unrevealed? %>
+              <%= t(".#{relation}.unrevealed") %>
+            <% else %>
+              <%= t(".#{relation}.revealed_html",
+                  work_link: work_link,
+                  creator_link: creator_link) %>
+            <% end %>
           </li>
         <% end %>
       </ul>

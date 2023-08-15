@@ -396,6 +396,16 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+  downloads:
+    download_preface:
+      html:
+        external_related_work_html: "%{work_link} by %{creator_link}."
+        inspired_by:
+          revealed_html: Inspired by %{work_link} by %{creator_link}.
+          unrevealed: Inspired by a work in an unrevealed collection.
+        translation_of:
+          revealed_html: Translation of %{work_link} by %{creator_link}.
+          unrevealed: Translation of a work in an unrevealed collection.
   feedbacks:
     new:
       abuse:
@@ -754,5 +764,15 @@ en:
         unrestricted: Show to all
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    work_header_notes:
+      external_related_work_html: "%{work_link} by %{creator_link}."
+      inspired_by:
+        restricted_html: Inspired by [Restricted Work] by %{creator_link}. Log in to view.
+        revealed_html: Inspired by %{work_link} by %{creator_link}.
+        unrevealed: Inspired by a work in an unrevealed collection.
+      translation_of:
+        restricted_html: Translation of [Restricted Work] by %{creator_link}. Log in to view.
+        revealed_html: Translation of %{work_link} by %{creator_link}.
+        unrevealed: Translation of a work in an unrevealed collection.
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
