@@ -713,7 +713,6 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     And I edit the work "Worldbuilding"
     And I list the work "Parent Work" as inspiration
     And I press "Post"
-    And I log out
     And I am logged in as "translator"
     And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
     And I am logged in as "remixer"

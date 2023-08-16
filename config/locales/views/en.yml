@@ -397,6 +397,10 @@ en:
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
   downloads:
+    download_afterword:
+      inspired:
+        revealed_html: "%{work_link} by %{creator_link}"
+        title: Works inbspired by this one
     download_preface:
       inspired_by:
         revealed_html: Inspired by %{work_link} by %{creator_link}.
@@ -763,10 +767,20 @@ en:
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
     work_header_notes:
+      inspired:
+        restricted_html: "[Restricted Work] by %{creator_link}. Log in to view."
+        revealed_html: "%{work_link} by %{creator_link}."
       inspired_by:
         restricted_html: Inspired by [Restricted Work] by %{creator_link}. Log in to view.
         revealed_html: Inspired by %{work_link} by %{creator_link}.
+        title: Works inspired by this one
         unrevealed: Inspired by a work in an unrevealed collection.
+      translated_to:
+        restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}. Log in to view.'
+        revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}.'
+      translated_to_afterword:
+        restricted_html: "[Restricted Work] by %{creator_link} (translation into %{language}) Log in to view."
+        revealed_html: "%{work_link} by %{creator_link} (translation into %{language})"
       translation_of:
         restricted_html: Translation of [Restricted Work] by %{creator_link}. Log in to view.
         revealed_html: Translation of %{work_link} by %{creator_link}.

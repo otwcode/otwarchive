@@ -1,27 +1,26 @@
 <!--approved children-->
 
 <div id="children" class="children module">
-  <h3 class="heading"><%= ts('Works inspired by this one:') %></h3>
+  <h3 class="heading"><%= t(".inspired.title") %>:</h3>
   <ul>
-  <% for child_work in inspired_by %>
-    <li>
-      <% if child_work.work.is_a?(ExternalWork) %>
-        <%= link_to child_work.work.title.html_safe, child_work.work %> <%= ts("by") %> <%= byline(child_work.work) %>
-        <% if child_work.translation %>
-          <%= ts("(translation into %{language})", language: tag.span(child_work.work.language.name, lang: child_work.work.language.short)).html_safe %>
+    <% for child_work in inspired_by %>
+      <li>
+        <% relation = child_work.translation ? "translated_to_afterword" : "inspired" %>
+        <% work_link = link_to child_work.work.title, polymorphic_url(child_work.work) %>
+        <% creator_link = byline(child_work.work) %>
+        <% language = tag.span(child_work.work.language.name, lang: child_work.work.language.short) %>
+
+        <% if child_work.work.is_a?(ExternalWork) || !child_work.work.unrevealed? %>
+          <%= t(".#{relation}.revealed_html",
+              language: language,
+              work_link: work_link,
+              creator_link: creator_link) %>
+        <% elsif child_work.work.restricted? && !logged_in? %>
+          <%= t(".#{relation}.restricted_html",
+              language: language,
+              creator_link: creator_link ) %>
         <% end %>
-      <% elsif child_work.work.restricted? && !logged_in? %>
-        <%= ts("A [Restricted Work] by") %> <%= byline(child_work.work) %>
-        <% if child_work.translation %>
-          <%= ts("(translation into %{language})", language: tag.span(child_work.work.language.name, lang: child_work.work.language.short)).html_safe %>
-        <% end %> <%= ts("Log in to view.") %>
-      <% else %>
-        <%= link_to child_work.work.title.html_safe, child_work.work %> <%= ts("by") %> <%= byline(child_work.work) %>
-        <% if child_work.translation %>
-          <%= ts("(translation into %{language})", language: tag.span(child_work.work.language.name, lang: child_work.work.language.short)).html_safe %>
-        <% end %>
-      <% end %>
-    </li>
-  <% end %>
+      </li>
+    <% end %>
   </ul>
 </div>

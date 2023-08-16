@@ -14,12 +14,19 @@
     <% for related_work in @work.approved_related_works %>
       <% if related_work.translation %>
         <li>
-          <%= ts("Translation into %{language} available: ",
-                language: tag.span(related_work.work.language.name, lang: related_work.work.language.short)).html_safe %>
+          <% work_link = link_to related_work.work.title, related_work.work %>
+          <% creator_link = byline(related_work.work) %>
+          <% language = tag.span(related_work.work.language.name, lang: related_work.work.language.short) %>
+
           <% if related_work.work.restricted? && !logged_in? %>
-            <%= ts("[Restricted Work] by") %> <%= byline(related_work.work) %>. <%= ts("Log in to view.") %>
-          <% else %>
-            <%= link_to related_work.work.title.html_safe, related_work.work %> <%= ts("by") %> <%= byline(related_work.work) %>
+            <%= t(".translated_to.restricted_html",
+                language: language,
+                creator_link: creator_link ) %>
+          <% elsif !related_work.work.unrevealed? %>
+            <%= t(".translated_to.revealed_html",
+                language: language,
+                work_link: work_link,
+                creator_link: creator_link) %>
           <% end %>
         </li>
       <% else %>
@@ -35,18 +42,12 @@
           <% work_link = link_to related_work.parent.title, related_work.parent %>
           <% creator_link = byline(related_work.parent) %>
 
-          <% if related_work.parent.is_a?(ExternalWork) %>
+          <% if related_work.parent.is_a?(ExternalWork) || !related_work.parent.unrevealed? %>
             <%= t(".#{relation}.revealed_html",
                 work_link: work_link,
                 creator_link: creator_link) %>
-          <% elsif related_work.parent.unrevealed? %>
+          <% else? %>
             <%= t(".#{relation}.unrevealed") %>
-          <% elsif related_work.parent.restricted? && !logged_in? %>
-            <%= t(".#{relation}.restricted_html", creator_link: creator_link ) %>
-          <% else %>
-            <%= t(".#{relation}.revealed_html",
-                work_link: work_link,
-                creator_link: creator_link) %>
           <% end %>
         </li>
       <% end %>

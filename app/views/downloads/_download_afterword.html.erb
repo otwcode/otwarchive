@@ -10,14 +10,23 @@
         </div>
       <% end %>
 
-      <% unless @work.approved_children.blank? %>
+      <% if @work.approved_children.present? %>
         <dl>
-          <dt><%= ts('Works inspired by this one') %></dt>
-          <dd>
-            <%= @work.approved_related_works.where(:translation => false).map{|rw|
-"#{link_to(rw.work.title.html_safe, work_url(rw.work))} #{ts('by')} #{byline(rw.work, visibility: 'public', only_path: false)}"}.join(",
-").html_safe %>
-          </dd>
+          <dt><%= t(".inspired.title") %></dt>
+          <% for child_work in @work.approved_related_works %>
+            <% next if child_work.translation %>
+
+            <% work_link = link_to child_work.work.title, child_work.work %>
+            <% creator_link = byline(child_work.work, visibility: "public", only_path: false) %>
+
+            <% if child_work.work.is_a?(ExternalWork) || !child_work.work.unrevealed? %>
+              <dd>
+                <%= t(".inspired.revealed_html",
+                    work_link: work_link,
+                    creator_link: creator_link) %>
+              </dd>
+            <% end %>
+          <% end %>
         </dl>
       <% end %>
     </div>
