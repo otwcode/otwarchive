@@ -398,13 +398,12 @@ en:
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
   downloads:
     download_preface:
-      html:
-        inspired_by:
-          revealed_html: Inspired by %{work_link} by %{creator_link}.
-          unrevealed: Inspired by a work in an unrevealed collection.
-        translation_of:
-          revealed_html: Translation of %{work_link} by %{creator_link}.
-          unrevealed: Translation of a work in an unrevealed collection.
+      inspired_by:
+        revealed_html: Inspired by %{work_link} by %{creator_link}.
+        unrevealed: Inspired by a work in an unrevealed collection.
+      translation_of:
+        revealed_html: Translation of %{work_link} by %{creator_link}.
+        unrevealed: Translation of a work in an unrevealed collection.
   feedbacks:
     new:
       abuse:

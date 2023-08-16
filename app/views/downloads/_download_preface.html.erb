@@ -67,10 +67,6 @@
 
     <% related_works = @work.parent_work_relationships.reject { |wr| !wr.parent } %>
     <% if related_works.length > 0 %>
-      <%# i18n-tasks-use t("downloads.download_preface.html.inspired_by.unrevealed")
-          i18n-tasks-use t("downloads.download_preface.html.inspired_by.revealed_html")
-          i18n-tasks-use t("downloads.download_preface.html.translation_of.unrevealed")
-          i18n-tasks-use t("downloads.download_preface.html.translation_of.revealed_html") %>
       <ul>
         <% related_works.each do |work| %>
           <li>
