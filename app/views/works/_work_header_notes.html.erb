@@ -12,6 +12,8 @@
 
     <% # translations %>
     <% for related_work in @work.approved_related_works %>
+      <% next if related_work.work.unrevealed? %>
+
       <% if related_work.translation %>
         <li>
           <% work_link = link_to related_work.work.title, related_work.work %>
@@ -22,7 +24,7 @@
             <%= t(".translated_to.restricted_html",
                 language: language,
                 creator_link: creator_link ) %>
-          <% elsif !related_work.work.unrevealed? %>
+          <% else %>
             <%= t(".translated_to.revealed_html",
                 language: language,
                 work_link: work_link,
@@ -42,12 +44,18 @@
           <% work_link = link_to related_work.parent.title, related_work.parent %>
           <% creator_link = byline(related_work.parent) %>
 
-          <% if related_work.parent.is_a?(ExternalWork) || !related_work.parent.unrevealed? %>
+          <% if related_work.parent.is_a?(ExternalWork) %>
             <%= t(".#{relation}.revealed_html",
                 work_link: work_link,
                 creator_link: creator_link) %>
-          <% else? %>
+          <% elsif related_work.parent.unrevealed? %>
             <%= t(".#{relation}.unrevealed") %>
+          <% elsif related_work.parent.restricted? && !logged_in? %>
+            <%= t(".#{relation}.restricted_html", creator_link: creator_link ) %>
+          <% else %>
+            <%= t(".#{relation}.revealed_html",
+                work_link: work_link,
+                creator_link: creator_link) %>
           <% end %>
         </li>
       <% end %>

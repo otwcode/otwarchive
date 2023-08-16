@@ -15,7 +15,7 @@ Given /^I have related works setup$/ do
 end
 
 Given /^an inspiring parent work has been posted$/ do
-  step %{I post an inspiring parent work as testy}
+  step %{I post an inspiring parent work as testuser}
 end
 
 # given for remixes / related works
@@ -42,7 +42,7 @@ end
 
 ### WHEN
 
-When /^I post an inspiring parent work as testy$/ do
+When /^I post an inspiring parent work as testuser$/ do
   step %{I am logged in as "testuser"}
   step %{I post the work "Parent Work"}
 end
@@ -159,6 +159,12 @@ Then /^I should see the related work in the end notes$/ do
   step %{I should see "Followup by remixer" within ".afterword .children"}
 end
 
+Then /^I should see the related work listed on the original work$/ do
+  step %{I should see "See the end of the work for other works inspired by this one"}
+  step %{I should see "Works inspired by this one:"}
+  step %{I should see "Followup by remixer"}
+end
+
 Then /^I should not see the related work listed on the original work$/ do
   step %{I should not see "See the end of the work for other works inspired by this one"}
   step %{I should not see "Works inspired by this one:"}
@@ -180,6 +186,11 @@ end
 Then /^I should see the translation in the beginning notes$/ do
   step %{I should see "Translation into Deutsch available:" within ".preface .notes"}
   step %{I should see "Worldbuilding Translated by translator" within ".preface .notes"}
+end
+
+Then /^I should see the translation listed on the original work$/ do
+  step %{I should see "Translation into Deutsch available:"}
+  step %{I should see "Worldbuilding Translated by translator"}
 end
 
 Then /^I should not see the translation listed on the original work$/ do
