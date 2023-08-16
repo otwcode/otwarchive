@@ -165,6 +165,10 @@ Then /^I should not see the related work listed on the original work$/ do
   step %{I should not see "Followup by remixer"}
 end
 
+Then "I should not see the inspiring parent work in the beginning notes" do
+ step %{I should not see "Inspired by Parent Work by testuser" within ".preface .notes"}
+end
+
 # then for translations
 
 Then /^a parent translated work should be seen$/ do

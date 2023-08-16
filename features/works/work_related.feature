@@ -666,21 +666,70 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I edit the work "Worldbuilding" to be in the collection "Hidden"
       And I post a related work as remixer
       And I post a translation as translator
+      And I log out
 
     # Check remix
     When I view the work "Followup"
     Then I should not see "Worldbuilding"
       And I should not see "inspiration"
       And I should see "Inspired by a work in an unrevealed collection."
-      And I follow "HTML"
+    When I follow "HTML"
     Then I should not see "Worldbuilding"
       And I should not see "inspiration"
       And I should see "Inspired by a work in an unrevealed collection."
 
     # Check translated work
     When I view the work "Worldbuilding Translated"
-      Then I should not see "inspiration"
-      And I should see "Translation of a work in an unrevealed collection."
-      And I follow "HTML"
     Then I should not see "inspiration"
       And I should see "Translation of a work in an unrevealed collection."
+    When I follow "HTML"
+    Then I should not see "inspiration"
+      And I should see "Translation of a work in an unrevealed collection."
+
+  Scenario: Notes of parent work do not break anonymity of child related works in an unrevealed collection
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And a translation has been posted and approved
+    And a related work has been posted and approved
+  When I am logged in as "translator"
+    And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
+  When I am logged in as "remixer"
+    And I edit the work "Followup" to be in the collection "Hidden"
+    And I log out
+  When I view the work "Worldbuilding"
+  Then I should not see the translation listed on the original work
+    And I should not see the related work listed on the original work
+  When I follow "HTML"
+  Then I should not see the translation listed on the original work
+    And I should not see the related work listed on the original work
+
+  Scenario: Work notes updates when anonymity of related works change
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And a translation has been posted and approved
+    And a related work has been posted and approved
+    And an inspiring parent work has been posted
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+    And I list the work "Parent Work" as inspiration
+    And I press "Post"
+    And I log out
+    And I am logged in as "translator"
+    And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
+    And I am logged in as "remixer"
+    And I edit the work "Followup" to be in the collection "Hidden"
+    And I am logged in as "testy"
+    And I edit the work "Parent Work" to be in the collection "Hidden"
+    And I log out
+    And I view the work "Worldbuilding"
+  Then I should not see the related work listed on the original work
+    And I should not see the translation listed on the original work
+    And I should not see the inspiring parent work in the beginning notes
+
+  When I am logged in as "inspiration"
+    And I reveal works for "Hidden"
+    And I log out
+  When I view the work "Worldbuilding"
+  Then I should not see the related work listed on the original work
+    And I should not see the translation listed on the original work
+    And I should not see the inspiring parent work in the beginning notes

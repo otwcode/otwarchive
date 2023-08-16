@@ -203,7 +203,7 @@ Feature: Download a work
     And I hide the work "TOS Violation"
   Then I should not see "Download"
 
-  Scenario: Downloads of related work expire when parent work is added to an unrevealed collection.
+  Scenario: Downloads of related work expire when parent work's anonymity changes.
 
   Given a hidden collection "Hidden"
     And I have related works setup
@@ -221,8 +221,8 @@ Feature: Download a work
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding" to be in the collection "Hidden"
     And I log out
-  When I view the work "Followup"
-      And I follow "HTML"
+    And I view the work "Followup"
+    And I follow "HTML"
   Then I should not see "inspiration"
     And I should see "Inspired by a work in an unrevealed collection."
   When I view the work "Worldbuilding Translated"
@@ -234,9 +234,39 @@ Feature: Download a work
   When I am logged in as "inspiration"
     And I reveal works for "Hidden"
     And I log out
-  When I view the work "Followup"
-      And I follow "HTML"
+    And I view the work "Followup"
+    And I follow "HTML"
   Then I should see "Worldbuilding by inspiration"
   When I view the work "Worldbuilding Translated"
       And I follow "HTML"
   Then I should see "Worldbuilding by inspiration"
+
+  Scenario: Downloads of related work expire when child work's anonymity changes.
+
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And a translation has been posted and approved
+    And a related work has been posted and approved
+  Then I should see a beginning note about related works
+    And I should see the translation in the beginning notes
+
+  # Going from revealed to unrevealed
+  When I am logged in as "translator"
+    And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
+    And I am logged in as "remixer"
+    And I edit the work "Followup" to be in the collection "Hidden"
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should not see the related work listed on the original work
+    And I should not see the translation listed on the original work
+    And I should not see the inspiring parent work in the beginning notes
+
+  # Going from unrevealed to revealed
+  When I am logged in as "inspiration"
+    And I reveal works for "Hidden"
+    And I log out
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should see the related work listed on the original work
+    And I should see the translation listed on the original work
+    And I should see the inspiring parent work in the beginning notes
