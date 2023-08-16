@@ -274,7 +274,6 @@ class Pseud < ApplicationRecord
   #
   # This is a particular case for the Pseud model
   def remove_stale_from_autocomplete_before_save
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 
@@ -400,7 +399,8 @@ class Pseud < ApplicationRecord
 
   def expire_caches
     if saved_change_to_name?
-      self.works.each{ |work| work.touch }
+      works.touch_all
+      series.touch_all
     end
   end
 

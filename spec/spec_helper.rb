@@ -140,7 +140,8 @@ RSpec.configure do |config|
   INVALID_URLS = %w[no_scheme.com ftp://ftp.address.com http://www.b@d!35.com https://www.b@d!35.com http://b@d!35.com https://www.b@d!35.com].freeze
   VALID_URLS = %w[http://rocksalt-recs.livejournal.com/196316.html https://rocksalt-recs.livejournal.com/196316.html].freeze
   INACTIVE_URLS = %w[https://www.iaminactive.com http://www.iaminactive.com https://iaminactive.com http://iaminactive.com].freeze
-
+  BYPASSED_URLS = %w[fanfiction.net ficbook.net].freeze
+  
   # rspec-rails 3 will no longer automatically infer an example group's spec type
   # from the file location. You can explicitly opt-in to the feature using this
   # config option.

@@ -522,3 +522,14 @@ ADMIN_POST_COMMENTING_EXPIRATION_DAYS: 14
 # Usernames in this list are not allowed to avoid potential confusion (like
 # a user who has the username 'admin', for example).
 FORBIDDEN_USERNAMES: []
+
+# The arguments to pass to pt-online-schema-change:
+PERCONA_ARGS: >
+  --chunk-size=5k
+  --max-flow-ctl 0
+  --pause-file /tmp/pauseme
+  --max-load Threads_running=15
+  --critical-load Threads_running=100
+  --set-vars innodb_lock_wait_timeout=2
+  --alter-foreign-keys-method=auto
+  --no-check-unique-key-change

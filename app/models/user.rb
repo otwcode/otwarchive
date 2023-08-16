@@ -158,6 +158,7 @@ class User < ApplicationRecord
 
   def expire_caches
     return unless saved_change_to_login?
+    series.touch_all
     self.works.each do |work|
       work.touch
       work.expire_caches
@@ -219,12 +220,12 @@ class User < ApplicationRecord
 
   validates_acceptance_of :terms_of_service,
                           allow_nil: false,
-                          message: ts("Sorry, you need to accept the Terms of Service in order to sign up."),
+                          message: ts("^Sorry, you need to accept the Terms of Service in order to sign up."),
                           if: :first_save?
 
   validates_acceptance_of :age_over_13,
                           allow_nil: false,
-                          message: ts("Sorry, you have to be over 13!"),
+                          message: ts("^Sorry, you have to be over 13!"),
                           if: :first_save?
 
   def to_param
@@ -578,7 +579,6 @@ class User < ApplicationRecord
   end
 
   def remove_stale_from_autocomplete
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 
