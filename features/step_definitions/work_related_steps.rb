@@ -166,7 +166,7 @@ Then /^I should not see the related work listed on the original work$/ do
 end
 
 Then "I should not see the inspiring parent work in the beginning notes" do
- step %{I should not see "Inspired by Parent Work by testuser" within ".preface .notes"}
+  step %{I should not see "Inspired by Parent Work by testuser" within ".preface .notes"}
 end
 
 # then for translations
