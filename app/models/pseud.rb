@@ -400,7 +400,7 @@ class Pseud < ApplicationRecord
   def expire_caches
     if saved_change_to_name?
       works.touch_all
-      series.touch_all
+      series.each(&:expire_byline_cache)
     end
   end
 

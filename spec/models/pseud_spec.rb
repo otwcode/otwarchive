@@ -66,20 +66,6 @@ describe Pseud do
     end
   end
 
-  describe "expire_caches" do
-    let(:pseud) { create(:pseud) }
-    let(:series) { create(:series, authors: [pseud]) }
-
-    it "modifies the updated_at of associated series" do
-      pseud.reload
-      series.reload
-      travel(1.day)
-      expect do
-        pseud.update(name: "New Name")
-      end.to change { series.reload.updated_at }
-    end
-  end
-
   describe ".default_alphabetical" do
     let(:user) { create(:user, login: "Zaphod") }
     let(:subject) { user.pseuds.default_alphabetical }
