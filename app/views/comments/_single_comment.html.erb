@@ -14,9 +14,9 @@
     <% elsif !can_see_hidden_comment?(single_comment) %>
       <p class="message"><%= ts("(This comment is under review by an admin and is currently unavailable.)") %></p>
     <% else %>
-      <% cache([single_comment, single_comment.comment_owner], expires_in: 1.week) do %>
-        <% # FRONT END, update this if a.user comes in %>
-        <h4 class="heading byline">
+      <% # FRONT END, update this if a.user comes in %>
+      <h4 class="heading byline">
+        <% cache("#{[single_comment, single_comment.comment_owner]}_heading", expires_in: 1.week) do %>
           <% if single_comment.by_anonymous_creator? %>
             <%= ts("Anonymous Creator") %>
           <% else %>
@@ -32,10 +32,12 @@
               <%= ts("(Unreviewed)") %>
             </span>
           <% end %>
-          <span class="posted datetime">
-            <%= time_in_zone(single_comment.created_at) %>
-          </span>
-        </h4>
+        <% end %>
+        <span class="posted datetime">
+          <%= time_in_zone(single_comment.created_at) %>
+        </span>
+      </h4>
+      <% cache("#{[single_comment, single_comment.comment_owner]}_body", expires_in: 1.week) do %>
         <div class="icon">
           <% if !single_comment.pseud.nil? %>
             <% if single_comment.by_anonymous_creator? %>
@@ -54,12 +56,12 @@
           <p class="notice"><%= ts("This comment has been hidden by an admin.") %></p>
         <% end %>
         <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :comment_content) %></blockquote>
-        <% unless single_comment.edited_at.blank? %>
-          <p class="edited datetime">
-            <%= ts("Last Edited") %> <%= time_in_zone(single_comment.edited_at) %>
-          </p>
-        <% end %>
-      <% end %><!-- end caching -->
+      <% end %>
+      <% unless single_comment.edited_at.blank? %>
+        <p class="edited datetime">
+          <%= ts("Last Edited") %> <%= time_in_zone(single_comment.edited_at) %>
+        </p>
+      <% end %>
 
       <% if policy(single_comment).show_email? && single_comment.email.present? %>
         <p class="email"><%= ts("Email: %{email}", email: single_comment.email) %></p>
