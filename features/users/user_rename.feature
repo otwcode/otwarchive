@@ -197,4 +197,3 @@ Feature:
       And I should see "Hi, newusername"
     When I follow "Series"
     Then I should see "Best Series by newusername"
-
