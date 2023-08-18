@@ -296,6 +296,8 @@ module ApplicationHelper
     link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", class: "hidden showme")
   end
 
+  # show time in the time zone specified by the first argument
+  # add the user's time when specified in preferences
   def time_in_zone(time, zone = nil, user = User.current_user)
     return ts("(no time specified)") if time.blank?
 

@@ -29,10 +29,16 @@ namespace :work do
   desc "Reset word counts for works in the specified language"
   task(:reset_word_counts, [:lang] => :environment) do |_t, args|
     language = Language.find_by(short: args.lang)
-    raise "Invalid language: '#{args.lang}'" if language.nil?
 
-    works = Work.where(language: language)
-    print "Resetting word count for #{works.count} '#{language.short}' works: "
+    updated_works = "ALL"
+    if language.nil?
+      works = Work.all
+    else
+      works = Work.where(language: language)
+      updated_works = language.short
+    end
+
+    print "Resetting word count for #{works.count} '#{updated_works}' works: "
 
     works.find_in_batches do |batch|
       batch.each do |work|

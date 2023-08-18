@@ -31,7 +31,7 @@
   <% else %>
     <div id="login" class="dropdown">
       <p class="user actions" role="menu">
-        <%= link_to ts('Log In', key: 'header'), new_user_session_path, id: "login-dropdown" %>
+        <%= link_to t(".login"), new_user_session_path, id: "login-dropdown", role: "menuitem" %>
       </p>
       <%= render 'users/sessions/login' %>
     </div>

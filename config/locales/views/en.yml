@@ -60,7 +60,12 @@ en:
         violation_html: You have encountered content on the Archive that violates the %{tos_link}.
   admin:
     admin_invitations:
+      find:
+        email: Enter all or part of an email address
+        token: Enter an invite token
+        user_name: Enter a user name
       index:
+        email: Enter all or part of an email address
         navigation:
           queue: Manage Queue
           requests: Manage Requests
@@ -88,6 +93,70 @@ en:
         external_work: Make External Work Visible
         series: Make Series Visible
         work: Make Work Visible
+    admin_users:
+      history:
+        heading: User History
+        table:
+          caption: History of User Actions
+          creation:
+            action: Account Created
+            details: System Generated
+          head:
+            action: Action
+            date: Date/Time
+            details: Details
+          sign_in:
+            current:
+              action: Current Login
+              no_details: No login recorded
+            details: 'IP Address: %{ip}'
+            last:
+              action: Previous Login
+              no_details: No previous login recorded
+          summary: Shows what notable actions, such as creating an account, a user performed, and when they did them.
+      show:
+        fnok:
+          form:
+            email: Fannish next of kin's email
+            name: Fannish next of kin's username
+            submit: Update Fannish Next of Kin
+          heading: Fannish Next of Kin
+        info:
+          email: 'Email:'
+          heading: User Information
+          invitation: 'Invitation:'
+          no_invitation: Created without invitation
+          no_role: No roles
+          role:
+            one: 'Role:'
+            other: 'Roles:'
+        navigation:
+          activate: Activate
+          invitations:
+            add: Add Invitations
+            manage: Manage Invitations
+          profile: Profile
+          roles: Manage Roles
+          troubleshoot: Troubleshoot
+        note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
+        page_heading: 'User: %{login} (%{id})'
+        page_title: "%{login} - User Administration"
+        status:
+          form:
+            admin_action:
+              ban: Suspend permanently (ban user)
+              legend: Warnings and Suspensions
+              note: Record note
+              spamban: 'Spammer: ban and delete all creations'
+              suspend: 'Suspend: enter a whole number of days'
+              unban: Lift permanent suspension, effective immediately.
+              unsuspend: Lift temporary suspension, effective immediately.
+              warn: Record warning
+            notes:
+              legend: Notes
+              required: Required when adding or removing a warning or suspension to an account.
+            submit: Update
+          heading: Record Warnings, Suspensions, or Notes
     blacklist:
       emails_found:
         one: one email found
@@ -148,6 +217,7 @@ en:
           disabled_support_form_text: Disabled support form text
           downloads_enabled: Allow downloads
           enable_test_caching: Turn on caching (currently experimental)
+          guest_comments_off: Turn off guest comments across the site
           hide_spam: Automatically hide spam works
           invite_from_queue_enabled: Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)
           invite_from_queue_frequency: How often (in days) should we invite people from the queue
@@ -201,7 +271,7 @@ en:
         sure_html: Are you sure you want to %{block} %{username}?
         title: Block %{name}
         will:
-          commenting: commenting on your works
+          commenting: commenting or leaving kudos on your works
           intro: 'Blocking a user prevents them from:'
           replying: replying to your comments anywhere on the site
         will_not:
@@ -213,7 +283,7 @@ en:
         button: Yes, Unblock User
         cancel: Cancel
         resume:
-          commenting: commenting on your works
+          commenting: commenting or leaving kudos on your works
           intro: 'Unblocking a user allows them to resume:'
           replying: replying to your comments anywhere on the site
         sure_html: Are you sure you want to %{unblock} %{username}?
@@ -232,7 +302,7 @@ en:
         none: You have not blocked any users.
         title: Blocked Users
         will:
-          commenting: commenting on your works
+          commenting: commenting or leaving kudos on your works
           intro:
             one: 'You can block up to %{block_limit} user. Blocking a user prevents them from:'
             other: 'You can block up to %{block_limit} users. Blocking a user prevents them from:'
@@ -254,6 +324,7 @@ en:
     collection_item_form:
       add: Add
       add_bookmark_header: Add Bookmark to collections
+      add_work_header_html: Add %{title} to collections
       invite: Invite
       invite_header_html: Invite %{title} to collections
     index:
@@ -276,7 +347,9 @@ en:
     commentable:
       actions:
         comment: Comment
+      add_to_collections_link: Add to Collections
       blocked: Sorry, you have been blocked by one or more of this work's creators.
+      guest_comments_disabled: Sorry, the Archive doesn't allow guests to comment right now.
       invite_to_collections_link: Invite To Collections
       permissions:
         admin_post:
@@ -284,10 +357,18 @@ en:
           disable_all: Sorry, this news post doesn't allow comments.
           disable_anon: Sorry, this news post doesn't allow non-Archive users to comment.
           support_link: contact Support
+        moderated_commenting:
+          disable: Disable comment moderation
+          enable: Enable comment moderation
+          keep_current: Keep current comment moderation settings
+          label: Comment Moderation
         options:
           disable_all: No one can comment
           disable_anon: Only registered users can comment
           enable_all: Registered users and guests can comment
+          keep_current: Keep current comment settings
+          label: Who can comment on this work
+          multiple_works_label: Who can comment on these works
         work:
           alt_action: You can however still leave Kudos!
           disable_all: Sorry, this work doesn't allow comments.
@@ -347,11 +428,23 @@ en:
         tag_changes: Requests to canonize or change tags
         work_problems: Works labeled with the wrong language or duplicate works
       status:
-        current: 'For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}.'
-        twitter: "@AO3_Status"
+        current: For current updates on Archive performance or downtime, please check the %{twitter_link} or %{tumblr_link}.
+        tumblr: ao3org Tumblr
+        twitter: "@AO3_Status Twitter feed"
   home:
     donate:
       page_title: Donate or Volunteer
+    fandoms:
+      all_fandoms: All Fandoms
+    index:
+      browse_or_favorite:
+        one: Browse fandoms by media or favorite up to %{count} tag to have it listed here!
+        other: Browse fandoms by media or favorite up to %{count} tags to have them listed here!
+      find_your_favorites: Find your favorites
+      media_navigation_label: Media
+  invitations:
+    invitation:
+      email_address_label: Enter an email address
   invite_requests:
     invite_request:
       date: 'At our current rate, you should receive an invitation on or around: %{date}.'
@@ -366,6 +459,8 @@ en:
         one: "%{count} more user"
         other: "%{count} more users"
   layouts:
+    header:
+      login: Log In
     proxy_notice:
       button: Dismiss Notice
       faux_heading: 'Important message:'
@@ -431,6 +526,11 @@ en:
       allow_collection_invitation: Allow others to invite my works to collections.
       blocked_users: Blocked Users
       muted_users: Muted Users
+  profile:
+    pseud_list:
+      more_pseuds:
+        one: "%{count} more pseud"
+        other: "%{count} more pseuds"
   pseuds:
     delete_preview:
       cancel: Cancel
@@ -464,6 +564,9 @@ en:
     show:
       fandom_relationship_tags: Relationship tags in this fandom
       list_fandom_tags_html: A list of all the %{fandom_relationship_tags_link} is available.
+  time:
+    formats:
+      date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
   troubleshooting:
     show:
       fix_associations:
@@ -503,6 +606,16 @@ en:
       contact_support: contact Support
       last_renamed: You last changed your user name on %{renamed_at}.
       more_info: For information on how changing your user name will affect your account, please check out the %{account_faq_link}. Note that changes to your user name may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
+    confirmation:
+      contact_support: contact Support
+      go_back: Return to Archive front page
+      important: Important!
+      must_activate:
+        one: You must activate your account within %{count} day, or your account will expire. If this happens, you can sign up again using the same invitation.
+        other: You must activate your account within %{count} days, or your account will expire. If this happens, you can sign up again using the same invitation.
+      no_email_html: If you haven't received this email within 24 hours, and you don't find our email in your spam filter or Social folder, please %{contact_support_link} for help.
+      page_heading: Almost Done!
+      receive_email_html: You should soon receive an activation email at the address you gave us. This will have the link you need to follow in order to activate your account and complete the account creation process. The activation email will come from %{return_address} -- you might want to add this to your address book to make sure you get the email.
     delete_preview:
       cancel: Cancel
       co_creations:
@@ -524,6 +637,15 @@ en:
         options_info: You can delete them, but please consider %{orphaning_link} them instead!
         works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
+    registrations:
+      new:
+        cancel: Cancel
+        heading: Create Account
+        legend:
+          legal: Legal Agreements
+          user: User Details
+        submit: Create Account
+        wait: Please wait...
     sessions:
       new:
         beta_reminder:
@@ -559,7 +681,28 @@ en:
         link_tos: Terms of Service
         welcome_text: Hi! It looks like you've just logged into the Archive for the first time. %{help_link} or dismiss this message permanently.
   works:
+    adult:
+      caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.
+      footnote: If you accept cookies from our site and you choose "Yes, Continue", you will not be asked again during this session (that is, until you close your browser). If you log in you can store your preference and never be asked again.
+      navigation:
+        back: No, Go Back
+        continue: Yes, Continue
+        preferences: Set your preferences now
+      page_title: Adult Content Warning
     meta:
       original_creators:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
+    permissions:
+      privacy: Privacy
+      visibility:
+        import_works_restricted: Only show imported works to registered users
+        keep_current: Keep current visibility settings
+        label: Visibility
+        multiple_works_restricted: Only show to registered users
+        restricted: Only show your work to registered users
+        unrestricted: Show to all
+    show:
+      unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    work_module:
+      draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.

@@ -99,13 +99,16 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
+    admin_settings = AdminSetting.current
+    
     !(comment.unreviewed? ||
       comment.iced? ||
       comment.hidden_by_admin? ||
       parent_disallows_comments?(comment) ||
       comment_parent_hidden?(comment) ||
       blocked_by_comment?(comment) ||
-      blocked_by?(comment.ultimate_parent))
+      blocked_by?(comment.ultimate_parent) ||
+      guest? && admin_settings.guest_comments_off?)
   end
 
   def can_edit_comment?(comment)
@@ -299,7 +302,7 @@ module CommentsHelper
   # return html link to mark/unmark comment as spam
   def tag_comment_as_spam_link(comment)
     if comment.approved
-      link_to(ts("Spam"), reject_comment_path(comment), method: :put, confirm: "Are you sure you want to mark this as spam?" )
+      link_to(ts("Spam"), reject_comment_path(comment), method: :put, data: { confirm: "Are you sure you want to mark this as spam?" })
     else
       link_to(ts("Not Spam"), approve_comment_path(comment), method: :put)
     end

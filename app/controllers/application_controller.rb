@@ -74,6 +74,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_admin
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
+  helper_method :guest?
 
   # Title helpers
   helper_method :process_title
@@ -174,11 +175,6 @@ protected
 
 public
 
-  before_action :fetch_admin_settings
-  def fetch_admin_settings
-    @admin_settings = AdminSetting.current
-  end
-
   before_action :load_admin_banner
   def load_admin_banner
     if Rails.env.development?
@@ -205,7 +201,6 @@ public
   before_action :store_location
   def store_location
     if session[:return_to] == "redirected"
-      Rails.logger.debug "Return to back would cause infinite loop"
       session.delete(:return_to)
     elsif request.fullpath.length > 200
       # Sessions are stored in cookies, which has a 4KB size limit.
@@ -214,7 +209,6 @@ public
       session.delete(:return_to)
     else
       session[:return_to] = request.fullpath
-      Rails.logger.debug "Return to: #{session[:return_to]}"
     end
   end
 
@@ -224,11 +218,9 @@ public
     back = session[:return_to]
     session.delete(:return_to)
     if back
-      Rails.logger.debug "Returning to #{back}"
       session[:return_to] = "redirected"
       redirect_to(back) and return
     else
-      Rails.logger.debug "Returning to default (#{default})"
       redirect_to(default) and return
     end
   end
@@ -405,7 +397,6 @@ public
 
   def see_adult?
     params[:anchor] = "comments" if (params[:show_comments] && params[:anchor].blank?)
-    Rails.logger.debug "Added anchor #{params[:anchor]}"
     return true if cookies[:view_adult] || logged_in_as_admin?
     return false unless current_user
     return true if current_user.is_author_of?(@work)
@@ -414,7 +405,7 @@ public
   end
 
   def use_caching?
-    %w(staging production test).include?(Rails.env) && @admin_settings.enable_test_caching?
+    %w(staging production test).include?(Rails.env) && AdminSetting.current.enable_test_caching?
   end
 
   protected
@@ -423,12 +414,20 @@ public
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended?
-        flash[:error] = t('suspension_notice', default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+        flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
       else
-        flash[:error] = t('ban_notice', default: "Your account has been banned. You are not permitted to add or edit archive content. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.").html_safe
+        flash[:error] = t("ban_notice", default: "Your account has been banned. You are not permitted to add or edit archive content. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.").html_safe
       end
       redirect_to current_user
     end
+  end
+
+  # Prevents temporarily suspended users from deleting content
+  def check_user_not_suspended
+    return unless current_user.is_a?(User) && current_user.suspended?
+    
+    flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+    redirect_to current_user
   end
 
   # Does the current user own a specific object?
@@ -464,7 +463,7 @@ public
 
   # Make sure user is allowed to access tag wrangling pages
   def check_permission_to_wrangle
-    if @admin_settings.tag_wrangling_off? && !logged_in_as_admin?
+    if AdminSetting.current.tag_wrangling_off? && !logged_in_as_admin?
       flash[:error] = "Wrangling is disabled at the moment. Please check back later."
       redirect_to root_path
     else
@@ -520,8 +519,7 @@ public
   end
 
   # Don't get unnecessary data for json requests
-  skip_before_action  :fetch_admin_settings,
-                      :load_admin_banner,
+  skip_before_action  :load_admin_banner,
                       :set_redirects,
                       :store_location,
                       if: proc { %w(js json).include?(request.format) }

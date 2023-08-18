@@ -1,13 +1,19 @@
 class CommentPolicy < ApplicationPolicy
-  DESTROY_ROLES = %w[superadmin board policy_and_abuse communications support].freeze
+  DESTROY_COMMENT_ROLES = %w[superadmin board policy_and_abuse support].freeze
+  DESTROY_ADMIN_POST_COMMENT_ROLES = %w[superadmin board communications elections policy_and_abuse support].freeze
   FREEZE_TAG_COMMENT_ROLES = %w[superadmin tag_wrangling].freeze
   FREEZE_WORK_COMMENT_ROLES = %w[superadmin policy_and_abuse].freeze
   HIDE_TAG_COMMENT_ROLES = %w[superadmin tag_wrangling].freeze
   HIDE_WORK_COMMENT_ROLES = %w[superadmin policy_and_abuse].freeze
-  SPAM_ROLES = %w[superadmin board policy_and_abuse communications support].freeze
+  SPAM_ROLES = %w[superadmin board communications elections policy_and_abuse support].freeze
 
   def can_destroy_comment?
-    user_has_roles?(DESTROY_ROLES)
+    case record.ultimate_parent
+    when AdminPost
+      user_has_roles?(DESTROY_ADMIN_POST_COMMENT_ROLES)
+    else
+      user_has_roles?(DESTROY_COMMENT_ROLES)
+    end
   end
 
   def can_freeze_comment?

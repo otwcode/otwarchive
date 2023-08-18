@@ -15,7 +15,7 @@ class Comment < ApplicationRecord
   has_many :thread_comments, class_name: 'Comment', foreign_key: :thread
 
   validates_presence_of :name, unless: :pseud_id
-  validates :email, email_veracity: {on: :create, unless: :pseud_id}, email_blacklist: {on: :create, unless: :pseud_id}
+  validates :email, email_format: { on: :create, unless: :pseud_id }, email_blacklist: { on: :create, unless: :pseud_id }
 
   validates_presence_of :comment_content
   validates_length_of :comment_content,
@@ -145,7 +145,11 @@ class Comment < ApplicationRecord
         users << self.comment_owner
       end
       if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
-        CommentMailer.comment_sent_notification(self).deliver_after_commit
+        if self.reply_comment?
+          CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+        else
+          CommentMailer.comment_sent_notification(self).deliver_after_commit
+        end
       end
 
       # send notification to the owner(s) of the ultimate parent, who can be users or admins
@@ -187,7 +191,11 @@ class Comment < ApplicationRecord
       users << self.comment_owner
     end
     if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
-      CommentMailer.comment_sent_notification(self).deliver_after_commit
+      if self.reply_comment?
+        CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+      else
+        CommentMailer.comment_sent_notification(self).deliver_after_commit
+      end
     end
 
     # Reply to owner of parent comment if this is a reply comment
