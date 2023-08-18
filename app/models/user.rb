@@ -158,7 +158,7 @@ class User < ApplicationRecord
 
   def expire_caches
     return unless saved_change_to_login?
-    series.touch_all
+    series.each(&:expire_byline_cache)
     self.works.each do |work|
       work.touch
       work.expire_caches
