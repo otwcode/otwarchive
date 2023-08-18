@@ -180,7 +180,7 @@ describe InviteRequestsController do
         end
       end
 
-      %w[board communications docs open_doors tag_wrangling translation].each do |admin_role|
+      (Admin::VALID_ROLES - %w[superadmin policy_and_abuse support]).each do |admin_role|
         context "with #{admin_role} role" do
           before do
             admin.update(roles: [admin_role])
@@ -282,7 +282,7 @@ describe InviteRequestsController do
         end
       end
 
-      %w[board communications docs open_doors tag_wrangling translation].each do |admin_role|
+      (Admin::VALID_ROLES - %w[superadmin policy_and_abuse support]).each do |admin_role|
         context "with #{admin_role} role" do
           before do
             admin.update(roles: [admin_role])

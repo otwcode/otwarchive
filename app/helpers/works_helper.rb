@@ -191,4 +191,11 @@ module WorksHelper
       chapter_total_display(work)
     end
   end
+
+  def get_open_assignments(user)
+    offer_signups = user.offer_assignments.undefaulted.unstarted.sent
+    pinch_hits = user.pinch_hit_assignments.undefaulted.unstarted.sent
+
+    (offer_signups + pinch_hits)
+  end
 end

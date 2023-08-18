@@ -43,9 +43,11 @@ class Gift < ApplicationRecord
 
   scope :for_recipient_name, lambda {|name| where("recipient_name = ?", name)}
 
-  scope :for_name_or_byline, lambda {|name| where("recipient_name = ? OR pseud_id = ?",
-                                                  name,
-                                                  Pseud.parse_byline(name, assume_matching_login: true).first)}
+  scope :for_name_or_byline, lambda { |name|
+    where("recipient_name = ? OR pseud_id = ?",
+          name,
+          Pseud.parse_byline(name))
+  }
 
   scope :in_collection, lambda {|collection|
     select("DISTINCT gifts.*").
@@ -62,7 +64,7 @@ class Gift < ApplicationRecord
   scope :are_rejected, -> { where(rejected: true) }
 
   def recipient=(new_recipient_name)
-    self.pseud = Pseud.parse_byline(new_recipient_name, assume_matching_login: true).first
+    self.pseud = Pseud.parse_byline(new_recipient_name)
     self.recipient_name = pseud ? nil : new_recipient_name
   end
 

@@ -179,7 +179,7 @@ class Work < ApplicationRecord
       next if self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud)
       next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(gift.pseud)
 
-      self.errors.add(:base, ts("#{gift.pseud.byline} does not accept gifts."))
+      self.errors.add(:base, ts("%{byline} does not accept gifts.", byline: gift.pseud.byline))
     end
   end
 
@@ -454,9 +454,11 @@ class Work < ApplicationRecord
 
   # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
+    valid_users = (self.users + [User.current_user]).compact
+
     self.challenge_assignments =
-      ids.map { |id| id.blank? ? nil : ChallengeAssignment.find(id) }.compact.
-      select { |assign| (self.users + [User.current_user]).compact.include?(assign.offering_user) }
+      ChallengeAssignment.where(id: ids)
+        .select { |assign| valid_users.include?(assign.offering_user) }
   end
 
   def recipients=(recipient_names)
