@@ -6,4 +6,3 @@ en:
       format:
         allow_blank: should look like an email address. Please use a different address or leave blank.
         no_blank: should look like an email address.
-    forbidden_name: "%{value} is not allowed"

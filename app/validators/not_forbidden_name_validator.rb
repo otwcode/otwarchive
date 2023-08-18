@@ -3,6 +3,6 @@ class NotForbiddenNameValidator < ActiveModel::EachValidator
     return if value.nil?
     return unless ArchiveConfig.FORBIDDEN_USERNAMES.include?(value.downcase)
 
-    record.errors.add(attribute, options[:message] || I18n.t("validators.forbidden_name", value: value))
+    record.errors.add(attribute, :forbidden, **options.merge(value: value))
   end
 end

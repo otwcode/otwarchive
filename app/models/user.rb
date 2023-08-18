@@ -187,16 +187,11 @@ class User < ApplicationRecord
   scope :out_of_invites, -> { where(out_of_invites: true) }
 
   validates :login,
-            length: {
-              within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
-              too_short: I18n.t("user.login.too_short", min_login: ArchiveConfig.LOGIN_LENGTH_MIN),
-              too_long: I18n.t("user.login.too_long", max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
-            },
+            length: { within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX },
             format: {
               with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/,
-              message: I18n.t("user.login.bad_format",
-                              min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
-                              max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
+              min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
+              max_login: ArchiveConfig.LOGIN_LENGTH_MAX
             },
             uniqueness: true,
             not_forbidden_name: true

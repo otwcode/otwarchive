@@ -98,7 +98,6 @@ en:
           format: "%{message}"
         comment:
           attributes:
-            name: 
             user:
               blocked_comment: Sorry, you have been blocked by one or more of this work's creators.
               blocked_reply: Sorry, you have been blocked by that user.
@@ -148,7 +147,8 @@ en:
               changed_too_recently:
                 one: can only be changed once per day. You last changed your user name on %{renamed_at}.
                 other: can only be changed once every %{count} days. You last changed your user name on %{renamed_at}.
-              taken: has already been taken
+              forbidden: "%{value} is not allowed"
+              invalid: must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).
             password_confirmation:
               confirmation: doesn't match new password.
         work:
@@ -203,8 +203,3 @@ en:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.
         required: must exist and not be spam.
-  user:
-    login:
-      bad_format: must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).
-      too_long: is too long (maximum is %{max_login} characters)
-      too_short: is too short (minimum is %{min_login} characters)
