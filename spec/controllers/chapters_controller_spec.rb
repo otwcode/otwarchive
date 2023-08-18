@@ -862,6 +862,28 @@ describe ChaptersController do
           expect(chapter4.reload.position).to eq(4)
         end
       end
+
+      context "when the logged in user is suspended" do
+        before do
+          fake_login_known_user(suspended_user)
+        end
+        
+        it "errors and redirects to user page" do
+          post :update_positions, params: { work_id: suspended_users_work.id, chapter: [suspended_users_work_chapter2, suspended_users_work.chapters.first] }
+          expect(flash[:error]).to include("Your account has been suspended")
+        end
+      end
+  
+      context "when the logged in user is banned" do
+        before do
+          fake_login_known_user(banned_user)
+        end
+        
+        it "errors and redirects to user page" do
+          post :update_positions, params: { work_id: banned_users_work.id, chapter: [banned_users_work_chapter2, banned_users_work.chapters.first] }
+          expect(flash[:error]).to include("Your account has been banned")
+        end
+      end
     end
   end
 

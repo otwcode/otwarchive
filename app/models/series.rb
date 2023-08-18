@@ -150,6 +150,12 @@ class Series < ApplicationRecord
     self.works.each(&:touch) if saved_change_to_title?
   end
 
+  def expire_byline_cache
+    [true, false].each do |only_path|
+      Rails.cache.delete("#{cache_key}/byline-nonanon/#{only_path}")
+    end
+  end
+
   # Change the positions of the serial works in the series
   def reorder_list(positions)
     SortableList.new(self.serial_works.in_order).reorder_list(positions)
