@@ -1,5 +1,5 @@
 class Admin < ApplicationRecord
-  VALID_ROLES = %w[superadmin board communications translation tag_wrangling docs support policy_and_abuse open_doors].freeze
+  VALID_ROLES = %w[superadmin board communications elections translation tag_wrangling docs support policy_and_abuse open_doors].freeze
 
   serialize :roles, Array
 

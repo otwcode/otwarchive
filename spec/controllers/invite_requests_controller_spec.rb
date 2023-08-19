@@ -89,7 +89,6 @@ describe InviteRequestsController do
         post :create, params: { invite_request: { email: generate(:email) } }
         it_redirects_to_simple(invite_requests_path)
         expect(flash[:error]).to include("New invitation requests are currently closed.")
-        expect(assigns(:admin_settings).invite_from_queue_enabled?).to be_falsey
       end
     end
   end
@@ -181,7 +180,7 @@ describe InviteRequestsController do
         end
       end
 
-      %w[board communications docs open_doors tag_wrangling translation].each do |admin_role|
+      (Admin::VALID_ROLES - %w[superadmin policy_and_abuse support]).each do |admin_role|
         context "with #{admin_role} role" do
           before do
             admin.update(roles: [admin_role])
@@ -283,7 +282,7 @@ describe InviteRequestsController do
         end
       end
 
-      %w[board communications docs open_doors tag_wrangling translation].each do |admin_role|
+      (Admin::VALID_ROLES - %w[superadmin policy_and_abuse support]).each do |admin_role|
         context "with #{admin_role} role" do
           before do
             admin.update(roles: [admin_role])

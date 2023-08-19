@@ -352,16 +352,6 @@ function attachCharacterCounters() {
     $j('.observe_textlength').each(countFn);
 }
 
-// prevent double submission for JS enabled
-jQuery.fn.preventDoubleSubmit = function() {
-  jQuery(this).submit(function() {
-    if (this.beenSubmitted)
-      return false;
-    else
-      this.beenSubmitted = true;
-  });
-};
-
 // add attributes that are only needed in the primary menus and when JavaScript is enabled
 function setupDropdown(){
   $j('#header').find('.dropdown').attr("aria-haspopup", true);

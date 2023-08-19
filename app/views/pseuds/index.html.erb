@@ -9,6 +9,7 @@
     <li><%= link_to ts('New Pseud'), new_user_pseud_path(@user) %></li>
   </ul>
 <% end %>
+<%= will_paginate @pseuds %>
 <!--/subnav-->
 
 <!--main content-->
@@ -20,4 +21,6 @@
 </ul>
 <!--/content-->
 
-
+<!--subnav-->
+<%= will_paginate @pseuds %>
+<!--/subnav-->
