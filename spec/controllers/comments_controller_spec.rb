@@ -167,6 +167,72 @@ describe CommentsController do
         end
       end
     end
+
+    shared_examples "guest cannot reply to a user with guest replies disabled" do
+      it "redirects guest with an error" do
+        get :add_comment_reply, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, this user doesn't allow non-Archive users to reply to their comments.")
+      end
+
+      it "redirects logged in user without an error" do
+        fake_login
+        get :add_comment_reply, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+      end
+    end
+
+    shared_examples "guest can reply to a user with guest replies disabled on user's work" do
+      it "redirects guest user without an error" do
+        get :add_comment_reply, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+      end
+
+      it "redirects logged in user without an error" do
+        fake_login
+        get :add_comment_reply, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+      end
+    end
+
+    context "when user has guest replies disabled" do
+      let(:user) do
+        user = create(:user)
+        user.preference.update!(guest_replies_off: true)
+        user
+      end
+
+      context "when commentable is an admin post" do
+        let(:comment) { create(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a tag" do
+        let(:comment) { create(:comment, :on_tag, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a work" do
+        let(:comment) { create(:comment, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is user's work" do
+        let(:work) { create(:work, authors: [user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
+
+      context "when commentable is user's co-creation" do
+        let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
+    end
   end
 
   describe "GET #unreviewed" do
@@ -345,6 +411,74 @@ describe CommentsController do
       comment = create(:comment, hidden_by_admin: true)
       get :new, params: { comment_id: comment.id }
       it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
+    end
+
+    shared_examples "guest cannot reply to a user with guest replies disabled" do
+      it "redirects guest with an error" do
+        get :new, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, this user doesn't allow non-Archive users to reply to their comments.")
+      end
+
+      it "renders the :new template for logged in user" do
+        fake_login
+        get :new, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to render_template("new")
+      end
+    end
+
+    shared_examples "guest can reply to a user with guest replies disabled on user's work" do
+      it "renders the :new template for guest" do
+        get :new, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to render_template("new")
+      end
+
+      it "renders the :new template for logged in user" do
+        fake_login
+        get :new, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to render_template("new")
+      end
+    end
+
+    context "user has guest comment replies disabled" do
+      let(:user) do
+        user = create(:user)
+        user.preference.update!(guest_replies_off: true)
+        user
+      end
+
+      context "when commentable is an admin post" do
+        let(:comment) { create(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a tag" do
+        let(:comment) { create(:comment, :on_tag, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a work" do
+        let(:comment) { create(:comment, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when comment is on user's work" do
+        let(:work) { create(:work, authors: [user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
+      context "when commentable is user's co-creation" do
+        let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
     end
   end
 
@@ -647,6 +781,71 @@ describe CommentsController do
           post :create, params: { work_id: work.id, comment: comment_attributes }
           it_redirects_to_with_error(work_path(work), "Sorry, this work doesn't allow comments.")
         end
+      end
+    end
+
+    shared_examples "guest cannot reply to a user with guest replies disabled" do
+      it "redirects guest with an error" do
+        post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, this user doesn't allow non-Archive users to reply to their comments.")
+      end
+
+      it "redirects logged in user without an error" do
+        fake_login
+        post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+        expect(flash[:error]).to be_nil
+      end
+    end
+
+    shared_examples "guest can reply to a user with guest replies disabled on user's work" do
+      it "redirects guest without an error" do
+        post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+        expect(flash[:error]).to be_nil
+      end
+
+      it "redirects logged in user without an error" do
+        fake_login
+        post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+        expect(flash[:error]).to be_nil
+      end
+    end
+
+    context "user has guest comment replies disabled" do
+      let(:user) do
+        user = create(:user)
+        user.preference.update!(guest_replies_off: true)
+        user
+      end
+
+      context "when commentable is an admin post" do
+        let(:comment) { create(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a tag" do
+        let(:comment) { create(:comment, :on_tag, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a work" do
+        let(:comment) { create(:comment, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when comment is on user's work" do
+        let(:work) { create(:work, authors: [user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
+      context "when commentable is user's co-creation" do
+        let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
       end
     end
   end
