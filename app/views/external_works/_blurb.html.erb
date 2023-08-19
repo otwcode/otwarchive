@@ -42,11 +42,11 @@
     <dd class="language" lang="<%= external_work.language.short %>"><%= external_work.language.name %></dd>
     <% end %>
     <% if Bookmark.count_visible_bookmarks(external_work) > 0 %>
-    <dt class="bookmarks"><%= t("stats.bookmarks") + ":" %></dt>
+    <dt class="bookmarks"><%= Bookmark.model_name.human(count: :many) %>:</dt>
     <dd class="bookmarks"><%= link_to_bookmarkable_bookmarks(external_work) %></dd>
     <% end %>
 
-    <dt class="inspired"><%= ts("stats.related_works") + ":" %></dt>
+    <dt class="inspired"><%= RelatedWork.model_name.human(count: :many) %>:</dt>
     <dd class="inspired"><%= link_to number_with_delimiter(external_work.related_works.count), external_work %></dd>
   </dl>
 
