@@ -184,7 +184,7 @@ en:
       rating:
         one: Rating
         other: Ratings
-      related_works:
+      related_work:
         one: Related Work
         other: Related Works
       relationship:
