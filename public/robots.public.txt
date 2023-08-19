@@ -33,5 +33,8 @@ Disallow: /
 User-agent: GPTBot
 Disallow: /
 
+User-agent: ChatGPT-User
+Disallow: /
+
 User-agent: Slurp
 Crawl-delay: 30
