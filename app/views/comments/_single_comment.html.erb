@@ -57,7 +57,7 @@
         <% end %>
         <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :comment_content) %></blockquote>
       <% end %>
-      <% unless single_comment.edited_at.blank? %>
+      <% if single_comment.edited_at.present? %>
         <p class="edited datetime">
           <%= ts("Last Edited") %> <%= time_in_zone(single_comment.edited_at) %>
         </p>
