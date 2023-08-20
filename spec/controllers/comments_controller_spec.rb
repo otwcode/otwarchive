@@ -233,6 +233,23 @@ describe CommentsController do
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
       end
     end
+
+    context "when replying to guests" do
+      let (:comment) { create(:comment, :by_guest) }
+
+      it "redirects guest user without an error" do
+        get :add_comment_reply, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+      end
+
+      it "redirects logged in user without an error" do
+        fake_login
+        get :add_comment_reply, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+      end
+    end
   end
 
   describe "GET #unreviewed" do

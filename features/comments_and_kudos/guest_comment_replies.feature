@@ -55,3 +55,14 @@ Feature: Disallowing guest comment replies
       And I fill in "Comment" with "Ugh." within ".odd"
       And I press "Comment" within ".odd"
     Then I should see "Comment created!"
+
+  Scenario: Guests can reply to guests
+    Given the work "Aftermath"
+      And a guest comment on the work "Aftermath"
+    When I view the work "Aftermath" with comments
+    Then I should see a "Comment" button
+      And I should see a link "Reply"
+    When I am logged in as "reader"
+      And I view the work "Aftermath" with comments
+    Then I should see a "Comment" button
+      And I should see a link "Reply"
