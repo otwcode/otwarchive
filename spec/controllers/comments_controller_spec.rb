@@ -235,7 +235,7 @@ describe CommentsController do
     end
 
     context "when replying to guests" do
-      let (:comment) { create(:comment, :by_guest) }
+      let(:comment) { create(:comment, :by_guest) }
 
       it "redirects guest user without an error" do
         get :add_comment_reply, params: { comment_id: comment.id }
