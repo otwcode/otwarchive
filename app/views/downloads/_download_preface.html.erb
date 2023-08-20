@@ -76,8 +76,8 @@
 
             <% if work.parent.is_a?(ExternalWork) || !work.parent.unrevealed? %>
               <%= t(".#{relation}.revealed_html",
-                  work_link: work_link,
-                  creator_link: creator_link) %>
+                    work_link: work_link,
+                    creator_link: creator_link) %>
             <% else %>
               <%= t(".#{relation}.unrevealed") %>
             <% end %>

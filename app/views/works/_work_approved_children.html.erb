@@ -11,20 +11,20 @@
 
         <% if child_work.work.is_a?(ExternalWork) %>
           <%= t(".inspired_by.revealed_html",
-              language: language,
-              work_link: work_link,
-              creator_link: creator_link) %>
+                language: language,
+                work_link: work_link,
+                creator_link: creator_link) %>
         <% elsif child_work.work.unrevealed? %>
           <%= t(".inspired_by.unrevealed") %>
         <% elsif child_work.work.restricted? && !logged_in? %>
           <%= t(".inspired_by.restricted_html",
-              language: language,
-              creator_link: creator_link ) %>
+                language: language,
+                creator_link: creator_link ) %>
         <% else %>
          <%= t(".inspired_by.revealed_html",
-              language: language,
-              work_link: work_link,
-              creator_link: creator_link) %>
+                language: language,
+                work_link: work_link,
+                creator_link: creator_link) %>
         <% end %>
       </li>
     <% end %>
