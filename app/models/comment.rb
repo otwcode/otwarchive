@@ -70,7 +70,7 @@ class Comment < ApplicationRecord
 
   scope :for_display, lambda {
     includes(
-      pseud: { user: [:roles, :block_of_current_user, :block_by_current_user] },
+      pseud: { user: [:roles, :block_of_current_user, :block_by_current_user, :preference] },
       parent: { work: [:pseuds, :users] }
     )
   }
