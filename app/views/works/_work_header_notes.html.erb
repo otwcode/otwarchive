@@ -23,7 +23,7 @@
           <% if related_work.work.restricted? && !logged_in? %>
             <%= t(".translated_to.restricted_html",
                   language: language,
-                  creator_link: creator_link ) %>
+                  creator_link: creator_link) %>
           <% else %>
             <%= t(".translated_to.revealed_html",
                   language: language,
@@ -51,7 +51,7 @@
           <% elsif related_work.parent.unrevealed? %>
             <%= t(".#{relation}.unrevealed") %>
           <% elsif related_work.parent.restricted? && !logged_in? %>
-            <%= t(".#{relation}.restricted_html", creator_link: creator_link ) %>
+            <%= t(".#{relation}.restricted_html", creator_link: creator_link) %>
           <% else %>
             <%= t(".#{relation}.revealed_html",
                   work_link: work_link,
