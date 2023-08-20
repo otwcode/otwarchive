@@ -19,7 +19,7 @@
         <% elsif child_work.work.restricted? && !logged_in? %>
           <%= t(".inspired_by.restricted_html",
                 language: language,
-                creator_link: creator_link)  %>
+                creator_link: creator_link) %>
         <% else %>
           <%= t(".inspired_by.revealed_html",
                 language: language,
