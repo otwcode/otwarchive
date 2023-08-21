@@ -175,8 +175,8 @@ class User < ApplicationRecord
   def log_if_next_of_kin
     fannish_next_of_kins.each do |fnok|
       fnok.user.create_log_item({
-        action: ArchiveConfig.ACTION_REMOVE_FNOK,
-        fnok_user_id: self.id,
+                                  action: ArchiveConfig.ACTION_REMOVE_FNOK,
+                                  fnok_user_id: self.id
       })
     end
   end
