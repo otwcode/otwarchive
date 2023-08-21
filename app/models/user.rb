@@ -177,7 +177,7 @@ class User < ApplicationRecord
       fnok.user.create_log_item({
                                   action: ArchiveConfig.ACTION_REMOVE_FNOK,
                                   fnok_user_id: self.id
-      })
+                                })
     end
   end
 

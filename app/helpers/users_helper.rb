@@ -121,10 +121,8 @@ module UsersHelper
 
   def log_item_action_name(item, user)
     action = item.action
-
-    if [ArchiveConfig.ACTION_ADD_FNOK, ArchiveConfig.ACTION_REMOVE_FNOK].include?(action)
-      return fnok_action_name(item, user)
-    end
+    
+    return fnok_action_name(item, user) if [ArchiveConfig.ACTION_ADD_FNOK, ArchiveConfig.ACTION_REMOVE_FNOK].include?(action)
 
     case action
     when ArchiveConfig.ACTION_ACTIVATE
@@ -158,8 +156,8 @@ module UsersHelper
     action = item.action == ArchiveConfig.ACTION_REMOVE_FNOK ? "removed" : "added"
     target_of_action = item.fnok_user_id == user.id
 
-    return t(
-      "users_helper.log.fnok.#{target_of_action ? "was" : "has"}_#{action}",
+    t(
+      "users_helper.log.fnok.#{target_of_action ? 'was' : 'has'}_#{action}",
       user_id: target_of_action ? item.user_id : item.fnok_user_id
     )
   end
