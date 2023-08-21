@@ -1,4 +1,4 @@
-require 'open3'
+require "open3"
 
 class DownloadWriter
   attr_reader :download, :work
@@ -125,7 +125,7 @@ class DownloadWriter
   # creating an empty stylesheets directory.
   def get_web2disk_command
     [
-      "web2disk',
+      "web2disk",
       "--base-dir", download.assets_path,
       "--max-recursions", "0",
       "--dont-download-stylesheets",
