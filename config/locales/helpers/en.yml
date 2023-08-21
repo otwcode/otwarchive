@@ -23,7 +23,7 @@ en:
   users_helper:
     log:
       fnok:
-        added: "Fannish Next of Kin Added: %{user_id}"
-        removed: "Fannish Next of Kin Removed: %{user_id}"
-        added_as: "Added as Fannish Next of Kin for: %{user_id}"
-        removed_as: "Removed as Fannish Next of Kin for: %{user_id}"
+        has_added: "Fannish Next of Kin Added: %{user_id}"
+        has_removed: "Fannish Next of Kin Removed: %{user_id}"
+        was_added: "Added as Fannish Next of Kin for: %{user_id}"
+        was_removed: "Removed as Fannish Next of Kin for: %{user_id}"

@@ -123,31 +123,7 @@ module UsersHelper
     action = item.action
 
     if [ArchiveConfig.ACTION_ADD_FNOK, ArchiveConfig.ACTION_REMOVE_FNOK].include?(action)
-      if item.fnok_user_id == user.id
-        if action == ArchiveConfig.ACTION_REMOVE_FNOK
-          return t(
-            "users_helper.log.fnok.removed_as",
-            user_id: item.user_id
-          )
-        end
-
-        return t(
-          "users_helper.log.fnok.added_as",
-          user_id: item.user_id
-        )
-      end
-
-      if action == ArchiveConfig.ACTION_REMOVE_FNOK
-        return t(
-          "users_helper.log.fnok.removed",
-          user_id: item.fnok_user_id
-        )
-      end
-
-      return t(
-        "users_helper.log.fnok.added",
-        user_id: item.fnok_user_id
-      )
+      return fnok_action_name(item, user)
     end
 
     case action
@@ -176,6 +152,16 @@ module UsersHelper
     when ArchiveConfig.ACTION_NOTE
       t("users_helper.log_note", default: "Note Added")
     end
+  end
+
+  def fnok_action_name(item, user)
+    action = item.action == ArchiveConfig.ACTION_REMOVE_FNOK ? "removed" : "added"
+    target_of_action = item.fnok_user_id == user.id
+
+    return t(
+      "users_helper.log.fnok.#{target_of_action ? "was" : "has"}_#{action}",
+      user_id: target_of_action ? item.user_id : item.fnok_user_id
+    )
   end
 
   # Give the TOS field in the new user form a different name in non-production environments
