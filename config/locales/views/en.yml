@@ -378,7 +378,7 @@ en:
   downloads:
     download_afterword:
       please_comment_html: Please %{work_comment_link} to let the creator know if you enjoyed their work!
-      work_comment: drop by the archive and comment
+      work_comment: drop by the Archive and comment
   feedbacks:
     new:
       abuse:
