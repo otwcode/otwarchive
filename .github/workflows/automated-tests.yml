@@ -104,13 +104,6 @@ jobs:
           sudo apt-get install -y redis-server
           ./script/gh-actions/multiple_redis.sh
 
-      - name: Cache wkhtmltopdf package
-        if: ${{ matrix.tests.ebook }}
-        uses: actions/cache@v3
-        with:
-          path: wkhtmltopdf
-          key: wkhtmltopdf-${{ hashFiles('script/gh-actions/ebook_converters.sh') }}
-
       - name: Install ebook converters
         if: ${{ matrix.tests.ebook }}
         run: ./script/gh-actions/ebook_converters.sh

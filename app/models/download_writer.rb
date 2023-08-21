@@ -59,21 +59,7 @@ class DownloadWriter
 
   # Get the version of the command we need to execute
   def get_commands
-    download.file_type == "pdf" ? [get_pdf_command] :
-      [get_web2disk_command, get_zip_command, get_calibre_command]
-  end
-
-  # We're sticking with wkhtmltopdf for PDF files since using calibre for PDF requires the use of xvfb
-  def get_pdf_command
-    [
-      'wkhtmltopdf',
-      '--encoding', 'utf-8',
-      '--disable-javascript',
-      '--disable-smart-shrinking',
-      '--log-level', 'none',
-      '--title', download.file_name,
-      download.html_file_path, download.file_path
-    ]
+    [get_web2disk_command, get_zip_command, get_calibre_command]
   end
 
   # Create the format-specific command-line call to calibre/ebook-convert
@@ -81,12 +67,32 @@ class DownloadWriter
     # Add info about first series if any
     series = []
     if meta[:series_title].present?
-      series = ['--series', meta[:series_title], '--series-index', meta[:series_position]]
+      series = ['--series', meta[:series_title],
+                '--series-index', meta[:series_position]]
     end
 
     ### Format-specific options
     # epub: don't generate a cover image
     epub = download.file_type == "epub" ? ['--no-default-epub-cover'] : []
+    # pdf: decrease margins from 72pt default
+    pdf = []
+    if download.file_type == "pdf"
+      pdf = [
+              '--pdf-page-margin-top', '36',
+              '--pdf-page-margin-right', '36',
+              '--pdf-page-margin-bottom', '36',
+              '--pdf-page-margin-left', '36',
+              '--pdf-default-font-size', '17',
+            ]
+    end
+
+    ### CSS options
+    # azw3, epub, and mobi get a special stylesheet
+    css = []
+    if %w(azw3 epub mobi).include?(download.file_type)
+      css = ['--extra-css',
+             Rails.public_path.join('stylesheets/ebooks.css').to_s]
+    end
 
     [
       'ebook-convert',
@@ -106,12 +112,11 @@ class DownloadWriter
       '--pubdate', meta[:pubdate],
       '--publisher', ArchiveConfig.APP_NAME,
       '--language', meta[:language],
-      '--extra-css', Rails.public_path.join('stylesheets/ebooks.css').to_s,
       # XPaths for detecting chapters are overly specific to make sure we don't grab
       # anything inputted by the user. First path is for single-chapter works,
       # second for multi-chapter, and third for the preface and afterword
       '--chapter', "//h:body/h:div[@id='chapters']/h:h2[@class='toc-heading'] | //h:body/h:div[@id='chapters']/h:div[@class='meta group']/h:h2[@class='heading'] | //h:body/h:div[@id='preface' or @id='afterword']/h:h2[@class='toc-heading']"
-    ] + series + epub
+    ] + series + css + epub + pdf
   end
 
   # Grab the HTML file and any images and put them in --base-dir.
