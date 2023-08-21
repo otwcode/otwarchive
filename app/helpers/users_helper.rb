@@ -126,30 +126,26 @@ module UsersHelper
       if item.fnok_user_id == user.id
         if action == ArchiveConfig.ACTION_REMOVE_FNOK
           return t(
-            "users_helper.log_removed_as_fnok",
-            default: "Removed as Fannish Next of Kin for: %{user_id}",
+            "users_helper.log.fnok.removed_as",
             user_id: item.user_id
           )
         end
 
         return t(
-          "users_helper.log_added_as_fnok",
-          default: "Added as Fannish Next of Kin for: %{user_id}",
+          "users_helper.log.fnok.added_as",
           user_id: item.user_id
         )
       end
 
       if action == ArchiveConfig.ACTION_REMOVE_FNOK
         return t(
-          "users_helper.log_remove_fnok",
-          default: "Fannish Next of Kin Removed: %{user_id}",
+          "users_helper.log.fnok.removed",
           user_id: item.fnok_user_id
         )
       end
 
       return t(
-        "users_helper.log_add_fnok",
-        default: "Fannish Next of Kin Added: %{user_id}",
+        "users_helper.log.fnok.added",
         user_id: item.fnok_user_id
       )
     end

@@ -20,3 +20,10 @@ en:
       user:
         bookmark: Bookmarker approval status
         work: Creator approval status
+  users_helper:
+    log:
+      fnok:
+        added: "Fannish Next of Kin Added: %{user_id}"
+        removed: "Fannish Next of Kin Removed: %{user_id}"
+        added_as: "Added as Fannish Next of Kin for: %{user_id}"
+        removed_as: "Removed as Fannish Next of Kin for: %{user_id}"
