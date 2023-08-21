@@ -144,7 +144,9 @@ class Work < ApplicationRecord
   validates :archive_warning_string,
             presence: { message: "^Please select at least one warning." }
   validates :rating_string,
-            presence: { message: "^Please choose a rating." }
+            presence: { message: "^Please choose a rating." }, 
+            inclusion: { in: Rating.rating_tags,
+                         message: "^Only canonical rating tags are allowed." }
 
   # rephrases the "chapters is invalid" message
   after_validation :check_for_invalid_chapters
