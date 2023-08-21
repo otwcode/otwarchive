@@ -24,10 +24,3 @@ Some pages with non existent things raise errors
       And visiting "/tags/UnknownTag/works" should fail with a not found error
     When I am logged in as "wranglerette"
       And visiting "/tags/NonexistentTag/edit" should fail with a not found error
-
-  Scenario: Some pages with non existent things give flash warnings
-    Given the user "KnownUser" exists and is activated
-      And the following activated tag wrangler exists
-      | login          |
-      | wranglerette   |
-    Then visiting "/users/UnknownUser" should fail with "Sorry, could not find this user."

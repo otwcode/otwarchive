@@ -132,7 +132,7 @@ module NavigationHelpers
     when /^(.*?)(?:'s)? user page$/i
       user_path(id: $1)
     when /^(.*?)(?:'s)? "(.*)" pseud page$/i
-      # TODO: Avoid this in favor of 'the (user|dashboard) page for user "(.*)" with pseud "(.*)', and eventually remove. 
+      # TODO: Avoid this in favor of 'the (user|dashboard) page for user "(.*)" with pseud "(.*)', and eventually remove.
       user_pseud_path(user_id: $1, id: $2)
     when /^the (user|dashboard) page for user "(.*?)" with pseud "(.*?)"$/i
       user_pseud_path(user_id: Regexp.last_match(2), id: Regexp.last_match(3))

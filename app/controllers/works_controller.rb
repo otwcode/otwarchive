@@ -5,7 +5,8 @@ class WorksController < ApplicationController
   before_action :load_collection
   before_action :load_owner, only: [:index]
   before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :drafts, :share]
-  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :share]
+  before_action :check_user_status, except: [:index, :edit, :edit_multiple, :confirm_delete_multiple, :delete_multiple, :confirm_delete, :destroy, :show, :show_multiple, :navigate, :search, :collected, :share]
+  before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy, :show_multiple, :edit_multiple, :confirm_delete_multiple, :delete_multiple]
   before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
   before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
@@ -317,7 +318,7 @@ class WorksController < ApplicationController
 
       if @work.save
         if params[:preview_button]
-          flash[:notice] = ts("Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}", deletion_date: view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+          flash[:notice] = ts("Draft was successfully created. It will be <strong>scheduled for deletion</strong> on %{deletion_date}.", deletion_date: view_context.date_in_zone(@work.created_at + 29.days)).html_safe
           in_moderated_collection
           redirect_to preview_work_path(@work)
         else
