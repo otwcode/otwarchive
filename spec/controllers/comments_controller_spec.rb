@@ -166,6 +166,15 @@ describe CommentsController do
           it_redirects_to_with_error(work_path(work), "Sorry, this work doesn't allow comments.")
         end
       end
+
+      context "when logged in as an admin" do
+        before { fake_login_admin(create(:admin)) }
+  
+        it "redirects to root with notice prompting log out" do
+          get :add_comment_reply, params: { comment_id: comment.id }
+          it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
+        end
+      end
     end
   end
 
@@ -217,10 +226,9 @@ describe CommentsController do
       context "when logged in as an admin" do
         before { fake_login_admin(create(:admin)) }
 
-        it "renders the :new template" do
+        it "redirects to root with notice prompting log out" do
           get :new, params: { tag_id: fandom.name }
-          expect(response).to render_template("new")
-          expect(assigns(:name)).to eq("Fandom")
+          it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
         end
       end
 
@@ -379,16 +387,11 @@ describe CommentsController do
       context "when logged in as an admin" do
         before { fake_login_admin(create(:admin)) }
 
-        it "posts the comment and shows it in context" do
+        it "redirects to root with notice prompting log out" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
+          it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
           comment = Comment.last
-          expect(comment.commentable).to eq fandom
-          expect(comment.name).to eq anon_comment_attributes[:name]
-          expect(comment.email).to eq anon_comment_attributes[:email]
-          expect(comment.comment_content).to include anon_comment_attributes[:comment_content]
-          path = comments_path(tag_id: fandom.to_param,
-                               anchor: "comment_#{comment.id}")
-          expect(response).to redirect_to path
+          expect(comment).to eq nil
         end
       end
 
@@ -470,6 +473,17 @@ describe CommentsController do
         it "sets flash_is_set to bypass caching" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
           expect(cookies[:flash_is_set]).to eq(1)
+        end
+      end
+
+      context "when logged in as an admin" do
+        let(:work) { create(:work) }
+
+        before { fake_login_admin(create(:admin)) }
+
+        it "redirects to root with notice prompting log out" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
         end
       end
     end

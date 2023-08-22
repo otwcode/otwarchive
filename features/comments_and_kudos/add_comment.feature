@@ -207,3 +207,30 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, with 
       """
       And I press "Comment"
     Then I should see "Comment created!"
+
+Scenario: Cannot comment (no form) while logged as admin
+
+    Given the work "Generic Work"
+      And I am logged in as an admin
+      And I view the work "Generic Work"
+    Then I should see "Generic Work"
+      And I should not see "Post Comment"
+      And I should not see a "Comment" button
+      And I should see "Please log out of your admin account to comment."
+
+Scenario: Cannot reply to comments (no button) while logged as admin
+
+    Given the work "Generic Work"
+    When I am logged in as "commenter"
+      And I view the work "Generic Work"
+      And I post a comment "Woohoo"
+    When I am logged in as an admin
+      And I view the work "Generic Work"
+      And I follow "Comments (1)"
+    Then I should see "Woohoo"
+      And I should not see "Reply"
+    When I am logged out
+      And I view the work "Generic Work"
+      And I follow "Comments (1)"
+    Then I should see "Woohoo"
+      And I should see "Reply"
