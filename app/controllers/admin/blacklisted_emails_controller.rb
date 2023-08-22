@@ -15,7 +15,7 @@ class Admin::BlacklistedEmailsController < Admin::BaseController
     @page_subtitle = t(".browser_title")
 
     if @admin_blacklisted_email.save
-      flash[:notice] = ts("Email address #{@admin_blacklisted_email.email} banned.")
+      flash[:notice] = ts("Email address %{email} banned.", email: @admin_blacklisted_email.email)
       redirect_to admin_blacklisted_emails_path
     else
       render action: "index"
@@ -26,7 +26,7 @@ class Admin::BlacklistedEmailsController < Admin::BaseController
     @admin_blacklisted_email = authorize AdminBlacklistedEmail.find(params[:id])
     @admin_blacklisted_email.destroy
 
-    flash[:notice] = ts("Email address #{@admin_blacklisted_email.email} removed from banned emails list.")
+    flash[:notice] = ts("Email address %{email} removed from banned emails list.", email: @admin_blacklisted_email.email)
     redirect_to admin_blacklisted_emails_path
   end
 

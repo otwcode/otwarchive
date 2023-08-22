@@ -151,7 +151,7 @@ class WorkSearchForm
     if @options[:language_id].present?
       language = Language.find_by(short: @options[:language_id])
       if language.present?
-        summary << "Language: #{language.name}"
+        summary << "Language: <span lang=#{language.short}>#{language.name}</span>"
       end
     end
     [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|

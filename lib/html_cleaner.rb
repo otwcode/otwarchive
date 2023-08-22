@@ -8,11 +8,9 @@ module HtmlCleaner
     sanitizer_version = object.try("#{fieldname}_sanitizer_version")
     if sanitizer_version && sanitizer_version >= ArchiveConfig.SANITIZER_VERSION
       # return the field without sanitizing
-      Rails.logger.debug "Already sanitized #{fieldname} on #{object.class.name} (id #{object.id})"
       object.send(fieldname)
     else
       # no sanitizer version information, so re-sanitize
-      Rails.logger.debug "Sanitizing without saving #{fieldname} on #{object.class.name} (id #{object.id})"
       sanitize_value(fieldname, object.send(fieldname))
     end
   end
