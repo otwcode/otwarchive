@@ -314,9 +314,3 @@ Then /^cookie "([^"]*)" should be deleted$/ do |cookie|
   cookie_value = Capybara.current_session.driver.request.cookies.[](cookie)
   assert cookie_value.nil?
 end
-
-When "I fix the domain name" do
-  parsed = URI.parse(current_url)
-  dest = "#{parsed.path}?#{parsed.query || ''}##{parsed.fragment || ''}"
-  visit dest
-end

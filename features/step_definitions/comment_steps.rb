@@ -323,11 +323,9 @@ When "I cancel the reply box" do
   click_link("Cancel")
 end
 
-When /^I reply to the work comment "([^"]*)" on a new page$/ do |comment_content|
-  comment = Comment.find_by(comment_content: comment_content)
-  visit work_path(
-    comment.commentable,
-    add_comment_reply_id: comment.id,
-    show_comments: true
-  )
+When "I reply to the comment on a new page" do
+  new_window = window_opened_by do
+    find(:link, "Reply").click(:control)
+  end
+  switch_to_window(new_window)
 end

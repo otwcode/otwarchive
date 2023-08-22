@@ -657,7 +657,8 @@ class CommentsController < ApplicationController
                   delete_comment_id: options[:delete_comment_id],
                   view_full_work: options[:view_full_work],
                   anchor: options[:anchor],
-                  page: options[:page]
+                  page: options[:page],
+                  only_path: true
     end
   end
 

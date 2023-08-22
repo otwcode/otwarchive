@@ -240,12 +240,11 @@ Scenario: It shows and hides cancel buttons properly even on a new page
     And I view the work "Aftermath"
     And I display comments
   Then I should see "Ugh."
-  When I reply to the work comment "Ugh." on a new page
+  When I reply to the comment on a new page
     Then I should see "Aftermath"
     Then I should see "Cancel"
     Then I should not see "Reply"
   When I cancel the reply box
-    And I fix the domain name
     Then I should see "Aftermath"
     Then I should not see "Cancel"
 
