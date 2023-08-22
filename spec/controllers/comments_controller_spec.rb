@@ -808,8 +808,12 @@ describe CommentsController do
       end
 
       it "redirects logged in user without an error" do
-        fake_login
-        post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+        comment_attributes = {
+          pseud_id: user.default_pseud_id,
+          comment_content: "Hello fellow human!"
+        }
+        fake_login_known_user(user)
+        post :create, params: { comment_id: comment.id, comment: comment_attributes }
         expect(flash[:error]).to be_nil
       end
     end
@@ -821,8 +825,12 @@ describe CommentsController do
       end
 
       it "redirects logged in user without an error" do
-        fake_login
-        post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+        comment_attributes = {
+          pseud_id: user.default_pseud_id,
+          comment_content: "Hello fellow human!"
+        }
+        fake_login_known_user(user)
+        post :create, params: { comment_id: comment.id, comment: comment_attributes }
         expect(flash[:error]).to be_nil
       end
     end

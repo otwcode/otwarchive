@@ -100,6 +100,9 @@ en:
               blocked_comment: Sorry, you have been blocked by one or more of this work's creators.
               blocked_reply: Sorry, you have been blocked by that user.
               format: "%{message}"
+            commentable:
+              guest_replies_off: Sorry, this user doesn't allow non-Archive users to reply to their comments.
+              format: "%{message}"
         creatorship:
           attributes:
             pseud_id:
