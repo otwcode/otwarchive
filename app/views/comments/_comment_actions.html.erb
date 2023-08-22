@@ -1,6 +1,6 @@
 <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
-<ul class="actions" id="navigation_for_comment_<%= comment.id %>" <% if on_js_less_comment_form(comment) %>style="display:none;"<% end %> >
+<ul class="actions" id="navigation_for_comment_<%= comment.id %>" <% if on_js_less_comment_form(comment) %>style="display:none;"<% end %>>
   <% # The effect is "Frozen" replaces "Reply." We can't do that in the helper
      # method for the reply link because that would prevent "Frozen" from
      # appearing on the Unreviewed Comments page for works with moderated
