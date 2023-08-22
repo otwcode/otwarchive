@@ -240,7 +240,7 @@ Scenario: It shows and hides cancel buttons properly even on a new page
     And I view the work "Aftermath"
     And I display comments
   Then I should see "Ugh."
-  When I reply to the comment on a new page
+  When I reply on a new page
     Then I should see "Aftermath"
     Then I should see "Cancel"
     Then I should not see "Reply"

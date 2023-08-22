@@ -323,7 +323,7 @@ When "I cancel the reply box" do
   click_link("Cancel")
 end
 
-When "I reply to the comment on a new page" do
+When "I reply on a new page" do
   new_window = window_opened_by do
     find(:link, "Reply").click(:control)
   end
