@@ -35,14 +35,17 @@ module CommentsHelper
   def comment_link_with_commentable_name(comment)
     ultimate_parent = comment.ultimate_parent
     commentable_name = ultimate_parent&.commentable_name
-    text = if ultimate_parent.is_a?(Work)
+    text = case ultimate_parent.class.to_s
+           when "Work"
              t("comments_helper.comment_link_with_commentable_name.on_work_html", title: commentable_name)
-           elsif ultimate_parent.is_a?(AdminPost)
+           when "AdminPost"
              t("comments_helper.comment_link_with_commentable_name.on_admin_post_html", title: commentable_name)
-           elsif ultimate_parent.is_a?(Tag)
-             t("comments_helper.comment_link_with_commentable_name.on_tag_html", name: commentable_name)
            else
-             t("comments_helper.comment_link_with_commentable_name.on_unknown")
+             if ultimate_parent.is_a?(Tag)
+               t("comments_helper.comment_link_with_commentable_name.on_tag_html", name: commentable_name)
+             else
+               t("comments_helper.comment_link_with_commentable_name.on_unknown")
+             end
            end
     link_to(text, comment_path(comment))
   end
