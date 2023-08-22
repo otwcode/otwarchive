@@ -158,8 +158,8 @@ Scenario: Many pseuds
     And I should see "All Pseuds (4)" within "ul.expandable"
 
   When I go to my "Slartibartfast" pseud page
-  Then I should see "Slartibartfast" within "li.pseud > a"
-    And I should not see "Slartibartfast" within "ul.expandable"
+  Then I should see "Pseuds" within "li.pseud > a"
+    And I should see "Slartibartfast" within "ul.expandable"
 
   When I go to my pseuds page
   Then I should not see "Zaphod (Zaphod)" within "ul.pseud.index"
@@ -173,3 +173,21 @@ Scenario: Many pseuds
   When there are 10 pseuds per page
     And I view my profile
   Then I should see "Zaphod, Agrajag, Betelgeuse, and Slartibartfast" within "dl.meta"
+
+Scenario: Edit pseud updates series blurbs
+
+  Given I am logged in as "Myself"
+    And I add the work "Great Work" to series "Best Series" as "Me2"
+  When I go to the dashboard page for user "Myself" with pseud "Me2"
+    And I follow "Series"
+  Then I should see "Best Series by Me2 (Myself)"
+
+  When I go to my profile page
+    And I follow "Manage My Pseuds"
+    And I follow "Edit Me2"
+    And I fill in "Name" with "Me3"
+    And I press "Update"
+  Then I should see "Pseud was successfully updated."
+
+  When I follow "Series"
+  Then I should see "Best Series by Me3 (Myself)"

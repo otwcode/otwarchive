@@ -303,6 +303,14 @@ When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
   end
 end
 
+When "I mark the comment as spam" do
+  click_link("Spam")
+end
+
+When "I confirm I want to mark the comment as spam" do
+  expect(page.accept_alert).to eq("Are you sure you want to mark this as spam?") if @javascript
+end
+
 When "I display comments" do
   click_link("Comments")
 end

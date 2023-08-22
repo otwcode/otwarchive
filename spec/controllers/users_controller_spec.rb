@@ -39,4 +39,23 @@ describe UsersController do
       end
     end
   end
+
+  describe "show" do
+    let(:user) { create(:user) }
+
+    context "with a valid username" do
+      it "renders the show template" do
+        get :show, params: { id: user }
+        expect(response).to render_template(:show)
+      end
+    end
+
+    context "with an invalid username" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "nobody" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+  end
 end
