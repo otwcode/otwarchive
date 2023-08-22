@@ -7,9 +7,9 @@
 <% end %>
 
 <% unless @comments.size.zero? %>
-  <% # We use comments rather than comment as the class because .comment:after
-     # create a clear that causes wonky styling when there are only a few
-     # comments. %>
+  <%# We use comments rather than comment as the class because .comment:after
+# create a clear that causes wonky styling when there are only a few
+# comments. %>
   <div class="comments listbox group" id="comments-summary">
     <h3 class="heading"><%= t(".comments", count: comments.size) %></h3>
     <%= render "comments/comment_abbreviated_list", comments: comments %>
