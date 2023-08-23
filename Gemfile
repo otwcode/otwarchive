@@ -6,7 +6,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 6.1.0"
+gem "rails", "~> 6.1.7"
 gem "rails-i18n"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
@@ -100,7 +100,7 @@ gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
-gem 'audited', '~> 4.4'
+gem 'audited', '~> 5.3'
 
 # For controlling application behavour dynamically
 gem 'rollout'
@@ -112,6 +112,9 @@ gem 'kgio', '2.10.0'
 
 # TODO: AO3-6297 Update the download code so we can remove mimemagic.
 gem "mimemagic", "0.3.10"
+
+# Library for helping run pt-online-schema-change commands:
+gem "departure", "~> 6.5"
 
 group :test do
   gem "rspec-rails", "~> 4.0.1"

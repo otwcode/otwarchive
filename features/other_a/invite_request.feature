@@ -95,7 +95,7 @@ Feature: Invite requests
         | user_registration_password               | password1 |
         | user_registration_password_confirmation  | password1 |
       And I press "Create Account"
-    Then I should see "You should soon receive a confirmation email at the address you gave us"
+    Then I should see "You should soon receive an activation email at the address you gave us"
       And I should see how long I have to activate my account
       And I should see "If you haven't received this email within 24 hours"
 
