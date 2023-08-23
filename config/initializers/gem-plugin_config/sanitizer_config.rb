@@ -63,9 +63,7 @@ class Sanitize
     RELATIVE_IMAGE_PATH_TRANSFORMER = lambda do |env|
       return unless env[:node_name] == "img" && env[:node]["src"]
 
-      base = "https://#{ArchiveConfig.APP_HOST}/"
-      absolute = URI.join(base, env[:node]["src"])
-      env[:node]["src"] = absolute
+      env[:node]["src"] = URI.join(ArchiveConfig.APP_URL, env[:node]["src"])
     rescue URI::InvalidURIError
       # do nothing, the sanitizer will handle it
     end

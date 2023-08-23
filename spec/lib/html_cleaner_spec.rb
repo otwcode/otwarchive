@@ -459,14 +459,14 @@ describe HtmlCleaner do
         context "when given an <img> tag with a relative src" do
           it "converts the src value to an absolute URL" do
             content = sanitize_value(field, "<img src=\"relative\">")
-            expect(content).to eq("<p>\n  <img src=\"https://#{ArchiveConfig.APP_HOST}/relative\" \/>\n</p>")
+            expect(content).to eq("<p>\n  <img src=\"#{ArchiveConfig.APP_URL}/relative\" \/>\n</p>")
           end
         end
 
         context "when given an <img> tag with an absolute src" do
           it "doesn't modify the src value" do
-            content = sanitize_value(field, "<img src=\"http://example.com/image.png\">")
-            expect(content).to eq("<p>\n  <img src=\"http://example.com/image.png\" \/>\n</p>")
+            content = sanitize_value(field, "<img src=\"http://random.com/image.png\">")
+            expect(content).to eq("<p>\n  <img src=\"http://random.com/image.png\" \/>\n</p>")
           end
         end
       end
