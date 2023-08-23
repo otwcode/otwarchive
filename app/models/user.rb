@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  audited
+  audited redacted: [:encrypted_password, :password_salt]
   include WorksOwner
 
   devise :database_authenticatable,
