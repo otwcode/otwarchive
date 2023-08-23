@@ -15,6 +15,7 @@ div.comment, li.comment {
   position: relative;
   border: 1px solid #ddd;
   overflow: visible;
+  text-align: start;
 }
 
 .comment:after,
