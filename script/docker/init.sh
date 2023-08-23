@@ -5,14 +5,12 @@ set -ex
 # Change directory to root of the repo
 cd "$(dirname "$0")/../.."
 
-copy="cp -b"
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    copy="cp" # macOS cp does not support the -b option
-fi
-
-$copy config/docker/database.yml config/database.yml
-$copy config/docker/redis.yml config/redis.yml
-$copy config/docker/local.yml config/local.yml
+for file in 'database.yml' 'redis.yml' 'local.yml'
+do
+  # Manual backup as the --backup option is not available for all versions of cp
+  test -f "config/$file" && cp "config/$file" "config/$file~"
+  cp "config/docker/$file" "config/$file"
+done
 
 docker-compose up -d
 
