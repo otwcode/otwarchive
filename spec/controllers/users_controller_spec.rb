@@ -67,8 +67,8 @@ describe UsersController do
       fake_login_known_user(user)
     end
 
-    context "user with no activity" do
-      it "deletes without side effects" do
+    context "no log items" do
+      it "successfully destroys and redirects with success message" do
         login = user.login
         delete :destroy, params: { id: login }
         it_redirects_to_with_notice(delete_confirmation_path, "You have successfully deleted your account.")

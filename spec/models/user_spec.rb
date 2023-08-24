@@ -21,7 +21,7 @@ describe User do
       let(:user) { fnok.kin }
       let(:person) { fnok.user }
 
-      it "explictly removes the relationship" do
+      it "removes the relationship and creates a log item of the removal" do
         user_id = user.id
         user.destroy!
         expect(person.reload.fannish_next_of_kin).to be_nil
