@@ -154,13 +154,18 @@ module UsersHelper
 
   def fnok_action_name(item, user)
     action = item.action == ArchiveConfig.ACTION_REMOVE_FNOK ? "removed" : "added"
-    target_of_action = item.fnok_user_id == user.id
 
-    key_leaf = "#{target_of_action ? 'was' : 'has'}_#{action}"
+    if item.fnok_user_id == user.id
+      user_id = item.user_id
+      action_leaf = "was_#{action}"
+    else
+      user_id = item.fnok_user_id
+      action_leaf = "has_#{action}"
+    end
 
     t(
-      "users_helper.log.fnok.#{key_leaf}",
-      user_id: target_of_action ? item.user_id : item.fnok_user_id
+      "users_helper.log.fnok.#{action_leaf}",
+      user_id: user_id
     )
   end
 
