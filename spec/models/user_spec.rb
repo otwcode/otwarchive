@@ -10,6 +10,12 @@ describe User do
       end
 
       it { is_expected.not_to allow_values(forbidden_username, forbidden_username.swapcase).for(:login) }
+
+      it "does not prevent saving when the name is unchanged" do
+        existing_user = build(:user, login: forbidden_username)
+        existing_user.save!(validate: false)
+        expect(existing_user.save).to be_truthy
+      end
     end
   end
 

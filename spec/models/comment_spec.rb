@@ -13,6 +13,12 @@ describe Comment do
       end
 
       it { is_expected.not_to allow_values(forbidden_name, forbidden_name.swapcase).for(:name) }
+
+      it "does not prevent saving when the name is unchanged" do
+        subject.name = forbidden_name
+        subject.save!(validate: false)
+        expect(subject.save).to be_truthy
+      end
     end
   end
 
