@@ -3,7 +3,7 @@
   <% cache "menu-fandoms-version4", skip_digest: true do %>
     <% Media.for_menu.each do |medium| %>
       <% unless medium.id.nil? %>
-        <li id="medium_<%= medium.id %>"><%= link_to ts("#{medium.name}", key: 'header.fandom'), medium_fandoms_path(medium) %></li>
+        <li id="medium_<%= medium.id %>"><%= link_to medium.name, medium_fandoms_path(medium) %></li>
       <% end %>
     <% end %>
   <% end %>

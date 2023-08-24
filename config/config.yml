@@ -513,3 +513,19 @@ ORIGINAL_CREATOR_TTL_HOURS: 72
 
 # The maximum number of tags to provide in a tag wrangling report.
 WRANGLING_REPORT_LIMIT: 1000
+
+# The number of days after which an Admin Post should allow comments.
+# After this window, all comments are disabled. Setting this value to
+# something below 1 -- or commenting it out -- will turn off comment disabling.
+ADMIN_POST_COMMENTING_EXPIRATION_DAYS: 14
+
+# The arguments to pass to pt-online-schema-change:
+PERCONA_ARGS: >
+  --chunk-size=5k
+  --max-flow-ctl 0
+  --pause-file /tmp/pauseme
+  --max-load Threads_running=15
+  --critical-load Threads_running=100
+  --set-vars innodb_lock_wait_timeout=2
+  --alter-foreign-keys-method=auto
+  --no-check-unique-key-change

@@ -1,12 +1,12 @@
 class Preference < ApplicationRecord
-  self.ignored_columns = [:automatically_approve_collections]
-
   belongs_to :user
   belongs_to :skin
 
-  validates_format_of :work_title_format, with: /^[a-zA-Z0-9_\-,\. ]+$/,
-    message: ts("can only contain letters, numbers, spaces, and some limited punctuation (comma, period, dash, underscore)."),
-    multiline: true
+  validates :work_title_format,
+            format: {
+              with: /\A[a-zA-Z0-9_\-,\. ]+\z/,
+              message: ts("can only contain letters, numbers, spaces, and some limited punctuation (comma, period, dash, underscore).")
+            }
 
   validate :can_use_skin, if: :skin_id_changed?
 
@@ -16,10 +16,11 @@ class Preference < ApplicationRecord
   end
 
   def self.disable_work_skin?(param)
-     return false if param == 'creator'
-     return true if param == 'light' || param == 'disable'
-     return false unless User.current_user.is_a? User
-     return User.current_user.try(:preference).try(:disable_work_skins)
+    return false if param == "creator"
+    return true if %w[light disable].include?(param)
+    return false unless User.current_user.is_a?(User)
+
+    User.current_user.try(:preference).try(:disable_work_skins)
   end
 
   def can_use_skin

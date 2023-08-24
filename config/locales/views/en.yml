@@ -60,7 +60,12 @@ en:
         violation_html: You have encountered content on the Archive that violates the %{tos_link}.
   admin:
     admin_invitations:
+      find:
+        email: Enter all or part of an email address
+        token: Enter an invite token
+        user_name: Enter a user name
       index:
+        email: Enter all or part of an email address
         navigation:
           queue: Manage Queue
           requests: Manage Requests
@@ -423,11 +428,23 @@ en:
         tag_changes: Requests to canonize or change tags
         work_problems: Works labeled with the wrong language or duplicate works
       status:
-        current: 'For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}.'
-        twitter: "@AO3_Status"
+        current: For current updates on Archive performance or downtime, please check the %{twitter_link} or %{tumblr_link}.
+        tumblr: ao3org Tumblr
+        twitter: "@AO3_Status Twitter feed"
   home:
     donate:
       page_title: Donate or Volunteer
+    fandoms:
+      all_fandoms: All Fandoms
+    index:
+      browse_or_favorite:
+        one: Browse fandoms by media or favorite up to %{count} tag to have it listed here!
+        other: Browse fandoms by media or favorite up to %{count} tags to have them listed here!
+      find_your_favorites: Find your favorites
+      media_navigation_label: Media
+  invitations:
+    invitation:
+      email_address_label: Enter an email address
   invite_requests:
     invite_request:
       date: 'At our current rate, you should receive an invitation on or around: %{date}.'
@@ -442,6 +459,8 @@ en:
         one: "%{count} more user"
         other: "%{count} more users"
   layouts:
+    header:
+      login: Log In
     proxy_notice:
       button: Dismiss Notice
       faux_heading: 'Important message:'
@@ -507,6 +526,11 @@ en:
       allow_collection_invitation: Allow others to invite my works to collections.
       blocked_users: Blocked Users
       muted_users: Muted Users
+  profile:
+    pseud_list:
+      more_pseuds:
+        one: "%{count} more pseud"
+        other: "%{count} more pseuds"
   pseuds:
     delete_preview:
       cancel: Cancel
@@ -537,6 +561,9 @@ en:
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
         random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
+  time:
+    formats:
+      date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
   troubleshooting:
     show:
       fix_associations:
@@ -576,6 +603,16 @@ en:
       contact_support: contact Support
       last_renamed: You last changed your user name on %{renamed_at}.
       more_info: For information on how changing your user name will affect your account, please check out the %{account_faq_link}. Note that changes to your user name may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
+    confirmation:
+      contact_support: contact Support
+      go_back: Return to Archive front page
+      important: Important!
+      must_activate:
+        one: You must activate your account within %{count} day, or your account will expire. If this happens, you can sign up again using the same invitation.
+        other: You must activate your account within %{count} days, or your account will expire. If this happens, you can sign up again using the same invitation.
+      no_email_html: If you haven't received this email within 24 hours, and you don't find our email in your spam filter or Social folder, please %{contact_support_link} for help.
+      page_heading: Almost Done!
+      receive_email_html: You should soon receive an activation email at the address you gave us. This will have the link you need to follow in order to activate your account and complete the account creation process. The activation email will come from %{return_address} -- you might want to add this to your address book to make sure you get the email.
     delete_preview:
       cancel: Cancel
       co_creations:
@@ -597,6 +634,15 @@ en:
         options_info: You can delete them, but please consider %{orphaning_link} them instead!
         works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
+    registrations:
+      new:
+        cancel: Cancel
+        heading: Create Account
+        legend:
+          legal: Legal Agreements
+          user: User Details
+        submit: Create Account
+        wait: Please wait...
     sessions:
       new:
         beta_reminder:
@@ -632,6 +678,14 @@ en:
         link_tos: Terms of Service
         welcome_text: Hi! It looks like you've just logged into the Archive for the first time. %{help_link} or dismiss this message permanently.
   works:
+    adult:
+      caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.
+      footnote: If you accept cookies from our site and you choose "Yes, Continue", you will not be asked again during this session (that is, until you close your browser). If you log in you can store your preference and never be asked again.
+      navigation:
+        back: No, Go Back
+        continue: Yes, Continue
+        preferences: Set your preferences now
+      page_title: Adult Content Warning
     meta:
       original_creators:
         one: 'Original Creator ID:'
@@ -645,3 +699,7 @@ en:
         multiple_works_restricted: Only show to registered users
         restricted: Only show your work to registered users
         unrestricted: Show to all
+    show:
+      unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    work_module:
+      draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.

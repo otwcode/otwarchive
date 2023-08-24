@@ -62,6 +62,16 @@ Feature: Invite requests
       And I should not see "Sorry, you have no unsent invitations right now."
       And I should see "You have 2 open invitations and 0 that have been sent but not yet used."
 
+  Scenario: User can see an error after trying to invite an invalid email address
+
+    Given I am logged in as "user1"
+      And "user1" has "1" invitation
+      And I am on user1's manage invitations page
+    When I follow the link for "user1" first invite
+      And I fill in "Enter an email address" with "test@"
+      And I press "Update Invitation"
+    Then I should see "Invitee email should look like an email address"
+
   Scenario: User can send out invites they have been granted, and the recipient can sign up
 
     Given invitations are required
@@ -85,7 +95,7 @@ Feature: Invite requests
         | user_registration_password               | password1 |
         | user_registration_password_confirmation  | password1 |
       And I press "Create Account"
-    Then I should see "You should soon receive a confirmation email at the address you gave us"
+    Then I should see "You should soon receive an activation email at the address you gave us"
       And I should see how long I have to activate my account
       And I should see "If you haven't received this email within 24 hours"
 
