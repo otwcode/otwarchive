@@ -136,6 +136,10 @@ Given /^I start a new session$/ do
   page.driver.reset!
 end
 
+Given "the user name {string} is on the forbidden list" do |username|
+  allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([username])
+end
+
 # TODO: This should eventually be removed in favor of the "I log out" step,
 # which does the same thing (but has a shorter and less passive name).
 Given /^I am logged out$/ do
