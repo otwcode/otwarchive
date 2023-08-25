@@ -341,7 +341,7 @@ class Work < ApplicationRecord
     WorkUrl.where(work: self).delete_all
     return if imported_from_url.nil?
     url = UrlFormatter.new(imported_from_url)
-    ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].all? do |method|
+    WorkUrl::METHODS.all? do |method|
       WorkUrl.create(
         work: self,
         formatted_url: url.send(method),
@@ -384,6 +384,12 @@ class Work < ApplicationRecord
   # 3. first match on variants of both the imported_from_url and the provided url if there is a partial match
 
   def self.find_by_url_uncached(url)
+    task_populating_the_table_for_all_existing_works_has_been_run = false
+    if task_populating_the_table_for_all_existing_works_has_been_run
+      url = UrlFormatter.new(url)
+      return WorkUrl.where(formatted_url: WorkUrl::METHODS.map { |method| url.send(method) }).first&.work
+    end
+
     url = UrlFormatter.new(url)
     Work.where(imported_from_url: url.original).first ||
       Work.where(imported_from_url: [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
