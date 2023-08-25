@@ -340,6 +340,7 @@ class Work < ApplicationRecord
   def update_urls
     WorkUrl.where(work: self).delete_all
     return if imported_from_url.nil?
+
     url = UrlFormatter.new(imported_from_url)
     WorkUrl::METHODS.all? do |method|
       WorkUrl.create(
