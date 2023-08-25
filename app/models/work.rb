@@ -336,6 +336,20 @@ class Work < ApplicationRecord
     self.challenge_assignments.each {|a| a.creation = nil; a.save!}
   end
 
+  after_save :update_urls, if: :imported_from_url_changed?
+  def update_urls
+    WorkUrl.where(work: self).delete_all
+    return if imported_from_url.nil?
+    url = UrlFormatter.new(imported_from_url)
+    ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].all? do |method|
+      WorkUrl.create(
+        work: self,
+        formatted_url: url.send(method),
+        formatting_method: method
+      )
+    end
+  end
+
   ########################################################################
   # RESQUE
   ########################################################################
