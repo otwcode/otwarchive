@@ -19,6 +19,7 @@ class CommonTagging < ApplicationRecord
   after_create :update_wrangler
   after_create :inherit_parents
   after_create :remove_uncategorized_media
+  after_create :update_child_autocomplete
 
   after_commit :update_search
 
@@ -26,6 +27,10 @@ class CommonTagging < ApplicationRecord
     unless User.current_user.nil?
       common_tag.update!(last_wrangler: User.current_user)
     end
+  end
+
+  def update_child_autocomplete
+    common_tag.after_update
   end
 
   # A relationship should inherit its characters' fandoms
