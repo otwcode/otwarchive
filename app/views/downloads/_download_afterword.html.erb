@@ -23,5 +23,5 @@
     </div>
   <% end %>
 
-  <p class="message"><%= t(".please_comment_html", work_comment_link: link_to(t(".work_comment"), new_work_comment_url(@work))) %></p>
+  <p class="message"><%= t(".please_comment_html", work_comment_link: link_to(t(".work_comment", locale: :en), new_work_comment_url(@work)), locale: :en) %></p>
 </div>
