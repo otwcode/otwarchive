@@ -1083,10 +1083,8 @@ class Tag < ApplicationRecord
         # decanonicalised tag
         tag.remove_from_autocomplete
       end
-    elsif tag.canonical
-      # clean up the autocomplete
-      tag.remove_stale_from_autocomplete
-      tag.add_to_autocomplete
+    else
+      tag.refresh_autocomplete
     end
 
     # Expire caching when a merger is added or removed
@@ -1112,6 +1110,13 @@ class Tag < ApplicationRecord
     if tag.saved_change_to_unwrangleable?
       tag.reindex_document
     end
+  end
+
+  def refresh_autocomplete
+    return unless canonical
+
+    remove_stale_from_autocomplete
+    add_to_autocomplete
   end
 
   before_destroy :before_destroy
