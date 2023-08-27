@@ -2950,7 +2950,9 @@ describe CommentsController do
 
       it "deletes the comment and redirects to referer with a notice" do
         delete :destroy, params: { id: unreviewed_comment.id }
-        expect { unreviewed_comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect do
+          unreviewed_comment.reload
+        end.to raise_exception(ActiveRecord::RecordNotFound)
         it_redirects_to_with_notice("/where_i_came_from", "Comment deleted.")
       end
 
@@ -2962,7 +2964,6 @@ describe CommentsController do
         expect(flash[:comment_error]).to eq "We couldn't delete that comment."
       end
     end
-
 
     context "when comment is a guest reply to user who turns off guest replies afterwards" do
       let(:comment) { create(:comment, :on_admin_post) }
