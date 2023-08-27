@@ -2983,7 +2983,9 @@ describe CommentsController do
           admin_post_path(reply.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"),
           "Comment deleted."
         )
-        expect { reply.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect do
+          reply.reload
+        end.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 
