@@ -165,8 +165,8 @@ Feature:
     Then I should see "Best Series by newusername"
 
     Scenario: Changing the username from a forbidden name to non-forbidden
-      Given I am logged in as "forbidden" with password "password"
-        And the user name "forbidden" is on the forbidden list
+      Given the user name "forbidden" is on the forbidden list
+        And I am logged in as "forbidden" with password "password"
       When I visit the change username page for forbidden
         And I fill in "New user name" with "notforbidden"
         And I fill in "Password" with "password"

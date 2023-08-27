@@ -19,6 +19,14 @@ describe Comment do
         subject.save!(validate: false)
         expect(subject.save).to be_truthy
       end
+
+      it "does not prevent deletion" do
+        subject.name = forbidden_name
+        subject.save!(validate: false)
+        subject.destroy
+        expect { subject.reload }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 
