@@ -22,11 +22,12 @@ class Comment < ApplicationRecord
     maximum: ArchiveConfig.COMMENT_MAX,
     too_long: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)
 
-  validates_each :commentable, if: :reply_comment?, unless: :pseud_id? do |record, attribute, value|
-    record.errors.add(attribute, :guest_replies_off) if value.user&.disallow_guest_replies?(value.ultimate_parent)
-  end
-
   delegate :user, to: :pseud, allow_nil: true
+
+  validate :reply_as_guest_allowed, if: :reply_comment?, unless: :pseud_id, on: :create
+  def reply_as_guest_allowed
+    errors.add(:commentable, :guest_replies_off) if commentable.user&.disallow_guest_replies?(ultimate_parent)
+  end
 
   # Check if the writer of this comment is blocked by the writer of the comment
   # they're replying to:

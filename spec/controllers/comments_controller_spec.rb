@@ -866,6 +866,7 @@ describe CommentsController do
 
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
       end
+
       context "when commentable is user's co-creation" do
         let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud]) }
         let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
@@ -1077,6 +1078,25 @@ describe CommentsController do
               admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
               "Comment thread successfully frozen!"
             )
+          end
+
+          context "when comment is a guest reply to user who turns off guest replies afterwards" do
+            let(:reply) do
+              reply = create(:comment, :by_guest, commentable: comment)
+              comment.user.preference.update!(guest_replies_off: true)
+              reply
+            end
+
+            it "freezes reply and redirects with success message" do
+              fake_login_admin(admin)
+              put :freeze, params: { id: reply.id }
+
+              expect(reply.reload.iced).to be_truthy
+              it_redirects_to_with_comment_notice(
+                admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+                "Comment thread successfully frozen!"
+              )
+            end
           end
         end
 
@@ -2940,6 +2960,29 @@ describe CommentsController do
         expect(unreviewed_comment.reload).to be_present
         expect(response).to redirect_to(chapter_path(unreviewed_comment.commentable, show_comments: true, anchor: "comment_#{unreviewed_comment.id}"))
         expect(flash[:comment_error]).to eq "We couldn't delete that comment."
+      end
+    end
+
+
+    context "when comment is a guest reply to user who turns off guest replies afterwards" do
+      let(:comment) { create(:comment, :on_admin_post) }
+      let(:reply) do
+        reply = create(:comment, :by_guest, commentable: comment)
+        comment.user.preference.update!(guest_replies_off: true)
+        reply
+      end
+
+      it "deletes the reply and redirects with success message" do
+        admin = create(:admin)
+        admin.update(roles: ["superadmin"])
+        fake_login_admin(admin)
+        delete :destroy, params: { id: reply.id }
+
+        it_redirects_to_with_comment_notice(
+          admin_post_path(reply.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"),
+          "Comment deleted."
+        )
+        expect { reply.reload }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 
