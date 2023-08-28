@@ -12,7 +12,7 @@
   </dd>
   
   <dt><%= f.label :is_default, t(".make_default") %></dt>
-  <dd><%= f.check_box :is_default, disabled: (@pseud.name && @user.login == @pseud.name && @pseud.is_default? || logged_in_as_admin?) %></dd>
+  <dd><%= f.check_box :is_default, disabled: ((@pseud.name && @user.login == @pseud.name && @pseud.is_default?) || logged_in_as_admin?) %></dd>
   
   <dt><%= f.label :description, t(".description") %></dt>
   <dd>
