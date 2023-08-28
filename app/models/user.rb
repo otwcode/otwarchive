@@ -36,6 +36,7 @@ class User < ApplicationRecord
   has_many :external_authors, dependent: :destroy
   has_many :external_creatorships, foreign_key: "archivist_id"
 
+  before_destroy :log_removal_as_next_of_kin
   has_many :fannish_next_of_kins, dependent: :delete_all, inverse_of: :kin, foreign_key: :kin_id
   has_one :fannish_next_of_kin, dependent: :destroy
 
@@ -169,6 +170,15 @@ class User < ApplicationRecord
     # TODO: AO3-5054 Expire kudos cache when deleting a user.
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
     Kudo.where(user: self).update_all(user_id: nil)
+  end
+
+  def log_removal_as_next_of_kin
+    fannish_next_of_kins.each do |fnok|
+      fnok.user.create_log_item({
+                                  action: ArchiveConfig.ACTION_REMOVE_FNOK,
+                                  fnok_user_id: self.id
+                                })
+    end
   end
 
   def read_inbox_comments
