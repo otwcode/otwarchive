@@ -1,10 +1,6 @@
 # Available linter versions:
 # http://help.houndci.com/en/articles/2461415-supported-linters
 
-erblint:
-  enabled: true
-  config_file: .erb-lint.yml
-
 jshint:
   config_file: .jshintrc
   ignore_file: .jshintignore

@@ -36,6 +36,7 @@ class User < ApplicationRecord
   has_many :external_authors, dependent: :destroy
   has_many :external_creatorships, foreign_key: "archivist_id"
 
+  before_destroy :log_removal_as_next_of_kin
   has_many :fannish_next_of_kins, dependent: :delete_all, inverse_of: :kin, foreign_key: :kin_id
   has_one :fannish_next_of_kin, dependent: :destroy
 
@@ -158,6 +159,7 @@ class User < ApplicationRecord
 
   def expire_caches
     return unless saved_change_to_login?
+    series.each(&:expire_byline_cache)
     self.works.each do |work|
       work.touch
       work.expire_caches
@@ -168,6 +170,15 @@ class User < ApplicationRecord
     # TODO: AO3-5054 Expire kudos cache when deleting a user.
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
     Kudo.where(user: self).update_all(user_id: nil)
+  end
+
+  def log_removal_as_next_of_kin
+    fannish_next_of_kins.each do |fnok|
+      fnok.user.create_log_item({
+                                  action: ArchiveConfig.ACTION_REMOVE_FNOK,
+                                  fnok_user_id: self.id
+                                })
+    end
   end
 
   def read_inbox_comments
@@ -219,12 +230,12 @@ class User < ApplicationRecord
 
   validates_acceptance_of :terms_of_service,
                           allow_nil: false,
-                          message: ts("Sorry, you need to accept the Terms of Service in order to sign up."),
+                          message: ts("^Sorry, you need to accept the Terms of Service in order to sign up."),
                           if: :first_save?
 
   validates_acceptance_of :age_over_13,
                           allow_nil: false,
-                          message: ts("Sorry, you have to be over 13!"),
+                          message: ts("^Sorry, you have to be over 13!"),
                           if: :first_save?
 
   def to_param
@@ -578,7 +589,6 @@ class User < ApplicationRecord
   end
 
   def remove_stale_from_autocomplete
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 

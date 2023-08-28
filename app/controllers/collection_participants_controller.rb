@@ -89,7 +89,7 @@ class CollectionParticipantsController < ApplicationController
   def add
     @participants_added = []
     @participants_invited = []
-    pseud_results = Pseud.parse_bylines(params[:participants_to_invite], assume_matching_login: true)
+    pseud_results = Pseud.parse_bylines(params[:participants_to_invite])
     pseud_results[:pseuds].each do |pseud|
       if @collection.participants.include?(pseud)
         participant = CollectionParticipant.where(collection_id: @collection.id, pseud_id: pseud.id).first
