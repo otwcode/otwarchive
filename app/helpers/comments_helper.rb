@@ -100,16 +100,18 @@ module CommentsHelper
 
   def can_reply_to_comment?(comment)
     admin_settings = AdminSetting.current
-    
-    !(comment.unreviewed? ||
-      comment.iced? ||
-      comment.hidden_by_admin? ||
-      parent_disallows_comments?(comment) ||
-      comment_parent_hidden?(comment) ||
-      blocked_by_comment?(comment) ||
-      blocked_by?(comment.ultimate_parent) ||
-      (guest? && admin_settings.guest_comments_off?) ||
-      (guest? && comment.guest_replies_disallowed?))
+
+    return false if comment.unreviewed?
+    return false if comment.iced?
+    return false if comment.hidden_by_admin?
+    return false if parent_disallows_comments?(comment)
+    return false if comment_parent_hidden?(comment)
+    return false if blocked_by_comment?(comment)
+    return false if blocked_by?(comment.ultimate_parent)
+
+    return true unless guest?
+
+    !(admin_settings.guest_comments_off? || comment.guest_replies_disallowed?)
   end
 
   def can_edit_comment?(comment)
