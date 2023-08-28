@@ -7,17 +7,13 @@ class Rating < Tag
     to_s
   end
 
-  def self.rating_tags
-    Set[ArchiveConfig.RATING_DEFAULT_TAG_NAME,
-        ArchiveConfig.RATING_GENERAL_TAG_NAME,
-        ArchiveConfig.RATING_TEEN_TAG_NAME,
-        ArchiveConfig.RATING_MATURE_TAG_NAME,
-        ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
-  end
-
   # Gives us the default ratings as Not Rated + low to high
   def self.defaults_by_severity
-    ratings = self.rating_tags
+    ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
+               ArchiveConfig.RATING_GENERAL_TAG_NAME,
+               ArchiveConfig.RATING_TEEN_TAG_NAME,
+               ArchiveConfig.RATING_MATURE_TAG_NAME,
+               ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
     ratings_by_id = Rating.where(name: ratings).inject({}) do |result, rating|
       result[rating.name] = rating
       result
