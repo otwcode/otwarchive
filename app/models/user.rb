@@ -431,12 +431,6 @@ class User < ApplicationRecord
     has_role?(:no_resets)
   end
 
-  # Whether logged out users can reply to this user's comments with the given
-  # ultimate parent
-  def disallow_guest_replies?(ultimate_parent)
-    self.preference.guest_replies_off && !self.is_author_of?(ultimate_parent)
-  end
-
   # Creates log item tracking changes to user
   def create_log_item(options = {})
     options.reverse_merge! note: "System Generated", user_id: self.id

@@ -109,7 +109,7 @@ module CommentsHelper
       blocked_by_comment?(comment) ||
       blocked_by?(comment.ultimate_parent) ||
       (guest? && admin_settings.guest_comments_off?) ||
-      (guest? && comment.user&.disallow_guest_replies?(comment.ultimate_parent)))
+      (guest? && comment.guest_replies_disallowed?))
   end
 
   def can_edit_comment?(comment)

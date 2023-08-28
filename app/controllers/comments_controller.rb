@@ -142,7 +142,7 @@ class CommentsController < ApplicationController
   end
 
   def check_guest_replies_preference
-    return unless guest? && @commentable.respond_to?(:user) && @commentable.user&.disallow_guest_replies?(find_parent)
+    return unless guest? && @commentable.respond_to?(:guest_replies_disallowed?) && @commentable.guest_replies_disallowed?
 
     flash[:error] = t("comments.check_guest_replies_preference.error")
     redirect_back(fallback_location: root_path)
