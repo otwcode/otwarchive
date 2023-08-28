@@ -33,6 +33,7 @@ class Comment < ApplicationRecord
   # Whether the writer of this comment disallows guest replies
   def guest_replies_disallowed?
     return false unless user
+    
     user.preference.guest_replies_off && !user.is_author_of?(ultimate_parent)
   end
 
