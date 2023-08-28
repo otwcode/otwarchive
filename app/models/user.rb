@@ -193,8 +193,8 @@ class User < ApplicationRecord
               min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
               max_login: ArchiveConfig.LOGIN_LENGTH_MAX
             },
-            uniqueness: true
-  validates :login, not_forbidden_name: true, if: :will_save_change_to_login?
+            uniqueness: true,
+            not_forbidden_name: { if: :will_save_change_to_login? }
   validate :username_is_not_recently_changed, if: :will_save_change_to_login?
 
   # allow nil so can save existing users
