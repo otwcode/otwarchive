@@ -33,12 +33,12 @@
                   t(".delete_html",
                     landmark_span: content_tag(:span,
                       t(".delete_landmark_text", pseud: pseud.name),
-                      class: "landmark")
-                  ),
+                      class: "landmark")),
                   user_pseud_path(@user, pseud),
                   data: { confirm: t(".confirm_delete") },
                   id: "delete_#{pseud.name.underscore}",
-                  method: :delete) %></li>
+                  method: :delete
+                ) %></li>
       <% end %>
     </ul>
   <% end %>
