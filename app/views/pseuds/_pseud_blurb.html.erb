@@ -4,25 +4,27 @@
   <% if current_user == pseud.user || policy(pseud).edit? %>
     <h6 class="landmark heading"><%= t(".user_actions") %></h6>
     <ul class="actions" role="navigation">
-      <% # These links use landmarks so they are distinct for screen readers,
-         # e.g., Edit Pseud1, Edit Pseud2. The landmark text " Pseud2" is inside
-         # the landmark span, so there's no extra space for sighted users.
-         # If your language says "Pseud2 Edit", your landmark text would be
-         # "Pseud2 " and your link string "%{landmark_span}Edit". %>
+      <%# These links use landmarks so they are distinct for screen readers,
+# e.g., Edit Pseud1, Edit Pseud2. The landmark text " Pseud2" is inside the
+# landmark span, so there's no extra space for sighted users. If your
+# language says "Pseud2 Edit", your landmark text would be "Pseud 2 " and
+# your link string "%{landmark_span}Edit". %>
       <li><%= link_to(
                 t(".edit_html",
                   landmark_span: content_tag(:span,
                     t(".edit_landmark_text", pseud: pseud.name),
                     class: "landmark")),
                 edit_user_pseud_path(@user, pseud),
-                id: "edit_#{pseud.name.downcase.gsub(" ", "_")}") %></li>
+                id: "edit_#{pseud.name.downcase.gsub(' ', '_')}"
+              ) %></li>
       <% if pseud.works.present? && current_user == pseud.user %>
         <li><%= link_to(
                   t(".orphan_html",
                     landmark_span: content_tag(:span,
                       t(".orphan_landmark_text", pseud: pseud.name),
                       class: "landmark")),
-                  new_orphan_path(pseud_id: pseud.id)) %></li>
+                  new_orphan_path(pseud_id: pseud.id)
+                ) %></li>
       <% end %>
       <% if pseud.is_default? %>
         <li><span class="current"><%= t(".default_pseud") %></span></li>
@@ -31,7 +33,8 @@
                   t(".delete_html",
                     landmark_span: content_tag(:span,
                       t(".delete_landmark_text", pseud: pseud.name),
-                      class: "landmark")),
+                      class: "landmark")
+                  ),
                   user_pseud_path(@user, pseud),
                   data: { confirm: t(".confirm_delete") },
                   id: "delete_#{pseud.name.underscore}",
@@ -40,4 +43,3 @@
     </ul>
   <% end %>
 </li>
-
