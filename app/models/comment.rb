@@ -24,16 +24,16 @@ class Comment < ApplicationRecord
 
   delegate :user, to: :pseud, allow_nil: true
 
-  validate :can_be_guest_reply, if: :reply_comment?, unless: :pseud_id, on: :create
   # Whether the writer of the comment this is replying to allows guest replies
-  def can_be_guest_reply
+  validate :guest_can_reply, if: :reply_comment?, unless: :pseud_id, on: :create
+  def guest_can_reply
     errors.add(:commentable, :guest_replies_off) if commentable.guest_replies_disallowed?
   end
 
   # Whether the writer of this comment disallows guest replies
   def guest_replies_disallowed?
     return false unless user
-    
+
     user.preference.guest_replies_off && !user.is_author_of?(ultimate_parent)
   end
 
