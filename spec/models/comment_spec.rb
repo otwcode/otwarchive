@@ -194,6 +194,7 @@ describe Comment do
           expect(guest_reply.save).to be_truthy
           expect(guest_reply.errors.full_messages).to be_blank
         end
+
         it "allows user replies" do
           expect(user_reply.save).to be_truthy
           expect(user_reply.errors.full_messages).to be_blank
@@ -207,6 +208,7 @@ describe Comment do
           expect(guest_reply.save).to be_falsey
           expect(guest_reply.errors.full_messages).to include("Sorry, this user doesn't allow non-Archive users to reply to their comments.")
         end
+
         it "allows user replies" do
           expect(user_reply.save).to be_truthy
           expect(user_reply.errors.full_messages).to be_blank

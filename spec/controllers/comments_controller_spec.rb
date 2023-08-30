@@ -490,6 +490,7 @@ describe CommentsController do
 
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
       end
+
       context "when commentable is user's co-creation" do
         let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud]) }
         let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
