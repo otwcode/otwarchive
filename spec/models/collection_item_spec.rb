@@ -18,6 +18,17 @@ describe CollectionItem, :ready do
     end
   end
 
+  describe "#unmark_for_destruction" do
+    let(:collection_item) { create(:collection_item) }
+
+    it "changes marked_for_destruction? to false" do
+      collection_item.mark_for_destruction
+      expect(collection_item.marked_for_destruction?).to be_truthy
+      collection_item.unmark_for_destruction
+      expect(collection_item.marked_for_destruction?).to be_falsey
+    end
+  end
+
   describe "#save" do
     let(:collection) { create(:collection) }
     let(:work) { create(:work) }

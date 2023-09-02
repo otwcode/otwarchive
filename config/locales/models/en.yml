@@ -98,6 +98,17 @@ en:
             blocked_id:
               taken: You have already blocked that user.
           format: "%{message}"
+        bookmark/collection_items:
+          format: "%{message}"
+        collection_item:
+          attributes:
+            collection:
+              blank: The collection can't be blank.
+              closed: The collection %{title} is not currently open.
+              not_found: We couldn't find the collection %{name}.
+            collection_id:
+              taken: The collection already contains this item.
+          format: "%{message}"
         comment:
           attributes:
             user:
@@ -156,6 +167,8 @@ en:
           attributes:
             user_defined_tags_count:
               at_most: must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them.
+        work/collection_items:
+          format: "%{message}"
         work/parent_work_relationships:
           format: "%{message}"
     models:

@@ -101,8 +101,8 @@ class CollectionItemsController < ApplicationController
         errors << ts("%{collection_title}, either you don't own this item or are not a moderator of the collection.", collection_title: collection.title)
       elsif @item.is_a?(Work) && @item.anonymous? && !current_user.is_author_of?(@item)
         errors << ts("%{collection_title}, because you don't own this item and the item is anonymous.", collection_title: collection.title)
-      # add the work to a collection, and try to save it
-      elsif @item.add_to_collection(collection) && @item.save(validate: false)
+      # add the work to a collection
+      elsif @item.add_to_collection(collection)
         # approved_by_user? and approved_by_collection? are both true.
         # This is will be true for archivists adding works to collections they maintain
         # or creators adding their works to a collection with auto-approval.

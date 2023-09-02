@@ -20,10 +20,10 @@ class Collection < ApplicationRecord
   has_many :children, class_name: "Collection", foreign_key: "parent_id", inverse_of: :parent
 
   has_one :collection_profile, dependent: :destroy
-  accepts_nested_attributes_for :collection_profile
+  accepts_nested_attributes_for :collection_profile, update_only: true
 
   has_one :collection_preference, dependent: :destroy
-  accepts_nested_attributes_for :collection_preference
+  accepts_nested_attributes_for :collection_preference, update_only: true
 
   before_create :ensure_associated
   def ensure_associated
@@ -324,10 +324,12 @@ class Collection < ApplicationRecord
     self.collection_profile.gift_notification || (parent ? parent.collection_profile.gift_notification : "")
   end
 
-  def moderated? ; self.collection_preference.moderated ; end
-  def closed? ; self.collection_preference.closed ; end
-  def unrevealed? ; self.collection_preference.unrevealed ; end
-  def anonymous? ; self.collection_preference.anonymous ; end
+  delegate :moderated?,
+           :closed?,
+           :unrevealed?,
+           :anonymous?,
+           to: :collection_preference, allow_nil: true
+
   def challenge? ; !self.challenge.nil? ; end
 
   def gift_exchange?

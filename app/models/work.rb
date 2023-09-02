@@ -202,7 +202,6 @@ class Work < ApplicationRecord
 
   after_save :save_chapters, :save_new_gifts
 
-  before_create :set_anon_unrevealed
   after_create :notify_after_creation
 
   after_update :adjust_series_restriction, :notify_after_update
@@ -521,17 +520,8 @@ class Work < ApplicationRecord
     end
   end
 
-  def unrevealed?(user=User.current_user)
-    # eventually here is where we check if it's in a challenge that hasn't been made public yet
-    #!self.collection_items.unrevealed.empty?
-    in_unrevealed_collection?
-  end
-
-  def anonymous?(user = User.current_user)
-    # here we check if the story is in a currently-anonymous challenge
-    #!self.collection_items.anonymous.empty?
-    in_anon_collection?
-  end
+  alias_attribute :unrevealed, :in_unrevealed_collection
+  alias_attribute :anonymous, :in_anon_collection
 
   before_update :bust_anon_caching
   def bust_anon_caching

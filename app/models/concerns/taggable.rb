@@ -30,7 +30,7 @@ module Taggable
 
     define_method("#{underscore}_string=") do |tag_string|
       tags = parse_tags_of_type(tag_string, klass)
-      assign_tags_of_type(tags, klass)
+      assign_through_association(taggings, :tagger, tags, klass: klass)
     end
 
     alias_method "#{underscore}_strings=", "#{underscore}_string="
@@ -47,7 +47,7 @@ module Taggable
 
   def tag_string=(tag_string)
     tags = parse_tags(tag_string)
-    assign_tags_of_type(tags, Tag)
+    assign_through_association(taggings, :tagger, tags, klass: Tag)
   end
 
   alias tag_strings= tag_string=
@@ -130,31 +130,6 @@ module Taggable
     tag_names.map do |tag_name|
       Tag.find_by_name(tag_name) || UnsortedTag.create(name: tag_name)
     end.uniq
-  end
-
-  # Mark taggings for destruction, and create new taggings, so that we will end
-  # up with the specified set of tags after saving.
-  #
-  # Only deletes/checks tags of the given class.
-  def assign_tags_of_type(tags, klass)
-    missing = Set.new(tags)
-
-    taggings.each do |tagging|
-      tag = tagging.tagger
-
-      next unless tag.is_a?(klass)
-
-      if missing.include?(tag)
-        missing.delete(tag)
-        tagging.reload if tagging.marked_for_destruction?
-      else
-        tagging.mark_for_destruction
-      end
-    end
-
-    missing.each do |tag|
-      taggings.build(tagger: tag)
-    end
   end
 
   def destroy_tagging(tag)

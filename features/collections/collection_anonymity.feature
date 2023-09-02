@@ -373,9 +373,8 @@ Feature: Collection
 
     When I view the work "My Work"
 
-    # This is not the desired behavior (AO3-5556), but we want to make sure it doesn't get broken worse
-    Then I should see "Anonymous Collection"
-      And I should see "Anonymous [creator]"
+    Then I should not see "Anonymous Collection"
+      And I should not see "Anonymous [creator]"
 
   Scenario: When an anonymous collection is deleted, works in the collection stop being anonymous.
     Given I have an anonymous collection "Anonymous Collection"

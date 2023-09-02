@@ -384,7 +384,7 @@ class WorksController < ApplicationController
         flash[:notice] = ts("Your changes have not been saved. Please post your work or save as draft if you want to keep them.")
       end
 
-      in_moderated_collection
+      in_moderated_collection(flash.now)
       @preview_mode = true
       render :preview
     else
@@ -590,22 +590,23 @@ class WorksController < ApplicationController
   end
 
   # check to see if the work is being added / has been added to a moderated collection, then let user know that
-  def in_moderated_collection
-    moderated_collections = []
-    @work.collections.each do |collection|
-      next unless !collection.nil? && collection.moderated? && !collection.user_is_posting_participant?(current_user)
-      next unless @work.collection_items.present?
-      @work.collection_items.each do |collection_item|
-        next unless collection_item.collection == collection
-        if collection_item.approved_by_user? && collection_item.unreviewed_by_collection?
-          moderated_collections << collection
-        end
-      end
+  def in_moderated_collection(flash = self.flash)
+    moderated_collections = @work.collection_items_after_saving
+      .select(&:approved_by_user?)
+      .select(&:unreviewed_by_collection?)
+      .map(&:collection)
+
+    return if moderated_collections.blank?
+
+    links = moderated_collections.map do |collection|
+      view_context.link_to(collection.title, collection_path(collection))
     end
-    if moderated_collections.present?
-      flash[:notice] ||= ''
-      flash[:notice] += ts(" You have submitted your work to #{moderated_collections.size > 1 ? 'moderated collections (%{all_collections}). It will not become a part of those collections' : "the moderated collection '%{all_collections}'. It will not become a part of the collection"} until it has been approved by a moderator.", all_collections: moderated_collections.map(&:title).join(', '))
-    end
+
+    message = t("works.moderated_collections_message_html",
+                count: moderated_collections.length,
+                collections: view_context.safe_join(links, ", ")).html_safe
+
+    flash[:notice] = view_context.safe_join([flash[:notice], message].compact, " ")
   end
 
   public
@@ -807,7 +808,7 @@ class WorksController < ApplicationController
     @serial_works = @work.serial_works
 
     if @collection.nil?
-      @collection = @work.approved_collections.first
+      @collection = @work.approved_collections_after_saving.first
     end
 
     if params[:claim_id]
