@@ -20,15 +20,16 @@ class QueryResult
   def items
     return [] if response[:error]
     if @items.nil?
-      @items = klass.load_from_elasticsearch(hits)
+      @items = klass.load_from_elasticsearch(hits, scopes: @scopes)
     end
     @items
   end
 
-  # Laying some groundwork for making better use of search results
-  def decorate_items(items)
-    return items unless klass == Pseud
-    PseudDecorator.decorate_from_search(items, hits)
+  def scope(*args)
+    @scopes ||= []
+    @scopes += args
+    @items = nil # reset the items in case we already loaded them
+    self # for chaining
   end
 
   def each(&block)
@@ -76,21 +77,28 @@ class QueryResult
     end
   end
 
+  def load_facets(aggregations)
+    aggregations.each_pair do |term, results|
+      if Tag::TYPES.include?(term.classify) || term == "tag"
+        load_tag_facets(term, results)
+      elsif term == "collections"
+        load_collection_facets(results)
+      elsif term == "bookmarks"
+        load_facets(results["filtered_bookmarks"])
+      elsif term == "bookmarkable"
+        load_facets(results)
+      end
+    end
+  end
+
   def facets
-    return if response['aggregations'].nil?
+    return if response["aggregations"].nil?
 
     if @facets.nil?
       @facets = {}
-      response['aggregations'].each_pair do |term, results|
-        if Tag::TYPES.include?(term.classify) || term == 'tag'
-          load_tag_facets(term, results)
-        elsif term == 'collections'
-          load_collection_facets(results)
-        elsif term == 'bookmarks'
-          load_tag_facets("tag", results["filtered_bookmarks"]["tag"])
-        end
-      end
+      load_facets(response["aggregations"])
     end
+
     @facets
   end
 

@@ -1,15 +1,4 @@
 module PromptRestrictionsHelper
-
-  def get_prompt_restriction(for_offer=false)
-    if @collection && @collection.challenge
-      if for_offer
-        @collection.challenge.offer_restriction || @collection.challenge.prompt_restriction
-      else
-        @collection.challenge.request_restriction || @collection.challenge.prompt_restriction
-      end
-    end
-  end
-
   def prompt_restriction_settings(form, include_description = false, allowany, hasprompts)
 
     result = "<!-- prompt restriction settings helper function -->".html_safe
@@ -84,5 +73,4 @@ module PromptRestrictionsHelper
       "#{tag_name.titleize}:"
     end
   end
-
 end

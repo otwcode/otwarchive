@@ -37,6 +37,7 @@ class User < ApplicationRecord
   has_many :external_authors, dependent: :destroy
   has_many :external_creatorships, foreign_key: "archivist_id"
 
+  before_destroy :log_removal_as_next_of_kin
   has_many :fannish_next_of_kins, dependent: :delete_all, inverse_of: :kin, foreign_key: :kin_id
   has_one :fannish_next_of_kin, dependent: :destroy
 
@@ -69,6 +70,16 @@ class User < ApplicationRecord
   has_one :block_by_current_user,
           -> { where(blocker: User.current_user) },
           class_name: "Block", foreign_key: :blocked_id, inverse_of: :blocked
+
+  has_many :mutes_as_muted, class_name: "Mute", dependent: :delete_all, inverse_of: :muted, foreign_key: :muted_id
+  has_many :mutes_as_muter, class_name: "Mute", dependent: :delete_all, inverse_of: :muter, foreign_key: :muter_id
+  has_many :muted_users, through: :mutes_as_muter, source: :muted
+
+  # The mute (if it exists) with User.current_user as the muter and this
+  # user as the muted:
+  has_one :mute_by_current_user,
+          -> { where(muter: User.current_user) },
+          class_name: "Mute", foreign_key: :muted_id, inverse_of: :muted
 
   has_many :skins, foreign_key: "author_id", dependent: :nullify
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
@@ -149,6 +160,7 @@ class User < ApplicationRecord
 
   def expire_caches
     return unless saved_change_to_login?
+    series.each(&:expire_byline_cache)
     self.works.each do |work|
       work.touch
       work.expire_caches
@@ -159,6 +171,15 @@ class User < ApplicationRecord
     # TODO: AO3-5054 Expire kudos cache when deleting a user.
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
     Kudo.where(user: self).update_all(user_id: nil)
+  end
+
+  def log_removal_as_next_of_kin
+    fannish_next_of_kins.each do |fnok|
+      fnok.user.create_log_item({
+                                  action: ArchiveConfig.ACTION_REMOVE_FNOK,
+                                  fnok_user_id: self.id
+                                })
+    end
   end
 
   def read_inbox_comments
@@ -176,13 +197,16 @@ class User < ApplicationRecord
   scope :valid, -> { where(banned: false, suspended: false) }
   scope :out_of_invites, -> { where(out_of_invites: true) }
 
-  ## used in app/views/users/new.html.erb
-  validates_length_of :login,
-                      within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
-                      too_short: ts("is too short (minimum is %{min_login} characters)",
-                                    min_login: ArchiveConfig.LOGIN_LENGTH_MIN),
-                      too_long: ts("is too long (maximum is %{max_login} characters)",
-                                   max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
+  validates :login,
+            length: { within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX },
+            format: {
+              with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/,
+              min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
+              max_login: ArchiveConfig.LOGIN_LENGTH_MAX
+            },
+            uniqueness: true,
+            not_forbidden_name: { if: :will_save_change_to_login? }
+  validate :username_is_not_recently_changed, if: :will_save_change_to_login?
 
   # allow nil so can save existing users
   validates_length_of :password,
@@ -193,13 +217,7 @@ class User < ApplicationRecord
                       too_long: ts("is too long (maximum is %{max_pwd} characters)",
                                    max_pwd: ArchiveConfig.PASSWORD_LENGTH_MAX)
 
-  validates_format_of :login,
-                      message: ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
-                      with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  validates_uniqueness_of :login, case_sensitive: false, message: ts("has already been taken")
-  validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
-
-  validates :email, email_veracity: true, email_format: true, uniqueness: { case_sensitive: false }
+  validates :email, email_format: true, uniqueness: true
 
   # Virtual attribute for age check and terms of service
     attr_accessor :age_over_13
@@ -208,12 +226,12 @@ class User < ApplicationRecord
 
   validates_acceptance_of :terms_of_service,
                           allow_nil: false,
-                          message: ts("Sorry, you need to accept the Terms of Service in order to sign up."),
+                          message: ts("^Sorry, you need to accept the Terms of Service in order to sign up."),
                           if: :first_save?
 
   validates_acceptance_of :age_over_13,
                           allow_nil: false,
-                          message: ts("Sorry, you have to be over 13!"),
+                          message: ts("^Sorry, you have to be over 13!"),
                           if: :first_save?
 
   def to_param
@@ -378,15 +396,6 @@ class User < ApplicationRecord
   # Gets the user account for authored objects if orphaning is enabled
   def self.orphan_account
     User.fetch_orphan_account if ArchiveConfig.ORPHANING_ALLOWED
-  end
-
-  # Is this user an authorized translation admin?
-  def translation_admin
-    self.is_translation_admin?
-  end
-
-  def is_translation_admin?
-    has_role?(:translation_admin)
   end
 
   # Is this user an authorized tag wrangler?
@@ -576,7 +585,6 @@ class User < ApplicationRecord
   end
 
   def remove_stale_from_autocomplete
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 

@@ -1,4 +1,4 @@
-@skins
+@set-default-skin
 Feature: Non-public site and work skins
 
   Scenario: A user should be able to create a skin with CSS

@@ -20,7 +20,7 @@ describe Admin::SkinsController do
         end
       end
 
-      %w[board communications docs open_doors policy_and_abuse tag_wrangling translation].each do |role|
+      (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
         context "when admin has #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
 
@@ -54,7 +54,7 @@ describe Admin::SkinsController do
         it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
 
-      %w[board communications docs open_doors policy_and_abuse tag_wrangling translation].each do |role|
+      (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
         context "when admin has #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
 
@@ -88,7 +88,7 @@ describe Admin::SkinsController do
         it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
 
-      %w[board communications docs open_doors policy_and_abuse tag_wrangling translation].each do |role|
+      (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
         context "when admin has #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
 
@@ -210,7 +210,7 @@ describe Admin::SkinsController do
       it_behaves_like "unauthorized admin cannot update work skin"
     end
 
-    %w[board communications docs open_doors policy_and_abuse tag_wrangling translation].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
       context "when admin has #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 

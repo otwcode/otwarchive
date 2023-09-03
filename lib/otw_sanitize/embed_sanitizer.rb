@@ -7,14 +7,11 @@ module OtwSanitize
   # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
     WHITELIST_REGEXES = {
-      ao3:              %r{^archiveofourown\.org/},
       archiveorg:       %r{^archive\.org\/embed/},
+      bilibili:         %r{^(player\.)?bilibili\.com/},
       criticalcommons:  %r{^criticalcommons\.org/},
-      dailymotion:      %r{^dailymotion\.com/},
       eighttracks:      %r{^8tracks\.com/},
       google:           %r{^google\.com/},
-      metacafe:         %r{^metacafe\.com/},
-      ning:             %r{^(static\.)?ning\.com/},
       podfic:           %r{^podfic\.com/},
       soundcloud:       %r{^(w\.)?soundcloud\.com/},
       spotify:          %r{^(open\.)?spotify\.com/},
@@ -25,12 +22,12 @@ module OtwSanitize
     }.freeze
 
     ALLOWS_FLASHVARS = %i[
-      ao3 criticalcommons eighttracks google
-      ning podfic soundcloud spotify viddersnet
+      criticalcommons eighttracks google
+      podfic soundcloud spotify viddersnet
     ].freeze
 
     SUPPORTS_HTTPS = %i[
-      ao3 archiveorg dailymotion eighttracks ning podfic
+      archiveorg bilibili eighttracks podfic
       soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze
 
@@ -56,11 +53,6 @@ module OtwSanitize
       return unless source_url && source
 
       ensure_https
-
-      # If a Dewplayer embed has been replaced with <audio> tags, return
-      # without safelisting them so the Sanitize transformer for <audio>
-      # tags can modify them later.
-      return if replace_dewplayer
 
       if parent_name == 'object'
         sanitize_object
@@ -130,41 +122,6 @@ module OtwSanitize
         node['flashvars'] = node['flashvars'].gsub("http:", "https:")
         node['flashvars'] = node['flashvars'].gsub("http%3A", "https%3A")
       end
-    end
-
-    # If the embed is hosted on the Archive, it's Dewplayer and can be replaced
-    # with <audio> tag(s).
-    #
-    # Refer to https://archiveofourown.org/admin_posts/250.
-    def replace_dewplayer
-      return unless source == :ao3 && node_name == "embed" && source_url.downcase.include?("dewplayer")
-
-      flashvars = node["flashvars"]
-      return if flashvars.blank?
-
-      mp3_urls = []
-      flashvars.split(/&/).each do |pairs|
-        key, value = pairs.split("=", 2)
-        next unless key == "mp3" && value
-
-        # URL-decode the flashvars value if necessary.
-        value = Addressable::URI.unencode(value) if value =~ /^https?%3A/
-
-        # Dewplayer allows specifying multiple sources.
-        mp3_urls.concat(value.split("|"))
-      end
-      return if mp3_urls.blank?
-
-      audio_fragment = Nokogiri::HTML::DocumentFragment.parse ""
-      Nokogiri::HTML::Builder.with(audio_fragment) do |fragment|
-        fragment.p do
-          mp3_urls.each_with_index do |url, i|
-            fragment.br unless i.zero?
-            fragment.audio(src: url.strip)
-          end
-        end
-      end
-      node.replace(audio_fragment)
     end
 
     # We're now certain that this is an embed from a trusted source, but we

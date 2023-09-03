@@ -5,7 +5,7 @@ Feature: Admin tasks
   Given the following language exists
       | name       | short |
       | Dutch      | nl    |
-    And I am logged in as an admin
+    And I am logged in as a "translation" admin
   When I go to the locales page
   Then I should see "English (US)"
   When I follow "New Locale"

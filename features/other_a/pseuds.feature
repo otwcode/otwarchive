@@ -117,3 +117,77 @@ Scenario: Manage pseuds - add, edit
     And I should see "My new fancy name (editpseuds)"
     And I should see "I wanted to add another fancy name"
     And I should not see "My new name (editpseuds)"
+
+Scenario: Comments reflect pseud changes immediately
+
+  Given the work "Interesting"
+    And I am logged in as "myself"
+    And I add the pseud "before"
+  When I set up the comment "Wow!" on the work "Interesting"
+    And I select "before" from "comment[pseud_id]"
+    And I press "Comment"
+    And I view the work "Interesting" with comments
+  Then I should see "before (myself)" within ".comment h4.byline"
+
+  When it is currently 1 second from now
+    And I change the pseud "before" to "after"
+    And I view the work "Interesting" with comments
+  Then I should see "after (myself)" within ".comment h4.byline"
+    And I should not see "before (myself)"
+
+Scenario: Many pseuds
+
+  Given there are 3 pseuds per page
+    And "Zaphod" has the pseud "Slartibartfast"
+    And "Zaphod" has the pseud "Agrajag"
+    And "Zaphod" has the pseud "Betelgeuse"
+    And I am logged in as "Zaphod"
+
+  When I view my profile
+  Then I should see "Zaphod" within "dl.meta"
+    And I should see "Agrajag" within "dl.meta"
+    And I should see "Betelgeuse" within "dl.meta"
+    And I should not see "Slartibartfast" within "dl.meta"
+    And I should see "1 more pseud" within "dl.meta"
+
+  When I go to my user page
+  Then I should see "Zaphod" within "ul.expandable"
+    And I should see "Agrajag" within "ul.expandable"
+    And I should see "Betelgeuse" within "ul.expandable"
+    And I should not see "Slartibartfast" within "ul.expandable"
+    And I should see "All Pseuds (4)" within "ul.expandable"
+
+  When I go to my "Slartibartfast" pseud page
+  Then I should see "Pseuds" within "li.pseud > a"
+    And I should see "Slartibartfast" within "ul.expandable"
+
+  When I go to my pseuds page
+  Then I should not see "Zaphod (Zaphod)" within "ul.pseud.index"
+    But I should see "Agrajag (Zaphod)" within "ul.pseud.index"
+    And I should see "Betelgeuse (Zaphod)" within "ul.pseud.index"
+    And I should see "Slartibartfast (Zaphod)" within "ul.pseud.index"
+    And I should see "Next" within ".pagination"
+  When I follow "Next" within ".pagination"
+  Then I should see "Zaphod (Zaphod)" within "ul.pseud.index"
+
+  When there are 10 pseuds per page
+    And I view my profile
+  Then I should see "Zaphod, Agrajag, Betelgeuse, and Slartibartfast" within "dl.meta"
+
+Scenario: Edit pseud updates series blurbs
+
+  Given I am logged in as "Myself"
+    And I add the work "Great Work" to series "Best Series" as "Me2"
+  When I go to the dashboard page for user "Myself" with pseud "Me2"
+    And I follow "Series"
+  Then I should see "Best Series by Me2 (Myself)"
+
+  When I go to my profile page
+    And I follow "Manage My Pseuds"
+    And I follow "Edit Me2"
+    And I fill in "Name" with "Me3"
+    And I press "Update"
+  Then I should see "Pseud was successfully updated."
+
+  When I follow "Series"
+  Then I should see "Best Series by Me3 (Myself)"
