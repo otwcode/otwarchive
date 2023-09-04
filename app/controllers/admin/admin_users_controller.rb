@@ -87,9 +87,18 @@ class Admin::AdminUsersController < Admin::BaseController
       return
     end
 
+    previous_fnok_user_id = fnok&.kin&.id
     fnok = @user.build_fannish_next_of_kin if fnok.blank?
     fnok.assign_attributes(kin: kin, kin_email: kin_email)
     if fnok.save
+      if previous_fnok_user_id
+        @user.create_log_item({
+                                action: ArchiveConfig.ACTION_REMOVE_FNOK,
+                                fnok_user_id: previous_fnok_user_id,
+                                admin_id: current_admin.id,
+                                note: "Change made by #{current_admin.login}"
+                              })
+      end
       @user.create_log_item({
                               action: ArchiveConfig.ACTION_ADD_FNOK,
                               fnok_user_id: fnok.kin.id,
