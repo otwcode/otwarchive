@@ -135,8 +135,8 @@ Feature: User Authentication
       And I request a password reset for "sam"
     Then I should see "Check your email for instructions on how to reset your password."
       And 3 emails should be delivered
-    Given all emails have been delivered
-    When I request a password reset for "sam"
+    When all emails have been delivered
+      And I request a password reset for "sam"
     Then I should see "You cannot reset your password at this time. Please try again after"
       And 0 emails should be delivered
     When it is currently 12 hours from now

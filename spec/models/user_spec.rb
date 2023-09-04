@@ -272,8 +272,8 @@ describe User do
     end
   end
 
-  describe "password_resets_limit_reached?" do
-    context "user with no password reset requests" do
+  describe "#password_resets_limit_reached?" do
+    context "with 0 resets requested" do
       let(:user) { build(:user, resets_requested: 0) }
 
       it "has not reached the requests limit" do
@@ -281,64 +281,75 @@ describe User do
       end
     end
 
-    context "user at the limit of password resets but after cooldown period" do
-      let(:user) do
-        build(:user,
-              resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
-              reset_password_sent_at: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago)
+    context "with the maximum number of password resets requested" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT) }
+
+      context "when the cooldown period has passed" do
+        before do
+          user.reset_password_sent_at = ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago
+        end
+
+        it "has not reached the requests limit" do
+          expect(user.password_resets_limit_reached?).to be_falsy
+        end
       end
 
-      it "has not reached the requests limit" do
-        expect(user.password_resets_limit_reached?).to be_falsy
-      end
-    end
+      context "when the cooldown period has not passed" do
+        before do
+          user.reset_password_sent_at = Time.current
+        end
 
-    context "user at the limit of password resets and within the cooldown period" do
-      let(:user) do
-        build(:user,
-              resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
-              reset_password_sent_at: Time.current)
-      end
-
-      it "has reached the requests limit" do
-        expect(user.password_resets_limit_reached?).to be_truthy
+        it "has reached the requests limit" do
+          expect(user.password_resets_limit_reached?).to be_truthy
+        end
       end
     end
   end
 
-  describe "update_password_resets_requested" do
-    context "user with no password reset requests" do
+  describe "#update_password_resets_requested" do
+    context "with 0 resets requested" do
       let(:user) { build(:user, resets_requested: 0) }
 
       it "increments the password reset requests field" do
-        user.update_password_resets_requested
-        expect(user.resets_requested).to eq(1)
+        expect { user.update_password_resets_requested }.to change { user.resets_requested }.to(1)
       end
     end
 
-    context "user within password reset requests limit and within the cooldown period" do
-      let(:user) do
-        build(:user,
-              resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT - 1,
-              reset_password_sent_at: Time.current)
+    context "with under the maximum number of password resets requested" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT - 1) }
+
+      context "when the cooldown period has passed" do
+        before do
+          user.reset_password_sent_at = ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago
+        end
+
+        it "resets the password reset request field to 1" do
+          expect { user.update_password_resets_requested }.to change { user.resets_requested }.to(1)
+        end
       end
 
-      it "increments the password reset requests field" do
-        user.update_password_resets_requested
-        expect(user.resets_requested).to eq(ArchiveConfig.PASSWORD_RESET_LIMIT)
+      context "when the cooldown period has not passed" do
+        before do
+          user.reset_password_sent_at = Time.current
+        end
+
+        it "increments the password reset requests field" do
+          expect { user.update_password_resets_requested }.to change { user.resets_requested }.by(1)
+        end
       end
     end
 
-    context "user at the limit of password resets but after cooldown period" do
-      let(:user) do
-        build(:user,
-              resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT,
-              reset_password_sent_at: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago)
-      end
+    context "with the maximum number of password resets requested" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT) }
 
-      it "sets the password reset requests field to 1" do
-        user.update_password_resets_requested
-        expect(user.resets_requested).to eq(1)
+      context "when the cooldown period has passed" do
+        before do
+          user.reset_password_sent_at = ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago
+        end
+
+        it "resets the password reset request field to 1" do
+          expect { user.update_password_resets_requested }.to change { user.resets_requested }.to(1)
+        end
       end
     end
   end
