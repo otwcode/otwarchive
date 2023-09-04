@@ -311,7 +311,9 @@ describe User do
       let(:user) { build(:user, resets_requested: 0) }
 
       it "increments the password reset requests field" do
-        expect { user.update_password_resets_requested }.to change { user.resets_requested }.to(1)
+        expect { user.update_password_resets_requested }
+          .to change { user.resets_requested }
+          .to(1)
       end
     end
 
@@ -324,7 +326,9 @@ describe User do
         end
 
         it "resets the password reset request field to 1" do
-          expect { user.update_password_resets_requested }.to change { user.resets_requested }.to(1)
+          expect { user.update_password_resets_requested }
+            .to change { user.resets_requested }
+            .to(1)
         end
       end
 
@@ -334,7 +338,9 @@ describe User do
         end
 
         it "increments the password reset requests field" do
-          expect { user.update_password_resets_requested }.to change { user.resets_requested }.by(1)
+          expect { user.update_password_resets_requested }
+            .to change { user.resets_requested }
+            .by(1)
         end
       end
     end
@@ -348,7 +354,9 @@ describe User do
         end
 
         it "resets the password reset request field to 1" do
-          expect { user.update_password_resets_requested }.to change { user.resets_requested }.to(1)
+          expect { user.update_password_resets_requested }
+            .to change { user.resets_requested }
+            .to(1)
         end
       end
     end
