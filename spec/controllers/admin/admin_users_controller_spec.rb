@@ -301,7 +301,7 @@ describe Admin::AdminUsersController do
       fake_login_admin(admin)
 
       post :update_next_of_kin, params: {
-        user_login: user.login
+        user_login: user.login, next_of_kin_email: ""
       }
       it_redirects_to_with_notice(admin_user_path(user), "No change to Fannish next of kin.")
       expect(user.reload.log_items).to be_empty
