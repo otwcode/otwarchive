@@ -69,36 +69,24 @@ class Admin::AdminUsersController < Admin::BaseController
   def update_next_of_kin
     @user = authorize User.find_by!(login: params[:user_login])
     fnok = @user.fannish_next_of_kin
+    previous_fnok_user_id = fnok&.kin&.id
     kin = User.find_by(login: params[:next_of_kin_name])
     kin_email = params[:next_of_kin_email]
 
     if kin.blank? && kin_email.blank?
       if fnok.present?
         fnok.destroy
-        @user.create_log_item({
-                                action: ArchiveConfig.ACTION_REMOVE_FNOK,
-                                fnok_user_id: fnok.kin.id,
-                                admin_id: current_admin.id,
-                                note: "Change made by #{current_admin.login}"
-                              })
+        log_next_of_kin_removed(previous_fnok_user_id)
         flash[:notice] = ts("Fannish next of kin was removed.")
       end
       redirect_to admin_user_path(@user)
       return
     end
 
-    previous_fnok_user_id = fnok&.kin&.id
     fnok = @user.build_fannish_next_of_kin if fnok.blank?
     fnok.assign_attributes(kin: kin, kin_email: kin_email)
     if fnok.save
-      if previous_fnok_user_id
-        @user.create_log_item({
-                                action: ArchiveConfig.ACTION_REMOVE_FNOK,
-                                fnok_user_id: previous_fnok_user_id,
-                                admin_id: current_admin.id,
-                                note: "Change made by #{current_admin.login}"
-                              })
-      end
+      log_next_of_kin_removed(previous_fnok_user_id)
       @user.create_log_item({
                               action: ArchiveConfig.ACTION_ADD_FNOK,
                               fnok_user_id: fnok.kin.id,
@@ -192,5 +180,16 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def log_items
     @log_items ||= (@user.log_items + LogItem.where(fnok_user_id: @user.id)).sort_by(&:created_at).reverse
+  end
+
+  def log_next_of_kin_removed(user_id)
+    return unless user_id.present?
+
+    @user.create_log_item({
+                            action: ArchiveConfig.ACTION_REMOVE_FNOK,
+                            fnok_user_id: user_id,
+                            admin_id: current_admin.id,
+                            note: "Change made by #{current_admin.login}"
+                          })
   end
 end
