@@ -80,11 +80,9 @@ class Admin::AdminUsersController < Admin::BaseController
     end
 
     if kin.blank? && kin_email.blank?
-      if fnok.present?
-        fnok.destroy
-        log_next_of_kin_removed(previous_fnok_user_id)
-        flash[:notice] = ts("Fannish next of kin was removed.")
-      end
+      fnok.destroy
+      log_next_of_kin_removed(previous_fnok_user_id)
+      flash[:notice] = ts("Fannish next of kin was removed.")
       redirect_to admin_user_path(@user)
       return
     end
