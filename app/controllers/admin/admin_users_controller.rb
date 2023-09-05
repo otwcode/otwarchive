@@ -73,17 +73,21 @@ class Admin::AdminUsersController < Admin::BaseController
     kin = User.find_by(login: params[:next_of_kin_name])
     kin_email = params[:next_of_kin_email]
 
-    noop = (fnok.blank? && kin.blank? && kin_email.blank?) || (fnok.present? && fnok.kin == kin && fnok.kin_email == kin_email)
-    if noop
-      flash[:notice] = ts("No change to Fannish next of kin.")
+    if kin.blank? && kin_email.blank?
+      if fnok.blank?
+        flash[:notice] = ts("No change to Fannish next of kin.")
+      else
+        fnok.destroy
+        log_next_of_kin_removed(previous_fnok_user_id)
+        flash[:notice] = ts("Fannish next of kin was removed.")
+      end
+
       redirect_to admin_user_path(@user)
       return
     end
 
-    if kin.blank? && kin_email.blank?
-      fnok.destroy
-      log_next_of_kin_removed(previous_fnok_user_id)
-      flash[:notice] = ts("Fannish next of kin was removed.")
+    if fnok&.kin == kin && fnok&.kin_email == kin_email
+      flash[:notice] = ts("No change to Fannish next of kin.")
       redirect_to admin_user_path(@user)
       return
     end
