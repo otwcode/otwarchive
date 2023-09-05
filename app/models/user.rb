@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   audited
   include WorksOwner
+  include PasswordResetsLimitable
 
   devise :database_authenticatable,
          :confirmable,
