@@ -283,6 +283,29 @@ describe Admin::AdminUsersController do
       expect(add_log_item.admin_id).to eq(admin.id)
       expect(add_log_item.note).to eq("Change made by #{admin.login}")
     end
+
+    it "does nothing if changing the fnok to themselves" do
+      admin = create(:support_admin)
+      fake_login_admin(admin)
+      previous_kin = create(:fannish_next_of_kin, user: user)
+
+      post :update_next_of_kin, params: {
+        user_login: user.login, next_of_kin_name: previous_kin.kin.login, next_of_kin_email: previous_kin.kin_email
+      }
+      it_redirects_to_with_notice(admin_user_path(user), "No change to Fannish next of kin.")
+      expect(user.reload.log_items).to be_empty
+    end
+
+    it "does nothing if fnok is kept undefined" do
+      admin = create(:support_admin)
+      fake_login_admin(admin)
+
+      post :update_next_of_kin, params: {
+        user_login: user.login
+      }
+      it_redirects_to_with_notice(admin_user_path(user), "No change to Fannish next of kin.")
+      expect(user.reload.log_items).to be_empty
+    end
   end
 
   describe "POST #update_status" do
