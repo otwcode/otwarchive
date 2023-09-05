@@ -183,7 +183,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def log_next_of_kin_removed(user_id)
-    return unless user_id.present?
+    return if user_id.blank?
 
     @user.create_log_item({
                             action: ArchiveConfig.ACTION_REMOVE_FNOK,
