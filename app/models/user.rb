@@ -160,8 +160,6 @@ class User < ApplicationRecord
 
   def expire_caches
     return unless saved_change_to_login?
-    # TODO: fix
-    Kudo.expire_user_caches(self)
     series.each(&:expire_byline_cache)
     self.works.each do |work|
       work.touch
@@ -171,7 +169,6 @@ class User < ApplicationRecord
 
   def remove_user_from_kudos
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
-    Kudo.expire_user_caches(self)
     Kudo.where(user: self).update_all(user_id: nil)
   end
 

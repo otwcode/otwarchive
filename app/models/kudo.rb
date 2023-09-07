@@ -61,14 +61,6 @@ class Kudo < ApplicationRecord
     end
   end
 
-  # Note: This is called in remove_user_from_kudos, so whether or not it delays
-  # any work here, it must not rely on user_id being present after this point.
-  def self.expire_user_caches(user)
-    Kudo.where(user: user).find_in_batches do |batch|
-      batch.each(&:expire_caches)
-    end
-  end
-
   after_save :expire_caches
   def expire_caches
     if commentable_type == "Work"
