@@ -142,12 +142,6 @@ input, select, option, textarea, legend, label, .actions a {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#26ffffff', endColorstr='#26ffffff',GradientType=0);
 }
 
-/* commas */
-
-.commas li.last:after {
-  content: none;
-}
-
 /*DIAGNOSIS*/
 
 /* WIDGET: MODAL DIALOGS (called by help links) */

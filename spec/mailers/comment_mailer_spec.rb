@@ -214,24 +214,29 @@ describe CommentMailer do
     it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
 
-    context "when the comment is a reply to another comment" do
-      let(:comment) { create(:comment, commentable: create(:comment)) }
+    context "when the comment is on a tag" do
+      let(:parent_comment) { create(:comment, :on_tag) }
+
+      it_behaves_like "a notification email with a link to the comment"
+    end
+  end
+
+  describe "comment_reply_sent_notification" do
+    subject(:email) { CommentMailer.comment_reply_sent_notification(comment) }
+
+    let(:parent_comment) { create(:comment) }
+    let(:comment) { create(:comment, commentable: parent_comment) }
+
+    it_behaves_like "an email with a valid sender"
+    it_behaves_like "it retries when the comment doesn't exist"
+    it_behaves_like "a notification email with a link to the comment"
+    it_behaves_like "a notification email with a link to the comment's thread"
+
+    context "when the parent comment is on a tag" do
+      let(:parent_comment) { create(:comment, :on_tag) }
 
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
-    end
-
-    context "when the comment is on a tag" do
-      let(:comment) { create(:comment, :on_tag) }
-
-      it_behaves_like "a notification email with a link to the comment"
-
-      context "when the comment is a reply to another comment" do
-        let(:comment) { create(:comment, commentable: create(:comment, :on_tag)) }
-
-        it_behaves_like "a notification email with a link to the comment"
-        it_behaves_like "a notification email with a link to the comment's thread"
-      end
     end
   end
 end

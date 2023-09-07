@@ -28,7 +28,7 @@ class WordCounter
     body.traverse do |node|
       if node.is_a? Nokogiri::XML::Text
         count += node.inner_text.gsub(/--/, "—").gsub(/['’‘-]/, "")
-                     .scan(/[#{character_count_scripts}]|((?!#{character_count_scripts})[[:word:]])+/).size
+          .scan(/#{character_count_scripts}|((?!#{character_count_scripts})[[:word:]])+/).size
       end
     end
     count

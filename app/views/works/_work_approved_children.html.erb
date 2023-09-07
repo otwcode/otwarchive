@@ -8,17 +8,17 @@
       <% if child_work.work.is_a?(ExternalWork) %>
         <%= link_to child_work.work.title.html_safe, child_work.work %> <%= ts("by") %> <%= byline(child_work.work) %>
         <% if child_work.translation %>
-          <%= ts('(translation into %{language})', :language => child_work.work.language.name) %>
+          <%= ts("(translation into %{language})", language: tag.span(child_work.work.language.name, lang: child_work.work.language.short)).html_safe %>
         <% end %>
       <% elsif child_work.work.restricted? && !logged_in? %>
         <%= ts("A [Restricted Work] by") %> <%= byline(child_work.work) %>
         <% if child_work.translation %>
-          <%= ts('(translation into %{language})', :language => child_work.work.language.name) %>
+          <%= ts("(translation into %{language})", language: tag.span(child_work.work.language.name, lang: child_work.work.language.short)).html_safe %>
         <% end %> <%= ts("Log in to view.") %>
       <% else %>
         <%= link_to child_work.work.title.html_safe, child_work.work %> <%= ts("by") %> <%= byline(child_work.work) %>
         <% if child_work.translation %>
-          <%= ts('(translation into %{language})', :language => child_work.work.language.name) %>
+          <%= ts("(translation into %{language})", language: tag.span(child_work.work.language.name, lang: child_work.work.language.short)).html_safe %>
         <% end %>
       <% end %>
     </li>

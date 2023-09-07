@@ -1,5 +1,5 @@
 class Admin < ApplicationRecord
-  VALID_ROLES = %w[superadmin board communications translation tag_wrangling docs support policy_and_abuse open_doors].freeze
+  VALID_ROLES = %w[superadmin board communications elections translation tag_wrangling docs support policy_and_abuse open_doors].freeze
 
   serialize :roles, Array
 
@@ -20,7 +20,7 @@ class Admin < ApplicationRecord
 
   validates :login,
             presence: true,
-            uniqueness: { case_sensitive: false },
+            uniqueness: true,
             length: { in: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX }
   validates_presence_of :password_confirmation, if: :new_record?
   validates_confirmation_of :password, if: :new_record?

@@ -88,6 +88,20 @@ Given /^the support form is enabled$/ do
   click_button("Update")
 end
 
+Given "guest comments are on" do
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  uncheck("Turn off guest comments across the site")
+  click_button("Update")
+end
+
+Given "guest comments are off" do
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  check("Turn off guest comments across the site")
+  click_button("Update")
+end
+
 Given /^I have posted known issues$/ do
   step %{I am logged in as an admin}
   step %{I follow "Admin Posts"}
@@ -117,7 +131,7 @@ end
 Given /^the user "([^\"]*)" is suspended$/ do |user|
   step %{the user "#{user}" exists and is activated}
   step %{I am logged in as a "policy_and_abuse" admin}
-  step %{I go to the abuse administration page for "#{user}"}
+  step %{I go to the user administration page for "#{user}"}
   choose("admin_action_suspend")
   fill_in("suspend_days", with: 30)
   fill_in("Notes", with: "Why they are suspended")
@@ -127,7 +141,7 @@ end
 Given /^the user "([^\"]*)" is banned$/ do |user|
   step %{the user "#{user}" exists and is activated}
   step(%{I am logged in as a "policy_and_abuse" admin})
-  step %{I go to the abuse administration page for "#{user}"}
+  step %{I go to the user administration page for "#{user}"}
   choose("admin_action_ban")
   fill_in("Notes", with: "Why they are banned")
   click_button("Update")
@@ -159,6 +173,14 @@ Given(/^the following language exists$/) do |table|
   end
 end
 
+Given /^I have posted an admin post with guest comments disabled$/ do
+  step %{I am logged in as a "communications" admin}
+  step %{I start to make an admin post}
+  choose("Only registered users can comment")
+  click_button("Post")
+  step %{I log out}
+end
+
 Given /^I have posted an admin post with comments disabled$/ do
   step %{I am logged in as a "communications" admin}
   step %{I start to make an admin post}
@@ -174,6 +196,14 @@ Given "an abuse ticket ID exists" do
     "webUrl" => Faker::Internet.url
   }
   allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
+end
+
+Given "a work {string} with the original creator {string}" do |title, creator|
+  step %{I am logged in as "#{creator}"}
+  step %{I post the work "#{title}"}
+  FactoryBot.create(:user, login: "orphan_account")
+  step %{I orphan the work "#{title}"}
+  step %{I log out}
 end
 
 Given "the admin {string} is locked" do |login|
@@ -467,4 +497,20 @@ end
 
 Then /^the user content should be shown as right-to-left$/ do
   page.should have_xpath("//div[contains(@class, 'userstuff') and @dir='rtl']")
+end
+
+Then "I should see the original creator {string}" do |creator|
+  user = User.find_by(login: creator)
+  expect(page).to have_selector(".original_creators",
+                                text: "#{user.id} (#{creator})")
+end
+
+Then "the history table should show that {string} was {word} as next of kin" do |username, action|
+  user_id = User.find_by(login: username).id
+  step %{I should see "Fannish Next of Kin #{action.capitalize}: #{user_id}" within "#user_history"}
+end
+
+Then "the history table should show they were {word} as next of kin of {string}" do |action, username|
+  user_id = User.find_by(login: username).id
+  step %{I should see "#{action.capitalize} as Fannish Next of Kin for: #{user_id}" within "#user_history"}
 end

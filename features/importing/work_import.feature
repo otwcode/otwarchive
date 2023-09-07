@@ -146,6 +146,63 @@ Feature: Import Works
     Then I should see "Chapters:2/2"
       And I should see "IP Address: 127.0.0.1"
 
+  Scenario: Imported works can be set to restricted
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I check "Only show imported works to registered users"
+      And I press "Import"
+      And I press "Post"
+    When I am logged out
+      And I go to the "Detected Title" work page
+    Then I should see "This work is only available to registered users of the Archive."
+
+  Scenario: Imported works can have comments enabled to guests
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I choose "comment_permissions_enable_all"
+      And I press "Import"
+      And I press "Post"
+    When I am logged out
+      And I go to the "Detected Title" work page
+      And I follow "Yes, Continue"
+    Then I should see "Guest name:"
+
+  Scenario: Imported works can have comments disabled to guests
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I choose "comment_permissions_disable_anon"
+      And I press "Import"
+      And I press "Post"
+    When I am logged out
+      And I go to the "Detected Title" work page
+      And I follow "Yes, Continue"
+    Then I should see "Sorry, this work doesn't allow non-Archive users to comment."
+
+  Scenario: Imported works can have comments disabled
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I choose "comment_permissions_disable_all"
+      And I press "Import"
+      And I press "Post"
+    When I go to the "Detected Title" work page
+    Then I should see "Sorry, this work doesn't allow comments."
+
+  Scenario: Imported works can have comment moderation off
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I uncheck "moderated_commenting_enabled"
+      And I press "Import"
+      And I press "Post"
+    When I am logged out
+      And I go to the "Detected Title" work page
+      And I follow "Yes, Continue"
+    Then I should not see "This work's creator has chosen to moderate comments on the work."
+
+  Scenario: Imported works can have comment moderation on
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I check "moderated_commenting_enabled"
+      And I press "Import"
+      And I press "Post"
+    When I am logged out
+      And I go to the "Detected Title" work page
+      And I follow "Yes, Continue"
+    Then I should see "This work's creator has chosen to moderate comments on the work."
+
   @work_import_multi_work_backdate
   Scenario: Importing multiple works with backdating
     When I import the urls

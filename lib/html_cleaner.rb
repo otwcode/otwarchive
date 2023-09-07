@@ -8,11 +8,9 @@ module HtmlCleaner
     sanitizer_version = object.try("#{fieldname}_sanitizer_version")
     if sanitizer_version && sanitizer_version >= ArchiveConfig.SANITIZER_VERSION
       # return the field without sanitizing
-      Rails.logger.debug "Already sanitized #{fieldname} on #{object.class.name} (id #{object.id})"
       object.send(fieldname)
     else
       # no sanitizer version information, so re-sanitize
-      Rails.logger.debug "Sanitizing without saving #{fieldname} on #{object.class.name} (id #{object.id})"
       sanitize_value(fieldname, object.send(fieldname))
     end
   end
@@ -58,7 +56,10 @@ module HtmlCleaner
     end
     if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(field.to_s)
       # We're allowing users to use HTML in this field
-      transformers = []
+      transformers = [
+        Sanitize::Config::OPEN_ATTRIBUTE_TRANSFORMER,
+        Sanitize::Config::RELATIVE_IMAGE_PATH_TRANSFORMER
+      ]
       if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
         transformers << OtwSanitize::EmbedSanitizer.transformer
         transformers << OtwSanitize::MediaSanitizer.transformer

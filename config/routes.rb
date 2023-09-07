@@ -103,7 +103,11 @@ Otwarchive::Application.routes.draw do
       post :wrangle
     end
   end
-  resources :tag_wranglers
+  resources :tag_wranglers do
+    member do
+      get :report_csv
+    end
+  end
   resources :unsorted_tags do
     collection do
       post :mass_update
@@ -195,7 +199,6 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete_user_creations
         post :destroy_user_creations
         post :activate
-        post :send_activation
         get :check_user
       end
       collection do
@@ -277,7 +280,11 @@ Otwarchive::Application.routes.draw do
     end
     resources :nominations, controller: "tag_set_nominations", only: [:index]
     resources :preferences, only: [:index, :update]
-    resource :profile, only: [:show], controller: "profile"
+    resource :profile, only: [:show], controller: "profile" do
+      collection do
+        get :pseuds
+      end
+    end
     resources :pseuds do
       resources :works
       resources :series
@@ -653,8 +660,32 @@ Otwarchive::Application.routes.draw do
   get "/admin/admin_users/troubleshoot/:id" => "admin/admin_users#troubleshoot", as: :troubleshoot_admin_user
 
   # TODO: rewrite the autocomplete controller to deal with the fact that
-  # there are fifty different actions going on in there
-  get '/autocomplete/:action' => 'autocomplete#%{action}'
+  # there are 21 different actions going on in there
+  %w[
+    pseud
+    tag
+    fandom
+    character
+    relationship
+    freeform
+    character_in_fandom
+    relationship_in_fandom
+    tags_in_sets
+    associated_tags
+    noncanonical_tag
+    collection_fullname
+    open_collection_names
+    collection_parent_name
+    external_work
+    potential_offers
+    potential_requests
+    owned_tag_sets
+    site_skins
+    admin_posts
+    admin_post_tags
+  ].each do |action|
+    get "/autocomplete/#{action}" => "autocomplete##{action}"
+  end
 
   get '/challenges/no_collection' => 'challenges#no_collection'
   get '/challenges/no_challenge' => 'challenges#no_challenge'

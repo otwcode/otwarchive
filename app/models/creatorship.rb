@@ -77,6 +77,7 @@ class Creatorship < ApplicationRecord
 
   before_destroy :expire_caches
   before_destroy :check_not_last
+  before_destroy :save_original_creator
   after_destroy :remove_from_children
 
   after_commit :update_indices
@@ -177,6 +178,17 @@ class Creatorship < ApplicationRecord
     raise ActiveRecord::RecordInvalid, self
   end
 
+  # Record the original creator if the creation is a work.
+  # This information is stored temporarily to make it available for
+  # Policy and Abuse on orphaned works.
+  def save_original_creator
+    return unless approved?
+    return unless creation.is_a?(Work)
+    return if creation.destroyed?
+
+    creation.original_creators.create_or_find_by(user: pseud.user).touch
+  end
+
   def expire_caches
     if creation_type == "Work" && self.pseud.present?
       CacheMaster.record(creation_id, "pseud", self.pseud_id)
@@ -194,7 +206,7 @@ class Creatorship < ApplicationRecord
   # ambiguous/missing pseuds. By storing the desired name in the @byline
   # variable, we can generate nicely formatted messages.
   def byline=(byline)
-    pseuds = Pseud.parse_byline(byline).to_a
+    pseuds = Pseud.parse_byline_ambiguous(byline).to_a
 
     if pseuds.size == 1
       self.pseud = pseuds.first

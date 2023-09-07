@@ -34,6 +34,7 @@ Feature: Some admins can see IP addresses and emails for comments
     | board            | should not | should not   |
     | communications   | should not | should not   |
     | docs             | should not | should not   |
+    | elections        | should not | should not   |
     | open_doors       | should not | should not   |
     | tag_wrangling    | should not | should not   |
     | translation      | should not | should not   |
