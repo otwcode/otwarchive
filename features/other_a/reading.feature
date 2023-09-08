@@ -82,7 +82,7 @@ Feature: Reading count
       And I am on testuser2 works page
       And I follow "fifth"
       And I should see "fifth by testuser2"
-      And I follow "Proceed"
+      And I follow "Yes, Continue"
       And the readings are saved to the database
     When I go to fandomer's reading page
     Then I should see "History" within "div#dashboard"

@@ -226,6 +226,39 @@ describe Admin::AdminUsersController do
         it_behaves_like "authorized admin can add next of kin"
       end
     end
+
+    it "logs adding a fannish next of kin" do
+      admin = create(:support_admin)
+      fake_login_admin(admin)
+
+      post :update_next_of_kin, params: {
+        user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
+      }
+      user.reload
+      expect(user.fannish_next_of_kin.kin).to eq(kin)
+      log_item = user.log_items.last
+      expect(log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
+      expect(log_item.fnok_user.id).to eq(kin.id)
+      expect(log_item.admin_id).to eq(admin.id)
+      expect(log_item.note).to eq("Change made by #{admin.login}")
+    end
+
+    it "logs removing a fannish next of kin" do
+      admin = create(:support_admin)
+      fake_login_admin(admin)
+      kin_user_id = create(:fannish_next_of_kin, user: user).kin_id
+
+      post :update_next_of_kin, params: {
+        user_login: user.login
+      }
+      user.reload
+      expect(user.fannish_next_of_kin).to be_nil
+      log_item = user.log_items.last
+      expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
+      expect(log_item.fnok_user.id).to eq(kin_user_id)
+      expect(log_item.admin_id).to eq(admin.id)
+      expect(log_item.note).to eq("Change made by #{admin.login}")
+    end
   end
 
   describe "POST #update_status" do

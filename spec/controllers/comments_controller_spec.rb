@@ -2746,7 +2746,7 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin board policy_and_abuse communications support].each do |admin_role|
+          %w[superadmin board communications elections policy_and_abuse support].each do |admin_role|
             context "with role #{admin_role}" do
               it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
@@ -2811,7 +2811,20 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin board policy_and_abuse communications support].each do |admin_role|
+          (Admin::VALID_ROLES - %w[superadmin board policy_and_abuse support]).each do |admin_role|
+            context "with role #{admin_role}" do
+              it "doesn't destroy comment and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                delete :destroy, params: { id: comment.id }
+  
+                it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+                expect { comment.reload }.not_to raise_exception
+              end
+            end
+          end
+
+          %w[superadmin board policy_and_abuse support].each do |admin_role|
             context "with the #{admin_role} role" do
               it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
@@ -2916,7 +2929,20 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin policy_and_abuse].each do |admin_role|
+          (Admin::VALID_ROLES - %w[superadmin board policy_and_abuse support]).each do |admin_role|
+            context "with role #{admin_role}" do
+              it "doesn't destroy comment and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                delete :destroy, params: { id: comment.id }
+  
+                it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+                expect { comment.reload }.not_to raise_exception
+              end
+            end
+          end
+
+          %w[superadmin board policy_and_abuse support].each do |admin_role|
             context "with the #{admin_role} role" do
               it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
@@ -3276,7 +3302,7 @@ describe CommentsController do
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
 
-        %w[superadmin board communications policy_and_abuse support].each do |admin_role|
+        %w[superadmin board support policy_and_abuse].each do |admin_role|
           it "successfully deletes the comment when admin has #{admin_role} role" do
             admin.update(roles: [admin_role])
             fake_login_admin(admin)

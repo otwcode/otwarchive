@@ -63,17 +63,17 @@ module CssCleaner
         clean_declarations = ""
         rs.each_declaration do |property, value, is_important|
           if property.blank? || value.blank?
-            errors.add(:base, ts("The code for #{rs.selectors.join(',')} doesn't seem to be a valid CSS rule."))
+            errors.add(:base, ts("The code for %{selectors} doesn't seem to be a valid CSS rule.", selectors: rs.selectors.join(",")))
           elsif sanitize_css_property(property).blank?
-            errors.add(:base, ts("We don't currently allow the CSS property #{property} -- please notify support if you think this is an error."))
+            errors.add(:base, ts("We don't currently allow the CSS property %{property} -- please notify support if you think this is an error.", property: property))
           elsif (cleanval = sanitize_css_declaration_value(property, value)).blank?
-            errors.add(:base, ts("The #{property} property in #{rs.selectors.join(', ')} cannot have the value #{value}, sorry!"))
+            errors.add(:base, ts("The %{property} property in %{selectors} cannot have the value %{value}, sorry!", property: property, selectors: rs.selectors.join(", "), value: value))
           elsif (!caller_check || caller_check.call(rs, property, value))
             clean_declarations += "  #{property}: #{cleanval}#{is_important ? ' !important' : ''};\n"
           end
         end
         if clean_declarations.blank?
-          errors.add(:base, ts("There don't seem to be any rules for #{rs.selectors.join(',')}"))
+          errors.add(:base, ts("There don't seem to be any rules for %{selectors}", selectors: rs.selectors.join(",")))
         else
           # everything looks ok, add it to the css
           clean_css += "#{selectors.join(",\n")} {\n"

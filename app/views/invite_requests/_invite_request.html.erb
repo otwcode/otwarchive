@@ -7,7 +7,7 @@
 <!--main content-->
 <p>
   <%= t(".position_html", position: tag.strong(@position_in_queue)) %>
-  <% if @admin_settings.invite_from_queue_enabled? %>
+  <% if AdminSetting.current.invite_from_queue_enabled? %>
     <%= t(".date", date: l(invite_request.proposed_fill_date, format: :long)) %>
   <% end %>
 </p>

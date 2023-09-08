@@ -15,17 +15,6 @@ module UsersHelper
     current_user.is_a?(User) ? current_user.maintained_collections.present? : false
   end
 
-  def sidebar_pseud_link_text(user, pseud)
-    text = if current_page?(user)
-             ts('Pseuds')
-           elsif pseud.present? && !pseud.new_record?
-             pseud.name
-           else
-             user.login
-           end
-    (text + ' &#8595;').html_safe
-  end
-
   # Prints user pseuds with links to anchors for each pseud on the page and the description as the title
   def print_pseuds(user)
     user.pseuds.collect(&:name).join(', ')
@@ -130,32 +119,54 @@ module UsersHelper
     items.html_safe
   end
 
-  def log_item_action_name(action)
-    if action == ArchiveConfig.ACTION_ACTIVATE
-      t('users_helper.log_validated', default: 'Account Validated')
-    elsif action == ArchiveConfig.ACTION_ADD_ROLE
-      t('users_helper.log_role_added', default: 'Role Added: ')
-    elsif action == ArchiveConfig.ACTION_REMOVE_ROLE
-      t('users_helper.log_role_removed', default: 'Role Removed: ')
-    elsif action == ArchiveConfig.ACTION_SUSPEND
-      t('users_helper.log_suspended', default: 'Suspended until ')
-    elsif action == ArchiveConfig.ACTION_UNSUSPEND
-      t('users_helper.log_lift_suspension', default: 'Suspension Lifted')
-    elsif action == ArchiveConfig.ACTION_BAN
-      t('users_helper.log_ban', default: 'Suspended Permanently')
-    elsif action == ArchiveConfig.ACTION_WARN
-      t('users_helper.log_warn', default: 'Warned')
-    elsif action == ArchiveConfig.ACTION_RENAME
-      t('users_helper.log_rename', default: 'Username Changed')
-    elsif action == ArchiveConfig.ACTION_PASSWORD_RESET
-      t('users_helper.log_password_change', default: 'Password Changed')
-    elsif action == ArchiveConfig.ACTION_NEW_EMAIL
-      t('users_helper.log_email_change', default: 'Email Changed')
-    elsif action == ArchiveConfig.ACTION_TROUBLESHOOT
-      t('users_helper.log_troubleshot', default: 'Account Troubleshot')
-    elsif action == ArchiveConfig.ACTION_NOTE
-      t('users_helper.log_note', default: 'Note Added')
+  def log_item_action_name(item, user)
+    action = item.action
+    
+    return fnok_action_name(item, user) if [ArchiveConfig.ACTION_ADD_FNOK, ArchiveConfig.ACTION_REMOVE_FNOK].include?(action)
+
+    case action
+    when ArchiveConfig.ACTION_ACTIVATE
+      t("users_helper.log.validated")
+    when ArchiveConfig.ACTION_ADD_ROLE
+      t("users_helper.log.role_added")
+    when ArchiveConfig.ACTION_REMOVE_ROLE
+      t("users_helper.log.role_removed")
+    when ArchiveConfig.ACTION_SUSPEND
+      t("users_helper.log.suspended")
+    when ArchiveConfig.ACTION_UNSUSPEND
+      t("users_helper.log.lift_suspension")
+    when ArchiveConfig.ACTION_BAN
+      t("users_helper.log.ban")
+    when ArchiveConfig.ACTION_WARN
+      t("users_helper.log.warn")
+    when ArchiveConfig.ACTION_RENAME
+      t("users_helper.log.rename")
+    when ArchiveConfig.ACTION_PASSWORD_RESET
+      t("users_helper.log.password_change")
+    when ArchiveConfig.ACTION_NEW_EMAIL
+      t("users_helper.log.email_change")
+    when ArchiveConfig.ACTION_TROUBLESHOOT
+      t("users_helper.log.troubleshot")
+    when ArchiveConfig.ACTION_NOTE
+      t("users_helper.log.note")
     end
+  end
+
+  def fnok_action_name(item, user)
+    action = item.action == ArchiveConfig.ACTION_REMOVE_FNOK ? "removed" : "added"
+
+    if item.fnok_user_id == user.id
+      user_id = item.user_id
+      action_leaf = "was_#{action}"
+    else
+      user_id = item.fnok_user_id
+      action_leaf = "has_#{action}"
+    end
+
+    t(
+      "users_helper.log.fnok.#{action_leaf}",
+      user_id: user_id
+    )
   end
 
   # Give the TOS field in the new user form a different name in non-production environments
