@@ -10,7 +10,7 @@ class SkinParent < ApplicationRecord
 
   validate :no_site_parent
   def no_site_parent
-    return unless parent_skin&.get_role == "site" && !%w[override site].include?(child_skin.get_role)
+    return unless parent_skin&.get_role == "site" && %w[override site].exclude?(child_skin.get_role)
 
     errors.add(:base, :site_parent, title: parent_skin.title)
   end
