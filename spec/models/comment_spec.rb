@@ -3,6 +3,32 @@
 require "spec_helper"
 
 describe Comment do
+  describe "validations" do
+    context "with a forbidden guest name" do
+      subject { build(:comment, email: Faker::Internet.email) }
+      let(:forbidden_name) { Faker::Lorem.characters(number: 8) }
+
+      before do
+        allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([forbidden_name])
+      end
+
+      it { is_expected.not_to allow_values(forbidden_name, forbidden_name.swapcase).for(:name) }
+
+      it "does not prevent saving when the name is unchanged" do
+        subject.name = forbidden_name
+        subject.save!(validate: false)
+        expect(subject.save).to be_truthy
+      end
+
+      it "does not prevent deletion" do
+        subject.name = forbidden_name
+        subject.save!(validate: false)
+        subject.destroy
+        expect { subject.reload }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 
   context "with an existing comment from the same user" do
     let(:first_comment) { create(:comment) }

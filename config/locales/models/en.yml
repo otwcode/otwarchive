@@ -64,6 +64,8 @@ en:
       series/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
+      user:
+        login: User name
       work:
         chapter_total_display: Chapters
         summary: Summary
@@ -79,6 +81,8 @@ en:
         title: The title of a parent work outside the archive
         url: Parent work URL
     errors:
+      messages:
+        forbidden: "%{value} is not allowed"
       models:
         abuse_report:
           attributes:
@@ -145,6 +149,7 @@ en:
               changed_too_recently:
                 one: can only be changed once per day. You last changed your user name on %{renamed_at}.
                 other: can only be changed once every %{count} days. You last changed your user name on %{renamed_at}.
+              invalid: must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).
             password_confirmation:
               confirmation: doesn't match new password.
         work:

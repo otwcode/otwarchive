@@ -66,7 +66,7 @@ class Admin::AdminUsersController < Admin::BaseController
   def show
     authorize @user
     @page_subtitle = t(".page_title", login: @user.login)
-    @log_items = @user.log_items.sort_by(&:created_at).reverse
+    log_items
   end
 
   # POST admin/users/update
@@ -94,6 +94,12 @@ class Admin::AdminUsersController < Admin::BaseController
     if kin.blank? && kin_email.blank?
       if fnok.present?
         fnok.destroy
+        @user.create_log_item({
+                                action: ArchiveConfig.ACTION_REMOVE_FNOK,
+                                fnok_user_id: fnok.kin.id,
+                                admin_id: current_admin.id,
+                                note: "Change made by #{current_admin.login}"
+                              })
         flash[:notice] = ts("Fannish next of kin was removed.")
       end
       redirect_to admin_user_path(@user)
@@ -103,11 +109,17 @@ class Admin::AdminUsersController < Admin::BaseController
     fnok = @user.build_fannish_next_of_kin if fnok.blank?
     fnok.assign_attributes(kin: kin, kin_email: kin_email)
     if fnok.save
+      @user.create_log_item({
+                              action: ArchiveConfig.ACTION_ADD_FNOK,
+                              fnok_user_id: fnok.kin.id,
+                              admin_id: current_admin.id,
+                              note: "Change made by #{current_admin.login}"
+                            })
       flash[:notice] = ts("Fannish next of kin was updated.")
       redirect_to admin_user_path(@user)
     else
       @hide_dashboard = true
-      @log_items = @user.log_items.sort_by(&:created_at).reverse
+      log_items
       render :show
     end
   end
@@ -178,5 +190,9 @@ class Admin::AdminUsersController < Admin::BaseController
   def creations
     authorize @user
     @page_subtitle = t(".page_title", login: @user.login)
+  end
+
+  def log_items
+    @log_items ||= (@user.log_items + LogItem.where(fnok_user_id: @user.id)).sort_by(&:created_at).reverse
   end
 end
