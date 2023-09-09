@@ -444,7 +444,7 @@ en:
       media_navigation_label: Media
     tos_faq:
       fnok:
-        support: "Support team"
+        support: Support team
   invitations:
     invitation:
       email_address_label: Enter an email address
