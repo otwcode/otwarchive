@@ -30,4 +30,22 @@ class Users::PasswordsController < Devise::PasswordsController
       end
     end
   end
+
+  protected
+
+  # We need to include information about the user (the remaining reset attempts)
+  # in addition to the Archive's configured reset cooldown in the success
+  # message. Otherwise, we would just override `devise_i18n_options` instead of
+  # this method.
+  def successfully_sent?(resource)
+    return super if Devise.paranoid
+    return unless resource.errors.empty?
+
+    set_flash_message!(:notice,
+                       :send_instructions,
+                       send_times_remaining: find_message(:send_times_remaining,
+                                                          count: resource.password_resets_remaining),
+                       send_cooldown_period: find_message(:send_cooldown_period,
+                                                          count: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS))
+  end
 end

@@ -2,8 +2,15 @@ module PasswordResetsLimitable
   extend ActiveSupport::Concern
 
   included do
+    def password_resets_remaining
+      return ArchiveConfig.PASSWORD_RESET_LIMIT unless self.last_reset_within_cooldown?
+
+      limit_delta = ArchiveConfig.PASSWORD_RESET_LIMIT - self.resets_requested
+      limit_delta.positive? ? limit_delta : 0
+    end
+
     def password_resets_limit_reached?
-      self.resets_requested >= ArchiveConfig.PASSWORD_RESET_LIMIT && self.last_reset_within_cooldown?
+      password_resets_remaining < 1
     end
 
     def password_resets_available_time

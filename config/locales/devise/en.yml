@@ -40,7 +40,13 @@ en:
       success: Successfully authenticated from %{kind} account.
     passwords:
       no_token: You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided.
-      send_instructions: Check your email for instructions on how to reset your password.
+      send_cooldown_period:
+        one: After that, you will need to wait %{count} hour before requesting another reset.
+        other: After that, you will need to wait %{count} hours before requesting another reset.
+      send_instructions: Check your email for instructions on how to reset your password. %{send_times_remaining} %{send_cooldown_period}
+      send_times_remaining:
+        one: You may reset your password %{count} more time.
+        other: You may reset your password %{count} more times.
       send_paranoid_instructions: If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.
       updated: Your password has been changed successfully. You are now signed in.
       updated_not_active: Your password has been changed successfully.
