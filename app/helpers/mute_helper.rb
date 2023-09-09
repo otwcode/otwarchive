@@ -26,7 +26,7 @@ module MuteHelper
     user.reload
 
     return if user.muted_users.empty?
-
+ 
     css_classes = user.muted_users.map { |muted_user| ".user-#{muted_user.id}" }.join(", ")
 
     "<style>#{css_classes} { display: none !important; visibility: hidden !important; }</style>".html_safe

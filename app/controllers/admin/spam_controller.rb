@@ -16,7 +16,7 @@ class Admin::SpamController < Admin::BaseController
 
   def bulk_update
     authorize ModeratedWork
-
+    
     if ModeratedWork.bulk_update(spam_params)
       flash[:notice] = "Works were successfully updated"
     else

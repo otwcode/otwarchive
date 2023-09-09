@@ -100,7 +100,7 @@ module CommentsHelper
 
   def can_reply_to_comment?(comment)
     admin_settings = AdminSetting.current
-
+    
     !(comment.unreviewed? ||
       comment.iced? ||
       comment.hidden_by_admin? ||

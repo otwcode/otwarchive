@@ -121,7 +121,7 @@ module UsersHelper
 
   def log_item_action_name(item, user)
     action = item.action
-
+    
     return fnok_action_name(item, user) if [ArchiveConfig.ACTION_ADD_FNOK, ArchiveConfig.ACTION_REMOVE_FNOK].include?(action)
 
     case action

@@ -8,7 +8,7 @@ class UrlActiveValidator < ActiveModel::EachValidator
   # Bypass check for fanfiction.net and ficbook.net because of ip block
   def validate_each(record,attribute,value)
     return true if value.match("fanfiction.net") || value.match("ficbook.net")
-
+    
     inactive_url_msg = "could not be reached. If the URL is correct and the site is currently down, please try again later."
     inactive_url_timeout = 10 # seconds
     begin
@@ -23,5 +23,5 @@ class UrlActiveValidator < ActiveModel::EachValidator
     end
     record.errors.add(attribute, options[:message] || inactive_url_msg) unless status
   end
-
+    
 end

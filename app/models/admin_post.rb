@@ -75,7 +75,7 @@ class AdminPost < ApplicationRecord
   def translated_post_language_must_differ
     return if translated_post.blank?
     return unless translated_post.language == language
-
+          
     errors.add(:translated_post_id, "cannot be same language as original post")
   end
 

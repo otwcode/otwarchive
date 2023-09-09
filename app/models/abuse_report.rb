@@ -85,7 +85,7 @@ class AbuseReport < ApplicationRecord
     work_id = Chapter.find_by(id: chapter_id).try(:work_id)
 
     return url if work_id.nil?
-
+    
     uri = Addressable::URI.parse(url)
     uri.path = "/works/#{work_id}" + uri.path
 

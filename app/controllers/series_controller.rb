@@ -24,7 +24,7 @@ class SeriesController < ApplicationController
     @page_subtitle = ts("%{username} - Series", username: @user.login)
     pseuds = @user.pseuds
     if params[:pseud_id]
-      @pseud = @user.pseuds.find_by!(name: params[:pseud_id])
+      @pseud = @user.pseuds.find_by!(name: params[:pseud_id])   
       @page_subtitle = ts("by ") + @pseud.byline
       pseuds = [@pseud]
     end
