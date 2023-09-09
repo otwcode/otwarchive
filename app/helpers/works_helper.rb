@@ -4,22 +4,22 @@ module WorksHelper
   def work_meta_list(work, chapter = nil)
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
-    list = [[ts('Published:'), 'published', localize(published_date)],
-            [ts('Words:'), 'words', work.word_count],
-            [ts('Chapters:'), 'chapters', work.chapter_total_display]]
+    list = [[ts("Published:"), "published", localize(published_date)],
+            [ts("Words:"), "words", number_with_delimiter(work.word_count)],
+            [ts("Chapters:"), "chapters", chapter_total_display(work)]]
 
     if (comment_count = work.count_visible_comments) > 0
-      list.concat([[ts('Comments:'), 'comments', work.count_visible_comments.to_s]])
+      list.concat([[ts("Comments:"), "comments", number_with_delimiter(work.count_visible_comments)]])
     end
 
     if work.all_kudos_count > 0
-      list.concat([[ts('Kudos:'), 'kudos', work.all_kudos_count.to_s]])
+      list.concat([[ts("Kudos:"), "kudos", number_with_delimiter(work.all_kudos_count)]])
     end
 
     if (bookmark_count = work.public_bookmarks_count) > 0
-      list.concat([[ts('Bookmarks:'), 'bookmarks', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
+      list.concat([[ts("Bookmarks:"), "bookmarks", link_to(number_with_delimiter(bookmark_count), work_bookmarks_path(work))]])
     end
-    list.concat([[ts('Hits:'), 'hits', work.hits]])
+    list.concat([[ts("Hits:"), "hits", number_with_delimiter(work.hits)]])
 
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? ts('Updated:') : ts('Completed:')
@@ -42,15 +42,7 @@ module WorksHelper
 
   # Determines whether or not to expand the related work association fields when the work form loads
   def check_parent_box(work)
-    !work.parents.blank? ||
-    (params[:work] && !(work_parent_value(:url).blank? && work_parent_value(:title).blank? && work_parent_value(:author).blank?))
-  end
-
-  # Passes value of fields for related works back to form when an error occurs on posting
-  def work_parent_value(field)
-    if params[:work] && params[:work][:parent_attributes]
-      params[:work][:parent_attributes][field]
-    end
+    work.parents_after_saving.present?
   end
 
   # Determines whether or not "manage series" dropdown should appear
@@ -65,7 +57,7 @@ module WorksHelper
 
   def language_link(work)
     if work.respond_to?(:language) && work.language
-      link_to work.language.name, work.language
+      link_to work.language.name, work.language, lang: work.language.short
     else
       "N/A"
     end
@@ -99,7 +91,7 @@ module WorksHelper
   end
 
   def get_endnotes_link
-    if current_page?(controller: 'chapters', action: 'show')
+    if current_page?({ controller: "chapters", action: "show" })
       if @work.posted?
         chapter_path(@work.last_posted_chapter.id, anchor: 'work_endnotes')
       else
@@ -111,7 +103,7 @@ module WorksHelper
   end
 
   def get_related_works_url
-    current_page?(controller: 'chapters', action: 'show') ?
+    current_page?({ controller: "chapters", action: "show" }) ?
       chapter_path(@work.last_posted_chapter.id, anchor: 'children') :
       "#children"
   end
@@ -136,7 +128,7 @@ module WorksHelper
     tags = work.tags.group_by(&:type)
     text = "<p>by #{byline(work, { visibility: 'public', full_path: true })}</p>"
     text << work.summary if work.summary
-    text << "<p>Words: #{work.word_count}, Chapters: #{work.chapter_total_display}, Language: #{work.language ? work.language.name : 'English'}</p>"
+    text << "<p>Words: #{work.word_count}, Chapters: #{chapter_total_display(work)}, Language: #{work.language ? work.language.name : 'English'}</p>"
     unless work.series.count == 0
       text << "<p>Series: #{series_list_for_feeds(work)}</p>"
     end
@@ -154,19 +146,19 @@ module WorksHelper
   # Returns true or false to determine whether the work notes module should display
   def show_work_notes?(work)
     work.notes.present? ||
-    work.endnotes.present? ||
-    work.gifts.not_rejected.present? ||
-    work.challenge_claims.present? ||
-    work.parent_work_relationships.present? ||
-    work.approved_related_works.present?
+      work.endnotes.present? ||
+      work.gifts.not_rejected.present? ||
+      work.challenge_claims.present? ||
+      work.parents_after_saving.present? ||
+      work.approved_related_works.present?
   end
 
   # Returns true or false to determine whether the work associations should be included
   def show_associations?(work)
     work.gifts.not_rejected.present? ||
-    work.approved_related_works.where(translation: true).exists? ||
-    work.parent_work_relationships.exists? ||
-    work.challenge_claims.present?
+      work.approved_related_works.where(translation: true).exists? ||
+      work.parents_after_saving.present? ||
+      work.challenge_claims.present?
   end
 
   def all_coauthor_skins
@@ -179,18 +171,31 @@ module WorksHelper
     Language.default_order
   end
 
+  # 1/1, 2/3, 5/?, etc.
+  def chapter_total_display(work)
+    current = work.posted? ? work.number_of_posted_chapters : 1
+    number_with_delimiter(current) + "/" + number_with_delimiter(work.wip_length)
+  end
+
   # For works that are more than 1 chapter, returns "current #/expected #" of chapters
   # (e.g. 3/5, 2/?), with the current # linked to that chapter. If the work is 1 chapter,
   # returns the un-linked version.
   def chapter_total_display_with_link(work)
     total_posted_chapters = work.number_of_posted_chapters
     if total_posted_chapters > 1
-      link_to(total_posted_chapters.to_s,
+      link_to(number_with_delimiter(total_posted_chapters),
               work_chapter_path(work, work.last_posted_chapter.id)) +
         "/" +
-        work.wip_length.to_s
+        number_with_delimiter(work.wip_length)
     else
-      work.chapter_total_display
+      chapter_total_display(work)
     end
+  end
+
+  def get_open_assignments(user)
+    offer_signups = user.offer_assignments.undefaulted.unstarted.sent
+    pinch_hits = user.pinch_hit_assignments.undefaulted.unstarted.sent
+
+    (offer_signups + pinch_hits)
   end
 end

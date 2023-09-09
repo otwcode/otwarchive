@@ -17,7 +17,7 @@ class Admin::AdminUsersController < Admin::BaseController
     if @emails.present?
       found_users, not_found_emails, duplicates = User.search_multiple_by_email(@emails)
       @users = found_users.paginate(page: params[:page] || 1)
-      
+
       if params[:download_button]
         header = [%w(Email Username)]
         found = found_users.map { |u| [u.email, u.login] }
@@ -43,15 +43,11 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   # GET admin/users/1
-  # GET admin/users/1.xml
   def show
+    @user = authorize User.find_by!(login: params[:id])
     @hide_dashboard = true
-    @user = User.find_by(login: params[:id])
-    authorize @user
-    unless @user
-      redirect_to action: "index", query: params[:query], role: params[:role] and return
-    end
-    @log_items = @user.log_items.sort_by(&:created_at).reverse
+    @page_subtitle = t(".page_title", login: @user.login)
+    log_items
   end
 
   # POST admin/users/update
@@ -70,20 +66,60 @@ class Admin::AdminUsersController < Admin::BaseController
     redirect_to request.referer || root_path
   end
 
+  def update_next_of_kin
+    @user = authorize User.find_by!(login: params[:user_login])
+    fnok = @user.fannish_next_of_kin
+    kin = User.find_by(login: params[:next_of_kin_name])
+    kin_email = params[:next_of_kin_email]
+
+    if kin.blank? && kin_email.blank?
+      if fnok.present?
+        fnok.destroy
+        @user.create_log_item({
+                                action: ArchiveConfig.ACTION_REMOVE_FNOK,
+                                fnok_user_id: fnok.kin.id,
+                                admin_id: current_admin.id,
+                                note: "Change made by #{current_admin.login}"
+                              })
+        flash[:notice] = ts("Fannish next of kin was removed.")
+      end
+      redirect_to admin_user_path(@user)
+      return
+    end
+
+    fnok = @user.build_fannish_next_of_kin if fnok.blank?
+    fnok.assign_attributes(kin: kin, kin_email: kin_email)
+    if fnok.save
+      @user.create_log_item({
+                              action: ArchiveConfig.ACTION_ADD_FNOK,
+                              fnok_user_id: fnok.kin.id,
+                              admin_id: current_admin.id,
+                              note: "Change made by #{current_admin.login}"
+                            })
+      flash[:notice] = ts("Fannish next of kin was updated.")
+      redirect_to admin_user_path(@user)
+    else
+      @hide_dashboard = true
+      log_items
+      render :show
+    end
+  end
+
   def update_status
-    @user = User.find_by(login: params[:user_login])
-    authorize @user
-    @user_manager = UserManager.new(current_admin, params)
+    @user = User.find_by!(login: params[:user_login])
+
+    # Authorize on the manager, as we need to check which specific actions the admin can do.
+    @user_manager = authorize UserManager.new(current_admin, @user, params)
     if @user_manager.save
       flash[:notice] = @user_manager.success_message
-      if params[:admin_action] == "spamban"
+      if @user_manager.admin_action == "spamban"
         redirect_to confirm_delete_user_creations_admin_user_path(@user)
       else
-        redirect_to request.referer || root_path
+        redirect_to admin_user_path(@user)
       end
     else
       flash[:error] = @user_manager.error_message
-      redirect_to request.referer || root_path
+      redirect_to admin_user_path(@user)
     end
   end
 
@@ -145,12 +181,7 @@ class Admin::AdminUsersController < Admin::BaseController
     end
   end
 
-  def send_activation
-    @user = User.find_by(login: params[:id])
-    authorize @user
-    # send synchronously to avoid getting caught in mail queue
-    UserMailer.signup_notification(@user.id).deliver_now
-    flash[:notice] = ts("Activation email sent")
-    redirect_to action: :show
+  def log_items
+    @log_items ||= (@user.log_items + LogItem.where(fnok_user_id: @user.id)).sort_by(&:created_at).reverse
   end
 end

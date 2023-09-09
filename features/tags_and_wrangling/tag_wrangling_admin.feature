@@ -61,3 +61,12 @@ Feature: Tag wrangling
       And "Testing" should not be assigned to the wrangler "tangler"
     When I edit the tag "Testing"
     Then I should see "Sign Up"
+
+  Scenario: Tag wrangling admins can download a wrangler's wrangled tags report CSV
+
+    Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
+      And I am logged in as a "tag_wrangling" admin
+    When I go to the wrangling page for "tangler"
+    Then I should see "Tags Wrangled (CSV)"
+    When I follow "Tags Wrangled (CSV)"
+    Then I should download a csv file with the header row "Name Last Updated Type Merger Fandoms Unwrangleable"

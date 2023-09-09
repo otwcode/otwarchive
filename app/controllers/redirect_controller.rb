@@ -11,7 +11,7 @@ class RedirectController < ApplicationController
     else
       @work = Work.find_by_url(url)
       if @work
-        flash[:notice] = ts("You have been redirected here from #{url}. Please update the original link if possible!")
+        flash[:notice] = ts("You have been redirected here from %{url}. Please update the original link if possible!", url: url)
         redirect_to work_path(@work) and return
       else
         flash[:error] = ts("We could not find a work imported from that url in the Archive of Our Own, sorry! Try another url?")

@@ -31,7 +31,7 @@ module CreationNotifier
   def notify_recipients
     return unless self.posted && self.new_gifts.present? && !self.unrevealed?
 
-    recipient_pseuds = Pseud.parse_bylines(self.new_gifts.collect(&:recipient).join(","), assume_matching_login: true)[:pseuds]
+    recipient_pseuds = Pseud.parse_bylines(self.new_gifts.collect(&:recipient).join(","))[:pseuds]
     # check user prefs to see which recipients want to get gift notifications
     # (since each user has only one preference item, this removes duplicates)
     recip_ids = Preference.where(user_id: recipient_pseuds.map(&:user_id),
@@ -94,8 +94,8 @@ module CreationNotifier
 
   # notify authors of related work
   def notify_parents
-    if !self.parent_work_relationships.empty? && !self.unrevealed?
-      self.parent_work_relationships.each {|relationship| relationship.notify_parent_owners}
-    end
+    return if unrevealed?
+
+    parents_after_saving.each(&:notify_parent_owners)
   end
 end

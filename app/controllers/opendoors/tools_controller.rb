@@ -35,8 +35,8 @@ class Opendoors::ToolsController < ApplicationController
       # if that didn't work, try to encode the URL and then parse it
       if @imported_from_url.blank?
         begin 
-          URI.parse(URI.encode(params[:imported_from_url]))
-          @imported_from_url = URI.encode(params[:imported_from_url])
+          URI.parse(URI::Parser.new.escape(params[:imported_from_url]))
+          @imported_from_url = URI::Parser.new.escape(params[:imported_from_url])
         rescue
         end
       end
@@ -48,7 +48,7 @@ class Opendoors::ToolsController < ApplicationController
       # check for any other works 
       works = Work.where(imported_from_url: @imported_from_url)
       if works.count > 0 
-        flash[:error] = ts("There is already a work imported from the url #{@imported_from_url}.")
+        flash[:error] = ts("There is already a work imported from the url %{url}.", url: @imported_from_url)
       else
         # ok let's try to update
         @work.update_attribute(:imported_from_url, @imported_from_url)

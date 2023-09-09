@@ -6,11 +6,11 @@ class UserPolicy < ApplicationPolicy
   # This is further restricted using ALLOWED_ATTRIBUTES_BY_ROLES.
   MANAGE_ROLES = %w[superadmin policy_and_abuse open_doors support tag_wrangling].freeze
 
-  # Roles that allow:
-  # - updating a user's Fannish Next of Kin
-  # - suspending and banning
-  # - deleting all of a spammer's creations
-  JUDGE_ROLES = %w[superadmin policy_and_abuse].freeze
+  # Roles that allow updating the Fannish Next Of Kin of a user.
+  MANAGE_NEXT_OF_KIN_ROLES = %w[superadmin policy_and_abuse support].freeze
+
+  # Roles that allow deleting all of a spammer's creations.
+  SPAM_CLEANUP_ROLES = %w[superadmin policy_and_abuse].freeze
 
   # Define which roles can update which attributes.
   ALLOWED_ATTRIBUTES_BY_ROLES = {
@@ -21,16 +21,32 @@ class UserPolicy < ApplicationPolicy
     "tag_wrangling" => [roles: []]
   }.freeze
 
+  # Define which admin roles can edit which user roles.
+  ALLOWED_USER_ROLES_BY_ADMIN_ROLES = {
+    "open_doors" => %w[archivist opendoors],
+    "policy_and_abuse" => %w[no_resets protected_user],
+    "superadmin" => %w[archivist no_resets official opendoors protected_user tag_wrangler],
+    "tag_wrangling" => %w[tag_wrangler]
+  }.freeze
+
   def can_manage_users?
     user_has_roles?(MANAGE_ROLES)
   end
 
-  def can_judge_users?
-    user_has_roles?(JUDGE_ROLES)
+  def can_manage_next_of_kin?
+    user_has_roles?(MANAGE_NEXT_OF_KIN_ROLES)
+  end
+
+  def can_destroy_spam_creations?
+    user_has_roles?(SPAM_CLEANUP_ROLES)
   end
 
   def permitted_attributes
     ALLOWED_ATTRIBUTES_BY_ROLES.values_at(*user.roles).compact.flatten
+  end
+
+  def can_edit_user_role?(role)
+    ALLOWED_USER_ROLES_BY_ADMIN_ROLES.values_at(*user.roles).compact.flatten.include?(role.name)
   end
 
   alias index? can_manage_users?
@@ -38,11 +54,11 @@ class UserPolicy < ApplicationPolicy
   alias show? can_manage_users?
   alias update? can_manage_users?
 
-  alias update_status? can_judge_users?
-  alias confirm_delete_user_creations? can_judge_users?
-  alias destroy_user_creations? can_judge_users?
+  alias update_next_of_kin? can_manage_next_of_kin?
+
+  alias confirm_delete_user_creations? can_destroy_spam_creations?
+  alias destroy_user_creations? can_destroy_spam_creations?
 
   alias troubleshoot? can_manage_users?
-  alias send_activation? can_manage_users?
   alias activate? can_manage_users?
 end

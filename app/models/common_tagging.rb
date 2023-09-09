@@ -6,6 +6,8 @@
 # is the child tag and filterable is the parent tag.
 # -- Sarken 01/2019
 class CommonTagging < ApplicationRecord
+  include Wrangleable
+
   # we need "touch" here so that when a common tagging changes, the tag(s) themselves are updated and
   # they get noticed by the tag sweeper (which then updates their autocomplete data)
   belongs_to :common_tag, class_name: 'Tag', touch: true
@@ -17,6 +19,7 @@ class CommonTagging < ApplicationRecord
   after_create :update_wrangler
   after_create :inherit_parents
   after_create :remove_uncategorized_media
+  after_create :update_child_autocomplete
 
   after_commit :update_search
 
@@ -24,6 +27,10 @@ class CommonTagging < ApplicationRecord
     unless User.current_user.nil?
       common_tag.update!(last_wrangler: User.current_user)
     end
+  end
+
+  def update_child_autocomplete
+    common_tag.refresh_autocomplete
   end
 
   # A relationship should inherit its characters' fandoms

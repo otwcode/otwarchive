@@ -63,7 +63,7 @@ content notice to visitors who are not logged in
     And I browse the "Canonical Fandom" works
     And I follow the recent chapter link for the work "WIP"
   Then I should see "adult content"
-  When I follow "Proceed"
+  When I follow "Yes, Continue"
   Then I should be on the 3rd chapter of the work "WIP"
 
 Scenario: The recent chapter link in a work's blurb should honor the logged-in
@@ -82,7 +82,7 @@ user's "Show me adult content without checking" preference
     And I browse the "Canonical Fandom" works
     And I follow the recent chapter link for the work "WIP"
   Then I should see "adult content"
-  When I follow "Proceed"
+  When I follow "Yes, Continue"
   Then I should be on the 2nd chapter of the work "WIP"
 
 Scenario: The recent chapter link in a work's blurb should point to

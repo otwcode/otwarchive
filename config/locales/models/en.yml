@@ -1,147 +1,206 @@
+---
 en:
   activerecord:
+    attributes:
+      admin/role:
+        board: Board
+        communications: Communications
+        docs: AO3 Docs
+        elections: Elections
+        open_doors: Open Doors
+        policy_and_abuse: Policy & Abuse
+        superadmin: Super admin
+        support: Support
+        tag_wrangling: Tag Wrangling
+        translation: Translation
+      archive_warning:
+        name_with_colon:
+          one: 'Warning:'
+          other: 'Warnings:'
+      category:
+        name_with_colon:
+          one: 'Category:'
+          other: 'Categories:'
+      chapters/creatorships:
+        base: 'Invalid creator:'
+        pseud_id: Pseud
+      character:
+        name_with_colon:
+          one: 'Character:'
+          other: 'Characters:'
+      creatorships:
+        base: 'Invalid creator:'
+        pseud_id: Pseud
+      external_work:
+        author: Creator
+        user_defined_tags_count: Fandom, relationship, and character tags
+      fandom:
+        name_with_colon:
+          one: 'Fandom:'
+          other: 'Fandoms:'
+      freeform:
+        name_with_colon:
+          one: 'Additional Tag:'
+          other: 'Additional Tags:'
+      meta_tagging:
+        meta_tag: Metatag
+        meta_tag_id: Metatag
+        sub_tag: Subtag
+        sub_tag_id: Subtag
+      rating:
+        name_with_colon: 'Rating:'
+      relationship:
+        name_with_colon:
+          one: 'Relationship:'
+          other: 'Relationships:'
+      role:
+        archivist: Archivist
+        no_resets: No Resets
+        official: Official
+        opendoors: Open Doors
+        protected_user: Protected User
+        tag_wrangler: Tag Wrangler
+        translator: Translator
+      series/creatorships:
+        base: 'Invalid creator:'
+        pseud_id: Pseud
+      user:
+        login: User name
+      work:
+        chapter_total_display: Chapters
+        summary: Summary
+        user_defined_tags_count: Fandom, relationship, character, and additional tags
+      work/chapters:
+        base: 'Invalid chapter:'
+        content: Content
+      work/creatorships:
+        base: 'Invalid creator:'
+        pseud_id: Pseud
+      work/parent_work_relationships/parent:
+        author: The author of a parent work outside the archive
+        title: The title of a parent work outside the archive
+        url: Parent work URL
     errors:
+      messages:
+        forbidden: "%{value} is not allowed"
       models:
-        block:
-          format: "%{message}"
+        abuse_report:
           attributes:
-            blocked_id:
-              taken: "You have already blocked that user."
+            url:
+              not_on_archive: does not appear to be on this site.
+        block:
+          attributes:
             blocked:
-              blank: "Sorry, we couldn't find a user matching that name."
-              self: "Sorry, you can't block yourself."
-              official: "Sorry, you can't block an official account."
+              blank: Sorry, we couldn't find a user matching that name.
+              limit: Sorry, you have blocked too many accounts.
+              official: Sorry, you can't block an official user.
+              self: Sorry, you can't block yourself.
+            blocked_id:
+              taken: You have already blocked that user.
+          format: "%{message}"
         comment:
           attributes:
             user:
+              blocked_comment: Sorry, you have been blocked by one or more of this work's creators.
+              blocked_reply: Sorry, you have been blocked by that user.
               format: "%{message}"
-              blocked_comment: "Sorry, you have been blocked by one or more of this work's creators."
-              blocked_reply: "Sorry, you have been blocked by that user."
         creatorship:
           attributes:
             pseud_id:
-              taken: "is already listed as a creator."
+              taken: is already listed as a creator.
         external_work:
           attributes:
             user_defined_tags_count:
-              at_most:
-                "must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them."
+              at_most: must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them.
+        kudo:
+          attributes:
+            commentable:
+              author_on_own_work: You can't leave kudos on your own work.
+              blank: What did you want to leave kudos on?
+              guest_on_restricted: You can't leave guest kudos on a restricted work.
+              user_is_banned: You cannot leave kudos while your account is banned.
+              user_is_suspended: You cannot leave kudos while your account is suspended.
+            commentable_type:
+              inclusion: What did you want to leave kudos on?
+            user:
+              blocked: Sorry, you have been blocked by one or more of this work's creators.
+          format: "%{message}"
+          taken: You have already left kudos here. :)
+        mute:
+          attributes:
+            muted:
+              blank: Sorry, we couldn't find a user matching that name.
+              limit: Sorry, you have muted too many accounts.
+              official: Sorry, you can't mute an official user.
+              self: Sorry, you can't mute yourself.
+            muted_id:
+              taken: You have already muted that user.
+          format: "%{message}"
+        related_work:
+          attributes:
+            parent:
+              blank: The work you listed as an inspiration does not seem to exist.
+              not_work: Only a link to a work can be listed as an inspiration.
+              protected: You can't use the related works function to cite works by the protected user %{login}.
+          format: "%{message}"
         user:
           attributes:
-            password_confirmation:
-              confirmation: "doesn't match new password."
             login:
               changed_too_recently:
-                one: "can only be changed once per day. You last changed your user name on %{renamed_at}."
-                other: "can only be changed once every %{count} days. You last changed your user name on %{renamed_at}."
+                one: can only be changed once per day. You last changed your user name on %{renamed_at}.
+                other: can only be changed once every %{count} days. You last changed your user name on %{renamed_at}.
+              invalid: must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).
+            password_confirmation:
+              confirmation: doesn't match new password.
         work:
           attributes:
             user_defined_tags_count:
-              at_most:
-                "must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them."
+              at_most: must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them.
+        work/parent_work_relationships:
+          format: "%{message}"
     models:
+      admin_blacklisted_email:
+        one: Banned Email
+        other: Banned Emails
       archive_warning:
-        one: "Warning"
-        other: "Warnings"
-      bookmark: "Bookmark"
+        one: Warning
+        other: Warnings
+      bookmark: Bookmark
       category:
-        one: "Category"
-        other: "Categories"
+        one: Category
+        other: Categories
       chapter:
-        one: "Chapter"
-        other: "Chapters"
+        one: Chapter
+        other: Chapters
       character:
-        one: "Character"
-        other: "Characters"
-      comment: "Comment"
+        one: Character
+        other: Characters
+      comment: Comment
       fandom:
-        one: "Fandom"
-        other: "Fandoms"
+        one: Fandom
+        other: Fandoms
       freeform:
-        one: "Additional Tag"
-        other: "Additional Tags"
-      pseud: "Pseud"
+        one: Additional Tag
+        other: Additional Tags
+      pseud: Pseud
       rating:
-        one: "Rating"
-        other: "Ratings"
+        one: Rating
+        other: Ratings
       relationship:
-        one: "Relationship"
-        other: "Relationships"
+        one: Relationship
+        other: Relationships
       series:
-        one: "Series"
-        other: "Series"
+        one: Series
+        other: Series
       tag:
-        one: "Tag"
-        other: "Tags"
-      work: "Work"
-    attributes:
-      admin/role:
-        board: "Board"
-        communications: "Communications"
-        docs: "AO3 Docs"
-        open_doors: "Open Doors"
-        policy_and_abuse: "Policy & Abuse"
-        superadmin: "Super admin"
-        support: "Support"
-        tag_wrangling: "Tag Wrangling"
-        translation: "Translation"
-      archive_warning:
-        name_with_colon:
-          one: "Warning:"
-          other: "Warnings:"
-      category:
-        name_with_colon:
-          one: "Category:"
-          other: "Categories:"
-      character:
-        name_with_colon:
-          one: "Character:"
-          other: "Characters:"
-      fandom:
-        name_with_colon:
-          one: "Fandom:"
-          other: "Fandoms:"
-      freeform:
-        name_with_colon:
-          one: "Additional Tag:"
-          other: "Additional Tags:"
-      rating:
-        name_with_colon: "Rating:"
-      relationship:
-        name_with_colon:
-          one: "Relationship:"
-          other: "Relationships:"
-      meta_tagging:
-        meta_tag_id: "Metatag"
-        meta_tag: "Metatag"
-        sub_tag_id: "Subtag"
-        sub_tag: "Subtag"
-      creatorships:
-        pseud_id: "Pseud"
-        base: "Invalid creator:"
-      series/creatorships:
-        pseud_id: "Pseud"
-        base: "Invalid creator:"
-      chapters/creatorships:
-        pseud_id: "Pseud"
-        base: "Invalid creator:"
-      work/creatorships:
-        pseud_id: "Pseud"
-        base: "Invalid creator:"
-      work/chapters:
-        content: "Content"
-        base: "Invalid chapter:"
-      external_work:
-        user_defined_tags_count: "Fandom, relationship, and character tags"
-      work:
-        chapter_total_display: "Chapters"
-        summary: "Summary"
-        user_defined_tags_count: "Fandom, relationship, character, and additional tags"
+        one: Tag
+        other: Tags
+      work: Work
   attributes:
-    ticket_number: "Ticket ID"
+    ticket_number: Ticket ID
   errors:
     attributes:
       ticket_number:
-        closed_ticket: "must not be closed."
-        invalid_department: "must be in your department."
-        required: "must exist and not be spam."
+        closed_ticket: must not be closed.
+        invalid_department: must be in your department.
+        required: must exist and not be spam.

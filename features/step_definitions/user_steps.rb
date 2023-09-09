@@ -136,6 +136,10 @@ Given /^I start a new session$/ do
   page.driver.reset!
 end
 
+Given "the user name {string} is on the forbidden list" do |username|
+  allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([username])
+end
+
 # TODO: This should eventually be removed in favor of the "I log out" step,
 # which does the same thing (but has a shorter and less passive name).
 Given /^I am logged out$/ do
@@ -175,6 +179,20 @@ end
 Given "the user {string} is a protected user" do |login|
   user = User.find_by(login: login)
   user.roles = [Role.find_or_create_by(name: "protected_user")]
+end
+
+Given "the user {string} has the no resets role" do |login|
+  user = User.find_by(login: login)
+  user.roles = [Role.find_or_create_by(name: "no_resets")]
+end
+
+Given "the user {string} with the email {string} exists" do |login, email|
+  FactoryBot.create(:user, login: login, email: email)
+end
+
+Given "the user {string} was created using an invitation" do |login|
+  invitation = FactoryBot.create(:invitation)
+  FactoryBot.create(:user, login: login, invitation: invitation)
 end
 
 # WHEN
@@ -219,6 +237,13 @@ When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
   step %{I wait 1 second}
   user = User.find_by(login: login)
   user.creatorships.unapproved.each(&:accept!)
+end
+
+When "I request a password reset for {string}" do |login|
+  step(%{I am on the login page})
+  step(%{I follow "Reset password"})
+  step(%{I fill in "Email address or user name" with "#{login}"})
+  step(%{I press "Reset Password"})
 end
 
 # THEN
@@ -301,4 +326,9 @@ end
 Then /^the user "([^"]*)" should be activated$/ do |login|
   user = User.find_by(login: login)
   expect(user).to be_active
+end
+
+Then "I should see the invitation id for the user {string}" do |login|
+  invitation_id = User.find_by(login: login).invitation.id
+  step %{I should see "Invitation: #{invitation_id}"}
 end

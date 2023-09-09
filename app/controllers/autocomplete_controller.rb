@@ -3,7 +3,6 @@ class AutocompleteController < ApplicationController
 
   skip_before_action :store_location
   skip_before_action :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
-  skip_before_action :fetch_admin_settings
   skip_before_action :set_redirects
   skip_before_action :sanitize_ac_params # can we dare!
 
@@ -53,7 +52,6 @@ class AutocompleteController < ApplicationController
       render_output(Tag.autocomplete_fandom_lookup(params).map {|r| Tag.name_from_autocomplete(r)})
     end
   public
-  def tag_in_fandom; tag_in_fandom_output(params); end
   def character_in_fandom; tag_in_fandom_output(params.merge({tag_type: "character"})); end
   def relationship_in_fandom; tag_in_fandom_output(params.merge({tag_type: "relationship"})); end
 
@@ -103,12 +101,6 @@ class AutocompleteController < ApplicationController
   # more-specific autocompletes should be added below here when they can't be avoided
 
 
-  # Nominated parents
-  def nominated_parents
-    render_output(TagNomination.for_tag_set(OwnedTagSet.find(params[:tag_set_id])).nominated_parents(params[:tagname], params[:term]))
-  end
-
-
   # look up collections ranked by number of items they contain
 
   def collection_fullname
@@ -134,15 +126,6 @@ class AutocompleteController < ApplicationController
   # for looking up existing urls for external works to avoid duplication
   def external_work
     render_output(ExternalWork.where(["url LIKE ?", '%' + params[:term] + '%']).limit(10).order(:url).pluck(:url))
-  end
-
-  # people signed up for a challenge
-  def challenge_participants
-    search_param = params[:term]
-    collection_id = params[:collection_id]
-    render_output(Pseud.limit(10).order(:name).joins(:challenge_signups)
-                    .where(["pseuds.name LIKE ? AND challenge_signups.collection_id = ?",
-                            '%' + search_param + '%', collection_id]).map(&:byline))
   end
 
   # the pseuds of the potential matches who could fulfill the requests in the given signup

@@ -1,5 +1,5 @@
 class AdminSetting < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
+  include AfterCommitEverywhere
 
   belongs_to :last_updated, class_name: 'Admin', foreign_key: :last_updated_by
   validates_presence_of :last_updated_by
@@ -8,7 +8,6 @@ class AdminSetting < ApplicationRecord
 
   before_save :update_invite_date
   before_update :check_filter_status
-  after_save :expire_cached_settings
 
   belongs_to :default_skin, class_name: 'Skin'
 
@@ -46,7 +45,7 @@ class AdminSetting < ApplicationRecord
   end
 
   def self.current
-    Rails.cache.fetch("admin_settings", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
+    Rails.cache.fetch("admin_settings-v1", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
   end
 
   class << self
@@ -60,7 +59,7 @@ class AdminSetting < ApplicationRecord
       if Date.today >= self.invite_from_queue_at.to_date
         new_date = Time.now + self.invite_from_queue_frequency.days
         self.first.update_attribute(:invite_from_queue_at, new_date)
-        InviteRequest.invite
+        InviteFromQueueJob.perform_now(count: invite_from_queue_number)
       end
     end
   end
@@ -71,11 +70,19 @@ class AdminSetting < ApplicationRecord
     self.send(method, *args)
   end
 
-  private
+  after_save :recache_settings
+  def recache_settings
+    # If the default skin has just been created and set, it will have a closed
+    # file handle from attaching a preview image, and cannot be serialized for
+    # caching. To avoid that, we need to reload a fresh copy of the record,
+    # within the current transaction to guarantee up-to-date data.
+    self.reload
 
-  def expire_cached_settings
-    Rails.cache.delete("admin_settings")
+    # However, we only cache it if the transaction is successful.
+    after_commit { Rails.cache.write("admin_settings-v1", self) }
   end
+
+  private
 
   def check_filter_status
     if self.suspend_filter_counts_changed?

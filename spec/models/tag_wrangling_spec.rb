@@ -185,6 +185,31 @@ describe Tag do
           expect(synonym.children.reload).to contain_exactly
         end
 
+        describe "with asynchronous jobs run asynchronously" do
+          include ActiveJob::TestHelper
+
+          it "transfers the subtags to the new parent autocomplete" do
+            child = create(:canonical_character)
+            synonym.add_association(child)
+            synonym.reload
+
+            fandom_redis_key = Tag.transliterate("autocomplete_fandom_#{fandom.name.downcase}_character")
+
+            expect(REDIS_AUTOCOMPLETE.exists(fandom_redis_key)).to be false
+
+            synonym.update!(syn_string: fandom.name)
+
+            User.current_user = nil # No current user in asynchronous context (?)
+            perform_enqueued_jobs
+
+            expect(fandom.children.reload).to contain_exactly(child)
+            expect(synonym.children.reload).to be_empty
+
+            expect(REDIS_AUTOCOMPLETE.exists(fandom_redis_key)).to be true
+            expect(REDIS_AUTOCOMPLETE.zrange(fandom_redis_key, 0, -1)).to eq(["#{child.id}: #{child.name}"])
+          end
+        end
+
         it "transfers favorite tags" do
           user = create(:user)
           user.favorite_tags.create(tag: synonym)
@@ -501,6 +526,10 @@ describe Tag do
   end
 
   describe "when the resque queue is long" do
+    # Disable immediate job processing. Jobs will only be processed when we
+    # call "perform_enqueued_jobs", which simulates a delay in the queue.
+    include ActiveJob::TestHelper
+
     # https://otwarchive.atlassian.net/browse/AO3-4077
     it "deletes the inherited metatag when both direct ones are removed" do
       lowest = create(:canonical_fandom)
@@ -509,10 +538,13 @@ describe Tag do
       middle.meta_tags << highest
       middle.sub_tags << lowest
 
-      suspend_resque_workers do
-        middle.reload
-        middle.update!(associations_to_remove: [lowest.id, highest.id])
-      end
+      perform_enqueued_jobs
+
+      middle.reload
+      middle.update!(associations_to_remove: [lowest.id, highest.id])
+      expect(enqueued_jobs).not_to be_empty
+
+      perform_enqueued_jobs
 
       expect(lowest.meta_tags.reload).not_to include(highest)
     end
@@ -525,10 +557,13 @@ describe Tag do
 
       work = create(:work, fandom_string: synonym.name)
 
-      suspend_resque_workers do
-        canonical.reload
-        canonical.update!(associations_to_remove: [synonym.id, meta.id])
-      end
+      perform_enqueued_jobs
+
+      canonical.reload
+      canonical.update!(associations_to_remove: [synonym.id, meta.id])
+      expect(enqueued_jobs).not_to be_empty
+
+      perform_enqueued_jobs
 
       expect(work.filters.reload).not_to include(meta)
     end

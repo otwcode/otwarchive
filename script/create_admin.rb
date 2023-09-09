@@ -1,5 +1,3 @@
-#!script/rails runner
-#
 # Run this script and follow the onscreen instructions:
 #   bundle exec rails r script/create_admin.rb
 
@@ -29,6 +27,7 @@ puts <<~PROMPT
   where
 
   - USERNAME is their OTW name without the admin- prefix (spaces will be removed)
+  - EMAIL is the trusted address provided by VolCom
   - EMAIL/ROLE can be left blank to skip updating email/roles of existing admins
   - ROLE is one of:
 
@@ -40,34 +39,27 @@ PROMPT
 
 list = CSV.parse(multi_gets)
 
-puts "\nFor new admins, copy and paste each section into a separate file and upload to the admin's Vault:\n"
-
 admins = []
 list.each do |user|
   login = user[0].gsub(/\s+/, "")
   email = user[1]&.strip
-  roles = user.drop(2).compact.map(&:strip)
+  roles = user.drop(2).compact.map(&:strip).map(&:downcase)
 
   a = Admin.find_or_initialize_by(login: "admin-#{login}")
+  success_message = a.new_record? ? "Created and notified" : "Updated"
   a.email = email if email.present?
   a.roles = roles if roles.present?
 
+  # If this is a new admin, we need to set a temporary password.
   if a.new_record?
-    # Create password only for new admins
-    password = `pwgen 8 1`.strip
+    password = SecureRandom.alphanumeric(10)
     a.password = password
     a.password_confirmation = password
-
-    password_file = <<~PASSFILE
-      username: #{a.login}
-      password: #{password}
-      #{new_admin_session_url}
-    PASSFILE
   end
 
-  puts "==== #{a.login}.txt"
+  puts "==== #{a.login}"
   if a.save
-    puts password_file if password_file.present?
+    puts success_message
     admins << a
   else
     puts a.errors.full_messages

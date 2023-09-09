@@ -588,4 +588,54 @@ describe Work do
       end
     end
   end
+
+  describe "#destroy" do
+    let(:work) { create(:work) }
+
+    it "does not save an original creator record" do
+      expect { work.destroy }.not_to change { WorkOriginalCreator.count }
+    end
+
+    context "when an original creator exists" do
+      let!(:original_creator) { create(:work_original_creator, work: work) }
+
+      it "deletes the original creator" do
+        work.destroy
+        expect { original_creator.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe "#allow_collection_invitation?" do
+    let(:creator1) { create(:user) }
+    let(:creator2) { create(:user) }
+    let(:work) { create(:work, authors: [creator1.default_pseud, creator2.default_pseud]) }
+
+    context "when all creators allow collection invitations" do
+      before do
+        creator1.preference.update(allow_collection_invitation: true)
+        creator2.preference.update(allow_collection_invitation: true)
+      end
+
+      it "returns true" do
+        expect(work.allow_collection_invitation?).to be true
+      end
+    end
+
+    context "when all creators disallow collection invitations" do
+      it "returns false" do
+        expect(work.allow_collection_invitation?).to be false
+      end
+    end
+
+    context "when creators have a mix of collection invitation preferences" do
+      before do
+        creator1.preference.update(allow_collection_invitation: true)
+      end
+
+      it "returns true" do
+        expect(work.allow_collection_invitation?).to be true
+      end
+    end
+  end
 end

@@ -12,14 +12,14 @@ class UserMailer < ApplicationMailer
   helper :series
   include HtmlCleaner
 
-  # Send an email letting creators know their work has been added to a collection
-  def added_to_collection_notification(user_id, work_id, collection_id)
+  # Send an email letting a creator know that their work has been added to a collection by an archivist
+  def archivist_added_to_collection_notification(user_id, work_id, collection_id)
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id)
     mail(
-         to: @user.email,
-         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Your work was added to a collection"
+      to: @user.email,
+      subject: t(".subject", app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
     )
   end
 
@@ -216,6 +216,7 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(Locale.find(@assigned_user.preference.preferred_locale).iso) do
       mail(
         to: @assigned_user.email,
+        # i18n-tasks-use t('user_mailer.challenge_assignment_notification.subject')
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
       )
     end
@@ -253,13 +254,11 @@ class UserMailer < ApplicationMailer
     @archivist = User.find(archivist_id)
     @user = @creatorship.pseud.user
     @creation = @creatorship.creation
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t("user_mailer.creatorship_notification_archivist.subject",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.creatorship_notification_archivist.subject",
+                 app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends email when a user is added as a co-creator
@@ -268,13 +267,11 @@ class UserMailer < ApplicationMailer
     @adding_user = User.find(adding_user_id)
     @user = @creatorship.pseud.user
     @creation = @creatorship.creation
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t("user_mailer.creatorship_notification.subject",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.creatorship_notification.subject",
+                 app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends email when a user is added as an unapproved/pending co-creator
@@ -283,13 +280,11 @@ class UserMailer < ApplicationMailer
     @inviting_user = User.find(inviting_user_id)
     @user = @creatorship.pseud.user
     @creation = @creatorship.creation
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t("user_mailer.creatorship_request.subject",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.creatorship_request.subject",
+                 app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends emails to creators whose stories were listed as the inspiration of another work
@@ -348,11 +343,12 @@ class UserMailer < ApplicationMailer
   def delete_work_notification(user, work)
     @user = user
     @work = work
-    work_copy = generate_attachment_content_from_work(work)
-    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
-    filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
-    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
+    download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
+    html = DownloadWriter.new(download).generate_html
+    html = ::Mail::Encodings::Base64.encode(html)
+    attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
+    attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
+
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -367,11 +363,12 @@ class UserMailer < ApplicationMailer
   def admin_deleted_work_notification(user, work)
     @user = user
     @work = work
-    work_copy = generate_attachment_content_from_work(work)
-    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
-    filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
-    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
+    download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
+    html = DownloadWriter.new(download).generate_html
+    html = ::Mail::Encodings::Base64.encode(html)
+    attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
+    attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
+
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
@@ -388,6 +385,7 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
       mail(
         to: @user.email,
+        # i18n-tasks-use t('user_mailer.admin_hidden_work_notification.subject')
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
@@ -421,34 +419,15 @@ class UserMailer < ApplicationMailer
 
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)
+    @username = abuse_report.username
     @email = abuse_report.email
     @url = abuse_report.url
+    @summary = abuse_report.summary
     @comment = abuse_report.comment
     mail(
       to: abuse_report.email,
-      subject: "#{t 'user_mailer.abuse_report.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
+      subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
     )
-  end
-
-  def generate_attachment_content_from_work(work)
-    attachment_string =  "Title: " + work.title + "<br />" + "by " + work.pseuds.collect(&:name).join(", ") + "<br />\n"
-    attachment_string += "<br/>Tags: " + work.tags.collect(&:name).join(", ") + "<br/>\n" unless work.tags.blank?
-    attachment_string += "<br/>Summary: " + work.summary + "<br/>\n" unless work.summary.blank?
-    attachment_string += "<br/>Notes: " + work.notes + "<br/>\n" unless work.notes.blank?
-    attachment_string += "<br/>End Notes: " + work.endnotes + "<br/>\n" unless work.endnotes.blank?
-    attachment_string += "<br/>Published at: " + work.first_chapter.published_at.to_s + "<br/>\n" unless work.first_chapter.published_at.blank?
-    attachment_string += "Revised at: " + work.revised_at.to_s + "<br/>\n" unless work.revised_at.blank?
-
-    work.chapters.each do |chapter|
-      attachment_string += "<br/>Chapter " + chapter.position.to_s unless !work.chaptered?
-      attachment_string += ": " + chapter.title unless chapter.title.blank?
-      attachment_string += "\n<br/>by: " + chapter.pseuds.collect(&:name).join(", ") + "<br />\n" unless chapter.pseuds.sort == work.pseuds.sort
-      attachment_string += "<br/>Summary: " + chapter.summary + "<br/>\n" unless chapter.summary.blank?
-      attachment_string += "<br/>Notes: " + chapter.notes + "<br/>\n" unless chapter.notes.blank?
-      attachment_string += "<br/>End Notes: " + chapter.endnotes + "<br/>\n" unless chapter.endnotes.blank?
-      attachment_string += "<br/>" + chapter.content + "<br />\n"
-    end
-    return attachment_string
   end
 
   protected

@@ -103,7 +103,7 @@ module MailerHelper
   # emails.
   def creation_title(creation)
     if creation.is_a?(Chapter)
-      ts("Chapter %{position} of %{title}",
+      t("mailer.general.creation.title_with_chapter_number",
          position: creation.position, title: creation.work.title)
     else
       creation.title
@@ -162,6 +162,8 @@ module MailerHelper
     "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
   end
 
+  # TODO: We're using this for labels in set_password_notification, too. Let's
+  # take the "work" out of the name.
   def style_work_metadata_label(text)
     style_bold(work_metadata_label(text))
   end
@@ -184,6 +186,12 @@ module MailerHelper
   def work_tag_metadata_label(tags)
     return if tags.empty?
 
+    # i18n-tasks-use t('activerecord.models.archive_warning')
+    # i18n-tasks-use t('activerecord.models.character')
+    # i18n-tasks-use t('activerecord.models.fandom')
+    # i18n-tasks-use t('activerecord.models.freeform')
+    # i18n-tasks-use t('activerecord.models.rating')
+    # i18n-tasks-use t('activerecord.models.relationship')
     type = tags.first.type
     t("activerecord.models.#{type.underscore}", count: tags.count) + t("mailer.general.metadata_label_indicator")
   end

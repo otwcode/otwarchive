@@ -1,5 +1,4 @@
 class Series < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
   include Searchable
   include Creatable
@@ -56,6 +55,8 @@ class Series < ApplicationRecord
     joins(:approved_creatorships).
     where("creatorships.pseud_id IN (?)", pseuds.collect(&:id))
   }
+
+  scope :for_blurb, -> { includes(:work_tags, :pseuds) }
 
   def posted_works
     self.works.posted
@@ -147,6 +148,12 @@ class Series < ApplicationRecord
   def expire_caches
     # Expire cached work blurbs and metas if series title changes
     self.works.each(&:touch) if saved_change_to_title?
+  end
+
+  def expire_byline_cache
+    [true, false].each do |only_path|
+      Rails.cache.delete("#{cache_key}/byline-nonanon/#{only_path}")
+    end
   end
 
   # Change the positions of the serial works in the series

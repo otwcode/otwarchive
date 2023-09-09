@@ -18,11 +18,10 @@ class Admin::AdminInvitationsController < Admin::BaseController
   end
 
   def invite_from_queue
-    InviteRequest.order(:position).limit(invitation_params[:invite_from_queue].to_i).each do |request|
-      request.invite_and_remove(current_admin)
-    end
-    InviteRequest.reset_order
-    flash[:notice] = t('invited_from_queue', default: "%{count} people from the invite queue were invited.", count: invitation_params[:invite_from_queue].to_i)
+    count = invitation_params[:invite_from_queue].to_i
+    InviteFromQueueJob.perform_later(count: count, creator: current_admin)
+
+    flash[:notice] = t(".success", count: count)
     redirect_to admin_invitations_path
   end
 
@@ -44,13 +43,14 @@ class Admin::AdminInvitationsController < Admin::BaseController
     end
     if !invitation_params[:token].blank?
       @invitation = Invitation.find_by(token: invitation_params[:token])
-    elsif !invitation_params[:invitee_email].blank?
-      @invitations = Invitation.where('invitee_email LIKE ?', "%#{invitation_params[:invitee_email]}%")
+    elsif invitation_params[:invitee_email].present?
+      @invitations = Invitation.where("invitee_email LIKE ?", "%#{invitation_params[:invitee_email]}%")
       @invitation = @invitations.first if @invitations.length == 1
     end
-    unless @user || @invitation || @invitations
-      flash.now[:error] = t('user_not_found', default: "No results were found. Try another search.")
-    end
+
+    return if @user || @invitation || @invitations.present?
+
+    flash.now[:error] = t(".user_not_found")
   end
 
   private

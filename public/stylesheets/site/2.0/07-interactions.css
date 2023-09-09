@@ -180,6 +180,7 @@ We only use error messages for LiveValidation. Style spoofs the system error mes
   position: absolute;
   margin-top: 0.643em;
   margin-right: 15em;
+  z-index: 1;
 }
 
 .LV_invalid {
@@ -288,6 +289,10 @@ form li ul.autocomplete li.input {
 .ui-draggable form {
   cursor: move;
     box-shadow: 0 0 3px #555;
+}
+
+.ui-draggable a {
+  cursor: default;
 }
 
 /* WIDGET: DATEPICKER, TIMEPICKER (todo, requires ARIA managed focus) */

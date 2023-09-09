@@ -11,9 +11,9 @@ module SearchHelper
       total_entries = collection.total_entries
       total_entries = collection.unlimited_total_entries if collection.respond_to?(:unlimited_total_entries)
       header << ts(" %{start_number} - %{end_number} of %{total} %{things}",
-                   start_number: collection.offset + 1,
-                   end_number: collection.offset + collection.length,
-                   total: total_entries,
+                   start_number: number_with_delimiter(collection.offset + 1),
+                   end_number: number_with_delimiter(collection.offset + collection.length),
+                   total: number_with_delimiter(total_entries),
                    things: item_name.pluralize)
     end
     header << ts("found") if search.present? && search.query.present?
@@ -35,11 +35,28 @@ module SearchHelper
   end
 
   def search_results_found(results)
-    ts("%{count} Found", count: results.unlimited_total_entries)
+    ts("%{count} Found", count: number_with_delimiter(results.unlimited_total_entries))
   end
 
   def random_search_tip
     ArchiveConfig.SEARCH_TIPS[rand(ArchiveConfig.SEARCH_TIPS.size)]
   end
 
+  def works_original_path
+    url_for(
+      controller: :works,
+      action: :index,
+      only_path: true,
+      **params.slice(:tag_id, :fandom_id, :collection_id, :pseud_id, :user_id).permit!
+    )
+  end
+
+  def bookmarks_original_path
+    url_for(
+      controller: :bookmarks,
+      action: :index,
+      only_path: true,
+      **params.slice(:tag_id, :collection_id, :pseud_id, :user_id).permit!
+    )
+  end
 end

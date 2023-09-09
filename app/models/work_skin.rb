@@ -1,6 +1,4 @@
 class WorkSkin < Skin
-  include ActiveModel::ForbiddenAttributesProtection
-
   include SkinCacheHelper
 
   has_many :works
@@ -11,7 +9,7 @@ class WorkSkin < Skin
     return if self.css.blank?
     check = lambda {|ruleset, property, value|
       if property == "position" && value == "fixed"
-        errors.add(:base, ts("The #{property} property in #{ruleset.selectors.join(', ')} cannot have the value #{value} in Work skins, sorry!"))
+        errors.add(:base, ts("The %{property} property in %{selectors} cannot have the value %{value} in Work skins, sorry!", property: property, selectors: ruleset.selectors.join(", "), value: value))
         return false
       end
       return true

@@ -1,6 +1,24 @@
 require "spec_helper"
 
 describe User do
+  describe "validations" do
+    context "with a forbidden user name" do
+      let(:forbidden_username) { Faker::Lorem.characters(number: 8) }
+
+      before do
+        allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([forbidden_username])
+      end
+
+      it { is_expected.not_to allow_values(forbidden_username, forbidden_username.swapcase).for(:login) }
+
+      it "does not prevent saving when the name is unchanged" do
+        existing_user = build(:user, login: forbidden_username)
+        existing_user.save!(validate: false)
+        expect(existing_user.save).to be_truthy
+      end
+    end
+  end
+
   describe "#destroy" do
     context "on a user with kudos" do
       let(:user) { create(:user) }
@@ -13,6 +31,23 @@ describe User do
           expect(kudo.user).to be_nil
           expect(kudo.user_id).to be_nil
         end
+      end
+    end
+
+    context "when the user is set as someone else's fnok" do
+      let(:fnok) { create(:fannish_next_of_kin) }
+      let(:user) { fnok.kin }
+      let(:person) { fnok.user }
+
+      it "removes the relationship and creates a log item of the removal" do
+        user_id = user.id
+        user.destroy!
+        expect(person.reload.fannish_next_of_kin).to be_nil
+        log_item = person.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
+        expect(log_item.fnok_user_id).to eq(user_id)
+        expect(log_item.admin_id).to be_nil
+        expect(log_item.note).to eq("System Generated")
       end
     end
   end
@@ -85,7 +120,6 @@ describe User do
           it "does not save" do
             expect(bad_email.save).to be_falsey
             expect(bad_email.errors[:email]).to include("should look like an email address.")
-            expect(bad_email.errors[:email]).to include("does not seem to be a valid address.")
           end
         end
       end
@@ -115,30 +149,31 @@ describe User do
         it "does not save a duplicate login" do
           new_user.login = existing_user.login
           expect(new_user.save).to be_falsey
-          expect(new_user.errors[:login].first).to eq("has already been taken")
+          expect(new_user.errors[:login].first).to include("has already been taken")
         end
 
         it "does not save a duplicate email" do
           new_user.email = existing_user.email
           expect(new_user.save).to be_falsey
-          expect(new_user.errors[:email].first).to eq("has already been taken")
+          expect(new_user.errors[:email].first).to include("has already been taken")
+        end
+
+        it "does not save a duplicate email with different capitalization" do
+          new_user.email = existing_user.email.capitalize
+          expect(new_user.save).to be_falsey
+          expect(new_user.errors[:email].first).to include("has already been taken")
         end
       end
     end
   end
 
   describe "#update" do
-    let(:existing_user) { create(:user) }
+    let!(:existing_user) { create(:user) }
 
     it "sets renamed_at if username is changed" do
       freeze_time
       existing_user.update(login: "new_username")
       expect(existing_user.renamed_at).to eq(Time.current)
-    end
-
-    it "does not set renamed_at when username is not changed" do
-      existing_user.update(email: "newemail@example.com")
-      expect(existing_user.renamed_at).to be_nil
     end
 
     context "username was recently changed" do
@@ -173,6 +208,41 @@ describe User do
         expect(existing_user.login).to eq("new")
       end
     end
+
+    context "when email is changed" do
+      before do
+        existing_user.update!(email: "newemail@example.com")
+        existing_user.reload
+      end
+
+      it "does not set renamed_at" do
+        expect(existing_user.renamed_at).to be_nil
+      end
+
+      it "creates a log item" do
+        log_item = existing_user.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_NEW_EMAIL)
+        expect(log_item.admin_id).to be_nil
+        expect(log_item.note).to eq("System Generated")
+      end
+    end
+
+    context "as an admin" do
+      let(:admin) { create(:admin) }
+
+      before do
+        User.current_user = admin
+        existing_user.update!(email: "new_email@example.com")
+        existing_user.reload
+      end
+
+      it "saves an admin log item" do
+        log_item = existing_user.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_NEW_EMAIL)
+        expect(log_item.admin_id).to eq(admin.id)
+        expect(log_item.note).to eq("Change made by #{admin.login}")
+      end
+    end
   end
 
   describe ".search_multiple_by_email" do
@@ -199,6 +269,96 @@ describe User do
       expect(not_found).to eq(["unknown@ao3.org", "nobody@example.com"])
       expect(found.size).to eq(emails.map(&:downcase).uniq.size - not_found.size)
       expect(duplicates).to eq(3)
+    end
+  end
+
+  describe "#password_resets_limit_reached?" do
+    context "with 0 resets requested" do
+      let(:user) { build(:user, resets_requested: 0) }
+
+      it "has not reached the requests limit" do
+        expect(user.password_resets_limit_reached?).to be_falsy
+      end
+    end
+
+    context "with the maximum number of password resets requested" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT) }
+
+      context "when the cooldown period has passed" do
+        before do
+          user.reset_password_sent_at = ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago
+        end
+
+        it "has not reached the requests limit" do
+          expect(user.password_resets_limit_reached?).to be_falsy
+        end
+      end
+
+      context "when the cooldown period has not passed" do
+        before do
+          user.reset_password_sent_at = Time.current
+        end
+
+        it "has reached the requests limit" do
+          expect(user.password_resets_limit_reached?).to be_truthy
+        end
+      end
+    end
+  end
+
+  describe "#update_password_resets_requested" do
+    context "with 0 resets requested" do
+      let(:user) { build(:user, resets_requested: 0) }
+
+      it "increments the password reset requests field" do
+        expect { user.update_password_resets_requested }
+          .to change { user.resets_requested }
+          .to(1)
+      end
+    end
+
+    context "with under the maximum number of password resets requested" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT - 1) }
+
+      context "when the cooldown period has passed" do
+        before do
+          user.reset_password_sent_at = ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago
+        end
+
+        it "resets the password reset request field to 1" do
+          expect { user.update_password_resets_requested }
+            .to change { user.resets_requested }
+            .to(1)
+        end
+      end
+
+      context "when the cooldown period has not passed" do
+        before do
+          user.reset_password_sent_at = Time.current
+        end
+
+        it "increments the password reset requests field" do
+          expect { user.update_password_resets_requested }
+            .to change { user.resets_requested }
+            .by(1)
+        end
+      end
+    end
+
+    context "with the maximum number of password resets requested" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT) }
+
+      context "when the cooldown period has passed" do
+        before do
+          user.reset_password_sent_at = ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago
+        end
+
+        it "resets the password reset request field to 1" do
+          expect { user.update_password_resets_requested }
+            .to change { user.resets_requested }
+            .to(1)
+        end
+      end
     end
   end
 end

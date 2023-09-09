@@ -1,0 +1,41 @@
+---
+en:
+  collections_helper:
+    collection_item_approval_options:
+      collection:
+        approved: Approved by collection moderators
+        rejected: Rejected by collection moderators
+        unreviewed: Unreviewed by collection moderators
+      user:
+        bookmark:
+          approved: Approved by bookmarker
+          rejected: Rejected by bookmarker
+          unreviewed: Unreviewed by bookmarker
+        work:
+          approved: Approved by creator
+          rejected: Rejected by creator
+          unreviewed: Unreviewed by creator
+    collection_item_approval_options_label:
+      collection: Collection approval status
+      user:
+        bookmark: Bookmarker approval status
+        work: Creator approval status
+  users_helper:
+    log:
+      ban: Suspended Permanently
+      email_change: Email Changed
+      fnok:
+        has_added: 'Fannish Next of Kin Added: %{user_id}'
+        has_removed: 'Fannish Next of Kin Removed: %{user_id}'
+        was_added: 'Added as Fannish Next of Kin for: %{user_id}'
+        was_removed: 'Removed as Fannish Next of Kin for: %{user_id}'
+      lift_suspension: Suspension Lifted
+      note: Note Added
+      password_change: Password Changed
+      rename: Username Changed
+      role_added: 'Role Added: '
+      role_removed: 'Role Removed: '
+      suspended: 'Suspended until '
+      troubleshot: Account Troubleshot
+      validated: Account Validated
+      warn: Warned

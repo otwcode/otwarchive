@@ -30,6 +30,13 @@
                                     ArchiveConfig.TITLE_MAX) %>
       </dd>
       <dt>
+        <%= f.label :language_id, ts("Language") %>
+        <%= link_to_help "languages-help" %>
+      </dt>
+      <dd>
+        <%= f.select(:language_id, language_options_for_select(sorted_languages, "id"), prompt: " ") %>
+      </dd>
+      <dt>
         <%= f.label :summary, ts("Creator's Summary") %>
         <%= ts("(please copy and paste from original work)") %>
       </dt>

@@ -1,4 +1,4 @@
-@skins
+@set-default-skin
 Feature: Non-public site and work skins
 
   Scenario: A user should be able to create a skin with CSS
@@ -296,7 +296,7 @@ Feature: Non-public site and work skins
       And the skin "Parent Skin" is cached
       And I change my skin to "Child Skin"
     # Only admins can edit cached skins:
-    When I am logged in as an admin
+    When I am logged in as a "superadmin" admin
       And I edit the skin "Parent Skin"
       And I fill in "CSS" with "body { background: cyan; }"
       And I press "Update"
@@ -321,7 +321,7 @@ Feature: Non-public site and work skins
       And the skin "Parent Skin" is cached
       And I change my skin to "Child Skin"
     # Only admins can edit cached skins:
-    When I am logged in as an admin
+    When I am logged in as a "superadmin" admin
       And I edit the skin "Parent Skin"
       And I fill in "CSS" with "body { background: cyan; }"
       And I press "Update"

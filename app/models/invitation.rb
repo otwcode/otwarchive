@@ -1,8 +1,6 @@
 # Beta invitations
 # http://railscasts.com/episodes/124-beta-invitations
 class Invitation < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   belongs_to :creator, polymorphic: true
   belongs_to :invitee, polymorphic: true
   belongs_to :external_author
@@ -16,7 +14,7 @@ class Invitation < ApplicationRecord
   end
 
   # ensure email is valid
-  validates :invitee_email, email_veracity: true, allow_blank: true
+  validates :invitee_email, email_format: true, allow_blank: true
 
   scope :unsent, -> { where(invitee_email: nil, redeemed_at: nil) }
   scope :unredeemed, -> { where('invitee_email IS NOT NULL and redeemed_at IS NULL') }
@@ -89,5 +87,4 @@ class Invitation < ApplicationRecord
       self.creator.save!(validate: false)
     end
   end
-
 end
