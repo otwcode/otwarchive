@@ -1,4 +1,4 @@
-<% unless @works.size.zero? %>
+<% unless @works.empty? %>
   <div class="work listbox group" id="works-summary">
     <h3 class="heading"><%= t(".works", count: works.size) %></h3>
     <%= render "works/work_abbreviated_list", works: works %>
@@ -6,7 +6,7 @@
   </div>
 <% end %>
 
-<% unless @comments.size.zero? %>
+<% unless @comments.empty? %>
   <%# We use comments rather than comment as the class because .comment:after
 # create a clear that causes wonky styling when there are only a few
 # comments. %>
