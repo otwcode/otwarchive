@@ -21,12 +21,16 @@ class Users::PasswordsController < Devise::PasswordsController
       redirect_to root_path and return
     end
 
-    super do |user|
-      if user.nil? || user.new_record?
-        flash.now[:notice] = ts("We couldn't find an account with that email address or username. Please try again?")
-      else
-        user.update_password_resets_requested
-        user.save
+    if user.present? && !user.new_record?
+      user.update_password_resets_requested
+      user.save
+    end
+
+    super do |target_user|
+      if target_user.nil? || target_user.new_record?
+        flash.now[:notice] = ts(
+          "We couldn't find an account with that email address or username. Please try again?"
+        )
       end
     end
   end
