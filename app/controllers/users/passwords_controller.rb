@@ -9,7 +9,7 @@ class Users::PasswordsController < Devise::PasswordsController
   def create
     user = User.find_for_authentication(resource_params.permit(:login))
     if user.nil? || user.new_record?
-      flash[:notice] = t(".user_not_found")
+      flash[:error] = t(".user_not_found")
       redirect_to new_user_password_path and return
     end
 
