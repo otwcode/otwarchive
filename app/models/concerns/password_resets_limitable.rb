@@ -24,12 +24,19 @@ module PasswordResetsLimitable
         self.resets_requested += 1
       end
     end
+
+    protected
+
+    def clear_reset_password_token
+      super
+      self.resets_requested = 0
+    end
   end
 
   private
 
   def last_reset_within_cooldown?
-    self.reset_password_sent_at.nil? ||
+    self.reset_password_sent_at.present? &&
       self.reset_password_sent_at > ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago
   end
 end
