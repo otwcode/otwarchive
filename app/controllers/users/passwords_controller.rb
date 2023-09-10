@@ -41,10 +41,10 @@ class Users::PasswordsController < Devise::PasswordsController
     return super if Devise.paranoid
     return unless resource.errors.empty?
 
-    flash[:notice] = t(".create.send_instructions",
-                       send_times_remaining: t(".create.send_times_remaining",
+    flash[:notice] = t("users.passwords.create.send_instructions",
+                       send_times_remaining: t("users.passwords.create.send_times_remaining",
                                                count: resource.password_resets_remaining),
-                       send_cooldown_period: t(".create.send_cooldown_period",
+                       send_cooldown_period: t("users.passwords.create.send_cooldown_period",
                                                count: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS))
   end
 end
