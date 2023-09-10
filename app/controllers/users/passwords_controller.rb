@@ -8,11 +8,15 @@ class Users::PasswordsController < Devise::PasswordsController
 
   def create
     user = User.find_for_authentication(resource_params.permit(:login))
+    if user.nil? || user.new_record?
+      flash[:notice] = t(".user_not_found")
+      redirect_to new_user_password_path and return
+    end
 
-    if user&.prevent_password_resets?
+    if user.prevent_password_resets?
       flash[:error] = t(".reset_blocked", contact_abuse_link: view_context.link_to(t(".contact_abuse"), new_abuse_report_path)).html_safe
       redirect_to root_path and return
-    elsif user&.password_resets_limit_reached?
+    elsif user.password_resets_limit_reached?
       available_time = ApplicationController.helpers.time_in_zone(
         user.password_resets_available_time, nil, user
       )
@@ -21,18 +25,10 @@ class Users::PasswordsController < Devise::PasswordsController
       redirect_to root_path and return
     end
 
-    if user.present? && !user.new_record?
-      user.update_password_resets_requested
-      user.save
-    end
+    user.update_password_resets_requested
+    user.save
 
-    super do |target_user|
-      if target_user.nil? || target_user.new_record?
-        flash.now[:notice] = ts(
-          "We couldn't find an account with that email address or username. Please try again?"
-        )
-      end
-    end
+    super
   end
 
   protected
