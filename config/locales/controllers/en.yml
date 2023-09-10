@@ -74,3 +74,10 @@ en:
         contact_abuse: contact Policy & Abuse
         reset_blocked: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
         reset_cooldown: You cannot reset your password at this time. Please try again after %{reset_available_time}.
+        send_cooldown_period:
+          one: After that, you will need to wait %{count} hour before requesting another reset.
+          other: After that, you will need to wait %{count} hours before requesting another reset.
+        send_instructions: Check your email for instructions on how to reset your password. %{send_times_remaining} %{send_cooldown_period}
+        send_times_remaining:
+          one: You may reset your password %{count} more time.
+          other: You may reset your password %{count} more times.
