@@ -174,6 +174,8 @@ describe UserMailer do
     # Test both body contents
     it_behaves_like "a multipart email"
 
+    it_behaves_like "a translated email"
+
     describe "HTML version" do
       it_behaves_like "a claim notification" do
         let(:part) { email.html_part.decoded }
@@ -1116,7 +1118,7 @@ describe UserMailer do
         an_object_having_attributes(filename: "#{work.title}.txt")
       )
     end
-    
+
     context "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")
@@ -1168,7 +1170,7 @@ describe UserMailer do
         an_object_having_attributes(filename: "#{work.title}.txt")
       )
     end
-    
+
     context "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")
