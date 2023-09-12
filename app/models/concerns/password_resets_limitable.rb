@@ -10,7 +10,7 @@ module PasswordResetsLimitable
     end
 
     def password_resets_limit_reached?
-      password_resets_remaining < 1
+      password_resets_remaining.zero?
     end
 
     def password_resets_available_time
@@ -27,6 +27,10 @@ module PasswordResetsLimitable
 
     protected
 
+    # Resets the resets_requested count to the default value -- zero -- when a user successfully _completes_
+    # the reset process. This extends the existing Devise method, which sets `reset_password_sent_at` to `nil`.
+    # If we don't also reset `resets_requested`, we will not know whether the number of resets means further
+    # reset requests should be limited or not.
     def clear_reset_password_token
       super
       self.resets_requested = 0

@@ -34,9 +34,8 @@ class Users::PasswordsController < Devise::PasswordsController
   protected
 
   # We need to include information about the user (the remaining reset attempts)
-  # in addition to the Archive's configured reset cooldown in the success
-  # message. Otherwise, we would just override `devise_i18n_options` instead of
-  # this method.
+  # in addition to the configured reset cooldown in the success  message.
+  # Otherwise, we would just override `devise_i18n_options` instead of this method.
   def successfully_sent?(resource)
     return super if Devise.paranoid
     return unless resource.errors.empty?
