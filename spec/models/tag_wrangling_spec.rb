@@ -185,7 +185,7 @@ describe Tag do
           expect(synonym.children.reload).to contain_exactly
         end
 
-        describe "with asynchronous jobs run asynchronously" do
+        context "with asynchronous jobs run asynchronously" do
           include ActiveJob::TestHelper
 
           it "transfers the subtags to the new parent autocomplete" do
@@ -210,21 +210,30 @@ describe Tag do
           end
         end
 
-        it "transfers favorite tags" do
-          user = create(:user)
-          user.favorite_tags.create(tag: synonym)
-          synonym.update!(syn_string: fandom.name)
-          expect(user.favorite_tags.count).to eq 1
-          expect(user.favorite_tags.reload.first.tag).to eq(fandom)
-        end
+        context "with favorite tags" do
+          # Can't create a user while User.current_user is an admin due to
+          # restrictions on which properties of a pseud an admin can edit.
+          let(:user) do
+            User.current_user = nil
+            user = create(:user)
+            User.current_user = create(:admin)
+            user
+          end
 
-        it "handles duplicate favorite tags" do
-          user = create(:user)
-          user.favorite_tags.create(tag: fandom)
-          user.favorite_tags.create(tag: synonym)
-          synonym.update!(syn_string: fandom.name)
-          expect(user.favorite_tags.count).to eq 1
-          expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+          it "transfers favorite tags" do
+            user.favorite_tags.create(tag: synonym)
+            synonym.update!(syn_string: fandom.name)
+            expect(user.favorite_tags.count).to eq 1
+            expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+          end
+
+          it "handles duplicate favorite tags" do
+            user.favorite_tags.create(tag: fandom)
+            user.favorite_tags.create(tag: synonym)
+            synonym.update!(syn_string: fandom.name)
+            expect(user.favorite_tags.count).to eq 1
+            expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+          end
         end
       end
     end

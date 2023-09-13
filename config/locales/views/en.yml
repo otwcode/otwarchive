@@ -59,6 +59,27 @@ en:
         suspended: You have been suspended or your work has been removed, and you have not received an email explaining why.
         violation_html: You have encountered content on the Archive that violates the %{tos_link}.
   admin:
+    activities:
+      index:
+        activities_table:
+          action: Action
+          admin: Admin
+          caption: Admin Activity
+          date: Date
+          summary: List of admin activity with links to full summaries.
+          target: Target
+        page_heading: Admin Activities
+      show:
+        action: Action
+        admin: Admin
+        date: Date
+        landmark:
+          details: Action Details
+        navigation:
+          index: Admin Activities
+        page_heading: Admin Activity
+        summary: Summary
+        target: Target
     admin_invitations:
       find:
         email: Enter all or part of an email address
@@ -549,6 +570,34 @@ en:
       transfer:
         one: Transfer this bookmark to the default pseud
         other: Transfer these bookmarks to the default pseud
+    pseud_blurb:
+      confirm_delete: Are you sure?
+      default_pseud: Default Pseud
+      delete_html: Delete%{landmark_span}
+      delete_landmark_text: " %{pseud}"
+      edit_html: Edit%{landmark_span}
+      edit_landmark_text: " %{pseud}"
+      orphan_html: Orphan Works%{landmark_span}
+      orphan_landmark_text: " by %{pseud}"
+      user_actions: User Actions
+    pseuds_form:
+      change_matching_pseud_html: You cannot change the pseud that matches your user name. However, you can %{change_username_link} instead.
+      change_username: change your user name
+      description: Description
+      icon: Icon
+      icon_alt: Icon alt text
+      icon_comment: Icon comment text
+      icon_delete: Delete your icon and revert to our default
+      icon_notes:
+        current: This is your icon.
+        format: Icons can be in png, jpeg or gif form.
+        limit: You can have one icon for each pseud.
+        size: Icons should be sized 100x100 pixels for best results.
+      icon_upload: Upload a new icon
+      make_default: Make this name default
+      name: Name
+      submit: Submit
+      ticket_footnote: Numbers only.
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
