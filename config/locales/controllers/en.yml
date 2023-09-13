@@ -36,6 +36,8 @@ en:
       reply: Sorry, you have been blocked by that user.
     check_frozen:
       error: Sorry, you cannot reply to a frozen comment.
+    check_guest_replies_preference:
+      error: Sorry, this user doesn't allow non-Archive users to reply to their comments.
     check_hidden_by_admin:
       error: Sorry, you cannot reply to a hidden comment.
     check_not_replying_to_spam:

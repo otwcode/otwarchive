@@ -549,6 +549,7 @@ en:
     index:
       allow_collection_invitation: Allow others to invite my works to collections.
       blocked_users: Blocked Users
+      guest_replies_off: Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately).
       muted_users: Muted Users
   profile:
     pseud_list:
