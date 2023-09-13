@@ -1,6 +1,24 @@
 require "spec_helper"
 
 describe User do
+  describe "validations" do
+    context "with a forbidden user name" do
+      let(:forbidden_username) { Faker::Lorem.characters(number: 8) }
+
+      before do
+        allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([forbidden_username])
+      end
+
+      it { is_expected.not_to allow_values(forbidden_username, forbidden_username.swapcase).for(:login) }
+
+      it "does not prevent saving when the name is unchanged" do
+        existing_user = build(:user, login: forbidden_username)
+        existing_user.save!(validate: false)
+        expect(existing_user.save).to be_truthy
+      end
+    end
+  end
+
   describe "#destroy" do
     context "on a user with kudos" do
       let(:user) { create(:user) }
@@ -251,6 +269,96 @@ describe User do
       expect(not_found).to eq(["unknown@ao3.org", "nobody@example.com"])
       expect(found.size).to eq(emails.map(&:downcase).uniq.size - not_found.size)
       expect(duplicates).to eq(3)
+    end
+  end
+
+  describe "#password_resets_limit_reached?" do
+    context "with 0 resets requested" do
+      let(:user) { build(:user, resets_requested: 0) }
+
+      it "has not reached the requests limit" do
+        expect(user.password_resets_limit_reached?).to be_falsy
+      end
+    end
+
+    context "with the maximum number of password resets requested" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT) }
+
+      context "when the cooldown period has passed" do
+        before do
+          user.reset_password_sent_at = ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago
+        end
+
+        it "has not reached the requests limit" do
+          expect(user.password_resets_limit_reached?).to be_falsy
+        end
+      end
+
+      context "when the cooldown period has not passed" do
+        before do
+          user.reset_password_sent_at = Time.current
+        end
+
+        it "has reached the requests limit" do
+          expect(user.password_resets_limit_reached?).to be_truthy
+        end
+      end
+    end
+  end
+
+  describe "#update_password_resets_requested" do
+    context "with 0 resets requested" do
+      let(:user) { build(:user, resets_requested: 0) }
+
+      it "increments the password reset requests field" do
+        expect { user.update_password_resets_requested }
+          .to change { user.resets_requested }
+          .to(1)
+      end
+    end
+
+    context "with under the maximum number of password resets requested" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT - 1) }
+
+      context "when the cooldown period has passed" do
+        before do
+          user.reset_password_sent_at = ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago
+        end
+
+        it "resets the password reset request field to 1" do
+          expect { user.update_password_resets_requested }
+            .to change { user.resets_requested }
+            .to(1)
+        end
+      end
+
+      context "when the cooldown period has not passed" do
+        before do
+          user.reset_password_sent_at = Time.current
+        end
+
+        it "increments the password reset requests field" do
+          expect { user.update_password_resets_requested }
+            .to change { user.resets_requested }
+            .by(1)
+        end
+      end
+    end
+
+    context "with the maximum number of password resets requested" do
+      let(:user) { build(:user, resets_requested: ArchiveConfig.PASSWORD_RESET_LIMIT) }
+
+      context "when the cooldown period has passed" do
+        before do
+          user.reset_password_sent_at = ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS.hours.ago
+        end
+
+        it "resets the password reset request field to 1" do
+          expect { user.update_password_resets_requested }
+            .to change { user.resets_requested }
+            .to(1)
+        end
+      end
     end
   end
 end
