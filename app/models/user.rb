@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   audited
   include WorksOwner
+  include PasswordResetsLimitable
 
   devise :database_authenticatable,
          :confirmable,
@@ -196,13 +197,16 @@ class User < ApplicationRecord
   scope :valid, -> { where(banned: false, suspended: false) }
   scope :out_of_invites, -> { where(out_of_invites: true) }
 
-  ## used in app/views/users/new.html.erb
-  validates_length_of :login,
-                      within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
-                      too_short: ts("^User name is too short (minimum is %{min_login} characters)",
-                                    min_login: ArchiveConfig.LOGIN_LENGTH_MIN),
-                      too_long: ts("^User name is too long (maximum is %{max_login} characters)",
-                                   max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
+  validates :login,
+            length: { within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX },
+            format: {
+              with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/,
+              min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
+              max_login: ArchiveConfig.LOGIN_LENGTH_MAX
+            },
+            uniqueness: true,
+            not_forbidden_name: { if: :will_save_change_to_login? }
+  validate :username_is_not_recently_changed, if: :will_save_change_to_login?
 
   # allow nil so can save existing users
   validates_length_of :password,
@@ -212,14 +216,6 @@ class User < ApplicationRecord
                                     min_pwd: ArchiveConfig.PASSWORD_LENGTH_MIN),
                       too_long: ts("is too long (maximum is %{max_pwd} characters)",
                                    max_pwd: ArchiveConfig.PASSWORD_LENGTH_MAX)
-
-  validates_format_of :login,
-                      message: ts("^User name must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).",
-                                  min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
-                                  max_login: ArchiveConfig.LOGIN_LENGTH_MAX),
-                      with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  validates :login, uniqueness: { message: ts("^User name has already been taken") }
-  validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
 
   validates :email, email_format: true, uniqueness: true
 

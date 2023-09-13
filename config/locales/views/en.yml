@@ -442,6 +442,9 @@ en:
         other: Browse fandoms by media or favorite up to %{count} tags to have them listed here!
       find_your_favorites: Find your favorites
       media_navigation_label: Media
+    tos_faq:
+      fnok:
+        support: Support team
   invitations:
     invitation:
       email_address_label: Enter an email address

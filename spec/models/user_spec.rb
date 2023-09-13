@@ -1,6 +1,24 @@
 require "spec_helper"
 
 describe User do
+  describe "validations" do
+    context "with a forbidden user name" do
+      let(:forbidden_username) { Faker::Lorem.characters(number: 8) }
+
+      before do
+        allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([forbidden_username])
+      end
+
+      it { is_expected.not_to allow_values(forbidden_username, forbidden_username.swapcase).for(:login) }
+
+      it "does not prevent saving when the name is unchanged" do
+        existing_user = build(:user, login: forbidden_username)
+        existing_user.save!(validate: false)
+        expect(existing_user.save).to be_truthy
+      end
+    end
+  end
+
   describe "#destroy" do
     context "on a user with kudos" do
       let(:user) { create(:user) }
