@@ -68,32 +68,27 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def update_next_of_kin
     @user = authorize User.find_by!(login: params[:user_login])
-    fnok = @user.fannish_next_of_kin
-    previous_fnok_user_id = fnok&.kin&.id
     kin = User.find_by(login: params[:next_of_kin_name])
     kin_email = params[:next_of_kin_email]
 
-    if kin.blank? && kin_email.blank?
-      if fnok.blank?
-        flash[:notice] = ts("No change to fannish next of kin.")
-      else
-        fnok.destroy
-        log_next_of_kin_removed(previous_fnok_user_id)
-        flash[:notice] = ts("Fannish next of kin was removed.")
-      end
-
-      redirect_to admin_user_path(@user)
-      return
-    end
-
-    if fnok&.kin == kin && fnok&.kin_email == kin_email
-      flash[:notice] = ts("No change to fannish next of kin.")
-      redirect_to admin_user_path(@user)
-      return
-    end
-
-    fnok = @user.build_fannish_next_of_kin if fnok.blank?
+    fnok = @user.fannish_next_of_kin
+    previous_fnok_user_id = fnok&.kin&.id
+    fnok ||= @user.build_fannish_next_of_kin
     fnok.assign_attributes(kin: kin, kin_email: kin_email)
+
+    unless fnok.changed?
+      flash[:notice] = ts("No change to fannish next of kin.")
+      redirect_to admin_user_path(@user) and return
+    end
+
+    # Remove FNOK that already exists.
+    if fnok.persisted? && kin.blank? && kin_email.blank?
+      fnok.destroy
+      log_next_of_kin_removed(previous_fnok_user_id)
+      flash[:notice] = ts("Fannish next of kin was removed.")
+      redirect_to admin_user_path(@user) and return
+    end
+
     if fnok.save
       log_next_of_kin_removed(previous_fnok_user_id)
       @user.create_log_item({
