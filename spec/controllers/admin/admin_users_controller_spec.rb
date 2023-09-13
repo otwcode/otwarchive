@@ -292,7 +292,7 @@ describe Admin::AdminUsersController do
       post :update_next_of_kin, params: {
         user_login: user.login, next_of_kin_name: previous_kin.kin.login, next_of_kin_email: previous_kin.kin_email
       }
-      it_redirects_to_with_notice(admin_user_path(user), "No change to Fannish next of kin.")
+      it_redirects_to_with_notice(admin_user_path(user), "No change to fannish next of kin.")
       expect(user.reload.log_items).to be_empty
     end
 
@@ -303,7 +303,7 @@ describe Admin::AdminUsersController do
       post :update_next_of_kin, params: {
         user_login: user.login, next_of_kin_email: ""
       }
-      it_redirects_to_with_notice(admin_user_path(user), "No change to Fannish next of kin.")
+      it_redirects_to_with_notice(admin_user_path(user), "No change to fannish next of kin.")
       expect(user.reload.log_items).to be_empty
     end
   end

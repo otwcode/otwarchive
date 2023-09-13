@@ -75,7 +75,7 @@ class Admin::AdminUsersController < Admin::BaseController
 
     if kin.blank? && kin_email.blank?
       if fnok.blank?
-        flash[:notice] = ts("No change to Fannish next of kin.")
+        flash[:notice] = ts("No change to fannish next of kin.")
       else
         fnok.destroy
         log_next_of_kin_removed(previous_fnok_user_id)
@@ -87,7 +87,7 @@ class Admin::AdminUsersController < Admin::BaseController
     end
 
     if fnok&.kin == kin && fnok&.kin_email == kin_email
-      flash[:notice] = ts("No change to Fannish next of kin.")
+      flash[:notice] = ts("No change to fannish next of kin.")
       redirect_to admin_user_path(@user)
       return
     end
