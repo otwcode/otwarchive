@@ -191,6 +191,8 @@ class Admin::AdminUsersController < Admin::BaseController
     @log_items ||= (@user.log_items + LogItem.where(fnok_user_id: @user.id)).sort_by(&:created_at).reverse
   end
 
+  private
+
   def log_next_of_kin_removed(user_id)
     return if user_id.blank?
 
