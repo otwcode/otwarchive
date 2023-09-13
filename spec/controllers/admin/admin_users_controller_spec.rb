@@ -227,84 +227,78 @@ describe Admin::AdminUsersController do
       end
     end
 
-    it "logs adding a fannish next of kin" do
-      admin = create(:support_admin)
-      fake_login_admin(admin)
+    context "when admin has support role" do
+      let(:admin) { create(:support_admin) }
 
-      post :update_next_of_kin, params: {
-        user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
-      }
-      user.reload
-      expect(user.fannish_next_of_kin.kin).to eq(kin)
-      log_item = user.log_items.last
-      expect(log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
-      expect(log_item.fnok_user.id).to eq(kin.id)
-      expect(log_item.admin_id).to eq(admin.id)
-      expect(log_item.note).to eq("Change made by #{admin.login}")
-    end
+      before { fake_login_admin(admin) }
 
-    it "logs removing a fannish next of kin" do
-      admin = create(:support_admin)
-      fake_login_admin(admin)
-      kin_user_id = create(:fannish_next_of_kin, user: user).kin_id
+      it "logs adding a fannish next of kin" do
+        post :update_next_of_kin, params: {
+          user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
+        }
+        user.reload
+        expect(user.fannish_next_of_kin.kin).to eq(kin)
+        log_item = user.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
+        expect(log_item.fnok_user.id).to eq(kin.id)
+        expect(log_item.admin_id).to eq(admin.id)
+        expect(log_item.note).to eq("Change made by #{admin.login}")
+      end
 
-      post :update_next_of_kin, params: {
-        user_login: user.login
-      }
-      user.reload
-      expect(user.fannish_next_of_kin).to be_nil
-      log_item = user.log_items.last
-      expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
-      expect(log_item.fnok_user.id).to eq(kin_user_id)
-      expect(log_item.admin_id).to eq(admin.id)
-      expect(log_item.note).to eq("Change made by #{admin.login}")
-    end
+      it "logs removing a fannish next of kin" do
+        kin_user_id = create(:fannish_next_of_kin, user: user).kin_id
 
-    it "logs updating a fannish next of kin" do
-      admin = create(:support_admin)
-      fake_login_admin(admin)
-      previous_kin_user_id = create(:fannish_next_of_kin, user: user).kin_id
+        post :update_next_of_kin, params: {
+          user_login: user.login
+        }
+        user.reload
+        expect(user.fannish_next_of_kin).to be_nil
+        log_item = user.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
+        expect(log_item.fnok_user.id).to eq(kin_user_id)
+        expect(log_item.admin_id).to eq(admin.id)
+        expect(log_item.note).to eq("Change made by #{admin.login}")
+      end
 
-      post :update_next_of_kin, params: {
-        user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
-      }
-      user.reload
-      expect(user.fannish_next_of_kin.kin).to eq(kin)
+      it "logs updating a fannish next of kin" do
+        previous_kin_user_id = create(:fannish_next_of_kin, user: user).kin_id
 
-      remove_log_item = user.log_items[-2]
-      expect(remove_log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
-      expect(remove_log_item.fnok_user.id).to eq(previous_kin_user_id)
-      expect(remove_log_item.admin_id).to eq(admin.id)
-      expect(remove_log_item.note).to eq("Change made by #{admin.login}")
+        post :update_next_of_kin, params: {
+          user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
+        }
+        user.reload
+        expect(user.fannish_next_of_kin.kin).to eq(kin)
 
-      add_log_item = user.log_items.last
-      expect(add_log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
-      expect(add_log_item.fnok_user.id).to eq(kin.id)
-      expect(add_log_item.admin_id).to eq(admin.id)
-      expect(add_log_item.note).to eq("Change made by #{admin.login}")
-    end
+        remove_log_item = user.log_items[-2]
+        expect(remove_log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
+        expect(remove_log_item.fnok_user.id).to eq(previous_kin_user_id)
+        expect(remove_log_item.admin_id).to eq(admin.id)
+        expect(remove_log_item.note).to eq("Change made by #{admin.login}")
 
-    it "does nothing if changing the fnok to themselves" do
-      admin = create(:support_admin)
-      fake_login_admin(admin)
-      previous_kin = create(:fannish_next_of_kin, user: user)
+        add_log_item = user.log_items.last
+        expect(add_log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
+        expect(add_log_item.fnok_user.id).to eq(kin.id)
+        expect(add_log_item.admin_id).to eq(admin.id)
+        expect(add_log_item.note).to eq("Change made by #{admin.login}")
+      end
 
-      post :update_next_of_kin, params: {
-        user_login: user.login, next_of_kin_name: previous_kin.kin.login, next_of_kin_email: previous_kin.kin_email
-      }
-      it_redirects_to_with_notice(admin_user_path(user), "No change to fannish next of kin.")
-      expect(user.reload.log_items).to be_empty
-    end
+      it "does nothing if changing the fnok to themselves" do
+        previous_kin = create(:fannish_next_of_kin, user: user)
 
-    it "does nothing if fnok is kept undefined" do
-      admin = create(:support_admin)
-      fake_login_admin(admin)
+        post :update_next_of_kin, params: {
+          user_login: user.login, next_of_kin_name: previous_kin.kin.login, next_of_kin_email: previous_kin.kin_email
+        }
+        it_redirects_to_with_notice(admin_user_path(user), "No change to fannish next of kin.")
+        expect(user.reload.log_items).to be_empty
+      end
 
-      post :update_next_of_kin, params: {
-        user_login: user.login, next_of_kin_email: ""
-      }
-      it_redirects_to_with_notice(admin_user_path(user), "No change to fannish next of kin.")
-      expect(user.reload.log_items).to be_empty
+      it "does nothing if fnok is kept undefined" do
+        post :update_next_of_kin, params: {
+          user_login: user.login, next_of_kin_email: ""
+        }
+        it_redirects_to_with_notice(admin_user_path(user), "No change to fannish next of kin.")
+        expect(user.reload.log_items).to be_empty
+      end
     end
   end
 
