@@ -292,11 +292,15 @@ describe Admin::AdminUsersController do
         expect(user.reload.log_items).to be_empty
       end
 
-      it "does nothing if fnok is kept undefined" do
+      it "errors properly if trying to add an incomplete fnok" do
         post :update_next_of_kin, params: {
           user_login: user.login, next_of_kin_email: ""
         }
-        it_redirects_to_with_notice(admin_user_path(user), "No change to fannish next of kin.")
+
+        kin = assigns(:user).fannish_next_of_kin
+        expect(kin).not_to be_valid
+        expect(kin.errors[:kin_email]).to include("can't be blank")
+
         expect(user.reload.log_items).to be_empty
       end
     end
