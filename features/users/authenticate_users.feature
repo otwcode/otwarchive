@@ -133,7 +133,7 @@ Feature: User Authentication
     When I request a password reset for "sam"
       And I request a password reset for "sam"
       And I request a password reset for "sam"
-    Then I should see "Check your email for instructions on how to reset your password."
+    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 0 more times."
       And 3 emails should be delivered
     When all emails have been delivered
       And I request a password reset for "sam"
@@ -141,7 +141,7 @@ Feature: User Authentication
       And 0 emails should be delivered
     When it is currently 12 hours from now
       And I request a password reset for "sam"
-    Then I should see "Check your email for instructions on how to reset your password."
+    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 2 more times."
       And 1 email should be delivered
 
   Scenario: User is locked out
