@@ -188,7 +188,7 @@ Then "I should see the translation in the beginning notes" do
   step %{I should see "Worldbuilding Translated by translator" within ".preface .notes"}
 end
 
-Then /^I should see the translation listed on the original work$/ do
+Then "I should see the translation listed on the original work" do
   step %{I should see "Translation into Deutsch available:"}
   step %{I should see "Worldbuilding Translated by translator"}
 end
