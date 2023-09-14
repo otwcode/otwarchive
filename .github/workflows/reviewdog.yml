@@ -27,6 +27,7 @@ jobs:
           reporter: github-pr-check
           rubocop_version: gemfile
           rubocop_extensions: rubocop-rails:gemfile rubocop-rspec:gemfile
+          skip_install: true
 
   erb-lint:
     name: ERB Lint runner
