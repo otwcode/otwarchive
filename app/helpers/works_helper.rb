@@ -129,7 +129,7 @@ module WorksHelper
       else
         t(".#{relation}.unrevealed")
       end
-    elsif related_work.restricted? && !logged_in?
+    elsif related_work.restricted? && (download || !logged_in?)
       t(".#{relation}.restricted_html",
         language: language,
         creator_link: creator_link)

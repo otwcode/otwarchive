@@ -203,7 +203,7 @@ Feature: Download a work
     And I hide the work "TOS Violation"
   Then I should not see "Download"
 
-  Scenario: Downloads of related work expire when parent work's anonymity changes.
+  Scenario: Downloads of related work update when parent work's anonymity changes.
 
   Given a hidden collection "Hidden"
     And I have related works setup
@@ -238,7 +238,7 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "Worldbuilding by inspiration"
 
-  Scenario: Downloads of related work expire when child work's anonymity changes.
+  Scenario: Downloads of related work update when child work's anonymity changes.
 
   Given a hidden collection "Hidden"
     And I have related works setup
@@ -261,3 +261,22 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "Followup by remixer"
     And I should not see "A work in an unrevealed collection."
+
+  Scenario: Downloads hide titles of restricted related works
+
+  Given I have related works setup
+    And a related work has been posted and approved
+    And I am logged in as "remixer"
+    And I lock the work "Followup"
+  When I am logged out
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should see "[Restricted Work] by remixer"
+  When I am logged in as "inspiration"
+    And I lock the work "Worldbuilding"
+    And I am logged in as "remixer"
+    And I unlock the work "Followup"
+    And I am logged out
+    And I view the work "Followup"
+    And I follow "HTML"
+  Then I should see "Inspired by [Restricted Work] by inspiration"
