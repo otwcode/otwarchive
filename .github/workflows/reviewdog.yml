@@ -25,8 +25,6 @@ jobs:
         with:
           use_bundler: true
           reporter: github-pr-check
-          rubocop_version: gemfile
-          rubocop_extensions: rubocop-rails:gemfile rubocop-rspec:gemfile
           skip_install: true
 
   erb-lint:
