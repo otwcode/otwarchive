@@ -116,11 +116,11 @@ module WorksHelper
     work_link = link_to related_work.title, polymorphic_url(related_work)
     language = tag.span(related_work.language.name, lang: related_work.language.short)
 
-    if download
-      creator_link = byline(related_work.work, visibility: "public", only_path: false)
-    else
-      creator_link = byline(related_work)
-    end
+    creator_link = if download
+                     byline(related_work.work, visibility: "public", only_path: false)
+                   else
+                     byline(related_work)
+                   end
 
     if related_work.respond_to?(:unrevealed?) && related_work.unrevealed?
       if relation == "translated_to"
