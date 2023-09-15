@@ -688,7 +688,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     And I edit the work "Followup" to be in the collection "Hidden"
     And I log out
   When I view the work "Worldbuilding"
-  Then I should not see the translation listed on the original work
+  Then I should not see "Worldbuilding Translated by translator"
     And I should not see "Followup by remixer"
     And I should see "A work in an unrevealed collection."
 
