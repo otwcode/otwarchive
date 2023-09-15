@@ -11,6 +11,9 @@
     <% end %>
 
     <% # translations %>
+    <%# i18n-tasks-use t("works.work_header_notes.translated_to.restricted_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.translated_to.revealed_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.translated_to.unrevealed_html") %>
     <% for related_work in @work.approved_related_works %>
       <% if related_work.translation %>
         <li>
@@ -22,6 +25,12 @@
     <% end %>
 
     <% # parent works %>
+    <%# i18n-tasks-use t("works.work_header_notes.translation_of.restricted_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.translation_of.revealed_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.translation_of.unrevealed") %>
+    <%# i18n-tasks-use t("works.work_header_notes.inspired_by.restricted_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.inspired_by.revealed_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.inspired_by.unrevealed") %>
     <% for related_work in @work.parents_after_saving %>
       <% if related_work.parent %>
         <li>

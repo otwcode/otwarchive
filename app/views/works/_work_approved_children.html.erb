@@ -3,6 +3,9 @@
 <div id="children" class="children module">
   <h3 class="heading"><%= t(".inspired_by.title") %>:</h3>
   <ul>
+    <%# i18n-tasks-use t("works.work_approved_children.inspired_by.restricted_html") %>
+    <%# i18n-tasks-use t("works.work_approved_children.inspired_by.revealed_html") %>
+    <%# i18n-tasks-use t("works.work_approved_children.inspired_by.unrevealed") %>
     <% for child_work in inspired_by %>
       <li>
         <%= related_work_note(child_work.work, "inspired_by") %>
