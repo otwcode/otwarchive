@@ -112,11 +112,15 @@ module WorksHelper
     work.approved_related_works.where(translation: false)
   end
 
-  def related_work_note(related_work, relation, download = false)
+  def related_work_note(related_work, relation, download: false)
     work_link = link_to related_work.title, polymorphic_url(related_work)
     language = tag.span(related_work.language.name, lang: related_work.language.short)
-    creator_link = download ? byline(child_work.work, visibility: "public", only_path: false)
-                            : byline(related_work)
+
+    if download
+      creator_link = byline(related_work.work, visibility: "public", only_path: false)
+    else
+      creator_link = byline(related_work)
+    end
 
     if related_work.respond_to?(:unrevealed?) && related_work.unrevealed?
       if relation == "translated_to"
