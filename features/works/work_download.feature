@@ -227,7 +227,7 @@ Feature: Download a work
   When I view the work "Worldbuilding Translated"
     And I follow "HTML"
   Then I should not see "inspiration"
-    And I should see "Translation of a work in an unrevealed collection."
+    And I should see "A translation of a work in an unrevealed collection."
   # Going from unrevealed to revealed
   When I reveal works for "Hidden"
     And I log out

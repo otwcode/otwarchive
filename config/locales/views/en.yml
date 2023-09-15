@@ -399,16 +399,19 @@ en:
   downloads:
     download_afterword:
       inspired_by:
+        restricted_html: "[Restricted Work] by %{creator_link}"
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection.
     download_preface:
       inspired_by:
-        revealed_html: Inspired by %{work_link} by %{creator_link}.
+        restricted_html: Inspired by [Restricted Work] by %{creator_link}
+        revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection.
       translation_of:
-        revealed_html: Translation of %{work_link} by %{creator_link}.
-        unrevealed: Translation of a work in an unrevealed collection.
+        restricted_html: A translation of [Restricted Work] by %{creator_link}
+        revealed_html: A translation of %{work_link} by %{creator_link}
+        unrevealed: A translation of a work in an unrevealed collection.
   feedbacks:
     new:
       abuse:
@@ -781,9 +784,10 @@ en:
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}. Log in to view.'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}.'
+        unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection.'
       translation_of:
-        restricted_html: Translation of [Restricted Work] by %{creator_link}. Log in to view.
-        revealed_html: Translation of %{work_link} by %{creator_link}.
-        unrevealed: Translation of a work in an unrevealed collection.
+        restricted_html: A translation of [Restricted Work] by %{creator_link}. Log in to view.
+        revealed_html: A translation of %{work_link} by %{creator_link}.
+        unrevealed: A translation of a work in an unrevealed collection.
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.

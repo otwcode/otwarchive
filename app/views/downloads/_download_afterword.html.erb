@@ -16,17 +16,8 @@
           <% for child_work in @work.approved_related_works %>
             <% next if child_work.translation %>
 
-            <% work_link = link_to child_work.work.title, child_work.work %>
-            <% creator_link = byline(child_work.work, visibility: "public", only_path: false) %>
-
             <dd>
-            <% if child_work.work.is_a?(ExternalWork) || !child_work.work.unrevealed? %>
-                <%= t(".inspired_by.revealed_html",
-                      work_link: work_link,
-                      creator_link: creator_link) %>
-            <% else %>
-              <%= t(".inspired_by.unrevealed") %>
-            <% end %>
+              <%= related_work_note(child_work.work, "inspired_by", download: true) %>
             </dd>
           <% end %>
         </dl>

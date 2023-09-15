@@ -71,16 +71,7 @@
         <% related_works.each do |work| %>
           <li>
             <% relation = work.translation ? "translation_of" : "inspired_by" %>
-            <% work_link = link_to work.parent.title, polymorphic_url(work.parent) %>
-            <% creator_link = byline(work.parent, visibility: "public", only_path: false) %>
-
-            <% if work.parent.is_a?(ExternalWork) || !work.parent.unrevealed? %>
-              <%= t(".#{relation}.revealed_html",
-                    work_link: work_link,
-                    creator_link: creator_link) %>
-            <% else %>
-              <%= t(".#{relation}.unrevealed") %>
-            <% end %>
+            <%= related_work_note(child_work.work, relation, download: true) %>
           </li>
         <% end %>
       </ul>

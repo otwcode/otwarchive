@@ -12,24 +12,9 @@
 
     <% # translations %>
     <% for related_work in @work.approved_related_works %>
-      <% next if related_work.work.unrevealed? %>
-
       <% if related_work.translation %>
         <li>
-          <% work_link = link_to related_work.work.title, related_work.work %>
-          <% creator_link = byline(related_work.work) %>
-          <% language = tag.span(related_work.work.language.name, lang: related_work.work.language.short) %>
-
-          <% if related_work.work.restricted? && !logged_in? %>
-            <%= t(".translated_to.restricted_html",
-                  language: language,
-                  creator_link: creator_link) %>
-          <% else %>
-            <%= t(".translated_to.revealed_html",
-                  language: language,
-                  work_link: work_link,
-                  creator_link: creator_link) %>
-          <% end %>
+          <%= related_work_note(related_work.work, "translated_to") %>
         </li>
       <% else %>
         <% related_works_link ||= link_to ts("other works inspired by this one"), get_related_works_url %>
@@ -41,22 +26,7 @@
       <% if related_work.parent %>
         <li>
           <% relation = related_work.translation ? "translation_of" : "inspired_by" %>
-          <% work_link = link_to related_work.parent.title, related_work.parent %>
-          <% creator_link = byline(related_work.parent) %>
-
-          <% if related_work.parent.is_a?(ExternalWork) %>
-            <%= t(".#{relation}.revealed_html",
-                  work_link: work_link,
-                  creator_link: creator_link) %>
-          <% elsif related_work.parent.unrevealed? %>
-            <%= t(".#{relation}.unrevealed") %>
-          <% elsif related_work.parent.restricted? && !logged_in? %>
-            <%= t(".#{relation}.restricted_html", creator_link: creator_link) %>
-          <% else %>
-            <%= t(".#{relation}.revealed_html",
-                  work_link: work_link,
-                  creator_link: creator_link) %>
-          <% end %>
+          <%= related_work_note(related_work.parent, relation) %>
         </li>
       <% end %>
     <% end %>

@@ -112,6 +112,31 @@ module WorksHelper
     work.approved_related_works.where(translation: false)
   end
 
+  def related_work_note(related_work, relation, download = false)
+    work_link = link_to related_work.title, polymorphic_url(related_work)
+    language = tag.span(related_work.language.name, lang: related_work.language.short)
+    creator_link = download ? byline(child_work.work, visibility: "public", only_path: false)
+                            : byline(related_work)
+
+    if related_work.respond_to?(:unrevealed?) && related_work.unrevealed?
+      if relation == "translated_to"
+        t(".#{relation}.unrevealed_html",
+          language: language)
+      else
+        t(".#{relation}.unrevealed_html")
+      end
+    elsif related_work.restricted? && !logged_in?
+      t(".#{relation}.restricted_html",
+        language: language,
+        creator_link: creator_link)
+    else
+      t(".#{relation}.revealed_html",
+        language: language,
+        work_link: work_link,
+        creator_link: creator_link)
+    end
+  end
+
   # Can the work be downloaded, i.e. is it posted and visible to all registered
   # users.
   def downloadable?

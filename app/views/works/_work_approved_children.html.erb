@@ -5,27 +5,7 @@
   <ul>
     <% for child_work in inspired_by %>
       <li>
-        <% work_link = link_to child_work.work.title, polymorphic_url(child_work.work) %>
-        <% creator_link = byline(child_work.work) %>
-        <% language = tag.span(child_work.work.language.name, lang: child_work.work.language.short) %>
-
-        <% if child_work.work.is_a?(ExternalWork) %>
-          <%= t(".inspired_by.revealed_html",
-                language: language,
-                work_link: work_link,
-                creator_link: creator_link) %>
-        <% elsif child_work.work.unrevealed? %>
-          <%= t(".inspired_by.unrevealed") %>
-        <% elsif child_work.work.restricted? && !logged_in? %>
-          <%= t(".inspired_by.restricted_html",
-                language: language,
-                creator_link: creator_link) %>
-        <% else %>
-          <%= t(".inspired_by.revealed_html",
-                language: language,
-                work_link: work_link,
-                creator_link: creator_link) %>
-        <% end %>
+        <%= related_work_note(child_work.work, "inspired_by") %>
       </li>
     <% end %>
   </ul>
