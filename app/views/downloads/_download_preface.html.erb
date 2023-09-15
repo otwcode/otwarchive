@@ -77,7 +77,7 @@
         <% related_works.each do |work| %>
           <li>
             <% relation = work.translation ? "translation_of" : "inspired_by" %>
-            <%= related_work_note(child_work.work, relation, download: true) %>
+            <%= related_work_note(work.parent, relation, download: true) %>
           </li>
         <% end %>
       </ul>
