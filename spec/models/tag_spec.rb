@@ -82,10 +82,10 @@ describe Tag do
       let(:tag) { create(:fandom) }
       let!(:work) { create(:work, fandom_string: tag.name) }
 
-      before {
+      before do
         Tag.write_redis_to_database
         tag.reload
-      }
+      end
 
       it "does not write to the database when reading the count" do
         tag.taggings_count
@@ -141,7 +141,8 @@ describe Tag do
       it "triggers reindexing of tags which aren't used much" do
         create(:work, fandom_string: tag.name)
 
-        expect{ Tag.write_redis_to_database }.to add_to_reindex_queue(tag.reload, :main)
+        expect { Tag.write_redis_to_database }
+          .to add_to_reindex_queue(tag.reload, :main)
       end
 
       it "triggers reindexing of tags which are used significantly" do
@@ -149,7 +150,8 @@ describe Tag do
           create(:work, fandom_string: tag.name)
         end
 
-        expect{ Tag.write_redis_to_database }.to add_to_reindex_queue(tag.reload, :main)
+        expect { Tag.write_redis_to_database }
+          .to add_to_reindex_queue(tag.reload, :main)
       end
     end
   end
