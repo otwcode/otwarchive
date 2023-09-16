@@ -2,7 +2,6 @@
 require 'spec_helper'
 
 describe Tag do
-  include TagSpecHelper
   after(:each) do
     User.current_user = nil
   end
@@ -79,78 +78,78 @@ describe Tag do
       end
     end
 
-    context "redis" do
+    context ".write_redis_to_databaser" do
+      let(:tag) { create(:fandom) }
+      let!(:work) { create(:work, fandom_string: tag.name) }
+
+      before {
+        Tag.write_redis_to_database
+        tag.reload
+      }
+
       it "does not write to the database when reading the count" do
-        tag = fandom_tag_with_one_work
         tag.taggings_count
         # Check if redis has flagged this tag for an update to the database.
         expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq false
       end
 
       it "does not write to the database when assigning the same count" do
-        tag = fandom_tag_with_one_work
         tag.taggings_count = 1
         # Check if redis has flagged this tag for an update to the database.
         expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq false
       end
 
       it "writes to the database when assigning a new count" do
-        tag = fandom_tag_with_one_work
         tag.taggings_count = 2
         # Check if redis has flagged this tag for an update to the database.
         expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
 
-        write_tag_to_database(tag)
+        Tag.write_redis_to_database
+        tag.reload
+
         # Actual number of taggings has not changed though count cache has.
         expect(tag.taggings_count_cache).to eq 2
         expect(tag.taggings_count).to eq 1
       end
 
       it "writes to the database when adding a new work with the same tag" do
-        tag = fandom_tag_with_one_work
         expect(tag.taggings_count_cache).to eq 1
         expect(tag.taggings_count).to eq 1
 
-        FactoryBot.create(:work, fandom_string: tag.name)
+        create(:work, fandom_string: tag.name)
         # Check if redis has flagged this tag for an update to the database.
         expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
 
-        write_tag_to_database(tag)
+        Tag.write_redis_to_database
+        tag.reload
+
         expect(tag.taggings_count_cache).to eq 2
         expect(tag.taggings_count).to eq 2
       end
 
       it "does not write to the database with a blank value" do
-        tag = fandom_tag_with_one_work
         # Blank values will cause errors if assigned earlier due to division
         # in taggings_count_expiry.
         REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
         REDIS_GENERAL.sadd("tag_update", tag.id)
 
-        write_tag_to_database(tag)
-        expect(tag.taggings_count_cache).to eq 1
+        Tag.write_redis_to_database
+
+        expect(tag.reload.taggings_count_cache).to eq 1
       end
 
       it "triggers reindexing of tags which aren't used much" do
-        tag = fandom_tag_with_one_work
-        FactoryBot.create(:work, fandom_string: tag.name)
-        # Run indexing jobs to prevent automatic reindexing with small tags
-        run_all_indexing_jobs
+        create(:work, fandom_string: tag.name)
 
-        expect do
-          write_tag_to_database(tag)
-        end.to(add_to_reindex_queue(tag, :main))
+        expect{ Tag.write_redis_to_database }.to add_to_reindex_queue(tag.reload, :main)
       end
 
       it "triggers reindexing of tags which are used significantly" do
-        tag = fandom_tag_with_one_work
-        (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do
-          FactoryBot.create(:work, fandom_string: tag.name)
+        ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT.times do
+          create(:work, fandom_string: tag.name)
         end
 
-        expect do
-          write_tag_to_database(tag)
-        end.to(add_to_reindex_queue(tag, :main))
+        expect{ Tag.write_redis_to_database }.to add_to_reindex_queue(tag.reload, :main)
       end
     end
   end

@@ -60,11 +60,14 @@ Given /^the basic categories exist$/ do
 end
 
 Given /^a set of tags for tag sort by use exists$/ do
-  hash = {  "10 uses" => 10,
-            "8 uses" => 8,
-            "also 8 uses" => 8,
-            "5 uses" => 5,
-            "2 uses" => 2 }
+  hash = {
+    "10 uses" => 10,
+    "8 uses" => 8,
+    "also 8 uses" => 8,
+    "5 uses" => 5,
+    "2 uses" => 2,
+    "0 uses" => 0
+  }
 
   # Create tags with specified number of uses
   hash.each do |freeform, uses|
@@ -72,7 +75,6 @@ Given /^a set of tags for tag sort by use exists$/ do
     tag.taggings_count = uses
   end
 
-  step %{a freeform exists with name: "0 uses"}
   step %{all indexing jobs have been run}
   step %{the periodic tag count task is run}
 end
