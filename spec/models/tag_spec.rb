@@ -78,12 +78,12 @@ describe Tag do
       end
     end
 
-    context ".write_redis_to_databaser" do
+    context "write_redis_to_database" do
       let(:tag) { create(:fandom) }
       let!(:work) { create(:work, fandom_string: tag.name) }
 
       before do
-        Tag.write_redis_to_database
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
         tag.reload
       end
 
@@ -104,7 +104,7 @@ describe Tag do
         # Check if redis has flagged this tag for an update to the database.
         expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
 
-        Tag.write_redis_to_database
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
         tag.reload
 
         # Actual number of taggings has not changed though count cache has.
@@ -120,7 +120,7 @@ describe Tag do
         # Check if redis has flagged this tag for an update to the database.
         expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
 
-        Tag.write_redis_to_database
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
         tag.reload
 
         expect(tag.taggings_count_cache).to eq 2
@@ -133,7 +133,7 @@ describe Tag do
         REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
         REDIS_GENERAL.sadd("tag_update", tag.id)
 
-        Tag.write_redis_to_database
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
 
         expect(tag.reload.taggings_count_cache).to eq 1
       end
@@ -141,7 +141,7 @@ describe Tag do
       it "triggers reindexing of tags which aren't used much" do
         create(:work, fandom_string: tag.name)
 
-        expect { Tag.write_redis_to_database }
+        expect { RedisJobSpawner.perform_now("TagCountUpdateJob") }
           .to add_to_reindex_queue(tag.reload, :main)
       end
 
@@ -150,7 +150,7 @@ describe Tag do
           create(:work, fandom_string: tag.name)
         end
 
-        expect { Tag.write_redis_to_database }
+        expect { RedisJobSpawner.perform_now("TagCountUpdateJob") }
           .to add_to_reindex_queue(tag.reload, :main)
       end
     end

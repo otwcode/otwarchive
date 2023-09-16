@@ -199,7 +199,6 @@ Feature: Search Tags
 
   Scenario: Search and sort by Uses in descending and ascending order
     Given a set of tags for tag sort by use exists
-      And all indexing jobs have been run
     When I am on the search tags page
       And I fill in "Tag name" with "uses"
       And I select "Uses" from "Sort by"
