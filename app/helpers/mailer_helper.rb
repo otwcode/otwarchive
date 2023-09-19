@@ -182,9 +182,9 @@ module MailerHelper
 
   def commenter_pseud_or_name_link(comment)
     if comment.comment_owner.nil?
-      style_bold(comment.comment_owner_name) + style_role("Guest")
+      style_bold(comment.comment_owner_name) + style_role(t("roles.guest"))
     elsif comment.by_anonymous_creator?
-      style_bold("Anonymous Creator")
+      style_bold(t("roles.anonymous_creator"))
     else
       style_link(comment.comment_owner_name, polymorphic_url(comment.comment_owner, only_path: false))
     end
@@ -192,9 +192,9 @@ module MailerHelper
 
   def commenter_pseud_or_name_text(comment)
     if comment.comment_owner.nil?
-      "#{comment.comment_owner_name} (Guest)"
+      "#{comment.comment_owner_name} #{t("roles.guest_with_parens")}"
     elsif comment.by_anonymous_creator?
-      "Anonymous Creator"
+      t("roles.anonymous_creator")
     else
       "#{comment.comment_owner_name} (#{polymorphic_url(comment.comment_owner, only_path: false)})"
     end

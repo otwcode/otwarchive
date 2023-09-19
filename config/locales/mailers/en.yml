@@ -81,6 +81,10 @@ en:
         open_doors: The Open Doors team
         parent_org: Organization for Transformative Works
         support: The AO3 Support team
+  roles:
+    anonymous_creator: Anonymous Creator
+    guest: Guest
+    guest_with_parens: "(Guest)"
   user_mailer:
     abuse_report:
       copy:

@@ -1,6 +1,6 @@
 <% content_for :message do %>
 
-  <%= commenter_pseud_or_name_text(@comment) %> edited their reply to your comment on 
+  <%= commenter_pseud_or_name_link(@comment) %> edited their reply to your comment on 
   
   <% if @comment.ultimate_parent.is_a?(Tag) %>
     the tag 
