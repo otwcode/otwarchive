@@ -73,6 +73,9 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Enabled: false
 
+Rails/DefaultScope:
+  Enabled: true
+
 Rails/DynamicFindBy:
   AllowedMethods:
     # Exception for Tag.find_by_name
