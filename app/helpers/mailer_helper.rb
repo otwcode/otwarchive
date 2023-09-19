@@ -192,7 +192,8 @@ module MailerHelper
 
   def commenter_pseud_or_name_text(comment)
     if comment.comment_owner.nil?
-      "#{comment.comment_owner_name} #{t("roles.guest_with_parens")}"
+
+      "#{comment.comment_owner_name} #{t('roles.guest_with_parens')}"
     elsif comment.by_anonymous_creator?
       t("roles.anonymous_creator")
     else
