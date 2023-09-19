@@ -223,11 +223,11 @@ Feature: Download a work
     And I view the work "Followup"
     And I follow "HTML"
   Then I should not see "inspiration"
-    And I should see "Inspired by a work in an unrevealed collection."
+    And I should see "Inspired by a work in an unrevealed collection"
   When I view the work "Worldbuilding Translated"
     And I follow "HTML"
   Then I should not see "inspiration"
-    And I should see "A translation of a work in an unrevealed collection."
+    And I should see "A translation of a work in an unrevealed collection"
   # Going from unrevealed to revealed
   When I reveal works for "Hidden"
     And I log out
@@ -246,21 +246,21 @@ Feature: Download a work
   When I view the work "Worldbuilding"
     And I follow "HTML"
   Then I should see "Followup by remixer"
-    And I should not see "A work in an unrevealed collection."
+    And I should not see "A work in an unrevealed collection"
   # Going from revealed to unrevealed
   When I am logged in as "remixer"
     And I edit the work "Followup" to be in the collection "Hidden"
     And I view the work "Worldbuilding"
     And I follow "HTML"
   Then I should not see "Followup by remixer"
-    And I should see "A work in an unrevealed collection."
+    And I should see "A work in an unrevealed collection"
   # Going from unrevealed to revealed
   When I reveal works for "Hidden"
     And I log out
     And I view the work "Worldbuilding"
     And I follow "HTML"
   Then I should see "Followup by remixer"
-    And I should not see "A work in an unrevealed collection."
+    And I should not see "A work in an unrevealed collection"
 
   Scenario: Downloads hide titles of restricted related works
 

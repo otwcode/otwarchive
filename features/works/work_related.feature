@@ -671,11 +671,11 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     When I view the work "Followup"
     Then I should not see "Worldbuilding"
       And I should not see "inspiration"
-      And I should see "Inspired by a work in an unrevealed collection."
+      And I should see "Inspired by a work in an unrevealed collection"
     # Check translated work
     When I view the work "Worldbuilding Translated"
     Then I should not see "inspiration"
-      And I should see "A translation of a work in an unrevealed collection."
+      And I should see "A translation of a work in an unrevealed collection"
 
   Scenario: Notes of parent work do not break anonymity of child related works in an unrevealed collection
   Given a hidden collection "Hidden"
@@ -690,7 +690,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   When I view the work "Worldbuilding"
   Then I should not see "Worldbuilding Translated by translator"
     And I should not see "Followup by remixer"
-    And I should see "A work in an unrevealed collection."
+    And I should see "A work in an unrevealed collection"
 
   Scenario: Work notes updates when anonymity of related works change
   Given a hidden collection "Hidden"
@@ -713,7 +713,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     And I view the work "Worldbuilding"
   Then I should not see the inspiring parent work in the beginning notes
     And I should see "Translation into Deutsch available:"
-    And I should see "A work in an unrevealed collection."
+    And I should see "A work in an unrevealed collection"
     And I should not see "Worldbuilding Translated by translator"
     And I should not see "Followup by remixer"
   # Going from unrevealed to revealed
