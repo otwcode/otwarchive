@@ -38,14 +38,14 @@ module UserHistory
 
     if admin.present?
       options = {
+        admin_id: admin.id,
         note: "Change made by #{admin.login}",
         **options
       }
     end
 
     user.create_log_item({
-                           action: action,
-                           admin_id: admin&.id,
+                           action: action,                           
                            **options
                          })
   end
