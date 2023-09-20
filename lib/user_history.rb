@@ -31,7 +31,7 @@ module UserHistory
       options: { fnok_user_id: user.id },
       admin: admin
     )
-    end
+  end
 
   def log_user_history(user, action, options: {}, admin: nil)
     return if user.nil?
@@ -44,9 +44,9 @@ module UserHistory
     end
 
     user.create_log_item({
-                          action: action,
-                          admin_id: admin&.id,
-                          **options
+                           action: action,
+                           admin_id: admin&.id,
+                           **options
                           })
   end
 end

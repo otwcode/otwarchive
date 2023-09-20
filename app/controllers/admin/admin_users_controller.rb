@@ -73,7 +73,7 @@ class Admin::AdminUsersController < Admin::BaseController
     kin_email = params[:next_of_kin_email]
 
     fnok = @user.fannish_next_of_kin
-    previous_fnok_user = fnok&.kin
+    previous_kin = fnok&.kin
     fnok ||= @user.build_fannish_next_of_kin
     fnok.assign_attributes(kin: kin, kin_email: kin_email)
 
@@ -85,13 +85,13 @@ class Admin::AdminUsersController < Admin::BaseController
     # Remove FNOK that already exists.
     if fnok.persisted? && kin.blank? && kin_email.blank?
       fnok.destroy
-      log_removal_of_next_of_kin(@user, previous_fnok_user, admin: current_admin)
+      log_removal_of_next_of_kin(@user, previous_kin, admin: current_admin)
       flash[:notice] = ts("Fannish next of kin was removed.")
       redirect_to admin_user_path(@user) and return
     end
 
     if fnok.save
-      log_removal_of_next_of_kin(@user, previous_fnok_user, admin: current_admin)
+      log_removal_of_next_of_kin(@user, previous_kin, admin: current_admin)
       log_assignment_of_next_of_kin(@user, kin, admin: current_admin)
       flash[:notice] = ts("Fannish next of kin was updated.")
       redirect_to admin_user_path(@user)
