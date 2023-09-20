@@ -97,6 +97,12 @@ class Admin::AdminUsersController < Admin::BaseController
                               admin_id: current_admin.id,
                               note: "Change made by #{current_admin.login}"
                             })
+      kin.create_log_item({
+                            action: ArchiveConfig.ACTION_ADDED_AS_FNOK,
+                            fnok_user_id: @user.id,
+                            admin_id: current_admin.id,
+                            note: "Change made by #{current_admin.login}"
+                          })
       flash[:notice] = ts("Fannish next of kin was updated.")
       redirect_to admin_user_path(@user)
     else
@@ -183,7 +189,7 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def log_items
-    @log_items ||= (@user.log_items + LogItem.where(fnok_user_id: @user.id)).sort_by(&:created_at).reverse
+    @log_items ||= @user.log_items.sort_by(&:created_at).reverse
   end
 
   private
@@ -197,5 +203,12 @@ class Admin::AdminUsersController < Admin::BaseController
                             admin_id: current_admin.id,
                             note: "Change made by #{current_admin.login}"
                           })
+
+    User.find_by(id: user_id)&.create_log_item({
+                                                action: ArchiveConfig.ACTION_REMOVED_AS_FNOK,
+                                                fnok_user_id: @user.id,
+                                                admin_id: current_admin.id,
+                                                note: "Change made by #{current_admin.login}"
+                                              })
   end
 end
