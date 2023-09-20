@@ -205,10 +205,10 @@ class Admin::AdminUsersController < Admin::BaseController
                           })
 
     User.find_by(id: user_id)&.create_log_item({
-                                                action: ArchiveConfig.ACTION_REMOVED_AS_FNOK,
-                                                fnok_user_id: @user.id,
-                                                admin_id: current_admin.id,
-                                                note: "Change made by #{current_admin.login}"
-                                              })
+                                                 action: ArchiveConfig.ACTION_REMOVED_AS_FNOK,
+                                                 fnok_user_id: @user.id,
+                                                 admin_id: current_admin.id,
+                                                 note: "Change made by #{current_admin.login}"
+                                               })
   end
 end

@@ -122,7 +122,7 @@ module UsersHelper
   def log_item_action_name(item)
     action = item.action
     
-    return fnok_action_name(item) if is_fnok_action(action)
+    return fnok_action_name(item) if is_fnok_action?(action)
 
     case action
     when ArchiveConfig.ACTION_ACTIVATE
@@ -164,7 +164,7 @@ module UsersHelper
 
   private
 
-  def is_fnok_action(action)
+  def is_fnok_action?(action)
     [
       ArchiveConfig.ACTION_ADD_FNOK,
       ArchiveConfig.ACTION_REMOVE_FNOK,
