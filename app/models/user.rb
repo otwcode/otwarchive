@@ -180,6 +180,11 @@ class User < ApplicationRecord
                                   fnok_user_id: self.id
                                 })
     end
+
+    fannish_next_of_kin&.kin&.create_log_item({
+                                                action: ArchiveConfig.ACTION_REMOVED_AS_FNOK,
+                                                fnok_user_id: self.id
+                                              })
   end
 
   def read_inbox_comments
