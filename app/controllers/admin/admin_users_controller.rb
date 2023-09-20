@@ -194,17 +194,17 @@ class Admin::AdminUsersController < Admin::BaseController
 
   private
 
-  def log_next_of_kin_removed(user_id)
-    return if user_id.blank?
+  def log_next_of_kin_removed(kin_id)
+    return if kin_id.blank?
 
     @user.create_log_item({
                             action: ArchiveConfig.ACTION_REMOVE_FNOK,
-                            fnok_user_id: user_id,
+                            fnok_user_id: kin_id,
                             admin_id: current_admin.id,
                             note: "Change made by #{current_admin.login}"
                           })
 
-    User.find_by(id: user_id)&.create_log_item({
+    User.find_by(id: kin_id)&.create_log_item({
                                                  action: ArchiveConfig.ACTION_REMOVED_AS_FNOK,
                                                  fnok_user_id: @user.id,
                                                  admin_id: current_admin.id,
