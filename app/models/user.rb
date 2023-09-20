@@ -2,6 +2,7 @@ class User < ApplicationRecord
   audited
   include WorksOwner
   include PasswordResetsLimitable
+  include UserHistory
 
   devise :database_authenticatable,
          :confirmable,
@@ -37,7 +38,8 @@ class User < ApplicationRecord
   has_many :external_authors, dependent: :destroy
   has_many :external_creatorships, foreign_key: "archivist_id"
 
-  before_destroy :log_removal_as_next_of_kin
+  before_destroy :log_removal_of_self_as_next_of_kin
+  before_destroy :log_removal_of_self_as_previous_of_kin
   has_many :fannish_next_of_kins, dependent: :delete_all, inverse_of: :kin, foreign_key: :kin_id
   has_one :fannish_next_of_kin, dependent: :destroy
 
@@ -173,18 +175,15 @@ class User < ApplicationRecord
     Kudo.where(user: self).update_all(user_id: nil)
   end
 
-  def log_removal_as_next_of_kin
+  def log_removal_of_self_as_next_of_kin
     fannish_next_of_kins.each do |fnok|
-      fnok.user.create_log_item({
-                                  action: ArchiveConfig.ACTION_REMOVE_FNOK,
-                                  fnok_user_id: self.id
-                                })
+      log_removal_of_next_of_kin(fnok.user, self)
     end
+  end
 
-    fannish_next_of_kin&.kin&.create_log_item({
-                                                action: ArchiveConfig.ACTION_REMOVED_AS_FNOK,
-                                                fnok_user_id: self.id
-                                              })
+  def log_removal_of_self_as_previous_of_kin
+    successor = fannish_next_of_kin&.kin
+    log_removal_of_next_of_kin(self, successor)
   end
 
   def read_inbox_comments
