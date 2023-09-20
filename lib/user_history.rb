@@ -38,7 +38,7 @@ module UserHistory
 
     if admin.present?
       options = {
-        note: admin.present? && "Change made by #{admin.login}",
+        note: "Change made by #{admin.login}",
         **options
       }
     end
