@@ -47,6 +47,6 @@ module UserHistory
                            action: action,
                            admin_id: admin&.id,
                            **options
-                          })
+                         })
   end
 end
