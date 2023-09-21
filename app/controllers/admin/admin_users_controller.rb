@@ -1,6 +1,5 @@
 class Admin::AdminUsersController < Admin::BaseController
   include ExportsHelper
-  include KinHistory
 
   def index
     authorize User
@@ -85,14 +84,14 @@ class Admin::AdminUsersController < Admin::BaseController
     # Remove FNOK that already exists.
     if fnok.persisted? && kin.blank? && kin_email.blank?
       fnok.destroy
-      log_removal_of_next_of_kin(@user, previous_kin, admin: current_admin)
+      @user.log_removal_of_next_of_kin(previous_kin, admin: current_admin)
       flash[:notice] = ts("Fannish next of kin was removed.")
       redirect_to admin_user_path(@user) and return
     end
 
     if fnok.save
-      log_removal_of_next_of_kin(@user, previous_kin, admin: current_admin)
-      log_assignment_of_next_of_kin(@user, kin, admin: current_admin)
+      @user.log_removal_of_next_of_kin(previous_kin, admin: current_admin)
+      @user.log_assignment_of_next_of_kin(kin, admin: current_admin)
       flash[:notice] = ts("Fannish next of kin was updated.")
       redirect_to admin_user_path(@user)
     else

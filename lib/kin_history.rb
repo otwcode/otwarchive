@@ -1,41 +1,50 @@
 module KinHistory
-  def log_assignment_of_next_of_kin(user, kin, admin:)
+  def self.included(user)
+    user.class_eval do
+      before_destroy :log_removal_of_self_from_fnok_relationships
+    end
+  end
+
+  def log_removal_of_self_from_fnok_relationships
+    fannish_next_of_kins.each do |fnok|
+      fnok.user.log_removal_of_next_of_kin(self)
+    end
+
+    successor = fannish_next_of_kin&.kin
+    log_removal_of_next_of_kin(successor)
+  end
+
+  def log_assignment_of_next_of_kin(kin, admin:)
     log_user_history(
-      user,
       ArchiveConfig.ACTION_ADD_FNOK,
       options: { fnok_user_id: kin.id },
       admin: admin
     )
 
-    log_user_history(
-      kin,
+    kin.log_user_history(
       ArchiveConfig.ACTION_ADDED_AS_FNOK,
-      options: { fnok_user_id: user.id },
+      options: { fnok_user_id: self.id },
       admin: admin
     )
   end
 
-  def log_removal_of_next_of_kin(user, kin, admin: nil)
+  def log_removal_of_next_of_kin(kin, admin: nil)
     return if kin.blank?
 
     log_user_history(
-      user,
       ArchiveConfig.ACTION_REMOVE_FNOK,
       options: { fnok_user_id: kin.id },
       admin: admin
     )
 
-    log_user_history(
-      kin,
+    kin.log_user_history(
       ArchiveConfig.ACTION_REMOVED_AS_FNOK,
-      options: { fnok_user_id: user.id },
+      options: { fnok_user_id: self.id },
       admin: admin
     )
   end
 
-  def log_user_history(user, action, options: {}, admin: nil)
-    return if user.nil?
-
+  def log_user_history(action, options: {}, admin: nil)
     if admin.present?
       options = {
         admin_id: admin.id,
@@ -44,9 +53,9 @@ module KinHistory
       }
     end
 
-    user.create_log_item({
-                           action: action,                           
-                           **options
-                         })
+    create_log_item({
+                      action: action,
+                      **options
+                    })
   end
 end
