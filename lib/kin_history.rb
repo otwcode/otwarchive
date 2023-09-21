@@ -1,4 +1,4 @@
-module UserHistory
+module KinHistory
   def log_assignment_of_next_of_kin(user, kin, admin:)
     log_user_history(
       user,

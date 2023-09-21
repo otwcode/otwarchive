@@ -1,6 +1,6 @@
 class Admin::AdminUsersController < Admin::BaseController
   include ExportsHelper
-  include UserHistory
+  include KinHistory
 
   def index
     authorize User
