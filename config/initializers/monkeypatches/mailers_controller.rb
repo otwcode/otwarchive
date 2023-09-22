@@ -1,10 +1,12 @@
-module MailersController
-  extend ActiveSupport::Concern
+Rails.application.config.after_initialize do
+  module MailersController
+    extend ActiveSupport::Concern
 
-  included do
-    # Hide the dev mark in mailer previews.
-    skip_rack_dev_mark
+    included do
+      # Hide the dev mark in mailer previews.
+      skip_rack_dev_mark
+    end
   end
-end
 
-::Rails::MailersController.include MailersController
+  ::Rails::MailersController.include MailersController
+end
