@@ -817,6 +817,8 @@ class Tag < ApplicationRecord
       self.sub_taggings.destroy_all
       self.meta_taggings.destroy_all
     end
+
+    refresh_autocomplete
   end
 
   # When we make this tag a synonym of another canonical tag, we want to move
