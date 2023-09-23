@@ -19,9 +19,9 @@ class CommonTagging < ApplicationRecord
   after_create :update_wrangler
   after_create :inherit_parents
   after_create :remove_uncategorized_media
-  after_create :update_child_autocomplete
 
   after_commit :update_search
+  after_commit :update_child_autocomplete
 
   def update_wrangler
     unless User.current_user.nil?
