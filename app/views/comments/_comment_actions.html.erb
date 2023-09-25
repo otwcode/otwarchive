@@ -9,7 +9,7 @@
     <li><%= frozen_comment_indicator %></li>
   <% end %>
   <% if can_reply_to_comment?(comment) %>
-    <li id="add_comment_reply_link_<%= comment.id %>"><%= add_cancel_comment_reply_link comment %></li>
+    <li id="add_comment_reply_link_<%= comment.id %>"><%= add_comment_reply_link comment %></li>
   <% end %>
   <% unless comment.unreviewed? %>
     <li><%= link_to ts("Thread"), comment %></li>

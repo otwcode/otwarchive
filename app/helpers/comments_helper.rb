@@ -183,14 +183,6 @@ module CommentsHelper
 
   #### HELPERS FOR REPLYING TO COMMENTS #####
 
-  def add_cancel_comment_reply_link(comment)
-    if focused_on_comment(comment)
-      cancel_comment_reply_link(comment)
-    else
-      add_comment_reply_link(comment)
-    end
-  end
-
   # return link to add new reply to a comment
   def add_comment_reply_link(comment)
     commentable_id = comment.ultimate_parent.is_a?(Tag) ?
