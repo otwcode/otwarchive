@@ -817,9 +817,7 @@ class Tag < ApplicationRecord
       self.sub_taggings.destroy_all
       self.meta_taggings.destroy_all
 
-      if self.merger&.canonical? and self.merger&.is_a?(Fandom)
-        self.merger.async_after_commit(:refresh_all_children_autocomplete)
-      end
+      self.merger.async_after_commit(:refresh_all_children_autocomplete) if self.merger&.canonical? && self.merger.is_a?(Fandom)
     end
   end
 
