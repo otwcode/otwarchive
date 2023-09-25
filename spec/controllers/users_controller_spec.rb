@@ -2,6 +2,7 @@ require "spec_helper"
 
 describe UsersController do
   include RedirectExpectationHelper
+  include LoginMacros
 
   describe "GET #activate" do
     let(:user) { create(:user, confirmed_at: nil) }
@@ -55,6 +56,23 @@ describe UsersController do
         expect do
           get :show, params: { id: "nobody" }
         end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+  end
+
+  describe "destroy" do
+    let(:user) { create(:user) }
+
+    before do
+      fake_login_known_user(user)
+    end
+
+    context "no log items" do
+      it "successfully destroys and redirects with success message" do
+        login = user.login
+        delete :destroy, params: { id: login }
+        it_redirects_to_with_notice(delete_confirmation_path, "You have successfully deleted your account.")
+        expect(User.find_by(login: login)).to be_nil
       end
     end
   end

@@ -47,7 +47,7 @@ class Admin::AdminUsersController < Admin::BaseController
     @user = authorize User.find_by!(login: params[:id])
     @hide_dashboard = true
     @page_subtitle = t(".page_title", login: @user.login)
-    @log_items = @user.log_items.sort_by(&:created_at).reverse
+    log_items
   end
 
   # POST admin/users/update
@@ -68,27 +68,40 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def update_next_of_kin
     @user = authorize User.find_by!(login: params[:user_login])
-    fnok = @user.fannish_next_of_kin
     kin = User.find_by(login: params[:next_of_kin_name])
     kin_email = params[:next_of_kin_email]
 
-    if kin.blank? && kin_email.blank?
-      if fnok.present?
-        fnok.destroy
-        flash[:notice] = ts("Fannish next of kin was removed.")
-      end
-      redirect_to admin_user_path(@user)
-      return
+    fnok = @user.fannish_next_of_kin
+    previous_fnok_user_id = fnok&.kin&.id
+    fnok ||= @user.build_fannish_next_of_kin
+    fnok.assign_attributes(kin: kin, kin_email: kin_email)
+
+    unless fnok.changed?
+      flash[:notice] = ts("No change to fannish next of kin.")
+      redirect_to admin_user_path(@user) and return
     end
 
-    fnok = @user.build_fannish_next_of_kin if fnok.blank?
-    fnok.assign_attributes(kin: kin, kin_email: kin_email)
+    # Remove FNOK that already exists.
+    if fnok.persisted? && kin.blank? && kin_email.blank?
+      fnok.destroy
+      log_next_of_kin_removed(previous_fnok_user_id)
+      flash[:notice] = ts("Fannish next of kin was removed.")
+      redirect_to admin_user_path(@user) and return
+    end
+
     if fnok.save
+      log_next_of_kin_removed(previous_fnok_user_id)
+      @user.create_log_item({
+                              action: ArchiveConfig.ACTION_ADD_FNOK,
+                              fnok_user_id: fnok.kin.id,
+                              admin_id: current_admin.id,
+                              note: "Change made by #{current_admin.login}"
+                            })
       flash[:notice] = ts("Fannish next of kin was updated.")
       redirect_to admin_user_path(@user)
     else
       @hide_dashboard = true
-      @log_items = @user.log_items.sort_by(&:created_at).reverse
+      log_items
       render :show
     end
   end
@@ -167,5 +180,22 @@ class Admin::AdminUsersController < Admin::BaseController
       flash[:error] = ts("Attempt to activate account failed.")
       redirect_to action: :show
     end
+  end
+
+  def log_items
+    @log_items ||= (@user.log_items + LogItem.where(fnok_user_id: @user.id)).sort_by(&:created_at).reverse
+  end
+
+  private
+
+  def log_next_of_kin_removed(user_id)
+    return if user_id.blank?
+
+    @user.create_log_item({
+                            action: ArchiveConfig.ACTION_REMOVE_FNOK,
+                            fnok_user_id: user_id,
+                            admin_id: current_admin.id,
+                            note: "Change made by #{current_admin.login}"
+                          })
   end
 end

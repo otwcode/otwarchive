@@ -185,21 +185,55 @@ describe Tag do
           expect(synonym.children.reload).to contain_exactly
         end
 
-        it "transfers favorite tags" do
-          user = create(:user)
-          user.favorite_tags.create(tag: synonym)
-          synonym.update!(syn_string: fandom.name)
-          expect(user.favorite_tags.count).to eq 1
-          expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+        context "with asynchronous jobs run asynchronously" do
+          include ActiveJob::TestHelper
+
+          it "transfers the subtags to the new parent autocomplete" do
+            child = create(:canonical_character)
+            synonym.add_association(child)
+            synonym.reload
+
+            fandom_redis_key = Tag.transliterate("autocomplete_fandom_#{fandom.name.downcase}_character")
+
+            expect(REDIS_AUTOCOMPLETE.exists(fandom_redis_key)).to be false
+
+            synonym.update!(syn_string: fandom.name)
+
+            User.current_user = nil # No current user in asynchronous context (?)
+            perform_enqueued_jobs
+
+            expect(fandom.children.reload).to contain_exactly(child)
+            expect(synonym.children.reload).to be_empty
+
+            expect(REDIS_AUTOCOMPLETE.exists(fandom_redis_key)).to be true
+            expect(REDIS_AUTOCOMPLETE.zrange(fandom_redis_key, 0, -1)).to eq(["#{child.id}: #{child.name}"])
+          end
         end
 
-        it "handles duplicate favorite tags" do
-          user = create(:user)
-          user.favorite_tags.create(tag: fandom)
-          user.favorite_tags.create(tag: synonym)
-          synonym.update!(syn_string: fandom.name)
-          expect(user.favorite_tags.count).to eq 1
-          expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+        context "with favorite tags" do
+          # Can't create a user while User.current_user is an admin due to
+          # restrictions on which properties of a pseud an admin can edit.
+          let(:user) do
+            User.current_user = nil
+            user = create(:user)
+            User.current_user = create(:admin)
+            user
+          end
+
+          it "transfers favorite tags" do
+            user.favorite_tags.create(tag: synonym)
+            synonym.update!(syn_string: fandom.name)
+            expect(user.favorite_tags.count).to eq 1
+            expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+          end
+
+          it "handles duplicate favorite tags" do
+            user.favorite_tags.create(tag: fandom)
+            user.favorite_tags.create(tag: synonym)
+            synonym.update!(syn_string: fandom.name)
+            expect(user.favorite_tags.count).to eq 1
+            expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+          end
         end
       end
     end

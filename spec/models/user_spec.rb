@@ -1,6 +1,24 @@
 require "spec_helper"
 
 describe User do
+  describe "validations" do
+    context "with a forbidden user name" do
+      let(:forbidden_username) { Faker::Lorem.characters(number: 8) }
+
+      before do
+        allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([forbidden_username])
+      end
+
+      it { is_expected.not_to allow_values(forbidden_username, forbidden_username.swapcase).for(:login) }
+
+      it "does not prevent saving when the name is unchanged" do
+        existing_user = build(:user, login: forbidden_username)
+        existing_user.save!(validate: false)
+        expect(existing_user.save).to be_truthy
+      end
+    end
+  end
+
   describe "#destroy" do
     context "on a user with kudos" do
       let(:user) { create(:user) }
@@ -13,6 +31,23 @@ describe User do
           expect(kudo.user).to be_nil
           expect(kudo.user_id).to be_nil
         end
+      end
+    end
+
+    context "when the user is set as someone else's fnok" do
+      let(:fnok) { create(:fannish_next_of_kin) }
+      let(:user) { fnok.kin }
+      let(:person) { fnok.user }
+
+      it "removes the relationship and creates a log item of the removal" do
+        user_id = user.id
+        user.destroy!
+        expect(person.reload.fannish_next_of_kin).to be_nil
+        log_item = person.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
+        expect(log_item.fnok_user_id).to eq(user_id)
+        expect(log_item.admin_id).to be_nil
+        expect(log_item.note).to eq("System Generated")
       end
     end
   end
