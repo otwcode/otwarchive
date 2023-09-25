@@ -201,6 +201,7 @@ describe Tag do
 
             User.current_user = nil # No current user in asynchronous context (?)
             perform_enqueued_jobs
+            perform_enqueued_jobs # Some async jobs trigger other async jobs
 
             expect(fandom.children.reload).to contain_exactly(child)
             expect(synonym.children.reload).to be_empty

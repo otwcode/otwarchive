@@ -816,9 +816,11 @@ class Tag < ApplicationRecord
       self.child_taggings.destroy_all
       self.sub_taggings.destroy_all
       self.meta_taggings.destroy_all
-    end
 
-    refresh_autocomplete
+      if self.merger&.canonical? and self.merger&.is_a?(Fandom)
+        self.merger.async_after_commit(:refresh_all_children_autocomplete)
+      end
+    end
   end
 
   # When we make this tag a synonym of another canonical tag, we want to move
@@ -1006,6 +1008,10 @@ class Tag < ApplicationRecord
         syn.update(merger_id: self.id)
       end
     end
+  end
+
+  def refresh_all_children_autocomplete
+    child_taggings&.each(&:update_child_autocomplete)
   end
 
   #################################
