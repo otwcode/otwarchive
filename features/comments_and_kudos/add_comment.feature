@@ -247,4 +247,4 @@ Scenario: It shows and hides cancel buttons properly even on a new page
   When I cancel the reply box
     Then I should see "Aftermath"
     Then I should not see "Cancel"
-
+    Then I should see "Reply"

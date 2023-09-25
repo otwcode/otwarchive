@@ -204,7 +204,7 @@ module CommentsHelper
   end
 
   # return link to cancel new reply to a comment
-  def cancel_comment_reply_link(comment, remote: true)
+  def cancel_comment_reply_link(comment)
     commentable_id = comment.ultimate_parent.is_a?(Tag) ?
                         :tag_id :
                         comment.parent.class.name.foreign_key.to_sym
@@ -222,7 +222,7 @@ module CommentsHelper
         view_full_work: params[:view_full_work],
         page: params[:page]
       ),
-      remote: remote
+      remote: true
     )
   end
 
