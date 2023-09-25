@@ -107,7 +107,7 @@
         <% elsif comment.persisted? %>
           <%= cancel_edit_comment_link(comment) %>
         <% elsif commentable.is_a?(Comment) || commentable.is_a?(CommentDecorator) %>
-          <%= cancel_comment_reply_link(commentable, remote: !on_js_less_comment_form(commentable)) %>
+          <%= cancel_comment_reply_link(commentable, remote: !focused_on_comment(commentable)) %>
         <% end %>
       </p>
     </fieldset>

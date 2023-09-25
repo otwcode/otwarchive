@@ -184,7 +184,7 @@ module CommentsHelper
   #### HELPERS FOR REPLYING TO COMMENTS #####
 
   def add_cancel_comment_reply_link(comment)
-    if on_js_less_comment_form(comment)
+    if focused_on_comment(comment)
       cancel_comment_reply_link(comment)
     else
       add_comment_reply_link(comment)
@@ -368,7 +368,7 @@ module CommentsHelper
     parent.respond_to?(:moderated_commenting_enabled) && parent.moderated_commenting_enabled?
   end
 
-  def on_js_less_comment_form(commentable)
+  def focused_on_comment(commentable)
     params[:add_comment_reply_id] && params[:add_comment_reply_id] == commentable.id.to_s
   end
 end
