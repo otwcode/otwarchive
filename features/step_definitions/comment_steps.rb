@@ -324,8 +324,5 @@ When "I cancel the reply box" do
 end
 
 When "I reply on a new page" do
-  new_window = window_opened_by do
-    find(:link, "Reply").click(:control)
-  end
-  switch_to_window(new_window)
+  visit find(:link, "Reply")["href"]
 end

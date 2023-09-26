@@ -209,42 +209,38 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, with 
     Then I should see "Comment created!"
 
 Scenario: It hides comment actions when a reply form is open
-  When I am logged in as "author"
-    And I post the work "The One Where Neal is Awesome"
-  When I am logged in as "commenter"
+  Given the work "The One Where Neal is Awesome"
+    And I am logged in as "commenter"
     And I post the comment "I loved this!" on the work "The One Where Neal is Awesome"
   When I follow "Reply"
-    Then I should see "Comment as commenter"
-    Then I should not see "Thread"
+  Then I should see "Comment as commenter"
+    And I should not see "Thread"
 
 @javascript
 Scenario: It shows and hides cancel buttons properly
   Given the work "Aftermath" by "creator"
     And a comment "Ugh." by "pest" on the work "Aftermath"
-  When I am logged in as "creator"
-    And I view the work "Aftermath"
+  When I view the work "Aftermath"
     And I display comments
   Then I should see "Ugh."
   When I open the reply box
-    Then I should see "Cancel"
-    Then I should not see "Reply"
+  Then I should see "Cancel"
+    But I should not see "Reply"
   When I cancel the reply box
-    Then I should not see "Cancel"
-    Then I should see "Reply"
+  Then I should not see "Cancel"
+    But I should see "Reply"
 
 @javascript
 Scenario: It shows and hides cancel buttons properly even on a new page
-  Given the work "Aftermath" by "creator"
+Given the work "Aftermath" by "creator"
     And a comment "Ugh." by "pest" on the work "Aftermath"
-  When I am logged in as "creator"
-    And I view the work "Aftermath"
+  When I view the work "Aftermath"
     And I display comments
   Then I should see "Ugh."
+  # Go to /chapters/XX?add_comment_reply_id=YY&show_comments=true#comment_YY"; akin to a Ctrl+Click on "Reply"
   When I reply on a new page
-    Then I should see "Aftermath"
-    Then I should see "Cancel"
-    Then I should not see "Reply"
+  Then I should see "Cancel"
+    But I should not see "Reply"
   When I cancel the reply box
-    Then I should see "Aftermath"
-    Then I should not see "Cancel"
-    Then I should see "Reply"
+  Then I should not see "Cancel"
+    But I should see "Reply"
