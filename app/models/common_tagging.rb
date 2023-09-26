@@ -30,7 +30,7 @@ class CommonTagging < ApplicationRecord
   end
 
   def update_child_autocomplete
-    common_tag&.refresh_autocomplete
+    common_tag&.add_to_parent_fandoms_autocomplete
   end
 
   # A relationship should inherit its characters' fandoms
