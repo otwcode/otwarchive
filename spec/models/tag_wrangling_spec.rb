@@ -586,7 +586,7 @@ describe Tag do
       expect_autocomplete_to_return(fandom, [character])
     end
 
-    it "updates Redis autocomplete when removing a canon character from a fandom" do
+    it "updates Redis autocomplete when removing a character from a fandom" do
       fandom = create(:canonical_fandom)
       character = create(:canonical_character)
 
