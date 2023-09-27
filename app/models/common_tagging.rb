@@ -23,6 +23,8 @@ class CommonTagging < ApplicationRecord
 
   after_commit :update_search
 
+  before_destroy :remove_from_autocomplete
+
   def update_wrangler
     unless User.current_user.nil?
       common_tag.update!(last_wrangler: User.current_user)
@@ -31,6 +33,10 @@ class CommonTagging < ApplicationRecord
 
   def add_to_autocomplete
     common_tag.add_to_fandom_autocomplete(filterable)
+  end
+
+  def remove_from_autocomplete
+    common_tag&.remove_from_fandom_autocomplete(filterable)
   end
 
   # A relationship should inherit its characters' fandoms

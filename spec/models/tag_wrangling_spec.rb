@@ -193,9 +193,7 @@ describe Tag do
             synonym.add_association(child)
             synonym.reload
 
-            fandom_redis_key = Tag.transliterate("autocomplete_fandom_#{fandom.name.downcase}_character")
-
-            expect(REDIS_AUTOCOMPLETE.exists(fandom_redis_key)).to be false
+            expect_autocomplete_to_return(fandom, [])
 
             synonym.update!(syn_string: fandom.name)
 
@@ -205,8 +203,7 @@ describe Tag do
             expect(fandom.children.reload).to contain_exactly(child)
             expect(synonym.children.reload).to be_empty
 
-            expect(REDIS_AUTOCOMPLETE.exists(fandom_redis_key)).to be true
-            expect(REDIS_AUTOCOMPLETE.zrange(fandom_redis_key, 0, -1)).to eq(["#{child.id}: #{child.name}"])
+            expect_autocomplete_to_return(fandom, [child])
           end
         end
 
@@ -576,5 +573,40 @@ describe Tag do
 
       expect(work.filters.reload).not_to include(meta)
     end
+  end
+
+  describe "associations" do
+    it "updates Redis autocomplete when adding a canon character to a canon fandom" do
+      fandom = create(:canonical_fandom)
+      character = create(:canonical_character)
+
+      expect_autocomplete_to_return(fandom, [])
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [character])
+    end
+
+    it "updates Redis autocomplete when removing a canon character from a fandom" do
+      fandom = create(:canonical_fandom)
+      character = create(:canonical_character)
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [character])
+
+      fandom.child_taggings.destroy_all
+      expect_autocomplete_to_return(fandom, [])
+    end
+  end
+
+  def redis_autocomplete_key(fandom)
+    Tag.transliterate("autocomplete_fandom_#{fandom.name.downcase}_character")
+  end
+
+  def redis_autocomplete_store(fandom)
+    REDIS_AUTOCOMPLETE.zrange(redis_autocomplete_key(fandom), 0, -1)
+  end
+
+  def expect_autocomplete_to_return(fandom, characters)
+    expect(redis_autocomplete_store(fandom)).to eq characters.map { |character| "#{character.id}: #{character.name}" }
   end
 end
