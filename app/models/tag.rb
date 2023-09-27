@@ -822,8 +822,6 @@ class Tag < ApplicationRecord
       self.child_taggings.destroy_all
       self.sub_taggings.destroy_all
       self.meta_taggings.destroy_all
-
-      self.merger.async_after_commit(:refresh_all_children_autocomplete) if self.merger&.canonical? && self.merger.is_a?(Fandom)
     end
   end
 
@@ -1012,10 +1010,6 @@ class Tag < ApplicationRecord
         syn.update(merger_id: self.id)
       end
     end
-  end
-
-  def refresh_all_children_autocomplete
-    child_taggings&.each(&:add_to_autocomplete)
   end
 
   #################################
