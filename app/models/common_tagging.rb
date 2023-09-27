@@ -21,9 +21,9 @@ class CommonTagging < ApplicationRecord
   after_create :remove_uncategorized_media
   after_create :add_to_autocomplete
 
-  after_commit :update_search
-
   before_destroy :remove_from_autocomplete
+
+  after_commit :update_search
 
   def update_wrangler
     unless User.current_user.nil?
