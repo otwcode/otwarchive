@@ -199,7 +199,7 @@ describe Tag do
 
             synonym.update!(syn_string: fandom.name)
 
-            User.current_user = nil # No current user in asynchronous context (?)
+            User.current_user = nil # No current user in asynchronous context
             perform_enqueued_jobs
             perform_enqueued_jobs # Some async jobs trigger other async jobs
 

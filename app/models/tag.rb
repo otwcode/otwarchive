@@ -471,18 +471,19 @@ class Tag < ApplicationRecord
   end
 
   def add_to_autocomplete(score = nil)
-    add_to_parent_fandoms_autocomplete(score)
+    parents.each do |parent|
+      add_to_fandom_autocomplete(parent, score)
+    end
     super
   end
 
-  def add_to_parent_fandoms_autocomplete(score = nil)
+  def add_to_fandom_autocomplete(fandom, score = nil)
     return unless canonical
+    return unless fandom.is_a?(Fandom)
     return unless self.is_a?(Character) || self.is_a?(Relationship)
 
     score ||= autocomplete_score
-    parents.each do |parent|
-      REDIS_AUTOCOMPLETE.zadd(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), score, autocomplete_value) if parent.is_a?(Fandom)
-    end
+    REDIS_AUTOCOMPLETE.zadd(self.transliterate("autocomplete_fandom_#{fandom.name.downcase}_#{type.downcase}"), score, autocomplete_value)
   end
 
   def remove_from_autocomplete
@@ -1014,7 +1015,7 @@ class Tag < ApplicationRecord
   end
 
   def refresh_all_children_autocomplete
-    child_taggings&.each(&:update_child_autocomplete)
+    child_taggings&.each(&:add_to_autocomplete)
   end
 
   #################################
