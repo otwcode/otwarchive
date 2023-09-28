@@ -2,7 +2,7 @@ class User < ApplicationRecord
   audited
   include WorksOwner
   include PasswordResetsLimitable
-  include KinHistory
+  include UserLoggable
 
   devise :database_authenticatable,
          :confirmable,

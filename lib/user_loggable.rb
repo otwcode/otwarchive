@@ -1,4 +1,4 @@
-module KinHistory
+module UserLoggable
   def self.included(user)
     user.class_eval do
       before_destroy :log_removal_of_self_from_fnok_relationships
