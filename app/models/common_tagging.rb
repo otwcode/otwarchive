@@ -36,7 +36,7 @@ class CommonTagging < ApplicationRecord
   end
 
   def remove_from_autocomplete
-    common_tag&.remove_from_fandom_autocomplete(filterable)
+    common_tag.remove_from_fandom_autocomplete(filterable)
   end
 
   # A relationship should inherit its characters' fandoms

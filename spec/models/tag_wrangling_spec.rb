@@ -596,6 +596,17 @@ describe Tag do
       fandom.child_taggings.destroy_all
       expect_autocomplete_to_return(fandom, [])
     end
+
+    it "updates Redis autocomplete when a character is deleted" do
+      fandom = create(:canonical_fandom)
+      character = create(:canonical_character)
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [character])
+
+      character.destroy
+      expect_autocomplete_to_return(fandom, [])
+    end
   end
 
   def redis_autocomplete_key(fandom)
