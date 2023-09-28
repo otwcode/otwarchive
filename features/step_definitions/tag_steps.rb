@@ -71,7 +71,7 @@ Given "a set of tags for tag sort by use exists" do
 
   # Create tags with specified number of uses
   hash.each do |freeform, uses|
-    tag = Freeform.create(name: freeform)
+    tag = Freeform.find_or_create_by_name(freeform)
     tag.taggings_count = uses
   end
 

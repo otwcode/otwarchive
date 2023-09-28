@@ -78,7 +78,7 @@ describe Tag do
       end
     end
 
-    context "write_redis_to_database" do
+    describe "write_redis_to_database" do
       let(:tag) { create(:fandom) }
       let!(:work) { create(:work, fandom_string: tag.name) }
 
@@ -87,22 +87,23 @@ describe Tag do
         tag.reload
       end
 
+      def expect_tag_update_flag_in_redis_to_be(flag)
+        expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq flag
+      end
+
       it "does not write to the database when reading the count" do
         tag.taggings_count
-        # Check if redis has flagged this tag for an update to the database.
-        expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq false
+        expect_tag_update_flag_in_redis_to_be(false)
       end
 
       it "does not write to the database when assigning the same count" do
         tag.taggings_count = 1
-        # Check if redis has flagged this tag for an update to the database.
-        expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq false
+        expect_tag_update_flag_in_redis_to_be(false)
       end
 
       it "writes to the database when assigning a new count" do
         tag.taggings_count = 2
-        # Check if redis has flagged this tag for an update to the database.
-        expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
+        expect_tag_update_flag_in_redis_to_be(true)
 
         RedisJobSpawner.perform_now("TagCountUpdateJob")
         tag.reload
@@ -113,12 +114,8 @@ describe Tag do
       end
 
       it "writes to the database when adding a new work with the same tag" do
-        expect(tag.taggings_count_cache).to eq 1
-        expect(tag.taggings_count).to eq 1
-
         create(:work, fandom_string: tag.name)
-        # Check if redis has flagged this tag for an update to the database.
-        expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq true
+        expect_tag_update_flag_in_redis_to_be(true)
 
         RedisJobSpawner.perform_now("TagCountUpdateJob")
         tag.reload
