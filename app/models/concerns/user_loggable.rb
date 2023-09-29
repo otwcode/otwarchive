@@ -1,8 +1,8 @@
 module UserLoggable
-  def self.included(user)
-    user.class_eval do
-      before_destroy :log_removal_of_self_from_fnok_relationships
-    end
+  extend ActiveSupport::Concern
+
+  included do
+    before_destroy :log_removal_of_self_from_fnok_relationships
   end
 
   def log_removal_of_self_from_fnok_relationships
