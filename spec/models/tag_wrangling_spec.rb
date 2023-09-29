@@ -609,15 +609,9 @@ describe Tag do
     end
   end
 
-  def redis_autocomplete_key(fandom)
-    Tag.transliterate("autocomplete_fandom_#{fandom.name.downcase}_character")
-  end
-
-  def redis_autocomplete_store(fandom)
-    REDIS_AUTOCOMPLETE.zrange(redis_autocomplete_key(fandom), 0, -1)
-  end
-
   def expect_autocomplete_to_return(fandom, characters)
-    expect(redis_autocomplete_store(fandom)).to eq characters.map { |character| "#{character.id}: #{character.name}" }
+    redis_key = Tag.transliterate("autocomplete_fandom_#{fandom.name.downcase}_character")
+    redis_store = REDIS_AUTOCOMPLETE.zrange(redis_key, 0, -1)
+    expect(redis_store).to eq characters.map { |character| "#{character.id}: #{character.name}" }
   end
 end
