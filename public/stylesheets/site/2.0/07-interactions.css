@@ -126,10 +126,6 @@ form dt {
   border-bottom: 1px solid #f3efec;
 }
 
-form dt.landmark, .dashboard form dt.landmark {
-  clear: both;
-}
-
 form dd, form dd.any {
   float: left;
   width: 72.5%;
@@ -691,6 +687,10 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
 
 .dashboard fieldset {
   clear: right;
+}
+
+.dashboard form dt.landmark {
+  clear: both;
 }
 
 /*END== */
