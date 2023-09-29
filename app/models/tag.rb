@@ -471,33 +471,38 @@ class Tag < ApplicationRecord
   end
 
   def add_to_autocomplete(score = nil)
-    parents.each do |parent|
-      add_to_fandom_autocomplete(parent, score)
+    if eligible_for_fandom_autocomplete?
+      parents.each do |parent|
+        add_to_fandom_autocomplete(parent, score) if parent.is_a?(Fandom)
+      end
     end
     super
   end
 
   def add_to_fandom_autocomplete(fandom, score = nil)
-    return unless canonical
-    return unless fandom.is_a?(Fandom)
-    return unless self.is_a?(Character) || self.is_a?(Relationship)
-
     score ||= autocomplete_score
     REDIS_AUTOCOMPLETE.zadd(self.transliterate("autocomplete_fandom_#{fandom.name.downcase}_#{type.downcase}"), score, autocomplete_value)
   end
 
   def remove_from_autocomplete
     super
-    parents.each do |parent|
-      remove_from_fandom_autocomplete(parent)
+    if was_eligible_for_fandom_autocomplete?
+      parents.each do |parent|
+        remove_from_fandom_autocomplete(parent) if parent.is_a?(Fandom)
+      end
     end
   end
 
   def remove_from_fandom_autocomplete(fandom)
-    return unless fandom.is_a?(Fandom)
-    return unless self.is_a?(Character) || self.is_a?(Relationship)
-
     REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{fandom.name.downcase}_#{type.downcase}"), autocomplete_value)
+  end
+
+  def eligible_for_fandom_autocomplete?
+    return (self.is_a?(Character) || self.is_a?(Relationship)) && canonical
+  end
+
+  def was_eligible_for_fandom_autocomplete?
+    return (self.is_a?(Character) || self.is_a?(Relationship))
   end
 
   def remove_stale_from_autocomplete
