@@ -32,15 +32,15 @@ class CommonTagging < ApplicationRecord
   end
 
   def add_to_autocomplete
-    if filterable.is_a?(Fandom) && common_tag.eligible_for_fandom_autocomplete?
-      common_tag.add_to_fandom_autocomplete(filterable)
-    end
+    return unless filterable.is_a?(Fandom) && common_tag.eligible_for_fandom_autocomplete?
+
+    common_tag.add_to_fandom_autocomplete(filterable)
   end
 
   def remove_from_autocomplete
-    if filterable.is_a?(Fandom) && common_tag&.was_eligible_for_fandom_autocomplete?
-      common_tag.remove_from_fandom_autocomplete(filterable)
-    end
+    return unless filterable.is_a?(Fandom) && common_tag&.was_eligible_for_fandom_autocomplete?
+
+    common_tag.remove_from_fandom_autocomplete(filterable)
   end
 
   # A relationship should inherit its characters' fandoms

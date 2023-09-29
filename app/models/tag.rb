@@ -498,11 +498,11 @@ class Tag < ApplicationRecord
   end
 
   def eligible_for_fandom_autocomplete?
-    return (self.is_a?(Character) || self.is_a?(Relationship)) && canonical
+    (self.is_a?(Character) || self.is_a?(Relationship)) && canonical
   end
 
   def was_eligible_for_fandom_autocomplete?
-    return (self.is_a?(Character) || self.is_a?(Relationship))
+    (self.is_a?(Character) || self.is_a?(Relationship))
   end
 
   def remove_stale_from_autocomplete
