@@ -486,10 +486,11 @@ class Tag < ApplicationRecord
 
   def remove_from_autocomplete
     super
-    if was_eligible_for_fandom_autocomplete?
-      parents.each do |parent|
-        remove_from_fandom_autocomplete(parent) if parent.is_a?(Fandom)
-      end
+
+    return unless was_eligible_for_fandom_autocomplete?
+
+    parents.each do |parent|
+      remove_from_fandom_autocomplete(parent) if parent.is_a?(Fandom)
     end
   end
 
