@@ -503,16 +503,16 @@ class Tag < ApplicationRecord
   end
 
   def was_eligible_for_fandom_autocomplete?
-    self.is_a?(Character) || self.is_a?(Relationship) && canonical_before_last_save
+    (self.is_a?(Character) || self.is_a?(Relationship)) && canonical_before_last_save
   end
 
   def remove_stale_from_autocomplete
     super
 
-    if was_eligible_for_fandom_autocomplete?
-      parents.each do |parent|
-        REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), autocomplete_value_before_last_save) if parent.is_a?(Fandom)
-      end
+    return unless was_eligible_for_fandom_autocomplete?
+
+    parents.each do |parent|
+      REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), autocomplete_value_before_last_save) if parent.is_a?(Fandom)
     end
   end
 
