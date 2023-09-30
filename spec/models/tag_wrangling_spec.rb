@@ -607,6 +607,40 @@ describe Tag do
       character.destroy
       expect_autocomplete_to_return(fandom, [])
     end
+
+    it "adds to autocomplete when a character becomes canonical" do
+      fandom = create(:canonical_fandom)
+      character = create(:character)
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [])
+
+      character.reload.update! canonical: true
+      expect_autocomplete_to_return(fandom, [character])
+    end
+
+    it "removes from autocomplete when a character loses its canonicity" do
+      fandom = create(:canonical_fandom)
+      character = create(:canonical_character)
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [character])
+
+      character.reload.update! canonical: false
+      expect_autocomplete_to_return(fandom, [])
+    end
+
+    it "updates autocomplete when a character name changes" do
+      fandom = create(:canonical_fandom)
+      character = create(:canonical_character)
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [character])
+
+      User.current_user = create(:admin)
+      character.reload.update! name: "Toto"
+      expect_autocomplete_to_return(fandom, [character])
+    end
   end
 
   def expect_autocomplete_to_return(fandom, characters)
