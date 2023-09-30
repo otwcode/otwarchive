@@ -503,7 +503,7 @@ class Tag < ApplicationRecord
   end
 
   def was_eligible_for_fandom_autocomplete?
-    (self.is_a?(Character) || self.is_a?(Relationship)) && canonical_before_last_save
+    (self.is_a?(Character) || self.is_a?(Relationship)) && (canonical || canonical_before_last_save)
   end
 
   def remove_stale_from_autocomplete
