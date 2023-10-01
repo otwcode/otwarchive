@@ -34,6 +34,23 @@ describe User do
       end
     end
 
+    context "when the user has a fnok" do
+      let(:fnok) { create(:fannish_next_of_kin) }
+      let(:user) { fnok.user }
+      let(:kin) { fnok.kin }
+
+      it "logs the fnok removal on the kin side" do
+        user_id = user.id
+        user.destroy!
+
+        log_item = kin.reload.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVED_AS_FNOK)
+        expect(log_item.fnok_user_id).to eq(user_id)
+        expect(log_item.admin_id).to be_nil
+        expect(log_item.note).to eq("System Generated")
+      end
+    end
+
     context "when the user is set as someone else's fnok" do
       let(:fnok) { create(:fannish_next_of_kin) }
       let(:user) { fnok.kin }

@@ -72,7 +72,7 @@ class Admin::AdminUsersController < Admin::BaseController
     kin_email = params[:next_of_kin_email]
 
     fnok = @user.fannish_next_of_kin
-    previous_fnok_user_id = fnok&.kin&.id
+    previous_kin = fnok&.kin
     fnok ||= @user.build_fannish_next_of_kin
     fnok.assign_attributes(kin: kin, kin_email: kin_email)
 
@@ -84,19 +84,14 @@ class Admin::AdminUsersController < Admin::BaseController
     # Remove FNOK that already exists.
     if fnok.persisted? && kin.blank? && kin_email.blank?
       fnok.destroy
-      log_next_of_kin_removed(previous_fnok_user_id)
+      @user.log_removal_of_next_of_kin(previous_kin, admin: current_admin)
       flash[:notice] = ts("Fannish next of kin was removed.")
       redirect_to admin_user_path(@user) and return
     end
 
     if fnok.save
-      log_next_of_kin_removed(previous_fnok_user_id)
-      @user.create_log_item({
-                              action: ArchiveConfig.ACTION_ADD_FNOK,
-                              fnok_user_id: fnok.kin.id,
-                              admin_id: current_admin.id,
-                              note: "Change made by #{current_admin.login}"
-                            })
+      @user.log_removal_of_next_of_kin(previous_kin, admin: current_admin)
+      @user.log_assignment_of_next_of_kin(kin, admin: current_admin)
       flash[:notice] = ts("Fannish next of kin was updated.")
       redirect_to admin_user_path(@user)
     else
@@ -183,19 +178,6 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def log_items
-    @log_items ||= (@user.log_items + LogItem.where(fnok_user_id: @user.id)).sort_by(&:created_at).reverse
-  end
-
-  private
-
-  def log_next_of_kin_removed(user_id)
-    return if user_id.blank?
-
-    @user.create_log_item({
-                            action: ArchiveConfig.ACTION_REMOVE_FNOK,
-                            fnok_user_id: user_id,
-                            admin_id: current_admin.id,
-                            note: "Change made by #{current_admin.login}"
-                          })
+    @log_items ||= @user.log_items.sort_by(&:created_at).reverse
   end
 end
