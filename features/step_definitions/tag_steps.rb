@@ -66,7 +66,7 @@ Given "a set of tags for tag sort by use exists" do
     "also 8 uses" => 8,
     "5 uses" => 5,
     "2 uses" => 2,
-    "0 uses" => 0,
+    "0 uses" => 0
   }.each do |freeform, uses|
     tag = Freeform.find_or_create_by_name(freeform.dup)
     tag.taggings_count = uses
