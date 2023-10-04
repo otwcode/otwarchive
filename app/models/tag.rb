@@ -480,30 +480,48 @@ class Tag < ApplicationRecord
   end
 
   def add_to_autocomplete(score = nil)
-    score ||= autocomplete_score
-    if self.is_a?(Character) || self.is_a?(Relationship)
+    if eligible_for_fandom_autocomplete?
       parents.each do |parent|
-        REDIS_AUTOCOMPLETE.zadd(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), score, autocomplete_value) if parent.is_a?(Fandom)
+        add_to_fandom_autocomplete(parent, score) if parent.is_a?(Fandom)
       end
     end
     super
+  end
+
+  def add_to_fandom_autocomplete(fandom, score = nil)
+    score ||= autocomplete_score
+    REDIS_AUTOCOMPLETE.zadd(self.transliterate("autocomplete_fandom_#{fandom.name.downcase}_#{type.downcase}"), score, autocomplete_value)
   end
 
   def remove_from_autocomplete
     super
-    if self.is_a?(Character) || self.is_a?(Relationship)
-      parents.each do |parent|
-        REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), autocomplete_value) if parent.is_a?(Fandom)
-      end
+
+    return unless was_eligible_for_fandom_autocomplete?
+
+    parents.each do |parent|
+      remove_from_fandom_autocomplete(parent) if parent.is_a?(Fandom)
     end
+  end
+
+  def remove_from_fandom_autocomplete(fandom)
+    REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{fandom.name.downcase}_#{type.downcase}"), autocomplete_value)
+  end
+
+  def eligible_for_fandom_autocomplete?
+    (self.is_a?(Character) || self.is_a?(Relationship)) && canonical
+  end
+
+  def was_eligible_for_fandom_autocomplete?
+    (self.is_a?(Character) || self.is_a?(Relationship)) && (canonical || canonical_before_last_save)
   end
 
   def remove_stale_from_autocomplete
     super
-    if self.is_a?(Character) || self.is_a?(Relationship)
-      parents.each do |parent|
-        REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), autocomplete_value_before_last_save) if parent.is_a?(Fandom)
-      end
+
+    return unless was_eligible_for_fandom_autocomplete?
+
+    parents.each do |parent|
+      REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), autocomplete_value_before_last_save) if parent.is_a?(Fandom)
     end
   end
 
