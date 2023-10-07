@@ -137,8 +137,8 @@ describe Tag do
 
       it "triggers reindexing of tags which aren't used much" do
         create(:work, fandom_string: tag.name)
-        expect { run_update_tag_count_job }.to
-          add_to_reindex_queue(tag, :main)
+        expect { run_update_tag_count_job }
+          .to add_to_reindex_queue(tag, :main)
       end
 
       it "triggers reindexing of tags which are used significantly" do
@@ -146,8 +146,8 @@ describe Tag do
           create(:work, fandom_string: tag.name)
         end
 
-        expect { run_update_tag_count_job }.to
-          add_to_reindex_queue(tag, :main)
+        expect { run_update_tag_count_job }
+          .to add_to_reindex_queue(tag, :main)
         expect_tag_update_flag_in_redis_to_be(false)
 
         create(:work, fandom_string: tag.name)
