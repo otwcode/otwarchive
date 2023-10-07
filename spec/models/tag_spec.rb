@@ -83,6 +83,10 @@ describe Tag do
       let!(:work) { create(:work, fandom_string: tag.name) }
 
       before do
+        run_update_tag_count_job
+      end
+
+      def run_update_tag_count_job
         RedisJobSpawner.perform_now("TagCountUpdateJob")
         tag.reload
       end
@@ -105,8 +109,7 @@ describe Tag do
         tag.taggings_count = 2
         expect_tag_update_flag_in_redis_to_be(true)
 
-        RedisJobSpawner.perform_now("TagCountUpdateJob")
-        tag.reload
+        run_update_tag_count_job
 
         # Actual number of taggings has not changed though count cache has.
         expect(tag.taggings_count_cache).to eq 2
@@ -117,8 +120,7 @@ describe Tag do
         create(:work, fandom_string: tag.name)
         expect_tag_update_flag_in_redis_to_be(true)
 
-        RedisJobSpawner.perform_now("TagCountUpdateJob")
-        tag.reload
+        run_update_tag_count_job
 
         expect(tag.taggings_count_cache).to eq 2
         expect(tag.taggings_count).to eq 2
@@ -130,16 +132,14 @@ describe Tag do
         REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
         REDIS_GENERAL.sadd("tag_update", tag.id)
 
-        RedisJobSpawner.perform_now("TagCountUpdateJob")
+        run_update_tag_count_job
 
-        expect(tag.reload.taggings_count_cache).to eq 1
+        expect(tag.taggings_count_cache).to eq 1
       end
 
       it "triggers reindexing of tags which aren't used much" do
         create(:work, fandom_string: tag.name)
-
-        expect { RedisJobSpawner.perform_now("TagCountUpdateJob") }
-          .to add_to_reindex_queue(tag.reload, :main)
+        expect{ run_update_tag_count_job }.to add_to_reindex_queue(tag, :main)
       end
 
       it "triggers reindexing of tags which are used significantly" do
@@ -147,8 +147,11 @@ describe Tag do
           create(:work, fandom_string: tag.name)
         end
 
-        expect { RedisJobSpawner.perform_now("TagCountUpdateJob") }
-          .to add_to_reindex_queue(tag.reload, :main)
+        expect{ run_update_tag_count_job }.to add_to_reindex_queue(tag, :main)
+        expect_tag_update_flag_in_redis_to_be(false)
+
+        create(:work, fandom_string: tag.name)
+        expect_tag_update_flag_in_redis_to_be(true)
       end
     end
   end

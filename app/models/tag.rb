@@ -1133,6 +1133,11 @@ class Tag < ApplicationRecord
       end
     end
 
+    # Ensure tags with count cache are updated.
+    if tag.saved_change_to_taggings_count_cache?
+      Rails.cache.delete(taggings_count_cache_key)
+    end
+
     # Reindex immediately to update the unwrangled bin.
     if tag.saved_change_to_unwrangleable?
       tag.reindex_document
