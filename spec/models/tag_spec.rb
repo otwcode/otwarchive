@@ -82,9 +82,7 @@ describe Tag do
       let(:tag) { create(:fandom) }
       let!(:work) { create(:work, fandom_string: tag.name) }
 
-      before do
-        run_update_tag_count_job
-      end
+      before { run_update_tag_count_job }
 
       def run_update_tag_count_job
         RedisJobSpawner.perform_now("TagCountUpdateJob")
