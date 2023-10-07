@@ -1133,7 +1133,7 @@ class Tag < ApplicationRecord
       end
     end
 
-    # Ensure tags with count cache are updated.
+    # Ensure tags with count cache can be reindexed.
     if tag.saved_change_to_taggings_count_cache?
       Rails.cache.delete(taggings_count_cache_key)
     end
