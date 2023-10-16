@@ -77,6 +77,80 @@ describe Tag do
         expect(@fandom_tag.taggings_count_cache).to eq 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
       end
     end
+
+    describe "write_redis_to_database" do
+      let(:tag) { create(:fandom) }
+      let!(:work) { create(:work, fandom_string: tag.name) }
+
+      before do
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
+        tag.reload
+      end
+
+      def expect_tag_update_flag_in_redis_to_be(flag)
+        expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq flag
+      end
+
+      it "does not write to the database when reading the count" do
+        tag.taggings_count
+        expect_tag_update_flag_in_redis_to_be(false)
+      end
+
+      it "does not write to the database when assigning the same count" do
+        tag.taggings_count = 1
+        expect_tag_update_flag_in_redis_to_be(false)
+      end
+
+      it "writes to the database when assigning a new count" do
+        tag.taggings_count = 2
+        expect_tag_update_flag_in_redis_to_be(true)
+
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
+        tag.reload
+
+        # Actual number of taggings has not changed though count cache has.
+        expect(tag.taggings_count_cache).to eq 2
+        expect(tag.taggings_count).to eq 1
+      end
+
+      it "writes to the database when adding a new work with the same tag" do
+        create(:work, fandom_string: tag.name)
+        expect_tag_update_flag_in_redis_to_be(true)
+
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
+        tag.reload
+
+        expect(tag.taggings_count_cache).to eq 2
+        expect(tag.taggings_count).to eq 2
+      end
+
+      it "does not write to the database with a blank value" do
+        # Blank values will cause errors if assigned earlier due to division
+        # in taggings_count_expiry.
+        REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
+        REDIS_GENERAL.sadd("tag_update", tag.id)
+
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
+
+        expect(tag.reload.taggings_count_cache).to eq 1
+      end
+
+      it "triggers reindexing of tags which aren't used much" do
+        create(:work, fandom_string: tag.name)
+
+        expect { RedisJobSpawner.perform_now("TagCountUpdateJob") }
+          .to add_to_reindex_queue(tag.reload, :main)
+      end
+
+      it "triggers reindexing of tags which are used significantly" do
+        ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT.times do
+          create(:work, fandom_string: tag.name)
+        end
+
+        expect { RedisJobSpawner.perform_now("TagCountUpdateJob") }
+          .to add_to_reindex_queue(tag.reload, :main)
+      end
+    end
   end
 
   it "should not be valid without a name" do
