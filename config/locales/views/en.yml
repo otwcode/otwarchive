@@ -454,7 +454,16 @@ en:
         twitter: "@AO3_Status Twitter feed"
   home:
     donate:
+      general:
+        text: There are two main ways to support the AO3 - donating your time or money.
+        title: Donations
+      money:
+        text: The AO3 has ongoing running costs - electricity for the servers and bandwidth so you can reach them - and one-off costs such as buying new servers as the number of users and works increases. Any <a href="https://donate.transformativeworks.org/otwgive">donation to the OTW</a> is a big help. (Don't worry, we'll never connect your AO3 username and your financial information.)
+        title: Donating Financially
       page_title: Donate or Volunteer
+      time:
+        text: The <a href="http://www.transformativeworks.org">Organization for Transformative Works</a> is the parent organization of the Archive of Our Own. We are often looking for volunteers to contribute to <a href="http://www.transformativeworks.org/our-projects">our projects</a>. If you're interested in volunteering specifically to help the Archive of Our Own, the roles to look out for include tag wranglers, testers, coders, Support staff and Abuse staff. We encourage you to browse through the <a href="http://www.transformativeworks.org/volunteer">available listings</a> and apply for any roles which match your qualifications and interests.
+        title: Donating Your Time
     fandoms:
       all_fandoms: All Fandoms
     index:
