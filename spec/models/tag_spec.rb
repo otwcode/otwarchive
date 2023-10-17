@@ -7,6 +7,8 @@ describe Tag do
   end
 
   context 'checking count caching' do
+    let(:fandom_tag) { create(:fandom) }
+
     before(:each) do
       # Set the minimal amount of time a tag can be cached for.
       ArchiveConfig.TAGGINGS_COUNT_MIN_TIME = 1
@@ -14,67 +16,71 @@ describe Tag do
       ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR = 2
       # Set the minimum number of uses needed for before caching is started.
       ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT = 3
-      @fandom_tag = FactoryBot.create(:fandom)
     end
 
-    context 'without updating taggings_count_cache' do
-      it 'should not cache tags which are not used much' do
-        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
-        @fandom_tag.reload
-        expect(@fandom_tag.taggings_count_cache).to eq 0
-        expect(@fandom_tag.taggings_count).to eq 1
+    context 'without running TagCountUpdateJob to update taggings_count_cache' do
+      it 'does not cache tags which are not used much' do
+        create(:work, fandom_string: fandom_tag.name)
+        fandom_tag.reload
+        expect(fandom_tag.taggings_count_cache).to eq 0
+        expect(Rails.cache.read(fandom_tag.taggings_count_cache_key)).to be_nil
+        expect(fandom_tag.taggings_count).to eq 1
       end
 
-      it 'will start caching a when tag when that tag is used significantly' do
+      it 'starts caching when a tag is used significantly' do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
-          FactoryBot.create(:work, fandom_string: @fandom_tag.name)
-          @fandom_tag.reload
-          expect(@fandom_tag.taggings_count_cache).to eq 0
-          expect(@fandom_tag.taggings_count).to eq try
+          create(:work, fandom_string: fandom_tag.name)
+          fandom_tag.reload
+          expect(fandom_tag.taggings_count_cache).to eq 0
+          expect(fandom_tag.taggings_count).to eq try
         end
-        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
-        @fandom_tag.reload
-        # This value should be cached and wrong
-        expect(@fandom_tag.taggings_count_cache).to eq 0
-        expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
+        create(:work, fandom_string: fandom_tag.name)
+        fandom_tag.reload
+        # This value should be wrong
+        expect(fandom_tag.taggings_count_cache).to eq 0
+        # This value should be cached and right
+        expect(Rails.cache.read(fandom_tag.taggings_count_cache_key)).to eq 4
+        expect(fandom_tag.taggings_count).to eq 4
       end
     end
 
-    context 'updating taggings_count_cache' do
-      it 'should not cache tags which are not used much' do
-        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
+    context 'when running TagCountUpdateJob to update taggings_count_cache' do
+      it 'does not cache tags which are not used much' do
+        create(:work, fandom_string: fandom_tag.name)
         RedisJobSpawner.perform_now("TagCountUpdateJob")
-        @fandom_tag.reload
-        expect(@fandom_tag.taggings_count_cache).to eq 1
-        expect(@fandom_tag.taggings_count).to eq 1
+        fandom_tag.reload
+        expect(fandom_tag.taggings_count_cache).to eq 1
+        expect(Rails.cache.read(fandom_tag.taggings_count_cache_key)).to be_nil
+        expect(fandom_tag.taggings_count).to eq 1
       end
 
-      it 'will start caching a when tag when that tag is used significantly' do
+      it 'starts caching when a tag is used significantly' do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
-          FactoryBot.create(:work, fandom_string: @fandom_tag.name)
+          create(:work, fandom_string: fandom_tag.name)
           RedisJobSpawner.perform_now("TagCountUpdateJob")
-          @fandom_tag.reload
-          expect(@fandom_tag.taggings_count_cache).to eq try
-          expect(@fandom_tag.taggings_count).to eq try
+          fandom_tag.reload
+          expect(fandom_tag.taggings_count_cache).to eq try
+          expect(fandom_tag.taggings_count).to eq try
         end
-        FactoryBot.create(:work, fandom_string: @fandom_tag.name)
+        create(:work, fandom_string: fandom_tag.name)
         RedisJobSpawner.perform_now("TagCountUpdateJob")
-        @fandom_tag.reload
-        # This value should be cached and wrong
-        expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
-        expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
+        fandom_tag.reload
+        # This value should be cached and right
+        expect(fandom_tag.taggings_count_cache).to eq 4
+        expect(Rails.cache.read(fandom_tag.taggings_count_cache_key)).to eq 4
+        expect(fandom_tag.taggings_count).to eq 4
       end
 
-      it "Writes to the database do not happen immeadiately" do
+      it "does not write ot the database immediately" do
         (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
-          @fandom_tag.taggings_count = try
-          @fandom_tag.reload
-          expect(@fandom_tag.taggings_count_cache).to eq 0
+          fandom_tag.taggings_count = try
+          fandom_tag.reload
+          expect(fandom_tag.taggings_count_cache).to eq 0
         end
-        @fandom_tag.taggings_count = 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
+        fandom_tag.taggings_count = 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
         RedisJobSpawner.perform_now("TagCountUpdateJob")
-        @fandom_tag.reload
-        expect(@fandom_tag.taggings_count_cache).to eq 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
+        fandom_tag.reload
+        expect(fandom_tag.taggings_count_cache).to eq 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
       end
     end
 
