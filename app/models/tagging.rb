@@ -24,6 +24,7 @@ class Tagging < ApplicationRecord
 
   def update_taggings_count
     return if tagger.blank? || tagger.destroyed?
+
     tagger.taggings_count = tagger.taggings.count
   end
 

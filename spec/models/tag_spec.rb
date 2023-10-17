@@ -6,7 +6,7 @@ describe Tag do
     User.current_user = nil
   end
 
-  context 'checking count caching' do
+  context "checking count caching" do
     let(:fandom_tag) { create(:fandom) }
 
     before(:each) do
@@ -18,8 +18,8 @@ describe Tag do
       ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT = 3
     end
 
-    context 'without running TagCountUpdateJob to update taggings_count_cache' do
-      it 'does not cache tags which are not used much' do
+    context "without running TagCountUpdateJob to update taggings_count_cache" do
+      it "does not cache tags which are not used much" do
         create(:work, fandom_string: fandom_tag.name)
         fandom_tag.reload
         expect(fandom_tag.taggings_count_cache).to eq 0
@@ -27,7 +27,7 @@ describe Tag do
         expect(fandom_tag.taggings_count).to eq 1
       end
 
-      it 'starts caching when a tag is used significantly' do
+      it "starts caching when a tag is used significantly" do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           create(:work, fandom_string: fandom_tag.name)
           fandom_tag.reload
@@ -44,8 +44,8 @@ describe Tag do
       end
     end
 
-    context 'when running TagCountUpdateJob to update taggings_count_cache' do
-      it 'does not cache tags which are not used much' do
+    context "when running TagCountUpdateJob to update taggings_count_cache" do
+      it "does not cache tags which are not used much" do
         create(:work, fandom_string: fandom_tag.name)
         RedisJobSpawner.perform_now("TagCountUpdateJob")
         fandom_tag.reload
@@ -54,7 +54,7 @@ describe Tag do
         expect(fandom_tag.taggings_count).to eq 1
       end
 
-      it 'starts caching when a tag is used significantly' do
+      it "starts caching when a tag is used significantly" do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           create(:work, fandom_string: fandom_tag.name)
           RedisJobSpawner.perform_now("TagCountUpdateJob")
