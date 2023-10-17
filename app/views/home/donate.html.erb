@@ -3,11 +3,12 @@
 
 <div class="userstuff">
   <h3><%= t(".time.title") %></h3>
-  <p><%= t(".time.text_html",
-           otw_url: link_to(t(".time.otw_url_text"), t(".time.otw_url")),
-           projects_url: link_to(t(".time.projects_url_text"), t(".time.projects_url")),
-           volunteer_url: link_to(t(".time.volunteer_url_text"), t(".time.volunteer_url"))) %></p>
+  <p><%= t(".time.details_html",
+           otw_link: link_to(t(".time.otw"), "http://www.transformativeworks.org"),
+           projects_link: link_to(t(".time.projects"), "http://www.transformativeworks.org/our-projects"),
+           volunteer_link: link_to(t(".time.volunteer"), "http://www.transformativeworks.org/volunteer")) %></p>
 
   <h3><%= t(".money.title") %></h3>
-  <p><%= t(".money.text_html", donation_url: link_to(t(".money.donation_url_text"), t(".money.donation_url"))) %></p>
+  <p><%= t(".money.details_html",
+           donation_link: link_to(t(".money.donation"), "https://donate.transformativeworks.org/otwgive")) %></p>
 </div>
