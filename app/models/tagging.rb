@@ -22,15 +22,9 @@ class Tagging < ApplicationRecord
     Tagging.find_by(tagger_id: tag.id, taggable_id: taggable.id, tagger_type: 'Tag', taggable_type: taggable.class.name)
   end
 
-  # Most of the time, we don't need the taggings_count_cache stored in the
-  # database to be perfectly accurate. But because of the way Tag.in_use is
-  # defined and used, the difference between a value of 0 and a value of 1 is
-  # important. So we make sure to poke the taggings_count cache every time we
-  # create or destroy a tagging. If it's a large tag, it'll fall back on the
-  # cached value. If it's a small tag, it'll recompute -- and make sure that it
-  # handles the transition from 0 uses to 1 use properly.
   def update_taggings_count
-    tagger.update_tag_cache unless tagger.blank? || tagger.destroyed?
+    return if tagger.blank? || tagger.destroyed?
+    tagger.taggings_count = tagger.taggings.count
   end
 
   def update_search
