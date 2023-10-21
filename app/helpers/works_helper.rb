@@ -115,6 +115,7 @@ module WorksHelper
   def related_work_note(related_work, relation, download: false)
     work_link = link_to related_work.title, polymorphic_url(related_work)
     language = tag.span(related_work.language.name, lang: related_work.language.short) if related_work.language
+    default_locale = download ? :en : nil
 
     creator_link = if download
                      byline(related_work, visibility: "public", only_path: false)
@@ -127,15 +128,18 @@ module WorksHelper
         t(".#{relation}.unrevealed_html",
           language: language)
       else
-        t(".#{relation}.unrevealed")
+        t(".#{relation}.unrevealed",
+          locale: default_locale)
       end
     elsif related_work.restricted? && (download || !logged_in?)
       t(".#{relation}.restricted_html",
         language: language,
+        locale: default_locale,
         creator_link: creator_link)
     else
       t(".#{relation}.revealed_html",
         language: language,
+        locale: default_locale,
         work_link: work_link,
         creator_link: creator_link)
     end
