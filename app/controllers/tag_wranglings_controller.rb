@@ -9,19 +9,25 @@ class TagWranglingsController < ApplicationController
   def index
     @counts = tag_counts_per_category
     unless params[:show].blank?
+      raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
+
       params[:sort_column] = 'created_at' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
-      sort = params[:sort_column] + " " + params[:sort_direction]
-      sort = sort + ", name ASC" if sort.include?('taggings_count_cache')
+
       if params[:show] == "fandoms"
         @media_names = Media.by_name.pluck(:name)
         @page_subtitle = ts("fandoms")
-        @tags = Fandom.unwrangled.in_use.order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      else # by fandom
-        raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
-        klass = params[:show].classify.constantize
-        @tags = klass.unwrangled.in_use.order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       end
+
+      type = params[:show].singularize.capitalize
+      @tags = TagQuery.new({
+                            type: type,
+                            to_wrangle: true,
+                            sort_column: params[:sort_column],
+                            sort_direction: params[:sort_direction],
+                            page: params[:page],
+                            per_page: ArchiveConfig.ITEMS_PER_PAGE
+                            }).search_results
     end
   end
 
