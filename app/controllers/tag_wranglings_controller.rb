@@ -1,20 +1,13 @@
 class TagWranglingsController < ApplicationController
   include TagWrangling
+  include WranglingHelper
 
   before_action :check_user_status
   before_action :check_permission_to_wrangle
   around_action :record_wrangling_activity, only: [:wrangle]
 
   def index
-    @counts = {}
-    [Fandom, Character, Relationship, Freeform].each do |klass|
-      @counts[klass.to_s.downcase.pluralize.to_sym] = Rails.cache.fetch("/wrangler/counts/sidebar/#{klass}", race_condition_ttl: 10, expires_in: 1.hour) do
-        klass.unwrangled.in_use.count
-      end
-    end
-    @counts[:UnsortedTag] = Rails.cache.fetch("/wrangler/counts/sidebar/UnsortedTag", race_condition_ttl: 10, expires_in: 1.hour) do
-      UnsortedTag.count
-    end
+    @counts = tag_counts_per_category
     unless params[:show].blank?
       params[:sort_column] = 'created_at' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
