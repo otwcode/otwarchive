@@ -5,8 +5,7 @@ module WranglingHelper
       counts[klass.to_s.downcase.pluralize.to_sym] = Rails.cache.fetch("/wrangler/counts/sidebar/#{klass}", race_condition_ttl: 10, expires_in: 1.hour) do
         TagQuery.new({
           type: klass.to_s,
-          unwrangleable: false,
-          wrangled: false
+          to_wrangle: true
         }).count
       end
     end

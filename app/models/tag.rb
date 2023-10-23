@@ -1033,6 +1033,18 @@ class Tag < ApplicationRecord
     end
   end
 
+  def wrangleable?
+    !unwrangleable?
+  end
+
+  def used?
+    canonical? || taggings_count_cache > 0
+  end
+
+  def unwrangled?
+    common_taggings.empty?
+  end
+
   #################################
   ## SEARCH #######################
   #################################

@@ -19,6 +19,10 @@ class Fandom < Tag
     where("unwrangleable = 0 AND common_taggings.filterable_id = ? AND common_taggings.filterable_type = 'Tag'", Media.uncategorized.try(:id))
   end
 
+  def unwrangled?
+    Media.uncategorized.fandoms.include?(self)
+  end
+
   # An association callback to add the default media if all others have been removed
   def check_media(media)
     self.add_media_for_uncategorized

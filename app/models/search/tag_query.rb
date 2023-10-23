@@ -22,7 +22,8 @@ class TagQuery < Query
       fandom_filter,
       character_filter,
       suggested_fandom_filter,
-      suggested_character_filter
+      suggested_character_filter,
+      to_wrangle_filter
     ].flatten.compact
   end
 
@@ -101,6 +102,10 @@ class TagQuery < Query
 
   def suggested_character_filter
     terms_filter(:pre_character_ids, options[:pre_character_ids]) if options[:pre_character_ids]
+  end
+
+  def to_wrangle_filter
+    term_filter(:to_wrangle, bool_value(options[:to_wrangle])) unless options[:to_wrangle].nil?
   end
 
   # Filter to only include tags that have no assigned fandom_ids. Checks that
