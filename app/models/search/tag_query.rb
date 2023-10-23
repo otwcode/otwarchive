@@ -63,9 +63,7 @@ class TagQuery < Query
 
     sort_by_id = { id: { order: direction } }
 
-    if column == "uses"
-      return [sort_hash, { "name.keyword" => { order: "asc" } }, sort_by_id]
-    end
+    return [sort_hash, { "name.keyword" => { order: "asc" } }, sort_by_id] if column == "uses"
 
     [sort_hash, sort_by_id]
   end

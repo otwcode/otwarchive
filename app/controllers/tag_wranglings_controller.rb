@@ -21,13 +21,13 @@ class TagWranglingsController < ApplicationController
 
       type = params[:show].singularize.capitalize
       @tags = TagQuery.new({
-                            type: type,
-                            to_wrangle: true,
-                            sort_column: params[:sort_column],
-                            sort_direction: params[:sort_direction],
-                            page: params[:page],
-                            per_page: ArchiveConfig.ITEMS_PER_PAGE
-                            }).search_results
+                             type: type,
+                             to_wrangle: true,
+                             sort_column: params[:sort_column],
+                             sort_direction: params[:sort_direction],
+                             page: params[:page],
+                             per_page: ArchiveConfig.ITEMS_PER_PAGE
+                           }).search_results
     end
   end
 
