@@ -194,12 +194,12 @@ describe TagQuery do
 
     it "allows you to sort by Uses" do
       q = TagQuery.new(sort_column: "uses")
-      expect(q.generated_query[:sort]).to eq([{ "uses" => { order: "desc" } }, { "name.keyword"=> { order: "asc" } }, { id: { order: "desc" } }])
+      expect(q.generated_query[:sort]).to eq([{ "uses" => { order: "desc" } }, { "name.keyword" => { order: "asc" } }, { id: { order: "desc" } }])
     end
 
     it "allows you to sort by Uses in ascending order" do
       q = TagQuery.new(sort_column: "uses", sort_direction: "asc")
-      expect(q.generated_query[:sort]).to eq([{ "uses" => { order: "asc" } }, { "name.keyword"=> { order: "asc" } }, { id: { order: "asc" } }])
+      expect(q.generated_query[:sort]).to eq([{ "uses" => { order: "asc" } }, { "name.keyword" => { order: "asc" } }, { id: { order: "asc" } }])
     end
   end
 end
