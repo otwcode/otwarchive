@@ -51,10 +51,15 @@ class Download
     end
   end
 
-  # The base name of the file (eg, "War and Peace")
+  # The base name of the file (e.g., "War_and_Peace")
   def file_name
     name = clean(work.title)
-    name += " Work #{work.id}" if name.length < 3
+    extender = "Work_#{work.id}"
+    if name.length == 0
+      name = extender
+    elsif name.length < 3
+      name += "_#{extender}"
+    end
     name.strip
   end
 
@@ -125,6 +130,7 @@ class Download
   # squash spaces
   # strip all non-alphanumeric
   # truncate to 24 chars at a word boundary
+  # replace whitespace with underscore for bug with epub table of contents on Kindle (AO3-6625)
   def clean(string)
     # get rid of any HTML entities to avoid things like "amp" showing up in titles
     string = string.gsub(/\&(\w+)\;/, '')
@@ -133,6 +139,7 @@ class Download
     string = string.gsub(/ +/, " ")
     string = string.strip
     string = string.truncate(24, separator: ' ', omission: '')
+    string = string.gsub(/\s/, "_")
     string
   end
 end
