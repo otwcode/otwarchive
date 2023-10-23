@@ -310,6 +310,18 @@ Given /^"(.*?)" has bookmarks of works in various languages$/ do |user|
   step %{all indexing jobs have been run}
 end
 
+Given /^"(.*?)" has a bookmark of a work titled "(.*?)"$/ do |user, title|
+  step %{the user "#{user}" exists and is activated}
+
+  user_pseud = User.find_by(login: user).default_pseud
+  work1 = FactoryBot.create(:work, title: title)
+  FactoryBot.create(:bookmark,
+                     bookmarkable_id: work1.id,
+                     pseud_id: user_pseud.id)
+
+  step %{all indexing jobs have been run}
+end
+
 def submit_bookmark_form(pseud, note, tags)
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
