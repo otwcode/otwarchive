@@ -192,6 +192,7 @@ Given /^the tag wrangling setup$/ do
   step %{I am logged in as a random user}
   step %{I post the work "Revenge of the Sith 2" with fandom "Star Wars, Stargate SG-1" with character "Daniel Jackson" with second character "Jack O'Neil" with rating "Not Rated" with relationship "JackDaniel"}
   step %{The periodic tag count task is run}
+  step %{all indexing jobs have been run}
   step %{I flush the wrangling sidebar caches}
 end
 
