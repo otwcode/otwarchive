@@ -1038,7 +1038,7 @@ class Tag < ApplicationRecord
   end
 
   def used?
-    canonical? || taggings_count_cache > 0
+    canonical? || taggings_count_cache.positive?
   end
 
   def unwrangled?
