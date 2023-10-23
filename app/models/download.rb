@@ -55,7 +55,7 @@ class Download
   def file_name
     name = clean(work.title)
     extender = "Work_#{work.id}"
-    if name.length == 0
+    if name.length.zero?
       name = extender
     elsif name.length < 3
       name += "_#{extender}"
@@ -139,7 +139,6 @@ class Download
     string = string.gsub(/ +/, " ")
     string = string.strip
     string = string.truncate(24, separator: ' ', omission: '')
-    string = string.gsub(/\s/, "_")
-    string
+    string.gsub(/\s/, "_")
   end
 end
