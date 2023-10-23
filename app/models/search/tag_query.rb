@@ -61,7 +61,13 @@ class TagQuery < Query
       sort_hash[column][:unmapped_type] = "date"
     end
 
-    [sort_hash, { id: { order: direction } }]
+    sort_by_id = { id: { order: direction } }
+
+    if column == "uses"
+      return [sort_hash, { "name.keyword" => { order: "asc" } }, sort_by_id]
+    end
+
+    [sort_hash, sort_by_id]
   end
 
   ################
