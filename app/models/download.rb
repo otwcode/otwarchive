@@ -54,12 +54,9 @@ class Download
   # The base name of the file (e.g., "War_and_Peace")
   def file_name
     name = clean(work.title)
-    extender = "Work_#{work.id}"
-    if name.length.zero?
-      name = extender
-    elsif name.length < 3
-      name += "_#{extender}"
-    end
+    # If the file name is 1-2 characters, append "_Work_#{work.id}".
+    # If the file name is blank, name the file "Work_#{work.id}".
+    name = [name, "Work_#{work.id}"].compact_blank.join("_") if name.length < 3
     name.strip
   end
 

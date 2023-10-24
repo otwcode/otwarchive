@@ -36,6 +36,62 @@ describe Download do
       expect(Download.new(work).file_name).to eq("Emjoi_Yay")
     end
 
+    it "strips leading space" do
+      work.title = " Blank Space Baby"
+      expect(Download.new(work).file_name).to eq("Blank_Space_Baby")
+    end
+
+    it "strips trailing space" do
+      work.title = "Write your name: "
+      expect(Download.new(work).file_name).to eq("Write_your_name")
+    end
+
+    it "replaces multiple spaces with single underscore" do
+      work.title = "Space   Opera"
+      expect(Download.new(work).file_name).to eq("Space_Opera")
+    end
+
+    it "replaces unicode space with underscores" do
+      work.title = "No-break Space"
+      expect(Download.new(work).file_name).to eq("No-break_Space")
+
+      work.title = "En Quad Space"
+      expect(Download.new(work).file_name).to eq("En_Quad_Space")
+
+      work.title = "Em Quad Space"
+      expect(Download.new(work).file_name).to eq("Em_Quad_Space")
+
+      work.title = "En Space"
+      expect(Download.new(work).file_name).to eq("En_Space")
+
+      work.title = "Em Space"
+      expect(Download.new(work).file_name).to eq("Em_Space")
+
+      work.title = "3 Per Em Space"
+      expect(Download.new(work).file_name).to eq("3_Per_Em_Space")
+
+      work.title = "4 Per Em Space"
+      expect(Download.new(work).file_name).to eq("4_Per_Em_Space")
+
+      work.title = "6 Per Em Space"
+      expect(Download.new(work).file_name).to eq("6_Per_Em_Space")
+
+      work.title = "Figure Space"
+      expect(Download.new(work).file_name).to eq("Figure_Space")
+
+      work.title = "Punctuation Space"
+      expect(Download.new(work).file_name).to eq("Punctuation_Space")
+
+      work.title = "Thin Space"
+      expect(Download.new(work).file_name).to eq("Thin_Space")
+
+      work.title = "Hair Space"
+      expect(Download.new(work).file_name).to eq("Hair_Space")
+
+      work.title = "Narrow No-Break Space"
+      expect(Download.new(work).file_name).to eq("Narrow_No-Break_Space")
+    end
+
     it "appends work ID if too short" do
       work.id = 999_999
       work.title = "Uh"
