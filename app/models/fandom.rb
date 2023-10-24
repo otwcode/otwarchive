@@ -14,11 +14,6 @@ class Fandom < Tag
 
   scope :by_media, lambda {|media| where(media_id: media.id)}
 
-  def self.unwrangled
-    joins(:common_taggings).
-    where("unwrangleable = 0 AND common_taggings.filterable_id = ? AND common_taggings.filterable_type = 'Tag'", Media.uncategorized.try(:id))
-  end
-
   def unwrangled?
     Media.uncategorized.fandoms.include?(self)
   end
