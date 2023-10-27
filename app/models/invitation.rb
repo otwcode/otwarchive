@@ -70,21 +70,21 @@ class Invitation < ApplicationRecord
 
       date_column = resend ? :resent_at : :sent_at
       # Skip callbacks within after_save by using update_column to avoid a callback loop
-      self.update_column(date_column, Time.now)
-    rescue Exception => exception
-      errors.add(:base, "Notification email could not be sent: #{exception.message}")
+      self.update_column(date_column, Time.current)
+    rescue => e
+      errors.add(:base, "Notification email could not be sent: #{e.message}")
     end
   end
 
   def can_resend?
-    checked_date = self.resent_at ? self.resent_at : self.sent_at
+    checked_date = self.resent_at || self.sent_at
     checked_date < ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION.hours.ago
   end
 
   private
 
   def generate_token
-    self.token = Digest::SHA1.hexdigest([Time.now, rand].join)
+    self.token = Digest::SHA1.hexdigest([Time.current, rand].join)
   end
 
   #Update the user's out_of_invites status
