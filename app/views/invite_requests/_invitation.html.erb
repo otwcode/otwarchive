@@ -9,7 +9,7 @@
 <p>
   <%= t(".info.#{status}",
         sent_at: l(invitation.sent_at.to_date),
-        resent_at: invitation.resent_at ? l(invitation.resent_at.to_date) : nil ) %>
+        resent_at: invitation.resent_at ? l(invitation.resent_at.to_date) : nil) %>
   <% if invitation.can_resend? %>
   <%# i18n-tasks-use t("invite_requests.invitation.after_cooldown_period.not_resent")
       i18n-tasks-use t("invite_requests.invitation.after_cooldown_period.resent")-%>
@@ -23,12 +23,12 @@
 </p>
 
 <%= content_for :footer_js do %>
-  <%= javascript_tag do %>
+  <script>
     $j(document).ready(function(){
       $j('#invite-heading').replaceWith(function () {
         return "<h3>" + $j(this).html() + "</h3>";
       });
     })
-  <% end %>
+  </script>
 <% end %>
 <!--/content-->
