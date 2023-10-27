@@ -1,15 +1,34 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading">
+<h2 class="heading" id="invite-heading">
   <%= t(".title", email: invitation.invitee_email) %>
 </h2>
 <!--/descriptions-->
 
 <!--main content-->
+<% status = invitation.resent_at ? "resent" : "not_resent" %>
 <p>
-<%= t(".date", date: l(invitation.sent_at.to_date)) %>
-<% if invitation.sent_at < ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION.hours.ago %>
-  <%= t(".resend", count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION) %>
-  <%= button_to t(".resend_button"), resend_invite_requests_path(email: invitation.invitee_email) %>
-<% end %>
+  <%= t(".info.#{status}",
+        sent_at: l(invitation.sent_at.to_date),
+        resent_at: invitation.resent_at ? l(invitation.resent_at.to_date) : nil ) %>
+  <% if invitation.can_resend? %>
+  <%# i18n-tasks-use t("invite_requests.invitation.after_cooldown_period.not_resent")
+      i18n-tasks-use t("invite_requests.invitation.after_cooldown_period.resent")-%>
+    <%= t(".after_cooldown_period.#{status}",
+          count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION,
+          support_link: link_to(t(".contact_support"), new_feedback_report_path)) %>
+    <%= button_to t(".resend_button"), resend_invite_requests_path(email: invitation.invitee_email) %>
+  <% else %>
+    <%= t(".before_cooldown_period", count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION) %>
+  <% end %>
 </p>
+
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+    $j(document).ready(function(){
+      $j('#invite-heading').replaceWith(function () {
+        return "<h3>" + $j(this).html() + "</h3>";
+      });
+    })
+  <% end %>
+<% end %>
 <!--/content-->

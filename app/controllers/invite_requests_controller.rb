@@ -27,8 +27,8 @@ class InviteRequestsController < ApplicationController
 
     if @invitation.nil?
       flash[:error] = ts("Could not find an invitation associated with that email.")
-    elsif @invitation.sent_at < ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION.hours.ago
-      @invitation.send_and_set_date
+    elsif @invitation.can_resend?
+      @invitation.send_and_set_date(resend: true)
       flash[:notice] = ts("Invitation resent to %{email}.", email: @invitation.invitee_email)
     else
       flash[:error] = ts("You cannot resend an invitation that was sent in the last %{count} hours.",
