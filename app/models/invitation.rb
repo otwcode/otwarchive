@@ -71,7 +71,7 @@ class Invitation < ApplicationRecord
       date_column = resend ? :resent_at : :sent_at
       # Skip callbacks within after_save by using update_column to avoid a callback loop
       self.update_column(date_column, Time.current)
-    rescue => e
+    rescue StandardError => e
       errors.add(:base, "Notification email could not be sent: #{e.message}")
     end
   end
