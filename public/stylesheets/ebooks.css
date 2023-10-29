@@ -20,6 +20,11 @@
   margin-bottom: 0;
 }
 
+/* list child related works under the labeling dt */
+#afterword .meta dd {
+  margin: 1em 0 0 1em;
+}
+
 #chapters, .userstuff {
   font-family: serif;
   padding: 0;
