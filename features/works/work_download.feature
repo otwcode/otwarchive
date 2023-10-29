@@ -114,6 +114,13 @@ Feature: Download a work
     And "Words:" should appear before "Chapters:"
     And "Chapters:" should appear before "Could be downloaded"
 
+  Scenario: Downloaded work afterword does not mention author
+
+  Given the work "Downloadable"
+  When I view the work "Downloadable"
+    And I follow "HTML"
+  Then I should not see "to let the author know if you enjoyed"
+    But I should see "to let the creator know if you enjoyed"
 
   Scenario: Download of chaptered works includes chapters
 

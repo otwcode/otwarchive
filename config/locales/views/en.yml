@@ -396,6 +396,10 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+  downloads:
+    download_afterword:
+      please_comment_html: Please %{work_comment_link} to let the creator know if you enjoyed their work!
+      work_comment: drop by the Archive and comment
   feedbacks:
     new:
       abuse:
