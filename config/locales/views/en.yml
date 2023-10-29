@@ -403,6 +403,8 @@ en:
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
+      please_comment_html: Please %{work_comment_link} to let the creator know if you enjoyed their work!
+      work_comment: drop by the Archive and comment
     download_preface:
       inspired_by:
         restricted_html: Inspired by [Restricted Work] by %{creator_link}

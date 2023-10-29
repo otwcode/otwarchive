@@ -28,5 +28,5 @@
     </div>
   <% end %>
 
-  <p class="message"><%= ts("Please") %> <%= link_to ts("drop by the archive and comment"), new_work_comment_url(@work) %> <%= ts("to let the author know if you enjoyed their work!") %></p>
+  <p class="message"><%= t(".please_comment_html", work_comment_link: link_to(t(".work_comment", locale: :en), new_work_comment_url(@work)), locale: :en) %></p>
 </div>
