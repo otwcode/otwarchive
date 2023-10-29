@@ -14,7 +14,7 @@
       <% Tag::VISIBLE.each do |type| %>
         <% tags = @work.tag_groups[type] %>
         <% unless tags.blank? %>
-          <dt><%= type.constantize::NAME %>:</dt>
+          <dt><%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize(locale: :en) %>:</dt>
           <dd><%= tags.map {|t| link_to(t.display_name, tag_url(t))}.join(", ").html_safe %></dd>
         <% end %>
       <% end %>
