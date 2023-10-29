@@ -208,3 +208,81 @@ Feature: Download a work
   When I am logged in as a "policy_and_abuse" admin
     And I hide the work "TOS Violation"
   Then I should not see "Download"
+
+  Scenario: Downloads of related work update when parent work's anonymity changes.
+
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+    And I log out
+  When I view the work "Followup"
+    And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"
+  When I view the work "Worldbuilding Translated"
+    And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"
+  # Going from revealed to unrevealed
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding" to be in the collection "Hidden"
+    And I log out
+    And I view the work "Followup"
+    And I follow "HTML"
+  Then I should not see "inspiration"
+    And I should see "Inspired by a work in an unrevealed collection"
+  When I view the work "Worldbuilding Translated"
+    And I follow "HTML"
+  Then I should not see "inspiration"
+    And I should see "A translation of a work in an unrevealed collection"
+  # Going from unrevealed to revealed
+  When I reveal works for "Hidden"
+    And I log out
+    And I view the work "Followup"
+    And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"
+  When I view the work "Worldbuilding Translated"
+    And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"
+
+  Scenario: Downloads of related work update when child work's anonymity changes.
+
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And a related work has been posted and approved
+  When I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should see "Followup by remixer"
+    And I should not see "A work in an unrevealed collection"
+  # Going from revealed to unrevealed
+  When I am logged in as "remixer"
+    And I edit the work "Followup" to be in the collection "Hidden"
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should not see "Followup by remixer"
+    And I should see "A work in an unrevealed collection"
+  # Going from unrevealed to revealed
+  When I reveal works for "Hidden"
+    And I log out
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should see "Followup by remixer"
+    And I should not see "A work in an unrevealed collection"
+
+  Scenario: Downloads hide titles of restricted related works
+
+  Given I have related works setup
+    And a related work has been posted and approved
+    And I am logged in as "remixer"
+    And I lock the work "Followup"
+  When I am logged out
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should see "[Restricted Work] by remixer"
+  When I am logged in as "inspiration"
+    And I lock the work "Worldbuilding"
+    And I am logged in as "remixer"
+    And I unlock the work "Followup"
+    And I am logged out
+    And I view the work "Followup"
+    And I follow "HTML"
+  Then I should see "Inspired by [Restricted Work] by inspiration"

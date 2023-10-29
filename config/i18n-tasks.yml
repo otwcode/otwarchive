@@ -261,7 +261,7 @@ ignore_missing:
   # File: app/views/pseuds/show.html.erb
   - pseuds.show.edit_link
   - pseuds.show.index_link
-  # File: app/views/series/manage.html.er
+  # File: app/views/series/manage.html.erb
   - series.manage.manage_series
 
 ## Consider these keys used:
