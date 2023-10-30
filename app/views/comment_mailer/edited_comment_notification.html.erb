@@ -1,7 +1,7 @@
 <% content_for :message do %>
 
   <%= commenter_pseud_or_name_link(@comment) %> edited the following comment on
-  
+
   <% if @comment.ultimate_parent.is_a?(Tag) %>
     the tag
     <%= style_link(@comment.ultimate_parent.commentable_name, {:controller => :tags, :action => :show, :id => @comment.ultimate_parent.to_param, :only_path => false}) %>:
@@ -10,7 +10,7 @@
   <% end %>
 
   <p>
-    <%= style_quote(raw @comment.sanitized_content) %>
+    <%= style_quote(raw(@comment.sanitized_content)) %>
   </p>
 
   <%= render 'comment_notification_footer' %>
