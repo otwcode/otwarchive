@@ -10,7 +10,7 @@ module MailerHelper
   end
 
   def style_role(text)
-    tag.em(tag.strong("(#{text})"))
+    tag.em(tag.strong(text))
   end
 
   # For work, chapter, and series links
@@ -182,7 +182,7 @@ module MailerHelper
 
   def commenter_pseud_or_name_link(comment)
     if comment.comment_owner.nil?
-      style_bold(comment.comment_owner_name) + style_role(t("roles.guest"))
+      style_bold(comment.comment_owner_name) + style_role(t("roles.guest_with_parens"))
     elsif comment.by_anonymous_creator?
       style_bold(t("roles.anonymous_creator"))
     else
