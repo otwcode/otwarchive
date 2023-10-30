@@ -267,3 +267,7 @@ When /^I should see the correct time zone for "(.*)"$/ do |zone|
   Time.zone = zone
   page.body.should =~ /#{Regexp.escape(Time.zone.now.zone)}/
 end
+
+When "I clear Rails cache" do
+  Rails.cache.clear
+end
