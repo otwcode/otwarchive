@@ -357,7 +357,7 @@ Feature: Tag wrangling
   Scenario: No call to Redis when no action is taken
     Given the tag wrangling setup
       And I am logged in as a tag wrangler
-    Then no tag should scheduled for count update from now on
+    Then no tag is scheduled for count update from now on
     When I go to my wrangling page
     Then I should see "Wrangling Home"
       And I should see "Characters by fandom (2)"
