@@ -110,8 +110,9 @@ class TagQuery < Query
 
   def to_wrangle_filter
     return [] unless options[:to_wrangle]
+
     [
-      { bool: { should: [{ range: { uses: { gt: 0 } } }, term_filter(:canonical, true)]} }, # Check if used OR canonical
+      { bool: { should: [{ range: { uses: { gt: 0 } } }, term_filter(:canonical, true)] } }, # Check if used OR canonical
       term_filter(:unwrangleable, false),
       term_filter(:unwrangled, true)
     ]

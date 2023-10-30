@@ -211,7 +211,7 @@ describe TagQuery do
         unused_and_not_canonical: create(:character),
         used_and_canonical: create(:canonical_character, taggings_count_cache: 5),
         unwrangleable: create(:character, taggings_count_cache: 5, unwrangleable: true),
-        wrangled: create(:canonical_character, common_taggings: [create(:common_tagging)]),
+        wrangled: create(:canonical_character, common_taggings: [create(:common_tagging)])
       }
       run_all_indexing_jobs
       tags
