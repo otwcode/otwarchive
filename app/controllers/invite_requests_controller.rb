@@ -29,7 +29,7 @@ class InviteRequestsController < ApplicationController
       flash[:error] = t("invite_requests.resend.not_found")
     elsif !@invitation.can_resend?
       flash[:error] = t("invite_requests.resend.not_yet",
-      count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION)
+                        count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION)
     else
       @invitation.send_and_set_date(resend: true)
 
