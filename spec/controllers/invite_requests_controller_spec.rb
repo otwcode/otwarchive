@@ -65,6 +65,18 @@ describe InviteRequestsController do
                                    "You cannot resend an invitation that was sent in the last 24 hours.")
       end
     end
+
+    context "when the email and time are valid" do
+      let!(:invitation) { create(:invitation) }
+
+      it "redirects with an error" do
+        travel_to (1 + ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION).hours.since
+        post :resend, params: { email: invitation.invitee_email }
+
+        it_redirects_to_with_notice(status_invite_requests_path,
+                                    "Invitation resent to #{invitation.invitee_email}.")
+      end
+    end
   end
 
   describe "POST #create" do

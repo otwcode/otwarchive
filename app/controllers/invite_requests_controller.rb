@@ -26,13 +26,18 @@ class InviteRequestsController < ApplicationController
     @invitation = Invitation.unredeemed.from_queue.find_by(invitee_email: params[:email])
 
     if @invitation.nil?
-      flash[:error] = ts("Could not find an invitation associated with that email.")
-    elsif @invitation.can_resend?
-      @invitation.send_and_set_date(resend: true)
-      flash[:notice] = ts("Invitation resent to %{email}.", email: @invitation.invitee_email)
+      flash[:error] = t("invite_requests.resend.not_found")
+    elsif !@invitation.can_resend?
+      flash[:error] = t("invite_requests.resend.not_yet",
+      count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION)
     else
-      flash[:error] = ts("You cannot resend an invitation that was sent in the last %{count} hours.",
-                         count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION)
+      @invitation.send_and_set_date(resend: true)
+
+      if @invitation.errors.any?
+        flash[:error] = @invitation.errors.full_messages.first
+      else
+        flash[:notice] = t("invite_requests.resend.success", email: @invitation.invitee_email)
+      end
     end
 
     redirect_to status_invite_requests_path

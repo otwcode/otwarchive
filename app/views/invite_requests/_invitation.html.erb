@@ -15,13 +15,14 @@
       i18n-tasks-use t("invite_requests.invitation.after_cooldown_period.resent")-%>
     <%= t(".after_cooldown_period.#{status}",
           count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION,
-          support_link: link_to(t(".contact_support"), new_feedback_report_path)) %>
+          contact_support_link: link_to(t(".contact_support"), new_feedback_report_path)) %>
     <%= button_to t(".resend_button"), resend_invite_requests_path(email: invitation.invitee_email) %>
   <% else %>
     <%= t(".before_cooldown_period", count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION) %>
   <% end %>
 </p>
 
+<%# Correct heading size for JavaScript display %>
 <%= content_for :footer_js do %>
   <script>
     $j(document).ready(function(){

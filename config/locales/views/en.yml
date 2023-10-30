@@ -489,11 +489,11 @@ en:
           one: Because your invitation was sent more than an hour ago, you can have your invitation resent.
           other: Because your invitation was sent more than %{count} hours ago, you can have your invitation resent.
         resent:
-          one: Because your invitation was resent more than an hour ago, you can have your invitation resent again, or you may want to %{support_link}.
-          other: Because your invitation was resent more than %{count} hours ago, you can have your invitation resent again, or you may want to %{support_link}.
+          one: Because your invitation was resent more than an hour ago, you can have your invitation resent again, or you may want to %{contact_support_link}.
+          other: Because your invitation was resent more than %{count} hours ago, you can have your invitation resent again, or you may want to %{contact_support_link}.
       before_cooldown_period:
-        one: if it has been more than an hour since you should have received your invitation, but you have not received it after checking your spam folder, you can visit this page to resend the invitation.
-        other: if it has been more than %{count} hours since you should have received your invitation, but you have not received it after checking your spam folder, you can visit this page to resend the invitation.
+        one: If it has been more than an hour since you should have received your invitation, but you have not received it after checking your spam folder, you can visit this page to resend the invitation.
+        other: If it has been more than %{count} hours since you should have received your invitation, but you have not received it after checking your spam folder, you can visit this page to resend the invitation.
       contact_support: contact Support
       info:
         not_resent: Your invitation was emailed to this address on %{sent_at}. If you can't find it, please check your email spam folder as your spam filters may have placed it there.

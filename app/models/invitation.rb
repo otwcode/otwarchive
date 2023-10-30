@@ -58,22 +58,20 @@ class Invitation < ApplicationRecord
   def send_and_set_date(resend: false)
     return if invitee_email.blank?
 
-    begin
-      if self.external_author
-        archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
-        # send invite synchronously for now -- this should now work delayed but just to be safe
-        UserMailer.invitation_to_claim(self.id, archivist).deliver_now
-      else
-        # send invitations actively sent by a user synchronously to avoid delays
-        UserMailer.invitation(self.id).deliver_now
-      end
-
-      date_column = resend ? :resent_at : :sent_at
-      # Skip callbacks within after_save by using update_column to avoid a callback loop
-      self.update_column(date_column, Time.current)
-    rescue StandardError => e
-      errors.add(:base, "Notification email could not be sent: #{e.message}")
+    if self.external_author
+      archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
+      # send invite synchronously for now -- this should now work delayed but just to be safe
+      UserMailer.invitation_to_claim(self.id, archivist).deliver_now
+    else
+      # send invitations actively sent by a user synchronously to avoid delays
+      UserMailer.invitation(self.id).deliver_now
     end
+
+    date_column = resend ? :resent_at : :sent_at
+    # Skip callbacks within after_save by using update_column to avoid a callback loop
+    self.update_column(date_column, Time.current)
+  rescue StandardError => e
+    errors.add(:base, :notification_could_not_be_sent, error: e.message)
   end
 
   def can_resend?
