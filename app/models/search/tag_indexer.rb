@@ -24,7 +24,7 @@ class TagIndexer < Indexer
         tag_type: { type: "keyword" },
         sortable_name: { type: "keyword" },
         uses: { type: "integer" },
-        to_wrangle: { type: "boolean" }
+        unwrangled: { type: "boolean" }
       }
     }
   end
@@ -69,7 +69,7 @@ class TagIndexer < Indexer
       has_posted_works: object.has_posted_works?,
       tag_type: object.type,
       uses: object.taggings_count_cache,
-      to_wrangle: object.wrangleable? && object.used? && object.unwrangled?
+      unwrangled: object.unwrangled?
     ).merge(parent_data(object))
   end
 

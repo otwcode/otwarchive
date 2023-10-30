@@ -23,7 +23,7 @@ class TagQuery < Query
       character_filter,
       suggested_fandom_filter,
       suggested_character_filter,
-      to_wrangle_filter
+      *to_wrangle_filter
     ].flatten.compact
   end
 
@@ -109,7 +109,12 @@ class TagQuery < Query
   end
 
   def to_wrangle_filter
-    term_filter(:to_wrangle, bool_value(options[:to_wrangle])) unless options[:to_wrangle].nil?
+    return [] unless options[:to_wrangle]
+    [
+      { bool: { should: [{ range: { uses: { gt: 0 } } }, term_filter(:canonical, true)]} }, # Check if used OR canonical
+      term_filter(:unwrangleable, false),
+      term_filter(:unwrangled, true)
+    ]
   end
 
   # Filter to only include tags that have no assigned fandom_ids. Checks that

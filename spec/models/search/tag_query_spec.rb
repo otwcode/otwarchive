@@ -202,4 +202,43 @@ describe TagQuery do
       expect(q.generated_query[:sort]).to eq([{ "uses" => { order: "asc" } }, { "name.keyword" => { order: "asc" } }, { id: { order: "asc" } }])
     end
   end
+
+  describe "to_wrangle" do
+    let!(:tags) do
+      tags = {
+        used: create(:character, taggings_count_cache: 5),
+        unused_but_canonical: create(:canonical_character),
+        unused_and_not_canonical: create(:character),
+        used_and_canonical: create(:canonical_character, taggings_count_cache: 5),
+        unwrangleable: create(:character, taggings_count_cache: 5, unwrangleable: true),
+        wrangled: create(:canonical_character, common_taggings: [create(:common_tagging)]),
+      }
+      run_all_indexing_jobs
+      tags
+    end
+
+    it "returns unwrangled tags in use" do
+      TagQuery.new(to_wrangle: true).search_results.should include(tags[:used])
+    end
+
+    it "returns unwrangled canonical tags, even unused" do
+      TagQuery.new(to_wrangle: true).search_results.should include(tags[:unused_but_canonical])
+    end
+
+    it "returns tags that are both used and canonical" do
+      TagQuery.new(to_wrangle: true).search_results.should include(tags[:used_and_canonical])
+    end
+
+    it "does not return tags that are neither canonical or used" do
+      TagQuery.new(to_wrangle: true).search_results.should_not include(tags[:unused_and_not_canonical])
+    end
+
+    it "does not return unwrangleable tags" do
+      TagQuery.new(to_wrangle: true).search_results.should_not include(tags[:unwrangeable])
+    end
+
+    it "does not return wrangled tags" do
+      TagQuery.new(to_wrangle: true).search_results.should_not include(tags[:wrangled])
+    end
+  end
 end
