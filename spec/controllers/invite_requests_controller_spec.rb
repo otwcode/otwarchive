@@ -70,7 +70,7 @@ describe InviteRequestsController do
       let!(:invitation) { create(:invitation) }
 
       it "redirects with a success message" do
-        travel_to(1 + ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION).hours.from_now
+        travel_to((1 + ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION).hours.from_now)
         post :resend, params: { email: invitation.invitee_email }
 
         it_redirects_to_with_notice(status_invite_requests_path,
