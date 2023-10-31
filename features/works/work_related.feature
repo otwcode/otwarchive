@@ -322,7 +322,7 @@ Scenario: Restricted works listed as Inspiration show up [Restricted] for guests
     And I lock the work "Followup"
   When I am logged out
     And I view the work "Worldbuilding"
-  Then I should see "A [Restricted Work] by remixer"
+  Then I should see "[Restricted Work] by remixer"
   When I am logged in as "remixer"
     And I unlock the work "Followup"
   When I am logged out
@@ -658,3 +658,68 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I should not see "A work in an unrevealed collection"
       And I should not see "Worldbuilding Translated by translator"
       And I should not see "From English to Deutsch"
+
+  Scenario: Notes of related work do not break anonymity of parent work in an unrevealed collection
+    Given a hidden collection "Hidden"
+      And I have related works setup
+    When I am logged in as "inspiration"
+      And I edit the work "Worldbuilding" to be in the collection "Hidden"
+      And I post a related work as remixer
+      And I post a translation as translator
+      And I log out
+    # Check remix
+    When I view the work "Followup"
+    Then I should not see "Worldbuilding"
+      And I should not see "inspiration"
+      And I should see "Inspired by a work in an unrevealed collection"
+    # Check translated work
+    When I view the work "Worldbuilding Translated"
+    Then I should not see "inspiration"
+      And I should see "A translation of a work in an unrevealed collection"
+
+  Scenario: Notes of parent work do not break anonymity of child related works in an unrevealed collection
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And a translation has been posted and approved
+    And a related work has been posted and approved
+  When I am logged in as "translator"
+    And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
+  When I am logged in as "remixer"
+    And I edit the work "Followup" to be in the collection "Hidden"
+    And I log out
+  When I view the work "Worldbuilding"
+  Then I should not see "Worldbuilding Translated by translator"
+    And I should not see "Followup by remixer"
+    And I should see "A work in an unrevealed collection"
+
+  Scenario: Work notes updates when anonymity of related works change
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And an inspiring parent work has been posted
+    And a translation has been posted and approved
+    And a related work has been posted and approved
+  # Going from revealed to unrevealed
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+    And I list the work "Parent Work" as inspiration
+    And I press "Post"
+    And I am logged in as "translator"
+    And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
+    And I am logged in as "remixer"
+    And I edit the work "Followup" to be in the collection "Hidden"
+    And I am logged in as "testuser"
+    And I edit the work "Parent Work" to be in the collection "Hidden"
+    And I log out
+    And I view the work "Worldbuilding"
+  Then I should not see the inspiring parent work in the beginning notes
+    And I should see "Translation into Deutsch available:"
+    And I should see "A work in an unrevealed collection"
+    And I should not see "Worldbuilding Translated by translator"
+    And I should not see "Followup by remixer"
+  # Going from unrevealed to revealed
+  When I reveal works for "Hidden"
+    And I log out
+  When I view the work "Worldbuilding"
+  Then I should see the inspiring parent work in the beginning notes
+    And I should see the translation listed on the original work
+    And I should see the related work listed on the original work

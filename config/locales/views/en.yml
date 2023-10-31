@@ -396,6 +396,24 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+  downloads:
+    download_afterword:
+      inspired_by:
+        restricted_html: "[Restricted Work] by %{creator_link}"
+        revealed_html: "%{work_link} by %{creator_link}"
+        title: Works inspired by this one
+        unrevealed: A work in an unrevealed collection
+      please_comment_html: Please %{work_comment_link} to let the creator know if you enjoyed their work!
+      work_comment: drop by the Archive and comment
+    download_preface:
+      inspired_by:
+        restricted_html: Inspired by [Restricted Work] by %{creator_link}
+        revealed_html: Inspired by %{work_link} by %{creator_link}
+        unrevealed: Inspired by a work in an unrevealed collection
+      translation_of:
+        restricted_html: A translation of [Restricted Work] by %{creator_link}
+        revealed_html: A translation of %{work_link} by %{creator_link}
+        unrevealed: A translation of a work in an unrevealed collection
   feedbacks:
     new:
       abuse:
@@ -767,5 +785,24 @@ en:
         unrestricted: Show to all
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    work_approved_children:
+      inspired_by:
+        restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
+        revealed_html: "%{work_link} by %{creator_link}"
+        title: Works inspired by this one
+        unrevealed: A work in an unrevealed collection
+    work_header_notes:
+      inspired_by:
+        restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
+        revealed_html: Inspired by %{work_link} by %{creator_link}
+        unrevealed: Inspired by a work in an unrevealed collection
+      translated_to:
+        restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link} (Log in to access.)'
+        revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
+        unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
+      translation_of:
+        restricted_html: A translation of [Restricted Work] by %{creator_link} (Log in to access.)
+        revealed_html: A translation of %{work_link} by %{creator_link}
+        unrevealed: A translation of a work in an unrevealed collection
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.

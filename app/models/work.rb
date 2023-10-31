@@ -211,7 +211,7 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series, :touch_related_works
   after_destroy :expire_caches, :update_pseud_index
 
   before_destroy :send_deleted_work_notification, prepend: true
@@ -921,6 +921,14 @@ class Work < ApplicationRecord
 
   def parents_after_saving
     parent_work_relationships.reject(&:marked_for_destruction?)
+  end
+
+  def touch_related_works
+    return unless saved_change_to_in_unrevealed_collection?
+
+    # Make sure download URLs of child and parent works expire to preserve anonymity.
+    children.touch_all
+    parents_after_saving.each { |rw| rw.parent.touch }
   end
 
   #################################################################################

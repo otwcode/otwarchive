@@ -88,9 +88,8 @@ Feature: Download a work
     And I should see "Archive Warning: No Archive Warnings Apply"
     And I should see "Category: Gen"
     And I should see "Fandom: Cool Fandom"
-    # TODO: Update "Character" and "Relationship" to plural form when AO3-5774 is fixed
-    And I should see "Relationship: Character 1/Character 2, Character 1 & Character 3"
-    And I should see "Character: Character 1, Character 2, Character 3"
+    And I should see "Relationships: Character 1/Character 2, Character 1 & Character 3"
+    And I should see "Characters: Character 1, Character 2, Character 3"
     And I should see "Additional Tags: Modern AU"
     And I should see "Language: English"
     And I should see "Series: Part 1 of THE DOWN"
@@ -103,8 +102,8 @@ Feature: Download a work
     And "Archive Warning:" should appear before "Category"
     And "Category:" should appear before "Fandom"
     And "Fandom:" should appear before "Relationship"
-    And "Relationship:" should appear before "Character"
-    And "Character:" should appear before "Additional Tags"
+    And "Relationships:" should appear before "Character"
+    And "Characters:" should appear before "Additional Tags"
     And "Additional Tags:" should appear before "Language"
     And "Language:" should appear before "Series"
     And "Series:" should appear before "Collections"
@@ -114,6 +113,13 @@ Feature: Download a work
     And "Words:" should appear before "Chapters:"
     And "Chapters:" should appear before "Could be downloaded"
 
+  Scenario: Downloaded work afterword does not mention author
+
+  Given the work "Downloadable"
+  When I view the work "Downloadable"
+    And I follow "HTML"
+  Then I should not see "to let the author know if you enjoyed"
+    But I should see "to let the creator know if you enjoyed"
 
   Scenario: Download of chaptered works includes chapters
 
@@ -202,3 +208,81 @@ Feature: Download a work
   When I am logged in as a "policy_and_abuse" admin
     And I hide the work "TOS Violation"
   Then I should not see "Download"
+
+  Scenario: Downloads of related work update when parent work's anonymity changes.
+
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And I post a related work as remixer
+    And I post a translation as translator
+    And I log out
+  When I view the work "Followup"
+    And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"
+  When I view the work "Worldbuilding Translated"
+    And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"
+  # Going from revealed to unrevealed
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding" to be in the collection "Hidden"
+    And I log out
+    And I view the work "Followup"
+    And I follow "HTML"
+  Then I should not see "inspiration"
+    And I should see "Inspired by a work in an unrevealed collection"
+  When I view the work "Worldbuilding Translated"
+    And I follow "HTML"
+  Then I should not see "inspiration"
+    And I should see "A translation of a work in an unrevealed collection"
+  # Going from unrevealed to revealed
+  When I reveal works for "Hidden"
+    And I log out
+    And I view the work "Followup"
+    And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"
+  When I view the work "Worldbuilding Translated"
+    And I follow "HTML"
+  Then I should see "Worldbuilding by inspiration"
+
+  Scenario: Downloads of related work update when child work's anonymity changes.
+
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And a related work has been posted and approved
+  When I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should see "Followup by remixer"
+    And I should not see "A work in an unrevealed collection"
+  # Going from revealed to unrevealed
+  When I am logged in as "remixer"
+    And I edit the work "Followup" to be in the collection "Hidden"
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should not see "Followup by remixer"
+    And I should see "A work in an unrevealed collection"
+  # Going from unrevealed to revealed
+  When I reveal works for "Hidden"
+    And I log out
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should see "Followup by remixer"
+    And I should not see "A work in an unrevealed collection"
+
+  Scenario: Downloads hide titles of restricted related works
+
+  Given I have related works setup
+    And a related work has been posted and approved
+    And I am logged in as "remixer"
+    And I lock the work "Followup"
+  When I am logged out
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should see "[Restricted Work] by remixer"
+  When I am logged in as "inspiration"
+    And I lock the work "Worldbuilding"
+    And I am logged in as "remixer"
+    And I unlock the work "Followup"
+    And I am logged out
+    And I view the work "Followup"
+    And I follow "HTML"
+  Then I should see "Inspired by [Restricted Work] by inspiration"
