@@ -191,9 +191,9 @@ module ApplicationHelper
     keys.collect { |key|
       if flash[key]
         if flash[key].is_a?(Array)
-          content_tag(:div, content_tag(:ul, flash[key].map { |flash_item| content_tag(:li, h(flash_item)) }.join("\n").html_safe), class: "flash #{key}")
+          content_tag(:div, content_tag(:ul, flash[key].map { |flash_item| content_tag(:li, h(sanitize(flash_item))) }.join("\n").html_safe), class: "flash #{key}")
         else
-          content_tag(:div, h(flash[key]), class: "flash #{key}")
+          content_tag(:div, h(sanitize(flash[key])), class: "flash #{key}")
         end
       end
     }.join.html_safe
