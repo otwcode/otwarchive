@@ -3,5 +3,5 @@
 <% elsif @invitation %>
   $j("#invite-status").html("<%= escape_javascript(render "invitation", invitation: @invitation) %>");
 <% else %>
-  $j("#invite-status").html("<p>Sorry, we can't find the email address you entered.</p>");
+  $j("#invite-status").html("<%= escape_javascript(render "no_invitation") %>");
 <% end %>

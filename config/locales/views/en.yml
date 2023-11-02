@@ -504,6 +504,10 @@ en:
       date: 'At our current rate, you should receive an invitation on or around: %{date}.'
       position_html: You are currently number %{position} on our waiting list!
       title: Invitation Status for %{email}
+    no_invitation:
+      email_not_found: Sorry, we can't find the email address you entered.
+    show:
+      instructions_html: To check on the status of your invitation, go to the %{status_link} and enter your email in the space provided.
   kudos:
     guest_header:
       one: "%{count} guest has also left kudos"
