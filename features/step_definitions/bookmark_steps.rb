@@ -316,8 +316,8 @@ Given "{string} has a bookmark of a work titled {string}" do |user, title|
   user_pseud = User.find_by(login: user).default_pseud
   work1 = FactoryBot.create(:work, title: title)
   FactoryBot.create(:bookmark,
-                    bookmarkable_id: work1.id,
-                    pseud_id: user_pseud.id)
+                    bookmarkable: work1,
+                    pseud: user_pseud)
 
   step %{all indexing jobs have been run}
 end
