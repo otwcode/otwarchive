@@ -193,9 +193,9 @@ module ApplicationHelper
         if flash[key].is_a?(Array)
           content_tag(:div,
             content_tag(:ul,
-              flash[key].map do |flash_item|
+              safe_join(flash[key].map do |flash_item|
                 content_tag(:li, sanitize(flash_item))
-              end.join("\n").html_safe),
+              end), "\n"),
             class: "flash #{key}")
         else
           content_tag(:div, sanitize(flash[key]), class: "flash #{key}")
