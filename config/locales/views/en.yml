@@ -413,7 +413,7 @@ en:
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
-        unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection.'
+        unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
       translation_of:
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
