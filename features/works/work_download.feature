@@ -286,3 +286,38 @@ Feature: Download a work
     And I view the work "Followup"
     And I follow "HTML"
   Then I should see "Inspired by [Restricted Work] by inspiration"
+
+  Scenario: Downloads of translated work update when translation's revealed status changes.
+
+  Given a hidden collection "Hidden"
+    And I have related works setup
+    And a translation has been posted and approved
+    And I log out
+  When I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should see "Worldbuilding Translated by translator"
+  # Going from revealed to unrevealed
+  When I am logged in as "translator"
+    And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
+    And I log out
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should not see "Worldbuilding Translated by translator"
+    And I should see "A work in an unrevealed collection"
+  # Going from unrevealed to revealed
+  When I reveal works for "Hidden"
+    And I log out
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should see "Worldbuilding Translated by translator"
+
+  Scenario: Downloads hide titles of restricted work translations
+
+  Given I have related works setup
+    And a translation has been posted and approved
+    And I am logged in as "translator"
+    And I lock the work "Worldbuilding Translated"
+  When I am logged out
+    And I view the work "Worldbuilding"
+    And I follow "HTML"
+  Then I should see "[Restricted Work] by translator"
