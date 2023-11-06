@@ -410,6 +410,10 @@ en:
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
+      translated_to:
+        restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}'
+        revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
+        unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
       translation_of:
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
