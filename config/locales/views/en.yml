@@ -382,7 +382,7 @@ en:
           disable: Disable comment moderation
           enable: Enable comment moderation
           keep_current: Keep current comment moderation settings
-          label: Comment Moderation
+          label: Comment moderation
         options:
           disable_all: No one can comment
           disable_anon: Only registered users can comment
