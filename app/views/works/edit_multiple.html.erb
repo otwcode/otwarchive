@@ -11,9 +11,9 @@
   <%= ts("Your edits will be applied to") %> <strong><%= ts("all") %></strong> <%= ts("of the following works:") %>
 </p>
 
-<%= render "works/work_abbreviated_list", :works => @works %>
+<%= render "works/work_abbreviated_list", works: @works %>
 
-<%= form_for :work, :url => update_multiple_user_works_path(@user), method: :patch, :html => { :class => "verbose post" } do |form| %>
+<%= form_for :work, url: update_multiple_user_works_path(@user), method: :patch, html: { class: "verbose post" } do |form| %>
   <p class="required notice">
     <%= ts("* Required information") %>
     <% @works.each do |work| %>
@@ -21,20 +21,20 @@
     <% end %>
   </p>
 
-  <%= render 'work_form_tags', :include_blank => true %>
+  <%= render "work_form_tags", include_blank: true %>
   <fieldset class="preface" role="article">
     <legend><%= ts("Preface") %></legend>
     <h3 class="landmark heading"><%= ts("Preface") %></h3>
     <dl>
-      <%= render "works/work_form_pseuds", :form => form, :works => @works %>
+      <%= render "works/work_form_pseuds", form: form, works: @works %>
     </dl>
   </fieldset>
 
   <fieldset id="associations" role="article">
     <legend><%= ts("Associations") %></legend>
     <h3 class="landmark heading"><%= ts("Associations") %></h3>
-    <dl>     
-      <%= render "collectibles/collectible_form", :form => form, :collectibles => @works %>
+    <dl>
+      <%= render "collectibles/collectible_form", form: form, collectibles: @works %>
       <dt><%= form.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
       <dd>
         <%= form.select :language_id, language_options_for_select(sorted_languages, "id"), { include_blank: true } %>
@@ -43,7 +43,7 @@
       <dt><%= form.label :work_skin_id, ts("Select work skin") %> <%= link_to_help "work-skins" %></dt>
       <dd>
         <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title,
-            {:include_blank => true} %>
+              { include_blank: true } %>
       </dd>
     </dl>
   </fieldset>
@@ -52,12 +52,12 @@
     <legend><%= t("works.permissions.privacy") %></legend>
     <h3 class="landmark heading"><%= t("works.permissions.privacy") %></h3>
     <dl>
-      
+
       <dt><%= t("works.permissions.visibility.label") %> <%= link_to_help "registered-users" %></dt>
       <dd>
         <fieldset>
-          <%=
-            radio_button_list(form, :restricted, [
+        <%=
+          radio_button_list(form, :restricted, [
               ["", t("works.permissions.visibility.keep_current")],
               ["1", t("works.permissions.visibility.multiple_works_restricted")],
               ["0", t("works.permissions.visibility.unrestricted")]
@@ -69,8 +69,8 @@
       <dt><%= t("comments.commentable.permissions.moderated_commenting.label") %><%= link_to_help "comments-moderated" %></dt>
       <dd>
         <fieldset>
-          <%=
-            radio_button_list(form, :moderated_commenting_enabled, [
+        <%=
+          radio_button_list(form, :moderated_commenting_enabled, [
               ["", t("comments.commentable.permissions.moderated_commenting.keep_current")],
               ["1", t("comments.commentable.permissions.moderated_commenting.enable")],
               ["0", t("comments.commentable.permissions.moderated_commenting.disable")]
@@ -103,7 +103,7 @@
     (If you leave a field blank it will remain unchanged.)") %>
   </p>
 
-  <p class="submit actions"><%= submit_tag ts("Update All Works"), data: {confirm: ts("Are you sure? Remember this will replace all existing values!")} %></p>
+  <p class="submit actions"><%= submit_tag ts("Update All Works"), data: { confirm: ts("Are you sure? Remember this will replace all existing values!") } %></p>
 
 <% end %>
 <!--/content-->
