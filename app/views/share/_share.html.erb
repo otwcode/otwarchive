@@ -10,23 +10,20 @@
   </p>
 
   <ul>
-    <% target = "_blank" %>
-    <%# Twitter share %>
     <li class="twitter">
       <% twitter_text = shareable.is_a?(Bookmark) ? get_tweet_text_for_bookmark(shareable) : get_tweet_text(shareable) %>
       <% twitter_url = shareable.is_a?(Bookmark) ? bookmark_url(shareable) : work_url(shareable) %>
       <% twitter_address = "https://twitter.com/intent/tweet/?text=#{u(twitter_text)}&url=#{u(twitter_url)}&via=ao3org&size=large" %>
-      <%= sharing_button("twitter", twitter_address, ts("Twitter"), target: target) %>
+      <%= sharing_button("twitter", twitter_address, ts("Twitter"), target: "_blank") %>
     </li>
 
-    <% # Tumblr share %>
     <li class="tumblr">
       <% work = shareable.is_a?(Bookmark) ? shareable.bookmarkable : shareable %>
       <% tumblr_url = work_url(work) %>
       <% tumblr_title = get_tumblr_embed_link_title(work) %>
       <% tumblr_caption = shareable.is_a?(Bookmark) ? render("share/embed_link_bookmark", item: shareable) : render("share/embed_meta", work: shareable) %>
       <% tumblr_address = "http://tumblr.com/widgets/share/tool?canonicalUrl=#{u(tumblr_url)}&title=#{u(tumblr_title)}&caption=#{u(tumblr_caption)}" %>
-      <%= sharing_button("tumblr", tumblr_address, ts("Tumblr"), target: target) %>
+      <%= sharing_button("tumblr", tumblr_address, ts("Tumblr"), target: "_blank") %>
     </li>
   </ul>
 </div>
