@@ -330,14 +330,14 @@ Feature: Tag wrangling
     When I edit the tag "Child"
       And I check the 1st checkbox with id matching "MetaTag"
       And I fill in "tag_meta_tag_string" with "Grandparent"
+      # Ensure a new cache key will be used
+      And it is currently 1 second from now
       And I press "Save changes"
     Then I should see "Tag was updated"
       And I should see "Grandparent" within "#parent_MetaTag_associations_to_remove_checkboxes"
       But I should not see "Parent" within "#parent_MetaTag_associations_to_remove_checkboxes"
 
-    # Burst template cache
-    When it is currently 25 hours from now
-      And I view the tag "Child"
+    When I view the tag "Child"
     Then I should see "Grandparent" within ".meta"
       But I should not see "Parent" within ".meta"
 
