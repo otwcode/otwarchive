@@ -490,7 +490,6 @@ public
   # Don't get unnecessary data for json requests
 
   skip_before_action  :load_admin_banner,
-                      :set_redirects,
                       :store_location,
                       if: proc { %w(js json).include?(request.format) }
 
