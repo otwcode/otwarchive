@@ -8,6 +8,25 @@ permissions:
   checks: write
 
 jobs:
+  rubocop:
+    name: Rubocop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby and run bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: rubocop
+        uses: reviewdog/action-rubocop@e70b014b8062c447d6b515ee0209f834ea93e696
+        with:
+          use_bundler: true
+          reporter: github-pr-check
+          skip_install: true
+
   erb-lint:
     name: ERB Lint runner
     runs-on: ubuntu-latest
