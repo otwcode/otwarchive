@@ -206,7 +206,7 @@ class Creatorship < ApplicationRecord
   # ambiguous/missing pseuds. By storing the desired name in the @byline
   # variable, we can generate nicely formatted messages.
   def byline=(byline)
-    pseuds = Pseud.parse_byline(byline).to_a
+    pseuds = Pseud.parse_byline_ambiguous(byline).to_a
 
     if pseuds.size == 1
       self.pseud = pseuds.first

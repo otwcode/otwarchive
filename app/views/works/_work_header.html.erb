@@ -35,7 +35,7 @@
     <% if @chapter == @work.first_chapter %>
 
       <% unless @work.summary.blank? %>
-        <div class="summary module" role="complementary">
+        <div class="summary module">
           <h3 class="heading"><%= ts("Summary:") %></h3>
           <% unless @work.summary.blank? %>
             <blockquote class="userstuff">

@@ -19,7 +19,7 @@
 
 <% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v4", skip_digest: true) do %>
 
-  <div class="chapter<%= ' preface' unless @preview_mode %> group" role="complementary">
+  <div class="chapter<%= ' preface' unless @preview_mode %> group">
     <h3 class="title">
       <%= link_to chapter.chapter_header, [chapter.work, chapter] %><% unless chapter.title.blank? %>: <%= chapter.title.html_safe %><% end %>
     </h3>
@@ -70,7 +70,7 @@
 
   <% unless chapter.endnotes.blank? %>
     <div class="chapter preface group">
-      <div class="end notes module" id="chapter_<%= chapter.position.to_s %>_endnotes" role="complementary">
+      <div class="end notes module" id="chapter_<%= chapter.position.to_s %>_endnotes">
         <h3 class="heading"><%=h ts('Notes:') %></h3>
         <blockquote class="userstuff">
           <%=raw sanitize_field(chapter, :endnotes) %>

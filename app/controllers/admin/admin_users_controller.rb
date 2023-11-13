@@ -46,7 +46,8 @@ class Admin::AdminUsersController < Admin::BaseController
   def show
     @user = authorize User.find_by!(login: params[:id])
     @hide_dashboard = true
-    @log_items = @user.log_items.sort_by(&:created_at).reverse
+    @page_subtitle = t(".page_title", login: @user.login)
+    log_items
   end
 
   # POST admin/users/update
@@ -67,27 +68,35 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def update_next_of_kin
     @user = authorize User.find_by!(login: params[:user_login])
-    fnok = @user.fannish_next_of_kin
     kin = User.find_by(login: params[:next_of_kin_name])
     kin_email = params[:next_of_kin_email]
 
-    if kin.blank? && kin_email.blank?
-      if fnok.present?
-        fnok.destroy
-        flash[:notice] = ts("Fannish next of kin was removed.")
-      end
-      redirect_to admin_user_path(@user)
-      return
+    fnok = @user.fannish_next_of_kin
+    previous_kin = fnok&.kin
+    fnok ||= @user.build_fannish_next_of_kin
+    fnok.assign_attributes(kin: kin, kin_email: kin_email)
+
+    unless fnok.changed?
+      flash[:notice] = ts("No change to fannish next of kin.")
+      redirect_to admin_user_path(@user) and return
     end
 
-    fnok = @user.build_fannish_next_of_kin if fnok.blank?
-    fnok.assign_attributes(kin: kin, kin_email: kin_email)
+    # Remove FNOK that already exists.
+    if fnok.persisted? && kin.blank? && kin_email.blank?
+      fnok.destroy
+      @user.log_removal_of_next_of_kin(previous_kin, admin: current_admin)
+      flash[:notice] = ts("Fannish next of kin was removed.")
+      redirect_to admin_user_path(@user) and return
+    end
+
     if fnok.save
+      @user.log_removal_of_next_of_kin(previous_kin, admin: current_admin)
+      @user.log_assignment_of_next_of_kin(kin, admin: current_admin)
       flash[:notice] = ts("Fannish next of kin was updated.")
       redirect_to admin_user_path(@user)
     else
       @hide_dashboard = true
-      @log_items = @user.log_items.sort_by(&:created_at).reverse
+      log_items
       render :show
     end
   end
@@ -168,12 +177,7 @@ class Admin::AdminUsersController < Admin::BaseController
     end
   end
 
-  def send_activation
-    @user = User.find_by(login: params[:id])
-    authorize @user
-    # send synchronously to avoid getting caught in mail queue
-    UserMailer.signup_notification(@user.id).deliver_now
-    flash[:notice] = ts("Activation email sent")
-    redirect_to action: :show
+  def log_items
+    @log_items ||= @user.log_items.sort_by(&:created_at).reverse
   end
 end
