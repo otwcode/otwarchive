@@ -79,6 +79,20 @@
     </div>
   <% end %>
 
+  <% if @next_chapter %>
+    <script type="speculationrules">
+    {
+      "prefetch": [
+        {
+          "source": "list",
+          "eagerness": "eager",
+          "urls": ["<%= work_chapter_path(@work, @next_chapter, anchor: "workskin") %>"]
+        }
+      ]
+    }
+    </script>
+  <% end %>
+
 </div>
 
 <% end %><!-- end of cache -->
