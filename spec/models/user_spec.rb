@@ -34,6 +34,23 @@ describe User do
       end
     end
 
+    context "when the user has a fnok" do
+      let(:fnok) { create(:fannish_next_of_kin) }
+      let(:user) { fnok.user }
+      let(:kin) { fnok.kin }
+
+      it "logs the fnok removal on the kin side" do
+        user_id = user.id
+        user.destroy!
+
+        log_item = kin.reload.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVED_AS_FNOK)
+        expect(log_item.fnok_user_id).to eq(user_id)
+        expect(log_item.admin_id).to be_nil
+        expect(log_item.note).to eq("System Generated")
+      end
+    end
+
     context "when the user is set as someone else's fnok" do
       let(:fnok) { create(:fannish_next_of_kin) }
       let(:user) { fnok.kin }
@@ -193,6 +210,37 @@ describe User do
       it "allows changing email" do
         existing_user.update(email: "new_email")
         expect(existing_user.email).to eq("new_email")
+      end
+    end
+
+    context "password was recently changed" do
+      before do
+        pw = Faker::Lorem.characters(number: ArchiveConfig.PASSWORD_LENGTH_MIN)
+        existing_user.update!(password: pw, password_confirmation: pw)
+      end
+
+      redacted_value = "[REDACTED]"
+      redacted_arr = Array.new(2, redacted_value)
+
+      it "audits and redacts password changes" do
+        last_change = existing_user.audits.pluck(:audited_changes).last
+
+        expect(last_change["encrypted_password"]).to eq(redacted_arr)
+      end
+
+      it "deserializes old BCrypt password changes" do
+        salt = SecureRandom.urlsafe_base64(15)
+        bcrypt_password = BCrypt::Password.create(
+          ["another_password", salt].flatten.join,
+          cost: ArchiveConfig.BCRYPT_COST || 14
+        )
+
+        existing_user.update!(encrypted_password: bcrypt_password, password_salt: salt)
+
+        last_change = existing_user.audits.pluck(:audited_changes).last
+
+        expect(last_change["encrypted_password"]).to eq(redacted_arr)
+        expect(last_change["password_salt"]).to eq(redacted_arr)
       end
     end
 

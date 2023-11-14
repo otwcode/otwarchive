@@ -241,12 +241,16 @@ describe Admin::AdminUsersController do
         log_item = user.log_items.last
         expect(log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
         expect(log_item.fnok_user.id).to eq(kin.id)
-        expect(log_item.admin_id).to eq(admin.id)
-        expect(log_item.note).to eq("Change made by #{admin.login}")
+
+        added_log_item = kin.reload.log_items.last
+        expect(added_log_item.action).to eq(ArchiveConfig.ACTION_ADDED_AS_FNOK)
+        expect(added_log_item.fnok_user.id).to eq(user.id)
+
+        expect_changes_made_by(admin, [log_item, added_log_item])
       end
 
       it "logs removing a fannish next of kin" do
-        kin_user_id = create(:fannish_next_of_kin, user: user).kin_id
+        kin = create(:fannish_next_of_kin, user: user).kin
 
         post :update_next_of_kin, params: {
           user_login: user.login
@@ -255,13 +259,17 @@ describe Admin::AdminUsersController do
         expect(user.fannish_next_of_kin).to be_nil
         log_item = user.log_items.last
         expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
-        expect(log_item.fnok_user.id).to eq(kin_user_id)
-        expect(log_item.admin_id).to eq(admin.id)
-        expect(log_item.note).to eq("Change made by #{admin.login}")
+        expect(log_item.fnok_user.id).to eq(kin.id)
+
+        removed_log_item = kin.reload.log_items.last
+        expect(removed_log_item.action).to eq(ArchiveConfig.ACTION_REMOVED_AS_FNOK)
+        expect(removed_log_item.fnok_user.id).to eq(user.id)
+
+        expect_changes_made_by(admin, [log_item, removed_log_item])
       end
 
       it "logs updating a fannish next of kin" do
-        previous_kin_user_id = create(:fannish_next_of_kin, user: user).kin_id
+        previous_kin = create(:fannish_next_of_kin, user: user).kin
 
         post :update_next_of_kin, params: {
           user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
@@ -271,15 +279,28 @@ describe Admin::AdminUsersController do
 
         remove_log_item = user.log_items[-2]
         expect(remove_log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
-        expect(remove_log_item.fnok_user.id).to eq(previous_kin_user_id)
-        expect(remove_log_item.admin_id).to eq(admin.id)
-        expect(remove_log_item.note).to eq("Change made by #{admin.login}")
+        expect(remove_log_item.fnok_user.id).to eq(previous_kin.id)
 
         add_log_item = user.log_items.last
         expect(add_log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
         expect(add_log_item.fnok_user.id).to eq(kin.id)
-        expect(add_log_item.admin_id).to eq(admin.id)
-        expect(add_log_item.note).to eq("Change made by #{admin.login}")
+
+        removed_log_item = previous_kin.reload.log_items.last
+        expect(removed_log_item.action).to eq(ArchiveConfig.ACTION_REMOVED_AS_FNOK)
+        expect(removed_log_item.fnok_user.id).to eq(user.id)
+
+        added_log_item = kin.reload.log_items.last
+        expect(added_log_item.action).to eq(ArchiveConfig.ACTION_ADDED_AS_FNOK)
+        expect(added_log_item.fnok_user.id).to eq(user.id)
+
+        expect_changes_made_by(admin, [remove_log_item, add_log_item, removed_log_item, added_log_item])
+      end
+
+      def expect_changes_made_by(admin, log_items)
+        log_items.each do |log_item|
+          expect(log_item.admin_id).to eq(admin.id)
+          expect(log_item.note).to eq("Change made by #{admin.login}")
+        end
       end
 
       it "does nothing if changing the fnok to themselves" do
