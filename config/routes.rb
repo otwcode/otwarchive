@@ -513,7 +513,7 @@ Otwarchive::Application.routes.draw do
     resources :works
     resources :admin_posts
   end
-  get '/languages/:id', to: redirect('/languages/%{id}/works', status: 302)
+  get "/languages/:id", to: redirect("/languages/%{id}/works", status: 302)
   resources :locales, except: :destroy
 
   #### API ####
