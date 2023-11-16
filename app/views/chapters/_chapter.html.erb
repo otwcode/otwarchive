@@ -79,7 +79,7 @@
     </div>
   <% end %>
 
-  <% if @next_chapter %>
+  <% if @next_chapter && $rollout.active?(:prefetch_next_chapter) %>
     <script type="speculationrules">
       {
         "prefetch": [
