@@ -564,7 +564,7 @@ When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, pag
   step "the periodic tag count task is run"
 end
 
-When "I browse works in {string}" do |language_name|
+When "I browse works in language {string}" do |language_name|
   step %{all indexing jobs have been run}
   step "the periodic tag count task is run"
 
