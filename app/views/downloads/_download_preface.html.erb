@@ -65,15 +65,24 @@
       <% end %>
     <% end %>
 
+    <%# i18n-tasks-use t("downloads.download_preface.translated_to.restricted_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translated_to.revealed_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translated_to.unrevealed_html") %>
     <%# i18n-tasks-use t("downloads.download_preface.inspired_by.restricted_html") %>
     <%# i18n-tasks-use t("downloads.download_preface.inspired_by.revealed_html") %>
     <%# i18n-tasks-use t("downloads.download_preface.inspired_by.unrevealed") %>
     <%# i18n-tasks-use t("downloads.download_preface.translation_of.restricted_html") %>
     <%# i18n-tasks-use t("downloads.download_preface.translation_of.revealed_html") %>
     <%# i18n-tasks-use t("downloads.download_preface.translation_of.unrevealed") %>
+    <% translations = @work.approved_related_works.where(translation: true) %>
     <% related_works = @work.parent_work_relationships.reject { |wr| !wr.parent } %>
-    <% if related_works.length > 0 %>
+    <% if translations.any? || related_works.any? %>
       <ul>
+        <% translations.each do |related_work| %>
+          <li>
+            <%= related_work_note(related_work.work, "translated_to", download: true) %>
+          </li>
+        <% end %>
         <% related_works.each do |work| %>
           <li>
             <% relation = work.translation ? "translation_of" : "inspired_by" %>
