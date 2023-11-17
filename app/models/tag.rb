@@ -168,8 +168,8 @@ class Tag < ApplicationRecord
     maximum: ArchiveConfig.TAG_MAX,
     message: "^Tag name '%{value}' is too long -- try using less than %{count} characters or using commas to separate your tags."
   validates_format_of :name,
-    with: /\A[^,*<>^{}=`\\%]+\z/,
-    message: "^Tag name '%{value}' cannot include the following restricted characters: , &#94; * < > { } = ` \\ %"
+    with: /\A[^,，、*<>^{}=`\\%]+\z/,
+    message: "^Tag name '%{value}' cannot include the following restricted characters: , &#94; * < > { } = ` ， 、 \\ %"
 
   validates_presence_of :sortable_name
 
