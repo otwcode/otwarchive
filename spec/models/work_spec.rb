@@ -644,7 +644,11 @@ describe Work do
     reveal_date = Date.new(2000, 1, 2)
 
     let(:collection) { create(:collection) }
-    let(:work) { create(:work, collection_names: collection.name, chapters: [create(:chapter, published_at: publication_date)]) }
+    let(:work) do
+      create(:work, collection_names: collection.name, chapters: [
+        create(:chapter, published_at: publication_date)
+      ])
+    end
 
     context "when visibility is changed" do
       before do
@@ -666,23 +670,22 @@ describe Work do
     end
 
     context "when visibility is not changed" do
-        before do
-          collection.collection_preference.unrevealed = false
-          collection.collection_preference.save!
-        end
+      before do
+        collection.collection_preference.unrevealed = false
+        collection.collection_preference.save!
+      end
 
-        it "does not update the revised date" do
-          travel_to publication_date
-          work.save!
-          expect(work.reload.revised_at).to eq publication_date
+      it "does not update the revised date" do
+        travel_to publication_date
+        work.save!
+        expect(work.reload.revised_at).to eq publication_date
 
-          travel_to reveal_date
-          collection.collection_preference.unrevealed = false
-          collection.collection_preference.save!
+        travel_to reveal_date
+        collection.collection_preference.unrevealed = false
+        collection.collection_preference.save!
 
-          expect(work.reload.revised_at).to eq publication_date
-        end
+        expect(work.reload.revised_at).to eq publication_date
+      end
     end
   end
-
 end
