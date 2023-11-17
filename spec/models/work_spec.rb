@@ -638,4 +638,51 @@ describe Work do
       end
     end
   end
+
+  describe "#save" do
+    publication_date = Date.new(2000, 1, 1)
+    reveal_date = Date.new(2000, 1, 2)
+
+    let(:collection) { create(:collection) }
+    let(:work) { create(:work, collection_names: collection.name, chapters: [create(:chapter, published_at: publication_date)]) }
+
+    context "when visibility is changed" do
+      before do
+        collection.collection_preference.unrevealed = true
+        collection.collection_preference.save!
+      end
+
+      it "updates the revised date" do
+        travel_to publication_date
+        work.save!
+        expect(work.reload.revised_at).to eq publication_date
+
+        travel_to reveal_date
+        collection.collection_preference.unrevealed = false
+        collection.collection_preference.save!
+
+        expect(work.reload.revised_at).to eq reveal_date
+      end
+    end
+
+    context "when visibility is not changed" do
+        before do
+          collection.collection_preference.unrevealed = false
+          collection.collection_preference.save!
+        end
+
+        it "does not update the revised date" do
+          travel_to publication_date
+          work.save!
+          expect(work.reload.revised_at).to eq publication_date
+
+          travel_to reveal_date
+          collection.collection_preference.unrevealed = false
+          collection.collection_preference.save!
+
+          expect(work.reload.revised_at).to eq publication_date
+        end
+    end
+  end
+
 end

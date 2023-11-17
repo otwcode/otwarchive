@@ -197,6 +197,11 @@ class Work < ApplicationRecord
 
   before_save :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
+  # If the work is becoming revealed, bump the revised-at date (AO3-3866)
+  before_save do
+    set_revised_at(Date.today) if will_save_change_to_in_unrevealed_collection?
+  end
+
   after_save :post_first_chapter
   before_save :set_word_count
 
