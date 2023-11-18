@@ -199,7 +199,7 @@ class Work < ApplicationRecord
 
   # If the work is becoming revealed, bump the revised-at date (AO3-3866)
   before_save do
-    set_revised_at(Time.zone.today) if will_save_change_to_in_unrevealed_collection?
+    set_revised_at(Time.current) if will_save_change_to_in_unrevealed_collection?
   end
 
   after_save :post_first_chapter

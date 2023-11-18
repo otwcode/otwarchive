@@ -640,13 +640,13 @@ describe Work do
   end
 
   describe "#save" do
-    publication_date = Date.new(2000, 1, 1)
-    reveal_date = Date.new(2000, 1, 2)
+    publication_time = Time.zone.local(2000, 1, 1)
+    reveal_time = Time.zone.local(2000, 1, 2)
 
     let(:collection) { create(:collection) }
     let(:work) do
       create(:work, collection_names: collection.name, chapters: [
-        create(:chapter, published_at: publication_date)
+        create(:chapter, published_at: publication_time)
       ])
     end
 
@@ -657,15 +657,15 @@ describe Work do
       end
 
       it "updates the revised date" do
-        travel_to publication_date
+        travel_to publication_time
         work.save!
-        expect(work.reload.revised_at).to eq publication_date
+        expect(work.reload.revised_at).to eq publication_time
 
-        travel_to reveal_date
+        travel_to reveal_time
         collection.collection_preference.unrevealed = false
         collection.collection_preference.save!
 
-        expect(work.reload.revised_at).to eq reveal_date
+        expect(work.reload.revised_at).to eq reveal_time
       end
     end
 
@@ -676,15 +676,15 @@ describe Work do
       end
 
       it "does not update the revised date" do
-        travel_to publication_date
+        travel_to publication_time
         work.save!
-        expect(work.reload.revised_at).to eq publication_date
+        expect(work.reload.revised_at).to eq publication_time
 
-        travel_to reveal_date
+        travel_to reveal_time
         collection.collection_preference.unrevealed = false
         collection.collection_preference.save!
 
-        expect(work.reload.revised_at).to eq publication_date
+        expect(work.reload.revised_at).to eq publication_time
       end
     end
   end
