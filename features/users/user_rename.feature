@@ -197,3 +197,17 @@ Feature:
       And I should see "Hi, newusername"
     When I follow "Series"
     Then I should see "Best Series by newusername"
+
+    Scenario: Changing the username from a forbidden name to non-forbidden
+      Given I have no users
+        And the following activated user exists
+          | login     | password |
+          | forbidden | secret   |
+        And the user name "forbidden" is on the forbidden list
+      When I am logged in as "forbidden" with password "secret"
+        And I visit the change username page for forbidden
+        And I fill in "New user name" with "notforbidden"
+        And I fill in "Password" with "secret"
+        And I press "Change User Name"
+      Then I should get confirmation that I changed my username
+        And I should see "Hi, notforbidden"
