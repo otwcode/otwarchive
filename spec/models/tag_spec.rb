@@ -169,7 +169,21 @@ describe Tag do
   end
 
   context "tags using restricted characters should not be saved" do
-    BAD_TAGS.each do |tag|
+    [
+      "bad, tag",
+      "also， bad",
+      "no、good",
+      "wild*card",
+      "back\\slash",
+      "lesser<tag",
+      "greater>tag",
+      "^tag",
+      "{open",
+      "close}",
+      "not=allowed",
+      "suspicious`character",
+      "no%maths"
+    ].each do |tag|
       forbidden_tag = Tag.new
       forbidden_tag.name = tag 
       it "is not saved and receives an error message about restricted characters" do
