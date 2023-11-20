@@ -49,7 +49,7 @@ describe Tag do
         expect(@fandom_tag.taggings_count).to eq 1
       end
 
-      it 'will start caching a when tag when that tag is used significantly' do
+      it 'will start caching a tag when that tag is used significantly' do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           FactoryBot.create(:work, fandom_string: @fandom_tag.name)
           RedisJobSpawner.perform_now("TagCountUpdateJob")
@@ -168,11 +168,15 @@ describe Tag do
     expect(tag.errors[:name].join).to match(/too long/)
   end
 
-  it "should not be valid with disallowed characters" do
-    tag = Tag.new
-    tag.name = "bad<tag"
-    expect(tag.save).to be_falsey
-    expect(tag.errors[:name].join).to match(/restricted characters/)
+  context "tags using restricted characters should not be saved" do
+    BAD_TAGS.each do |tag|
+      forbidden_tag = Tag.new
+      forbidden_tag.name = tag 
+      it "is not saved and receives an error message about restricted characters" do
+        expect(forbidden_tag.save).to be_falsey
+        expect(forbidden_tag.errors[:name].join).to match(/restricted characters/)
+      end
+    end
   end
 
   context "unwrangleable" do
