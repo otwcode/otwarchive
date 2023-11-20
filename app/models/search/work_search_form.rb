@@ -160,7 +160,9 @@ class WorkSearchForm
       end
     end
     if @options[:sort_column].present?
-      summary << "sort by: #{name_for_sort_column(@options[:sort_column]).downcase}" +
+      # Use pretty name if available, otherwise fall back to plain column name
+      pretty_sort_name = name_for_sort_column(@options[:sort_column])
+      summary << "sort by: #{pretty_sort_name.nil? ? @options[:sort_column] : pretty_sort_name.downcase}" +
         (@options[:sort_direction].present? ?
           (@options[:sort_direction] == "asc" ? " ascending" : " descending") : "")
     end
