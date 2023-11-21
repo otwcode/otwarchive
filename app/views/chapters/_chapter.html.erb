@@ -78,20 +78,19 @@
       </div>
     </div>
   <% end %>
-
-  <% if @next_chapter && $rollout.active?(:prefetch_next_chapter) %>
-    <script type="speculationrules">
-      {
-        "prefetch": [
-          {
-            "source": "list",
-            "urls": ["<%= work_chapter_path(@work, @next_chapter, anchor: "workskin") %>"]
-          }
-        ]
-      }
-    </script>
-  <% end %>
-
 </div>
 
 <% end %><!-- end of cache -->
+
+<% if @next_chapter && $rollout.active?(:prefetch_next_chapter) %>
+  <script type="speculationrules">
+    {
+      "prefetch": [
+        {
+          "source": "list",
+          "urls": ["<%= work_chapter_path(@work, @next_chapter, anchor: "workskin") %>"]
+        }
+      ]
+    }
+  </script>
+<% end %>
