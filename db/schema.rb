@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20230920094945) do
+ActiveRecord::Schema.define(version: 2023_09_20_094945) do
 
   create_table "abuse_reports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "email"
@@ -258,7 +258,7 @@ ActiveRecord::Schema.define(version: 20230920094945) do
     t.index ["pseud_id"], name: "signups_on_pseud_id"
   end
 
-  create_table "chapters", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
+  create_table "chapters", id: :integer, charset: "utf8", force: :cascade do |t|
     t.text "content", size: :long, null: false, collation: "utf8mb4_unicode_ci"
     t.integer "position", default: 1
     t.integer "work_id"
@@ -799,7 +799,7 @@ ActiveRecord::Schema.define(version: 20230920094945) do
     t.boolean "banner_seen", default: false, null: false
     t.integer "preferred_locale", default: 1, null: false
     t.boolean "allow_cocreator", default: false
-    t.boolean "allow_gifts", default: false, null: false
+    t.boolean "allow_gifts", default: false
     t.boolean "allow_collection_invitation", default: false, null: false
     t.boolean "guest_replies_off", default: false, null: false
     t.index ["skin_id"], name: "index_preferences_on_skin_id"
@@ -996,7 +996,7 @@ ActiveRecord::Schema.define(version: 20230920094945) do
     t.index ["name"], name: "index_roles_on_name"
   end
 
-  create_table "roles_users", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
+  create_table "roles_users", charset: "utf8", force: :cascade do |t|
     t.integer "user_id"
     t.integer "role_id"
     t.datetime "created_at"
