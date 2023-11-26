@@ -694,6 +694,9 @@ end
 
 When "the cache for the work {string} is cleared" do |title|
   work = Work.find_by(title: title)
+
+  # Delay to force the updated_at that gets set by .touch to be new
+  step "it is currently 1 second from now"
   # Touch the work to actually expire the cache
   work.touch
 end

@@ -77,6 +77,8 @@ Feature: Edit Works
       And I follow "Edit"
       And I select "testy" from "work_author_attributes_ids"
       And I unselect "testuser" from "work_author_attributes_ids"
+      # Expire byline cache
+      And it is currently 1 second from now
       And I press "Post"
     Then I should see "testy"
       And I should not see "testuser,"
