@@ -29,7 +29,7 @@ describe AbuseReport do
     end
 
     context "provided email is invalid" do
-      [BAD_EMAILS, BADLY_FORMATTED_EMAILS].each do |email|
+      BAD_EMAILS.each do |email|
         let(:bad_email) { build(:abuse_report, email: email) }
         it "fails email format check and cannot be created" do
           expect(bad_email.save).to be_falsey

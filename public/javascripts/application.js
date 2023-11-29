@@ -352,16 +352,6 @@ function attachCharacterCounters() {
     $j('.observe_textlength').each(countFn);
 }
 
-// prevent double submission for JS enabled
-jQuery.fn.preventDoubleSubmit = function() {
-  jQuery(this).submit(function() {
-    if (this.beenSubmitted)
-      return false;
-    else
-      this.beenSubmitted = true;
-  });
-};
-
 // add attributes that are only needed in the primary menus and when JavaScript is enabled
 function setupDropdown(){
   $j('#header').find('.dropdown').attr("aria-haspopup", true);
@@ -585,12 +575,12 @@ function thermometer() {
           stretch = true
         } else { stretch = false }
 
-        goal_amount = parseFloat(banner_goal_text.replace(/,/g, ''))
-        progress_amount = parseFloat(banner_progress_text.replace(/,/g, ''))
+        goal_amount = parseFloat(banner_goal_text.replace(/\.(?![0-9])|[^\.0-9]/g, ''));
+        progress_amount = parseFloat(banner_progress_text.replace(/\.(?![0-9])|[^\.0-9]/g, ''));
         percentage_amount = Math.min( Math.round(progress_amount / goal_amount * 1000) / 10, 100);
 
     // add thermometer markup (with amounts)
-    banner_content.append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"><span class="amount">US$' + banner_goal_text +'</span></div><div class="progress"><span class="amount">US$' + banner_progress_text + '</span></div></div></div></div>');
+    banner_content.append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"><span class="amount">' + banner_goal_text +'</span></div><div class="progress"><span class="amount">' + banner_progress_text + '</span></div></div></div></div>');
 
     // set the progress indicator
     // darker green for over 100% stretch goals

@@ -127,26 +127,25 @@ class ArchiveFaqsController < ApplicationController
 
   # Set the locale as an instance variable first
   def set_locale
-    session[:language_id] = params[:language_id].presence if session[:language_id] != params[:language_id].presence
+    session[:language_id] = params[:language_id] if Locale.exists?(iso: params[:language_id])
 
     if current_user.present? && $rollout.active?(:set_locale_preference,
                                                  current_user)
-      @i18n_locale = session[:language_id] || Locale.find(current_user.
-        preference.preferred_locale).iso
+      @i18n_locale = session[:language_id].presence || Locale.find(current_user.preference.preferred_locale).iso
     else
-      @i18n_locale = session[:language_id] || I18n.default_locale
+      @i18n_locale = session[:language_id].presence || I18n.default_locale
     end
   end
 
   def validate_locale
-    return if Locale.exists?(iso: @i18n_locale)
+    return if params[:language_id].blank? || Locale.exists?(iso: params[:language_id])
 
     flash[:error] = "The specified locale does not exist."
     redirect_to url_for(request.query_parameters.merge(language_id: I18n.default_locale))
   end
 
   def require_language_id
-    return if params[:language_id].present?
+    return if params[:language_id].present? && Locale.exists?(iso: params[:language_id])
 
     redirect_to url_for(request.query_parameters.merge(language_id: @i18n_locale.to_s))
   end

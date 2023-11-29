@@ -3,9 +3,9 @@
   <p>
     <%= t(".restricted.work_unavailable") %>
     <%= t(".restricted.account_exists") %>
-    <% if @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
+    <% if AdminSetting.current.invite_from_queue_enabled? && AdminSetting.current.creation_requires_invite? %>
       <%= t(".restricted.no_account", request_invite_link: link_to(t(".restricted.request_invite"), invite_requests_path)).html_safe %>
-    <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
+    <% elsif AdminSetting.current.account_creation_enabled? && !AdminSetting.current.creation_requires_invite? %>
       <%= link_to t(".restricted.signup"), signup_path %>
     <% end %>
   </p>
@@ -14,9 +14,9 @@
   <p>
     <%= t(".restricted.commenting_unavailable") %>
     <%= t(".restricted.account_exists") %>
-    <% if @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
+    <% if AdminSetting.current.invite_from_queue_enabled? && AdminSetting.current.creation_requires_invite? %>
       <%= t(".restricted.no_account", request_invite_link: link_to(t(".restricted.request_invite"), invite_requests_path)).html_safe %>
-    <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
+    <% elsif AdminSetting.current.account_creation_enabled? && !AdminSetting.current.creation_requires_invite? %>
       <%= link_to t(".restricted.signup"), signup_path %>
     <% end %>
   </p>
@@ -35,9 +35,9 @@
 
 <p>
   <%= t(".login.forgot", reset_password_link: link_to(t(".login.reset_password"), new_user_password_path)).html_safe %>
-  <% if @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
+  <% if AdminSetting.current.invite_from_queue_enabled? && AdminSetting.current.creation_requires_invite? %>
     <br \><%= t(".login.no_account", join_link: link_to(t(".login.request_invite"), invite_requests_path)).html_safe %>
-  <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
+  <% elsif AdminSetting.current.account_creation_enabled? && !AdminSetting.current.creation_requires_invite? %>
     <br \><%= t(".login.no_account", join_link: link_to(t(".login.create_account"), signup_path)).html_safe %>
   <% end %>
 </p>

@@ -17,7 +17,7 @@
     <%= render "chapters/chapter_management", chapter: chapter, work: @work %>
   <% end %>
 
-<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v4", skip_digest: true) do %>
+<% cache_if(!@preview_mode, "#{@work.cache_key}/#{chapter.cache_key}-show-v6", skip_digest: true) do %>
 
   <div class="chapter<%= ' preface' unless @preview_mode %> group">
     <h3 class="title">
@@ -77,6 +77,19 @@
         </blockquote>
       </div>
     </div>
+  <% end %>
+
+  <% if @next_chapter %>
+    <script type="speculationrules">
+      {
+        "prefetch": [
+          {
+            "source": "list",
+            "urls": ["<%= work_chapter_path(@work, @next_chapter, anchor: "workskin") %>"]
+          }
+        ]
+      }
+    </script>
   <% end %>
 
 </div>

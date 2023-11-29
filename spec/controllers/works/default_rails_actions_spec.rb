@@ -5,6 +5,22 @@ describe WorksController, work_search: true do
   include LoginMacros
   include RedirectExpectationHelper
 
+  let(:banned_user) { create(:user, banned: true) }
+  let(:banned_users_work) do
+    banned_user.update!(banned: false)
+    work = create(:work, authors: [banned_user.pseuds.first])
+    banned_user.update!(banned: true)
+    work
+  end
+
+  let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.from_now) }
+  let(:suspended_users_work) do
+    suspended_user.update!(suspended: false, suspended_until: nil)
+    work = create(:work, authors: [suspended_user.pseuds.first])
+    suspended_user.update!(suspended: true, suspended_until: 1.week.from_now)
+    work
+  end
+  
   describe "before_action #clean_work_search_params" do
     let(:params) { {} }
 
@@ -174,6 +190,13 @@ describe WorksController, work_search: true do
       get :new
       expect(response).to render_template("new")
     end
+
+    it "errors and redirects to user page when user is banned" do
+      fake_login_known_user(banned_user)
+      get :new
+      it_redirects_to_simple(user_path(banned_user))
+      expect(flash[:error]).to include("Your account has been banned.")
+    end
   end
 
   describe "create" do
@@ -266,6 +289,15 @@ describe WorksController, work_search: true do
         post :create, params: { work: work_attributes }
         expect(user.last_wrangling_activity).to be_nil
       end
+    end
+
+    it "errors and redirects to user page when user is banned" do
+      fake_login_known_user(banned_user)
+      tag = create(:unsorted_tag)
+      work_attributes = attributes_for(:work).except(:posted, :freeform_string).merge(freeform_string: tag.name)
+      post :create, params: { work: work_attributes }
+      it_redirects_to_simple(user_path(banned_user))
+      expect(flash[:error]).to include("Your account has been banned.")
     end
   end
 
@@ -604,6 +636,14 @@ describe WorksController, work_search: true do
         end
       end
     end
+
+    it "errors and redirects to user page when user is banned" do
+      fake_login_known_user(banned_user)
+      attrs = { title: "New Work Title" }
+      put :update, params: { id: banned_users_work.id, work: attrs }
+      it_redirects_to_simple(user_path(banned_user))
+      expect(flash[:error]).to include("Your account has been banned.")
+    end
   end
 
   describe "collected" do
@@ -790,6 +830,34 @@ describe WorksController, work_search: true do
         it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{work_title} was deleted.")
         expect { work.reload }.to raise_exception(ActiveRecord::RecordNotFound)
         expect(Comment.count).to eq(0)
+      end
+    end
+
+    context "when a logged in user is suspended" do
+      before do
+        fake_login_known_user(suspended_user)
+      end
+
+      it "errors and redirects to user page" do
+        fake_login_known_user(suspended_user)
+        delete :destroy, params: { id: suspended_users_work.id }
+        
+        it_redirects_to_simple(user_path(suspended_user))
+        expect(flash[:error]).to include("Your account has been suspended")
+      end
+    end
+
+    context "when a logged in user is banned" do
+      before do
+        fake_login_known_user(banned_user)
+      end
+
+      it "deletes the work and redirects to the user's works with a notice" do
+        delete :destroy, params: { id: banned_users_work.id }
+
+        it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{banned_users_work.title} was deleted.")
+        expect { banned_users_work.reload }
+          .to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
   end

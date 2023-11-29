@@ -56,6 +56,9 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And 1 email should be delivered
       And the email should contain "deleted from the Archive by a site admin"
       And the email should not contain "translation missing"
+    When I visit the last activities item
+    Then I should see "destroy"
+      And I should see "#<Work id"
     When I log out
       And I am on regular_user's works page
     Then I should not see "ToS Violation"
@@ -113,7 +116,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should see "Admin-Added Relationship"
       And I should see "Admin-Added Character"
      When I follow "Activities"
-     Then I should see "View Admin Activity"
+     Then I should see "Admin Activities"
      When I visit the last activities item
      Then I should see "No Archive Warnings Apply"
       And I should see "Old tags"

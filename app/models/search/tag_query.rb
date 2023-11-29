@@ -44,7 +44,7 @@ class TagQuery < Query
   def sort
     direction = options[:sort_direction]&.downcase
     case options[:sort_column]
-    when "taggings_count_cache"
+    when "taggings_count_cache", "uses"
       column = "uses"
       direction ||= "desc"
     when "created_at"

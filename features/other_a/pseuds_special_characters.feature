@@ -10,7 +10,7 @@ Scenario: creating pseud with unicode characters
     And I follow "New Pseud" within "div#main.pseuds-index"
     And I fill in "Name" with "Àlice and Bôb"
     And I fill in "Description" with "special character name"
-    And I fill in "Icon alt text:" with "special Alice"
+    And I fill in "Icon alt text" with "special Alice"
     And I press "Create"
   Then I should see "Pseud was successfully created."
   When I follow "Edit Pseud"
