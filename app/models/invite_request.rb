@@ -45,7 +45,6 @@ class InviteRequest < ApplicationRecord
     invitation = creator ? creator.invitations.build(invitee_email: self.email, from_queue: true) :
                                        Invitation.new(invitee_email: self.email, from_queue: true)
     if invitation.save
-      Rails.logger.info "#{invitation.invitee_email} was invited at #{Time.now}"
       self.destroy
     end
   end

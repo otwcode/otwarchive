@@ -178,7 +178,8 @@ class Work < ApplicationRecord
       next if gift.pseud&.user&.preference&.allow_gifts?
       next if self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud)
       next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(gift.pseud)
-      self.errors.add(:base, ts("#{gift.pseud.byline} does not accept gifts."))
+
+      self.errors.add(:base, ts("%{byline} does not accept gifts.", byline: gift.pseud.byline))
     end
   end
 
@@ -210,7 +211,7 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series, :touch_related_works
   after_destroy :expire_caches, :update_pseud_index
 
   before_destroy :send_deleted_work_notification, prepend: true
@@ -453,9 +454,11 @@ class Work < ApplicationRecord
 
   # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
+    valid_users = (self.users + [User.current_user]).compact
+
     self.challenge_assignments =
-      ids.map { |id| id.blank? ? nil : ChallengeAssignment.find(id) }.compact.
-      select { |assign| (self.users + [User.current_user]).compact.include?(assign.offering_user) }
+      ChallengeAssignment.where(id: ids)
+        .select { |assign| valid_users.include?(assign.offering_user) }
   end
 
   def recipients=(recipient_names)
@@ -918,6 +921,14 @@ class Work < ApplicationRecord
 
   def parents_after_saving
     parent_work_relationships.reject(&:marked_for_destruction?)
+  end
+
+  def touch_related_works
+    return unless saved_change_to_in_unrevealed_collection?
+
+    # Make sure download URLs of child and parent works expire to preserve anonymity.
+    children.touch_all
+    parents_after_saving.each { |rw| rw.parent.touch }
   end
 
   #################################################################################

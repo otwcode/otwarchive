@@ -134,3 +134,95 @@ Scenario: Comments reflect pseud changes immediately
     And I view the work "Interesting" with comments
   Then I should see "after (myself)" within ".comment h4.byline"
     And I should not see "before (myself)"
+
+Scenario: Many pseuds
+
+  Given there are 3 pseuds per page
+    And "Zaphod" has the pseud "Slartibartfast"
+    And "Zaphod" has the pseud "Agrajag"
+    And "Zaphod" has the pseud "Betelgeuse"
+    And I am logged in as "Zaphod"
+
+  When I view my profile
+  Then I should see "Zaphod" within "dl.meta"
+    And I should see "Agrajag" within "dl.meta"
+    And I should see "Betelgeuse" within "dl.meta"
+    And I should not see "Slartibartfast" within "dl.meta"
+    And I should see "1 more pseud" within "dl.meta"
+
+  When I go to my user page
+  Then I should see "Zaphod" within "ul.expandable"
+    And I should see "Agrajag" within "ul.expandable"
+    And I should see "Betelgeuse" within "ul.expandable"
+    And I should not see "Slartibartfast" within "ul.expandable"
+    And I should see "All Pseuds (4)" within "ul.expandable"
+
+  When I go to my "Slartibartfast" pseud page
+  Then I should see "Pseuds" within "li.pseud > a"
+    And I should see "Slartibartfast" within "ul.expandable"
+
+  When I go to my pseuds page
+  Then I should not see "Zaphod (Zaphod)" within "ul.pseud.index"
+    But I should see "Agrajag (Zaphod)" within "ul.pseud.index"
+    And I should see "Betelgeuse (Zaphod)" within "ul.pseud.index"
+    And I should see "Slartibartfast (Zaphod)" within "ul.pseud.index"
+    And I should see "Next" within ".pagination"
+  When I follow "Next" within ".pagination"
+  Then I should see "Zaphod (Zaphod)" within "ul.pseud.index"
+
+  When there are 10 pseuds per page
+    And I view my profile
+  Then I should see "Zaphod, Agrajag, Betelgeuse, and Slartibartfast" within "dl.meta"
+
+Scenario: Edit pseud updates series blurbs
+
+  Given I am logged in as "Myself"
+    And I add the work "Great Work" to series "Best Series" as "Me2"
+  When I go to the dashboard page for user "Myself" with pseud "Me2"
+    And I follow "Series"
+  Then I should see "Best Series by Me2 (Myself)"
+
+  When I go to my profile page
+    And I follow "Manage My Pseuds"
+    And I follow "Edit Me2"
+    And I fill in "Name" with "Me3"
+    And I press "Update"
+  Then I should see "Pseud was successfully updated."
+
+  When I follow "Series"
+  Then I should see "Best Series by Me3 (Myself)"
+
+Scenario: Change details as an admin
+
+  Given "someone" has the pseud "alt"
+    And I am logged in as a "policy_and_abuse" admin
+    And an abuse ticket ID exists
+  When I go to someone's pseuds page
+    And I follow "Edit alt"
+    And I fill in "Description" with "I'd probably be removing text."
+    And I fill in "Ticket ID" with "no 💜"
+    And I press "Update"
+  Then I should see "Ticket ID is not a number"
+    And the field labeled "Ticket ID" should contain "no 💜"
+  When I fill in "Ticket ID" with "47"
+    And I press "Update"
+  Then I should see "Pseud was successfully updated."
+  When I go to someone's pseuds page
+  Then I should see "I'd probably be removing text."
+  When I follow "Activities" within ".admin.primary.navigation"
+  Then I should see "Pseud alt (someone)"
+  When I follow "Pseud alt (someone)"
+  Then I should be on someone's pseuds page
+  When I visit the last activities item
+  Then I should see "Pseud alt (someone)"
+    And I should see "edit pseud"
+    And I should see a link "Ticket #47"
+
+  # Skip logging admin activity if no change was actually made.
+  When I go to someone's pseuds page
+    And I follow "Edit alt"
+    And I fill in "Ticket ID" with "47"
+    And I press "Update"
+  Then I should see "Pseud was successfully updated."
+  When I go to the admin-activities page
+  Then I should see 1 admin activity log entry

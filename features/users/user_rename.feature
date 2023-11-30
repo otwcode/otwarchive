@@ -147,3 +147,33 @@ Feature:
       And I view the work "Interesting" with comments
     Then I should see "after" within ".comment h4.byline"
       And I should not see "mine (before)"
+
+  Scenario: Changing username updates series blurbs
+    Given I have no users
+      And I am logged in as "oldusername" with password "password"
+      And I add the work "Great Work" to series "Best Series"
+    When I go to the dashboard page for user "oldusername" with pseud "oldusername"
+      And I follow "Series"
+    Then I should see "Best Series by oldusername"
+    When I visit the change username page for oldusername
+      And I fill in "New user name" with "newusername"
+      And I fill in "Password" with "password"
+      And I press "Change User Name"
+    Then I should get confirmation that I changed my username
+      And I should see "Hi, newusername"
+    When I follow "Series"
+    Then I should see "Best Series by newusername"
+
+    Scenario: Changing the username from a forbidden name to non-forbidden
+      Given I have no users
+        And the following activated user exists
+          | login     | password |
+          | forbidden | secret   |
+        And the user name "forbidden" is on the forbidden list
+      When I am logged in as "forbidden" with password "secret"
+        And I visit the change username page for forbidden
+        And I fill in "New user name" with "notforbidden"
+        And I fill in "Password" with "secret"
+        And I press "Change User Name"
+      Then I should get confirmation that I changed my username
+        And I should see "Hi, notforbidden"

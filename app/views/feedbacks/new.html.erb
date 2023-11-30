@@ -21,7 +21,7 @@
 <% else %>
   <h3 class="heading"><%= t(".heading.instructions") %></h3>
   <div class="userstuff">
-    <p><%= t(".status.current", twitter_link: link_to(t(".status.twitter"), "https://twitter.com/AO3_Status")).html_safe %></p>
+    <p><%= t(".status.current", twitter_link: link_to(t(".status.twitter"), "https://twitter.com/AO3_Status"), tumblr_link: link_to(t(".status.tumblr"), "https://ao3org.tumblr.com")).html_safe %></p>
     <p><%= t(".abuse.reports", contact_link: link_to(t(".abuse.contact"), new_abuse_report_path)).html_safe %></p>
     <p><%= t(".reportable.intro") %></p>
     <ul>

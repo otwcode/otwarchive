@@ -312,10 +312,10 @@ class TagSetNominationsController < ApplicationController
             # this is the tricky one: make sure we can do this name change
             tagnom = TagNomination.for_tag_set(@tag_set).where(type: "#{type.classify}Nomination", tagname: name).first
             if !tagnom
-              @errors << ts("Couldn't find a #{type} nomination for #{name}")
+              @errors << ts("Couldn't find a #{type} nomination for %{name}", name: name)
               @force_expand[type] = true
             elsif !tagnom.change_tagname?(val)
-              @errors << ts("Invalid name change for #{name} to #{val}: %{msg}", msg: tagnom.errors.full_messages.join(', '))
+              @errors << ts("Invalid name change for %{name} to %{val}: %{msg}", name: name, val: val, msg: tagnom.errors.full_messages.join(", "))
               @force_expand[type] = true
             elsif action == "synonym"
               @synonym[type] << val

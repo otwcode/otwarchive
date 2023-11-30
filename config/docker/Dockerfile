@@ -6,7 +6,6 @@ RUN apt-get update             && \
         calibre                   \
         default-mysql-client      \
         shared-mime-info          \
-        wkhtmltopdf               \
         zip
 
 # Clean and mount repository at /otwa
