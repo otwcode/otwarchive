@@ -203,6 +203,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    date (3.3.4)
     delorean (2.1.0)
       chronic
     departure (6.5.0)
@@ -323,8 +324,11 @@ GEM
     loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
-    mail (2.7.1)
+    mail (2.8.1)
       mini_mime (>= 0.1.1)
+      net-imap
+      net-pop
+      net-smtp
     marcel (1.0.2)
     matrix (0.4.2)
     mechanize (2.8.5)
@@ -345,7 +349,7 @@ GEM
     mimemagic (0.3.10)
       nokogiri (~> 1)
       rake
-    mini_mime (1.1.2)
+    mini_mime (1.1.5)
     mini_portile2 (2.8.2)
     minitest (5.17.0)
     mono_logger (1.1.1)
@@ -360,10 +364,19 @@ GEM
     net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
+    net-imap (0.4.7)
+      date
+      net-protocol
+    net-pop (0.1.2)
+      net-protocol
+    net-protocol (0.2.2)
+      timeout
     net-scp (3.0.0)
       net-ssh (>= 2.6.5, < 7.0.0)
     net-sftp (3.0.0)
       net-ssh (>= 5.0.0, < 7.0.0)
+    net-smtp (0.4.0)
+      net-protocol
     net-ssh (6.1.0)
     net-ssh-gateway (2.0.0)
       net-ssh (>= 4.0.0)
@@ -559,6 +572,7 @@ GEM
     tilt (2.0.11)
     timecop (0.9.4)
     timeliness (0.4.4)
+    timeout (0.4.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -649,6 +663,7 @@ DEPENDENCIES
   kt-paperclip (>= 5.2.0)
   launchy
   lograge
+  mail (>= 2.8)
   mechanize
   mimemagic (= 0.3.10)
   minitest
@@ -703,4 +718,4 @@ RUBY VERSION
    ruby 3.1.4p223
 
 BUNDLED WITH
-   2.2.33
+   2.4.22
