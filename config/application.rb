@@ -66,9 +66,6 @@ module Otwarchive
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:content, :password, :terms_of_service_non_production]
 
-    # Disable dumping schemas after migrations.
-    config.active_record.dump_schema_after_migration = false
-
     # Allows belongs_to associations to be optional
     config.active_record.belongs_to_required_by_default = false
 
