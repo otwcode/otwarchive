@@ -1057,7 +1057,7 @@ ActiveRecord::Schema.define(version: 2023_09_20_094945) do
   create_table "skins", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "title"
     t.integer "author_id"
-    t.text "css"
+    t.text "css", size: :long
     t.boolean "public", default: false
     t.boolean "official", default: false
     t.datetime "created_at"
