@@ -546,3 +546,4 @@ PERCONA_ARGS: >
   --set-vars innodb_lock_wait_timeout=2
   --alter-foreign-keys-method=auto
   --no-check-unique-key-change
+  --recursion-method=none
