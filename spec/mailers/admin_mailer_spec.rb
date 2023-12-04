@@ -172,4 +172,78 @@ describe AdminMailer do
       end
     end
   end
+
+  let(:commenter) { create(:user, login: "Accumulator") }
+  let(:commenter_pseud) { create(:pseud, user: commenter, name: "Blueprint") }
+  let(:comment) { create(:comment, :on_admin_post, pseud: commenter_pseud) }
+
+  shared_examples "a notification email with the commenters pseud and username" do
+    describe "HTML email" do
+      it "has the pseud and username of the commenter" do
+        expect(email).to have_html_part_content(">Blueprint (Accumulator)</a></b> <em><strong>(Registered User)</strong></em>")
+        expect(subject.html_part).to have_xpath(
+          "//a[@href=\"#{user_pseud_url(commenter, commenter_pseud)}\"]",
+          text: "Blueprint (Accumulator)"
+        )
+      end
+    end
+
+    describe "text email" do
+      it "has the pseud and username of the commenter" do
+        expect(subject).to have_text_part_content(
+          "Blueprint (Accumulator) (#{user_pseud_url(commenter, commenter_pseud)}) (Registered User)"
+        )
+      end
+    end
+  end
+
+  shared_examples "a notification email that marks the commenter as official" do
+    describe "HTML email" do
+      it "has the username of the commenter and the official role" do
+        expect(email).to have_html_part_content(">Centrifuge</a></b> <em><strong>(Official)</strong></em>")
+        expect(subject.html_part).to have_xpath(
+          "//a[@href=\"#{user_pseud_url(commenter, commenter.default_pseud)}\"]",
+          text: "Centrifuge"
+        )
+      end
+    end
+
+    describe "text email" do
+      it "has the username of the commenter and the official role" do
+        expect(subject).to have_text_part_content(
+          "Centrifuge (#{user_pseud_url(commenter, commenter.default_pseud)}) (Official)"
+        )
+      end
+    end
+  end
+
+  describe "comment_notification" do
+    subject(:email) { AdminMailer.comment_notification(comment.id) }
+
+    it_behaves_like "an email with a valid sender"
+    it_behaves_like "a multipart email"
+    it_behaves_like "a notification email with the commenters pseud and username"
+
+    context "when the comment is by an official user using their default pseud" do
+      let(:commenter) { create(:official_user, login: "Centrifuge") }
+      let(:comment) { create(:comment, :on_admin_post, pseud: commenter.default_pseud) }
+
+      it_behaves_like "a notification email that marks the commenter as official"
+    end
+  end
+
+  describe "comment_edited_notification" do
+    subject(:email) { AdminMailer.edited_comment_notification(comment.id) }
+
+    it_behaves_like "an email with a valid sender"
+    it_behaves_like "a multipart email"
+    it_behaves_like "a notification email with the commenters pseud and username"
+
+    context "when the comment is by an official user using their default pseud" do
+      let(:commenter) { create(:official_user, login: "Centrifuge") }
+      let(:comment) { create(:comment, :on_admin_post, pseud: commenter.default_pseud) }
+
+      it_behaves_like "a notification email that marks the commenter as official"
+    end
+  end
 end

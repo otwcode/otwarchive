@@ -84,6 +84,8 @@ en:
   roles:
     anonymous_creator: Anonymous Creator
     guest_with_parens: "(Guest)"
+    official_with_parens: "(Official)"
+    registered_with_parens: "(Registered User)"
   user_mailer:
     abuse_report:
       copy:
