@@ -564,6 +564,14 @@ When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, pag
   step "the periodic tag count task is run"
 end
 
+When "I browse works in language {string}" do |language_name|
+  step %{all indexing jobs have been run}
+  step "the periodic tag count task is run"
+
+  language = Language.find_by(name: language_name)
+  visit language_works_path(language)
+end
+
 When /^I delete the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: CGI.escapeHTML(work))
   visit edit_work_path(work)

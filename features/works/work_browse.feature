@@ -152,3 +152,27 @@ chapter when the chapters are reordered.
   When I follow the comments link for the work "Awesome Work"
   Then I should be on the work "Awesome Work"
     And I should see "Bravo!"
+
+Scenario: Can also browse work indexed by language
+    Given basic languages
+      And Persian language
+      And basic tags
+      And I am logged in
+      And I post the work "Whatever 1" with fandom "Aggressive Retsuko"
+      And I post the work "Whatever 2" with fandom "Aggressive Retsuko"
+    When I go to the new work page
+      And I select "Not Rated" from "Rating"
+      And I check "No Archive Warnings Apply"
+      And I fill in "Fandoms" with "Weiß Kreuz"
+      And I fill in "Work Title" with "Überraschende Überraschung"
+      And I fill in "content" with "Dies ist eine Fanfic in Deutsch."
+      And I select "Deutsch" from "Choose a language"
+    When I press "Post"
+    Then I should see "Work was successfully posted."
+      And I should see "Deutsch" within "dd.language"
+    When I browse works in language "English"
+      Then I should see "2 Works in English"
+    When I browse works in language "Deutsch"
+      Then I should see "1 Work in Deutsch"
+    When I browse works in language "Persian"
+      Then I should see "0 Works in Persian"
