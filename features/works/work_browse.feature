@@ -172,6 +172,8 @@ Scenario: Can also browse work indexed by language
       And I should see "Deutsch" within "dd.language"
     When I browse works in language "English"
       Then I should see "2 Works in English"
+    When I press "Sort and Filter"
+      Then I should see "2 Works in English"
     When I browse works in language "Deutsch"
       Then I should see "1 Work in Deutsch"
     When I browse works in language "Persian"
