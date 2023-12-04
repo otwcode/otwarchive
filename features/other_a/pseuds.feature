@@ -135,6 +135,55 @@ Scenario: Comments reflect pseud changes immediately
   Then I should see "after (myself)" within ".comment h4.byline"
     And I should not see "before (myself)"
 
+Scenario: Collections reflect pseud changes of the owner after the cache expires
+
+  When I am logged in as "myself"
+    And I add the pseud "before"
+    And I set up the collection "My Collection Thing"
+    And I select "before" from "Owner pseud(s)"
+    And I unselect "myself" from "Owner pseud(s)"
+    And I press "Submit"
+    And I go to the collections page
+  Then I should see "My Collection Thing"
+    And I should see "before (myself)" within "#main"
+
+  When I change the pseud "before" to "after"
+    And I go to the collections page
+  Then I should see "My Collection Thing"
+    And I should see "before (myself)" within "#main"
+  When the collection blurb cache has expired
+    And I go to the collections page
+  Then I should see "My Collection Thing"
+    And I should see "after (myself)" within "#main"
+    And I should not see "before (myself)" within "#main"
+
+Scenario: Collections reflect pseud changes of moderators after the cache expires
+
+  Given "myself" has the pseud "before"
+  When I have the collection "My Collection Thing"
+    And I am logged in as the owner of "My Collection Thing"
+    And I am on the "My Collection Thing" participants page
+    And I fill in "participants_to_invite" with "before (myself)"
+    And I press "Submit"
+  Then I should see "New members invited: before (myself)"
+  When I select "Moderator" from "myself_role"
+    And I submit with the 3rd button
+  Then I should see "Updated before."
+  When I go to the collections page
+  Then I should see "My Collection Thing"
+    And I should see "before (myself)" within "#main"
+
+  When I am logged in as "myself"
+    And I change the pseud "before" to "after"
+    And I go to the collections page
+  Then I should see "My Collection Thing"
+    And I should see "before (myself)" within "#main"
+  When the collection blurb cache has expired
+    And I go to the collections page
+  Then I should see "My Collection Thing"
+    And I should see "after (myself)" within "#main"
+    And I should not see "before (myself)" within "#main"
+
 Scenario: Many pseuds
 
   Given there are 3 pseuds per page

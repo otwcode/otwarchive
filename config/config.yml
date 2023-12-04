@@ -468,6 +468,9 @@ SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE: 3600
 # bookmarks, # of fandoms):
 SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE: 300
 
+# Cache durations for work and bookmark searches (in minutes)
+MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE: 120
+
 # Job size used for the HitCountUpdateJob class:
 HIT_COUNT_JOB_SIZE: 1000
 
