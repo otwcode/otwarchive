@@ -182,7 +182,7 @@ module MailerHelper
 
   def commenter_pseud_or_name_link(comment)
     if comment.comment_owner.nil?
-      safe_join([style_bold(comment.comment_owner_name), " ", style_role(t("roles.guest_with_parens"))])
+      t("roles.guest_commenter_name_html", name: style_bold(comment.comment_owner_name), role: style_role(t("roles.guest_with_parens")))
     elsif comment.by_anonymous_creator?
       style_bold(t("roles.anonymous_creator"))
     else
@@ -192,8 +192,7 @@ module MailerHelper
 
   def commenter_pseud_or_name_text(comment)
     if comment.comment_owner.nil?
-
-      "#{comment.comment_owner_name} #{t('roles.guest_with_parens')}"
+      t("roles.guest_commenter_name_text", name: comment.comment_owner_name, role: t('roles.guest_with_parens'))
     elsif comment.by_anonymous_creator?
       t("roles.anonymous_creator")
     else

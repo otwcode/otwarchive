@@ -84,6 +84,8 @@ en:
   roles:
     anonymous_creator: Anonymous Creator
     guest_with_parens: "(Guest)"
+    guest_commenter_name_html: "%{name} %{role}"
+    guest_commenter_name_text: "%{name} %{role}"
   user_mailer:
     abuse_report:
       copy:
