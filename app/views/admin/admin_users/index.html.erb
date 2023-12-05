@@ -29,22 +29,17 @@
         <%= check_box_tag "inactive", "1", params[:inactive].present? %>
         <%= label_tag "inactive", ts("Not yet activated") %>
       </dd>
-      <dt><%= label_tag "settings", ts("Search settings") %></dt>
-      <dd>
-        <ul>
-          <li>
-            <%= check_box_tag "exact", "1", params[:exact].present? %>
-            <%= label_tag "exact", ts("Exact match only") %>
-          </li>
-
-          <% if policy(User).view_past? %>
-            <li>
-              <%= check_box_tag "search_past", "1", params[:search_past].present? %>
-              <%= label_tag "search_past", ts("Include past usernames and emails") %>
-            </li>
-          <% end %>
-        </ul>
-      </dd>
+      <% if policy(User).can_view_past? %>
+        <dt><%= label_tag "settings", ts("Search settings") %></dt>
+        <dd>
+          <ul>
+              <li>
+                <%= check_box_tag "search_past", "1", params[:search_past].present? %>
+                <%= label_tag "search_past", ts("Include past usernames and emails") %>
+              </li>
+          </ul>
+        </dd>
+      <% end %>
     </dl>
     <p class="submit"><%= submit_tag ts("Find") %></p>
   <% end %>

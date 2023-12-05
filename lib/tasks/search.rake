@@ -49,7 +49,7 @@ namespace :search do
     BookmarkedWorkIndexer.index_from_db
   end
 
-  desc "Recreate admin users index"
+  desc "Reindex users without recreating the admin users index"
   task(reindex_admin_users: :environment) do
     UserIndexer.index_from_db
   end

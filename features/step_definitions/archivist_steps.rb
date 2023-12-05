@@ -19,7 +19,6 @@ end
 When /^I make "([^\"]*)" an archivist$/ do |name|
   step(%{I go to the manage users page})
   step(%{I fill in "Name" with "#{name}"})
-  step(%{I check "Exact match only"})
   step(%{I press "Find"})
   step(%{I check "user_roles_4"})
   step(%{I press "Update"})

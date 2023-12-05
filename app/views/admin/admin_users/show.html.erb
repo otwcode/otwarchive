@@ -35,15 +35,13 @@
       <dd><%= @user.invitation ? link_to(@user.invitation.id, invitation_path(@user.invitation.id)) : t(".info.no_invitation") %></dd>
       <dt><%= t(".info.role", count: @user.roles.size) %></dt>
       <dd><%= @user.roles.any? ? @user.roles.map { |role| t("activerecord.attributes.role.#{role.name}") }.to_sentence : t(".info.no_role") %></dd>
-      <% if policy(User).view_past? %>
+      <% if policy(User).can_view_past? %>
         <% past_logins = @user.historic_values("login") %>
         <% if past_logins.present? %>
           <dt><%= t(".info.past_logins", count: past_logins.size) %></dt>
           <dd>
             <ul>
-              <% past_logins.each do |login| %>
-                <li><%= login %></li>
-              <% end %>
+              <li><%= past_logins.join(", ") %></li>
             </ul>
           </dd>
         <% end %>
@@ -52,9 +50,7 @@
           <dt><%= t(".info.past_emails", count: past_emails.size) %></dt>
           <dd>
             <ul>
-              <% past_emails.each do |email| %>
-                <li><%= email %></li>
-              <% end %>
+              <li><%= past_emails.join(", ") %></li>
             </ul>
           </dd>
         <% end %>

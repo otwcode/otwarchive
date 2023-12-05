@@ -12,6 +12,9 @@ class UserPolicy < ApplicationPolicy
   # Roles that allow deleting all of a spammer's creations.
   SPAM_CLEANUP_ROLES = %w[superadmin policy_and_abuse].freeze
 
+  # Roles that allow viewing of past user emails and logins.
+  VIEW_PAST_USER_INFO_ROLES = %w[superadmin policy_and_abuse open_doors support tag_wrangling].freeze
+
   # Define which roles can update which attributes.
   ALLOWED_ATTRIBUTES_BY_ROLES = {
     "open_doors" => [roles: []],
@@ -41,6 +44,10 @@ class UserPolicy < ApplicationPolicy
     user_has_roles?(SPAM_CLEANUP_ROLES)
   end
 
+  def can_view_past?
+    user_has_roles?(VIEW_PAST_USER_INFO_ROLES)
+  end
+
   def permitted_attributes
     ALLOWED_ATTRIBUTES_BY_ROLES.values_at(*user.roles).compact.flatten
   end
@@ -61,8 +68,4 @@ class UserPolicy < ApplicationPolicy
 
   alias troubleshoot? can_manage_users?
   alias activate? can_manage_users?
-
-  def view_past?
-    user_has_roles?(%w[superadmin policy_and_abuse support])
-  end
 end

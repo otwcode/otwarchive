@@ -11,16 +11,15 @@ Feature: Admin Find Users page
       And I am logged in as a super admin
       And I go to the manage users page
 
-  Scenario: The Find Users page should perform a partial match on name
-    When I fill in "Name" with "user"
+  Scenario: The Find Users page performs a partial match on name with * wildcard
+    When I fill in "Name" with "u*er*"
       And I submit
     Then I should see "userA"
       And I should see "userB"
       And I should see "userCB"
 
-  Scenario: The Find Users page should perform a exact match on name if exact is checked
-    When I check "Exact match only"
-      And I fill in "Name" with "user"
+  Scenario: The Find Users page performs a exact match on name by default
+    When I fill in "Name" with "user"
       And I submit
     Then I should see "0 users found"
     When I fill in "Name" with "userA"
@@ -28,14 +27,14 @@ Feature: Admin Find Users page
     Then the field labeled "user_email" should contain "a@ao3.org"
       But I should not see "UserB"
 
-  Scenario: The Find Users page should search past logins only if the option is selected
+  Scenario: The Find Users page searches past logins only if the option is selected
     When I am logged in as "userA"
       And I visit the change username page for userA
       And I fill in "New user name" with "userD"
       And I fill in "Password" with "password"
       And I press "Change"
     Then I should get confirmation that I changed my username
-    When I am logged in as a super admin
+    When I am logged in as a "support" admin
       And I go to the manage users page
       And I fill in "Name" with "userA"
       And I submit
@@ -45,16 +44,15 @@ Feature: Admin Find Users page
     Then I should see "1 user found"
       And I should see "userD"
 
-  Scenario: The Find Users page should perform a partial match by email
-    When I fill in "Email" with "bo3"
+  Scenario: The Find Users page performs a partial match by email with * wildcard
+    When I fill in "Email" with "*bo3*"
       And I submit
     Then I should see "userB"
       And I should see "userCB"
       But I should not see "userA"
 
-  Scenario: The Find Users page should perform a exact match on email if exact is checked
-    When I check "Exact match only"
-      And I fill in "Email" with "not_email"
+  Scenario: The Find Users page performs a exact match on email by default
+    When I fill in "Email" with "ao3"
       And I submit
     Then I should see "0 users found"
     When I fill in "Email" with "a@ao3.org"
@@ -62,7 +60,7 @@ Feature: Admin Find Users page
     Then I should see "userA"
       But I should not see "UserB"
 
-  Scenario: The Find Users page should search past emails if the option is selected
+  Scenario: The Find Users page searches past emails if the option is selected
     When I am logged in as "userA"
       And I visit the change email page for userA
       And I fill in "New Email" with "d@ao3.org"
@@ -70,7 +68,7 @@ Feature: Admin Find Users page
       And I fill in "Password" with "password"
       And I press "Change"
     Then I should get confirmation that I changed my email
-    When I am logged in as a super admin
+    Given I am logged in as a "policy_and_abuse" admin
       And I go to the manage users page
       And I fill in "Email" with "a@ao3.org"
       And I submit
@@ -79,37 +77,32 @@ Feature: Admin Find Users page
       And I submit
     Then I should see "1 user found"
       And I should see "userA"
-      But the field labeled "user_email" should contain "d@ao3.org"
+      And the field labeled "user_email" should contain "d@ao3.org"
 
-  Scenario: The Find Users page should perform an exact match by role
+  Scenario: The Find Users page performs an exact match by role
     When I select "Archivist" from "Role"
       And I submit
     Then I should see "userB"
       But I should not see "userA"
       And I should not see "userCB"
 
-  Scenario: The Find Users should display an appropriate message if no users are found
-    When I fill in "Name" with "co3"
-      And I submit
-    Then I should see "0 users found"
-
-  Scenario: The Find Users page should perform an exact match by ID in addition to any other criteria
+  Scenario: The Find Users page performs an exact match by ID in addition to any other criteria
     When the search criteria contains the ID for "userB"
       And I submit
     Then I should see "1 user found"
       And I should see "userB"
       But I should not see "userA"
       And I should not see "userCB"
-    When I fill in "Name" with "A"
+    When I fill in "Name" with "*A"
       And I submit
     Then I should see "0 users found"
-    When I fill in "Name" with "B"
+    When I fill in "Name" with "*B"
       And I submit
     Then I should see "1 user found"
       And I should see "userB"
 
   # Bulk email search
-  Scenario: The Bulk Email Search page should find all existing matching users
+  Scenario: The Bulk Email Search page finds all existing matching users
     When I go to the Bulk Email Search page
       And I fill in "Email addresses *" with
       """
@@ -122,7 +115,7 @@ Feature: Admin Find Users page
       But I should not see "userCB"
       And I should not see "Not found"
 
-  Scenario: The Bulk Email Search page should list emails found, not found and duplicates
+  Scenario: The Bulk Email Search page lists emails found, not found and duplicates
     When I go to the Bulk Email Search page
       And I fill in "Email addresses *" with
       """
@@ -137,7 +130,7 @@ Feature: Admin Find Users page
       And I should see "1 duplicate"
       And I should see "Not found"
 
-  Scenario: The Bulk Email Search page should find an exact match
+  Scenario: The Bulk Email Search page finds an exact match
     When I go to the Bulk Email Search page
       And I fill in "Email addresses *" with "b@bo3.org"
       And I press "Find"

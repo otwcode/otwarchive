@@ -42,7 +42,7 @@ class UserQuery < Query
 
     field = options[:search_past].present? ? :all_names : :names
 
-    { wildcard: { field => with_wildcards_or_exact(options[:name]) } }
+    { wildcard: { field => options[:name] } }
   end
 
   def email_filter
@@ -50,14 +50,6 @@ class UserQuery < Query
 
     field = options[:search_past].present? ? :all_emails : :email
 
-    { wildcard: { field => with_wildcards_or_exact(options[:email]) } }
-  end
-
-  def with_wildcards_or_exact(value)
-    if options[:exact]
-      value
-    else
-      "*#{value}*"
-    end
+    { wildcard: { field => options[:email] } }
   end
 end
