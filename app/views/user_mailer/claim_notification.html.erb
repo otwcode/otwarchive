@@ -16,8 +16,11 @@
   <ul>
     <% @claimed_works.each do |work| %>
       <li>
-        <%= style_link(work.title, work_url(work)) %>
-        <%= "(#{work.fandom_string})" if work.fandom_string.present? %>
+        <% if work.fandom_string.present? %>
+          <%= t(".work_info.html", work_link: style_link(work.title, work_url(work)), fandom: work.fandom_string.split(",").to_sentence) %>
+        <% else %>
+          <%= style_link(work.title, work_url(work)) %>
+        <% end %>
       </li>
     <% end %>
   </ul>
