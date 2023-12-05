@@ -67,6 +67,8 @@ module Otwarchive
     config.filter_parameters += [:content, :password, :terms_of_service_non_production]
 
     # Disable dumping schemas after migrations.
+    # This can cause problems since we don't always update versions on merge.
+    # Ideally this would be enabled in dev, but we're not quite ready for that.
     config.active_record.dump_schema_after_migration = false
 
     # Allows belongs_to associations to be optional
@@ -75,8 +77,13 @@ module Otwarchive
     # Keeps updated_at in cache keys
     config.active_record.cache_versioning = false
 
-    # This class is not allowed by deafult when upgrading Rails to 6.0.5.1 patch
-    config.active_record.yaml_column_permitted_classes = [ActiveSupport::TimeWithZone, Time, ActiveSupport::TimeZone]
+    # This class is not allowed by default when upgrading Rails to 6.0.5.1 patch
+    config.active_record.yaml_column_permitted_classes = [
+      ActiveSupport::TimeWithZone,
+      Time,
+      ActiveSupport::TimeZone,
+      BCrypt::Password
+    ]
 
     # handle errors with custom error pages:
     config.exceptions_app = self.routes

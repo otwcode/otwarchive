@@ -243,8 +243,8 @@ module ApplicationHelper
   # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
   def generate_countdown_html(field_id, max)
     max = max.to_s
-    span = content_tag(:span, max, id: "#{field_id}_counter", class: "value", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
-    content_tag(:p, span + ts(' characters left'), class: "character_counter")
+    span = content_tag(:span, max, id: "#{field_id}_counter", class: "value", "data-maxlength" => max)
+    content_tag(:p, span + ts(' characters left'), class: "character_counter", "tabindex" => 0)
   end
 
   # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc)
@@ -296,6 +296,8 @@ module ApplicationHelper
     link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", class: "hidden showme")
   end
 
+  # show time in the time zone specified by the first argument
+  # add the user's time when specified in preferences
   def time_in_zone(time, zone = nil, user = User.current_user)
     return ts("(no time specified)") if time.blank?
 

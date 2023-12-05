@@ -17,21 +17,14 @@ describe InviteRequestsController do
 
   describe "GET #show" do
     context "when given invalid emails" do
-      it "redirects to index with error" do
-        message = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
-        get :show, params: { id: 0 }
-        it_redirects_to_with_error(status_invite_requests_path, message)
-        expect(assigns(:invite_request)).to be_nil
-        get :show, params: { id: 0, email: "mistressofallevil@example.org" }
-        it_redirects_to_with_error(status_invite_requests_path, message)
+      it "renders" do
+        get :show, params: { email: "mistressofallevil@example.org" }
+        expect(response).to render_template("show")
         expect(assigns(:invite_request)).to be_nil
       end
 
       it "renders for an ajax call" do
-        get :show, params: { id: 0 }, xhr: true
-        expect(response).to render_template("show")
-        expect(assigns(:invite_request)).to be_nil
-        get :show, params: { id: 0, email: "mistressofallevil@example.org" }, xhr: true
+        get :show, params: { email: "mistressofallevil@example.org" }, xhr: true
         expect(response).to render_template("show")
         expect(assigns(:invite_request)).to be_nil
       end
@@ -41,15 +34,47 @@ describe InviteRequestsController do
       let(:invite_request) { create(:invite_request) }
 
       it "renders" do
-        get :show, params: { id: 0, email: invite_request.email }
+        get :show, params: { email: invite_request.email }
         expect(response).to render_template("show")
         expect(assigns(:invite_request)).to eq(invite_request)
       end
 
       it "renders for an ajax call" do
-        get :show, params: { id: 0, email: invite_request.email }, xhr: true
+        get :show, params: { email: invite_request.email }, xhr: true
         expect(response).to render_template("show")
         expect(assigns(:invite_request)).to eq(invite_request)
+      end
+    end
+  end
+
+  describe "POST #resend" do
+    context "when the email doesn't match any invitations" do
+      it "redirects with an error" do
+        post :resend, params: { email: "test@example.org" }
+        it_redirects_to_with_error(status_invite_requests_path,
+                                   "Could not find an invitation associated with that email.")
+      end
+    end
+
+    context "when the invitation is too recent" do
+      let(:invitation) { create(:invitation) }
+
+      it "redirects with an error" do
+        post :resend, params: { email: invitation.invitee_email }
+        it_redirects_to_with_error(status_invite_requests_path,
+                                   "You cannot resend an invitation that was sent in the last 24 hours.")
+      end
+    end
+
+    context "when the email and time are valid" do
+      let!(:invitation) { create(:invitation) }
+
+      it "redirects with a success message" do
+        travel_to((1 + ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION).hours.from_now)
+        post :resend, params: { email: invitation.invitee_email }
+
+        it_redirects_to_with_notice(status_invite_requests_path,
+                                    "Invitation resent to #{invitation.invitee_email}.")
       end
     end
   end
@@ -89,7 +114,6 @@ describe InviteRequestsController do
         post :create, params: { invite_request: { email: generate(:email) } }
         it_redirects_to_simple(invite_requests_path)
         expect(flash[:error]).to include("New invitation requests are currently closed.")
-        expect(assigns(:admin_settings).invite_from_queue_enabled?).to be_falsey
       end
     end
   end
@@ -181,7 +205,7 @@ describe InviteRequestsController do
         end
       end
 
-      %w[board communications docs open_doors tag_wrangling translation].each do |admin_role|
+      (Admin::VALID_ROLES - %w[superadmin policy_and_abuse support]).each do |admin_role|
         context "with #{admin_role} role" do
           before do
             admin.update(roles: [admin_role])
@@ -283,7 +307,7 @@ describe InviteRequestsController do
         end
       end
 
-      %w[board communications docs open_doors tag_wrangling translation].each do |admin_role|
+      (Admin::VALID_ROLES - %w[superadmin policy_and_abuse support]).each do |admin_role|
         context "with #{admin_role} role" do
           before do
             admin.update(roles: [admin_role])

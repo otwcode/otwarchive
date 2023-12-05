@@ -27,7 +27,7 @@ Otwarchive::Application.configure do
 
   # See everything in the log (default is now :debug)
   # config.log_level = :debug
-  config.log_level = :info
+  config.log_level = :error
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new
@@ -53,4 +53,7 @@ Otwarchive::Application.configure do
   config.active_support.deprecation = :notify
 
   config.middleware.use Rack::Attack
+
+  # Disable dumping schemas after migrations.
+  config.active_record.dump_schema_after_migration = false
 end

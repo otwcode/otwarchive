@@ -153,19 +153,6 @@ ignore_missing:
   - successfully_sent # should be feedbacks.create.successfully_sent
   # Files: app/controllers/languages_controller.rb and app/controllers/locales_controller.rb
   - successfully_added # should be languages.create.successfully_added and locales.create.successfully_added
-  # File: app/helpers/users_helper.rb
-  - users_helper.log_ban
-  - users_helper.log_email_change
-  - users_helper.log_lift_suspension
-  - users_helper.log_note
-  - users_helper.log_password_change
-  - users_helper.log_rename
-  - users_helper.log_role_added
-  - users_helper.log_role_removed
-  - users_helper.log_suspended
-  - users_helper.log_troubleshot
-  - users_helper.log_validated
-  - users_helper.log_warn
   # Files: app/views/admin/_admin_nav.html.erb and app/views/admin_posts/show.html.erb
   - admin.admin_nav.delete
   # File: app/views/admin/admin_invitations/find.html.erb
@@ -274,7 +261,7 @@ ignore_missing:
   # File: app/views/pseuds/show.html.erb
   - pseuds.show.edit_link
   - pseuds.show.index_link
-  # File: app/views/series/manage.html.er
+  # File: app/views/series/manage.html.erb
   - series.manage.manage_series
 
 ## Consider these keys used:

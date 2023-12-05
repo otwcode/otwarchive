@@ -147,3 +147,67 @@ Feature:
       And I view the work "Interesting" with comments
     Then I should see "after" within ".comment h4.byline"
       And I should not see "mine (before)"
+
+  Scenario: Collections reflect username changes of the owner after the cache expires
+    When I am logged in as "before" with password "password"
+      And I create the collection "My Collection Thing"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "before" within "#main"
+    When I change my username to "after"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "before" within "#main"
+    When the collection blurb cache has expired
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "after" within "#main"
+      And I should not see "before" within "#main"
+
+  Scenario: Collections reflect username changes of moderators after the cache expires
+    Given I am logged in as "mod1"
+      And I create the collection "My Collection Thing"
+      And I have added a co-moderator "before" to collection "My Collection Thing"
+    When I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "before" within "#main"
+    When I am logged in as "before" with password "password"
+      And I change my username to "after"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "before" within "#main"
+    When the collection blurb cache has expired
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "after" within "#main"
+      And I should not see "before" within "#main"
+
+  Scenario: Changing username updates series blurbs
+    Given I have no users
+      And I am logged in as "oldusername" with password "password"
+      And I add the work "Great Work" to series "Best Series"
+    When I go to the dashboard page for user "oldusername" with pseud "oldusername"
+      And I follow "Series"
+    Then I should see "Best Series by oldusername"
+    When I visit the change username page for oldusername
+      And I fill in "New user name" with "newusername"
+      And I fill in "Password" with "password"
+      And I press "Change User Name"
+    Then I should get confirmation that I changed my username
+      And I should see "Hi, newusername"
+    When I follow "Series"
+    Then I should see "Best Series by newusername"
+
+    Scenario: Changing the username from a forbidden name to non-forbidden
+      Given I have no users
+        And the following activated user exists
+          | login     | password |
+          | forbidden | secret   |
+        And the user name "forbidden" is on the forbidden list
+      When I am logged in as "forbidden" with password "secret"
+        And I visit the change username page for forbidden
+        And I fill in "New user name" with "notforbidden"
+        And I fill in "Password" with "secret"
+        And I press "Change User Name"
+      Then I should get confirmation that I changed my username
+        And I should see "Hi, notforbidden"

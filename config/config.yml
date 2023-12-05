@@ -22,6 +22,13 @@ DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES: 7
 # This also affects the link included in the admin account creation email.
 DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES: 5
 
+# If more than PASSWORD_RESET_LIMIT password reset emails are sent within
+# PASSWORD_RESET_COOLDOWN_HOURS time, then password resets for that user
+# will be prevented until PASSWORD_RESET_COOLDOWN_HOURS after the last
+# password reset.
+PASSWORD_RESET_LIMIT: 3
+PASSWORD_RESET_COOLDOWN_HOURS: 12
+
 # email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
@@ -71,6 +78,8 @@ DELIMITER_FOR_OUTPUT: ', '
 INVITE_FROM_QUEUE_ENABLED: true
 INVITE_FROM_QUEUE_NUMBER: 10
 INVITE_FROM_QUEUE_FREQUENCY: 7
+
+HOURS_BEFORE_RESEND_INVITATION: 24
 # this is whether or not people without invitations can create accounts
 ACCOUNT_CREATION_ENABLED: false
 DAYS_TO_PURGE_UNACTIVATED: 7
@@ -277,7 +286,7 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 COMMENT_MODERATION_THRESHOLD: 10
 
 # SANITIZER VERSION
-SANITIZER_VERSION: 3
+SANITIZER_VERSION: 4
 
 # parameters that must be natural integers and their default values
 NONZERO_INTEGER_PARAMETERS:
@@ -428,6 +437,10 @@ ACTION_PASSWORD_RESET: 8
 ACTION_NEW_EMAIL: 9
 ACTION_TROUBLESHOOT: 10
 ACTION_NOTE: 11
+ACTION_ADD_FNOK: 12
+ACTION_REMOVE_FNOK: 13
+ACTION_ADDED_AS_FNOK: 14
+ACTION_REMOVED_AS_FNOK: 15
 
 
 # Elasticsearch index prefix
@@ -454,6 +467,9 @@ SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE: 3600
 # Cache duration for various collection-related counts (# of works, # of
 # bookmarks, # of fandoms):
 SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE: 300
+
+# Cache durations for work and bookmark searches (in minutes)
+MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE: 120
 
 # Job size used for the HitCountUpdateJob class:
 HIT_COUNT_JOB_SIZE: 1000
@@ -513,3 +529,23 @@ ORIGINAL_CREATOR_TTL_HOURS: 72
 
 # The maximum number of tags to provide in a tag wrangling report.
 WRANGLING_REPORT_LIMIT: 1000
+
+# The number of days after which an Admin Post should allow comments.
+# After this window, all comments are disabled. Setting this value to
+# something below 1 -- or commenting it out -- will turn off comment disabling.
+ADMIN_POST_COMMENTING_EXPIRATION_DAYS: 14
+
+# Usernames in this list are not allowed to avoid potential confusion (like
+# a user who has the username 'admin', for example).
+FORBIDDEN_USERNAMES: []
+
+# The arguments to pass to pt-online-schema-change:
+PERCONA_ARGS: >
+  --chunk-size=5k
+  --max-flow-ctl 0
+  --pause-file /tmp/pauseme
+  --max-load Threads_running=15
+  --critical-load Threads_running=100
+  --set-vars innodb_lock_wait_timeout=2
+  --alter-foreign-keys-method=auto
+  --no-check-unique-key-change

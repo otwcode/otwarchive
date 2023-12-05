@@ -2,6 +2,8 @@
 en:
   admin:
     admin_invitations:
+      find:
+        user_not_found: No results were found. Try another search.
       invite_from_queue:
         success:
           one: "%{count} person from the invite queue is being invited."
@@ -15,6 +17,9 @@ en:
   chapters:
     destroy:
       only_chapter: You can't delete the only chapter in your work. If you want to delete the work, choose "Delete Work".
+    draft_flash:
+      posted_work: This is a draft chapter in a posted work. It will be kept unless the work is deleted.
+      unposted_work_html: This is a draft chapter in an unposted work. The work will be <strong>scheduled for deletion</strong> on %{deletion_date}.
     show:
       anonymous: Anonymous
       chapter_position: " - Chapter %{position}"
@@ -31,6 +36,8 @@ en:
       reply: Sorry, you have been blocked by that user.
     check_frozen:
       error: Sorry, you cannot reply to a frozen comment.
+    check_guest_replies_preference:
+      error: Sorry, this user doesn't allow non-Archive users to reply to their comments.
     check_hidden_by_admin:
       error: Sorry, you cannot reply to a hidden comment.
     check_not_replying_to_spam:
@@ -54,6 +61,11 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
+  invite_requests:
+    resend:
+      not_found: Could not find an invitation associated with that email.
+      not_yet: You cannot resend an invitation that was sent in the last %{count} hours.
+      success: Invitation resent to %{email}.
   kudos:
     create:
       success: Thank you for leaving kudos!
@@ -68,3 +80,12 @@ en:
       create:
         contact_abuse: contact Policy & Abuse
         reset_blocked: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
+        reset_cooldown: You cannot reset your password at this time. Please try again after %{reset_available_time}.
+        send_cooldown_period:
+          one: After that, you will need to wait %{count} hour before requesting another reset.
+          other: After that, you will need to wait %{count} hours before requesting another reset.
+        send_instructions: Check your email for instructions on how to reset your password. %{send_times_remaining} %{send_cooldown_period}
+        send_times_remaining:
+          one: You may reset your password %{count} more time.
+          other: You may reset your password %{count} more times.
+        user_not_found: We couldn't find an account with that email address or username. Please try again.

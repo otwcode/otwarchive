@@ -83,4 +83,85 @@ describe ChallengeAssignment do
     end
   end
 
+  describe "request_signup_pseud=" do
+    let!(:collection) { create(:collection, challenge: create(:gift_exchange)) }
+
+    let(:assignment) { collection.assignments.build }
+
+    context "when a user has signed up with a pseud matching their login" do
+      let(:user) { create(:user) }
+
+      let!(:signup) do
+        create(:challenge_signup,
+               collection: collection,
+               pseud: user.default_pseud)
+      end
+
+      it "assigns the user's signup when entering the user's login" do
+        assignment.request_signup_pseud = user.login
+        expect(assignment.request_signup).to eq(signup)
+      end
+
+      context "when another user has signed up with the same pseud name" do
+        let(:ambiguous) { create(:pseud, name: user.login) }
+
+        let!(:ambiguous_signup) do
+          create(:challenge_signup,
+                 collection: collection,
+                 pseud: ambiguous)
+        end
+
+        it "assigns the first user's signup when entering the first user's login" do
+          assignment.request_signup_pseud = user.login
+          expect(assignment.request_signup).to eq(signup)
+        end
+
+        it "assigns the second user's signup when entering the full byline for the other user's pseud" do
+          assignment.request_signup_pseud = "#{ambiguous.name} (#{ambiguous.user.login})"
+          expect(assignment.request_signup).to eq(ambiguous_signup)
+        end
+      end
+    end
+  end
+
+  describe "offer_signup_pseud=" do
+    let!(:collection) { create(:collection, challenge: create(:gift_exchange)) }
+
+    let(:assignment) { collection.assignments.build }
+
+    context "when a user has signed up with a pseud matching their login" do
+      let(:user) { create(:user) }
+
+      let!(:signup) do
+        create(:challenge_signup,
+               collection: collection,
+               pseud: user.default_pseud)
+      end
+
+      it "assigns the user's signup when entering the user's login" do
+        assignment.offer_signup_pseud = user.login
+        expect(assignment.offer_signup).to eq(signup)
+      end
+
+      context "when another user has signed up with the same pseud name" do
+        let(:ambiguous) { create(:pseud, name: user.login) }
+
+        let!(:ambiguous_signup) do
+          create(:challenge_signup,
+                 collection: collection,
+                 pseud: ambiguous)
+        end
+
+        it "assigns the first user's signup when entering the first user's login" do
+          assignment.offer_signup_pseud = user.login
+          expect(assignment.offer_signup).to eq(signup)
+        end
+
+        it "assigns the second user's signup when entering the full byline for the other user's pseud" do
+          assignment.offer_signup_pseud = "#{ambiguous.name} (#{ambiguous.user.login})"
+          expect(assignment.offer_signup).to eq(ambiguous_signup)
+        end
+      end
+    end
+  end
 end

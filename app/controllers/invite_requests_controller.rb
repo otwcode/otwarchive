@@ -8,22 +8,44 @@ class InviteRequestsController < ApplicationController
 
   # GET /invite_requests/1
   def show
-    fetch_admin_settings # we normally skip this for js requests
     @invite_request = InviteRequest.find_by(email: params[:email])
-    @position_in_queue = @invite_request.position if @invite_request.present?
-    unless (request.xml_http_request?) || @invite_request
-      flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
-      redirect_to status_invite_requests_path and return
+
+    if @invite_request.present?
+      @position_in_queue = @invite_request.position
+    else
+      @invitation = Invitation.unredeemed.from_queue.find_by(invitee_email: params[:email])
     end
+
     respond_to do |format|
       format.html
       format.js
     end
   end
 
+  def resend
+    @invitation = Invitation.unredeemed.from_queue.find_by(invitee_email: params[:email])
+
+    if @invitation.nil?
+      flash[:error] = t("invite_requests.resend.not_found")
+    elsif !@invitation.can_resend?
+      flash[:error] = t("invite_requests.resend.not_yet",
+                        count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION)
+    else
+      @invitation.send_and_set_date(resend: true)
+
+      if @invitation.errors.any?
+        flash[:error] = @invitation.errors.full_messages.first
+      else
+        flash[:notice] = t("invite_requests.resend.success", email: @invitation.invitee_email)
+      end
+    end
+
+    redirect_to status_invite_requests_path
+  end
+
   # POST /invite_requests
   def create
-    unless @admin_settings.invite_from_queue_enabled?
+    unless AdminSetting.current.invite_from_queue_enabled?
       flash[:error] = ts("<strong>New invitation requests are currently closed.</strong> For more information, please check the %{news}.",
                          news: view_context.link_to("\"Invitations\" tag on AO3 News", admin_posts_path(tag: 143))).html_safe
       redirect_to invite_requests_path

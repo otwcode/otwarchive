@@ -240,6 +240,10 @@ Then /^I should see a link "([^\"]*)"$/ do |name|
   page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
+Then "I should see a link {string} to {string}" do |text, href|
+  expect(page).to have_link(text, href: href)
+end
+
 Then /^I should not see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
   page.body.should_not =~ /#{Regexp.escape(text)}/m
