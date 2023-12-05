@@ -1,13 +1,13 @@
 <% content_for :message do %>
   <%= t("mailer.general.greeting.introductory") %>
 
-  <%= t(".introduction.text", open_doors_name: t(".html.open_doors_name"), open_doors_link: "http://opendoors.transformativeworks.org", app_name: ArchiveConfig.APP_NAME, app_short_name: ArchiveConfig.APP_SHORT_NAME, app_url: root_url) %>
+  <%= t(".introduction.text", open_doors_url: "http://opendoors.transformativeworks.org", app_url: root_url) %>
 
-  <%= t(".more_info.text", news_link: "#{admin_posts_url}?tag=18", open_doors_faq_link: "http://opendoors.transformativeworks.org/faq", open_doors_tutorial_link: "http://opendoors.transformativeworks.org/tutorials", support_link: new_feedback_report_url) %>
+  <%= t(".more_info.text", news_url: admin_posts_url(tag: 18), open_doors_faq_url: "http://opendoors.transformativeworks.org/faq", open_doors_tutorial_url: "http://opendoors.transformativeworks.org/tutorials", support_url: new_feedback_report_url) %>
 
-  <%= t(".mistake.text", open_doors_link: "https://opendoors.transformativeworks.org/en/contact-open-doors/") %>
+  <%= t(".mistake.text", open_doors_url: "https://opendoors.transformativeworks.org/en/contact-open-doors/") %>
 
-  <%= t(".access.text") %>
+  <%= t(".access.text", support_url: new_feedback_report_url) %>
 
   <%= t(".works_by", email: @external_email) %>
   <% @claimed_works.each do |work| %>
@@ -16,11 +16,11 @@
 
   <%= t(".redirects") %>
 
-  <%= t(".update_redirect.text", open_doors_link: "https://opendoors.transformativeworks.org/en/contact-open-doors/") %>
+  <%= t(".update_redirect.text", open_doors_url: "https://opendoors.transformativeworks.org/en/contact-open-doors/") %>
 
   <%= t(".other_works.text") %>
 
-  <%= t(".questions.text", support_link: new_feedback_report_url) %>
+  <%= t(".questions.text", support_url: new_feedback_report_url) %>
 
   <%= t(".email_tips") %>
 

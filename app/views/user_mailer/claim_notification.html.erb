@@ -3,13 +3,13 @@
     <%= t("mailer.general.greeting.introductory") %>
   </h2>
 
-  <p><%= t(".introduction.html", open_doors_name_link: style_link(t(".html.open_doors_name"), "http://opendoors.transformativeworks.org"), app_short_name: ArchiveConfig.APP_SHORT_NAME, app_link: style_link(ArchiveConfig.APP_NAME, root_url)) %></p>
+  <p><%= t(".introduction.html", open_doors_name_link: style_link(t(".introduction.open_doors_name"), "http://opendoors.transformativeworks.org"), app_link: style_link(t('.introduction.ao3_name'), root_url)) %></p>
 
-  <p><%= t(".more_info.html", ao3_news_link: style_link(t(".html.ao3_news"), "#{admin_posts_url}?tag=18"), faq_page_link: style_link(t(".html.faq_page"), "http://opendoors.transformativeworks.org/faq"), tutorial_page_link: style_link(t(".html.tutorial_page"), "http://opendoors.transformativeworks.org/tutorials"), contact_support_link: support_link(t(".html.contact_support"))) %></p>
+  <p><%= t(".more_info.html", ao3_news_link: style_link(t(".more_info.ao3_news"), admin_posts_url(tag: 18)), faq_page_link: style_link(t(".more_info.faq_page"), "http://opendoors.transformativeworks.org/faq"), tutorial_page_link: style_link(t(".more_info.tutorial_page"), "http://opendoors.transformativeworks.org/tutorials"), contact_support_link: support_link(t(".more_info.contact_support"))) %></p>
 
-  <p><%= t(".mistake.html", contact_open_doors_link: opendoors_link(t(".html.contact_open_doors"))) %></p>
+  <p><%= t(".mistake.html", contact_open_doors_link: opendoors_link(t(".mistake.contact_open_doors"))) %></p>
 
-  <p><%= t(".access.html", contact_support_link: support_link(t(".html.contact_support"))) %></p>
+  <p><%= t(".access.html", contact_support_link: support_link(t(".access.contact_support"))) %></p>
 
   <p><%= t(".works_by", email: @external_email) %></p>
 
@@ -24,11 +24,11 @@
 
   <p><%= t(".redirects") %></p>
 
-  <p><%= t(".update_redirect.html", contact_open_doors_link: opendoors_link(t(".html.contact_open_doors"))) %></p>
+  <p><%= t(".update_redirect.html", contact_open_doors_link: opendoors_link(t(".update_redirect.contact_open_doors"))) %></p>
 
-  <p><%= t(".other_works.html", contact_open_doors_link: opendoors_link(t(".html.contact_open_doors"))) %></p>
+  <p><%= t(".other_works.html", contact_open_doors_link: opendoors_link(t(".other_works.contact_open_doors"))) %></p>
 
-  <p><%= t(".questions.html", contact_support_link: support_link(t(".html.contact_support"))) %></p>
+  <p><%= t(".questions.html", contact_support_link: support_link(t(".questions.contact_support"))) %></p>
 
   <p><%= t ".email_tips" %></p>
 
