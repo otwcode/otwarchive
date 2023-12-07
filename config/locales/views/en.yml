@@ -498,6 +498,17 @@ en:
         other: Browse fandoms by media or favorite up to %{count} tags to have them listed here!
       find_your_favorites: Find your favorites
       media_navigation_label: Media
+      readings:
+        heading:
+          history_link: My History
+          title: Is it later already?
+        note: Some works you've marked for later.
+      social:
+        heading: Follow us
+        note_html: Follow the Archive on Twitter or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
+        other_outlets: Organization for Transformative Works' news outlets
+        tumblr: ao3org on Tumblr
+        twitter: "@AO3_Status on Twitter"
     tos_faq:
       fnok:
         support: Support team
