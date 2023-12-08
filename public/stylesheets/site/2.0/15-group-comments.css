@@ -30,7 +30,6 @@ div.comment, li.comment {
 .comment div.icon {
   float: left;
   margin: -1.5625em 0.5625em 0.5625em 0;
-  border-bottom: 5px solid #ddd;
 }
 
 .comment .icon .anonymous {
