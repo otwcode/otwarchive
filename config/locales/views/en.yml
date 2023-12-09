@@ -521,7 +521,7 @@ en:
         not_resent:
           one: Because your invitation was sent more than an hour ago, you can have your invitation resent.
           other: Because your invitation was sent more than %{count} hours ago, you can have your invitation resent.
-        resent:
+        resent_html:
           one: Because your invitation was resent more than an hour ago, you can have your invitation resent again, or you may want to %{contact_support_link}.
           other: Because your invitation was resent more than %{count} hours ago, you can have your invitation resent again, or you may want to %{contact_support_link}.
       before_cooldown_period:
