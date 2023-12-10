@@ -413,9 +413,11 @@ describe "rake After:remove_invalid_commas_from_tags" do
       expect do
         subject.invoke
       end.to change { chinese_tag.reload.name }
-          .from("Full-width，Comma")
-          .to("Full-widthComma")
-        .and change { japanese_tag.reload.name }.from("Ideographic、Comma").to("IdeographicComma")
+        .from("Full-width，Comma")
+        .to("Full-widthComma")
+        .and change { japanese_tag.reload.name }
+        .from("Ideographic、Comma")
+        .to("IdeographicComma")
         .and output("Tags can only be renamed by an admin. Enter your admin login:\nFull-widthComma\nIdeographicComma\n").to_stdout
     end
 
@@ -426,9 +428,11 @@ describe "rake After:remove_invalid_commas_from_tags" do
       expect do
         subject.invoke
       end.to change { chinese_tag.reload.name }
-          .from("Full-width，Comma")
-          .to("Full-widthComma - AO3-6626")
-        .and change { japanese_tag.reload.name }.from("Ideographic、Comma").to("IdeographicComma - AO3-6626")
+        .from("Full-width，Comma")
+        .to("Full-widthComma - AO3-6626")
+        .and change { japanese_tag.reload.name }
+        .from("Ideographic、Comma")
+        .to("IdeographicComma - AO3-6626")
         .and output("Tags can only be renamed by an admin. Enter your admin login:\nFull-widthComma - AO3-6626\nIdeographicComma - AO3-6626\n").to_stdout
     end
 
