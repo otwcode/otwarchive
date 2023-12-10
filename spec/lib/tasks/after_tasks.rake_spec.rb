@@ -381,6 +381,7 @@ describe "rake After:remove_translation_admin_role" do
 end
 
 describe "rake After:remove_invalid_commas_from_tags" do
+  let(:prompt) { "Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:\n" }
   let!(:chinese_tag) do
     tag = create(:tag)
     tag.update_column(:name, "Full-width，Comma")
@@ -399,7 +400,7 @@ describe "rake After:remove_invalid_commas_from_tags" do
       subject.invoke
     end.to avoid_changing { chinese_tag.reload.name }
       .and avoid_changing { japanese_tag.reload.name }
-      .and output("Tags can only be renamed by an admin. Enter your admin login:\nAdmin not found.\n").to_stdout
+      .and output("#{prompt}Admin not found.\n").to_stdout
   end
 
   context "with a valid admin" do
@@ -418,7 +419,7 @@ describe "rake After:remove_invalid_commas_from_tags" do
         .and change { japanese_tag.reload.name }
         .from("Ideographic、Comma")
         .to("IdeographicComma")
-        .and output("Tags can only be renamed by an admin. Enter your admin login:\nFull-widthComma\nIdeographicComma\n").to_stdout
+        .and output("#{prompt}Full-widthComma\nIdeographicComma\n").to_stdout
     end
 
     it "removes full-width and ideographic commas and appends \" - AO3-6626\" when the name is not unique" do
@@ -433,7 +434,7 @@ describe "rake After:remove_invalid_commas_from_tags" do
         .and change { japanese_tag.reload.name }
         .from("Ideographic、Comma")
         .to("IdeographicComma - AO3-6626")
-        .and output("Tags can only be renamed by an admin. Enter your admin login:\nFull-widthComma - AO3-6626\nIdeographicComma - AO3-6626\n").to_stdout
+        .and output("#{prompt}Full-widthComma - AO3-6626\nIdeographicComma - AO3-6626\n").to_stdout
     end
 
     it "puts an error when the tag cannot be renamed" do
@@ -443,7 +444,7 @@ describe "rake After:remove_invalid_commas_from_tags" do
         subject.invoke
       end.to avoid_changing { chinese_tag.reload.name }
         .and avoid_changing { japanese_tag.reload.name }
-        .and output("Tags can only be renamed by an admin. Enter your admin login:\nCould not rename Full-width，Comma\nCould not rename Ideographic、Comma\n").to_stdout
+        .and output("#{prompt}Could not rename Full-width，Comma\nCould not rename Ideographic、Comma\n").to_stdout
     end
   end
 end

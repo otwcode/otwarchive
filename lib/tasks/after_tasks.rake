@@ -269,7 +269,7 @@ namespace :After do
 
   desc "Remove full-width and ideographic commas from tags"
   task(remove_invalid_commas_from_tags: :environment) do
-    puts("Tags can only be renamed by an admin. Enter your admin login:")
+    puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
     login = $stdin.gets.chomp.strip
     admin = Admin.find_by(login: login)
 
