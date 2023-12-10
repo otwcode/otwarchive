@@ -379,3 +379,63 @@ describe "rake After:remove_translation_admin_role" do
     expect(user.reload.roles).to be_empty
   end
 end
+
+describe "rake After:remove_invalid_commas_from_tags" do
+  let!(:chinese_tag) do
+    tag = create(:tag)
+    tag.update_column(:name, "Full-width，Comma")
+    tag
+  end
+  let!(:japanese_tag) do
+    tag = create(:tag)
+    tag.update_column(:name, "Ideographic、Comma")
+    tag
+  end
+
+  it "puts an error and does not rename tags without a valid admin" do
+    allow(STDIN).to receive(:gets) { "typo" }
+
+    expect do
+      subject.invoke
+    end.to avoid_changing { chinese_tag.reload.name }
+      .and avoid_changing { japanese_tag.reload.name }
+      .and output("Tags can only be renamed by an admin. Enter your admin login:\nAdmin not found.\n").to_stdout
+  end
+
+  context "with a valid admin" do
+    let!(:admin) { create(:admin, login: "admin") }
+
+    before do
+      allow(STDIN).to receive(:gets) { "admin" }
+    end
+
+    it "removes full-width and ideographic commas when the name is otherwise unique" do
+      expect do
+        subject.invoke
+      end.to change { chinese_tag.reload.name }.from("Full-width，Comma").to("Full-widthComma")
+        .and change { japanese_tag.reload.name }.from("Ideographic、Comma").to("IdeographicComma")
+        .and output("Tags can only be renamed by an admin. Enter your admin login:\nFull-widthComma\nIdeographicComma\n").to_stdout
+    end
+
+    it "removes full-width and ideographic commas and appends \" - AO3-6626\" when the name is not unique" do
+      duplicate_chinese_tag = create(:tag, name: "Full-widthComma")
+      duplicate_japanese_tag = create(:tag, name: "IdeographicComma")
+
+      expect do
+        subject.invoke
+      end.to change { chinese_tag.reload.name }.from("Full-width，Comma").to("Full-widthComma - AO3-6626")
+        .and change { japanese_tag.reload.name }.from("Ideographic、Comma").to("IdeographicComma - AO3-6626")
+        .and output("Tags can only be renamed by an admin. Enter your admin login:\nFull-widthComma - AO3-6626\nIdeographicComma - AO3-6626\n").to_stdout
+    end
+
+    it "puts an error when the tag cannot be renamed" do
+      allow_any_instance_of(Tag).to receive(:save).and_return(false)
+
+      expect do
+        subject.invoke
+      end.to avoid_changing { chinese_tag.reload.name }
+        .and avoid_changing { japanese_tag.reload.name }
+        .and output("Tags can only be renamed by an admin. Enter your admin login:\nCould not rename Full-width，Comma\nCould not rename Ideographic、Comma\n").to_stdout
+    end
+  end
+end
