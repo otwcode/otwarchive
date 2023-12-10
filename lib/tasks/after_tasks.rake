@@ -270,7 +270,7 @@ namespace :After do
   desc "Remove full-width and ideographic commas from tags"
   task(remove_invalid_commas_from_tags: :environment) do
     puts("Tags can only be renamed by an admin. Enter your admin login:")
-    login = STDIN.gets.chomp.strip
+    login = $stdin.gets.chomp.strip
     admin = Admin.find_by(login: login)
 
     if admin.present?
@@ -280,14 +280,12 @@ namespace :After do
         tags = Tag.where("name LIKE ?", "%#{comma}%")
         tags.each do |tag|
           new_name = tag.name.gsub(/#{comma}/, "")
-          if tag.update(name: new_name)
-            puts(tag.reload.name)
-          elsif tag.update(name: "#{new_name} - AO3-6626")
+          if tag.update(name: new_name) || tag.update(name: "#{new_name} - AO3-6626")
             puts(tag.reload.name)
           else
             puts("Could not rename #{tag.reload.name}")
           end
-          STDOUT.flush
+          $stdout.flush
         end
       end
     else

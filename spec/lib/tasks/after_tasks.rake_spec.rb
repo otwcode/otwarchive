@@ -393,7 +393,7 @@ describe "rake After:remove_invalid_commas_from_tags" do
   end
 
   it "puts an error and does not rename tags without a valid admin" do
-    allow(STDIN).to receive(:gets) { "typo" }
+    allow($stdin).to receive(:gets) { "typo" }
 
     expect do
       subject.invoke
@@ -406,24 +406,28 @@ describe "rake After:remove_invalid_commas_from_tags" do
     let!(:admin) { create(:admin, login: "admin") }
 
     before do
-      allow(STDIN).to receive(:gets) { "admin" }
+      allow($stdin).to receive(:gets) { "admin" }
     end
 
     it "removes full-width and ideographic commas when the name is otherwise unique" do
       expect do
         subject.invoke
-      end.to change { chinese_tag.reload.name }.from("Full-width，Comma").to("Full-widthComma")
+      end.to change { chinese_tag.reload.name }
+          .from("Full-width，Comma")
+          .to("Full-widthComma")
         .and change { japanese_tag.reload.name }.from("Ideographic、Comma").to("IdeographicComma")
         .and output("Tags can only be renamed by an admin. Enter your admin login:\nFull-widthComma\nIdeographicComma\n").to_stdout
     end
 
     it "removes full-width and ideographic commas and appends \" - AO3-6626\" when the name is not unique" do
-      duplicate_chinese_tag = create(:tag, name: "Full-widthComma")
-      duplicate_japanese_tag = create(:tag, name: "IdeographicComma")
+      create(:tag, name: "Full-widthComma")
+      create(:tag, name: "IdeographicComma")
 
       expect do
         subject.invoke
-      end.to change { chinese_tag.reload.name }.from("Full-width，Comma").to("Full-widthComma - AO3-6626")
+      end.to change { chinese_tag.reload.name }
+          .from("Full-width，Comma")
+          .to("Full-widthComma - AO3-6626")
         .and change { japanese_tag.reload.name }.from("Ideographic、Comma").to("IdeographicComma - AO3-6626")
         .and output("Tags can only be renamed by an admin. Enter your admin login:\nFull-widthComma - AO3-6626\nIdeographicComma - AO3-6626\n").to_stdout
     end
