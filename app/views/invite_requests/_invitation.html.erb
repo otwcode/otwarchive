@@ -7,9 +7,9 @@
 <!--main content-->
 <% status = invitation.resent_at ? "resent" : "not_resent" %>
 <p>
-  <%# created_at fallback is a vestige of the already fixed AO3-6094. %>
+  <%# updated_at fallback is a vestige of the already fixed AO3-6094. %>
   <%= t(".info.#{status}",
-        sent_at: l((invitation.sent_at || invitation.created_at).to_date),
+        sent_at: l((invitation.sent_at || invitation.updated_at).to_date),
         resent_at: invitation.resent_at ? l(invitation.resent_at.to_date) : nil) %>
   <% if invitation.can_resend? %>
   <%# i18n-tasks-use t("invite_requests.invitation.after_cooldown_period.not_resent")
