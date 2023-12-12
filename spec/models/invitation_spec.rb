@@ -79,7 +79,7 @@ describe Invitation, :ready do
   describe "can_resend?" do
     # Support old invites when AO3-6094 wasn't fixed.
     context "without sent_at" do
-      let (:broken_invite) { create(:invitation) }
+      let(:broken_invite) { create(:invitation) }
 
       before do
         broken_invite.sent_at = nil
@@ -99,7 +99,7 @@ describe Invitation, :ready do
     end
 
     context "with sent_at" do
-      let! (:invite) { create(:invitation) }
+      let!(:invite) { create(:invitation) }
 
       it "cannot be resent before set period" do
         travel(5.minutes)
