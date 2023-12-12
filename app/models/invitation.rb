@@ -75,7 +75,8 @@ class Invitation < ApplicationRecord
   end
 
   def can_resend?
-    checked_date = self.resent_at || self.sent_at
+    # created_at fallback is a vestige of the already fixed AO3-6094.
+    checked_date = self.resent_at || self.sent_at || self.created_at
     checked_date < ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION.hours.ago
   end
 

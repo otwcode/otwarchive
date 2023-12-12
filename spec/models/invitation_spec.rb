@@ -75,4 +75,41 @@ describe Invitation, :ready do
       end
     end
   end
+
+  describe "can_resend?" do
+    # Support old invites when AO3-6094 wasn't fixed.
+    context "old invites without sent_at" do
+      let (:broken_invite) { create(:invitation) }
+
+      before do
+        broken_invite.sent_at = nil
+        broken_invite.save(validate: false)
+        expect(broken_invite.reload.sent_at).to be_nil
+      end
+
+      it "cannot be resent before set period" do
+        travel(5.minutes)
+        expect(broken_invite.can_resend?).to be false
+      end
+
+      it "can be resent after set period" do
+        travel((ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION + 1).hours)
+        expect(broken_invite.can_resend?).to be true
+      end
+    end
+
+    context "normal invites" do
+      let! (:invite) { create(:invitation) }
+
+      it "cannot be resent before set period" do
+        travel(5.minutes)
+        expect(invite.can_resend?).to be false
+      end
+
+      it "can be resent after set period" do
+        travel((ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION + 1).hours)
+        expect(invite.can_resend?).to be true
+      end
+    end
+  end
 end
