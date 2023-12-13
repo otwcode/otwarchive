@@ -69,9 +69,10 @@ class Invitation < ApplicationRecord
 
     # Skip callbacks within after_save by using update_column to avoid a callback loop
     if resend
-      self.update_column(:resent_at, Time.current)
+      attrs = { resent_at: Time.current }
       # This applies to old invites when AO3-6094 wasn't fixed.
-      self.update_column(:sent_at, self.updated_at) if self.sent_at.nil?
+      attrs[:sent_at] = self.updated_at if self.sent_at.nil?
+      self.update_columns(attrs)
     else
       self.update_column(:sent_at, Time.current)
     end
