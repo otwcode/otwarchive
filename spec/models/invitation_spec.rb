@@ -76,7 +76,7 @@ describe Invitation, :ready do
     end
   end
 
-  describe "can_resend?" do
+  describe "#can_resend?" do
     # Support old invites when AO3-6094 wasn't fixed.
     context "without sent_at" do
       let(:broken_invite) { create(:invitation) }
