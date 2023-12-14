@@ -12,6 +12,7 @@
   <%= will_paginate @kudos %>
 
   <div id="kudos">
+    <div class="kudos-icon"></div>
     <p class="kudos">
       <%= @kudos.map { |kudo| link_to kudo.user.login, kudo.user }.to_sentence.html_safe %>
       <%= ts(" left kudos on this work!") %>
