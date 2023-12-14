@@ -195,7 +195,8 @@ p.kudos {
   min-height: 40px;
 }
 
-div.kudos-icon {
+p.kudos::before {
+  content: "";
   background: url("/images/imageset.png") no-repeat -111px -580px;
   width: 55px;
   height: 54px;
