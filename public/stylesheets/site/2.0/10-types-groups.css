@@ -201,6 +201,7 @@ p.kudos::before {
   width: 55px;
   height: 54px;
   float: left;
+  margin-top: -0.5em;
 }
 
 .icon {
