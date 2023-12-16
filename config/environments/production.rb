@@ -45,10 +45,6 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # See everything in the log (default is now :debug)
-  # config.log_level = :debug
-  config.log_level = :error
-
   # Use a different cache store in production
   config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
                        { namespace: "ao3-v2", compress: true, pool_size: 10 }
@@ -63,7 +59,8 @@ Rails.application.configure do
 
   # Include generic and useful information about system operation, but avoid logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII).
-  config.log_level = :info
+  # config.log_level = :info
+  config.log_level = :error
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
