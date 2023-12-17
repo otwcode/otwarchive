@@ -82,7 +82,8 @@ class DownloadWriter
         "--pdf-page-margin-right", "36",
         "--pdf-page-margin-bottom", "36",
         "--pdf-page-margin-left", "36",
-        "--pdf-default-font-size", "17"
+        "--pdf-default-font-size", "17",
+        "--subset-embedded-fonts"
       ]
     end
 
