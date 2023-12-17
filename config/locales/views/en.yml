@@ -396,6 +396,28 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+  downloads:
+    download_afterword:
+      inspired_by:
+        restricted_html: "[Restricted Work] by %{creator_link}"
+        revealed_html: "%{work_link} by %{creator_link}"
+        title: Works inspired by this one
+        unrevealed: A work in an unrevealed collection
+      please_comment_html: Please %{work_comment_link} to let the creator know if you enjoyed their work!
+      work_comment: drop by the Archive and comment
+    download_preface:
+      inspired_by:
+        restricted_html: Inspired by [Restricted Work] by %{creator_link}
+        revealed_html: Inspired by %{work_link} by %{creator_link}
+        unrevealed: Inspired by a work in an unrevealed collection
+      translated_to:
+        restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}'
+        revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
+        unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
+      translation_of:
+        restricted_html: A translation of [Restricted Work] by %{creator_link}
+        revealed_html: A translation of %{work_link} by %{creator_link}
+        unrevealed: A translation of a work in an unrevealed collection
   feedbacks:
     new:
       abuse:
@@ -476,6 +498,17 @@ en:
         other: Browse fandoms by media or favorite up to %{count} tags to have them listed here!
       find_your_favorites: Find your favorites
       media_navigation_label: Media
+      readings:
+        heading:
+          history_link: My History
+          title: Is it later already?
+        note: Some works you've marked for later.
+      social:
+        heading: Follow us
+        note_html: Follow the Archive on Twitter or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
+        other_outlets: Organization for Transformative Works' news outlets
+        tumblr: ao3org on Tumblr
+        twitter: "@AO3_Status on Twitter"
     tos_faq:
       fnok:
         support: Support team
@@ -483,10 +516,31 @@ en:
     invitation:
       email_address_label: Enter an email address
   invite_requests:
+    invitation:
+      after_cooldown_period:
+        not_resent:
+          one: Because your invitation was sent more than an hour ago, you can have your invitation resent.
+          other: Because your invitation was sent more than %{count} hours ago, you can have your invitation resent.
+        resent_html:
+          one: Because your invitation was resent more than an hour ago, you can have your invitation resent again, or you may want to %{contact_support_link}.
+          other: Because your invitation was resent more than %{count} hours ago, you can have your invitation resent again, or you may want to %{contact_support_link}.
+      before_cooldown_period:
+        one: If it has been more than an hour since you should have received your invitation, but you have not received it after checking your spam folder, you can visit this page to resend the invitation.
+        other: If it has been more than %{count} hours since you should have received your invitation, but you have not received it after checking your spam folder, you can visit this page to resend the invitation.
+      contact_support: contact Support
+      info:
+        not_resent: Your invitation was emailed to this address on %{sent_at}. If you can't find it, please check your email spam folder as your spam filters may have placed it there.
+        resent: Your invitation was emailed to this address on %{sent_at} and resent on %{resent_at}. If you can't find it, please check your email spam folder as your spam filters may have placed it there.
+      resend_button: Resend Invitation
+      title: Invitation Status for %{email}
     invite_request:
       date: 'At our current rate, you should receive an invitation on or around: %{date}.'
       position_html: You are currently number %{position} on our waiting list!
       title: Invitation Status for %{email}
+    no_invitation:
+      email_not_found: Sorry, we can't find the email address you entered.
+    show:
+      instructions_html: To check on the status of your invitation, go to the %{status_link} and enter your email in the space provided.
   kudos:
     guest_header:
       one: "%{count} guest has also left kudos"
@@ -767,5 +821,24 @@ en:
         unrestricted: Show to all
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    work_approved_children:
+      inspired_by:
+        restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
+        revealed_html: "%{work_link} by %{creator_link}"
+        title: Works inspired by this one
+        unrevealed: A work in an unrevealed collection
+    work_header_notes:
+      inspired_by:
+        restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
+        revealed_html: Inspired by %{work_link} by %{creator_link}
+        unrevealed: Inspired by a work in an unrevealed collection
+      translated_to:
+        restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link} (Log in to access.)'
+        revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
+        unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
+      translation_of:
+        restricted_html: A translation of [Restricted Work] by %{creator_link} (Log in to access.)
+        revealed_html: A translation of %{work_link} by %{creator_link}
+        unrevealed: A translation of a work in an unrevealed collection
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.

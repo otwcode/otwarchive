@@ -267,5 +267,30 @@ namespace :After do
     r&.destroy
   end
 
+  desc "Remove full-width and ideographic commas from tags"
+  task(remove_invalid_commas_from_tags: :environment) do
+    puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
+    login = $stdin.gets.chomp.strip
+    admin = Admin.find_by(login: login)
+
+    if admin.present?
+      User.current_user = admin
+
+      ["，", "、"].each do |comma|
+        tags = Tag.where("name LIKE ?", "%#{comma}%")
+        tags.each do |tag|
+          new_name = tag.name.gsub(/#{comma}/, "")
+          if tag.update(name: new_name) || tag.update(name: "#{new_name} - AO3-6626")
+            puts(tag.reload.name)
+          else
+            puts("Could not rename #{tag.reload.name}")
+          end
+          $stdout.flush
+        end
+      end
+    else
+      puts("Admin not found.")
+    end
+  end
   # This is the end that you have to put new tasks above.
 end

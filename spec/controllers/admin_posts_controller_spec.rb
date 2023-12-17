@@ -4,6 +4,22 @@ describe AdminPostsController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  describe "GET #index" do
+    context "when filtering by language" do
+      let(:translated_post1) { create(:admin_post, tag_list: "xylophone,aardvark") }
+      let!(:translation_post1) { create(:admin_post, translated_post_id: translated_post1.id, language: create(:language, short: "fr")) }
+      let(:translated_post2) { create(:admin_post, tag_list: "xylophone,aardvark") }
+      let!(:translation_post2) { create(:admin_post, translated_post_id: translated_post2.id, language: translation_post1.language) }
+      let!(:untranslated_post) { create(:admin_post, tag_list: "uncommon tag") }
+
+      it "assigns the admin post tags for the language ordered by name" do
+        get :index, params: { language_id: "fr" }
+
+        expect(assigns[:tags].map(&:name).join(", ")).to eql("aardvark, xylophone")
+      end
+    end
+  end
+
   describe "POST #create" do
     before { fake_login_admin(create(:admin, roles: ["communications"])) }
 
