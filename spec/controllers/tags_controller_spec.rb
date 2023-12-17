@@ -535,11 +535,11 @@ describe TagsController do
     end
 
     it "can add and remove metatags at the same time" do
-      old_metatag =  create(:canonical_freeform)
-      new_metatag =  create(:canonical_freeform)
+      old_metatag = create(:canonical_freeform)
+      new_metatag = create(:canonical_freeform)
 
       tag = create(:canonical_freeform)
-      MetaTagging.create(meta_tag: old_metatag, sub_tag: tag, direct: true)
+      create(:meta_tagging, meta_tag: old_metatag, sub_tag: tag, direct: true)
       old_metatag.reload
       tag.reload
 

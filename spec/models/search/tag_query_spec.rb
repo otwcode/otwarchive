@@ -218,27 +218,27 @@ describe TagQuery do
     end
 
     it "returns unwrangled tags in use" do
-      TagQuery.new(to_wrangle: true).search_results.should include(tags[:used])
+      expect(TagQuery.new(to_wrangle: true).search_results).to include(tags[:used])
     end
 
     it "returns unwrangled canonical tags, even unused" do
-      TagQuery.new(to_wrangle: true).search_results.should include(tags[:unused_but_canonical])
+      expect(TagQuery.new(to_wrangle: true).search_results).to include(tags[:unused_but_canonical])
     end
 
     it "returns tags that are both used and canonical" do
-      TagQuery.new(to_wrangle: true).search_results.should include(tags[:used_and_canonical])
+      expect(TagQuery.new(to_wrangle: true).search_results).to include(tags[:used_and_canonical])
     end
 
-    it "does not return tags that are neither canonical or used" do
-      TagQuery.new(to_wrangle: true).search_results.should_not include(tags[:unused_and_not_canonical])
+    it "does not return tags that are neither canonical nor used" do
+      expect(TagQuery.new(to_wrangle: true).search_results).not_to include(tags[:unused_and_not_canonical])
     end
 
     it "does not return unwrangleable tags" do
-      TagQuery.new(to_wrangle: true).search_results.should_not include(tags[:unwrangeable])
+      expect(TagQuery.new(to_wrangle: true).search_results).not_to include(tags[:unwrangeable])
     end
 
     it "does not return wrangled tags" do
-      TagQuery.new(to_wrangle: true).search_results.should_not include(tags[:wrangled])
+      expect(TagQuery.new(to_wrangle: true).search_results).not_to include(tags[:wrangled])
     end
   end
 end

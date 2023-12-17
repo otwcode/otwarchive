@@ -23,7 +23,7 @@ class TagQuery < Query
       character_filter,
       suggested_fandom_filter,
       suggested_character_filter,
-      *to_wrangle_filter
+      to_wrangle_filter
     ].flatten.compact
   end
 
