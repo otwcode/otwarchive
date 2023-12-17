@@ -71,7 +71,7 @@ class Invitation < ApplicationRecord
     if resend
       attrs = { resent_at: Time.current }
       # This applies to old invites when AO3-6094 wasn't fixed.
-      attrs[:sent_at] = self.updated_at if self.sent_at.nil?
+      attrs[:sent_at] = self.created_at if self.sent_at.nil?
       self.update_columns(attrs)
     else
       self.update_column(:sent_at, Time.current)
@@ -81,8 +81,8 @@ class Invitation < ApplicationRecord
   end
 
   def can_resend?
-    # updated_at fallback is a vestige of the already fixed AO3-6094.
-    checked_date = self.resent_at || self.sent_at || self.updated_at
+    # created_at fallback is a vestige of the already fixed AO3-6094.
+    checked_date = self.resent_at || self.sent_at || self.created_at
     checked_date < ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION.hours.ago
   end
 
