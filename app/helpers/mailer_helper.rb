@@ -186,7 +186,7 @@ module MailerHelper
     elsif comment.by_anonymous_creator?
       style_bold(t("roles.anonymous_creator"))
     else
-      style_pseud_link(comment.comment_owner)
+      style_pseud_link(comment.pseud)
     end
   end
 
