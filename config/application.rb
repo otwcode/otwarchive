@@ -17,7 +17,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 6.0
+    config.load_defaults 6.1
 
     # TODO: Remove in Rails 7.1, where it's false by default.
     config.add_autoload_paths_to_load_path = false
