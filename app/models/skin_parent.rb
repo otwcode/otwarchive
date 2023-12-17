@@ -1,6 +1,6 @@
 class SkinParent < ApplicationRecord
-  belongs_to :child_skin, class_name: "Skin", inverse_of: :skin_parents, touch: true
-  belongs_to :parent_skin, class_name: "Skin", inverse_of: :skin_children
+  belongs_to :child_skin, class_name: "Skin", touch: true
+  belongs_to :parent_skin, class_name: "Skin"
 
   validates :position,
     uniqueness: {scope: [:child_skin_id, :parent_skin_id], message: ts("^Position has to be unique for each parent.")},
