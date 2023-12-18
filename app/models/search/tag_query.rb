@@ -111,7 +111,8 @@ class TagQuery < Query
   def to_wrangle_filter
     return [] if options[:to_wrangle].nil?
 
-    raise "Not implemented" if options[:to_wrangle].false?
+    # Not covering listing tags that are _not_ to be wrangled as of now
+    raise "Not implemented" unless options[:to_wrangle]
 
     [
       { bool: { should: [{ range: { uses: { gt: 0 } } }, term_filter(:canonical, true)] } }, # Check if used OR canonical
