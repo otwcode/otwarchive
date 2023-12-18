@@ -1,8 +1,7 @@
 # Label to be added when the PR is updated:
 "Coder Has Actioned Review":
-  - "**/*"
-  - ".*"
-  - ".*/**/*"
+- changed-files:
+  - any-glob-to-any-file: ["**/*", ".*", ".*/**/*"]
 
 # Label to be removed when the PR is updated:
 "Reviewed: Action Needed": []
