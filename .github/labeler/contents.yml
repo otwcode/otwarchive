@@ -6,6 +6,10 @@
 - changed-files:
   - any-glob-to-any-file: "db/migrate/**/*"
 
+"Scope: i18n Only":
+-changed-files:
+  - any-glob-to-all-files: 'config/locales/**/*'
+
 "Scope: Tests Only":
 - changed-files:
   - any-glob-to-all-files: "{factories,features,spec,test,.github}/**/*"
