@@ -12,4 +12,4 @@
 
 "Scope Tests Only":
 - changed-files:
-  - any-glob-to-all-files: {factories,features,spec,test,.github}/**/*
+  - any-glob-to-all-files: "{factories,features,spec,test,.github}/**/*"
