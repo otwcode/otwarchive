@@ -1,14 +1,15 @@
 "Gem Updates":
-  - "Gemfile"
-  - "Gemfile.lock"
+- changed-files:
+  - any-glob-to-any-file: ["Gemfile", "Gemfile.lock"]
 
 "Has Migrations":
-  - "db/migrate/**/*"
+- changed-files:
+  - any-glob-to-any-file: "db/migrate/**/*"
 
 "Scope: i18n Only":
-  - all:
-    - "config/locales/**/*"
+-changed-files:
+  - any-glob-to-all-files: "config/locales/**/*"
 
 "Scope: Tests Only":
-  - all:
-    - "{factories,features,spec,test,.github}/**/*"
+- changed-files:
+  - any-glob-to-all-files: "{factories,features,spec,test,.github}/**/*"
