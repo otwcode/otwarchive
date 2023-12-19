@@ -6,6 +6,6 @@
 - changed-files:
   - any-glob-to-any-file: "db/migrate/**/*"
 
-"Scope Tests Only":
+"Scope: Tests Only":
 - changed-files:
   - any-glob-to-all-files: "{factories,features,spec,test,.github}/**/*"
