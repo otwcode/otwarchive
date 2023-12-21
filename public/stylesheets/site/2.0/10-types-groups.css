@@ -189,19 +189,11 @@ span.series .position + .divider:after {
   content: "\25CF\0020";
 }
 
-p.kudos {
-  padding: 0.5em;
-  margin: 2em 0;
-  min-height: 40px;
-}
-
-p.kudos::before {
-  content: "";
-  background: url("/images/imageset.png") no-repeat -111px -580px;
-  width: 55px;
-  height: 54px;
-  float: left;
-  margin-top: -0.5em;
+p.kudos { 
+  background: url("/images/imageset.png") no-repeat -110px -580px; 
+  padding: 0.5em 0.5em 0.5em 60px; 
+  margin: 2em 0; 
+  min-height: 50px; 
 }
 
 .icon {

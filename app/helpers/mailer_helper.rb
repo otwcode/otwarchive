@@ -196,7 +196,7 @@ module MailerHelper
     elsif comment.by_anonymous_creator?
       t("roles.anonymous_creator")
     else
-      "#{comment.comment_owner_name} (#{polymorphic_url(comment.comment_owner, only_path: false)})"
+      text_pseud(comment.pseud)
     end
   end
 
