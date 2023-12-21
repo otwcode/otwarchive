@@ -1,6 +1,6 @@
 <% content_for :message do %>
 
-  <%= commenter_pseud_or_name_link(@comment) %> left the following comment on 
+  <%= commenter_pseud_or_name_link(@comment) %> left the following comment on
   
   <% if @comment.ultimate_parent.is_a?(Tag) %>
     the tag 
