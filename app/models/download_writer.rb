@@ -76,7 +76,7 @@ class DownloadWriter
     epub = download.file_type == "epub" ? ["--no-default-epub-cover"] : []
     # pdf:
     # - decrease margins from 72pt default
-    # - only include characters that are used in file when embedding fonts
+    # - only include necessary characters when embedding fonts
     pdf = []
     if download.file_type == "pdf"
       pdf = [
