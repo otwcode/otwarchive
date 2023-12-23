@@ -7,7 +7,7 @@
   - any-glob-to-any-file: "db/migrate/**/*"
 
 "Scope: i18n Only":
--changed-files:
+- changed-files:
   - any-glob-to-all-files: "config/locales/**/*"
 
 "Scope: Tests Only":

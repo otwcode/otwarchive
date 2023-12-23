@@ -3,5 +3,7 @@
 - changed-files:
   - any-glob-to-any-file: "**/*"
 
-# Label to be removed when the PR is updated:
-"Reviewed: Action Needed": []
+# Condition is always false so the label is removed when the PR is updated:
+"Reviewed: Action Needed":
+- changed-files:
+  - any-glob-to-any-file: "!**/*"
