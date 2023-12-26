@@ -337,8 +337,7 @@ Feature: Tag wrangling
       And I should see "Grandparent" within "#parent_MetaTag_associations_to_remove_checkboxes"
       But I should not see "Parent" within "#parent_MetaTag_associations_to_remove_checkboxes"
 
-    When it is currently 25 hours from now
-      And I view the tag "Child"
+    When I view the tag "Child"
     Then I should see "Grandparent" within ".meta"
       But I should not see "Parent" within ".meta"
 
