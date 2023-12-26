@@ -115,7 +115,7 @@ class TagQuery < Query
 
     unless options[:in_use]
       # Check if not used AND not canonical
-      return [ term_filter(:uses, 0), term_filter(:canonical, false)]
+      return [term_filter(:uses, 0), term_filter(:canonical, false)]
     end
 
     # Check if used OR canonical
