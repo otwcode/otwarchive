@@ -23,7 +23,8 @@ class TagQuery < Query
       character_filter,
       suggested_fandom_filter,
       suggested_character_filter,
-      to_wrangle_filter
+      in_use_filter,
+      unwrangled_filter
     ].flatten.compact
   end
 
@@ -108,17 +109,21 @@ class TagQuery < Query
     terms_filter(:pre_character_ids, options[:pre_character_ids]) if options[:pre_character_ids]
   end
 
-  def to_wrangle_filter
-    return [] if options[:to_wrangle].nil?
+  # Canonical tags are treated as used even if they technically aren't
+  def in_use_filter
+    return if options[:in_use].nil?
 
-    # Not covering listing tags that are _not_ to be wrangled as of now
-    raise "Not implemented" unless options[:to_wrangle]
+    unless options[:in_use]
+      # Check if not used AND not canonical
+      return [ term_filter(:uses, 0), term_filter(:canonical, false)]
+    end
 
-    [
-      { bool: { should: [{ range: { uses: { gt: 0 } } }, term_filter(:canonical, true)] } }, # Check if used OR canonical
-      term_filter(:unwrangleable, false),
-      term_filter(:unwrangled, true)
-    ]
+    # Check if used OR canonical
+    { bool: { should: [{ range: { uses: { gt: 0 } } }, term_filter(:canonical, true)] } }
+  end
+
+  def unwrangled_filter
+    term_filter(:unwrangled, bool_value(options[:unwrangled])) unless options[:unwrangled].nil?
   end
 
   # Filter to only include tags that have no assigned fandom_ids. Checks that
