@@ -34,7 +34,7 @@ div.comment, li.comment {
 }
 
 .comment .icon .anonymous {
-  background: url("/images/imageset.png") no-repeat -100px -635px;
+  background: url("/images/imageset.png") no-repeat -0px -735px;
   display: block;
 }
 
