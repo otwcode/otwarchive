@@ -446,5 +446,5 @@ Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
 end
 
 Then "no tag is scheduled for count update from now on" do
-  Tag.any_instance.should_not_receive(:write_taggings_to_redis)
+  expect_any_instance_of(Tag).not_to receive(:update_filters_for_filterables)
 end
