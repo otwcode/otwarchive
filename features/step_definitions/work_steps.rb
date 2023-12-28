@@ -214,6 +214,11 @@ Given "the work {string} by {string}" do |title, login|
   FactoryBot.create(:work, title: title, authors: [user.default_pseud])
 end
 
+Given "the work {string} by {string} with guest comments enabled" do |title, login|
+  user = ensure_user(login)
+  FactoryBot.create(:work, title: title, authors: [user.default_pseud], comment_permissions: :enable_all)
+end
+
 Given "the work {string} by {string} and {string}" do |title, login1, login2|
   user1 = ensure_user(login1)
   user2 = ensure_user(login2)
@@ -321,7 +326,7 @@ When /^I post the work "([^"]*)" without preview$/ do |title|
   step %{I post the work "#{title}"}
 end
 
-When /^I post the work "(.*?)" with guest comments enabled$/ do |title|
+When "I post the work {string} with guest comments enabled" do |title|
   step %{I set up the draft "#{title}"}
   choose("Registered users and guests can comment")
   step %{I post the work without preview}

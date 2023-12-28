@@ -24,7 +24,7 @@ Feature: Admin Settings Page
       And I edit the tag "Ianto Jones"
     Then I should see "Wrangling is disabled at the moment. Please check back later."
       And I should not see "Synonym of"
-    
+
   Scenario: Turn off Support form
     Given the support form is disabled and its text field set to "Please don't contact us"
     When I am logged in as a random user
@@ -40,21 +40,19 @@ Feature: Admin Settings Page
   Scenario Outline: Guests can comment when guest coments are enabled
     Given guest comments are on
       And I am logged out
-      And <commentable>
       And <commentable> with guest comments enabled
       And I view <commentable> with comments
     When I post a guest comment
     Then I should see a link "Reply"
 
     Examples:
-        | commentable | 
+        | commentable |
         | the work "Generic Work" |
         | the admin post "Generic Post" |
 
   Scenario Outline: Guests cannot comment when guest comments are disabled, even if works or admin posts allow commets
     Given guest comments are off
       And I am logged out
-      And <commentable>
       And <commentable> with guest comments enabled
       And a guest comment on <commentable>
     When I view <commentable> with comments
@@ -66,12 +64,12 @@ Feature: Admin Settings Page
     When I am logged in as a super admin
       And I view <commentable> with comments
     Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
-    
+
     Examples:
         | commentable |
         | the work "Generic Work"  |
         | the admin post "Generic Post" |
-    
+
   Scenario: Turn off guest comments (when the work itself does not allow guest comments)
     Given guest comments are off
       And I am logged in as "author"
