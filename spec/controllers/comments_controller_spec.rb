@@ -222,7 +222,7 @@ describe CommentsController do
       end
 
       context "when commentable is a work with guest comments enabled" do
-        let(:comment) { create(:comment, :on_work_with_guest_comment_on, pseud: user.default_pseud) }
+        let(:comment) { create(:comment, :on_work_with_guest_comments_on, pseud: user.default_pseud) }
 
         it_behaves_like "guest cannot reply to a user with guest replies disabled"
       end
