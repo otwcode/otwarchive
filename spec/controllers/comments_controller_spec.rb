@@ -13,8 +13,8 @@ describe CommentsController do
 
   describe "GET #add_comment_reply" do
     context "when comment permissions are enable_all" do
-      let(:moderated_work) { create(:work, moderated_commenting_enabled: true, comment_permissions: :enable_all) }
-      let(:unmoderated_work) { create(:work, comment_permissions: :enable_all) }
+      let(:moderated_work) { create(:work, :guest_comments_on, moderated_commenting_enabled: true) }
+      let(:unmoderated_work) { create(:work, :guest_comments_on) }
 
       let(:comment) { create(:comment, commentable: unmoderated_work.first_chapter) }
       let(:unreviewed_comment) { create(:comment, :unreviewed, commentable: moderated_work.first_chapter) }
@@ -74,8 +74,7 @@ describe CommentsController do
       end
 
       context "when commentable is a work" do
-        let(:work) { create(:work, comment_permissions: :enable_all) }
-        let(:comment) { create(:comment, iced: true, commentable: work) }
+        let(:comment) { create(:comment, :on_work_with_guest_comments_on, iced: true) }
 
         it_behaves_like "no one can add comment reply on a frozen comment"
       end
@@ -108,16 +107,14 @@ describe CommentsController do
       end
 
       context "when commentable is a work with guest comments enabled" do
-        let(:work) { create(:work, comment_permissions: :enable_all) }
-        let(:comment) { create(:comment, hidden_by_admin: true, commentable: work) }
+        let(:comment) { create(:comment, :on_work_with_guest_comments_on, hidden_by_admin: true) }
 
         it_behaves_like "no one can add comment reply on a hidden comment"
       end
     end
 
     context "guest comments are turned on in work and admin settings" do
-      let(:work) { create(:work, comment_permissions: :enable_all) }
-      let(:comment) { create(:comment, commentable: work.first_chapter) }
+      let(:comment) { create(:comment, :on_work_with_guest_comments_on) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
@@ -225,21 +222,20 @@ describe CommentsController do
       end
 
       context "when commentable is a work with guest comments enabled" do
-        let(:work) { create(:work, comment_permissions: :enable_all) }
-        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+        let(:comment) { create(:comment, :work_with_guest_comment_on, pseud: user.default_pseud) }
 
         it_behaves_like "guest cannot reply to a user with guest replies disabled"
       end
 
       context "when commentable is user's work with guest comments enabled" do
-        let(:work) { create(:work, authors: [user.default_pseud], comment_permissions: :enable_all) }
+        let(:work) { create(:work, :guest_comments_on, authors: [user.default_pseud]) }
         let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
       end
 
       context "when commentable is user's co-creation with guest comments enabled" do
-        let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud], comment_permissions: :enable_all) }
+        let(:work) { create(:work, :guest_comments_on, authors: [create(:user).default_pseud, user.default_pseud]) }
         let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
@@ -247,7 +243,7 @@ describe CommentsController do
     end
 
     context "when replying to guests" do
-      let(:comment) { create(:comment, :by_guest) }
+      let(:comment) { create(:comment, :by_guest, :on_work_with_guest_comments_on) }
 
       it "redirects guest user without an error" do
         get :add_comment_reply, params: { comment_id: comment.id }
@@ -356,7 +352,7 @@ describe CommentsController do
 
     context "guest comments are turned on in admin settings" do
       let(:work) { create(:work) }
-      let(:work_with_guest_comment_on) { create(:work, comment_permissions: :enable_all) }
+      let(:work_with_guest_comment_on) { create(:work, :guest_comments_on) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
@@ -424,7 +420,7 @@ describe CommentsController do
     end
 
     context "when work comment permissions are enable_all" do
-      let(:work) { create(:work, comment_permissions: :enable_all) }
+      let(:work) { create(:work, :guest_comments_on) }
 
       it "renders the :new template if commentable is a valid comment" do
         comment = create(:comment, commentable: work)
@@ -494,21 +490,21 @@ describe CommentsController do
         it_behaves_like "guest cannot reply to a user with guest replies disabled"
       end
 
-      context "when commentable is a work" do
-        let(:comment) { create(:comment, pseud: user.default_pseud) }
+      context "when commentable is a work with guest comments enabled" do
+        let(:comment) { create(:comment, :on_work_with_guest_comments_on, pseud: user.default_pseud) }
 
         it_behaves_like "guest cannot reply to a user with guest replies disabled"
       end
 
-      context "when comment is on user's work" do
-        let(:work) { create(:work, authors: [user.default_pseud]) }
+      context "when comment is on user's work with guest comments enabled" do
+        let(:work) { create(:work, :guest_comments_on, authors: [user.default_pseud]) }
         let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
       end
 
       context "when commentable is user's co-creation" do
-        let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud]) }
+        let(:work) { create(:work, :guest_comments_on, authors: [create(:user).default_pseud, user.default_pseud]) }
         let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
@@ -714,7 +710,7 @@ describe CommentsController do
       end
 
       context "with guest comments enabled" do
-        let(:work_with_guest_comment_on) { create(:work, comment_permissions: :enable_all) }
+        let(:work_with_guest_comment_on) { create(:work, :guest_comments_on) }
 
         context "when the commentable is frozen" do
           let(:comment) { create(:comment, iced: true, commentable: work_with_guest_comment_on) }
@@ -749,7 +745,6 @@ describe CommentsController do
     end
 
     context "guest comments are turned on in admin settings" do
-      let(:work) { create(:work, comment_permissions: :enable_all) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
@@ -757,6 +752,7 @@ describe CommentsController do
       end
 
       it "allows guest comments when work has guest comments enabled" do
+        let(:work) { create(:work, :guest_comments_on) }
         post :create, params: { work_id: work.id, comment: anon_comment_attributes }
 
         expect(flash[:error]).to be_nil
@@ -872,21 +868,21 @@ describe CommentsController do
         it_behaves_like "guest cannot reply to a user with guest replies disabled"
       end
 
-      context "when commentable is a work" do
-        let(:comment) { create(:comment, pseud: user.default_pseud) }
+      context "when commentable is a work with guest comments enabled" do
+        let(:comment) { create(:comment, :on_work_with_guest_comments_on, pseud: user.default_pseud) }
 
         it_behaves_like "guest cannot reply to a user with guest replies disabled"
       end
 
-      context "when comment is on user's work" do
-        let(:work) { create(:work, authors: [user.default_pseud]) }
+      context "when comment is on user's work with guest comments enabled" do
+        let(:work) { create(:work, :guest_comments_on, authors: [user.default_pseud]) }
         let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
       end
 
-      context "when commentable is user's co-creation" do
-        let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud]) }
+      context "when commentable is user's co-creation with guest comments enabled" do
+        let(:work) { create(:work, :guest_comments_on, authors: [create(:user).default_pseud, user.default_pseud]) }
         let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"

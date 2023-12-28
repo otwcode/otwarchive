@@ -58,7 +58,8 @@ Feature: Disallowing guest comment replies
     Then I should see "Comment created!"
 
   Scenario: Guests can reply to guests
-    Given the work "Aftermath" with guest comments enabled
+    Given the work "Aftermath"
+      And the work "Aftermath" with guest comments enabled
       And a guest comment on the work "Aftermath"
     When I view the work "Aftermath" with comments
     Then I should see a "Comment" button
