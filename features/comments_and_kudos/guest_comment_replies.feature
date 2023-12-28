@@ -13,12 +13,12 @@ Feature: Disallowing guest comment replies
       And I should see a link "Reply"
 
     Examples:
-      | commentable                 |
-      | the work "Aftermath"        |
-      | the admin post "Change Log" |
+      | commentable                                      |
+      | the work "Aftermath" with guest comments enabled |
+      | the admin post "Change Log"                      |
 
   Scenario: Guests can reply to a user who has guest comments off on their own work
-    Given the work "Aftermath" by "creator"
+    Given the work "Aftermath" by "creator" with guest comments enabled
       And the user "creator" turns off guest comment replies
       And a comment "OMG!" by "creator" on the work "Aftermath"
     When I view the work "Aftermath" with comments
@@ -31,7 +31,7 @@ Feature: Disallowing guest comment replies
 
   Scenario: Guests can reply to a user who has guest comments off on works co-created by the user
     Given the user "nemesis" turns off guest comment replies
-      And the work "Aftermath" by "creator" and "nemesis"
+      And the work "Aftermath" by "creator" and "nemesis" has guest comments enabled
       And a comment "OMG!" by "nemesis" on the work "Aftermath"
     When I view the work "Aftermath" with comments
     Then I should see a "Comment" button
@@ -57,7 +57,7 @@ Feature: Disallowing guest comment replies
     Then I should see "Comment created!"
 
   Scenario: Guests can reply to guests
-    Given the work "Aftermath"
+    Given the work "Aftermath" with guest comments enabled
       And a guest comment on the work "Aftermath"
     When I view the work "Aftermath" with comments
     Then I should see a "Comment" button

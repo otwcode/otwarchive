@@ -224,21 +224,22 @@ describe CommentsController do
         it_behaves_like "guest cannot reply to a user with guest replies disabled"
       end
 
-      context "when commentable is a work" do
-        let(:comment) { create(:comment, pseud: user.default_pseud) }
+      context "when commentable is a work with guest comments enabled" do
+        let(:work) { create(:work, comment_permissions: :enable_all) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
         it_behaves_like "guest cannot reply to a user with guest replies disabled"
       end
 
-      context "when commentable is user's work" do
-        let(:work) { create(:work, authors: [user.default_pseud]) }
+      context "when commentable is user's work with guest comments enabled" do
+        let(:work) { create(:work, authors: [user.default_pseud], comment_permissions: :enable_all) }
         let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
       end
 
-      context "when commentable is user's co-creation" do
-        let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud]) }
+      context "when commentable is user's co-creation with guest comments enabled" do
+        let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud], comment_permissions: :enable_all) }
         let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
@@ -3104,7 +3105,7 @@ describe CommentsController do
                 admin.update(roles: [admin_role])
                 fake_login_admin(admin)
                 delete :destroy, params: { id: comment.id }
-  
+
                 it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
                 expect { comment.reload }.not_to raise_exception
               end
@@ -3222,7 +3223,7 @@ describe CommentsController do
                 admin.update(roles: [admin_role])
                 fake_login_admin(admin)
                 delete :destroy, params: { id: comment.id }
-  
+
                 it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
                 expect { comment.reload }.not_to raise_exception
               end

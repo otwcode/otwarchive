@@ -49,7 +49,7 @@ Feature: Marking comments as spam
 
   Scenario: Author can mark comments as spam
     Given I am logged in as "author"
-      And I post the work "Popular Fic"
+      And I post the work "Popular Fic" with guest comments enabled
       And I log out
     When I view the work "Popular Fic" with comments
       And I post a spam comment
