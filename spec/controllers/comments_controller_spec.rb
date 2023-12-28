@@ -222,7 +222,7 @@ describe CommentsController do
       end
 
       context "when commentable is a work with guest comments enabled" do
-        let(:comment) { create(:comment, :work_with_guest_comment_on, pseud: user.default_pseud) }
+        let(:comment) { create(:comment, :on_work_with_guest_comment_on, pseud: user.default_pseud) }
 
         it_behaves_like "guest cannot reply to a user with guest replies disabled"
       end
@@ -745,6 +745,7 @@ describe CommentsController do
     end
 
     context "guest comments are turned on in admin settings" do
+      let(:work) { create(:work, :guest_comments_on) }
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
@@ -752,7 +753,6 @@ describe CommentsController do
       end
 
       it "allows guest comments when work has guest comments enabled" do
-        let(:work) { create(:work, :guest_comments_on) }
         post :create, params: { work_id: work.id, comment: anon_comment_attributes }
 
         expect(flash[:error]).to be_nil
