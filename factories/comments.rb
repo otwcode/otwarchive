@@ -21,7 +21,7 @@ FactoryBot.define do
     end
 
     trait :on_work_with_guest_comments_on do
-      commentable { create(:work, :guest_comments_on) }
+      commentable { create(:work, :guest_comments_on).first_chapter }
     end
 
     trait :unreviewed do
