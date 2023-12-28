@@ -203,7 +203,7 @@ describe TagQuery do
     end
   end
 
-  describe "to_wrangle" do
+  describe "to_wrangle", tag_search: true do
     let!(:tags) do
       tags = {
         used: create(:character, taggings_count_cache: 5),
@@ -246,6 +246,7 @@ describe TagQuery do
       expect(results).to include(tags[:unused_and_not_canonical])
       expect(results).not_to include(tags[:used])
       expect(results).not_to include(tags[:unused_but_canonical])
+      expect(results).not_to include(tags[:used_and_canonical])
     end
 
     def results
