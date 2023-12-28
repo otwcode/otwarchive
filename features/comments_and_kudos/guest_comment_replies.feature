@@ -32,7 +32,7 @@ Feature: Disallowing guest comment replies
 
   Scenario: Guests can reply to a user who has guest comments off on works co-created by the user
     Given the user "nemesis" turns off guest comment replies
-      And the work "Aftermath" by "creator" and "nemesis" has guest comments enabled
+      And the work "Aftermath" by "creator" and "nemesis" with guest comments enabled
       And a comment "OMG!" by "nemesis" on the work "Aftermath"
     When I view the work "Aftermath" with comments
     Then I should see a "Comment" button
