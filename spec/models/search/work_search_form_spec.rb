@@ -108,6 +108,14 @@ describe WorkSearchForm, work_search: true do
         expect(searcher.options[:sort_direction]).to eq("desc")
       end
     end
+
+    context "when sorting by field without pretty name" do
+      it "displays the field name in search summary" do
+        options = { sort_column: "expected_number_of_chapters", sort_direction: "desc" }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.summary).to eq("sort by: expected_number_of_chapters descending")
+      end
+    end
   end
 
   describe "searching" do

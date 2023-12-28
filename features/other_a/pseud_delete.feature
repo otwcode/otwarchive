@@ -152,3 +152,53 @@ Feature: Delete pseud.
       And I should see "original_pseud" within ".creatorships"
       And I should see "Co-Creator Requests (1)"
       And I should not see "other_pseud" within ".creatorships"
+
+  Scenario: Collections reflect pseud deletion of the owner after the cache expires
+
+    When I am logged in as "original_pseud"
+      And I add the pseud "other_pseud"
+      And I set up the collection "My Collection Thing"
+      And I select "other_pseud" from "Owner pseud(s)"
+      And I unselect "original_pseud" from "Owner pseud(s)"
+      And I press "Submit"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "other_pseud (original_pseud)" within "#main"
+
+    When I delete the pseud "other_pseud"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "other_pseud (original_pseud)" within "#main"
+    When the collection blurb cache has expired
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "original_pseud" within "#main"
+      And I should not see "other_pseud" within "#main"
+
+
+  Scenario: Collections reflect pseud deletion of moderators after the cache expires
+
+    Given "myself" has the pseud "other_pseud"
+    When I have the collection "My Collection Thing"
+      And I am logged in as the owner of "My Collection Thing"
+      And I am on the "My Collection Thing" participants page
+      And I fill in "participants_to_invite" with "other_pseud (myself)"
+      And I press "Submit"
+    Then I should see "New members invited: other_pseud (myself)"
+    When I select "Moderator" from "myself_role"
+      And I submit with the 5th button
+    Then I should see "Updated other_pseud."
+    When I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "other_pseud (myself)" within "#main"
+
+    When I am logged in as "myself"
+      And I delete the pseud "other_pseud"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "other_pseud (myself)" within "#main"
+    When the collection blurb cache has expired
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should not see "other_pseud (myself)" within "#main"
+      And I should see "myself" within "#main"

@@ -18,6 +18,8 @@ Feature: Orphan pseud
     When I follow "Back To Pseuds"
     Then I should see "orphanpseud"
       And I should see "2 works"
+      # Delay before orphaning to make sure the cache is expired
+      And it is currently 1 second from now
     When I follow "Orphan Works"
     Then I should see "Orphan All Works by orphanpseud"
     When I choose "Take my pseud off as well"
@@ -44,6 +46,8 @@ Feature: Orphan pseud
     When I follow "Back To Pseuds"
     Then I should see "orphanpseud"
       And I should see "2 works"
+      # Delay before orphaning to make sure the cache is expired
+      And it is currently 1 second from now
     When I follow "Orphan Works"
     Then I should see "Orphan All Works by orphanpseud"
     When I choose "Leave a copy of my pseud on"

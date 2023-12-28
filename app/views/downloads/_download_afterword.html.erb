@@ -10,18 +10,23 @@
         </div>
       <% end %>
 
-      <% unless @work.approved_children.blank? %>
+      <%# i18n-tasks-use t("downloads.download_afterword.inspired_by.restricted_html") %>
+      <%# i18n-tasks-use t("downloads.download_afterword.inspired_by.revealed_html") %>
+      <%# i18n-tasks-use t("downloads.download_afterword.inspired_by.unrevealed") %>
+      <% if @work.approved_children.present? %>
         <dl>
-          <dt><%= ts('Works inspired by this one') %></dt>
-          <dd>
-            <%= @work.approved_related_works.where(:translation => false).map{|rw|
-"#{link_to(rw.work.title.html_safe, work_url(rw.work))} #{ts('by')} #{byline(rw.work, visibility: 'public', only_path: false)}"}.join(",
-").html_safe %>
-          </dd>
+          <dt><%= t(".inspired_by.title") %></dt>
+          <% for child_work in @work.approved_related_works %>
+            <% next if child_work.translation %>
+
+            <dd>
+              <%= related_work_note(child_work.work, "inspired_by", download: true) %>
+            </dd>
+          <% end %>
         </dl>
       <% end %>
     </div>
   <% end %>
 
-  <p class="message"><%= ts("Please") %> <%= link_to ts("drop by the archive and comment"), new_work_comment_url(@work) %> <%= ts("to let the author know if you enjoyed their work!") %></p>
+  <p class="message"><%= t(".please_comment_html", work_comment_link: link_to(t(".work_comment", locale: :en), new_work_comment_url(@work)), locale: :en) %></p>
 </div>

@@ -106,6 +106,12 @@ describe Work do
     end
   end
 
+  context "invalid rating" do
+    it "cannot have more than one rating" do
+      expect(build(:work, rating_string: "Not Rated, General Audiences")).to be_invalid
+    end
+  end
+
   context "validate authors" do
     let(:invalid_work) { build(:no_authors) }
 

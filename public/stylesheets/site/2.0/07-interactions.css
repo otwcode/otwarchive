@@ -180,6 +180,7 @@ We only use error messages for LiveValidation. Style spoofs the system error mes
   position: absolute;
   margin-top: 0.643em;
   margin-right: 15em;
+  z-index: 1;
 }
 
 .LV_invalid {

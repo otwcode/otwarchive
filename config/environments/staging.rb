@@ -69,4 +69,7 @@ Otwarchive::Application.configure do
   end
 
   config.middleware.use Rack::Attack
+
+  # Disable dumping schemas after migrations.
+  config.active_record.dump_schema_after_migration = false
 end

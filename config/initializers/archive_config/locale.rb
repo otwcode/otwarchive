@@ -1,4 +1,4 @@
-begin
+Rails.application.config.after_initialize do
   ActiveRecord::Base.connection
   # try to set language and locale using models (which use Archive Config)
   Language.default
@@ -10,7 +10,7 @@ rescue ActiveRecord::ConnectionNotEstablished
 rescue
   # ArchiveConfig didn't work, try to set it manually
   if Language.table_exists? && Locale.table_exists?
-    language = Language.find_or_create_by(short: 'en', name: 'English')
+    language = Language.find_or_create_by(short: "en", name: "English")
     Locale.set_base_locale(iso: "en", name: "English (US)", language_id: language.id)
   end
 end

@@ -5,10 +5,6 @@ FactoryBot.define do
     "#{Faker::Lorem.characters(number: 8)}#{n}"
   end
 
-  sequence :email do |n|
-    Faker::Internet.email(name: "#{Faker::Name.first_name}_#{n}")
-  end
-
   factory :role do
     sequence(:name) { |n| "#{Faker::Company.profession}_#{n}" }
   end
@@ -19,7 +15,7 @@ FactoryBot.define do
     age_over_13 { "1" }
     terms_of_service { "1" }
     password_confirmation(&:password)
-    email { generate(:email) }
+    email { Faker::Internet.unique.email }
 
     # By default, create activated users who can log in, since we use
     # devise :confirmable.
