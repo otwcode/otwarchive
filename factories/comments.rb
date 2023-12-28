@@ -20,10 +20,6 @@ FactoryBot.define do
       commentable { create(:fandom) }
     end
 
-    trait :on_admin_post_with_guest_comments_on do
-      commentable { create(:admin_post, :guest_comments_on) }
-    end
-
     trait :on_work_with_guest_comments_on do
       commentable { create(:work, :guest_comments_on) }
     end
