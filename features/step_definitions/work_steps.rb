@@ -329,7 +329,7 @@ end
 When "I post the work {string} with guest comments enabled" do |title|
   step %{I set up the draft "#{title}"}
   choose("Registered users and guests can comment")
-  step %{I post the work without preview}
+  step "I post the work without preview"
 end
 
 When /^a chapter is added to "([^"]*)"$/ do |work_title|

@@ -1,7 +1,8 @@
 Feature: Disallowing guest comment replies
 
   Scenario Outline: Guests cannot reply to a user who has guest comments off on news posts and other users' works
-    Given <commentable> with guest comments enabled
+    Given <commentable>
+      And <commentable> with guest comments enabled
       And the user "commenter" turns off guest comment replies
       And a comment "OMG!" by "commenter" on <commentable>
     When I view <commentable> with comments

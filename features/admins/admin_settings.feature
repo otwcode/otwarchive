@@ -40,6 +40,7 @@ Feature: Admin Settings Page
   Scenario Outline: Guests can comment when guest coments are enabled
     Given guest comments are on
       And I am logged out
+      And <commentable>
       And <commentable> with guest comments enabled
       And I view <commentable> with comments
     When I post a guest comment
@@ -53,6 +54,7 @@ Feature: Admin Settings Page
   Scenario Outline: Guests cannot comment when guest comments are disabled, even if works or admin posts allow commets
     Given guest comments are off
       And I am logged out
+      And <commentable>
       And <commentable> with guest comments enabled
       And a guest comment on <commentable>
     When I view <commentable> with comments

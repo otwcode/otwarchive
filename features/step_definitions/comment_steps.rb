@@ -32,7 +32,6 @@ ParameterType(
 
 Given "{commentable} with guest comments enabled" do |commentable|
   assert !commentable.is_a?(Tag)
-  step %{#{commentable}}
   commentable.update_attribute(:comment_permissions, :enable_all)
 end
 
@@ -125,7 +124,7 @@ end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest(?: with email "([^"]*)")?$/ do |comment_text, work, email|
   step "I start a new session"
-  step 'I set up the comment "#{comment_text}" on the work "#{work}" with guest comments enabled'
+  step %{I set up the comment "#{comment_text}" on the work "#{work}" with guest comments enabled}
   fill_in("Guest name", with: "guest")
   fill_in("Guest email", with: (email || "guest@foo.com"))
   click_button "Comment"
