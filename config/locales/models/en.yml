@@ -115,6 +115,11 @@ en:
           attributes:
             user_defined_tags_count:
               at_most: must not add up to more than %{count}. You have entered %{value} of these tags, so you must remove %{diff} of them.
+        invitation:
+          attributes:
+            base:
+              format: "%{message}"
+              notification_could_not_be_sent: 'Notification email could not be sent: %{error}'
         kudo:
           attributes:
             commentable:

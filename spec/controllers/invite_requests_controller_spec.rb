@@ -17,21 +17,14 @@ describe InviteRequestsController do
 
   describe "GET #show" do
     context "when given invalid emails" do
-      it "redirects to index with error" do
-        message = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
-        get :show, params: { id: 0 }
-        it_redirects_to_with_error(status_invite_requests_path, message)
-        expect(assigns(:invite_request)).to be_nil
-        get :show, params: { id: 0, email: "mistressofallevil@example.org" }
-        it_redirects_to_with_error(status_invite_requests_path, message)
+      it "renders" do
+        get :show, params: { email: "mistressofallevil@example.org" }
+        expect(response).to render_template("show")
         expect(assigns(:invite_request)).to be_nil
       end
 
       it "renders for an ajax call" do
-        get :show, params: { id: 0 }, xhr: true
-        expect(response).to render_template("show")
-        expect(assigns(:invite_request)).to be_nil
-        get :show, params: { id: 0, email: "mistressofallevil@example.org" }, xhr: true
+        get :show, params: { email: "mistressofallevil@example.org" }, xhr: true
         expect(response).to render_template("show")
         expect(assigns(:invite_request)).to be_nil
       end
@@ -41,15 +34,47 @@ describe InviteRequestsController do
       let(:invite_request) { create(:invite_request) }
 
       it "renders" do
-        get :show, params: { id: 0, email: invite_request.email }
+        get :show, params: { email: invite_request.email }
         expect(response).to render_template("show")
         expect(assigns(:invite_request)).to eq(invite_request)
       end
 
       it "renders for an ajax call" do
-        get :show, params: { id: 0, email: invite_request.email }, xhr: true
+        get :show, params: { email: invite_request.email }, xhr: true
         expect(response).to render_template("show")
         expect(assigns(:invite_request)).to eq(invite_request)
+      end
+    end
+  end
+
+  describe "POST #resend" do
+    context "when the email doesn't match any invitations" do
+      it "redirects with an error" do
+        post :resend, params: { email: "test@example.org" }
+        it_redirects_to_with_error(status_invite_requests_path,
+                                   "Could not find an invitation associated with that email.")
+      end
+    end
+
+    context "when the invitation is too recent" do
+      let(:invitation) { create(:invitation) }
+
+      it "redirects with an error" do
+        post :resend, params: { email: invitation.invitee_email }
+        it_redirects_to_with_error(status_invite_requests_path,
+                                   "You cannot resend an invitation that was sent in the last 24 hours.")
+      end
+    end
+
+    context "when the email and time are valid" do
+      let!(:invitation) { create(:invitation) }
+
+      it "redirects with a success message" do
+        travel_to((1 + ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION).hours.from_now)
+        post :resend, params: { email: invitation.invitee_email }
+
+        it_redirects_to_with_notice(status_invite_requests_path,
+                                    "Invitation resent to #{invitation.invitee_email}.")
       end
     end
   end
@@ -68,14 +93,14 @@ describe InviteRequestsController do
       end
 
       it "redirects to index with notice" do
-        email = generate(:email)
+        email = Faker::Internet.unique.email
         post :create, params: { invite_request: { email: email } }
         invite_request = InviteRequest.find_by!(email: email)
         it_redirects_to_with_notice(invite_requests_path, "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider.")
       end
 
       it "assigns an IP address to the request" do
-        post :create, params: { invite_request: { email: generate(:email) } }
+        post :create, params: { invite_request: { email: Faker::Internet.unique.email } }
         expect(assigns(:invite_request).ip_address).to eq(ip)
       end
     end
@@ -86,7 +111,7 @@ describe InviteRequestsController do
       end
 
       it "redirects to index with error" do
-        post :create, params: { invite_request: { email: generate(:email) } }
+        post :create, params: { invite_request: { email: Faker::Internet.unique.email } }
         it_redirects_to_simple(invite_requests_path)
         expect(flash[:error]).to include("New invitation requests are currently closed.")
       end
