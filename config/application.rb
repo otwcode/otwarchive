@@ -67,6 +67,8 @@ module Otwarchive
     config.filter_parameters += [:content, :password, :terms_of_service_non_production]
 
     # Disable dumping schemas after migrations.
+    # This can cause problems since we don't always update versions on merge.
+    # Ideally this would be enabled in dev, but we're not quite ready for that.
     config.active_record.dump_schema_after_migration = false
 
     # Allows belongs_to associations to be optional

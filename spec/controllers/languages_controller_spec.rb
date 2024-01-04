@@ -25,26 +25,6 @@ describe LanguagesController do
     end
   end
 
-  describe "GET show" do
-    context "when not logged in" do
-      it "renders the show template" do
-        get :show, params: { id: "en" }
-        expect(response).to render_template("show")
-      end
-    end
-
-    Admin::VALID_ROLES.each do |role|
-      context "when logged in as an admin with #{role} role" do
-        let(:admin) { create(:admin, roles: [role]) }
-
-        it "renders the show template" do
-          get :show, params: { id: "en" }
-          expect(response).to render_template("show")
-        end
-      end
-    end
-  end
-
   describe "GET new" do
     context "when not logged in" do
       it "redirects with error" do
@@ -227,7 +207,7 @@ describe LanguagesController do
         end
 
         it "redirects and returns success message" do
-          it_redirects_to_with_notice(finnish, "Language was successfully updated.")
+          it_redirects_to_with_notice(languages_path, "Language was successfully updated.")
         end
       end
     end

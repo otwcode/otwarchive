@@ -146,6 +146,13 @@ class Work < ApplicationRecord
   validates :rating_string,
             presence: { message: "^Please choose a rating." }
 
+  validate :only_one_rating
+  def only_one_rating
+    return unless split_tag_string(rating_string).count > 1
+
+    errors.add(:base, ts("Only one rating is allowed."))
+  end
+
   # rephrases the "chapters is invalid" message
   after_validation :check_for_invalid_chapters
   def check_for_invalid_chapters
@@ -211,7 +218,7 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series, :touch_related_works
   after_destroy :expire_caches, :update_pseud_index
 
   before_destroy :send_deleted_work_notification, prepend: true
@@ -923,6 +930,14 @@ class Work < ApplicationRecord
     parent_work_relationships.reject(&:marked_for_destruction?)
   end
 
+  def touch_related_works
+    return unless saved_change_to_in_unrevealed_collection?
+
+    # Make sure download URLs of child and parent works expire to preserve anonymity.
+    children.touch_all
+    parents_after_saving.each { |rw| rw.parent.touch }
+  end
+
   #################################################################################
   #
   # In this section we define various named scopes that can be chained together
@@ -1008,7 +1023,7 @@ class Work < ApplicationRecord
   }
 
   scope :with_includes_for_blurb, lambda {
-    includes(:pseuds)
+    includes(:pseuds, :approved_collections, :stat_counter)
   }
 
   scope :for_blurb, -> { with_columns_for_blurb.with_includes_for_blurb }

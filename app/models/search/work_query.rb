@@ -44,6 +44,12 @@ class WorkQuery < Query
 
   def add_owner
     owner = options[:works_parent]
+
+    if owner.is_a?(Language)
+      options[:language_id] = owner.short
+      return
+    end
+
     field = case owner
             when Tag
               :filter_ids
