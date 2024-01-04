@@ -113,6 +113,20 @@ describe CommentMailer do
     end
   end
 
+  shared_examples "a notification email that marks the commenter as a guest" do
+    describe "HTML email" do
+      it "has the name of the guest and the guest role" do
+        expect(email).to have_html_part_content(">Defender</b> <em><strong>(Guest)</strong></em>")
+      end
+    end
+
+    describe "text email" do
+      it "has the name of the guest and the guest role" do
+        expect(subject).to have_text_part_content("Defender (Guest)")
+      end
+    end
+  end
+
   describe "comment_notification" do
     subject(:email) { CommentMailer.comment_notification(user, comment) }
 
@@ -128,6 +142,12 @@ describe CommentMailer do
       let(:comment) { create(:comment, pseud: commenter.default_pseud) }
 
       it_behaves_like "a notification email that marks the commenter as official"
+    end
+
+    context "when the comment is by a guest" do
+      let(:comment) { create(:comment, pseud: nil, name: "Defender", email: Faker::Internet.email) }
+
+      it_behaves_like "a notification email that marks the commenter as a guest"
     end
 
     context "when the comment is a reply to another comment" do
@@ -222,6 +242,12 @@ describe CommentMailer do
       it_behaves_like "a notification email that marks the commenter as official"
     end
 
+    context "when the comment is by a guest" do
+      let(:comment) { create(:comment, commentable: parent_comment, pseud: nil, name: "Defender", email: Faker::Internet.email) }
+
+      it_behaves_like "a notification email that marks the commenter as a guest"
+    end
+
     context "when the comment is on a tag" do
       let(:parent_comment) { create(:comment, :on_tag, pseud: commenter_pseud) }
 
@@ -244,6 +270,27 @@ describe CommentMailer do
       before { create(:admin_blacklisted_email, email: parent_comment.comment_owner_email) }
 
       it_behaves_like "an unsent email"
+    end
+
+    context "when the comment is from the author of the anonymous work" do
+      let(:work) { create(:work, authors: [commenter_pseud], collections: [create(:anonymous_collection)]) }
+      let(:parent_comment) { create(:comment, commentable: work) }
+      let(:comment) { create(:comment, commentable: parent_comment, pseud: commenter_pseud) }
+
+      describe "HTML email" do
+        it "does not reveal the pseud of the replier" do
+          expect(subject).to have_html_part_content(">Anonymous Creator</b>")
+          expect(email).not_to have_html_part_content(">Blueprint (Accumulator)")
+        end
+      end
+
+      describe "text email" do
+        it "does not reveal the pseud of the replier" do
+          expect(subject).to have_text_part_content("Anonymous Creator")
+          expect(subject).not_to have_text_part_content("Blueprint (Accumulator)")
+        end
+      end
+
     end
   end
 

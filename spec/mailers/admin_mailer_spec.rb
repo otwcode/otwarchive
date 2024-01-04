@@ -230,6 +230,22 @@ describe AdminMailer do
 
       it_behaves_like "a notification email that marks the commenter as official"
     end
+
+    context "when the commenter is a guest" do
+      let(:comment) { create(:comment, :on_admin_post, pseud: nil, name: "Defender", email: Faker::Internet.email) }
+
+      describe "HTML email" do
+        it "has the name of the guest and the guest role" do
+          expect(email).to have_html_part_content(">Defender</b> <em><strong>(Guest)</strong></em>")
+        end
+      end
+
+      describe "text email" do
+        it "has the name of the guest and the guest role" do
+          expect(subject).to have_text_part_content("Defender (Guest)")
+        end
+      end
+    end
   end
 
   describe "comment_edited_notification" do
