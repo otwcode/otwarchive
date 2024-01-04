@@ -811,7 +811,7 @@ en:
         choose: Choose a language
       title: Associations
     byline:
-      add_co-creators: Add co-creator(s)
+      add_co-creators: Add co-creators
       show_co-creator_options: Add co-creators?
     meta:
       original_creators:
