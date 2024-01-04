@@ -290,7 +290,6 @@ describe CommentMailer do
           expect(subject).not_to have_text_part_content("Blueprint (Accumulator)")
         end
       end
-
     end
   end
 
