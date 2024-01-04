@@ -774,6 +774,13 @@ en:
         continue: Yes, Continue
         preferences: Set your preferences now
       page_title: Adult Content Warning
+    associations:
+      language:
+        choose: Choose a language
+      title: Associations
+    byline:
+      add_co-creators: Add co-creator(s)
+      show_co-creator_options: Add co-creators?
     meta:
       original_creators:
         one: 'Original Creator ID:'
@@ -787,8 +794,12 @@ en:
         multiple_works_restricted: Only show to registered users
         restricted: Only show your work to registered users
         unrestricted: Show to all
+    preface:
+      title: Preface
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    skin:
+      select: Select work skin
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"

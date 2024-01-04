@@ -23,24 +23,24 @@
 
   <%= render "work_form_tags", include_blank: true %>
   <fieldset class="preface" role="article">
-    <legend><%= ts("Preface") %></legend>
-    <h3 class="landmark heading"><%= ts("Preface") %></h3>
+    <legend><%= t("works.preface.title") %></legend>
+    <h3 class="landmark heading"><%= t("works.preface.title") %></h3>
     <dl>
       <%= render "works/work_form_pseuds", form: form, works: @works %>
     </dl>
   </fieldset>
 
   <fieldset id="associations" role="article">
-    <legend><%= ts("Associations") %></legend>
-    <h3 class="landmark heading"><%= ts("Associations") %></h3>
+    <legend><%= t("works.associations.title") %></legend>
+    <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
     <dl>
       <%= render "collectibles/collectible_form", form: form, collectibles: @works %>
-      <dt><%= form.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
+      <dt><%= form.label :language_id, t("works.associations.language.choose") %> <%= link_to_help "languages-help" %></dt>
       <dd>
         <%= form.select :language_id, language_options_for_select(sorted_languages, "id"), { include_blank: true } %>
       </dd>
 
-      <dt><%= form.label :work_skin_id, ts("Select work skin") %> <%= link_to_help "work-skins" %></dt>
+      <dt><%= form.label :work_skin_id, t("works.skin.select") %> <%= link_to_help "work-skins" %></dt>
       <dd>
         <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title,
               { include_blank: true } %>
