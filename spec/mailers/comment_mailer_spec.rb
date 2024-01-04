@@ -76,7 +76,7 @@ describe CommentMailer do
   shared_examples "a notification email with the commenters pseud and username" do
     describe "HTML email" do
       it "has the pseud and username of the commenter" do
-        expect(email).to have_html_part_content(">Blueprint (Accumulator)</a></b> <em><strong>(Registered User)</strong></em>")
+        expect(email).to have_html_part_content(">Blueprint (Accumulator)</a></strong> <em><strong>(Registered User)</strong></em>")
         expect(subject.html_part).to have_xpath(
           "//a[@href=\"#{user_pseud_url(commenter, commenter_pseud)}\"]",
           text: "Blueprint (Accumulator)"
@@ -96,7 +96,7 @@ describe CommentMailer do
   shared_examples "a notification email that marks the commenter as official" do
     describe "HTML email" do
       it "has the username of the commenter and the official role" do
-        expect(email).to have_html_part_content(">Centrifuge</a></b> <em><strong>(Official)</strong></em>")
+        expect(email).to have_html_part_content(">Centrifuge</a></strong> <em><strong>(Official)</strong></em>")
         expect(subject.html_part).to have_xpath(
           "//a[@href=\"#{user_pseud_url(commenter, commenter.default_pseud)}\"]",
           text: "Centrifuge"

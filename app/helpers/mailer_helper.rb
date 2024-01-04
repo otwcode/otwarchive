@@ -188,7 +188,7 @@ module MailerHelper
     else
       role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
       pseud_link = style_link(comment.pseud.byline, user_pseud_url(comment.user, comment.pseud))
-      t("roles.commenter_name_html", name: style_bold(pseud_link), role: style_role(role))
+      t("roles.commenter_name_html", name: tag.strong(pseud_link), role: style_role(role))
     end
   end
 
