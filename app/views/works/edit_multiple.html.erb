@@ -56,8 +56,7 @@
       <dt><%= t("works.permissions.visibility.label") %> <%= link_to_help "registered-users" %></dt>
       <dd>
         <fieldset>
-        <%=
-          radio_button_list(form, :restricted, [
+        <%= radio_button_list(form, :restricted, [
               ["", t("works.permissions.visibility.keep_current")],
               ["1", t("works.permissions.visibility.multiple_works_restricted")],
               ["0", t("works.permissions.visibility.unrestricted")]
@@ -69,8 +68,7 @@
       <dt><%= t("comments.commentable.permissions.moderated_commenting.label") %><%= link_to_help "comments-moderated" %></dt>
       <dd>
         <fieldset>
-        <%=
-          radio_button_list(form, :moderated_commenting_enabled, [
+        <%= radio_button_list(form, :moderated_commenting_enabled, [
               ["", t("comments.commentable.permissions.moderated_commenting.keep_current")],
               ["1", t("comments.commentable.permissions.moderated_commenting.enable")],
               ["0", t("comments.commentable.permissions.moderated_commenting.disable")]
