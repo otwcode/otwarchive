@@ -53,4 +53,7 @@ Otwarchive::Application.configure do
   config.active_support.deprecation = :notify
 
   config.middleware.use Rack::Attack
+
+  # Disable dumping schemas after migrations.
+  config.active_record.dump_schema_after_migration = false
 end

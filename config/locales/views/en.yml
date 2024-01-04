@@ -498,6 +498,17 @@ en:
         other: Browse fandoms by media or favorite up to %{count} tags to have them listed here!
       find_your_favorites: Find your favorites
       media_navigation_label: Media
+      readings:
+        heading:
+          history_link: My History
+          title: Is it later already?
+        note: Some works you've marked for later.
+      social:
+        heading: Follow us
+        note_html: Follow the Archive on Twitter or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
+        other_outlets: Organization for Transformative Works' news outlets
+        tumblr: ao3org on Tumblr
+        twitter: "@AO3_Status on Twitter"
     tos_faq:
       fnok:
         support: Support team
@@ -505,10 +516,31 @@ en:
     invitation:
       email_address_label: Enter an email address
   invite_requests:
+    invitation:
+      after_cooldown_period:
+        not_resent:
+          one: Because your invitation was sent more than an hour ago, you can have your invitation resent.
+          other: Because your invitation was sent more than %{count} hours ago, you can have your invitation resent.
+        resent_html:
+          one: Because your invitation was resent more than an hour ago, you can have your invitation resent again, or you may want to %{contact_support_link}.
+          other: Because your invitation was resent more than %{count} hours ago, you can have your invitation resent again, or you may want to %{contact_support_link}.
+      before_cooldown_period:
+        one: If it has been more than an hour since you should have received your invitation, but you have not received it after checking your spam folder, you can visit this page to resend the invitation.
+        other: If it has been more than %{count} hours since you should have received your invitation, but you have not received it after checking your spam folder, you can visit this page to resend the invitation.
+      contact_support: contact Support
+      info:
+        not_resent: Your invitation was emailed to this address on %{sent_at}. If you can't find it, please check your email spam folder as your spam filters may have placed it there.
+        resent: Your invitation was emailed to this address on %{sent_at} and resent on %{resent_at}. If you can't find it, please check your email spam folder as your spam filters may have placed it there.
+      resend_button: Resend Invitation
+      title: Invitation Status for %{email}
     invite_request:
       date: 'At our current rate, you should receive an invitation on or around: %{date}.'
       position_html: You are currently number %{position} on our waiting list!
       title: Invitation Status for %{email}
+    no_invitation:
+      email_not_found: Sorry, we can't find the email address you entered.
+    show:
+      instructions_html: To check on the status of your invitation, go to the %{status_link} and enter your email in the space provided.
   kudos:
     guest_header:
       one: "%{count} guest has also left kudos"

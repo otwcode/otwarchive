@@ -146,6 +146,13 @@ class Work < ApplicationRecord
   validates :rating_string,
             presence: { message: "^Please choose a rating." }
 
+  validate :only_one_rating
+  def only_one_rating
+    return unless split_tag_string(rating_string).count > 1
+
+    errors.add(:base, ts("Only one rating is allowed."))
+  end
+
   # rephrases the "chapters is invalid" message
   after_validation :check_for_invalid_chapters
   def check_for_invalid_chapters
@@ -1016,7 +1023,7 @@ class Work < ApplicationRecord
   }
 
   scope :with_includes_for_blurb, lambda {
-    includes(:pseuds)
+    includes(:pseuds, :approved_collections, :stat_counter)
   }
 
   scope :for_blurb, -> { with_columns_for_blurb.with_includes_for_blurb }

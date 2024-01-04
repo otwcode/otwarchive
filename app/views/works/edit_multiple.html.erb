@@ -85,14 +85,12 @@
       </dt>
       <dd>
         <fieldset>
-          <%=
-            radio_button_list(form, :comment_permissions, [
-              ["", t("comments.commentable.permissions.options.keep_current")],
-              [:enable_all, t("comments.commentable.permissions.options.enable_all")],
-              [:disable_anon, t("comments.commentable.permissions.options.disable_anon")],
-              [:disable_all, t("comments.commentable.permissions.options.disable_all")]
-            ])
-          %>
+          <%= radio_button_list(form, :comment_permissions, [
+                ["", t("comments.commentable.permissions.options.keep_current")],
+                [:enable_all, t("comments.commentable.permissions.options.enable_all")],
+                [:disable_anon, t("comments.commentable.permissions.options.disable_anon")],
+                [:disable_all, t("comments.commentable.permissions.options.disable_all")]
+              ]) %>
         </fieldset>
       </dd>
     </dl>
