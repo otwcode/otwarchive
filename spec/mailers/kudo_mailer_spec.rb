@@ -42,4 +42,59 @@ describe KudoMailer do
       end
     end
   end
+
+  describe "obeys the set locale preference feature flag" do
+    let(:user) { create(:user) }
+    let(:work) { create(:work, authors: [user.default_pseud]) }
+    let(:kudos_json) do
+      hash = {}
+      hash["#{work.class.name}_#{work.id}"] = { guest_count: 1, names: [] }
+      hash.to_json
+    end
+    let(:locale) { create(:locale) }
+
+    context "when the set locale preference feature flag is on" do
+      before { $rollout.activate_user(:set_locale_preference, user) }
+
+      context "and the user has non-default locale set" do
+        before { user.preference.update!(preferred_locale: locale.id) }
+
+        it "sends a localised email" do
+          expect(I18n).to receive(:with_locale).with(locale.iso)
+          expect(KudoMailer.batch_kudo_notification(user.id, kudos_json)).to be_truthy
+        end
+      end
+
+      context "and the user has the default locale set" do
+        before { user.preference.update!(preferred_locale: Locale.default.id) }
+
+        it "sends an English email" do
+          expect(I18n).to receive(:with_locale).with("en")
+          expect(KudoMailer.batch_kudo_notification(user.id, kudos_json)).to be_truthy
+        end
+      end
+    end
+
+    context "when the set locale preference feature flag is off" do
+      before { $rollout.deactivate_user(:set_locale_preference, user) }
+
+      context "and the user has non-default locale set" do
+        before { user.preference.update!(preferred_locale: locale.id) }
+
+        it "sends an English email" do
+          expect(I18n).to receive(:with_locale).with("en")
+          expect(KudoMailer.batch_kudo_notification(user.id, kudos_json)).to be_truthy
+        end
+      end
+
+      context "and the user has the default locale set" do
+        before { user.preference.update!(preferred_locale: Locale.default.id) }
+
+        it "sends an English email" do
+          expect(I18n).to receive(:with_locale).with("en")
+          expect(KudoMailer.batch_kudo_notification(user.id, kudos_json)).to be_truthy
+        end
+      end
+    end
+  end
 end
