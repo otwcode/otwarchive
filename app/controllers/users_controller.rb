@@ -35,7 +35,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    @page_title = ts("Edit Profile")
+    @page_title = ts("Edit Profile | #{ArchiveConfig.APP_NAME}") 
     authorize @user.profile if logged_in_as_admin?
   end
 
@@ -127,11 +127,9 @@ class UsersController < ApplicationController
   end
 
   def update
-
     authorize @user.profile if logged_in_as_admin?
     if @user.profile.update(profile_params)
       if logged_in_as_admin? && @user.profile.ticket_url.present?
-
         link = view_context.link_to("Ticket ##{@user.profile.ticket_number}", @user.profile.ticket_url)
         AdminActivity.log_action(current_admin, @user, action: "edit profile", summary: link)
       end
