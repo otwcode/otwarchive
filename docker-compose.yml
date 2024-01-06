@@ -30,7 +30,7 @@ services:
   db:
     image: mariadb:10.5.4-focal 
     environment:
-      - MYSQL_ROOT_PASSWORD="Password1!"
+      - MYSQL_ROOT_PASSWORD=change_me
     ports:
       - "3306:3306"
     command:

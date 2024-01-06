@@ -4,7 +4,7 @@ defaults: &defaults
   collation: utf8mb4_unicode_ci
   host: db
   username: root
-  password: "Password1!"
+  password: change_me
 
 development:
   database: otwarchive_development
