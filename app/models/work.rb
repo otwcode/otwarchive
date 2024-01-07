@@ -380,7 +380,7 @@ class Work < ApplicationRecord
     url = UrlFormatter.new(url)
     Work.where(imported_from_url: url.original).first ||
       Work.where(imported_from_url: [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
-      Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
+      Work.where("imported_from_url LIKE ?", "#{url.minimal_no_http}%").select { |w|
         work_url = UrlFormatter.new(w.imported_from_url)
         ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
           work_url.send(method) == url.send(method)
