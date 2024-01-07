@@ -27,8 +27,8 @@ class UrlFormatter
     end
   end
 
-  def minimal_no_http
-    minimal.gsub(/https?:\/\/www\./, "")
+  def minimal_no_protocol_no_www
+    minimal.gsub(/https?:\/\/(www\.)?/, "")
   end
   
   def no_www
@@ -38,7 +38,15 @@ class UrlFormatter
   def with_www
     minimal.gsub(/http:\/\//, "http://www.")
   end
-  
+
+  def with_http
+    minimal.gsub(/https:\/\//, "http://")
+  end
+
+  def with_https
+    minimal.gsub(/http:\/\//, "https://")
+  end
+
   def encoded
     minimal URI::Parser.new.escape(url)
   end
@@ -55,5 +63,5 @@ class UrlFormatter
     clean_url.host = clean_url.host.downcase
     clean_url.to_s
   end
-  
+
 end

@@ -10,13 +10,32 @@ describe UrlFormatter do
   end
 
   describe '#minimal' do
-    it "should remove anchors and query parameters from url" do
+    it "should remove anchors and query parameters from url containing no 'www'" do
       url = "http://ao3.org?evil=false#monkeys"
       expect(UrlFormatter.new(url).minimal).to eq("http://ao3.org")
     end
     it "should remove all parameters except \"sid\" for eFiction sites" do
       url = "http://eFiction.com/viewstory.php?param=foo&sid=123#comments"
       expect(UrlFormatter.new(url).minimal).to eq("http://eFiction.com/viewstory.php?sid=123")
+    end
+  end
+
+  describe 'minimal_no_protocol_no_www' do
+    it "should handle http url containing 'www'" do
+      url = "http://www.ao3.org?evil=false#monkeys"
+      expect(UrlFormatter.new(url).minimal_no_protocol_no_www).to eq("ao3.org")
+    end
+    it "should handle http url NOT containing 'www'" do
+      url = "http://ao3.org?evil=false#monkeys"
+      expect(UrlFormatter.new(url).minimal_no_protocol_no_www).to eq("ao3.org")
+    end
+    it "should handle httpS url containing 'www'" do
+      url = "https://ao3.org?evil=false#monkeys"
+      expect(UrlFormatter.new(url).minimal_no_protocol_no_www).to eq("ao3.org")
+    end
+    it "should handle httpS url NOT containing 'www'" do
+      url = "https://ao3.org?evil=false#monkeys"
+      expect(UrlFormatter.new(url).minimal_no_protocol_no_www).to eq("ao3.org")
     end
   end
 
@@ -39,6 +58,28 @@ describe UrlFormatter do
     it "should add www to the url and remove query parameters and anchors" do
       url = "http://ao3.org?evil=false#monkeys"
       expect(UrlFormatter.new(url).with_www).to eq("http://www.ao3.org")
+    end
+  end
+
+  describe '#with_http' do
+    it "should add http:// to the url" do
+      url = "ao3.org"
+      expect(UrlFormatter.new(url).with_http).to eq("http://ao3.org")
+    end
+    it "should switch https to http and remove query parameters and anchors" do
+      url = "https://ao3.org?evil=false#monkeys"
+      expect(UrlFormatter.new(url).with_http).to eq("http://ao3.org")
+    end
+  end
+
+  describe '#with_https' do
+    it "should add https:// to the url" do
+      url = "ao3.org"
+      expect(UrlFormatter.new(url).with_https).to eq("https://ao3.org")
+    end
+    it "should switch http to https and remove query parameters and anchors" do
+      url = "http://ao3.org?evil=false#monkeys"
+      expect(UrlFormatter.new(url).with_https).to eq("https://ao3.org")
     end
   end
 
