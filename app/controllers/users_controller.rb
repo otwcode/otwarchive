@@ -35,7 +35,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    @page_title = ts("Edit Profile | #{ArchiveConfig.APP_NAME}") 
+    @page_subtitle = t(".browser_title") 
     authorize @user.profile if logged_in_as_admin?
   end
 
