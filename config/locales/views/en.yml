@@ -714,8 +714,6 @@ en:
         description: Recalculate the filters for this work based on the current set of tags. Use this option if wrangling seems to have gone wrong. (e.g. If you synned one of this work's tags to a canonical but it's not showing up in the tag listings, or if the wrong tags are listed in the sidebar when you drill down to a search that includes only this work.)
         title: Update Work Filters
   users:
-    edit:
-      browser_title: Edit Profile
     change_username:
       account_faq: Account FAQ
       caution: Please use this feature with caution.
@@ -756,6 +754,8 @@ en:
         options_info: You can delete them, but please consider %{orphaning_link} them instead!
         works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
+    edit:
+      browser_title: Edit Profile
     registrations:
       new:
         cancel: Cancel
