@@ -3,7 +3,7 @@ class CommentMailer < ApplicationMailer
   def comment_notification(user, comment)
     @comment = comment
     @owner = user
-    I18n.with_locale(user.preference.locale_for_emails) do
+    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
@@ -14,7 +14,7 @@ class CommentMailer < ApplicationMailer
   # Sends email to an owner of the top-level commentable when a comment is edited
   def edited_comment_notification(user, comment)
     @comment = comment
-    I18n.with_locale(user.preference.locale_for_emails) do
+    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
       mail(
         to: user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")

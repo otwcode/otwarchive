@@ -30,9 +30,7 @@ class Preference < ApplicationRecord
     errors.add(:base, "You don't have permission to use that skin!")
   end
 
-  def locale_for_emails
-    return Locale.find(preferred_locale).iso if $rollout.active?(:set_locale_preference, user)
-
-    Locale.default.iso
+  def preferred_locale
+    $rollout.active?(:set_locale_preference, user) ? super : Locale.default.id
   end
 end
