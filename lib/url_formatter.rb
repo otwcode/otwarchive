@@ -32,19 +32,19 @@ class UrlFormatter
   end
   
   def no_www
-    minimal.gsub(/http:\/\/www\./, "http://")
+    minimal.gsub(/(https?):\/\/www\./, "\1://")
   end
   
   def with_www
-    minimal.gsub(/http:\/\//, "http://www.")
+    minimal.gsub(/(https?):\/\//, "\1://www.")
   end
 
   def with_http
-    minimal.gsub(/https:\/\//, "").prepend("http://")
+    minimal.gsub(/(https?):\/\//, "").prepend("http://")
   end
 
   def with_https
-    minimal.gsub(/http:\/\//, "").prepend("https://")
+    minimal.gsub(/(https?):\/\//, "").prepend("https://")
   end
 
   def encoded
