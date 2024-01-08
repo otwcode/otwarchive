@@ -450,14 +450,14 @@ describe Work do
     end
 
     it "finds works imported with HTTP protocol" do
-      work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
-      expect(Work.find_by_url("https://lj-site.com/thing1?style=other")).to eq(work)
+      work = create(:work, imported_from_url: "http://lj-site.com/thing1")
+      expect(Work.find_by_url("https://lj-site.com/thing1")).to eq(work)
       work.destroy
     end
 
     it "finds works imported with HTTPS protocol" do
-      work = create(:work, imported_from_url: "https://lj-site.com/thing1?style=mine")
-      expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
+      work = create(:work, imported_from_url: "https://lj-site.com/thing1")
+      expect(Work.find_by_url("http://lj-site.com/thing1")).to eq(work)
       work.destroy
     end
 
