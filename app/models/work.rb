@@ -378,7 +378,6 @@ class Work < ApplicationRecord
 
   def self.find_by_url_uncached(url)
     url = UrlFormatter.new(url)
-    url_variants =
     Work.where(imported_from_url: url.original).first ||
       Work.where(imported_from_url: [url.minimal,
                                      url.with_http, url.with_https,
