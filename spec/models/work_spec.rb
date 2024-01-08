@@ -421,7 +421,9 @@ describe Work do
         'http://foo.com/bar.html',
         'http://foo.com/bar',
         'http://lj-site.com/bar/foo?color=blue',
-        'http://www.foo.com/bar'
+        'https://www.lj-site.com/bar/foo?color=blue',
+        'http://www.foo.com/bar',
+        'https://www.foo.com/bar',
       ].each do |url|
         work = create(:work, imported_from_url: url)
         expect(Work.find_by_url(url)).to eq(work)
@@ -443,6 +445,18 @@ describe Work do
 
     it "should find works imported with irrelevant query parameters" do
       work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
+      expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
+      work.destroy
+    end
+
+    it "finds works imported with HTTP protocol" do
+      work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
+      expect(Work.find_by_url("https://lj-site.com/thing1?style=other")).to eq(work)
+      work.destroy
+    end
+
+    it "finds works imported with HTTPS protocol" do
+      work = create(:work, imported_from_url: "https://lj-site.com/thing1?style=mine")
       expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
       work.destroy
     end
