@@ -386,7 +386,7 @@ class Work < ApplicationRecord
                                      url.minimal_no_protocol_no_www]).first ||
       Work.where("imported_from_url REGEXP ?", "https?:\/\/#{url.minimal_no_protocol_no_www}\?.*?").select { |w|
         work_url = UrlFormatter.new(w.imported_from_url)
-        ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
+        ['original', 'minimal', 'no_www', 'with_www', 'with_http', 'with_https', 'encoded', 'decoded'].any? { |method|
           work_url.send(method) == url.send(method)
         }
       }.first
