@@ -19,10 +19,9 @@ class Invitation < ApplicationRecord
   scope :unsent, -> { where(invitee_email: nil, redeemed_at: nil) }
   scope :unredeemed, -> { where('invitee_email IS NOT NULL and redeemed_at IS NULL') }
   scope :redeemed, -> { where('redeemed_at IS NOT NULL') }
-  scope :from_queue, -> { where(external_author: nil).where(creator_type: [nil, "Admin"]) }
 
   before_validation :generate_token, on: :create
-  after_save :send_and_set_date, if: :saved_change_to_invitee_email?
+  after_save :send_and_set_date
   after_save :adjust_user_invite_status
 
   #Create a certain number of invitations for all valid users
@@ -55,34 +54,30 @@ class Invitation < ApplicationRecord
     save
   end
 
-  def send_and_set_date(resend: false)
-    return if invitee_email.blank?
-
-    if self.external_author
-      archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
-      # send invite synchronously for now -- this should now work delayed but just to be safe
-      UserMailer.invitation_to_claim(self.id, archivist).deliver_now
-    else
-      # send invitations actively sent by a user synchronously to avoid delays
-      UserMailer.invitation(self.id).deliver_now
-    end
-
-    date_column = resend ? :resent_at : :sent_at
-    # Skip callbacks within after_save by using update_column to avoid a callback loop
-    self.update_column(date_column, Time.current)
-  rescue StandardError => e
-    errors.add(:base, :notification_could_not_be_sent, error: e.message)
-  end
-
-  def can_resend?
-    checked_date = self.resent_at || self.sent_at
-    checked_date < ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION.hours.ago
-  end
-
   private
 
   def generate_token
-    self.token = Digest::SHA1.hexdigest([Time.current, rand].join)
+    self.token = Digest::SHA1.hexdigest([Time.now, rand].join)
+  end
+
+  def send_and_set_date
+    if self.saved_change_to_invitee_email? && !self.invitee_email.blank?
+      begin
+        if self.external_author
+          archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
+          # send invite synchronously for now -- this should now work delayed but just to be safe
+          UserMailer.invitation_to_claim(self.id, archivist).deliver_now
+        else
+          # send invitations actively sent by a user synchronously to avoid delays
+          UserMailer.invitation(self.id).deliver_now
+        end
+
+        # Skip callbacks within after_save by using update_column to avoid a callback loop
+        self.update_column(:sent_at, Time.now)
+      rescue Exception => exception
+        errors.add(:base, "Notification email could not be sent: #{exception.message}")
+      end
+    end
   end
 
   #Update the user's out_of_invites status
