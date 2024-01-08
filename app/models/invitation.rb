@@ -67,22 +67,15 @@ class Invitation < ApplicationRecord
       UserMailer.invitation(self.id).deliver_now
     end
 
+    date_column = resend ? :resent_at : :sent_at
     # Skip callbacks within after_save by using update_column to avoid a callback loop
-    if resend
-      attrs = { resent_at: Time.current }
-      # This applies to old invites when AO3-6094 wasn't fixed.
-      attrs[:sent_at] = self.created_at if self.sent_at.nil?
-      self.update_columns(attrs)
-    else
-      self.update_column(:sent_at, Time.current)
-    end
+    self.update_column(date_column, Time.current)
   rescue StandardError => e
     errors.add(:base, :notification_could_not_be_sent, error: e.message)
   end
 
   def can_resend?
-    # created_at fallback is a vestige of the already fixed AO3-6094.
-    checked_date = self.resent_at || self.sent_at || self.created_at
+    checked_date = self.resent_at || self.sent_at
     checked_date < ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION.hours.ago
   end
 

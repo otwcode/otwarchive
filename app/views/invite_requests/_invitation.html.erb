@@ -8,7 +8,7 @@
 <p>
   <% status = invitation.resent_at ? "resent" : "not_resent" %>
   <%= t(".info.#{status}",
-        sent_at: l((invitation.sent_at || invitation.created_at).to_date),
+        sent_at: l(invitation.sent_at.to_date),
         resent_at: invitation.resent_at ? l(invitation.resent_at.to_date) : nil) %>
 </p>
 
