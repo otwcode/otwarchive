@@ -5,18 +5,14 @@
 <!--/descriptions-->
 
 <!--main content-->
+<% status = invitation.resent_at ? "resent" : "not_resent" %>
 <p>
-  <% status = invitation.resent_at ? "resent" : "not_resent" %>
   <%= t(".info.#{status}",
         sent_at: l(invitation.sent_at.to_date),
         resent_at: invitation.resent_at ? l(invitation.resent_at.to_date) : nil) %>
-</p>
-
-<p>
   <% if invitation.can_resend? %>
   <%# i18n-tasks-use t("invite_requests.invitation.after_cooldown_period.not_resent")
-      i18n-tasks-use t("invite_requests.invitation.after_cooldown_period.resent_html")-%>
-    <% status = invitation.resent_at ? "resent_html" : "not_resent" %>
+      i18n-tasks-use t("invite_requests.invitation.after_cooldown_period.resent")-%>
     <%= t(".after_cooldown_period.#{status}",
           count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION,
           contact_support_link: link_to(t(".contact_support"), new_feedback_report_path)) %>
@@ -25,4 +21,15 @@
     <%= t(".before_cooldown_period", count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION) %>
   <% end %>
 </p>
+
+<%# Correct heading size for JavaScript display %>
+<%= content_for :footer_js do %>
+  <script>
+    $j(document).ready(function(){
+      $j('#invite-heading').replaceWith(function () {
+        return "<h3>" + $j(this).html() + "</h3>";
+      });
+    })
+  </script>
+<% end %>
 <!--/content-->

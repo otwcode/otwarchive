@@ -2,13 +2,6 @@
   $j("#invite-status").html("<%= escape_javascript(render "invite_requests/invite_request", invite_request: @invite_request) %>");
 <% elsif @invitation %>
   $j("#invite-status").html("<%= escape_javascript(render "invitation", invitation: @invitation) %>");
-
-  <%# Correct heading size for JavaScript display %>
-  $j(document).ready(function(){
-    $j('#invite-heading').replaceWith(function () {
-      return '<h3 class="heading">' + $j(this).html() + "</h3>";
-    });
-  })
 <% else %>
   $j("#invite-status").html("<%= escape_javascript(render "no_invitation") %>");
 <% end %>
