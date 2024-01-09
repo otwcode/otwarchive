@@ -528,6 +528,15 @@ en:
       more_link:
         one: "%{count} more user"
         other: "%{count} more users"
+  languages:
+    index:
+      add: Add a language
+      description: The Archive supports these languages
+      edit: Edit
+      suggest: Suggest a language
+      works_count:
+        one: '%{count} work'
+        other: '%{count} works'
   layouts:
     header:
       login: Log In

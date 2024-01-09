@@ -2,6 +2,7 @@ class LanguagesController < ApplicationController
 
   def index
     @languages = Language.default_order
+    @works_counts = WorkQuery.new.works_per_language(@languages.count)
   end
 
   def new
