@@ -417,14 +417,11 @@ describe Work do
 
   describe "#find_by_url" do
     it "should find imported works with various URL formats" do
-      [
-        'http://foo.com/bar.html',
-        'http://foo.com/bar',
-        'http://lj-site.com/bar/foo?color=blue',
-        'https://www.lj-site.com/bar/foo?color=blue',
-        'http://www.foo.com/bar',
-        'https://www.foo.com/bar',
-      ].each do |url|
+      %w[http://foo.com/bar.html
+         http://foo.com/bar
+         http://lj-site.com/bar/foo?color=blue
+         https://www.lj-site.com/bar/foo?color=blue
+         http://www.foo.com/bar https://www.foo.com/bar].each do |url|
         work = create(:work, imported_from_url: url)
         expect(Work.find_by_url(url)).to eq(work)
         work.destroy
@@ -433,9 +430,9 @@ describe Work do
 
     it "should not mix up imported works with similar URLs or significant query parameters" do
       {
-        'http://foo.com/12345' => 'http://foo.com/123',
-        'http://efiction-site.com/viewstory.php?sid=123' => 'http://efiction-site.com/viewstory.php?sid=456',
-        'http://www.foo.com/i-am-something' => 'http://foo.com/i-am-something/else'
+        "http://foo.com/12345" => "http://foo.com/123",
+        "http://efiction-site.com/viewstory.php?sid=123" => "http://efiction-site.com/viewstory.php?sid=456",
+        "http://www.foo.com/i-am-something" => "http://foo.com/i-am-something/else"
       }.each do |import_url, find_url|
         work = create(:work, imported_from_url: import_url)
         expect(Work.find_by_url(find_url)).to_not eq(work)
