@@ -55,14 +55,14 @@ class UrlFormatter
     URI::Parser.new.unescape(minimal)
   end
   
-  # Adds http if not present and downcases the host
+  # Adds http if not present, downcases the host and hyphenates spaces
   # Extracted from story parser class
+  # Returns a Generic::URI
   def standardized
-    clean_url = URI.parse(url)
-    clean_url = URI.parse('http://' + url) if clean_url.class.name == "URI::Generic"
-    clean_url.host.downcase!
-    clean_url.host.tr!(" ", "-")
-    clean_url.to_s
+    uri = URI.parse(url)
+    uri = URI.parse('http://' + url) if uri.class.name == "URI::Generic"
+    uri.host = uri.host.downcase.tr(" ", "-")
+    uri
   end
 
 end
