@@ -531,7 +531,7 @@ en:
   languages:
     index:
       add: Add a language
-      description: The Archive supports these languages
+      description: Work Languages
       edit: Edit
       suggest: Suggest a language
       works_count:
