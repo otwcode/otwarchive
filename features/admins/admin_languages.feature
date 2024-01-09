@@ -8,7 +8,7 @@ Scenario: An admin can add a language
   Given basic languages
     And I am logged in as a "translation" admin
   When I go to the languages page
-    And I follow "Add a language"
+    And I follow "Add a Language"
     And I fill in "Name" with "Klingon"
     And I fill in "Abbreviation" with "tlh"
     And I press "Create Language"
