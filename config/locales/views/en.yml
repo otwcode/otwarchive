@@ -535,8 +535,8 @@ en:
       edit: Edit
       suggest: Suggest a language
       works_count:
-        one: '%{count} work'
-        other: '%{count} works'
+        one: '%{formatted_count} work'
+        other: '%{formatted_count} works'
   layouts:
     header:
       login: Log In
