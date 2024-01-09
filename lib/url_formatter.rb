@@ -19,11 +19,11 @@ class UrlFormatter
     uri = Addressable::URI.parse(input)
     queries = CGI::parse(uri.query) unless uri.query.nil?
     if queries.nil?
-      input.gsub(%r{[?#].*$}, "")
+      input.gsub(/[?#].*$/, "")
     else
-      queries.keep_if { |k,_| ["sid"].include? k }
-      querystring = ("?" + URI.encode_www_form(queries)) unless queries.empty?
-      input.gsub(%r{[?#].*$}, '') << querystring.to_s
+      queries.keep_if { |k, _| ["sid"].include? k }
+      querystring = ("?#{URI.encode_www_form(queries)}") unless queries.empty?
+      input.gsub(/[?#].*$/, "") << querystring.to_s
     end
   end
 
