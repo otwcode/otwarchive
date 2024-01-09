@@ -15,7 +15,7 @@
 <!--main content-->
 <dl class="language index group">
   <% @languages.each do |language| %>
-    <% works_count = @works_counts[language.short] || 0 %>
+    <% works_count = estimate_number(@works_counts[language.short] || 0) %>
     <% if language == Language.default %>
       <dt><span lang="<%= language.short %>"><%= language.name %></span></dt>
       <dd>
