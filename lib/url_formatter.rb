@@ -28,23 +28,23 @@ class UrlFormatter
   end
 
   def minimal_no_protocol_no_www
-    minimal.gsub(%r{https?:\/\/(www\.)?}, "")
+    minimal.gsub(%r{https?://(www\.)?}, "")
   end
   
   def no_www
-    minimal.gsub(%r{(https?):\/\/www\.}, "\\1://")
+    minimal.gsub(%r{(https?)://www\.}, "\\1://")
   end
   
   def with_www
-    minimal.gsub(%r{(https?):\/\/}, "\\1://www.")
+    minimal.gsub(%r{(https?)://}, "\\1://www.")
   end
 
   def with_http
-    minimal.gsub(%r{https?:\/\/}, "").prepend("http://")
+    minimal.gsub(%r{https?://}, "").prepend("http://")
   end
 
   def with_https
-    minimal.gsub(%r{https?:\/\/}, "").prepend("https://")
+    minimal.gsub(%r{https?://}, "").prepend("https://")
   end
 
   def encoded
