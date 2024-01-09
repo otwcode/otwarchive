@@ -99,7 +99,7 @@ describe UrlFormatter do
 
   describe "#standardized" do
     it "should add http" do
-      expect(UrlFormatter.new('ao3.org').standardized.to_s).to eq("http://ao3.org")
+      expect(UrlFormatter.new("ao3.org").standardized.to_s).to eq("http://ao3.org")
     end
     it "should downcase the domain" do
       url = "http://YAYCAPS.COM/ILOVECAPS"

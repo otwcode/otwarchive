@@ -19,32 +19,32 @@ class UrlFormatter
     uri = Addressable::URI.parse(input)
     queries = CGI::parse(uri.query) unless uri.query.nil?
     if queries.nil?
-      input.gsub(%r/[?#].*$/, "")
+      input.gsub(%r{[?#].*$}, "")
     else
       queries.keep_if { |k,_| ["sid"].include? k }
       querystring = ("?" + URI.encode_www_form(queries)) unless queries.empty?
-      input.gsub(%r/[?#].*$/, '') << querystring.to_s
+      input.gsub(%r{[?#].*$}, '') << querystring.to_s
     end
   end
 
   def minimal_no_protocol_no_www
-    minimal.gsub(%r/https?:\/\/(www\.)?/, "")
+    minimal.gsub(%r{https?:\/\/(www\.)?}, "")
   end
   
   def no_www
-    minimal.gsub(%r/(https?):\/\/www\./, "\\1://")
+    minimal.gsub(%r{(https?):\/\/www\.}, "\\1://")
   end
   
   def with_www
-    minimal.gsub(%r/(https?):\/\//, "\\1://www.")
+    minimal.gsub(%r{(https?):\/\/}, "\\1://www.")
   end
 
   def with_http
-    minimal.gsub(%r/https?:\/\//, "").prepend("http://")
+    minimal.gsub(%r{https?:\/\/}, "").prepend("http://")
   end
 
   def with_https
-    minimal.gsub(%r/https?:\/\//, "").prepend("https://")
+    minimal.gsub(%r{https?:\/\/}, "").prepend("https://")
   end
 
   def encoded
@@ -60,7 +60,7 @@ class UrlFormatter
   # Returns a Generic::URI
   def standardized
     uri = URI.parse(url)
-    uri = URI.parse("http://" + url) if uri.instance_of?(URI::Generic)
+    uri = URI.parse("http://#{url}") if uri.instance_of?(URI::Generic)
     uri.host = uri.host.downcase.tr(" ", "-")
     uri
   end
