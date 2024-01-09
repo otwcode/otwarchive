@@ -13,7 +13,7 @@ Scenario: An admin can add a language
     And I fill in "Abbreviation" with "tlh"
     And I press "Create Language"
   Then I should see "Language was successfully added."
-    And I should see "The Archive supports these languages"
+    And I should see "Work Languages"
     And I should see "Klingon"
 
 Scenario: Adding Abuse support for a language
