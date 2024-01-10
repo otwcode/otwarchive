@@ -40,11 +40,11 @@ class UrlFormatter
   end
 
   def with_http
-    minimal.gsub(%r{^https?://}, "http://")
+    minimal.gsub(%r{^https?://}, "").prepend("http://")
   end
 
   def with_https
-    minimal.gsub(%r{^https?://}, "https://")
+    minimal.gsub(%r{^https?://}, "").prepend("https://")
   end
 
   def encoded
