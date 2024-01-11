@@ -40,21 +40,22 @@ namespace :Tag do
     deleted_names = []
     Tag.where(canonical: false, merger_id: nil, taggings_count_cache: 0).find_in_batches do |batch|
       batch.each do |t|
-        if t.taggings.count.zero? && t.child_taggings.count.zero? && t.set_taggings.count.zero?
+        next unless t.taggings.count.zero?
+        next unless t.child_taggings.count.zero?
+        next unless t.set_taggings.count.zero?
+        deleted_names << t.name
+        begin
           deleted_names << t.name
-          begin
-            deleted_names << t.name
-            t.destroy
-            print "+"
-          rescue ActiveRecord::LockWaitTimeout
-            sleep(10)
-            print("Retrying ",t.name)
-            retry
-          end
+          t.destroy
+          print "+"
+        rescue ActiveRecord::LockWaitTimeout
+          sleep(10)
+          print("Retrying ", t.name)
+          retry
         end
       end
     print "."
-  end
+    end
     unless deleted_names.blank?
       puts "The following #{deleted_names.length} unused tags were deleted:"
       puts deleted_names.join(", ")
