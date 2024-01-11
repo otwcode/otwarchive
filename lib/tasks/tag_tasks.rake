@@ -46,7 +46,6 @@ namespace :Tag do
 
         deleted_names << t.name
         begin
-          deleted_names << t.name
           t.destroy
           print "+"
         rescue ActiveRecord::LockWaitTimeout
