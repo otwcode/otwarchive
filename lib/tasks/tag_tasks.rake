@@ -43,6 +43,7 @@ namespace :Tag do
         next unless t.taggings.count.zero?
         next unless t.child_taggings.count.zero?
         next unless t.set_taggings.count.zero?
+
         deleted_names << t.name
         begin
           deleted_names << t.name
@@ -54,7 +55,7 @@ namespace :Tag do
           retry
         end
       end
-    print "."
+      print "."
     end
     unless deleted_names.blank?
       puts "The following #{deleted_names.length} unused tags were deleted:"
