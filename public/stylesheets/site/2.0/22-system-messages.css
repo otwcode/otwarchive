@@ -37,6 +37,7 @@ div.error {
   clear: right;
     box-shadow: inset 1px 1px 2px;
     border-radius: 0.25em;
+  word-wrap: break-word;
 }
 
 .caution {
@@ -49,7 +50,6 @@ div.error {
   background: #efd1d1;
   border-color: #900;
     box-shadow: 1px 1px 2px;
-    word-wrap: break-word;
 }
 
 .notes {
