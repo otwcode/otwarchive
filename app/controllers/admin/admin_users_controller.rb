@@ -133,7 +133,7 @@ class Admin::AdminUsersController < Admin::BaseController
     @works = @user.works.paginate(page: params[:works_page])
     @comments = @user.comments.paginate(page: params[:comments_page])
     @bookmarks = @user.bookmarks
-    @collections = @user.collections
+    @collections =  @user.collections.to_a.delete_if { |collection| !(collection.all_owners - @user.pseuds).empty? }
     @series = @user.series
   end
 
