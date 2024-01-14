@@ -1,6 +1,7 @@
 class Preference < ApplicationRecord
   belongs_to :user
   belongs_to :skin
+  belongs_to :locale, foreign_key: "preferred_locale"
 
   validates :work_title_format,
             format: {
@@ -30,7 +31,7 @@ class Preference < ApplicationRecord
     errors.add(:base, "You don't have permission to use that skin!")
   end
 
-  def preferred_locale
-    $rollout.active?(:set_locale_preference, user) ? super : Locale.default.id
+  def locale
+    $rollout.active?(:set_locale_preference, user) ? super : Locale.default
   end
 end

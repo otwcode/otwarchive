@@ -149,7 +149,7 @@ class Creatorship < ApplicationRecord
                   pseud.user != User.current_user &&
                   pseud.user != User.orphan_account
 
-    I18n.with_locale(Locale.find(pseud.user.preference.preferred_locale).iso) do
+    I18n.with_locale(pseud.user.preference.locale.iso) do
       if approved?
         if User.current_user.try(:is_archivist?)
           UserMailer.creatorship_notification_archivist(id, User.current_user.id).deliver_later

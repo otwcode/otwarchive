@@ -321,7 +321,7 @@ class User < ApplicationRecord
   def create_default_associateds
     self.pseuds << Pseud.new(name: self.login, is_default: true)
     self.profile = Profile.new
-    self.preference = Preference.new(preferred_locale: Locale.default.id)
+    self.preference = Preference.new(locale: Locale.default)
   end
 
   def prevent_password_resets?

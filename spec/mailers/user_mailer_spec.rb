@@ -1210,7 +1210,7 @@ describe UserMailer do
       before { $rollout.activate_user(:set_locale_preference, user) }
 
       context "and the user has non-default locale set" do
-        before { user.preference.update!(preferred_locale: locale.id) }
+        before { user.preference.update!(locale: locale) }
 
         it "sends a localised email" do
           expect(I18n).to receive(:with_locale).with(locale.iso)
@@ -1219,7 +1219,7 @@ describe UserMailer do
       end
 
       context "and the user has the default locale set" do
-        before { user.preference.update!(preferred_locale: Locale.default.id) }
+        before { user.preference.update!(locale: Locale.default) }
 
         it "sends an English email" do
           expect(I18n).to receive(:with_locale).with("en")
@@ -1232,7 +1232,7 @@ describe UserMailer do
       before { $rollout.deactivate_user(:set_locale_preference, user) }
 
       context "and the user has non-default locale set" do
-        before { user.preference.update!(preferred_locale: locale.id) }
+        before { user.preference.update!(locale: locale) }
 
         it "sends an English email" do
           expect(I18n).to receive(:with_locale).with("en")
@@ -1241,7 +1241,7 @@ describe UserMailer do
       end
 
       context "and the user has the default locale set" do
-        before { user.preference.update!(preferred_locale: Locale.default.id) }
+        before { user.preference.update!(locale: Locale.default) }
 
         it "sends an English email" do
           expect(I18n).to receive(:with_locale).with("en")
