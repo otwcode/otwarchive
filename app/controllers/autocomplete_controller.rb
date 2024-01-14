@@ -91,10 +91,14 @@ class AutocompleteController < ApplicationController
   def noncanonical_tag
     search_param = params[:term]
     raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
-    tag_class = params[:type].classify.constantize
-    render_output(tag_class.by_popularity
-                      .where(["canonical = 0 AND name LIKE ?",
-                              '%' + search_param + '%']).limit(10).map(&:name))
+    begin
+      search_results = $elasticsearch.search(
+        index: "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_tags",
+        body: { query: { bool: { filter: [{ match: { tag_type: params[:type] } }, { match: { canonical: false } }], must: { prefix: { name: search_param } } } } })
+      render_output(search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] })
+    rescue Elasticsearch::Transport::Transport::Errors::BadRequest
+      render_output([])
+    end
   end
 
 
