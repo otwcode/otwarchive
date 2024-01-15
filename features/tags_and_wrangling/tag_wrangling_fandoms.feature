@@ -65,6 +65,7 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "TV Shows"
     And I should see "SG1"
     And the "Canonical" checkbox should be disabled
+    And all indexing jobs have been run
   When I enter "Stargate" in the "tag_merger_string_autocomplete" autocomplete field
   Then I should see "Stargates SG-1" in the autocomplete
     And I should see "the whole Stargate franchise" in the autocomplete
