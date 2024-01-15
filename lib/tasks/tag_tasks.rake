@@ -57,7 +57,7 @@ namespace :Tag do
       print "."
     end
     unless deleted_names.blank?
-      puts "The following #{deleted_names.length} unused tags were deleted:"
+      puts "The following unused tags were deleted:"
       puts deleted_names.join(", ")
       puts "Started #{start}"
       puts "Ended #{Time.current}"
