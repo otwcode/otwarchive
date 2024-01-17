@@ -1,7 +1,5 @@
 class AutocompleteController < ApplicationController
   respond_to :json
-  
-  include SearchUtils
 
   skip_before_action :store_location
   skip_before_action :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
@@ -91,7 +89,7 @@ class AutocompleteController < ApplicationController
 
   ## NONCANONICAL TAGS
   def noncanonical_tag
-    search_param = escape_reserved_characters(params[:term])
+    search_param = params[:term]
     raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
     begin
       # Size is chosen so we get enough search results from each shard.
