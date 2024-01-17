@@ -379,13 +379,19 @@ class Work < ApplicationRecord
   def self.find_by_url_uncached(url)
     url = UrlFormatter.new(url)
     Work.where(imported_from_url: url.original).first ||
-      Work.where(imported_from_url: [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
-      Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
+      Work.where(imported_from_url: [url.minimal,
+                                     url.with_http, url.with_https,
+                                     url.no_www, url.with_www,
+                                     url.encoded, url.decoded,
+                                     url.minimal_no_protocol_no_www]).first ||
+      Work.where("imported_from_url LIKE ? or imported_from_url LIKE ?",
+                 "http://#{url.minimal_no_protocol_no_www}%",
+                 "https://#{url.minimal_no_protocol_no_www}%").select do |w|
         work_url = UrlFormatter.new(w.imported_from_url)
-        ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
+        %w[original minimal no_www with_www with_http with_https encoded decoded].any? do |method|
           work_url.send(method) == url.send(method)
-        }
-      }.first
+        end
+      end.first
   end
 
   def self.find_by_url(url)
