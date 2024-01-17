@@ -1,5 +1,7 @@
 class Query
 
+  include SearchUtils
+
   attr_reader :options
 
   # Options: page, per_page
@@ -202,26 +204,6 @@ class Query
 
   def pagination_offset
     (page * per_page) - per_page
-  end
-
-  # Only escape if it isn't already escaped
-  def escape_slashes(word)
-    word.gsub(/([^\\])\//) { |s| $1 + '\\/' }
-  end
-
-  def escape_reserved_characters(word)
-    word = escape_slashes(word)
-    word.gsub!('!', '\\!')
-    word.gsub!('+', '\\\\+')
-    word.gsub!('-', '\\-')
-    word.gsub!('?', '\\?')
-    word.gsub!("~", '\\~')
-    word.gsub!("(", '\\(')
-    word.gsub!(")", '\\)')
-    word.gsub!("[", '\\[')
-    word.gsub!("]", '\\]')
-    word.gsub!(':', '\\:')
-    word
   end
 
   def split_query_text_phrases(fieldname, text)
