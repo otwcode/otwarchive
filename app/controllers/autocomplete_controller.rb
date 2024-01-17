@@ -91,17 +91,18 @@ class AutocompleteController < ApplicationController
   def noncanonical_tag
     search_param = params[:term]
     raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
+
     begin
       # Size is chosen so we get enough search results from each shard.
       search_results = $elasticsearch.search(
         index: "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_tags",
-        body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: { prefix: { name: search_param } } } } })
+        body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: { prefix: { name: search_param } } } } }
+      )
       render_output(search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] })
     rescue Elasticsearch::Transport::Transport::Errors::BadRequest
       render_output([])
     end
   end
-
 
   # more-specific autocompletes should be added below here when they can't be avoided
 
