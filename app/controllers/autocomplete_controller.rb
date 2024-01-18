@@ -91,12 +91,20 @@ class AutocompleteController < ApplicationController
   def noncanonical_tag
     search_param = params[:term]
     raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
-
+    tag_class = params[:type].classify.constantize
+    one_tag=tag_class.where(canonical: false, name: search_param).limit(2)
+    # Is there a tag which is just right ( this is really for testing )
+    if one_tag.count == 1
+       return render_output([one_tag.first.name])
+    end
+    word_list = search_param.split(" ")
+    last_word = word_list.pop
+    search_list = word_list.map{|w| {term: {name:{value: w,case_insensitive: true} } } } + [ { prefix: { name: { value: last_word, case_insensitive: true } } } ]
     begin
       # Size is chosen so we get enough search results from each shard.
       search_results = $elasticsearch.search(
         index: "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_tags",
-        body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: { prefix: { name: search_param } } } } }
+        body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: search_list } } }
       )
       render_output(search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] })
     rescue Elasticsearch::Transport::Transport::Errors::BadRequest
