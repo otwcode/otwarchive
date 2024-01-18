@@ -97,7 +97,7 @@ class AutocompleteController < ApplicationController
     # Is there a tag which is just right ( this is really for testing )
     return render_output([one_tag.first.name]) if one_tag.count == 1
 
-    word_list = search_param.split(" ")
+    word_list = search_param.split()
     last_word = word_list.pop
     search_list = word_list.map { |w| { term: { name: { value: w, case_insensitive: true } } } } + [{ prefix: { name: { value: last_word, case_insensitive: true } } }]
     begin
