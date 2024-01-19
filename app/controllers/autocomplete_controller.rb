@@ -93,9 +93,10 @@ class AutocompleteController < ApplicationController
     raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
 
     tag_class = params[:type].classify.constantize
-    one_tag = tag_class.where(canonical: false, name: search_param).limit(2)
+    one_tag = tag_class.where(canonical: false, name: search_param)
     # Is there a tag which is just right ( this is really for testing )
-    return render_output([one_tag.first.name]) if one_tag.count == 1
+    match = []
+    match = [one_tag.first.name] if one_tag.count == 1
 
     word_list = search_param.split
     last_word = word_list.pop
@@ -106,14 +107,13 @@ class AutocompleteController < ApplicationController
         index: "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_tags",
         body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: search_list } } }
       )
-      render_output(search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] })
+      render_output(match + search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] })
     rescue Elasticsearch::Transport::Transport::Errors::BadRequest
-      render_output([])
+      render_output(match)
     end
   end
 
   # more-specific autocompletes should be added below here when they can't be avoided
-
 
   # look up collections ranked by number of items they contain
 
