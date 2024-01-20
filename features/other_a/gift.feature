@@ -359,4 +359,4 @@ Feature: Create Gifts
       And I edit the work "Collateral"
       And I give the work to "giftee1"
     When I press "Post"
-    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
+    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from gifter2."
