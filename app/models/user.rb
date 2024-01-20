@@ -470,6 +470,11 @@ class User < ApplicationRecord
     return @coauthored_works
   end
 
+  # checks that only collections a user has created are deleted.
+  def sole_owned_collections
+    self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
+  end
+
   ### BETA INVITATIONS ###
 
   #If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
@@ -577,10 +582,6 @@ class User < ApplicationRecord
 
   def remove_stale_from_autocomplete
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
-  end
-
-  def sole_owned_collections
-    self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
   end
 
   def username_is_not_recently_changed
