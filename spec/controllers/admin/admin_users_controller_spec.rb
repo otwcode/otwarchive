@@ -440,7 +440,15 @@ describe Admin::AdminUsersController do
   describe "POST #destroy_user_creations" do
     let(:admin) { create(:admin) }
     let(:user) { create(:user, banned: true) }
+    let!(:collection) { create(:collection) }  # Assuming you have a Collection model
 
+    before do
+      # Create the first user and make them an owner of the collection
+      create(:collection_participant, user: user, collection: collection, participant_role: CollectionParticipant::OWNER)
+      # Create the second user and make them an owner of the collection
+      create(:collection_participant, user: other_owner, collection: collection, participant_role: CollectionParticipant::OWNER)
+    end
+  
     context "when admin does not have correct authorization" do
       it "redirects with error" do
         admin.update(roles: [])
@@ -463,14 +471,19 @@ describe Admin::AdminUsersController do
         end
       end
 
-      context "when user is banned" do
-        it "allows admins to destroy user creations" do
+      context "when deleting the first user" do
+        it "deletes the first user's collection but preserves the second user's collection" do
           admin.update(roles: ["policy_and_abuse"])
           fake_login_admin(admin)
-          user.update(banned: true)
           post :confirm_delete_user_creations, params: { id: user.login }
-
+    
           expect(response).to have_http_status(:success)
+    
+          # Check that the first user's collection is deleted
+          expect(Collection.where(id: collection.id)).to be_empty
+    
+          # Check that the second user's collection still exists
+          expect(Collection.where(id: other_owner.collections.first.id)).to be_present
         end
       end
     end
