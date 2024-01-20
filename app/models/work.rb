@@ -209,7 +209,6 @@ class Work < ApplicationRecord
             gifter: User.current_user == pseud.user ? ts("you") : pseud.byline
           )
         )
-        break
       end
     end
   end
