@@ -198,7 +198,7 @@ class Work < ApplicationRecord
       blocked_users = gift.pseud&.user&.blocked_users || []
       next if blocked_users.empty?
 
-      self.errors.add(:base, ts("%{byline} does not accept gifts from you.", byline: gift.pseud.byline)) if current_user_pseuds&.any? { |pseud| blocked_users.include?(pseud.user) }
+      self.errors.add(:base, ts("%{byline} does not accept gifts from you.", byline: gift.pseud.byline)) if pseuds_after_saving.any? { |pseud| blocked_users.include?(pseud.user) }
     end
   end
 

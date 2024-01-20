@@ -344,3 +344,19 @@ Feature: Create Gifts
       And I post the work "Rude Gift" as a gift for "giftee1"
     Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
       And 0 emails should be delivered to "giftee1@example.com"
+
+  Scenario: Can't gift an existing work to a user who has blocked you
+    Given the user "giftee1" has blocked the user "gifter"
+      And I press "Post"
+      And I follow "Edit"
+      And I give the work to "giftee1"
+    When I press "Post"
+    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
+
+  Scenario: Can't gift a work whose co-creator is blocked by recipient
+    Given I coauthored the work "Collateral" as "gifter" with "gifter2"
+      And the user "giftee1" has blocked the user "gifter2"
+      And I edit the work "Collateral"
+      And I give the work to "giftee1"
+    When I press "Post"
+    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
