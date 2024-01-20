@@ -580,7 +580,7 @@ class User < ApplicationRecord
   end
 
   def sole_owned_collections
-    collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
+    self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
   end
 
   def username_is_not_recently_changed
