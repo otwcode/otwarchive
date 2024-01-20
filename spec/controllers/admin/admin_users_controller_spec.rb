@@ -440,7 +440,7 @@ describe Admin::AdminUsersController do
   describe "POST #destroy_user_creations" do
     let(:admin) { create(:admin) }
     let(:user) { create(:user, banned: true) }
-    let!(:collection) { create(:collection) }  # Assuming you have a Collection model
+    let!(:collection) { create(:collection) }
 
     before do
       # Create the first user and make them an owner of the collection
@@ -476,12 +476,9 @@ describe Admin::AdminUsersController do
           admin.update(roles: ["policy_and_abuse"])
           fake_login_admin(admin)
           post :confirm_delete_user_creations, params: { id: user.login }
-    
           expect(response).to have_http_status(:success)
-    
           # Check that the first user's collection is deleted
           expect(Collection.where(id: collection.id)).to be_empty
-    
           # Check that the second user's collection still exists
           expect(Collection.where(id: other_owner.collections.first.id)).to be_present
         end
