@@ -11,8 +11,8 @@
     <%= icon_display(pseud.user, pseud) %>
   </div>
 </div>
-<% unless pseud.description.blank? %>
+<% if pseud.description.present? %>
   <blockquote class="userstuff">
-    <%=raw sanitize_field(pseud, :description) %>
+    <%=raw strip_images(sanitize_field(pseud, :description)) %>
   </blockquote>
 <% end %>
