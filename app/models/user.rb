@@ -579,6 +579,10 @@ class User < ApplicationRecord
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 
+  def sole_owned_collections
+    collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
+  end
+
   def username_is_not_recently_changed
     change_interval_days = ArchiveConfig.USER_RENAME_LIMIT_DAYS
     return unless renamed_at && change_interval_days.days.ago <= renamed_at
