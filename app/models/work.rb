@@ -190,6 +190,18 @@ class Work < ApplicationRecord
     end
   end
 
+  validate :new_recipients_have_not_blocked_gift_giver
+  def new_recipients_have_not_blocked_gift_giver
+    return if self.new_gifts.blank?
+
+    self.new_gifts.each do |gift|
+      blocked_users = gift.pseud&.user&.blocked_users || []
+      next if blocked_users.empty?
+
+      self.errors.add(:base, ts("%{byline} does not accept gifts from you.", byline: gift.pseud.byline)) if current_user_pseuds&.any? { |pseud| blocked_users.include?(pseud.user) }
+    end
+  end
+
   enum comment_permissions: {
     enable_all: 0,
     disable_anon: 1,

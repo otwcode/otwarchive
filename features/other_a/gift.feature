@@ -337,3 +337,10 @@ Feature: Create Gifts
       And I should not see "by gifter for giftee1"
     When I view the work "Rude Gift"
     Then I should not see "For giftee1."
+
+  Scenario: Can't give a gift to a user who has blocked you
+    Given the user "giftee1" has blocked the user "gifter"
+    When I am logged in as "gifter"
+      And I post the work "Rude Gift" as a gift for "giftee1"
+    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
+      And 0 emails should be delivered to "giftee1@example.com"
