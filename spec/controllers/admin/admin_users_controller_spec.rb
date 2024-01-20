@@ -440,6 +440,7 @@ describe Admin::AdminUsersController do
   describe "POST #destroy_user_creations" do
     let(:admin) { create(:admin) }
     let(:user) { create(:user, banned: true) }
+    let(:other_owner) { create(:user, banned: false) }
     let!(:collection) { create(:collection) }
 
     before do
