@@ -139,7 +139,7 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def destroy_user_creations
     authorize @user
-    creations = @user.works + @user.bookmarks + @user.collections + @user.comments
+    creations = @user.works + @user.bookmarks + @user.collections.to_a.delete_if { |collection| !(collection.all_owners - @user.pseuds).empty? } + @user.comments
     creations.each do |creation|
       AdminActivity.log_action(current_admin, creation, action: "destroy spam", summary: creation.inspect)
       creation.mark_as_spam! if creation.respond_to?(:mark_as_spam!)
