@@ -476,12 +476,13 @@ describe Admin::AdminUsersController do
         it "deletes the first user's collection but preserves the second user's collection" do
           admin.update(roles: ["policy_and_abuse"])
           fake_login_admin(admin)
-          post :confirm_delete_user_creations, params: { id: user.login }
-          expect(response).to have_http_status(:success)
+          expect { post :confirm_delete_user_creations, params: { id: user.login } }.to change(Collection, :count).by(-1)
+
           # Check that the first user's collection is deleted
-          expect(Collection.where(id: collection.id)).to be_empty
+          expect(Collection.exists?(collection.id)).to be_falsey
+
           # Check that the second user's collection still exists
-          expect(Collection.where(id: other_owner.collections.first.id)).to be_present
+          expect(Collection.exists?(other_owner.collections.first.id)).to be_truthy
         end
       end
     end
