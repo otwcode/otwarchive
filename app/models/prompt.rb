@@ -120,10 +120,15 @@ class Prompt < ApplicationRecord
       TagSet::TAG_TYPES.each do |tag_type|
         # if we have a specified set of tags of this type, make sure that all the
         # tags in the prompt are in the set.
-        if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom")
-          # skip the check, these will be tested in restricted_tags below
-        elsif restriction.has_tags?(tag_type)
-          disallowed_taglist = tag_set.send("#{tag_type}_taglist") - restriction.tags(tag_type)
+
+        next if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom")
+        # skip the check, these will be tested in restricted_tags below
+
+        taglist = tag_set.send("#{tag_type}_taglist")
+        next if taglist.empty?
+
+        if restriction.has_tags?(tag_type)
+          disallowed_taglist = taglist - restriction.tags(tag_type)
           unless disallowed_taglist.empty?
             errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
               tag_label: tag_type_label_name(tag_type).downcase,
@@ -131,7 +136,7 @@ class Prompt < ApplicationRecord
               taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
         else
-          noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
+          noncanonical_taglist = taglist.reject {|t| t.canonical}
           unless noncanonical_taglist.empty?
             errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
               tag_label: tag_type_label_name(tag_type).downcase,
