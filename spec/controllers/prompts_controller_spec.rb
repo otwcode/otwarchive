@@ -133,6 +133,30 @@ describe PromptsController do
     end
 
     context "prompt has tags" do
+      before do
+        # Delete existing prompt of current user
+        open_signup.offers.first.destroy
+      end
+      let!(:canonical_character) { create(:canonical_character, name: "Sakura Kinomoto") }
+
+      it "should accept canonical tags" do
+        post :create,
+          params: {
+            collection_id: open_signup.collection.name,
+            prompt_type: "offer",
+            prompt: {
+              description: "This is a description.",
+              tag_set_attributes: {
+                character_tagnames: ["Sakura Kinomoto"]
+              }
+            }
+          }
+        it_redirects_to_with_notice(
+          collection_signup_path(open_signup.collection, open_signup),
+          "Prompt was successfully added."
+        )
+      end
+
       it "should error if some tags aren't canonical" do
         post :create,
           params: {
