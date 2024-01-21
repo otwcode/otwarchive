@@ -491,21 +491,21 @@ describe Admin::AdminUsersController do
       create(:collection_participant, user: user, collection: collection2, participant_role: CollectionParticipant::MEMBER)
     end
 
-      context "when deleting the first user" do
-        it "deletes the first user's collection but preserves the second user's collection" do
-          admin.update(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          expect do
-            post :confirm_delete_user_creations, params: { id: user.login }  
-            post :destroy_user_creations, params: { id: user.login }
-          end.to change(Collection, :count).by(-1)
-          # Check that the first user's collection is deleted
-          expect(Collection.exists?(collection1.id)).to be_falsey
-          # Check that the second user's collection still exists
-          expect(Collection.exists?(other_owner.collections.last.id)).to be_truthy
-        end
+    context "when deleting the first user" do
+      it "deletes the first user's collection but preserves the second user's collection" do
+        admin.update(roles: ["policy_and_abuse"])
+        fake_login_admin(admin)
+        expect do
+          post :confirm_delete_user_creations, params: { id: user.login }  
+          post :destroy_user_creations, params: { id: user.login }
+        end.to change(Collection, :count).by(-1)
+        # Check that the first user's collection is deleted
+        expect(Collection.exists?(collection1.id)).to be_falsey
+        # Check that the second user's collection still exists
+        expect(Collection.exists?(other_owner.collections.last.id)).to be_truthy
       end
     end
+  end
 
   describe "GET #troubleshoot" do
     let(:admin) { create(:admin) }
