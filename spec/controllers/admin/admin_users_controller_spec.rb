@@ -441,13 +441,15 @@ describe Admin::AdminUsersController do
     let(:admin) { create(:admin) }
     let(:user) { create(:user, banned: true) }
     let(:other_owner) { create(:user, banned: false) }
-    let!(:collection) { create(:collection) }
+    let!(:collection1) { create(:collection) }
+    let!(:collection2) { create(:collection) }
 
     before do
       # Create the first user and make them an owner of the collection
-      create(:collection_participant, user: user, collection: collection, participant_role: CollectionParticipant::OWNER)
+      create(:collection_participant, user: user, collection: collection1, participant_role: CollectionParticipant::OWNER)
       # Create the second user and make them an owner of the collection
-      create(:collection_participant, user: other_owner, collection: collection, participant_role: CollectionParticipant::OWNER)
+      create(:collection_participant, user: other_owner, collection: collection2, participant_role: CollectionParticipant::OWNER)
+      create(:collection_participant, user: user, collection: collection2, participant_role: CollectionParticipant::MEMBER)
     end
   
     context "when admin does not have correct authorization" do
@@ -479,10 +481,10 @@ describe Admin::AdminUsersController do
           expect { post :confirm_delete_user_creations, params: { id: user.login } }.to change(Collection, :count).by(-1)
 
           # Check that the first user's collection is deleted
-          expect(Collection.exists?(collection.id)).to be_falsey
+          expect(Collection.exists?(collection1.id)).to be_falsey
 
           # Check that the second user's collection still exists
-          expect(Collection.exists?(other_owner.collections.first.id)).to be_truthy
+          expect(Collection.exists?(other_owner.collections.last.id)).to be_truthy
         end
       end
     end
