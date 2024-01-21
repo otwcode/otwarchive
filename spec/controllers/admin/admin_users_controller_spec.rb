@@ -481,6 +481,8 @@ describe Admin::AdminUsersController do
           user.update(banned: true)
           expect do
             post :confirm_delete_user_creations, params: { id: user.login }
+
+            post :destroy_user_creations, params: { id: user.login }
           end.to change(Collection, :count).by(-1)
           # Check that the first user's collection is deleted
           expect(Collection.exists?(collection1.id)).to be_falsey
