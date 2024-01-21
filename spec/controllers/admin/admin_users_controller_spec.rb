@@ -442,11 +442,11 @@ describe Admin::AdminUsersController do
     let(:user) { create(:user, banned: true) }
     let(:other_owner) { create(:user, banned: false) }
     let!(:collection1) { create(:collection) }
-    collection1.collection_participants = [create(:collection_participant, user: user, collection: collection1, participant_role: CollectionParticipant::OWNER)]
-    collection1.save
     let!(:collection2) { create(:collection) }
 
     before do
+      collection1.collection_participants = [create(:collection_participant, user: user, collection: collection1, participant_role: CollectionParticipant::OWNER)]
+      collection1.save
       # Create the second user and make them an owner of the collection
       create(:collection_participant, user: other_owner, collection: collection2, participant_role: CollectionParticipant::OWNER)
       create(:collection_participant, user: user, collection: collection2, participant_role: CollectionParticipant::MEMBER)
