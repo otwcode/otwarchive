@@ -506,7 +506,6 @@ describe Admin::AdminUsersController do
         end
       end
     end
-  end
 
   describe "GET #troubleshoot" do
     let(:admin) { create(:admin) }
