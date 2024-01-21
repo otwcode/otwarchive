@@ -440,18 +440,7 @@ describe Admin::AdminUsersController do
   describe "POST #destroy_user_creations" do
     let(:admin) { create(:admin) }
     let(:user) { create(:user, banned: true) }
-    let(:other_owner) { create(:user, banned: false) }
-    let!(:collection1) { create(:collection) }
-    let!(:collection2) { create(:collection) }
 
-    before do
-      collection1.collection_participants = [create(:collection_participant, user: user, collection: collection1, participant_role: CollectionParticipant::OWNER)]
-      collection1.save
-      # Create the second user and make them an owner of the collection
-      create(:collection_participant, user: other_owner, collection: collection2, participant_role: CollectionParticipant::OWNER)
-      create(:collection_participant, user: user, collection: collection2, participant_role: CollectionParticipant::MEMBER)
-    end
-  
     context "when admin does not have correct authorization" do
       it "redirects with error" do
         admin.update(roles: [])
@@ -474,11 +463,38 @@ describe Admin::AdminUsersController do
         end
       end
 
+      context "when user is banned" do
+        it "allows admins to destroy user creations" do
+          admin.update(roles: ["policy_and_abuse"])
+          fake_login_admin(admin)
+          user.update(banned: true)
+          post :confirm_delete_user_creations, params: { id: user.login }
+
+          expect(response).to have_http_status(:success)
+        end
+      end
+    end
+  end
+
+  describe "POST #destroy_user_creations" do
+    let(:admin) { create(:admin) }
+    let(:user) { create(:user, banned: true) }
+    let(:other_owner) { create(:user, banned: false) }
+    let!(:collection1) { create(:collection) }
+    let!(:collection2) { create(:collection) }
+
+    before do
+      collection1.collection_participants = [create(:collection_participant, user: user, collection: collection1, participant_role: CollectionParticipant::OWNER)]
+      collection1.save
+      # Create the second user and make them an owner of the collection
+      create(:collection_participant, user: other_owner, collection: collection2, participant_role: CollectionParticipant::OWNER)
+      create(:collection_participant, user: user, collection: collection2, participant_role: CollectionParticipant::MEMBER)
+    end
+
       context "when deleting the first user" do
         it "deletes the first user's collection but preserves the second user's collection" do
           admin.update(roles: ["policy_and_abuse"])
           fake_login_admin(admin)
-          user.update(banned: true)
           expect do
             post :confirm_delete_user_creations, params: { id: user.login }  
             post :destroy_user_creations, params: { id: user.login }
