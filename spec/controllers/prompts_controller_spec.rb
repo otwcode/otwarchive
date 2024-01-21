@@ -177,6 +177,27 @@ describe PromptsController do
           ["^These character tags in your offer are not canonical and cannot be used in this challenge: Sakura Typomoto. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations."]
         )
       end
+
+      it "shouldn't make needless checks on unused kind of tags" do
+        expect_any_instance_of(PromptRestriction).to receive(:has_tags?).with("character").at_least(:once)
+        expect_any_instance_of(PromptRestriction).not_to receive(:has_tags?).with("relationship")
+
+        post :create,
+          params: {
+            collection_id: open_signup.collection.name,
+            prompt_type: "offer",
+            prompt: {
+              description: "This is a description.",
+              tag_set_attributes: {
+                character_tagnames: ["Sakura Kinomoto"]
+              }
+            }
+          }
+        it_redirects_to_with_notice(
+          collection_signup_path(open_signup.collection, open_signup),
+          "Prompt was successfully added."
+        )
+      end
     end
   end
 
