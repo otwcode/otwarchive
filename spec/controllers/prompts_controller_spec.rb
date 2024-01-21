@@ -140,17 +140,16 @@ describe PromptsController do
       let!(:canonical_character) { create(:canonical_character, name: "Sakura Kinomoto") }
 
       it "should accept canonical tags" do
-        post :create,
-          params: {
-            collection_id: open_signup.collection.name,
-            prompt_type: "offer",
-            prompt: {
-              description: "This is a description.",
-              tag_set_attributes: {
-                character_tagnames: ["Sakura Kinomoto"]
-              }
+        post :create, params: {
+          collection_id: open_signup.collection.name,
+          prompt_type: "offer",
+          prompt: {
+            description: "This is a description.",
+            tag_set_attributes: {
+              character_tagnames: ["Sakura Kinomoto"]
             }
           }
+        }
         it_redirects_to_with_notice(
           collection_signup_path(open_signup.collection, open_signup),
           "Prompt was successfully added."
@@ -158,17 +157,16 @@ describe PromptsController do
       end
 
       it "should error if some tags aren't canonical" do
-        post :create,
-          params: {
-            collection_id: open_signup.collection.name,
-            prompt_type: "offer",
-            prompt: {
-              description: "This is a description.",
-              tag_set_attributes: {
-                character_tagnames: ["Sakura Typomoto"]
-              }
+        post :create, params: {
+          collection_id: open_signup.collection.name,
+          prompt_type: "offer",
+          prompt: {
+            description: "This is a description.",
+            tag_set_attributes: {
+              character_tagnames: ["Sakura Typomoto"]
             }
           }
+        }
         it_redirects_to_with_error(
           edit_collection_signup_path(open_signup.collection, open_signup),
           "That prompt would make your overall sign-up invalid, sorry."
@@ -182,17 +180,16 @@ describe PromptsController do
         expect_any_instance_of(PromptRestriction).to receive(:has_tags?).with("character").at_least(:once)
         expect_any_instance_of(PromptRestriction).not_to receive(:has_tags?).with("relationship")
 
-        post :create,
-          params: {
-            collection_id: open_signup.collection.name,
-            prompt_type: "offer",
-            prompt: {
-              description: "This is a description.",
-              tag_set_attributes: {
-                character_tagnames: ["Sakura Kinomoto"]
-              }
+        post :create, params: {
+          collection_id: open_signup.collection.name,
+          prompt_type: "offer",
+          prompt: {
+            description: "This is a description.",
+            tag_set_attributes: {
+              character_tagnames: ["Sakura Kinomoto"]
             }
           }
+        }
         it_redirects_to_with_notice(
           collection_signup_path(open_signup.collection, open_signup),
           "Prompt was successfully added."
