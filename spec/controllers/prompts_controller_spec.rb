@@ -131,6 +131,29 @@ describe PromptsController do
       it_redirects_to_simple("#{collection_signups_path(open_signup.collection)}/"\
                       "#{open_signup.collection.prompts.first.challenge_signup_id}/edit")
     end
+
+    context "prompt has tags" do
+      it "should error if some tags aren't canonical" do
+        post :create,
+          params: {
+            collection_id: open_signup.collection.name,
+            prompt_type: "offer",
+            prompt: {
+              description: "This is a description.",
+              tag_set_attributes: {
+                character_tagnames: ["Sakura Typomoto"]
+              }
+            }
+          }
+        it_redirects_to_with_error(
+          edit_collection_signup_path(open_signup.collection, open_signup),
+          "That prompt would make your overall sign-up invalid, sorry."
+        )
+        expect(assigns[:prompt].errors[:base]).to eq(
+          ["^These character tags in your offer are not canonical and cannot be used in this challenge: Sakura Typomoto. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations."]
+        )
+      end
+    end
   end
 
   describe "update" do
