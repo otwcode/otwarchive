@@ -442,6 +442,8 @@ describe Admin::AdminUsersController do
     let(:user) { create(:user, banned: true) }
     let(:other_owner) { create(:user, banned: false) }
     let!(:collection1) { create(:collection) }
+    collection1.collection_participants = [create(:collection_participant, user: user, collection: collection1, participant_role: CollectionParticipant::OWNER)]
+    collection1.save
     let!(:collection2) { create(:collection) }
 
     before do
@@ -480,11 +482,9 @@ describe Admin::AdminUsersController do
           fake_login_admin(admin)
           user.update(banned: true)
           expect do
-            puts "Collections before deletion: #{Collection.count}"
-            post :confirm_delete_user_creations, params: { id: user.login }
+            post :confirm_delete_user_creations, params: { id: user.login }  
             post :destroy_user_creations, params: { id: user.login }
-            puts "Collections after deletion: #{Collection.count}"
-          end
+          end.to change(Collection, :count).by(-1)
           # Check that the first user's collection is deleted
           expect(Collection.exists?(collection1.id)).to be_falsey
           # Check that the second user's collection still exists
