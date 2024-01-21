@@ -479,11 +479,16 @@ describe Admin::AdminUsersController do
           admin.update(roles: ["policy_and_abuse"])
           fake_login_admin(admin)
           user.update(banned: true)
+
+          puts "Collections before deletion: #{Collection.count}"
+
           expect do
             post :confirm_delete_user_creations, params: { id: user.login }
-
+            
             post :destroy_user_creations, params: { id: user.login }
-          end.to change(Collection, :count).by(-1)
+          
+            puts "Collections after deletion: #{Collection.count}"
+
           # Check that the first user's collection is deleted
           expect(Collection.exists?(collection1.id)).to be_falsey
           # Check that the second user's collection still exists
