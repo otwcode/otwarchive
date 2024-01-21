@@ -447,8 +447,6 @@ describe Admin::AdminUsersController do
     let!(:collection2) { create(:collection) }
 
     before do
-      # Create the first user and make them an owner of the collection
-      create(:collection_participant, user: user, collection: collection1, participant_role: CollectionParticipant::OWNER)
       # Create the second user and make them an owner of the collection
       create(:collection_participant, user: other_owner, collection: collection2, participant_role: CollectionParticipant::OWNER)
       create(:collection_participant, user: user, collection: collection2, participant_role: CollectionParticipant::MEMBER)
