@@ -470,7 +470,7 @@ class User < ApplicationRecord
     return @coauthored_works
   end
 
-  # checks that only collections a user has created are deleted.
+  #  Returns array of works where the user is the sole author
   def sole_owned_collections
     self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
   end
