@@ -439,25 +439,34 @@ describe Admin::AdminUsersController do
 
   describe "POST #destroy_user_creations" do
     let(:admin) { create(:admin) }
-    let(:user) { create(:user, banned: true) }
+    let(:user) { create(:user) }
+    let!(:work) { create(:work, authors: [user.default_pseud]) }
+
+    before do
+      # Banning user only after creating works for them
+      user.update(banned: true)
+    end
 
     context "when admin does not have correct authorization" do
       it "redirects with error" do
         admin.update(roles: [])
         fake_login_admin(admin)
-        post :confirm_delete_user_creations, params: { id: user.login }
+        post :destroy_user_creations, params: { id: user.login }
 
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
 
     context "when admin has correct authorization" do
+      before do
+        admin.update(roles: ["policy_and_abuse"])
+        fake_login_admin(admin)
+      end
+
       context "when user is not banned" do
         it "redirects with error" do
-          admin.update(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
           user.update(banned: false)
-          post :confirm_delete_user_creations, params: { id: user.login }
+          post :destroy_user_creations, params: { id: user.login }
 
           it_redirects_to_with_error(admin_users_path, "That user is not banned!")
         end
@@ -465,12 +474,10 @@ describe Admin::AdminUsersController do
 
       context "when user is banned" do
         it "allows admins to destroy user creations" do
-          admin.update(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          user.update(banned: true)
-          post :confirm_delete_user_creations, params: { id: user.login }
+          post :destroy_user_creations, params: { id: user.login }
 
-          expect(response).to have_http_status(:success)
+          it_redirects_to_with_notice(admin_users_path, "All creations by user #{user.login} have been deleted.")
+          expect(Work.exists?(work.id)).to be false
         end
       end
     end
