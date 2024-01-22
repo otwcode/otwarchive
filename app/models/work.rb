@@ -201,14 +201,11 @@ class Work < ApplicationRecord
       pseuds_after_saving.each do |pseud|
         next unless blocked_users.include?(pseud.user)
 
-        self.errors.add(
-          :base,
-          ts(
-            "%{byline} does not accept gifts from %{gifter}.",
-            byline: gift.pseud.byline,
-            gifter: User.current_user == pseud.user ? ts("you") : pseud.byline
-          )
-        )
+        if User.current_user == pseud.user
+          self.errors.add(:base, ts("%{byline} does not accept gifts from you.", byline: gift.pseud.byline))
+        else
+          self.errors.add(:base, ts("%{byline} does not accept gifts.", byline: gift.pseud.byline))
+        end
       end
     end
   end

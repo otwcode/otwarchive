@@ -359,4 +359,12 @@ Feature: Create Gifts
       And I edit the work "Collateral"
       And I give the work to "giftee1"
     When I press "Post"
-    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from gifter2."
+    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts."
+
+  Scenario: Only see one error message is shown if gifts are disabled and user is blocked*
+    Given the user "giftee1" disallows gifts
+      And the user "giftee1" has blocked the user "gifter"
+    When I am logged in as "gifter"
+      And I post the work "Rude Gift" as a gift for "giftee1"
+    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts."
+      And I should not see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
