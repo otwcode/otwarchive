@@ -225,6 +225,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
     # now mark comment as not spam
     When I am logged in as a "policy_and_abuse" admin
+      And it is currently 1 second from now
       And I view the work "The One Where Neal is Awesome"
       And I follow "Comments (1)"
       And I follow "Not Spam"
