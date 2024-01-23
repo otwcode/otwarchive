@@ -183,8 +183,7 @@ class Work < ApplicationRecord
     self.new_gifts.each do |gift|
       next if gift.pseud.blank?
       next if gift.pseud&.user&.preference&.allow_gifts?
-      next if self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud)
-      next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(gift.pseud)
+      next if challenge_bypass(gift)
 
       self.errors.add(:base, ts("%{byline} does not accept gifts.", byline: gift.pseud.byline))
     end
@@ -195,6 +194,8 @@ class Work < ApplicationRecord
     return if self.new_gifts.blank?
 
     self.new_gifts.each do |gift|
+      next if challenge_bypass(gift)
+
       blocked_users = gift.pseud&.user&.blocked_users || []
       next if blocked_users.empty?
 
@@ -1276,5 +1277,15 @@ class Work < ApplicationRecord
   # meaning that at least one of the creators has opted-in.
   def allow_collection_invitation?
     users.any? { |user| user.preference.allow_collection_invitation }
+  end
+
+  private
+
+  def challenge_bypass(gift)
+    self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud) ||
+      self.challenge_claims
+        .reject { |c| c.request_prompt.anonymous? }
+        .map(&:requesting_pseud)
+        .include?(gift.pseud)
   end
 end
