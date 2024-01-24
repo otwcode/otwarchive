@@ -94,7 +94,7 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run apt-get update
         run: sudo apt-get update
@@ -103,13 +103,6 @@ jobs:
         run: |
           sudo apt-get install -y redis-server
           ./script/gh-actions/multiple_redis.sh
-
-      - name: Cache wkhtmltopdf package
-        if: ${{ matrix.tests.ebook }}
-        uses: actions/cache@v3
-        with:
-          path: wkhtmltopdf
-          key: wkhtmltopdf-${{ hashFiles('script/gh-actions/ebook_converters.sh') }}
 
       - name: Install ebook converters
         if: ${{ matrix.tests.ebook }}
@@ -167,7 +160,7 @@ jobs:
 
       - name: Upload failure screenshots
         if: ${{ failure() && matrix.tests.command == 'cucumber' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test failures ${{ hashFiles('tmp/capybara/*') }}
           path: tmp/capybara

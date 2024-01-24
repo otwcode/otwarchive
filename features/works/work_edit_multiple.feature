@@ -15,6 +15,7 @@ Feature: Edit Multiple Works
       And I should see "Edit Multiple Works"
     When I select "Glorious" for editing
       And I select "Excellent" for editing
+      And it is currently 1 second from now
       And I press "Delete"
     Then I should see "Are you sure you want to delete these works PERMANENTLY?"
       And I should see "Glorious"

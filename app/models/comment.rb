@@ -14,7 +14,7 @@ class Comment < ApplicationRecord
 
   has_many :thread_comments, class_name: 'Comment', foreign_key: :thread
 
-  validates_presence_of :name, unless: :pseud_id
+  validates :name, presence: { unless: :pseud_id }, not_forbidden_name: { if: :will_save_change_to_name? }
   validates :email, email_format: { on: :create, unless: :pseud_id }, email_blacklist: { on: :create, unless: :pseud_id }
 
   validates_presence_of :comment_content
@@ -23,6 +23,19 @@ class Comment < ApplicationRecord
     too_long: ts("must be less than %{count} characters long.", count: ArchiveConfig.COMMENT_MAX)
 
   delegate :user, to: :pseud, allow_nil: true
+
+  # Whether the writer of the comment this is replying to allows guest replies
+  validate :guest_can_reply, if: :reply_comment?, unless: :pseud_id, on: :create
+  def guest_can_reply
+    errors.add(:commentable, :guest_replies_off) if commentable.guest_replies_disallowed?
+  end
+
+  # Whether the writer of this comment disallows guest replies
+  def guest_replies_disallowed?
+    return false unless user
+
+    user.preference.guest_replies_off && !user.is_author_of?(ultimate_parent)
+  end
 
   # Check if the writer of this comment is blocked by the writer of the comment
   # they're replying to:
@@ -70,7 +83,7 @@ class Comment < ApplicationRecord
 
   scope :for_display, lambda {
     includes(
-      pseud: { user: [:roles, :block_of_current_user, :block_by_current_user] },
+      pseud: { user: [:roles, :block_of_current_user, :block_by_current_user, :preference] },
       parent: { work: [:pseuds, :users] }
     )
   }

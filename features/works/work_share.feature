@@ -80,4 +80,6 @@ Feature: Share Works
       And I fill in "User name or email:" with "maduser"
       And I fill in "Password:" with "password"
       And I press "Log In"
-    Then I should be on the "Blabla" work page
+    Then the url should not include "share"
+      # Shown when the share url is accessed directly
+      And I should not see "Sorry, you need to have JavaScript enabled for this."

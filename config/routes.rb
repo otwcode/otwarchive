@@ -509,10 +509,11 @@ Otwarchive::Application.routes.draw do
   #### I18N ####
 
   # should stay below the main works mapping
-  resources :languages do
+  resources :languages, except: [:show] do
     resources :works
     resources :admin_posts
   end
+  get "/languages/:id", to: redirect("/languages/%{id}/works", status: 302)
   resources :locales, except: :destroy
 
   #### API ####

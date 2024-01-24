@@ -218,7 +218,7 @@ class CollectionItem < ApplicationRecord
 
   def notify_of_reveal
     unless self.unrevealed? || !self.posted?
-      recipient_pseuds = Pseud.parse_bylines(self.recipients, assume_matching_login: true)[:pseuds]
+      recipient_pseuds = Pseud.parse_bylines(self.recipients)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
           UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver_after_commit

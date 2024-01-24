@@ -98,6 +98,17 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Migrates session cookies from encrypted to signed format
+  before_action :migrate_session_cookie_20231230
+  def migrate_session_cookie_20231230
+    # If the request contains a valid encrypted session cookie, it means the
+    # session hasn't yet been migrated to a signed cookie, so we update the
+    # session with the contents of the encrypted cookie.
+    if cookies.encrypted[:_otwarchive_session].present?
+      session.update(cookies.encrypted[:_otwarchive_session])
+    end
+  end
+
   after_action :ensure_admin_credentials
   def ensure_admin_credentials
     if logged_in_as_admin?
@@ -201,7 +212,6 @@ public
   before_action :store_location
   def store_location
     if session[:return_to] == "redirected"
-      Rails.logger.debug "Return to back would cause infinite loop"
       session.delete(:return_to)
     elsif request.fullpath.length > 200
       # Sessions are stored in cookies, which has a 4KB size limit.
@@ -210,7 +220,6 @@ public
       session.delete(:return_to)
     else
       session[:return_to] = request.fullpath
-      Rails.logger.debug "Return to: #{session[:return_to]}"
     end
   end
 
@@ -220,11 +229,9 @@ public
     back = session[:return_to]
     session.delete(:return_to)
     if back
-      Rails.logger.debug "Returning to #{back}"
       session[:return_to] = "redirected"
       redirect_to(back) and return
     else
-      Rails.logger.debug "Returning to default (#{default})"
       redirect_to(default) and return
     end
   end
@@ -401,7 +408,6 @@ public
 
   def see_adult?
     params[:anchor] = "comments" if (params[:show_comments] && params[:anchor].blank?)
-    Rails.logger.debug "Added anchor #{params[:anchor]}"
     return true if cookies[:view_adult] || logged_in_as_admin?
     return false unless current_user
     return true if current_user.is_author_of?(@work)
@@ -419,12 +425,20 @@ public
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended?
-        flash[:error] = t('suspension_notice', default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+        flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
       else
-        flash[:error] = t('ban_notice', default: "Your account has been banned. You are not permitted to add or edit archive content. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.").html_safe
+        flash[:error] = t("ban_notice", default: "Your account has been banned. You are not permitted to add or edit archive content. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.").html_safe
       end
       redirect_to current_user
     end
+  end
+
+  # Prevents temporarily suspended users from deleting content
+  def check_user_not_suspended
+    return unless current_user.is_a?(User) && current_user.suspended?
+    
+    flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+    redirect_to current_user
   end
 
   # Does the current user own a specific object?
@@ -482,7 +496,7 @@ public
     if model.to_s.downcase == 'work'
       allowed = %w(author title date created_at word_count hit_count)
     elsif model.to_s.downcase == 'tag'
-      allowed = %w(name created_at taggings_count_cache)
+      allowed = %w[name created_at taggings_count_cache uses]
     elsif model.to_s.downcase == 'collection'
       allowed = %w(collections.title collections.created_at)
     elsif model.to_s.downcase == 'prompt'

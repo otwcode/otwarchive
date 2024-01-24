@@ -46,7 +46,8 @@
     <legend><%= ts("Associations") %></legend>
     <h3 class="landmark heading"><%= ts("Associations") %></h3>
     <dl>
-      <% if !(@assignments = ChallengeAssignment.by_offering_user(current_user).undefaulted.unstarted.sent).empty? || !@work.challenge_assignments.empty? %>
+      <% @assignments = get_open_assignments(current_user) %>
+      <% if @assignments.any? || @work.challenge_assignments.any? %>
         <!-- if the user has open assignments? -->
         <dt class="collection">
           <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment") %>
