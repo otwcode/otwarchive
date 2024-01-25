@@ -22,31 +22,37 @@ module OtwSanitize
         audio video source track
       ] + Sanitize::Config::ARCHIVE[:elements],
       attributes: {
-        'audio'  => AUDIO_ATTRIBUTES,
-        'video'  => VIDEO_ATTRIBUTES,
-        'source' => SOURCE_ATTRIBUTES,
-        'track'  => TRACK_ATTRIBUTES
+        "audio" => AUDIO_ATTRIBUTES,
+        "video" => VIDEO_ATTRIBUTES,
+        "source" => SOURCE_ATTRIBUTES,
+        "track" => TRACK_ATTRIBUTES
       },
       add_attributes: {
-        'audio' => {
-          'controls'    => 'controls',
-          'crossorigin' => 'anonymous',
-          'preload'     => 'metadata'
+        "audio" => {
+          "controls" => "controls",
+          "crossorigin" => "anonymous",
+          "preload" => "metadata"
         },
-        'video' => {
-          'controls'    => 'controls',
-          'playsinline' => 'playsinline',
-          'crossorigin' => 'anonymous',
-          'preload'     => 'metadata'
+        "video" => {
+          "controls" => "controls",
+          "playsinline" => "playsinline",
+          "crossorigin" => "anonymous",
+          "preload" => "metadata"
         }
       },
       protocols: {
-        'audio' => {
-          'src'    => %w[http https]
+        "audio" => {
+          "src" => %w[http https]
         },
-        'video' => {
-          'poster' => %w[http https],
-          'src'    => %w[http https]
+        "video" => {
+          "poster" => %w[http https],
+          "src" => %w[http https]
+        },
+        "source" => {
+          "src" => %w[http https]
+        },
+        "track" => {
+          "src" => %w[http https]
         }
       }
     }.freeze
@@ -102,6 +108,7 @@ module OtwSanitize
 
     def banned_source?
       return unless source_host
+
       ArchiveConfig.BANNED_MULTIMEDIA_SRCS.any? do |blocked|
         source_host.match(blocked)
       end
