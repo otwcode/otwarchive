@@ -483,7 +483,6 @@ describe Admin::AdminUsersController do
       context "when user is banned" do
         it "allows admins to destroy user creations" do
           post :destroy_user_creations, params: { id: user.login }
-          end.to change(Collection, :count).by(-1)
           # Check that the first user's collection is deleted
           expect(Collection.exists?(collection1.id)).to be_falsey
           # Check that the second user's collection still exists
@@ -494,7 +493,7 @@ describe Admin::AdminUsersController do
         end
       end
     end
-  end 
+  end
 
   describe "GET #troubleshoot" do
     let(:admin) { create(:admin) }
