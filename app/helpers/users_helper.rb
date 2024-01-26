@@ -82,21 +82,21 @@ module UsersHelper
   def series_link(user, pseud = nil)
     return pseud_series_link(pseud) if pseud.present? && !pseud.new_record?
 
-    if current_user.nil?
-      total = Series.visible_to_all.exclude_anonymous.for_pseuds(user.pseuds).count.size
-    else
-      total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(user.pseuds).count.size
-    end
-    span_if_current ts('Series (%{series_number})', series_number: total.to_s), user_series_index_path(@user)
+    total = if current_user.nil?
+              Series.visible_to_all.exclude_anonymous.for_pseuds(user.pseuds).count.size
+            else
+              Series.visible_to_registered_user.exclude_anonymous.for_pseuds(user.pseuds).count.size
+            end
+    span_if_current ts("Series (%{series_number})", series_number: total.to_s), user_series_index_path(user)
   end
 
   def pseud_series_link(pseud)
-    if current_user.nil?
-      total = Series.visible_to_all.exclude_anonymous.for_pseuds([pseud]).count.size
-    else
-      total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([pseud]).count.size
-    end
-    span_if_current ts('Series (%{series_number})', series_number: total.to_s), user_pseud_series_index_path(@user, pseud)
+    total = if current_user.nil?
+              Series.visible_to_all.exclude_anonymous.for_pseuds([pseud]).count.size
+            else
+              Series.visible_to_registered_user.exclude_anonymous.for_pseuds([pseud]).count.size
+            end
+    span_if_current ts("Series (%{series_number})", series_number: total.to_s), user_pseud_series_index_path(pseud.user, pseud)
   end
 
   def gifts_link(user)
