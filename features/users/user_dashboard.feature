@@ -201,6 +201,7 @@ Feature: User dashboard
     Given I have the anonymous collection "Anon works"
       And I am logged in as "Accumulator"
       And I add the pseud "Battery"
+      And I add the pseud "Centrifuge"
       And I post the work "Normal work" as part of a series "Mine" using the pseud "Battery"
       And I post the work "Normal work 2" as part of a series "Mine" using the pseud "Battery"
       And I post the work "Restricted work" as part of a series "Restricted" using the pseud "Battery"
@@ -209,28 +210,32 @@ Feature: User dashboard
       And I lock the work "Another restricted work"
     When I go to Accumulator's user page
     Then I should see "Series (2)" within "#dashboard"
-    When I go to Accumulator's user page
-      And I follow "Battery" within ".pseud .expandable"
+    When I go to Accumulator's "Battery" pseud page
     Then I should see "Series (2)" within "#dashboard"
+    When I go to Accumulator's "Centrifuge" pseud page
+    Then I should see "Series (0)" within "#dashboard"
     When I am logged out
       And I go to Accumulator's user page
     Then I should see "Series (1)" within "#dashboard"
-    When I go to Accumulator's user page
-      And I follow "Battery" within ".pseud .expandable"
+    When I go to Accumulator's "Battery" pseud page
     Then I should see "Series (1)" within "#dashboard"
+    When I go to Accumulator's "Centrifuge" pseud page
+    Then I should see "Series (0)" within "#dashboard"
     # Series with anon works are never counted
     When I am logged in as "Accumulator"
       And I post the work "Another normal work" as part of a series "Anon" using the pseud "Battery"
       And I post the work "Anon work" in the collection "Anon works" as part of a series "Anon" using the pseud "Battery"
       And I go to Accumulator's user page
     Then I should see "Series (2)" within "#dashboard"
-    When I go to Accumulator's user page
-      And I follow "Battery" within ".pseud .expandable"
+    When I go to Accumulator's "Battery" pseud page
     Then I should see "Series (2)" within "#dashboard"
+    When I go to Accumulator's "Centrifuge" pseud page
+    Then I should see "Series (0)" within "#dashboard"
     When I am logged out
       And I go to Accumulator's user page
     Then I should see "Series (1)" within "#dashboard"
-    When I go to Accumulator's user page
-      And I follow "Battery" within ".pseud .expandable"
+    When I go to Accumulator's "Battery" pseud page
     Then I should see "Series (1)" within "#dashboard"
+    When I go to Accumulator's "Centrifuge" pseud page
+    Then I should see "Series (0)" within "#dashboard"
 
