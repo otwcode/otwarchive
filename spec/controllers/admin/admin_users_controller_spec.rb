@@ -447,7 +447,7 @@ describe Admin::AdminUsersController do
 
     before do
       # Banning user only after creating works for them
-      user.update(banned: true)
+      user.update!(banned: true)
 
       collection1.collection_participants = [create(:collection_participant, user: user, collection: collection1, participant_role: CollectionParticipant::OWNER)]
       collection1.save
@@ -467,7 +467,7 @@ describe Admin::AdminUsersController do
 
     context "when admin has correct authorization" do
       before do
-        admin.update(roles: ["policy_and_abuse"])
+        admin.update!(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
       end
 
