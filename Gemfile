@@ -147,6 +147,7 @@ group :test, :development do
   gem 'whiny_validation'
   gem "factory_bot_rails"
   gem 'minitest'
+  gem "listen", "~> 3.3"
   gem "i18n-tasks", require: false
 end
 
