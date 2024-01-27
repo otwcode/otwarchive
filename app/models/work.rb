@@ -185,7 +185,7 @@ class Work < ApplicationRecord
       next if gift.pseud&.user&.preference&.allow_gifts?
       next if challenge_bypass(gift)
 
-      self.errors.add(:base, ts("%{byline} does not accept gifts.", byline: gift.pseud.byline))
+      self.errors.add(:base, I18n.t("activerecord.errors.models.work.blocked_gifts", byline: gift.pseud.byline))
     end
   end
 
@@ -206,9 +206,9 @@ class Work < ApplicationRecord
         next unless blocked_users.include?(pseud.user)
 
         if User.current_user == pseud.user
-          self.errors.add(:base, ts("%{byline} does not accept gifts from you.", byline: gift.pseud.byline))
+          self.errors.add(:base, I18n.t("activerecord.errors.models.work.blocked_your_gifts", byline: gift.pseud.byline))
         else
-          self.errors.add(:base, ts("%{byline} does not accept gifts.", byline: gift.pseud.byline))
+          self.errors.add(:base, I18n.t("activerecord.errors.models.work.blocked_gifts", byline: gift.pseud.byline))
         end
       end
     end
