@@ -83,18 +83,18 @@ module UsersHelper
     return pseud_series_link(pseud) if pseud.present? && !pseud.new_record?
 
     total = if current_user.nil?
-              Series.visible_to_all.exclude_anonymous.for_pseuds(user.pseuds).count.size
+              Series.visible_to_all.exclude_anonymous.for_user(user).count.size
             else
-              Series.visible_to_registered_user.exclude_anonymous.for_pseuds(user.pseuds).count.size
+              Series.visible_to_registered_user.exclude_anonymous.for_user(user).count.size
             end
     span_if_current ts("Series (%{series_number})", series_number: total.to_s), user_series_index_path(user)
   end
 
   def pseud_series_link(pseud)
     total = if current_user.nil?
-              Series.visible_to_all.exclude_anonymous.for_pseuds([pseud]).count.size
+              Series.visible_to_all.exclude_anonymous.for_pseud(pseud).count.size
             else
-              Series.visible_to_registered_user.exclude_anonymous.for_pseuds([pseud]).count.size
+              Series.visible_to_registered_user.exclude_anonymous.for_pseud(pseud).count.size
             end
     span_if_current ts("Series (%{series_number})", series_number: total.to_s), user_pseud_series_index_path(pseud.user, pseud)
   end

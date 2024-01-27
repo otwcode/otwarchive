@@ -51,8 +51,12 @@ class Series < ApplicationRecord
     having("MAX(works.in_anon_collection) = 0 AND MAX(works.in_unrevealed_collection) = 0")
   }
 
-  scope :for_pseuds, lambda { |pseuds|
-    joins(approved_creatorships: :pseud).where(pseuds: { id: pseuds })
+  scope :for_pseud, lambda { |pseud|
+    joins(:approved_creatorships).where(creatorships: { pseud: pseud })
+  }
+
+  scope :for_user, lambda { |user|
+    joins(approved_creatorships: :pseud).where(pseuds: { user: user })
   }
 
   scope :for_blurb, -> { includes(:work_tags, :pseuds) }
