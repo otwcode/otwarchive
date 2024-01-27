@@ -343,14 +343,6 @@ module ApplicationHelper
     name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
   end
 
-  def field_id(form, attribute)
-    name_to_id(field_name(form, attribute))
-  end
-
-  def field_name(form, attribute)
-    "#{form.object_name}[#{field_attribute(attribute)}]"
-  end
-
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
   def checkbox_section_toggle(checkboxes_id, checkboxes_size, options = {})
     toggle_show = content_tag(:a, ts("Expand %{checkboxes_size} Checkboxes", checkboxes_size: checkboxes_size),
