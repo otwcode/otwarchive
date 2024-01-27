@@ -8,6 +8,7 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Turn false under Spring and add config.action_view.cache_template_loading = true.
   config.cache_classes = true
 
   # Do not eager load code on boot, except in CI. This avoids loading your whole application
@@ -53,9 +54,6 @@ Rails.application.configure do
 
   # Configure strong parameters to raise an exception if an unpermitted attribute is used
   config.action_controller.action_on_unpermitted_parameters = :raise
-
-  config.serve_static_files = true
-  config.assets.enabled = false
 
   # Make sure that we don't have a host mismatch:
   config.action_controller.default_url_options = { host: "http://www.example.com", port: nil }
