@@ -15,44 +15,44 @@ en:
         translation: Translation
       archive_warning:
         name_with_colon:
-          one: "Warning:"
-          other: "Warnings:"
+          one: 'Warning:'
+          other: 'Warnings:'
       category:
         name_with_colon:
-          one: "Category:"
-          other: "Categories:"
+          one: 'Category:'
+          other: 'Categories:'
       chapters/creatorships:
-        base: "Invalid creator:"
+        base: 'Invalid creator:'
         pseud_id: Pseud
       character:
         name_with_colon:
-          one: "Character:"
-          other: "Characters:"
+          one: 'Character:'
+          other: 'Characters:'
       creatorships:
-        base: "Invalid creator:"
+        base: 'Invalid creator:'
         pseud_id: Pseud
       external_work:
         author: Creator
         user_defined_tags_count: Fandom, relationship, and character tags
       fandom:
         name_with_colon:
-          one: "Fandom:"
-          other: "Fandoms:"
+          one: 'Fandom:'
+          other: 'Fandoms:'
       freeform:
         name_with_colon:
-          one: "Additional Tag:"
-          other: "Additional Tags:"
+          one: 'Additional Tag:'
+          other: 'Additional Tags:'
       meta_tagging:
         meta_tag: Metatag
         meta_tag_id: Metatag
         sub_tag: Subtag
         sub_tag_id: Subtag
       rating:
-        name_with_colon: "Rating:"
+        name_with_colon: 'Rating:'
       relationship:
         name_with_colon:
-          one: "Relationship:"
-          other: "Relationships:"
+          one: 'Relationship:'
+          other: 'Relationships:'
       role:
         archivist: Archivist
         no_resets: No Resets
@@ -62,7 +62,7 @@ en:
         tag_wrangler: Tag Wrangler
         translator: Translator
       series/creatorships:
-        base: "Invalid creator:"
+        base: 'Invalid creator:'
         pseud_id: Pseud
       user:
         login: User name
@@ -71,10 +71,10 @@ en:
         summary: Summary
         user_defined_tags_count: Fandom, relationship, character, and additional tags
       work/chapters:
-        base: "Invalid chapter:"
+        base: 'Invalid chapter:'
         content: Content
       work/creatorships:
-        base: "Invalid creator:"
+        base: 'Invalid creator:'
         pseud_id: Pseud
       work/parent_work_relationships/parent:
         author: The author of a parent work outside the archive
