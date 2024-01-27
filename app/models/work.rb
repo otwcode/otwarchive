@@ -195,7 +195,7 @@ class Work < ApplicationRecord
 
     self.new_gifts.each do |gift|
       # Already dealt with in #new_recipients_allow_gifts
-      next if gift.pseud&.user&.preference and not gift.pseud.user.preference.allow_gifts?
+      next if gift.pseud&.user&.preference && !gift.pseud.user.preference.allow_gifts?
 
       next if challenge_bypass(gift)
 
