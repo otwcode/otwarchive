@@ -798,10 +798,7 @@ class StoryParser
       begin
         # we do a little cleanup here in case the user hasn't included the 'http://'
         # or if they've used capital letters or an underscore in the hostname
-        uri = URI.parse(location)
-        uri = URI.parse('http://' + location) if uri.class.name == "URI::Generic"
-        uri.host.downcase!
-        uri.host.tr!(" ", "-")
+        uri = UrlFormatter.new(location).standardized
         response = Net::HTTP.get_response(uri)
         case response
         when Net::HTTPSuccess

@@ -104,32 +104,34 @@
 
             <tbody>
               <% @tags.each do |tag| %>
-                <tr>
-                  <th scope="row" title="<%= ts('tag') %>">
-                    <%= check_box_tag 'selected_tags[]', tag.id, nil, id: "selected_tags_#{tag.id}" %>
-                    <%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %>
-                  </th>
+                <% if tag.unwrangled? %>
+                  <tr>
+                    <th scope="row" title="<%= ts("tag") %>">
+                      <%= check_box_tag "selected_tags[]", tag.id, nil, id: "selected_tags_#{tag.id}" %>
+                      <%= label_tag "selected_tags_#{tag.id}", tag.name.to_s %>
+                    </th>
 
-                  <td title="<%= ts('created') %>"><%= l(tag.created_at.to_date) %></td>
+                    <td title="<%= ts("created") %>"><%= l(tag.created_at.to_date) %></td>
 
-                  <td title="<%= ts('canonical?') %>">
-                    <% if tag.canonical? %>
-                      <%= ts('Yes') %>
-                    <% else %>
-                      <%= check_box_tag 'canonicals[]', tag.id, tag.canonical?, id: "canonicals_#{tag.id}" %>
-                    <% end %>
-                  </td>
+                    <td title="<%= ts("canonical?") %>">
+                      <% if tag.canonical? %>
+                        <%= ts("Yes") %>
+                      <% else %>
+                        <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, id: "canonicals_#{tag.id}" %>
+                      <% end %>
+                    </td>
 
-                  <td title="<%= ts('taggings') %>"><%= tag.taggings_count %></td>
+                    <td title="<%= ts("taggings") %>"><%= tag.taggings_count_cache %></td>
 
-                  <td>
-                    <ul class="actions" role="navigation">
-                      <li><%= link_to ts('Edit'), {controller: :tags, action: :edit, id: tag} %></li>
-                      <li><%= link_to ts('Wrangle'), {controller: :tags, action: :wrangle, id: tag} %></li>
-                      <li><%= link_to ts('Works'), {controller: :works, action: :index, tag_id: tag} %></li>
-                    </ul>
-                  </td>
-                </tr>
+                    <td>
+                      <ul class="actions" role="navigation">
+                        <li><%= link_to ts("Edit"), { controller: :tags, action: :edit, id: tag } %></li>
+                        <li><%= link_to ts("Wrangle"), { controller: :tags, action: :wrangle, id: tag } %></li>
+                        <li><%= link_to ts("Works"), { controller: :works, action: :index, tag_id: tag } %></li>
+                      </ul>
+                    </td>
+                  </tr>
+                <% end %>
               <% end %>
             </tbody>
           </table>

@@ -186,7 +186,7 @@ module MailerHelper
     elsif comment.by_anonymous_creator?
       style_bold(t("roles.anonymous_creator"))
     else
-      style_link(comment.comment_owner_name, polymorphic_url(comment.comment_owner, only_path: false))
+      style_pseud_link(comment.pseud)
     end
   end
 
@@ -196,7 +196,7 @@ module MailerHelper
     elsif comment.by_anonymous_creator?
       t("roles.anonymous_creator")
     else
-      "#{comment.comment_owner_name} (#{polymorphic_url(comment.comment_owner, only_path: false)})"
+      text_pseud(comment.pseud)
     end
   end
 
