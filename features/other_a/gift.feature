@@ -366,8 +366,9 @@ Feature: Create Gifts
       And the user "giftee1" has blocked the user "gifter"
     When I am logged in as "gifter"
       And I post the work "Rude Gift" as a gift for "giftee1"
-    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts."
-      And I should not see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
+    Then I should see "Sorry! We couldn't save this work because:"
+      And I should see "giftee1 does not accept gifts."
+      And I should not see "giftee1 does not accept gifts from you."
 
   Scenario: A user can refuse previous gifts from user after blocking them
     Given I am logged in as "gifter"

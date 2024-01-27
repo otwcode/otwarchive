@@ -194,6 +194,9 @@ class Work < ApplicationRecord
     return if self.new_gifts.blank?
 
     self.new_gifts.each do |gift|
+      # Already dealt with in #new_recipients_allow_gifts
+      next if gift.pseud&.user&.preference and not gift.pseud.user.preference.allow_gifts?
+
       next if challenge_bypass(gift)
 
       blocked_users = gift.pseud&.user&.blocked_users || []
