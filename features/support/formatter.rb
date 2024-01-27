@@ -1,9 +1,10 @@
 # Adapted from https://github.com/tpope/fivemat
 require "cucumber/formatter/progress"
+require_relative "./elapsed_time"
 
 module Ao3Cucumber
   class Formatter < ::Cucumber::Formatter::Progress
-    include ElapsedTime
+    include ::ElapsedTime
 
     def on_test_case_started(event)
       super
@@ -27,7 +28,7 @@ module Ao3Cucumber
       @io.puts feature.location.file
       @io.flush
       @current_feature = feature
-      @start_time = Time.now
+      @start_time = Time.current
     end
 
     def after_feature
