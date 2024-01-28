@@ -30,7 +30,8 @@ Given(/^(\d)+ emails? should be delivered$/) do |count|
 end
 
 When(/^(?:I|they) follow "([^"]*?)" in #{capture_email}$/) do |link, email_ref|
-  visit_in_email(email(email_ref).html_part, link)
+  open_last_email
+  visit_in_email(link)
 end
 
 When(/^(?:I|they) click the first link in #{capture_email}$/) do |email_ref|
