@@ -17,7 +17,7 @@ namespace :search do
       Have you warned the wrangling team this task is being run?
       Enter YES to continue:'
   
-      confirmation = $stdin.gets.chomp
+      confirmation = $stdin.gets.chomp.strip.upcase
       unless confirmation == "YES"
         puts "Task aborted. No changes were made."
         exit
