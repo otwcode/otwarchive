@@ -25,7 +25,7 @@ module Ao3Cucumber
 
     def before_feature(feature)
       # Print the feature's file name.
-      @io.puts feature.location.file
+      @io.puts current_feature_uri
       @io.flush
       @current_feature = feature
       @start_time = Time.current
