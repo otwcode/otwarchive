@@ -8,7 +8,7 @@ module Ao3Cucumber
 
     def on_test_case_started(event)
       super
-      feature = event.test_case.feature
+      feature = gherkin_document.feature
 
       return if same_feature_as_previous_test_case?(feature)
 

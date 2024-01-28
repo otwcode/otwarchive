@@ -601,7 +601,7 @@ GEM
       raindrops (~> 0.7)
     unidecoder (1.1.2)
     uniform_notifier (1.16.0)
-    vcr (6.2.0)
+    vcr (3.0.3)
     warden (1.2.9)
       rack (>= 2.0.9)
     webmock (3.19.1)
@@ -720,7 +720,7 @@ DEPENDENCIES
   unicode_utils (>= 1.4.0)
   unicorn (~> 5.5)
   unidecoder
-  vcr (~> 6.2)
+  vcr (~> 3.0, >= 3.0.1)
   webmock
   whenever (~> 0.6.2)
   whiny_validation

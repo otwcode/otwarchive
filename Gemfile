@@ -129,7 +129,7 @@ group :test do
   gem 'launchy'    # So you can do Then show me the page
   gem 'delorean'
   # Record and replay data from external URLs
-  gem "vcr", "~> 6.2"
+  gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem "webmock"
   gem 'timecop'
   gem 'cucumber-timecop', require: false
