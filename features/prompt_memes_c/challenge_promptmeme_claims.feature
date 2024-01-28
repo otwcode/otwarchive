@@ -96,7 +96,7 @@ Feature: Prompt Meme Challenge
   Then I should see "In response to a prompt by Anonymous"
     And I should see "In response to a prompt by myname2"
 
-  Scenario: User claims two prompts in different challenges and fulfills both of them at once
+  # Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
 
   Scenario: Sign up for several challenges and see Sign-ups are sorted
@@ -184,7 +184,7 @@ Feature: Prompt Meme Challenge
     And I should see "by myname4"
     And I should see "Stargate Atlantis"
 
-  Scenario: check that claims can't be viewed even after challenge is revealed
+  # Scenario: check that claims can't be viewed even after challenge is revealed
   # TODO: Find a way to construct the link to a claim show page for someone who shouldn't be able to see it
 
   Scenario: Mod can reveal challenge
@@ -348,7 +348,7 @@ Feature: Prompt Meme Challenge
   Then I should not see "myname4"
     And I should see "Anonymous"
 
-  Scenario: check that anon prompts are still anon on the fulfilling work
+  # Scenario: check that anon prompts are still anon on the fulfilling work
   # TODO
 
   Scenario: work left in draft so claim is not yet totally fulfilled

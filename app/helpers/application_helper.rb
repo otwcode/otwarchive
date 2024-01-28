@@ -343,17 +343,19 @@ module ApplicationHelper
     name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
   end
 
-  def field_id(form_or_object_name, attribute, **kwargs)
+  def field_id(form_or_object_name, attribute, **_kwargs)
     name_to_id(field_name(form_or_object_name, attribute))
   end
 
-  def field_name(form_or_object_name, attribute, *method_names, multiple: false, index: nil)
+  def field_name(form_or_object_name, attribute, *_method_names, multiple: false, **kwargs)
     object_name = if form_or_object_name.respond_to?(:object_name)
                     form_or_object_name.object_name
                   else
                     form_or_object_name
                   end
-    "#{object_name}[#{field_attribute(attribute)}]#{multiple ? "[]" : ""}"
+    return "#{field_attribute(attribute)}#{multiple ? '[]' : ''}" if object_name.blank?
+
+    "#{object_name}[#{field_attribute(attribute)}]#{multiple ? '[]' : ''}"
   end
 
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
