@@ -1,6 +1,6 @@
 module SkinCacheHelper
   def cache_timestamp
-    Time.now.utc.to_s(:usec)
+    Time.now.utc.to_fs(:usec)
   end
 
   def skin_cache_version_key(skin_id)
