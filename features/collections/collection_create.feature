@@ -119,6 +119,18 @@ Given I have the collection "Scotts Collection" with name "scotts_collection"
   And I press "Update"
   And I should see "Collection was successfully updated"
 
+  Scenario: Update a collection with a HTTPS header URL
+
+  Given I have the collection "Scotts Collection" with name "scotts_collection"
+  When I am logged in as "moderator"
+    And I am on "Scotts Collection" collection's page
+    And I follow "Collection Settings"
+    And I fill in "Custom header URL" with "https://example.com/image.png"
+    And I press "Update"
+  Then I should see "Collection was successfully updated"
+  When I follow "Collection Settings"
+  Then I should see "https://example.com/image.png" in the "Custom header URL" input
+
   Scenario: Delete a subcollection and then its parent collection
 
   Given I am logged in as "collector"
