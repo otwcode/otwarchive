@@ -12,6 +12,17 @@ namespace :search do
 
   desc "Recreate tag index"
   task(index_tags: :environment) do
+    if Rails.env.production? && !ENV["DOCKER"]
+      puts 'Running this task will temporarily empty some wrangling bins and affect tag search. 
+      Have you warned the wrangling team this task is being run?
+      Enter YES to continue:'
+  
+      confirmation = $stdin.gets.chomp
+      unless confirmation == "YES"
+        puts "Task aborted. No changes were made."
+        exit
+      end
+    end
     TagIndexer.index_all
   end
 
