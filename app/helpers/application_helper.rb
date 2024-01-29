@@ -343,19 +343,27 @@ module ApplicationHelper
     name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
   end
 
-  def field_id(form_or_object_name, attribute, **_kwargs)
-    name_to_id(field_name(form_or_object_name, attribute))
+  def field_id(form_or_object_name, attribute, index: nil, **_kwargs)
+    name_to_id(field_name(form_or_object_name, attribute, index: index))
   end
 
-  def field_name(form_or_object_name, attribute, *_method_names, multiple: false, **kwargs)
+  # This is a partial re-implementation of ActionView::Helpers::FormTagHelper#field_name.
+  # The method contract changed in Rails 7.0, but we can't use the default because it sometimes
+  # includes other information that -- at a minimum -- wrecks havoc on the Cucumber feature tests.
+  # It is used in when constructing forms, like in app/views/tags/new.html.erb.
+  def field_name(form_or_object_name, attribute, *_method_names, multiple: false, index: nil)
     object_name = if form_or_object_name.respond_to?(:object_name)
                     form_or_object_name.object_name
                   else
                     form_or_object_name
                   end
-    return "#{field_attribute(attribute)}#{multiple ? '[]' : ''}" if object_name.blank?
-
-    "#{object_name}[#{field_attribute(attribute)}]#{multiple ? '[]' : ''}"
+    if object_name.blank?
+      "#{field_attribute(attribute)}#{multiple ? '[]' : ''}"
+    elsif index
+      "#{object_name}[#{index}][#{field_attribute(attribute)}]#{multiple ? '[]' : ''}"
+    else
+      "#{object_name}[#{field_attribute(attribute)}]#{multiple ? '[]' : ''}"
+    end
   end
 
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
