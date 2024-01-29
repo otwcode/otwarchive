@@ -22,9 +22,11 @@ module ChallengeCore
       if open_date && open_date.future?
         error_message << ts("If sign-ups are open, sign-up open date cannot be in the future.")
       end
+      # rubocop:disable Style/IfUnlessModifier
       if close_date && open_date && close_date.to_fs(:number) < open_date.to_fs(:number)
         error_message << ts("Close date cannot be before open date.")
       end
+      # rubocop:enable Style/IfUnlessModifier
     end
     unless error_message.empty?
       error_message.each do |errors|
