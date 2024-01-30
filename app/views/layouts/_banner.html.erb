@@ -1,6 +1,5 @@
 <%# BACK END this seems giant and messy and confusing, pls can we review?
-  # FRONT END yes let us rewrite this
-%>
+  # FRONT END yes let us rewrite this %>
 <% if @admin_banner&.active? %>
   <% unless session[:hide_banner] || current_user&.preference&.banner_seen %>
     <div class="<%= @admin_banner.banner_type %> announcement group" id="admin-banner">
