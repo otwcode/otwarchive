@@ -31,7 +31,7 @@
   <% if bookmark.bookmarker_notes.present? %>
     <h6 class="landmark heading"><%= ts("Bookmark Notes:") %></h6>
     <blockquote class="userstuff summary">
-      <%=raw strip_images(sanitize_field(bookmark, :bookmarker_notes)) %>
+      <%= raw strip_images(sanitize_field(bookmark, :bookmarker_notes)) %>
     </blockquote>
   <% end %>
   <!--actions-->

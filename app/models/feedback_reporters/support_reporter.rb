@@ -33,6 +33,6 @@ class SupportReporter < FeedbackReporter
   def ticket_description
     return "No description submitted." if description.blank?
 
-    return strip_images(description.html_safe)
+    strip_images(description.html_safe)
   end
 end
