@@ -114,6 +114,22 @@ describe ChaptersController do
         get :show, params: { work_id: work.id, id: chapter.id }
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
+
+      context "when viewing as a logged-in user" do
+        before do
+          fake_login
+        end
+
+        context "when speculative loading is enabled" do
+          it "does not record history" do
+            create(:chapter, work: work)
+            chapter1 = work.chapters.first
+            @request.headers["Spec-Purpose"] = "prerender"
+            get :show, params: { work_id: work.id, id: chapter1.id }
+            expect(Reading).not_to receive(:update_or_create)
+          end
+        end
+      end
     end
 
     context "when work is adult" do

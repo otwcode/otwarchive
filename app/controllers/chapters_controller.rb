@@ -69,7 +69,7 @@ class ChaptersController < ApplicationController
                         current_user.subscriptions.build(subscribable: @work)
       end
       # update the history.
-      Reading.update_or_create(@work, current_user) if current_user
+      Reading.update_or_create(@work, current_user) if current_user && !speculative_loading?
 
       respond_to do |format|
         format.html
@@ -285,5 +285,12 @@ class ChaptersController < ApplicationController
                                     :notes, :endnotes, :content, :published_at,
                                     author_attributes: [:byline, ids: [], coauthors: []])
 
+  end
+
+  def speculative_loading?
+    sec_purpose = request.headers["HTTP_SPEC_PURPOSE"]
+    return false unless sec_purpose
+
+    sec_purpose.include?("prefetch") || sec_purpose.include?("prerender")
   end
 end
