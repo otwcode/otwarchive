@@ -124,7 +124,7 @@ describe ChaptersController do
           it "does not record history" do
             create(:chapter, work: work)
             chapter1 = work.chapters.first
-            @request.headers["Spec-Purpose"] = "prerender"
+            @request.headers["Sec-Purpose"] = "prerender"
             get :show, params: { work_id: work.id, id: chapter1.id }
             expect(Reading).not_to receive(:update_or_create)
           end

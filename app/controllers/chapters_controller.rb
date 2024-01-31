@@ -288,7 +288,7 @@ class ChaptersController < ApplicationController
   end
 
   def speculative_loading?
-    sec_purpose = request.headers["HTTP_SPEC_PURPOSE"]
+    sec_purpose = request.headers["HTTP_SEC_PURPOSE"]
     return false unless sec_purpose
 
     sec_purpose.include?("prefetch") || sec_purpose.include?("prerender")
