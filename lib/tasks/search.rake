@@ -19,7 +19,7 @@ namespace :search do
   
       confirmation = $stdin.gets.chomp.strip.upcase
       unless confirmation == "YES"
-        puts "Task aborted. No changes were made."
+        puts "Task aborted."
         exit
       end
     end
