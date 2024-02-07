@@ -12,7 +12,7 @@ namespace :search do
 
   desc "Recreate tag index"
   task(index_tags: :environment) do
-    if Rails.env.production? && !ENV["DOCKER"]
+    if Rails.env.development? || Rails.env.test?
       puts 'Running this task will temporarily empty some wrangling bins and affect tag search. 
       Have you warned the wrangling team this task is being run?
       Enter YES to continue:'
