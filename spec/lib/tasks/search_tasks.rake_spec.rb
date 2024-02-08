@@ -66,7 +66,6 @@ describe "rake search:index_tags" do
   
     allow($stdin).to receive(:gets).and_return("yes")
     expect { subject.invoke }.to output("#{prompt}").to_stdout
-
   end
   
   it "does not complete tag index when user does not enter yes" do
