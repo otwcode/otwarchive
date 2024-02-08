@@ -74,6 +74,7 @@ describe "rake search:index_tags" do
     
     # Do not set up an expectation for TagIndexer.index_all
     allow($stdin).to receive(:gets).and_return("no")
-    expect { subject.invoke }.to output("#{prompt}\nTask aborted.").to_stdout
+    expect { subject.invoke }.to output("#{prompt}\nTask aborted.")
+  .to_stdout
   end
 end
