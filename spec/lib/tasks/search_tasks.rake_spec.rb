@@ -65,7 +65,9 @@ describe "rake search:index_tags" do
     IndexQueue.enqueue(tag, :world)
   
     allow($stdin).to receive(:gets).and_return("yes")
-    expect { subject.invoke }.to output("#{prompt}").to_stdout
+    expect { subject.invoke }
+      .to output("#{prompt}")
+      .to_stdout
   end
   
   it "does not complete tag index when user does not enter yes" do
@@ -74,7 +76,8 @@ describe "rake search:index_tags" do
     
     # Do not set up an expectation for TagIndexer.index_all
     allow($stdin).to receive(:gets).and_return("no")
-    expect { subject.invoke }.to output("#{prompt}\nTask aborted.")
+    expect { subject.invoke }
+      .to output("#{prompt}\nTask aborted.")
       .to_stdout
   end
 end
