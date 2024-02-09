@@ -1,10 +1,8 @@
-<%# BACK END this seems giant and messy and confusing, pls can we review?
-  # FRONT END yes let us rewrite this %>
 <% if @admin_banner&.active? %>
   <% unless session[:hide_banner] || current_user&.preference&.banner_seen %>
     <div class="<%= @admin_banner.banner_type %> announcement group" id="admin-banner">
       <blockquote class="userstuff">
-        <%= raw strip_images(sanitize_field(@admin_banner, :content)) %>
+        <%= raw sanitize_field(@admin_banner, :content, strip_images: true) %>
       </blockquote>
       <% if current_user.nil? %>
         <p class="submit">

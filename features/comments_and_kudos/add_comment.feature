@@ -180,7 +180,7 @@ Scenario: Set preference and receive comment notifications of your own comments
     And "commenter" should be emailed
     And 1 email should be delivered to "commenter"
 
-Scenario: Wprk comment displays images
+Scenario: Work comment displays images
 
   Given the work "Generic Work"
     And I am logged in as "commenter"

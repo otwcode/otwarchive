@@ -48,7 +48,7 @@
     <% if bookmark.bookmarker_notes.present? %>
       <h6 class="landmark heading"><%= ts('Bookmarker\'s Notes') %></h6>
       <blockquote class="userstuff notes">
-        <%= raw strip_images(sanitize_field(bookmark, :bookmarker_notes)) %>
+        <%= raw sanitize_field(bookmark, :bookmarker_notes, strip_images: true) %>
       </blockquote>
     <% end %>
     <% # end of information added by the bookmark owner %>

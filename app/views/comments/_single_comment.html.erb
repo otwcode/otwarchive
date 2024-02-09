@@ -54,11 +54,7 @@
           <p class="notice"><%= ts("This comment has been hidden by an admin.") %></p>
         <% end %>
         <blockquote class="userstuff">
-          <% if single_comment.ultimate_parent.is_a?(AdminPost) %>
-            <%= raw strip_images(sanitize_field(single_comment, :comment_content)) %>
-          <% else %>
-            <%= raw sanitize_field(single_comment, :comment_content) %>
-          <% end %>
+          <%= raw sanitize_field(single_comment, :comment_content, strip_images: single_comment.ultimate_parent.is_a?(AdminPost)) %>
         </blockquote>
         <% unless single_comment.edited_at.blank? %>
           <p class="edited datetime">
