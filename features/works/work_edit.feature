@@ -175,7 +175,7 @@ Feature: Edit Works
     Then I should see "Lead Author's Work Skin" within "#work_work_skin_id"
       And I should see "Coauthor's Work Skin" within "#work_work_skin_id"
       And I should not see "Random User's Work Skin" within "#work_work_skin_id"
-    When I select "Coauthor's Work Skin" from "Select Work Skin"
+    When I select "Coauthor's Work Skin" from "Select work skin"
       And I press "Post"
     Then I should see "Work was successfully updated"
 
