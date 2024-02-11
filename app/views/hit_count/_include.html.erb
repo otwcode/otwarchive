@@ -2,7 +2,17 @@
   <% content_for :footer_js do %>
     <script>
       $j(document).on("loadedCSRF", function() {
-        $j.post("<%= work_hit_count_path(@work, format: :json) %>")
+        function send() {
+          $j.post("<%= work_hit_count_path(@work, format: :json) %>")
+        }
+
+        // If a browser doesn't support prerendering, then document.prerendering
+        // will be undefined, and we'll just send the hit count immediately.
+        if (document.prerendering) {
+          document.addEventListener("prerenderingchange", send);
+        } else {
+          send();
+        }
       })
     </script>
   <% end %>

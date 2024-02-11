@@ -8,6 +8,7 @@ Feature: Muting
       And I press "Yes, Mute User"
     Then I should see "You have muted the user pest."
       And the user "muter" should have a mute for "pest"
+      And the blurb should not say when "muter" muted "pest"
 
   Scenario Outline: Users can mute from various user-related pages
     Given the user "pest" exists and is activated
@@ -88,6 +89,7 @@ Feature: Muting
     When I am logged in as a "<role>" admin
       And I go to the muted users page for "muter"
     Then I should see "pest"
+      And the blurb should say when "muter" muted "pest"
       And I should see a link "Unmute"
     When I follow "Unmute"
     Then I should see "Sorry, you don't have permission to access the page you were trying to reach."

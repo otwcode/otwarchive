@@ -151,6 +151,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And the following typed tags exists
         | name                                   | type         | canonical |
         | Cowboy Bebop                           | Fandom       | true      |
+      And all indexing jobs have been run
     When I go to the wrangling tools page
       And I follow "Fandoms by media (1)"
       And I check the wrangling option for "Cowboy Bebop"
@@ -165,6 +166,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | name                                   | type         | canonical |
         | Toby Daye/Tybalt                       | Relationship | true      |
         | October Daye Series - Seanan McGuire   | Fandom       | false     |
+      And all indexing jobs have been run
     When I go to the wrangling tools page
       And I follow "Relationships by fandom (1)"
       And I check the wrangling option for "Toby Daye/Tybalt"
@@ -179,6 +181,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | name                                   | type         | canonical |
         | Toby Daye/Tybalt                       | Relationship | true      |
         | October Daye Series - Seanan McGuire   | Fandom       | true      |
+      And all indexing jobs have been run
     When I go to the wrangling tools page
       And I follow "Relationships by fandom (1)"
       And I check the wrangling option for "Toby Daye/Tybalt"
@@ -194,6 +197,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | Faye Valentine    | Character    | false     |
         | Ed                | Character    | false     |
       And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop" with character "Faye Valentine" with second character "Ed"
+      And all indexing jobs have been run
     When I go to the wrangling tools page
       And I follow "Characters by fandom (2)"
       And I fill in "Wrangle to Fandom(s)" with "Cowboy Bebop"
