@@ -177,7 +177,7 @@ describe AdminMailer do
   let(:commenter_pseud) { create(:pseud, user: commenter, name: "Blueprint") }
   let(:comment) { create(:comment, :on_admin_post, pseud: commenter_pseud) }
 
-  shared_examples "a notification email with the commenters pseud and username" do
+  shared_examples "a notification email with the commenter's pseud and username" do
     describe "HTML email" do
       it "has the pseud and username of the commenter" do
         expect(email).to have_html_part_content(">Blueprint (Accumulator)</a></strong> <em><strong>(Registered User)</strong></em>")
@@ -217,7 +217,7 @@ describe AdminMailer do
     end
   end
 
-  describe "comment_notification" do
+  describe "#comment_notification" do
     subject(:email) { AdminMailer.comment_notification(comment.id) }
 
     it_behaves_like "an email with a valid sender"
