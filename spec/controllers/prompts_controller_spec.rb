@@ -177,7 +177,7 @@ describe PromptsController do
       end
 
       it "shouldn't make needless checks on unused kind of tags" do
-        expect_any_instance_of(PromptRestriction).to receive(:has_tags?).with("character").at_least(:once)
+        expect_any_instance_of(PromptRestriction).to receive(:has_tags?).with("character").once
         expect_any_instance_of(PromptRestriction).not_to receive(:has_tags?).with("relationship")
 
         post :create, params: {
