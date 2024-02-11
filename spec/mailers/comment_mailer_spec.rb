@@ -132,9 +132,9 @@ describe CommentMailer do
       it "has the pseud and username of the commenter" do
         expect(email).to have_html_part_content(">Exoskeleton</a></strong> <em><strong>(Registered User)</strong></em>")
         expect(subject.html_part).to have_xpath(
-                                       "//a[@href=\"#{user_pseud_url(commenter, commenter.default_pseud)}\"]",
-                                       text: "Exoskeleton"
-                                     )
+          "//a[@href=\"#{user_pseud_url(commenter, commenter.default_pseud)}\"]",
+          text: "Exoskeleton"
+        )
         expect(email).not_to have_html_part_content(">Exoskeleton (Exoskeleton)")
       end
     end
@@ -142,8 +142,8 @@ describe CommentMailer do
     describe "text email" do
       it "has the pseud and username of the commenter" do
         expect(subject).to have_text_part_content(
-                             "Exoskeleton (#{user_pseud_url(commenter, commenter.default_pseud)}) (Registered User)"
-                           )
+          "Exoskeleton (#{user_pseud_url(commenter, commenter.default_pseud)}) (Registered User)"
+        )
         expect(subject).not_to have_text_part_content("Exoskeleton (Exoskeleton)")
       end
     end
