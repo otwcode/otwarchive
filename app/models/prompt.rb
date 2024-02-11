@@ -1,5 +1,4 @@
 class Prompt < ApplicationRecord
-  include UrlHelpers
   include TagTypeHelper
 
   # -1 represents all matching
@@ -65,7 +64,7 @@ class Prompt < ApplicationRecord
 
   before_validation :cleanup_url
   def cleanup_url
-    self.url = reformat_url(self.url) if self.url
+    self.url = Addressable::URI.heuristic_parse(self.url) if self.url
   end
 
   validate :correct_number_of_tags
