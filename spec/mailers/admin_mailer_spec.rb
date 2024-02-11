@@ -217,6 +217,28 @@ describe AdminMailer do
     end
   end
 
+  shared_examples "a notification email with only the commenter's username" do
+    describe "HTML email" do
+      it "has the pseud and username of the commenter" do
+        expect(email).to have_html_part_content(">Exoskeleton</a></strong> <em><strong>(Registered User)</strong></em>")
+        expect(subject.html_part).to have_xpath(
+                                       "//a[@href=\"#{user_pseud_url(commenter, commenter.default_pseud)}\"]",
+                                       text: "Exoskeleton"
+                                     )
+        expect(email).not_to have_html_part_content(">Exoskeleton (Exoskeleton)")
+      end
+    end
+
+    describe "text email" do
+      it "has the pseud and username of the commenter" do
+        expect(subject).to have_text_part_content(
+                             "Exoskeleton (#{user_pseud_url(commenter, commenter.default_pseud)}) (Registered User)"
+                           )
+        expect(subject).not_to have_text_part_content("Exoskeleton (Exoskeleton)")
+      end
+    end
+  end
+
   describe "#comment_notification" do
     subject(:email) { AdminMailer.comment_notification(comment.id) }
 
@@ -246,6 +268,13 @@ describe AdminMailer do
         end
       end
     end
+
+    context "when the comment is by a registered user using their default pseud" do
+      let(:commenter) { create(:user, login: "Exoskeleton") }
+      let(:comment) { create(:comment, pseud: commenter.default_pseud) }
+
+      it_behaves_like "a notification email with only the commenter's username"
+    end
   end
 
   describe "#comment_edited_notification" do
@@ -260,6 +289,13 @@ describe AdminMailer do
       let(:comment) { create(:comment, :on_admin_post, pseud: commenter.default_pseud) }
 
       it_behaves_like "a notification email that marks the commenter as official"
+    end
+
+    context "when the comment is by a registered user using their default pseud" do
+      let(:commenter) { create(:user, login: "Exoskeleton") }
+      let(:comment) { create(:comment, :on_admin_post, pseud: commenter.default_pseud) }
+
+      it_behaves_like "a notification email with only the commenter's username"
     end
   end
 end
