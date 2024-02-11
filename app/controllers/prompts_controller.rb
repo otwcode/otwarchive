@@ -130,12 +130,12 @@ class PromptsController < ApplicationController
       @prompt = @challenge_signup.requests.build(prompt_params)
     end
 
-    if !@challenge_signup.save
-      flash[:error] = ts("That prompt would make your overall sign-up invalid, sorry.")
-      redirect_to edit_collection_signup_path(@collection, @challenge_signup)
-    else
+    if @challenge_signup.save
       flash[:notice] = ts("Prompt was successfully added.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
+    else
+      flash[:error] = ts("That prompt would make your overall sign-up invalid, sorry.")
+      redirect_to edit_collection_signup_path(@collection, @challenge_signup)
     end
   end
 
