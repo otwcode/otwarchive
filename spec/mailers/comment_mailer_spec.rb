@@ -73,7 +73,7 @@ describe CommentMailer do
     end
   end
 
-  shared_examples "a notification email with the commenters pseud and username" do
+  shared_examples "a notification email with the commenter's pseud and username" do
     describe "HTML email" do
       it "has the pseud and username of the commenter" do
         expect(email).to have_html_part_content(">Blueprint (Accumulator)</a></strong> <em><strong>(Registered User)</strong></em>")
@@ -127,7 +127,7 @@ describe CommentMailer do
     end
   end
 
-  describe "comment_notification" do
+  describe "#comment_notification" do
     subject(:email) { CommentMailer.comment_notification(user, comment) }
 
     it_behaves_like "an email with a valid sender"
@@ -135,7 +135,7 @@ describe CommentMailer do
     it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
-    it_behaves_like "a notification email with the commenters pseud and username"
+    it_behaves_like "a notification email with the commenter's pseud and username"
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
@@ -156,7 +156,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
-      it_behaves_like "a notification email with the commenters pseud and username"
+      it_behaves_like "a notification email with the commenter's pseud and username"
     end
 
     context "when the comment is on a tag" do
@@ -164,7 +164,7 @@ describe CommentMailer do
 
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
-      it_behaves_like "a notification email with the commenters pseud and username"
+      it_behaves_like "a notification email with the commenter's pseud and username"
 
       context "when the comment is a reply to another comment" do
         let(:comment) { create(:comment, commentable: create(:comment, :on_tag), pseud: commenter_pseud) }
@@ -172,12 +172,12 @@ describe CommentMailer do
         it_behaves_like "a notification email with a link to the comment"
         it_behaves_like "a notification email with a link to reply to the comment"
         it_behaves_like "a notification email with a link to the comment's thread"
-        it_behaves_like "a notification email with the commenters pseud and username"
+        it_behaves_like "a notification email with the commenter's pseud and username"
       end
     end
   end
 
-  describe "edited_comment_notification" do
+  describe "#edited_comment_notification" do
     subject(:email) { CommentMailer.edited_comment_notification(user, comment) }
 
     it_behaves_like "an email with a valid sender"
@@ -185,7 +185,7 @@ describe CommentMailer do
     it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
-    it_behaves_like "a notification email with the commenters pseud and username"
+    it_behaves_like "a notification email with the commenter's pseud and username"
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
@@ -200,7 +200,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
-      it_behaves_like "a notification email with the commenters pseud and username"
+      it_behaves_like "a notification email with the commenter's pseud and username"
     end
 
     context "when the comment is on a tag" do
@@ -208,7 +208,7 @@ describe CommentMailer do
 
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
-      it_behaves_like "a notification email with the commenters pseud and username"
+      it_behaves_like "a notification email with the commenter's pseud and username"
 
       context "when the comment is a reply to another comment" do
         let(:comment) { create(:comment, commentable: create(:comment, :on_tag), pseud: commenter_pseud) }
@@ -216,12 +216,12 @@ describe CommentMailer do
         it_behaves_like "a notification email with a link to the comment"
         it_behaves_like "a notification email with a link to reply to the comment"
         it_behaves_like "a notification email with a link to the comment's thread"
-        it_behaves_like "a notification email with the commenters pseud and username"
+        it_behaves_like "a notification email with the commenter's pseud and username"
       end
     end
   end
 
-  describe "comment_reply_notification" do
+  describe "#comment_reply_notification" do
     subject(:email) { CommentMailer.comment_reply_notification(parent_comment, comment) }
 
     let(:parent_comment) { create(:comment) }
@@ -233,7 +233,7 @@ describe CommentMailer do
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
     it_behaves_like "a notification email with a link to the comment's thread"
-    it_behaves_like "a notification email with the commenters pseud and username"
+    it_behaves_like "a notification email with the commenter's pseud and username"
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
@@ -254,7 +254,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
-      it_behaves_like "a notification email with the commenters pseud and username"
+      it_behaves_like "a notification email with the commenter's pseud and username"
     end
 
     context "when the comment is from a user using a banned email" do
@@ -293,7 +293,7 @@ describe CommentMailer do
     end
   end
 
-  describe "edited_comment_reply_notification" do
+  describe "#edited_comment_reply_notification" do
     subject(:email) { CommentMailer.edited_comment_reply_notification(parent_comment, comment) }
 
     let(:parent_comment) { create(:comment) }
@@ -305,7 +305,7 @@ describe CommentMailer do
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
     it_behaves_like "a notification email with a link to the comment's thread"
-    it_behaves_like "a notification email with the commenters pseud and username"
+    it_behaves_like "a notification email with the commenter's pseud and username"
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
@@ -320,7 +320,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
-      it_behaves_like "a notification email with the commenters pseud and username"
+      it_behaves_like "a notification email with the commenter's pseud and username"
     end
 
     context "when the comment is from a user using a banned email" do
@@ -339,7 +339,7 @@ describe CommentMailer do
     end
   end
 
-  describe "comment_sent_notification" do
+  describe "#comment_sent_notification" do
     subject(:email) { CommentMailer.comment_sent_notification(comment) }
 
     it_behaves_like "an email with a valid sender"
@@ -354,7 +354,7 @@ describe CommentMailer do
     end
   end
 
-  describe "comment_reply_sent_notification" do
+  describe "#comment_reply_sent_notification" do
     subject(:email) { CommentMailer.comment_reply_sent_notification(comment) }
 
     let(:parent_comment) { create(:comment, pseud: commenter_pseud) }
@@ -365,7 +365,7 @@ describe CommentMailer do
     it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to the comment's thread"
-    it_behaves_like "a notification email with the commenters pseud and username"
+    it_behaves_like "a notification email with the commenter's pseud and username"
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
@@ -380,7 +380,7 @@ describe CommentMailer do
 
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
-      it_behaves_like "a notification email with the commenters pseud and username" # for parent comment
+      it_behaves_like "a notification email with the commenter's pseud and username" # for parent comment
     end
   end
 end

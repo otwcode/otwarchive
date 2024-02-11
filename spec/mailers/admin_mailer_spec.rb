@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe AdminMailer do
-  describe "send_spam_alert" do
+  describe "#send_spam_alert" do
     let(:spam_user) { create(:user) }
 
     let(:spam1) do
@@ -130,7 +130,7 @@ describe AdminMailer do
     end
   end
 
-  describe "set_password_notification" do
+  describe "#set_password_notification" do
     subject(:email) { AdminMailer.set_password_notification(admin, token) }
 
     let(:admin) { create(:admin) }
@@ -222,7 +222,7 @@ describe AdminMailer do
 
     it_behaves_like "an email with a valid sender"
     it_behaves_like "a multipart email"
-    it_behaves_like "a notification email with the commenters pseud and username"
+    it_behaves_like "a notification email with the commenter's pseud and username"
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
@@ -248,12 +248,12 @@ describe AdminMailer do
     end
   end
 
-  describe "comment_edited_notification" do
+  describe "#comment_edited_notification" do
     subject(:email) { AdminMailer.edited_comment_notification(comment.id) }
 
     it_behaves_like "an email with a valid sender"
     it_behaves_like "a multipart email"
-    it_behaves_like "a notification email with the commenters pseud and username"
+    it_behaves_like "a notification email with the commenter's pseud and username"
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
