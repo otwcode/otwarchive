@@ -470,6 +470,11 @@ class User < ApplicationRecord
     return @coauthored_works
   end
 
+  #  Returns array of collections where the user is the sole author
+  def sole_owned_collections
+    self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
+  end
+
   ### BETA INVITATIONS ###
 
   #If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now

@@ -136,6 +136,10 @@ Then /^I should not see a button with text "(.*?)"(?: within "(.*?)")?$/ do |tex
   assure_xpath_not_present("input", "value", text, selector)
 end
 
+Then "I should see a link to {string} within {string}" do |url, selector|
+  assure_xpath_present("a", "href", url, selector)
+end
+
 Then "the {string} input should be blank" do |label|
   expect(find_field(label).value).to be_blank
 end

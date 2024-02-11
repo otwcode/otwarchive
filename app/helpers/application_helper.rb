@@ -150,7 +150,7 @@ module ApplicationHelper
     options[:for] ||= ""
     options[:title] ||= options[:for]
 
-    html_options = { "class" => options[:class] + " modal", "title" => options[:title], "aria-controls" => "#modal" }
+    html_options = { class: "#{options[:class]} modal", title: options[:title] }
     link_to content, options[:for], html_options
   end
 
@@ -191,9 +191,14 @@ module ApplicationHelper
     keys.collect { |key|
       if flash[key]
         if flash[key].is_a?(Array)
-          content_tag(:div, content_tag(:ul, flash[key].map { |flash_item| content_tag(:li, h(flash_item)) }.join("\n").html_safe), class: "flash #{key}")
+          content_tag(:div,
+            content_tag(:ul,
+              safe_join(flash[key].map do |flash_item|
+                content_tag(:li, sanitize(flash_item))
+              end), "\n"),
+            class: "flash #{key}")
         else
-          content_tag(:div, h(flash[key]), class: "flash #{key}")
+          content_tag(:div, sanitize(flash[key]), class: "flash #{key}")
         end
       end
     }.join.html_safe
