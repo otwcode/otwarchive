@@ -192,6 +192,7 @@ Given /^the tag wrangling setup$/ do
   step %{I am logged in as a random user}
   step %{I post the work "Revenge of the Sith 2" with fandom "Star Wars, Stargate SG-1" with character "Daniel Jackson" with second character "Jack O'Neil" with rating "Not Rated" with relationship "JackDaniel"}
   step %{The periodic tag count task is run}
+  step %{all indexing jobs have been run}
   step %{I flush the wrangling sidebar caches}
 end
 
@@ -442,4 +443,8 @@ end
 Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
   tag = Tag.find_by(name: tagname)
   puts tag.inspect
+end
+
+Then "no tag is scheduled for count update from now on" do
+  expect_any_instance_of(Tag).not_to receive(:update_filters_for_filterables)
 end

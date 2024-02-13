@@ -1,6 +1,6 @@
 class Creatorship < ApplicationRecord
-  belongs_to :pseud, inverse_of: :creatorships
-  belongs_to :creation, inverse_of: :creatorships, polymorphic: true, touch: true
+  belongs_to :pseud
+  belongs_to :creation, polymorphic: true, touch: true
 
   scope :approved, -> { where(approved: true) }
   scope :unapproved, -> { where(approved: false) }

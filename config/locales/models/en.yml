@@ -64,6 +64,8 @@ en:
       series/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
+      skin/skin_parents:
+        parent_skin: Parent skin
       user:
         login: User name
       work:
@@ -146,6 +148,15 @@ en:
               not_work: Only a link to a work can be listed as an inspiration.
               protected: You can't use the related works function to cite works by the protected user %{login}.
           format: "%{message}"
+        skin/skin_parents:
+          attributes:
+            base:
+              format: "%{message}"
+        skin_parent:
+          attributes:
+            base:
+              format: "%{message}"
+              site_parent: You can't use %{title} as a parent unless replacing the default archive skin.
         user:
           attributes:
             login:
