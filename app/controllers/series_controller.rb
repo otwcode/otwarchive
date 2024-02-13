@@ -52,6 +52,7 @@ class SeriesController < ApplicationController
                                                        subscribable_type: 'Series').first ||
                       current_user.subscriptions.build(subscribable: @series)
     end
+    @works = @works.paginate(page: params[:page])
   end
 
   # GET /series/new
