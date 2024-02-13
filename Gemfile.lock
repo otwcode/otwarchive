@@ -496,7 +496,7 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.3)
-    rubocop (1.54)
+    rubocop (= 1.22.1)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -682,7 +682,7 @@ DEPENDENCIES
   rest-client (~> 2.1.0)
   rollout
   rspec-rails (~> 4.0.1)
-  rubocop (= 1.54)
+  rubocop (= 1.22.1)
   rubocop-rails (= 2.12.4)
   rubocop-rspec (= 2.6.0)
   rvm-capistrano
