@@ -22,7 +22,7 @@ end
 
 # We set the default domain to example.org.
 # The phantomjs drive fetchs pages directly so some tests will go to example.org
-# setting this whitelist stops this happening which is in itself a good thing
+# setting this allowlist stops this happening which is in itself a good thing
 # and makes the network traces easier to read as there are less calls to twitter etc.
 
 When /^I limit myself to the Archive$/ do

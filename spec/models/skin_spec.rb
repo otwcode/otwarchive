@@ -48,7 +48,7 @@ describe Skin do
         li.relationships + li.freeforms:before { content: 'Freeform: '; }
         li:before {content: url('http://foo.com/bullet.jpg')}",
 
-      "allows whitelisted image extensions" =>
+      "allows allowlisted image extensions" =>
         ".a { background: url('http://example.com/i.jpg'); }
         .b { background: url('http://example.com/i.jpeg'); }
         .c { background: url('http://example.com/i.png'); }
@@ -187,10 +187,10 @@ describe Skin do
       end
 
       {
-        "doesn't allow max-width that isn't whitelisted" => "only screen and (max-width: 1024px)",
-        "doesn't allow media that isn't whitelisted" => "(min-aspect-ratio: 8/5)",
-        "doesn't allow two whitelisted media combined with and instead of a comma" => "screen and (prefers-color-scheme: dark",
-        "doesn't allow combination of whitelisted media and non-whitelisted media" => "(prefers-color-scheme: dark), (monochrome)"
+        "doesn't allow max-width that isn't allowlisted" => "only screen and (max-width: 1024px)",
+        "doesn't allow media that isn't allowlisted" => "(min-aspect-ratio: 8/5)",
+        "doesn't allow two allowlisted media combined with and instead of a comma" => "screen and (prefers-color-scheme: dark",
+        "doesn't allow combination of allowlisted media and non-allowlisted media" => "(prefers-color-scheme: dark), (monochrome)"
       }.each_pair do |description, media_query|
         it description do
           @skin.media = [media_query]
