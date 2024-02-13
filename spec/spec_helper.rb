@@ -82,11 +82,6 @@ RSpec.configure do |config|
     Indexer.all.map(&:delete_index)
   end
 
-  # Remove the folder where test images are saved.
-  config.after(:suite) do
-    FileUtils.rm_rf(Dir[Rails.root.join("public/system/test")])
-  end
-
   config.before :each, bookmark_search: true do
     BookmarkIndexer.prepare_for_testing
   end
