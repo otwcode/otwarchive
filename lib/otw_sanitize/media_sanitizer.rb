@@ -3,7 +3,7 @@
 # Creates a Sanitize transformer to sanitize audio and video tags
 module OtwSanitize
   class MediaSanitizer
-    # Attribute whitelists
+    # Attribute allowlists
     AUDIO_ATTRIBUTES = %w[
       class controls crossorigin dir
       loop muted preload src title
@@ -17,7 +17,7 @@ module OtwSanitize
     SOURCE_ATTRIBUTES = %w[src type].freeze
     TRACK_ATTRIBUTES = %w[default kind label src srclang].freeze
 
-    WHITELIST_CONFIG = {
+    ALLOWLIST_CONFIG = {
       elements: %w[
         audio video source track
       ] + Sanitize::Config::ARCHIVE[:elements],
@@ -55,7 +55,7 @@ module OtwSanitize
     def self.transformer
       lambda do |env|
         # Don't continue if this node is already safelisted.
-        return if env[:is_whitelisted]
+        return if env[:is_allowlisted]
 
         new(env[:node]).sanitized_node
       end
@@ -68,15 +68,15 @@ module OtwSanitize
       @node = node
     end
 
-    # Skip if it's not media or if we don't want to whitelist it
+    # Skip if it's not media or if we don't want to allowlist it
     def sanitized_node
       return unless media_node?
       return if blacklisted_source?
 
-      config = Sanitize::Config.merge(Sanitize::Config::ARCHIVE, WHITELIST_CONFIG)
+      config = Sanitize::Config.merge(Sanitize::Config::ARCHIVE, ALLOWLIST_CONFIG)
       Sanitize.clean_node!(node, config)
       tidy_boolean_attributes(node)
-      { node_whitelist: [node] }
+      { node_allowlist: [node] }
     end
 
     def node_name
