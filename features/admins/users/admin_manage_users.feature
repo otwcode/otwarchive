@@ -68,7 +68,7 @@ Feature: Admin Actions to manage users
     When time is frozen at 1/1/2019
       And I am logged in as "new_user"
       And I am logged out
-      And I jump in our Delorean and return to the present
+      And time is returned to the present
       And I am logged in as a "support" admin
       And I go to the user administration page for "new_user"
     Then I should not see "No login recorded"
