@@ -12,7 +12,7 @@ describe RedisHitCounter do
     end
 
     it "returns the current date at 3:00 AM UTC" do
-      travel_to(Time.parse("2020-01-30 03:00:00 UTC"))do
+      travel_to(Time.parse("2020-01-30 03:00:00 UTC")) do
         expect(RedisHitCounter.current_timestamp).to eq("20200130")
       end
     end
