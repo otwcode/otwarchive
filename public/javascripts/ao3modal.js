@@ -193,8 +193,10 @@ jQuery(document).ready(function() {
                         .append(img);
 
                 a.addClass('modal modal-attached')
-                    .attr('aria-controls', '#modal')
-                    .click(function(event){
+                    .attr('aria-controls', 'modal')
+                    .filter(function() {
+                        return $(this).closest('.userstuff').length === 0;
+                    }).click(function(event){
                         _show($(this).attr('href'), $(this).attr('title'));
                         event.preventDefault();
                     });

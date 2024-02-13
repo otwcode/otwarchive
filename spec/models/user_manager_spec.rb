@@ -4,6 +4,7 @@ describe UserManager do
   describe "#save" do
     let(:admin) { create(:admin) }
     let(:user) { create(:user) }
+    let(:orphan) { create(:user, login: "orphan_account") }
 
     it "returns error without user" do
       manager = UserManager.new(admin, nil, {})
@@ -11,6 +12,12 @@ describe UserManager do
       expect(manager.errors).to eq ["Must have a valid user and admin account to proceed."]
     end
 
+    it "returns error if user is orphan_account" do
+      manager = UserManager.new(admin, orphan, admin_action: "suspend", suspend_days: "7")
+      expect(manager.save).to be_falsey
+      expect(manager.errors).to eq ["orphan_account cannot be warned, suspended, or banned."]
+    end
+    
     it "does nothing without an admin action" do
       manager = UserManager.new(admin, user, {})
       expect do

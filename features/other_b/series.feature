@@ -207,6 +207,8 @@ Feature: Create and Edit Series
     Then I should see "Work was successfully updated."
       And "moon" should be a creator of the series "Ponies"
       And "son" should be a creator on the series "Ponies"
+      # Delay to make sure the cache is expired
+      And it is currently 1 second from now
     When I follow "Remove Me As Co-Creator"
     Then I should see "You have been removed as a creator from the series and its works."
       And "moon" should not be the creator of the series "Ponies"

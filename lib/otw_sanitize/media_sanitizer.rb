@@ -22,31 +22,37 @@ module OtwSanitize
         audio video source track
       ] + Sanitize::Config::ARCHIVE[:elements],
       attributes: {
-        'audio'  => AUDIO_ATTRIBUTES,
-        'video'  => VIDEO_ATTRIBUTES,
-        'source' => SOURCE_ATTRIBUTES,
-        'track'  => TRACK_ATTRIBUTES
+        "audio" => AUDIO_ATTRIBUTES,
+        "video" => VIDEO_ATTRIBUTES,
+        "source" => SOURCE_ATTRIBUTES,
+        "track" => TRACK_ATTRIBUTES
       },
       add_attributes: {
-        'audio' => {
-          'controls'    => 'controls',
-          'crossorigin' => 'anonymous',
-          'preload'     => 'metadata'
+        "audio" => {
+          "controls" => "controls",
+          "crossorigin" => "anonymous",
+          "preload" => "metadata"
         },
-        'video' => {
-          'controls'    => 'controls',
-          'playsinline' => 'playsinline',
-          'crossorigin' => 'anonymous',
-          'preload'     => 'metadata'
+        "video" => {
+          "controls" => "controls",
+          "playsinline" => "playsinline",
+          "crossorigin" => "anonymous",
+          "preload" => "metadata"
         }
       },
       protocols: {
-        'audio' => {
-          'src'    => %w[http https]
+        "audio" => {
+          "src" => %w[http https]
         },
-        'video' => {
-          'poster' => %w[http https],
-          'src'    => %w[http https]
+        "video" => {
+          "poster" => %w[http https],
+          "src" => %w[http https]
+        },
+        "source" => {
+          "src" => %w[http https]
+        },
+        "track" => {
+          "src" => %w[http https]
         }
       }
     }.freeze
@@ -71,7 +77,7 @@ module OtwSanitize
     # Skip if it's not media or if we don't want to allowlist it
     def sanitized_node
       return unless media_node?
-      return if blacklisted_source?
+      return if banned_source?
 
       config = Sanitize::Config.merge(Sanitize::Config::ARCHIVE, ALLOWLIST_CONFIG)
       Sanitize.clean_node!(node, config)
@@ -100,9 +106,10 @@ module OtwSanitize
       Addressable::URI.parse(url).normalize.host
     end
 
-    def blacklisted_source?
+    def banned_source?
       return unless source_host
-      ArchiveConfig.BLACKLISTED_MULTIMEDIA_SRCS.any? do |blocked|
+
+      ArchiveConfig.BANNED_MULTIMEDIA_SRCS.any? do |blocked|
         source_host.match(blocked)
       end
     end

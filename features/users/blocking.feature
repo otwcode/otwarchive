@@ -17,6 +17,7 @@ Feature: Blocking
       And I press "Yes, Block User"
     Then I should see "You have blocked the user pest."
       And the user "blocker" should have a block for "pest"
+      And the blurb should not say when "blocker" blocked "pest"
 
     Examples:
       | page                                                 |
@@ -39,7 +40,7 @@ Feature: Blocking
       And I am logged in as "blocker"
     When I go to pest's user page
       And I follow "Block"
-    Then I should see "Sorry, you can't block an official account."
+    Then I should see "Sorry, you can't block an official user."
       And I should not see a "Yes, Block User" button
 
   Scenario: Users cannot block themselves
@@ -109,6 +110,7 @@ Feature: Blocking
     When I am logged in as a "<role>" admin
       And I go to the blocked users page for "blocker"
     Then I should see "pest"
+      And the blurb should say when "blocker" blocked "pest"
       And I should see a link "Unblock"
     When I follow "Unblock"
     Then I should see "Sorry, you don't have permission to access the page you were trying to reach."

@@ -44,6 +44,8 @@ class Work < ApplicationRecord
   has_many :total_comments, class_name: 'Comment', through: :chapters
   has_many :kudos, as: :commentable, dependent: :destroy
 
+  has_many :original_creators, class_name: "WorkOriginalCreator", dependent: :destroy
+
   belongs_to :language
   belongs_to :work_skin
   validate :work_skin_allowed, on: :save
@@ -144,6 +146,13 @@ class Work < ApplicationRecord
   validates :rating_string,
             presence: { message: "^Please choose a rating." }
 
+  validate :only_one_rating
+  def only_one_rating
+    return unless split_tag_string(rating_string).count > 1
+
+    errors.add(:base, ts("Only one rating is allowed."))
+  end
+
   # rephrases the "chapters is invalid" message
   after_validation :check_for_invalid_chapters
   def check_for_invalid_chapters
@@ -177,7 +186,7 @@ class Work < ApplicationRecord
       next if self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud)
       next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(gift.pseud)
 
-      self.errors.add(:base, ts("#{gift.pseud.byline} does not accept gifts."))
+      self.errors.add(:base, ts("%{byline} does not accept gifts.", byline: gift.pseud.byline))
     end
   end
 
@@ -209,7 +218,7 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series, :touch_related_works
   after_destroy :expire_caches, :update_pseud_index
 
   before_destroy :send_deleted_work_notification, prepend: true
@@ -370,13 +379,19 @@ class Work < ApplicationRecord
   def self.find_by_url_uncached(url)
     url = UrlFormatter.new(url)
     Work.where(imported_from_url: url.original).first ||
-      Work.where(imported_from_url: [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
-      Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
+      Work.where(imported_from_url: [url.minimal,
+                                     url.with_http, url.with_https,
+                                     url.no_www, url.with_www,
+                                     url.encoded, url.decoded,
+                                     url.minimal_no_protocol_no_www]).first ||
+      Work.where("imported_from_url LIKE ? or imported_from_url LIKE ?",
+                 "http://#{url.minimal_no_protocol_no_www}%",
+                 "https://#{url.minimal_no_protocol_no_www}%").select do |w|
         work_url = UrlFormatter.new(w.imported_from_url)
-        ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
+        %w[original minimal no_www with_www with_http with_https encoded decoded].any? do |method|
           work_url.send(method) == url.send(method)
-        }
-      }.first
+        end
+      end.first
   end
 
   def self.find_by_url(url)
@@ -452,9 +467,11 @@ class Work < ApplicationRecord
 
   # Only allow a work to fulfill an assignment assigned to one of this work's authors
   def challenge_assignment_ids=(ids)
+    valid_users = (self.users + [User.current_user]).compact
+
     self.challenge_assignments =
-      ids.map { |id| id.blank? ? nil : ChallengeAssignment.find(id) }.compact.
-      select { |assign| (self.users + [User.current_user]).compact.include?(assign.offering_user) }
+      ChallengeAssignment.where(id: ids)
+        .select { |assign| valid_users.include?(assign.offering_user) }
   end
 
   def recipients=(recipient_names)
@@ -544,17 +561,6 @@ class Work < ApplicationRecord
   ########################################################################
   # VERSIONS & REVISION DATES
   ########################################################################
-
-  # provide an interface to increment major version number
-  # resets minor_version to 0
-  def update_major_version
-    self.update({ major_version: self.major_version + 1, minor_version: 0 })
-  end
-
-  # provide an interface to increment minor version number
-  def update_minor_version
-    self.update_attribute(:minor_version, self.minor_version+1)
-  end
 
   def set_revised_at(date=nil)
     date ||= self.chapters.where(posted: true).maximum('published_at') ||
@@ -781,12 +787,6 @@ class Work < ApplicationRecord
     return !self.is_wip
   end
 
-  # 1/1, 2/3, 5/?, etc.
-  def chapter_total_display
-    current = self.posted? ? self.number_of_posted_chapters : 1
-    current.to_s + '/' + self.wip_length.to_s
-  end
-
   # Set the value of word_count to reflect the length of the chapter content
   # Called before_save
   def set_word_count(preview = false)
@@ -936,6 +936,14 @@ class Work < ApplicationRecord
     parent_work_relationships.reject(&:marked_for_destruction?)
   end
 
+  def touch_related_works
+    return unless saved_change_to_in_unrevealed_collection?
+
+    # Make sure download URLs of child and parent works expire to preserve anonymity.
+    children.touch_all
+    parents_after_saving.each { |rw| rw.parent.touch }
+  end
+
   #################################################################################
   #
   # In this section we define various named scopes that can be chained together
@@ -1012,6 +1020,19 @@ class Work < ApplicationRecord
     joins(:series).
     where("series.id = ?", series.id)
   end
+
+  scope :with_columns_for_blurb, lambda {
+    select(:id, :created_at, :updated_at, :expected_number_of_chapters,
+           :posted, :language_id, :restricted, :title, :summary, :word_count,
+           :hidden_by_admin, :revised_at, :complete, :in_anon_collection,
+           :in_unrevealed_collection, :summary_sanitizer_version)
+  }
+
+  scope :with_includes_for_blurb, lambda {
+    includes(:pseuds, :approved_collections, :stat_counter)
+  }
+
+  scope :for_blurb, -> { with_columns_for_blurb.with_includes_for_blurb }
 
   ########################################################################
   # SORTING
@@ -1229,5 +1250,11 @@ class Work < ApplicationRecord
   def nonfiction
     nonfiction_tags = [125773, 66586, 123921, 747397] # Essays, Nonfiction, Reviews, Reference
     (filter_ids & nonfiction_tags).present?
+  end
+
+  # Determines if this work allows invitations to collections,
+  # meaning that at least one of the creators has opted-in.
+  def allow_collection_invitation?
+    users.any? { |user| user.preference.allow_collection_invitation }
   end
 end

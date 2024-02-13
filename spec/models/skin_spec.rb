@@ -28,6 +28,10 @@ describe Skin do
         dd {color: blue;}
         /* end comment */",
 
+      "should allow hsl(a) colours" =>
+        "ol {color: hsl(180, 100%, 50%);}
+        li {color: hsla(90, 30%, 70%, 50%);}",
+      
       "should allow through border-radius (CSS3 property)" =>
         ".profile { border-radius: 5px }",
 
@@ -107,7 +111,10 @@ describe Skin do
                 color:#555 }",
  
         "saves box shadows with multiple shadows" =>
-          "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }"
+          "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }",
+
+        "saves very long CSS" =>
+          "#main { background: url(http://example.com/#{'a' * 70_000}.png); }"
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css

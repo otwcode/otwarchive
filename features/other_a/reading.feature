@@ -28,7 +28,7 @@ Feature: Reading count
 
     When time is frozen at 20/4/2020
       And I go to the work "some work"
-      And the reading rake task is run
+      And the readings are saved to the database
       And I go to fandomer's reading page
     Then I should see "Visited 2 times"
       And I should see "Last visited: 20 Apr 2020"
@@ -52,7 +52,7 @@ Feature: Reading count
     Then I should not see "My History"
 
     When I go to the work "some work"
-      And the reading rake task is run
+      And the readings are saved to the database
       And I go to fandomer's reading page
     Then I should see "You have reading history disabled"
       And I should not see "some work"
@@ -66,7 +66,7 @@ Feature: Reading count
       And I should see "Last visited: 25 May 2010"
     When time is frozen at 20/4/2020
       And I go to the work "some work"
-      And the reading rake task is run
+      And the readings are saved to the database
       And I go to fandomer's reading page
     Then I should see "Visited 2 times"
       And I should see "Last visited: 20 Apr 2020"
@@ -82,8 +82,8 @@ Feature: Reading count
       And I am on testuser2 works page
       And I follow "fifth"
       And I should see "fifth by testuser2"
-      And I follow "Proceed"
-      And the reading rake task is run
+      And I follow "Yes, Continue"
+      And the readings are saved to the database
     When I go to fandomer's reading page
     Then I should see "History" within "div#dashboard"
       And I should see "First work"
@@ -141,20 +141,20 @@ Feature: Reading count
   When I am logged out
     And I am logged in as "fandomer"
     And I view the work "multichapter work"
-  When the reading rake task is run
+  When the readings are saved to the database
     And I go to fandomer's reading page
   Then I should see "multichapter work"
     And I should see "Visited once"
   When I press "Delete from History"
   Then I should see "Work successfully deleted from your history."
   When I view the work "multichapter work"
-    And the reading rake task is run
+    And the readings are saved to the database
   When I go to fandomer's reading page
   Then I should see "multichapter work"
     And I should see "Visited once"
   When I view the work "multichapter work"
     And I follow "Next Chapter"
-    And the reading rake task is run
+    And the readings are saved to the database
   When I go to fandomer's reading page
   Then I should see "multichapter work"
     And I should see "Visited 3 times"
@@ -162,7 +162,7 @@ Feature: Reading count
     And I follow "Next Chapter"
   When I follow "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
-    And the reading rake task is run
+    And the readings are saved to the database
     And I go to fandomer's reading page
   Then I should see "multichapter work"
     And I should see "Visited 6 times"
@@ -211,7 +211,7 @@ Feature: Reading count
     And I am logged out
   When I am logged in as "reader" with password "password"
     And I mark the work "Gone Gone Gone" for later
-    And the reading rake task is run
+    And the readings are saved to the database
     And I am logged out
   When I am logged in as "golucky" with password "password"
     And I delete the work "Gone Gone Gone"
@@ -234,7 +234,7 @@ Feature: Reading count
     And I am logged out
   When I am logged in as "reader" with password "password"
     And I mark the work "Some Work V1" for later
-    And the reading rake task is run
+    And the readings are saved to the database
     And I am logged out
   When I am logged in as "editor" with password "password"
     And I edit the work "Some Work V1"

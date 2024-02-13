@@ -42,7 +42,7 @@ SUBSECTIONS:
   width: 36%;
 }
 
-.splash .intro, .splash .tweets {
+.splash .intro, .splash .social {
   float: right;
   width: 60%;
 }
@@ -185,11 +185,14 @@ SUBSECTIONS:
   margin: 1em;
 }
 
-/* module: twitter */
+/* module: social */
 
-.tweets iframe {
-  display: block !important;
-  margin: 0 auto;
+.splash .social ul {
+  text-align: center;
+}
+
+.splash .social li {
+  display: inline-block;
 }
 
 /* mod: logged-in */
@@ -218,7 +221,7 @@ SUBSECTIONS:
   width: 48%;
 }
 
-.sessions-new .new_admin {
+.sessions-new #new_admin {
   width: 75%;
   margin: auto;
 }

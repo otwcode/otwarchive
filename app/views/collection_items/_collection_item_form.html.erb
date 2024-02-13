@@ -2,7 +2,17 @@
 <% @collection_item ||= CollectionItem.new %>
 <% in_page ||= false %>
 <div id="collection-form">
-  <h3 class="heading"><%= ts("Add %{title} to collections", :title => item.respond_to?(:title) ? item.title : item.class.name).html_safe %></h3>
+  <% if item.is_a?(Work) %>
+    <h3 class="heading">
+      <% if current_user.archivist %>
+        <%= t(".add_work_header_html", title: item.title) %>
+      <% else %>
+        <%= t(".invite_header_html", title: item.title) %>
+      <% end %>
+    </h3>
+  <% else %>
+    <h3 class="heading"><%= t(".add_bookmark_header") %></h3>
+  <% end %>
   <%
     # when in the works controller, such as for a non-multi-chapter work, form_for does not set work_id
     # so the create action of the collection_items controller fails to find the targetted work
@@ -16,7 +26,11 @@
     </dd>
     <dt class="landmark"><%= ts("Submit") %></dt>
     <dd class="submit actions">
-      <%= form.submit(ts("Add")) %>
+      <% if item.is_a?(Work) && !current_user.archivist %>
+        <%= form.submit(t(".invite")) %>
+      <% else %>
+        <%= form.submit(t(".add")) %>
+      <% end %>
       <% if in_page %>
         <a class="collection_item_form_placement_close" href="#comments"><%= ts("Cancel") %></a>
       <% else %>

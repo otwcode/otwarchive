@@ -77,7 +77,7 @@ class SkinsController < ApplicationController
         flash[:notice] += ts(" We've added all the archive skin components as parents. You probably want to remove some of them now!")
         redirect_to edit_skin_path(@skin)
       else
-        redirect_to @skin
+        redirect_to skin_path(@skin)
       end
     else
       if params[:wizard]

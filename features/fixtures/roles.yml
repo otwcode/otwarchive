@@ -4,9 +4,6 @@ wrangler:
 translator:
   id: 2
   name: translator
-translation_admin:
-  id: 3
-  name: translation_admin
 archivist:
   id: 4
   name: archivist

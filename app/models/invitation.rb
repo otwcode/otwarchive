@@ -14,7 +14,7 @@ class Invitation < ApplicationRecord
   end
 
   # ensure email is valid
-  validates :invitee_email, email_veracity: true, allow_blank: true
+  validates :invitee_email, email_format: true, allow_blank: true
 
   scope :unsent, -> { where(invitee_email: nil, redeemed_at: nil) }
   scope :unredeemed, -> { where('invitee_email IS NOT NULL and redeemed_at IS NULL') }

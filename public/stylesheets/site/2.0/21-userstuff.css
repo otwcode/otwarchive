@@ -4,7 +4,7 @@
     word-wrap: break-word;
 }
 
-.userstuff p {
+.userstuff p, .userstuff details {
   margin: 1.286em auto;
   padding: 0;
   line-height: 1.5;
