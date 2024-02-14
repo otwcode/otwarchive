@@ -1,6 +1,5 @@
 class Collection < ApplicationRecord
   include Filterable
-  include UrlHelpers
   include WorksOwner
 
   has_attached_file :icon,
@@ -177,7 +176,7 @@ class Collection < ApplicationRecord
 
   before_validation :cleanup_url
   def cleanup_url
-    self.header_image_url = reformat_url(self.header_image_url) if self.header_image_url
+    self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
   end
 
   # Get only collections with running challenges

@@ -150,7 +150,7 @@ module ApplicationHelper
     options[:for] ||= ""
     options[:title] ||= options[:for]
 
-    html_options = { "class" => options[:class] + " modal", "title" => options[:title], "aria-controls" => "#modal" }
+    html_options = { class: "#{options[:class]} modal", title: options[:title] }
     link_to content, options[:for], html_options
   end
 
