@@ -293,6 +293,7 @@ en:
         title: Block %{name}
         will:
           commenting: commenting or leaving kudos on your works
+          gifting: giving you gift works outside of challenge assignments and claimed prompts
           intro: 'Blocking a user prevents them from:'
           replying: replying to your comments anywhere on the site
         will_not:
@@ -305,6 +306,7 @@ en:
         cancel: Cancel
         resume:
           commenting: commenting or leaving kudos on your works
+          gifting: giving you gift works outside of challenge assignments and claimed prompts
           intro: 'Unblocking a user allows them to resume:'
           replying: replying to your comments anywhere on the site
         sure_html: Are you sure you want to %{unblock} %{username}?
@@ -324,6 +326,7 @@ en:
         title: Blocked Users
         will:
           commenting: commenting or leaving kudos on your works
+          gifting: giving you gift works outside of challenge assignments and claimed prompts
           intro:
             one: 'You can block up to %{block_limit} user. Blocking a user prevents them from:'
             other: 'You can block up to %{block_limit} users. Blocking a user prevents them from:'
