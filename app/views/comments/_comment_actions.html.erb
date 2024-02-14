@@ -1,6 +1,6 @@
 <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
-<ul class="actions" id="navigation_for_comment_<%= comment.id %>">
+<ul class="actions" id="navigation_for_comment_<%= comment.id %>" <% if focused_on_comment(comment) %> style="display:none;"<% end %>>
   <% # The effect is "Frozen" replaces "Reply." We can't do that in the helper
      # method for the reply link because that would prevent "Frozen" from
      # appearing on the Unreviewed Comments page for works with moderated
@@ -9,7 +9,7 @@
     <li><%= frozen_comment_indicator %></li>
   <% end %>
   <% if can_reply_to_comment?(comment) %>
-    <li id="add_comment_reply_link_<%= comment.id %>"><%= add_cancel_comment_reply_link comment %></li>
+    <li id="add_comment_reply_link_<%= comment.id %>"><%= add_comment_reply_link comment %></li>
   <% end %>
   <% unless comment.unreviewed? %>
     <li><%= link_to ts("Thread"), comment %></li>
@@ -65,7 +65,7 @@
 <% if can_reply_to_comment?(comment) %>
   <% # This is where the reply-to box will be added when "Reply" is hit, if the user has JavaScript. %>
   <% # If not, we will render the comment form if this is the comment we are replying to. %>
-  <% if params[:add_comment_reply_id] && params[:add_comment_reply_id] == comment.id.to_s %>
+  <% if focused_on_comment(comment) %>
     <div id="add_comment_reply_placeholder_<%= comment.id %>" title="<%= ts("reply to this comment") %>">
       <%= render 'comments/comment_form',
         :comment => Comment.new,
