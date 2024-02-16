@@ -8,46 +8,46 @@ describe Skin do
 
     # good css
     {
-      "should allow through basic CSS including font family" =>
+      "allows basic CSS including font family" =>
         "body { background-color: #ffffff;}
          h1 { font-family: 'Fertigo Pro', Verdana, serif; }",
 
-      "should allow through valid CSS shorthand values" =>
+      "allows valid CSS shorthand values" =>
         "body {background:#ffffff url('http://mywebsite.com/img_tree.png') no-repeat right top;}",
 
-      "should allow images in the images directory" =>
+      "allows images in the images directory" =>
         "body {background:#ffffff url('/images/img_tree.png') no-repeat right top;}",
 
-      "should allow unquoted urls" =>
+      "allows unquoted URLs" =>
         "body {background:#ffffff url(http://mywebsite.com/images/img_tree.png) no-repeat right top;}",
 
-      "should allow comments on their own lines" =>
+      "allows comments on their own lines" =>
         "/* starting comment */
         li {color: green;}
         /* middle comment */
         dd {color: blue;}
         /* end comment */",
 
-      "should allow hsl(a) colours" =>
+      "allows hsl(a) colors" =>
         "ol {color: hsl(180, 100%, 50%);}
         li {color: hsla(90, 30%, 70%, 50%);}",
-      
-      "should allow through border-radius (CSS3 property)" =>
+
+      "allows border-radius (CSS3 property)" =>
         ".profile { border-radius: 5px }",
 
-      ".should allow through specific border radius properties" =>
+      "allows specific border radius properties" =>
         ".profile { border-bottom-right-radius: 10px; }",
 
-      "should allow through box-shadow (CSS3 property)" =>
+      "allows box-shadow (CSS3 property)" =>
         ".profile { box-shadow: 5px 5px 5px black; }",
 
-      "should allow through alphabetic strings as keyword values even if they are not explicitly listed" =>
+      "allows alphabetic strings as keyword values even if they are not explicitly listed" =>
         "#main .navigation input { vertical-align: baseline; }
         #header .navigation li { text-transform: capitalize; }
         table { border-collapse: separate !important; }
         ",
 
-      "should allow through valid CSS3 rules using quoted strings as content." =>
+      "allows valid CSS3 rules using quoted strings as content." =>
         "li.characters + li.freeforms:before {content: '||'}
         li.relationships + li.freeforms:before { content: 'Freeform: '; }
         li:before {content: url('http://foo.com/bullet.jpg')}",
@@ -58,7 +58,7 @@ describe Skin do
         .c { background: url('http://example.com/i.png'); }
         .d { background: url('http://example.com/i.gif'); }",
 
-      "should allow through properties that are variations on the ones in the shorthand config list" =>
+      "allows properties that are variations on the ones in the shorthand config list" =>
         "#main ul.sorting {
           background: rgba(120,120,120,1) 5%;
           -moz-border-radius:0.15em !important;
@@ -70,7 +70,7 @@ describe Skin do
         #main ul.sorting a {
           border-color:rgba(86,86,86,1) !important;
           color:rgba(231,231,231,1);
-          text-shadow:-1px -1px 0 rgba(0,0,0,0.75)
+          text-shadow:-1px -1px 0 rgba(0,0,0,0.75);
         }
         ul.sorting  a:hover {
           background: rgba(71,71,71,1) 5% !important;
@@ -78,9 +78,13 @@ describe Skin do
         }
         #main .navigation ul.sorting a:visited{
           color:rgba(254,254,254,1)
+        }
+        .flex-container {
+          flex: 2 2 20em;
+          flex-flow: row-reverse wrap;
         }",
 
-      "should allow through gradients, clip, scale, skew, translate, rotate" =>
+      "allows gradients, clip, scale, skew, translate, rotate" =>
         "#main ul.sorting {
         background:-moz-linear-gradient(bottom, rgba(120,120,120,1) 5%, rgba(94,94,94,1) 50%, rgba(108,108,108,1) 55%, rgba(137,137,137,1) 100%) ;
         }
@@ -100,16 +104,35 @@ describe Skin do
         #main .rotatevert {transform: rotatey(180deg);}
         .rotatehoriz {transform: rotatex(50deg)}",
 
-        "should allow multiple valid values for a single property" =>
+      "allows multiple valid values for a single property" =>
         "#outer .actions a:hover,symbol .question:hover,.actions input:hover,#outer input[type=\"submit\"]:hover,button:hover,.actions label:hover
-                { background:#ddd;
-                background:-webkit-linear-gradient(top,#fafafa,#ddd);
-                background:-moz-linear-gradient(top,#fafafa,#ddd);
-                background:-ms-linear-gradient(top,#fafafa,#ddd);
-                background:-o-linear-gradient(top,#fafafa,#ddd);
-                background:linear-gradient(top,#fafafa,#ddd);
-                color:#555 }",
- 
+        { background:#ddd;
+        background:-webkit-linear-gradient(top,#fafafa,#ddd);
+        background:-moz-linear-gradient(top,#fafafa,#ddd);
+        background:-ms-linear-gradient(top,#fafafa,#ddd);
+        background:-o-linear-gradient(top,#fafafa,#ddd);
+        background:linear-gradient(top,#fafafa,#ddd);
+        color:#555 }",
+
+      "allows display property with flex values" =>
+        ".flex-container { display: flex; }
+        .flex-container-inline { display: inline-flex; }",
+
+      "allows align-content property" =>
+        "div { align-content: flex-start; }",
+
+      "allows align-items property" =>
+        "div { align-items: stretch }",
+
+      "allows align-self property" =>
+        ".flex-item { align-self: center; }",
+
+      "allows justify-content property" =>
+        "div { justify-content: flex-end; }",
+
+      "allows order property with negative value" =>
+        "div { order: -1 }",
+
         "saves box shadows with multiple shadows" =>
           "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }",
 
@@ -124,22 +147,22 @@ describe Skin do
 
     # bad bad bad css
     {
-      "should not save garbage with braces" => "blhalkdfasd {ljaflkasjdflasd}",
-      "should not save garbage with braces and colon" => "blhalkdfasd {ljaflkasjdflasd: }",
-      "should not save garbage with invalid property" => "blhalkdfasd {ljaflkasjdflasd: aklsdfjsdf}",
-      "should not save urls with xss" => "body {-moz-binding:url('http://ha.ckers.org/xssmoz.xml#xss')}",
-      "should not save @font-face" => "@font-face { font-family: Delicious; src: url('Delicious-Roman.otf');}",
-      "should not save @import" => "@import url('http://ha.ckers.org/xss.css');",
-      "should not save src" => "body {border: src('http://foo.com/')}",
-      "should not save url for font" => "body {font: url(http://foo.com/bar.png)}",
-      "should not save htc urls" => "body {behavior: url(xss.htc);}",
-      "should not save javascript in li" => "li {background-image: url(javascript:alert('XSS'));}",
-      "should not save expression" => "div {width: expression(alert('XSS'));}",
-      "should not save javascript with escaped quote" => "div {background-image: url(&#1;javascript:alert('XSS'))}",
-      "should not save gradient with xss" => "div {background: -webkit-linear-gradient(url(xss.htc))}",
-      "should not save dsf images" => "body {background: url(http://foo.com/bar.dsf)}",
-      "should not save urls with invalid domain" => "body {background: url(http://foo.htc/bar.png)}",
-      "should not save xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}",
+      "errors when saving garbage with braces" => "blhalkdfasd {ljaflkasjdflasd}",
+      "errors when saving garbage with braces and colon" => "blhalkdfasd {ljaflkasjdflasd: }",
+      "errors when saving garbage with invalid property" => "blhalkdfasd {ljaflkasjdflasd: aklsdfjsdf}",
+      "errors when saving urls with xss" => "body {-moz-binding:url('http://ha.ckers.org/xssmoz.xml#xss')}",
+      "errors when saving @font-face" => "@font-face { font-family: Delicious; src: url('Delicious-Roman.otf');}",
+      "errors when saving @import" => "@import url('http://ha.ckers.org/xss.css');",
+      "errors when saving src" => "body {border: src('http://foo.com/')}",
+      "errors when saving url for font" => "body {font: url(http://foo.com/bar.png)}",
+      "errors when saving htc urls" => "body {behavior: url(xss.htc);}",
+      "errors when saving javascript in li" => "li {background-image: url(javascript:alert('XSS'));}",
+      "errors when saving expression" => "div {width: expression(alert('XSS'));}",
+      "errors when saving javascript with escaped quote" => "div {background-image: url(&#1;javascript:alert('XSS'))}",
+      "errors when saving gradient with xss" => "div {background: -webkit-linear-gradient(url(xss.htc))}",
+      "errors when saving dsf images" => "body {background: url(http://foo.com/bar.dsf)}",
+      "errors when saving urls with invalid domain" => "body {background: url(http://foo.htc/bar.png)}",
+      "errors when saving xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}"
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
@@ -148,20 +171,20 @@ describe Skin do
       end
     end
 
-    it "should require a title" do
+    it "requires a title" do
       @skin.title = ""
       expect(@skin.save).not_to be_truthy
       expect(@skin.errors[:title]).not_to be_empty
     end
 
-    it "should have a unique title" do
+    it "has a unique title" do
       expect(@skin.save).to be_truthy
       skin2 = Skin.new(title: "Test Skin")
       expect(skin2.save).not_to be_truthy
       expect(skin2.errors[:title]).not_to be_empty
     end
 
-    it "should require a preview image if public" do
+    it "requires a preview image if public" do
       @skin.css = "body {background: #fff;}"
       @skin.public = true
       expect(@skin.save).not_to be_truthy
@@ -207,7 +230,7 @@ describe Skin do
       end
     end
 
-    it "should only allow valid roles" do
+    it "only allows valid roles" do
       @skin.role = "foobar"
       expect(@skin.save).not_to be_truthy
       expect(@skin.errors[:role]).not_to be_empty
@@ -216,7 +239,7 @@ describe Skin do
       expect(@skin.errors[:role]).to be_empty
     end
 
-    it "should only allow valid ie-only conditions" do
+    it "only allows valid ie-only conditions" do
       @skin.ie_condition = "foobar"
       expect(@skin.save).not_to be_truthy
       expect(@skin.errors[:ie_condition]).not_to be_empty
@@ -237,15 +260,15 @@ describe Skin do
     let(:skin) { Skin.create(title: "Test Skin", css: css) }
     let(:style) { skin.get_style }
 
-    it "should have a valid style block" do
+    it "has a valid style block" do
       expect(style).to match(%r{<style type="text/css" media="all">})
     end
 
-    it "should include the css" do
+    it "includes the css" do
       expect(style).to match(/background: purple;/)
     end
 
-    it "should include links to the default archive skin" do
+    it "includes links to the default archive skin" do
       expect(style).to match(%r{<link rel="stylesheet" type="text/css"})
     end
   end
@@ -259,50 +282,50 @@ describe Skin do
       create(:work_skin, :private, author: skin_owner, title: "Private Skin 2")
     end
 
-    context 'no user argument given' do
-      context 'User.current_user is nil' do
-        it 'returns approved skins' do
+    context "no user argument given" do
+      context "User.current_user is nil" do
+        it "returns approved skins" do
           allow(User).to receive(:current_user).and_return(nil)
           expect(Skin.approved_or_owned_by.pluck(:title)).to eq(['Default'])
         end
       end
 
-      context 'User.current_user is not nil' do
-        context 'user does not own skins' do
-          it 'returns approved skins' do
+      context "when User.current_user is not nil" do
+        context "user does not own skins" do
+          it "returns approved skins" do
             allow(User).to receive(:current_user).and_return(random_user)
-            expect(Skin.approved_or_owned_by.pluck(:title)).to eq(['Default'])
+            expect(Skin.approved_or_owned_by.pluck(:title)).to eq(["Default"])
           end
         end
 
-        context 'user owns skins' do
-          it 'returns approved and owned skins' do
+        context "user owns skins" do
+          it "returns approved and owned skins" do
             allow(User).to receive(:current_user).and_return(skin_owner)
-            expect(Skin.approved_or_owned_by.pluck(:title)).to eq(['Default', 'Private Skin 1', 'Private Skin 2'])
+            expect(Skin.approved_or_owned_by.pluck(:title)).to eq(["Default", "Private Skin 1", "Private Skin 2"])
           end
         end
       end
     end
 
-    context 'user argument is given' do
-      context 'user is nil' do
-        it 'returns approved skins' do
-          expect(Skin.approved_or_owned_by(nil).pluck(:title)).to eq(['Default'])
+    context "user argument is given" do
+      context "user is nil" do
+        it "returns approved skins" do
+          expect(Skin.approved_or_owned_by(nil).pluck(:title)).to eq(["Default"])
         end
       end
 
-      context 'user is not nil' do
-        context 'user does not own skins' do
-          it 'returns approved skins' do
-            expect(Skin.approved_or_owned_by(random_user).pluck(:title)).to eq(['Default'])
+      context "user is not nil" do
+        context "user does not own skins" do
+          it "returns approved skins" do
+            expect(Skin.approved_or_owned_by(random_user).pluck(:title)).to eq(["Default"])
           end
         end
 
-        context 'user owns skins' do
-          it 'returns approved and owned skins' do
-            expect(Skin.approved_or_owned_by(skin_owner).pluck(:title)).to eq(['Default',
-                                                                               'Private Skin 1',
-                                                                               'Private Skin 2'])
+        context "user owns skins" do
+          it "returns approved and owned skins" do
+            expect(Skin.approved_or_owned_by(skin_owner).pluck(:title)).to eq(["Default",
+                                                                               "Private Skin 1",
+                                                                               "Private Skin 2"])
           end
         end
       end
@@ -312,13 +335,13 @@ describe Skin do
   describe ".approved_or_owned_by_any", default_skin: true do
     let(:users) { Array.new(3) { FactoryBot.create(:user) } }
 
-    context 'users do not own skins' do
-      it 'returns approved skins' do
-        expect(Skin.approved_or_owned_by_any(users).pluck(:title)).to eq(['Default'])
+    context "users do not own skins" do
+      it "returns approved skins" do
+        expect(Skin.approved_or_owned_by_any(users).pluck(:title)).to eq(["Default"])
       end
     end
 
-    context 'users own skins' do
+    context "users own skins" do
       before do
         create(:work_skin, :private, author: users[1], title: "User 2's First Skin")
         create(:work_skin, :private, author: users[1], title: "User 2's Second Skin")
@@ -326,15 +349,15 @@ describe Skin do
         create(:work_skin, :private, title: "Unowned Private Skin")
       end
 
-      it 'returns approved and owned skins' do
+      it "returns approved and owned skins" do
         expect(Skin.approved_or_owned_by_any(users).pluck(:title)).to eq(["Default",
                                                                           "User 2's First Skin",
                                                                           "User 2's Second Skin",
                                                                           "User 3's Skin"])
       end
 
-      it 'does not return unassociated private work skins' do
-        expect(Skin.approved_or_owned_by_any(users).pluck(:title)).not_to include(['Unowned Private Skin'])
+      it "does not return unassociated private work skins" do
+        expect(Skin.approved_or_owned_by_any(users).pluck(:title)).not_to include(["Unowned Private Skin"])
       end
     end
   end
