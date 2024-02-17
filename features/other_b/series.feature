@@ -179,6 +179,24 @@ Feature: Create and Edit Series
     Then I should see "penguins30"
     When I follow "Next"
     Then I should see "penguins0"
+	
+  Scenario: Series show page with many works
+    Given I am logged in as "author"
+      And I post the work "Caesar" as part of a series "Salads"
+      And I post the work "Chicken" as part of a series "Salads"
+      And I post the work "Pasta" as part of a series "Salads"
+      And I post the work "Spring" as part of a series "Salads"
+      And I post the work "Chef" as part of a series "Salads"
+      And there are 3 works per page
+    When I view the series "Salads"
+    Then I should see "Caesar" within ".heading a"
+      And I should see "Chicken" within ".heading a"
+      And I should see "Pasta" within ".heading a"
+      And I should see "Next" within ".pagination"
+    When I follow "Next" within ".pagination"
+    Then I should see "Spring" within ".heading a"
+      And I should see "Chef" within ".heading a"
+      And I should see "Previous" within ".pagination"
 
   Scenario: Removing self as co-creator from co-created series when you are the only creator of a work in the series.
     Given I am logged in as "sun"

@@ -2,6 +2,12 @@ When /^I view the series "([^\"]*)"$/ do |series|
   visit series_url(Series.find_by(title: series))
 end
 
+Given "there are {int} works per page" do |amount|
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.ITEMS_PER_PAGE = amount.to_i
+  allow(Series).to receive(:per_page).and_return(amount)
+end
+
 When /^I add the series "([^\"]*)"$/ do |series_title|
   check("series-options-show")
   if Series.find_by(title: series_title)
