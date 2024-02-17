@@ -4,9 +4,7 @@ class Download
   def initialize(work, options = {})
     @work = work
     @file_type = set_file_type(options.slice(:mime_type, :format))
-    # TODO: Our current version of the mime-types gem doesn't include azw3, but
-    # the gem cannot be updated without updating rest-client
-    @mime_type = @file_type == "azw3" ? "application/x-mobi8-ebook" : MIME::Types.type_for(@file_type).first
+    @mime_type = Marcel::MimeType.for(extension: @file_type).to_s
     @include_draft_chapters = options[:include_draft_chapters]
   end
 
@@ -40,16 +38,17 @@ class Download
 
   # Given a mime type, return a file extension
   def file_type_from_mime(mime)
-    ext = MimeMagic.new(mime.to_s).subtype
-    case ext
+    subtype = Marcel::Magic.new(mime.to_s).subtype
+    case subtype
     when "x-mobipocket-ebook"
       "mobi"
     when "x-mobi8-ebook"
       "azw3"
     else
-      ext
+      subtype
     end
   end
+  
 
   # The base name of the file (e.g., "War_and_Peace")
   def file_name
