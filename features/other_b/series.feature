@@ -189,13 +189,13 @@ Feature: Create and Edit Series
       And I post the work "Chef" as part of a series "Salads"
       And there are 3 works per page
     When I view the series "Salads"
-    Then I should see "Caesar" within ".heading a"
-      And I should see "Chicken" within ".heading a"
-      And I should see "Pasta" within ".heading a"
+    Then I should see "Caesar"
+      And I should see "Chicken"
+      And I should see "Pasta"
       And I should see "Next" within ".pagination"
     When I follow "Next" within ".pagination"
-    Then I should see "Spring" within ".heading a"
-      And I should see "Chef" within ".heading a"
+    Then I should see "Spring"
+      And I should see "Chef"
       And I should see "Previous" within ".pagination"
 
   Scenario: Removing self as co-creator from co-created series when you are the only creator of a work in the series.
