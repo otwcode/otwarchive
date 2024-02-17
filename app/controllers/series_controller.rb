@@ -43,8 +43,7 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
-    @works = @series.works_in_order.posted.select(&:visible?)
-    @works = @works.paginate(page: params[:page])
+    @works = @series.works_in_order.posted.select(&:visible?).paginate(page: params[:page])
 
     # sets the page title with the data for the series
     @page_title = @series.unrevealed? ? ts("Mystery Series") : get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.anonymous? ? ts("Anonymous") : @series.allpseuds.collect(&:byline).join(', '), @series.title)
