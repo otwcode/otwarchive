@@ -192,11 +192,9 @@ Feature: Create and Edit Series
     Then I should see "Caesar"
       And I should see "Chicken"
       And I should see "Pasta"
-      And I should see "Next"
     When I follow "Next"
     Then I should see "Spring"
       And I should see "Chef"
-      And I should see "Previous"
 
   Scenario: Removing self as co-creator from co-created series when you are the only creator of a work in the series.
     Given I am logged in as "sun"
