@@ -3,9 +3,7 @@ When /^I view the series "([^\"]*)"$/ do |series|
 end
 
 Given "there are {int} works per page" do |amount|
-  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
-  ArchiveConfig.ITEMS_PER_PAGE = amount.to_i
-  allow(Work).to receive(:per_page).and_return(amount)
+  allow(WillPaginate).to receive(:per_page).and_return(amount)
 end
 
 When /^I add the series "([^\"]*)"$/ do |series_title|
