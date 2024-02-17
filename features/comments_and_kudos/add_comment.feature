@@ -207,3 +207,20 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, with 
       """
       And I press "Comment"
     Then I should see "Comment created!"
+
+Scenario: Users with different time zone preferences should see the time in their own timezone
+  Given the work "Generic Work"
+    And I am logged in as "commenter"
+    And I set my time zone to "UTC"
+    And I post the comment "Something" on the work "Generic Work"
+    And it is currently 1 second from now
+    And I follow "Edit"
+    And I fill in "Comment" with "Something else"
+    And I press "Update"
+  Then I should see "UTC" within ".posted.datetime"
+    And I should see "UTC" within ".edited.datetime"
+  When I am logged in as "reader"
+    And I set my time zone to "Eastern Time (US & Canada)"
+    And I view the work "Generic Work" with comments
+  Then I should see "EDT" within ".posted.datetime"
+    And I should see "EDT" within ".edited.datetime"
