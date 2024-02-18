@@ -220,7 +220,7 @@ Scenario: Users with different time zone preferences should see the time in thei
   Then I should see "UTC" within ".posted.datetime"
     And I should see "UTC" within ".edited.datetime"
   When I am logged in as "reader"
-    And I set my time zone to "Eastern Time (US & Canada)"
+    And I set my time zone to "Brisbane"
     And I view the work "Generic Work" with comments
-  Then I should see "EDT" within ".posted.datetime"
-    And I should see "EDT" within ".edited.datetime"
+  Then I should see "AEST" within ".posted.datetime"
+    And I should see "AEST" within ".edited.datetime"
