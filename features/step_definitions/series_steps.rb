@@ -2,7 +2,7 @@ When /^I view the series "([^\"]*)"$/ do |series|
   visit series_url(Series.find_by(title: series))
 end
 
-Given "there are {int} works per page" do |amount|
+Given "there are {int} works per series page" do |amount|
   allow(WillPaginate).to receive(:per_page).and_return(amount)
 end
 

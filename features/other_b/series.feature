@@ -187,7 +187,7 @@ Feature: Create and Edit Series
       And I post the work "Pasta" as part of a series "Salads"
       And I post the work "Spring" as part of a series "Salads"
       And I post the work "Chef" as part of a series "Salads"
-      And there are 3 works per page
+      And there are 3 works per series page
     When I view the series "Salads"
     Then I should see "Caesar"
       And I should see "Chicken"
