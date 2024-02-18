@@ -79,6 +79,10 @@ span.error {
   display: block;
 }
 
+.inline-error > span.error {
+  display: inline-block;
+}
+
 /* contexts */
 
 .actions + .footnote {
