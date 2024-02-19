@@ -671,7 +671,6 @@ DEPENDENCIES
   mail (>= 2.8)
   mechanize
   mimemagic (= 0.3.10)
-  mini_portile2 (~> 2.8)
   minitest
   mysql2
   n_plus_one_control
