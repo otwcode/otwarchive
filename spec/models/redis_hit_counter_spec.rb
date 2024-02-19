@@ -6,19 +6,19 @@ describe RedisHitCounter do
 
   describe ".current_timestamp" do
     it "returns the previous date at 2:59 AM UTC" do
-      Delorean.time_travel_to "2020/01/30 2:59 UTC" do
+      travel_to "2020-01-30 02:59:00 UTC" do
         expect(RedisHitCounter.current_timestamp).to eq("20200129")
       end
     end
 
     it "returns the current date at 3:00 AM UTC" do
-      Delorean.time_travel_to "2020/01/30 3:00 UTC" do
+      travel_to "2020-01-30 03:00:00 UTC" do
         expect(RedisHitCounter.current_timestamp).to eq("20200130")
       end
     end
 
     it "returns the current date at 3:01 AM UTC" do
-      Delorean.time_travel_to "2020/01/30 3:01 UTC" do
+      travel_to "2020-01-30 03:01:00 UTC" do
         expect(RedisHitCounter.current_timestamp).to eq("20200130")
       end
     end
@@ -27,7 +27,7 @@ describe RedisHitCounter do
   describe ".add" do
     context "when the IP address hasn't visited" do
       it "records the IP address and increments the count" do
-        Delorean.time_travel_to "2020/01/30 3:05 UTC" do
+        travel_to "2020-01-30 03:05:00 UTC" do
           RedisHitCounter.add(work_id, ip_address)
         end
 
@@ -40,7 +40,7 @@ describe RedisHitCounter do
 
     context "when the IP address has already visited after 3 AM" do
       before do
-        Delorean.time_travel_to "2020/01/30 3:01 UTC" do
+        travel_to "2020-01-30 03:01:00 UTC" do
           RedisHitCounter.add(work_id, ip_address)
         end
 
@@ -48,7 +48,7 @@ describe RedisHitCounter do
       end
 
       it "doesn't increment the count" do
-        Delorean.time_travel_to "2020/01/30 3:02 UTC" do
+        travel_to "2020-01-30 03:02:00 UTC" do
           RedisHitCounter.add(work_id, ip_address)
         end
 
@@ -59,7 +59,7 @@ describe RedisHitCounter do
 
     context "when the IP address has already visited before 3 AM" do
       before do
-        Delorean.time_travel_to "2020/01/30 2:59 UTC" do
+        travel_to "2020-01-30 02:59:00 UTC" do
           RedisHitCounter.add(work_id, ip_address)
         end
 
@@ -67,7 +67,7 @@ describe RedisHitCounter do
       end
 
       it "increments the count" do
-        Delorean.time_travel_to "2020/01/30 3:02 UTC" do
+        travel_to "2020-01-30 03:02:00 UTC" do
           RedisHitCounter.add(work_id, ip_address)
         end
 
@@ -79,13 +79,13 @@ describe RedisHitCounter do
 
   describe ".remove_old_visits" do
     it "removes information from previous days" do
-      Delorean.time_travel_to "2020/01/30 2:59 UTC" do
+      travel_to "2020-01-30 02:59:00 UTC" do
         RedisHitCounter.add(work_id, ip_address)
 
         expect(RedisHitCounter.redis.exists("visits:20200129")).to be_truthy
       end
 
-      Delorean.time_travel_to "2020/01/30 3:01 UTC" do
+      travel_to "2020-01-30 03:01:00 UTC" do
         RedisHitCounter.remove_old_visits
 
         expect(RedisHitCounter.redis.exists("visits:20200129")).to be_falsey
@@ -93,15 +93,15 @@ describe RedisHitCounter do
     end
 
     it "doesn't remove information from the current day" do
-      Delorean.time_travel_to "2020/01/30 2:59 UTC" do
+      travel_to "2020-01-30 02:59:00 UTC" do
         RedisHitCounter.add(work_id, ip_address)
       end
 
-      Delorean.time_travel_to "2020/01/30 3:01 UTC" do
+      travel_to "2020-01-30 03:01:00 UTC" do
         RedisHitCounter.add(work_id, ip_address)
       end
 
-      Delorean.time_travel_to "2020/01/30 3:02 UTC" do
+      travel_to "2020-01-30 03:02:00 UTC" do
         RedisHitCounter.remove_old_visits
 
         expect(RedisHitCounter.redis.exists("visits:20200129")).to be_falsey
@@ -110,15 +110,15 @@ describe RedisHitCounter do
     end
 
     it "doesn't modify recent_counts" do
-      Delorean.time_travel_to "2020/01/30 2:59 UTC" do
+      travel_to "2020-01-30 02:59:00 UTC" do
         RedisHitCounter.add(work_id, ip_address)
       end
 
-      Delorean.time_travel_to "2020/01/30 3:01 UTC" do
+      travel_to "2020-01-30 03:01:00 UTC" do
         RedisHitCounter.add(work_id, ip_address)
       end
 
-      Delorean.time_travel_to "2020/01/30 3:02 UTC" do
+      travel_to "2020-01-30 03:02:00 UTC" do
         expect do
           RedisHitCounter.remove_old_visits
         end.not_to(change { RedisHitCounter.redis.hgetall("recent_counts") })

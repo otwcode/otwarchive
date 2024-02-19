@@ -204,8 +204,6 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    delorean (2.1.0)
-      chronic
     departure (6.5.0)
       activerecord (>= 5.2.0, < 7.1, != 7.0.0)
       mysql2 (>= 0.4.0, <= 0.5.5)
@@ -351,7 +349,7 @@ GEM
       nokogiri (~> 1)
       rake
     mini_mime (1.1.2)
-    mini_portile2 (2.8.2)
+    mini_portile2 (2.8.5)
     minitest (5.17.0)
     mono_logger (1.1.2)
     multi_json (1.15.0)
@@ -375,8 +373,8 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (9.7.1)
     nio4r (2.5.8)
-    nokogiri (1.14.3)
-      mini_portile2 (~> 2.8.0)
+    nokogiri (1.16.2)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.23.0)
@@ -403,7 +401,7 @@ GEM
     pundit (2.1.1)
       activesupport (>= 3.0.0)
     raabro (1.4.0)
-    racc (1.7.1)
+    racc (1.7.3)
     rack (2.2.6.4)
     rack-attack (6.6.0)
       rack (>= 1.0, < 3)
@@ -633,7 +631,6 @@ DEPENDENCIES
   cucumber-timecop
   dalli
   database_cleaner
-  delorean
   departure (~> 6.5)
   devise
   devise-async
