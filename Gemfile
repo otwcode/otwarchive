@@ -187,3 +187,5 @@ group :staging, :production do
   # frameworks above it to be instrumented when the gem initializes.
   gem "newrelic_rpm"
 end
+
+gem "mini_portile2", "~> 2.8"

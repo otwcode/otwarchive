@@ -353,6 +353,7 @@ GEM
       nokogiri (~> 1)
       rake
     mini_mime (1.1.5)
+    mini_portile2 (2.8.5)
     minitest (5.17.0)
     mono_logger (1.1.2)
     multi_json (1.15.0)
@@ -385,7 +386,8 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (9.7.1)
     nio4r (2.5.8)
-    nokogiri (1.16.2-x86_64-linux)
+    nokogiri (1.16.2)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.23.0)
@@ -616,7 +618,7 @@ GEM
     zeitwerk (2.6.8)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   actionpack-page_caching
@@ -669,6 +671,7 @@ DEPENDENCIES
   mail (>= 2.8)
   mechanize
   mimemagic (= 0.3.10)
+  mini_portile2 (~> 2.8)
   minitest
   mysql2
   n_plus_one_control
@@ -721,4 +724,4 @@ RUBY VERSION
    ruby 3.1.4p223
 
 BUNDLED WITH
-   2.4.22
+   2.5.6
