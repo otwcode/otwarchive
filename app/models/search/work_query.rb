@@ -44,6 +44,12 @@ class WorkQuery < Query
 
   def add_owner
     owner = options[:works_parent]
+
+    if owner.is_a?(Language)
+      options[:language_id] = owner.short
+      return
+    end
+
     field = case owner
             when Tag
               :filter_ids
@@ -297,6 +303,19 @@ class WorkQuery < Query
     end
 
     { aggs: aggs }
+  end
+
+  def works_per_language(languages_count)
+    response = $elasticsearch.search(index: index_name, body: {
+                                       size: 0,
+                                       aggregations: {
+                                         languages: {
+                                           terms: { field: "language_id.keyword", size: languages_count }
+                                         }
+                                       }
+                                     })
+    language_counts = response.dig("aggregations", "languages", "buckets") || []
+    language_counts.map(&:values).to_h
   end
 
   ####################

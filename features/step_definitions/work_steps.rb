@@ -69,7 +69,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by(title: title)
   if work
-    visit preview_work_url(work)
+    visit preview_work_path(work)
     click_button("Post")
   else
     # Note: this will match the above regexp and work just fine even if all the options are blank!
@@ -79,7 +79,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
   # Now add the chapters
   if number_of_chapters.present? && number_of_chapters.to_i > 1
     work = Work.find_by_title(title)
-    visit work_url(work)
+    visit work_path(work)
     (number_of_chapters.to_i - 1).times do
       step %{I follow "Add Chapter"}
       fill_in("content", with: "Yet another chapter.")
@@ -564,6 +564,14 @@ When /^I browse the "(.*?)" works with page parameter "(.*?)"$/ do |tagname, pag
   step "the periodic tag count task is run"
 end
 
+When "I browse works in language {string}" do |language_name|
+  step %{all indexing jobs have been run}
+  step "the periodic tag count task is run"
+
+  language = Language.find_by(name: language_name)
+  visit language_works_path(language)
+end
+
 When /^I delete the work "([^"]*)"$/ do |work|
   work = Work.find_by(title: CGI.escapeHTML(work))
   visit edit_work_path(work)
@@ -694,6 +702,9 @@ end
 
 When "the cache for the work {string} is cleared" do |title|
   work = Work.find_by(title: title)
+
+  # Delay to force the updated_at that gets set by .touch to be new
+  step "it is currently 1 second from now"
   # Touch the work to actually expire the cache
   work.touch
 end

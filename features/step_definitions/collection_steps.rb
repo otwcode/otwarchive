@@ -62,6 +62,10 @@ When "the collection counts have expired" do
   step "it is currently #{ArchiveConfig.SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE} seconds from now"
 end
 
+When "the collection blurb cache has expired" do
+  step "it is currently #{ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE} minutes from now"
+end
+
 Given /^mod1 lives in Alaska$/ do
   step %{I am logged in as "mod1"}
   step %{I go to mod1 preferences page}

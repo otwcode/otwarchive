@@ -423,7 +423,7 @@ describe CollectionParticipantsController do
         it "doesn't approve the member, displays an error and redirects" do
           get :add, params: params
           it_redirects_to_with_error(collection_participants_path(collection),
-                                     "#{users.map(&:default_pseud).map(&:byline).to_sentence} is currently banned and cannot participate in challenges.")
+                                     "#{users.map(&:default_pseud).map(&:byline).to_sentence} cannot participate in challenges.")
           users.each do |user|
             expect(CollectionParticipant.where(pseud_id: user.default_pseud.id)).to be_empty
           end

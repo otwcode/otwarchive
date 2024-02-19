@@ -6,7 +6,7 @@ describe Tag do
     User.current_user = nil
   end
 
-  context 'checking count caching' do
+  context "checking count caching" do
     before(:each) do
       # Set the minimal amount of time a tag can be cached for.
       ArchiveConfig.TAGGINGS_COUNT_MIN_TIME = 1
@@ -17,15 +17,15 @@ describe Tag do
       @fandom_tag = FactoryBot.create(:fandom)
     end
 
-    context 'without updating taggings_count_cache' do
-      it 'should not cache tags which are not used much' do
+    context "without updating taggings_count_cache" do
+      it "should not cache tags which are not used much" do
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         @fandom_tag.reload
         expect(@fandom_tag.taggings_count_cache).to eq 0
         expect(@fandom_tag.taggings_count).to eq 1
       end
 
-      it 'will start caching a when tag when that tag is used significantly' do
+      it "will start caching a when tag when that tag is used significantly" do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           FactoryBot.create(:work, fandom_string: @fandom_tag.name)
           @fandom_tag.reload
@@ -40,8 +40,8 @@ describe Tag do
       end
     end
 
-    context 'updating taggings_count_cache' do
-      it 'should not cache tags which are not used much' do
+    context "updating taggings_count_cache" do
+      it "should not cache tags which are not used much" do
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         RedisJobSpawner.perform_now("TagCountUpdateJob")
         @fandom_tag.reload
@@ -49,7 +49,7 @@ describe Tag do
         expect(@fandom_tag.taggings_count).to eq 1
       end
 
-      it 'will start caching a when tag when that tag is used significantly' do
+      it "will start caching a tag when that tag is used significantly" do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           FactoryBot.create(:work, fandom_string: @fandom_tag.name)
           RedisJobSpawner.perform_now("TagCountUpdateJob")
@@ -65,7 +65,7 @@ describe Tag do
         expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
       end
 
-      it "Writes to the database do not happen immeadiately" do
+      it "Writes to the database do not happen immediately" do
         (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
           @fandom_tag.taggings_count = try
           @fandom_tag.reload
@@ -168,11 +168,29 @@ describe Tag do
     expect(tag.errors[:name].join).to match(/too long/)
   end
 
-  it "should not be valid with disallowed characters" do
-    tag = Tag.new
-    tag.name = "bad<tag"
-    expect(tag.save).to be_falsey
-    expect(tag.errors[:name].join).to match(/restricted characters/)
+  context "tags using restricted characters should not be saved" do
+    [
+      "bad, tag",
+      "also， bad",
+      "no、good",
+      "wild*card",
+      "back\\slash",
+      "lesser<tag",
+      "greater>tag",
+      "^tag",
+      "{open",
+      "close}",
+      "not=allowed",
+      "suspicious`character",
+      "no%maths"
+    ].each do |tag|
+      forbidden_tag = Tag.new
+      forbidden_tag.name = tag 
+      it "is not saved and receives an error message about restricted characters" do
+        expect(forbidden_tag.save).to be_falsey
+        expect(forbidden_tag.errors[:name].join).to match(/restricted characters/)
+      end
+    end
   end
 
   context "unwrangleable" do
@@ -250,20 +268,20 @@ describe Tag do
         expect(tag.save).to be_falsey
       end
 
-      it 'autocomplete should work' do
-        tag_character = FactoryBot.create(:character, canonical: true, name: 'kirk')
-        tag_fandom = FactoryBot.create(:fandom, name: 'Star Trek', canonical: true)
+      it "autocomplete should work" do
+        tag_character = FactoryBot.create(:character, canonical: true, name: "kirk")
+        tag_fandom = FactoryBot.create(:fandom, name: "Star Trek", canonical: true)
         tag_fandom.add_to_autocomplete
-        results = Tag.autocomplete_fandom_lookup(term: 'ki', fandom: 'Star Trek')
+        results = Tag.autocomplete_fandom_lookup(term: "ki", fandom: "Star Trek")
         expect(results.include?("#{tag_character.id}: #{tag_character.name}")).to be_truthy
         expect(results.include?("brave_sire_robin")).to be_falsey
       end
 
-      it 'old tag maker still works' do
-        tag_adult = Rating.create_canonical('adult', true)
-        tag_normal = ArchiveWarning.create_canonical('other')
-        expect(tag_adult.name).to eq('adult')
-        expect(tag_normal.name).to eq('other')
+      it "old tag maker still works" do
+        tag_adult = Rating.create_canonical("adult", true)
+        tag_normal = ArchiveWarning.create_canonical("other")
+        expect(tag_adult.name).to eq("adult")
+        expect(tag_normal.name).to eq("other")
         expect(tag_adult.adult).to be_truthy
         expect(tag_normal.adult).to be_falsey
       end

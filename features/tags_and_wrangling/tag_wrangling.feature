@@ -355,3 +355,13 @@ Feature: Tag wrangling
     Then I should see "Youngest"
       But I should not see "Oldest"
       And I should not see "Middle"
+
+  Scenario: No call to Redis when no action is taken
+    Given the tag wrangling setup
+      And I am logged in as a tag wrangler
+    Then no tag is scheduled for count update from now on
+    When I go to my wrangling page
+    Then I should see "Wrangling Home"
+      And I should see "Characters by fandom (2)"
+    When I follow "Characters by fandom (2)"
+    Then I should see "Mass Wrangle New/Unwrangled Tags"

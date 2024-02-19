@@ -1,5 +1,3 @@
-PROFILER_SESSIONS_FILE = 'used_tags.txt'
-
 class ApplicationController < ActionController::Base
   include Pundit
   protect_from_forgery with: :exception, prepend: true
@@ -98,6 +96,17 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Migrates session cookies from encrypted to signed format
+  before_action :migrate_session_cookie_20231230
+  def migrate_session_cookie_20231230
+    # If the request contains a valid encrypted session cookie, it means the
+    # session hasn't yet been migrated to a signed cookie, so we update the
+    # session with the contents of the encrypted cookie.
+    if cookies.encrypted[:_otwarchive_session].present?
+      session.update(cookies.encrypted[:_otwarchive_session])
+    end
+  end
+
   after_action :ensure_admin_credentials
   def ensure_admin_credentials
     if logged_in_as_admin?
@@ -135,22 +144,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # mark the flash as being set (called when flash is set)
-  def set_flash_cookie(key=nil, msg=nil)
-    cookies[:flash_is_set] = 1
-  end
-  # aliasing setflash for set_flash_cookie
-  # def setflash (this is here in case someone is grepping for the definition of the method)
-  alias :setflash :set_flash_cookie
-
 protected
-
-  def record_not_found (exception)
-    @message=exception.message
-    respond_to do |f|
-      f.html{ render template: "errors/404", status: 404 }
-    end
-  end
 
   def logged_in?
     user_signed_in?
@@ -352,8 +346,6 @@ public
   end
 
 
-  @over_anon_threshold = true if @over_anon_threshold.nil?
-
   def get_page_title(fandom, author, title, options = {})
     # truncate any piece that is over 15 chars long to the nearest word
     if options[:truncate]
@@ -381,11 +373,6 @@ public
   #### -- AUTHORIZATION -- ####
 
   # It is just much easier to do this here than to try to stuff variable values into a constant in environment.rb
-  before_action :set_redirects
-  def set_redirects
-    @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
-    @logged_out_redirect = new_user_session_path
-  end
 
   def is_registered_user?
     logged_in? || logged_in_as_admin?
@@ -471,13 +458,6 @@ public
     end
   end
 
-  private
- # With thanks from here: http://blog.springenwerk.com/2008/05/set-date-attribute-from-dateselect.html
-  def convert_date(hash, date_symbol_or_string)
-    attribute = date_symbol_or_string.to_s
-    return Date.new(hash[attribute + '(1i)'].to_i, hash[attribute + '(2i)'].to_i, hash[attribute + '(3i)'].to_i)
-  end
-
   public
 
   def valid_sort_column(param, model='work')
@@ -519,8 +499,8 @@ public
   end
 
   # Don't get unnecessary data for json requests
+
   skip_before_action  :load_admin_banner,
-                      :set_redirects,
                       :store_location,
                       if: proc { %w(js json).include?(request.format) }
 

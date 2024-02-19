@@ -131,7 +131,7 @@ group :test do
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
-  gem 'delorean'
+  
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem "webmock"
@@ -151,6 +151,7 @@ group :test, :development do
   gem 'whiny_validation'
   gem "factory_bot_rails"
   gem 'minitest'
+  gem "listen", "~> 3.3"
   gem "i18n-tasks", require: false
 end
 

@@ -498,6 +498,17 @@ en:
         other: Browse fandoms by media or favorite up to %{count} tags to have them listed here!
       find_your_favorites: Find your favorites
       media_navigation_label: Media
+      readings:
+        heading:
+          history_link: My History
+          title: Is it later already?
+        note: Some works you've marked for later.
+      social:
+        heading: Follow us
+        note_html: Follow the Archive on Twitter or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
+        other_outlets: Organization for Transformative Works' news outlets
+        tumblr: ao3org on Tumblr
+        twitter: "@AO3_Status on Twitter"
     tos_faq:
       fnok:
         support: Support team
@@ -517,6 +528,16 @@ en:
       more_link:
         one: "%{count} more user"
         other: "%{count} more users"
+  languages:
+    index:
+      navigation:
+        add: Add a Language
+        edit: Edit
+        suggest: Suggest a Language
+      page_heading: Work Languages
+      works_count:
+        one: "%{formatted_count} work"
+        other: "%{formatted_count} works"
   layouts:
     header:
       login: Log In
@@ -722,6 +743,8 @@ en:
         options_info: You can delete them, but please consider %{orphaning_link} them instead!
         works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
+    edit:
+      browser_title: Edit Profile
     registrations:
       new:
         cancel: Cancel

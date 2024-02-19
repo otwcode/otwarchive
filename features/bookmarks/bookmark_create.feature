@@ -130,6 +130,8 @@ Scenario: bookmark added to moderated collection has flash notice only when not 
     Then I should see "The collection Five Pillars is currently moderated."
   When I log out
     And I am logged in as "moderator" with password "password"
+    # Delay before approving to make sure the cache is expired
+    And it is currently 1 second from now
     And I approve the first item in the collection "Five Pillars"
     And all indexing jobs have been run
     And I am logged in as "bookmarker" with password "password"
