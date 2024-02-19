@@ -188,4 +188,8 @@ group :staging, :production do
   gem "newrelic_rpm"
 end
 
+# Force the correct platform (Ruby) by making the needed  dependency for nokogiri available.
+# For some reason, despite being in the lockfile, bundle install was trampling over it and
+# trying to make us use a platform other than ruby.
+# Ref: https://github.com/rubygems/rubygems/issues/7304#issuecomment-1863317056
 gem "mini_portile2", "~> 2.8"
