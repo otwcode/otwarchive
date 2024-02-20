@@ -308,6 +308,7 @@ class WorkQuery < Query
   def works_per_language(languages_count)
     response = $elasticsearch.search(index: index_name, body: {
                                        size: 0,
+                                       query: filtered_query,
                                        aggregations: {
                                          languages: {
                                            terms: { field: "language_id.keyword", size: languages_count }

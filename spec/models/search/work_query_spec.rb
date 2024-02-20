@@ -177,46 +177,115 @@ describe WorkQuery do
   end
 
   describe "#works_per_language" do
-    it "returns the count of works per language code" do
-      es_response = {
-        "took" => 16,
-        "timed_out" => false,
-        "_shards" => {
-          "total" => 12,
-          "successful" => 12,
-          "skipped" => 0,
-          "failed" => 0
-        },
-        "hits" => {
-          "total" => { "value" => 10_000, "relation" => "gte" },
-          "max_score" => nil,
-          "hits" => []
-        },
-        "aggregations" => {
-          "languages" => {
-            "doc_count_error_upper_bound" => 0,
-            "sum_other_doc_count" => 0,
-            "buckets" => [
-              { "key" => "en", "doc_count" => 863_269 },
-              { "key" => "ru", "doc_count" => 11_476 },
-              { "key" => "zh", "doc_count" => 1622 }
-            ]
+    context "when invoked by a guest" do
+      it "returns the count of works per language code" do
+        es_response = {
+          "took" => 16,
+          "timed_out" => false,
+          "_shards" => {
+            "total" => 12,
+            "successful" => 12,
+            "skipped" => 0,
+            "failed" => 0
+          },
+          "hits" => {
+            "total" => { "value" => 10_000, "relation" => "gte" },
+            "max_score" => nil,
+            "hits" => []
+          },
+          "aggregations" => {
+            "languages" => {
+              "doc_count_error_upper_bound" => 0,
+              "sum_other_doc_count" => 0,
+              "buckets" => [
+                { "key" => "en", "doc_count" => 863_269 },
+                { "key" => "ru", "doc_count" => 11_476 },
+                { "key" => "zh", "doc_count" => 1622 }
+              ]
+            }
           }
         }
-      }
-      allow($elasticsearch).to receive(:search)
-        .with(index: "ao3_test_works", body: {
-                size: 0,
-                aggregations: {
-                  languages: {
-                    terms: { field: "language_id.keyword", size: 100 }
+        allow($elasticsearch).to receive(:search)
+          .with(index: "ao3_test_works", body: {
+                  size: 0,
+                  query: {
+                    bool: {
+                      filter: [
+                        { term: { posted: "true" } },
+                        { term: { hidden_by_admin: "false" } },
+                        { term: { restricted: "false" } },
+                        { term: { in_unrevealed_collection: "false" } },
+                      ],
+                    },
+                  },
+                  aggregations: {
+                    languages: {
+                      terms: { field: "language_id.keyword", size: 100 }
+                    }
                   }
-                }
-              })
-        .and_return(es_response)
+                })
+          .and_return(es_response)
 
-      result = WorkQuery.new.works_per_language(100)
-      expect(result).to eq({ "en" => 863_269, "ru" => 11_476, "zh" => 1622 })
+        result = WorkQuery.new.works_per_language(100)
+        expect(result).to eq({ "en" => 863_269, "ru" => 11_476, "zh" => 1622 })
+      end
+    end
+
+    context "when invoked by a registered user" do
+      before do
+        User.current_user = build(:user)
+      end
+
+      it "returns the count of works per language code" do
+        es_response = {
+          "took" => 16,
+          "timed_out" => false,
+          "_shards" => {
+            "total" => 12,
+            "successful" => 12,
+            "skipped" => 0,
+            "failed" => 0
+          },
+          "hits" => {
+            "total" => { "value" => 10_000, "relation" => "gte" },
+            "max_score" => nil,
+            "hits" => []
+          },
+          "aggregations" => {
+            "languages" => {
+              "doc_count_error_upper_bound" => 0,
+              "sum_other_doc_count" => 0,
+              "buckets" => [
+                { "key" => "en", "doc_count" => 863_269 },
+                { "key" => "ru", "doc_count" => 11_476 },
+                { "key" => "zh", "doc_count" => 1622 }
+              ]
+            }
+          }
+        }
+        allow($elasticsearch).to receive(:search)
+                                   .with(index: "ao3_test_works", body: {
+                                     size: 0,
+                                     query: {
+                                       bool: {
+                                         filter: [
+                                           { term: { posted: "true" } },
+                                           { term: { hidden_by_admin: "false" } },
+                                           { term: { in_unrevealed_collection: "false" } },
+                                         ],
+                                       },
+                                     },
+                                     aggregations: {
+                                       languages: {
+                                         terms: { field: "language_id.keyword", size: 100 }
+                                       }
+                                     }
+                                   })
+                                   .and_return(es_response)
+
+        result = WorkQuery.new.works_per_language(100)
+        expect(result).to eq({ "en" => 863_269, "ru" => 11_476, "zh" => 1622 })
+      end
     end
   end
 end
