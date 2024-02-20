@@ -214,9 +214,9 @@ describe WorkQuery do
                         { term: { posted: "true" } },
                         { term: { hidden_by_admin: "false" } },
                         { term: { restricted: "false" } },
-                        { term: { in_unrevealed_collection: "false" } },
-                      ],
-                    },
+                        { term: { in_unrevealed_collection: "false" } }
+                      ]
+                    }
                   },
                   aggregations: {
                     languages: {
@@ -264,24 +264,24 @@ describe WorkQuery do
           }
         }
         allow($elasticsearch).to receive(:search)
-                                   .with(index: "ao3_test_works", body: {
-                                     size: 0,
-                                     query: {
-                                       bool: {
-                                         filter: [
-                                           { term: { posted: "true" } },
-                                           { term: { hidden_by_admin: "false" } },
-                                           { term: { in_unrevealed_collection: "false" } },
-                                         ],
-                                       },
-                                     },
-                                     aggregations: {
-                                       languages: {
-                                         terms: { field: "language_id.keyword", size: 100 }
-                                       }
-                                     }
-                                   })
-                                   .and_return(es_response)
+          .with(index: "ao3_test_works", body: {
+                  size: 0,
+                  query: {
+                    bool: {
+                      filter: [
+                        { term: { posted: "true" } },
+                        { term: { hidden_by_admin: "false" } },
+                        { term: { in_unrevealed_collection: "false" } }
+                      ]
+                    }
+                  },
+                  aggregations: {
+                    languages: {
+                      terms: { field: "language_id.keyword", size: 100 }
+                    }
+                  }
+                })
+          .and_return(es_response)
 
         result = WorkQuery.new.works_per_language(100)
         expect(result).to eq({ "en" => 863_269, "ru" => 11_476, "zh" => 1622 })
