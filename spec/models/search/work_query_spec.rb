@@ -178,7 +178,7 @@ describe WorkQuery do
 
   describe "#works_per_language" do
     context "when invoked by a guest" do
-      it "returns the count of works per language code" do
+      it "returns the count of public, revealed, and unhidden works per language code" do
         es_response = {
           "took" => 16,
           "timed_out" => false,
@@ -236,7 +236,7 @@ describe WorkQuery do
         User.current_user = build(:user)
       end
 
-      it "returns the count of works per language code" do
+      it "returns the count of public, restricted, revealed, and unhidden works works per language code" do
         es_response = {
           "took" => 16,
           "timed_out" => false,
