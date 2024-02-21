@@ -11,7 +11,7 @@ Then /^I should see the external inspiring work link$/ do
 end
 
 Then /^I should receive a file of type "(.*?)"$/ do |filetype|
-  mime_type = filetype == "azw3" ? "application/x-mobi8-ebook" : Marcel::MimeType.for(name: "foo.#{filetype}").to_s
+  mime_type = Marcel::MimeType.for(name: "foo.#{filetype}").to_s
   expect(page.response_headers['Content-Disposition']).to match(/filename=.+\.#{filetype}/)
   expect(page.response_headers['Content-Length'].to_i).to be_positive
   expect(page.response_headers['Content-Type']).to eq(mime_type)
@@ -30,7 +30,7 @@ Then /^I should be able to download the (\w+) version of "(.*?)"$/ do |filetype,
 
   download = Download.new(work, format: filetype)
   filename = "#{download.file_name}.#{download.file_type}"
-  mime_type = filetype == "azw3" ? "application/x-mobi8-ebook" : Marcel::MimeType.for(name: filename).to_s
+  mime_type = Marcel::MimeType.for(name: filename).to_s
   expect(page.response_headers['Content-Disposition']).to match(/filename="#{filename}"/)
   expect(page.response_headers['Content-Length'].to_i).to be_positive
   expect(page.response_headers['Content-Type']).to eq(mime_type)
