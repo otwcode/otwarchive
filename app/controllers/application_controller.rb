@@ -96,17 +96,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # Migrates session cookies from encrypted to signed format
-  before_action :migrate_session_cookie_20231230
-  def migrate_session_cookie_20231230
-    # If the request contains a valid encrypted session cookie, it means the
-    # session hasn't yet been migrated to a signed cookie, so we update the
-    # session with the contents of the encrypted cookie.
-    if cookies.encrypted[:_otwarchive_session].present?
-      session.update(cookies.encrypted[:_otwarchive_session])
-    end
-  end
-
   after_action :ensure_admin_credentials
   def ensure_admin_credentials
     if logged_in_as_admin?
