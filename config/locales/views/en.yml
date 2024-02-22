@@ -528,6 +528,16 @@ en:
       more_link:
         one: "%{count} more user"
         other: "%{count} more users"
+  languages:
+    index:
+      navigation:
+        add: Add a Language
+        edit: Edit
+        suggest: Suggest a Language
+      page_heading: Work Languages
+      works_count:
+        one: "%{formatted_count} work"
+        other: "%{formatted_count} works"
   layouts:
     header:
       login: Log In
@@ -733,6 +743,8 @@ en:
         options_info: You can delete them, but please consider %{orphaning_link} them instead!
         works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
+    edit:
+      browser_title: Edit Profile
     registrations:
       new:
         cancel: Cancel
