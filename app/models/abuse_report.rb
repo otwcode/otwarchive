@@ -85,7 +85,7 @@ class AbuseReport < ApplicationRecord
     work_id = Chapter.find_by(id: chapter_id).try(:work_id)
 
     return url if work_id.nil?
-    
+
     uri = Addressable::URI.parse(url)
     uri.path = "/works/#{work_id}" + uri.path
 
@@ -116,7 +116,17 @@ class AbuseReport < ApplicationRecord
       ip_address: ip_address,
       url: url
     )
-    reporter.send_report!
+    response = reporter.send_report!
+    return if response.blank? || response.key?("errorCode")
+
+    attach_work_download(response.fetch('ticketNumber'))
+  end
+
+  def attach_work_download(ticket_id)
+    return if url !~ /\/works\/\d+/
+
+    work = Work.find_by(id: url[/\/works\/(\d+)\//, 1])
+    ReportAttachmentJob.perform_later(ticket_id, work) if work && ticket_id.present?
   end
 
   # if the URL clearly belongs to a work (i.e. contains "/works/123")
