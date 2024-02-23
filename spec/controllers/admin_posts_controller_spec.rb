@@ -31,7 +31,7 @@ describe AdminPostsController do
       let(:admin) { create(:admin) }
 
       unauthorized_roles.each do |admin_role|
-        role_description = admin_role == nil ? "no role" : "the role #{admin_role}"
+        role_description = admin_role.nil? ? "no role" : "the role #{admin_role}"
 
         context "with #{role_description}" do
           it "redirects with error" do
@@ -97,7 +97,7 @@ describe AdminPostsController do
 
     context "when admin does not have correct authorization" do
       unauthorized_roles.each do |admin_role|
-        role_description = admin_role == nil ? "no role" : "the role #{admin_role}"
+        role_description = admin_role.nil? ? "no role" : "the role #{admin_role}"
 
         context "with #{role_description}" do
           it "redirects with error" do
@@ -181,7 +181,7 @@ describe AdminPostsController do
 
     context "when admin does not have correct authorization" do
       unauthorized_roles.each do |admin_role|
-        role_description = admin_role == nil ? "no role" : "the role #{admin_role}"
+        role_description = admin_role.nil? ? "no role" : "the role #{admin_role}"
 
         context "with #{role_description}" do
           it "redirects with error" do
@@ -218,7 +218,7 @@ describe AdminPostsController do
 
     context "when admin does not have correct authorization" do
       unauthorized_roles.each do |admin_role|
-        role_description = admin_role == nil ? "no role" : "the role #{admin_role}"
+        role_description = admin_role.nil? ? "no role" : "the role #{admin_role}"
 
         context "with #{role_description}" do
           it "redirects with error" do
@@ -255,14 +255,16 @@ describe AdminPostsController do
 
     context "when admin does not have correct authorization" do
       unauthorized_roles.each do |admin_role|
-        role_description = admin_role == nil ? "no role" : "the role #{admin_role}"
+        role_description = admin_role.nil? ? "no role" : "the role #{admin_role}"
 
-        it "redirects with error" do
-          admin.update(roles: [admin_role])
-          fake_login_admin(admin)
-          delete :destroy, params: { id: post.id }
+        context "with #{role_description}" do
+          it "redirects with error" do
+            admin.update(roles: [admin_role])
+            fake_login_admin(admin)
+            delete :destroy, params: { id: post.id }
 
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+          end
         end
       end
     end

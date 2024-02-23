@@ -910,7 +910,7 @@ describe CommentsController do
       end
 
       unauthorized_roles.each do |role|
-        role_description = role == nil ? "no role" : "the role #{role}"
+        role_description = role.nil? ? "no role" : "the role #{role}"
 
         context "when logged-in as admin with #{role_description}" do
           it "leaves the comment marked as spam and redirects with an error" do
@@ -948,7 +948,7 @@ describe CommentsController do
       end
 
       unauthorized_roles.each do |role|
-        role_description = role == nil ? "no role" : "the role #{role}"
+        role_description = role.nil? ? "no role" : "the role #{role}"
 
         context "when logged-in as admin with the role #{role_description}" do
           it "leaves the comment marked as spam and redirects with an error" do
@@ -1049,7 +1049,7 @@ describe CommentsController do
         end
 
         unauthorized_roles.each do |role|
-          role_description = role == nil ? "no role" : "the role #{role}"
+          role_description = role.nil? ? "no role" : "the role #{role}"
 
           context "when logged-in as admin with #{role_description}" do
             it "doesn't mark the comment as spam and redirects with an error" do
@@ -1084,7 +1084,7 @@ describe CommentsController do
           end
 
           unauthorized_roles.each do |role|
-            role_description = role == nil ? "no role" : "the role #{role}"
+            role_description = role.nil? ? "no role" : "the role #{role}"
 
             context "with #{role_description}" do
               it "doesn't mark the comment as spam and redirects with an error" do
