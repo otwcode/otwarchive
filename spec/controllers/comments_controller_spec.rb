@@ -888,42 +888,93 @@ describe CommentsController do
   describe "PUT #approve" do
     before { comment.update_column(:approved, false) }
 
-    context "when logged-in as admin without a role" do
-      before { fake_login_admin(create(:admin)) }
+    context "when ultimate parent is an AdminPost" do
+      let(:admin) { create(:admin) }
+      let(:comment) { create(:comment, :on_admin_post) }
+      authorized_roles = %w[superadmin board board_assistants_team communications elections policy_and_abuse support]
+      unauthorized_roles = Admin::VALID_ROLES - authorized_roles + [nil]
 
-      it "leaves the comment marked as spam and redirects with an error" do
-        put :approve, params: { id: comment.id }
-        expect(comment.reload.approved).to be_falsey
-        it_redirects_to_with_error(
-          root_path,
-          "Sorry, only an authorized admin can access the page you were trying to reach."
-        )
+      authorized_roles.each do |role|
+        context "when logged-in as admin with the role #{role}" do
+          it "marks the comment as not spam" do
+            admin.update(roles: [role])
+            fake_login_admin(admin)
+            put :approve, params: { id: comment.id }
+            expect(flash[:error]).to be_nil
+            expect(response).to redirect_to(admin_post_path(comment.ultimate_parent,
+                                                            show_comments: true,
+                                                            anchor: "comments"))
+            expect(comment.reload.approved).to be_truthy
+          end
+        end
+      end
+
+      unauthorized_roles.each do |role|
+        role_description = role == nil ? "no role" : "the role #{role}"
+
+        context "when logged-in as admin with #{role_description}" do
+          it "leaves the comment marked as spam and redirects with an error" do
+            admin.update(roles: [role])
+            fake_login_admin(admin)
+            put :approve, params: { id: comment.id }
+            expect(comment.reload.approved).to be_falsey
+            it_redirects_to_with_error(
+              root_path,
+              "Sorry, only an authorized admin can access the page you were trying to reach."
+            )
+          end
+        end
       end
     end
 
-    context "when logged-in as admin with authorized role" do
-      before { fake_login_admin(create(:superadmin)) }
+    context "when ultimate parent is a Work" do
+      let(:admin) { create(:admin) }
+      authorized_roles = %w[superadmin board policy_and_abuse support]
+      unauthorized_roles = Admin::VALID_ROLES - authorized_roles + [nil]
 
-      it "marks the comment as not spam" do
-        put :approve, params: { id: comment.id }
-        expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(work_path(comment.ultimate_parent,
-                                                  show_comments: true,
-                                                  anchor: "comments"))
-        expect(comment.reload.approved).to be_truthy
+      authorized_roles.each do |role|
+        context "when logged-in as admin with the role #{role}" do
+          it "marks the comment as not spam" do
+            admin.update(roles: [role])
+            fake_login_admin(admin)
+            put :approve, params: { id: comment.id }
+            expect(flash[:error]).to be_nil
+            expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                                                      show_comments: true,
+                                                      anchor: "comments"))
+            expect(comment.reload.approved).to be_truthy
+          end
+        end
       end
-    end
 
-    context "when logged-in as the work's creator" do
-      before { fake_login_known_user(comment.ultimate_parent.users.first) }
+      unauthorized_roles.each do |role|
+        role_description = role == nil ? "no role" : "the role #{role}"
 
-      it "leaves the comment marked as spam and redirects with an error" do
-        put :approve, params: { id: comment.id }
-        expect(comment.reload.approved).to be_falsey
-        it_redirects_to_with_error(
-          root_path,
-          "Sorry, only an authorized admin can access the page you were trying to reach."
-        )
+        context "when logged-in as admin with the role #{role_description}" do
+          it "leaves the comment marked as spam and redirects with an error" do
+            admin.update(roles: [role])
+            fake_login_admin(admin)
+            put :approve, params: { id: comment.id }
+            expect(comment.reload.approved).to be_falsey
+            it_redirects_to_with_error(
+              root_path,
+              "Sorry, only an authorized admin can access the page you were trying to reach."
+            )
+          end
+        end
+      end
+
+      context "when logged-in as the work's creator" do
+        before { fake_login_known_user(comment.ultimate_parent.users.first) }
+
+        it "leaves the comment marked as spam and redirects with an error" do
+          put :approve, params: { id: comment.id }
+          expect(comment.reload.approved).to be_falsey
+          it_redirects_to_with_error(
+            root_path,
+            "Sorry, only an authorized admin can access the page you were trying to reach."
+          )
+        end
       end
     end
 
@@ -969,38 +1020,94 @@ describe CommentsController do
 
   describe "PUT #reject" do
     shared_examples "marking a comment spam" do
-      context "when logged-in as admin" do
+      context "when ultimate parent is an AdminPost" do
         let(:admin) { create(:admin) }
+        let(:admin_post) { create(:admin_post) }
+        authorized_roles = %w[superadmin board board_assistants_team communications elections policy_and_abuse support]
+        unauthorized_roles = Admin::VALID_ROLES - authorized_roles + [nil]
 
-        it "fails to mark the comment as spam if admin does not have correct role" do
-          admin.update(roles: [])
-          fake_login_admin(admin)
-          put :reject, params: { id: comment.id }
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        before do
+          comment.commentable = admin_post
+          comment.parent = admin_post
+          comment.save
+          comment.reload
         end
 
-        it "marks the comment as spam when admin has correct role" do
-          admin.update(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          put :reject, params: { id: comment.id }
-          expect(flash[:error]).to be_nil
-          expect(response).to redirect_to(work_path(comment.ultimate_parent,
-                                                    show_comments: true,
-                                                    anchor: "comments"))
-          expect(comment.reload.approved).to be_falsey
+        authorized_roles.each do |role|
+          context "when logged-in as admin with the role #{role}" do
+            it "marks the comment as spam" do
+              admin.update(roles: [role])
+              fake_login_admin(admin)
+              put :reject, params: { id: comment.id }
+              expect(flash[:error]).to be_nil
+              expect(response).to redirect_to(admin_post_path(comment.ultimate_parent,
+                                                              show_comments: true,
+                                                              anchor: "comments"))
+              expect(comment.reload.approved).to be_falsey
+            end
+          end
+        end
+
+        unauthorized_roles.each do |role|
+          role_description = role == nil ? "no role" : "the role #{role}"
+
+          context "when logged-in as admin with #{role_description}" do
+            it "doesn't mark the comment as spam and redirects with an error" do
+              admin.update(roles: [role])
+              fake_login_admin(admin)
+              put :reject, params: { id: comment.id }
+              it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            end
+          end
         end
       end
 
-      context "when logged-in as the work's creator" do
-        before { fake_login_known_user(comment.ultimate_parent.users.first) }
+      context "when ultimate parent is a Work" do
+        context "when logged-in as admin" do
+          let(:admin) { create(:admin) }
+          authorized_roles = %w[superadmin board policy_and_abuse support]
+          unauthorized_roles = Admin::VALID_ROLES - authorized_roles + [nil]
 
-        it "marks the comment as spam" do
-          put :reject, params: { id: comment.id }
-          expect(flash[:error]).to be_nil
-          expect(response).to redirect_to(work_path(comment.ultimate_parent,
-                                                    show_comments: true,
-                                                    anchor: "comments"))
-          expect(comment.reload.approved).to be_falsey
+          authorized_roles.each do |role|
+            context "with the role #{role}" do
+              it "marks the comment as spam" do
+                admin.update(roles: [role])
+                fake_login_admin(admin)
+                put :reject, params: { id: comment.id }
+                expect(flash[:error]).to be_nil
+                expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                                                          show_comments: true,
+                                                          anchor: "comments"))
+                expect(comment.reload.approved).to be_falsey
+              end
+            end
+          end
+
+          unauthorized_roles.each do |role|
+            role_description = role == nil ? "no role" : "the role #{role}"
+
+            context "with #{role_description}" do
+              it "doesn't mark the comment as spam and redirects with an error" do
+                admin.update(roles: [role])
+                fake_login_admin(admin)
+                put :reject, params: { id: comment.id }
+                it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+              end
+            end
+          end
+        end
+
+        context "when logged-in as the work's creator" do
+          before { fake_login_known_user(comment.ultimate_parent.users.first) }
+
+          it "marks the comment as spam" do
+            put :reject, params: { id: comment.id }
+            expect(flash[:error]).to be_nil
+            expect(response).to redirect_to(work_path(comment.ultimate_parent,
+                                                      show_comments: true,
+                                                      anchor: "comments"))
+            expect(comment.reload.approved).to be_falsey
+          end
         end
       end
 
@@ -3017,7 +3124,7 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin board communications elections policy_and_abuse support].each do |admin_role|
+          %w[superadmin board board_assistants_team communications elections policy_and_abuse support].each do |admin_role|
             context "with role #{admin_role}" do
               it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])

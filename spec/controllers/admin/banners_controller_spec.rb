@@ -8,7 +8,10 @@ describe Admin::BannersController do
   let(:admin_banner_params) { attributes_for(:admin_banner) }
 
   shared_examples "only authorized admins are allowed" do
-    %w[support communications superadmin board].each do |role|
+    authorized_roles = %w[superadmin board board_assistants_team communications support]
+    unauthorized_roles = Admin::VALID_ROLES - authorized_roles
+
+    authorized_roles.each do |role|
       it "succeeds for #{role} admins" do
         fake_login_admin(create(:admin, roles: [role]))
         subject
@@ -16,12 +19,18 @@ describe Admin::BannersController do
       end
     end
 
-    (Admin::VALID_ROLES - %w[support communications superadmin board]).each do |role|
+    unauthorized_roles.each do |role|
       it "displays an error to #{role} admins" do
         fake_login_admin(create(:admin, roles: [role]))
         subject
         it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
+    end
+
+    it "displays an error to admins without roles" do
+      fake_login_admin(create(:admin))
+      subject
+      it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
     end
   end
 
