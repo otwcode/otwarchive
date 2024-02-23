@@ -35,7 +35,7 @@ describe AdminPostsController do
 
         context "with #{role_description}" do
           it "redirects with error" do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             post :create, params: { admin_post: base_params }
 
@@ -101,7 +101,7 @@ describe AdminPostsController do
 
         context "with #{role_description}" do
           it "redirects with error" do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             put :update, params: { id: post.id, admin_post: { admin_id: admin.id } }
 
@@ -116,7 +116,7 @@ describe AdminPostsController do
         context "with #{admin_role} role" do
           context "with valid title" do
             it "updates title and redirects with notice" do
-              admin.update(roles: [admin_role])
+              admin.update!(roles: [admin_role])
               fake_login_admin(admin)
               put :update, params: { id: post.id, admin_post: { admin_id: admin.id, title: "Modified Title of Post" } }
 
@@ -127,7 +127,7 @@ describe AdminPostsController do
 
           context "with invalid translated_post_id" do
             it "renders the edit template with error message" do
-              admin.update(roles: [admin_role])
+              admin.update!(roles: [admin_role])
               fake_login_admin(admin)
               put :update, params: { id: post.id, admin_post: { admin_id: admin.id, translated_post_id: 0 } }
 
@@ -141,7 +141,7 @@ describe AdminPostsController do
 
             context "with valid comment_permissions" do
               it "does not change comment_permissions and redirects with notice" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 expect do
                   put :update, params: {
@@ -160,7 +160,7 @@ describe AdminPostsController do
 
             context "with invalid translated_post language" do
               it "renders the edit template with error message" do 
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :update, params: { id: translation.id, admin_post: { language_id:post.language_id } }
                 expect(response).to render_template(:edit)
@@ -185,7 +185,7 @@ describe AdminPostsController do
 
         context "with #{role_description}" do
           it "redirects with error" do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             get :edit, params: { id: post.id }
 
@@ -199,7 +199,7 @@ describe AdminPostsController do
       authorized_roles.each do |admin_role|
         context "with #{admin_role} role" do
           it "renders edit template" do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             get :edit, params: { id: post.id }
 
@@ -222,7 +222,7 @@ describe AdminPostsController do
 
         context "with #{role_description}" do
           it "redirects with error" do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             get :edit, params: { id: post.id }
 
@@ -236,7 +236,7 @@ describe AdminPostsController do
       authorized_roles.each do |admin_role|
         context "with #{admin_role} role" do
           it "renders new template" do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             get :new, params: { id: post.id }
 
@@ -259,7 +259,7 @@ describe AdminPostsController do
 
         context "with #{role_description}" do
           it "redirects with error" do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             delete :destroy, params: { id: post.id }
 
@@ -273,7 +273,7 @@ describe AdminPostsController do
       authorized_roles.each do |admin_role|
         context "with #{admin_role} role" do
           it "deletes post and redirects without notice" do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             delete :destroy, params: { id: post.id }
 
@@ -285,7 +285,7 @@ describe AdminPostsController do
             let!(:translation) { create(:admin_post, translated_post_id: post.id, language_id: create(:language).id) }
 
             it "deletes translations of post along with post" do 
-              admin.update(roles: [admin_role])
+              admin.update!(roles: [admin_role])
               fake_login_admin(admin)
               delete :destroy, params: { id: post.id }
   

@@ -897,7 +897,7 @@ describe CommentsController do
       authorized_roles.each do |role|
         context "when logged-in as admin with the role #{role}" do
           it "marks the comment as not spam" do
-            admin.update(roles: [role])
+            admin.update!(roles: [role])
             fake_login_admin(admin)
             put :approve, params: { id: comment.id }
             expect(flash[:error]).to be_nil
@@ -914,7 +914,7 @@ describe CommentsController do
 
         context "when logged-in as admin with #{role_description}" do
           it "leaves the comment marked as spam and redirects with an error" do
-            admin.update(roles: [role])
+            admin.update!(roles: [role])
             fake_login_admin(admin)
             put :approve, params: { id: comment.id }
             expect(comment.reload.approved).to be_falsey
@@ -935,7 +935,7 @@ describe CommentsController do
       authorized_roles.each do |role|
         context "when logged-in as admin with the role #{role}" do
           it "marks the comment as not spam" do
-            admin.update(roles: [role])
+            admin.update!(roles: [role])
             fake_login_admin(admin)
             put :approve, params: { id: comment.id }
             expect(flash[:error]).to be_nil
@@ -952,7 +952,7 @@ describe CommentsController do
 
         context "when logged-in as admin with the role #{role_description}" do
           it "leaves the comment marked as spam and redirects with an error" do
-            admin.update(roles: [role])
+            admin.update!(roles: [role])
             fake_login_admin(admin)
             put :approve, params: { id: comment.id }
             expect(comment.reload.approved).to be_falsey
@@ -1036,7 +1036,7 @@ describe CommentsController do
         authorized_roles.each do |role|
           context "when logged-in as admin with the role #{role}" do
             it "marks the comment as spam" do
-              admin.update(roles: [role])
+              admin.update!(roles: [role])
               fake_login_admin(admin)
               put :reject, params: { id: comment.id }
               expect(flash[:error]).to be_nil
@@ -1053,7 +1053,7 @@ describe CommentsController do
 
           context "when logged-in as admin with #{role_description}" do
             it "doesn't mark the comment as spam and redirects with an error" do
-              admin.update(roles: [role])
+              admin.update!(roles: [role])
               fake_login_admin(admin)
               put :reject, params: { id: comment.id }
               it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
@@ -1071,7 +1071,7 @@ describe CommentsController do
           authorized_roles.each do |role|
             context "with the role #{role}" do
               it "marks the comment as spam" do
-                admin.update(roles: [role])
+                admin.update!(roles: [role])
                 fake_login_admin(admin)
                 put :reject, params: { id: comment.id }
                 expect(flash[:error]).to be_nil
@@ -1088,7 +1088,7 @@ describe CommentsController do
 
             context "with #{role_description}" do
               it "doesn't mark the comment as spam and redirects with an error" do
-                admin.update(roles: [role])
+                admin.update!(roles: [role])
                 fake_login_admin(admin)
                 put :reject, params: { id: comment.id }
                 it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
@@ -1236,7 +1236,7 @@ describe CommentsController do
 
           context "with no role" do
             it "doesn't freeze comment and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :freeze, params: { id: comment.id }
 
@@ -1248,7 +1248,7 @@ describe CommentsController do
           %w[superadmin tag_wrangling].each do |admin_role|
             context "with the #{admin_role} role" do
               it "freezes comment and redirects with success message" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :freeze, params: { id: comment.id }
 
@@ -1302,7 +1302,7 @@ describe CommentsController do
 
           context "with no role" do
             it "doesn't freeze comment and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :freeze, params: { id: comment.id }
 
@@ -1314,7 +1314,7 @@ describe CommentsController do
           %w[superadmin policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "freezes comment and redirects with success message" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :freeze, params: { id: comment.id }
 
@@ -1507,7 +1507,7 @@ describe CommentsController do
 
           context "with no role" do
             it "leaves comment frozen and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :freeze, params: { id: comment.id }
 
@@ -1519,7 +1519,7 @@ describe CommentsController do
           %w[superadmin tag_wrangling].each do |admin_role|
             context "with the #{admin_role} role" do
               it "leaves comment frozen and redirects with error" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :freeze, params: { id: comment.id }
 
@@ -1573,7 +1573,7 @@ describe CommentsController do
 
           context "with no role" do
             it "leaves comment frozen and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :freeze, params: { id: comment.id }
 
@@ -1585,7 +1585,7 @@ describe CommentsController do
           %w[superadmin policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "leaves comment frozen and redirects with error" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :freeze, params: { id: comment.id }
 
@@ -1760,7 +1760,7 @@ describe CommentsController do
 
           context "with no role" do
             it "leaces comment unfrozen and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :unfreeze, params: { id: comment.id }
 
@@ -1772,7 +1772,7 @@ describe CommentsController do
           %w[superadmin tag_wrangling].each do |admin_role|
             context "with the #{admin_role} role" do
               it "leaves comment unfrozen and redirects with error" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :unfreeze, params: { id: comment.id }
 
@@ -1826,7 +1826,7 @@ describe CommentsController do
 
           context "with no role" do
             it "leaves comment unfrozen and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :unfreeze, params: { id: comment.id }
 
@@ -1838,7 +1838,7 @@ describe CommentsController do
           %w[superadmin policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "leaves comment unfrozen and redirects with error" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :unfreeze, params: { id: comment.id }
 
@@ -2011,7 +2011,7 @@ describe CommentsController do
 
           context "with no role" do
             it "doesn't unfreeze comment and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :unfreeze, params: { id: comment.id }
 
@@ -2023,7 +2023,7 @@ describe CommentsController do
           %w[superadmin tag_wrangling].each do |admin_role|
             context "with the #{admin_role} role" do
               it "unfreezes comment and redirects with success message" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :unfreeze, params: { id: comment.id }
 
@@ -2077,7 +2077,7 @@ describe CommentsController do
 
           context "with no role" do
             it "doesn't unfreeze comment and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :unfreeze, params: { id: comment.id }
 
@@ -2089,7 +2089,7 @@ describe CommentsController do
           %w[superadmin policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "unfreezes comment and redirects with success message" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :unfreeze, params: { id: comment.id }
 
@@ -2284,7 +2284,7 @@ describe CommentsController do
 
           context "with no role" do
             it "doesn't hide comment and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :hide, params: { id: comment.id }
 
@@ -2296,7 +2296,7 @@ describe CommentsController do
           %w[superadmin tag_wrangling].each do |admin_role|
             context "with the #{admin_role} role" do
               it "hides comment and redirects with success message" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :hide, params: { id: comment.id }
 
@@ -2350,7 +2350,7 @@ describe CommentsController do
 
           context "with no role" do
             it "doesn't hide comment and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :hide, params: { id: comment.id }
 
@@ -2362,7 +2362,7 @@ describe CommentsController do
           %w[superadmin policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "hides comment and redirects with success message" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :hide, params: { id: comment.id }
 
@@ -2454,7 +2454,7 @@ describe CommentsController do
 
           context "with no role" do
             it "leaves comment hidden and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :hide, params: { id: comment.id }
 
@@ -2466,7 +2466,7 @@ describe CommentsController do
           %w[superadmin tag_wrangling].each do |admin_role|
             context "with the #{admin_role} role" do
               it "leaves comment hidden and redirects with error" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :hide, params: { id: comment.id }
 
@@ -2520,7 +2520,7 @@ describe CommentsController do
 
           context "with no role" do
             it "leaves comment hidden and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :hide, params: { id: comment.id }
 
@@ -2532,7 +2532,7 @@ describe CommentsController do
           %w[superadmin policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "leaves comment hidden and redirects with error" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :hide, params: { id: comment.id }
 
@@ -2626,7 +2626,7 @@ describe CommentsController do
 
           context "with no role" do
             it "doesn't unhide comment and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :unhide, params: { id: comment.id }
 
@@ -2638,7 +2638,7 @@ describe CommentsController do
           %w[superadmin tag_wrangling].each do |admin_role|
             context "with the #{admin_role} role" do
               it "unhides comment and redirects with success message" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :unhide, params: { id: comment.id }
 
@@ -2692,7 +2692,7 @@ describe CommentsController do
 
           context "with no role" do
             it "doesn't unhide comment and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :unhide, params: { id: comment.id }
 
@@ -2704,7 +2704,7 @@ describe CommentsController do
           %w[superadmin policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "unhides comment and redirects with success message" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :unhide, params: { id: comment.id }
 
@@ -2796,7 +2796,7 @@ describe CommentsController do
 
           context "with no role" do
             it "leaves comment unhidden and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :unhide, params: { id: comment.id }
 
@@ -2808,7 +2808,7 @@ describe CommentsController do
           %w[superadmin tag_wrangling].each do |admin_role|
             context "with the #{admin_role} role" do
               it "leaves comment unhidden and redirects with error" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :unhide, params: { id: comment.id }
 
@@ -2862,7 +2862,7 @@ describe CommentsController do
 
           context "with no role" do
             it "leaves comment unhidden and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               put :unhide, params: { id: comment.id }
 
@@ -2874,7 +2874,7 @@ describe CommentsController do
           %w[superadmin policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "leaves comment unhidden and redirects with error" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 put :unhide, params: { id: comment.id }
 
@@ -3083,7 +3083,7 @@ describe CommentsController do
 
       it "deletes the reply and redirects with success message" do
         admin = create(:admin)
-        admin.update(roles: ["superadmin"])
+        admin.update!(roles: ["superadmin"])
         fake_login_admin(admin)
         delete :destroy, params: { id: reply.id }
 
@@ -3115,7 +3115,7 @@ describe CommentsController do
 
           context "with no role" do
             it "doesn't destroy comment and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               delete :destroy, params: { id: comment.id }
 
@@ -3127,7 +3127,7 @@ describe CommentsController do
           %w[superadmin board board_assistants_team communications elections policy_and_abuse support].each do |admin_role|
             context "with role #{admin_role}" do
               it "destroys comment and redirects with success message" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 delete :destroy, params: { id: comment.id }
 
@@ -3180,7 +3180,7 @@ describe CommentsController do
 
           context "with no role" do
             it "doesn't destroy comment and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               delete :destroy, params: { id: comment.id }
 
@@ -3192,7 +3192,7 @@ describe CommentsController do
           (Admin::VALID_ROLES - %w[superadmin board policy_and_abuse support]).each do |admin_role|
             context "with role #{admin_role}" do
               it "doesn't destroy comment and redirects with error" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 delete :destroy, params: { id: comment.id }
   
@@ -3205,7 +3205,7 @@ describe CommentsController do
           %w[superadmin board policy_and_abuse support].each do |admin_role|
             context "with the #{admin_role} role" do
               it "destroys comment and redirects with success message" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 delete :destroy, params: { id: comment.id }
 
@@ -3298,7 +3298,7 @@ describe CommentsController do
 
           context "with no role" do
             it "doesn't destroy comment and redirects with error" do
-              admin.update(roles: [])
+              admin.update!(roles: [])
               fake_login_admin(admin)
               delete :destroy, params: { id: comment.id }
 
@@ -3310,7 +3310,7 @@ describe CommentsController do
           (Admin::VALID_ROLES - %w[superadmin board policy_and_abuse support]).each do |admin_role|
             context "with role #{admin_role}" do
               it "doesn't destroy comment and redirects with error" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 delete :destroy, params: { id: comment.id }
   
@@ -3323,7 +3323,7 @@ describe CommentsController do
           %w[superadmin board policy_and_abuse support].each do |admin_role|
             context "with the #{admin_role} role" do
               it "destroys comment and redirects with success message" do
-                admin.update(roles: [admin_role])
+                admin.update!(roles: [admin_role])
                 fake_login_admin(admin)
                 delete :destroy, params: { id: comment.id }
 
@@ -3674,7 +3674,7 @@ describe CommentsController do
 
       context "DELETE #destroy" do
         it "does not permit deletion of the comment when admin has no role" do
-          admin.update(roles: [])
+          admin.update!(roles: [])
           fake_login_admin(admin)
           delete :destroy, params: { id: comment.id }
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
@@ -3682,7 +3682,7 @@ describe CommentsController do
 
         %w[superadmin board support policy_and_abuse].each do |admin_role|
           it "successfully deletes the comment when admin has #{admin_role} role" do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             delete :destroy, params: { id: comment.id }
             expect(flash[:comment_notice]).to eq "Comment deleted."
@@ -3735,7 +3735,7 @@ describe CommentsController do
 
       context "PUT #freeze" do
         it "does not permit freezing of the comment when admin has no role" do
-          admin.update(roles: [])
+          admin.update!(roles: [])
           fake_login_admin(admin)
           put :freeze, params: { id: comment.id }
           it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to freeze that comment thread.")
@@ -3743,7 +3743,7 @@ describe CommentsController do
 
         %w[superadmin policy_and_abuse].each do |admin_role|
           it "successfully freezes the comment when admin has #{admin_role} role" do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             put :freeze, params: { id: comment.id }
             it_redirects_to_with_comment_notice(
@@ -3758,7 +3758,7 @@ describe CommentsController do
       context "PUT #unfreeze" do
         it "does not permit unfreezing of the comment when admin has no role" do
           comment.update(iced: true)
-          admin.update(roles: [])
+          admin.update!(roles: [])
           fake_login_admin(admin)
           put :unfreeze, params: { id: comment.id }
           it_redirects_to_with_error("/where_i_came_from", "Sorry, you don't have permission to unfreeze that comment thread.")
@@ -3767,7 +3767,7 @@ describe CommentsController do
         %w[superadmin policy_and_abuse].each do |admin_role|
           it "successfully unfreezes the comment when admin has #{admin_role} role" do
             comment.update(iced: true)
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             put :unfreeze, params: { id: comment.id }
             it_redirects_to_with_comment_notice(
