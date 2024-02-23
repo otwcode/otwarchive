@@ -16,7 +16,7 @@
     <% else %>
       <%# FRONT END, update this if a.user comes in %>
       <h4 class="heading byline">
-        <% cache("#{[single_comment, single_comment.comment_owner]}_heading", expires_in: 1.week) do %>
+        <% cache([single_comment, single_comment.comment_owner, "heading"], expires_in: 1.week) do %>
           <% if single_comment.by_anonymous_creator? %>
             <%= ts("Anonymous Creator") %>
           <% else %>
@@ -37,7 +37,7 @@
           <%= time_in_zone(single_comment.created_at) %>
         </span>
       </h4>
-      <% cache("#{[single_comment, single_comment.comment_owner]}_body", expires_in: 1.week) do %>
+      <% cache([single_comment, single_comment.comment_owner, "body"], expires_in: 1.week) do %>
         <div class="icon">
           <% if !single_comment.pseud.nil? %>
             <% if single_comment.by_anonymous_creator? %>
