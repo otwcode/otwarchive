@@ -6,7 +6,7 @@ describe HitCountUpdateJob do
     let(:stat_counter) { work.stat_counter }
 
     before do
-      stat_counter.update(hit_count: 3)
+      stat_counter.update!(hit_count: 3)
       RedisHitCounter.redis.hset("recent_counts", work_id, 10)
     end
 

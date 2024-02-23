@@ -9,7 +9,7 @@ describe OwnedTagSet do
   describe "#owner_changes=" do
     context "given a user that is not an owner" do
       it "makes the user an owner when assigning their login" do
-        owned_tag_set.update(owner_changes: user.login)
+        owned_tag_set.update!(owner_changes: user.login)
         expect(owned_tag_set.owners.reload).to include(user.default_pseud)
       end
 
@@ -17,13 +17,13 @@ describe OwnedTagSet do
         let!(:other_pseud) { create(:pseud, name: user.login) }
 
         it "makes the first user an owner when assigning their login" do
-          owned_tag_set.update(owner_changes: user.login)
+          owned_tag_set.update!(owner_changes: user.login)
           expect(owned_tag_set.owners.reload).to include(user.default_pseud)
           expect(owned_tag_set.owners.reload).not_to include(other_pseud)
         end
 
         it "makes the second user an owner when assigning the full byline for the other user's pseud" do
-          owned_tag_set.update(owner_changes: "#{other_pseud.name} (#{other_pseud.user.login})")
+          owned_tag_set.update!(owner_changes: "#{other_pseud.name} (#{other_pseud.user.login})")
           expect(owned_tag_set.owners.reload).not_to include(user.default_pseud)
           expect(owned_tag_set.owners.reload).to include(other_pseud)
         end
@@ -38,7 +38,7 @@ describe OwnedTagSet do
       end
 
       it "removes the user as an owner when assigning their login" do
-        owned_tag_set.update(owner_changes: user.login)
+        owned_tag_set.update!(owner_changes: user.login)
         expect(owned_tag_set.owners.reload).not_to include(user.default_pseud)
       end
 
@@ -52,13 +52,13 @@ describe OwnedTagSet do
         end
 
         it "removes the first user as an owner when assigning their login" do
-          owned_tag_set.update(owner_changes: user.login)
+          owned_tag_set.update!(owner_changes: user.login)
           expect(owned_tag_set.owners.reload).not_to include(user.default_pseud)
           expect(owned_tag_set.owners.reload).to include(other_pseud)
         end
 
         it "removes the second user an owner when assigning the full byline for the other user's pseud" do
-          owned_tag_set.update(owner_changes: "#{other_pseud.name} (#{other_pseud.user.login})")
+          owned_tag_set.update!(owner_changes: "#{other_pseud.name} (#{other_pseud.user.login})")
           expect(owned_tag_set.owners.reload).to include(user.default_pseud)
           expect(owned_tag_set.owners.reload).not_to include(other_pseud)
         end
@@ -69,7 +69,7 @@ describe OwnedTagSet do
   describe "#moderator_changes=" do
     context "given a user that is not a moderator" do
       it "makes the user a moderator when assigning their login" do
-        owned_tag_set.update(moderator_changes: user.login)
+        owned_tag_set.update!(moderator_changes: user.login)
         expect(owned_tag_set.moderators.reload).to include(user.default_pseud)
       end
 
@@ -77,13 +77,13 @@ describe OwnedTagSet do
         let!(:other_pseud) { create(:pseud, name: user.login) }
 
         it "makes the first user a moderator when assigning their login" do
-          owned_tag_set.update(moderator_changes: user.login)
+          owned_tag_set.update!(moderator_changes: user.login)
           expect(owned_tag_set.moderators.reload).to include(user.default_pseud)
           expect(owned_tag_set.moderators.reload).not_to include(other_pseud)
         end
 
         it "makes the second user a moderator when assigning the full byline for the other user's pseud" do
-          owned_tag_set.update(moderator_changes: "#{other_pseud.name} (#{other_pseud.user.login})")
+          owned_tag_set.update!(moderator_changes: "#{other_pseud.name} (#{other_pseud.user.login})")
           expect(owned_tag_set.moderators.reload).not_to include(user.default_pseud)
           expect(owned_tag_set.moderators.reload).to include(other_pseud)
         end
@@ -98,7 +98,7 @@ describe OwnedTagSet do
       end
 
       it "removes the user as a moderator when assigning their login" do
-        owned_tag_set.update(moderator_changes: user.login)
+        owned_tag_set.update!(moderator_changes: user.login)
         expect(owned_tag_set.moderators.reload).not_to include(user.default_pseud)
       end
 
@@ -112,13 +112,13 @@ describe OwnedTagSet do
         end
 
         it "removes the first user as a moderator when assigning their login" do
-          owned_tag_set.update(moderator_changes: user.login)
+          owned_tag_set.update!(moderator_changes: user.login)
           expect(owned_tag_set.moderators.reload).not_to include(user.default_pseud)
           expect(owned_tag_set.moderators.reload).to include(other_pseud)
         end
 
         it "removes the second user a moderator when assigning the full byline for the other user's pseud" do
-          owned_tag_set.update(moderator_changes: "#{other_pseud.name} (#{other_pseud.user.login})")
+          owned_tag_set.update!(moderator_changes: "#{other_pseud.name} (#{other_pseud.user.login})")
           expect(owned_tag_set.moderators.reload).to include(user.default_pseud)
           expect(owned_tag_set.moderators.reload).not_to include(other_pseud)
         end

@@ -58,14 +58,14 @@ describe UserManager do
     end
 
     it "succeeds in unsuspending user" do
-      user.update(suspended: true, suspended_until: 4.days.from_now)
+      user.update!(suspended: true, suspended_until: 4.days.from_now)
       manager = UserManager.new(admin, user, admin_action: "unsuspend", admin_note: "There was a mistake in the review process")
       expect(manager.save).to be_truthy
       expect(manager.successes).to eq ["Suspension has been lifted."]
     end
 
     it "succeeds in unbanning user" do
-      user.update(banned: true)
+      user.update!(banned: true)
       manager = UserManager.new(admin, user, admin_action: "unban", admin_note: "There was a mistake in the review process")
       expect(manager.save).to be_truthy
       expect(manager.successes).to eq ["Suspension has been lifted."]

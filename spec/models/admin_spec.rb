@@ -115,7 +115,7 @@ describe Admin, :ready do
     context "valid roles" do
       it "can be assigned a valid role" do
         admin = create(:admin)
-        expect(admin.update(roles: ["superadmin"])).to be_truthy
+        expect(admin.update!(roles: ["superadmin"])).to be_truthy
       end
     end
 

@@ -72,7 +72,7 @@ describe Comment do
         before { comment.save(validate: false) }
 
         it "changes the comment" do
-          expect(comment.update(comment_content: "Why did you block me?")).to be_truthy
+          expect(comment.update!(comment_content: "Why did you block me?")).to be_truthy
           expect(comment.errors.full_messages).to be_blank
           expect(comment.reload.comment_content).to eq("Why did you block me?")
         end
@@ -91,7 +91,7 @@ describe Comment do
         before { comment.save(validate: false) }
 
         it "doesn't change the comment" do
-          expect(comment.update(comment_content: "Why did you block me?")).to be_falsey
+          expect { comment.update!(comment_content: "Why did you block me?") }.to raise_error(ActiveRecord::RecordInvalid)
           expect(comment.errors.full_messages).to include(message)
           expect(comment.reload.comment_content).to eq("Hmm.")
         end
@@ -356,7 +356,7 @@ describe Comment do
 
         it "does not update last wrangling activity" do
           expect do
-            comment.update(comment_content: Faker::Lorem.sentence(word_count: 25))
+            comment.update!(comment_content: Faker::Lorem.sentence(word_count: 25))
           end.not_to change { tag_wrangler.reload.last_wrangling_activity.updated_at }
         end
       end
