@@ -91,7 +91,8 @@ describe Comment do
         before { comment.save(validate: false) }
 
         it "doesn't change the comment" do
-          expect { comment.update!(comment_content: "Why did you block me?") }.to raise_error(ActiveRecord::RecordInvalid)
+          expect { comment.update!(comment_content: "Why did you block me?") }
+            .to raise_error(ActiveRecord::RecordInvalid)
           expect(comment.errors.full_messages).to include(message)
           expect(comment.reload.comment_content).to eq("Hmm.")
         end
