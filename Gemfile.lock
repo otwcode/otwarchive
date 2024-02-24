@@ -218,8 +218,6 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     date (3.3.4)
-    delorean (2.1.0)
-      chronic
     departure (6.6.0)
       activerecord (>= 5.2.0, < 7.2.0, != 7.0.0)
       mysql2 (>= 0.4.0, <= 0.5.5)
@@ -654,7 +652,6 @@ DEPENDENCIES
   cucumber-timecop
   dalli
   database_cleaner
-  delorean
   departure (~> 6.5)
   devise
   devise-async

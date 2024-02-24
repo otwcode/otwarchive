@@ -10,7 +10,7 @@ describe ArchiveFaqsController do
   let(:user_locale) { create(:locale) }
   let(:user) do
     user = create(:user)
-    user.preference.update!(preferred_locale: user_locale.id)
+    user.preference.update!(locale: user_locale)
     user
   end
 

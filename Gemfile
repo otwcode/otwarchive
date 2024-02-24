@@ -127,7 +127,7 @@ group :test do
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
-  gem 'delorean'
+  
   # Record and replay data from external URLs
   gem "vcr", "~> 6.2"
   gem "webmock"

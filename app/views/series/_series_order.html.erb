@@ -1,5 +1,5 @@
 <div id="manage-series">
-  <%= form_tag url_for(:action => 'update_positions') do %>
+  <%= form_tag update_positions_series_path, method: :post do %>
   <ul id="sortable_series_list">
     <% @serial_works.each_with_index do |serial, i| %>
       <li id="serial_<%= serial.id %>" class="serial-position-list">
@@ -25,8 +25,8 @@
                 $j.ajax({
                   type: 'post',
                   data: $j("#sortable_series_list").sortable("serialize"),
-                  dataType: 'script',
-                  url: "<%= url_for(:action => :update_positions) %>"})
+                  dataType: 'json',
+                  url: "<%= update_positions_series_path %>"})
               }
       })
   <% end %>

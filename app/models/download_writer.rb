@@ -74,15 +74,18 @@ class DownloadWriter
     ### Format-specific options
     # epub: don't generate a cover image
     epub = download.file_type == "epub" ? ["--no-default-epub-cover"] : []
-    # pdf: decrease margins from 72pt default
+
     pdf = []
     if download.file_type == "pdf"
       pdf = [
+        # pdf: decrease margins from 72pt default
         "--pdf-page-margin-top", "36",
         "--pdf-page-margin-right", "36",
         "--pdf-page-margin-bottom", "36",
         "--pdf-page-margin-left", "36",
-        "--pdf-default-font-size", "17"
+        "--pdf-default-font-size", "17",
+        # pdf: only include necessary characters when embedding fonts
+        "--subset-embedded-fonts"
       ]
     end
 
