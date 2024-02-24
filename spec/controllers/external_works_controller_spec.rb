@@ -12,6 +12,11 @@ describe ExternalWorksController do
     context "when the URL has an external work" do
       let!(:external_work) { create(:external_work, url: url) }
 
+      it "responds with javascript" do
+        get :fetch, xhr: true, params: { external_work_url: url, format: :js }
+        expect(response.content_type).to match("text/javascript")
+      end
+
       it "responds with the matching work" do
         get :fetch, params: { external_work_url: url, format: :json }
         expect(assigns(:external_work)).to eq(external_work)
@@ -29,6 +34,11 @@ describe ExternalWorksController do
     end
 
     context "when the URL doesn't have an exteral work" do
+      it "responds with javascript" do
+        get :fetch, xhr: true, params: { external_work_url: url, format: :js }
+        expect(response.content_type).to match("text/javascript")
+      end
+
       it "responds with blank" do
         get :fetch, params: { external_work_url: url, format: :json }
         expect(assigns(:external_work)).to be_nil

@@ -98,7 +98,7 @@ Rails.application.config.active_support.use_rfc4122_namespaced_uuids = true
 # Rails.application.config.action_dispatch.cookies_serializer = :json
 #
 #
-# NOTE: as of https://github.com/otwcode/otwarchive/pull/4651, we are using :hybrid, which is the first step to migate.
+# NOTE: as of https://github.com/otwcode/otwarchive/pull/4651, we are using :hybrid, which is the first step to migrate.
 # After some time, we can update to use :json instead.
 
 # Change the return value of `ActionDispatch::Request#content_type` to the Content-Type header without modification.
