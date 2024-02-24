@@ -3641,7 +3641,7 @@ describe CommentsController do
       end
 
       it "PUT #unfreeze successfully unfreezes the comment" do
-        comment.update(iced: true)
+        comment.update!(iced: true)
         put :unfreeze, params: { id: comment.id }
         it_redirects_to_with_comment_notice(
           work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
@@ -3741,7 +3741,7 @@ describe CommentsController do
 
       context "PUT #unfreeze" do
         it "does not permit unfreezing of the comment when admin has no role" do
-          comment.update(iced: true)
+          comment.update!(iced: true)
           admin.update!(roles: [])
           fake_login_admin(admin)
           put :unfreeze, params: { id: comment.id }
@@ -3750,7 +3750,7 @@ describe CommentsController do
 
         %w[superadmin policy_and_abuse].each do |admin_role|
           it "successfully unfreezes the comment when admin has #{admin_role} role" do
-            comment.update(iced: true)
+            comment.update!(iced: true)
             admin.update!(roles: [admin_role])
             fake_login_admin(admin)
             put :unfreeze, params: { id: comment.id }
