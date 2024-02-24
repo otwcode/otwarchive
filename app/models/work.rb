@@ -146,6 +146,13 @@ class Work < ApplicationRecord
   validates :rating_string,
             presence: { message: "^Please choose a rating." }
 
+  validate :only_one_rating
+  def only_one_rating
+    return unless split_tag_string(rating_string).count > 1
+
+    errors.add(:base, ts("Only one rating is allowed."))
+  end
+
   # rephrases the "chapters is invalid" message
   after_validation :check_for_invalid_chapters
   def check_for_invalid_chapters
@@ -211,7 +218,7 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series, :touch_related_works
   after_destroy :expire_caches, :update_pseud_index
 
   before_destroy :send_deleted_work_notification, prepend: true
@@ -259,6 +266,8 @@ class Work < ApplicationRecord
       tag.update_tag_cache
     end
 
+    series.each(&:expire_caches)
+
     Work.expire_work_blurb_version(id)
     Work.flush_find_by_url_cache unless imported_from_url.blank?
   end
@@ -285,7 +294,7 @@ class Work < ApplicationRecord
   end
 
   def self.work_blurb_version_key(id)
-    "/v3/work_blurb_tag_cache_key/#{id}"
+    "/v4/work_blurb_tag_cache_key/#{id}"
   end
 
   def self.work_blurb_version(id)
@@ -321,9 +330,8 @@ class Work < ApplicationRecord
     Collection.expire_ids(collection_ids)
   end
 
-  # TODO: AO3-6085 We can use touch_all once we update to Rails 6.
   def touch_series
-    series.each(&:touch) if saved_change_to_in_anon_collection?
+    series.touch_all if saved_change_to_in_anon_collection?
   end
 
   after_destroy :destroy_chapters_in_reverse
@@ -372,13 +380,19 @@ class Work < ApplicationRecord
   def self.find_by_url_uncached(url)
     url = UrlFormatter.new(url)
     Work.where(imported_from_url: url.original).first ||
-      Work.where(imported_from_url: [url.minimal, url.no_www, url.with_www, url.encoded, url.decoded]).first ||
-      Work.where("imported_from_url LIKE ?", "%#{url.minimal_no_http}%").select { |w|
+      Work.where(imported_from_url: [url.minimal,
+                                     url.with_http, url.with_https,
+                                     url.no_www, url.with_www,
+                                     url.encoded, url.decoded,
+                                     url.minimal_no_protocol_no_www]).first ||
+      Work.where("imported_from_url LIKE ? or imported_from_url LIKE ?",
+                 "http://#{url.minimal_no_protocol_no_www}%",
+                 "https://#{url.minimal_no_protocol_no_www}%").select do |w|
         work_url = UrlFormatter.new(w.imported_from_url)
-        ['original', 'minimal', 'no_www', 'with_www', 'encoded', 'decoded'].any? { |method|
+        %w[original minimal no_www with_www with_http with_https encoded decoded].any? do |method|
           work_url.send(method) == url.send(method)
-        }
-      }.first
+        end
+      end.first
   end
 
   def self.find_by_url(url)
@@ -923,6 +937,14 @@ class Work < ApplicationRecord
     parent_work_relationships.reject(&:marked_for_destruction?)
   end
 
+  def touch_related_works
+    return unless saved_change_to_in_unrevealed_collection?
+
+    # Make sure download URLs of child and parent works expire to preserve anonymity.
+    children.touch_all
+    parents_after_saving.each { |rw| rw.parent.touch }
+  end
+
   #################################################################################
   #
   # In this section we define various named scopes that can be chained together
@@ -1008,7 +1030,7 @@ class Work < ApplicationRecord
   }
 
   scope :with_includes_for_blurb, lambda {
-    includes(:pseuds)
+    includes(:pseuds, :approved_collections, :stat_counter)
   }
 
   scope :for_blurb, -> { with_columns_for_blurb.with_includes_for_blurb }

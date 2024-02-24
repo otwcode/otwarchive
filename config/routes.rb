@@ -1,5 +1,4 @@
-Otwarchive::Application.routes.draw do
-
+Rails.application.routes.draw do
   devise_scope :admin do
     get "admin/logout" => "admin/sessions#confirm_logout"
 
@@ -510,10 +509,11 @@ Otwarchive::Application.routes.draw do
   #### I18N ####
 
   # should stay below the main works mapping
-  resources :languages do
+  resources :languages, except: [:show] do
     resources :works
     resources :admin_posts
   end
+  get "/languages/:id", to: redirect("/languages/%{id}/works", status: 302)
   resources :locales, except: :destroy
 
   #### API ####
@@ -640,7 +640,7 @@ Otwarchive::Application.routes.draw do
 
   # See how all your routes lay out with "rake routes"
 
-  # These are whitelisted routes that are proven to be used throughout the
+  # These are allowlisted routes that are proven to be used throughout the
   # application, which previously relied on a deprecated catch-all route definition
   # (`get ':controller(/:action(/:id(.:format)))'`) to work.
   #

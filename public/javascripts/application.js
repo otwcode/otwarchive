@@ -361,7 +361,7 @@ function setupDropdown(){
     'data-target': '#'
   });
   $j('.dropdown').find('.menu').addClass("dropdown-menu");
-  $j('.dropdown').find('.menu').children('li').attr("role", "menu-item");
+  $j('.dropdown').find('.menu').children('li').attr("role", "menuitem");
 }
 
 // Accordion-style collapsible widgets

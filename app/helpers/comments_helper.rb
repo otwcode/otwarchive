@@ -61,7 +61,7 @@ module CommentsHelper
         link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]
       end
     else
-      comment.name
+      content_tag(:span, comment.name) + content_tag(:span, " #{ts('(Guest)')}", class: "role")
     end
   end
 
@@ -118,15 +118,18 @@ module CommentsHelper
 
   def can_reply_to_comment?(comment)
     admin_settings = AdminSetting.current
-    
-    !(comment.unreviewed? ||
-      comment.iced? ||
-      comment.hidden_by_admin? ||
-      parent_disallows_comments?(comment) ||
-      comment_parent_hidden?(comment) ||
-      blocked_by_comment?(comment) ||
-      blocked_by?(comment.ultimate_parent) ||
-      guest? && admin_settings.guest_comments_off?)
+
+    return false if comment.unreviewed?
+    return false if comment.iced?
+    return false if comment.hidden_by_admin?
+    return false if parent_disallows_comments?(comment)
+    return false if comment_parent_hidden?(comment)
+    return false if blocked_by_comment?(comment)
+    return false if blocked_by?(comment.ultimate_parent)
+
+    return true unless guest?
+
+    !(admin_settings.guest_comments_off? || comment.guest_replies_disallowed?)
   end
 
   def can_edit_comment?(comment)
@@ -343,8 +346,9 @@ module CommentsHelper
     unreviewed = "unreviewed" if comment.unreviewed?
     commenter = commenter_id_for_css_classes(comment)
     official = "official" if commenter && comment&.pseud&.user&.official
+    guest = "guest" unless comment.pseud_id
 
-    "#{unavailable} #{official} #{unreviewed} comment group #{commenter}".squish
+    "#{unavailable} #{official} #{guest} #{unreviewed} comment group #{commenter}".squish
   end
 
   # find the parent of the commentable

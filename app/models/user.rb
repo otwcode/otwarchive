@@ -1,7 +1,8 @@
 class User < ApplicationRecord
-  audited
+  audited redacted: [:encrypted_password, :password_salt]
   include WorksOwner
   include PasswordResetsLimitable
+  include UserLoggable
 
   devise :database_authenticatable,
          :confirmable,
@@ -37,7 +38,6 @@ class User < ApplicationRecord
   has_many :external_authors, dependent: :destroy
   has_many :external_creatorships, foreign_key: "archivist_id"
 
-  before_destroy :log_removal_as_next_of_kin
   has_many :fannish_next_of_kins, dependent: :delete_all, inverse_of: :kin, foreign_key: :kin_id
   has_one :fannish_next_of_kin, dependent: :destroy
 
@@ -171,15 +171,6 @@ class User < ApplicationRecord
     # TODO: AO3-5054 Expire kudos cache when deleting a user.
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
     Kudo.where(user: self).update_all(user_id: nil)
-  end
-
-  def log_removal_as_next_of_kin
-    fannish_next_of_kins.each do |fnok|
-      fnok.user.create_log_item({
-                                  action: ArchiveConfig.ACTION_REMOVE_FNOK,
-                                  fnok_user_id: self.id
-                                })
-    end
   end
 
   def read_inbox_comments
@@ -330,7 +321,7 @@ class User < ApplicationRecord
   def create_default_associateds
     self.pseuds << Pseud.new(name: self.login, is_default: true)
     self.profile = Profile.new
-    self.preference = Preference.new(preferred_locale: Locale.default.id)
+    self.preference = Preference.new(locale: Locale.default)
   end
 
   def prevent_password_resets?
@@ -477,6 +468,11 @@ class User < ApplicationRecord
       end
     end
     return @coauthored_works
+  end
+
+  #  Returns array of collections where the user is the sole author
+  def sole_owned_collections
+    self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
   end
 
   ### BETA INVITATIONS ###

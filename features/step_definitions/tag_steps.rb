@@ -59,6 +59,23 @@ Given /^the basic categories exist$/ do
   end
 end
 
+Given "a set of tags for tag sort by use exists" do
+  {
+    "10 uses" => 10,
+    "8 uses" => 8,
+    "also 8 uses" => 8,
+    "5 uses" => 5,
+    "2 uses" => 2,
+    "0 uses" => 0
+  }.each do |freeform, uses|
+    tag = Freeform.find_or_create_by_name(freeform.dup)
+    tag.taggings_count = uses
+  end
+
+  step "all indexing jobs have been run"
+  step "the periodic tag count task is run"
+end
+
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
   fandom = Fandom.find_or_create_by_name(fandom)
   fandom.update(canonical: true)
@@ -175,6 +192,7 @@ Given /^the tag wrangling setup$/ do
   step %{I am logged in as a random user}
   step %{I post the work "Revenge of the Sith 2" with fandom "Star Wars, Stargate SG-1" with character "Daniel Jackson" with second character "Jack O'Neil" with rating "Not Rated" with relationship "JackDaniel"}
   step %{The periodic tag count task is run}
+  step %{all indexing jobs have been run}
   step %{I flush the wrangling sidebar caches}
 end
 
@@ -425,4 +443,8 @@ end
 Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
   tag = Tag.find_by(name: tagname)
   puts tag.inspect
+end
+
+Then "no tag is scheduled for count update from now on" do
+  expect_any_instance_of(Tag).not_to receive(:update_filters_for_filterables)
 end

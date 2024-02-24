@@ -119,10 +119,10 @@ module UsersHelper
     items.html_safe
   end
 
-  def log_item_action_name(item, user)
+  def log_item_action_name(item)
     action = item.action
     
-    return fnok_action_name(item, user) if [ArchiveConfig.ACTION_ADD_FNOK, ArchiveConfig.ACTION_REMOVE_FNOK].include?(action)
+    return fnok_action_name(item) if fnok_action?(action)
 
     case action
     when ArchiveConfig.ACTION_ACTIVATE
@@ -152,23 +152,6 @@ module UsersHelper
     end
   end
 
-  def fnok_action_name(item, user)
-    action = item.action == ArchiveConfig.ACTION_REMOVE_FNOK ? "removed" : "added"
-
-    if item.fnok_user_id == user.id
-      user_id = item.user_id
-      action_leaf = "was_#{action}"
-    else
-      user_id = item.fnok_user_id
-      action_leaf = "has_#{action}"
-    end
-
-    t(
-      "users_helper.log.fnok.#{action_leaf}",
-      user_id: user_id
-    )
-  end
-
   # Give the TOS field in the new user form a different name in non-production environments
   # so that it can be filtered out of the log, for ease of debugging
   def tos_field_name
@@ -177,5 +160,35 @@ module UsersHelper
     else
       'terms_of_service_non_production'
     end
+  end
+
+  private
+
+  def fnok_action?(action)
+    [
+      ArchiveConfig.ACTION_ADD_FNOK,
+      ArchiveConfig.ACTION_REMOVE_FNOK,
+      ArchiveConfig.ACTION_ADDED_AS_FNOK,
+      ArchiveConfig.ACTION_REMOVED_AS_FNOK
+    ].include?(action)
+  end
+
+  def fnok_action_name(item)
+    action_leaf =
+      case item.action
+      when ArchiveConfig.ACTION_ADD_FNOK
+        "has_added"
+      when ArchiveConfig.ACTION_REMOVE_FNOK
+        "has_removed"
+      when ArchiveConfig.ACTION_ADDED_AS_FNOK
+        "was_added"
+      when ArchiveConfig.ACTION_REMOVED_AS_FNOK
+        "was_removed"
+      end
+
+    t(
+      "users_helper.log.fnok.#{action_leaf}",
+      user_id: item.fnok_user_id
+    )
   end
 end

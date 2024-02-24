@@ -49,9 +49,14 @@ Feature: Create and Edit Series
     When I view the series "Ponies"
       And I follow "Rainbow Dash"
     Then I should see "Part 3 of Ponies"
+      And I should not see "Next Work →"
     When I follow "← Previous Work"
     Then I should see "Starsong"
+      And I should see "Next Work →" within ".work.meta .next"
+      And I should see "Next Work →" within ".afterword .next"
     When I follow "← Previous Work"
+      And I should see "Next Work →" within ".work.meta .next"
+      And I should see "Next Work →" within ".afterword .next"
     Then I should see "Sweetie Belle"
     When I follow "Next Work →"
     Then I should see "Starsong"
@@ -207,6 +212,8 @@ Feature: Create and Edit Series
     Then I should see "Work was successfully updated."
       And "moon" should be a creator of the series "Ponies"
       And "son" should be a creator on the series "Ponies"
+      # Delay to make sure the cache is expired
+      And it is currently 1 second from now
     When I follow "Remove Me As Co-Creator"
     Then I should see "You have been removed as a creator from the series and its works."
       And "moon" should not be the creator of the series "Ponies"

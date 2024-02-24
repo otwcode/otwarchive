@@ -31,6 +31,7 @@ Feature: Edit preferences
     And I should see "Turn off messages to your inbox about comments."
     And I should see "Turn off copies of your own comments."
     And I should see "Turn off emails about kudos."
+    And I should see "Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately)."
     And I should see "Allow others to invite my works to collections."
     And I should see "Turn off emails from collections."
     And I should see "Turn off inbox messages from collections."

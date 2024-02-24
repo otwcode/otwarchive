@@ -270,6 +270,10 @@ Then /^(?:|The )url should include (.+)$/ do |url|
   current_url.should include(url)
 end
 
+Then "the url should not include {string}" do |url|
+  expect(current_url).not_to include(url)
+end
+
 Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   query = URI.parse(current_url).query
   actual_params = query ? CGI.parse(query) : {}
