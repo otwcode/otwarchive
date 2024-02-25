@@ -66,3 +66,15 @@
     And I follow "Join"
   Then I should see "You are now a member of Such a nice collection"
   When I am in the default browser
+
+Scenario: Collection member should see correct button text
+  Given a user exists with login: "sam"
+    And I am in sam's browser
+    And I am logged in as "sam"
+    And I have joined the collection "Such a nice collection"
+  When I am on the "Collections in the Example Archive" page
+    And I choose "collection_filters_moderated_true"
+    And I choose "collection_filters_closed_false"
+    And I press "Sort and Filter"
+  Then I should see "Leave" button exactly 1 time
+    And I should see "Join" button 0 or more times
