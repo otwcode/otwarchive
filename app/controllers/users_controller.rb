@@ -35,6 +35,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    @page_subtitle = t(".browser_title") 
     authorize @user.profile if logged_in_as_admin?
   end
 
@@ -127,7 +128,6 @@ class UsersController < ApplicationController
 
   def update
     authorize @user.profile if logged_in_as_admin?
-
     if @user.profile.update(profile_params)
       if logged_in_as_admin? && @user.profile.ticket_url.present?
         link = view_context.link_to("Ticket ##{@user.profile.ticket_number}", @user.profile.ticket_url)

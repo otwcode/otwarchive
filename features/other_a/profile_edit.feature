@@ -13,6 +13,7 @@ Background:
 
 Scenario: Add details
 
+  Then I should see the page title "Edit Profile"
   When I fill in the details of my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
