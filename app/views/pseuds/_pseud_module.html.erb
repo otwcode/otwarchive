@@ -17,6 +17,6 @@
 </div>
 <% if pseud.description.present? %>
   <blockquote class="userstuff">
-    <%=raw sanitize_field(pseud, :description, strip_images: true) %>
+    <%= raw sanitize_field(pseud, :description, strip_images: true) %>
   </blockquote>
 <% end %>
