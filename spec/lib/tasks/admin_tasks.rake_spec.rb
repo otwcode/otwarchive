@@ -3,7 +3,7 @@ require "spec_helper"
 describe "rake admin:purge_unvalidated_users" do
   context "when the unconfirmed account is younger than two weeks" do
     it "doesn't delete the account" do
-      unconfirmed = Delorean.time_travel_to 13.days.ago do
+      unconfirmed = travel_to(13.days.ago) do
         create(:user, :unconfirmed)
       end
 
@@ -15,7 +15,7 @@ describe "rake admin:purge_unvalidated_users" do
 
   context "when the unconfirmed account is older than two weeks" do
     it "deletes the account" do
-      unconfirmed = Delorean.time_travel_to 15.days.ago do
+      unconfirmed = travel_to(15.days.ago) do
         create(:user, :unconfirmed)
       end
 
@@ -28,7 +28,7 @@ describe "rake admin:purge_unvalidated_users" do
     it "resets the account's invitation" do
       invitation = create(:invitation)
 
-      unconfirmed = Delorean.time_travel_to 15.days.ago do
+      unconfirmed = travel_to(15.days.ago) do
         create(:user, :unconfirmed, invitation_token: invitation.token)
       end
 

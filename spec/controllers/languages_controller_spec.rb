@@ -4,7 +4,7 @@ describe LanguagesController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  describe "GET index" do
+  describe "GET index", work_search: true do
     context "when not logged in" do
       it "renders the index template" do
         get :index

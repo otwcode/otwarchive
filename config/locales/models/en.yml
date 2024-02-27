@@ -42,6 +42,11 @@ en:
         name_with_colon:
           one: 'Additional Tag:'
           other: 'Additional Tags:'
+      gift_exchange:
+        offers_num_allowed: Number of offers allowed per sign-up
+        offers_num_required: Number of offers required per sign-up
+        requests_num_allowed: Number of requests allowed per sign-up
+        requests_num_required: Number of requests required per sign-up
       meta_tagging:
         meta_tag: Metatag
         meta_tag_id: Metatag
@@ -64,6 +69,8 @@ en:
       series/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
+      skin/skin_parents:
+        parent_skin: Parent skin
       user:
         login: User name
       work:
@@ -146,6 +153,15 @@ en:
               not_work: Only a link to a work can be listed as an inspiration.
               protected: You can't use the related works function to cite works by the protected user %{login}.
           format: "%{message}"
+        skin/skin_parents:
+          attributes:
+            base:
+              format: "%{message}"
+        skin_parent:
+          attributes:
+            base:
+              format: "%{message}"
+              site_parent: You can't use %{title} as a parent unless replacing the default archive skin.
         user:
           attributes:
             login:

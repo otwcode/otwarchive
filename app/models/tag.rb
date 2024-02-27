@@ -272,9 +272,6 @@ class Tag < ApplicationRecord
   scope :unfilterable, -> { nonsynonymous.where(unwrangleable: false) }
   scope :unwrangleable, -> { where(unwrangleable: true) }
 
-  # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
-  # what we actually need are the empty rows in the results
-  scope :unwrangled, -> { joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("unwrangleable = 0 AND common_taggings.id IS NULL") }
   scope :in_use, -> { where("canonical = 1 OR taggings_count_cache > 0") }
   scope :first_class, -> { joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL") }
 
@@ -1032,6 +1029,20 @@ class Tag < ApplicationRecord
         syn.update(merger_id: self.id)
       end
     end
+  end
+
+  # unwrangleable:
+  #   - A boolean stored in the tags table
+  #   - Default false
+  #   - Set to true by wranglers on tags that should be excluded from the wrangling process altogether. Example: freeform tags like "idk how to explain it but trust me"
+  #
+  # unwrangled:
+  #   - A computed value
+  #   - True for "orphan" tags yet to be tied to something (fandom, character, etc.) by wranglers
+  #   - Exact meaning may change depending on the nature of the tag (search for definitions of unwrangled? overriding this one)
+  #
+  def unwrangled?
+    common_taggings.empty?
   end
 
   #################################
