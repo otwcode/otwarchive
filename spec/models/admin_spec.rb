@@ -114,16 +114,13 @@ describe Admin, :ready do
 
     context "valid roles" do
       it "can be assigned a valid role" do
-        admin = create(:admin)
-        expect(admin.update!(roles: ["superadmin"])).to be_truthy
+        expect { create(:admin, roles: ["superadmin"]) }.not_to raise_error
       end
     end
 
     context "invalid roles" do
       it "cannot be assigned invalid role" do
-        admin = create(:admin)
-
-        expect { admin.update!(roles: ["fake_role"]) }.to \
+        expect { create(:admin, roles: ["fake_role"]) }.to \
           raise_error(ActiveRecord::RecordInvalid, \
                       "Validation failed: Roles is invalid")
       end

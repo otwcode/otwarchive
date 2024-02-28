@@ -72,7 +72,7 @@ describe Comment do
         before { comment.save(validate: false) }
 
         it "changes the comment" do
-          expect(comment.update!(comment_content: "Why did you block me?")).to be_truthy
+          comment.update!(comment_content: "Why did you block me?")
           expect(comment.errors.full_messages).to be_blank
           expect(comment.reload.comment_content).to eq("Why did you block me?")
         end
