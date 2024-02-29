@@ -4,19 +4,13 @@ class Pseud < ApplicationRecord
   include Justifiable
 
   has_attached_file :icon,
-    styles: { standard: "100x100>" },
-    path: if Rails.env.production?
-            ":attachment/:id/:style.:extension"
-          elsif Rails.env.staging?
-            ":rails_env/:attachment/:id/:style.:extension"
-          else
-            ":rails_root/public/system/:rails_env/:class/:attachment/:id_partition/:style/:filename"
-          end,
-    storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
-    s3_protocol: "https",
-    s3_credentials: "#{Rails.root}/config/s3.yml",
-    bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
-    default_url: "/images/skins/iconsets/default/icon_user.png"
+                    styles: { standard: "100x100>" },
+                    path: %w[staging production].include?(Rails.env) ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
+                    storage: %w[staging production].include?(Rails.env) ? :s3 : :filesystem,
+                    s3_protocol: "https",
+                    s3_credentials: Rails.root.join("config/s3.yml"),
+                    bucket: %w[staging production].include?(Rails.env) ? YAML.load_file(Rails.root.join("config/s3.yml"))["bucket"] : "",
+                    default_url: "/images/skins/iconsets/default/icon_user.png"
 
   validates_attachment_content_type :icon,
                                     content_type: %w[image/gif image/jpeg image/png],
