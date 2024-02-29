@@ -416,7 +416,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.7.3)
-    rack (2.2.6.4)
+    rack (2.2.8.1)
     rack-attack (6.6.0)
       rack (>= 1.0, < 3)
     rack-dev-mark (0.7.9)
