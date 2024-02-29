@@ -201,6 +201,9 @@ en:
           canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is banned).
           guest_comments: Banned email addresses cannot be used in guest comments.
         page_heading: Manage Banned Emails
+    header:
+      nav:
+        label: Admin
     passwords:
       edit:
         describedby:
@@ -541,6 +544,8 @@ en:
   layouts:
     header:
       login: Log In
+      nav:
+        label: Site
     proxy_notice:
       button: Dismiss Notice
       faux_heading: 'Important message:'
@@ -755,6 +760,9 @@ en:
         submit: Create Account
         wait: Please wait...
     sessions:
+      greeting:
+        nav:
+          label: User
       new:
         beta_reminder:
           give_feedback: give us your feedback

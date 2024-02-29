@@ -1,4 +1,4 @@
-<ul class="menu" role="menu">
+<ul class="menu">
   <li><%= link_to ts('All Fandoms', key: 'header.fandom'), media_path %></li>
   <% cache "menu-fandoms-version4", skip_digest: true do %>
     <% Media.for_menu.each do |medium| %>
