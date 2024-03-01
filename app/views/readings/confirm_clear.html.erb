@@ -1,0 +1,13 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Clear Entire History") %></h2>
+
+<!--main content-->
+<%= form_for(@readings, :html => {:method => :post, :action => :clear, :class => "simple destroy"}) do |f| %>
+  <p class="caution notice">
+    <%= ts("Are you sure you want to <strong><em>clear</em></strong> your entire history? This <strong>cannot be undone</strong>.").html_safe %>
+  </p>
+  <p class="actions">
+    <%= f.submit ts("Yes, Clear Entire History") %>
+  </p>
+<% end %>
+<!--/content-->

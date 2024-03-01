@@ -50,6 +50,9 @@ class ReadingsController < ApplicationController
     redirect_to user_readings_path(current_user)
   end
 
+  def confirm_clear
+  end
+
   protected
 
   # checks if user has history enabled and redirects to preferences if not, so they can potentially change it
