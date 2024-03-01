@@ -21,7 +21,7 @@ class AbuseReport < ApplicationRecord
   end
 
   def logged_in_with_matching_email?
-    User.current_user.present? && User.current_user.email == email
+    User.current_user.present? && User.current_user.email.downcase == email.downcase
   end
 
   def akismet_attributes
