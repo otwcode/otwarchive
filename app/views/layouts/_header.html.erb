@@ -6,7 +6,7 @@
   <style type="text/css">
   #header h2 { 
     background: #616C90 <% if (header_url = @collection.header_image_url || (@collection_parent && @collection_parent.header_image_url)) %>
-      <% height = (size = FastImage.size(header_url, timeout: 1)) ? size[1].to_s + "px" : "100%" %>
+      <% height = (size = FastImage.size(header_url, timeout: 1)) ? "#{size[1].to_s}px" : "100%" %>
       url(<%= header_url %>); height: <%= height %>
     <% end %>;
   }
@@ -16,8 +16,8 @@
 <header id="header" class="region<% if @collection %> collection<% end %>">
 
   <h1 class="heading">
-    <%= link_to(content_tag(:span, "#{ArchiveConfig.APP_NAME}") + content_tag(:sup, " beta") +
-    image_tag("/images/ao3_logos/logo_42.png", alt: "#{ArchiveConfig.ALT_LOGO}", class: "logo", skip_pipeline: true), root_path) %>
+    <%= link_to(content_tag(:span, ArchiveConfig.APP_NAME) + content_tag(:sup, " beta") +
+    image_tag("/images/ao3_logos/logo_42.png", alt: ArchiveConfig.ALT_LOGO, class: "logo", skip_pipeline: true), root_path) %>
   </h1>
 
   <% if logged_in? || logged_in_as_admin? %>
@@ -60,7 +60,13 @@
   <% if @collection %>
     <h2 class="collections">
       <% unless @collection.header_image_url.present? %>
-        <%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : t(".collections.new")) %>
+        <%= if @collection.title
+              @collection.title
+            elsif @collection_parent
+              @collection_parent.title
+            else
+              t(".collections.new")
+            end %>
       <% end %>
     </h2>
   <% end %>
