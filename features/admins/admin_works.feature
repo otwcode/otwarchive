@@ -82,6 +82,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     When I follow "Hide Bookmark"
       And all indexing jobs have been run
     Then I should see "Item has been hidden."
+      And I should see "Make Bookmark Visible"
     When I am logged in as "regular_user" with password "password1"
       And I am on bad_user's bookmarks page
     Then I should not see "Rude comment"
