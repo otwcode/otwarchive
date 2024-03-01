@@ -1,10 +1,11 @@
 /* ==USERSTUFF: displaying content inputted by a user into a textarea.*/
 
 .userstuff {
-    word-wrap: break-word;
+  word-wrap: break-word;
 }
 
-.userstuff p, .userstuff details {
+.userstuff p,
+.userstuff details {
   margin: 1.286em auto;
   padding: 0;
   line-height: 1.5;
@@ -20,6 +21,10 @@
 .userstuff dl dl {
   width: 90%;
   margin: auto;
+}
+
+.faq .userstuff dl {
+  margin: 0.75em 0;
 }
 
 .userstuff dt {
@@ -40,12 +45,19 @@
   padding: 0;
 }
 
+.faq .userstuff dd {
+  margin-block-start: 0.75em;
+  margin-block-end: 0.75em;
+  margin-inline-start: 1.75em;
+}
+
 .userstuff ul {
   margin: 1.125em auto;
   padding: 0 1em;
 }
 
-.userstuff li, .userstuff ol ul li {
+.userstuff li,
+.userstuff ol ul li {
   font-weight: normal;
   display: list-item;
   list-style-type: disc;
@@ -108,7 +120,9 @@
   border-bottom: 1px solid;
 }
 
-.userstuff h3 a, .userstuff h3 a:link, .userstuff h3 a:visited {
+.userstuff h3 a,
+.userstuff h3 a:link,
+.userstuff h3 a:visited {
   font-weight: 500;
   border-bottom: 0;
   text-decoration: none;
@@ -119,11 +133,21 @@
 .userstuff caption {
   font-size: 1em;
   height: auto;
-  opacity: 1.0;
+  opacity: 1;
   width: auto;
 }
 
-.userstuff table, .userstuff td, .userstuff col, .userstuff tr, .userstuff thead, .userstuff tfoot, .userstuff tbody, .userstuff th, .userstuff thead td, .userstuff th a, .userstuff th a:link {
+.userstuff table,
+.userstuff td,
+.userstuff col,
+.userstuff tr,
+.userstuff thead,
+.userstuff tfoot,
+.userstuff tbody,
+.userstuff th,
+.userstuff thead td,
+.userstuff th a,
+.userstuff th a:link {
   background: transparent;
   border: none;
 }
@@ -179,11 +203,11 @@
 /* contexts */
 
 .bookmark .user .userstuff {
-	line-height: 1.5;
+  line-height: 1.5;
 }
 
 .bookmark .user .userstuff blockquote {
-	margin-bottom: 1.286em;
+  margin-bottom: 1.286em;
 }
 
 /*END== */
