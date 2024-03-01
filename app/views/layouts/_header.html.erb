@@ -6,7 +6,7 @@
   <style type="text/css">
   #header h2 { 
     background: #616C90 <% if (header_url = @collection.header_image_url || (@collection_parent && @collection_parent.header_image_url)) %>
-      <% height = (size = FastImage.size(header_url, timeout: 1)) ? "#{size[1].to_s}px" : "100%" %>
+      <% height = (size = FastImage.size(header_url, timeout: 1)) ? "#{size[1]}px" : "100%" %>
       url(<%= header_url %>); height: <%= height %>
     <% end %>;
   }
