@@ -149,18 +149,19 @@ class DownloadWriter
   # A hash of the work data calibre needs
   def meta
     return @metadata if @metadata
+    # Using ampersands as instructed by Calibre's ebook-convert documentation
+    # hides all but the first author name in Books (formerly iBooks). The
+    # other authors cannot be used for searching or sorting. Using commas
+    # just means Calibre's GUI treats it as one name, e.g. "testy, testy2" is
+    # like "Fangirl, Suzy Q", for searching and sorting.
+
+    # We add "Fanworks" because Books uses the first tag as the category and
+    # it would otherwise be the work's rating, which is weird.
     @metadata = {
       title:             work.title,
       sortable_title:    work.sorted_title,
-      # Using ampersands as instructed by Calibre's ebook-convert documentation
-      # hides all but the first author name in Books (formerly iBooks). The
-      # other authors cannot be used for searching or sorting. Using commas
-      # just means Calibre's GUI treats it as one name, e.g. "testy, testy2" is
-      # like "Fangirl, Suzy Q", for searching and sorting.
       authors:           download.authors,
       sortable_authors:  work.creator_to_sort_on,
-      # We add "Fanworks" because Books uses the first tag as the category and
-      # it would otherwise be the work's rating, which is weird.
       tags:              "Fanworks, " + work.tags.pluck(:name).join(", "),
       pubdate:           work.revised_at.to_date.to_s,
       summary:           work.summary.to_s,

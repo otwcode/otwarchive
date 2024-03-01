@@ -1041,7 +1041,7 @@ class Work < ApplicationRecord
 
   SORTED_AUTHOR_REGEX = %r{^[\+\-=_\?!'"\.\/]}
 
-  def creator_to_sort_on
+  def authors_to_sort_on
     if self.anonymous?
       "Anonymous"
     else

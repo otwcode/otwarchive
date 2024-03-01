@@ -45,7 +45,7 @@ class WorkSearchForm
     :sort_column,
     :sort_direction,
     :page
-  ]
+  ].freeze
 
   attr_accessor :options
 

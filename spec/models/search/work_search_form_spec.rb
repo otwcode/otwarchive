@@ -604,14 +604,14 @@ describe WorkSearchForm, work_search: true do
 
       it "returns all works in the correct order of sortable pseud values" do
         work_search = WorkSearchForm.new(sort_column: "creator_to_sort_on")
-        expect(work_search.search_results.map(&:creator_to_sort_on)).to eq %w(cioelle ruth)
+        expect(work_search.search_results.map(&:creator_to_sort_on)).to eq %w[cioelle ruth]
 
         user_1.login = "yabalchoath"
         user_1.save!
         run_all_indexing_jobs
 
         work_search = WorkSearchForm.new(sort_column: "creator_to_sort_on")
-        expect(work_search.search_results.map(&:creator_to_sort_on)).to eq %w(ruth yabalchoath)
+        expect(work_search.search_results.map(&:creator_to_sort_on)).to eq %w[ruth yabalchoath]
       end
     end
 
