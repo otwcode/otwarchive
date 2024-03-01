@@ -28,7 +28,7 @@ Feature: Search anonymous works
     When I go to the search works page
       And I fill in "Creator" with "Anonymous"
       And I press "Search" within "#new_work_search"
-    Then I should see "You searched for: Creator: Anonymous"
+    Then I should see "You searched for: creator: Anonymous"
       And I should see "1 Found"
       And I should see "Fulfilled Story-thing"
 
@@ -47,6 +47,6 @@ Feature: Search anonymous works
     When I go to the search works page
       And I fill in "Creator" with "mod1"
       And I press "Search" within "#new_work_search"
-    Then I should see "You searched for: Creator: mod1"
+    Then I should see "You searched for: creator: mod1"
       And I should see "1 Found"
       And I should see "Fulfilled Story-thing"

@@ -56,7 +56,7 @@ Feature: Search works by work info
     When I fill in "Any Field" with ""
       And I fill in "Creator" with "testuser2"
       And I press "Search" within "#new_work_search"
-    Then I should see "You searched for: Creator: testuser2"
+    Then I should see "You searched for: creator: testuser2"
       And I should see "3 Found"
       And I should see "fourth"
       And I should see "fifth"

@@ -65,8 +65,8 @@ describe QueryCleaner do
       expect(clean_params[:sort_direction]).to eq("desc")
     end
 
-    it "should extract author sorting from a query" do
-      cleaner = QueryCleaner.new(query: "sorted by:>author")
+    it "should extract creator sorting from a query" do
+      cleaner = QueryCleaner.new(query: "sorted by:>creator")
       clean_params = cleaner.clean
       expect(clean_params[:query]).to eq(nil)
       expect(clean_params[:sort_column]).to eq("creator_to_sort_on")

@@ -125,7 +125,7 @@ describe WorkQuery do
   end
 
   it "should allow you to sort by creator name" do
-    q = WorkQuery.new(sort_column: 'creator_to_sort_on', sort_direction: 'asc')
+    q = WorkQuery.new(sort_column: "creator_to_sort_on", sort_direction: "asc")
     expect(q.generated_query[:sort]).to eq([{ "creator_to_sort_on" => { order: "asc" } }, { id: { order: "asc" } }])
   end
 
