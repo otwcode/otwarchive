@@ -6,7 +6,7 @@ en:
         expiration:
           one: If you do not use this link to reset your password within %{count} day, it will expire, and you will have to request a new one.
           other: If you do not use this link to reset your password within %{count} days, it will expire, and you will have to request a new one.
-        intro: 'Someone has requested a password reset for your account. You can change your account password by following the link below and entering your new password:'
+        intro: "Someone has requested a password reset for your account. You can change your account password by following the link below and entering your new password:"
         link_title_html: Change my password.
         subject: "[%{app_name}] Reset your admin password"
         unrequested: If you did not request this password reset, you may ignore this email and your previous password will continue to work.
@@ -14,12 +14,12 @@ en:
     set_password_notification:
       created: Your AO3 admin account has been created.
       expiration:
-        one: 'The link to set your password is good for %{count} day. If it no longer works, you can request a password reset and use the link that will be emailed to you instead: %{request_reset_url}.'
-        other: 'The link to set your password is good for %{count} days. If it no longer works, you can request a password reset and use the link that will be emailed to you instead: %{request_reset_url}.'
+        one: "The link to set your password is good for %{count} day. If it no longer works, you can request a password reset and use the link that will be emailed to you instead: %{request_reset_url}."
+        other: "The link to set your password is good for %{count} days. If it no longer works, you can request a password reset and use the link that will be emailed to you instead: %{request_reset_url}."
       expiration_html:
         one: The link to set your password is good for %{count} day. If it no longer works, you can %{request_reset_link} and use the link that will be emailed to you instead.
         other: The link to set your password is good for %{count} days. If it no longer works, you can %{request_reset_link} and use the link that will be emailed to you instead.
-      finish: 'Please follow this link to set your password so you can log in: %{set_password_url}.'
+      finish: "Please follow this link to set your password so you can log in: %{set_password_url}."
       finish_html: Please %{set_password_link} so you can log in.
       request_reset: request a password reset
       set_password: follow this link to set your password
@@ -60,7 +60,7 @@ en:
         general:
           about:
             html: The Archive of Our Own is a fan-run and fan-supported archive that relies on %{donate_link}.
-            text: 'The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}.'
+            text: "The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}."
           html:
             donate_link_text: your donations
             support_link_text: contact Support
@@ -90,7 +90,7 @@ en:
     abuse_report:
       copy:
         comment: Description of the content or issue
-        intro: 'Here is a copy of your report for your reference:'
+        intro: "Here is a copy of your report for your reference:"
         summary: Terms of Service violation
         url: URL of the reported page
       report_received: The Policy & Abuse team has received your report, and our volunteers will investigate as soon as they can. Because our team is small and we receive thousands of reports each month, it may take some time for us to get to your report.
@@ -112,6 +112,20 @@ en:
       subject: "[%{app_name}] Your work has been deleted by an admin"
       text:
         tos_violation: If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{contact_abuse_url}).
+    admin_hidden_series_notification:
+      access: While your series is hidden, you will still be able to access it through the link provided above, but it will not be listed on your series' page, and it won't be available to other users of the Archive.
+      check_email: Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your series was hidden.
+      contact_abuse: contact Policy & Abuse
+      html:
+        help: If you are uncertain why your series was hidden, and you have not received further communication regarding this matter, please %{contact_abuse_link} directly.
+        hidden: Your series %{title} has been hidden by the Policy & Abuse team and is no longer publicly accessible.
+        tos_violation: If your series was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your series into compliance with the Terms of Service may lead to your series being deleted from the Archive.
+      subject: "[%{app_name}] Your series has been hidden by the Policy & Abuse team"
+      text:
+        help: "If you are uncertain why your series was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}."
+        hidden: Your series "%{title}" (%{series_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible.
+        tos_violation: If your series was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your series into compliance with the Terms of Service may lead to your series being deleted from the Archive.
+      tos: Terms of Service
     admin_hidden_work_notification:
       access: While your work is hidden, you will still be able to access it through the link provided above, but it will not be listed on your works page, and it won't be available to other users of the Archive.
       check_email: Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your work was hidden.
@@ -122,7 +136,7 @@ en:
         tos_violation: If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
       subject: "[%{app_name}] Your work has been hidden by the Policy & Abuse team"
       text:
-        help: 'If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}.'
+        help: "If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}."
         hidden: Your work "%{title}" (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible.
         tos_violation: If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
       tos: Terms of Service
@@ -143,17 +157,17 @@ en:
       do_not_want:
         anonymous:
           html: If you do not want your work to be anonymous, please visit your %{collection_items_link} to remove it from this collection.
-          text: 'If you do not want your work to be anonymous, please visit your Approved Collection Items page to remove it from this collection: %{collection_items_url}'
+          text: "If you do not want your work to be anonymous, please visit your Approved Collection Items page to remove it from this collection: %{collection_items_url}"
         anonymous_unrevealed:
           html: If you do not want your work to be anonymous and unrevealed, please visit your %{collection_items_link} to remove it from this collection.
-          text: 'If you do not want your work to be anonymous and unrevealed, please visit your Approved Collection Items page to remove it from this collection: %{collection_items_url}'
+          text: "If you do not want your work to be anonymous and unrevealed, please visit your Approved Collection Items page to remove it from this collection: %{collection_items_url}"
         unrevealed:
           html: If you do not want your work to be unrevealed, please visit your %{collection_items_link} to remove it from this collection.
-          text: 'If you do not want your work to be unrevealed, please visit your Approved Collection Items page to remove it from this collection: %{collection_items_url}'
+          text: "If you do not want your work to be unrevealed, please visit your Approved Collection Items page to remove it from this collection: %{collection_items_url}"
       faq_link_text: Collections FAQ
       more_info:
         html: For more information, visit our %{faq_link}.
-        text: 'For more information, visit our Collections FAQ: %{faq_url}'
+        text: "For more information, visit our Collections FAQ: %{faq_url}"
       subject:
         anonymous: "[%{app_name}] Your work was made anonymous"
         anonymous_unrevealed: "[%{app_name}] Your work was made anonymous and unrevealed"
@@ -164,7 +178,7 @@ en:
       archivist_notice: Because the collection maintainers are acting in their official capacity as Open Doors archivists, they are allowed to add your work to this collection, even if you have collection invitations disabled. Archivists will only add a work to a collection if it was hosted on an imported archive.
       removal_instructions:
         html: If you would like to remove your work from this collection, please visit your %{approved_items_link}.
-        text: 'If you would like to remove your work from this collection, please visit your Approved Collection Items page: %{approved_items_url}.'
+        text: "If you would like to remove your work from this collection, please visit your Approved Collection Items page: %{approved_items_url}."
       subject: "[%{app_name}][%{collection_title}] An Open Doors archivist has added your work to a collection"
       work_added:
         html: The collection maintainers of %{collection_link} have added your work %{work_link} to their collection!
@@ -173,18 +187,18 @@ en:
       any: Any
       assignment:
         html: You have been assigned the following request in the %{link} challenge at the Archive of Our Own!
-      description: 'Description:'
-      due: 'This assignment is due at:'
+      description: "Description:"
+      due: "This assignment is due at:"
       html:
         footer: You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{footer_link}.
         footer_link: the challenge profile page
         look_up: You can look up this assignment from %{link}.
         look_up_link: your Assignments page
-      optional_tags: 'Optional Tags:'
-      prompt_url: 'Prompt URL:'
-      prompts: 'Prompts:'
-      recipient: 'Recipient:'
-      recipient_missing: 'None: contact a moderator for help!'
+      optional_tags: "Optional Tags:"
+      prompt_url: "Prompt URL:"
+      prompts: "Prompts:"
+      recipient: "Recipient:"
+      recipient_missing: "None: contact a moderator for help!"
       subject: "[%{app_name}][%{collection_title}] Your assignment!"
       text:
         assignment: You have been assigned the following request in the "%{collection_title}" challenge (%{collection_url}) at the Archive of Our Own!
@@ -200,7 +214,7 @@ en:
         complete: All assignments have now been sent out.
         subject: Assignments sent
       html:
-        received_message: 'You have received a message about your collection %{collection_link}:'
+        received_message: "You have received a message about your collection %{collection_link}:"
       text:
         received_message: 'You have received a message about your collection "%{collection_title}" (%{collection_url}):'
     creatorship_notification:
@@ -213,15 +227,15 @@ en:
         remove_chapter: If you've been added in error or don't want to be listed as a creator, you can %{edit_chapter_link} to remove yourself as creator.
         remove_series: If you've been added in error or don't want to be listed as a creator, you can %{edit_series_link} to remove yourself as creator.
         remove_work: If you've been added in error or don't want to be listed as a creator, you can %{edit_work_link} to remove yourself as creator.
-      intro_chapter: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following chapter:'
-      intro_series: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following series:'
-      intro_work: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following work:'
+      intro_chapter: "The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following chapter:"
+      intro_series: "The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following series:"
+      intro_work: "The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following work:"
       subject: "[%{app_name}] Co-creator notification"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
-        remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
-        remove_series: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the series to remove yourself as creator: %{url}'
-        remove_work: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the work to remove yourself as creator: %{url}'
+        remove_chapter: "If you've been added in error or don't want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}"
+        remove_series: "If you've been added in error or don't want to be listed as a creator, you can edit the series to remove yourself as creator: %{url}"
+        remove_work: "If you've been added in error or don't want to be listed as a creator, you can edit the work to remove yourself as creator: %{url}"
     creatorship_notification_archivist:
       explanation: Because they are acting in their official capacity as an Open Doors archivist, they are allowed to add you without a request, even if you have co-creation disabled.
       html:
@@ -232,27 +246,27 @@ en:
         remove_chapter: If you've been added in error or don't want to be listed as a creator, you can %{edit_chapter_link} to remove yourself as creator.
         remove_series: If you've been added in error or don't want to be listed as a creator, you can %{edit_series_link} to remove yourself as creator.
         remove_work: If you've been added in error or don't want to be listed as a creator, you can %{edit_work_link} to remove yourself as creator.
-      intro_chapter: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following chapter:'
-      intro_series: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following series:'
-      intro_work: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following work:'
+      intro_chapter: "The user %{archivist} has added your pseud %{pseud} as a co-creator on the following chapter:"
+      intro_series: "The user %{archivist} has added your pseud %{pseud} as a co-creator on the following series:"
+      intro_work: "The user %{archivist} has added your pseud %{pseud} as a co-creator on the following work:"
       subject: "[%{app_name}] Archivist co-creator notification"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
-        remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
-        remove_series: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the series to remove yourself as creator: %{url}'
-        remove_work: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the work to remove yourself as creator: %{url}'
+        remove_chapter: "If you've been added in error or don't want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}"
+        remove_series: "If you've been added in error or don't want to be listed as a creator, you can edit the series to remove yourself as creator: %{url}"
+        remove_work: "If you've been added in error or don't want to be listed as a creator, you can edit the work to remove yourself as creator: %{url}"
     creatorship_request:
       html:
         creation: "%{creation_link} by %{pseud_links}"
         instructions: You can accept or reject this request on your %{page_name} page.
         page_name: Co-Creator Requests
-      intro_chapter: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following chapter:'
-      intro_series: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following series:'
-      intro_work: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following work:'
+      intro_chapter: "The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following chapter:"
+      intro_series: "The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following series:"
+      intro_work: "The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following work:"
       subject: "[%{app_name}] Co-creator request"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
-        instructions: 'You can accept or reject this request on your Co-Creator Requests page: %{url}'
+        instructions: "You can accept or reject this request on your Co-Creator Requests page: %{url}"
     delete_work_notification:
       attachment: Attached is a copy of your work for your reference.
       deleted_other:
@@ -282,16 +296,16 @@ en:
       subject: "[%{app_name}] Invitation"
       text:
         about: The Archive of Our Own (AO3) is a free, noncommercial archive built by and for fans. Our servers are owned by our parent nonprofit, the Organization for Transformative Works (%{otw_url}), which works to protect fan rights and preserve fanworks. We welcome all kinds of fanworks, including fanfiction, fanart, fanvids, and podfic from any fandom.
-        activation_support: 'After you sign up, you''ll receive an account activation email. If you do not receive this email after 48 hours, please contact Support: %{support_url}.'
-        faq: 'For more information, please check our FAQ: %{faq_url}.'
-        join: 'If you''d like to join us, please follow this link to sign up: %{invitation_url}.'
+        activation_support: "After you sign up, you'll receive an account activation email. If you do not receive this email after 48 hours, please contact Support: %{support_url}."
+        faq: "For more information, please check our FAQ: %{faq_url}."
+        join: "If you'd like to join us, please follow this link to sign up: %{invitation_url}."
     invitation_to_claim:
       access:
         html: Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{contact_support_link}.
         text: Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please contact AO3 Support.
       claim_or_remove:
         html: Claim or remove your works here.
-        text: 'Claim or remove your works here: %{claim_url}'
+        text: "Claim or remove your works here: %{claim_url}"
       email_tips: If you're contacting us, please add email addresses from @transformativeworks.org to your list of safe contacts and check your spam folders for our reply.
       html:
         ao3_news: AO3 News
@@ -323,7 +337,7 @@ en:
       update_redirect:
         html: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and %{contact_open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
         text: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and contact Open Doors at %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
-      uploaded_list: 'The works uploaded include:'
+      uploaded_list: "The works uploaded include:"
     invite_increase_notification:
       html:
         body:
@@ -339,7 +353,7 @@ en:
       main:
         one: We regret to inform you that your request for a new invitation cannot be fulfilled at this time.
         other: We regret to inform you that your request for %{count} new invitations cannot be fulfilled at this time.
-      reason: 'Your request was:'
+      reason: "Your request was:"
       subject: "[%{app_name}] Additional invitation request declined"
     recipient_notification:
       html:
@@ -353,7 +367,7 @@ en:
     signup_notification:
       activate:
         html: Please %{activate_account_link}.
-        text: 'Please follow this link to activate your account: %{activate_account_url}'
+        text: "Please follow this link to activate your account: %{activate_account_url}"
       activate_your_account: follow this link to activate your account
       admin_posts: AO3 News
       bye: We hope you enjoy using the Archive.
@@ -364,14 +378,14 @@ en:
         text: Once your account is up and running, you can post your fanworks, set up email subscriptions to let you know when your favorite creators or works have updated, set preferences to customize the way the site looks and works for you, keep track of the works you've accessed on the Archive via your history, and much more.
       information:
         html: There's lots of information and advice on how to use the Archive in our %{faq_link}. You'll find the latest news about site developments on %{admin_posts_link}. If you need more help, run into a bug, or have questions or comments, please %{contact_support_link}, who are always happy to help out.
-        text: 'There''s lots of information and advice on how to use the Archive in our FAQ at %{faq_url}. You''ll find the latest news about site developments on AO3 News at %{admin_posts_url}. If you need more help, run into a bug, or have questions or comments, please contact Support, who are always happy to help out: %{contact_support_url}.'
+        text: "There's lots of information and advice on how to use the Archive in our FAQ at %{faq_url}. You'll find the latest news about site developments on AO3 News at %{admin_posts_url}. If you need more help, run into a bug, or have questions or comments, please contact Support, who are always happy to help out: %{contact_support_url}."
       subject: "[%{app_name}] Activate your account"
       welcome: Welcome to the Archive of Our Own, %{login}!
   users:
     mailer:
       reset_password_instructions:
         expiration: If you do not use this link to reset your password within a week, it will expire, and you will have to request a new one.
-        intro: 'Someone has requested a password reset for your account. You can change your account password by following the link below and entering your new password:'
+        intro: "Someone has requested a password reset for your account. You can change your account password by following the link below and entering your new password:"
         link_title: Change my password.
         subject: "[%{app_name}] Reset your password"
         unrequested: If you did not request this password reset, you may ignore this email and your previous password will continue to work.
