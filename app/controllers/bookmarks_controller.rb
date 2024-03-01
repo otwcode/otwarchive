@@ -61,10 +61,11 @@ class BookmarksController < ApplicationController
   def index
     if @bookmarkable
       access_denied unless is_admin? || @bookmarkable.visible?
-      @bookmarks = @bookmarkable.bookmarks.is_public.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      @bookmarks = @bookmarkable.bookmarks.is_public
       if is_admin?
         @bookmarks += @bookmarkable.bookmarks.where(hidden_by_admin: true)
       end
+      @bookmarks = @bookmarks.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     else
       base_options = {
         show_private: (@user.present? && @user == current_user),
