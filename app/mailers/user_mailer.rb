@@ -377,6 +377,18 @@ class UserMailer < ApplicationMailer
     end
   end
 
+  def admin_hidden_series_notification(creation_id, user_id)
+    @user = User.find_by(id: user_id)
+    @series = Series.find_by(id: creation_id)
+
+    I18n.with_locale(@user.preference.locale.iso) do
+      mail(
+        to: @user.email,
+        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+      )
+    end
+  end
+
   # Sends email to creators when a creation is hidden by an admin
   def admin_hidden_work_notification(creation_id, user_id)
     @user = User.find_by(id: user_id)
