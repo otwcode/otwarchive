@@ -344,6 +344,10 @@ class StoryParser
     # lock to registered users if specified or importing for others
     work.restricted = options[:restricted] || options[:importing_for_others] || false
 
+    # set comment permissions
+    work.comment_permissions = options[:comment_permissions] || "enable_all"
+    work.moderated_commenting_enabled = options[:moderated_commenting_enabled] || false
+
     # set default values for required tags
     work.fandom_string = meta_or_default(work.fandom_string, options[:fandom], ArchiveConfig.FANDOM_NO_TAG_NAME)
     work.rating_string = meta_or_default(work.rating_string, options[:rating], ArchiveConfig.RATING_DEFAULT_TAG_NAME)
@@ -412,23 +416,25 @@ class StoryParser
   end
 
   def parse_author_common(email, name)
-    if name.present? && email.present?
-      # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
-      name = name.to_ascii.gsub(/[^\w[ \-@.]]/u, "")
+    errors = []
+
+    errors << "No author name specified" if name.blank?
+
+    if email.present?
       external_author = ExternalAuthor.find_or_create_by(email: email)
-      external_author_name = external_author.default_name
-      unless name.blank?
-        external_author_name = ExternalAuthorName.where(name: name, external_author_id: external_author.id).first ||
-                               ExternalAuthorName.new(name: name)
-        external_author.external_author_names << external_author_name
-        external_author.save
-      end
-      external_author_name
+      errors += external_author.errors.full_messages
     else
-      messages = []
-      messages << "No author name specified" if name.blank?
-      messages << "No author email specified" if email.blank?
-      raise Error, messages.join("\n")
+      errors << "No author email specified"
+    end
+
+    raise Error, errors.join("\n") if errors.present?
+
+    # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
+    redacted_name = name.to_ascii.gsub(/[^\w[ \-@.]]/u, "")
+    if redacted_name.present?
+      external_author.names.find_or_create_by(name: redacted_name)
+    else
+      external_author.default_name
     end
   end
 
@@ -792,10 +798,7 @@ class StoryParser
       begin
         # we do a little cleanup here in case the user hasn't included the 'http://'
         # or if they've used capital letters or an underscore in the hostname
-        uri = URI.parse(location)
-        uri = URI.parse('http://' + location) if uri.class.name == "URI::Generic"
-        uri.host.downcase!
-        uri.host.tr!(" ", "-")
+        uri = UrlFormatter.new(location).standardized
         response = Net::HTTP.get_response(uri)
         case response
         when Net::HTTPSuccess

@@ -3,7 +3,7 @@
 # Creates a Sanitize transformer to sanitize audio and video tags
 module OtwSanitize
   class MediaSanitizer
-    # Attribute whitelists
+    # Attribute allowlists
     AUDIO_ATTRIBUTES = %w[
       class controls crossorigin dir
       loop muted preload src title
@@ -17,36 +17,42 @@ module OtwSanitize
     SOURCE_ATTRIBUTES = %w[src type].freeze
     TRACK_ATTRIBUTES = %w[default kind label src srclang].freeze
 
-    WHITELIST_CONFIG = {
+    ALLOWLIST_CONFIG = {
       elements: %w[
         audio video source track
       ] + Sanitize::Config::ARCHIVE[:elements],
       attributes: {
-        'audio'  => AUDIO_ATTRIBUTES,
-        'video'  => VIDEO_ATTRIBUTES,
-        'source' => SOURCE_ATTRIBUTES,
-        'track'  => TRACK_ATTRIBUTES
+        "audio" => AUDIO_ATTRIBUTES,
+        "video" => VIDEO_ATTRIBUTES,
+        "source" => SOURCE_ATTRIBUTES,
+        "track" => TRACK_ATTRIBUTES
       },
       add_attributes: {
-        'audio' => {
-          'controls'    => 'controls',
-          'crossorigin' => 'anonymous',
-          'preload'     => 'metadata'
+        "audio" => {
+          "controls" => "controls",
+          "crossorigin" => "anonymous",
+          "preload" => "metadata"
         },
-        'video' => {
-          'controls'    => 'controls',
-          'playsinline' => 'playsinline',
-          'crossorigin' => 'anonymous',
-          'preload'     => 'metadata'
+        "video" => {
+          "controls" => "controls",
+          "playsinline" => "playsinline",
+          "crossorigin" => "anonymous",
+          "preload" => "metadata"
         }
       },
       protocols: {
-        'audio' => {
-          'src'    => %w[http https]
+        "audio" => {
+          "src" => %w[http https]
         },
-        'video' => {
-          'poster' => %w[http https],
-          'src'    => %w[http https]
+        "video" => {
+          "poster" => %w[http https],
+          "src" => %w[http https]
+        },
+        "source" => {
+          "src" => %w[http https]
+        },
+        "track" => {
+          "src" => %w[http https]
         }
       }
     }.freeze
@@ -55,7 +61,7 @@ module OtwSanitize
     def self.transformer
       lambda do |env|
         # Don't continue if this node is already safelisted.
-        return if env[:is_whitelisted]
+        return if env[:is_allowlisted]
 
         new(env[:node]).sanitized_node
       end
@@ -68,15 +74,15 @@ module OtwSanitize
       @node = node
     end
 
-    # Skip if it's not media or if we don't want to whitelist it
+    # Skip if it's not media or if we don't want to allowlist it
     def sanitized_node
       return unless media_node?
-      return if blacklisted_source?
+      return if banned_source?
 
-      config = Sanitize::Config.merge(Sanitize::Config::ARCHIVE, WHITELIST_CONFIG)
+      config = Sanitize::Config.merge(Sanitize::Config::ARCHIVE, ALLOWLIST_CONFIG)
       Sanitize.clean_node!(node, config)
       tidy_boolean_attributes(node)
-      { node_whitelist: [node] }
+      { node_allowlist: [node] }
     end
 
     def node_name
@@ -100,9 +106,10 @@ module OtwSanitize
       Addressable::URI.parse(url).normalize.host
     end
 
-    def blacklisted_source?
+    def banned_source?
       return unless source_host
-      ArchiveConfig.BLACKLISTED_MULTIMEDIA_SRCS.any? do |blocked|
+
+      ArchiveConfig.BANNED_MULTIMEDIA_SRCS.any? do |blocked|
         source_host.match(blocked)
       end
     end

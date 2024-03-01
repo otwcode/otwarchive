@@ -58,11 +58,6 @@ When "all AJAX requests are complete" do
   wait_for_ajax if @javascript
 end
 
-When 'the system processes jobs' do
-  #resque runs inline during testing. see resque.rb in initializers/gem-plugin_config
-  #Delayed::Worker.new.work_off
-end
-
 When 'I reload the page' do
   visit current_url
 end
@@ -141,6 +136,10 @@ Then /^I should not see a button with text "(.*?)"(?: within "(.*?)")?$/ do |tex
   assure_xpath_not_present("input", "value", text, selector)
 end
 
+Then "I should see a link to {string} within {string}" do |url, selector|
+  assure_xpath_present("a", "href", url, selector)
+end
+
 Then "the {string} input should be blank" do |label|
   expect(find_field(label).value).to be_blank
 end
@@ -159,23 +158,17 @@ end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label, disabled: true)
-    if field_disabled.respond_to? :should
-      field_disabled.should be_truthy
-    else
-      assert field_disabled
-    end
+    field = find_field(label, disabled: true)
+    expect(field).to be_present
+    expect(field.disabled?).to be_truthy
   end
 end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do |label, selector|
   with_scope(selector) do
-    field_disabled = find_field(label)['disabled']
-    if field_disabled.respond_to? :should
-      field_disabled.should be_falsey
-    else
-      assert !field_disabled
-    end
+    field = find_field(label)
+    expect(field).to be_present
+    expect(field.disabled?).to be_falsey
   end
 end
 
@@ -249,6 +242,10 @@ end
 Then /^I should see a link "([^\"]*)"$/ do |name|
   text = name + "</a>"
   page.body.should =~ /#{Regexp.escape(text)}/m
+end
+
+Then "I should see a link {string} to {string}" do |text, href|
+  expect(page).to have_link(text, href: href)
 end
 
 Then /^I should not see a link "([^\"]*)"$/ do |name|

@@ -226,6 +226,105 @@ describe Admin::AdminUsersController do
         it_behaves_like "authorized admin can add next of kin"
       end
     end
+
+    context "when admin has support role" do
+      let(:admin) { create(:support_admin) }
+
+      before { fake_login_admin(admin) }
+
+      it "logs adding a fannish next of kin" do
+        post :update_next_of_kin, params: {
+          user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
+        }
+        user.reload
+        expect(user.fannish_next_of_kin.kin).to eq(kin)
+        log_item = user.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
+        expect(log_item.fnok_user.id).to eq(kin.id)
+
+        added_log_item = kin.reload.log_items.last
+        expect(added_log_item.action).to eq(ArchiveConfig.ACTION_ADDED_AS_FNOK)
+        expect(added_log_item.fnok_user.id).to eq(user.id)
+
+        expect_changes_made_by(admin, [log_item, added_log_item])
+      end
+
+      it "logs removing a fannish next of kin" do
+        kin = create(:fannish_next_of_kin, user: user).kin
+
+        post :update_next_of_kin, params: {
+          user_login: user.login
+        }
+        user.reload
+        expect(user.fannish_next_of_kin).to be_nil
+        log_item = user.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
+        expect(log_item.fnok_user.id).to eq(kin.id)
+
+        removed_log_item = kin.reload.log_items.last
+        expect(removed_log_item.action).to eq(ArchiveConfig.ACTION_REMOVED_AS_FNOK)
+        expect(removed_log_item.fnok_user.id).to eq(user.id)
+
+        expect_changes_made_by(admin, [log_item, removed_log_item])
+      end
+
+      it "logs updating a fannish next of kin" do
+        previous_kin = create(:fannish_next_of_kin, user: user).kin
+
+        post :update_next_of_kin, params: {
+          user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
+        }
+        user.reload
+        expect(user.fannish_next_of_kin.kin).to eq(kin)
+
+        remove_log_item = user.log_items[-2]
+        expect(remove_log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
+        expect(remove_log_item.fnok_user.id).to eq(previous_kin.id)
+
+        add_log_item = user.log_items.last
+        expect(add_log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
+        expect(add_log_item.fnok_user.id).to eq(kin.id)
+
+        removed_log_item = previous_kin.reload.log_items.last
+        expect(removed_log_item.action).to eq(ArchiveConfig.ACTION_REMOVED_AS_FNOK)
+        expect(removed_log_item.fnok_user.id).to eq(user.id)
+
+        added_log_item = kin.reload.log_items.last
+        expect(added_log_item.action).to eq(ArchiveConfig.ACTION_ADDED_AS_FNOK)
+        expect(added_log_item.fnok_user.id).to eq(user.id)
+
+        expect_changes_made_by(admin, [remove_log_item, add_log_item, removed_log_item, added_log_item])
+      end
+
+      def expect_changes_made_by(admin, log_items)
+        log_items.each do |log_item|
+          expect(log_item.admin_id).to eq(admin.id)
+          expect(log_item.note).to eq("Change made by #{admin.login}")
+        end
+      end
+
+      it "does nothing if changing the fnok to themselves" do
+        previous_kin = create(:fannish_next_of_kin, user: user)
+
+        post :update_next_of_kin, params: {
+          user_login: user.login, next_of_kin_name: previous_kin.kin.login, next_of_kin_email: previous_kin.kin_email
+        }
+        it_redirects_to_with_notice(admin_user_path(user), "No change to fannish next of kin.")
+        expect(user.reload.log_items).to be_empty
+      end
+
+      it "errors if trying to add an incomplete fnok" do
+        post :update_next_of_kin, params: {
+          user_login: user.login, next_of_kin_email: ""
+        }
+
+        kin = assigns(:user).fannish_next_of_kin
+        expect(kin).not_to be_valid
+        expect(kin.errors[:kin_email]).to include("can't be blank")
+
+        expect(user.reload.log_items).to be_empty
+      end
+    end
   end
 
   describe "POST #update_status" do
@@ -340,25 +439,42 @@ describe Admin::AdminUsersController do
 
   describe "POST #destroy_user_creations" do
     let(:admin) { create(:admin) }
-    let(:user) { create(:user, banned: true) }
+    let(:user) { create(:user) }
+    let!(:work) { create(:work, authors: [user.default_pseud]) }
+    let(:other_owner) { create(:user, banned: false) }
+    let!(:collection1) { create(:collection) }
+    let!(:collection2) { create(:collection) }
+
+    before do
+      # Banning user only after creating works for them
+      user.update!(banned: true)
+
+      collection1.collection_participants = [create(:collection_participant, user: user, collection: collection1, participant_role: CollectionParticipant::OWNER)]
+      collection1.save
+      create(:collection_participant, user: other_owner, collection: collection2, participant_role: CollectionParticipant::OWNER)
+      create(:collection_participant, user: user, collection: collection2, participant_role: CollectionParticipant::MEMBER)
+    end
 
     context "when admin does not have correct authorization" do
       it "redirects with error" do
         admin.update(roles: [])
         fake_login_admin(admin)
-        post :confirm_delete_user_creations, params: { id: user.login }
+        post :destroy_user_creations, params: { id: user.login }
 
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
 
     context "when admin has correct authorization" do
+      before do
+        admin.update!(roles: ["policy_and_abuse"])
+        fake_login_admin(admin)
+      end
+
       context "when user is not banned" do
         it "redirects with error" do
-          admin.update(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
           user.update(banned: false)
-          post :confirm_delete_user_creations, params: { id: user.login }
+          post :destroy_user_creations, params: { id: user.login }
 
           it_redirects_to_with_error(admin_users_path, "That user is not banned!")
         end
@@ -366,12 +482,14 @@ describe Admin::AdminUsersController do
 
       context "when user is banned" do
         it "allows admins to destroy user creations" do
-          admin.update(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          user.update(banned: true)
-          post :confirm_delete_user_creations, params: { id: user.login }
+          post :destroy_user_creations, params: { id: user.login }
+          # Check that the first user's collection is deleted
+          expect(Collection.exists?(collection1.id)).to be_falsey
+          # Check that the second user's collection still exists
+          expect(Collection.exists?(other_owner.collections.last.id)).to be_truthy
 
-          expect(response).to have_http_status(:success)
+          it_redirects_to_with_notice(admin_users_path, "All creations by user #{user.login} have been deleted.")
+          expect(Work.exists?(work.id)).to be false
         end
       end
     end
@@ -423,31 +541,6 @@ describe Admin::AdminUsersController do
         post :activate, params: { id: user.login }
 
         it_redirects_to_with_notice(admin_user_path(id: user.login), "User Account Activated")
-      end
-    end
-  end
-
-  describe "POST #send_activation" do
-    let(:admin) { create(:admin) }
-    let(:user) { create(:user, :unconfirmed) }
-
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update(roles: [])
-        fake_login_admin(admin)
-        post :send_activation, params: { id: user.login }
-
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
-    end
-
-    context "when admin has correct authorization" do
-      it "succeeds with notice" do
-        admin.update(roles: ["support"])
-        fake_login_admin(admin)
-        post :send_activation, params: { id: user.login }
-
-        it_redirects_to_with_notice(admin_user_path(id: user.login), "Activation email sent")
       end
     end
   end

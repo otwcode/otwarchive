@@ -42,15 +42,17 @@ When "I edit the work {string} to be in the collection(s) {string}" do |work, co
   step %{I post the work}
 end
 
-When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_status, collection|
+When /^I view the ([^"]*) collection items page for "(.*?)"$/ do |item_status, collection|
   c = Collection.find_by(title: collection)
   if item_status == "approved"
-    visit collection_items_path(c, approved: true)
-  elsif item_status == "rejected"
-    visit collection_items_path(c, rejected: true)
-  elsif item_status == "invited"
-    visit collection_items_path(c, invited: true)
-  else
+    visit collection_items_path(c, status: "approved")
+  elsif item_status == "rejected by user"
+    visit collection_items_path(c, status: "rejected_by_user")
+  elsif item_status == "rejected by collection"
+    visit collection_items_path(c, status: "rejected_by_collection")
+  elsif item_status == "awaiting user approval"
+    visit collection_items_path(c, status: "unreviewed_by_user")
+  elsif item_status == "awaiting collection approval"
     visit collection_items_path(c)
   end
 end
@@ -58,6 +60,10 @@ end
 When "the collection counts have expired" do
   step "all indexing jobs have been run"
   step "it is currently #{ArchiveConfig.SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE} seconds from now"
+end
+
+When "the collection blurb cache has expired" do
+  step "it is currently #{ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE} minutes from now"
 end
 
 Given /^mod1 lives in Alaska$/ do

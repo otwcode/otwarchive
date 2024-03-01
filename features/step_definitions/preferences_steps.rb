@@ -32,6 +32,12 @@ Given "the user {string} allows gifts" do |login|
   user.preference.save
 end
 
+When "the user {string} turns off guest comment replies" do |login|
+  user = User.where(login: login).first
+  user = find_or_create_new_user(login, DEFAULT_PASSWORD) if user.nil?
+  user.preference.update!(guest_replies_off: true)
+end
+
 Given "the user {string} is hidden from search engines" do |login|
   user = User.find_by(login: login)
   user.preference.update(minimize_search_engines: true)

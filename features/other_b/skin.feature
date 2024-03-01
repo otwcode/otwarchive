@@ -1,4 +1,4 @@
-@skins
+@set-default-skin
 Feature: Non-public site and work skins
 
   Scenario: A user should be able to create a skin with CSS
@@ -278,7 +278,7 @@ Feature: Non-public site and work skins
   Then I should see "My Site Skins"
     And I should see "My Work Skins"
 
-  Scenario: User should be able to revert to the default skin from an individual 
+  Scenario: User should be able to revert to the default skin from an individual
   skin's edit page
   Given basic skins
     And I am logged in as "skinner"
@@ -337,3 +337,20 @@ Feature: Non-public site and work skins
       And I fill in "CSS" with "body { background: cyan; }"
       And I press "Update"
     Then I should see "background: cyan;"
+
+  @javascript
+  Scenario: User can add a parent skin using the Custom CSS form
+    Given I am logged in
+      And I create the skin "Dad"
+    When I go to the new skin page
+    Then I should see "Advanced"
+    When I follow "Show ↓"
+    Then I should see "Parent Skins"
+    When I fill in "Title" with "Child"
+      And I follow "Add parent skin"
+      And it is currently 1 second from now
+    Then I should see a parent skin text field
+    When I enter "Dad" in the "skin_skin_parents_attributes_1_parent_skin_title_autocomplete" autocomplete field
+      And I press "Submit"
+    Then I should see "Parent Skins"
+      And I should see "Dad"

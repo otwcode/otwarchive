@@ -1,4 +1,4 @@
-<div class="notes module" role="complementary">
+<div class="notes module">
   <h3 class="heading"><%= ts("Notes:") %></h3>
 
   <% # We don't want the ul tag hanging around when it's empty (i.e. when there are no recipients, parent works, or claims) but we can't skip this entire section because line 25 generates the link to child works that appear under any notes. We repeat this logic on line 63 to close the ul. %>
@@ -11,15 +11,13 @@
     <% end %>
 
     <% # translations %>
+    <%# i18n-tasks-use t("works.work_header_notes.translated_to.restricted_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.translated_to.revealed_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.translated_to.unrevealed_html") %>
     <% for related_work in @work.approved_related_works %>
       <% if related_work.translation %>
         <li>
-          <%= ts('Translation into %{language} available: ', :language => related_work.work.language.name) %>
-          <% if related_work.work.restricted? && !logged_in? %>
-            <%= ts("[Restricted Work] by") %> <%= byline(related_work.work) %>. <%= ts("Log in to view.") %>
-          <% else %>
-            <%= link_to related_work.work.title.html_safe, related_work.work %> <%= ts("by") %> <%= byline(related_work.work) %>
-          <% end %>
+          <%= related_work_note(related_work.work, "translated_to") %>
         </li>
       <% else %>
         <% related_works_link ||= link_to ts("other works inspired by this one"), get_related_works_url %>
@@ -27,22 +25,17 @@
     <% end %>
 
     <% # parent works %>
+    <%# i18n-tasks-use t("works.work_header_notes.translation_of.restricted_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.translation_of.revealed_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.translation_of.unrevealed") %>
+    <%# i18n-tasks-use t("works.work_header_notes.inspired_by.restricted_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.inspired_by.revealed_html") %>
+    <%# i18n-tasks-use t("works.work_header_notes.inspired_by.unrevealed") %>
     <% for related_work in @work.parents_after_saving %>
       <% if related_work.parent %>
         <li>
-          <% if related_work.translation %>
-            <%= ts('A translation of') %>
-          <% else %>
-            <%= ts('Inspired by') %>
-          <% end %>
-
-          <% if related_work.parent.is_a?(ExternalWork) %>
-            <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>.
-          <% elsif related_work.parent.restricted? && !logged_in? %>
-            <%= ts("[Restricted Work] by") %> <%= byline(related_work.parent) %>. <%= ts("Log in to view.") %>
-          <% else %>
-            <%= link_to related_work.parent.title.html_safe, related_work.parent %> <%= ts("by") %> <%= byline(related_work.parent) %>.
-          <% end %>
+          <% relation = related_work.translation ? "translation_of" : "inspired_by" %>
+          <%= related_work_note(related_work.parent, relation) %>
         </li>
       <% end %>
     <% end %>

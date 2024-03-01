@@ -38,6 +38,6 @@
       status: link_to("check your position on the waiting list",
                       status_invite_requests_path),
       count: InviteRequest.count,
-      invites: @admin_settings.invite_from_queue_number).html_safe %>
+      invites: AdminSetting.current.invite_from_queue_number).html_safe %>
 </p>
 <!--/content-->

@@ -104,6 +104,152 @@ describe CommentsController do
         it_behaves_like "no one can add comment reply on a hidden comment"
       end
     end
+
+    context "guest comments are turned on in admin settings" do
+      let(:comment) { create(:comment) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        admin_setting.update_attribute(:guest_comments_off, false)
+      end
+
+      it "redirects logged out user to the comment on the commentable without an error" do
+        get :add_comment_reply, params: { comment_id: comment.id }
+
+        expect(flash[:error]).to be_nil
+        it_redirects_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+      end
+    end
+
+    context "guest comments are turned off in admin settings" do
+      let(:comment) { create(:comment) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+      let(:work) { comment.ultimate_parent }
+
+      before do
+        admin_setting.update_attribute(:guest_comments_off, true)
+      end
+
+      [:enable_all, :disable_anon].each do |permissions|
+        context "when work comment permissions are #{permissions}" do
+          before do
+            work.update_attribute(:comment_permissions, permissions)
+          end
+
+          it "redirects logged out user with an error" do
+            get :add_comment_reply, params: { comment_id: comment.id }
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+          end
+
+          it "redirects logged in user to the comment on the commentable without an error" do
+            fake_login
+            get :add_comment_reply, params: { comment_id: comment.id }
+            expect(flash[:error]).to be_nil
+            expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+          end
+        end
+      end
+
+      context "when work comment permissions are disable_all" do
+        before do
+          work.update_attribute(:comment_permissions, :disable_all)
+        end
+
+        it "redirects logged out user with an error" do
+          get :add_comment_reply, params: { comment_id: comment.id }
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+        end
+
+        it "redirects logged in user with an error" do
+          fake_login
+          get :add_comment_reply, params: { comment_id: comment.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, this work doesn't allow comments.")
+        end
+      end
+    end
+
+    shared_examples "guest cannot reply to a user with guest replies disabled" do
+      it "redirects guest with an error" do
+        get :add_comment_reply, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, this user doesn't allow non-Archive users to reply to their comments.")
+      end
+
+      it "redirects logged in user without an error" do
+        fake_login
+        get :add_comment_reply, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+      end
+    end
+
+    shared_examples "guest can reply to a user with guest replies disabled on user's work" do
+      it "redirects guest user without an error" do
+        get :add_comment_reply, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+      end
+
+      it "redirects logged in user without an error" do
+        fake_login
+        get :add_comment_reply, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+      end
+    end
+
+    context "when user has guest replies disabled" do
+      let(:user) do
+        user = create(:user)
+        user.preference.update!(guest_replies_off: true)
+        user
+      end
+
+      context "when commentable is an admin post" do
+        let(:comment) { create(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a tag" do
+        let(:comment) { create(:comment, :on_tag, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a work" do
+        let(:comment) { create(:comment, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is user's work" do
+        let(:work) { create(:work, authors: [user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
+
+      context "when commentable is user's co-creation" do
+        let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
+    end
+
+    context "when replying to guests" do
+      let(:comment) { create(:comment, :by_guest) }
+
+      it "redirects guest user without an error" do
+        get :add_comment_reply, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+      end
+
+      it "redirects logged in user without an error" do
+        fake_login
+        get :add_comment_reply, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to redirect_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
+      end
+    end
   end
 
   describe "GET #unreviewed" do
@@ -135,15 +281,15 @@ describe CommentsController do
     end
   end
 
-  describe "POST #new" do
+  describe "GET #new" do
     it "errors if the commentable is not a valid tag" do
-      post :new, params: { tag_id: "Non existent tag" }
+      get :new, params: { tag_id: "Non existent tag" }
       expect(flash[:error]).to eq "What did you want to comment on?"
     end
 
     it "renders the :new template if commentable is a valid admin post" do
       admin_post = create(:admin_post)
-      post :new, params: { admin_post_id: admin_post.id }
+      get :new, params: { admin_post_id: admin_post.id }
       expect(response).to render_template("new")
       expect(assigns(:name)).to eq(admin_post.title)
     end
@@ -155,7 +301,7 @@ describe CommentsController do
         before { fake_login_admin(create(:admin)) }
 
         it "renders the :new template" do
-          post :new, params: { tag_id: fandom.name }
+          get :new, params: { tag_id: fandom.name }
           expect(response).to render_template("new")
           expect(assigns(:name)).to eq("Fandom")
         end
@@ -165,7 +311,7 @@ describe CommentsController do
         before { fake_login_known_user(create(:tag_wrangler)) }
 
         it "renders the :new template" do
-          post :new, params: { tag_id: fandom.name }
+          get :new, params: { tag_id: fandom.name }
           expect(response).to render_template("new")
           expect(assigns(:name)).to eq("Fandom")
         end
@@ -175,7 +321,7 @@ describe CommentsController do
         before { fake_login }
 
         it "shows an error and redirects" do
-          post :new, params: { tag_id: fandom.name }
+          get :new, params: { tag_id: fandom.name }
           it_redirects_to_with_error(user_path(controller.current_user),
                                      "Sorry, you don't have permission to " \
                                      "access the page you were trying to " \
@@ -187,7 +333,7 @@ describe CommentsController do
         before { fake_logout }
 
         it "shows an error and redirects" do
-          post :new, params: { tag_id: fandom.name }
+          get :new, params: { tag_id: fandom.name }
           it_redirects_to_with_error(new_user_session_path,
                                      "Sorry, you don't have permission to " \
                                      "access the page you were trying to " \
@@ -196,23 +342,161 @@ describe CommentsController do
       end
     end
 
+    context "guest comments are turned on in admin settings" do
+      let(:work) { create(:work) }
+      let(:work_with_guest_comment_off) { create(:work, comment_permissions: :disable_anon) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        admin_setting.update_attribute(:guest_comments_off, false)
+      end
+
+      it "allows guest comments" do
+        get :new, params: { work_id: work.id }
+
+        expect(response).to render_template(:new)
+      end
+
+      it "does not allow guest comments when work has guest comments disabled" do
+        get :new, params: { work_id: work_with_guest_comment_off.id }
+
+        it_redirects_to_with_error(work_path(work_with_guest_comment_off), 
+                                   "Sorry, this work doesn't allow non-Archive users to comment.")
+      end
+    end
+
+    context "guest comments are turned off in admin settings" do
+      let(:work) { create(:work) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        admin_setting.update_attribute(:guest_comments_off, true)
+      end
+
+      [:enable_all, :disable_anon].each do |permissions|
+        context "when work comment permissions are #{permissions}" do
+          before do
+            work.update_attribute(:comment_permissions, permissions)
+          end
+
+          it "redirects logged out user with an error" do
+            get :new, params: { work_id: work.id }
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+          end
+
+          it "renders the :new template for logged in user" do
+            fake_login
+            get :new, params: { work_id: work.id }
+            expect(flash[:error]).to be_nil
+            expect(response).to render_template("new")
+          end
+        end
+      end
+
+      context "when work comment permissions are disable_all" do
+        before do
+          work.update_attribute(:comment_permissions, :disable_all)
+        end
+
+        it "redirects logged out user with an error" do
+          get :new, params: { work_id: work.id }
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+        end
+
+        it "redirects logged in user with an error" do
+          fake_login
+          get :new, params: { work_id: work.id }
+          it_redirects_to_with_error(work_path(work), "Sorry, this work doesn't allow comments.")
+        end
+      end
+    end
+
     it "renders the :new template if commentable is a valid comment" do
       comment = create(:comment)
-      post :new, params: { comment_id: comment.id }
+      get :new, params: { comment_id: comment.id }
       expect(response).to render_template("new")
       expect(assigns(:name)).to eq("Previous Comment")
     end
 
     it "shows an error and redirects if commentable is a frozen comment" do
       comment = create(:comment, iced: true)
-      post :new, params: { comment_id: comment.id }
+      get :new, params: { comment_id: comment.id }
       it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a frozen comment.")
     end
 
     it "shows an error and redirects if commentable is a hidden comment" do
       comment = create(:comment, hidden_by_admin: true)
-      post :new, params: { comment_id: comment.id }
+      get :new, params: { comment_id: comment.id }
       it_redirects_to_with_error("/where_i_came_from", "Sorry, you cannot reply to a hidden comment.")
+    end
+
+    shared_examples "guest cannot reply to a user with guest replies disabled" do
+      it "redirects guest with an error" do
+        get :new, params: { comment_id: comment.id }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, this user doesn't allow non-Archive users to reply to their comments.")
+      end
+
+      it "renders the :new template for logged in user" do
+        fake_login
+        get :new, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to render_template("new")
+      end
+    end
+
+    shared_examples "guest can reply to a user with guest replies disabled on user's work" do
+      it "renders the :new template for guest" do
+        get :new, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to render_template("new")
+      end
+
+      it "renders the :new template for logged in user" do
+        fake_login
+        get :new, params: { comment_id: comment.id }
+        expect(flash[:error]).to be_nil
+        expect(response).to render_template("new")
+      end
+    end
+
+    context "user has guest comment replies disabled" do
+      let(:user) do
+        user = create(:user)
+        user.preference.update!(guest_replies_off: true)
+        user
+      end
+
+      context "when commentable is an admin post" do
+        let(:comment) { create(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a tag" do
+        let(:comment) { create(:comment, :on_tag, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a work" do
+        let(:comment) { create(:comment, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when comment is on user's work" do
+        let(:work) { create(:work, authors: [user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
+
+      context "when commentable is user's co-creation" do
+        let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
     end
   end
 
@@ -446,6 +730,151 @@ describe CommentsController do
         end
       end
     end
+
+    context "guest comments are turned on in admin settings" do
+      let(:work) { create(:work) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        admin_setting.update_attribute(:guest_comments_off, false)
+      end
+
+      it "allows guest comments" do
+        post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+
+        expect(flash[:error]).to be_nil
+      end
+    end
+
+    context "guest comments are turned off in admin settings" do
+      let(:work) { create(:work) }
+      let(:user) { create(:user) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        admin_setting.update_attribute(:guest_comments_off, true)
+      end
+
+      [:enable_all, :disable_anon].each do |permissions|
+        context "when work comment permissions are #{permissions}" do
+          before do
+            work.update_attribute(:comment_permissions, permissions)
+          end
+
+          it "redirects logged out user with an error" do
+            post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+            it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+          end
+
+          it "redirects logged in user to the comment on the commentable without an error" do
+            comment_attributes = {
+              pseud_id: user.default_pseud_id,
+              comment_content: "Hello fellow human!"
+            }
+            fake_login_known_user(user)
+            post :create, params: { work_id: work.id, comment: comment_attributes }
+            comment = Comment.last
+            expect(flash[:error]).to be_nil
+            expect(response).to redirect_to(work_chapter_path(work, comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"))
+          end
+        end
+      end
+
+      context "when work comment permissions are disable_all" do
+        before do
+          work.update_attribute(:comment_permissions, :disable_all)
+        end
+
+        it "redirects logged out user with an error" do
+          post :create, params: { work_id: work.id, comment: anon_comment_attributes }
+          it_redirects_to_with_error("/where_i_came_from", "Sorry, the Archive doesn't allow guests to comment right now.")
+        end
+
+        it "redirects logged in user with an error" do
+          comment_attributes = {
+            pseud_id: user.default_pseud_id,
+            comment_content: "Hello fellow human!"
+          }
+          fake_login_known_user(user)
+          post :create, params: { work_id: work.id, comment: comment_attributes }
+          it_redirects_to_with_error(work_path(work), "Sorry, this work doesn't allow comments.")
+        end
+      end
+    end
+
+    shared_examples "guest cannot reply to a user with guest replies disabled" do
+      it "redirects guest with an error" do
+        post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+        it_redirects_to_with_error("/where_i_came_from", "Sorry, this user doesn't allow non-Archive users to reply to their comments.")
+      end
+
+      it "redirects logged in user without an error" do
+        comment_attributes = {
+          pseud_id: user.default_pseud_id,
+          comment_content: "Hello fellow human!"
+        }
+        fake_login_known_user(user)
+        post :create, params: { comment_id: comment.id, comment: comment_attributes }
+        expect(flash[:error]).to be_nil
+      end
+    end
+
+    shared_examples "guest can reply to a user with guest replies disabled on user's work" do
+      it "redirects guest without an error" do
+        post :create, params: { comment_id: comment.id, comment: anon_comment_attributes }
+        expect(flash[:error]).to be_nil
+      end
+
+      it "redirects logged in user without an error" do
+        comment_attributes = {
+          pseud_id: user.default_pseud_id,
+          comment_content: "Hello fellow human!"
+        }
+        fake_login_known_user(user)
+        post :create, params: { comment_id: comment.id, comment: comment_attributes }
+        expect(flash[:error]).to be_nil
+      end
+    end
+
+    context "user has guest comment replies disabled" do
+      let(:user) do
+        user = create(:user)
+        user.preference.update!(guest_replies_off: true)
+        user
+      end
+
+      context "when commentable is an admin post" do
+        let(:comment) { create(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a tag" do
+        let(:comment) { create(:comment, :on_tag, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when commentable is a work" do
+        let(:comment) { create(:comment, pseud: user.default_pseud) }
+
+        it_behaves_like "guest cannot reply to a user with guest replies disabled"
+      end
+
+      context "when comment is on user's work" do
+        let(:work) { create(:work, authors: [user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
+
+      context "when commentable is user's co-creation" do
+        let(:work) { create(:work, authors: [create(:user).default_pseud, user.default_pseud]) }
+        let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
+
+        it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
+    end
   end
 
   describe "PUT #review_all" do
@@ -650,6 +1079,25 @@ describe CommentsController do
               admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
               "Comment thread successfully frozen!"
             )
+          end
+
+          context "when comment is a guest reply to user who turns off guest replies afterwards" do
+            let(:reply) do
+              reply = create(:comment, :by_guest, commentable: comment)
+              comment.user.preference.update!(guest_replies_off: true)
+              reply
+            end
+
+            it "freezes reply and redirects with success message" do
+              fake_login_admin(admin)
+              put :freeze, params: { id: reply.id }
+
+              expect(reply.reload.iced).to be_truthy
+              it_redirects_to_with_comment_notice(
+                admin_post_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
+                "Comment thread successfully frozen!"
+              )
+            end
           end
         end
 
@@ -2503,7 +2951,9 @@ describe CommentsController do
 
       it "deletes the comment and redirects to referer with a notice" do
         delete :destroy, params: { id: unreviewed_comment.id }
-        expect { unreviewed_comment.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect do
+          unreviewed_comment.reload
+        end.to raise_exception(ActiveRecord::RecordNotFound)
         it_redirects_to_with_notice("/where_i_came_from", "Comment deleted.")
       end
 
@@ -2513,6 +2963,30 @@ describe CommentsController do
         expect(unreviewed_comment.reload).to be_present
         expect(response).to redirect_to(chapter_path(unreviewed_comment.commentable, show_comments: true, anchor: "comment_#{unreviewed_comment.id}"))
         expect(flash[:comment_error]).to eq "We couldn't delete that comment."
+      end
+    end
+
+    context "when comment is a guest reply to user who turns off guest replies afterwards" do
+      let(:comment) { create(:comment, :on_admin_post) }
+      let(:reply) do
+        reply = create(:comment, :by_guest, commentable: comment)
+        comment.user.preference.update!(guest_replies_off: true)
+        reply
+      end
+
+      it "deletes the reply and redirects with success message" do
+        admin = create(:admin)
+        admin.update(roles: ["superadmin"])
+        fake_login_admin(admin)
+        delete :destroy, params: { id: reply.id }
+
+        it_redirects_to_with_comment_notice(
+          admin_post_path(reply.ultimate_parent, show_comments: true, anchor: "comment_#{comment.id}"),
+          "Comment deleted."
+        )
+        expect do
+          reply.reload
+        end.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 
@@ -2543,7 +3017,7 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin board policy_and_abuse communications support].each do |admin_role|
+          %w[superadmin board communications elections policy_and_abuse support].each do |admin_role|
             context "with role #{admin_role}" do
               it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
@@ -2608,7 +3082,20 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin board policy_and_abuse communications support].each do |admin_role|
+          (Admin::VALID_ROLES - %w[superadmin board policy_and_abuse support]).each do |admin_role|
+            context "with role #{admin_role}" do
+              it "doesn't destroy comment and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                delete :destroy, params: { id: comment.id }
+  
+                it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+                expect { comment.reload }.not_to raise_exception
+              end
+            end
+          end
+
+          %w[superadmin board policy_and_abuse support].each do |admin_role|
             context "with the #{admin_role} role" do
               it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
@@ -2713,7 +3200,20 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin policy_and_abuse].each do |admin_role|
+          (Admin::VALID_ROLES - %w[superadmin board policy_and_abuse support]).each do |admin_role|
+            context "with role #{admin_role}" do
+              it "doesn't destroy comment and redirects with error" do
+                admin.update(roles: [admin_role])
+                fake_login_admin(admin)
+                delete :destroy, params: { id: comment.id }
+  
+                it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+                expect { comment.reload }.not_to raise_exception
+              end
+            end
+          end
+
+          %w[superadmin board policy_and_abuse support].each do |admin_role|
             context "with the #{admin_role} role" do
               it "destroys comment and redirects with success message" do
                 admin.update(roles: [admin_role])
@@ -3073,7 +3573,7 @@ describe CommentsController do
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
 
-        %w[superadmin board communications policy_and_abuse support].each do |admin_role|
+        %w[superadmin board support policy_and_abuse].each do |admin_role|
           it "successfully deletes the comment when admin has #{admin_role} role" do
             admin.update(roles: [admin_role])
             fake_login_admin(admin)

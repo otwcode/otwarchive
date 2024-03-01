@@ -9,8 +9,9 @@ describe HtmlCleaner do
     ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.each do |field|
       context "#{field} is configured to allow video embeds" do
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com 
-           vidders.net criticalcommons.org google.com archiveofourown.org podfic.com archive.org
-           open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com].each do |source|
+           vidders.net criticalcommons.org google.com podfic.com archive.org
+           open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com
+           bilibili.com player.bilibili.com].each do |source|
 
           it "keeps embeds from #{source}" do
             html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
@@ -20,8 +21,9 @@ describe HtmlCleaner do
         end
 
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
-           archiveofourown.org archive.org 8tracks.com podfic.com
-           open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com].each do |source|
+           archive.org 8tracks.com podfic.com
+           open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com
+           bilibili.com player.bilibili.com].each do |source|
 
           it "converts src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
@@ -42,37 +44,6 @@ describe HtmlCleaner do
           html = '<embed type="application/x-shockwave-flash" flashvars="audioUrl=http://dl.dropbox.com/u/123/foo.mp3" src="http://www.google.com/reader/ui/123-audio-player.swf" width="400" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
           result = sanitize_value(field, html)
           expect(result).to include(html)
-        end
-
-        it "converts an Archive-hosted Dewplayer embed into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/next%20color%20planet.mp3?dl=0" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/next%20color%20planet.mp3?dl=0" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
-        end
-
-        it "converts an Archive-hosted Dewplayer embed with single quotes in the source URL into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/\'quote%27.mp3" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/\'quote%27.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
-        end
-
-        it "converts an Archive-hosted Dewplayer embed with double quotes in the source URL into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars=\'mp3=http://example.com/"quote%22.mp3\' src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/%22quote%22.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
-        end
-
-        it "converts an Archive-hosted Dewplayer embed with spaces around the source URL into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=  http://example.com/fic.mp3 " src="https://archiveofourown.org/system/dewplayer/dewplayer-vol.swf" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/fic.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
-        end
-
-        it "converts an Archive-hosted Dewplayer embed with an encoded source URL into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="param=val&amp;mp3=http%3A%2F%2Fexample.com%2Fnext%2520color%2520planet%2527.mp3%3Fdl%3D0" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/next%20color%20planet%27.mp3?dl=0" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
-        end
-
-        it "converts an Archive-hosted Dewplayer multi embed into audio tags" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/live-again.mp3|http://example.com/cursed-night.mp3" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          result = sanitize_value(field, html)
-          expect(result.squish).to eq('<p> <audio src="https://example.com/live-again.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio> <br /> <audio src="https://example.com/cursed-night.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio> </p>')
         end
 
         it "strips embeds with unknown source" do
@@ -484,6 +455,20 @@ describe HtmlCleaner do
             end
           end
         end
+
+        context "when given an <img> tag with a relative src" do
+          it "converts the src value to an absolute URL" do
+            content = sanitize_value(field, "<img src=\"relative\">")
+            expect(content).to eq("<p>\n  <img src=\"#{ArchiveConfig.APP_URL}/relative\" \/>\n</p>")
+          end
+        end
+
+        context "when given an <img> tag with an absolute src" do
+          it "doesn't modify the src value" do
+            content = sanitize_value(field, "<img src=\"http://random.com/image.png\">")
+            expect(content).to eq("<p>\n  <img src=\"http://random.com/image.png\" \/>\n</p>")
+          end
+        end
       end
     end
 
@@ -725,9 +710,9 @@ describe HtmlCleaner do
         <details>
           <summary>
             Automated
-          
-            Status: 
-            
+
+            Status:
+
             Operational
           </summary>
           <p>Velocity: 12m/s</p>

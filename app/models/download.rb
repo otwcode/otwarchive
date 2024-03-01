@@ -51,10 +51,12 @@ class Download
     end
   end
 
-  # The base name of the file (eg, "War and Peace")
+  # The base name of the file (e.g., "War_and_Peace")
   def file_name
     name = clean(work.title)
-    name += " Work #{work.id}" if name.length < 3
+    # If the file name is 1-2 characters, append "_Work_#{work.id}".
+    # If the file name is blank, name the file "Work_#{work.id}".
+    name = [name, "Work_#{work.id}"].compact_blank.join("_") if name.length < 3
     name.strip
   end
 
@@ -91,28 +93,23 @@ class Download
     @tmpdir
   end
 
-  # Utility methods which clean up work data for use in downloads
-
-  def fandoms
-    string = work.fandoms.size > 3 ? "Multifandom" : work.fandoms.string
-    clean(string)
+  def page_title
+    fandom = if work.fandoms.size > 3
+               "Multifandom"
+             elsif work.fandoms.empty?
+               "No fandom specified"
+             else
+               work.fandom_string
+             end
+    [work.title, authors, fandom].join(" - ")
   end
 
   def authors
-    author_names.join(', ').to_ascii
+    author_names.join(", ")
   end
 
   def author_names
     work.anonymous? ? ["Anonymous"] : work.pseuds.sort.map(&:byline)
-  end
-
-  # need the next two to be filesystem safe and not overly long
-  def file_authors
-    clean(author_names.join('-'))
-  end
-
-  def page_title
-    [file_name, file_authors, fandoms].join(" - ")
   end
 
   def chapters
@@ -130,6 +127,7 @@ class Download
   # squash spaces
   # strip all non-alphanumeric
   # truncate to 24 chars at a word boundary
+  # replace whitespace with underscore for bug with epub table of contents on Kindle (AO3-6625)
   def clean(string)
     # get rid of any HTML entities to avoid things like "amp" showing up in titles
     string = string.gsub(/\&(\w+)\;/, '')
@@ -138,6 +136,6 @@ class Download
     string = string.gsub(/ +/, " ")
     string = string.strip
     string = string.truncate(24, separator: ' ', omission: '')
-    string
+    string.gsub(/\s/, "_")
   end
 end

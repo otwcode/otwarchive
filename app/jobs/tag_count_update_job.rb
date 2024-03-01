@@ -1,9 +1,6 @@
 class TagCountUpdateJob < RedisSetJob
   queue_as :tag_counts
 
-  retry_on ActiveRecord::Deadlocked, attempts: 10
-  retry_on ActiveRecord::LockWaitTimeout, attempts: 10
-
   def self.base_key
     "tag_update"
   end
@@ -20,7 +17,7 @@ class TagCountUpdateJob < RedisSetJob
     Tag.transaction do
       tag_ids.each do |id|
         value = REDIS_GENERAL.get("tag_update_#{id}_value")
-        Tag.where(id: id).update_all(taggings_count_cache: value) if value.present?
+        Tag.where(id: id).update(taggings_count_cache: value) if value.present?
       end
     end
   end

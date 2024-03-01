@@ -18,11 +18,13 @@ class CommentsController < ApplicationController
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_action :check_permission_to_edit, only: [:edit, :update ]
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
+  before_action :check_guest_comment_admin_setting, only: [:new, :create, :add_comment_reply]
   before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
   before_action :check_frozen, only: [:new, :create, :add_comment_reply]
   before_action :check_hidden_by_admin, only: [:new, :create, :add_comment_reply]
   before_action :check_not_replying_to_spam, only: [:new, :create, :add_comment_reply]
+  before_action :check_guest_replies_preference, only: [:new, :create, :add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
@@ -130,6 +132,22 @@ class CommentsController < ApplicationController
     end
   end
 
+  def check_guest_comment_admin_setting
+    admin_settings = AdminSetting.current
+
+    return unless admin_settings.guest_comments_off? && guest?
+    
+    flash[:error] = t("comments.commentable.guest_comments_disabled")
+    redirect_back(fallback_location: root_path)
+  end
+
+  def check_guest_replies_preference
+    return unless guest? && @commentable.respond_to?(:guest_replies_disallowed?) && @commentable.guest_replies_disallowed?
+
+    flash[:error] = t("comments.check_guest_replies_preference.error")
+    redirect_back(fallback_location: root_path)
+  end
+
   def check_unreviewed
     return unless @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
 
@@ -195,7 +213,7 @@ class CommentsController < ApplicationController
   # Comments cannot be edited after they've been replied to or if they are frozen.
   def check_permission_to_edit
     if @comment&.iced?
-      flash[:error] = t("comment.check_permission_to_edit.error.frozen")
+      flash[:error] = t("comments.check_permission_to_edit.error.frozen")
       redirect_back(fallback_location: root_path)
     elsif !@comment&.count_all_comments&.zero?
       flash[:error] = ts("Comments with replies cannot be edited")
@@ -211,14 +229,18 @@ class CommentsController < ApplicationController
   def check_permission_to_modify_frozen_status
     return if permission_to_modify_frozen_status
 
-    flash[:error] = t(".permission_denied")
+    # i18n-tasks-use t('comments.freeze.permission_denied')
+    # i18n-tasks-use t('comments.unfreeze.permission_denied')
+    flash[:error] = t("comments.#{action_name}.permission_denied")
     redirect_back(fallback_location: root_path)
   end
 
   def check_permission_to_modify_hidden_status
     return if policy(@comment).can_hide_comment?
 
-    flash[:error] = t(".permission_denied")
+    # i18n-tasks-use t('comments.hide.permission_denied')
+    # i18n-tasks-use t('comments.unhide.permission_denied')
+    flash[:error] = t("comments.#{action_name}.permission_denied")
     redirect_back(fallback_location: root_path)
   end
 

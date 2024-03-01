@@ -640,7 +640,7 @@ describe UserMailer do
     let(:email) { UserMailer.abuse_report(report.id) }
 
     it "has the correct subject" do
-      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Your abuse report"
+      expect(email).to have_subject "[#{ArchiveConfig.APP_SHORT_NAME}] Abuse - #{report.summary}"
     end
 
     it "delivers to the user who filed the report" do
@@ -650,6 +650,8 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
 
     describe "HTML version" do
       it "contains the comment and the URL reported" do
@@ -817,8 +819,10 @@ describe UserMailer do
     end
   end
 
-  describe "added_to_collection_notification" do
-    subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id) }
+  describe "#archivist_added_to_collection_notification" do
+    subject(:email) do
+      UserMailer.archivist_added_to_collection_notification(user.id, work.id, collection.id)
+    end
 
     let(:collection) { create(:collection) }
     let(:user) { create(:user) }
@@ -828,7 +832,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] An Open Doors archivist has added your work to a collection"
       expect(email.subject).to eq(subject)
     end
 
@@ -841,12 +845,16 @@ describe UserMailer do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
+        expect(email).to have_html_part_content(collection.title)
+        expect(email).to have_html_part_content(work.title)
       end
     end
 
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content(collection.title)
+        expect(email).to have_text_part_content(work.title)
       end
     end
   end
@@ -1102,10 +1110,11 @@ describe UserMailer do
     end
 
     it "has the correct attachments" do
+      filename = work.title.gsub(/\s/, "_")
       expect(email.attachments.length).to eq(2)
       expect(email.attachments).to contain_exactly(
-        an_object_having_attributes(filename: "#{work.title}.html"),
-        an_object_having_attributes(filename: "#{work.title}.txt")
+        an_object_having_attributes(filename: "#{filename}.html"),
+        an_object_having_attributes(filename: "#{filename}.txt")
       )
     end
     
@@ -1154,10 +1163,11 @@ describe UserMailer do
     end
 
     it "has the correct attachments" do
+      filename = work.title.gsub(/\s/, "_")
       expect(email.attachments.length).to eq(2)
       expect(email.attachments).to contain_exactly(
-        an_object_having_attributes(filename: "#{work.title}.html"),
-        an_object_having_attributes(filename: "#{work.title}.txt")
+        an_object_having_attributes(filename: "#{filename}.html"),
+        an_object_having_attributes(filename: "#{filename}.txt")
       )
     end
     
@@ -1188,6 +1198,56 @@ describe UserMailer do
       end
 
       it_behaves_like "an email with a deleted work with draft chapters attached"
+    end
+  end
+
+  describe "obeys the set locale preference feature flag" do
+    let(:user) { create(:user) }
+    let(:work) { create(:work, authors: [user.default_pseud]) }
+    let(:locale) { create(:locale) }
+
+    context "when the set locale preference feature flag is on" do
+      before { $rollout.activate_user(:set_locale_preference, user) }
+
+      context "and the user has non-default locale set" do
+        before { user.preference.update!(locale: locale) }
+
+        it "sends a localised email" do
+          expect(I18n).to receive(:with_locale).with(locale.iso)
+          expect(UserMailer.admin_hidden_work_notification(work.id, user.id)).to be_truthy
+        end
+      end
+
+      context "and the user has the default locale set" do
+        before { user.preference.update!(locale: Locale.default) }
+
+        it "sends an English email" do
+          expect(I18n).to receive(:with_locale).with("en")
+          expect(UserMailer.admin_hidden_work_notification(work.id, user.id)).to be_truthy
+        end
+      end
+    end
+
+    context "when the set locale preference feature flag is off" do
+      before { $rollout.deactivate_user(:set_locale_preference, user) }
+
+      context "and the user has non-default locale set" do
+        before { user.preference.update!(locale: locale) }
+
+        it "sends an English email" do
+          expect(I18n).to receive(:with_locale).with("en")
+          expect(UserMailer.admin_hidden_work_notification(work.id, user.id)).to be_truthy
+        end
+      end
+
+      context "and the user has the default locale set" do
+        before { user.preference.update!(locale: Locale.default) }
+
+        it "sends an English email" do
+          expect(I18n).to receive(:with_locale).with("en")
+          expect(UserMailer.admin_hidden_work_notification(work.id, user.id)).to be_truthy
+        end
+      end
     end
   end
 end

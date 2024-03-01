@@ -24,12 +24,12 @@
     <div id="chapters">
       <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
     </div>
-  
+
     <% inspired_by = get_inspired_by(@work) %>
     <% last_chapter = @work.posted? ? @work.last_posted_chapter : @work.last_chapter %>
     <% if @chapter == last_chapter && (@work.endnotes.present? || @work.series.present? || inspired_by.present?) %>
       <!--afterword-->
-      <div class="afterword preface group" role="complementary">  
+      <div class="afterword preface group">
         <% if !@work.endnotes.blank? %>
           <%= render :partial => 'works/work_endnotes' %>
         <% end %>
@@ -42,7 +42,7 @@
       </div>
       <!--/afterword-->
     <% end %>
-  
+
     </div>
     <!-- END work skin -->
   </div>
@@ -51,6 +51,19 @@
   <!-- BEGIN comment section -->
   <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
   <!-- END comment section -->
+
+  <% if @next_chapter %>
+    <script type="speculationrules">
+      {
+        "prerender": [
+          {
+            "source": "list",
+            "urls": ["<%= work_chapter_path(@work, @next_chapter, anchor: "workskin") %>"]
+          }
+        ]
+      }
+    </script>
+  <% end %>
 <% end %>
 
 <%= render "hit_count/include" %>

@@ -95,9 +95,9 @@
                             <p><%= yield(:footer_note) %></p>
                           <% end %>
 
-                          <p><%= t("mailer.general.footer.general.html.part1", support_link: style_footer_link(t("mailer.general.footer.general.html.support_link_text"), new_feedback_report_url)).html_safe %></p>
+                          <p><%= t("mailer.general.footer.general.unwanted_email.html", support_link: style_footer_link(t("mailer.general.footer.general.html.support_link_text"), new_feedback_report_url)) %></p>
 
-                          <p><%= t("mailer.general.footer.general.html.part2", donate_link: style_footer_link(t("mailer.general.footer.general.html.donate_link_text"), donate_url)).html_safe %></p>
+                          <p><%= t("mailer.general.footer.general.about.html", donate_link: style_footer_link(t("mailer.general.footer.general.html.donate_link_text"), donate_url)) %></p>
 
                           <% if content_for?(:sent_at) %>
                             <p><%= t 'mailer.general.footer.sent_at', sent_at: yield(:sent_at).strip %></p>

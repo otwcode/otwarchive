@@ -31,7 +31,11 @@
 <fieldset>
   <legend><%= ts('CSS') %></legend>
   <h3 class="heading"><%= f.label :css, ts('CSS') %> <%= link_to_help 'skins-creating' %></h3>
-  <p><%= f.text_area :css, :cols => 70, :class => 'large' %></p>
+  <p>
+    <%= f.text_area :css, :cols => 70, :class => 'large observe_textlength' %>
+    <%= live_validation_for_field("skin_css", maximum_length: ArchiveConfig.CONTENT_MAX_DISPLAYED) %>
+    <%= generate_countdown_html("skin_css", ArchiveConfig.CONTENT_MAX_DISPLAYED) %>
+  </p>
 </fieldset>
   
 <fieldset id="advanced_skin_fieldset" class="<%= (@skin.type || params[:skin_type]) == 'WorkSkin' ? 'hidden ' : ''%>">

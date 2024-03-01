@@ -1,0 +1,46 @@
+# Based on https://github.com/tk0miya/action-erblint/blob/main/README.md#example-usage
+
+name: Reviewdog
+
+on: [pull_request]
+
+permissions:
+  checks: write
+
+jobs:
+  rubocop:
+    name: Rubocop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby and run bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: rubocop
+        uses: reviewdog/action-rubocop@2f726ae5dd8df72b4faa9d93669cdab96aeb2153
+        with:
+          use_bundler: true
+          reporter: github-pr-check
+          skip_install: true
+
+  erb-lint:
+    name: ERB Lint runner
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby and run bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: erb-lint
+        uses: tk0miya/action-erblint@667687e73b44e7b7a710a1204b180f49f80ebb5e
+        with:
+          use_bundler: true
+          reporter: github-pr-check # default
