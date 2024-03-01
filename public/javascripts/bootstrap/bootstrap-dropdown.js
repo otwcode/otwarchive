@@ -19,7 +19,7 @@
  * OTWARCHIVE DEVS:
  *
  * When updating to the newest version, make sure to include the
- * customizations from LINES 61-69, 102, AND 176-183 and UPDATE THIS
+ * customizations from LINES 62-70, 103, AND 177-184 and UPDATE THIS
  * MESSAGE with the new line numbers. These lines ensure the code works
  * without the ARIA menu role and ensure proper behavior when both JS and
  * CSS hover are used for menus.
