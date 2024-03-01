@@ -891,8 +891,8 @@ en:
         restricted: Only show your work to registered users
         unrestricted: Show to all
     search_box:
+      a11y_label: Work
       label: Work Search
-      legend: Search Works
       submit: Search
       tooltip_label: 'tip:'
     show:
