@@ -122,7 +122,7 @@ Given("a user exists with login: {string}") do |login|
   collection_title = "Such a nice collection"
   collection = Collection.find_or_create_by(title: collection_title)
   collection.join(user)
-  check("This collection is moderated") unless moderated.blank?
+  check("This collection is moderated") unless moderated.present?
   check("This collection is not closed") unless closed.present?
   step "I submit"
 end
