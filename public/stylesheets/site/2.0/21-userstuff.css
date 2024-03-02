@@ -45,8 +45,7 @@
     padding: 0 1em;
 }
 
-.userstuff li,
-.userstuff ol ul li {
+.userstuff li, .userstuff ol ul li {
     font-weight: normal;
     display: list-item;
     list-style-type: disc;
@@ -109,9 +108,7 @@
     border-bottom: 1px solid;
 }
 
-.userstuff h3 a,
-.userstuff h3 a:link,
-.userstuff h3 a:visited {
+.userstuff h3 a, .userstuff h3 a:link, .userstuff h3 a:visited {
     font-weight: 500;
     border-bottom: 0;
     text-decoration: none;
