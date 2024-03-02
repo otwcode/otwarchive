@@ -121,7 +121,7 @@ Given("a user exists with login: {string}") do |login|
   c = Collection.find_by(title: collection)
   step %{#{c.join}}
   check("This collection is moderated") unless moderated.blank?
-  check("This collection is closed") unless closed.blank?
+  check("This collection is closed") unless closed.present?
   step %{I submit}
 end
 
