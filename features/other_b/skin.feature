@@ -12,7 +12,7 @@ Feature: Non-public site and work skins
     And I should see "text-decoration: blink;"
     And I should see "(No Description Provided)"
     And I should see "by skinner"
-    But I should see "Use"
+    But I should see a button with text "Use"
     And I should see "Delete"
     And I should see "Edit"
     And I should not see "Stop Using"
@@ -40,7 +40,6 @@ Feature: Non-public site and work skins
   Given I am logged in as "skinner"
     And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
   Then I should see "my blinking skin"
-    And I should see "Use"
   When I press "Use"
   Then I should see "#title {" in the page style
     And I should see "text-decoration: blink;" in the page style
