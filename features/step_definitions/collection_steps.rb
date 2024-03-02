@@ -118,11 +118,13 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
 end
 
 Given("a user exists with login: {string}") do |login|
-  c = Collection.find_by(title: collection)
-  step %{#{c.join}}
+  user = User.find_or_create_by(login: login)
+  collection_title = "Such a nice collection"
+  collection = Collection.find_or_create_by(title: collection_title)
+  collection.join(user)
   check("This collection is moderated") unless moderated.blank?
-  check("This collection is closed") unless closed.present?
-  step %{I submit}
+  check("This collection is not closed") unless closed.present?
+  step "I submit"
 end
 
 ### WHEN
