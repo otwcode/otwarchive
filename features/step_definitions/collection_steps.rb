@@ -117,14 +117,11 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
   step %{I should see "Updated #{name}"}
 end
 
-Given("a user exists with login: {string}") do |login|
-  user = User.find_or_create_by(login: login)
-  collection_title = "Such a nice collection"
-  collection = Collection.find_or_create_by(title: collection_title)
-  collection.join(user)
-  check("This collection is moderated") unless moderated.present?
-  check("This collection is not closed") unless closed.present?
-  step "I submit"
+Given /^I have joined the collection "([^\"]*)"$/ do |title|
+  step %{I am logged in as "#{name}"}
+  visit collections
+  check("This collection is moderated") if moderated.blank?
+  check("This collection is not closed") if closed.blank?
 end
 
 ### WHEN
