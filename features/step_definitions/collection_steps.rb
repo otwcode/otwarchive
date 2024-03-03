@@ -117,11 +117,11 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
   step %{I should see "Updated #{name}"}
 end
 
-Given /^I have joined the collection "([^"]*)" as "([^"]*)"$/ do |title, name|
+Given /^I have joined the collection "([^"]*)" as "([^"]*)"$/ do |_title, name|
   step %{I am logged in as "#{name}"}
   visit collections_path
-  check("This collection is moderated") unless moderated.blank?
-  check("This collection is closed") unless closed.blank?
+  check("This collection is moderated") if moderated.present?
+  check("This collection is closed") if closed.present?
   step %{I press "Sort and Filter"}
   step %{I should see "Leave"}
   step %{I should see "Join"}
