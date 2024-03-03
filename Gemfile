@@ -67,6 +67,10 @@ gem 'devise'
 gem 'devise-async'       # To mails through queues
 gem 'bcrypt'
 
+# Needed for modern ssh
+gem 'ed25519', '>= 1.2', '< 2.0'
+gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
+
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
 gem "pundit"
