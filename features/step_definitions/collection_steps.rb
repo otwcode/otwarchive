@@ -121,8 +121,8 @@ Given /^I have joined the collection "([^"]*)" as "([^"]*)"$/ do |title, name|
   collection = Collection.find_by(title: title)
   step %{I am logged in as "#{name}"}
   visit collections_path
-  check("This collection is moderated") if collection.moderated?
-  check("This collection is not closed") unless collection.closed?
+  check("This collection is moderated") unless moderated.present?
+  check("This collection is closed") unless closed.present?
   step %{I press "Sort and Filter"}
   step %{I should see "Leave"}
   step %{I should see "Join"}
