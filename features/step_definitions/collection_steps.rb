@@ -120,9 +120,8 @@ end
 Given /^I have joined the collection "([^"]*)" as "([^"]*)"$/ do |_title, name|
   step %{I am logged in as "#{name}"}
   visit collections_path
-  puts page.html
-  find("#collection_filters_moderated_true").check
-  find("#collection_filters_closed_false").check
+  find("label[for='collection_filters_moderated_true']").click
+  find("label[for='collection_filters_closed_false']").click
   step %{I press "Sort and Filter"}
   step %{I should see "Leave"}
   step %{I should see "Join"}
