@@ -118,11 +118,10 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
 end
 
 Given /^I have joined the collection "([^"]*)" as "([^"]*)"$/ do |title, name|
-  collection = Collection.find_by(title: title)
   step %{I am logged in as "#{name}"}
   visit collections_path
-  check("This collection is moderated") unless moderated.present?
-  check("This collection is closed") unless closed.present?
+  check("This collection is moderated") unless moderated.blank?
+  check("This collection is closed") unless closed.blank?
   step %{I press "Sort and Filter"}
   step %{I should see "Leave"}
   step %{I should see "Join"}
