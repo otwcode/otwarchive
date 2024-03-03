@@ -120,8 +120,8 @@ end
 Given /^I have joined the collection "([^"]*)" as "([^"]*)"$/ do |_title, name|
   step %{I am logged in as "#{name}"}
   visit collections_path
-  check("This collection is moderated") if moderated.present?
-  check("This collection is closed") if closed.present?
+  check("collection_filters_moderated_true")
+  check("collection_filters_closed_false")
   step %{I press "Sort and Filter"}
   step %{I should see "Leave"}
   step %{I should see "Join"}
