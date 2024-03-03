@@ -68,7 +68,7 @@
   When I am in the default browser
 
 Scenario: Collection member should see correct button text
-  Given I have joined the collection "Such a nice collection"
+  Given I have joined the collection "Such a nice collection" as "sam"
     And I am logged in as "sam"
   When I am on the "Collections in the Example Archive" page
     And I choose "collection_filters_moderated_true"
