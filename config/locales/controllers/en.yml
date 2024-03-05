@@ -14,6 +14,9 @@ en:
         blocked: You have blocked the user %{name}.
       destroy:
         unblocked: You have unblocked the user %{name}.
+  challenge_assignments:
+    validations:
+      not_owner: You aren't the owner of that assignment.
   chapters:
     destroy:
       only_chapter: You can't delete the only chapter in your work. If you want to delete the work, choose "Delete Work".
@@ -30,6 +33,11 @@ en:
     create:
       invited: invited
       invited_to_collections_html: This work has been %{invited_link} to your collection (%{collection_title}).
+  collection_participants:
+    update:
+      failure: Couldn't update %{participant}.
+    validation:
+      owners_required: You can't remove the only owner!
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.

@@ -10,7 +10,7 @@ class CollectionParticipantsController < ApplicationController
   cache_sweeper :collection_sweeper
 
   def owners_required
-    flash[:error] = t('collection_participants.owners_required', default: "You can't remove the only owner!")
+    flash[:error] = t(".validation.owners_required", default: "You can't remove the only owner!")
     redirect_to collection_participants_path(@collection)
     false
   end
@@ -75,7 +75,7 @@ class CollectionParticipantsController < ApplicationController
     if @participant.update(collection_participant_params)
       flash[:notice] = t('collection_participants.update_success', default: "Updated %{participant}.", participant: @participant.pseud.name)
     else
-      flash[:error] = t('collection_participants.update_failure', default: "Couldn't update %{participant}.", participant: @participant.pseud.name)
+      flash[:error] = t(".failure", default: "Couldn't update %{participant}.", participant: @participant.pseud.name)
     end
     redirect_to collection_participants_path(@collection)
   end
