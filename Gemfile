@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby "3.0.5"
+ruby "3.1.4"
 
 gem 'test-unit', '~> 3.2'
 
@@ -66,6 +66,10 @@ gem 'devise'
 gem 'devise-async'       # To mails through queues
 gem 'bcrypt'
 
+# Needed for modern ssh
+gem "ed25519", ">= 1.2", "< 2.0"
+gem "bcrypt_pbkdf", ">= 1.0", "< 2.0"
+
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
 gem "pundit"
@@ -115,6 +119,9 @@ gem "mimemagic", "0.3.10"
 
 # Library for helping run pt-online-schema-change commands:
 gem "departure", "~> 6.5"
+
+# Ruby 3.1 means we need to specify a version of mail until we get to rails 7.x
+gem "mail", ">= 2.8"
 
 group :test do
   gem "rspec-rails", "~> 4.0.1"
