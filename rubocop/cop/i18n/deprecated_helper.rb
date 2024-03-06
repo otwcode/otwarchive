@@ -18,7 +18,7 @@ module RuboCop
       #  t(".relative.path.to.translation")
       #  t(".greeting", name: "world")
       class DeprecatedHelper < RuboCop::Cop::Base
-        MSG = "Prefer Rails built-in `I18n.t` function over `ts`: the latter is not actually translatable"
+        MSG = "Prefer Rails built-in `I18n.t` function over `ts`: the latter is not actually translatable. For more information, refer to https://github.com/otwcode/otwarchive/wiki/Internationalization-(i18n)-Standards."
 
         RESTRICT_ON_SEND = %i[ts].freeze
 
