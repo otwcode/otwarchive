@@ -42,9 +42,14 @@ class CommentPolicy < ApplicationPolicy
     user_has_roles?(SPAM_ROLES)
   end
 
+  def can_review_comment?
+    record.ultimate_parent.is_a?(AdminPost) && user&.is_a?(Admin)
+  end
+
   alias destroy? can_destroy_comment?
   alias approve? can_mark_comment_spam?
   alias reject? can_mark_comment_spam?
+  alias review? can_review_comment?
 
   def show_email?
     user_has_roles?(%w[policy_and_abuse support superadmin])

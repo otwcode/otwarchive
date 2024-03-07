@@ -28,7 +28,10 @@
 
       <% if comments_are_moderated(commentable) && !current_user_is_work_creator(commentable) %>
         <p class="notice">
-          <%= ts("This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator.") %>
+          <%# i18n-tasks-use
+              t("comments.commentable.permissions.moderated_commenting.notice.admin_post")
+              t("comments.commentable.permissions.moderated_commenting.notice.work") %>
+          <%= t("comments.commentable.permissions.moderated_commenting.notice.#{commentable.model_name.i18n_key}") %>
         </p>
       <% end %>
 

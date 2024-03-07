@@ -181,6 +181,12 @@ module CommentsHelper
       parent.disable_anon_comments? && !logged_in?
   end
 
+  def can_review_comment?(comment)
+    return false unless comment.unreviewed?
+
+    is_author_of?(comment.ultimate_parent) || policy(comment).can_review_comment?
+  end
+
   #### HELPERS FOR REPLYING TO COMMENTS #####
 
   def add_cancel_comment_reply_link(comment)

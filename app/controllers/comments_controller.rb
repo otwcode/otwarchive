@@ -344,7 +344,9 @@ class CommentsController < ApplicationController
       if @comment.save
         if @comment.approved?
           if @comment.unreviewed?
-            flash[:comment_notice] = ts("Your comment was received! It will appear publicly after the work creator has approved it.")
+            # i18n-tasks-use t("comments.create.success.moderated.admin_post")
+            # i18n-tasks-use t("comments.create.success.moderated.work")
+            flash[:comment_notice] = t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
           else
             flash[:comment_notice] = ts("Comment created!")
           end
@@ -425,10 +427,13 @@ class CommentsController < ApplicationController
   end
 
   def review
+    authorize @comment if logged_in_as_admin?
+
     return unless @comment && current_user_owns?(@comment.ultimate_parent) && @comment.unreviewed?
+
     @comment.toggle!(:unreviewed)
     # mark associated inbox comments as read
-    InboxComment.where(user_id: current_user.id, feedback_comment_id: @comment.id).update_all(read: true)
+    InboxComment.where(user_id: current_user.id, feedback_comment_id: @comment.id).update_all(read: true) unless logged_in_as_admin?
     flash[:notice] = ts("Comment approved.")
     respond_to do |format|
       format.html do
@@ -436,6 +441,8 @@ class CommentsController < ApplicationController
           redirect_to user_inbox_path(current_user, page: params[:page], filters: filter_params[:filters])
         elsif params[:approved_from] == "home"
           redirect_to root_path
+        elsif @comment.ultimate_parent.is_a?(AdminPost)
+          redirect_to unreviewed_admin_post_comments_path(@comment.ultimate_parent)
         else
           redirect_to unreviewed_work_comments_path(@comment.ultimate_parent)
         end

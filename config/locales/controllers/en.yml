@@ -45,6 +45,11 @@ en:
     check_permission_to_edit:
       error:
         frozen: Frozen comments cannot be edited.
+    create:
+      success:
+        moderated:
+          admin_post: Your comment was received! It will appear publicly after it has been approved.
+          work: Your comment was received! It will appear publicly after the work creator has approved it.
     freeze:
       error: Sorry, that comment thread could not be frozen.
       permission_denied: Sorry, you don't have permission to freeze that comment thread.

@@ -164,7 +164,12 @@ Rails.application.routes.draw do
 
   #### ADMIN ####
   resources :admin_posts do
-    resources :comments
+    resources :comments do
+      collection do
+        get :unreviewed
+        put :review_all
+      end
+    end
   end
 
   namespace :admin do

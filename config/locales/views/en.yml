@@ -270,6 +270,18 @@ en:
         footnote_comment_permissions: Comment permissions from the selected post will replace any permissions selected on this page.
         footnote_tags: Tags from the selected post will replace any tags entered on this page.
         label: Translation of
+    show:
+      navigation:
+        admin:
+          delete: Delete Post
+          confirm_delete: Are you sure you want to delete this news post?
+          edit: Edit Post
+          landmark: Admin Actions
+          unreviewed_comments: Unreviewed Comments (%{count})
+        landmark: Admin Post Navigation
+        next: Next Post
+        previous: Previous Post
+      page_heading: AO3 News
   admins:
     index:
       confidentiality_reminder: You are now logged in as an admin. That means you will probably encounter information that is personal or confidential (e.g. usernames, email and IP addresses, creator names on anonymous works, etc). Please do not use this information in ways unrelated to your OTW role. If you have questions about what you can or cannot do with information you see here, contact your committee chair(s).
@@ -383,6 +395,9 @@ en:
           enable: Enable comment moderation
           keep_current: Keep current comment moderation settings
           label: Comment Moderation
+          notice:
+            admin_post: Comments on this news post are moderated. Your comment will not appear until it has been approved.
+            work: This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator.
         options:
           disable_all: No one can comment
           disable_anon: Only registered users can comment
@@ -396,6 +411,13 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+    unreviewed:
+      approve_all: Approve All Unreviewed Comments
+      no_unreviewed: No unreviewed comments.
+      note:
+        admin_post: Please note that comments cannot be unapproved once you have approved them. After you delete any comments you do not wish to appear on the admin post, you can approve all that remain.
+        work: Please note that comments cannot be unapproved once you have reviewed them. After you delete any comments you do not wish to appear on your work, you can approve all that remain.
+      page_heading_html: Unreviewed Comments on %{commentable_link}
   downloads:
     download_afterword:
       inspired_by:
