@@ -60,13 +60,7 @@
   <% if @collection %>
     <h2 class="collections">
       <% unless @collection.header_image_url.present? %>
-        <%= if @collection.title
-              @collection.title
-            elsif @collection_parent
-              @collection_parent.title
-            else
-              t(".collections.new")
-            end %>
+        <%= @collection.title || @collection_parent&.title || t(".collections.new") %>
       <% end %>
     </h2>
   <% end %>
