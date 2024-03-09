@@ -117,7 +117,7 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
   step %{I should see "Updated #{name}"}
 end
 
-Given /^I have the moderated collection "([^]*)"$/ do |_title|
+Given /^I have the moderated collection "([^"]*)"$/ do |_title|
   visit collections_path
   puts page.html
   find("label[for='collection_filters_moderated_true']").click
