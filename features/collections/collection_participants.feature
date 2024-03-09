@@ -68,7 +68,7 @@
   When I am in the default browser
 
 Scenario: Collection member should see correct button text
-Given I am logged in as "sam"
+Given basic collections
     And I have a moderated collection "ModeratedCollection"
     And I have a moderated collection "ModeratedCollectionTheSequel"
   When I am on the "Collections in the Example Archive" page
