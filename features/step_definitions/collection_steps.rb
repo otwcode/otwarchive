@@ -73,7 +73,7 @@ Given /^mod1 lives in Alaska$/ do
   step %{I press "Update"}
 end
 
-Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
+Given /^I (?:create|have) (?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
   step %{I am logged in as "moderator"}
   step %{I set up the collection "#{title}" with name "#{name}"}
   check("This collection is unrevealed") unless hidden.blank?
