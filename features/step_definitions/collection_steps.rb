@@ -73,7 +73,7 @@ Given /^mod1 lives in Alaska$/ do
   step %{I press "Update"}
 end
 
-Given /^I (?:create|have) (?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^"]*)"(?: with name "([^"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
+Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
   step %{I am logged in as "moderator"}
   step %{I set up the collection "#{title}" with name "#{name}"}
   check("This collection is unrevealed") unless hidden.blank?
@@ -117,7 +117,7 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
   step %{I should see "Updated #{name}"}
 end
 
-Given /^I have the moderated collection "(.*?)"$/ do |collection_title|
+Given /^I have the unique moderated collection "(.*?)"$/ do |collection_title|
   visit collections_path
   puts page.html
   find("label[for='collection_filters_moderated_true']").click
