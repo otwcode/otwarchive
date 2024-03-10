@@ -68,12 +68,10 @@
   When I am in the default browser
 
 Scenario: Collection member should see correct button text
-Given basic collections
-    And I have a moderated collection "ModeratedCollection"
-    And I have a moderated collection "ModeratedCollectionTheSequel"
-  When I am on the "Collections in the Example Archive" page
-    And I choose "collection_filters_moderated_true"
-    And I choose "collection_filters_closed_false"
-    And I press "Sort and Filter"
+  Given I have the moderated collection "ModeratedCollection"
+    And I have the moderated collection "ModeratedCollectionTheSequel"
+    And I am logged in as "sam"
+    And I have joined the collection "ModeratedCollection" as "sam"
+  When I am on the collections page
   Then I should see "Leave" button exactly 1 time
     And I should see "Join" button 0 or more times

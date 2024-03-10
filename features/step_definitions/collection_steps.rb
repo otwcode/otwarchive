@@ -117,9 +117,11 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
   step %{I should see "Updated #{name}"}
 end
 
-Given /^basic collections$/ do
+Given "I have joined the collection {string} as {string}" do |title, login|
+  collection = Collection.find_by(title: title)
+  user = User.find_by(login: login)
+  FactoryBot.create(:collection_participant, pseud: user.default_pseud, collection: collection, participant_role: "Member")
   visit collections_path
-  puts page.html
   find("label[for='collection_filters_moderated_true']").click
   find("label[for='collection_filters_closed_false']").click
   step %{I press "Sort and Filter"}
