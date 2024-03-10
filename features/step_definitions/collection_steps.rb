@@ -213,11 +213,11 @@ Then /^I should see a collection not found message for "([^\"]+)"$/ do |collecti
   step %{I should see /We couldn't find the collection(?:.+and)? #{collection_name}/}
 end
 
-Then("I should see {string} button exactly {int} time") do |string, int|
+Then("I should see {string} button exactly {int} time") do |_string, _int|
   step %{I should see "Leave"}
 end
   
-Then("I should see {string} button {int} or more times") do |string, int|
+Then("I should see {string} button {int} or more times") do |_string, _int|
   step %{I should see "Join"}
 end
 
