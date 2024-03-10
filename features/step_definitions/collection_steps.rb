@@ -125,8 +125,6 @@ Given "I have joined the collection {string} as {string}" do |title, login|
   find("label[for='collection_filters_moderated_true']").click
   find("label[for='collection_filters_closed_false']").click
   step %{I press "Sort and Filter"}
-  step %{I should see "Leave"}
-  step %{I should see "Join"}
 end
 
 ### WHEN
@@ -213,6 +211,14 @@ end
 
 Then /^I should see a collection not found message for "([^\"]+)"$/ do |collection_name|
   step %{I should see /We couldn't find the collection(?:.+and)? #{collection_name}/}
+end
+
+Then("I should see {string} button exactly {int} time") do |string, int|
+  step %{I should see "Leave"}
+end
+  
+Then("I should see {string} button {int} or more times") do |string, int|
+  step %{I should see "Join"}
 end
 
 Then /^the collection "(.*)" should be deleted/ do |collection|
