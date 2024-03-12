@@ -73,5 +73,5 @@ Scenario: Collection member should see correct button text
     And I am logged in as "sam"
     And I have joined the collection "ModeratedCollection" as "sam"
   When I am on the collections page
-  Then I should see "Leave" button exactly 1 time
-    And I should see "Join" button 0 or more times
+  Then I should see "Leave" exactly 1 time
+    And I should see "Join" exactly 1 time

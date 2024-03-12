@@ -122,9 +122,6 @@ Given "I have joined the collection {string} as {string}" do |title, login|
   user = User.find_by(login: login)
   FactoryBot.create(:collection_participant, pseud: user.default_pseud, collection: collection, participant_role: "Member")
   visit collections_path
-  find("label[for='collection_filters_moderated_true']").click
-  find("label[for='collection_filters_closed_false']").click
-  step %{I press "Sort and Filter"}
 end
 
 ### WHEN
@@ -211,14 +208,6 @@ end
 
 Then /^I should see a collection not found message for "([^\"]+)"$/ do |collection_name|
   step %{I should see /We couldn't find the collection(?:.+and)? #{collection_name}/}
-end
-
-Then("I should see {string} button exactly {int} time") do |_string, _int|
-  step %{I should see "Leave"}
-end
-  
-Then("I should see {string} button {int} or more times") do |_string, _int|
-  step %{I should see "Join"}
 end
 
 Then /^the collection "(.*)" should be deleted/ do |collection|
