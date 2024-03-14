@@ -1,7 +1,7 @@
 /* ==USERSTUFF: displaying content inputted by a user into a textarea.*/
 
 .userstuff {
-  word-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .userstuff p, .userstuff details {
@@ -137,8 +137,8 @@
 }
 
 .userstuff blockquote blockquote {
-    padding: 0.25em;
-    border: 0;
+  padding: 0.25em;
+  border: 0;
 }
 
 .userstuff hr {
