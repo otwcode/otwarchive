@@ -32,7 +32,7 @@ Feature: Help
     And I follow "Chapter title"
     Then I should see "You can add a chapter title"
 
-  Scenario: Scenario: Asked to log in if trying to access the first login page as guest
+  Scenario: Asked to log in if trying to access the first login page as guest
 
     When I go to the first login help page
     Then I should see "Sorry, you don't have permission"
