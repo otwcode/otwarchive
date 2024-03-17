@@ -34,6 +34,12 @@ When /^I delete the icon from the collection "([^"]*)"$/ do |title|
   step %{I press "Update"}
 end
 
+When /^I delete the icon from my psued$/ do
+  visit edit_user_pseud_path(User.current_user, User.current_user.default_pseud)
+  check('pseud_delete_icon')
+  step %{I press "Update"}
+end
+
 Then /^the "([^"]*)" collection should have an icon$/ do |title|
   collection = Collection.find_by(title: title)
   assert !collection.icon_file_name.blank?
@@ -45,3 +51,8 @@ Then /^the "([^"]*)" collection should not have an icon$/ do |title|
 end
 
 ### THEN
+
+Then /^I should see the icon and alt text boxes are blank$/ do
+  expect(find('#pseud_icon').value).to be_blank
+  expect(find('#pseud_icon_alt_text').value).to be_nil
+end
