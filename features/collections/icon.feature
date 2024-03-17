@@ -40,3 +40,15 @@ Feature: User icons
   When I delete the icon from the collection "Pretty"
   Then I should see "Collection was successfully updated."
     And the "Pretty" collection should not have an icon
+
+  Scenario: Users can delete icon and alt text
+
+  Given I have an icon uploaded
+  When I follow "Edit Pseud"
+    And I fill in "pseud_icon_alt_text" with "Some test description"
+    And I press "Update"
+  Then I should see the image "alt" text "Some test description"
+  When I delete the icon from my psued
+  Then I should see "Pseud was successfully updated."
+  When I follow "Edit Pseud"
+  Then I should see the icon and alt text boxes are blank
