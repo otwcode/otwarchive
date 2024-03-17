@@ -196,8 +196,8 @@ describe ChallengeSignupsController do
 
     before do
       challenge = collection.challenge
-      challenge.offer_restriction.update(title_allowed: true)
-      challenge.request_restriction.update(title_allowed: true)
+      challenge.offer_restriction.update!(title_allowed: true)
+      challenge.request_restriction.update!(title_allowed: true)
 
       signup_offer = signup.offers.first
       signup_offer.description = ""
@@ -244,7 +244,7 @@ describe ChallengeSignupsController do
 
     context "when title is allowed" do
       before do
-        challenge.request_restriction.update(title_allowed: true)
+        challenge.request_restriction.update!(title_allowed: true)
       end
 
       it "includes title in CSV" do
@@ -257,7 +257,7 @@ describe ChallengeSignupsController do
 
     context "when description is not allowed" do
       before do
-        challenge.request_restriction.update(description_allowed: false)
+        challenge.request_restriction.update!(description_allowed: false)
       end
 
       it "omits description from CSV" do
@@ -270,7 +270,7 @@ describe ChallengeSignupsController do
 
     context "when prompt is anonymous" do
       before do
-        prompt.update(anonymous: true)
+        prompt.update!(anonymous: true)
       end
 
       it "omits the anonymous prompt's pseud and sign-up URL from CSV" do

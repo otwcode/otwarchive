@@ -539,8 +539,8 @@ describe Work do
       # be automatically approved), we need to make sure that User.current_user
       # is not nil.
       User.current_user = creator
-      co_creator.preference.update(allow_cocreator: true)
-      no_co_creator.preference.update(allow_cocreator: false)
+      co_creator.preference.update!(allow_cocreator: true)
+      no_co_creator.preference.update!(allow_cocreator: false)
     end
 
     it "allows normal users to invite others as chapter co-creators" do
@@ -630,8 +630,8 @@ describe Work do
 
     context "when all creators allow collection invitations" do
       before do
-        creator1.preference.update(allow_collection_invitation: true)
-        creator2.preference.update(allow_collection_invitation: true)
+        creator1.preference.update!(allow_collection_invitation: true)
+        creator2.preference.update!(allow_collection_invitation: true)
       end
 
       it "returns true" do
@@ -647,7 +647,7 @@ describe Work do
 
     context "when creators have a mix of collection invitation preferences" do
       before do
-        creator1.preference.update(allow_collection_invitation: true)
+        creator1.preference.update!(allow_collection_invitation: true)
       end
 
       it "returns true" do

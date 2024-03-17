@@ -55,7 +55,7 @@ describe WorksController do
 
     context "when logged in as a banned user" do
       it "redirects to the orphan path when the Orphan button was clicked" do
-        multiple_works_user.update(banned: true)
+        multiple_works_user.update!(banned: true)
         post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
 
         it_redirects_to new_orphan_path(work_ids: work_ids)
@@ -64,7 +64,7 @@ describe WorksController do
 
     context "when logged in as a suspended user" do
       it "errors and redirects to user page" do
-        multiple_works_user.update(suspended: true, suspended_until: 1.week.from_now)
+        multiple_works_user.update!(suspended: true, suspended_until: 1.week.from_now)
         post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
 
         it_redirects_to_simple(user_path(multiple_works_user))
@@ -93,7 +93,7 @@ describe WorksController do
 
     context "when logged in as a banned user" do
       it "returns the works specified in the work_ids parameters" do
-        multiple_works_user.update(banned: true)
+        multiple_works_user.update!(banned: true)
         post :confirm_delete_multiple, params: params
 
         expect(assigns(:works)).to include(work1)
@@ -103,7 +103,7 @@ describe WorksController do
 
     context "when logged in as a suspended user" do
       it "errors and redirects to user page" do
-        multiple_works_user.update(suspended: true, suspended_until: 1.week.from_now)
+        multiple_works_user.update!(suspended: true, suspended_until: 1.week.from_now)
 
         post :confirm_delete_multiple, params: params
         it_redirects_to_simple(user_path(multiple_works_user))
@@ -148,7 +148,7 @@ describe WorksController do
 
     context "when logged in as a banned user" do
       before do
-        multiple_works_user.update(banned: true)
+        multiple_works_user.update!(banned: true)
         post :delete_multiple, params: { id: multiple_work1.id, work_ids: [multiple_work1.id, multiple_work2.id] }
       end
 
@@ -166,7 +166,7 @@ describe WorksController do
 
     context "when logged in as a suspended user" do
       before do
-        multiple_works_user.update(suspended: true, suspended_until: 1.week.from_now)
+        multiple_works_user.update!(suspended: true, suspended_until: 1.week.from_now)
         post :delete_multiple, params: { id: multiple_work1.id, work_ids: [multiple_work1.id, multiple_work2.id] }
       end
 
@@ -246,7 +246,7 @@ describe WorksController do
     context "updating creators" do
       let(:pseud_to_invite) do
         user = FactoryBot.create(:user)
-        user.preference.update(allow_cocreator: true)
+        user.preference.update!(allow_cocreator: true)
         user.default_pseud
       end
 
@@ -402,7 +402,7 @@ describe WorksController do
       end
       
       it "errors and redirects to user page" do
-        multiple_works_user.update(banned: true)
+        multiple_works_user.update!(banned: true)
         put :update_multiple, params: params
 
         it_redirects_to_simple(user_path(multiple_works_user))
@@ -421,7 +421,7 @@ describe WorksController do
       end
 
       it "errors and redirects to user page" do
-        multiple_works_user.update(suspended: true, suspended_until: 1.week.from_now)
+        multiple_works_user.update!(suspended: true, suspended_until: 1.week.from_now)
         put :update_multiple, params: params
         
         it_redirects_to_simple(user_path(multiple_works_user))

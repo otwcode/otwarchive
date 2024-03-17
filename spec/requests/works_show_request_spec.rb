@@ -9,7 +9,7 @@ describe "Works#show" do
   context "when the first chapter of a work is unposted" do
     before do
       work.chapters.create(position: 1, posted: false, content: "Draft content")
-      chapter.update(position: 2)
+      chapter.update!(position: 2)
     end
 
     context "when logged in as an admin" do

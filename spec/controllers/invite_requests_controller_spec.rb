@@ -116,7 +116,7 @@ describe InviteRequestsController do
         context "with #{admin_role} role" do
 
           before do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
           end
 
@@ -183,7 +183,7 @@ describe InviteRequestsController do
       (Admin::VALID_ROLES - %w[superadmin policy_and_abuse support]).each do |admin_role|
         context "with #{admin_role} role" do
           before do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
           end
 
@@ -253,7 +253,7 @@ describe InviteRequestsController do
           end
 
           before do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
           end
 
@@ -285,7 +285,7 @@ describe InviteRequestsController do
       (Admin::VALID_ROLES - %w[superadmin policy_and_abuse support]).each do |admin_role|
         context "with #{admin_role} role" do
           before do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
           end
 
@@ -303,7 +303,7 @@ describe InviteRequestsController do
 
       context "with no admin role" do
         before do
-          admin.update(roles: [])
+          admin.update!(roles: [])
           fake_login_admin(admin)
         end
 
