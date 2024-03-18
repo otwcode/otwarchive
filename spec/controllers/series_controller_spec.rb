@@ -57,7 +57,7 @@ describe SeriesController do
     it "allows you to invite co-creators" do
       fake_login_known_user(user)
       co_creator = create(:user)
-      co_creator.preference.update(allow_cocreator: true)
+      co_creator.preference.update!(allow_cocreator: true)
       put :update, params: { series: { author_attributes: { byline: co_creator.login } }, id: series }
       it_redirects_to_with_notice(series_path(series), \
                                   "Series was successfully updated.")

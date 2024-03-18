@@ -34,7 +34,7 @@ Given /the following users exist with BCrypt encrypted passwords/ do |table|
                            [hash[:password], salt].flatten.join,
                            cost: ArchiveConfig.BCRYPT_COST || 14)
 
-    user.update(
+    user.update!(
       password_salt: salt,
       encrypted_password: encrypted_password
     )
@@ -54,7 +54,7 @@ Given /the following users exist with SHA-512 encrypted passwords/ do |table|
     encrypted_password = [hash[:password], salt].flatten.join
     20.times { encrypted_password = Digest::SHA512.hexdigest(encrypted_password) }
 
-    user.update(
+    user.update!(
       password_salt: salt,
       encrypted_password: encrypted_password
     )
@@ -163,9 +163,9 @@ end
 Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
   step %{basic tags}
   author1 = User.find_by(login: login).default_pseud
-  author1.user.preference.update(allow_cocreator: true)
+  author1.user.preference.update!(allow_cocreator: true)
   author2 = User.find_by(login: coauthor).default_pseud
-  author2.user.preference.update(allow_cocreator: true)
+  author2.user.preference.update!(allow_cocreator: true)
   work = FactoryBot.create(:work, authors: [author1, author2], title: title)
   work.creatorships.unapproved.each(&:accept!)
 end
@@ -205,7 +205,7 @@ end
 
 When /^the user "([^\"]*)" has failed to log in (\d+) times$/ do |login, count|
   user = User.find_by(login: login)
-  user.update(failed_attempts: count.to_i)
+  user.update!(failed_attempts: count.to_i)
 end
 
 When /^I fill in the sign up form with valid data$/ do

@@ -40,7 +40,7 @@ end
 
 Given "the user {string} is hidden from search engines" do |login|
   user = User.find_by(login: login)
-  user.preference.update(minimize_search_engines: true)
+  user.preference.update!(minimize_search_engines: true)
 end
 
 When /^I set my preferences to turn off notification emails for comments$/ do
