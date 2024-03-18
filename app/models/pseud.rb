@@ -419,6 +419,7 @@ class Pseud < ApplicationRecord
 
   def clear_icon
     return unless delete_icon?
+    
     self.icon = nil if delete_icon?
     self.icon_alt_text = nil
   end
