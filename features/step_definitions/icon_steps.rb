@@ -34,7 +34,7 @@ When /^I delete the icon from the collection "([^"]*)"$/ do |title|
   step %{I press "Update"}
 end
 
-When /^I delete the icon from my psued$/ do
+When "I delete the icon from my pseud" do
   visit edit_user_pseud_path(User.current_user, User.current_user.default_pseud)
   check("pseud_delete_icon")
   step %{I press "Update"}
@@ -52,7 +52,7 @@ end
 
 ### THEN
 
-Then /^I should see the icon and alt text boxes are blank$/ do
+Then  "I should see the icon and alt text boxes are blank" do
   expect(find("#pseud_icon").value).to be_blank
   expect(find("#pseud_icon_alt_text").value).to be_nil
 end

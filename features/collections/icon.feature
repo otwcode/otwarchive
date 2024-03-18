@@ -48,7 +48,7 @@ Feature: User icons
     And I fill in "pseud_icon_alt_text" with "Some test description"
     And I press "Update"
   Then I should see the image "alt" text "Some test description"
-  When I delete the icon from my psued
+  When I delete the icon from my pseud
   Then I should see "Pseud was successfully updated."
   When I follow "Edit Pseud"
   Then I should see the icon and alt text boxes are blank
