@@ -52,7 +52,7 @@ end
 
 ### THEN
 
-Then  "I should see the icon and alt text boxes are blank" do
+Then "I should see the icon and alt text boxes are blank" do
   expect(find("#pseud_icon").value).to be_blank
   expect(find("#pseud_icon_alt_text").value).to be_nil
 end
