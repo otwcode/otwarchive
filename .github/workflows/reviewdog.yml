@@ -11,6 +11,8 @@ jobs:
   rubocop:
     name: Rubocop
     runs-on: ubuntu-latest
+    env:
+      BUNDLE_ONLY: linters
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -30,6 +32,8 @@ jobs:
   erb-lint:
     name: ERB Lint runner
     runs-on: ubuntu-latest
+    env:
+      BUNDLE_ONLY: linters
     steps:
       - name: Check out code
         uses: actions/checkout@v4
