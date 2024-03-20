@@ -163,6 +163,7 @@ Feature: Admin Abuse actions
       And I press "Update"
     Then I should see "permanently suspended"
       And the user "Spamster" should be permanently banned
+      And the page should have a dashboard sidebar
       And I should see "Are you sure you want to delete"
       And I should see "1 bookmarks"
       And I should see "1 collections"

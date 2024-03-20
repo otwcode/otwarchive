@@ -18,9 +18,11 @@
     <li>
       <%= link_to t(".navigation.roles"), { action: "index", user_id: @user.id } %>
     </li>
-    <li>
-      <%= link_to t(".navigation.profile"), user_profile_path(@user) %>
-    </li>
+    <% if policy(User).can_access_creation_summary? %>
+      <li>
+        <%= link_to t(".navigation.creations"), creations_admin_user_path(@user) %>
+      </li>
+    <% end %>
   </ul>
   <!--/subnav-->
 

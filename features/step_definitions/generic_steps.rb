@@ -30,6 +30,10 @@ Then /^show me the sidebar$/ do
   puts "\n" + find("#dashboard").native.inner_html
 end
 
+Then "the page should have a dashboard sidebar" do
+  expect(page).to have_css("#dashboard")
+end
+
 Then /^I should see errors/ do
   assert find("div.error")
 end

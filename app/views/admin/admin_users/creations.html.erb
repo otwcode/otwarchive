@@ -1,0 +1,21 @@
+<div class="admin">
+  <!--Descriptive page name, messages and instructions-->
+  <h2 class="heading"><%= t(".page_heading", user: @user.login) %></h2>
+  <!--/descriptions-->
+
+  <!--subnav-->
+  <ul class="navigation actions" role="navigation">
+    <li>
+      <%= link_to t(".admin_user"), admin_user_path(@user) %>
+    </li>
+  </ul>
+  <!--/subnav-->
+
+  <!--main content-->
+  <% if @works.empty? && @comments.empty? %>
+    <p class="notes"><%= t(".no_creations") %></p>
+  <% else %>
+    <%= render "user_creations_summary", works: @works, comments: @comments %>
+  <% end %>
+  <!--/content-->
+</div>
