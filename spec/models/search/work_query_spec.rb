@@ -124,9 +124,9 @@ describe WorkQuery do
     expect(q.generated_query[:sort]).to eq([{ "_score" => { order: "desc" } }, { id: { order: "desc" } }])
   end
 
-  it "allows sorting by creator name" do
-    q = WorkQuery.new(sort_column: "authors_to_sort_on", sort_direction: "asc")
-    expect(q.generated_query[:sort]).to eq([{ "authors_to_sort_on" => { order: "asc" } }, { id: { order: "asc" } }])
+  it "should allow you to sort by creator name" do
+    q = WorkQuery.new(sort_column: "creator_to_sort_on", sort_direction: "asc")
+    expect(q.generated_query[:sort]).to eq([{ "creator_to_sort_on" => { order: "asc" } }, { id: { order: "asc" } }])
   end
 
   it "allows sorting by title" do

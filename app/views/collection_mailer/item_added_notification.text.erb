@@ -2,7 +2,7 @@
 <% pseuds = @creation.is_a?(Work) ? @creation.pseuds.map{|p| text_pseud(p)}.to_sentence.html_safe : @creation.pseud.name %>
 
 
-<%= @creation.is_a?(Work) ? @creation.pseuds.length > 0 ? pseuds : @creation.authors_to_sort_on : pseuds %> posted a <%= @creation.is_a?(Work) ? @creation.backdate ? "backdated " : "new " : "new " %> <%= @creation.is_a?(Work) ? "work" : "bookmark" %> to your collection, "<%= @collection.name %>" (<%= collection_url(@collection) %>:
+<%= @creation.is_a?(Work) ? @creation.pseuds.length > 0 ? pseuds : @creation.creator_to_sort_on : pseuds %> posted a <%= @creation.is_a?(Work) ? @creation.backdate ? "backdated " : "new " : "new " %> <%= @creation.is_a?(Work) ? "work" : "bookmark" %> to your collection, "<%= @collection.name %>" (<%= collection_url(@collection) %>:
 
 <% if @creation.is_a?(Work) %>
 "<%= @creation.title.html_safe %>"
