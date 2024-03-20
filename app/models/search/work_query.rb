@@ -305,6 +305,20 @@ class WorkQuery < Query
     { aggs: aggs }
   end
 
+  def works_per_language(languages_count)
+    response = $elasticsearch.search(index: index_name, body: {
+                                       size: 0,
+                                       query: filtered_query,
+                                       aggregations: {
+                                         languages: {
+                                           terms: { field: "language_id.keyword", size: languages_count }
+                                         }
+                                       }
+                                     })
+    language_counts = response.dig("aggregations", "languages", "buckets") || []
+    language_counts.map(&:values).to_h
+  end
+
   ####################
   # HELPERS
   ####################

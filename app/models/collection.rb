@@ -8,8 +8,6 @@ class Collection < ApplicationRecord
   path: %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
   storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
   s3_protocol: "https",
-  s3_credentials: "#{Rails.root}/config/s3.yml",
-  bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
   default_url: "/images/skins/iconsets/default/icon_collection.png"
 
   validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true

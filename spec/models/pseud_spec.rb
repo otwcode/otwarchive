@@ -61,7 +61,7 @@ describe Pseud do
       pseud.reload
       travel(1.day)
       expect do
-        pseud.update(name: "New Name")
+        pseud.update!(name: "New Name")
       end.to change { comment.reload.updated_at }
     end
   end

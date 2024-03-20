@@ -28,7 +28,7 @@ There is currently no API for the OTW-Archive software. While it is something we
 
 License and Acknowledgments
 ----------
-The Archive code is licensed under [GPL](https://www.gnu.org/licenses/gpl-2.0.html) by the [Organization for Transformative Works](https://www.transformativeworks.org/).
+The Archive code is licensed under [GPL-2.0-or-later](https://www.gnu.org/licenses/gpl-2.0.html) by the [Organization for Transformative Works](https://www.transformativeworks.org/).
 
 We benefit from software and services that are free to use for Open Source projects, including:
 

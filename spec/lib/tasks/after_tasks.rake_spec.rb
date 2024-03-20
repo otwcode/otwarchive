@@ -359,7 +359,7 @@ describe "rake After:clean_up_chapter_kudos" do
 
   it "orphan chapter kudos if there is already a work kudo from the same user ID" do
     user_id = create(:user).id
-    work_kudo.update(ip_address: nil, user_id: user_id)
+    work_kudo.update!(ip_address: nil, user_id: user_id)
     chapter_kudo.update_columns(ip_address: nil, user_id: user_id)
 
     expect do
