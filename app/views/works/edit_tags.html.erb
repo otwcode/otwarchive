@@ -18,8 +18,8 @@
 
   <% if logged_in_as_admin? %>
     <fieldset role="article">
-      <legend><%= ts('Associations') %></legend>
-      <h3 class="landmark heading"><%= ts('Associations') %></h3>
+      <legend><%= t("works.associations.title") %></legend>
+      <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
       <dl>
         <%= render 'work_form_associations_language', f: f %>
       </dl>

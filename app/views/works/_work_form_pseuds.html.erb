@@ -13,11 +13,11 @@
       <% if has_cocreators %>
         <%= label_tag :remove_me, class: "action" do %>
           <%= check_box_tag :remove_me, "1", false %>
-          <%= ts("Remove Me As Co-Creator") %>
+          <%= ts("Remove me as co-creator") %>
         <% end %>
       <% end %>
   </dd>
 <% end %>
 
-<dt><%= form.label :pseuds_to_add, ts("Add Co-Creators") %></dt>
+<dt><%= form.label :pseuds_to_add, t("works.byline.add_co-creators") %></dt>
 <dd><%= form.text_field :pseuds_to_add, autocomplete_options("pseud", data: { autocomplete_min_chars: 0 }) %></dd>
