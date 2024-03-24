@@ -733,6 +733,9 @@ en:
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
         random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
+    show:
+      fandom_relationship_tags: Relationship tags in this fandom
+      list_fandom_tags_html: A list of all the %{fandom_relationship_tags_link} is available.
   time:
     formats:
       date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>

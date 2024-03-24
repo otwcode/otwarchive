@@ -285,8 +285,6 @@ module NavigationHelpers
       edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
     when /^the wrangling tools page$/
       tag_wranglings_path
-    when /^the "(.*)" fandom relationship page$/i
-      fandom_path($1)
     when /^the new external work page$/i
       new_external_work_path
     when /^the external works page$/i
