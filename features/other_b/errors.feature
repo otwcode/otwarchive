@@ -31,4 +31,4 @@ Feature: Error messages should work
       And I follow "Edit Tags"
     When I fill in "Fandoms" with "^"
       And I press "Post"
-    Then I should see "Sorry! We couldn't save this work because: Tag name '^' cannot include the following restricted characters: , ^ * < > { } = ` \ %"
+    Then I should see "Sorry! We couldn't save this work because: Tag name '^' cannot include the following restricted characters: , ^ * < > { } = ` ， 、 \ %"
