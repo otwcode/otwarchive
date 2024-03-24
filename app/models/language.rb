@@ -1,6 +1,7 @@
 class Language < ApplicationRecord
+  include WorksOwner
   validates_presence_of :short
-  validates_uniqueness_of :short, case_sensitive: false
+  validates :short, uniqueness: true
   validates_presence_of :name
 
   has_many :works

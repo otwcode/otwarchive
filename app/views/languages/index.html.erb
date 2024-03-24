@@ -1,38 +1,37 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts('The Archive supports these languages') %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <p class="navigation actions" role="navigation">
-  <% if logged_in_as_admin? %>
-    <%= link_to ts('Add a Language'), new_language_path %>
+  <% if policy(Language).new? %>
+    <%= link_to t(".navigation.add"), new_language_path %>
   <% else %>
-    <%= link_to ts('Suggest a Language'), new_feedback_report_path %>
+    <%= link_to t(".navigation.suggest"), new_feedback_report_path %>
   <% end %>
 </p>
 <!--/subnav-->
 
 <!--main content-->
 <dl class="language index group">
-  <% for language in @languages %>
-
+  <% @languages.each do |language| %>
+    <% works_count = estimate_number(@works_counts[language.short] || 0) %>
     <% if language == Language.default %>
-      <dt><%= language.name %></dt>
+      <dt><span lang="<%= language.short %>"><%= language.name %></span></dt>
       <dd>
-        <%= link_to ts("%{count} works", count: language.works.count), works_path %>
+        <%= link_to t(".works_count", count: works_count, formatted_count: number_with_delimiter(works_count)), works_path %>
       </dd>
     <% else %>
-      <dt><%= link_to language.name, language %></dt>
+      <dt><%= link_to language.name, language, lang: language.short %></dt>
       <dd>
-        <%= link_to ts("%{count} works", count: language.works.count), language_works_path(language) %>
-        <% if logged_in_as_admin? %>
+        <%= link_to t(".works_count", count: works_count, formatted_count: number_with_delimiter(works_count)), language_works_path(language) %>
+        <% if policy(Language).edit? %>
           <p class="actions">
-            <%= link_to ts("Edit"), edit_language_path(language) %>
+            <%= link_to t(".navigation.edit"), edit_language_path(language) %>
           </p>
         <% end %>
       </dd>
     <% end %>
-
   <% end %>
 </dl>
 <!--main content-->

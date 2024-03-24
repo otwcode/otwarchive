@@ -29,11 +29,53 @@ describe AbuseReport do
     end
 
     context "provided email is invalid" do
-      [BAD_EMAILS, BADLY_FORMATTED_EMAILS].each do |email|
+      BAD_EMAILS.each do |email|
         let(:bad_email) { build(:abuse_report, email: email) }
         it "fails email format check and cannot be created" do
           expect(bad_email.save).to be_falsey
           expect(bad_email.errors[:email]).to include("should look like an email address.")
+        end
+      end
+    end
+
+    context "with a chapter URL that's missing the work id" do
+      context "when the chapter exists" do
+        let(:work) { create(:work) }
+        let(:chapter) { work.chapters.first }
+        let(:missing_work_id) { build(:abuse_report, url: "http://archiveofourown.org/chapters/#{chapter.id}/") }
+        
+        it "saves and adds the correct work id to the URL" do
+          expect(missing_work_id.save).to be_truthy
+          expect(missing_work_id.url).to eq("http://archiveofourown.org/works/#{work.id}/chapters/#{chapter.id}/")
+        end
+
+        context "when the URL does not include the scheme" do
+          let(:missing_work_id) { build(:abuse_report, url: "archiveofourown.org/chapters/#{chapter.id}/") }
+
+          it "saves and adds a scheme and correct work id to the URL" do
+            expect(missing_work_id.save).to be_truthy
+            expect(missing_work_id.url).to eq("https://archiveofourown.org/works/#{work.id}/chapters/#{chapter.id}/")
+          end
+        end
+      end
+
+      context "when the chapter does not exist" do
+        let(:chapter_url) { "http://archiveofourown.org/chapters/000" }
+        let(:missing_work_id) { build(:abuse_report, url: chapter_url) }
+
+        it "saves without adding a work id to the URL" do
+          expect(missing_work_id.save).to be_truthy
+          expect(missing_work_id.url).to eq("#{chapter_url}/")
+        end
+
+        context "when the URL does not include the scheme" do
+          let(:chapter_url) { "archiveofourown.org/chapters/000" }
+          let(:missing_work_id) { build(:abuse_report, url: chapter_url) }
+
+          it "saves and adds a scheme but no work id to the URL" do
+            expect(missing_work_id.save).to be_truthy
+            expect(missing_work_id.url).to eq("https://#{chapter_url}/")
+          end
         end
       end
     end

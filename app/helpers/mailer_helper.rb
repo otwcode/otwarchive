@@ -9,6 +9,10 @@ module MailerHelper
     link_to(body.html_safe, url, html_options)
   end
 
+  def style_role(text)
+    tag.em(tag.strong(text))
+  end
+
   # For work, chapter, and series links
   def style_creation_link(title, url, html_options = {})
     html_options[:style] = "color:#990000"
@@ -162,6 +166,8 @@ module MailerHelper
     "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
   end
 
+  # TODO: We're using this for labels in set_password_notification, too. Let's
+  # take the "work" out of the name.
   def style_work_metadata_label(text)
     style_bold(work_metadata_label(text))
   end
@@ -174,6 +180,26 @@ module MailerHelper
     "#{label}#{style_work_tag_metadata_list(tags)}".html_safe
   end
 
+  def commenter_pseud_or_name_link(comment)
+    if comment.comment_owner.nil?
+      t("roles.guest_commenter_name_html", name: style_bold(comment.comment_owner_name), role: style_role(t("roles.guest_with_parens")))
+    elsif comment.by_anonymous_creator?
+      style_bold(t("roles.anonymous_creator"))
+    else
+      style_pseud_link(comment.pseud)
+    end
+  end
+
+  def commenter_pseud_or_name_text(comment)
+    if comment.comment_owner.nil?
+      t("roles.guest_commenter_name_text", name: comment.comment_owner_name, role: t("roles.guest_with_parens"))
+    elsif comment.by_anonymous_creator?
+      t("roles.anonymous_creator")
+    else
+      text_pseud(comment.pseud)
+    end
+  end
+
   private
 
   # e.g., 1 word or 50 words
@@ -184,6 +210,12 @@ module MailerHelper
   def work_tag_metadata_label(tags)
     return if tags.empty?
 
+    # i18n-tasks-use t('activerecord.models.archive_warning')
+    # i18n-tasks-use t('activerecord.models.character')
+    # i18n-tasks-use t('activerecord.models.fandom')
+    # i18n-tasks-use t('activerecord.models.freeform')
+    # i18n-tasks-use t('activerecord.models.rating')
+    # i18n-tasks-use t('activerecord.models.relationship')
     type = tags.first.type
     t("activerecord.models.#{type.underscore}", count: tags.count) + t("mailer.general.metadata_label_indicator")
   end

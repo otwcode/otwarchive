@@ -5,76 +5,195 @@ describe WorksController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  let!(:multiple_works_user) { create(:user) }
+  let(:multiple_works_user) { create(:user) }
+  let(:banned_user) { create(:user, banned: true) }
+  let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.from_now) }
+
+  describe "show_multiple" do
+    context "when logged in as a user" do
+      it "shows Edit Multiple Works page" do
+        fake_login_known_user(multiple_works_user)
+        get :show_multiple, params: { user_id: multiple_works_user.id }
+        expect(response).to render_template("show_multiple")
+      end
+    end
+
+    context "when logged in as a banned user" do
+      it "shows Edit Multiple Works page" do
+        fake_login_known_user(banned_user)
+        get :show_multiple, params: { user_id: banned_user.id }
+        expect(response).to render_template("show_multiple")
+      end
+    end
+
+    context "when logged in as a suspended user" do
+      it "errors and redirects to user page" do
+        fake_login_known_user(suspended_user)
+        get :show_multiple, params: { user_id: suspended_user.id }
+        it_redirects_to_simple(user_path(suspended_user))
+        expect(flash[:error]).to include("Your account has been suspended")
+      end
+    end
+  end
 
   describe "edit_multiple" do
-    it "redirects to the orphan path when the Orphan button was clicked" do
-      work1 = create(:work, authors: [multiple_works_user.default_pseud])
-      work2 = create(:work, authors: [multiple_works_user.default_pseud])
-      work_ids = [work1.id, work2.id]
+    let!(:work1) { create(:work, authors: [multiple_works_user.default_pseud]) }
+    let!(:work2) { create(:work, authors: [multiple_works_user.default_pseud]) }
+    let(:work_ids) { [work1.id, work2.id] }
+
+    before do
       fake_login_known_user(multiple_works_user)
-      post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
-      it_redirects_to new_orphan_path(work_ids: work_ids)
+    end
+
+    context "when logged in as a user" do
+      it "redirects to the orphan path when the Orphan button was clicked" do
+        post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
+
+        it_redirects_to new_orphan_path(work_ids: work_ids)
+      end
+    end
+
+    context "when logged in as a banned user" do
+      it "redirects to the orphan path when the Orphan button was clicked" do
+        multiple_works_user.update!(banned: true)
+        post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
+
+        it_redirects_to new_orphan_path(work_ids: work_ids)
+      end
+    end
+
+    context "when logged in as a suspended user" do
+      it "errors and redirects to user page" do
+        multiple_works_user.update!(suspended: true, suspended_until: 1.week.from_now)
+        post :edit_multiple, params: { id: work1.id, work_ids: work_ids, commit: "Orphan" }
+
+        it_redirects_to_simple(user_path(multiple_works_user))
+        expect(flash[:error]).to include("Your account has been suspended")
+      end
     end
   end
 
   describe "confirm_delete_multiple" do
-    it "returns the works specified in the work_ids parameters" do
-      work1 = create(:work, authors: [multiple_works_user.default_pseud])
-      work2 = create(:work, authors: [multiple_works_user.default_pseud])
+    let!(:work1) { create(:work, authors: [multiple_works_user.default_pseud]) }
+    let!(:work2) { create(:work, authors: [multiple_works_user.default_pseud]) }
+    let(:params) { { commit: "Orphan", id: work1.id, work_ids: [work1.id, work2.id] } }
+
+    before do
       fake_login_known_user(multiple_works_user)
-      params = { commit: "Orphan", id: work1.id, work_ids: [work1.id, work2.id] }
-      post :confirm_delete_multiple, params: params
-      expect(assigns(:works)).to include(work1)
-      expect(assigns(:works)).to include(work2)
+    end
+
+    context "when logged in as a user" do
+      it "returns the works specified in the work_ids parameters" do
+        post :confirm_delete_multiple, params: params
+
+        expect(assigns(:works)).to include(work1)
+        expect(assigns(:works)).to include(work2)
+      end
+    end
+
+    context "when logged in as a banned user" do
+      it "returns the works specified in the work_ids parameters" do
+        multiple_works_user.update!(banned: true)
+        post :confirm_delete_multiple, params: params
+
+        expect(assigns(:works)).to include(work1)
+        expect(assigns(:works)).to include(work2)
+      end
+    end
+
+    context "when logged in as a suspended user" do
+      it "errors and redirects to user page" do
+        multiple_works_user.update!(suspended: true, suspended_until: 1.week.from_now)
+
+        post :confirm_delete_multiple, params: params
+        it_redirects_to_simple(user_path(multiple_works_user))
+        expect(flash[:error]).to include("Your account has been suspended")
+      end
     end
   end
 
   describe "delete_multiple" do
-    let(:multiple_work1) {
+    let!(:multiple_work1) do
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 1")
-    }
-    let(:multiple_work2) {
+    end
+    let!(:multiple_work2) do
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 2")
-    }
+    end
 
     before do
       fake_login_known_user(multiple_works_user)
-      post :delete_multiple, params: { id: multiple_work1.id, work_ids: [multiple_work1.id, multiple_work2.id] }
     end
 
-    # already covered - just for completeness
-    it "deletes all the works" do
-      expect { Work.find(multiple_work1.id) }.to raise_exception(ActiveRecord::RecordNotFound)
-      expect { Work.find(multiple_work2.id) }.to raise_exception(ActiveRecord::RecordNotFound)
+    context "when logged in as a user" do
+      before do
+        post :delete_multiple, params: { id: multiple_work1.id, work_ids: [multiple_work1.id, multiple_work2.id] }
+      end
+
+      # already covered - just for completeness
+      it "deletes all the works" do
+        expect { Work.find(multiple_work1.id) }
+          .to raise_exception(ActiveRecord::RecordNotFound)
+        expect { Work.find(multiple_work2.id) }
+          .to raise_exception(ActiveRecord::RecordNotFound)
+      end
+
+      it "displays a notice" do
+        expect(flash[:notice]).to eq "Your works Work 1, Work 2 were deleted."
+      end
     end
 
-    it "displays a notice" do
-      expect(flash[:notice]).to eq "Your works Work 1, Work 2 were deleted."
+    context "when logged in as a banned user" do
+      before do
+        multiple_works_user.update!(banned: true)
+        post :delete_multiple, params: { id: multiple_work1.id, work_ids: [multiple_work1.id, multiple_work2.id] }
+      end
+
+      it "deletes all the works" do
+        expect { Work.find(multiple_work1.id) }
+          .to raise_exception(ActiveRecord::RecordNotFound)
+        expect { Work.find(multiple_work2.id) }
+          .to raise_exception(ActiveRecord::RecordNotFound)
+      end
+
+      it "displays a notice" do
+        expect(flash[:notice]).to eq "Your works Work 1, Work 2 were deleted."
+      end
+    end
+
+    context "when logged in as a suspended user" do
+      before do
+        multiple_works_user.update!(suspended: true, suspended_until: 1.week.from_now)
+        post :delete_multiple, params: { id: multiple_work1.id, work_ids: [multiple_work1.id, multiple_work2.id] }
+      end
+
+      it "errors and redirects to user page" do
+        it_redirects_to_simple(user_path(multiple_works_user))
+        expect(flash[:error]).to include("Your account has been suspended")
+      end
     end
   end
 
   describe "update_multiple" do
     let(:multiple_works_user) { create(:user) }
-    let(:multiple_work1) {
+    let!(:multiple_work1) do
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 1",
              comment_permissions: :disable_anon,
              moderated_commenting_enabled: true)
-    }
-    let(:multiple_work2) {
+    end
+    let!(:multiple_work2) do
       create(:work,
              authors: [multiple_works_user.default_pseud],
              title: "Work 2",
              comment_permissions: :disable_all,
              moderated_commenting_enabled: true)
-    }
-    let(:params) {
+    end
+    let(:params) do
       {
         work_ids: [multiple_work1.id, multiple_work2.id],
         work: {
@@ -93,7 +212,7 @@ describe WorksController do
           moderated_commenting_enabled: ""
         }
       }.merge(work_params)
-    }
+    end
 
     before do
       fake_login_known_user(multiple_works_user)
@@ -127,7 +246,7 @@ describe WorksController do
     context "updating creators" do
       let(:pseud_to_invite) do
         user = FactoryBot.create(:user)
-        user.preference.update(allow_cocreator: true)
+        user.preference.update!(allow_cocreator: true)
         user.default_pseud
       end
 
@@ -270,6 +389,44 @@ describe WorksController do
           end
         end
       end
-    end 
+    end
+
+    context "when user is banned" do
+      let(:work_params) do
+        {
+          work: {
+            comment_permissions: "enable_all",
+            moderated_commenting_enabled: "0"
+          }
+        }
+      end
+      
+      it "errors and redirects to user page" do
+        multiple_works_user.update!(banned: true)
+        put :update_multiple, params: params
+
+        it_redirects_to_simple(user_path(multiple_works_user))
+        expect(flash[:error]).to include("Your account has been banned")
+      end
+    end
+    
+    context "when user is suspended" do
+      let(:work_params) do
+        {
+          work: {
+            comment_permissions: "enable_all",
+            moderated_commenting_enabled: "0"
+          }
+        }
+      end
+
+      it "errors and redirects to user page" do
+        multiple_works_user.update!(suspended: true, suspended_until: 1.week.from_now)
+        put :update_multiple, params: params
+        
+        it_redirects_to_simple(user_path(multiple_works_user))
+        expect(flash[:error]).to include("Your account has been suspended")
+      end
+    end
   end
 end

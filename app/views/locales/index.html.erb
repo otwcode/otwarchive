@@ -3,48 +3,37 @@
 <!--/descriptions-->
 
 <!--main content-->
-<% if logged_in_as_admin? || permit?("translation_admin") %>
-  <%= render 'navigation' %>
-  <!--main content-->
-  <table summary="<%= t('.locale_table_summary', :default => 'Lists supported locales, along with details of how they are used and options to modify them.') %>">
-    <caption><%= t('.locale_table_caption', :default => 'Supported Locales') %></caption>
-    <thead>
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">ISO Code</th>
-        <th scope="col">Primary Locale</th>
-        <th scope="col">Use for Email</th>
-        <th scope="col">Use for Interface</th>
-        <th scope="col">Created at</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for locale in @locales %>
-        <tr>
-          <th scope="row"><%= locale.name %></th>
-          <td><%= locale.iso %></td>
-          <td><%= locale.main %></td>
-          <td><%= locale.email_enabled %></td>
-          <td><%= locale.interface_enabled %></td>
-          <td><%= locale.updated_at %></td>
-          <td class="actions">
-            <%= link_to ts('Edit'), {controller: :locales, action: :edit, id: locale.iso} %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <ul>
+<%= render 'navigation' %>
+<!--main content-->
+<table summary="<%= t('.locale_table_summary', :default => 'Lists supported locales, along with details of how they are used and options to modify them.') %>">
+  <caption><%= t('.locale_table_caption', :default => 'Supported Locales') %></caption>
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">ISO Code</th>
+      <th scope="col">Primary Locale</th>
+      <th scope="col">Use for Email</th>
+      <th scope="col">Use for Interface</th>
+      <th scope="col">Created at</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
     <% for locale in @locales %>
-      <li><%= locale.name %></li>
+      <tr>
+        <th scope="row" lang="<%= locale.language.short %>"><%= locale.name %></th>
+        <td><%= locale.iso %></td>
+        <td><%= locale.main %></td>
+        <td><%= locale.email_enabled %></td>
+        <td><%= locale.interface_enabled %></td>
+        <td><%= locale.updated_at %></td>
+        <td class="actions">
+          <%= link_to ts('Edit'), {controller: :locales, action: :edit, id: locale.iso} %>
+        </td>
+      </tr>
     <% end %>
-  </ul>
-  <p class="navigation actions" role="navigation">
-    <%= link_to t('.suggest_locale', :default => 'Suggest a Locale!'), new_feedback_report_path %>
-  </p>
-<% end %>
+  </tbody>
+</table>
 <!--/content-->
 
 <!--subnav-->

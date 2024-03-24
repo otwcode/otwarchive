@@ -20,7 +20,7 @@ describe Admin::SkinsController do
         end
       end
 
-      %w[board communications docs open_doors policy_and_abuse tag_wrangling translation].each do |role|
+      (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
         context "when admin has #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
 
@@ -54,7 +54,7 @@ describe Admin::SkinsController do
         it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
 
-      %w[board communications docs open_doors policy_and_abuse tag_wrangling translation].each do |role|
+      (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
         context "when admin has #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
 
@@ -88,7 +88,7 @@ describe Admin::SkinsController do
         it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
 
-      %w[board communications docs open_doors policy_and_abuse tag_wrangling translation].each do |role|
+      (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
         context "when admin has #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
 
@@ -119,7 +119,7 @@ describe Admin::SkinsController do
     let(:work_skin) { create(:work_skin, :public) }
 
     shared_examples "unauthorized admin cannot update default skin" do
-      before { site_skin.update(official: true) }
+      before { site_skin.update!(official: true) }
 
       it "does not modify the default skin" do
         expect do
@@ -135,7 +135,7 @@ describe Admin::SkinsController do
     end
 
     shared_examples "authorized admin can update default skin" do
-      before { site_skin.update(official: true) }
+      before { site_skin.update!(official: true) }
 
       it "modifies the default skin" do
         expect do
@@ -210,7 +210,7 @@ describe Admin::SkinsController do
       it_behaves_like "unauthorized admin cannot update work skin"
     end
 
-    %w[board communications docs open_doors policy_and_abuse tag_wrangling translation].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin support]).each do |role|
       context "when admin has #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 

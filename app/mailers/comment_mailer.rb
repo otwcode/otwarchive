@@ -3,7 +3,7 @@ class CommentMailer < ApplicationMailer
   def comment_notification(user, comment)
     @comment = comment
     @owner = user
-    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
+    I18n.with_locale(user.preference.locale.iso) do
       mail(
         to: user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
@@ -14,7 +14,7 @@ class CommentMailer < ApplicationMailer
   # Sends email to an owner of the top-level commentable when a comment is edited
   def edited_comment_notification(user, comment)
     @comment = comment
-    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
+    I18n.with_locale(user.preference.locale.iso) do
       mail(
         to: user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
@@ -51,7 +51,7 @@ class CommentMailer < ApplicationMailer
     )
   end
 
-  # Sends email to the poster of a comment
+  # Sends email to the poster of a top-level comment
   def comment_sent_notification(comment)
     @comment = comment
     @noreply = true # don't give reply link to your own comment
@@ -61,4 +61,14 @@ class CommentMailer < ApplicationMailer
     )
   end
 
+  # Sends email to the poster of a reply to a comment
+  def comment_reply_sent_notification(comment)
+    @comment = comment
+    @parent_comment = comment.commentable
+    @noreply = true
+    mail(
+      to: @comment.comment_owner_email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+    )
+  end
 end

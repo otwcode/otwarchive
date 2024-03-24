@@ -8,7 +8,7 @@
 </ul>
 
 <div class="notice">
-  <p><%= t(".will.intro") %></p>
+  <p><%= t(".will.intro", block_limit: number_with_delimiter(ArchiveConfig.MAX_BLOCKED_USERS), count: ArchiveConfig.MAX_BLOCKED_USERS) %></p>
 
   <ul>
     <li><%= t(".will.commenting") %></li>
@@ -39,7 +39,7 @@
   </fieldset>
 <% end %>
 
-<h3 class="landmark heading"><%= t("heading.landmark.blocked") %> %></h3>
+<h3 class="landmark heading"><%= t(".heading.landmark.blocked_users") %></h3>
 <% if @blocks.present? %>
   <ul class="pseud index group">
     <%= render partial: "blocked_user_blurb", collection: @blocks, as: :block %>

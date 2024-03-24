@@ -74,7 +74,7 @@ describe ExternalWorksController do
     end
 
     context "when admin does not have correct authorization" do
-      before { admin.update(roles: []) }
+      before { admin.update!(roles: []) }
 
       it_behaves_like "unauthorized admin cannot update external works"
     end

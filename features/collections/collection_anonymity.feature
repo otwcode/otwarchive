@@ -60,6 +60,8 @@ Feature: Collection
       And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "First Snippet" to the collection "Hidden Treasury" as a gift for "third_user"
+      # Delay before posting to make sure first work is clearly older
+      And it is currently 1 second from now
       And I post the work "Second Snippet" to the collection "Hidden Treasury" as a gift for "fourth_user"
       And subscription notifications are sent
     Then 0 emails should be delivered
@@ -160,6 +162,8 @@ Feature: Collection
       And the user "third_user" allows gifts
       And I am logged in as "first_user"
       And I post the work "First Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
+      # Delay before posting to make sure first work is clearly older
+      And it is currently 1 second from now
       And I post the work "Second Snippet" to the collection "Anonymous Hugs" as a gift for "not a user"
     When subscription notifications are sent
     Then "second_user" should not be emailed
@@ -167,6 +171,8 @@ Feature: Collection
       And I view the approved collection items page for "Anonymous Hugs"
       # items listed in date order so checking the second will reveal the older work
       And I uncheck the 2nd checkbox with id matching "collection_items_\d+_anonymous"
+      # Delay before submitting to make sure the cache is expired
+      And it is currently 1 second from now
       And I submit
     Then the author of "First Snippet" should be publicly visible
     When subscription notifications are sent
@@ -236,8 +242,7 @@ Feature: Collection
   Scenario: Adding a co-author to (one chapter of) an anonymous work should still keep it anonymous
     Given I have the anonymous collection "Various Penguins"
       And I am logged in as "Jessica"
-      And I post the chaptered work "Cone of Silence"
-      And I add the work "Cone of Silence" to the collection "Various Penguins"
+      And I post the chaptered work "Cone of Silence" in the collection "Various Penguins"
     When I edit the work "Cone of Silence"
       And I follow "2" within "div#main.works-edit.region"
       And I invite the co-author "Amos"
@@ -252,8 +257,7 @@ Feature: Collection
       And I have the anonymous collection "Temporary Mice"
       And I am logged in as "a_nonny_mouse"
       And I post the work "Cheesy Goodness"
-      And I add the work "Cheesy Goodness" to the collection "Permanent Mice"
-      And I add the work "Cheesy Goodness" to the collection "Temporary Mice"
+      And I edit the work "Cheesy Goodness" to be in the collections "Permanent_Mice,Temporary_Mice"
       And "eager_fan" subscribes to author "a_nonny_mouse"
 
     When I am logged in as "moderator"
@@ -267,8 +271,7 @@ Feature: Collection
       And I have the hidden collection "Secret for Now"
       And I am logged in as "classified"
       And I post the work "Top-Secret Goodness"
-      And I add the work "Top-Secret Goodness" to the collection "Super-Secret"
-      And I add the work "Top-Secret Goodness" to the collection "Secret for Now"
+      And I edit the work "Top-Secret Goodness" to be in the collections "Super-Secret,Secret_for_Now"
       And "eager_fan" subscribes to author "classified"
 
     When I am logged in as "moderator"
@@ -282,8 +285,7 @@ Feature: Collection
       And I have the anonymous collection "Cheese Enthusiasts"
       And I am logged in as "classified"
       And I post the work "Half and Half"
-      And I add the work "Half and Half" to the collection "Triple-Secret"
-      And I add the work "Half and Half" to the collection "Cheese Enthusiasts"
+      And I edit the work "Half and Half" to be in the collections "Triple-Secret,Cheese_Enthusiasts"
       And "eager_fan" subscribes to author "classified"
 
     When I am logged in as "moderator"
@@ -297,8 +299,7 @@ Feature: Collection
       And I have the anonymous collection "Anons Anonymous"
       And I am logged in as "classified"
       And I post the work "Half and Half"
-      And I add the work "Half and Half" to the collection "Hidden Dreams"
-      And I add the work "Half and Half" to the collection "Anons Anonymous"
+      And I edit the work "Half and Half" to be in the collections "Hidden_Dreams,Anons_Anonymous"
       And "eager_fan" subscribes to author "classified"
 
     When I am logged in as "moderator"
@@ -320,7 +321,7 @@ Feature: Collection
 
     When I am logged in as "mysterious"
       And I post the work "Anonymous Gift"
-      And I add the work "Anonymous Gift" to the collection "Anon Forever"
+      And I edit the work "Anonymous Gift" to be in the collection "Anon_Forever"
       And subscription notifications are sent
 
     Then 0 emails should be delivered
@@ -393,6 +394,8 @@ Feature: Collection
     When I am logged in as the owner of "Anonymous Collection"
       And I go to "Anonymous Collection" collection edit page
       And I follow "Delete Collection"
+      # Delay before deleting to make sure the cache is expired
+      And it is currently 1 second from now
       And I press "Yes, Delete Collection"
       And I go to creator's works page
     Then I should see "Secret Work"
@@ -423,6 +426,8 @@ Feature: Collection
     When I am logged in as the owner of "Anonymous Collection"
       And I view the approved collection items page for "Anonymous Collection"
       And I check "Remove"
+      # Delay before submitting to make sure the cache is expired
+      And it is currently 1 second from now
       And I submit
       And I go to creator's works page
     Then I should see "Secret Work"
@@ -456,6 +461,8 @@ Feature: Collection
 
     When I edit the work "Secret Work"
       And I fill in "Collections" with "Holidays,Fluffy"
+      # Delay before posting to make sure the cache is expired
+      And it is currently 1 second from now
       And I press "Post"
       And I go to my works page
     Then I should see "Secret Work"
@@ -517,7 +524,8 @@ Feature: Collection
       And the email should contain "The collection maintainers may later reveal your work but leave it anonymous."
       And the email should not contain "translation missing"
 
-  @javascript
+  # We need to load the site skin to make the share modal work:
+  @javascript @load-default-skin
   Scenario: Work share modal should not reveal anonymous authors
     Given I have the anonymous collection "Anonymous Hugs"
     When I am logged in as "first_user"
@@ -558,8 +566,7 @@ Feature: Collection
       And I have the collection "Welcome"
       And I am logged in as "author"
       And I post the work "Work"
-      And I add the work "Work" to the collection "Welcome"
-      And I add the work "Work" to the collection "Hidden Moderated Not Approved"
+      And I edit the work "Work" to be in the collections "Welcome,Hidden_Moderated_Not_Approved"
 
     When I am logged out
      And I go to "Welcome" collection's page
@@ -567,10 +574,7 @@ Feature: Collection
      And I should not see "Part of"
 
     When I am logged in as "author"
-     And I add the work "Work" to the collection "Hidden Moderated Approved"
-     And I add the work "Work" to the collection "Just Hidden"
-     And I add the work "Work" to the collection "Just Anonymous"
-     And I add the work "Work" to the collection "Hidden and Anonymous"
+     And I edit the work "Work" to be in the collections "Welcome,Hidden_Moderated_Not_Approved,Hidden_Moderated_Approved,Just_Hidden,Just_Anonymous,Hidden_And_Anonymous"
      And I am logged in as "moderator"
      And I approve the work "Work" in the collection "Hidden Moderated Approved"
      And I submit
@@ -588,8 +592,7 @@ Feature: Collection
       And I have the hidden moderated collection "Hidden Moderated 2"
       And I am logged in as "author"
       And I post the chaptered work "Work"
-      And I add the work "Work" to the collection "Hidden Moderated 1"
-      And I add the work "Work" to the collection "Hidden Moderated 2"
+      And I edit the work "Work" to be in the collections "Hidden_Moderated_1,Hidden_Moderated_2"
 
      When I view the work "Work"
      Then I should see "You can find details here: Hidden Moderated 1, Hidden Moderated 2"

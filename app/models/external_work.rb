@@ -1,5 +1,4 @@
 class ExternalWork < ApplicationRecord
-  include UrlHelpers
   include Bookmarkable
   include Filterable
   include Searchable
@@ -10,6 +9,8 @@ class ExternalWork < ApplicationRecord
 
   # .duplicate.count.size returns the number of URLs with multiple external works
   scope :duplicate, -> { group(:url).having("count(DISTINCT id) > 1") }
+
+  scope :for_blurb, -> { includes(:language, :tags) }
 
   AUTHOR_LENGTH_MAX = 500
 
@@ -40,7 +41,7 @@ class ExternalWork < ApplicationRecord
   before_validation :cleanup_url
   validates :url, presence: true, url_format: true, url_active: true
   def cleanup_url
-    self.url = reformat_url(self.url) if self.url
+    self.url = Addressable::URI.heuristic_parse(self.url) if self.url
   end
 
   # Allow encoded characters to display correctly in titles

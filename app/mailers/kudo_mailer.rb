@@ -10,7 +10,7 @@ class KudoMailer < ApplicationMailer
     user = User.find(user_id)
     kudos_hash = JSON.parse(user_kudos)
 
-    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
+    I18n.with_locale(user.preference.locale.iso) do
       kudos_hash.each_pair do |commentable_info, kudo_givers_hash|
         # Parse the key to extract the type and id of the commentable so we can
         # weed out any commentables that no longer exist.
@@ -22,6 +22,7 @@ class KudoMailer < ApplicationMailer
       end
       mail(
         to: user.email,
+        # i18n-tasks-use t('kudo_mailer.batch_kudo_notification.subject')
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end

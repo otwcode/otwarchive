@@ -24,13 +24,6 @@ Feature: Error messages should work
     When I am logged in as "wranglerette"
       And visiting "/tags/NonexistentTag/edit" should fail with a not found error
 
-  Scenario: Some pages with non existent things give flash warnings
-    Given the user "KnownUser" exists and is activated
-      And the following activated tag wrangler exists
-      | login          |
-      | wranglerette   |
-    Then visiting "/users/UnknownUser" should fail with "Sorry, could not find this user."
-
   Scenario: Error messages should be able to display '^'
     Given I am logged in as a random user
       And I post the work "Work 1"

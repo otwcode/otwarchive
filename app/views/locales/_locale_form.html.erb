@@ -12,7 +12,7 @@
       <dd class="required"><%= f.text_field :iso %></dd>
 
       <dt class="required"><%= f.label :language_id, t('.language', :default => "Language") + '*' %></dt>
-      <dd class="required"><%= f.select(:language_id, @languages.collect { |language| [ language.name, language.id ] }) %></dd>
+      <dd class="required"><%= f.select(:language_id, language_options_for_select(@languages, "id")) %></dd>
 
       <dt><%= f.check_box :email_enabled %></dt>
       <dd><%= f.label :email_enabled, t('.enable_email', :default => "Use this locale to send email") %></dd>

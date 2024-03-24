@@ -108,7 +108,7 @@
     </li>
   <% end %>
 
-  <% if downloadable? && @admin_settings.downloads_enabled? %>
+  <% if downloadable? && AdminSetting.current.downloads_enabled? %>
     <li class="download" aria-haspopup="true">
       <a href="#"><%= ts("Download") %></a>
       <ul class="expandable secondary">

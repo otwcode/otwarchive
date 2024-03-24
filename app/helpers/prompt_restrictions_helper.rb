@@ -1,15 +1,4 @@
 module PromptRestrictionsHelper
-
-  def get_prompt_restriction(for_offer=false)
-    if @collection && @collection.challenge
-      if for_offer
-        @collection.challenge.offer_restriction || @collection.challenge.prompt_restriction
-      else
-        @collection.challenge.request_restriction || @collection.challenge.prompt_restriction
-      end
-    end
-  end
-
   def prompt_restriction_settings(form, include_description = false, allowany, hasprompts)
 
     result = "<!-- prompt restriction settings helper function -->".html_safe
@@ -69,7 +58,7 @@ module PromptRestrictionsHelper
         h(ts("Must Be Unique?")) + form.check_box("require_unique_#{tag_type}".to_sym, disabled: (hasprompts ? false : true))
       end
     end
-    content_tag(:dd, fields.html_safe, title: ts("#{tag_type_label_name(tag_type).pluralize.downcase}")) + "\n".html_safe
+    content_tag(:dd, fields.html_safe, class: "complex", title: ts(tag_type_label_name(tag_type).pluralize.downcase.to_s)) + "\n".html_safe
   end
 
   # generate the string to use for the labels on sign-up forms
@@ -84,5 +73,4 @@ module PromptRestrictionsHelper
       "#{tag_name.titleize}:"
     end
   end
-
 end

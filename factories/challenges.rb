@@ -16,7 +16,7 @@ FactoryBot.define do
     offers_attributes { [attributes_for(:offer)] }
   end
 
-  factory :prompt_meme_signup, class: ChallengeSignup do
+  factory :prompt_meme_signup, class: "ChallengeSignup" do
     pseud { create(:user).default_pseud }
     collection { create(:collection, challenge: create(:prompt_meme)) }
     requests_attributes { [attributes_for(:request)] }
@@ -34,7 +34,6 @@ FactoryBot.define do
   factory :gift_exchange do
     association :offer_restriction, factory: :prompt_restriction
     association :request_restriction, factory: :prompt_restriction
-    association :prompt_restriction, factory: :prompt_restriction
 
     trait :open do
       signups_open_at { Time.now - 1.day }
@@ -51,6 +50,5 @@ FactoryBot.define do
 
   factory :prompt_meme do
     association :request_restriction, factory: :prompt_restriction
-    association :prompt_restriction, factory: :prompt_restriction
   end
 end
