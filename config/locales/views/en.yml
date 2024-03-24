@@ -201,6 +201,38 @@ en:
           canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is banned).
           guest_comments: Banned email addresses cannot be used in guest comments.
         page_heading: Manage Banned Emails
+    header:
+      nav:
+        activities: Activities
+        api_tokens: Manage API Tokens
+        banned_emails: Banned Emails
+        banners: Banners
+        invitations:
+          invitations: Invitations
+          new: Invite New Users
+          queue: Manage Queue
+          requests: Manage Requests
+        label: Admin
+        locales: Locales
+        posts:
+          admin_posts: Admin Posts
+          faqs: Archive FAQ
+          known_issues: Known Issues
+          news: AO3 News
+          post_news: Post AO3 News
+          wrangling_guidelines: Wrangling Guidelines
+        settings: Settings
+        skins:
+          approved: Approved Skins
+          queue: Approval Queue
+          rejected: Rejected Skins
+          skins: Skins
+        spam: Spam
+        users:
+          email_search: Bulk Email Search
+          manage: Manage Users
+          search: Find Users
+        wrangling: Tag Wrangling
     passwords:
       edit:
         describedby:
@@ -540,12 +572,40 @@ en:
         other: "%{formatted_count} works"
   layouts:
     header:
+      collections:
+        new: New Collection
+      javascript: While we've done our best to make the core functionality of this site accessible without JavaScript, it will work better with it enabled. Please consider turning it on!
       login: Log In
+      nav:
+        about: About
+        browse: Browse
+        fandoms: Fandoms
+        label: Site
+        search: Search
     proxy_notice:
       button: Dismiss Notice
       faux_heading: 'Important message:'
       point1: You are using a proxy site that is not part of the Archive of Our Own.
       point2: The entity that set up the proxy site can see what you submit, including your IP address. If you log in through the proxy site, it can see your password.
+  menu:
+    menu_about:
+      about_us: About Us
+      donate: Donate or Volunteer
+      faq: FAQ
+      news: News
+      wrangling_guidelines: Wrangling Guidelines
+    menu_browse:
+      bookmarks: Bookmarks
+      collections: Collections
+      tags: Tags
+      works: Works
+    menu_fandoms:
+      all: All Fandoms
+    menu_search:
+      bookmarks: Bookmarks
+      people: People
+      tags: Tags
+      works: Works
   muted:
     mute: Mute
     muted_items_notice_html: You have muted some users on the Archive. Some items may not be shown, and any counts may be inaccurate. You can mute or unmute users on %{muted_users_link}.
@@ -755,6 +815,26 @@ en:
         submit: Create Account
         wait: Please wait...
     sessions:
+      greeting:
+        nav:
+          assignments: My Assignments
+          bookmarks: My Bookmarks
+          collections: My Collections
+          dashboard: My Dashboard
+          greeting: Hi, %{current_user}!
+          history: My History
+          import: Import Work
+          label: User
+          log_out: Log Out
+          new_work: New Work
+          open_doors: Open Doors
+          post: Post
+          post_draft: From Draft
+          preferences: My Preferences
+          sign_ups: My Sign-ups
+          subscriptions: My Subscriptions
+          tag_wrangling: Tag Wrangling
+          works: My Works
       new:
         beta_reminder:
           give_feedback: give us your feedback
@@ -810,6 +890,11 @@ en:
         multiple_works_restricted: Only show to registered users
         restricted: Only show your work to registered users
         unrestricted: Show to all
+    search_box:
+      a11y_label: Work
+      label: Work Search
+      submit: Search
+      tooltip_label: 'tip:'
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
     work_approved_children:
