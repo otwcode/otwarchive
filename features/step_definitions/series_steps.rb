@@ -2,6 +2,10 @@ When /^I view the series "([^\"]*)"$/ do |series|
   visit series_path(Series.find_by(title: series))
 end
 
+Given "there are {int} works per series page" do |amount|
+  allow(WillPaginate).to receive(:per_page).and_return(amount)
+end
+
 When /^I add the series "([^\"]*)"$/ do |series_title|
   check("series-options-show")
   if Series.find_by(title: series_title)
