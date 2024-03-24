@@ -24,12 +24,12 @@
   <!--main content-->
   <p><%= ts("This tag belongs to the %{tag_class} Category.", :tag_class => @tag.class::NAME) %>
   <% if @tag.canonical %>
-    <% if @tag.is_a?(Fandom) %>
-      <%= t(".list_fandom_tags_html", fandom_relationship_tags_link: link_to(t(".fandom_relationship_tags"), fandom_path(@tag.name))) %>
-    <% end %>
     <%= ts("It's a common tag. You can use it to ") %> 
     <%= link_to ts('filter works'), {:controller => :works, :action => :index, :tag_id => @tag} %> <%= ts('and to') %> 
     <%= link_to ts('filter bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %>.
+    <% if @tag.is_a?(Fandom) %>
+      <%= t(".list_fandom_tags_html", fandom_relationship_tags_link: link_to(t(".fandom_relationship_tags"), fandom_path(@tag.name))) %>
+    <% end %>
   <% end %>
   </p>
   

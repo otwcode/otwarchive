@@ -735,7 +735,7 @@ en:
       search_tags: try our tag search
     show:
       fandom_relationship_tags: Relationship tags in this fandom
-      list_fandom_tags_html: A list of all the %{fandom_relationship_tags_link} is available.
+      list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
   time:
     formats:
       date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
