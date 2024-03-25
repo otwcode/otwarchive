@@ -32,20 +32,6 @@ describe User do
           expect(kudo.user_id).to be_nil
         end
       end
-
-      it "expires kudosed works' kudos caches" do
-        kudo_bundle.each do |kudo|
-          # Cache a fragment
-          ActionController::Base.new.write_fragment("#{kudo.commentable.cache_key}/kudos-v4", "fake fragment")
-        end
-
-        user.destroy!
-
-        kudo_bundle.each do |kudo|
-          # Make sure it's gone
-          expect(ActionController::Base.new.fragment_exist?("#{kudo.commentable.cache_key}/kudos-v4")).to be(false)
-        end
-      end
     end
 
     context "when the user has a fnok" do
@@ -205,20 +191,6 @@ describe User do
       freeze_time
       existing_user.update!(login: "new_username")
       expect(existing_user.renamed_at).to eq(Time.current)
-    end
-
-    context "user has kudosed a work" do
-      let(:kudo) { create(:kudo, user: existing_user) }
-
-      it "expires the work's kudos cache" do
-        # Cache a fragment
-        ActionController::Base.new.write_fragment("#{kudo.commentable.cache_key}/kudos-v4", "fake fragment")
-
-        existing_user.update(login: "new_username")
-
-        # Make sure it's gone
-        expect(ActionController::Base.new.fragment_exist?("#{kudo.commentable.cache_key}/kudos-v4")).to be(false)
-      end
     end
 
     context "username was recently changed" do

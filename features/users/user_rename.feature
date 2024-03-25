@@ -210,7 +210,8 @@ Feature:
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
       And I should see "Hi, newusername"
-    When I view the work "Interesting"
+    When it is currently 61 minutes from now
+      And I view the work "Interesting"
     Then I should see "newusername left kudos on this work!"
       And I should not see "oldusername"
 
