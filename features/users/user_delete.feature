@@ -119,13 +119,13 @@ Scenario: Delete a user who has coauthored a work
     Then I should see "Epic"
 
   Scenario: Deleting user updates kudos fragment
-    Given the work "Interesting"
+    Given the work "SUPER Interesting"
       And I am logged in as "kudoser"
       And I have no works or comments
-    When I view the work "Interesting"
+    When I view the work "SUPER Interesting"
       And I press "Kudos ♥"
     Then I should see "kudoser left kudos on this work!"
-    When I try to delete my account
+    When I try to delete my account as kudoser
       And the kudos cache has expired
-      And I view the work "Interesting"
+      And I view the work "SUPER Interesting"
     Then I should not see "kudoser left kudos on this work!"
