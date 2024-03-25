@@ -23,7 +23,9 @@ Scenario: Orphan all works belonging to a user
   Then I should see "Orphan All Works"
     And I should see "Are you really sure you want to"
   When I choose "Take my pseud off as well"
-	And I press "Yes, I'm sure"
+    # Delay before orphaning to make sure the cache is expired
+    And it is currently 1 second from now
+    And I press "Yes, I'm sure"
   Then I should see "Orphaning was successful."
   When I view the work "Shenanigans"
   Then I should see "orphan_account"
@@ -54,7 +56,9 @@ Given I have an orphan account
   Then I should see "Orphan All Works"
     And I should see "Are you really sure you want to"
   When I choose "Leave a copy of my pseud on"
-	And I press "Yes, I'm sure"
+    # Delay before orphaning to make sure the cache is expired
+    And it is currently 1 second from now
+    And I press "Yes, I'm sure"
   Then I should see "Orphaning was successful."
   When I view the work "Shenanigans"
   Then I should see "orphaneer (orphan_account)"

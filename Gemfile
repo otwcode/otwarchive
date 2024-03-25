@@ -1,12 +1,13 @@
 source 'https://rubygems.org'
 
-ruby "3.0.5"
+ruby "3.1.4"
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
 gem "rails", "~> 6.1.7"
+
 gem "rails-i18n"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
@@ -66,6 +67,10 @@ gem 'devise'
 gem 'devise-async'       # To mails through queues
 gem 'bcrypt'
 
+# Needed for modern ssh
+gem "ed25519", ">= 1.2", "< 2.0"
+gem "bcrypt_pbkdf", ">= 1.0", "< 2.0"
+
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
 gem "pundit"
@@ -116,6 +121,9 @@ gem "mimemagic", "0.3.10"
 # Library for helping run pt-online-schema-change commands:
 gem "departure", "~> 6.5"
 
+# Ruby 3.1 means we need to specify a version of mail until we get to rails 7.x
+gem "mail", ">= 2.8"
+
 group :test do
   gem "rspec-rails", "~> 4.0.1"
   gem 'pickle'
@@ -127,7 +135,7 @@ group :test do
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
-  gem 'delorean'
+  
   # Record and replay data from external URLs
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem "webmock"
@@ -147,6 +155,7 @@ group :test, :development do
   gem 'whiny_validation'
   gem "factory_bot_rails"
   gem 'minitest'
+  gem "listen", "~> 3.3"
   gem "i18n-tasks", require: false
 end
 

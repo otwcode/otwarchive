@@ -24,6 +24,7 @@ class CommentsController < ApplicationController
   before_action :check_frozen, only: [:new, :create, :add_comment_reply]
   before_action :check_hidden_by_admin, only: [:new, :create, :add_comment_reply]
   before_action :check_not_replying_to_spam, only: [:new, :create, :add_comment_reply]
+  before_action :check_guest_replies_preference, only: [:new, :create, :add_comment_reply]
   before_action :check_permission_to_review, only: [:unreviewed]
   before_action :check_permission_to_access_single_unreviewed, only: [:show]
   before_action :check_permission_to_moderate, only: [:approve, :reject]
@@ -137,6 +138,13 @@ class CommentsController < ApplicationController
     return unless admin_settings.guest_comments_off? && guest?
     
     flash[:error] = t("comments.commentable.guest_comments_disabled")
+    redirect_back(fallback_location: root_path)
+  end
+
+  def check_guest_replies_preference
+    return unless guest? && @commentable.respond_to?(:guest_replies_disallowed?) && @commentable.guest_replies_disallowed?
+
+    flash[:error] = t("comments.check_guest_replies_preference.error")
     redirect_back(fallback_location: root_path)
   end
 

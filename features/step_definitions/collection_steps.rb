@@ -62,6 +62,10 @@ When "the collection counts have expired" do
   step "it is currently #{ArchiveConfig.SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE} seconds from now"
 end
 
+When "the collection blurb cache has expired" do
+  step "it is currently #{ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE} minutes from now"
+end
+
 Given /^mod1 lives in Alaska$/ do
   step %{I am logged in as "mod1"}
   step %{I go to mod1 preferences page}
@@ -111,6 +115,13 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
   # TODO: fix the form, it is malformed right now
   click_button("#{name}_submit")
   step %{I should see "Updated #{name}"}
+end
+
+Given "I have joined the collection {string} as {string}" do |title, login|
+  collection = Collection.find_by(title: title)
+  user = User.find_by(login: login)
+  FactoryBot.create(:collection_participant, pseud: user.default_pseud, collection: collection, participant_role: "Member")
+  visit collections_path
 end
 
 ### WHEN

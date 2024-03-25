@@ -11,6 +11,7 @@ class TagSearchForm
     :fandoms,
     :type,
     :created_at,
+    :uses,
     :sort_column,
     :sort_direction
   ]
@@ -53,11 +54,12 @@ class TagSearchForm
   def sort_options
     [
       %w[Name name],
-      ["Date Created", "created_at"]
+      ["Date Created", "created_at"],
+      %w[Uses uses]
     ]
   end
 
   def default_sort_direction
-    %w[created_at].include?(sort_column) ? "desc" : "asc"
+    %w[created_at uses].include?(sort_column) ? "desc" : "asc"
   end
 end
