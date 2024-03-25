@@ -210,7 +210,7 @@ Feature:
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
       And I should see "Hi, newusername"
-    When it is currently 61 minutes from now
+    When the kudos cache has expired
       And I view the work "Interesting"
     Then I should see "newusername left kudos on this work!"
       And I should not see "oldusername"
