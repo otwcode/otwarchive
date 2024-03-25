@@ -35,7 +35,7 @@ describe BookmarksHelper do
           expect(helper.css_classes_for_bookmark_blurb(external_work_bookmark)).to eq(expected_classes)
 
           travel(1.day)
-          external_work_bookmark.update(bookmarker_notes: "New note")
+          external_work_bookmark.update!(bookmarker_notes: "New note")
           expect(helper.css_classes_for_bookmark_blurb(external_work_bookmark.reload)).to eq(expected_classes)
           expect(original_cache_key).not_to eq("#{external_work.cache_key_with_version}_#{external_work_bookmark.cache_key}/blurb_css_classes")
           travel_back
@@ -51,7 +51,7 @@ describe BookmarksHelper do
 
       context "when bookmarker is also series creator" do
         before do
-          series.creatorships.first.update(pseud_id: bookmarker.default_pseud_id)
+          series.creatorships.first.update!(pseud_id: bookmarker.default_pseud_id)
         end
 
         it "only includes the user id once" do
@@ -86,7 +86,7 @@ describe BookmarksHelper do
           expect(helper.css_classes_for_bookmark_blurb(series_bookmark)).to eq(expected_classes)
 
           travel(1.day)
-          series_bookmark.update(bookmarker_notes: "New note")
+          series_bookmark.update!(bookmarker_notes: "New note")
           expect(helper.css_classes_for_bookmark_blurb(series_bookmark.reload)).to eq(expected_classes)
           expect(original_cache_key).not_to eq("#{series.cache_key_with_version}_#{series_bookmark.cache_key}/blurb_css_classes")
           travel_back
@@ -102,7 +102,7 @@ describe BookmarksHelper do
 
       context "when bookmarker is also work creator" do
         before do
-          work.creatorships.first.update(pseud_id: bookmarker.default_pseud_id)
+          work.creatorships.first.update!(pseud_id: bookmarker.default_pseud_id)
         end
 
         it "only includes the user id once" do
@@ -137,7 +137,7 @@ describe BookmarksHelper do
           expect(helper.css_classes_for_bookmark_blurb(work_bookmark)).to eq(expected_classes)
 
           travel(1.day)
-          work_bookmark.update(bookmarker_notes: "New note")
+          work_bookmark.update!(bookmarker_notes: "New note")
           expect(helper.css_classes_for_bookmark_blurb(work_bookmark.reload)).to eq(expected_classes)
           expect(original_cache_key).not_to eq("#{work.cache_key_with_version}_#{work_bookmark.cache_key}/blurb_css_classes")
           travel_back

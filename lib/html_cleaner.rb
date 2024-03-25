@@ -2,19 +2,21 @@
 module HtmlCleaner
   # If we aren't sure that this field hasn't been sanitized since the last sanitizer version,
   # we sanitize it before we allow it to pass through (and save it if possible).
-  def sanitize_field(object, fieldname)
+  def sanitize_field(object, fieldname, strip_images: false)
     return "" if object.send(fieldname).nil?
 
     sanitizer_version = object.try("#{fieldname}_sanitizer_version")
-    if sanitizer_version && sanitizer_version >= ArchiveConfig.SANITIZER_VERSION
-      # return the field without sanitizing
-      Rails.logger.debug "Already sanitized #{fieldname} on #{object.class.name} (id #{object.id})"
-      object.send(fieldname)
-    else
-      # no sanitizer version information, so re-sanitize
-      Rails.logger.debug "Sanitizing without saving #{fieldname} on #{object.class.name} (id #{object.id})"
-      sanitize_value(fieldname, object.send(fieldname))
-    end
+    sanitized_field =
+      if sanitizer_version && sanitizer_version >= ArchiveConfig.SANITIZER_VERSION
+        # return the field without sanitizing
+        object.send(fieldname)
+      else
+        # no sanitizer version information, so re-sanitize
+        sanitize_value(fieldname, object.send(fieldname))
+      end
+
+    sanitized_field = strip_images(sanitized_field) if strip_images
+    sanitized_field
   end
 
   # yank out bad end-of-line characters and evil msword curly quotes
@@ -58,7 +60,10 @@ module HtmlCleaner
     end
     if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(field.to_s)
       # We're allowing users to use HTML in this field
-      transformers = [Sanitize::Config::OPEN_ATTRIBUTE_TRANSFORMER]
+      transformers = [
+        Sanitize::Config::OPEN_ATTRIBUTE_TRANSFORMER,
+        Sanitize::Config::RELATIVE_IMAGE_PATH_TRANSFORMER
+      ]
       if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
         transformers << OtwSanitize::EmbedSanitizer.transformer
         transformers << OtwSanitize::MediaSanitizer.transformer

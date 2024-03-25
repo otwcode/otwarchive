@@ -19,7 +19,7 @@ span.unread, .replied, span.claimed, .actions span.defaulted {
   background: #ccc;
   color: #900;
   width: auto;
-  font: 100 100%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  font: 100 100%/1.286 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
   height: 1.286em;
   vertical-align: middle;
   display: inline-block;

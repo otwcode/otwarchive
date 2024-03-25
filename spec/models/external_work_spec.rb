@@ -26,6 +26,22 @@ describe ExternalWork do
     end
   end
 
+  context "for bypassed URLs" do
+    BYPASSED_URLS.each do |url|
+      context "for #{url}" do
+        let(:bypassed_url) { build(:external_work, url: url) }
+
+        before do
+          WebMock.stub_request(:any, bypassed_url.url).to_return(status: 403)
+        end
+
+        it "saves" do
+          expect(bypassed_url.save).to be_truthy
+        end
+      end
+    end
+  end
+
   context "for valid URLs" do
     [200, 301, 302, 307, 308].each do |status|
       context "returning #{status}" do

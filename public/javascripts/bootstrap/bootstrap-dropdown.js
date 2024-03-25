@@ -19,9 +19,10 @@
  * OTWARCHIVE DEVS:
  *
  * When updating to the newest version, make sure to include the
- * customizations from LINES 61-69 AND 177-183 and UPDATE THIS
- * MESSAGE with the new line numbers. These lines ensure proper
- * behavior when both JS and CSS hover are used for menus
+ * customizations from LINES 62-70, 103, AND 177-184 and UPDATE THIS
+ * MESSAGE with the new line numbers. These lines ensure the code works
+ * without the ARIA menu role and ensure proper behavior when both JS and
+ * CSS hover are used for menus.
  * ========================================================== */
 
 
@@ -99,7 +100,7 @@
         return $this.click()
       }
 
-      $items = $('[role=menu] li:not(.divider):visible a', $parent)
+      $items = $('ul.menu li:not(.divider):visible a', $parent)
 
       if (!$items.length) return
 
@@ -173,12 +174,12 @@
     .on('click.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
     .on('click.dropdown-menu', function (e) { e.stopPropagation() })
     .on('click.dropdown.data-api'  , toggle, Dropdown.prototype.toggle)
-    .on('keydown.dropdown.data-api', toggle + ', [role=menu]' , Dropdown.prototype.keydown)
+    .on('keydown.dropdown.data-api', toggle + ', ul.menu' , Dropdown.prototype.keydown)
     .on('mouseenter', '.dropdown', function (e) {
       var $parent = $(this)
       if ($parent.siblings('.open').length) {
         $parent.children('ul').hide()
-      }	
+      }
     })
     .on('mouseleave', '.dropdown', function (e) { $(this).children('ul').removeAttr('') })
 

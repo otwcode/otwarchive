@@ -1,6 +1,8 @@
 class User < ApplicationRecord
-  audited
+  audited redacted: [:encrypted_password, :password_salt]
   include WorksOwner
+  include PasswordResetsLimitable
+  include UserLoggable
 
   devise :database_authenticatable,
          :confirmable,
@@ -158,6 +160,7 @@ class User < ApplicationRecord
 
   def expire_caches
     return unless saved_change_to_login?
+    series.each(&:expire_byline_cache)
     self.works.each do |work|
       work.touch
       work.expire_caches
@@ -185,13 +188,16 @@ class User < ApplicationRecord
   scope :valid, -> { where(banned: false, suspended: false) }
   scope :out_of_invites, -> { where(out_of_invites: true) }
 
-  ## used in app/views/users/new.html.erb
-  validates_length_of :login,
-                      within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
-                      too_short: ts("^User name is too short (minimum is %{min_login} characters)",
-                                    min_login: ArchiveConfig.LOGIN_LENGTH_MIN),
-                      too_long: ts("^User name is too long (maximum is %{max_login} characters)",
-                                   max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
+  validates :login,
+            length: { within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX },
+            format: {
+              with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/,
+              min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
+              max_login: ArchiveConfig.LOGIN_LENGTH_MAX
+            },
+            uniqueness: true,
+            not_forbidden_name: { if: :will_save_change_to_login? }
+  validate :username_is_not_recently_changed, if: :will_save_change_to_login?
 
   # allow nil so can save existing users
   validates_length_of :password,
@@ -202,15 +208,7 @@ class User < ApplicationRecord
                       too_long: ts("is too long (maximum is %{max_pwd} characters)",
                                    max_pwd: ArchiveConfig.PASSWORD_LENGTH_MAX)
 
-  validates_format_of :login,
-                      message: ts("^User name must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).",
-                                  min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
-                                  max_login: ArchiveConfig.LOGIN_LENGTH_MAX),
-                      with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  validates :login, uniqueness: { message: ts("^User name has already been taken") }
-  validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
-
-  validates :email, email_veracity: true, email_format: true, uniqueness: true
+  validates :email, email_format: true, uniqueness: true
 
   # Virtual attribute for age check and terms of service
     attr_accessor :age_over_13
@@ -219,12 +217,12 @@ class User < ApplicationRecord
 
   validates_acceptance_of :terms_of_service,
                           allow_nil: false,
-                          message: ts("Sorry, you need to accept the Terms of Service in order to sign up."),
+                          message: ts("^Sorry, you need to accept the Terms of Service in order to sign up."),
                           if: :first_save?
 
   validates_acceptance_of :age_over_13,
                           allow_nil: false,
-                          message: ts("Sorry, you have to be over 13!"),
+                          message: ts("^Sorry, you have to be over 13!"),
                           if: :first_save?
 
   def to_param
@@ -323,7 +321,7 @@ class User < ApplicationRecord
   def create_default_associateds
     self.pseuds << Pseud.new(name: self.login, is_default: true)
     self.profile = Profile.new
-    self.preference = Preference.new(preferred_locale: Locale.default.id)
+    self.preference = Preference.new(locale: Locale.default)
   end
 
   def prevent_password_resets?
@@ -472,6 +470,11 @@ class User < ApplicationRecord
     return @coauthored_works
   end
 
+  #  Returns array of collections where the user is the sole author
+  def sole_owned_collections
+    self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
+  end
+
   ### BETA INVITATIONS ###
 
   #If a new user has an invitation_token (meaning they were invited), the method sets the redeemed_at column for that invitation to Time.now
@@ -578,7 +581,6 @@ class User < ApplicationRecord
   end
 
   def remove_stale_from_autocomplete
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 

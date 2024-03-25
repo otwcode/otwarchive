@@ -4,7 +4,7 @@ describe LanguagesController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  describe "GET index" do
+  describe "GET index", work_search: true do
     context "when not logged in" do
       it "renders the index template" do
         get :index
@@ -12,7 +12,7 @@ describe LanguagesController do
       end
     end
     
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors translation superadmin].each do |role|
+    Admin::VALID_ROLES.each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -20,26 +20,6 @@ describe LanguagesController do
           fake_login_admin(admin)
           get :index
           expect(response).to render_template("index")
-        end
-      end
-    end
-  end
-
-  describe "GET show" do
-    context "when not logged in" do
-      it "renders the show template" do
-        get :show, params: { id: "en" }
-        expect(response).to render_template("show")
-      end
-    end
-
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors translation superadmin].each do |role|
-      context "when logged in as an admin with #{role} role" do
-        let(:admin) { create(:admin, roles: [role]) }
-
-        it "renders the show template" do
-          get :show, params: { id: "en" }
-          expect(response).to render_template("show")
         end
       end
     end
@@ -53,7 +33,7 @@ describe LanguagesController do
       end
     end
 
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
         
@@ -99,7 +79,7 @@ describe LanguagesController do
       end
     end
 
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
         
@@ -146,7 +126,7 @@ describe LanguagesController do
       end
     end
     
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
         
@@ -195,7 +175,7 @@ describe LanguagesController do
       end
     end
 
-    %w[board communications policy_and_abuse tag_wrangling docs support open_doors].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
         
@@ -227,7 +207,7 @@ describe LanguagesController do
         end
 
         it "redirects and returns success message" do
-          it_redirects_to_with_notice(finnish, "Language was successfully updated.")
+          it_redirects_to_with_notice(languages_path, "Language was successfully updated.")
         end
       end
     end

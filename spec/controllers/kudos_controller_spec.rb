@@ -107,6 +107,32 @@ describe KudosController do
           end
         end
       end
+
+      context "when kudos giver is blocked by the owner of the work" do
+        let(:blocked_user) { create(:user) }
+
+        before do
+          Block.create(blocker: work.users.first, blocked: blocked_user)
+          fake_login_known_user(blocked_user)
+        end
+
+        it "redirects to referer with an error" do
+          post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+          it_redirects_to_with_kudos_error(referer, "Sorry, you have been blocked by one or more of this work's creators.")
+        end
+
+        it "does not save kudos" do
+          post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+          expect(assigns(:kudo).new_record?).to be_truthy
+        end
+
+        context "with format: :js" do
+          it "returns an error in JSON format" do
+            post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
+            expect(JSON.parse(response.body)["error_message"]).to eq("Sorry, you have been blocked by one or more of this work's creators.")
+          end
+        end
+      end
     end
 
     context "when work does not exist" do

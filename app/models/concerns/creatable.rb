@@ -132,13 +132,13 @@ module Creatable
     names = pseud_names.split(",").reject(&:blank?).map(&:strip)
 
     names.each do |name|
-      possible_pseuds = Pseud.parse_byline(name)
+      possible_pseuds = Pseud.parse_byline_ambiguous(name)
 
-      if possible_pseuds.size > 1
-        possible_pseuds = Pseud.parse_byline(name, assume_matching_login: true)
-      end
-
-      pseud = possible_pseuds.first
+      pseud = if possible_pseuds.size > 1
+                Pseud.parse_byline(name)
+              else
+                possible_pseuds.first
+              end
 
       if pseud
         creatorship = creatorships.find_or_initialize_by(pseud: pseud)

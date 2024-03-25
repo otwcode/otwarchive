@@ -177,9 +177,8 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Notes: broken heart, With Notes"
-    When "AO3-3943" is fixed
-      # And I should see "1 Found"
-      # And I should see "fifth"
+      And I should see "1 Found"
+      And I should see "fifth"
     When I follow "Edit Your Search"
     Then the field labeled "Notes" should contain "broken heart"
       And the "With notes" checkbox should be checked

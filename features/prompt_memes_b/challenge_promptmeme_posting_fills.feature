@@ -542,3 +542,20 @@ Feature: Prompt Meme Challenge
     And I fill in "Gift this work to" with "prompter, bystander"
     And I press "Post"
   Then I should see "bystander does not accept gifts."
+
+  Scenario: A creator can give a gift to a user who has blocked them if the work is connected to a claim of a non-anonymous prompt belonging to the recipient
+
+  Given I have Battle 12 prompt meme fully set up
+    And the user "prompter" exists and is activated
+    And the user "prompter" has blocked the user "gifter"
+    And "prompter" has signed up for Battle 12 with combination A
+  When I am logged in as "gifter"
+    And I claim a prompt from "Battle 12"
+    And I start to fulfill my claim
+    And I fill in "Gift this work to" with "prompter"
+    And I press "Post"
+  Then I should see "For prompter."
+  When I follow "Edit"
+    And I uncheck "Battle 12 (prompter)"
+    And I press "Post"
+  Then I should see "For prompter."

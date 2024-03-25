@@ -74,6 +74,16 @@ body .narrow-shown {
   margin-left: 45px;
 }
 
+#header .dropdown, #greeting .user {
+  position: static;
+}
+
+#header .menu {
+  width: 100%;
+  position: absolute;
+  left: 0;
+}
+
 /* 04 region dashboard */
 
 #dashboard, #dashboard.own {
@@ -153,17 +163,21 @@ body .narrow-shown {
 }
 
 .comment .icon {
-  height: 50px;
+  height: 55px;
   margin-bottom: 0;
-  width: 50px;
+  width: 55px;
+}
+
+.comment .icon .anonymous {
+  background: url(/images/imageset.png) no-repeat -75px -395px;
 }
 
 .comment .icon .visitor {
-  background: url(/images/imageset.png) no-repeat 0px -525px transparent;
+  background: url(/images/imageset.png) no-repeat -130px -395px;
 }
 
 .comment h4.byline {
-  padding-left: 58px;
+  padding-left: 62px;
 }
 
 /* 16 zone: system */

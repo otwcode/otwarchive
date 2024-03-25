@@ -39,7 +39,7 @@
   When I am on the "Such a nice collection" participants page
     And I fill in "participants_to_invite" with "sam"
     And I press "Submit"
-  Then I should see "sam is currently banned and cannot participate in challenges."
+  Then I should see "sam cannot participate in challenges."
 
   Scenario: A user can ask to join a closed collection
   Given I have a moderated closed collection "Such a nice collection"
@@ -66,3 +66,12 @@
     And I follow "Join"
   Then I should see "You are now a member of Such a nice collection"
   When I am in the default browser
+
+Scenario: Collection member should see correct button text
+  Given I have the moderated collection "ModeratedCollection"
+    And I have the moderated collection "ModeratedCollectionTheSequel"
+    And I am logged in as "sam"
+    And I have joined the collection "ModeratedCollection" as "sam"
+  When I am on the collections page
+  Then I should see "Leave" exactly 1 time
+    And I should see "Join" exactly 1 time

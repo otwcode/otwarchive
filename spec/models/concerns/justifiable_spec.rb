@@ -122,3 +122,10 @@ describe Profile do
     let(:attributes) { { about_me: "I stole a fragment of the Rune of Death." } }
   end
 end
+
+describe Pseud do
+  it_behaves_like "a justifiable model" do
+    let!(:record) { create(:pseud) }
+    let(:attributes) { { description: "Edited by admin." } }
+  end
+end

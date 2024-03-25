@@ -99,7 +99,7 @@ describe "rake resanitize:all" do
 
       before do
         I18n.with_locale(locale.iso) do
-          question.update(content: Faker::Lorem.paragraph)
+          question.update!(content: Faker::Lorem.paragraph)
         end
       end
 

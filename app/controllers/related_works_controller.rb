@@ -65,7 +65,7 @@ class RelatedWorksController < ApplicationController
       end
     end
     @related_work.destroy
-    redirect_back_or_default(user_related_works_path(current_user))
+    redirect_back(fallback_location: user_related_works_path(current_user))
   end
 
   private

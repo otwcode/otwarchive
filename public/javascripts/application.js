@@ -4,7 +4,7 @@
 //things to do when the page loads
 $j(document).ready(function() {
     setupToggled();
-    if ($j('#work-form')) { hideFormFields(); };
+    if ($j('form#work-form')) { hideFormFields(); }
     hideHideMe();
     showShowMe();
     handlePopUps();
@@ -12,9 +12,6 @@ $j(document).ready(function() {
     setupAccordion();
     setupDropdown();
     updateCachedTokens();
-
-    // remove final comma from comma lists in older browsers
-    $j('.commas li:last-child').addClass('last');
 
     // add clear to items on the splash page in older browsers
     $j('.splash').children('div:nth-of-type(odd)').addClass('odd');
@@ -200,7 +197,9 @@ jQuery(function($){
 //   (and you can then add an alternative link for them using <noscript>)
 // - Generally reserved for toggling complex elements like bookmark forms and challenge sign-ups; for simple elements like lists use setupAccordion.
 function setupToggled(){
-  $j('.toggled').each(function(){
+  $j('.toggled').filter(function(){
+    return $j(this).closest('.userstuff').length === 0;
+  }).each(function(){
     var node = $j(this);
     var open_toggles = $j('.' + node.attr('id') + "_open");
     var close_toggles = $j('.' + node.attr('id') + "_close");
@@ -301,16 +300,17 @@ function toggleFormField(element_id) {
 
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
-    if ($j('#work-form') != null) {
-        var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options',
-          '#parent-options', '#series-options', '#backdate-options', '#override_tags-options'];
-        $j.each(toHide, function(index, name) {
-            if ($j(name)) {
-                if (!($j(name + '-show').is(':checked'))) { $j(name).addClass('hidden'); }
-            }
-        });
-        $j('#work-form').className = $j('#work-form').className;
-    }
+  if ($j('form#work-form') != null) {
+    var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options',
+      '#parent-options', '#series-options', '#backdate-options', '#override_tags-options'];
+
+    $j.each(toHide, function(index, name) {
+      if ($j(name)) {
+        if (!($j(name + '-show').is(':checked'))) { $j(name).addClass('hidden'); }
+      }
+    });
+    $j('form#work-form').className = $j('form#work-form').className;
+  }
 }
 
 // Hides the extra checkbox fields in prompt form
@@ -352,16 +352,6 @@ function attachCharacterCounters() {
     $j('.observe_textlength').each(countFn);
 }
 
-// prevent double submission for JS enabled
-jQuery.fn.preventDoubleSubmit = function() {
-  jQuery(this).submit(function() {
-    if (this.beenSubmitted)
-      return false;
-    else
-      this.beenSubmitted = true;
-  });
-};
-
 // add attributes that are only needed in the primary menus and when JavaScript is enabled
 function setupDropdown(){
   $j('#header').find('.dropdown').attr("aria-haspopup", true);
@@ -371,7 +361,6 @@ function setupDropdown(){
     'data-target': '#'
   });
   $j('.dropdown').find('.menu').addClass("dropdown-menu");
-  $j('.dropdown').find('.menu').children('li').attr("role", "menu-item");
 }
 
 // Accordion-style collapsible widgets
@@ -385,7 +374,9 @@ function setupDropdown(){
 //  </div>
 // </li>
 function setupAccordion() {
-  $j(".expandable").each(function() {
+  $j(".expandable").filter(function() {
+    return $j(this).closest(".userstuff").length === 0;
+  }).each(function() {
     var pane = $j(this);
     // hide the pane element if it's not hidden by default
     if ( !pane.hasClass("hidden") ) {
@@ -409,22 +400,16 @@ function setupAccordion() {
 
 // Remove the /confirm_delete portion of delete links so user who have JS enabled will
 // be able to delete items via hyperlink (per rails/jquery-ujs) rather than a dedicated
-// form page. Also add a confirmation message if one was not set in the back end using
-// :confirm => "message"
+// form page.
 function prepareDeleteLinks() {
-  $j('a[href$="/confirm_delete"]').each(function(){
+  $j('a[href$="/confirm_delete"][data-confirm]').each(function(){
     this.href = this.href.replace(/\/confirm_delete$/, "");
     $j(this).attr("data-method", "delete");
-    if ($j(this).is("[data-confirm]")) {
-      return;
-    } else {
-      $j(this).attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
-    };
   });
 
   // For purging assignments in gift exchanges. This is only on one page and easy to
   // check, so don't worry about adding a fallback data-confirm message.
-  $j('a[href$="/confirm_purge"]').each(function() {
+  $j('a[href$="/confirm_purge"][data-confirm]').each(function() {
     this.href = this.href.replace(/\/confirm_purge$/, "/purge");
     $j(this).attr("data-method", "post");
   });
@@ -432,7 +417,7 @@ function prepareDeleteLinks() {
 
 /// Kudos
 $j(document).ready(function() {
-  $j('#kudo_submit').on("click", function(event) {
+  $j('input#kudo_submit').on("click", function(event) {
     event.preventDefault();
 
     $j.ajax({
@@ -479,7 +464,7 @@ $j(document).ready(function() {
 // controller needs item_id and item_success_message for save success and
 // item_success_message for destroy success
 $j(document).ready(function() {
-  $j('.ajax-create-destroy').on("click", function(event) {
+  $j('form.ajax-create-destroy').on("click", function(event) {
     event.preventDefault();
 
     var form = $j(this);
@@ -530,7 +515,7 @@ $j(document).ready(function() {
 // <form> needs ajax-remove class
 // controller needs item_success_message
 $j(document).ready(function() {
-  $j('.ajax-remove').on("click", function(event) {
+  $j('form.ajax-remove').on("click", function(event) {
     event.preventDefault();
 
     var form = $j(this);
@@ -577,20 +562,24 @@ $j(document).ready(function() {
 
 // FUNDRAISING THERMOMETER adapted from http://jsfiddle.net/GeekyJohn/vQ4Xn/
 function thermometer() {
-  $j('.announcement').has('.goal').each(function(){
-    var banner_content = $j(this).find('blockquote')
-        banner_goal_text = banner_content.find('span.goal').text()
-        banner_progress_text = banner_content.find('span.progress').text()
+  var banners = $j('.announcement').filter(function(){
+                  return $j(this).closest('.userstuff').length === 0;
+                });
+
+  banners.has('.goal').each(function(){
+    var banner_content = $j(this).find('blockquote');
+        banner_goal_text = banner_content.find('span.goal').html();
+        banner_progress_text = banner_content.find('span.progress').html();
         if ($j(this).find('span.goal').hasClass('stretch')){
           stretch = true
         } else { stretch = false }
 
-        goal_amount = parseFloat(banner_goal_text.replace(/,/g, ''))
-        progress_amount = parseFloat(banner_progress_text.replace(/,/g, ''))
+        goal_amount = parseFloat(banner_goal_text.replace(/\.(?![0-9])|[^\.0-9]/g, ''));
+        progress_amount = parseFloat(banner_progress_text.replace(/\.(?![0-9])|[^\.0-9]/g, ''));
         percentage_amount = Math.min( Math.round(progress_amount / goal_amount * 1000) / 10, 100);
 
     // add thermometer markup (with amounts)
-    banner_content.append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"><span class="amount">US$' + banner_goal_text +'</span></div><div class="progress"><span class="amount">US$' + banner_progress_text + '</span></div></div></div></div>');
+    banner_content.append('<div class="thermometer-content"><div class="thermometer"><div class="track"><div class="goal"><span class="amount">' + banner_goal_text +'</span></div><div class="progress"><span class="amount">' + banner_progress_text + '</span></div></div></div></div>');
 
     // set the progress indicator
     // darker green for over 100% stretch goals

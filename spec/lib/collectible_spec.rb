@@ -47,12 +47,12 @@ describe Collectible do
       work1.collections << [collection]
       work2.collections << [collection]
 
-      work1.collection_items.first.update(
+      work1.collection_items.first.update!(
         user_approval_status: "approved",
         collection_approval_status: "approved"
       )
 
-      work2.collection_items.first.update(
+      work2.collection_items.first.update!(
         user_approval_status: "approved",
         collection_approval_status: "approved"
       )
