@@ -42,9 +42,11 @@ module ValidationHelper
   end
   
   def error_messages_formatted(errors, intro = "")
-    return unless errors && !errors.empty?
-    error_messages = errors.map { |msg| content_tag(:li, msg.gsub(/^(.*)\^/, '').html_safe) }.join("\n").html_safe
-    content_tag(:div, intro.html_safe + content_tag(:ul, error_messages), id:"error", class:"error")    
+    return unless errors.present?
+
+    error_messages = errors.map { |msg| content_tag(:li, msg.gsub(/^(.*?)\^/, "").html_safe) }
+      .join("\n").html_safe
+    content_tag(:div, intro.html_safe + content_tag(:ul, error_messages), id: "error", class: "error")
   end
   
   # use to make sure we have consistent name throughout

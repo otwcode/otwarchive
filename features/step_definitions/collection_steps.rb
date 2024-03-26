@@ -117,6 +117,13 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
   step %{I should see "Updated #{name}"}
 end
 
+Given "I have joined the collection {string} as {string}" do |title, login|
+  collection = Collection.find_by(title: title)
+  user = User.find_by(login: login)
+  FactoryBot.create(:collection_participant, pseud: user.default_pseud, collection: collection, participant_role: "Member")
+  visit collections_path
+end
+
 ### WHEN
 
 When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|

@@ -11,6 +11,8 @@ jobs:
   rubocop:
     name: Rubocop
     runs-on: ubuntu-latest
+    env:
+      BUNDLE_ONLY: linters
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -21,7 +23,7 @@ jobs:
           bundler-cache: true
 
       - name: rubocop
-        uses: reviewdog/action-rubocop@2f726ae5dd8df72b4faa9d93669cdab96aeb2153
+        uses: reviewdog/action-rubocop@2c8048e3169487eccc1eed812daaa6e5275a809f
         with:
           use_bundler: true
           reporter: github-pr-check
@@ -30,6 +32,8 @@ jobs:
   erb-lint:
     name: ERB Lint runner
     runs-on: ubuntu-latest
+    env:
+      BUNDLE_ONLY: linters
     steps:
       - name: Check out code
         uses: actions/checkout@v4

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe RelatedWorksController do
   include RedirectExpectationHelper
@@ -87,45 +87,44 @@ describe RelatedWorksController do
   end
 
   describe "DELETE #destroy" do
+    let!(:related_work) { create(:related_work, parent: parent_work, work: child_work, reciprocal: true) }
+
     context "by the creator of the parent work" do
       before(:each) do
-        @related_work = FactoryBot.create(:related_work, parent_id: parent_work.id, reciprocal: true)
         fake_login_known_user(parent_creator)
-        delete :destroy, params: { id: @related_work }
+        delete :destroy, params: { id: related_work }
       end
 
       it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(related_work_path(@related_work), "Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
+        it_redirects_to_with_error(related_work_path(related_work), "Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
       end
     end
 
     context "by a user who is not the creator of either work" do
       before(:each) do
-        @related_work = FactoryBot.create(:related_work)
         fake_login
-        delete :destroy, params: { id: @related_work }
+        delete :destroy, params: { id: related_work }
       end
 
       it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(related_work_path(@related_work), "Sorry, but you don't have permission to do that.")
+        it_redirects_to_with_error(related_work_path(related_work), "Sorry, but you don't have permission to do that.")
       end
     end
 
     context "by the creator of the child work" do
       before(:each) do
-        @related_work = FactoryBot.create(:related_work, work_id: child_work.id)
         fake_login_known_user(child_creator)
       end
 
       it "deletes the related work" do
-        expect {
-          delete :destroy, params: { id: @related_work }
-        }.to change(RelatedWork, :count).by(-1)
+        expect { delete :destroy, params: { id: related_work } }
+          .to change(RelatedWork, :count).by(-1)
       end
 
-      it "redirects the requester" do
-        delete :destroy, params: { id: @related_work }
-        it_redirects_to(related_work_path(@related_work))
+      it "redirects the requester to referer" do
+        @request.set_header("HTTP_REFERER", "/works/#{related_work.id}/edit")
+        delete :destroy, params: { id: related_work }
+        it_redirects_to(edit_work_path(related_work))
       end
     end
   end

@@ -641,3 +641,37 @@ Feature: Gift Exchange Challenge
       And I uncheck "exchange_collection (recip)"
       And I press "Post"
     Then I should see "For recip."
+
+  Scenario: If a work is connected to an assignment for a user who blocked the gifter,
+  user is still automatically added as a gift recipient. The recipient
+  remains attached even if the work is later disconnected from the assignment.
+    Given basic tags
+      And the user "recip" exists and is activated
+      And the user "recip" allows gifts
+      And the user "recip" has blocked the user "gifter"
+      And I am logged in as "gifter"
+      And I have an assignment for the user "recip" in the collection "exchange_collection"
+    When I fulfill my assignment
+    Then I should see "For recip."
+    When I follow "Edit"
+      And I uncheck "exchange_collection (recip)"
+      And I press "Post"
+    Then I should see "For recip."
+
+  Scenario: A user can explicitly give a gift to a user who blocked the gifter if
+  the work is connected to an assignment. The recipient remains attached even if
+  the work is later disconnected from the assignment.
+    Given basic tags
+      And the user "recip" exists and is activated
+      And the user "recip" allows gifts
+      And the user "recip" has blocked the user "gifter"
+      And I am logged in as "gifter"
+      And I have an assignment for the user "recip" in the collection "exchange_collection"
+    When I start to fulfill my assignment
+      And I fill in "Gift this work to" with "recip"
+      And I press "Post"
+    Then I should see "For recip."
+    When I follow "Edit"
+      And I uncheck "exchange_collection (recip)"
+      And I press "Post"
+    Then I should see "For recip."

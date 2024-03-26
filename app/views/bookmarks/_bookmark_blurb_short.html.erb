@@ -28,10 +28,10 @@
     </ul>
   <% end %>
   <!--notes-->
-  <% unless bookmark.bookmarker_notes.blank? %>
+  <% if bookmark.bookmarker_notes.present? %>
     <h6 class="landmark heading"><%= ts("Bookmark Notes:") %></h6>
     <blockquote class="userstuff summary">
-      <%=raw sanitize_field(bookmark, :bookmarker_notes) %>
+      <%= raw sanitize_field(bookmark, :bookmarker_notes, strip_images: true) %>
     </blockquote>
   <% end %>
   <!--actions-->

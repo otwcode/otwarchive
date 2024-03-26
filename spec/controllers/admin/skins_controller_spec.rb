@@ -119,7 +119,7 @@ describe Admin::SkinsController do
     let(:work_skin) { create(:work_skin, :public) }
 
     shared_examples "unauthorized admin cannot update default skin" do
-      before { site_skin.update(official: true) }
+      before { site_skin.update!(official: true) }
 
       it "does not modify the default skin" do
         expect do
@@ -135,7 +135,7 @@ describe Admin::SkinsController do
     end
 
     shared_examples "authorized admin can update default skin" do
-      before { site_skin.update(official: true) }
+      before { site_skin.update!(official: true) }
 
       it "modifies the default skin" do
         expect do

@@ -151,8 +151,8 @@ describe WorkSearchForm, work_search: true do
       second_work.collection_ids = [collection.id]
       second_work.save
 
-      work.stat_counter.update(kudos_count: 1200, comments_count: 120, bookmarks_count: 12)
-      second_work.stat_counter.update(kudos_count: 999, comments_count: 99, bookmarks_count: 9)
+      work.stat_counter.update!(kudos_count: 1200, comments_count: 120, bookmarks_count: 12)
+      second_work.stat_counter.update!(kudos_count: 999, comments_count: 99, bookmarks_count: 9)
       run_all_indexing_jobs
     end
 
@@ -456,10 +456,10 @@ describe WorkSearchForm, work_search: true do
 
     describe "when searching by word count" do
       before(:each) do
-        work.chapters.first.update(content: "This is a work with a word count of ten.")
+        work.chapters.first.update!(content: "This is a work with a word count of ten.")
         work.save
 
-        second_work.chapters.first.update(content: "This is a work with a word count of fifteen which is more than ten.")
+        second_work.chapters.first.update!(content: "This is a work with a word count of fifteen which is more than ten.")
         second_work.save
 
         run_all_indexing_jobs
@@ -625,7 +625,7 @@ describe WorkSearchForm, work_search: true do
       res = q.search_results.map(&:id)
 
       [work1, work2].each do |work|
-        work.update(summary: "Updated")
+        work.update!(summary: "Updated")
         run_all_indexing_jobs
         expect(q.search_results.map(&:id)).to eq(res)
       end

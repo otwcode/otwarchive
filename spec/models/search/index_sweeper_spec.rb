@@ -119,7 +119,7 @@ describe IndexSweeper do
 
   it "should grab the elasticsearch ids expected by the indexer for retries" do
     work = create(:work)
-    work.stat_counter.update(id: 3)
+    work.stat_counter.update!(id: 3)
 
     sweeper = IndexSweeper.new(batch(work.id), StatCounterIndexer)
     indexer = AsyncIndexer.new(StatCounterIndexer, "failures")
