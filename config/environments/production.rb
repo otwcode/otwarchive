@@ -38,7 +38,8 @@ Rails.application.configure do
 
   # Use a different cache store in production
   config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
-                       { namespace: "ao3-v2", compress: true, pool_size: 10 }
+                       { namespace: "ao3-v#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}",
+                         compress: true, pool_size: 10 }
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
