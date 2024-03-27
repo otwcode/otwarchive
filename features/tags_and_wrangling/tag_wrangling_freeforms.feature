@@ -61,6 +61,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "No Fandom"
     And I should see "Pirate AU"
     And the "Canonical" checkbox should be disabled
+    And all indexing jobs have been run
   When I choose "Arrr-verse" from the "tag_merger_string_autocomplete" autocomplete
     And I press "Save changes"
   Then I should see "Tag was updated"

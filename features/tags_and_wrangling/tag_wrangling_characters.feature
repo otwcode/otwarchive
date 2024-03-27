@@ -90,6 +90,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I follow "Edit First Doctor"
   Then I should see "Doctor Who"
     And the "Canonical" checkbox should be disabled
+    And all indexing jobs have been run
   When I choose "One" from the "tag_merger_string_autocomplete" autocomplete
     And I fill in "Relationships" with "First Doctor/TARDIS"
     And I press "Save changes"

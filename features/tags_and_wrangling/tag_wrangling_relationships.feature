@@ -87,6 +87,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I should see "Ianto Jones" within "div#parent_Character_associations_to_remove_checkboxes"
     And I should see "Torchwood"
     And I should see "Jack/Ianto"
+    And all indexing jobs have been run
     And the "Canonical" checkbox should be disabled
     And I choose "Janto" from the "tag_merger_string_autocomplete" autocomplete
     And I press "Save changes"
