@@ -79,14 +79,9 @@ module HtmlCleaner
         unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
                                         Sanitize::Config::ARCHIVE.merge(transformers: transformers))
       end
-      doc = Nokogiri::HTML::Document.new
+      doc = Nokogiri::HTML5::Document.new
       doc.encoding = "UTF-8"
-      unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
-
-      # Hack! the herald angels sing
-      # TODO: AO3-5801 Switch to an HTML5 serializer that doesn't add invalid closing tags
-      # to track and source elements.
-      unfrozen_value.gsub!(%r{</(source|track)>}, "")
+      unfrozen_value = doc.fragment(unfrozen_value).to_html
     else
       # clean out all tags
       unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
@@ -135,9 +130,8 @@ module HtmlCleaner
     doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
     myroot = doc.children.first
     ParagraphMaker.process(myroot)
-    myroot.children.to_xhtml
+    myroot.children.to_html
   end
-
 
   ### STRIPPING FOR DISPLAY ONLY
   # Regexps for stripping particular tags and attributes for display.
