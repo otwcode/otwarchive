@@ -50,6 +50,11 @@ en:
         formal: Sincerely,
         informal: Best,
       creation:
+        attribution:
+          anon: by Anonymous
+          named:
+            html: by %{creator_links}
+            text: by %{creators}
         link_with_word_count: "%{creation_link} (%{word_count})"
         title_with_chapter_number: Chapter %{position} of %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
@@ -169,6 +174,87 @@ en:
       work_added:
         html: The collection maintainers of %{collection_link} have added your work %{work_link} to their collection!
         text: The collection maintainers of "%{collection_title}" (%{collection_url}) have added your work "%{work_title}" (%{work_url}) to their collection!
+    batch_subscription_notification:
+      chapter_summary: Chapter Summary
+      footer_note:
+        html: You're receiving this email because you've subscribed to %{subscription_link}. Follow the link to unsubscribe if you no longer wish to receive updates.
+        text: 'You''re receiving this email because you''ve subscribed to %{subscription_name}. Follow the link to unsubscribe if you no longer wish to receive updates: %{unsubscribe_url}'
+      preface:
+        anon:
+          chapter:
+            html: 'Anonymous posted a new chapter of %{work_link_with_word_count}:'
+            text: 'Anonymous posted a new chapter of %{work_title_with_word_count}:'
+          work:
+            backdated: 'Anonymous posted a backdated work:'
+            new: 'Anonymous posted a new work:'
+        named:
+          chapter:
+            html:
+              one: "%{creator_links} posted a new chapter of %{work_link_with_word_count}:"
+              other: "%{creator_links} posted a new chapter of %{work_link_with_word_count}:"
+            text:
+              one: "%{creators} posted a new chapter of %{work_title_with_word_count}:"
+              other: "%{creators} posted a new chapter of %{work_title_with_word_count}:"
+          work:
+            backdated:
+              html:
+                one: "%{creator_links} posted a backdated work:"
+                other: "%{creator_links} posted a backdated work:"
+              text:
+                one: "%{creators} posted a backdated work:"
+                other: "%{creators} posted a backdated work:"
+            new:
+              html:
+                one: "%{creator_links} posted a new work:"
+                other: "%{creator_links} posted a new work:"
+              text:
+                one: "%{creators} posted a new work:"
+                other: "%{creators} posted a new work:"
+      subject:
+        anon:
+          chapter:
+            multiple_entries: "[%{app_name}] Anonymous posted %{chapter_header} of %{work_title} %{more}"
+            one_entry: "[%{app_name}] Anonymous posted %{chapter_header} of %{work_title}"
+          series:
+            chapter:
+              multiple_entries: "[%{app_name}] Anonymous posted %{chapter_header} of %{work_title} in the %{series_title} series %{more}"
+              one_entry: "[%{app_name}] Anonymous posted %{chapter_header} of %{work_title} in the %{series_title} series"
+            work:
+              multiple_entries: "[%{app_name}] Anonymous posted %{work_title} in the %{series_title} series %{more}"
+              one_entry: "[%{app_name}] Anonymous posted %{work_title} in the %{series_title} series"
+        more:
+          one: and %{count} more
+          other: and %{count} more
+        named:
+          chapter:
+            multiple_entries:
+              one: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} %{more}"
+              other: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} %{more}"
+            one_entry:
+              one: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title}"
+              other: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title}"
+          series:
+            chapter:
+              multiple_entries:
+                one: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} in the %{series_title} series %{more}"
+                other: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} in the %{series_title} series %{more}"
+              one_entry:
+                one: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} in the %{series_title} series"
+                other: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} in the %{series_title} series"
+            work:
+              multiple_entries:
+                one: "[%{app_name}] %{creators} posted %{work_title} in the %{series_title} series %{more}"
+                other: "[%{app_name}] %{creators} posted %{work_title} in the %{series_title} series %{more}"
+              one_entry:
+                one: "[%{app_name}] %{creators} posted %{work_title} in the %{series_title} series"
+                other: "[%{app_name}] %{creators} posted %{work_title} in the %{series_title} series"
+          work:
+            multiple_entries:
+              one: "[%{app_name}] %{creators} posted %{work_title} %{more}"
+              other: "[%{app_name}] %{creators} posted %{work_title} %{more}"
+            one_entry:
+              one: "[%{app_name}] %{creators} posted %{work_title}"
+              other: "[%{app_name}] %{creators} posted %{work_title}"
     challenge_assignment_notification:
       any: Any
       assignment:

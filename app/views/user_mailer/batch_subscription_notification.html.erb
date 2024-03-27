@@ -4,62 +4,31 @@
   <% @creations.each_with_index do |creation, index| %>
 
     <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
-    <% work_link = style_link(this_work.title.html_safe, work_url(this_work)) %>
+    <% creation_url = creation.is_a?(Work) ? work_url(this_work) : work_chapter_url(this_work, creation) %>
 
-    <% cache("subscription-email-preface-#{creation.cache_key}") do %>
-      <%= creator_links(this_work) %> posted a
-      <% if creation.is_a?(Work) %>
-        <%= this_work.backdate ? "backdated" : "new" %> work:
-      <% else %>
-        new chapter of <i><b><%= work_link %></b></i> (<%= this_work.word_count %> words):
-      <% end %>
+    <% cache("/subscription-email-preface-#{creation.cache_key}") do %>
+      <p><%= batch_subscription_html_preface(creation) %></p>
     <% end %>
 
     <p>
-      <i>
-        <%= style_bold(creation.is_a?(Work) ? work_link :
-          style_link(creation.full_chapter_title.html_safe, work_chapter_url(this_work, creation))) %>
-      </i> (<%= creation.word_count%> words)
-
-      <% unless @seen[this_work.id] %>
-        <br>
-
-        by <%= creator_links(this_work) %>
-      <% end %>
+      <%= creation_link_with_word_count(creation, creation_url) %><% unless @seen[this_work.id] %><br><%= creation_attribution_links(this_work) %><% end %>
     </p>
 
     <% if creation.summary.present? && creation.is_a?(Chapter) %>
-      <p><%= style_bold("Chapter Summary:") %></p>
+      <p><%= style_work_metadata_label(t(".chapter_summary")) %></p>
       <%= style_quote(raw sanitize_field(creation, :summary)) %>
     <% end %>
 
     <% unless @seen[this_work.id] %>
-      <% cache("subscription-email-meta-#{creation.cache_key}") do %>
-      <p>
-        <%= style_bold("Chapters:") %> <%= chapter_total_display(this_work) %>
-        <br><%= style_bold("Fandom:") %> <%= this_work.fandoms.map{|f| style_link(f.name, fandom_url(f))}.to_sentence.html_safe %>
-        <br><%= style_bold("Rating:") %> <%= this_work.rating_string %>
-        <br><%= style_bold("Warnings:") %> <%= this_work.archive_warning_string %>
-        <% if this_work.relationship_string && !this_work.relationship_string.blank? %>
-          <br><%= style_bold("Relationships:") %> <%= this_work.relationship_string %>
-        <% end %>
-        <% if this_work.character_string && !this_work.character_string.blank? %>
-          <br><%= style_bold("Characters:") %> <%= this_work.character_string %>
-        <% end %>
-        <% if this_work.freeform_string && !this_work.freeform_string.blank? %>
-          <br><%= style_bold("Additional Tags:") %> <%= this_work.freeform_string %>
-        <% end %>
-        <% if this_work.series.count > 0 %>
-          <br><%= style_bold("Series:") %> <%= series_list_for_feeds(this_work).html_safe %>
-        <% end %>
-      </p>
+      <% cache("/subscription-email-meta-#{creation.cache_key}") do %>
+        <p><%= render "work_info", work: this_work, suppress_summary: true %></p>
       <% end %>
 
       <% @seen[this_work.id] = true %>
     <% end %>
 
     <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
-      <p><%= style_bold("Summary:") %></p>
+      <p><%= style_work_metadata_label(Work.human_attribute_name("summary")) %></p>
       <%= style_quote(raw sanitize_field(this_work, :summary)) %>
       <% @seen_summary[this_work.id] = true %>
     <% end %>
@@ -73,5 +42,5 @@
 
 
 <% content_for :footer_note do %>
-  You're receiving this email because you've subscribed to <%= style_footer_link(@subscription.name, polymorphic_url(@subscription.subscribable)) %>. Follow the link to unsubscribe if you no longer wish to receive updates.
+  <%= t(".footer_note.html", subscription_link: style_footer_link(@subscription.name, polymorphic_url(@subscription.subscribable))) %>
 <% end %>

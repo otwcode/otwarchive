@@ -1,6 +1,9 @@
 require "spec_helper"
 
 describe UserMailer do
+  include ActionView::Helpers::UrlHelper
+  include MailerHelper
+
   describe "creatorship_request" do
     subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id) }
 
@@ -538,11 +541,13 @@ describe UserMailer do
   end
 
   describe "batch_subscription_notification" do
-    subject(:email) { UserMailer.batch_subscription_notification(subscription.id, ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json) }
+    subject(:email) { UserMailer.batch_subscription_notification(subscription.id, entries) }
 
-    let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
-    let(:chapter) { create(:chapter, work: work, summary: "<p><b>Another</b> HTML summary.</p>") }
-    let(:subscription) { create(:subscription, subscribable: work) }
+    let(:creator) { create(:pseud) }
+    let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>", authors: [creator]) }
+    let(:chapter) { create(:chapter, work: work, summary: "<p><b>Another</b> HTML summary.</p>", authors: [creator]) }
+    let(:subscription) { create(:subscription, subscribable: creator.user) }
+    let(:entries) { ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json }
 
     context "when the user is unavailable" do
       before { subscription.user.delete }
@@ -560,17 +565,20 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{subscription.subject_text(work)} and 1 more"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{creator.byline} posted #{work.title} and 1 more"
       expect(email).to have_subject(subject)
     end
 
     # Test both body contents
     it_behaves_like "a multipart email"
 
+    it_behaves_like "a translated email"
+
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("new work")
-        expect(email).to have_html_part_content("new chapter of")
+        work_link = "<i><b>#{style_link(work.title, work_url(work))}</b></i>"
+        expect(email).to have_html_part_content("#{creator_links(work)} posted a new work:")
+        expect(email).to have_html_part_content("#{creator_links(work)} posted a new chapter of #{work_link} (#{work.word_count} words):")
       end
 
       it "includes HTML from the work summary" do
@@ -585,8 +593,8 @@ describe UserMailer do
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("new work")
-        expect(email).to have_text_part_content("new chapter of #{work.title}")
+        expect(email).to have_text_part_content("#{creator_text(work)} posted a new work:")
+        expect(email).to have_text_part_content("#{creator_text(work)} posted a new chapter of \"#{work.title}\"")
       end
 
       it "reformats HTML from the work summary" do
@@ -596,6 +604,49 @@ describe UserMailer do
 
       it "reformats HTML from the chapter summary" do
         expect(email).to have_text_part_content("*Another* HTML summary.")
+      end
+    end
+
+    context "when creation is a chapter" do
+      let(:entries) { ["Chapter_#{chapter.id}"].to_json }
+
+      context "with different creators than the work" do
+        let(:creator1) { create(:user).default_pseud }
+        let(:creator2) { create(:user).default_pseud }
+        let(:work) { create(:work, authors: [creator1, creator2]) }
+        let(:chapter) { create(:chapter, work: work, authors: [creator1]) }
+
+        it "has the correct subject line" do
+          subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{creator1.byline} posted #{chapter.chapter_header} of #{work.title}"
+          expect(email).to have_subject(subject)
+        end
+
+        it "has the correct preface in the HTML version" do
+          work_link = "<i><b>#{style_link(work.title, work_url(work))}</b></i>"
+          expect(email).to have_html_part_content("#{style_pseud_link(creator1)} and #{style_pseud_link(creator2)} posted a new chapter of #{work_link} (#{work.word_count} words):")
+        end
+
+        it "has the correct preface in the text version" do
+          expect(email).to have_text_part_content("#{text_pseud(creator1)} and #{text_pseud(creator2)} posted a new chapter of \"#{work.title}\" (#{work.word_count} words):\n#{work_chapter_url(work, chapter)}")
+        end
+
+        it "has the correct chapter link with work attribution in the HTML version" do
+          chapter_link = "<i><b>#{style_link(chapter.full_chapter_title.html_safe, work_chapter_url(work, chapter))}</b></i>"
+          expect(email).to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br>by #{style_pseud_link(creator1)} and #{style_pseud_link(creator2)}")
+        end
+
+        it "has the correct chapter title with work attribution in the text version" do
+          expect(email).to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby #{text_pseud(creator1)} and #{text_pseud(creator2)}")
+        end
+
+        xit "has the correct chapter link with chapter attribution in the HTML version", pending("AO3-5805: Fix chapter attribution when different from work") do
+          chapter_link = "<i><b>#{style_link(chapter.full_chapter_title.html_safe, work_chapter_url(work, chapter))}</b></i>"
+          expect(email).to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br>by #{style_pseud_link(creator1)}")
+        end
+
+        xit "has the correct chapter title with chapter attribution in the text version", pending("AO3-5805: Fix chapter attribution when different from work") do
+          expect(email).to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby #{text_pseud(creator1)}")
+        end
       end
     end
   end
@@ -1117,7 +1168,7 @@ describe UserMailer do
         an_object_having_attributes(filename: "#{filename}.txt")
       )
     end
-    
+
     context "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")
@@ -1170,7 +1221,7 @@ describe UserMailer do
         an_object_having_attributes(filename: "#{filename}.txt")
       )
     end
-    
+
     context "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")

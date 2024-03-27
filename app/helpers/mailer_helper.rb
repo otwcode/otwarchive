@@ -137,21 +137,36 @@ module MailerHelper
       creation_title: title, word_count: creation_word_count(creation))
   end
 
-  # The bylines used in subscription emails to prevent exposing the name(s) of
-  # anonymous creator(s).
-  def creator_links(work)
-    if work.anonymous?
-      "Anonymous"
+  # TODO: Update all mailers to use creator_links or creator_text as
+  # appropriate to eliminate pseuds.map { etc }.to_sentence in the views. Note
+  # that these should never be used on anonymous creations. Text dealing with
+  # Anonymous creations should always have a separate translation, as in the
+  # creation_attribution_ and batch_subscription_subject methods below.
+  def creator_links(creation)
+    to_sentence(creation.pseuds.map { |p| style_pseud_link(p) })
+  end
+
+  def creator_text(creation)
+    to_sentence(creation.pseuds.map { |p| text_pseud(p) })
+  end
+
+  # "by name" or "by name, name, and name", which appears under or after
+  # creation titles.
+  # It's always plain text if the creation is anonymous, so we share that
+  # translation between two methods.
+  def creation_attribution_links(creation)
+    if creation.anonymous?
+      t("mailer.general.creation.attribution.anon")
     else
-      work.pseuds.map { |p| style_pseud_link(p) }.to_sentence.html_safe
+      t("mailer.general.creation.attribution.named.html", creator_links: creator_links(creation))
     end
   end
 
-  def creator_text(work)
-    if work.anonymous?
-      "Anonymous"
+  def creation_attribution_text(creation)
+    if creation.anonymous?
+      t("mailer.general.creation.attribution.anon")
     else
-      work.pseuds.map { |p| text_pseud(p) }.to_sentence.html_safe
+      t("mailer.general.creation.attribution.named.text", creators: creator_text(creation))
     end
   end
 
@@ -178,6 +193,82 @@ module MailerHelper
 
     label = style_bold(work_tag_metadata_label(tags))
     "#{label}#{style_work_tag_metadata_list(tags)}".html_safe
+  end
+
+  # The subject of batch_subscription_notification is based on the first
+  # creation in the email. It uses that creation's creator, so if you subscribe
+  # to user X, who has co-created a work with user Y, and Y posts a chapter that
+  # is not co-created, the subject line will say just "Y posted" even though the
+  # subscription is for X.
+  # Note that we assume this is being used in batch_subscription_notification,
+  # after a subscription.valid_notification_entry?(creation) check. You can
+  # otherwise pass invalid or anonymity-breaking combinations of data to this.
+  def batch_subscription_subject(subscription, creation, additional_creations_count)
+    work = creation.is_a?(Chapter) ? creation.work : creation
+    series = subscription.subscribable if subscription.subscribable_type == "Series"
+
+    base_key = "user_mailer.batch_subscription_notification.subject"
+    creator_key = creation.anonymous? ? "anon" : "named"
+    creation_type = creation.model_name.i18n_key
+    creation_key = series ? "series.#{creation_type}" : creation_type
+    entries_key = additional_creations_count.zero? ? "one_entry" : "multiple_entries"
+
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.chapter.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.chapter.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.series.chapter.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.series.chapter.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.series.work.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.series.work.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.chapter.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.chapter.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.series.chapter.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.series.chapter.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.series.work.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.series.work.one_entry")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.work.multiple_entries")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.work.one_entry")
+    computed_key = "#{base_key}.#{creator_key}.#{creation_key}.#{entries_key}"
+
+    creator_list = to_sentence(creation.pseuds.map(&:byline)) unless creation.anonymous?
+    # For pluralization: creator publico, creator y creator2 publicaron.
+    creators_count = creation.pseuds.size unless creation.anonymous?
+    chapter_header = creation.chapter_header if creation_type == :chapter
+    # "and X more," translated separately so we can pluralize "more" based on X.
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.more")
+    more_translation = t("#{base_key}.more", count: additional_creations_count) unless additional_creations_count.zero?
+
+    interpolations = {}
+    interpolations[:app_name] = ArchiveConfig.APP_SHORT_NAME
+    interpolations[:creators] = creator_list
+    interpolations[:count] = creators_count
+    interpolations[:chapter_header] = chapter_header
+    interpolations[:work_title] = work.title
+    interpolations[:series_title] = series&.title
+    interpolations[:more] = more_translation
+
+    t(computed_key, **interpolations)
+  end
+
+  def batch_subscription_text_preface(creation)
+    work = creation.is_a?(Chapter) ? creation.work : creation
+
+    interpolations = {}
+    interpolations[:creators] = creator_text(work) unless creation.anonymous?
+    interpolations[:work_title_with_word_count] = creation_title_with_word_count(creation.work) unless creation.is_a?(Work)
+    interpolations[:count] = creation.pseuds.size unless creation.anonymous?
+
+    t(batch_subscription_preface_key(creation, email_format: "text"), **interpolations)
+  end
+
+  def batch_subscription_html_preface(creation)
+    work = creation.is_a?(Chapter) ? creation.work : creation
+
+    interpolations = {}
+    interpolations[:creator_links] = creator_links(work) unless creation.anonymous?
+    interpolations[:work_link_with_word_count] = creation_link_with_word_count(creation.work, work_url(creation.work)) unless creation.is_a?(Work)
+    interpolations[:count] = creation.pseuds.size unless creation.anonymous?
+
+    t(batch_subscription_preface_key(creation, email_format: "html"), **interpolations)
   end
 
   def commenter_pseud_or_name_link(comment)
@@ -234,9 +325,31 @@ module MailerHelper
     type = tags.first.type
     # Fandom tags are linked and to_sentence'd.
     if type == "Fandom"
-      tags.map { |f| style_link(f.name, fandom_url(f)) }.to_sentence.html_safe
+      to_sentence(tags.map { |f| style_link(f.name, fandom_url(f)) })
     else
       work_tag_metadata_list(tags)
     end
+  end
+
+  def batch_subscription_preface_key(creation, email_format:)
+    base_key = "user_mailer.batch_subscription_notification.preface"
+    creator_key = creation.anonymous? ? "anon" : "named"
+    creation_key = creation.model_name.i18n_key
+    dating_key = creation.backdate ? ".backdated" : ".new" if creation.is_a?(Work)
+    format_key = ".#{email_format}" unless creation.is_a?(Work) && creation.anonymous?
+
+    # Note the lack of . before dating and format keys, which are not always
+    # included.
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.chapter.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.chapter.text")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.work.backdated")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.work.new")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.chapter.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.chapter.text")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.backdated.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.backdated.text")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.new.html")
+    # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.new.text")
+    "#{base_key}.#{creator_key}.#{creation_key}#{dating_key}#{format_key}"
   end
 end # end of MailerHelper
