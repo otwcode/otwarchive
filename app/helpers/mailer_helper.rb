@@ -229,7 +229,7 @@ module MailerHelper
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.work.one_entry")
     computed_key = "#{base_key}.#{creator_key}.#{creation_key}.#{entries_key}"
 
-    creator_list = to_sentence(creation.pseuds.map(&:byline)) unless creation.anonymous?
+    creator_list = creation.pseuds.map(&:byline).to_sentence unless creation.anonymous?
     # For pluralization: creator publico, creator y creator2 publicaron.
     creators_count = creation.pseuds.size unless creation.anonymous?
     chapter_header = creation.chapter_header if creation_type == :chapter
