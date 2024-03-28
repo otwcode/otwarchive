@@ -33,7 +33,7 @@
     <li>
       <% if controller.controller_name == 'collections' && controller.action_name == 'show' %>
       <%= link_to 'Random Items', 
-        :url => collection_path(@collection, :show_random => true), :method => :get, :remote => true %>  
+        :url => collection_path(@collection, :show_random => true), :method => :get, :remote => false %>  
       <% else %>  
       <%= link_to 'Random Items', collection_path(@collection, :show_random => true) %>
       <% end %>
