@@ -6,6 +6,7 @@
 require:
   - rubocop-rails
   - rubocop-rspec
+  - ./rubocop/rubocop
 
 inherit_mode:
   merge:
@@ -71,6 +72,9 @@ Metrics/ParameterLists:
 
 Metrics/PerceivedComplexity:
   Enabled: false
+
+Rails/DefaultScope:
+  Enabled: true
 
 Rails/DynamicFindBy:
   AllowedMethods:
