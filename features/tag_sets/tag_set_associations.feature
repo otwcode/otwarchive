@@ -52,4 +52,5 @@ Feature: Reviewing tag set associations
   Then I should see "What tag set did you want to look at?"
     And I should be on the tagsets page
 
-  Scenario: Tags with brackets should work in associations
+  # TODO
+  # Scenario: Tags with brackets should work in associations

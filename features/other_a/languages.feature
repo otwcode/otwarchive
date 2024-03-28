@@ -1,7 +1,7 @@
 @works
 Feature: Languages
     
-  Scenario: Browse works by language
+  # Scenario: Browse works by language
   
   # Admin set up the language
   

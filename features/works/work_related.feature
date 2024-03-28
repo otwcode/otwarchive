@@ -185,7 +185,8 @@ Scenario: Translator receives comments on translation, creator of original work 
   Then "translator" should be emailed
     And "inspiration" should not be emailed
 
-Scenario: Creator of original work chooses to receive comments on translation
+# TODO
+# Scenario: Creator of original work chooses to receive comments on translation
 
   #Given I have related works setup
   #  And a translation has been posted
@@ -198,7 +199,8 @@ Scenario: Creator of original work chooses to receive comments on translation
   #Then "translator" should be emailed
   #  And "inspiration" should be emailed
 
-Scenario: Creator of original work doesn't receive comments if they haven't approved the translation
+# TODO
+# Scenario: Creator of original work doesn't receive comments if they haven't approved the translation
 
   #Given I have related works setup
   #  And a translation has been posted
@@ -209,13 +211,17 @@ Scenario: Creator of original work doesn't receive comments if they haven't appr
   #When I post the comment "Blah" on the work "Worldbuilding Translated"
   #Then "inspiration" should not be emailed
 
-Scenario: Can post a translation of a mystery work
+# TODO
+# Scenario: Can post a translation of a mystery work
 
-Scenario: Posting a translation of a mystery work should not allow you to see the work
+# TODO
+# Scenario: Posting a translation of a mystery work should not allow you to see the work
 
-Scenario: Can post a translation of an anonymous work
+# TODO
+# Scenario: Can post a translation of an anonymous work
 
-Scenario: Posting a translation of an anonymous work should not allow you to see the author
+# TODO
+# Scenario: Posting a translation of an anonymous work should not allow you to see the author
 
 Scenario: Translate your own work
 
