@@ -106,8 +106,13 @@ class Skin < ApplicationRecord
     errors.add(:base, ts("You need to upload a screencap if you want to share your skin."))
   end
 
-  validates_presence_of :title
-  validates :title, uniqueness: { message: ts("must be unique"), case_sensitive: true }
+  validates :title, presence: true, uniqueness: { message: ts("must be unique"), case_sensitive: true }
+  validate :allowed_title
+  def allowed_title
+    return true if (!self.title.match(/archive/i) || User.current_user.is_a?(Admin))
+
+    errors.add(:base, ts("You can't use the word 'Archive' in your skin title, sorry! (We have to reserve it for official skins.)"))
+  end
 
   validates_numericality_of :margin, :base_em, allow_nil: true
   validate :valid_font
@@ -477,7 +482,7 @@ class Skin < ApplicationRecord
           skin.unusable = true
           skin.official = true
           File.open(version_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
-          skin.save!
+          skin.save!(validate: false)
           skins << skin
         end
 
@@ -492,7 +497,7 @@ class Skin < ApplicationRecord
         end
         File.open(version_dir + 'preview.png', 'rb') {|preview_file| top_skin.icon = preview_file}
         top_skin.official = true
-        top_skin.save!
+        top_skin.save!(validate: false)
         skins.each_with_index do |skin, index|
           skin_parent = top_skin.skin_parents.build(child_skin: top_skin, parent_skin: skin, position: index+1)
           skin_parent.save!
