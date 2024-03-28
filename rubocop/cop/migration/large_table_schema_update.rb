@@ -23,48 +23,6 @@ module RuboCop
       class LargeTableSchemaUpdate < RuboCop::Cop::Base
         MSG = "Use departure to change the schema of large table `%s`"
 
-        LARGE_TABLES = %i[
-          abuse_reports
-          admin_activities
-          audits
-          bookmarks
-          comments
-          common_taggings
-          collection_items
-          collection_participants
-          collection_profiles
-          collections
-          creatorships
-          external_works
-          favorite_tags
-          feedbacks
-          filter_counts
-          filter_taggings
-          gifts
-          inbox_comments
-          invitations
-          kudos
-          log_items
-          mutes
-          preferences
-          profiles
-          prompts
-          pseuds
-          readings
-          set_taggings
-          serial_works
-          series
-          skins
-          stat_counters
-          subscriptions
-          tag_nominations
-          tag_set_associations
-          tags
-          taggings
-          users
-          works
-        ].freeze
-
         # @!method uses_departure?(node)
         def_node_search :uses_departure?, <<~PATTERN
           (send nil? :uses_departure!)
@@ -80,13 +38,17 @@ module RuboCop
           return if uses_departure?(node)
 
           schema_changes(node).each do |change_node, table_name|
-            next unless LARGE_TABLES.include?(table_name)
+            next unless large_tables.include?(table_name.to_s)
 
             add_offense(change_node.loc.expression, message: format(MSG, table_name))
           end
         end
 
         private
+
+        def large_tables
+          cop_config["Tables"] || []
+        end
 
         def in_migration?(node)
           filename = node.location.expression.source_buffer.name

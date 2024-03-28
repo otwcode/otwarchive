@@ -4,6 +4,10 @@ require "rubocop_spec_helper"
 require_relative "../../../../rubocop/cop/migration/large_table_schema_update"
 
 describe RuboCop::Cop::Migration::LargeTableSchemaUpdate do
+  subject(:cop) { described_class.new(config) }
+
+  let(:config) { RuboCop::Config.new("Migration/LargeTableSchemaUpdate" => { "Tables" => ["users"] }) }
+
   context "when running on a migration file" do
     before do
       allow(cop).to receive(:in_migration?).and_return(true)
