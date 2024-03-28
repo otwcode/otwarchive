@@ -3,48 +3,6 @@
 require "spec_helper"
 
 describe AdminMailer do
-  describe "#comment_notification" do
-    let(:email) { described_class.comment_notification(comment.id) }
-
-    context "when the comment is on an admin post" do
-      let(:comment) { create(:comment, :on_admin_post) }
-
-      context "and the comment's contents contain an image" do
-        let(:image_tag) { "<img src=\"an_image.png\" />" }
-
-        before do
-          comment.comment_content += image_tag
-          comment.save!
-        end
-
-        it "strips the image from the email message" do
-          expect(email).not_to have_html_part_content(image_tag)
-        end
-      end
-    end
-  end
-
-  describe "#edited_comment_notification" do
-    let(:email) { described_class.edited_comment_notification(comment.id) }
-
-    context "when the comment is on an admin post" do
-      let(:comment) { create(:comment, :on_admin_post) }
-
-      context "and the comment's contents contain an image" do
-        let(:image_tag) { "<img src=\"an_image.png\" />" }
-
-        before do
-          comment.comment_content += image_tag
-          comment.save!
-        end
-
-        it "strips the image from the email message" do
-          expect(email).not_to have_html_part_content(image_tag)
-        end
-      end
-    end
-  end
-
   describe "#send_spam_alert" do
     let(:spam_user) { create(:user) }
 
@@ -288,6 +246,23 @@ describe AdminMailer do
     it_behaves_like "a multipart email"
     it_behaves_like "a notification email with the commenter's pseud and username"
 
+    context "when the comment is on an admin post" do
+      let(:comment) { create(:comment, :on_admin_post) }
+
+      context "and the comment's contents contain an image" do
+        let(:image_tag) { "<img src=\"an_image.png\" />" }
+
+        before do
+          comment.comment_content += image_tag
+          comment.save!
+        end
+
+        it "strips the image from the email message" do
+          expect(email).not_to have_html_part_content(image_tag)
+        end
+      end
+    end
+
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
       let(:comment) { create(:comment, :on_admin_post, pseud: commenter.default_pseud) }
@@ -325,6 +300,23 @@ describe AdminMailer do
     it_behaves_like "an email with a valid sender"
     it_behaves_like "a multipart email"
     it_behaves_like "a notification email with the commenter's pseud and username"
+
+    context "when the comment is on an admin post" do
+      let(:comment) { create(:comment, :on_admin_post) }
+
+      context "and the comment's contents contain an image" do
+        let(:image_tag) { "<img src=\"an_image.png\" />" }
+
+        before do
+          comment.comment_content += image_tag
+          comment.save!
+        end
+
+        it "strips the image from the email message" do
+          expect(email).not_to have_html_part_content(image_tag)
+        end
+      end
+    end
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
