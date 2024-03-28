@@ -44,7 +44,9 @@ Feature: Create and Edit Series
   Scenario: Works in a series have series navigation
     Given I am logged in as "author"
       And I post the work "Sweetie Belle" as part of a series "Ponies"
+      And it is currently 1 second from now
       And I post the work "Starsong" as part of a series "Ponies"
+      And it is currently 1 second from now
       And I post the work "Rainbow Dash" as part of a series "Ponies"
     When I view the series "Ponies"
       And I follow "Rainbow Dash"
