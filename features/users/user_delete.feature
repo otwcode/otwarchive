@@ -121,7 +121,6 @@ Scenario: Delete a user who has coauthored a work
   Scenario: Deleting user updates kudos fragment
     Given the work "SUPER Interesting"
       And I am logged in as "kudoser"
-      And I have no works or comments
     When I view the work "SUPER Interesting"
       And I press "Kudos ♥"
     Then I should see "kudoser left kudos on this work!"
