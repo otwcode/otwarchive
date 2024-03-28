@@ -68,7 +68,7 @@ describe OtwSanitize::MediaSanitizer do
         expect(content).to match("xyz")
       end
 
-      it "fills in values for whitelisted boolean attributes" do
+      it "fills in values for allowlisted boolean attributes" do
         html = "
           <video muted loop>
             <track default>
@@ -79,7 +79,7 @@ describe OtwSanitize::MediaSanitizer do
         expect(content).to match('default="default"') 
       end
 
-      it "removes unwhitelisted attributes" do
+      it "removes unallowlisted attributes" do
         html = "
           <video>
             <source onerror='alert(1)'>

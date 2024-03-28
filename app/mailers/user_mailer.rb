@@ -58,7 +58,7 @@ class UserMailer < ApplicationMailer
                 :unrevealed
               end
 
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         subject: t(".subject.#{@status}",
@@ -95,7 +95,7 @@ class UserMailer < ApplicationMailer
   def claim_notification(creator_id, claimed_work_ids, is_user=false)
     if is_user
       creator = User.find(creator_id)
-      locale = Locale.find(creator.preference.preferred_locale).iso
+      locale = creator.preference.locale.iso
     else
       creator = ExternalAuthor.find(creator_id)
       locale = I18n.default_locale
@@ -145,7 +145,7 @@ class UserMailer < ApplicationMailer
     if @creations.count > 1
       subject += " and #{@creations.count - 1} more"
     end
-    I18n.with_locale(Locale.find(@subscription.user.preference.preferred_locale).iso) do
+    I18n.with_locale(@subscription.user.preference.locale.iso) do
       mail(
         to: @subscription.user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] #{subject}"
@@ -157,7 +157,7 @@ class UserMailer < ApplicationMailer
   def invite_increase_notification(user_id, total)
     @user = User.find(user_id)
     @total = total
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         subject: "#{t 'user_mailer.invite_increase_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
@@ -170,7 +170,7 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @total = total
     @reason = reason
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -213,7 +213,7 @@ class UserMailer < ApplicationMailer
     @assigned_user = User.find(assigned_user_id)
     assignment = ChallengeAssignment.find(assignment_id)
     @request = (assignment.request_signup || assignment.pinch_request_signup)
-    I18n.with_locale(Locale.find(@assigned_user.preference.preferred_locale).iso) do
+    I18n.with_locale(@assigned_user.preference.locale.iso) do
       mail(
         to: @assigned_user.email,
         # i18n-tasks-use t('user_mailer.challenge_assignment_notification.subject')
@@ -225,7 +225,7 @@ class UserMailer < ApplicationMailer
   # Asks a user to validate and activate their new account
   def signup_notification(user_id)
     @user = User.find(user_id)
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -238,7 +238,7 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @old_email = old_email
     @new_email = new_email
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @old_email,
         subject: t('user_mailer.change_email.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -293,7 +293,7 @@ class UserMailer < ApplicationMailer
     @related_work = RelatedWork.find(related_work_id)
     @related_parent_link = url_for(controller: :works, action: :show, id: @related_work.parent)
     @related_child_link = url_for(controller: :works, action: :show, id: @related_work.work)
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Related work notification"
@@ -306,7 +306,7 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       subject = if @collection
                   t("user_mailer.recipient_notification.subject.collection",
                     app_name: ArchiveConfig.APP_SHORT_NAME,
@@ -328,7 +328,7 @@ class UserMailer < ApplicationMailer
     @collection = Collection.find(collection_id) if collection_id
     @work.challenge_claims.each do |claim|
       user = User.find(claim.request_signup.pseud.user.id)
-      I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
+      I18n.with_locale(user.preference.locale.iso) do
         mail(
           to: user.email,
           subject: "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
@@ -349,7 +349,7 @@ class UserMailer < ApplicationMailer
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
     attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
 
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: user.email,
         subject: t('user_mailer.delete_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -369,7 +369,7 @@ class UserMailer < ApplicationMailer
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
     attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
 
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: user.email,
         subject: t('user_mailer.admin_deleted_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -382,7 +382,7 @@ class UserMailer < ApplicationMailer
     @user = User.find_by(id: user_id)
     @work = Work.find_by(id: creation_id)
 
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         # i18n-tasks-use t('user_mailer.admin_hidden_work_notification.subject')

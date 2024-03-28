@@ -44,8 +44,8 @@ describe Series do
       # be automatically approved), we need to make sure that User.current_user
       # is not nil.
       User.current_user = creator
-      co_creator.preference.update(allow_cocreator: true)
-      no_co_creator.preference.update(allow_cocreator: false)
+      co_creator.preference.update!(allow_cocreator: true)
+      no_co_creator.preference.update!(allow_cocreator: false)
     end
 
     it "allows normal users to invite others as series co-creators" do
@@ -68,10 +68,10 @@ describe Series do
 
     it "allows new series to be added to an existing work co-created with someone who disallowed co-creators" do
       # Set up a work co-created with a user that doesn't allow co-creators:
-      no_co_creator.preference.update(allow_cocreator: true)
+      no_co_creator.preference.update!(allow_cocreator: true)
       work = create(:work, authors: creator.pseuds + no_co_creator.pseuds)
       work.creatorships.for_user(no_co_creator).each(&:accept!)
-      no_co_creator.preference.update(allow_cocreator: false)
+      no_co_creator.preference.update!(allow_cocreator: false)
 
       series = create(:series, authors: creator.pseuds)
       work.reload.series << series

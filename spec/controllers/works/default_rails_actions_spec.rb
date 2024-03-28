@@ -540,7 +540,7 @@ describe WorksController, work_search: true do
 
     it "allows the user to invite co-creators" do
       co_creator = create(:user)
-      co_creator.preference.update(allow_cocreator: true)
+      co_creator.preference.update!(allow_cocreator: true)
       put :update, params: { id: update_work.id, work: { author_attributes: { byline: co_creator.login } } }
       expect(update_work.pseuds.reload).not_to include(co_creator.default_pseud)
       expect(update_work.user_has_creator_invite?(co_creator)).to be_truthy
@@ -548,7 +548,7 @@ describe WorksController, work_search: true do
 
     it "prevents inviting users who have disallowed co-creators" do
       no_co_creator = create(:user)
-      no_co_creator.preference.update(allow_cocreator: false)
+      no_co_creator.preference.update!(allow_cocreator: false)
       put :update, params: { id: update_work.id, work: { author_attributes: { byline: no_co_creator.login } } }
       expect(response).to render_template :edit
       expect(assigns[:work].errors.full_messages).to \

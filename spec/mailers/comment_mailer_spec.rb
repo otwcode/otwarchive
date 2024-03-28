@@ -149,6 +149,20 @@ describe CommentMailer do
     end
   end
 
+  shared_examples "strips image tags" do
+    let(:image_tag) { "<img src=\"an_image.png\" />" }
+
+    before do
+      comment.comment_content += image_tag
+      comment.save!
+    end
+
+    it "strips the image from the email message" do
+      expect(email).not_to have_html_part_content(image_tag)
+      expect(email).not_to have_text_part_content(image_tag)
+    end
+  end
+
   describe "#comment_notification" do
     subject(:email) { CommentMailer.comment_notification(user, comment) }
 
@@ -177,6 +191,12 @@ describe CommentMailer do
       let(:comment) { create(:comment, pseud: commenter.default_pseud) }
 
       it_behaves_like "a notification email with only the commenter's username"
+    end
+
+    context "when the comment is on an admin post" do
+      let(:comment) { create(:comment, :on_admin_post) }
+
+      it_behaves_like "strips image tags"
     end
 
     context "when the comment is a reply to another comment" do
@@ -228,6 +248,12 @@ describe CommentMailer do
       let(:comment) { create(:comment, pseud: commenter.default_pseud) }
 
       it_behaves_like "a notification email with only the commenter's username"
+    end
+
+    context "when the comment is on an admin post" do
+      let(:comment) { create(:comment, :on_admin_post) }
+
+      it_behaves_like "strips image tags"
     end
 
     context "when the comment is a reply to another comment" do
@@ -289,6 +315,12 @@ describe CommentMailer do
       let(:comment) { create(:comment, commentable: parent_comment, pseud: commenter.default_pseud) }
 
       it_behaves_like "a notification email with only the commenter's username"
+    end
+
+    context "when the comment is on an admin post" do
+      let(:comment) { create(:comment, :on_admin_post) }
+
+      it_behaves_like "strips image tags"
     end
 
     context "when the comment is on a tag" do
@@ -362,6 +394,12 @@ describe CommentMailer do
       let(:comment) { create(:comment, commentable: parent_comment, pseud: commenter.default_pseud) }
 
       it_behaves_like "a notification email with only the commenter's username"
+    end
+
+    context "when the comment is on an admin post" do
+      let(:comment) { create(:comment, :on_admin_post) }
+
+      it_behaves_like "strips image tags"
     end
 
     context "when the comment is on a tag" do
