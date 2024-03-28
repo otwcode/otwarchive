@@ -43,7 +43,7 @@ describe AbuseReport do
         let(:work) { create(:work) }
         let(:chapter) { work.chapters.first }
         let(:missing_work_id) { build(:abuse_report, url: "http://archiveofourown.org/chapters/#{chapter.id}/") }
-        
+
         it "saves and adds the correct work id to the URL" do
           expect(missing_work_id.save).to be_truthy
           expect(missing_work_id.url).to eq("http://archiveofourown.org/works/#{work.id}/chapters/#{chapter.id}/")
@@ -343,6 +343,22 @@ describe AbuseReport do
     it "is valid even with spam if logged in and providing correct email" do
       User.current_user = legit_user
       expect(safe_report.save).to be_truthy
+    end
+  end
+
+  describe "#attach_work_download" do
+    include ActiveJob::TestHelper
+
+    let(:work) { create(:work) }
+
+    it "does not attach a download for non-work URLs asynchronously" do
+      expect { subject.attach_work_download("123") }.not_to have_enqueued_job
+    end
+
+    it "does attach a download for work URLs asynchronously" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+      expect { subject.attach_work_download("123") }.to have_enqueued_job
     end
   end
 end

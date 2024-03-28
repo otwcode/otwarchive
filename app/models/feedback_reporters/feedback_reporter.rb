@@ -33,6 +33,13 @@ class FeedbackReporter
     zoho_resource_client.create_ticket(ticket_attributes: report_attributes)
   end
 
+  def send_attachment!(id, download)
+    zoho_resource_client.create_attachment(
+      ticket_id: id,
+      attachment: download
+    )
+  end
+
   def report_attributes
     {
       "email" => email,
