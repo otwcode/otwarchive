@@ -70,6 +70,26 @@ describe FeedbackReporter do
     end
   end
 
+  describe "#send_attachment!" do
+    work_id = "123"
+    download = "the_file"
+    let(:expected_attachment_attributes) do
+      { file: download }
+    end
+
+    it "calls the Zoho ticket attachment creator with the expected arguments" do
+      expect(ZohoResourceClient).to receive_message_chain(
+        :new,
+        :create_ticket_attachment
+      ).with(
+        ticket_id: work_id,
+        attachment_attributes: expected_attachment_attributes
+      )
+
+      subject.send_attachment!(work_id, download)
+    end
+  end
+
   describe "#report_attributes" do
     it "returns the expected attributes" do
       expect(subject.report_attributes).to eq(expected_ticket_attributes)
