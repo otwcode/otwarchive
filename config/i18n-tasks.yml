@@ -128,7 +128,6 @@ ignore_missing:
   - challenge_assignments.assignments_not_sent
   - challenge_assignments.assignments_sent
   - challenge_assignments.no_challenge
-  - challenge_assignments.not_owner
   - challenge_assignments.signup_open
   # File: app/controllers/challenges_controller.rb
   - challenge.no_collection # should be challenges.no_collection
@@ -141,8 +140,6 @@ ignore_missing:
   - collection_participants.accepted_invite
   - collection_participants.destroy
   - collection_participants.no_invitation
-  - collection_participants.owners_required
-  - collection_participants.update_failure
   - collection_participants.update_success
   # File: app/controllers/external_authors_controller.rb
   - external_author_claimed # should be external_authors.complete_claim.external_author_claimed
