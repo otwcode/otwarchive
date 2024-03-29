@@ -117,9 +117,10 @@ class AbuseReport < ApplicationRecord
       url: url
     )
     response = reporter.send_report!
-    return if response.blank? || response.key?("errorCode")
+    ticket_id = response.fetch('ticketNumber')
+    return if ticket_id.blank?
 
-    attach_work_download(response.fetch("ticketNumber"))
+    attach_work_download(ticket_id)
   end
 
   def attach_work_download(ticket_id)
