@@ -36,7 +36,7 @@ class FeedbackReporter
   def send_attachment!(id, download)
     zoho_resource_client.create_attachment(
       ticket_id: id,
-      attachment: download
+      attachment_attributes: attachment_attributes(download)
     )
   end
 
@@ -49,6 +49,10 @@ class FeedbackReporter
         "cf_name" => username.presence || "Anonymous user"
       }
     }
+  end
+
+  def attachment_attributes(download)
+    { "file": download }
   end
 
   private

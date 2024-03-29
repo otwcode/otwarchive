@@ -36,11 +36,11 @@ class ZohoResourceClient
     ).parsed_response
   end
 
-  def create_ticket_attachment(ticket_id:, attachment:)
+  def create_ticket_attachment(ticket_id:, attachment_attributes:)
     HTTParty.post(
       ticket_attachment_create_endpoint(ticket_id),
       headers: headers,
-      body: attachment
+      body: attachment_attributes.to_json
     ).parsed_response
   end
 

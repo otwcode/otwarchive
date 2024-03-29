@@ -144,8 +144,9 @@ describe ZohoResourceClient do
   end
 
   describe "#create_ticket_attachment" do
-    let(:work) { Work.new }
-    let(:attachment) { Download.new(work).generate }
+    let(:attachment_attributes) do
+      { file: "the_file" }
+    end
 
     before do
       WebMock.stub_request(:post, /zoho/)
@@ -155,13 +156,13 @@ describe ZohoResourceClient do
     it "submits a post request to the correct endpoint with the expected arguments" do
       expect(subject.create_ticket_attachment(
         ticket_id: 3,
-        attachment: attachment
+        attachment_attributes: attachment_attributes
       ).fetch("id")).to eq("31")
 
       expect(WebMock).to have_requested(:post, "https://desk.zoho.com/api/v1/tickets/3/attachments")
         .with(
           headers: expected_request_headers,
-          body: attachment
+          body: attachment_attributes.to_json
         )
     end
   end
