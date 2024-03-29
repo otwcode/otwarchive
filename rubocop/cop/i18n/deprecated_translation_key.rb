@@ -13,7 +13,7 @@ module RuboCop
       #
       # @example
       #   # good
-      #   Category.human_attribute_name("name", count: 1) + I18n.t("mailer.general.metadata_label_indicator")
+      #   Category.human_attribute_name("name", count: 1) + t("mailer.general.metadata_label_indicator")
       #   metadata_property(t(".relative.path.name", count: 2)) # views only
       class DeprecatedTranslationKey < RuboCop::Cop::Base
         # Rubocop optimization: the check here is a little bit inefficient,

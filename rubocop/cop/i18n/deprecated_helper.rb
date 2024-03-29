@@ -5,7 +5,7 @@ module RuboCop
     module I18n
       # Checks for uses of the deprecated helper function, `ts`.
       # Strings passed to it cannot be translated, and all calls
-      # will need to be replaced with I18n.t to enable UI translations
+      # will need to be replaced with `t` to enable UI translations
       # in the future.
       #
       # @example
