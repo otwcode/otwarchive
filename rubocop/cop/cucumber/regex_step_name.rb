@@ -42,7 +42,7 @@ module RuboCop
 
         def on_send(node)
           regex_name(node) do |regex_node|
-            add_offense(regex_node)
+            add_offense(regex_node, severity: :refactor)
           end
         end
       end

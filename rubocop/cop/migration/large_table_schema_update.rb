@@ -40,7 +40,7 @@ module RuboCop
           schema_changes(node).each do |change_node, table_name|
             next unless large_tables.include?(table_name.to_s)
 
-            add_offense(change_node.loc.expression, message: format(MSG, table_name))
+            add_offense(change_node.loc.expression, message: format(MSG, table_name), severity: :warning)
           end
         end
 
