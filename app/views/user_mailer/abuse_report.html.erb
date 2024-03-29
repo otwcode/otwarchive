@@ -22,11 +22,11 @@
   <p>
     <%= style_work_metadata_label(t(".copy.summary")) %>
     <% # TODO: Remove to_plain_text when AO3-6519 is fixed. %>
-    <%= to_plain_text(raw @summary) %>
+    <%= to_plain_text(raw(strip_images(@summary))) %>
   </p>
 
   <p><%= style_work_metadata_label(t(".copy.comment")) %></p>
-  <p><%= style_quote(raw @comment) %></p>
+  <p><%= style_quote(raw(strip_images(@comment))) %></p>
 
   <p><%= t(".thank_you") %></p>
 
