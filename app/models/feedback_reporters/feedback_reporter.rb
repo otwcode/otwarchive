@@ -52,7 +52,7 @@ class FeedbackReporter
   end
 
   def attachment_attributes(download)
-    { "file": download }
+    { file: download }
   end
 
   private
