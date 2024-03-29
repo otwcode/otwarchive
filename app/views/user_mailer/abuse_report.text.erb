@@ -17,10 +17,10 @@
 <%= to_plain_text(@url) %>
 
 <%= work_metadata_label(t(".copy.summary")) %>
-<%= to_plain_text(raw(strip_images(@summary))) %>
+<%= to_plain_text(raw @summary) %>
 
 <%= work_metadata_label(t(".copy.comment")) %>
-<%= to_plain_text(raw(strip_images(@comment))) %>
+<%= to_plain_text(raw @comment) %>
 
 <%= text_divider %>
 
