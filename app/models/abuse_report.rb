@@ -117,16 +117,16 @@ class AbuseReport < ApplicationRecord
       url: url
     )
     response = reporter.send_report!
-    ticket_id = response.fetch('ticketNumber')
+    ticket_id = response.fetch("ticketNumber")
     return if ticket_id.blank?
 
     attach_work_download(ticket_id)
   end
 
   def attach_work_download(ticket_id)
-    return if url !~ %r{/works/\d\+}
+    return if url !~ %r{/works/\d+}
 
-    work = Work.find_by(id: url[%r{/works/(\d\+)/}, 1])
+    work = Work.find_by(id: url[%r{/works/(\d+)/}, 1])
     ReportAttachmentJob.perform_later(ticket_id, work) if work && ticket_id.present?
   end
 
