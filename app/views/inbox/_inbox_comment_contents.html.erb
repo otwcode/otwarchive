@@ -26,7 +26,9 @@
   <% end %>
 </div>
 
-<% # This feedback_comment used to be inbox_comment... not sure why %>
+<%# This feedback_comment used to be inbox_comment... not sure why %>
 <blockquote class="userstuff">
-  <%= raw sanitize_field(feedback_comment, :comment_content) %>
+  <%= raw sanitize_field(feedback_comment,
+                         :comment_content,
+                         strip_images: feedback_comment.ultimate_parent.is_a?(AdminPost)) %>
 </blockquote>
