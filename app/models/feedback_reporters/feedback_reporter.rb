@@ -34,7 +34,7 @@ class FeedbackReporter
   end
 
   def send_attachment!(id, download)
-    zoho_resource_client.create_attachment(
+    zoho_resource_client.create_ticket_attachment(
       ticket_id: id,
       attachment_attributes: attachment_attributes(download)
     )
