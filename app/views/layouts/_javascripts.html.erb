@@ -120,4 +120,18 @@
   <% end %>
 <% end %>
 
+<script type="speculationrules">
+  {
+    "prerender": [
+      {
+        "source": "document",
+        "eagerness": "moderate",
+        "where": {
+          "href_matches": "/*"
+        }
+      }
+    ]
+  }
+</script>
+
 <%= yield :footer_js %>
