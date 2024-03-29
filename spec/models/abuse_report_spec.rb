@@ -352,13 +352,15 @@ describe AbuseReport do
     let(:work) { create(:work) }
 
     it "does not attach a download for non-work URLs asynchronously" do
-      expect { subject.attach_work_download("123") }.not_to have_enqueued_job
+      expect { subject.attach_work_download("123") }
+        .not_to have_enqueued_job
     end
 
     it "does attach a download for work URLs asynchronously" do
       allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
 
-      expect { subject.attach_work_download("123") }.to have_enqueued_job
+      expect { subject.attach_work_download("123") }
+        .to have_enqueued_job
     end
   end
 end
