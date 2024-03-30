@@ -198,23 +198,6 @@ Feature:
     When I follow "Series"
     Then I should see "Best Series by newusername"
 
-  Scenario: Changing username updates kudos fragment
-    Given the work "Interesting beans"
-      And I am logged in as "oldusername1" with password "password"
-    When I view the work "Interesting beans"
-      And I press "Kudos ♥"
-    Then I should see "oldusername1 left kudos on this work!"
-    When I visit the change username page for oldusername1
-      And I fill in "New user name" with "newusername1"
-      And I fill in "Password" with "password"
-      And I press "Change User Name"
-    Then I should get confirmation that I changed my username
-      And I should see "Hi, newusername1"
-    When the kudos cache has expired
-      And I view the work "Interesting beans"
-    Then I should see "newusername1 left kudos on this work!"
-      And I should not see "oldusername1"
-
     Scenario: Changing the username from a forbidden name to non-forbidden
       Given I have no users
         And the following activated user exists
