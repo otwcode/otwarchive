@@ -159,3 +159,12 @@ Feature: Get messages in the inbox
       And I go to the homepage
     Then I should see "sewwiththeflo on Cat Thor's Bizarre Adventure"
       And I should see "Thank you! Please go to bed."
+
+  Scenario: Reply to a comment on an admin post that contains an image
+    Given I have posted an admin post
+      And a comment "My comment" by "sewwiththeflo" on the admin post "Default Admin Post"
+      And a reply "My reply <img src='foo.jpg' />" by "unbeatablesg" on the admin post "Default Admin Post"
+    When I am logged in as "sewwiththeflo"
+      And I go to the homepage
+    Then I should see "My reply"
+      And I should not see "<img src='foo.jpg' />"
