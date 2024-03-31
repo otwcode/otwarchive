@@ -23,7 +23,7 @@
 
   <!--main content-->
   <p><%= ts("This tag belongs to the %{tag_class} Category.", :tag_class => @tag.class::NAME) %>
-  <% if @tag.canonical %>   
+  <% if @tag.canonical %>
     <%= t(".canonical_html",
           canonical_tag_faq_link: link_to(t(".canonical_tag_faq"), archive_faq_path("glossary", anchor: "canonicaldef")),
           filter_works_link: link_to(t(".filter_works"), { controller: :works, action: :index, tag_id: @tag }),
