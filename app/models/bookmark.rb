@@ -102,7 +102,7 @@ class Bookmark < ApplicationRecord
 
   scope :latest, -> { is_public.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work }
 
-  scope :for_blurb, -> { includes(:bookmarkable, :pseud, :tags, :collections, :user) }
+  scope :for_blurb, -> { includes(:bookmarkable, :tags, :collections, :pseud [:user]) }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
