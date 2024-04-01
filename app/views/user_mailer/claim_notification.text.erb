@@ -1,34 +1,34 @@
 <% content_for :message do %>
-  <%= t("mailer.general.greeting.introductory") %>
+<%= t("mailer.general.greeting.introductory") %>
 
-  <%= t(".introduction.text", open_doors_url: "http://opendoors.transformativeworks.org", app_url: root_url) %>
+<%= t(".introduction.text", open_doors_url: "http://opendoors.transformativeworks.org", app_url: root_url) %>
 
-  <%= t(".more_info.text", news_url: admin_posts_url(tag: 18), open_doors_faq_url: "http://opendoors.transformativeworks.org/faq", open_doors_tutorial_url: "http://opendoors.transformativeworks.org/tutorials", support_url: new_feedback_report_url) %>
+<%= t(".more_info.text", news_url: admin_posts_url(tag: 18), open_doors_faq_url: "http://opendoors.transformativeworks.org/faq", open_doors_tutorial_url: "http://opendoors.transformativeworks.org/tutorials", support_url: new_feedback_report_url) %>
 
-  <%= t(".mistake.text", open_doors_url: "https://opendoors.transformativeworks.org/en/contact-open-doors/") %>
+<%= t(".mistake.text", open_doors_url: "https://opendoors.transformativeworks.org/en/contact-open-doors/") %>
 
-  <%= t(".access.text", support_url: new_feedback_report_url) %>
+<%= t(".access.text", support_url: new_feedback_report_url) %>
 
-  <%= t(".works_by", email: @external_email) %>
-  <% @claimed_works.each do |work| %>
-    <% if work.fandom_string.present? %>
-      <%= t(".work_info.text.with_fandom", work_title: work.title, work_url: work_url(work), fandom: work.fandom_string.split(",").to_sentence) %>
-    <% else %>
-      <%= t(".work_info.text.no_fandom", work_title: work.title, work_url: work_url(work)) %>
-    <% end %>
+<%= t(".works_by", email: @external_email) %>
+<% @claimed_works.each do |work| %>
+  <% if work.fandom_string.present? %>
+    <%= t(".work_info.text.with_fandom", work_title: work.title, work_url: work_url(work), fandom: work.fandom_string.split(",").to_sentence) %>
+  <% else %>
+    <%= t(".work_info.text.no_fandom", work_title: work.title, work_url: work_url(work)) %>
   <% end %>
+<% end %>
 
-  <%= t(".redirects") %>
+<%= t(".redirects") %>
 
-  <%= t(".update_redirect.text", open_doors_url: "https://opendoors.transformativeworks.org/en/contact-open-doors/") %>
+<%= t(".update_redirect.text", open_doors_url: "https://opendoors.transformativeworks.org/en/contact-open-doors/") %>
 
-  <%= t(".other_works.text") %>
+<%= t(".other_works.text") %>
 
-  <%= t(".questions.text", support_url: new_feedback_report_url) %>
+<%= t(".questions.text", support_url: new_feedback_report_url) %>
 
-  <%= t(".email_tips") %>
+<%= t(".email_tips") %>
 
-  <%= t("mailer.general.closing.informal") %>
-  <%= t("mailer.general.signature.open_doors") %>
-  <%= t("mailer.general.signature.parent_org") %>
+<%= t("mailer.general.closing.informal") %>
+<%= t("mailer.general.signature.open_doors") %>
+<%= t("mailer.general.signature.parent_org") %>
 <% end %>
