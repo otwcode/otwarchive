@@ -127,7 +127,7 @@ class AbuseReport < ApplicationRecord
     return if url !~ %r{/works/\d+}
 
     work = Work.find_by(id: url[%r{/works/(\d+)/}, 1])
-    ReportAttachmentJob.perform_later(ticket_id, work) if work && ticket_id.present?
+    ReportAttachmentJob.perform_later(ticket_id, work) if work
   end
 
   # if the URL clearly belongs to a work (i.e. contains "/works/123")
