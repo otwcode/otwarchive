@@ -62,7 +62,7 @@ describe Admin::BannersController do
 
     it_behaves_like "only authorized admins are allowed",
                     authorized_roles: %w[superadmin board communications development_and_membership support]
-    end
+  end
 
   describe "GET #new" do
     subject { get :new }

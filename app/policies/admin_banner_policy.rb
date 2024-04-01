@@ -12,6 +12,5 @@ class AdminBannerPolicy < ApplicationPolicy
 
   alias show? index?
   alias update? index?
-  alias create? create?
   alias destroy? create?
 end
