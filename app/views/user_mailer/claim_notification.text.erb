@@ -12,9 +12,9 @@
 <%= t(".works_by", email: @external_email) %>
 <% @claimed_works.each do |work| %>
   <% if work.fandom_string.present? %>
-    <%= t(".work_info.text.with_fandom", work_title: work.title, work_url: work_url(work), fandom: work.fandom_string.split(",").to_sentence) %>
+<%= t(".work_info.text.with_fandom", work_title: work.title, work_url: work_url(work), fandom: work.fandom_string.split(",").to_sentence) %>
   <% else %>
-    <%= t(".work_info.text.no_fandom", work_title: work.title, work_url: work_url(work)) %>
+<%= t(".work_info.text.no_fandom", work_title: work.title, work_url: work_url(work)) %>
   <% end %>
 <% end %>
 
