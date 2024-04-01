@@ -734,8 +734,8 @@ en:
         random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
     show:
-      canonical_html: It's a %{canonical_tag_faq_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
-      canonical_tag_faq: canonical tag
+      canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
+      canonical_tag: canonical tag
       fandom_relationship_tags: Relationship tags in this fandom
       filter_bookmarks: filter bookmarks
       filter_works: filter works

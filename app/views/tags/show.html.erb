@@ -25,9 +25,9 @@
   <p><%= ts("This tag belongs to the %{tag_class} Category.", :tag_class => @tag.class::NAME) %>
   <% if @tag.canonical %>
     <%= t(".canonical_html",
-          canonical_tag_faq_link: link_to(t(".canonical_tag_faq"), archive_faq_path("glossary", anchor: "canonicaldef")),
-          filter_works_link: link_to(t(".filter_works"), { controller: :works, action: :index, tag_id: @tag }),
-          filter_bookmarks_link: link_to(t(".filter_bookmarks"), { controller: :bookmarks, action: :index, tag_id: @tag })) %>
+          canonical_tag_link: link_to(t(".canonical_tag"), archive_faq_path("glossary", anchor: "canonicaldef")),
+          filter_works_link: link_to(t(".filter_works"), tag_works_path(@tag)),
+          filter_bookmarks_link: link_to(t(".filter_bookmarks"), tag_bookmarks_path(@tag))) %>
     <% if @tag.is_a?(Fandom) %>
       <%= t(".list_fandom_tags_html", fandom_relationship_tags_link: link_to(t(".fandom_relationship_tags"), fandom_path(@tag.name))) %>
     <% end %>
