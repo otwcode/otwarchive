@@ -31,7 +31,7 @@ module RuboCop
       #     ...
       #   end
       class RegexStepName < RuboCop::Cop::Base
-        MSG = "Prefer Cucumber expressions (https://github.com/cucumber/cucumber-expressions) over regex for step names"
+        MSG = "Prefer Cucumber expressions (https://github.com/cucumber/cucumber-expressions) over regex for step names; refer to https://github.com/otwcode/otwarchive/wiki/Reviewdog-and-RuboCop if regex is still required"
 
         RESTRICT_ON_SEND = %i[Given When Then].freeze
 

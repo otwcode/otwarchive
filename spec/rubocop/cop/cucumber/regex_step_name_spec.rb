@@ -8,7 +8,7 @@ describe RuboCop::Cop::Cucumber::RegexStepName do
     it "records a violation when named via regex" do
       expect_offense(<<~INVALID)
         Given /^I have no users$/ do
-              ^^^^^^^^^^^^^^^^^^^ Prefer Cucumber expressions (https://github.com/cucumber/cucumber-expressions) over regex for step names
+              ^^^^^^^^^^^^^^^^^^^ Prefer Cucumber expressions (https://github.com/cucumber/cucumber-expressions) over regex for step names; refer to https://github.com/otwcode/otwarchive/wiki/Reviewdog-and-RuboCop if regex is still required
           User.delete_all
         end
       INVALID
@@ -27,7 +27,7 @@ describe RuboCop::Cop::Cucumber::RegexStepName do
     it "records a violation when named via regex" do
       expect_offense(<<~INVALID)
         When /^I visit the change username page for (.*)$/ do |login|
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer Cucumber expressions (https://github.com/cucumber/cucumber-expressions) over regex for step names
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer Cucumber expressions (https://github.com/cucumber/cucumber-expressions) over regex for step names; refer to https://github.com/otwcode/otwarchive/wiki/Reviewdog-and-RuboCop if regex is still required
           user = User.find_by(login: login)
           visit change_username_user_path(user)
         end
@@ -50,7 +50,7 @@ describe RuboCop::Cop::Cucumber::RegexStepName do
     it "records a violation when named via regex" do
       expect_offense(<<~INVALID)
         Then /^the user "([^"]*)" should be activated$/ do |login|
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer Cucumber expressions (https://github.com/cucumber/cucumber-expressions) over regex for step names
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer Cucumber expressions (https://github.com/cucumber/cucumber-expressions) over regex for step names; refer to https://github.com/otwcode/otwarchive/wiki/Reviewdog-and-RuboCop if regex is still required
           user = User.find_by(login: login)
           expect(user).to be_active
         end
