@@ -5,6 +5,7 @@ en:
       admin/role:
         board: Board
         communications: Communications
+        development_and_membership: Development & Membership
         docs: AO3 Docs
         elections: Elections
         open_doors: Open Doors

@@ -178,6 +178,20 @@ en:
               required: Required when adding or removing a warning or suspension to an account.
             submit: Update
           heading: Record Warnings, Suspensions, or Notes
+    banners:
+      index:
+        actions:
+          active: Active
+          confirm_delete: Are you sure you want to delete this banner?
+          delete: Delete
+          edit: Edit
+        page_heading: Banners
+      navigation:
+        confirm_delete: Are you sure you want to delete this banner?
+        delete: Delete Banner
+        edit: Edit Banner
+        index: Banners
+        new: New Banner
     blacklist:
       emails_found:
         one: one email found
