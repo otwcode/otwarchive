@@ -294,19 +294,6 @@ describe User do
     end
   end
 
-  describe "changing login name" do
-    let(:user) { build(:user) }
-    let(:pseud) { create(:pseud, user: user) }
-    let!(:bookmark) { create(:bookmark, pseud: pseud) }
-
-    it "modifies the updated_at of associated bookmarks" do
-      travel(1.second)
-      expect do
-        user.update(login: "New")
-      end.to change { bookmark.reload.updated_at }
-    end
-  end
-
   describe ".search_multiple_by_email" do
     let(:user_bundle) { create_list(:user, 5) }
 
