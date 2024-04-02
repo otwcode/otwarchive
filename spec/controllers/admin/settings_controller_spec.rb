@@ -21,7 +21,7 @@ describe Admin::SettingsController do
       end
 
       it "allows access to admins with correct roles" do
-        admin.update(roles: ["policy_and_abuse"])
+        admin.update!(roles: ["policy_and_abuse"])
         get :index
         expect(response).to have_http_status(:success)
       end
@@ -44,7 +44,7 @@ describe Admin::SettingsController do
       before { fake_login_admin(admin) }
 
       context "when admin has superadmin role" do
-        before { admin.update(roles: ["superadmin"]) }
+        before { admin.update!(roles: ["superadmin"]) }
 
         it "allows superadmins to update all settings" do
           put :update, params: {
@@ -74,7 +74,7 @@ describe Admin::SettingsController do
       end
 
       context "when admin has policy_and_abuse role" do
-        before { admin.update(roles: ["policy_and_abuse"]) }
+        before { admin.update!(roles: ["policy_and_abuse"]) }
 
         {
           disable_support_form: true,
@@ -103,7 +103,7 @@ describe Admin::SettingsController do
       end
 
       context "when admin has support role" do
-        before { admin.update(roles: ["support"]) }
+        before { admin.update!(roles: ["support"]) }
 
         {
           downloads_enabled: false,
@@ -134,7 +134,7 @@ describe Admin::SettingsController do
       end
 
       context "when admin has tag_wrangling role" do
-        before { admin.update(roles: ["tag_wrangling"]) }
+        before { admin.update!(roles: ["tag_wrangling"]) }
 
         {
           disable_support_form: true,

@@ -44,7 +44,9 @@ Feature: Create and Edit Series
   Scenario: Works in a series have series navigation
     Given I am logged in as "author"
       And I post the work "Sweetie Belle" as part of a series "Ponies"
+      And it is currently 1 second from now
       And I post the work "Starsong" as part of a series "Ponies"
+      And it is currently 1 second from now
       And I post the work "Rainbow Dash" as part of a series "Ponies"
     When I view the series "Ponies"
       And I follow "Rainbow Dash"
@@ -184,6 +186,22 @@ Feature: Create and Edit Series
     Then I should see "penguins30"
     When I follow "Next"
     Then I should see "penguins0"
+	
+  Scenario: Series show page with many works
+    Given I am logged in as "author"
+      And I post the work "Caesar" as part of a series "Salads"
+      And I post the work "Chicken" as part of a series "Salads"
+      And I post the work "Pasta" as part of a series "Salads"
+      And I post the work "Spring" as part of a series "Salads"
+      And I post the work "Chef" as part of a series "Salads"
+      And there are 3 works per series page
+    When I view the series "Salads"
+    Then I should see "Caesar"
+      And I should see "Chicken"
+      And I should see "Pasta"
+    When I follow "Next"
+    Then I should see "Spring"
+      And I should see "Chef"
 
   Scenario: Removing self as co-creator from co-created series when you are the only creator of a work in the series.
     Given I am logged in as "sun"

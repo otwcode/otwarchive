@@ -119,6 +119,7 @@ module Otwarchive
       domain: ArchiveConfig.SMTP_DOMAIN,
       port: ArchiveConfig.SMTP_PORT,
       enable_starttls_auto: ArchiveConfig.SMTP_ENABLE_STARTTLS_AUTO,
+      enable_starttls: ArchiveConfig.SMTP_ENABLE_STARTTLS,
       openssl_verify_mode: ArchiveConfig.SMTP_OPENSSL_VERIFY_MODE
     }
     if ArchiveConfig.SMTP_AUTHENTICATION

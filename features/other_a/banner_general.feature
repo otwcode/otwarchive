@@ -118,3 +118,25 @@ Scenario: Admin can make minor changes to the text of an active banner without t
   Then I should see the banner with minor edits
   When I am logged in as "banner_tester_4"
   Then I should see the banner with minor edits
+
+Scenario: Development & Membership admin can see edit options but not delete or create
+  Given an admin creates a banner
+  When I am logged in as a "development_and_membership" admin
+    And I go to the admin_banners page
+  Then I should see "Banners" within "#header .admin.navigation"
+    And I should see "Banners" within "#main .navigation.actions"
+    And I should see "Edit" within "#main ul.banners.index.group"
+    But I should not see "Delete" within "#main ul.banners.index.group"
+    And I should not see "New Banner" within "#main .navigation.actions"
+  When I follow "Edit"
+  Then I should not see "New Banner" within "#main .navigation.actions"
+    And I should not see "Delete Banner" within "#main .navigation.actions"
+    But I should see "Edit Banner" within "#main h2"
+    And I should see "Edit Banner" within "#main .navigation.actions"
+  When I fill in "Banner text" with "Some fun new text"
+    And I press "Update Banner"
+  Then I should see "Banner successfully updated."
+    And I should see "Banners" within "#main .navigation.actions"
+    And I should see "Edit Banner" within "#main .navigation.actions"
+    But I should not see "Delete Banner" within "#main .navigation.actions"
+    And I should not see "New Banner" within "#main .navigation.actions"

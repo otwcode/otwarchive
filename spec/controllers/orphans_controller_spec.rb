@@ -259,9 +259,9 @@ describe OrphansController do
       context "when a work has multiple pseuds for the same user" do
         let(:second_pseud) { create(:pseud, user: suspended_user) }
         let(:work) do
-          suspended_user.update(suspended: false, suspended_until: nil)
+          suspended_user.update!(suspended: false, suspended_until: nil)
           work = create(:work, authors: [suspended_pseud, suspended_second_pseud])
-          suspended_user.update(suspended: true, suspended_until: 1.week.from_now)
+          suspended_user.update!(suspended: true, suspended_until: 1.week.from_now)
           work
         end
 
@@ -316,9 +316,9 @@ describe OrphansController do
       context "when a work has multiple pseuds for the same user" do
         let(:second_pseud) { create(:pseud, user: banned_user) }
         let(:work) do
-          banned_user.update(banned: false)
+          banned_user.update!(banned: false)
           work = create(:work, authors: [banned_pseud, banned_second_pseud])
-          banned_user.update(banned: true)
+          banned_user.update!(banned: true)
           work
         end
 
