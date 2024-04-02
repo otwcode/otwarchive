@@ -2,7 +2,7 @@
 
 This folder contains custom RuboCop rules (cops) we've writen
 to enforce in-house conventions. To add a new rule, create
-a Ruby file within the directory that matches the departmen
+a Ruby file within the directory that matches the department
 (category in RuboCop speak). Custom cops also need tests in `spec/rubocop`.
 
 ## cucumber
