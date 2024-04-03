@@ -88,13 +88,13 @@ class AutocompleteController < ApplicationController
 
   ## NONCANONICAL TAGS
   def noncanonical_tag
-    search_param = params[:term]
+    search_param = Query.new.escape_reserved_characters(params[:term])
     raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
 
     tag_class = params[:type].classify.constantize
     one_tag = tag_class.find_by(canonical: false, name: search_param)
     # Is there a tag which is just right ( this is really for testing )
-    match = if one_tag then [one_tag.name]  else [] end
+    match = if one_tag then [one_tag.name]  else [] end # rubocop:disable Style/OneLineConditional
 
     # As explained in https://stackoverflow.com/a/54080114, the Elasticsearch suggestion suggester does not support
     # matches in the middle of a series of words. Therefore, we break the autocomplete query into its individual
