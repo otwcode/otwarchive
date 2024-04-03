@@ -89,7 +89,7 @@ class AutocompleteController < ApplicationController
 
   ## NONCANONICAL TAGS
   def noncanonical_tag
-    search_param = params[:term]
+    search_param = Query.escape_reserved_characters(params[:term])
     raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
     begin
       # Size is chosen so we get enough search results from each shard.
