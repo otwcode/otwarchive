@@ -227,6 +227,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "The One Where Neal is Awesome"
       And I follow "Comments (1)"
+      And it is currently 1 second from now
       And I follow "Not Spam"
     Then I should see "Hide Comments (2)"
       And I should not see "Not Spam"

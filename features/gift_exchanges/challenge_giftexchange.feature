@@ -108,6 +108,18 @@ Feature: Gift Exchange Challenge
       And I submit
     Then I should see "Something else weird"
 
+  Scenario: HTTPS URL is saved as HTTPS when editing a signup
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I edit settings for "Awesome Gift Exchange" challenge
+      And I check "gift_exchange[request_restriction_attributes][url_allowed]"
+      And I submit
+    When I am logged in as "myname1"
+      And I sign up for "Awesome Gift Exchange" with combination A
+      And I follow "Edit Sign-up"
+      And I fill in "Prompt URL:" with "https://example.com/url_for_prompt"
+      And I submit
+    Then I should see "URL: https://example.com/url_for_prompt"
+
   Scenario: Sign-ups can be seen in the dashboard
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
     When I am logged in as "myname1"
@@ -619,6 +631,40 @@ Feature: Gift Exchange Challenge
     Given basic tags
       And the user "recip" exists and is activated
       And the user "recip" disallows gifts
+      And I am logged in as "gifter"
+      And I have an assignment for the user "recip" in the collection "exchange_collection"
+    When I start to fulfill my assignment
+      And I fill in "Gift this work to" with "recip"
+      And I press "Post"
+    Then I should see "For recip."
+    When I follow "Edit"
+      And I uncheck "exchange_collection (recip)"
+      And I press "Post"
+    Then I should see "For recip."
+
+  Scenario: If a work is connected to an assignment for a user who blocked the gifter,
+  user is still automatically added as a gift recipient. The recipient
+  remains attached even if the work is later disconnected from the assignment.
+    Given basic tags
+      And the user "recip" exists and is activated
+      And the user "recip" allows gifts
+      And the user "recip" has blocked the user "gifter"
+      And I am logged in as "gifter"
+      And I have an assignment for the user "recip" in the collection "exchange_collection"
+    When I fulfill my assignment
+    Then I should see "For recip."
+    When I follow "Edit"
+      And I uncheck "exchange_collection (recip)"
+      And I press "Post"
+    Then I should see "For recip."
+
+  Scenario: A user can explicitly give a gift to a user who blocked the gifter if
+  the work is connected to an assignment. The recipient remains attached even if
+  the work is later disconnected from the assignment.
+    Given basic tags
+      And the user "recip" exists and is activated
+      And the user "recip" allows gifts
+      And the user "recip" has blocked the user "gifter"
       And I am logged in as "gifter"
       And I have an assignment for the user "recip" in the collection "exchange_collection"
     When I start to fulfill my assignment

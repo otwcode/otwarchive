@@ -6,6 +6,7 @@
 require:
   - rubocop-rails
   - rubocop-rspec
+  - ./rubocop/rubocop
 
 inherit_mode:
   merge:
@@ -17,6 +18,10 @@ AllCops:
 
 Bundler/OrderedGems:
   Enabled: false
+
+I18n/DeprecatedTranslationKey:
+    Rules:
+      name_with_colon: "Prefer `name` with `mailer.general.metadata_label_indicator` over `name_with_colon`"
 
 Layout/DotPosition:
   EnforcedStyle: leading
@@ -71,6 +76,51 @@ Metrics/ParameterLists:
 
 Metrics/PerceivedComplexity:
   Enabled: false
+
+Migration/LargeTableSchemaUpdate:
+  Tables:
+    - abuse_reports
+    - admin_activities
+    - audits
+    - bookmarks
+    - comments
+    - common_taggings
+    - collection_items
+    - collection_participants
+    - collection_profiles
+    - collections
+    - creatorships
+    - external_works
+    - favorite_tags
+    - feedbacks
+    - filter_counts
+    - filter_taggings
+    - gifts
+    - inbox_comments
+    - invitations
+    - kudos
+    - log_items
+    - mutes
+    - preferences
+    - profiles
+    - prompts
+    - pseuds
+    - readings
+    - set_taggings
+    - serial_works
+    - series
+    - skins
+    - stat_counters
+    - subscriptions
+    - tag_nominations
+    - tag_set_associations
+    - tags
+    - taggings
+    - users
+    - works
+
+Rails/DefaultScope:
+  Enabled: true
 
 Rails/DynamicFindBy:
   AllowedMethods:

@@ -321,7 +321,7 @@ class User < ApplicationRecord
   def create_default_associateds
     self.pseuds << Pseud.new(name: self.login, is_default: true)
     self.profile = Profile.new
-    self.preference = Preference.new(preferred_locale: Locale.default.id)
+    self.preference = Preference.new(locale: Locale.default)
   end
 
   def prevent_password_resets?
@@ -468,6 +468,11 @@ class User < ApplicationRecord
       end
     end
     return @coauthored_works
+  end
+
+  #  Returns array of collections where the user is the sole author
+  def sole_owned_collections
+    self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
   end
 
   ### BETA INVITATIONS ###

@@ -17,6 +17,7 @@ Feature: Blocking
       And I press "Yes, Block User"
     Then I should see "You have blocked the user pest."
       And the user "blocker" should have a block for "pest"
+      And the blurb should not say when "blocker" blocked "pest"
 
     Examples:
       | page                                                 |
@@ -109,6 +110,7 @@ Feature: Blocking
     When I am logged in as a "<role>" admin
       And I go to the blocked users page for "blocker"
     Then I should see "pest"
+      And the blurb should say when "blocker" blocked "pest"
       And I should see a link "Unblock"
     When I follow "Unblock"
     Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
@@ -119,3 +121,17 @@ Feature: Blocking
       | superadmin       |
       | policy_and_abuse |
       | support          |
+
+  Scenario: Users are told about blocking effects on gift-giving
+    Given the user "pest" exists and is activated
+      And I am logged in as "blocker"
+    When I go to my blocked users page
+    Then I should see "giving you gift works"
+    Given the user "unblocker" has blocked the user "improving"
+      And I am logged in as "unblocker"
+    When I go to my blocked users page
+    Then I should see "improving"
+      And I should see "giving you gift works"
+    When I follow "Unblock"
+    Then I should see a "Yes, Unblock User" button
+      And I should see "giving you gift works"
