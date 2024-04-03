@@ -93,7 +93,7 @@ Category.human_attribute_name("name", count: 1) + t("mailer.general.metadata_lab
 metadata_property(t(".relative.path.name", count: 2)) # views only
 ```
 
-[Deprecated keys translation keys](https://github.com/otwcode/otwarchive/blob/master/.rubocop.yml#L23)
+[Deprecated translation keys](https://github.com/otwcode/otwarchive/blob/master/.rubocop.yml#L23)
 
 ## migration
 
