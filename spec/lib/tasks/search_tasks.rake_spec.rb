@@ -80,7 +80,7 @@ describe "rake search:index_tags" do
       expect { subject.invoke }
         .to output("#{prompt}\nTask aborted.")
         .to_stdout
-    rescue SystemExit
+    rescue SystemExit # rubocop:disable Lint/SuppressedException
     end
   end
 end
