@@ -753,7 +753,7 @@ en:
       fandom_relationship_tags: Relationship tags in this fandom
       filter_bookmarks: filter bookmarks
       filter_works: filter works
-      list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}. 
+      list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
   time:
     formats:
       date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>

@@ -7,14 +7,14 @@ describe RuboCop::Cop::I18n::DeprecatedHelper do
   it "registers an offense when `ts` is used" do
     expect_offense(<<~INVALID)
       ts("Some String")
-      ^^^^^^^^^^^^^^^^^ Prefer Rails built-in `t` helper over `ts`: the latter is not actually translatable. For more information, refer to https://github.com/otwcode/otwarchive/wiki/Internationalization-(i18n)-Standards.
+      ^^^^^^^^^^^^^^^^^ Prefer Rails built-in `t` helper over `ts`: the latter is not actually translatable. For more information, refer to https://github.com/otwcode/otwarchive/wiki/Internationalization-(i18n)-Standards
     INVALID
   end
 
   it "registers an offense when `ts` is used without parentheses" do
     expect_offense(<<~INVALID)
       ts "Another string"
-      ^^^^^^^^^^^^^^^^^^^ Prefer Rails built-in `t` helper over `ts`: the latter is not actually translatable. For more information, refer to https://github.com/otwcode/otwarchive/wiki/Internationalization-(i18n)-Standards.
+      ^^^^^^^^^^^^^^^^^^^ Prefer Rails built-in `t` helper over `ts`: the latter is not actually translatable. For more information, refer to https://github.com/otwcode/otwarchive/wiki/Internationalization-(i18n)-Standards
     INVALID
   end
 
