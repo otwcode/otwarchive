@@ -92,7 +92,7 @@ class AutocompleteController < ApplicationController
     raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
 
     tag_class = params[:type].classify.constantize
-    one_tag = tag_class.where(canonical: false, name: search_param)
+    one_tag = tag_class.find_by(canonical: false, name: search_param)
     # Is there a tag which is just right ( this is really for testing )
     match = if one_tag then [one_tag.name]  else [] end
 
