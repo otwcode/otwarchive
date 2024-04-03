@@ -94,8 +94,12 @@ class AutocompleteController < ApplicationController
     tag_class = params[:type].classify.constantize
     one_tag = tag_class.where(canonical: false, name: search_param)
     # Is there a tag which is just right ( this is really for testing )
-    match = []
-    match = [one_tag.first.name] if one_tag.count == 1
+    match = if one_tag then [one_tag.name]  else [] end
+
+    # As explained in https://stackoverflow.com/a/54080114, the Elasticsearch suggestion suggester does not support
+    # matches in the middle of a series of words. Therefore, we break the autocomplete query into its individual
+    # words – based on whitespace – except for the last word, which could be a incomplete, so a prefix match is
+    # appropriate. This emulates the behavior of SQL `LIKE '%text%'.
 
     word_list = search_param.split
     last_word = word_list.pop
