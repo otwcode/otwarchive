@@ -223,6 +223,9 @@ en:
     ticket_number: Ticket ID
   errors:
     attributes:
+      icon:
+        invalid_format: content type is invalid
+        too_large: file size must be less than %{size_limit_kb} KB
       ticket_number:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.

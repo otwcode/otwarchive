@@ -123,4 +123,11 @@ module CollectionsHelper
       [t("#{key}.rejected"), :rejected]
     ]
   end
+
+  # Fetches the icon URL for the given collection, using the standard (100x100>) variant.
+  def standard_icon_url(collection)
+    return "/images/skins/iconsets/default/icon_collection.png" unless collection.icon.attached?
+
+    collection.icon.variant(:standard).processed.url
+  end
 end

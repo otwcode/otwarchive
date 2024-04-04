@@ -321,15 +321,12 @@ GEM
       rails-i18n
       rainbow (>= 2.2.2, < 4.0)
       terminal-table (>= 1.5.1)
+    image_processing (1.12.2)
+      mini_magick (>= 4.9.5, < 5)
+      ruby-vips (>= 2.0.17, < 3)
     jmespath (1.6.2)
     json (2.7.1)
     kgio (2.10.0)
-    kt-paperclip (7.2.2)
-      activemodel (>= 4.2.0)
-      activesupport (>= 4.2.0)
-      marcel (~> 1.0.1)
-      mime-types
-      terrapin (>= 0.6.0, < 2.0)
     launchy (2.5.2)
       addressable (~> 2.8)
     lograge (0.14.0)
@@ -538,6 +535,8 @@ GEM
     rubocop-rspec (2.6.0)
       rubocop (~> 1.19)
     ruby-progressbar (1.13.0)
+    ruby-vips (2.2.1)
+      ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     rubyntlm (0.6.3)
     rubyzip (2.3.2)
@@ -673,8 +672,8 @@ DEPENDENCIES
   htmlentities
   httparty
   i18n-tasks
+  image_processing (~> 1.12)
   kgio (= 2.10.0)
-  kt-paperclip (>= 5.2.0)
   launchy
   lograge
   mail (>= 2.8)

@@ -2,16 +2,21 @@ class Collection < ApplicationRecord
   include Filterable
   include WorksOwner
 
-  has_attached_file :icon,
-  styles: { standard: "100x100>" },
-  url: "/system/:class/:attachment/:id/:style/:basename.:extension",
-  path: %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
-  storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
-  s3_protocol: "https",
-  default_url: "/images/skins/iconsets/default/icon_collection.png"
+  has_one_attached :icon do |attachable|
+    attachable.variant(:standard, resize_to_fill: [100, nil])
+  end
 
-  validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
-  validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
+  validate :check_icon_properties
+  def check_icon_properties
+    return unless icon.attached?
+
+    errors.add(:icon, :invalid_format) unless %r{image/\S+}.match?(icon.content_type)
+
+    size_limit_kb = 500
+    errors.add(:icon, :too_large, size_limit_kb: size_limit_kb) unless icon.blob.byte_size < size_limit_kb.kilobytes
+
+    icon.purge if errors[:icon].any?
+  end
 
   belongs_to :parent, class_name: "Collection", inverse_of: :children
   has_many :children, class_name: "Collection", foreign_key: "parent_id", inverse_of: :parent
@@ -419,6 +424,6 @@ class Collection < ApplicationRecord
   alias_method :delete_icon?, :delete_icon
 
   def clear_icon
-    self.icon = nil if delete_icon? && !icon.dirty?
+    self.icon.purge if delete_icon?
   end
 end

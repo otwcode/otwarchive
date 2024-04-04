@@ -48,13 +48,21 @@ class Skin < ApplicationRecord
 
   accepts_nested_attributes_for :skin_parents, allow_destroy: true, reject_if: proc { |attrs| attrs[:position].blank? || (attrs[:parent_skin_title].blank? && attrs[:parent_skin_id].blank?) }
 
-  has_attached_file :icon,
-                    styles: { standard: "100x100>" },
-                    url: "/system/:class/:attachment/:id/:style/:basename.:extension",
-                    path: %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
-                    storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
-                    s3_protocol: "https",
-                    default_url: "/images/skins/iconsets/default/icon_skins.png"
+  has_one_attached :icon do |attachable|
+    attachable.variant(:standard, resize_to_fill: [100, nil])
+  end
+
+  validate :check_icon_properties
+  def check_icon_properties
+    return unless icon.attached?
+
+    errors.add(:icon, :invalid_format) unless %r{image/\S+}.match?(icon.content_type)
+
+    size_limit_kb = 500
+    errors.add(:icon, :too_large, size_limit_kb: size_limit_kb) unless icon.blob.byte_size < size_limit_kb.kilobytes
+
+    icon.purge if errors[:icon].any?
+  end
 
   after_save :skin_invalidate_cache
   def skin_invalidate_cache
@@ -70,8 +78,6 @@ class Skin < ApplicationRecord
     end
   end
 
-  validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
-  validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
   validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
 
@@ -102,7 +108,8 @@ class Skin < ApplicationRecord
 
   validate :valid_public_preview
   def valid_public_preview
-    return true if (self.official? || !self.public? || self.icon_file_name)
+    return true if (self.official? || !self.public? || self.icon.attached?)
+
     errors.add(:base, ts("You need to upload a screencap if you want to share your skin."))
   end
 
@@ -476,7 +483,7 @@ class Skin < ApplicationRecord
           skin.ie_condition = skin_ie
           skin.unusable = true
           skin.official = true
-          File.open(version_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+          skin.icon.attach(io: File.open("#{version_dir}preview.png", "rb"), content_type: "image/png", filename: "preview.png")
           skin.save!
           skins << skin
         end
@@ -490,7 +497,7 @@ class Skin < ApplicationRecord
           top_skin = Skin.new(title: "Archive #{version}", css: "", description: "Version #{version} of the default Archive style.",
                               public: true, role: "site", media: ["screen"])
         end
-        File.open(version_dir + 'preview.png', 'rb') {|preview_file| top_skin.icon = preview_file}
+        top_skin.icon.attach(io: File.open("#{version_dir}preview.png", "rb"), content_type: "image/png", filename: "preview.png")
         top_skin.official = true
         top_skin.save!
         skins.each_with_index do |skin, index|
@@ -579,8 +586,6 @@ class Skin < ApplicationRecord
                   self.class.site_skins_dir + "preview.png"
                 end
 
-    File.open(icon_path) do |icon_file|
-      self.icon = icon_file
-    end
+    self.icon.attach(io: File.open(icon_path), content_type: "image/png", filename: "preview.png")
   end
 end

@@ -3,24 +3,22 @@ class Pseud < ApplicationRecord
   include WorksOwner
   include Justifiable
 
-  has_attached_file :icon,
-    styles: { standard: "100x100>" },
-    path: if Rails.env.production?
-            ":attachment/:id/:style.:extension"
-          elsif Rails.env.staging?
-            ":rails_env/:attachment/:id/:style.:extension"
-          else
-            ":rails_root/public/system/:rails_env/:class/:attachment/:id_partition/:style/:filename"
-          end,
-    storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
-    s3_protocol: "https",
-    default_url: "/images/skins/iconsets/default/icon_user.png"
+  has_one_attached :icon do |attachable|
+    attachable.variant(:standard, resize_to_fill: [100, nil])
+  end
 
-  validates_attachment_content_type :icon,
-                                    content_type: %w[image/gif image/jpeg image/png],
-                                    allow_nil: true
+  validate :check_icon_properties
+  def check_icon_properties
+    return unless icon.attached?
 
-  validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
+    allowed_formats = %w[image/gif image/jpeg image/png]
+    errors.add(:icon, :invalid_format) unless allowed_formats.include?(icon.content_type)
+
+    size_limit_kb = 500
+    errors.add(:icon, :too_large, size_limit_kb: size_limit_kb) unless icon.blob.byte_size < size_limit_kb.kilobytes
+
+    icon.purge if errors[:icon].any?
+  end
 
   NAME_LENGTH_MIN = 1
   NAME_LENGTH_MAX = 40
@@ -419,9 +417,10 @@ class Pseud < ApplicationRecord
 
   def clear_icon
     return unless delete_icon?
-    
-    self.icon = nil unless icon.dirty?
+
+    self.icon.purge
     self.icon_alt_text = nil
+    self.icon = nil if delete_icon? && !icon.dirty?
   end
 
   #################################
