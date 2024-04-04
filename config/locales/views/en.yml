@@ -178,6 +178,20 @@ en:
               required: Required when adding or removing a warning or suspension to an account.
             submit: Update
           heading: Record Warnings, Suspensions, or Notes
+    banners:
+      index:
+        actions:
+          active: Active
+          confirm_delete: Are you sure you want to delete this banner?
+          delete: Delete
+          edit: Edit
+        page_heading: Banners
+      navigation:
+        confirm_delete: Are you sure you want to delete this banner?
+        delete: Delete Banner
+        edit: Edit Banner
+        index: Banners
+        new: New Banner
     blacklist:
       emails_found:
         one: one email found
@@ -734,8 +748,12 @@ en:
         random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
     show:
+      canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
+      canonical_tag: canonical tag
       fandom_relationship_tags: Relationship tags in this fandom
-      list_fandom_tags_html: A list of all the %{fandom_relationship_tags_link} is available.
+      filter_bookmarks: filter bookmarks
+      filter_works: filter works
+      list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
   time:
     formats:
       date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
