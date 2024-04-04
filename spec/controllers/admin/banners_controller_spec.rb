@@ -50,7 +50,7 @@ describe Admin::BannersController do
     end
 
     it_behaves_like "only authorized admins are allowed",
-                    authorized_roles: %w[superadmin board communications development_and_membership support]
+                    authorized_roles: %w[superadmin board board_assistants_team communications development_and_membership support]
   end
 
   describe "GET #show" do
@@ -61,7 +61,7 @@ describe Admin::BannersController do
     end
 
     it_behaves_like "only authorized admins are allowed",
-                    authorized_roles: %w[superadmin board communications development_and_membership support]
+                    authorized_roles: %w[superadmin board board_assistants_team communications development_and_membership support]
   end
 
   describe "GET #new" do
@@ -72,7 +72,7 @@ describe Admin::BannersController do
     end
 
     it_behaves_like "only authorized admins are allowed",
-                    authorized_roles: %w[superadmin board communications support]
+                    authorized_roles: %w[superadmin board board_assistants_team communications support]
   end
 
   describe "POST #create" do
@@ -83,7 +83,7 @@ describe Admin::BannersController do
     end
 
     it_behaves_like "only authorized admins are allowed",
-                    authorized_roles: %w[superadmin board communications support]
+                    authorized_roles: %w[superadmin board board_assistants_team communications support]
   end
 
   describe "GET #edit" do
@@ -94,7 +94,7 @@ describe Admin::BannersController do
     end
 
     it_behaves_like "only authorized admins are allowed",
-                    authorized_roles: %w[superadmin board communications development_and_membership support]
+                    authorized_roles: %w[superadmin board board_assistants_team communications development_and_membership support]
   end
 
   describe "PUT #update" do
@@ -106,7 +106,7 @@ describe Admin::BannersController do
     end
 
     it_behaves_like "only authorized admins are allowed",
-                    authorized_roles: %w[superadmin board communications development_and_membership support]
+                    authorized_roles: %w[superadmin board board_assistants_team communications development_and_membership support]
   end
 
   describe "GET #confirm_delete" do
@@ -117,7 +117,7 @@ describe Admin::BannersController do
     end
 
     it_behaves_like "only authorized admins are allowed",
-                    authorized_roles: %w[superadmin board communications support]
+                    authorized_roles: %w[superadmin board board_assistants_team communications support]
   end
 
   describe "DELETE #destroy" do
@@ -129,6 +129,6 @@ describe Admin::BannersController do
     end
 
     it_behaves_like "only authorized admins are allowed",
-                    authorized_roles: %w[superadmin board communications support]
+                    authorized_roles: %w[superadmin board board_assistants_team communications support]
   end
 end
