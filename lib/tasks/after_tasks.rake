@@ -218,5 +218,71 @@ namespace :After do
       puts("Admin not found.")
     end
   end
+
+  desc "Migrate collection icons to ActiveStorage paths"
+  task(migrate_collection_icons: :environment) do
+    require "open-uri"
+
+    return unless Rails.env.staging? || Rails.env.production?
+
+    Collection.where.not(icon_file_name: nil).find_each do |collection|
+      image = collection.icon_file_name
+      ext = File.extname(image)
+      image_original = "original#{ext}"
+
+      # Collection icons are co-mingled in production and staging...
+      icon_url = "https://s3.amazonaws.com/otw-ao3-icons/collections/icons/#{collection.id}/#{image_original}"
+      collection.icon.attach(io: URI.parse(icon_url).open,
+                             filename: image,
+                             content_type: collection.icon_content_type)
+
+      print "." && $stdout.flush if collection.id.modulo(100).zero?
+    end
+  end
+
+  desc "Migrate pseud icons to ActiveStorage paths"
+  task(migrate_pseud_icons: :environment) do
+    require "open-uri"
+
+    return unless Rails.env.staging? || Rails.env.production?
+
+    Pseud.where.not(icon_file_name: nil).find_each do |pseud|
+      image = pseud.icon_file_name
+      ext = File.extname(image)
+      image_original = "original#{ext}"
+
+      icon_url = if Rails.env.production
+                   "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
+                 else
+                   "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
+                 end
+      pseud.icon.attach(io: URI.parse(icon_url).open,
+                        filename: image,
+                        content_type: pseud.icon_content_type)
+
+      print "." && $stdout.flush if pseud.id.modulo(100).zero?
+    end
+  end
+
+  desc "Migrate skin icons to ActiveStorage paths"
+  task(migrate_skin_icons: :environment) do
+    require "open-uri"
+
+    return unless Rails.env.staging? || Rails.env.production?
+
+    Skin.where.not(icon_file_name: nil).find_each do |skin|
+      image = skin.icon_file_name
+      ext = File.extname(image)
+      image_original = "original#{ext}"
+
+      # Skin icons are co-mingled in production and staging...
+      icon_url = "https://s3.amazonaws.com/otw-ao3-icons/skins/icons/#{skin.id}/#{image_original}"
+      skin.icon.attach(io: URI.parse(icon_url).open,
+                       filename: image,
+                       content_type: skin.icon_content_type)
+
+      print "." && $stdout.flush if skin.id.modulo(100).zero?
+    end
+  end
   # This is the end that you have to put new tasks above.
 end
