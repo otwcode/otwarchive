@@ -168,7 +168,6 @@ class User < ApplicationRecord
   end
 
   def remove_user_from_kudos
-    # TODO: AO3-5054 Expire kudos cache when deleting a user.
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
     Kudo.where(user: self).update_all(user_id: nil)
   end
@@ -321,7 +320,7 @@ class User < ApplicationRecord
   def create_default_associateds
     self.pseuds << Pseud.new(name: self.login, is_default: true)
     self.profile = Profile.new
-    self.preference = Preference.new(preferred_locale: Locale.default.id)
+    self.preference = Preference.new(locale: Locale.default)
   end
 
   def prevent_password_resets?

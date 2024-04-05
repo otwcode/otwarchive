@@ -41,6 +41,22 @@ describe Admin::SpamController do
         end
       end
     end
+
+    context "when a ModeratedWork has no corresponding Work" do
+      let!(:spam_with_work) { create(:moderated_work) }
+      let!(:spam_missing_work) { create(:moderated_work, work_id: -1) }
+
+      before do
+        fake_login_admin(create(:superadmin))
+      end
+
+      it "only loads the existing work" do
+        get :index
+
+        expect(assigns(:works)).to include(spam_with_work)
+        expect(assigns(:works)).not_to include(spam_missing_work)
+      end
+    end
   end
 
   describe "POST #bulk_update" do
