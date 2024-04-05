@@ -1,6 +1,5 @@
 class Collection < ApplicationRecord
   include Filterable
-  include UrlHelpers
   include WorksOwner
 
   has_attached_file :icon,
@@ -9,8 +8,6 @@ class Collection < ApplicationRecord
   path: %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
   storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
   s3_protocol: "https",
-  s3_credentials: "#{Rails.root}/config/s3.yml",
-  bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
   default_url: "/images/skins/iconsets/default/icon_collection.png"
 
   validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
@@ -177,7 +174,7 @@ class Collection < ApplicationRecord
 
   before_validation :cleanup_url
   def cleanup_url
-    self.header_image_url = reformat_url(self.header_image_url) if self.header_image_url
+    self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
   end
 
   # Get only collections with running challenges

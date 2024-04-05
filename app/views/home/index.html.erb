@@ -31,14 +31,14 @@
   <% if logged_in? && @homepage.readings.present? %>
     <div class="random readings module">
       <h3 class="heading">
-        <span class="title"><%= ts('Is it later already?') %></span>
-        <span class="link"><%= link_to ts('My History'), user_readings_path(current_user) %></span>
+        <span class="title"><%= t(".readings.heading.title") %></span>
+        <span class="link"><%= link_to t(".readings.heading.history_link"), user_readings_path(current_user) %></span>
       </h3>
       <div class="flash"></div>
-      <p class="note"><%= ts('Some works you\'ve marked for later.') %></p>
+      <p class="note"><%= t(".readings.note") %></p>
       <ul class="readings works index group">
         <% @homepage.readings.each do |reading| %>
-          <%= render 'readings/reading_blurb', work: reading.work, reading: reading %>
+          <%= render "readings/reading_blurb", work: reading.work, reading: reading %>
         <% end %>
       </ul>
     </div>
@@ -48,11 +48,13 @@
     <%= render 'inbox_module', inbox_comments: @homepage.inbox_comments %>
   <% end %>
 
-  <% unless Rails.env.test? %>
-    <div class="latest tweets module">
-      <h3 class="heading"><%= ts('Tweets') %></h3>
-      <a class="twitter-timeline" href="https://twitter.com/otw_status/lists/otw-tweets" data-dnt="true" data-height="600"><%= ts('Tweets from https://twitter.com/otw_status/lists/otw-tweets') %></a>
-      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-    </div>
-  <% end %>
+  <div class="social module">
+    <h3 class="heading"><%= t(".social.heading") %></h3>
+    <p class="note"><%= t(".social.note_html", other_outlets_link: link_to(t(".social.other_outlets"), "https://www.transformativeworks.org/where-find-us/")) %></p>
+
+    <ul>
+      <li class="twitter"><%= sharing_button("twitter", "https://twitter.com/AO3_Status", t(".social.twitter")) %></li>
+      <li class="tumblr"><%= sharing_button("tumblr", "https://ao3org.tumblr.com", t(".social.tumblr")) %></li>
+    </ul>
+  </div>
 </div>

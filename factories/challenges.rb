@@ -16,7 +16,7 @@ FactoryBot.define do
     offers_attributes { [attributes_for(:offer)] }
   end
 
-  factory :prompt_meme_signup, class: ChallengeSignup do
+  factory :prompt_meme_signup, class: "ChallengeSignup" do
     pseud { create(:user).default_pseud }
     collection { create(:collection, challenge: create(:prompt_meme)) }
     requests_attributes { [attributes_for(:request)] }

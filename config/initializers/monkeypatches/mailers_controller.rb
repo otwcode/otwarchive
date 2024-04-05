@@ -6,5 +6,6 @@ module MailersController
     skip_rack_dev_mark
   end
 end
-
-::Rails::MailersController.include MailersController
+Rails.application.config.after_initialize do
+  ::Rails::MailersController.include MailersController
+end

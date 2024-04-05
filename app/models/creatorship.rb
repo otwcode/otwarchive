@@ -1,6 +1,6 @@
 class Creatorship < ApplicationRecord
-  belongs_to :pseud, inverse_of: :creatorships
-  belongs_to :creation, inverse_of: :creatorships, polymorphic: true, touch: true
+  belongs_to :pseud
+  belongs_to :creation, polymorphic: true, touch: true
 
   scope :approved, -> { where(approved: true) }
   scope :unapproved, -> { where(approved: false) }
@@ -17,8 +17,8 @@ class Creatorship < ApplicationRecord
   validates_uniqueness_of :pseud, scope: [:creation_type, :creation_id], on: :create
 
   validate :check_invalid, on: :create
-  validate :check_disallowed, on: :create
   validate :check_banned, on: :create
+  validate :check_disallowed, on: :create
   validate :check_approved_becoming_false, on: :update
 
   # Update approval status if this creatorship should be automatically approved.
@@ -41,21 +41,21 @@ class Creatorship < ApplicationRecord
     end
   end
 
+  # Make sure that the user isn't banned or suspended.
+  def check_banned
+    return unless pseud&.user&.banned || pseud&.user&.suspended
+
+    errors.add(:base, ts("%{name} cannot be listed as a co-creator.",
+                         name: pseud.byline))
+    throw :abort
+  end
+
   # Make sure that if this is an invitation, we're not inviting someone who has
   # disabled invitations.
   def check_disallowed
     return if approved? || pseud.nil?
     return if pseud&.user&.preference&.allow_cocreator
-
     errors.add(:base, ts("%{name} does not allow others to invite them to be a co-creator.",
-                         name: pseud.byline))
-  end
-
-  # Make sure that the user isn't banned or suspended.
-  def check_banned
-    return unless pseud&.user&.banned || pseud&.user&.suspended
-
-    errors.add(:base, ts("%{name} is currently banned and cannot be listed as a co-creator.",
                          name: pseud.byline))
   end
 
@@ -149,7 +149,7 @@ class Creatorship < ApplicationRecord
                   pseud.user != User.current_user &&
                   pseud.user != User.orphan_account
 
-    I18n.with_locale(Locale.find(pseud.user.preference.preferred_locale).iso) do
+    I18n.with_locale(pseud.user.preference.locale.iso) do
       if approved?
         if User.current_user.try(:is_archivist?)
           UserMailer.creatorship_notification_archivist(id, User.current_user.id).deliver_later

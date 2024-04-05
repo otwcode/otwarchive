@@ -12,6 +12,7 @@ Feature: Brand new fandoms
     Given I am logged in as a random user
       And I post a work "My New Work" with fandom "My Brand New Fandom"
       And the periodic tag count task is run
+      And all indexing jobs have been run
     When I follow "Uncategorized Fandoms" within "#header"
     Then I should see "My Brand New Fandom"
 
@@ -21,6 +22,7 @@ Feature: Brand new fandoms
       And I fill in "Fandoms" with "My Brand New Fandom"
       And I submit
       And the periodic tag count task is run
+      And all indexing jobs have been run
     When I follow "Uncategorized Fandoms" within "#header"
     Then I should see "My Brand New Fandom"
 
@@ -28,6 +30,7 @@ Feature: Brand new fandoms
     Given I am logged in as a random user
       And I post a work "My New Work" with fandom "My Brand New Fandom"
       And the periodic tag count task is run
+      And all indexing jobs have been run
     When I follow "Edit"
       And I follow "Delete Work"
       And I press "Yes"
@@ -43,6 +46,7 @@ Feature: Brand new fandoms
       And I fill in "Fandoms" with "My Brand New Fandom"
       And I submit
       And the periodic tag count task is run
+      And all indexing jobs have been run
     When I am logged in as a "policy_and_abuse" admin
       And I view the external work "External Work To Be Deleted"
       And I follow "Delete External Work"
@@ -55,6 +59,7 @@ Feature: Brand new fandoms
     Given I am logged in as a tag wrangler
       And I post a work "My New Work" with fandom "My Brand New Fandom"
       And the periodic tag count task is run
+      And all indexing jobs have been run
     When I follow "Tag Wrangling" within "#header"
       And I follow "Fandoms by media"
     Then I should see "My Brand New Fandom"
@@ -65,6 +70,7 @@ Feature: Brand new fandoms
       And I fill in "Fandoms" with "My Brand New Fandom"
       And I submit
       And the periodic tag count task is run
+      And all indexing jobs have been run
     When I follow "Tag Wrangling" within "#header"
       And I follow "Fandoms by media"
     Then I should see "My Brand New Fandom"
@@ -73,11 +79,13 @@ Feature: Brand new fandoms
     Given I am logged in as a tag wrangler
       And I post a work "My New Work" with fandom "My Brand New Fandom"
       And the periodic tag count task is run
+      And all indexing jobs have been run
     When I follow "Edit"
       And I follow "Delete Work"
       And I press "Yes"
     Then I should see "Your work My New Work was deleted."
     When the periodic tag count task is run
+      And all indexing jobs have been run
       And I follow "Tag Wrangling" within "#header"
       And I follow "Fandoms by media"
     Then I should not see "My Brand New Fandom"
@@ -89,11 +97,13 @@ Feature: Brand new fandoms
       And I fill in "Fandoms" with "My Brand New Fandom"
       And I submit
       And the periodic tag count task is run
+      And all indexing jobs have been run
     When I am logged in as a "policy_and_abuse" admin
       And I view the external work "External Work To Be Deleted"
       And I follow "Delete External Work"
     Then I should see "Item was successfully deleted."
     When the periodic tag count task is run
+      And all indexing jobs have been run
       And I am logged in as a tag wrangler
       And I follow "Tag Wrangling" within "#header"
       And I follow "Fandoms by media"

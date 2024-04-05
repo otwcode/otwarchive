@@ -3,6 +3,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_permitted_parameters
 
   def new
+    @page_title = "Create Account" # Displays "New Registration" otherwise
     super do |resource|
       if params[:invitation_token]
         @invitation = Invitation.find_by(token: params[:invitation_token])

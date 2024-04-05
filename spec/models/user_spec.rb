@@ -34,6 +34,23 @@ describe User do
       end
     end
 
+    context "when the user has a fnok" do
+      let(:fnok) { create(:fannish_next_of_kin) }
+      let(:user) { fnok.user }
+      let(:kin) { fnok.kin }
+
+      it "logs the fnok removal on the kin side" do
+        user_id = user.id
+        user.destroy!
+
+        log_item = kin.reload.log_items.last
+        expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVED_AS_FNOK)
+        expect(log_item.fnok_user_id).to eq(user_id)
+        expect(log_item.admin_id).to be_nil
+        expect(log_item.note).to eq("System Generated")
+      end
+    end
+
     context "when the user is set as someone else's fnok" do
       let(:fnok) { create(:fannish_next_of_kin) }
       let(:user) { fnok.kin }
@@ -172,18 +189,19 @@ describe User do
 
     it "sets renamed_at if username is changed" do
       freeze_time
-      existing_user.update(login: "new_username")
+      existing_user.update!(login: "new_username")
       expect(existing_user.renamed_at).to eq(Time.current)
     end
 
     context "username was recently changed" do
       before do
         freeze_time
-        existing_user.update(login: "new_login")
+        existing_user.update!(login: "new_login")
       end
 
       it "does not allow another rename" do
-        expect(existing_user.update(login: "new")).to be_falsey
+        expect { existing_user.update!(login: "new") }
+          .to raise_error(ActiveRecord::RecordInvalid)
         localized_renamed_at = I18n.l(existing_user.renamed_at, format: :long)
         expect(existing_user.errors[:login].first).to eq(
           "can only be changed once every 7 days. You last changed your user name on #{localized_renamed_at}."
@@ -191,20 +209,51 @@ describe User do
       end
 
       it "allows changing email" do
-        existing_user.update(email: "new_email")
-        expect(existing_user.email).to eq("new_email")
+        existing_user.update!(email: "new_email@example.com")
+        expect(existing_user.email).to eq("new_email@example.com")
+      end
+    end
+
+    context "password was recently changed" do
+      before do
+        pw = Faker::Lorem.characters(number: ArchiveConfig.PASSWORD_LENGTH_MIN)
+        existing_user.update!(password: pw, password_confirmation: pw)
+      end
+
+      redacted_value = "[REDACTED]"
+      redacted_arr = Array.new(2, redacted_value)
+
+      it "audits and redacts password changes" do
+        last_change = existing_user.audits.pluck(:audited_changes).last
+
+        expect(last_change["encrypted_password"]).to eq(redacted_arr)
+      end
+
+      it "deserializes old BCrypt password changes" do
+        salt = SecureRandom.urlsafe_base64(15)
+        bcrypt_password = BCrypt::Password.create(
+          ["another_password", salt].flatten.join,
+          cost: ArchiveConfig.BCRYPT_COST || 14
+        )
+
+        existing_user.update!(encrypted_password: bcrypt_password, password_salt: salt)
+
+        last_change = existing_user.audits.pluck(:audited_changes).last
+
+        expect(last_change["encrypted_password"]).to eq(redacted_arr)
+        expect(last_change["password_salt"]).to eq(redacted_arr)
       end
     end
 
     context "username was changed outside window" do
       before do
         travel_to ArchiveConfig.USER_RENAME_LIMIT_DAYS.days.ago do
-          existing_user.update(login: "new_username")
+          existing_user.update!(login: "new_username")
         end
       end
 
       it "allows another rename" do
-        expect(existing_user.update(login: "new")).to be_truthy
+        expect(existing_user.update!(login: "new")).to be_truthy
         expect(existing_user.login).to eq("new")
       end
     end

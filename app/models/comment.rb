@@ -495,7 +495,7 @@ class Comment < ApplicationRecord
   end
 
   def sanitized_content
-    sanitize_field self, :comment_content
+    sanitize_field(self, :comment_content, strip_images: ultimate_parent.is_a?(AdminPost))
   end
   include Responder
 end

@@ -68,14 +68,14 @@ describe InviteRequestsController do
       end
 
       it "redirects to index with notice" do
-        email = generate(:email)
+        email = Faker::Internet.unique.email
         post :create, params: { invite_request: { email: email } }
         invite_request = InviteRequest.find_by!(email: email)
         it_redirects_to_with_notice(invite_requests_path, "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider.")
       end
 
       it "assigns an IP address to the request" do
-        post :create, params: { invite_request: { email: generate(:email) } }
+        post :create, params: { invite_request: { email: Faker::Internet.unique.email } }
         expect(assigns(:invite_request).ip_address).to eq(ip)
       end
     end
@@ -86,7 +86,7 @@ describe InviteRequestsController do
       end
 
       it "redirects to index with error" do
-        post :create, params: { invite_request: { email: generate(:email) } }
+        post :create, params: { invite_request: { email: Faker::Internet.unique.email } }
         it_redirects_to_simple(invite_requests_path)
         expect(flash[:error]).to include("New invitation requests are currently closed.")
       end
@@ -116,7 +116,7 @@ describe InviteRequestsController do
         context "with #{admin_role} role" do
 
           before do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
           end
 
@@ -183,7 +183,7 @@ describe InviteRequestsController do
       (Admin::VALID_ROLES - %w[superadmin policy_and_abuse support]).each do |admin_role|
         context "with #{admin_role} role" do
           before do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
           end
 
@@ -253,7 +253,7 @@ describe InviteRequestsController do
           end
 
           before do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
           end
 
@@ -285,7 +285,7 @@ describe InviteRequestsController do
       (Admin::VALID_ROLES - %w[superadmin policy_and_abuse support]).each do |admin_role|
         context "with #{admin_role} role" do
           before do
-            admin.update(roles: [admin_role])
+            admin.update!(roles: [admin_role])
             fake_login_admin(admin)
           end
 
@@ -303,7 +303,7 @@ describe InviteRequestsController do
 
       context "with no admin role" do
         before do
-          admin.update(roles: [])
+          admin.update!(roles: [])
           fake_login_admin(admin)
         end
 

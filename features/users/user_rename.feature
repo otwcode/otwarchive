@@ -148,6 +148,40 @@ Feature:
     Then I should see "after" within ".comment h4.byline"
       And I should not see "mine (before)"
 
+  Scenario: Collections reflect username changes of the owner after the cache expires
+    When I am logged in as "before" with password "password"
+      And I create the collection "My Collection Thing"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "before" within "#main"
+    When I change my username to "after"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "before" within "#main"
+    When the collection blurb cache has expired
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "after" within "#main"
+      And I should not see "before" within "#main"
+
+  Scenario: Collections reflect username changes of moderators after the cache expires
+    Given I am logged in as "mod1"
+      And I create the collection "My Collection Thing"
+      And I have added a co-moderator "before" to collection "My Collection Thing"
+    When I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "before" within "#main"
+    When I am logged in as "before" with password "password"
+      And I change my username to "after"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "before" within "#main"
+    When the collection blurb cache has expired
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "after" within "#main"
+      And I should not see "before" within "#main"
+
   Scenario: Changing username updates series blurbs
     Given I have no users
       And I am logged in as "oldusername" with password "password"

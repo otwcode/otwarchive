@@ -13,36 +13,92 @@ describe Download do
 
       # Arabic
       work.title = "هذا عمل جديد"
-      expect(Download.new(work).file_name).to eq("hdh ml jdyd")
+      expect(Download.new(work).file_name).to eq("hdh_ml_jdyd")
 
       # Chinese
       work.title = "我哥好像被奇怪的人盯上了怎么破"
-      expect(Download.new(work).file_name).to eq("Wo Ge Hao Xiang Bei Qi")
+      expect(Download.new(work).file_name).to eq("Wo_Ge_Hao_Xiang_Bei_Qi")
 
       # Japanese
       work.title = "二重スパイは接点を持つ"
-      expect(Download.new(work).file_name).to eq("Er Zhong supaihaJie Dian")
+      expect(Download.new(work).file_name).to eq("Er_Zhong_supaihaJie_Dian")
 
       # Hebrew
       work.title = "לחזור הביתה"
-      expect(Download.new(work).file_name).to eq("lkhzvr hbyth")
+      expect(Download.new(work).file_name).to eq("lkhzvr_hbyth")
     end
 
     it "removes HTML entities and emojis" do
       work.title = "Two of Hearts <3 &amp; >.< &"
-      expect(Download.new(work).file_name).to eq("Two of Hearts 3")
+      expect(Download.new(work).file_name).to eq("Two_of_Hearts_3")
 
       work.title = "Emjoi 🤩 Yay 🥳"
-      expect(Download.new(work).file_name).to eq("Emjoi Yay")
+      expect(Download.new(work).file_name).to eq("Emjoi_Yay")
+    end
+
+    it "strips leading space" do
+      work.title = " Blank Space Baby"
+      expect(Download.new(work).file_name).to eq("Blank_Space_Baby")
+    end
+
+    it "strips trailing space" do
+      work.title = "Write your name: "
+      expect(Download.new(work).file_name).to eq("Write_your_name")
+    end
+
+    it "replaces multiple spaces with single underscore" do
+      work.title = "Space   Opera"
+      expect(Download.new(work).file_name).to eq("Space_Opera")
+    end
+
+    it "replaces unicode space with underscores" do
+      work.title = "No-break Space"
+      expect(Download.new(work).file_name).to eq("No-break_Space")
+
+      work.title = "En Quad Space"
+      expect(Download.new(work).file_name).to eq("En_Quad_Space")
+
+      work.title = "Em Quad Space"
+      expect(Download.new(work).file_name).to eq("Em_Quad_Space")
+
+      work.title = "En Space"
+      expect(Download.new(work).file_name).to eq("En_Space")
+
+      work.title = "Em Space"
+      expect(Download.new(work).file_name).to eq("Em_Space")
+
+      work.title = "3 Per Em Space"
+      expect(Download.new(work).file_name).to eq("3_Per_Em_Space")
+
+      work.title = "4 Per Em Space"
+      expect(Download.new(work).file_name).to eq("4_Per_Em_Space")
+
+      work.title = "6 Per Em Space"
+      expect(Download.new(work).file_name).to eq("6_Per_Em_Space")
+
+      work.title = "Figure Space"
+      expect(Download.new(work).file_name).to eq("Figure_Space")
+
+      work.title = "Punctuation Space"
+      expect(Download.new(work).file_name).to eq("Punctuation_Space")
+
+      work.title = "Thin Space"
+      expect(Download.new(work).file_name).to eq("Thin_Space")
+
+      work.title = "Hair Space"
+      expect(Download.new(work).file_name).to eq("Hair_Space")
+
+      work.title = "Narrow No-Break Space"
+      expect(Download.new(work).file_name).to eq("Narrow_No-Break_Space")
     end
 
     it "appends work ID if too short" do
       work.id = 999_999
       work.title = "Uh"
-      expect(Download.new(work).file_name).to eq("Uh Work 999999")
+      expect(Download.new(work).file_name).to eq("Uh_Work_999999")
 
       work.title = ""
-      expect(Download.new(work).file_name).to eq("Work 999999")
+      expect(Download.new(work).file_name).to eq("Work_999999")
 
       work.title = "wat"
       expect(Download.new(work).file_name).to eq("wat")
@@ -53,7 +109,7 @@ describe Download do
       expect(Download.new(work).file_name).to eq("123456789-123456789-1234")
 
       work.title = "123456789 123456789 123456789"
-      expect(Download.new(work).file_name).to eq("123456789 123456789")
+      expect(Download.new(work).file_name).to eq("123456789_123456789")
     end
   end
 

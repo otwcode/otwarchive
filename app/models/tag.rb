@@ -50,8 +50,17 @@ class Tag < ApplicationRecord
   end
 
   def write_taggings_to_redis(value)
+    # Atomically set the value while extracting the old value.
+    old_redis_value = REDIS_GENERAL.getset("tag_update_#{id}_value", value).to_i
+
+    # If the value hasn't changed from the saved version or the REDIS version,
+    # there's no need to write an update to the database, so let's just bail
+    # out.
+    return value if value == old_redis_value && value == taggings_count_cache
+
+    # If we've reached here, then the value has changed, and we need to make
+    # sure that the new value is written to the database.
     REDIS_GENERAL.sadd("tag_update", id)
-    REDIS_GENERAL.set("tag_update_#{id}_value", value)
     value
   end
 
@@ -101,7 +110,7 @@ class Tag < ApplicationRecord
   end
 
   has_many :mergers, foreign_key: 'merger_id', class_name: 'Tag'
-  belongs_to :merger, class_name: 'Tag'
+  belongs_to :merger, class_name: "Tag"
   belongs_to :fandom
   belongs_to :media
   belongs_to :last_wrangler, polymorphic: true
@@ -152,17 +161,18 @@ class Tag < ApplicationRecord
   has_many :tag_set_associations, dependent: :destroy
   has_many :parent_tag_set_associations, class_name: 'TagSetAssociation', foreign_key: 'parent_tag_id', dependent: :destroy
 
-  validates_presence_of :name
+  validates :name, presence: true
   validates :name, uniqueness: true
-  validates_length_of :name, minimum: 1, message: "cannot be blank."
-  validates_length_of :name,
-    maximum: ArchiveConfig.TAG_MAX,
-    message: "^Tag name '%{value}' is too long -- try using less than %{count} characters or using commas to separate your tags."
-  validates_format_of :name,
-    with: /\A[^,*<>^{}=`\\%]+\z/,
-    message: "^Tag name '%{value}' cannot include the following restricted characters: , &#94; * < > { } = ` \\ %"
-
-  validates_presence_of :sortable_name
+  validates :name,
+            length: { minimum: 1,
+                      message: "cannot be blank." }
+  validates :name,
+            length: { maximum: ArchiveConfig.TAG_MAX,
+                      message: "^Tag name '%{value}' is too long -- try using less than %{count} characters or using commas to separate your tags." }
+  validates :name,
+            format: { with: /\A[^,，、*<>^{}=`\\%]+\z/,
+                      message: "^Tag name '%{value}' cannot include the following restricted characters: , &#94; * < > { } = ` ， 、 \\ %" }
+  validates :sortable_name, presence: true
 
   validate :unwrangleable_status
   def unwrangleable_status
@@ -262,9 +272,6 @@ class Tag < ApplicationRecord
   scope :unfilterable, -> { nonsynonymous.where(unwrangleable: false) }
   scope :unwrangleable, -> { where(unwrangleable: true) }
 
-  # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
-  # what we actually need are the empty rows in the results
-  scope :unwrangled, -> { joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("unwrangleable = 0 AND common_taggings.id IS NULL") }
   scope :in_use, -> { where("canonical = 1 OR taggings_count_cache > 0") }
   scope :first_class, -> { joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL") }
 
@@ -471,30 +478,48 @@ class Tag < ApplicationRecord
   end
 
   def add_to_autocomplete(score = nil)
-    score ||= autocomplete_score
-    if self.is_a?(Character) || self.is_a?(Relationship)
+    if eligible_for_fandom_autocomplete?
       parents.each do |parent|
-        REDIS_AUTOCOMPLETE.zadd(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), score, autocomplete_value) if parent.is_a?(Fandom)
+        add_to_fandom_autocomplete(parent, score) if parent.is_a?(Fandom)
       end
     end
     super
+  end
+
+  def add_to_fandom_autocomplete(fandom, score = nil)
+    score ||= autocomplete_score
+    REDIS_AUTOCOMPLETE.zadd(self.transliterate("autocomplete_fandom_#{fandom.name.downcase}_#{type.downcase}"), score, autocomplete_value)
   end
 
   def remove_from_autocomplete
     super
-    if self.is_a?(Character) || self.is_a?(Relationship)
-      parents.each do |parent|
-        REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), autocomplete_value) if parent.is_a?(Fandom)
-      end
+
+    return unless was_eligible_for_fandom_autocomplete?
+
+    parents.each do |parent|
+      remove_from_fandom_autocomplete(parent) if parent.is_a?(Fandom)
     end
+  end
+
+  def remove_from_fandom_autocomplete(fandom)
+    REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{fandom.name.downcase}_#{type.downcase}"), autocomplete_value)
+  end
+
+  def eligible_for_fandom_autocomplete?
+    (self.is_a?(Character) || self.is_a?(Relationship)) && canonical
+  end
+
+  def was_eligible_for_fandom_autocomplete?
+    (self.is_a?(Character) || self.is_a?(Relationship)) && (canonical || canonical_before_last_save)
   end
 
   def remove_stale_from_autocomplete
     super
-    if self.is_a?(Character) || self.is_a?(Relationship)
-      parents.each do |parent|
-        REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), autocomplete_value_before_last_save) if parent.is_a?(Fandom)
-      end
+
+    return unless was_eligible_for_fandom_autocomplete?
+
+    parents.each do |parent|
+      REDIS_AUTOCOMPLETE.zrem(self.transliterate("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}"), autocomplete_value_before_last_save) if parent.is_a?(Fandom)
     end
   end
 
@@ -1004,6 +1029,20 @@ class Tag < ApplicationRecord
         syn.update(merger_id: self.id)
       end
     end
+  end
+
+  # unwrangleable:
+  #   - A boolean stored in the tags table
+  #   - Default false
+  #   - Set to true by wranglers on tags that should be excluded from the wrangling process altogether. Example: freeform tags like "idk how to explain it but trust me"
+  #
+  # unwrangled:
+  #   - A computed value
+  #   - True for "orphan" tags yet to be tied to something (fandom, character, etc.) by wranglers
+  #   - Exact meaning may change depending on the nature of the tag (search for definitions of unwrangled? overriding this one)
+  #
+  def unwrangled?
+    common_taggings.empty?
   end
 
   #################################

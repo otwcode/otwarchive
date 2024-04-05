@@ -36,7 +36,7 @@
          @log_items.each do |item| %>
         <tr>
           <td><%= item.created_at %></td>
-          <td><%= log_item_action_name(item, @user) %><%= item.role&.name %><%= item.enddate %></td>
+          <td><%= log_item_action_name(item) %><%= item.role&.name %><%= item.enddate %></td>
           <td><%= item.note %></td>
         </tr>
       <% end %>

@@ -82,21 +82,21 @@ module UsersHelper
   def series_link(user, pseud = nil)
     return pseud_series_link(pseud) if pseud.present? && !pseud.new_record?
 
-    if current_user.nil?
-      total = Series.visible_to_all.exclude_anonymous.for_pseuds(user.pseuds).length
-    else
-      total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(user.pseuds).length
-    end
-    span_if_current ts('Series (%{series_number})', series_number: total.to_s), user_series_index_path(@user)
+    total = if current_user.nil?
+              Series.visible_to_all.exclude_anonymous.for_user(user).count.size
+            else
+              Series.visible_to_registered_user.exclude_anonymous.for_user(user).count.size
+            end
+    span_if_current ts("Series (%{series_number})", series_number: total.to_s), user_series_index_path(user)
   end
 
   def pseud_series_link(pseud)
-    if current_user.nil?
-      total = Series.visible_to_all.exclude_anonymous.for_pseuds([pseud]).length
-    else
-      total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([pseud]).length
-    end
-    span_if_current ts('Series (%{series_number})', series_number: total.to_s), user_pseud_series_index_path(@user, pseud)
+    total = if current_user.nil?
+              Series.visible_to_all.exclude_anonymous.for_pseud(pseud).count.size
+            else
+              Series.visible_to_registered_user.exclude_anonymous.for_pseud(pseud).count.size
+            end
+    span_if_current ts("Series (%{series_number})", series_number: total.to_s), user_pseud_series_index_path(pseud.user, pseud)
   end
 
   def gifts_link(user)
@@ -119,10 +119,10 @@ module UsersHelper
     items.html_safe
   end
 
-  def log_item_action_name(item, user)
+  def log_item_action_name(item)
     action = item.action
     
-    return fnok_action_name(item, user) if [ArchiveConfig.ACTION_ADD_FNOK, ArchiveConfig.ACTION_REMOVE_FNOK].include?(action)
+    return fnok_action_name(item) if fnok_action?(action)
 
     case action
     when ArchiveConfig.ACTION_ACTIVATE
@@ -152,23 +152,6 @@ module UsersHelper
     end
   end
 
-  def fnok_action_name(item, user)
-    action = item.action == ArchiveConfig.ACTION_REMOVE_FNOK ? "removed" : "added"
-
-    if item.fnok_user_id == user.id
-      user_id = item.user_id
-      action_leaf = "was_#{action}"
-    else
-      user_id = item.fnok_user_id
-      action_leaf = "has_#{action}"
-    end
-
-    t(
-      "users_helper.log.fnok.#{action_leaf}",
-      user_id: user_id
-    )
-  end
-
   # Give the TOS field in the new user form a different name in non-production environments
   # so that it can be filtered out of the log, for ease of debugging
   def tos_field_name
@@ -177,5 +160,35 @@ module UsersHelper
     else
       'terms_of_service_non_production'
     end
+  end
+
+  private
+
+  def fnok_action?(action)
+    [
+      ArchiveConfig.ACTION_ADD_FNOK,
+      ArchiveConfig.ACTION_REMOVE_FNOK,
+      ArchiveConfig.ACTION_ADDED_AS_FNOK,
+      ArchiveConfig.ACTION_REMOVED_AS_FNOK
+    ].include?(action)
+  end
+
+  def fnok_action_name(item)
+    action_leaf =
+      case item.action
+      when ArchiveConfig.ACTION_ADD_FNOK
+        "has_added"
+      when ArchiveConfig.ACTION_REMOVE_FNOK
+        "has_removed"
+      when ArchiveConfig.ACTION_ADDED_AS_FNOK
+        "was_added"
+      when ArchiveConfig.ACTION_REMOVED_AS_FNOK
+        "was_removed"
+      end
+
+    t(
+      "users_helper.log.fnok.#{action_leaf}",
+      user_id: item.fnok_user_id
+    )
   end
 end
