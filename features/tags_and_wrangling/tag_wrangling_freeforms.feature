@@ -62,7 +62,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I should see "Pirate AU"
     And the "Canonical" checkbox should be disabled
     And all indexing jobs have been run
-  When I choose "Arrr\\-verse" from the "tag_merger_string_autocomplete" autocomplete
+  When I choose "Arrr-verse" from the "tag_merger_string_autocomplete" autocomplete
     And I press "Save changes"
   Then I should see "Tag was updated"
     And I should see "Arrr-verse"
