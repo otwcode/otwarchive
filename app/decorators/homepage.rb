@@ -1,4 +1,6 @@
 class Homepage
+  include NumberHelper
+
   def initialize(user)
     @user = user
   end
@@ -62,11 +64,4 @@ class Homepage
     return unless logged_in?
     @inbox_comments ||= @user.inbox_comments.with_bad_comments_removed.for_homepage
   end
-
-  def estimate_number(number)
-    digits = [(Math.log10([number, 1].max).to_i - 3), 0].max
-    divide = 10**digits
-    divide * (number / divide).to_i
-  end
-
 end

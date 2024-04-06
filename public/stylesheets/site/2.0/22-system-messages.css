@@ -75,8 +75,12 @@ ul.notes li, .error ul li, .notice ul li, .caution ul li, .alert.flash ul li {
   padding-left: 1.5em;
 }
 
-span.error {
+dt span.error, dd span.error {
   display: block;
+}
+
+dd.complex span.error {
+  display: inline-block;
 }
 
 /* contexts */
