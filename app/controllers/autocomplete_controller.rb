@@ -102,7 +102,7 @@ class AutocompleteController < ApplicationController
 
     # As explained in https://stackoverflow.com/a/54080114, the Elasticsearch suggestion suggester does not support
     # matches in the middle of a series of words. Therefore, we break the autocomplete query into its individual
-    # words – based on whitespace – except for the last word, which could be a incomplete, so a prefix match is
+    # words – based on whitespace – except for the last word, which could be incomplete, so a prefix match is
     # appropriate. This emulates the behavior of SQL `LIKE '%text%'.
 
     word_list = search_param.split
@@ -111,7 +111,7 @@ class AutocompleteController < ApplicationController
     begin
       # Size is chosen so we get enough search results from each shard.
       search_results = $elasticsearch.search(
-        index: "#{ArchiveConfig.ELASTICSEARCH_PREFIX}_#{Rails.env}_tags",
+        index: TagIndexer.index_name,
         body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: search_list } } }
       )
       render_output(match + search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] })
