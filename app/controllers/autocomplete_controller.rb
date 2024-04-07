@@ -93,7 +93,7 @@ class AutocompleteController < ApplicationController
 
     tag_class = params[:type].classify.constantize
     one_tag = tag_class.find_by(canonical: false, name: params[:term])
-    # Is there a tag which is just right (this is really for testing)
+    # If there is an exact match in the database, ensure it is the first thing suggested.
     match = if one_tag
               [one_tag.name]
             else
