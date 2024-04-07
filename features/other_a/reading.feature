@@ -251,18 +251,15 @@ Feature: Reading count
   Given I am logged in as "writer"
   When I post the work "Testy"
   Then I should see "Work was successfully posted"
-  When I am logged out
-    And I am logged in as "reader"
+  When I am logged in as "reader"
     And I view the work "Testy"
   Then I should see "Mark for Later"
   When I follow "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
-  When I am logged out
-    And I am logged in as a "policy_and_abuse" admin
+  When I am logged in as a "policy_and_abuse" admin
     And I view the work "Testy"
     And I follow "Hide Work"
   Then I should see "Item has been hidden."
-  When I am logged out
-    And I am logged in as "reader"
+  When I am logged in as "reader"
     And I go to reader's reading page
   Then I should not see "Testy"
