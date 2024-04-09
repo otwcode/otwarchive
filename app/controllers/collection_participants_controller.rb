@@ -10,7 +10,7 @@ class CollectionParticipantsController < ApplicationController
   cache_sweeper :collection_sweeper
 
   def owners_required
-    flash[:error] = t(".validation.owners_required")
+    flash[:error] = t("collection_participants.validation.owners_required")
     redirect_to collection_participants_path(@collection)
     false
   end

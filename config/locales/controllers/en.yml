@@ -15,7 +15,7 @@ en:
       destroy:
         unblocked: You have unblocked the user %{name}.
   challenge_assignments:
-    validations:
+    validation:
       not_owner: You aren't the owner of that assignment.
   chapters:
     destroy:

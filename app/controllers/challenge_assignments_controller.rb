@@ -33,7 +33,7 @@ class ChallengeAssignmentsController < ApplicationController
   def owner_only
     return if current_user == @challenge_assignment.offering_pseud.user
 
-    flash[:error] = t(".validations.not_owner")
+    flash[:error] = t("challenge_assignments.validation.not_owner")
     redirect_to root_path
   end
 
