@@ -308,6 +308,9 @@ en:
         text: If you have questions, please %{support} (%{url}).
       subject: "[%{app_name}] Your work has been deleted"
       support: contact Support
+    feedback:
+      additional_ticket: If you have additional questions or information, do not hesitate to send in another ticket.
+      introduction: 'We''re working hard to reply to everyone, and we''ll respond to you as soon as we can. Your communication is greatly valued, and it will be reviewed and answered by our volunteer Support team. In the meantime, here is a copy of the information you submitted through the Technical Support and Feedback form:'
     invitation:
       been_invited: You've been invited to join the Archive of Our Own!
       features: With an account, you can post fanworks, use bookmarks to keep track of works you enjoyed, receive subscription emails when your favorite creators or works update, customize the way the site looks for you, and more!
