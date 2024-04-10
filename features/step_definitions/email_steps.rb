@@ -64,7 +64,7 @@ end
 Then(/^#{capture_email} should contain "(.*)"$/) do |email_ref, text|
   if email(email_ref).multipart?
     email(email_ref).text_part.body.should =~ /#{text}/
-    email(email_ref).html_part.body.should =~ /#{CGI::escapeHTML(text)}/
+    email(email_ref).html_part.body.should =~ /#{text}/
   else
     email(email_ref).body.should =~ /#{text}/
   end
