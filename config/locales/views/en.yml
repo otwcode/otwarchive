@@ -414,6 +414,24 @@ en:
           unreviewed_by_collection: Works and bookmarks listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection.
         page_heading: Items by %{username} in Collections
   comments:
+    comment_form:
+      anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
+      cancel_action: Cancel
+      choose_name: Choose Name
+      comment_action: Comment
+      comment_as: Comment as
+      comment_field_title: Enter Comment
+      comment_too_long: must be less than %{count} characters long.
+      comment_too_short: Brevity is the soul of wit, but we need your comment to have text in it.
+      form_title: Post Comment
+      guest_email: 'Guest email:'
+      guest_email_failure: Please enter your email address.
+      guest_instructions: All fields are required. Your email address will not be published.
+      guest_name: 'Guest name:'
+      guest_name_failure: Please enter your name.
+      moderation_forewarning: This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator.
+      note: Note
+      processing_message: Please wait...
     commentable:
       actions:
         comment: Comment
