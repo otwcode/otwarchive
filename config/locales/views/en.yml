@@ -59,8 +59,34 @@ en:
         suspended: You have been suspended or your work has been removed, and you have not received an email explaining why.
         violation_html: You have encountered content on the Archive that violates the %{tos_link}.
   admin:
-    admin_invitations:
+    activities:
       index:
+        activities_table:
+          action: Action
+          admin: Admin
+          caption: Admin Activity
+          date: Date
+          summary: List of admin activity with links to full summaries.
+          target: Target
+        page_heading: Admin Activities
+      show:
+        action: Action
+        admin: Admin
+        date: Date
+        landmark:
+          details: Action Details
+        navigation:
+          index: Admin Activities
+        page_heading: Admin Activity
+        summary: Summary
+        target: Target
+    admin_invitations:
+      find:
+        email: Enter all or part of an email address
+        token: Enter an invite token
+        user_name: Enter a user name
+      index:
+        email: Enter all or part of an email address
         navigation:
           queue: Manage Queue
           requests: Manage Requests
@@ -152,6 +178,20 @@ en:
               required: Required when adding or removing a warning or suspension to an account.
             submit: Update
           heading: Record Warnings, Suspensions, or Notes
+    banners:
+      index:
+        actions:
+          active: Active
+          confirm_delete: Are you sure you want to delete this banner?
+          delete: Delete
+          edit: Edit
+        page_heading: Banners
+      navigation:
+        confirm_delete: Are you sure you want to delete this banner?
+        delete: Delete Banner
+        edit: Edit Banner
+        index: Banners
+        new: New Banner
     blacklist:
       emails_found:
         one: one email found
@@ -175,6 +215,38 @@ en:
           canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is banned).
           guest_comments: Banned email addresses cannot be used in guest comments.
         page_heading: Manage Banned Emails
+    header:
+      nav:
+        activities: Activities
+        api_tokens: Manage API Tokens
+        banned_emails: Banned Emails
+        banners: Banners
+        invitations:
+          invitations: Invitations
+          new: Invite New Users
+          queue: Manage Queue
+          requests: Manage Requests
+        label: Admin
+        locales: Locales
+        posts:
+          admin_posts: Admin Posts
+          faqs: Archive FAQ
+          known_issues: Known Issues
+          news: AO3 News
+          post_news: Post AO3 News
+          wrangling_guidelines: Wrangling Guidelines
+        settings: Settings
+        skins:
+          approved: Approved Skins
+          queue: Approval Queue
+          rejected: Rejected Skins
+          skins: Skins
+        spam: Spam
+        users:
+          email_search: Bulk Email Search
+          manage: Manage Users
+          search: Find Users
+        wrangling: Tag Wrangling
     passwords:
       edit:
         describedby:
@@ -267,6 +339,7 @@ en:
         title: Block %{name}
         will:
           commenting: commenting or leaving kudos on your works
+          gifting: giving you gift works outside of challenge assignments and claimed prompts
           intro: 'Blocking a user prevents them from:'
           replying: replying to your comments anywhere on the site
         will_not:
@@ -279,6 +352,7 @@ en:
         cancel: Cancel
         resume:
           commenting: commenting or leaving kudos on your works
+          gifting: giving you gift works outside of challenge assignments and claimed prompts
           intro: 'Unblocking a user allows them to resume:'
           replying: replying to your comments anywhere on the site
         sure_html: Are you sure you want to %{unblock} %{username}?
@@ -298,6 +372,7 @@ en:
         title: Blocked Users
         will:
           commenting: commenting or leaving kudos on your works
+          gifting: giving you gift works outside of challenge assignments and claimed prompts
           intro:
             one: 'You can block up to %{block_limit} user. Blocking a user prevents them from:'
             other: 'You can block up to %{block_limit} users. Blocking a user prevents them from:'
@@ -357,7 +432,7 @@ en:
           disable: Disable comment moderation
           enable: Enable comment moderation
           keep_current: Keep current comment moderation settings
-          label: Comment Moderation
+          label: Comment moderation
         options:
           disable_all: No one can comment
           disable_anon: Only registered users can comment
@@ -371,6 +446,28 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+  downloads:
+    download_afterword:
+      inspired_by:
+        restricted_html: "[Restricted Work] by %{creator_link}"
+        revealed_html: "%{work_link} by %{creator_link}"
+        title: Works inspired by this one
+        unrevealed: A work in an unrevealed collection
+      please_comment_html: Please %{work_comment_link} to let the creator know if you enjoyed their work!
+      work_comment: drop by the Archive and comment
+    download_preface:
+      inspired_by:
+        restricted_html: Inspired by [Restricted Work] by %{creator_link}
+        revealed_html: Inspired by %{work_link} by %{creator_link}
+        unrevealed: Inspired by a work in an unrevealed collection
+      translated_to:
+        restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}'
+        revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
+        unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
+      translation_of:
+        restricted_html: A translation of [Restricted Work] by %{creator_link}
+        revealed_html: A translation of %{work_link} by %{creator_link}
+        unrevealed: A translation of a work in an unrevealed collection
   feedbacks:
     new:
       abuse:
@@ -424,11 +521,50 @@ en:
         tag_changes: Requests to canonize or change tags
         work_problems: Works labeled with the wrong language or duplicate works
       status:
-        current: 'For current updates on Archive performance or downtime, please check out our Twitter feed: %{twitter_link}.'
-        twitter: "@AO3_Status"
+        current: For current updates on Archive performance or downtime, please check the %{twitter_link} or %{tumblr_link}.
+        tumblr: ao3org Tumblr
+        twitter: "@AO3_Status Twitter feed"
   home:
     donate:
+      general:
+        text: There are two main ways to support the AO3 - donating your time or money.
+        title: Donations
+      money:
+        details_html: The AO3 has ongoing running costs - electricity for the servers and bandwidth so you can reach them - and one-off costs such as buying new servers as the number of users and works increases. Any %{donation_link} is a big help. (Don't worry, we'll never connect your AO3 username and your financial information.)
+        donation: donation to the OTW
+        title: Donating Financially
       page_title: Donate or Volunteer
+      time:
+        details_html: The %{otw_link} is the parent organization of the Archive of Our Own. We are often looking for volunteers to contribute to %{projects_link}. If you're interested in volunteering specifically to help the Archive of Our Own, the roles to look out for include tag wranglers, testers, coders, Support staff and Abuse staff. We encourage you to browse through the %{volunteer_link} and apply for any roles which match your qualifications and interests.
+        otw: Organization for Transformative Works
+        projects: our projects
+        title: Donating Your Time
+        volunteer: available listings
+    fandoms:
+      all_fandoms: All Fandoms
+    index:
+      browse_or_favorite:
+        one: Browse fandoms by media or favorite up to %{count} tag to have it listed here!
+        other: Browse fandoms by media or favorite up to %{count} tags to have them listed here!
+      find_your_favorites: Find your favorites
+      media_navigation_label: Media
+      readings:
+        heading:
+          history_link: My History
+          title: Is it later already?
+        note: Some works you've marked for later.
+      social:
+        heading: Follow us
+        note_html: Follow the Archive on Twitter or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
+        other_outlets: Organization for Transformative Works' news outlets
+        tumblr: ao3org on Tumblr
+        twitter: "@AO3_Status on Twitter"
+    tos_faq:
+      fnok:
+        support: Support team
+  invitations:
+    invitation:
+      email_address_label: Enter an email address
   invite_requests:
     invite_request:
       date: 'At our current rate, you should receive an invitation on or around: %{date}.'
@@ -442,12 +578,52 @@ en:
       more_link:
         one: "%{count} more user"
         other: "%{count} more users"
+  languages:
+    index:
+      navigation:
+        add: Add a Language
+        edit: Edit
+        suggest: Suggest a Language
+      page_heading: Work Languages
+      works_count:
+        one: "%{formatted_count} work"
+        other: "%{formatted_count} works"
   layouts:
+    header:
+      collections:
+        new: New Collection
+      javascript: While we've done our best to make the core functionality of this site accessible without JavaScript, it will work better with it enabled. Please consider turning it on!
+      login: Log In
+      nav:
+        about: About
+        browse: Browse
+        fandoms: Fandoms
+        label: Site
+        search: Search
     proxy_notice:
       button: Dismiss Notice
       faux_heading: 'Important message:'
       point1: You are using a proxy site that is not part of the Archive of Our Own.
       point2: The entity that set up the proxy site can see what you submit, including your IP address. If you log in through the proxy site, it can see your password.
+  menu:
+    menu_about:
+      about_us: About Us
+      donate: Donate or Volunteer
+      faq: FAQ
+      news: News
+      wrangling_guidelines: Wrangling Guidelines
+    menu_browse:
+      bookmarks: Bookmarks
+      collections: Collections
+      tags: Tags
+      works: Works
+    menu_fandoms:
+      all: All Fandoms
+    menu_search:
+      bookmarks: Bookmarks
+      people: People
+      tags: Tags
+      works: Works
   muted:
     mute: Mute
     muted_items_notice_html: You have muted some users on the Archive. Some items may not be shown, and any counts may be inaccurate. You can mute or unmute users on %{muted_users_link}.
@@ -507,7 +683,13 @@ en:
     index:
       allow_collection_invitation: Allow others to invite my works to collections.
       blocked_users: Blocked Users
+      guest_replies_off: Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately).
       muted_users: Muted Users
+  profile:
+    pseud_list:
+      more_pseuds:
+        one: "%{count} more pseud"
+        other: "%{count} more pseuds"
   pseuds:
     delete_preview:
       cancel: Cancel
@@ -523,6 +705,34 @@ en:
       transfer:
         one: Transfer this bookmark to the default pseud
         other: Transfer these bookmarks to the default pseud
+    pseud_blurb:
+      confirm_delete: Are you sure?
+      default_pseud: Default Pseud
+      delete_html: Delete%{landmark_span}
+      delete_landmark_text: " %{pseud}"
+      edit_html: Edit%{landmark_span}
+      edit_landmark_text: " %{pseud}"
+      orphan_html: Orphan Works%{landmark_span}
+      orphan_landmark_text: " by %{pseud}"
+      user_actions: User Actions
+    pseuds_form:
+      change_matching_pseud_html: You cannot change the pseud that matches your user name. However, you can %{change_username_link} instead.
+      change_username: change your user name
+      description: Description
+      icon: Icon
+      icon_alt: Icon alt text
+      icon_comment: Icon comment text
+      icon_delete: Delete your icon and revert to our default
+      icon_notes:
+        current: This is your icon.
+        format: Icons can be in png, jpeg or gif form.
+        limit: You can have one icon for each pseud.
+        size: Icons should be sized 100x100 pixels for best results.
+      icon_upload: Upload a new icon
+      make_default: Make this name default
+      name: Name
+      submit: Submit
+      ticket_footnote: Numbers only.
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
@@ -538,6 +748,16 @@ en:
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
         random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
+    show:
+      canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
+      canonical_tag: canonical tag
+      fandom_relationship_tags: Relationship tags in this fandom
+      filter_bookmarks: filter bookmarks
+      filter_works: filter works
+      list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
+  time:
+    formats:
+      date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
   troubleshooting:
     show:
       fix_associations:
@@ -577,6 +797,16 @@ en:
       contact_support: contact Support
       last_renamed: You last changed your user name on %{renamed_at}.
       more_info: For information on how changing your user name will affect your account, please check out the %{account_faq_link}. Note that changes to your user name may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
+    confirmation:
+      contact_support: contact Support
+      go_back: Return to Archive front page
+      important: Important!
+      must_activate:
+        one: You must activate your account within %{count} day, or your account will expire. If this happens, you can sign up again using the same invitation.
+        other: You must activate your account within %{count} days, or your account will expire. If this happens, you can sign up again using the same invitation.
+      no_email_html: If you haven't received this email within 24 hours, and you don't find our email in your spam filter or Social folder, please %{contact_support_link} for help.
+      page_heading: Almost Done!
+      receive_email_html: You should soon receive an activation email at the address you gave us. This will have the link you need to follow in order to activate your account and complete the account creation process. The activation email will come from %{return_address} -- you might want to add this to your address book to make sure you get the email.
     delete_preview:
       cancel: Cancel
       co_creations:
@@ -598,7 +828,38 @@ en:
         options_info: You can delete them, but please consider %{orphaning_link} them instead!
         works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
+    edit:
+      browser_title: Edit Profile
+    registrations:
+      new:
+        cancel: Cancel
+        heading: Create Account
+        legend:
+          legal: Legal Agreements
+          user: User Details
+        submit: Create Account
+        wait: Please wait...
     sessions:
+      greeting:
+        nav:
+          assignments: My Assignments
+          bookmarks: My Bookmarks
+          collections: My Collections
+          dashboard: My Dashboard
+          greeting: Hi, %{current_user}!
+          history: My History
+          import: Import Work
+          label: User
+          log_out: Log Out
+          new_work: New Work
+          open_doors: Open Doors
+          post: Post
+          post_draft: From Draft
+          preferences: My Preferences
+          sign_ups: My Sign-ups
+          subscriptions: My Subscriptions
+          tag_wrangling: Tag Wrangling
+          works: My Works
       new:
         beta_reminder:
           give_feedback: give us your feedback
@@ -633,6 +894,21 @@ en:
         link_tos: Terms of Service
         welcome_text: Hi! It looks like you've just logged into the Archive for the first time. %{help_link} or dismiss this message permanently.
   works:
+    adult:
+      caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.
+      footnote: If you accept cookies from our site and you choose "Yes, Continue", you will not be asked again during this session (that is, until you close your browser). If you log in you can store your preference and never be asked again.
+      navigation:
+        back: No, Go Back
+        continue: Yes, Continue
+        preferences: Set your preferences now
+      page_title: Adult Content Warning
+    associations:
+      language:
+        choose: Choose a language
+      title: Associations
+    byline:
+      add_co-creators: Add co-creators
+      show_co-creator_options: Add co-creators?
     meta:
       original_creators:
         one: 'Original Creator ID:'
@@ -646,3 +922,35 @@ en:
         multiple_works_restricted: Only show to registered users
         restricted: Only show your work to registered users
         unrestricted: Show to all
+    preface:
+      title: Preface
+    search_box:
+      a11y_label: Work
+      label: Work Search
+      submit: Search
+      tooltip_label: 'tip:'
+    show:
+      unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    skin:
+      select: Select work skin
+    work_approved_children:
+      inspired_by:
+        restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"
+        revealed_html: "%{work_link} by %{creator_link}"
+        title: Works inspired by this one
+        unrevealed: A work in an unrevealed collection
+    work_header_notes:
+      inspired_by:
+        restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
+        revealed_html: Inspired by %{work_link} by %{creator_link}
+        unrevealed: Inspired by a work in an unrevealed collection
+      translated_to:
+        restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link} (Log in to access.)'
+        revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
+        unrevealed_html: 'Translation into %{language} available: A work in an unrevealed collection'
+      translation_of:
+        restricted_html: A translation of [Restricted Work] by %{creator_link} (Log in to access.)
+        revealed_html: A translation of %{work_link} by %{creator_link}
+        unrevealed: A translation of a work in an unrevealed collection
+    work_module:
+      draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.

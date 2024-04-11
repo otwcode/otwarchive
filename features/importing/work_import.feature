@@ -162,7 +162,7 @@ Feature: Import Works
       And I press "Post"
     When I am logged out
       And I go to the "Detected Title" work page
-      And I follow "Proceed"
+      And I follow "Yes, Continue"
     Then I should see "Guest name:"
 
   Scenario: Imported works can have comments disabled to guests
@@ -172,7 +172,7 @@ Feature: Import Works
       And I press "Post"
     When I am logged out
       And I go to the "Detected Title" work page
-      And I follow "Proceed"
+      And I follow "Yes, Continue"
     Then I should see "Sorry, this work doesn't allow non-Archive users to comment."
 
   Scenario: Imported works can have comments disabled
@@ -190,7 +190,7 @@ Feature: Import Works
       And I press "Post"
     When I am logged out
       And I go to the "Detected Title" work page
-      And I follow "Proceed"
+      And I follow "Yes, Continue"
     Then I should not see "This work's creator has chosen to moderate comments on the work."
 
   Scenario: Imported works can have comment moderation on
@@ -200,7 +200,7 @@ Feature: Import Works
       And I press "Post"
     When I am logged out
       And I go to the "Detected Title" work page
-      And I follow "Proceed"
+      And I follow "Yes, Continue"
     Then I should see "This work's creator has chosen to moderate comments on the work."
 
   @work_import_multi_work_backdate

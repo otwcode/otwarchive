@@ -1,7 +1,8 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
   before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
-  before_action :check_user_status, only: [:new, :create, :edit, :update]
+  before_action :check_user_status, only: [:new, :create, :update, :update_positions]
+  before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy]
   before_action :load_work
   # only authors of a work should be able to edit its chapters
   before_action :check_ownership, except: [:index, :show]
@@ -97,7 +98,7 @@ class ChaptersController < ApplicationController
   end
 
   def draft_flash_message(work)
-    flash[:notice] = work.posted ? ts("This is a draft chapter in a posted work. It will be kept unless the work is deleted.") : ts("This is a draft chapter in an unposted work. The work will be <strong>automatically deleted</strong> on #{view_context.time_in_zone(work.created_at + 1.month)}.").html_safe
+    flash[:notice] = work.posted ? t("chapters.draft_flash.posted_work") : t("chapters.draft_flash.unposted_work_html", deletion_date: view_context.date_in_zone(work.created_at + 29.days)).html_safe
   end
 
   # POST /work/:work_id/chapters

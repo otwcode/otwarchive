@@ -28,7 +28,7 @@
       <div id="toc" class="toc" role="navigation">
         <h3 class="heading">
           <% #TODO: Change this back to 'Questions in the NAME Category' once Translation system in place %>
-          <%= ts("#{@archive_faq.title}") %>
+          <%= @archive_faq.title %>
         </h3>
         <ul role="navigation">
           <% for q in @questions %>

@@ -34,7 +34,7 @@ Given /the following users exist with BCrypt encrypted passwords/ do |table|
                            [hash[:password], salt].flatten.join,
                            cost: ArchiveConfig.BCRYPT_COST || 14)
 
-    user.update(
+    user.update!(
       password_salt: salt,
       encrypted_password: encrypted_password
     )
@@ -54,7 +54,7 @@ Given /the following users exist with SHA-512 encrypted passwords/ do |table|
     encrypted_password = [hash[:password], salt].flatten.join
     20.times { encrypted_password = Digest::SHA512.hexdigest(encrypted_password) }
 
-    user.update(
+    user.update!(
       password_salt: salt,
       encrypted_password: encrypted_password
     )
@@ -136,6 +136,10 @@ Given /^I start a new session$/ do
   page.driver.reset!
 end
 
+Given "the user name {string} is on the forbidden list" do |username|
+  allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([username])
+end
+
 # TODO: This should eventually be removed in favor of the "I log out" step,
 # which does the same thing (but has a shorter and less passive name).
 Given /^I am logged out$/ do
@@ -159,9 +163,9 @@ end
 Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
   step %{basic tags}
   author1 = User.find_by(login: login).default_pseud
-  author1.user.preference.update(allow_cocreator: true)
+  author1.user.preference.update!(allow_cocreator: true)
   author2 = User.find_by(login: coauthor).default_pseud
-  author2.user.preference.update(allow_cocreator: true)
+  author2.user.preference.update!(allow_cocreator: true)
   work = FactoryBot.create(:work, authors: [author1, author2], title: title)
   work.creatorships.unapproved.each(&:accept!)
 end
@@ -201,7 +205,7 @@ end
 
 When /^the user "([^\"]*)" has failed to log in (\d+) times$/ do |login, count|
   user = User.find_by(login: login)
-  user.update(failed_attempts: count.to_i)
+  user.update!(failed_attempts: count.to_i)
 end
 
 When /^I fill in the sign up form with valid data$/ do
@@ -233,6 +237,13 @@ When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
   step %{I wait 1 second}
   user = User.find_by(login: login)
   user.creatorships.unapproved.each(&:accept!)
+end
+
+When "I request a password reset for {string}" do |login|
+  step(%{I am on the login page})
+  step(%{I follow "Reset password"})
+  step(%{I fill in "Email address or user name" with "#{login}"})
+  step(%{I press "Reset Password"})
 end
 
 # THEN

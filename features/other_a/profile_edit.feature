@@ -13,21 +13,25 @@ Background:
 
 Scenario: Add details
 
+  Then I should see the page title "Edit Profile"
   When I fill in the details of my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
+    And I should see "I live in"
 
 Scenario: Change details
 
   When I change the details in my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
+    And I should see "I live in"
 
 Scenario: Remove details
 
   When I remove details from my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
+    And I should not see "I live in"
 
 Scenario: Change details as an admin
 
@@ -112,6 +116,9 @@ Scenario: Changing email address and viewing
     And the email should not contain "translation missing"
   When I change my preferences to display my email address
   Then I should see "My email address: valid2@archiveofourown.org"
+  When I log out
+    And I go to editname's profile page
+  Then I should see "My email address: valid2@archiveofourown.org"
 
 Scenario: Changing email address after requesting password reset
 
@@ -153,6 +160,9 @@ Scenario: Entering date of birth and displaying
   When I change my preferences to display my date of birth
   Then I should see "My birthday: 1980-11-30"
     And 0 emails should be delivered
+  When I log out
+    And I go to editname's profile page
+  Then I should see "My birthday: 1980-11-30"
 
 Scenario: Change password - mistake in typing old password
 

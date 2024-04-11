@@ -48,7 +48,7 @@
   </div>
 
   <% if !work.posted? %>
-   <p class="caution notice"><%= ts('This draft will be <strong>automatically deleted</strong> on %{time}', time: time_in_zone(work.created_at + 1.month)).html_safe %></p>
+   <p class="caution notice"><%= t('.draft_deletion_notice_html', deletion_date: date_in_zone(work.created_at + 29.days)) %></p>
   <% end %>
   <!--warnings again, cast, freeform tags-->
   <h6 class="landmark heading"><%= ts("Tags") %></h6>

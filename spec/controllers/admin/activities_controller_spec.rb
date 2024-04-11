@@ -22,7 +22,7 @@ describe Admin::ActivitiesController do
       it_behaves_like "unauthorized"
     end
 
-    %w[board communications translation tag_wrangling docs support open_doors].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin policy_and_abuse]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -49,7 +49,7 @@ describe Admin::ActivitiesController do
       it_behaves_like "unauthorized"
     end
 
-    %w[board communications translation tag_wrangling docs support open_doors].each do |role|
+    (Admin::VALID_ROLES - %w[superadmin policy_and_abuse]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 

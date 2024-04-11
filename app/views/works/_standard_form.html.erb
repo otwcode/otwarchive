@@ -6,8 +6,8 @@
   <%= render "work_form_tags", include_blank: false %>
 
   <fieldset class="preface" role="article">
-    <legend><%= ts("Preface") %></legend>
-    <h3 class="landmark heading"><%= ts("Preface") %></h3>
+    <legend><%= t("works.preface.title") %></legend>
+    <h3 class="landmark heading"><%= ts("work.preface.title") %></h3>
     <dl>
       <dt class="title required">
         <%= f.label :title, ts("Work Title") + "*" %>
@@ -43,10 +43,11 @@
   </fieldset>
 
   <fieldset id="associations" role="article">
-    <legend><%= ts("Associations") %></legend>
-    <h3 class="landmark heading"><%= ts("Associations") %></h3>
+    <legend><%= t("works.associations.title") %></legend>
+    <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
     <dl>
-      <% if !(@assignments = ChallengeAssignment.by_offering_user(current_user).undefaulted.unstarted.sent).empty? || !@work.challenge_assignments.empty? %>
+      <% @assignments = get_open_assignments(current_user) %>
+      <% if @assignments.any? || @work.challenge_assignments.any? %>
         <!-- if the user has open assignments? -->
         <dt class="collection">
           <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment") %>
@@ -242,7 +243,7 @@
         <%= render "work_form_associations_language", f: f %>
 
         <dt class="skin">
-          <%= f.label :work_skin_id, ts("Select Work Skin") %>
+          <%= f.label :work_skin_id, t("works.skin.select") %>
           <%= link_to_help "work-skins" %>
         </dt>
         <dd class="skin">

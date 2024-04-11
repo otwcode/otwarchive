@@ -504,3 +504,13 @@ Then "I should see the original creator {string}" do |creator|
   expect(page).to have_selector(".original_creators",
                                 text: "#{user.id} (#{creator})")
 end
+
+Then "the history table should show that {string} was {word} as next of kin" do |username, action|
+  user_id = User.find_by(login: username).id
+  step %{I should see "Fannish Next of Kin #{action.capitalize}: #{user_id}" within "#user_history"}
+end
+
+Then "the history table should show they were {word} as next of kin of {string}" do |action, username|
+  user_id = User.find_by(login: username).id
+  step %{I should see "#{action.capitalize} as Fannish Next of Kin for: #{user_id}" within "#user_history"}
+end

@@ -10,9 +10,13 @@
   <div class="icon">
     <%= icon_display(pseud.user, pseud) %>
   </div>
+  <%# created_at date to display to admins for mutes and blocks %>
+  <% if local_assigns[:date] && logged_in_as_admin? %>
+    <p class="datetime"><%= date %></p>
+  <% end %>
 </div>
-<% unless pseud.description.blank? %>
+<% if pseud.description.present? %>
   <blockquote class="userstuff">
-    <%=raw sanitize_field(pseud, :description) %>
+    <%= raw sanitize_field(pseud, :description, strip_images: true) %>
   </blockquote>
 <% end %>

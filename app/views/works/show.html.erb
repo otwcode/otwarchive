@@ -4,9 +4,7 @@
   <li><a href="#work"><%= ts("Skip header") %></a></li>
 </ul>
 <% if !@work.posted? %>
-  <p class="notice">
-    <%= ts("This work is a draft and has not been posted. The draft will be") %> <strong><%= ts("automatically deleted") %></strong> <%= ts("on") %> <%= time_in_zone(@work.created_at + 1.month) %>
-  </p>
+  <p class="notice"><%= t(".unposted_deletion_notice_html", deletion_date: date_in_zone(@work.created_at + 29.days)) %></p>
 <% end %>
 <% if @work.unrevealed? %>
   <%= render "works/work_unrevealed_notice" %>

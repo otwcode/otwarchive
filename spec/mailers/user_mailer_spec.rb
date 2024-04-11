@@ -174,6 +174,8 @@ describe UserMailer do
     # Test both body contents
     it_behaves_like "a multipart email"
 
+    it_behaves_like "a translated email"
+
     describe "HTML version" do
       it_behaves_like "a claim notification" do
         let(:part) { email.html_part.decoded }
@@ -1110,13 +1112,14 @@ describe UserMailer do
     end
 
     it "has the correct attachments" do
+      filename = work.title.gsub(/\s/, "_")
       expect(email.attachments.length).to eq(2)
       expect(email.attachments).to contain_exactly(
-        an_object_having_attributes(filename: "#{work.title}.html"),
-        an_object_having_attributes(filename: "#{work.title}.txt")
+        an_object_having_attributes(filename: "#{filename}.html"),
+        an_object_having_attributes(filename: "#{filename}.txt")
       )
     end
-    
+
     context "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")
@@ -1162,13 +1165,14 @@ describe UserMailer do
     end
 
     it "has the correct attachments" do
+      filename = work.title.gsub(/\s/, "_")
       expect(email.attachments.length).to eq(2)
       expect(email.attachments).to contain_exactly(
-        an_object_having_attributes(filename: "#{work.title}.html"),
-        an_object_having_attributes(filename: "#{work.title}.txt")
+        an_object_having_attributes(filename: "#{filename}.html"),
+        an_object_having_attributes(filename: "#{filename}.txt")
       )
     end
-    
+
     context "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")
@@ -1196,6 +1200,56 @@ describe UserMailer do
       end
 
       it_behaves_like "an email with a deleted work with draft chapters attached"
+    end
+  end
+
+  describe "obeys the set locale preference feature flag" do
+    let(:user) { create(:user) }
+    let(:work) { create(:work, authors: [user.default_pseud]) }
+    let(:locale) { create(:locale) }
+
+    context "when the set locale preference feature flag is on" do
+      before { $rollout.activate_user(:set_locale_preference, user) }
+
+      context "and the user has non-default locale set" do
+        before { user.preference.update!(locale: locale) }
+
+        it "sends a localised email" do
+          expect(I18n).to receive(:with_locale).with(locale.iso)
+          expect(UserMailer.admin_hidden_work_notification(work.id, user.id)).to be_truthy
+        end
+      end
+
+      context "and the user has the default locale set" do
+        before { user.preference.update!(locale: Locale.default) }
+
+        it "sends an English email" do
+          expect(I18n).to receive(:with_locale).with("en")
+          expect(UserMailer.admin_hidden_work_notification(work.id, user.id)).to be_truthy
+        end
+      end
+    end
+
+    context "when the set locale preference feature flag is off" do
+      before { $rollout.deactivate_user(:set_locale_preference, user) }
+
+      context "and the user has non-default locale set" do
+        before { user.preference.update!(locale: locale) }
+
+        it "sends an English email" do
+          expect(I18n).to receive(:with_locale).with("en")
+          expect(UserMailer.admin_hidden_work_notification(work.id, user.id)).to be_truthy
+        end
+      end
+
+      context "and the user has the default locale set" do
+        before { user.preference.update!(locale: Locale.default) }
+
+        it "sends an English email" do
+          expect(I18n).to receive(:with_locale).with("en")
+          expect(UserMailer.admin_hidden_work_notification(work.id, user.id)).to be_truthy
+        end
+      end
     end
   end
 end
