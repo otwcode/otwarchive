@@ -14,11 +14,12 @@ redis_configs.each_pair do |name, redis_config|
     # example:
     # redis_kudos:
     #   development
+    #     name: redis_kudos
     #     sentinels:
     #       - host: 127.0.0.1
     #         port: 26379
     #       - host: 127.0.0.1
-    #         port: 263780
+    #         port: 26380
     redis_options = redis_config[rails_env]
   else
     redis_host, redis_port = redis_config[rails_env].split(":")
