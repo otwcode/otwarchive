@@ -417,20 +417,22 @@ en:
     comment_form:
       anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
       cancel_action: Cancel
-      choose_name: Choose Name
-      comment_action: Comment
+      choose_name_field_title: Choose Name
       comment_as: Comment as
       comment_field_title: Enter Comment
       comment_too_long: must be less than %{count} characters long.
       comment_too_short: Brevity is the soul of wit, but we need your comment to have text in it.
-      form_title: Post Comment
-      guest_email: 'Guest email:'
+      guest_email: Guest email
       guest_email_failure: Please enter your email address.
       guest_instructions: All fields are required. Your email address will not be published.
-      guest_name: 'Guest name:'
+      guest_name: Guest name
       guest_name_failure: Please enter your name.
+      inbox_reference: to %{commentable_creator} on %{commentable_link}
+      landmark:
+        comment: Comment
+        note: Note
+      legend: Post Comment
       moderation_forewarning: This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator.
-      note: Note
       processing_message: Please wait...
     commentable:
       actions:

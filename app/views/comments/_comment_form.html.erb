@@ -5,9 +5,9 @@
 <div class="post comment" id="comment_form_for_<%= commentable.id %>">
   <%= form_for value_for_comment_form(commentable, comment), remote: !comment.new_record?, authenticity_token: true, html: { id: "comment_for_#{commentable.id}" } do |f| %>
     <fieldset>
-      <legend><%= t(".form_title") %></legend>
+      <legend><%= t(".legend") %></legend>
 
-      <% # here come the hacks (hidden fields to transmit various info to the create action) %>
+      <%# here come the hacks (hidden fields to transmit various info to the create action) %>
       <% if commentable.is_a?(Tag) %>
         <%= hidden_field_tag :tag_id, commentable.name %>
       <% end %>
@@ -35,18 +35,16 @@
       <% if logged_in? %>
         <% if current_user_is_anonymous_creator(commentable) %>
           <p class="notice">
-          <%= t(".anonymous_forewarning") %>
+            <%= t(".anonymous_forewarning") %>
           </p>
         <% end %>
 
         <% if current_user.pseuds.count > 1 %>
-          <h4 class="heading"><%= t(".comment_as") %> <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, { selected: (comment.pseud ? comment.pseud.id.to_s : current_user.default_pseud.id.to_s) }, id: "comment_pseud_id_for_#{commentable.id}", title: t(".choose_name") %>
+          <h4 class="heading"><%= t(".comment_as") %> <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, { selected: (comment.pseud ? comment.pseud.id.to_s : current_user.default_pseud.id.to_s) }, id: "comment_pseud_id_for_#{commentable.id}", title: t(".choose_name_field_title") %>
             <% if controller.controller_name == "inbox" %>
-              <% if commentable.by_anonymous_creator? %>
-                <span><%= ts("to") %> <%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
-              <% else %>
-                <span><%= ts("to") %> <%= get_commenter_pseud_or_name(commentable) %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
-              <% end %>
+              <span><%= t ".inbox_reference",
+                          commentable_creator: commentable.by_anonymous_creator? ? "Anonymous Creator" : get_commenter_pseud_or_name(commentable),
+                          commentable_link: commentable_description_link(commentable) %></span>
             <% end %>
             (<%= allowed_html_instructions %>)
           </h4>
@@ -54,11 +52,9 @@
           <h4 class="heading"><%= t(".comment_as") %> <span class="byline"><%= current_user.default_pseud.name %></span>
             <%= f.hidden_field :pseud_id, value: current_user.default_pseud.id.to_s, id: "comment_pseud_id_for_#{commentable.id}" %>
             <% if controller.controller_name == "inbox" %>
-              <% if commentable.by_anonymous_creator? %>
-                <span><%= ts("to") %> <%= "Anonymous Creator" %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
-              <% else %>
-                <span><%= ts("to") %> <%= get_commenter_pseud_or_name(commentable) %> <%= ts("on") %> <%= commentable_description_link(commentable) %></span>
-              <% end %>
+            <span><%= t ".inbox_reference",
+                        commentable_creator: commentable.by_anonymous_creator? ? "Anonymous Creator" : get_commenter_pseud_or_name(commentable),
+                        commentable_link: commentable_description_link(commentable) %></span>
             <% end %>
           </h4>
           <p class="footnote">(<%= allowed_html_instructions %>)</p>
@@ -66,7 +62,7 @@
 
       <% else %>
         <dl>
-          <dt class="landmark"><%= t(".note") %>:</dt>
+          <dt class="landmark"><%= t(".landmark.note") %>:</dt>
           <dd class="instructions comment_form"><%= t(".guest_instructions") %></dd>
           <dt><%= f.label "name_for_#{commentable.id}", t(".guest_name") %></dt>
           <dd>
@@ -84,7 +80,7 @@
 
       <p>
         <% content_id = "comment_content_for_#{commentable.id}" %>
-        <label for="<%= content_id %>" class="landmark"><%= t(".comment_action") %></label>
+        <label for="<%= content_id %>" class="landmark"><%= t(".landmark.comment") %></label>
         <%= f.text_area :comment_content, id: content_id, class: "comment_form observe_textlength", title: t(".comment_field_title") %>
         <input type="hidden" id="controller_name_for_<%= commentable.id %>" name="controller_name" value="<%= @controller_name ||= controller.controller_name %>" />
       </p>
@@ -93,16 +89,16 @@
             failureMessage: t(".comment_too_short"),
             maximum_length: ArchiveConfig.COMMENT_MAX,
             tooLongMessage: t(".comment_too_long", count: ArchiveConfig.COMMENT_MAX) %>
-    <p class="submit actions">
-        <%= f.submit button_name, id: "comment_submit_for_#{commentable.id}", data: { disable_with: t(".processing_message") } %>
-        <% if controller.controller_name == 'inbox' %>
-          <a name="comment_cancel" id="comment_cancel"><%= t(".cancel_action") %></a>
-        <% elsif comment.persisted? %>
-          <%= cancel_edit_comment_link(comment) %>
-        <% elsif commentable.is_a?(Comment) || commentable.is_a?(CommentDecorator) %>
-          <%= cancel_comment_reply_link(commentable) %>
-        <% end %>
-      </p>
+      <p class="submit actions">
+          <%= f.submit button_name, id: "comment_submit_for_#{commentable.id}", data: { disable_with: t(".processing_message") } %>
+          <% if controller.controller_name == 'inbox' %>
+            <a name="comment_cancel" id="comment_cancel"><%= t(".cancel_action") %></a>
+          <% elsif comment.persisted? %>
+            <%= cancel_edit_comment_link(comment) %>
+          <% elsif commentable.is_a?(Comment) || commentable.is_a?(CommentDecorator) %>
+            <%= cancel_comment_reply_link(commentable) %>
+          <% end %>
+        </p>
     </fieldset>
   <% end %>
 </div>
