@@ -415,6 +415,7 @@ en:
         page_heading: Items by %{username} in Collections
   comments:
     comment_form:
+      anonymous_creator: Anonymous Creator
       anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
       cancel_action: Cancel
       choose_name_field_title: Choose Name
@@ -427,7 +428,7 @@ en:
       guest_instructions: All fields are required. Your email address will not be published.
       guest_name: Guest name
       guest_name_failure: Please enter your name.
-      inbox_reference: to %{commentable_creator} on %{commentable_link}
+      inbox_reference_html: to %{commentable_creator} on %{commentable_link}
       landmark:
         comment: Comment
         note: Note
