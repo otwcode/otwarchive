@@ -46,4 +46,14 @@ Feature: Filing a support request
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"
     And 1 email should be delivered
-    
+
+  Scenario: Submit a request containing an image
+
+  Given I am logged in as "puzzled"
+    And basic languages
+  When I follow "Support & Feedback"
+    And I fill in "Brief summary" with "Just a brief note"
+    And I fill in "Your question or problem" with '<img src="foo.jpg" />Hi'
+    And I press "Send"
+  Then 1 email should be delivered
+    And the email should not contain "<img src="foo.jpg" />"

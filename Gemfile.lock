@@ -351,10 +351,7 @@ GEM
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2022.0105)
-    mimemagic (0.3.10)
-      nokogiri (~> 1)
-      rake
-    mini_mime (1.1.5)
+    mini_mime (1.1.2)
     mini_portile2 (2.8.5)
     minitest (5.17.0)
     mono_logger (1.1.2)
@@ -380,7 +377,7 @@ GEM
       net-ssh (>= 2.6.5, < 7.0.0)
     net-sftp (3.0.0)
       net-ssh (>= 5.0.0, < 7.0.0)
-    net-smtp (0.4.0)
+    net-smtp (0.5.0)
       net-protocol
     net-ssh (6.1.0)
     net-ssh-gateway (2.0.0)
@@ -388,7 +385,7 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (9.7.1)
     nio4r (2.5.8)
-    nokogiri (1.16.2)
+    nokogiri (1.16.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -673,8 +670,8 @@ DEPENDENCIES
   listen (~> 3.3)
   lograge
   mail (>= 2.8)
+  marcel (= 1.0.2)
   mechanize
-  mimemagic (= 0.3.10)
   minitest
   mysql2
   n_plus_one_control
@@ -727,4 +724,4 @@ RUBY VERSION
    ruby 3.1.4p223
 
 BUNDLED WITH
-   2.3.26
+   2.5.6

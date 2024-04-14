@@ -4,7 +4,9 @@ en:
     attributes:
       admin/role:
         board: Board
+        board_assistants_team: Board Assistants Team
         communications: Communications
+        development_and_membership: Development & Membership
         docs: AO3 Docs
         elections: Elections
         open_doors: Open Doors
