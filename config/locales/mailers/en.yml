@@ -83,8 +83,9 @@ en:
         support: The AO3 Support team
   roles:
     anonymous_creator: Anonymous Creator
-    commenter_name_html: "%{name} %{role}"
-    commenter_name_text: "%{name} %{role}"
+    commenter_name:
+      html: "%{name} %{role_with_parens}"
+      text: "%{name} %{role_with_parens}"
     guest_with_parens: "(Guest)"
     official_with_parens: "(Official)"
     registered_with_parens: "(Registered User)"
