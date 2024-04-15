@@ -300,9 +300,9 @@ module NavigationHelpers
     when /^the admin-posts page$/i
       admin_posts_path
     when /^the admin post "(.*)"$/i
-      admin_post_path(AdminPost.find_by(title: $1))
+      admin_post_path(AdminPost.find_by(title: Regexp.last_match(1)))
     when /^the unreviewed comments page for the admin post "(.*)"$/i
-      unreviewed_admin_post_comments_path(AdminPost.find_by(title: $1))
+      unreviewed_admin_post_comments_path(AdminPost.find_by(title: Regexp.last_match(1)))
     when /^the admin-settings page$/i
       admin_settings_path
     when /^the admin-activities page$/i

@@ -343,13 +343,13 @@ class CommentsController < ApplicationController
       # First, try saving the comment
       if @comment.save
         if @comment.approved?
-          if @comment.unreviewed?
-            # i18n-tasks-use t("comments.create.success.moderated.admin_post")
-            # i18n-tasks-use t("comments.create.success.moderated.work")
-            flash[:comment_notice] = t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
-          else
-            flash[:comment_notice] = ts("Comment created!")
-          end
+          flash[:comment_notice] = if @comment.unreviewed?
+                                     # i18n-tasks-use t("comments.create.success.moderated.admin_post")
+                                     # i18n-tasks-use t("comments.create.success.moderated.work")
+                                     t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
+                                   else
+                                     t("comments.create.success.not_moderated")
+                                   end
           respond_to do |format|
             format.html do
               if request.referer&.match(/inbox/)
@@ -429,8 +429,8 @@ class CommentsController < ApplicationController
   def review
     authorize @comment if logged_in_as_admin?
 
-    return unless @comment && @comment.unreviewed?
-    return unless current_user_owns?(@comment.ultimate_parent) || logged_in_as_admin? && @comment.ultimate_parent.is_a?(AdminPost)
+    return unless @comment&.unreviewed?
+    return unless (current_user_owns?(@comment.ultimate_parent)) || (logged_in_as_admin? && @comment.ultimate_parent.is_a?(AdminPost))
 
     @comment.toggle!(:unreviewed)
     # mark associated inbox comments as read
@@ -455,7 +455,7 @@ class CommentsController < ApplicationController
 
   def review_all
     authorize @commentable, policy_class: CommentPolicy if logged_in_as_admin?
-    unless @commentable && current_user_owns?(@commentable) || @commentable && logged_in_as_admin? && @commentable.is_a?(AdminPost)
+    unless (@commentable && current_user_owns?(@commentable)) || (@commentable && logged_in_as_admin? && @commentable.is_a?(AdminPost))
       flash[:error] = ts("What did you want to review comments on?")
       redirect_back_or_default(root_path)
       return

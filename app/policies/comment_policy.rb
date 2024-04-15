@@ -20,7 +20,7 @@ class CommentPolicy < ApplicationPolicy
   def can_freeze_comment?
     case record.ultimate_parent
     when AdminPost
-      user&.is_a?(Admin)
+      user.is_a?(Admin)
     when Tag
       user_has_roles?(FREEZE_TAG_COMMENT_ROLES)
     when Work
@@ -31,7 +31,7 @@ class CommentPolicy < ApplicationPolicy
   def can_hide_comment?
     case record.ultimate_parent
     when AdminPost
-      user&.is_a?(Admin)
+      user.is_a?(Admin)
     when Tag
       user_has_roles?(HIDE_TAG_COMMENT_ROLES)
     when Work
@@ -49,11 +49,11 @@ class CommentPolicy < ApplicationPolicy
   end
 
   def can_review_comment?
-    record.ultimate_parent.is_a?(AdminPost) && user&.is_a?(Admin)
+    record.ultimate_parent.is_a?(AdminPost) && user.is_a?(Admin)
   end
 
   def can_review_all?
-    record.is_a?(AdminPost) && user&.is_a?(Admin)
+    record.is_a?(AdminPost) && user.is_a?(Admin)
   end
 
   alias destroy? can_destroy_comment?

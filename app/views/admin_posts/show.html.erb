@@ -12,16 +12,14 @@
           <li><%= link_to t(".navigation.admin.edit"), edit_admin_post_path(@admin_post) %></li>
           <li>
             <%= link_to t(".navigation.admin.delete"),
-                        @admin_post,
-                        data: { confirm: t(".navigation.admin.confirm_delete") },
-                        method: :delete %>
+                  @admin_post,
+                  data: { confirm: t(".navigation.admin.confirm_delete") },
+                  method: :delete %>
           </li>
           <% if @admin_post.find_all_comments.unreviewed_only.exists? %>
             <li>
-              <%= link_to t(".navigation.admin.unreviewed_comments",
-                            count: @admin_post.find_all_comments.unreviewed_only.count),
-                          unreviewed_admin_post_comments_path(@admin_post) %>
-
+              <%= link_to t(".navigation.admin.unreviewed_comments", count: @admin_post.find_all_comments.unreviewed_only.count),
+                    unreviewed_admin_post_comments_path(@admin_post) %>
             </li>
           <% end %>
         </ul>
