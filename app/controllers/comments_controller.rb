@@ -341,7 +341,7 @@ class CommentsController < ApplicationController
       @controller_name = params[:controller_name]
 
       # First, try saving the comment
-      if @comment.save && @comment.approved?
+      if @comment.save
         flash[:comment_notice] = if @comment.unreviewed?
                                    # i18n-tasks-use t("comments.create.success.moderated.admin_post")
                                    # i18n-tasks-use t("comments.create.success.moderated.work")
@@ -371,10 +371,6 @@ class CommentsController < ApplicationController
             end
           end
         end
-      elsif @comment.save && !@comment.approved
-        # this shouldn't come up any more
-        flash[:comment_notice] = ts("Sorry, but this comment looks like spam to us.")
-        redirect_back_or_default(root_path)
       else
         flash[:error] = ts("Couldn't save comment!")
         render action: "new"
