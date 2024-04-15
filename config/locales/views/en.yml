@@ -592,11 +592,11 @@ en:
       instructions_html: To check on the status of your invitation, go to the %{status_link} and enter your email in the space provided.
     status:
       heading: Invitation Request Status
+      search: Look me up
+      send_rate: We are sending out %{invites} invitations per day.
       waiting_list:
         one: There is currently %{count} person on the waiting list.
         other: There are currently %{count} people on the waiting list.
-      send_rate: We are sending out %{invites} invitations per day.
-      search: Look me up
   kudos:
     guest_header:
       one: "%{count} guest has also left kudos"
