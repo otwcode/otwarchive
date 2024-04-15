@@ -46,7 +46,7 @@ ul.actions {
 }
 
 button {
-  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
   box-sizing: content-box;
 }
 
@@ -165,7 +165,7 @@ legend .action:link {
 
 .heading .actions, .heading .action, .heading span.actions {
   height: auto;
-  font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
   padding: 0.15em 0.375em;
 }
 

@@ -21,7 +21,7 @@ describe WorkSearchForm, work_search: true do
       end
 
       it "should exclude works with a given canonical tag name" do
-        excluded_work.update(freeform_string: "Exclude Me")
+        excluded_work.update!(freeform_string: "Exclude Me")
         run_all_indexing_jobs
 
         options = {
@@ -35,7 +35,7 @@ describe WorkSearchForm, work_search: true do
       end
 
       it "should exclude works tagged with a synonym to a given canonical tag name" do
-        excluded_work.update(freeform_string: "Excluded")
+        excluded_work.update!(freeform_string: "Excluded")
         run_all_indexing_jobs
 
         options = {
@@ -49,8 +49,8 @@ describe WorkSearchForm, work_search: true do
       end
 
       it "should only exclude works tagged with a synonym (not its merger) when given that synonym as a tag to exclude" do
-        included_work.update(freeform_string: "Exclude Me")
-        excluded_work.update(freeform_string: "Excluded")
+        included_work.update!(freeform_string: "Exclude Me")
+        excluded_work.update!(freeform_string: "Excluded")
 
         run_all_indexing_jobs
 
@@ -106,7 +106,7 @@ describe WorkSearchForm, work_search: true do
       end
 
       it "should exclude works tagged with direct sub tags of the given superset tag name" do
-        excluded_work.update(character_string: "Sam Winchester")
+        excluded_work.update!(character_string: "Sam Winchester")
         run_all_indexing_jobs
 
         options = {
@@ -120,8 +120,8 @@ describe WorkSearchForm, work_search: true do
       end
 
       it "should not exclude works tagged with the direct superset of the given sub tag name" do
-        included_work.update(character_string: "Sam")
-        excluded_work.update(character_string: "Sam Winchester")
+        included_work.update!(character_string: "Sam")
+        excluded_work.update!(character_string: "Sam Winchester")
         run_all_indexing_jobs
 
         options = {
@@ -135,7 +135,7 @@ describe WorkSearchForm, work_search: true do
       end
 
       it "should exclude works tagged with indirect sub tags of the given superset tag name" do
-        excluded_work.update(character_string: "Endverse Sam Winchester")
+        excluded_work.update!(character_string: "Endverse Sam Winchester")
         run_all_indexing_jobs
 
         options = {
@@ -149,8 +149,8 @@ describe WorkSearchForm, work_search: true do
       end
 
       it "should not exclude works tagged with the indirect superset of the given sub tag name" do
-        included_work.update(character_string: "Sam")
-        excluded_work.update(character_string: "Endverse Sam Winchester")
+        included_work.update!(character_string: "Sam")
+        excluded_work.update!(character_string: "Endverse Sam Winchester")
         run_all_indexing_jobs
 
         options = {

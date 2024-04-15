@@ -14,7 +14,7 @@
       <dd><%= l(@profile.created_at) %></dd>
       <dt><%= ts("My user ID is:") %></dt>
       <dd><%= @user.id %></dd>
-      <% if @profile.location %>
+      <% if @profile.location.present? %>
         <dt class="location"><%=h ts("I live in:") %></dt>
         <dd><%=h @profile.location %></dd>
       <% end %>

@@ -178,6 +178,20 @@ en:
               required: Required when adding or removing a warning or suspension to an account.
             submit: Update
           heading: Record Warnings, Suspensions, or Notes
+    banners:
+      index:
+        actions:
+          active: Active
+          confirm_delete: Are you sure you want to delete this banner?
+          delete: Delete
+          edit: Edit
+        page_heading: Banners
+      navigation:
+        confirm_delete: Are you sure you want to delete this banner?
+        delete: Delete Banner
+        edit: Edit Banner
+        index: Banners
+        new: New Banner
     blacklist:
       emails_found:
         one: one email found
@@ -201,6 +215,38 @@ en:
           canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is banned).
           guest_comments: Banned email addresses cannot be used in guest comments.
         page_heading: Manage Banned Emails
+    header:
+      nav:
+        activities: Activities
+        api_tokens: Manage API Tokens
+        banned_emails: Banned Emails
+        banners: Banners
+        invitations:
+          invitations: Invitations
+          new: Invite New Users
+          queue: Manage Queue
+          requests: Manage Requests
+        label: Admin
+        locales: Locales
+        posts:
+          admin_posts: Admin Posts
+          faqs: Archive FAQ
+          known_issues: Known Issues
+          news: AO3 News
+          post_news: Post AO3 News
+          wrangling_guidelines: Wrangling Guidelines
+        settings: Settings
+        skins:
+          approved: Approved Skins
+          queue: Approval Queue
+          rejected: Rejected Skins
+          skins: Skins
+        spam: Spam
+        users:
+          email_search: Bulk Email Search
+          manage: Manage Users
+          search: Find Users
+        wrangling: Tag Wrangling
     passwords:
       edit:
         describedby:
@@ -307,6 +353,7 @@ en:
         title: Block %{name}
         will:
           commenting: commenting or leaving kudos on your works
+          gifting: giving you gift works outside of challenge assignments and claimed prompts
           intro: 'Blocking a user prevents them from:'
           replying: replying to your comments anywhere on the site
         will_not:
@@ -319,6 +366,7 @@ en:
         cancel: Cancel
         resume:
           commenting: commenting or leaving kudos on your works
+          gifting: giving you gift works outside of challenge assignments and claimed prompts
           intro: 'Unblocking a user allows them to resume:'
           replying: replying to your comments anywhere on the site
         sure_html: Are you sure you want to %{unblock} %{username}?
@@ -338,6 +386,7 @@ en:
         title: Blocked Users
         will:
           commenting: commenting or leaving kudos on your works
+          gifting: giving you gift works outside of challenge assignments and claimed prompts
           intro:
             one: 'You can block up to %{block_limit} user. Blocking a user prevents them from:'
             other: 'You can block up to %{block_limit} users. Blocking a user prevents them from:'
@@ -396,7 +445,7 @@ en:
           disable: Disable comment moderation
           enable: Enable comment moderation
           keep_current: Keep current comment moderation settings
-          label: Comment Moderation
+          label: Comment moderation
           notice:
             admin_post: Comments on this news post are moderated. Your comment will not appear until it has been approved.
             work: This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator.
@@ -564,12 +613,40 @@ en:
         other: "%{formatted_count} works"
   layouts:
     header:
+      collections:
+        new: New Collection
+      javascript: While we've done our best to make the core functionality of this site accessible without JavaScript, it will work better with it enabled. Please consider turning it on!
       login: Log In
+      nav:
+        about: About
+        browse: Browse
+        fandoms: Fandoms
+        label: Site
+        search: Search
     proxy_notice:
       button: Dismiss Notice
       faux_heading: 'Important message:'
       point1: You are using a proxy site that is not part of the Archive of Our Own.
       point2: The entity that set up the proxy site can see what you submit, including your IP address. If you log in through the proxy site, it can see your password.
+  menu:
+    menu_about:
+      about_us: About Us
+      donate: Donate or Volunteer
+      faq: FAQ
+      news: News
+      wrangling_guidelines: Wrangling Guidelines
+    menu_browse:
+      bookmarks: Bookmarks
+      collections: Collections
+      tags: Tags
+      works: Works
+    menu_fandoms:
+      all: All Fandoms
+    menu_search:
+      bookmarks: Bookmarks
+      people: People
+      tags: Tags
+      works: Works
   muted:
     mute: Mute
     muted_items_notice_html: You have muted some users on the Archive. Some items may not be shown, and any counts may be inaccurate. You can mute or unmute users on %{muted_users_link}.
@@ -694,6 +771,13 @@ en:
         random: These are some random tags used on the Archive. To find more tags, %{search_tags_link}.
         random_in_collection: These are some random tags used in the collection.
       search_tags: try our tag search
+    show:
+      canonical_html: It's a %{canonical_tag_link}. You can use it to %{filter_works_link} and to %{filter_bookmarks_link}.
+      canonical_tag: canonical tag
+      fandom_relationship_tags: Relationship tags in this fandom
+      filter_bookmarks: filter bookmarks
+      filter_works: filter works
+      list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
   time:
     formats:
       date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
@@ -779,6 +863,26 @@ en:
         submit: Create Account
         wait: Please wait...
     sessions:
+      greeting:
+        nav:
+          assignments: My Assignments
+          bookmarks: My Bookmarks
+          collections: My Collections
+          dashboard: My Dashboard
+          greeting: Hi, %{current_user}!
+          history: My History
+          import: Import Work
+          label: User
+          log_out: Log Out
+          new_work: New Work
+          open_doors: Open Doors
+          post: Post
+          post_draft: From Draft
+          preferences: My Preferences
+          sign_ups: My Sign-ups
+          subscriptions: My Subscriptions
+          tag_wrangling: Tag Wrangling
+          works: My Works
       new:
         beta_reminder:
           give_feedback: give us your feedback
@@ -821,6 +925,13 @@ en:
         continue: Yes, Continue
         preferences: Set your preferences now
       page_title: Adult Content Warning
+    associations:
+      language:
+        choose: Choose a language
+      title: Associations
+    byline:
+      add_co-creators: Add co-creators
+      show_co-creator_options: Add co-creators?
     meta:
       original_creators:
         one: 'Original Creator ID:'
@@ -834,8 +945,17 @@ en:
         multiple_works_restricted: Only show to registered users
         restricted: Only show your work to registered users
         unrestricted: Show to all
+    preface:
+      title: Preface
+    search_box:
+      a11y_label: Work
+      label: Work Search
+      submit: Search
+      tooltip_label: 'tip:'
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    skin:
+      select: Select work skin
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"

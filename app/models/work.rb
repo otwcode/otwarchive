@@ -183,10 +183,34 @@ class Work < ApplicationRecord
     self.new_gifts.each do |gift|
       next if gift.pseud.blank?
       next if gift.pseud&.user&.preference&.allow_gifts?
-      next if self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud)
-      next if self.challenge_claims.reject { |c| c.request_prompt.anonymous? }.map(&:requesting_pseud).include?(gift.pseud)
+      next if challenge_bypass(gift)
 
-      self.errors.add(:base, ts("%{byline} does not accept gifts.", byline: gift.pseud.byline))
+      self.errors.add(:base, :blocked_gifts, byline: gift.pseud.byline)
+    end
+  end
+
+  validate :new_recipients_have_not_blocked_gift_giver
+  def new_recipients_have_not_blocked_gift_giver
+    return if self.new_gifts.blank?
+
+    self.new_gifts.each do |gift|
+      # Already dealt with in #new_recipients_allow_gifts
+      next if gift.pseud&.user&.preference && !gift.pseud.user.preference.allow_gifts?
+
+      next if challenge_bypass(gift)
+
+      blocked_users = gift.pseud&.user&.blocked_users || []
+      next if blocked_users.empty?
+
+      pseuds_after_saving.each do |pseud|
+        next unless blocked_users.include?(pseud.user)
+
+        if User.current_user == pseud.user
+          self.errors.add(:base, :blocked_your_gifts, byline: gift.pseud.byline)
+        else
+          self.errors.add(:base, :blocked_gifts, byline: gift.pseud.byline)
+        end
+      end
     end
   end
 
@@ -1257,5 +1281,15 @@ class Work < ApplicationRecord
   # meaning that at least one of the creators has opted-in.
   def allow_collection_invitation?
     users.any? { |user| user.preference.allow_collection_invitation }
+  end
+
+  private
+
+  def challenge_bypass(gift)
+    self.challenge_assignments.map(&:requesting_pseud).include?(gift.pseud) ||
+      self.challenge_claims
+        .reject { |c| c.request_prompt.anonymous? }
+        .map(&:requesting_pseud)
+        .include?(gift.pseud)
   end
 end

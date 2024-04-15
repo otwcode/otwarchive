@@ -348,6 +348,7 @@ end
 When /^I bookmark the works "([^\"]*)"$/ do |worklist|
   worklist.split(/, ?/).each do |work_title|
     step %{I bookmark the work "#{work_title}"}
+    step %{it is currently 1 second from now}
   end
 end
 

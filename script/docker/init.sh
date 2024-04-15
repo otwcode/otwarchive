@@ -12,12 +12,12 @@ do
   cp "config/docker/$file" "config/$file"
 done
 
-docker-compose up -d
+docker compose up -d
 
 sleep 60
 
-docker-compose run --rm web script/reset_database.sh
+docker compose run --rm web script/reset_database.sh
 
 # The development database reset will do everything except run migrations for
 # the test environment:
-docker-compose run --rm test bundle exec rake db:migrate
+docker compose run --rm test bundle exec rake db:migrate
