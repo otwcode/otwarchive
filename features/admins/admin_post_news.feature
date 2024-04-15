@@ -253,25 +253,27 @@ Feature: Admin Actions to Post News
 
     # Leave a guest comment on a moderated admin post
     When I log out
-      And I go to the admin post "Default Admin Post"
+      And I go to the "Default Admin Post" admin post page
     Then I should see "Comments on this news post are moderated. Your comment will not appear until it has been approved."
     When I fill in "Comment" with "Perfectly nice comment"
       And I fill in "Guest name" with "lovely"
       And I fill in "Guest email" with "email@example.com"
       And I press "Comment"
     Then I should see "Your comment was received! It will appear publicly after it has been approved."
+      And I should be on the "Default Admin Post" admin post page
 
     # Leave a logged in comment on a moderated admin post
     When I am logged in as "commenter"
-      And I go to the admin post "Default Admin Post"
+      And I go to the "Default Admin Post" admin post page
     Then I should see "Comments on this news post are moderated. Your comment will not appear until it has been approved."
     When I fill in "Comment" with "Second perfectly nice comment"
       And I press "Comment"
     Then I should see "Your comment was received! It will appear publicly after it has been approved."
+      And I should be on the show page for my latest comment
 
     # Access unreviewed comments
     When I am logged in as a "communications" admin
-      And I go to the admin post "Default Admin Post"
+      And I go to the "Default Admin Post" admin post page
       And I follow "Unreviewed Comments (2)"
     Then I should see "Unreviewed Comments on Default Admin Post"
       And I should see "Please note that comments cannot be unapproved once you have approved them. After you delete any comments you do not wish to appear on the admin post, you can approve all that remain."
@@ -280,7 +282,7 @@ Feature: Admin Actions to Post News
     When I press "Approve"
     Then I should see "Comment approved."
       And I should be on the unreviewed comments page for the admin post "Default Admin Post"
-    When I go to the admin post "Default Admin Post"
+    When I go to the "Default Admin Post" admin post page
     Then I should see "Comments (1)"
       And I should see "Unreviewed Comments (1)"
 
@@ -288,7 +290,7 @@ Feature: Admin Actions to Post News
     When I go to the unreviewed comments page for the admin post "Default Admin Post"
       And I press "Approve All Unreviewed Comments"
     Then I should see "All moderated comments approved."
-      And I should be on the admin post "Default Admin Post"
+      And I should be on the "Default Admin Post" admin post page
       And I should see "Comments (2)"
       And I should not see "Unreviewed Comments"
 

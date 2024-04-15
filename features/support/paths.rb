@@ -111,6 +111,8 @@ module NavigationHelpers
       user_invitations_path(User.current_user)
     when /my co-creator requests page/
       user_creatorships_path(User.current_user)
+    when /the show page for my latest comment$/
+      comment_path(User.current_user.comments.last)
     when /the gifts page$/
       gifts_path
     when /the gifts page for the recipient (.*)$/
@@ -299,7 +301,7 @@ module NavigationHelpers
     # Admin Pages
     when /^the admin-posts page$/i
       admin_posts_path
-    when /^the admin post "(.*)"$/i
+    when /^the "(.*)" admin post page$/i
       admin_post_path(AdminPost.find_by(title: Regexp.last_match(1)))
     when /^the unreviewed comments page for the admin post "(.*)"$/i
       unreviewed_admin_post_comments_path(AdminPost.find_by(title: Regexp.last_match(1)))
