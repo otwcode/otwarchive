@@ -429,7 +429,8 @@ class CommentsController < ApplicationController
   def review
     authorize @comment if logged_in_as_admin?
 
-    return unless @comment && current_user_owns?(@comment.ultimate_parent) && @comment.unreviewed?
+    return unless @comment && @comment.unreviewed?
+    return unless current_user_owns?(@comment.ultimate_parent) || logged_in_as_admin? && @comment.ultimate_parent.is_a?(AdminPost)
 
     @comment.toggle!(:unreviewed)
     # mark associated inbox comments as read
@@ -453,7 +454,8 @@ class CommentsController < ApplicationController
   end
 
   def review_all
-    unless @commentable && current_user_owns?(@commentable)
+    authorize @commentable, policy_class: CommentPolicy if logged_in_as_admin?
+    unless @commentable && current_user_owns?(@commentable) || @commentable && logged_in_as_admin? && @commentable.is_a?(AdminPost)
       flash[:error] = ts("What did you want to review comments on?")
       redirect_back_or_default(root_path)
       return
