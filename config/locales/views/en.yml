@@ -273,11 +273,13 @@ en:
     show:
       navigation:
         admin:
-          delete: Delete Post
           confirm_delete: Are you sure you want to delete this news post?
+          delete: Delete Post
           edit: Edit Post
           landmark: Admin Actions
-          unreviewed_comments: Unreviewed Comments (%{count})
+          unreviewed_comments:
+            one: Unreviewed Comments (%{count})
+            other: Unreviewed Comments (%{count})
         landmark: Admin Post Navigation
         next: Next Post
         previous: Previous Post
