@@ -253,31 +253,53 @@ describe CommentsController do
   end
 
   describe "GET #unreviewed" do
-    let!(:user) { create(:user) }
-    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true) }
-    let(:comment) { create(:comment, :unreviewed, commentable: work.first_chapter) }
+    context "when the commentable is a chapter of a work" do
+      let(:user) { create(:user) }
+      let(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true) }
 
-    it "redirects logged out users to login path with an error" do
-      get :unreviewed, params: { comment_id: comment.id, work_id: work.id }
-      it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to see those unreviewed comments.")
+      it "redirects logged out users to login path with an error" do
+        get :unreviewed, params: { work_id: work.id }
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to see those unreviewed comments.")
+      end
+
+      it "redirects to root path with an error when logged in user does not own the commentable" do
+        fake_login
+        get :unreviewed, params: { work_id: work.id }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to see those unreviewed comments.")
+      end
+
+      it "renders the :unreviewed template for a user who owns the work" do
+        fake_login_known_user(user)
+        get :unreviewed, params: { work_id: work.id }
+        expect(response).to render_template("unreviewed")
+      end
+
+      it "renders the :unreviewed template for an admin" do
+        fake_login_admin(create(:admin))
+        get :unreviewed, params: { work_id: work.id }
+        expect(response).to render_template("unreviewed")
+      end
     end
 
-    it "redirects to root path with an error when logged in user does not own the commentable" do
-      fake_login
-      get :unreviewed, params: { comment_id: comment.id, work_id: work.id }
-      it_redirects_to_with_error(root_path, "Sorry, you don't have permission to see those unreviewed comments.")
-    end
+    context "when the commentable is an admin post" do
+      let(:admin_post) { create(:admin_post, moderated_commenting_enabled: true) }
 
-    it "renders the :unreviewed template for a user who owns the work" do
-      fake_login_known_user(user)
-      get :unreviewed, params: { work_id: work.id }
-      expect(response).to render_template("unreviewed")
-    end
+      it "redirects logged out users to login path with an error" do
+        get :unreviewed, params: { admin_post_id: admin_post.id }
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to see those unreviewed comments.")
+      end
 
-    it "renders the :unreviewed template for an admin" do
-      fake_login_admin(create(:admin))
-      get :unreviewed, params: { work_id: work.id }
-      expect(response).to render_template("unreviewed")
+      it "redirects logged in users to root path with an error" do
+        fake_login
+        get :unreviewed, params: { admin_post_id: admin_post.id }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to see those unreviewed comments.")
+      end
+
+      it "renders the :unreviewed template for an admin" do
+        fake_login_admin(create(:admin))
+        get :unreviewed, params: { admin_post_id: admin_post.id }
+        expect(response).to render_template("unreviewed")
+      end
     end
   end
 
@@ -878,10 +900,71 @@ describe CommentsController do
   end
 
   describe "PUT #review_all" do
-    it "redirects to root path with an error if current user does not own the commentable" do
-      fake_login
-      put :review_all, params: { work_id: unreviewed_comment.commentable.work_id }
-      it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+    context "when commentable is a chapter on a work" do
+      let(:work) { unreviewed_comment.commentable.work }
+      let(:user) { work.users.first }
+
+      it "redirects logged out user to root path with error and does not mark comment reviewed" do
+        put :review_all, params: { work_id: work.id }
+        it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+        expect(unreviewed_comment.reload.unreviewed).to be_truthy
+      end
+
+      context "when logged in" do
+        context "when current user does not own the work" do
+          it "redirects to root path with error and does not mark comment reviewed" do
+            fake_login
+            put :review_all, params: { work_id: work.id }
+            it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+            expect(unreviewed_comment.reload.unreviewed).to be_truthy
+          end
+        end
+
+        context "when current user owns the work" do
+          it "redirects to commentable with notice and marks comment reviewed" do
+            fake_login_known_user(user)
+            put :review_all, params: { work_id: work.id }
+            it_redirects_to_with_notice(work_path(work), "All moderated comments approved.")
+            expect(unreviewed_comment.reload.unreviewed).to be_falsey
+          end
+        end
+      end
+
+      it "redirects logged in admin to root path with error and does not mark comment reviewed" do
+        fake_login_admin(create(:admin))
+        put :review_all, params: { work_id: work.id }
+        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        expect(unreviewed_comment.reload.unreviewed).to be_truthy
+      end
+    end
+
+    context "when commentable is an admin post" do
+      let(:admin_post) { create(:admin_post, moderated_commenting_enabled: true) }
+      let!(:comment1) { create(:comment, :unreviewed, commentable: admin_post) }
+      let!(:comment2) { create(:comment, :unreviewed, commentable: admin_post) }
+
+      it "redirects logged out user to root path with error and does not mark comments reviewed" do
+        put :review_all, params: { admin_post_id: admin_post.id }
+        it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+        expect(comment1.reload.unreviewed).to be_truthy
+        expect(comment2.reload.unreviewed).to be_truthy
+      end
+
+      it "redirects logged in user to root path with error and does not mark comments reviewed" do
+        fake_login
+        put :review_all, params: { admin_post_id: admin_post.id }
+        it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+        expect(comment1.reload.unreviewed).to be_truthy
+        expect(comment2.reload.unreviewed).to be_truthy
+      end
+
+      it "redirects logged in admin to commentable with notice and marks comments reviewed" do
+        fake_login_admin(create(:admin))
+        put :review_all, params: { admin_post_id: admin_post.id }
+        it_redirects_to_with_notice(admin_post_path(admin_post), "All moderated comments approved.")
+        expect(comment1.reload.unreviewed).to be_falsey
+        expect(comment2.reload.unreviewed).to be_falsey
+      end
     end
   end
 
@@ -3266,41 +3349,115 @@ describe CommentsController do
   end
 
   describe "PUT #review" do
-    let!(:user) { create(:user) }
-    let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true) }
-    let(:comment) { create(:comment, :unreviewed, commentable: work.first_chapter) }
+    context "when commentable is a chapter on a work" do
+      let!(:user) { create(:user) }
+      let!(:work) { create(:work, authors: [user.default_pseud], moderated_commenting_enabled: true) }
+      let(:comment) { create(:comment, :unreviewed, commentable: work.first_chapter) }
+      let!(:inbox_comment) { create(:inbox_comment, feedback_comment: comment, user: user, read: false) }
 
-    before do
-      fake_login_known_user(user)
-    end
+      context "when logged out" do
+        it "redirects to 404, does not mark comment reviewed, and does not mark work owner's inbox comment read" do
+          put :review, params: { id: comment.id }
+          it_redirects_to_simple("/404")
+          expect(comment.reload.unreviewed).to be_truthy
+          expect(inbox_comment.reload.read).to be_falsey
+        end
+      end
 
-    context "when recipient approves comment from inbox" do
-      it "marks comment reviewed and redirects to user inbox path with success message" do
-        put :review, params: { id: comment.id, approved_from: "inbox" }
-        expect(response).to redirect_to(user_inbox_path(user))
-        expect(flash[:notice]).to eq "Comment approved."
-        comment.reload
-        expect(comment.unreviewed).to be false
+      context "when logged in" do
+        context "when user owns the work" do
+          before do
+            fake_login_known_user(user)
+          end
+
+          context "with approved_from params set to inbox" do
+            it "redirects to user inbox path with success message, marks comment reviewed, and marks inbox comment read" do
+              put :review, params: { id: comment.id, approved_from: "inbox" }
+              it_redirects_to_with_notice(user_inbox_path(user), "Comment approved.")
+              expect(comment.reload.unreviewed).to be_falsey
+              expect(inbox_comment.reload.read).to be_truthy
+            end
+          end
+
+          context "with approved_from params set to inbox with filters" do
+            it "redirects to filtered user inbox path with success message, marks comment reviewed, and marks inbox comment read" do
+              put :review, params: { id: comment.id, approved_from: "inbox", filters: { date: "asc" } }
+              expect(response).to redirect_to(user_inbox_path(user, filters: { date: "asc" }))
+              expect(flash[:notice]).to eq "Comment approved."
+              expect(comment.reload.unreviewed).to be_falsey
+              expect(inbox_comment.reload.read).to be_truthy
+            end
+          end
+
+          context "with approved_from params set to home" do
+            it "redirects to root path with success message, marks comment reviewed, and marks inbox comment read" do
+              put :review, params: { id: comment.id, approved_from: "home" }
+              it_redirects_to_with_notice(root_path, "Comment approved.")
+              expect(comment.reload.unreviewed).to be_falsey
+              expect(inbox_comment.reload.read).to be_truthy
+            end
+          end
+
+          context "without approved_from params" do
+            it "redirects to unreviewed comments with notice, marks comment reviewed, and marks inbox comment read" do
+              put :review, params: { id: comment.id }
+              it_redirects_to_with_notice(unreviewed_work_comments_path(work), "Comment approved.")
+              expect(comment.reload.unreviewed).to be_falsey
+              expect(inbox_comment.reload.read).to be_truthy
+            end
+          end
+        end
+
+        context "when user does not own the work" do
+          it "redirects to 404, does not mark comment reviewed, and does not mark work owner's inbox comment read" do
+            fake_login
+            put :review, params: { id: comment.id }
+            it_redirects_to_simple("/404")
+            expect(comment.reload.unreviewed).to be_truthy
+            expect(inbox_comment.reload.read).to be_falsey
+          end
+        end
+      end
+
+      context "when logged in as admin" do
+        it "redirects to rooth path with error, does not mark comment reviewed, and does not mark work owner's inbox comment read" do
+          fake_login_admin(create(:admin))
+          put :review, params: { id: comment.id }
+          it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+          expect(comment.reload.unreviewed).to be_truthy
+          expect(inbox_comment.reload.read).to be_falsey
+        end
       end
     end
 
-    context "when recipient approves comment from inbox with filters" do
-      it "marks comment reviewed and redirects to user inbox path with success message" do
-        put :review, params: { id: comment.id, approved_from: "inbox", filters: { date: "asc" } }
-        expect(response).to redirect_to(user_inbox_path(user, filters: { date: "asc" }))
-        expect(flash[:notice]).to eq "Comment approved."
-        comment.reload
-        expect(comment.unreviewed).to be false
-      end
-    end
+    context "when commentable is an admin post" do
+      let(:admin_post) { create(:admin_post, moderated_commenting_enabled: true) }
+      let(:comment) { create(:comment, :unreviewed, commentable: admin_post) }
 
-    context "when recipient approves comment from homepage" do
-      it "marks comment reviewed and redirects to root path with success message" do
-        put :review, params: { id: comment.id, approved_from: "home" }
-        expect(response).to redirect_to(root_path)
-        expect(flash[:notice]).to eq "Comment approved."
-        comment.reload
-        expect(comment.unreviewed).to be false
+      context "when logged out" do
+        it "redirects to 404 and does not mark comment reviewed" do
+          put :review, params: { id: comment.id }
+          it_redirects_to_simple("/404")
+          expect(comment.reload.unreviewed).to be_truthy
+        end
+      end
+
+      context "when logged in" do
+        it "redirects to 404 and does not mark comment reviewed" do
+          fake_login
+          put :review, params: { id: comment.id }
+          it_redirects_to_simple("/404")
+          expect(comment.reload.unreviewed).to be_truthy
+        end
+      end
+
+      context "when logged in as admin" do
+        it "redirects to unreviewed comments with notice and marks comment reviewed" do
+          fake_login_admin(create(:admin))
+          put :review, params: { id: comment.id }
+          it_redirects_to_with_notice(unreviewed_admin_post_comments_path(admin_post), "Comment approved.")
+          expect(comment.reload.unreviewed).to be_falsey
+        end
       end
     end
   end
