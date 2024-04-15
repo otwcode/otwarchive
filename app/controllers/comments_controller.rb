@@ -341,40 +341,38 @@ class CommentsController < ApplicationController
       @controller_name = params[:controller_name]
 
       # First, try saving the comment
-      if @comment.save
-        if @comment.approved?
-          flash[:comment_notice] = if @comment.unreviewed?
-                                     # i18n-tasks-use t("comments.create.success.moderated.admin_post")
-                                     # i18n-tasks-use t("comments.create.success.moderated.work")
-                                     t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
-                                   else
-                                     t("comments.create.success.not_moderated")
-                                   end
-          respond_to do |format|
-            format.html do
-              if request.referer&.match(/inbox/)
-                redirect_to user_inbox_path(current_user, filters: filter_params[:filters], page: params[:page])
-              elsif request.referer&.match(/new/)
-                # came here from the new comment page, probably via download link
-                # so go back to the comments page instead of reloading full work
-                redirect_to comment_path(@comment)
-              elsif request.referer == "#{root_url}"
-                # replying on the homepage
-                redirect_to root_path
-              elsif @comment.unreviewed? && current_user
-                redirect_to comment_path(@comment)
-              elsif @comment.unreviewed?
-                redirect_to_all_comments(@commentable)
-              else
-                redirect_to_comment(@comment, {view_full_work: (params[:view_full_work] == "true"), page: params[:page]})
-              end
+      if @comment.save && @comment.approved?
+        flash[:comment_notice] = if @comment.unreviewed?
+                                    # i18n-tasks-use t("comments.create.success.moderated.admin_post")
+                                    # i18n-tasks-use t("comments.create.success.moderated.work")
+                                    t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
+                                  else
+                                    t("comments.create.success.not_moderated")
+                                  end
+        respond_to do |format|
+          format.html do
+            if request.referer&.match(/inbox/)
+              redirect_to user_inbox_path(current_user, filters: filter_params[:filters], page: params[:page])
+            elsif request.referer&.match(/new/)
+              # came here from the new comment page, probably via download link
+              # so go back to the comments page instead of reloading full work
+              redirect_to comment_path(@comment)
+            elsif request.referer == "#{root_url}"
+              # replying on the homepage
+              redirect_to root_path
+            elsif @comment.unreviewed? && current_user
+              redirect_to comment_path(@comment)
+            elsif @comment.unreviewed?
+              redirect_to_all_comments(@commentable)
+            else
+              redirect_to_comment(@comment, {view_full_work: (params[:view_full_work] == "true"), page: params[:page]})
             end
           end
-        else
-          # this shouldn't come up any more
-          flash[:comment_notice] = ts("Sorry, but this comment looks like spam to us.")
-          redirect_back_or_default(root_path)
         end
+      elsif @comment.save && !@comment.approved
+        # this shouldn't come up any more
+        flash[:comment_notice] = ts("Sorry, but this comment looks like spam to us.")
+        redirect_back_or_default(root_path)
       else
         flash[:error] = ts("Couldn't save comment!")
         render action: "new"
