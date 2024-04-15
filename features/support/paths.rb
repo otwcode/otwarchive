@@ -301,6 +301,10 @@ module NavigationHelpers
     # Admin Pages
     when /^the admin-posts page$/i
       admin_posts_path
+    when /^the admin post "(.*)"$/i
+      admin_post_path(AdminPost.find_by(title: $1))
+    when /^the unreviewed comments page for the admin post "(.*)"$/i
+      unreviewed_admin_post_comments_path(AdminPost.find_by(title: $1))
     when /^the admin-settings page$/i
       admin_settings_path
     when /^the admin-activities page$/i
