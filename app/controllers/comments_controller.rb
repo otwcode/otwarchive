@@ -353,19 +353,19 @@ class CommentsController < ApplicationController
           format.html do
             if request.referer&.match(/inbox/)
               redirect_to user_inbox_path(current_user, filters: filter_params[:filters], page: params[:page])
-            elsif request.referer&.match(/new/)
-              # came here from the new comment page, probably via download link
-              # so go back to the comments page instead of reloading full work
+            elsif request.referer&.match(/new/) || (@comment.unreviewed? && current_user)
+              # If the referer is the new comment page, go to the comment's page
+              # instead of reloading the full work.
+              # If the comment is unreviewed and commenter is logged in, take
+              # them to the comment's page so they can access the edit and
+              # delete options for the comment, since unreviewed comments don't
+              # appear on the commentable.
               redirect_to comment_path(@comment)
             elsif request.referer == root_url
               # replying on the homepage
               redirect_to root_path
             elsif @comment.unreviewed?
-              if current_user
-                redirect_to comment_path(@comment)
-              else
-                redirect_to_all_comments(@commentable)
-              end
+              redirect_to_all_comments(@commentable)
             else
               redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
             end
