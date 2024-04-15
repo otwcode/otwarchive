@@ -343,12 +343,12 @@ class CommentsController < ApplicationController
       # First, try saving the comment
       if @comment.save && @comment.approved?
         flash[:comment_notice] = if @comment.unreviewed?
-                                    # i18n-tasks-use t("comments.create.success.moderated.admin_post")
-                                    # i18n-tasks-use t("comments.create.success.moderated.work")
-                                    t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
-                                  else
-                                    t("comments.create.success.not_moderated")
-                                  end
+                                   # i18n-tasks-use t("comments.create.success.moderated.admin_post")
+                                   # i18n-tasks-use t("comments.create.success.moderated.work")
+                                   t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
+                                 else
+                                   t("comments.create.success.not_moderated")
+                                 end
         respond_to do |format|
           format.html do
             if request.referer&.match(/inbox/)
@@ -357,15 +357,17 @@ class CommentsController < ApplicationController
               # came here from the new comment page, probably via download link
               # so go back to the comments page instead of reloading full work
               redirect_to comment_path(@comment)
-            elsif request.referer == "#{root_url}"
+            elsif request.referer == root_url
               # replying on the homepage
               redirect_to root_path
-            elsif @comment.unreviewed? && current_user
-              redirect_to comment_path(@comment)
             elsif @comment.unreviewed?
-              redirect_to_all_comments(@commentable)
+              if current_user
+                redirect_to comment_path(@comment)
+              else
+                redirect_to_all_comments(@commentable)
+              end
             else
-              redirect_to_comment(@comment, {view_full_work: (params[:view_full_work] == "true"), page: params[:page]})
+              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
             end
           end
         end
@@ -428,7 +430,7 @@ class CommentsController < ApplicationController
     authorize @comment if logged_in_as_admin?
 
     return unless @comment&.unreviewed?
-    return unless (current_user_owns?(@comment.ultimate_parent)) || (logged_in_as_admin? && @comment.ultimate_parent.is_a?(AdminPost))
+    return unless current_user_owns?(@comment.ultimate_parent) || (logged_in_as_admin? && @comment.ultimate_parent.is_a?(AdminPost))
 
     @comment.toggle!(:unreviewed)
     # mark associated inbox comments as read
