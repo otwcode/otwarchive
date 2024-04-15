@@ -10,8 +10,8 @@
 <!--/subnav-->
 
 <!--main content-->
-<%# i18n-tasks-use t(".note.admin_post")
-    i18n-tasks-use t(".note.work") %>
+<%# i18n-tasks-use t("comments.unreviewed.note.admin_post")
+    i18n-tasks-use t("comments.unreviewed.note.work") %>
 <p class="note"><%= t(".note.#{@commentable.model_name.i18n_key}") %></p>
 
 <% if @comments.count > 0 %>
