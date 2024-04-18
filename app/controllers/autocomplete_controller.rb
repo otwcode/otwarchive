@@ -114,7 +114,7 @@ class AutocompleteController < ApplicationController
         index: TagIndexer.index_name,
         body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: search_list } } }
       )
-      render_output(match + search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] })
+      render_output((match + search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] }).uniq)
     rescue Elasticsearch::Transport::Transport::Errors::BadRequest
       render_output(match)
     end
