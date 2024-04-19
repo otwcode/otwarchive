@@ -276,7 +276,7 @@ Feature: Admin Actions to Post News
       And I go to the "Default Admin Post" admin post page
       And I follow "Unreviewed Comments (2)"
     Then I should see "Unreviewed Comments on Default Admin Post"
-      And I should see "Please note that comments cannot be unapproved once you have approved them. After you delete any comments you do not wish to appear on the admin post, you can approve all that remain."
+      And I should see "Please note that comments cannot be unapproved once you have approved them. After you delete any comments you do not wish to appear on the news post, you can approve all that remain."
 
     # Approve a single comment
     When I press "Approve"

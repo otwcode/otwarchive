@@ -307,7 +307,7 @@ en:
   admin_posts:
     admin_post_form:
       comment_permissions:
-        label: Who can comment on this admin post
+        label: Who can comment on this news post
       language:
         label: Choose a language
       tags:
@@ -326,7 +326,7 @@ en:
           unreviewed_comments:
             one: Unreviewed Comments (%{count})
             other: Unreviewed Comments (%{count})
-        landmark: Admin Post Navigation
+        landmark: News Post Navigation
         next: Next Post
         previous: Previous Post
       page_heading: AO3 News
@@ -466,7 +466,7 @@ en:
       approve_all: Approve All Unreviewed Comments
       no_unreviewed: No unreviewed comments.
       note:
-        admin_post: Please note that comments cannot be unapproved once you have approved them. After you delete any comments you do not wish to appear on the admin post, you can approve all that remain.
+        admin_post: Please note that comments cannot be unapproved once you have approved them. After you delete any comments you do not wish to appear on the news post, you can approve all that remain.
         work: Please note that comments cannot be unapproved once you have reviewed them. After you delete any comments you do not wish to appear on your work, you can approve all that remain.
       page_heading_html: Unreviewed Comments on %{commentable_link}
   downloads:
