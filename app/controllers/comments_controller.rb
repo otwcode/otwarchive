@@ -423,10 +423,13 @@ class CommentsController < ApplicationController
   end
 
   def review
-    authorize @comment if logged_in_as_admin?
+    if logged_in_as_admin?
+      authorize @comment
+    else
+      return unless current_user_owns?(@comment.ultimate_parent)
+    end
 
     return unless @comment&.unreviewed?
-    return unless current_user_owns?(@comment.ultimate_parent) || (logged_in_as_admin? && @comment.ultimate_parent.is_a?(AdminPost))
 
     @comment.toggle!(:unreviewed)
     # mark associated inbox comments as read
