@@ -12,7 +12,7 @@
     <%= span_if_current ts('Marked for Later'), user_readings_path(@user, :show => 'to-read'), params[:show] == "to-read" %>
   </li>
   <li>
-    <%= link_to ts('Clear Entire History'), confirm_clear_readings_path(current_user) %>
+    <%= link_to ts('Clear Entire History'), confirm_clear_user_readings_path(current_user) %>
   </li>
 </ul>
 <% end %>
