@@ -644,7 +644,7 @@ en:
       icon: Icon
       icon_alt: Icon alt text
       icon_comment: Icon comment text
-      icon_delete: Delete your icon and revert to our default
+      icon_delete: Delete your icon and revert to our default. This will also remove your icon alt text and comment text.
       icon_notes:
         current: This is your icon.
         format: Icons can be in png, jpeg or gif form.
