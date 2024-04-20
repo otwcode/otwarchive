@@ -59,3 +59,15 @@ Feature: Filing an abuse report
     And I press "Submit"
     And I should see "Your report was submitted to the Policy & Abuse team. A confirmation message has been sent to the email address you provided."
     And 1 email should be delivered
+
+  Scenario: File a report containing images
+
+  Given I am logged in as "otheruser"
+    And basic languages
+  When I follow "Policy Questions & Abuse Reports"
+    And I fill in "Description of the content you are reporting (required)" with "This is wrong"
+    And I fill in "Brief summary of Terms of Service violation (required)" with '<img src="foo.jpg" />Hi'
+    And I fill in "Link to the page you are reporting (required)" with "http://www.archiveofourown.org/works"
+    And I press "Submit"
+  Then 1 email should be delivered
+    And the email should not contain "<img src="foo.jpg" />"
