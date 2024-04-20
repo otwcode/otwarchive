@@ -340,6 +340,12 @@ describe AbuseReport do
       expect(spam_report.errors[:base]).to include("This report looks like spam to our system!")
     end
 
+    it "is valid even if the email casing is different" do
+      legit_user.email = legit_user.email.upcase
+      User.current_user = legit_user
+      expect(safe_report.save).to be_truthy
+    end
+
     it "is valid even with spam if logged in and providing correct email" do
       User.current_user = legit_user
       expect(safe_report.save).to be_truthy
