@@ -23,9 +23,9 @@
                       remote: true %>
           <% else %>
             <%= link_to ts("Save"),
-              new_polymorphic_path([bookmarkable, Bookmark]),
-              id: "bookmark_form_trigger_for_#{bookmarkable.id}",
-              remote: true %>
+                      new_polymorphic_path([bookmarkable, Bookmark]),
+                      id: "bookmark_form_trigger_for_#{bookmarkable.id}",
+                      remote: true %>
           <% end %>
       </li>
     </ul>
