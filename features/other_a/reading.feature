@@ -91,6 +91,8 @@ Feature: Reading count
       And I should see "fifth"
       But I should not see "fourth"
     When I follow "Clear Entire History"
+    Then I should see "Are you sure you want to clear your entire history?"
+    When I follow "Yes, Clear Entire History"
     Then I should see "Your history is now cleared"
       And I should see "History" within "div#dashboard"
       But I should not see "First work"
