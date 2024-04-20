@@ -53,7 +53,7 @@ Lint/AmbiguousBlockAssociation:
 Lint/AmbiguousRegexpLiteral:
   Enabled: false
 
-Lint/RedundantSafeNavigation
+Lint/RedundantSafeNavigation:
   Exclude:
     # Take a better safe than sorry approach to safe navigation in admin
     # policies.
