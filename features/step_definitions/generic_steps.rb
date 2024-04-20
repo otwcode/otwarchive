@@ -271,3 +271,7 @@ When /^I should see the correct time zone for "(.*)"$/ do |zone|
   Time.zone = zone
   page.body.should =~ /#{Regexp.escape(Time.zone.now.zone)}/
 end
+
+Then "I should see {string} exactly {int} time(s)" do |string, int|
+  expect(page).to have_content(string).exactly(int)
+end

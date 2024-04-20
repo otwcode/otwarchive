@@ -14,7 +14,7 @@ describe Admin::UserCreationsController do
 
       context "when admin does not have correct authorization" do
         it "redirects with error" do
-          admin.update(roles: [])
+          admin.update!(roles: [])
           fake_login_admin(admin)
 
           put :hide, params: { id: work.id, creation_type: "Work" }
@@ -25,7 +25,7 @@ describe Admin::UserCreationsController do
       context "when admin has correct authorization" do
         context "when work is visible and hidden param is true" do
           it "hides work and redirects with notice" do
-            admin.update(roles: ["policy_and_abuse"])
+            admin.update!(roles: ["policy_and_abuse"])
             fake_login_admin(admin)
             put :hide, params: { id: work.id, creation_type: "Work", hidden: true }
 
@@ -37,8 +37,8 @@ describe Admin::UserCreationsController do
 
         context "when work is hidden and hidden param is false" do
           it "makes work visible and redirects with notice" do
-            work.update(hidden_by_admin: true)
-            admin.update(roles: ["policy_and_abuse"])
+            work.update!(hidden_by_admin: true)
+            admin.update!(roles: ["policy_and_abuse"])
             fake_login_admin(admin)
             put :hide, params: { id: work.id, creation_type: "Work", hidden: false }
 
@@ -59,7 +59,7 @@ describe Admin::UserCreationsController do
 
       context "when admin does not have correct authorization" do
         it "redirects with error" do
-          admin.update(roles: [])
+          admin.update!(roles: [])
           fake_login_admin(admin)
           put :set_spam, params: { id: work.id, creation_type: "Work", spam: true }
 
@@ -70,7 +70,7 @@ describe Admin::UserCreationsController do
       context "when admin has correct authorization" do
         context "when work is not spam and spam param is true" do
           it "marks work as spam, hides it, and redirects with notice" do
-            admin.update(roles: ["policy_and_abuse"])
+            admin.update!(roles: ["policy_and_abuse"])
             fake_login_admin(admin)
             put :set_spam, params: { id: work.id, creation_type: "Work", spam: true }
 
@@ -83,8 +83,8 @@ describe Admin::UserCreationsController do
 
         context "when work is spam and spam param is false" do
           it "marks work as not spam, unhides it, and redirects with notice" do
-            admin.update(roles: ["policy_and_abuse"])
-            work.update(spam: true)
+            admin.update!(roles: ["policy_and_abuse"])
+            work.update!(spam: true)
             fake_login_admin(admin)
             put :set_spam, params: { id: work.id, creation_type: "Work", spam: false }
 
@@ -142,7 +142,7 @@ describe Admin::UserCreationsController do
     end
 
     context "when admin does not have correct authorization" do
-      before { admin.update(roles: []) }
+      before { admin.update!(roles: []) }
 
       it_behaves_like "unauthorized admin cannot delete works"
       it_behaves_like "unauthorized admin cannot delete bookmarks"

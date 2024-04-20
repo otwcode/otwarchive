@@ -337,3 +337,57 @@ Feature: Create Gifts
       And I should not see "by gifter for giftee1"
     When I view the work "Rude Gift"
     Then I should not see "For giftee1."
+
+  Scenario: Can't give a gift to a user who has blocked you
+    Given the user "giftee1" has blocked the user "gifter"
+    When I am logged in as "gifter"
+      And I post the work "Rude Gift" as a gift for "giftee1"
+    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
+      And 0 emails should be delivered to "giftee1@example.com"
+
+  Scenario: Can't gift an existing work to a user who has blocked you
+    Given the user "giftee1" has blocked the user "gifter"
+      And I press "Post"
+      And I follow "Edit"
+      And I give the work to "giftee1"
+    When I press "Post"
+    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
+
+  Scenario: Can't gift a work whose co-creator is blocked by recipient
+    Given I coauthored the work "Collateral" as "gifter" with "gifter2"
+      And the user "giftee1" has blocked the user "gifter2"
+      And I edit the work "Collateral"
+      And I give the work to "giftee1"
+    When I press "Post"
+    Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts."
+
+  Scenario: Only see one error message is shown if gifts are disabled and user is blocked*
+    Given the user "giftee1" disallows gifts
+      And the user "giftee1" has blocked the user "gifter"
+    When I am logged in as "gifter"
+      And I post the work "Rude Gift" as a gift for "giftee1"
+    Then I should see "Sorry! We couldn't save this work because:"
+      And I should see "giftee1 does not accept gifts."
+      And I should not see "giftee1 does not accept gifts from you."
+
+  Scenario: A user can refuse previous gifts from user after blocking them
+    Given I am logged in as "gifter"
+      And I post the work "Rude Gift" as a gift for "giftee1"
+    When I am logged in as "giftee1"
+      And I go to my gifts page
+    Then I should see "Rude Gift"
+    When I go to my blocked users page
+      And I fill in "blocked_id" with "gifter"
+      And I press "Block"
+      And I press "Yes, Block User"
+    Then I should see "You have blocked the user gifter."
+    When I go to my gifts page
+      And it is currently 1 second from now
+      And I follow "Refuse Gift"
+    Then I should see "This work will no longer be listed among your gifts."
+      And I should not see "Rude Gift"
+    When I follow "Refused Gifts"
+    Then I should see "Rude Gift"
+      And I should not see "by gifter for giftee1"
+    When I view the work "Rude Gift"
+    Then I should not see "For giftee1."

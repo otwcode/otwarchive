@@ -108,6 +108,18 @@ Scenario: extra commas in bookmark form (Issue 2284)
     And I press "Create"
   Then I should see "created"
 
+Scenario: Bookmark notes do not display images
+  Given I am logged in as "bookmarkuser"
+    And I post the work "Some Work"
+  When I follow "Bookmark"
+    And I fill in "Notes" with "Fantastic!<img src='http://example.com/icon.svg'>"
+    And I press "Create"
+    And all indexing jobs have been run
+  Then I should see "Bookmark was successfully created"
+  When I go to the bookmarks page
+  Then I should not see the image "src" text "http://example.com/icon.svg"
+    And I should see "Fantastic!"
+
 Scenario: bookmark added to moderated collection has flash notice only when not approved
   Given the following activated users exist
     | login      | password |
