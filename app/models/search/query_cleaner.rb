@@ -5,7 +5,7 @@ class QueryCleaner
   attr_reader :params
 
   SORT_OPTIONS = [
-    %w[Creator creator_to_sort_on],
+    %w[Creator creators_to_sort_on],
     %w[Title title_to_sort_on],
     ['Date Posted', 'created_at'],
     ['Date Updated', 'revised_at'],
