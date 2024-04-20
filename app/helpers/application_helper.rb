@@ -349,7 +349,7 @@ module ApplicationHelper
 
   # This is a partial re-implementation of ActionView::Helpers::FormTagHelper#field_name.
   # The method contract changed in Rails 7.0, but we can't use the default because it sometimes
-  # includes other information that -- at a minimum -- wrecks havoc on the Cucumber feature tests.
+  # includes other information that -- at a minimum -- wreaks havoc on the Cucumber feature tests.
   # It is used in when constructing forms, like in app/views/tags/new.html.erb.
   def field_name(form_or_object_name, attribute, *_method_names, multiple: false, index: nil)
     object_name = if form_or_object_name.respond_to?(:object_name)
