@@ -35,7 +35,7 @@ Feature: Help
   Scenario: Asked to log in if trying to access the first login page as guest
 
     When I go to the first login help page
-    Then I should see "Sorry, you don't have permission"
+    Then I should be on the login page
 
     Given I am logged in
     When I go to the first login help page

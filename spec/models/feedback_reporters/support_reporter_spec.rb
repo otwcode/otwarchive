@@ -89,5 +89,13 @@ describe SupportReporter do
         expect(subject.report_attributes.fetch("cf").fetch("cf_user_agent")).to eq("Unknown user agent")
       end
     end
+
+    context "if the report has an image in description" do
+      it "strips all img tags" do
+        allow(subject).to receive(:description).and_return("Hi!<img src='http://example.com/Camera-icon.svg'>Bye!")
+
+        expect(subject.report_attributes.fetch("description")).to eq("Hi!Bye!")
+      end
+    end
   end
 end

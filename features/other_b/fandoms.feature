@@ -34,6 +34,7 @@ Feature: There is a list of unassigned Fandoms
       And I add the fandom "Steven Universe" to the character "Sapphire (Steven Universe)"
       And I am logged in as "author"
       And I post the work "Stronger than you" with fandom "Steven Universe" with character "Ruby (Steven Universe)" with second character "Sapphire (Steven Universe)" with relationship "Ruby/Sapphire (Steven Universe)"
-    When I go to the "Steven Universe" fandom relationship page
+    When I go to the "Steven Universe" tag page
+      And I follow "Relationship tags in this fandom"
     Then I should see "Ruby (Steven Universe)"
       And I should see "Sapphire (Steven Universe)"

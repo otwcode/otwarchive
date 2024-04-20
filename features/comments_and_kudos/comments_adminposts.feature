@@ -135,3 +135,14 @@ Feature: Commenting on admin posts
     When I follow "Edit Post"
     Then I should see "No one can comment"
     # TODO: Test that the other options aren't available/selected in a non-brittle way
+
+  Scenario: Admin post comment does not display images
+    Given I have posted an admin post
+      And I am logged in as "regular"
+      And I go to the admin-posts page
+      And I follow "Default Admin Post"
+    When I fill in "Comment" with "Hi!<img src='http://example.com/icon.svg'>"
+      And I press "Comment"
+    Then I should see "Comment created!"
+      And I should not see the image "src" text "http://example.com/icon.svg"
+      And I should see "Hi!"

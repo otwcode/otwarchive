@@ -175,6 +175,8 @@ en:
           attributes:
             user_defined_tags_count:
               at_most: must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them.
+          blocked_gifts: "%{byline} does not accept gifts."
+          blocked_your_gifts: "%{byline} does not accept gifts from you."
         work/parent_work_relationships:
           format: "%{message}"
     models:
