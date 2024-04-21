@@ -218,7 +218,7 @@ class Work < ApplicationRecord
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, _suffix: :comments
+  }, _suffix: :comments, _default: 1
 
   ########################################################################
   # HOOKS
