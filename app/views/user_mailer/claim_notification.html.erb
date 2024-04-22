@@ -25,7 +25,7 @@
     <% end %>
   </ul>
 
-  <p><%= t(".redirects.html") %></p>
+  <p><%= t(".redirects.html", negation: style_bold(t(".redirects.negation"))) %></p>
 
   <p><%= t(".update_redirect.html", contact_open_doors_link: opendoors_link(t(".update_redirect.contact_open_doors"))) %></p>
 
