@@ -29,6 +29,12 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.feedback(feedback.id)
   end
 
+  def claim_notification_registered
+    work = create(:work)
+    creator_id = work.pseuds.first.user.id
+    UserMailer.claim_notification(creator_id, [work.id], true)
+  end
+
   private
 
   def creatorship_notification_data
