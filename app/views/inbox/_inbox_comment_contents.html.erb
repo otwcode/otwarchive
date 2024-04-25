@@ -27,5 +27,5 @@
 </div>
 
 <blockquote class="userstuff">
-  <%= raw sanitize_field(feedback_comment, :comment_content, strip_images: feedback_comment.ultimate_parent.is_a?(AdminPost)) %>
+  <%= raw sanitize_field(feedback_comment, :comment_content, image_saftey_mode: feedback_comment.ultimate_parent.is_a?(AdminPost)) %>
 </blockquote>
