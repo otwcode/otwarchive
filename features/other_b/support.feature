@@ -57,3 +57,4 @@ Feature: Filing a support request
     And I press "Send"
   Then 1 email should be delivered
     And the email should not contain "<img src="foo.jpg" />"
+    But the email should contain "foo.jpg"

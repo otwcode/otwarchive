@@ -72,16 +72,19 @@ describe CommentMailer do
   end
 
   shared_examples "strips image tags" do
-    let(:image_tag) { "<img src=\"an_image.png\" />" }
+    let(:image_url) { "an_image.png" }
+    let(:image_tag) { "<img src=\"#{image_url}\" />" }
 
     before do
       comment.comment_content += image_tag
       comment.save!
     end
 
-    it "strips the image from the email message" do
+    it "strips the image from the email message but leaves its URL" do
       expect(email).not_to have_html_part_content(image_tag)
       expect(email).not_to have_text_part_content(image_tag)
+      expect(email).to have_html_part_content(image_url)
+      expect(email).to have_text_part_content(image_url)
     end
   end
 

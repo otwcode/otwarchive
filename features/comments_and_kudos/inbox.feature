@@ -168,3 +168,4 @@ Feature: Get messages in the inbox
       And I go to the homepage
     Then I should see "My reply"
       And I should not see "<img src='foo.jpg' />"
+      But I should see "foo.jpg"
