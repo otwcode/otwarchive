@@ -56,5 +56,6 @@ Feature: Filing a support request
     And I fill in "Your question or problem" with '<img src="foo.jpg" />Hi'
     And I press "Send"
   Then 1 email should be delivered
-    And the email should not contain "<img src="foo.jpg" />"
-    But the email should contain "foo.jpg"
+    # The sanitizer adds the domain in front of relative image URLs as of AO3-6571
+    And the email should not contain "<img src="http://www.example.org/foo.jpg" />"
+    But the email should contain "http://www.example.org/foo.jpgHi"

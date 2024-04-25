@@ -65,10 +65,13 @@ Feature: Filing an abuse report
   Given I am logged in as "otheruser"
     And basic languages
   When I follow "Policy Questions & Abuse Reports"
-    And I fill in "Description of the content you are reporting (required)" with "This is wrong"
-    And I fill in "Brief summary of Terms of Service violation (required)" with '<img src="foo.jpg" />Hi'
+    And I fill in "Brief summary of Terms of Service violation (required)" with '<img src="foo.jpg" />Gross'
+    And I fill in "Description of the content you are reporting (required)" with "This is wrong <img src='bar.jpeg' />"
     And I fill in "Link to the page you are reporting (required)" with "http://www.archiveofourown.org/works"
     And I press "Submit"
   Then 1 email should be delivered
-    And the email should not contain "<img src="foo.jpg" />"
-    But the email should contain "foo.jpg"
+    # The sanitizer adds the domain in front of relative image URLs as of AO3-6571
+    And the email should not contain "<img src="http://www.example.org/foo.jpg" />"
+    And the email should not contain "<img src="http://www.example.org/bar.jpeg" />"
+    But the email should contain "Gross"
+    And the email should contain "This is wrong http://www.example.org/bar.jpeg"
