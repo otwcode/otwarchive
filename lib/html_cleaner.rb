@@ -148,10 +148,12 @@ module HtmlCleaner
 
   # strip img tags, optionally leaving the src URL exposed
   def strip_images(value, keep_src: false)
-    if keep_src
-      value.gsub(%r{<img .*?src="(.*?)" .*?\/>}, '\1')
-    else
-      value.gsub(%r{<img .*?}, "")
+    value.gsub(%r{(<img .*?>)}) do |img_tag|
+      if keep_src
+        img_tag.match(%r{src="([^"]+)"})[1]
+      else
+        ""
+      end
     end
   end
 
