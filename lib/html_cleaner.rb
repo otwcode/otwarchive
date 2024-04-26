@@ -149,11 +149,7 @@ module HtmlCleaner
   # strip img tags, optionally leaving the src URL exposed
   def strip_images(value, keep_src: false)
     value.gsub(/(<img .*?>)/) do |img_tag|
-      return "" unless keep_src
-      # The cleaned field will always use double quotes (") but the fields
-      # in tests aren't always cleaned, so we're allowing double or single
-      # quotes here.
-      match_data = img_tag.match(/src="([^"]+)"/)
+      match_data = img_tag.match(/src="([^"]+)"/) if keep_src
       src = match_data[1] if match_data
       src || ""
     end
