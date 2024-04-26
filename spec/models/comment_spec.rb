@@ -455,7 +455,7 @@ describe Comment do
     end
 
     context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE includes multiple parent types" do
-      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost", "Tag"]) }
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[AdminPost Tag]) }
 
       it "returns true for comments and replies on the listed parent types and false for the other" do
         expect(admin_post_comment.use_image_safety_mode?).to be_truthy

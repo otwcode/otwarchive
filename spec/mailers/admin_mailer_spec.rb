@@ -34,7 +34,7 @@ describe AdminMailer do
           end
 
           it "embeds the image when image safety mode is enabled for other types of comments" do
-            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Chapter", "Tag"])
+            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[Chapter Tag])
             expect(email).to have_html_part_content(image_tag)
           end
         end
@@ -76,7 +76,7 @@ describe AdminMailer do
           end
 
           it "embeds the image in the HTML email when image safety mode is enabled for other types of comments" do
-            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Chapter", "Tag"])
+            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[Chapter Tag])
             expect(email).to have_html_part_content(image_tag)
             expect(email).not_to have_text_part_content(image_url)
           end
