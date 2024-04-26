@@ -58,6 +58,33 @@ Given "a reply {string} by {string} on {commentable}" do |text, user, commentabl
                     comment_content: text)
 end
 
+Given "image safety mode is enabled for comments on a {string}" do |parent_type|
+  allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(parent_type)
+end
+
+Given "image safety mode is disabled for comments" do
+  allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
+end
+
+Given "the setup for testing image safety mode on the admin post {string}" do |title|
+  step %{the admin post "#{title}"}
+  step %{a comment "plain text" by "commentrecip" on the admin post "#{title}"}
+  step %{a reply 'OMG! <img src="https://example.com/image.jpg">' by "commenter" on the admin post "#{title}"}
+  step %{I am logged in as "commentrecip"}
+end
+
+Given "the setup for testing image safety mode on the tag {string}" do |name|
+  step %{the tag wrangler "commentrecip" with password "password" is wrangler of "No Fandom"}
+  step %{a comment 'OMG! <img src="https://example.com/image.jpg">' by "commenter" on the tag "#{name}"}
+  step %{I am logged in as "commentrecip"}
+end
+
+Given "the setup for testing image safety mode on the work {string}" do |title|
+  step %{the work "#{title}" by "commentrecip"}
+  step %{a comment 'OMG! <img src="https://example.com/image.jpg">' by "commenter" on the work "#{title}"}
+  step %{I am logged in as "commentrecip"}
+end
+
 # THEN
 
 Then /^the comment's posted date should be nowish$/ do

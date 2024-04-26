@@ -18,9 +18,25 @@ describe AdminMailer do
           comment.save!
         end
 
-        it "strips the image from the email message but leaves its URL" do
-          expect(email).not_to have_html_part_content(image_tag)
-          expect(email).to have_html_part_content(image_url)
+        context "when image safety mode is enabled for admin post comments" do
+          before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost"]) }
+
+          it "strips the image from the email message but leaves its URL" do
+            expect(email).not_to have_html_part_content(image_tag)
+            expect(email).to have_html_part_content(image_url)
+          end
+        end
+
+        context "when image safety mode is not enabled for admin post comments" do
+          it "embeds the image when image safety mode is completely disabled" do
+            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
+            expect(email).to have_html_part_content(image_tag)
+          end
+
+          it "embeds the image when image safety mode is enabled for other types of comments" do
+            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Chapter", "Tag"])
+            expect(email).to have_html_part_content(image_tag)
+          end
         end
       end
     end
@@ -32,7 +48,7 @@ describe AdminMailer do
     context "when the comment is on an admin post" do
       let(:comment) { create(:comment, :on_admin_post) }
 
-      context "and the comment's contents contain an image" do
+      context "with an image in the comment content" do
         let(:image_url) { "an_image.png" }
         let(:image_tag) { "<img src=\"#{image_url}\" />" }
 
@@ -41,9 +57,29 @@ describe AdminMailer do
           comment.save!
         end
 
-        it "strips the image from the email message but leaves its URL" do
-          expect(email).not_to have_html_part_content(image_tag)
-          expect(email).to have_html_part_content(image_url)
+        context "when image safety mode is enabled for admin post comments" do
+          before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost"]) }
+
+          it "strips the image from the email message but leaves its URL" do
+            expect(email).not_to have_html_part_content(image_tag)
+            expect(email).not_to have_text_part_content(image_tag)
+            expect(email).to have_html_part_content(image_url)
+            expect(email).to have_text_part_content(image_url)
+          end
+        end
+
+        context "when image safety mode is not enabled for admin post comments" do
+          it "embeds the image in the HTML email when image safety mode is completely disabled" do
+            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
+            expect(email).to have_html_part_content(image_tag)
+            expect(email).not_to have_text_part_content(image_url)
+          end
+
+          it "embeds the image in the HTML email when image safety mode is enabled for other types of comments" do
+            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Chapter", "Tag"])
+            expect(email).to have_html_part_content(image_tag)
+            expect(email).not_to have_text_part_content(image_url)
+          end
         end
       end
     end
