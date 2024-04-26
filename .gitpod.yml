@@ -7,7 +7,7 @@ ports:
     onOpen: open-browser
   - port: 3306
     onOpen: ignore
-  - port: 6372
+  - port: 6379
     onOpen: ignore
   - port: 9200
     onOpen: ignore
