@@ -1,0 +1,12 @@
+tasks:
+  - init: ./script/docker/init.sh
+    command: docker compose up -d web
+
+ports:
+  - port: 3000
+    onOpen: open-browser
+
+vscode:
+  extensions:
+    - Shopify.ruby-lsp
+    - rubocop.vscode-rubocop
