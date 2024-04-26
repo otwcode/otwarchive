@@ -37,8 +37,7 @@
           <%= time_in_zone(single_comment.created_at) %>
         </span>
       </h4>
-      <% image_safety_mode_key = single_comment.use_image_safety_mode? ? "-image-safety-mode" : "" %>
-      <% cache([single_comment, single_comment.comment_owner, "body", image_safety_mode_key], expires_in: 1.week) do %>
+      <% cache([single_comment, single_comment.comment_owner, "body", image_safety_mode_cache_key(single_comment)], expires_in: 1.week) do %>
         <div class="icon">
           <% if !single_comment.pseud.nil? %>
             <% if single_comment.by_anonymous_creator? %>
