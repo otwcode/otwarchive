@@ -86,7 +86,7 @@ Given "the setup for testing image safety mode on the tag {string}" do |name|
   step %{I am logged in as "commenter"}
   visit tag_comments_path(Tag.find_by_name("No Fandom"))
   # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
-  fill_in("comment[comment_content]", with: 'OMG! <img src=\n"https://example.com/image.jpg">')
+  fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
   click_button("Comment")
   step %{I am logged in as "commentrecip"}
 end
