@@ -1,6 +1,6 @@
 class UserQuery < Query
   def klass
-    'User'
+    "User"
   end
 
   def index_name
@@ -38,7 +38,7 @@ class UserQuery < Query
   end
 
   def name_filter
-    return unless options[:name].present?
+    return if options[:name].blank?
 
     field = options[:search_past].present? ? :all_names : :names
 
@@ -46,7 +46,7 @@ class UserQuery < Query
   end
 
   def email_filter
-    return unless options[:email].present?
+    return if options[:email].blank?
 
     field = options[:search_past].present? ? :all_emails : :email
 
