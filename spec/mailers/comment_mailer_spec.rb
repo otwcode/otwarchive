@@ -145,6 +145,7 @@ describe CommentMailer do
         it_behaves_like "a notification email with a link to the comment"
         it_behaves_like "a notification email with a link to reply to the comment"
         it_behaves_like "a notification email with a link to the comment's thread"
+        it_behaves_like "a comment subject to image safety mode settings"
       end
     end
   end
