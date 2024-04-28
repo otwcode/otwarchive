@@ -135,6 +135,11 @@ en:
               action: Previous Login
               no_details: No previous login recorded
           summary: Shows what notable actions, such as creating an account, a user performed, and when they did them.
+      index:
+        role: Role
+        settings:
+          label: Search settings
+          search_past: Include past usernames and emails
       show:
         fnok:
           form:
