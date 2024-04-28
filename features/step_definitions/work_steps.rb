@@ -69,7 +69,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by(title: title)
   if work
-    visit preview_work_url(work)
+    visit preview_work_path(work)
     click_button("Post")
   else
     # Note: this will match the above regexp and work just fine even if all the options are blank!
@@ -79,7 +79,7 @@ When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*
   # Now add the chapters
   if number_of_chapters.present? && number_of_chapters.to_i > 1
     work = Work.find_by_title(title)
-    visit work_url(work)
+    visit work_path(work)
     (number_of_chapters.to_i - 1).times do
       step %{I follow "Add Chapter"}
       fill_in("content", with: "Yet another chapter.")
@@ -214,10 +214,21 @@ Given "the work {string} by {string}" do |title, login|
   FactoryBot.create(:work, title: title, authors: [user.default_pseud])
 end
 
+Given "the work {string} by {string} with guest comments enabled" do |title, login|
+  user = ensure_user(login)
+  FactoryBot.create(:work, :guest_comments_on, title: title, authors: [user.default_pseud])
+end
+
 Given "the work {string} by {string} and {string}" do |title, login1, login2|
   user1 = ensure_user(login1)
   user2 = ensure_user(login2)
   FactoryBot.create(:work, title: title, authors: [user1.default_pseud, user2.default_pseud])
+end
+
+Given "the work {string} by {string} and {string} with guest comments enabled" do |title, login1, login2|
+  user1 = ensure_user(login1)
+  user2 = ensure_user(login2)
+  FactoryBot.create(:work, :guest_comments_on, title: title, authors: [user1.default_pseud, user2.default_pseud])
 end
 
 Given /^the work "([^\"]*)" by "([^\"]*)" with chapter two co-authored with "([^\"]*)"$/ do |work, author, coauthor|
@@ -313,6 +324,12 @@ end
 When /^I post the work "([^"]*)" without preview$/ do |title|
   # we now post as our default test case
   step %{I post the work "#{title}"}
+end
+
+When "I post the work {string} with guest comments enabled" do |title|
+  step %{I set up the draft "#{title}"}
+  choose("Registered users and guests can comment")
+  step "I post the work without preview"
 end
 
 When /^a chapter is added to "([^"]*)"$/ do |work_title|
@@ -419,6 +436,7 @@ end
 When /^I edit multiple works with different comment moderation settings$/ do
   step %{I set up the draft "Work with Comment Moderation Enabled"}
   check("work_moderated_commenting_enabled")
+  choose("Registered users and guests can comment")
   step %{I post the work without preview}
   step %{I post the work "Work with Comment Moderation Disabled"}
   step %{I go to my edit multiple works page}

@@ -1,8 +1,8 @@
 # This file is used by Rack-based servers to start the application.
 
-require ::File.expand_path('../config/environment',  __FILE__)
-require 'resque/server'
-require 'resque/scheduler/server'
+require_relative "config/environment"
+require "resque/server"
+require "resque/scheduler/server"
 
 # Set the AUTH env variable to your basic auth password to protect Resque.
 AUTH_PASSWORD = ENV['AUTH']

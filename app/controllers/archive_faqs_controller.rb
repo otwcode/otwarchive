@@ -129,9 +129,8 @@ class ArchiveFaqsController < ApplicationController
   def set_locale
     session[:language_id] = params[:language_id] if Locale.exists?(iso: params[:language_id])
 
-    if current_user.present? && $rollout.active?(:set_locale_preference,
-                                                 current_user)
-      @i18n_locale = session[:language_id].presence || Locale.find(current_user.preference.preferred_locale).iso
+    if current_user.present?
+      @i18n_locale = session[:language_id].presence || current_user.preference.locale.iso
     else
       @i18n_locale = session[:language_id].presence || I18n.default_locale
     end

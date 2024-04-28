@@ -11,7 +11,7 @@ describe Admin::AdminUsersController do
 
     context "when admin does not have correct authorization" do
       it "redirects with error" do
-        admin.update(roles: [])
+        admin.update!(roles: [])
         fake_login_admin(admin)
         get :index
 
@@ -21,7 +21,7 @@ describe Admin::AdminUsersController do
 
     context "when admin has correct authorization" do
       it "allows access to index" do
-        admin.update(roles: ["policy_and_abuse"])
+        admin.update!(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
         get :index
 
@@ -35,7 +35,7 @@ describe Admin::AdminUsersController do
 
     context "when admin does not have correct authorization" do
       it "redirects with error" do
-        admin.update(roles: [])
+        admin.update!(roles: [])
         fake_login_admin(admin)
         get :bulk_search
 
@@ -45,7 +45,7 @@ describe Admin::AdminUsersController do
 
     context "when admin has correct authorization" do
       it "allows access to access bulk search" do
-        admin.update(roles: ["policy_and_abuse"])
+        admin.update!(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
         get :bulk_search
 
@@ -60,7 +60,7 @@ describe Admin::AdminUsersController do
 
     context "when admin does not have correct authorization" do
       it "redirects with error" do
-        admin.update(roles: [])
+        admin.update!(roles: [])
         fake_login_admin(admin)
         get :show, params: { id: user.login }
 
@@ -70,7 +70,7 @@ describe Admin::AdminUsersController do
 
     context "when admin has correct authorization" do
       it "if user exists, allows access to show page" do
-        admin.update(roles: ["policy_and_abuse"])
+        admin.update!(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
         get :show, params: { id: user.login }
 
@@ -78,7 +78,7 @@ describe Admin::AdminUsersController do
       end
 
       it "if user does not exists, raises a 404" do
-        admin.update(roles: ["policy_and_abuse"])
+        admin.update!(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
         params = { id: "not_existing_id" }
 
@@ -96,7 +96,7 @@ describe Admin::AdminUsersController do
     context "when admin does not have correct authorization" do
       before do
         fake_login_admin(admin)
-        admin.update(roles: [])
+        admin.update!(roles: [])
       end
 
       it "redirects with error" do
@@ -111,7 +111,7 @@ describe Admin::AdminUsersController do
 
       %w[policy_and_abuse superadmin].each do |admin_role|
         context "when admin has #{admin_role} role" do
-          before { admin.update(roles: [admin_role]) }
+          before { admin.update!(roles: [admin_role]) }
 
           it "allows admins to update all attributes" do
             expect do
@@ -136,7 +136,7 @@ describe Admin::AdminUsersController do
 
       %w[open_doors tag_wrangling].each do |admin_role|
         context "when admin has #{admin_role} role" do
-          before { admin.update(roles: [admin_role]) }
+          before { admin.update!(roles: [admin_role]) }
 
           it "prevents admins with #{admin_role} role from updating email" do
             expect do
@@ -161,7 +161,7 @@ describe Admin::AdminUsersController do
       # Keep the array in case we need to add another role like this.
       %w[support].each do |admin_role|
         context "when admin has #{admin_role} role" do
-          before { admin.update(roles: [admin_role]) }
+          before { admin.update!(roles: [admin_role]) }
 
           it "prevents admins with #{admin_role} role from updating roles" do
             expect do
@@ -214,7 +214,7 @@ describe Admin::AdminUsersController do
     end
 
     context "when admin does not have correct authorization" do
-      before { admin.update(roles: []) }
+      before { admin.update!(roles: []) }
 
       it_behaves_like "unauthorized admin cannot add next of kin"
     end
@@ -375,7 +375,7 @@ describe Admin::AdminUsersController do
     end
 
     context "when admin does not have correct authorization" do
-      before { admin.update(roles: []) }
+      before { admin.update!(roles: []) }
 
       it_behaves_like "unauthorized admin cannot add note to user"
       it_behaves_like "unauthorized admin cannot suspend user"
@@ -404,7 +404,7 @@ describe Admin::AdminUsersController do
 
     context "when admin does not have correct authorization" do
       it "redirects with error" do
-        admin.update(roles: [])
+        admin.update!(roles: [])
         fake_login_admin(admin)
         get :confirm_delete_user_creations, params: { id: user.login }
 
@@ -415,9 +415,9 @@ describe Admin::AdminUsersController do
     context "when admin has correct authorization" do
       context "when user is not banned" do
         it "redirects with error" do
-          admin.update(roles: ["policy_and_abuse"])
+          admin.update!(roles: ["policy_and_abuse"])
           fake_login_admin(admin)
-          user.update(banned: false)
+          user.update!(banned: false)
           get :confirm_delete_user_creations, params: { id: user.login }
 
           it_redirects_to_with_error(admin_users_path, "That user is not banned!")
@@ -426,9 +426,9 @@ describe Admin::AdminUsersController do
 
       context "when user is banned" do
         it "allows admins to access delete user creations page" do
-          admin.update(roles: ["policy_and_abuse"])
+          admin.update!(roles: ["policy_and_abuse"])
           fake_login_admin(admin)
-          user.update(banned: true)
+          user.update!(banned: true)
           get :confirm_delete_user_creations, params: { id: user.login }
 
           expect(response).to have_http_status(:success)
@@ -439,25 +439,42 @@ describe Admin::AdminUsersController do
 
   describe "POST #destroy_user_creations" do
     let(:admin) { create(:admin) }
-    let(:user) { create(:user, banned: true) }
+    let(:user) { create(:user) }
+    let!(:work) { create(:work, authors: [user.default_pseud]) }
+    let(:other_owner) { create(:user, banned: false) }
+    let!(:collection1) { create(:collection) }
+    let!(:collection2) { create(:collection) }
+
+    before do
+      # Banning user only after creating works for them
+      user.update!(banned: true)
+
+      collection1.collection_participants = [create(:collection_participant, user: user, collection: collection1, participant_role: CollectionParticipant::OWNER)]
+      collection1.save
+      create(:collection_participant, user: other_owner, collection: collection2, participant_role: CollectionParticipant::OWNER)
+      create(:collection_participant, user: user, collection: collection2, participant_role: CollectionParticipant::MEMBER)
+    end
 
     context "when admin does not have correct authorization" do
       it "redirects with error" do
-        admin.update(roles: [])
+        admin.update!(roles: [])
         fake_login_admin(admin)
-        post :confirm_delete_user_creations, params: { id: user.login }
+        post :destroy_user_creations, params: { id: user.login }
 
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
 
     context "when admin has correct authorization" do
+      before do
+        admin.update!(roles: ["policy_and_abuse"])
+        fake_login_admin(admin)
+      end
+
       context "when user is not banned" do
         it "redirects with error" do
-          admin.update(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          user.update(banned: false)
-          post :confirm_delete_user_creations, params: { id: user.login }
+          user.update!(banned: false)
+          post :destroy_user_creations, params: { id: user.login }
 
           it_redirects_to_with_error(admin_users_path, "That user is not banned!")
         end
@@ -465,12 +482,14 @@ describe Admin::AdminUsersController do
 
       context "when user is banned" do
         it "allows admins to destroy user creations" do
-          admin.update(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          user.update(banned: true)
-          post :confirm_delete_user_creations, params: { id: user.login }
+          post :destroy_user_creations, params: { id: user.login }
+          # Check that the first user's collection is deleted
+          expect(Collection.exists?(collection1.id)).to be_falsey
+          # Check that the second user's collection still exists
+          expect(Collection.exists?(other_owner.collections.last.id)).to be_truthy
 
-          expect(response).to have_http_status(:success)
+          it_redirects_to_with_notice(admin_users_path, "All creations by user #{user.login} have been deleted.")
+          expect(Work.exists?(work.id)).to be false
         end
       end
     end
@@ -482,7 +501,7 @@ describe Admin::AdminUsersController do
 
     context "when admin does not have correct authorization" do
       it "redirects with error" do
-        admin.update(roles: [])
+        admin.update!(roles: [])
         fake_login_admin(admin)
         get :troubleshoot, params: { id: user.login }
 
@@ -492,7 +511,7 @@ describe Admin::AdminUsersController do
 
     context "when admin has correct authorization" do
       it "allows admins to troublehoot user account" do
-        admin.update(roles: ["support"])
+        admin.update!(roles: ["support"])
         fake_login_admin(admin)
         get :troubleshoot, params: { id: user.login }
 
@@ -507,7 +526,7 @@ describe Admin::AdminUsersController do
 
     context "when admin does not have correct authorization" do
       it "redirects with error" do
-        admin.update(roles: [])
+        admin.update!(roles: [])
         fake_login_admin(admin)
         post :activate, params: { id: user.login }
 
@@ -517,7 +536,7 @@ describe Admin::AdminUsersController do
 
     context "when admin has correct authorization" do
       it "allows admins to troublehoot user account" do
-        admin.update(roles: ["support"])
+        admin.update!(roles: ["support"])
         fake_login_admin(admin)
         post :activate, params: { id: user.login }
 

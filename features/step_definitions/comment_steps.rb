@@ -30,6 +30,11 @@ ParameterType(
   }
 )
 
+Given "{commentable} with guest comments enabled" do |commentable|
+  assert !commentable.is_a?(Tag)
+  commentable.update_attribute(:comment_permissions, :enable_all)
+end
+
 Given "a guest comment on {commentable}" do |commentable|
   commentable = Comment.commentable_object(commentable)
   FactoryBot.create(:comment, :by_guest, commentable: commentable)
@@ -87,6 +92,13 @@ When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, 
   fill_in("comment[comment_content]", with: comment_text)
 end
 
+When "I set up the comment {string} on the work {string} with guest comments enabled" do |comment_text, work|
+  work = Work.find_by(title: work)
+  work.update_attribute(:comment_permissions, :enable_all)
+  visit work_path(work)
+  fill_in("comment[comment_content]", with: comment_text)
+end
+
 When /^I attempt to comment on "([^"]*)" with a pseud that is not mine$/ do |work|
   step %{I am logged in as "commenter"}
   step %{I set up the comment "This is a test" on the work "#{work}"}
@@ -112,7 +124,7 @@ end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest(?: with email "([^"]*)")?$/ do |comment_text, work, email|
   step "I start a new session"
-  step "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
+  step %{I set up the comment "#{comment_text}" on the work "#{work}" with guest comments enabled}
   fill_in("Guest name", with: "guest")
   fill_in("Guest email", with: (email || "guest@foo.com"))
   click_button "Comment"

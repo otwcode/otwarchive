@@ -271,7 +271,7 @@ describe ChallengeAssignmentsController do
         let(:collection_item) { work.collection_items.find_by(collection: collection) }
 
         before do
-          collection_item.update(collection_approval_status: CollectionItem::NEUTRAL)
+          collection_item.update!(collection_approval_status: CollectionItem::NEUTRAL)
         end
 
         it "marks the collection item as approved", pending: "AO3-6106" do

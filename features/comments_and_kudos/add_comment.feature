@@ -133,7 +133,7 @@ Scenario: Comment threading, comment editing
       And I fill in "Comment" with "B's improved comment (edited)"
       And I press "Update"
     Then 0 emails should be delivered to "User_A"
-  
+
   Scenario: Try to post an invalid comment
 
     When I am logged in as "author"
@@ -180,6 +180,17 @@ Scenario: Set preference and receive comment notifications of your own comments
     And "commenter" should be emailed
     And 1 email should be delivered to "commenter"
 
+Scenario: Work comment displays images
+
+  Given the work "Generic Work"
+    And I am logged in as "commenter"
+    And I visit the new comment page for the work "Generic Work"
+  When I fill in "Comment" with "Fantastic!<img src='http://example.com/icon.svg'>"
+    And I press "Comment"
+  Then I should see "Comment created!"
+    And I should see "Fantastic!"
+    And I should see the image "src" text "http://example.com/icon.svg"
+
 Scenario: Try to post a comment with a < angle bracket before a linebreak, without a space before the bracket
 
     Given the work "Generic Work"
@@ -194,7 +205,7 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, witho
       And I press "Comment"
     Then I should see "Comment created!"
 
-Scenario: Try to post a comment with a < angle bracket before a linebreak, with a space before the bracket 
+Scenario: Try to post a comment with a < angle bracket before a linebreak, with a space before the bracket
 
     Given the work "Generic Work"
       And I am logged in as "commenter"
@@ -207,3 +218,20 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, with 
       """
       And I press "Comment"
     Then I should see "Comment created!"
+
+Scenario: Users with different time zone preferences should see the time in their own timezone
+  Given the work "Generic Work"
+    And I am logged in as "commenter"
+    And I set my time zone to "UTC"
+    And I post the comment "Something" on the work "Generic Work"
+    And it is currently 1 second from now
+    And I follow "Edit"
+    And I fill in "Comment" with "Something else"
+    And I press "Update"
+  Then I should see "UTC" within ".posted.datetime"
+    And I should see "UTC" within ".edited.datetime"
+  When I am logged in as "reader"
+    And I set my time zone to "Brisbane"
+    And I view the work "Generic Work" with comments
+  Then I should see "AEST" within ".posted.datetime"
+    And I should see "AEST" within ".edited.datetime"

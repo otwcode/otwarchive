@@ -5,7 +5,7 @@ FactoryBot.define do
     login { generate(:login) }
     password { "adminpassword" }
     password_confirmation { |u| u.password }
-    email { generate(:email) }
+    email { Faker::Internet.unique.email }
 
     factory :superadmin do
       roles { ["superadmin"] }

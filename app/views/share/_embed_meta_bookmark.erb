@@ -5,6 +5,6 @@
 <% end %>
 <% if bookmark.bookmarker_notes.present? %>
 <%= ts("Bookmarker's Notes: ").html_safe %>
-<%= raw(sanitize_field(bookmark, :bookmarker_notes)) %>
+<%= raw sanitize_field(bookmark, :bookmarker_notes, strip_images: true) %>
 <% end %>
 <% end %>

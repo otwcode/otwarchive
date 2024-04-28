@@ -150,11 +150,11 @@
         <fieldset>
           <ul>
             <li>
-              <%= radio_button_tag "comment_permissions", "enable_all", true %>
+              <%= radio_button_tag "comment_permissions", "enable_all" %>
               <%= label_tag "comment_permissions_enable_all", t("comments.commentable.permissions.options.enable_all") %>
             </li>
             <li>
-              <%= radio_button_tag "comment_permissions", "disable_anon" %>
+              <%= radio_button_tag "comment_permissions", "disable_anon", true %>
               <%= label_tag "comment_permissions_disable_anon", t("comments.commentable.permissions.options.disable_anon") %>
             </li>
             <li>

@@ -61,11 +61,6 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
-  invite_requests:
-    resend:
-      not_found: Could not find an invitation associated with that email.
-      not_yet: You cannot resend an invitation that was sent in the last %{count} hours.
-      success: Invitation resent to %{email}.
   kudos:
     create:
       success: Thank you for leaving kudos!

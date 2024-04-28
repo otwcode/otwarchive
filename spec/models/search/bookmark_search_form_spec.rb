@@ -17,37 +17,37 @@ describe BookmarkSearchForm, bookmark_search: true do
         let(:tag) { create(:canonical_fandom) }
 
         let!(:work1) do
-          Delorean.time_travel_to 40.minutes.ago do
+          travel_to(40.minutes.ago) do
             create(:work, title: "One", fandom_string: tag.name)
           end
         end
 
         let!(:work2) do
-          Delorean.time_travel_to 60.minutes.ago do
+          travel_to(60.minutes.ago) do
             create(:work, title: "Two", fandom_string: tag.name)
           end
         end
 
         let!(:work3) do
-          Delorean.time_travel_to 50.minutes.ago do
+          travel_to(50.minutes.ago) do
             create(:work, title: "Three", fandom_string: tag.name)
           end
         end
 
         let!(:bookmark1) do
-          Delorean.time_travel_to 30.minutes.ago do
+          travel_to(30.minutes.ago) do
             create(:bookmark, bookmarkable: work1)
           end
         end
 
         let!(:bookmark2) do
-          Delorean.time_travel_to 10.minutes.ago do
+          travel_to(10.minutes.ago) do
             create(:bookmark, bookmarkable: work2)
           end
         end
 
         let!(:bookmark3) do
-          Delorean.time_travel_to 20.minutes.ago do
+          travel_to(20.minutes.ago) do
             create(:bookmark, bookmarkable: work3)
           end
         end
@@ -109,7 +109,7 @@ describe BookmarkSearchForm, bookmark_search: true do
             res = search.bookmarkable_search_results.map(&:id)
 
             [work1, work2].each do |work|
-              work.update(summary: "Updated")
+              work.update!(summary: "Updated")
               run_all_indexing_jobs
               expect(search.bookmarkable_search_results.map(&:id)).to eq(res)
             end
@@ -124,7 +124,7 @@ describe BookmarkSearchForm, bookmark_search: true do
             res = search.bookmarkable_search_results.map(&:id)
 
             [work1, work2].each do |work|
-              work.update(summary: "Updated")
+              work.update!(summary: "Updated")
               run_all_indexing_jobs
               expect(search.bookmarkable_search_results.map(&:id)).to eq(res)
             end
@@ -278,13 +278,13 @@ describe BookmarkSearchForm, bookmark_search: true do
             res = search.search_results.map(&:id)
 
             [work1, work2].each do |work|
-              work.update(summary: "Updated")
+              work.update!(summary: "Updated")
               run_all_indexing_jobs
               expect(search.search_results.map(&:id)).to eq(res)
             end
 
             [bookmark1, bookmark2].each do |bookmark|
-              bookmark.update(bookmarker_notes: "Updated")
+              bookmark.update!(bookmarker_notes: "Updated")
               run_all_indexing_jobs
               expect(search.search_results.map(&:id)).to eq(res)
             end
