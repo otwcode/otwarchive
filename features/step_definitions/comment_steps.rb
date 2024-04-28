@@ -73,7 +73,7 @@ Given "the setup for testing image safety mode on the admin post {string}" do |t
   visit comment_path(Comment.last)
   step %{I follow "Reply"}
   with_scope(".odd") do
-  # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
+    # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
     fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
     click_button("Comment")
   end
@@ -81,10 +81,10 @@ Given "the setup for testing image safety mode on the admin post {string}" do |t
 end
 
 Given "the setup for testing image safety mode on the tag {string}" do |name|
-  step %{the tag wrangler "commentrecip" with password "password" is wrangler of "No Fandom"}
+  step %{the tag wrangler "commentrecip" with password "password" is wrangler of "#{name}"}
   step %{the tag wrangler "commenter" with password "password" is wrangler of "Some Fandom"}
   step %{I am logged in as "commenter"}
-  visit tag_comments_path(Tag.find_by_name("No Fandom"))
+  visit tag_comments_path(Tag.find_by_name(name))
   # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
   fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
   click_button("Comment")
