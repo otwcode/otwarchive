@@ -40,7 +40,7 @@ class UserIndexer < Indexer
         normalizer: {
           keyword_normalizer: {
             type: "custom",
-            filter: ["lowercase", "asciifolding"]
+            filter: %w[lowercase asciifolding]
           }
         }
       }

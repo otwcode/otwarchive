@@ -85,8 +85,8 @@ class Pseud < ApplicationRecord
   after_update :check_default_pseud
   after_update :expire_caches
   after_update :reindex_user, if: :name_changed?
-  after_commit :reindex_creations, :touch_comments
   after_destroy :reindex_user
+  after_commit :reindex_creations, :touch_comments
 
   scope :alphabetical, -> { order(:name) }
   scope :default_alphabetical, -> { order(is_default: :desc).alphabetical }
