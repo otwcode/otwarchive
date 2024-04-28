@@ -212,7 +212,7 @@ Feature:
       Then I should get confirmation that I changed my username
         And I should see "Hi, notforbidden"
 
-  Scenario: Tag wrangling admins are emailed about tag wrangler username changes
+  Scenario: Tag wrangling supervisors are emailed about tag wrangler username changes
     Given the user "before" exists and is activated
       And I am logged in as "before" with password "password"
       And all emails have been delivered

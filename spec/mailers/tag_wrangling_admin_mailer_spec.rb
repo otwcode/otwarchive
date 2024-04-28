@@ -15,6 +15,10 @@ describe TagWranglingAdminMailer do
       expect(email).to have_subject(subject)
     end
 
+    it "delivers to the correct address" do
+      expect(email).to deliver_to ArchiveConfig.TAG_WRANGLER_SUPERVISORS
+    end
+
     describe "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("The wrangler <b")

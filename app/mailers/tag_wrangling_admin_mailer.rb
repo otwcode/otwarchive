@@ -1,7 +1,7 @@
 class TagWranglingAdminMailer < ApplicationMailer
-  default to: "tagwranglers-personnel@transformativeworks.org" # should be configurable, similar to ArchiveConfig.ADMIN_ADDRESS
+  default to: ArchiveConfig.TAG_WRANGLER_SUPERVISORS
 
-  # Sent to tag wrangling supervisors when a tag wrangler changes their username
+  # Sends an email to tag wrangling supervisors when a tag wrangler changes their username
   def wrangler_username_change_notification(old_name, new_name)
     @old_username = old_name
     @new_username = new_name
