@@ -139,7 +139,7 @@ en:
         role: Role
         settings:
           label: Search settings
-          search_past: Include past usernames and emails
+          past: Include past usernames and emails
       show:
         fnok:
           form:
