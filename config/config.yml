@@ -292,6 +292,12 @@ NONZERO_INTEGER_PARAMETERS:
   page: 1
   per_page: 25
 
+# Enable image safety mode when sanitizing comments on the following parents for
+# display. This is the parent_type of the comment, not the ultimate_parent,
+# so if you want to add extra sanitization to work comments, use Chapter here.
+# Options: AdminPost, Chapter, Tag.
+PARENTS_WITH_IMAGE_SAFETY_MODE: []
+
 # These fields are encrypted and should not have characters escaped or be treated as HTML
 FIELDS_WITHOUT_SANITIZATION: ["password", "password_check", "password_confirmation"]
 
