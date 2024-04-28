@@ -1,8 +1,8 @@
 <% content_for :message do %>
-Hello Tag Wrangler Supervisors,
+<%= t("mailer.general.greeting.tag_wrangling_admin.html", tag_wrangler_supervisors: t("mailer.general.greeting.tag_wrangling_admin.tag_wrangler_supervisors")) %>
 
-The wrangler <%= @old_username %> has changed their name to <%= @new_username %>.
+<%= t(".name_changed.html", old_username: @old_username, new_username: @new_username) %>
 
-Best,
-AO3
+<%= t("mailer.general.closing.informal") %>
+<%= t("mailer.general.signature.app_short_name") %>
 <% end %>
