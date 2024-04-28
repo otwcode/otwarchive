@@ -90,6 +90,7 @@ class User < ApplicationRecord
   before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :log_change_if_login_was_edited
+  after_update :send_wrangler_username_change_notification
   after_update :log_email_change, if: :saved_change_to_email?
 
   after_commit :reindex_user_creations_after_rename
@@ -567,6 +568,11 @@ class User < ApplicationRecord
 
   def log_change_if_login_was_edited
     create_log_item(action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}") if saved_change_to_login?
+  end
+
+  def send_wrangler_username_change_notification
+    return unless saved_change_to_login? && login_before_last_save.present? # only if wrangler
+    TagWranglingAdminMailer.wrangler_username_change_notification(login_before_last_save, login).deliver
   end
 
   def log_email_change
