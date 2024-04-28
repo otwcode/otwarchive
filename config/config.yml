@@ -34,7 +34,7 @@ RETURN_ADDRESS: 'do-not-reply@example.org'
 SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
 SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
-TAG_WRANGLER_SUPERVISORS: 'tagwranglers-personnel@transformativeworks.org'
+TAG_WRANGLER_SUPERVISORS_ADDRESS: 'tagwranglers-personnel@transformativeworks.org'
 
 # Because the default email addresses are fake,
 # email delivery is turned off by default, even for production.

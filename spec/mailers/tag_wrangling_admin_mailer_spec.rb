@@ -16,7 +16,7 @@ describe TagWranglingAdminMailer do
     end
 
     it "delivers to the correct address" do
-      expect(email).to deliver_to ArchiveConfig.TAG_WRANGLER_SUPERVISORS
+      expect(email).to deliver_to ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS
     end
 
     describe "HTML version" do
