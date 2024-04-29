@@ -573,7 +573,7 @@ class User < ApplicationRecord
   def send_wrangler_username_change_notification
     return unless saved_change_to_login? && login_before_last_save.present?
 
-    TagWranglingAdminMailer.wrangler_username_change_notification(login_before_last_save, login).deliver_now
+    TagWranglingSupervisorMailer.wrangler_username_change_notification(login_before_last_save, login).deliver_now
   end
 
   def log_email_change

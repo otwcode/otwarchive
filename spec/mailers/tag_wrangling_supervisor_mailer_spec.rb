@@ -1,8 +1,8 @@
 require "spec_helper"
 
-describe TagWranglingAdminMailer do
+describe TagWranglingSupervisorMailer do
   describe "#wrangler_username_change_notification" do
-    let(:email) { TagWranglingAdminMailer.wrangler_username_change_notification(old_name, new_name) }
+    let(:email) { TagWranglingSupervisorMailer.wrangler_username_change_notification(old_name, new_name) }
     let(:old_name) { "fast" }
     let(:new_name) { "express" }
 
@@ -22,8 +22,8 @@ describe TagWranglingAdminMailer do
     describe "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("The wrangler <b")
-        expect(email).to have_html_part_content("fast</b> has changed their name to <b")
-        expect(email).to have_html_part_content("express</b>.")
+        expect(email).to have_html_part_content(">fast</b> has changed their name to <b")
+        expect(email).to have_html_part_content(">express</b>.")
       end
     end
 
