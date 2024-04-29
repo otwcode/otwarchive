@@ -220,7 +220,7 @@ Feature:
       And I fill in "New user name" with "after"
       And I fill in "Password" with "password"
       And I press "Change User Name"
-    Then 0 email should be delivered to "tagwranglers-personnel@transformativeworks.org"
+    Then 0 email should be delivered to "tagwranglers-personnel@example.org"
     When the user "wrangler_before" exists and has the role "tag_wrangler"
       And I am logged in as "wrangler_before" with password "password"
       And all emails have been delivered
@@ -228,7 +228,7 @@ Feature:
       And I fill in "New user name" with "wrangler_after"
       And I fill in "Password" with "password"
       And I press "Change User Name"
-    Then 1 email should be delivered to "tagwranglers-personnel@transformativeworks.org"
+    Then 1 email should be delivered to "tagwranglers-personnel@example.org"
       And the email should contain "The wrangler"
       And the email should contain "wrangler_before"
       And the email should contain "has changed their name"
