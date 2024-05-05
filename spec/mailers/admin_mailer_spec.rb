@@ -4,7 +4,6 @@ require "spec_helper"
 
 describe AdminMailer do
   describe "#send_spam_alert" do
-
     let(:spam_user) { create(:user) }
 
     let(:spam1) do
