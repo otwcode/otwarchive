@@ -253,19 +253,15 @@ en:
         creation: "%{creation_link} by %{pseud_links}"
         edit_chapter: edit the chapter
         edit_series: edit the series
-        edit_work: edit the work
         remove_chapter: If you've been added in error or don't want to be listed as a creator, you can %{edit_chapter_link} to remove yourself as creator.
         remove_series: If you've been added in error or don't want to be listed as a creator, you can %{edit_series_link} to remove yourself as creator.
-        remove_work: If you've been added in error or don't want to be listed as a creator, you can %{edit_work_link} to remove yourself as creator.
       intro_chapter: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following series:'
-      intro_work: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following work:'
       subject: "[%{app_name}] Co-creator notification"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
         remove_series: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the series to remove yourself as creator: %{url}'
-        remove_work: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the work to remove yourself as creator: %{url}'
     creatorship_notification_archivist:
       explanation: Because they are acting in their official capacity as an Open Doors archivist, they are allowed to add you without a request, even if you have co-creation disabled.
       html:
