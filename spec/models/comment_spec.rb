@@ -379,4 +379,93 @@ describe Comment do
       end
     end
   end
+
+  describe "#use_image_safety_mode?" do
+    let(:admin_post_comment) { create(:comment, :on_admin_post) }
+    let(:chapter_comment) { create(:comment) }
+    let(:tag_comment) { create(:comment, :on_tag) }
+    let(:admin_post_reply) { create(:comment, commentable: admin_post_comment) }
+    let(:chapter_reply) { create(:comment, commentable: chapter_comment) }
+    let(:tag_reply) { create(:comment, commentable: tag_comment) }
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is empty" do
+      it "returns false for comments and replies for all parent types" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to something that doesn't match an existing parent type" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Work"]) }
+
+      it "returns false for comments and replies for all parent types" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to AdminPost" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost"]) }
+
+      it "returns true for AdminPost comments and replies and false for Chapter and Tag comments and replies" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_truthy
+        expect(admin_post_reply.use_image_safety_mode?).to be_truthy
+
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to Chapter" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Chapter"]) }
+
+      it "returns true for Chapter comments and false for AdminPost and Tag comments and replies" do
+        expect(chapter_comment.use_image_safety_mode?).to be_truthy
+        expect(chapter_reply.use_image_safety_mode?).to be_truthy
+
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to Tag" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Tag"]) }
+
+      it "returns true for Tag comments and replies and false for AdminPost and Chapter comments and replies" do
+        expect(tag_comment.use_image_safety_mode?).to be_truthy
+        expect(tag_reply.use_image_safety_mode?).to be_truthy
+
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE includes multiple parent types" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[AdminPost Tag]) }
+
+      it "returns true for comments and replies on the listed parent types and false for the other" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_truthy
+        expect(tag_comment.use_image_safety_mode?).to be_truthy
+        expect(admin_post_reply.use_image_safety_mode?).to be_truthy
+        expect(tag_reply.use_image_safety_mode?).to be_truthy
+
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+  end
 end

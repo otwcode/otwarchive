@@ -47,6 +47,10 @@ module CommentsHelper
     end
   end
 
+  def image_safety_mode_cache_key(comment)
+    "image-safety-mode" if comment.use_image_safety_mode?
+  end
+
   ####
   ## Mar 4 2009 Enigel: the below shouldn't happen anymore, please test
   ####

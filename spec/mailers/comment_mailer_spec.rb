@@ -149,17 +149,40 @@ describe CommentMailer do
     end
   end
 
-  shared_examples "strips image tags" do
-    let(:image_tag) { "<img src=\"an_image.png\" />" }
+  shared_examples "a comment subject to image safety mode settings" do
+    let(:image_url) { "an_image.png" }
+    let(:image_tag) { "<img src=\"#{image_url}\" />" }
+    let(:all_parent_types) { %w[AdminPost Chapter Tag] }
+    let(:comment_parent_type) { [comment.parent_type] }
 
     before do
       comment.comment_content += image_tag
       comment.save!
     end
 
-    it "strips the image from the email message" do
-      expect(email).not_to have_html_part_content(image_tag)
-      expect(email).not_to have_text_part_content(image_tag)
+    context "when image safety mode is enabled for the parent type" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(comment_parent_type) }
+
+      it "strips the image from the email message but leaves its URL" do
+        expect(email).not_to have_html_part_content(image_tag)
+        expect(email).not_to have_text_part_content(image_tag)
+        expect(email).to have_html_part_content(image_url)
+        expect(email).to have_text_part_content(image_url)
+      end
+    end
+
+    context "when image safety mode is not enabled for the parent type" do
+      it "embeds the image in the HTML email when image safety mode is completely disabled" do
+        allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
+        expect(email).to have_html_part_content(image_tag)
+        expect(email).not_to have_text_part_content(image_url)
+      end
+
+      it "embeds the image in the HTML email when image safety mode is enabled for other parent types" do
+        allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(all_parent_types - comment_parent_type)
+        expect(email).to have_html_part_content(image_tag)
+        expect(email).not_to have_text_part_content(image_url)
+      end
     end
   end
 
@@ -172,6 +195,7 @@ describe CommentMailer do
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
     it_behaves_like "a notification email with the commenter's pseud and username"
+    it_behaves_like "a comment subject to image safety mode settings"
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
@@ -196,7 +220,7 @@ describe CommentMailer do
     context "when the comment is on an admin post" do
       let(:comment) { create(:comment, :on_admin_post) }
 
-      it_behaves_like "strips image tags"
+      it_behaves_like "a comment subject to image safety mode settings"
     end
 
     context "when the comment is a reply to another comment" do
@@ -206,6 +230,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username"
+      it_behaves_like "a comment subject to image safety mode settings"
     end
 
     context "when the comment is on a tag" do
@@ -214,6 +239,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with the commenter's pseud and username"
+      it_behaves_like "a comment subject to image safety mode settings"
 
       context "when the comment is a reply to another comment" do
         let(:comment) { create(:comment, commentable: create(:comment, :on_tag), pseud: commenter_pseud) }
@@ -222,6 +248,7 @@ describe CommentMailer do
         it_behaves_like "a notification email with a link to reply to the comment"
         it_behaves_like "a notification email with a link to the comment's thread"
         it_behaves_like "a notification email with the commenter's pseud and username"
+        it_behaves_like "a comment subject to image safety mode settings"
       end
     end
   end
@@ -235,6 +262,7 @@ describe CommentMailer do
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
     it_behaves_like "a notification email with the commenter's pseud and username"
+    it_behaves_like "a comment subject to image safety mode settings"
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
@@ -253,7 +281,7 @@ describe CommentMailer do
     context "when the comment is on an admin post" do
       let(:comment) { create(:comment, :on_admin_post) }
 
-      it_behaves_like "strips image tags"
+      it_behaves_like "a comment subject to image safety mode settings"
     end
 
     context "when the comment is a reply to another comment" do
@@ -263,6 +291,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username"
+      it_behaves_like "a comment subject to image safety mode settings"
     end
 
     context "when the comment is on a tag" do
@@ -271,6 +300,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with the commenter's pseud and username"
+      it_behaves_like "a comment subject to image safety mode settings"
 
       context "when the comment is a reply to another comment" do
         let(:comment) { create(:comment, commentable: create(:comment, :on_tag), pseud: commenter_pseud) }
@@ -279,6 +309,7 @@ describe CommentMailer do
         it_behaves_like "a notification email with a link to reply to the comment"
         it_behaves_like "a notification email with a link to the comment's thread"
         it_behaves_like "a notification email with the commenter's pseud and username"
+        it_behaves_like "a comment subject to image safety mode settings"
       end
     end
   end
@@ -296,6 +327,7 @@ describe CommentMailer do
     it_behaves_like "a notification email with a link to reply to the comment"
     it_behaves_like "a notification email with a link to the comment's thread"
     it_behaves_like "a notification email with the commenter's pseud and username"
+    it_behaves_like "a comment subject to image safety mode settings"
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
@@ -320,7 +352,7 @@ describe CommentMailer do
     context "when the comment is on an admin post" do
       let(:comment) { create(:comment, :on_admin_post) }
 
-      it_behaves_like "strips image tags"
+      it_behaves_like "a comment subject to image safety mode settings"
     end
 
     context "when the comment is on a tag" do
@@ -330,6 +362,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username"
+      it_behaves_like "a comment subject to image safety mode settings"
     end
 
     context "when the comment is from a user using a banned email" do
@@ -381,6 +414,7 @@ describe CommentMailer do
     it_behaves_like "a notification email with a link to reply to the comment"
     it_behaves_like "a notification email with a link to the comment's thread"
     it_behaves_like "a notification email with the commenter's pseud and username"
+    it_behaves_like "a comment subject to image safety mode settings"
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
@@ -399,7 +433,7 @@ describe CommentMailer do
     context "when the comment is on an admin post" do
       let(:comment) { create(:comment, :on_admin_post) }
 
-      it_behaves_like "strips image tags"
+      it_behaves_like "a comment subject to image safety mode settings"
     end
 
     context "when the comment is on a tag" do
@@ -409,6 +443,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username"
+      it_behaves_like "a comment subject to image safety mode settings"
     end
 
     context "when the comment is from a user using a banned email" do
@@ -434,11 +469,19 @@ describe CommentMailer do
     it_behaves_like "a multipart email"
     it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
+    it_behaves_like "a comment subject to image safety mode settings"
+
+    context "when the comment is on an admin post" do
+      let(:comment) { create(:comment, :on_admin_post) }
+
+      it_behaves_like "a comment subject to image safety mode settings"
+    end
 
     context "when the comment is on a tag" do
       let(:parent_comment) { create(:comment, :on_tag) }
 
       it_behaves_like "a notification email with a link to the comment"
+      it_behaves_like "a comment subject to image safety mode settings"
     end
   end
 
@@ -454,6 +497,13 @@ describe CommentMailer do
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to the comment's thread"
     it_behaves_like "a notification email with the commenter's pseud and username"
+    it_behaves_like "a comment subject to image safety mode settings"
+
+    context "when the comment is on an admin post" do
+      let(:parent_comment) { create(:comment, :on_admin_post) }
+
+      it_behaves_like "a comment subject to image safety mode settings"
+    end
 
     context "when the comment is by an official user using their default pseud" do
       let(:commenter) { create(:official_user, login: "Centrifuge") }
@@ -475,6 +525,7 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username" # for parent comment
+      it_behaves_like "a comment subject to image safety mode settings"
     end
   end
 end

@@ -228,7 +228,9 @@ en:
         contact_support: contact AO3 Support
         html: For other inquiries, please %{contact_support_link}.
         text: For other inquiries, please contact AO3 Support at %{support_url}.
-      redirects: To preserve rec lists and bookmarks, the imported archive's web addresses may redirect to the imported copy of these works for a limited time (check the announcement post for your archive to be sure). If you've already uploaded a copy of these works and you did NOT use the import from URL feature, there will be two copies of the same work on the archive.
+      redirects:
+        html: To preserve rec lists and bookmarks, the imported archive's web addresses may redirect to the imported copy of these works for a limited time (check the announcement post for your archive to be sure). If you've already uploaded a copy of these works and you did %{negation} use the import from URL feature, there will be two copies of the same work on the AO3.
+        negation: NOT
       subject: "[%{app_name}] Works uploaded"
       update_redirect:
         contact_open_doors: contact Open Doors
