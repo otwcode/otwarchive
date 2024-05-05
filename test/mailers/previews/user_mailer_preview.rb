@@ -7,19 +7,22 @@ class UserMailerPreview < ApplicationMailerPreview
 
   # Sends email when an archivist adds someone as a co-creator.
   def creatorship_notification_archivist
-    second_creatorship, first_creator = creatorship_notification_data
+    allowed_creations = [:series, :chapter, :work].freeze
+    second_creatorship, first_creator = creatorship_notification_data(allowed_creations, params[:creation]&.to_sym)
     UserMailer.creatorship_notification_archivist(second_creatorship.id, first_creator.id)
   end
 
   # Sends email when a user is added as a co-creator
   def creatorship_notification
-    second_creatorship, first_creator = creatorship_notification_data
+    allowed_creations = [:series, :chapter].freeze
+    second_creatorship, first_creator = creatorship_notification_data(allowed_creations, params[:creation]&.to_sym)
     UserMailer.creatorship_notification(second_creatorship.id, first_creator.id)
   end
 
   # Sends email when a user is added as an unapproved/pending co-creator
   def creatorship_request
-    second_creatorship, first_creator = creatorship_notification_data
+    allowed_creations = [:series, :chapter, :work].freeze
+    second_creatorship, first_creator = creatorship_notification_data(allowed_creations, params[:creation]&.to_sym)
     UserMailer.creatorship_request(second_creatorship.id, first_creator.id)
   end
 
@@ -37,11 +40,12 @@ class UserMailerPreview < ApplicationMailerPreview
 
   private
 
-  def creatorship_notification_data
+  def creatorship_notification_data(allowed_creations, creation_type)
     first_creator = create(:user, login: "JayceHexmaster")
     second_creator = create(:user, login: "viktor_the_machine")
-    work = create(:work, authors: [first_creator.default_pseud, second_creator.default_pseud])
-    second_creatorship = Creatorship.find_by(creation: work, pseud: second_creator.default_pseud)
-    [second_creatorship, first_creator]
+
+    creation_factory = allowed_creations.include?(creation_type) ? creation_type : :series
+    creation = create(creation_factory, authors: [first_creator.default_pseud, second_creator.default_pseud])
+    [creation.creatorships.last, first_creator]
   end
 end
