@@ -291,6 +291,7 @@ Rails.application.routes.draw do
     end
     resources :readings do
       collection do
+        get :confirm_clear
         post :clear
       end
     end
