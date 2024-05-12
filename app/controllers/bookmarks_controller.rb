@@ -1,10 +1,10 @@
 class BookmarksController < ApplicationController
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :load_bookmarkable, only: [:index, :new, :create, :fetch_recent, :hide_recent]
+  before_action :load_bookmarkable, only: [:index, :new, :create, :fetch_recent]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete, :share]
+  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :fetch_recent, :confirm_delete, :share]
   before_action :check_visibility, only: [:show, :share]
   before_action :check_ownership, only: [:edit, :update, :destroy, :confirm_delete, :share]
 
