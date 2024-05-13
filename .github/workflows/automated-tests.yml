@@ -21,6 +21,7 @@ jobs:
       TEST_GROUP: ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
       CUCUMBER_RETRY: 1
       CUCUMBER_FORMAT: Ao3Cucumber::Formatter
+      CUCUMBER_PUBLISH_QUIET: true
       SPEC_OPTS: --force-color
 
     services:
