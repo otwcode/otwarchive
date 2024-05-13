@@ -60,10 +60,12 @@ jobs:
             arguments: --exclude-pattern 'spec/{controllers,models}/**/*.rb'
           - command: cucumber
             arguments: features/admins
+            libvips: true
           - command: cucumber
             arguments: features/bookmarks
           - command: cucumber
             arguments: features/collections
+            libvips: true
           - command: cucumber
             arguments: features/comments_and_kudos
           - command: cucumber
@@ -73,8 +75,10 @@ jobs:
             vcr: true
           - command: cucumber
             arguments: features/other_a
+            libvips: true
           - command: cucumber
             arguments: features/other_b
+            libvips: true
           - command: cucumber
             arguments: features/prompt_memes_a
           - command: cucumber
@@ -128,6 +132,10 @@ jobs:
           key: cassette-library-${{ hashFiles(matrix.tests.arguments) }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             cassette-library-${{ hashFiles(matrix.tests.arguments) }}-
+
+      - name: Install libvips for image processing
+        if: ${{ matrix.tests.libvips }}
+        run: sudo apt-get install -y libvips-dev
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
