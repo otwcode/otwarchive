@@ -5,25 +5,26 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.abuse_report(abuse_report.id)
   end
 
-  # Sends email when an archivist adds someone as a co-creator.
-  def creatorship_notification_archivist
-    allowed_creations = [:series, :chapter, :work].freeze
-    second_creatorship, first_creator = creatorship_notification_data(allowed_creations, params[:creation]&.to_sym)
-    UserMailer.creatorship_notification_archivist(second_creatorship.id, first_creator.id)
-  end
+  [:series, :chapter, :work].each do |creation_type|
+    # Sends email when an archivist adds someone as a co-creator.
+    define_method :"creatorship_notification_archivist_#{creation_type}" do
+      second_creatorship, first_creator = creatorship_notification_data(creation_type)
+      UserMailer.creatorship_notification_archivist(second_creatorship.id, first_creator.id)
+    end
 
-  # Sends email when a user is added as a co-creator
-  def creatorship_notification
-    allowed_creations = [:series, :chapter].freeze
-    second_creatorship, first_creator = creatorship_notification_data(allowed_creations, params[:creation]&.to_sym)
-    UserMailer.creatorship_notification(second_creatorship.id, first_creator.id)
-  end
+    # Sends email when a user is added as an unapproved/pending co-creator
+    define_method :"creatorship_request_#{creation_type}" do
+      second_creatorship, first_creator = creatorship_notification_data(creation_type)
+      UserMailer.creatorship_request(second_creatorship.id, first_creator.id)
+    end
 
-  # Sends email when a user is added as an unapproved/pending co-creator
-  def creatorship_request
-    allowed_creations = [:series, :chapter, :work].freeze
-    second_creatorship, first_creator = creatorship_notification_data(allowed_creations, params[:creation]&.to_sym)
-    UserMailer.creatorship_request(second_creatorship.id, first_creator.id)
+    next if creation_type == :work
+
+    # Sends email when a user is added as a co-creator
+    define_method :"creatorship_notification_#{creation_type}" do
+      second_creatorship, first_creator = creatorship_notification_data(creation_type)
+      UserMailer.creatorship_notification(second_creatorship.id, first_creator.id)
+    end
   end
 
   # Sent to a user when the submit a support request (AKA feedback)
@@ -40,12 +41,10 @@ class UserMailerPreview < ApplicationMailerPreview
 
   private
 
-  def creatorship_notification_data(allowed_creations, creation_type)
+  def creatorship_notification_data(creation_type)
     first_creator = create(:user, login: "JayceHexmaster")
     second_creator = create(:user, login: "viktor_the_machine")
-
-    creation_factory = allowed_creations.include?(creation_type) ? creation_type : :series
-    creation = create(creation_factory, authors: [first_creator.default_pseud, second_creator.default_pseud])
+    creation = create(creation_type, authors: [first_creator.default_pseud, second_creator.default_pseud])
     [creation.creatorships.last, first_creator]
   end
 end
