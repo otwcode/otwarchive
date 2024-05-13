@@ -10,9 +10,11 @@ class Collection < ApplicationRecord
   def check_icon_properties
     return unless icon.attached?
 
+    # i18n-tasks-use t("errors.attributes.icon.invalid_format")
     errors.add(:icon, :invalid_format) unless %r{image/\S+}.match?(icon.content_type)
 
     size_limit_kb = 500
+    # i18n-tasks-use t("errors.attributes.icon.too_large")
     errors.add(:icon, :too_large, size_limit_kb: size_limit_kb) unless icon.blob.byte_size < size_limit_kb.kilobytes
 
     icon.purge if errors[:icon].any?
