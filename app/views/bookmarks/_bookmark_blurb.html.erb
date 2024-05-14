@@ -40,9 +40,6 @@
 
   <%= render "bookmarks/bookmark_user_module", bookmark: bookmark %>
 
-  <% # recent bookmarks will be loaded up here if requested %>
-  <div class="recent dynamic" id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;"></div>
-
   <% if logged_in_as_admin? && bookmarkable.class == ExternalWork %>
     <%= render "admin/admin_options", item: bookmarkable %>
   <% end %>
