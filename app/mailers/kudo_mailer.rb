@@ -22,7 +22,6 @@ class KudoMailer < ApplicationMailer
       end
       mail(
         to: user.email,
-        # i18n-tasks-use t('kudo_mailer.batch_kudo_notification.subject')
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
