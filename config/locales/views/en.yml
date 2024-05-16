@@ -546,6 +546,33 @@ en:
         tumblr: ao3org Tumblr
         twitter: "@AO3_Status Twitter feed"
   home:
+    about:
+      ao3:
+        github_repository: GitHub repository
+        html: The Archive of Our Own offers a noncommercial and nonprofit central hosting place for fanworks using open-source archiving software. We welcome contributions to our %{github_repository_link}, and a list of open tasks is available on our %{jira_project_link}.
+        jira_project: Jira project
+      details: We are proactive and innovative in protecting and defending our work from commercial exploitation and legal challenge. We preserve our fannish economy, values, and creative expression by protecting and nurturing our fellow fans, our work, our commentary, our history, and our identity while providing the broadest possible access to fannish activity for all fans.
+      general: The Organization for Transformative Works (OTW) is a nonprofit organization, established by fans in 2007, to serve the interests of fans by providing access to and preserving the history of fanworks and fan culture in its myriad forms. We believe that fanworks are transformative and that transformative works are legitimate.
+      heading:
+        html: About the %{otw}
+        otw: OTW
+        otw_long: Organization for Transformative Works
+      major_projects:
+        fanlore: Fanlore
+        fanlore_details_html: "%{fanlore_link}, a fandom wiki devoted to preserving the history of transformative fanworks and the fandoms from which they have arisen."
+        legal_advocacy: Legal Advocacy
+        legal_details_html: "%{legal_advocacy_link} committed to protecting and defending fanworks from commercial exploitation and legal challenge."
+        open_doors: Open Doors
+        open_doors_details_html: "%{open_doors_link}, which offers shelter to at-risk fannish projects."
+        title: 'Our other major projects include:'
+        twc: Transformative Works and Cultures
+        twc_details_html: "%{twc_link}, a peer-reviewed academic journal that seeks to promote scholarship on fanworks and practices."
+      more_info:
+        communications_team: Communications team
+        faq_page: FAQ page
+        html: You can find out more about the OTW and its projects at its website, %{transformative_works_link}, and learn about how your financial support is vital to the continuation and expansion of the OTW's work on its %{faq_page_link}. If you have a media or research question, please contact the %{communications_team_link}.
+        transformative_works: transformativeworks.org
+      page_title: About the OTW
     donate:
       general:
         text: There are two main ways to support the AO3 - donating your time or money.
@@ -556,11 +583,15 @@ en:
         title: Donating Financially
       page_title: Donate or Volunteer
       time:
-        details_html: The %{otw_link} is the parent organization of the Archive of Our Own. We are often looking for volunteers to contribute to %{projects_link}. If you're interested in volunteering specifically to help the Archive of Our Own, the roles to look out for include tag wranglers, testers, coders, Support staff and Abuse staff. We encourage you to browse through the %{volunteer_link} and apply for any roles which match your qualifications and interests.
+        contribute_html: We also welcome community contributions to %{github_repository_link} for open tasks in our %{jira_project_link}. We also encourage you to browse through our %{volunteer_listings_link}, sign up to receive all our %{news_by_email_link} which includes our calls for volunteers, and apply for any volunteer roles that match your qualifications and interests.
+        github_repository: our GitHub repository
+        info_html: The %{otw_link} is the parent organization of the Archive of Our Own (AO3). We are often looking for volunteers to contribute to %{projects_link}. If you are interested in volunteering specifically to help the Archive of Our Own, the committees to look out for include Accessibility, Design, and Technology (AD&T); AO3 Documentation; Policy & Abuse; Support; Tag Wrangling; and Translation.
+        jira_project: Jira project
+        news_by_email: news by email
         otw: Organization for Transformative Works
         projects: our projects
         title: Donating Your Time
-        volunteer: available listings
+        volunteer_listings: volunteer position listings
     fandoms:
       all_fandoms: All Fandoms
     index:

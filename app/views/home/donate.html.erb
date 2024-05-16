@@ -3,10 +3,14 @@
 
 <div class="userstuff">
   <h3><%= t(".time.title") %></h3>
-  <p><%= t(".time.details_html",
+  <p><%= t(".time.info_html",
            otw_link: link_to(t(".time.otw"), "http://www.transformativeworks.org"),
-           projects_link: link_to(t(".time.projects"), "http://www.transformativeworks.org/our-projects"),
-           volunteer_link: link_to(t(".time.volunteer"), "http://www.transformativeworks.org/volunteer")) %></p>
+           projects_link: link_to(t(".time.projects"), "http://www.transformativeworks.org/our-projects")) %></p>
+  <p><%= t(".time.contribute_html",
+           github_repository_link: link_to(t(".time.github_repository"), "https://github.com/otwcode/otwarchive"),
+           jira_project_link: link_to(t(".time.jira_project"), "https://otwarchive.atlassian.net/browse/AO3"),
+           volunteer_listings_link: link_to(t(".time.volunteer_listings"), "http://www.transformativeworks.org/volunteer"),
+           news_by_email_link: link_to(t(".time.news_by_email"), "https://www.transformativeworks.org/you-can-now-subscribe-to-otw-news-by-email")) %></p>
 
   <h3><%= t(".money.title") %></h3>
   <p><%= t(".money.details_html",
