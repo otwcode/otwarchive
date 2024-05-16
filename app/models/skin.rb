@@ -99,7 +99,6 @@ class Skin < ApplicationRecord
         :invalid_media_html,
         media: media.join(", "),
         support_link: "<a href=\"#{new_feedback_report_path}\">#{I18n.t("activerecord.errors.models.skin.contact_support")}</a>".html_safe,
-        )
       )
     end
   end
