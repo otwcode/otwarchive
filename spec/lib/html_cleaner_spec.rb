@@ -1104,4 +1104,90 @@ describe HtmlCleaner do
       expect(add_break_between_paragraphs(original)).to eq(result)
     end
   end
+
+  describe "strip_images" do
+    let(:result) { "Hi!  Bye" }
+
+    context "without keep_src" do
+      it "removes the img tag entirely when the src uses double quotes" do
+        string = 'Hi! <img src="http://example.org/image.png" /> Bye'
+        expect(strip_images(string)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses single quotes" do
+        string = "Hi! <img src='http://example.org/image.png'> Bye"
+        expect(strip_images(string)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses mismatched quotes" do
+        string = "Hi! <img src=\"http://example.org/image.png'> Bye"
+        expect(strip_images(string)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing" do
+        string = 'Hi! <img alt="a11y"> Bye'
+        expect(strip_images(string)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing a closing quotation mark" do
+        string = 'Hi! <img src="http://example.org/image.png /> Bye'
+        expect(strip_images(string)).to eq(result)
+      end
+    end
+
+    context "with keep_src: false" do
+      it "removes the img tag entirely when the src uses double quotes" do
+        string = 'Hi! <img src="http://example.org/image.png" /> Bye'
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses single quotes" do
+        string = "Hi! <img src='http://example.org/image.png'> Bye"
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses mismatched quotes" do
+        string = "Hi! <img src=\"http://example.org/image.png'> Bye"
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing" do
+        string = 'Hi! <img alt="a11y"> Bye'
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing a closing quotation mark" do
+        string = 'Hi! <img src="http://example.org/image.png /> Bye'
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+    end
+
+    context "with keep_src: true" do
+      it "keeps the img src URL when the src uses double quotes" do
+        string = 'Hi! <img src="http://example.org/image.png" /> Bye'
+        result = "Hi! http://example.org/image.png Bye"
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses single quotes" do
+        string = "Hi! <img src='http://example.org/image.png'> Bye"
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses mismatched quotes" do
+        string = "Hi! <img src=\"http://example.org/image.png'> Bye"
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing" do
+        string = 'Hi! <img alt="a11y"> Bye'
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing a closing quotation mark" do
+        string = 'Hi! <img src="http://example.org/image.png /> Bye'
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+    end
+  end
 end

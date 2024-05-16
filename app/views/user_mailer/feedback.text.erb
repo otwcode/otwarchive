@@ -14,7 +14,7 @@ information you submitted through the Technical Support and Feedback form:
 <%= text_divider %>
 
 * <%= to_plain_text(raw @summary) %> *
-<%= to_plain_text(raw @comment) %>
+<%= to_plain_text(raw(strip_images(@comment, keep_src: true))) %>
 
 <%= text_divider %>
 

@@ -129,5 +129,7 @@ module Otwarchive
                                                   authentication: ArchiveConfig.SMTP_AUTHENTICATION
                                                 })
     end
+
+    config.active_support.disable_to_s_conversion = true
   end
 end

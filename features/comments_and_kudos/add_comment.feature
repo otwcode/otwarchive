@@ -180,17 +180,6 @@ Scenario: Set preference and receive comment notifications of your own comments
     And "commenter" should be emailed
     And 1 email should be delivered to "commenter"
 
-Scenario: Work comment displays images
-
-  Given the work "Generic Work"
-    And I am logged in as "commenter"
-    And I visit the new comment page for the work "Generic Work"
-  When I fill in "Comment" with "Fantastic!<img src='http://example.com/icon.svg'>"
-    And I press "Comment"
-  Then I should see "Comment created!"
-    And I should see "Fantastic!"
-    And I should see the image "src" text "http://example.com/icon.svg"
-
 Scenario: Try to post a comment with a < angle bracket before a linebreak, without a space before the bracket
 
     Given the work "Generic Work"

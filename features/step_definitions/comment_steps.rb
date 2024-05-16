@@ -58,6 +58,49 @@ Given "a reply {string} by {string} on {commentable}" do |text, user, commentabl
                     comment_content: text)
 end
 
+Given "image safety mode is enabled for comments on a {string}" do |parent_type|
+  allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(parent_type)
+end
+
+Given "image safety mode is disabled for comments" do
+  allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
+end
+
+Given "the setup for testing image safety mode on the admin post {string}" do |title|
+  step %{the admin post "#{title}"}
+  step %{a comment "plain text" by "commentrecip" on the admin post "#{title}"}
+  step %{I am logged in as "commenter"}
+  visit comment_path(Comment.last)
+  step %{I follow "Reply"}
+  with_scope(".odd") do
+    # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
+    fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
+    click_button("Comment")
+  end
+  step %{I am logged in as "commentrecip"}
+end
+
+Given "the setup for testing image safety mode on the tag {string}" do |name|
+  step %{the tag wrangler "commentrecip" with password "password" is wrangler of "#{name}"}
+  step %{the tag wrangler "commenter" with password "password" is wrangler of "Some Fandom"}
+  step %{I am logged in as "commenter"}
+  visit tag_comments_path(Tag.find_by_name(name))
+  # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
+  fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
+  click_button("Comment")
+  step %{I am logged in as "commentrecip"}
+end
+
+Given "the setup for testing image safety mode on the work {string}" do |title|
+  step %{the work "#{title}" by "commentrecip"}
+  step %{I am logged in as "commenter"}
+  visit work_path(Work.find_by(title: title))
+  # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
+  fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
+  click_button("Comment")
+  step %{I am logged in as "commentrecip"}
+end
+
 # THEN
 
 Then /^the comment's posted date should be nowish$/ do
