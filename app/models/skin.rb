@@ -5,6 +5,7 @@ class Skin < ApplicationRecord
   include CssCleaner
   include SkinCacheHelper
   include SkinWizard
+  include Rails.application.routes.url_helpers
 
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],
@@ -93,7 +94,13 @@ class Skin < ApplicationRecord
   validate :valid_media
   def valid_media
     if media && media.is_a?(Array) && media.any? {|m| !MEDIA.include?(m)}
-      errors.add(:base, ts("We don't currently support the media type %{media}, sorry! If we should, please let Support know.", media: media.join(', ')))
+      errors.add(
+        :base,
+        :invalid_media_html,
+        media: media.join(", "),
+        support_link: "<a href=\"#{new_feedback_report_path}\">#{I18n.t("activerecord.errors.models.skin.contact_support")}</a>".html_safe,
+        )
+      )
     end
   end
 
@@ -103,11 +110,24 @@ class Skin < ApplicationRecord
   validate :valid_public_preview
   def valid_public_preview
     return true if (self.official? || !self.public? || self.icon_file_name)
-    errors.add(:base, ts("You need to upload a screencap if you want to share your skin."))
+    errors.add(:base, :no_public_preview)
   end
 
-  validates_presence_of :title
-  validates :title, uniqueness: { message: ts("must be unique"), case_sensitive: true }
+  validates :title, presence: true, uniqueness: { case_sensitive: true }
+  validate :allowed_title
+  def allowed_title
+    return true unless self.title.match(/archive/i)
+
+    authorized_roles = if self.is_a?(WorkSkin)
+                         %w[superadmin support]
+                       else
+                         %w[superadmin]
+                       end
+
+    return true if (User.current_user.roles & authorized_roles).present?
+
+    errors.add(:base, :archive_in_title)
+  end
 
   validates_numericality_of :margin, :base_em, allow_nil: true
   validate :valid_font
@@ -477,7 +497,7 @@ class Skin < ApplicationRecord
           skin.unusable = true
           skin.official = true
           File.open(version_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
-          skin.save!
+          skin.save!(validate: false)
           skins << skin
         end
 
@@ -492,7 +512,7 @@ class Skin < ApplicationRecord
         end
         File.open(version_dir + 'preview.png', 'rb') {|preview_file| top_skin.icon = preview_file}
         top_skin.official = true
-        top_skin.save!
+        top_skin.save!(validate: false)
         skins.each_with_index do |skin, index|
           skin_parent = top_skin.skin_parents.build(child_skin: top_skin, parent_skin: skin, position: index+1)
           skin_parent.save!

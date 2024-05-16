@@ -155,6 +155,14 @@ en:
               not_work: Only a link to a work can be listed as an inspiration.
               protected: You can't use the related works function to cite works by the protected user %{login}.
           format: "%{message}"
+        skin:
+          archive_in_title: Sorry, titles including the word 'Archive' are reserved for official skins.
+          attributes:
+            title:
+              taken: must be unique
+          invalid_media_html: We don't currently support the media type %{media}, sorry! If we should, please %{support_link}.
+          no_public_preview: You need to upload a screencap if you want to share your skin.
+          contact_support:  let Support know
         skin/skin_parents:
           attributes:
             base:
