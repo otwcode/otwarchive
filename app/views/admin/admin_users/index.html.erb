@@ -31,14 +31,10 @@
       </dd>
       <% if policy(User).can_view_past? %>
         <dt><%= label_tag "settings", t(".settings.label") %></dt>
-        <dd>
-          <ul>
-              <li>
-                <%= check_box_tag "search_past", "1", params[:search_past].present? %>
-                <%= label_tag "search_past", t(".settings.past") %>
-              </li>
-          </ul>
-        </dd>
+        <li>
+          <%= check_box_tag "search_past", "1", params[:search_past].present? %>
+          <%= label_tag "search_past", t(".settings.past") %>
+        </li>
       <% end %>
     </dl>
     <p class="submit"><%= submit_tag ts("Find") %></p>

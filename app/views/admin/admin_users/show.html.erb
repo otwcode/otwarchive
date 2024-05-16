@@ -40,18 +40,14 @@
         <% if past_logins.present? %>
           <dt><%= t(".info.past_logins", count: past_logins.size) %></dt>
           <dd>
-            <ul>
-              <li><%= past_logins.join(", ") %></li>
-            </ul>
+            <%= past_logins.to_sentence %>
           </dd>
         <% end %>
         <% past_emails = @user.historic_values("email") %>
         <% if past_emails.present? %>
           <dt><%= t(".info.past_emails", count: past_emails.size) %></dt>
           <dd>
-            <ul>
-              <li><%= past_emails.join(", ") %></li>
-            </ul>
+            <%= past_emails.to_sentence %>
           </dd>
         <% end %>
       <% end %>
