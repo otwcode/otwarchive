@@ -43,23 +43,16 @@ I'd like to comment on a tag'
   Scenario: Multiple comments on a tag increment correctly
 
     Given the following activated tag wranglers exist
-        | login     |
-        | dizmo     |
+        | login        |
+        | dizmo        |
+        | someone_else |
       And a fandom exists with name: "Stargate Atlantis", canonical: true
     When I am logged in as "dizmo"
     When I post the comment "Yep, we should have a Stargate franchise metatag." on the tag "Stargate Atlantis"
-    When I am logged in as an admin
+    When I am logged in as "someone_else"
     When I post the comment "Important policy decision" on the tag "Stargate Atlantis"
     When I view the tag "Stargate Atlantis"
     Then I should see "2 comments"
-
-    Scenario: admin can also comment on tags, issue 1428
-
-    Given a fandom exists with name: "Stargate Atlantis", canonical: true
-    When I am logged in as an admin
-    When I post the comment "Important policy decision" on the tag "Stargate Atlantis" via web
-    When I view the tag "Stargate Atlantis"
-    Then I should see "1 comment"
 
   Scenario: Issue 2185: email notifications for tag commenting; TO DO: replies to comments
 

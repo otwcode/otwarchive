@@ -319,7 +319,7 @@ en:
   admins:
     index:
       confidentiality_reminder: You are now logged in as an admin. That means you will probably encounter information that is personal or confidential (e.g. usernames, email and IP addresses, creator names on anonymous works, etc). Please do not use this information in ways unrelated to your OTW role. If you have questions about what you can or cannot do with information you see here, contact your committee chair(s).
-      log_out_reminder: Please remember to log out before resuming your normal site activity and leaving comments and kudos!
+      log_out_reminder: Please remember to log out before resuming your normal site activity!
       page_title: Hi, %{login}!
       responsibility: With great power comes great responsibility.
       roles:
@@ -414,6 +414,27 @@ en:
           unreviewed_by_collection: Works and bookmarks listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection.
         page_heading: Items by %{username} in Collections
   comments:
+    comment_form:
+      anonymous_creator: Anonymous Creator
+      anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
+      cancel_action: Cancel
+      choose_name_field_title: Choose Name
+      comment_as: Comment as
+      comment_field_title: Enter Comment
+      comment_too_long: must be less than %{count} characters long.
+      comment_too_short: Brevity is the soul of wit, but we need your comment to have text in it.
+      guest_email: Guest email
+      guest_email_failure: Please enter your email address.
+      guest_instructions: All fields are required. Your email address will not be published.
+      guest_name: Guest name
+      guest_name_failure: Please enter your name.
+      inbox_reference_html: to %{commentable_creator} on %{commentable_link}
+      landmark:
+        comment: Comment
+        note: Note
+      legend: Post Comment
+      moderation_forewarning: This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator.
+      processing_message: Please wait...
     commentable:
       actions:
         comment: Comment
@@ -421,6 +442,7 @@ en:
       blocked: Sorry, you have been blocked by one or more of this work's creators.
       guest_comments_disabled: Sorry, the Archive doesn't allow guests to comment right now.
       invite_to_collections_link: Invite To Collections
+      logged_as_admin: Please log out of your admin account to comment.
       permissions:
         admin_post:
           alt_action: You can however %{support_link} with any feedback or questions.

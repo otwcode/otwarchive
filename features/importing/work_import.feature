@@ -163,7 +163,7 @@ Feature: Import Works
     When I am logged out
       And I go to the "Detected Title" work page
       And I follow "Yes, Continue"
-    Then I should see "Guest name:"
+    Then I should see "Guest name"
 
   Scenario: Imported works can have comments disabled to guests
     When I start importing "http://import-site-with-tags" with a mock website

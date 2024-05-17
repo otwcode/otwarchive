@@ -112,6 +112,7 @@ module CommentsHelper
     return false if comment_parent_hidden?(comment)
     return false if blocked_by_comment?(comment)
     return false if blocked_by?(comment.ultimate_parent)
+    return false if logged_in_as_admin?
 
     return true unless guest?
 
