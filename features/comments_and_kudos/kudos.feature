@@ -195,3 +195,9 @@ Feature: Kudos
       And the kudos cache has expired
       And I view the work "Interesting beans"
     Then I should not see "newusername1 left kudos on this work!"
+
+  Scenario: Cannot leave kudos (no button) while logged as admin
+    Given I am logged in as an admin
+      And I view the work "Awesome Story"
+    Then I should see "Awesome Story"
+      And I should not see a "Kudos ♥" button

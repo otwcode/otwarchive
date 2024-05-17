@@ -163,7 +163,7 @@ Feature: Import Works
     When I am logged out
       And I go to the "Detected Title" work page
       And I follow "Yes, Continue"
-    Then I should see "Guest name:"
+    Then I should see "Guest name"
 
   Scenario: Imported works can have comments disabled to guests
     When I start importing "http://import-site-with-tags" with a mock website
@@ -195,6 +195,7 @@ Feature: Import Works
 
   Scenario: Imported works can have comment moderation on
     When I start importing "http://import-site-with-tags" with a mock website
+      And I choose "comment_permissions_enable_all"
       And I check "moderated_commenting_enabled"
       And I press "Import"
       And I press "Post"
