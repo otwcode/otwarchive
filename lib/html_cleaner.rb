@@ -36,11 +36,6 @@ module HtmlCleaner
     # argh, get rid of ____spacer____ inserts
     text.gsub! "____spacer____", ""
 
-    # trash a whole bunch of crappy non-printing format characters stuck
-    # in most commonly by MS Word
-    # \p{Cf} matches all unicode char in the "other, format" category
-    text.gsub!(/\p{Cf}/u, '')
-
     return text
   end
 
