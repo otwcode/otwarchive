@@ -18,6 +18,7 @@ class CommentsController < ApplicationController
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
   before_action :check_permission_to_edit, only: [:edit, :update ]
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
+  before_action :admin_logout_required, only: [:new, :create, :add_comment_reply]
   before_action :check_guest_comment_admin_setting, only: [:new, :create, :add_comment_reply]
   before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
   before_action :check_unreviewed, only: [:add_comment_reply]
@@ -30,7 +31,6 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
   before_action :check_permission_to_modify_hidden_status, only: [:hide, :unhide]
-  before_action :admin_logout_required, only: [:new, :create, :add_comment_reply]
 
   include BlockHelper
 
