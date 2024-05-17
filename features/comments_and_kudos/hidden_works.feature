@@ -15,7 +15,7 @@ Feature: Comments on Hidden Works
     Then I should see "Do you see?"
       But I should not see "Reply"
       And I should not see "Post Comment"
-      And I should see "Sorry, you can't add or edit comments on a hidden work."
+      And I should see "Please log out of your admin account to comment."
 
     When I am logged in as "creator"
       And I go to the work comments page for "To Be Hidden"
@@ -63,7 +63,7 @@ Feature: Comments on Hidden Works
     Then I should see "Do you see?"
       But I should not see "Reply"
       And I should not see "Post Comment"
-      And I should see "Sorry, you can't add or edit comments on an unrevealed work."
+      And I should see "Please log out of your admin account to comment."
 
     When I am logged in as "commenter"
       And I go to the work comments page for "Murder, She Wrote"
