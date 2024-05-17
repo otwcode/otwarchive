@@ -79,7 +79,11 @@
   <%= flash_div :comment_error, :comment_notice %>
 
   <% commentable_parent = find_parent(commentable) %>
-  <% if AdminSetting.current.guest_comments_off? && guest? %>
+  <% if logged_in_as_admin? %>
+    <p class="notice">
+      <%= t(".logged_as_admin") %>
+    </p>
+  <% elsif AdminSetting.current.guest_comments_off? && guest? %>
     <p class="notice">
       <%= t(".guest_comments_disabled") %>
     </p>
@@ -112,10 +116,6 @@
   <% elsif commentable_parent.is_a?(Work) && blocked_by?(commentable_parent) %>
     <p class="notice">
       <%= t(".blocked") %>
-    </p>
-  <% elsif logged_in_as_admin? %>
-    <p class="notice">
-      <%= t(".logged_as_admin") %>
     </p>
   <% else %>
     <div id="add_comment_placeholder" title="top level comment">

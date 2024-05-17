@@ -246,7 +246,7 @@ Scenario: Cannot reply to comments (no button) while logged as admin
       And I follow "Comments (1)"
     Then I should see "Woohoo"
       And I should not see "Reply"
-    When I am logged out
+    When I am logged in as "commenter"
       And I view the work "Generic Work"
       And I follow "Comments (1)"
     Then I should see "Woohoo"
