@@ -5,7 +5,6 @@ class Skin < ApplicationRecord
   include CssCleaner
   include SkinCacheHelper
   include SkinWizard
-  include Rails.application.routes.url_helpers
 
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],
@@ -96,9 +95,8 @@ class Skin < ApplicationRecord
     if media && media.is_a?(Array) && media.any? {|m| !MEDIA.include?(m)}
       errors.add(
         :base,
-        :invalid_media_html,
-        media: media.join(", "),
-        support_link: "<a href=\"#{new_feedback_report_path}\">#{I18n.t("activerecord.errors.models.skin.contact_support")}</a>".html_safe,
+        :invalid_media,
+        media: media.join(", ")
       )
     end
   end
