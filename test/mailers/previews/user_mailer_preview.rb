@@ -18,6 +18,7 @@ class UserMailerPreview < ApplicationMailerPreview
       UserMailer.creatorship_request(second_creatorship.id, first_creator.id)
     end
 
+    # AO3-6710: Users cannot directly add a co-creator to a work, so creatorship_notification will never be sent for works
     next if creation_type == :work
 
     # Sends email when a user is added as a co-creator
