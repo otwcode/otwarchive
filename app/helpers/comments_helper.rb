@@ -47,6 +47,10 @@ module CommentsHelper
     end
   end
 
+  def image_safety_mode_cache_key(comment)
+    "image-safety-mode" if comment.use_image_safety_mode?
+  end
+
   ####
   ## Mar 4 2009 Enigel: the below shouldn't happen anymore, please test
   ####
@@ -108,6 +112,7 @@ module CommentsHelper
     return false if comment_parent_hidden?(comment)
     return false if blocked_by_comment?(comment)
     return false if blocked_by?(comment.ultimate_parent)
+    return false if logged_in_as_admin?
 
     return true unless guest?
 

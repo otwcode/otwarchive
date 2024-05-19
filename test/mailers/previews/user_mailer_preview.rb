@@ -1,7 +1,7 @@
 class UserMailerPreview < ApplicationMailerPreview
   # Sent to a user when they submit an abuse report
-  def abuse_report_response
-    abuse_report = create(:abuse_report)
+  def abuse_report
+    abuse_report = create(:abuse_report, url: "https://#{ArchiveConfig.APP_HOST}/tags/1984%20-%20George%20Orwell")
     UserMailer.abuse_report(abuse_report.id)
   end
 
@@ -24,7 +24,7 @@ class UserMailerPreview < ApplicationMailerPreview
   end
 
   # Sent to a user when the submit a support request (AKA feedback)
-  def feedback_response
+  def feedback
     feedback = create(:feedback)
     UserMailer.feedback(feedback.id)
   end
