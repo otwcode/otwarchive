@@ -127,6 +127,15 @@ describe CommentsController do
         expect(flash[:error]).to be_nil
         it_redirects_to(chapter_path(comment.commentable, show_comments: true, anchor: "comment_#{comment.id}"))
       end
+
+      context "when logged in as an admin" do
+        before { fake_login_admin(create(:admin)) }
+
+        it "redirects to root with notice prompting log out" do
+          get :add_comment_reply, params: { comment_id: comment.id }
+          it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
+        end
+      end
     end
 
     context "guest comments are turned off in admin settings" do
@@ -172,15 +181,6 @@ describe CommentsController do
           fake_login
           get :add_comment_reply, params: { comment_id: comment.id }
           it_redirects_to_with_error(work_path(work), "Sorry, this work doesn't allow comments.")
-        end
-      end
-
-      context "when logged in as an admin" do
-        before { fake_login_admin(create(:admin)) }
-  
-        it "redirects to root with notice prompting log out" do
-          get :add_comment_reply, params: { comment_id: comment.id }
-          it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
         end
       end
     end
@@ -641,7 +641,7 @@ describe CommentsController do
       end
 
       context "when logged in as an admin" do
-        let(:work) { create(:work) }
+        let(:work) { create(:work, :guest_comments_on) }
 
         before { fake_login_admin(create(:admin)) }
 
