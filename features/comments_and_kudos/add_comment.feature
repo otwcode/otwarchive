@@ -227,7 +227,7 @@ Scenario: Users with different time zone preferences should see the time in thei
 
 Scenario: Cannot comment (no form) while logged as admin
 
-    Given the work "Generic Work"
+    Given the work "Generic Work" by "creator" with guest comments enabled
       And I am logged in as an admin
       And I view the work "Generic Work"
     Then I should see "Generic Work"
@@ -237,7 +237,7 @@ Scenario: Cannot comment (no form) while logged as admin
 
 Scenario: Cannot reply to comments (no button) while logged as admin
 
-    Given the work "Generic Work"
+    Given the work "Generic Work" by "creator" with guest comments enabled
     When I am logged in as "commenter"
       And I view the work "Generic Work"
       And I post a comment "Woohoo"
