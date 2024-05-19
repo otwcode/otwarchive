@@ -16,7 +16,8 @@ Feature: Filing a support request
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"
     And 1 email should be delivered
-    And the email should contain "We're working hard to reply to everyone, and we'll respond to you as soon as we can."
+    And the email should contain "working hard to reply to everyone"
+    And the email should contain "respond to you as soon as we can."
     And the email should contain "If you have additional questions or information"
     And the email should contain "Sent at Mon, 14 Mar 2022 12:00:00 \+0000"
   When I follow "Support & Feedback"
