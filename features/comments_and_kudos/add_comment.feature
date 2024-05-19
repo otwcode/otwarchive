@@ -224,3 +224,30 @@ Scenario: Users with different time zone preferences should see the time in thei
     And I view the work "Generic Work" with comments
   Then I should see "AEST" within ".posted.datetime"
     And I should see "AEST" within ".edited.datetime"
+
+Scenario: Cannot comment (no form) while logged as admin
+
+    Given the work "Generic Work" by "creator" with guest comments enabled
+      And I am logged in as an admin
+      And I view the work "Generic Work"
+    Then I should see "Generic Work"
+      And I should not see "Post Comment"
+      And I should not see a "Comment" button
+      And I should see "Please log out of your admin account to comment."
+
+Scenario: Cannot reply to comments (no button) while logged as admin
+
+    Given the work "Generic Work" by "creator" with guest comments enabled
+    When I am logged in as "commenter"
+      And I view the work "Generic Work"
+      And I post a comment "Woohoo"
+    When I am logged in as an admin
+      And I view the work "Generic Work"
+      And I follow "Comments (1)"
+    Then I should see "Woohoo"
+      And I should not see "Reply"
+    When I am logged out
+      And I view the work "Generic Work"
+      And I follow "Comments (1)"
+    Then I should see "Woohoo"
+      And I should see "Reply"
