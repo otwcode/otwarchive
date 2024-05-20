@@ -84,4 +84,43 @@ module CollectionsHelper
       ts('Deleted or unknown item')
     end
   end
+
+  def collection_item_approval_options_label(actor:, item_type:)
+    item_type = item_type.downcase
+    actor = actor.downcase
+
+    case actor
+    when "user"
+      t("collections_helper.collection_item_approval_options_label.user.#{item_type}")
+    when "collection"
+      t("collections_helper.collection_item_approval_options_label.collection")
+    end
+  end
+
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.unreviewed')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.unreviewed')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.unreviewed')
+  def collection_item_approval_options(actor:, item_type:)
+    item_type = item_type.downcase
+    actor = actor.downcase
+
+    key = case actor
+          when "user"
+            "collections_helper.collection_item_approval_options.user.#{item_type}"
+          when "collection"
+            "collections_helper.collection_item_approval_options.collection"
+          end
+
+    [
+      [t("#{key}.unreviewed"), :unreviewed],
+      [t("#{key}.approved"), :approved],
+      [t("#{key}.rejected"), :rejected]
+    ]
+  end
 end

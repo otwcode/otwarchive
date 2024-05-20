@@ -169,12 +169,8 @@ class ChallengeAssignment < ApplicationRecord
     if pseud_byline.blank?
       self.offer_signup = nil
     else
-      pseuds = Pseud.parse_byline(pseud_byline)
-      if pseuds.size == 1
-        pseud = pseuds.first
-        signup = ChallengeSignup.in_collection(self.collection).where(pseud_id: pseud.id).first
-        self.offer_signup = signup if signup
-      end
+      signup = signup_for_byline(pseud_byline)
+      self.offer_signup = signup if signup
     end
   end
 
@@ -186,18 +182,18 @@ class ChallengeAssignment < ApplicationRecord
     if pseud_byline.blank?
       self.request_signup = nil
     else
-      pseuds = Pseud.parse_byline(pseud_byline)
-      if pseuds.size == 1
-        pseud = pseuds.first
-        signup = ChallengeSignup.in_collection(self.collection).where(pseud_id: pseud.id).first
-        # If there's an existing assignment then this is a pinch recipient
-        self.request_signup = signup if signup
-      end
+      signup = signup_for_byline(pseud_byline)
+      self.request_signup = signup if signup
     end
   end
 
   def request_signup_pseud
     self.request_signup.try(:pseud).try(:byline) || ""
+  end
+
+  def signup_for_byline(byline)
+    pseud = Pseud.parse_byline(byline)
+    collection.signups.find_by(pseud: pseud)
   end
 
   def title
@@ -230,7 +226,7 @@ class ChallengeAssignment < ApplicationRecord
   end
 
   def pinch_hitter_byline=(byline)
-    self.pinch_hitter = Pseud.by_byline(byline).first
+    self.pinch_hitter = Pseud.parse_byline(byline)
   end
 
   def pinch_request_byline
@@ -238,8 +234,8 @@ class ChallengeAssignment < ApplicationRecord
   end
 
   def pinch_request_byline=(byline)
-    pinch_pseud = Pseud.by_byline(byline).first
-    self.pinch_request_signup = ChallengeSignup.in_collection(self.collection).by_pseud(pinch_pseud).first if pinch_pseud
+    signup = signup_for_byline(byline)
+    self.pinch_request_signup = signup if signup
   end
 
   def default

@@ -22,7 +22,37 @@ describe TagsController do
     context "successful creation" do
       before { post :create, params: { tag: tag_params } }
 
+      it "creates a new, non-canonical, tag" do
+        tag = Tag.last
+        it_redirects_to_with_notice(edit_tag_path(tag), "Tag was successfully created.")
+        expect(tag.name).to eq tag_params[:name]
+        expect(tag).not_to be_canonical
+      end
+
       include_examples "set last wrangling activity"
+    end
+
+    it "creates a new, canonical, tag" do
+      tag_params[:canonical] = "1"
+
+      post :create, params: { tag: tag_params }
+      tag = Tag.last
+      it_redirects_to_with_notice(edit_tag_path(tag), "Tag was successfully created.")
+
+      expect(tag.name).to eq tag_params[:name]
+      expect(tag).to be_canonical
+    end
+
+    it "cannot make changes to an existing tag when trying to create one" do
+      existing_tag = create(:canonical_character, name: "Blake Belladonna")
+      tag_params = { name: "Blâke Belladonna", canonical: "0", type: "Character" }
+
+      post :create, params: { tag: tag_params }
+      it_redirects_to_with_notice(edit_tag_path(existing_tag), "Tag already existed and was not modified.")
+
+      existing_tag.reload
+      expect(existing_tag.name).to eq "Blake Belladonna"
+      expect(existing_tag).to be_canonical
     end
   end
 
@@ -502,6 +532,19 @@ describe TagsController do
           expect(MetaTagging.find_by(sub_tag: tag, meta_tag: meta).direct).to be_truthy
         end
       end
+    end
+
+    it "can add and remove metatags at the same time" do
+      old_metatag = create(:canonical_freeform)
+      new_metatag = create(:canonical_freeform)
+
+      tag = create(:canonical_freeform)
+      create(:meta_tagging, meta_tag: old_metatag, sub_tag: tag, direct: true)
+      old_metatag.reload
+      tag.reload
+
+      put :update, params: { id: tag.name, tag: { associations_to_remove: [old_metatag.id], meta_tag_string: new_metatag.name } }
+      expect(tag.reload.direct_meta_tags).to eq [new_metatag]
     end
   end
 end

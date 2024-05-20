@@ -43,8 +43,12 @@ module CommentsHelper
         link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]
       end
     else
-      comment.name
+      content_tag(:span, comment.name) + content_tag(:span, " #{ts('(Guest)')}", class: "role")
     end
+  end
+
+  def image_safety_mode_cache_key(comment)
+    "image-safety-mode" if comment.use_image_safety_mode?
   end
 
   ####
@@ -99,13 +103,20 @@ module CommentsHelper
   #### HELPERS FOR CHECKING WHICH BUTTONS/FORMS TO DISPLAY #####
 
   def can_reply_to_comment?(comment)
-    !(comment.unreviewed? ||
-      comment.iced? ||
-      comment.hidden_by_admin? ||
-      parent_disallows_comments?(comment) ||
-      comment_parent_hidden?(comment) ||
-      blocked_by_comment?(comment) ||
-      blocked_by?(comment.ultimate_parent))
+    admin_settings = AdminSetting.current
+
+    return false if comment.unreviewed?
+    return false if comment.iced?
+    return false if comment.hidden_by_admin?
+    return false if parent_disallows_comments?(comment)
+    return false if comment_parent_hidden?(comment)
+    return false if blocked_by_comment?(comment)
+    return false if blocked_by?(comment.ultimate_parent)
+    return false if logged_in_as_admin?
+
+    return true unless guest?
+
+    !(admin_settings.guest_comments_off? || comment.guest_replies_disallowed?)
   end
 
   def can_edit_comment?(comment)
@@ -173,6 +184,12 @@ module CommentsHelper
 
     parent.disable_all_comments? ||
       parent.disable_anon_comments? && !logged_in?
+  end
+
+  def can_review_comment?(comment)
+    return false unless comment.unreviewed?
+
+    is_author_of?(comment.ultimate_parent) || policy(comment).can_review_comment?
   end
 
   #### HELPERS FOR REPLYING TO COMMENTS #####
@@ -299,7 +316,7 @@ module CommentsHelper
   # return html link to mark/unmark comment as spam
   def tag_comment_as_spam_link(comment)
     if comment.approved
-      link_to(ts("Spam"), reject_comment_path(comment), method: :put, confirm: "Are you sure you want to mark this as spam?" )
+      link_to(ts("Spam"), reject_comment_path(comment), method: :put, data: { confirm: "Are you sure you want to mark this as spam?" })
     else
       link_to(ts("Not Spam"), approve_comment_path(comment), method: :put)
     end
@@ -322,8 +339,9 @@ module CommentsHelper
     unreviewed = "unreviewed" if comment.unreviewed?
     commenter = commenter_id_for_css_classes(comment)
     official = "official" if commenter && comment&.pseud&.user&.official
+    guest = "guest" unless comment.pseud_id
 
-    "#{unavailable} #{official} #{unreviewed} comment group #{commenter}".squish
+    "#{unavailable} #{official} #{guest} #{unreviewed} comment group #{commenter}".squish
   end
 
   # find the parent of the commentable

@@ -84,7 +84,6 @@ module AutocompleteSource
   end
 
   def remove_stale_from_autocomplete
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_before_last_save}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_before_last_save, self.autocomplete_prefixes, self.autocomplete_value_before_last_save)
   end
 

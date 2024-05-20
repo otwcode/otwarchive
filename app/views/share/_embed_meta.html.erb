@@ -1,5 +1,5 @@
 <%= ts("Chapters: ") %>
-<%= work.chapter_total_display %><br />
+<%= chapter_total_display(work) %><br />
 <%= ts("Fandom: ") %>
 <%= work.tag_groups["Fandom"].map { |fandom| link_to fandom.name, tag_url(fandom) }.join(", ").html_safe %><br />
 <% [Rating, ArchiveWarning, Relationship, Character, Freeform].each do |klass| %>

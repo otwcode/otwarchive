@@ -17,7 +17,7 @@ class AbuseReportsController < ApplicationController
     @abuse_report.ip_address = request.remote_ip
     if @abuse_report.save
       @abuse_report.email_and_send
-      flash[:notice] = ts("Your abuse report was sent to the Abuse team.")
+      flash[:notice] = ts("Your report was submitted to the Policy & Abuse team. A confirmation message has been sent to the email address you provided.")
       redirect_to root_path
     else
       render action: "new"

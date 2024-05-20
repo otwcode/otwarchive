@@ -33,8 +33,6 @@ and preserve the balance/symmetry of the page */
 /* While implementing AO3-5987 it was suggested we move to non-JS share buttons.
  * These are statically styled with CSS instead.
  *
- * These styles are currently only used in app/views/share/_share.html.erb.
- *
  * Sourced from: https://sharingbuttons.io/
  * See: https://github.com/otwcode/otwarchive/pull/3874#pullrequestreview-460459176
  */

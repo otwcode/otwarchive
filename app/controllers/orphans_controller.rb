@@ -2,6 +2,7 @@ class OrphansController < ApplicationController
   # You must be logged in to orphan works - relies on current_user data 
   before_action :users_only, except: [:index]
   
+  before_action :check_user_not_suspended, except: [:index]
   before_action :load_pseuds, only: [:create]
   before_action :load_orphans, only: [:create]
 

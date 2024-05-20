@@ -2,7 +2,8 @@
 Feature: Share Bookmarks
   Testing the "Share" button on bookmarks, with JavaScript emulation
 
-  @javascript
+  # We need to load the site skin to make the share modal work properly:
+  @javascript @load-default-skin
   Scenario: Share a bookmark
     Given I am logged in as "tess"
       And I have a bookmark for "Damp Gravel"
@@ -23,7 +24,6 @@ Feature: Share Bookmarks
       And I should not see "Characters:" within "#share textarea"
       And I should not see "Summary:" within "#share textarea"
 
-  @javascript
   Scenario: Share option is unavailable if bookmarkable is unrevealed.
     Given there is a work "Hidden Figures" in an unrevealed collection "Backlist"
       And I am logged in as the author of "Hidden Figures"
@@ -38,7 +38,6 @@ Feature: Share Bookmarks
       And I should see "Add To Collection"
       And I should not see "Share"
 
-  @javascript
   Scenario: Sharing a bookmark is not possible when logged out
     Given I am logged in as "tess"
       And I have a bookmark for "Damp Gravel"

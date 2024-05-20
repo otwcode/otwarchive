@@ -4,9 +4,9 @@ class BookmarkableDecorator < SimpleDelegator
   # Given a list of bookmarkable objects, with inner bookmark hits, load the
   # objects and their bookmarks and wrap everything up in a
   # BookmarkableDecorator object.
-  def self.load_from_elasticsearch(hits)
-    bookmarks = load_bookmarks(hits)
-    bookmarkables = load_bookmarkables(hits)
+  def self.load_from_elasticsearch(hits, **options)
+    bookmarks = load_bookmarks(hits, **options)
+    bookmarkables = load_bookmarkables(hits, **options)
 
     hits.map do |hit|
       id = hit["_id"]
@@ -22,18 +22,18 @@ class BookmarkableDecorator < SimpleDelegator
   # Given search results for bookmarkables, with inner_hits for the matching
   # bookmarks, load all of the referenced bookmarks and return a hash mapping
   # from IDs to bookmarks.
-  def self.load_bookmarks(hits)
+  def self.load_bookmarks(hits, **options)
     all_bookmark_hits = hits.flat_map do |bookmarkable_item|
       bookmarkable_item.dig("inner_hits", "bookmark", "hits", "hits")
     end
 
-    Bookmark.load_from_elasticsearch(all_bookmark_hits).group_by(&:id)
+    Bookmark.load_from_elasticsearch(all_bookmark_hits, **options).group_by(&:id)
   end
 
   # Given search results for bookmarkables, return a hash mapping from IDs to
   # Works, Series, or ExternalWorks (depending on which type the ID is marked
   # with).
-  def self.load_bookmarkables(hits)
+  def self.load_bookmarkables(hits, **options)
     hits_by_bookmarkable_type = hits.group_by do |item|
       item.dig("_source", "bookmarkable_type")
     end
@@ -44,7 +44,7 @@ class BookmarkableDecorator < SimpleDelegator
       hits_for_klass = hits_by_bookmarkable_type[klass.to_s]
       next if hits_for_klass.blank?
       type = klass.to_s.underscore
-      klass.load_from_elasticsearch(hits_for_klass).each do |item|
+      klass.load_from_elasticsearch(hits_for_klass, **options).each do |item|
         bookmarkables["#{item.id}-#{type}"] = item
       end
     end

@@ -167,3 +167,37 @@ Feature: Kudos
       And the email should contain "Meh Story"
       And the email should not contain "0 guests"
       And the email should not contain "translation missing"
+
+  Scenario: Blocked users should not see a kudos button on their blocker's works
+    Given the work "Aftermath" by "creator"
+      And the user "creator" has blocked the user "pest"
+    When I am logged in as "pest"
+      And I view the work "Aftermath"
+    Then I should not see a "Kudos ♥" button
+
+  Scenario: Kudos cache expires periodically to ensure deleted users are removed and renamed users are updated
+    Given the work "Interesting beans"
+      And I am logged in as "oldusername1" with password "password"
+    When I view the work "Interesting beans"
+      And I press "Kudos ♥"
+    Then I should see "oldusername1 left kudos on this work!"
+    When I visit the change username page for oldusername1
+      And I fill in "New user name" with "newusername1"
+      And I fill in "Password" with "password"
+      And I press "Change User Name"
+    Then I should get confirmation that I changed my username
+      And I should see "Hi, newusername1"
+    When the kudos cache has expired
+      And I view the work "Interesting beans"
+    Then I should see "newusername1 left kudos on this work!"
+      And I should not see "oldusername1"
+    When I try to delete my account as newusername1
+      And the kudos cache has expired
+      And I view the work "Interesting beans"
+    Then I should not see "newusername1 left kudos on this work!"
+
+  Scenario: Cannot leave kudos (no button) while logged as admin
+    Given I am logged in as an admin
+      And I view the work "Awesome Story"
+    Then I should see "Awesome Story"
+      And I should not see a "Kudos ♥" button

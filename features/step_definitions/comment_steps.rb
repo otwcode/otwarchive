@@ -14,11 +14,6 @@ Given /^I have the receive no comment notifications setup$/ do
   user.preference.save
 end
 
-Given "a guest comment on the work {string}" do |title|
-  work = Work.find_by(title: title)
-  FactoryBot.create(:comment, :by_guest, commentable: work.first_chapter)
-end
-
 ParameterType(
   name: "commentable",
   regexp: /the (work|admin post|tag) "([^"]*)"/,
@@ -34,6 +29,16 @@ ParameterType(
     end
   }
 )
+
+Given "{commentable} with guest comments enabled" do |commentable|
+  assert !commentable.is_a?(Tag)
+  commentable.update_attribute(:comment_permissions, :enable_all)
+end
+
+Given "a guest comment on {commentable}" do |commentable|
+  commentable = Comment.commentable_object(commentable)
+  FactoryBot.create(:comment, :by_guest, commentable: commentable)
+end
 
 Given "a comment {string} by {string} on {commentable}" do |text, user, commentable|
   user = ensure_user(user)
@@ -51,6 +56,49 @@ Given "a reply {string} by {string} on {commentable}" do |text, user, commentabl
                     pseud: user.default_pseud,
                     commentable: comment,
                     comment_content: text)
+end
+
+Given "image safety mode is enabled for comments on a {string}" do |parent_type|
+  allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(parent_type)
+end
+
+Given "image safety mode is disabled for comments" do
+  allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
+end
+
+Given "the setup for testing image safety mode on the admin post {string}" do |title|
+  step %{the admin post "#{title}"}
+  step %{a comment "plain text" by "commentrecip" on the admin post "#{title}"}
+  step %{I am logged in as "commenter"}
+  visit comment_path(Comment.last)
+  step %{I follow "Reply"}
+  with_scope(".odd") do
+    # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
+    fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
+    click_button("Comment")
+  end
+  step %{I am logged in as "commentrecip"}
+end
+
+Given "the setup for testing image safety mode on the tag {string}" do |name|
+  step %{the tag wrangler "commentrecip" with password "password" is wrangler of "#{name}"}
+  step %{the tag wrangler "commenter" with password "password" is wrangler of "Some Fandom"}
+  step %{I am logged in as "commenter"}
+  visit tag_comments_path(Tag.find_by_name(name))
+  # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
+  fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
+  click_button("Comment")
+  step %{I am logged in as "commentrecip"}
+end
+
+Given "the setup for testing image safety mode on the work {string}" do |title|
+  step %{the work "#{title}" by "commentrecip"}
+  step %{I am logged in as "commenter"}
+  visit work_path(Work.find_by(title: title))
+  # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
+  fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
+  click_button("Comment")
+  step %{I am logged in as "commentrecip"}
 end
 
 # THEN
@@ -87,6 +135,13 @@ When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, 
   fill_in("comment[comment_content]", with: comment_text)
 end
 
+When "I set up the comment {string} on the work {string} with guest comments enabled" do |comment_text, work|
+  work = Work.find_by(title: work)
+  work.update_attribute(:comment_permissions, :enable_all)
+  visit work_path(work)
+  fill_in("comment[comment_content]", with: comment_text)
+end
+
 When /^I attempt to comment on "([^"]*)" with a pseud that is not mine$/ do |work|
   step %{I am logged in as "commenter"}
   step %{I set up the comment "This is a test" on the work "#{work}"}
@@ -112,7 +167,7 @@ end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest(?: with email "([^"]*)")?$/ do |comment_text, work, email|
   step "I start a new session"
-  step "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
+  step %{I set up the comment "#{comment_text}" on the work "#{work}" with guest comments enabled}
   fill_in("Guest name", with: "guest")
   fill_in("Guest email", with: (email || "guest@foo.com"))
   click_button "Comment"
@@ -301,4 +356,12 @@ When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
     click_link("Delete")
     click_link("Yes, delete!") # TODO: Fix along with comment deletion.
   end
+end
+
+When "I mark the comment as spam" do
+  click_link("Spam")
+end
+
+When "I confirm I want to mark the comment as spam" do
+  expect(page.accept_alert).to eq("Are you sure you want to mark this as spam?") if @javascript
 end

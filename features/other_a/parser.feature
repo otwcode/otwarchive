@@ -42,7 +42,7 @@ Feature: Parsing HTML
     And I fill in "content" with "<p class='size-10'><img src='britney.gif' alt='Britney Spears' />You better work</p>"
     And I press "Preview"
   Then I should see "Draft was successfully created."
-    And I should see the image "src" text "britney.gif"
+    And I should see the image "src" text "http://www.example.org/britney.gif"
     And I should see the image "alt" text "Britney Spears"
   When I press "Edit"
   Then the "Summary" field should not contain "myclass"
@@ -51,7 +51,7 @@ Feature: Parsing HTML
     And the "content" field should contain "size-10"
   When I press "Post"
   Then I should see "Work was successfully posted."
-    And I should see the image "src" text "britney.gif"
+    And I should see the image "src" text "http://www.example.org/britney.gif"
 
   Scenario: Chapter notes and content HTML keep classes when previewing before posting
   Given I am logged in as a random user

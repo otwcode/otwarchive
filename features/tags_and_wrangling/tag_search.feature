@@ -196,3 +196,27 @@ Feature: Search Tags
       And the 2nd tag result should contain "created second"
       And the 3rd tag result should contain "created third"
       And the 4th tag result should contain "created fourth"
+
+  Scenario: Search and sort by Uses in descending and ascending order
+    Given a set of tags for tag sort by use exists
+    When I am on the search tags page
+      And I fill in "Tag name" with "uses"
+      And I select "Uses" from "Sort by"
+      And I select "Descending" from "Sort direction"
+      And I press "Search Tags"
+    Then I should see "6 Found"
+      And the 1st tag result should contain "10 uses"
+      And the 2nd tag result should contain "8 uses"
+      And the 3rd tag result should contain "8 uses"
+      And the 4th tag result should contain "5 uses"
+      And the 5th tag result should contain "2 uses"
+      And the 6th tag result should contain "0 uses"
+    When I select "Ascending" from "Sort direction"
+      And I press "Search Tags"
+    Then I should see "6 Found"
+      And the 1st tag result should contain "0 uses"
+      And the 2nd tag result should contain "2 uses"
+      And the 3rd tag result should contain "5 uses"
+      And the 4th tag result should contain "8 uses"
+      And the 5th tag result should contain "8 uses"
+      And the 6th tag result should contain "10 uses"

@@ -4,6 +4,7 @@ describe UserManager do
   describe "#save" do
     let(:admin) { create(:admin) }
     let(:user) { create(:user) }
+    let(:orphan) { create(:user, login: "orphan_account") }
 
     it "returns error without user" do
       manager = UserManager.new(admin, nil, {})
@@ -11,6 +12,12 @@ describe UserManager do
       expect(manager.errors).to eq ["Must have a valid user and admin account to proceed."]
     end
 
+    it "returns error if user is orphan_account" do
+      manager = UserManager.new(admin, orphan, admin_action: "suspend", suspend_days: "7")
+      expect(manager.save).to be_falsey
+      expect(manager.errors).to eq ["orphan_account cannot be warned, suspended, or banned."]
+    end
+    
     it "does nothing without an admin action" do
       manager = UserManager.new(admin, user, {})
       expect do
@@ -51,14 +58,14 @@ describe UserManager do
     end
 
     it "succeeds in unsuspending user" do
-      user.update(suspended: true, suspended_until: 4.days.from_now)
+      user.update!(suspended: true, suspended_until: 4.days.from_now)
       manager = UserManager.new(admin, user, admin_action: "unsuspend", admin_note: "There was a mistake in the review process")
       expect(manager.save).to be_truthy
       expect(manager.successes).to eq ["Suspension has been lifted."]
     end
 
     it "succeeds in unbanning user" do
-      user.update(banned: true)
+      user.update!(banned: true)
       manager = UserManager.new(admin, user, admin_action: "unban", admin_note: "There was a mistake in the review process")
       expect(manager.save).to be_truthy
       expect(manager.successes).to eq ["Suspension has been lifted."]

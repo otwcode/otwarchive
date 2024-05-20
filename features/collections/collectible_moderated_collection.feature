@@ -7,16 +7,6 @@ Feature: Collectible items in moderated collections
     Given I have a moderated collection "Various Penguins"
       And I am logged in as a random user
 
-  Scenario: Add my work to a moderated collection with the Add to Collections 
-  button
-    Given I post the work "Blabla"
-    When I add my work to the collection
-    Then I should see "until it has been approved by a moderator."
-    When the collection counts have expired
-      And I go to "Various Penguins" collection's page
-    Then I should see "Works (0)" within "#dashboard"
-      And I should not see "Blabla"
-
   Scenario: Add my work to a moderated collection by editing the work
     Given I post the work "Blabla"
     When I edit the work "Blabla"
@@ -40,7 +30,7 @@ Feature: Collectible items in moderated collections
     Given I have a bookmark of a deleted work
       And I add my bookmark to the collection "Various_Penguins"
     When I am logged in as the owner of "Various Penguins"
-      And I view the awaiting approval collection items page for "Various Penguins"
+      And I view the awaiting collection approval collection items page for "Various Penguins"
     Then I should see "Bookmark of deleted item"
       And I should see "This has been deleted, sorry!"
 

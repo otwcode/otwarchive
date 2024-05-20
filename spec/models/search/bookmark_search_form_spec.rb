@@ -17,37 +17,37 @@ describe BookmarkSearchForm, bookmark_search: true do
         let(:tag) { create(:canonical_fandom) }
 
         let!(:work1) do
-          Delorean.time_travel_to 40.minutes.ago do
+          travel_to(40.minutes.ago) do
             create(:work, title: "One", fandom_string: tag.name)
           end
         end
 
         let!(:work2) do
-          Delorean.time_travel_to 60.minutes.ago do
+          travel_to(60.minutes.ago) do
             create(:work, title: "Two", fandom_string: tag.name)
           end
         end
 
         let!(:work3) do
-          Delorean.time_travel_to 50.minutes.ago do
+          travel_to(50.minutes.ago) do
             create(:work, title: "Three", fandom_string: tag.name)
           end
         end
 
         let!(:bookmark1) do
-          Delorean.time_travel_to 30.minutes.ago do
+          travel_to(30.minutes.ago) do
             create(:bookmark, bookmarkable: work1)
           end
         end
 
         let!(:bookmark2) do
-          Delorean.time_travel_to 10.minutes.ago do
+          travel_to(10.minutes.ago) do
             create(:bookmark, bookmarkable: work2)
           end
         end
 
         let!(:bookmark3) do
-          Delorean.time_travel_to 20.minutes.ago do
+          travel_to(20.minutes.ago) do
             create(:bookmark, bookmarkable: work3)
           end
         end
@@ -109,7 +109,7 @@ describe BookmarkSearchForm, bookmark_search: true do
             res = search.bookmarkable_search_results.map(&:id)
 
             [work1, work2].each do |work|
-              work.update(summary: "Updated")
+              work.update!(summary: "Updated")
               run_all_indexing_jobs
               expect(search.bookmarkable_search_results.map(&:id)).to eq(res)
             end
@@ -124,7 +124,7 @@ describe BookmarkSearchForm, bookmark_search: true do
             res = search.bookmarkable_search_results.map(&:id)
 
             [work1, work2].each do |work|
-              work.update(summary: "Updated")
+              work.update!(summary: "Updated")
               run_all_indexing_jobs
               expect(search.bookmarkable_search_results.map(&:id)).to eq(res)
             end
@@ -278,13 +278,13 @@ describe BookmarkSearchForm, bookmark_search: true do
             res = search.search_results.map(&:id)
 
             [work1, work2].each do |work|
-              work.update(summary: "Updated")
+              work.update!(summary: "Updated")
               run_all_indexing_jobs
               expect(search.search_results.map(&:id)).to eq(res)
             end
 
             [bookmark1, bookmark2].each do |bookmark|
-              bookmark.update(bookmarker_notes: "Updated")
+              bookmark.update!(bookmarker_notes: "Updated")
               run_all_indexing_jobs
               expect(search.search_results.map(&:id)).to eq(res)
             end
@@ -382,6 +382,129 @@ describe BookmarkSearchForm, bookmark_search: true do
       options = { warning_ids: [13] }
       searcher = BookmarkSearchForm.new(options)
       expect(searcher.options[:archive_warning_ids]).to eq([13])
+    end
+  end
+
+  describe "facets" do
+    let(:author) { create(:user).default_pseud }
+    let(:bookmarker) { create(:user).default_pseud }
+
+    let(:fandom1) { create(:canonical_fandom) }
+    let(:fandom2) { create(:canonical_fandom) }
+    let(:fandom3) { create(:fandom, merger: fandom1) }
+
+    let(:character1) { create(:canonical_character) }
+    let(:character2) { create(:canonical_character) }
+    let(:character3) { create(:canonical_character) }
+
+    let(:freeform1) { create(:canonical_freeform) }
+    let(:freeform2) { create(:freeform, merger: freeform1) }
+
+    let(:work1) do
+      create(:work,
+             fandom_string: fandom1.name,
+             character_string: [character1.name, character2.name].join(","),
+             authors: [author])
+    end
+
+    let(:work2) do
+      create(:work,
+             fandom_string: fandom2.name,
+             character_string: [character1.name, character2.name].join(","),
+             authors: [author])
+    end
+
+    let(:work3) do
+      create(:work,
+             fandom_string: fandom3.name,
+             character_string: [character1.name, character3.name].join(","),
+             authors: [author])
+    end
+
+    let!(:bookmark1) { create(:bookmark, pseud: bookmarker, bookmarkable: work1, tag_string: freeform1.name) }
+    let!(:bookmark2) { create(:bookmark, pseud: bookmarker, bookmarkable: work2, tag_string: freeform1.name) }
+    let!(:bookmark3) { create(:bookmark, pseud: bookmarker, bookmarkable: work3, tag_string: freeform2.name) }
+
+    before { run_all_indexing_jobs }
+
+    let(:form) { BookmarkSearchForm.new(faceted: true) }
+    let(:facets) { results.facets }
+
+    def facet_hash(facets)
+      facets.to_h { |facet| [facet.name, facet.count] }
+    end
+
+    shared_examples "it calculates the correct counts" do
+      it "lists the canonical fandoms with their counts" do
+        expect(facet_hash(facets["fandom"])).to eq(
+          {
+            fandom1.name => 2,
+            fandom2.name => 1
+          }
+        )
+      end
+
+      it "lists the canonical characters with their counts" do
+        expect(facet_hash(facets["character"])).to eq(
+          {
+            character1.name => 3,
+            character2.name => 2,
+            character3.name => 1
+          }
+        )
+      end
+
+      it "lists all bookmark tags with their counts" do
+        expect(facet_hash(facets["tag"])).to eq(
+          {
+            freeform1.name => 2,
+            freeform2.name => 1
+          }
+        )
+      end
+
+      context "when excluding tags" do
+        let(:form) { BookmarkSearchForm.new(faceted: true, excluded_tag_ids: [fandom2.id]) }
+
+        it "lists the canonical fandoms with their counts" do
+          expect(facet_hash(facets["fandom"])).to eq(
+            {
+              fandom1.name => 2
+            }
+          )
+        end
+
+        it "lists the canonical characters with their counts" do
+          expect(facet_hash(facets["character"])).to eq(
+            {
+              character1.name => 2,
+              character2.name => 1,
+              character3.name => 1
+            }
+          )
+        end
+
+        it "lists all bookmark tags with their counts" do
+          expect(facet_hash(facets["tag"])).to eq(
+            {
+              freeform1.name => 1,
+              freeform2.name => 1
+            }
+          )
+        end
+      end
+    end
+
+    context "for search_results" do
+      let(:results) { form.search_results }
+
+      it_behaves_like "it calculates the correct counts"
+    end
+
+    context "for bookmarkable_search_results" do
+      let(:results) { form.bookmarkable_search_results }
+
+      it_behaves_like "it calculates the correct counts"
     end
   end
 end

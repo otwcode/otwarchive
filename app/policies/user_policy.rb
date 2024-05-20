@@ -21,6 +21,14 @@ class UserPolicy < ApplicationPolicy
     "tag_wrangling" => [roles: []]
   }.freeze
 
+  # Define which admin roles can edit which user roles.
+  ALLOWED_USER_ROLES_BY_ADMIN_ROLES = {
+    "open_doors" => %w[archivist opendoors],
+    "policy_and_abuse" => %w[no_resets protected_user],
+    "superadmin" => %w[archivist no_resets official opendoors protected_user tag_wrangler],
+    "tag_wrangling" => %w[tag_wrangler]
+  }.freeze
+
   def can_manage_users?
     user_has_roles?(MANAGE_ROLES)
   end
@@ -37,6 +45,10 @@ class UserPolicy < ApplicationPolicy
     ALLOWED_ATTRIBUTES_BY_ROLES.values_at(*user.roles).compact.flatten
   end
 
+  def can_edit_user_role?(role)
+    ALLOWED_USER_ROLES_BY_ADMIN_ROLES.values_at(*user.roles).compact.flatten.include?(role.name)
+  end
+
   alias index? can_manage_users?
   alias bulk_search? can_manage_users?
   alias show? can_manage_users?
@@ -48,6 +60,5 @@ class UserPolicy < ApplicationPolicy
   alias destroy_user_creations? can_destroy_spam_creations?
 
   alias troubleshoot? can_manage_users?
-  alias send_activation? can_manage_users?
   alias activate? can_manage_users?
 end
