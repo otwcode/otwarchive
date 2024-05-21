@@ -7,7 +7,6 @@ class AsyncIndexer
   ####################
 
   def self.perform(name)
-    Rails.logger.info "Blueshirt: Logging use of constantize class self.perform #{name.split(":").first}"
     indexer = name.split(":").first.constantize
     ids = REDIS.smembers(name)
 

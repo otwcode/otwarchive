@@ -3,6 +3,32 @@
 require "spec_helper"
 
 describe Comment do
+  describe "validations" do
+    context "with a forbidden guest name" do
+      subject { build(:comment, email: Faker::Internet.email) }
+      let(:forbidden_name) { Faker::Lorem.characters(number: 8) }
+
+      before do
+        allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([forbidden_name])
+      end
+
+      it { is_expected.not_to allow_values(forbidden_name, forbidden_name.swapcase).for(:name) }
+
+      it "does not prevent saving when the name is unchanged" do
+        subject.name = forbidden_name
+        subject.save!(validate: false)
+        expect(subject.save).to be_truthy
+      end
+
+      it "does not prevent deletion" do
+        subject.name = forbidden_name
+        subject.save!(validate: false)
+        subject.destroy
+        expect { subject.reload }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 
   context "with an existing comment from the same user" do
     let(:first_comment) { create(:comment) }
@@ -14,7 +40,7 @@ describe Comment do
 
     it "should be invalid if exactly duplicated" do
       expect(second_comment.valid?).to be_falsy
-      expect(second_comment.errors.keys).to include(:comment_content)
+      expect(second_comment.errors.attribute_names).to include(:comment_content)
     end
 
     it "should not be invalid if in the process of being deleted" do
@@ -46,7 +72,7 @@ describe Comment do
         before { comment.save(validate: false) }
 
         it "changes the comment" do
-          expect(comment.update(comment_content: "Why did you block me?")).to be_truthy
+          comment.update!(comment_content: "Why did you block me?")
           expect(comment.errors.full_messages).to be_blank
           expect(comment.reload.comment_content).to eq("Why did you block me?")
         end
@@ -65,7 +91,8 @@ describe Comment do
         before { comment.save(validate: false) }
 
         it "doesn't change the comment" do
-          expect(comment.update(comment_content: "Why did you block me?")).to be_falsey
+          expect { comment.update!(comment_content: "Why did you block me?") }
+            .to raise_error(ActiveRecord::RecordInvalid)
           expect(comment.errors.full_messages).to include(message)
           expect(comment.reload.comment_content).to eq("Hmm.")
         end
@@ -167,6 +194,94 @@ describe Comment do
     end
   end
 
+  context "when user has disabled guest replies" do
+    let(:no_reply_guy) do
+      user = create(:user)
+      user.preference.update!(guest_replies_off: true)
+      user
+    end
+
+    let(:guest_reply) do
+      Comment.new(commentable: comment,
+                  pseud: nil,
+                  name: "unwelcome guest",
+                  email: Faker::Internet.email,
+                  comment_content: "I'm a vampire.")
+    end
+
+    let(:user_reply) do
+      Comment.new(commentable: comment,
+                  pseud: create(:user).default_pseud,
+                  comment_content: "Hmm.")
+    end
+
+    shared_examples "creating guest reply is allowed" do
+      describe "save" do
+        it "allows guest replies" do
+          expect(guest_reply.save).to be_truthy
+          expect(guest_reply.errors.full_messages).to be_blank
+        end
+
+        it "allows user replies" do
+          expect(user_reply.save).to be_truthy
+          expect(user_reply.errors.full_messages).to be_blank
+        end
+      end
+    end
+
+    shared_examples "creating guest reply is not allowed" do
+      describe "save" do
+        it "doesn't allow guest replies" do
+          expect(guest_reply.save).to be_falsey
+          expect(guest_reply.errors.full_messages).to include("Sorry, this user doesn't allow non-Archive users to reply to their comments.")
+        end
+
+        it "allows user replies" do
+          expect(user_reply.save).to be_truthy
+          expect(user_reply.errors.full_messages).to be_blank
+        end
+      end
+    end
+
+    context "comment on a work" do
+      let(:comment) { create(:comment, pseud: no_reply_guy.default_pseud) }
+
+      include_examples "creating guest reply is not allowed"
+    end
+
+    context "comment on an admin post" do
+      let(:comment) { create(:comment, :on_admin_post, pseud: no_reply_guy.default_pseud) }
+
+      include_examples "creating guest reply is not allowed"
+    end
+
+    context "comment on a tag" do
+      let(:comment) { create(:comment, :on_tag, pseud: no_reply_guy.default_pseud) }
+
+      include_examples "creating guest reply is not allowed"
+    end
+
+    context "comment on the user's work" do
+      let(:work) { create(:work, authors: [no_reply_guy.default_pseud]) }
+      let(:comment) { create(:comment, pseud: no_reply_guy.default_pseud, commentable: work.first_chapter) }
+
+      include_examples "creating guest reply is allowed"
+    end
+
+    context "comment on the user's co-creation" do
+      let(:work) { create(:work, authors: [create(:user).default_pseud, no_reply_guy.default_pseud]) }
+      let(:comment) { create(:comment, pseud: no_reply_guy.default_pseud, commentable: work.first_chapter) }
+
+      include_examples "creating guest reply is allowed"
+    end
+
+    context "guest comment" do
+      let(:comment) { create(:comment, :by_guest) }
+
+      include_examples "creating guest reply is allowed"
+    end
+  end
+
   describe "#create" do
     context "as a tag wrangler" do
       let(:tag_wrangler) { create(:tag_wrangler) }
@@ -242,7 +357,7 @@ describe Comment do
 
         it "does not update last wrangling activity" do
           expect do
-            comment.update(comment_content: Faker::Lorem.sentence(word_count: 25))
+            comment.update!(comment_content: Faker::Lorem.sentence(word_count: 25))
           end.not_to change { tag_wrangler.reload.last_wrangling_activity.updated_at }
         end
       end
@@ -261,6 +376,95 @@ describe Comment do
             comment.destroy
           end.not_to change { tag_wrangler.reload.last_wrangling_activity.updated_at }
         end
+      end
+    end
+  end
+
+  describe "#use_image_safety_mode?" do
+    let(:admin_post_comment) { create(:comment, :on_admin_post) }
+    let(:chapter_comment) { create(:comment) }
+    let(:tag_comment) { create(:comment, :on_tag) }
+    let(:admin_post_reply) { create(:comment, commentable: admin_post_comment) }
+    let(:chapter_reply) { create(:comment, commentable: chapter_comment) }
+    let(:tag_reply) { create(:comment, commentable: tag_comment) }
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is empty" do
+      it "returns false for comments and replies for all parent types" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to something that doesn't match an existing parent type" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Work"]) }
+
+      it "returns false for comments and replies for all parent types" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to AdminPost" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost"]) }
+
+      it "returns true for AdminPost comments and replies and false for Chapter and Tag comments and replies" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_truthy
+        expect(admin_post_reply.use_image_safety_mode?).to be_truthy
+
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to Chapter" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Chapter"]) }
+
+      it "returns true for Chapter comments and false for AdminPost and Tag comments and replies" do
+        expect(chapter_comment.use_image_safety_mode?).to be_truthy
+        expect(chapter_reply.use_image_safety_mode?).to be_truthy
+
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to Tag" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Tag"]) }
+
+      it "returns true for Tag comments and replies and false for AdminPost and Chapter comments and replies" do
+        expect(tag_comment.use_image_safety_mode?).to be_truthy
+        expect(tag_reply.use_image_safety_mode?).to be_truthy
+
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE includes multiple parent types" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[AdminPost Tag]) }
+
+      it "returns true for comments and replies on the listed parent types and false for the other" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_truthy
+        expect(tag_comment.use_image_safety_mode?).to be_truthy
+        expect(admin_post_reply.use_image_safety_mode?).to be_truthy
+        expect(tag_reply.use_image_safety_mode?).to be_truthy
+
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
       end
     end
   end

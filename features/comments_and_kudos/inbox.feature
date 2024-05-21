@@ -43,11 +43,11 @@ Feature: Get messages in the inbox
       And I go to my inbox page
       And I choose "Show unread"
       And I press "Filter"
-    Then I should see "guest on Down for the Count"
+    Then I should see "guest (Guest) on Down for the Count"
       And I should see "less than 1 minute ago"
     When I choose "Show read"
       And I press "Filter"
-    Then I should not see "guest on Down for the Count"
+    Then I should not see "guest (Guest) on Down for the Count"
 
   Scenario: I can bulk edit comments in my inbox by clicking 'Select'
     Given I am logged in as "boxer"

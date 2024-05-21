@@ -31,7 +31,7 @@ module CreationNotifier
   def notify_recipients
     return unless self.posted && self.new_gifts.present? && !self.unrevealed?
 
-    recipient_pseuds = Pseud.parse_bylines(self.new_gifts.collect(&:recipient).join(","), assume_matching_login: true)[:pseuds]
+    recipient_pseuds = Pseud.parse_bylines(self.new_gifts.collect(&:recipient).join(","))[:pseuds]
     # check user prefs to see which recipients want to get gift notifications
     # (since each user has only one preference item, this removes duplicates)
     recip_ids = Preference.where(user_id: recipient_pseuds.map(&:user_id),

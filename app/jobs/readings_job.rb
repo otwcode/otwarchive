@@ -1,9 +1,6 @@
 class ReadingsJob < RedisSetJob
   queue_as :readings
 
-  retry_on ActiveRecord::Deadlocked, attempts: 10
-  retry_on ActiveRecord::LockWaitTimeout, attempts: 10
-
   def self.base_key
     "Reading:new"
   end

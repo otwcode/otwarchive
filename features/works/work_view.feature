@@ -60,3 +60,12 @@ Feature: View a work with various options
     And I view the work "Whatever"
   Then I should see a link "Invite To Collections"
     And I should see the "new_collection_item" form
+
+  Scenario: archivists can add works to collections regardless of invitation preferences
+  Given the work "Imported Work"
+    And I have an archivist "archivist"
+    And I am logged in as "archivist"
+  When I create the collection "Open Doors Collection 1"
+    And I view the work "Imported Work"
+  Then I should see a link "Add to Collections"
+    And I should see the "new_collection_item" form

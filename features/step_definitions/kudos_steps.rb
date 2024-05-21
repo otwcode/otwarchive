@@ -24,6 +24,10 @@ When /^I leave kudos on "([^\"]*)"$/ do |work_title|
   click_button("kudo_submit")
 end
 
+When "the kudos cache has expired" do
+  step "it is currently #{ArchiveConfig.MINUTES_UNTIL_COMMENTABLE_KUDOS_LISTS_EXPIRE} minutes from now"
+end
+
 ### THEN
 
 Then /^I should see kudos on every chapter$/ do

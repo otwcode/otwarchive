@@ -58,7 +58,7 @@ Feature: Collectible items
     Then I should see "Bookmark of deleted item"
       And I should see "This has been deleted, sorry!"
 
-  Scenario: Deleted works are not included on the user's Manage Collected Works
+  Scenario: Deleted works are not included on the user's Manage Collection Items
   page
     Given I post the work "Emperor Penguins" to the collection "Various Penguins"
       And I delete the work "Emperor Penguins"
@@ -73,7 +73,7 @@ Feature: Collectible items
       And I view the approved collection items page for "Various Penguins"
     Then I should not see "Emperor Penguins"
 
-  Scenario: Drafts are included on the user's Manage Collected Works page
+  Scenario: Drafts are included on the user's Manage Collection Items page
     Given the draft "Sweater Penguins" in the collection "Various Penguins"
     When I go to my collection items page
       And I follow "Approved"

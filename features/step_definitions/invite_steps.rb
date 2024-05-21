@@ -150,7 +150,7 @@ end
 
 Then /^I should see how long I have to activate my account$/ do
   days_to_activate = AdminSetting.first.days_to_purge_unactivated? ? (AdminSetting.first.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
-  step %{I should see "You must confirm your email address within #{days_to_activate} days"}
+  step %{I should see "You must activate your account within #{days_to_activate} days"}
 end
 
 Then /^"([^"]*)" should have "([^"]*)" invitations$/ do |login, invitation_count|

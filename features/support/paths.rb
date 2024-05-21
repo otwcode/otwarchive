@@ -111,6 +111,8 @@ module NavigationHelpers
       user_invitations_path(User.current_user)
     when /my co-creator requests page/
       user_creatorships_path(User.current_user)
+    when /the show page for my latest comment$/
+      comment_path(User.current_user.comments.last)
     when /the gifts page$/
       gifts_path
     when /the gifts page for the recipient (.*)$/
@@ -132,7 +134,7 @@ module NavigationHelpers
     when /^(.*?)(?:'s)? user page$/i
       user_path(id: $1)
     when /^(.*?)(?:'s)? "(.*)" pseud page$/i
-      # TODO: Avoid this in favor of 'the (user|dashboard) page for user "(.*)" with pseud "(.*)', and eventually remove. 
+      # TODO: Avoid this in favor of 'the (user|dashboard) page for user "(.*)" with pseud "(.*)', and eventually remove.
       user_pseud_path(user_id: $1, id: $2)
     when /^the (user|dashboard) page for user "(.*?)" with pseud "(.*?)"$/i
       user_pseud_path(user_id: Regexp.last_match(2), id: Regexp.last_match(3))
@@ -273,6 +275,8 @@ module NavigationHelpers
       tag_wranglers_path
     when /^my wrangling page$/i
       tag_wrangler_path(User.current_user)
+    when /^the wrangling page for "(.*)"$/i
+      tag_wrangler_path(User.find_by(login: Regexp.last_match(1)))
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
     when /^the "(.*)" tag page$/i
@@ -283,8 +287,6 @@ module NavigationHelpers
       edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
     when /^the wrangling tools page$/
       tag_wranglings_path
-    when /^the "(.*)" fandom relationship page$/i
-      fandom_path($1)
     when /^the new external work page$/i
       new_external_work_path
     when /^the external works page$/i
@@ -299,6 +301,10 @@ module NavigationHelpers
     # Admin Pages
     when /^the admin-posts page$/i
       admin_posts_path
+    when /^the "(.*)" admin post page$/i
+      admin_post_path(AdminPost.find_by(title: Regexp.last_match(1)))
+    when /^the unreviewed comments page for the admin post "(.*)"$/i
+      unreviewed_admin_post_comments_path(AdminPost.find_by(title: Regexp.last_match(1)))
     when /^the admin-settings page$/i
       admin_settings_path
     when /^the admin-activities page$/i
@@ -309,7 +315,7 @@ module NavigationHelpers
       admin_users_path
     when /^the bulk email search page$/i
       bulk_search_admin_users_path
-    when /^the abuse administration page for "(.*)"$/i
+    when /^the user administration page for "(.*)"$/i
       admin_user_path(User.find_by(login: $1))
     when /^the new admin password page$/i
       new_admin_password_path

@@ -1,4 +1,4 @@
-@skins
+@set-default-skin
 Feature: Admin manage skins
 
   Scenario: Users should not be able to see the admin skins page

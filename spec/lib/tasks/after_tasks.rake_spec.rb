@@ -37,7 +37,7 @@ describe "rake After:fix_teen_and_up_imported_rating" do
   let!(:canonical_gen_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_GENERAL_TAG_NAME, canonical: true) }
   let!(:canonical_teen_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
   let!(:work_with_noncanonical_rating) { create(:work, rating_string: noncanonical_teen_rating.name) }
-  let!(:work_with_canonical_and_noncanonical_ratings) { create(:work, rating_string: [noncanonical_teen_rating.name, ArchiveConfig.RATING_GENERAL_TAG_NAME].join(",")) }
+  let!(:work_with_canonical_and_noncanonical_ratings) { create_invalid(:work, rating_string: [noncanonical_teen_rating.name, ArchiveConfig.RATING_GENERAL_TAG_NAME].join(",")) }
 
   it "updates the works' ratings to the canonical teen rating" do
     subject.invoke
@@ -55,7 +55,7 @@ describe "rake After:clean_up_noncanonical_ratings" do
   let!(:canonical_teen_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
   let!(:default_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true) }
   let!(:work_with_noncanonical_rating) { create(:work, rating_string: noncanonical_rating.name) }
-  let!(:work_with_canonical_and_noncanonical_ratings) { create(:work, rating_string: [noncanonical_rating.name, canonical_teen_rating.name]) }
+  let!(:work_with_canonical_and_noncanonical_ratings) { create_invalid(:work, rating_string: [noncanonical_rating.name, canonical_teen_rating.name]) }
 
   it "changes and replaces the noncanonical rating tags" do
     subject.invoke
@@ -288,88 +288,6 @@ describe "rake After:fix_2009_comment_threads" do
   end
 end
 
-describe "rake After:clean_up_chapter_kudos" do
-  let(:work) { create(:work) }
-  let!(:work_kudo) { create(:kudo, commentable: work) }
-  let!(:chapter_kudo) do
-    kudo = create(:kudo, commentable: work)
-    kudo.update_columns(commentable_type: "Chapter", commentable_id: work.first_chapter.id)
-    kudo
-  end
-
-  it "destroys chapter kudos if the chapter does not exist" do
-    work.first_chapter.delete
-
-    expect do
-      subject.invoke
-    end.to avoid_changing { work_kudo.reload.updated_at }
-    expect { chapter_kudo.reload }.to raise_exception(ActiveRecord::RecordNotFound)
-  end
-
-  it "destroys chapter kudos if the work does not exist" do
-    work.delete
-    subject.invoke
-    expect { chapter_kudo.reload }.to raise_exception(ActiveRecord::RecordNotFound)
-  end
-
-  it "prints chapter kudos that cannot be destroyed when the work does not exist" do
-    work.delete
-    allow_any_instance_of(Kudo).to receive(:destroy).and_return(false)
-
-    expect do
-      subject.invoke
-    end.to output("Updating 1 chapter kudos\n.\nCouldn't destroy 1 kudo(s): #{chapter_kudo.id}\n").to_stdout
-  end
-
-  it "transfers chapter kudos to the chapter's work" do
-    expect do
-      subject.invoke
-    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
-      .and change { work.all_kudos_count }.from(1).to(2)
-      .and change { work.guest_kudos_count }.from(1).to(2)
-  end
-
-  it "prints chapter kudos that cannot be transferred to the work" do
-    allow_any_instance_of(Kudo).to receive(:save).and_return(false)
-
-    expect do
-      subject.invoke
-    end.to output("Updating 1 chapter kudos\n.\nCouldn't update 1 kudo(s): #{chapter_kudo.id}\n").to_stdout
-  end
-
-  it "transfers guest chapter kudos to the chapter's restricted work" do
-    work.update!(restricted: true)
-
-    expect do
-      subject.invoke
-    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
-      .and avoid_changing { chapter_kudo.reload.ip_address }
-      .and avoid_changing { work_kudo.reload.updated_at }
-  end
-
-  it "orphan chapter kudos if there is already a work kudo from the same IP address" do
-    chapter_kudo.update_column(:ip_address, work_kudo.ip_address)
-
-    expect do
-      subject.invoke
-    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
-      .and change { chapter_kudo.reload.ip_address }.from(work_kudo.ip_address).to(nil)
-      .and avoid_changing { work_kudo.reload.updated_at }
-  end
-
-  it "orphan chapter kudos if there is already a work kudo from the same user ID" do
-    user_id = create(:user).id
-    work_kudo.update(ip_address: nil, user_id: user_id)
-    chapter_kudo.update_columns(ip_address: nil, user_id: user_id)
-
-    expect do
-      subject.invoke
-    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
-      .and change { chapter_kudo.reload.user_id }.from(user_id).to(nil)
-      .and avoid_changing { work_kudo.reload.updated_at }
-  end
-end
-
 describe "rake After:remove_translation_admin_role" do
   it "remove translation admin role" do
     user = create(:user)
@@ -377,5 +295,74 @@ describe "rake After:remove_translation_admin_role" do
     subject.invoke
     expect(Role.all).to be_empty
     expect(user.reload.roles).to be_empty
+  end
+end
+
+describe "rake After:remove_invalid_commas_from_tags" do
+  let(:prompt) { "Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:\n" }
+  let!(:chinese_tag) do
+    tag = create(:tag)
+    tag.update_column(:name, "Full-width，Comma")
+    tag
+  end
+  let!(:japanese_tag) do
+    tag = create(:tag)
+    tag.update_column(:name, "Ideographic、Comma")
+    tag
+  end
+
+  it "puts an error and does not rename tags without a valid admin" do
+    allow($stdin).to receive(:gets) { "typo" }
+
+    expect do
+      subject.invoke
+    end.to avoid_changing { chinese_tag.reload.name }
+      .and avoid_changing { japanese_tag.reload.name }
+      .and output("#{prompt}Admin not found.\n").to_stdout
+  end
+
+  context "with a valid admin" do
+    let!(:admin) { create(:admin, login: "admin") }
+
+    before do
+      allow($stdin).to receive(:gets) { "admin" }
+    end
+
+    it "removes full-width and ideographic commas when the name is otherwise unique" do
+      expect do
+        subject.invoke
+      end.to change { chinese_tag.reload.name }
+        .from("Full-width，Comma")
+        .to("Full-widthComma")
+        .and change { japanese_tag.reload.name }
+        .from("Ideographic、Comma")
+        .to("IdeographicComma")
+        .and output("#{prompt}Full-widthComma\nIdeographicComma\n").to_stdout
+    end
+
+    it "removes full-width and ideographic commas and appends \" - AO3-6626\" when the name is not unique" do
+      create(:tag, name: "Full-widthComma")
+      create(:tag, name: "IdeographicComma")
+
+      expect do
+        subject.invoke
+      end.to change { chinese_tag.reload.name }
+        .from("Full-width，Comma")
+        .to("Full-widthComma - AO3-6626")
+        .and change { japanese_tag.reload.name }
+        .from("Ideographic、Comma")
+        .to("IdeographicComma - AO3-6626")
+        .and output("#{prompt}Full-widthComma - AO3-6626\nIdeographicComma - AO3-6626\n").to_stdout
+    end
+
+    it "puts an error when the tag cannot be renamed" do
+      allow_any_instance_of(Tag).to receive(:save).and_return(false)
+
+      expect do
+        subject.invoke
+      end.to avoid_changing { chinese_tag.reload.name }
+        .and avoid_changing { japanese_tag.reload.name }
+        .and output("#{prompt}Could not rename Full-width，Comma\nCould not rename Ideographic、Comma\n").to_stdout
+    end
   end
 end

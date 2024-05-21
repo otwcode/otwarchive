@@ -33,7 +33,7 @@ class Sanitize
       protocols: {
         "a" => { "href" => ["ftp", "http", "https", "mailto", :relative] },
         "blockquote" => { "cite" => ["http", "https", :relative] },
-        "img" => { "src" => ["http", "https", :relative] },
+        "img" => { "src" => ["http", "https"] },
         "q" => { "cite" => ["http", "https", :relative] }
       },
       
@@ -50,5 +50,22 @@ class Sanitize
     )
 
     CSS_ALLOWED = freeze_config(merge(ARCHIVE, CLASS_ATTRIBUTE))
+
+    # On details elements, force boolean attribute "open" to have
+    # value "open", if it exists
+    OPEN_ATTRIBUTE_TRANSFORMER = lambda do |env|
+      return unless env[:node_name] == "details"
+
+      env[:node]["open"] = "open" if env[:node].has_attribute?("open")
+    end
+
+    # On img elements, convert relative paths to absolute:
+    RELATIVE_IMAGE_PATH_TRANSFORMER = lambda do |env|
+      return unless env[:node_name] == "img" && env[:node]["src"]
+
+      env[:node]["src"] = URI.join(ArchiveConfig.APP_URL, env[:node]["src"])
+    rescue URI::InvalidURIError
+      # do nothing, the sanitizer will handle it
+    end
   end
 end

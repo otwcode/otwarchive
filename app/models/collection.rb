@@ -1,6 +1,5 @@
 class Collection < ApplicationRecord
   include Filterable
-  include UrlHelpers
   include WorksOwner
 
   has_attached_file :icon,
@@ -9,8 +8,6 @@ class Collection < ApplicationRecord
   path: %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
   storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
   s3_protocol: "https",
-  s3_credentials: "#{Rails.root}/config/s3.yml",
-  bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
   default_url: "/images/skins/iconsets/default/icon_collection.png"
 
   validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
@@ -130,7 +127,7 @@ class Collection < ApplicationRecord
   validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
 
-  validates :email, email_veracity: {allow_blank: true}
+  validates :email, email_format: { allow_blank: true }
 
   validates_presence_of :title, message: ts("Please enter a title to be displayed for your collection.")
   validates_length_of :title,
@@ -177,7 +174,7 @@ class Collection < ApplicationRecord
 
   before_validation :cleanup_url
   def cleanup_url
-    self.header_image_url = reformat_url(self.header_image_url) if self.header_image_url
+    self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
   end
 
   # Get only collections with running challenges

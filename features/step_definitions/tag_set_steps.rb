@@ -186,6 +186,14 @@ When /^I view the tag set "([^\"]*)"/ do |tagset|
   visit tag_set_path(tagset)
 end
 
+When "the cache for the tag set {string} is expired" do |tagset|
+  tag_set_id = OwnedTagSet.find_by(title: tagset).tag_set_id
+  ActionController::Base.new.expire_fragment("tag_set_show_#{tag_set_id}")
+  TagSet::TAG_TYPES.each do |type|
+    ActionController::Base.new.expire_fragment("tag_set_show_#{tag_set_id}_#{type}")
+  end
+end
+
 When /^I view associations for a tag set that does not exist/ do
   id = 1
   tagset = OwnedTagSet.find_by(id: id)

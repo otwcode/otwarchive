@@ -34,7 +34,7 @@ protected
   # It can't contain unposted chapters, nor unrevealed creators, even
   # if the creator is the one requesting the download.
   def load_work
-    unless @admin_settings.downloads_enabled?
+    unless AdminSetting.current.downloads_enabled?
       flash[:error] = ts("Sorry, downloads are currently disabled.")
       redirect_back_or_default works_path
       return
