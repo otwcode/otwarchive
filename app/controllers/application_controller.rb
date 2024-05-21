@@ -409,8 +409,17 @@ public
   # Prevents temporarily suspended users from deleting content
   def check_user_not_suspended
     return unless current_user.is_a?(User) && current_user.suspended?
+
+    suspension_end = current_user.suspended_until
+
+    # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+    unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
+
+    # If the stated suspension end date is after the unban threshold we need to advance a day 
+    suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
+    localized_suspension_end = localize(suspension_end.to_date)
     
-    flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+    flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localized_suspension_end).html_safe
     redirect_to current_user
   end
 
