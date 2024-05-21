@@ -13,26 +13,22 @@ class WranglingGuidelinesController < ApplicationController
 
   # GET /wrangling_guidelines/new
   def new
-    @wrangling_guideline = WranglingGuideline.new
-    authorize @wrangling_guideline
+    @wrangling_guideline = authorize WranglingGuideline.new
   end
 
   # GET /wrangling_guidelines/1/edit
   def edit
-    @wrangling_guideline = WranglingGuideline.find(params[:id])
-    authorize @wrangling_guideline
+    @wrangling_guideline = authorize WranglingGuideline.find(params[:id])
   end
 
   # GET /wrangling_guidelines/manage
   def manage
-    authorize WranglingGuideline
-    @wrangling_guidelines = WranglingGuideline.order('position ASC')
+    @wrangling_guidelines = authorize WranglingGuideline.order('position ASC')
   end
 
   # POST /wrangling_guidelines
   def create
-    @wrangling_guideline = WranglingGuideline.new(wrangling_guideline_params)
-    authorize @wrangling_guideline
+    @wrangling_guideline = authorize WranglingGuideline.new(wrangling_guideline_params)
 
     if @wrangling_guideline.save
       flash[:notice] = ts('Wrangling Guideline was successfully created.')
@@ -44,8 +40,7 @@ class WranglingGuidelinesController < ApplicationController
 
   # PUT /wrangling_guidelines/1
   def update
-    @wrangling_guideline = WranglingGuideline.find(params[:id])
-    authorize @wrangling_guideline
+    @wrangling_guideline = authorize WranglingGuideline.find(params[:id])
 
     if @wrangling_guideline.update(wrangling_guideline_params)
       flash[:notice] = ts('Wrangling Guideline was successfully updated.')
@@ -67,8 +62,7 @@ class WranglingGuidelinesController < ApplicationController
 
   # DELETE /wrangling_guidelines/1
   def destroy
-    @wrangling_guideline = WranglingGuideline.find(params[:id])
-    authorize @wrangling_guideline
+    @wrangling_guideline =  authorize WranglingGuideline.find(params[:id])
     @wrangling_guideline.destroy
     flash[:notice] = ts('Wrangling Guideline was successfully deleted.')
     redirect_to(wrangling_guidelines_path)
