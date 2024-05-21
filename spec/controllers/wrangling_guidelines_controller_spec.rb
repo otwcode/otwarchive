@@ -7,14 +7,14 @@ describe WranglingGuidelinesController do
   let(:admin) { create(:admin) }
 
   describe "GET #index" do
-    let!(:guideline_1) { create(:wrangling_guideline, position: 9001) }
-    let!(:guideline_2) { create(:wrangling_guideline, position: 2) }
-    let!(:guideline_3) { create(:wrangling_guideline, position: 7) }
+    let!(:guideline1) { create(:wrangling_guideline, position: 9001) }
+    let!(:guideline2) { create(:wrangling_guideline, position: 2) }
+    let!(:guideline3) { create(:wrangling_guideline, position: 7) }
 
     it "renders" do
       get :index
       expect(response).to render_template("index")
-      expect(assigns(:wrangling_guidelines)).to eq([guideline_2, guideline_3, guideline_1])
+      expect(assigns(:wrangling_guidelines)).to eq([guideline2, guideline3, guideline1])
     end
   end
 
@@ -132,9 +132,9 @@ describe WranglingGuidelinesController do
 
     %w[tag_wrangling superadmin].each do |role| 
       context "when logged in as an admin with #{role} role" do 
-        let!(:guideline_1) { create(:wrangling_guideline, position: 9001) }
-        let!(:guideline_2) { create(:wrangling_guideline, position: 2) }
-        let!(:guideline_3) { create(:wrangling_guideline, position: 7) }
+        let!(:guideline1) { create(:wrangling_guideline, position: 9001) }
+        let!(:guideline2) { create(:wrangling_guideline, position: 2) }
+        let!(:guideline3) { create(:wrangling_guideline, position: 7) }
         let(:admin) { create(:admin, roles: [role]) }
 
         before { fake_login_admin(admin) }
@@ -142,7 +142,7 @@ describe WranglingGuidelinesController do
         it "renders" do
           get :manage
           expect(response).to render_template("manage")
-          expect(assigns(:wrangling_guidelines)).to eq([guideline_2, guideline_3, guideline_1])
+          expect(assigns(:wrangling_guidelines)).to eq([guideline2, guideline3, guideline1])
         end
       end
     end
@@ -266,15 +266,15 @@ describe WranglingGuidelinesController do
 
     %w[board communications translation policy_and_abuse docs support open_doors].each do |role|
       context "when logged in as an admin with #{role} role" do 
-        let!(:guideline_1) { create(:wrangling_guideline, position: 1) }
-        let!(:guideline_2) { create(:wrangling_guideline, position: 2) }
-        let!(:guideline_3) { create(:wrangling_guideline, position: 3) }
+        let!(:guideline1) { create(:wrangling_guideline, position: 1) }
+        let!(:guideline2) { create(:wrangling_guideline, position: 2) }
+        let!(:guideline3) { create(:wrangling_guideline, position: 3) }
         let(:admin) { create(:admin, roles: [role]) }
 
         before { fake_login_admin(admin) }
 
         it "redirects with error" do 
-          expect(WranglingGuideline.order("position ASC")).to eq([guideline_1, guideline_2, guideline_3])
+          expect(WranglingGuideline.order("position ASC")).to eq([guideline1, guideline2, guideline3])
           post :update_positions, params: { wrangling_guidelines: [3, 2, 1] }          
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
@@ -283,19 +283,19 @@ describe WranglingGuidelinesController do
 
     %w[tag_wrangling superadmin].each do |role| 
       context "when logged in as an admin with #{role} role" do 
-        let!(:guideline_1) { create(:wrangling_guideline, position: 1) }
-        let!(:guideline_2) { create(:wrangling_guideline, position: 2) }
-        let!(:guideline_3) { create(:wrangling_guideline, position: 3) }
+        let!(:guideline1) { create(:wrangling_guideline, position: 1) }
+        let!(:guideline2) { create(:wrangling_guideline, position: 2) }
+        let!(:guideline3) { create(:wrangling_guideline, position: 3) }
         let(:admin) { create(:admin, roles: [role]) }
 
         before { fake_login_admin(admin) }
 
         it "updates positions and redirects to index" do
-          expect(WranglingGuideline.order("position ASC")).to eq([guideline_1, guideline_2, guideline_3])
+          expect(WranglingGuideline.order("position ASC")).to eq([guideline1, guideline2, guideline3])
           post :update_positions, params: { wrangling_guidelines: [3, 2, 1] }
   
           expect(assigns(:wrangling_guidelines)).to eq(WranglingGuideline.order("position ASC"))
-          expect(assigns(:wrangling_guidelines)).to eq([guideline_3, guideline_2, guideline_1])
+          expect(assigns(:wrangling_guidelines)).to eq([guideline3, guideline2, guideline1])
           it_redirects_to_with_notice(wrangling_guidelines_path, "Wrangling Guidelines order was successfully updated.")
         end
   
