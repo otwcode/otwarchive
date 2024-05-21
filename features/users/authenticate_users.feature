@@ -92,10 +92,7 @@ Feature: User Authentication
         | login | email           | password |
         | sam   | sam@example.com | password |
       And all emails have been delivered
-    When I am on the login page
-      And I follow "Reset password"
-      And I fill in "Email address or user name" with "sam@example.com"
-      And I press "Reset Password"
+    When I request a password reset for "sam@example.com"
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
     When I start a new session
@@ -112,10 +109,7 @@ Feature: User Authentication
         | login | password |
         | sam   | password |
       And all emails have been delivered
-    When I am on the login page
-      And I follow "Reset password"
-      And I fill in "Email address or user name" with "sam"
-      And I press "Reset Password"
+    When I request a password reset for "sam"
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
     When it is currently 2 weeks from now
@@ -129,6 +123,26 @@ Feature: User Authentication
       And I should see "Log In"
       And I should not see "Your password has been changed"
       And I should not see "Hi, sam!"
+
+  Scenario: Forgot password, with enough attempts to trigger password reset cooldown
+    Given I have no users
+      And the following activated user exists
+        | login | password |
+        | sam   | password |
+      And all emails have been delivered
+    When I request a password reset for "sam"
+      And I request a password reset for "sam"
+      And I request a password reset for "sam"
+    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 0 more times."
+      And 3 emails should be delivered
+    When all emails have been delivered
+      And I request a password reset for "sam"
+    Then I should see "You cannot reset your password at this time. Please try again after"
+      And 0 emails should be delivered
+    When it is currently 12 hours from now
+      And I request a password reset for "sam"
+    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 2 more times."
+      And 1 email should be delivered
 
   Scenario: User is locked out
     Given I have no users
@@ -249,3 +263,21 @@ Feature: User Authentication
       | role                   |
       | is a protected user    |
       | has the no resets role |
+
+  Scenario: Admin cannot log in or reset password as ordinary user.
+    Given the following admin exists
+      | login | password      |
+      | admin | adminpassword |
+    When I go to the login page
+      And I fill in "User name or email" with "admin"
+      And I fill in "Password" with "adminpassword"
+      And I press "Log In"
+    Then I should not see "Successfully logged in"
+      And I should see "The password or user name you entered doesn't match our records."
+    When I am logged in as an admin
+      And I go to the new user password page
+    Then I should be on the homepage
+      And I should see "Please log out of your admin account first!"
+    When I go to the edit user password page
+    Then I should be on the homepage
+      And I should see "Please log out of your admin account first!"

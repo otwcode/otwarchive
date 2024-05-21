@@ -2,4 +2,3 @@ coverage
 public/**/*.min.js
 public/javascripts/bootstrap
 public/javascripts/tinymce
-public/system/dewplayer

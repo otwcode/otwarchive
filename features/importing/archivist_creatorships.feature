@@ -32,6 +32,8 @@ Feature: Special co-creator behavior for archivists
       And I post the work "Imported"
     When a chapter is set up for "Imported"
       And I try to invite the co-author "allow"
+      # Expire byline cache
+      And it is currently 1 second from now
       And I press "Post"
     Then I should see "allow, archivist" within ".byline"
       And 1 email should be delivered to "allow"
@@ -44,6 +46,8 @@ Feature: Special co-creator behavior for archivists
       And I post the work "Imported"
     When a chapter is set up for "Imported"
       And I try to invite the co-author "disallow"
+      # Expire byline cache
+      And it is currently 1 second from now
       And I press "Post"
     Then I should see "archivist, disallow" within ".byline"
       And 1 email should be delivered to "disallow"

@@ -19,3 +19,4 @@ admin_setting_3:
   creation_requires_invite: false
   downloads_enabled: true
   hide_spam: false
+  guest_comments_off: false

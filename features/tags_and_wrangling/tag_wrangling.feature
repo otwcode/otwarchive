@@ -330,6 +330,8 @@ Feature: Tag wrangling
     When I edit the tag "Child"
       And I check the 1st checkbox with id matching "MetaTag"
       And I fill in "tag_meta_tag_string" with "Grandparent"
+      # Ensure a new cache key will be used
+      And it is currently 1 second from now
       And I press "Save changes"
     Then I should see "Tag was updated"
       And I should see "Grandparent" within "#parent_MetaTag_associations_to_remove_checkboxes"
@@ -353,3 +355,13 @@ Feature: Tag wrangling
     Then I should see "Youngest"
       But I should not see "Oldest"
       And I should not see "Middle"
+
+  Scenario: No call to Redis when no action is taken
+    Given the tag wrangling setup
+      And I am logged in as a tag wrangler
+    Then no tag is scheduled for count update from now on
+    When I go to my wrangling page
+    Then I should see "Wrangling Home"
+      And I should see "Characters by fandom (2)"
+    When I follow "Characters by fandom (2)"
+    Then I should see "Mass Wrangle New/Unwrangled Tags"

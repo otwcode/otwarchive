@@ -1,8 +1,5 @@
 @javascript
 Feature: Hit Counts
-  Background:
-    Given I limit myself to the Archive
-
   # Throughout these tests, we use the "all hit count information is reset"
   # step because logging in/logging out may result in the user being redirected
   # to the page that the user was just on, i.e. the work whose hit count we're

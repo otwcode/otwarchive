@@ -15,8 +15,13 @@ class Block < ApplicationRecord
     errors.add(:blocked, :official) if blocked.official
   end
 
+  validate :check_block_limit
+  def check_block_limit
+    errors.add(:blocked, :limit) if blocker.blocked_users.count >= ArchiveConfig.MAX_BLOCKED_USERS
+  end
+
   def blocked_byline=(byline)
-    pseuds = Pseud.parse_byline(byline, assume_matching_login: true)
-    self.blocked = pseuds.first.user unless pseuds.empty?
+    pseud = Pseud.parse_byline(byline)
+    self.blocked = pseud.user unless pseud.nil?
   end
 end

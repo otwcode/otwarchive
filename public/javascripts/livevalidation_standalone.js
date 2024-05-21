@@ -119,6 +119,7 @@ LiveValidation.prototype = {
       	    this.element.onblur = function(e){ self.doOnBlur(e); return self.oldOnBlur.call(this, e); }
         }
       }
+      this.validate();
     },
 	
 	/**
@@ -210,7 +211,6 @@ LiveValidation.prototype = {
      */
     doOnFocus: function(e){
       this.focused = true;
-      this.removeMessageAndFieldClass();
     },
     
     /**
@@ -313,18 +313,17 @@ LiveValidation.prototype = {
      * @return {Boolean} - whether the all the validations passed or if one failed
      */
     validate: function(){
-      if(!this.element.disabled){
-		var isValid = this.doValidations();
-		if(isValid){
-			this.onValid();
-			return true;
-		}else {
-			this.onInvalid();
-			return false;
-		}
-	  }else{
-      return true;
-    }
+      if (this.element.disabled) return true;
+
+      var isValid = this.doValidations();
+      if (isValid) {
+        this.onValid();
+        if (typeof jQuery != "undefined") enableSubmit();
+        return true;
+      } else {
+        this.onInvalid();
+        return false;
+      }
     },
 	
  /**
@@ -364,6 +363,8 @@ LiveValidation.prototype = {
         var span = document.createElement('span');
     	var textNode = document.createTextNode(this.message);
       	span.appendChild(textNode);
+        span.role = "alert";
+        span.id = this.element.id + "_" + this.messageClass;
         return span;
     },
     
@@ -374,16 +375,13 @@ LiveValidation.prototype = {
      */
     insertMessage: function(elementToInsert){
       	this.removeMessage();
-      	if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value == ''))
-    	  || this.element.value != '' ){
-            var className = this.validationFailed ? this.invalidClass : this.validClass;
-    	  	elementToInsert.className += ' ' + this.messageClass + ' ' + className;
-            if(this.insertAfterWhatNode.nextSibling){
-    		  		this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
-    		}else{
-    			    this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
-    	    }
-    	}
+        var className = this.validationFailed ? this.invalidClass : this.validClass;
+        elementToInsert.className += ' ' + this.messageClass + ' ' + className;
+        if(this.insertAfterWhatNode.nextSibling){
+            this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
+        } else {
+            this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
+        }
     },
     
     
@@ -394,9 +392,13 @@ LiveValidation.prototype = {
         this.removeFieldClass();
         if(!this.validationFailed){
             if(this.displayMessageWhenEmpty || this.element.value != ''){
+                this.element.setAttribute("aria-invalid", false);
+                this.element.removeAttribute("aria-describedby");
                 if(this.element.className.indexOf(this.validFieldClass) == -1) this.element.className += ' ' + this.validFieldClass;
             }
-        }else{
+        } else {
+            this.element.setAttribute("aria-invalid", true);
+            this.element.setAttribute("aria-describedby", this.element.id + "_" + this.messageClass);
             if(this.element.className.indexOf(this.invalidFieldClass) == -1) this.element.className += ' ' + this.invalidFieldClass;
         }
     },
@@ -490,6 +492,10 @@ LiveValidationForm.prototype = {
    	  // AO3: don't freeze the form if the user has clicked on the 'cancel' button -elz, 3/2/09, Enigel 3/7/11
       var buttonClicked = document.activeElement || this.explicitOriginalTarget;  
       if (buttonClicked.name == 'cancel_button') ret = true;
+      else if (!ret) {
+        scrollToErrorIfFound();
+        enableSubmit();
+      }
       return ret;
     }
   },
@@ -898,4 +904,21 @@ var Validate = {
     	this.name = 'ValidationError';
     }
 
+}
+
+function scrollToErrorIfFound() {
+  var errorField = $j(".LV_invalid_field").first();
+  if (errorField.length !== 0) {
+    $j("html, body").animate({
+      scrollTop: errorField.offset().top
+    }, 1000);
+    errorField.focus();
+  }
+}
+
+// Enable submit button if there are no errors
+function enableSubmit() {
+  if ($j(".LV_invalid_field").first().length === 0) {
+    $j.rails.enableFormElement($j("input[data-disable-with]"));
+  }
 }

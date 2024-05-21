@@ -8,7 +8,7 @@ class UrlFormatValidator < ActiveModel::EachValidator
     # http (optional s) :// domain . tld (optional port) / anything
     regexp = /^https?:\/\/[_a-z\d\-]+\.[._a-z\d\-]+(:\d+)?\/?.+/i
     unless value.match regexp
-      record.errors[attribute] << (options[:message] || "does not appear to be a valid URL.")
+      record.errors.add(attribute, options[:message] || "does not appear to be a valid URL.")
     end
   end
 end

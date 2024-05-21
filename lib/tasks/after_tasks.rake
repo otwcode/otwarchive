@@ -223,43 +223,36 @@ namespace :After do
     end
   end
 
-  desc "Convert remaining chapter kudos into work kudos"
-  task(clean_up_chapter_kudos: :environment) do
-    kudos = Kudo.where(commentable_type: "Chapter")
-    kudos_count = kudos.count
-
-    puts("Updating #{kudos_count} chapter kudos") && STDOUT.flush
-
-    indestructible_kudo_ids = []
-    unupdatable_kudo_ids = []
-
-    kudos.find_each do |kudo|
-      if kudo.commentable.nil? || kudo.commentable.work.nil?
-        indestructible_kudo_ids << kudo.id unless kudo.destroy
-        print(".") && STDOUT.flush
-        next
-      end
-
-      kudo.commentable = kudo.commentable.work
-      unless kudo.save
-        if kudo.errors.keys == [:ip_address] || kudo.errors.keys == [:user_id]
-          # If it's a uniqueness problem, orphan the kudo and re-save.
-          kudo.ip_address = nil
-          kudo.user_id = nil
-          unupdatable_kudo_ids << kudo.id unless kudo.save
-        else
-          # In other cases, let's be cautious and only log.
-          unupdatable_kudo_ids << kudo.id
-        end
-      end
-      print(".") && STDOUT.flush
-    end
-
-    puts
-    puts("Couldn't destroy #{indestructible_kudo_ids.size} kudo(s): #{indestructible_kudo_ids.join(',')}") if indestructible_kudo_ids.any?
-    puts("Couldn't update #{unupdatable_kudo_ids.size} kudo(s): #{unupdatable_kudo_ids.join(',')}") if unupdatable_kudo_ids.any?
-    STDOUT.flush
+  desc "Remove translation_admin role"
+  task(remove_translation_admin_role: :environment) do
+    r = Role.find_by(name: "translation_admin")
+    r&.destroy
   end
 
+  desc "Remove full-width and ideographic commas from tags"
+  task(remove_invalid_commas_from_tags: :environment) do
+    puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
+    login = $stdin.gets.chomp.strip
+    admin = Admin.find_by(login: login)
+
+    if admin.present?
+      User.current_user = admin
+
+      ["，", "、"].each do |comma|
+        tags = Tag.where("name LIKE ?", "%#{comma}%")
+        tags.each do |tag|
+          new_name = tag.name.gsub(/#{comma}/, "")
+          if tag.update(name: new_name) || tag.update(name: "#{new_name} - AO3-6626")
+            puts(tag.reload.name)
+          else
+            puts("Could not rename #{tag.reload.name}")
+          end
+          $stdout.flush
+        end
+      end
+    else
+      puts("Admin not found.")
+    end
+  end
   # This is the end that you have to put new tasks above.
 end

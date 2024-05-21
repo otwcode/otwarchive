@@ -348,6 +348,7 @@ end
 When /^I bookmark the works "([^\"]*)"$/ do |worklist|
   worklist.split(/, ?/).each do |work_title|
     step %{I bookmark the work "#{work_title}"}
+    step %{it is currently 1 second from now}
   end
 end
 
@@ -371,8 +372,8 @@ end
 
 When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
   step %{I follow "Add To Collection"}
-    fill_in("collection_names", with: "#{collection_name}")
-    click_button("Add")
+  fill_in("collection_names", with: collection_name)
+  click_button("Add")
 end
 
 When /^I rec the current work$/ do

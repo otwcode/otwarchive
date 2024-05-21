@@ -4,18 +4,24 @@ Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
   step %{I start a new session}
 end
 
+Given "there are {int} pseuds per page" do |amount|
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.ITEMS_PER_PAGE = amount.to_i
+  allow(Pseud).to receive(:per_page).and_return(amount)
+end
+
 When /^I change the pseud "([^\"]*)" to "([^\"]*)"/ do |old_pseud, new_pseud|
   step %{I edit the pseud "#{old_pseud}"}
   fill_in("Name", with: new_pseud)
   click_button("Update")
 end
 
-When /^I edit the pseud "([^\"]*)"/ do |pseud| 
+When /^I edit the pseud "([^\"]*)"/ do |pseud|
   p = Pseud.where(name: pseud, user_id: User.current_user.id).first
   visit edit_user_pseud_path(User.current_user, p)
 end
 
-When /^I add the pseud "([^\"]*)"/ do |pseud| 
+When /^I add the pseud "([^\"]*)"/ do |pseud|
   visit new_user_pseud_path(User.current_user)
   fill_in("Name", with: pseud)
   click_button("Create")

@@ -13,7 +13,7 @@ class ExternalAuthorName < ApplicationRecord
     too_short: ts("is too short (minimum is %{min} characters)", min: NAME_LENGTH_MIN),
     too_long: ts("is too long (maximum is %{max} characters)", max: NAME_LENGTH_MAX)
 
-  validates_uniqueness_of :name, scope: :external_author_id, case_sensitive: false
+  validates :name, uniqueness: { scope: :external_author_id }
 
   validates_format_of :name,
     message: ts('can contain letters, numbers, spaces, underscores, @-signs, dots, and dashes.'),

@@ -65,7 +65,7 @@
               <% if bookmarkable.class != ExternalWork %>
                 <%= ts("The creator's summary is added automatically.") %>
               <% end %>
-              <%= allowed_html_instructions(show_list = false) %>
+              <%= allowed_html_instructions %>
             </p>
             <%= f.text_area :bookmarker_notes, rows: 4, id: notes_id, class: "observe_textlength",
                 "aria-describedby" => "notes-field-description" %>

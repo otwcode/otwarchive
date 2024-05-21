@@ -1,6 +1,6 @@
 class SkinParent < ApplicationRecord
-  belongs_to :child_skin, class_name: "Skin", inverse_of: :skin_parents, touch: true
-  belongs_to :parent_skin, class_name: "Skin", inverse_of: :skin_children
+  belongs_to :child_skin, class_name: "Skin", touch: true
+  belongs_to :parent_skin, class_name: "Skin"
 
   validates :position,
     uniqueness: {scope: [:child_skin_id, :parent_skin_id], message: ts("^Position has to be unique for each parent.")},
@@ -10,9 +10,9 @@ class SkinParent < ApplicationRecord
 
   validate :no_site_parent
   def no_site_parent
-    if parent_skin.get_role == "site" && !%w(override site).include?(child_skin.get_role)
-      errors.add(:base, ts("^You can't use %{title} as a parent unless replacing the default archive skin.", title: parent_skin.title))
-    end
+    return unless parent_skin&.get_role == "site" && %w[override site].exclude?(child_skin.get_role)
+
+    errors.add(:base, :site_parent, title: parent_skin.title)
   end
 
   validate :no_circular_skin

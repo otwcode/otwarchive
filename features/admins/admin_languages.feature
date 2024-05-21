@@ -6,14 +6,14 @@ Feature: Manipulate languages on the Archive
 Scenario: An admin can add a language
 
   Given basic languages
-    And I am logged in as an admin
+    And I am logged in as a "translation" admin
   When I go to the languages page
     And I follow "Add a Language"
     And I fill in "Name" with "Klingon"
     And I fill in "Abbreviation" with "tlh"
     And I press "Create Language"
   Then I should see "Language was successfully added."
-    And I should see "The Archive supports these languages"
+    And I should see "Work Languages"
     And I should see "Klingon"
 
 Scenario: Adding Abuse support for a language
@@ -22,7 +22,7 @@ Scenario: Adding Abuse support for a language
     | name        | short |
     | Arabic      | ar    |
     | Espanol     | es    |
-  When I am logged in as an admin
+  When I am logged in as a "translation" admin
     And I go to the languages page
     # Languages are sorted by short name, so the first "Edit" is for Arabic
     And I follow "Edit"
@@ -39,7 +39,7 @@ Scenario: Adding a language to the Support form
       | name     | short |
       | Sindarin | sj    |
       | Klingon  | tlh   |
-  When I am logged in as an admin
+  When I am logged in as a "translation" admin
     And I go to the languages page
     # Languages are sorted by short name, so the first "Edit" is for Sindarin
     And I follow "Edit"

@@ -20,7 +20,7 @@
     <% inspired_by = get_inspired_by(@work) %>
     <% if !@work.endnotes.blank? || !@work.serial_works.blank? || !inspired_by.empty? %>
     <!--afterword-->
-    <div class="afterword preface group" role="complementary">
+    <div class="afterword preface group">
       <% unless @work.endnotes.blank? %>
         <%= render "works/work_endnotes" %>
       <% end %>

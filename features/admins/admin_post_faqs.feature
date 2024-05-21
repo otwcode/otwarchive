@@ -29,7 +29,7 @@ Feature: Admin Actions to Post FAQs
 
   Scenario: Post a translated FAQ for a locale, then change the locale's code.
     Given basic languages
-      And I am logged in as an admin
+      And I am logged in as a "translation" admin
 
     # Post "en" FAQ
     When I go to the archive_faqs page

@@ -1,4 +1,4 @@
-begin
+Rails.application.config.after_initialize do
   # If we have no database, fall through to rescue
   ActiveRecord::Base.connection
   AdminSetting.default if AdminSetting.table_exists?

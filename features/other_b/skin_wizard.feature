@@ -1,4 +1,4 @@
-@skins
+@set-default-skin
 Feature: Skin wizard
 
   Scenario: User should be able to toggle between the wizard and the form
@@ -11,6 +11,23 @@ Feature: Skin wizard
   When I follow "Write Custom CSS"
   Then I should see "Create New Skin"
     And I should see "CSS"
+
+  @javascript
+  Scenario: User can add a parent skin using the wizard
+  Given I am logged in
+    And I create the skin "Dad"
+  When I go to the new skin page
+    And I follow "Use Wizard"
+  Then I should see "Site Skin Wizard"
+    And I should see "Parent Skins"
+  When I fill in "Title" with "Child"
+    And I follow "Add parent skin"
+    And it is currently 1 second from now
+  Then I should see a parent skin text field
+  When I enter "Dad" in the "skin_skin_parents_attributes_1_parent_skin_title_autocomplete" autocomplete field
+    And I press "Submit"
+  Then I should see "Parent Skins"
+    And I should see "Dad"
 
   Scenario: Users should be able to create and use a wizard skin to adjust work margins,
   and they should be able to edit the skin while they are using it
