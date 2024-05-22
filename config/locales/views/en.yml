@@ -427,6 +427,22 @@ en:
         notice:
           unreviewed_by_collection: Works and bookmarks listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection.
         page_heading: Items by %{username} in Collections
+  collections:
+    sidebar:
+      bookmarks: Bookmarked Items (%{count})
+      challenge_settings: Challenge Settings
+      collection_settings: Collection Settings
+      dashboard: Dashboard
+      fandoms: Fandoms (%{count})
+      faq: FAQ
+      manage_items: Manage Items
+      parent_collection: Parent Collection
+      people: People
+      profile: Profile
+      rules: Rules
+      subcollections: Subcollections (%{count})
+      tags: Tags
+      works: Works (%{count})
   comments:
     comment_form:
       anonymous_creator: Anonymous Creator
