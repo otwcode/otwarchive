@@ -101,3 +101,8 @@ en:
           one: You may reset your password %{count} more time.
           other: You may reset your password %{count} more times.
         user_not_found: We couldn't find an account with that email address or username. Please try again.
+  wrangling_guidelines:
+    create: Wrangling Guideline was successfully created.
+    delete: Wrangling Guideline was successfully deleted.
+    reorder: Wrangling Guidelines order was successfully updated.
+    update: Wrangling Guideline was successfully updated.

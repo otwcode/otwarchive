@@ -31,7 +31,7 @@ class WranglingGuidelinesController < ApplicationController
     @wrangling_guideline = authorize WranglingGuideline.new(wrangling_guideline_params)
 
     if @wrangling_guideline.save
-      flash[:notice] = ts("Wrangling Guideline was successfully created.")
+      flash[:notice] = t("wrangling_guidelines.create")
       redirect_to(@wrangling_guideline)
     else
       render action: "new"
@@ -43,7 +43,7 @@ class WranglingGuidelinesController < ApplicationController
     @wrangling_guideline = authorize WranglingGuideline.find(params[:id])
 
     if @wrangling_guideline.update(wrangling_guideline_params)
-      flash[:notice] = ts("Wrangling Guideline was successfully updated.")
+      flash[:notice] = t("wrangling_guidelines.update")
       redirect_to(@wrangling_guideline)
     else
       render action: "edit"
@@ -55,7 +55,7 @@ class WranglingGuidelinesController < ApplicationController
     authorize WranglingGuideline
     if params[:wrangling_guidelines]
       @wrangling_guidelines = WranglingGuideline.reorder_list(params[:wrangling_guidelines])
-      flash[:notice] = ts("Wrangling Guidelines order was successfully updated.")
+      flash[:notice] = t("wrangling_guidelines.reorder")
     end
     redirect_to(wrangling_guidelines_path)
   end
@@ -64,7 +64,7 @@ class WranglingGuidelinesController < ApplicationController
   def destroy
     @wrangling_guideline = authorize WranglingGuideline.find(params[:id])
     @wrangling_guideline.destroy
-    flash[:notice] = ts("Wrangling Guideline was successfully deleted.")
+    flash[:notice] = t("wrangling_guidelines.delete")
     redirect_to(wrangling_guidelines_path)
   end
 
