@@ -117,6 +117,31 @@ Given /^a set of Spock\/Uhura works for searching$/ do
   step %{all indexing jobs have been run}
 end
 
+Given /^a set of Ed\/Stede works for searching$/ do
+  step %{basic tags}
+
+  # Create a relationship with a syn
+  step %{a canonical relationship "Blackbeard | Edward Teach/Stede Bonnet"}
+  step %{a synonym "Ed/Stede" of the tag "Blackbeard | Edward Teach/Stede Bonnet"}
+
+  # Create a work for each tag or set of tags (all are otp: true)
+  ["Ed/Stede",
+   "Blackbeard | Edward Teach/Stede Bonnet",
+   "Blackbeard | Edward Teach/Stede Bonnet, Ed/Stede"].each do |relationship|
+    FactoryBot.create(:work, relationship_string: relationship)
+  end
+
+  # Create a work with no relationship tag (an otp: false work)
+  FactoryBot.create(:work, title: "The Work Without a Relationship")
+
+  # Create a work with two unconnected relationship tags (an otp: false work)
+  FactoryBot.create(:work,
+    title: "The Work With Multiple Ships",
+    relationship_string: "Ed/Stede, Ed/Izzy")
+
+  step %{all indexing jobs have been run}
+end
+
 Given /^a set of works with various categories for searching$/ do
   step %{basic tags}
 
