@@ -23,7 +23,7 @@ describe WorkIndexer, work_search: true do
     end
 
     context "with multiple works in a batch", :n_plus_one do
-      populate { |n| create_list(:work, n) }
+      populate { |n| create_list(:work, n, relationship_string: "a/b,c/d") }
 
       it "generates a constant number of database queries" do
         expect do

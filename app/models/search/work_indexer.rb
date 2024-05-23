@@ -15,9 +15,8 @@ class WorkIndexer < Indexer
       :users,
       fandoms: { meta_tags: :meta_tags, merger: { meta_tags: :meta_tags } },
       pseuds: :user,
-      relationships: :merger,
       serial_works: :series
-    )
+    ).includes(relationships: :merger)
   end
 
   def self.index_all(options = {})
