@@ -117,7 +117,7 @@ Given /^a set of Spock\/Uhura works for searching$/ do
   step %{all indexing jobs have been run}
 end
 
-Given /^a set of Ed\/Stede works for searching$/ do
+Given "a set of Ed Stede works for searching" do
   step %{basic tags}
 
   # Create a relationship with a syn
@@ -136,8 +136,8 @@ Given /^a set of Ed\/Stede works for searching$/ do
 
   # Create a work with two unconnected relationship tags (an otp: false work)
   FactoryBot.create(:work,
-    title: "The Work With Multiple Ships",
-    relationship_string: "Ed/Stede, Ed/Izzy")
+                    title: "The Work With Multiple Ships",
+                    relationship_string: "Ed/Stede, Ed/Izzy")
 
   step %{all indexing jobs have been run}
 end
