@@ -52,19 +52,12 @@ class Skin < ApplicationRecord
     attachable.variant(:standard, resize_to_fill: [100, nil])
   end
 
-  validate :check_icon_properties
-  def check_icon_properties
-    return unless icon.attached?
-
-    # i18n-tasks-use t("errors.attributes.icon.invalid_format")
-    errors.add(:icon, :invalid_format) unless %r{image/\S+}.match?(icon.content_type)
-
-    size_limit_kb = 500
-    # i18n-tasks-use t("errors.attributes.icon.too_large")
-    errors.add(:icon, :too_large, size_limit_kb: size_limit_kb) unless icon.blob.byte_size < size_limit_kb.kilobytes
-
-    icon.purge if errors[:icon].any?
-  end
+  # i18n-tasks-use t("errors.attributes.icon.invalid_format")
+  # i18n-tasks-use t("errors.attributes.icon.too_large")
+  validates :icon, attachment: {
+    allowed_formats: %r{image/\S+},
+    maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
+  }
 
   after_save :skin_invalidate_cache
   def skin_invalidate_cache

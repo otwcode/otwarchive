@@ -7,20 +7,12 @@ class Pseud < ApplicationRecord
     attachable.variant(:standard, resize_to_fill: [100, nil])
   end
 
-  validate :check_icon_properties
-  def check_icon_properties
-    return unless icon.attached?
-
-    allowed_formats = %w[image/gif image/jpeg image/png]
-    # i18n-tasks-use t("errors.attributes.icon.invalid_format")
-    errors.add(:icon, :invalid_format) unless allowed_formats.include?(icon.content_type)
-
-    size_limit_kb = 500
-    # i18n-tasks-use t("errors.attributes.icon.too_large")
-    errors.add(:icon, :too_large, size_limit_kb: size_limit_kb) unless icon.blob.byte_size < size_limit_kb.kilobytes
-
-    icon.purge if errors[:icon].any?
-  end
+  # i18n-tasks-use t("errors.attributes.icon.invalid_format")
+  # i18n-tasks-use t("errors.attributes.icon.too_large")
+  validates :icon, attachment: {
+    allowed_formats: %w[image/gif image/jpeg image/png],
+    maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
+  }
 
   NAME_LENGTH_MIN = 1
   NAME_LENGTH_MAX = 40

@@ -43,7 +43,11 @@ class User < ApplicationRecord
 
   has_many :favorite_tags, dependent: :destroy
 
-  has_one :default_pseud, -> { where(is_default: true).merge(Pseud.with_attached_icon) }, class_name: "Pseud", inverse_of: :user
+  has_one :default_pseud,
+          -> { where(is_default: true).merge(Pseud.with_attached_icon) },
+          class_name: "Pseud",
+          inverse_of: :user,
+          dependent: :destroy
   delegate :id, to: :default_pseud, prefix: true
 
   has_many :pseuds, dependent: :destroy
