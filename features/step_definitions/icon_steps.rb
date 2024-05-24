@@ -42,7 +42,7 @@ end
 
 Then /^the "([^"]*)" collection should have an icon$/ do |title|
   collection = Collection.find_by(title: title)
-  assert !collection.icon_file_name.blank?
+  assert collection.icon.attached?
 end
 
 Then /^the "([^"]*)" collection should not have an icon$/ do |title|
