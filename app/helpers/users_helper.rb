@@ -21,9 +21,8 @@ module UsersHelper
   end
 
   # Determine which icon to show on user pages
-  def standard_icon(user = nil, pseud = nil)
+  def standard_icon(pseud = nil)
     return pseud.icon.variant(:standard).processed.url if pseud&.icon&.attached?
-    return user.default_pseud.icon.variant(:standard).processed.url if user&.default_pseud&.icon&.attached?
 
     "/images/skins/iconsets/default/icon_user.png"
   end
@@ -32,7 +31,7 @@ module UsersHelper
   def icon_display(user = nil, pseud = nil)
     path = user ? (pseud ? user_pseud_path(pseud.user, pseud) : user_path(user)) : nil
     pseud ||= user.default_pseud if user
-    icon = standard_icon(user, pseud)
+    icon = standard_icon(pseud)
     alt_text = pseud.try(:icon_alt_text) || nil
 
     if path

@@ -12,9 +12,9 @@ class AttachmentValidator < ActiveModel::EachValidator
 
     case allowed_formats
     when Regexp
-      errors.add(attribute, :invalid_format) unless allowed_formats.match?(value.content_type)
+      record.errors.add(attribute, :invalid_format) unless allowed_formats.match?(value.content_type)
     when Array
-      errors.add(attribute, :invalid_format) unless allowed_formats.include?(value.content_type)
+      record.errors.add(attribute, :invalid_format) unless allowed_formats.include?(value.content_type)
     end
 
     record.errors.add(attribute, :too_large, size_limit_kb: size_limit_kb) unless value.blob.byte_size < maximum_size
