@@ -22,9 +22,9 @@ module UsersHelper
 
   # Determine which icon to show on user pages
   def standard_icon(pseud = nil)
-    return pseud.icon.variant(:standard).processed.url if pseud&.icon&.attached?
+    return "/images/skins/iconsets/default/icon_user.png" unless pseud&.icon.attached?
 
-    "/images/skins/iconsets/default/icon_user.png"
+    pseud.icon.variant(:standard).processed.url
   end
 
   # no alt text if there isn't specific alt text

@@ -4,7 +4,7 @@ class Pseud < ApplicationRecord
   include Justifiable
 
   has_one_attached :icon do |attachable|
-    attachable.variant(:standard, resize_to_fill: [100, nil])
+    attachable.variant(:standard, resize_to_fill: [100, 100])
   end
 
   # i18n-tasks-use t("errors.attributes.icon.invalid_format")
@@ -414,7 +414,6 @@ class Pseud < ApplicationRecord
 
     self.icon.purge
     self.icon_alt_text = nil
-    self.icon = nil if delete_icon? && !icon.dirty?
   end
 
   #################################

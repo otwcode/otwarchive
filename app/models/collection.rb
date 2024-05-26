@@ -3,7 +3,7 @@ class Collection < ApplicationRecord
   include WorksOwner
 
   has_one_attached :icon do |attachable|
-    attachable.variant(:standard, resize_to_fill: [100, nil])
+    attachable.variant(:standard, resize_to_fill: [100, 100])
   end
 
   # i18n-tasks-use t("errors.attributes.icon.invalid_format")
@@ -419,6 +419,9 @@ class Collection < ApplicationRecord
   alias_method :delete_icon?, :delete_icon
 
   def clear_icon
-    self.icon.purge if delete_icon?
+    return unless delete_icon?
+
+    self.icon.purge
+    self.icon_alt_text = nil
   end
 end

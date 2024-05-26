@@ -66,7 +66,7 @@
         <ul class="notes">
           <% unless @collection.new_record? %>
             <li>
-              <%= image_tag(standard_icon_url(@collection), size: "100x100", alt: @collection.icon_alt_text, skip_pipeline: true) %>
+              <%= collection_icon_display(@collection) %>
               <%= ts("This is the collection's icon.") %>
             </li>
           <% end %>
