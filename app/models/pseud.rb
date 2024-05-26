@@ -4,7 +4,7 @@ class Pseud < ApplicationRecord
   include Justifiable
 
   has_one_attached :icon do |attachable|
-    attachable.variant(:standard, resize_to_fit: [100, 100])
+    attachable.variant(:standard, resize_to_limit: [100, 100])
   end
 
   # i18n-tasks-use t("errors.attributes.icon.invalid_format")
