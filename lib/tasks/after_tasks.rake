@@ -233,7 +233,7 @@ namespace :After do
       # Collection icons are co-mingled in production and staging...
       icon_url = "https://s3.amazonaws.com/otw-ao3-icons/collections/icons/#{collection.id}/#{image_original}"
       collection.icon.attach(io: URI.parse(icon_url).open,
-                             filename: image,
+                             filename: image_original,
                              content_type: collection.icon_content_type)
 
       print "." && $stdout.flush if collection.id.modulo(100).zero?
@@ -257,7 +257,7 @@ namespace :After do
                    "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
                  end
       pseud.icon.attach(io: URI.parse(icon_url).open,
-                        filename: image,
+                        filename: image_original,
                         content_type: pseud.icon_content_type)
 
       print "." && $stdout.flush if pseud.id.modulo(100).zero?
@@ -278,7 +278,7 @@ namespace :After do
       # Skin icons are co-mingled in production and staging...
       icon_url = "https://s3.amazonaws.com/otw-ao3-icons/skins/icons/#{skin.id}/#{image_original}"
       skin.icon.attach(io: URI.parse(icon_url).open,
-                       filename: image,
+                       filename: image_original,
                        content_type: skin.icon_content_type)
 
       print "." && $stdout.flush if skin.id.modulo(100).zero?
