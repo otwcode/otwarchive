@@ -22,7 +22,7 @@ module UsersHelper
 
   # Determine which icon to show on user pages
   def standard_icon(pseud = nil)
-    return "/images/skins/iconsets/default/icon_user.png" unless pseud&.icon.attached?
+    return "/images/skins/iconsets/default/icon_user.png" unless pseud&.icon&.attached?
 
     pseud.icon.variant(:standard).processed.url
   end

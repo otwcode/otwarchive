@@ -9,7 +9,7 @@ module SkinsHelper
 
   # we only actually display an image if there's a file
   def skin_preview_display(skin)
-    return unless skin&.icon.attached?
+    return unless skin&.icon&.attached?
 
     link_to image_tag(skin.icon.variant(:standard).processed.url,
                       alt: skin.icon_alt_text,
