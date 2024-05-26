@@ -3,7 +3,7 @@ class Collection < ApplicationRecord
   include WorksOwner
 
   has_one_attached :icon do |attachable|
-    attachable.variant(:standard, resize_to_fill: [100, 100])
+    attachable.variant(:standard, resize_to_fit: [100, 100])
   end
 
   # i18n-tasks-use t("errors.attributes.icon.invalid_format")
