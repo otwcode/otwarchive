@@ -76,7 +76,7 @@
         </ul>
         <% if @collection.icon.attached? %>
           <%= collection_form.check_box :delete_icon, {:checked => false} %>
-          <%= collection_form.label :delete_icon, ts("Delete collection icon and revert to our default") %>
+          <%= collection_form.label :delete_icon, t(".icon.delete") %>
         <% end %>
       </dd>
 

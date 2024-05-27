@@ -414,6 +414,7 @@ class Pseud < ApplicationRecord
 
     self.icon.purge
     self.icon_alt_text = nil
+    self.icon_comment_text = nil
   end
 
   #################################
