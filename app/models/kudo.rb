@@ -1,22 +1,50 @@
 class Kudo < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Responder
+
+  VALID_COMMENTABLE_TYPES = %w[Work].freeze
 
   belongs_to :user
   belongs_to :commentable, polymorphic: true
 
-  validate :cannot_be_author
-  validate :guest_cannot_kudos_restricted_work
+  validates :commentable_type, inclusion: { in: VALID_COMMENTABLE_TYPES }
+  validates :commentable,
+            presence: true,
+            if: proc { |c| VALID_COMMENTABLE_TYPES.include?(c.commentable_type) }
 
-  validates_uniqueness_of :ip_address,
-                          scope: [:commentable_id, :commentable_type],
-                          message: ts("^You have already left kudos here. :)"),
-                          if: proc { |kudo| !kudo.ip_address.blank? }
+  validates :user, not_blocked: { by: :commentable, on: :create }
 
-  validates_uniqueness_of :user_id,
-                          scope: [:commentable_id, :commentable_type],
-                          message: ts("^You have already left kudos here. :)"),
-                          if: proc { |kudo| !kudo.user.nil? }
+  validate :cannot_be_author, on: :create
+  def cannot_be_author
+    return unless user&.is_author_of?(commentable)
+
+    errors.add(:commentable, :author_on_own_work)
+  end
+
+  validate :guest_cannot_kudos_restricted_work, on: :create
+  def guest_cannot_kudos_restricted_work
+    return unless user.blank? && commentable.is_a?(Work) && commentable.restricted?
+
+    errors.add(:commentable, :guest_on_restricted)
+  end
+
+  validate :cannot_be_suspended, on: :create
+  def cannot_be_suspended
+    return unless user&.banned || user&.suspended
+
+    if user.banned
+      errors.add(:commentable, :user_is_banned)
+    else
+      errors.add(:commentable, :user_is_suspended)
+    end
+  end
+
+  validates :ip_address,
+            uniqueness: { scope: [:commentable_id, :commentable_type] },
+            if: proc { |kudo| kudo.ip_address.present? }
+
+  validates :user_id,
+            uniqueness: { scope: [:commentable_id, :commentable_type] },
+            if: proc { |kudo| kudo.user.present? }
 
   scope :with_user, -> { where("user_id IS NOT NULL") }
   scope :by_guest, -> { where("user_id IS NULL") }
@@ -33,6 +61,19 @@ class Kudo < ApplicationRecord
     end
   end
 
+  after_save :expire_caches
+  def expire_caches
+    if commentable_type == "Work"
+      # Expire the work's cached total kudos count.
+      Rails.cache.delete("works/#{commentable_id}/kudos_count-v2")
+      # If it's a guest kudo, also expire the work's cached guest kudos count.
+      Rails.cache.delete("works/#{commentable_id}/guest_kudos_count-v2") if user_id.nil?
+    end
+
+    # Expire the cached kudos section under the work.
+    ActionController::Base.new.expire_fragment("#{commentable.cache_key}/kudos-v4")
+  end
+
   def notify_user_by_email?(user)
     user.nil? ? false : ( user.is_a?(Admin) ? true :
       !(user == User.orphan_account || user.preference.kudos_emails_off?) )
@@ -46,51 +87,5 @@ class Kudo < ApplicationRecord
     else
       "guest"
     end
-  end
-
-  def dup?
-    errors.values.to_s.match /already left kudos/
-  end
-
-  def cannot_be_author
-    return unless user
-
-    commentable = nil
-    if commentable_type == "Work"
-      commentable = Work.find_by(id: commentable_id)
-    elsif commentable_type == "Chapter"
-      commentable = Chapter.find_by(id: commentable_id).work
-    end
-
-    if commentable.nil?
-      errors.add(:no_commentable,
-                 ts("^What did you want to leave kudos on?"))
-    elsif user.is_author_of?(commentable)
-      errors.add(:cannot_be_author,
-                 ts("^You can't leave kudos on your own work."))
-    end
-  end
-
-  def guest_cannot_kudos_restricted_work
-    return if user
-
-    commentable = nil
-    if commentable_type == "Work"
-      commentable = Work.find_by(id: commentable_id)
-    elsif commentable_type == "Chapter"
-      commentable = Chapter.find_by(id: commentable_id).work
-    end
-
-    if commentable.nil?
-      errors.add(:no_commentable,
-                 ts("^What did you want to leave kudos on?"))
-    elsif commentable.restricted?
-      errors.add(:guest_on_restricted,
-                 ts("^You can't leave guest kudos on a restricted work."))
-    end
-  end
-
-  def creator_of_work?
-    errors.values.to_s.match /your own work/
   end
 end

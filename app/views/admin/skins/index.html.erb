@@ -34,6 +34,7 @@
     </thead>
       <tbody>
       <% @unapproved_skins.each_with_index do |skin, i| %>
+        <% disabled = !policy(skin).update? %>
         <tr>
           <th scope="row">
             <% skin_name = skin.title.downcase.gsub(/ +/, '_') %>
@@ -45,12 +46,12 @@
           <td>
             <%= skin.description.blank? ? ts("(No Description Provided)") : raw(strip_images(sanitize_field(skin, :description))) %>
           </td>
-          <td><%= text_field_tag "skin_admin_note[#{skin.id}]", h(skin.admin_note) %></td>
+          <td><%= text_field_tag "skin_admin_note[#{skin.id}]", h(skin.admin_note), disabled: disabled %></td>
           <td>
-            <%= check_box_tag "make_official[]", skin.id, false, :id => "make_official_#{skin_name}" %>
+            <%= check_box_tag "make_official[]", skin.id, false, id: "make_official_#{skin_name}", disabled: disabled %>
           </td>
           <td>
-            <%= check_box_tag "make_rejected[]", skin.id, false, :id => "make_rejected_#{skin_name}" %>
+            <%= check_box_tag "make_rejected[]", skin.id, false, id: "make_rejected_#{skin_name}", disabled: disabled %>
           </td>
         </tr>
       <% end %>

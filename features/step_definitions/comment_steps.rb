@@ -14,6 +14,93 @@ Given /^I have the receive no comment notifications setup$/ do
   user.preference.save
 end
 
+ParameterType(
+  name: "commentable",
+  regexp: /the (work|admin post|tag) "([^"]*)"/,
+  type: ActsAsCommentable::Commentable,
+  transformer: lambda { |type, title|
+    case type
+    when "work"
+      Work.find_by(title: title)
+    when "admin post"
+      AdminPost.find_by(title: title)
+    when "tag"
+      Tag.find_by(name: title)
+    end
+  }
+)
+
+Given "{commentable} with guest comments enabled" do |commentable|
+  assert !commentable.is_a?(Tag)
+  commentable.update_attribute(:comment_permissions, :enable_all)
+end
+
+Given "a guest comment on {commentable}" do |commentable|
+  commentable = Comment.commentable_object(commentable)
+  FactoryBot.create(:comment, :by_guest, commentable: commentable)
+end
+
+Given "a comment {string} by {string} on {commentable}" do |text, user, commentable|
+  user = ensure_user(user)
+  commentable = Comment.commentable_object(commentable)
+  FactoryBot.create(:comment,
+                    pseud: user.default_pseud,
+                    commentable: commentable,
+                    comment_content: text)
+end
+
+Given "a reply {string} by {string} on {commentable}" do |text, user, commentable|
+  user = ensure_user(user)
+  comment = commentable.comments.first
+  FactoryBot.create(:comment,
+                    pseud: user.default_pseud,
+                    commentable: comment,
+                    comment_content: text)
+end
+
+Given "image safety mode is enabled for comments on a {string}" do |parent_type|
+  allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(parent_type)
+end
+
+Given "image safety mode is disabled for comments" do
+  allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
+end
+
+Given "the setup for testing image safety mode on the admin post {string}" do |title|
+  step %{the admin post "#{title}"}
+  step %{a comment "plain text" by "commentrecip" on the admin post "#{title}"}
+  step %{I am logged in as "commenter"}
+  visit comment_path(Comment.last)
+  step %{I follow "Reply"}
+  with_scope(".odd") do
+    # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
+    fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
+    click_button("Comment")
+  end
+  step %{I am logged in as "commentrecip"}
+end
+
+Given "the setup for testing image safety mode on the tag {string}" do |name|
+  step %{the tag wrangler "commentrecip" with password "password" is wrangler of "#{name}"}
+  step %{the tag wrangler "commenter" with password "password" is wrangler of "Some Fandom"}
+  step %{I am logged in as "commenter"}
+  visit tag_comments_path(Tag.find_by_name(name))
+  # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
+  fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
+  click_button("Comment")
+  step %{I am logged in as "commentrecip"}
+end
+
+Given "the setup for testing image safety mode on the work {string}" do |title|
+  step %{the work "#{title}" by "commentrecip"}
+  step %{I am logged in as "commenter"}
+  visit work_path(Work.find_by(title: title))
+  # Use HTML that will get cleaned up by the sanitizer so we're sure it runs.
+  fill_in("comment[comment_content]", with: 'OMG! <img src= "https://example.com/image.jpg">')
+  click_button("Comment")
+  step %{I am logged in as "commentrecip"}
+end
+
 # THEN
 
 Then /^the comment's posted date should be nowish$/ do
@@ -48,6 +135,13 @@ When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, 
   fill_in("comment[comment_content]", with: comment_text)
 end
 
+When "I set up the comment {string} on the work {string} with guest comments enabled" do |comment_text, work|
+  work = Work.find_by(title: work)
+  work.update_attribute(:comment_permissions, :enable_all)
+  visit work_path(work)
+  fill_in("comment[comment_content]", with: comment_text)
+end
+
 When /^I attempt to comment on "([^"]*)" with a pseud that is not mine$/ do |work|
   step %{I am logged in as "commenter"}
   step %{I set up the comment "This is a test" on the work "#{work}"}
@@ -73,7 +167,7 @@ end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest(?: with email "([^"]*)")?$/ do |comment_text, work, email|
   step "I start a new session"
-  step "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
+  step %{I set up the comment "#{comment_text}" on the work "#{work}" with guest comments enabled}
   fill_in("Guest name", with: "guest")
   fill_in("Guest email", with: (email || "guest@foo.com"))
   click_button "Comment"
@@ -135,12 +229,7 @@ end
 
 When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|
   with_scope(selector) do
-    fill_in("Comment", with: %/Sed mollis sapien ac massa pulvinar facilisis. Nulla rhoncus neque nisi. Integer sit amet nulla vel orci hendrerit aliquam. Proin vehicula bibendum vulputate. Nullam porttitor, arcu eu mollis accumsan, turpis justo ornare tellus, ac congue lectus purus ut risus. Phasellus feugiat, orci id tempor elementum, sapien nulla dignissim sapien, dictum eleifend nisl erat vitae urna. Cras imperdiet bibendum porttitor. Suspendisse vitae tellus nibh, vel facilisis magna. Quisque nec massa augue. Pellentesque in ipsum lacus. Aenean mauris leo, viverra sit amet fringilla sit amet, volutpat eu risus. Etiam scelerisque, nibh a condimentum eleifend, augue ipsum blandit tortor, lacinia pharetra ante felis eget lorem. Proin tristique dictum placerat. Aenean commodo imperdiet massa et auctor. Phasellus eleifend posuere varius.
-Sed bibendum nisl vel ligula rhoncus at laoreet lorem lacinia. Vivamus est est, euismod vel pretium in, aliquam ac turpis. Integer ac leo sem, vel egestas lacus. Duis id nibh magna, vel adipiscing erat. Aliquam arcu velit, laoreet eget laoreet eget, semper id augue. Nullam volutpat pretium turpis vitae molestie. Ut id nisi eget nibh blandit blandit malesuada et sem. Fusce at accumsan erat. Sed sed adipiscing tortor. Proin vitae eros eget neque dignissim ullamcorper. Vestibulum eleifend nisl sed erat molestie suscipit. Fusce rutrum dignissim diam vel ultricies. Proin nec consequat velit. Aliquam eu nulla urna. Morbi ac orci nisl.
-Vivamus vitae felis erat, a hendrerit nisi. Nullam et nunc sed est laoreet tempus non at nibh. Pellentesque tincidunt, diam eu vestibulum pretium, diam metus volutpat risus, ut mollis augue dolor quis ligula. Fusce in placerat leo. Nullam quis orci dui. Donec ultrices quam ut metus blandit cursus. Quisque lobortis elit sit amet libero mollis quis egestas ipsum faucibus. Curabitur sit amet sollicitudin metus. Vivamus sit amet justo eget felis dictum scelerisque in eu mauris. Vestibulum in diam ligula, et convallis ante. Praesent risus magna, adipiscing in vehicula eu, interdum eu arcu. Duis in nisl libero, nec posuere massa. Vestibulum pretium fermentum dui et dignissim. Mauris at diam sed purus faucibus tristique. Maecenas non orci et augue dignissim tempor. Sed vestibulum condimentum faucibus.
-Morbi nec ullamcorper dolor. In luctus vulputate arcu et egestas. Nullam at pretium enim. Nulla congue tincidunt dignissim. Fusce malesuada odio nec turpis sagittis et accumsan tellus iaculis. Mauris eu libero non diam pretium feugiat quis in mauris. Vestibulum ut facilisis massa. Cras est metus, pulvinar eget ullamcorper in, eleifend id est. Ut ac bibendum elit. Vestibulum quis eros sem. Duis elementum congue lorem, nec semper justo adipiscing vitae. Nam eget velit est, nec varius leo. Quisque aliquet aliquet elit, eu elementum enim lacinia aliquam. Suspendisse laoreet convallis interdum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In quis velit massa. Nullam lectus risus, condimentum ac fringilla eu, pretium sed metus.
-Nunc eget dolor ut nisi laoreet scelerisque. Vestibulum condimentum dignissim leo ut luctus. Aliquam sed sem velit. Nulla justo nulla, molestie cursus mollis eget, ullamcorper aliquet mi. Duis et sem elit, quis pretium diam. Nam consectetur ullamcorper velit, varius vulputate dui ultrices sodales. Sed aliquet laoreet tortor, vitae varius enim ornare vel. Nam ornare dapibus aliquam. Proin faucibus tellus eget nibh lacinia in dignissim odio ultricies. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla aliquet pulvinar turpis vitae malesuada. Mauris porttitor erat in urna bibendum luctus. Vestibulum nec mi eros, nec rutrum ligula. Nunc ac nisl eros, ut adipiscing diam. Integer feugiat justo a purus fermentum sollicitudin. Mauris lacinia venenatis commodo. Nam urna libero, viverra in rhoncus vel, ultricies vitae augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Morbi vitae lacus vitae magna volutpat pharetra rhoncus eget nisi. Proin vehicula, felis nec tempor eleifend, dolor ipsum volutpat dolor, et eleifend nibh libero ac turpis. Donec odio est, sodales nec consectetur vehicula, adipiscing sit amet magna. Suspendisse dapibus tincidunt velit sit amet mollis. Curabitur eget blandit li./)
+    fill_in("Comment", with: "Now, we can devour the gods, together! " * 270)
   end
 end
 
@@ -183,6 +272,14 @@ end
 Then /^the comment on "([^\"]*?)" should not be marked as unreviewed/ do |work|
   w = Work.find_by(title: work)
   assert !w.comments.first.unreviewed?
+end
+
+When "I view {commentable} with comments" do |commentable|
+  if commentable.is_a?(Tag)
+    visit tag_comments_path(commentable)
+  else
+    visit polymorphic_path(commentable, show_comments: true)
+  end
 end
 
 When /^I view the unreviewed comments page for "([^\"]*?)"/ do |work|
@@ -259,4 +356,12 @@ When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
     click_link("Delete")
     click_link("Yes, delete!") # TODO: Fix along with comment deletion.
   end
+end
+
+When "I mark the comment as spam" do
+  click_link("Spam")
+end
+
+When "I confirm I want to mark the comment as spam" do
+  expect(page.accept_alert).to eq("Are you sure you want to mark this as spam?") if @javascript
 end

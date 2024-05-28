@@ -34,7 +34,8 @@ Otwarchive::Application.configure do
 
   # Use a different cache store in production
   config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
-                       { namespace: "ao3-v2", compress: true, pool_size: 5 }
+                       { namespace: "ao3-v#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}",
+                         compress: true, pool_size: 5 }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
@@ -45,6 +46,9 @@ Otwarchive::Application.configure do
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
+
+  # Enable mailer previews.
+  config.action_mailer.show_previews = true
 
   # Enable threaded mode
   # config.threadsafe!
@@ -65,5 +69,14 @@ Otwarchive::Application.configure do
     Bullet.counter_cache_enable = false
   end
 
+  Paperclip::Attachment.default_options[:storage] = :s3
+  Paperclip::Attachment.default_options[:s3_credentials] = { s3_region: ENV["S3_REGION"],
+                                                             bucket: ENV["S3_BUCKET"],
+                                                             access_key_id: ENV["S3_ACCESS_KEY_ID"],
+                                                             secret_access_key: ENV["S3_SECRET_ACCESS_KEY"] }
+
   config.middleware.use Rack::Attack
+
+  # Disable dumping schemas after migrations.
+  config.active_record.dump_schema_after_migration = false
 end

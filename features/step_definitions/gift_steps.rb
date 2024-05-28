@@ -13,6 +13,10 @@ end
 
 Given(/^I have refused the work/) do
   step %{I have given the work to "giftee1"}
+
+  # Delay to force the cache to expire when the gift is refused:
+  step "it is currently 1 second from now"
+
   step %{I am logged in as "giftee1" with password "something"}
   step %{I go to my gifts page}
   step %{I follow "Refuse Gift"}

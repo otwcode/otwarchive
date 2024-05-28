@@ -37,9 +37,12 @@
           <% feedback_comment = inbox_comment.feedback_comment %>
 
           <!-- START of single comment -->
-          <li class="<% if feedback_comment.unreviewed? %>unreviewed <% end %><%= inbox_comment.read? ? 'read' : 'unread' %> comment group" role="article" id="feedback_comment_<%= feedback_comment.id %>">
-
-            <%= render "inbox_comment_contents", feedback_comment: feedback_comment %>
+          <li class="<%= inbox_comment.read? ? 'read' : 'unread' %> <%= css_classes_for_comment(feedback_comment) %>" role="article" id="feedback_comment_<%= feedback_comment.id %>">
+            <% if !can_see_hidden_comment?(feedback_comment) %>
+              <p class="message"><%= ts("(This comment is under review by an admin and is currently unavailable.)") %></p>
+            <% else %>
+              <%= render "inbox_comment_contents", feedback_comment: feedback_comment %>
+            <% end %>
 
             <h5 class="landmark heading"><%= ts("Comment Actions") %></h5>
 
@@ -61,7 +64,7 @@
                 <li class="approve review" id="review_comment_link_<%= feedback_comment.id %>">
                   <%= render 'inbox/approve_button', feedback_comment: feedback_comment, approved_from: "inbox" %>
                 </li>
-              <% elsif !feedback_comment.iced? %>
+              <% elsif can_reply_to_comment?(feedback_comment) %>
                 <li>
                   <%= render 'inbox/reply_button', feedback_comment: feedback_comment %>
                 </li>

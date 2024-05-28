@@ -10,7 +10,7 @@ Feature: Search works by stats
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: hits: 10000-20000"
       And I should see "1 Found"
-      And the 1st result should contain "Hits: 10000"
+      And the 1st result should contain "Hits: 10,000"
     When I follow "Edit Your Search"
     Then the field labeled "Hits" should contain "10000-20000"
 

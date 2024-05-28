@@ -1,5 +1,4 @@
 class OwnedTagSet < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   # Rather than use STI or polymorphic associations, since really what we want to do here
   # is build an extra layer of functionality on top of the generic tag set structure,
   # I've gone with creating a separate model and making it contain a generic tag set
@@ -34,7 +33,7 @@ class OwnedTagSet < ApplicationRecord
   has_many :set_taggables, through: :owned_set_taggings
 
   validates_presence_of :title, message: ts("^Please enter a title for your tag set.")
-  validates_uniqueness_of :title, case_sensitive: false, message: ts('^Sorry, that name is already taken. Try again, please!')
+  validates :title, uniqueness: { message: ts("^Sorry, that name is already taken. Try again, please!") }
   validates_length_of :title,
     minimum: ArchiveConfig.TITLE_MIN,
     too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN)

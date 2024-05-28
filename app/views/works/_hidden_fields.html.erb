@@ -37,6 +37,15 @@
   <%= s.hidden_field :id, value: "#{work_series_value(:id)}" %>
   <%= s.hidden_field :title, value: "#{work_series_value(:title)}" %>
 <% end %>
+
+<%= form.fields_for :parent_work_relationships, @work.parent_work_relationships.select(&:new_record?) do |p| %>
+  <%= p.hidden_field :url %>
+  <%= p.hidden_field :title %>
+  <%= p.hidden_field :author %>
+  <%= p.hidden_field :language_id %>
+  <%= p.hidden_field :translation %>
+<% end %>
+
 <%= form.hidden_field :backdate, :value => "#{@work.backdate}" %>
 <%= form.hidden_field :wip_length, :value => "#{@work.wip_length}" %>
 <%= form.hidden_field :restricted, :value => "#{@work.restricted}" %>

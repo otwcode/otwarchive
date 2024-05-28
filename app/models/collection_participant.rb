@@ -1,6 +1,4 @@
 class CollectionParticipant < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   belongs_to :pseud
   has_one :user, through: :pseud
   belongs_to :collection
@@ -56,5 +54,4 @@ class CollectionParticipant < ApplicationRecord
   def user_allowed_to_promote?(user, role)
     (role == MEMBER || role == NONE) ? self.collection.user_is_maintainer?(user) : self.collection.user_is_owner?(user)
   end
-
 end

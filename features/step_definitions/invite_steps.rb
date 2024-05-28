@@ -91,6 +91,10 @@ Given /^an invitation request for "([^"]*)"$/ do |email|
   click_button("Add me to the list")
 end
 
+Given "there are {int} invite request(s) per page" do |amount|
+  allow(InviteRequest).to receive(:per_page).and_return(amount)
+end
+
 ### WHEN
 
 When /^I use an invitation to sign up$/ do
@@ -127,7 +131,7 @@ end
 When /^I view requests as an admin$/ do
   step %{I am logged in as an admin}
   step %{I follow "Invitations"}
-  step %{I follow "Manage requests"}
+  step %{I follow "Manage Requests"}
 end
 
 When /^an admin grants the request$/ do
@@ -146,10 +150,21 @@ end
 
 Then /^I should see how long I have to activate my account$/ do
   days_to_activate = AdminSetting.first.days_to_purge_unactivated? ? (AdminSetting.first.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
-  step %{I should see "You must confirm your email address within #{days_to_activate} days"}
+  step %{I should see "You must activate your account within #{days_to_activate} days"}
 end
 
 Then /^"([^"]*)" should have "([^"]*)" invitations$/ do |login, invitation_count|
   user = User.find_by(login: login)
   assert user.invitations.count == invitation_count.to_i
+end
+
+Then "the invite queue should list the following:" do |desired|
+  actual = all("table tbody tr").map do |row|
+    {
+      "position" => row.find("td:nth-child(1)").text,
+      "email" => row.find("td:nth-child(2)").text
+    }
+  end
+
+  expect(actual).to eq(desired.hashes)
 end

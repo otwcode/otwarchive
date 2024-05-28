@@ -1,4 +1,4 @@
-@skins
+@set-default-skin
 Feature: Non-public site and work skins
 
   Scenario: A user should be able to create a skin with CSS
@@ -12,7 +12,7 @@ Feature: Non-public site and work skins
     And I should see "text-decoration: blink;"
     And I should see "(No Description Provided)"
     And I should see "by skinner"
-    But I should see "Use"
+    But I should see a button with text "Use"
     And I should see "Delete"
     And I should see "Edit"
     And I should not see "Stop Using"
@@ -32,18 +32,17 @@ Feature: Non-public site and work skins
     And I select "my blinking skin" from "preference_skin_id"
     And I submit
   Then I should see "Your preferences were successfully updated."
-    And I should see "#title {" within "style"
-    And I should see "text-decoration: blink;" within "style"
+    And I should see "#title {" in the page style
+    And I should see "text-decoration: blink;" in the page style
 
   Scenario: A user should be able to select one of their own non-public skins to use in
   their My Skins page
   Given I am logged in as "skinner"
     And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
   Then I should see "my blinking skin"
-    And I should see "Use"
   When I press "Use"
-  Then I should see "#title {" within "style"
-    And I should see "text-decoration: blink;" within "style"
+  Then I should see "#title {" in the page style
+    And I should see "text-decoration: blink;" in the page style
 
   Scenario: Skin titles should be unique
   Given I am logged in as "skinner"
@@ -77,10 +76,10 @@ Feature: Non-public site and work skins
     And I select "Awesome Work Skin" from "work_work_skin_id"
     And I press "Preview"
   Then I should see "Preview"
-    And I should see "color: purple" within "style"
+    And I should see "color: purple" in the page style
   When I press "Post"
   Then I should see "Story With Awesome Skin"
-    And I should see "color: purple" within "style"
+    And I should see "color: purple" in the page style
     And I should see "Hide Creator's Style"
   When I follow "Hide Creator's Style"
   Then I should see "Story With Awesome Skin"
@@ -278,7 +277,7 @@ Feature: Non-public site and work skins
   Then I should see "My Site Skins"
     And I should see "My Work Skins"
 
-  Scenario: User should be able to revert to the default skin from an individual 
+  Scenario: User should be able to revert to the default skin from an individual
   skin's edit page
   Given basic skins
     And I am logged in as "skinner"
@@ -296,7 +295,7 @@ Feature: Non-public site and work skins
       And the skin "Parent Skin" is cached
       And I change my skin to "Child Skin"
     # Only admins can edit cached skins:
-    When I am logged in as an admin
+    When I am logged in as a "superadmin" admin
       And I edit the skin "Parent Skin"
       And I fill in "CSS" with "body { background: cyan; }"
       And I press "Update"
@@ -321,7 +320,7 @@ Feature: Non-public site and work skins
       And the skin "Parent Skin" is cached
       And I change my skin to "Child Skin"
     # Only admins can edit cached skins:
-    When I am logged in as an admin
+    When I am logged in as a "superadmin" admin
       And I edit the skin "Parent Skin"
       And I fill in "CSS" with "body { background: cyan; }"
       And I press "Update"
@@ -337,3 +336,20 @@ Feature: Non-public site and work skins
       And I fill in "CSS" with "body { background: cyan; }"
       And I press "Update"
     Then I should see "background: cyan;"
+
+  @javascript
+  Scenario: User can add a parent skin using the Custom CSS form
+    Given I am logged in
+      And I create the skin "Dad"
+    When I go to the new skin page
+    Then I should see "Advanced"
+    When I follow "Show ↓"
+    Then I should see "Parent Skins"
+    When I fill in "Title" with "Child"
+      And I follow "Add parent skin"
+      And it is currently 1 second from now
+    Then I should see a parent skin text field
+    When I enter "Dad" in the "skin_skin_parents_attributes_1_parent_skin_title_autocomplete" autocomplete field
+      And I press "Submit"
+    Then I should see "Parent Skins"
+      And I should see "Dad"

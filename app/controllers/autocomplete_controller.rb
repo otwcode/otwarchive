@@ -3,8 +3,6 @@ class AutocompleteController < ApplicationController
 
   skip_before_action :store_location
   skip_before_action :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
-  skip_before_action :fetch_admin_settings
-  skip_before_action :set_redirects
   skip_before_action :sanitize_ac_params # can we dare!
 
   #### DO WE NEED THIS AT ALL? IF IT FIRES WITHOUT A TERM AND 500s BECAUSE USER DID SOMETHING WACKY SO WHAT
@@ -53,7 +51,6 @@ class AutocompleteController < ApplicationController
       render_output(Tag.autocomplete_fandom_lookup(params).map {|r| Tag.name_from_autocomplete(r)})
     end
   public
-  def tag_in_fandom; tag_in_fandom_output(params); end
   def character_in_fandom; tag_in_fandom_output(params.merge({tag_type: "character"})); end
   def relationship_in_fandom; tag_in_fandom_output(params.merge({tag_type: "relationship"})); end
 
@@ -91,23 +88,39 @@ class AutocompleteController < ApplicationController
 
   ## NONCANONICAL TAGS
   def noncanonical_tag
-    search_param = params[:term]
+    search_param = Query.new.escape_reserved_characters(params[:term])
     raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
-    tag_class = params[:type].classify.constantize
-    render_output(tag_class.by_popularity
-                      .where(["canonical = 0 AND name LIKE ?",
-                              '%' + search_param + '%']).limit(10).map(&:name))
-  end
 
+    tag_class = params[:type].classify.constantize
+    one_tag = tag_class.find_by(canonical: false, name: params[:term])
+    # If there is an exact match in the database, ensure it is the first thing suggested.
+    match = if one_tag
+              [one_tag.name]
+            else
+              []
+            end
+
+    # As explained in https://stackoverflow.com/a/54080114, the Elasticsearch suggestion suggester does not support
+    # matches in the middle of a series of words. Therefore, we break the autocomplete query into its individual
+    # words – based on whitespace – except for the last word, which could be incomplete, so a prefix match is
+    # appropriate. This emulates the behavior of SQL `LIKE '%text%'.
+
+    word_list = search_param.split
+    last_word = word_list.pop
+    search_list = word_list.map { |w| { term: { name: { value: w, case_insensitive: true } } } } + [{ prefix: { name: { value: last_word, case_insensitive: true } } }]
+    begin
+      # Size is chosen so we get enough search results from each shard.
+      search_results = $elasticsearch.search(
+        index: TagIndexer.index_name,
+        body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: search_list } } }
+      )
+      render_output((match + search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] }).uniq)
+    rescue Elasticsearch::Transport::Transport::Errors::BadRequest
+      render_output(match)
+    end
+  end
 
   # more-specific autocompletes should be added below here when they can't be avoided
-
-
-  # Nominated parents
-  def nominated_parents
-    render_output(TagNomination.for_tag_set(OwnedTagSet.find(params[:tag_set_id])).nominated_parents(params[:tagname], params[:term]))
-  end
-
 
   # look up collections ranked by number of items they contain
 
@@ -134,15 +147,6 @@ class AutocompleteController < ApplicationController
   # for looking up existing urls for external works to avoid duplication
   def external_work
     render_output(ExternalWork.where(["url LIKE ?", '%' + params[:term] + '%']).limit(10).order(:url).pluck(:url))
-  end
-
-  # people signed up for a challenge
-  def challenge_participants
-    search_param = params[:term]
-    collection_id = params[:collection_id]
-    render_output(Pseud.limit(10).order(:name).joins(:challenge_signups)
-                    .where(["pseuds.name LIKE ? AND challenge_signups.collection_id = ?",
-                            '%' + search_param + '%', collection_id]).map(&:byline))
   end
 
   # the pseuds of the potential matches who could fulfill the requests in the given signup

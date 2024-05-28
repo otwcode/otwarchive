@@ -3,8 +3,26 @@
 namespace :search do
   BATCH_SIZE = 1000
 
+  desc "Update all index mappings"
+  task(update_all_mappings: :environment) do
+    # If multiple indexers share an index and a mapping, we only need to call
+    # create_mapping on one of them.
+    Indexer.all.group_by(&:index_name).values.map(&:first).map(&:create_mapping)
+  end
+
   desc "Recreate tag index"
   task(index_tags: :environment) do
+    if Rails.env.production? || Rails.env.test?
+      puts 'Running this task will temporarily empty some wrangling bins and affect tag search. 
+      Have you warned the wrangling team this task is being run?
+      Enter YES to continue:'
+  
+      confirmation = $stdin.gets.chomp.strip.upcase
+      unless confirmation == "YES"
+        puts "Task aborted."
+        exit
+      end
+    end
     TagIndexer.index_all
   end
 
@@ -19,7 +37,7 @@ namespace :search do
     WorkCreatorIndexer.index_from_db
   end
 
-  desc "Recreate boomark index"
+  desc "Recreate bookmark index"
   task(index_bookmarks: :environment) do
     BookmarkIndexer.index_all
   end
@@ -74,7 +92,7 @@ namespace :search do
     end
   end
 
-  desc "Reindex psueds"
+  desc "Reindex pseuds"
   task timed_pseud: :environment do
     time = ENV["TIME_PERIOD"] || "NOW() - INTERVAL 1 DAY"
     Pseud.where("pseuds.updated_at >  #{time}").select(:id).find_in_batches(batch_size: BATCH_SIZE) do |group|

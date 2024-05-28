@@ -102,6 +102,7 @@ div.comment,
 li.comment,
 .toggled form,
 form dl dt,
+form.single fieldset,
 #inner .module .heading,
 .bookmark .status span,
 .splash .news li,
@@ -158,7 +159,7 @@ fieldset fieldset.listbox,
 #footer a:hover,
 #footer a:focus,
 .autocomplete .dropdown ul li:hover,
-li.selected,
+.autocomplete .dropdown li.selected,
 a.tag:hover,
 .listbox .heading a.tag:visited:hover,
 .symbol .question,
@@ -273,7 +274,8 @@ button,
 #dashboard a:hover,
 .actions a:focus,
 .actions input:focus,
-#dashboard a:focus {
+#dashboard a:focus,
+.actions .disabled select {
   color: #999;
   border-color: #000;
   box-shadow: inset 2px 2px 2px #000;
@@ -293,6 +295,11 @@ a.current,
 span.delete {
   box-shadow: -1px -1px 2px rgba(255,255,255.25);
 }
+
+.actions label.disabled {
+   background: #222;
+     box-shadow: none;
+ }
 
 ul.required-tags,
 .bookmark .status span,
@@ -315,7 +322,8 @@ fieldset.listbox .heading,
 #header .actions a,
 fieldset fieldset,
 .mce-container button,
-.filters .expander {
+.filters .expander,
+.actions .disabled select {
   box-shadow: none;
 }
 

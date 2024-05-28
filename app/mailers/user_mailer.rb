@@ -12,14 +12,14 @@ class UserMailer < ApplicationMailer
   helper :series
   include HtmlCleaner
 
-  # Send an email letting creators know their work has been added to a collection
-  def added_to_collection_notification(user_id, work_id, collection_id)
+  # Send an email letting a creator know that their work has been added to a collection by an archivist
+  def archivist_added_to_collection_notification(user_id, work_id, collection_id)
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id)
     mail(
-         to: @user.email,
-         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Your work was added to a collection"
+      to: @user.email,
+      subject: t(".subject", app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
     )
   end
 
@@ -58,7 +58,7 @@ class UserMailer < ApplicationMailer
                 :unrevealed
               end
 
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         subject: t(".subject.#{@status}",
@@ -95,7 +95,7 @@ class UserMailer < ApplicationMailer
   def claim_notification(creator_id, claimed_work_ids, is_user=false)
     if is_user
       creator = User.find(creator_id)
-      locale = Locale.find(creator.preference.preferred_locale).iso
+      locale = creator.preference.locale.iso
     else
       creator = ExternalAuthor.find(creator_id)
       locale = I18n.default_locale
@@ -105,7 +105,7 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(locale) do
       mail(
         to: creator.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
+        subject: t("user_mailer.claim_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
   end
@@ -145,7 +145,7 @@ class UserMailer < ApplicationMailer
     if @creations.count > 1
       subject += " and #{@creations.count - 1} more"
     end
-    I18n.with_locale(Locale.find(@subscription.user.preference.preferred_locale).iso) do
+    I18n.with_locale(@subscription.user.preference.locale.iso) do
       mail(
         to: @subscription.user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] #{subject}"
@@ -157,7 +157,7 @@ class UserMailer < ApplicationMailer
   def invite_increase_notification(user_id, total)
     @user = User.find(user_id)
     @total = total
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         subject: "#{t 'user_mailer.invite_increase_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
@@ -170,7 +170,7 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @total = total
     @reason = reason
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -213,7 +213,7 @@ class UserMailer < ApplicationMailer
     @assigned_user = User.find(assigned_user_id)
     assignment = ChallengeAssignment.find(assignment_id)
     @request = (assignment.request_signup || assignment.pinch_request_signup)
-    I18n.with_locale(Locale.find(@assigned_user.preference.preferred_locale).iso) do
+    I18n.with_locale(@assigned_user.preference.locale.iso) do
       mail(
         to: @assigned_user.email,
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
@@ -224,7 +224,7 @@ class UserMailer < ApplicationMailer
   # Asks a user to validate and activate their new account
   def signup_notification(user_id)
     @user = User.find(user_id)
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -237,7 +237,7 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @old_email = old_email
     @new_email = new_email
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @old_email,
         subject: t('user_mailer.change_email.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -253,13 +253,11 @@ class UserMailer < ApplicationMailer
     @archivist = User.find(archivist_id)
     @user = @creatorship.pseud.user
     @creation = @creatorship.creation
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t("user_mailer.creatorship_notification_archivist.subject",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.creatorship_notification_archivist.subject",
+                 app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends email when a user is added as a co-creator
@@ -268,13 +266,11 @@ class UserMailer < ApplicationMailer
     @adding_user = User.find(adding_user_id)
     @user = @creatorship.pseud.user
     @creation = @creatorship.creation
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t("user_mailer.creatorship_notification.subject",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.creatorship_notification.subject",
+                 app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends email when a user is added as an unapproved/pending co-creator
@@ -283,13 +279,11 @@ class UserMailer < ApplicationMailer
     @inviting_user = User.find(inviting_user_id)
     @user = @creatorship.pseud.user
     @creation = @creatorship.creation
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
-      mail(
-        to: @user.email,
-        subject: t("user_mailer.creatorship_request.subject",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.creatorship_request.subject",
+                 app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends emails to creators whose stories were listed as the inspiration of another work
@@ -298,7 +292,7 @@ class UserMailer < ApplicationMailer
     @related_work = RelatedWork.find(related_work_id)
     @related_parent_link = url_for(controller: :works, action: :show, id: @related_work.parent)
     @related_child_link = url_for(controller: :works, action: :show, id: @related_work.work)
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Related work notification"
@@ -311,7 +305,7 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       subject = if @collection
                   t("user_mailer.recipient_notification.subject.collection",
                     app_name: ArchiveConfig.APP_SHORT_NAME,
@@ -333,7 +327,7 @@ class UserMailer < ApplicationMailer
     @collection = Collection.find(collection_id) if collection_id
     @work.challenge_claims.each do |claim|
       user = User.find(claim.request_signup.pseud.user.id)
-      I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
+      I18n.with_locale(user.preference.locale.iso) do
         mail(
           to: user.email,
           subject: "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
@@ -348,12 +342,13 @@ class UserMailer < ApplicationMailer
   def delete_work_notification(user, work)
     @user = user
     @work = work
-    work_copy = generate_attachment_content_from_work(work)
-    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
-    filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
-    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
+    html = DownloadWriter.new(download).generate_html
+    html = ::Mail::Encodings::Base64.encode(html)
+    attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
+    attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
+
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: user.email,
         subject: t('user_mailer.delete_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -367,12 +362,13 @@ class UserMailer < ApplicationMailer
   def admin_deleted_work_notification(user, work)
     @user = user
     @work = work
-    work_copy = generate_attachment_content_from_work(work)
-    work_copy = ::Mail::Encodings::Base64.encode(work_copy)
-    filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
-    attachments["#{filename}.txt"] = { content: work_copy, encoding: "base64" }
-    attachments["#{filename}.html"] = { content: work_copy, encoding: "base64" }
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
+    html = DownloadWriter.new(download).generate_html
+    html = ::Mail::Encodings::Base64.encode(html)
+    attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
+    attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
+
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: user.email,
         subject: t('user_mailer.admin_deleted_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -385,7 +381,7 @@ class UserMailer < ApplicationMailer
     @user = User.find_by(id: user_id)
     @work = Work.find_by(id: creation_id)
 
-    I18n.with_locale(Locale.find(@user.preference.preferred_locale).iso) do
+    I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
         subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -421,34 +417,15 @@ class UserMailer < ApplicationMailer
 
   def abuse_report(abuse_report_id)
     abuse_report = AbuseReport.find(abuse_report_id)
+    @username = abuse_report.username
     @email = abuse_report.email
     @url = abuse_report.url
+    @summary = abuse_report.summary
     @comment = abuse_report.comment
     mail(
       to: abuse_report.email,
-      subject: "#{t 'user_mailer.abuse_report.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
+      subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
     )
-  end
-
-  def generate_attachment_content_from_work(work)
-    attachment_string =  "Title: " + work.title + "<br />" + "by " + work.pseuds.collect(&:name).join(", ") + "<br />\n"
-    attachment_string += "<br/>Tags: " + work.tags.collect(&:name).join(", ") + "<br/>\n" unless work.tags.blank?
-    attachment_string += "<br/>Summary: " + work.summary + "<br/>\n" unless work.summary.blank?
-    attachment_string += "<br/>Notes: " + work.notes + "<br/>\n" unless work.notes.blank?
-    attachment_string += "<br/>End Notes: " + work.endnotes + "<br/>\n" unless work.endnotes.blank?
-    attachment_string += "<br/>Published at: " + work.first_chapter.published_at.to_s + "<br/>\n" unless work.first_chapter.published_at.blank?
-    attachment_string += "Revised at: " + work.revised_at.to_s + "<br/>\n" unless work.revised_at.blank?
-
-    work.chapters.each do |chapter|
-      attachment_string += "<br/>Chapter " + chapter.position.to_s unless !work.chaptered?
-      attachment_string += ": " + chapter.title unless chapter.title.blank?
-      attachment_string += "\n<br/>by: " + chapter.pseuds.collect(&:name).join(", ") + "<br />\n" unless chapter.pseuds.sort == work.pseuds.sort
-      attachment_string += "<br/>Summary: " + chapter.summary + "<br/>\n" unless chapter.summary.blank?
-      attachment_string += "<br/>Notes: " + chapter.notes + "<br/>\n" unless chapter.notes.blank?
-      attachment_string += "<br/>End Notes: " + chapter.endnotes + "<br/>\n" unless chapter.endnotes.blank?
-      attachment_string += "<br/>" + chapter.content + "<br />\n"
-    end
-    return attachment_string
   end
 
   protected

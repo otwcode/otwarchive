@@ -1,5 +1,5 @@
 <!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
-<div id="feedback" class="feedback" role="complementary">
+<div id="feedback" class="feedback">
 
   <h3 class="landmark heading"><%= ts("Actions") %></h3>
 
@@ -28,7 +28,7 @@
       <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
     <% end %>
 
-    <% if @work && !is_author_of?(@work) %>
+    <% if @work && !is_author_of?(@work) && !blocked_by?(@work) && !logged_in_as_admin? %>
       <li>
         <%= form_for(:kudo, url: kudos_path, html: { method: 'post', id: 'new_kudo' }) do |kudo_form| %>
           <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
@@ -37,9 +37,13 @@
         <% end %>
       </li>
     <% end %>
-    <% if @work && (is_author_of?(@work) || is_maintainer?) %>
+    <% if @work && is_maintainer? %>
       <li>
-        <%= link_to ts("Add To Collections"), "#collection-form", :class => "collection_item_form_placement_open" %>
+        <% if current_user.archivist %>
+          <%= link_to t(".add_to_collections_link"), "#collection-form", class: "collection_item_form_placement_open" %>
+        <% elsif @work.allow_collection_invitation? %>
+          <%= link_to t(".invite_to_collections_link"), "#collection-form", class: "collection_item_form_placement_open" %>
+        <% end %>
       </li>
     <% end %>
 
@@ -75,7 +79,11 @@
   <%= flash_div :comment_error, :comment_notice %>
 
   <% commentable_parent = find_parent(commentable) %>
-  <% if commentable_parent.is_a?(AdminPost) && commentable_parent.disable_all_comments? %>
+  <% if AdminSetting.current.guest_comments_off? && guest? %>
+    <p class="notice">
+      <%= t(".guest_comments_disabled") %>
+    </p>
+  <% elsif commentable_parent.is_a?(AdminPost) && commentable_parent.disable_all_comments? %>
     <p class="notice">
       <%= t(".permissions.admin_post.disable_all") %>
     </p>
@@ -101,6 +109,14 @@
     <p class="notice">
       <%= t(".permissions.work.unrevealed") %>
     </p>
+  <% elsif commentable_parent.is_a?(Work) && blocked_by?(commentable_parent) %>
+    <p class="notice">
+      <%= t(".blocked") %>
+    </p>
+  <% elsif logged_in_as_admin? %>
+    <p class="notice">
+      <%= t(".logged_as_admin") %>
+    </p>
   <% else %>
     <div id="add_comment_placeholder" title="top level comment">
       <div id="add_comment">
@@ -113,7 +129,7 @@
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
   <div id="comments_placeholder" <% unless params[:show_comments] || params[:tag_id] %>style="display:none;"<% end %>>
     <% if params[:show_comments] || params[:tag_id] %>
-      <% @comments = commentable.comments.reviewed.page(params[:page]) %>
+      <% @comments = CommentDecorator.for_commentable(commentable, page: params[:page]) %>
       <%= will_paginate @comments, params: { anchor: :comments } %>
       <%= render 'comments/comment_thread', { :depth => 0, :comments => @comments } %>
       </ol><!-- need to tack this on to close thread -->
@@ -122,7 +138,7 @@
   </div>
 
   <% if logged_in? && @work %>
-    <% if is_author_of?(@work) || is_maintainer? %>
+    <% if is_maintainer? && (@work.allow_collection_invitation? || current_user.archivist) %>
       <div id="collection_item_form_placement" class="wrapper toggled">
         <%= render "collection_items/collection_item_form", :item => @work, :in_page => true %>
       </div>

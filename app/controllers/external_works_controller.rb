@@ -1,5 +1,5 @@
 class ExternalWorksController < ApplicationController
-  before_action :admin_only, only: [:edit, :update, :compare, :merge]
+  before_action :admin_only, only: [:edit, :update]
   before_action :users_only, only: [:new]
   before_action :check_user_status, only: [:new]
 
@@ -10,13 +10,13 @@ class ExternalWorksController < ApplicationController
 
   # Used with bookmark form to get an existing external work and return it via ajax
   def fetch
-   if params[:external_work_url]
-     url = ExternalWork.new.reformat_url(params[:external_work_url])
-     @external_work = ExternalWork.where(url: url).first
-   end
-   respond_to do |format|
-    format.json { render 'fetch.js.erb' }
-   end
+    if params[:external_work_url]
+      url = Addressable::URI.heuristic_parse(params[:external_work_url]).to_str
+      @external_work = ExternalWork.where(url: url).first
+    end
+    respond_to do |format|
+      format.js
+    end
   end
 
   def index
@@ -37,16 +37,15 @@ class ExternalWorksController < ApplicationController
   end
 
   def edit
-    authorize @external_work, policy_class: UserCreationPolicy
-    @external_work = ExternalWork.find(params[:id])
+    @external_work = authorize ExternalWork.find(params[:id])
     @work = @external_work
   end
 
   def update
-    @external_work = ExternalWork.find(params[:id])
+    @external_work = authorize ExternalWork.find(params[:id])
     @external_work.attributes = work_params
     if @external_work.update(external_work_params)
-      flash[:notice] = t('successfully_updated', default: 'External work was successfully updated.')
+      flash[:notice] = t(".successfully_updated")
       redirect_to(@external_work)
     else
       render action: "edit"
@@ -57,7 +56,7 @@ class ExternalWorksController < ApplicationController
 
   def external_work_params
     params.require(:external_work).permit(
-      :url, :author, :title, :summary
+      :url, :author, :title, :summary, :language_id
     )
   end
 

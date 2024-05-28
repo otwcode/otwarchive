@@ -46,7 +46,7 @@ ul.actions {
 }
 
 button {
-  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
   box-sizing: content-box;
 }
 
@@ -69,6 +69,10 @@ p.submit, input.submit, dd.submit {
   border: none;
   padding: 0;
 }
+
+.actions li select, .actions li label input[type="checkbox"] {
+   margin: 0;
+ }
 
 /*subtypes and modes
 test note: this pagination clear needs to be kept an eye on*/
@@ -101,6 +105,12 @@ ol.pagination, div.pagination, ol.year {
   background: #ccc;
 }
 
+.actions .disabled select {
+   background: transparent;
+   color: #111;
+   border-color: #aaa;
+ }
+
 .actions li a, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
   margin: 0.375em auto;
 }
@@ -130,6 +140,10 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
     opacity: 0;
 }
 
+h2.landmark {
+  display: block;
+}
+
 .secondary {
   background: #fff;
   position: absolute;
@@ -151,7 +165,7 @@ legend .action:link {
 
 .heading .actions, .heading .action, .heading span.actions {
   height: auto;
-  font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
   padding: 0.15em 0.375em;
 }
 
@@ -159,7 +173,7 @@ th .actions, td .actions {
   float: none;
 }
 
-dl.stats + .landmark + .actions {
+dl.stats + .landmark + .actions, .mystery .summary + .landmark + .actions {
   clear: none;
   float: left;
   margin: 0 auto;

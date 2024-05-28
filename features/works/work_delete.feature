@@ -82,7 +82,7 @@ Feature: Delete Works
       And I fill in "Or create and use a new one:" with "My new series"
       And I select "Pseud2" from "Creator/Pseud(s)"
       And I select "Pseud3" from "Creator/Pseud(s)"
-      And I fill in "pseud_byline" with "coauthor"
+      And I fill in "pseud_byline_autocomplete" with "coauthor"
       And I fill in "Post to Collections / Challenges" with "collection1, collection2"
       And I press "Preview"
     Then I should see "Preview"
@@ -101,7 +101,7 @@ Feature: Delete Works
       And I should see "No Archive Warnings Apply"
       And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
-      And I should see "Characters: Sam WinchesterDean Winchester"
+      And I should see "Characters: Sam Winchester Dean Winchester"
       And I should see "Relationship: Harry/Ginny"
       And I should see "For Someone else, recipient"
       And I should see "Collections: Collection 1, Collection 2"
@@ -127,7 +127,6 @@ Feature: Delete Works
       And I should see "Let's write another story"
     When I press "Post"
     Then I should see "All Something Breaks Loose"
-      And I should see "Chapter 1"
       And I should not see "Bad things happen, etc."
       And I should see "Let's write another story"
     When I follow "Previous Chapter"
@@ -138,7 +137,7 @@ Feature: Delete Works
       And I should see "Let's write another story"
     When I follow "Edit"
       And I check "Add co-creators?"
-      And I fill in "pseud_byline" with "Does_not_exist"
+      And I fill in "pseud_byline_autocomplete" with "Does_not_exist"
       And I press "Preview"
     Then I should see "Invalid creator: Could not find a pseud Does_not_exist."
     When all emails have been delivered
@@ -155,13 +154,7 @@ Feature: Delete Works
       And I view the work "All Something Breaks Loose"
     Then I should see "cosomeone" within ".byline"
     When all emails have been delivered
-      And I follow "Edit"
-      And I give the work to "giftee"
-      And I press "Preview"
-      And I press "Update"
-    Then I should see "Work was successfully updated"
-      And I should see "For giftee"
-    When I am logged in as "someone_else"
+      And I am logged in as "someone_else"
       And I view the work "All Something Breaks Loose"
       And I press "Kudos"
     Then I should see "someone_else left kudos on this work!"
@@ -173,12 +166,12 @@ Feature: Delete Works
       And I go to the bookmarks page
     Then I should see "All Something Breaks Loose"
     When I am logged in as "thorough"
-      And I go to giftee's user page
+      And I go to recipient's user page
     Then I should see "Gifts (1)"
     When I delete the work "All Something Breaks Loose"
       And all indexing jobs have been run
     Then I should see "Your work All Something Breaks Loose was deleted."
-    When I go to giftee's user page
+    When I go to recipient's user page
     Then I should see "Gifts (0)"
       And I should not see "All Something Breaks Loose"
     When I go to cosomeone's user page

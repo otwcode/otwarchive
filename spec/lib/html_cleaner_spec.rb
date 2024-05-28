@@ -5,146 +5,13 @@ require 'nokogiri'
 describe HtmlCleaner do
   include HtmlCleaner
 
-  describe "TagStack" do
-    let(:stack) { HtmlCleaner::TagStack.new }
-
-    describe "inside paragraph?" do
-      it "should return false" do
-        stack.concat([[["div"], {}], [["i", {}]], [["s"], {}]])
-        expect(stack.inside_paragraph?).to be_falsey
-      end
-
-      it "should recognise paragraph in combination with i" do
-        stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s"], {}]])
-        expect(stack.inside_paragraph?).to be_truthy
-      end
-
-      it "should recognise paragraph in combination with i" do
-        stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s"], {}]])
-        expect(stack.inside_paragraph?).to be_truthy
-      end
-
-      it "should recognise single paragraph" do
-        stack.concat([[["div", {}]], [["p", {}]], [["s", {}]]])
-        expect(stack.inside_paragraph?).to be_truthy
-      end
-    end
-
-    describe "open_paragraph_tags" do
-      it "should open tags" do
-        stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s", {}]]])
-        expect(stack.open_paragraph_tags).to eq("<p><i><s>")
-      end
-
-      it "should open tags" do
-        stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s", {}]]])
-        expect(stack.open_paragraph_tags).to eq("<p><s>")
-      end
-
-      it "should handle attributes" do
-        stack.concat([[["div", {}]], [["p", {}]], [["s", { "color" => "blue" }]]])
-        expect(stack.open_paragraph_tags).to eq("<p><s color='blue'>")
-      end
-
-      it "should ignore text nodes" do
-        stack.concat([[["div", {}]], [["p", {}], ["s", {}]], [["text", {}]]])
-        expect(stack.open_paragraph_tags).to eq("<p><s>")
-      end
-
-      it "should return empty string when not inside paragraph" do
-        stack.concat([[["div", {}]], [["i", {}]], [["s", {}]]])
-        expect(stack.open_paragraph_tags).to eq("")
-      end
-    end
-
-    describe "close_paragraph_tags" do
-      it "should close tags" do
-        stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s", {}]]])
-        expect(stack.close_paragraph_tags).to eq("</s></i></p>")
-      end
-
-      it "should close tags" do
-        stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s", {}]]])
-        expect(stack.close_paragraph_tags).to eq("</s></p>")
-      end
-
-      it "should handle attributes" do
-        stack.concat([[["div", {}]], [["p", {}]], [["s", { "color" => "blue" }]]])
-        expect(stack.close_paragraph_tags).to eq("</s></p>")
-      end
-
-      it "should ignore text nodes" do
-        stack.concat([[["div", {}]], [["p", {}], ["s", {}]], [["text", {}]]])
-        expect(stack.close_paragraph_tags).to eq("</s></p>")
-      end
-
-      it "should return empty string when not inside paragraph" do
-        stack.concat([[["div", {}]], [["i", {}]], [["s", {}]]])
-        expect(stack.close_paragraph_tags).to eq("")
-      end
-    end
-
-    describe "close_and_pop_last" do
-      it "should close tags" do
-        stack.concat([[["div", {}]], [["p", {}], ["i", {}]]])
-        expect(stack.close_and_pop_last).to eq("</i></p>")
-        expect(stack).to eq([[["div", {}]]])
-      end
-    end
-  end
-
-  describe "close_unclosed_tag" do
-    it "should close tag at end of line" do
-      result = close_unclosed_tag("first <i>line\n second line", "i", 1)
-      expect(result).to eq("first <i>line</i>\n second line")
-    end
-
-    %w(br col hr img).each do |tag|
-      it "should not touch self-closing #{tag} tag" do
-        result = close_unclosed_tag("don't <#{tag}> close", tag, 1)
-        expect(result).to eq("don't <#{tag}> close")
-      end
-    end
-
-    %w(col colgroup dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul).each do |tag|
-      it "should not touch #{tag} tags that don't go inside p tags" do
-        result = close_unclosed_tag("don't <#{tag}> close", tag, 1)
-        expect(result).to eq("don't <#{tag}> close")
-      end
-    end
-
-    it "should close tag before next opening tag" do
-      result = close_unclosed_tag("some <i>more<s>text</s>", "i", 1)
-      expect(result).to eq("some <i>more</i><s>text</s>")
-    end
-
-    it "should close tag before next closing tag" do
-      result = close_unclosed_tag("some <s><i>more text</s>", "i", 1)
-      expect(result).to eq("some <s><i>more text</i></s>")
-    end
-
-    it "should close tag before next closing tag" do
-      result = close_unclosed_tag("some <s><i>more text</s>", "i", 1)
-      expect(result).to eq("some <s><i>more text</i></s>")
-    end
-
-    it "should close second opening tag" do
-      result = close_unclosed_tag("some <i>more</i> <i>text", "i", 1)
-      expect(result).to eq("some <i>more</i> <i>text</i>")
-    end
-
-    it "should only close specified tag" do
-      result = close_unclosed_tag("<code><i>text", "strong", 1)
-      expect(result).to eq("<code><i>text")
-    end
-  end
-
   describe "sanitize_value" do
     ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.each do |field|
       context "#{field} is configured to allow video embeds" do
-        %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com static.ning.com ning.com dailymotion.com
-           metacafe.com vidders.net criticalcommons.org google.com archiveofourown.org podfic.com archive.org
-           open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com}.each do |source|
+        %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com 
+           vidders.net criticalcommons.org google.com podfic.com archive.org
+           open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com
+           bilibili.com player.bilibili.com].each do |source|
 
           it "keeps embeds from #{source}" do
             html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
@@ -153,9 +20,10 @@ describe HtmlCleaner do
           end
         end
 
-        %w{youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
-           archiveofourown.org archive.org dailymotion.com 8tracks.com static.ning.com ning.com podfic.com
-           open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com}.each do |source|
+        %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
+           archive.org 8tracks.com podfic.com
+           open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com
+           bilibili.com player.bilibili.com].each do |source|
 
           it "converts src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
@@ -178,37 +46,6 @@ describe HtmlCleaner do
           expect(result).to include(html)
         end
 
-        it "converts an Archive-hosted Dewplayer embed into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/next%20color%20planet.mp3?dl=0" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/next%20color%20planet.mp3?dl=0" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
-        end
-
-        it "converts an Archive-hosted Dewplayer embed with single quotes in the source URL into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/\'quote%27.mp3" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/\'quote%27.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
-        end
-
-        it "converts an Archive-hosted Dewplayer embed with double quotes in the source URL into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars=\'mp3=http://example.com/"quote%22.mp3\' src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/%22quote%22.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
-        end
-
-        it "converts an Archive-hosted Dewplayer embed with spaces around the source URL into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=  http://example.com/fic.mp3 " src="https://archiveofourown.org/system/dewplayer/dewplayer-vol.swf" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/fic.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
-        end
-
-        it "converts an Archive-hosted Dewplayer embed with an encoded source URL into an audio tag" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="param=val&amp;mp3=http%3A%2F%2Fexample.com%2Fnext%2520color%2520planet%2527.mp3%3Fdl%3D0" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          expect(sanitize_value(field, html)).to include('<audio src="https://example.com/next%20color%20planet%27.mp3?dl=0" controls="controls" crossorigin="anonymous" preload="metadata"></audio>')
-        end
-
-        it "converts an Archive-hosted Dewplayer multi embed into audio tags" do
-          html = '<embed type="application/x-shockwave-flash" flashvars="mp3=http://example.com/live-again.mp3|http://example.com/cursed-night.mp3" src="https://archiveofourown.org/system/dewplayer/dewplayer.swf" width="200" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
-          result = sanitize_value(field, html)
-          expect(result.squish).to eq('<p> <audio src="https://example.com/live-again.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio> <br /> <audio src="https://example.com/cursed-night.mp3" controls="controls" crossorigin="anonymous" preload="metadata"></audio> </p>')
-        end
-
         it "strips embeds with unknown source" do
           html = '<embed src="http://www.evil.org"></embed>'
           result = sanitize_value(field, html)
@@ -221,7 +58,7 @@ describe HtmlCleaner do
           expect(result).to be_empty
         end
 
-        %w(metacafe.com criticalcommons.org).each do |source|
+        %w[criticalcommons.org].each do |source|
           it "doesn't convert src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
             result = sanitize_value(field, html)
@@ -344,9 +181,7 @@ describe HtmlCleaner do
         it "should allow RTL content in div" do
           html = '<div dir="rtl"><p>This is RTL content</p></div>'
           result = sanitize_value(field, html)
-          # Yes, this is ugly. We should maybe try to figure out why our parser
-          # wants to wrap All The Things in <p> tags.
-          expect(result.to_s.squish).to eq('<p></p><div dir="rtl"> <p>This is RTL content</p> </div>')
+          expect(result.to_s.squish).to eq('<div dir="rtl"> <p>This is RTL content</p> </div>')
         end
 
         it "should not allow iframes with unknown source" do
@@ -620,6 +455,62 @@ describe HtmlCleaner do
             end
           end
         end
+
+        context "when given an <img> tag with a relative src" do
+          it "converts the src value to an absolute URL" do
+            content = sanitize_value(field, "<img src=\"relative\">")
+            expect(content).to eq("<p>\n  <img src=\"#{ArchiveConfig.APP_URL}/relative\" \/>\n</p>")
+          end
+        end
+
+        context "when given an <img> tag with an absolute src" do
+          it "doesn't modify the src value" do
+            content = sanitize_value(field, "<img src=\"http://random.com/image.png\">")
+            expect(content).to eq("<p>\n  <img src=\"http://random.com/image.png\" \/>\n</p>")
+          end
+        end
+      end
+    end
+
+    ArchiveConfig.FIELDS_ALLOWING_HTML.each do |field|
+      it "preserves ruby-annotated HTML in #{field}" do
+        result = sanitize_value(field, "<ruby>BigText<rp>(</rp><rt>small_text</rt><rp>)</rp></ruby>")
+        expect(result).to include("<ruby>BigText<rp>(</rp><rt>small_text</rt><rp>)</rp></ruby>")
+      end
+
+      it "preserves ruby-annotated HTML without rp in #{field}" do
+        result = sanitize_value(field, "<ruby>BigText<rt>small_text</rt></ruby>")
+        expect(result).to include("<ruby>BigText<rt>small_text</rt></ruby>")
+      end
+
+      it "transforms open attribute's value when present on details element in #{field}" do
+        html = <<~HTML
+          <details open="false">
+            <summary>Automated Status: Operational</summary>
+            <p>Velocity: 12m/s</p>
+            <p>Direction: North</p>
+          </details>
+        HTML
+
+        result = sanitize_value(field, html)
+        doc = Nokogiri::HTML.fragment(result)
+
+        expect(doc.xpath("./details/@open").to_s.strip).to eq("open")
+      end
+
+      it "does not require details to have an 'open' attribute in #{field}" do
+        html = <<~HTML
+          <details>
+            <summary>Automated Status: Operational</summary>
+            <p>Velocity: 12m/s</p>
+            <p>Direction: North</p>
+          </details>
+        HTML
+
+        result = sanitize_value(field, html)
+        doc = Nokogiri::HTML.fragment(result)
+
+        expect(doc.xpath("./details[@open]")).to be_empty
       end
     end
   end
@@ -631,6 +522,21 @@ describe HtmlCleaner do
 
     it "should not touch normal text with valid unicode chars" do
       expect(fix_bad_characters("„‚nörmäl’—téxt‘“")).to eq("„‚nörmäl’—téxt‘“")
+    end
+
+    it "does not touch zero-width non-joiner" do
+      string = ["A".ord, 0x200C, "A".ord]  # "A[zwnj]A"
+      expect(fix_bad_characters(string.pack("U*")).unpack("U*")).to eq(string)
+    end
+
+    it "does not touch zero-width joiner" do
+      string = ["A".ord, 0x200D, "A".ord]  # "A[zwj]A"
+      expect(fix_bad_characters(string.pack("U*")).unpack("U*")).to eq(string)
+    end
+
+    it "does not touch word joiner" do
+      string = ["A".ord, 0x2060, "A".ord]  # "A[wj]A"
+      expect(fix_bad_characters(string.pack("U*")).unpack("U*")).to eq(string)
     end
 
     it "should remove invalid unicode chars" do
@@ -648,10 +554,6 @@ describe HtmlCleaner do
 
     it "should remove the spacer" do
       expect(fix_bad_characters("A____spacer____A")).to eq("AA")
-    end
-
-    it "should remove unicode chars in the 'other, format' category" do
-      expect(fix_bad_characters("A\xE2\x81\xA0A")).to eq("AA")
     end
   end
 
@@ -679,6 +581,12 @@ describe HtmlCleaner do
       expect(result).not_to match("<br")
     end
 
+    it "doesn't break links with images inside them" do
+      result = add_paragraphs_to_text("<a href='/users/name'><img src='/icon.png'>name</a>")
+      doc = Nokogiri::HTML.fragment(result)
+      expect(doc.xpath("./p/a/img").size).to eq(1)
+    end
+
     it "should not convert linebreaks after p tags" do
       result = add_paragraphs_to_text("<p>A</p>\n<p>B</p>\n\n<p>C</p>\n\n\n")
       doc = Nokogiri::HTML.fragment(result)
@@ -699,7 +607,7 @@ describe HtmlCleaner do
       it "should not convert linebreaks after #{tag} tags" do
         result = add_paragraphs_to_text("<#{tag}>A</#{tag}>\n<#{tag}>B</#{tag}>\n\n<#{tag}>C</#{tag}>\n\n\n")
         doc = Nokogiri::HTML.fragment(result)
-        expect(doc.xpath(".//p").size).to eq(4)
+        expect(doc.xpath(".//p").size).to eq(3)
         expect(doc.xpath(".//br")).to be_empty
       end
     end
@@ -718,13 +626,35 @@ describe HtmlCleaner do
       expect(doc.xpath(".//br")).to be_empty
     end
 
-    %w(dl h1 h2 h3 h4 h5 h6 ol pre table ul).each do |tag|
-      it "should not wrap #{tag} in p tags" do
+    %w[figure dl h1 h2 h3 h4 h5 h6 ol pre summary table ul].each do |tag|
+      it "does not wrap #{tag} in p tags" do
         result = add_paragraphs_to_text("aa <#{tag}>foo</#{tag}> bb")
         doc = Nokogiri::HTML.fragment(result)
         expect(doc.xpath(".//p").size).to eq(2)
         expect(doc.xpath(".//#{tag}").children.to_s.strip).to eq("foo")
       end
+    end
+
+    it "does not wrap details in p tags" do
+      html = <<~HTML
+        aa
+
+        <details>
+          <summary>Automated Status: Operational</summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+
+        bb
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      # aa, velocity..., direction..., bb
+      expect(doc.xpath(".//p").size).to eq(4)
+      expect(doc.xpath("./p/details").size).to eq(0)
+      expect(doc.xpath("./details/p").size).to eq(2)
     end
 
     ["ol", "ul"].each do |tag|
@@ -784,6 +714,92 @@ describe HtmlCleaner do
       expect(doc.xpath("./dl/dt[2]").children.to_s.strip).to eq("B")
       expect(doc.xpath("./dl/dd[2]").children.to_s.strip).to eq("bbb")
       expect(doc.xpath(".//br")).to be_empty
+    end
+
+    it "does not add paragraphs inside summary" do
+      html = <<~HTML
+        <details>
+          <summary>
+            Automated
+
+            Status:
+
+            Operational
+          </summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./summary/p")).to be_empty
+    end
+
+    it "does not add paragraphs inside figure" do
+      html = <<~HTML
+        <figure>
+
+          <img src="http://example.com/Camera-icon.svg" alt="camera icon">
+
+          <img src="http://example.com/Hand-icon.svg" alt="hand icon">
+
+        </figure>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./figure/p")).to be_empty
+    end
+
+    it "allows alt and title attributes on elements inside figure" do
+      html = <<~HTML
+        <figure>
+          <img src="http://example.com/Camera-icon.svg" alt="camera icon">
+          <figcaption title="here is title">Take picture here</figcaption>
+        </figure>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./figure/img/@alt").to_s.strip).to eq("camera icon")
+      expect(doc.xpath("./figure/figcaption/@title").to_s.strip).to eq("here is title")
+    end
+
+    it "allows other HTML elements inside figcaption" do
+      html = <<~HTML
+        <figure>
+          <img src="http://example.com/Camera-icon.svg">
+          <figcaption><em>Take picture <a href="http://example.com/link">here</a></em></figcaption>
+        </figure>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./figure/figcaption/em/text()").to_s.strip).to eq("Take picture")
+      expect(doc.xpath("./figure/figcaption/em/a/text()").to_s.strip).to eq("here")
+      expect(doc.xpath("./figure/figcaption/em/a/@href").to_s.strip).to eq("http://example.com/link")
+    end
+
+    it "allows other HTML elements inside summary" do
+      html = <<~HTML
+        <details>
+          <summary><em>Automated Status: <a href="http://example.com/link">Operational</a></em></summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+      HTML
+
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+
+      expect(doc.xpath("./details/summary/em/text()").to_s.strip).to eq("Automated Status:")
+      expect(doc.xpath("./details/summary/em/a/text()").to_s.strip).to eq("Operational")
+      expect(doc.xpath("./details/summary/em/a/@href").to_s.strip).to eq("http://example.com/link")
     end
 
     %w(address h1 h2 h3 h4 h5 h6 p pre).each do |tag|
@@ -866,6 +882,12 @@ describe HtmlCleaner do
         expect(doc.xpath("./p[1]/#{tag}").children.to_s.strip).to eq("some")
         expect(doc.xpath("./p[2]/#{tag}").children.to_s.strip).to eq("text")
       end
+
+      it "handles #{tag} with an unclosed br tag in it" do
+        result = add_paragraphs_to_text("<#{tag}>some<br>text</#{tag}>")
+        doc = Nokogiri::HTML.fragment(result)
+        expect(doc.xpath("./p[1]/#{tag}[1]").children.to_s.strip).to match(%r{some<br/?>text})
+      end
     end
 
     it "should handle nested inline tags spanning double line breaks" do
@@ -886,12 +908,28 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[2]").children.to_s.strip).to match(/ yay\Z/)
     end
 
-    %w(blockquote center div).each do |tag|
+    %w[blockquote center div details].each do |tag|
       it "should convert double linebreaks inside #{tag} tag" do
         result = add_paragraphs_to_text("<#{tag}>some\n\ntext</#{tag}>")
         doc = Nokogiri::HTML.fragment(result)
         expect(doc.xpath("./#{tag}/p[1]").children.to_s.strip).to eq("some")
         expect(doc.xpath("./#{tag}/p[2]").children.to_s.strip).to eq("text")
+      end
+
+      it "doesn't insert extra <p></p> tags before the #{tag} tag" do
+        result = add_paragraphs_to_text("<p>before</p><#{tag}><p>during</p></#{tag}>")
+        doc = Nokogiri::HTML.fragment(result)
+        expect(doc.xpath(".//p").size).to eq(2)
+        expect(doc.xpath("./p[1]").children.to_s.strip).to eq("before")
+        expect(doc.xpath("./#{tag}/p[1]").children.to_s.strip).to eq("during")
+      end
+
+      it "creates a paragraph for text immediately following the #{tag} tag" do
+        result = add_paragraphs_to_text("<#{tag}>during</#{tag}>after")
+        doc = Nokogiri::HTML.fragment(result)
+        expect(doc.xpath(".//p").size).to eq(2)
+        expect(doc.xpath("./#{tag}/p[1]").children.to_s.strip).to eq("during")
+        expect(doc.xpath("./p[1]").children.to_s.strip).to eq("after")
       end
     end
 
@@ -901,6 +939,12 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[1]").children.to_s.strip).to eq("boom")
       expect(doc.xpath("./p[2]").children.to_s.strip).to eq("da")
       expect(doc.xpath("./p[3]").children.to_s.strip).to eq("yadda")
+    end
+
+    it "wraps ruby-annotated text in p tags" do
+      result = add_paragraphs_to_text("text with <ruby>ルビ<rp> (</rp><rt>RUBY</rt><rp>)</rp></ruby>")
+      doc = Nokogiri::HTML.fragment(result)
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("text with <ruby>ルビ<rp> (</rp><rt>RUBY</rt><rp>)</rp></ruby>")
     end
 
     it "should keep attributes of block elements" do
@@ -924,32 +968,22 @@ describe HtmlCleaner do
       expect(doc.xpath("./p[contains(@class, 'bar')]").children.to_s.strip).to eq("foobar")
     end
 
-    # When we call add_paragraphs_to_text, everything gets wrapped inside myroot
-    # tags, and the closing myroot tag is treated as a mismatch for strong, ergo
-    # strong is closed on the second paragraph while the em tag remains open.
-    # In real world use, however, this content would most likely be run through
-    # Sanitize.clean first, which would close both the em and strong tags at the
-    # very end, so we wouldn't have a mismatch and the strong tag would be
-    # reopened in every paragraph, just like the em tag is. More info at:
-    # https://github.com/otwcode/otwarchive/pull/3692#issuecomment-558740913
-    it "should close mismatched tags" do
-      html = """Here is an unclosed <em>em tag.
-
-      Here is an unclosed <strong>strong tag.
-
-      Stuff."""
-
-      doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))
-      expect(doc.xpath("./p[1]/em").children.to_s.strip).to eq("em tag.")
-      expect(doc.xpath("./p[2]/em/strong").children.to_s.strip).to eq("strong tag.")
-      expect(doc.xpath("./p[3]/em").children.to_s.strip).to eq("Stuff.")
-    end
-
-    it "should close unclosed tag within other tag" do
-      pending "Opened bug report with Nokogiri"
+    it "closes unclosed tag within other tag" do
       html = "<strong><em>unclosed</strong>"
       doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))
       expect(doc.xpath("./p/strong/em").children.to_s.strip).to eq("unclosed")
+    end
+
+    it "closes unclosed rt tags" do
+      html = "<ruby>big text<rt>small text</ruby>"
+      result = add_paragraphs_to_text(html)
+      expect(result).to include("<ruby>big text<rt>small text</rt></ruby>")
+    end
+
+    it "closes unclosed rp tag" do
+      html = "<ruby>big text<rp>(</rp><rt>small text</rt><rp>)</ruby>"
+      result = add_paragraphs_to_text(html)
+      expect(result).to include("<ruby>big text<rp>(</rp><rt>small text</rt><rp>)</rp></ruby>")
     end
 
     it "should re-nest mis-nested tags" do
@@ -1030,12 +1064,24 @@ describe HtmlCleaner do
       expect(doc.xpath("./table/tr[2]/td[2]").children.to_s.strip).to eq("D")
     end
 
-    %w(script style).each do |tag|
-      it "should keep #{tag} tags as is" do
-        result = add_paragraphs_to_text("<#{tag}>keep me</#{tag}>")
-        doc = Nokogiri::HTML.fragment(result)
-        expect(doc.xpath("./p/#{tag}").children.to_s.strip).to eq("keep me")
-      end
+    it "doesn't break when an attribute includes a single quote" do
+      result = add_paragraphs_to_text(<<~HTML)
+        <span title="Don't stop me now">Cause I'm having a good time</span>
+      HTML
+      doc = Nokogiri::HTML.fragment(result)
+      node = doc.xpath(".//span").first
+      expect(node.attribute("title").value).to eq("Don't stop me now")
+    end
+
+    it "doesn't unescape escaped text when processing newlines" do
+      result = add_paragraphs_to_text(<<~HTML.strip)
+        &lt;span&gt;
+
+        &lt;div&gt;
+      HTML
+      doc = Nokogiri::HTML.fragment(result)
+      expect(doc.xpath("./p[1]").children.to_s.strip).to eq("&lt;span&gt;")
+      expect(doc.xpath("./p[2]").children.to_s.strip).to eq("&lt;div&gt;")
     end
 
     it "should fail gracefully for missing ending quotation marks" do
@@ -1051,7 +1097,7 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text('<strong><a href=ao3.org">mylink</a></strong>')
       doc = Nokogiri::HTML.fragment(result)
       node = doc.xpath(".//a").first
-      expect(node.attribute("href").value).to eq("ao3.org%22")
+      expect(node.attribute("href").value).to eq('ao3.org"')
       expect(node.text.strip).to eq("mylink")
     end
   end
@@ -1067,6 +1113,92 @@ describe HtmlCleaner do
       original = "bla.  </p>   <p>   Bla"
       result = "bla.</p><br /><p>Bla"
       expect(add_break_between_paragraphs(original)).to eq(result)
+    end
+  end
+
+  describe "strip_images" do
+    let(:result) { "Hi!  Bye" }
+
+    context "without keep_src" do
+      it "removes the img tag entirely when the src uses double quotes" do
+        string = 'Hi! <img src="http://example.org/image.png" /> Bye'
+        expect(strip_images(string)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses single quotes" do
+        string = "Hi! <img src='http://example.org/image.png'> Bye"
+        expect(strip_images(string)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses mismatched quotes" do
+        string = "Hi! <img src=\"http://example.org/image.png'> Bye"
+        expect(strip_images(string)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing" do
+        string = 'Hi! <img alt="a11y"> Bye'
+        expect(strip_images(string)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing a closing quotation mark" do
+        string = 'Hi! <img src="http://example.org/image.png /> Bye'
+        expect(strip_images(string)).to eq(result)
+      end
+    end
+
+    context "with keep_src: false" do
+      it "removes the img tag entirely when the src uses double quotes" do
+        string = 'Hi! <img src="http://example.org/image.png" /> Bye'
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses single quotes" do
+        string = "Hi! <img src='http://example.org/image.png'> Bye"
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses mismatched quotes" do
+        string = "Hi! <img src=\"http://example.org/image.png'> Bye"
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing" do
+        string = 'Hi! <img alt="a11y"> Bye'
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing a closing quotation mark" do
+        string = 'Hi! <img src="http://example.org/image.png /> Bye'
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+    end
+
+    context "with keep_src: true" do
+      it "keeps the img src URL when the src uses double quotes" do
+        string = 'Hi! <img src="http://example.org/image.png" /> Bye'
+        result = "Hi! http://example.org/image.png Bye"
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses single quotes" do
+        string = "Hi! <img src='http://example.org/image.png'> Bye"
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses mismatched quotes" do
+        string = "Hi! <img src=\"http://example.org/image.png'> Bye"
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing" do
+        string = 'Hi! <img alt="a11y"> Bye'
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing a closing quotation mark" do
+        string = 'Hi! <img src="http://example.org/image.png /> Bye'
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
     end
   end
 end

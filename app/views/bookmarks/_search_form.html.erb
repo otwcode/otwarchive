@@ -31,7 +31,7 @@
         <%= f.label :language_id, ts("Work language") %>
       </dt>
       <dd>
-        <%= f.collection_select :language_id, @languages, :short, :name, include_blank: true %>
+        <%= f.select(:language_id, language_options_for_select(@languages, "short"), include_blank: true) %>
       </dd>
       <dt>
         <%= f.label :bookmarkable_date, ts("Date updated") %>

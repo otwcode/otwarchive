@@ -1,4 +1,4 @@
-@skins
+@set-default-skin
 Feature: Skin wizard
 
   Scenario: User should be able to toggle between the wizard and the form
@@ -11,6 +11,23 @@ Feature: Skin wizard
   When I follow "Write Custom CSS"
   Then I should see "Create New Skin"
     And I should see "CSS"
+
+  @javascript
+  Scenario: User can add a parent skin using the wizard
+  Given I am logged in
+    And I create the skin "Dad"
+  When I go to the new skin page
+    And I follow "Use Wizard"
+  Then I should see "Site Skin Wizard"
+    And I should see "Parent Skins"
+  When I fill in "Title" with "Child"
+    And I follow "Add parent skin"
+    And it is currently 1 second from now
+  Then I should see a parent skin text field
+  When I enter "Dad" in the "skin_skin_parents_attributes_1_parent_skin_title_autocomplete" autocomplete field
+    And I press "Submit"
+  Then I should see "Parent Skins"
+    And I should see "Dad"
 
   Scenario: Users should be able to create and use a wizard skin to adjust work margins,
   and they should be able to edit the skin while they are using it
@@ -30,7 +47,7 @@ Feature: Skin wizard
     And I select "Wide margins" from "preference_skin_id"
     And I submit
   Then I should see "Your preferences were successfully updated."
-    And I should see "margin: auto 5%; max-width: 100%" within "style"
+    And I should see "margin: auto 5%; max-width: 100%" in the page style
     # Make sure that the creation/update cache keys are different:
     And I wait 1 second
   When I edit the skin "Wide margins" with the wizard
@@ -40,7 +57,7 @@ Feature: Skin wizard
   Then I should see an update confirmation message
     And I should see "Work margin width: 4%"
     And I should not see "Work margin width: 4.5%"
-    And I should see "margin: auto 4%;" within "style"
+    And I should see "margin: auto 4%;" in the page style
   When I am on skinner's preferences page
   Then "Wide margins" should be selected within "preference_skin_id"
 
@@ -64,11 +81,11 @@ Feature: Skin wizard
     And I should see "Vertical gap between paragraphs: 5.0em"
   When I press "Use"
   Then I should see "Your preferences were successfully updated."
-    And I should see "background: #ccccff;" within "style"
-    And I should see "color: red;" within "style"
-    And I should see "font-family: 'Times New Roman', Garamond, serif;" within "style"
-    And I should see "font-size: 120%;" within "style"
-    And I should see "margin: 5.0em auto;" within "style"
+    And I should see "background: #ccccff;" in the page style
+    And I should see "color: red;" in the page style
+    And I should see "font-family: 'Times New Roman', Garamond, serif;" in the page style
+    And I should see "font-size: 120%;" in the page style
+    And I should see "margin: 5.0em auto;" in the page style
   When I am on skinner's preferences page
   Then "Many changes" should be selected within "preference_skin_id"
 

@@ -26,7 +26,7 @@ module ActsAsCommentable::CommentMethods
       if self.children_count > 0
         self.is_deleted = true
         self.comment_content = "deleted comment" # wipe out the content
-        self.save
+        self.save(validate: false)
       else
         self.destroy
       end
@@ -92,14 +92,15 @@ module ActsAsCommentable::CommentMethods
     # Adds a child to this object in the tree. This method will update all of the
     # other elements in the tree and shift them to the right, keeping everything
     # balanced.
+    #
+    # Skips validations so that we can reply to invalid comments.
     def add_child( child )
       if ( (self.threaded_left == nil) || (self.threaded_right == nil) )
         # Looks like we're now the root node!  Woo
         self.threaded_left = 1
         self.threaded_right = 4
 
-        # What do to do about validation?
-        return nil unless self.save
+        return nil unless save(validate: false)
 
         child.commentable_id = self.id
         child.threaded_left = 2
@@ -115,7 +116,7 @@ module ActsAsCommentable::CommentMethods
         Comment.transaction {
           Comment.where(["thread = (?) AND threaded_left >= (?)", self.thread, right_bound]).update_all("threaded_left = (threaded_left + 2)")
           Comment.where(["thread = (?) AND threaded_right >= (?)", self.thread, right_bound]).update_all("threaded_right = (threaded_right + 2)")
-          self.save
+          save(validate: false)
         }
       end
     end

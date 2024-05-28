@@ -9,12 +9,13 @@ Feature: Admin Fannish Next Of Kind actions
       | login    | password   |
       | harrykim | diesalot   |
       | libby    | stillalive |
-      And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "harrykim"
+      And I am logged in as a "support" admin
+    When I go to the user administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "libby"
       And I fill in "Fannish next of kin's email" with "testy@foo.com"
-      And I press "Update"
+      And I press "Update Fannish Next of Kin"
     Then I should see "Fannish next of kin was updated."
+      And the history table should show that "libby" was added as next of kin
 
     When I go to the manage users page
       And I fill in "Name" with "harrykim"
@@ -24,48 +25,54 @@ Feature: Admin Fannish Next Of Kind actions
     When I follow "libby"
     Then I should be on libby's user page
 
+    When I go to the user administration page for "libby"
+    Then the history table should show they were added as next of kin of "harrykim"
+
   Scenario: An invalid Fannish Next of Kin username is added
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "harrykim"
+      And I am logged in as a "support" admin
+    When I go to the user administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "userididnotcreate"
-      And I press "Update"
-    Then I should see "Fannish next of kin user is invalid."
+      And I press "Update Fannish Next of Kin"
+    Then I should see "Kin can't be blank"
 
   Scenario: A blank Fannish Next of Kin username can't be added
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "harrykim"
+      And I am logged in as a "support" admin
+    When I go to the user administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with ""
-      And I press "Update"
-    Then I should see "Fannish next of kin user is missing."
+      And I press "Update Fannish Next of Kin"
+    Then I should see "Kin can't be blank"
 
   Scenario: A blank Fannish Next of Kin email can't be added
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "harrykim"
+      And I am logged in as a "support" admin
+    When I go to the user administration page for "harrykim"
       And I fill in "Fannish next of kin's email" with ""
-      And I press "Update"
-    Then I should see "Fannish next of kin email is missing."
+      And I press "Update Fannish Next of Kin"
+    Then I should see "Kin email can't be blank"
 
   Scenario: A Fannish Next of Kin is edited
     Given the fannish next of kin "libby" for the user "harrykim"
       And the user "newlibby" exists and is activated
-      And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "harrykim"
+      And I am logged in as a "support" admin
+    When I go to the user administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "newlibby"
       And I fill in "Fannish next of kin's email" with "newlibby@foo.com"
-      And I press "Update"
+      And I press "Update Fannish Next of Kin"
     Then I should see "Fannish next of kin was updated."
 
   Scenario: A Fannish Next of Kin is removed
     Given the fannish next of kin "libby" for the user "harrykim"
-      And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "harrykim"
+      And I am logged in as a "support" admin
+    When I go to the user administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with ""
       And I fill in "Fannish next of kin's email" with ""
-      And I press "Update"
-    Then I should see "Fannish next of kin was updated."
+      And I press "Update Fannish Next of Kin"
+    Then I should see "Fannish next of kin was removed."
+      And the history table should show that "libby" was removed as next of kin
+    When I go to the user administration page for "libby"
+    Then the history table should show they were removed as next of kin of "harrykim"
 
   Scenario: A Fannish Next of Kin updates when the next of kin user changes their username
     Given the fannish next of kin "libby" for the user "harrykim"
@@ -75,7 +82,7 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Password" with "password"
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "support" admin
       And I go to the manage users page
       And I fill in "Name" with "harrykim"
       And I press "Find"
@@ -89,7 +96,7 @@ Feature: Admin Fannish Next Of Kind actions
       And I fill in "Password" with "password"
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "support" admin
       And I go to the manage users page
       And I fill in "Name" with "harrykim2"
       And I press "Find"
@@ -98,15 +105,20 @@ Feature: Admin Fannish Next Of Kind actions
   Scenario: A Fannish Next of Kin can update even after an invalid user is entered
     Given the fannish next of kin "libby" for the user "harrykim"
       And the user "harrysmom" exists and is activated
-      And I am logged in as a "policy_and_abuse" admin
-    When I go to the abuse administration page for "harrykim"
+      And I am logged in as a "support" admin
+    When I go to the user administration page for "harrykim"
       And I fill in "Fannish next of kin's username" with "libbylibby"
       And I fill in "Fannish next of kin's email" with "libbylibby@example.com"
-      And I press "Update"
-    Then I should see "Fannish next of kin user is invalid."
+      And I press "Update Fannish Next of Kin"
+    Then I should see "Kin can't be blank"
+      And the "Fannish next of kin's username" input should be blank
+      And I should see "libbylibby@example.com" in the "Fannish next of kin's email" input
+    When I go to the user administration page for "harrykim"
+      And I should see "libby" in the "Fannish next of kin's username" input
+      And I should see "fnok@example.com" in the "Fannish next of kin's email" input
     When I fill in "Fannish next of kin's username" with "harrysmom"
       And I fill in "Fannish next of kin's email" with "harrysmom@example.com"
-      And I press "Update"
+      And I press "Update Fannish Next of Kin"
     Then I should see "Fannish next of kin was updated."
       And the "Fannish next of kin's username" field should contain "harrysmom"
       And the "Fannish next of kin's email" field should contain "harrysmom@example.com"

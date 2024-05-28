@@ -21,9 +21,9 @@ class EmailFormatValidator < ActiveModel::EachValidator
 
     unless result
       if options[:allow_blank]
-        record.errors[attribute] << (options[:message] || I18n.t('validators.email.format.allow_blank'))
+        record.errors.add(attribute, options[:message] || I18n.t("validators.email.format.allow_blank"))
       else
-        record.errors[attribute] << (options[:message] || I18n.t('validators.email.format.no_blank'))
+        record.errors.add(attribute, options[:message] || I18n.t("validators.email.format.no_blank"))
       end
     end
   end

@@ -1,9 +1,7 @@
 class Locale < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   belongs_to :language
   validates_presence_of :iso
-  validates_uniqueness_of :iso, case_sensitive: false
+  validates :iso, uniqueness: true
   validates_presence_of :name
 
   scope :default_order, -> { order(:iso) }

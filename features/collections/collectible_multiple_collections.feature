@@ -4,19 +4,13 @@ Feature: Collectible items in multiple collections
   As a user
   I want to be unable to add items to more than one collection
 
-  Scenario: Add a work that is already in a moderated collection to a second
-  moderated collection using the Add to Collections option on the work
+  Scenario: Add a work that is already in a moderated collection to a second moderated collection
     Given I have the moderated collection "ModeratedCollection"
       And I have the moderated collection "ModeratedCollection2"
       And I am logged in as a random user
+      And I set my preferences to allow collection invitations
       And I post the work "Blabla" to the collection "ModeratedCollection"
-    When I view the work "Blabla"
-      And I fill in "Collection name(s):" with "ModeratedCollection2"
-      And I press "Add"
-    Then I should see "You have submitted your work to the moderated collection 'ModeratedCollection2'."
-      And I should see "It will not become a part of the collection until it has been approved by a moderator."
-    When I follow "Edit"
-      And I press "Post"
+    When I edit the work "Blabla" to be in the collections "ModeratedCollection,ModeratedCollection2"
     Then I should see "Work was successfully updated. You have submitted your work to moderated collections (ModeratedCollection, ModeratedCollection2). It will not become a part of those collections until it has been approved by a moderator."
 
   Scenario: Add my work to both moderated and unmoderated collections by editing
@@ -45,21 +39,21 @@ Feature: Collectible items in multiple collections
     Given I have the anonymous collection "AnonymousCollection"
       And I have the collection "MyCollection"
       And I am logged in as a random user
+      And I set my preferences to allow collection invitations
       And I post the work "Some Work" to the collection "AnonymousCollection"
     When I am logged in as the owner of "MyCollection"
       And I view the work "Some Work"
       And I fill in "Collection name(s):" with "MyCollection"
-      And I press "Add"
+      And I press "Invite"
     Then I should see "We couldn't add your submission to the following collection(s):"
       And I should see "MyCollection, because you don't own this item and the item is anonymous."
 
-  Scenario: Work creator can add their own anonymous work to a collection using
-  the Add to Collections option on the work
+  Scenario: Work creator can add their own anonymous work to another collection
     Given I have the anonymous collection "AnonymousCollection"
       And I have the collection "OtherCollection"
       And I am logged in as a random user
+      And I set my preferences to allow collection invitations
       And I post the work "Some Work" to the collection "AnonymousCollection"
-    When I view the work "Some Work"
-      And I fill in "Collection name(s):" with "OtherCollection"
-      And I press "Add"
-    Then I should see "Added to collection(s): OtherCollection."
+    When I edit the work "Some Work" to be in the collections "AnonymousCollection,OtherCollection"
+    Then I should see "Work was successfully updated."
+      And I should see "OtherCollection"

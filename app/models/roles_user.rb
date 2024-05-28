@@ -21,4 +21,13 @@ class RolesUser < ApplicationRecord
                            note: note,
                            role_id: role_id })
   end
+
+  # After removing the tag_wrangler role, remove the
+  # user's last wrangling activity as well.
+  after_destroy :destroy_last_wrangling_activity
+  def destroy_last_wrangling_activity
+    return unless role.name == "tag_wrangler"
+
+    user.last_wrangling_activity&.destroy
+  end
 end

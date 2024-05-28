@@ -14,10 +14,16 @@
       <% Tag::VISIBLE.each do |type| %>
         <% tags = @work.tag_groups[type] %>
         <% unless tags.blank? %>
-          <dt><%= type.constantize::NAME %>:</dt>
-          <dd><%= tags.map {|t| link_to(t.name, tag_url(t))}.join(", ").html_safe %></dd>
+          <dt><%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize(locale: :en) %>:</dt>
+          <dd><%= tags.map {|t| link_to(t.display_name, tag_url(t))}.join(", ").html_safe %></dd>
         <% end %>
       <% end %>
+
+      <% unless @work.language.blank? %>
+        <dt><%= ts("Language") %>:</dt>
+        <dd><%= @work.language.name %></dd>
+      <% end %>
+
       <% series_list = @work.serial_works.reject{ |sw| sw.series.nil? } %>
       <% unless series_list.blank? %>
         <dt><%= ts("Series") %>:</dt>
@@ -35,10 +41,8 @@
         <% if @work.first_chapter.published_at < @work.revised_at.to_date %>
           <%= @work.is_wip ? ts("Updated") : ts("Completed") %>: <%= l(@work.revised_at.to_date) %>
         <% end %>
-        <% if @work.chaptered? %>
-          <%= ts("Chapters") %>: <%= @work.chapter_total_display %>
-        <% end %>
-        <%= ts("Words") %>: <%= @work.word_count %>
+        <%= ts("Words") %>: <%= number_with_delimiter(@work.word_count) %>
+        <%= ts("Chapters") %>: <%= chapter_total_display(@work) %>
       </dd>
     </dl>
     <h1><%= @work.title.html_safe %></h1>
@@ -61,19 +65,28 @@
       <% end %>
     <% end %>
 
+    <%# i18n-tasks-use t("downloads.download_preface.translated_to.restricted_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translated_to.revealed_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translated_to.unrevealed_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.inspired_by.restricted_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.inspired_by.revealed_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.inspired_by.unrevealed") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translation_of.restricted_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translation_of.revealed_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translation_of.unrevealed") %>
+    <% translations = @work.approved_related_works.where(translation: true) %>
     <% related_works = @work.parent_work_relationships.reject { |wr| !wr.parent } %>
-    <% if related_works.length > 0 %>
+    <% if translations.any? || related_works.any? %>
       <ul>
+        <% translations.each do |related_work| %>
+          <li>
+            <%= related_work_note(related_work.work, "translated_to", download: true) %>
+          </li>
+        <% end %>
         <% related_works.each do |work| %>
           <li>
-            <% relation_text = work.translation ?
-              "A translation of %{work_link} by %{author_link}" :
-              "Inspired by %{work_link} by %{author_link}"
-            %>
-            <% work_link = link_to work.parent.title.html_safe, url_for(work.parent) %>
-            <% author_link = byline(work.parent, visibility: 'public', only_path: false) %>
-
-            <%= ts(relation_text, work_link: work_link, author_link: author_link).html_safe %>
+            <% relation = work.translation ? "translation_of" : "inspired_by" %>
+            <%= related_work_note(work.parent, relation, download: true) %>
           </li>
         <% end %>
       </ul>

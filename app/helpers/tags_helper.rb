@@ -126,6 +126,7 @@ module TagsHelper
   end
 
   # Changes display name of warnings in works blurb
+  # Used when we don't have an actual tag object
   def warning_display_name(name)
     ArchiveWarning::DISPLAY_NAME_MAPPING[name] || name
   end
@@ -349,5 +350,4 @@ module TagsHelper
       end
     end
   end
-
 end

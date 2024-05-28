@@ -1,4 +1,4 @@
-<%= form_tag collections_url, method: :get, class: "narrow-hidden filters",
+<%= form_tag collections_path, method: :get, class: "narrow-hidden filters",
     id: "collection-filters" do %>
   <h3 class="landmark heading"><%= ts("Filters") %></h3>
   <%= field_set_tag ts("Filter collections:") do %>
@@ -138,6 +138,9 @@
       <dt class="landmark"><%= ts("Submit") %></dt>
       <dd class="submit actions"><%= submit_tag ts("Sort and Filter") %></dd>
     </dl>
+    <p class="footnote">
+      <%= link_to ts("Clear Filters"), collections_path %>
+    </p>
   <% end %>
   <% # On narrow screens, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
   <p class="narrow-shown hidden">

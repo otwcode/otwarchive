@@ -15,8 +15,9 @@ Feature: Filing a support request
     And all emails have been delivered
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"
-    And 2 emails should be delivered
-    And the email should contain "We're working hard to reply to everyone, and we'll respond to you as soon as we can."
+    And 1 email should be delivered
+    And the email should contain "working hard to reply to everyone"
+    And the email should contain "respond to you as soon as we can."
     And the email should contain "If you have additional questions or information"
     And the email should contain "Sent at Mon, 14 Mar 2022 12:00:00 \+0000"
   When I follow "Support & Feedback"
@@ -27,7 +28,7 @@ Feature: Filing a support request
     And all emails have been delivered
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"
-    And 2 emails should be delivered
+    And 1 email should be delivered
 
   Scenario: Not logged in, with and without email
   
@@ -45,5 +46,17 @@ Feature: Filing a support request
     And I fill in "Your email (required)" with "test@archiveofourown.org"
     And I press "Send"
   Then I should see "Your message was sent to the Archive team - thank you!"
-    And 2 emails should be delivered
-    
+    And 1 email should be delivered
+
+  Scenario: Submit a request containing an image
+
+  Given I am logged in as "puzzled"
+    And basic languages
+  When I follow "Support & Feedback"
+    And I fill in "Brief summary" with "Just a brief note"
+    And I fill in "Your question or problem" with '<img src="foo.jpg" />Hi'
+    And I press "Send"
+  Then 1 email should be delivered
+    # The sanitizer adds the domain in front of relative image URLs as of AO3-6571
+    And the email should not contain "<img src="http://www.example.org/foo.jpg" />"
+    But the email should contain "http://www.example.org/foo.jpgHi"

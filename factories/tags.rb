@@ -14,8 +14,8 @@ FactoryBot.define do
   end
 
   factory :meta_tagging do
-    association :meta_tag, factory: :freeform
-    association :sub_tag, factory: :freeform
+    association :meta_tag, factory: :canonical_freeform
+    association :sub_tag, factory: :canonical_freeform
   end
 
   factory :tag_set do

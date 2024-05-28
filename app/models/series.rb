@@ -1,5 +1,4 @@
 class Series < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Bookmarkable
   include Searchable
   include Creatable
@@ -39,8 +38,7 @@ class Series < ApplicationRecord
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   after_save :adjust_restricted
-  after_update :expire_caches
-  after_update_commit :update_work_index
+  after_update_commit :expire_caches, :update_work_index
 
   scope :visible_to_registered_user, -> { where(hidden_by_admin: false).order('series.updated_at DESC') }
   scope :visible_to_all, -> { where(hidden_by_admin: false, restricted: false).order('series.updated_at DESC') }
@@ -52,10 +50,15 @@ class Series < ApplicationRecord
     having("MAX(works.in_anon_collection) = 0 AND MAX(works.in_unrevealed_collection) = 0")
   }
 
-  scope :for_pseuds, lambda {|pseuds|
-    joins(:approved_creatorships).
-    where("creatorships.pseud_id IN (?)", pseuds.collect(&:id))
+  scope :for_pseud, lambda { |pseud|
+    joins(:approved_creatorships).where(creatorships: { pseud: pseud })
   }
+
+  scope :for_user, lambda { |user|
+    joins(approved_creatorships: :pseud).where(pseuds: { user: user })
+  }
+
+  scope :for_blurb, -> { includes(:work_tags, :pseuds) }
 
   def posted_works
     self.works.posted
@@ -145,8 +148,13 @@ class Series < ApplicationRecord
   end
 
   def expire_caches
-    # Expire cached work blurbs and metas if series title changes
-    self.works.each(&:touch) if saved_change_to_title?
+    self.works.touch_all
+  end
+
+  def expire_byline_cache
+    [true, false].each do |only_path|
+      Rails.cache.delete("#{cache_key}/byline-nonanon/#{only_path}")
+    end
   end
 
   # Change the positions of the serial works in the series

@@ -1,4 +1,5 @@
-@works
+# We need to load the site skin to make the share modal work properly:
+@works @load-default-skin
 Feature: Share Works
   Testing the "Share" button on works, with Javascript emulation
 
@@ -11,32 +12,32 @@ Feature: Share Works
     When I follow "Share"
     Then I should see "Copy and paste the following code to link back to this work" within "#share"
       And I should see "or use the Tweet or Tumblr links to share the work" within "#share"
-      And I should see '<strong>Blabla</strong></a> (6 words)' within "#share"
-      And I should see 'by <a href="http://www.example.com/users/testuser1"><strong>testuser1</strong></a>' within "#share"
-      And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share"
-      And I should see "Rating: Not Rated" within "#share"
-      And I should see "Warnings: No Archive Warnings Apply" within "#share"
+      And I should see '<strong>Blabla</strong></a> (6 words)' within "#share textarea"
+      And I should see 'by <a href="http://www.example.com/users/testuser1"><strong>testuser1</strong></a>' within "#share textarea"
+      And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share textarea"
+      And I should see "Rating: Not Rated" within "#share textarea"
+      And I should see "Warnings: No Archive Warnings Apply" within "#share textarea"
       And the share modal should contain social share buttons
-      And I should not see "Series:" within "#share"
-      And I should not see "Relationships:" within "#share"
-      And I should not see "Characters:" within "#share"
-      And I should not see "Summary:" within "#share"
+      And I should not see "Series:" within "#share textarea"
+      And I should not see "Relationships:" within "#share textarea"
+      And I should not see "Characters:" within "#share textarea"
+      And I should not see "Summary:" within "#share textarea"
     When I view the work "Blabla"
       And I log out
     Then I should see "Share"
     When I follow "Share"
     Then I should see "Copy and paste the following code to link back to this work" within "#share"
       And I should see "or use the Tweet or Tumblr links to share the work" within "#share"
-      And I should see '<strong>Blabla</strong></a> (6 words)' within "#share"
-      And I should see 'by <a href="http://www.example.com/users/testuser1"><strong>testuser1</strong></a>' within "#share"
-      And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share"
-      And I should see "Rating: Not Rated" within "#share"
-      And I should see "Warnings: No Archive Warnings Apply" within "#share"
+      And I should see '<strong>Blabla</strong></a> (6 words)' within "#share textarea"
+      And I should see 'by <a href="http://www.example.com/users/testuser1"><strong>testuser1</strong></a>' within "#share textarea"
+      And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share textarea"
+      And I should see "Rating: Not Rated" within "#share textarea"
+      And I should see "Warnings: No Archive Warnings Apply" within "#share textarea"
       And the share modal should contain social share buttons
-      And I should not see "Series:" within "#share"
-      And I should not see "Relationships:" within "#share"
-      And I should not see "Characters:" within "#share"
-      And I should not see "Summary:" within "#share"
+      And I should not see "Series:" within "#share textarea"
+      And I should not see "Relationships:" within "#share textarea"
+      And I should not see "Characters:" within "#share textarea"
+      And I should not see "Summary:" within "#share textarea"
 
   Scenario: Share option should be disabled if all creators have set the option to disable sharing on their works
   
@@ -61,7 +62,7 @@ Feature: Share Works
     Then I should see "Share"
     When I follow "Share"
     Then I should see "Copy and paste the following code to link back to this work"
-      And I should see "><strong>Whatever</strong></a> (10 words) b"
+      And I should see "><strong>Whatever</strong></a> (10 words) b" within "#share textarea"
 
   @javascript
   Scenario: Share URL should not be used for post-login redirect
@@ -75,7 +76,10 @@ Feature: Share Works
     When I follow "Share"
     Then I should see "Close" within "#modal"
     When I follow "Close"
+      And I follow "Log In"
       And I fill in "User name or email:" with "maduser"
       And I fill in "Password:" with "password"
       And I press "Log In"
-    Then I should be on the "Blabla" work page
+    Then the url should not include "share"
+      # Shown when the share url is accessed directly
+      And I should not see "Sorry, you need to have JavaScript enabled for this."

@@ -9,6 +9,10 @@ module MailerHelper
     link_to(body.html_safe, url, html_options)
   end
 
+  def style_role(text)
+    tag.em(tag.strong(text))
+  end
+
   # For work, chapter, and series links
   def style_creation_link(title, url, html_options = {})
     html_options[:style] = "color:#990000"
@@ -103,11 +107,34 @@ module MailerHelper
   # emails.
   def creation_title(creation)
     if creation.is_a?(Chapter)
-      ts("Chapter %{position} of %{title}",
+      t("mailer.general.creation.title_with_chapter_number",
          position: creation.position, title: creation.work.title)
     else
       creation.title
     end
+  end
+
+  # e.g., Title (x words), where Title is a link
+  def creation_link_with_word_count(creation, creation_url)
+    title = if creation.is_a?(Chapter)
+              creation.full_chapter_title.html_safe
+            else
+              creation.title.html_safe
+            end
+    t("mailer.general.creation.link_with_word_count",
+      creation_link: style_creation_link(title, creation_url),
+      word_count: creation_word_count(creation)).html_safe
+  end
+
+  # e.g., "Title" (x words), where Title is not a link
+  def creation_title_with_word_count(creation)
+    title = if creation.is_a?(Chapter)
+              creation.full_chapter_title.html_safe
+            else
+              creation.title.html_safe
+            end
+    t("mailer.general.creation.title_with_word_count",
+      creation_title: title, word_count: creation_word_count(creation))
   end
 
   # The bylines used in subscription emails to prevent exposing the name(s) of
@@ -139,6 +166,8 @@ module MailerHelper
     "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
   end
 
+  # TODO: We're using this for labels in set_password_notification, too. Let's
+  # take the "work" out of the name.
   def style_work_metadata_label(text)
     style_bold(work_metadata_label(text))
   end
@@ -151,11 +180,45 @@ module MailerHelper
     "#{label}#{style_work_tag_metadata_list(tags)}".html_safe
   end
 
+  def commenter_pseud_or_name_link(comment)
+    return style_bold(t("roles.anonymous_creator")) if comment.by_anonymous_creator?
+
+    if comment.comment_owner.nil?
+      t("roles.commenter_name.html", name: style_bold(comment.comment_owner_name), role_with_parens: style_role(t("roles.guest_with_parens")))
+    else
+      role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
+      pseud_link = style_link(comment.pseud.byline, user_pseud_url(comment.user, comment.pseud))
+      t("roles.commenter_name.html", name: tag.strong(pseud_link), role_with_parens: style_role(role))
+    end
+  end
+
+  def commenter_pseud_or_name_text(comment)
+    return t("roles.anonymous_creator") if comment.by_anonymous_creator?
+
+    if comment.comment_owner.nil?
+      t("roles.commenter_name.text", name: comment.comment_owner_name, role_with_parens: t("roles.guest_with_parens"))
+    else
+      role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
+      t("roles.commenter_name.text", name: text_pseud(comment.pseud), role_with_parens: role)
+    end
+  end
+
   private
+
+  # e.g., 1 word or 50 words
+  def creation_word_count(creation)
+    t("mailer.general.creation.word_count", count: creation.word_count)
+  end
 
   def work_tag_metadata_label(tags)
     return if tags.empty?
 
+    # i18n-tasks-use t('activerecord.models.archive_warning')
+    # i18n-tasks-use t('activerecord.models.character')
+    # i18n-tasks-use t('activerecord.models.fandom')
+    # i18n-tasks-use t('activerecord.models.freeform')
+    # i18n-tasks-use t('activerecord.models.rating')
+    # i18n-tasks-use t('activerecord.models.relationship')
     type = tags.first.type
     t("activerecord.models.#{type.underscore}", count: tags.count) + t("mailer.general.metadata_label_indicator")
   end

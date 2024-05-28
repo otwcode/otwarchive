@@ -1,22 +1,33 @@
+# Uncomment the following line to ignore known issues
+# inherit_from: .rubocop_todo.yml
+
 # Options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 
 require:
   - rubocop-rails
   - rubocop-rspec
+  - ./rubocop/rubocop
+
+inherit_mode:
+  merge:
+    - Exclude
 
 AllCops:
-  RSpec:
-    Patterns:
-      - "(?:^|/)factories/"
-      - "(?:^|/)features/"
-      - "(?:^|/)spec/"
-  TargetRubyVersion: 2.7
+  NewCops: enable
+  TargetRubyVersion: 3.0
 
 Bundler/OrderedGems:
   Enabled: false
 
+I18n/DeprecatedTranslationKey:
+    Rules:
+      name_with_colon: "Prefer `name` with `mailer.general.metadata_label_indicator` over `name_with_colon`"
+
 Layout/DotPosition:
   EnforcedStyle: leading
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: false
 
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
@@ -26,6 +37,9 @@ Layout/LineLength:
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
+
+Layout/SingleLineBlockChain:
+  Enabled: true
 
 Layout/TrailingWhitespace:
   Enabled: false
@@ -38,6 +52,12 @@ Lint/AmbiguousBlockAssociation:
 
 Lint/AmbiguousRegexpLiteral:
   Enabled: false
+
+Lint/RedundantSafeNavigation:
+  Exclude:
+    # Take a better safe than sorry approach to safe navigation in admin
+    # policies.
+    - 'app/policies/*.rb'
 
 Metrics/AbcSize:
   Enabled: false
@@ -57,8 +77,56 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
 Metrics/PerceivedComplexity:
   Enabled: false
+
+Migration/LargeTableSchemaUpdate:
+  Tables:
+    - abuse_reports
+    - admin_activities
+    - audits
+    - bookmarks
+    - comments
+    - common_taggings
+    - collection_items
+    - collection_participants
+    - collection_profiles
+    - collections
+    - creatorships
+    - external_works
+    - favorite_tags
+    - feedbacks
+    - filter_counts
+    - filter_taggings
+    - gifts
+    - inbox_comments
+    - invitations
+    - kudos
+    - log_items
+    - mutes
+    - preferences
+    - profiles
+    - prompts
+    - pseuds
+    - readings
+    - set_taggings
+    - serial_works
+    - series
+    - skins
+    - stat_counters
+    - subscriptions
+    - tag_nominations
+    - tag_set_associations
+    - tags
+    - taggings
+    - users
+    - works
+
+Rails/DefaultScope:
+  Enabled: true
 
 Rails/DynamicFindBy:
   AllowedMethods:
@@ -72,6 +140,11 @@ Rails/DynamicFindBy:
     - find_by_url_generation
     - find_by_url_generation_key
     - find_by_url_uncached
+    # Exceptions for InboxComment.find_by_filters
+    - find_by_filters
+
+Rails/EnvironmentVariableAccess:
+  Enabled: true
 
 # Allow all uses of html_safe, they're everywhere...
 Rails/OutputSafety:
@@ -85,6 +158,9 @@ Rails/Output:
 Rails/RakeEnvironment:
   Enabled: false
 
+Rails/ReversibleMigrationMethodDefinition:
+  Enabled: true
+
 # Allow update_attribute, update_all, touch, etc.
 Rails/SkipsModelValidations:
   Enabled: false
@@ -95,6 +171,12 @@ Rails/UnknownEnv:
     - test
     - staging
     - production
+
+RSpec:
+  Include:
+    - "(?:^|/)factories/"
+    - "(?:^|/)features/"
+    - "(?:^|/)spec/"
 
 # Allow "allow_any_instance_of"
 RSpec/AnyInstance:
@@ -129,6 +211,8 @@ RSpec/FilePath:
   Exclude:
     # Exception for WorksController, whose many specs need multiple files
     - 'spec/controllers/works/*.rb'
+    # Exception for concern specs, which may test multiple classes
+    - 'spec/models/concerns/**/*.rb'
 
 # Avoid instance variables, except for those not assigned within the spec,
 # e.g. @request.
@@ -194,6 +278,9 @@ Style/PercentLiteralDelimiters:
 # Stop checking if uses of "self" are redundant
 Style/RedundantSelf:
   Enabled: false
+
+Style/SelectByRegexp:
+  Enabled: true
 
 Style/SingleLineMethods:
   AllowIfMethodIsEmpty: false

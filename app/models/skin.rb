@@ -1,8 +1,6 @@
 require 'fileutils'
 
 class Skin < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   include HtmlCleaner
   include CssCleaner
   include SkinCacheHelper
@@ -48,7 +46,7 @@ class Skin < ApplicationRecord
                                   class_name: 'SkinParent', dependent: :destroy, inverse_of: :parent_skin
   has_many :child_skins, through: :skin_children, inverse_of: :parent_skins
 
-  accepts_nested_attributes_for :skin_parents, allow_destroy: true, reject_if: proc { |attrs| attrs[:position].blank? }
+  accepts_nested_attributes_for :skin_parents, allow_destroy: true, reject_if: proc { |attrs| attrs[:position].blank? || (attrs[:parent_skin_title].blank? && attrs[:parent_skin_id].blank?) }
 
   has_attached_file :icon,
                     styles: { standard: "100x100>" },
@@ -56,8 +54,6 @@ class Skin < ApplicationRecord
                     path: %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
                     storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
                     s3_protocol: "https",
-                    s3_credentials: "#{Rails.root}/config/s3.yml",
-                    bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
                     default_url: "/images/skins/iconsets/default/icon_skins.png"
 
   after_save :skin_invalidate_cache
@@ -111,7 +107,7 @@ class Skin < ApplicationRecord
   end
 
   validates_presence_of :title
-  validates_uniqueness_of :title, message: ts('must be unique'), case_sensitive: true
+  validates :title, uniqueness: { message: ts("must be unique"), case_sensitive: true }
 
   validates_numericality_of :margin, :base_em, allow_nil: true
   validate :valid_font

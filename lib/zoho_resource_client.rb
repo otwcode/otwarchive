@@ -21,6 +21,8 @@ class ZohoResourceClient
       query: search_params.merge(ticketNumber: ticket_number),
       headers: headers
     ).parsed_response
+
+    # Note that Zoho returns an empty 204 if the ticket is marked as spam.
     return if response.blank? || response.key?("errorCode")
 
     response.fetch("data").first

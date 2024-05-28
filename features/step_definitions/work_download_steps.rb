@@ -1,5 +1,17 @@
+Then /^I should see the inspiring parent work link$/ do
+  parent = Work.find_by(title: "Worldbuilding")
+  inspired_link = "<a href=\"#{work_url(parent)}\">#{parent.title.html_safe}</a>"
+  page.body.should =~ /Inspired by #{Regexp.escape(inspired_link)}/m
+end
+
+Then /^I should see the external inspiring work link$/ do
+  parent = ExternalWork.find_by(title: "Example External")
+  inspired_link = "<a href=\"#{external_work_url(parent)}\">#{parent.title.html_safe}</a>"
+  page.body.should =~ /Inspired by #{Regexp.escape(inspired_link)}/m
+end
+
 Then /^I should receive a file of type "(.*?)"$/ do |filetype|
-  mime_type = filetype == "azw3" ? "application/x-mobi8-ebook" : MIME::Types.type_for("foo.#{filetype}").first
+  mime_type = Marcel::MimeType.for(name: "foo.#{filetype}").to_s
   expect(page.response_headers['Content-Disposition']).to match(/filename=.+\.#{filetype}/)
   expect(page.response_headers['Content-Length'].to_i).to be_positive
   expect(page.response_headers['Content-Type']).to eq(mime_type)
@@ -18,7 +30,7 @@ Then /^I should be able to download the (\w+) version of "(.*?)"$/ do |filetype,
 
   download = Download.new(work, format: filetype)
   filename = "#{download.file_name}.#{download.file_type}"
-  mime_type = filetype == "azw3" ? "application/x-mobi8-ebook" : MIME::Types.type_for(filename).first
+  mime_type = Marcel::MimeType.for(name: filename).to_s
   expect(page.response_headers['Content-Disposition']).to match(/filename="#{filename}"/)
   expect(page.response_headers['Content-Length'].to_i).to be_positive
   expect(page.response_headers['Content-Type']).to eq(mime_type)

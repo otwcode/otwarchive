@@ -124,22 +124,18 @@ class PromptsController < ApplicationController
   end
 
   def create
-    params[:prompt].merge!({challenge_signup_id: @challenge_signup.id})
-
     if params[:prompt_type] == "offer"
       @prompt = @challenge_signup.offers.build(prompt_params)
     else
       @prompt = @challenge_signup.requests.build(prompt_params)
     end
 
-    if !@challenge_signup.valid?
-      flash[:error] = ts("That prompt would make your overall sign-up invalid, sorry.")
-      redirect_to edit_collection_signup_path(@collection, @challenge_signup)
-    elsif @prompt.save
+    if @challenge_signup.save
       flash[:notice] = ts("Prompt was successfully added.")
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
-      render action: :new
+      flash[:error] = ts("That prompt would make your overall sign-up invalid, sorry.")
+      redirect_to edit_collection_signup_path(@collection, @challenge_signup)
     end
   end
 
@@ -178,12 +174,10 @@ class PromptsController < ApplicationController
 
   def prompt_params
     params.require(:prompt).permit(
-      :collection_id,
       :title,
       :url,
       :anonymous,
       :description,
-      :challenge_signup_id,
       :any_fandom,
       :any_character,
       :any_relationship,

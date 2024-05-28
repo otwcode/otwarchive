@@ -17,7 +17,7 @@ Chapter Summary: <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
 
 <% unless @seen[this_work.id] %>
 <% cache "subscription-email-txt-meta-#{creation.cache_key}" do %>
-Chapters: <%= this_work.chapter_total_display %>
+Chapters: <%= chapter_total_display(this_work) %>
 Fandom: <%= this_work.fandoms.map{|f| f.name}.to_sentence.html_safe %>
 Rating: <%= this_work.rating_string %>
 Warnings: <%= this_work.archive_warning_string %>

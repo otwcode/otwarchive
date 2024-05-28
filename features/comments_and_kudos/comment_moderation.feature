@@ -72,6 +72,7 @@ Feature: Comment Moderation
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
       And I post the comment "Fail comment" on the work "Moderation"
+      And it is currently 1 second from now
     When I follow "Edit"
       And I fill in "Comment" with "Edited unfail comment"
       And I press "Update"
@@ -269,7 +270,8 @@ Feature: Comment Moderation
       And I am logged in as "author"
       And I view the unreviewed comments page for "Moderation"
       And I press "Approve"
-    When I am logged in as "commenter"
+    When it is currently 1 second from now
+      And I am logged in as "commenter"
       And I view the work "Moderation"
       And I follow "Comments (1)"
       And I follow "Edit"
@@ -280,7 +282,8 @@ Feature: Comment Moderation
     Then I should see "Comments (1)"
     When I follow "Comments (1)"
     Then I should see "Interesting Commentary"
-    When I follow "Edit"
+    When it is currently 1 second from now
+      And I follow "Edit"
       And I fill in "Comment" with "AHAHAHA LOOK I HAVE TOTALLY CHANGED IT"
       And it is currently 1 second from now
       And I press "Update"

@@ -23,6 +23,8 @@ module PermitYo
         # Determine if the current model has a particular role
         # depends on the model having a relationship with roles! (eg, has_and_belongs_to_many :roles)
         def has_role?(role_name)
+          return self.roles.any? { |role| role.name == role_name.to_s } if self.roles.loaded?
+
           role = Role.find_by(name: role_name)
           self.roles.include?(role)
         end

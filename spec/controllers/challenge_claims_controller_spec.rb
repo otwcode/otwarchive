@@ -78,7 +78,7 @@ describe ChallengeClaimsController do
 
   describe 'show' do
     it 'redirects logged in user to the prompt' do
-      request_prompt = create(:prompt, collection_id: collection.id, challenge_signup_id: signup.id)
+      request_prompt = create(:request, collection_id: collection.id, challenge_signup_id: signup.id)
       claim_with_prompt = create(:challenge_claim, collection: collection, request_prompt_id: request_prompt.id)
       fake_login_known_user(user)
       get :show, params: { id: claim_with_prompt.id, collection_id: collection.name }

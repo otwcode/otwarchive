@@ -59,6 +59,30 @@
   width: auto;
 }
 
+/* 07 interactions */
+
+form.single input[type="text"] {
+  width: 100%;
+    box-sizing: border-box;
+}
+
+form.single input[type="submit"] {
+  margin-top: 0.375em;
+}
+
+form.single span.submit {
+  display: block;
+  text-align: right;
+}
+
+form.single ul.autocomplete {
+  display: block;
+}
+
+form.single .autocomplete li.input {
+  margin-right: 0;
+}
+
 /* 16 zone system */
 
 .logged-in .splash > .module {

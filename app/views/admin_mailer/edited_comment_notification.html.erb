@@ -1,13 +1,7 @@
 <% content_for :message do %>
 
-  <% if @comment.comment_owner %>
-    <b><%= style_link(@comment.comment_owner_name, polymorphic_url(@comment.comment_owner, :only_path => false)) %></b>
-  <% else %>
-    <%= style_bold(@comment.comment_owner_name) %>
-  <% end %> 
+  <%= commenter_pseud_or_name_link(@comment) %> edited the following comment on
 
-  edited the following comment on 
-  
   <% if @comment.ultimate_parent.is_a?(Tag) %>
     the tag 
     <%= style_link(@comment.ultimate_parent.commentable_name, {:controller => :tags, :action => :show, :id => @comment.ultimate_parent.to_param, :only_path => false}) %>:

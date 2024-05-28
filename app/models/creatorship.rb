@@ -1,6 +1,6 @@
 class Creatorship < ApplicationRecord
-  belongs_to :pseud, inverse_of: :creatorships
-  belongs_to :creation, inverse_of: :creatorships, polymorphic: true, touch: true
+  belongs_to :pseud
+  belongs_to :creation, polymorphic: true, touch: true
 
   scope :approved, -> { where(approved: true) }
   scope :unapproved, -> { where(approved: false) }
@@ -17,8 +17,8 @@ class Creatorship < ApplicationRecord
   validates_uniqueness_of :pseud, scope: [:creation_type, :creation_id], on: :create
 
   validate :check_invalid, on: :create
-  validate :check_disallowed, on: :create
   validate :check_banned, on: :create
+  validate :check_disallowed, on: :create
   validate :check_approved_becoming_false, on: :update
 
   # Update approval status if this creatorship should be automatically approved.
@@ -41,21 +41,21 @@ class Creatorship < ApplicationRecord
     end
   end
 
+  # Make sure that the user isn't banned or suspended.
+  def check_banned
+    return unless pseud&.user&.banned || pseud&.user&.suspended
+
+    errors.add(:base, ts("%{name} cannot be listed as a co-creator.",
+                         name: pseud.byline))
+    throw :abort
+  end
+
   # Make sure that if this is an invitation, we're not inviting someone who has
   # disabled invitations.
   def check_disallowed
     return if approved? || pseud.nil?
     return if pseud&.user&.preference&.allow_cocreator
-
     errors.add(:base, ts("%{name} does not allow others to invite them to be a co-creator.",
-                         name: pseud.byline))
-  end
-
-  # Make sure that the user isn't banned or suspended.
-  def check_banned
-    return unless pseud&.user&.banned || pseud&.user&.suspended
-
-    errors.add(:base, ts("%{name} is currently banned and cannot be listed as a co-creator.",
                          name: pseud.byline))
   end
 
@@ -77,6 +77,7 @@ class Creatorship < ApplicationRecord
 
   before_destroy :expire_caches
   before_destroy :check_not_last
+  before_destroy :save_original_creator
   after_destroy :remove_from_children
 
   after_commit :update_indices
@@ -148,14 +149,16 @@ class Creatorship < ApplicationRecord
                   pseud.user != User.current_user &&
                   pseud.user != User.orphan_account
 
-    if approved?
-      if User.current_user.try(:is_archivist?)
-        UserMailer.creatorship_notification_archivist(id, User.current_user.id).deliver_later
+    I18n.with_locale(pseud.user.preference.locale.iso) do
+      if approved?
+        if User.current_user.try(:is_archivist?)
+          UserMailer.creatorship_notification_archivist(id, User.current_user.id).deliver_later
+        else
+          UserMailer.creatorship_notification(id, User.current_user.id).deliver_later
+        end
       else
-        UserMailer.creatorship_notification(id, User.current_user.id).deliver_later
+        UserMailer.creatorship_request(id, User.current_user.id).deliver_later
       end
-    else
-      UserMailer.creatorship_request(id, User.current_user.id).deliver_later
     end
   end
 
@@ -175,6 +178,17 @@ class Creatorship < ApplicationRecord
     raise ActiveRecord::RecordInvalid, self
   end
 
+  # Record the original creator if the creation is a work.
+  # This information is stored temporarily to make it available for
+  # Policy and Abuse on orphaned works.
+  def save_original_creator
+    return unless approved?
+    return unless creation.is_a?(Work)
+    return if creation.destroyed?
+
+    creation.original_creators.create_or_find_by(user: pseud.user).touch
+  end
+
   def expire_caches
     if creation_type == "Work" && self.pseud.present?
       CacheMaster.record(creation_id, "pseud", self.pseud_id)
@@ -192,7 +206,7 @@ class Creatorship < ApplicationRecord
   # ambiguous/missing pseuds. By storing the desired name in the @byline
   # variable, we can generate nicely formatted messages.
   def byline=(byline)
-    pseuds = Pseud.parse_byline(byline).to_a
+    pseuds = Pseud.parse_byline_ambiguous(byline).to_a
 
     if pseuds.size == 1
       self.pseud = pseuds.first

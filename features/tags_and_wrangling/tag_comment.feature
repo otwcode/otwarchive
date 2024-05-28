@@ -28,7 +28,8 @@ I'd like to comment on a tag'
       And it is currently Mon Mar 27 22:00:00 UTC 2017
     When I am logged in as "dizmo"
     When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis"
-    When I follow "Edit"
+    When it is currently 1 second from now
+      And I follow "Edit"
     Then the "Comment" field should contain "Shouldn't this be a metatag with Stargate?"
       And I should see "Cancel"
     When I fill in "Comment" with "Yep, we should have a Stargate franchise metatag."
@@ -42,53 +43,16 @@ I'd like to comment on a tag'
   Scenario: Multiple comments on a tag increment correctly
 
     Given the following activated tag wranglers exist
-        | login     |
-        | dizmo     |
+        | login        |
+        | dizmo        |
+        | someone_else |
       And a fandom exists with name: "Stargate Atlantis", canonical: true
     When I am logged in as "dizmo"
     When I post the comment "Yep, we should have a Stargate franchise metatag." on the tag "Stargate Atlantis"
-    When I am logged in as an admin
+    When I am logged in as "someone_else"
     When I post the comment "Important policy decision" on the tag "Stargate Atlantis"
     When I view the tag "Stargate Atlantis"
     Then I should see "2 comments"
-
-  Scenario: Multiple comments on a tag show on discussion page
-
-    Given the following activated tag wranglers exist
-        | login     |
-        | dizmo     |
-        | Enigel    |
-      And a fandom exists with name: "Stargate Atlantis", canonical: true
-    When I am logged in as "Enigel"
-    When I post the comment "Yep, we should have a Stargate franchise metatag." on the tag "Stargate Atlantis"
-    When I am logged in as an admin
-    When I post the comment "Important policy decision" on the tag "Stargate Atlantis"
-    When I am logged in as "dizmo"
-    When I view tag wrangling discussions
-    Then I should see "Tag Wrangling Discussion"
-      And I should see "Yep, we should have a Stargate franchise metatag."
-      And I should see "Important policy decision"
-
-  Scenario: Unedited tag does not show on discussion page
-
-    Given the following activated tag wranglers exist
-          | login     |
-          | dizmo     |
-          | Enigel    |
-        And a fandom exists with name: "Stargate Atlantis", canonical: true
-    When I am logged in as "Enigel"
-    When I view the tag "Stargate Atlantis"
-    When I am logged in as "dizmo"
-    When I view tag wrangling discussions
-    Then I should not see "Stargate Atlantis"
-
-    Scenario: admin can also comment on tags, issue 1428
-
-    Given a fandom exists with name: "Stargate Atlantis", canonical: true
-    When I am logged in as an admin
-    When I post the comment "Important policy decision" on the tag "Stargate Atlantis" via web
-    When I view the tag "Stargate Atlantis"
-    Then I should see "1 comment"
 
   Scenario: Issue 2185: email notifications for tag commenting; TO DO: replies to comments
 

@@ -3,6 +3,8 @@
 .bundle
 .idea
 stdout
+*~
+.vscode/
 # /
 /*.tmproj
 /sphinx

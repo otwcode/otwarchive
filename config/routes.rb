@@ -1,13 +1,22 @@
-Otwarchive::Application.routes.draw do
-
+Rails.application.routes.draw do
   devise_scope :admin do
     get "admin/logout" => "admin/sessions#confirm_logout"
+
+    # Rails emulates some HTTP methods over POST, so password resets (PUT /admin/password)
+    # look the same as password reset requests (POST /admin/password).
+    #
+    # To rate limit them differently at nginx, we set up an alias for
+    # the first request type.
+    put "admin/password/reset" => "admin/passwords#update"
   end
 
   devise_for :admin,
              module: "admin",
-             only: :sessions,
-             controllers: { sessions: "admin/sessions" },
+             only: [:sessions, :passwords],
+             controllers: {
+               sessions: "admin/sessions",
+               passwords: "admin/passwords"
+             },
              path_names: {
                sign_in: "login",
                sign_out: "logout"
@@ -67,10 +76,9 @@ Otwarchive::Application.routes.draw do
 
   resources :invitations
   resources :user_invite_requests
-  resources :invite_requests do
+  resources :invite_requests, only: [:index, :create, :destroy] do
     collection do
       get :manage
-      post :reorder
       get :status
     end
   end
@@ -92,10 +100,13 @@ Otwarchive::Application.routes.draw do
   resources :tag_wranglings do
     collection do
       post :wrangle
-      get :discuss
     end
   end
-  resources :tag_wranglers
+  resources :tag_wranglers do
+    member do
+      get :report_csv
+    end
+  end
   resources :unsorted_tags do
     collection do
       post :mass_update
@@ -153,7 +164,12 @@ Otwarchive::Application.routes.draw do
 
   #### ADMIN ####
   resources :admin_posts do
-    resources :comments
+    resources :comments do
+      collection do
+        get :unreviewed
+        put :review_all
+      end
+    end
   end
 
   namespace :admin do
@@ -163,7 +179,7 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete
       end
     end
-    resources :blacklisted_emails, only: [:index, :new, :create, :destroy]
+    resources :blacklisted_emails, only: [:index, :create, :destroy]
     resources :settings
     resources :skins do
       collection do
@@ -182,12 +198,11 @@ Otwarchive::Application.routes.draw do
         put :set_spam
       end
     end
-    resources :users, controller: 'admin_users' do
+    resources :users, controller: "admin_users", only: [:index, :show] do
       member do
         get :confirm_delete_user_creations
         post :destroy_user_creations
         post :activate
-        post :send_activation
         get :check_user
       end
       collection do
@@ -195,6 +210,7 @@ Otwarchive::Application.routes.draw do
         post :bulk_search
         post :update
         post :update_status
+        post :update_next_of_kin
       end
     end
     resources :invitations, controller: 'admin_invitations' do
@@ -234,7 +250,7 @@ Otwarchive::Application.routes.draw do
     resources :assignments, controller: "challenge_assignments", only: [:index]
     resources :claims, controller: "challenge_claims", only: [:index]
     resources :bookmarks
-    resources :collection_items, only: [:index, :update, :destroy] do
+    resources :collection_items, only: [:index, :update] do
       collection do
         patch :update_multiple
       end
@@ -268,7 +284,11 @@ Otwarchive::Application.routes.draw do
     end
     resources :nominations, controller: "tag_set_nominations", only: [:index]
     resources :preferences, only: [:index, :update]
-    resource :profile, only: [:show], controller: "profile"
+    resource :profile, only: [:show], controller: "profile" do
+      collection do
+        get :pseuds
+      end
+    end
     resources :pseuds do
       resources :works
       resources :series
@@ -299,6 +319,26 @@ Otwarchive::Application.routes.draw do
         post :edit_multiple
         patch :update_multiple
         post :delete_multiple
+      end
+    end
+    namespace :blocked do
+      resources :users, only: [:index, :create, :destroy] do
+        collection do
+          get :confirm_block
+        end
+        member do
+          get :confirm_unblock
+        end
+      end
+    end
+    namespace :muted do
+      resources :users, only: [:index, :create, :destroy] do
+        collection do
+          get :confirm_mute
+        end
+        member do
+          get :confirm_unmute
+        end
       end
     end
   end
@@ -364,8 +404,6 @@ Otwarchive::Application.routes.draw do
 
   resources :external_works do
     collection do
-      get :compare
-      post :merge
       get :fetch
     end
     resources :bookmarks
@@ -475,10 +513,11 @@ Otwarchive::Application.routes.draw do
   #### I18N ####
 
   # should stay below the main works mapping
-  resources :languages do
+  resources :languages, except: [:show] do
     resources :works
     resources :admin_posts
   end
+  get "/languages/:id", to: redirect("/languages/%{id}/works", status: 302)
   resources :locales, except: :destroy
 
   #### API ####
@@ -498,9 +537,11 @@ Otwarchive::Application.routes.draw do
     member do
       put :approve
       put :freeze
+      put :hide
       put :reject
       put :review
       put :unfreeze
+      put :unhide
     end
     collection do
       get :hide_comments
@@ -603,7 +644,7 @@ Otwarchive::Application.routes.draw do
 
   # See how all your routes lay out with "rake routes"
 
-  # These are whitelisted routes that are proven to be used throughout the
+  # These are allowlisted routes that are proven to be used throughout the
   # application, which previously relied on a deprecated catch-all route definition
   # (`get ':controller(/:action(/:id(.:format)))'`) to work.
   #
@@ -613,9 +654,6 @@ Otwarchive::Application.routes.draw do
   # can be refactored to not rely on their existence.
   #
   # Note written on August 1, 2017 during upgrade to Rails 5.1.
-  get '/bookmarks/fetch_recent/:id' => 'bookmarks#fetch_recent', as: :fetch_recent_bookmarks
-  get '/bookmarks/hide_recent/:id' => 'bookmarks#hide_recent', as: :hide_recent_bookmarks
-
   get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
   get '/user_invite_requests/update' => 'user_invite_requests#update'
 
@@ -624,8 +662,32 @@ Otwarchive::Application.routes.draw do
   get "/admin/admin_users/troubleshoot/:id" => "admin/admin_users#troubleshoot", as: :troubleshoot_admin_user
 
   # TODO: rewrite the autocomplete controller to deal with the fact that
-  # there are fifty different actions going on in there
-  get '/autocomplete/:action' => 'autocomplete#%{action}'
+  # there are 21 different actions going on in there
+  %w[
+    pseud
+    tag
+    fandom
+    character
+    relationship
+    freeform
+    character_in_fandom
+    relationship_in_fandom
+    tags_in_sets
+    associated_tags
+    noncanonical_tag
+    collection_fullname
+    open_collection_names
+    collection_parent_name
+    external_work
+    potential_offers
+    potential_requests
+    owned_tag_sets
+    site_skins
+    admin_posts
+    admin_post_tags
+  ].each do |action|
+    get "/autocomplete/#{action}" => "autocomplete##{action}"
+  end
 
   get '/challenges/no_collection' => 'challenges#no_collection'
   get '/challenges/no_challenge' => 'challenges#no_challenge'

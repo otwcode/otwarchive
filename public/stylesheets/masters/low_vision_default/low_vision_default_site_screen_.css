@@ -37,8 +37,7 @@ form blockquote.userstuff {
 #inner .filters,
 #footer,
 .filters dt,
-media .listbox,
-.bookmark .recent .index {
+media .listbox {
   width: 100%;
 }
 
@@ -59,6 +58,7 @@ form dl,
 fieldset dl dl,
 fieldset fieldset fieldset,
 fieldset fieldset dl dl,
+form.single fieldset,
 dd.hideme,
 form blockquote.userstuff {
   border: 2px solid;
@@ -157,9 +157,4 @@ pre {
 #header .menu a:focus {
   background: #ccc;
   color: #111;
-}
-
-.bookmark .recent,
-.bookmark .recent .index {
-  border: none;
 }

@@ -185,21 +185,52 @@ describe Tag do
           expect(synonym.children.reload).to contain_exactly
         end
 
-        it "transfers favorite tags" do
-          user = create(:user)
-          user.favorite_tags.create(tag: synonym)
-          synonym.update!(syn_string: fandom.name)
-          expect(user.favorite_tags.count).to eq 1
-          expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+        context "with asynchronous jobs run asynchronously" do
+          include ActiveJob::TestHelper
+
+          it "transfers the subtags to the new parent autocomplete" do
+            child = create(:canonical_character)
+            synonym.add_association(child)
+            synonym.reload
+
+            expect_autocomplete_to_return(fandom, [])
+
+            synonym.update!(syn_string: fandom.name)
+
+            User.current_user = nil # No current user in asynchronous context
+            perform_enqueued_jobs
+
+            expect(fandom.children.reload).to contain_exactly(child)
+            expect(synonym.children.reload).to be_empty
+
+            expect_autocomplete_to_return(fandom, [child])
+          end
         end
 
-        it "handles duplicate favorite tags" do
-          user = create(:user)
-          user.favorite_tags.create(tag: fandom)
-          user.favorite_tags.create(tag: synonym)
-          synonym.update!(syn_string: fandom.name)
-          expect(user.favorite_tags.count).to eq 1
-          expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+        context "with favorite tags" do
+          # Can't create a user while User.current_user is an admin due to
+          # restrictions on which properties of a pseud an admin can edit.
+          let(:user) do
+            User.current_user = nil
+            user = create(:user)
+            User.current_user = create(:admin)
+            user
+          end
+
+          it "transfers favorite tags" do
+            user.favorite_tags.create(tag: synonym)
+            synonym.update!(syn_string: fandom.name)
+            expect(user.favorite_tags.count).to eq 1
+            expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+          end
+
+          it "handles duplicate favorite tags" do
+            user.favorite_tags.create(tag: fandom)
+            user.favorite_tags.create(tag: synonym)
+            synonym.update!(syn_string: fandom.name)
+            expect(user.favorite_tags.count).to eq 1
+            expect(user.favorite_tags.reload.first.tag).to eq(fandom)
+          end
         end
       end
     end
@@ -501,6 +532,10 @@ describe Tag do
   end
 
   describe "when the resque queue is long" do
+    # Disable immediate job processing. Jobs will only be processed when we
+    # call "perform_enqueued_jobs", which simulates a delay in the queue.
+    include ActiveJob::TestHelper
+
     # https://otwarchive.atlassian.net/browse/AO3-4077
     it "deletes the inherited metatag when both direct ones are removed" do
       lowest = create(:canonical_fandom)
@@ -509,10 +544,13 @@ describe Tag do
       middle.meta_tags << highest
       middle.sub_tags << lowest
 
-      suspend_resque_workers do
-        middle.reload
-        middle.update!(associations_to_remove: [lowest.id, highest.id])
-      end
+      perform_enqueued_jobs
+
+      middle.reload
+      middle.update!(associations_to_remove: [lowest.id, highest.id])
+      expect(enqueued_jobs).not_to be_empty
+
+      perform_enqueued_jobs
 
       expect(lowest.meta_tags.reload).not_to include(highest)
     end
@@ -525,12 +563,89 @@ describe Tag do
 
       work = create(:work, fandom_string: synonym.name)
 
-      suspend_resque_workers do
-        canonical.reload
-        canonical.update!(associations_to_remove: [synonym.id, meta.id])
-      end
+      perform_enqueued_jobs
+
+      canonical.reload
+      canonical.update!(associations_to_remove: [synonym.id, meta.id])
+      expect(enqueued_jobs).not_to be_empty
+
+      perform_enqueued_jobs
 
       expect(work.filters.reload).not_to include(meta)
     end
+  end
+
+  describe "associations" do
+    it "updates Redis autocomplete when adding a canon character to a canon fandom" do
+      fandom = create(:canonical_fandom)
+      character = create(:canonical_character)
+
+      expect_autocomplete_to_return(fandom, [])
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [character])
+    end
+
+    it "updates Redis autocomplete when removing a character from a fandom" do
+      fandom = create(:canonical_fandom)
+      character = create(:canonical_character)
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [character])
+
+      fandom.child_taggings.destroy_all
+      expect_autocomplete_to_return(fandom, [])
+    end
+
+    it "updates Redis autocomplete when a character is deleted" do
+      fandom = create(:canonical_fandom)
+      character = create(:canonical_character)
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [character])
+
+      character.destroy
+      expect_autocomplete_to_return(fandom, [])
+    end
+
+    it "adds to autocomplete when a character becomes canonical" do
+      fandom = create(:canonical_fandom)
+      character = create(:character)
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [])
+
+      character.reload.update! canonical: true
+      expect_autocomplete_to_return(fandom, [character])
+    end
+
+    it "removes from autocomplete when a character loses its canonicity" do
+      fandom = create(:canonical_fandom)
+      character = create(:canonical_character)
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [character])
+
+      character.reload.update! canonical: false
+      expect_autocomplete_to_return(fandom, [])
+    end
+
+    it "updates autocomplete when a character name changes" do
+      fandom = create(:canonical_fandom)
+      character = create(:canonical_character)
+
+      fandom.add_association(character)
+      expect_autocomplete_to_return(fandom, [character])
+
+      User.current_user = create(:admin)
+      character.reload.update! name: "Toto"
+      expect_autocomplete_to_return(fandom, [character])
+    end
+  end
+
+  def expect_autocomplete_to_return(fandom, characters)
+    redis_key = Tag.transliterate("autocomplete_fandom_#{fandom.name.downcase}_character")
+    redis_store = REDIS_AUTOCOMPLETE.zrange(redis_key, 0, -1)
+    expect(redis_store).to eq characters.map { |character| "#{character.id}: #{character.name}" }
   end
 end

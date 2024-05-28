@@ -16,7 +16,7 @@
 %>
 
 <% if kudo_count == 1 && guest_count == 1 %>
-<%= t(".text.left_kudos.single_guest", commentable_title: commentable_title, commentable_url: commentable_url) %>
+<%= t(".text.single_guest", commentable_title: commentable_title, commentable_url: commentable_url) %>
 <% else %>
 <%= t(".text.left_kudos", givers_list: givers_list, commentable_title: commentable_title, commentable_url: commentable_url, count: kudo_count) %>
 <% end %>

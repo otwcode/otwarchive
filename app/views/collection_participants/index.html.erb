@@ -1,15 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Members of %{title}", :title => @collection.title) %></h2>
+<h2 class="heading"><%= ts("Members of %{title}", title: @collection.title) %></h2>
 <!--descriptions-->
 
-<!--add members-->
-<%= render :partial => 'add_participants_form' %>
+<%= render partial: "add_participants_form" %>
 
-<!--list members-->
-<ul class="members index group">
-<% @collection_participants.each do |participant| %>
-      <%= render :partial => 'participant_form', :locals => {:participant => participant} %>
-    <% end %>
+<h3 class="landmark heading"><%= ts("Listing Collection Members") %></h3>
+<ul class="member index group">
+  <%= render partial: "participant_form", collection: @collection_participants, as: :participant %>
 </ul>
-
-

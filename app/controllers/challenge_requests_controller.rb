@@ -15,7 +15,7 @@ class ChallengeRequestsController < ApplicationController
   end
 
   def index
-    @show_request_fandom_tags = (@collection.challenge.request_restriction.allowed("fandom") > 0 || (!@collection.challenge.prompt_restriction.nil? && @collection.challenge.prompt_restriction.allowed("fandom") > 0))
+    @show_request_fandom_tags = @collection.challenge.request_restriction.allowed("fandom").positive?
 
     # sorting
     set_sort_order

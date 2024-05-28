@@ -5,11 +5,6 @@
 
 <!--subnav-->
   <ul class="navigation actions" role="navigation">
-    <li>
-      <%= form_tag reorder_invite_requests_url do %>
-        <p><%= submit_tag ts("Reorder Queue") %></p>
-      <% end %>
-    </li>
     <li class="search" role="search">
       <%= form_tag manage_invite_requests_path, method: :get,
           id: "invite-request-search", class: "simple search" do %>
@@ -35,14 +30,21 @@
       </tr>
     </thead>
     <tbody>
-      <% @invite_requests.each do |request| %>
+      <% @invite_requests.each_with_index do |request, index| %>
         <% ip_address = if request.ip_address.present?
                           request.ip_address
                         else
                           ts("No IP recorded")
                         end %>
+
+        <% position = if @filtered
+                        request.position
+                      else
+                        @invite_requests.offset + index + 1
+                      end %>
+
         <tr>
-          <td><%= request.position %></td>
+          <td><%= position %></td>
           <td><%= request.email %></td>
           <td><%= ip_address %></td>
           <td>

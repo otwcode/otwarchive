@@ -13,7 +13,9 @@ When /^I add (.*) to the tag ?set$/ do |tags|
       tags = scanned_tags.split(/, ?/)
       tags.each { |tag| check(tag) }
     else
-      fill_in("owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add", with: scanned_tags)
+      field_name = "owned_tag_set_tag_set_attributes_#{type}_tagnames_to_add"
+      field_name += "_autocomplete" if @javascript
+      fill_in(field_name, with: scanned_tags)
     end
   end
 end
@@ -182,6 +184,14 @@ end
 When /^I view the tag set "([^\"]*)"/ do |tagset|
   tagset = OwnedTagSet.find_by(title: tagset)
   visit tag_set_path(tagset)
+end
+
+When "the cache for the tag set {string} is expired" do |tagset|
+  tag_set_id = OwnedTagSet.find_by(title: tagset).tag_set_id
+  ActionController::Base.new.expire_fragment("tag_set_show_#{tag_set_id}")
+  TagSet::TAG_TYPES.each do |type|
+    ActionController::Base.new.expire_fragment("tag_set_show_#{tag_set_id}_#{type}")
+  end
 end
 
 When /^I view associations for a tag set that does not exist/ do

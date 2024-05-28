@@ -8,9 +8,8 @@ Feature: Collectible items in closed collections
       And I am logged in as a random user
 
   Scenario: Add my work to a closed collection
-    Given I post the work "Blabla"
-    When I add my work to the collection
-    Then I should see "is closed"
+    When I post the work "Blabla" in the collection "Various Penguins"
+    Then I should see "is not currently open"
     When the collection counts have expired
       And I go to "Various Penguins" collection's page
     Then I should see "Works (0)" within "#dashboard"

@@ -51,8 +51,8 @@ describe OtwSanitize::MediaSanitizer do
       it "allows source elements" do
         html = "
           <video controls width='250'>
-            <source src='example.com/flower.webm' type='video/webm'>
-            <source src='example.com/flower.mp4' type='video/mp4'>
+            <source src='http://example.com/flower.webm' type='video/webm'>
+            <source src='http://example.com/flower.mp4' type='video/mp4'>
             Sorry, your browser doesn't support embedded videos.
           </video>"
         content = Sanitize.fragment(html, config)
@@ -68,7 +68,7 @@ describe OtwSanitize::MediaSanitizer do
         expect(content).to match("xyz")
       end
 
-      it "fills in values for whitelisted boolean attributes" do
+      it "fills in values for allowlisted boolean attributes" do
         html = "
           <video muted loop>
             <track default>
@@ -79,7 +79,7 @@ describe OtwSanitize::MediaSanitizer do
         expect(content).to match('default="default"') 
       end
 
-      it "removes unwhitelisted attributes" do
+      it "removes unallowlisted attributes" do
         html = "
           <video>
             <source onerror='alert(1)'>
@@ -99,13 +99,22 @@ describe OtwSanitize::MediaSanitizer do
         expect(content).not_to match("javascript")
       end
 
+      %w[audio video source track].each do |element|
+        it "removes src on #{element} elements for unsupported protocols" do
+          html = "<#{element} src='file://flower.mp4'></#{element}>"
+          content = Sanitize.fragment(html, config)
+          expect(content).not_to match("src")
+          expect(content).not_to match("file://")
+        end
+      end
+
       context "given a blacklisted source" do
         before do
-          ArchiveConfig.BLACKLISTED_MULTIMEDIA_SRCS = ["google.com"]
+          ArchiveConfig.BANNED_MULTIMEDIA_SRCS = ["google.com"]
         end
 
         after do
-          ArchiveConfig.BLACKLISTED_MULTIMEDIA_SRCS = []
+          ArchiveConfig.BANNED_MULTIMEDIA_SRCS = []
         end
 
         it "strips the source element" do

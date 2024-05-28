@@ -94,11 +94,13 @@ describe InboxController do
   describe "GET #reply" do
     let(:inbox_comment) { create(:inbox_comment) }
     let(:feedback_comment) { inbox_comment.feedback_comment }
+    let(:user) { inbox_comment.user }
+    let(:params) { { user_id: user, comment_id: feedback_comment.id } }
 
     before { fake_login_known_user(inbox_comment.user) }
 
     it "renders the HTML form" do
-      get :reply, params: { user_id: inbox_comment.user.login, comment_id: feedback_comment.id }
+      get :reply, params: params
       path_params = {
         add_comment_reply_id: feedback_comment.id,
         anchor: "comment_" + feedback_comment.id.to_s
@@ -109,16 +111,40 @@ describe InboxController do
     end
 
     it "renders the JS form" do
-      parameters = {
-        user_id: inbox_comment.user.login,
-        comment_id: feedback_comment.id,
-        format: :js
-      }
-
-      get :reply, params: parameters, xhr: true
+      get :reply, params: params.merge(format: :js), xhr: true
       expect(response).to render_template("reply")
       expect(assigns(:commentable)).to eq(feedback_comment)
       expect(assigns(:comment)).to be_a_new(Comment)
+    end
+
+    context "when the user is blocked" do
+      before { Block.create!(blocker: blocker, blocked: user) }
+
+      context "by the person they're replying to" do
+        let(:blocker) { feedback_comment.user }
+
+        it "redirects to the user's inbox" do
+          get :reply, params: params
+
+          it_redirects_to_with_error(
+            user_inbox_path(user),
+            "Sorry, you have been blocked by that user."
+          )
+        end
+      end
+
+      context "by the work creator" do
+        let(:blocker) { feedback_comment.ultimate_parent.users.first }
+
+        it "redirects to the user's inbox" do
+          get :reply, params: params
+
+          it_redirects_to_with_error(
+            user_inbox_path(user),
+            "Sorry, you have been blocked by one or more of this work's creators."
+          )
+        end
+      end
     end
   end
 

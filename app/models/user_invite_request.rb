@@ -1,6 +1,4 @@
 class UserInviteRequest < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   MAX_USER_INVITE_REQUEST = ArchiveConfig.MAX_USER_INVITE_REQUEST
 
   belongs_to :user

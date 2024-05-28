@@ -57,7 +57,7 @@ describe SeriesController do
     it "allows you to invite co-creators" do
       fake_login_known_user(user)
       co_creator = create(:user)
-      co_creator.preference.update(allow_cocreator: true)
+      co_creator.preference.update!(allow_cocreator: true)
       put :update, params: { series: { author_attributes: { byline: co_creator.login } }, id: series }
       it_redirects_to_with_notice(series_path(series), \
                                   "Series was successfully updated.")
@@ -89,13 +89,58 @@ describe SeriesController do
     end
   end
 
-  describe 'destory' do
+  describe 'destroy' do
     it 'on an exception gives an error and redirects' do
       fake_login_known_user(user)
       allow_any_instance_of(Series).to receive(:destroy) { false }
       delete :destroy, params: { id: series }
       it_redirects_to_with_error(series_path(series), \
                                  "Sorry, we couldn't delete the series. Please try again.")
+    end
+  end
+
+  describe "index" do
+    context "without user_id parameter" do
+      it "redirects to the homepage with an error" do
+        get :index
+        it_redirects_to_with_error(root_path, "Whose series did you want to see?")
+      end
+    end
+
+    context "with user_id parameter" do
+      context "when user_id does not exist" do
+        it "raises an error" do
+          expect do
+            get :index, params: { user_id: "nobody" }
+          end.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when user_id exists" do
+        context "without pseud_id parameter" do
+          it "renders the index template" do
+            get :index, params: { user_id: user }
+            expect(response).to render_template(:index)
+          end
+        end
+
+        context "with pseud_id parameter" do
+          context "when pseud_id does not exist" do
+            it "raises an error" do
+              expect do
+                get :index, params: { user_id: user, pseud_id: "nobody" }
+              end.to raise_error ActiveRecord::RecordNotFound
+            end
+          end
+
+          context "when pseud_id exists" do
+            it "renders the index template" do
+              get :index, params: { user_id: user, pseud_id: user.default_pseud }
+              expect(response).to render_template(:index)
+            end
+          end
+        end
+      end
     end
   end
 end

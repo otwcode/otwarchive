@@ -1,5 +1,4 @@
 class ChallengeSignup < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include TagTypeHelper
 
   # -1 represents all matching
@@ -200,5 +199,4 @@ class ChallengeSignup < ApplicationRecord
 
     builder.build_potential_match
   end
-
 end

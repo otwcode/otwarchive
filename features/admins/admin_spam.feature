@@ -7,7 +7,7 @@ Feature: Admin spam management
 Scenario: Review spam
   Given the spam work "Spammity Spam"
     And the spam work "Totally Legit"
-    And I am logged in as an admin
+    And I am logged in as a "superadmin" admin
   Then I should see "Spam"
   When I follow "Spam"
   Then I should see "Works Marked as Spam"

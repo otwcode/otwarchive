@@ -1,7 +1,9 @@
 # A class for keeping track of hits/IP addresses in redis. Writes the values in
-# redis to the database when you call save_recent_counts.
+# redis to the database when the HitCountUpdateJobs run.
 class RedisHitCounter
   class << self
+    include RedisScanning
+
     # Records a hit for the given IP address on the given work ID. If the IP
     # address hasn't visited the work within the current 24 hour block, we
     # increment the work's hit count. Otherwise, we do nothing.
@@ -16,20 +18,6 @@ class RedisHitCounter
       # returning true, we know that the user hasn't visited this work
       # recently. So we increment the count of recent hits.
       redis.hincrby(:recent_counts, work_id, 1) if added_visit
-    end
-
-    # Moves the current recent_counts hash to a temporary key, and enqueues a
-    # job to transfer those values from the new key to the database.
-    #
-    # Note that we move it to a temporary key so that there's no danger of
-    # updates occurring while we perform the transfer, which simplifies the
-    # code for save_hit_counts_at_key and save_batch_hit_counts.
-    def save_recent_counts
-      return unless redis.exists(:recent_counts)
-
-      temp_key = make_temporary_key
-      redis.rename(:recent_counts, temp_key)
-      async(:save_hit_counts_at_key, temp_key)
     end
 
     # Go through the list of all keys starting with "visits:", compute the
@@ -53,31 +41,6 @@ class RedisHitCounter
 
     protected
 
-    # Given a key pointing to a hash mapping from work IDs to hit counts,
-    # iterate through the hash. For each set of hit counts retrieved from
-    # redis, save it to the database, and then remove it from the hash.
-    def save_hit_counts_at_key(key)
-      scan_hash_in_batches(key) do |batch|
-        save_batch_hit_counts(batch)
-        redis.hdel(key, batch.map(&:first))
-      end
-    end
-
-    # Given a list of pairs of (work_id, hit_count), add each hit count to the
-    # appropriate StatCounter.
-    def save_batch_hit_counts(batch)
-      StatCounter.transaction do
-        batch.each do |work_id, value|
-          work = Work.find_by(id: work_id)
-          stat_counter = StatCounter.lock.find_by(work_id: work_id)
-
-          next if prevent_hits?(work) || stat_counter.nil?
-
-          stat_counter.update(hit_count: stat_counter.hit_count + value.to_i)
-        end
-      end
-    end
-
     # Remove the set at the given key.
     #
     # Deletion technique adapted from:
@@ -97,7 +60,7 @@ class RedisHitCounter
 
     # Scan through the given set and delete it batch-by-batch.
     def remove_set(key)
-      scan_set_in_batches(key) do |batch|
+      scan_set_in_batches(redis, key, batch_size: batch_size) do |batch|
         redis.srem(key, batch)
       end
     end
@@ -105,34 +68,6 @@ class RedisHitCounter
     # Constructs an all-new key to use for deleting sets:
     def make_garbage_key
       "garbage:#{redis.incr('garbage:index')}"
-    end
-
-    # Constructs an all-new key for temporary use:
-    def make_temporary_key
-      "temporary:#{redis.incr('temporary:index')}"
-    end
-
-    # Scan a redis object stored at the given key using the provided
-    # scan_method. (Typically hscan or sscan.) Yields the contents of the
-    # object in batches.
-    def scan_in_batches(scan_method, key, &block)
-      cursor = "0"
-
-      loop do
-        cursor, batch = redis.send(scan_method, key, cursor, count: batch_size)
-        block.call(batch) if batch.any?
-        break if cursor == "0"
-      end
-    end
-
-    # Scan a hash in redis batch-by-batch.
-    def scan_hash_in_batches(key, &block)
-      scan_in_batches(:hscan, key, &block)
-    end
-
-    # Scan a set in redis batch-by-batch.
-    def scan_set_in_batches(key, &block)
-      scan_in_batches(:sscan, key, &block)
     end
 
     public

@@ -81,7 +81,11 @@ jQuery(document).ready(function() {
 
             if (hidden) { _modalDiv.hide().css('opacity', ''); }
 
-            _wrapDiv.css('top', $(window).scrollTop());
+            if (_mobile) {
+                _wrapDiv.css('top', _mobileScrollTop);
+            } else {
+                _wrapDiv.css('top', $(window).scrollTop());
+            }
         }
 
         function _setContent(content, title) {
@@ -189,8 +193,10 @@ jQuery(document).ready(function() {
                         .append(img);
 
                 a.addClass('modal modal-attached')
-                    .attr('aria-controls', '#modal')
-                    .click(function(event){
+                    .attr('aria-controls', 'modal')
+                    .filter(function() {
+                        return $(this).closest('.userstuff').length === 0;
+                    }).click(function(event){
                         _show($(this).attr('href'), $(this).attr('title'));
                         event.preventDefault();
                     });
@@ -270,8 +276,10 @@ jQuery(document).ready(function() {
                                 _hide();
                             }
 
-                            // key events triggered from outside the modal should also die
-                            if (escKey || !targetInModal || enterKey && !targetIsInput) {
+                            // key events triggered from outside the modal should also die,
+                            // except for ctrl combinations like ctrl+c (or cmd+c on macOS)
+                            var keyShortcut = event.ctrlKey || event.metaKey;
+                            if (escKey || (!targetInModal && !keyShortcut) || enterKey && !targetIsInput) {
                                 event.preventDefault();
                                 event.stopPropagation();
                             }

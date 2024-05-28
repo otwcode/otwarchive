@@ -21,5 +21,15 @@ describe WorkIndexer, work_search: true do
         expect(indexer.index_documents).to be_nil
       end
     end
+
+    context "with multiple works in a batch", :n_plus_one do
+      populate { |n| create_list(:work, n) }
+
+      it "generates a constant number of database queries" do
+        expect do
+          WorkIndexer.new(Work.ids).index_documents
+        end.to perform_constant_number_of_queries
+      end
+    end
   end
 end

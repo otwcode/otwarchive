@@ -1,6 +1,4 @@
 class TagNomination < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   belongs_to :tag_set_nomination, inverse_of: :tag_nominations
   has_one :owned_tag_set, through: :tag_set_nomination
 
@@ -152,7 +150,6 @@ class TagNomination < ApplicationRecord
   def self.change_tagname!(owned_tag_set_to_change, old_tagname, new_tagname)
     TagNomination.for_tag_set(owned_tag_set_to_change).where(tagname: old_tagname).readonly(false).each do |tagnom|
       tagnom.tagname = new_tagname
-      Rails.logger.info "Tagnom: #{tagnom.tagname} #{tagnom.valid?}"
       tagnom.save or return false
     end
     return true
@@ -181,5 +178,4 @@ class TagNomination < ApplicationRecord
   def times_nominated(tag_set)
     TagNomination.for_tag_set(tag_set).where(tagname: self.tagname).count
   end
-
 end
