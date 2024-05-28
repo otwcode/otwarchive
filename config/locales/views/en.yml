@@ -404,12 +404,6 @@ en:
           preferences_link_text: update your preferences
           prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
           refuse_link_text: refuse a gift
-  subscriptions:
-    index:
-      byline: "by %{creators}"
-      series: "(Series)"
-      work: "(Work)"
-      unsubscribe: "Unsubscribe from %{name}"
   collection_items:
     collection_item_form:
       add: Add
@@ -786,6 +780,23 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+  subscriptions:
+    index:
+      button_html: Unsubscribe from %{name}
+      byline: by %{creators}
+      heading:
+        landmark:
+          list: List of Subscriptions
+      navigation:
+        all: All Subscriptions
+        series: Series Subscriptions
+        user: User Subscriptions
+        work: Work Subscriptions
+      page_heading:
+        general: My Subscriptions
+        type: My %{type} Subscriptions
+      series: "(Series)"
+      work: "(Work)"
   tag_wranglers:
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."

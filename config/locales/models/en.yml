@@ -229,11 +229,11 @@ en:
         other: Works
   attributes:
     ticket_number: Ticket ID
-  subscriptions:
-    deleted: "Deleted item"
   errors:
     attributes:
       ticket_number:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.
         required: must exist and not be spam.
+  subscriptions:
+    deleted: Deleted item

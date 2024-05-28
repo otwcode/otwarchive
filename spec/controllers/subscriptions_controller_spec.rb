@@ -21,14 +21,14 @@ describe SubscriptionsController do
       let(:author) { create(:user) }
       let(:work) { create(:work) }
       let(:series) { create(:series) }
-      let!(:sub_series) { create(:subscription, user: user, subscribable_type: "Series", subscribable_id: series.id) }
+      let!(:sub_series) { create(:subscription, user: user, subscribable: series) }
       let!(:sub_work) { create(:subscription, user: user, subscribable_type: "Work", subscribable_id: work.id) }
       let!(:sub_user) { create(:subscription, user: user, subscribable_type: "User", subscribable_id: author.id) }
 
       it "renders the user subscriptions" do
         get :index, params: { user_id: user.login }
         expect(response).to render_template("index")
-        expect(assigns(:subscriptions)).to satisfy { |subs| subs.size == 3 }
+        expect(assigns(:subscriptions)).to contain_exactly(sub_series, sub_work, sub_user)
       end
     end
 
@@ -42,7 +42,7 @@ describe SubscriptionsController do
       it "renders the user subscriptions" do
         get :index, params: { user_id: user.login }
         expect(response).to render_template("index")
-        
+
         bad_sub = assigns(:subscriptions)[0]
         expect(bad_sub.subscribable_id).to eq(-1)
         expect(bad_sub.name).to eq("Deleted item")

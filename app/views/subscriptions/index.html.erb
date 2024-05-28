@@ -1,32 +1,35 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-  <%= params[:type].blank? ? ts('My Subscriptions') : 
-  ts('My %{type} Subscriptions', type: params[:type].to_s.singularize.titleize)
-  %>
+  <% if params[:type].blank? %>
+    <%= t(".page_heading.general") %>
+  <% else %>
+    <%= t(".page_heading.type", type: params[:type].to_s.singularize.titleize) %>
+  <% end %>
 </h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<h3 class="landmark heading"><%= ts('Navigation') %></h3>
+<h3 class="landmark heading"><%= t("a11y.navigation") %></h3>
 <ul class="navigation actions" role="navigation">
   <li>
-    <%= span_if_current ts('All Subscriptions'),
-    user_subscriptions_path(@user), params[:type].blank? %>
+    <%= span_if_current(t(".navigation.all"),
+          user_subscriptions_path(@user),
+          params[:type].blank?) %>
   </li>
   <li>
-    <%= span_if_current ts('Series Subscriptions'),
-    user_subscriptions_path(@user, :type => "series"), 
-    params[:type] == "series" %>
+    <%= span_if_current(t(".navigation.series"),
+          user_subscriptions_path(@user, type: "series"),
+          params[:type] == "series") %>
   </li>
   <li>
-    <%= span_if_current ts('User Subscriptions'),
-    user_subscriptions_path(@user, :type => "users"), 
-    params[:type] == "users" %>
+    <%= span_if_current(t(".navigation.user"),
+          user_subscriptions_path(@user, type: "users"),
+          params[:type] == "users") %>
   </li>
   <li>
-    <%= span_if_current ts('Work Subscriptions'),
-    user_subscriptions_path(@user, :type => "works"), 
-    params[:type] == "works" %>
+    <%= span_if_current(t(".navigation.work"),
+          user_subscriptions_path(@user, type: "works"),
+          params[:type] == "works") %>
   </li>
 </ul>
 <!--/subnav-->
@@ -34,7 +37,7 @@
 <!--main content-->
 <%= will_paginate @subscriptions %>
 
-<h3 class="landmark heading"><%= ts('List of Subscriptions') %></h3>
+<h3 class="landmark heading"><%= t(".heading.landmark.list") %></h3>
 <dl class="subscription index group">
   <% @subscriptions.each do |subscription| %>
     <dt>
@@ -49,13 +52,13 @@
       <% if params[:type].blank? && subscription.subscribable_type == "Series" %>
         <%= t(".series") %>
       <% end %>
-      <% unless subscription.subscribable.nil? || subscription.subscribable_type == "User" %>
-        <%= t(".byline", :creators => byline(subscription.subscribable)).html_safe %>
+      <% if subscription.subscribable || subscription.subscribable_type == "User" %>
+        <%= t(".byline", creators: byline(subscription.subscribable)) %>
       <% end %>
     </dt>
     <dd>
       <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>
-        <%= f.submit t(".unsubscribe", :name => subscription.name).html_safe %>
+        <%= f.submit t(".button_html", name: subscription.name) %>
       <% end %>
     </dd>
   <% end %>
