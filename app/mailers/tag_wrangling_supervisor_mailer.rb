@@ -6,7 +6,6 @@ class TagWranglingSupervisorMailer < ApplicationMailer
     @old_username = old_name
     @new_username = new_name
     mail(
-      # i18n-tasks-use t('tag_wrangling_supervisor_mailer.wrangler_username_change_notification.subject')
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end

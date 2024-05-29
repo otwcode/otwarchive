@@ -25,6 +25,11 @@ FactoryBot.define do
       confirmed_at { nil }
     end
 
+    # User names used in mailer preview should be unique but recognizable as user names
+    trait :for_mailer_preview do
+      login { "User#{Faker::Alphanumeric.alpha(number: 8)}" }
+    end
+
     # Roles
 
     factory :archivist do
