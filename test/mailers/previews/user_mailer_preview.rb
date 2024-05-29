@@ -43,8 +43,8 @@ class UserMailerPreview < ApplicationMailerPreview
   private
 
   def creatorship_notification_data(creation_type)
-    first_creator = create(:user, login: "JayceHexmaster")
-    second_creator = create(:user, login: "viktor_the_machine")
+    first_creator = create(:user, :for_mailer_preview)
+    second_creator = create(:user, :for_mailer_preview)
     creation = create(creation_type, authors: [first_creator.default_pseud, second_creator.default_pseud])
     [creation.creatorships.last, first_creator]
   end
