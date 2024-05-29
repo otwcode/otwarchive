@@ -41,19 +41,18 @@
 <dl class="subscription index group">
   <% @subscriptions.each do |subscription| %>
     <dt>
-      <% if subscription.subscribable.nil? %>
-        <%= subscription.name %>
-      <% else %>
+      <% if subscription.subscribable %>
         <%= link_to(subscription.name, subscription.subscribable) %>
-      <% end %>
-      <% if params[:type].blank? && subscription.subscribable_type == "Work" %>
-        <%= t(".work") %>
-      <% end %>
-      <% if params[:type].blank? && subscription.subscribable_type == "Series" %>
-        <%= t(".series") %>
-      <% end %>
-      <% if subscription.subscribable || subscription.subscribable_type == "User" %>
-        <%= t(".byline", creators: byline(subscription.subscribable)) %>
+        <% case subscription.subscribable_type %>
+        <% when "Work" %>
+          <%= t(".work") if params[:type].blank? %>
+          <%= t(".byline", creators: byline(subscription.subscribable)) %>
+        <% when "Series" %>
+          <%= t(".series") if params[:type].blank? %>
+          <%= t(".byline", creators: byline(subscription.subscribable)) %>
+        <% end %>
+      <% else %>
+        <%= subscription.name %>
       <% end %>
     </dt>
     <dd>
