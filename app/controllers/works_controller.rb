@@ -13,7 +13,7 @@ class WorksController < ApplicationController
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
   before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
   before_action :log_admin_activity, only: [:update_tags]
-  before_action :check_visibility, only: [:show, :navigate, :share, :mark_for_later, :mark_as_read]
+  before_action :check_visibility, only: [:show, :navigate, :share]
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
 
