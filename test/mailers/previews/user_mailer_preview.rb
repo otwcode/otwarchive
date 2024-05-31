@@ -38,8 +38,8 @@ class UserMailerPreview < ApplicationMailerPreview
   private
 
   def creatorship_notification_data
-    first_creator = create(:user, login: "JayceHexmaster")
-    second_creator = create(:user, login: "viktor_the_machine")
+    first_creator = create(:user, :for_mailer_preview)
+    second_creator = create(:user, :for_mailer_preview)
     work = create(:work, authors: [first_creator.default_pseud, second_creator.default_pseud])
     second_creatorship = Creatorship.find_by(creation: work, pseud: second_creator.default_pseud)
     [second_creatorship, first_creator]
