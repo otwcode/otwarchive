@@ -524,6 +524,21 @@ describe HtmlCleaner do
       expect(fix_bad_characters("„‚nörmäl’—téxt‘“")).to eq("„‚nörmäl’—téxt‘“")
     end
 
+    it "does not touch zero-width non-joiner" do
+      string = ["A".ord, 0x200C, "A".ord]  # "A[zwnj]A"
+      expect(fix_bad_characters(string.pack("U*")).unpack("U*")).to eq(string)
+    end
+
+    it "does not touch zero-width joiner" do
+      string = ["A".ord, 0x200D, "A".ord]  # "A[zwj]A"
+      expect(fix_bad_characters(string.pack("U*")).unpack("U*")).to eq(string)
+    end
+
+    it "does not touch word joiner" do
+      string = ["A".ord, 0x2060, "A".ord]  # "A[wj]A"
+      expect(fix_bad_characters(string.pack("U*")).unpack("U*")).to eq(string)
+    end
+
     it "should remove invalid unicode chars" do
       bad_string = [65, 150, 65].pack("C*")  # => "A\226A"
       expect(fix_bad_characters(bad_string)).to eq("AA")
@@ -539,10 +554,6 @@ describe HtmlCleaner do
 
     it "should remove the spacer" do
       expect(fix_bad_characters("A____spacer____A")).to eq("AA")
-    end
-
-    it "should remove unicode chars in the 'other, format' category" do
-      expect(fix_bad_characters("A\xE2\x81\xA0A")).to eq("AA")
     end
   end
 
