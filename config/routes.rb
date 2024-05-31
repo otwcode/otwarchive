@@ -654,9 +654,6 @@ Rails.application.routes.draw do
   # can be refactored to not rely on their existence.
   #
   # Note written on August 1, 2017 during upgrade to Rails 5.1.
-  get '/bookmarks/fetch_recent/:id' => 'bookmarks#fetch_recent', as: :fetch_recent_bookmarks
-  get '/bookmarks/hide_recent/:id' => 'bookmarks#hide_recent', as: :hide_recent_bookmarks
-
   get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
   get '/user_invite_requests/update' => 'user_invite_requests#update'
 
