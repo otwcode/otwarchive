@@ -24,7 +24,7 @@ class UserMailerPreview < ApplicationMailerPreview
   end
 
   # Sent to a user when the submit a support request (AKA feedback)
-  def feedback
+  def feedback_response
     feedback = create(:feedback)
     UserMailer.feedback(feedback.id)
   end
