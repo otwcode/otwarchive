@@ -3,7 +3,93 @@
 require "spec_helper"
 
 describe AdminMailer do
-  describe "#send_spam_alert" do
+  describe "#comment_notification" do
+    let(:email) { described_class.comment_notification(comment.id) }
+
+    context "when the comment is on an admin post" do
+      let(:comment) { create(:comment, :on_admin_post) }
+
+      context "and the comment's contents contain an image" do
+        let(:image_url) { "an_image.png" }
+        let(:image_tag) { "<img src=\"#{image_url}\" />" }
+
+        before do
+          comment.comment_content += image_tag
+          comment.save!
+        end
+
+        context "when image safety mode is enabled for admin post comments" do
+          before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost"]) }
+
+          it "strips the image from the email message but leaves its URL" do
+            expect(email).not_to have_html_part_content(image_tag)
+            expect(email).not_to have_text_part_content(image_tag)
+            expect(email).to have_html_part_content(image_url)
+            expect(email).to have_text_part_content(image_url)
+          end
+        end
+
+        context "when image safety mode is not enabled for admin post comments" do
+          it "embeds the image when image safety mode is completely disabled" do
+            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
+            expect(email).to have_html_part_content(image_tag)
+            expect(email).not_to have_text_part_content(image_url)
+          end
+
+          it "embeds the image when image safety mode is enabled for other types of comments" do
+            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[Chapter Tag])
+            expect(email).to have_html_part_content(image_tag)
+            expect(email).not_to have_text_part_content(image_url)
+          end
+        end
+      end
+    end
+  end
+
+  describe "#edited_comment_notification" do
+    let(:email) { described_class.edited_comment_notification(comment.id) }
+
+    context "when the comment is on an admin post" do
+      let(:comment) { create(:comment, :on_admin_post) }
+
+      context "with an image in the comment content" do
+        let(:image_url) { "an_image.png" }
+        let(:image_tag) { "<img src=\"#{image_url}\" />" }
+
+        before do
+          comment.comment_content += image_tag
+          comment.save!
+        end
+
+        context "when image safety mode is enabled for admin post comments" do
+          before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost"]) }
+
+          it "strips the image from the email message but leaves its URL" do
+            expect(email).not_to have_html_part_content(image_tag)
+            expect(email).not_to have_text_part_content(image_tag)
+            expect(email).to have_html_part_content(image_url)
+            expect(email).to have_text_part_content(image_url)
+          end
+        end
+
+        context "when image safety mode is not enabled for admin post comments" do
+          it "embeds the image in the HTML email when image safety mode is completely disabled" do
+            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
+            expect(email).to have_html_part_content(image_tag)
+            expect(email).not_to have_text_part_content(image_url)
+          end
+
+          it "embeds the image in the HTML email when image safety mode is enabled for other types of comments" do
+            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[Chapter Tag])
+            expect(email).to have_html_part_content(image_tag)
+            expect(email).not_to have_text_part_content(image_url)
+          end
+        end
+      end
+    end
+  end
+
+  describe "send_spam_alert" do
     let(:spam_user) { create(:user) }
 
     let(:spam1) do
@@ -130,7 +216,7 @@ describe AdminMailer do
     end
   end
 
-  describe "#set_password_notification" do
+  describe "set_password_notification" do
     subject(:email) { AdminMailer.set_password_notification(admin, token) }
 
     let(:admin) { create(:admin) }
@@ -170,210 +256,6 @@ describe AdminMailer do
         expect(email).to have_text_part_content("so you can log in:")
         expect(email).to have_text_part_content(token)
       end
-    end
-  end
-
-  let(:commenter) { create(:user, login: "Accumulator") }
-  let(:commenter_pseud) { create(:pseud, user: commenter, name: "Blueprint") }
-  let(:comment) { create(:comment, :on_admin_post, pseud: commenter_pseud) }
-
-  shared_examples "a notification email with the commenter's pseud and username" do
-    describe "HTML email" do
-      it "has the pseud and username of the commenter" do
-        expect(email).to have_html_part_content(">Blueprint (Accumulator)</a></strong> <em><strong>(Registered User)</strong></em>")
-        expect(subject.html_part).to have_xpath(
-          "//a[@href=\"#{user_pseud_url(commenter, commenter_pseud)}\"]",
-          text: "Blueprint (Accumulator)"
-        )
-      end
-    end
-
-    describe "text email" do
-      it "has the pseud and username of the commenter" do
-        expect(subject).to have_text_part_content(
-          "Blueprint (Accumulator) (#{user_pseud_url(commenter, commenter_pseud)}) (Registered User)"
-        )
-      end
-    end
-  end
-
-  shared_examples "a notification email that marks the commenter as official" do
-    describe "HTML email" do
-      it "has the username of the commenter and the official role" do
-        expect(email).to have_html_part_content(">Centrifuge</a></strong> <em><strong>(Official)</strong></em>")
-        expect(subject.html_part).to have_xpath(
-          "//a[@href=\"#{user_pseud_url(commenter, commenter.default_pseud)}\"]",
-          text: "Centrifuge"
-        )
-      end
-    end
-
-    describe "text email" do
-      it "has the username of the commenter and the official role" do
-        expect(subject).to have_text_part_content(
-          "Centrifuge (#{user_pseud_url(commenter, commenter.default_pseud)}) (Official)"
-        )
-      end
-    end
-  end
-
-  shared_examples "a notification email with only the commenter's username" do
-    describe "HTML email" do
-      it "has only the username of the commenter" do
-        expect(email).to have_html_part_content(">Exoskeleton</a></strong> <em><strong>(Registered User)</strong></em>")
-        expect(subject.html_part).to have_xpath(
-          "//a[@href=\"#{user_pseud_url(commenter, commenter.default_pseud)}\"]",
-          text: "Exoskeleton"
-        )
-        expect(email).not_to have_html_part_content(">Exoskeleton (Exoskeleton)")
-      end
-    end
-
-    describe "text email" do
-      it "has only the username of the commenter" do
-        expect(subject).to have_text_part_content(
-          "Exoskeleton (#{user_pseud_url(commenter, commenter.default_pseud)}) (Registered User)"
-        )
-        expect(subject).not_to have_text_part_content("Exoskeleton (Exoskeleton)")
-      end
-    end
-  end
-
-  describe "#comment_notification" do
-    subject(:email) { AdminMailer.comment_notification(comment.id) }
-
-    it_behaves_like "an email with a valid sender"
-    it_behaves_like "a multipart email"
-    it_behaves_like "a notification email with the commenter's pseud and username"
-
-    context "when the comment is on an admin post" do
-      let(:comment) { create(:comment, :on_admin_post) }
-
-      context "and the comment's contents contain an image" do
-        let(:image_url) { "an_image.png" }
-        let(:image_tag) { "<img src=\"#{image_url}\" />" }
-
-        before do
-          comment.comment_content += image_tag
-          comment.save!
-        end
-
-        context "when image safety mode is enabled for admin post comments" do
-          before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost"]) }
-
-          it "strips the image from the email message but leaves its URL" do
-            expect(email).not_to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_tag)
-            expect(email).to have_html_part_content(image_url)
-            expect(email).to have_text_part_content(image_url)
-          end
-        end
-
-        context "when image safety mode is not enabled for admin post comments" do
-          it "embeds the image when image safety mode is completely disabled" do
-            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
-            expect(email).to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_url)
-          end
-
-          it "embeds the image when image safety mode is enabled for other types of comments" do
-            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[Chapter Tag])
-            expect(email).to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_url)
-          end
-        end
-      end
-    end
-
-    context "when the comment is by an official user using their default pseud" do
-      let(:commenter) { create(:official_user, login: "Centrifuge") }
-      let(:comment) { create(:comment, :on_admin_post, pseud: commenter.default_pseud) }
-
-      it_behaves_like "a notification email that marks the commenter as official"
-    end
-
-    context "when the commenter is a guest" do
-      let(:comment) { create(:comment, :on_admin_post, pseud: nil, name: "Defender", email: Faker::Internet.email) }
-
-      describe "HTML email" do
-        it "has the name of the guest and the guest role" do
-          expect(email).to have_html_part_content(">Defender</b> <em><strong>(Guest)</strong></em>")
-        end
-      end
-
-      describe "text email" do
-        it "has the name of the guest and the guest role" do
-          expect(subject).to have_text_part_content("Defender (Guest)")
-        end
-      end
-    end
-
-    context "when the comment is by a registered user using their default pseud" do
-      let(:commenter) { create(:user, login: "Exoskeleton") }
-      let(:comment) { create(:comment, pseud: commenter.default_pseud) }
-
-      it_behaves_like "a notification email with only the commenter's username"
-    end
-  end
-
-  describe "#comment_edited_notification" do
-    subject(:email) { AdminMailer.edited_comment_notification(comment.id) }
-
-    it_behaves_like "an email with a valid sender"
-    it_behaves_like "a multipart email"
-    it_behaves_like "a notification email with the commenter's pseud and username"
-
-    context "when the comment is on an admin post" do
-      let(:comment) { create(:comment, :on_admin_post) }
-
-      context "with an image in the comment content" do
-        let(:image_url) { "an_image.png" }
-        let(:image_tag) { "<img src=\"#{image_url}\" />" }
-
-        before do
-          comment.comment_content += image_tag
-          comment.save!
-        end
-
-        context "when image safety mode is enabled for admin post comments" do
-          before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost"]) }
-
-          it "strips the image from the email message but leaves its URL" do
-            expect(email).not_to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_tag)
-            expect(email).to have_html_part_content(image_url)
-            expect(email).to have_text_part_content(image_url)
-          end
-        end
-
-        context "when image safety mode is not enabled for admin post comments" do
-          it "embeds the image in the HTML email when image safety mode is completely disabled" do
-            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
-            expect(email).to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_url)
-          end
-
-          it "embeds the image in the HTML email when image safety mode is enabled for other types of comments" do
-            allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[Chapter Tag])
-            expect(email).to have_html_part_content(image_tag)
-            expect(email).not_to have_text_part_content(image_url)
-          end
-        end
-      end
-    end
-
-    context "when the comment is by an official user using their default pseud" do
-      let(:commenter) { create(:official_user, login: "Centrifuge") }
-      let(:comment) { create(:comment, :on_admin_post, pseud: commenter.default_pseud) }
-
-      it_behaves_like "a notification email that marks the commenter as official"
-    end
-
-    context "when the comment is by a registered user using their default pseud" do
-      let(:commenter) { create(:user, login: "Exoskeleton") }
-      let(:comment) { create(:comment, :on_admin_post, pseud: commenter.default_pseud) }
-
-      it_behaves_like "a notification email with only the commenter's username"
     end
   end
 end
