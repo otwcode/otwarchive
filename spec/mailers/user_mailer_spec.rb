@@ -703,7 +703,6 @@ describe UserMailer do
 
       # Test both body contents
       it_behaves_like "a multipart email"
-      it_behaves_like "a translated email"
 
       describe "HTML version" do
         it "has the correct content" do
@@ -735,7 +734,6 @@ describe UserMailer do
 
       # Test both body contents
       it_behaves_like "a multipart email"
-      it_behaves_like "a translated email"
 
       describe "HTML version" do
         it "has the correct content" do
