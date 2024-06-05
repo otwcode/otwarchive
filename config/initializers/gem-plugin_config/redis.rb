@@ -5,7 +5,7 @@ rails_root = ENV["RAILS_ROOT"] || "#{File.dirname(__FILE__)}/../../.."
 rails_env = (ENV["RAILS_ENV"] || "development").to_sym
 
 # https://gist.github.com/441072
-start_redis!(rails_root, :cucumber) if rails_env == "test" && !(ENV["CI"] || ENV["DOCKER"])
+start_redis!(rails_root, :cucumber) if rails_env == :test && !(ENV["CI"] || ENV["DOCKER"])
 
 redis_configs = YAML.load_file("#{rails_root}/config/redis.yml", symbolize_names: true)
 redis_configs.each_pair do |name, redis_config|
