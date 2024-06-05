@@ -10,13 +10,13 @@ class ReadingsController < ApplicationController
   end
 
   def index
-    @readings = @user.readings
+    @readings = @user.readings.visible
     @page_subtitle = ts("History")
     if params[:show] == 'to-read'
       @readings = @readings.where(toread: true)
       @page_subtitle = ts("Marked For Later")
     end
-    @readings = @readings.left_joins(:work).merge(Work.visible_to_registered_user).or(Work.where(id: nil)).order("last_viewed DESC").page(params[:page])
+    @readings = @readings.last_viewed.page(params[:page])
   end
 
   def destroy
