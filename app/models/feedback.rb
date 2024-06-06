@@ -44,7 +44,15 @@ class Feedback < ApplicationRecord
   end
 
   def email_and_send
-    UserMailer.feedback(id).deliver_later
+    user = User.find_by(login: username)
+    locale = if $rollout.active?(:set_locale_preference, user)
+               Language.find_by(name: language)&.locales&.where(email_enabled: true)&.first || Locale.default
+             else
+               Locale.default
+             end
+    I18n.with_locale(locale.iso) do
+      UserMailer.feedback(id).deliver_later
+    end
     send_report
   end
 
