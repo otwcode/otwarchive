@@ -6,7 +6,6 @@ class Reading < ApplicationRecord
   after_destroy :expire_cached_home_marked_for_later, if: :toread?
 
   scope :visible, -> { left_joins(:work).merge(Work.visible_to_registered_user.or(Work.where(id: nil))) }
-  scope :last_viewed, -> { order("last_viewed DESC") }
 
   # called from show in work controller
   def self.update_or_create(work, user)
