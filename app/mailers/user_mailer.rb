@@ -411,7 +411,7 @@ class UserMailer < ApplicationMailer
     @language = feedback.language
     mail(
       to: feedback.email,
-      subject: t(".subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(feedback.summary))
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(feedback.summary))
     )
   end
 
