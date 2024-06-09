@@ -389,11 +389,11 @@ public
   # Prevents banned and suspended users from adding/editing content
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
-      if current_user.suspended?
-        flash[:error] = t("users.suspension_notice_html", contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path), suspended_until: localize(current_user.suspended_until))
-      else
-        flash[:error] = t("users.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
-      end
+      flash[:error] = if current_user.suspended?
+                        t("users.status.suspension_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path), suspended_until: localize(current_user.suspended_until))
+                      else
+                        t("users.status.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path))
+                      end
       redirect_to current_user
     end
   end
@@ -402,7 +402,7 @@ public
   def check_user_not_suspended
     return unless current_user.is_a?(User) && current_user.suspended?
     
-    flash[:error] = t("users.suspension_notice_html", contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path), suspended_until: localize(current_user.suspended_until))
+    flash[:error] = t("users.status.suspension_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path), suspended_until: localize(current_user.suspended_until))
     redirect_to current_user
   end
 
