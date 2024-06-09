@@ -139,12 +139,23 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def destroy_user_creations
     authorize @user
-    creations = @user.works + @user.bookmarks + @user.sole_owned_collections + @user.comments
+
+    creations = @user.works + @user.bookmarks + @user.sole_owned_collections
     creations.each do |creation|
       AdminActivity.log_action(current_admin, creation, action: "destroy spam", summary: creation.inspect)
       creation.mark_as_spam! if creation.respond_to?(:mark_as_spam!)
       creation.destroy
     end
+
+    # comments are special and needs to be handled separately
+    @user.comments.each do |comment|
+      AdminActivity.log_action(current_admin, comment, action: "destroy spam", summary: comment.inspect)
+      # Submit spam sample to Akismet if in production mode
+      # comment.mark_as_spam cannot be used here because it also sets :approved to false, which would hide the whole thread
+      Akismetor.submit_spam(akismet_attributes) if Rails.env.production?
+      comment.destroy_or_mark_deleted # comments with replies cannot be destroyed, mark deleted instead
+    end
+
     flash[:notice] = ts("All creations by user %{login} have been deleted.", login: @user.login)
     redirect_to(admin_users_path)
   end
