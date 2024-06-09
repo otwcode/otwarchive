@@ -101,3 +101,6 @@ en:
           one: You may reset your password %{count} more time.
           other: You may reset your password %{count} more times.
         user_not_found: We couldn't find an account with that email address or username. Please try again.
+    suspension_notice_html: Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.
+    ban_notice_html: Your account has been banned. You are not permitted to add or edit archive content. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.
+    suspension_notice_html: Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.
