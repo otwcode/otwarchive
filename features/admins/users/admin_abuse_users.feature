@@ -187,6 +187,8 @@ Feature: Admin Abuse actions
     Given I have a work "Generic Work"
       And a comment "I like spam" by "Spamster" on the work "Generic Work"
       And a reply "I don't :(" by "NotSpamster" on the work "Generic Work"
+      And a comment "A thread of spams" by "Spamster" on the work "Generic Work"
+      And a reply "more spam" by "Spamster" on the work "Generic Work"
     When I am logged in as a "policy_and_abuse" admin
       And I go to the user administration page for "Spamster"
       And I choose "Spammer: ban and delete all creations"
@@ -200,6 +202,8 @@ Feature: Admin Abuse actions
     Then I should not see "I like spam"
       And I should see "(Previous comment deleted.)"
       And I should see "I don't :("
+      And I should not see "A thread of spams"
+      And I should not see "more spam"
 
   Scenario: A user's works cannot be destroyed unless they are banned
     Given I am logged in as "Spamster"

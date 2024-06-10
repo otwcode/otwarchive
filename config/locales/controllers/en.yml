@@ -8,6 +8,9 @@ en:
         success:
           one: "%{count} person from the invite queue is being invited."
           other: "%{count} people from the invite queue are being invited."
+    admin_users:
+      destroy_user_creations:
+        success: All creations by user %{login} have been deleted.
   blocked:
     users:
       create:
