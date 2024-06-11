@@ -1248,7 +1248,8 @@ class Work < ApplicationRecord
   def otp
     return true if relationships.size == 1
 
-    all_without_syns = relationships.map { |r| r.merger_id ? r.merger_id : r.id }.uniq.compact
+    all_without_syns = relationships.map { |r| r.merger_id || r.id }
+      .uniq
     all_without_syns.count == 1
   end
 
