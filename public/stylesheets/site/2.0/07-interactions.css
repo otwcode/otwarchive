@@ -682,10 +682,15 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
 .dashboard > form {
   float: left;
   width: 100%;
+  clear: none;
 }
 
 .dashboard fieldset {
   clear: right;
+}
+
+.dashboard form dt.landmark {
+  clear: both;
 }
 
 /*END== */
