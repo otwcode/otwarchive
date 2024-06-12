@@ -88,6 +88,6 @@ class ZohoResourceClient
   private
 
   def ticket_attachment_create_endpoint(ticket_id)
-    "https://desk.zoho.com/api/v1/tickets/#{ticket_id}/attachments"
+    "#{ArchiveConfig.ZOHO_URL}/api/v1/tickets/#{ticket_id}/attachments"
   end
 end

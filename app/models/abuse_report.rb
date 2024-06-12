@@ -124,9 +124,10 @@ class AbuseReport < ApplicationRecord
   end
 
   def attach_work_download(ticket_id)
-    return if url !~ %r{/works/\d+}
+    work_id = url[%r{/works/(\d+)}, 1]
+    return unless work_id
 
-    work = Work.find_by(id: url[%r{/works/(\d+)/}, 1])
+    work = Work.find_by(id: work_id)
     ReportAttachmentJob.perform_later(ticket_id, work) if work
   end
 

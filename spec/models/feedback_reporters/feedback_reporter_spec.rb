@@ -71,8 +71,9 @@ describe FeedbackReporter do
   end
 
   describe "#send_attachment!" do
-    work_id = "123"
-    download = "the_file"
+    let(:work_id) { "123" }
+    let(:download) { "the_file" }
+
     let(:expected_attachment_attributes) do
       { file: download }
     end
