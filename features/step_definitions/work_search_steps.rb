@@ -142,6 +142,41 @@ Given "a set of Ed Stede works for searching" do
   step %{all indexing jobs have been run}
 end
 
+Given "a set of crossover works for searching" do
+  step %{basic tags}
+
+  # Create two unrelated fandoms, one with a syn
+  step %{a canonical fandom "Unrelated Fandom"}
+  step %{a canonical fandom "Hermitcraft SMP"}
+  step %{a synonym "Hermitcraft" of the tag "Hermitcraft SMP"}
+
+  # Create a fandom and make it the metatag of one of the fandoms
+  step %{a canonical fandom "Video Blogging RPF"}
+  step %{"Video Blogging RPF" is a metatag of the fandom "Hermitcraft SMP"}
+
+  # Create a work for each tag or set of tags (none are crossovers)
+  ["Video Blogging RPF",
+   "Hermitcraft SMP",
+   "Hermitcraft SMP, Hermitcraft",
+   "Hermitcraft SMP, Video Blogging RPF",
+   "Hermitcraft, Video Blogging RPF"].each do |fandom|
+    FactoryBot.create(:work, fandom_string: fandom)
+  end
+
+  # Create three works with two unconnected fandom tags (crossover works)
+  FactoryBot.create(:work,
+                    title: "First Work With Multiple Fandoms",
+                    fandom_string: "Hermitcraft SMP, Unrelated Fandom")
+  FactoryBot.create(:work,
+                    title: "Second Work With Multiple Fandoms",
+                    fandom_string: "Hermitcraft, Unrelated Fandom")
+  FactoryBot.create(:work,
+                    title: "Third Work With Multiple Fandoms",
+                    fandom_string: "Video Blogging RPF, Unrelated Fandom")
+
+  step %{all indexing jobs have been run}
+end
+
 Given /^a set of works with various categories for searching$/ do
   step %{basic tags}
 

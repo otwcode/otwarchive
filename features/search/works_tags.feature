@@ -225,6 +225,8 @@ Feature: Search works by tag
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: otp: true"
       And I should see "3 Found"
+      But I should not see "The Work Without a Relationship"
+      And I should not see "The Work With Multiple Ships"
     When I follow "Edit Your Search"
     Then the field labeled "Any Field" should contain "otp: true"
 
