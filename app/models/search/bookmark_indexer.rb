@@ -35,7 +35,7 @@ class BookmarkIndexer < Indexer
         },
         creators: {
           type: "text",
-          analyzer: "simple"
+          analyzer: "standard"
         },
         work_types: {
           type: "keyword"
@@ -45,7 +45,7 @@ class BookmarkIndexer < Indexer
         },
         bookmarker: {
           type: "text",
-          analyzer: "simple"
+          analyzer: "standard"
         },
         tag: {
           type: "text",
