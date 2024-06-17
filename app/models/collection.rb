@@ -373,7 +373,7 @@ class Collection < ApplicationRecord
     pagination_args = {page: page}
 
     # build up the query with scopes based on the options the user specifies
-    query = Collection.top_level
+    query = Collection.with_attached_icon.top_level
 
     if !filters[:title].blank?
       # we get the matching collections out of autocomplete and use their ids

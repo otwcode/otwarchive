@@ -14,8 +14,8 @@ describe "n+1 queries in the collections controller" do
     end
   end
 
-  describe "#index", n_plus_one: true do
-    context "when viewing a work's approved collections" do
+  describe "#index" do
+    context "when viewing a work's approved collections", n_plus_one: true do
       let!(:work) { create(:work) }
 
       populate do |n|
@@ -36,7 +36,7 @@ describe "n+1 queries in the collections controller" do
       it_behaves_like "produces a constant number of queries"
     end
 
-    context "when viewing collections moderated by a specific user" do
+    context "when viewing collections moderated by a specific user", n_plus_one: true do
       let!(:user) { create(:user) }
 
       populate do |n|
@@ -55,7 +55,7 @@ describe "n+1 queries in the collections controller" do
       it_behaves_like "produces a constant number of queries"
     end
 
-    context "when viewing all collections" do
+    context "when viewing all collections", n_plus_one: true do
       populate do |n|
         create_list(:collection, n).each do |collection|
           collection.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")

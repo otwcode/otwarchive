@@ -12,7 +12,9 @@ module Muted
     # GET /users/:user_id/muted/users
     def index
       @mutes = @user.mutes_as_muter
-        .joins(:muted).includes(muted: :default_pseud)
+        .joins(:muted)
+        .includes(muted: [:default_pseud, :pseuds])
+        .merge(Pseud.with_attached_icon)
         .order(created_at: :desc).order(id: :desc).page(params[:page])
 
       @pseuds = @mutes.map { |b| b.muted.default_pseud }

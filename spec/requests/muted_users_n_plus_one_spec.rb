@@ -5,13 +5,14 @@ require "spec_helper"
 describe "n+1 queries in the muted users controller" do
   include LoginMacros
 
-  describe "#index" do
-    context "with a logged in user who has muted someone", n_plus_one: true do
+  describe "#index", n_plus_one: true do
+    context "with a logged in user who has muted someone" do
       let!(:muter) { create(:user) }
 
       populate do |n|
         muted_users = create_list(:user, n)
         muted_users.each do |muted|
+          muted.default_pseud.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
           Mute.create(muter: muter, muted: muted)
         end
       end

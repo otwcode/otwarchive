@@ -12,7 +12,9 @@ module Blocked
     # GET /users/:user_id/blocked/users
     def index
       @blocks = @user.blocks_as_blocker
-        .joins(:blocked).includes(blocked: :default_pseud)
+        .joins(:blocked)
+        .includes(blocked: [:default_pseud, :pseuds])
+        .merge(Pseud.with_attached_icon)
         .order(created_at: :desc).order(id: :desc).page(params[:page])
 
       @pseuds = @blocks.map { |b| b.blocked.default_pseud }
