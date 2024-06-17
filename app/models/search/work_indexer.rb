@@ -38,7 +38,7 @@ class WorkIndexer < Indexer
         },
         title: {
           type: "text",
-          analyzer: "simple"
+          analyzer: "standard"
         },
         creators: {
           type: "text"

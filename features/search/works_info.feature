@@ -139,3 +139,17 @@ Feature: Search works by work info
     Then the field labeled "Title" should contain "work"
       And "Title" should be selected within "Sort by"
       And "Ascending" should be selected within "Sort direction"
+
+  Scenario: Search by number in title
+    Given I have loaded the fixtures
+    When I am on the search works page
+      And I fill in "Title" with "work 2 6"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Title: work 2 6"
+      And I should see "1 Found"
+      And the 1st result should contain "second work (2 of 6)"
+    When I am on the search works page
+      And I fill in "Title" with "work 1"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Title: work 1"
+      And I should see "No results found"
