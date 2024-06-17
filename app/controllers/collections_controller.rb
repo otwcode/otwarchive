@@ -25,11 +25,23 @@ class CollectionsController < ApplicationController
 
   def index
     if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
-      @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
+      @collections = @work.approved_collections
+        .by_title
+        .includes(:parent, :moderators, :children, :collection_preference, owners: [:user])
+        .merge(Collection.with_attached_icon)
+        .paginate(page: params[:page])
     elsif params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
-      @collections = @collection.children.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
+      @collections = @collection.children
+        .by_title
+        .includes(:parent, :moderators, :children, :collection_preference, owners: [:user])
+        .merge(Collection.with_attached_icon)
+        .paginate(page: params[:page])
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
-      @collections = @user.maintained_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
+      @collections = @user.maintained_collections
+        .by_title
+        .includes(:parent, :moderators, :children, :collection_preference, owners: [:user])
+        .merge(Collection.with_attached_icon)
+        .paginate(page: params[:page])
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       if params[:user_id]
@@ -44,7 +56,7 @@ class CollectionsController < ApplicationController
       params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
       params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]
-      @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
+      @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page]).with_attached_icon
     end
   end
 

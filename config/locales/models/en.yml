@@ -225,7 +225,7 @@ en:
     attributes:
       icon:
         invalid_format: content type is invalid
-        too_large: file size must be less than %{size_limit_kb} KB
+        too_large: file size must be less than %{maximum_size}
       ticket_number:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.

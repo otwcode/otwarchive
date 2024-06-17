@@ -17,7 +17,7 @@ class AttachmentValidator < ActiveModel::EachValidator
       record.errors.add(attribute, :invalid_format) unless allowed_formats.include?(value.content_type)
     end
 
-    record.errors.add(attribute, :too_large, size_limit_kb: size_limit_kb) unless value.blob.byte_size < maximum_size
+    record.errors.add(attribute, :too_large, maximum_size: maximum_size.to_fs(:human_size)) unless value.blob.byte_size < maximum_size
 
     value.purge if record.errors[attribute].any?
   end
