@@ -23,21 +23,21 @@ class SkinsController < ApplicationController
         redirect_to skins_path and return
       end
       if is_work_skin
-        @skins = @user.work_skins.sort_by_recent
+        @skins = @user.work_skins.with_attached_icon.sort_by_recent
         @title = ts('My Work Skins')
       else
-        @skins = @user.skins.site_skins.sort_by_recent
+        @skins = @user.skins.site_skins.with_attached_icon.sort_by_recent
         @title = ts('My Site Skins')
       end
     else
       if is_work_skin
-        @skins = WorkSkin.approved_skins.sort_by_recent_featured
+        @skins = WorkSkin.approved_skins.with_attached_icon.sort_by_recent_featured
         @title = ts('Public Work Skins')
       else
         if logged_in?
-          @skins = Skin.approved_skins.usable.site_skins.sort_by_recent_featured
+          @skins = Skin.approved_skins.usable.site_skins.with_attached_icon.sort_by_recent_featured
         else
-          @skins = Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured
+          @skins = Skin.approved_skins.usable.site_skins.cached.with_attached_icon.sort_by_recent_featured
         end
         @title = ts('Public Site Skins')
       end

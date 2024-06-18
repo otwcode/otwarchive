@@ -5,8 +5,8 @@ require "spec_helper"
 describe "n+1 queries in the collection items controller" do
   include LoginMacros
 
-  describe "#index", n_plus_one: true do
-    context "when viewing collection items for a specific user" do
+  describe "#index" do
+    context "when viewing collection items for a specific user", n_plus_one: true do
       let!(:user) { create(:user) }
 
       populate do |n|

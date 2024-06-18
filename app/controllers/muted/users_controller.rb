@@ -13,7 +13,7 @@ module Muted
     def index
       @mutes = @user.mutes_as_muter
         .joins(:muted)
-        .includes(muted: [:default_pseud, :pseuds])
+        .includes(muted: { default_pseud: { icon_attachment: :blob }, pseuds: { icon_attachment: :blob } })
         .merge(Pseud.with_attached_icon)
         .order(created_at: :desc).order(id: :desc).page(params[:page])
 
