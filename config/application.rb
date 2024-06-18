@@ -17,7 +17,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # TODO: Remove in Rails 7.1, where it's false by default.
     config.add_autoload_paths_to_load_path = false
@@ -131,7 +131,5 @@ module Otwarchive
     end
 
     config.active_support.disable_to_s_conversion = true
-
-    config.active_support.cache_format_version = 7.0
   end
 end
