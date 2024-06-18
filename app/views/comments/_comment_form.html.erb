@@ -28,10 +28,11 @@
 
       <% if comments_are_moderated(commentable) && !current_user_is_work_creator(commentable) %>
         <p class="notice">
-          <%# i18n-tasks-use
-              t("comments.commentable.permissions.moderated_commenting.notice.admin_post")
-              t("comments.commentable.permissions.moderated_commenting.notice.work") %>
-          <%= t("comments.commentable.permissions.moderated_commenting.notice.#{commentable.model_name.i18n_key}") %>
+          <% if commentable.is_a?(AdminPost) %>
+            <%= t("comments.commentable.permissions.moderated_commenting.notice.admin_post") %>
+          <% else %>
+            <%= t("comments.commentable.permissions.moderated_commenting.notice.work") %>
+          <% end %>
         </p>
       <% end %>
 
