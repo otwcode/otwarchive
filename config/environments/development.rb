@@ -89,6 +89,11 @@ Rails.application.configure do
     Bullet.counter_cache_enable = false
   end
 
-  # GitPod preview support
+  # GitPod preview support; the preview URL begins with `port#-`, then details about the individual workspace.
+  # For more information about this, refer to https://www.gitpod.io/docs/configure/workspaces/ports#accessing-port-urls.
+  # Example:
+  # GITPOD_WORKSPACE_ID=brianjaustin-otwarchive-w2lj9jd79gm (username-repo-uuid)
+  # GITPOD_WORKSPACE_CLUSTER_HOST=ws-us114.gitpod.io
+  # results in 3000-brianjaustin-otwarchive-w2lj9jd79gm.ws-us114.gitpod.io
   config.hosts << "3000-#{ENV['GITPOD_WORKSPACE_ID']}.#{ENV['GITPOD_WORKSPACE_CLUSTER_HOST']}" if ENV["GITPOD_WORKSPACE_ID"]
 end
