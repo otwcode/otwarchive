@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-  <% if params[:type].blank? %>
-    <%= t(".page_heading.general") %>
+  <% if @subscribable_type %>
+    <%= t(".page_heading.#{@subscribable_type}") %>
   <% else %>
-    <%= t(".page_heading.type", type: params[:type].to_s.singularize.titleize) %>
+    <%= t(".page_heading.all") %>
   <% end %>
 </h2>
 <!--/descriptions-->

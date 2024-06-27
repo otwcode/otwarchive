@@ -793,8 +793,10 @@ en:
         user: User Subscriptions
         work: Work Subscriptions
       page_heading:
-        general: My Subscriptions
-        type: My %{type} Subscriptions
+        all: My Subscriptions
+        series: My Series Subscriptions
+        users: My User Subscriptions
+        works: My Work Subscriptions
       series: "(Series)"
       work: "(Work)"
   tag_wranglers:
