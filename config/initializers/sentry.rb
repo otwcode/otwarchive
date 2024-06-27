@@ -11,9 +11,12 @@ if Rails.env.production? || Rails.env.staging?
 
       rack_env = sampling_context[:env]
       rate_from_nginx = Float(rack_env["HTTP_X_SENTRY_RATE"], exception: false)
-      return 0.3 unless rate_from_nginx
+      return rate_from_nginx if rate_from_nginx
+      return 0.01 if Rails.env.production?
+      return 1.00 if Rails.env.staging?
 
-      rate_from_nginx
+      # Default to off for other environments when no override is present
+      0.0
     end
 
     # enable profiling
