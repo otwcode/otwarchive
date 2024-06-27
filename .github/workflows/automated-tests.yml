@@ -58,6 +58,7 @@ jobs:
             arguments: spec/models
           - command: rspec
             arguments: --exclude-pattern 'spec/{controllers,models}/**/*.rb'
+            libvips: true
           - command: cucumber
             arguments: features/admins
             libvips: true
