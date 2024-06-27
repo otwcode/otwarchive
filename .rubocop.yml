@@ -1,3 +1,6 @@
+# Uncomment the following line to ignore known issues
+# inherit_from: .rubocop_todo.yml
+
 # Options available at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 
 require:
