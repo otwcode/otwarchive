@@ -23,7 +23,7 @@ jobs:
           bundler-cache: true
 
       - name: rubocop
-        uses: reviewdog/action-rubocop@708a61f1f3bc4127205f5ec59f4f8617478ebdda
+        uses: reviewdog/action-rubocop@1346d2bf532497b4ef3a8241dd4eadbc4656b05d
         with:
           use_bundler: true
           reporter: github-pr-check

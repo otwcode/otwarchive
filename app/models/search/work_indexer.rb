@@ -13,9 +13,9 @@ class WorkIndexer < Indexer
       :stat_counter,
       :tags,
       :users,
+      :relationships,
       fandoms: { meta_tags: :meta_tags, merger: { meta_tags: :meta_tags } },
       pseuds: :user,
-      relationships: :merger,
       serial_works: :series
     )
   end
@@ -38,7 +38,7 @@ class WorkIndexer < Indexer
         },
         title: {
           type: "text",
-          analyzer: "simple"
+          analyzer: "standard"
         },
         creators: {
           type: "text"
