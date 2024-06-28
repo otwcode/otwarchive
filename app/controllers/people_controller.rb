@@ -8,7 +8,7 @@ class PeopleController < ApplicationController
     else
       options = people_search_params.merge(page: params[:page])
       @search = PseudSearchForm.new(options)
-      @people = @search.search_results.scope(:with_attached_icon)
+      @people = @search.search_results.scope(:for_search)
       flash_search_warnings(@people)
     end
   end
