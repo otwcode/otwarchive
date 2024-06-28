@@ -171,6 +171,7 @@ class Collection < ApplicationRecord
   scope :prompt_meme, -> { where(challenge_type: 'PromptMeme') }
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
+  scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]) }
 
   before_validation :cleanup_url
   def cleanup_url

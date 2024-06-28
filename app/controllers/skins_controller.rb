@@ -1,5 +1,4 @@
 class SkinsController < ApplicationController
-
   before_action :users_only, only: [:new, :create, :destroy]
   before_action :load_skin, except: [:index, :new, :create, :unset]
   before_action :check_title, only: [:create, :update]
@@ -23,22 +22,22 @@ class SkinsController < ApplicationController
         redirect_to skins_path and return
       end
       if is_work_skin
-        @skins = @user.work_skins.with_attached_icon.sort_by_recent
+        @skins = @user.work_skins.with_attached_icon.sort_by_recent.includes(:author)
         @title = ts('My Work Skins')
       else
-        @skins = @user.skins.site_skins.with_attached_icon.sort_by_recent
+        @skins = @user.skins.site_skins.with_attached_icon.sort_by_recent.includes(:author)
         @title = ts('My Site Skins')
       end
     else
       if is_work_skin
-        @skins = WorkSkin.approved_skins.with_attached_icon.sort_by_recent_featured
+        @skins = WorkSkin.approved_skins.with_attached_icon.sort_by_recent_featured.includes(:author)
         @title = ts('Public Work Skins')
       else
-        if logged_in?
-          @skins = Skin.approved_skins.usable.site_skins.with_attached_icon.sort_by_recent_featured
-        else
-          @skins = Skin.approved_skins.usable.site_skins.cached.with_attached_icon.sort_by_recent_featured
-        end
+        @skins = if logged_in?
+                   Skin.approved_skins.usable.site_skins.with_attached_icon.sort_by_recent_featured
+                 else
+                   Skin.approved_skins.usable.site_skins.cached.with_attached_icon.sort_by_recent_featured
+                 end
         @title = ts('Public Site Skins')
       end
     end
