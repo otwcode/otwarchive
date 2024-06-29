@@ -18,7 +18,7 @@ class SubscriptionsController < ApplicationController
 
     if params[:type] && Subscription::VALID_SUBSCRIBABLES.include?(params[:type].singularize.titleize)
       @subscribable_type = params[:type]
-      @subscriptions = @subscriptions.where(subscribable_type: params[:type].classify)
+      @subscriptions = @subscriptions.where(subscribable_type: @subscribable_type.classify)
     end
 
     @subscriptions = @subscriptions.to_a.sort { |a,b| a.name.downcase <=> b.name.downcase }

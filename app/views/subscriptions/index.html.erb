@@ -14,22 +14,22 @@
   <li>
     <%= span_if_current(t(".navigation.all"),
           user_subscriptions_path(@user),
-          params[:type].blank?) %>
+          @subscribable_type.blank?) %>
   </li>
   <li>
     <%= span_if_current(t(".navigation.series"),
           user_subscriptions_path(@user, type: "series"),
-          params[:type] == "series") %>
+          @subscribable_type == "series") %>
   </li>
   <li>
     <%= span_if_current(t(".navigation.user"),
           user_subscriptions_path(@user, type: "users"),
-          params[:type] == "users") %>
+          @subscribable_type == "users") %>
   </li>
   <li>
     <%= span_if_current(t(".navigation.work"),
           user_subscriptions_path(@user, type: "works"),
-          params[:type] == "works") %>
+          @subscribable_type == "works") %>
   </li>
 </ul>
 <!--/subnav-->
@@ -45,10 +45,10 @@
         <%= link_to(subscription.name, subscription.subscribable) %>
         <% case subscription.subscribable_type %>
         <% when "Work" %>
-          <%= t(".work") if params[:type].blank? %>
+          <%= t(".work") if @subscribable_type.blank? %>
           <%= t(".byline", creators: byline(subscription.subscribable)) %>
         <% when "Series" %>
-          <%= t(".series") if params[:type].blank? %>
+          <%= t(".series") if @subscribable_type.blank? %>
           <%= t(".byline", creators: byline(subscription.subscribable)) %>
         <% end %>
       <% else %>
