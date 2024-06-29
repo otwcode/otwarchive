@@ -70,8 +70,4 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
-
-  # We use example.com in our tests, so some redirects may be flagged as unsafe.
-  # In other environments, we should not expect this, so just override the setting here.
-  config.action_controller.raise_on_open_redirects = false
 end

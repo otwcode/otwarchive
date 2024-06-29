@@ -824,7 +824,7 @@ describe CommentsController do
             post :create, params: { work_id: work.id, comment: comment_attributes }
             comment = Comment.last
             expect(flash[:error]).to be_nil
-            expect(response).to redirect_to(work_chapter_path(work, comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"))
+            expect(response).to redirect_to(chapter_path(work, comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"))
           end
         end
       end
