@@ -737,3 +737,8 @@ PERCONA_ARGS: >
   --set-vars innodb_lock_wait_timeout=2
   --alter-foreign-keys-method=auto
   --no-check-unique-key-change
+
+# How many shards to have in elastic indexes.
+# Production has more than 5 for these
+BOOKMARKABLE_SHARDS: 5
+WORKS_SHARDS: 5
