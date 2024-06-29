@@ -23,7 +23,7 @@ class WorkIndexer < Indexer
   def self.index_all(options = {})
     unless options[:skip_delete]
       delete_index
-      create_index(shards: 20)
+      create_index(shards: ArchiveConfig.WORKS_SHARDS )
     end
     options[:skip_delete] = true
     super(options)
