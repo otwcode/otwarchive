@@ -53,7 +53,7 @@ class CollectionsController < ApplicationController
       params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
       params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]
-      @collections = Collection.for_blurb.sorted_and_filtered(sort, params[:collection_filters], params[:page])
+      @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
     end
   end
 
