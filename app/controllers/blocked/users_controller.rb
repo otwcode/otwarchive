@@ -13,7 +13,7 @@ module Blocked
     def index
       @blocks = @user.blocks_as_blocker
         .joins(:blocked)
-        .includes(blocked: { default_pseud: { icon_attachment: :blob }, pseuds: { icon_attachment: :blob } })
+        .includes(blocked: { default_pseud: { icon_attachment: :blob }, pseuds: {} })
         .order(created_at: :desc).order(id: :desc).page(params[:page])
 
       @pseuds = @blocks.map { |b| b.blocked.default_pseud }

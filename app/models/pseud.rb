@@ -80,7 +80,7 @@ class Pseud < ApplicationRecord
   scope :alphabetical, -> { order(:name) }
   scope :default_alphabetical, -> { order(is_default: :desc).alphabetical }
   scope :abbreviated_list, -> { default_alphabetical.limit(ArchiveConfig.ITEMS_PER_PAGE) }
-  scope :for_search, -> { includes(:user).merge(with_attached_icon) }
+  scope :for_search, -> { includes(:user).with_attached_icon }
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)

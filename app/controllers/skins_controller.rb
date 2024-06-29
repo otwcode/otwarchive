@@ -22,21 +22,21 @@ class SkinsController < ApplicationController
         redirect_to skins_path and return
       end
       if is_work_skin
-        @skins = @user.work_skins.with_attached_icon.sort_by_recent.includes(:author)
+        @skins = @user.work_skins.sort_by_recent.includes(:author).with_attached_icon
         @title = ts('My Work Skins')
       else
-        @skins = @user.skins.site_skins.with_attached_icon.sort_by_recent.includes(:author)
+        @skins = @user.skins.site_skins.sort_by_recent.includes(:author).with_attached_icon
         @title = ts('My Site Skins')
       end
     else
       if is_work_skin
-        @skins = WorkSkin.approved_skins.with_attached_icon.sort_by_recent_featured.includes(:author)
+        @skins = WorkSkin.approved_skins.sort_by_recent_featured.includes(:author).with_attached_icon
         @title = ts('Public Work Skins')
       else
         @skins = if logged_in?
-                   Skin.approved_skins.usable.site_skins.with_attached_icon.sort_by_recent_featured
+                   Skin.approved_skins.usable.site_skins.sort_by_recent_featured.with_attached_icon
                  else
-                   Skin.approved_skins.usable.site_skins.cached.with_attached_icon.sort_by_recent_featured
+                   Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured.with_attached_icon
                  end
         @title = ts('Public Site Skins')
       end

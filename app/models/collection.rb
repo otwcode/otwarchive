@@ -171,7 +171,7 @@ class Collection < ApplicationRecord
   scope :prompt_meme, -> { where(challenge_type: 'PromptMeme') }
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
-  scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]) }
+  scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).with_attached_icon }
 
   before_validation :cleanup_url
   def cleanup_url
@@ -374,7 +374,7 @@ class Collection < ApplicationRecord
     pagination_args = {page: page}
 
     # build up the query with scopes based on the options the user specifies
-    query = Collection.with_attached_icon.top_level
+    query = Collection.top_level
 
     if !filters[:title].blank?
       # we get the matching collections out of autocomplete and use their ids
@@ -395,7 +395,7 @@ class Collection < ApplicationRecord
         query = query.no_challenge
       end
     end
-    query = query.order(sort)
+    query = query.order(sort).for_blurb
 
     if !filters[:fandom].blank?
       fandom = Fandom.find_by_name(filters[:fandom])
