@@ -85,7 +85,7 @@ class Comment < ApplicationRecord
     includes(
       pseud: { user: [:roles, :block_of_current_user, :block_by_current_user, :preference] },
       parent: { work: [:pseuds, :users] }
-    )
+    ).merge(Pseud.with_attached_icon)
   }
 
   # Gets methods and associations from acts_as_commentable plugin
