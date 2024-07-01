@@ -1,8 +1,7 @@
 <% creation_type = @creation.class.name.underscore %>
 <% content_for :message do %>
 <%# i18n-tasks-use t('user_mailer.creatorship_notification.intro_chapter')
-    i18n-tasks-use t('user_mailer.creatorship_notification.intro_series')
-    i18n-tasks-use t('user_mailer.creatorship_notification.intro_work')-%>
+    i18n-tasks-use t('user_mailer.creatorship_notification.intro_series')-%>
 <%= t(".intro_#{creation_type}", adding_user: @adding_user.login, pseud: @creatorship.pseud.name) %>
 
 <%= t ".text.creation", title: creation_title(@creation),
@@ -12,7 +11,6 @@
 <%= t ".explanation" %>
 
 <%# i18n-tasks-use t('user_mailer.creatorship_notification.text.remove_chapter')
-  i18n-tasks-use t('user_mailer.creatorship_notification.text.remove_series')
-  i18n-tasks-use t('user_mailer.creatorship_notification.text.remove_work')-%>
+  i18n-tasks-use t('user_mailer.creatorship_notification.text.remove_series')-%>
 <%= t(".text.remove_#{creation_type}", url: edit_polymorphic_url(@creation)) %>
 <% end %>
