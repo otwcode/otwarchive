@@ -80,14 +80,6 @@ gem 'escape_utils', '1.2.1'
 
 gem 'timeliness'
 
-# TODO: rpm_contrib is deprecated and needs to be replaced
-# Here is a list of possible alternatives:
-# https://github.com/newrelic/extends_newrelic_rpm
-#
-# The last working version is not compatible with Rails 5
-#
-# gem 'rpm_contrib', '2.2.0'
-
 # for generating graphs
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
@@ -184,7 +176,8 @@ gem 'unicorn', '~> 5.5', require: false
 gem 'god', '~> 0.13.7'
 
 group :staging, :production do
-  # Place the New Relic gem as low in the list as possible, allowing the
-  # frameworks above it to be instrumented when the gem initializes.
-  gem "newrelic_rpm"
+  gem "stackprof"
+  gem "sentry-ruby"
+  gem "sentry-rails"
+  gem "sentry-resque"
 end

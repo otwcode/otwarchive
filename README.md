@@ -36,6 +36,7 @@ We benefit from software and services that are free to use for Open Source proje
 * [Codeship](https://codeship.com/)
 * [Hound](https://houndci.com/) by [thoughtbot](https://thoughtbot.com/)
 * [BrowserStack](https://www.browserstack.com)
+* [Sentry](https://sentry.io)
 * [Full list of acknowledgments](ACKNOWLEDGMENTS.md)
 
 Thank you kindly!
