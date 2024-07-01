@@ -14,7 +14,10 @@ describe SupportReporter do
       username: "Walrus",
       user_agent: "HTTParty",
       site_revision: "eternal_beta",
-      rollout: "rollout_value"
+      rollout: "rollout_value",
+      ip_address: "127.0.0.1",
+      referrer: "https://example.com/works/1",
+      site_skin: build(:skin, title: "Reversi", public: true)
     }
   end
 
@@ -30,7 +33,10 @@ describe SupportReporter do
         "cf_name" => "Walrus",
         "cf_archive_version" => "eternal_beta",
         "cf_rollout" => "rollout_value",
-        "cf_user_agent" => "HTTParty"
+        "cf_user_agent" => "HTTParty",
+        "cf_ip" => "127.0.0.1",
+        "cf_referrer" => "https://example.com/works/1",
+        "cf_site_skin" => "Reversi"
       }
     }
   end
@@ -95,6 +101,46 @@ describe SupportReporter do
         allow(subject).to receive(:description).and_return('Hi!<img src="http://example.com/Camera-icon.svg">Bye!')
 
         expect(subject.report_attributes.fetch("description")).to eq("Hi!http://example.com/Camera-icon.svgBye!")
+      end
+    end
+
+    context "if the report has an empty ip address" do
+      before do
+        allow(subject).to receive(:ip_address).and_return("")
+      end
+
+      it "returns a hash containing 'Unknown' for IP address" do
+        expect(subject.report_attributes.dig("cf", "cf_ip")).to eq("Unknown")
+      end
+    end
+
+    context "if the report has an empty referrer" do
+      before do
+        allow(subject).to receive(:referrer).and_return("")
+      end
+
+      it "returns a hash containing a blank string for referrer" do
+        expect(subject.report_attributes.dig("cf", "cf_referrer")).to eq("")
+      end
+    end
+
+    context "if the report has an empty skin" do
+      before do
+        allow(subject).to receive(:site_skin).and_return(nil)
+      end
+
+      it "returns a hash containing the custom skin placeholder" do
+        expect(subject.report_attributes.dig("cf", "cf_site_skin")).to eq("Custom skin")
+      end
+    end
+
+    context "if the report has a private skin" do
+      before do
+        allow(subject).to receive(:site_skin).and_return(build(:skin, public: false))
+      end
+
+      it "returns a hash containing the custom skin placeholder" do
+        expect(subject.report_attributes.dig("cf", "cf_site_skin")).to eq("Custom skin")
       end
     end
   end

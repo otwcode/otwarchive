@@ -525,7 +525,6 @@ en:
           label: Your question or problem (required)
         email:
           label: Your email (required)
-        ip: Our spam filter does collect IP addresses, but we never see them.
         language:
           label: Select language (required)
         legend:
