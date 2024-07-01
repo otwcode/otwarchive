@@ -2,7 +2,7 @@
 class Feedback < ApplicationRecord
   attr_accessor :ip_address, :referer, :site_skin
 
-  # NOTE -- this has NOTHING to do with the Comment class!
+  # NOTE: this has NOTHING to do with the Comment class!
   # This is just the name of the text field in the Feedback
   # class which holds the user's comments.
   validates_presence_of :comment

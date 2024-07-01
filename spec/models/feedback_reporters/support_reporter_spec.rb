@@ -16,7 +16,7 @@ describe SupportReporter do
       site_revision: "eternal_beta",
       rollout: "rollout_value",
       ip_address: "127.0.0.1",
-      referrer: "https://example.com/works/1",
+      referer: "https://example.com/works/1",
       site_skin: build(:skin, title: "Reversi", public: true)
     }
   end
@@ -35,7 +35,7 @@ describe SupportReporter do
         "cf_rollout" => "rollout_value",
         "cf_user_agent" => "HTTParty",
         "cf_ip" => "127.0.0.1",
-        "cf_referrer" => "https://example.com/works/1",
+        "cf_referer" => "https://example.com/works/1",
         "cf_site_skin" => "Reversi"
       }
     }
@@ -114,13 +114,13 @@ describe SupportReporter do
       end
     end
 
-    context "if the report has an empty referrer" do
+    context "if the report has an empty referer" do
       before do
-        allow(subject).to receive(:referrer).and_return("")
+        allow(subject).to receive(:referer).and_return("")
       end
 
-      it "returns a hash containing a blank string for referrer" do
-        expect(subject.report_attributes.dig("cf", "cf_referrer")).to eq("")
+      it "returns a hash containing a blank string for referer" do
+        expect(subject.report_attributes.dig("cf", "cf_referer")).to eq("")
       end
     end
 
