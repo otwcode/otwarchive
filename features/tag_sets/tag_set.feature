@@ -10,7 +10,27 @@ Feature: Creating and editing tag sets
     And I submit
   Then I should see a create confirmation message
     And I should see "About Empty Tag Set"
-    And I should see "tagsetter" within ".meta"
+    And Maintainers should be "tagsetter"
+
+  Scenario: A user should be able to create a tag set with an additional owner
+  Given I am logged in as "tagsetter"
+    And the following activated users exist
+      | login         | password   |
+      | anotherowner  | password   |
+    And I set up the tag set "Additional Owner" with owners "anotherowner" and the freeform tags "Shared Responsibilities"
+  Then I should see a create confirmation message
+    And Maintainers should be "anotherowner tagsetter"
+
+  Scenario: A user should not be able to remove themselves as an owner (AO3-6714)
+  Given I am logged in as "tagsetter"
+    And I set up the tag set "Duplicate Ownership" with owners "tagsetter" and the freeform tags "Clones"
+  Then I should see a create confirmation message
+    And I should see "tagsetter tagsetter" within ".meta"
+  When I go to the "Duplicate Ownership" tag set edit page
+    And I toggle the owners "tagsetter"
+    And I submit
+  Then I should see an update confirmation message
+    And Maintainers should be "tagsetter"
 
   Scenario: A user should be able to create a tag set with noncanonical tags
   Given I am logged in as "tagsetter"
