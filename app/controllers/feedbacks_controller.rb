@@ -19,6 +19,8 @@ class FeedbacksController < ApplicationController
     @feedback.rollout = @feedback.rollout_string
     @feedback.user_agent = request.env["HTTP_USER_AGENT"]
     @feedback.ip_address = request.remote_ip
+    @feedback.referer = request.referer if request.referer && ArchiveConfig.PERMITTED_HOSTS.include?(URI(request.referer).host)
+    @feedback.site_skin = current_skin
     if @feedback.save
       @feedback.email_and_send
       flash[:notice] = t("successfully_sent",
@@ -37,10 +39,16 @@ class FeedbacksController < ApplicationController
     @support_languages = Language.where(support_available: true).default_order
   end
 
+  def current_skin
+    skin = Skin.approved_or_owned_by.usable.find_by(id: session[:site_skin]) if session[:site_skin]
+    skin ||= current_user&.preference&.skin
+    skin ||= Skin.default
+    skin
+  end
+
   def feedback_params
     params.require(:feedback).permit(
       :comment, :email, :summary, :username, :language
     )
   end
-
 end

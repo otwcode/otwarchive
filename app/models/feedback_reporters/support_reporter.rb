@@ -1,5 +1,5 @@
 class SupportReporter < FeedbackReporter
-  attr_accessor :user_agent, :site_revision, :rollout
+  attr_accessor :user_agent, :referer, :rollout, :site_revision, :site_skin
 
   def report_attributes
     super.deep_merge(
@@ -16,7 +16,10 @@ class SupportReporter < FeedbackReporter
     {
       "cf_archive_version" => site_revision.presence || "Unknown site revision",
       "cf_rollout" => rollout.presence || "Unknown",
-      "cf_user_agent" => user_agent.presence || "Unknown user agent"
+      "cf_user_agent" => user_agent.presence || "Unknown user agent",
+      "cf_ip" => ip_address.presence || "Unknown",
+      "cf_referer" => referer.presence || "",
+      "cf_site_skin" => site_skin&.public ? site_skin.title : "Custom skin"
     }
   end
 
