@@ -87,7 +87,7 @@ ol.pagination, div.pagination, ol.year {
   color: #111;
 }
 
-.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
+.actions a:hover, .actions button:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
   color: #900;
   border-top: 1px solid #999;
   border-left: 1px solid #999;
