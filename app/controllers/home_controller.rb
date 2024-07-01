@@ -52,6 +52,7 @@ class HomeController < ApplicationController
 
   # about
   def about
+    @page_subtitle = t(".page_title")
     render action: "about", layout: "application"
   end
 
