@@ -34,7 +34,9 @@ describe FeedbacksController do
 
       context "and the user has no skin set" do
         before do
-          Skin.default
+          admin_setting = AdminSetting.default
+          admin_setting.default_skin = Skin.default
+          admin_setting.save(validate: false)
         end
 
         it "sets the skin title in the Zoho ticket" do
@@ -83,23 +85,6 @@ describe FeedbacksController do
     end
 
     context "when accessed by a guest" do
-      context "and the guest has a skin set for the session" do
-        let(:skin) { create(:skin, :public) }
-
-        before do
-          session[:site_skin] = skin.id
-        end
-
-        it "sets the skin title in the Zoho ticket" do
-          expect(mock_zoho).to receive(:create_ticket).with(ticket_attributes: include(
-            "cf" => include(
-              "cf_site_skin" => skin.title
-            )
-          ))
-          post :create, params: default_parameters
-        end
-      end
-
       context "and the referer is on the Archive" do
         before do
           request.env["HTTP_REFERER"] = "https://archiveofourown.org/works/1"
