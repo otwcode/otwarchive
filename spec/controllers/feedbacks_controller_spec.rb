@@ -3,8 +3,6 @@
 require "spec_helper"
 
 describe FeedbacksController do
-  include LoginMacros
-
   describe "POST #create" do
     let(:mock_zoho) { instance_double(ZohoResourceClient) }
 
