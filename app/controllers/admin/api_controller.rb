@@ -8,6 +8,7 @@ class Admin::ApiController < Admin::BaseController
                 else
                   ApiKey.order("name").paginate(page: params[:page])
                 end
+    authorize @api_keys
   end
 
   def show
@@ -15,7 +16,7 @@ class Admin::ApiController < Admin::BaseController
   end
 
   def new
-    @api_key = ApiKey.new
+    @api_key = authorize ApiKey.new
   end
 
   def create
@@ -31,6 +32,7 @@ class Admin::ApiController < Admin::BaseController
   end
 
   def edit
+    authorize ApiKey
     @api_key = ApiKey.find(params[:id])
   end
 

@@ -29,38 +29,72 @@ describe Admin::ApiController do
     end
 
     context "where admin is logged in" do
-      render_views
-      let(:admin) { FactoryBot.create(:admin) }
+      context "when admin does not have correct authorization" do
+        context "when admin has no role" do
+          let(:admin) { create(:admin, roles: []) }
 
-      before do
-        fake_login_admin(admin)
-      end
+          before do
+            fake_login_admin(admin)
+          end
 
-      let(:api_key_prefixes) { %w(a b c) }
-      let!(:api_keys) do
-        api_key_prefixes.each do |p|
-          FactoryBot.create(:api_key, name: "#{p}_key")
+          it "redirects with error" do
+            get :index, params: params
+  
+            it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+          end
         end
-      end
-
-      context "where no query params are set" do
-        it "returns a successful response with all api keys" do
-          get :index, params: params
-          expect(response).to have_http_status(:success)
-          api_key_prefixes.each do |p|
-            expect(response.body).to include("#{p}_key")
+  
+        (Admin::VALID_ROLES - %w[superadmin]).each do |role|
+          context "when admin has #{role} role" do
+            let(:admin) { create(:admin, roles: [role]) }
+            
+            before do
+              fake_login_admin(admin)
+            end
+            
+            it "redirects with error" do
+              get :index, params: params
+  
+              it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            end
           end
         end
       end
 
-      context "where query params are set" do
-        let(:params) { { query: "a_key" } }
-        it "returns a successful response with a filtered list of api keys" do
-          get :index, params: params
-          expect(response).to have_http_status(:success)
-          expect(response.body).to include("a_key")
-          expect(response.body).to_not include("b_key")
-          expect(response.body).to_not include("c_key")
+      context "when admin is authorized with the superadmin role" do
+        render_views
+        let(:admin) { create(:admin, roles: ["superadmin"]) }
+  
+        before do
+          fake_login_admin(admin)
+        end
+  
+        let(:api_key_prefixes) { %w(a b c) }
+        let!(:api_keys) do
+          api_key_prefixes.each do |p|
+            FactoryBot.create(:api_key, name: "#{p}_key")
+          end
+        end
+  
+        context "where no query params are set" do
+          it "returns a successful response with all api keys" do
+            get :index, params: params
+            expect(response).to have_http_status(:success)
+            api_key_prefixes.each do |p|
+              expect(response.body).to include("#{p}_key")
+            end
+          end
+        end
+  
+        context "where query params are set" do
+          let(:params) { { query: "a_key" } }
+          it "returns a successful response with a filtered list of api keys" do
+            get :index, params: params
+            expect(response).to have_http_status(:success)
+            expect(response.body).to include("a_key")
+            expect(response.body).to_not include("b_key")
+            expect(response.body).to_not include("c_key")
+          end
         end
       end
     end
@@ -68,15 +102,49 @@ describe Admin::ApiController do
 
   describe "GET #new" do
     context "where an admin is logged in" do
-      let(:admin) { FactoryBot.create(:admin) }
+      context "when admin does not have correct authorization" do
+        context "when admin has no role" do
+          let(:admin) { create(:admin, roles: []) }
 
-      before do
-        fake_login_admin(admin)
+          before do
+            fake_login_admin(admin)
+          end
+
+          it "redirects with error" do
+            get :new
+  
+            it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+          end
+        end
+  
+        (Admin::VALID_ROLES - %w[superadmin]).each do |role|
+          context "when admin has #{role} role" do
+            let(:admin) { create(:admin, roles: [role]) }
+            
+            before do
+              fake_login_admin(admin)
+            end
+            
+            it "redirects with error" do
+              get :new
+  
+              it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            end
+          end
+        end
       end
-      it "responds with the new api key form" do
-        get :new
-        expect(response).to have_http_status(:success)
-        assert_template :new
+
+      context "when admin is authorized with the superadmin role" do
+        let(:admin) { create(:admin, roles: ["superadmin"]) }
+  
+        before do
+          fake_login_admin(admin)
+        end
+        it "responds with the new api key form" do
+          get :new
+          expect(response).to have_http_status(:success)
+          assert_template :new
+        end
       end
     end
   end
@@ -139,27 +207,61 @@ describe Admin::ApiController do
 
   describe "GET #edit" do
     context "where an admin is logged in" do
-      let(:admin) { FactoryBot.create(:admin) }
+      context "when admin does not have correct authorization" do
+        context "when admin has no role" do
+          let(:admin) { create(:admin, roles: []) }
 
-      before do
-        fake_login_admin(admin)
-      end
+          before do
+            fake_login_admin(admin)
+          end
 
-      context "where the api key exists" do
-        render_views
-        let!(:api_key) { FactoryBot.create(:api_key, name: "api_key") }
-
-        it "populates the form with the api key" do
-          get :edit, params: { id: api_key.id }
-          expect(response).to have_http_status(:success)
-          expect(response.body).to include(api_key.name)
+          it "redirects with error" do
+            get :edit, params: { id: 123 }
+  
+            it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+          end
+        end
+  
+        (Admin::VALID_ROLES - %w[superadmin]).each do |role|
+          context "when admin has #{role} role" do
+            let(:admin) { create(:admin, roles: [role]) }
+            
+            before do
+              fake_login_admin(admin)
+            end
+            
+            it "redirects with error" do
+              get :edit, params: { id: 123 }
+  
+              it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            end
+          end
         end
       end
 
-      context "where the api key can't be found" do
-        it "raises an error" do
-          assert_raises ActiveRecord::RecordNotFound do
-            get :edit, params: { id: 123 }
+      context "when admin is authorized with the superadmin role" do
+        let(:admin) { create(:admin, roles: ["superadmin"]) }
+  
+        before do
+          fake_login_admin(admin)
+        end
+  
+        context "where the api key exists" do
+          render_views
+          let!(:api_key) { FactoryBot.create(:api_key, name: "api_key") }
+  
+          it "populates the form with the api key" do
+            get :edit, params: { id: api_key.id }
+            expect(response).to have_http_status(:success)
+            expect(response.body).to include(api_key.name)
+          end
+        end
+  
+        context "where the api key can't be found" do
+          it "raises an error" do
+            assert_raises ActiveRecord::RecordNotFound do
+              get :edit, params: { id: 123 }
+            end
           end
         end
       end
