@@ -180,6 +180,7 @@ en:
           heading: Record Warnings, Suspensions, or Notes
     api:
       index:
+        page_title: API Tokens
         page_heading: API Tokens
         note: Search for an API token by name
         search_box:
@@ -198,6 +199,10 @@ en:
             actions: Actions
           actions:
             edit: Edit
+      new:
+        page_title: New API Token
+      edit:
+        page_title: Edit API Token
     banners:
       index:
         actions:

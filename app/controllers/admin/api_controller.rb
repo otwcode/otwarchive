@@ -2,6 +2,7 @@ class Admin::ApiController < Admin::BaseController
   before_action :check_for_cancel, only: [:create, :update]
 
   def index
+    @page_title = t(".page_title")
     @api_keys = if params[:query]
                   sql_query = "%" + params[:query] + "%"
                   ApiKey.where("name LIKE ?", sql_query).order("name").paginate(page: params[:page])
@@ -16,6 +17,7 @@ class Admin::ApiController < Admin::BaseController
   end
 
   def new
+    @page_title = t(".page_title")
     @api_key = authorize ApiKey.new
   end
 
@@ -33,6 +35,7 @@ class Admin::ApiController < Admin::BaseController
 
   def edit
     authorize ApiKey
+    @page_title = t(".page_title")
     @api_key = ApiKey.find(params[:id])
   end
 
