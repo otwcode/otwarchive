@@ -178,6 +178,26 @@ en:
               required: Required when adding or removing a warning or suspension to an account.
             submit: Update
           heading: Record Warnings, Suspensions, or Notes
+    api:
+      index:
+        page_heading: API Tokens
+        note: Search for an API token by name
+        search_box:
+          label: Name
+        actions:
+          find: Find
+        table:
+          summary: Existing API tokens along with the dates they were created and updated and options for editing them.
+          caption: API Tokens
+          headings:
+            name: Name
+            token: Token
+            banned: Banned?
+            created: Created
+            updated: Updated
+            actions: Actions
+          actions:
+            edit: Edit
     banners:
       index:
         actions:
@@ -218,7 +238,7 @@ en:
     header:
       nav:
         activities: Activities
-        api_tokens: Manage API Tokens
+        api_tokens: API Tokens
         banned_emails: Banned Emails
         banners: Banners
         invitations:
