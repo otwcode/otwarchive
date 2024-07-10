@@ -151,55 +151,89 @@ describe Admin::ApiController do
 
   describe "POST #create" do
     context "where an admin is logged in" do
-      let(:admin) { FactoryBot.create(:admin) }
-      let(:params) { {} }
+      context "when admin does not have correct authorization" do
+        context "when admin has no role" do
+          let(:admin) { create(:admin, roles: []) }
 
-      before do
-        fake_login_admin(admin)
-      end
+          before do
+            fake_login_admin(admin)
+          end
 
-      context "with an api key param" do
-        let(:api_key_name) { "api_key" }
-        let(:api_key_params) { { name: api_key_name } }
-        let(:params) { { api_key: api_key_params } }
-
-        it "redirects to the homepage and notifies of the success" do
-          post :create, params: params
-          expect(ApiKey.where(name: api_key_name)).to_not be_empty
-          it_redirects_to_with_notice(admin_api_index_path, "New token successfully created")
+          it "redirects with error" do
+            post :create
+  
+            it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+          end
+        end
+  
+        (Admin::VALID_ROLES - %w[superadmin]).each do |role|
+          context "when admin has #{role} role" do
+            let(:admin) { create(:admin, roles: [role]) }
+            
+            before do
+              fake_login_admin(admin)
+            end
+            
+            it "redirects with error" do
+              post :create
+  
+              it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            end
+          end
         end
       end
 
-      context "without an api key param" do
-        it "shows the new api view" do
-          post :create, params: params
-          expect(response).to have_http_status(:success)
-          assert_template :new
-        end
-      end
-
-      context "the save was unsuccessful" do
-        let(:api_key_name) { "api_key" }
-        let(:api_key_params) { { name: api_key_name } }
-        let(:params) { { api_key: api_key_params } }
+      context "when admin is authorized with the superadmin role" do
+        let(:admin) { create(:admin, roles: ["superadmin"]) }
+        let(:params) { {} }
 
         before do
-          allow_any_instance_of(ApiKey).to receive(:save).and_return(false)
+          fake_login_admin(admin)
         end
 
-        it "shows the new api view" do
-          post :create, params: params
-          expect(ApiKey.where(name: api_key_name)).to be_empty
-          assert_template :new
+        context "with an api key param" do
+          let(:api_key_name) { "api_key" }
+          let(:api_key_params) { { name: api_key_name } }
+          let(:params) { { api_key: api_key_params } }
+
+          it "redirects to the homepage and notifies of the success" do
+            post :create, params: params
+            expect(ApiKey.where(name: api_key_name)).to_not be_empty
+            it_redirects_to_with_notice(admin_api_index_path, "New token successfully created")
+          end
         end
-      end
 
-      context "cancel_button is present" do
-        let(:params) { { cancel_button: "Cancel" } }
+        context "without an api key param" do
+          it "shows the new api view" do
+            post :create, params: params
+            expect(response).to have_http_status(:success)
+            assert_template :new
+          end
+        end
 
-        it "redirects to index" do
-          post :create, params: params
-          it_redirects_to admin_api_index_path
+        context "the save was unsuccessful" do
+          let(:api_key_name) { "api_key" }
+          let(:api_key_params) { { name: api_key_name } }
+          let(:params) { { api_key: api_key_params } }
+
+          before do
+            allow_any_instance_of(ApiKey).to receive(:save).and_return(false)
+          end
+
+          it "shows the new api view" do
+            post :create, params: params
+            expect(ApiKey.where(name: api_key_name)).to be_empty
+            assert_template :new
+          end
+        end
+
+        context "cancel_button is present" do
+          let(:params) { { cancel_button: "Cancel" } }
+
+          it "redirects to index" do
+            post :create, params: params
+            it_redirects_to admin_api_index_path
+          end
         end
       end
     end
@@ -270,59 +304,93 @@ describe Admin::ApiController do
 
   describe "POST #update" do
     context "where an admin is logged in" do
-      let(:admin) { FactoryBot.create(:admin) }
+      context "when admin does not have correct authorization" do
+        context "when admin has no role" do
+          let(:admin) { create(:admin, roles: []) }
 
-      before do
-        fake_login_admin(admin)
-      end
-
-      context "where the api key exists" do
-        let(:api_key) { FactoryBot.create(:api_key) }
-        let(:new_name) { "new_name" }
-        let(:params) do
-          {
-            id: api_key.id,
-            api_key: { name: new_name }
-          }
-        end
-
-        context "where the update is successful" do
-          it "updates the api key and redirects to index" do
-            expect(ApiKey.where(name: new_name)).to be_empty
-            post :update, params: params
-            expect(ApiKey.where(name: new_name)).to_not be_empty
-            it_redirects_to_with_notice(admin_api_index_path, "Access token was successfully updated")
-          end
-        end
-
-        context "where the update is unsuccessful" do
           before do
-            allow_any_instance_of(ApiKey).to receive(:update).and_return(false)
+            fake_login_admin(admin)
           end
 
-          it "shows the edit view" do
-            post :update, params: { id: api_key.id, api_key: { name: "new_name" } }
-            expect(ApiKey.where(name: "new_name")).to be_empty
-            assert_template :edit
-          end
-        end
-      end
-
-      context "where the api key doesn't exist" do
-        it "raises an error" do
-          assert_raises ActiveRecord::RecordNotFound do
+          it "redirects with error" do
             post :update, params: { id: 123, api_key: { name: "new_name" } }
+  
+            it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+          end
+        end
+  
+        (Admin::VALID_ROLES - %w[superadmin]).each do |role|
+          context "when admin has #{role} role" do
+            let(:admin) { create(:admin, roles: [role]) }
+            
+            before do
+              fake_login_admin(admin)
+            end
+            
+            it "redirects with error" do
+              post :update, params: { id: 123, api_key: { name: "new_name" } }
+  
+              it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            end
           end
         end
       end
 
-      context "cancel_button is true" do
-        let(:api_key_id) { 123 }
-        let!(:api_key) { FactoryBot.create(:api_key, id: api_key_id) }
+      context "when admin is authorized with the superadmin role" do
+        let(:admin) { create(:admin, roles: ["superadmin"]) }
 
-        it "redirects to index" do
-          post :update, params: { id: api_key_id, cancel_button: "Cancel" }
-          it_redirects_to admin_api_index_path
+        before do
+          fake_login_admin(admin)
+        end
+
+        context "where the api key exists" do
+          let(:api_key) { FactoryBot.create(:api_key) }
+          let(:new_name) { "new_name" }
+          let(:params) do
+            {
+              id: api_key.id,
+              api_key: { name: new_name }
+            }
+          end
+
+          context "where the update is successful" do
+            it "updates the api key and redirects to index" do
+              expect(ApiKey.where(name: new_name)).to be_empty
+              post :update, params: params
+              expect(ApiKey.where(name: new_name)).to_not be_empty
+              it_redirects_to_with_notice(admin_api_index_path, "Access token was successfully updated")
+            end
+          end
+
+          context "where the update is unsuccessful" do
+            before do
+              allow_any_instance_of(ApiKey).to receive(:update).and_return(false)
+            end
+
+            it "shows the edit view" do
+              post :update, params: { id: api_key.id, api_key: { name: "new_name" } }
+              expect(ApiKey.where(name: "new_name")).to be_empty
+              assert_template :edit
+            end
+          end
+        end
+
+        context "where the api key doesn't exist" do
+          it "raises an error" do
+            assert_raises ActiveRecord::RecordNotFound do
+              post :update, params: { id: 123, api_key: { name: "new_name" } }
+            end
+          end
+        end
+
+        context "cancel_button is true" do
+          let(:api_key_id) { 123 }
+          let!(:api_key) { FactoryBot.create(:api_key, id: api_key_id) }
+
+          it "redirects to index" do
+            post :update, params: { id: api_key_id, cancel_button: "Cancel" }
+            it_redirects_to admin_api_index_path
+          end
         end
       end
     end
@@ -330,27 +398,61 @@ describe Admin::ApiController do
 
   describe "POST #destroy" do
     context "where an admin is logged in" do
-      let(:admin) { FactoryBot.create(:admin) }
+      context "when admin does not have correct authorization" do
+        context "when admin has no role" do
+          let(:admin) { create(:admin, roles: []) }
 
-      before do
-        fake_login_admin(admin)
-      end
+          before do
+            fake_login_admin(admin)
+          end
 
-      context "where the api key exists" do
-        let(:api_key_id) { 123 }
-        let!(:api_key) { FactoryBot.create(:api_key, id: api_key_id) }
-
-        it "destroys the api key, then redirects to edit" do
-          post :destroy, params: { id: api_key_id }
-          expect(ApiKey.where(id: api_key_id)).to be_empty
-          expect(response).to redirect_to admin_api_path
+          it "redirects with error" do
+            post :destroy, params: { id: 123 }
+  
+            it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+          end
+        end
+  
+        (Admin::VALID_ROLES - %w[superadmin]).each do |role|
+          context "when admin has #{role} role" do
+            let(:admin) { create(:admin, roles: [role]) }
+            
+            before do
+              fake_login_admin(admin)
+            end
+            
+            it "redirects with error" do
+              post :destroy, params: { id: 123 }
+  
+              it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            end
+          end
         end
       end
 
-      context "where the api key doesn't exist" do
-        it "raises an error" do
-          assert_raises ActiveRecord::RecordNotFound do
-            post :destroy, params: { id: 123 }
+      context "when admin is authorized with the superadmin role" do
+        let(:admin) { create(:admin, roles: ["superadmin"]) }
+
+        before do
+          fake_login_admin(admin)
+        end
+
+        context "where the api key exists" do
+          let(:api_key_id) { 123 }
+          let!(:api_key) { FactoryBot.create(:api_key, id: api_key_id) }
+
+          it "destroys the api key, then redirects to edit" do
+            post :destroy, params: { id: api_key_id }
+            expect(ApiKey.where(id: api_key_id)).to be_empty
+            expect(response).to redirect_to admin_api_path
+          end
+        end
+
+        context "where the api key doesn't exist" do
+          it "raises an error" do
+            assert_raises ActiveRecord::RecordNotFound do
+              post :destroy, params: { id: 123 }
+            end
           end
         end
       end

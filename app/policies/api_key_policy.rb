@@ -8,4 +8,7 @@ class ApiKeyPolicy < ApplicationPolicy
   alias show? index?
   alias new? index?
   alias edit? index?
+  alias create? index?
+  alias update? index?
+  alias destroy? index?
 end

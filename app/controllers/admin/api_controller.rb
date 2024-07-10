@@ -22,6 +22,7 @@ class Admin::ApiController < Admin::BaseController
   end
 
   def create
+    authorize ApiKey
     # Use provided api key params if available otherwise fallback to empty
     # ApiKey object
     @api_key = params[:api_key].nil? ? ApiKey.new : ApiKey.new(api_key_params)
@@ -40,6 +41,7 @@ class Admin::ApiController < Admin::BaseController
   end
 
   def update
+    authorize ApiKey
     @api_key = ApiKey.find(params[:id])
     if @api_key.update(api_key_params)
       flash[:notice] = ts("Access token was successfully updated")
@@ -50,6 +52,7 @@ class Admin::ApiController < Admin::BaseController
   end
 
   def destroy
+    authorize ApiKey
     @api_key = ApiKey.find(params[:id])
     @api_key.destroy
     redirect_to(admin_api_path)
