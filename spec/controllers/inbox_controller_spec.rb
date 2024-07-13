@@ -19,6 +19,111 @@ describe InboxController do
                                  "Sorry, you don't have permission to access the page you were trying to reach.")
     end
 
+    context "when logged in as an admin" do
+      context "when admin does not have correct authorization" do
+        context "when admin has no role" do
+          let(:admin) { create(:admin, roles: []) }
+
+          before { fake_login_admin(admin) }
+
+          it "redirects with error" do
+            get :show, params: { user_id: user.login }
+  
+            it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+          end
+        end
+  
+        (Admin::VALID_ROLES - %w[superadmin policy_and_abuse]).each do |role|
+          context "when admin has #{role} role" do
+            let(:admin) { create(:admin, roles: [role]) }
+            
+            before { fake_login_admin(admin) }
+            
+            it "redirects with error" do
+              get :show, params: { user_id: user.login }
+  
+              it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            end
+          end
+        end
+      end
+
+      %w[superadmin policy_and_abuse].each do |role|
+        context "when admin is authorized with the #{role} role" do
+          let(:admin) { create(:admin, roles: [role]) }
+          
+          before { fake_login_admin(admin) }
+
+          it "renders the user inbox" do
+            get :show, params: { user_id: user.login }
+            expect(response).to render_template("show")
+            expect(assigns(:inbox_total)).to eq(0)
+            expect(assigns(:unread)).to eq(0)
+          end
+
+          context "with unread comments" do
+            let!(:inbox_comments) do
+              Array.new(3) do |i|
+                create(:inbox_comment, user: user, created_at: Time.now + i.days)
+              end
+            end
+
+            it "renders non-zero unread count" do
+              get :show, params: { user_id: user.login }
+              expect(assigns(:inbox_comments)).to eq(inbox_comments.reverse)
+              expect(assigns(:inbox_total)).to eq(3)
+              expect(assigns(:unread)).to eq(3)
+            end
+
+            it "renders oldest first" do
+              get :show, params: { user_id: user.login, filters: { date: "asc" } }
+              expect(assigns(:filters)[:date]).to eq("asc")
+              expect(assigns(:inbox_comments)).to eq(inbox_comments)
+              expect(assigns(:inbox_total)).to eq(3)
+              expect(assigns(:unread)).to eq(3)
+            end
+          end
+
+          context "with 1 read and 1 unread" do
+            let!(:read_comment) { create(:inbox_comment, user: user, read: true) }
+            let!(:unread_comment) { create(:inbox_comment, user: user) }
+
+            it "renders only unread" do
+              get :show, params: { user_id: user.login, filters: { read: "false" } }
+              expect(assigns(:filters)[:read]).to eq("false")
+              expect(assigns(:inbox_comments)).to eq([unread_comment])
+              expect(assigns(:inbox_total)).to eq(2)
+              expect(assigns(:unread)).to eq(1)
+            end
+          end
+
+          context "with 1 replied and 1 unreplied" do
+            let!(:replied_comment) { create(:inbox_comment, user: user, replied_to: true) }
+            let!(:unreplied_comment) { create(:inbox_comment, user: user) }
+
+            it "renders only unreplied" do
+              get :show, params: { user_id: user.login, filters: { replied_to: "false" } }
+              expect(assigns(:filters)[:replied_to]).to eq("false")
+              expect(assigns(:inbox_comments)).to eq([unreplied_comment])
+              expect(assigns(:inbox_total)).to eq(2)
+              expect(assigns(:unread)).to eq(2)
+            end
+          end
+
+          context "with a deleted comment" do
+            let(:inbox_comment) { create(:inbox_comment, user: user) }
+
+            it "excludes deleted comments" do
+              inbox_comment.feedback_comment.destroy
+              get :show, params: { user_id: user.login }
+              expect(assigns(:inbox_total)).to eq(0)
+              expect(assigns(:unread)).to eq(0)
+            end
+          end
+        end
+      end
+    end
+
     context "when logged in as the same user" do
       before { fake_login_known_user(user) }
 
