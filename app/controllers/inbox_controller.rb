@@ -2,7 +2,7 @@ class InboxController < ApplicationController
   include BlockHelper
 
   before_action :load_user
-  before_action :check_ownership
+  before_action :check_ownership_or_admin
 
   before_action :load_commentable, only: :reply
   before_action :check_blocked, only: :reply
@@ -13,6 +13,7 @@ class InboxController < ApplicationController
   end
 
   def show
+    authorize InboxComment if logged_in_as_admin?
     @inbox_total = @user.inbox_comments.with_bad_comments_removed.count
     @unread = @user.inbox_comments.with_bad_comments_removed.count_unread
     @filters = filter_params[:filters] || {}
