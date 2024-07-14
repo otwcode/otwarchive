@@ -31,6 +31,7 @@ class InboxController < ApplicationController
   end
 
   def update
+    authorize InboxComment if logged_in_as_admin?
     begin
       @inbox_comments = InboxComment.find(params[:inbox_comments])
       if params[:read]
