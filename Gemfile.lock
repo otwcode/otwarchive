@@ -402,7 +402,7 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    parallel (1.24.0)
+    parallel (1.25.1)
     parser (3.3.0.5)
       ast (~> 2.4.1)
       racc
@@ -520,7 +520,7 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.13.1)
-    rubocop (1.22.1)
+    rubocop (1.22.3)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -529,7 +529,7 @@ GEM
       rubocop-ast (>= 1.12.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.31.1)
+    rubocop-ast (1.31.2)
       parser (>= 3.3.0.4)
     rubocop-rails (2.12.4)
       activesupport (>= 4.2.0)
@@ -705,7 +705,7 @@ DEPENDENCIES
   rest-client (~> 2.1.0)
   rollout
   rspec-rails (~> 4.0.1)
-  rubocop (= 1.22.1)
+  rubocop (= 1.22.3)
   rubocop-rails (= 2.12.4)
   rubocop-rspec (= 2.6.0)
   rvm-capistrano
