@@ -11,7 +11,7 @@ inherit_mode:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.1
 
 Bundler/OrderedGems:
   Enabled: false
