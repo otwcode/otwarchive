@@ -168,6 +168,21 @@ Feature: Kudos
       And the email should not contain "0 guests"
       And the email should not contain "translation missing"
 
+  Scenario: Translated kudos email
+
+    Given a locale with translated emails
+      And the user "myname1" enables translated emails
+      And all emails have been delivered
+      And the kudos queue is cleared
+      And I am logged in as "myname2"
+      And I leave kudos on "Awesome Story"
+    When kudos are sent
+    Then 1 email should be delivered to "myname1@foo.com"
+      And the email should have "You've got kudos!" in the subject
+      And the email to "myname1" should contain "myname2"
+      And the email to "myname1" should contain "Awesome Story"
+      And the email to "myname1" should be translated
+
   Scenario: Blocked users should not see a kudos button on their blocker's works
     Given the work "Aftermath" by "creator"
       And the user "creator" has blocked the user "pest"
