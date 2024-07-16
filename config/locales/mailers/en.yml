@@ -31,19 +31,18 @@ en:
       guest:
         one: a guest
         other: "%{count} guests"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           one: "%{givers_list} left kudos on %{commentable_link}."
           other: "%{givers_list} left kudos on %{commentable_link}."
-        single_guest:
-          giver_list: A guest
-          left_kudos: "%{giver_list} left kudos on %{commentable_link}."
-      subject: "[%{app_name}] You've got kudos!"
-      text:
-        left_kudos:
+        text:
           one: '%{givers_list} left kudos on "%{commentable_title}" (%{commentable_url}).'
           other: '%{givers_list} left kudos on "%{commentable_title}" (%{commentable_url}).'
-        single_guest: A guest left kudos on "%{commentable_title}" (%{commentable_url}).
+      single_guest:
+        html: "%{giver} left kudos on %{commentable_link}."
+        giver: A guest
+        text: A guest left kudos on "%{commentable_title}" (%{commentable_url}).
+      subject: "[%{app_name}] You've got kudos!"
   mailer:
     general:
       closing:
