@@ -39,8 +39,8 @@ en:
           one: '%{givers_list} left kudos on "%{commentable_title}" (%{commentable_url}).'
           other: '%{givers_list} left kudos on "%{commentable_title}" (%{commentable_url}).'
       single_guest:
-        html: "%{giver} left kudos on %{commentable_link}."
         giver: A guest
+        html: "%{giver} left kudos on %{commentable_link}."
         text: A guest left kudos on "%{commentable_title}" (%{commentable_url}).
       subject: "[%{app_name}] You've got kudos!"
   mailer:
