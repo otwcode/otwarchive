@@ -5,8 +5,9 @@ end
 Given "a locale with translated emails" do
   language = Language.find_or_create_by(short: "new", name: "New")
   Locale.create(iso: "new", name: "New", language: language, email_enabled: true)
-  # These keys are used in every email
+  # The footer keys are used in all emails
   I18n.backend.store_translations(:new, { mailer: { general: { footer: { general: { about: { html: "Translated footer", text: "Translated footer" } } } } } })
+  I18n.backend.store_translations(:new, { kudo_mailer: { batch_kudo_notification: { subject: "Translated subject" } } })
 end
 
 Given "the user {string} enables translated emails" do |user|
@@ -15,10 +16,21 @@ Given "the user {string} enables translated emails" do |user|
   user.preference.update!(locale: Locale.find_by(iso: "new"))
 end
 
+Given "the locale preference feature flag is disabled for user {string}" do |user|
+  user = User.find_by(login: user)
+  $rollout.deactivate_user(:set_locale_preference, user)
+end
+
 Then "the email to {string} should be translated" do |user|
   step(%{the email to "#{user}" should contain "Translated footer"})
   step(%{the email to "#{user}" should not contain "fan-run and fan-supported archive"}) # untranslated English text
   step(%{the email to "#{user}" should not contain "translation missing"}) # missing translations in the target language fall back to English
+end
+
+Then "the email to {string} should be non-translated" do |user|
+  step(%{the email to "#{user}" should not contain "Translated footer"})
+  step(%{the email to "#{user}" should contain "fan-run and fan-supported archive"})
+  step(%{the email to "#{user}" should not contain "translation missing"})
 end
 
 Then "{string} should be emailed" do |user|

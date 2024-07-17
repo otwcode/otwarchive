@@ -178,10 +178,20 @@ Feature: Kudos
       And I leave kudos on "Awesome Story"
     When kudos are sent
     Then 1 email should be delivered to "myname1@foo.com"
-      And the email should have "You've got kudos!" in the subject
+      And the email should have "Translated subject" in the subject
       And the email to "myname1" should contain "myname2"
       And the email to "myname1" should contain "Awesome Story"
       And the email to "myname1" should be translated
+    When the locale preference feature flag is disabled for user "myname1"
+      And all emails have been delivered
+      And I am logged in as "myname3"
+      And I leave kudos on "Awesome Story"
+      And kudos are sent
+    Then 1 email should be delivered to "myname1@foo.com"
+      And the email should have "You've got kudos!" in the subject
+      And the email to "myname1" should contain "myname3"
+      And the email to "myname1" should contain "Awesome Story"
+      And the email to "myname1" should be non-translated
 
   Scenario: Blocked users should not see a kudos button on their blocker's works
     Given the work "Aftermath" by "creator"
