@@ -184,11 +184,11 @@ en:
       index:
         actions:
           find: Find
-        search_by_name: Search for an API token by name
         page_heading: API Tokens
         page_title: API Tokens
         search_box:
           label: Name
+        search_by_name: Search for an API token by name
         table:
           actions:
             edit: Edit
