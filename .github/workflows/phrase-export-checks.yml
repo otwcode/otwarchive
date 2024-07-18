@@ -1,4 +1,4 @@
-name: Check Phrase translations
+name: Check Phrase exports
 on:
   pull_request:
     branches:
@@ -21,10 +21,10 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Run i18n-tasks
+      - name: Run i18n-tasks missing (diff mode)
         run: bundle exec i18n-tasks missing -t diff -f keys en | bundle exec i18n-tasks tree-mv -f keys "en.{*}" "\1" > en-keys-to-remove.txt
 
-      - name: Check that there are zero keys in other locales that don't exist in English
+      - name: Check that all keys exported from Phrase exist in English
         run: "! test -s en-keys-to-remove.txt"
 
       - name: Upload list of English keys that should be removed from Phrase
