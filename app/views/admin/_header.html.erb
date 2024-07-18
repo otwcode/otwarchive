@@ -68,7 +68,7 @@
       <li><%= link_to t(".nav.activities"), admin_activities_path %></li>
     <% end %>
 
-    <% if policy(ApiKey).show? %>
+    <% if policy(ApiKey).index? %>
       <li><%= link_to t(".nav.api_tokens"), admin_api_index_path %></li>
     <% end %>
   </ul>
