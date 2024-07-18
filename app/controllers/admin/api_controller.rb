@@ -35,14 +35,12 @@ class Admin::ApiController < Admin::BaseController
   end
 
   def edit
-    authorize ApiKey
     @page_subtitle = t(".page_title")
-    @api_key = ApiKey.find(params[:id])
+    @api_key = authorize ApiKey.find(params[:id])
   end
 
   def update
-    authorize ApiKey
-    @api_key = ApiKey.find(params[:id])
+    @api_key = authorize ApiKey.find(params[:id])
     if @api_key.update(api_key_params)
       flash[:notice] = ts("Access token was successfully updated")
       redirect_to action: "index"
@@ -52,8 +50,7 @@ class Admin::ApiController < Admin::BaseController
   end
 
   def destroy
-    authorize ApiKey
-    @api_key = ApiKey.find(params[:id])
+    @api_key = authorize ApiKey.find(params[:id])
     @api_key.destroy
     redirect_to(admin_api_path)
   end

@@ -242,6 +242,9 @@ describe Admin::ApiController do
   describe "GET #edit" do
     context "where an admin is logged in" do
       context "when admin does not have correct authorization" do
+        let(:api_key_id) { 123 }
+        let!(:api_key) { FactoryBot.create(:api_key, id: api_key_id) }
+
         context "when admin has no role" do
           let(:admin) { create(:admin, roles: []) }
 
@@ -250,7 +253,7 @@ describe Admin::ApiController do
           end
 
           it "redirects with error" do
-            get :edit, params: { id: 123 }
+            get :edit, params: { id: api_key_id }
   
             it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
           end
@@ -265,7 +268,7 @@ describe Admin::ApiController do
             end
             
             it "redirects with error" do
-              get :edit, params: { id: 123 }
+              get :edit, params: { id: api_key_id }
   
               it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
             end
@@ -305,6 +308,9 @@ describe Admin::ApiController do
   describe "POST #update" do
     context "where an admin is logged in" do
       context "when admin does not have correct authorization" do
+        let(:api_key_id) { 123 }
+        let!(:api_key) { FactoryBot.create(:api_key, id: api_key_id) }
+        
         context "when admin has no role" do
           let(:admin) { create(:admin, roles: []) }
 
@@ -313,7 +319,7 @@ describe Admin::ApiController do
           end
 
           it "redirects with error" do
-            post :update, params: { id: 123, api_key: { name: "new_name" } }
+            post :update, params: { id: api_key_id, api_key: { name: "new_name" } }
   
             it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
           end
@@ -328,7 +334,7 @@ describe Admin::ApiController do
             end
             
             it "redirects with error" do
-              post :update, params: { id: 123, api_key: { name: "new_name" } }
+              post :update, params: { id: api_key_id, api_key: { name: "new_name" } }
   
               it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
             end
@@ -399,6 +405,9 @@ describe Admin::ApiController do
   describe "POST #destroy" do
     context "where an admin is logged in" do
       context "when admin does not have correct authorization" do
+        let(:api_key_id) { 123 }
+        let!(:api_key) { FactoryBot.create(:api_key, id: api_key_id) }
+
         context "when admin has no role" do
           let(:admin) { create(:admin, roles: []) }
 
@@ -407,7 +416,7 @@ describe Admin::ApiController do
           end
 
           it "redirects with error" do
-            post :destroy, params: { id: 123 }
+            post :destroy, params: { id: api_key_id }
   
             it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
           end
@@ -422,7 +431,7 @@ describe Admin::ApiController do
             end
             
             it "redirects with error" do
-              post :destroy, params: { id: 123 }
+              post :destroy, params: { id: api_key_id }
   
               it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
             end
