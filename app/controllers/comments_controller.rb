@@ -30,6 +30,7 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_moderate, only: [:approve, :reject]
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
   before_action :check_permission_to_modify_hidden_status, only: [:hide, :unhide]
+  before_action :admin_logout_required, only: [:new, :create, :add_comment_reply]
 
   include BlockHelper
 
@@ -342,36 +343,34 @@ class CommentsController < ApplicationController
 
       # First, try saving the comment
       if @comment.save
-        if @comment.approved?
-          if @comment.unreviewed?
-            flash[:comment_notice] = ts("Your comment was received! It will appear publicly after the work creator has approved it.")
-          else
-            flash[:comment_notice] = ts("Comment created!")
-          end
-          respond_to do |format|
-            format.html do
-              if request.referer&.match(/inbox/)
-                redirect_to user_inbox_path(current_user, filters: filter_params[:filters], page: params[:page])
-              elsif request.referer&.match(/new/)
-                # came here from the new comment page, probably via download link
-                # so go back to the comments page instead of reloading full work
-                redirect_to comment_path(@comment)
-              elsif request.referer == "#{root_url}"
-                # replying on the homepage
-                redirect_to root_path
-              elsif @comment.unreviewed? && current_user
-                redirect_to comment_path(@comment)
-              elsif @comment.unreviewed?
-                redirect_to_all_comments(@commentable)
-              else
-                redirect_to_comment(@comment, {view_full_work: (params[:view_full_work] == "true"), page: params[:page]})
-              end
+        flash[:comment_notice] = if @comment.unreviewed?
+                                   # i18n-tasks-use t("comments.create.success.moderated.admin_post")
+                                   # i18n-tasks-use t("comments.create.success.moderated.work")
+                                   t("comments.create.success.moderated.#{@comment.ultimate_parent.model_name.i18n_key}")
+                                 else
+                                   t("comments.create.success.not_moderated")
+                                 end
+        respond_to do |format|
+          format.html do
+            if request.referer&.match(/inbox/)
+              redirect_to user_inbox_path(current_user, filters: filter_params[:filters], page: params[:page])
+            elsif request.referer&.match(/new/) || (@comment.unreviewed? && current_user)
+              # If the referer is the new comment page, go to the comment's page
+              # instead of reloading the full work.
+              # If the comment is unreviewed and commenter is logged in, take
+              # them to the comment's page so they can access the edit and
+              # delete options for the comment, since unreviewed comments don't
+              # appear on the commentable.
+              redirect_to comment_path(@comment)
+            elsif request.referer == root_url
+              # replying on the homepage
+              redirect_to root_path
+            elsif @comment.unreviewed?
+              redirect_to_all_comments(@commentable)
+            else
+              redirect_to_comment(@comment, { view_full_work: (params[:view_full_work] == "true"), page: params[:page] })
             end
           end
-        else
-          # this shouldn't come up any more
-          flash[:comment_notice] = ts("Sorry, but this comment looks like spam to us.")
-          redirect_back_or_default(root_path)
         end
       else
         flash[:error] = ts("Couldn't save comment!")
@@ -425,10 +424,17 @@ class CommentsController < ApplicationController
   end
 
   def review
-    return unless @comment && current_user_owns?(@comment.ultimate_parent) && @comment.unreviewed?
+    if logged_in_as_admin?
+      authorize @comment
+    else
+      return unless current_user_owns?(@comment.ultimate_parent)
+    end
+
+    return unless @comment&.unreviewed?
+
     @comment.toggle!(:unreviewed)
     # mark associated inbox comments as read
-    InboxComment.where(user_id: current_user.id, feedback_comment_id: @comment.id).update_all(read: true)
+    InboxComment.where(user_id: current_user.id, feedback_comment_id: @comment.id).update_all(read: true) unless logged_in_as_admin?
     flash[:notice] = ts("Comment approved.")
     respond_to do |format|
       format.html do
@@ -436,6 +442,8 @@ class CommentsController < ApplicationController
           redirect_to user_inbox_path(current_user, page: params[:page], filters: filter_params[:filters])
         elsif params[:approved_from] == "home"
           redirect_to root_path
+        elsif @comment.ultimate_parent.is_a?(AdminPost)
+          redirect_to unreviewed_admin_post_comments_path(@comment.ultimate_parent)
         else
           redirect_to unreviewed_work_comments_path(@comment.ultimate_parent)
         end
@@ -446,7 +454,8 @@ class CommentsController < ApplicationController
   end
 
   def review_all
-    unless @commentable && current_user_owns?(@commentable)
+    authorize @commentable, policy_class: CommentPolicy if logged_in_as_admin?
+    unless (@commentable && current_user_owns?(@commentable)) || (@commentable && logged_in_as_admin? && @commentable.is_a?(AdminPost))
       flash[:error] = ts("What did you want to review comments on?")
       redirect_back_or_default(root_path)
       return

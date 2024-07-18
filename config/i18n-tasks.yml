@@ -49,8 +49,6 @@ data:
   #     object_nl: "\n"
   #     array_nl: "\n"
 
-<% require "i18n/tasks/scanners/ast_matchers/rails_model_matcher.rb" %>
-
 # Find translate calls
 search:
   ## Paths or `Find.find` patterns to search in:
@@ -93,9 +91,13 @@ search:
   ## - RailsModelMatcher
   ##     Matches ActiveRecord translations like
   ##     User.human_attribute_name(:email) and User.model_name.human
+  ## - DefaultI18nSubjectMatcher
+  ##     Matches ActionMailer's default_i18n_subject method
   ##
   ## To implement your own, please see `I18n::Tasks::Scanners::AstMatchers::BaseMatcher`.
-  <% I18n::Tasks.add_ast_matcher('I18n::Tasks::Scanners::AstMatchers::RailsModelMatcher') %>
+  ast_matchers:
+    - 'I18n::Tasks::Scanners::AstMatchers::RailsModelMatcher'
+    - 'I18n::Tasks::Scanners::AstMatchers::DefaultI18nSubjectMatcher'
 
   ## Multiple scanners can be used. Their results are merged.
   ## The options specified above are passed down to each scanner. Per-scanner options can be specified as well.
@@ -128,7 +130,6 @@ ignore_missing:
   - challenge_assignments.assignments_not_sent
   - challenge_assignments.assignments_sent
   - challenge_assignments.no_challenge
-  - challenge_assignments.not_owner
   - challenge_assignments.signup_open
   # File: app/controllers/challenges_controller.rb
   - challenge.no_collection # should be challenges.no_collection
@@ -141,13 +142,11 @@ ignore_missing:
   - collection_participants.accepted_invite
   - collection_participants.destroy
   - collection_participants.no_invitation
-  - collection_participants.owners_required
-  - collection_participants.update_failure
   - collection_participants.update_success
   # File: app/controllers/external_authors_controller.rb
   - external_author_claimed # should be external_authors.complete_claim.external_author_claimed
   # Files: app/controllers/external_works_controller.rb and app/controllers/languages_controller.rb
-  - successfully_updated # should be external_works.update.successfully_updated and languages.update.successfully_updated
+  - successfully_updated # should be languages.update.successfully_updated
   # File: app/controllers/feedbacks_controller.rb
   - failure_send # should be feedbacks.create.failure_send
   - successfully_sent # should be feedbacks.create.successfully_sent

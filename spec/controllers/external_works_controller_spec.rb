@@ -12,9 +12,9 @@ describe ExternalWorksController do
     context "when the URL has an external work" do
       let!(:external_work) { create(:external_work, url: url) }
 
-      it "responds with json" do
-        get :fetch, params: { external_work_url: url, format: :json }
-        expect(response.content_type).to match("application/json")
+      it "responds with javascript" do
+        get :fetch, xhr: true, params: { external_work_url: url, format: :js }
+        expect(response.content_type).to match("text/javascript")
       end
 
       it "responds with the matching work" do
@@ -34,9 +34,9 @@ describe ExternalWorksController do
     end
 
     context "when the URL doesn't have an exteral work" do
-      it "responds with json" do
-        get :fetch, params: { external_work_url: url, format: :json }
-        expect(response.content_type).to match("application/json")
+      it "responds with javascript" do
+        get :fetch, xhr: true, params: { external_work_url: url, format: :js }
+        expect(response.content_type).to match("text/javascript")
       end
 
       it "responds with blank" do
@@ -74,7 +74,7 @@ describe ExternalWorksController do
     end
 
     context "when admin does not have correct authorization" do
-      before { admin.update(roles: []) }
+      before { admin.update!(roles: []) }
 
       it_behaves_like "unauthorized admin cannot update external works"
     end

@@ -57,7 +57,7 @@ Feature: Invite queue management
     # check your place in the queue - invalid address
     When I check how long "testttt@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Request Status"
-      And I should see "Sorry, we can't find the email address you entered."
+      And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
       And I should not see "You are currently number"
 
     # check your place in the queue - correct address
@@ -98,7 +98,7 @@ Feature: Invite queue management
     Then 1 email should be delivered to test@archiveofourown.org
     When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Request Status"
-      And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
+      And I should see "If you can't find it, your invitation may have already been emailed to that address;"
 
     # invite can be used
     When I am logged in as an admin
@@ -155,29 +155,3 @@ Feature: Invite queue management
       And I fill in "invite_request_email" with "fred@bedrock.com"
       And I press "Add me to the list"
     Then I should see "Email is already being used by an account holder."
-
-  Scenario: Users can resend their invitation after enough time has passed
-    Given account creation is enabled
-      And the invitation queue is enabled
-      And account creation requires an invitation
-      And the invite_from_queue_at is yesterday
-      And an invitation request for "invitee@example.org"
-    When the scheduled check_invite_queue job is run
-    Then 1 email should be delivered to invitee@example.org
-
-    When I check how long "invitee@example.org" will have to wait in the invite request queue
-    Then I should see "Invitation Request Status"
-      And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
-      And I should not see "Because your invitation was sent more than 24 hours ago, you can have your invitation resent."
-      And I should not see a "Resend Invitation" button
-
-    When all emails have been delivered
-      And it is currently 25 hours from now
-      And I check how long "invitee@example.org" will have to wait in the invite request queue
-    Then I should see "Invitation Request Status"
-      And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
-      And I should see "Because your invitation was sent more than 24 hours ago, you can have your invitation resent."
-      And I should see a "Resend Invitation" button
-
-    When I press "Resend Invitation"
-    Then 1 email should be delivered to invitee@example.org

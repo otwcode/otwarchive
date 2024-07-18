@@ -1,5 +1,4 @@
-Otwarchive::Application.routes.draw do
-
+Rails.application.routes.draw do
   devise_scope :admin do
     get "admin/logout" => "admin/sessions#confirm_logout"
 
@@ -81,7 +80,6 @@ Otwarchive::Application.routes.draw do
     collection do
       get :manage
       get :status
-      post :resend
     end
   end
 
@@ -166,7 +164,12 @@ Otwarchive::Application.routes.draw do
 
   #### ADMIN ####
   resources :admin_posts do
-    resources :comments
+    resources :comments do
+      collection do
+        get :unreviewed
+        put :review_all
+      end
+    end
   end
 
   namespace :admin do
@@ -641,7 +644,7 @@ Otwarchive::Application.routes.draw do
 
   # See how all your routes lay out with "rake routes"
 
-  # These are whitelisted routes that are proven to be used throughout the
+  # These are allowlisted routes that are proven to be used throughout the
   # application, which previously relied on a deprecated catch-all route definition
   # (`get ':controller(/:action(/:id(.:format)))'`) to work.
   #
@@ -651,9 +654,6 @@ Otwarchive::Application.routes.draw do
   # can be refactored to not rely on their existence.
   #
   # Note written on August 1, 2017 during upgrade to Rails 5.1.
-  get '/bookmarks/fetch_recent/:id' => 'bookmarks#fetch_recent', as: :fetch_recent_bookmarks
-  get '/bookmarks/hide_recent/:id' => 'bookmarks#hide_recent', as: :hide_recent_bookmarks
-
   get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
   get '/user_invite_requests/update' => 'user_invite_requests#update'
 

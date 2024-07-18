@@ -150,7 +150,7 @@ module ApplicationHelper
     options[:for] ||= ""
     options[:title] ||= options[:for]
 
-    html_options = { "class" => options[:class] + " modal", "title" => options[:title], "aria-controls" => "#modal" }
+    html_options = { class: "#{options[:class]} modal", title: options[:title] }
     link_to content, options[:for], html_options
   end
 
@@ -191,9 +191,14 @@ module ApplicationHelper
     keys.collect { |key|
       if flash[key]
         if flash[key].is_a?(Array)
-          content_tag(:div, content_tag(:ul, flash[key].map { |flash_item| content_tag(:li, h(flash_item)) }.join("\n").html_safe), class: "flash #{key}")
+          content_tag(:div,
+            content_tag(:ul,
+              safe_join(flash[key].map do |flash_item|
+                content_tag(:li, sanitize(flash_item))
+              end), "\n"),
+            class: "flash #{key}")
         else
-          content_tag(:div, h(flash[key]), class: "flash #{key}")
+          content_tag(:div, sanitize(flash[key]), class: "flash #{key}")
         end
       end
     }.join.html_safe
@@ -338,12 +343,27 @@ module ApplicationHelper
     name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
   end
 
-  def field_id(form, attribute)
-    name_to_id(field_name(form, attribute))
+  def field_id(form_or_object_name, attribute, index: nil, **_kwargs)
+    name_to_id(field_name(form_or_object_name, attribute, index: index))
   end
 
-  def field_name(form, attribute)
-    "#{form.object_name}[#{field_attribute(attribute)}]"
+  # This is a partial re-implementation of ActionView::Helpers::FormTagHelper#field_name.
+  # The method contract changed in Rails 7.0, but we can't use the default because it sometimes
+  # includes other information that -- at a minimum -- wreaks havoc on the Cucumber feature tests.
+  # It is used in when constructing forms, like in app/views/tags/new.html.erb.
+  def field_name(form_or_object_name, attribute, *_method_names, multiple: false, index: nil)
+    object_name = if form_or_object_name.respond_to?(:object_name)
+                    form_or_object_name.object_name
+                  else
+                    form_or_object_name
+                  end
+    if object_name.blank?
+      "#{field_attribute(attribute)}#{multiple ? '[]' : ''}"
+    elsif index
+      "#{object_name}[#{index}][#{field_attribute(attribute)}]#{multiple ? '[]' : ''}"
+    else
+      "#{object_name}[#{field_attribute(attribute)}]#{multiple ? '[]' : ''}"
+    end
   end
 
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes

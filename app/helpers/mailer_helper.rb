@@ -181,22 +181,25 @@ module MailerHelper
   end
 
   def commenter_pseud_or_name_link(comment)
+    return style_bold(t("roles.anonymous_creator")) if comment.by_anonymous_creator?
+
     if comment.comment_owner.nil?
-      t("roles.guest_commenter_name_html", name: style_bold(comment.comment_owner_name), role: style_role(t("roles.guest_with_parens")))
-    elsif comment.by_anonymous_creator?
-      style_bold(t("roles.anonymous_creator"))
+      t("roles.commenter_name.html", name: style_bold(comment.comment_owner_name), role_with_parens: style_role(t("roles.guest_with_parens")))
     else
-      style_link(comment.comment_owner_name, polymorphic_url(comment.comment_owner, only_path: false))
+      role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
+      pseud_link = style_link(comment.pseud.byline, user_pseud_url(comment.user, comment.pseud))
+      t("roles.commenter_name.html", name: tag.strong(pseud_link), role_with_parens: style_role(role))
     end
   end
 
   def commenter_pseud_or_name_text(comment)
+    return t("roles.anonymous_creator") if comment.by_anonymous_creator?
+
     if comment.comment_owner.nil?
-      t("roles.guest_commenter_name_text", name: comment.comment_owner_name, role: t("roles.guest_with_parens"))
-    elsif comment.by_anonymous_creator?
-      t("roles.anonymous_creator")
+      t("roles.commenter_name.text", name: comment.comment_owner_name, role_with_parens: t("roles.guest_with_parens"))
     else
-      "#{comment.comment_owner_name} (#{polymorphic_url(comment.comment_owner, only_path: false)})"
+      role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
+      t("roles.commenter_name.text", name: text_pseud(comment.pseud), role_with_parens: role)
     end
   end
 

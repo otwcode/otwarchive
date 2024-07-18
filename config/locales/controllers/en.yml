@@ -14,6 +14,9 @@ en:
         blocked: You have blocked the user %{name}.
       destroy:
         unblocked: You have unblocked the user %{name}.
+  challenge_assignments:
+    validation:
+      not_owner: You aren't the owner of that assignment.
   chapters:
     destroy:
       only_chapter: You can't delete the only chapter in your work. If you want to delete the work, choose "Delete Work".
@@ -30,6 +33,11 @@ en:
     create:
       invited: invited
       invited_to_collections_html: This work has been %{invited_link} to your collection (%{collection_title}).
+  collection_participants:
+    update:
+      failure: Couldn't update %{participant}.
+    validation:
+      owners_required: You can't remove the only owner!
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.
@@ -45,6 +53,12 @@ en:
     check_permission_to_edit:
       error:
         frozen: Frozen comments cannot be edited.
+    create:
+      success:
+        moderated:
+          admin_post: Your comment was received! It will appear publicly after it has been approved.
+          work: Your comment was received! It will appear publicly after the work creator has approved it.
+        not_moderated: Comment created!
     freeze:
       error: Sorry, that comment thread could not be frozen.
       permission_denied: Sorry, you don't have permission to freeze that comment thread.
@@ -61,11 +75,9 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
-  invite_requests:
-    resend:
-      not_found: Could not find an invitation associated with that email.
-      not_yet: You cannot resend an invitation that was sent in the last %{count} hours.
-      success: Invitation resent to %{email}.
+  external_works:
+    update:
+      successfully_updated: External work was successfully updated.
   kudos:
     create:
       success: Thank you for leaving kudos!

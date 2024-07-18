@@ -55,7 +55,7 @@
   <% if @next_chapter %>
     <script type="speculationrules">
       {
-        "prefetch": [
+        "prerender": [
           {
             "source": "list",
             "urls": ["<%= work_chapter_path(@work, @next_chapter, anchor: "workskin") %>"]
