@@ -9,7 +9,7 @@
 
   <!--main content-->
   <%= form_tag url_for(controller: "admin/api", action: "index"), method: :get, class: "search", role: "search" do %>
-    <p class="note"><%= t(".note") %></p>
+    <p class="note"><%= t(".search_by_name") %></p>
     <dl>
       <dt><%= label_tag "query", t(".search_box.label") %></dt>
       <dd><%= text_field_tag "query", params[:query] %>
