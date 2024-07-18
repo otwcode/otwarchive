@@ -67,6 +67,39 @@ namespace :After do
     end
   end
 
+  desc "Clean up multiple rating tags"
+  task(clean_up_multiple_ratings: :environment) do
+    default_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+    invalid_works = Work.select { |work| work.ratings.size > 1 }
+    puts "There are #{invalid_works.size} works with multiple ratings."
+
+    work_ids = []
+    invalid_work_ids = []
+    invalid_works.each do |work|
+      work.ratings = [default_rating_tag]
+      work.rating_string = default_rating_tag.name
+
+      if work.save
+        work_ids << work.id
+      else
+        invalid_work_ids << work.id
+      end
+      print(".") && STDOUT.flush
+    end
+
+    unless work_ids.empty?
+      puts "Cleaned up having multiple ratings on #{work_ids.size} works:"
+      puts work_ids.join(", ")
+      STDOUT.flush
+    end
+
+    unless invalid_work_ids.empty?
+      puts "The following #{invalid_work_ids.size} works failed validations and could not be saved:"
+      puts invalid_work_ids.join(", ")
+      STDOUT.flush
+    end
+  end
+
   desc "Clean up noncanonical rating tags"
   task(clean_up_noncanonical_ratings: :environment) do
     canonical_not_rated_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
