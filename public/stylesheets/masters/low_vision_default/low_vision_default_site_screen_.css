@@ -124,6 +124,7 @@ pre {
 
 #header .menu {
   display: none;
+  position: static;
 }
 
 #footer {
