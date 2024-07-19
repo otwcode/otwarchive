@@ -134,6 +134,7 @@ pre {
 
 #header,
 #header ul.primary,
+#header .open a,
 #footer,
 .actions a:hover,
 .actions a:focus {
