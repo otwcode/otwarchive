@@ -276,6 +276,10 @@ public
         errors = [ts("Sorry, only an authorized admin can do that.")]
         render json: { errors: errors }, status: :forbidden
       end
+      format.js do
+        flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.") 
+        render js: "window.location.href = '#{root_path}';" 
+      end
     end
   end
 
