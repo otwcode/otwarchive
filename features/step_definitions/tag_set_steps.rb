@@ -216,5 +216,7 @@ Then /^"([^\"]*)" should be an unassociated tag$/ do |tag|
 end
 
 Then "the maintainers should be {string}" do |maintainers|
-  step %{I should see "#{maintainers}" within ".meta"}
+  expected = maintainers.split(" ").sort
+  actual = all(".meta ul.mods li").map(&:text).sort
+  assert_equal actual, expected
 end
