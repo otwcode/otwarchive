@@ -370,12 +370,46 @@ describe BookmarksController do
     let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
 
     context "when logged in" do
-      it "returns a bookmark on a public multi-chapter work" do
+      before do
         fake_login_known_user(bookmark.pseud.user)
+      end
+
+      it "returns a bookmark on a public multi-chapter work" do
         get :show, params: { id: bookmark }
         expect(response).to have_http_status(:success)
         expect(assigns(:bookmark)).to eq(bookmark)
       end
+
+      it "finds a work from a bookmark" do
+        get :show, params: { id: bookmark }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:bookmark)).to eq(bookmark)
+        expect(assigns(:bookmark).bookmarkable).to eq(chaptered_work)
+      end
+    end
+  end
+
+  describe "fetch recent" do
+    # need several bookmarks on the same work
+    let(:work) { create(:work) }
+    let(:bookmark1) { create(:bookmark, bookmarkable_id: work.id, bookmarker_notes: "Extra 1") }
+    let!(:bookmark2) { create(:bookmark, bookmarkable_id: work.id, bookmarker_notes: "Different") }
+    let!(:bookmark3) { create(:bookmark, bookmarkable_id: work.id, bookmarker_notes: "I think this is great") }
+
+    # wouldn't normally need to render views in a controller test, but it's the only way to get the js response
+    render_views
+
+    it "shows 4 most recent bookmarks in js" do
+      get :fetch_recent, params: { id: bookmark1, format: "js" }, xhr: true
+      expect(response).to have_http_status(:success)
+      expect(assigns(:bookmark)).to eq(bookmark1)
+      expect(assigns(:bookmarkable)).to eq(work)
+      expect(assigns(:bookmarks)).to eq([bookmark3, bookmark2])
+    end
+
+    it "redirects to work on non-js" do
+      get :fetch_recent, params: { id: bookmark1 }
+      it_redirects_to(work_bookmarks_path(work))
     end
   end
 end
