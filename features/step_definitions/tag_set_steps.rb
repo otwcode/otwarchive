@@ -66,7 +66,7 @@ end
 
 # Takes things like When I toggle the owners "tagsetter"
 # Don't forget the extra s, even if it's singular.
-When /^I toggle the owners "([^\"]*)"$/ do |owners|
+When "I toggle the owner(s) {string}" do |owners|
   fill_in("owned_tag_set_owner_changes", with: owners) if owners.present?
 end
 
@@ -215,6 +215,6 @@ Then /^"([^\"]*)" should be an unassociated tag$/ do |tag|
   step %{I should see "#{tag}" within "ol#list_for_unassociated_char_and_rel"}
 end
 
-Then /^Maintainers should be "([^\"]*)"$/ do |maintainers|
+Then "the maintainers should be {string}" do |maintainers|
   step %{I should see "#{maintainers}" within ".meta"}
 end
