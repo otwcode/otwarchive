@@ -64,7 +64,7 @@ describe InboxController do
           context "with unread comments" do
             let!(:inbox_comments) do
               Array.new(3) do |i|
-                create(:inbox_comment, user: user, created_at: Time.now + i.days)
+                create(:inbox_comment, user: user, created_at: Time.now.utc + i.days)
               end
             end
 
@@ -279,7 +279,7 @@ describe InboxController do
         end
 
         it "redirects to the previously viewed page if HTTP_REFERER is set, with a caution and a notice" do
-          @request.env['HTTP_REFERER'] = root_path
+          @request.env["HTTP_REFERER"] = root_path
           put :update, params: { user_id: user.login, read: "yeah" }
           it_redirects_to_with_caution_and_notice(root_path,
                                                   "Please select something first",
@@ -288,8 +288,8 @@ describe InboxController do
       end
 
       context "with unread comments" do
-        let!(:inbox_comment_1) { create(:inbox_comment, user: user) }
-        let!(:inbox_comment_2) { create(:inbox_comment, user: user) }
+        let!(:inbox_comment1) { create(:inbox_comment, user: user) }
+        let!(:inbox_comment2) { create(:inbox_comment, user: user) }
 
         it "marks all as read and redirects to inbox with a notice" do
           parameters = {
