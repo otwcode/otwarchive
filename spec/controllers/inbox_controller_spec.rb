@@ -294,36 +294,36 @@ describe InboxController do
         it "marks all as read and redirects to inbox with a notice" do
           parameters = {
             user_id: user.login,
-            inbox_comments: [inbox_comment_1.id, inbox_comment_2.id],
+            inbox_comments: [inbox_comment1.id, inbox_comment2.id],
             read: "yeah"
           }
 
           put :update, params: parameters
           it_redirects_to_with_notice(user_inbox_path(user), "Inbox successfully updated.")
 
-          inbox_comment_1.reload
-          expect(inbox_comment_1.read).to be_truthy
-          inbox_comment_2.reload
-          expect(inbox_comment_2.read).to be_truthy
+          inbox_comment1.reload
+          expect(inbox_comment1.read).to be_truthy
+          inbox_comment2.reload
+          expect(inbox_comment2.read).to be_truthy
         end
 
         it "marks one as read and redirects to inbox with a notice" do
-          put :update, params: { user_id: user.login, inbox_comments: [inbox_comment_1.id], read: "yeah" }
+          put :update, params: { user_id: user.login, inbox_comments: [inbox_comment1.id], read: "yeah" }
           it_redirects_to_with_notice(user_inbox_path(user), "Inbox successfully updated.")
 
-          inbox_comment_1.reload
-          expect(inbox_comment_1.read).to be_truthy
-          inbox_comment_2.reload
-          expect(inbox_comment_2.read).to be_falsy
+          inbox_comment1.reload
+          expect(inbox_comment1.read).to be_truthy
+          inbox_comment2.reload
+          expect(inbox_comment2.read).to be_falsy
         end
 
         it "deletes one and redirects to inbox with a notice" do
-          put :update, params: { user_id: user.login, inbox_comments: [inbox_comment_1.id], delete: "yeah" }
+          put :update, params: { user_id: user.login, inbox_comments: [inbox_comment1.id], delete: "yeah" }
           it_redirects_to_with_notice(user_inbox_path(user), "Inbox successfully updated.")
 
-          expect(InboxComment.find_by(id: inbox_comment_1.id)).to be_nil
-          inbox_comment_2.reload
-          expect(inbox_comment_2.read).to be_falsy
+          expect(InboxComment.find_by(id: inbox_comment1.id)).to be_nil
+          inbox_comment2.reload
+          expect(inbox_comment2.read).to be_falsy
         end
       end
 
