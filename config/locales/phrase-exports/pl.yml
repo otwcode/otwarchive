@@ -151,8 +151,6 @@ pl:
         unrequested: Jeśli nie prosiłaś/eś o zmianę hasła, możesz zignorować tę wiadomość,
           a Twoje dotychczasowe hasło nadal będzie funkcjonować.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Twój Raport Nadużyć"
     admin_deleted_work_notification:
       bye: Dołączamy kopię Twojej pracy, abyś mogła/mógł się do niej odnieść.
       contact_abuse: skontaktuj się z naszą Komisją ds. Zasad i Nadużyć
@@ -456,15 +454,6 @@ pl:
           adresu e-mail, do którego nie masz już dostępu, prosimy o skontaktowanie
           się z Drzwiami Otwartymi i podanie jakichkolwiek informacji, mogących pomóc
           w potwierdzeniu Twoich roszczeń.
-      part12: W razie kontaktowania się z nami, prosimy o dodanie adresów mailowych
-        zawierających @transformativeworks.org do listy zaufanych nadawców oraz o
-        sprawdzenie, czy nasza odpowiedź nie znajduje się w folderze spam.
-      part6: 'W zamieszczonych pracach znalazły się:'
-      part8: Aby zachować listy z rekomendacjami oraz zakładki, adres internetowy
-        zaimportowanego archiwum może przez jakiś czas jeszcze przekierowywać do zaimportowanej
-        kopii (dla pewności, sprawdź post z ogłoszeniem dotyczącym Twojego archiwum).
-        Jeśli już zamieściłaś/eś kopie tych prac i NIE użyłaś/eś funkcji importowania
-        z URL, na archiwum znajdą się dwie kopie tej samej pracy.
       questions:
         text: W razie dalszych wątpliwości, prosimy skontaktuj się ze Wsparciem AO3
           przez stronę %{support_link}.
@@ -510,7 +499,7 @@ pl:
             (Zaproszenia) (%{invitation_page_url}).
           one: Masz %{count} nowe zaproszenie, które może być użyte do stworzenia
             nowego konta na AO3. Możesz zaprosić kogoś przez swoją stronę Invitations
-            (Zaproszenia) (%{invitation_page_link}) .
+            (Zaproszenia) (%{invitation_page_url}) .
     invite_request_declined:
       main:
         few: Z przykrością informujemy, że Twoja prośba o %{count} nowe zaproszenia

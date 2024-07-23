@@ -133,8 +133,6 @@ fr:
         unrequested: Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer
           ce message. Votre ancien mot de passe restera alors valide.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Vous avez signalé un abus au Comité Modération"
     admin_deleted_work_notification:
       bye: Vous trouverez une copie de votre œuvre en pièce jointe.
       contact_abuse: contacter notre Comité Modération
@@ -564,17 +562,6 @@ fr:
           une adresse e-mail à laquelle vous n’avez plus accès, veuillez contacter
           Open Doors en mentionnant toute information susceptible de contribuer à
           confirmer votre identité.
-      part12: Si vous nous contactez, veuillez autoriser les e-mails provenant de
-        @transformativeworks.org et vérifiez que notre réponse n’arrive pas dans votre
-        courrier indésirable.
-      part6: 'Les œuvres suivantes ont été mises en ligne :'
-      part8: Afin de préserver les listes de recommandations et les marque-pages,
-        les adresses web de l’archive importée sont susceptibles de renvoyer vers
-        la copie importée de ces œuvres pendant une durée limitée (consultez le billet
-        d’actualités concernant votre archive pour vous en assurer). Si vous avez
-        déjà mis en ligne une copie de ces œuvres et que vous n’avez PAS utilisé la
-        fonctionnalité permettant d’importer à partir d’une URL, il y aura deux copies
-        d’une même œuvre sur l’archive.
       questions:
         text: 'Pour toute autre demande, veuillez contacter le Comité Support Technique
           ici : %{support_link}.'

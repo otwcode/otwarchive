@@ -116,8 +116,6 @@ ms:
         unrequested: Jika anda tidak memohon penetapan semula kata laluan, sila abaikan
           e-mel ini. Kata laluan anda yang asal masih akan dapat digunakan.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Laporan Polisi & Aduan Anda"
     admin_deleted_work_notification:
       bye: Salinan karya anda telah dilampirkan untuk rujukan anda.
       contact_abuse: hubungi Jawatankuasa Polisi & Aduan kami
@@ -507,15 +505,6 @@ ms:
         text: Jika anda mempunyai karya-karya lain pada arkib yang diimport dengan
           alamat e-mel lain yang anda tidak dapat akses, sila hubungi Open Doors dengan
           apa-apa maklumat yang boleh membantu mengesahkan identiti anda.
-      part12: Jika anda menghubungi kami, sila whitelist alamat-alamat e-mel daripada
-        @transformativeworks.org dan semak folder spam anda untuk balasan kami.
-      part6: 'Karya-karya yang dimuat naik termasuk:'
-      part8: Untuk memelihara senarai cadangan dan penanda laman, alamat-alamat laman
-        web dari arkib yang diimport mungkin akan berubah hala ke salinan untuk karya-karya
-        tersebut yang diimport untuk jangka masa yang terhad (semak artikel pengumuman
-        untuk arkib anda untuk kepastian). Jika anda telah memuat naik salinan untuk
-        karya-karya tersebut dan anda TIDAK menggunakan ciri import daripada URL,
-        akan terdapat dua salinan untuk karya yang sama di dalam arkib.
       questions:
         text: Untuk pertanyaan lanjut, sila hubungi Bantuan AO3 di %{support_link}.
       redirects: Untuk memelihara senarai cadangan dan penanda laman, alamat-alamat

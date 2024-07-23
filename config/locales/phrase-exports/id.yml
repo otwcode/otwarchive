@@ -115,8 +115,6 @@ id:
         unrequested: Jika Anda tidak pernah meminta pengaturan ulang kata sandi Anda,
           silakan abaikan surel ini. Kata sandi lama Anda akan tetap berfungsi.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Laporan Pelanggaran Anda"
     admin_deleted_work_notification:
       bye: Terlampir adalah salinan karya Anda sebagai referensi.
       contact_abuse: hubungi Komite Kebijakan dan Pelanggaran kami
@@ -541,16 +539,6 @@ id:
           alamat surel yang sudah tidak dapat Anda akses, silakan hubungi tim Open
           Doors dengan menyertakan informasi apapun yang dapat memverifikasi identitas
           Anda.
-      part12: Jika Anda ingin menghubungi kami, harap masukkan alamat-alamat surel
-        dari @transformativeworks.org ke daftar putih kontak Anda dan cek folder spam
-        Anda untuk memastikan Anda menerima balasan kami.
-      part6: 'Karya yang diunggah termasuk:'
-      part8: Untuk mempertahankan daftar rekomendasi dan markah buku, alamat web menuju
-        arsip yang telah diimpor bisa saja telah dialihkan langsung ke salinan karya
-        yang telah diimpor ini selama jangka waktu tertentu (cek artikel pengumuman
-        arsip Anda untuk memastikannya). Jika Anda telah mengunggah salinan dari karya
-        ini dan Anda TIDAK menggunakan fitur impor dari URL, akan ada dua salinan
-        karya yang sama di AO3.
       questions:
         text: Untuk pertanyaan-pertanyaan lain, silakan hubungi tim Dukungan AO3 di
           %{support_link}.

@@ -133,8 +133,6 @@ tr:
         unrequested: Eğer şifre sıfırlama talebinde bulunmadıysanız bu e-postayı görmezden
           gelerek önceki şifrenizi kullanmaya devam edebilirsiniz.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Kötüye Kullanım İhbarınız"
     admin_deleted_work_notification:
       bye: Referans için eserinizin bir kopyası ektedir.
       contact_abuse: Poliçe ve Kötüye Kullanım Komitesi ile iletişime geçin

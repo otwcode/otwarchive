@@ -130,8 +130,6 @@ ca:
         unrequested: Si no has sol·licitat un canvi de contrasenya, pots ignorar aquest
           correu electrònic i la teva contrasenya anterior continuarà funcionant.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] La teva denúncia de Polítiques i Prevenció de l’Abús"
     admin_deleted_work_notification:
       bye: S'adjunta una còpia de la teva obra com a referència.
       contact_abuse: el Comitè de Polítiques i Prevenció de l'Abús
@@ -533,16 +531,6 @@ ca:
         text: Si tens altres obres a l’arxiu importat enllaçades a una adreça de correu
           a la qual ja no tens accés, contacta amb l’Open Doors amb qualsevol informació
           que pugui ajudar a verificar la teva identitat, si us plau.
-      part12: Si t’estàs posant en contacte amb nosaltres; si us plau, aprova les
-        adreces de correu electrònic de @transformativeworks.org i revisa la teva
-        carpeta de correu brossa si no trobes la nostra resposta.
-      part6: 'Les obres pujades inclouen:'
-      part8: Per preservar llistes de recomanacions i marcadors, les adreces web dels
-        arxius importats poden redirigir a la còpia importada d’aquestes obres durant
-        un temps limitat (comprova la publicació de l’anunci del trasllat del teu
-        arxiu per assegurar-te’n). Si ja has publicat una còpia d’aquestes obres i
-        NO has fet servir l’eina d’importar des de l’URL, hi haurà dues còpies de
-        la mateixa obra a l’arxiu.
       questions:
         text: Per a qualsevol altre dubte, contacta amb Suport de l’AO3 a %{support_link}.
       redirects: Per preservar llistes de recomanacions i marcadors, les adreces web

@@ -132,8 +132,6 @@ sv:
           så kan du bortse från det här mailet. Ditt tidigare lösenord kommer att
           fortsätta fungera.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Din rapport om policy eller missbruk"
     admin_deleted_work_notification:
       bye: Som hänvisning har vi bifogat en kopia av ditt verk.
       contact_abuse: kontakta vår kommitté för Policy och missbruk
@@ -523,15 +521,6 @@ sv:
         text: Om du hade andra verk i det importerade arkivet under en mailadress
           du inte längre har tillgång till, vänligen kontakta Öppna dörrar med information
           som kan hjälpa till att verifiera din identitet.
-      part12: Om du kontaktar oss, vänligen vitlista mailadresser från @transformativeworks.org
-        och kontrollera om vårt svar finns i din skräppost.
-      part6: 'De uppladdade verken inkluderar:'
-      part8: För att bevara rekommendationslistor och bokmärken kan det importerade
-        arkivets webbadresser under en begränsad tid omdirigeras till en importerad
-        kopia av dessa verk (se inlägget med tillkännagivelser om ditt arkiv för att
-        vara på den säkra sidan). Om du redan har laddat upp en kopia av dessa verk
-        och INTE använde funktionen för import av URL kommer det att finnas två kopior
-        av samma verk i arkivet.
       questions:
         text: För andra frågor, vänligen kontakta AO3 support via %{support_link}.
       redirects: För att bevara rekommendationslistor och bokmärken kan det importerade

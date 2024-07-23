@@ -131,8 +131,6 @@ it:
         unrequested: Se non hai richiesto di reimpostare la password, puoi ignorare
           questa email; la tua password attuale continuerà a funzionare.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Il Tuo Verbale di Norme & Violazioni"
     admin_deleted_work_notification:
       bye: In allegato puoi trovare una copia del tuo lavoro a cui fare riferimento.
       contact_abuse: contatta il nostro Comitato Norme & Violazioni
@@ -368,10 +366,10 @@ it:
           email a cui non hai più accesso, per favore %{contact_open_doors_link} fornendo
           qualsiasi informazione che permetta di verificare la tua identità come autore
           dei lavori in oggetto.
-        text: Se nell'archivio importato avevi altri lavori legati a un altro indirizzo
-          email a cui non hai più accesso, per favore contatta Porte Aperte (%{open_doors_url})
-          fornendo qualsiasi informazione che permetta di verificare la tua identità
-          come autore dei lavori in oggetto.
+        text: Se nell’archivio importato avevi altri lavori legati a un altro indirizzo
+          email a cui non hai più accesso, per favore contatta Porte Aperte fornendo
+          qualsiasi informazione che permetta di verificare la tua identità come autore
+          dei lavori in oggetto.
       questions:
         contact_support: contatta il Supporto di AO3
         html: Se hai ulteriori domande, per favore %{contact_support_link}.
@@ -560,16 +558,6 @@ it:
         text: Se hai altri lavori nell’archivio importato collegati a un diverso indirizzo
           email a cui non hai più accesso, contatta Porte Aperte con qualunque informazione
           che possa aiutare a verificare la tua identità di autore di tali lavori.
-      part12: Nel caso tu decida di contattarci, ricordati per favore di aggiungere
-        alla tua whitelist gli indirizzi email provenienti da @transformativeworks.org
-        e controlla che la nostra risposta non sia finita nella cartella di spam.
-      part6: 'I lavori pubblicati comprendono:'
-      part8: Per mantenere intatte le rec list e i preferiti, l’indirizzo web dell’archivio
-        importato potrebbe - per un breve periodo - reindirizzare alle copie importate
-        di questi lavori (per essere sicur@, controlla l’annuncio relativo al tuo
-        archivio). Se hai già pubblicato una copia di questi lavori e NON hai usato
-        la funzione per importare automaticamente dall’URL, ci saranno due copie dello
-        stesso lavoro nell’archivio.
       questions:
         html: Per altre domande, per favore %{contact_support_link}.
       redirects: Per mantenere intatte le rec list e i preferiti, l’indirizzo web

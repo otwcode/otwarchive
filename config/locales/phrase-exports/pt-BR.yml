@@ -38,7 +38,7 @@ pt-BR:
       include:
         ao3: Termos de Serviço do AO3
         intro: 'O que incluir na descrição:'
-        languages: 'Podemos responder a denúncias nas seguintes línguas:'
+        languages: 'Podemos responder a denúncias nas seguintes línguas: %{list_html}.'
         sources: links ou screenshots de quaisquer fontes relevantes
         username: o nome da conta no AO3 da pessoa que você está denunciando
       purview:
@@ -473,8 +473,6 @@ pt-BR:
         tag_changes: Pedidos para canonizar ou modificar tags
         work_problems: Obras marcadas com a língua errada ou obras duplicadas
       status:
-        current: 'Para as últimas atualizações sobre performance ou indisponibilidade
-          do AO3, dê uma olhada na nossa conta no Twitter: %{twitter_link}.'
         twitter: "@AO3_Status"
   home:
     donate:
@@ -687,8 +685,6 @@ pt-BR:
         welcome_text: Oi! Parece que você efetuou login no AO3 pela primeira vez.
           %{help_link} ou desabilite permanentemente essa mensagem de boas-vindas.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Sua denúncia para a equipe de Diretrizes e Abuso"
     admin_deleted_work_notification:
       bye: Uma cópia da obra removida encontra-se em anexo.
       contact_abuse: entre em contato com a nossa equipe de Diretrizes e Abuso
@@ -1101,15 +1097,6 @@ pt-BR:
         text: Se você tinha outras obras no arquivo importado sob uma conta de e-mail
           que não consegue mais acessar, por favor entre em contato com o Portas Abertas
           com qualquer informação que possa ajudar a confirmar sua identidade.
-      part12: Se você está entrando em contato conosco, por favor, adicione à sua
-        lista de contatos os e-mails do domínio @transformativeworks.org e verifique
-        sua pasta de spam para checar se recebeu uma resposta.
-      part6: 'Foi realizado o upload das seguintes obras:'
-      part8: Para preservar as listas de recomendações e favoritos, os links da página
-        da web do arquivo importado podem redirecionar para uma cópia das obras importadas
-        por um tempo limitado (acesse o post de anúncio do seu arquivo para ter certeza).
-        Se você já publicou uma cópia dessas obras e NÃO usou a ferramenta de importação
-        por URL, então duas cópias da mesma obra serão armazenadas no arquivo.
       questions:
         html: Para outras questões, por favor %{contact_support_link}.
         text: Para outras questões, por favor entre em contato com o Suporte do AO3

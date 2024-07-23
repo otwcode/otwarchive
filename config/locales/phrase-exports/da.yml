@@ -131,8 +131,6 @@ da:
         unrequested: Hvis du ikke anmodede om nulstilling af password, kan du ignorere
           denne e-mail, og dit tidligere password vil stadig fungere.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Din indberetning til Retningslinier & Misbrug"
     admin_deleted_work_notification:
       bye: Vedhæftet finder du en kopi af dit værk til orientering.
       contact_abuse: kontakte vores komité for Retningslinjer & Misbrug
@@ -524,15 +522,6 @@ da:
         text: Hvis du havde andre værker på det importerede arkiv under en e-mailadresse,
           som du ikke længere har adgang til, kan du kontakte Åbne Døre med information,
           som kan hjælpe med at verificere din identitet.
-      part12: Hvis du kontakter os, beder vi dig om at whiteliste e-mailadresser fra
-        @transformativeworks.org, og husk at kigge i din spam-mappe for at se om vores
-        svar ligger der.
-      part6: 'De uploadede værker inkluderer:'
-      part8: For at bevare anbefalede værker og bogmærker vil det importerede arkivs
-        URL'er muligvis omdirigere til de importerede kopier af disse værker i en
-        begrænset periode (se Åbne Døres meddelelse om dit arkiv for at være sikker).
-        Hvis du allerede har uploadet en kopi af disse værker, og du IKKE brugte importér
-        fra URL-funktionen, vil der være to kopier af det samme værk på AO3.
       questions:
         text: For flere spørgsmål kan du kontakte AO3 Support på %{support_link}.
       redirects: For at bevare anbefalede værker og bogmærker vil det importerede

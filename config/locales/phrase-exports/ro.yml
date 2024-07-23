@@ -149,8 +149,6 @@ ro:
         unrequested: Dacă nu ai solicitat schimbarea parolei, ignoră acest e-mail
           și continuă să-ți folosești parola actuală.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Raportul tău către Politici și Abuz"
     admin_deleted_work_notification:
       bye: Îți trimitem în atașament o copie a lucrării tale, ca reper.
       contact_abuse: contactează Comitetul de Politici și Abuz
@@ -471,16 +469,6 @@ ro:
         text: Dacă ai în arhiva importată alte lucrări înregistrate cu adrese de e-mail
           pe care nu le mai poți accesa, te rugăm să contactezi Uși Deschise și să
           furnizezi orice informație care ne poate ajuta să-ți verificăm identitatea.
-      part12: Dacă ne contactezi, te rugăm să adaugi adresele de e-mail de la @transformativeworks.org
-        la lista ta autorizată și să verifici folderele de spam pentru a găsi răspunsul
-        de la noi.
-      part6: 'Lucrările încărcate includ:'
-      part8: 'Pentru a păstra listele de recomandări sau semnele de carte, adresele
-        web ale arhivei importate pot redirecționa către copia importată a acestor
-        lucrări doar pentru o perioadă limitată de timp (verifică postarea anunțului
-        pentru arhiva ta ca să te asiguri). Dacă ai încărcat deja o copie a acestor
-        lucrări și NU ai folosit funcția de importare din URL, vor exista două copii
-        ale aceleiași lucrări în arhivă. '
       questions:
         text: Pentru alte întrebări, te rugăm contactează echipa de Suport Tehnic
           AO3 la %{support_link}.

@@ -109,8 +109,6 @@ zh-CN:
         subject: "[%{app_name}] 重设您的密码"
         unrequested: 如果您没有申请重设密码，请忽略此邮件，继续使用您原本的密码。
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] 您的条款执行和违反行为处理报告"
     admin_deleted_work_notification:
       bye: 附件中为该作品副本，以供参考。
       contact_abuse: 联系条款执行与违反行为处理委员会
@@ -177,7 +175,7 @@ zh-CN:
       approved_collection_items_page: Approved Collection Items (已批准作品集的作品) 页面
       archivist_notice: 因为作品集维护员拥有Open Doors (Open Doors拯救计划) 作品库管理员官方身份，所以即使您禁用了作品集邀请，他们也可以将您的作品添加到此作品集中。管理员只会将被导入作品库中的作品添加到作品集中。
       removal_instructions:
-        html: 如果您想从此作品集中删除您的作品，请访问您的%{approved_items_link。
+        html: 如果您想从此作品集中删除您的作品，请访问您的%{approved_items_link}。
         text: 如果您想从此作品集中删除您的作品，请访问您的Approved Collection Items (已批准作品集的作品) 页面：%{approved_items_url}.
       subject: "[%{app_name}][%{collection_title}]一位Open Doors (Open Doors拯救计划) 作品库管理员已将您的作品添加到一个作品集。"
       work_added:

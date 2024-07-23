@@ -115,8 +115,6 @@ vi:
         unrequested: Nếu bạn không yêu cầu đặt lại mật khẩu, bạn có thể bỏ qua email
           này; mật khẩu cũ của bạn vẫn sẽ tiếp tục có hiệu lực.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Báo cáo Lạm Quyền của bạn"
     admin_deleted_work_notification:
       bye: Bản sao tác phẩm của bạn được đính kèm trong thư này.
       contact_abuse: liên hệ đội ngũ Xử Lý Lạm Quyền của chúng tôi.
@@ -433,16 +431,6 @@ vi:
         text: Nếu bạn còn các tác phẩm nào khác trong kho lưu trữ được nhập dưới một
           email bạn không thể truy cập được nữa, xin vui lòng liên hệ Open Doors với
           bất kỳ thông tin nào có thể giúp xác minh danh tính của bạn.
-      part12: Nếu bạn liên hệ với chúng tôi, vui lòng cho phép nhận email từ địa chỉ
-        @transformativeworks.org và kiểm tra mục thư rác để tìm phản hồi từ chúng
-        tôi.
-      part6: 'Tác phẩm được đăng tải bao gồm:'
-      part8: Để lưu danh sách đề xuất và tác phẩm được đánh dấu, các địa chỉ của kho
-        lưu trữ đã nhập có thể sẽ chuyển hướng đến bản sao đã nhập của các tác phẩm
-        này trong một khoảng thời gian giới hạn (xem bài thông báo về kho lưu trữ
-        của bạn để xác nhận). Nếu bạn đã tải lên bản sao của các tác phẩm này và bạn
-        KHÔNG sử dụng tính năng nhập từ URL, sẽ có hai bản sao của cùng một tác phẩm
-        trong kho lưu trữ.
       questions:
         text: Nếu còn thắc mắc nào khác, vui lòng liên hệ ban Hỗ trợ Kỹ thuật AO3
           tại %{support_link}.

@@ -130,8 +130,6 @@ hu:
         unrequested: Ha nem Te kérted jelszavad visszaállítását, hagyd figyelmen kívül
           ezt az emailt, így korábbi jelszavad továbbra is működni fog.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Visszaélés bejelentésed"
     admin_deleted_work_notification:
       bye: Csatoltuk a munkád másolatát.
       contact_abuse: lépj kapcsolatba a Szabályzat & Visszaélés bizottsággal
@@ -435,14 +433,6 @@ hu:
         text: Ha más munkáid is voltak az importált archívumon olyan e-mail cím alatt,
           amelyhez már nem férsz hozzá, kérjük, lépj kapcsolatba a Nyitott Ajtókkal
           bármilyen információval, amely segíthet személyazonosságod megerősítésében.
-      part12: Ha kapcsolatba lépsz velünk, kérjük, engedélyezd a @transformativeworks.org
-        e-mail címeit, és ellenőrizd, hogy válaszunk nincs-e a spam mappában.
-      part6: 'A feltöltött munkák az alábbiak:'
-      part8: Az ajánlólisták és a könyvjelzők megőrzése érdekében az importált archívum
-        webcímei korlátozott ideig a munkák importált másolatára irányíthatnak át
-        (biztos információért ellenőrizd az archívum bejelentő posztját). Ha már feltöltöttél
-        egy példányt ezekből a munkákból és NEM használtad az URL-ből történő importálás
-        funkciót, akkor ugyanazon mű két másolata lesz az archívumon.
       questions:
         text: 'Ha más kérdésed lenne, kérjük, lépj kapcsolatba az AO3 Támogatással
           az alábbi linken: %{support_link}.'

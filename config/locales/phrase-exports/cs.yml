@@ -151,8 +151,6 @@ cs:
         unrequested: Pokud jste si změnu hesla nevyžádal/a, můžete tento email ignorovat
           a vaše stávající heslo zůstane platné.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Vaše nahlášení porušení pravidel a zásad serveru"
     admin_deleted_work_notification:
       bye: Kopii své práce najdete v příloze.
       contact_abuse: obraťte se prosím na Dohled na dodržování pravidel a zásad serveru
@@ -314,7 +312,7 @@ cs:
           pouze registrovaným uživatelům (aby se nedostaly do vyhledávání Google).
           Pokud se nerozhodnete je zpřístupnit všem uživatelům, budou přístupné pouze
           přihlášeným uživatelům. Pokud potřebujete pomoct s odemknutím, opuštěním
-          nebo odstraněním vašich prací, %{support_url}.
+          nebo odstraněním vašich prací, %{contact_support_link}.
         text: 'V závislosti na typu archivu mohou být vaše importované práce dostupné
           pouze registrovaným uživatelům (aby se nedostaly do vyhledávání Google).
           Pokud se nerozhodnete je zpřístupnit všem uživatelům, budou přístupné pouze
@@ -389,10 +387,10 @@ cs:
           jednoho e-mailu.)
         text: Chcete-li, aby projekt Open Doors aktualizoval přesměrování na vaši
           již existující práci, smažte prosím importovanou kopii a kontaktujte projekt
-          Open Doors %{contact_open_doors_link} se jménem vašeho účtu na AO3, vašeho
-          účtu v importovaném archivu a názvem a URL fanouškovské práce, ke které
-          chcete, aby přesměrování vedlo. (Pokud máte více prací, u kterých chcete
-          přesměrování změnit, můžete je uvést do jednoho e-mailu.)
+          Open Doors %{open_doors_url} se jménem vašeho účtu na AO3, vašeho účtu v
+          importovaném archivu a názvem a URL fanouškovské práce, ke které chcete,
+          aby přesměrování vedlo. (Pokud máte více prací, u kterých chcete přesměrování
+          změnit, můžete je uvést do jednoho e-mailu.)
       works_by: 'Tyto práce byly vedeny pod e-mailovou adresou: %{email}'
       work_info:
         html: "%{work_link} (%{fandom})"
@@ -531,15 +529,6 @@ cs:
         text: Pokud jste v tomto importovaném archivu měli další práce uvedené pod
           e-mailovou adresou, k níž již nemáte přístup, prosím kontaktujte Open Doors
           s jakoukoliv informací, která by mohla pomoci ověřit vaši identitu.
-      part12: Pokud se nás rozhodnete kontaktovat, prosím přidejte si e-mailové adresy
-        z domény @transformativeworks.org na svůj seznam povolených adres a zkontrolujte
-        složku spamu pro případ, že by naše odpověď skončila tam.
-      part6: 'Mezi nahranými pracemi se nachází:'
-      part8: Za účelem zachování seznamů doporučení a záložek mohou webové adresy
-        importovaného archivu krátkodobě odkazovat na importované kopie těchto prací
-        (abyste se ujistili, zkontrolujte příspěvek s oznámeními o vašem archivu).
-        Pokud jste již nahráli kopii této práce a NEpoužili jste možnost importovat
-        z URL, budou v archivu dvě kopie této práce.
       questions:
         text: S dalšími dotazy prosím kontaktujte Podporu AO3 na %{support_link}.
       redirects: Za účelem zachování seznamů doporučení a záložek mohou webové adresy

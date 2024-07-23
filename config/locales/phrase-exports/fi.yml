@@ -130,8 +130,6 @@ fi:
         unrequested: Jos et pyytänyt salasanan uudelleen asetusta, voit jättää tämän
           viestin huomioimatta, ja vanha salasanasi pysyy voimassa.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Ilmoituksesi Säännöt ja väärinkäytökset -toimikunnalle"
     admin_deleted_work_notification:
       bye: Tähän viestiin on liitetty tiedoksesi kopio teoksestasi.
       contact_abuse: ota yhteyttä Säännöt ja väärinkäytökset -toimikuntaan
@@ -347,7 +345,7 @@ fi:
       questions:
         contact_support: ota yhteyttä AO3:n Käyttäjätukeen
         html: Muissa asioissa %{contact_support_link}.
-        text: 'Muissa asioissa ota yhteyttä AO3:n Käyttäjätukeen täällä: %{suport_uprl}.'
+        text: 'Muissa asioissa ota yhteyttä AO3:n Käyttäjätukeen täällä: %{support_url}.'
       redirects:
         html: Suosituslistojen ja kirjanmerkkien säilyttämiseksi tuodun arkiston nettiosoitteet
           saattavat uudelleenohjautua näiden teosten tuotuihin versioihin rajoitetun
@@ -511,14 +509,6 @@ fi:
         text: Jos sinulla oli tuodussa arkistossa muita teoksia, jotka on liitetty
           sähköpostiosoitteeseen, johon sinulla ei enää ole pääsyä, ole hyvä ja ota
           yhteyttä Open Doorsiin mahdollisten todisteiden kanssa.
-      part12: Jos otat meihin yhteyttä, ole hyvä ja lisää @transformativeworks.org
-        sallittujen lähettäjien listalle ja tarkista, onko vastauksemme päätynyt roskapostikansioon.
-      part6: 'Seuraavat teokset ladattiin:'
-      part8: Siirretyn arkiston verkko-osoitteet saatetaan uudelleenohjata teosten
-        tuotuihin kopioihin rajoitetun ajan, jotta suosituslistat ja kirjanmerkit
-        toimisivat edelleen. (Tarkasta arkiston tuomisesta kertovasta uutisesta, tehdäänkö
-        näin.) Jos olet jo itse lisännyt teokset arkistoon ja ET käyttänyt tuo URL:stä
-        -toimintoa, teoksista on arkistossa kaksi kopiota.
       questions:
         text: Jos sinulla on muuta kysyttävää, ole hyvä ja ota yhteyttä AO3:n Käyttäjätukeen
           osoitteessa %{support_link}.

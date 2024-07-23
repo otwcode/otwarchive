@@ -134,8 +134,6 @@ nl:
         unrequested: Als je geen wachtwoordherstel hebt aangevraagd, kan je deze e-mail
           negeren en zal je vorige wachtwoord blijven werken.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Jouw Beleid & Misbruik Melding"
     admin_deleted_work_notification:
       bye: Een kopie van je werk is ter referentie bijgevoegd.
       contact_abuse: neem dan contact op met Beleid & Misbruik

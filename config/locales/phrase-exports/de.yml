@@ -134,8 +134,6 @@ de:
         unrequested: Wenn Du keine Zurücksetzung Deines Passworts beantragt hast,
           kannst Du diese E-Mail ignorieren und Dein altes Passwort bleibt gültig.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Deine Richtlinien- und Missbrauchsmeldung"
     admin_deleted_work_notification:
       bye: Anbei ist eine Kopie deines Werkes als Referenz.
       contact_abuse: kontaktiere bitte unser “Richtlinien und Missbrauch”-Komitee
@@ -260,7 +258,7 @@ de:
           diesen Link: %{approved_items_link}.'
         text: 'Wenn Du Dein Werk aus dieser Sammlung entfernen möchtest, besuche bitte
           Deine Seite für Approved Collection Items (Zugelassene Sammlungsgegenstände):
-          %{approved_items_link}.'
+          %{approved_items_url}.'
       subject: "[%{app_name}][%{collection_title}] Ein*e Open Doors (Offene Türen)
         Archivar*in hat Dein Werk zu einer Sammlung hinzugefügt."
       work_added:
@@ -545,16 +543,6 @@ de:
           hast, die über eine E-Mail-Adresse laufen, auf die Du keinen Zugriff mehr
           hast, kontaktiere bitte Open Doors mit sämtlichen Informationen, die dabei
           helfen können, Deine Identität zu verifizieren.
-      part12: Wenn Du uns kontaktierst, füge bitte E-Mail-Adressen von @transformativeworks.org
-        zur Liste sicherer Absender hinzu und schau auch in Deinem Spam-Ordner nach
-        unserer Antwort.
-      part6: 'Die hochgeladenen Werke umfassen:'
-      part8: Um Empfehlungslisten und Lesezeichen zu erhalten, kann es sein, dass
-        die Webadressen des importierten Archivs für eine begrenzte Zeit auf die importierte
-        Kopie dieser Werke umleiten (überprüfe die Ankündigung Deines Archivs, um
-        sicher zu gehen). Wenn Du diese Werke schon einmal hochgeladen hast und dabei
-        NICHT die Funktion "Import von URL" benutzt hast, gibt es nun zwei Versionen
-        des Werkes im Archiv.
       questions:
         text: Für alle weiteren Fragen kontaktiere bitte den AO3-Support unter %{support_link}.
       redirects: Um Empfehlungslisten und Lesezeichen zu erhalten, kann es sein, dass

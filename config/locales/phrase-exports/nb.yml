@@ -84,7 +84,7 @@ nb:
         informal: Med vennlig hilsen
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
-        title_with_chapter_number: Kapittel %{position} av %{title
+        title_with_chapter_number: Kapittel %{position} av %{title}
         title_with_word_count: '"%{creation_title}" (%{word_count})'
         word_count:
           one: "%{count} ord"
@@ -131,8 +131,6 @@ nb:
         unrequested: Hvis du ikke ba om å tilbakestille passordet ditt, kan du ignorere
           denne e-posten og det tidligere passordet ditt vil fortsette å fungere.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Din melding til retningslinjer og misbruk"
     admin_deleted_work_notification:
       bye: Vedlagt ligger en kopi av verket for din referanse.
       contact_abuse: kontakt vår komité for retningslinjer og misbruk
@@ -529,14 +527,6 @@ nb:
         text: Om du hadde andre verk på det importerte arkivet under en e-postadresse
           du ikke lenger har tilgang til, vennligst kontakt Åpne Dører med informasjon
           som kan bekrefte din identitet.
-      part12: 'Dersom du tar kontakt med oss, vennligst merk e-postadresser fra @transformativeworks.org
-        som trygge og sjekk spamfilteret. '
-      part6: 'Verkene det gjelder er:'
-      part8: For å bevare anbefalingslister og bokmerker, vil det importerte arkivets
-        URL muligens viderekoble til den importerte versjonen av disse verkene i en
-        begrenset periode (sjekk innlegget med kunngjøringen for arkivet ditt for
-        å være sikker). Om du allerede har publisert noen av disse verkene og du IKKE
-        importerer fra URL, vil det eksistere to kopier av samme verk på arkivet.
       questions:
         text: 'For andre spørsmål, vennligst kontakt AO3 support her: %{support_link}.'
       redirects: For å bevare anbefalingslister og bokmerker, vil det importerte arkivets

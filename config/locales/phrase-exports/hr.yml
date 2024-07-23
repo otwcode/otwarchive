@@ -149,8 +149,6 @@ hr:
         unrequested: Ako Vi niste zatražili resetiranje lozinke, možete ignorirati
           ovaj email i Vaša će prijašnja lozinka nastaviti funkcionirati.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Vaša prijava Pravilima & zloupotrebi"
     admin_deleted_work_notification:
       bye: Priložena je kopija vašeg djela za vašu referencu.
       contact_abuse: kontaktirajte naše vijeće za Zloupotrebu
@@ -531,13 +529,6 @@ hr:
         text: Ako ste na uvezenoj arhivi imali djela pod e-mail adresom kojoj više
           nemate pristup, molimo kontaktirajte Otvorena vrata s informacijama koje
           mogu pomoći u potvrdi vašeg identiteta.
-      part12: Ako nas kontaktirate, molimo stavite @transformativeworks.org na listu
-        prihvaćenih adresa i provjerite mapu s neželjenom poštom za naš odgovor.
-      part6: 'Učitana djela sadrže:'
-      part8: Kako bi sačuvali liste i bookmarkove, uvezene web adrese arhiva će vas
-        neko vrijeme možda preusmjeravati na uvezenu kopiju djela (provjerite objave
-        svoje arhive, kako biste bili sigurni). Ako ste već učitali kopiju tih djela
-        i NISTE koristili opciju URL uvoza, imat ćete dvije kopije istog djela u arhivi.
       questions:
         text: Za druga pitanja, molimo kontaktirajte AO3 Podršku na  %{support_link}.
       redirects: Kako bi sačuvali liste i bookmarkove, uvezene web adrese arhiva će
@@ -577,13 +568,13 @@ hr:
         body:
           few: Želimo vas obavijestiti da imate %{count} nove pozivnice, koje se mogu
             koristiti za izradu novih računa na AO3. Možete pozvati prijatelje na
-            %{invitation_page_link}.
+            %{invitation_page_url}.
           one: Želimo vas obavijestiti da imate %{count} novu pozivnicu, koje se mogu
             koristiti za izradu novih računa na AO3. Možete pozvati prijatelje na
-            %{invitation_page_link}.
+            %{invitation_page_url}.
           other: Želimo vas obavijestiti da imate %{count} novih pozivnica, koje se
             mogu koristiti za izradu novih računa na AO3. Možete pozvati prijatelje
-            na %{invitation_page_link}.
+            na %{invitation_page_url}.
     invite_request_declined:
       main:
         few: Žao nam je što vas moramo obavijestiti da vaš zahtjev za %{count} nova

@@ -130,8 +130,6 @@ es:
         unrequested: Si no solicitaste un cambio de contraseña, puedes ignorar este
           correo electrónico y tu contraseña previa será la misma.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Tu reporte de Políticas y Prevención de Abuso"
     admin_deleted_work_notification:
       bye: Para tu referencia, se adjunta una copia de tu obra.
       contact_abuse: Comunicate con el comité de Políticas y Prevención de Abuso
@@ -436,15 +434,6 @@ es:
           de correo electrónico a la que ya no puedes acceder, por favor ponte en
           contacto con Puertas Abiertas con cualquier información que pueda ayudarnos
           a verificar tu identidad.
-      part12: Si vas a contactarnos, por favor incluye los correos electrónicos de
-        @transformativeworks.org a tu lista autorizada de contactos y revisa la carpeta
-        de spam para asegurarte de que has recibido nuestra respuesta.
-      part6: 'Las obras subidas incluyen:'
-      part8: Para conservar las listas de recomendaciones y los marcadores, las direcciones
-        web del archivo importado pueden redirigir a las copias importadas de dichas
-        obras por un tiempo (consulta la publicación sobre el archivo en cuestión
-        para asegurarte). Si ya has subido una copia de estas obras y NO has utilizado
-        la función importar desde URL, habrá dos copias de la misma obra en el archivo.
       questions:
         text: Para cualquier otra consulta, por favor, ponte en contacto con Soporte
           Técnico del AO3 en %{support_link}.

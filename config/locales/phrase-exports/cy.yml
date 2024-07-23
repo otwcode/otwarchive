@@ -189,8 +189,6 @@ cy:
         unrequested: Os na wnaethoch chi ceisio ailosod y cyfrinair hwn, gallwch anwybyddu'r
           e-bost hwn a bydd eich cyfrinair blaenorol yn parhau i weithio.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Eich Adroddiad Camdriniaeth"
     admin_deleted_work_notification:
       bye: Cysylltwyd gopi o'ch gwaith am eich cofnodion.
       contact_abuse: cysylltwch â'n Pwyllgor Polisi a Chamdriniaeth
@@ -416,7 +414,7 @@ cy:
           Os ydych chi eisoes wedi uwchlwytho copi o'r gweithiau hyn a %{negation}
           defnyddioch chi'r nodwedd mewnforio o URL, bydd dau gopi o'r un gwaith ar
           AO3.
-      subject: Gweithiau wedi'u llwytho i fyny
+      subject: "[%{app_name}] Gweithiau wedi'u llwytho i fyny"
       update_redirect:
         contact_open_doors: cysylltwch â Drysau Agored
         html: Os hoffech i Ddrysau Agored ddiweddaru'r ailgyfeiriad i dynnu sylw at
@@ -577,15 +575,6 @@ cy:
         text: Os oedd gennych weithiau eraill ar yr archif a fewnforiwyd o dan gyfeiriad
           e-bost na allwch ei gyrchu mwyach, cysylltwch â Drysau Agored gydag unrhyw
           wybodaeth a all helpu i wirio'ch hunaniaeth.
-      part12: Os ydych yn cysylltu â ni, hawliwch gyfeiriadau e-bost o @transformativeworks.org
-        a gwiriwch eich ffolderau sbam am ein hateb os gwelwch yn dda.
-      part6: 'Mae’r gwaith a lanlwythwyd yn cynnwys:'
-      part8: Er mwyn cadw rhestrau argymhelliad a thudalnodau, gall cyfeiriadau gwe'r
-        archif a fewnforir ailgyfeirio i'r copi a fewnforiwyd o'r gweithiau hyn am
-        gyfnod cyfyngedig (gwiriwch y post cyhoeddi am eich archif i fod yn sicr).
-        Os ydych chi eisoes wedi uwchlwytho copi o'r gweithiau hyn ac NAD wnaethoch
-        chi ddefnyddio'r nodwedd mewnforio o URL, bydd dau gopi o'r un gwaith ar yr
-        archif.
       questions:
         text: Am bob ymholiad arall, cysylltwch â Chefnogaeth AO3 ar %{support_link}.
       redirects: Er mwyn cadw rhestrau argymhelliad a thudalnodau, gall cyfeiriadau

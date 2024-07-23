@@ -264,8 +264,8 @@ mr:
       work_added:
         html: "%{collection_link} च्या व्यवस्थापकांनी आपली कृती %{work_link} त्यांच्या
           संकलनेत सामील केली आहे!"
-        text: '"%{collection_title}" %{collection_link} च्या व्यवस्थापकांनी आपली कृती
-          "%{work_title}" %{work_link} त्यांच्या संकलनेत सामील केली आहे!'
+        text: '"%{collection_title}" %{collection_url} च्या व्यवस्थापकांनी आपली कृती
+          "%{work_title}" %{work_url} त्यांच्या संकलनेत सामील केली आहे!'
     challenge_assignment_notification:
       any: कोणतेही
       assignment:

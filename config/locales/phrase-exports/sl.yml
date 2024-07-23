@@ -168,8 +168,6 @@ sl:
         unrequested: Če ponastavitve gesla niste zahtevali, lahko prezrete to elektronsko
           sporočilo in vaše trenutno geslo bo ostalo veljavno.
   user_mailer:
-    abuse_report:
-      subject: "[%{app_name}] Vaše poročilo odboru za Pravila in zlorabo"
     admin_deleted_work_notification:
       bye: V priponki lahko najdete kopijo svojega dela.
       contact_abuse: stopite v stik z Odborom za pravila in zlorabo.
@@ -436,15 +434,6 @@ sl:
         text: Če ste imeli na uvoženem arhivu druga dela pod e-poštnim naslovom, do
           katerega nimate več dostopa, prosimo,  kontaktirajte Odprta vrata z kakršnimi
           koli informacijami, ki bi nam lahko pomagale potrditi vašo identiteto.
-      part12: 'Če nas kontaktirate, prosimo dodajte e-mail naslove @transformativeworks.org
-        na seznam dovoljenih naslovov in preverite, če je bil naš odgovor preusmerjen
-        v vašo mapo z vsiljeno pošto. '
-      part6: 'Objavljena dela vključujejo:'
-      part8: Zato, da ohranjamo sezname priporočil in zaznamke, lahko spletni naslovi
-        uvoženega arhiva za določen čas preusmerijo na uvoženo kopijo teh del (da
-        se prepričate o tem, preverite objavo z obvestilom za vaš arhiv). Če ste že
-        naložili kopijo teh del in NISTE uporabili funkcije uvoza iz URL-ja, bosta
-        v arhivu dve kopiji istega dela.
       questions:
         text: Za druga vprašanja, prosimo, kontaktirajte AO3 podporo uporabnikom na
           %{support_link}.
@@ -484,12 +473,12 @@ sl:
       text:
         body:
           few: Sporočamo vam, da imate %{count} nova vabila za ustvarjanje novega
-            uporabniškega računa na AO3. Podarite jih lahko preko %{invitation_page_link}.
+            uporabniškega računa na AO3. Podarite jih lahko preko %{invitation_page_url}.
           one: Sporočamo vam, da imate %{count} novo vabilo za ustvarjanje novega
             uporabniškega računa na AO3. Prijatelje lahko povabite preko vaše strani
             Invitations (Vabila) (%{invitation_page_url}).
           other: Sporočamo vam, da imate %{count} novih vabil za ustvarjanje novega
-            uporabniškega računa na AO3. Podarite jih lahko preko %{invitation_page_link}.
+            uporabniškega računa na AO3. Podarite jih lahko preko %{invitation_page_url}.
           two: Sporočamo vam, da imate %{count} novi vabili za ustvarjanje novega
             uporabniškega računa na AO3. Prijatelje lahko povabite preko vaše strani
             Invitations (Vabila) (%{invitation_page_url}).
