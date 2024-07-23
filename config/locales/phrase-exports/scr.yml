@@ -301,11 +301,6 @@ scr:
           objavu za Vašu arhivu kako biste bili sigurni). Ako ste Vi već objavili
           kopiju ovih dela i %{negation} koristili opciju unosa putem URL-a, na AO3-u
           će postojati dve kopije istog dela.
-        text: Kako bi očuvali liste preporuka i obeleživače, veb adrese unesene arhive
-          će možda voditi do unesenih kopija ovih dela na ograničeno vreme (proverite
-          objavu za Vašu arhivu kako biste bili sigurni). Ako ste Vi već objavili
-          kopiju ovih dela i %{negation} koristili opciju unosa putem URL-a, na AO3-u
-          će postojati dve kopije istog dela.
       subject: "[%{app_name}] Dodata dela"
       update_redirect:
         contact_open_doors: kontaktirate Otvorena vrata

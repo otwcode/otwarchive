@@ -101,15 +101,7 @@ de:
               angewiesen ist: %{donate_url}.'
           html:
             donate_link_text: Deine Spenden
-            part1: Solltest Du diese Nachricht irrtümlicherweise erhalten haben, %{support_link}.
-            part2: Das AO3 ist ein Archiv von Fans für Fans, das auf %{donate_link}
-              angewiesen ist.
             support_link_text: wende Dich bitte an den Support
-          text:
-            part1: Solltest Du diese Nachricht irrtümlicherweise erhalten haben, wende
-              Dich bitte unter %{support_url} an den Support.
-            part2: 'Das AO3 ist ein Archiv von Fans für Fans, das auf Deine Spenden
-              angewiesen ist: %{donate_url}.'
           unwanted_email:
             html: Solltest Du diese Nachricht irrtümlicherweise erhalten haben, %{support_link}.
             text: Solltest Du diese Nachricht irrtümlicherweise erhalten haben, wende
@@ -143,11 +135,7 @@ de:
           kannst Du diese E-Mail ignorieren und Dein altes Passwort bleibt gültig.
   user_mailer:
     abuse_report:
-      description_para: 'Beschreibung des Missbrauchs:'
-      para1: 'Die folgende Missbrauchsmeldung wurde an das “Richtlinien und Missbrauch”-Team
-        geschickt:'
       subject: "[%{app_name}] Deine Richtlinien- und Missbrauchsmeldung"
-      url_para: 'Die URL der Seite, auf der sich der Missbrauch befindet:'
     admin_deleted_work_notification:
       bye: Anbei ist eine Kopie deines Werkes als Referenz.
       contact_abuse: kontaktiere bitte unser “Richtlinien und Missbrauch”-Komitee
@@ -155,9 +143,6 @@ de:
         html: dein Werk %{title} wurde von einem*r Webadministrator*in des AO3 gelöscht.
         text: dein Werk "%{title}" wurde von einem*r Webadministrator*in des AO3 gelöscht.
       html:
-        part1: dein Werk %{title} wurde von einem*r Webadministrator*in des AO3 gelöscht.
-        part2: Falls dein Werk Teil eines Import-Projektes durch unser Open Doors-
-          (Offene Türen) Komitee war, %{opendoors_link} für alle weiteren Fragen.
         tos_violation: Wenn dein Werk eventuell die Nutzungsbedingungen des AO3 verletzt
           hat, %{contact_abuse_link}.
       import_project:
@@ -169,11 +154,6 @@ de:
       opendoors: kontaktiere bitte das “Offene Türen”-Komitee
       subject: "[%{app_name}] Dein Werk wurde von einem*r Webadministrator*in gelöscht"
       text:
-        part1: dein Werk "%{title}" wurde von einem*r Webadministrator*in des AO3
-          gelöscht.
-        part2: Falls dein Werk Teil eines Import-Projektes durch unser Open Doors-
-          (Offene Türen) Komitee war, kontaktiere bitte Offene Türen (%{opendoors_link})
-          für alle weiteren Fragen.
         tos_violation: Wenn dein Werk eventuell die Nutzungsbedingungen des AO3 verletzt
           hat, kontaktiere bitte unser Richtlinien und Missbrauch-Komitee (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -301,7 +281,6 @@ de:
         footer_link: Profilseite der Herausforderung
         look_up: Du kannst diese Aufgabe auf %{link} anschauen.
         look_up_link: Deine Assignments (Aufgaben) Seite
-        part1: Dir wurde folgender Wunsch in der Herausforderung %{link} im AO3 zugewiesen!
       optional_tags: 'Optionale Tags:'
       prompts: 'Anregungen:'
       prompt_url: 'URL der Anregung:'
@@ -322,8 +301,6 @@ de:
           geändert."
         text: "%{login}, die mit Deinem Konto verknüpfte E-Mail-Adresse wurde zu %{email}
           geändert."
-      part1: "%{login}, die mit Deinem Konto verknüpfte E-Mail-Adresse wurde zu %{email}
-        geändert."
       subject: "[%{app_name}] E-Mail-Adresse geändert"
     claim_notification:
       access:
@@ -399,12 +376,6 @@ de:
           Archivs, um sicher zu sein). Wenn Du bereits eine Kopie dieser Werke hochgeladen
           und %{negation} die Funktion "Importieren von URL" genutzt hast, werden
           zwei Kopien desselben Werkes auf AO3 existieren.
-        text: Um Empfehlungslisten und Lesezeichen zu bewahren, werden die Webadressen
-          des importierten Archivs möglicherweise für eine begrenzte Zeit auf die
-          importierte Kopie dieser Werke umgeleitet (überprüfe die Ankündigung Deines
-          Archivs, um sicher zu sein). Wenn Du bereits eine Kopie dieser Werke hochgeladen
-          hast, und Du %{negation} die "Importieren von URL"-Funktion genutzt hast,
-          werden zwei Kopien vom selben Werk auf AO3 existieren.
       subject: "[%{app_name}] Werke hochgeladen"
       update_redirect:
         contact_open_doors: kontaktiere Open Doors
@@ -525,20 +496,11 @@ de:
       deleted_yourself:
         html: Dein Werk %{title} wurde gemäß Deiner Anfrage gelöscht.
         text: Dein Werk "%{title}" wurde gemäß Deiner Anfrage gelöscht.
-      html:
-        part1_other: Dein Werk %{title} wurde gemäß Anfrage von %{pseud} gelöscht.
-        part1_yourself: Dein Werk %{title} wurde gemäß Deiner Anfrage gelöscht.
-        part2: Wenn Du Fragen hast, %{support}.
-      part3: Anbei ist eine Kopie Deines Werkes, als Referenz für Dich.
       questions:
         html: Wenn Du Fragen hast, %{support}.
         text: Falls Du Fragen hast, bitte %{support} (%{url}).
       subject: "[%{app_name}] Dein Werk wurde gelöscht"
       support: kontaktiere bitte den Support
-      text:
-        part1_other: Dein Werk "%{title}" wurde gemäß Anfrage von %{pseud} gelöscht.
-        part1_yourself: Dein Werk "%{title}" wurde gemäß Deiner Anfrage gelöscht.
-        part2: Falls Du Fragen hast, bitte %{support} (%{url}).
     invitation_to_claim:
       access:
         text: Abhängig vom ursprünglichen Archiv kann es sein, dass Deine importierten
@@ -559,8 +521,6 @@ de:
         contact_open_doors: kontaktiere bitte Open Doors
         contact_support: kontaktiere bitte AO3 Support
         faq_page: Häufig gestellte Fragen (FAQ) Seite
-        open_doors: Open Doors (Offene Türen)
-        part5: Beanspruche Deine Werke oder entferne sie hier.
         tutorial_page: Anleitungsseite
       introduction:
         text: 'Du bekommst diese E-Mail, da kürzlich ein Archiv durch Open Doors (Offene
@@ -604,48 +564,6 @@ de:
         NICHT die Funktion "Import von URL" benutzt hast, gibt es nun zwei Versionen
         des Werkes im Archiv.
       subject: "[%{app_name}] Einladung zur Inanspruchnahme von Werken"
-      text:
-        part1: 'Du bekommst diese E-Mail, da kürzlich ein Archiv durch Open Doors
-          (Offene Türen: %{open_doors_link}) in das %{app_name} (%{app_short_name}
-          - Ein Eigenes Archiv: %{app_url}) importiert wurde, und wir denken, dass
-          die folgenden Fanwerke Dir gehören.  Wir möchten Dir gerne die Möglichkeit
-          geben, diese Werke als Deine in Anspruch zu nehmen (oder zu löschen/auszuwildern),
-          sofern Du das möchtest. Und wenn Du noch keinen Account bei uns hast (möglicherweise
-          über eine andere E-Mail-Adresse), würden wir Dich gerne zu uns einladen!'
-        part10: Wenn Du noch weitere Werke auf dem importierten Archiv veröffentlicht
-          hast, die über eine E-Mail-Adresse laufen, auf die Du keinen Zugriff mehr
-          hast, kontaktiere bitte Open Doors mit sämtlichen Informationen, die dabei
-          helfen können, Deine Identität zu verifizieren.
-        part11: Für alle weiteren Fragen kontaktiere bitte den AO3-Support unter %{support_link}.
-        part2: Du findest Ankündigungen zu kürzlichen Archiv-Umzügen unter AO3-Neuigkeiten
-          (%{news_link}) und weitere Informationen auf Open Doors FAQ-Seite (%{open_doors_faq_link})
-          oder der Anleitungsseite (%{open_doors_tutorial_link}). Für Fragen, die
-          weder in den FAQ, den Anleitungen, noch in dieser E-Mail beantwortet werden,
-          kontaktiere den Support unter %{support_link}.
-        part3: Falls wir uns irren und diese Werke nicht von Dir sind, lösche sie
-          bitte nicht! Kontaktiere bitte Open Doors unter %{open_doors_link}, und
-          wir kümmern uns darum.
-        part4: Abhängig vom ursprünglichen Archiv kann es sein, dass Deine importierten
-          Werke nur für registrierte Benutzer*innen zugänglich sind (damit man sie
-          über Google nicht finden kann). Falls dies der Fall ist, können Deine Werke
-          nur von eingeloggten Benutzer*innen geöffnet werden, außer Du entscheidest
-          Dich dafür, sie frei zugänglich zu machen. Wenn du Hilfe brauchst, Deine
-          Werke frei zugänglich zu machen, sie auszuwildern oder zu löschen, kontaktiere
-          bitte den AO3 Support.
-        part5: 'Beanspruche Deine Werke oder entferne sie hier: %{claim_url}'
-        part7: Wenn diese Werke Dir gehören, Du sie aber nicht behalten möchtest,
-          kannst Du sie auswildern (hierbei bleiben sie auf dem AO3 stehen, aber ohne
-          Angabe Deines Namens) oder löschen (dann werden sie komplett vom AO3 entfernt).
-          Du musst Deine Werke keinem Account hinzufügen, um sie auszuwildern oder
-          zu löschen – Du kannst beides direkt über den Inanspruchnahme-Link oben
-          erledigen. (Für Unterstützung dabei, kontaktiere bitte den Support unter
-          %{support_link}.)
-        part9: Wenn Du möchtest, dass Open Doors die Weiterleitung aktualisiert, um
-          auf Dein bereits existierendes Werk zu verweisen, lösche bitte die importierte
-          Kopie, und kontaktiere Open Doors unter %{open_doors_link} mit Deinem AO3-Accountnamen,
-          Deinem Accountnamen im importierten Archiv und dem Titel sowie der URL des
-          Fanwerks, auf das die Weiterleitung verweisen soll. (Falls Du die Weiterleitungen
-          für mehrere Werke ändern möchtest, kannst Du sie alle in einer E-Mail auflisten.)
       unwanted:
         text: Wenn diese Werke Dir gehören, Du sie aber nicht behalten möchtest, kannst
           Du sie auswildern (hierbei bleiben sie auf dem AO3 stehen, aber ohne Angabe
@@ -663,13 +581,6 @@ de:
           für mehrere Werke ändern möchtest, kannst Du sie alle in einer E-Mail auflisten.)
       uploaded_list: 'Die hochgeladenen Werke umfassen:'
     invite_increase_notification:
-      body:
-        one: wir wollten Dir nur Bescheid sagen, dass Du %{count} neue Einladung hast,
-          die man zur Erstellung neuer Benutzer*innenkonten im AO3 verwenden kann.
-          Du kannst Freund*innen auf %{invitation_page} einladen.
-        other: wir wollten Dir nur Bescheid sagen, dass Du %{count} neue Einladungen
-          hast, die man zur Erstellung neuer Benutzer*innenkonten im AO3 verwenden
-          kann. Du kannst Freund*innen auf %{invitation_page} einladen.
       html:
         body:
           one: wir wollten Dir nur Bescheid sagen, dass Du %{count} neue Einladung
@@ -732,19 +643,6 @@ de:
           oder -werken gibt, Deine Einstellungen anpassen, damit die Seite so aussieht
           und funktioniert, wie es für Dich passt, über den Verlauf nachverfolgen,
           welche Werke Du im Archiv angesehen hast und vieles mehr.
-      html:
-        part1: Bitte %{activate_account_link}.
-        part2: Sobald Dein Benutzerkonto eingerichtet und aktiviert ist, kannst Du
-          Deine Fanwerke veröffentlichen, E-Mail-Benachrichtigungen einrichten, die
-          Dich informieren, wenn es Aktualisierungen von Deinen Lieblingsschöpfer*innen
-          oder -werken gibt, Deine Einstellungen anpassen, damit die Seite so aussieht
-          und funktioniert, wie es für Dich passt, über den Verlauf nachverfolgen,
-          welche Werke Du im Archiv angesehen hast und vieles mehr.
-        part3: Es gibt eine Menge Informationen und Tipps zur Nutzung des Archivs
-          in unseren %{faq_link}. Du findest die aktuellsten Neuigkeiten zur Entwicklung
-          unserer Seite in unserem %{admin_posts_link}. Falls Du weitere Hilfe benötigen,
-          auf einen Bug stoßen oder Fragen oder Kommentare haben solltest, dann %{contact_support_link},
-          dessen Mitglieder sich immer freuen, wenn sie Dir helfen können.
       information:
         html: Es gibt eine Menge Informationen und Tipps zur Nutzung des Archivs in
           unseren %{faq_link}. Du findest die aktuellsten Neuigkeiten zur Entwicklung
@@ -752,20 +650,6 @@ de:
           auf einen Bug stoßen oder Fragen oder Kommentare haben solltest, dann %{contact_support_link},
           dessen Mitglieder sich immer freuen, wenn sie Dir helfen können.
         text: 'Es gibt eine Menge Informationen und Tipps zur Nutzung des Archivs
-          in unseren Häufig gestellten Fragen (FAQ) unter %{faq_url}. Du findest die
-          aktuellsten Neuigkeiten zur Entwicklung unseren AO3-Newslettern unter %{admin_posts_url}.
-          Falls Du weitere Hilfe benötigen, auf einen Bug stoßen oder Fragen oder
-          Kommentare haben solltest, dann kontaktiere bitte unser Support-Team, dessen
-          Mitglieder sich immer freuen, wenn sie Dir helfen können: %{contact_support_url}.'
-      text:
-        part1: 'Bitte folge diesem Link, um Dein Benutzerkonto zu aktivieren: %{activate_account_url}'
-        part2: Sobald Dein Benutzerkonto eingerichtet und aktiviert ist, kannst Du
-          Deine Fanwerke veröffentlichen, E-Mail-Benachrichtigungen einrichten, die
-          Dich informieren, wenn es Aktualisierungen von Deinen Lieblingsschöpfer*innen
-          oder -werken gibt, Deine Einstellungen anpassen, damit die Seite so aussieht
-          und funktioniert, wie es für Dich passt, über den Verlauf nachverfolgen,
-          welche Werke Du im Archiv angesehen hast und vieles mehr.
-        part3: 'Es gibt eine Menge Informationen und Tipps zur Nutzung des Archivs
           in unseren Häufig gestellten Fragen (FAQ) unter %{faq_url}. Du findest die
           aktuellsten Neuigkeiten zur Entwicklung unseren AO3-Newslettern unter %{admin_posts_url}.
           Falls Du weitere Hilfe benötigen, auf einen Bug stoßen oder Fragen oder

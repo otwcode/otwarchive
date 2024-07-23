@@ -44,8 +44,6 @@ vi:
         other: Mối Quan Hệ
       series:
         other: Bộ
-  chapters:
-    chapter_position: "- Chương %{position}"
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -82,15 +80,7 @@ vi:
               và duy trì nhờ quyên góp của bạn: %{donate_url}.'
           html:
             donate_link_text: quyên góp của bạn
-            part1: Nếu thông báo này có sai sót hoặc nhầm lẫm, xin hãy %{support_link}.
-            part2: AO3 là một kho tàng lưu trữ được điều hành và vận hành bởi fan,
-              và duy trì nhờ %{donate_link}.
             support_link_text: liên hệ Ban Hỗ Trợ Kỹ Thuật
-          text:
-            part1: Nếu thông báo này có sai sót hoặc nhầm lẫn, xin hãy liên hệ ban
-              Hỗ Trợ Kỹ Thuật tại %{support_url}.
-            part2: 'AO3 là một kho tàng lưu trữ được điều hành và vận hành bởi fan,
-              và duy trì nhờ quyên góp của bạn: %{donate_url}.'
           unwanted_email:
             html: Nếu thông báo này có sai sót hoặc nhầm lẫm, xin hãy %{support_link}.
             text: Nếu thông báo này có sai sót hoặc nhầm lẫn, xin hãy liên hệ ban
@@ -126,10 +116,7 @@ vi:
           này; mật khẩu cũ của bạn vẫn sẽ tiếp tục có hiệu lực.
   user_mailer:
     abuse_report:
-      description_para: 'Miêu tả nội dung lạm quyền:'
-      para1: 'Đơn báo cáo sau đã được gửi tới Ban Xử lý Lạm quyền:'
       subject: "[%{app_name}] Báo cáo Lạm Quyền của bạn"
-      url_para: 'URL của trang có sự lạm quyền:'
     admin_deleted_work_notification:
       bye: Bản sao tác phẩm của bạn được đính kèm trong thư này.
       contact_abuse: liên hệ đội ngũ Xử Lý Lạm Quyền của chúng tôi.
@@ -138,10 +125,6 @@ vi:
         text: Quản lý trang web đã xóa tác phẩm %{title} của bạn quản lý trang web
           khỏi AO3.
       html:
-        part1: Quản trị viên đã xóa tác phẩm %{title} của bạn khỏi AO3.
-        part2: Nếu tác phẩm của bạn nằm trong dự án đăng lại thuộc quyền quản lý của
-          đội ngũ Open Doors (Cửa Mở), hãy %{opendoors_link} để biết thêm thông tin
-          chi tiết.
         tos_violation: Nếu tác phẩm của bạn vi phạm Điều Khoản Dịch Vụ của AO3, vui
           lòng %{contact_abuse_link}.
       import_project:
@@ -154,11 +137,6 @@ vi:
       opendoors: liên hệ Open Doors
       subject: "[%{app_name}] Quản trị viên đã xóa tác phẩm của bạn"
       text:
-        part1: Quản lý trang web đã xóa tác phẩm %{title} của bạn quản lý trang web
-          khỏi AO3.
-        part2: Nếu tác phẩm của bạn nằm trong dự án đăng lại thuộc quyền quản lý của
-          đội ngũ Open Doors (Cửa Mở), hãy liên hệ Open Doors (%{opendoors_link})
-          để biết thêm thông tin chi tiết.
         tos_violation: Nếu tác phẩm của bạn vi phạm Điều Khoản Dịch Vụ AO3, hãy liên
           hệ đội ngũ Xử Lý Lạm Quyền của chúng tôi (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -288,7 +266,6 @@ vi:
         footer_link: trang chính của thử thách
         look_up: Bạn có thể tìm hiểu thêm về nhiệm vụ này ở %{link}.
         look_up_link: trang Assignments (Nhiệm Vụ) của bạn
-        part1: Đây là nhiệm vụ của bạn trong thử thách %{link} tại AO3!
       optional_tags: 'Từ khóa tùy chọn:'
       prompts: 'Chủ đề gợi ý:'
       prompt_url: 'Địa chỉ URL của chủ đề gợi ý:'
@@ -310,8 +287,6 @@ vi:
           %{email}"
         text: "%{login}, email dùng để đăng ký tài khoản của bạn đã được đổi thành
           %{email}"
-      part1: "%{login}, email dùng để đăng ký tài khoản của bạn đã được đổi thành
-        %{email}"
       subject: "[%{app_name}] Thay đổi email"
     collection_notification:
       assignments_sent:
@@ -412,21 +387,11 @@ vi:
       deleted_yourself:
         html: Tác phẩm %{title} đã được xóa theo yêu cầu của bạn.
         text: Tác phẩm "%{title}" đã được xóa theo yêu cầu của bạn.
-      html:
-        part1_other: Tác phẩm %{title} đã được xóa theo yêu cầu của %{pseud}.
-        part1_yourself: Tác phẩm %{title} đã được xóa theo yêu cầu của bạn.
-        part2: Nếu bạn có thắc mắc, vui lòng %{support}.
-      part3: Một bản sao tác phẩm của bạn được đính kèm nhằm phục vụ mục đích tham
-        khảo.
       questions:
         html: Nếu bạn có thắc mắc, vui lòng %{support}.
         text: Nếu bạn có thắc mắc, vui lòng %{support} (%{url}).
       subject: "[%{app_name}] Quản trị viên đã xóa tác phẩm của bạn"
       support: liên hệ ban Hỗ Trợ Kỹ Thuật
-      text:
-        part1_other: Tác phẩm "%{title}" đã được xóa theo yêu cầu của %{pseud}.
-        part1_yourself: Tác phẩm "%{title}" đã được xóa theo yêu cầu của bạn.
-        part2: Nếu bạn có thắc mắc, vui lòng %{support} (%{url}).
     invitation_to_claim:
       access:
         text: Tùy thuộc vào kho lưu trữ, các tác phẩm của bạn có thể đã được nhập
@@ -446,8 +411,6 @@ vi:
         contact_open_doors: liên hệ Open Doors
         contact_support: liên hệ ban Hỗ trợ Kỹ thuật AO3
         faq_page: trang Câu Hỏi Thường Gặp
-        open_doors: Open Doors (Cửa Mở)
-        part5: Nhận hoặc xóa tác phẩm của bạn ở đây.
         tutorial_page: trang hướng dẫn
       introduction:
         text: Bạn nhận được e-mail này vì gần đây một kho lưu trữ đã được nhập vào
@@ -490,45 +453,6 @@ vi:
         và bạn KHÔNG sử dụng tính năng nhập từ URL, sẽ có hai bản sao của cùng một
         tác phẩm trong kho lưu trữ.
       subject: "[%{app_name}] Lời mời nhận tác phẩm"
-      text:
-        part1: Bạn nhận được e-mail này vì gần đây một kho lưu trữ đã được nhập vào
-          %{app_name} (%{app_short_name} - %{app_url}) bởi Cửa Mở (%{open_doors_link}),
-          và chúng tôi tin rằng các tác phẩm sau đây thuộc về bạn. Chúng tôi muốn
-          cho bạn cơ hội để nhận (hoặc xóa/tách riêng) những tác phẩm này nếu bạn
-          muốn. Nếu bạn chưa có tài khoản đăng ký dưới e-mail khác, chúng tôi muốn
-          mời bạn tạo tài khoản!
-        part10: Nếu bạn còn các tác phẩm nào khác trong kho lưu trữ được nhập dưới
-          một email bạn không thể truy cập được nữa, xin vui lòng liên hệ Open Doors
-          với bất kỳ thông tin nào có thể giúp xác minh danh tính của bạn.
-        part11: Nếu còn thắc mắc nào khác, vui lòng liên hệ ban Hỗ trợ Kỹ thuật AO3
-          tại %{support_link}.
-        part2: Bạn có thể đọc thông báo về các lần nhập kho lưu trữ gần đây tại trang
-          tin tức của AO3 (%{news_link}), và tìm thêm thông tin ở trang FAQ (%{open_doors_faq_link})
-          hoặc trang hướng dẫn (%{open_doors_tutorial_link}) của Open Doors. Đối với
-          bất kỳ câu hỏi nào không được trả lời trong trang FAQ, các hướng dẫn, hoặc
-          e-mail này, vui lòng liên hệ ban Hỗ trợ Kỹ thuật tại %{support_link}.
-        part3: Nếu chúng tôi nhầm lẫn và đây không phải tác phẩm của bạn, xin đừng
-          xóa chúng! Vui lòng liên hệ Open Doors (%{open_doors_link}) và chúng tôi
-          sẽ xử lý vấn đề này.
-        part4: Tùy thuộc vào kho lưu trữ, các tác phẩm của bạn có thể đã được nhập
-          chỉ giới hạn cho người dùng đã đăng ký (để chúng không hiển thị trên các
-          tìm kiếm của Google). Trong trường hợp này, chỉ người dùng đã đăng nhập
-          có thể được truy cập vào tác phẩm trừ khi bạn chọn hiển thị chúng cho tất
-          cả mọi người. Nếu cần hỗ trợ mở khoá, tách riêng, hoặc xoá tác phẩm, vui
-          lòng liên hệ ban Hỗ trợ Kỹ thuật AO3.
-        part5: 'Nhận hoặc xóa tác phẩm của bạn ở đây: %{claim_url}'
-        part7: Nếu những tác phẩm này thuộc về bạn nhưng bạn không muốn nhận chúng,
-          bạn có thể tách riêng (chúng sẽ vẫn tồn tại trên AO3, nhưng bút danh của
-          bạn sẽ được xóa) hoặc xóa chúng (chúng sẽ bị gỡ bỏ hoàn toàn khỏi AO3).
-          Bạn không cần thêm tác phẩm vào bất kỳ tài khoản nào để tách riêng hoặc
-          xóa chúng - bạn có thể thực hiện việc này trực tiếp qua đường link nhận
-          tác phẩm ở trên. (Nếu cần trợ giúp, xin liên lạc ban Hỗ trợ qua %{support_link}.)
-        part9: Nếu bạn muốn Open Doors cập nhật đường link chuyển hướng để dẫn đến
-          tác phẩm đã có trước đó của bạn, vui lòng xóa bản copy đã được nhập và liên
-          lạc Open Doors qua %{open_doors_link} với tên tài khoản AO3 của bạn, tên
-          tài khoản của bạn trên kho lưu trữ đã được nhập, cùng với tiêu đề và URL
-          của tác phẩm bạn muốn chuyển hướng đến. (Nếu bạn muốn đổi đường link chuyển
-          hướng cho nhiều tác phẩm, bạn có thể liệt kê chúng trong cùng một email.)
       unwanted:
         text: Nếu những tác phẩm này thuộc về bạn nhưng bạn không muốn nhận chúng,
           bạn có thể tách riêng (chúng sẽ vẫn tồn tại trên AO3, nhưng bút danh của
@@ -545,10 +469,6 @@ vi:
           hướng cho nhiều tác phẩm, bạn có thể liệt kê chúng trong cùng một email.)
       uploaded_list: 'Tác phẩm được đăng tải bao gồm:'
     invite_increase_notification:
-      body:
-        other: 'Chúng tôi xin thông báo: bạn hiện đang có %{count} thư mời mới có
-          thể sử dụng để tạo tài khoản mới ở AO3. Bạn có thể gửi thư mời cho bạn bè
-          qua %{invitation_page}.'
       html:
         body:
           other: 'Chúng tôi xin thông báo: bạn hiện đang có %{count} thư mời mới có
@@ -599,18 +519,6 @@ vi:
           phẩm yêu thích của bạn có chương mới, cài đặt giao diện mới cho trang web,
           lưu lại những tác phẩm bạn đã truy cập trên AO3 ở mục lịch sử, và nhiều
           hơn thế.
-      html:
-        part1: Hãy %{activate_account_link}.
-        part2: Một khi tài khoản của bạn được xác nhận, bạn có thể đăng tác phẩm của
-          bạn, đăng kí theo dõi qua email để nhận được thông báo mỗi khi tác giả/tác
-          phẩm yêu thích của bạn có chương mới, cài đặt giao diện mới cho trang web,
-          lưu lại những tác phẩm bạn đã truy cập qua AO3 ở mục lịch sử, và nhiều hơn
-          thế.
-        part3: Có rất nhiều thông tin và lời khuyên về cách sử dụng AO3 trong mục
-          %{faq_link}. Bạn có thể tìm đọc những tin tức mới về quá trình phát triển
-          trang web tại mục %{admin_posts_link}. Nếu bạn cần trợ giúp, gặp trục trặc
-          khi sử dụng web, hoặc có câu hỏi hay lời góp ý nào, hãy %{contact_support_link}.
-          Chúng tôi luôn sẵn lòng giúp đỡ.
       information:
         html: Có rất nhiều thông tin và lời khuyên về cách sử dụng AO3 trong mục %{faq_link}.
           Bạn có thể tìm đọc những tin tức mới về quá trình phát triển trang web tại
@@ -620,19 +528,6 @@ vi:
         text: 'Xem thông tin thêm và hướng dẫn sử dụng Kho tàng trong mục ‘Những câu
           hỏi thường gặp’ %{faq_url}. Bạn có thể tìm đọc những tin tức mới về quá
           trình phát triển trang web ở mục AO3 News (Tin tức AO3) tại %{admin_posts_url}.
-          Nếu bạn cần giúp đỡ, gặp trục trặc khi sử dụng trang web, hoặc có câu hỏi
-          hay lời góp ý nào, hãy liên hệ đội ngũ Hỗ trợ của chúng tôi. Chúng tôi luôn
-          sẵn lòng giúp đỡ: %{contact_support_url}.'
-      text:
-        part1: 'Hãy đi theo đường link để kích hoạt tài khoản của bạn: %{activate_account_url}'
-        part2: Một khi tài khoản của bạn được xác nhận, bạn sẽ có thể đăng tác phẩm
-          của bạn, đăng kí theo dõi qua email để nhận được thông báo mỗi khi tác giả/tác
-          phẩm yêu thích của bạn có chương mới, cài đặt giao diện mới cho trang web,
-          lưu lại những tác phẩm bạn đã truy cập trên AO3 ở mục lịch sử, và nhiều
-          hơn thế.
-        part3: 'Xem thông tin thêm và hướng dẫn sử dụng Kho tàng trong mục ‘Những
-          câu hỏi thường gặp’ %{faq_url}. Bạn có thể tìm đọc những tin tức mới về
-          quá trình phát triển trang web ở mục AO3 News (Tin tức AO3) tại %{admin_posts_url}.
           Nếu bạn cần giúp đỡ, gặp trục trặc khi sử dụng trang web, hoặc có câu hỏi
           hay lời góp ý nào, hãy liên hệ đội ngũ Hỗ trợ của chúng tôi. Chúng tôi luôn
           sẵn lòng giúp đỡ: %{contact_support_url}.'

@@ -101,15 +101,7 @@ tr:
               ve sizin bağışlarınızla varlığını sürdüren bir arşivdir: %{donate_url}.'
           html:
             donate_link_text: sizin bağışlarınızdır
-            part1: Eğer bu mesajı bir hata sonucu aldıysanız lütfen %{support_link}.
-            part2: AO3 hayranlar tarafından yönetilen ve desteklenen bir arşivdir,
-              varlığını sürdürmesini sağlayan şey %{donate_link}.
             support_link_text: Teknik Destek ile iletişime geçin
-          text:
-            part1: Eğer bu mesajı bir hata sonucu aldıysanız lütfen %{support_url}
-              adresinden Teknik Destek ile iletişime geçin.
-            part2: 'AO3 hayranlar tarafından yönetilen, hayranlar tarafından desteklenen
-              ve sizin bağışlarınızla varlığını sürdüren bir arşivdir: %{donate_url}.'
           unwanted_email:
             html: Eğer bu mesajı bir hata sonucu aldıysanız lütfen %{support_link}.
             text: Eğer bu mesajı bir hata sonucu aldıysanız lütfen %{support_url}
@@ -142,10 +134,7 @@ tr:
           gelerek önceki şifrenizi kullanmaya devam edebilirsiniz.
   user_mailer:
     abuse_report:
-      description_para: 'Kötüye kullanımın tanımı:'
-      para1: 'Aşağıdaki kötüye kullanım ihbarı, Kötüye Kullanım Komitesine gönderilmiştir:'
       subject: "[%{app_name}] Kötüye Kullanım İhbarınız"
-      url_para: 'Kötüye kullanımın olduğu sayfanın URL’si:'
     admin_deleted_work_notification:
       bye: Referans için eserinizin bir kopyası ektedir.
       contact_abuse: Poliçe ve Kötüye Kullanım Komitesi ile iletişime geçin
@@ -153,9 +142,6 @@ tr:
         html: Eseriniz, %{title}, bir site yöneticisi tarafından AO3’ten silinmiştir.
         text: Eseriniz "%{title}" bir site yöneticisi tarafından AO3’ten silinmiştir.
       html:
-        part1: Eseriniz, %{title}, bir site yöneticisi tarafından AO3’ten silinmiştir.
-        part2: Eğer eseriniz, Open Doors (Açık Kapılar) ekibimiz tarafından yönetilen
-          bir içe aktarma projesinin parçası ise lütfen sorularınız için %{opendoors_link}.
         tos_violation: Eğer eserinizin AO3’ün Kullanım Şartlarını ihlal etmiş olma
           ihtimali var ise lütfen %{contact_abuse_link}.
       import_project:
@@ -167,10 +153,6 @@ tr:
       opendoors: Açık Kapılar ile iletişime geçin
       subject: "[%{app_name}] Eseriniz bir yönetici tarafından silinmiştir"
       text:
-        part1: Eseriniz "%{title}" bir site yöneticisi tarafından AO3’ten silinmiştir.
-        part2: Eğer eseriniz Open Doors (Açık Kapılar) ekibimiz tarafından yönetilen
-          bir içe aktarma projesinin parçası ise lütfen sorularınız için Açık Kapılar
-          (%{opendoors_link}) ile iletişime geçin.
         tos_violation: Eğer eserinizin AO3’ün Kullanım Şartlarını ihlal etmiş olma
           ihtimali var ise lütfen Poliçe ve Kötüye Kullanım Komitesi (%{contact_abuse_url})
           ile iletişime geçin.
@@ -296,7 +278,6 @@ tr:
         footer_link: oyun profil sayfası
         look_up: Bu görevi %{link} adresinden arayabilirsiniz.
         look_up_link: Assignments (Görevler) sayfanız
-        part1: AO3'teki %{link} oyununda size aşağıdaki istek atandı!
       optional_tags: 'İsteğe Bağlı Etiketler:'
       prompts: 'Fikirler:'
       prompt_url: 'Fikir URL''si:'
@@ -315,7 +296,6 @@ tr:
       changed:
         html: "%{login}, hesabınızla ilişkili e-posta adresiniz %{email} olarak değiştirilmiştir."
         text: "%{login}, hesabınızla ilişkili e-posta adresiniz %{email} olarak değiştirilmiştir."
-      part1: "%{login}, hesabınızla ilişkili e-posta adresiniz %{email} olarak değiştirilmiştir."
       subject: "[%{app_name}] E-posta adresiniz değiştirildi"
     claim_notification:
       access:
@@ -383,11 +363,6 @@ tr:
           ile iletişime geçin.
       redirects:
         html: Öneri listeleri ve yer işaretlerini korumak için, aktarılan arşivin
-          web adresi kısa bir süreliğine bu eserlerin aktarılan bir kopyasına yönlendirebilir
-          (emin olmak için arşivinizdeki duyuru gönderilerini kontrol ediniz). Eğer
-          çoktan bu eserin bir kopyasını yüklediyseniz ve URL'den aktar özelliğini
-          %{negation}, AO3'te aynı eserin iki kopyası olacaktır.
-        text: Öneri listeleri ve yer işaretlerini korumak için, aktarılan arşivin
           web adresi kısa bir süreliğine bu eserlerin aktarılan bir kopyasına yönlendirebilir
           (emin olmak için arşivinizdeki duyuru gönderilerini kontrol ediniz). Eğer
           çoktan bu eserin bir kopyasını yüklediyseniz ve URL'den aktar özelliğini
@@ -501,28 +476,12 @@ tr:
       deleted_yourself:
         html: "%{title} eseriniz isteğiniz üzerine silindi."
         text: '"%{title}" eseriniz isteğiniz üzerine silinmiştir.'
-      html:
-        part1_other: "%{title} eseriniz %{pseud} kullanıcısının isteği üzerine silindi."
-        part1_yourself: "%{title} eseriniz isteğiniz üzerine silindi."
-        part2: Sorularınız varsa, lütfen %{support}.
-      part3: Ekte referansınız için eserinizin bir kopyası bulunmaktadır.
       questions:
         html: Sorularınız varsa, lütfen %{support}.
         text: Sorularınız varsa, lütfen %{support} (%{url}).
       subject: "[%{app_name}] Eseriniz silinmiştir"
       support: Teknik Destek Komitesi ile iletişime geçin
-      text:
-        part1_other: '"%{title}" eseriniz %{pseud} kullanıcısının isteği üzerine silinmiştir.'
-        part1_yourself: '"%{title}" eseriniz isteğiniz üzerine silinmiştir.'
-        part2: Sorularınız varsa, lütfen %{support} (%{url}).
     invite_increase_notification:
-      body:
-        one: AO3'te yeni bir hesap oluşturmak için kullanabileceğiniz %{count} yeni
-          davetiyeniz olduğunu size bildirmek istedik. Dilerseniz %{invitation_page}
-          üzerinden bir arkadaşınızı davet edebilirsiniz.
-        other: AO3'te yeni hesaplar oluşturmak için kullanabileceğiniz %{count} yeni
-          davetiyeniz olduğunu size bildirmek istedik. Dilerseniz %{invitation_page}
-          üzerinden bir arkadaşınızı davet edebilirsiniz.
       html:
         body:
           one: AO3'te yeni bir hesap oluşturmak için kullanabileceğiniz %{count} yeni

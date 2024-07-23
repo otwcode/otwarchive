@@ -117,15 +117,7 @@ ro:
               pe donațiile tale: %{donate_url}.'
           html:
             donate_link_text: donațiile tale
-            part1: Dacă ai primit acest mesaj din greșeală te rugăm %{support_link}.
-            part2: AO3 este o arhivă administrată și susținută de fani care se bazează
-              pe %{donate_link}.
             support_link_text: să contactezi echipa de Suport Tehnic
-          text:
-            part1: Dacă ai primit acest mesaj din greșeală te rugăm să contactezi
-              echipa de Suport Tehnic la %{support_url}.
-            part2: 'AO3 este o arhivă administrată și susținută de fani care se bazează
-              pe donațiile tale: %{donate_url}.'
           unwanted_email:
             html: Dacă ai primit acest mesaj din greșeală te rugăm %{support_link}.
             text: Dacă ai primit acest mesaj din greșeală te rugăm să contactezi echipa
@@ -158,10 +150,7 @@ ro:
           și continuă să-ți folosești parola actuală.
   user_mailer:
     abuse_report:
-      description_para: 'Descrierea abuzului:'
-      para1: 'Următorul raport de abuz a fost trimis către echipa de Politici și Abuz:'
       subject: "[%{app_name}] Raportul tău către Politici și Abuz"
-      url_para: 'Link-ul paginii pe care se regăsește abuzul:'
     admin_deleted_work_notification:
       bye: Îți trimitem în atașament o copie a lucrării tale, ca reper.
       contact_abuse: contactează Comitetul de Politici și Abuz
@@ -171,11 +160,6 @@ ro:
         text: Lucrarea ta %{title} a fost ștearsă din Arhivă de către un administrator
           al site-ului.
       html:
-        part1: Lucrarea ta %{title} a fost ștearsă din Arhivă de către un administrator
-          al site-ului.
-        part2: Dacă lucrarea ta făcea parte dintr-un proiect de importare gestionat
-          de echipa noastră Open Doors (Uși Deschise), te rugăm %{opendoors_link}
-          dacă ai întrebări suplimentare.
         tos_violation: Dacă e posibil ca lucrarea ta să fi încălcat Termenii de Servicii
           ai Arhivei, %{contact_abuse_link}.
       import_project:
@@ -188,11 +172,6 @@ ro:
       opendoors: contactează Open Doors
       subject: "[%{app_name}] Lucrarea ta a fost ștearsă de către un administrator"
       text:
-        part1: Lucrarea ta %{title} a fost ștearsă din Arhivă de către un administrator
-          al site-ului.
-        part2: Dacă lucrarea ta făcea parte dintr-un proiect de importare gestionat
-          de echipa noastră Open Doors (Uși Deschise), te rugăm contactează Open Doors
-          (%{opendoors_link}) dacă ai întrebări suplimentare.
         tos_violation: Dacă e posibil ca lucrarea ta să fi încălcat Termenii de Servicii
           ai Arhivei, te rugăm contactează Comitetul de Politici și Abuz (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -322,7 +301,6 @@ ro:
         footer_link: pagina de profil a provocării
         look_up: Poți să verifici această sarcină pe %{link}.
         look_up_link: pagina ta de Assignments (Sarcini)
-        part1: Ai primit sarcina de mai jos în provocarea %{link} pe AO3!
       optional_tags: 'Tag-uri opționale:'
       prompts: 'Sugestii:'
       prompt_url: 'Link pentru sugestie:'
@@ -344,8 +322,6 @@ ro:
           la %{email}"
         text: "%{login}, adresa de e-mail asociată cu contul tău a fost schimbată
           la %{email}"
-      part1: "%{login}, adresa de e-mail asociată cu contul tău a fost schimbată la
-        %{email}"
       subject: "[%{app_name}] Adresa de e-mail schimbată"
     collection_notification:
       assignments_sent:
@@ -447,20 +423,11 @@ ro:
       deleted_yourself:
         html: Lucrarea ta %{title} a fost ștearsă la cererea ta.
         text: Lucrarea ta "%{title}" a fost ștearsă la cererea ta.
-      html:
-        part1_other: Lucrarea ta %{title} a fost ștearsă la cererea lui %{pseud}.
-        part1_yourself: Lucrarea ta %{title} a fost ștearsă la cererea ta.
-        part2: Dacă ai întrebări, te rugăm %{support}.
-      part3: Atașată este o copie a lucrării tale ca și referință.
       questions:
         html: Dacă ai întrebări, te rugăm %{support}.
         text: Dacă ai întrebări, te rugăm %{support} (%{url}).
       subject: "[%{app_name}] Lucrarea ta a fost ștearsă"
       support: să contactezi echipa de Suport Tehnic
-      text:
-        part1_other: Lucrarea ta "%{title}" a fost ștearsă la cererea lui %{pseud}.
-        part1_yourself: Lucrarea ta "%{title}" a fost ștearsă la cererea ta.
-        part2: Dacă ai întrebări, te rugăm %{support} (%{url}).
     invitation_to_claim:
       access:
         text: În funcție de arhivă, este posibil ca lucrările tale să fi fost importate
@@ -481,8 +448,6 @@ ro:
         contact_open_doors: să contactezi Uși Deschise
         contact_support: să contactezi echipa de Suport Tehnic AO3
         faq_page: pagina Întrebări Frecvente
-        open_doors: Open Doors (Uși Deschise)
-        part5: Revendică sau șterge-ți lucrările aici.
         tutorial_page: pagina de tutorial
       introduction:
         text: Ai primit acest e-mail pentru că o arhivă a fost importată recent de
@@ -526,48 +491,6 @@ ro:
         lucrări și NU ai folosit funcția de importare din URL, vor exista două copii
         ale aceleiași lucrări în arhivă. '
       subject: "[%{app_name}] Invitație de a revendica lucrări"
-      text:
-        part1: Ai primit acest e-mail pentru că o arhivă a fost importată recent de
-          către Open Doors (Uși Deschise) (%{open_doors_link}) în %{app_name} (%{app_short_name}
-          - %{app_url}) și considerăm că următoarele lucrări îți aparțin. Dorim să
-          îți oferim opțiunea de a revendica (sau șterge/abandona) aceste lucrări,
-          dacă vrei. Și dacă nu ai deja un cont înregistrat pe o adresă de e-mail
-          diferită, dorim să te invităm la bord!
-        part10: Dacă ai în arhiva importată alte lucrări înregistrate cu adrese de
-          e-mail pe care nu le mai poți accesa, te rugăm să contactezi Uși Deschise
-          și să furnizezi orice informație care ne poate ajuta să-ți verificăm identitatea.
-        part11: Pentru alte întrebări, te rugăm contactează echipa de Suport Tehnic
-          AO3 la %{support_link}.
-        part2: Poți citi anunțuri despre mutări recente ale arhivelor la Știri AO3
-          (%{news_link}) și informații suplimentare pe pagina Întrebări Frecvente
-          (%{open_doors_faq_link}) sau pagina de tutoriale (%{open_doors_tutorial_link})
-          ale Uși Deschise. Pentru orice întrebări care nu sunt incluse în Întrebările
-          Frecvente, tutoriale sau în acest e-mail, te rugăm  să contactezi echipa
-          de Suport Tehnic AO3 la %{support_link}.
-        part3: Dacă am greșit și aceste lucrări nu îți aparțin, te rugăm să nu le
-          ștergi! Te rugăm doar să contactezi Uși Deschise (%{open_doors_link}) și
-          ne vom ocupa noi de ele.
-        part4: În funcție de arhivă, este posibil ca lucrările tale să fi fost importate
-          în așa fel încât să fie accesibile numai utilizatorilor înregistrați (pentru
-          a le păstra în afara căutărilor Google). În cazul acesta, lucrările vor
-          putea fi accesate doar de către utilizatorii conectați, dacă nu alegi să
-          le faci vizibile pentru oricine. Pentru ajutor cu deblocarea, abandonarea
-          sau ștergerea lucrărilor tale, te rugăm să contactezi echipa de Suport Tehnic
-          AO3.
-        part5: 'Revendică sau șterge-ti lucrările aici: %{claim_url}'
-        part7: Dacă aceste lucrări îți aparțin, dar nu le vrei, le poți abandona (vor
-          rămâne pe AO3, dar numele tău va fi șters) sau șterge (vor fi înlăturate
-          complet de pe AO3). Nu trebuie să adaugi aceste lucrări la niciun cont ca
-          să le abandonezi sau să le ștergi--poți să faci acest lucru direct prin
-          accesarea link-ului de revendicare de mai sus. (Pentru ajutor, te rugăm
-          să contactezi echipa de Suport Tehnic AO3 la %{support_link}.)
-        part9: Dacă dorești ca Uși Deschise să actualizeze redirecționarea către lucrările
-          tale existente, te rugăm să ștergi copia importată și să contactezi Uși
-          Deschise la %{open_doors_link} cu numele contului tău de pe AO3, numele
-          contului tău în arhiva importată și titlul și URL-ul lucrării către care
-          ți-ai dori să se facă redirecționarea. (Dacă ai mai multe lucrări la care
-          dorești să schimbi redirecționările, le poți lista pe toate într-un singur
-          e-mail.)
       unwanted:
         text: Dacă aceste lucrări îți aparțin, dar nu le vrei, le poți abandona (vor
           rămâne pe AO3, dar numele tău va fi șters) sau șterge (vor fi înlăturate
@@ -585,13 +508,6 @@ ro:
           e-mail.)
       uploaded_list: 'Lucrările încărcate includ:'
     invite_increase_notification:
-      body:
-        few: Vrem să te anunțăm că ai %{count} invitații noi care pot fi folosite
-          pentru a crea conturi noi de arhivă. Poți invita un prieten accesând %{invitation_page}.
-        one: Vrem să te anunțăm că ai %{count} invitație nouă care poate fi folosită
-          pentru a crea un cont nou de arhivă. Poți invita un prieten accesând %{invitation_page}.
-        other: Vrem să te anunțăm că ai %{count} de invitații noi care pot fi folosite
-          pentru a crea conturi noi de arhivă. Poți invita un prieten accesând %{invitation_page}.
       invitation_page_link_text: pagina ta de Invitations (Invitații)
       subject: "[%{app_name}] Invitații noi"
     invite_request_declined:
@@ -639,19 +555,6 @@ ro:
           să îți definești preferințele pentru a personaliza modul în care site-ul
           arată și funcționează pentru tine, să ții evidența lucrărilor pe care le-ai
           accesat pe AO3 prin intermediul istoricului tău și multe altele.
-      html:
-        part1: Te rugăm %{activate_account_link}.
-        part2: După ce contul tău a fost înființat și funcționează, poți să postezi
-          lucrările tale de fan, să îți stabilești notificări pe e-mail pentru a fi
-          înștiințat/-ă când creatorii sau lucrările tale preferate au fost actualizate,
-          să îți definești preferințele pentru a personaliza modul în care site-ul
-          arată și funcționează pentru tine, să ții evidența lucrărilor pe care le-ai
-          accesat pe arhivă prin intermediul istoricului tău și multe altele.
-        part3: Găsești mai multe informații și sfaturi despre cum să folosești Arhiva
-          în secțiunea  %{faq_link} și cele mai recente știri despre  îmbunătățirile
-          aduse site-ului în %{admin_posts_link}. Dacă ai nevoie de mai mult ajutor,
-          sau ai descoperit ceva ce nu merge sau dacă ai întrebări sau comentarii,
-          te rugăm să %{contact_support_link}, care este oricând dornică să ajute.
       information:
         html: Găsești mai multe informații și sfaturi despre cum să folosești Arhiva
           în secțiunea  %{faq_link} și cele mai recente știri despre  îmbunătățirile
@@ -659,20 +562,6 @@ ro:
           sau ai descoperit ceva ce nu merge sau dacă ai întrebări sau comentarii,
           te rugăm să %{contact_support_link}, care este oricând dornică să ajute.
         text: 'Găsești mai multe informații și sfaturi despre cum să folosești Arhiva
-          în secțiunea %{faq_url} și cele mai recente știri despre  îmbunătățirile
-          aduse site-ului în secțiunea de Știri AO3: %{admin_posts_url}. Dacă ai nevoie
-          de mai mult ajutor, sau ai descoperit ceva ce nu merge sau dacă ai întrebări
-          sau comentarii, te rugăm să contactezi echipa de Suport Tehnic, care este
-          oricând dornică să ajute: %{contact_support_url}.'
-      text:
-        part1: 'Te rugăm să accesezi acest link pentru a-ți activa contul: %{activate_account_url}'
-        part2: După ce contul tău a fost înființat și funcționează, poți să postezi
-          lucrările tale de fan, să îți stabilești notificări pe e-mail pentru a fi
-          înștiințat/-ă când creatorii sau lucrările tale preferate au fost actualizate,
-          să îți definești preferințele pentru a personaliza modul în care site-ul
-          arată și funcționează pentru tine, să ții evidența lucrărilor pe care le-ai
-          accesat pe AO3 prin intermediul istoricului tău și multe altele.
-        part3: 'Găsești mai multe informații și sfaturi despre cum să folosești Arhiva
           în secțiunea %{faq_url} și cele mai recente știri despre  îmbunătățirile
           aduse site-ului în secțiunea de Știri AO3: %{admin_posts_url}. Dacă ai nevoie
           de mai mult ajutor, sau ai descoperit ceva ce nu merge sau dacă ai întrebări

@@ -99,15 +99,7 @@ fr:
               les fans, qui dépend de vos dons : %{donate_url}.'
           html:
             donate_link_text: vos dons
-            part1: Si vous avez reçu ce message par erreur, veuillez %{support_link}.
-            part2: Le site Archive of Our Own est une archive gérée et financée par
-              les fans, qui dépend de %{donate_link}.
             support_link_text: contacter le Support Technique
-          text:
-            part1: 'Si vous avez reçu ce message par erreur, veuillez contacter le
-              Support Technique à l''adresse suivante : %{support_url}.'
-            part2: 'Le site Archive of Our Own est une archive gérée et financée par
-              les fans, qui dépend de vos dons : %{donate_url}.'
           unwanted_email:
             html: Si vous avez reçu ce message par erreur, veuillez %{support_link}.
             text: 'Si vous avez reçu ce message par erreur, veuillez contacter le
@@ -142,10 +134,7 @@ fr:
           ce message. Votre ancien mot de passe restera alors valide.
   user_mailer:
     abuse_report:
-      description_para: 'Description de l’abus signalé :'
-      para1: 'Le rapport d’abus suivant a été envoyé au Comité Modération :'
       subject: "[%{app_name}] Vous avez signalé un abus au Comité Modération"
-      url_para: 'Adresse web de la page sur laquelle se trouve l’abus signalé :'
     admin_deleted_work_notification:
       bye: Vous trouverez une copie de votre œuvre en pièce jointe.
       contact_abuse: contacter notre Comité Modération
@@ -155,10 +144,6 @@ fr:
         text: Votre œuvre "%{title}" a été supprimée de l'Archive par un-e administrateur-trice
           du site.
       html:
-        part1: Votre œuvre %{title} a été supprimée de l'Archive par un-e administrateur-trice
-          du site.
-        part2: Si votre œuvre faisait partie d'un projet d'importation réalisé par
-          Open Doors, veuillez %{opendoors_link} pour toute question supplémentaire.
         tos_violation: S'il est possible que votre œuvre ait enfreint les Conditions
           d'Utilisation, veuillez %{contact_abuse_link}.
       import_project:
@@ -170,11 +155,6 @@ fr:
       opendoors: contacter Open Doors (Portes Ouvertes)
       subject: "[%{app_name}] Votre œuvre a été supprimée par un-e administrateur-trice"
       text:
-        part1: Votre œuvre "%{title}" a été supprimée de l'Archive par un-e administrateur-trice
-          du site.
-        part2: Si votre œuvre faisait partie d'un projet d'importation réalisé par
-          Open Doors, veuillez contacter Open Doors (Portes Ouvertes) (%{opendoors_link})
-          pour toute question supplémentaire.
         tos_violation: S'il est possible que votre œuvre ait enfreint les Conditions
           d'Utilisation, veuillez contacter notre Comité Modération (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -304,8 +284,6 @@ fr:
         footer_link: la page de profil du défi
         look_up: Vous pouvez accéder à cette tâche via %{link}.
         look_up_link: votre page Assignments (Tâches)
-        part1: La demande suivante vous a été attribuée dans le cadre du défi %{link}
-          sur Archive of Our Own !
       optional_tags: 'Tags optionnels :'
       prompts: 'Prompts :'
       prompt_url: 'URL du prompt :'
@@ -327,8 +305,6 @@ fr:
           par %{email}"
         text: "%{login}, l'adresse e-mail associée à votre compte a été remplacée
           par %{email}"
-      part1: "%{login}, l'adresse e-mail associée à votre compte a été remplacée par
-        %{email}"
       subject: "[%{app_name}] Changement d'adresse e-mail"
     claim_notification:
       access:
@@ -404,13 +380,6 @@ fr:
           à l'adresse %{support_url}.
       redirects:
         html: Pour assurer la continuité des listes de recommandation et des marque-pages,
-          il se peut que l'adresse de l'archive importée redirige les utilisateur-trice-s
-          vers la copie importée des œuvres concernées pour une durée limitée (pour
-          savoir si c'est le cas, consultez le billet annonçant l'importation de votre
-          archive). Si vous avez déjà publié une copie de ces œuvres sur AO3 %{negation}
-          passer par notre outil d'importation par URL, il existera deux copies de
-          cette œuvre sur AO3.
-        text: Pour assurer la continuité des listes de recommandation et des marque-pages,
           il se peut que l'adresse de l'archive importée redirige les utilisateur-trice-s
           vers la copie importée des œuvres concernées pour une durée limitée (pour
           savoir si c'est le cas, consultez le billet annonçant l'importation de votre
@@ -538,47 +507,17 @@ fr:
       deleted_yourself:
         html: Votre œuvre %{title} a été supprimée suite à votre demande.
         text: Votre œuvre "%{title}" a été supprimée suite à votre demande.
-      html:
-        part1_other: Votre œuvre %{title} a été supprimée suite à la demande de %{pseud}.
-        part1_yourself: Votre œuvre %{title} a été supprimée suite à votre demande.
-        part2: Si vous avez des questions, veuillez %{support}.
-      part3: Ci-joint une copie de votre œuvre pour référence.
       questions:
         html: Si vous avez des questions, veuillez %{support}.
         text: Si vous avez des questions, veuillez %{support} (%{url}).
       subject: "[%{app_name}] Votre œuvre a été supprimée"
       support: contacter le Support Technique
-      text:
-        part1_other: Votre œuvre "%{title}" a été supprimée suite à la demande de
-          %{pseud}.
-        part1_yourself: Votre œuvre "%{title}" a été supprimée suite à votre demande.
-        part2: Si vous avez des questions, veuillez %{support} (%{url}).
     invitation:
       been_invited: Vous avez été invité-e à rejoindre notre version bêta !
       has_invited: "%{user_name} vous a invité-e à rejoindre notre version bêta !"
       html:
-        faq_link: 'Pour plus d''informations, veuillez consulter %{faq_link}. '
         faq_link_text: notre FAQ
-        part3: 'Si vous souhaitez nous rejoindre, vous pouvez vous inscrire à l''adresse
-          suivante : %{invitation_link}'
-      part1: Archive of Our Own – AO3 (Notre Propre Archive) est une archive gratuite
-        à but non commercial créée par et pour les fans. Nous accueillons de nombreux
-        fandoms et des œuvres de fans de toutes sortes, y compris des fanfictions,
-        fanarts, fanvidéos et audiofics. Notre fonctionnement repose sur un logiciel
-        open source appelé otwarchive, et tous nos serveurs sont la propriété de l'OTW
-        (Organisation pour les Œuvres Transformatives), un organisme à but non lucratif
-        dédié à la protection des droits des fans et à la préservation de leurs œuvres.
-      part2: Nous proposons également de nombreuses fonctionnalités qui vous permettront
-        de trouver les œuvres de fans qui vous intéressent, mais aussi de publier
-        et partager vos propres œuvres avec le public. Et ce n’est que le début !
-        Les commentaires que vous nous enverrez pendant cette phase bêta nous aideront
-        à construire une archive encore plus fonctionnelle. \o/
       subject: "[%{app_name}] Invitation"
-      text:
-        faq_link: Pour plus d'informations, veuillez consulter notre FAQ à l'adresse
-          %{faq_link}.
-        part3: 'Si vous souhaitez nous rejoindre, vous pouvez vous inscrire à l''adresse
-          suivante : %{invitation_link}'
     invitation_to_claim:
       access:
         text: En fonction de l’archive, il se peut que vos œuvres aient été importées
@@ -599,8 +538,6 @@ fr:
         contact_open_doors: contacter Open Doors
         contact_support: contacter le Comité Support Technique d’AO3
         faq_page: FAQ
-        open_doors: Open Doors (Portes Ouvertes)
-        part5: Vous pouvez revendiquer ou supprimer vos œuvres ici.
         tutorial_page: tutoriels
       introduction:
         text: Vous recevez cet e-mail car une archive a récemment été importée par
@@ -649,53 +586,6 @@ fr:
         fonctionnalité permettant d’importer à partir d’une URL, il y aura deux copies
         d’une même œuvre sur l’archive.
       subject: "[%{app_name}] Invitation à revendiquer vos œuvres"
-      text:
-        part1: Vous recevez cet e-mail car une archive a récemment été importée par
-          Open Doors (%{open_doors_link}) sur %{app_name} (%{app_short_name} - %{app_url}),
-          et il nous semble que les œuvres de fans listées ci-après vous appartiennent.
-          Nous aimerions vous donner l’occasion de revendiquer ces œuvres (ou de les
-          supprimer, ou encore de les rendre orphelines, c’est-à-dire de rompre la
-          relation entre elles et vous) si vous le souhaitez. Et si vous n’avez pas
-          encore de compte AO3 sous une adresse différente, nous voudrions vous convier
-          à bord !
-        part10: Si certaines de vos œuvres de l’archive importée étaient associées
-          à une adresse e-mail à laquelle vous n’avez plus accès, veuillez contacter
-          Open Doors en mentionnant toute information susceptible de contribuer à
-          confirmer votre identité.
-        part11: 'Pour toute autre demande, veuillez contacter le Comité Support Technique
-          ici : %{support_link}.'
-        part2: 'Vous pouvez consulter les dernières annonces d’importation d’archives
-          grâce aux actualités d’AO3 (%{news_link}), et trouver des informations complémentaires
-          dans la FAQ d’Open Doors (%{open_doors_faq_link}) ou dans les tutoriels
-          (%{open_doors_tutorial_link}). Si la réponse à vos questions ne se trouve
-          pas à ces endroits, ou dans cet email, veuillez contacter le Comité Support
-          Technique ici : %{support_link}.'
-        part3: S’il y a erreur et que ces œuvres ne vous appartiennent pas, ne les
-          supprimez pas ! Merci de simplement contacter Open Doors (%{open_doors_link})
-          et nous reprendrons la main.
-        part4: En fonction de l’archive, il se peut que vos œuvres aient été importées
-          de façon à n’être accessibles qu’aux utilisateur-trice-s enregistré-e-s
-          (afin qu’elles n’apparaissent pas parmi les résultats de recherche Google).
-          Si c’est le cas, les œuvres seront restreintes aux utilisateur-trice-s connecté-e-s,
-          à moins que vous ne les rendiez accessibles à tous/toutes. Si vous avez
-          besoin d’aide pour cela, pour rendre orphelines ou supprimer vos œuvres,
-          veuillez contacter le Comité Support Technique d’AO3.
-        part5: 'Vous pouvez revendiquer ou supprimer vos œuvres ici : %{claim_url}.'
-        part7: 'Si ces œuvres vous appartiennent bien mais que vous ne souhaitez pas
-          les revendiquer, vous pouvez les rendre orphelines (afin qu’elles restent
-          sur AO3 sans que votre nom y soit associé) ou les supprimer (afin qu’elles
-          disparaissent entièrement d’AO3). Il n’est pas nécessaire d’ajouter ces
-          œuvres à un compte pour les rendre orphelines ou les supprimer, vous pouvez
-          le faire directement en suivant le lien de revendication plus haut. (Si
-          vous avez besoin d’aide, veuillez contacter le Comité Support Technique
-          ici : %{support_link}.)'
-        part9: 'Si vous aimeriez qu’Open Doors mette à jour le lien de redirection
-          afin qu’il renvoie vers votre œuvre préexistante, veuillez supprimer la
-          copie importée et contacter Open Doors ici : %{open_doors_link}, en précisant
-          le nom de votre compte AO3, le nom de votre compte sur l’archive importée,
-          ainsi que le titre et l’URL de l’œuvre vers laquelle vous aimeriez que le
-          lien redirige. (Si vous souhaitez changer le lien de redirection de plusieurs
-          œuvres, vous pouvez rassembler tous les renseignements dans un seul e-mail.)'
       unwanted:
         text: 'Si ces œuvres vous appartiennent bien mais que vous ne souhaitez pas
           les revendiquer, vous pouvez les rendre orphelines (afin qu’elles restent
@@ -715,13 +605,6 @@ fr:
           œuvres, vous pouvez rassembler tous les renseignements dans un seul e-mail.)'
       uploaded_list: 'Les œuvres suivantes ont été mises en ligne :'
     invite_increase_notification:
-      body:
-        one: 'Nous vous envoyons ce message pour vous informer que vous possédez %{count}
-          nouvelle invitation, permettant de créer un nouveau compte sur AO3. Vous
-          pouvez aussi inviter un-e ami-e à l''adresse suivante : %{invitation_page}.'
-        other: 'Nous vous envoyons ce message pour vous informer que vous possédez
-          %{count} nouvelles invitations, permettant de créer de nouveaux comptes
-          sur AO3. Vous pouvez aussi inviter un-e ami-e à l''adresse suivante : %{invitation_page}.'
       html:
         body:
           one: 'Nous vous envoyons ce message pour vous informer que vous possédez
@@ -785,20 +668,6 @@ fr:
           vos préférences pour personnaliser l’apparence et l’interface du site, garder
           une trace des œuvres que vous avez consultées sur l’Archive grâce à votre
           historique, et bien plus encore.
-      html:
-        part1: Veuillez %{activate_account_link}.
-        part2: Une fois que votre compte est activé, vous pouvez notamment publier
-          vos œuvres de fans, paramétrer les abonnements par e-mail pour être averti-e
-          des mises à jour de vos créateur-trice-s et œuvres préféré-e-s, définir
-          vos préférences pour personnaliser l’apparence et l’interface du site, garder
-          une trace des œuvres que vous avez consultées sur l’Archive grâce à votre
-          historique, et bien plus encore.
-        part3: Vous trouverez une multitude d’informations et de conseils sur l’utilisation
-          de l’Archive sur notre %{faq_link}. Vous pouvez trouver les dernières actualités
-          concernant le développement du site grâce aux %{admin_posts_link}. Si vous
-          avez besoin d’aide, faites face à un bug, souhaitez nous poser des questions
-          ou nous faire part de vos commentaires, veuillez %{contact_support_link},
-          qui est toujours ravi d’aider.
       information:
         html: Vous trouverez une multitude d’informations et de conseils sur l’utilisation
           de l’Archive sur notre %{faq_link}. Vous pouvez trouver les dernières actualités
@@ -807,23 +676,6 @@ fr:
           ou nous faire part de vos commentaires, veuillez %{contact_support_link},
           qui est toujours ravi d’aider.
         text: 'Vous trouverez une multitude d’informations et de conseils sur l’utilisation
-          d’AO3 sur notre FAQ à l’adresse suivante : %{faq_url}. Vous pouvez trouver
-          les dernières actualités publiées par les admins  et concernant le développement
-          du site à l’adresse suivante : %{admin_posts_url}. Si vous avez besoin d’aide,
-          trouvez un bug, souhaitez nous poser des questions ou nous faire part de
-          vos commentaires, veuillez contacter notre équipe du Support Technique,
-          qui est toujours ravie d’aider : %{contact_support_url}.
-
-          '
-      text:
-        part1: 'Veuillez suivre ce lien pour activer votre compte : %{activate_account_url}'
-        part2: Une fois que votre compte est activé, vous pouvez notamment publier
-          vos œuvres de fans, paramétrer les abonnements par e-mail pour être averti-e
-          des mises à jour de vos créateur-trice-s et œuvres préféré-e-s, définir
-          vos préférences pour personnaliser l’apparence et l’interface du site, garder
-          une trace des œuvres que vous avez consultées sur l’Archive grâce à votre
-          historique, et bien plus encore.
-        part3: 'Vous trouverez une multitude d’informations et de conseils sur l’utilisation
           d’AO3 sur notre FAQ à l’adresse suivante : %{faq_url}. Vous pouvez trouver
           les dernières actualités publiées par les admins  et concernant le développement
           du site à l’adresse suivante : %{admin_posts_url}. Si vous avez besoin d’aide,

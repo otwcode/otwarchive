@@ -59,8 +59,6 @@ pt-PT:
       series:
         one: Série
         other: Séries
-  chapters:
-    chapter_position: "- Capítulo %{position}"
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -99,14 +97,7 @@ pt-PT:
               doações: %{donate_url}.'
           html:
             donate_link_text: tuas doações
-            part1: Se recebeste esta mensagem por engano, por favor %{support_link}.
-            part2: O AO3 é um arquivo gerido e suportado por fãs que depende das %{donate_link}.
             support_link_text: contacta a equipa de Suporte
-          text:
-            part1: Se recebeste esta mensagem por engano, por favor contacta a equipa
-              de Suporte em %{support_url}.
-            part2: 'O AO3 é um arquivo gerido e suportado por fãs que depende das
-              tuas doações: %{donate_url}.'
           unwanted_email:
             html: Se recebeste esta mensagem por engano, por favor %{support_link}.
             text: Se recebeste esta mensagem por engano, por favor contacta a equipa
@@ -139,10 +130,7 @@ pt-PT:
           este email e a tua antiga palavra-passe continuará a funcionar.
   user_mailer:
     abuse_report:
-      description_para: 'Descrição do abuso:'
-      para1: 'A seguinte denúncia de abuso foi enviada à equipa de Políticas e Abuso:'
       subject: "[%{app_name}] A Tua Denúncia de Abuso"
-      url_para: 'O URL da página onde se encontra o abuso:'
     admin_deleted_work_notification:
       bye: Foi anexada uma cópia da obra para tua referência.
       contact_abuse: contacta o nosso Comité de Políticas e Abuso
@@ -152,11 +140,6 @@ pt-PT:
         text: A tua obra "%{title}" foi eliminada do Arquivo por uma pessoa administradora
           do site.
       html:
-        part1: A tua obra %{title} foi eliminada do Arquivo por uma pessoa administradora
-          do site.
-        part2: Se a tua obra fazia parte de um projeto importado gerido pela nossa
-          equipa do Open Doors (Portas Abertas), por favor %{opendoors_link} com as
-          tuas questões.
         tos_violation: Se é possível que a tua obra tenha violado os Termos de Serviço
           do Arquivo, por favor %{contact_abuse_link}.
       import_project:
@@ -169,11 +152,6 @@ pt-PT:
       opendoors: contacta o Portas Abertas
       subject: "[%{app_name}] A tua obra foi eliminada por uma pessoa administradora"
       text:
-        part1: A tua obra "%{title}" foi eliminada do Arquivo por uma pessoa administradora
-          do site.
-        part2: Se a tua obra fazia parte de um projeto importado gerido pela nossa
-          equipa do Open Doors (Portas Abertas), por favor contacta o Portas Abertas
-          (%{opendoors_link}) com quaisquer questões que tenhas.
         tos_violation: Se é possível que a tua obra tenha violado os Termos de Serviço
           do Arquivo, por favor contacta o nosso Comité de Políticas e Abuso (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -301,7 +279,6 @@ pt-PT:
         footer_link: a página de perfil do desafio
         look_up: Podes encontrar esta tarefa %{link}.
         look_up_link: na tua página Assignments (Tarefas)
-        part1: Foi-te atribuída a seguinte tarefa no desafio %{link} no AO3!
       optional_tags: 'Tags Opcionais:'
       prompts: 'Prompts:'
       prompt_url: 'URL da prompt:'
@@ -322,8 +299,6 @@ pt-PT:
           %{email}"
         text: "%{login}, o endereço de email associado à tua conta foi mudado para
           %{email}"
-      part1: "%{login}, o endereço de email associado à tua conta foi mudado para
-        %{email}"
       subject: "[%{app_name}] Mudança de email"
     collection_notification:
       assignments_sent:
@@ -419,20 +394,11 @@ pt-PT:
       deleted_yourself:
         html: A tua obra %{title} foi eliminada a teu pedido.
         text: A tua obra "%{title}" foi eliminada a teu pedido.
-      html:
-        part1_other: A tua obra %{title} foi eliminada a pedido de %{pseud}.
-        part1_yourself: A tua obra %{title} foi eliminada a teu pedido.
-        part2: Se tiveres alguma pergunta, por favor %{support}.
-      part3: Segue em anexo uma cópia da tua obra para tua referência.
       questions:
         html: Se tiveres alguma pergunta, por favor %{support}.
         text: Se tiveres alguma questão, por favor %{support} (%{url}).
       subject: "[%{app_name}] A tua obra foi eliminada"
       support: contacta a equipa de Suporte
-      text:
-        part1_other: A tua obra "%{title}" foi eliminada a pedido de %{pseud}.
-        part1_yourself: A tua obra "%{title}" foi eliminada a teu pedido.
-        part2: Se tiveres alguma questão, por favor %{support} (%{url}).
     invitation_to_claim:
       access:
         text: Dependendo do arquivo, as tuas obras podem ter sido importadas com restrições
@@ -453,8 +419,6 @@ pt-PT:
         contact_open_doors: contacta o Open Doors (Portas Abertas)
         contact_support: contacta a equipa de Suporte do AO3
         faq_page: página de Perguntas Frequentes (FAQs)
-        open_doors: Open Doors (Portas Abertas)
-        part5: Reivindica ou elimina as tuas obras aqui.
         tutorial_page: página do tutorial
       introduction:
         text: Estás a receber este email porque um arquivo foi recentemente importado
@@ -498,48 +462,6 @@ pt-PT:
         a função de importar de um URL, irão existir duas cópias da mesma obra no
         arquivo.
       subject: "[%{app_name}] Convite para reivindicar obras"
-      text:
-        part1: Estás a receber este email porque um arquivo foi recentemente importado
-          pelo Open Doors (Portas Abertas) (%{open_doors_link}) para o %{app_name}
-          (%{app_short_name} - %{app_url}), e cremos que as seguintes obras de fãs
-          te pertencem. Gostaríamos de te dar uma oportunidade para reivindicar (ou
-          eliminar/orfanar) estas obras se assim o desejares. E se não tiveres já
-          uma conta com um email diferente, gostaríamos de te convidar!
-        part10: Se tens outras obras no arquivo importado com um endereço de email
-          ao qual já não tens acesso, por favor entra em contacto com o Portas Abertas
-          com toda a informação que possa ajudar a verificar a tua identidade.
-        part11: Para outras questões, por favor entra em contacto com a equipa de
-          Suporte do AO3 em %{support_link}.
-        part2: 'Podes ler as publicações acerca das mudanças de arquivos recentes
-          nas Notícias do AO3 (%{news_link}), e podes aceder a informação adicional
-          sobre o Portas Abertas na página de Perguntas Frequentes (FAQs) (%{open_doors_faq_link})
-          ou na página de tutoriais (%{open_doors_tutorial_link}). Para quaisquer
-          questões não respondidas nas Perguntas Frequentes, nos tutoriais ou neste
-          email, por favor entra em contacto com a equipa de Suporte: %{support_link}.'
-        part3: Se recebeste este email por engano e estas não são as tuas obras, por
-          favor não as apagues! Entra em contacto com o Portas Abertas (%{open_doors_link})
-          e iremos resolver o problema.
-        part4: Dependendo do arquivo, as tuas obras podem ter sido importadas com
-          restrições para que apenas pessoas utilizadoras registadas as possam ver
-          (de modo a não serem visíveis em pesquisas no Google). Se for este o caso,
-          as obras irão apenas estar acessíveis a pessoas utilizadoras que tenham
-          sessão iniciada, a não ser que escolhas torná-las completamente visíveis.
-          Para obteres ajuda para desbloquear, orfanar ou eliminar as tuas obras,
-          por favor entra em contacto com a equipa de Suporte.
-        part5: 'Reivindica ou elimina as tuas obras aqui: %{claim_url}'
-        part7: 'Se estas obras são tuas mas não as queres, podes orfaná-las (para
-          que continuem no AO3, mas sem o teu nome) ou eliminá-las (para que sejam
-          completamente removidas do AO3). Não precisas de adicionar estas obras a
-          nenhuma conta para poderes orfaná-las ou eliminá-las -- podes fazê-lo diretamente
-          através do link de reivindicação acima. (Para obteres ajuda, por favor entra
-          em contacto com a equipa de Suporte: %{support_link}.)'
-        part9: Se queres que o Portas Abertas atualize a redireção para que vá diretamente
-          para a tua obra já existente, por favor elimina a cópia importada, e entra
-          em contacto com o Portas Abertas em %{open_doors_link} com o teu nome de
-          pessoa utilizadora do AO3, o nome da tua conta no arquivo importado, e o
-          título e URL da obra de fã para onde queres que a redireção vá. (Se tens
-          várias obras que gostarias que fossem redirecionadas, podes simplesmente
-          listá-las num único email.)
       unwanted:
         text: 'Se estas obras são tuas mas não as queres, podes orfaná-las (para que
           continuem no AO3, mas sem o teu nome) ou eliminá-las (para que sejam completamente
@@ -557,13 +479,6 @@ pt-PT:
           listá-las num único email.)
       uploaded_list: 'Foi feito upload das seguintes obras:'
     invite_increase_notification:
-      body:
-        one: Queremos apenas informar-te de que tens %{count} novo convite, que pode
-          ser utilizado para criar uma nova conta no AO3. Podes convidar uma pessoa
-          amiga a partir da %{invitation_page}.
-        other: Queremos apenas informar-te de que tens %{count} novos convites, que
-          podem ser utilizados para criar novas contas no AO3. Podes convidar pessoas
-          amigas a partir da %{invitation_page}.
       html:
         body:
           one: Queremos apenas informar-te de que tens %{count} novo convite, que
@@ -622,18 +537,6 @@ pt-PT:
           criadoras ou obras favoritas, definir preferências para personalizares o
           aspeto e o funcionamento do site, manter registos das obras que acedeste
           no Arquivo através do teu histórico e muito mais.
-      html:
-        part1: Por favor, %{activate_account_link}.
-        part2: Assim que a tua conta estiver a funcionar, podes publicar as tuas obras
-          de fã, configurar subscrições de email para receberes atualizações das tuas
-          pessoas criadoras ou obras favoritas, definir preferências para personalizares
-          o aspeto e o funcionamento do site, manter registos das obras que acedeste
-          no Arquivo através do teu histórico e muito mais.
-        part3: Há muita informação e muitos conselhos sobre a utilização do Arquivo
-          nas nossas %{faq_link}. Encontrarás as últimas notícias sobre os desenvolvimentos
-          do site nas nossas %{admin_posts_link}. Se precisares de mais ajuda, encontrares
-          um bug ou tiveres questões ou comentários, por favor, %{contact_support_link},
-          que está sempre disponível para te ajudar.
       information:
         html: Há muita informação e muitos conselhos sobre a utilização do Arquivo
           nas nossas %{faq_link}. Encontrarás as últimas notícias sobre os desenvolvimentos
@@ -641,19 +544,6 @@ pt-PT:
           um bug ou tiveres questões ou comentários, por favor, %{contact_support_link},
           que está sempre disponível para te ajudar.
         text: 'Há muita informação e muitos conselhos sobre a utilização do Arquivo
-          nas nossas %{faq_url}. Encontrarás as últimas notícias sobre os desenvolvimentos
-          do site nas notícias do AO3 no %{admin_posts_url}. Se precisares de mais
-          ajuda, encontrares um bug ou tiveres questões ou comentários, por favor,
-          contacta a nossa equipa de Suporte, que está sempre disponível para te ajudar:
-          %{contact_support_url}.'
-      text:
-        part1: 'Por favor, segue este link para ativar a tua conta: %{activate_account_url}'
-        part2: Assim que a tua conta estiver a funcionar, podes publicar obras de
-          fã, configurar subscrições de email para receberes atualizações das tuas
-          pessoas criadoras ou obras favoritas, definir preferências para personalizares
-          o aspeto e o funcionamento do site, manter registos das obras que acedeste
-          no Arquivo através do teu histórico e muito mais.
-        part3: 'Há muita informação e muitos conselhos sobre a utilização do Arquivo
           nas nossas %{faq_url}. Encontrarás as últimas notícias sobre os desenvolvimentos
           do site nas notícias do AO3 no %{admin_posts_url}. Se precisares de mais
           ajuda, encontrares um bug ou tiveres questões ou comentários, por favor,

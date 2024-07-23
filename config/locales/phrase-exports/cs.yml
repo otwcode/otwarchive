@@ -119,14 +119,7 @@ cs:
               příspěvky: %{donate_url}.'
           html:
             donate_link_text: na vaše příspěvky
-            part1: Pokud jste obdrželi tuto zprávu omylem, prosím %{support_link}.
-            part2: AO3 je fanoušky vedený a podporovaný archiv, který spoléhá %{donate_link}.
             support_link_text: kontaktujte Podporu
-          text:
-            part1: Pokud jste obdrželi tuto zprávu omylem, prosím kontaktujte Podporu
-              na %{support_url}.
-            part2: 'AO3 je fanoušky vedený a podporovaný archiv, který spoléhá na
-              vaše příspěvky: %{donate_url}.'
           unwanted_email:
             html: Pokud jste obdrželi tuto zprávu omylem, prosím %{support_link}.
             text: Pokud jste obdrželi tuto zprávu omylem, prosím kontaktujte Podporu
@@ -159,11 +152,7 @@ cs:
           a vaše stávající heslo zůstane platné.
   user_mailer:
     abuse_report:
-      description_para: 'Popis porušení zásad:'
-      para1: 'Tým pro dohled na dodržování pravidel a zásad serveru obdržel následující
-        nahlášení porušení pravidel a zásad serveru:'
       subject: "[%{app_name}] Vaše nahlášení porušení pravidel a zásad serveru"
-      url_para: 'URL stránky, na které se porušení zásad nachází:'
     admin_deleted_work_notification:
       bye: Kopii své práce najdete v příloze.
       contact_abuse: obraťte se prosím na Dohled na dodržování pravidel a zásad serveru
@@ -171,9 +160,6 @@ cs:
         html: Vaše práce s názvem %{title} byla z Archivu smazána administrátorem.
         text: Vaše práce s názvem "%{title}" byla z Archivu smazána administrátorem.
       html:
-        part1: Vaše práce s názvem %{title} byla z Archivu smazána administrátorem.
-        part2: V případě, že byla vaše práce součástí projektu Open Doors (Otevřené
-          dveře), %{opendoors_link}.
         tos_violation: V případě, že je možné, že vaše práce porušila Smluvní podmínky
           Archivu, %{contact_abuse_link}.
       import_project:
@@ -184,9 +170,6 @@ cs:
       opendoors: obraťte se s případnými dotazy na Open Doors
       subject: "[%{app_name}] Vaše práce byla smazána administrátorem"
       text:
-        part1: Vaše práce s názvem "%{title}" byla z Archivu smazána administrátorem.
-        part2: V případě, že byla vaše práce součástí projektu Open Doors (Otevřené
-          dveře), obraťte se s případnými dotazy na Open Doors (%{opendoors_link}).
         tos_violation: V případě, že je možné, že vaše práce porušila Smluvní podmínky
           Archivu, obraťte se prosím na Dohled na dodržování pravidel a zásad serveru
           (%{contact_abuse_url}).
@@ -306,7 +289,6 @@ cs:
         footer_link: profilové stránce výzvy
         look_up: Toto zadání můžete najít na %{link}.
         look_up_link: své stránce Assignments (Zadání)
-        part1: Byla vám přidělena následující žádost ve výzvě %{link} na AO3!
       optional_tags: 'Volitelné tagy:'
       prompts: 'Náměty:'
       prompt_url: 'URL námětu:'
@@ -324,7 +306,6 @@ cs:
       changed:
         html: "%{login}, email spojený s vaším účtem byl změněn na %{email}"
         text: "%{login}, email spojený s vaším účtem byl změněn na %{email}"
-      part1: "%{login}, email spojený s vaším účtem byl změněn na %{email}"
       subject: "[%{app_name}] Email byl změněn"
     claim_notification:
       access:
@@ -397,11 +378,6 @@ cs:
           kopii těchto prací (pro jistotu zkontrolujte oznámení k vašemu archivu).
           Pokud jste již nahráli kopii těchto děl a %{negation}použili jste funkci
           importování z URL, budou na webu AO3 dvě kopie též práce.
-        text: Z důvodu zachování záložek a seznamů s doporučeními mohou být webové
-          adresy importovaného archivu po omezenou dobu přesměrovány na importovanou
-          kopii těchto prací (pro jistotu zkontrolujte oznámení k vašemu archivu).
-          Pokud jste již nahráli kopii těchto děl a %{negation}použili jste funkci
-          importövání z URL, budou na webu AO3 dvě kopie též práce.
       subject: "[%{app_name}] Nahrané práce"
       update_redirect:
         contact_open_doors: kontaktujte projekt Open Doors
@@ -509,20 +485,11 @@ cs:
       deleted_yourself:
         html: Vaše práce %{title} byla na vaši žádost smazána.
         text: Vaše práce "%{title}" byla na vaši žádost smazána.
-      html:
-        part1_other: Vaše práce %{title} byla smazána na žádost %{pseud}.
-        part1_yourself: Vaše práce %{title} byla na vaši žádost smazána.
-        part2: Pokud máte nějaké otázky, prosím %{support}.
-      part3: Kopii své práce najdete v příloze.
       questions:
         html: Pokud máte nějaké otázky, prosím %{support}.
         text: Pokud máte nějaké otázky, prosím %{support} (%{url}).
       subject: "[%{app_name}] Vaše práce byla smazána"
       support: kontaktujte Podporu
-      text:
-        part1_other: Vaše práce "%{title}" byla smazána na žádost %{pseud}.
-        part1_yourself: Vaše práce "%{title}" byla na vaši žádost smazána.
-        part2: Pokud máte nějaké otázky, prosím %{support} (%{url}).
     invitation_to_claim:
       access:
         text: V závislosti na archivu, ze kterého byly vaše práce importovány, mohly
@@ -542,8 +509,6 @@ cs:
         contact_open_doors: kontaktujte Open Doors
         contact_support: kontaktujte podporu AO3
         faq_page: stránce FAQ - často kladených otázek
-        open_doors: Open Doors (Otevřené dveře)
-        part5: Ke svým pracím se příhlásíte nebo je odstraníte zde.
         tutorial_page: stránce s návody
       introduction:
         text: Dostali jste tento e-mail, protože v rámci projektu Open Doors (Otevřené
@@ -583,43 +548,6 @@ cs:
         Pokud jste již nahráli kopii této práce a NEpoužili jste možnost importovat
         z URL, budou v archivu dvě kopie této práce.
       subject: "[%{app_name}] Výzva k přihlášení se o vaše práce"
-      text:
-        part1: Dostali jste tento e-mail, protože v rámci projektu Open Doors (Otevřené
-          dveře) (%{open_doors_link}) došlo v nedávné době k importu archivu do %{app_name}
-          (%{app_short_name} - %{app_url}) a my věříme, že následující práce patří
-          vám. Rádi bychom vám umožnili se k těmto pracím přihlásit (nebo je smazat/opustit),
-          pokud máte zájem. A pokud ještě nemáte účet pod jiným emailem, chceme vás
-          tímto pozvat na palubu!
-        part10: Pokud jste v tomto importovaném archivu měli další práce uvedené pod
-          e-mailovou adresou, k níž již nemáte přístup, prosím kontaktujte Open Doors
-          s jakoukoliv informací, která by mohla pomoci ověřit vaši identitu.
-        part11: S dalšími dotazy prosím kontaktujte Podporu AO3 na %{support_link}.
-        part2: Oznámení o nedávných přesunech archivu si můžete přečíst na AO3 News
-          (%{news_link}) a další informace najdete na Open Doors' FAQ – stránce často
-          kladených otázek k projektu Otevřené dveře (%{open_doors_faq_link}) nebo
-          na stránce s návody (%{open_doors_tutorial_link}). S jakýmikoliv otázkami
-          nezodpovězenými v FAQ a návodech nebo v tomto e-mailu prosím kontaktujte
-          Podporu na %{support_link}.
-        part3: Pokud došlo k omylu a toto nejsou vaše práce, prosím, nemažte je! Prosím,
-          kontaktujte Open Doors (%{open_doors_link}) a my se o to postaráme.
-        part4: V závislosti na archivu, ze kterého byly vaše práce importovány, mohly
-          být přístupné pouze registrovaným uživatelům (aby byly mimo dosah vyhledávání
-          Google). Pokud je toto váš případ, budou tyto práce dostupné pouze registrovaným
-          uživatelům, pokud se nerozhodnete učinit je plně přístupnými. Pro pomoc
-          se zpřístupňováním, opuštěním nebo mazáním vašich prací, kontaktujte prosím
-          Podporu AO3.
-        part5: 'Své práce si zaberete nebo odstraníte zde: %{claim_url}'
-        part7: Pokud vám tyto práce opravdu patří, ale nechcete je, můžete je opustit
-          (pak zůstanou na AO3, ale vaše jméno bude odstraněno) nebo je smazat (pak
-          budou z AO3 úplně odstraněny). Pro opuštění nebo smazání nepotřebujete tyto
-          práce přidávat k účtu – můžete tak udělat přímo pod odkazem výše. (Pro pomoc
-          prosím kontaktujte Podporu na %{support_link}.)
-        part9: Pokud si přejete, aby projekt Open Doors změnil přesměrování na vaši
-          již existující práci, prosím smažte importovanou kopii, kontaktujte Open
-          Doors pomocí tohoto odkazu %{open_doors_link} a sdělte jim vaše jméno na
-          AO3, vaše jméno na importovaném archivu a název a URL práce, na kterou chcete,
-          aby odkaz přesměrovával. (Pokud si přejete změnit přesměrování pro více
-          prací, můžete je všechny vyjmenovat v jednom emailu.)
       unwanted:
         text: Pokud vám tyto práce opravdu patří, ale nechcete je, můžete je opustit
           (pak zůstanou na AO3, ale vaše jméno bude odstraněno) nebo je smazat (pak
@@ -635,19 +563,6 @@ cs:
           prací, můžete je všechny vyjmenovat v jednom emailu.)
       uploaded_list: 'Mezi nahranými pracemi se nachází:'
     invite_increase_notification:
-      body:
-        few: Rádi bychom vám sdělili, že máte %{count} nové pozvánky. Tyto pozvánky
-          lze využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat
-          na %{invitation_page}.
-        many: Rádi bychom vám sdělili, že máte %{count} nových pozvánek. Tyto pozvánky
-          lze využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat
-          na %{invitation_page}.
-        one: Rádi bychom vám sdělili, že máte %{count} novou pozvánku, kterou lze
-          využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat na
-          %{invitation_page}.
-        other: Rádi bychom vám sdělili, že máte %{count} nových pozvánek. Tyto pozvánky
-          lze využít k vytvoření nových účtů na Archivu. Své přátele můžete pozvat
-          na %{invitation_page}.
       html:
         body:
           few: Rádi bychom vám sdělili, že máte %{count} nové pozvánky. Tyto pozvánky
@@ -715,18 +630,6 @@ cs:
           dojde k aktualizaci u vašeho oblíbeného díla či autora, nastavit si vzhled
           stránky, zaznamenávat v historii  práce, které jste si již na Archivu zobrazili
           a mnoho dalšího.
-      html:
-        part1: Prosím, %{activate_account_link}.
-        part2: Jakmile bude váš účet zprovozněn, budete moci přidávat své fanouškovské
-          práce, nastavit si upozornění na e-mail, které vás upozorní, pokud dojde
-          k aktualizaci u vašeho oblíbeného díla či autora, nastavit si vzhled stránky,
-          zaznamenávat v historii práce, které jste si již v Archivu zobrazili a mnoho
-          dalšího.
-        part3: Náš %{faq_link} poskytuje ohledně užívání Archivu spousta informací
-          a rad. Pokud vás zajímají novinky spojené s rozvojem stránky, můžete je
-          najít v %{admin_posts_link}. V případě, že budete potřebovat pomoc, narazíte
-          na chybu či budete mít dotaz nebo komentář, %{contact_support_link}, která
-          je vždy připravena a ochotna pomoci.
       information:
         html: Náš %{faq_link} poskytuje ohledně užívání Archivu spousta informací
           a rad. Pokud vás zajímají novinky spojené s rozvojem stránky, můžete je
@@ -734,19 +637,6 @@ cs:
           na chybu či budete mít dotaz nebo komentář, %{contact_support_link}, která
           je vždy připravena a ochotna pomoci.
         text: Pod odkazem na FAQ %{faq_url} najdete spoustu informací a rad k používání
-          Archivu. Novinky spojené s rozvojem stránky si můžete přečíst na Novinkách
-          AO3 pod odkazem %{admin_posts_url}. V případě, že budete potřebovat pomoc,
-          narazíte na chybu či budete mít dotaz nebo komentář, kontaktujte prosím
-          naši Podporu %{contact_support_url}, která je vždy připravena a ochotna
-          pomoci.
-      text:
-        part1: 'Prosím, aktivujte svůj účet pod tímto odkazem: %{activate_account_url}'
-        part2: Jakmile bude váš účet zprovozněn, budete moci přidávat své fanouškovské
-          práce, nastavit si upozornění na email, které vám dá vědět v případě, že
-          dojde k aktualizaci u vašeho oblíbeného díla či autora, nastavit si vzhled
-          stránky, zaznamenávat v historii  práce, které jste si již na Archivu zobrazili
-          a mnoho dalšího.
-        part3: Pod odkazem na FAQ %{faq_url} najdete spoustu informací a rad k používání
           Archivu. Novinky spojené s rozvojem stránky si můžete přečíst na Novinkách
           AO3 pod odkazem %{admin_posts_url}. V případě, že budete potřebovat pomoc,
           narazíte na chybu či budete mít dotaz nebo komentář, kontaktujte prosím

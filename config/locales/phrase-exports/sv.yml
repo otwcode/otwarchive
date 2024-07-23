@@ -98,15 +98,7 @@ sv:
               av era gåvor: %{donate_url}.'
           html:
             donate_link_text: era gåvor
-            part1: Om du felaktigt har fått detta meddelande, vänligen %{support_link}.
-            part2: AO3 är ett arkiv som drivs och stöds av fans och som är beroende
-              av %{donate_link}.
             support_link_text: kontakta Support
-          text:
-            part1: Om du felaktigt har fått detta meddelande, vänligen kontakta Support
-              på %{support_url}.
-            part2: 'AO3 är ett arkiv som drivs och stöds av fans och som är beroende
-              av era gåvor: %{donate_url}.'
           unwanted_email:
             html: Om du felaktigt har fått detta meddelande, vänligen %{support_link}.
             text: Om du felaktigt har fått detta meddelande, vänligen kontakta Support
@@ -141,10 +133,7 @@ sv:
           fortsätta fungera.
   user_mailer:
     abuse_report:
-      description_para: 'Beskrivning av missbruket:'
-      para1: 'Följande rapport om missbruk har skickats till teamet för Policy & Missbruk:'
       subject: "[%{app_name}] Din rapport om policy eller missbruk"
-      url_para: 'URL för sidan som missbruket finns på:'
     admin_deleted_work_notification:
       bye: Som hänvisning har vi bifogat en kopia av ditt verk.
       contact_abuse: kontakta vår kommitté för Policy och missbruk
@@ -154,10 +143,6 @@ sv:
         text: Ditt verk "%{title}" har blivit raderat från AO3 av en av webbplatsens
           administratörer.
       html:
-        part1: Ditt verk %{title} har blivit raderat från AO3 av en av webbplatsens
-          administratörer.
-        part2: Om ditt verk var en del av ett importprojekt som hanteras av vårt Öppna
-          dörrar-team, var vänlig %{opendoors_link} om du har frågor.
         tos_violation: Om det är möjligt att ditt verk bröt mot AO3:s användarvillkor,
           var vänlig %{contact_abuse_link}.
       import_project:
@@ -169,11 +154,6 @@ sv:
       opendoors: kontakta Öppna dörrar
       subject: "[%{app_name}] Ditt verk har blivit raderat av en administratör"
       text:
-        part1: Ditt verk "%{title}" har blivit raderat från AO3 av en av webbplatsens
-          administratörer.
-        part2: Om ditt verk var en del av ett importprojekt som hanteras av vårt Öppna
-          dörrar-team, var vänlig kontakta Öppna dörrar (%{opendoors_link}) om du
-          har frågor.
         tos_violation: Om det är möjligt att ditt verk bröt mot AO3:s användarvillkor,
           var vänlig kontakta vår kommitté för Policy och missbruk (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -293,8 +273,6 @@ sv:
         footer_link: uppdragets profilsida
         look_up: Du kan nå ditt uppdrag via %{link}.
         look_up_link: din sida för Assignments (Uppdrag)
-        part1: Du har blivit tilldelad följande förfrågan i %{link}-utmaningen på
-          AO3!
       optional_tags: 'Valfria taggar:'
       prompts: 'Prompts:'
       prompt_url: 'Prompt-URL:'
@@ -315,8 +293,6 @@ sv:
           till %{email}"
         text: "%{login}, e-postadressen som är knuten till ditt konto har ändrats
           till %{email}"
-      part1: "%{login}, e-postadressen som är knuten till ditt konto har ändrats till
-        %{email}"
       subject: "[%{app_name}] E-postadressen har ändrats"
     claim_notification:
       access:
@@ -384,12 +360,6 @@ sv:
         text: För andra frågor, vänligen kontakta AO3:s Support på %{support_url}.
       redirects:
         html: För att bevara rekommendationslistor och bokmärken kan det importerade
-          arkivets webbaddresser dirigera om till den importerade kopian av dessa
-          verk under en begränsad tid (se inlägget med tillkännagivandet för ditt
-          arkiv för att vara säker). Om du redan laddat upp en kopia av dessa verk
-          och %{negation} använt funktionen "importera från URL", så kommer det att
-          finnas två kopior av samma verk på AO3.
-        text: För att bevara rekommendationslistor och bokmärken kan det importerade
           arkivets webbaddresser dirigera om till den importerade kopian av dessa
           verk under en begränsad tid (se inlägget med tillkännagivandet för ditt
           arkiv för att vara säker). Om du redan laddat upp en kopia av dessa verk
@@ -509,20 +479,11 @@ sv:
       deleted_yourself:
         html: Ditt verk %{title} togs bort på din begäran.
         text: Ditt verk "%{title}" togs bort på din begäran.
-      html:
-        part1_other: Ditt verk "%{title}" togs bort på begäran av %{pseud}.
-        part1_yourself: Ditt verk %{title} togs bort på din begäran.
-        part2: Om du har frågor, vänligen %{support}.
-      part3: Bifogat finns en kopia av ditt verk för din kännedom.
       questions:
         html: Om du har frågor, vänligen %{support}.
         text: Om du har frågor, vänligen %{support} (%{url}).
       subject: "[%{app_name}] Ditt verk har tagits bort"
       support: kontakta Support
-      text:
-        part1_other: Ditt verk "%{title}" togs bort på begäran av %{pseud}.
-        part1_yourself: Ditt verk "%{title}" togs bort på din begäran.
-        part2: Om du har frågor, vänligen %{support} (%{url}).
     invitation_to_claim:
       access:
         text: Beroende på arkivtyp kan dina verk ha blivit tillgängliga endast för
@@ -541,8 +502,6 @@ sv:
         contact_open_doors: kontakta Öppna dörrar
         contact_support: kontakta AO3 support
         faq_page: Vanliga frågor och svar
-        open_doors: Öppna dörrar
-        part5: Gör anspråk på eller ta bort dina verk här.
         tutorial_page: handledningssidan
       introduction:
         text: Du har fått det här mailet för att ett arkiv nyligen har blivit importerat
@@ -582,43 +541,6 @@ sv:
         och INTE använde funktionen för import av URL kommer det att finnas två kopior
         av samma verk i arkivet.
       subject: "[%{app_name}] Inbjudan att göra anspråk på verk"
-      text:
-        part1: Du har fått det här mailet för att ett arkiv nyligen har blivit importerat
-          av Öppna dörrar (%{open_doors_link}) till %{app_name} (%{app_short_name}
-          - %{app_url}), och vi tror att följande verk tillhör dig. Vi vill ge dig
-          möjlighet att göra anspråk på (eller radera/anonymisera) dessa verk. Och
-          om du inte redan har ett konto med en annan mailadress vill vi välkomna
-          dig ombord!
-        part10: Om du hade andra verk i det importerade arkivet under en mailadress
-          du inte längre har tillgång till, vänligen kontakta Öppna dörrar med information
-          som kan hjälpa till att verifiera din identitet.
-        part11: För andra frågor, vänligen kontakta AO3 support via %{support_link}.
-        part2: Du kan läsa tillkännagivanden rörande arkivflyttar på AO3 nyheter (%{news_link}),
-          och hitta ytterligare information på Öppna dörrars sida med vanliga frågor
-          och svar %{open_doors_faq_link} eller på handledningssidan %{open_doors_tutorial_link}.
-          Om du har frågor som inte besvarats i detta mail eller länkarna ovan, vänligen
-          kontakta Support via  %{support_link}.
-        part3: Om det har skett ett misstag och det här inte är dina verk, snälla
-          radera dem inte! Vänligen kontakta (%{open_doors_link}) så löser vi det.
-        part4: Beroende på arkivtyp kan dina verk ha blivit tillgängliga endast för
-          registrerade användare (för att exkludera dem från googlesökningar) vid
-          importen. Om så är fallet kommer verken endast vara tillgängliga för inloggade
-          användare om du inte väljer att göra dem synliga för alla. För hjälp med
-          att låsa upp, anonymisera eller radera dina verk, vänligen kontakta AO3
-          support.
-        part5: 'Gör anspråk på eller ta bort dina verk här: %{claim_url}'
-        part7: Om dessa verk tillhör dig, men du inte vill ha kvar dem kan du anonymisera
-          dem (så att de finns kvar på AO3 men utan ditt namn) eller radera dem (så
-          att de tas bort helt från AO3). Du behöver inte lägga till dessa verk till
-          något konto för att kunna anonymisera eller radera dem -- du kan göra det
-          direkt från anspråkslänken ovan. (För hjälp, vänligen kontakta oss på Support
-          via %{support_link}.)
-        part9: Om du vill att Öppna dörrar ska uppdatera länken så att den riktas
-          mot ett av dina verk som redan finns, vänligen radera den importerade kopian
-          och kontakta Öppna dörrar %{open_doors_link} med namnet på ditt AO3-konto,
-          ditt namn på det importerade arkivet, samt titel och URL på verket du vill
-          omdirigera länken till. (Om du har många verk du vill rikta om kan du skriva
-          dessa i samma mail.)
       unwanted:
         text: Om dessa verk tillhör dig, men du inte vill ha kvar dem kan du anonymisera
           dem (så att de finns kvar på AO3 men utan ditt namn) eller radera dem (så
@@ -635,13 +557,6 @@ sv:
           dessa i samma mail.)
       uploaded_list: 'De uppladdade verken inkluderar:'
     invite_increase_notification:
-      body:
-        one: Vi vill bara berätta för dig att du har %{count} ny inbjudan som kan
-          användas för att skapa ett nytt konto på AO3. Du kan bjuda in en vän via
-          %{invitation_page}.
-        other: Vi vill bara berätta för dig att du har %{count} nya inbjudningar som
-          kan användas för att skapa nya konton på AO3. Du kan bjuda in en vän via
-          %{invitation_page}.
       html:
         body:
           one: Vi vill bara berätta för dig att du har %{count} ny inbjudan som kan
@@ -700,18 +615,6 @@ sv:
           uppdateras, göra egna inställningar för hur sajten ska se ut och fungera
           för dig, hålla koll på vilka verk du har gått in på eller läst på Arkivet
           via din historik, och mycket mer.
-      html:
-        part1: Var vänlig %{activate_account_link}.
-        part2: När ditt konto väl är färdigställt kan du lägga upp dina verk, ordna
-          mail-prenumerationer så att du vet när dina favoritskapare eller favoritverk
-          uppdateras, göra egna inställningar för hur sajten ska se ut och fungera
-          för dig, hålla koll på vilka verk du har gått in på eller läst på Arkivet
-          via din historik, och mycket mer.
-        part3: Det finns massor av information och råd om hur du använder Arkivet
-          i våra %{faq_link}. Du hittar de senaste nyheterna om sajtens utveckling
-          i våra %{admin_posts_link}. Om du behöver mer hjälp, stöter på en bugg,
-          eller har frågor eller kommentarer, %{contact_support_link}, som alltid
-          är glada att hjälpa till.
       information:
         html: Det finns massor av information och råd om hur du använder Arkivet i
           våra %{faq_link}. Du hittar de senaste nyheterna om sajtens utveckling i
@@ -719,18 +622,6 @@ sv:
           har frågor eller kommentarer, %{contact_support_link}, som alltid är glada
           att hjälpa till.
         text: 'Det finns massor av information och råd om hur du använder Arkivet
-          i våra Vanliga frågor här: %{faq_url}. Du hittar de senaste nyheterna om
-          sajtens utveckling på AO3 Nyheter här: %{admin_posts_url}. Om du behöver
-          mer hjälp, stöter på en bugg, eller har frågor eller kommentarer, var vänlig
-          kontakta vårt Support-team, som alltid är glada att hjälpa till: %{contact_support_url}.'
-      text:
-        part1: 'Var vänlig följ denna länk för att aktivera ditt konto: %{activate_account_url}'
-        part2: När ditt konto väl är färdigställt kan du lägga upp dina verk, ordna
-          mail-prenumerationer så att du vet när dina favoritskapare eller favoritverk
-          uppdateras, göra egna inställningar för hur sajten ska se ut och fungera
-          för dig, hålla koll på vilka verk du har gått in på eller läst på Arkivet
-          via din historik, och mycket mer.
-        part3: 'Det finns massor av information och råd om hur du använder Arkivet
           i våra Vanliga frågor här: %{faq_url}. Du hittar de senaste nyheterna om
           sajtens utveckling på AO3 Nyheter här: %{admin_posts_url}. Om du behöver
           mer hjälp, stöter på en bugg, eller har frågor eller kommentarer, var vänlig

@@ -116,14 +116,7 @@ hr:
               %{donate_url}.'
           html:
             donate_link_text: vaših donacija
-            part1: Ako ste ovu poruku primili pogreškom, molimo vas %{support_link}.
-            part2: AO3 je arhiv od fanova za fanove, te ovisi o %{donate_link}.
             support_link_text: kontaktirajte korisničku podršku
-          text:
-            part1: Ako ste ovu poruku primili pogreškom, molimo vas, javite se korisničkoj
-              podršci na %{support_url}.
-            part2: 'AO3 je arhiv od fanova za fanove, te ovisi o vašim donacijama:
-              %{donate_url}.'
           unwanted_email:
             html: Ako ste ovu poruku primili pogreškom, molimo vas %{support_link}.
             text: Ako ste ovu poruku primili pogreškom, molimo vas, javite se korisničkoj
@@ -157,10 +150,7 @@ hr:
           ovaj email i Vaša će prijašnja lozinka nastaviti funkcionirati.
   user_mailer:
     abuse_report:
-      description_para: 'Opis prijavljenog sadržaja:'
-      para1: 'Sljedeća prijava je poslana timu za Pravila & zloupotrebu:'
       subject: "[%{app_name}] Vaša prijava Pravilima & zloupotrebi"
-      url_para: 'URL stranice na kojoj se nalazi prijavljeni sadržaj:'
     admin_deleted_work_notification:
       bye: Priložena je kopija vašeg djela za vašu referencu.
       contact_abuse: kontaktirajte naše vijeće za Zloupotrebu
@@ -168,9 +158,6 @@ hr:
         html: Vaše djelo %{title} je izbrisano sa Arhive od strane administratora.
         text: Vaše djelo "%{title}" je izbrisano sa Arhive od strane administratora.
       html:
-        part1: Vaše djelo %{title} je izbrisano sa Arhive od strane administratora.
-        part2: Ako je vaše djelo bilo dio uvoznog projekta kojim upravlja naš tim
-          Otvorenih vrata, molimo %{opendoors_link} za sva daljnja pitanja.
         tos_violation: Ako je moguće da je vaše djelo prekršilo Uvjete korištenja
           Arhive, molimo %{contact_abuse_link}.
       import_project:
@@ -182,10 +169,6 @@ hr:
       opendoors: kontaktirajte Otvorena vrata
       subject: "[%{app_name}] Vaše djelo je izbrisano od strane administratora"
       text:
-        part1: Vaše djelo "%{title}" je izbrisano sa Arhive od strane administratora.
-        part2: Ako je vaše djelo bilo dio uvoznog projekta kojim upravlja Open Doors
-          (Otvorena vrata), molimo kontaktirajte Otvorena vrata (%{opendoors_link})
-          za sva daljnja pitanja.
         tos_violation: Ako je moguće da je vaše djelo prekršilo Uvjete korištenja
           Arhive, molimo kontaktirajte vijeće za Zloupotrebu (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -306,8 +289,6 @@ hr:
         footer_link: profilna stranica izazova
         look_up: Možete pogledati ovaj zadatak na %{link}.
         look_up_link: vaša Assignments (Zadaci) stranica
-        part1: Dobili ste sljedeći zahtjev na %{link} za izazov Archive of Our Own
-          – AO3 (Našeg vlastitog ariva)!
       optional_tags: 'Neobavezne oznake:'
       prompts: 'Promptovi:'
       prompt_url: 'URL prompta:'
@@ -326,7 +307,6 @@ hr:
       changed:
         html: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
         text: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
-      part1: "%{login}, e-mail povezan s vašim računom je promijenjen u %{email}"
       subject: "[%{app_name}] Promijenjen e-mail"
     claim_notification:
       access:
@@ -394,11 +374,6 @@ hr:
           (provjerite objavu za svoju arhivu kako biste bili sigurni). Ako ste već
           učitali kopiju ovih djela i %{negation} koristili značajku uvoza s URL-a,
           postojat će dvije kopije istog djela na AO3-u.
-        text: Kako bi se sačuvali popisi fic preporuka i bookmarkovi, web-adrese uvezene
-          arhive mogu preusmjeravati na uvezenu kopiju ovih djela na ograničeno vrijeme
-          (provjerite objavu za svoju arhivu kako biste bili sigurni). Ako ste već
-          učitali kopiju ovih djela i %{negation} koristili značajku uvoza s URL-a,
-          bit će dvije kopije istog djela na AO3-u.
       subject: "[%{app_name}] Uvezena djela"
       update_redirect:
         contact_open_doors: kontaktirajte Otvorena vrata
@@ -507,43 +482,17 @@ hr:
       deleted_yourself:
         html: Vaše djelo %{title} je izbrisano na vaš zahtjev.
         text: Vaše djelo "%{title}" je izbrisano na vaš zahtjev.
-      html:
-        part1_other: Vaše djelo %{title} je izbrisano na zahtjev %{pseud}.
-        part1_yourself: Vaše djelo %{title} je izbrisano na vaš zahtjev.
-        part2: Ako imate pitanja, molimo %{support}.
-      part3: U prilogu se nalazi kopija vašeg djela za referencu.
       questions:
         html: Ako imate pitanja, molimo %{support}.
         text: Ako imate pitanja, molimo %{support} (%{url}).
       subject: "[%{app_name}] Vaše djelo je izbrisano"
       support: kontaktirajte Korisničku podršku
-      text:
-        part1_other: Vaše djelo "%{title}" je izbrisano na zahtjev %{pseud}.
-        part1_yourself: Vaše djelo "%{title}" je izbrisano na vaš zahtjev.
-        part2: Ako imate pitanja, molimo %{support} (%{url}).
     invitation:
       been_invited: Pozvani ste da se pridružite našoj otvorenoj beti!
       has_invited: "%{user_name} Vas je pozvao da se pridružite našoj beti!"
       html:
-        faq_link: Za više informacija, molimo provjerite %{faq_link}.
         faq_link_text: naša najčešća pitanja
-        part3: 'Ako se želite pridužiti, molimo prijavite se na sljedećoj adresi:
-          %{invitation_link}'
-      part1: Archive of Our Own – AO3 (Naš vlastiti arhiv) je besplatna, nekomercijalna
-        arhiva izgrađena od strane fanova za fanove. Multifanovski smo i dobro došle
-        su sve vrste djela, uključujući fanfikciju, fanart, fanvid i podfic. Održavamo
-        otwarhiv softver otvorenog koda, a naši su serveri u vlasništvu neprofitne
-        organizacije, OTW (Organizacije za transformativna djela), koja radi na zaštiti
-        prava fanova i očuvanju njihovih djela.
-      part2: Također, imamo puno opcija za pronalaženje djela koje želite, te za postavljanje
-        i dijeljenje Vaših djela s ostalima. I još više toga dolazi uskoro! Vaše povratne
-        informacije tijekom bete mogu nam pomoći u izgradnji još bolje arhive. \o/
       subject: "[%{app_name}] הזמנה"
-      text:
-        faq_link: Za više informacija, molimo provjerite naša najčešća pitanja na
-          %{faq_link}.
-        part3: 'Ako se želite pridružiti, molim prijavite se na sljedećoj adresi:
-          %{invitation_link}'
     invitation_to_claim:
       access:
         text: Ovisno o arhivi, moguće je da su vaša djela uvezena samo za registrirane
@@ -561,8 +510,6 @@ hr:
         contact_open_doors: kontaktiraj Otvorena vrata
         contact_support: kontaktiraj AO3 korisničku podršku
         faq_page: stranica najčešćih pitanja
-        open_doors: Open doors (Otvorena vrata)
-        part5: Položite prava na ili uklonite svoja djela ovdje.
         tutorial_page: uputstva
       introduction:
         text: Primili ste ovaj e-mail jer su Otvorena vrata (%{open_doors_link}) nedavno
@@ -599,40 +546,6 @@ hr:
         tih djela i NISTE koristili opciju URL uvoza, imat ćete dvije kopije istog
         djela u arhivi.
       subject: "[%{app_name}] Poziv na polaganje prava na djelo"
-      text:
-        part1: Primili ste ovaj e-mail jer su Otvorena vrata (%{open_doors_link})
-          nedavno uvezla arhiv u %{app_name} (%{app_short_name} - %{app_url}), i vjerujemo
-          da sljedeća djela pripadaju vama. Želimo vam pružiti priliku da položite
-          prava na (ili izbrišete/napustite) njih, ako želite. Ako već nemate račun
-          pod drugim e-mailom, ovim vas putem želimo pozvati da nam se pridružite!
-        part10: Ako ste na uvezenoj arhivi imali djela pod e-mail adresom kojoj više
-          nemate pristup, molimo kontaktirajte Otvorena vrata s informacijama koje
-          mogu pomoći u potvrdi vašeg identiteta.
-        part11: Za druga pitanja, molimo kontaktirajte AO3 Podršku na  %{support_link}.
-        part2: Nove obavijesti o nedavnim potezima arhiva možete pročitati na AO3
-          Vijestima (%{news_link}), te pronaći dodatne informacije na najčešćim pitanjima
-          Otvorenih vrata (%{open_doors_faq_link}) ili na stranici s uputstvima (%{open_doors_tutorial_link}).
-          Za svaka pitanja koja nisu odgovorena ovdje ili u uputstvima, molimo kontaktirajte
-          Podršku na %{support_link}.
-        part3: Ako je ovo greška i to nisu vaša djela, molimo vas da ih ne izbrišete!
-          Samo kontaktirajte Otvorena vrata  (%{open_doors_link}) i mi ćemo se pobrinuti
-          oko toga.
-        part4: Ovisno o arhivi, moguće je da su vaša djela uvezena samo za registrirane
-          korisnike (kako se ne bi pojavili na Google pretrazi). Ako je to slučaj,
-          djela će biti dostupna samo prijavljenim korisnicima, osim ako se ne odlučite
-          da budu potpuno vidljiva. Za pomoć s otključavanjem, napuštanjem ili brisanjem
-          vaših djela, molimo kontaktirajte AO3 Podršku.
-        part5: 'Položite prava na ili uklonite svoja djela ovdje: %{claim_url}'
-        part7: Ako djela pripadaju vama, al ih ne želite, možete ih napustiti (tako
-          da ostanu na AO3-u bez vašeg imena) ili izbrisati (potpuno ih ukloniti s
-          AO3-a). Ne morate ih dodati na bilo koji račun kako biste ih napustili ili
-          izbrisali--možete učiniti to direktno preko linka gore. (Za pomoć, molimo
-          kontaktirajte Podršku na %{support_link}.)
-        part9: Ako želite da Otvorena vrata preusmjeruju na vaše već postojeće djelo,
-          molimo izbrišite učitanu kopiju i kontaktirajte Otvorena vrata na %{open_doors_link}
-          s vašim AO3 korisničkim imenom, imenom računa s uvezene arhive, te naslovom
-          i URL-om fan djela na koje želite biti preusmjereni. (Ako imate više djela
-          koja želite da budu preusmjerena, možete ih sva navesti u jednom mailu.)
       unwanted:
         text: Ako djela pripadaju vama, al ih ne želite, možete ih napustiti (tako
           da ostanu na AO3-u bez vašeg imena) ili izbrisati (potpuno ih ukloniti s
@@ -647,14 +560,6 @@ hr:
           koja želite da budu preusmjerena, možete ih sva navesti u jednom mailu.)
       uploaded_list: 'Učitana djela sadrže:'
     invite_increase_notification:
-      body:
-        few: Želimo vas obavijestiti da imate %{count} nove pozivnice, koje se mogu
-          koristiti za izradu novih računna na AO3. Možete pozvati prijatelje na %{invitation_page}.
-        one: Želimo vas obavijestiti da imate %{count} novu pozivnicu, koje se mogu
-          koristiti za izradu novih računa na AO3. Možete pozvati prijatelje na %{invitation_page}.
-        other: Želimo vas obavijestiti da imate %{count} novih pozivnica, koje se
-          mogu koristiti za izradu novih računna na AO3. Možete pozvati prijatelje
-          na %{invitation_page}.
       html:
         body:
           few: Želimo vas obavijestiti da imate %{count} nove pozivnice, koje se mogu
@@ -722,19 +627,6 @@ hr:
           postavke da biste prilagodili način na koji stranica izgleda i radi za vas,
           pratite djela kojem ste pristupili na Arhivu putem svoje povijesti i još
           mnogo toga.
-      html:
-        part1: Molimo %{activate_account_link}.
-        part2: Nakon što je vaš račun otvoren i aktiviran, možete objaviti svoja fan
-          djela, napraviti preplate putem e-maila kako biste bili obaviješteni kada
-          vaši omiljeni autori učitaju novo djelo ili ažuriraju već postojeće, postavite
-          postavke da biste prilagodili način na koji stranica izgleda i radi za vas,
-          pratite djela kojima ste pristupilii na Arhivu putem svoje povijesti i još
-          mnogo toga.
-        part3: Postoji puno informacija i savjeta o tome kako koristiti Arhiv putem
-          stranice %{faq_link}. Naći ćete najnovije vijesti o razvoju web lokacije
-          putem stranice %{admin_posts_link}. Ako vam je potrebna dodatna pomoć, naišli
-          ste na bug ili imate pitanja ili komentare, molimo %{contact_support_link},
-          koji su uvijek spremni pomoći.
       information:
         html: Postoji puno informacija i savjeta o tome kako koristiti Arhiv putem
           stranice %{faq_link}. Naći ćete najnovije vijesti o razvoju web lokacije
@@ -742,19 +634,6 @@ hr:
           ste na bug ili imate pitanja ili komentare, molimo %{contact_support_link},
           koji su uvijek spremni pomoći.
         text: 'Postoji puno informacija i savjeta o tome kako koristiti Arhivu putem
-          stranice %{faq_url}. Naći ćete najnovije vijesti o razvoju web lokacije
-          na AO3 Vijestima na  %{admin_posts_url}. Ako vam je potrebna dodatna pomoć,
-          naletili ste na bug ili imate pitanja ili komentare, molimo kontaktirajte
-          naš tim za korisničku podršku, koji su uvijek spremni pomoći: %{contact_support_url}.'
-      text:
-        part1: 'Molimo slijedite ovu poveznicu kako bi aktivirali svoj račun: %{activate_account_url}'
-        part2: Nakon što je vaš račun otvoren i aktiviran, možete objaviti svoja fan
-          djela, napraviti preplate putem e-maila kako biste bili obaviješteni kada
-          vaši omiljeni autori učitaju novo djelo ili ažuriraju već postojeće, postavite
-          postavke da biste prilagodili način na koji stranica izgleda i radi za vas,
-          pratite djela kojem ste pristupili na Arhivu putem svoje povijesti i još
-          mnogo toga.
-        part3: 'Postoji puno informacija i savjeta o tome kako koristiti Arhivu putem
           stranice %{faq_url}. Naći ćete najnovije vijesti o razvoju web lokacije
           na AO3 Vijestima na  %{admin_posts_url}. Ako vam je potrebna dodatna pomoć,
           naletili ste na bug ili imate pitanja ili komentare, molimo kontaktirajte

@@ -81,15 +81,7 @@ id:
               bergantung pada donasi Anda: %{donate_url}.'
           html:
             donate_link_text: donasi Anda
-            part1: Jika Anda tidak seharusnya menerima pesan ini, silakan %{support_link}.
-            part2: AO3 adalah arsip yang dikelola dan didukung oleh sesama fan dan
-              bergantung pada %{donate_link}.
             support_link_text: hubungi Komite Bantuan
-          text:
-            part1: Jika Anda tidak seharusnya menerima pesan ini, silakan hubungi
-              Komite Bantuan di %{support_url}.
-            part2: 'AO3 adalah arsip yang dikelola dan didukung oleh sesama fan dan
-              bergantung pada donasi Anda: %{donate_url}.'
           unwanted_email:
             html: Jika Anda tidak seharusnya menerima pesan ini, silakan %{support_link}.
             text: Jika Anda tidak seharusnya menerima pesan ini, silakan hubungi Komite
@@ -124,10 +116,7 @@ id:
           silakan abaikan surel ini. Kata sandi lama Anda akan tetap berfungsi.
   user_mailer:
     abuse_report:
-      description_para: 'Deskripsi pelanggaran:'
-      para1: 'Laporan pelanggaran berikut telah dikirimkan ke tim Pelanggaran:'
       subject: "[%{app_name}] Laporan Pelanggaran Anda"
-      url_para: 'Alamat URL halaman yang mengandung pelanggaran:'
     admin_deleted_work_notification:
       bye: Terlampir adalah salinan karya Anda sebagai referensi.
       contact_abuse: hubungi Komite Kebijakan dan Pelanggaran kami
@@ -135,10 +124,6 @@ id:
         html: Karya Anda, %{title}, telah dihapus dari AO3 oleh admin situs.
         text: Karya Anda, "%{title}", telah dihapus dari AO3 oleh admin situs.
       html:
-        part1: Karya Anda, %{title}, telah dihapus dari AO3 oleh admin situs.
-        part2: Jika karya Anda merupakan bagian dari proyek impor yang diatur oleh
-          Komite Open Doors (Pintu Terbuka) kami, silakan %{opendoors_link} dengan
-          pertanyaan lebih lanjut.
         tos_violation: Jika ada kemungkinan karya Anda melanggar Ketentuan Layanan
           AO3, silakan %{contact_abuse_link}.
       import_project:
@@ -151,10 +136,6 @@ id:
       opendoors: hubungi Komite Pintu Terbuka
       subject: "[%{app_name}] Karya Anda telah dihapus oleh admin"
       text:
-        part1: Karya Anda, "%{title}", telah dihapus dari AO3 oleh admin situs.
-        part2: Jika karya Anda merupakan bagian dari proyek impor yang diatur oleh
-          Komite Open Doors (Pintu Terbuka) kami, silakan hubungi Komite Pintu Terbuka
-          (%{opendoors_link}) dengan pertanyaan lebih lanjut.
         tos_violation: Jika ada kemungkinan karya Anda melanggar Ketentuan Layanan
           AO3, silakan hubungi Komite Kebijakan dan Pelanggaran kami (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -283,8 +264,6 @@ id:
         footer_link: halaman profil tantangan
         look_up: Anda dapat melihat tugas ini dari %{link}.
         look_up_link: halaman Assignments (Tugas) Anda
-        part1: Anda telah ditugaskan untuk memenuhi permintaan berikut dalam challenge
-          (tantangan) %{link} di AO3!
       optional_tags: 'Tag (Label) Opsional:'
       prompts: 'Prompt (Ide Karya):'
       prompt_url: 'URL Prompt (Ide Karya):'
@@ -305,8 +284,6 @@ id:
           ke %{email}"
         text: "%{login}, alamat surel yang diasosiasikan dengan akun Anda telah diganti
           ke %{email}"
-      part1: "%{login}, alamat surel yang diasosiasikan dengan akun Anda telah diganti
-        ke %{email}"
       subject: "[%{app_name}] Alamat surel telah diganti"
     claim_notification:
       access:
@@ -384,12 +361,6 @@ id:
           Jika Anda telah mengunggah salinan dari karya-karya ini dan Anda %{negation}
           menggunakan fitur impor dari URL, maka akan ada dua salinan dari karya yang
           sama di AO3.
-        text: Untuk melestarikan daftar rekomendasi dan markah buku, alamat web dari
-          arsip yang diimpor mungkin akan dialihkan ke salinan karya yang telah diimpor
-          untuk jangka waktu tertentu (periksa artikel pengumuman untuk arsip Anda
-          untuk memastikannya). Jika Anda telah mengunggah salinan dari karya-karya
-          ini dan Anda %{negation} menggunakan fitur impor dari URL, maka akan ada
-          dua salinan dari karya yang sama di AO3.
       subject: "[%{app_name}] Karya diunggah"
       update_redirect:
         contact_open_doors: hubungi Pintu Terbuka
@@ -512,44 +483,17 @@ id:
       deleted_yourself:
         html: Karya Anda, %{title}, telah dihapus atas permintaan Anda.
         text: Karya Anda, "%{title}", telah dihapus atas permintaan Anda.
-      html:
-        part1_other: Karya Anda, %{title}, telah dihapus atas permintaan %{pseud}.
-        part1_yourself: Karya Anda, %{title}, telah dihapus atas permintaan Anda.
-        part2: Jika Anda memiliki pertanyaan, silakan %{support}.
-      part3: Terlampir salinan karya Anda sebagai referensi.
       questions:
         html: Jika Anda memiliki pertanyaan, silakan %{support}.
         text: Jika Anda memiliki pertanyaan, silakan %{support} (%{url}).
       subject: "[%{app_name}] Karya Anda telah dihapus"
       support: hubungi Komite Bantuan
-      text:
-        part1_other: Karya Anda, "%{title}", telah dihapus atas permintaan %{pseud}.
-        part1_yourself: Karya Anda, "%{title}", telah dihapus atas permintaan Anda.
-        part2: Jika Anda memiliki pertanyaan, silakan %{support} (%{url}).
     invitation:
       been_invited: Kamu telah diundang untuk menjadi beta kami!
       has_invited: "%{user_name} telah mengundangmu untuk bergabung menjadi beta kami!"
       html:
-        faq_link: Untuk informasi lebih lanjut, silahkan cek%{faq_link}.
         faq_link_text: Pertanyaan umum kami
-        part3: 'Jika kamu berminat untuk bergabung dengan kami, silahkan daftar di
-          halaman berikut: %{invitation_link}'
-      part1: Archive of Our Own – AO3 (Arsip Milik Kita) adalah arsip non komersial
-        dan gratis yang dibuat dari dan untuk fan. Kami menerima semua jenis karya
-        fan, termasuk fan fiksi, <i>fanart</i>, <i>fanvids</i>, dan <i>podfic</i>
-        dari berbagai fandom. Dalam rangka melindungi hak fan dan karya fan, kami
-        menggunakan perangkat lunak <i>open source</i> otwarchive dan server yang
-        dimiliki oleh organisasi non profit OTW (Organisasi untuk Karya Transformatif).
-      part2: Kami juga memiliki fitur yang hebat untuk menemukan karya fan yang kamu
-        mau, serta untuk memposting dan membagikan karyamu. Masih banyak fitur lain
-        yang akan datang! Saran dari kamu selama menjadi beta kami akan membantu kami
-        membangun arsip yang lebih baik. \o/
       subject: Undangan [%{app_name}]
-      text:
-        faq_link: Untuk informasi lebih lanjut, silahkan cek pertanyaan umum kami
-          di %{faq_link}.
-        part3: 'Jika kamu berminat untuk bergabung dengan kami, silahkan daftar di
-          halaman berikut: %{invitation_link}'
     invitation_to_claim:
       access:
         text: Tergantung pada arsip asalnya, karya-karya Anda mungkin saja telah diimpor
@@ -570,8 +514,6 @@ id:
         contact_open_doors: hubungi tim Open Doors
         contact_support: hubungi tim Dukungan AO3
         faq_page: halaman Pertanyaan Umum
-        open_doors: Open Doors (Pintu Terbuka)
-        part5: Klaim atau hapus karya Anda di sini.
         tutorial_page: halaman tutorial
       introduction:
         text: Anda menerima surel ini karena baru-baru ini ada arsip yang telah diimpor
@@ -619,53 +561,6 @@ id:
         ini dan Anda TIDAK menggunakan fitur impor dari URL, akan ada dua salinan
         karya yang sama di AO3.
       subject: "[%{app_name}] Undangan untuk mengklaim karya"
-      text:
-        part1: Anda menerima surel ini karena baru-baru ini ada arsip yang telah diimpor
-          oleh tim Open Doors (Pintu Terbuka) (%{open_doors_link}) ke  %{app_name}
-          (%{app_short_name} - %{app_url}), dan berdasarkan informasi yang kami miliki,
-          karya fan berikut ini adalah milik Anda. Kami memberikan Anda kesempatan
-          untuk mengklaim (atau menghapus/meninggalkan) karya-karya ini jika Anda
-          ingin. Jika Anda belum mempunyai akun AO3 dengan alamat surel yang berbeda,
-          kami mengundang Anda untuk bergabung dengan kami!
-        part10: Jika Anda memiliki karya-karya lain di arsip impor yang menggunakan
-          alamat surel yang sudah tidak dapat Anda akses, silakan hubungi tim Open
-          Doors dengan menyertakan informasi apapun yang dapat memverifikasi identitas
-          Anda.
-        part11: Untuk pertanyaan-pertanyaan lain, silakan hubungi tim Dukungan AO3
-          di %{support_link}.
-        part2: 'Anda dapat membaca pengumuman tentang kegiatan pengarsipan terbaru
-          di Berita AO3 (%{news_link}), serta mendapat informasi tambahan di halaman
-          Pertanyaan Umum tentang Open Doors (%{open_doors_faq_link}) atau di halaman
-          tutorial (%{open_doors_tutorial_link}). Untuk pertanyaan-pertanyaan yang
-          belum terjawab di halaman Pertanyaan Umum, tutorial, atau surel ini, silakan
-          hubungi Tim Dukungan AO3 di %{support_link}.
-
-          '
-        part3: Jika ini adalah sebuah kesalahan dan karya-karya ini bukan milik Anda,
-          mohon jangan hapus karya-karya ini! Tolong hubungi tim Open Doors (%{open_doors_link})
-          dan kami akan menanganinya.
-        part4: Tergantung pada arsip asalnya, karya-karya Anda mungkin saja telah
-          diimpor dan hanya dapat dilihat oleh pengguna yang terdaftar saja (untuk
-          mencegah pencarian karya tersebut melalui Google). Jika hal ini terjadi,
-          karya-karya tersebut hanya dapat diakses oleh pengguna yang telah tercatat
-          masuk, kecuali Anda memutuskan untuk membuka akses terhadap karya Anda.
-          Untuk bantuan membuka karya, meninggalkan karya, atau menghapus karya, silakan
-          hubungi tim Dukungan AO3.
-        part5: 'Klaim atau hapus karya Anda di sini: %{claim_url}'
-        part7: Jika karya-karya ini milik Anda, tapi Anda tidak menginginkannya lagi,
-          Anda dapat meninggalkan mereka (sehingga mereka dapat tetap berada di AO3,
-          tapi nama Anda akan terhapus) atau menghapus mereka (sehingga karya tersebut
-          akan dihilangkan dari AO3 seluruhnya). Untuk meninggalkan atau menghapus
-          karya, Anda tidak perlu menambahkannya ke akun manapun--Anda dapat melakukan
-          ini langsung melalui tautan klaim diatas. (Untuk bantuan, silakan hubungi
-          tim Dukungan di %{support_link}.)
-        part9: Jika Anda ingin tim Open Doors untuk memperbarui tautan pengalihan
-          agar mengarahkan ke karya yang Anda impor sendiri sebelumnya, harap hapus
-          salinan yang kami impor, lalu hubungi tim Open Doors di %{open_doors_link}
-          menggunakan nama akun AO3 Anda, nama akun Anda di arsip impor, dan judul
-          serta URL karya fan yang akan dituju oleh tautan pengalihan Anda. (Jika
-          Anda memiliki beberapa karya yang ingin Anda ganti tautan pengalihannya,
-          Anda dapat menuliskan semua tautan tersebut dalam satu surel.)
       unwanted:
         text: Jika karya-karya ini milik Anda, tapi Anda tidak menginginkannya lagi,
           Anda dapat meninggalkan mereka (sehingga mereka dapat tetap berada di AO3,
@@ -684,10 +579,6 @@ id:
           semua tautan tersebut dalam satu surel.)
       uploaded_list: 'Karya yang diunggah termasuk:'
     invite_increase_notification:
-      body:
-        other: Kami hanya ingin memberitahu bahwa Anda memiliki %{count} undangan
-          baru yang dapat digunakan untuk membuat akun baru di AO3. Anda dapat mengundang
-          teman Anda di %{invitation_page}.
       html:
         body:
           other: Kami hanya ingin memberitahu bahwa Anda memiliki %{count} undangan
@@ -738,18 +629,6 @@ id:
           pembuat konten favorit Anda memposting karya terbaru atau karya favorit
           Anda diperbarui, mengatur tampilan situs, melacak karya-karya yang telah
           Anda buka melalui riwayat, dan lain-lain.
-      html:
-        part1: Mohon %{activate_account_link}.
-        part2: Setelah akun Anda tersedia dan aktif, Anda dapat memposting karya-karya
-          penggemar, mengatur layanan surel langganan untuk memberitahu Anda saat
-          pembuat konten favorit Anda memposting karya terbaru atau karya favorit
-          Anda diperbarui, mengatur tampilan situs, melacak karya-karya yang telah
-          Anda buka melalui riwayat, dan lain-lain.
-        part3: Terdapat banyak informasi dan saran mengenai cara penggunaan AO3 yang
-          tersedia di %{faq_link} kami. Anda dapat menemukan berita terbaru mengenai
-          perkembangan situs di %{admin_posts_link} kami. Jika Anda membutuhkan bantuan,
-          menemukan <i>bug</i>, atau ingin mengajukan pertanyaan atau komentar, mohon
-          %{contact_support_link}, yang dengan senang hati akan membantu Anda.
       information:
         html: Terdapat banyak informasi dan saran mengenai cara penggunaan AO3 yang
           tersedia di %{faq_link} kami. Anda dapat menemukan berita terbaru mengenai
@@ -757,19 +636,6 @@ id:
           menemukan <i>bug</i>, atau ingin mengajukan pertanyaan atau komentar, mohon
           %{contact_support_link}, yang dengan senang hati akan membantu Anda.
         text: 'Terdapat banyak informasi dan saran mengenai cara penggunaan AO3 yang
-          tersedia di Pertanyaan yang Sering Diajukan kami pada %{faq_url}. Anda dapat
-          menemukan berita terbaru mengenai perkembangan situs di Berita AO3 pada
-          %{admin_posts_url}. Jika Anda membutuhkan bantuan, menemukan bug, atau ingin
-          mengajukan pertanyaan atau komentar, mohon hubungi tim Dukungan kami, yang
-          dengan senang hati akan membantu Anda: %{contact_support_url}.'
-      text:
-        part1: 'Mohon ikuti tautan ini untuk mengaktifkan akun Anda: %{activate_account_url}'
-        part2: Setelah akun Anda tersedia dan aktif, Anda dapat memposting karya-karya
-          penggemar, mengatur layanan surel langganan untuk memberitahu Anda saat
-          pembuat konten favorit Anda memposting karya terbaru atau karya favorit
-          Anda diperbarui, mengatur tampilan situs, melacak karya-karya yang telah
-          Anda buka melalui riwayat, dan lain-lain.
-        part3: 'Terdapat banyak informasi dan saran mengenai cara penggunaan AO3 yang
           tersedia di Pertanyaan yang Sering Diajukan kami pada %{faq_url}. Anda dapat
           menemukan berita terbaru mengenai perkembangan situs di Berita AO3 pada
           %{admin_posts_url}. Jika Anda membutuhkan bantuan, menemukan bug, atau ingin

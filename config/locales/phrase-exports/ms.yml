@@ -81,15 +81,7 @@ ms:
               pada sumbangan anda: %{donate_url}.'
           html:
             donate_link_text: sumbangan anda
-            part1: Jika anda tidak sepatutnya menerima mesej ini, sila %{support_link}.
-            part2: AO3 adalah arkib yang diurus dan disokong oleh peminat yang bergantung
-              pada %{donate_link}.
             support_link_text: hubungi Bantuan
-          text:
-            part1: Jika anda tidak sepatutnya menerima mesej ini, sila hubungi Bantuan
-              di %{support_url}.
-            part2: 'AO3 adalah arkib yang diurus dan disokong oleh peminat yang bergantung
-              pada sumbangan anda: %{donate_url}.'
           unwanted_email:
             html: Jika anda tidak sepatutnya menerima mesej ini, sila %{support_link}.
             text: Jika anda tidak sepatutnya menerima mesej ini, sila hubungi Bantuan
@@ -125,10 +117,7 @@ ms:
           e-mel ini. Kata laluan anda yang asal masih akan dapat digunakan.
   user_mailer:
     abuse_report:
-      description_para: 'Keterangan penyalahgunaan:'
-      para1: 'Laporan aduan berikut telah dihantar kepada pasukan Polisi & Aduan:'
       subject: "[%{app_name}] Laporan Polisi & Aduan Anda"
-      url_para: 'Halaman URL di mana penyalahgunaan berlaku:'
     admin_deleted_work_notification:
       bye: Salinan karya anda telah dilampirkan untuk rujukan anda.
       contact_abuse: hubungi Jawatankuasa Polisi & Aduan kami
@@ -138,11 +127,6 @@ ms:
         text: Karya anda "%{title}" telah dipadam daripada AO3 oleh seorang admin
           laman web berkenaan.
       html:
-        part1: Karya anda %{title} telah dipadam daripada AO3 oleh seorang admin laman
-          web berkenaan.
-        part2: Jika karya anda merupakan sebahagian daripada projek import yang diuruskan
-          oleh pasukan Open Doors (Projek Pemeliharaan Bahan-Bahan Digital dan Bukan
-          Digital) kami, sila %{opendoors_link} untuk sebarang persoalan.
         tos_violation: Jika terdapat kemungkinan karya anda telah melanggar Syarat-Syarat
           Perkhidmatan AO3, sila %{contact_abuse_link}.
       import_project:
@@ -156,12 +140,6 @@ ms:
       opendoors: hubungi Open Doors
       subject: "[%{app_name}] Karya anda telah dipadam oleh seorang admin"
       text:
-        part1: Karya anda "%{title}" telah dipadam daripada AO3 oleh seorang admin
-          laman web berkenaan.
-        part2: Jika karya anda merupakan sebahagian daripada projek import yang diuruskan
-          oleh pasukan Open Doors (Projek Pemeliharaan Bahan-Bahan Digital dan Bukan
-          Digital) kami, sila hubungi Open Doors (%{opendoors_link}) untuk sebarang
-          persoalan.
         tos_violation: Jika terdapat kemungkinan karya anda telah melanggar Syarat-Syarat
           Perkhidmatan AO3, sila hubungi Jawatankuasa Polisi & Aduan kami (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -272,8 +250,6 @@ ms:
         footer_link: laman profil cabaran
         look_up: Anda boleh melihat tugasan ini di %{link}.
         look_up_link: halaman Assignments (Tugasan) anda
-        part1: Anda telah ditugaskan dengan permintaan yang dinyatakan pada cabaran
-          %{link} di Arkib Milik Kita!
       optional_tags: 'Tag Pilihan:'
       prompts: 'Prompt:'
       prompt_url: 'URL Prompt:'
@@ -294,8 +270,6 @@ ms:
           %{email}"
         text: "%{login}, emel yang dikaitkan dengan akaun anda kini telah diubah kepada
           %{email}"
-      part1: "%{login}, emel yang dikaitkan dengan akaun anda kini telah diubah kepada
-        %{email}"
       subject: "[%{app_name}] Emel diubah"
     claim_notification:
       access:
@@ -365,11 +339,6 @@ ms:
         text: Untuk pertanyaan lanjut, sila hubungi Bantuan AO3 di %{support_url}.
       redirects:
         html: Untuk memelihara senarai cadangan dan menanda, alamat laman dari arkib
-          diimport mungkin mengubah hala ke salinan import karya-karya ini untuk masa
-          terhad (lihat pengumuman bagi arkib kita untuk kepastian). Jika anda sudah
-          memuat naik salinan karya tersebut dan anda %{negation} mengguna ciri import
-          dari URL, dua salinan karya yang sama akan terpapar pada AO3.
-        text: Untuk memelihara senarai cadangan dan penanda, alamat laman dari arkib
           diimport mungkin mengubah hala ke salinan import karya-karya ini untuk masa
           terhad (lihat pengumuman bagi arkib kita untuk kepastian). Jika anda sudah
           memuat naik salinan karya tersebut dan anda %{negation} mengguna ciri import
@@ -492,20 +461,11 @@ ms:
       deleted_yourself:
         html: Karya anda %{title} telah dipadamkan atas permintaan anda.
         text: Karya anda "%{title}" telah dipadamkan atas permintaan anda.
-      html:
-        part1_other: Karya anda %{title} telah dipadamkan atas permintaan %{pseud}.
-        part1_yourself: Karya anda %{title} telah dipadamkan atas permintaan anda.
-        part2: Sekiranya anda mempunyai sebarang pertanyaan, sila %{support}.
-      part3: Dilampirkan adalah sebuah salinan karya anda untuk rujukan.
       questions:
         html: Sekiranya anda mempunyai sebarang pertanyaan, sila %{support}.
         text: Sekiranya anda mempunyai sebarang pertanyaan, sila %{support} (%{url}).
       subject: "[%{app_name}] Karya anda telah dipadamkan"
       support: hubungi Bantuan
-      text:
-        part1_other: Karya anda "%{title}" telah dipadamkan atas permintaan %{pseud}.
-        part1_yourself: Karya anda "%{title}" telah dipadamkan atas permintaan anda.
-        part2: Sekiranya anda mempunyai sebarang pertanyaan, sila %{support} (%{url}).
     invitation_to_claim:
       access:
         text: Bergantung kepada arkib, karya-karya anda yang diimport mungkin dihadkan
@@ -524,8 +484,6 @@ ms:
         contact_open_doors: hubungi Open Doors
         contact_support: hubungi bantuan AO3
         faq_page: laman FAQ
-        open_doors: Open Doors
-        part5: Tuntut atau padamkan karya-karya anda di sini.
         tutorial_page: laman tutorial
       introduction:
         text: Anda menerima e-mel ini kerana sebuah arkib baru sahaja diimport oleh
@@ -567,46 +525,6 @@ ms:
         salinan untuk karya-karya tersebut dan anda TIDAK menggunakan ciri import
         daripada URL, akan terdapat dua salinan untuk karya yang sama di dalam arkib.
       subject: "[%{app_name}] Jemputan untuk menuntut karya"
-      text:
-        part1: Anda menerima e-mel ini kerana sebuah arkib baru sahaja diimport oleh
-          Open Doors (%{open_doors_link}) ke dalam %{app_name} (%{app_short_name}
-          - %{app_url}), dan kami percaya bahawa hasil kerja peminat berikut adalah
-          milik anda. Kami ingin memberikan peluang kepada anda untuk menuntut (atau
-          memadam/menyatim) karya-karya tersebut jika anda mahu. Dan jika anda belum
-          lagi mempunyai akaun dengan e-mel berbeza, kami ingin menjemput anda untuk
-          menyertai kami!
-        part10: Jika anda mempunyai karya-karya lain pada arkib yang diimport dengan
-          alamat e-mel lain yang anda tidak dapat akses, sila hubungi Open Doors dengan
-          apa-apa maklumat yang boleh membantu mengesahkan identiti anda.
-        part11: Untuk pertanyaan lanjut, sila hubungi Bantuan AO3 di %{support_link}.
-        part2: Anda boleh membaca pengumuman mengenai pergerakan arkib terbaru di
-          Berita AO3 (%{news_link}), dan mencari maklumat tambahan tentang laman FAQ
-          Open Doors (%{open_doors_faq_link}) atau laman tutorial (%{open_doors_tutorial_link}).
-          Untuk sebarang soalan yang tidak dijawab di dalam FAQ, tutorial, atau e-mel
-          ini, sila hubungi Bantuan di %{support_link}.
-        part3: Jika ini merupakan suatu kesilapan dan karya-karya ini bukan milik
-          anda, sila jangan padamkannya! Sila hubungi sahaja Open Doors (%{open_doors_link})
-          dan kami akan selesaikannya.
-        part4: Bergantung kepada arkib, karya-karya anda yang diimport mungkin dihadkan
-          kepada pengguna berdaftar sahaja (supaya tidak termasuk ke dalam carian
-          Google). Jika berlaku sedemikian, karya-karya tersebut hanya boleh diakses
-          oleh pengguna yang log masuk, melainkan anda memilih untuk membuatkan karya-karya
-          boleh diakses oleh orang ramai. Untuk bantuan membebaskan, meyatimkan, atau
-          memadam karya-karya anda, sila hubungi Bantuan AO3.
-        part5: 'Tuntut atau padam karya-karya anda di sini: %{claim_url}'
-        part7: Jika karya-karya ini milik anda, tetapi anda tidak menyimpannya lagi,
-          anda boleh meyatimkan (supaya mereka kekal di dalam AO3, tetapi dengan nama
-          anda dibuang) atau memadamkan mereka (supaya mereka dibuang sepenuhnya dari
-          AO3). Anda tidak perlu menambahkan karya-karya tersebut ke mana-mana akaun
-          untuk meyatimkan atau memadamkan mereka--anda boleh lakukan terus daripada
-          pautan tuntut di atas. (Untuk bantuan, sila hubungi Bantuan di %{support_link}.)
-        part9: Jika anda ingin Open Doors untuk mengemas kini pengalihan untuk menuju
-          ke karya anda yang sedia ada, sila padamkan salinan yang telah dimuat naik,
-          dan hubungi Open Doors di %{open_doors_link} dengan akaun AO3 anda, nama
-          akaun anda pada arkib yang diimport, dan tajuk dan URL hasil kerja peminat
-          anda yang anda ingin tujukan pengalihan tersebut. (Jika anda mempunyai pelbagai
-          karya yang anda ingin ubah pengalihan, anda boleh senaraikannya dalam satu
-          e-mel.)
       unwanted:
         text: Jika karya-karya ini milik anda, tetapi anda tidak menyimpannya lagi,
           anda boleh meyatimkan (supaya mereka kekal di dalam AO3, tetapi dengan nama
@@ -624,10 +542,6 @@ ms:
           e-mel.)
       uploaded_list: 'Karya-karya yang dimuat naik termasuk:'
     invite_increase_notification:
-      body:
-        other: Kami ingin memaklumkan bahawa anda mempunyai %{count} jemputan baharu
-          yang boleh digunakan untuk membuat akaun baharu di AO3. Anda boleh menjemput
-          rakan anda di %{invitation_page}.
       html:
         body:
           other: Kami ingin memaklumkan bahawa anda mempunyai %{count} jemputan baharu
@@ -678,18 +592,6 @@ ms:
           kegemaran anda telah dikemaskini, menetapkan pilihan anda untuk mengubah
           suai rupa atau bagaimana laman ini berfungsi kepada anda, mengikuti hasil
           karya yang anda telah akses di arkib melalui sejarah anda dan banyak lagi.
-      html:
-        part1: Sila %{activate_account_link}.
-        part2: Setelah akaun anda diaktifkan, anda boleh menerbitkan hasil kerja peminat,
-          menetapkan langganan e-mel untuk memaklumkan anda jika pereka atau karya
-          kegemaran anda telah dikemaskini, menetapkan pilihan anda untuk mengubah
-          suai rupa atau bagaimana laman ini berfungsi kepada anda, mengikuti hasil
-          karya yang anda telah akses di arkib melalui sejarah anda dan banyak lagi.
-        part3: Terdapat banyak maklumat dan nasihat tentang cara-cara menggunakan
-          Arkib di %{faq_link} kami. Anda akan menemui berita terkini tentang perkembangan
-          laman di  %{admin_posts_link} kami. Jika anda memerlukan lebih pertolongan,
-          menghadapi ralat perisian dalaman atau mempunyai soalan atau komen, sila
-          %{contact_support_link}, yang sentiasa bersedia untuk menolong.
       information:
         html: Terdapat banyak maklumat dan nasihat tentang cara-cara menggunakan Arkib
           di %{faq_link} kami. Anda akan menemui berita terkini tentang perkembangan
@@ -697,19 +599,6 @@ ms:
           menghadapi ralat perisian dalaman atau mempunyai soalan atau komen, sila
           %{contact_support_link}, yang sentiasa bersedia untuk menolong.
         text: 'Terdapat banyak maklumat dan nasihat tentang cara-cara menggunakan
-          Arkib di FAQ kami di %{faq_url}. Anda akan menemui berita terkini tentang
-          perkembangan laman dalam Berita AO3 di %{admin_posts_url}. Jika anda memerlukan
-          lebih pertolongan, menghadapi ralat perisian dalaman atau mempunyai soalan
-          atau komen, sila berhubung dengan bahagian Bantuan kami,  yang sentiasa
-          bersedia untuk menolong: %{contact_support_url}'
-      text:
-        part1: 'Sila ikuti pautan ini untuk aktifkan akaun anda: %{activate_account_url}'
-        part2: Setelah akaun anda diaktifkan, anda boleh menerbitkan hasil kerja peminat,
-          menetapkan langganan e-mel untuk memaklumkan anda jika pereka atau karya
-          kegemaran anda telah dikemaskini, menetapkan pilihan anda untuk mengubah
-          suai rupa atau bagaimana laman ini berfungsi kepada anda, mengikuti hasil
-          karya yang anda telah akses di arkib melalui sejarah anda dan banyak lagi.
-        part3: 'Terdapat banyak maklumat dan nasihat tentang cara-cara menggunakan
           Arkib di FAQ kami di %{faq_url}. Anda akan menemui berita terkini tentang
           perkembangan laman dalam Berita AO3 di %{admin_posts_url}. Jika anda memerlukan
           lebih pertolongan, menghadapi ralat perisian dalaman atau mempunyai soalan

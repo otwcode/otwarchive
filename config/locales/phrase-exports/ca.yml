@@ -98,14 +98,7 @@ ca:
               gràcies a les vostres donacions: %{donate_url}.'
           html:
             donate_link_text: les vostres donacions
-            part1: Si has rebut aquest missatge per error, %{support_link}.
-            part2: L'AO3 és un arxiu gestionat i mantingut per fans que sobreviu gràcies
-              a %{donate_link}.
             support_link_text: contacta amb Suport
-          text:
-            part1: Si has rebut aquest missatge per error, contacta amb Suport a %{support_url}.
-            part2: 'L''AO3 és un arxiu gestionat i mantingut per fans que sobreviu
-              gràcies a les vostres donacions: %{donate_url}.'
           unwanted_email:
             html: Si has rebut aquest missatge per error, %{support_link}.
             text: Si has rebut aquest missatge per error, contacta amb Suport a %{support_url}.
@@ -138,11 +131,7 @@ ca:
           correu electrònic i la teva contrasenya anterior continuarà funcionant.
   user_mailer:
     abuse_report:
-      description_para: 'Descripció de l’abús:'
-      para1: 'S’ha enviat la següent denúncia d’abús a l’equip de Polítiques i Prevenció
-        de l’Abús:'
       subject: "[%{app_name}] La teva denúncia de Polítiques i Prevenció de l’Abús"
-      url_para: 'URL de la pàgina on es troba l’abús:'
     admin_deleted_work_notification:
       bye: S'adjunta una còpia de la teva obra com a referència.
       contact_abuse: el Comitè de Polítiques i Prevenció de l'Abús
@@ -152,11 +141,6 @@ ca:
         text: La teva obra "%{title}" ha estat eliminada de l'AO3 per un/a administrador/a
           del lloc web.
       html:
-        part1: La teva obra %{title} ha estat eliminada de l'AO3 per un/a administrador/a
-          del lloc web.
-        part2: Si la teva obra formava part d'un projecte importat per l'equip d'Open
-          Doors (Projecte de Portes Obertes), contacta amb %{opendoors_link} si tens
-          qualsevol altra pregunta.
         tos_violation: Si és possible que la teva obra hagi violat els Termes i condicions
           de servei de l'AO3, posa't en contacte amb %{contact_abuse_link}.
       import_project:
@@ -169,11 +153,6 @@ ca:
       opendoors: Open Doors
       subject: "[%{app_name}] La teva obra ha estat eliminada per un/a administrador/a"
       text:
-        part1: La teva obra "%{title}" ha estat eliminada de l'AO3 per un/a administrador/a
-          del lloc web.
-        part2: Si la teva obra formava part d'un projecte importat per l'equip d'Open
-          Doors (Projecte de Portes Obertes), contacta amb Open Doors (%{opendoors_link})
-          si tens qualsevol altra pregunta.
         tos_violation: Si és possible que la teva obra violés els Termes i condicions
           de servei de l'AO3, posa't en contacte amb el Comitè de Polítiques i Prevenció
           de l'Abús (%{contact_abuse_url}).
@@ -303,7 +282,6 @@ ca:
         footer_link: la pàgina de perfil del repte
         look_up: Pots consultar aquesta tasca a %{link}.
         look_up_link: la teva pàgina d'Assignments (Tasques)
-        part1: Se t'ha assignat la següent petició del repte %{link} a l'AO3!
       optional_tags: 'Etiquetes opcionals:'
       prompts: 'Premisses:'
       prompt_url: 'URL de la premissa:'
@@ -325,8 +303,6 @@ ca:
           a %{email}"
         text: "%{login}, l'adreça electrònica associada amb aquest compte ha canviat
           a %{email}"
-      part1: "%{login}, l'adreça electrònica associada amb aquest compte ha canviat
-        a %{email}"
       subject: "[%{app_name}] Canvi d'adreça electrònica"
     claim_notification:
       access:
@@ -398,12 +374,6 @@ ca:
           a %{support_url}.
       redirects:
         html: Per tal de preservar les llistes de recomanacions i els marcadors, les
-          pàgines web de l'arxiu importat poden redirigir a una còpia importada de
-          les obres durant un temps limitat (pots revisar la publicació de la notícia
-          per assegurar-te). Si ja has publicat una còpia d'aquestes obres i %{negation}
-          has utilitzat l'opció d'importar des d'un URL, hi haurà dues còpies de la
-          mateixa obra a l'AO3.
-        text: Per tal de preservar les llistes de recomanacions i els marcadors, les
           pàgines web de l'arxiu importat poden redirigir a una còpia importada de
           les obres durant un temps limitat (pots revisar la publicació de la notícia
           per assegurar-te). Si ja has publicat una còpia d'aquestes obres i %{negation}
@@ -516,20 +486,11 @@ ca:
       deleted_yourself:
         html: La teva obra %{title} ha estat eliminada a petició teva.
         text: La teva obra "%{title}" ha estat eliminada a petició teva.
-      html:
-        part1_other: La teva obra %{title} ha estat eliminada a petició de %{pseud}.
-        part1_yourself: La teva obra %{title} ha estat eliminada a petició teva.
-        part2: Si us plau, si tens cap pregunta %{support}.
-      part3: Pots trobar adjunta una còpia de la teva obra com a referència.
       questions:
         html: Si us plau, si tens cap pregunta %{support}.
         text: Si us plau, si tens cap pregunta %{support} (%{url}).
       subject: "[%{app_name}] La teva obra ha estat eliminada"
       support: contacta amb Suport
-      text:
-        part1_other: La teva obra "%{title}" ha estat eliminada a petició de %{pseud}.
-        part1_yourself: La teva obra "%{title}" ha estat eliminada a petició teva.
-        part2: Si us plau, si tens cap pregunta %{support} (%{url}).
     invitation_to_claim:
       access:
         text: Depenent de l’arxiu, les teves obres es poden haver importat de manera
@@ -549,8 +510,6 @@ ca:
         contact_open_doors: contacta amb l’Open Doors
         contact_support: contacta amb Suport de l’AO3
         faq_page: pàgina de preguntes freqüents
-        open_doors: Open Doors (Projecte de Portes Obertes)
-        part5: Reclama o elimina les teves obres aquí.
         tutorial_page: pàgina del tutorial
       introduction:
         text: Estàs rebent aquest correu perquè un arxiu ha estat importat recentment
@@ -593,45 +552,6 @@ ca:
         i NO has fet servir l’eina d’importar des de l’URL, hi haurà dues còpies de
         la mateixa obra a l’arxiu.
       subject: "[%{app_name}] Invitació a reclamar obres"
-      text:
-        part1: Estàs rebent aquest correu perquè un arxiu ha estat importat recentment
-          per l’Open Doors (%{open_doors_link}) a %{app_name} (%{app_short_name} -
-          %{app_url}), i creiem que les obres següents et poden pertànyer. Volem donar-te
-          l’oportunitat de reclamar (o eliminar/deixar orfes) aquestes obres si és
-          el que vols. I en cas que no tinguis ja un compte associat a una altra adreça
-          de correu, ens agradaria convidar-te a l’arxiu!
-        part10: Si tens altres obres a l’arxiu importat enllaçades a una adreça de
-          correu a la qual ja no tens accés, contacta amb l’Open Doors amb qualsevol
-          informació que pugui ajudar a verificar la teva identitat, si us plau.
-        part11: Per a qualsevol altre dubte, contacta amb Suport de l’AO3 a %{support_link}.
-        part2: Pots llegir els anuncis sobre trasllats recents a l’arxiu a les notícies
-          de l’AO3 (%{news_link}), i trobar informació addicional a la pàgina de preguntes
-          freqüents de l’Open Doors (%{open_doors_faq_link}) o bé a la pàgina de tutorials
-          (%{open_doors_tutorial_link}). Per a qualsevol pregunta respecte a la qual
-          no vegis resposta a la pàgina de preguntes freqüents, als tutorials o en
-          aquest correu, contacta amb %{support_link}, si us plau.
-        part3: Si això és un error i aquestes obres no són teves, no les esborris,
-          si us plau! Contacta amb l’Open Doors (%{open_doors_link}) i nosaltres ens
-          n’encarregarem.
-        part4: Depenent de l’arxiu, les teves obres es poden haver importat de manera
-          restringida només per als usuaris registrats (per evitar que apareguin a
-          les cerques de Google). Si aquest és el cas, les obres només seran accessibles
-          per usuaris que hagin iniciat sessió, a menys que escullis fer-les completament
-          visibles. Si necessites ajuda per desbloquejar, deixar orfes o eliminar
-          les teves obres, contacta amb Suport de l’AO3.
-        part5: 'Reclama o elimina les teves obres aquí: %{claim_url}'
-        part7: Si aquestes obres són teves però no les vols, les pots deixar orfes
-          (de manera que es mantenen a l’AO3 però el teu nom queda eliminat) o esborrar-les
-          (de manera que quedin completament eliminades de l’AO3). No necessites afegir
-          aquestes obres a cap compte per tal d’abandonar-les o eliminar-les, ho pots
-          fer directament des de l’enllaç de reclamació de més amunt. (Si necessites
-          ajuda, contacta amb Suport a %{support_link}.)
-        part9: Si t’agradaria que l’Open Doors actualitzés la redirecció per dirigir-la
-          a la teva obra preexistent; si us plau, esborra la còpia importada i contacta
-          amb l’Open Doors a %{open_doors_link} tot indicant el nom del teu compte
-          a l’AO3, el nom del teu compte a l’arxiu importat i el títol i l’URL de
-          l’obra a la qual voldries efectuar la nova redirecció. (Si vols canviar
-          la redirecció de diverses obres, pots enumerar-les en un sol correu electrònic.)
       unwanted:
         text: Si aquestes obres són teves però no les vols, les pots deixar orfes
           (de manera que es mantenen a l’AO3 però el teu nom queda eliminat) o esborrar-les
@@ -648,12 +568,6 @@ ca:
           la redirecció de diverses obres, pots enumerar-les en un sol correu electrònic.)
       uploaded_list: 'Les obres pujades inclouen:'
     invite_increase_notification:
-      body:
-        one: Tan sols et volíem fer saber que tens %{count} invitació nova, que pots
-          fer servir per crear nous comptes a l'AO3. Pots convidar una amistat a %{invitation_page}.
-        other: Tan sols et volíem fer saber que tens %{count} invitacions noves, que
-          pots fer servir per crear nous comptes a l'AO3. Pots convidar una amistat
-          a %{invitation_page}.
       html:
         body:
           one: Tan sols et volíem fer saber que tens %{count} invitació nova, que
@@ -714,37 +628,12 @@ ca:
           o creadores preferides, personalitzar l’aspecte de la pàgina, controlar
           a quines obres has accedit a l’AO3 fent servir el teu historial, i molt
           més.
-      html:
-        part1: Si us plau %{activate_account_link}.
-        part2: Un cop el teu compte estigui activat, podràs publicar les teves obres
-          de fan, configurar les teves subscripcions per a que t’avisem per correu
-          electrònic quan hi hagi cap actualització de les teves obres i creadors
-          o creadores preferides, personalitzar l’aspecte de la pàgina, controlar
-          a quines obres has accedit a l’AO3 fent servir el teu historial, i molt
-          més.
-        part3: Hi ha molta informació i consells sobre com fer servir l’AO3 a %{faq_link}.
-          A  %{admin_posts_link} trobaràs les últimes notícies sobre el desenvolupament
-          del lloc web. Si necessites més ajuda, trobes un error o tens preguntes
-          o suggeriments, %{contact_support_link}, on t’ajudaran de bon grat.
       information:
         html: Hi ha molta informació i consells sobre com fer servir l’AO3 a %{faq_link}.
           A  %{admin_posts_link} trobaràs les últimes notícies sobre el desenvolupament
           del lloc web. Si necessites més ajuda, trobes un error o tens preguntes
           o suggeriments, %{contact_support_link}, on t’ajudaran de bon grat.
         text: 'Disposes de molta informació i consells sobre com fer servir l’AO3
-          a la pàgina de FAQ %{faq_url}. Trobaràs les últimes notícies sobre el desenvolupament
-          del lloc web a %{admin_posts_url}. Si necessites més ajuda, trobes un error
-          o tens preguntes o suggeriments, contacta amb Suport, on t’ajudaran de bon
-          grat: %{contact_support_url}.'
-      text:
-        part1: 'Segueix aquest enllaç per activar el teu compte: %{activate_account_url}'
-        part2: Un cop el teu compte estigui activat, podràs publicar les teves obres
-          de fan, configurar les teves subscripcions per a que t’avisem per correu
-          electrònic quan hi hagi cap actualització de les teves obres i creadors
-          o creadores preferides, personalitzar l’aspecte de la pàgina, controlar
-          a quines obres has accedit a l’AO3 fent servir el teu historial, i molt
-          més.
-        part3: 'Disposes de molta informació i consells sobre com fer servir l’AO3
           a la pàgina de FAQ %{faq_url}. Trobaràs les últimes notícies sobre el desenvolupament
           del lloc web a %{admin_posts_url}. Si necessites més ajuda, trobes un error
           o tens preguntes o suggeriments, contacta amb Suport, on t’ajudaran de bon

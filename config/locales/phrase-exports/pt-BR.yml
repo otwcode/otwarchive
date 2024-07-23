@@ -4,17 +4,8 @@ pt-BR:
     navigation: Navegação
   abuse_reports:
     new:
-      do_not_spam_html: "<strong>Investigamos cada denúncia que recebemos.</strong>
-        Por isso, pedimos que você por favor não envie renúncias repetidas acerca
-        do mesmo problema, a menos que tenha informação adicional a nos oferecer.
-        Pedimos também que você não encoraje outras pessoas a enviar denúncias relativas
-        a conteúdo que você já denunciou. Fazer isso aumenta nosso tempo de resposta,
-        pois somos uma pequena equipe voluntária."
       form:
         comment:
-          description: Por favor inclua todas as URLs relevantes e detalhe qual aspecto
-            do conteúdo viola os %{tos_link} do AO3. Quanto mais completa a informação
-            enviada, mais rápido poderemos efetuar a investigação necessária.
           error: Por favor descreva o problema.
           include: inclua todos os links pertinentes, bem como qualquer outra informação
             que julgue relevante, em sua mensagem
@@ -50,33 +41,15 @@ pt-BR:
         languages: 'Podemos responder a denúncias nas seguintes línguas:'
         sources: links ou screenshots de quaisquer fontes relevantes
         username: o nome da conta no AO3 da pessoa que você está denunciando
-      languages_html: "<strong>Podemos responder denúncias de Abuso nos seguintes
-        idiomas:  %{list}.</strong> Por favor leve em conta que idiomas além do inglês
-        podem ter um tempo de resposta mais elevado."
       purview:
-        about: O comitê de Diretrizes e Abuso é responsável por todas as questões
-          relacionadas ao conteúdo  do AO3 e ao comportamento de quem utiliza o site
-          em violação aos %{tos_link} do site. Para ajuda com questões técnicas, por
-          favor %{support_link}.
         support: entre em contato com a equipe de Suporte
         tos: Termos de Serviço
       reportable:
-        dmca:
-          claim: caso queira dar entrada com uma reivindicação baseada no Digital
-            Millennium Copyright Act (DMCA, sigla em inglês) americano — por favor
-            leia nossas %{dmca_link}
-          policy: diretrizes sobre o DMCA
-        fnok:
-          concerning: caso queira entrar em contato conosco sobre a pessoa que é sua
-            %{fnok_link}, ou
-          fnok: Fannish Next of Kin (herdeira no fandom)
         hack: caso você ache que sua conta foi hackeada ou que alguém está tentando
           hackear sua conta, ou
         intro: 'Por favor utilize esse formulário para enviar uma denúncia somente
           se você não tenha nos enviado essa mesma denúncia nos últimos 60 dias. Você
           pode nos contactar aqui sobre os seguintes assuntos:'
-        tos: caso você acredite ter encontrado conteúdo postado no AO3 que viole nossos
-          Termos de Serviço, ou
   activerecord:
     attributes:
       admin/role:
@@ -320,8 +293,6 @@ pt-BR:
       tags:
         label: Tags
       translated_post:
-        footnote: As configurações de permissão para comentar do post original irão
-          substituir quaisquer permissões selecionadas nessa página.
         label: Tradução do post
   blocked:
     unblock: Desbloquear
@@ -333,9 +304,6 @@ pt-BR:
       index:
         blocked_users: Contas bloqueadas
         none: Você não bloqueou nenhuma conta.
-  chapters:
-    chapter_position: "- Capítulo %{position}"
-    unspecified_fandom: Fandom não especificado
   collection_items:
     collection_item_form:
       add: Adicionar
@@ -503,7 +471,6 @@ pt-BR:
         policy_questions: Perguntas gerais sobre políticas do AO3
         site_questions: Perguntas sobre como usar o site
         tag_changes: Pedidos para canonizar ou modificar tags
-        work_language: Obras associadas ao idioma errado
         work_problems: Obras marcadas com a língua errada ou obras duplicadas
       status:
         current: 'Para as últimas atualizações sobre performance ou indisponibilidade
@@ -569,14 +536,7 @@ pt-BR:
               de fãs: %{donate_url}.'
           html:
             donate_link_text: doações de fãs
-            part1: Se você recebeu essa mensagem por engano, por favor %{support_link}.
-            part2: O AO3 é um arquivo que depende do trabalho voluntário e das %{donate_link}.
             support_link_text: entre em contato com a nossa equipe de Suporte
-          text:
-            part1: 'Se você recebeu essa mensagem por engano, por favor entre em contato
-              com a nossa equipe de Suporte: %{support_url}.'
-            part2: 'O AO3 é um arquivo que depende do trabalho voluntário e das doações
-              de fãs: %{donate_url}.'
           unwanted_email:
             html: Se você recebeu essa mensagem por engano, por favor %{support_link}.
             text: 'Se você recebeu essa mensagem por engano, por favor entre em contato
@@ -728,10 +688,7 @@ pt-BR:
           %{help_link} ou desabilite permanentemente essa mensagem de boas-vindas.
   user_mailer:
     abuse_report:
-      description_para: 'Descrição da violação:'
-      para1: 'A seguinte denúncia foi enviada para a equipe de Diretrizes e Abuso:'
       subject: "[%{app_name}] Sua denúncia para a equipe de Diretrizes e Abuso"
-      url_para: 'URL da página onde a violação se encontra:'
     admin_deleted_work_notification:
       bye: Uma cópia da obra removida encontra-se em anexo.
       contact_abuse: entre em contato com a nossa equipe de Diretrizes e Abuso
@@ -741,10 +698,6 @@ pt-BR:
         text: Sua obra "%{title}" foi apagada do AO3 por um membro da equipe de administração
           do site.
       html:
-        part1: Sua obra %{title} foi removida do AO3 por um membro da equipe de administração
-          do site.
-        part2: Se sua obra era parte de um projeto de importação ligado ao Open Doors
-          (Portas Abertas), por favor %{opendoors_link} com qualquer dúvida.
         tos_violation: Caso seja possível que sua obra tenha violado os Termos de
           Serviço do AO3, por favor %{contact_abuse_link}.
       import_project:
@@ -756,11 +709,6 @@ pt-BR:
       opendoors: entre em contato com a equipe do Portas Abertas
       subject: "[%{app_name}] Sua obra foi removida pela administração do AO3"
       text:
-        part1: Sua obra "%{title}" foi apagada do AO3 por um membro da equipe de administração
-          do site.
-        part2: Se sua obra era parte de um projeto de importação ligado ao Open Doors
-          (Portas Abertas), por favor entre em contato com a equipe do Portas Abertas
-          (%{opendoors_link}) com qualquer dúvida.
         tos_violation: Caso seja possível que sua obra tenha violado os Termos de
           Serviço do AO3, por favor entre em contato com a nossa equipe de Diretrizes
           e Abuso (%{contact_abuse_url}).
@@ -884,8 +832,6 @@ pt-BR:
         footer_link: a página do desafio
         look_up: Acesse mais detalhes sobre essa tarefa na %{link}.
         look_up_link: sua página de Assignments (Tarefas)
-        part1: Você recebeu a seguinte tarefa no desafio %{link} no Archive of Our
-          Own (AO3)!
       optional_tags: 'Tags opcionais:'
       prompts: 'Ideias:'
       prompt_url: 'URL da ideia:'
@@ -905,7 +851,6 @@ pt-BR:
       changed:
         html: "%{login}, o e-mail associado à sua conta foi alterado para %{email}."
         text: "%{login}, o e-mail associado à sua conta foi alterado para %{email}."
-      part1: "%{login}, o e-mail associado à sua conta foi alterado para %{email}."
       subject: "[%{app_name}] Mudança de endereço de e-mail efetuada"
     claim_notification:
       access:
@@ -976,12 +921,6 @@ pt-BR:
           do AO3 no link %{support_url}.
       redirects:
         html: Para preservar listas de recomendações e favoritos, os endereços dos
-          arquivos importados podem redirecionar à cópia importada dessas obras por
-          um tempo limitado (verifique o anúncio de importação do seu arquivo para
-          ter certeza). Se você já publicou uma cópia dessas obras e você %{negation}
-          utilizou a função Importação por URL, haverá duas cópias da mesma obra no
-          AO3.
-        text: Para preservar listas de recomendações e favoritos, os endereços dos
           arquivos importados podem redirecionar à cópia importada dessas obras por
           um tempo limitado (verifique o anúncio de importação do seu arquivo para
           ter certeza). Se você já publicou uma cópia dessas obras e você %{negation}
@@ -1106,46 +1045,17 @@ pt-BR:
       deleted_yourself:
         html: Conforme sua solicitação, a obra %{title} foi removida do AO3.
         text: Conforme sua solicitação, a obra %{title} foi removida do AO3.
-      html:
-        part1_other: Sua obra %{title} foi removida do AO3, conforme solicitado por
-          %{pseud}.
-        part1_yourself: Conforme sua solicitação, a obra %{title} foi removida do
-          AO3.
-        part2: Caso tenha alguma dúvida, por favor %{support}.
-      part3: Uma cópia da obra removida encontra-se em anexo.
       questions:
         html: Caso tenha alguma dúvida, por favor %{support}.
         text: Caso tenha alguma dúvida, por favor %{support} (%{url}).
       subject: "[%{app_name}] Sua obra foi removida"
       support: entre em contato com a nossa equipe de Suporte
-      text:
-        part1_other: Sua obra %{title} foi removida do AO3, conforme solicitado por
-          %{pseud}.
-        part1_yourself: Conforme sua solicitação, a obra %{title} foi removida do
-          AO3.
-        part2: Caso tenha alguma dúvida, por favor %{support} (%{url}).
     invitation:
       been_invited: Você recebeu um convite para se juntar ao nosso site beta!
       has_invited: "%{user_name} convidou você para participar do nosso site beta!"
       html:
-        faq_link: Para mais informações, consulte %{faq_link}.
         faq_link_text: nossa página de FAQ
-        part3: 'Caso queira participar, inscreva-se acessando a seguinte página: %{invitation_link}'
-      part1: O Archive of Our Own – AO3 (Nosso Próprio Arquivo) é um arquivo gratuito
-        e sem fins comerciais criado por fãs e para fãs. Somos multifandom e recebemos
-        todos os tipos de obras de fãs, como fanfiction, fanart, fanvids e podfic.
-        O site roda no software open source otwarchive, e nossos servidores são propriedade
-        da organização sem fins lucrativos OTW (Organização para Obras Transformativas),
-        que tem como missão a proteção de direitos de fãs e a preservação de suas
-        obras.
-      part2: Além disso, possuímos diversas ferramentas para que você possa encontrar
-        o tipo de obra que deseja, bem como publicar e compartilhar suas obras com
-        outras pessoas. Teremos muito mais em breve! Suas sugestões durante nossa
-        fase beta podem nos ajudar a construir um arquivo ainda melhor. \o/
       subject: "[%{app_name}] Convite"
-      text:
-        faq_link: 'Para mais informações, consulte nossa página de FAQ: %{faq_link}.'
-        part3: 'Caso queira participar, inscreva-se acessando a seguinte página: %{invitation_link}'
     invitation_to_claim:
       access:
         text: 'Dependendo do arquivo, suas obras podem ter sido importadas e disponibilizadas
@@ -1165,18 +1075,6 @@ pt-BR:
         contact_open_doors: entre em contato com o Portas Abertas
         contact_support: entre em contato com a equipe de Suporte do AO3
         faq_page: página de FAQ
-        open_doors: Open Doors (Portas Abertas)
-        part11: Para outras questões, por favor %{contact_support_link}.
-        part2: Para anúncios sobre novas mudanças de arquivo, consulte nossa página
-          de %{ao3_news_link}. Para encontrar mais informações, visite também a %{faq_page_link}
-          e a %{tutorial_page_link} do Portas Abertas. Caso tenha alguma pergunta
-          que não foi respondida nos links ou nesse e-mail, por favor %{contact_support_link}.
-        part5: Reivindique ou apague suas obras aqui.
-        part7: Se essas obras lhe pertencem, mas você não as deseja, você pode as
-          orfanar (para que permaneçam no AO3 com seu nome removido) ou apagar (para
-          que sejam inteiramente removidas do AO3). Você não precisa adicionar essas
-          obras a nenhuma conta para orfanar ou apagar — a ação pode ser feita diretamente
-          através do link de reivindicação acima. (Para receber ajuda, por favor %{contact_support_link}.)
         tutorial_page: página de tutorial
       introduction:
         text: Você está recebendo este e-mail, pois um arquivo foi recentemente importado
@@ -1223,43 +1121,6 @@ pt-BR:
         ferramenta de importação por URL, então duas cópias da mesma obra serão armazenadas
         no arquivo.
       subject: "[%{app_name}] Convite para a reivindicação de obras"
-      text:
-        part1: Você está recebendo este e-mail, pois um arquivo foi recentemente importado
-          pelo Open Doors (Portas Abertas) (%{open_doors_link}) para %{app_name} (%{app_short_name}
-          - %{app_url}) e acreditamos que as obras de fãs a seguir pertencem a você.
-          Queremos lhe dar a chance de reivindicar (ou apagar/orfanar) essas obras
-          se quiser. Caso ainda não tenha uma conta sob outro endereço de e-mail,
-          gostaríamos de lhe convidar para participar!
-        part10: Se você tinha outras obras no arquivo importado sob uma conta de e-mail
-          que não consegue mais acessar, por favor entre em contato com o Portas Abertas
-          com qualquer informação que possa ajudar a confirmar sua identidade.
-        part11: Para outras questões, por favor entre em contato com o Suporte do
-          AO3 em %{support_link}.
-        part2: Para anúncios sobre novas mudanças de arquivo, consulte nossa página
-          de Notícias do AO3 (%{news_link}). Para encontrar mais informações, visite
-          também a página de FAQ (%{open_doors_faq_link}) e de tutoriais (%{open_doors_tutorial_link})
-          do Portas Abertas. Caso tenha alguma pergunta que não foi respondida nos
-          links ou nesse e-mail, por favor entre em contato com o Suporte em %{support_link}.
-        part3: Se esse for um erro e essas obras não forem suas, por favor não as
-          apague! Por favor apenas entre em contato com o Portas Abertas %{open_doors_link}
-          e vamos corrigir a situação.
-        part4: 'Dependendo do arquivo, suas obras podem ter sido importadas e disponibilizadas
-          apenas para pessoas registradas (para manter as obras fora de pesquisas
-          do Google). Se for esse o caso, as obras só serão acessíveis a quem tiver
-          feito login no arquivo, a não ser que você opte por torná-las totalmente
-          visíveis. Se precisar de ajuda para desbloquear, orfanar ou apagar suas
-          obras, por favor entre em contato com o Suporte do AO3. '
-        part5: 'Reivindique ou apague suas obras aqui: %{claim_url}'
-        part7: |-
-          Se essas obras lhe pertencem, mas você não as deseja, você pode as orfanar (para que permaneçam no AO3 com seu nome removido) ou apagar (para que sejam inteiramente removidas do AO3). Você não precisa adicionar essas obras a nenhuma conta para orfanar ou apagar — a ação pode ser feita diretamente através do link de reivindicação acima.
-          (Se precisar de ajuda, por favor entre em contato com o Suporte em %{support_link}.)
-        part9: Se você deseja que o Portas Abertas atualize o link de redirecionamento
-          para sua obra já publicada no Arquivo, por favor apague a versão importada
-          e entre em contato com o Portas Abertas em %{open_doors_link} com o nome
-          que usa na sua conta do AO3, o nome que usava no arquivo importado, o título
-          e a URL da obra de fã que você deseja usar como link de redirecionamento.
-          (Se você tiver múltiplas obras com as quais deseja realizar esse procedimento,
-          todas podem ser mandadas em um único e-mail.)
       unwanted:
         html: Se essas obras lhe pertencem, mas você não as deseja, você pode as orfanar
           (para que permaneçam no AO3 com seu nome removido) ou apagar (para que sejam
@@ -1279,11 +1140,6 @@ pt-BR:
           todas podem ser mandadas em um único e-mail.)
       uploaded_list: 'Foi realizado o upload das seguintes obras:'
     invite_increase_notification:
-      body:
-        one: Só pra avisar que você tem um novo convite, que pode ser usado para criar
-          uma nova conta no AO3. Para convidar alguém, visite a %{invitation_page}.
-        other: Só pra avisar que você tem %{count} novos convites, que podem ser usados
-          para criar novas contas no AO3. Para convidar alguém, visite a %{invitation_page}.
       html:
         body:
           one: Só pra avisar que você tem um novo convite, que pode ser usado para
@@ -1341,18 +1197,6 @@ pt-BR:
           das obras e artistas que mais gosta, configurar suas preferências para definir
           a aparência e funcionamento do site para você, saber quais obras você acessou
           no AO3 através do seu histórico e muito mais.
-      html:
-        part1: Por favor %{activate_account_link}.
-        part2: Depois que sua conta for ativada, você poderá publicar suas obras de
-          fã, fazer assinaturas para receber notificações por e-mail quando houver
-          atualizações das obras e artistas que mais gosta, configurar suas preferências
-          para definir a aparência e funcionamento do site para você, saber quais
-          obras você acessou no AO3 através do seu histórico e muito mais.
-        part3: Existem muitas informações e dicas sobre como usar o AO3 na nossa %{faq_link}.
-          Você encontrará as mais recentes notícias a respeito do desenvolvimento
-          do site em %{admin_posts_link}. Se você precisar de mais ajuda, encontrar
-          algum bug ou tiver dúvidas ou sugestões, por favor %{contact_support_link},
-          que está sempre à sua disposição.
       information:
         html: Existem muitas informações e dicas sobre como usar o AO3 na nossa %{faq_link}.
           Você encontrará as mais recentes notícias a respeito do desenvolvimento
@@ -1366,19 +1210,6 @@ pt-BR:
           em contato com a nossa equipe de Suporte, que está sempre à sua disposição:
           %{contact_support_url}'
       subject: "[%{app_name}] Ative sua conta"
-      text:
-        part1: 'Por favor siga este link para ativar a sua conta: %{activate_account_url}'
-        part2: Depois que sua conta for ativada, você poderá publicar suas obras,
-          fazer assinaturas para receber notificações por e-mail quando houver atualizações
-          das obras e artistas que mais gosta, configurar suas preferências para definir
-          a aparência e funcionamento do site para você, saber quais obras você acessou
-          no AO3 através do seu histórico e muito mais.
-        part3: 'Há muitas informações e dicas sobre como usar o AO3 na nossa FAQ em
-          %{faq_url}. Você encontrará as mais recentes notícias a respeito do desenvolvimento
-          do site em Notícias do AO3 em %{admin_posts_url}. Se você precisar de mais
-          ajuda, encontrar algum bug ou tiver dúvidas ou sugestões, por favor, entre
-          em contato com a nossa equipe de Suporte, que está sempre à sua disposição:
-          %{contact_support_url}'
       welcome: Boas vindas ao Archive of Our Own (AO3), %{login}!
   validators:
     email:
@@ -1390,7 +1221,3 @@ pt-BR:
         allow_blank: deveria ter o formato de um endereço de e-mail. Por favor utilize
           um endereço diferente ou deixe em branco.
         no_blank: deveria ter o formato de um endereço de e-mail.
-      veracity:
-        allow_blank: parece não ser um endereço válido. Por favor utilize um endereço
-          diferente ou deixe em branco.
-        no_blank: parece não ser um endereço válido

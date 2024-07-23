@@ -156,16 +156,7 @@ cy:
               %{donate_url}.'
           html:
             donate_link_text: eich cyfranniadau
-            part1: Os rydych chi wedi derbyn y neges hon ar gam, %{support_link}.
-            part2: Mae'r "Archive of Our Own - AO3" (Archif Ein Hun) yn archif a chaiff
-              ei rhedeg a'i chefnogi gan ffaniau, sy'n dibynu ar %{donate_link}.
             support_link_text: cysylltwch â Chefnogaeth
-          text:
-            part1: 'Os rydych wedi derbyn y neges hon ar gam, cysylltwch â Chefnogaeth
-              fama: %{support_url}.'
-            part2: 'Mae''r "Archive of Our Own" (Archif Ein Hun) yn archif a chaiff
-              ei rhedeg a''i chefnogi gan ffaniau, sy''n dibynu ar eich cyfranniadau:
-              %{donate_url}.'
           unwanted_email:
             html: Os rydych chi wedi derbyn y neges hon ar gam, %{support_link}.
             text: 'Os rydych wedi derbyn y neges hon ar gam, cysylltwch â Chefnogaeth
@@ -199,10 +190,7 @@ cy:
           e-bost hwn a bydd eich cyfrinair blaenorol yn parhau i weithio.
   user_mailer:
     abuse_report:
-      description_para: 'Disgrifiad o''r camdriniaeth:'
-      para1: 'Caiff yr adroddiad isod ei hanfon i''r tîm Camdriniaeth:'
       subject: "[%{app_name}] Eich Adroddiad Camdriniaeth"
-      url_para: 'URL y dudalen ble mae''r camdriniaeth yn bodoli:'
     admin_deleted_work_notification:
       bye: Cysylltwyd gopi o'ch gwaith am eich cofnodion.
       contact_abuse: cysylltwch â'n Pwyllgor Polisi a Chamdriniaeth
@@ -210,9 +198,6 @@ cy:
         html: Dileüwyd eich gwaith %{title} o'r Archif gan weinyddydd.
         text: Dileüwyd eich gwaith %{title} o'r Archif gan weinyddydd.
       html:
-        part1: Dileüwyd eich gwaith %{title} o'r Archif gan weinyddydd.
-        part2: Os yr oedd eich gwaith yn rhan o brosiect mewforiad gan "Open Doors"
-          (Drysau Agored), %{opendoors_link} gyda unrhyw holiadau pellach.
         tos_violation: Os mae'n bosib yr oedd eich gwaith yn torri Telerau'r Archif,
           %{contact_abuse_link}.
       import_project:
@@ -224,10 +209,6 @@ cy:
       opendoors: cysylltwch â Drysau Agored
       subject: "[%{app_name}] Dileuwyd eich gwaith gan weinyddydd"
       text:
-        part1: Dileüwyd eich gwaith %{title} o'r Archif gan weinyddydd.
-        part2: Os yr oedd eich gwaith yn rhan o brosiect mewforiad gan "Open Doors"
-          (Drysau Agored), cysylltwch â Drysau Agored (%{opendoors_link}) gyda unrhyw
-          holiadau pellach.
         tos_violation: Os mae'n bosib yr oedd eich gwaith yn torri Telerau'r Archif,
           cysylltwch âg ein Pwyllgor Polisi a Chamdriniaeth (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -345,8 +326,6 @@ cy:
         footer_link: tudalen proffil yr her
         look_up: Gallwch weld yr aseiniad hwn ar %{link}.
         look_up_link: Eich Aseiniadau
-        part1: Mae'r cais hon yn yr her %{link} ar Archif Ein Hun wedi'i aseinio i
-          chi!
       optional_tags: 'Tagiau Ychwanegol:'
       prompts: 'Annogion:'
       prompt_url: 'URL Annogiad:'
@@ -365,7 +344,6 @@ cy:
       changed:
         html: "%{login}, newidwyd yr ebost cysylltiedig i'ch cyfrif i %{email}"
         text: "%{login}, newidwyd yr ebost cysylltiedig i'ch cyfrif i %{email}"
-      part1: "%{login}, newidwyd yr ebost cysylltiedig i'ch cyfrif i %{email}"
       subject: "[%{app_name}] Newidiad Ebost"
     claim_notification:
       access:
@@ -433,12 +411,6 @@ cy:
         text: Am ymholiadau eraill, cysylltwch â Chefnogaeth AO3 at %{support_url}.
       redirects:
         html: I gadw rhestrau awgrymu a thudalnodau, gall cyfeiriadau gwe'r archif
-          a fewnforiwyd ailgyfeirio i'r copi o'r gweithiau hyn a fewnforiwyd am gyfnod
-          cyfyngedig (edrychwch ar bostiad cyhoeddiad eich archif i fod yn sicr).
-          Os ydych chi eisoes wedi uwchlwytho copi o'r gweithiau hyn a %{negation}
-          defnyddioch chi'r nodwedd mewnforio o URL, bydd dau gopi o'r un gwaith ar
-          AO3.
-        text: I gadw rhestrau awgrymu a thudalnodau, gall cyfeiriadau gwe'r archif
           a fewnforiwyd ailgyfeirio i'r copi o'r gweithiau hyn a fewnforiwyd am gyfnod
           cyfyngedig (edrychwch ar bostiad cyhoeddiad eich archif i fod yn sicr).
           Os ydych chi eisoes wedi uwchlwytho copi o'r gweithiau hyn a %{negation}
@@ -559,21 +531,11 @@ cy:
       deleted_yourself:
         html: Caiff eich gwaith %{title} ei dileu yn ôl eich dymuniad chi.
         text: Caiff eich gwaith "%{title}" ei dileu yn ôl eich dymuniad chi.
-      html:
-        part1_other: Caiff eich gwaith %{title} ei dileu yn ôl dymuniad %{pseud}.
-        part1_yourself: Caiff eich gwaith %{title} ei dileu yn ôl eich dymuniad chi.
-        part2: Os mae gennych chi holiadau, %{support}.
-      part3: Cysylltwyd gopi o'ch gwaith am eich cofnodion.
       questions:
         html: Os mae gennych chi holiadau, %{support}.
         text: Os mae gennych chi holiadau, %{support} (%{url}).
       subject: "[%{app_name}] Mae eich gwaith wedi cael ei dileu"
       support: cysylltwch â Chefnogaeth
-      text:
-        part1_other: Caiff eich gwaith "%{title}" ei dileu yn ôl dymuniad %{pseud}.
-        part1_yourself: Caiff eich gwaith "%{title}" ei dileu yn ôl eich dymuniad
-          chi.
-        part2: Os mae gennych chi holiadau, %{support} (%{url}).
     invitation_to_claim:
       access:
         text: Yn dibynnu ar yr archif, efallai bod eich gweithiau wedi'u mewnforio
@@ -592,8 +554,6 @@ cy:
         contact_open_doors: cysylltu Drysau Agored
         contact_support: cysylltu cefnogaeth AO3
         faq_page: tudalen Cwestiynau Cyffredin
-        open_doors: Drysau Agored
-        part5: Hawliwch neu ddileu eich gwaith yma.
         tutorial_page: tudalen tiwtorial
       introduction:
         text: Rydych chi'n derbyn yr e-bost hwn oherwydd bod archif wedi'i mewnforio
@@ -635,45 +595,6 @@ cy:
         chi ddefnyddio'r nodwedd mewnforio o URL, bydd dau gopi o'r un gwaith ar yr
         archif.
       subject: "[%{app_name}] Gwahoddiad i hawlio gwaith"
-      text:
-        part1: Rydych chi'n derbyn yr e-bost hwn oherwydd bod archif wedi'i mewnforio
-          yn ddiweddar gan Ddrysau Agored (%{open_doors_link}) i'r%{app_name} (%{app_short_name}
-          - %{app_url}), a chredwn fod y ffanwaith canlynol yn perthyn i chi. Hoffem
-          roi cyfle i chi hawlio (neu ddileu/amddifadu) y gweithiau hyn os ydych chi
-          eisiau. Ac os nad oes gennych gyfrif eisoes o dan e-bost gwahanol, hoffem
-          eich gwahodd ar fwrdd!
-        part10: Os oedd gennych weithiau eraill ar yr archif a fewnforiwyd o dan gyfeiriad
-          e-bost na allwch ei gyrchu mwyach, cysylltwch â Drysau Agored gydag unrhyw
-          wybodaeth a all helpu i wirio'ch hunaniaeth.
-        part11: Am bob ymholiad arall, cysylltwch â Chefnogaeth AO3 ar %{support_link}.
-        part2: Gallwch ddarllen cyhoeddiadau am symudiadau archif diweddar yn Newyddion
-          AO3 (%{news_link}), a dod o hyd i wybodaeth ychwanegol ar dudalen Cwestiynau
-          Cyffredin Drysau Agored (%{open_doors_faq_link}) neu dudalen tiwtorialau
-          (%{open_doors_tutorial_link}). Am unrhyw gwestiynau na chawsant eu hateb
-          yn y Cwestiynau Cyffredin, sesiynau tiwtorial, neu'r e-bost hwn, cysylltwch
-          â Chefnogaeth ar %{support_link}.
-        part3: Os yw hwn yn gamgymeriad ac nid eich gweithiau chi yw’'r rhain, peidiwch
-          â'u dileu! Cysylltwch â Drysau Agored (%{open_doors_link}) a byddwn yn ei
-          ddatrys.
-        part4: Yn dibynnu ar yr archif, efallai bod eich gweithiau wedi'u mewnforio
-          wedi'u cyfyngu i ddefnyddwyr cofrestredig yn unig (i'w cadw allan o chwiliadau
-          Gwgl). Os yw hyn yn wir, dim ond defnyddwyr sydd wedi mewngofnodi fydd yn
-          hygyrch i'r gwaith oni bai eich bod yn dewis eu gwneud yn gwbl weladwy.
-          I gael help i ddatgloi, amddifadu, neu ddileu eich gwaith, cysylltwch â
-          Chymorth AO3.
-        part5: 'Hawliwch neu ddileu eich gwaith yma: %{claim_url}'
-        part7: Os yw'r gweithiau hyn yn eiddo i chi, ond nad ydych eu heisiau, gallwch
-          amddifadu (fel eu bod yn aros ar yr AO3, ond gyda'ch enw wedi'i dynnu) neu
-          eu dileu (fel eu bod yn cael eu tynnu o'r AO3 yn llwyr). Nid oes angen i
-          chi ychwanegu'r gweithiau hyn i unrhyw gyfrif er mwyn eu hamddifadu neu
-          eu dileu - gallwch wneud hyn yn uniongyrchol o'r ddolen hawlio uchod. (Am
-          gymorth, cysylltwch â Chefnogaeth ar %{support_link}.)
-        part9: Os hoffech i Ddrysau Agored ddiweddaru'r ailgyfeiriad i fynd at eich
-          gwaith sy'n bodoli eisoes, dilëwch y copi a fewnforiwyd, a chysylltwch â
-          Drysau Agored ar %{open_doors_link} gyda'ch enw cyfrif AO3, enw'ch cyfrif
-          ar yr archif a fewnforiwyd, a'r teitl ac URL y ffanwaith yr hoffech i'r
-          ailgyfeiriad fynd ati. (Os oes gennych chi sawl gwaith yr hoffech chi newid
-          yr ailgyfeiriadau ar eu cyfer, gallwch chi restru'r rhain mewn un e-bost.)
       unwanted:
         text: Os yw'r gweithiau hyn yn eiddo i chi, ond nad ydych eu heisiau, gallwch
           amddifadu (fel eu bod yn aros ar yr AO3, ond gyda'ch enw wedi'i dynnu) neu
@@ -690,22 +611,6 @@ cy:
           yr ailgyfeiriadau ar eu cyfer, gallwch chi restru'r rhain mewn un e-bost.)
       uploaded_list: 'Mae’r gwaith a lanlwythwyd yn cynnwys:'
     invite_increase_notification:
-      body:
-        few: Hoffem ni gadael i chi gwybod bod gennych chi %{count} o wahoddion newydd,
-          a allwch defnyddio i greu cyfrifau newydd ar yr archif. Gallwch gwahodd
-          ffrind at %{invitation_page}.
-        many: Hoffem ni gadael i chi gwybod bod gennych chi %{count} o wahoddion newydd,
-          a allwch defnyddio i greu cyfrifau newydd ar yr archif. Gallwch gwahodd
-          ffrind at %{invitation_page}.
-        one: Hoffem ni gadael i chi gwybod bod gennych chi %{count} wahoddiad newydd,
-          a allwch defnyddio i greu cyfrifau newydd ar yr archif. Gallwch gwahodd
-          ffrind at %{invitation_page}.
-        other: Hoffem ni gadael i chi gwybod bod gennych chi %{count} o wahoddion
-          newydd, a allwch defnyddio i greu cyfrifau newydd ar yr archif. Gallwch
-          gwahodd ffrind at %{invitation_page}.
-        two: Hoffem ni gadael i chi gwybod bod gennych chi %{count} o wahoddion newydd,
-          a allwch defnyddio i greu cyfrifau newydd ar yr archif. Gallwch gwahodd
-          ffrind at %{invitation_page}.
       html:
         body:
           one: Hoffem ni gadael i chi gwybod bod gennych chi %{count} wahoddiad newydd,
@@ -770,18 +675,6 @@ cy:
           neu greüydd hoff wedi diweddaru, gosod dewisadau i addasu’r ffordd mae’r
           wefan yn edrych ac yn gweithio i chi, dilyn y nifer o weithiau rydych wedi’i
           hedrych ar trwy eich hanes, a llawer fwy.
-      html:
-        part1: "%{activate_account_link}."
-        part2: Unwaith mae eich cyfrif wedi’i osod, gallwch postio eich ffanweithiau,
-          gosod tanysgrifiadau ebost i adael i chi gwybod pan mae eich ffanweithiau
-          neu greüydd hoff wedi diweddaru, gosod dewisadau i addasu’r ffordd mae’r
-          wefan yn edrych ac yn gweithio i chi, dilyn y nifer o weithiau rydych wedi’i
-          hedrych ar trwy eich hanes, a llawer fwy.
-        part3: Mae na lwyth o wybodaeth a chefnogaeth ar sut i defnyddio’r archif
-          yn ein %{faq_link}. Gallwch darganfod ein newyddion fwyaf dilys yn ein %{admin_posts_link}.
-          Os mae angen help arnoch, neu rydych wedi darganfod gwall, neu mae gennych
-          chi sylwadau neu holiadau, %{contact_support_link}, a fydd yn hapus i’ch
-          helpu.
       information:
         html: Mae na lwyth o wybodaeth a chefnogaeth ar sut i defnyddio’r archif yn
           ein %{faq_link}. Gallwch darganfod ein newyddion fwyaf dilys yn ein %{admin_posts_link}.
@@ -789,19 +682,6 @@ cy:
           chi sylwadau neu holiadau, %{contact_support_link}, a fydd yn hapus i’ch
           helpu.
         text: 'Mae na lwyth o wybodaeth a chefnogaeth ar sut i defnyddio’r archif
-          yn ein tudalen Holiadau Cyffredin at %{faq_url}. Gallwch darganfod ein newyddion
-          fwyaf dilys yn pyst gweinyddydd yr archif at %{admin_posts_url}. Os mae
-          angen help arnoch, neu rydych wedi darganfod gwall, neu mae gennych chi
-          sylwadau neu holiadau, cysylltwch âg ein tîm Cefnogaeth, a fydd yn hapus
-          i’ch helpu: %{contact_support_url}.'
-      text:
-        part1: 'Ysgogwch eich cyfrif: %{activate_account_url}'
-        part2: Unwaith mae eich cyfrif wedi’i osod, gallwch postio eich ffanweithiau,
-          gosod tanysgrifiadau ebost i adael i chi gwybod pan mae eich ffanweithiau
-          neu greüydd hoff wedi diweddaru, gosod dewisadau i addasu’r ffordd mae’r
-          wefan yn edrych ac yn gweithio i chi, dilyn y nifer o weithiau rydych wedi’i
-          hedrych ar trwy eich hanes, a llawer fwy.
-        part3: 'Mae na lwyth o wybodaeth a chefnogaeth ar sut i defnyddio’r archif
           yn ein tudalen Holiadau Cyffredin at %{faq_url}. Gallwch darganfod ein newyddion
           fwyaf dilys yn pyst gweinyddydd yr archif at %{admin_posts_url}. Os mae
           angen help arnoch, neu rydych wedi darganfod gwall, neu mae gennych chi

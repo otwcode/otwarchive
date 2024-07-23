@@ -136,15 +136,7 @@ sl:
               na vaše donacije: %{donate_url}.'
           html:
             donate_link_text: vaše donacije
-            part1: Če ste to sporočilo prejeli po pomoti, prosimo %{support_link}.
-            part2: Naš lastni arhiv upravljajo in vzdržujejo fani, zato se zanaša
-              na %{donate_link}.
             support_link_text: kontaktirajte Pomoč uporabnikom
-          text:
-            part1: Če ste to sporočilo prejeli po pomoti, prosimo kontaktirajte Pomoč
-              uporabnikom preko %{support_url}.
-            part2: 'Naš lastni arhiv upravljajo in vzdržujejo fani, zato se zanaša
-              na vaše donacije: %{donate_url}.'
           unwanted_email:
             html: Če ste to sporočilo prejeli po pomoti, prosimo %{support_link}.
             text: Če ste to sporočilo prejeli po pomoti, prosimo kontaktirajte Pomoč
@@ -177,10 +169,7 @@ sl:
           sporočilo in vaše trenutno geslo bo ostalo veljavno.
   user_mailer:
     abuse_report:
-      description_para: 'Opis zlorabe:'
-      para1: 'Sledeče poročilo je bilo posredovano ekipi za Pravila in zlorabo:'
       subject: "[%{app_name}] Vaše poročilo odboru za Pravila in zlorabo"
-      url_para: 'Naslov spletne strani, kjer se nahaja zloraba:'
     admin_deleted_work_notification:
       bye: V priponki lahko najdete kopijo svojega dela.
       contact_abuse: stopite v stik z Odborom za pravila in zlorabo.
@@ -188,10 +177,6 @@ sl:
         html: Administrator je vaše delo %{title} odstranil iz AO3.
         text: Administrator je vaše delo %{title} odstranil iz AO3.
       html:
-        part1: Administrator je vaše delo %{title} odstranil iz AO3.
-        part2: Če je bilo vaše delo del uvoženega projekta pod nadzorom naše ekipe
-          Open Doors (Odprta vrata), prosimo %{opendoors_link} z vsemi nadaljnjimi
-          vprašanji.
         tos_violation: Če je vaše delo morda kršilo Pogoje uporabe AO3, prosimo %{contact_abuse_link}.
       import_project:
         html: Če je bilo vaše delo del uvoženega projekta pod nadzorom naše ekipe
@@ -203,10 +188,6 @@ sl:
       opendoors: kontaktirajte Odprta vrata
       subject: "[%{app_name}] Administrator je odstranil vaše delo"
       text:
-        part1: Administrator je vaše delo %{title} odstranil iz AO3.
-        part2: Če je bilo vaše delo del uvoženega projekta pod nadzorom naše ekipe
-          Open Doors (Odprta vrata), prosimo kontaktirajte Odprta vrata (%{opendoors_link})
-          z vsemi nadaljnjimi vprašanji.
         tos_violation: Če je vaše delo morda kršilo Pogoje uporabe AO3, prosimo stopite
           v stik z Odborom za pravila in zlorabo (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -304,7 +285,6 @@ sl:
         footer_link: profilno stran izziva
         look_up: Nalogo si lahko ogledate na %{link}.
         look_up_link: svoji strani Assignments (Naloge)
-        part1: Dodeljena vam je bila naslednja naloga v izzivu %{link} v AO3!
       optional_tags: 'Neobvezne oznake:'
       prompts: 'Iztočnice (prompti):'
       prompt_url: 'URL iztočnice (prompta):'
@@ -325,8 +305,6 @@ sl:
           v %{email}"
         text: "%{login}, elektronski naslov povezan z vašim računom je bil spremenjen
           v %{email}"
-      part1: "%{login}, elektronski naslov povezan z vašim računom je bil spremenjen
-        v %{email}"
       subject: "[%{app_name}] Sprememba elektronskega naslova"
     collection_notification:
       assignments_sent:
@@ -413,20 +391,11 @@ sl:
       deleted_yourself:
         html: Vaše delo %{title} je bilo izbrisano na vašo zahtevo.
         text: Vaše delo "%{title}" je bilo izbrisano na vašo zahtevo.
-      html:
-        part1_other: Vaše delo %{title} je bilo izbrisano na zahtevo %{pseud}.
-        part1_yourself: Vaše delo %{title} je bilo izbrisano na vašo zahtevo.
-        part2: Če imate vprašanja, prosimo, %{support}.
-      part3: V priponki lahko najdete kopijo svojega dela.
       questions:
         html: Če imate vprašanja, prosimo, %{support}.
         text: Če imate vprašanja, prosimo, %{support} (%{url}).
       subject: "[%{app_name}] Vaše delo je bilo izbrisano"
       support: kontaktirajte pomoč uporabnikom
-      text:
-        part1_other: Vaše delo "%{title}" je bilo izbrisano na zahtevo %{pseud}.
-        part1_yourself: Vaše delo "%{title}" je bilo izbrisano na vašo zahtevo.
-        part2: Če imate vprašanja, prosimo, %{support} (%{url}).
     invitation_to_claim:
       access:
         text: Glede na arhiv so bila vaša dela morda uvožena tako, da so dostopna
@@ -445,8 +414,6 @@ sl:
         contact_open_doors: kontaktirajte Odprta vrata
         contact_support: kontaktirajte podporo uporabnikom AO3
         faq_page: Pogosta vprašanja
-        open_doors: Open Doors (Odprta vrata)
-        part5: Kliknite tu, da si prilastite ali odstranite svoja dela.
         tutorial_page: vodič
       introduction:
         text: Ta e-mail ste prejeli, ker so pred kratkim pri Odprtih vratih (%{open_doors_link})
@@ -487,43 +454,6 @@ sl:
         Če ste že naložili kopijo teh del in NISTE uporabili funkcije uvoza iz URL-ja,
         bosta v arhivu dve kopiji istega dela.
       subject: "[%{app_name}] Povabilo k zahtevku za lastništvo dela"
-      text:
-        part1: Ta e-mail ste prejeli, ker so pred kratkim pri Odprtih vratih (%{open_doors_link})
-          uvozili arhiv v %{app_name} (%{app_short_name} - %{app_url}). Naslednja
-          fan-dela naj bi pripadala vam. Radi bi vam dali priložnost, da si ta dela,
-          če tako želite, prilastite (ali da jih izbrišete oz. da jih opustite). Če
-          še nimate uporabniškega računa pod drugim e-mailom, bi vas radi povabili,
-          da se nam pridružite!
-        part10: Če ste imeli na uvoženem arhivu druga dela pod e-poštnim naslovom,
-          do katerega nimate več dostopa, prosimo,  kontaktirajte Odprta vrata z kakršnimi
-          koli informacijami, ki bi nam lahko pomagale potrditi vašo identiteto.
-        part11: Za druga vprašanja, prosimo, kontaktirajte AO3 podporo uporabnikom
-          na %{support_link}.
-        part2: Obvestila o nedavnih premikih arhivov lahko preberete na AO3 novicah
-          (%{news_link}), dodatne informacije pa lahko najdete na strani Odprtih vratih
-          s pogostimi vprašanji (%{open_doors_faq_link}) ali v vodiču (%{open_doors_tutorial_link}).
-          Za vprašanja, na katere ni odgovora na strani z pogostimi vprašanji, v vodiču
-          ali v tem e-mailu, prosimo, kontaktirajte podporo uporabnikom na %{support_link}.
-        part3: Če je prišlo do napake in ta dela niso vaša, vas naprošamo, da jih
-          ne izbrišite! Prosimo, kontaktirajte Odprta vrata (%{open_doors_link}) in
-          razrešili bomo težavo.
-        part4: Glede na arhiv so bila vaša dela morda uvožena tako, da so dostopna
-          samo registriranim uporabnikom (da niso dostopna na google iskanju). V tem
-          primeru so ta dela dostopna samo prijavljenim uporabnikom, razen če se odločite,
-          da bodo popolnoma vidna. Če potrebujete pomoč pri odklepanju, opuščanju
-          ali izbrisanju vašim del, prosimo, kontaktirajte AO3 podporo uporabnikom.
-        part5: 'Kliknite tu, da si prilastite ali odstranite svoja dela: %{claim_url}'
-        part7: Če so ta dela vaša, ampak jih ne želite lastiti, jih lahko opustite
-          oz. osirotite (tako bodo ostala na AO3, ampak brez vašega imena). Če želite
-          opustiti ali popolnoma izbrisati ta dela, za to ne potrebujete dodati nobenega
-          uporabniškega računa, temveč lahko to storite direktno na zgornji povezavi
-          (za pomoč, prosimo, kontaktirajte podporo uporabnikom na %{support_link}).
-        part9: Če želite, da Odprta vrata posodobijo preusmeritev, da kaže na vaše
-          obstoječe delo, izbrišite uvoženo kopijo in kontaktirajte Odprta vrata na
-          %{open_doors_link} z imenom vašega AO3 računa, z imenom računa na uvoženem
-          arhivu in z naslovom ter URL-jem fan-dela, kamor želite, da vodi preusmeritev.
-          (Če imate več del, za katera bi radi spremenili preusmeritve, jih lahko
-          navedete v enem e-mailu.)
       unwanted:
         text: Če so ta dela vaša, ampak jih ne želite lastiti, jih lahko opustite
           oz. osirotite (tako bodo ostala na AO3, ampak brez vašega imena). Če želite
@@ -539,15 +469,6 @@ sl:
           navedete v enem e-mailu.)
       uploaded_list: 'Objavljena dela vključujejo:'
     invite_increase_notification:
-      body:
-        few: Sporočamo vam, da imate %{count} nova vabila za ustvarjanje novega uporabniškega
-          računa na AO3. Podarite jih lahko preko %{invitation_page}.
-        one: Sporočamo vam, da imate %{count} novo vabilo za ustvarjanje novega uporabniškega
-          računa na AO3. Podarite ga lahko preko %{invitation_page}.
-        other: Sporočamo vam, da imate %{count} novih vabil za ustvarjanje novega
-          uporabniškega računa na AO3. Podarite jih lahko preko %{invitation_page}.
-        two: Sporočamo vam, da imate %{count} novi vabili za ustvarjanje novega uporabniškega
-          računa na AO3. Podarite ju lahko preko %{invitation_page}.
       html:
         body:
           few: Sporočamo vam, da imate %{count} nova vabila za ustvarjanje novega
@@ -615,18 +536,6 @@ sl:
           najljubših ustvarjalcev in del, nastavite preference, da si prilagodite
           delovanje in izgled strani, vodite evidenco del, do katerih ste dostopali
           na AO3 preko vaše zgodovine, in še veliko več.
-      html:
-        part1: Prosimo, %{activate_account_link}.
-        part2: Ko aktivirate svoj račun, lahko objavljate svoja fan-dela, nastavite
-          e-poštne naročnine, da boste obveščeni o najnovejših posodobitvah vaših
-          najljubših ustvarjalcev in del, nastavite preference, da si prilagodite
-          delovanje in izgled strani, vodite evidenco del, do katerih ste dostopali
-          na AO3 preko vaše zgodovine, in še veliko več.
-        part3: Veliko informacij in nasvetov o tem kako uporabljati AO3 najdete v
-          naših %{faq_link}. Najnovejše novice o razvoju strani najdete v %{admin_posts_link}.
-          Če potrebujete pomoč, naletite na napako, ali imate vprašanja ali komentarje,
-          prosimo, %{contact_support_link}, katere člani so vedno na voljo, da vam
-          pomagajo.
       information:
         html: Veliko informacij in nasvetov o tem kako uporabljati AO3 najdete v naših
           %{faq_link}. Najnovejše novice o razvoju strani najdete v %{admin_posts_link}.
@@ -634,18 +543,6 @@ sl:
           prosimo, %{contact_support_link}, katere člani so vedno na voljo, da vam
           pomagajo.
         text: Veliko informacij in nasvetov o tem kako uporabljati AO3 najdete na
-          strani s pogostimi vprašanji v %{faq_url}. Najnovejše informacije o razvoju
-          strani AO3 Novic najdete v %{admin_posts_url}. Če potrebujete pomoč, naletite
-          na napako, ali imate vprašanja ali komentarje, prosimo, %{contact_support_url},
-          katere člani so vedno na voljo, da vam pomagajo.
-      text:
-        part1: 'Prosimo, kliknite na naslednji link, da aktivirate svoj račun: %{activate_account_url}.'
-        part2: Ko aktivirate svoj račun, lahko objavljate svoja fan-dela, nastavite
-          e-poštne naročnine, da boste obveščeni o najnovejših posodobitvah vaših
-          najljubših ustvarjalcev in del, nastavite preference, da si prilagodite
-          delovanje in izgled strani, vodite evidenco del, do katerih ste dostopali
-          na AO3 preko vaše zgodovine, in še veliko več.
-        part3: Veliko informacij in nasvetov o tem kako uporabljati AO3 najdete na
           strani s pogostimi vprašanji v %{faq_url}. Najnovejše informacije o razvoju
           strani AO3 Novic najdete v %{admin_posts_url}. Če potrebujete pomoč, naletite
           na napako, ali imate vprašanja ali komentarje, prosimo, %{contact_support_url},
