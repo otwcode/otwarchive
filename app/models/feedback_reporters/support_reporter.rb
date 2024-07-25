@@ -16,7 +16,7 @@ class SupportReporter < FeedbackReporter
     # The Zoho field supports at most 255 characters. That _should_ be enough, but technically
     # we support ludicrously long URLs because searches can do that. In those cases, just get the
     # first 255 characters.
-    sanitized_url = referer ? referer[0..254] : "Unknown URL"
+    sanitized_url = referer.present? ? referer[0..254] : "Unknown URL"
     {
       "cf_archive_version" => site_revision.presence || "Unknown site revision",
       "cf_rollout" => rollout.presence || "Unknown",

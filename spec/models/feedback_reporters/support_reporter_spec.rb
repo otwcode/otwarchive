@@ -120,7 +120,7 @@ describe SupportReporter do
       end
 
       it "returns a hash containing a blank string for referer" do
-        expect(subject.report_attributes.dig("cf", "cf_url")).to eq("")
+        expect(subject.report_attributes.dig("cf", "cf_url")).to eq("Unknown URL")
       end
     end
 
