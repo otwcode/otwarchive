@@ -35,7 +35,7 @@ describe SupportReporter do
         "cf_rollout" => "rollout_value",
         "cf_user_agent" => "HTTParty",
         "cf_ip" => "127.0.0.1",
-        "cf_referer" => "https://example.com/works/1",
+        "cf_url" => "https://example.com/works/1",
         "cf_site_skin" => "Reversi"
       }
     }
@@ -104,13 +104,13 @@ describe SupportReporter do
       end
     end
 
-    context "if the report has an empty ip address" do
+    context "if the report has an empty IP address" do
       before do
         allow(subject).to receive(:ip_address).and_return("")
       end
 
       it "returns a hash containing 'Unknown' for IP address" do
-        expect(subject.report_attributes.dig("cf", "cf_ip")).to eq("Unknown")
+        expect(subject.report_attributes.dig("cf", "cf_ip")).to eq("Unknown IP")
       end
     end
 
@@ -120,7 +120,17 @@ describe SupportReporter do
       end
 
       it "returns a hash containing a blank string for referer" do
-        expect(subject.report_attributes.dig("cf", "cf_referer")).to eq("")
+        expect(subject.report_attributes.dig("cf", "cf_url")).to eq("")
+      end
+    end
+
+    context "if the reporter has a very long referer" do
+      before do
+        allow(subject).to receive(:referer).and_return("a" * 256)
+      end
+
+      it "truncates the referer to 255 characters" do
+        expect(subject.report_attributes.dig("cf", "cf_url").length).to eq(255)
       end
     end
 

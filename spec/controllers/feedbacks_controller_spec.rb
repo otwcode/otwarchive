@@ -32,7 +32,7 @@ describe FeedbacksController do
         fake_login_known_user(user)
       end
 
-      context "and the user has no skin set" do
+      context "when the user has no skin set" do
         before do
           admin_setting = AdminSetting.default
           admin_setting.default_skin = Skin.default
@@ -49,7 +49,7 @@ describe FeedbacksController do
         end
       end
 
-      context "and the user has a public non-default skin set" do
+      context "when the user has a public non-default skin set" do
         let(:skin) { create(:skin, :public) }
 
         before do
@@ -66,7 +66,7 @@ describe FeedbacksController do
         end
       end
 
-      context "and the user has a private skin set" do
+      context "when the user has a private skin set" do
         let(:skin) { create(:skin, author: user) }
 
         before do
@@ -85,7 +85,7 @@ describe FeedbacksController do
     end
 
     context "when accessed by a guest" do
-      context "and the referer is on the Archive" do
+      context "when the referer is on the Archive" do
         before do
           request.env["HTTP_REFERER"] = "https://archiveofourown.org/works/1"
         end
@@ -101,7 +101,7 @@ describe FeedbacksController do
         end
       end
 
-      context "and the referer is elsewhere" do
+      context "when the referer is elsewhere" do
         before do
           request.env["HTTP_REFERER"] = "https://example.com/works/1"
         end

@@ -36,7 +36,7 @@ module SkinsHelper
     skin = current_skin
     return "" unless skin
 
-    # We include the version information for both the skin_id and the
+    # We include the version information for both the skin's id and the
     # AdminSetting.default_skin_id because the default skin is used in skins of
     # type "user", so we need to regenerate the cache block when it's modified.
     #

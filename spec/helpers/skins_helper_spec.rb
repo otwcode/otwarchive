@@ -18,7 +18,7 @@ describe SkinsHelper do
         params[:site_skin] = skin.id
       end
 
-      context "and the skin is usable" do
+      context "when the skin is applied" do
         let(:skin) { create(:skin, :public) }
 
         it "returns the skin matching the parameter" do
@@ -26,7 +26,7 @@ describe SkinsHelper do
         end
       end
 
-      context "and the skin is not usable" do
+      context "when the skin is not applied" do
         let(:skin) { create(:skin) }
 
         it "falls back to other options" do
@@ -42,7 +42,7 @@ describe SkinsHelper do
         session[:site_skin] = skin.id
       end
 
-      context "and the skin is usable" do
+      context "when the skin is applied" do
         let(:skin) { create(:skin, :public) }
 
         it "returns the skin matching the session attribute" do
@@ -50,7 +50,7 @@ describe SkinsHelper do
         end
       end
 
-      context "and the skin is not usable" do
+      context "when the skin is not applied" do
         # Non-public skin with a different author
         let(:skin) { create(:skin) }
 
