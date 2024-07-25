@@ -182,6 +182,7 @@ Feature: Kudos
       And the email to "myname1" should contain "myname2"
       And the email to "myname1" should contain "Awesome Story"
       And the email to "myname1" should be translated
+    # AO3-6042: Emails should not obey user's locale preference when locales are deactivated
     When the locale preference feature flag is disabled for user "myname1"
       And all emails have been delivered
       And I am logged in as "myname3"

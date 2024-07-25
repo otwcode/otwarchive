@@ -3,8 +3,7 @@ Given "the email queue is clear" do
 end
 
 Given "a locale with translated emails" do
-  language = Language.find_or_create_by(short: "new", name: "New")
-  Locale.create(iso: "new", name: "New", language: language, email_enabled: true)
+  FactoryBot.create(:locale, iso: "new")
   # The footer keys are used in all emails
   I18n.backend.store_translations(:new, { mailer: { general: { footer: { general: { about: { html: "Translated footer", text: "Translated footer" } } } } } })
   I18n.backend.store_translations(:new, { kudo_mailer: { batch_kudo_notification: { subject: "Translated subject" } } })
@@ -35,7 +34,7 @@ end
 
 Then "{string} should be emailed" do |user|
   @user = User.find_by(login: user)
-  expect(emails("to: \"#{email_for(@user.email)}\"").size).to be_positive
+  expect(emails("to: \"#{email_for(@user.email)}\"")).not_to be_empty
 end
 
 Then "{string} should not be emailed" do |user|
