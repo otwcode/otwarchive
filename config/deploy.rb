@@ -24,8 +24,7 @@
 #
 # Several tasks run automatically based on behind-the-scenes magic
 #
-require './config/boot'
-require 'new_relic/recipes'
+require "./config/boot"
 require "active_support/core_ext/hash/keys"
 
 # takes care of the bundle install tasks
