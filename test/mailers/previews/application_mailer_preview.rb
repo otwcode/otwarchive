@@ -11,6 +11,7 @@ class ApplicationMailerPreview < ActionMailer::Preview
     message = nil
     ActiveRecord::Base.transaction do
       message = super(...)
+      User.current_user = nil
       raise ActiveRecord::Rollback
     end
     message
