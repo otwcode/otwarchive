@@ -258,8 +258,10 @@ class Work < ApplicationRecord
             # this has to use the synchronous version because the work is going to be destroyed
             UserMailer.admin_deleted_work_notification(user, self).deliver_now
           else
-            # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.delete_work_notification(user, self).deliver_now
+            I18n.with_locale(user.preference.locale.iso) do
+              # this has to use the synchronous version because the work is going to be destroyed
+              UserMailer.delete_work_notification(user, self).deliver_now
+            end
           end
         end
       end

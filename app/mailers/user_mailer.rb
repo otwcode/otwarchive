@@ -330,12 +330,10 @@ class UserMailer < ApplicationMailer
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
     attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
 
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: user.email,
-        subject: t("user_mailer.delete_work_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: user.email,
+      subject: t('user_mailer.delete_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends email to creators when a creation is deleted by an admin
