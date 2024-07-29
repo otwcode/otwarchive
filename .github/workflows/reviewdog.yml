@@ -45,7 +45,7 @@ jobs:
           bundler-cache: true
 
       - name: erb-lint
-        uses: tk0miya/action-erblint@eda368e7a0d8a0e71c475bb7cc65d0d612e5148c
+        uses: tk0miya/action-erblint@b6e537f4616e4fa7a9eef209ca34ca944e1440dd
         with:
           use_bundler: true
           reporter: github-pr-check
