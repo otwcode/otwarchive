@@ -39,7 +39,12 @@ describe TagWranglersController do
   end
 
   before(:all) do
-    Role.find_or_create_by(name: "tag_wrangler")
+    Role.create!(name: "tag_wrangler")
+  end
+
+  after(:all) do
+    # Clean up when we're done, a few other specs become unhappy otherwise
+    Role.find_by(name: "tag_wrangler").destroy!
   end
 
   describe "#index" do
