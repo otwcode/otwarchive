@@ -85,6 +85,9 @@ services:
       - redis
       - es
       - mc
+    # Make `docker compose attach web` work for debugging
+    stdin_open: true
+    tty: true
   chrome:
     profiles:
       - test
