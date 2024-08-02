@@ -232,3 +232,34 @@ Feature: Nominating and reviewing nominations for a tag set
       And I submit
     Then I should see "The tag Veronica Mars is already in the archive as a Character tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom."
 
+  Scenario: If a tag was nominated as another type of tag, "My Nominations" and "Review Nominations" can still be accessed
+    Given a nominated tag set "bad" with a tag nomination in the wrong category
+      And I am logged in as "tagsetter"
+      And I go to the "bad" tag set page
+    # preexisting non-canonical tag
+    When I follow "My Nominations"
+    Then I should see "My Nominations for bad"
+      And I should see "rel tag"
+    When I go to the "bad" tag set nominations page
+    Then I should see "Fandoms (1 left to review)"
+      And I should see "rel tag"
+    # canonical tag
+    When the tag "rel tag" is canonized
+      And I go to the "bad" tag set page
+    When I follow "My Nominations"
+    Then I should see "My Nominations for bad"
+      And I should see "rel tag"
+    When I go to the "bad" tag set nominations page
+    Then I should see "Fandoms (1 left to review)"
+      And I should see "rel tag"
+    # synonym tag
+    When the tag "rel tag" is decanonized
+      And a canonical relationship "canon tag"
+      And a synonym "rel tag" of the tag "canon tag"
+      And I go to the "bad" tag set page
+    When I follow "My Nominations"
+    Then I should see "My Nominations for bad"
+      And I should see "rel tag"
+    When I go to the "bad" tag set nominations page
+    Then I should see "Fandoms (1 left to review)"
+      And I should see "rel tag (canon tag)"
