@@ -222,7 +222,7 @@ Feature: Display autocomplete for tags
     Given a canonical character "Gold"
       And a zero width space tag exists
       And I am logged in as a tag wrangler
-    When I go to the "A/B" tag edit page
+    When I go to the "Gold" tag edit page
     Then I should see "This is the official name for the Character"
     When I enter " " in the "tag_merger_string_autocomplete" autocomplete field
     Then I should see "No suggestions found" in the autocomplete
@@ -232,7 +232,7 @@ Feature: Display autocomplete for tags
     Given a canonical character "Gold"
       And a zero width space tag exists
       And I am logged in as a tag wrangler
-    When I go to the "A/B" tag edit page
+    When I go to the "Gold" tag edit page
     Then I should see "This is the official name for the Character"
     # Zero width space tag
     When I enter "​" in the "tag_merger_string_autocomplete" autocomplete field
