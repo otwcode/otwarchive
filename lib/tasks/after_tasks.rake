@@ -70,22 +70,23 @@ namespace :After do
   desc "Clean up multiple rating tags"
   task(clean_up_multiple_ratings: :environment) do
     default_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
-    es_results = $elasticsearch.search(index: WorkIndexer.index_name, body: {
-      query: {
-        bool: {
-          filter: {
-            script: {
+    es_results = $elasticsearch.search(index: WorkIndexer.index_name, 
+      body: {
+        query: {
+          bool: {
+            filter: {
               script: {
-                source: "doc['rating_ids'].length > 1",
-                lang: "painless"
+                script: {
+                  source: "doc['rating_ids'].length > 1",
+                  lang: "painless"
+                }
               }
             }
           }
         }
       }
-    })
+    )
     invalid_works = QueryResult.new("Work", es_results)
-
 
     puts "There are #{invalid_works.size} works with multiple ratings."
 
