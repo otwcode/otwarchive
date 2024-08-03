@@ -77,7 +77,7 @@ namespace :After do
                                                script: {
                                                  script: {
                                                    source: "doc['rating_ids'].length > 1",
-                                                   lang: "painless",
+                                                   lang: "painless"
                                                  }
                                                }
                                              }
