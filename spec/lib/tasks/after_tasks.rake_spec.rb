@@ -49,13 +49,13 @@ end
 describe "rake After:clean_up_multiple_ratings" do
   let!(:default_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true) }
   let!(:other_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
-  let!(:work_with_multiple_ratings) {
+  let!(:work_with_multiple_ratings) do
     create_invalid(:work, rating_string: [default_rating.name, other_rating.name].join(",")).tap do |work|
       # Update the creatorship to a user so validation doesn't fail
       work.creatorships.build(pseud: build(:pseud), approved: true)
       work.save!(validate: false)
     end
-  }
+  end
 
   before do
     run_all_indexing_jobs
