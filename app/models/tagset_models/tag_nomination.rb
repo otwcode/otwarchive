@@ -43,15 +43,17 @@ class TagNomination < ApplicationRecord
     end
   end
 
-  after_save :destroy_if_blank
-  def destroy_if_blank
-    if tagname.blank?
-      self.destroy
-    end
-  end
-
   def get_owned_tag_set
     @tag_set || self.tag_set_nomination.owned_tag_set
+  end
+
+  after_save :destroy_if_blank
+  def destroy_if_blank
+    self.destroy if blank_tagname?
+  end
+
+  def blank_tagname?
+    tagname.blank?
   end
 
   before_save :set_tag_status

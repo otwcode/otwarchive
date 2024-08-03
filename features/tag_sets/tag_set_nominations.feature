@@ -114,6 +114,25 @@ Feature: Nominating and reviewing nominations for a tag set
     And I should see "My Favorite Character/Their Worst Enemy"
     But I should not see "Their Best Friend"
 
+  Scenario: You should be able to delete a nominated character and its fandom at once
+  when the tagset doesn't allow fandom nominations
+    Given a canonical character "Common Character" in fandom "Canon"
+    And I am logged in as "tagsetter"
+    And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 3 character noms
+    When I follow "Nominate"
+    And I fill in "Character 1" with "Obscure Character"
+    And I fill in "Fandom?" with "Canon"
+    And I press "Submit"
+    Then I should see "Your nominations were successfully submitted."
+    And I should see "Obscure Character"
+    When I follow "Edit"
+    And I fill in "Character 1" with ""
+    And I fill in "Fandom?" with ""
+    And I press "Submit"
+    Then I should see "Your nominations were successfully updated."
+    And I should see "None nominated in this category."
+    But I should not see "We need to know what fandom belongs in."
+
   Scenario: Owner of a tag set can clear all nominations
   Given I am logged in as "tagsetter"
     And I set up the nominated tag set "Nominated Tags" with 3 fandom noms and 3 character noms
