@@ -15,9 +15,9 @@ class TagNomination < ApplicationRecord
 
   validate :type_validity, unless: :blank_tagname?
   def type_validity
-    if (tag = Tag.find_by_name(tagname)) && "#{tag.type}Nomination" != self.type
-      errors.add(:base, ts("^The tag %{tagname} is already in the archive as a #{tag.type} tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom.", tagname: self.tagname))
-    end
+    return unless (tag = Tag.find_by_name(tagname)) && "#{tag.type}Nomination" != self.type
+
+    errors.add(:base, ts("^The tag %{tagname} is already in the archive as a #{tag.type} tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom.", tagname: self.tagname))
   end
 
   validate :not_already_reviewed, on: :update
@@ -45,11 +45,6 @@ class TagNomination < ApplicationRecord
 
   def get_owned_tag_set
     @tag_set || self.tag_set_nomination.owned_tag_set
-  end
-
-  after_save :destroy_if_blank
-  def destroy_if_blank
-    self.destroy if blank_tagname?
   end
 
   def blank_tagname?
@@ -105,6 +100,11 @@ class TagNomination < ApplicationRecord
       self.approved = set_noms.owned_tag_set.already_in_set?(tagname) || false
     end
     true
+  end
+
+  after_save :destroy_if_blank
+  def destroy_if_blank
+    self.destroy if blank_tagname?
   end
 
   def self.for_tag_set(tag_set)
