@@ -46,6 +46,32 @@ describe "rake After:fix_teen_and_up_imported_rating" do
   end
 end
 
+describe "rake After:clean_up_multiple_ratings" do
+  let!(:default_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true) }
+  let!(:other_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
+  let!(:work_with_multiple_ratings) do
+    create_invalid(:work, rating_string: [default_rating.name, other_rating.name].join(",")).tap do |work|
+      # Update the creatorship to a user so validation doesn't fail
+      work.creatorships.build(pseud: build(:pseud), approved: true)
+      work.save!(validate: false)
+    end
+  end
+
+  before do
+    run_all_indexing_jobs
+  end
+
+  it "changes and replaces the multiple tags" do
+    subject.invoke
+
+    work_with_multiple_ratings.reload
+
+    # Work with multiple ratings gets the default rating
+    expect(work_with_multiple_ratings.ratings.to_a).to contain_exactly(default_rating)
+    expect(work_with_multiple_ratings.rating_string).to eq(default_rating.name)
+  end
+end
+
 describe "rake After:clean_up_noncanonical_ratings" do
   let!(:noncanonical_rating) do
     tag = Rating.create(name: "Borked rating tag", canonical: false)
