@@ -263,8 +263,6 @@ module NavigationHelpers
       edit_tag_set_path(OwnedTagSet.find_by(title: $1))
     when /^the "(.*)" tag ?set page$/i
       tag_set_path(OwnedTagSet.find_by(title: $1))
-    when /^the "(.*)" tag ?set nominations page$/i
-      tag_set_nominations_path(OwnedTagSet.find_by(title: Regexp.last_match(1)))
     when /^the Open Doors tools page$/i
       opendoors_tools_path
     when /^the Open Doors external authors page$/i
