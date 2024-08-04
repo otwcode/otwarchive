@@ -6,71 +6,75 @@ describe Admin::AdminUsersController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  describe "GET #index" do
-    let(:admin) { create(:admin) }
+  search_roles = %w[superadmin legal tag_wrangling support policy_and_abuse open_doors]
 
-    context "when admin does not have correct authorization" do
+  shared_examples "denies access to unauthorized admins" do
+    context "with no roles" do
+      let(:admin) { create(:admin) }
+
       it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-        get :index
-
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
 
-    context "when admin has correct authorization" do
-      it "allows access to index" do
-        admin.update!(roles: ["policy_and_abuse"])
-        fake_login_admin(admin)
-        get :index
+    (Admin::VALID_ROLES - search_roles).each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
 
-        expect(response).to have_http_status(:success)
+        it "redirects with error" do
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
       end
     end
+  end
+
+  shared_examples "permits access to authorized admins" do
+    search_roles.each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "allows access to index" do
+          expect(response).to have_http_status(:success)
+        end
+      end
+    end
+  end
+
+  describe "GET #index" do
+    before do
+      fake_login_admin(admin)
+      get :index
+    end
+
+    it_behaves_like "denies access to unauthorized admins"
+    it_behaves_like "permits access to authorized admins"
   end
 
   describe "GET #bulk_search" do
-    let(:admin) { create(:admin) }
-
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-        get :bulk_search
-
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
+    before do
+      fake_login_admin(admin)
+      get :bulk_search
     end
 
-    context "when admin has correct authorization" do
-      it "allows access to access bulk search" do
-        admin.update!(roles: ["policy_and_abuse"])
-        fake_login_admin(admin)
-        get :bulk_search
-
-        expect(response).to have_http_status(:success)
-      end
-    end
+    it_behaves_like "denies access to unauthorized admins"
+    it_behaves_like "permits access to authorized admins"
   end
 
   describe "GET #show" do
-    let(:admin) { create(:admin) }
     let(:user) { create(:user) }
 
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-        get :show, params: { id: user.login }
-
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
+    before do
+      fake_login_admin(admin)
+      get :show, params: { id: user.login }
     end
 
+    it_behaves_like "denies access to unauthorized admins"
+    it_behaves_like "permits access to authorized admins"
+
     context "when admin has correct authorization" do
+      let(:admin) { create(:admin, roles: ["policy_and_abuse"]) }
+
       it "if user exists, allows access to show page" do
-        admin.update!(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
         get :show, params: { id: user.login }
 
@@ -78,11 +82,11 @@ describe Admin::AdminUsersController do
       end
 
       it "if user does not exists, raises a 404" do
-        admin.update!(roles: ["policy_and_abuse"])
         fake_login_admin(admin)
         params = { id: "not_existing_id" }
 
-        expect { get :show, params: params }.to raise_error ActiveRecord::RecordNotFound
+        expect { get :show, params: params }
+          .to raise_error ActiveRecord::RecordNotFound
       end
     end
   end
