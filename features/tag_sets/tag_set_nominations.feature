@@ -300,7 +300,7 @@ Feature: Nominating and reviewing nominations for a tag set
       But I should not see "Gold"
       And I should see "None nominated in this fandom."
 
-  Scenario: A tag nomination with for the zero width space tag doesn't prevent removing other tag nominations
+  Scenario: A tag nomination with the zero width space tag doesn't prevent removing other tag nominations
     Given a canonical fandom "First"
       And a canonical fandom "Treasure Chest"
       And a zero width space tag exists
