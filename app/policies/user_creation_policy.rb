@@ -12,7 +12,7 @@ class UserCreationPolicy < ApplicationPolicy
   end
 
   def show_ip_address?
-    user_has_roles?(%w[superadmin policy_and_abuse])
+    user_has_roles?(%w[superadmin legal policy_and_abuse])
   end
 
   def show_original_creators?
