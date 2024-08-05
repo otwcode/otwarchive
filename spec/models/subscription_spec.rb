@@ -2,11 +2,18 @@ require 'spec_helper'
 
 describe Subscription do
   let(:subscription) { build(:subscription) }
+  let(:work) { create(:work) }
+  let(:series) { create(:series) }
+  let(:user) { create(:user) }
 
   context "to a work" do
     before do
-      subscription.subscribable = create(:work)
+      subscription.subscribable = work
       subscription.save!
+    end
+
+    it "has a name" do
+      expect(subscription.name).to eq(work.title)
     end
 
     describe "when the work is destroyed" do
@@ -22,8 +29,12 @@ describe Subscription do
 
   context "to a series" do
     before do
-      subscription.subscribable = create(:series)
+      subscription.subscribable = series
       subscription.save!
+    end
+
+    it "has a name" do
+      expect(subscription.name).to eq(series.title)
     end
 
     describe "when the series is destroyed" do
@@ -39,8 +50,12 @@ describe Subscription do
 
   context "to a user" do
     before do
-      subscription.subscribable = create(:user)
+      subscription.subscribable = user
       subscription.save!
+    end
+
+    it "has a name" do
+      expect(subscription.name).to eq(user.login)
     end
 
     describe "when the user is destroyed" do
@@ -64,6 +79,10 @@ describe Subscription do
 
     it "should be invalid" do
       expect(subscription.valid?).to be_falsey
+    end
+
+    it "has a name" do
+      expect(subscription.name).to eq("Deleted item")
     end
   end
 
