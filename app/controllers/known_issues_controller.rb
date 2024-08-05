@@ -1,5 +1,4 @@
 class KnownIssuesController < ApplicationController
-
   before_action :admin_only, except: [:index]
 
   # GET /known_issues
@@ -10,24 +9,28 @@ class KnownIssuesController < ApplicationController
   # GET /known_issues/1
   def show
     @known_issue = KnownIssue.find(params[:id])
+    authorize @known_issue
   end
 
   # GET /known_issues/new
   def new
     @known_issue = KnownIssue.new
+    authorize @known_issue
   end
 
   # GET /known_issues/1/edit
   def edit
     @known_issue = KnownIssue.find(params[:id])
+    authorize @known_issue
   end
 
   # POST /known_issues
   def create
     @known_issue = KnownIssue.new(known_issue_params)
+    authorize @known_issue
 
     if @known_issue.save
-      flash[:notice] = 'Known issue was successfully created.'
+      flash[:notice] = "Known issue was successfully created."
       redirect_to(@known_issue)
     else
       render action: "new"
@@ -37,9 +40,10 @@ class KnownIssuesController < ApplicationController
   # PUT /known_issues/1
   def update
     @known_issue = KnownIssue.find(params[:id])
+    authorize @known_issue
 
     if @known_issue.update(known_issue_params)
-      flash[:notice] = 'Known issue was successfully updated.'
+      flash[:notice] = "Known issue was successfully updated."
       redirect_to(@known_issue)
     else
       render action: "edit"
@@ -49,6 +53,7 @@ class KnownIssuesController < ApplicationController
   # DELETE /known_issues/1
   def destroy
     @known_issue = KnownIssue.find(params[:id])
+    authorize @known_issue
     @known_issue.destroy
     redirect_to(known_issues_path)
   end

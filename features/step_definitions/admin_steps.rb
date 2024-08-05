@@ -102,8 +102,8 @@ Given "guest comments are off" do
   click_button("Update")
 end
 
-Given /^I have posted known issues$/ do
-  step %{I am logged in as an admin}
+Given "I have posted known issues" do
+  step %{I am logged in as a super admin}
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "make a new known issues post"}
@@ -281,8 +281,11 @@ When "the scheduled check_invite_queue job is run" do
   Resque.enqueue(AdminSetting, :check_queue)
 end
 
-When /^I edit known issues$/ do
-  step %{I am logged in as an admin}
+When "I view the latest known issue" do
+  visit known_issue_path(KnownIssue.last)
+end
+
+When "I edit known issues" do
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "Edit"}
@@ -291,11 +294,19 @@ When /^I edit known issues$/ do
   step %{I press "Post"}
 end
 
-When /^I delete known issues$/ do
-  step %{I am logged in as an admin}
+When "I try to edit the latest known issue" do
+  visit edit_known_issue_path(KnownIssue.last)
+end
+
+When "I delete known issues" do
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "Delete"}
+end
+
+When "I try to delete the latest known issue" do
+  # This is weird, so have a StackOverflow link: https://stackoverflow.com/a/11605501
+  page.driver.submit :delete, known_issue_path(KnownIssue.last), {}
 end
 
 When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
