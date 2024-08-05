@@ -69,11 +69,8 @@ Otwarchive::Application.configure do
     Bullet.counter_cache_enable = false
   end
 
-  Paperclip::Attachment.default_options[:storage] = :s3
-  Paperclip::Attachment.default_options[:s3_credentials] = { s3_region: ENV["S3_REGION"],
-                                                             bucket: ENV["S3_BUCKET"],
-                                                             access_key_id: ENV["S3_ACCESS_KEY_ID"],
-                                                             secret_access_key: ENV["S3_SECRET_ACCESS_KEY"] }
+  # Store uploaded files in AWS S3.
+  config.active_storage.service = :s3
 
   config.middleware.use Rack::Attack
 

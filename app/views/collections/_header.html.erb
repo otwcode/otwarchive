@@ -2,7 +2,7 @@
 <div class="primary header module">
   <h2 class="heading"><%= link_to_unless_current(@collection.title, @collection) %></h2>
   <div class="icon">
-    <%= image_tag(@collection.icon.url(:standard), size: "100x100", alt: collection.icon_alt_text, skip_pipeline: true) %>
+    <%= collection_icon_display(@collection) %>
   </div>
 <!--/descriptions-->
 

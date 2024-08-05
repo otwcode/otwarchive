@@ -33,7 +33,7 @@
         <p class="datetime"><%= collection_item.item_date.to_date %></p>
       <% end %>
       <div class="icon">
-        <%= image_tag(collection_item.collection.icon.url(:standard), size: "100x100", alt: collection_item.collection.icon_alt_text, class: "icon", skip_pipeline: true) %>
+        <%= collection_icon_display(collection_item.collection) %>
       </div> 
     </div>
 
