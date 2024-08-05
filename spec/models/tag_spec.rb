@@ -174,7 +174,7 @@ describe Tag do
       ["200D".hex].pack("U"), # zero width joiner
       ["2060".hex].pack("U"), # word joiner
       (["200B".hex].pack("U") * 3),
-      (["200D".hex, "200D".hex, "2060".hex, "200B".hex].pack("U")),
+      ["200D".hex, "200D".hex, "2060".hex, "200B".hex].pack("U")
     ].each do |tag_name|
       tag = Tag.new
       tag.name = tag_name
@@ -186,11 +186,11 @@ describe Tag do
   end
 
   context "tags with names that contain some zero-width characters are valid" do
-    %w(
+    %w[
       👨‍👨‍👧‍👦
       ප්‍රදානය
       👩‍🔬
-    ).each do |tag_name|
+    ].each do |tag_name|
       tag = Tag.new
       tag.name = tag_name
       it "is saved" do
