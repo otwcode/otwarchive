@@ -37,7 +37,9 @@ class RedisMailQueue
       # queue the notification for delivery
       begin
         # don't die if we hit one deleted user
-        KudoMailer.batch_kudo_notification(author_id, user_kudos.to_json).deliver_later
+        I18n.with_locale(User.find(author_id).preference.locale.iso) do
+          KudoMailer.batch_kudo_notification(author_id, user_kudos.to_json).deliver_later
+        end
       rescue
       end
     end
