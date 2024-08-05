@@ -939,7 +939,7 @@ class WorksController < ApplicationController
     params.require(:work_search).permit(
       :query,
       :title,
-      :creators,
+      :creator,
       :revised_at,
       :complete,
       :single_chapter,
