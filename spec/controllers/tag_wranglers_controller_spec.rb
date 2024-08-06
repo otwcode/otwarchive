@@ -8,14 +8,9 @@ describe TagWranglersController do
 
   let(:user) { create(:tag_wrangler) }
 
-  shared_examples "denies access to unauthorized admins" do |verb, action, **kwargs|
+  shared_examples "denies access to unauthorized admins" do
     context "when logged in as an admin with no role" do
       let(:admin) { create(:admin) }
-
-      before do
-        fake_login_admin(admin)
-        send(verb, action, **kwargs)
-      end
 
       it "redirects with an error" do
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
@@ -26,11 +21,6 @@ describe TagWranglersController do
       context "when logged in as an admin with role #{admin_role}" do
         let(:admin) { create(:admin, roles: [admin_role]) }
 
-        before do
-          fake_login_admin(admin)
-          send(verb, action, **kwargs)
-        end
-
         it "redirects with an error" do
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
@@ -38,17 +28,17 @@ describe TagWranglersController do
     end
   end
 
-  before(:all) do
-    Role.create!(name: "tag_wrangler")
-  end
-
-  after(:all) do
-    # Clean up when we're done, a few other specs become unhappy otherwise
-    Role.find_by(name: "tag_wrangler").destroy!
-  end
-
   describe "#index" do
-    it_behaves_like "denies access to unauthorized admins", :get, :index
+    before do
+      Role.create!(name: "tag_wrangler")
+    end
+
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        get :index
+      end
+    end
 
     wrangling_roles.each do |admin_role|
       context "when logged in as an admin with role #{admin_role}" do
@@ -88,7 +78,12 @@ describe TagWranglersController do
       end
     end
 
-    it_behaves_like "denies access to unauthorized admins", :get, :show, params: { id: -1 }
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        get :show, params: { id: user.login }
+      end
+    end
 
     wrangling_roles.each do |admin_role|
       context "when logged in as an admin with role #{admin_role}" do
@@ -124,7 +119,12 @@ describe TagWranglersController do
       it_behaves_like "prevents access to the report"
     end
 
-    it_behaves_like "denies access to unauthorized admins", :get, :report_csv, params: { id: 0 }
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        get :report_csv, params: { id: user.login }
+      end
+    end
 
     context "when logged in as an admin with proper authorization" do
       before { fake_login_admin(admin) }
@@ -232,12 +232,18 @@ describe TagWranglersController do
   end
 
   describe "#create" do
-    it_behaves_like "denies access to unauthorized admins", :post, :create
+    let(:fandom) { create(:fandom) }
+
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        post :create, params: { assignments: { fandom.id.to_s => [user.login] } }
+      end
+    end
 
     wrangling_roles.each do |admin_role|
       context "when logged in as an admin with role #{admin_role}" do
         let(:admin) { create(:admin, roles: [admin_role]) }
-        let(:fandom) { create(:fandom) }
 
         before do
           fake_login_admin(admin)
@@ -249,15 +255,32 @@ describe TagWranglersController do
         end
       end
     end
+
+    context "when logged in as another tag wrangler" do
+      before do
+        fake_login_known_user(create(:tag_wrangler))
+      end
+
+      it "allows access" do
+        post :create, params: { assignments: { fandom.id.to_s => [user.login] } }
+        it_redirects_to_with_notice(tag_wranglers_path, "Wranglers were successfully assigned!")
+      end
+    end
   end
 
   describe "#destroy" do
-    it_behaves_like "denies access to unauthorized admins", :delete, :destroy, params: { id: 0, fandom_id: 0 }
+    let(:wrangling_assignment) { create(:wrangling_assignment) }
+
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        delete :destroy, params: { id: wrangling_assignment.user.login, fandom_id: wrangling_assignment.fandom.id }
+      end
+    end
 
     wrangling_roles.each do |admin_role|
       context "when logged in as an admin with role #{admin_role}" do
         let(:admin) { create(:admin, roles: [admin_role]) }
-        let(:wrangling_assignment) { create(:wrangling_assignment) }
 
         before do
           fake_login_admin(admin)
@@ -267,6 +290,17 @@ describe TagWranglersController do
           delete :destroy, params: { id: wrangling_assignment.user.login, fandom_id: wrangling_assignment.fandom.id }
           it_redirects_to_with_notice(tag_wranglers_path, "Wranglers were successfully unassigned!")
         end
+      end
+    end
+
+    context "when logged in as another tag wrangler" do
+      before do
+        fake_login_known_user(create(:tag_wrangler))
+      end
+
+      it "allows access" do
+        delete :destroy, params: { id: wrangling_assignment.user.login, fandom_id: wrangling_assignment.fandom.id }
+        it_redirects_to_with_notice(tag_wranglers_path, "Wranglers were successfully unassigned!")
       end
     end
   end
