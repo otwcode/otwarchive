@@ -1,5 +1,5 @@
 class SupportReporter < FeedbackReporter
-  attr_accessor :user_agent, :site_revision, :rollout
+  attr_accessor :user_agent, :referer, :rollout, :site_revision, :site_skin
 
   def report_attributes
     super.deep_merge(
@@ -13,10 +13,17 @@ class SupportReporter < FeedbackReporter
   private
 
   def custom_zoho_fields
+    # The Zoho field supports at most 255 characters. That _should_ be enough, but technically
+    # we support ludicrously long URLs because searches can do that. In those cases, just get the
+    # first 255 characters.
+    sanitized_url = referer.present? ? referer[0..254] : "Unknown URL"
     {
       "cf_archive_version" => site_revision.presence || "Unknown site revision",
       "cf_rollout" => rollout.presence || "Unknown",
-      "cf_user_agent" => user_agent.presence || "Unknown user agent"
+      "cf_user_agent" => user_agent.presence || "Unknown user agent",
+      "cf_ip" => ip_address.presence || "Unknown IP",
+      "cf_url" => sanitized_url,
+      "cf_site_skin" => site_skin&.public ? site_skin.title : "Custom skin"
     }
   end
 

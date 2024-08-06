@@ -13,7 +13,8 @@ class FeedbackReporter
                 :language,
                 :category,
                 :username,
-                :url
+                :url,
+                :ip_address
 
   def initialize(attrs = {})
     attrs.each_pair do |key, val|
