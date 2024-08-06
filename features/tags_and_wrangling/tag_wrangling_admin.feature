@@ -54,7 +54,7 @@ Feature: Tag wrangling
   Scenario: Admin can remove a user's wrangling assignments
 
     Given the tag wrangler "tangler" with password "wr@ngl3r" is wrangler of "Testing"
-    When I am logged in as an admin
+    When I am logged in as a "tag_wrangling" admin
       And I am on the wranglers page
       And I follow "x"
     Then I should see "Wranglers were successfully unassigned!"

@@ -5,7 +5,7 @@
     <p class="icon"><%= icon_display(@wrangler) %></p>
     <!--/descriptions-->
     <!--subnav-->
-    <% if policy(:tag_wrangler).report_csv? %>
+    <% if policy(:wrangling).report_csv? %>
       <ul class="navigation actions" role="navigation">
         <li><%= link_to t(".tags_wrangled_csv"), report_csv_tag_wrangler_path %></li>
       </ul>
