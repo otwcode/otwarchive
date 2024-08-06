@@ -211,3 +211,20 @@ Feature:
         And I press "Change User Name"
       Then I should get confirmation that I changed my username
         And I should see "Hi, notforbidden"
+
+  Scenario: Bookmarker's bookmark blurbs reflect username changes immediately
+    Given the work "Interesting"
+      And I am logged in as "before" with password "password"
+      And I add the pseud "mine"
+      And I bookmark the work "Interesting" as "mine"
+      And I go to before's bookmarks page
+    Then I should see "Bookmarked by mine (before)"
+
+    When it is currently 1 second from now
+      And I visit the change username page for before
+      And I fill in "New user name" with "after"
+      And I fill in "Password" with "password"
+      And I press "Change User Name"
+      And I go to after's bookmarks page
+    Then I should see "Bookmarked by mine (after)"
+      And I should not see "Bookmarked by mine (before)"
