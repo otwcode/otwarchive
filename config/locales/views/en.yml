@@ -91,6 +91,17 @@ en:
           queue: Manage Queue
           requests: Manage Requests
         page_heading: Invite New Users
+    admin_nav:
+      ao3_news: AO3 News
+      archive_faq: Archive FAQ
+      faq:
+        reorder_questions: Reorder Questions
+      known_issues: Known Issues
+      landmark: Admin Navigation
+      news:
+        delete_post: Delete Post
+      post_ao3_news: Post AO3 News
+      wrangling_guidelines: Wrangling Guidelines
     admin_options:
       delete:
         bookmark: Delete Bookmark
