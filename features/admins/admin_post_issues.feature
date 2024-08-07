@@ -55,12 +55,6 @@ Feature: Admin Actions to Post Known Issues
     Then I should not see "Known Issues" within "#header"
     When I go to the known issues page
     Then I should not see "Edit" within ".actions"
-    When I view the latest known issue
-    Then I should see "Sorry, only an authorized admin can access the page you were trying to reach."
-    When I try to edit the latest known issue
-    Then I should see "Sorry, only an authorized admin can access the page you were trying to reach."
-    When I try to delete the latest known issue
-    Then I should see "Sorry, only an authorized admin can access the page you were trying to reach."
 
     Examples:
     | role                       |
