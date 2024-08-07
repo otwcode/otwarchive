@@ -27,9 +27,9 @@
     <%= span_if_current ts("Archive FAQ", key: "header"), archive_faqs_path %>
   </li>
   <% if policy(KnownIssue).admin_index? %>
-  <li>
-    <%= span_if_current ts("Known Issues", key: "header"), known_issues_path %>
-  </li>
+    <li>
+      <%= span_if_current ts("Known Issues", key: "header"), known_issues_path %>
+    </li>
   <% end %>
   <li>
     <%= span_if_current ts("Wrangling Guidelines", key: "header"),

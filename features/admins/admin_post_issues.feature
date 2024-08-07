@@ -3,7 +3,7 @@ Feature: Admin Actions to Post Known Issues
   As an an admin
   I want to be able to report known issues
 
-  Scenario Outline: Post known issues
+  Scenario Outline: Authorized admin posts, edits, and deletes known issues
     Given I am logged in as a "<role>" admin
     When I follow "Admin Posts"
       And I follow "Known Issues" within "#header"
@@ -18,28 +18,10 @@ Feature: Admin Actions to Post Known Issues
       And I follow "Known Issues" within "#header"
       And I follow "Show"
     Then I should see "First known problem"
-
-    Examples:
-    | role       |
-    | support    |
-    | superadmin |
-
-  Scenario Outline: Edit known issues
-    Given I have posted known issues
-      And I am logged in as a "<role>" admin
     When I edit known issues
-    Then I should see "Known issue was successfully updated"
+      Then I should see "Known issue was successfully updated"
       And I should not see "First known problem"
       And I should see "This is a bit of a problem, and this is too"
-
-    Examples:
-    | role       |
-    | support    |
-    | superadmin |
-
-  Scenario Outline: Delete known issues
-    Given I have posted known issues
-      And I am logged in as a "<role>" admin
     When I delete known issues
     Then I should not see "First known problem"
 
@@ -48,7 +30,7 @@ Feature: Admin Actions to Post Known Issues
     | support    |
     | superadmin |
 
-  Scenario Outline: Access is denied to unauthorized admins
+  Scenario Outline: Links to edit and create known issues are not shown to unauthorized admins
     Given I have posted known issues
       And I am logged in as a "<role>" admin
     When I follow "Admin Posts"
