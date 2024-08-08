@@ -218,7 +218,7 @@ Given "the admin {string} is unlocked" do |login|
   admin.unlock_access!
 end
 
-Given "an archive FAQ category with the title {string}" do |title|
+Given "an archive FAQ category with the title {string} exists" do |title|
   FactoryBot.create(:archive_faq, title: title)
 end
 
@@ -273,7 +273,7 @@ end
 
 When "{int} Archive FAQ(s) exist(s)" do |n|
   (1..n).each do |i|
-    FactoryBot.create(:archive_faq, id: i)
+    FactoryBot.create(:archive_faq, id: i, title: "The #{i} FAQ")
   end
 end
 

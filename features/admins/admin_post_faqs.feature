@@ -174,7 +174,7 @@ Feature: Admin Actions to Post FAQs
       And I should see "Updated:" within ".header"
 
   Scenario Outline: Links to create and edit FAQs are not shown to unauthorized admins
-    Given an archive FAQ category with the title "Very important FAQ"
+    Given an archive FAQ category with the title "Very important FAQ" exists
       And I am logged in as a "<role>" admin
     When I follow "Admin Posts"
     Then I should not see "Archive FAQ" within "#header"
