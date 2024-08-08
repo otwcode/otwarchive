@@ -61,7 +61,7 @@ class ArchiveFaqsController < ApplicationController
   public
   # GET /archive_faqs/new
   def new
-    @archive_faq = ArchiveFaq.new
+    @archive_faq = authorize ArchiveFaq.new
     1.times { @archive_faq.questions.build(attributes: { question: "This is a temporary question", content: "This is temporary content", anchor: "ThisIsATemporaryAnchor"})}
     respond_to do |format|
       format.html # new.html.erb
@@ -70,18 +70,19 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1/edit
   def edit
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
+    authorize :archive_faq, :full_access? if default_locale?
     build_questions
   end
 
   # GET /archive_faqs/manage
   def manage
-    @archive_faqs = ArchiveFaq.order('position ASC')
+    @archive_faqs = authorize ArchiveFaq.order('position ASC')
   end
 
   # POST /archive_faqs
   def create
-    @archive_faq = ArchiveFaq.new(archive_faq_params)
+    @archive_faq = authorize ArchiveFaq.new(archive_faq_params)
       if @archive_faq.save
         flash[:notice] = 'ArchiveFaq was successfully created.'
         redirect_to(@archive_faq)
@@ -92,7 +93,8 @@ class ArchiveFaqsController < ApplicationController
 
   # PUT /archive_faqs/1
   def update
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
+    authorize :archive_faq, :full_access? if default_locale?
 
     if @archive_faq.update(archive_faq_params)
       flash[:notice] = 'ArchiveFaq was successfully updated.'
@@ -104,6 +106,7 @@ class ArchiveFaqsController < ApplicationController
 
   # reorder FAQs
   def update_positions
+    authorize :archive_faq
     if params[:archive_faqs]
       @archive_faqs = ArchiveFaq.reorder_list(params[:archive_faqs])
       flash[:notice] = ts("Archive FAQs order was successfully updated.")
@@ -154,14 +157,18 @@ class ArchiveFaqsController < ApplicationController
     I18n.with_locale(@i18n_locale) { yield }
   end
 
+  def default_locale?
+    @i18n_locale.to_s == I18n.default_locale.to_s
+  end
+
   # GET /archive_faqs/1/confirm_delete
   def confirm_delete
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
   end
 
   # DELETE /archive_faqs/1
   def destroy
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
     @archive_faq.destroy
     redirect_to(archive_faqs_path)
   end
