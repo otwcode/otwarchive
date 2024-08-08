@@ -1,5 +1,4 @@
 class ArchiveFaqsController < ApplicationController
-
   before_action :admin_only, except: [:index, :show]
   before_action :set_locale
   before_action :validate_locale, if: :logged_in_as_admin?
@@ -9,7 +8,7 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs
   def index
-    @archive_faqs = ArchiveFaq.order('position ASC')
+    @archive_faqs = ArchiveFaq.order("position ASC")
     unless logged_in_as_admin?
       @archive_faqs = @archive_faqs.with_translations(I18n.locale)
     end
@@ -41,6 +40,7 @@ class ArchiveFaqsController < ApplicationController
   end
 
   protected
+
   def build_questions
     notice = ""
     num_to_build = params["num_questions"] ? params["num_questions"].to_i : @archive_faq.questions.count
@@ -60,6 +60,7 @@ class ArchiveFaqsController < ApplicationController
   end
 
   public
+
   # GET /archive_faqs/new
   def new
     @archive_faq = authorize ArchiveFaq.new
@@ -78,18 +79,18 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/manage
   def manage
-    @archive_faqs = authorize ArchiveFaq.order('position ASC')
+    @archive_faqs = authorize ArchiveFaq.order("position ASC")
   end
 
   # POST /archive_faqs
   def create
     @archive_faq = authorize ArchiveFaq.new(archive_faq_params)
-      if @archive_faq.save
-        flash[:notice] = 'ArchiveFaq was successfully created.'
-        redirect_to(@archive_faq)
-      else
-        render action: "new"
-      end
+    if @archive_faq.save
+      flash[:notice] = t(".success")
+      redirect_to(@archive_faq)
+    else
+      render action: "new"
+    end
   end
 
   # PUT /archive_faqs/1
@@ -98,7 +99,7 @@ class ArchiveFaqsController < ApplicationController
     authorize :archive_faq, :full_access? if default_locale?
 
     if @archive_faq.update(archive_faq_params)
-      flash[:notice] = 'ArchiveFaq was successfully updated.'
+      flash[:notice] = t(".success")
       redirect_to(@archive_faq)
     else
       render action: "edit"
@@ -110,7 +111,7 @@ class ArchiveFaqsController < ApplicationController
     authorize :archive_faq
     if params[:archive_faqs]
       @archive_faqs = ArchiveFaq.reorder_list(params[:archive_faqs])
-      flash[:notice] = ts("Archive FAQs order was successfully updated.")
+      flash[:notice] = t(".success")
     elsif params[:archive_faq]
       params[:archive_faq].each_with_index do |id, position|
         ArchiveFaq.update(id, position: position + 1)
@@ -155,6 +156,7 @@ class ArchiveFaqsController < ApplicationController
 
   def default_locale_only
     return if default_locale?
+
     flash[:error] = t("archive_faqs.default_locale_only")
     redirect_to archive_faqs_path
   end

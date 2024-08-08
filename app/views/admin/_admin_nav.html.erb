@@ -25,7 +25,7 @@
 
   <% if policy(ArchiveFaq).translation_access? %>
     <li>
-      <%= span_if_current ts("Archive FAQ", key: "header"), archive_faqs_path %>
+      <%= span_if_current t(".archive_faq"), archive_faqs_path %>
     </li>
   <% end %>
   <li>

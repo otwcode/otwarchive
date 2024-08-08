@@ -219,7 +219,7 @@ Given "the admin {string} is unlocked" do |login|
 end
 
 Given "an archive FAQ category with the title {string}" do |title|
-  FactoryBot.create(:archive_faq, title:)
+  FactoryBot.create(:archive_faq, title: )
 end
 
 ### WHEN
@@ -281,7 +281,7 @@ When "{int} Archive FAQ(s) with {int} question(s) exist(s)" do |faqs, questions|
   (1..faqs).each do |i|
     archive_faq = FactoryBot.create(:archive_faq, id: i)
     (1..questions).each do
-      FactoryBot.create(:question, archive_faq:)
+      FactoryBot.create(:question, archive_faq: )
     end
   end
 end
