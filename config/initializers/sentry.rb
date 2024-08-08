@@ -9,7 +9,7 @@ if Rails.env.production? || Rails.env.staging?
     config.traces_sampler = lambda do |sampling_context|
       next sampling_context[:parent_sampled] unless sampling_context[:parent_sampled].nil?
 
-      rack_env = sampling_context[:env]
+      rack_env = sampling_context[:env] || {}
       rate_from_nginx = Float(rack_env["HTTP_X_SENTRY_RATE"], exception: false)
       return rate_from_nginx if rate_from_nginx
       return 0.01 if Rails.env.production?
