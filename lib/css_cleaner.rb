@@ -29,7 +29,7 @@ module CssCleaner
 
   # drop-shadow can take multiple values, which are a mix of numbers and colors
   DROP_SHADOW_NAME_REGEX = Regexp.new("drop-shadow", Regexp::IGNORECASE)
-  DROP_SHADOW_VALUE_REGEX = Regexp.new('\(\s*(' + NUMBER_WITH_UNIT_REGEX.to_s + '|' + COLOR_REGEX.to_s + '\s*)+\s*\)')
+  DROP_SHADOW_VALUE_REGEX = Regexp.new("\\(\\s*(#{NUMBER_WITH_UNIT_REGEX}|#{COLOR_REGEX}\\s*)+\\s*\\)")
   DROP_SHADOW_FUNCTION_REGEX = Regexp.new("#{DROP_SHADOW_NAME_REGEX}#{DROP_SHADOW_VALUE_REGEX}")
 
   # from the ICANN list at http://www.icann.org/en/registries/top-level-domains.htm
