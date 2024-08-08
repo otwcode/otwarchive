@@ -13,18 +13,12 @@ class ArchiveFaqPolicy < ApplicationPolicy
     user_has_roles?(FULL_ACCESS_ROLES)
   end
 
-  # edit is in issue twice...?
   alias edit? translation_access?
   alias update? translation_access?
   alias new? full_access?
   alias create? full_access?
   alias manage? full_access?
-  alias update_positions? full_access? # not in issue - is part of manage
+  alias update_positions? full_access?
   alias confirm_delete? full_access?
-  alias destroy? full_access? # not in issue - is part of confirm_delete?
-
-  # questions manage update_positions
-  # questions destroy ?
-  # questions new create ?
-  # questions edit update ? (translation allowed)
+  alias destroy? full_access?
 end

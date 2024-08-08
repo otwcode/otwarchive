@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
 
   # GET /archive_faq/:archive_faq_id/questions/manage
   def manage
+    authorize :archive_faq, :full_access?
     @questions = @archive_faq.questions.order('position')
   end
 
@@ -18,6 +19,7 @@ class QuestionsController < ApplicationController
 
   # Update the position number of questions within a archive_faq
   def update_positions
+    authorize :archive_faq, :full_access?
     if params[:questions]
       @archive_faq = ArchiveFaq.find_by_slug(params[:archive_faq_id])
       @archive_faq.reorder_list(params[:questions])
