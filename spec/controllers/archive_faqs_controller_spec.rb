@@ -80,6 +80,30 @@ describe ArchiveFaqsController do
     end
   end
 
+  shared_examples "a non-English action that nobody can access" do
+    before { fake_login_admin(admin) }
+
+    context "with no role" do
+      let(:admin) { create(:admin, roles: []) }
+
+      it "redirects with an error" do
+        subject
+        it_redirects_to_with_error(archive_faqs_path, "Sorry, this action is only available for English FAQs.")
+      end
+    end
+
+    Admin::VALID_ROLES.each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "redirects with an error" do
+          subject
+          it_redirects_to_with_error(archive_faqs_path, "Sorry, this action is only available for English FAQs.")
+        end
+      end
+    end
+  end
+
   let(:non_standard_locale) { create(:locale) }
   let(:user_locale) { create(:locale) }
   let(:user) do
@@ -227,7 +251,6 @@ describe ArchiveFaqsController do
 
     context "for a non-default locale" do
       let(:locale) { non_standard_locale.iso }
-
       it_behaves_like "an action translation authorized admins can access"
     end
   end
@@ -246,7 +269,6 @@ describe ArchiveFaqsController do
 
     context "for a non-default locale" do
       let(:locale) { non_standard_locale.iso }
-
       it_behaves_like "an action translation authorized admins can access"
     end
   end
@@ -262,11 +284,10 @@ describe ArchiveFaqsController do
       it_behaves_like "an action only fully authorized admins can access"
     end
 
-    # context "for a non-default locale" do
-    #   let(:locale) { non_standard_locale.iso }
-    #   # The buttons to navigate here aren't shown in the GUI for anybody, so maybe nobody should be able to access this?
-    #   it_behaves_like "an action only fully authorized admins can access"
-    # end
+    context "for a non-default locale" do
+      let(:locale) { non_standard_locale.iso }
+      it_behaves_like "a non-English action that nobody can access"
+    end
   end
 
   describe "POST #create" do
@@ -281,11 +302,10 @@ describe ArchiveFaqsController do
       it_behaves_like "an action only fully authorized admins can access"
     end
 
-    # context "for a non-default locale" do
-    #   let(:locale) { non_standard_locale.iso }
-    #   # The buttons to navigate here aren't shown in the GUI for anybody, so maybe nobody should be able to access this?
-    #   it_behaves_like "an action only fully authorized admins can access"
-    # end
+    context "for a non-default locale" do
+      let(:locale) { non_standard_locale.iso }
+      it_behaves_like "a non-English action that nobody can access"
+    end
   end
 
   describe "GET #manage" do
@@ -299,11 +319,10 @@ describe ArchiveFaqsController do
       it_behaves_like "an action only fully authorized admins can access"
     end
 
-    # context "for a non-default locale" do
-    #   let(:locale) { non_standard_locale.iso }
-    #   # The buttons to navigate here aren't shown in the GUI for anybody, so maybe nobody should be able to access this?
-    #   it_behaves_like "an action only fully authorized admins can access"
-    # end
+    context "for a non-default locale" do
+      let(:locale) { non_standard_locale.iso }
+      it_behaves_like "a non-English action that nobody can access"
+    end
   end
 
   describe "POST #update_positions" do
@@ -323,11 +342,10 @@ describe ArchiveFaqsController do
       it_behaves_like "an action only fully authorized admins can access"
     end
 
-    # context "for a non-default locale" do
-    #   let(:locale) { non_standard_locale.iso }
-    #   # The buttons to navigate here aren't shown in the GUI for anybody, so maybe nobody should be able to access this?
-    #   it_behaves_like "an action only fully authorized admins can access"
-    # end
+    context "for a non-default locale" do
+      let(:locale) { non_standard_locale.iso }
+      it_behaves_like "a non-English action that nobody can access"
+    end
   end
 
   describe "GET #confirm_delete" do
@@ -342,11 +360,10 @@ describe ArchiveFaqsController do
       it_behaves_like "an action only fully authorized admins can access"
     end
 
-    # context "for a non-default locale" do
-    #   let(:locale) { non_standard_locale.iso }
-    #   # The buttons to navigate here aren't shown in the GUI for anybody, so maybe nobody should be able to access this?
-    #   it_behaves_like "an action only fully authorized admins can access"
-    # end
+    context "for a non-default locale" do
+      let(:locale) { non_standard_locale.iso }
+      it_behaves_like "a non-English action that nobody can access"
+    end
   end
 
   describe "DELETE #destroy" do
@@ -363,10 +380,9 @@ describe ArchiveFaqsController do
       it_behaves_like "an action only fully authorized admins can access"
     end
 
-    # context "for a non-default locale" do
-    #   let(:locale) { non_standard_locale.iso }
-    #   # The buttons to navigate here aren't shown in the GUI for anybody, so maybe nobody should be able to access this?
-    #   it_behaves_like "an action only fully authorized admins can access"
-    # end
+    context "for a non-default locale" do
+      let(:locale) { non_standard_locale.iso }
+      it_behaves_like "a non-English action that nobody can access"
+    end
   end
 end

@@ -8,6 +8,8 @@ en:
         success:
           one: "%{count} person from the invite queue is being invited."
           other: "%{count} people from the invite queue are being invited."
+  archive_faqs:
+    default_locale_only: Sorry, this action is only available for English FAQs.
   blocked:
     users:
       create:

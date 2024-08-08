@@ -4,6 +4,7 @@ class ArchiveFaqsController < ApplicationController
   before_action :set_locale
   before_action :validate_locale, if: :logged_in_as_admin?
   before_action :require_language_id
+  before_action :default_locale_only, only: [:new, :create, :manage, :update_positions, :confirm_delete, :destroy]
   around_action :with_locale
 
   # GET /archive_faqs
@@ -150,6 +151,12 @@ class ArchiveFaqsController < ApplicationController
     return if params[:language_id].present? && Locale.exists?(iso: params[:language_id])
 
     redirect_to url_for(request.query_parameters.merge(language_id: @i18n_locale.to_s))
+  end
+
+  def default_locale_only
+    return if default_locale?
+    flash[:error] = t("archive_faqs.default_locale_only")
+    redirect_to archive_faqs_path
   end
 
   # Setting I18n.locale directly is not thread safe
