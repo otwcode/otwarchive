@@ -218,6 +218,10 @@ Given "the admin {string} is unlocked" do |login|
   admin.unlock_access!
 end
 
+Given "an archive FAQ category with the title {string}" do |title|
+  FactoryBot.create(:archive_faq, title:)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -267,9 +271,18 @@ When /^I make a multi-question FAQ post$/ do
   click_button("Post")
 end
 
-When /^(\d+) Archive FAQs? exists?$/ do |n|
-  (1..n.to_i).each do |i|
+When "{int} Archive FAQ(s) exist(s)" do |n|
+  (1..n).each do |i|
     FactoryBot.create(:archive_faq, id: i)
+  end
+end
+
+When "{int} Archive FAQ(s) with {int} question(s) exist(s)" do |faqs, questions|
+  (1..faqs).each do |i|
+    archive_faq = FactoryBot.create(:archive_faq, id: i)
+    (1..questions).each do
+      FactoryBot.create(:question, archive_faq:)
+    end
   end
 end
 

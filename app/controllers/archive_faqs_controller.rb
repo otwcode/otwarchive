@@ -164,10 +164,6 @@ class ArchiveFaqsController < ApplicationController
     I18n.with_locale(@i18n_locale) { yield }
   end
 
-  def default_locale?
-    @i18n_locale.to_s == I18n.default_locale.to_s
-  end
-
   # GET /archive_faqs/1/confirm_delete
   def confirm_delete
     @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
@@ -181,6 +177,10 @@ class ArchiveFaqsController < ApplicationController
   end
 
   private
+
+  def default_locale?
+    @i18n_locale.to_s == I18n.default_locale.to_s
+  end
 
   def archive_faq_params
     params.require(:archive_faq).permit(
