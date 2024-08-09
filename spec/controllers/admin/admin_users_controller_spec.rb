@@ -33,7 +33,7 @@ describe Admin::AdminUsersController do
       context "with role #{role}" do
         let(:admin) { create(:admin, roles: [role]) }
 
-        it "allows access to index" do
+        it "allows access" do
           expect(response).to have_http_status(:success)
         end
       end
@@ -72,7 +72,7 @@ describe Admin::AdminUsersController do
     it_behaves_like "permits access to authorized admins"
 
     context "when admin has correct authorization" do
-      let(:admin) { create(:admin, roles: ["policy_and_abuse"]) }
+      let(:admin) { create(:policy_and_abuse_admin) }
 
       it "if user exists, allows access to show page" do
         fake_login_admin(admin)

@@ -1017,7 +1017,7 @@ describe CommentsController do
     context "when ultimate parent is an AdminPost" do
       let(:admin) { create(:admin) }
       let(:comment) { create(:comment, :on_admin_post) }
-      authorized_roles = %w[superadmin board board_assistants_team communications elections legal policy_and_abuse support]
+      authorized_roles = %w[superadmin board board_assistants_team communications elections policy_and_abuse support]
       unauthorized_roles = Admin::VALID_ROLES - authorized_roles
 
       authorized_roles.each do |role|
@@ -1130,7 +1130,7 @@ describe CommentsController do
     shared_examples "marking a comment spam" do
       context "when ultimate parent is an AdminPost" do
         let(:admin_post) { create(:admin_post) }
-        authorized_roles = %w[superadmin board board_assistants_team communications elections legal policy_and_abuse support]
+        authorized_roles = %w[superadmin board board_assistants_team communications elections policy_and_abuse support]
         unauthorized_roles = Admin::VALID_ROLES - authorized_roles
 
         before do
@@ -2453,7 +2453,7 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin policy_and_abuse].each do |admin_role|
+          %w[superadmin legal policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "hides comment and redirects with success message" do
                 admin.update!(roles: [admin_role])
@@ -2623,7 +2623,7 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin policy_and_abuse].each do |admin_role|
+          %w[superadmin legal policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "leaves comment hidden and redirects with error" do
                 admin.update!(roles: [admin_role])
@@ -2795,7 +2795,7 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin policy_and_abuse].each do |admin_role|
+          %w[superadmin legal policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "unhides comment and redirects with success message" do
                 admin.update!(roles: [admin_role])
@@ -2965,7 +2965,7 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin policy_and_abuse].each do |admin_role|
+          %w[superadmin legal policy_and_abuse].each do |admin_role|
             context "with the #{admin_role} role" do
               it "leaves comment unhidden and redirects with error" do
                 admin.update!(roles: [admin_role])
@@ -3271,6 +3271,7 @@ describe CommentsController do
 
         context "when logged in as an admin" do
           let(:admin) { create(:admin) }
+          authorized_roles = %w[superadmin board legal policy_and_abuse support]
 
           context "with no role" do
             it "doesn't destroy comment and redirects with error" do
@@ -3283,7 +3284,7 @@ describe CommentsController do
             end
           end
 
-          (Admin::VALID_ROLES - %w[superadmin board legal policy_and_abuse support]).each do |admin_role|
+          (Admin::VALID_ROLES - authorized_roles).each do |admin_role|
             context "with role #{admin_role}" do
               it "doesn't destroy comment and redirects with error" do
                 admin.update!(roles: [admin_role])
@@ -3296,7 +3297,7 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin board legal policy_and_abuse support].each do |admin_role|
+          authorized_roles.each do |admin_role|
             context "with the #{admin_role} role" do
               it "destroys comment and redirects with success message" do
                 admin.update!(roles: [admin_role])
@@ -3389,6 +3390,7 @@ describe CommentsController do
 
         context "when logged in as an admin" do
           let(:admin) { create(:admin) }
+          authorized_roles = %w[superadmin board legal policy_and_abuse support]
 
           context "with no role" do
             it "doesn't destroy comment and redirects with error" do
@@ -3401,7 +3403,7 @@ describe CommentsController do
             end
           end
 
-          (Admin::VALID_ROLES - %w[superadmin board legal policy_and_abuse support]).each do |admin_role|
+          (Admin::VALID_ROLES - authorized_roles).each do |admin_role|
             context "with role #{admin_role}" do
               it "doesn't destroy comment and redirects with error" do
                 admin.update!(roles: [admin_role])
@@ -3414,7 +3416,7 @@ describe CommentsController do
             end
           end
 
-          %w[superadmin board legal policy_and_abuse support].each do |admin_role|
+          authorized_roles.each do |admin_role|
             context "with the #{admin_role} role" do
               it "destroys comment and redirects with success message" do
                 admin.update!(roles: [admin_role])
@@ -3848,7 +3850,7 @@ describe CommentsController do
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
 
-        %w[superadmin board support policy_and_abuse].each do |admin_role|
+        %w[superadmin board legal support policy_and_abuse].each do |admin_role|
           it "successfully deletes the comment when admin has #{admin_role} role" do
             admin.update!(roles: [admin_role])
             fake_login_admin(admin)

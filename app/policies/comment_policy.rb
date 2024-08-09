@@ -5,7 +5,7 @@ class CommentPolicy < ApplicationPolicy
   FREEZE_WORK_COMMENT_ROLES = %w[superadmin policy_and_abuse].freeze
   HIDE_TAG_COMMENT_ROLES = %w[superadmin legal tag_wrangling].freeze
   HIDE_WORK_COMMENT_ROLES = %w[superadmin legal policy_and_abuse].freeze
-  SPAM_ADMIN_POST_COMMENT_ROLES = %w[superadmin board board_assistants_team communications elections legal policy_and_abuse support].freeze
+  SPAM_ADMIN_POST_COMMENT_ROLES = %w[superadmin board board_assistants_team communications elections policy_and_abuse support].freeze
   SPAM_COMMENT_ROLES = %w[superadmin board policy_and_abuse support].freeze
 
   def can_destroy_comment?
