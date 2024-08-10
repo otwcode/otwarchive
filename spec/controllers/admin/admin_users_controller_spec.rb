@@ -6,9 +6,10 @@ describe Admin::AdminUsersController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  search_roles = %w[superadmin legal tag_wrangling support policy_and_abuse open_doors]
+  manage_roles = %w[superadmin legal policy_and_abuse open_doors support tag_wrangling].freeze
+  search_roles = %w[superadmin legal tag_wrangling support policy_and_abuse open_doors].freeze
 
-  shared_examples "denies access to unauthorized admins" do
+  shared_examples "denies access to unauthorized admins" do |authorized_roles|
     context "with no roles" do
       let(:admin) { create(:admin) }
 
@@ -17,7 +18,7 @@ describe Admin::AdminUsersController do
       end
     end
 
-    (Admin::VALID_ROLES - search_roles).each do |role|
+    (Admin::VALID_ROLES - authorized_roles).each do |role|
       context "with role #{role}" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -46,7 +47,7 @@ describe Admin::AdminUsersController do
       get :index
     end
 
-    it_behaves_like "denies access to unauthorized admins"
+    it_behaves_like "denies access to unauthorized admins", search_roles
     it_behaves_like "permits access to authorized admins"
   end
 
@@ -56,7 +57,7 @@ describe Admin::AdminUsersController do
       get :bulk_search
     end
 
-    it_behaves_like "denies access to unauthorized admins"
+    it_behaves_like "denies access to unauthorized admins", search_roles
     it_behaves_like "permits access to authorized admins"
   end
 
@@ -68,7 +69,7 @@ describe Admin::AdminUsersController do
       get :show, params: { id: user.login }
     end
 
-    it_behaves_like "denies access to unauthorized admins"
+    it_behaves_like "denies access to unauthorized admins", search_roles
     it_behaves_like "permits access to authorized admins"
 
     context "when admin has correct authorization" do
@@ -97,21 +98,17 @@ describe Admin::AdminUsersController do
     let(:role) { create(:role) }
     let(:user) { create(:user, email: "user@example.com", roles: [old_role]) }
 
-    context "when admin does not have correct authorization" do
+    it_behaves_like "denies access to unauthorized admins", manage_roles do
       before do
         fake_login_admin(admin)
-        admin.update!(roles: [])
-      end
-
-      it "redirects with error" do
         put :update, params: { id: user.login, user: { roles: [] } }
-
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
 
     context "when admin has correct authorization" do
-      before { fake_login_admin(admin) }
+      before do
+        fake_login_admin(admin)
+      end
 
       %w[policy_and_abuse superadmin].each do |admin_role|
         context "when admin has #{admin_role} role" do
@@ -186,6 +183,26 @@ describe Admin::AdminUsersController do
           end
         end
       end
+
+      %w[legal].each do |admin_role|
+        context "when admin has #{admin_role} role" do
+          let(:admin) { create(:admin, roles: [admin_role]) }
+
+          it "does not allow updating roles" do
+            expect do
+              put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
+            end.to raise_exception(ActionController::UnpermittedParameters)
+            expect(user.reload.roles).not_to include(role)
+          end
+
+          it "does not allow updating email" do
+            expect do
+              put :update, params: { id: user.login, user: { email: "updated@example.com" } }
+            end.to raise_exception(ActionController::UnpermittedParameters)
+            expect(user.reload.email).not_to eq("updated@example.com")
+          end
+        end
+      end
     end
   end
 
@@ -193,140 +210,126 @@ describe Admin::AdminUsersController do
     let(:admin) { create(:admin) }
     let(:user) { create(:user) }
     let(:kin) { create(:user) }
+    authorized_roles = %w[superadmin policy_and_abuse support].freeze
 
-    before { fake_login_admin(admin) }
-
-    shared_examples "unauthorized admin cannot add next of kin" do
-      it "redirects with error" do
+    it_behaves_like "denies access to unauthorized admins", authorized_roles do
+      before do
+        fake_login_admin(admin)
         post :update_next_of_kin, params: {
           user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
         }
-        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        expect(user.reload.fannish_next_of_kin).to be_nil
       end
     end
 
-    shared_examples "authorized admin can add next of kin" do
-      it "adds next of kin and redirects with notice" do
-        post :update_next_of_kin, params: {
-          user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
-        }
-        it_redirects_to_with_notice(admin_user_path(user), "Fannish next of kin was updated.")
-        expect(user.reload.fannish_next_of_kin.kin).to eq(kin)
-        expect(user.reload.fannish_next_of_kin.kin_email).to eq(kin.email)
-      end
-    end
-
-    context "when admin does not have correct authorization" do
-      before { admin.update!(roles: []) }
-
-      it_behaves_like "unauthorized admin cannot add next of kin"
-    end
-
-    %w[superadmin policy_and_abuse support].each do |role|
+    authorized_roles.each do |role|
       context "when admin has #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
-        it_behaves_like "authorized admin can add next of kin"
-      end
-    end
-
-    context "when admin has support role" do
-      let(:admin) { create(:support_admin) }
-
-      before { fake_login_admin(admin) }
-
-      it "logs adding a fannish next of kin" do
-        post :update_next_of_kin, params: {
-          user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
-        }
-        user.reload
-        expect(user.fannish_next_of_kin.kin).to eq(kin)
-        log_item = user.log_items.last
-        expect(log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
-        expect(log_item.fnok_user.id).to eq(kin.id)
-
-        added_log_item = kin.reload.log_items.last
-        expect(added_log_item.action).to eq(ArchiveConfig.ACTION_ADDED_AS_FNOK)
-        expect(added_log_item.fnok_user.id).to eq(user.id)
-
-        expect_changes_made_by(admin, [log_item, added_log_item])
-      end
-
-      it "logs removing a fannish next of kin" do
-        kin = create(:fannish_next_of_kin, user: user).kin
-
-        post :update_next_of_kin, params: {
-          user_login: user.login
-        }
-        user.reload
-        expect(user.fannish_next_of_kin).to be_nil
-        log_item = user.log_items.last
-        expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
-        expect(log_item.fnok_user.id).to eq(kin.id)
-
-        removed_log_item = kin.reload.log_items.last
-        expect(removed_log_item.action).to eq(ArchiveConfig.ACTION_REMOVED_AS_FNOK)
-        expect(removed_log_item.fnok_user.id).to eq(user.id)
-
-        expect_changes_made_by(admin, [log_item, removed_log_item])
-      end
-
-      it "logs updating a fannish next of kin" do
-        previous_kin = create(:fannish_next_of_kin, user: user).kin
-
-        post :update_next_of_kin, params: {
-          user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
-        }
-        user.reload
-        expect(user.fannish_next_of_kin.kin).to eq(kin)
-
-        remove_log_item = user.log_items[-2]
-        expect(remove_log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
-        expect(remove_log_item.fnok_user.id).to eq(previous_kin.id)
-
-        add_log_item = user.log_items.last
-        expect(add_log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
-        expect(add_log_item.fnok_user.id).to eq(kin.id)
-
-        removed_log_item = previous_kin.reload.log_items.last
-        expect(removed_log_item.action).to eq(ArchiveConfig.ACTION_REMOVED_AS_FNOK)
-        expect(removed_log_item.fnok_user.id).to eq(user.id)
-
-        added_log_item = kin.reload.log_items.last
-        expect(added_log_item.action).to eq(ArchiveConfig.ACTION_ADDED_AS_FNOK)
-        expect(added_log_item.fnok_user.id).to eq(user.id)
-
-        expect_changes_made_by(admin, [remove_log_item, add_log_item, removed_log_item, added_log_item])
-      end
-
-      def expect_changes_made_by(admin, log_items)
-        log_items.each do |log_item|
-          expect(log_item.admin_id).to eq(admin.id)
-          expect(log_item.note).to eq("Change made by #{admin.login}")
+        before do
+          fake_login_admin(admin)
         end
-      end
 
-      it "does nothing if changing the fnok to themselves" do
-        previous_kin = create(:fannish_next_of_kin, user: user)
+        it "adds next of kin and redirects with notice" do
+          post :update_next_of_kin, params: {
+            user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
+          }
+          it_redirects_to_with_notice(admin_user_path(user), "Fannish next of kin was updated.")
+          expect(user.reload.fannish_next_of_kin.kin).to eq(kin)
+          expect(user.reload.fannish_next_of_kin.kin_email).to eq(kin.email)
+        end
 
-        post :update_next_of_kin, params: {
-          user_login: user.login, next_of_kin_name: previous_kin.kin.login, next_of_kin_email: previous_kin.kin_email
-        }
-        it_redirects_to_with_notice(admin_user_path(user), "No change to fannish next of kin.")
-        expect(user.reload.log_items).to be_empty
-      end
+        it "logs adding a fannish next of kin" do
+          post :update_next_of_kin, params: {
+            user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
+          }
+          user.reload
+          expect(user.fannish_next_of_kin.kin).to eq(kin)
+          log_item = user.log_items.last
+          expect(log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
+          expect(log_item.fnok_user.id).to eq(kin.id)
 
-      it "errors if trying to add an incomplete fnok" do
-        post :update_next_of_kin, params: {
-          user_login: user.login, next_of_kin_email: ""
-        }
+          added_log_item = kin.reload.log_items.last
+          expect(added_log_item.action).to eq(ArchiveConfig.ACTION_ADDED_AS_FNOK)
+          expect(added_log_item.fnok_user.id).to eq(user.id)
 
-        kin = assigns(:user).fannish_next_of_kin
-        expect(kin).not_to be_valid
-        expect(kin.errors[:kin_email]).to include("can't be blank")
+          expect_changes_made_by(admin, [log_item, added_log_item])
+        end
 
-        expect(user.reload.log_items).to be_empty
+        it "logs removing a fannish next of kin" do
+          kin = create(:fannish_next_of_kin, user: user).kin
+
+          post :update_next_of_kin, params: {
+            user_login: user.login
+          }
+          user.reload
+          expect(user.fannish_next_of_kin).to be_nil
+          log_item = user.log_items.last
+          expect(log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
+          expect(log_item.fnok_user.id).to eq(kin.id)
+
+          removed_log_item = kin.reload.log_items.last
+          expect(removed_log_item.action).to eq(ArchiveConfig.ACTION_REMOVED_AS_FNOK)
+          expect(removed_log_item.fnok_user.id).to eq(user.id)
+
+          expect_changes_made_by(admin, [log_item, removed_log_item])
+        end
+
+        it "logs updating a fannish next of kin" do
+          previous_kin = create(:fannish_next_of_kin, user: user).kin
+
+          post :update_next_of_kin, params: {
+            user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email
+          }
+          user.reload
+          expect(user.fannish_next_of_kin.kin).to eq(kin)
+
+          remove_log_item = user.log_items[-2]
+          expect(remove_log_item.action).to eq(ArchiveConfig.ACTION_REMOVE_FNOK)
+          expect(remove_log_item.fnok_user.id).to eq(previous_kin.id)
+
+          add_log_item = user.log_items.last
+          expect(add_log_item.action).to eq(ArchiveConfig.ACTION_ADD_FNOK)
+          expect(add_log_item.fnok_user.id).to eq(kin.id)
+
+          removed_log_item = previous_kin.reload.log_items.last
+          expect(removed_log_item.action).to eq(ArchiveConfig.ACTION_REMOVED_AS_FNOK)
+          expect(removed_log_item.fnok_user.id).to eq(user.id)
+
+          added_log_item = kin.reload.log_items.last
+          expect(added_log_item.action).to eq(ArchiveConfig.ACTION_ADDED_AS_FNOK)
+          expect(added_log_item.fnok_user.id).to eq(user.id)
+
+          expect_changes_made_by(admin, [remove_log_item, add_log_item, removed_log_item, added_log_item])
+        end
+
+        def expect_changes_made_by(admin, log_items)
+          log_items.each do |log_item|
+            expect(log_item.admin_id).to eq(admin.id)
+            expect(log_item.note).to eq("Change made by #{admin.login}")
+          end
+        end
+
+        it "does nothing if changing the fnok to themselves" do
+          previous_kin = create(:fannish_next_of_kin, user: user)
+
+          post :update_next_of_kin, params: {
+            user_login: user.login, next_of_kin_name: previous_kin.kin.login, next_of_kin_email: previous_kin.kin_email
+          }
+          it_redirects_to_with_notice(admin_user_path(user), "No change to fannish next of kin.")
+          expect(user.reload.log_items).to be_empty
+        end
+
+        it "errors if trying to add an incomplete fnok" do
+          post :update_next_of_kin, params: {
+            user_login: user.login, next_of_kin_email: ""
+          }
+
+          kin = assigns(:user).fannish_next_of_kin
+          expect(kin).not_to be_valid
+          expect(kin.errors[:kin_email]).to include("can't be blank")
+
+          expect(user.reload.log_items).to be_empty
+        end
       end
     end
   end
@@ -378,15 +381,22 @@ describe Admin::AdminUsersController do
       end
     end
 
-    context "when admin does not have correct authorization" do
+    context "when the admin has no roles" do
       before { admin.update!(roles: []) }
 
       it_behaves_like "unauthorized admin cannot add note to user"
       it_behaves_like "unauthorized admin cannot suspend user"
     end
 
+    (Admin::VALID_ROLES - %w[policy_and_abuse support superadmin]).each do |role|
+      context "when the admin has #{role} role" do
+        it_behaves_like "unauthorized admin cannot add note to user"
+        it_behaves_like "unauthorized admin cannot suspend user"
+      end
+    end
+
     %w[superadmin policy_and_abuse].each do |role|
-      context "when admin has #{role} role" do
+      context "when the admin has #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
         it_behaves_like "authorized admin can add note to user"
@@ -394,7 +404,7 @@ describe Admin::AdminUsersController do
       end
     end
 
-    context "when admin has support role" do
+    context "when the admin has support role" do
       let(:admin) { create(:support_admin) }
 
       it_behaves_like "authorized admin can add note to user"
@@ -403,53 +413,55 @@ describe Admin::AdminUsersController do
   end
 
   describe "GET #confirm_delete_user_creations" do
-    let(:admin) { create(:admin) }
     let(:user) { create(:user, banned: true) }
+    authorized_roles = %w[superadmin policy_and_abuse].freeze
 
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
+    before do
+      fake_login_admin(admin)
+    end
+
+    it_behaves_like "denies access to unauthorized admins", authorized_roles do
+      before do
         get :confirm_delete_user_creations, params: { id: user.login }
-
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
 
-    context "when admin has correct authorization" do
-      context "when user is not banned" do
-        it "redirects with error" do
-          admin.update!(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          user.update!(banned: false)
-          get :confirm_delete_user_creations, params: { id: user.login }
+    authorized_roles.each do |role|
+      context "when logged in as a #{role} admin" do
+        let(:admin) { create(:admin, roles: [role]) }
 
-          it_redirects_to_with_error(admin_users_path, "That user is not banned!")
+        context "when the user is not banned" do
+          it "redirects with error" do
+            user.update!(banned: false)
+            get :confirm_delete_user_creations, params: { id: user.login }
+
+            it_redirects_to_with_error(admin_users_path, "That user is not banned!")
+          end
         end
-      end
 
-      context "when user is banned" do
-        it "allows admins to access delete user creations page" do
-          admin.update!(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          user.update!(banned: true)
-          get :confirm_delete_user_creations, params: { id: user.login }
+        context "when the user is banned" do
+          it "allows admins to access delete user creations page" do
+            user.update!(banned: true)
+            get :confirm_delete_user_creations, params: { id: user.login }
 
-          expect(response).to have_http_status(:success)
+            expect(response).to have_http_status(:success)
+          end
         end
       end
     end
   end
 
   describe "POST #destroy_user_creations" do
-    let(:admin) { create(:admin) }
     let(:user) { create(:user) }
     let!(:work) { create(:work, authors: [user.default_pseud]) }
     let(:other_owner) { create(:user, banned: false) }
     let!(:collection1) { create(:collection) }
     let!(:collection2) { create(:collection) }
+    authorized_roles = %w[superadmin policy_and_abuse].freeze
 
     before do
+      fake_login_admin(admin)
+
       # Banning user only after creating works for them
       user.update!(banned: true)
 
@@ -459,92 +471,83 @@ describe Admin::AdminUsersController do
       create(:collection_participant, user: user, collection: collection2, participant_role: CollectionParticipant::MEMBER)
     end
 
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
+    it_behaves_like "denies access to unauthorized admins", authorized_roles do
+      before do
         post :destroy_user_creations, params: { id: user.login }
-
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
 
-    context "when admin has correct authorization" do
-      before do
-        admin.update!(roles: ["policy_and_abuse"])
-        fake_login_admin(admin)
-      end
+    authorized_roles.each do |role|
+      context "when logged in as a #{role} admin" do
+        let(:admin) { create(:admin, roles: [role]) }
 
-      context "when user is not banned" do
-        it "redirects with error" do
-          user.update!(banned: false)
-          post :destroy_user_creations, params: { id: user.login }
-
-          it_redirects_to_with_error(admin_users_path, "That user is not banned!")
+        context "when the user is not banned" do
+          it "redirects with error" do
+            user.update!(banned: false)
+            post :destroy_user_creations, params: { id: user.login }
+  
+            it_redirects_to_with_error(admin_users_path, "That user is not banned!")
+          end
         end
-      end
 
-      context "when user is banned" do
-        it "allows admins to destroy user creations" do
-          post :destroy_user_creations, params: { id: user.login }
-          # Check that the first user's collection is deleted
-          expect(Collection.exists?(collection1.id)).to be_falsey
-          # Check that the second user's collection still exists
-          expect(Collection.exists?(other_owner.collections.last.id)).to be_truthy
+        context "when the user is banned" do
+          it "allows admins to destroy user creations" do
+            post :destroy_user_creations, params: { id: user.login }
+            # Check that the first user's collection is deleted
+            expect(Collection.exists?(collection1.id)).to be_falsey
+            # Check that the second user's collection still exists
+            expect(Collection.exists?(other_owner.collections.last.id)).to be_truthy
 
-          it_redirects_to_with_notice(admin_users_path, "All creations by user #{user.login} have been deleted.")
-          expect(Work.exists?(work.id)).to be false
+            it_redirects_to_with_notice(admin_users_path, "All creations by user #{user.login} have been deleted.")
+            expect(Work.exists?(work.id)).to be false
+          end
         end
       end
     end
   end
 
   describe "GET #troubleshoot" do
-    let(:admin) { create(:admin) }
     let(:user) { create(:user) }
 
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-        get :troubleshoot, params: { id: user.login }
-
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
+    before do
+      fake_login_admin(admin)
+      get :troubleshoot, params: { id: user.login }
     end
 
-    context "when admin has correct authorization" do
-      it "allows admins to troublehoot user account" do
-        admin.update!(roles: ["support"])
-        fake_login_admin(admin)
-        get :troubleshoot, params: { id: user.login }
+    it_behaves_like "denies access to unauthorized admins", manage_roles
 
-        it_redirects_to_with_notice(root_path, "User account troubleshooting complete.")
+    context "when admin has correct authorization" do
+      manage_roles.each do |role|
+        context "with role #{role}" do
+          let(:admin) { create(:admin, roles: [role]) }
+
+          it "allows admins to troublehoot user account" do
+            it_redirects_to_with_notice(root_path, "User account troubleshooting complete.")
+          end
+        end
       end
     end
   end
 
   describe "POST #activate" do
-    let(:admin) { create(:admin) }
     let(:user) { create(:user) }
 
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-        post :activate, params: { id: user.login }
-
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
+    before do
+      fake_login_admin(admin)
+      post :activate, params: { id: user.login }
     end
 
-    context "when admin has correct authorization" do
-      it "allows admins to troublehoot user account" do
-        admin.update!(roles: ["support"])
-        fake_login_admin(admin)
-        post :activate, params: { id: user.login }
+    it_behaves_like "denies access to unauthorized admins", manage_roles
 
-        it_redirects_to_with_notice(admin_user_path(id: user.login), "User Account Activated")
+    context "when admin has correct authorization" do
+      manage_roles.each do |role|
+        context "with role #{role}" do
+          let(:admin) { create(:admin, roles: [role]) }
+
+          it "allows admins to activate the user account" do
+            it_redirects_to_with_notice(admin_user_path(id: user.login), "User Account Activated")
+          end
+        end
       end
     end
   end
