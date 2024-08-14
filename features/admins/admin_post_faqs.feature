@@ -195,6 +195,7 @@ Feature: Admin Actions to Post FAQs
       | communications             |
       | development_and_membership |
       | elections                  |
+      | legal                      |
       | tag_wrangling              |
       | policy_and_abuse           |
       | open_doors                 |
