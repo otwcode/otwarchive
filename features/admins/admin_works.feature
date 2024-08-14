@@ -13,10 +13,10 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I press "Troubleshoot"
     Then I should see "Work sent to be reindexed."
 
-  Scenario: Can hide works
+  Scenario Outline: Can hide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "<role>" admin
       And all emails have been delivered
       And I view the work "ToS Violation"
       And I follow "Hide Work"
@@ -26,8 +26,14 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And "regular_user" should see their work "ToS Violation" is hidden
       And 1 email should be delivered
       And the email should contain "you will be required to take action to correct the violation"
+    
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
 
-  Scenario: Can unhide works
+  Scenario Outline: Can unhide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as a "policy_and_abuse" admin
@@ -43,7 +49,13 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And logged in users should see the unhidden work "ToS Violation" by "regular_user"
       And 0 emails should be delivered
 
-  Scenario: Can delete works
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
+
+  Scenario: Deleting works as a Policy & Abuse admin
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
     When I am logged in as a "policy_and_abuse" admin
@@ -66,9 +78,28 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I am on regular_user's works page
     Then I should not see "ToS Violation"
 
-  Scenario: Can hide bookmarks
-    Given basic tags
-      And I am logged in as "regular_user" with password "password1"
+  Scenario: Deleting works as a Legal admin
+    Given I am logged in as "regular_user"
+      And I post the work "ToS Violation"
+    When I am logged in as a "legal" admin
+      # Don't let the admin password email mess up the count.
+      And all emails have been delivered
+      And I view the work "ToS Violation"
+      And I follow "Delete Work"
+      And all indexing jobs have been run
+    Then I should see "Item was successfully deleted."
+      And 1 email should be delivered
+      And the email should contain "deleted from the Archive by a site admin"
+      And the email should not contain "translation missing"
+    When I log out
+      And I am on regular_user's works page
+    Then I should not see "ToS Violation"
+    When I am logged in
+      And I am on regular_user's works page
+    Then I should not see "ToS Violation"
+
+  Scenario Outline: Can hide bookmarks
+    Given I am logged in as "regular_user" with password "password1"
       And I post the work "A Nice Work"
     When I am logged in as "bad_user"
       And I view the work "A Nice Work"
@@ -77,7 +108,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I press "Create"
       And all indexing jobs have been run
     Then I should see "Bookmark was successfully created"
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "<role>" admin
       And I am on bad_user's bookmarks page
     When I follow "Hide Bookmark"
       And all indexing jobs have been run
@@ -86,9 +117,38 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I am on bad_user's bookmarks page
     Then I should not see "Rude comment"
 
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
+
+  Scenario Outline: Deleting bookmarks
+    Given I am logged in as "regular_user" with password "password1"
+      And I post the work "A Nice Work"
+    When I am logged in as "bad_user"
+      And I view the work "A Nice Work"
+    When I follow "Bookmark"
+      And I fill in "bookmark_notes" with "Rude comment"
+      And I press "Create"
+      And all indexing jobs have been run
+    Then I should see "Bookmark was successfully created"
+    When I am logged in as a "<role>" admin
+      And I am on bad_user's bookmarks page
+      And I follow "Delete Bookmark"
+    Then I should see "Item was successfully deleted."
+    When I am logged in as "bad_user"
+      And I am on bad_user's bookmarks page
+    Then I should not see "Rude comment"
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
+
   Scenario: Can edit tags on works
-    Given basic tags
-      And I am logged in as "regular_user"
+    Given I am logged in as "regular_user"
       And I post the work "Changes" with fandom "User-Added Fandom" with freeform "User-Added Freeform" with category "M/M"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Changes"
@@ -124,8 +184,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should not see "Admin-Added Fandom"
 
   Scenario: Can edit external works
-    Given basic tags
-      And basic languages
+    Given basic languages
       And I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
     When I am logged in as a "policy_and_abuse" admin
@@ -155,14 +214,36 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should see "M/M"
       And I should see "Language: Deutsch"
 
-  Scenario: Can delete external works
-    Given basic tags
-      And I am logged in as "regular_user"
+  Scenario Outline: Hiding and un-hiding external works
+    Given I am logged in as "regular_user"
       And I bookmark the external work "External Changes"
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "<role>" admin
+      And I view the external work "External Changes"
+      And I follow "Hide External Work"
+    Then I should see "Item has been hidden."
+      And I should see "Make External Work Visible"
+    When I follow "Make External Work Visible"
+    Then I should see "Item is no longer hidden."
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
+
+  Scenario Outline: Deleting external works
+    Given I am logged in as "regular_user"
+      And I bookmark the external work "External Changes"
+    When I am logged in as a "<role>" admin
       And I view the external work "External Changes"
       And I follow "Delete External Work"
     Then I should see "Item was successfully deleted."
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
 
   Scenario: Can mark a comment as spam
     Given I have no works or comments
@@ -250,8 +331,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should not see "This comment has been marked as spam."
 
   Scenario: Admin can edit language on works when posting without previewing
-    Given basic tags
-      And basic languages
+    Given basic languages
       And I am logged in as "regular_user"
       And I post the work "Wrong Language"
     When I am logged in as a "policy_and_abuse" admin
@@ -264,8 +344,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I should not see "English"
 
   Scenario: Admin can edit language on works when previewing first
-    Given basic tags
-      And basic languages
+    Given basic languages
       And I am logged in as "regular_user"
       And I post the work "Wrong Language"
     When I am logged in as a "policy_and_abuse" admin
@@ -300,10 +379,10 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     And the work "Spammity Spam" should not be marked as spam
     And the work "Spammity Spam" should not be hidden
 
-  Scenario: Admin can hide a series (e.g. if the series description or notes contain a TOS Violation)
+  Scenario Outline: Admin can hide a series (e.g. if the series description or notes contain a TOS Violation)
     Given I am logged in as "tosser"
       And I add the work "Legit Work" to series "Violation"
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "<role>" admin
       And I view the series "Violation"
       And I follow "Hide Series"
     Then I should see "Item has been hidden."
@@ -328,10 +407,16 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     When I view the series "Violation"
     Then I should see the image "title" text "Hidden by Administrator"
 
-  Scenario: Admin can un-hide a series
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
+
+  Scenario Outline: Admin can un-hide a series
     Given I am logged in as "tosser"
       And I add the work "Legit Work" to series "Violation"
-      And I am logged in as a "policy_and_abuse" admin
+      And I am logged in as a "<role>" admin
       And I view the series "Violation"
       And I follow "Hide Series"
     When I follow "Make Series Visible"
@@ -357,6 +442,30 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     When I view the series "Violation"
     Then I should see "Violation"
 
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
+
+  Scenario Outline: Deleting series
+    Given I am logged in as "tosser"
+      And I add the work "Legit Work" to series "Violation"
+      And I am logged in as a "<role>" admin
+    When I view the series "Violation"
+      And I follow "Delete Series"
+    Then I should see "Item was successfully deleted."
+    When I log out
+      And I go to tosser's series page
+    Then I should see "Series (0)"
+      And I should not see "Violation"
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
+
   Scenario: Admins can see when a work has too many tags
     Given the user-defined tag limit is 7
       And the work "Under the Limit"
@@ -371,8 +480,14 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     When I view the work "Over the Limit"
     Then I should see "Over Tag Limit: Yes"
 
-  Scenario: Policy abuse admins can see original work creators
+  Scenario Outline: Certain admins can see original work creators
     Given a work "Orphaned" with the original creator "orphaneer"
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "<role>" admin
       And I view the work "Orphaned"
     Then I should see the original creator "orphaneer"
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
