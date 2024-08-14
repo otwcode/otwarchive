@@ -74,6 +74,7 @@ en:
           addressed: Hi, %{name}!
           unaddressed: Hi!
         introductory: Hello from the Archive of Our Own!
+        tag_wrangler_supervisors: Tag Wrangler Supervisors
       metadata_label_indicator: ": "
       signature:
         abuse_team: The AO3 Policy & Abuse team
@@ -89,6 +90,11 @@ en:
     guest_with_parens: "(Guest)"
     official_with_parens: "(Official)"
     registered_with_parens: "(Registered User)"
+  tag_wrangling_supervisor_mailer:
+    wrangler_username_change_notification:
+      name_changed:
+        html: The wrangler %{old_username} has changed their name to %{new_username}.
+      subject: "[%{app_name}] Wrangler name change"
   user_mailer:
     abuse_report:
       copy:
