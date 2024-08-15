@@ -40,8 +40,8 @@ module Otwarchive
     I18n.config.available_locales = [
       :en, :af, :ar, :bg, :bn, :ca, :cs, :cy, :da, :de, :el, :es, :fa, :fi,
       :fil, :fr, :he, :hi, :hr, :hu, :id, :it, :ja, :ko, :lt, :lv, :mk,
-      :mr, :ms, :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :sk, :sl, :sr, :sv,
-      :th, :tr, :uk, :vi, :"zh-CN"
+      :mr, :ms, :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :scr, :sk, :sl,
+      :sv, :th, :tr, :uk, :vi, :"zh-CN"
     ]
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
@@ -119,6 +119,7 @@ module Otwarchive
       domain: ArchiveConfig.SMTP_DOMAIN,
       port: ArchiveConfig.SMTP_PORT,
       enable_starttls_auto: ArchiveConfig.SMTP_ENABLE_STARTTLS_AUTO,
+      enable_starttls: ArchiveConfig.SMTP_ENABLE_STARTTLS,
       openssl_verify_mode: ArchiveConfig.SMTP_OPENSSL_VERIFY_MODE
     }
     if ArchiveConfig.SMTP_AUTHENTICATION
@@ -128,5 +129,7 @@ module Otwarchive
                                                   authentication: ArchiveConfig.SMTP_AUTHENTICATION
                                                 })
     end
+
+    config.active_support.disable_to_s_conversion = true
   end
 end

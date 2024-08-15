@@ -4,7 +4,7 @@ class UserPolicy < ApplicationPolicy
   # - managing a user's invitations
   # - updating a user's email and roles (e.g. wranglers, archivists, not admin roles)
   # This is further restricted using ALLOWED_ATTRIBUTES_BY_ROLES.
-  MANAGE_ROLES = %w[superadmin policy_and_abuse open_doors support tag_wrangling].freeze
+  MANAGE_ROLES = %w[superadmin legal policy_and_abuse open_doors support tag_wrangling].freeze
 
   # Roles that allow updating the Fannish Next Of Kin of a user.
   MANAGE_NEXT_OF_KIN_ROLES = %w[superadmin policy_and_abuse support].freeze

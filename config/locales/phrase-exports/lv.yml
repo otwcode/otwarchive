@@ -1,2 +1,32 @@
 ---
-lv: {}
+lv:
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Ja Tu nedēļas laikā neizmantosi šo saiti, lai nomainītu paroli,
+          beigsies tās derīguma termiņš, un Tev vajadzēs to pieprasīt atkārtoti.
+        intro: 'Kāds ir pieprasījis paroles nomaiņu Tavam kontam. Tu vari nomainīt
+          sava konta paroli sekojot norādītajai saitei un ievadot savu jauno paroli:'
+        link_title: Mainīt manu paroli.
+        subject: "[%{app_name}] Atiestati savu paroli"
+        unrequested: Ja Tu nepieprasīji šo paroles nomaiņu, Tu vari ignorēt šo epastu
+          un Tava iepriekšējā parole turpinās darboties.
+  user_mailer:
+    archivist_added_to_collection_notification:
+      approved_collection_items_page: Apstiprinātās Kolekcijas (Tulkošana) lapa
+      archivist_notice: Kolekcijas uzturētāji darbojas viņu oficiālajā kapacitātē
+        kā Atvērto Durvju(Tulkošana) arhīvisti, tāpēc viņiem ir atļauts pievienot
+        Tavu darbu kolekcijai, arī tādos gadījumos, kad esi bloķējis ielūgumus uz
+        kolekcijām. Arhīvisti pievieno darbu kolekcijai tikai tad, ja ja tas tika
+        pievienots importētam arhīvam.
+      removal_instructions:
+        html: Ja Tu vēlies noņemt savu darbu no šīs kolekcijas, lūdzu, apmeklē %{approved_items_link}.
+        text: 'Ja Tu vēlies noņemt savu darbu no šīs kolekcijas, lūdzu, apmeklē savu
+          Apstiprināto kolekciju (Tulkošana) lapu: %{approved_items_url}.'
+      subject: "[%{app_name}][%{collection_title}]Open Doors(Atvērtās Durvis (Tulkošana))
+        arhīvists ir pievienojis Tavu darbu kolekcijai."
+      work_added:
+        html: "%{collection_link}Kolekcijas uzturētāji ir pievienojuši Tavu darbu
+          %{work_link} viņu kolekcijai!"
+        text: '"%{collection_title}" (%{collection_url})Kolekcijas uzturētāji ir pievienojuši
+          Tavu darbu "%{work_title}" (%{work_url}) viņu kolekcijai!'

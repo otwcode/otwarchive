@@ -214,10 +214,21 @@ Given "the work {string} by {string}" do |title, login|
   FactoryBot.create(:work, title: title, authors: [user.default_pseud])
 end
 
+Given "the work {string} by {string} with guest comments enabled" do |title, login|
+  user = ensure_user(login)
+  FactoryBot.create(:work, :guest_comments_on, title: title, authors: [user.default_pseud])
+end
+
 Given "the work {string} by {string} and {string}" do |title, login1, login2|
   user1 = ensure_user(login1)
   user2 = ensure_user(login2)
   FactoryBot.create(:work, title: title, authors: [user1.default_pseud, user2.default_pseud])
+end
+
+Given "the work {string} by {string} and {string} with guest comments enabled" do |title, login1, login2|
+  user1 = ensure_user(login1)
+  user2 = ensure_user(login2)
+  FactoryBot.create(:work, :guest_comments_on, title: title, authors: [user1.default_pseud, user2.default_pseud])
 end
 
 Given /^the work "([^\"]*)" by "([^\"]*)" with chapter two co-authored with "([^\"]*)"$/ do |work, author, coauthor|
@@ -313,6 +324,12 @@ end
 When /^I post the work "([^"]*)" without preview$/ do |title|
   # we now post as our default test case
   step %{I post the work "#{title}"}
+end
+
+When "I post the work {string} with guest comments enabled" do |title|
+  step %{I set up the draft "#{title}"}
+  choose("Registered users and guests can comment")
+  step "I post the work without preview"
 end
 
 When /^a chapter is added to "([^"]*)"$/ do |work_title|
@@ -419,6 +436,7 @@ end
 When /^I edit multiple works with different comment moderation settings$/ do
   step %{I set up the draft "Work with Comment Moderation Enabled"}
   check("work_moderated_commenting_enabled")
+  choose("Registered users and guests can comment")
   step %{I post the work without preview}
   step %{I post the work "Work with Comment Moderation Disabled"}
   step %{I go to my edit multiple works page}

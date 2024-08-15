@@ -495,7 +495,11 @@ class Comment < ApplicationRecord
   end
 
   def sanitized_content
-    sanitize_field self, :comment_content
+    sanitize_field(self, :comment_content, image_safety_mode: use_image_safety_mode?)
+  end
+
+  def use_image_safety_mode?
+    parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE)
   end
   include Responder
 end

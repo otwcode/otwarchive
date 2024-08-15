@@ -78,9 +78,9 @@ end
 
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
   fandom = Fandom.find_or_create_by_name(fandom)
-  fandom.update(canonical: true)
+  fandom.update!(canonical: true)
   media = Media.find_or_create_by_name(media)
-  media.update(canonical: true)
+  media.update!(canonical: true)
   fandom.add_association media
 end
 
@@ -219,6 +219,11 @@ end
 Given /^the tag "([^"]*)" does not exist$/ do |tag_name|
   tag = Tag.find_by_name(tag_name)
   tag.destroy if tag.present?
+end
+
+Given "a zero width space tag exists" do
+  blank_tag = FactoryBot.build(:character, name: ["200B".hex].pack("U"))
+  blank_tag.save!(validate: true) # TODO: Change to validate: false when AO3-6777 is fixed
 end
 
 ### WHEN

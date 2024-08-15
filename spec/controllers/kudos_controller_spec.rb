@@ -208,5 +208,25 @@ describe KudosController do
         end
       end
     end
+
+    context "when kudos giver is admin" do
+      let(:work) { create(:work) }
+      let(:admin) { create(:admin) }
+
+      before { fake_login_admin(admin) }
+
+      it "redirects to root with notice prompting log out" do
+        post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
+        it_redirects_to_with_notice(root_path, "Please log out of your admin account first!")
+        expect(assigns(:kudo)).to be_nil
+      end
+
+      context "with format: :js" do
+        it "does not create any kudo" do
+          post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
+          expect(assigns(:kudo)).to be_nil
+        end
+      end
+    end
   end
 end

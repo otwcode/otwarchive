@@ -49,22 +49,22 @@ describe UserMailer do
     end
   end
 
-  describe "creatorship_notification" do
-    subject(:email) { UserMailer.creatorship_notification(work_creatorship.id, author.id) }
+  describe "#creatorship_notification" do
+    subject(:email) { UserMailer.creatorship_notification(chapter_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
-    let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
-    let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
+    let(:chapter) { create(:chapter, authors: [author.default_pseud, second_author.default_pseud]) }
+    let(:chapter_creatorship) { chapter.creatorships.last }
 
     context "when the creation is unavailable" do
-      before { work_creatorship.creation.delete }
+      before { chapter_creatorship.creation.delete }
 
       include_examples "it retries and fails on", ActionView::Template::Error
     end
 
     context "when the pseud being invited is unavailable" do
-      before { work_creatorship.pseud.delete }
+      before { chapter_creatorship.pseud.delete }
 
       include_examples "it retries and fails on", NoMethodError
     end
@@ -173,6 +173,8 @@ describe UserMailer do
 
     # Test both body contents
     it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
 
     describe "HTML version" do
       it_behaves_like "a claim notification" do
@@ -701,6 +703,7 @@ describe UserMailer do
 
       # Test both body contents
       it_behaves_like "a multipart email"
+      it_behaves_like "a translated email"
 
       describe "HTML version" do
         it "has the correct content" do
@@ -732,6 +735,7 @@ describe UserMailer do
 
       # Test both body contents
       it_behaves_like "a multipart email"
+      it_behaves_like "a translated email"
 
       describe "HTML version" do
         it "has the correct content" do
@@ -1117,7 +1121,7 @@ describe UserMailer do
         an_object_having_attributes(filename: "#{filename}.txt")
       )
     end
-    
+
     context "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")
@@ -1170,7 +1174,7 @@ describe UserMailer do
         an_object_having_attributes(filename: "#{filename}.txt")
       )
     end
-    
+
     context "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")

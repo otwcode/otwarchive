@@ -93,7 +93,7 @@ describe Admin::AdminInvitationsController do
     end
 
     it "allows admins to search by user_name" do
-      user.update(invitations: [invitation])
+      user.update!(invitations: [invitation])
       fake_login_admin(admin)
       get :find, params: { invitation: { user_name: user.login } }
 
@@ -110,7 +110,7 @@ describe Admin::AdminInvitationsController do
     end
 
     it "allows admins to search by invitee_email" do
-      invitation.update(invitee_email: user.email)
+      invitation.update!(invitee_email: user.email)
       fake_login_admin(admin)
       get :find, params: { invitation: { invitee_email: user.email } }
 
