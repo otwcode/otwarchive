@@ -10,7 +10,7 @@ describe Admin::AdminUsersController do
   let(:user) { create(:user) }
 
   manage_roles = %w[superadmin legal open_doors policy_and_abuse support tag_wrangling].freeze
-  search_roles = %w[superadmin legal open_doors policy_and_abuse support tag_wrangling ].freeze
+  search_roles = %w[superadmin legal open_doors policy_and_abuse support tag_wrangling].freeze
 
   shared_examples "an action unauthorized admins can't access" do |authorized_roles:|
     before { fake_login_admin(admin) }
@@ -240,13 +240,7 @@ describe Admin::AdminUsersController do
   end
 
   describe "POST #update_next_of_kin" do
-    subject { -> {
-        post :update_next_of_kin, params: {
-          user_login: user.login,
-          next_of_kin_name: kin.login,
-          next_of_kin_email: kin.email
-        }
-    } }
+    subject { -> { post :update_next_of_kin, params: { user_login: user.login, next_of_kin_name: kin.login, next_of_kin_email: kin.email } } }
     let(:kin) { create(:user) }
     authorized_roles = %w[superadmin policy_and_abuse support].freeze
 
