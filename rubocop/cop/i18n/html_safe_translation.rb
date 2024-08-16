@@ -21,8 +21,9 @@ module RuboCop
       class HtmlSafeTranslation < RuboCop::Cop::Base
         MSG = "Prefer t(key) with locale keys ending in `_html` or `.html` over calling t(key).html_safe"
 
-        RESTRICT_ON_SEND = [:html_safe].freeze
+        RESTRICT_ON_SEND = %i[html_safe].freeze
 
+        # @!method html_safe_translate?(node)
         def_node_matcher :html_safe_translate?, <<~PATTERN
           (send (send nil? {:t | :translate} ...) :html_safe)
         PATTERN
