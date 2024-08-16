@@ -68,9 +68,9 @@ en:
             text: If you've received this message in error, please contact Support at %{support_url}.
         sent_at: Sent at %{sent_at}.
       greeting:
-        formal: Dear %{name},
+        formal_html: Dear %{name},
         informal:
-          addressed: Hi, %{name}!
+          addressed_html: Hi, %{name}!
           unaddressed: Hi!
         introductory: Hello from the Archive of Our Own!
         tag_wrangler_supervisors: Tag Wrangler Supervisors
