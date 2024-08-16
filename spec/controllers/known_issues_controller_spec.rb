@@ -54,6 +54,30 @@ describe KnownIssuesController do
     end
   end
 
+  describe "GET #new" do
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        get :new
+      end
+    end
+
+    allowed_roles.each do |admin_role|
+      context "when logged in as an admin with role #{admin_role}" do
+        let(:admin) { create(:admin, roles: [admin_role]) }
+
+        before do
+          fake_login_admin(admin)
+        end
+
+        it "allows access" do
+          get :new
+          expect(response).to have_http_status(:success)
+        end
+      end
+    end
+  end
+
   describe "GET #edit" do
     let(:known_issue) { create(:known_issue) }
 
@@ -102,6 +126,33 @@ describe KnownIssuesController do
           expect { post :create, params: params }
             .to change { KnownIssue.count }
             .by(1)
+        end
+      end
+    end
+  end
+
+  describe "PUT #update" do
+    let(:known_issue) { create(:known_issue) }
+    let(:params) { { id: known_issue.id, known_issue: { title: "Brand new title" } } }
+
+    it_behaves_like "denies access to unauthorized admins" do
+      before do
+        fake_login_admin(admin)
+        put :update, params: params
+      end
+    end
+
+    allowed_roles.each do |admin_role|
+      context "when logged in as an admin with role #{admin_role}" do
+        let(:admin) { create(:admin, roles: [admin_role]) }
+
+        before do
+          fake_login_admin(admin)
+        end
+
+        it "updates the known issue successfully" do
+          put :update, params: params
+          expect(known_issue.reload.title).to eq("Brand new title")
         end
       end
     end

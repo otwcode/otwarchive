@@ -19,7 +19,7 @@ Feature: Admin Actions to Post Known Issues
       And I follow "Show"
     Then I should see "First known problem"
     When I edit known issues
-      Then I should see "Known issue was successfully updated"
+    Then I should see "Known issue was successfully updated"
       And I should not see "First known problem"
       And I should see "This is a bit of a problem, and this is too"
     When I delete known issues
@@ -46,6 +46,7 @@ Feature: Admin Actions to Post Known Issues
     | development_and_membership |
     | docs                       |
     | elections                  |
+    | legal                      |
     | translation                |
     | tag_wrangling              |
     | policy_and_abuse           |
