@@ -2,10 +2,12 @@
 <ul class="navigation actions" role="navigation">
   <li>
     <%= span_if_current t(".ao3_news"), admin_posts_path %>
-   </li>
-  <li>
-    <%= span_if_current t(".post_ao3_news"), new_admin_post_path %>
   </li>
+  <% if policy(AdminPost).can_post? %>
+    <li>
+      <%= span_if_current t(".post_ao3_news"), new_admin_post_path %>
+    </li>
+  <% end %>
   <% if params[:controller] == "admin_posts" && params[:action] == "edit" %>
     <li>
       <%= link_to t(".news.delete_post"),
