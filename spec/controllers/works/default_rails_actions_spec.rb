@@ -353,7 +353,8 @@ describe WorksController, work_search: true do
     describe "when the fandom id is invalid" do
       it "raises a 404 for an invalid id" do
         params = { fandom_id: 0 }
-        expect { get :index, params: params }.to raise_error ActiveRecord::RecordNotFound
+        expect { get :index, params: params }
+          .to raise_error ActiveRecord::RecordNotFound
       end
     end
 
