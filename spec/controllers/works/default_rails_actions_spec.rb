@@ -337,7 +337,6 @@ describe WorksController, work_search: true do
     before do
       @fandom = create(:canonical_fandom)
       @work = create(:work, fandom_string: @fandom.name)
-      @invalid_fandom_id = Fandom.last.id + 1
     end
 
     it "returns the work" do
@@ -352,10 +351,9 @@ describe WorksController, work_search: true do
     end
 
     describe "when the fandom id is invalid" do
-      it "causes a 404 error" do
-        params = { fandom_id: @invalid_fandom_id }
-        get :index, params: params
-        it_redirects_to_simple("/404")
+      it "raises a 404 for an invalid id" do
+        params = { fandom_id: 0 }
+        expect { get :index, params: params }.to raise_error ActiveRecord::RecordNotFound
       end
     end
 
