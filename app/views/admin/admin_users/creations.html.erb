@@ -4,15 +4,18 @@
   <!--/descriptions-->
 
   <!--subnav-->
-  <ul class="navigation actions" role="navigation">
+  <ul class="navigation actions">
     <li>
-      <%= link_to t(".admin_user"), admin_user_path(@user) %>
+      <%= span_if_current(t(".navigation.creations"), creations_admin_user_path(@user)) %>
+    </li>
+    <li>
+      <%= span_if_current(t(".navigation.admin_user"), admin_user_path(@user)) %>
     </li>
   </ul>
   <!--/subnav-->
 
   <!--main content-->
-  <% if @works.empty? && @comments.empty? %>
+  <% if @user.works.empty? && @user.comments.empty? %>
     <p class="notes"><%= t(".no_creations") %></p>
   <% else %>
     <%= render "user_creations_summary", works: @works, comments: @comments %>
