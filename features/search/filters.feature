@@ -79,6 +79,9 @@ Feature: Filters
     When I press "Fandoms" within "dd.exclude"
     Then the "Legend of Korra (1)" checkbox within "#exclude_fandom_tags" should not be checked
       And the "Harry Potter (1)" checkbox within "#exclude_fandom_tags" should not be checked
+    When I fill in "work_search_query" with "bad~query!!!"
+      And I press "Sort and Filter"
+    Then I should see "Your search failed because of a syntax error"
 
   @javascript
   Scenario: Filter through a user's works with non-existent tags
