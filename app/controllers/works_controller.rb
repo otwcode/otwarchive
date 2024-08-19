@@ -62,6 +62,9 @@ class WorksController < ApplicationController
       end
 
       tag = @fandom || @tag
+
+      return raise_not_found unless tag
+
       options[:filter_ids] ||= []
       options[:filter_ids] << tag.id
     end
