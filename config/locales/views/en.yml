@@ -121,7 +121,9 @@ en:
         page_heading: Delete Spammer Creations
         submit: Yes, Delete All Spammer Creations
       creations:
-        admin_user: User Administration
+        navigation:
+          admin_user: User Administration
+          creations: Creations
         no_creations: This user has no works or comments.
         page_heading: Works and Comments by %{user}
         page_title: "%{login} - User Creations"
@@ -188,9 +190,6 @@ en:
               required: Required when adding or removing a warning or suspension to an account.
             submit: Update
           heading: Record Warnings, Suspensions, or Notes
-      user_creations_summary:
-        comments: Comments (%{count})
-        works: Works (%{count})
     api:
       edit:
         page_title: Edit API Token
