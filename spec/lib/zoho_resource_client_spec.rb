@@ -145,6 +145,11 @@ describe ZohoResourceClient do
 
   describe "#create_ticket_attachment" do
     let(:attachment_attributes) do
+      attachment = StringIO.new("the_file")
+      def attachment.path
+        "the_file.html"
+      end
+
       { file: "the_file" }
     end
 
@@ -162,7 +167,7 @@ describe ZohoResourceClient do
       expect(WebMock).to have_requested(:post, "https://desk.zoho.com/api/v1/tickets/3/attachments")
         .with(
           headers: expected_request_headers,
-          body: attachment_attributes.to_json
+          body: "file=the_file"
         )
     end
   end
