@@ -59,7 +59,7 @@ class FeedbackReporter
       filename
     end
 
-    { file: ZohoStringAttachment.new(filename, download) }
+    { file: attachment }
   end
 
   private
