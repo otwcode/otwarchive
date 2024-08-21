@@ -55,10 +55,7 @@ class FeedbackReporter
     attachment = StringIO.new(download)
     # Workaround for HTTParty not recognizing StringIO as a file-like object:
     # https://github.com/jnunemaker/httparty/issues/675#issuecomment-590757288
-    def attachment.path
-      filename
-    end
-
+    attachment.define_singleton_method(:path) { filename }
     { file: attachment }
   end
 
