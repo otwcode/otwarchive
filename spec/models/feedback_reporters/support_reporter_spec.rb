@@ -35,7 +35,7 @@ describe SupportReporter do
         "cf_rollout" => "rollout_value",
         "cf_user_agent" => "HTTParty",
         "cf_ip" => "127.0.0.1",
-        "cf_url" => "https://example.com/works/1",
+        "cf_referer" => "https://example.com/works/1",
         "cf_site_skin" => "Reversi"
       }
     }
@@ -120,7 +120,7 @@ describe SupportReporter do
       end
 
       it "returns a hash containing a blank string for referer" do
-        expect(subject.report_attributes.dig("cf", "cf_url")).to eq("Unknown URL")
+        expect(subject.report_attributes.dig("cf", "cf_referer")).to eq("Unknown URL")
       end
     end
 
@@ -130,7 +130,7 @@ describe SupportReporter do
       end
 
       it "truncates the referer to 255 characters" do
-        expect(subject.report_attributes.dig("cf", "cf_url").length).to eq(255)
+        expect(subject.report_attributes.dig("cf", "cf_referer").length).to eq(255)
       end
     end
 
