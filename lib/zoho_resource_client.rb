@@ -37,11 +37,14 @@ class ZohoResourceClient
   end
 
   def create_ticket_attachment(ticket_id:, attachment_attributes:)
-    HTTParty.post(
+    response = HTTParty.post(
       ticket_attachment_create_endpoint(ticket_id),
       headers: headers,
-      body: attachment_attributes.to_json
+      body: attachment_attributes
     ).parsed_response
+    raise response["message"] if response["errorCode"]
+
+    response
   end
 
   def find_contact
