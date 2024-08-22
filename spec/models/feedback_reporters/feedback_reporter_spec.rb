@@ -73,10 +73,6 @@ describe FeedbackReporter do
   describe "#send_attachment!" do
     let(:download) { "the_file" }
 
-    let(:expected_attachment_attributes) do
-      { file: StringIO.new(download) }
-    end
-
     it "calls the Zoho ticket attachment creator with the expected arguments" do
       expect(ZohoResourceClient).to receive_message_chain(
         :new,

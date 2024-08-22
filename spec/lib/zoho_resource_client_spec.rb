@@ -145,11 +145,6 @@ describe ZohoResourceClient do
 
   describe "#create_ticket_attachment" do
     let(:attachment_attributes) do
-      attachment = StringIO.new("the_file")
-      def attachment.path
-        "the_file.html"
-      end
-
       { file: "the_file" }
     end
 
