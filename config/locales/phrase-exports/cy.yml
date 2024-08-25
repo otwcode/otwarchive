@@ -121,7 +121,7 @@ cy:
           other: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
       single_guest:
         giver: un westai
-        html: Gadawodd %{giver_list} canmol ar %{commentable_link}.
+        html: Gadawodd %{giver} canmol ar %{commentable_link}.
         text: Gadawodd un westai canmol ar %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Mae gennych chi canmol!"
   mailer:

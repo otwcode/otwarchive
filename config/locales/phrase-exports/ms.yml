@@ -56,7 +56,7 @@ ms:
             (%{commentable_url})."
       single_guest:
         giver: Seorang tetamu
-        html: "%{giver_list} telah meninggalkan kudos untuk %{commentable_link}."
+        html: "%{giver} telah meninggalkan kudos untuk %{commentable_link}."
         text: Seorang tetamu telah meninggalkan kudos untuk %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Anda telah menerima kudos!"
   mailer:

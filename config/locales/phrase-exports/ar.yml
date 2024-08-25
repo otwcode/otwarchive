@@ -131,7 +131,7 @@ ar:
             من %{givers_list}.
       single_guest:
         giver: ضيف
-        html: حصلت على علامة امتياز للعمل %{commentable_link} من %{giver_list}.
+        html: حصلت على علامة امتياز للعمل %{commentable_link} من %{giver}.
         text: حصلت على علامة امتياز للعمل %{commentable_title} (%{commentable_url})
           من ضيف.
       subject: "[%{app_name}] حصلت على علامة امتياز!"

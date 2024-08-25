@@ -73,7 +73,7 @@ fr:
           other: "%{givers_list} ont félicité votre œuvre %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Un/Une invité-e
-        html: "%{giver_list} a félicité votre œuvre %{commentable_link}."
+        html: "%{giver} a félicité votre œuvre %{commentable_link}."
         text: Un/Une invité-e a félicité votre œuvre %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Vous avez reçu des félicitations !"
   mailer:

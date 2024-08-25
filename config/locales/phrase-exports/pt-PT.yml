@@ -73,7 +73,7 @@ pt-PT:
           other: "%{givers_list} deixaram kudos em %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Uma pessoa convidada
-        html: "%{giver_list} deixou kudos em %{commentable_link}."
+        html: "%{giver} deixou kudos em %{commentable_link}."
         text: Uma pessoa convidada deixou kudos em %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Recebeste kudos!"
   mailer:

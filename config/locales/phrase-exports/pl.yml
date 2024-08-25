@@ -92,7 +92,7 @@ pl:
           one: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
       single_guest:
         giver: 1 gościa
-        html: Kudos dla %{commentable_link} od %{giver_list}.
+        html: Kudos dla %{commentable_link} od %{giver}.
         text: Kudos dla %{commentable_title} (%{commentable_url}) od 1 gościa.
       subject: "[%{app_name}] Masz kudos!"
   mailer:

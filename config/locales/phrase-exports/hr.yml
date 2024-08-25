@@ -91,7 +91,7 @@ hr:
           other: "%{givers_list} ostavilo je kudos na %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Gost
-        html: "%{giver_list} ostavio/la je kudos na %{commentable_link}."
+        html: "%{giver} ostavio/la je kudos na %{commentable_link}."
         text: Gost je ostavio/la kudos na %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Dobili ste kudos!"
   mailer:

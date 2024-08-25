@@ -75,7 +75,7 @@ tr:
             kalp bıraktı."
       single_guest:
         giver: Bir ziyaretçi
-        html: "%{giver_list}, %{commentable_link} eserinize kalp bıraktı."
+        html: "%{giver}, %{commentable_link} eserinize kalp bıraktı."
         text: Bir ziyaretçi %{commentable_title} (%{commentable_url}) eserinize kalp
           bıraktı.
       subject: "[%{app_name}] Kalp aldınız!"

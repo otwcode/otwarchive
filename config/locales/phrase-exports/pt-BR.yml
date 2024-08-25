@@ -501,7 +501,7 @@ pt-BR:
           other: "%{givers_list} deixaram kudos em %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: 1 visitante
-        html: "%{giver_list} deixou kudos em %{commentable_link}."
+        html: "%{giver} deixou kudos em %{commentable_link}."
         text: 1 visitante deixou kudos em %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Kudos pra você!"
   layouts:
@@ -540,7 +540,9 @@ pt-BR:
               com a nossa equipe de Suporte: %{support_url}.'
         sent_at: Enviado %{sent_at}.
       greeting:
+        formal: Olá, %{name},
         informal:
+          addressed: Oi, %{name}!
           unaddressed: Oi!
         introductory: Olá! Aqui é o Archive of Our Own – AO3 (Um Arquivo Todo Nosso).
       metadata_label_indicator: ":"
@@ -914,6 +916,12 @@ pt-BR:
           do AO3 no link %{support_url}.
       redirects:
         html: Para preservar listas de recomendações e favoritos, os endereços dos
+          arquivos importados podem redirecionar à cópia importada dessas obras por
+          um tempo limitado (verifique o anúncio de importação do seu arquivo para
+          ter certeza). Se você já publicou uma cópia dessas obras e você %{negation}
+          utilizou a função Importação por URL, haverá duas cópias da mesma obra no
+          AO3.
+        text: Para preservar listas de recomendações e favoritos, os endereços dos
           arquivos importados podem redirecionar à cópia importada dessas obras por
           um tempo limitado (verifique o anúncio de importação do seu arquivo para
           ter certeza). Se você já publicou uma cópia dessas obras e você %{negation}

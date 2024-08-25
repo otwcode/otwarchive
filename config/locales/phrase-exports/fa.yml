@@ -74,7 +74,7 @@ fa:
             و قدردانی فرستادند."
       single_guest:
         giver: یک مهمان
-        html: "%{giver_list} براى %{commentable_link} كودوس و قدردانى فرستاد."
+        html: "%{giver} براى %{commentable_link} كودوس و قدردانى فرستاد."
         text: یک مهمان براى %{commentable_title} كودوس و قدردانى فرستاد (%{commentable_url}).
       subject: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
   mailer:

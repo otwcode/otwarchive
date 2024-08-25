@@ -73,7 +73,7 @@ sv:
           other: "%{givers_list} berömde %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: En gäst
-        html: "%{giver_list} berömde %{commentable_link}."
+        html: "%{giver} berömde %{commentable_link}."
         text: En gäst berömde %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Du har fått beröm!"
   mailer:

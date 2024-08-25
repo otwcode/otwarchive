@@ -75,7 +75,7 @@ mr:
             (%{commentable_url})."
       single_guest:
         giver: एक पाहुणा
-        html: "%{commentable_link} वर %{giver_list} या पाहुण्याने टाळ्या दिल्या आहेत."
+        html: "%{commentable_link} वर %{giver} या पाहुण्याने टाळ्या दिल्या आहेत."
         text: "%{commentable_title} (%{commentable_url}) वर पाहुण्यांनी टाळ्या दिल्या
           आहेत"
       subject: "[%{app_name}] आपल्याला टाळ्या प्राप्त झाल्या आहेत!"

@@ -56,7 +56,7 @@ ko:
             남겼습니다."
       single_guest:
         giver: 손님
-        html: "%{commentable_link}에 %{giver_list}이(가) 좋아요(kudos)를 남겼습니다."
+        html: "%{commentable_link}에 %{giver}이(가) 좋아요(kudos)를 남겼습니다."
         text: "%{commentable_title} (%{commentable_url})에 손님이 좋아요(kudos)를 남겼습니다."
       subject: "[%{app_name}] 회원님의 게시물에 좋아요(kudos)가 있습니다!"
   mailer:

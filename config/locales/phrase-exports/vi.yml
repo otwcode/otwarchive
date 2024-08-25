@@ -55,7 +55,7 @@ vi:
           other: "%{givers_list} đã tán dương tác phẩm %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Một người đọc khách
-        html: "%{giver_list} đã tán dương tác phẩm %{commentable_link}."
+        html: "%{giver} đã tán dương tác phẩm %{commentable_link}."
         text: Một người đọc khách đã tán dương tác phẩm %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Tán dương gửi đến bạn!"
   mailer:
@@ -350,6 +350,12 @@ vi:
         text: Nếu bạn có câu hỏi nào khác, hãy liên lạc Ban Hỗ Trợ của AO3 tại %{support_url}.
       redirects:
         html: Để giữ danh sách đề cử và dấu trang, đường link những kho tàng được
+          nhập liệu có thể sẽ được chuyển hướng đến bản sao chép được nhập liệu của
+          những tác phẩm ấy trong một khoảng thời gian giới hạn (kiểm tra thông báo
+          về kho tàng để biết về thời gian). Nếu bạn đã đăng tải những tác phẩm này
+          và %{negation} dùng tính năng nhập liệu từ URL, tác phẩm đấy sẽ có 2 bản
+          trên AO3.
+        text: Để giữ danh sách đề cử và dấu trang, đường link những kho tàng được
           nhập liệu có thể sẽ được chuyển hướng đến bản sao chép được nhập liệu của
           những tác phẩm ấy trong một khoảng thời gian giới hạn (kiểm tra thông báo
           về kho tàng để biết về thời gian). Nếu bạn đã đăng tải những tác phẩm này

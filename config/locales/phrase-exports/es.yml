@@ -73,7 +73,7 @@ es:
           other: "%{givers_list} dejaron kudos en %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Unx visitante
-        html: "%{giver_list} dejó kudos en %{commentable_link}."
+        html: "%{giver} dejó kudos en %{commentable_link}."
         text: Unx visitante dejó kudos en %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] ¡Recibiste kudos!"
   mailer:
@@ -362,6 +362,12 @@ es:
           %{support_url}.
       redirects:
         html: Para preservar listas de recomendaciones y marcadores, la dirección
+          web del archivo importado redireccionará a la copia importada de esas obras
+          por tiempo limitado (revisa la publicación del anuncio de importación de
+          tu archivo para asegurarte). Si tu ya subiste una copia de estas obras y
+          %{negation} utilizaste la herramienta de importación desde la URL, habrá
+          dos copias de la misma obra en el AO3.
+        text: Para preservar listas de recomendaciones y marcadores, la dirección
           web del archivo importado redireccionará a la copia importada de esas obras
           por tiempo limitado (revisa la publicación del anuncio de importación de
           tu archivo para asegurarte). Si tu ya subiste una copia de estas obras y

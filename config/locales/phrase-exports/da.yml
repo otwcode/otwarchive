@@ -73,7 +73,7 @@ da:
           other: "%{givers_list} efterlod kudos på %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: En gæst
-        html: "%{giver_list} efterlod kudos på %{commentable_link}."
+        html: "%{giver} efterlod kudos på %{commentable_link}."
         text: En gæst efterlod kudos på %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Du har fået kudos!"
   mailer:

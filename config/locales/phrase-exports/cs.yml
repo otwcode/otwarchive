@@ -93,7 +93,7 @@ cs:
             %{givers_list}.
       single_guest:
         giver: návštěvníka
-        html: Práce %{commentable_link} dostala kudos od %{giver_list}.
+        html: Práce %{commentable_link} dostala kudos od %{giver}.
         text: Práce %{commentable_title} (%{commentable_url}) dostala kudos od návštěvníka.
       subject: "[%{app_name}] Máte nové kudos!"
   mailer:

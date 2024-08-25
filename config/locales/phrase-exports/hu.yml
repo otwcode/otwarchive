@@ -73,7 +73,7 @@ hu:
           other: "%{givers_list} kudost hagyott itt: %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Egy vendég
-        html: "%{giver_list} kudost hagyott itt: %{commentable_link}."
+        html: "%{giver} kudost hagyott itt: %{commentable_link}."
         text: 'Egy vendég kudost hagyott itt: %{commentable_title} (%{commentable_url}).'
       subject: "​[%{app_name}]​​ ​Kudost kaptál!"
   mailer:

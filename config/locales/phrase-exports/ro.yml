@@ -91,7 +91,7 @@ ro:
           other: "%{givers_list} au lăsat kudos pentru %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Un vizitator
-        html: "%{giver_list} a lăsat kudos pentru %{commentable_link}."
+        html: "%{giver} a lăsat kudos pentru %{commentable_link}."
         text: Un vizitator a lăsat kudos pentru %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Ai primit kudos!"
   mailer:

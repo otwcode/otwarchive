@@ -75,7 +75,7 @@ de:
             hinterlassen."
       single_guest:
         giver: Ein Gast
-        html: "%{giver_list} hat Kudos für %{commentable_link} hinterlassen."
+        html: "%{giver} hat Kudos für %{commentable_link} hinterlassen."
         text: Ein Gast hat Kudos für %{commentable_title} (%{commentable_url}) hinterlassen.
       subject: "[%{app_name}] Du hast Kudos erhalten!"
   mailer:

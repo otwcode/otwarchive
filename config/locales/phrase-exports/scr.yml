@@ -91,7 +91,7 @@ scr:
           other: "%{givers_list} су похвалили %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Гост/гошћа
-        html: "%{giver_list} је оставио/ла похвалу на %{commentable_link}."
+        html: "%{giver} је оставио/ла похвалу на %{commentable_link}."
         text: Гост/гошћа је оставио/ла похвалу на %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Добили сте похвале!"
   mailer:

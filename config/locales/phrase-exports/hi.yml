@@ -75,7 +75,7 @@ hi:
             दिए हैं।"
       single_guest:
         giver: एक अतिथि
-        html: "%{giver_list} ने %{commentable_link} पर कुङोस दिया है।"
+        html: "%{giver} ने %{commentable_link} पर कुङोस दिया है।"
         text: एक अतिथि ने %{commentable_title} (%{commentable_url}) पर कुङोस दिया
           है।
       subject: "[%{app_name}] आपको कुङोस मिला हैं!"

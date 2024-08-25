@@ -109,7 +109,7 @@ sl:
           two: "%{givers_list} sta pohvalila/i %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Gost/ja
-        html: "%{giver_list} je pohvalil/a %{commentable_link}."
+        html: "%{giver} je pohvalil/a %{commentable_link}."
         text: Gost/ja je pohvalil/a %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Dobili ste pohvalo!"
   mailer:
@@ -384,6 +384,12 @@ sl:
         text: Ostala vprašanja lahko naslovite na podporo uporabnikom AO3 na %{support_url}.
       redirects:
         html: Da se ohranijo seznami priporočil in zaznamki, bodo spletni naslovi
+          uvoženega arhiva nekaj časa morda preusmerjeni na uvožene kopije teh del
+          (če se želite prepričati o tem, si preberite oznanilo o uvozu za vaš arhiv).
+          Če ste kopije zgoraj navedenih del na AO3 že naložili sami in jih %{negation}
+          uvozili prek hiperpovezave, bosta na AO3 obstajali po dve kopiji vsakega
+          posameznega dela.
+        text: Da se ohranijo seznami priporočil in zaznamki, bodo spletni naslovi
           uvoženega arhiva nekaj časa morda preusmerjeni na uvožene kopije teh del
           (če se želite prepričati o tem, si preberite oznanilo o uvozu za vaš arhiv).
           Če ste kopije zgoraj navedenih del na AO3 že naložili sami in jih %{negation}

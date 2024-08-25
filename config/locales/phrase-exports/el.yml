@@ -73,7 +73,7 @@ el:
           other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_title} (%{commentable_url}).
       single_guest:
         giver: Ένας επισκέπτης
-        html: "%{giver_list} άφησε μπράβο στο %{commentable_link}."
+        html: "%{giver} άφησε μπράβο στο %{commentable_link}."
         text: Ένας επισκέπτης άφησε μπράβο στο %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] 'Εχεις μπράβο!"
   mailer:

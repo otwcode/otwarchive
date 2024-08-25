@@ -105,7 +105,7 @@ he:
           other: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: אורחת
-        html: "%{giver_list} השאירה קודוס על %{commentable_link}."
+        html: "%{giver} השאירה קודוס על %{commentable_link}."
         text: אורחת השאירה קודוס על %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] קיבלת קודוס!"
   mailer:

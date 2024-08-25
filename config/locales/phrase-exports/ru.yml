@@ -91,7 +91,7 @@ ru:
           one: "%{givers_list} дарит вам кудос за %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Один гость
-        html: "%{giver_list} дарит вам кудос за %{commentable_link}."
+        html: "%{giver} дарит вам кудос за %{commentable_link}."
         text: Один гость подарил вам кудос за %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Вы получили кудос!"
   mailer:

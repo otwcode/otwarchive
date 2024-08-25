@@ -55,7 +55,7 @@ th:
           other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: ผู้เข้าชมคนหนึ่ง
-        html: "%{giver_list} ได้มอบคำชมเชยบน %{commentable_link}."
+        html: "%{giver} ได้มอบคำชมเชยบน %{commentable_link}."
         text: ผู้เข้าชมคนหนึ่งได้มอบคำชมเชยบน %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] คุณได้รับคำชมเชย!"
   mailer:

@@ -73,7 +73,7 @@ it:
           other: "%{givers_list} hanno lasciato kudos per %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Un ospite
-        html: "%{giver_list} ha lasciato kudos per %{commentable_link}."
+        html: "%{giver} ha lasciato kudos per %{commentable_link}."
         text: Un ospite ha lasciato kudos per %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Hai dei kudos!"
   mailer:

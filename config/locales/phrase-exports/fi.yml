@@ -73,7 +73,7 @@ fi:
           other: "%{givers_list} kehuivat teosta %{commentable_title} (%{commentable_url})."
       single_guest:
         giver: Vieras
-        html: "%{giver_list} kehui teosta %{commentable_link}."
+        html: "%{giver} kehui teosta %{commentable_link}."
         text: Vieras kehui teosta %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Sinulle on kehuja!"
   mailer:
