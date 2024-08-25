@@ -71,6 +71,17 @@ pt-PT:
         single_guest:
           giver_list: Uma pessoa convidada
           left_kudos: "%{giver_list} deixou kudos em %{commentable_link}."
+      left_kudos:
+        html:
+          one: "%{givers_list} deixou kudos em %{commentable_link}."
+          other: "%{givers_list} deixaram kudos em %{commentable_link}."
+        text:
+          one: "%{givers_list} deixou kudos em %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} deixaram kudos em %{commentable_title} (%{commentable_url})."
+      single_guest:
+        giver: Uma pessoa convidada
+        html: "%{giver_list} deixou kudos em %{commentable_link}."
+        text: Uma pessoa convidada deixou kudos em %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Recebeste kudos!"
       text:
         left_kudos:

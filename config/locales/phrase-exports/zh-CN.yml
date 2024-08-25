@@ -54,6 +54,15 @@ zh-CN:
         single_guest:
           giver_list: 一名访客
           left_kudos: "%{giver_list}给您的作品%{commentable_link}点了赞。"
+      left_kudos:
+        html:
+          other: "%{givers_list}给您的作品%{commentable_link}点了赞。"
+        text:
+          other: "%{givers_list}给您的作品%{commentable_title}（%{commentable_url}）点了赞。"
+      single_guest:
+        giver: 一名访客
+        html: "%{giver_list}给您的作品%{commentable_link}点了赞。"
+        text: 一名访客给您的作品%{commentable_title}（%{commentable_url}）点了赞。
       subject: "[%{app_name}] 您收到了点赞！"
       text:
         left_kudos:

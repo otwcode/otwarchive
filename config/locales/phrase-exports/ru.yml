@@ -88,6 +88,19 @@ ru:
         single_guest:
           giver_list: Один гость
           left_kudos: "%{giver_list} дарит вам кудос за %{commentable_link}."
+      left_kudos:
+        html:
+          few: "%{givers_list} дарят вам кудос за %{commentable_link}."
+          many: "%{givers_list} дарят вам кудос за %{commentable_link}."
+          one: "%{givers_list} дарит вам кудос за %{commentable_link}."
+        text:
+          few: "%{givers_list} дарят вам кудос за %{commentable_title} (%{commentable_url})."
+          many: "%{givers_list} дарят вам кудос за %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} дарит вам кудос за %{commentable_title} (%{commentable_url})."
+      single_guest:
+        giver: Один гость
+        html: "%{giver_list} дарит вам кудос за %{commentable_link}."
+        text: Один гость подарил вам кудос за %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Вы получили кудос!"
       text:
         left_kudos:

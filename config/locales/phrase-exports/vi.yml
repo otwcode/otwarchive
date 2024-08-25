@@ -54,6 +54,15 @@ vi:
         single_guest:
           giver_list: Một người đọc khách
           left_kudos: "%{giver_list} đã tán dương tác phẩm %{commentable_link}."
+      left_kudos:
+        html:
+          other: "%{givers_list} đã tán dương tác phẩm %{commentable_link}."
+        text:
+          other: "%{givers_list} đã tán dương tác phẩm %{commentable_title} (%{commentable_url})."
+      single_guest:
+        giver: Một người đọc khách
+        html: "%{giver_list} đã tán dương tác phẩm %{commentable_link}."
+        text: Một người đọc khách đã tán dương tác phẩm %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Tán dương gửi đến bạn!"
       text:
         left_kudos:
@@ -286,6 +295,105 @@ vi:
         text: "%{login}, email dùng để đăng ký tài khoản của bạn đã được đổi thành
           %{email}"
       subject: "[%{app_name}] Thay đổi email"
+    claim_notification:
+      access:
+        contact_support: liên lạc Ban Hỗ Trợ của AO3
+        html: Tùy thuộc vào kho tàng gốc, sau khi được nhập vào, các tác phẩm của
+          bạn có thể chỉ hiển thị với người dùng đã đăng ký (để tránh những tác phẩm
+          ấy hiển thị khi dùng chức năng tìm kiếm của Google). Trong trường hợp đó,
+          chỉ những người dùng đã đăng nhập mới có thể nhìn thấy tác phẩm, trừ khi
+          bạn cho phép hiển thị với mọi người. Để mở khóa, bỏ quyền sở hữu hoặc xóa
+          tác phẩm, hãy %{contact_support_link}.
+        text: Tùy thuộc vào kho tàng gốc, sau khi được nhập vào, các tác phẩm của
+          bạn có thể chỉ hiển thị với người dùng đã đăng ký (để tránh những tác phẩm
+          ấy hiển thị khi dùng chức năng tìm kiếm của Google). Trong trường hợp đó,
+          chỉ những người dùng đã đăng nhập mới có thể nhìn thấy tác phẩm, trừ khi
+          bạn cho phép hiển thị với mọi người. Để mở khóa, bỏ quyền sở hữu hoặc xóa
+          tác phẩm, hãy liên lạc với Ban Hỗ Trợ AO3 ở %{support_url}.
+      email_tips: Để đảm bảo liên lạc giữa hai bên, hãy thêm @transformativeworks.org
+        vào danh sách email an toàn của bạn và kiểm tra hòm thư spam nếu không tìm
+        thấy phản hồi của chúng tôi.
+      introduction:
+        ao3_name: Archive of Our Own – AO3 (Kho Tàng Lưu Trữ của Chúng Ta)
+        html: Bạn nhận được thư này vì bạn có tác phẩm đăng tải ở trang kho tàng lưu
+          trữ tác phẩm fan được %{open_doors_name_link} nhập vào %{app_link}. Vì địa
+          chỉ e-mail này liên kết trực tiếp với địa chỉ e-mail đăng ký trong dữ liệu
+          trang kho tàng được nhập, các tác phẩm tương ứng (được liệt kê sau đây)
+          đã được tự động thêm vào tài khoản AO3 của bạn.
+        open_doors_name: Open Doors (Dự án Cửa Mở)
+        text: 'Bạn nhận được email này vì những tác phẩm của bạn trong kho tàng lưu
+          trữ tác phẩm của fan đã được nhập bởi Open Doors (Cửa Mở) (%{open_doors_url}
+          đến Archive of Our Own – AO3 (Kho tàng lưu trữ của chúng ta): %{app_url}..
+          Vì địa chỉ email này được liên kết với email đăng ký ở kho tàng đó, nên
+          những tác phẩm liên quan (được liệt kê bên dưới) được tự động thêm vào tài
+          khoản AO3 của bạn.'
+      mistake:
+        contact_open_doors: liên lạc với Open Doors
+        html: Nếu các tác phẩm kể trên không phải của bạn, xin vui lòng đừng xóa tác
+          phẩm, mà hãy %{contact_open_doors_link} để chúng tôi tìm phương án giải
+          quyết.
+        text: Nếu đây không phải những tác phẩm của bạn, xin đừng xóa chúng đi! Hãy
+          liên lạc với Open Doors (%{open_doors_url}) và chúng tôi sẽ tìm phương án
+          giải quyết.
+      more_info:
+        ao3_news: Tin tức AO3
+        contact_support: liên lạc với đội ngũ Hỗ Trợ của AO3
+        faq_page: trang Hỏi Đáp
+        html: Bạn có thể tìm đọc thông báo về các đợt nhập lưu trữ dữ liệu gần đây
+          tại trang %{ao3_news_link} và tìm hiểm thêm thông tin tại %{faq_page_link}
+          hoặc %{tutorial_page_link} của dự án Open Doors. Với những vấn đề chưa được
+          giải đáp trong trang Hỏi Đáp và trang Hướng Dẫn, vui lòng %{contact_support_link}.
+        text: Bạn có thể đọc thông báo về việc nhập dữ liệu từ kho tàng khác tại Tin
+          Tức AO3 (%{news_url}), và đọc thêm thông tin tại Trang Hỏi Đáp của Cửa Mở
+          (%{open_doors_faq_url}) hoặc Trang Hướng dẫn (%{open_doors_tutorial_url}).
+          Với những câu hỏi chưa được giải đáp trong Trang Hướng Đáp, Trang Hướng
+          dẫn và email này, hãy liên lạc Ban Hỗ Trợ tại %{support_url}.
+        tutorial_page: trang Hướng Dẫn
+      other_works:
+        contact_open_doors: liên lạc với Cửa Mở
+        html: Nếu bạn còn những tác phẩm khác đã được nhập vào nhưng lại liên kết
+          với email bạn không còn đăng nhập được, hãy %{contact_open_doors_link} đính
+          kèm thông tin chứng minh bạn là người sáng tác.
+        text: Nếu bạn còn những tác phẩm khác đã được nhập vào nhưng lại liên kết
+          với email bạn không còn đăng nhập được, hãy liên lạc với Cửa Mở đính kèm
+          thông tin chứng minh bạn là người sáng tác.
+      questions:
+        contact_support: liên lạc Ban Hỗ Trợ của AO3
+        html: Với những câu hỏi khác, hãy %{contact_support_link}.
+        text: Nếu bạn có câu hỏi nào khác, hãy liên lạc Ban Hỗ Trợ của AO3 tại %{support_url}.
+      redirects:
+        html: Để giữ danh sách đề cử và dấu trang, đường link những kho tàng được
+          nhập liệu có thể sẽ được chuyển hướng đến bản sao chép được nhập liệu của
+          những tác phẩm ấy trong một khoảng thời gian giới hạn (kiểm tra thông báo
+          về kho tàng để biết về thời gian). Nếu bạn đã đăng tải những tác phẩm này
+          và %{negation} dùng tính năng nhập liệu từ URL, tác phẩm đấy sẽ có 2 bản
+          trên AO3.
+        text: Để giữ danh sách đề cử và dấu trang, đường link những kho tàng được
+          nhập liệu có thể sẽ được chuyển hướng đến bản sao chép được nhập liệu của
+          những tác phẩm ấy trong một khoảng thời gian giới hạn (kiểm tra thông báo
+          về kho tàng để biết về thời gian). Nếu bạn đã đăng tải những tác phẩm này
+          và %{negation} dùng tính năng nhập liệu từ URL, tác phẩm đấy sẽ có 2 bản
+          trên AO3.
+      subject: "[%{app_name}] Tác phẩm đã đăng tải"
+      update_redirect:
+        contact_open_doors: liên lạc với Cửa Mở
+        html: Nếu bạn muốn Cửa Mở cập nhật đường link chuyển hướng sang tác phẩm đã
+          có sẵn của bạn, hãy xóa tác phẩm được nhập liệu, và %{contact_open_doors_link}
+          cùng tên tài khoản AO3, tên tài khoản trên kho tàng được nhập liệu của bạn,
+          tên và URL của tác phẩm mà bạn muốn được chuyển hướng đến. Nếu bạn có nhiều
+          tác phẩm cùng muốn chuyển hướng, bạn có thể liệt kê trong cùng một mail.
+        text: Nếu bạn muốn Cửa Mở cập nhật đường link chuyển hướng sang tác phẩm đã
+          có sẵn của bạn, hãy xóa tác phẩm được nhập liệu, và liên lạc với Cửa Mở
+          tại %{open_doors_url} cùng tên tài khoản AO3, tên tài khoản trên kho tàng
+          được nhập liệu của bạn, tên và URL của tác phẩm mà bạn muốn được chuyển
+          hướng đến. Nếu bạn có nhiều tác phẩm cùng muốn chuyển hướng, bạn có thể
+          liệt kê trong cùng một mail.
+      works_by: 'Những tác phẩm dưới đây được liên kết với email: %{email}'
+      work_info:
+        html: "%{work_link} (%{fandom})"
+        text:
+          no_fandom: "- %{work_title} %{work_url}"
+          with_fandom: "- %{work_title} %{work_url} (%{fandom})"
     collection_notification:
       assignments_sent:
         complete: Tất cả nhiệm vụ đã được gửi.

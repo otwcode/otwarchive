@@ -71,6 +71,17 @@ ca:
         single_guest:
           giver_list: Un/a convidat/da
           left_kudos: "%{giver_list} ha deixat kudos a %{commentable_link}."
+      left_kudos:
+        html:
+          one: "%{givers_list} ha deixat kudos a %{commentable_link}."
+          other: "%{givers_list} han deixat kudos a %{commentable_link}."
+        text:
+          one: "%{givers_list} ha deixat kudos a %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} han deixat kudos a %{commentable_title} (%{commentable_url})."
+      single_guest:
+        giver: Un/a convidat/da
+        html: "%{giver_list} ha deixat kudos a %{commentable_link}."
+        text: Un/a convidat/da ha deixat kudos a %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] T'han deixat kudos!"
       text:
         left_kudos:

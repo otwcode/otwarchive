@@ -71,6 +71,20 @@ tr:
         single_guest:
           giver_list: Bir ziyaretçi
           left_kudos: "%{giver_list}, %{commentable_link} eserinize kalp bıraktı."
+      left_kudos:
+        html:
+          one: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
+          other: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
+        text:
+          one: "%{givers_list}, %{commentable_title} (%{commentable_url}) eserinize
+            kalp bıraktı."
+          other: "%{givers_list}, %{commentable_title} (%{commentable_url}) eserinize
+            kalp bıraktı."
+      single_guest:
+        giver: Bir ziyaretçi
+        html: "%{giver_list}, %{commentable_link} eserinize kalp bıraktı."
+        text: Bir ziyaretçi %{commentable_title} (%{commentable_url}) eserinize kalp
+          bıraktı.
       subject: "[%{app_name}] Kalp aldınız!"
       text:
         left_kudos:

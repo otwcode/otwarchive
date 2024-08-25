@@ -71,6 +71,20 @@ hi:
         single_guest:
           giver_list: एक अतिथि
           left_kudos: "%{giver_list} ने %{commentable_link} पर कुङोस दिया है।"
+      left_kudos:
+        html:
+          one: "%{givers_list} ने %{commentable_link} पर कुङोस दिया है।"
+          other: "%{givers_list} ने %{commentable_link} पर कुङोस दिए हैं।"
+        text:
+          one: "%{givers_list} ने %{commentable_title} (%{commentable_url}) पर कुङोस
+            दिया है।"
+          other: "%{givers_list} ने %{commentable_title} (%{commentable_url}) पर कुङोस
+            दिए हैं।"
+      single_guest:
+        giver: एक अतिथि
+        html: "%{giver_list} ने %{commentable_link} पर कुङोस दिया है।"
+        text: एक अतिथि ने %{commentable_title} (%{commentable_url}) पर कुङोस दिया
+          है।
       subject: "[%{app_name}] आपको कुङोस मिला हैं!"
       text:
         left_kudos:

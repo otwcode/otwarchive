@@ -121,6 +121,29 @@ ar:
         single_guest:
           giver_list: ضيف
           left_kudos: حصلت على علامة امتياز للعمل %{commentable_link} من %{giver_list}.
+      left_kudos:
+        html:
+          few: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+          many: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+          one: حصلت على علامة امتياز للعمل %{commentable_link} من %{givers_list}.
+          other: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
+          two: حصلت على علامتي امتياز للعمل %{commentable_link} من %{givers_list}.
+        text:
+          few: حصلت على علامات امتياز للعمل %{commentable_title} (%{commentable_url})
+            من %{givers_list}.
+          many: حصلت على علامات امتياز للعمل %{commentable_title} (%{commentable_url})
+            من %{givers_list}.
+          one: حصلت على علامة امتياز للعمل %{commentable_title} (%{commentable_url})
+            من %{givers_list}.
+          other: حصلت على علامات امتياز للعمل %{commentable_title} (%{commentable_url})
+            من %{givers_list}.
+          two: حصلت على علامتي امتياز للعمل %{commentable_title} (%{commentable_url})
+            من %{givers_list}.
+      single_guest:
+        giver: ضيف
+        html: حصلت على علامة امتياز للعمل %{commentable_link} من %{giver_list}.
+        text: حصلت على علامة امتياز للعمل %{commentable_title} (%{commentable_url})
+          من ضيف.
       subject: "[%{app_name}] حصلت على علامة امتياز!"
       text:
         left_kudos:

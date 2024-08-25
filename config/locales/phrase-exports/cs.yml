@@ -89,6 +89,20 @@ cs:
         single_guest:
           giver_list: návštěvníka
           left_kudos: Práce %{commentable_link} dostala kudos od %{giver_list}.
+      left_kudos:
+        html:
+          few: Práce %{commentable_link} dostala kudos od %{givers_list}.
+          one: Práce %{commentable_link} dostala kudos od %{givers_list}.
+          other: Práce %{commentable_link} dostala kudos od %{givers_list}.
+        text:
+          few: Práce %{commentable_title} (%{commentable_url}) dostala kudos od %{givers_list}.
+          one: Práce %{commentable_title} (%{commentable_url}) dostala kudos od %{givers_list}.
+          other: Práce %{commentable_title} (%{commentable_url}) dostala kudos od
+            %{givers_list}.
+      single_guest:
+        giver: návštěvníka
+        html: Práce %{commentable_link} dostala kudos od %{giver_list}.
+        text: Práce %{commentable_title} (%{commentable_url}) dostala kudos od návštěvníka.
       subject: "[%{app_name}] Máte nové kudos!"
       text:
         left_kudos:

@@ -72,6 +72,20 @@ mr:
           giver_list: एक पाहुणा
           left_kudos: "%{commentable_link} वर %{giver_list} या पाहुण्याने टाळ्या दिल्या
             आहेत."
+      left_kudos:
+        html:
+          one: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_link}."
+          other: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_link}."
+        text:
+          one: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_title}
+            (%{commentable_url})."
+          other: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_title}
+            (%{commentable_url})."
+      single_guest:
+        giver: एक पाहुणा
+        html: "%{commentable_link} वर %{giver_list} या पाहुण्याने टाळ्या दिल्या आहेत."
+        text: "%{commentable_title} (%{commentable_url}) वर पाहुण्यांनी टाळ्या दिल्या
+          आहेत"
       subject: "[%{app_name}] आपल्याला टाळ्या प्राप्त झाल्या आहेत!"
       text:
         left_kudos:

@@ -88,6 +88,19 @@ ro:
         single_guest:
           giver_list: Un vizitator
           left_kudos: "%{giver_list} a lăsat kudos pentru %{commentable_link}."
+      left_kudos:
+        html:
+          few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
+          one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
+          other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
+        text:
+          few: "%{givers_list} au lăsat kudos pentru %{commentable_title} (%{commentable_url})."
+          one: "%{givers_list} a lăsat kudos pentru %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} au lăsat kudos pentru %{commentable_title} (%{commentable_url})."
+      single_guest:
+        giver: Un vizitator
+        html: "%{giver_list} a lăsat kudos pentru %{commentable_link}."
+        text: Un vizitator a lăsat kudos pentru %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Ai primit kudos!"
       text:
         left_kudos:
@@ -496,8 +509,27 @@ ro:
           e-mail.)
       uploaded_list: 'Lucrările încărcate includ:'
     invite_increase_notification:
+      html:
+        body:
+          few: Vrem să te anunțăm că ai %{count} invitații noi care pot fi folosite
+            pentru a crea conturi noi de arhivă. Poți invita un prieten accesând %{invitation_page_link}.
+          one: Vrem să te anunțăm că ai %{count} invitație nouă care poate fi folosită
+            pentru a crea un cont nou de arhivă. Poți invita un prieten accesând %{invitation_page_link}.
+          other: Vrem să te anunțăm că ai %{count} de invitații noi care pot fi folosite
+            pentru a crea conturi noi de arhivă. Poți invita un prieten accesând %{invitation_page_link}.
       invitation_page_link_text: pagina ta de Invitations (Invitații)
       subject: "[%{app_name}] Invitații noi"
+      text:
+        body:
+          few: Vrem să te anunțăm că ai %{count} invitații noi care pot fi folosite
+            pentru a crea conturi noi de arhivă. Poți invita un prieten accesând pagina
+            Invitations (Invitații) (%{invitation_page_url}).
+          one: Vrem să te anunțăm că ai %{count} invitație nouă care poate fi folosită
+            pentru a crea un cont nou de arhivă. Poți invita un prieten accesând pagina
+            Invitations (Invitații) (%{invitation_page_url}).
+          other: Vrem să te anunțăm că ai %{count} de invitații noi care pot fi folosite
+            pentru a crea conturi noi de arhivă. Poți invita un prieten accesând pagina
+            Invitations (Invitații) (%{invitation_page_url}).
     invite_request_declined:
       main:
         few: Te informăm cu regret că solicitarea pentru %{count} invitații noi nu

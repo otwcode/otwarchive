@@ -54,6 +54,15 @@ ja:
         single_guest:
           giver_list: ゲスト1名
           left_kudos: "%{giver_list}があなたの作品 %{commentable_link}にいいねを送りました。"
+      left_kudos:
+        html:
+          other: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
+        text:
+          other: "%{givers_list} があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。"
+      single_guest:
+        giver: ゲスト1名
+        html: "%{giver_list}があなたの作品 %{commentable_link}にいいねを送りました。"
+        text: ゲスト1名があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。
       subject: "[%{app_name}] あなたにいいねが届きました！"
       text:
         left_kudos:

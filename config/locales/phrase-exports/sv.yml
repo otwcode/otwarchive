@@ -71,6 +71,17 @@ sv:
         single_guest:
           giver_list: En gäst
           left_kudos: "%{giver_list} berömde %{commentable_link}."
+      left_kudos:
+        html:
+          one: "%{givers_list} berömde %{commentable_link}."
+          other: "%{givers_list} berömde %{commentable_link}."
+        text:
+          one: "%{givers_list} berömde %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} berömde %{commentable_title} (%{commentable_url})."
+      single_guest:
+        giver: En gäst
+        html: "%{giver_list} berömde %{commentable_link}."
+        text: En gäst berömde %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Du har fått beröm!"
       text:
         left_kudos:

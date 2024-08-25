@@ -122,6 +122,17 @@ cy:
         single_guest:
           giver_list: un westai
           left_kudos: Gadawodd %{giver_list} canmol ar %{commentable_link}.
+      left_kudos:
+        html:
+          one: Gadawodd %{givers_list} canmol ar %{commentable_link}.
+          other: Gadawodd %{givers_list} canmol ar %{commentable_link}.
+        text:
+          one: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
+          other: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
+      single_guest:
+        giver: un westai
+        html: Gadawodd %{giver_list} canmol ar %{commentable_link}.
+        text: Gadawodd un westai canmol ar %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Mae gennych chi canmol!"
       text:
         left_kudos:

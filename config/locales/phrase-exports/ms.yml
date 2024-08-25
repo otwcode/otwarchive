@@ -54,6 +54,16 @@ ms:
         single_guest:
           giver_list: Seorang tetamu
           left_kudos: "%{giver_list} telah meninggalkan kudos untuk %{commentable_link}."
+      left_kudos:
+        html:
+          other: "%{givers_list} telah meninggalkan kudos untuk %{commentable_link}."
+        text:
+          other: "%{givers_list} telah meninggalkan kudos untuk %{commentable_title}
+            (%{commentable_url})."
+      single_guest:
+        giver: Seorang tetamu
+        html: "%{giver_list} telah meninggalkan kudos untuk %{commentable_link}."
+        text: Seorang tetamu telah meninggalkan kudos untuk %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Anda telah menerima kudos!"
       text:
         left_kudos:

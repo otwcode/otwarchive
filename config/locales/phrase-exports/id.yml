@@ -54,6 +54,16 @@ id:
         single_guest:
           giver_list: Seorang tamu
           left_kudos: "%{giver_list} telah memberikan kudos untuk %{commentable_link}."
+      left_kudos:
+        html:
+          other: "%{givers_list} telah memberikan kudos untuk %{commentable_link}."
+        text:
+          other: "%{givers_list} telah memberikan kudos untuk %{commentable_title}
+            (%{commentable_url})."
+      single_guest:
+        giver: Seorang tamu
+        html: "%{giver_list} telah memberikan kudos untuk %{commentable_link}."
+        text: Seorang tamu telah memberikan kudos untuk %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Anda telah menerima kudos!"
       text:
         left_kudos:

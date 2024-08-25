@@ -71,6 +71,17 @@ nb:
         single_guest:
           giver_list: En gjest
           left_kudos: "%{giver_list} la igjen kudos på %{commentable_link}."
+      left_kudos:
+        html:
+          one: "%{givers_list} la igjen kudos på %{commentable_link}."
+          other: "%{givers_list} la igjen kudos på %{commentable_link}."
+        text:
+          one: "%{givers_list} la igjen kudos på %{commentable_title} (%{commentable_url})."
+          other: "%{givers_list} la igjen kudos på %{commentable_title} (%{commentable_url})."
+      single_guest:
+        giver: En gjest
+        html: "%{giver_list} la igjen kudos på %{commentable_link}."
+        text: En gjest la igjen kudos på %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Du har fått kudos!"
       text:
         left_kudos:

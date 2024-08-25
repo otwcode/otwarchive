@@ -71,6 +71,19 @@ de:
         single_guest:
           giver_list: Ein Gast
           left_kudos: "%{giver_list} hat Kudos für %{commentable_link} hinterlassen."
+      left_kudos:
+        html:
+          one: "%{givers_list} hat Kudos für %{commentable_link} hinterlassen."
+          other: "%{givers_list} haben Kudos für %{commentable_link} hinterlassen."
+        text:
+          one: "%{givers_list} hat Kudos für %{commentable_title} (%{commentable_url})
+            hinterlassen."
+          other: "%{givers_list} haben Kudos für %{commentable_title} (%{commentable_url})
+            hinterlassen."
+      single_guest:
+        giver: Ein Gast
+        html: "%{giver_list} hat Kudos für %{commentable_link} hinterlassen."
+        text: Ein Gast hat Kudos für %{commentable_title} (%{commentable_url}) hinterlassen.
       subject: "[%{app_name}] Du hast Kudos erhalten!"
       text:
         left_kudos:

@@ -89,6 +89,19 @@ pl:
         single_guest:
           giver_list: 1 gościa
           left_kudos: Kudos dla %{commentable_link} od %{giver_list}.
+      left_kudos:
+        html:
+          few: Kudos dla %{commentable_link} od %{givers_list}.
+          many: Kudos dla %{commentable_link} od %{givers_list}.
+          one: Kudos dla %{commentable_link} od %{givers_list}.
+        text:
+          few: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
+          many: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
+          one: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
+      single_guest:
+        giver: 1 gościa
+        html: Kudos dla %{commentable_link} od %{giver_list}.
+        text: Kudos dla %{commentable_title} (%{commentable_url}) od 1 gościa.
       subject: "[%{app_name}] Masz kudos!"
       text:
         left_kudos:
