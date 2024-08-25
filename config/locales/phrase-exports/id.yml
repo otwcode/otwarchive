@@ -86,7 +86,9 @@ id:
               Bantuan di %{support_url}.
         sent_at: Dikirimkan pada %{sent_at}.
       greeting:
+        formal_html: Halo %{name},
         informal:
+          addressed_html: Halo %{name}!
           unaddressed: Halo!
         introductory: Halo dari Archive of Our Own – AO3 (Arsip Milik Kita)!
       metadata_label_indicator: ":"

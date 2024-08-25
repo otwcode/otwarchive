@@ -107,7 +107,9 @@ tr:
               adresinden Teknik Destek ile iletişime geçin.
         sent_at: "%{sent_at} tarihinde gönderilmiştir."
       greeting:
+        formal_html: Sayın %{name},
         informal:
+          addressed_html: Merhaba %{name}!
           unaddressed: Merhaba!
         introductory: Archive of Our Own – AO3 (Kendimize Ait Bir Arşiv)ten selamlar!
       metadata_label_indicator: ":"

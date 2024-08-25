@@ -85,7 +85,9 @@ vi:
               Hỗ Trợ Kỹ Thuật tại %{support_url}.
         sent_at: Gửi vào lúc %{sent_at}.
       greeting:
+        formal_html: Thân gửi %{name},
         informal:
+          addressed_html: Xin chào, %{name}!
           unaddressed: Xin chào!
         introductory: Hello from the Archive of Our Own – AO3 (Xin gửi lời chào từ
           Kho Tàng Lưu Trữ của Chúng Ta)!

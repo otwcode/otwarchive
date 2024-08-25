@@ -104,7 +104,9 @@ fi:
               Käyttäjätukeen osoitteessa %{support_url}.
         sent_at: Lähetetty %{sent_at}.
       greeting:
+        formal_html: Hei %{name},
         informal:
+          addressed_html: Hei, %{name}!
           unaddressed: Hei!
         introductory: Tervehdys Archive of Our Own – AO3:lta (Oma arkisto)!
       metadata_label_indicator: ":"

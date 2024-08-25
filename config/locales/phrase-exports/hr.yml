@@ -122,7 +122,9 @@ hr:
               podršci na %{support_url}.
         sent_at: Poslano na %{sent_at}.
       greeting:
+        formal_html: Dragi %{name},
         informal:
+          addressed_html: Bok, %{name}!
           unaddressed: Bok!
         introductory: Pozdrav od Archive of Our Own – AO3 (Našeg vlastitog arhiva)!
       metadata_label_indicator: ":"

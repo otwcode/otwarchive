@@ -104,7 +104,9 @@ nb:
               support: %{support_url}.'
         sent_at: Sendt %{sent_at}.
       greeting:
+        formal_html: Kjære %{name}
         informal:
+          addressed_html: Hei, %{name}!
           unaddressed: Hei!
         introductory: En hilsen fra Archive of Our Own – AO3 (Vårt eget arkiv)!
       metadata_label_indicator: ":"

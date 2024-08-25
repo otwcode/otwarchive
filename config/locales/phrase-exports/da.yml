@@ -103,7 +103,9 @@ da:
               Support på %{support_url}.
         sent_at: Sendt %{sent_at}.
       greeting:
+        formal_html: Kære %{name},
         informal:
+          addressed_html: Hej %{name}!
           unaddressed: Hej!
         introductory: Hej fra Archive of Our Own – AO3 (Vores Eget Arkiv)!
       metadata_label_indicator: ":"

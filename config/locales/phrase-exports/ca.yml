@@ -103,7 +103,9 @@ ca:
             text: Si has rebut aquest missatge per error, contacta amb Suport a %{support_url}.
         sent_at: Enviat el %{sent_at}.
       greeting:
+        formal_html: Estimat/da %{name},
         informal:
+          addressed_html: Hola, %{name}!
           unaddressed: Hola!
         introductory: Hola de part de l'Archive of Our Own – AO3 (Un Arxiu Propi)!
       metadata_label_indicator: ":"

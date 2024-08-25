@@ -123,7 +123,9 @@ uk:
               з Підтримкою %{support_url}.
         sent_at: Відправлено %{sent_at}.
       greeting:
+        formal_html: Вітаємо, %{name},
         informal:
+          addressed_html: Привіт, %{name}!
           unaddressed: Привіт!
         introductory: Вітання з Archive of Our Own – AO3 (Нашого Власного Архіву)!
       metadata_label_indicator: ":"

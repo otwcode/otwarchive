@@ -137,7 +137,9 @@ he:
               %{support_url}.
         sent_at: נשלח בשעה %{sent_at}.
       greeting:
+        formal_html: "%{name} שלום,"
         informal:
+          addressed_html: היי, %{name}!
           unaddressed: היי!
         introductory: שלום מ-Archive of Our Own – AO3 (ארכיון משלנו)!
       metadata_label_indicator: ":"

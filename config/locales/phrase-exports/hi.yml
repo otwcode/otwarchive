@@ -107,7 +107,9 @@ hi:
               पर संपर्क करें।
         sent_at: "%{sent_at} पर भेजा गया।"
       greeting:
+        formal_html: प्रिय %{name},
         informal:
+          addressed_html: नमस्कार, %{name}!
           unaddressed: नमस्कार!
         introductory: Archive of Our Own AO3 (हमारा अपना संग्रह) – से नमस्कार!
       metadata_label_indicator: ":"

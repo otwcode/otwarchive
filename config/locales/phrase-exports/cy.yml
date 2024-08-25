@@ -156,7 +156,9 @@ cy:
               fama: %{support_url}.'
         sent_at: Anfonwyd at %{sent_at}.
       greeting:
+        formal_html: I %{name},
         informal:
+          addressed_html: Helo, %{name}!
           unaddressed: Helo!
         introductory: Helo o'r "Archive of Our Own – AO3" (Archif Ein Hun)!
       metadata_label_indicator: ":"

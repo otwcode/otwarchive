@@ -142,7 +142,9 @@ sl:
               uporabnikom preko %{support_url}.
         sent_at: Poslano dne %{sent_at}.
       greeting:
+        formal_html: Spoštovani %{name},
         informal:
+          addressed_html: Zdravo, %{name}!
           unaddressed: Zdravo!
         introductory: Lep pozdrav od Archive Of Our Own - AO3!
       metadata_label_indicator: ":"

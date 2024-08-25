@@ -82,7 +82,9 @@ ja:
             text: 間違ってこのメッセージを受けた場合はユーザーサポート（%{support_url}）までご連絡ください。
         sent_at: "%{sent_at}に送信されました。"
       greeting:
+        formal_html: "%{name}さん、"
         informal:
+          addressed_html: こんにちは、%{name}さん！
           unaddressed: こんにちは！
         introductory: みんなのアーカイブ（AO3）から、こんにちは！
       metadata_label_indicator: "："

@@ -105,7 +105,9 @@ fa:
               بگیرید در %{support_url}.
         sent_at: فرستاده شده در %{sent_at}.
       greeting:
+        formal_html: "%{name} عزیز،"
         informal:
+          addressed_html: سلام، %{name}!
           unaddressed: سلام!
         introductory: سلامی از Archive of Our Own – AO3 (آرشیوی از آن خودمان)!
       metadata_label_indicator: ":"

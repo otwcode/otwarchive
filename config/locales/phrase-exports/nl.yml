@@ -106,7 +106,9 @@ nl:
               via %{support_url}.
         sent_at: Verstuurd om %{sent_at}.
       greeting:
+        formal_html: Beste %{name},
         informal:
+          addressed_html: Hallo, %{name}!
           unaddressed: Hallo!
         introductory: Hallo van Archive of Our Own – AO3 (Ons Eigen Archief)!
       metadata_label_indicator: ":"

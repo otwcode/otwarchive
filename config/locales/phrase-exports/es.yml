@@ -104,7 +104,9 @@ es:
               Técnico en %{support_url}.
         sent_at: 'Enviado: %{sent_at}.'
       greeting:
+        formal_html: Estimadx %{name},
         informal:
+          addressed_html: "¡Hola %{name}!"
           unaddressed: "¡Hola!"
         introductory: Saludos de parte del Archive of Our Own – AO3 (Un Archivo Propio)
       metadata_label_indicator: ":"

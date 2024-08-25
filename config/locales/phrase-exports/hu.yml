@@ -104,7 +104,9 @@ hu:
               %{support_url}.'
         sent_at: 'Dátum: %{sent_at}'
       greeting:
+        formal_html: Kedves %{name},
         informal:
+          addressed_html: Szia %{name}!
           unaddressed: Szia!
         introductory: Üdvözlet az Archive of Our Own – AO3-tól (A Mi Archívumunk)!
       metadata_label_indicator: ":"

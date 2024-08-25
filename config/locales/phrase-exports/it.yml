@@ -104,7 +104,9 @@ it:
               all'indirizzo %{support_url}.
         sent_at: Inviato %{sent_at}.
       greeting:
+        formal_html: Ciao %{name},
         informal:
+          addressed_html: Ciao, %{name}!
           unaddressed: Ciao!
         introductory: Ciao da Archive of Our Own – AO3 (Archivio Tutto Per Noi)!
       metadata_label_indicator: ":"

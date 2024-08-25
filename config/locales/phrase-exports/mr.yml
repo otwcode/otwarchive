@@ -107,7 +107,9 @@ mr:
               समितीस संपर्क साधा %{support_url}.
         sent_at: "%{sent_at} ला पाठवलं गेलं."
       greeting:
+        formal_html: प्रिय %{name},
         informal:
+          addressed_html: नमस्कार, %{name}!
           unaddressed: नमस्कार!
         introductory: Archive of Our Own – AO3 (आमचा स्वतःचा संग्रह) तर्फे नमस्कार!
       metadata_label_indicator: ":"

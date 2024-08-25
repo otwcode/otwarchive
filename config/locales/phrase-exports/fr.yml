@@ -104,7 +104,9 @@ fr:
               Support Technique à l''adresse suivante : %{support_url}.'
         sent_at: Envoyé le %{sent_at}.
       greeting:
+        formal_html: Cher/Chère %{name},
         informal:
+          addressed_html: Bonjour, %{name} !
           unaddressed: Bonjour !
         introductory: Bonjour de la part d'Archive of Our Own – AO3 (Notre Propre
           Archive) !

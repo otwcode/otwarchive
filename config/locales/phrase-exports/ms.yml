@@ -86,7 +86,9 @@ ms:
               di %{support_url}.
         sent_at: Dihantar pada %{sent_at}.
       greeting:
+        formal_html: "%{name},"
         informal:
+          addressed_html: Hai, %{name}!
           unaddressed: Hai!
         introductory: Helo daripada Archive of Our Own – AO3 (Arkib Milik Kita)!
       metadata_label_indicator: ":"

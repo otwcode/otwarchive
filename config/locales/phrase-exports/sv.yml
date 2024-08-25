@@ -104,7 +104,9 @@ sv:
               på %{support_url}.
         sent_at: Skickat %{sent_at}.
       greeting:
+        formal_html: Bästa %{name},
         informal:
+          addressed_html: Hej, %{name}!
           unaddressed: Hej!
         introductory: Hej från Archive of Our Own – AO3 (Vårt eget arkiv)!
       metadata_label_indicator: ":"

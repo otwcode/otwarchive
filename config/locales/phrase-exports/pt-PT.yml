@@ -103,7 +103,9 @@ pt-PT:
               de Suporte em %{support_url}.
         sent_at: Enviada %{sent_at}.
       greeting:
+        formal_html: Olá %{name},
         informal:
+          addressed_html: Olá, %{name}!
           unaddressed: Olá!
         introductory: Olá do Archive of Our Own – AO3 (O Nosso Próprio Arquivo)!
       metadata_label_indicator: ":"

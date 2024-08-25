@@ -123,7 +123,9 @@ ro:
               de Suport Tehnic la %{support_url}.
         sent_at: Trimis %{sent_at}.
       greeting:
+        formal_html: Bună %{name},
         informal:
+          addressed_html: Bună %{name}!
           unaddressed: Salut!
         introductory: Salutări de la Archive of Our Own - AO3 (Arhiva Noastră)!
       metadata_label_indicator: ":"

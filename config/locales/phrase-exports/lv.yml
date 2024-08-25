@@ -126,6 +126,91 @@ lv:
         text: Epasta adrese %{login}, kura ir asociēta ar Tavu profilu, ir nomainīta
           uz %{email}
       subject: "[%{app_name}] Epasta adrese ir mainīta"
+    claim_notification:
+      access:
+        contact_support: sazinies ar AO3 Support (Atbalsts)
+        html: Atkarībā no arhīva Tavi darbi var būt importēti un tos var redzēt tikai
+          reģistrēti lietotāji (Lai paslēptu tos no Google meklētāja). Ja tas ir tā,
+          darbi būs pieejami tikai reģistrētiem lietotājiem, izņemot gadījumus, kad
+          Tu izvēlies tos padarīt redzamus citiem. Lai saņemtu palīdzību šīs darbības
+          veikšanai vai savu darbu dzēšanai, lūdzu sazinies ar %{contact_support_link}.
+        text: Atkarībā no arhīva Tavi darbi var būt importēti un tos var redzēt tikai
+          reģistrēti lietotāji (Lai paslēptu tos no Google meklētāja). Ja tas ir tā,
+          darbi būs pieejami tikai reģistrētiem lietotājiem, izņemot gadījumus, kad
+          Tu izvēlies tos padarīt redzamus citiem. Lai saņemtu palīdzību šīs darbības
+          veikšanai vai savu darbu dzēšanai, lūdzu sazinies ar user_mailer.claim_notification.access.contact_support
+          Sazinies ar AO3 Support(Atbalsts)%{support_url}.
+      email_tips: Ja Tu sazinies ar Mums, lūdzu pievieno e-pasta adreses no @transformativeworks.org
+        uz savu drošo kontaktu sarakstu un pārbaudi savu spamu, lai redzētu Mūsu atbildi.
+      introduction:
+        ao3_name: Archive Of Our Own-AO3 (Tulkošana) (Mūsu pašu arhīvs)
+        html: Tu esi saņēmis šo e-pastu, jo Tavi darbi ir iekļauti fanworks arhīvā,
+          kurš tika importēts no %{open_doors_name_link} uz %{app_link}. Šī e-pasta
+          adrese ir saistīta ar to, kas ir reģistrēta importētajā arhīvā, asociētie
+          fanu darbi (minēti lejā) automātiski tika pievienoti Tavam AO3 kontam.
+        open_doors_name: "(Atvērtās Durvis (Tulkošana)"
+        text: Tu esi saņēmis šo e-pastu, jo Tavi darbi ir iekļauti fanworks arhīvā,
+          kurš tika importēts no Atvērtajām Durvīm(%{open_doors_url}) uz AO3 arhīvu.%{app_url}.
+          . Šī e-pasta adrese ir saistīta ar to, kas ir reģistrēta importētajā arhīvā,
+          asociētie fanu darbi( minēti lejā) automātiski tika pievienoti Tavam AO3
+          kontam.
+      mistake:
+        contact_open_doors: sazinies ar Atvērtajām Durvīm (Open Doors)
+        html: Ja šī ir kļūda, un šie nav Tavi darbi, lūdzu, neizdēs tos! Lūdzu, sazinies
+          ar %{contact_open_doors_link} un Mēs to nokārtosim.
+        text: Ja šī ir kļūda, un šie nav Tavi darbi, lūdzu, neizdēs tos! Lūdzu, sazinies
+          ar (%{open_doors_url}) un Mēs to nokārtosim
+      more_info:
+        ao3_news: AO3 ziņas
+        contact_support: Sazinies ar AO3 Support (AO3 Atbalsts)
+        faq_page: BUJ lapa
+        html: Tu vari izlasīt paziņojumus par nesenām arhīva pārcelšanām %{ao3_news_link},
+          un atrast papildus informāciju Open Doors (Atvērtās Durvis) %{faq_page_link}
+          vai%{tutorial_page_link}. Ja ir kādi jautājumi, kas nav atbildēti FAQ apmācībā,
+          vai šajā e-pastā, lūdzu %{contact_support_link}.
+        text: Tu vari izlasīt paziņojumus par nesenām arhīva pārcelšanām AO3 Ziņās
+          (%{news_url}), un atrast papildus informāciju Open Doors (Atvērtās Durvis)(%{open_doors_faq_url})
+          vai apmācības lapā (%{open_doors_tutorial_url}). Ja ir kādi jautājumi, kas
+          nav atbildēti FAQ apmācība, vai šajā e-pastā, lūdzu%{support_url}.
+        tutorial_page: apmācības lapa
+      other_works:
+        contact_open_doors: sazinies ar Atvērtajām Durvīm
+        html: Ja ir bijuši citi darbi importētajā arhīvā zem e-pasta adreses, kurai
+          Tu vairs nevari piekļūt, lūdzu, sazinies %{contact_open_doors_link} ar jebkādu
+          informāciju, kas varētu palīdzēt vertificēt Tavu identitāti.
+        text: Ja ir bijuši citi darbi importētajā arhīvā zem e-pasta adreses, kurai
+          Tu vairs nevari piekļūt, lūdzu, sazinies ar jebkādu informāciju, kas varētu
+          palīdzēt vertificēt Tavu identitāti.
+      questions:
+        contact_support: sazinies ar AO3 Atbalstu
+        html: Citām nepieciešamībām, lūdzu,%{contact_support_link}.
+        text: Citām nepieciešamībām, lūdzu,%{support_url}.
+      redirects:
+        html: Lai saglabātu rec (rekomendāciju) sarakstu un grāmatzīmes, importēto
+          arhīvu mājaslapu adreses var norādit uz šo darbu importētajām kopijām uz
+          noteiktu laiku( pārbaudi sava arhīva paziņojumu, lai pārliecinātos). Ja
+          Tu jau esi lejupielādējis šo darbu kopiju un %{negation} izmantoji URL funkciju,
+          būs divas tāda paša darba kopijas AO3.
+      subject: "[%{app_name}] Darbi ir augšupielādēti"
+      update_redirect:
+        contact_open_doors: Sazinies ar Atvērtajām Durvīm
+        html: Ja Tu vēlies, lai Open Doors atjauninātu novirzījumu, lai tas norādītu
+          uz jau eksistējošu darbu, lūdzu,%{contact_open_doors_link} izdzēs importēto
+          kopiju ar savu AO3 vārdu, sava konta vārdu importētajā arhīvā un nosaukumu
+          un tā fanu darba URL, uz kuru tu gribi novirzīt. (Ja ir vairāki darbi, kurus
+          Tu vēlies novirzīt vai mainīt novirzījumu, Tu vari to pierakstīt vienā e-pastā.)
+        text: Ja Tu vēlies, lai Open Doors atjauninātu novirzījumu , lai tas norādītu
+          uz jau eksistējošu darbu un sazināties ar Open Doors %{open_doors_url} ,
+          lūdzu, izdzēs importēto kopiju ar savu AO3 vārdu, sava konta vārdu importētajā
+          arhīvā un nosaukumu un tā fanu darba URL, uz kuru tu gribi novirzīt. (Ja
+          ir vairāki darbi, kurus Tu vēlies novirzīt vai mainīt novirzījumu, Tu vari
+          to pierakstīt vienā e-pastā.)
+      works_by: 'Šie darbi tika rakstīti izmantojot šo e-pasta adresi: %{email}'
+      work_info:
+        html: "%{work_link} (%{fandom})"
+        text:
+          no_fandom: "- %{work_title} %{work_url}"
+          with_fandom: "- %{work_title} %{work_url} (%{fandom})"
     creatorship_request:
       html:
         creation: "%{creation_link} autors/i %{pseud_links}"

@@ -85,7 +85,9 @@ th:
               %{support_url}
         sent_at: ส่งเมื่อ %{sent_at}
       greeting:
+        formal_html: เรียน %{name},
         informal:
+          addressed_html: สวัสดี %{name}!
           unaddressed: สวัสดี!
         introductory: ขอทักทายจาก Archive of Our Own – AO3 (คลังเก็บข้อมูลของเราเอง)!
       metadata_label_indicator: ":"

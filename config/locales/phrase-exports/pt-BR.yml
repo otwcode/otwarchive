@@ -540,7 +540,9 @@ pt-BR:
               com a nossa equipe de Suporte: %{support_url}.'
         sent_at: Enviado %{sent_at}.
       greeting:
+        formal_html: Olá, %{name},
         informal:
+          addressed_html: Oi, %{name}!
           unaddressed: Oi!
         introductory: Olá! Aqui é o Archive of Our Own – AO3 (Um Arquivo Todo Nosso).
       metadata_label_indicator: ":"

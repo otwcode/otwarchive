@@ -125,7 +125,9 @@ pl:
               o kontakt ze Wsparciem poprzez %{support_url}.
         sent_at: Wysłano w %{sent_at}.
       greeting:
+        formal_html: Szanowna/y %{name},
         informal:
+          addressed_html: Cześć, %{name}!
           unaddressed: Cześć!
         introductory: Pozdrowienia z Archive of Our Own – AO3 (Naszego Własnego Archiwum)!
       metadata_label_indicator: ":"

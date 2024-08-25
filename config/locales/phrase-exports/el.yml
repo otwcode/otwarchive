@@ -104,7 +104,9 @@ el:
               με την Επιτροπή Υποστήριξης %{support_url}.
         sent_at: Στάλθηκε στις %{sent_at}.
       greeting:
+        formal_html: Αγαπητή/έ %{name},
         informal:
+          addressed_html: Γεια %{name}!
           unaddressed: Γεια!
         introductory: Γεια σας από το Archive of Our Own – AO3 (Το Αρχείο Μας)!
       metadata_label_indicator: ":"

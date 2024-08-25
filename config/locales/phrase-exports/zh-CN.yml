@@ -87,7 +87,9 @@ zh-CN:
             text: 如果这封邮件被误发给了您，请于此联系支持团队：%{support_url}。
         sent_at: 于%{sent_at}发送。
       greeting:
+        formal_html: 尊敬的%{name}，
         informal:
+          addressed_html: 您好，%{name}！
           unaddressed: 您好！
         introductory: Archive of Our Own – AO3（AO3作品库）向您问好！
       metadata_label_indicator: "："

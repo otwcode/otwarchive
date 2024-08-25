@@ -106,7 +106,9 @@ de:
               Dich bitte unter %{support_url} an den Support.
         sent_at: Gesendet %{sent_at}.
       greeting:
+        formal_html: Hallo %{name},
         informal:
+          addressed_html: Hallo %{name}!
           unaddressed: Hallo!
         introductory: Hallo vom Archive of Our Own – AO3 (Ein Eigenes Archiv)
       metadata_label_indicator: ":"

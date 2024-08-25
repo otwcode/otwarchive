@@ -123,7 +123,9 @@ ru:
               в Поддержку – %{support_url}.
         sent_at: Отправлено в %{sent_at}.
       greeting:
+        formal_html: Здравствуйте, %{name},
         informal:
+          addressed_html: Привет, %{name}!
           unaddressed: Привет!
         introductory: Привет от Archive of Our Own – AO3 (Нашего Архива)!
       metadata_label_indicator: ":"

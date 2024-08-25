@@ -105,7 +105,9 @@ bn:
               সাহায্য'র সাথে যোগাযোগ করুন।
         sent_at: "%{sent_at}তে পাঠানো হয়েছে।"
       greeting:
+        formal_html: প্রিয় %{name},
         informal:
+          addressed_html: নমস্কার, %{name}!
           unaddressed: নমস্কার!
         introductory: Archive of Our Own – AO3(আমাদের নিজস্ব সংগ্রহশালা) থেকে নমস্কার!
       metadata_label_indicator: ":"

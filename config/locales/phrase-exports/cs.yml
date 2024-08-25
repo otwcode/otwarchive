@@ -124,7 +124,9 @@ cs:
               na %{support_url}.
         sent_at: Odesláno v %{sent_at}.
       greeting:
+        formal_html: Dobrý den, %{name},
         informal:
+          addressed_html: Ahoj %{name},
           unaddressed: Ahoj,
         introductory: Zdravíme z Archive of Our Own – AO3 (Našeho vlastního archivu),
       metadata_label_indicator: ":"
