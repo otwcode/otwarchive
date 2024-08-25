@@ -112,16 +112,6 @@ cy:
         one: un westai
         other: "%{count} o westeion"
         two: "%{count} o westeion"
-      html:
-        left_kudos:
-          few: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
-          many: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
-          one: Gadawodd %{givers_list} canmol ar %{commentable_link}.
-          other: Gadawodd %{givers_list} canmol ar %{commentable_link}.
-          two: Gadawodd %{givers_list} canmol ar  %{commentable_link}.
-        single_guest:
-          giver_list: un westai
-          left_kudos: Gadawodd %{giver_list} canmol ar %{commentable_link}.
       left_kudos:
         html:
           one: Gadawodd %{givers_list} canmol ar %{commentable_link}.
@@ -134,14 +124,6 @@ cy:
         html: Gadawodd %{giver_list} canmol ar %{commentable_link}.
         text: Gadawodd un westai canmol ar %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Mae gennych chi canmol!"
-      text:
-        left_kudos:
-          few: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
-          many: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
-          one: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
-          other: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
-          two: Gadawodd %{givers_list} canmol ar %{commentable_title} (%{commentable_url}).
-        single_guest: Gadawodd un westai canmol ar %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -174,9 +156,7 @@ cy:
               fama: %{support_url}.'
         sent_at: Anfonwyd at %{sent_at}.
       greeting:
-        formal: I %{name},
         informal:
-          addressed: Helo, %{name}!
           unaddressed: Helo!
         introductory: Helo o'r "Archive of Our Own – AO3" (Archif Ein Hun)!
       metadata_label_indicator: ":"

@@ -48,12 +48,6 @@ th:
     batch_kudo_notification:
       guest:
         other: "%{count} ผู้เข้าชม"
-      html:
-        left_kudos:
-          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_link}."
-        single_guest:
-          giver_list: ผู้เข้าชมคนหนึ่ง
-          left_kudos: "%{giver_list} ได้มอบคำชมเชยบน %{commentable_link}."
       left_kudos:
         html:
           other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_link}."
@@ -64,10 +58,6 @@ th:
         html: "%{giver_list} ได้มอบคำชมเชยบน %{commentable_link}."
         text: ผู้เข้าชมคนหนึ่งได้มอบคำชมเชยบน %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] คุณได้รับคำชมเชย!"
-      text:
-        left_kudos:
-          other: "%{givers_list} ได้มอบคำชมเชยบน %{commentable_title} (%{commentable_url})."
-        single_guest: ผู้เข้าชมคนหนึ่งได้มอบคำชมเชยบน %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -95,9 +85,7 @@ th:
               %{support_url}
         sent_at: ส่งเมื่อ %{sent_at}
       greeting:
-        formal: เรียน %{name},
         informal:
-          addressed: สวัสดี %{name}!
           unaddressed: สวัสดี!
         introductory: ขอทักทายจาก Archive of Our Own – AO3 (คลังเก็บข้อมูลของเราเอง)!
       metadata_label_indicator: ":"

@@ -64,13 +64,6 @@ ca:
       guest:
         one: 1 convidat/da
         other: "%{count} convidats/des"
-      html:
-        left_kudos:
-          one: "%{givers_list} ha deixat kudos a %{commentable_link}."
-          other: "%{givers_list} han deixat kudos a %{commentable_link}."
-        single_guest:
-          giver_list: Un/a convidat/da
-          left_kudos: "%{giver_list} ha deixat kudos a %{commentable_link}."
       left_kudos:
         html:
           one: "%{givers_list} ha deixat kudos a %{commentable_link}."
@@ -83,11 +76,6 @@ ca:
         html: "%{giver_list} ha deixat kudos a %{commentable_link}."
         text: Un/a convidat/da ha deixat kudos a %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] T'han deixat kudos!"
-      text:
-        left_kudos:
-          one: "%{givers_list} ha deixat kudos a %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} han deixat kudos a %{commentable_title} (%{commentable_url})."
-        single_guest: Un/a convidat/da ha deixat kudos a %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -115,9 +103,7 @@ ca:
             text: Si has rebut aquest missatge per error, contacta amb Suport a %{support_url}.
         sent_at: Enviat el %{sent_at}.
       greeting:
-        formal: Estimat/da %{name},
         informal:
-          addressed: Hola, %{name}!
           unaddressed: Hola!
         introductory: Hola de part de l'Archive of Our Own – AO3 (Un Arxiu Propi)!
       metadata_label_indicator: ":"

@@ -64,13 +64,6 @@ es:
       guest:
         one: unx visitante
         other: "%{count} visitantes"
-      html:
-        left_kudos:
-          one: "%{givers_list} dejó kudos en %{commentable_link}."
-          other: "%{givers_list} dejaron kudos en %{commentable_link}"
-        single_guest:
-          giver_list: Unx visitante
-          left_kudos: "%{giver_list} dejó kudos en %{commentable_link}."
       left_kudos:
         html:
           one: "%{givers_list} dejó kudos en %{commentable_link}."
@@ -83,11 +76,6 @@ es:
         html: "%{giver_list} dejó kudos en %{commentable_link}."
         text: Unx visitante dejó kudos en %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] ¡Recibiste kudos!"
-      text:
-        left_kudos:
-          one: "%{givers_list} dejó kudos en %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} dejaron kudos en %{commentable_title} (%{commentable_url})."
-        single_guest: Unx visitante dejó kudos en %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -116,9 +104,7 @@ es:
               Técnico en %{support_url}.
         sent_at: 'Enviado: %{sent_at}.'
       greeting:
-        formal: Estimadx %{name},
         informal:
-          addressed: "¡Hola %{name}!"
           unaddressed: "¡Hola!"
         introductory: Saludos de parte del Archive of Our Own – AO3 (Un Archivo Propio)
       metadata_label_indicator: ":"
@@ -376,12 +362,6 @@ es:
           %{support_url}.
       redirects:
         html: Para preservar listas de recomendaciones y marcadores, la dirección
-          web del archivo importado redireccionará a la copia importada de esas obras
-          por tiempo limitado (revisa la publicación del anuncio de importación de
-          tu archivo para asegurarte). Si tu ya subiste una copia de estas obras y
-          %{negation} utilizaste la herramienta de importación desde la URL, habrá
-          dos copias de la misma obra en el AO3.
-        text: Para preservar listas de recomendaciones y marcadores, la dirección
           web del archivo importado redireccionará a la copia importada de esas obras
           por tiempo limitado (revisa la publicación del anuncio de importación de
           tu archivo para asegurarte). Si tu ya subiste una copia de estas obras y

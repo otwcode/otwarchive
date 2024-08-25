@@ -64,14 +64,6 @@ mr:
       guest:
         one: एक पाहुणा
         other: "%{count} पाहुणे"
-      html:
-        left_kudos:
-          one: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_link}."
-          other: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_link}."
-        single_guest:
-          giver_list: एक पाहुणा
-          left_kudos: "%{commentable_link} वर %{giver_list} या पाहुण्याने टाळ्या दिल्या
-            आहेत."
       left_kudos:
         html:
           one: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_link}."
@@ -87,14 +79,6 @@ mr:
         text: "%{commentable_title} (%{commentable_url}) वर पाहुण्यांनी टाळ्या दिल्या
           आहेत"
       subject: "[%{app_name}] आपल्याला टाळ्या प्राप्त झाल्या आहेत!"
-      text:
-        left_kudos:
-          one: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_title}
-            (%{commentable_url})."
-          other: "%{givers_list} यांनी पुढील कार्यावर टाळ्या दिल्या आहेत %{commentable_title}
-            (%{commentable_url})."
-        single_guest: "%{commentable_title} (%{commentable_url}) वर पाहुण्यांनी टाळ्या
-          दिल्या आहेत"
   mailer:
     general:
       closing:
@@ -123,9 +107,7 @@ mr:
               समितीस संपर्क साधा %{support_url}.
         sent_at: "%{sent_at} ला पाठवलं गेलं."
       greeting:
-        formal: प्रिय %{name},
         informal:
-          addressed: नमस्कार, %{name}!
           unaddressed: नमस्कार!
         introductory: Archive of Our Own – AO3 (आमचा स्वतःचा संग्रह) तर्फे नमस्कार!
       metadata_label_indicator: ":"

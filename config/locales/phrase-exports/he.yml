@@ -96,15 +96,6 @@ he:
         one: אורחת
         other: "%{count} אורחות"
         two: "%{count} אורחות"
-      html:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          one: "%{givers_list} השאירה קודוס על %{commentable_link}."
-          other: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
-        single_guest:
-          giver_list: אורחת
-          left_kudos: "%{giver_list} השאירה קודוס על %{commentable_link}."
       left_kudos:
         html:
           one: "%{givers_list} השאירה קודוס על %{commentable_link}."
@@ -117,13 +108,6 @@ he:
         html: "%{giver_list} השאירה קודוס על %{commentable_link}."
         text: אורחת השאירה קודוס על %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] קיבלת קודוס!"
-      text:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
-          one: "%{givers_list} השאירה קודוס על %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
-          two: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
-        single_guest: אורחת השאירה קודוס על %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -153,9 +137,7 @@ he:
               %{support_url}.
         sent_at: נשלח בשעה %{sent_at}.
       greeting:
-        formal: "%{name} שלום,"
         informal:
-          addressed: היי, %{name}!
           unaddressed: היי!
         introductory: שלום מ-Archive of Our Own – AO3 (ארכיון משלנו)!
       metadata_label_indicator: ":"

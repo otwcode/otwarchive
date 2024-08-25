@@ -64,13 +64,6 @@ hi:
       guest:
         one: अतिथि
         other: "%{count} अतिथिगण"
-      html:
-        left_kudos:
-          one: "%{givers_list} ने %{commentable_link} पर कुङोस दिया है।"
-          other: "%{givers_list} ने %{commentable_link} पर कुङोस दिए हैं।"
-        single_guest:
-          giver_list: एक अतिथि
-          left_kudos: "%{giver_list} ने %{commentable_link} पर कुङोस दिया है।"
       left_kudos:
         html:
           one: "%{givers_list} ने %{commentable_link} पर कुङोस दिया है।"
@@ -86,14 +79,6 @@ hi:
         text: एक अतिथि ने %{commentable_title} (%{commentable_url}) पर कुङोस दिया
           है।
       subject: "[%{app_name}] आपको कुङोस मिला हैं!"
-      text:
-        left_kudos:
-          one: "%{givers_list} ने %{commentable_title} (%{commentable_url}) पर कुङोस
-            दिया है।"
-          other: "%{givers_list} ने %{commentable_title} (%{commentable_url}) पर कुङोस
-            दिए हैं।"
-        single_guest: एक अतिथि ने %{commentable_title} (%{commentable_url}) पर कुङोस
-          दिया है।
   mailer:
     general:
       closing:
@@ -122,9 +107,7 @@ hi:
               पर संपर्क करें।
         sent_at: "%{sent_at} पर भेजा गया।"
       greeting:
-        formal: प्रिय %{name},
         informal:
-          addressed: नमस्कार, %{name}!
           unaddressed: नमस्कार!
         introductory: Archive of Our Own AO3 (हमारा अपना संग्रह) – से नमस्कार!
       metadata_label_indicator: ":"

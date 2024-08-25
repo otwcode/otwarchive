@@ -64,13 +64,6 @@ fi:
       guest:
         one: vieras
         other: "%{count} vierasta"
-      html:
-        left_kudos:
-          one: "%{givers_list} kehui teosta %{commentable_link}."
-          other: "%{givers_list} kehuivat teosta %{commentable_link}."
-        single_guest:
-          giver_list: Vieras
-          left_kudos: "%{giver_list} kehui teosta %{commentable_link}."
       left_kudos:
         html:
           one: "%{givers_list} kehui teosta %{commentable_link}."
@@ -83,11 +76,6 @@ fi:
         html: "%{giver_list} kehui teosta %{commentable_link}."
         text: Vieras kehui teosta %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Sinulle on kehuja!"
-      text:
-        left_kudos:
-          one: "%{givers_list} kehui teosta %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} kehuivat teosta %{commentable_title} (%{commentable_url})."
-        single_guest: Vieras kehui teosta %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -116,9 +104,7 @@ fi:
               Käyttäjätukeen osoitteessa %{support_url}.
         sent_at: Lähetetty %{sent_at}.
       greeting:
-        formal: Hei %{name},
         informal:
-          addressed: Hei, %{name}!
           unaddressed: Hei!
         introductory: Tervehdys Archive of Our Own – AO3:lta (Oma arkisto)!
       metadata_label_indicator: ":"

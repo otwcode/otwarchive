@@ -80,14 +80,6 @@ ro:
         few: "%{count} vizitatori"
         one: un vizitator
         other: "%{count} de vizitatori"
-      html:
-        left_kudos:
-          few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-          one: "%{givers_list} a lăsat kudos pentru %{commentable_link}."
-          other: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
-        single_guest:
-          giver_list: Un vizitator
-          left_kudos: "%{giver_list} a lăsat kudos pentru %{commentable_link}."
       left_kudos:
         html:
           few: "%{givers_list} au lăsat kudos pentru %{commentable_link}."
@@ -102,12 +94,6 @@ ro:
         html: "%{giver_list} a lăsat kudos pentru %{commentable_link}."
         text: Un vizitator a lăsat kudos pentru %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Ai primit kudos!"
-      text:
-        left_kudos:
-          few: "%{givers_list} au lăsat kudos pentru %{commentable_title} (%{commentable_url})."
-          one: "%{givers_list} a lăsat kudos pentru %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} au lăsat kudos pentru %{commentable_title} (%{commentable_url})."
-        single_guest: Un vizitator a lăsat kudos pentru %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -137,9 +123,7 @@ ro:
               de Suport Tehnic la %{support_url}.
         sent_at: Trimis %{sent_at}.
       greeting:
-        formal: Bună %{name},
         informal:
-          addressed: Bună %{name}!
           unaddressed: Salut!
         introductory: Salutări de la Archive of Our Own - AO3 (Arhiva Noastră)!
       metadata_label_indicator: ":"

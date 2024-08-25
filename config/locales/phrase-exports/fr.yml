@@ -64,13 +64,6 @@ fr:
       guest:
         one: un/une invité-e
         other: "%{count} invité-e-s"
-      html:
-        left_kudos:
-          one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
-          other: "%{givers_list} ont félicité votre œuvre %{commentable_link}."
-        single_guest:
-          giver_list: Un/Une invité-e
-          left_kudos: "%{giver_list} a félicité votre œuvre %{commentable_link}."
       left_kudos:
         html:
           one: "%{givers_list} a félicité votre œuvre %{commentable_link}."
@@ -83,12 +76,6 @@ fr:
         html: "%{giver_list} a félicité votre œuvre %{commentable_link}."
         text: Un/Une invité-e a félicité votre œuvre %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Vous avez reçu des félicitations !"
-      text:
-        left_kudos:
-          one: "%{givers_list} a félicité votre œuvre %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} ont félicité votre œuvre %{commentable_title} (%{commentable_url})."
-        single_guest: Un/Une invité-e a félicité votre œuvre %{commentable_title}
-          (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -117,9 +104,7 @@ fr:
               Support Technique à l''adresse suivante : %{support_url}.'
         sent_at: Envoyé le %{sent_at}.
       greeting:
-        formal: Cher/Chère %{name},
         informal:
-          addressed: Bonjour, %{name} !
           unaddressed: Bonjour !
         introductory: Bonjour de la part d'Archive of Our Own – AO3 (Notre Propre
           Archive) !

@@ -64,13 +64,6 @@ nb:
       guest:
         one: en gjest
         other: "%{count} gjester"
-      html:
-        left_kudos:
-          one: "%{givers_list} la igjen kudos på %{commentable_link}."
-          other: "%{givers_list} la igjen kudos på %{commentable_link}."
-        single_guest:
-          giver_list: En gjest
-          left_kudos: "%{giver_list} la igjen kudos på %{commentable_link}."
       left_kudos:
         html:
           one: "%{givers_list} la igjen kudos på %{commentable_link}."
@@ -83,11 +76,6 @@ nb:
         html: "%{giver_list} la igjen kudos på %{commentable_link}."
         text: En gjest la igjen kudos på %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Du har fått kudos!"
-      text:
-        left_kudos:
-          one: "%{givers_list} la igjen kudos på %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} la igjen kudos på %{commentable_title} (%{commentable_url})."
-        single_guest: En gjest la igjen kudos på %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -116,9 +104,7 @@ nb:
               support: %{support_url}.'
         sent_at: Sendt %{sent_at}.
       greeting:
-        formal: Kjære %{name}
         informal:
-          addressed: Hei, %{name}!
           unaddressed: Hei!
         introductory: En hilsen fra Archive of Our Own – AO3 (Vårt eget arkiv)!
       metadata_label_indicator: ":"

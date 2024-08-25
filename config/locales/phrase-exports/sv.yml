@@ -64,13 +64,6 @@ sv:
       guest:
         one: en gäst
         other: "%{count} gäster"
-      html:
-        left_kudos:
-          one: "%{givers_list} berömde %{commentable_link}."
-          other: "%{givers_list} berömde %{commentable_link}."
-        single_guest:
-          giver_list: En gäst
-          left_kudos: "%{giver_list} berömde %{commentable_link}."
       left_kudos:
         html:
           one: "%{givers_list} berömde %{commentable_link}."
@@ -83,11 +76,6 @@ sv:
         html: "%{giver_list} berömde %{commentable_link}."
         text: En gäst berömde %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Du har fått beröm!"
-      text:
-        left_kudos:
-          one: "%{givers_list} berömde %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} berömde %{commentable_title} (%{commentable_url})."
-        single_guest: En gäst berömde %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -116,9 +104,7 @@ sv:
               på %{support_url}.
         sent_at: Skickat %{sent_at}.
       greeting:
-        formal: Bästa %{name},
         informal:
-          addressed: Hej, %{name}!
           unaddressed: Hej!
         introductory: Hej från Archive of Our Own – AO3 (Vårt eget arkiv)!
       metadata_label_indicator: ":"

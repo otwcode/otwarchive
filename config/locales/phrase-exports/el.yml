@@ -64,13 +64,6 @@ el:
       guest:
         one: ένας επισκέπτης
         other: "%{count} επισκέπτες"
-      html:
-        left_kudos:
-          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
-          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_link}.
-        single_guest:
-          giver_list: Ένας επισκέπτης
-          left_kudos: "%{giver_list} άφησε μπράβο στο %{commentable_link}."
       left_kudos:
         html:
           one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_link}.
@@ -83,11 +76,6 @@ el:
         html: "%{giver_list} άφησε μπράβο στο %{commentable_link}."
         text: Ένας επισκέπτης άφησε μπράβο στο %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] 'Εχεις μπράβο!"
-      text:
-        left_kudos:
-          one: Ο/Η %{givers_list} άφησε μπράβο στο %{commentable_title} (%{commentable_url}).
-          other: Οι %{givers_list} άφησαν μπράβο στο %{commentable_title} (%{commentable_url}).
-        single_guest: Ένας επισκέπτης άφησε μπράβο στο %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -116,9 +104,7 @@ el:
               με την Επιτροπή Υποστήριξης %{support_url}.
         sent_at: Στάλθηκε στις %{sent_at}.
       greeting:
-        formal: Αγαπητή/έ %{name},
         informal:
-          addressed: Γεια %{name}!
           unaddressed: Γεια!
         introductory: Γεια σας από το Archive of Our Own – AO3 (Το Αρχείο Μας)!
       metadata_label_indicator: ":"

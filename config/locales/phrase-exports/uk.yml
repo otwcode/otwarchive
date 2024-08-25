@@ -80,14 +80,6 @@ uk:
         few: "%{count} гостей"
         many: "%{count} гостей"
         one: "%{count} гостя"
-      html:
-        left_kudos:
-          few: Вподобайка для %{commentable_link} від %{givers_list}.
-          many: Вподобайка для %{commentable_link} від %{givers_list}.
-          one: Вподобайка для %{commentable_link} від %{givers_list}.
-        single_guest:
-          giver_list: 1-го гостя
-          left_kudos: Вподобайка для %{commentable_link} від %{giver_list}.
       left_kudos:
         html:
           few: Вподобайка для %{commentable_link} від %{givers_list}.
@@ -102,13 +94,6 @@ uk:
         html: Вподобайка для %{commentable_link} від %{giver_list}.
         text: Вподобайка для %{commentable_title} (%{commentable_url}) від 1-го гостя.
       subject: "[%{app_name}] Ви отримали вподобайку!"
-      text:
-        left_kudos:
-          few: Вподобайка для %{commentable_title} (%{commentable_url}) від %{givers_list}.
-          many: Вподобайка для %{commentable_title} (%{commentable_url}) від %{givers_list}.
-          one: Вподобайка для %{commentable_title} (%{commentable_url}) від %{givers_list}.
-        single_guest: Вподобайка для %{commentable_title} (%{commentable_url}) від
-          1-го гостя.
   mailer:
     general:
       closing:
@@ -138,9 +123,7 @@ uk:
               з Підтримкою %{support_url}.
         sent_at: Відправлено %{sent_at}.
       greeting:
-        formal: Вітаємо, %{name},
         informal:
-          addressed: Привіт, %{name}!
           unaddressed: Привіт!
         introductory: Вітання з Archive of Our Own – AO3 (Нашого Власного Архіву)!
       metadata_label_indicator: ":"
@@ -380,11 +363,6 @@ uk:
           за посиланням: %{support_url}.'
       redirects:
         html: Для збереження списків і закладок, протягом обмеженого часу веб-адреса
-          імпортованого архіву може перенаправляти користувачів до імпортованої копії
-          цих робіт (перегляньте оголошення про Ваш архів, аби знати точну інформацію).
-          Якщо Ви вже завантажили копію цих робіт і %{negation} використали функцію
-          імпорту з URL-адреси, на AO3 буде дві копії однієї роботи.
-        text: Для збереження списків і закладок, протягом обмеженого часу веб-адреса
           імпортованого архіву може перенаправляти користувачів до імпортованої копії
           цих робіт (перегляньте оголошення про Ваш архів, аби знати точну інформацію).
           Якщо Ви вже завантажили копію цих робіт і %{negation} використали функцію

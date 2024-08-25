@@ -64,13 +64,6 @@ it:
       guest:
         one: un ospite
         other: "%{count} ospiti"
-      html:
-        left_kudos:
-          one: "%{givers_list} ha lasciato kudos per %{commentable_link}."
-          other: "%{givers_list} hanno lasciato kudos per %{commentable_link}."
-        single_guest:
-          giver_list: Un ospite
-          left_kudos: "%{giver_list} ha lasciato kudos per %{commentable_link}."
       left_kudos:
         html:
           one: "%{givers_list} ha lasciato kudos per %{commentable_link}."
@@ -83,11 +76,6 @@ it:
         html: "%{giver_list} ha lasciato kudos per %{commentable_link}."
         text: Un ospite ha lasciato kudos per %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Hai dei kudos!"
-      text:
-        left_kudos:
-          one: "%{givers_list} ha lasciato kudos per %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} hanno lasciato kudos per %{commentable_title} (%{commentable_url})."
-        single_guest: Un ospite ha lasciato kudos per %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -116,9 +104,7 @@ it:
               all'indirizzo %{support_url}.
         sent_at: Inviato %{sent_at}.
       greeting:
-        formal: Ciao %{name},
         informal:
-          addressed: Ciao, %{name}!
           unaddressed: Ciao!
         introductory: Ciao da Archive of Our Own – AO3 (Archivio Tutto Per Noi)!
       metadata_label_indicator: ":"

@@ -63,13 +63,6 @@ fa:
       guest:
         one: یک مهمان
         other: "%{count} مهمان"
-      html:
-        left_kudos:
-          one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
-          other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
-        single_guest:
-          giver_list: یک مهمان
-          left_kudos: "%{giver_list} براى %{commentable_link} كودوس و قدردانى فرستاد."
       left_kudos:
         html:
           one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
@@ -84,13 +77,6 @@ fa:
         html: "%{giver_list} براى %{commentable_link} كودوس و قدردانى فرستاد."
         text: یک مهمان براى %{commentable_title} كودوس و قدردانى فرستاد (%{commentable_url}).
       subject: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
-      text:
-        left_kudos:
-          one: "%{givers_list} برای %{commentable_title} (%{commentable_url}) کودوس
-            و قدردانی فرستاد."
-          other: "%{givers_list} برای %{commentable_title} (%{commentable_url}) کودوس
-            و قدردانی فرستادند."
-        single_guest: یک مهمان براى %{commentable_title} كودوس و قدردانى فرستاد (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -119,9 +105,7 @@ fa:
               بگیرید در %{support_url}.
         sent_at: فرستاده شده در %{sent_at}.
       greeting:
-        formal: "%{name} عزیز،"
         informal:
-          addressed: سلام، %{name}!
           unaddressed: سلام!
         introductory: سلامی از Archive of Our Own – AO3 (آرشیوی از آن خودمان)!
       metadata_label_indicator: ":"

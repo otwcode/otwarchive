@@ -80,14 +80,6 @@ scr:
         few: "%{count} госта"
         one: "%{count} гост"
         other: "%{count} гостију"
-      html:
-        left_kudos:
-          few: "%{givers_list} су похвалили %{commentable_link}."
-          one: "%{givers_list} је похвалио/ла %{commentable_link}."
-          other: "%{givers_list} су похвалили %{commentable_link}."
-        single_guest:
-          giver_list: Гост/гошћа
-          left_kudos: "%{giver_list} је оставио/ла похвалу на %{commentable_link}."
       left_kudos:
         html:
           few: "%{givers_list} су похвалили %{commentable_link}."
@@ -102,12 +94,6 @@ scr:
         html: "%{giver_list} је оставио/ла похвалу на %{commentable_link}."
         text: Гост/гошћа је оставио/ла похвалу на %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Добили сте похвале!"
-      text:
-        left_kudos:
-          few: "%{givers_list} су похвалили %{commentable_title} (%{commentable_url})."
-          one: "%{givers_list} је похвалио/ла %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} су похвалили %{commentable_title} (%{commentable_url})."
-        single_guest: Гост/гошћа је оставио/ла похвалу на %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       creation:

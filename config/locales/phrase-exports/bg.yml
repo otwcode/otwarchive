@@ -64,19 +64,7 @@ bg:
       guest:
         one: един гост
         other: "%{count} гости"
-      html:
-        left_kudos:
-          one: "%{givers_list} остави кудос за %{commentable_link}."
-          other: "%{givers_list} оставиха кудос за %{commentable_link}."
-        single_guest:
-          giver_list: Един гост
-          left_kudos: "%{giver_list} остави кудос за %{commentable_link}."
       subject: "[%{app_name}] Имаш кудос!"
-      text:
-        left_kudos:
-          one: "%{givers_list} остави кудос за %{commentable_title} (%{commentable_url})."
-          other: "%{givers_list} оставиха кудос за %{commentable_title} (%{commentable_url})."
-        single_guest: Един гост остави кудос за %{commentable_title} (%{commentable_url}).
   mailer:
     general:
       closing:
@@ -105,9 +93,7 @@ bg:
               Поддръжка на %{support_url}.
         sent_at: Изпратено в %{sent_at}.
       greeting:
-        formal: Привет, %{name},
         informal:
-          addressed: Здравей, %{name}!
           unaddressed: Здравей!
         introductory: Привет от Archive of Our Own – AO3 (Нашият архив)!
       metadata_label_indicator: ":"
