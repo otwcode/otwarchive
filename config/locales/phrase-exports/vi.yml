@@ -355,12 +355,6 @@ vi:
           về kho tàng để biết về thời gian). Nếu bạn đã đăng tải những tác phẩm này
           và %{negation} dùng tính năng nhập liệu từ URL, tác phẩm đấy sẽ có 2 bản
           trên AO3.
-        text: Để giữ danh sách đề cử và dấu trang, đường link những kho tàng được
-          nhập liệu có thể sẽ được chuyển hướng đến bản sao chép được nhập liệu của
-          những tác phẩm ấy trong một khoảng thời gian giới hạn (kiểm tra thông báo
-          về kho tàng để biết về thời gian). Nếu bạn đã đăng tải những tác phẩm này
-          và %{negation} dùng tính năng nhập liệu từ URL, tác phẩm đấy sẽ có 2 bản
-          trên AO3.
       subject: "[%{app_name}] Tác phẩm đã đăng tải"
       update_redirect:
         contact_open_doors: liên lạc với Cửa Mở

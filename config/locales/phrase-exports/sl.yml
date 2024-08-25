@@ -389,12 +389,6 @@ sl:
           Če ste kopije zgoraj navedenih del na AO3 že naložili sami in jih %{negation}
           uvozili prek hiperpovezave, bosta na AO3 obstajali po dve kopiji vsakega
           posameznega dela.
-        text: Da se ohranijo seznami priporočil in zaznamki, bodo spletni naslovi
-          uvoženega arhiva nekaj časa morda preusmerjeni na uvožene kopije teh del
-          (če se želite prepričati o tem, si preberite oznanilo o uvozu za vaš arhiv).
-          Če ste kopije zgoraj navedenih del na AO3 že naložili sami in jih %{negation}
-          uvozili prek hiperpovezave, bosta na AO3 obstajali po dve kopiji vsakega
-          posameznega dela.
       subject: Dela uvožena na [%{app_name}]
       update_redirect:
         contact_open_doors: Stopite v stik z Odprtimi vrati

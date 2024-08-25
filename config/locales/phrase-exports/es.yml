@@ -367,12 +367,6 @@ es:
           tu archivo para asegurarte). Si tu ya subiste una copia de estas obras y
           %{negation} utilizaste la herramienta de importación desde la URL, habrá
           dos copias de la misma obra en el AO3.
-        text: Para preservar listas de recomendaciones y marcadores, la dirección
-          web del archivo importado redireccionará a la copia importada de esas obras
-          por tiempo limitado (revisa la publicación del anuncio de importación de
-          tu archivo para asegurarte). Si tu ya subiste una copia de estas obras y
-          %{negation} utilizaste la herramienta de importación desde la URL, habrá
-          dos copias de la misma obra en el AO3.
       subject: "[%{app_name}] Obras importadas"
       update_redirect:
         contact_open_doors: contacta a Open Doors

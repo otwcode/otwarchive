@@ -75,7 +75,7 @@ nl:
             (%{commentable_url}).
       single_guest:
         giver: een bezoeker
-        html: "%{count} guests"
+        html: Je hebt kudos gekregen van %{giver} voor %{commentable_link}.
         text: Je hebt kudos gekregen van een bezoeker voor %{commentable_title} (%{commentable_url}).
       subject: "[%{app_name}] Kudos!"
   mailer:
