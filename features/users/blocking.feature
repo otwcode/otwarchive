@@ -121,3 +121,17 @@ Feature: Blocking
       | superadmin       |
       | policy_and_abuse |
       | support          |
+
+  Scenario: Users are told about blocking effects on gift-giving
+    Given the user "pest" exists and is activated
+      And I am logged in as "blocker"
+    When I go to my blocked users page
+    Then I should see "giving you gift works"
+    Given the user "unblocker" has blocked the user "improving"
+      And I am logged in as "unblocker"
+    When I go to my blocked users page
+    Then I should see "improving"
+      And I should see "giving you gift works"
+    When I follow "Unblock"
+    Then I should see a "Yes, Unblock User" button
+      And I should see "giving you gift works"

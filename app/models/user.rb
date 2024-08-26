@@ -89,6 +89,7 @@ class User < ApplicationRecord
 
   before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
+  after_update :send_wrangler_username_change_notification, if: :is_tag_wrangler?
   after_update :log_change_if_login_was_edited
   after_update :log_email_change, if: :saved_change_to_email?
 
@@ -168,7 +169,6 @@ class User < ApplicationRecord
   end
 
   def remove_user_from_kudos
-    # TODO: AO3-5054 Expire kudos cache when deleting a user.
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
     Kudo.where(user: self).update_all(user_id: nil)
   end
@@ -568,6 +568,12 @@ class User < ApplicationRecord
 
   def log_change_if_login_was_edited
     create_log_item(action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}") if saved_change_to_login?
+  end
+
+  def send_wrangler_username_change_notification
+    return unless saved_change_to_login? && login_before_last_save.present?
+
+    TagWranglingSupervisorMailer.wrangler_username_change_notification(login_before_last_save, login).deliver_now
   end
 
   def log_email_change

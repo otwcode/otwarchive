@@ -120,22 +120,32 @@ Feature: Import Works
       And I should not see "Additional Tags:"
       And I should not see "Relationship: Detected 1/Detected 2"
 
-  Scenario: Admins see IP address on imported works
+  Scenario Outline: Admins see IP address on imported works
     Given I import "http://import-site-with-tags" with a mock website
       And I press "Post"
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "<role>" admin
       And I go to the "Detected Title" work page
     Then I should see "IP Address: 127.0.0.1"
 
-  Scenario: Admins see IP address on works imported without preview
+    Examples:
+    | role             |
+    | legal            |
+    | policy_and_abuse |
+
+  Scenario Outline: Admins see IP address on works imported without preview
     Given I start importing "http://import-site-with-tags" with a mock website
       And I check "Post without previewing"
       And I press "Import"
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "<role>" admin
       And I go to the "Detected Title" work page
     Then I should see "IP Address: 127.0.0.1"
 
-  Scenario: Admins see IP address on multi-chapter works imported without preview
+    Examples:
+    | role             |
+    | legal            |
+    | policy_and_abuse |
+
+  Scenario Outline: Admins see IP address on multi-chapter works imported without preview
     Given I import the urls with mock websites as chapters without preview
       """
       http://import-site-without-tags
@@ -145,6 +155,11 @@ Feature: Import Works
       And I go to the "Untitled Imported Work" work page
     Then I should see "Chapters:2/2"
       And I should see "IP Address: 127.0.0.1"
+
+    Examples:
+    | role             |
+    | legal            |
+    | policy_and_abuse |
 
   Scenario: Imported works can be set to restricted
     When I start importing "http://import-site-with-tags" with a mock website
@@ -163,7 +178,7 @@ Feature: Import Works
     When I am logged out
       And I go to the "Detected Title" work page
       And I follow "Yes, Continue"
-    Then I should see "Guest name:"
+    Then I should see "Guest name"
 
   Scenario: Imported works can have comments disabled to guests
     When I start importing "http://import-site-with-tags" with a mock website
@@ -195,6 +210,7 @@ Feature: Import Works
 
   Scenario: Imported works can have comment moderation on
     When I start importing "http://import-site-with-tags" with a mock website
+      And I choose "comment_permissions_enable_all"
       And I check "moderated_commenting_enabled"
       And I press "Import"
       And I press "Post"

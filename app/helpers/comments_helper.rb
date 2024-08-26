@@ -32,6 +32,24 @@ module CommentsHelper
     end
   end
 
+  def comment_link_with_commentable_name(comment)
+    ultimate_parent = comment.ultimate_parent
+    commentable_name = ultimate_parent&.commentable_name
+    text = case ultimate_parent.class.to_s
+           when "Work"
+             t("comments_helper.comment_link_with_commentable_name.on_work_html", title: commentable_name)
+           when "AdminPost"
+             t("comments_helper.comment_link_with_commentable_name.on_admin_post_html", title: commentable_name)
+           else
+             if ultimate_parent.is_a?(Tag)
+               t("comments_helper.comment_link_with_commentable_name.on_tag_html", name: commentable_name)
+             else
+               t("comments_helper.comment_link_with_commentable_name.on_unknown")
+             end
+           end
+    link_to(text, comment_path(comment))
+  end
+
   # return pseudname or name for comment
   def get_commenter_pseud_or_name(comment)
     if comment.pseud_id
@@ -45,6 +63,10 @@ module CommentsHelper
     else
       content_tag(:span, comment.name) + content_tag(:span, " #{ts('(Guest)')}", class: "role")
     end
+  end
+
+  def image_safety_mode_cache_key(comment)
+    "image-safety-mode" if comment.use_image_safety_mode?
   end
 
   ####
@@ -108,6 +130,7 @@ module CommentsHelper
     return false if comment_parent_hidden?(comment)
     return false if blocked_by_comment?(comment)
     return false if blocked_by?(comment.ultimate_parent)
+    return false if logged_in_as_admin?
 
     return true unless guest?
 
@@ -179,6 +202,12 @@ module CommentsHelper
 
     parent.disable_all_comments? ||
       parent.disable_anon_comments? && !logged_in?
+  end
+
+  def can_review_comment?(comment)
+    return false unless comment.unreviewed?
+
+    is_author_of?(comment.ultimate_parent) || policy(comment).can_review_comment?
   end
 
   #### HELPERS FOR REPLYING TO COMMENTS #####

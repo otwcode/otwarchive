@@ -217,6 +217,19 @@ Feature: Search works by tag
     When I follow "Edit Your Search"
     Then the field labeled "Relationships" should contain "James T. Kirk/Spock"
 
+  Scenario: Searching by otp: true returns works with one relationship tag or
+  multiple synonymous relationship tags.
+    Given a set of Ed Stede works for searching
+    When I am on the search works page
+      And I fill in "Any Field" with "otp: true"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: otp: true"
+      And I should see "3 Found"
+      But I should not see "The Work Without a Relationship"
+      And I should not see "The Work With Multiple Ships"
+    When I follow "Edit Your Search"
+    Then the field labeled "Any Field" should contain "otp: true"
+
   Scenario: Searching by relationship and category returns only works using the
   category and the exact relationship tag or its synonyms
     Given a set of Kirk/Spock works for searching
