@@ -1,2 +1,6 @@
 # Set the default behavior, in case people don't have core.autocrlf set.
 * text=auto
+# Bash scripts needs to have LF line endings, even on Windows
+*.sh text eol=lf
+# /usr/local/bin/ruby: warning: shebang line ending with \r may cause problems
+/bin/* text eol=lf
