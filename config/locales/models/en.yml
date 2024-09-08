@@ -236,3 +236,5 @@ en:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.
         required: must exist and not be spam.
+  subscriptions:
+    deleted: Deleted item
