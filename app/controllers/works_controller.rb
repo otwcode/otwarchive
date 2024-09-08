@@ -58,10 +58,11 @@ class WorksController < ApplicationController
 
     if params[:fandom_id] || (@collection.present? && @tag.present?)
       if params[:fandom_id].present?
-        @fandom = Fandom.find_by(id: params[:fandom_id])
+        @fandom = Fandom.find(params[:fandom_id])
       end
 
       tag = @fandom || @tag
+
       options[:filter_ids] ||= []
       options[:filter_ids] << tag.id
     end

@@ -23,7 +23,7 @@ jobs:
           bundler-cache: true
 
       - name: rubocop
-        uses: reviewdog/action-rubocop@7ef50b200dba9fb54c97392337ac7e82d692c4bd
+        uses: reviewdog/action-rubocop@a162a8e8976d8b3b7141c2147d7d79eed7cc8c4c
         with:
           use_bundler: true
           reporter: github-pr-check
@@ -45,7 +45,7 @@ jobs:
           bundler-cache: true
 
       - name: erb-lint
-        uses: tk0miya/action-erblint@eda368e7a0d8a0e71c475bb7cc65d0d612e5148c
+        uses: tk0miya/action-erblint@b6e537f4616e4fa7a9eef209ca34ca944e1440dd
         with:
           use_bundler: true
           reporter: github-pr-check

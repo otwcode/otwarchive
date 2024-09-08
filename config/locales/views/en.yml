@@ -115,6 +115,18 @@ en:
         series: Make Series Visible
         work: Make Work Visible
     admin_users:
+      confirm_delete_user_creations:
+        caution_html: Are you sure you want to <strong><em>delete</em></strong> all the works and comments created by this user, along with their %{bookmarks} bookmarks, %{series} series, and %{collections} collections? This <strong>cannot be undone</strong>.
+        confirm: Are you sure? Remember this will destroy ALL these objects!
+        page_heading: Delete Spammer Creations
+        submit: Yes, Delete All Spammer Creations
+      creations:
+        navigation:
+          admin_user: User Administration
+          creations: Creations
+        no_creations: This user has no works or comments.
+        page_heading: Works and Comments by %{user}
+        page_title: "%{login} - User Creations"
       history:
         heading: User History
         table:
@@ -153,10 +165,10 @@ en:
             other: 'Roles:'
         navigation:
           activate: Activate
+          creations: Creations
           invitations:
             add: Add Invitations
             manage: Manage Invitations
-          profile: Profile
           roles: Manage Roles
           troubleshoot: Troubleshoot
         note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
@@ -178,6 +190,31 @@ en:
               required: Required when adding or removing a warning or suspension to an account.
             submit: Update
           heading: Record Warnings, Suspensions, or Notes
+    api:
+      edit:
+        page_title: Edit API Token
+      index:
+        actions:
+          find: Find
+        page_heading: API Tokens
+        page_title: API Tokens
+        search_box:
+          label: Name
+        search_by_name: Search for an API token by name
+        table:
+          actions:
+            edit: Edit
+          caption: API Tokens
+          headings:
+            actions: Actions
+            banned: Banned?
+            created: Created
+            name: Name
+            token: Token
+            updated: Updated
+          summary: Existing API tokens along with the dates they were created and updated and options for editing them.
+      new:
+        page_title: New API Token
     banners:
       index:
         actions:
@@ -218,7 +255,7 @@ en:
     header:
       nav:
         activities: Activities
-        api_tokens: Manage API Tokens
+        api_tokens: API Tokens
         banned_emails: Banned Emails
         banners: Banners
         invitations:
@@ -815,6 +852,25 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+  subscriptions:
+    index:
+      button_html: Unsubscribe from %{name}
+      byline: by %{creators}
+      heading:
+        landmark:
+          list: List of Subscriptions
+      navigation:
+        all: All Subscriptions
+        series: Series Subscriptions
+        user: User Subscriptions
+        work: Work Subscriptions
+      page_heading:
+        all: My Subscriptions
+        series: My Series Subscriptions
+        users: My User Subscriptions
+        works: My Work Subscriptions
+      series: "(Series)"
+      work: "(Work)"
   tag_wranglers:
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
@@ -909,6 +965,11 @@ en:
       submit: Save
     edit:
       browser_title: Edit Profile
+    header_navigation:
+      admin_user: User Administration
+      edit_multiple: Edit Works
+      invitations: Invitations
+      new_work: Post New
     registrations:
       new:
         cancel: Cancel

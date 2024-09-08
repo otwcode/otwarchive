@@ -666,13 +666,16 @@ class CommentsController < ApplicationController
       if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
         commentable = commentable.work
       end
-      redirect_to polymorphic_path(commentable,
-                                   options.slice(:show_comments,
-                                                 :add_comment_reply_id,
-                                                 :delete_comment_id,
-                                                 :view_full_work,
-                                                 :anchor,
-                                                 :page))
+      redirect_to controller: commentable.class.to_s.underscore.pluralize,
+                  action: :show,
+                  id: commentable.id,
+                  show_comments: options[:show_comments],
+                  add_comment_reply_id: options[:add_comment_reply_id],
+                  delete_comment_id: options[:delete_comment_id],
+                  view_full_work: options[:view_full_work],
+                  anchor: options[:anchor],
+                  page: options[:page],
+                  only_path: true
     end
   end
 
