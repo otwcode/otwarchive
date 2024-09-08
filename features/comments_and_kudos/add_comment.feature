@@ -235,7 +235,7 @@ Scenario: It hides comment actions when a reply form is open
 
 @javascript
 Scenario: It shows and hides cancel buttons properly
-  Given the work "Aftermath" by "creator"
+  Given the work "Aftermath" by "creator" with guest comments enabled
     And a comment "Ugh." by "pest" on the work "Aftermath"
   When I view the work "Aftermath"
     And I display comments
@@ -249,7 +249,7 @@ Scenario: It shows and hides cancel buttons properly
 
 @javascript
 Scenario: It shows and hides cancel buttons properly even on a new page
-Given the work "Aftermath" by "creator"
+Given the work "Aftermath" by "creator" with guest comments enabled
     And a comment "Ugh." by "pest" on the work "Aftermath"
   When I view the work "Aftermath"
     And I display comments
