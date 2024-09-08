@@ -212,14 +212,6 @@ module CommentsHelper
 
   #### HELPERS FOR REPLYING TO COMMENTS #####
 
-  def add_cancel_comment_reply_link(comment)
-    if params[:add_comment_reply_id] && params[:add_comment_reply_id] == comment.id.to_s
-      cancel_comment_reply_link(comment)
-    else
-      add_comment_reply_link(comment)
-    end
-  end
-
   # return link to add new reply to a comment
   def add_comment_reply_link(comment)
     commentable_id = comment.ultimate_parent.is_a?(Tag) ?
@@ -250,14 +242,17 @@ module CommentsHelper
                           comment.parent.id
     link_to(
       ts("Cancel"),
-      url_for(controller: :comments,
-              action: :cancel_comment_reply,
-              id: comment.id,
-              comment_id: params[:comment_id],
-              commentable_id => commentable_value,
-              view_full_work: params[:view_full_work],
-              page: params[:page]),
-      remote: true)
+      url_for(
+        controller: :comments,
+        action: :cancel_comment_reply,
+        id: comment.id,
+        comment_id: params[:comment_id],
+        commentable_id => commentable_value,
+        view_full_work: params[:view_full_work],
+        page: params[:page]
+      ),
+      remote: true
+    )
   end
 
   # canceling an edit
@@ -393,5 +388,9 @@ module CommentsHelper
   def comments_are_moderated(commentable)
     parent = find_parent(commentable)
     parent.respond_to?(:moderated_commenting_enabled) && parent.moderated_commenting_enabled?
+  end
+
+  def focused_on_comment(commentable)
+    params[:add_comment_reply_id] && params[:add_comment_reply_id] == commentable.id.to_s
   end
 end
