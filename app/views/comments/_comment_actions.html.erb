@@ -35,7 +35,7 @@
       <%= tag_comment_as_spam_link comment %>
     </li>
   <% end %>
-  <% if comment.unreviewed? && is_author_of?(comment.ultimate_parent) %>
+  <% if can_review_comment?(comment) %>
     <li id="review_comment_link_<%= comment.id %>">
       <%= button_to(ts("Approve"), review_comment_path(comment), method: :put) %>
     </li>

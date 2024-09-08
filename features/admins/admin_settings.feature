@@ -24,7 +24,7 @@ Feature: Admin Settings Page
       And I edit the tag "Ianto Jones"
     Then I should see "Wrangling is disabled at the moment. Please check back later."
       And I should not see "Synonym of"
-    
+
   Scenario: Turn off Support form
     Given the support form is disabled and its text field set to "Please don't contact us"
     When I am logged in as a random user
@@ -41,12 +41,13 @@ Feature: Admin Settings Page
     Given guest comments are on
       And I am logged out
       And <commentable>
+      And <commentable> with guest comments enabled
       And I view <commentable> with comments
     When I post a guest comment
     Then I should see a link "Reply"
 
     Examples:
-        | commentable | 
+        | commentable |
         | the work "Generic Work" |
         | the admin post "Generic Post" |
 
@@ -54,6 +55,7 @@ Feature: Admin Settings Page
     Given guest comments are off
       And I am logged out
       And <commentable>
+      And <commentable> with guest comments enabled
       And a guest comment on <commentable>
     When I view <commentable> with comments
     Then I should see "Sorry, the Archive doesn't allow guests to comment right now."
@@ -64,12 +66,12 @@ Feature: Admin Settings Page
     When I am logged in as a super admin
       And I view <commentable> with comments
     Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
-    
+
     Examples:
         | commentable |
         | the work "Generic Work"  |
         | the admin post "Generic Post" |
-    
+
   Scenario: Turn off guest comments (when the work itself does not allow guest comments)
     Given guest comments are off
       And I am logged in as "author"
@@ -138,11 +140,6 @@ Feature: Admin Settings Page
   Scenario: Tag comments are not affected when guest comments are turned off
     Given guest comments are off
       And a fandom exists with name: "Stargate SG-1", canonical: true
-    When I am logged in as a super admin
-      And I view the tag "Stargate SG-1" with comments
-    Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
-    When I post the comment "Important policy decision" on the tag "Stargate SG-1"
-    Then I should see "Comment created!"
     When I am logged in as a tag wrangler
       And I view the tag "Stargate SG-1" with comments
     Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."

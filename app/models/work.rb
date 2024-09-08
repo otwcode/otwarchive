@@ -218,7 +218,7 @@ class Work < ApplicationRecord
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, _suffix: :comments
+  }, _suffix: :comments, _default: 1
 
   ########################################################################
   # HOOKS
@@ -1248,7 +1248,8 @@ class Work < ApplicationRecord
   def otp
     return true if relationships.size == 1
 
-    all_without_syns = relationships.map { |r| r.merger ? r.merger : r }.uniq.compact
+    all_without_syns = relationships.map { |r| r.merger_id || r.id }
+      .uniq
     all_without_syns.count == 1
   end
 

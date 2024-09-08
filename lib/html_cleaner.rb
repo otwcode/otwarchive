@@ -2,7 +2,9 @@
 module HtmlCleaner
   # If we aren't sure that this field hasn't been sanitized since the last sanitizer version,
   # we sanitize it before we allow it to pass through (and save it if possible).
-  def sanitize_field(object, fieldname, strip_images: false)
+  # For certain highly visible fields, we might want to be cautious about
+  # images. Use image_safety_mode: true to prevent images from embedding as-is.
+  def sanitize_field(object, fieldname, image_safety_mode: false)
     return "" if object.send(fieldname).nil?
 
     sanitizer_version = object.try("#{fieldname}_sanitizer_version")
@@ -15,7 +17,7 @@ module HtmlCleaner
         sanitize_value(fieldname, object.send(fieldname))
       end
 
-    sanitized_field = strip_images(sanitized_field) if strip_images
+    sanitized_field = strip_images(sanitized_field, keep_src: true) if image_safety_mode
     sanitized_field
   end
 
@@ -33,11 +35,6 @@ module HtmlCleaner
 
     # argh, get rid of ____spacer____ inserts
     text.gsub! "____spacer____", ""
-
-    # trash a whole bunch of crappy non-printing format characters stuck
-    # in most commonly by MS Word
-    # \p{Cf} matches all unicode char in the "other, format" category
-    text.gsub!(/\p{Cf}/u, '')
 
     return text
   end
@@ -144,9 +141,13 @@ module HtmlCleaner
   # These assume they are running on well-formed XHTML, which we can do
   # because they will only be used on already-cleaned fields.
 
-  # strip img tags
-  def strip_images(value)
-    value.gsub(/<img .*?>/, '')
+  # strip img tags, optionally leaving the src URL exposed
+  def strip_images(value, keep_src: false)
+    value.gsub(/(<img .*?>)/) do |img_tag|
+      match_data = img_tag.match(/src="([^"]+)"/) if keep_src
+      src = match_data[1] if match_data
+      src || ""
+    end
   end
 
   def strip_html_breaks_simple(value)

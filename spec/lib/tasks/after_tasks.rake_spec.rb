@@ -46,6 +46,32 @@ describe "rake After:fix_teen_and_up_imported_rating" do
   end
 end
 
+describe "rake After:clean_up_multiple_ratings" do
+  let!(:default_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true) }
+  let!(:other_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
+  let!(:work_with_multiple_ratings) do
+    create_invalid(:work, rating_string: [default_rating.name, other_rating.name].join(",")).tap do |work|
+      # Update the creatorship to a user so validation doesn't fail
+      work.creatorships.build(pseud: build(:pseud), approved: true)
+      work.save!(validate: false)
+    end
+  end
+
+  before do
+    run_all_indexing_jobs
+  end
+
+  it "changes and replaces the multiple tags" do
+    subject.invoke
+
+    work_with_multiple_ratings.reload
+
+    # Work with multiple ratings gets the default rating
+    expect(work_with_multiple_ratings.ratings.to_a).to contain_exactly(default_rating)
+    expect(work_with_multiple_ratings.rating_string).to eq(default_rating.name)
+  end
+end
+
 describe "rake After:clean_up_noncanonical_ratings" do
   let!(:noncanonical_rating) do
     tag = Rating.create(name: "Borked rating tag", canonical: false)
@@ -285,88 +311,6 @@ describe "rake After:fix_2009_comment_threads" do
         end
       end
     end
-  end
-end
-
-describe "rake After:clean_up_chapter_kudos" do
-  let(:work) { create(:work) }
-  let!(:work_kudo) { create(:kudo, commentable: work) }
-  let!(:chapter_kudo) do
-    kudo = create(:kudo, commentable: work)
-    kudo.update_columns(commentable_type: "Chapter", commentable_id: work.first_chapter.id)
-    kudo
-  end
-
-  it "destroys chapter kudos if the chapter does not exist" do
-    work.first_chapter.delete
-
-    expect do
-      subject.invoke
-    end.to avoid_changing { work_kudo.reload.updated_at }
-    expect { chapter_kudo.reload }.to raise_exception(ActiveRecord::RecordNotFound)
-  end
-
-  it "destroys chapter kudos if the work does not exist" do
-    work.delete
-    subject.invoke
-    expect { chapter_kudo.reload }.to raise_exception(ActiveRecord::RecordNotFound)
-  end
-
-  it "prints chapter kudos that cannot be destroyed when the work does not exist" do
-    work.delete
-    allow_any_instance_of(Kudo).to receive(:destroy).and_return(false)
-
-    expect do
-      subject.invoke
-    end.to output("Updating 1 chapter kudos\n.\nCouldn't destroy 1 kudo(s): #{chapter_kudo.id}\n").to_stdout
-  end
-
-  it "transfers chapter kudos to the chapter's work" do
-    expect do
-      subject.invoke
-    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
-      .and change { work.all_kudos_count }.from(1).to(2)
-      .and change { work.guest_kudos_count }.from(1).to(2)
-  end
-
-  it "prints chapter kudos that cannot be transferred to the work" do
-    allow_any_instance_of(Kudo).to receive(:save).and_return(false)
-
-    expect do
-      subject.invoke
-    end.to output("Updating 1 chapter kudos\n.\nCouldn't update 1 kudo(s): #{chapter_kudo.id}\n").to_stdout
-  end
-
-  it "transfers guest chapter kudos to the chapter's restricted work" do
-    work.update!(restricted: true)
-
-    expect do
-      subject.invoke
-    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
-      .and avoid_changing { chapter_kudo.reload.ip_address }
-      .and avoid_changing { work_kudo.reload.updated_at }
-  end
-
-  it "orphan chapter kudos if there is already a work kudo from the same IP address" do
-    chapter_kudo.update_column(:ip_address, work_kudo.ip_address)
-
-    expect do
-      subject.invoke
-    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
-      .and change { chapter_kudo.reload.ip_address }.from(work_kudo.ip_address).to(nil)
-      .and avoid_changing { work_kudo.reload.updated_at }
-  end
-
-  it "orphan chapter kudos if there is already a work kudo from the same user ID" do
-    user_id = create(:user).id
-    work_kudo.update!(ip_address: nil, user_id: user_id)
-    chapter_kudo.update_columns(ip_address: nil, user_id: user_id)
-
-    expect do
-      subject.invoke
-    end.to change { chapter_kudo.reload.commentable }.from(work.first_chapter).to(work)
-      .and change { chapter_kudo.reload.user_id }.from(user_id).to(nil)
-      .and avoid_changing { work_kudo.reload.updated_at }
   end
 end
 
