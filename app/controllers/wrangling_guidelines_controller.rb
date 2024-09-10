@@ -1,4 +1,6 @@
 class WranglingGuidelinesController < ApplicationController
+  include WranglingHelper
+  
   before_action :admin_only, except: [:index, :show]
 
   # GET /wrangling_guidelines
@@ -13,22 +15,26 @@ class WranglingGuidelinesController < ApplicationController
 
   # GET /wrangling_guidelines/new
   def new
-    @wrangling_guideline = authorize WranglingGuideline.new
+    authorize :wrangling if logged_in_as_admin?
+    @wrangling_guideline = WranglingGuideline.new
   end
 
   # GET /wrangling_guidelines/1/edit
   def edit
-    @wrangling_guideline = authorize WranglingGuideline.find(params[:id])
+    authorize :wrangling if logged_in_as_admin?
+    @wrangling_guideline = WranglingGuideline.find(params[:id])
   end
 
   # GET /wrangling_guidelines/manage
   def manage
-    @wrangling_guidelines = authorize WranglingGuideline.order("position ASC")
+    authorize :wrangling if logged_in_as_admin?
+    @wrangling_guidelines = WranglingGuideline.order("position ASC")
   end
 
   # POST /wrangling_guidelines
   def create
-    @wrangling_guideline = authorize WranglingGuideline.new(wrangling_guideline_params)
+    authorize :wrangling if logged_in_as_admin?
+    @wrangling_guideline = WranglingGuideline.new(wrangling_guideline_params)
 
     if @wrangling_guideline.save
       flash[:notice] = t("wrangling_guidelines.create")
@@ -40,7 +46,8 @@ class WranglingGuidelinesController < ApplicationController
 
   # PUT /wrangling_guidelines/1
   def update
-    @wrangling_guideline = authorize WranglingGuideline.find(params[:id])
+    authorize :wrangling if logged_in_as_admin?
+    @wrangling_guideline = WranglingGuideline.find(params[:id])
 
     if @wrangling_guideline.update(wrangling_guideline_params)
       flash[:notice] = t("wrangling_guidelines.update")
@@ -52,7 +59,7 @@ class WranglingGuidelinesController < ApplicationController
 
   # reorder FAQs
   def update_positions
-    authorize WranglingGuideline
+    authorize :wrangling if logged_in_as_admin?
     if params[:wrangling_guidelines]
       @wrangling_guidelines = WranglingGuideline.reorder_list(params[:wrangling_guidelines])
       flash[:notice] = t("wrangling_guidelines.reorder")
@@ -62,7 +69,8 @@ class WranglingGuidelinesController < ApplicationController
 
   # DELETE /wrangling_guidelines/1
   def destroy
-    @wrangling_guideline = authorize WranglingGuideline.find(params[:id])
+    authorize :wrangling if logged_in_as_admin?
+    @wrangling_guideline = WranglingGuideline.find(params[:id])
     @wrangling_guideline.destroy
     flash[:notice] = t("wrangling_guidelines.delete")
     redirect_to(wrangling_guidelines_path)

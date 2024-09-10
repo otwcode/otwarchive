@@ -29,8 +29,9 @@
   <li>
     <%= span_if_current ts("Known Issues", key: "header"), known_issues_path %>
   </li>
-  <li>
-    <%= span_if_current ts("Wrangling Guidelines", key: "header"),
-                        wrangling_guidelines_path %>
-  </li>
+  <% if policy(Wrangling).new? %>
+    <li>
+      <%= span_if_current ts("Wrangling Guidelines", key: "header"), wrangling_guidelines_path %>
+    </li>
+  <% end %>
 </ul>
