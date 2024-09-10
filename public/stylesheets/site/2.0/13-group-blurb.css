@@ -232,7 +232,6 @@ li.blurb:after, .blurb .blurb:after {
 }
 
 .blurb blockquote {
-  clear: none;
   margin: 0.643em auto;
   text-align: justify;
 }

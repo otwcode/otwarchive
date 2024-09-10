@@ -115,6 +115,18 @@ en:
         series: Make Series Visible
         work: Make Work Visible
     admin_users:
+      confirm_delete_user_creations:
+        caution_html: Are you sure you want to <strong><em>delete</em></strong> all the works and comments created by this user, along with their %{bookmarks} bookmarks, %{series} series, and %{collections} collections? This <strong>cannot be undone</strong>.
+        confirm: Are you sure? Remember this will destroy ALL these objects!
+        page_heading: Delete Spammer Creations
+        submit: Yes, Delete All Spammer Creations
+      creations:
+        navigation:
+          admin_user: User Administration
+          creations: Creations
+        no_creations: This user has no works or comments.
+        page_heading: Works and Comments by %{user}
+        page_title: "%{login} - User Creations"
       history:
         heading: User History
         table:
@@ -153,10 +165,10 @@ en:
             other: 'Roles:'
         navigation:
           activate: Activate
+          creations: Creations
           invitations:
             add: Add Invitations
             manage: Manage Invitations
-          profile: Profile
           roles: Manage Roles
           troubleshoot: Troubleshoot
         note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
@@ -178,6 +190,31 @@ en:
               required: Required when adding or removing a warning or suspension to an account.
             submit: Update
           heading: Record Warnings, Suspensions, or Notes
+    api:
+      edit:
+        page_title: Edit API Token
+      index:
+        actions:
+          find: Find
+        page_heading: API Tokens
+        page_title: API Tokens
+        search_box:
+          label: Name
+        search_by_name: Search for an API token by name
+        table:
+          actions:
+            edit: Edit
+          caption: API Tokens
+          headings:
+            actions: Actions
+            banned: Banned?
+            created: Created
+            name: Name
+            token: Token
+            updated: Updated
+          summary: Existing API tokens along with the dates they were created and updated and options for editing them.
+      new:
+        page_title: New API Token
     banners:
       index:
         actions:
@@ -218,7 +255,7 @@ en:
     header:
       nav:
         activities: Activities
-        api_tokens: Manage API Tokens
+        api_tokens: API Tokens
         banned_emails: Banned Emails
         banners: Banners
         invitations:
@@ -569,6 +606,33 @@ en:
         tumblr: ao3org Tumblr
         twitter: "@AO3_Status Twitter feed"
   home:
+    about:
+      ao3:
+        github_repository: GitHub repository
+        html: The Archive of Our Own offers a noncommercial and nonprofit central hosting place for fanworks using open-source archiving software. We welcome contributions to our %{github_repository_link}, and a list of open tasks is available on our %{jira_project_link}.
+        jira_project: Jira project
+      details: We are proactive and innovative in protecting and defending our work from commercial exploitation and legal challenge. We preserve our fannish economy, values, and creative expression by protecting and nurturing our fellow fans, our work, our commentary, our history, and our identity while providing the broadest possible access to fannish activity for all fans.
+      general: The Organization for Transformative Works (OTW) is a nonprofit organization, established by fans in 2007, to serve the interests of fans by providing access to and preserving the history of fanworks and fan culture in its myriad forms. We believe that fanworks are transformative and that transformative works are legitimate.
+      heading:
+        html: About the %{otw}
+        otw: OTW
+        otw_long: Organization for Transformative Works
+      major_projects:
+        fanlore: Fanlore
+        fanlore_details_html: "%{fanlore_link}, a fandom wiki devoted to preserving the history of transformative fanworks and the fandoms from which they have arisen."
+        legal_advocacy: Legal Advocacy
+        legal_details_html: "%{legal_advocacy_link} committed to protecting and defending fanworks from commercial exploitation and legal challenge."
+        open_doors: Open Doors
+        open_doors_details_html: "%{open_doors_link}, which offers shelter to at-risk fannish projects."
+        title: 'Our other major projects include:'
+        twc: Transformative Works and Cultures
+        twc_details_html: "%{twc_link}, a peer-reviewed academic journal that seeks to promote scholarship on fanworks and practices."
+      more_info:
+        communications_team: Communications team
+        faq_page: FAQ page
+        html: You can find out more about the OTW and its projects at its website, %{transformative_works_link}, and learn about how your financial support is vital to the continuation and expansion of the OTW's work on its %{faq_page_link}. If you have a media or research question, please contact the %{communications_team_link}.
+        transformative_works: transformativeworks.org
+      page_title: About the OTW
     donate:
       general:
         text: There are two main ways to support the AO3 - donating your time or money.
@@ -579,11 +643,15 @@ en:
         title: Donating Financially
       page_title: Donate or Volunteer
       time:
-        details_html: The %{otw_link} is the parent organization of the Archive of Our Own. We are often looking for volunteers to contribute to %{projects_link}. If you're interested in volunteering specifically to help the Archive of Our Own, the roles to look out for include tag wranglers, testers, coders, Support staff and Abuse staff. We encourage you to browse through the %{volunteer_link} and apply for any roles which match your qualifications and interests.
+        contribute_html: We also welcome community contributions to %{github_repository_link} for open tasks in our %{jira_project_link}. We also encourage you to browse through our %{volunteer_listings_link}, sign up to receive all our %{news_by_email_link} which includes our calls for volunteers, and apply for any volunteer roles that match your qualifications and interests.
+        github_repository: our GitHub repository
+        info_html: The %{otw_link} is the parent organization of the Archive of Our Own (AO3). We are often looking for volunteers to contribute to %{projects_link}. If you are interested in volunteering specifically to help the Archive of Our Own, the committees to look out for include Accessibility, Design, and Technology (AD&T); AO3 Documentation; Policy & Abuse; Support; Tag Wrangling; and Translation.
+        jira_project: Jira project
+        news_by_email: news by email
         otw: Organization for Transformative Works
         projects: our projects
         title: Donating Your Time
-        volunteer: available listings
+        volunteer_listings: volunteer position listings
     fandoms:
       all_fandoms: All Fandoms
     index:
@@ -723,6 +791,10 @@ en:
           hide_content_for_others: hide their works, series, bookmarks, and comments from anyone else
           intro: 'Muting a user will not:'
           prevent_emails: prevent you from receiving comment or subscription emails from this user
+  orphans:
+    orphan_user:
+      orphaning_bylines_only_message_html: Orphaning will automatically remove your personal information from <strong>bylines only</strong>. It will <strong>not</strong> automatically remove your personal information from anywhere else in the work(s). Social media accounts, contact information, email addresses, names, and any other personal information posted in the title, summary, notes, tags, work body, or comment text will <strong>not</strong> be automatically removed. Comments posted by other users will also <strong>not</strong> be affected by Orphaning. If you want information removed from these places, you should edit or delete it prior to Orphaning. <strong>Once you Orphan the work(s), you will no longer be able to delete information in these places yourself</strong>.
+      orphaning_works_message_html: 'Orphaning will <strong>permanently</strong> remove your username and/or pseud from the bylines of: the following work(s), their chapters, associated series, and any comments you may have left on them while logged into this account.'
   preferences:
     index:
       allow_collection_invitation: Allow others to invite my works to collections.
@@ -780,6 +852,25 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+  subscriptions:
+    index:
+      button_html: Unsubscribe from %{name}
+      byline: by %{creators}
+      heading:
+        landmark:
+          list: List of Subscriptions
+      navigation:
+        all: All Subscriptions
+        series: Series Subscriptions
+        user: User Subscriptions
+        work: Work Subscriptions
+      page_heading:
+        all: My Subscriptions
+        series: My Series Subscriptions
+        users: My User Subscriptions
+        works: My Work Subscriptions
+      series: "(Series)"
+      work: "(Work)"
   tag_wranglers:
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
@@ -874,6 +965,11 @@ en:
       submit: Save
     edit:
       browser_title: Edit Profile
+    header_navigation:
+      admin_user: User Administration
+      edit_multiple: Edit Works
+      invitations: Invitations
+      new_work: Post New
     registrations:
       new:
         cancel: Cancel
