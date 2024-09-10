@@ -64,7 +64,7 @@ module TagSetsHelper
   end
 
   def nomination_tag_information(nominated_tag)
-    tag_object = nominated_tag.type.gsub(/Nomination/, '').constantize.find_by_name(nominated_tag.tagname)
+    tag_object = Tag.find_by(name: nominated_tag.tagname)
     status = "nonexistent"
     tooltip = ts("This tag has never been used before. Check the spelling!")
     title = ts("nonexistent tag")

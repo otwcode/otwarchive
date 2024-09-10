@@ -37,10 +37,13 @@ Feature: Comment Moderation
       And I set up the draft "Moderation"
       And I check "Enable comment moderation"
       And I post the work without preview
+      And I post a chapter for the work "Moderation"
     Then comment moderation should be enabled on "Moderation"
     When I am logged in as "commenter"
-      And I view the work "Moderation"
-    Then I should see "has chosen to moderate comments"
+      And I go to the work "Moderation" in full mode
+    Then I should see "This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator."
+    When I go to the 2nd chapter of the work "Moderation"
+    Then I should see "This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator."
 
   Scenario: Post a moderated comment
     Given the moderated work "Moderation" by "author"

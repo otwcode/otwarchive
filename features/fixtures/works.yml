@@ -11,7 +11,7 @@ first:
 second:
   id: 2
   posted: true
-  title: second work
+  title: second work (2 of 6)
   word_count: 1000
   title_to_sort_on: second work
   language: english
