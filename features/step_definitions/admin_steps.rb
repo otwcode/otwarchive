@@ -277,7 +277,7 @@ When /^I make a multi-question FAQ post$/ do
 end
 
 When "{int} Archive FAQ(s) exist(s)" do |n|
-  n.times do |i|
+  (1..n).each do |i|
     FactoryBot.create(:archive_faq, id: i, title: "The #{i} FAQ")
   end
 end
