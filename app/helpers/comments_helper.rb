@@ -32,6 +32,24 @@ module CommentsHelper
     end
   end
 
+  def comment_link_with_commentable_name(comment)
+    ultimate_parent = comment.ultimate_parent
+    commentable_name = ultimate_parent&.commentable_name
+    text = case ultimate_parent.class.to_s
+           when "Work"
+             t("comments_helper.comment_link_with_commentable_name.on_work_html", title: commentable_name)
+           when "AdminPost"
+             t("comments_helper.comment_link_with_commentable_name.on_admin_post_html", title: commentable_name)
+           else
+             if ultimate_parent.is_a?(Tag)
+               t("comments_helper.comment_link_with_commentable_name.on_tag_html", name: commentable_name)
+             else
+               t("comments_helper.comment_link_with_commentable_name.on_unknown")
+             end
+           end
+    link_to(text, comment_path(comment))
+  end
+
   # return pseudname or name for comment
   def get_commenter_pseud_or_name(comment)
     if comment.pseud_id
@@ -194,14 +212,6 @@ module CommentsHelper
 
   #### HELPERS FOR REPLYING TO COMMENTS #####
 
-  def add_cancel_comment_reply_link(comment)
-    if params[:add_comment_reply_id] && params[:add_comment_reply_id] == comment.id.to_s
-      cancel_comment_reply_link(comment)
-    else
-      add_comment_reply_link(comment)
-    end
-  end
-
   # return link to add new reply to a comment
   def add_comment_reply_link(comment)
     commentable_id = comment.ultimate_parent.is_a?(Tag) ?
@@ -232,14 +242,17 @@ module CommentsHelper
                           comment.parent.id
     link_to(
       ts("Cancel"),
-      url_for(controller: :comments,
-              action: :cancel_comment_reply,
-              id: comment.id,
-              comment_id: params[:comment_id],
-              commentable_id => commentable_value,
-              view_full_work: params[:view_full_work],
-              page: params[:page]),
-      remote: true)
+      url_for(
+        controller: :comments,
+        action: :cancel_comment_reply,
+        id: comment.id,
+        comment_id: params[:comment_id],
+        commentable_id => commentable_value,
+        view_full_work: params[:view_full_work],
+        page: params[:page]
+      ),
+      remote: true
+    )
   end
 
   # canceling an edit
@@ -375,5 +388,9 @@ module CommentsHelper
   def comments_are_moderated(commentable)
     parent = find_parent(commentable)
     parent.respond_to?(:moderated_commenting_enabled) && parent.moderated_commenting_enabled?
+  end
+
+  def focused_on_comment(commentable)
+    params[:add_comment_reply_id] && params[:add_comment_reply_id] == commentable.id.to_s
   end
 end

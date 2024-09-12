@@ -64,22 +64,20 @@ nl:
       guest:
         one: een bezoeker
         other: "%{count} bezoekers"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
           other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-        single_guest:
-          giver_list: een bezoeker
-          left_kudos: Je hebt kudos gekregen van %{giver_list} voor %{commentable_link}.
-      subject: "[%{app_name}] Kudos!"
-      text:
-        left_kudos:
+        text:
           one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_title}
             (%{commentable_url}).
           other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_title}
             (%{commentable_url}).
-        single_guest: Je hebt kudos gekregen van een bezoeker voor %{commentable_title}
-          (%{commentable_url}).
+      single_guest:
+        giver: een bezoeker
+        html: Je hebt kudos gekregen van %{giver} voor %{commentable_link}.
+        text: Je hebt kudos gekregen van een bezoeker voor %{commentable_title} (%{commentable_url}).
+      subject: "[%{app_name}] Kudos!"
   mailer:
     general:
       closing:
@@ -108,9 +106,9 @@ nl:
               via %{support_url}.
         sent_at: Verstuurd om %{sent_at}.
       greeting:
-        formal: Beste %{name},
+        formal_html: Beste %{name},
         informal:
-          addressed: Hallo, %{name}!
+          addressed_html: Hallo, %{name}!
           unaddressed: Hallo!
         introductory: Hallo van Archive of Our Own – AO3 (Ons Eigen Archief)!
       metadata_label_indicator: ":"

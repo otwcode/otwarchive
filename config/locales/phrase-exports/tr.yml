@@ -64,22 +64,21 @@ tr:
       guest:
         one: bir ziyaretçi
         other: "%{count} ziyaretçi"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           one: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
           other: "%{givers_list}, %{commentable_link} eserinize kalp bıraktı."
-        single_guest:
-          giver_list: Bir ziyaretçi
-          left_kudos: "%{giver_list}, %{commentable_link} eserinize kalp bıraktı."
-      subject: "[%{app_name}] Kalp aldınız!"
-      text:
-        left_kudos:
+        text:
           one: "%{givers_list}, %{commentable_title} (%{commentable_url}) eserinize
             kalp bıraktı."
           other: "%{givers_list}, %{commentable_title} (%{commentable_url}) eserinize
             kalp bıraktı."
-        single_guest: Bir ziyaretçi %{commentable_title} (%{commentable_url}) eserinize
-          kalp bıraktı.
+      single_guest:
+        giver: Bir ziyaretçi
+        html: "%{giver}, %{commentable_link} eserinize kalp bıraktı."
+        text: Bir ziyaretçi %{commentable_title} (%{commentable_url}) eserinize kalp
+          bıraktı.
+      subject: "[%{app_name}] Kalp aldınız!"
   mailer:
     general:
       closing:
@@ -108,9 +107,9 @@ tr:
               adresinden Teknik Destek ile iletişime geçin.
         sent_at: "%{sent_at} tarihinde gönderilmiştir."
       greeting:
-        formal: Sayın %{name},
+        formal_html: Sayın %{name},
         informal:
-          addressed: Merhaba %{name}!
+          addressed_html: Merhaba %{name}!
           unaddressed: Merhaba!
         introductory: Archive of Our Own – AO3 (Kendimize Ait Bir Arşiv)ten selamlar!
       metadata_label_indicator: ":"

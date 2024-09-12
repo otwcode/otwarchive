@@ -48,19 +48,17 @@ id:
     batch_kudo_notification:
       guest:
         other: "%{count} tamu"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           other: "%{givers_list} telah memberikan kudos untuk %{commentable_link}."
-        single_guest:
-          giver_list: Seorang tamu
-          left_kudos: "%{giver_list} telah memberikan kudos untuk %{commentable_link}."
-      subject: "[%{app_name}] Anda telah menerima kudos!"
-      text:
-        left_kudos:
+        text:
           other: "%{givers_list} telah memberikan kudos untuk %{commentable_title}
             (%{commentable_url})."
-        single_guest: Seorang tamu telah memberikan kudos untuk %{commentable_title}
-          (%{commentable_url}).
+      single_guest:
+        giver: Seorang tamu
+        html: "%{giver} telah memberikan kudos untuk %{commentable_link}."
+        text: Seorang tamu telah memberikan kudos untuk %{commentable_title} (%{commentable_url}).
+      subject: "[%{app_name}] Anda telah menerima kudos!"
   mailer:
     general:
       closing:
@@ -88,9 +86,9 @@ id:
               Bantuan di %{support_url}.
         sent_at: Dikirimkan pada %{sent_at}.
       greeting:
-        formal: Halo %{name},
+        formal_html: Halo %{name},
         informal:
-          addressed: Halo %{name}!
+          addressed_html: Halo %{name}!
           unaddressed: Halo!
         introductory: Halo dari Archive of Our Own – AO3 (Arsip Milik Kita)!
       metadata_label_indicator: ":"

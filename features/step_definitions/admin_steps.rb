@@ -218,6 +218,11 @@ Given "the admin {string} is unlocked" do |login|
   admin.unlock_access!
 end
 
+Given "there is/are {int} user creation(s) per page" do |amount|
+  allow(Work).to receive(:per_page).and_return(amount)
+  allow(Comment).to receive(:per_page).and_return(amount)
+end
+
 Given "an archive FAQ category with the title {string} exists" do |title|
   FactoryBot.create(:archive_faq, title: title)
 end

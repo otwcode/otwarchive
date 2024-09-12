@@ -48,17 +48,16 @@ ja:
     batch_kudo_notification:
       guest:
         other: ゲスト%{count}名
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           other: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
-        single_guest:
-          giver_list: ゲスト1名
-          left_kudos: "%{giver_list}があなたの作品 %{commentable_link}にいいねを送りました。"
-      subject: "[%{app_name}] あなたにいいねが届きました！"
-      text:
-        left_kudos:
+        text:
           other: "%{givers_list} があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。"
-        single_guest: ゲスト1名があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。
+      single_guest:
+        giver: ゲスト1名
+        html: "%{giver}があなたの作品 %{commentable_link}にいいねを送りました。"
+        text: ゲスト1名があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。
+      subject: "[%{app_name}] あなたにいいねが届きました！"
   mailer:
     general:
       closing:
@@ -83,9 +82,9 @@ ja:
             text: 間違ってこのメッセージを受けた場合はユーザーサポート（%{support_url}）までご連絡ください。
         sent_at: "%{sent_at}に送信されました。"
       greeting:
-        formal: "%{name}さん、"
+        formal_html: "%{name}さん、"
         informal:
-          addressed: こんにちは、%{name}さん！
+          addressed_html: こんにちは、%{name}さん！
           unaddressed: こんにちは！
         introductory: みんなのアーカイブ（AO3）から、こんにちは！
       metadata_label_indicator: "："

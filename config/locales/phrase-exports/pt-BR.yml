@@ -492,19 +492,18 @@ pt-BR:
       guest:
         one: 1 visitante
         other: "%{count} visitantes"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           one: "%{givers_list} deixou kudos em %{commentable_link}."
           other: "%{givers_list} deixaram kudos em %{commentable_link}."
-        single_guest:
-          giver_list: 1 visitante
-          left_kudos: "%{giver_list} deixou kudos em %{commentable_link}."
-      subject: "[%{app_name}] Kudos pra você!"
-      text:
-        left_kudos:
+        text:
           one: "%{givers_list} deixou kudos em %{commentable_title} (%{commentable_url})."
           other: "%{givers_list} deixaram kudos em %{commentable_title} (%{commentable_url})."
-        single_guest: 1 visitante deixou kudos em %{commentable_title} (%{commentable_url}).
+      single_guest:
+        giver: 1 visitante
+        html: "%{giver} deixou kudos em %{commentable_link}."
+        text: 1 visitante deixou kudos em %{commentable_title} (%{commentable_url}).
+      subject: "[%{app_name}] Kudos pra você!"
   layouts:
     proxy_notice:
       button: Desabilitar aviso
@@ -541,11 +540,11 @@ pt-BR:
               com a nossa equipe de Suporte: %{support_url}.'
         sent_at: Enviado %{sent_at}.
       greeting:
-        formal: Olá, %{name},
+        formal_html: Olá, %{name},
         informal:
-          addressed: Oi, %{name}!
+          addressed_html: Oi, %{name}!
           unaddressed: Oi!
-        introductory: Olá! Aqui é o Archive of Our Own – AO3 (Nosso Próprio Arquivo).
+        introductory: Olá! Aqui é o Archive of Our Own – AO3 (Um Arquivo Todo Nosso).
       metadata_label_indicator: ":"
       signature:
         abuse_team: Equipe de Diretrizes e Abuso do AO3
@@ -867,7 +866,7 @@ pt-BR:
         de e-mail de @transformativeworks.org à sua lista de contatos e verifique
         as suas pastas de spam para encontrar nossas respostas.
       introduction:
-        ao3_name: Archive of Our Own – AO3 (Nosso Próprio Arquivo)
+        ao3_name: Archive of Our Own – AO3 (Um Arquivo Todo Nosso)
         html: Você está recebendo este e-mail porque tinha obras em um arquivo de
           obras de fãs que foi importado pelo %{open_doors_name_link} ao %{app_link}.
           Como este endereço de e-mail está conectado a um registro do arquivo importado,
@@ -876,7 +875,7 @@ pt-BR:
         open_doors_name: Open Doors (Portas Abertas)
         text: 'Você está recebendo este e-mail porque tinha obras em um arquivo de
           obras de fãs que foi importado pelo Open Doors (Portas Abertas) (%{open_doors_url})
-          ao %Archive of Our Own – AO3 (Nosso Próprio Arquivo): %{app_url}. Como este
+          ao %Archive of Our Own – AO3 (Um Arquivo Todo Nosso): %{app_url}. Como este
           endereço de e-mail está conectado a um registro do arquivo importado, as
           obras de fãs associadas (listadas abaixo) foram adicionadas à sua conta
           do AO3.'
