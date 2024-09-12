@@ -13,10 +13,10 @@ en:
         success: All creations by user %{login} have been deleted.
   archive_faqs:
     create:
-      success: ArchiveFaq was successfully created.
+      success: Archive FAQ was successfully created.
     default_locale_only: Sorry, this action is only available for English FAQs.
     update:
-      success: ArchiveFaq was successfully updated.
+      success: Archive FAQ was successfully updated.
     update_positions:
       success: Archive FAQs order was successfully updated.
   blocked:

@@ -17,7 +17,7 @@ Feature: Admin Actions to Post FAQs
       And I fill in "Category name*" with "New subsection"
       And I fill in "Anchor name*" with "whatisao3"
       And I press "Post"
-    Then I should see "ArchiveFaq was successfully created"
+    Then I should see "Archive FAQ was successfully created"
     When I go to the archive_faqs page
       And I follow "New subsection"
     Then I should see "Some text, that is sufficiently long to pass validation" within ".userstuff"
@@ -38,22 +38,22 @@ Feature: Admin Actions to Post FAQs
       | superadmin |
       | docs       |
 
-    @javascript
-    Scenario Outline: Authorized admin deletes a FAQ question
-      Given 1 Archive FAQ with 1 question exists
-        And I am logged in as a "<role>" admin
-        And I go to the archive_faqs page
-        And I follow "Edit"
-        And I follow "Remove Question"
-        And I press "Post"
-      Then I should see "ArchiveFaq was successfully updated."
-        And I should see "We're sorry, there are currently no entries in this category."
+  @javascript
+  Scenario Outline: Authorized admin deletes a FAQ question
+    Given 1 Archive FAQ with 1 question exists
+      And I am logged in as a "<role>" admin
+      And I go to the archive_faqs page
+      And I follow "Edit"
+      And I follow "Remove Question"
+      And I press "Post"
+    Then I should see "Archive FAQ was successfully updated."
+      And I should see "We're sorry, there are currently no entries in this category."
 
-      Examples:
-        | role       |
-        | support    |
-        | superadmin |
-        | docs       |
+    Examples:
+      | role       |
+      | support    |
+      | superadmin |
+      | docs       |
 
   Scenario: Post a translated FAQ for a locale, then change the locale's code.
     Given basic languages
@@ -67,7 +67,7 @@ Feature: Admin Actions to Post FAQs
       And I fill in "Category name*" with "New subsection"
       And I fill in "Anchor name*" with "whatisao3"
       And I press "Post"
-    Then I should see "ArchiveFaq was successfully created"
+    Then I should see "Archive FAQ was successfully created"
 
     # Translate FAQ to "de"
     When I am logged in as a "translation" admin
@@ -81,7 +81,7 @@ Feature: Admin Actions to Post FAQs
       And I fill in "Category name*" with "Neuer Abschnitt"
       And I check "Question translated"
       And I press "Post"
-    Then I should see "ArchiveFaq was successfully updated."
+    Then I should see "Archive FAQ was successfully updated."
       And I should not see "New subsection"
       And I should see "Neuer Abschnitt"
       And I should see "Was ist AO3?"

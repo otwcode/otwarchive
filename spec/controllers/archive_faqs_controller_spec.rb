@@ -241,7 +241,7 @@ describe ArchiveFaqsController do
         expect { faq.reload }
           .to change { faq.title }
       end
-      it_redirects_to_with_notice(faq, "ArchiveFaq was successfully updated.")
+      it_redirects_to_with_notice(faq, "Archive FAQ was successfully updated.")
     end
 
     context "for the default locale" do
@@ -256,8 +256,8 @@ describe ArchiveFaqsController do
   end
 
   describe "GET #edit" do
-    let(:faq) { create(:archive_faq) }
     subject { get :edit, params: { id: faq, language_id: locale } }
+    let(:faq) { create(:archive_faq) }
     let(:success) do
       expect(response).to render_template(:edit)
     end
@@ -294,7 +294,7 @@ describe ArchiveFaqsController do
     subject { post :create, params: { archive_faq: attributes_for(:archive_faq), language_id: locale } }
     let(:success) do
       expect(ArchiveFaq.count).to eq(1)
-      it_redirects_to_with_notice(assigns[:archive_faq], "ArchiveFaq was successfully created.")
+      it_redirects_to_with_notice(assigns[:archive_faq], "Archive FAQ was successfully created.")
     end
 
     context "for the default locale" do
@@ -326,10 +326,10 @@ describe ArchiveFaqsController do
   end
 
   describe "POST #update_positions" do
+    subject { post :update_positions, params: { archive_faqs: [3, 1, 2], language_id: locale } }
     let!(:faq1) { create(:archive_faq, position: 1) }
     let!(:faq2) { create(:archive_faq, position: 2) }
     let!(:faq3) { create(:archive_faq, position: 3) }
-    subject { post :update_positions, params: { archive_faqs: [3, 1, 2], language_id: locale } }
     let(:success) do
       expect(faq1.reload.position).to eq(3)
       expect(faq2.reload.position).to eq(1)
@@ -349,8 +349,8 @@ describe ArchiveFaqsController do
   end
 
   describe "GET #confirm_delete" do
-    let(:faq) { create(:archive_faq) }
     subject { get :confirm_delete, params: { id: faq, language_id: locale } }
+    let(:faq) { create(:archive_faq) }
     let(:success) do
       expect(response).to render_template(:confirm_delete)
     end
@@ -367,8 +367,8 @@ describe ArchiveFaqsController do
   end
 
   describe "DELETE #destroy" do
-    let(:faq) { create(:archive_faq) }
     subject { delete :destroy, params: { id: faq, language_id: locale } }
+    let(:faq) { create(:archive_faq) }
     let(:success) do
       expect { faq.reload }
         .to raise_exception(ActiveRecord::RecordNotFound)
