@@ -657,7 +657,39 @@ describe HtmlCleaner do
       expect(doc.xpath("./details/p").size).to eq(2)
     end
 
-    ["ol", "ul"].each do |tag|
+    it "allows details to have a 'name' attribute" do
+      html = <<~HTML
+        <details name='test'>
+          <summary>Automated Status: Operational</summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+      HTML
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+      expect(doc.xpath("./details[@name]").size).to eq(1)
+    end
+
+    it "allows the value of the 'name' attribute to be repeated" do
+      html = <<~HTML
+        <details name='test'>
+          <summary>Automated Status: Operational</summary>
+          <p>Velocity: 12m/s</p>
+          <p>Direction: North</p>
+        </details>
+        <details name='test'>
+          <summary>Automated Status: Standby</summary>
+          <p>Velocity: 10m/s</p>
+          <p>Direction: South</p>
+        </details>
+      HTML
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::HTML.fragment(result)
+      expect(doc.xpath("./details[@name]").size).to eq(2)
+    end
+      
+
+    %w[ol ul].each do |tag|
       it "should not convert linebreaks inside #{tag} lists" do
         html = """
         <#{tag}>
