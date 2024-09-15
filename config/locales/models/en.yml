@@ -169,8 +169,8 @@ en:
         subscription:
           attributes:
             subscribable:
-              format: "%{message}"
               blank: The item you tried to subscribe to does not exist. It may have been deleted.
+              format: "%{message}"
         user:
           attributes:
             login:
