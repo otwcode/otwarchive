@@ -166,6 +166,11 @@ en:
             base:
               format: "%{message}"
               site_parent: You can't use %{title} as a parent unless replacing the default archive skin.
+        subscription:
+          attributes:
+            subscribable:
+              format: "%{message}"
+              blank: The item you tried to subscribe to does not exist. It may have been deleted.
         user:
           attributes:
             login:
