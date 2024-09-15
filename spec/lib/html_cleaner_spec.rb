@@ -685,7 +685,7 @@ describe HtmlCleaner do
       HTML
       result = add_paragraphs_to_text(html)
       doc = Nokogiri::HTML.fragment(result)
-      expect(doc.xpath("./details[@name]").size).to eq(2)
+      expect(doc.xpath("./details[@name='test']").size).to eq(2)
     end
       
 
