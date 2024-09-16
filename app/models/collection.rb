@@ -335,7 +335,7 @@ class Collection < ApplicationRecord
   end
 
   def get_maintainers_list
-    return self.maintainers.collect(&:user).flatten.uniq
+    @maintainers_list = self.maintainers.collect(&:user).flatten.uniq
   end
 
   def notify_maintainers(subject, message)
