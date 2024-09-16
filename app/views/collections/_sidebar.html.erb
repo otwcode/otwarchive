@@ -30,13 +30,7 @@
 
     <li><%= span_if_current t(".bookmarks", count: SearchCounts.bookmarkable_count_for_collection(@collection)), collection_bookmarks_path(@collection) %></li>
 
-    <li>
-      <% if controller.controller_name == 'collections' && controller.action_name == 'show' %>
-      <%= link_to t(".random_items"), url: collection_path(@collection, show_random: true), method: :get, remote: false %>
-      <% else %>
-      <%= link_to t(".random_items"), collection_path(@collection, show_random: true) %>
-      <% end %>
-    </li>
+    <li><%= span_if_current t(".random_items"), collection_path(@collection, show_random: true) %></li>
     <li><%= span_if_current t(".people"), collection_people_path(@collection) %></li>
     <li><%= span_if_current t(".tags"), collection_tags_path(@collection) %></li>
   </ul>
