@@ -1115,3 +1115,7 @@ en:
         unrevealed: A translation of a work in an unrevealed collection
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+  wrangling_guidelines:
+    show:
+      edit: Edit
+      heading: Wrangling Guidelines
