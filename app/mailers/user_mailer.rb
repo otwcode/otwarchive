@@ -178,32 +178,30 @@ class UserMailer < ApplicationMailer
     end
   end
 
-  # TODO: This may be sent to multiple users simultaneously. We need to ensure
-  # each user gets the email for their preferred locale.
-  def collection_notification(collection_id, subject, message)
+  def collection_notification(collection_id, subject, message, email)
     @message = message
     @collection = Collection.find(collection_id)
     mail(
-      to: @collection.get_maintainers_email,
+      to: email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
     )
   end
 
-  def invalid_signup_notification(collection_id, invalid_signup_ids)
+  def invalid_signup_notification(collection_id, invalid_signup_ids, email)
     @collection = Collection.find(collection_id)
     @invalid_signups = invalid_signup_ids
     mail(
-      to: @collection.get_maintainers_email,
+      to: email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid sign-ups found"
     )
   end
 
   # This is sent at the end of matching, i.e., after assignments are generated.
   # It is also sent when assignments are regenerated.
-  def potential_match_generation_notification(collection_id)
+  def potential_match_generation_notification(collection_id, email)
     @collection = Collection.find(collection_id)
     mail(
-      to: @collection.get_maintainers_email,
+      to: email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential assignment generation complete"
     )
   end

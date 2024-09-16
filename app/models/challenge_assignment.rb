@@ -374,7 +374,10 @@ class ChallengeAssignment < ApplicationRecord
       end
     end
     REDIS_GENERAL.del(progress_key(collection))
-    UserMailer.potential_match_generation_notification(collection.id).deliver_later
+    @maintainers = collection.get_maintainers_list
+    @maintainers.each do |i|
+      UserMailer.potential_match_generation_notification(collection.id, i.email).deliver_later
+    end 
   end
 
   # go through the request's potential matches in order from best to worst and try and assign

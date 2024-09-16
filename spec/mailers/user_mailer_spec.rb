@@ -933,7 +933,7 @@ describe UserMailer do
   end
 
   describe "potential_match_generation_notification" do
-    subject(:email) { UserMailer.potential_match_generation_notification(collection.id) }
+    subject(:email) { UserMailer.potential_match_generation_notification(collection.id, "test@example.com") }
 
     let(:collection) { create(:collection) }
 
@@ -966,7 +966,7 @@ describe UserMailer do
   end
 
   describe "invalid_signup_notification" do
-    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id]) }
+    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id], "test@example.com") }
 
     let(:collection) { create(:collection) }
     let(:signup) { create(:challenge_signup) }
@@ -998,7 +998,7 @@ describe UserMailer do
   end
 
   describe "collection_notification" do
-    subject(:email) { UserMailer.collection_notification(collection.id, subject_text, message_text) }
+    subject(:email) { UserMailer.collection_notification(collection.id, subject_text, message_text, "test@example.com") }
 
     let(:collection) { create(:collection) }
     let(:subject_text) { Faker::Hipster.sentence }
