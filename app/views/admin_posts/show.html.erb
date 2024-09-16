@@ -6,16 +6,20 @@
     <!--/descriptions-->
     <!--subnav-->
     <div class="navigation actions module" role="navigation">
-      <% if policy(@admin_post).can_post? %>
+      <% if policy(@admin_post).edit? || policy(@admin_post).destroy? || (logged_in_as_admin? && @admin_post.find_all_comments.unreviewed_only.exists?) %>
         <h4 class="landmark heading"><%= t(".navigation.admin.landmark") %></h4>
         <ul class="management actions">
-          <li><%= link_to t(".navigation.admin.edit"), edit_admin_post_path(@admin_post) %></li>
-          <li>
-            <%= link_to t(".navigation.admin.delete"),
-                  @admin_post,
-                  data: { confirm: t(".navigation.admin.confirm_delete") },
-                  method: :delete %>
-          </li>
+          <% if policy(@admin_post).edit? %>
+            <li><%= link_to t(".navigation.admin.edit"), edit_admin_post_path(@admin_post) %></li>
+          <% end %>
+          <% if policy(@admin_post).destroy? %>
+            <li>
+              <%= link_to t(".navigation.admin.delete"),
+                    @admin_post,
+                    data: { confirm: t(".navigation.admin.confirm_delete") },
+                    method: :delete %>
+            </li>
+          <% end %>
           <% if @admin_post.find_all_comments.unreviewed_only.exists? %>
             <li>
               <%= link_to t(".navigation.admin.unreviewed_comments", count: @admin_post.find_all_comments.unreviewed_only.count),

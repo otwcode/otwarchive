@@ -49,8 +49,6 @@ data:
   #     object_nl: "\n"
   #     array_nl: "\n"
 
-<% require "i18n/tasks/scanners/ast_matchers/rails_model_matcher.rb" %>
-
 # Find translate calls
 search:
   ## Paths or `Find.find` patterns to search in:
@@ -93,9 +91,13 @@ search:
   ## - RailsModelMatcher
   ##     Matches ActiveRecord translations like
   ##     User.human_attribute_name(:email) and User.model_name.human
+  ## - DefaultI18nSubjectMatcher
+  ##     Matches ActionMailer's default_i18n_subject method
   ##
   ## To implement your own, please see `I18n::Tasks::Scanners::AstMatchers::BaseMatcher`.
-  <% I18n::Tasks.add_ast_matcher('I18n::Tasks::Scanners::AstMatchers::RailsModelMatcher') %>
+  ast_matchers:
+    - 'I18n::Tasks::Scanners::AstMatchers::RailsModelMatcher'
+    - 'I18n::Tasks::Scanners::AstMatchers::DefaultI18nSubjectMatcher'
 
   ## Multiple scanners can be used. Their results are merged.
   ## The options specified above are passed down to each scanner. Per-scanner options can be specified as well.
@@ -121,9 +123,6 @@ ignore_missing:
   - no_email # should be admin.admin_invitations.create.no_email
   - sent # should be admin.admin_invitations.create.sent
   - user_not_found # should be admin.admin_invitations.find.user_not_found
-  # File: app/controllers/application_controller.rb
-  - ban_notice # should be application.check_user_status.ban_notice
-  - suspension_notice # should be application.check_user_status.suspension_notice
   # File: app/controllers/challenge_assignments_controller.rb
   - challenge_assignments.assignments_not_sent
   - challenge_assignments.assignments_sent

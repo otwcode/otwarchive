@@ -217,3 +217,23 @@ Feature: Display autocomplete for tags
     Then I should see "日月" in the autocomplete
       But I should not see "大小" in the autocomplete
 
+  @javascript
+  Scenario: Zero width space tag doesn't appear in the autocomplete for space
+    Given a canonical character "Gold"
+      And a zero width space tag exists
+      And I am logged in as a tag wrangler
+    When I go to the "Gold" tag edit page
+    Then I should see "This is the official name for the Character"
+    When I enter " " in the "tag_merger_string_autocomplete" autocomplete field
+    Then I should see "No suggestions found" in the autocomplete
+
+  @javascript
+  Scenario: Zero width space tag appears in the autocomplete for zero width space
+    Given a canonical character "Gold"
+      And a zero width space tag exists
+      And I am logged in as a tag wrangler
+    When I go to the "Gold" tag edit page
+    Then I should see "This is the official name for the Character"
+    # Zero width space tag
+    When I enter "​" in the "tag_merger_string_autocomplete" autocomplete field
+    Then I should not see "No suggestions found" in the autocomplete

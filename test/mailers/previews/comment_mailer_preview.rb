@@ -3,8 +3,8 @@ class CommentMailerPreview < ApplicationMailerPreview
   def comment_notification
     user = create(:user)
 
-    commenter = create(:user, login: "Accumulator")
-    commenter_pseud = create(:pseud, user: commenter, name: "Blueprint")
+    commenter = create(:user, :for_mailer_preview)
+    commenter_pseud = create(:pseud, user: commenter, name: "Custom pseud")
     comment = create(:comment, pseud: commenter_pseud)
     CommentMailer.comment_notification(user, comment)
   end
@@ -13,7 +13,7 @@ class CommentMailerPreview < ApplicationMailerPreview
   def comment_notification_official
     user = create(:user)
 
-    commenter = create(:official_user, login: "Centrifuge")
+    commenter = create(:official_user, :for_mailer_preview)
     comment = create(:comment, pseud: commenter.default_pseud)
     CommentMailer.comment_notification(user, comment)
   end
@@ -29,7 +29,7 @@ class CommentMailerPreview < ApplicationMailerPreview
   def comment_reply_notification
     comment = create(:comment)
 
-    replier = create(:user, login: "Defender")
+    replier = create(:user, :for_mailer_preview)
     reply = create(:comment, commentable: comment, pseud: replier.default_pseud)
     CommentMailer.comment_reply_notification(comment, reply)
   end
@@ -46,7 +46,7 @@ class CommentMailerPreview < ApplicationMailerPreview
 
   # Sent to a user when they make a reply to a comment and they want to be notified of their own comments
   def comment_reply_sent_notification
-    commenter = create(:user, login: "Exoskeleton")
+    commenter = create(:user, :for_mailer_preview)
 
     comment = create(:comment, pseud: commenter.default_pseud)
     reply = create(:comment, commentable: comment)
