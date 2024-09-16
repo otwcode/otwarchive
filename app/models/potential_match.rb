@@ -90,7 +90,7 @@ public
     # check for invalid signups
     PotentialMatch.clear_invalid_signups(collection)
     invalid_signup_ids = collection.signups.select {|s| !s.valid?}.collect(&:id)
-    unless invalid_signup_ids.empty?
+    if invalid_signup_ids.present?
       invalid_signup_ids.each {|sid| REDIS_GENERAL.sadd invalid_signup_key(collection), sid}
       @maintainers = collection.get_maintainers_list
       @maintainers.each do |i|
