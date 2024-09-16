@@ -334,12 +334,12 @@ class Collection < ApplicationRecord
     return self.challenge_type == "PromptMeme"
   end
 
-  def get_maintainers_list
+  def maintainers_list
     @maintainers_list = self.maintainers.collect(&:user).flatten.uniq
   end
 
   def notify_maintainers(subject, message)
-    @maintainers = self.get_maintainers_list
+    @maintainers = self.maintainers_list
     # loop through maintainers and send each a notice via email
     @maintainers.each do |i|
       UserMailer.collection_notification(self.id, subject, message, i.email).deliver_later

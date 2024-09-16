@@ -92,7 +92,7 @@ public
     invalid_signup_ids = collection.signups.select {|s| !s.valid?}.collect(&:id)
     if invalid_signup_ids.present?
       invalid_signup_ids.each {|sid| REDIS_GENERAL.sadd invalid_signup_key(collection), sid}
-      @maintainers = collection.get_maintainers_list
+      @maintainers = collection.maintainers_list
       @maintainers.each do |i|
         UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, i.email).deliver_later
       end

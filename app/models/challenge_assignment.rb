@@ -374,7 +374,7 @@ class ChallengeAssignment < ApplicationRecord
       end
     end
     REDIS_GENERAL.del(progress_key(collection))
-    @maintainers = collection.get_maintainers_list
+    @maintainers = collection.maintainers_list
     @maintainers.each do |i|
       UserMailer.potential_match_generation_notification(collection.id, i.email).deliver_later
     end 
