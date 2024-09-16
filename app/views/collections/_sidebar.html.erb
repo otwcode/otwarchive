@@ -1,5 +1,5 @@
 <div id="dashboard" class="region" role="navigation region">
-  <h3 class="landmark heading">Dashboard</h3>
+  <h3 class="landmark heading"><%= t(".landmark.dashboard") %></h3>
   <ul class="navigation actions">
     <li><%= span_if_current t(".dashboard"), @collection %></li>
     <li><%= span_if_current t(".profile"), collection_profile_path(@collection) %></li>
@@ -22,7 +22,7 @@
     <%= render partial: "challenge/#{challenge_class_name(@collection)}/challenge_sidebar" %>
   <% end %>
 
-  <h4 class="landmark heading">Contents</h4>
+  <h4 class="landmark heading"><%= t(".landmark.contents") %></h4>
   <ul class="navigation actions">
     <li><%= span_if_current t(".fandoms", count: SearchCounts.fandom_count_for_collection(@collection)), collection_fandoms_path(@collection) %></li>
 
@@ -32,9 +32,9 @@
 
     <li>
       <% if controller.controller_name == 'collections' && controller.action_name == 'show' %>
-      <%= link_to "Random Items", url: collection_path(@collection, show_random: true), method: :get, remote: false %>
+      <%= link_to t(".random_items"), url: collection_path(@collection, show_random: true), method: :get, remote: false %>
       <% else %>
-      <%= link_to "Random Items", collection_path(@collection, show_random: true) %>
+      <%= link_to t(".random_items"), collection_path(@collection, show_random: true) %>
       <% end %>
     </li>
     <li><%= span_if_current t(".people"), collection_people_path(@collection) %></li>
@@ -42,7 +42,7 @@
   </ul>
 
   <% if @collection.user_is_maintainer?(current_user) %>
-    <h4 class="landmark heading">Choices</h4>
+    <h4 class="landmark heading"><%= t(".landmark.choices") %></h4>
     <ul class="navigation actions">
       <li><%= span_if_current(t(".manage_items"), collection_items_path(@collection)) %></li>
       <% if @collection.user_is_owner?(current_user) %>

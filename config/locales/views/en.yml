@@ -472,10 +472,15 @@ en:
       dashboard: Dashboard
       fandoms: Fandoms (%{count})
       faq: FAQ
+      landmark:
+        choices: Choices
+        contents: Contents
+        dashboard: Dashboard
       manage_items: Manage Items
       parent_collection: Parent Collection
       people: People
       profile: Profile
+      random_items: Random Items
       rules: Rules
       subcollections: Subcollections (%{count})
       tags: Tags
