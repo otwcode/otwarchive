@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe TagsController do
   include LoginMacros
@@ -124,19 +124,19 @@ describe TagsController do
       @character3 = FactoryBot.create(:character, canonical: false)
       @character2 = FactoryBot.create(:character, canonical: false, merger: @character3)
       @work = FactoryBot.create(:work,
-                                 fandom_string: "#{@fandom1.name}",
-                                 character_string: "#{@character1.name},#{@character2.name}",
-                                 freeform_string: "#{@freeform1.name}")
+                                fandom_string: @fandom1.name.to_s,
+                                character_string: "#{@character1.name},#{@character2.name}",
+                                freeform_string: @freeform1.name.to_s)
     end
 
     it "should redirect to the wrangle action for that tag" do
-      expect(put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled' }).
-        to redirect_to wrangle_tag_path(id: @fandom1.name,
-                                        show: 'freeforms',
-                                        status: 'unwrangled',
-                                        page: 1,
-                                        sort_column: 'name',
-                                        sort_direction: 'ASC')
+      expect(put(:mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled" }))
+        .to redirect_to wrangle_tag_path(id: @fandom1.name,
+                                         show: "freeforms",
+                                         status: "unwrangled",
+                                         page: 1,
+                                         sort_column: "name",
+                                         sort_direction: "ASC")
     end
 
     context "when logged in as an admin with no role" do
@@ -145,7 +145,7 @@ describe TagsController do
       before { fake_login_admin(admin) }
 
       it "redirects with an error" do
-        put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
+        put :mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled", fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
@@ -157,7 +157,7 @@ describe TagsController do
         before { fake_login_admin(admin) }
 
         it "redirects with error" do
-          put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
+          put :mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled", fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
       end 
@@ -171,11 +171,11 @@ describe TagsController do
 
         context "with one canonical fandom in the fandom string and a selected freeform" do
           before do
-            put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
+            put :mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled", fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
           end
     
           it "updates the tags successfully" do
-            get :wrangle, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled' }
+            get :wrangle, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled" }
             expect(assigns(:tags)).not_to include(@freeform1)
     
             @freeform1.reload
@@ -187,7 +187,7 @@ describe TagsController do
 
     context "with one canonical and one noncanonical fandoms in the fandom string and a selected freeform" do
       before do
-        put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: "#{@fandom2.name},#{@fandom3.name}", selected_tags: [@freeform1.id] }
+        put :mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled", fandom_string: "#{@fandom2.name},#{@fandom3.name}", selected_tags: [@freeform1.id] }
       end
 
       it "updates the tags successfully" do
@@ -201,7 +201,7 @@ describe TagsController do
 
     context "with two canonical fandoms in the fandom string and a selected character" do
       before do
-        put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name},#{@fandom2.name}", selected_tags: [@character1.id] }
+        put :mass_update, params: { id: @fandom1.name, show: "characters", status: "unwrangled", fandom_string: "#{@fandom1.name},#{@fandom2.name}", selected_tags: [@character1.id] }
       end
 
       it "updates the tags successfully" do
@@ -215,7 +215,7 @@ describe TagsController do
 
     context "with a canonical fandom in the fandom string, a selected unwrangled character, and the same character to be made canonical" do
       before do
-        put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name}", selected_tags: [@character1.id], canonicals: [@character1.id] }
+        put :mass_update, params: { id: @fandom1.name, show: "characters", status: "unwrangled", fandom_string: @fandom1.name.to_s, selected_tags: [@character1.id], canonicals: [@character1.id] }
       end
 
       it "updates the tags successfully" do
@@ -229,7 +229,7 @@ describe TagsController do
 
     context "with a canonical fandom in the fandom string, a selected synonym character, and the same character to be made canonical" do
       before do
-        put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unfilterable', fandom_string: "#{@fandom2.name}", selected_tags: [@character2.id], canonicals: [@character2.id] }
+        put :mass_update, params: { id: @fandom1.name, show: "characters", status: "unfilterable", fandom_string: @fandom2.name.to_s, selected_tags: [@character2.id], canonicals: [@character2.id] }
       end
 
       it "updates the tags successfully" do
@@ -563,7 +563,7 @@ describe TagsController do
       end
 
       context "when the associated tag has an invalid type" do
-        # NOTE This will enter the associated tag into the freeform_string
+        # NOTE: This will enter the associated tag into the freeform_string
         # field, which is not displayed on the form. This still might come up
         # in the extremely rare case where a tag wrangler loads the form, a
         # different tag wrangler goes in and changes the type of the tag being
