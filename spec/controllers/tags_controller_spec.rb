@@ -348,7 +348,6 @@ describe TagsController do
             get :show, params: { id: @tag.name }
             expect(response).to have_http_status(:success)
           end
-
         end
       end
 
@@ -357,7 +356,6 @@ describe TagsController do
         it_redirects_to_with_error(tag_wranglings_path,
                                    "Please log in as admin")
       end
-
     end
   end
   
@@ -419,7 +417,6 @@ describe TagsController do
             get :edit, params: { id: @tag.name }
             expect(response).to have_http_status(:success)
           end
-
         end
       end
 
