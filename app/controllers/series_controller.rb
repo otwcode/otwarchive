@@ -31,7 +31,7 @@ class SeriesController < ApplicationController
 
     if params[:pseud_id]
       @pseud = @user.pseuds.find_by!(name: params[:pseud_id])
-      @page_subtitle = ts("by ") + @pseud.byline
+      @page_subtitle = ts("%{username} - Series", username: @pseud.byline)
       @series = @series.exclude_anonymous.for_pseud(@pseud)
     else
       @series = @series.exclude_anonymous.for_user(@user)
