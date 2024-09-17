@@ -5,7 +5,7 @@ class UnsortedTagsController < ApplicationController
   before_action :check_permission_to_wrangle
 
   def index
-    authorize :wrangling if logged_in_as_admin?
+    authorize :wrangling, :view_access? if logged_in_as_admin?
 
     @tags = UnsortedTag.page(params[:page])
     @counts = tag_counts_per_category
