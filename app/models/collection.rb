@@ -341,7 +341,7 @@ class Collection < ApplicationRecord
     # loop through maintainers and send each a notice via email
     self.maintainers_list.each do |user|
       I18n.with_locale(user.preference.locale.iso) do
-        UserMailer.collection_notification(self.id, t("user_mailer.collection_notification.assignments_sent.subject"), t("user_mailer.collection_notification.assignments_sent.complete"), user.email).deliver_later
+        UserMailer.collection_notification(self.id, I18n.t("user_mailer.collection_notification.assignments_sent.subject"), I18n.t("user_mailer.collection_notification.assignments_sent.complete"), user.email).deliver_later
       end
     end
   end
