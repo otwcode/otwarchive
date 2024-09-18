@@ -1,6 +1,35 @@
 Feature: Gift Exchange Notification Emails
   Make sure that gift exchange notification emails are formatted properly
 
+  Scenario: Assignment notification emails should be sent to two owners in their respective locales
+    Given I have created the tagless gift exchange "Holiday Swap"
+      And I open signups for "Holiday Swap"
+    
+    When I am logged in as "participant1"
+      And I start signing up for "Holiday Swap"
+      And I press "Submit"
+    Then I should see "Sign-up was successfully created."
+
+    When I am logged in as "participant2"
+      And I start signing up for "Holiday Swap"
+      And I press "Submit"
+    Then I should see "Sign-up was successfully created."
+
+    Given I have added a co-moderator "mod2" to collection "Holiday Swap"
+      And a locale with translated emails
+      And the user "mod1" enables translated emails
+    When I close signups for "Holiday Swap"
+      And I have generated matches for "Holiday Swap"
+      And I have sent assignments for "Holiday Swap"
+
+    Then 4 emails should be delivered
+      And "mod1" should receive 1 email
+      And the email to "mod1" should be translated
+      And "mod2" should receive 1 email
+      And the email to "mod2" should be non-translated
+      And "participant1" should receive 1 email
+      And "participant2" should receive 1 email
+
   Scenario: Assignment notifications with linebreaks.
     Given I have created the tagless gift exchange "Holiday Swap"
       And I open signups for "Holiday Swap"

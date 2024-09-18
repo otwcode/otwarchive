@@ -333,14 +333,16 @@ class Collection < ApplicationRecord
   end
 
   def maintainers_list
-    @maintainers_list = self.maintainers.collect(&:user).flatten.uniq
+    self.maintainers.collect(&:user).flatten.uniq
   end
 
   def notify_maintainers(subject, message)
-    @maintainers = self.maintainers_list
+    
     # loop through maintainers and send each a notice via email
-    @maintainers.each do |i|
-      UserMailer.collection_notification(self.id, subject, message, i.email).deliver_later
+    self.maintainers_list.each do |user|
+      I18n.with_locale(user.preference.locale.iso) do
+        UserMailer.collection_notification(self.id, I18n.t(subject, default: subject), I18n.t(message, default: message), user.email).deliver_later
+      end
     end
   end
 

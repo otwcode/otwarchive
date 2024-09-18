@@ -298,8 +298,8 @@ class ChallengeAssignment < ApplicationRecord
     collection.assignments.each do |assignment|
       assignment.send_out
     end
-    subject = I18n.t("user_mailer.collection_notification.assignments_sent.subject")
-    message = I18n.t("user_mailer.collection_notification.assignments_sent.complete")
+    subject = "user_mailer.collection_notification.assignments_sent.subject"
+    message = "user_mailer.collection_notification.assignments_sent.complete"
     collection.notify_maintainers(subject, message)
 
     # purge the potential matches! we don't want bazillions of them in our db
@@ -388,9 +388,10 @@ class ChallengeAssignment < ApplicationRecord
       end
     end
     REDIS_GENERAL.del(progress_key(collection))
-    @maintainers = collection.maintainers_list
-    @maintainers.each do |i|
-      UserMailer.potential_match_generation_notification(collection.id, i.email).deliver_later
+    collection.maintainers_list.each do |user|
+      I18n.with_locale(user.preference.locale.iso) do
+        UserMailer.potential_match_generation_notification(collection.id, user.email).deliver_later
+      end 
     end 
   end
 
