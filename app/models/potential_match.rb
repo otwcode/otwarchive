@@ -1,5 +1,4 @@
 class PotentialMatch < ApplicationRecord
-
   # We use "-1" to represent all the requested items matching
   ALL = -1
 
@@ -12,25 +11,22 @@ class PotentialMatch < ApplicationRecord
   belongs_to :offer_signup, class_name: "ChallengeSignup"
   belongs_to :request_signup, class_name: "ChallengeSignup"
 
-protected
-
+  
   def self.progress_key(collection)
-    CACHE_PROGRESS_KEY + "#{collection.id}"
+    CACHE_PROGRESS_KEY + collection.id.to_s
   end
 
   def self.signup_key(collection)
-    CACHE_SIGNUP_KEY + "#{collection.id}"
+    CACHE_SIGNUP_KEY + collection.id.to_s
   end
 
   def self.interrupt_key(collection)
-    CACHE_INTERRUPT_KEY + "#{collection.id}"
+    CACHE_INTERRUPT_KEY + collection.id.to_s
   end
 
   def self.invalid_signup_key(collection)
-    CACHE_INVALID_SIGNUP_KEY + "#{collection.id}"
+    CACHE_INVALID_SIGNUP_KEY + collection.id.to_s
   end
-
-public
 
   def self.clear!(collection)
     # rapidly delete all potential prompt matches and potential matches
@@ -89,9 +85,10 @@ public
 
     # check for invalid signups
     PotentialMatch.clear_invalid_signups(collection)
-    invalid_signup_ids = collection.signups.select {|s| !s.valid?}.collect(&:id)
+    invalid_signup_ids = collection.signups.select { |s| !s.valid? }
+      .collect(&:id)
     if invalid_signup_ids.present?
-      invalid_signup_ids.each {|sid| REDIS_GENERAL.sadd invalid_signup_key(collection), sid}
+      invalid_signup_ids.each { |sid| REDIS_GENERAL.sadd invalid_signup_key(collection), sid }
       @maintainers = collection.maintainers_list
       @maintainers.each do |i|
         UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, i.email).deliver_later
@@ -165,9 +162,9 @@ public
       # and now we look up any signups that have one of those tagsets in the opposite position -- ie,
       # if this signup is a request, we are looking for offers with the same tag; if it's an offer, we're
       # looking for requests with the same tag.
-      matching_signup_ids = (prompt_type == "request" ? Offer : Request).
-                            where("tag_set_id IN (?) OR optional_tag_set_id IN (?)", match_tagsets, match_tagsets).
-                            pluck(:challenge_signup_id).compact
+      matching_signup_ids = (prompt_type == "request" ? Offer : Request)
+        .where("tag_set_id IN (?) OR optional_tag_set_id IN (?)", match_tagsets, match_tagsets)
+        .pluck(:challenge_signup_id).compact
 
       # now add on "any" matches for the required types
       condition = case required_types.first.underscore
@@ -207,14 +204,14 @@ public
     # Get all the data
     settings = collection.challenge.potential_match_settings
     collection_tag_sets = Prompt.where(collection_id: collection.id).pluck(:tag_set_id, :optional_tag_set_id).flatten.compact
-    required_types = settings.required_types.map {|t| t.classify}
+    required_types = settings.required_types.map { |t| t.classify }
 
     # clear the existing potential matches for this signup in each direction
     signup.offer_potential_matches.destroy_all
     signup.request_potential_matches.destroy_all
 
     # We check the signup in both directions -- as a request signup and as an offer signup
-    %w(request offer).each do |prompt_type|
+    %w[request offer].each do |prompt_type|
       PotentialMatch.generate_for_signup(collection, signup, settings, collection_tag_sets, required_types, prompt_type)
     end
   end
@@ -266,12 +263,16 @@ public
     return cmp unless cmp == 0
 
     # if we're a match down to here just match on id
-    return self.id <=> other.id
+    self.id <=> other.id
   end
 
-protected
+  protected
+
   def compare_all(self_value, other_value)
-    self_value == ALL ? (other_value == ALL ? 0 : 1) : (other_value == ALL ? -1 : self_value <=> other_value)
+    if self_value == ALL
+      other_value == ALL ? 0 : 1
+    else
+      (other_value == ALL ? -1 : self_value <=> other_value)
+    end
   end
-
 end

@@ -678,11 +678,12 @@ describe UserMailer do
       end
 
       it "formats the date rightfully in French" do
-        I18n.locale = "fr"
-        travel_to "2022-03-14 13:27:09 +0000" do
-          expect(email).to have_html_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
-          expect(email).to have_text_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
-        end
+        I18n.with_locale("fr") do
+          travel_to "2022-03-14 13:27:09 +0000" do
+            expect(email).to have_html_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
+            expect(email).to have_text_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
+          end
+        end 
       end
     end
   end
