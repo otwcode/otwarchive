@@ -67,6 +67,7 @@ Feature: Work Drafts
       And the draft "draft to post"
     When I am on drafter's works page
     Then I should see "Drafts (1)"
+      And the page title should include "drafter - Drafts"
     When I follow "Drafts (1)"
     Then I should see "draft to post"
       And I should see "Post Draft" within "#main .own.work.blurb .actions"
