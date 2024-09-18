@@ -21,7 +21,7 @@ class SeriesController < ApplicationController
       redirect_to(root_path) and return
     end
     @user = User.find_by!(login: params[:user_id])
-    @page_subtitle = ts("%{username} - Series", username: @user.login)
+    @page_subtitle = t('users.page_subtitle.series_page', username: @user.login)
 
     @series = if current_user.nil?
                 Series.visible_to_all
@@ -31,7 +31,7 @@ class SeriesController < ApplicationController
 
     if params[:pseud_id]
       @pseud = @user.pseuds.find_by!(name: params[:pseud_id])
-      @page_subtitle = ts("%{username} - Series", username: @pseud.byline)
+      @page_subtitle = t('users.page_subtitle.series_page', username: params[:pseud_id])
       @series = @series.exclude_anonymous.for_pseud(@pseud)
     else
       @series = @series.exclude_anonymous.for_user(@user)
