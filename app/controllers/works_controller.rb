@@ -160,7 +160,7 @@ class WorksController < ApplicationController
       return
     end
     
-    @page_subtitle = t('users.page_subtitle.drafts_page', username: @user.login)
+    @page_subtitle = t(".page_title", username: @user.login)
 
     if params[:pseud_id]
       @pseud = @user.pseuds.find_by(name: params[:pseud_id])
