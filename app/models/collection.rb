@@ -207,7 +207,7 @@ class Collection < ApplicationRecord
   end
 
   # Change membership of collection(s) from a particular pseud to the orphan account
-  def self.orphan(pseuds, collections, default = true)
+  def self.orphan(pseuds, collections, default: true)
     pseuds.each do |pseud|
       collections.each do |collection|
         if pseud && collection && collection.owners.include?(pseud)
