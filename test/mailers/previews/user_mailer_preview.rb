@@ -34,10 +34,10 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.feedback(feedback.id)
   end
 
-  def claim_notification_registered
+  def claim_notification
     work = create(:work)
     creator_id = work.pseuds.first.user.id
-    UserMailer.claim_notification(creator_id, [work.id], true)
+    UserMailer.claim_notification(creator_id, [work.id])
   end
 
   private
