@@ -298,9 +298,7 @@ class ChallengeAssignment < ApplicationRecord
     collection.assignments.each do |assignment|
       assignment.send_out
     end
-    subject = "user_mailer.collection_notification.assignments_sent.subject"
-    message = "user_mailer.collection_notification.assignments_sent.complete"
-    collection.notify_maintainers(subject, message)
+    collection.notify_maintainers_challenge_sent
 
     # purge the potential matches! we don't want bazillions of them in our db
     PotentialMatch.clear!(collection)

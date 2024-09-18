@@ -336,12 +336,20 @@ class Collection < ApplicationRecord
     self.maintainers.collect(&:user).flatten.uniq
   end
 
-  def notify_maintainers(subject, message)
-    
+  def notify_maintainers_challenge_sent
     # loop through maintainers and send each a notice via email
     self.maintainers_list.each do |user|
       I18n.with_locale(user.preference.locale.iso) do
-        UserMailer.collection_notification(self.id, I18n.t(subject, default: subject), I18n.t(message, default: message), user.email).deliver_later
+        UserMailer.collection_notification(self.id, t("user_mailer.collection_notification.assignments_sent.subject"), t("user_mailer.collection_notification.assignments_sent.complete"), user.email).deliver_later
+      end
+    end
+  end
+
+  def notify_maintainers(subject, message)
+    # loop through maintainers and send each a notice via email
+    self.maintainers_list.each do |user|
+      I18n.with_locale(user.preference.locale.iso) do
+        UserMailer.collection_notification(self.id, subject, message, user.email).deliver_later
       end
     end
   end
