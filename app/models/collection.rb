@@ -64,29 +64,29 @@ class Collection < ApplicationRecord
 
   has_many :participants, through: :collection_participants, source: :pseud
   has_many :users, through: :participants, source: :user
-  has_many :invited, -> { where("collection_participants.participant_role = ?", CollectionParticipant::INVITED) }, through: :collection_participants, source: :pseud
-  has_many :owners, -> { where("collection_participants.participant_role = ?", CollectionParticipant::OWNER) }, through: :collection_participants, source: :pseud
-  has_many :moderators, -> { where("collection_participants.participant_role = ?", CollectionParticipant::MODERATOR) }, through: :collection_participants, source: :pseud
-  has_many :members, -> { where("collection_participants.participant_role = ?", CollectionParticipant::MEMBER) }, through: :collection_participants, source: :pseud
-  has_many :posting_participants, -> { where("collection_participants.participant_role in (?)", [CollectionParticipant::MEMBER, CollectionParticipant::MODERATOR, CollectionParticipant::OWNER]) }, through: :collection_participants, source: :pseud
+  has_many :invited, -> { where(collection_participants: { participant_role: CollectionParticipant::INVITED }) }, through: :collection_participants, source: :pseud
+  has_many :owners, -> { where(collection_participants: { participant_role: CollectionParticipant::OWNER }) }, through: :collection_participants, source: :pseud
+  has_many :moderators, -> { where(collection_participants: { participant_role: CollectionParticipant::MODERATOR }) }, through: :collection_participants, source: :pseud
+  has_many :members, -> { where(collection_participants: { participant_role: CollectionParticipant::MEMBER }) }, through: :collection_participants, source: :pseud
+  has_many :posting_participants, -> { where(collection_participants: { participant_role: [CollectionParticipant::MEMBER, CollectionParticipant::MODERATOR, CollectionParticipant::OWNER] }) }, through: :collection_participants, source: :pseud
 
   CHALLENGE_TYPE_OPTIONS = [
     ["", ""],
     [ts("Gift Exchange"), "GiftExchange"],
     [ts("Prompt Meme"), "PromptMeme"]
-  ]
+  ].freeze
 
   validate :must_have_owners
   def must_have_owners
     # we have to use collection participants because the association may not exist until after
     # the collection is saved
-    errors.add(:base, ts("Collection has no valid owners.")) if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select { |p| p.is_owner? }
+    errors.add(:base, ts("Collection has no valid owners.")) if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select(&:is_owner?)
       .empty?
   end
 
   validate :collection_depth
   def collection_depth
-    errors.add(:base, ts("Sorry, but %{name} is a subcollection, so it can't also be a parent collection.", name: parent.name)) if (self.parent && self.parent.parent) || (self.parent && !self.children.empty?) || (!self.children.empty? && !self.children.collect(&:children).flatten.empty?)
+    errors.add(:base, ts("Sorry, but %{name} is a subcollection, so it can't also be a parent collection.", name: parent.name)) if self.parent&.parent || (self.parent && !self.children.empty?) || (!self.children.empty? && !self.children.collect(&:children).flatten.empty?)
   end
 
   validate :parent_exists
@@ -154,12 +154,12 @@ class Collection < ApplicationRecord
                       message: "^Sorry, a collection can only have %{count} tags." }
 
   scope :top_level, -> { where(parent_id: nil) }
-  scope :closed, -> { joins(:collection_preference).where("collection_preferences.closed = ?", true) }
-  scope :not_closed, -> { joins(:collection_preference).where("collection_preferences.closed = ?", false) }
-  scope :moderated, -> { joins(:collection_preference).where("collection_preferences.moderated = ?", true) }
-  scope :unmoderated, -> { joins(:collection_preference).where("collection_preferences.moderated = ?", false) }
-  scope :unrevealed, -> { joins(:collection_preference).where("collection_preferences.unrevealed = ?", true) }
-  scope :anonymous, -> { joins(:collection_preference).where("collection_preferences.anonymous = ?", true) }
+  scope :closed, -> { joins(:collection_preference).where(collection_preferences: { closed: true }) }
+  scope :not_closed, -> { joins(:collection_preference).where(collection_preferences: { closed: false }) }
+  scope :moderated, -> { joins(:collection_preference).where(collection_preferences: { moderated: true }) }
+  scope :unmoderated, -> { joins(:collection_preference).where(collection_preferences: { moderated: false }) }
+  scope :unrevealed, -> { joins(:collection_preference).where(collection_preferences: { unrevealed: true }) }
+  scope :anonymous, -> { joins(:collection_preference).where(collection_preferences: { anonymous: true }) }
   scope :no_challenge, -> { where(challenge_type: nil) }
   scope :gift_exchange, -> { where(challenge_type: "GiftExchange") }
   scope :prompt_meme, -> { where(challenge_type: "PromptMeme") }
@@ -172,24 +172,25 @@ class Collection < ApplicationRecord
 
   # Get only collections with running challenges
   def self.signup_open(challenge_type)
-    if challenge_type == "PromptMeme"
+    case challenge_type
+    when "PromptMeme"
       not_closed.where(challenge_type: challenge_type)
         .joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").where("prompt_memes.signup_open = 1")
-        .where("prompt_memes.signups_close_at > ?", Time.now).order("prompt_memes.signups_close_at DESC")
-    elsif challenge_type == "GiftExchange"
+        .where("prompt_memes.signups_close_at > ?", Time.zone.now).order("prompt_memes.signups_close_at DESC")
+    when "GiftExchange"
       not_closed.where(challenge_type: challenge_type)
         .joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("gift_exchanges.signup_open = 1")
-        .where("gift_exchanges.signups_close_at > ?", Time.now).order("gift_exchanges.signups_close_at DESC")
+        .where("gift_exchanges.signups_close_at > ?", Time.zone.now).order("gift_exchanges.signups_close_at DESC")
     end
   end
 
   scope :with_name_like, lambda { |name|
-    where("collections.name LIKE ?", "%" + name + "%")
+    where("collections.name LIKE ?", "%#{name}%")
       .limit(10)
   }
 
   scope :with_title_like, lambda { |title|
-    where("collections.title LIKE ?", "%" + title + "%")
+    where("collections.title LIKE ?", "%#{title}%")
   }
 
   scope :with_item_count, lambda {
@@ -277,27 +278,27 @@ class Collection < ApplicationRecord
   end
 
   def user_is_owner?(user)
-    user && user != :false && !(user.pseuds & self.all_owners).empty?
+    user && user != false && !(user.pseuds & self.all_owners).empty?
   end
 
   def user_is_moderator?(user)
-    user && user != :false && !(user.pseuds & self.all_moderators).empty?
+    user && user != false && !(user.pseuds & self.all_moderators).empty?
   end
 
   def user_is_maintainer?(user)
-    user && user != :false && !(user.pseuds & (self.all_moderators + self.all_owners)).empty?
+    user && user != false && !(user.pseuds & (self.all_moderators + self.all_owners)).empty?
   end
 
   def user_is_participant?(user)
-    user && user != :false && !get_participating_pseuds_for_user(user).empty?
+    user && user != false && !get_participating_pseuds_for_user(user).empty?
   end
 
   def user_is_posting_participant?(user)
-    user && user != :false && !(user.pseuds & self.all_posting_participants).empty?
+    user && user != false && !(user.pseuds & self.all_posting_participants).empty?
   end
 
   def get_participating_pseuds_for_user(user)
-    (user && user != :false) ? user.pseuds & self.all_participants : []
+    (user && user != false) ? user.pseuds & self.all_participants : []
   end
 
   def get_participants_for_user(user)
@@ -375,7 +376,7 @@ class Collection < ApplicationRecord
   end
 
   def send_reveal_notifications
-    approved_collection_items.each { |collection_item| collection_item.notify_of_reveal }
+    approved_collection_items.each(&:notify_of_reveal)
   end
 
   def self.sorted_and_filtered(sort, filters, page)
@@ -392,17 +393,18 @@ class Collection < ApplicationRecord
                                                                  else
                                                                    (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open")
                                                                  end)).map { |result| Collection.id_from_autocomplete(result) }
-      query = query.where("collections.id in (?)", ids)
+      query = query.where(collections: { id: ids })
     elsif filters[:closed].present?
       query = (filters[:closed] == "true" ? query.closed : query.not_closed)
     end
     query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if filters[:moderated].present?
     if filters[:challenge_type].present?
-      if filters[:challenge_type] == "gift_exchange"
+      case filters[:challenge_type]
+      when "gift_exchange"
         query = query.gift_exchange
-      elsif filters[:challenge_type] == "prompt_meme"
+      when "prompt_meme"
         query = query.prompt_meme
-      elsif filters[:challenge_type] == "no_challenge"
+      when "no_challenge"
         query = query.no_challenge
       end
     end
