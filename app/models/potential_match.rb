@@ -85,7 +85,7 @@ class PotentialMatch < ApplicationRecord
 
     # check for invalid signups
     PotentialMatch.clear_invalid_signups(collection)
-    invalid_signup_ids = collection.signups.select { |s| !s.valid? }
+    invalid_signup_ids = collection.signups.reject(&:valid?)
       .collect(&:id)
     if invalid_signup_ids.present?
       invalid_signup_ids.each { |sid| REDIS_GENERAL.sadd invalid_signup_key(collection), sid }
@@ -134,7 +134,7 @@ class PotentialMatch < ApplicationRecord
         potential_match = other_signup.match(signup, settings)
       end
 
-      potential_match.save if potential_match && potential_match.valid?
+      potential_match.save if potential_match&.valid?
     end
   end
 
@@ -151,7 +151,7 @@ class PotentialMatch < ApplicationRecord
     signup_tagsets = signup.send(prompt_type.pluralize).pluck(:tag_set_id, :optional_tag_set_id).flatten.compact
 
     # get the ids of all the tags of the required types in the signup's tagsets
-    signup_tags = SetTagging.where(tag_set_id: signup_tagsets).joins(:tag).where("tags.type IN (?)", required_types).pluck(:tag_id)
+    signup_tags = SetTagging.where(tag_set_id: signup_tagsets).joins(:tag).where(tags: { type: required_types }).pluck(:tag_id)
 
     if signup_tags.empty?
       # a match is required by the settings but the user hasn't put any of the required tags in, meaning they are open to anything
@@ -205,7 +205,7 @@ class PotentialMatch < ApplicationRecord
     # Get all the data
     settings = collection.challenge.potential_match_settings
     collection_tag_sets = Prompt.where(collection_id: collection.id).pluck(:tag_set_id, :optional_tag_set_id).flatten.compact
-    required_types = settings.required_types.map { |t| t.classify }
+    required_types = settings.required_types.map(&:classify)
 
     # clear the existing potential matches for this signup in each direction
     signup.offer_potential_matches.destroy_all
@@ -255,13 +255,13 @@ class PotentialMatch < ApplicationRecord
 
     # start with seeing how many offers/requests match
     cmp = compare_all(self.num_prompts_matched, other.num_prompts_matched)
-    return cmp unless cmp == 0
+    return cmp unless cmp.zero?
 
     # compare the "quality" of the best prompt match
     # (i.e. the number of matching tags between the most closely-matching
     # request prompt/offer prompt pair)
     cmp = compare_all(max_tags_matched, other.max_tags_matched)
-    return cmp unless cmp == 0
+    return cmp unless cmp.zero?
 
     # if we're a match down to here just match on id
     self.id <=> other.id
