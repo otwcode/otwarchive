@@ -213,14 +213,8 @@ end
 # "I submit with the 2nd button", but in those cases you probably want to make sure that
 # the different forms have different button text anyway, and submit them using
 # When I press "Button Text"
-When /^I submit with the (\d+)(?:st|nd|rd|th) button$/ do |index| # rubocop:disable Cucumber/RegexStepName
+When /^I submit with the (\d+)(?:st|nd|rd|th) button$/ do |index|
   page.all("input[type='submit']")[(index.to_i - 1)].click
-end
-
-# This is for buttons generated with the button_to helper method. They use a different HTML element,
-# <button> instead of <input type="submit">.
-When /^I click the (\d+)(?:st|nd|rd|th) button$/ do |index| # rubocop:disable Cucumber/RegexStepName
-  page.all("button")[index.to_i - 1].click
 end
 
 # This will submit the first submit button inside a <p class="submit"> by default
