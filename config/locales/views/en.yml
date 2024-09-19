@@ -855,7 +855,7 @@ en:
   subscriptions:
     index:
       button_html: Unsubscribe from %{name}
-      byline: by %{creators}
+      byline_html: by %{creators}
       heading:
         landmark:
           list: List of Subscriptions
