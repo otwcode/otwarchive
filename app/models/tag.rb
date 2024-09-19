@@ -1189,15 +1189,15 @@ class Tag < ApplicationRecord
 
     TagNomination.where(tagname: name, parent_tagname: parent_names).update_all(parented: true)
 
-    if saved_change_to_name? && name_before_last_save.present?
-      # Act as if the tag with the previous name was deleted and mirror clear_tag_nominations
-      TagNomination.where(tagname: name_before_last_save).update_all(
-        canonical: false,
-        exists: false,
-        parented: false,
-        synonym: nil
-      )
-    end
+    return unless saved_change_to_name? && name_before_last_save.present?
+
+    # Act as if the tag with the previous name was deleted and mirror clear_tag_nominations
+    TagNomination.where(tagname: name_before_last_save).update_all(
+      canonical: false,
+      exists: false,
+      parented: false,
+      synonym: nil
+    )
   end
 
   before_destroy :clear_tag_nominations
