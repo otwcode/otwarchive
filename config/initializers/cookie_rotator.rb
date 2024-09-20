@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# As part of the Rails 7 upgrade, we need to convert legacy (SHA1) cookies to SHA256.
-# This can be removed after it has been in production for a little bit.
+# Due to the rolled back deploy, some users have SHA256 cookies.
+# Read them, but write back SHA1 cookies (writing is based on current setting of config.active_support.key_generator_hash_digest_class)
 # Ref: https://guides.rubyonrails.org/upgrading_ruby_on_rails.html#key-generator-digest-class-change-requires-a-cookie-rotator
 Rails.application.config.after_initialize do
   Rails.application.config.action_dispatch.cookies_rotations.tap do |cookies|
@@ -11,7 +11,7 @@ Rails.application.config.after_initialize do
     secret_key_base = Rails.application.secret_key_base
 
     key_generator = ActiveSupport::KeyGenerator.new(
-      secret_key_base, iterations: 1000, hash_digest_class: OpenSSL::Digest::SHA1
+      secret_key_base, iterations: 1000, hash_digest_class: OpenSSL::Digest::SHA256
     )
     key_len = ActiveSupport::MessageEncryptor.key_len
 
