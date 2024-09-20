@@ -5,6 +5,7 @@ RUN apt-get update             && \
     apt-get install -y            \
         calibre                   \
         default-mysql-client      \
+        libvips                   \
         shared-mime-info          \
         zip
 

@@ -23,7 +23,7 @@ class CollectionItemsController < ApplicationController
                             @collection_items.unreviewed_by_collection
                           end
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id])) && @user == current_user
-      @collection_items = CollectionItem.for_user(@user).includes(:collection)
+      @collection_items = CollectionItem.for_user(@user).includes(:collection).merge(Collection.with_attached_icon)
       @collection_items = case params[:status]
                           when "approved"
                             @collection_items.approved_by_both
