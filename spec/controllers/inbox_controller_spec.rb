@@ -20,8 +20,8 @@ describe InboxController do
     end
 
     context "when logged in as an admin" do
-      context "when admin does not have correct authorization" do
-        context "when admin has no role" do
+      context "when the admin does not have the correct authorization" do
+        context "when the admin has no role" do
           let(:admin) { create(:admin, roles: []) }
 
           before { fake_login_admin(admin) }
@@ -34,7 +34,7 @@ describe InboxController do
         end
   
         (Admin::VALID_ROLES - %w[superadmin policy_and_abuse]).each do |role|
-          context "when admin has #{role} role" do
+          context "when the admin has the #{role} role" do
             let(:admin) { create(:admin, roles: [role]) }
             
             before { fake_login_admin(admin) }
@@ -49,7 +49,7 @@ describe InboxController do
       end
 
       %w[superadmin policy_and_abuse].each do |role|
-        context "when admin is authorized with the #{role} role" do
+        context "when the admin is authorized with the #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
           
           before { fake_login_admin(admin) }
@@ -114,7 +114,7 @@ describe InboxController do
             let(:inbox_comment) { create(:inbox_comment, user: user) }
 
             it "excludes deleted comments" do
-              inbox_comment.feedback_comment.destroy
+              inbox_comment.feedback_comment.destroy!
               get :show, params: { user_id: user.login }
               expect(assigns(:inbox_total)).to eq(0)
               expect(assigns(:unread)).to eq(0)
@@ -187,7 +187,7 @@ describe InboxController do
         let(:inbox_comment) { create(:inbox_comment, user: user) }
 
         it "excludes deleted comments" do
-          inbox_comment.feedback_comment.destroy
+          inbox_comment.feedback_comment.destroy!
           get :show, params: { user_id: user.login }
           expect(assigns(:inbox_total)).to eq(0)
           expect(assigns(:unread)).to eq(0)
@@ -267,7 +267,7 @@ describe InboxController do
       end
     end
 
-    context "when logged in as the same user" do
+    context "when logged in as the comment receiver" do
       before { fake_login_known_user(user) }
 
       context "with no comments selected" do

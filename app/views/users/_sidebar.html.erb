@@ -35,7 +35,7 @@
   <li><%= span_if_current t(".pitch.collections", coll_number: @user.maintained_collections.count), user_collections_path(@user) %></li>
 </ul>
 
-<% if @user == current_user || policy(:dashboard).can_view_inbox_link? %>
+<% if @user == current_user || policy(:inbox_comment).show? %>
   <h4 class="landmark heading"><%= t(".landmark.catch") %></h4>
   <ul class="navigation actions">
     <li><%= span_if_current t(".catch.inbox", inbox_number: @user.unread_inbox_comments_count.to_s), user_inbox_path(@user) %></li>
