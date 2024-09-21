@@ -5,7 +5,7 @@ Feature: Rearrange Archive FAQs
   I want to be able to reorder the FAQs
 
   Scenario: Rearrange FAQs
-    Given I am logged in as an admin
+    Given I am logged in as a "superadmin" admin
       And 3 Archive FAQs exist
     When I go to the FAQ reorder page
       And I fill in "archive_faqs_1" with "3"

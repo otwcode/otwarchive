@@ -1,31 +1,33 @@
 <div class="admin">
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Archive FAQ") %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<%= render 'archive_faqs/filters' %>
-<%= render 'admin/admin_nav' %>
+<%= render "archive_faqs/filters" %>
+<%= render "admin/admin_nav" %>
 <ul class="navigation actions" role="navigation">
-  <% if Globalize.locale.to_s == "en" %>
-    <li><%= link_to ts("New FAQ Category"), new_archive_faq_path %></li>
-    <li><%= link_to ts("Reorder FAQs"), manage_archive_faqs_path(:language_id => params[:language_id]) %></li>
+  <% if Globalize.locale.to_s == "en" && policy(ArchiveFaq).full_access? %>
+    <li><%= link_to t(".new_faq_category"), new_archive_faq_path %></li>
+    <li><%= link_to t(".reorder_faqs"), manage_archive_faqs_path(language_id: params[:language_id]) %></li>
   <% end %>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark heading"><%= ts("Manage Archive FAQs") %></h3>
+<h3 class="landmark heading"><%= t(".manage_faqs") %></h3>
 <dl class="faq index group">
   <% @archive_faqs.each do |archive_faq| %>
     <dt><%= link_to archive_faq.title, archive_faq %></dt>
     <dd>
-      <p class="datetime"><%= ts("Created at %{date_created} and updated at %{date_updated}", :date_created => archive_faq.created_at, :date_updated => archive_faq.updated_at) %></p>
+      <p class="datetime"><%= t(".created_updated_date", date_created: l(archive_faq.created_at), date_updated: l(archive_faq.updated_at)) %></p>
       <ul class="navigation actions">
-        <li><%= link_to ts("Show"), archive_faq %></li>
-        <li><%= link_to ts("Edit"), edit_archive_faq_path(archive_faq) %></li>
-        <% if Globalize.locale.to_s == "en" %>
-          <li><%= link_to ts("Delete"), confirm_delete_archive_faq_path(archive_faq), data: {confirm: ts('Are you sure you want to delete this FAQ category?')} %></li>
+        <li><%= link_to t(".show"), archive_faq %></li>
+        <% if Globalize.locale.to_s != "en" || policy(ArchiveFaq).full_access? %>
+          <li><%= link_to t(".edit"), edit_archive_faq_path(archive_faq) %></li>
+        <% end %>
+        <% if Globalize.locale.to_s == "en" && policy(ArchiveFaq).full_access? %>
+          <li><%= link_to t(".delete"), confirm_delete_archive_faq_path(archive_faq), data: { confirm: t(".confirm_delete") } %></li>
         <% end %>
       </ul>
     </dd>

@@ -4,7 +4,7 @@ Feature: Admin Actions to re-order questions in a FAQ Category
   I want to be able to re-order the questions in a FAQ Category
 
 Scenario: Re-order the questions in a FAQ Category
-  Given I am logged in as an admin
+  Given I am logged in as a "superadmin" admin
     And I make a multi-question FAQ post
   When I go to the archive_faqs page
     And I follow "Standard FAQ Category"
