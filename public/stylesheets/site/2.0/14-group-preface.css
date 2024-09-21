@@ -35,11 +35,6 @@ div.preface .module {
 div.preface .title, div.preface .byline, div.preface .byline a {
   border: 0;
   text-align: center;
-  text-decoration: none;
-}
-
-.preface a:hover {
-  text-decoration: underline;
 }
 
 .preface blockquote {
