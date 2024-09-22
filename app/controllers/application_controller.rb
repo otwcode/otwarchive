@@ -397,7 +397,7 @@ public
 
         # If the stated suspension end date is after the unban threshold we need to advance a day 
         suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
-        localized_suspension_end = localize(suspension_end.to_date)
+        localized_suspension_end = view_context.date_in_zone(suspension_end)
         flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
         
       else
