@@ -342,11 +342,10 @@ class Collection < ApplicationRecord
     message = I18n.t("user_mailer.collection_notification.assignments_sent.complete")
     if self.email.present?
       UserMailer.collection_notification(self.id, subject, message, self.email).deliver_later
-    elsif
-      self.parent && self.parent.email.present?
+    elsif self.parent && self.parent.email.present?
       UserMailer.collection_notification(self.id, subject, message, self.parent.email).deliver_later
     else
-    # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
+      # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
       self.maintainers_list.each do |user|
         I18n.with_locale(user.preference.locale.iso) do
           translated_subject = I18n.t("user_mailer.collection_notification.assignments_sent.subject")
@@ -358,19 +357,18 @@ class Collection < ApplicationRecord
   end
 
   def notify_maintainers_challenge_default(offer_byline, request_byline, assignments_page_url)
-    subject = I18n.t("user_mailer.collection_notification.challenge_default.subject", offer_byline: offer_byline )
+    subject = I18n.t("user_mailer.collection_notification.challenge_default.subject", offer_byline: offer_byline)
     message = I18n.t("user_mailer.collection_notification.challenge_default.complete", offer_byline: offer_byline, request_byline: request_byline, assignments_page_url: assignments_page_url)
 
     if self.email.present?
       UserMailer.collection_notification(self.id, subject, message, self.email).deliver_later
-    elsif
-      self.parent && self.parent.email.present?
+    elsif self.parent && self.parent.email.present?
       UserMailer.collection_notification(self.id, subject, message, self.parent.email).deliver_later
     else
-    # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
+      # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
       self.maintainers_list.each do |user|
         I18n.with_locale(user.preference.locale.iso) do
-          translated_subject = I18n.t("user_mailer.collection_notification.challenge_default.subject", offer_byline: offer_byline )
+          translated_subject = I18n.t("user_mailer.collection_notification.challenge_default.subject", offer_byline: offer_byline)
           translated_message = I18n.t("user_mailer.collection_notification.challenge_default.complete", offer_byline: offer_byline, request_byline: request_byline, assignments_page_url: assignments_page_url)
           UserMailer.collection_notification(self.id, translated_subject, translated_message, user.email).deliver_later
         end
