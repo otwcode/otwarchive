@@ -315,7 +315,7 @@ class UsersController < ApplicationController
       use_default = params[:use_default] == 'true' || params[:sole_author] == 'orphan_pseud'
 
       Creatorship.orphan(pseuds, works, use_default)
-      Collection.orphan(pseuds, @sole_owned_collections, use_default)
+      Collection.orphan(pseuds, @sole_owned_collections, default: use_default)
     elsif params[:sole_author] == 'delete'
       # Deletes works where user is sole author
       @sole_authored_works.each(&:destroy)
