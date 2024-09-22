@@ -14,4 +14,4 @@ Feature: Suspensions
         And the user "mrparis" is suspended
         And I am logged in as "mrparis"
         And I go to the new work page
-      Then I should see "suspended until 2024-02-11"
+      Then I should see "suspended until Sun 11 Feb 2024"
