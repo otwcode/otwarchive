@@ -387,9 +387,9 @@ class ChallengeAssignment < ApplicationRecord
     end
     REDIS_GENERAL.del(progress_key(collection))
 
-    if !collection.email.blank?
+    if collection.email.present?
       UserMailer.potential_match_generation_notification(collection.id, collection.email).deliver_later
-    elsif collection.parent && !collection.parent.email.blank?
+    elsif collection.parent && collection.parent.email.present?
       UserMailer.potential_match_generation_notification(collection.id, collection.parent.email).deliver_later
     else
       collection.maintainers_list.each do |user|
