@@ -235,6 +235,10 @@ en:
         other: Works
   attributes:
     ticket_number: Ticket ID
+  collection:
+    header_image:
+      invalid_file_type: can only point to a gif, jpg, or png file.
+      invalid_url: is not a valid URL.
   errors:
     attributes:
       ticket_number:
