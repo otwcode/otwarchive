@@ -6,7 +6,7 @@ Feature: Suspensions
       And the user "mrparis" is suspended
       And I am logged in as "mrparis"
       And I go to the new work page
-    Then I should see "suspended until 2024-02-10"
+    Then I should see "suspended until Sat 10 Feb 2024"
 
   Scenario: Users suspended on 2024-01-11 after the unban threshold can see they will be unbanned on 2024-02-11
       Given the user "mrparis" exists and is activated
