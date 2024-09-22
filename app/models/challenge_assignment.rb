@@ -298,7 +298,7 @@ class ChallengeAssignment < ApplicationRecord
     collection.assignments.each do |assignment|
       assignment.send_out
     end
-    collection.notify_maintainers_challenge_sent
+    collection.notify_maintainers_assignments_sent
 
     # purge the potential matches! we don't want bazillions of them in our db
     PotentialMatch.clear!(collection)
@@ -386,9 +386,16 @@ class ChallengeAssignment < ApplicationRecord
       end
     end
     REDIS_GENERAL.del(progress_key(collection))
-    collection.maintainers_list.each do |user|
-      I18n.with_locale(user.preference.locale.iso) do
-        UserMailer.potential_match_generation_notification(collection.id, user.email).deliver_later
+
+    if !collection.email.blank?
+      UserMailer.potential_match_generation_notification(collection.id, collection.email).deliver_later
+    elsif collection.parent && !collection.parent.email.blank?
+      UserMailer.potential_match_generation_notification(collection.id, collection.parent.email).deliver_later
+    else
+      collection.maintainers_list.each do |user|
+        I18n.with_locale(user.preference.locale.iso) do
+          UserMailer.potential_match_generation_notification(collection.id, user.email).deliver_later
+        end
       end 
     end 
   end

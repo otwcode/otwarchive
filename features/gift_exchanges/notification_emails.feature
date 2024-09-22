@@ -15,18 +15,20 @@ Feature: Gift Exchange Notification Emails
       And I press "Submit"
     Then I should see "Sign-up was successfully created."
 
-    Given I have added a co-moderator "mod2" to collection "Holiday Swap"
+    When I have added a co-moderator "mod2" to collection "Holiday Swap"
       And a locale with translated emails
       And the user "mod1" enables translated emails
-    When I close signups for "Holiday Swap"
+      And I close signups for "Holiday Swap"
       And I have generated matches for "Holiday Swap"
       And I have sent assignments for "Holiday Swap"
 
     Then 4 emails should be delivered
       And "mod1" should receive 1 email
       And the email to "mod1" should be translated
+      And the email should contain "You have received a message about your collection"
       And "mod2" should receive 1 email
       And the email to "mod2" should be non-translated
+      And the email should contain "You have received a message about your collection"
       And "participant1" should receive 1 email
       And "participant2" should receive 1 email
 

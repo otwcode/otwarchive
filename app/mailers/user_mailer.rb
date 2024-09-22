@@ -92,7 +92,7 @@ class UserMailer < ApplicationMailer
   end
 
   # Notifies a writer that their imported works have been claimed
-  def claim_notification(creator_id, claimed_work_ids, is_user = false)
+  def claim_notification(creator_id, claimed_work_ids, is_user=false)
     if is_user
       creator = User.find(creator_id)
       locale = creator.preference.locale.iso
@@ -160,7 +160,7 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
-        subject: t("user_mailer.invite_increase_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME.to_s)
+        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
   end
@@ -394,7 +394,7 @@ class UserMailer < ApplicationMailer
     mail(
       to: @user.email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work was hidden as spam"
-      )
+    )
   end
 
   ### OTHER NOTIFICATIONS ###

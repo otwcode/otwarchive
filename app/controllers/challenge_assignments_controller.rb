@@ -219,9 +219,11 @@ class ChallengeAssignmentsController < ApplicationController
   def default
     @challenge_assignment.defaulted_at = Time.now
     @challenge_assignment.save
-    subject = t("user_mailer.collection_notification.challenge_default.subject", offer_byline: @challenge_assignment.offer_byline )
-    message = t("user_mailer.collection_notification.challenge_default.complete", offer_byline: @challenge_assignment.offer_byline, request_byline: @challenge_assignment.request_byline, assignments_page_link: collection_assignments_url(@challenge_assignment.collection))
-    @challenge_assignment.collection.notify_maintainers(subject, message)
+    offer_byline = @challenge_assignment.offer_byline
+    request_byline = @challenge_assignment.request_byline
+    assignments_page_url = collection_assignments_url(@challenge_assignment.collection)
+    
+    @challenge_assignment.collection.notify_maintainers_challenge_default(offer_byline, request_byline, assignments_page_url)
 
     flash[:notice] = "We have notified the collection maintainers that you had to default on your assignment."
     redirect_to user_assignments_path(current_user)

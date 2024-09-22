@@ -147,7 +147,7 @@ class Collection < ApplicationRecord
                       too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX) }
 
   validates :header_image_url, format: { allow_blank: true, with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: ts("is not a valid URL.") }
-  validates :header_image_url, format: { allow_blank: true, with: /\.(png|gif|jpg)$/, message: ts("can only point to a gif, jpg, or png file."), multiline: true }
+  validates :header_image_url, format: { allow_blank: true, with: /\.(png|gif|jpg)\z/, message: ts("can only point to a gif, jpg, or png file."), multiline: true }
 
   validates :tags_after_saving,
             length: { maximum: ArchiveConfig.COLLECTION_TAGS_MAX,
@@ -337,20 +337,43 @@ class Collection < ApplicationRecord
     self.maintainers.collect(&:user).flatten.uniq
   end
 
-  def notify_maintainers_challenge_sent
-    # loop through maintainers and send each a notice via email
-    self.maintainers_list.each do |user|
-      I18n.with_locale(user.preference.locale.iso) do
-        UserMailer.collection_notification(self.id, I18n.t("user_mailer.collection_notification.assignments_sent.subject"), I18n.t("user_mailer.collection_notification.assignments_sent.complete"), user.email).deliver_later
+  def notify_maintainers_assignments_sent
+    subject = I18n.t("user_mailer.collection_notification.assignments_sent.subject")
+    message = I18n.t("user_mailer.collection_notification.assignments_sent.complete")
+    if !self.email.blank?
+      UserMailer.collection_notification(self.id, subject, message, self.email).deliver_later
+    elsif
+      self.parent && !self.parent.email.blank?
+      UserMailer.collection_notification(self.id, subject, message, self.parent.email).deliver_later
+    else
+    # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
+      self.maintainers_list.each do |user|
+        I18n.with_locale(user.preference.locale.iso) do
+          translated_subject = I18n.t("user_mailer.collection_notification.assignments_sent.subject")
+          translated_message = I18n.t("user_mailer.collection_notification.assignments_sent.complete")
+          UserMailer.collection_notification(self.id, translated_subject, translated_message, user.email).deliver_later
+        end
       end
     end
   end
 
-  def notify_maintainers(subject, message)
-    # loop through maintainers and send each a notice via email
-    self.maintainers_list.each do |user|
-      I18n.with_locale(user.preference.locale.iso) do
-        UserMailer.collection_notification(self.id, subject, message, user.email).deliver_later
+  def notify_maintainers_challenge_default(offer_byline, request_byline, assignments_page_url)
+    subject = I18n.t("user_mailer.collection_notification.challenge_default.subject", offer_byline: offer_byline )
+    message = I18n.t("user_mailer.collection_notification.challenge_default.complete", offer_byline: offer_byline, request_byline: request_byline, assignments_page_url: assignments_page_url)
+
+    if !self.email.blank?
+      UserMailer.collection_notification(self.id, subject, message, self.email).deliver_later
+    elsif
+      self.parent && !self.parent.email.blank?
+      UserMailer.collection_notification(self.id, subject, message, self.parent.email).deliver_later
+    else
+    # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
+      self.maintainers_list.each do |user|
+        I18n.with_locale(user.preference.locale.iso) do
+          translated_subject = I18n.t("user_mailer.collection_notification.challenge_default.subject", offer_byline: offer_byline )
+          translated_message = I18n.t("user_mailer.collection_notification.challenge_default.complete", offer_byline: offer_byline, request_byline: request_byline, assignments_page_url: assignments_page_url)
+          UserMailer.collection_notification(self.id, translated_subject, translated_message, user.email).deliver_later
+        end
       end
     end
   end
