@@ -72,67 +72,67 @@ class Collection < ApplicationRecord
 
   CHALLENGE_TYPE_OPTIONS = [
     ["", ""],
-    [I18n.t("collection.gift_exchange"), "GiftExchange"],
-    [I18n.t("collection.prompt_meme"), "PromptMeme"]
+    [ts("Gift Exchange"), "GiftExchange"],
+    [ts("Prompt Meme"), "PromptMeme"]
   ].freeze
 
   validate :must_have_owners
   def must_have_owners
     # we have to use collection participants because the association may not exist until after
     # the collection is saved
-    errors.add(:base, I18n.t("collection.validation.no_valid_owners")) if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select(&:is_owner?)
+    errors.add(:base, ts("Collection has no valid owners.")) if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select(&:is_owner?)
       .empty?
   end
 
   validate :collection_depth
   def collection_depth
-    errors.add(:base, I18n.t("collection.validation.collection_depth", name: parent.name)) if self.parent&.parent || (self.parent && !self.children.empty?) || (!self.children.empty? && !self.children.collect(&:children).flatten.empty?)
+    errors.add(:base, ts("Sorry, but %{name} is a subcollection, so it can't also be a parent collection.", name: parent.name)) if self.parent&.parent || (self.parent && !self.children.empty?) || (!self.children.empty? && !self.children.collect(&:children).flatten.empty?)
   end
 
   validate :parent_exists
   def parent_exists
-    errors.add(:base, I18n.t("collection.validation.collection_not_found", name: parent_name)) unless parent_name.blank? || Collection.find_by(name: parent_name)
+    errors.add(:base, ts("We couldn't find a collection with name %{name}.", name: parent_name)) unless parent_name.blank? || Collection.find_by(name: parent_name)
   end
 
   validate :parent_is_allowed
   def parent_is_allowed
-    return unless parent
-    
-    if parent == self
-      errors.add(:base, I18n.t("collection.validation.invalid_parent"))
-    elsif parent_id_changed? && !parent.user_is_maintainer?(User.current_user)
-      errors.add(:base, I18n.t("collection.validation.subcollection", name: parent.name))
+    if parent
+      if parent == self
+        errors.add(:base, ts("You can't make a collection its own parent."))
+      elsif parent_id_changed? && !parent.user_is_maintainer?(User.current_user)
+        errors.add(:base, ts("You have to be a maintainer of %{name} to make a subcollection.", name: parent.name))
+      end
     end
   end
 
-  validates :name, presence: { message: I18n.t("collection.validation.name.presence") }
-  validates :name, uniqueness: { message: I18n.t("collection.validation.name.uniqueness") }
+  validates :name, presence: { message: ts("Please enter a name for your collection.") }
+  validates :name, uniqueness: { message: ts("Sorry, that name is already taken. Try again, please!") }
   validates :name,
             length: { minimum: ArchiveConfig.TITLE_MIN,
-                      too_short: I18n.t("collection.validation.length.min", min: ArchiveConfig.TITLE_MIN) }
+                      too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN) }
   validates :name,
             length: { maximum: ArchiveConfig.TITLE_MAX,
-                      too_long: I18n.t("collection.validation.length.max", max: ArchiveConfig.TITLE_MAX) }
+                      too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX) }
   validates :name,
-            format: { message: I18n.t("collection.validation.name.format"),
+            format: { message: ts("must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces."),
                       with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/ }
   validates :icon_alt_text, length: { allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
-                                      too_long: I18n.t("collection.validation.length.max", max: ArchiveConfig.ICON_ALT_MAX) }
+                                      too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX) }
   validates :icon_comment_text, length: { allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
-                                          too_long: I18n.t("collection.validation.length.max", max: ArchiveConfig.ICON_COMMENT_MAX) }
+                                          too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX) }
 
   validates :email, email_format: { allow_blank: true }
 
-  validates :title, presence: { message: I18n.t("collection.validation.title") }
+  validates :title, presence: { message: ts("Please enter a title to be displayed for your collection.") }
   validates :title,
             length: { minimum: ArchiveConfig.TITLE_MIN,
-                      too_short: I18n.t("collection.validation.length.min", min: ArchiveConfig.TITLE_MIN) }
+                      too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN) }
   validates :title,
             length: { maximum: ArchiveConfig.TITLE_MAX,
-                      too_long: I18n.t("collection.validation.length.max", max: ArchiveConfig.TITLE_MAX) }
+                      too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX) }
   validate :no_reserved_strings
   def no_reserved_strings
-    errors.add(:title, I18n.t("collection.validation.no_reserved_strings")) if
+    errors.add(:title, ts("^Sorry, the ',' character cannot be in a collection Display Title.")) if
       title.match(/,/)
   end
 
@@ -144,14 +144,14 @@ class Collection < ApplicationRecord
   validates :description,
             length: { allow_blank: true,
                       maximum: ArchiveConfig.SUMMARY_MAX,
-                      too_long: I18n.t("collection.validation.length.max", max: ArchiveConfig.SUMMARY_MAX) }
+                      too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX) }
 
-  validates :header_image_url, format: { allow_blank: true, with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: I18n.t("collection.validation.header_image.invalid_url") }
-  validates :header_image_url, format: { allow_blank: true, with: /\A\S+\.(png|gif|jpg)\z/, message: I18n.t("collection.validation.header_image.invalid_file_type"), multiline: true }
+  validates :header_image_url, format: { allow_blank: true, with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: I18n.t("collection.header_image.invalid_url") }
+  validates :header_image_url, format: { allow_blank: true, with: /\A\S+\.(png|gif|jpg)\z/, message: I18n.t("collection.header_image.invalid_file_type"), multiline: true }
 
   validates :tags_after_saving,
             length: { maximum: ArchiveConfig.COLLECTION_TAGS_MAX,
-                      message: I18n.t("collection.validation.num_tags") }
+                      message: "^Sorry, a collection can only have %{count} tags." }
 
   scope :top_level, -> { where(parent_id: nil) }
   scope :closed, -> { joins(:collection_preference).where(collection_preferences: { closed: true }) }

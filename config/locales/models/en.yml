@@ -236,27 +236,9 @@ en:
   attributes:
     ticket_number: Ticket ID
   collection:
-    gift_exchange: Gift Exchange
-    prompt_meme: Prompt Meme
-    validation:
-      collection_depth: Sorry, but %{name} is a subcollection, so it can't also be a parent collection.
-      collection_not_found: We couldn't find a collection with name %{name}.
-      header_image:
-        invalid_file_type: can only point to a gif, jpg, or png file.
-        invalid_url: is not a valid URL.
-      invalid_parent: You can't make a collection its own parent.
-      length:
-        max: must be less than %{max} characters long.
-        min: must be at least %{min} characters long.
-      name:
-        format: must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.
-        presence: Please enter a name for your collection.
-        uniqueness: Sorry, that name is already taken. Try again, please!
-      no_reserved_strings: "^Sorry, the ',' character cannot be in a collection Display Title."
-      no_valid_owners: Collection has no valid owners.
-      num_tags: "^Sorry, a collection can only have %{count} tags."
-      subcollection: You have to be a maintainer of %{name} to make a subcollection.
-      title: Please enter a title to be displayed for your collection.
+    header_image:
+      invalid_file_type: can only point to a gif, jpg, or png file.
+      invalid_url: is not a valid URL.
   errors:
     attributes:
       ticket_number:
