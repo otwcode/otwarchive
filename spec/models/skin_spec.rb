@@ -148,6 +148,12 @@ describe Skin do
       "allows order property with negative value" =>
         "div { order: -1 }",
 
+      "allows multiple string values for quotes" =>
+        ".two-escaped-characters { quotes: '\\00AB' '\\00BB'; }
+        .four-escaped-characters { quotes: '\\00AB' '\\00BB' '\\00AB' '\\00BB'; }
+        .four-nonword-characters { quotes: \"«\" \"»\" \"‹\" \"›\"; }
+        .two-nonword-characters { quotes: \"'\" \"'\"; }",
+
         "saves box shadows with multiple shadows" =>
           "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }",
 
