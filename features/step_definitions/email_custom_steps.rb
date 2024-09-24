@@ -27,6 +27,12 @@ Then "the email to {string} should be translated" do |user|
   step(%{the email to "#{user}" should not contain "translation missing"}) # missing translations in the target language fall back to English
 end
 
+Then "the last email to {string} should be translated" do |user|
+  step(%{the last email to "#{user}" should contain "Translated footer"})
+  step(%{the last email to "#{user}" should not contain "fan-run and fan-supported archive"}) # untranslated English text
+  step(%{the last email to "#{user}" should not contain "translation missing"}) # missing translations in the target language fall back to English
+end
+
 Then "the email to {string} should be non-translated" do |user|
   step(%{the email to "#{user}" should not contain "Translated footer"})
   step(%{the email to "#{user}" should contain "fan-run and fan-supported archive"})
@@ -54,9 +60,31 @@ Then "the email to {string} should contain {string}" do |user, text|
   end
 end
 
+Then "the last email to {string} should contain {string}" do |user, text|
+  @user = User.find_by(login: user)
+  email = emails("to: \"#{email_for(@user.email)}\"").last
+  if email.multipart?
+    expect(email.text_part.body).to match(text)
+    expect(email.html_part.body).to match(text)
+  else
+    expect(email.body).to match(text)
+  end
+end
+
 Then "the email to {string} should not contain {string}" do |user, text|
   @user = User.find_by(login: user)
   email = emails("to: \"#{email_for(@user.email)}\"").first
+  if email.multipart?
+    expect(email.text_part.body).not_to match(text)
+    expect(email.html_part.body).not_to match(text)
+  else
+    expect(email.body).not_to match(text)
+  end
+end
+
+Then "the last email to {string} should not contain {string}" do |user, text|
+  @user = User.find_by(login: user)
+  email = emails("to: \"#{email_for(@user.email)}\"").last
   if email.multipart?
     expect(email.text_part.body).not_to match(text)
     expect(email.html_part.body).not_to match(text)
