@@ -214,7 +214,7 @@ class ChallengeAssignment < ApplicationRecord
     if offer_signup && offer_signup.pseud
       offer_signup.pseud.byline
     else
-      (pinch_hitter ? (pinch_hitter.byline + "* (pinch hitter)") : "- none -")
+      (pinch_hitter ? I18n.t("challenge_assignment.offer_byline.pinch_hitter", pinch_hitter_byline: pinch_hitter.byline) : I18n.t("challenge_assignment.offer_byline.none"))
     end
   end
 
@@ -222,7 +222,7 @@ class ChallengeAssignment < ApplicationRecord
     if request_signup && request_signup.pseud
       request_signup.pseud.byline
     else
-      (pinch_request_signup ? (pinch_request_byline + "* (pinch recipient)") : "- None -")
+      (pinch_request_signup ? I18n.t("challenge_assignment.request_byline.pinch_recipient", pinch_request_byline: pinch_request_byline) : I18n.t("challenge_assignment.request_byline.none"))
     end
   end
 
@@ -387,10 +387,8 @@ class ChallengeAssignment < ApplicationRecord
     end
     REDIS_GENERAL.del(progress_key(collection))
 
-    if collection.email.present?
-      UserMailer.potential_match_generation_notification(collection.id, collection.email).deliver_later
-    elsif collection.parent && collection.parent.email.present?
-      UserMailer.potential_match_generation_notification(collection.id, collection.parent.email).deliver_later
+    if collection.collection_email.present?
+      UserMailer.potential_match_generation_notification(collection.id, collection.collection_email).deliver_later
     else
       collection.maintainers_list.each do |user|
         I18n.with_locale(user.preference.locale.iso) do
