@@ -168,6 +168,39 @@ describe Tag do
     expect(tag.errors[:name].join).to match(/too long/)
   end
 
+  context "tags with blank names are invalid" do
+    [
+      ["200B".hex].pack("U"), # zero width space
+      ["200D".hex].pack("U"), # zero width joiner
+      ["2060".hex].pack("U"), # word joiner
+      (["200B".hex].pack("U") * 3),
+      ["200D".hex, "200D".hex, "2060".hex, "200B".hex].pack("U")
+    ].each do |tag_name|
+      tag = Tag.new
+      tag.name = tag_name
+      it "is not saved with an error message about a blank tag" do
+        expect(tag.save).to be_falsey
+        expect(tag.errors[:name].join).to match(/cannot be blank/)
+      end
+    end
+  end
+
+  context "tags with names that contain some zero-width characters are valid" do
+    %w[
+      👨‍👨‍👧‍👦
+      ප්‍රදානය
+      👩‍🔬
+    ].each do |tag_name|
+      tag = Tag.new
+      tag.name = tag_name
+      it "is saved" do
+        expect(tag.save).to be_truthy
+        expect(tag.errors).to be_empty
+        expect(tag.name).to eq(tag_name)
+      end
+    end
+  end
+
   context "tags using restricted characters should not be saved" do
     [
       "bad, tag",
