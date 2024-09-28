@@ -17,6 +17,76 @@ describe TagsController do
     end
   end
 
+  shared_examples "an action only admins with full access roles can do" do 
+    before { fake_login_admin(admin) }
+
+    context "with no role" do
+      let(:admin) { create(:admin, roles: []) }
+
+      it "redirects with an error" do
+        subject
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
+
+    (Admin::VALID_ROLES - wrangling_full_access_roles).each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "redirects with an error" do
+          subject
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
+      end
+    end
+
+    wrangling_full_access_roles.each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "succeeds" do
+          subject
+          success
+        end
+      end
+    end
+  end
+
+  shared_examples "an action only admins with read access roles can do" do 
+    before { fake_login_admin(admin) }
+
+    context "with no role" do
+      let(:admin) { create(:admin, roles: []) }
+
+      it "redirects with an error" do
+        subject
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
+
+    (Admin::VALID_ROLES - wrangling_read_access_roles).each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "redirects with an error" do
+          subject
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
+      end
+    end
+
+    wrangling_read_access_roles.each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "succeeds" do
+          subject
+          success
+        end
+      end
+    end
+  end
+
   describe "#create" do
     let(:tag_params) do
       { name: Faker::FunnyName.name, canonical: "0", type: "Character" }
@@ -74,6 +144,12 @@ describe TagsController do
                #{freeform3.name}, #{freeform4.name}")
         run_all_indexing_jobs
       end
+      
+      subject { get :wrangle, params: { id: fandom.name, show: "freeforms", status: "unwrangled" } }
+      let(:success) do
+        expect(assigns(:tags)).to include(freeform1)
+      end
+      it_behaves_like "an action only admins with read access roles can do"
 
       it "includes unwrangled freeforms" do
         get :wrangle, params: { id: fandom.name, show: "freeforms", status: "unwrangled" }
@@ -139,51 +215,15 @@ describe TagsController do
                                          sort_direction: "ASC")
     end
 
-    context "when logged in as an admin with no role" do
-      let(:admin) { create(:admin) }
+    subject { put :mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled", fandom_string: @fandom2.name, selected_tags: [@freeform1.id] } }
+    let(:success) do
+      get :wrangle, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled" }
+      expect(assigns(:tags)).not_to include(@freeform1)
 
-      before { fake_login_admin(admin) }
-
-      it "redirects with an error" do
-        put :mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled", fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
+      @freeform1.reload
+      expect(@freeform1.fandoms).to include(@fandom2)
     end
-
-    (Admin::VALID_ROLES - wrangling_full_access_roles).each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
-        let(:admin) { create(:admin, roles: [admin_role]) }
-        
-        before { fake_login_admin(admin) }
-
-        it "redirects with error" do
-          put :mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled", fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-      end 
-    end
-
-    wrangling_full_access_roles.each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
-        let(:admin) { create(:admin, roles: [admin_role]) }
-          
-        before { fake_login_admin(admin) }
-
-        context "with one canonical fandom in the fandom string and a selected freeform" do
-          before do
-            put :mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled", fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
-          end
-    
-          it "updates the tags successfully" do
-            get :wrangle, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled" }
-            expect(assigns(:tags)).not_to include(@freeform1)
-    
-            @freeform1.reload
-            expect(@freeform1.fandoms).to include(@fandom2)
-          end 
-        end
-      end
-    end
+    it_behaves_like "an action only admins with full access roles can do"
 
     context "with one canonical and one noncanonical fandoms in the fandom string and a selected freeform" do
       before do
@@ -265,94 +305,33 @@ describe TagsController do
   end
 
   describe "new" do 
-    context "when logged in as an admin with no role" do
-      let(:admin) { create(:admin) }
 
-      before { fake_login_admin(admin) }
-
-      it "redirects with an error" do
-        get :new
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
-    end
-
-    (Admin::VALID_ROLES - wrangling_full_access_roles).each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
-        let(:admin) { create(:admin, roles: [admin_role]) }
-        
-        before { fake_login_admin(admin) }
-
-        it "redirects with error" do
-          get :new
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-      end 
-    end
-
-    wrangling_full_access_roles.each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
-        let(:admin) { create(:admin, roles: [admin_role]) }
-          
-        before { fake_login_admin(admin) }
-        
-        it "allows access" do
-          get :new
-          expect(response).to have_http_status(:success)
-        end
-      end
-    end
-
-    it "allows access when not an admin" do
-      get :new
+    subject { get :new }
+    let(:success) do
       expect(response).to have_http_status(:success)
+    end
+    it_behaves_like "an action only admins with full access roles can do"
+
+    context "when logged in as a tag wrangler" do
+      it "allows access" do
+        get :new
+        expect(response).to have_http_status(:success)
+      end
     end
   end
 
-  describe "show" do 
+  describe "show" do   
     context "when showing a banned tag" do
-      before do
-        @tag = FactoryBot.create(:banned)
-      end 
+      let(:tag) { create(:banned) } 
 
-      context "when logged in as an admin with no role" do
-        let(:admin) { create(:admin) }
-
-        before { fake_login_admin(admin) }
-  
-        it "redirects with an error" do
-          get :edit, params: { id: @tag.name }
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
+      subject { get :edit, params: { id: tag.name } }
+      let(:success) do
+        expect(response).to have_http_status(:success)
       end
-
-      (Admin::VALID_ROLES - wrangling_read_access_roles).each do |admin_role|
-        context "when logged in as an admin with role #{admin_role}" do
-          let(:admin) { create(:admin, roles: [admin_role]) }
-          
-          before { fake_login_admin(admin) }
-
-          it "redirects with error" do
-            get :show, params: { id: @tag.name }
-            it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-          end
-        end 
-      end
-
-      wrangling_read_access_roles.each do |admin_role|
-        context "when logged in as an admin with role #{admin_role}" do
-          let(:admin) { create(:admin, roles: [admin_role]) }
-            
-          before { fake_login_admin(admin) }
-          
-          it "allows access" do
-            get :show, params: { id: @tag.name }
-            expect(response).to have_http_status(:success)
-          end
-        end
-      end
+      it_behaves_like "an action only admins with read access roles can do"
 
       it "redirects with an error when not an admin" do
-        get :show, params: { id: @tag.name }
+        get :show, params: { id: tag.name }
         it_redirects_to_with_error(tag_wranglings_path,
                                    "Please log in as admin")
       end
@@ -379,49 +358,16 @@ describe TagsController do
 
   describe "edit" do
     context "when editing a banned tag" do
-      before do
-        @tag = FactoryBot.create(:banned)
+      let(:tag) { create(:banned) } 
+
+      subject { get :edit, params: { id: tag.name } }
+      let(:success) do
+        expect(response).to have_http_status(:success)
       end
-
-      context "when logged in as an admin with no role" do
-        let(:admin) { create(:admin) }
-
-        before { fake_login_admin(admin) }
-  
-        it "redirects with an error" do
-          get :edit, params: { id: @tag.name }
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-      end
-
-      (Admin::VALID_ROLES - wrangling_read_access_roles).each do |admin_role|
-        context "when logged in as an admin with role #{admin_role}" do
-          let(:admin) { create(:admin, roles: [admin_role]) }
-          
-          before { fake_login_admin(admin) }
-
-          it "redirects with error" do
-            get :edit, params: { id: @tag.name }
-            it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-          end
-        end 
-      end
-
-      wrangling_read_access_roles.each do |admin_role|
-        context "when logged in as an admin with role #{admin_role}" do
-          let(:admin) { create(:admin, roles: [admin_role]) }
-            
-          before { fake_login_admin(admin) }
-          
-          it "allows access" do
-            get :edit, params: { id: @tag.name }
-            expect(response).to have_http_status(:success)
-          end
-        end
-      end
+      it_behaves_like "an action only admins with read access roles can do"
 
       it "redirects with an error when not an admin" do
-        get :edit, params: { id: @tag.name }
+        get :edit, params: { id: tag.name }
         it_redirects_to_with_error(tag_wranglings_path,
                                    "Please log in as admin")
       end
@@ -464,45 +410,14 @@ describe TagsController do
         end
       end
 
-      context "when logged in as an admin with no role" do
-        let(:admin) { create(:admin) }
-
-        before { fake_login_admin(admin) }
-  
-        it "redirects with an error" do
-          put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" }
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
+      subject { put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" } }
+      let(:success) do
+        it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
+        tag.reload
+        expect(tag.merger_id).to eq(synonym.id)
       end
+      it_behaves_like "an action only admins with full access roles can do"
       
-      (Admin::VALID_ROLES - wrangling_full_access_roles).each do |admin_role|
-        context "when logged in as an admin with role #{admin_role}" do
-          let(:admin) { create(:admin, roles: [admin_role]) }
-            
-          before { fake_login_admin(admin) }
-          
-          it "redirects with error" do
-            put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" }
-            it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-          end
-        end
-      end
-
-      wrangling_full_access_roles.each do |admin_role|
-        context "when logged in as an admin with role #{admin_role}" do
-          let(:admin) { create(:admin, roles: [admin_role]) }
-            
-          before { fake_login_admin(admin) }
-
-          it "succeeds and redirects to the edit page" do
-            put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" }
-            it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
-
-            tag.reload
-            expect(tag.merger_id).to eq(synonym.id)
-          end 
-        end
-      end
     end
 
     shared_examples "success message" do

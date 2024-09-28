@@ -62,7 +62,7 @@ class TagsController < ApplicationController
   #   2. the tag, the works and the bookmarks using it, if the tag is unwrangled (because we can't redirect them
   #       to the works controller)
   def show
-    authorize :wrangling, :view_access? if logged_in_as_admin?
+    authorize :wrangling, :read_access? if logged_in_as_admin?
 
     @page_subtitle = @tag.name
     if @tag.is_a?(Banned) && !logged_in_as_admin?
@@ -213,7 +213,7 @@ class TagsController < ApplicationController
   end
 
   def edit
-    authorize :wrangling, :view_access? if logged_in_as_admin?
+    authorize :wrangling, :read_access? if logged_in_as_admin?
 
     @page_subtitle = ts('%{tag_name} - Edit', tag_name: @tag.name)
 
@@ -280,6 +280,8 @@ class TagsController < ApplicationController
   end
 
   def wrangle
+    authorize :wrangling, :read_access? if logged_in_as_admin?
+
     @page_subtitle = ts('%{tag_name} - Wrangle', tag_name: @tag.name)
     @counts = {}
     @tag.child_types.map { |t| t.underscore.pluralize.to_sym }.each do |tag_type|
