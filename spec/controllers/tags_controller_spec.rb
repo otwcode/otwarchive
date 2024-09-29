@@ -4,8 +4,8 @@ describe TagsController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  wrangling_read_access_roles = %w[superadmin tag_wrangling policy_and_abuse]
-  wrangling_full_access_roles = %w[superadmin tag_wrangling]
+  wrangling_full_access_roles = %w[superadmin tag_wrangling].freeze
+  wrangling_read_access_roles = (wrangling_full_access_roles + %w[policy_and_abuse]).freeze
 
   let(:user) { create(:tag_wrangler) }
 
@@ -17,7 +17,7 @@ describe TagsController do
     end
   end
 
-  shared_examples "an action only admins with full access roles can do" do 
+  shared_examples "an action only fully authorized admins can access" do |authorized_roles:|
     before { fake_login_admin(admin) }
 
     context "with no role" do
@@ -29,7 +29,7 @@ describe TagsController do
       end
     end
 
-    (Admin::VALID_ROLES - wrangling_full_access_roles).each do |role|
+    (Admin::VALID_ROLES - authorized_roles).each do |role|
       context "with role #{role}" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -40,42 +40,7 @@ describe TagsController do
       end
     end
 
-    wrangling_full_access_roles.each do |role|
-      context "with role #{role}" do
-        let(:admin) { create(:admin, roles: [role]) }
-
-        it "succeeds" do
-          subject
-          success
-        end
-      end
-    end
-  end
-
-  shared_examples "an action only admins with read access roles can do" do 
-    before { fake_login_admin(admin) }
-
-    context "with no role" do
-      let(:admin) { create(:admin, roles: []) }
-
-      it "redirects with an error" do
-        subject
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
-    end
-
-    (Admin::VALID_ROLES - wrangling_read_access_roles).each do |role|
-      context "with role #{role}" do
-        let(:admin) { create(:admin, roles: [role]) }
-
-        it "redirects with an error" do
-          subject
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-      end
-    end
-
-    wrangling_read_access_roles.each do |role|
+    authorized_roles.each do |role|
       context "with role #{role}" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -144,12 +109,12 @@ describe TagsController do
                #{freeform3.name}, #{freeform4.name}")
         run_all_indexing_jobs
       end
-      
+
       subject { get :wrangle, params: { id: fandom.name, show: "freeforms", status: "unwrangled" } }
       let(:success) do
         expect(assigns(:tags)).to include(freeform1)
       end
-      it_behaves_like "an action only admins with read access roles can do"
+      it_behaves_like "an action only fully authorized admins can access", authorized_roles: wrangling_read_access_roles
 
       it "includes unwrangled freeforms" do
         get :wrangle, params: { id: fandom.name, show: "freeforms", status: "unwrangled" }
@@ -223,7 +188,7 @@ describe TagsController do
       @freeform1.reload
       expect(@freeform1.fandoms).to include(@fandom2)
     end
-    it_behaves_like "an action only admins with full access roles can do"
+    it_behaves_like "an action only fully authorized admins can access", authorized_roles: wrangling_full_access_roles
 
     context "with one canonical and one noncanonical fandoms in the fandom string and a selected freeform" do
       before do
@@ -305,12 +270,11 @@ describe TagsController do
   end
 
   describe "new" do 
-
     subject { get :new }
     let(:success) do
       expect(response).to have_http_status(:success)
     end
-    it_behaves_like "an action only admins with full access roles can do"
+    it_behaves_like "an action only fully authorized admins can access", authorized_roles: wrangling_full_access_roles
 
     context "when logged in as a tag wrangler" do
       it "allows access" do
@@ -328,7 +292,7 @@ describe TagsController do
       let(:success) do
         expect(response).to have_http_status(:success)
       end
-      it_behaves_like "an action only admins with read access roles can do"
+      it_behaves_like "an action only fully authorized admins can access", authorized_roles: wrangling_read_access_roles
 
       it "redirects with an error when not an admin" do
         get :show, params: { id: tag.name }
@@ -364,7 +328,7 @@ describe TagsController do
       let(:success) do
         expect(response).to have_http_status(:success)
       end
-      it_behaves_like "an action only admins with read access roles can do"
+      it_behaves_like "an action only fully authorized admins can access", authorized_roles: wrangling_read_access_roles
 
       it "redirects with an error when not an admin" do
         get :edit, params: { id: tag.name }
@@ -416,7 +380,7 @@ describe TagsController do
         tag.reload
         expect(tag.merger_id).to eq(synonym.id)
       end
-      it_behaves_like "an action only admins with full access roles can do"
+      it_behaves_like "an action only fully authorized admins can access", authorized_roles: wrangling_full_access_roles
       
     end
 
