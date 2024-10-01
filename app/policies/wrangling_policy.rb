@@ -2,7 +2,7 @@
 
 class WranglingPolicy < ApplicationPolicy
   FULL_ACCESS_ROLES = %w[superadmin tag_wrangling].freeze
-  READ_ACCESS_ROLES  = (FULL_ACCESS_ROLES + %w[policy_and_abuse]).freeze
+  READ_ACCESS_ROLES = (FULL_ACCESS_ROLES + %w[policy_and_abuse]).freeze
   
   def full_access?
     user_has_roles?(FULL_ACCESS_ROLES)
