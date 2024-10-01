@@ -95,7 +95,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "Tag was updated"
   When I follow "Alternate Universe Pirates"
   Then I should see "Alternate Universe Space Pirates"
-  When I am logged in as an admin
+  When I am logged in as a "tag_wrangling" admin
     And I edit the tag "Alternate Universe Pirates"
     And I fill in "Synonym of" with "Alternate Universe Pirrrates"
     And I press "Save changes"

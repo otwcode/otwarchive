@@ -311,7 +311,7 @@ Feature: Tag wrangling
   Scenario: An admin can see the troubleshoot button on a tag page
 
     Given a canonical fandom "Cowboy Bebop"
-      And I am logged in as an admin
+      And I am logged in as a "tag_wrangling" admin
     When I view the tag "Cowboy Bebop"
     Then I should see "Troubleshoot"
 
