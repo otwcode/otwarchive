@@ -65,6 +65,7 @@ class Prompt < ApplicationRecord
   before_validation :cleanup_url
   def cleanup_url
     self.url = Addressable::URI.heuristic_parse(self.url) if self.url
+    rescue Addressable::URI::InvalidURIError
   end
 
   validate :correct_number_of_tags
