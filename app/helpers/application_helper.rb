@@ -631,4 +631,15 @@ module ApplicationHelper
       item.users.all? { |u| u&.preference&.minimize_search_engines? }
     end
   end
-end # end of ApplicationHelper
+
+  # Determines if the page (controller and action combination) does not need
+  # to show the ToS (Terms of Service) popup.
+  def tos_exempt_page?
+    case params[:controller]
+    when "home"
+      %w[content dmca privacy tos tos_faq].include?(params[:action])
+    when "abuse_reports", "feedbacks"
+      params[:action] == "new"
+    end
+  end
+end

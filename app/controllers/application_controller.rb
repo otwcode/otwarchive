@@ -176,7 +176,7 @@ public
   before_action :load_tos_popup
   def load_tos_popup
     # Integers only, YYYY-MM-DD format of date Board approved TOS
-    @current_tos_version = 20180523
+    @current_tos_version = 2024_10_15 # rubocop:disable Style/NumericLiterals
   end
 
   # store previous page in session to make redirecting back possible
