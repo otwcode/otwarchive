@@ -25,7 +25,8 @@
           <%= @page_subtitle %>
         <% else %>
           <%= controller.action_name == "index" ? "" : process_title(controller.action_name) %>
-          <%= controller.action_name == "index" ? process_title(controller.controller_name) : process_title(controller.controller_name.singularize) %>        <% end %>
+          <%= controller.action_name == "index" ? process_title(controller.controller_name) : process_title(controller.controller_name.singularize) %>
+        <% end %>
         |
         <%= ArchiveConfig.APP_NAME  %>
       <% end %>
