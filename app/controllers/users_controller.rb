@@ -39,6 +39,18 @@ class UsersController < ApplicationController
     authorize @user.profile if logged_in_as_admin?
   end
 
+  def change_email
+    @page_subtitle = t(".browser_title")
+  end
+
+  def change_password
+    @page_subtitle = t(".browser_title")
+  end
+
+  def change_username
+    @page_subtitle = t(".browser_title")
+  end
+
   def changed_password
     unless params[:password] && reauthenticate
       render(:change_password) && return
