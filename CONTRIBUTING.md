@@ -8,8 +8,7 @@ and a [list of Known Issues](https://archiveofourown.org/known_issues) for
 publicly editable.
 
 If you need help using the site, or want to report an issue you have found,
-please [contact the AO3 Support team](https://archiveofourown.org/support).
-
+please [contact the AO3 Support team](https://archiveofourown.org/support). Our Support team is staffed by volunteers, so please wait for a response before submitting another ticket. Duplicate submissions will not make things happen faster.
 
 ## Reporting security issues
 
@@ -25,7 +24,7 @@ official OTW volunteers, please feel free to make changes!
 
 ## Suggesting new features
 
-Please [contact the AO3 Support team](https://archiveofourown.org/support).
+Please [contact the AO3 Support team](https://archiveofourown.org/support). Our Support team is staffed by volunteers, so please wait for a response before submitting another ticket. Duplicate submissions will not make things happen faster.
 
 
 ## Contributing code
