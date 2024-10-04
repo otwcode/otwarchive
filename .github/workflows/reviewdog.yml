@@ -28,7 +28,7 @@ jobs:
           use_bundler: true
           reporter: github-pr-check
           skip_install: true
-          reviewdog_flags: "-fail-level=any"
+          fail_on_error: true
 
   erb-lint:
     name: ERB Lint runner
