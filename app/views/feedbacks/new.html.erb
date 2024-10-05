@@ -42,9 +42,6 @@
   <%= form_for(@feedback, html: {class: "post feedback"}) do |f| %>
     <fieldset>
       <legend><%= t(".form.legend.contact_info") %></legend>
-      <p class="notice">
-        <%= t(".form.ip") %>
-      </p>
       <dl>
         <dt><%= f.label :username, t(".form.name.label") %></dt>
         <dd>
