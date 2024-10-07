@@ -44,7 +44,7 @@ Feature: Import Works
       And I should see "Detected Title"
       And I should see "Language: Deutsch"
       And I should see "Explicit"
-      And I should see "Archive Warning: Underage"
+      And I should see "Archive Warning: Underage Sex"
       And I should see "Fandom: Detected Fandom"
       And I should see "Category: M/M"
       And I should see "Relationship: Detected 1/Detected 2"
