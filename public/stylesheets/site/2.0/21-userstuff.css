@@ -45,6 +45,10 @@
   padding: 0 1em;
 }
 
+.userstuff ul li { 
+  display: list-item; 
+}
+
 .userstuff li, .userstuff ol ul li {
   font-weight: normal;
   display: list-item;
