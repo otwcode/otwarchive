@@ -69,6 +69,7 @@ Feature: Work Drafts
     Then I should see "Drafts (1)"
     When I follow "Drafts (1)"
     Then I should see "draft to post"
+      And the page title should include "drafter - Drafts"
       And I should see "Post Draft" within "#main .own.work.blurb .actions"
       And I should see "Delete Draft" within "#main .own.work.blurb .actions"
     When I follow "Post Draft"
