@@ -90,6 +90,9 @@ en:
         muted: You have muted the user %{name}.
       destroy:
         unmuted: You have unmuted the user %{name}.
+  series:
+    index:
+      page_title: "%{username} - Series"
   users:
     passwords:
       create:
