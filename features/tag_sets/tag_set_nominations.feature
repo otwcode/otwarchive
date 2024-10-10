@@ -322,3 +322,19 @@ Feature: Nominating and reviewing nominations for a tag set
       And I should not see "Someone else has already nominated the tag for this set but in fandom First."
       And I should not see "Gold"
       And I should see "None nominated in this fandom."
+
+  Scenario: A nominated canonical tag can be renamed by a tag wrangling admin without affecting the nomination
+    Given a canonical character "Before" in fandom "Treasure Chest"
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "Nominated Tags" with 1 fandom nom and 1 character nom
+      And I nominate fandom "Treasure Chest" and character "Before" in "Nominated Tags" as "tagsetter"
+    When I am logged in as an "tag_wrangling" admin
+      And I edit the tag "Before"
+      And I fill in "Name" with "After"
+      And I press "Save changes"
+    Then I should see "Tag was updated."
+    When I am logged in as "tagsetter"
+      And I go to the "Nominated Tags" tag set page
+      And I follow "My Nominations"
+    Then I should see "Treasure Chest"
+      And I should see "Before"
