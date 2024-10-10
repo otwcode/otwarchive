@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<% if logged_in_as_admin? %>
+<% if policy(KnownIssue).admin_index? %>
   <%= render :partial => "admin_index" %>
 <% else %>
   <h2 class="heading"><%= ts("Known Issues") %></h2>
