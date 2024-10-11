@@ -3,7 +3,7 @@ Feature: Tag wrangling
 
   Scenario: Admin can rename a tag
 
-    Given I am logged in as an admin
+    Given I am logged in as a "tag_wrangling" admin
       And a fandom exists with name: "Amelie", canonical: false
     When I edit the tag "Amelie"
       And I fill in "Synonym of" with "Amélie"
@@ -18,7 +18,7 @@ Feature: Tag wrangling
 
   Scenario: Admin can rename a tag using Eastern characters
 
-  Given I am logged in as an admin
+  Given I am logged in as a "tag_wrangling" admin
     And a fandom exists with name: "先生", canonical: false
   When I edit the tag "先生"
     And I fill in "Name" with "てりやき"
