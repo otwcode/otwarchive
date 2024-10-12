@@ -311,6 +311,7 @@ class Series < ApplicationRecord
 
   def admin_hidden_series_notification
     return unless hidden_by_admin?
+
     users.each do |user|
       UserMailer.send_series_hidden_notification(id, user.id).deliver_later
     end
