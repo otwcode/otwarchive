@@ -1055,6 +1055,7 @@ class Tag < ApplicationRecord
       type: tag_type,
       unwrangleable: false,
       wrangled: false,
+      has_posted_works: true,
       "pre_#{self_type}_ids": [self.id],
       per_page: Tag.per_page
     ))

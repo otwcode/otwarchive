@@ -151,9 +151,10 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And the following typed tags exists
         | name                                   | type         | canonical |
         | Cowboy Bebop                           | Fandom       | true      |
+      And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop"
       And all indexing jobs have been run
     When I go to the wrangling tools page
-      And I follow "Fandoms by media (1)"
+      And I follow "Fandoms by media (2)"
       And I check the wrangling option for "Cowboy Bebop"
       And I select "Anime & Manga" from "Wrangle to Media"
       And I press "Wrangle"
@@ -166,6 +167,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | name                                   | type         | canonical |
         | Toby Daye/Tybalt                       | Relationship | true      |
         | October Daye Series - Seanan McGuire   | Fandom       | false     |
+      And I post the work "Honky Tonk Women" with fandom "October Daye Series - Seanan McGuire" with relationship "Toby Daye/Tybalt"
       And all indexing jobs have been run
     When I go to the wrangling tools page
       And I follow "Relationships by fandom (1)"
@@ -181,6 +183,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | name                                   | type         | canonical |
         | Toby Daye/Tybalt                       | Relationship | true      |
         | October Daye Series - Seanan McGuire   | Fandom       | true      |
+      And I post the work "Honky Tonk Women" with fandom "October Daye Series - Seanan McGuire" with relationship "Toby Daye/Tybalt"
       And all indexing jobs have been run
     When I go to the wrangling tools page
       And I follow "Relationships by fandom (1)"
@@ -259,3 +262,30 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And all indexing jobs have been run
       And I view the unwrangled relationship bin for "Canonical Character"
     Then I should not see "Syn Character/OC"
+
+  Scenario: Tags from draft works don't show in unwrangled bins
+    Given a canonical fandom "Testing"
+      And I am logged in as a tag wrangler
+      And I set up the draft "Generic Work" with fandom "Testing" with character "draft char" with freeform "draft freeform" with relationship "draft rel"
+      And I press "Preview"
+      And all indexing jobs have been run
+    When I view the unwrangled character bin for "Testing"
+      Then I should not see "draft char"
+    When I view the unwrangled freeform bin for "Testing"
+      Then I should not see "draft freeform"
+    When I view the unwrangled relationship bin for "Testing"
+      Then I should not see "draft rel"
+    When I go to the wrangling tools page
+      And I flush the wrangling sidebar caches
+      And I follow "Characters by fandom (0)"
+      Then I should not see "draft char"
+    When I follow "Freeforms by fandom (0)"
+      Then I should not see "draft freeform"
+    When I follow "Relationships by fandom (0)"
+      Then I should not see "draft rel"
+    When I view the work "Generic Work"
+      And I follow "Edit"
+      And I press "Post"
+      And all indexing jobs have been run
+      And I view the unwrangled character bin for "Testing"
+    Then I should see "draft char"
