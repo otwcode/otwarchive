@@ -548,6 +548,12 @@ en:
       find_your_favorites: Find your favorites
       media_navigation_label: Media
       readings:
+        index:
+          page_heading: History
+          content_heading: List of History Items
+          full_history: Full History
+          marked_for_later: Marked for Later
+          clear_entire_history: Clear Entire History
         heading:
           history_link: My History
           title: Is it later already?

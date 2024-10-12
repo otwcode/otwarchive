@@ -2,7 +2,7 @@
 <h2 class="heading"><%= t("Clear Entire History") %></h2>
 
 <!--main content-->
-<%= form_for(@readings, html: { method: "post", action: "clear", class: "simple destroy" }) do |f| %>
+<%= form_with(model: :reading, method: :post, url: {action: "clear"}, class: "simple destroy") do |f| %>
   <p class="caution notice">
     <%= t("Are you sure you want to <strong><em>clear</em></strong> your entire history? This <strong>cannot be undone</strong>.").html_safe %>
   </p>
