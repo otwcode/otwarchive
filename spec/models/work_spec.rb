@@ -321,23 +321,23 @@ describe Work do
     end
   end
 
-  describe "#creators_to_sort_on" do
+  describe "#authors_to_sort_on" do
     let(:work) { build(:work) }
 
     context "when the pseuds start with special characters" do
       it "removes those characters" do
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "-jolyne")]
-        expect(work.creators_to_sort_on).to eq "jolyne"
+        expect(work.authors_to_sort_on).to eq "jolyne"
 
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "_hermes")]
-        expect(work.creators_to_sort_on).to eq "hermes"
+        expect(work.authors_to_sort_on).to eq "hermes"
       end
     end
 
     context "when the pseuds start with numbers" do
       it "does not remove numbers" do
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "007james")]
-        expect(work.creators_to_sort_on).to eq "007james"
+        expect(work.authors_to_sort_on).to eq "007james"
       end
     end
 
@@ -345,17 +345,17 @@ describe Work do
       it "returns Anonymous" do
         work.in_anon_collection = true
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "stealthy")]
-        expect(work.creators_to_sort_on).to eq "Anonymous"
+        expect(work.authors_to_sort_on).to eq "Anonymous"
       end
     end
 
     context "when the work has multiple pseuds" do
       it "sorts them like the byline then joins them with commas" do
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "diavolo"), Pseud.new(name: "doppio")]
-        expect(work.creators_to_sort_on).to eq "diavolo,  doppio"
+        expect(work.authors_to_sort_on).to eq "diavolo,  doppio"
 
         allow(work).to receive(:pseuds).and_return [Pseud.new(name: "Tiziano"), Pseud.new(name: "squalo")]
-        expect(work.creators_to_sort_on).to eq "squalo,  tiziano"
+        expect(work.authors_to_sort_on).to eq "squalo,  tiziano"
       end
     end
   end

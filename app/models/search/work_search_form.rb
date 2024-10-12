@@ -7,7 +7,7 @@ class WorkSearchForm
   ATTRIBUTES = [
     :query,
     :title,
-    :creator,
+    :creators,
     :collected,
     :faceted,
     :revised_at,
@@ -182,7 +182,7 @@ class WorkSearchForm
 
   SORT_OPTIONS = [
     ["Best Match", "_score"],
-    %w[Creator creators_to_sort_on],
+    %w[Creator authors_to_sort_on],
     %w[Title title_to_sort_on],
     ["Date Posted", "created_at"],
     ["Date Updated", "revised_at"],
@@ -219,7 +219,7 @@ class WorkSearchForm
   end
 
   def default_sort_direction
-    if %w[creators_to_sort_on title_to_sort_on].include?(sort_column)
+    if %w[authors_to_sort_on title_to_sort_on].include?(sort_column)
       'asc'
     else
       'desc'

@@ -161,7 +161,7 @@ class DownloadWriter
       title:             work.title,
       sortable_title:    work.sorted_title,
       authors:           download.authors,
-      sortable_authors:  work.creators_to_sort_on,
+      sortable_authors:  work.authors_to_sort_on,
       tags:              "Fanworks, " + work.tags.pluck(:name).join(", "),
       pubdate:           work.revised_at.to_date.to_s,
       summary:           work.summary.to_s,
