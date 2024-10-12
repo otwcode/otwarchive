@@ -548,12 +548,6 @@ en:
       find_your_favorites: Find your favorites
       media_navigation_label: Media
       readings:
-        index:
-          page_heading: History
-          content_heading: List of History Items
-          full_history: Full History
-          marked_for_later: Marked for Later
-          clear_entire_history: Clear Entire History
         heading:
           history_link: My History
           title: Is it later already?
@@ -738,6 +732,17 @@ en:
       name: Name
       submit: Submit
       ticket_footnote: Numbers only.
+  readings:
+    index:
+      page_heading: History
+      content_heading: List of History Items
+      full_history: Full History
+      marked_for_later: Marked for Later
+      clear_entire_history: Clear Entire History
+    confirm_clear:
+      page_heading: Clear Entire History
+      notice: Are you sure you want to <strong><em>clear</em></strong> your entire history? This <strong>cannot be undone</strong>.
+      submit: Yes, Clear Entire History
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?

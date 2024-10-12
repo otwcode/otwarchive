@@ -51,7 +51,6 @@ class ReadingsController < ApplicationController
   end
 
   def confirm_clear
-    @readings = @user.readings
   end
 
   protected
