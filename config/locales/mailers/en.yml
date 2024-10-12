@@ -120,6 +120,20 @@ en:
       subject: "[%{app_name}] Your work has been deleted by an admin"
       text:
         tos_violation: If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{contact_abuse_url}).
+    admin_hidden_bookmark_notification:
+      access: While your bookmark is hidden, you will still be able to access it through the link provided above, but it will not be listed on your bookmarks page, and it won't be available to other users of the Archive.
+      check_email: Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your bookmark was hidden.
+      contact_abuse: contact Policy & Abuse
+      html:
+        help: If you are uncertain why your bookmark was hidden, and you have not received further communication regarding this matter, please %{contact_abuse_link} directly.
+        hidden: Your (%{bookmark_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible.
+        tos_violation: If your bookmark was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your bookmark into compliance with the Terms of Service may lead to your bookmark being deleted from the Archive.
+      subject: "[%{app_name}] Your bookmark has been hidden by the Policy & Abuse team"
+      text:
+        help: "If you are uncertain why your bookmark was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}."
+        hidden: Your bookmark (%{bookmark_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible.
+        tos_violation: If your bookmark was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your bookmark into compliance with the Terms of Service may lead to your bookmark being deleted from the Archive.
+      tos: Terms of Service
     admin_hidden_series_notification:
       access: While your series is hidden, you will still be able to access it through the link provided above, but it will not be listed on your series' page, and it won't be available to other users of the Archive.
       check_email: Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your series was hidden.
