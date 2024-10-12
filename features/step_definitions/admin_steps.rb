@@ -218,6 +218,11 @@ Given "the admin {string} is unlocked" do |login|
   admin.unlock_access!
 end
 
+Given "there is/are {int} user creation(s) per page" do |amount|
+  allow(Work).to receive(:per_page).and_return(amount)
+  allow(Comment).to receive(:per_page).and_return(amount)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -230,7 +235,7 @@ When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/ do |field, login|
   fill_in(field, with: token)
 end
 
-When /^I start to make an admin post$/ do
+When "I start to make an admin post" do
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Default Admin Post")
   fill_in("content", with: "Content of the admin post.")

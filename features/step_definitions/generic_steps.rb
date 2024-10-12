@@ -30,6 +30,10 @@ Then /^show me the sidebar$/ do
   puts "\n" + find("#dashboard").native.inner_html
 end
 
+Then "the page should have a dashboard sidebar" do
+  expect(page).to have_css("#dashboard")
+end
+
 Then /^I should see errors/ do
   assert find("div.error")
 end
@@ -270,4 +274,8 @@ end
 When /^I should see the correct time zone for "(.*)"$/ do |zone|
   Time.zone = zone
   page.body.should =~ /#{Regexp.escape(Time.zone.now.zone)}/
+end
+
+Then "I should see {string} exactly {int} time(s)" do |string, int|
+  expect(page).to have_content(string).exactly(int)
 end

@@ -245,3 +245,21 @@ Feature: Reading count
     And I go to the homepage
   Then I should see "Some Work V2"
     And I should not see "Some Work V1"
+
+  Scenario: A user cannot see hidden by admin works in their reading history
+
+  Given I am logged in as "writer"
+  When I post the work "Testy"
+  Then I should see "Work was successfully posted"
+  When I am logged in as "reader"
+    And I view the work "Testy"
+  Then I should see "Mark for Later"
+  When I follow "Mark for Later"
+  Then I should see "This work was added to your Marked for Later list."
+  When I am logged in as a "policy_and_abuse" admin
+    And I view the work "Testy"
+    And I follow "Hide Work"
+  Then I should see "Item has been hidden."
+  When I am logged in as "reader"
+    And I go to reader's reading page
+  Then I should not see "Testy"

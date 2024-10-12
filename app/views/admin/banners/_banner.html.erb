@@ -2,6 +2,6 @@
 <% # don't forget to update layouts/banner! %>
 <div class="<%= admin_banner.banner_type %> announcement group">
   <blockquote class="userstuff">
-    <%=raw sanitize_field(admin_banner, :content) %>
+    <%= raw sanitize_field(admin_banner, :content, image_safety_mode: true) %>
   </blockquote>
 </div>

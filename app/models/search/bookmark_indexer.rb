@@ -11,7 +11,7 @@ class BookmarkIndexer < Indexer
     unless options[:skip_delete]
       options[:skip_delete] = true
       BookmarkableIndexer.delete_index
-      BookmarkableIndexer.create_index(shards: 18)
+      BookmarkableIndexer.create_index(shards: ArchiveConfig.BOOKMARKABLE_SHARDS)
       create_mapping
     end
     BookmarkedExternalWorkIndexer.index_all(skip_delete: true)
@@ -35,7 +35,7 @@ class BookmarkIndexer < Indexer
         },
         creators: {
           type: "text",
-          analyzer: "simple"
+          analyzer: "standard"
         },
         work_types: {
           type: "keyword"
@@ -45,7 +45,7 @@ class BookmarkIndexer < Indexer
         },
         bookmarker: {
           type: "text",
-          analyzer: "simple"
+          analyzer: "standard"
         },
         tag: {
           type: "text",

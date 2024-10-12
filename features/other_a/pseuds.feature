@@ -118,6 +118,18 @@ Scenario: Manage pseuds - add, edit
     And I should see "I wanted to add another fancy name"
     And I should not see "My new name (editpseuds)"
 
+Scenario: Pseud descriptions do not display images
+
+  Given I am logged in as "myself"
+    And I go to my pseuds page
+    When I follow "Edit"
+    And I fill in "Description" with "Fantastic!<img src='http://example.com/icon.svg'>"
+    And I press "Update"
+  Then I should see "Pseud was successfully updated."
+  When I follow "Back To Pseuds"
+  Then I should not see the image "src" text "http://example.com/icon.svg"
+    And I should see "Fantastic!"
+
 Scenario: Comments reflect pseud changes immediately
 
   Given the work "Interesting"
