@@ -49,7 +49,7 @@ class WorkIndexer < Indexer
         series: {
           type: "object"
         },
-        authorss_to_sort_on: {
+        authors_to_sort_on: {
           type: "keyword"
         },
         title_to_sort_on: {
