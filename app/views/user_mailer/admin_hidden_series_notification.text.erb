@@ -1,14 +1,14 @@
 <% content_for :message do %>
-<%= t("mailer.general.greeting.formal", name: @user.login) %>
+<%= t("mailer.general.greeting.formal_html", name: @user.login) %>
 
-<%= t(".text.hidden", title: @series.title, series_url: series_url(@series)) %>
+<%= t(".hidden.text", title: @series.title, series_url: series_url(@series)) %>
 
 <%= t(".access") %>
 
 <%= t(".check_email") %>
 
-<%= t(".text.tos_violation", tos_url: tos_url) %>
+<%= t(".tos_violation.text", tos_url: tos_url) %>
 
-<%= t(".text.help", contact_abuse_url: new_abuse_report_url) %>
+<%= t(".help.text", contact_abuse_url: new_abuse_report_url) %>
 <% end %>
 
