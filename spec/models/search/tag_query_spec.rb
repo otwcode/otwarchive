@@ -164,7 +164,7 @@ describe TagQuery do
       results = tag_query.search_results.map(&:id)
 
       [tags[:fan_abcd], tags[:free_abccc]].each do |tag|
-        tag.update(canonical: true)
+        tag.update!(canonical: true)
         run_all_indexing_jobs
         expect(tag_query.search_results.map(&:id)).to eq(results)
       end

@@ -40,7 +40,7 @@ describe WorksController do
 
     context "when admin does not have correct authorization" do
       before do
-        admin.update(roles: [])
+        admin.update!(roles: [])
         fake_login_admin(admin)
       end
 

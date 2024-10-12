@@ -32,6 +32,10 @@ FactoryBot.define do
     factory :draft do
       posted { false }
     end
+
+    trait :guest_comments_on do
+      comment_permissions { :enable_all }
+    end
   end
 
   factory :external_work do

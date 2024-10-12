@@ -67,6 +67,54 @@ namespace :After do
     end
   end
 
+  desc "Clean up multiple rating tags"
+  task(clean_up_multiple_ratings: :environment) do
+    default_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+    es_results = $elasticsearch.search(index: WorkIndexer.index_name, body: {
+                                         query: {
+                                           bool: {
+                                             filter: {
+                                               script: {
+                                                 script: {
+                                                   source: "doc['rating_ids'].length > 1",
+                                                   lang: "painless"
+                                                 }
+                                               }
+                                             }
+                                           }
+                                         }
+                                       })
+    invalid_works = QueryResult.new("Work", es_results)
+
+    puts "There are #{invalid_works.size} works with multiple ratings."
+
+    fixed_work_ids = []
+    unfixed_word_ids = []
+    invalid_works.each do |work|
+      work.ratings = [default_rating_tag]
+      work.rating_string = default_rating_tag.name
+
+      if work.save
+        fixed_work_ids << work.id
+      else
+        unfixed_word_ids << work.id
+      end
+      print(".") && $stdout.flush
+    end
+
+    unless fixed_work_ids.empty?
+      puts "Cleaned up having multiple ratings on #{fixed_work_ids.size} works:"
+      puts fixed_work_ids.join(", ")
+      $stdout.flush
+    end
+
+    unless unfixed_word_ids.empty?
+      puts "The following #{unfixed_word_ids.size} works failed validations and could not be saved:"
+      puts unfixed_word_ids.join(", ")
+      $stdout.flush
+    end
+  end
+
   desc "Clean up noncanonical rating tags"
   task(clean_up_noncanonical_ratings: :environment) do
     canonical_not_rated_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
@@ -221,44 +269,6 @@ namespace :After do
 
       puts "Fixed thread #{index + 1} out of #{total}" if index % 100 == 99
     end
-  end
-
-  desc "Convert remaining chapter kudos into work kudos"
-  task(clean_up_chapter_kudos: :environment) do
-    kudos = Kudo.where(commentable_type: "Chapter")
-    kudos_count = kudos.count
-
-    puts("Updating #{kudos_count} chapter kudos") && STDOUT.flush
-
-    indestructible_kudo_ids = []
-    unupdatable_kudo_ids = []
-
-    kudos.find_each do |kudo|
-      if kudo.commentable.nil? || kudo.commentable.work.nil?
-        indestructible_kudo_ids << kudo.id unless kudo.destroy
-        print(".") && STDOUT.flush
-        next
-      end
-
-      kudo.commentable = kudo.commentable.work
-      unless kudo.save
-        if kudo.errors.keys == [:ip_address] || kudo.errors.keys == [:user_id]
-          # If it's a uniqueness problem, orphan the kudo and re-save.
-          kudo.ip_address = nil
-          kudo.user_id = nil
-          unupdatable_kudo_ids << kudo.id unless kudo.save
-        else
-          # In other cases, let's be cautious and only log.
-          unupdatable_kudo_ids << kudo.id
-        end
-      end
-      print(".") && STDOUT.flush
-    end
-
-    puts
-    puts("Couldn't destroy #{indestructible_kudo_ids.size} kudo(s): #{indestructible_kudo_ids.join(',')}") if indestructible_kudo_ids.any?
-    puts("Couldn't update #{unupdatable_kudo_ids.size} kudo(s): #{unupdatable_kudo_ids.join(',')}") if unupdatable_kudo_ids.any?
-    STDOUT.flush
   end
 
   desc "Remove translation_admin role"

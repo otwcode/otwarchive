@@ -1,10 +1,10 @@
 class BookmarksController < ApplicationController
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :load_bookmarkable, only: [:index, :new, :create, :fetch_recent, :hide_recent]
+  before_action :load_bookmarkable, only: [:index, :new, :create]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete, :share]
+  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :confirm_delete, :share]
   before_action :check_visibility, only: [:show, :share]
   before_action :check_ownership, only: [:edit, :update, :destroy, :confirm_delete, :share]
 
@@ -63,7 +63,7 @@ class BookmarksController < ApplicationController
       access_denied unless logged_in_as_admin? || @bookmarkable.visible?
       @bookmarks = @bookmarkable.bookmarks.is_public
       @bookmarks += @bookmarkable.bookmarks.where(hidden_by_admin: true) if logged_in_as_admin?
-      @bookmarks = @bookmarks.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      @bookmarks = @bookmarks.order_by_created_at.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
     else
       base_options = {
         show_private: (@user.present? && @user == current_user),
@@ -279,26 +279,6 @@ class BookmarksController < ApplicationController
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
     redirect_to user_bookmarks_path(current_user)
-  end
-
-  # Used on index page to show 4 most recent bookmarks (after bookmark being currently viewed) via RJS
-  # Only main bookmarks page or tag bookmarks page
-  # non-JS fallback should be to the 'view all bookmarks' link which serves the same function
-  def fetch_recent
-    @bookmarkable = @bookmark.bookmarkable
-    respond_to do |format|
-      format.js {
-        @bookmarks = @bookmarkable.bookmarks.visible.order("created_at DESC").offset(1).limit(4)
-        set_own_bookmarks
-      }
-      format.html do
-        id_symbol = (@bookmarkable.class.to_s.underscore + '_id').to_sym
-        redirect_to url_for({action: :index, id_symbol => @bookmarkable})
-      end
-    end
-  end
-  def hide_recent
-    @bookmarkable = @bookmark.bookmarkable
   end
 
   protected

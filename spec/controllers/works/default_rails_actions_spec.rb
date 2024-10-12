@@ -350,6 +350,22 @@ describe WorksController, work_search: true do
       expect(assigns(:fandom)).to eq(@fandom)
     end
 
+    describe "when the fandom id is invalid" do
+      it "raises a 404 for an invalid id" do
+        params = { fandom_id: 0 }
+        expect { get :index, params: params }
+          .to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    describe "when the fandom id is empty" do
+      it "returns the work" do
+        params = { fandom_id: nil }
+        get :index, params: params
+        expect(assigns(:works)).to include(@work)
+      end
+    end
+
     describe "without caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, false)
@@ -540,7 +556,7 @@ describe WorksController, work_search: true do
 
     it "allows the user to invite co-creators" do
       co_creator = create(:user)
-      co_creator.preference.update(allow_cocreator: true)
+      co_creator.preference.update!(allow_cocreator: true)
       put :update, params: { id: update_work.id, work: { author_attributes: { byline: co_creator.login } } }
       expect(update_work.pseuds.reload).not_to include(co_creator.default_pseud)
       expect(update_work.user_has_creator_invite?(co_creator)).to be_truthy
@@ -548,7 +564,7 @@ describe WorksController, work_search: true do
 
     it "prevents inviting users who have disallowed co-creators" do
       no_co_creator = create(:user)
-      no_co_creator.preference.update(allow_cocreator: false)
+      no_co_creator.preference.update!(allow_cocreator: false)
       put :update, params: { id: update_work.id, work: { author_attributes: { byline: no_co_creator.login } } }
       expect(response).to render_template :edit
       expect(assigns[:work].errors.full_messages).to \

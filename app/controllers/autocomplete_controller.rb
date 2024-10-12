@@ -88,17 +88,39 @@ class AutocompleteController < ApplicationController
 
   ## NONCANONICAL TAGS
   def noncanonical_tag
-    search_param = params[:term]
+    search_param = Query.new.escape_reserved_characters(params[:term])
     raise "Redshirt: Attempted to constantize invalid class initialize noncanonical_tag #{params[:type].classify}" unless Tag::TYPES.include?(params[:type].classify)
+
     tag_class = params[:type].classify.constantize
-    render_output(tag_class.by_popularity
-                      .where(["canonical = 0 AND name LIKE ?",
-                              '%' + search_param + '%']).limit(10).map(&:name))
+    one_tag = tag_class.find_by(canonical: false, name: params[:term]) if params[:term].present?
+    # If there is an exact match in the database, ensure it is the first thing suggested.
+    match = if one_tag
+              [one_tag.name]
+            else
+              []
+            end
+
+    # As explained in https://stackoverflow.com/a/54080114, the Elasticsearch suggestion suggester does not support
+    # matches in the middle of a series of words. Therefore, we break the autocomplete query into its individual
+    # words – based on whitespace – except for the last word, which could be incomplete, so a prefix match is
+    # appropriate. This emulates the behavior of SQL `LIKE '%text%'.
+
+    word_list = search_param.split
+    last_word = word_list.pop
+    search_list = word_list.map { |w| { term: { name: { value: w, case_insensitive: true } } } } + [{ prefix: { name: { value: last_word, case_insensitive: true } } }]
+    begin
+      # Size is chosen so we get enough search results from each shard.
+      search_results = $elasticsearch.search(
+        index: TagIndexer.index_name,
+        body: { size: "100", query: { bool: { filter: [{ match: { tag_type: params[:type].capitalize } }, { match: { canonical: false } }], must: search_list } } }
+      )
+      render_output((match + search_results["hits"]["hits"].first(10).map { |t| t["_source"]["name"] }).uniq)
+    rescue Elasticsearch::Transport::Transport::Errors::BadRequest
+      render_output(match)
+    end
   end
 
-
   # more-specific autocompletes should be added below here when they can't be avoided
-
 
   # look up collections ranked by number of items they contain
 

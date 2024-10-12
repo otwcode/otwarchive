@@ -4,21 +4,21 @@ Feature: Help
   As a humble user
   I want to read help links
 
-Scenario: clicking the help popup for moderated collection
-  
-  Given I am logged in as "first_user"
-  When I go to the collections page
-  When I follow "New Collection"
-    And I follow "Collection moderated"
-  Then I should see "By default, collections are not moderated"
-  
-Scenario: view the help popup for chapter title
+  Scenario: clicking the help popup for moderated collection
 
-  Given the following activated user exists
-    | login         | password   |
-    | epicauthor    | password   |
+    Given I am logged in as "first_user"
+    When I go to the collections page
+    When I follow "New Collection"
+    And I follow "Collection moderated"
+    Then I should see "By default, collections are not moderated"
+
+  Scenario: view the help popup for chapter title
+
+    Given the following activated user exists
+      | login      | password |
+      | epicauthor | password |
     And basic tags
-  When I am logged in as "epicauthor"
+    When I am logged in as "epicauthor"
     And I go to epicauthor's user page
     And I follow "New Work"
     And I select "Not Rated" from "Rating"
@@ -30,4 +30,13 @@ Scenario: view the help popup for chapter title
     And I press "Post"
     And I follow "Add Chapter"
     And I follow "Chapter title"
-  Then I should see "You can add a chapter title"
+    Then I should see "You can add a chapter title"
+
+  Scenario: Asked to log in if trying to access the first login page as guest
+
+    When I go to the first login help page
+    Then I should be on the login page
+
+    Given I am logged in
+    When I go to the first login help page
+    Then I should see "Here are some tips to help you get started"
