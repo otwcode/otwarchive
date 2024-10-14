@@ -149,7 +149,7 @@ describe UserMailer do
     title = "Façade"
     title2 = Faker::Book.title
 
-    subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true) }
+    subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id]) }
 
     let(:author) { create(:user) }
     let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
