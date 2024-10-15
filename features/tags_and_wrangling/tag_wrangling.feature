@@ -81,7 +81,7 @@ Feature: Tag wrangling
     Then I should see "Stargate SG-1"
       And I should see "wrangler" within "ul.wranglers"
 
-  Scenario: Making a character canonical and assiging it to a fandom
+  Scenario: Making a character canonical and assigning it to a fandom
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
       And I am logged in as a tag wrangler

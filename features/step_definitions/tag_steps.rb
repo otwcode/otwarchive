@@ -374,8 +374,19 @@ When /^I remove the metatag "([^"]*)" from "([^"]*)"$/ do |metatag, subtag|
   click_button("Save changes")
 end
 
+When "I assign the tag {string} to the fandom {string}" do |tag, fandom|
+  tag = Tag.find_by(name: tag)
+  visit edit_tag_path(tag)
+  fill_in("Fandoms", with: fandom)
+  click_button("Save changes")
+end
+
 When /^I view the (canonical|synonymous|unfilterable|unwrangled|unwrangleable) (character|relationship|freeform) bin for "(.*?)"$/ do |status, type, tag|
   visit wrangle_tag_path(Tag.find_by(name: tag), show: type.pluralize, status: status)
+end
+
+When /^I view the (character|relationship|freeform|fandom) mass bin$/ do |type|
+  visit tag_wranglings_path(show: type.pluralize)
 end
 
 ### THEN

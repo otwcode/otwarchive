@@ -153,8 +153,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | Cowboy Bebop                           | Fandom       | true      |
       And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop"
       And all indexing jobs have been run
-    When I go to the wrangling tools page
-      And I follow "Fandoms by media (2)"
+    When I view the fandom mass bin
       And I check the wrangling option for "Cowboy Bebop"
       And I select "Anime & Manga" from "Wrangle to Media"
       And I press "Wrangle"
@@ -169,8 +168,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | October Daye Series - Seanan McGuire   | Fandom       | false     |
       And I post the work "Honky Tonk Women" with fandom "October Daye Series - Seanan McGuire" with relationship "Toby Daye/Tybalt"
       And all indexing jobs have been run
-    When I go to the wrangling tools page
-      And I follow "Relationships by fandom (1)"
+    When I view the relationship mass bin
       And I check the wrangling option for "Toby Daye/Tybalt"
       And I fill in "Wrangle to Fandom(s)" with "October Daye Series - Seanan McGuire"
       And I press "Wrangle"
@@ -185,8 +183,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | October Daye Series - Seanan McGuire   | Fandom       | true      |
       And I post the work "Honky Tonk Women" with fandom "October Daye Series - Seanan McGuire" with relationship "Toby Daye/Tybalt"
       And all indexing jobs have been run
-    When I go to the wrangling tools page
-      And I follow "Relationships by fandom (1)"
+    When I view the relationship mass bin
       And I check the wrangling option for "Toby Daye/Tybalt"
       And I fill in "Wrangle to Fandom(s)" with "October Daye Series - Seanan McGuire"
       And I press "Wrangle"
@@ -201,8 +198,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | Ed                | Character    | false     |
       And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop" with character "Faye Valentine" with second character "Ed"
       And all indexing jobs have been run
-    When I go to the wrangling tools page
-      And I follow "Characters by fandom (2)"
+    When I view the character mass bin
       And I fill in "Wrangle to Fandom(s)" with "Cowboy Bebop"
       And I check the canonical option for the tag "Faye Valentine"
       And I check the canonical option for the tag "Ed"
@@ -268,7 +264,9 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I am logged in as a tag wrangler
       And I set up the draft "Generic Work" with fandom "Testing" with character "draft char" with freeform "draft freeform" with relationship "draft rel"
       And I press "Preview"
+      And the periodic tag count task is run
       And all indexing jobs have been run
+      And I flush the wrangling sidebar caches
     When I view the unwrangled character bin for "Testing"
       Then I should not see "draft char"
     When I view the unwrangled freeform bin for "Testing"
@@ -276,16 +274,65 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I view the unwrangled relationship bin for "Testing"
       Then I should not see "draft rel"
     When I go to the wrangling tools page
-      And I flush the wrangling sidebar caches
       And I follow "Characters by fandom (0)"
       Then I should not see "draft char"
     When I follow "Freeforms by fandom (0)"
       Then I should not see "draft freeform"
     When I follow "Relationships by fandom (0)"
       Then I should not see "draft rel"
-    When I view the work "Generic Work"
-      And I follow "Edit"
-      And I press "Post"
+
+  Scenario: When the only draft using a tag is posted, the tag shows up in unwrangled bins
+    Given a canonical fandom "Testing"
+      And I am logged in as a tag wrangler
+      And I set up the draft "Generic Work" with fandom "Testing" with character "draft char"
+      And I press "Preview"
+      And the periodic tag count task is run
       And all indexing jobs have been run
+    When I view the unwrangled character bin for "Testing"
+    Then I should not see "draft char"
+    When I post the work "Generic Work"
+      And the periodic tag count task is run
+      And all indexing jobs have been run
+      And I flush the wrangling sidebar caches
       And I view the unwrangled character bin for "Testing"
     Then I should see "draft char"
+    When I go to the wrangling tools page
+      And I follow "Characters by fandom (1)"
+    Then I should see "draft char"
+
+  Scenario: Tags from bookmarks don't show up in unwrangled bins after being sorted and assigned to a fandom
+    Given  a canonical fandom "Testing"
+      And I am logged in as a tag wrangler
+      And I post the work "Generic Work"
+      And I bookmark the work "Generic Work" with the tags "bookmark rel tag, bookmark char tag"
+    When I go to the unsorted_tags page
+      And I select "Relationship" for the unsorted tag "bookmark rel tag"
+      And I select "Character" for the unsorted tag "bookmark char tag"
+      And I press "Update"
+    Then I should see "Tags were successfully sorted"
+      And the "bookmark rel tag" tag should be a "Relationship" tag
+      And the "bookmark char tag" tag should be a "Character" tag
+    When the periodic tag count task is run
+      And all indexing jobs have been run
+      And I flush the wrangling sidebar caches
+      And I go to the wrangling tools page
+      And I follow "Characters by fandom (0)"
+    Then I should not see "bookmark char tag"
+    When I follow "Relationships by fandom (0)"
+    Then I should not see "bookmark rel tag"
+    When I assign the tag "bookmark char tag" to the fandom "Testing"
+      And I assign the tag "bookmark rel tag" to the fandom "Testing"
+    Then the "bookmark char tag" tag should be in the "Testing" fandom
+      And the "bookmark rel tag" tag should be in the "Testing" fandom
+      And the periodic tag count task is run
+      And all indexing jobs have been run
+      And I flush the wrangling sidebar caches
+    When I view the unwrangled character bin for "Testing"
+    Then I should not see "bookmark char tag"
+    When I view the unwrangled relationship bin for "Testing"
+    Then I should not see "bookmark rel tag"
+    When I go to the wrangling tools page
+      And I follow "Characters by fandom (0)"
+    Then I should not see "bookmark char tag"
+    When I follow "Relationships by fandom (0)"
+    Then I should not see "bookmark rel tag"
