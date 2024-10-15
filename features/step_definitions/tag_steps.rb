@@ -385,7 +385,7 @@ When /^I view the (canonical|synonymous|unfilterable|unwrangled|unwrangleable) (
   visit wrangle_tag_path(Tag.find_by(name: tag), show: type.pluralize, status: status)
 end
 
-When /^I view the (character|relationship|freeform|fandom) mass bin$/ do |type|
+When /^I view the (character|relationship|freeform|fandom) mass bin$/ do |type| # rubocop:disable Cucumber/RegexStepName
   visit tag_wranglings_path(show: type.pluralize)
 end
 
