@@ -28,7 +28,7 @@ Feature: Tag wrangling
       And I am logged in as a tag wrangler
     When I go to my wrangling page
     Then I should see "Wrangling Home"
-      And I should see "Fandoms by media (3)"
+      And I should see "Fandoms by media (2)"
       And I should see "Characters by fandom (2)"
       And I should see "Relationships by fandom (1)"
     When I follow <link_text>
@@ -40,7 +40,7 @@ Feature: Tag wrangling
       | "Wrangling Tools"             | "Tag Wrangling"                    |
       | "Characters by fandom (2)"    | "Mass Wrangle New/Unwrangled Tags" |
       | "Relationships by fandom (1)" | "Mass Wrangle New/Unwrangled Tags" |
-      | "Fandoms by media (3)"        | "Mass Wrangle New/Unwrangled Tags" |
+      | "Fandoms by media (2)"        | "Mass Wrangle New/Unwrangled Tags" |
 
   Scenario: Edit tag page
     Given the tag wrangling setup
@@ -81,7 +81,7 @@ Feature: Tag wrangling
     Then I should see "Stargate SG-1"
       And I should see "wrangler" within "ul.wranglers"
 
-  Scenario: Making a character canonical and assiging it to a fandom
+  Scenario: Making a character canonical and assigning it to a fandom
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
       And I am logged in as a tag wrangler
