@@ -1,5 +1,4 @@
 class SkinsController < ApplicationController
-
   before_action :users_only, only: [:new, :create, :destroy]
   before_action :load_skin, except: [:index, :new, :create, :unset]
   before_action :check_title, only: [:create, :update]
@@ -13,34 +12,31 @@ class SkinsController < ApplicationController
   # GET /skins
   def index
     is_work_skin = params[:skin_type] && params[:skin_type] == "WorkSkin"
-    if current_user && current_user.is_a?(User)
-      @preference = current_user.preference
-    end
+    @preference = current_user.preference if current_user && current_user.is_a?(User)
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       redirect_to new_user_session_path and return unless logged_in?
+
       if @user != current_user
         flash[:error] = "You can only browse your own skins and approved public skins."
         redirect_to skins_path and return
       end
       if is_work_skin
         @skins = @user.work_skins.sort_by_recent
-        @title = ts('My Work Skins')
+        @title = ts("My Work Skins")
       else
         @skins = @user.skins.site_skins.sort_by_recent
-        @title = ts('My Site Skins')
+        @title = ts("My Site Skins")
       end
+    elsif is_work_skin
+      @skins = WorkSkin.approved_skins.sort_by_recent_featured
+      @title = ts("Public Work Skins")
     else
-      if is_work_skin
-        @skins = WorkSkin.approved_skins.sort_by_recent_featured
-        @title = ts('Public Work Skins')
-      else
-        if logged_in?
-          @skins = Skin.approved_skins.usable.site_skins.sort_by_recent_featured
-        else
-          @skins = Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured
-        end
-        @title = ts('Public Site Skins')
-      end
+      @skins = if logged_in?
+                 Skin.approved_skins.usable.site_skins.sort_by_recent_featured
+               else
+                 Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured
+               end
+      @title = ts("Public Site Skins")
     end
   end
 
@@ -60,16 +56,16 @@ class SkinsController < ApplicationController
 
   # POST /skins
   def create
-    unless params[:skin_type].nil? || params[:skin_type] && %w(Skin WorkSkin).include?(params[:skin_type])
+    unless params[:skin_type].nil? || (params[:skin_type] && %w[Skin WorkSkin].include?(params[:skin_type]))
       flash[:error] = ts("What kind of skin did you want to create?")
       redirect_to :new and return
     end
-    loaded = load_archive_parents unless params[:skin_type] && params[:skin_type] == 'WorkSkin'
-    if params[:skin_type] == "WorkSkin"
-      @skin = WorkSkin.new(skin_params)
-    else
-      @skin = Skin.new(skin_params)
-    end
+    loaded = load_archive_parents unless params[:skin_type] && params[:skin_type] == "WorkSkin"
+    @skin = if params[:skin_type] == "WorkSkin"
+              WorkSkin.new(skin_params)
+            else
+              Skin.new(skin_params)
+            end
     @skin.author = current_user
     if @skin.save
       flash[:notice] = ts("Skin was successfully created.")
@@ -79,12 +75,10 @@ class SkinsController < ApplicationController
       else
         redirect_to skin_path(@skin)
       end
+    elsif params[:wizard]
+      render :new_wizard
     else
-      if params[:wizard]
-        render :new_wizard
-      else
-        render :new
-      end
+      render :new
     end
   end
 
@@ -120,9 +114,10 @@ class SkinsController < ApplicationController
   def preview
     flash[:notice] = []
     flash[:notice] << ts("You are previewing the skin %{title}. This is a randomly chosen page.", title: @skin.title)
-    flash[:notice] << ts("Go back or click any link to remove the skin.")
-    flash[:notice] << ts("Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above.")
-    flash[:notice] << "<a href='#{skin_path(@skin)}' class='action' role='button'>".html_safe + ts("Return To Skin To Use") + "</a>".html_safe
+    flash[:notice] << ts("Go back or follow any link to remove the skin.")
+    flash[:notice] << (ts("Tip: You can preview any archive page you want by adding '?site_skin=%{skin_id}' to the end of the URL.", skin_id: @skin.id) +
+                      "<p><a href='#{skin_path(@skin)}' class='action'>".html_safe + ts("Return to Skin to Use") + "</a></p>".html_safe)
+
     tag = FilterCount.where("public_works_count BETWEEN 10 AND 20").random_order.first.filter
     redirect_to tag_works_path(tag, site_skin: @skin.id)
   end
@@ -157,7 +152,7 @@ class SkinsController < ApplicationController
     begin
       @skin.destroy
       flash[:notice] = ts("The skin was deleted.")
-    rescue
+    rescue StandardError
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
 
@@ -165,7 +160,11 @@ class SkinsController < ApplicationController
       current_user.preference.skin_id = AdminSetting.default_skin_id
       current_user.preference.save
     end
-    redirect_to user_skins_path(current_user) rescue redirect_to skins_path
+    begin
+      redirect_to user_skins_path(current_user)
+    rescue StandardError
+      redirect_to skins_path
+    end
   end
 
   private
@@ -211,7 +210,7 @@ class SkinsController < ApplicationController
     if params[:add_site_parents]
       params[:skin][:skin_parents_attributes] ||= ActionController::Parameters.new
       archive_parents = Skin.get_current_site_skin.get_all_parents
-      skin_parent_titles = params[:skin][:skin_parents_attributes].values.map { |v| v[:parent_skin_title] }
+      skin_parent_titles = params[:skin][:skin_parents_attributes].values.pluck(:parent_skin_title)
       skin_parents = skin_parent_titles.empty? ? [] : Skin.where(title: skin_parent_titles).pluck(:id)
       skin_parents += @skin.get_all_parents.collect(&:id) if @skin
       unless (skin_parents.uniq & archive_parents.map(&:id)).empty?
@@ -222,7 +221,7 @@ class SkinsController < ApplicationController
       archive_parents.each do |parent_skin|
         last_position += 1
         new_skin_parent_hash = ActionController::Parameters.new({ position: last_position, parent_skin_id: parent_skin.id })
-        params[:skin][:skin_parents_attributes].merge!({last_position.to_s => new_skin_parent_hash})
+        params[:skin][:skin_parents_attributes].merge!({ last_position.to_s => new_skin_parent_hash })
       end
       return true
     end
