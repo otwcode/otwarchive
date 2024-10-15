@@ -54,16 +54,22 @@ jobs:
             arguments: db:otwseed
           - command: rspec
             arguments: spec/controllers
+            imagemagick: true
           - command: rspec
             arguments: spec/models
+            imagemagick: true
           - command: rspec
             arguments: --exclude-pattern 'spec/{controllers,models}/**/*.rb'
+            imagemagick: true
           - command: cucumber
             arguments: features/admins
+            imagemagick: true
           - command: cucumber
             arguments: features/bookmarks
+            imagemagick: true
           - command: cucumber
             arguments: features/collections
+            imagemagick: true
           - command: cucumber
             arguments: features/comments_and_kudos
           - command: cucumber
@@ -73,8 +79,10 @@ jobs:
             vcr: true
           - command: cucumber
             arguments: features/other_a
+            imagemagick: true
           - command: cucumber
             arguments: features/other_b
+            imagemagick: true
           - command: cucumber
             arguments: features/prompt_memes_a
           - command: cucumber
@@ -92,6 +100,7 @@ jobs:
           - command: cucumber
             arguments: features/works
             ebook: true
+            imagemagick: true
 
     steps:
       - name: Check out code
@@ -128,6 +137,10 @@ jobs:
           key: cassette-library-${{ hashFiles(matrix.tests.arguments) }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             cassette-library-${{ hashFiles(matrix.tests.arguments) }}-
+
+      - name: Install imagemagick for image processing
+        if: ${{ matrix.tests.imagemagick }}
+        run: sudo apt-get install -y imagemagick
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
