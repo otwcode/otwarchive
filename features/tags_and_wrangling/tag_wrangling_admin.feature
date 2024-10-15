@@ -70,3 +70,42 @@ Feature: Tag wrangling
     Then I should see "Tags Wrangled (CSV)"
     When I follow "Tags Wrangled (CSV)"
     Then I should download a csv file with the header row "Name Last Updated Type Merger Fandoms Unwrangleable"
+
+  Scenario Outline: Authorized admins get the wrangling dashboard sidebar
+
+    Given I am logged in as a "<role>" admin
+    When I go to the wrangling tools page
+    Then I should see "Wrangling Tools" within "div#dashboard"
+      And I should see "Wranglers" within "div#dashboard"
+      And I should see "Search Tags" within "div#dashboard"
+      And I should see "New Tag" within "div#dashboard"
+      But I should not see "Wrangling Home" within "div#dashboard"
+
+    Examples:
+    | role          |
+    | superadmin    |
+    | tag_wrangling |
+
+  Scenario Outline: Unauthorized admins do not get the wrangling dashboard sidebar
+
+    Given I am logged in as a "<role>" admin
+    When I go to the wrangling tools page
+    Then I should not see "Wrangling Tools"
+      And I should not see "Wranglers"
+      And I should not see "Search Tags"
+      And I should not see "New Tag"
+      And I should not see "Wrangling Home"
+
+    Examples:
+    | role                       |
+    | board                      |
+    | board_assistants_team      |
+    | communications             |
+    | development_and_membership |
+    | docs                       |
+    | elections                  |
+    | legal                      |
+    | translation                |
+    | support                    |
+    | policy_and_abuse           |
+    | open_doors                 |

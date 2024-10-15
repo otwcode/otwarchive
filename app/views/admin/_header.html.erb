@@ -58,8 +58,9 @@
         </ul>
       </li>
     <% end %>
-    <li><%= link_to t(".nav.wrangling"), tag_wranglings_path %></li>
-  
+    <% if policy(:wrangling).read_access? %>
+      <li><%= link_to t(".nav.wrangling"), tag_wranglings_path %></li>
+    <% end %>
     <% if policy(Locale).index? %>
       <li><%= link_to t(".nav.locales"), locales_path %></li>
     <% end %>
