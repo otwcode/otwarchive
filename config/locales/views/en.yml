@@ -91,6 +91,10 @@ en:
           queue: Manage Queue
           requests: Manage Requests
         page_heading: Invite New Users
+    admin_nav:
+      news:
+        delete_post: Delete Post
+      wrangling_guidelines: Wrangling Guidelines
     admin_options:
       delete:
         bookmark: Delete Bookmark
