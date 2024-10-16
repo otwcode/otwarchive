@@ -7,6 +7,9 @@ class TagSet < ApplicationRecord
   TAG_TYPES_RESTRICTED_TO_FANDOM = %w(character relationship)
   TAGS_AS_CHECKBOXES = %w(category rating archive_warning)
 
+  INVALID_CHARACTERS = /[,\^*<>{}=`\\%]/
+  MAX_LENGTH = 100
+
   attr_accessor :from_owned_tag_set
 
   has_many :set_taggings, dependent: :destroy
@@ -72,9 +75,15 @@ class TagSet < ApplicationRecord
   # [type]_tagnames
   # [type]_tagnames_to_add/_remove
   after_save :assign_tags
+
+  def self.invalid_tag?(tag_name)
+    tag_name.length > MAX_LENGTH || tag_name.match?(INVALID_CHARACTERS)
+  end
+
   def assign_tags
     tags_to_add = []
     tags_to_remove = []
+    invalid_tags = [] # collect invalid tags
 
     TAG_TYPES.each do |type|
       if self.instance_variable_get("@#{type}_tagnames")
@@ -83,6 +92,12 @@ class TagSet < ApplicationRecord
         old_tags = self.with_type(type.classify)
         tags_to_add += (new_tags - old_tags)
         tags_to_remove += (old_tags - new_tags)
+        if TagSet.invalid_tag?(tag.name)
+          invalid_tags << tag.name
+        else
+          tags_to_add << tag
+        end
+      end
       else
         #
         unless self.instance_variable_get("@#{type}_tagnames_to_add").blank?
@@ -93,6 +108,12 @@ class TagSet < ApplicationRecord
           tags_to_remove += (self.instance_variable_get("@#{type}_tags_to_remove").map {|tag_id| tag_id.blank? ? nil : tagclass.find(tag_id)}.compact)
         end
       end
+    end
+
+    if invalid_tags.any?
+      errors.add(:tags, "The following tags are invalid: #{invalid_tags.join(', ')}. " \
+                        "Ensure tags are less than 100 characters and contain no invalid characters: , ^ * < > { } = ` \\ %.")
+      return
     end
 
     # This overrides the type-specific
@@ -250,17 +271,21 @@ class TagSet < ApplicationRecord
 
   def add_tags_to_autocomplete(tags_to_add)
     tags_to_add.each do |tag|
+      next if TagSet.invalid_tag?(tag.name) # skips invalid tags in autocomplete
       value = tag.autocomplete_value
       REDIS_AUTOCOMPLETE.zadd("autocomplete_tagset_all_#{self.id}", 0, value)
       REDIS_AUTOCOMPLETE.zadd("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", 0, value)
     end
   end
 
-  def remove_tags_from_autocomplete(tags_to_remove)
-    tags_to_remove.each do |tag|
-      value = tag.autocomplete_value
-      REDIS_AUTOCOMPLETE.zrem("autocomplete_tagset_all_#{self.id}", value)
-      REDIS_AUTOCOMPLETE.zrem("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", value)
+  # cleanup of invalid tags for autocomplete
+  def remove_invalid_tags_from_autocomplete
+    all_tags = REDIS_AUTOCOMPLETE.zrange("autocomplete_tagset_all_#{self.id}", 0, -1)
+    all_tags.each do |tag_name|
+      if TagSet.invalid_tag?(tag_name)
+        REDIS_AUTOCOMPLETE.zrem("autocomplete_tagset_all_#{self.id}", tag_name)
+        REDIS_AUTOCOMPLETE.zrem("autocomplete_tagset_#{tag_name.type.downcase}_#{self.id}", tag_name)
+      end
     end
   end
 
