@@ -40,6 +40,18 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.claim_notification(creator_id, [work.id], true)
   end
 
+  def admin_hidden_bookmark_notification
+    bookmark = create(:bookmark)
+    creator_id = bookmark.pseud.user_id
+    UserMailer.admin_hidden_bookmark_notification(bookmark.id, creator_id)
+  end
+
+  def admin_hidden_series_notification
+    series = create(:series)
+    creator_id = series.pseuds.first.user_id
+    UserMailer.admin_hidden_series_notification(series.id, creator_id)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)
