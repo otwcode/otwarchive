@@ -264,6 +264,11 @@ Given /^the spam work "([^\"]*)"$/ do |work|
   w.update_attribute(:hidden_by_admin, true)
 end
 
+Given /^the work "([^\"]*)" is marked as spam$/ do |work|
+  w = Work.find_by_title(work)
+  w.update_attribute(:spam, true)
+end
+
 Given "the user-defined tag limit is {int}" do |count|
   allow(ArchiveConfig).to receive(:USER_DEFINED_TAGS_MAX).and_return(count)
 end
