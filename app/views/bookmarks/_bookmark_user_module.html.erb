@@ -1,5 +1,6 @@
 <% # expects "bookmark" %>
 <div class="<% if is_author_of?(bookmark) %>own <% end %>user module group">
+  <%# If you update the cache key, update flush_bookmark_cache in tag.rb %>
   <% blurb_cache_key = (is_author_of?(bookmark) ? "bookmark-owner-blurb-#{bookmark.cache_key}-v2" : "bookmark-blurb-#{bookmark.cache_key}-v2") %>
   <% cache(blurb_cache_key, skip_digest: true) do %>
     <!--bookmarker, time-->
