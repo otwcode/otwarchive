@@ -2,7 +2,7 @@
 
 <!--subnav-->
 <h3 class="landmark heading"><%= t("a11y.navigation") %></h3>
-<ul class="navigation actions">  
+<ul class="navigation actions">
   <li><%= span_if_current t("blocked.users.index.blocked_users"), user_blocked_users_path %></li>
   <li><%= span_if_current t(".muted_users"), user_muted_users_path %></li>
 </ul>
