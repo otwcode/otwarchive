@@ -54,31 +54,28 @@
 
 <% unless Rails.env.test? || current_user.try(:accepted_tos_version) == @current_tos_version || tos_exempt_page? %>
   <%= javascript_tag do %>
-    <%# localStorage support check we only need for guests. %>
-    <% unless current_user %>
-      // We can't rely on !window.localStorage to test localStorage support in
-      // browsers like Safari 9, which technically support it, but which have a
-      // storage length of 0 in private mode.
-      // Credit: https://github.com/getgrav/grav-plugin-admin/commit/cfe2188f10c4ca604e03c96f3e21537fda1cdf9a
-      function isSupported() {
-          var item = "localStoragePolyfill";
-          try {
-              localStorage.setItem(item, item);
-              localStorage.removeItem(item);
-              return true;
-          } catch (e) {
-              return false;
-          }
-      }
-
-      function acceptTOS() {
-        if (isSupported()) {
-          localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
-        } else {
-          Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 365 });
+    // We can't rely on !window.localStorage to test localStorage support in
+    // browsers like Safari 9, which technically support it, but which have a
+    // storage length of 0 in private mode.
+    // Credit: https://github.com/getgrav/grav-plugin-admin/commit/cfe2188f10c4ca604e03c96f3e21537fda1cdf9a
+    function isSupported() {
+        var item = "localStoragePolyfill";
+        try {
+            localStorage.setItem(item, item);
+            localStorage.removeItem(item);
+            return true;
+        } catch (e) {
+            return false;
         }
+    }
+
+    function acceptTOS() {
+      if (isSupported()) {
+        localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
+      } else {
+        Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 365 });
       }
-    <% end %>
+    }
 
     $j(document).ready(function() {
       <% if current_user %>

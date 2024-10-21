@@ -25,6 +25,7 @@ class HomeController < ApplicationController
 
   # terms of service faq
   def tos_faq
+    @page_title = t(".page_title")
     render action: "tos_faq", layout: "application"
   end
 

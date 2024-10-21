@@ -1,424 +1,350 @@
 <%# IMPORTANT: Also update current_tos_version in application_controller %>
-<div id="tos" class="userstuff">
-  <p><big><strong><%= t(".archive_description") %></strong></big></p>
+<%# To ensure proper formatting, this must always be rendered inside an element
+  with the userstuff class. The userstuff element must be inside an element with
+  the classes "docs system". %>
+<p><big><strong><%= t(".archive_description") %></strong></big></p>
 
-  <h3 class="heading" id="believe"><%= t(".what_we_believe.header") %></h3>
-  <ol style="list-style-type:decimal;">
-    <li>
-      <%= t(".what_we_believe.our_goal_html",
-            maximum_inclusiveness_link: link_to(t(".what_we_believe.maximum_inclusiveness"), tos_faq_path(anchor: "max_inclusiveness"))) %>
-    </li>
-    <li>
-      <%= t(".what_we_believe.ao3_run_by_html",
-            defending_fanworks_link: link_to(t(".what_we_believe.defending_fanworks"), archive_faqs_path(anchor: "faq-legalfaq")),
-            on_the_otw_site_link: link_to(t(".what_we_believe.on_the_otw_site"), "https://www.transformativeworks.org/legal")) %>
-    </li>
-    <li>
-      <%= t(".what_we_believe.we_do_not_sell_html",
-            ao3_link: link_to("archiveofourown.org", root_path),
-            fanlore_link: link_to("fanlore.org", "https://fanlore.org/"),
-            transformativeworks_link: link_to("transformativeworks.org", "https://www.transformativeworks.org/")) %>
-    </li>
-    <li>
-      <%= t(".what_we_believe.readability_html",
-            tos_faq_link: link_to(t(".what_we_believe.tos_faq_html",
-              faq_abbreviation: tag.abbr(t(".what_we_believe.faq.abbreviated"), title: t(".what_we_believe.faq.full"))),
-              tos_faq_path)) %>
-    </li>
-  </ol>
+<h3 class="heading" id="believe"><%= t(".what_we_believe.header") %></h3>
+<ol style="list-style-type:decimal;">
+  <li>
+    <%= t(".what_we_believe.our_goal_html",
+          maximum_inclusiveness_link: link_to(t(".what_we_believe.maximum_inclusiveness"), tos_faq_path(anchor: "max_inclusiveness"))) %>
+  </li>
+  <li>
+    <%= t(".what_we_believe.ao3_run_by_html",
+          defending_fanworks_link: link_to(t(".what_we_believe.defending_fanworks"), "https://www.transformativeworks.org/faq/#faq-legalfaq"),
+          on_the_otw_site_link: link_to(t(".what_we_believe.on_the_otw_site"), "https://www.transformativeworks.org/legal")) %>
+  </li>
+  <li>
+    <%= t(".what_we_believe.we_do_not_sell_html",
+          ao3_link: link_to("archiveofourown.org", root_path),
+          fanlore_link: link_to("fanlore.org", "https://fanlore.org/"),
+          transformativeworks_link: link_to("transformativeworks.org", "https://www.transformativeworks.org/")) %>
+  </li>
+  <li>
+    <%= t(".what_we_believe.readability_html",
+          tos_faq_link: link_to(t(".what_we_believe.tos_faq_html",
+            faq_abbreviation: tag.abbr(t(".what_we_believe.faq.abbreviated"), title: t(".what_we_believe.faq.full"))),
+            tos_faq_path)) %>
+  </li>
+</ol>
 
-  <h3 class="heading" id="nav_toc_heading"><%= t(".toc.header") %></h3>
-  <p>
-    <%= t(".toc.intro") %>
-  </p>
-  <nav aria-labelledby="nav_toc_heading">
-    <% unless local_assigns[:static_toc] %>
-    <details open>
-      <summary><%= t(".toc.full_toc") %></summary>
-    <% end %>
-      <ol class="toc" style="list-style-type:upper-roman;">
-        <li>
-          <% unless local_assigns[:static_toc] %>
-          <details open>
-            <summary><h4 class="heading"><%= t(".toc.general_principles.header_current") %></h4></summary>
-          <% else %>
-            <h4 class="heading"><%= t(".toc.general_principles.header") %></h4>
-          <% end %>
-            <p><%= link_to t(".toc.general_principles.general_principles_introduction"), tos_path(anchor: "tos") %></p>
-            <ol style="list-style-type:upper-alpha;">
-              <li><%= link_to t(".toc.general_principles.general_terms"), tos_path(anchor: "I.A") %></li>
-              <li><%= link_to t(".toc.general_principles.updates_to_the_tos"), tos_path(anchor: "I.B") %></li>
-              <li><%= link_to t(".toc.general_principles.potential_problems"), tos_path(anchor: "I.C") %></li>
-              <li><%= link_to t(".toc.general_principles.content_you_access"), tos_path(anchor: "I.D") %></li>
-              <li><%= link_to t(".toc.general_principles.what_we_do_with_content"), tos_path(anchor: "I.E") %></li>
-              <li><%= link_to t(".toc.general_principles.what_you_cant_do"), tos_path(anchor: "I.F") %></li>
-              <li><%= link_to t(".toc.general_principles.registration_and_email_addresses"), tos_path(anchor: "I.G") %></li>
-              <li><%= link_to t(".toc.general_principles.age_policy"), tos_path(anchor: "I.H") %></li>
-              <li><%= link_to t(".toc.general_principles.abuse_policy"), tos_path(anchor: "I.I") %></li>
-            </ol>
-          <% unless local_assigns[:static_toc] %>
-          </details>
-          <% end %>
-        </li>
-        <li>
-          <% unless local_assigns[:static_toc] %>
-          <details>
-            <summary><h4 class="heading"><%= t(".toc.content_policy.header") %></h4></summary>
-          <% else %>
-            <h4 class="heading"><%= t(".toc.content_policy.header") %></h4>
-          <% end %>
-            <p><%= link_to t(".toc.content_policy.content_policy_introduction"), content_path(anchor: "content") %></p>
-            <ol style="list-style-type:upper-alpha;">
-              <li><%= link_to t(".toc.content_policy.offensive_content"), content_path(anchor: "II.A") %></li>
-              <li><%= link_to t(".toc.content_policy.fanworks"), content_path(anchor: "II.B") %></li>
-              <li><%= link_to t(".toc.content_policy.commercial_promotion"), content_path(anchor: "II.C") %></li>
-              <li><%= link_to t(".toc.content_policy.copyright_infringement"), content_path(anchor: "II.D") %></li>
-              <li><%= link_to t(".toc.content_policy.plagiarism"), content_path(anchor: "II.E") %></li>
-              <li><%= link_to t(".toc.content_policy.personal_information_and_fannish_identities"), content_path(anchor: "II.F") %></li>
-              <li><%= link_to t(".toc.content_policy.impersonation"), content_path(anchor: "II.G") %></li>
-              <li><%= link_to t(".toc.content_policy.harassment"), content_path(anchor: "II.H") %></li>
-              <li><%= link_to t(".toc.content_policy.user_icons"), content_path(anchor: "II.I") %></li>
-              <li><%= link_to t(".toc.content_policy.mandatory_tags"), content_path(anchor: "II.J") %></li>
-              <li><%= link_to t(".toc.content_policy.illegal_and_inappropriate_content"), content_path(anchor: "II.K") %></li>
-            </ol>
-          <% unless local_assigns[:static_toc] %>
-          </details>
-          <% end %>
-        </li>
-        <li>
-          <% unless local_assigns[:static_toc] %>
-          <details>
-            <summary><h4 class="heading"><%= t(".toc.privacy_policy.header") %></h4></summary>
-          <% else %>
-            <h4 class="heading"><%= t(".toc.privacy_policy.header") %></h4>
-          <% end %>
-            <p><%= link_to t(".toc.privacy_policy.privacy_policy_introduction"), privacy_path(anchor: "privacy") %></p>
-            <ol style="list-style-type:upper-alpha;">
-              <li><%= link_to t(".toc.privacy_policy.applicability"), privacy_path(anchor: "III.A") %></li>
-              <li><%= link_to t(".toc.privacy_policy.scope_of_personal_information_we_process"), privacy_path(anchor: "III.B") %></li>
-              <li><%= link_to t(".toc.privacy_policy.types_of_personal_information_we_collect_and_process"), privacy_path(anchor: "III.C") %></li>
-              <li><%= link_to t(".toc.privacy_policy.aggregate_and_anonymous_information"), privacy_path(anchor: "III.D") %></li>
-              <li><%= link_to t(".toc.privacy_policy.your_rights_under_applicable_data_privacy_laws"), privacy_path(anchor: "III.E") %></li>
-              <li><%= link_to t(".toc.privacy_policy.information_shared_with_third_parties"), privacy_path(anchor: "III.F") %></li>
-              <li><%= link_to t(".toc.privacy_policy.termination_of_account"), privacy_path(anchor: "III.G") %></li>
-              <li><%= link_to t(".toc.privacy_policy.retention_of_personal_information"), privacy_path(anchor: "III.H") %></li>
-              <li><%= link_to t(".toc.privacy_policy.contact_us"), privacy_path(anchor: "III.I") %></li>
-            </ol>
-          <% unless local_assigns[:static_toc] %>
-          </details>
-          <% end %>
-        </li>
-      </ol>
-    <% unless local_assigns[:static_toc] %>
-    </details>
-    <% end %>
-  </nav>
+<nav aria-labelledby="nav-toc-heading" class="toc">
+  <details open>
+    <summary><h3 class="heading" id="nav-toc-heading"><%= t(".toc.header") %></h3></summary>
+    <p><%= t(".toc.intro") %></p>
+    <ol class="toc" style="list-style-type:upper-roman;">
+      <li><%= tos_table_of_contents_section("tos") %></li>
+      <li><%= tos_table_of_contents_section("content") %></li>
+      <li><%= tos_table_of_contents_section("privacy") %></li>
+    </ol>
+  </details>
+</nav>
 
-  <h3 class="heading"><%= t(".general_principles_heading") %></h3>
-  <h4 class="heading" id="I.A"><span id="general"><%= t(".general_terms.heading") %></span></h4>
-  <ol style="list-style-type:decimal;">
-    <li id="I.A.1">
-      <p>
-        <%= t(".general_terms.agreement.html",
-              agreement: tag.strong(t(".general_terms.agreement.agreement")),
-              content_policy_link: link_to(t(".general_terms.agreement.content_policy"), content_path),
-              privacy_policy_link: link_to(t(".general_terms.agreement.privacy_policy"), privacy_path),
-              personal_information_link: link_to(t(".general_terms.agreement.personal_information"), privacy_path(anchor: "III.A.1")),
-              any_other_form_link: link_to(t(".general_terms.agreement.any_other_form"), tos_faq_path(anchor: "define_content"))) %>
-      </p>
-    </li>
-    <li id="I.A.2">
-      <p>
-        <%= t(".general_terms.entirety_of_agreement.html",
-              entirety_of_agreement: tag.strong(t(".general_terms.entirety_of_agreement.entirety_of_agreement"))) %>
-      </p>
-    </li>
-    <li id="I.A.3">
-      <p>
-        <%= t(".general_terms.jurisdiction.html",
-              jurisdiction: tag.strong(t(".general_terms.jurisdiction.jurisdiction")),
-              the_state_of_new_york_link: link_to(t(".general_terms.jurisdiction.the_state_of_new_york"), tos_faq_path(anchor: "ny_law"))) %>
-      </p>
-    </li>
-    <li id="I.A.4">
-      <p>
-        <%= t(".general_terms.non_severability.html",
-              non_severability: tag.strong(t(".general_terms.non_severability.non_severability"))) %>
-      </p>
-    </li>
-    <li id="I.A.5">
-      <p>
-        <%= t(".general_terms.limitation_on_claims.html",
-              limitation_on_claims: tag.strong(t(".general_terms.limitation_on_claims.limitation_on_claims"))) %>
-      </p>
-    </li>
-    <li id="I.A.6">
-      <p>
-        <%= t(".general_terms.no_assignment.html",
-              no_assignment: tag.strong(t(".general_terms.no_assignment.no_assignment"))) %>
-      </p>
-    </li>
-  </ol>
-
-  <h4 class="heading" id="I.B"><span id="updates"><%= t(".updates_to_the_tos.heading") %></span></h4>
-  <p>
-    <%= t(".updates_to_the_tos.html",
-          content_policy_link: link_to(t(".updates_to_the_tos.content_policy"), content_path),
-          privacy_policy_link: link_to(t(".updates_to_the_tos.privacy_policy"), privacy_path)) %>
-  </p>
-
-  <h4 class="heading" id="I.C"><span id="problems"><%= t(".potential_problems.heading") %></span></h4>
-  <ol style="list-style-type:decimal;">
-    <li id="I.C.1"><p><%= t(".potential_problems.service_as_is") %></p></li>
-    <li id="I.C.2"><p><%= t(".potential_problems.breach_notification") %></p></li>
-    <li id="I.C.3"><p><%= t(".potential_problems.own_risk") %></p></li>
-    <li id="I.C.4">
-      <p>
-        <strong>
-          <%= t(".potential_problems.disclaim_warranties_html",
-                merchantability_link: link_to(t(".potential_problems.merchantability"), tos_faq_path(anchor: "merchantability")),
-                fitness_for_purpose_link: link_to(t(".potential_problems.fitness_for_purpose"), tos_faq_path(anchor: "fitness"))) %>
-        </strong>
-      </p>
-    </li>
-    <li id="I.C.5"><p><strong><%= t(".potential_problems.damage_liability") %></strong></p></li>
-    <li id="I.C.6"><p><%= t(".potential_problems.account_termination_liability") %></p></li>
-    <li id="I.C.7"><p><%= t(".potential_problems.content_access_liability") %></p></li>
-    <li id="I.C.8"><p><%= t(".potential_problems.not_personal_storage_html", sole_backup_responsibility: tag.strong(t(".potential_problems.sole_backup_responsibility"))) %></p></li>
-  </ol>
-
-  <h4 class="heading" id="I.D"><span id="access"><%= t(".content_you_access.heading") %></span></h4>
-  <ol style="list-style-type:decimal;">
-    <li id="I.D.1"><p><%= t(".content_you_access.external_links_html", here_link: link_to(t(".content_you_access.here"), "https://www.transformativeworks.org/where-find-us/")) %></p></li>
-    <li id="I.D.2">
-      <p>
-        <%= t(".content_you_access.third_party_content_html",
-              hosted_by_third_party_link: link_to(t(".content_you_access.hosted_by_third_party"), tos_faq_path(anchor: "nontextual_fanworks")),
-              content_policy_link: link_to(t(".content_you_access.content_policy"), content_path),
-              privacy_policy_link: link_to(t(".content_you_access.privacy_policy"), privacy_path)) %>
-      </p>
-    </li>
-    <li id="I.D.3"><p><%= t(".content_you_access.no_prescreen") %></p></li>
-    <li id="I.D.4">
-      <p>
-        <%= t(".content_you_access.no_otw_endorsement_html",
-              official_statement_link: link_to(t(".content_you_access.official_statement"), tos_faq_path(anchor: "official_statement"))) %>
-      </p>
-    </li>
-    <li id="I.D.5"><p><strong><%= t(".content_you_access.otw_not_liable") %></strong></p></li>
-  </ol>
-
-  <h4 class="heading" id="I.E"><span id="what_we_do"><%= t(".what_we_do_with_content.heading") %></span></h4>
-  <p><%= t(".what_we_do_with_content.no_copyright_ownership_html", we_repeat: tag.strong(t(".what_we_do_with_content.we_repeat"))) %></p>
-  <ol style="list-style-type:decimal;">
-    <li id="I.E.1">
-      <p>
-        <%= t(".what_we_do_with_content.agree_otw_can_copy_html",
-              worldwide_royalty_free_nonexclusive_license_link: link_to(t(".what_we_do_with_content.worldwide_royalty_free_nonexclusive_license"), tos_faq_path(anchor: "nonexclusive_license")),
-              modifying_or_adapting_link: link_to(t(".what_we_do_with_content.modifying_or_adapting"), tos_faq_path(anchor: "modify_adapt")),
-              tag_wrangling_link: link_to(t(".what_we_do_with_content.tag_wrangling"), archive_faq_path("tags", anchor: "wrangling"))) %>
-      </p>
-    </li>
-    <li id="I.E.2"><p><%= t(".what_we_do_with_content.license_duration") %></p></li>
-    <li id="I.E.3">
-      <p>
-        <%= t(".what_we_do_with_content.content_not_completely_controlled_html",
-              orphan_link: link_to(t(".what_we_do_with_content.orphan"), archive_faq_path("orphaning")),
-              challenge_link: link_to(t(".what_we_do_with_content.challenge"), archive_faq_path("glossary", anchor: "challengedef")),
-              subject_to_moderation_link: link_to(t(".what_we_do_with_content.subject_to_moderation"), "https://www.transformativeworks.org/otw-news-post-moderation-policy/"),
-              rules_for_removing_such_content_link: link_to(t(".what_we_do_with_content.rules_for_removing_such_content"), tos_faq_path(anchor: "partial_control"))) %>
-      </p>
-    </li>
-    <li id="I.E.4">
-      <p>
-        <%= t(".what_we_do_with_content.some_content_open_doors_html",
-              open_doors_link: link_to(t(".what_we_do_with_content.open_doors"), "https://opendoors.transformativeworks.org/en/")) %>
-      </p>
-    </li>
-    <li id="I.E.5"><p><%= t(".what_we_do_with_content.preserve_for_legal_reasons_html", privacy_policy_link: link_to(t(".what_we_do_with_content.privacy_policy"), privacy_path)) %></p></li>
-  </ol>
-
-  <h4 class="heading" id="I.F"><span id="general_rules"><%= t(".what_you_cant_do.heading") %></span></h4>
-  <p><%= t(".what_you_cant_do.you_agree_not_to") %></p>
-  <ol style="list-style-type:decimal;">
-    <li id="I.F.1">
-      <p>
-        <%= t(".what_you_cant_do.content_violating_policy_html",
-              content_policy_link: link_to(t(".what_you_cant_do.content_policy"), content_path)) %>
-      </p>
-    </li>
-    <li id="I.F.2">
-      <p>
-        <%= t(".what_you_cant_do.impersonate_person_or_entity_html",
-              impersonate_any_person_or_entity_link: link_to(t(".what_you_cant_do.impersonate_any_person_or_entity"), content_path(anchor: "II.G")),
-              function_link: link_to(t(".what_you_cant_do.function"), tos_faq_path(anchor: "impersonate_function"))) %>
-      </p>
-    </li>
-    <li id="I.F.3"><p><%= t(".what_you_cant_do.forge_identifiers") %></p></li>
-    <li id="I.F.4">
-      <p>
-        <%= t(".what_you_cant_do.copyright_infringement_html",
-              infringement_of_a_copyright_link: link_to(t(".what_you_cant_do.infringement_of_a_copyright"), content_path(anchor: "II.D")),
-              position_on_fanwork_legality_link: link_to(t(".what_you_cant_do.position_on_fanwork_legality"), "https://www.transformativeworks.org/faq/#faq-WhydoestheOTWbelievethattransformativeworksarelegal")) %>
-      </p>
-    </li>
-    <li id="I.F.5">
-      <p>
-        <%= t(".what_you_cant_do.commercial_activity_html",
-              making_available_any_advertising_link: link_to(t(".what_you_cant_do.making_available_any_advertising"), content_path(anchor: "II.C"))) %>
-      </p>
-    </li>
-    <li id="I.F.6"><p><%= t(".what_you_cant_do.software_viruses") %></p></li>
-    <li id="I.F.7">
-      <p>
-        <%= t(".what_you_cant_do.interfere_disrupt_ao3_html",
-              interfere_disrupt_ao3_link: link_to(t(".what_you_cant_do.interfere_disrupt_ao3"), content_path(anchor: "technical_integrity"))) %>
-      </p>
-    </li>
-    <li id="I.F.8">
-      <p>
-        <%= t(".what_you_cant_do.account_if_age_barred_html",
-              age_barred_individual_link: link_to(t(".what_you_cant_do.age_barred_individual"), "#age")) %>
-      </p>
-    </li>
-    <li id="I.F.9">
-      <p>
-        <%= t(".what_you_cant_do.resident_embargo_country_html",
-              comprehensive_trade_embargo_link: link_to(t(".what_you_cant_do.comprehensive_trade_embargo"), tos_faq_path(anchor: "trade_embargo"))) %>
-      </p>
-    </li>
-    <li id="I.F.10"><p><%= t(".what_you_cant_do.break_applicable_law") %></p></li>
-  </ol>
-
-  <h4 class="heading" id="I.G"><span id="registration"><%= t(".registration_and_email_addresses.heading") %></span></h4>
-  <ol style="list-style-type:decimal;">
-    <li id="I.G.1">
-      <p>
-        <%= t(".registration_and_email_addresses.agree_current_address_html",
-              suspend_your_account_link: link_to(t(".registration_and_email_addresses.suspend_your_account"), tos_faq_path(anchor: "invalid_email"))) %>
-      </p>
-    </li>
-    <li id="I.G.2">
-      <p>
-        <%= t(".registration_and_email_addresses.email_is_yours_html",
-              lawfully_communicate_with_you_link: link_to(t(".registration_and_email_addresses.lawfully_communicate_with_you"), privacy_path(anchor: "III.C.1"))) %>
-      </p>
-    </li>
-  </ol>
-
-  <h4 class="heading" id="I.H"><span id="age"><%= t(".age_policy.heading") %></span></h4>
-  <p><%= t(".age_policy.intro") %></p>
-  <ol style="list-style-type:decimal;">
-    <li><%= t(".age_policy.individuals_under_13") %></li>
-    <li>
-      <%= t(".age_policy.individuals_under_16") %>
-      <ol style="list-style-type:lower-alpha;">
-        <li>
-          <%= t(".age_policy.eu_country_html",
-                special_categories_of_personal_data_link: link_to(t(".age_policy.special_categories_of_personal_data"), "https://gdpr-info.eu/art-9-gdpr/")) %>
-        </li>
-        <li><%= t(".age_policy.country_disallowing_childrens_data") %></li>
-      </ol>
-    </li>
-    <li>
-      <%= t(".age_policy.age_barred_not_permitted_html",
-            not_permitted_account_upload_link: link_to(t(".age_policy.not_permitted_account_upload"), tos_faq_path(anchor: "age_faq"))) %>
-    </li>
-    <li><%= t(".age_policy.addressing_violations") %></li>
-    <li><%= t(".age_policy.ask_parent_to_upload") %></li>
-  </ol>
-
-  <h4 class="heading" id="I.I"><span id="abuse"><%= t(".abuse_policy.heading") %></span></h4>
-  <p>
-    <%= t(".abuse_policy.no_prescreen_html",
-          content_policy_link: link_to(t(".abuse_policy.content_policy"), content_path)) %>
-  </p>
-  <p>
-    <%= t(".abuse_policy.answers_common_questions_html",
-          tos_faq_link: link_to(t(".abuse_policy.tos_faq"), tos_faq_path(anchor: "policy_procedures_faq"))) %>
-  </p>
-  <ol style="list-style-type:decimal;">
-    <li id="I.I.1">
-      <strong><%= t(".abuse_policy.submitting_a_complaint.heading") %></strong>
-      <p>
-        <%= t(".abuse_policy.submitting_a_complaint.html",
-              policy_and_abuse_form_link: link_to(t(".abuse_policy.submitting_a_complaint.policy_and_abuse_form"), new_abuse_report_path),
-              dmca_policy_link: link_to(t(".abuse_policy.submitting_a_complaint.dmca_policy"), dmca_path)) %>
-      </p>
-    </li>
-    <li id="I.I.2">
-      <strong><%= t(".abuse_policy.treatment_of_complaints.heading") %></strong>
-      <p>
-        <%= t(".abuse_policy.treatment_of_complaints.html",
-              privacy_policy_link: link_to(t(".abuse_policy.treatment_of_complaints.privacy_policy"), privacy_path),
-              pac_confidentiality_policy_link: link_to(t(".abuse_policy.treatment_of_complaints.pac_confidentiality_policy"),
-                "https://www.transformativeworks.org/committees/policy-abuse-confidentiality-policy/")) %>
-      </p>
-    </li>
-    <li id="I.I.3">
-      <strong><%= t(".abuse_policy.resolution_of_complaints.heading") %></strong>
-      <p>
-        <%= t(".abuse_policy.resolution_of_complaints.administrators_determine_content_removal_html",
-              determine_removal_link: link_to(t(".abuse_policy.resolution_of_complaints.determine_removal"),
-                tos_faq_path(anchor: "determine_removal"))) %>
-      </p>
-      <p>
-        <%= t(".abuse_policy.resolution_of_complaints.potentially_legitimate_fanwork_html",
-              illegal_and_inappropriate_content_policy_link: link_to(t(".abuse_policy.resolution_of_complaints.illegal_and_inappropriate_content_policy"),
-                content_path(anchor: "II.K"))) %>
-      </p>
-      <p><%= t(".abuse_policy.resolution_of_complaints.voluntary_removal") %></p>
-      <p>
-        <%= t(".abuse_policy.resolution_of_complaints.add_or_edit_tags_html",
-              mandatory_tags_policy_link: link_to(t(".abuse_policy.resolution_of_complaints.mandatory_tags_policy"),
-                content_path(anchor: "II.J"))) %>
-      </p>
-      <p><%= t(".abuse_policy.resolution_of_complaints.immediate_removal") %></p>
-    </li>
-    <li id="I.I.4">
-      <strong><%= t(".abuse_policy.penalties.heading") %></strong>
-      <p>
-        <%= t(".abuse_policy.penalties.violations_warnings_suspensions_html",
-              tos_faq_link: link_to(t(".abuse_policy.penalties.tos_faq"), tos_faq_path)) %>
-      </p>
-      <p>
-        <%= t(".abuse_policy.penalties.open_doors_removal_html",
-              content_policy_ii_k_1_link: link_to(t(".abuse_policy.penalties.content_policy_ii_k_1"), content_path(anchor: "II.K.1"))) %>
-      </p>
-      <p>
-        <%= t(".abuse_policy.penalties.remove_resolve_lawsuit_html",
-              age_barred_individual_link: link_to(t(".abuse_policy.penalties.age_barred_individual"), tos_path(anchor: "age"))) %>
-      </p>
-      <p>
-        <%= t(".abuse_policy.penalties.non_violating_content_html",
-              illegal_inappropriate_content_policy_link: link_to(t(".abuse_policy.penalties.illegal_inappropriate_content_policy"),
-                content_path(anchor: "II.K"))) %>
-      </p>
-      <p><%= t(".abuse_policy.penalties.edit_post_while_suspended") %></p>
-    </li>
-    <li id="I.I.5">
-      <strong><%= t(".abuse_policy.appeals.heading") %></strong>
-      <p>
-        <%= t(".abuse_policy.appeals.html",
-              appeal_decision_link: link_to(t(".abuse_policy.appeals.appeal_decision"), tos_faq_path(anchor: "appeal"))) %>
-      </p>
-    </li>
-  </ol>
-
-  <hr />
-
-  <% unless local_assigns[:suppress_footer] %>
-    <p><%= t(".effective") %></p>
-    <p id="license">
-      <small>
-        <%= t(".license_html",
-              terms_of_service_link: link_to(t(".terms_of_service"), tos_path),
-              content_policy_link: link_to(t(".content_policy"), content_path),
-              privacy_policy_link: link_to(t(".privacy_policy"), privacy_path),
-              cc_attribution_4_0_international_link: link_to(t(".cc_attribution_4_0_international"),
-                "https://creativecommons.org/licenses/by/4.0/",
-                rel: "nofollow")) %>
-      </small>
+<h3 class="heading"><%= t(".general_principles_heading") %></h3>
+<h4 class="heading" id="I.A"><span id="general"><%= t(".general_terms.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="I.A.1">
+    <p>
+      <%= t(".general_terms.agreement.html",
+            agreement: tag.strong(t(".general_terms.agreement.agreement")),
+            content_policy_link: link_to(t(".general_terms.agreement.content_policy"), content_path),
+            privacy_policy_link: link_to(t(".general_terms.agreement.privacy_policy"), privacy_path),
+            personal_information_link: link_to(t(".general_terms.agreement.personal_information"), privacy_path(anchor: "III.A.1")),
+            any_other_form_link: link_to(t(".general_terms.agreement.any_other_form"), tos_faq_path(anchor: "define_content"))) %>
     </p>
-  <% end %>
-</div>
+  </li>
+  <li id="I.A.2">
+    <p>
+      <%= t(".general_terms.entirety_of_agreement.html",
+            entirety_of_agreement: tag.strong(t(".general_terms.entirety_of_agreement.entirety_of_agreement"))) %>
+    </p>
+  </li>
+  <li id="I.A.3">
+    <p>
+      <%= t(".general_terms.jurisdiction.html",
+            jurisdiction: tag.strong(t(".general_terms.jurisdiction.jurisdiction")),
+            the_state_of_new_york_link: link_to(t(".general_terms.jurisdiction.the_state_of_new_york"), tos_faq_path(anchor: "ny_law"))) %>
+    </p>
+  </li>
+  <li id="I.A.4">
+    <p>
+      <%= t(".general_terms.non_severability.html",
+            non_severability: tag.strong(t(".general_terms.non_severability.non_severability"))) %>
+    </p>
+  </li>
+  <li id="I.A.5">
+    <p>
+      <%= t(".general_terms.limitation_on_claims.html",
+            limitation_on_claims: tag.strong(t(".general_terms.limitation_on_claims.limitation_on_claims"))) %>
+    </p>
+  </li>
+  <li id="I.A.6">
+    <p>
+      <%= t(".general_terms.no_assignment.html",
+            no_assignment: tag.strong(t(".general_terms.no_assignment.no_assignment"))) %>
+    </p>
+  </li>
+</ol>
+
+<h4 class="heading" id="I.B"><span id="updates"><%= t(".updates_to_the_tos.heading") %></span></h4>
+<p>
+  <%= t(".updates_to_the_tos.html",
+        content_policy_link: link_to(t(".updates_to_the_tos.content_policy"), content_path),
+        privacy_policy_link: link_to(t(".updates_to_the_tos.privacy_policy"), privacy_path)) %>
+</p>
+
+<h4 class="heading" id="I.C"><span id="problems"><%= t(".potential_problems.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="I.C.1"><p><%= t(".potential_problems.service_as_is") %></p></li>
+  <li id="I.C.2"><p><%= t(".potential_problems.breach_notification") %></p></li>
+  <li id="I.C.3"><p><%= t(".potential_problems.own_risk") %></p></li>
+  <li id="I.C.4">
+    <p>
+      <strong>
+        <%= t(".potential_problems.disclaim_warranties_html",
+              merchantability_link: link_to(t(".potential_problems.merchantability"), tos_faq_path(anchor: "merchantability")),
+              fitness_for_purpose_link: link_to(t(".potential_problems.fitness_for_purpose"), tos_faq_path(anchor: "fitness"))) %>
+      </strong>
+    </p>
+  </li>
+  <li id="I.C.5"><p><strong><%= t(".potential_problems.damage_liability") %></strong></p></li>
+  <li id="I.C.6"><p><%= t(".potential_problems.account_termination_liability") %></p></li>
+  <li id="I.C.7"><p><%= t(".potential_problems.content_access_liability") %></p></li>
+  <li id="I.C.8"><p><%= t(".potential_problems.not_personal_storage_html", sole_backup_responsibility: tag.strong(t(".potential_problems.sole_backup_responsibility"))) %></p></li>
+</ol>
+
+<h4 class="heading" id="I.D"><span id="access"><%= t(".content_you_access.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="I.D.1"><p><%= t(".content_you_access.external_links_html", here_link: link_to(t(".content_you_access.here"), "https://www.transformativeworks.org/where-find-us/")) %></p></li>
+  <li id="I.D.2">
+    <p>
+      <%= t(".content_you_access.third_party_content_html",
+            hosted_by_third_party_link: link_to(t(".content_you_access.hosted_by_third_party"), tos_faq_path(anchor: "nontextual_fanworks")),
+            content_policy_link: link_to(t(".content_you_access.content_policy"), content_path),
+            privacy_policy_link: link_to(t(".content_you_access.privacy_policy"), privacy_path)) %>
+    </p>
+  </li>
+  <li id="I.D.3"><p><%= t(".content_you_access.no_prescreen") %></p></li>
+  <li id="I.D.4">
+    <p>
+      <%= t(".content_you_access.no_otw_endorsement_html",
+            official_statement_link: link_to(t(".content_you_access.official_statement"), tos_faq_path(anchor: "official_statement"))) %>
+    </p>
+  </li>
+  <li id="I.D.5"><p><strong><%= t(".content_you_access.otw_not_liable") %></strong></p></li>
+</ol>
+
+<h4 class="heading" id="I.E"><span id="what_we_do"><%= t(".what_we_do_with_content.heading") %></span></h4>
+<p><%= t(".what_we_do_with_content.no_copyright_ownership_html", we_repeat: tag.strong(t(".what_we_do_with_content.we_repeat"))) %></p>
+<ol style="list-style-type:decimal;">
+  <li id="I.E.1">
+    <p>
+      <%= t(".what_we_do_with_content.agree_otw_can_copy_html",
+            worldwide_royalty_free_nonexclusive_license_link: link_to(t(".what_we_do_with_content.worldwide_royalty_free_nonexclusive_license"), tos_faq_path(anchor: "nonexclusive_license")),
+            modifying_or_adapting_link: link_to(t(".what_we_do_with_content.modifying_or_adapting"), tos_faq_path(anchor: "modify_adapt")),
+            tag_wrangling_link: link_to(t(".what_we_do_with_content.tag_wrangling"), archive_faq_path("tags", anchor: "wrangling"))) %>
+    </p>
+  </li>
+  <li id="I.E.2"><p><%= t(".what_we_do_with_content.license_duration") %></p></li>
+  <li id="I.E.3">
+    <p>
+      <%= t(".what_we_do_with_content.content_not_completely_controlled_html",
+            orphan_link: link_to(t(".what_we_do_with_content.orphan"), archive_faq_path("orphaning")),
+            challenge_link: link_to(t(".what_we_do_with_content.challenge"), archive_faq_path("glossary", anchor: "challengedef")),
+            subject_to_moderation_link: link_to(t(".what_we_do_with_content.subject_to_moderation"), "https://www.transformativeworks.org/otw-news-post-moderation-policy/"),
+            rules_for_removing_such_content_link: link_to(t(".what_we_do_with_content.rules_for_removing_such_content"), tos_faq_path(anchor: "partial_control"))) %>
+    </p>
+  </li>
+  <li id="I.E.4">
+    <p>
+      <%= t(".what_we_do_with_content.some_content_open_doors_html",
+            open_doors_link: link_to(t(".what_we_do_with_content.open_doors"), "https://opendoors.transformativeworks.org/en/")) %>
+    </p>
+  </li>
+  <li id="I.E.5"><p><%= t(".what_we_do_with_content.preserve_for_legal_reasons_html", privacy_policy_link: link_to(t(".what_we_do_with_content.privacy_policy"), privacy_path)) %></p></li>
+</ol>
+
+<h4 class="heading" id="I.F"><span id="general_rules"><%= t(".what_you_cant_do.heading") %></span></h4>
+<p><%= t(".what_you_cant_do.you_agree_not_to") %></p>
+<ol style="list-style-type:decimal;">
+  <li id="I.F.1">
+    <p>
+      <%= t(".what_you_cant_do.content_violating_policy_html",
+            content_policy_link: link_to(t(".what_you_cant_do.content_policy"), content_path)) %>
+    </p>
+  </li>
+  <li id="I.F.2">
+    <p>
+      <%= t(".what_you_cant_do.impersonate_person_or_entity_html",
+            impersonate_any_person_or_entity_link: link_to(t(".what_you_cant_do.impersonate_any_person_or_entity"), content_path(anchor: "II.G")),
+            function_link: link_to(t(".what_you_cant_do.function"), tos_faq_path(anchor: "impersonate_function"))) %>
+    </p>
+  </li>
+  <li id="I.F.3"><p><%= t(".what_you_cant_do.forge_identifiers") %></p></li>
+  <li id="I.F.4">
+    <p>
+      <%= t(".what_you_cant_do.copyright_infringement_html",
+            infringement_of_a_copyright_link: link_to(t(".what_you_cant_do.infringement_of_a_copyright"), content_path(anchor: "II.D")),
+            position_on_fanwork_legality_link: link_to(t(".what_you_cant_do.position_on_fanwork_legality"), "https://www.transformativeworks.org/faq/#faq-WhydoestheOTWbelievethattransformativeworksarelegal")) %>
+    </p>
+  </li>
+  <li id="I.F.5">
+    <p>
+      <%= t(".what_you_cant_do.commercial_activity_html",
+            making_available_any_advertising_link: link_to(t(".what_you_cant_do.making_available_any_advertising"), content_path(anchor: "II.C"))) %>
+    </p>
+  </li>
+  <li id="I.F.6"><p><%= t(".what_you_cant_do.software_viruses") %></p></li>
+  <li id="I.F.7">
+    <p>
+      <%= t(".what_you_cant_do.interfere_disrupt_ao3_html",
+            interfere_disrupt_ao3_link: link_to(t(".what_you_cant_do.interfere_disrupt_ao3"), content_path(anchor: "technical_integrity"))) %>
+    </p>
+  </li>
+  <li id="I.F.8">
+    <p>
+      <%= t(".what_you_cant_do.account_if_age_barred_html",
+            age_barred_individual_link: link_to(t(".what_you_cant_do.age_barred_individual"), "#age")) %>
+    </p>
+  </li>
+  <li id="I.F.9">
+    <p>
+      <%= t(".what_you_cant_do.resident_embargo_country_html",
+            comprehensive_trade_embargo_link: link_to(t(".what_you_cant_do.comprehensive_trade_embargo"), tos_faq_path(anchor: "trade_embargo"))) %>
+    </p>
+  </li>
+  <li id="I.F.10"><p><%= t(".what_you_cant_do.break_applicable_law") %></p></li>
+</ol>
+
+<h4 class="heading" id="I.G"><span id="registration"><%= t(".registration_and_email_addresses.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="I.G.1">
+    <p>
+      <%= t(".registration_and_email_addresses.agree_current_address_html",
+            suspend_your_account_link: link_to(t(".registration_and_email_addresses.suspend_your_account"), tos_faq_path(anchor: "invalid_email"))) %>
+    </p>
+  </li>
+  <li id="I.G.2">
+    <p>
+      <%= t(".registration_and_email_addresses.email_is_yours_html",
+            lawfully_communicate_with_you_link: link_to(t(".registration_and_email_addresses.lawfully_communicate_with_you"), privacy_path(anchor: "III.C.1"))) %>
+    </p>
+  </li>
+</ol>
+
+<h4 class="heading" id="I.H"><span id="age"><%= t(".age_policy.heading") %></span></h4>
+<p><%= t(".age_policy.intro") %></p>
+<ol style="list-style-type:decimal;">
+  <li><%= t(".age_policy.individuals_under_13") %></li>
+  <li>
+    <%= t(".age_policy.individuals_under_16") %>
+    <ol style="list-style-type:lower-alpha;">
+      <li>
+        <%= t(".age_policy.eu_country_html",
+              special_categories_of_personal_data_link: link_to(t(".age_policy.special_categories_of_personal_data"), "https://gdpr-info.eu/art-9-gdpr/")) %>
+      </li>
+      <li><%= t(".age_policy.country_disallowing_childrens_data") %></li>
+    </ol>
+  </li>
+</ol>
+<p>
+  <%= t(".age_policy.age_barred_not_permitted_html",
+        not_permitted_account_upload_link: link_to(t(".age_policy.not_permitted_account_upload"), tos_faq_path(anchor: "age_faq"))) %>
+</p>
+<p><%= t(".age_policy.addressing_violations") %></p>
+<p><%= t(".age_policy.ask_parent_to_upload") %></p>
+
+<h4 class="heading" id="I.I"><span id="abuse"><%= t(".abuse_policy.heading") %></span></h4>
+<p>
+  <%= t(".abuse_policy.no_prescreen_html",
+        content_policy_link: link_to(t(".abuse_policy.content_policy"), content_path)) %>
+</p>
+<p>
+  <%= t(".abuse_policy.answers_common_questions_html",
+        tos_faq_link: link_to(t(".abuse_policy.tos_faq"), tos_faq_path(anchor: "policy_procedures_faq"))) %>
+</p>
+<ol style="list-style-type:decimal;">
+  <li id="I.I.1">
+    <strong><%= t(".abuse_policy.submitting_a_complaint.heading") %></strong>
+    <p>
+      <%= t(".abuse_policy.submitting_a_complaint.html",
+            policy_and_abuse_form_link: link_to(t(".abuse_policy.submitting_a_complaint.policy_and_abuse_form"), new_abuse_report_path),
+            dmca_policy_link: link_to(t(".abuse_policy.submitting_a_complaint.dmca_policy"), dmca_path)) %>
+    </p>
+  </li>
+  <li id="I.I.2">
+    <strong><%= t(".abuse_policy.treatment_of_complaints.heading") %></strong>
+    <p>
+      <%= t(".abuse_policy.treatment_of_complaints.html",
+            privacy_policy_link: link_to(t(".abuse_policy.treatment_of_complaints.privacy_policy"), privacy_path),
+            pac_confidentiality_policy_link: link_to(t(".abuse_policy.treatment_of_complaints.pac_confidentiality_policy"),
+              "https://www.transformativeworks.org/committees/policy-abuse-confidentiality-policy/")) %>
+    </p>
+  </li>
+  <li id="I.I.3">
+    <strong><%= t(".abuse_policy.resolution_of_complaints.heading") %></strong>
+    <p>
+      <%= t(".abuse_policy.resolution_of_complaints.administrators_determine_content_removal_html",
+            determine_removal_link: link_to(t(".abuse_policy.resolution_of_complaints.determine_removal"),
+              tos_faq_path(anchor: "determine_removal"))) %>
+    </p>
+    <p>
+      <%= t(".abuse_policy.resolution_of_complaints.potentially_legitimate_fanwork_html",
+            illegal_and_inappropriate_content_policy_link: link_to(t(".abuse_policy.resolution_of_complaints.illegal_and_inappropriate_content_policy"),
+              content_path(anchor: "II.K"))) %>
+    </p>
+    <p><%= t(".abuse_policy.resolution_of_complaints.voluntary_removal") %></p>
+    <p>
+      <%= t(".abuse_policy.resolution_of_complaints.add_or_edit_tags_html",
+            mandatory_tags_policy_link: link_to(t(".abuse_policy.resolution_of_complaints.mandatory_tags_policy"),
+              content_path(anchor: "II.J"))) %>
+    </p>
+    <p><%= t(".abuse_policy.resolution_of_complaints.immediate_removal") %></p>
+  </li>
+  <li id="I.I.4">
+    <strong><%= t(".abuse_policy.penalties.heading") %></strong>
+    <p>
+      <%= t(".abuse_policy.penalties.violations_warnings_suspensions_html",
+            tos_faq_link: link_to(t(".abuse_policy.penalties.tos_faq"), tos_faq_path(anchor: "penalty"))) %>
+    </p>
+    <p>
+      <%= t(".abuse_policy.penalties.open_doors_removal_html",
+            content_policy_ii_k_1_link: link_to(t(".abuse_policy.penalties.content_policy_ii_k_1"), content_path(anchor: "II.K.1"))) %>
+    </p>
+    <p>
+      <%= t(".abuse_policy.penalties.remove_resolve_lawsuit_html",
+            age_barred_individual_link: link_to(t(".abuse_policy.penalties.age_barred_individual"), "#age")) %>
+    </p>
+    <p>
+      <%= t(".abuse_policy.penalties.non_violating_content_html",
+            illegal_inappropriate_content_policy_link: link_to(t(".abuse_policy.penalties.illegal_inappropriate_content_policy"),
+              content_path(anchor: "II.K"))) %>
+    </p>
+    <p><%= t(".abuse_policy.penalties.edit_post_while_suspended") %></p>
+  </li>
+  <li id="I.I.5">
+    <strong><%= t(".abuse_policy.appeals.heading") %></strong>
+    <p>
+      <%= t(".abuse_policy.appeals.html",
+            appeal_decision_link: link_to(t(".abuse_policy.appeals.appeal_decision"), tos_faq_path(anchor: "appeal"))) %>
+    </p>
+  </li>
+</ol>
+
+<hr />
+
+<% unless local_assigns[:suppress_footer] %>
+  <p><%= t(".effective") %></p>
+  <p id="license">
+    <small>
+      <%= t(".license_html",
+            terms_of_service_link: link_to(t(".terms_of_service"), tos_path),
+            content_policy_link: link_to(t(".content_policy"), content_path),
+            privacy_policy_link: link_to(t(".privacy_policy"), privacy_path),
+            cc_attribution_4_0_international_link: link_to(t(".cc_attribution_4_0_international"),
+              "https://creativecommons.org/licenses/by/4.0/",
+              rel: "nofollow")) %>
+    </small>
+  </p>
+<% end %>
