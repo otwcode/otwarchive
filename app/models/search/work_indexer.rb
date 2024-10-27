@@ -13,9 +13,9 @@ class WorkIndexer < Indexer
       :stat_counter,
       :tags,
       :users,
+      :relationships,
       fandoms: { meta_tags: :meta_tags, merger: { meta_tags: :meta_tags } },
       pseuds: :user,
-      relationships: :merger,
       serial_works: :series
     )
   end
@@ -23,7 +23,7 @@ class WorkIndexer < Indexer
   def self.index_all(options = {})
     unless options[:skip_delete]
       delete_index
-      create_index(shards: 12)
+      create_index(shards: ArchiveConfig.WORKS_SHARDS)
     end
     options[:skip_delete] = true
     super(options)
@@ -38,7 +38,7 @@ class WorkIndexer < Indexer
         },
         title: {
           type: "text",
-          analyzer: "simple"
+          analyzer: "standard"
         },
         creators: {
           type: "text"

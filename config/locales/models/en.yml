@@ -9,6 +9,7 @@ en:
         development_and_membership: Development & Membership
         docs: AO3 Docs
         elections: Elections
+        legal: Legal
         open_doors: Open Doors
         policy_and_abuse: Policy & Abuse
         superadmin: Super admin
@@ -79,6 +80,7 @@ en:
         chapter_total_display: Chapters
         summary: Summary
         user_defined_tags_count: Fandom, relationship, character, and additional tags
+        word_count: Words
       work/chapters:
         base: 'Invalid chapter:'
         content: Content
@@ -164,6 +166,11 @@ en:
             base:
               format: "%{message}"
               site_parent: You can't use %{title} as a parent unless replacing the default archive skin.
+        subscription:
+          attributes:
+            subscribable:
+              blank: The item you tried to subscribe to does not exist. It may have been deleted.
+              format: "%{message}"
         user:
           attributes:
             login:
@@ -188,7 +195,9 @@ en:
       archive_warning:
         one: Warning
         other: Warnings
-      bookmark: Bookmark
+      bookmark:
+        one: Bookmark
+        other: Bookmarks
       category:
         one: Category
         other: Categories
@@ -209,6 +218,9 @@ en:
       rating:
         one: Rating
         other: Ratings
+      related_work:
+        one: Related Work
+        other: Related Works
       relationship:
         one: Relationship
         other: Relationships
@@ -218,7 +230,9 @@ en:
       tag:
         one: Tag
         other: Tags
-      work: Work
+      work:
+        one: Work
+        other: Works
   attributes:
     ticket_number: Ticket ID
   errors:
@@ -227,3 +241,5 @@ en:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.
         required: must exist and not be spam.
+  subscriptions:
+    deleted: Deleted item

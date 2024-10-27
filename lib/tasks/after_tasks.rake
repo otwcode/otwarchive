@@ -67,6 +67,54 @@ namespace :After do
     end
   end
 
+  desc "Clean up multiple rating tags"
+  task(clean_up_multiple_ratings: :environment) do
+    default_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+    es_results = $elasticsearch.search(index: WorkIndexer.index_name, body: {
+                                         query: {
+                                           bool: {
+                                             filter: {
+                                               script: {
+                                                 script: {
+                                                   source: "doc['rating_ids'].length > 1",
+                                                   lang: "painless"
+                                                 }
+                                               }
+                                             }
+                                           }
+                                         }
+                                       })
+    invalid_works = QueryResult.new("Work", es_results)
+
+    puts "There are #{invalid_works.size} works with multiple ratings."
+
+    fixed_work_ids = []
+    unfixed_word_ids = []
+    invalid_works.each do |work|
+      work.ratings = [default_rating_tag]
+      work.rating_string = default_rating_tag.name
+
+      if work.save
+        fixed_work_ids << work.id
+      else
+        unfixed_word_ids << work.id
+      end
+      print(".") && $stdout.flush
+    end
+
+    unless fixed_work_ids.empty?
+      puts "Cleaned up having multiple ratings on #{fixed_work_ids.size} works:"
+      puts fixed_work_ids.join(", ")
+      $stdout.flush
+    end
+
+    unless unfixed_word_ids.empty?
+      puts "The following #{unfixed_word_ids.size} works failed validations and could not be saved:"
+      puts unfixed_word_ids.join(", ")
+      $stdout.flush
+    end
+  end
+
   desc "Clean up noncanonical rating tags"
   task(clean_up_noncanonical_ratings: :environment) do
     canonical_not_rated_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)

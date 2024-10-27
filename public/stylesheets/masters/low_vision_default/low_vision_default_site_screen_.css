@@ -37,8 +37,7 @@ form blockquote.userstuff {
 #inner .filters,
 #footer,
 .filters dt,
-media .listbox,
-.bookmark .recent .index {
+media .listbox {
   width: 100%;
 }
 
@@ -125,6 +124,7 @@ pre {
 
 #header .menu {
   display: none;
+  position: static;
 }
 
 #footer {
@@ -133,7 +133,9 @@ pre {
 }
 
 #header,
-#header ul.primary,
+#header .open a,
+#header .primary .dropdown a:focus,
+#header .user .dropdown a:focus,
 #footer,
 .actions a:hover,
 .actions a:focus {
@@ -141,7 +143,7 @@ pre {
   color: #eee;
 }
 
-#header h1.heading a {
+#header h1 a {
   color: #fff;
 }
 
@@ -149,18 +151,13 @@ pre {
   background: transparent;
 }
 
-#header .menu a {
+#header .dropdown .menu a {
   background: #111;
   color: #fff;
 }
 
-#header .menu a:hover,
-#header .menu a:focus {
+#header .dropdown .menu a:hover,
+#header .dropdown .menu a:focus {
   background: #ccc;
   color: #111;
-}
-
-.bookmark .recent,
-.bookmark .recent .index {
-  border: none;
 }
