@@ -9,6 +9,7 @@ en:
         development_and_membership: Development & Membership
         docs: AO3 Docs
         elections: Elections
+        legal: Legal
         open_doors: Open Doors
         policy_and_abuse: Policy & Abuse
         superadmin: Super admin
@@ -165,6 +166,11 @@ en:
             base:
               format: "%{message}"
               site_parent: You can't use %{title} as a parent unless replacing the default archive skin.
+        subscription:
+          attributes:
+            subscribable:
+              blank: The item you tried to subscribe to does not exist. It may have been deleted.
+              format: "%{message}"
         user:
           attributes:
             login:
@@ -235,3 +241,5 @@ en:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.
         required: must exist and not be spam.
+  subscriptions:
+    deleted: Deleted item

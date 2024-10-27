@@ -111,19 +111,14 @@ ar:
         one: ضيف
         other: "%{count} ضيف"
         two: ضيفين
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           few: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
           many: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
           one: حصلت على علامة امتياز للعمل %{commentable_link} من %{givers_list}.
           other: حصلت على علامات امتياز للعمل %{commentable_link} من %{givers_list}.
           two: حصلت على علامتي امتياز للعمل %{commentable_link} من %{givers_list}.
-        single_guest:
-          giver_list: ضيف
-          left_kudos: حصلت على علامة امتياز للعمل %{commentable_link} من %{giver_list}.
-      subject: "[%{app_name}] حصلت على علامة امتياز!"
-      text:
-        left_kudos:
+        text:
           few: حصلت على علامات امتياز للعمل %{commentable_title} (%{commentable_url})
             من %{givers_list}.
           many: حصلت على علامات امتياز للعمل %{commentable_title} (%{commentable_url})
@@ -134,8 +129,12 @@ ar:
             من %{givers_list}.
           two: حصلت على علامتي امتياز للعمل %{commentable_title} (%{commentable_url})
             من %{givers_list}.
-        single_guest: حصلت على علامة امتياز للعمل %{commentable_title} (%{commentable_url})
+      single_guest:
+        giver: ضيف
+        html: حصلت على علامة امتياز للعمل %{commentable_link} من %{giver}.
+        text: حصلت على علامة امتياز للعمل %{commentable_title} (%{commentable_url})
           من ضيف.
+      subject: "[%{app_name}] حصلت على علامة امتياز!"
   mailer:
     general:
       closing:
@@ -167,9 +166,7 @@ ar:
               الرابط %{support_url}.
         sent_at: أرسل في %{sent_at}.
       greeting:
-        formal: حضرة المستخدم(ة) %{name}،
         informal:
-          addressed: مرحباً %{name}!
           unaddressed: مرحباً!
         introductory: مرحباً من Archive of Our Own – AO3 (الأرشيف من جانبنا)
       metadata_label_indicator: ": "

@@ -81,23 +81,21 @@ cs:
         many: "%{count} návštěvníků"
         one: návštěvníka
         other: "%{count} návštěvníků"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           few: Práce %{commentable_link} dostala kudos od %{givers_list}.
           one: Práce %{commentable_link} dostala kudos od %{givers_list}.
           other: Práce %{commentable_link} dostala kudos od %{givers_list}.
-        single_guest:
-          giver_list: návštěvníka
-          left_kudos: Práce %{commentable_link} dostala kudos od %{giver_list}.
-      subject: "[%{app_name}] Máte nové kudos!"
-      text:
-        left_kudos:
+        text:
           few: Práce %{commentable_title} (%{commentable_url}) dostala kudos od %{givers_list}.
           one: Práce %{commentable_title} (%{commentable_url}) dostala kudos od %{givers_list}.
           other: Práce %{commentable_title} (%{commentable_url}) dostala kudos od
             %{givers_list}.
-        single_guest: Práce %{commentable_title} (%{commentable_url}) dostala kudos
-          od návštěvníka.
+      single_guest:
+        giver: návštěvníka
+        html: Práce %{commentable_link} dostala kudos od %{giver}.
+        text: Práce %{commentable_title} (%{commentable_url}) dostala kudos od návštěvníka.
+      subject: "[%{app_name}] Máte nové kudos!"
   mailer:
     general:
       closing:
@@ -126,9 +124,9 @@ cs:
               na %{support_url}.
         sent_at: Odesláno v %{sent_at}.
       greeting:
-        formal: Dobrý den, %{name},
+        formal_html: Dobrý den, %{name},
         informal:
-          addressed: Ahoj %{name},
+          addressed_html: Ahoj %{name},
           unaddressed: Ahoj,
         introductory: Zdravíme z Archive of Our Own – AO3 (Našeho vlastního archivu),
       metadata_label_indicator: ":"

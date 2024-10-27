@@ -218,6 +218,11 @@ Given "the admin {string} is unlocked" do |login|
   admin.unlock_access!
 end
 
+Given "there is/are {int} user creation(s) per page" do |amount|
+  allow(Work).to receive(:per_page).and_return(amount)
+  allow(Comment).to receive(:per_page).and_return(amount)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do

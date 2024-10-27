@@ -1,8 +1,7 @@
 <% content_for :message do %>
   <p>
     <% if @username.present? %>
-      <%= t("mailer.general.greeting.informal.addressed",
-            name: style_bold(@username)).html_safe %>
+      <%= t("mailer.general.greeting.informal.addressed_html", name: style_bold(@username)) %>
     <% else %>
       <%= t("mailer.general.greeting.informal.unaddressed") %>
     <% end %>

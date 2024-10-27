@@ -6,6 +6,8 @@ class TagWranglersController < ApplicationController
   before_action :check_permission_to_wrangle, except: [:report_csv]
 
   def index
+    authorize :wrangling, :full_access? if logged_in_as_admin?
+
     @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
     conditions = ["canonical = 1"]
     joins = "LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id)
@@ -39,6 +41,8 @@ class TagWranglersController < ApplicationController
   end
 
   def show
+    authorize :wrangling if logged_in_as_admin?
+
     @wrangler = User.find_by!(login: params[:id])
     @page_subtitle = @wrangler.login
     @fandoms = @wrangler.fandoms.by_name
@@ -46,7 +50,7 @@ class TagWranglersController < ApplicationController
   end
 
   def report_csv
-    authorize :tag_wrangler, :report_csv?
+    authorize :wrangling
 
     wrangler = User.find_by!(login: params[:id])
     wrangled_tags = Tag
@@ -64,6 +68,8 @@ class TagWranglersController < ApplicationController
   end
 
   def create
+    authorize :wrangling if logged_in_as_admin?
+
     unless params[:tag_fandom_string].blank?
       names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
       fandoms = Fandom.where('name IN (?)', names)
@@ -95,6 +101,8 @@ class TagWranglersController < ApplicationController
   end
 
   def destroy
+    authorize :wrangling if logged_in_as_admin?
+
     wrangler = User.find_by(login: params[:id])
     assignment = WranglingAssignment.where(user_id: wrangler.id, fandom_id: params[:fandom_id]).first
     assignment.destroy

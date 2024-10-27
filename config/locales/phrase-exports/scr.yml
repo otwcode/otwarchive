@@ -80,21 +80,20 @@ scr:
         few: "%{count} госта"
         one: "%{count} гост"
         other: "%{count} гостију"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           few: "%{givers_list} су похвалили %{commentable_link}."
           one: "%{givers_list} је похвалио/ла %{commentable_link}."
           other: "%{givers_list} су похвалили %{commentable_link}."
-        single_guest:
-          giver_list: Гост/гошћа
-          left_kudos: "%{giver_list} је оставио/ла похвалу на %{commentable_link}."
-      subject: "[%{app_name}] Добили сте похвале!"
-      text:
-        left_kudos:
+        text:
           few: "%{givers_list} су похвалили %{commentable_title} (%{commentable_url})."
           one: "%{givers_list} је похвалио/ла %{commentable_title} (%{commentable_url})."
           other: "%{givers_list} су похвалили %{commentable_title} (%{commentable_url})."
-        single_guest: Гост/гошћа је оставио/ла похвалу на %{commentable_title} (%{commentable_url}).
+      single_guest:
+        giver: Гост/гошћа
+        html: "%{giver} је оставио/ла похвалу на %{commentable_link}."
+        text: Гост/гошћа је оставио/ла похвалу на %{commentable_title} (%{commentable_url}).
+      subject: "[%{app_name}] Добили сте похвале!"
   mailer:
     general:
       creation:
@@ -228,6 +227,33 @@ scr:
       unrevealed_info: Неоткривена дела нису укључена у излистане тагове и нису на
         страници Ваших радова. Свако ко буде пратио линк до Вашег дела ће добити обавештење
         да је дело тренутно неоткривено, и да није могуће да се приступи његовом садржају.
+    challenge_assignment_notification:
+      any: Bilo koji
+      assignment:
+        html: Dodeljen Vam je sledeći zahtev u okviru izazova %{link} na AO3-u!
+      description: 'Opis:'
+      due: 'Rok za ovaj zadatak je:'
+      html:
+        footer: Primili ste ovaj mejl jer ste se prijavili za izazov %{title}. Za
+          više informacija o izazovu i kontakt informacije moderatora, molimo Vas
+          da posetite %{footer_link}.
+        footer_link: profilnu stranicu izazova
+        look_up: Ovaj zadatak možete potražiti na %{link}.
+        look_up_link: Vašoj stranici Assignments (Zadaci)
+      optional_tags: 'Proizvoljni tagovi:'
+      prompts: 'Ideje (prompts):'
+      prompt_url: 'Link ideje:'
+      recipient: 'Primalac:'
+      recipient_missing: 'Nepoznato: kontaktirajte moderatora za pomoć!'
+      subject: "[%{app_name}][%{collection_title}] Vaš zadatak!"
+      text:
+        assignment: Dodeljen Vam je sledeći zahtev u okviru izazova "%{collection_title}"
+          (%{collection_url}) na AO3-u!
+        footer: Primili ste ovaj mejl jer ste se prijavili za izazov %{title} (%{url}).
+          Za više informacija o izazovu i kontakt informacije moderatora, molimo Vas
+          da posetite %{profile_url}.
+        look_up: Ovaj zadatak možete potražiti na Vašoj stranici Assignments (Zadaci)
+          na %{link}.
     change_email:
       changed:
         html: "%{login}, имејл који је повезан са Вашим налогом је промењен у %{email}"

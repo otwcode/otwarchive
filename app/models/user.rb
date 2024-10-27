@@ -89,6 +89,7 @@ class User < ApplicationRecord
 
   before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
+  after_update :send_wrangler_username_change_notification, if: :is_tag_wrangler?
   after_update :log_change_if_login_was_edited
   after_update :log_email_change, if: :saved_change_to_email?
 
@@ -328,9 +329,18 @@ class User < ApplicationRecord
   end
 
   protected
-    def first_save?
-      self.new_record?
+
+  def first_save?
+    self.new_record?
+  end
+
+  # Override of Devise method for email sending to set I18n.locale
+  # Based on https://github.com/heartcombo/devise/blob/v4.9.3/lib/devise/models/authenticatable.rb#L200
+  def send_devise_notification(notification, *args)
+    I18n.with_locale(preference.locale.iso) do
+      devise_mailer.send(notification, self, *args).deliver_now
     end
+  end
 
   public
 
@@ -567,6 +577,12 @@ class User < ApplicationRecord
 
   def log_change_if_login_was_edited
     create_log_item(action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}") if saved_change_to_login?
+  end
+
+  def send_wrangler_username_change_notification
+    return unless saved_change_to_login? && login_before_last_save.present?
+
+    TagWranglingSupervisorMailer.wrangler_username_change_notification(login_before_last_save, login).deliver_now
   end
 
   def log_email_change

@@ -80,21 +80,20 @@ ru:
         few: "%{count} гостей"
         many: "%{count} гостей"
         one: "%{count} гость"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           few: "%{givers_list} дарят вам кудос за %{commentable_link}."
           many: "%{givers_list} дарят вам кудос за %{commentable_link}."
           one: "%{givers_list} дарит вам кудос за %{commentable_link}."
-        single_guest:
-          giver_list: Один гость
-          left_kudos: "%{giver_list} дарит вам кудос за %{commentable_link}."
-      subject: "[%{app_name}] Вы получили кудос!"
-      text:
-        left_kudos:
+        text:
           few: "%{givers_list} дарят вам кудос за %{commentable_title} (%{commentable_url})."
           many: "%{givers_list} дарят вам кудос за %{commentable_title} (%{commentable_url})."
           one: "%{givers_list} дарит вам кудос за %{commentable_title} (%{commentable_url})."
-        single_guest: Один гость подарил вам кудос за %{commentable_title} (%{commentable_url}).
+      single_guest:
+        giver: Один гость
+        html: "%{giver} дарит вам кудос за %{commentable_link}."
+        text: Один гость подарил вам кудос за %{commentable_title} (%{commentable_url}).
+      subject: "[%{app_name}] Вы получили кудос!"
   mailer:
     general:
       closing:
@@ -124,9 +123,9 @@ ru:
               в Поддержку – %{support_url}.
         sent_at: Отправлено в %{sent_at}.
       greeting:
-        formal: Здравствуйте, %{name},
+        formal_html: Здравствуйте, %{name},
         informal:
-          addressed: Привет, %{name}!
+          addressed_html: Привет, %{name}!
           unaddressed: Привет!
         introductory: Привет от Archive of Our Own – AO3 (Нашего Архива)!
       metadata_label_indicator: ":"

@@ -64,19 +64,18 @@ da:
       guest:
         one: en gæst
         other: "%{count} gæster"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           one: "%{givers_list} efterlod kudos på %{commentable_link}."
           other: "%{givers_list} efterlod kudos på %{commentable_link}."
-        single_guest:
-          giver_list: En gæst
-          left_kudos: "%{giver_list} efterlod kudos på %{commentable_link}."
-      subject: "[%{app_name}] Du har fået kudos!"
-      text:
-        left_kudos:
+        text:
           one: "%{givers_list} efterlod kudos på %{commentable_title} (%{commentable_url})."
           other: "%{givers_list} efterlod kudos på %{commentable_title} (%{commentable_url})."
-        single_guest: En gæst efterlod kudos på %{commentable_title} (%{commentable_url}).
+      single_guest:
+        giver: En gæst
+        html: "%{giver} efterlod kudos på %{commentable_link}."
+        text: En gæst efterlod kudos på %{commentable_title} (%{commentable_url}).
+      subject: "[%{app_name}] Du har fået kudos!"
   mailer:
     general:
       closing:
@@ -104,9 +103,9 @@ da:
               Support på %{support_url}.
         sent_at: Sendt %{sent_at}.
       greeting:
-        formal: Kære %{name},
+        formal_html: Kære %{name},
         informal:
-          addressed: Hej %{name}!
+          addressed_html: Hej %{name}!
           unaddressed: Hej!
         introductory: Hej fra Archive of Our Own – AO3 (Vores Eget Arkiv)!
       metadata_label_indicator: ":"
