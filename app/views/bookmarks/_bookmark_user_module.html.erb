@@ -15,7 +15,7 @@
       <h6 class="meta heading"><%= ts('Bookmarker\'s Tags:') %></h6>
       <ul class="meta tags commas">
         <% bookmark.tags.each do |tag| %>
-          <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') %></li>
+          <li><%= link_to(tag.name, tag_bookmarks_path(tag), class: "tag") %></li>
         <% end %>
       </ul>
     <% end %>
