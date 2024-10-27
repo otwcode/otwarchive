@@ -192,6 +192,11 @@ class Admin::AdminUsersController < Admin::BaseController
     end
   end
 
+  def creations
+    authorize @user
+    @page_subtitle = t(".page_title", login: @user.login)
+  end
+
   private
 
   def search_params
@@ -202,11 +207,6 @@ class Admin::AdminUsersController < Admin::BaseController
                      end
 
     params.slice(*allowed_params).permit(*allowed_params)
-  end
-
-  def creations
-    authorize @user
-    @page_subtitle = t(".page_title", login: @user.login)
   end
 
   def log_items
