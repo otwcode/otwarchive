@@ -115,7 +115,7 @@ gem "departure", "~> 6.5"
 gem "mail", ">= 2.8"
 
 group :test do
-  gem "rspec-rails", "~> 4.0.1"
+  gem "rspec-rails", "~> 6.0"
   gem 'pickle'
   gem 'shoulda'
   gem "capybara"
