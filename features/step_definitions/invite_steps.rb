@@ -128,6 +128,16 @@ When /^I request some invites$/ do
   step %{I press "Send Request"}
 end
 
+When("as {string} I request some invites") do |user|
+  step %{I am logged in as "#{user}"}
+  step %{I go to my user page}
+  step %{I follow "Invitations"}
+  step %{I follow "Request invitations"}
+  step %{I fill in "How many invitations would you like? (max 10)" with "3"}
+  step %{I fill in "Please specify why you'd like them:" with "I want them for a friend"}
+  step %{I press "Send Request"}
+end
+
 When /^I view requests as an admin$/ do
   step %{I am logged in as an admin}
   step %{I follow "Invitations"}

@@ -39,6 +39,13 @@ class UserMailerPreview < ApplicationMailerPreview
     creator_id = work.pseuds.first.user.id
     UserMailer.claim_notification(creator_id, [work.id], true)
   end
+  
+  def invite_request_declined
+    user = create(:user, :for_mailer_preview)
+    total = params[:total] || 1
+    reason = "test reason"
+    UserMailer.invite_request_declined(user.id, total, reason)
+  end
 
   private
 
@@ -48,4 +55,5 @@ class UserMailerPreview < ApplicationMailerPreview
     creation = create(creation_type, authors: [first_creator.default_pseud, second_creator.default_pseud])
     [creation.creatorships.last, first_creator]
   end
+
 end

@@ -170,12 +170,10 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @total = total
     @reason = reason
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # TODO: This may be sent to multiple users simultaneously. We need to ensure
