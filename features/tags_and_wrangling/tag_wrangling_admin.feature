@@ -71,6 +71,35 @@ Feature: Tag wrangling
     When I follow "Tags Wrangled (CSV)"
     Then I should download a csv file with the header row "Name Last Updated Type Merger Fandoms Unwrangleable"
 
+  Scenario Outline: Authorized admins have the tag wrangling item in the admin navbar
+
+    Given I am logged in as a "<role>" admin
+    Then I should see "Tag Wrangling" within "ul.admin.primary.navigation"
+
+    Examples:
+    | role          |
+    | superadmin    |
+    | tag_wrangling |
+
+  Scenario Outline: Unauthorized admins do not have the tag wrangling item in the admin navbar
+
+    Given I am logged in as a "<role>" admin
+    Then I should not see "Tag Wrangling" within "ul.admin.primary.navigation"
+
+    Examples:
+    | role                       |
+    | board                      |
+    | board_assistants_team      |
+    | communications             |
+    | development_and_membership |
+    | docs                       |
+    | elections                  |
+    | legal                      |
+    | translation                |
+    | support                    |
+    | policy_and_abuse           |
+    | open_doors                 |
+
   Scenario Outline: Authorized admins get the wrangling dashboard sidebar
 
     Given I am logged in as a "<role>" admin
