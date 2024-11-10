@@ -8,10 +8,8 @@ class TagWranglingsController < ApplicationController
 
   def index
     @counts = tag_counts_per_category
-    if params[:show].blank?
-      authorize :wrangling, :full_access? if logged_in_as_admin?
-    else
-      authorize :wrangling, :read_access? if logged_in_as_admin?
+    authorize :wrangling, :read_access? if logged_in_as_admin?
+    if params[:show].present?
       raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
 
       params[:sort_column] = 'created_at' if !valid_sort_column(params[:sort_column], 'tag')

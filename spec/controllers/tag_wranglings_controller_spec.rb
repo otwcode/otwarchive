@@ -10,13 +10,13 @@ describe TagWranglingsController do
   shared_examples "an action only authorized admins can access" do |authorized_roles:|
     before do
       fake_login_admin(admin)
-      subject
     end
 
     context "when logged in as an admin with no role" do
       let(:admin) { create(:admin) }
 
       it "redirects with an error" do
+        subject
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
@@ -26,6 +26,7 @@ describe TagWranglingsController do
         let(:admin) { create(:admin, roles: [admin_role]) }
 
         it "redirects with an error" do
+          subject
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
         end
       end
@@ -36,6 +37,7 @@ describe TagWranglingsController do
         let(:admin) { create(:admin, roles: [admin_role]) }
 
         it "succeeds" do
+          subject
           success
         end
       end
@@ -48,7 +50,7 @@ describe TagWranglingsController do
     context "when the show parameter is absent" do
       subject { get :index }
 
-      it_behaves_like "an action only authorized admins can access", authorized_roles: full_access_roles
+      it_behaves_like "an action only authorized admins can access", authorized_roles: read_access_roles
 
       context "when logged in as a tag wrangler" do
         before do
@@ -108,10 +110,6 @@ describe TagWranglingsController do
       let(:success) do
         expect(tag1.reload.canonical?).to be(true)
         expect(tag2.reload.canonical?).to be(true)
-      end
-
-      before do
-        post :wrangle, params: { canonicals: [tag1.id, tag2.id] }
       end
 
       it_behaves_like "set last wrangling activity"
