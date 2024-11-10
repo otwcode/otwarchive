@@ -100,7 +100,7 @@ Feature: Tag wrangling
     | policy_and_abuse           |
     | open_doors                 |
 
-  Scenario Outline: Authorized admins get the wrangling dashboard sidebar
+  Scenario Outline: Fully-authorized admins get the wrangling dashboard sidebar
 
     Given I am logged in as a "<role>" admin
     When I go to the wrangling tools page
@@ -115,10 +115,26 @@ Feature: Tag wrangling
     | superadmin    |
     | tag_wrangling |
 
-  Scenario Outline: Unauthorized admins do not get the wrangling dashboard sidebar
+  Scenario Outline: Read-authorized admins get a partial wrangling dashboard sidebar
 
     Given I am logged in as a "<role>" admin
     When I go to the wrangling tools page
+    Then I should see "Wrangling Tools" within "div#dashboard"
+      And I should see "Search Tags" within "div#dashboard"
+      But I should not see "Wranglers" within "div#dashboard"
+      And I should not see "New Tag" within "div#dashboard"
+      And I should not see "Wrangling Home" within "div#dashboard"
+
+    Examples:
+    | role             |
+    | policy_and_abuse |
+
+  Scenario Outline: Unauthorized admins do not get the wrangling dashboard sidebar
+
+    Given I am logged in as a "<role>" admin
+      And basic tags
+    # Other admins cannot view the wrangling tools page, so try from the tags index page.
+    When I go to the tags page
     Then I should not see "Wrangling Tools"
       And I should not see "Wranglers"
       And I should not see "Search Tags"
@@ -136,5 +152,4 @@ Feature: Tag wrangling
     | legal                      |
     | translation                |
     | support                    |
-    | policy_and_abuse           |
     | open_doors                 |

@@ -6,9 +6,13 @@
           <li><%= span_if_current(t(".wrangling_home"), tag_wrangler_path(current_user)) %></li>
         <% end %>
         <li><%= span_if_current(t(".wrangling_tools"), tag_wranglings_path, current_page?(tag_wranglings_path) && params[:show].blank?) %></li>
-        <li><%= span_if_current(t(".wranglers"), tag_wranglers_path) %></li>
+        <% if policy(:wrangling).full_access? || current_user.try(:is_tag_wrangler?) %>
+          <li><%= span_if_current(t(".wranglers"), tag_wranglers_path) %></li>
+        <% end %>
         <li><%= span_if_current(t(".search_tags"), search_tags_path) %></li>
-        <li><%= span_if_current(t(".new_tag"), new_tag_path) %></li>
+        <% if policy(:wrangling).full_access? || current_user.try(:is_tag_wrangler?) %>
+          <li><%= span_if_current(t(".new_tag"), new_tag_path) %></li>
+        <% end %>
       </ul>
     <% end %>
 
