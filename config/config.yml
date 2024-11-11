@@ -226,7 +226,7 @@ WARNING_NONE_TAG_DISPLAY_NAME: 'No Archive Warnings Apply'
 WARNING_VIOLENCE_TAG_NAME: 'Graphic Depictions Of Violence'
 WARNING_DEATH_TAG_NAME: 'Major Character Death'
 WARNING_NONCON_TAG_NAME: 'Rape/Non-Con'
-WARNING_CHAN_TAG_NAME: 'Underage'
+WARNING_CHAN_TAG_NAME: 'Underage Sex'
 
 RATING_CATEGORY_NAME: 'Rating'
 RATING_DEFAULT_TAG_NAME: 'Not Rated'
