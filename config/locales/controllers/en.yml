@@ -90,6 +90,9 @@ en:
         muted: You have muted the user %{name}.
       destroy:
         unmuted: You have unmuted the user %{name}.
+  tag_wranglings:
+    index:
+      page_subtitle: fandoms
   users:
     passwords:
       create:

@@ -1,4 +1,4 @@
-<% if (logged_in_as_admin? && policy(:wrangling).full_access?) || current_user.try(:is_tag_wrangler?) || @counts %>
+<% if (logged_in_as_admin? && policy(:wrangling).read_access?) || current_user.try(:is_tag_wrangler?) || @counts %>
   <div id="dashboard" role="navigation region" class="tag wrangling region">
     <% if (logged_in_as_admin? && policy(:wrangling).read_access?) || current_user.try(:is_tag_wrangler?) %>
       <ul class="navigation actions">

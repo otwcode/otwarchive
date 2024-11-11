@@ -9,29 +9,29 @@ class TagWranglingsController < ApplicationController
   def index
     @counts = tag_counts_per_category
     authorize :wrangling, :read_access? if logged_in_as_admin?
-    if params[:show].present?
-      raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
+    return if params[:show].blank?
 
-      params[:sort_column] = 'created_at' if !valid_sort_column(params[:sort_column], 'tag')
-      params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
+    raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
 
-      if params[:show] == "fandoms"
-        @media_names = Media.by_name.pluck(:name)
-        @page_subtitle = ts("fandoms")
-      end
+    params[:sort_column] = "created_at" unless valid_sort_column(params[:sort_column], "tag")
+    params[:sort_direction] = "ASC" unless valid_sort_direction(params[:sort_direction])
 
-      type = params[:show].singularize.capitalize
-      @tags = TagQuery.new({
-                             type: type,
-                             in_use: true,
-                             unwrangleable: false,
-                             unwrangled: true,
-                             sort_column: params[:sort_column],
-                             sort_direction: params[:sort_direction],
-                             page: params[:page],
-                             per_page: ArchiveConfig.ITEMS_PER_PAGE
-                           }).search_results
+    if params[:show] == "fandoms"
+      @media_names = Media.by_name.pluck(:name)
+      @page_subtitle = t(".page_subtitle")
     end
+
+    type = params[:show].singularize.capitalize
+    @tags = TagQuery.new({
+                           type: type,
+                           in_use: true,
+                           unwrangleable: false,
+                           unwrangled: true,
+                           sort_column: params[:sort_column],
+                           sort_direction: params[:sort_direction],
+                           page: params[:page],
+                           per_page: ArchiveConfig.ITEMS_PER_PAGE
+                         }).search_results
   end
 
   def wrangle

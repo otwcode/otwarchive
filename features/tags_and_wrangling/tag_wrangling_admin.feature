@@ -103,7 +103,8 @@ Feature: Tag wrangling
   Scenario Outline: Fully-authorized admins get the wrangling dashboard sidebar
 
     Given I am logged in as a "<role>" admin
-    When I go to the wrangling tools page
+      And basic tags
+    When I go to the tags page
     Then I should see "Wrangling Tools" within "div#dashboard"
       And I should see "Wranglers" within "div#dashboard"
       And I should see "Search Tags" within "div#dashboard"
@@ -118,7 +119,8 @@ Feature: Tag wrangling
   Scenario Outline: Read-authorized admins get a partial wrangling dashboard sidebar
 
     Given I am logged in as a "<role>" admin
-    When I go to the wrangling tools page
+      And basic tags
+    When I go to the tags page
     Then I should see "Wrangling Tools" within "div#dashboard"
       And I should see "Search Tags" within "div#dashboard"
       But I should not see "Wranglers" within "div#dashboard"
@@ -133,7 +135,6 @@ Feature: Tag wrangling
 
     Given I am logged in as a "<role>" admin
       And basic tags
-    # Other admins cannot view the wrangling tools page, so try from the tags index page.
     When I go to the tags page
     Then I should not see "Wrangling Tools"
       And I should not see "Wranglers"
