@@ -252,7 +252,7 @@ module ApplicationHelper
   end
 
   # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc)
-  def expand_contract_all(target="index")
+  def expand_contract_all(target = "listbox")
     expand_all = content_tag(:a, ts("Expand All"), href: "#", class: "expand_all", "target_class" => target, role: "button")
     contract_all = content_tag(:a, ts("Contract All"), href: "#", class: "contract_all", "target_class" => target, role: "button")
     content_tag(:span, expand_all + "\n".html_safe + contract_all, class: "actions hidden showme", role: "menu")

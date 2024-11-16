@@ -1,12 +1,11 @@
 <% @tag_hash[:fandom].keys.each do |media| %>
   <li class="media listbox group">
-    <h3 class="expander_parent heading">
+    <h3 class="heading">
       <%= ts("%{media}", :media => media) %>
       <% list_id = "list_for_media_#{media.gsub(/[^\w]/, '_')}" %>
       (<%= @tag_hash[:fandom][media].size %>)
       <%= expand_contract_shuffle(list_id) %>
-      <!-- FRONT END is this ok? -->      
-      <%= expand_contract_all("listbox") %>
+      <%= expand_contract_all %>
     </h3>
     <ol id="<%= list_id %>" class="tags index group commas">
       <% unless @tag_hash[:character] || @tag_hash[:relationship] %>
@@ -24,7 +23,7 @@
           %>
           <li class="fandom listbox group">
             <% if (has_relationships + has_characters) > 0 %>
-              <h3 class="expander_parent heading">
+              <h3 class="heading">
                 <%= ts("%{fandom}", :fandom => fandom) %>
                 <% list_id = "list_for_fandom_#{fandom.gsub(/[^\w]/, '_')}_in_#{media.gsub(/[^\w]/, '_')}" %>
                 (<%= has_relationships + has_characters %>)

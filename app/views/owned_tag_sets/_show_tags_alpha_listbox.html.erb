@@ -10,8 +10,8 @@
   # in a list item
 %>
 <% itemcount ||= 30 %>
-<li class="<%= tag_type_css_class(tag_type) %> alphabet tagset index group listbox">
-  <h3 class="expander_parent heading">
+<li class="<%= tag_type_css_class(tag_type) %> alphabet listbox group">
+  <h3 class="heading">
     <%= ts("%{tag_type}", tag_type: tag_type_label_name(tag_type).pluralize) %>
     <%= expand_contract_all %>
   </h3>
@@ -19,7 +19,7 @@
     <% slice_index = 0 %>
     <% tagname_list.each_slice(itemcount) do |tagnames| %>
       <li class="<%= tag_type_css_class(tag_type) %> letter range listbox group">
-        <h3 class="expander_parent heading">
+        <h3 class="heading">
           <span class="range">
             <%= tagnames.first %>
             <% unless tagnames.size < 2 %> &#8594; <%= tagnames.last %><% end %>

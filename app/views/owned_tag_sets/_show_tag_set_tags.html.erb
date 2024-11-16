@@ -44,7 +44,7 @@
         <% has_relationships = (@tag_hash[:relationship] && @tag_hash[:relationship][fandom]) ? @tag_hash[:relationship][fandom].size : 0 %>
         <li class="fandom listbox group">
           <% if (has_relationships + has_characters) > 0 %>
-            <h3 class="expander_parent heading">
+            <h3 class="heading">
               <%= ts("%{fandom}", :fandom => fandom) %>
               (<%= has_relationships + has_characters %>)
               <% list_id = "list_for_fandom_#{fandom.gsub(/[^\w]/, '_')}" %>
