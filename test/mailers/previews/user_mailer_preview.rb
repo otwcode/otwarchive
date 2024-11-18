@@ -55,5 +55,4 @@ class UserMailerPreview < ApplicationMailerPreview
     creation = create(creation_type, authors: [first_creator.default_pseud, second_creator.default_pseud])
     [creation.creatorships.last, first_creator]
   end
-
 end

@@ -128,7 +128,7 @@ When /^I request some invites$/ do
   step %{I press "Send Request"}
 end
 
-When("as {string} I request some invites") do |user|
+When "as {string} I request some invites" do |user|
   step %{I am logged in as "#{user}"}
   step %{I go to my user page}
   step %{I follow "Invitations"}

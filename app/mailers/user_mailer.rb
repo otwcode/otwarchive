@@ -238,7 +238,7 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @old_email,
-        subject: t('user_mailer.change_email.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
   end

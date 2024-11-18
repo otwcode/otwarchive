@@ -55,11 +55,11 @@ class UserInviteRequestsController < ApplicationController
       params[:requests].each_pair do |id, quantity|
         unless quantity.blank?
           request = UserInviteRequest.find(id)
-          @user = User.find(request.user_id)
+          user = User.find(request.user_id)
           requested_total = request.quantity.to_i
           request.quantity = 0
           request.save!
-          I18n.with_locale(@user.preference.locale.iso) do
+          I18n.with_locale(user.preference.locale.iso) do
             UserMailer.invite_request_declined(request.user_id, requested_total, request.reason).deliver_later
           end
         end
