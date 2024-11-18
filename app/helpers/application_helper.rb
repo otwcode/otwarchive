@@ -253,19 +253,23 @@ module ApplicationHelper
 
   # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc)
   def expand_contract_all(target = "listbox")
-    expand_all = content_tag(:a, ts("Expand All"), href: "#", class: "expand_all", "target_class" => target, role: "button")
-    contract_all = content_tag(:a, ts("Contract All"), href: "#", class: "contract_all", "target_class" => target, role: "button")
-    content_tag(:span, expand_all + "\n".html_safe + contract_all, class: "actions hidden showme", role: "menu")
+    expand_all = content_tag(:button, ts("Expand All"), class: "expand_all", data: { target_class: target })
+    contract_all = content_tag(:button, ts("Contract All"), class: "contract_all", data: { target_class: target })
+
+    expand_all + contract_all
   end
 
   # Sets up expand/contract/shuffle buttons for any list whose id is passed in
   # See the jquery code in application.js
   # Note that these start hidden because if javascript is not available, we
   # don't want to show the user the buttons at all.
-  def expand_contract_shuffle(list_id, shuffle=true)
-    ('<span class="action expand hidden" title="expand" action_target="#' + list_id + '"><a href="#" role="button">&#8595;</a></span>
-    <span class="action contract hidden" title="contract" action_target="#' + list_id + '"><a href="#" role="button">&#8593;</a></span>').html_safe +
-    (shuffle ? ('<span class="action shuffle hidden" title="shuffle" action_target="#' + list_id + '"><a href="#" role="button">&#8646;</a></span>') : '').html_safe
+  def expand_contract_shuffle(list_id, shuffle = true)
+    target = "##{list_id}"
+    expander = content_tag(:button, "&#8595;".html_safe, class: "expand hidden", title: "expand", data: { action_target: target })
+    contractor = content_tag(:button, "&#8593;".html_safe, class: "contract hidden", title: "contract", data: { action_target: target })
+    shuffler = content_tag(:button, "&#8646;".html_safe, class: "shuffle hidden", title: "shuffle", data: { action_target: target }) if shuffle
+
+    expander + contractor + shuffler
   end
 
   # returns the default autocomplete attributes, all of which can be overridden

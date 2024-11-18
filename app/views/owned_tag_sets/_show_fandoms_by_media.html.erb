@@ -4,8 +4,7 @@
       <%= ts("%{media}", :media => media) %>
       <% list_id = "list_for_media_#{media.gsub(/[^\w]/, '_')}" %>
       (<%= @tag_hash[:fandom][media].size %>)
-      <%= expand_contract_shuffle(list_id) %>
-      <%= expand_contract_all %>
+      <span class="actions"><%= expand_contract_shuffle(list_id) %><%= expand_contract_all %></span>
     </h3>
     <ol id="<%= list_id %>" class="tags index group commas">
       <% unless @tag_hash[:character] || @tag_hash[:relationship] %>
@@ -23,12 +22,12 @@
           %>
           <li class="fandom listbox group">
             <% if (has_relationships + has_characters) > 0 %>
-              <h3 class="heading">
+              <h4 class="heading">
                 <%= ts("%{fandom}", :fandom => fandom) %>
                 <% list_id = "list_for_fandom_#{fandom.gsub(/[^\w]/, '_')}_in_#{media.gsub(/[^\w]/, '_')}" %>
                 (<%= has_relationships + has_characters %>)
-                <%= expand_contract_shuffle(list_id, shuffle=false) %>
-              </h3>
+                <span class="actions"><%= expand_contract_shuffle(list_id, shuffle = false) %></span>
+              </h4>
               <ol id="<%= list_id %>" class="tags index group commas">
                 <% if has_characters > 0 %>
                   <%= @tag_hash[:character][fandom].map {|character| @character_seen[character] = true; content_tag(:li, character)}.join("\n").html_safe %>
@@ -38,7 +37,7 @@
                 <% end %>                
               </ol>
             <% else %>
-              <h3 class="heading"><%= ts("%{fandom}", :fandom => fandom) %> (0)</h3>
+              <h4 class="heading"><%= ts("%{fandom}", :fandom => fandom) %> (0)</h4>
             <% end %>
           </li>
         <% end %>
