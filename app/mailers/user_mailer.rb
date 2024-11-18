@@ -172,7 +172,7 @@ class UserMailer < ApplicationMailer
     @reason = reason
     mail(
       to: @user.email,
-      subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 

@@ -165,8 +165,8 @@ Feature: Invite requests
       And the user "user1" enables translated emails
       And all emails have been delivered
     When as "user1" I request some invites
-    When as "notuser1" I request some invites 
-    When I view requests as an admin
+      And as "notuser1" I request some invites 
+      And I view requests as an admin
       And I press "Decline All"
     Then "user1" should be emailed
       And the email should have "Additional invitation request declined" in the subject
