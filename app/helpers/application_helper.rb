@@ -22,24 +22,23 @@ module ApplicationHelper
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " dashboard" if show_sidebar
 
-    if page_has_filters?
-      class_names += " filtered"
-    end
+    class_names += " filtered" if page_has_filters?
 
-    if %w(abuse_reports feedbacks known_issues).include?(controller.controller_name)
-      class_names = "system support " + controller.controller_name + ' ' + controller.action_name
-    end
-    if controller.controller_name == "archive_faqs"
-      class_names = "system docs support faq " + controller.action_name
-    end
-    if controller.controller_name == "wrangling_guidelines"
-      class_names = "system docs guideline " + controller.action_name
-    end
-    if controller.controller_name == "home"
-      class_names = "system docs " + controller.action_name
-    end
-    if controller.controller_name == "errors"
-      class_names = "system " + controller.controller_name + " error-" + controller.action_name
+    case controller.controller_name
+    when "abuse_reports", "feedbacks", "known_issues"
+      class_names = "system support #{controller.controller_name} #{controller.action_name}"
+    when "archive_faqs"
+      class_names = "system docs support faq #{controller.action_name}"
+    when "wrangling_guidelines"
+      class_names = "system docs guideline #{controller.action_name}"
+    when "home"
+      class_names = if %w(content privacy).include?(controller.action_name)
+                      "system docs tos tos-#{controller.action_name}"
+                    else
+                      "system docs #{controller.action_name}"
+                    end
+    when "errors"
+      class_names = "system #{controller.controller_name} error-#{controller.action_name}"
     end
 
     class_names
@@ -631,4 +630,15 @@ module ApplicationHelper
       item.users.all? { |u| u&.preference&.minimize_search_engines? }
     end
   end
-end # end of ApplicationHelper
+
+  # Determines if the page (controller and action combination) does not need
+  # to show the ToS (Terms of Service) popup.
+  def tos_exempt_page?
+    case params[:controller]
+    when "home"
+      %w[content dmca privacy tos tos_faq].include?(params[:action])
+    when "abuse_reports", "feedbacks"
+      params[:action] == "new"
+    end
+  end
+end

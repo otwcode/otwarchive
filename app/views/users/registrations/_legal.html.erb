@@ -1,23 +1,33 @@
   <!-- Age Check -->
-  <p class="note">
-  <%= ts('You need to be at least 13 years old to become a registered member of the Archive.') %>
-  <%= ts("(Sorry to anyone younger! You'll be more than welcome when the time comes.)") %></p>
+  <p class="note"><%= t(".over_thirteen_required") %></p>
   <p>
     <%= f.check_box :age_over_13 %>
-    <%= f.label :age_over_13, ts("Yes, I am at least 13.") %>
+    <%= f.label :age_over_13, t(".over_thirteen_confirm") %>
   </p>
   <!-- Terms of Service -->
   <p>
-     <%= ts("And - really important - we need you to agree to our") %> 
-     <%= link_to "Terms of Service (opens new window)", tos_path, :target => '_blank' %>:
+     <%= t(".agreement_required_html",
+           terms_of_service_link: link_to(t(".terms_of_service"), tos_path, target: "_blank", rel: "noopener"),
+           content_policy_link: link_to(t(".content_policy"), content_path, target: "_blank", rel: "noopener"),
+           privacy_policy_link: link_to(t(".privacy_policy"), privacy_path, target: "_blank", rel: "noopener")) %>
   </p>
   <fieldset name="<%= tos_field_name %>" id="tos-partial">
-    <div class="tos module">
-      <%= render 'home/tos' %>
+    <div class="tos docs system module">
+      <div class="userstuff">
+        <h2 class="heading" id="tos"><%= t("home.tos.page_heading") %></h2>
+        <%= render "home/tos", suppress_footer: true %>
+        <h2 class="heading" id="content"><%= t("home.content.page_heading") %></h2>
+        <%= render "home/content", suppress_toc: true, suppress_footer: true %>
+        <h2 class="heading" id="privacy"><%= t("home.privacy.page_heading") %></h2>
+        <%= render "home/privacy", suppress_toc: true %>
+      </div>
     </div>
   </fieldset>
-  <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
   <p>
     <%= f.check_box :terms_of_service %>
-    <%= f.label :terms_of_service, ts("Yes, I have read the Terms of Service and agree to them."),  :class => 'important' %>
+    <%= f.label :terms_of_service, t(".agreement_confirm"), class: "important" %>
+  </p>
+  <p>
+    <%= f.check_box :data_processing %>
+    <%= f.label :data_processing, t(".data_processing_confirm"), class: "important" %>
   </p>

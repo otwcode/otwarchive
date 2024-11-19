@@ -81,6 +81,15 @@ en:
   external_works:
     update:
       successfully_updated: External work was successfully updated.
+  home:
+    content:
+      page_title: Content Policy
+    privacy:
+      page_title: Privacy Policy
+    tos:
+      page_title: Terms of Service
+    tos_faq:
+      page_title: Terms of Service FAQ
   kudos:
     create:
       success: Thank you for leaving kudos!
