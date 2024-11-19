@@ -1050,6 +1050,7 @@ en:
         privacy_policy: Privacy Policy
         project_of_otw_html: The Archive of Our Own is a project of the %{otw_link}
         terms_of_service: Terms of Service
+        tos_faq: Terms of Service FAQ
       access_your_account:
         drafts: Drafts
         header: Access your account
