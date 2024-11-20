@@ -38,8 +38,8 @@ class Admin::UserCreationsController < Admin::BaseController
     AdminActivity.log_action(current_admin, @creation, action: action, summary: @creation.inspect)    
     if params[:spam] == "true"
       @creation.mark_as_spam!
-      if not @creation.hidden_by_admin
-        @creation.notify_of_hiding_for_spam() if @creation_class == Work
+      unless @creation.hidden_by_admin
+        @creation.notify_of_hiding_for_spam if @creation_class == Work
         @creation.update_attribute(:hidden_by_admin, true)
       end
       flash[:notice] = ts("Work was marked as spam and hidden.")

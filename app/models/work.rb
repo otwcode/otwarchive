@@ -1122,8 +1122,9 @@ class Work < ApplicationRecord
     admin_settings = AdminSetting.current
     if admin_settings.hide_spam?
       return if self.hidden_by_admin
+
       self.hidden_by_admin = true
-      notify_of_hiding_for_spam()
+      notify_of_hiding_for_spam
     end
   end
 
@@ -1148,6 +1149,7 @@ class Work < ApplicationRecord
   def notify_of_hiding
     return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
     return if spam?
+    
     users.each do |user|
       UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
     end
