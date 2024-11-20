@@ -261,7 +261,9 @@ Given /^the spam work "([^\"]*)"$/ do |work|
   step %{I log out}
   w = Work.find_by_title(work)
   w.update_attribute(:spam, true)
-  w.update_attribute(:hidden_by_admin, true)
+
+  admin_settings = AdminSetting.current
+  w.update_attribute(:hidden_by_admin, true) if admin_settings.hide_spam?
 end
 
 Given /^the work "([^\"]*)" is marked as spam$/ do |work|

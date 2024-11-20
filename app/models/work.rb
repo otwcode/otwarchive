@@ -75,9 +75,6 @@ class Work < ApplicationRecord
   attr_accessor :new_gifts
   attr_accessor :preview_mode
 
-  # Virtual attribute for when a work is to be hidden, whether if it's for spam or other reasons, so different emails can be sent
-  attr_accessor :hidden_for_spam
-
   # return title.html_safe to overcome escaping done by sanitiser
   def title
     read_attribute(:title).try(:html_safe)
@@ -1124,8 +1121,9 @@ class Work < ApplicationRecord
     return unless spam?
     admin_settings = AdminSetting.current
     if admin_settings.hide_spam?
-      self.hidden_for_spam = true
+      return if self.hidden_by_admin
       self.hidden_by_admin = true
+      notify_of_hiding_for_spam()
     end
   end
 
@@ -1136,7 +1134,6 @@ class Work < ApplicationRecord
   def mark_as_spam!
     update_attribute(:spam, true)
     ModeratedWork.mark_reviewed(self)
-    self.hidden_for_spam = true
     # don't submit spam reports unless in production mode
     Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
   end
@@ -1150,12 +1147,15 @@ class Work < ApplicationRecord
 
   def notify_of_hiding
     return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
+    return if spam?
     users.each do |user|
-      if spam? && hidden_for_spam
-        UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
-      else
-        UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
-      end
+      UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
+    end
+  end
+
+  def notify_of_hiding_for_spam
+    users.each do |user|
+      UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
     end
   end
 

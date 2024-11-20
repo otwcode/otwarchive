@@ -382,7 +382,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Given the work "Spammity Spam"
     And I am logged in as a "policy_and_abuse" admin
     And I view the work "Spammity Spam"
-    And all emails have been delivered 
+    And all emails have been delivered
   Then I should see "Mark As Spam"
   When I follow "Mark As Spam"
   Then I should see "marked as spam and hidden"
