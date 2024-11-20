@@ -144,7 +144,7 @@ Feature: Create and Edit Series
       And I post the work "Sweetie Belle" as part of a series "Ponies" using the pseud "Pointless Pseud"
     When I follow "Pointless Pseud"
       And I follow "Series (1)"
-    Then the page title should include "by Pointless Pseud"
+    Then the page title should include "Pointless Pseud - Series"
 
   Scenario: Rename a series
     Given I am logged in as a random user
