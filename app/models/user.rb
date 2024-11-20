@@ -210,20 +210,12 @@ class User < ApplicationRecord
 
   validates :email, email_format: true, uniqueness: true
 
-  # Virtual attribute for age check and terms of service
-    attr_accessor :age_over_13
-    attr_accessor :terms_of_service
-    # attr_accessible :age_over_13, :terms_of_service
+  # Virtual attribute for age check, data processing agreement, and terms of service
+  attr_accessor :age_over_13, :data_processing, :terms_of_service
 
-  validates_acceptance_of :terms_of_service,
-                          allow_nil: false,
-                          message: ts("^Sorry, you need to accept the Terms of Service in order to sign up."),
-                          if: :first_save?
-
-  validates_acceptance_of :age_over_13,
-                          allow_nil: false,
-                          message: ts("^Sorry, you have to be over 13!"),
-                          if: :first_save?
+  validates :data_processing, acceptance: { allow_nil: false, if: :first_save? }
+  validates :age_over_13, acceptance: { allow_nil: false, if: :first_save? }
+  validates :terms_of_service, acceptance: { allow_nil: false, if: :first_save? }
 
   def to_param
     login
