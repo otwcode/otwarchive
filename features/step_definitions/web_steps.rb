@@ -257,6 +257,12 @@ Then /^the "(.*?)" checkbox(?: within "(.*?)")? should not be checked$/ do |labe
   end
 end
 
+Then /^(?:|I )should not see button "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+  with_scope(selector) do
+    page.body.should_not have_button(text)
+  end
+end
+
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should

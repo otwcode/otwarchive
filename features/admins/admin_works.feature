@@ -330,6 +330,19 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "rolex"
       And I should not see "This comment has been marked as spam."
 
+  Scenario: Moderated comments cannot be approved by admin
+    Given the moderated work "Moderation" by "author"
+      And I am logged in as "commenter"
+      And I post the comment "Test comment" on the work "Moderation"
+    When I am logged in as a "superadmin" admin
+      And I view the work "Moderation"
+    Then I should see "Unreviewed Comments (1)"
+      And the comment on "Moderation" should be marked as unreviewed
+    When I follow "Unreviewed Comments (1)"
+    Then I should see "Test comment"
+      And I should not see button "Approve All Unreviewed Comments"
+      And I should not see button "Approve"
+
   Scenario: Admin can edit language on works when posting without previewing
     Given basic languages
       And I am logged in as "regular_user"
