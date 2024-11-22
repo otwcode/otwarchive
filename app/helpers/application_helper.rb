@@ -636,9 +636,11 @@ module ApplicationHelper
   def tos_exempt_page?
     case params[:controller]
     when "home"
-      %w[content dmca privacy tos tos_faq].include?(params[:action])
-    when "abuse_reports", "feedbacks"
-      params[:action] == "new"
+      %w[index content dmca privacy tos tos_faq].include?(params[:action])
+    when "abuse_reports", "feedbacks", "users/sessions"
+      %w[new create].include?(params[:action])
+    when "archive_faqs"
+      %w[index show].include?(params[:action])
     end
   end
 end
