@@ -117,3 +117,6 @@ en:
       ban_notice_html: Your account has been banned. You are not permitted to add or edit archive content. Please %{contact_abuse_link} for more information.
       contact_abuse: contact Abuse
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please %{contact_abuse_link} for more information.
+  works:
+    drafts:
+      page_title: "%{username} - Drafts"

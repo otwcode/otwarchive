@@ -441,6 +441,15 @@ en:
           preferences_link_text: update your preferences
           prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
           refuse_link_text: refuse a gift
+  chapters:
+    chapter_form:
+      content_policy: Content Policy
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
+    preview:
+      content_policy: Content Policy
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
   collection_items:
     collection_item_form:
       add: Add
@@ -1050,6 +1059,7 @@ en:
         privacy_policy: Privacy Policy
         project_of_otw_html: The Archive of Our Own is a project of the %{otw_link}
         terms_of_service: Terms of Service
+        tos_faq: Terms of Service FAQ
       access_your_account:
         drafts: Drafts
         header: Access your account
@@ -1621,8 +1631,13 @@ en:
         description: Recalculate the filters for this work based on the current set of tags. Use this option if wrangling seems to have gone wrong. (e.g. If you synned one of this work's tags to a canonical but it's not showing up in the tag listings, or if the wrong tags are listed in the sidebar when you drill down to a search that includes only this work.)
         title: Update Work Filters
   users:
+    change_email:
+      browser_title: Change Email
+    change_password:
+      browser_title: Change Password
     change_username:
       account_faq: Account FAQ
+      browser_title: Change Username
       caution: Please use this feature with caution.
       change_window:
         one: You can change your user name once per day.
@@ -1769,10 +1784,18 @@ en:
     byline:
       add_co-creators: Add co-creators
       show_co-creator_options: Add co-creators?
+    edit_tags:
+      content_policy: Content Policy
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
     meta:
       original_creators:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
+    new_import:
+      content_policy: Content Policy
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
     permissions:
       privacy: Privacy
       visibility:
@@ -1784,6 +1807,10 @@ en:
         unrestricted: Show to all
     preface:
       title: Preface
+    preview:
+      content_policy: Content Policy
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
     search_box:
       a11y_label: Work
       label: Work Search

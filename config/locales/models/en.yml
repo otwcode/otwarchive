@@ -244,6 +244,13 @@ en:
         other: Works
   attributes:
     ticket_number: Ticket ID
+  challenge_assignment:
+    offer_byline:
+      none: "- none -"
+      pinch_hitter: "%{pinch_hitter_byline}* (pinch hitter)"
+    request_byline:
+      none: "- None -"
+      pinch_recipient: "%{pinch_request_byline}* (pinch recipient)"
   errors:
     attributes:
       ticket_number:

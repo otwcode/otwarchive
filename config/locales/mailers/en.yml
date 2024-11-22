@@ -251,6 +251,9 @@ en:
       assignments_sent:
         complete: All assignments have now been sent out.
         subject: Assignments sent
+      challenge_default:
+        complete: 'Signed-up participant %{offer_byline} has defaulted on their assignment for %{request_byline}. You may want to assign a pinch hitter on the collection assignments page: %{assignments_page_url}'
+        subject: Challenge default by %{offer_byline}
       html:
         received_message: 'You have received a message about your collection %{collection_link}:'
       text:
