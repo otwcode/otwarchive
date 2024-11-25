@@ -60,7 +60,7 @@ Feature: Brand new fandoms
       And I post a work "My New Work" with fandom "My Brand New Fandom"
       And the periodic tag count task is run
       And all indexing jobs have been run
-    When I view the fandom mass bin
+    When I go to the fandom mass bin
     Then I should see "My Brand New Fandom"
 
   Scenario: When the only work with a brand new fandom is destroyed, the fandom should not be visible to tag wranglers.
@@ -74,7 +74,7 @@ Feature: Brand new fandoms
     Then I should see "Your work My New Work was deleted."
     When the periodic tag count task is run
       And all indexing jobs have been run
-      And I view the fandom mass bin
+      And I go to the fandom mass bin
     Then I should not see "My Brand New Fandom"
 
   Scenario: Fandoms used only on external works should not be visible to wranglers.
@@ -84,7 +84,7 @@ Feature: Brand new fandoms
       And I submit
       And the periodic tag count task is run
       And all indexing jobs have been run
-    When I view the fandom mass bin
+    When I go to the fandom mass bin
     Then I should not see "My Brand New Fandom"
 
   Scenario: When a brand new fandom used only on external works is tagged on a work, the fandom should be visible to tag wranglers.
@@ -96,5 +96,5 @@ Feature: Brand new fandoms
       And the periodic tag count task is run
       And all indexing jobs have been run
       And I am logged in as a tag wrangler
-      And I view the fandom mass bin
+      And I go to the fandom mass bin
     Then I should see "My Brand New Fandom"
