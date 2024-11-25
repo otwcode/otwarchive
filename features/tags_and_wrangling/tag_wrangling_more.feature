@@ -153,7 +153,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | Cowboy Bebop                           | Fandom       | true      |
       And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop"
       And all indexing jobs have been run
-    When I view the fandom mass bin
+    When I go to the fandom mass bin
       And I check the wrangling option for "Cowboy Bebop"
       And I select "Anime & Manga" from "Wrangle to Media"
       And I press "Wrangle"
@@ -168,7 +168,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | October Daye Series - Seanan McGuire   | Fandom       | false     |
       And I post the work "Honky Tonk Women" with fandom "October Daye Series - Seanan McGuire" with relationship "Toby Daye/Tybalt"
       And all indexing jobs have been run
-    When I view the relationship mass bin
+    When I go to the relationship mass bin
       And I check the wrangling option for "Toby Daye/Tybalt"
       And I fill in "Wrangle to Fandom(s)" with "October Daye Series - Seanan McGuire"
       And I press "Wrangle"
@@ -183,7 +183,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | October Daye Series - Seanan McGuire   | Fandom       | true      |
       And I post the work "Honky Tonk Women" with fandom "October Daye Series - Seanan McGuire" with relationship "Toby Daye/Tybalt"
       And all indexing jobs have been run
-    When I view the relationship mass bin
+    When I go to the relationship mass bin
       And I check the wrangling option for "Toby Daye/Tybalt"
       And I fill in "Wrangle to Fandom(s)" with "October Daye Series - Seanan McGuire"
       And I press "Wrangle"
@@ -198,7 +198,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
         | Ed                | Character    | false     |
       And I post the work "Honky Tonk Women" with fandom "Cowboy Bebop" with character "Faye Valentine" with second character "Ed"
       And all indexing jobs have been run
-    When I view the character mass bin
+    When I go to the character mass bin
       And I fill in "Wrangle to Fandom(s)" with "Cowboy Bebop"
       And I check the canonical option for the tag "Faye Valentine"
       And I check the canonical option for the tag "Ed"
@@ -320,8 +320,8 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should not see "bookmark char tag"
     When I follow "Relationships by fandom (0)"
     Then I should not see "bookmark rel tag"
-    When I assign the tag "bookmark char tag" to the fandom "Testing"
-      And I assign the tag "bookmark rel tag" to the fandom "Testing"
+    When I add the fandom "Testing" to the tag "bookmark char tag"
+      And I add the fandom "Testing" to the tag "bookmark rel tag"
     Then the "bookmark char tag" tag should be in the "Testing" fandom
       And the "bookmark rel tag" tag should be in the "Testing" fandom
       And the periodic tag count task is run

@@ -84,10 +84,10 @@ Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, f
   fandom.add_association media
 end
 
-Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, character|
-  char = Character.find_or_create_by(name: character)
+Given "I add the fandom {string} to the tag/character {string}" do |fandom, tag|
+  tag = Tag.find_or_create_by(name: tag)
   fand = Fandom.find_or_create_by_name(fandom)
-  char.add_association(fand)
+  tag.add_association(fand)
 end
 
 Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
@@ -374,19 +374,8 @@ When /^I remove the metatag "([^"]*)" from "([^"]*)"$/ do |metatag, subtag|
   click_button("Save changes")
 end
 
-When "I assign the tag {string} to the fandom {string}" do |tag, fandom|
-  tag = Tag.find_by(name: tag)
-  visit edit_tag_path(tag)
-  fill_in("Fandoms", with: fandom)
-  click_button("Save changes")
-end
-
 When /^I view the (canonical|synonymous|unfilterable|unwrangled|unwrangleable) (character|relationship|freeform) bin for "(.*?)"$/ do |status, type, tag|
   visit wrangle_tag_path(Tag.find_by(name: tag), show: type.pluralize, status: status)
-end
-
-When /^I view the (character|relationship|freeform|fandom) mass bin$/ do |type| # rubocop:disable Cucumber/RegexStepName
-  visit tag_wranglings_path(show: type.pluralize)
 end
 
 ### THEN

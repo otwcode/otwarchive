@@ -297,6 +297,8 @@ module NavigationHelpers
       new_user_password_path
     when /^the edit user password page$/i
       edit_user_password_path
+    when /^the (.*) mass bin$/i
+      tag_wranglings_path(show: $1.pluralize)
 
     # Admin Pages
     when /^the admin-posts page$/i
