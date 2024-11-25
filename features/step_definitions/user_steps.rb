@@ -233,20 +233,6 @@ When /^I visit the change username page for (.*)$/ do |login|
   visit change_username_user_path(user)
 end
 
-When "I visit the change email page for {string}" do |login|
-  user = User.find_by(login: login)
-  visit change_email_user_path(user)
-end
-
-When "{string} old email {string} should be emailed" do |user, old_email|
-  expect(emails("to: \"#{email_for(old_email)}\"")).not_to be_empty
-end
-
-When "{string} default email is changed to {string}" do |user, new_email|
-  user = User.find_by(login: user)
-  assert user.email == new_email
-end
-
 When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
   # To make sure that we don't have caching issues with the byline:
   step %{I wait 1 second}
