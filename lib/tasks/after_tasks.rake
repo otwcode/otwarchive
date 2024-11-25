@@ -302,5 +302,61 @@ namespace :After do
       puts("Admin not found.")
     end
   end
+
+  desc "Add suffix to existing Underage Sex tag in prepartion for Underage warning rename"
+  task(add_suffix_to_underage_sex_tag: :environment) do
+    puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
+    login = $stdin.gets.chomp.strip
+    admin = Admin.find_by(login: login)
+
+    if admin.present?
+      User.current_user = admin
+
+      tag = Tag.find_by_name("Underage Sex")
+
+      if tag.blank?
+        puts("No Underage Sex tag found.")
+      elsif tag.is_a?(ArchiveWarning)
+        puts("Underage Sex is already an Archive Warning.")
+      else
+        suffixed_name = "Underage Sex - #{tag.class}"
+        if tag.update(name: suffixed_name)
+          puts("Renamed Underage Sex tag to #{tag.reload.name}.")
+        else
+          puts("Failed to rename Underage Sex tag to #{suffixed_name}.")
+        end
+        $stdout.flush
+      end
+    else
+      puts("Admin not found.")
+    end
+  end
+
+  desc "Rename Underage warning to Underage Sex"
+  task(rename_underage_warning: :environment) do
+    puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
+    login = $stdin.gets.chomp.strip
+    admin = Admin.find_by(login: login)
+
+    if admin.present?
+      User.current_user = admin
+
+      tag = ArchiveWarning.find_by_name("Underage")
+
+      if tag.blank?
+        puts("No Underage warning tag found.")
+      else
+        new_name = "Underage Sex"
+        if tag.update(name: new_name)
+          puts("Renamed Underage warning tag to #{tag.reload.name}.")
+        else
+          puts("Failed to rename Underage warning tag to #{new_name}.")
+        end
+        $stdout.flush
+      end
+    else
+      puts("Admin not found.")
+    end
+  end
   # This is the end that you have to put new tasks above.
 end

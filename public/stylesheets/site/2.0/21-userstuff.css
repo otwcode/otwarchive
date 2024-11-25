@@ -2,12 +2,12 @@
 
 .userstuff {
     word-wrap: break-word;
+    line-height: 1.5;
 }
 
 .userstuff p, .userstuff details {
   margin: 1.286em auto;
   padding: 0;
-  line-height: 1.5;
 }
 
 /*lists */
@@ -29,7 +29,6 @@
 
 .userstuff dd {
   display: block;
-  line-height: 1.5;
   margin-block-start: 1.25em;
   margin-block-end: 1.25em;
   margin-inline-start: 3em;
@@ -43,6 +42,10 @@
 .userstuff ul {
   margin: 1.125em auto;
   padding: 0 1em;
+}
+
+.userstuff ul li { 
+  display: list-item; 
 }
 
 .userstuff li, .userstuff ol ul li {
@@ -131,6 +134,7 @@
 /* quotes and stresses */
 
 .userstuff blockquote {
+  line-height: 1.5;
   margin-inline-start: 1.5em;
   padding: 0.75em;
   border-inline-start: 2px solid #999;

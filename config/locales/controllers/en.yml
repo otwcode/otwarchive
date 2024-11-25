@@ -89,6 +89,15 @@ en:
   external_works:
     update:
       successfully_updated: External work was successfully updated.
+  home:
+    content:
+      page_title: Content Policy
+    privacy:
+      page_title: Privacy Policy
+    tos:
+      page_title: Terms of Service
+    tos_faq:
+      page_title: Terms of Service FAQ
   kudos:
     create:
       success: Thank you for leaving kudos!
@@ -120,3 +129,6 @@ en:
       ban_notice_html: Your account has been banned. You are not permitted to add or edit archive content. Please %{contact_abuse_link} for more information.
       contact_abuse: contact Abuse
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please %{contact_abuse_link} for more information.
+  works:
+    drafts:
+      page_title: "%{username} - Drafts"

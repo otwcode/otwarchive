@@ -39,6 +39,18 @@ class UsersController < ApplicationController
     authorize @user.profile if logged_in_as_admin?
   end
 
+  def change_email
+    @page_subtitle = t(".browser_title")
+  end
+
+  def change_password
+    @page_subtitle = t(".browser_title")
+  end
+
+  def change_username
+    @page_subtitle = t(".browser_title")
+  end
+
   def changed_password
     unless params[:password] && reauthenticate
       render(:change_password) && return
@@ -315,7 +327,7 @@ class UsersController < ApplicationController
       use_default = params[:use_default] == 'true' || params[:sole_author] == 'orphan_pseud'
 
       Creatorship.orphan(pseuds, works, use_default)
-      Collection.orphan(pseuds, @sole_owned_collections, use_default)
+      Collection.orphan(pseuds, @sole_owned_collections, default: use_default)
     elsif params[:sole_author] == 'delete'
       # Deletes works where user is sole author
       @sole_authored_works.each(&:destroy)

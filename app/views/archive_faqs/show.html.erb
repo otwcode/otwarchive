@@ -27,18 +27,18 @@
   <% if @archive_faq.questions.blank? %>
     <p class="notice"><%= t(".no_category_entries") %></p>
   <% else %>
-    <div <% if rtl? %> dir="rtl"<% end %> class="userstuff">
-      <div id="toc" class="toc" role="navigation">
-        <h3 class="heading">
-          <%# TODO: Change this back to 'Questions in the NAME Category' once Translation system in place %>
+    <div <% if rtl? %>dir="rtl"<% end %> class="userstuff">
+      <nav id="toc" aria-labelledby="toc-nav-heading" class="toc">
+        <h3 class="heading" id="toc-nav-heading">
+          <%# TODO: The heading should be "Questions in the NAME Category" once interface translation is in place. If we do it now, everything except NAME will be in English/the interface default. %>
           <%= @archive_faq.title %>
         </h3>
-        <ul role="navigation">
+        <ul class="toc">
           <% for q in @questions %>
             <li><%= link_to q.question, archive_faq_path(@archive_faq, anchor: q.anchor) %></li>
           <% end %>
         </ul>
-      </div>
+      </nav>
 
       <div id="faq">
         <% for q in @questions %>

@@ -13,11 +13,9 @@
   <% end %>
   <% unless comment.unreviewed? %>
     <li><%= link_to ts("Thread"), comment %></li>
-    <% if comment.depth > 0 %>
-      <li>
-        <%= link_to ts("Parent Thread"), comment_path(id: comment.thread) %>
-      </li>
-    <% end %>
+  <% end %>
+  <% if comment.depth > 0 %>
+    <li><%= link_to ts("Parent Thread"), comment_path(id: comment.thread) %></li>
   <% end %>
   <% if can_freeze_comment?(comment) %>
     <li><%= freeze_comment_button(comment) %></li>
