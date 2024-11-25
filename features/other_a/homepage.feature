@@ -15,7 +15,7 @@ Feature: Various things on the homepage
 
   Given I am on the homepage
   When I follow "DMCA Policy"
-  Then I should see "safe harbor"
+  Then I should see "Filing a DMCA counternotice"
 
   Scenario: Donate
 
