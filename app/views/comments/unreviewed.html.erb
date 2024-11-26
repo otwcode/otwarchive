@@ -3,7 +3,7 @@
 <!--/descriptions-->
 
 <!--Subnavigation, sorting and actions-->
-<% if @comments[0] && can_review_comment?(@comments[0]) %>
+<% if can_review_all_comments?(@commentable) %>
   <ul class="navigation actions">
     <% path = @commentable.is_a?(AdminPost) ? review_all_admin_post_comments_path(@commentable) : review_all_work_comments_path(@commentable) %>
     <li><%= button_to(t(".approve_all"), path, method: :put) %></li>

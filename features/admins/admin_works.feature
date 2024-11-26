@@ -340,8 +340,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the comment on "Moderation" should be marked as unreviewed
     When I follow "Unreviewed Comments (1)"
     Then I should see "Test comment"
-      And I should not see button "Approve All Unreviewed Comments"
-      And I should not see button "Approve"
+      And I should not see an "Approve All Unreviewed Comments" button
+      And I should not see an "Approve" button
 
   Scenario: Admin can edit language on works when posting without previewing
     Given basic languages
