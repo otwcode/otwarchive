@@ -34,6 +34,9 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.feedback(feedback.id)
   end
 
+  # Sent by gift exchanges to the participants
+  # Variant with tag fields set to "Any" and no due date
+  # URL: /rails/mailers/user_mailer/challenge_assignment_notification_any?sent_at=2025-01-23T20:00
   def challenge_assignment_notification_any
     assignment = create(:challenge_assignment)
     assignment.sent_at = params[:sent_at] ? params[:sent_at].to_time : Time.current
@@ -54,7 +57,9 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.challenge_assignment_notification(assignment.collection.id, assignment.offering_user.id, assignment.id)
   end
 
-  # /rails/mailers/user_mailer/challenge_assignment_notification_filled?sent_at=2025-01-23T20:00&due=2021-12-15T13:45
+  # Sent by gift exchanges to the participants
+  # Variant with flexible due date, 3 tags per type and all fields filled out
+  # URL: /rails/mailers/user_mailer/challenge_assignment_notification_filled?sent_at=2025-01-23T20:00&due=2021-12-15T13:45
   def challenge_assignment_notification_filled
     assignment = create(:challenge_assignment)
     assignment.sent_at = params[:sent_at] ? params[:sent_at].to_time : Time.current
@@ -80,7 +85,7 @@ class UserMailerPreview < ApplicationMailerPreview
     tag_set.archive_warning_tagnames = [ArchiveConfig.WARNING_VIOLENCE_TAG_NAME, ArchiveConfig.WARNING_DEATH_TAG_NAME, ArchiveConfig.WARNING_NONCON_TAG_NAME].join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
     tag_set.rating_tagnames = [ArchiveConfig.RATING_EXPLICIT_TAG_NAME, ArchiveConfig.RATING_MATURE_TAG_NAME, ArchiveConfig.RATING_TEEN_TAG_NAME].join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
     tag_set.category_tagnames = [ArchiveConfig.CATEGORY_GEN_TAG_NAME, ArchiveConfig.CATEGORY_HET_TAG_NAME, ArchiveConfig.CATEGORY_SLASH_TAG_NAME].join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
-    %w(fandom character relationship freeform).each do |type|
+    %w[fandom character relationship freeform].each do |type|
       tag_set.tags += [create(:"canonical_#{type}"), create(:"canonical_#{type}"), create(:"canonical_#{type}")]
     end
     tag_set.save!

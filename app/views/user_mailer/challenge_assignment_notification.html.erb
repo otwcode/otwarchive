@@ -28,15 +28,15 @@
     <%= index + 1 %>. <%= style_bold(prompt.title) %>
 
     <p>
-      <% if fandoms %><%= style_bold(t("activerecord.models.fandom", count: prompt.any_fandom ? 1 : tag_groups["Fandom"].count) + t("mailer.general.metadata_label_indicator")) %> <%= fandoms %><br><% end %>
-      <% if chars %><%= style_bold(t("activerecord.models.character", count: prompt.any_character ? 1 : tag_groups["Character"].count) + t("mailer.general.metadata_label_indicator")) %> <%= chars %><br><% end %>
-      <% if ships %><%= style_bold(t("activerecord.models.relationship", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count) + t("mailer.general.metadata_label_indicator")) %> <%= ships %><br><% end %>
-      <% if ratings %><%= style_bold(t("activerecord.models.rating", count: 1) + t("mailer.general.metadata_label_indicator")) %> <%= ratings %><br><% end %>
-      <% if warnings %><%= style_bold(t("activerecord.models.archive_warning", count: prompt.any_archive_warning ? 1 : tag_groups["ArchiveWarning"].count) + t("mailer.general.metadata_label_indicator")) %> <%= warnings %><br><% end %>
-      <% if categories %><%= style_bold(t("activerecord.models.category", count: prompt.any_category ? 1 : tag_groups["Category"].count) + t("mailer.general.metadata_label_indicator")) %> <%= categories %><br><% end %>
-      <% if atags %><%= style_bold(t("activerecord.models.freeform", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count) + t("mailer.general.metadata_label_indicator")) %> <%= atags %><br><% end %>
-      <% if otags %><%= style_bold(t(".optional_tags")) %> <%= otags %><br><% end %>
-      <% if prompt.url && !prompt.url.blank? %><%= style_bold(t(".prompt_url")) %> <%= style_link(prompt.url, prompt.url) %><br><% end %>
+      <% if fandoms %><%= style_bold(t("activerecord.models.fandom", count: prompt.any_fandom ? 1 : tag_groups["Fandom"].count) + t("mailer.general.metadata_label_indicator")) %> <%= fandoms %><br /><% end %>
+      <% if chars %><%= style_bold(t("activerecord.models.character", count: prompt.any_character ? 1 : tag_groups["Character"].count) + t("mailer.general.metadata_label_indicator")) %> <%= chars %><br /><% end %>
+      <% if ships %><%= style_bold(t("activerecord.models.relationship", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count) + t("mailer.general.metadata_label_indicator")) %> <%= ships %><br /><% end %>
+      <% if ratings %><%= style_bold(t("activerecord.models.rating", count: 1) + t("mailer.general.metadata_label_indicator")) %> <%= ratings %><br /><% end %>
+      <% if warnings %><%= style_bold(t("activerecord.models.archive_warning", count: prompt.any_archive_warning ? 1 : tag_groups["ArchiveWarning"].count) + t("mailer.general.metadata_label_indicator")) %> <%= warnings %><br /><% end %>
+      <% if categories %><%= style_bold(t("activerecord.models.category", count: prompt.any_category ? 1 : tag_groups["Category"].count) + t("mailer.general.metadata_label_indicator")) %> <%= categories %><br /><% end %>
+      <% if atags %><%= style_bold(t("activerecord.models.freeform", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count) + t("mailer.general.metadata_label_indicator")) %> <%= atags %><br /><% end %>
+      <% if otags %><%= style_bold(t(".optional_tags")) %> <%= otags %><br /><% end %>
+      <% if prompt.url && !prompt.url.blank? %><%= style_bold(t(".prompt_url")) %> <%= style_link(prompt.url, prompt.url) %><br /><% end %>
       <% if prompt.description && !prompt.description.blank? %>
         <%= style_bold(t(".description")) %>
         <%= style_quote(prompt.description) %>
