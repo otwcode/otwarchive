@@ -185,13 +185,13 @@ en:
       description: 'Description:'
       due: 'This assignment is due at:'
       footer:
+        challenge_profile: the challenge profile page
         html: You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{challenge_profile_link}.
         text: You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{challenge_profile_url}.
-        challenge_profile: the challenge profile page
       look_up:
         html: You can look up this assignment from %{your_assignments_link}.
-        your_assignments: your Assignments page
         text: You can look up this assignment from your Assignments page at %{your_assignments_link}.
+        your_assignments: your Assignments page
       optional_tags: 'Optional Tags:'
       prompt_url: 'Prompt URL:'
       prompts: 'Prompts:'
