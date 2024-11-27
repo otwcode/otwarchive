@@ -38,13 +38,10 @@ class UserMailerPreview < ApplicationMailerPreview
   # Variant with tag fields set to "Any" and no due date
   # URL: /rails/mailers/user_mailer/challenge_assignment_notification_any?sent_at=2025-01-23T20:00
   def challenge_assignment_notification_any
-    assignment = create(:challenge_assignment)
-    assignment.sent_at = params[:sent_at] ? params[:sent_at].to_time : Time.current
-    assignment.save!
+    assignment = create(:challenge_assignment, sent_at: (params[:sent_at] ? params[:sent_at].to_time : Time.current))
 
     signup = assignment.request_signup
-    signup.pseud = create(:user, :for_mailer_preview).default_pseud
-    signup.save!
+    signup.update(pseud: create(:user, :for_mailer_preview).default_pseud)
 
     # Fill all tag fields with "Any"
     prompt = signup.requests.first
@@ -61,17 +58,13 @@ class UserMailerPreview < ApplicationMailerPreview
   # Variant with flexible due date, 3 tags per type and all fields filled out
   # URL: /rails/mailers/user_mailer/challenge_assignment_notification_filled?sent_at=2025-01-23T20:00&due=2021-12-15T13:45
   def challenge_assignment_notification_filled
-    assignment = create(:challenge_assignment)
-    assignment.sent_at = params[:sent_at] ? params[:sent_at].to_time : Time.current
-    assignment.save!
+    assignment = create(:challenge_assignment, sent_at: (params[:sent_at] ? params[:sent_at].to_time : Time.current))
 
     challenge = assignment.collection.challenge
-    challenge.assignments_due_at = params[:due] ? params[:due].to_time : Time.current
-    challenge.save!
+    challenge.update(assignments_due_at: params[:due] ? params[:due].to_time : Time.current)
 
     signup = assignment.request_signup
-    signup.pseud = create(:user, :for_mailer_preview).default_pseud
-    signup.save!
+    signup.update(pseud: create(:user, :for_mailer_preview).default_pseud)
 
     # Allow up to 3 tags per type
     request_restriction = challenge.request_restriction
