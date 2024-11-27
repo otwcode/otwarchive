@@ -181,23 +181,23 @@ en:
       any: Any
       assignment:
         html: You have been assigned the following request in the %{link} challenge at the Archive of Our Own!
+        text: You have been assigned the following request in the "%{collection_title}" challenge (%{collection_url}) at the Archive of Our Own!
       description: 'Description:'
       due: 'This assignment is due at:'
-      html:
-        footer: You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{footer_link}.
-        footer_link: the challenge profile page
-        look_up: You can look up this assignment from %{link}.
-        look_up_link: your Assignments page
+      footer:
+        html: You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{challenge_profile_link}.
+        text: You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{challenge_profile_url}.
+        challenge_profile: the challenge profile page
+      look_up:
+        html: You can look up this assignment from %{your_assignments_link}.
+        your_assignments: your Assignments page
+        text: You can look up this assignment from your Assignments page at %{your_assignments_link}.
       optional_tags: 'Optional Tags:'
       prompt_url: 'Prompt URL:'
       prompts: 'Prompts:'
       recipient: 'Recipient:'
       recipient_missing: 'None: contact a moderator for help!'
       subject: "[%{app_name}][%{collection_title}] Your assignment!"
-      text:
-        assignment: You have been assigned the following request in the "%{collection_title}" challenge (%{collection_url}) at the Archive of Our Own!
-        footer: You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{profile_url}.
-        look_up: You can look up this assignment from your Assignments page at %{link}.
     change_email:
       changed:
         html: "%{login}, the email associated with your account has been changed to %{email}"
