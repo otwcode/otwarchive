@@ -34,6 +34,62 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.feedback(feedback.id)
   end
 
+  def challenge_assignment_notification_any
+    assignment = create(:challenge_assignment)
+
+    signup = assignment.request_signup
+    signup.pseud = create(:user, :for_mailer_preview).default_pseud
+    signup.save!
+
+    # Fill all tag fields with "Any"
+    prompt = signup.requests.first
+    TagSet::TAG_TYPES.each do |type|
+      prompt.send(:"any_#{type}=", true)
+    end
+    prompt.title = "This is a title"
+    prompt.save!
+
+    UserMailer.challenge_assignment_notification(assignment.collection.id, assignment.offering_user.id, assignment.id)
+  end
+
+  def challenge_assignment_notification_filled
+    assignment = create(:challenge_assignment)
+
+    signup = assignment.request_signup
+    signup.pseud = create(:user, :for_mailer_preview).default_pseud
+    signup.save!
+
+    challenge = assignment.collection.challenge
+    challenge.assignments_due_at = params[:due] ? params[:due].to_time : Time.current
+    challenge.save!
+
+    # Allow up to 3 tags per type
+    request_restriction = challenge.request_restriction
+    TagSet::TAG_TYPES.each do |type|
+      request_restriction.send(:"#{type}_num_allowed=", 3)
+    end
+    request_restriction.save!
+
+    # Tag set with 3 tags per type
+    tag_set = create(:tag_set, tags: [])
+    tag_set.archive_warning_tagnames = [ArchiveConfig.WARNING_VIOLENCE_TAG_NAME, ArchiveConfig.WARNING_DEATH_TAG_NAME, ArchiveConfig.WARNING_NONCON_TAG_NAME].join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    tag_set.rating_tagnames = [ArchiveConfig.RATING_EXPLICIT_TAG_NAME, ArchiveConfig.RATING_MATURE_TAG_NAME, ArchiveConfig.RATING_TEEN_TAG_NAME].join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    tag_set.category_tagnames = [ArchiveConfig.CATEGORY_GEN_TAG_NAME, ArchiveConfig.CATEGORY_HET_TAG_NAME, ArchiveConfig.CATEGORY_SLASH_TAG_NAME].join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    %w(fandom character relationship freeform).each do |type|
+      tag_set.tags += [create(:"canonical_#{type}"), create(:"canonical_#{type}"), create(:"canonical_#{type}")]
+    end
+    tag_set.save!
+
+    prompt = signup.requests.first
+    prompt.tag_set = tag_set
+    prompt.title = "This is a title"
+    prompt.url = "https://example.com/"
+    prompt.optional_tag_set = create(:tag_set, tags: [create(:freeform), create(:freeform), create(:freeform)])
+    prompt.save!
+
+    UserMailer.challenge_assignment_notification(assignment.collection.id, assignment.offering_user.id, assignment.id)
+  end
+
   def claim_notification_registered
     work = create(:work)
     creator_id = work.pseuds.first.user.id

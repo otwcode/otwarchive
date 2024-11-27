@@ -211,12 +211,10 @@ class UserMailer < ApplicationMailer
     @assigned_user = User.find(assigned_user_id)
     assignment = ChallengeAssignment.find(assignment_id)
     @request = (assignment.request_signup || assignment.pinch_request_signup)
-    I18n.with_locale(@assigned_user.preference.locale.iso) do
-      mail(
-        to: @assigned_user.email,
-        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
-      )
-    end
+    mail(
+      to: @assigned_user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
+    )
   end
 
   # Asks a user to validate and activate their new account
