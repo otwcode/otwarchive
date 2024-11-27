@@ -36,6 +36,8 @@ class UserMailerPreview < ApplicationMailerPreview
 
   def challenge_assignment_notification_any
     assignment = create(:challenge_assignment)
+    assignment.sent_at = params[:sent_at] ? params[:sent_at].to_time : Time.current
+    assignment.save!
 
     signup = assignment.request_signup
     signup.pseud = create(:user, :for_mailer_preview).default_pseud
@@ -52,16 +54,19 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.challenge_assignment_notification(assignment.collection.id, assignment.offering_user.id, assignment.id)
   end
 
+  # /rails/mailers/user_mailer/challenge_assignment_notification_filled?sent_at=2025-01-23T20:00&due=2021-12-15T13:45
   def challenge_assignment_notification_filled
     assignment = create(:challenge_assignment)
-
-    signup = assignment.request_signup
-    signup.pseud = create(:user, :for_mailer_preview).default_pseud
-    signup.save!
+    assignment.sent_at = params[:sent_at] ? params[:sent_at].to_time : Time.current
+    assignment.save!
 
     challenge = assignment.collection.challenge
     challenge.assignments_due_at = params[:due] ? params[:due].to_time : Time.current
     challenge.save!
+
+    signup = assignment.request_signup
+    signup.pseud = create(:user, :for_mailer_preview).default_pseud
+    signup.save!
 
     # Allow up to 3 tags per type
     request_restriction = challenge.request_restriction
