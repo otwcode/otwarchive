@@ -126,7 +126,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   When I follow "Jack Harkness/Ianto Jones"
   Then I should see "Jack Harkness/Robot Ianto Jones"
     And I should see "Jack Harkness/Male Character"
-  When I am logged in as an admin
+  When I am logged in as a "tag_wrangling" admin
     And I edit the tag "Jack Harkness/Ianto Jones"
     And I fill in "Synonym of" with "Captain Jack Harkness/Ianto Jones"
     And I press "Save changes"
@@ -270,7 +270,7 @@ Scenario: AO3-2147 Creating a new merger to a non-can tag while adding character
     And I should see "Testypants/Testyskirt"
     And the "Canonical" checkbox should be checked and disabled
 
-  When I am logged in as an admin
+  When I am logged in as a "tag_wrangling" admin
     And I edit the tag "Testing McTestypants/Testing McTestySkirt"
     And I fill in "Synonym of" with "Dame Tester/Sir Tester"
     And I press "Save changes"
