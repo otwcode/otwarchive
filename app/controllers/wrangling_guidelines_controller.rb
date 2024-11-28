@@ -1,4 +1,4 @@
-class WranglingGuidelinesController < ApplicationController  
+class WranglingGuidelinesController < ApplicationController
   before_action :admin_only, except: [:index, :show]
 
   # GET /wrangling_guidelines

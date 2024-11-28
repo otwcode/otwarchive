@@ -23,9 +23,11 @@
     </li>
   <% end %>
 
-  <li>
-    <%= span_if_current ts("Archive FAQ", key: "header"), archive_faqs_path %>
-  </li>
+  <% if policy(ArchiveFaq).translation_access? %>
+    <li>
+      <%= span_if_current t(".archive_faq"), archive_faqs_path %>
+    </li>
+  <% end %>
   <li>
     <%= span_if_current ts("Known Issues", key: "header"), known_issues_path %>
   </li>

@@ -56,10 +56,8 @@ class WorksController < ApplicationController
 
     options = params[:work_search].present? ? clean_work_search_params : {}
 
-    if params[:fandom_id] || (@collection.present? && @tag.present?)
-      if params[:fandom_id].present?
-        @fandom = Fandom.find(params[:fandom_id])
-      end
+    if params[:fandom_id].present? || (@collection.present? && @tag.present?)
+      @fandom = Fandom.find(params[:fandom_id]) if params[:fandom_id]
 
       tag = @fandom || @tag
 
@@ -161,6 +159,8 @@ class WorksController < ApplicationController
       redirect_to logged_in? ? user_path(current_user) : new_user_session_path
       return
     end
+    
+    @page_subtitle = t(".page_title", username: @user.login)
 
     if params[:pseud_id]
       @pseud = @user.pseuds.find_by(name: params[:pseud_id])

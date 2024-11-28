@@ -11,6 +11,14 @@ en:
     admin_users:
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
+  archive_faqs:
+    create:
+      success: Archive FAQ was successfully created.
+    default_locale_only: Sorry, this action is only available for English FAQs.
+    update:
+      success: Archive FAQ was successfully updated.
+    update_positions:
+      success: Archive FAQs order was successfully updated.
   blocked:
     users:
       create:
@@ -81,6 +89,15 @@ en:
   external_works:
     update:
       successfully_updated: External work was successfully updated.
+  home:
+    content:
+      page_title: Content Policy
+    privacy:
+      page_title: Privacy Policy
+    tos:
+      page_title: Terms of Service
+    tos_faq:
+      page_title: Terms of Service FAQ
   kudos:
     create:
       success: Thank you for leaving kudos!
@@ -90,6 +107,10 @@ en:
         muted: You have muted the user %{name}.
       destroy:
         unmuted: You have unmuted the user %{name}.
+  questions:
+    not_found: Sorry, we couldn't find the FAQ you were looking for.
+    update_positions:
+      success: Question order has been successfully updated.
   users:
     passwords:
       create:
@@ -108,6 +129,9 @@ en:
       ban_notice_html: Your account has been banned. You are not permitted to add or edit archive content. Please %{contact_abuse_link} for more information.
       contact_abuse: contact Abuse
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please %{contact_abuse_link} for more information.
+  works:
+    drafts:
+      page_title: "%{username} - Drafts"
   wrangling_guidelines:
     create: Wrangling Guideline was successfully created.
     delete: Wrangling Guideline was successfully deleted.
