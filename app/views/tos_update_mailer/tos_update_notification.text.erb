@@ -1,0 +1,16 @@
+<% content_for :message do %>
+<%= t("mailer.general.greeting.formal_html", name: @username) %>
+
+In order to make AO3's rules clearer to our users, we intend to update the AO3 Terms of Service (TOS) later this year. Once this occurs, you will need to agree to the updated TOS in order to continue using AO3.
+
+Here are the highlights of the changes in the 2024 version of the TOS:
+
+  - We've clarified the Content Policy, but we haven't changed what works are or are not allowed. If your fanwork was allowed on AO3 before, then it is still allowed.
+  - The TOS has been split into three pages (General Principles, Content Policy, and Privacy Policy). This should make it easier to find what you're looking for when you want to know about a specific part of the TOS.
+  - We've simplified the language throughout the TOS and removed redundant or overly specific phrases and passages. When longer explanations would help to provide clarity, we've added new questions to the TOS FAQ instead.
+  - We've updated the descriptions of how we and our subprocessors collect and process user information (including personal information) in the Privacy Policy.
+  - The Abuse Policy has been generalized to provide the AO3 Policy & Abuse committee with greater flexibility to determine how to address TOS violations, while still providing protections for fanworks in accordance with AO3's mission.
+  - The "Underage" Archive Warning, which is used for works that depict or describe underage sex, will be renamed to "Underage Sex". This does not change the meaning of this warning or how it is enforced. When the TOS update occurs, all works with the "Underage" Archive Warning will be recategorized automatically to display the new "Underage Sex" Archive Warning label instead. If you have a work that carries the "Underage" warning and you don't want it to display the "Underage Sex" label, you can replace it with the "Creator Chose Not to Use Archive Warnings" label at any time.
+
+You can learn more about the intended changes, access the full draft text, ask questions, and provide public feedback by visiting our news post about the 2024 Terms of Service updates: <%= admin_post_url(@admin_post) %>.
+<% end %>

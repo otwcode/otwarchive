@@ -1,12 +1,16 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Users::RegistrationsController do
   include RedirectExpectationHelper
 
   def valid_user_attributes
     {
-      email: "sna.foo@gmail.com", login: "myname", age_over_13: "1",
-      terms_of_service: "1", password: "password"
+      email: "sna.foo@gmail.com",
+      login: "myname",
+      age_over_13: "1",
+      data_processing: "1",
+      terms_of_service: "1",
+      password: "password"
     }
   end
 
