@@ -1,6 +1,9 @@
 ---
 en:
   admin:
+    access:
+      action_access_denied: Sorry, only an authorized admin can do that.
+      page_access_denied: Sorry, only an authorized admin can access the page you were trying to reach.
     admin_invitations:
       find:
         user_not_found: No results were found. Try another search.
@@ -132,3 +135,8 @@ en:
   works:
     drafts:
       page_title: "%{username} - Drafts"
+  wrangling_guidelines:
+    create: Wrangling Guideline was successfully created.
+    delete: Wrangling Guideline was successfully deleted.
+    reorder: Wrangling Guidelines order was successfully updated.
+    update: Wrangling Guideline was successfully updated.
