@@ -39,7 +39,7 @@
     <% if policy(AdminBlacklistedEmail).index? %>
       <li><%= link_to t(".nav.banned_emails"), admin_blacklisted_emails_path %></li>
     <% end %>
-  
+
     <% if policy(ModeratedWork).index? %>
       <li><%= link_to t(".nav.spam"), admin_spam_index_path %></li>
     <% end %>
@@ -62,8 +62,9 @@
         </ul>
       </li>
     <% end %>
-    <li><%= link_to t(".nav.wrangling"), tag_wranglings_path %></li>
-  
+    <% if policy(:wrangling).full_access? %>
+      <li><%= link_to t(".nav.wrangling"), tag_wranglings_path %></li>
+    <% end %>
     <% if policy(Locale).index? %>
       <li><%= link_to t(".nav.locales"), locales_path %></li>
     <% end %>

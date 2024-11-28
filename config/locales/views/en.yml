@@ -1606,6 +1606,34 @@ en:
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
       tags_wrangled_csv: Tags Wrangled (CSV)
+  tag_wranglings:
+    wrangler_dashboard:
+      characters_by_fandom: Characters by fandom (%{count})
+      fandoms_by_media: Fandoms by media (%{count})
+      freeforms_by_fandom: Freeforms by fandom (%{count})
+      new_tag: New Tag
+      relationships_by_fandom: Relationships by fandom (%{count})
+      search_tags: Search Tags
+      tag_type:
+        character: Characters
+        fandom: Fandoms
+        freeform: Freeforms
+        merger: Mergers
+        relationship: Relationships
+        subtag: SubTags
+      tag_type_and_count: "%{tag_type} (%{count})"
+      unsorted_tags: Unsorted Tags (%{count})
+      use_type:
+        bookmarks: Bookmarks
+        drafts: Drafts
+        external_works: External Works
+        private_bookmarks: Private Bookmarks
+        taggings_count: Taggings Count
+        works: Works
+      use_type_and_count: "%{use_type} (%{count})"
+      wranglers: Wranglers
+      wrangling_home: Wrangling Home
+      wrangling_tools: Wrangling Tools
   tags:
     index:
       about:
