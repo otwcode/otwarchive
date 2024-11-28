@@ -93,6 +93,9 @@ en:
         page_heading: Invite New Users
     admin_nav:
       archive_faq: Archive FAQ
+      news:
+        delete_post: Delete Post
+      wrangling_guidelines: Wrangling Guidelines
     admin_options:
       delete:
         bookmark: Delete Bookmark
