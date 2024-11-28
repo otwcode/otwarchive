@@ -30,7 +30,9 @@
         <% if policy(ArchiveFaq).translation_access? %>
           <li><%= link_to t(".nav.posts.faqs"), archive_faqs_path %></li>
         <% end %>
-        <li><%= link_to t(".nav.posts.known_issues"), known_issues_path %></li>
+        <% if policy(KnownIssue).admin_index? %>
+          <li><%= link_to t(".nav.posts.known_issues"), known_issues_path %></li>
+        <% end %>
         <% if policy(:wrangling).new? %>
           <li><%= link_to t(".nav.posts.wrangling_guidelines"), wrangling_guidelines_path %></li>
         <% end %>

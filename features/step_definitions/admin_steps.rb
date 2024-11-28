@@ -102,8 +102,8 @@ Given "guest comments are off" do
   click_button("Update")
 end
 
-Given /^I have posted known issues$/ do
-  step %{I am logged in as an admin}
+Given "I have posted known issues" do
+  step %{I am logged in as a super admin}
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "make a new known issues post"}
@@ -299,8 +299,7 @@ When "the scheduled check_invite_queue job is run" do
   Resque.enqueue(AdminSetting, :check_queue)
 end
 
-When /^I edit known issues$/ do
-  step %{I am logged in as an admin}
+When "I edit known issues" do
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "Edit"}
@@ -309,8 +308,7 @@ When /^I edit known issues$/ do
   step %{I press "Post"}
 end
 
-When /^I delete known issues$/ do
-  step %{I am logged in as an admin}
+When "I delete known issues" do
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "Delete"}
