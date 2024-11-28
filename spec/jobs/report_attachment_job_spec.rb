@@ -10,6 +10,7 @@ describe ReportAttachmentJob do
   before do
     download_mock = instance_double(Download)
     allow(Download).to receive(:new).with(work, { mime_type: "text/html" }).and_return(download_mock)
+    allow(download_mock).to receive(:file_name).and_return("filename")
     allow(DownloadWriter).to receive(:new).with(download_mock).and_return(writer_mock)
     allow(writer_mock).to receive(:generate_html)
     allow(FeedbackReporter).to receive(:new).and_return(reporter)

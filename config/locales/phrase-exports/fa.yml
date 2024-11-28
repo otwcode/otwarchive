@@ -63,21 +63,20 @@ fa:
       guest:
         one: یک مهمان
         other: "%{count} مهمان"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           one: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستاد."
           other: "%{givers_list} برای %{commentable_link} کودوس و قدردانی فرستادند."
-        single_guest:
-          giver_list: یک مهمان
-          left_kudos: "%{giver_list} براى %{commentable_link} كودوس و قدردانى فرستاد."
-      subject: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
-      text:
-        left_kudos:
+        text:
           one: "%{givers_list} برای %{commentable_title} (%{commentable_url}) کودوس
             و قدردانی فرستاد."
           other: "%{givers_list} برای %{commentable_title} (%{commentable_url}) کودوس
             و قدردانی فرستادند."
-        single_guest: یک مهمان براى %{commentable_title} كودوس و قدردانى فرستاد (%{commentable_url}).
+      single_guest:
+        giver: یک مهمان
+        html: "%{giver} براى %{commentable_link} كودوس و قدردانى فرستاد."
+        text: یک مهمان براى %{commentable_title} كودوس و قدردانى فرستاد (%{commentable_url}).
+      subject: "[%{app_name}] شما کودوس و قدردانی دریافت کردید!"
   mailer:
     general:
       closing:
@@ -106,9 +105,9 @@ fa:
               بگیرید در %{support_url}.
         sent_at: فرستاده شده در %{sent_at}.
       greeting:
-        formal: "%{name} عزیز،"
+        formal_html: "%{name} عزیز،"
         informal:
-          addressed: سلام، %{name}!
+          addressed_html: سلام، %{name}!
           unaddressed: سلام!
         introductory: سلامی از Archive of Our Own – AO3 (آرشیوی از آن خودمان)!
       metadata_label_indicator: ":"
@@ -310,8 +309,8 @@ fa:
           حذف کنید: %{url}'
     creatorship_notification_archivist:
       explanation: به خاطر اینکه ایشان در حوزه ی رسمی خود به عنوان یک بایگان Open
-        Doors (درهای باز) فعالیت می کنند، اجازه دارند که شما را بدون هیچ دعوتنامه
-        ای اضافه کنند، حتی اگر شما تهیه کنندگی همکار خود را غیرفعال کرده باشید.
+        Doors (درهای باز) فعالیت می کنند، اجازه دارند که شما را بدون هیچ درخواستی
+        اضافه کنند، حتی اگر شما تهیه کنندگی همکار خود را غیرفعال کرده باشید.
       html:
         creation: "%{creation_link} توسط %{pseud_links}"
         edit_chapter: فصل را ویرایش کنید

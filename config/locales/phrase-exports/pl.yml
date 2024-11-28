@@ -81,21 +81,20 @@ pl:
         many: "%{count} gości"
         one: 1 gościa
         other: "%{count} gości"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           few: Kudos dla %{commentable_link} od %{givers_list}.
           many: Kudos dla %{commentable_link} od %{givers_list}.
           one: Kudos dla %{commentable_link} od %{givers_list}.
-        single_guest:
-          giver_list: 1 gościa
-          left_kudos: Kudos dla %{commentable_link} od %{giver_list}.
-      subject: "[%{app_name}] Masz kudos!"
-      text:
-        left_kudos:
+        text:
           few: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
           many: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
           one: Kudos dla %{commentable_title} (%{commentable_url}) od %{givers_list}.
-        single_guest: Kudos dla %{commentable_title} (%{commentable_url}) od 1 gościa.
+      single_guest:
+        giver: 1 gościa
+        html: Kudos dla %{commentable_link} od %{giver}.
+        text: Kudos dla %{commentable_title} (%{commentable_url}) od 1 gościa.
+      subject: "[%{app_name}] Masz kudos!"
   mailer:
     general:
       closing:
@@ -126,9 +125,9 @@ pl:
               o kontakt ze Wsparciem poprzez %{support_url}.
         sent_at: Wysłano w %{sent_at}.
       greeting:
-        formal: Szanowna/y %{name},
+        formal_html: Szanowna/y %{name},
         informal:
-          addressed: Cześć, %{name}!
+          addressed_html: Cześć, %{name}!
           unaddressed: Cześć!
         introductory: Pozdrowienia z Archive of Our Own – AO3 (Naszego Własnego Archiwum)!
       metadata_label_indicator: ":"

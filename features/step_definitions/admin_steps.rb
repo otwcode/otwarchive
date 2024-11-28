@@ -223,6 +223,10 @@ Given "there is/are {int} user creation(s) per page" do |amount|
   allow(Comment).to receive(:per_page).and_return(amount)
 end
 
+Given "an archive FAQ category with the title {string} exists" do |title|
+  FactoryBot.create(:archive_faq, title: title)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -272,9 +276,18 @@ When /^I make a multi-question FAQ post$/ do
   click_button("Post")
 end
 
-When /^(\d+) Archive FAQs? exists?$/ do |n|
-  (1..n.to_i).each do |i|
-    FactoryBot.create(:archive_faq, id: i)
+When "{int} Archive FAQ(s) exist(s)" do |n|
+  (1..n).each do |i|
+    FactoryBot.create(:archive_faq, id: i, title: "The #{i} FAQ")
+  end
+end
+
+When "{int} Archive FAQ(s) with {int} question(s) exist(s)" do |faqs, questions|
+  (1..faqs).each do |i|
+    archive_faq = FactoryBot.create(:archive_faq, id: i)
+    (1..questions).each do
+      FactoryBot.create(:question, archive_faq: archive_faq)
+    end
   end
 end
 

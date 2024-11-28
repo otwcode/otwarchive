@@ -64,22 +64,21 @@ hi:
       guest:
         one: अतिथि
         other: "%{count} अतिथिगण"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           one: "%{givers_list} ने %{commentable_link} पर कुङोस दिया है।"
           other: "%{givers_list} ने %{commentable_link} पर कुङोस दिए हैं।"
-        single_guest:
-          giver_list: एक अतिथि
-          left_kudos: "%{giver_list} ने %{commentable_link} पर कुङोस दिया है।"
-      subject: "[%{app_name}] आपको कुङोस मिला हैं!"
-      text:
-        left_kudos:
+        text:
           one: "%{givers_list} ने %{commentable_title} (%{commentable_url}) पर कुङोस
             दिया है।"
           other: "%{givers_list} ने %{commentable_title} (%{commentable_url}) पर कुङोस
             दिए हैं।"
-        single_guest: एक अतिथि ने %{commentable_title} (%{commentable_url}) पर कुङोस
-          दिया है।
+      single_guest:
+        giver: एक अतिथि
+        html: "%{giver} ने %{commentable_link} पर कुङोस दिया है।"
+        text: एक अतिथि ने %{commentable_title} (%{commentable_url}) पर कुङोस दिया
+          है।
+      subject: "[%{app_name}] आपको कुङोस मिला हैं!"
   mailer:
     general:
       closing:
@@ -108,9 +107,9 @@ hi:
               पर संपर्क करें।
         sent_at: "%{sent_at} पर भेजा गया।"
       greeting:
-        formal: प्रिय %{name},
+        formal_html: प्रिय %{name},
         informal:
-          addressed: नमस्कार, %{name}!
+          addressed_html: नमस्कार, %{name}!
           unaddressed: नमस्कार!
         introductory: Archive of Our Own AO3 (हमारा अपना संग्रह) – से नमस्कार!
       metadata_label_indicator: ":"
@@ -505,9 +504,12 @@ hi:
       subject: "[%{app_name}] नये आमंत्रण"
       text:
         body:
-          one: हम सिर्फ आपको यह बताना चाहते हैं कि आपके पास %{count} नया आमंत्रण है,
-            जिसका उपयोग AO3 पर एक नया खाता बनाने के लिए किया जा सकता है। आप आपने Invitations
-            (आमंत्रण) पृष्ठ
+          one: |-
+            हम सिर्फ आपको यह बताना चाहते हैं कि आपके पास %{count} नया आमंत्रण है, जिसका उपयोग AO3 पर एक नया खाता बनाने के लिए किया जा सकता है। आप आपने Invitations (आमंत्रण) पृष्ठ
+            (%{invitation_page_url}) से किसी मित्र को आमंत्रित कर सकते हैं।
+          other: |-
+            हम सिर्फ आपको यह बताना चाहते हैं कि आपके पास %{count} नए आमंत्रण हैं, जिनका उपयोग AO3 पर नए खाते बनाने के लिए किया जा सकता है। आप आपने Invitations (आमंत्रण) पृष्ठ
+            (%{invitation_page_url}) से किसी मित्र को आमंत्रित कर सकते हैं।
     invite_request_declined:
       main:
         one: हमें आपको यह सूचित करते हुए खेद हो रहा है कि नए आमंत्रण के लिए आपका अनुरोध

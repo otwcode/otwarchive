@@ -53,7 +53,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I follow "Edit The First Doctor"
   Then I should not see "Make tag non-canonical and unhook all associations"
 
-  Given I am logged in as an admin
+  Given I am logged in as a "tag_wrangling" admin
   When I edit the tag "The First Doctor"
   Then I should see "Make tag non-canonical and unhook all associations"
     And I should see "The Doctor (1st)"
@@ -129,7 +129,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I follow "First Doctor"
   Then I should see "John Smith"
     And I should see "The Doctor"
-  When I am logged in as an admin
+  When I am logged in as a "tag_wrangling" admin
     And I edit the tag "First Doctor"
     And I fill in "Synonym of" with "First Doctor (DW)"
     And I press "Save changes"

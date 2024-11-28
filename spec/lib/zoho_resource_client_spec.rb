@@ -162,7 +162,7 @@ describe ZohoResourceClient do
       expect(WebMock).to have_requested(:post, "https://desk.zoho.com/api/v1/tickets/3/attachments")
         .with(
           headers: expected_request_headers,
-          body: attachment_attributes.to_json
+          body: "file=the_file"
         )
     end
   end
