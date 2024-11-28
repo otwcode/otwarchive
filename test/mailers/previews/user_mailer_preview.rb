@@ -47,6 +47,13 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.invite_request_declined(user.id, total, reason)
   end
 
+  def change_email
+    user = create(:user, :for_mailer_preview)
+    old_email = user.email
+    new_email = "new_email"
+    UserMailer.change_email(user.id, old_email, new_email)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)

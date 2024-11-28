@@ -174,7 +174,9 @@ class UsersController < ApplicationController
 
       if @user.save
         flash.now[:notice] = ts("Your email has been successfully updated")
-        UserMailer.change_email(@user.id, old_email, new_email).deliver_later
+        I18n.with_locale(@user.preference.locale.iso) do
+          UserMailer.change_email(@user.id, old_email, new_email).deliver_later
+        end
       else
         # Make sure that on failure, the form still shows the old email as the "current" one.
         @user.email = old_email
