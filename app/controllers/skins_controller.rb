@@ -2,7 +2,6 @@ class SkinsController < ApplicationController
 
   before_action :users_only, only: [:new, :create, :destroy]
   before_action :load_skin, except: [:index, :new, :create, :unset]
-  before_action :check_title, only: [:create, :update]
   before_action :check_ownership_or_admin, only: [:edit, :update]
   before_action :check_ownership, only: [:confirm_delete, :destroy]
   before_action :check_visibility, only: [:show]
@@ -196,13 +195,6 @@ class SkinsController < ApplicationController
     unless @skin.editable?
       flash[:error] = ts("Sorry, you don't have permission to edit this skin")
       redirect_to @skin
-    end
-  end
-
-  def check_title
-    if params[:skin][:title].match(/archive/i)
-      flash[:error] = ts("You can't use the word 'archive' in your skin title, sorry! (We have to reserve it for official skins.)")
-      render @skin ? :edit : :new
     end
   end
 
