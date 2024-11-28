@@ -91,6 +91,8 @@ en:
           queue: Manage Queue
           requests: Manage Requests
         page_heading: Invite New Users
+    admin_nav:
+      archive_faq: Archive FAQ
     admin_options:
       delete:
         bookmark: Delete Bookmark
@@ -376,6 +378,24 @@ en:
       roles:
         heading: 'Your admin roles:'
         none: You currently have no admin roles assigned to you.
+  archive_faqs:
+    admin_index:
+      confirm_delete: Are you sure you want to delete this FAQ category?
+      created_updated_date: Created at %{date_created} and updated at %{date_updated}
+      delete: Delete
+      edit: Edit
+      manage_faqs: Manage Archive FAQs
+      new_faq_category: New FAQ Category
+      page_heading: Archive FAQ
+      reorder_faqs: Reorder FAQs
+      show: Show
+    show:
+      edit: Edit
+      elasticsearch_news: news post announcing the search and filter updates
+      elasticsearch_update_notice_html: Our search engine has recently been updated, and this FAQ is based on our old version. We're working on bringing you more up-to-date information, but in the meantime, you can find out more in our %{elasticsearch_news_link}!
+      no_category_entries: We're sorry, there are currently no entries in this category.
+      page_heading: Archive FAQ
+      screencast: 'Screencast:'
   blocked:
     block: Block
     unblock: Unblock
@@ -441,6 +461,15 @@ en:
           preferences_link_text: update your preferences
           prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
           refuse_link_text: refuse a gift
+  chapters:
+    chapter_form:
+      content_policy: Content Policy
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
+    preview:
+      content_policy: Content Policy
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
   collection_items:
     collection_item_form:
       add: Add
@@ -633,6 +662,168 @@ en:
         html: You can find out more about the OTW and its projects at its website, %{transformative_works_link}, and learn about how your financial support is vital to the continuation and expansion of the OTW's work on its %{faq_page_link}. If you have a media or research question, please contact the %{communications_team_link}.
         transformative_works: transformativeworks.org
       page_title: About the OTW
+    content:
+      cc_attribution_4_0_international: Creative Commons Attribution 4.0 International License
+      commercial_promotion:
+        heading: II.C. Commercial Promotion
+        not_allowed: Promotion, solicitation, and advertisement of commercial products or activities are not allowed.
+        tos_faq: FAQ for Section II.C
+        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_link_label: Commercial Promotion FAQ
+      content_policy: Content Policy
+      content_policy_heading: II. Content Policy
+      copyright_infringement:
+        epigraphs_small_quotations_allowed: Epigraphs and short quotations are allowed, as is Content that is set within or based on an existing work.
+        heading: II.D. Copyright Infringement
+        not_allowed: Reproductions of large excerpts of copyrighted works are not allowed without the consent of the copyright owner. This includes stories, artwork, songs, poems, transcripts, and other copyrighted material. Crediting the original creator does not give you the right to upload, podfic, or translate someone else's work without permission, regardless of whether the source is a fanwork or a professionally published work.
+        tos_faq: FAQ for Section II.D
+        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_link_label: Copyright Infringement and Plagiarism FAQ
+        transformative_fanworks: transformative fanworks
+        transformative_works_legal_html: We believe that %{transformative_fanworks_link} are legal. Complaints about the mere existence of fanworks that mention trademarks or are based on copyrighted material will not be pursued.
+      effective: 'Effective: November 19, 2024'
+      fanworks:
+        bookmarks: Bookmarks
+        bookmarks_only_fanworks_html: "%{bookmarks_link} must only be created for fanworks. You may create %{external_bookmarks_link} for fanworks hosted on third-party sites."
+        external_bookmarks: external bookmarks
+        heading: II.B. Fanworks
+        must_be_fanworks_html: Works must be fanworks. Posting a Work that primarily consists of %{non_fanwork_content_link} is not allowed.
+        non_fanwork_content: non-fanwork Content
+        tos_faq: FAQ for Section II.B
+        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_link_label: Fanworks and Non-Fanwork Content FAQ
+      harassment:
+        advocating_harm:
+          heading: Advocating Harm
+          text: Content that advocates specific, real, harmful actions towards real people is not allowed. This includes, but is not limited to, directing death threats or slurs at people outside of fiction, as well as encouraging others to harass or harm specific people or groups.
+        applies_to_all: it applies to all aspects of the Service
+        blocking: blocking
+        definition: Harassment is any behavior that produces a generally hostile environment for its target. Examples include bullying, threats, and personal attacks by or towards individuals or groups of people.
+        filtering: filtering
+        heading: II.H. Harassment
+        muting: muting
+        not_allowed_and_context: Harassment is not allowed. When judging whether a specific incident or item of Content constitutes harassment and/or when determining the appropriate severity of a penalty, the Policy & Abuse committee will consider relevant context. This includes whether the behavior was repeated, targeted, difficult to avoid encountering, or related to a general pattern of harassment by an individual or a group, among other factors. Additionally, submitting repeated and/or baseless complaints, particularly those targeting a specific user or group, may be considered harassment.
+        otw:
+          abbreviated: OTW
+          full: Organization for Transformative Works
+        policy_applicability_html: The Harassment Policy is primarily focused on user conduct and non-fictional Content. However, %{applies_to_all_link}, including interactions with the Policy & Abuse committee, the Support committee, and other AO3 or %{otw_abbreviation} volunteers.
+        rpf:
+          heading: Real-Person Fiction (RPF)
+          text: Creating RPF never constitutes harassment in and of itself. Posting works where someone dies, is subjected to slurs, or is otherwise harmed as part of the plot is usually not a violation of the Harassment Policy. However, deliberately posting such Content in a manner designed to be seen by the subject of the work, such as by gifting them the work, may result in a judgment of harassment.
+        threatening_versus_annoying_html: In general, threatening Content will be considered harassment, while Content that is merely rude or annoying will be allowed. Not everyone agrees about what is offensive and unacceptable. Users are encouraged to use tools such as %{blocking_link}, %{muting_link}, and %{filtering_link} to control their own environment on AO3.
+        tos_faq: FAQ for Section II.H
+        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_link_label: Harassment FAQ
+      illegal_inappropriate_content:
+        automated_spam_check_html: We may use automated means to filter out spam. If you submit Content that is erroneously caught in a spam filter, please %{contact_ao3_administrators_link}.
+        conduct_threatening_technical_integrity_html: Conduct that threatens the %{technical_integrity_link} of AO3, for example attempting to hack AO3 or spread viruses through it, is prohibited. Uploading technically misnamed files or Content (such as non-image files with an image file extension used to disguise their actual format) constitutes a threat to the technical integrity of the site.
+        contact_ao3_administrators: contact AO3 administrators
+        heading: II.K. Illegal and Inappropriate Content
+        images_of_real_children: photographic or photorealistic images of real children
+        no_illegal_content_html: You may not upload Content that appears or purports to contain, link to, or provide instructions for obtaining sexually explicit or suggestive %{images_of_real_children_link}; malware, warez, cracks, hacks, or other executable files and their associated utilities; or trade secrets, restricted technologies, or other classified information.
+        report_it_to_us: report it to us
+        spamming_behavior: Spamming behavior is prohibited. Repeated identical or nearly identical posts in multiple places may be considered spam regardless of commercial content.
+        technical_integrity: technical integrity
+        tos_faq: FAQ for Section II.K
+        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_link_label: Offensive Content vs Illegal Content FAQ
+        violates_us_law_html: If you encounter Content that you believe violates a specific law of the United States, you can %{report_it_to_us_link}.
+      impersonation:
+        function: function
+        heading: II.G. Impersonation
+        html: You may not impersonate or misrepresent your affiliation with any person, entity, or %{function_link}. Fiction clearly marked as such is not considered impersonation.
+        tos_faq: FAQ for Section II.G
+        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_link_label: Fannish Identities and Impersonation FAQ
+      intro:
+        all_content_must_comply_html: All %{content_link} on AO3 must comply with our Content Policy.
+        archive_description: The Archive of Our Own (AO3) exists to host transformative, non-commercial works created by fans from all over the world.
+        content: content
+        maximum_inclusiveness: maximum inclusiveness of fanwork content
+        our_goal_html: Our goal is %{maximum_inclusiveness_link}. We want to provide a safe and permanent home for fanworks, including works that might be at risk on other sites due to being deemed immoral, explicit, or otherwise objectionable. Users should always observe and heed the ratings and warnings provided before accessing works on AO3.
+        report_it_to_us: report it to us
+        review_before_posting_html: "%{all_content_must_comply_bold} Please review this page carefully before you begin posting. Answers to common questions about the Content Policy can be found in the %{tos_faq_link}."
+        tos_faq: TOS FAQ
+        we_do_not_prescreen: We do not prescreen content on AO3.
+        you_can_report_html: If you encounter content that you believe violates our Content Policy, you can %{report_it_to_us_link}. %{we_do_not_prescreen_bold}
+      license_html: The AO3 %{terms_of_service_link}, including the %{content_policy_link} and %{privacy_policy_link}, are licensed under the %{cc_attribution_4_0_international_link}.
+      mandatory_tags:
+        any_archive_warning: any Archive Warning
+        ao3_may_designate_html: AO3 software may designate some tag fields (e.g. Rating, Archive Warnings, Fandom, or Language) as mandatory in order to post, import, or edit a Work using the appropriate forms. Tags entered into mandatory fields must meet the %{minimum_criteria_link} described in the TOS FAQ.
+        applying_nonspecific_tag_html: Applying a non-specific tag (such as "Not Rated", "Creator Chose Not To Use Archive Warnings", or "Unspecified Fandom") is always considered sufficient tagging for that field. A Work that is labeled with a non-specific Rating may contain Content of the highest rating. A Work that is labeled with a non-specific Archive Warning may contain Content pertaining to %{any_archive_warning_link}.
+        archive_warning: Archive Warning
+        choose_no_warnings_html: A creator may choose not to apply specific %{rating_link} and/or %{archive_warning_link} tags to their Work, but they must signal such choices by applying AO3's %{non_specific_tags_link} indicating that they have opted out of choosing a specific Rating and/or Archive Warning.
+        heading: II.J. Mandatory Tags
+        minimum_criteria: minimum criteria
+        non_specific_tags: non-specific tag(s)
+        not_available: not available
+        rating: Rating
+        tags_applied_automatically_html: Some tags may be automatically applied to Works. In addition, AO3 administrators may determine that tags in a mandatory tag field on a Work are inaccurate or insufficient. In such cases, AO3 administrators may remove inaccurate tags; add non-specific tags to the Work; add specific tags to the Work in fields where non-specific tags are %{not_available_link}; require the creator to appropriately adjust the Work's tags; hide the Work; or take other appropriate action to address the matter. Refer to the %{tos_faq_link} for details about when AO3 administrators may enforce the presence or removal of tags in mandatory fields.
+        tos_faq: TOS FAQ
+        tos_faq_endnote: FAQ for Section II.J
+        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_link_label: Ratings and Archive Warnings FAQ
+      offensive_content:
+        heading: II.A. Offensive Content
+        removal_not_just_offensiveness: Unless it violates some other policy, we will not remove Content for offensiveness.
+        tos_faq: FAQ for Section II.A
+        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_link_label: Offensive Content vs Illegal Content FAQ
+      page_content_landmark: Main Text
+      page_heading: Content Policy
+      personal_information:
+        disclosing_personal_data_html: disclosing personal data, including %{special_categories_of_personal_data_link}.
+        heading: II.F. Personal Information and Fannish Identities
+        linking_fannish_identity: linking someone's fannish identity (such as their AO3 username) to their legal or professional identity (such as their "real life" name);
+        not_allowed: 'You may not upload Content that contains seemingly accurate, non-public information about another individual without authorization. This includes:'
+        orphaned: Orphaned
+        revealing_orphaned_creator_html: revealing the identity of the creator of an %{orphaned_link} fanwork;
+        right_to_hide_delete: We reserve the right to delete, hide, or otherwise make such Content unavailable.
+        rpf_exception: As Real-Person Fiction (RPF) is fictional, Content in RPF that would normally be deemed personal data (e.g. full names, usernames on social media services, city of residence, or birth date) will not ordinarily be considered as such.
+        sharing_sufficient_information: sharing information sufficient to identify someone else's legal or professional identity or their physical location (e.g. phone numbers, email addresses, residential addresses, or hotel room numbers); and
+        special_categories_of_personal_data: Special Categories of Personal Data
+        tos_faq: FAQ for Section II.F
+        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_link_label: Fannish Identities and Impersonation FAQ
+      plagiarism:
+        heading: II.E. Plagiarism
+        html: Plagiarism is the use of someone else's words, or %{their_expressions_of_their_ideas_link}, without attribution. Minor alterations (such as replacing names, substituting synonyms, or rearranging a few words) are insufficient to make a work your own. Plagiarism is not allowed. Deliberately creating a work using the same general idea as another work is not plagiarism, but citation may be appropriate.
+        their_expressions_of_their_ideas: their expressions of their ideas
+        tos_faq: FAQ for Section II.E
+        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_link_label: Copyright Infringement and Plagiarism FAQ
+      privacy_policy: Privacy Policy
+      terms_of_service: Terms of Service
+      toc:
+        header: Table of Contents for the Terms of Service (TOS)
+        intro: The Content Policy is the second part of the AO3 Terms of Service.
+      user_icons:
+        heading: II.I. User Icons
+        text: User icons must be appropriate for general audiences. They must not depict genital nudity, explicit sexual activity, hate symbols, or imagery that promotes, advocates, or causes harm.
+        tos_faq: FAQ for Section II.I
+        tos_faq_in_parens_html: "(%{tos_faq_link})"
+        tos_faq_link_label: Usernames, Icons, and Profiles FAQ
+    diversity_statement:
+      archive_description_html: This archive is a permanent, panfandom place for fanworks, built by fans for fans. Whichever way you use the Archive, you're part of this, powering it, shaping it through your use and %{your_feedback_link}.
+      archive_for_you: 'No matter your appearance, circumstances, configuration or take on the world: if you enjoy consuming, creating or commenting on fanworks, the Archive is for you.'
+      archive_team: the Archive team
+      diversity_statement: Diversity Statement
+      dreamwidth: Dreamwidth's
+      dreamwidth_remix_html: This is a remix of %{dreamwidth_link} %{diversity_statement_link}.
+      few_restrictions: few restrictions
+      license:
+        creative_commons_by_sa: Creative Commons Attribution-Share Alike 3.0 Unported License
+        html: This work is licensed under a %{creative_commons_by_sa_link}.
+        image_alt: Creative Commons License
+      some_essential_parts: some essential parts
+      still_missing_html: 'We know that there are %{some_essential_parts_link} that are still missing to make the Archive truly panfandom: the ability to host fanworks other than text, an interface in languages other than English, and more ways for you to connect with each other, to name just a few. But with your support, we''ll get there.'
+      terms_of_service: Terms of Service
+      we_build_for: We are building this archive for you. Come be a part of it.
+      welcome_header: You are welcome at the Archive of Our Own.
+      what_we_do_html: We, %{archive_team_link}, know that we won't get everything right on the first try, and we won't be able to make everyone equally happy. But we strive to find a good balance, and we promise to respectfully consider your feedback and to take it seriously.
+      why_we_build: We are building this archive because we believe it's possible for people of all opinions and persuasions to come together and share with each other.
+      you_can_html: You are free to express your creativity within the %{few_restrictions_link} needed to keep the service viable for other users. The Archive strives to protect your rights to free expression and privacy; you can read about the details in our %{terms_of_service_link}.
+      your_feedback: your feedback
     donate:
       general:
         text: There are two main ways to support the AO3 - donating your time or money.
@@ -654,6 +845,93 @@ en:
         volunteer_listings: volunteer position listings
     fandoms:
       all_fandoms: All Fandoms
+    first_login_help:
+      additional_info:
+        header: Additional Browsing Information
+        history_mark_later:
+          header: History and Mark for Later
+          history: History
+          history_faq: History and Mark for Later FAQ
+          html: You can access and manage your history by going to %{your_dashboard_link} and selecting the "%{history_link}" link in the side menu in the default browser skin or on top of the page in mobile devices. You can clear your history, or delete individual entries if you don't want these entries to show up in your history. You can also add works to the "Marked for Later" list in your history. For more information on History, please visit the %{history_faq_link}.
+          your_dashboard: your Dashboard
+        subscriptions:
+          header: Subscriptions
+          html: You can subscribe to a work, collection, series of works, or user by selecting the "Subscribe" link at the top or bottom of a work, or at the top or bottom of a collection or series page, or the user's profile page. You can check your subscriptions from %{your_dashboard_link} by selecting the "Subscriptions" link. For more information on Subscriptions, please visit the %{subscriptions_feed_faq_link}.
+          subscriptions_feed_faq: Subscriptions and Feeds FAQ
+          your_dashboard: your Dashboard
+      bookmarking_works:
+        bookmarks_faq: Bookmarks FAQ
+        header: Bookmarking Works
+        html: You can bookmark works on the Archive as well as works hosted on other sites. You can choose to make your bookmarks public or private. You can also mark a public bookmark as a rec (recommendation). Additionally, you can add notes and tags to the bookmark, and/or add it to a collection. For more instructions on managing your Bookmarks, please visit the %{bookmarks_faq_link}.
+      browsing:
+        all_fandoms: All Fandoms
+        fandoms: Fandoms
+        header: Browsing
+        html: You can start browsing works by going to the "%{fandoms_link}" tab at the top of any Archive page in the default skin and selecting either "%{all_fandoms_link}" or one of the subsets such as "%{movies_link}". Alternatively, you can use the %{search_feature_link} to look for specific fandoms, works, or users. You can use the "Sort and Filter" form to narrow down the results in any fandom page. For more instructions, please visit %{search_browse_faq_link} and the %{search_browse_tutorial_link}.
+        movies: Movies
+        search_browse_faq: Search and Browse FAQ
+        search_browse_tutorial: Searching and browsing tutorial
+        search_feature: search feature
+      editing_profile:
+        edit_my_profile: Edit My Profile
+        header: Editing Your Profile, Password, and Preferences
+        html: To add your info, go to %{your_dashboard_link}, select the "%{profile_link}" tab, and select "%{edit_my_profile_link}" from the range of options at the end of the page. Here, you can enter some basic personal information. It's also where to go to change your password. Refer to the %{profile_faq_link} for more information.
+        profile: Profile
+        profile_faq: Profile FAQ
+        your_dashboard: your Dashboard
+      logging_in_out:
+        forgot_password: forgot your password
+        header: Logging In and Logging Out
+        html: To log in, locate the login link and fill in your Username and  Password. The link will be located at the top right of the screen and as indicated by your screenreader if you're using one. If you forget your password, then select "%{forgot_password_link}". To log out, select "Log Out" on the top right corner in the default browser skin.
+      posting_works:
+        header: Posting Works
+        html: To open the Post New Work page, just select the %{post_new_link} link from the menu of the Post tab located at the top right of the page in the default browser skin. Visit the %{posting_editing_faq_link} or check out our %{tutorial_link} for more information.
+        post_new: Post New
+        posting_editing_faq: Posting and Editing FAQ
+        tutorial: 'Tutorial: Posting a Work on AO3'
+      preferences:
+        edit_my_profile: Edit My Profile
+        header: Preferences
+        html: '"%{set_my_preferences_link}" is located next to the "%{edit_my_profile_link}" button, and allows you to adjust certain settings to personalize your experience on the site. The Preferences area controls both the Archive''s behavior (such as whether your history is saved) and the Archive''s appearance. Go to the %{preferences_faq_link} for more details.'
+        preferences_faq: Preferences FAQ
+        set_my_preferences: Set My Preferences
+        skins_detail_html: For more information on how to customize the skins and interface of the Archive, refer to the %{skins_faq_link} and %{tutorials_list_link}.
+        skins_faq: Skins and Archive Interface FAQ
+        tutorials_list: List of Tutorials
+      pseuds:
+        header: Pseuds
+        html: Pseuds are like pen names linked to your account. You can use different pseuds to post your works under the appropriate name while still managing them through the same account. You can %{manage_your_pseuds_link} through your profile page. For more information, please visit the %{pseuds_faq_link}.
+        manage_your_pseuds: manage your pseuds
+        pseuds_faq: Pseuds FAQ
+      support_and_feedback:
+        archive_faq: Archive FAQ
+        contact_support: contact Support
+        header: Support and Feedback
+        html: Some frequently asked questions about the Archive are answered in the broader %{archive_faq_link}. You may also like to check out our %{known_issues_link}. If you need more help, please %{contact_support_link}. If you want to know more about some user-created tools that work with the Archive, please visit the %{unofficial_tools_faq_link}.
+        known_issues: Known Issues
+        unofficial_tools_faq: Unofficial Browser Tools FAQ
+      table_of_contents: Table of Contents
+      tags:
+        header: Tags
+        html: All tags on the Archive—including those for fandoms, relationships, and characters—start out user-created. You can always use the existing tags by selecting from the autocomplete list. If you cannot find the tags you want to use, feel free to create new tags for your works. Behind the scenes, our tag wrangling team will match the tags up with their synonyms, so that people can find your work whether you tag it "<abbr>AMTDI</abbr>", "Aliens Made Them Do It", or "Sex Pollen". Refer to the %{tags_faq_link} to learn more.
+        tags_faq: Tags FAQ
+      tips_to_start: Here are some tips to help you get started.
+      tos:
+        additional_questions_html: If you have additional questions that are not covered here, please %{contact_abuse_link}.
+        contact_abuse: contact our Policy & Abuse team
+        content_policy: Content Policy
+        header: Terms of Service
+        info_html: You can learn about our policies and procedures by reviewing the %{tos_link}, including the %{content_policy_link} and %{privacy_policy_link}. Answers to common questions are available in the %{tos_faq_link}.
+        privacy_policy: Privacy Policy
+        tos: Terms of Service
+        tos_faq: Terms of Service FAQ
+      warnings:
+        archive_specific_warnings: Archive-specific warnings
+        description_html: 'The Archive defines four "primary" %{archive_specific_warnings_link}: "Graphic Depictions Of Violence", "Major Character Death", "Rape/Non-Con", and "Underage Sex". When posting a work, you have the option to explicitly select warnings for this content, deny the presence of such content ("No Archive Warnings Apply"), or choose not to apply warnings regardless of whether or not these warnings are applicable ("Creator Chose Not To Use Archive Warnings"). Remember, "No Archive Warnings Apply" only refers to the listed primary warnings.'
+        header: Warnings
+        symbols_html: When browsing the Archive, warnings will be displayed in the blurb of each work. Official warning tags are displayed in bold. A four square grid in the top left corner of each work's blurb indicates the work's rating, completion status, pairing category, and any Archive warnings that apply to it. Refer to the %{symbols_key_chart_link} for more information.
+        symbols_key_chart: Symbols Key Chart
+      welcome_header: Welcome to the %{app_name}!
     index:
       browse_or_favorite:
         one: Browse fandoms by media or favorite up to %{count} tag to have it listed here!
@@ -671,13 +949,425 @@ en:
         other_outlets: Organization for Transformative Works' news outlets
         tumblr: ao3org on Tumblr
         twitter: "@AO3_Status on Twitter"
-    tos_faq:
-      fnok:
-        support: Support team
+    privacy:
+      account_termination:
+        backup_copies_html: '"Active records" do not include the backup copies of Content created for legal and/or disaster recovery purposes (refer to the %{general_principles_link}).'
+        deletion_after_termination_html: If for any reason you %{terminate_your_account_link}, as soon as reasonably possible we will destroy active records containing your Personal Information that are visible to the public or to AO3 users, with the exception of Personal Information entered as Content that you have not deleted. "Reasonably" here means no more than thirty business days from the termination of the account.
+        general_principles: General Principles
+        heading: III.G. Termination of account
+        legal_enforcement_retention: We will retain some Personal Information accessible to AO3 administrators for legal and TOS enforcement purposes. For example, if we terminate your service or suspend your account, we may retain enough Personal Information to prevent you from creating an account or using AO3 in the future.
+        orphan: Orphan
+        orphans_excluded_html: If you choose to %{orphan_link} your works during the account deletion process, and choose to keep your %{pseud_link} associated with the works when Orphaning them, then your pseud will remain visible on the works.
+        pseud: pseud
+        terminate_your_account: terminate your account with us
+      aggregate_anonymous_info:
+        anonymous_non_personal: Nothing in this Privacy Policy restricts our use of anonymous information or other information or data that does not qualify as "Personal Information".
+        heading: III.D. Aggregate and anonymous information
+        understand_ao3_usage: We may use Personal Information in the aggregate to understand how our users use AO3. This is necessary for us to carry out our legitimate interests as a host of Content and a non-profit entity, including managing, maintaining, and ensuring the security of AO3 and our servers. Note that de-identified or aggregate information that is not linked with your other Personal Information, and does not otherwise identify you, will not be treated as Personal Information.
+      applicability:
+        consent_to_us_processing: By agreeing to this Privacy Policy, you consent to the processing of your Personal Information in the United States and in other jurisdictions in connection with our provision of AO3 and its related services to you.
+        global_subprocessors_html: While the OTW is a United States 501(c)(3) corporation, our users are global. Your use of AO3 may result in the transfer of Personal Information across international boundaries. For example, Personal Information collected within the European Economic Area (EEA) and Switzerland may be transferred to and processed in a country outside of the EEA and Switzerland, or by third-party %{subprocessors_link} located outside of the EEA and Switzerland, where you may have different legal rights in relation to your Personal Information.
+        heading: III.A. Applicability
+        policy_covers: This Privacy Policy covers the treatment of Personal Information submitted to AO3 or which we collect when you use our services. Except as otherwise stated in these Terms of Service, "Personal Information" (as used in this Privacy Policy) means information related to you that qualifies as "personal data" or "personal information" under the data privacy laws applicable to the Organization for Transformative Works (OTW). Changes to this Privacy Policy will only apply to the Personal Information that is processed by AO3 after the effective date of those changes. If you are concerned about how your Personal Information is used, you should review this Privacy Policy periodically.
+        subprocessors: Subprocessors
+        transfers_necessary_html: We make such transfers to the United States and the jurisdictions of our service providers with your consent or because it is necessary for the performance of a contract with you. %{consent_to_us_processing_bold}
+      cc_attribution_4_0_international: Creative Commons Attribution 4.0 International License
+      contact_us:
+        contact_pac: contact the Policy & Abuse committee
+        heading: III.I. Contact us
+        html: If you have any questions, concerns, or complaints about this Privacy Policy, or would like to submit a data request, please %{contact_pac_link}.
+      content_policy: Content Policy
+      effective: 'Effective: November 19, 2024'
+      information_scope:
+        collect_through_use: We may collect your Personal Information (such as your IP address and email address) when you request an AO3 invitation, register for an AO3 account, or otherwise access or use AO3.
+        content: Content
+        heading: III.B. Scope of Personal Information we process
+        information_in_content_html: Any Personal Information you include in your %{content_link} (including %{special_categories_link} and other types of Personal Information) may be accessible by AO3 administrators. It may also be accessible by the general public if the Content is made public, or by AO3 users if the Content is made available to AO3 users.
+        special_categories: Special Categories of Personal Data
+      intro:
+        answers_common_questions_html: Answers to common questions about the Privacy Policy can be found in the %{tos_faq_link}.
+        ao3_exists_to_host_html: 'AO3 exists to host content by and for fans from all over the world. To do so, we process certain data and information, including %{personal_information_link}. This is so that we can:'
+        archive_description: The Archive of Our Own (AO3) is a project of the Organization for Transformative Works (OTW), which is committed to fan privacy.
+        details_how_and_why_html: This Privacy Policy details how and why we collect and process this information. %{common_questions_bold}
+        enable_post_information: Enable you to post comments, kudos, bookmarks, and other information designed to be seen by other users
+        host_your_fanworks: Host or share your fanworks
+        personal_information: Personal Information
+        show_you_works: Show you works by other people
+        tos_faq: TOS FAQ
+      license_html: The AO3 %{terms_of_service_link}, including the %{content_policy_link} and %{privacy_policy_link}, are licensed under the %{cc_attribution_4_0_international_link}.
+      page_content_landmark: Main Text
+      page_heading: Privacy Policy
+      privacy_policy: Privacy Policy
+      privacy_policy_heading: III. Privacy Policy
+      retention_of_information:
+        heading: III.H. Retention of Personal Information
+        text: We will retain your Personal Information for no longer than reasonably necessary and proportionate to fulfill the purposes for which we originally collected or processed it, as set out in this Privacy Policy or as required by law. Once the purpose(s) for which the Personal Information was collected is/are no longer applicable, we will delete or otherwise dispose of that Personal Information.
+      terms_of_service: Terms of Service
+      third_parties:
+        do_not_sell_information: We will not sell, trade, or rent your Personal Information. We will not use your Personal Information to market third-party products and services to you. This means that we do not collect or use your Personal Information for targeted advertising, nor do we process Personal Information for automated decision-making purposes. If we begin to do so, that change will be reflected in this Privacy Policy, and you will have the right to restrict the use of that Personal Information accordingly.
+        heading: III.F. Information shared with third parties
+        sharing_exceptions:
+          challenge_signup:
+            challenge: Challenge
+            heading_html: 'If you sign up for a %{challenge_link}:'
+            text: We may share your email address with the maintainers of the Challenge.
+          external_processing:
+            heading: 'For external processing:'
+            html: We may use third-party services to store, process, or transmit data, or to perform other technical functions related to operating AO3. For example, we may use third-party email services. A list of third-party services is provided in our %{subprocessor_list_link}. We cannot guarantee other services' technical performance. We or the services we use may store or process your Personal Information in data centers which may be located in the United States or elsewhere.
+            subprocessor_list: Subprocessor List
+          handle_complaints:
+            dmca_notice: Digital Millennium Copyright Act (DMCA) notice
+            heading: 'To handle complaints submitted by you about TOS violations:'
+            html: If we receive a %{dmca_notice_link}, we reserve the right to disclose the information provided by the copyright owner or their legal representative to the subject of the complaint. If we receive a complaint from you about other matters, that information will be subject to the %{pac_confidentiality_policy_link}.
+            pac_confidentiality_policy: Policy & Abuse Confidentiality Policy
+          intro: 'We will not share your Personal Information with any third parties without your prior consent, except for the following cases:'
+          legal_reasons:
+            attempt_to_notify: We will attempt to notify you any time we disclose your Personal Information to a third party for legal reasons, unless legally prohibited from doing so or if, in our sole judgment, notification might hinder an ongoing investigation. In some cases, the Personal Information we have, such as an IP address, may be insufficient for us to notify you.
+            cooperating_law_enforcement: are cooperating with law enforcement authorities.
+            good_faith_comply: have a good-faith belief that such action is necessary to comply with a current judicial proceeding, court order, or legal process served on the OTW; or
+            heading: 'For legal reasons:'
+            intro: 'We may share Personal Information if we:'
+            law_enforcement_cooperation_details: We will cooperate with all investigations conducted by law enforcement authorities within the United States when legally required to do so. Cooperation with law enforcement authorities from other countries and cooperation when it is not legally required are at our sole discretion. Our discretion looks favorably on freedom and justice, and unfavorably on oppression and violence.
+            legally_compelled: are legally compelled to do so;
+          open_doors_import:
+            heading_html: 'If your work is imported via %{open_doors_link}:'
+            open_doors: Open Doors
+            text: If the email address associated with your AO3 account matches an email address that you used in connection with a non-AO3 archive that is being imported to AO3 via Open Doors, then we may share your email address with the entity that manages that imported archive.
+        third_party_tools: Third parties have developed applications, software, scripts, browser extensions, or other tools for use in connection with AO3. Such third parties may receive Personal Information from you if you use their tools to access AO3. This Privacy Policy does not cover your use of such tools.
+      toc:
+        header: Table of Contents for the Terms of Service (TOS)
+        intro: The Privacy Policy is the third part of the AO3 Terms of Service.
+      types_of_information:
+        cookies:
+          heading: 'Cookies:'
+          text: We and our Subprocessors use cookies to collect and store visitors' preferences; customize web pages' content based on visitors' preferences or other Personal Information that the visitor sends; prevent attacks on our servers; and record activity at AO3 in order to provide better service when visitors return to our site. AO3 has no access to cookies set by other sites. If you block or disable cookies, you may be unable to access or use AO3.
+        emails:
+          address_usage_html: We will use your email address internally for the purposes of managing AO3 and maintaining site integrity. We may occasionally send emails to you about AO3, your Content and account, or news that we reasonably believe to be of interest to our registered users. We will also send you your invitation to register for AO3 via email. By creating and maintaining an account on AO3, you consent to receiving such emails. We reserve the right to send you notice of complaints raised against you, or alleged violations of the TOS by you, as well as to reply to any email message you send to AO3 and/or its personnel. If you choose to participate in a %{challenge_link}, the Challenge maintainer(s) may have access to your email address for the purposes of communicating with you.
+          challenge: Challenge
+          collect_process_retain: We collect, process, and retain the email addresses of and from those who communicate with us via email, and any Content or Personal Information included in emails to us. We need this Personal Information so we can respond to you; so we can handle complaints about AO3 and any users who may have violated the TOS or other policies; and for other legal and accounting/audit reasons, including maintaining the integrity of AO3 and the Content that we host.
+          heading: 'Emails:'
+          unsubscribe: Although it is possible to unsubscribe from some emails (such as kudos updates and responses to comments), you cannot unsubscribe from receiving emails that we, in our sole discretion, deem necessary for legal purposes or to maintain the safety and integrity of your account or our services, including other OTW sites.
+        fnok:
+          heading: 'Fannish next-of-kin:'
+          text: We collect the contact information you and/or your fannish next-of-kin provide, and use it only to implement the fannish next-of-kin function.
+        heading: III.C. Types of Personal Information we collect and process
+        ip_addresses:
+          heading: 'IP addresses:'
+          text: We and our Subprocessors collect, process, and retain the IP addresses of AO3 visitors, including registered users. IP information may also be collected by our servers for logging purposes and used for limited technical assessments of AO3. We need this Personal Information so we can provide you with the Content that you are requesting; to allow you to submit Content to us; and for other legal, TOS enforcement, and accounting/audit reasons, including maintaining the integrity of AO3 and the Content that we host.
+        logs:
+          heading: 'Logs:'
+          text: We and our Subprocessors collect, process, and retain logs of server interactions. We need this Personal Information for legal, TOS enforcement, and accounting/audit reasons, including maintaining the integrity of AO3 and the Content that we host.
+        other_information:
+          heading: 'Other user-specific information:'
+          to_maintain_integrity: We and our Subprocessors collect, process, and retain Personal Information about what pages you access or visit, including your interactions with integral AO3 features such as comments, kudos, and bookmarks; referral information (i.e. data about what site you are coming to AO3 from); and whether there are errors in displaying Content to you. We need this Personal Information to maintain the integrity of AO3 and the Content that we host; to provide you with the Content that you are seeking; to prevent spam and abuse; and for other legal and accounting/audit reasons.
+          to_make_content_available_html: We and our Subprocessors collect, process, and retain Personal Information about Content that you submit to us. You consent to the collection of your Personal Information (such as your IP address) when you access AO3, including when you are not logged in. We use this Personal Information to make the Content you submit available to people who use AO3. By submitting Content to us, you are requesting that we make it available to those people and consenting to the use of your Content. For explanations of site features that use your Content and/or Personal Information and how they are used, please refer to the %{tos_faq_link}.
+          tos_faq: TOS FAQ
+      your_rights:
+        applicable_jurisdiction: applicable jurisdiction
+        heading: III.E. Your rights under applicable data privacy laws
+        other_rights: other rights regarding your Personal Information
+        potential_other_rights_html: You may have %{other_rights_link} under the laws of the jurisdiction in which you are located. We will not discriminate against you for making a request under the data privacy laws of applicable jurisdictions.
+        request_data_html: You can request that the OTW assemble the data that AO3 has about you, and provide you with a copy in electronic format. We agree to provide such data to you within a reasonable time if you are a resident or citizen of the European Union or another %{applicable_jurisdiction_link}.
+        require_user_specific_proof: We reserve the right to require user-specific proof of identity before providing Personal Information to a requester. This is necessary to protect the safety and privacy of our users and personnel.
+    site_map:
+      about:
+        ao3_news: AO3 News
+        archive_faq: Archive FAQ
+        content_policy: Content Policy
+        header: About the Archive of Our Own
+        known_issues: Known Issues
+        privacy_policy: Privacy Policy
+        project_of_otw_html: The Archive of Our Own is a project of the %{otw_link}
+        terms_of_service: Terms of Service
+        tos_faq: Terms of Service FAQ
+      access_your_account:
+        drafts: Drafts
+        header: Access your account
+        my_bookmarks: My Bookmarks
+        my_collections_and_challenges: My Collections and Challenges
+        my_history: My History
+        my_home: My Home
+        my_inbox: My Inbox
+        my_series: My Series
+        my_subscriptions: My Subscriptions
+        my_works: My Works
+        post_new: Post New
+        set_my_preferences: Set My Preferences
+      change_your_account_settings:
+        delete_account_confirmation: This will permanently delete your account and cannot be undone. Are you sure?
+        delete_my_account: Delete My Account
+        edit_my_profile: Edit My Profile
+        header: Change your account settings
+        manage_my_pseuds: Manage My Pseuds
+        my_profile: My Profile
+      contact_us:
+        donations: Donations
+        header: Contact Us
+        policy_questions_and_abuse_reports: Policy Questions & Abuse Reports
+        technical_support_and_feedback: Technical Support & Feedback
+      explore:
+        additional_tags_cloud: Additional Tags Cloud
+        bookmarks: Bookmarks
+        collections_and_challenges: Collections and Challenges
+        fandoms: Fandoms
+        header: Explore
+        homepage: Homepage
+        languages: Languages
+        people: People
+        recent_works: Recent Works
+      otw:
+        abbreviated: OTW
+        full: Organization for Transformative Works
+      page_heading: Site Map
+    tos:
+      abuse_policy:
+        answers_common_questions_html: Answers to common questions about the Abuse Policy can be found in the %{tos_faq_link}.
+        appeals:
+          appeal_decision: appeal a decision to the Policy & Abuse committee
+          heading: Appeals
+          html: The complainant or the subject of a complaint may %{appeal_decision_link}, in which case it will be reviewed by an additional PAC administrator. The original decision will remain in effect while an appeal is being reviewed. We will attempt to resolve appeals as speedily as possible, but we cannot guarantee any particular timeframe for a response. PAC's decisions are final.
+        content_policy: Content Policy
+        heading: I.I. Abuse Policy
+        no_prescreen_html: We do not prescreen Content for violations of the Terms of Service, including violations of the %{content_policy_link}. Complaints are investigated only when they are submitted through the appropriate channels and with the appropriate information.
+        penalties:
+          age_barred_individual: Age-Barred Individual
+          content_policy_ii_k_1: Subsection II.K.1 of the Content Policy
+          edit_post_while_suspended: A suspended user may not post or edit Content or create an account while they are suspended. A user who was suspended solely due to age may post Content or create an account once they are no longer an Age-Barred Individual.
+          heading: Penalties
+          illegal_inappropriate_content_policy: Illegal and Inappropriate Content Policy
+          non_violating_content_html: A suspended user's non-violating Content will not be automatically removed unless the user is an Age-Barred Individual or has violated the %{illegal_inappropriate_content_policy_link}. Suspended users retain the right to delete or Orphan their fanworks by contacting AO3 administrators.
+          open_doors_removal_html: The removal of Content imported via Open Doors will not usually result in a penalty for the archivist or creator, except for violations of %{content_policy_ii_k_1_link}.
+          remove_resolve_lawsuit_html: We may determine that we need to remove Content to resolve a threatened or pending lawsuit or to mitigate other liability. If so, we will remove the Content. Unless said Content was submitted by an %{age_barred_individual_link} or otherwise violates the TOS, removal for such reasons will not lead to a suspension.
+          tos_faq: TOS FAQ
+          violations_warnings_suspensions_html: Violations of the TOS may result in warnings or suspensions ("penalties") for all accounts owned by the offending user. The determination of appropriate penalties, including the length of any suspensions, is subject to the discretion of the Policy & Abuse committee. PAC's discretion will be informed by the nature of the violation and the behavior of the user. For more information, please refer to the %{tos_faq_link}.
+        resolution_of_complaints:
+          add_or_edit_tags_html: AO3 administrators may also determine that tags need to be added to or edited on a Work, and may add or edit those tags. For more information, please refer to the %{mandatory_tags_policy_link}.
+          administrators_determine_content_removal_html: When AO3 administrators %{determine_removal_link}, it may be hidden from public view or removed from AO3. If the Content is a Work (defined as Content created via the New Work or Import Work forms, or imported via Open Doors) and the creator provided valid contact information, we will inform the creator as soon as possible.
+          determine_removal: determine that Content needs to be removed
+          heading: Resolution of complaints
+          illegal_and_inappropriate_content_policy: Illegal and Inappropriate Content Policy
+          immediate_removal: Non-Work Content, or any Content without valid contact information, that violates the TOS may be immediately removed.
+          mandatory_tags_policy: Mandatory Tags Policy
+          potentially_legitimate_fanwork_html: If the Content that needs to be removed is a Work that includes potentially legitimate fanwork, the default will be to hide the Work. The Policy & Abuse committee has sole discretion to determine necessary exceptions to this default rule, which may include repeated violations of the TOS, any violations of the %{illegal_and_inappropriate_content_policy_link}, or any circumstances where the OTW reasonably believes that the Content is unlawful, including when it contains a true threat.
+          voluntary_removal: When Content (whether a Work or otherwise) is hidden from public view, AO3 administrators may identify the nature of the problem with the Content and set a deadline for voluntary removal of the violating material. If the creator does not remove that material within the given deadline, AO3 administrators may permanently remove the Content. At the discretion of the Policy & Abuse committee, the creator may have the option to resubmit any non-violating material that was also removed.
+        submitting_a_complaint:
+          dmca_policy: DMCA Policy
+          heading: Submitting a complaint
+          html: Complaints may be submitted to the Policy & Abuse committee (PAC) via the %{policy_and_abuse_form_link}, except for Digital Millennium Copyright Act (DMCA) notices filed by the copyright owner or their legal representative. DMCA notices must be submitted to the Legal committee and are not governed by the Abuse Policy. Refer to the %{dmca_policy_link} for more information.
+          policy_and_abuse_form: Policy & Abuse reporting form
+        tos_faq: TOS FAQ
+        treatment_of_complaints:
+          heading: Treatment of complaints
+          html: Complaints are covered by the %{privacy_policy_link} and processed by PAC in accordance with the %{pac_confidentiality_policy_link}. Responses to complaints will be provided at the discretion of the OTW, in accordance with the Privacy Policy and other applicable terms of these TOS.
+          pac_confidentiality_policy: Policy & Abuse Confidentiality Policy
+          privacy_policy: Privacy Policy
+      age_policy:
+        addressing_violations: If AO3 administrators determine that an Age-Barred Individual has created an account or uploaded Content, they may suspend or delete the account, hide or delete the Content, or take other appropriate action to address the matter.
+        age_barred_not_permitted_html: Age-Barred Individuals are %{not_permitted_account_upload_link} to AO3. By submitting Content to AO3, you confirm that you are not an Age-Barred Individual.
+        ask_parent_to_upload: If you are a child under the age of thirteen (13) and not a resident or citizen of the European Union, you may ask your parent or legal guardian to upload your Content through their account.
+        country_disallowing_childrens_data: any country (including a European Economic Area country) which does not allow the processing of personal data from children of that age without written permission from a parent or legal guardian.
+        eu_country_html: a European Union country where the processing of %{special_categories_of_personal_data_link} from children of that age requires the consent of a parent or legal guardian, or
+        heading: I.H. Age Policy
+        individuals_under_13: individuals under the age of thirteen (13), and
+        individuals_under_16: 'individuals under the age of sixteen (16) who are not old enough, in their country of residence or citizenship, to consent to the processing of personal data. This includes individuals under the age of sixteen (16) who are residents or citizens of:'
+        intro: 'AO3 does not knowingly solicit or collect information from Age-Barred Individuals. Age-Barred Individuals are:'
+        not_permitted_account_upload: not permitted to have an account or upload Content
+        special_categories_of_personal_data: Special Categories of Personal Data
+      archive_description: The Archive of Our Own (AO3) is a home for fanworks, including fanfiction based on books, movies, TV, comics, other media, and real-person fiction (RPF).
+      cc_attribution_4_0_international: Creative Commons Attribution 4.0 International License
+      content_policy: Content Policy
+      content_you_access:
+        content_policy: Content Policy
+        external_links_html: The OTW or users of its services may provide links to or content via sites that are owned or controlled by third parties, and may use such sites (including those identified %{here_link}) to communicate information about the OTW and its sites. If you follow links away from AO3, you should review those sites' terms and privacy policies, which may differ from AO3's. The OTW has no control over any third-party sites or their terms of use or privacy policies, and you agree that the OTW is not responsible for and does not endorse their content, terms, or availability.
+        heading: I.D. Content you access when using AO3
+        here: here
+        hosted_by_third_party: embedded from and/or hosted by third-party sites
+        no_otw_endorsement_html: You recognize that the OTW does not endorse Content on AO3 in any way, except when such material appears as an %{official_statement_link} of the OTW. No members, volunteers, administrators, officers, or directors of the OTW are acting in an official capacity when they post fanworks, commentary, or other Content of the type generally provided by site users.
+        no_prescreen: You understand that the OTW does not prescreen Content or review it for purposes of compliance with the TOS. This includes (but is not limited to) a work's text, graphics, tags, comments, or any other material. Content, including User-Embedded Content, is the sole responsibility of the submitter. You understand that using AO3 may expose you to material that is offensive, atrocious, immoral, obscene, triggering, blasphemous, bigoted, erroneous, or objectionable in other ways.
+        official_statement: official statement
+        otw_not_liable: The OTW is not liable to you for any Content to which you are exposed on or because of AO3.
+        privacy_policy: Privacy Policy
+        third_party_content_html: Some of the Content displayed on or accessible via AO3 is not hosted on AO3 or by the OTW. Such content can include text, image, audio, or video files %{hosted_by_third_party_link} ("User-Embedded Content"). If you access a page that includes User-Embedded Content, the embedded file may share data with the hosted site as if you were on or at the hosted site. Although User-Embedded Content must comply with our %{content_policy_link}, it is not otherwise governed by these Terms of Service (including the AO3 %{privacy_policy_link}), and is instead governed by the terms of use or privacy policy of the service that hosts it. We reserve the right to provide an indicator to users that User-Embedded Content is present on or visible via your Content.
+      effective: 'Effective: November 19, 2024'
+      general_principles_heading: I. General Principles
+      general_terms:
+        agreement:
+          agreement: 'Agreement:'
+          any_other_form: any other form of content
+          content_policy: Content Policy
+          html: '%{agreement} AO3 hosts and shares content created by fans, for fans. Our %{content_policy_link} and %{privacy_policy_link} are part of these Terms of Service (TOS). By submitting a work; bookmark; comment; tag; link; text, image, audio, or video file; username; fannish next-of-kin; %{personal_information_link} (such as an email address); or %{any_other_form_link} ("Content") to the Archive of Our Own service (hereinafter "Service", "AO3", or "Archive"), or by creating an account and/or accessing Content on AO3, you affirm, confirm, and state that you comply with and assent to the TOS.'
+          personal_information: Personal Information
+          privacy_policy: Privacy Policy
+        entirety_of_agreement:
+          entirety_of_agreement: 'Entirety of agreement:'
+          html: "%{entirety_of_agreement} These Terms of Service constitute the entire agreement between you and the Organization for Transformative Works (OTW) and govern your use of AO3. They replace all prior agreements between you and the OTW concerning your use of AO3. They do not govern your use of any other OTW sites and/or projects, all of which are covered under separate agreements."
+        heading: I.A. General terms
+        jurisdiction:
+          html: "%{jurisdiction} The AO3 TOS, the relationship between you and the OTW, and all disputes arising out of or related to them shall be governed by the laws of the United States and specifically %{the_state_of_new_york_link}, without regard to any conflict-of-law provisions. You and the OTW agree to submit to the personal and exclusive jurisdiction of the courts located within New York County (Manhattan), New York, and to waive any objection to the laying of venue there."
+          jurisdiction: 'Jurisdiction:'
+          the_state_of_new_york: the State of New York
+        limitation_on_claims:
+          html: "%{limitation_on_claims} You agree that, regardless of any statute or law to the contrary, any claim or cause of action arising out of or related to any use of AO3 or its TOS must be filed within one (1) year after such claim or cause of action arose or be forever barred."
+          limitation_on_claims: 'Limitation on claims:'
+        no_assignment:
+          html: "%{no_assignment} These TOS are personal to you. You may not assign or transfer your rights or obligations under these TOS to any other person or entity, and any attempted assignment or transfer is void."
+          no_assignment: 'No assignment:'
+        non_severability:
+          html: "%{non_severability} The OTW's failure to enforce any part of the TOS will not waive the OTW's ability to enforce it. Any waiver with regard to a specific instance shall not constitute a waiver of any other breaches of the TOS, even with regard to the same user. If any provision of the TOS is found by a court of competent jurisdiction to be invalid, you agree that the court should give effect to the party's intentions as reflected in the provision, and that all other provisions of the TOS remain in full force and effect."
+          non_severability: 'Non-severability:'
+      license_html: The AO3 %{terms_of_service_link}, including the %{content_policy_link} and %{privacy_policy_link}, are licensed under the %{cc_attribution_4_0_international_link}.
+      page_content_landmark: Main Text
+      page_heading: Terms of Service
+      potential_problems:
+        account_termination_liability: You agree that the OTW shall not be liable to you or any third party for any limitations on, or termination of, your access to AO3. The OTW may change, put on hiatus, restrict or prohibit access to, or end AO3 or parts of its services at any time.
+        breach_notification: If we learn of a breach which compromises the security or confidentiality of the Personal Information of AO3 users, we will notify affected users and relevant supervisory authorities as required by law as soon as practicable.
+        content_access_liability: You agree that the OTW shall not be liable to you for any claim arising out of Content you make available, your connection to AO3, your use of AO3 or its TOS, or your violation of anyone else's rights. In other words, the OTW is not liable to you for allowing you to post, access, or download Content, or use or interact with AO3. The OTW does not assume whatever legal risks you face by posting, accessing, or doing other things with Content.
+        damage_liability: You expressly agree that, to the maximum extent permitted by law, the OTW shall not be liable to you for any damages of any kind (even if the OTW has been advised of the possibility of such damages) resulting from AO3, including but not limited to your use of or inability to use AO3; unauthorized access to or changes in Content or information you submit; and the actions and statements of third parties who use AO3.
+        disclaim_warranties_html: The OTW expressly disclaims all warranties of any kind, whether express or implied, including (but not limited to) the implied warranties of %{merchantability_link}, %{fitness_for_purpose_link}, and non-infringement. The TOS govern your use of AO3, and therefore no communication from anyone associated with the OTW will create any warranty that isn't expressly stated in the TOS.
+        fitness_for_purpose: fitness for a particular purpose
+        heading: I.C. Potential problems with AO3
+        merchantability: merchantability
+        not_personal_storage_html: AO3 is not intended to be used as a personal storage or file recovery service. %{sole_backup_responsibility}
+        own_risk: Any material you access through AO3 in any way is at your own risk. You will be solely responsible for any damage or loss of data that results from accessing any such material.
+        service_as_is: The OTW provides services, including AO3, on an "as is" and "as available" basis. The OTW does not warrant (that is, does not make a legally binding promise) that our services will meet your requirements; that our services will be uninterrupted, timely, secure, or error-free; or that the results you get from using our services will be accurate, reliable, or satisfactory to you.
+        sole_backup_responsibility: You are solely responsible for backing up any Content that you submit to AO3. The OTW will not be liable for any lost or unrecoverable Content.
+      privacy_policy: Privacy Policy
+      registration_and_email_addresses:
+        agree_current_address_html: As part of your registration, you agree to provide an accurate and current email address and to update the address as necessary. If your email address is inaccurate or not current, we may %{suspend_your_account_link}.
+        email_is_yours_html: By registering or otherwise using an email address in connection with AO3, you assert that the email address is yours and that we may %{lawfully_communicate_with_you_link} as otherwise provided in the TOS.
+        heading: I.G. Registration and email addresses
+        lawfully_communicate_with_you: lawfully communicate with you
+        suspend_your_account: suspend your account
+      terms_of_service: Terms of Service
+      toc:
+        header: Table of Contents for the Terms of Service (TOS)
+        intro: There are three parts to the AO3 Terms of Service. The General Principles are the first part of the TOS.
+      updates_to_the_tos:
+        content_policy: Content Policy
+        heading: I.B. Updates to the Terms of Service
+        html: 'You can learn about changes to the TOS by visiting AO3. The TOS, including the %{content_policy_link} and %{privacy_policy_link}, may be modified at any time through the following process: Proposed changes will first be prominently disclosed on AO3 for a public comment period lasting at least two weeks. After the end of the comment period, proposed changes will be voted on by the OTW Board. If the OTW Board votes in favor, the changes will become effective when posted to the relevant Terms page(s). This is the only means by which the TOS may be altered. The TOS cannot be changed by emails or other communications with you.'
+        privacy_policy: Privacy Policy
+      what_we_believe:
+        ao3_run_by_html: AO3 is run by the Organization for Transformative Works (OTW). We are committed to %{defending_fanworks_link}. We have legal resources and alliances on which we can draw. However, that is not a guarantee that the OTW can or will fight each battle. The OTW Board will take into account a variety of factors, both legal and otherwise, when responding to a legal challenge. More information is available %{on_the_otw_site_link}.
+        defending_fanworks: defending fanworks against legal challenges
+        faq:
+          abbreviated: FAQ
+          full: Frequently Asked Questions
+        header: What We Believe
+        maximum_inclusiveness: maximum inclusiveness of fanwork content
+        on_the_otw_site: on the OTW site
+        our_goal_html: Our goal is %{maximum_inclusiveness_link}.
+        readability_html: We strive to make our Terms of Service (TOS) readable. We have provided explanations for the more unusual legal terms, and answers to common questions are available in the %{tos_faq_link}.
+        tos_faq_html: TOS %{faq_abbreviation}
+        we_do_not_sell_html: We do not sell any data that you post on, submit to, or share on OTW sites (%{ao3_link}, %{fanlore_link}, and %{transformativeworks_link}), and we do not include or accept paid advertisements from third parties.
+      what_we_do_with_content:
+        agree_otw_can_copy_html: You agree that we can make those copies and show your Content to other people. Specifically, by submitting Content, you grant the OTW a %{worldwide_royalty_free_nonexclusive_license_link} to make your Content available. "Making available" includes distributing, reproducing, performing, displaying, compiling, and modifying or adapting. %{modifying_or_adapting_link} here refers strictly to how your work is displayed, not how it is written, drawn, or otherwise created. User-provided tags may be modified or organized, which is a process we call %{tag_wrangling_link}.
+        challenge: Challenge
+        content_not_completely_controlled_html: You may provide Content to a part of AO3 that you do not completely control. For example, you may decide to %{orphan_link} a work; participate in a %{challenge_link}; comment on someone else's work; or comment on an official AO3 or OTW post, which may be %{subject_to_moderation_link}. Where this is the case, by submitting Content to those parts of AO3, you agree to the %{rules_for_removing_such_content_link} on those parts of AO3.
+        heading: I.E. What we do with Content
+        license_duration: Subject to the next paragraph of this policy, this license exists only for as long as you choose to continue to include such Content on AO3. It will terminate within a reasonable time after you remove (or the OTW removes) such Content from AO3. We will always strive to make your Content unavailable to users as soon as possible should you choose to delete it. However, if the Content is not attached to an account you control, you may be unable to delete that Content. Although removed Content will not be publicly available through AO3, we may retain backup copies for longer periods for legal and disaster recovery purposes. These copies may be accessible to AO3 and OTW administrators. If you delete Content from AO3 or edit Content in a manner that overwrites Content that you had previously submitted, we cannot restore it at your request.
+        modifying_or_adapting: Modifying or adapting
+        no_copyright_ownership_html: The OTW does not claim any copyright in or ownership of your Content. %{we_repeat} Nothing in this agreement changes that in any way. However, running AO3 requires us to make copies, and backup copies, on servers that may be located anywhere around the world.
+        open_doors: Open Doors
+        orphan: Orphan
+        preserve_for_legal_reasons_html: You acknowledge and agree that the OTW may preserve Content and may disclose Content if required to do so by law or in the good-faith belief that such preservation or disclosure is reasonably necessary to comply with legal processes; enforce the TOS; respond to claims that any Content violates the rights of third parties; or protect the rights, property, or personal safety of the OTW, users of the OTW's services, or the public. Refer to the %{privacy_policy_link} for details about when we may preserve and/or disclose your Personal Information.
+        privacy_policy: Privacy Policy
+        rules_for_removing_such_content: rules for removing and retaining such Content
+        some_content_open_doors_html: Some of the Content hosted on AO3 is imported via %{open_doors_link}. Open Doors' agreement with each collection's archivist is separate from AO3's TOS. If a work has been imported via Open Doors and its creator requests that the work be removed from AO3, we will remove it. If an archivist chooses to remove their imported collection, any imported works that have been claimed or Orphaned by their creators will remain on AO3.
+        subject_to_moderation: subject to moderation
+        tag_wrangling: tag wrangling
+        we_repeat: 'We repeat: we do not own your Content.'
+        worldwide_royalty_free_nonexclusive_license: worldwide, royalty-free, nonexclusive license
+      what_you_cant_do:
+        account_if_age_barred_html: to create an account if you are an %{age_barred_individual_link};
+        age_barred_individual: Age-Barred Individual
+        break_applicable_law: to break any law that applies to you, including any rules or regulations having the force of law. As a general rule, AO3 follows U.S. law. Each user is responsible for knowing the laws of their own country.
+        commercial_activity_html: to conduct any commercial activity, whether for direct or indirect commercial advantage, including (without limitation) %{making_available_any_advertising_link}, spam, or other solicitation, or scraping Content in order to commercialize it;
+        comprehensive_trade_embargo: comprehensive trade embargo
+        content_policy: Content Policy
+        content_violating_policy_html: to make available any Content that violates the %{content_policy_link};
+        copyright_infringement_html: to make available any Content that a court has ruled constitutes %{infringement_of_a_copyright_link}, patent, trademark, or trade secret; or that violates any other rights of a third party (as consistent with the OTW's %{position_on_fanwork_legality_link});
+        forge_identifiers: to forge or otherwise manipulate identifiers (such as email headers or other information intended to route or authenticate Content) in order to disguise the origin of any Content transmitted to or through any OTW sites, servers, networks, or services;
+        function: function
+        heading: I.F. What you can't do
+        impersonate_any_person_or_entity: impersonate any person or entity
+        impersonate_person_or_entity_html: to %{impersonate_any_person_or_entity_link} (including, but not limited to, an AO3 or OTW representative or volunteer, or an AO3 %{function_link}), or to falsely state or otherwise misrepresent your affiliation with a person or entity;
+        infringement_of_a_copyright: infringement of a copyright
+        interfere_disrupt_ao3: interfere with or disrupt AO3
+        interfere_disrupt_ao3_html: to %{interfere_disrupt_ao3_link}, any OTW-hosted Content, or any services, sites, servers, or networks connected to OTW sites;
+        making_available_any_advertising: making available any advertising
+        position_on_fanwork_legality: position on fanwork legality
+        resident_embargo_country_html: to create an account if you are a resident or national of any country with which the U.S. has prohibited transactions by mandating a %{comprehensive_trade_embargo_link}, as detailed by the Office of Foreign Assets Control; or
+        software_viruses: to make available any material that contains software viruses or other computer code, files, or programs designed to interrupt, destroy, or limit the functionality of any computer, hardware, or telecommunications equipment;
+        you_agree_not_to: 'You agree not to use AO3 (as well as the email addresses and URLs of OTW sites):'
+    tos_navigation:
+      content: Content Policy
+      privacy: Privacy Policy
+      top: "%{arrow} Top"
+      tos: Terms of Service
+      tos_faq: TOS FAQ
+    tos_toc:
+      content:
+        commercial_promotion: Commercial Promotion
+        copyright_infringement: Copyright Infringement
+        fanworks: Fanworks
+        harassment: Harassment
+        header: Content Policy
+        header_current: Content Policy (current section)
+        illegal_and_inappropriate_content: Illegal and Inappropriate Content
+        impersonation: Impersonation
+        intro: Content Policy Introduction
+        mandatory_tags: Mandatory Tags
+        offensive_content: Offensive Content
+        personal_information_and_fannish_identities: Personal Information and Fannish Identities
+        plagiarism: Plagiarism
+        user_icons: User Icons
+      privacy:
+        aggregate_and_anonymous_information: Aggregate and anonymous information
+        applicability: Applicability
+        contact_us: Contact us
+        header: Privacy Policy
+        header_current: Privacy Policy (current section)
+        information_shared_with_third_parties: Information shared with third parties
+        intro: Privacy Policy Introduction
+        retention_of_personal_information: Retention of Personal Information
+        scope_of_personal_information_we_process: Scope of Personal Information we process
+        termination_of_account: Termination of account
+        types_of_personal_information_we_collect_and_process: Types of Personal Information we collect and process
+        your_rights_under_applicable_data_privacy_laws: Your rights under applicable data privacy laws
+      tos:
+        abuse_policy: Abuse Policy
+        age_policy: Age Policy
+        content_you_access: Content you access when using AO3
+        general_terms: General terms
+        header: General Principles
+        header_current: General Principles (current section)
+        intro: General Principles Introduction
+        potential_problems: Potential problems with AO3
+        registration_and_email_addresses: Registration and email addresses
+        updates_to_the_tos: Updates to the Terms of Service
+        what_we_do_with_content: What we do with Content
+        what_you_cant_do: What you can't do
   invitations:
     invitation:
       email_address_label: Enter an email address
   invite_requests:
+    index_open:
+      add_to_list: Add me to the list
+      already_requested_html: If you have already requested an invitation, you can %{check_status_link}.
+      check_waitlist_position: check your position on the waiting list
+      content_policy: Content Policy
+      details_html: To get a free Archive of Our Own account, you need an Invitation. By submitting your email address to our invitation queue, you confirm that you are at least 13 years old, and if you're in a country whose residents/citizens have to be of an age older than 13 to consent, you are old enough to consent to the processing of your personal data without our obtaining written permission from a parent or legal guardian. We will use the email address you submit only to send you an Invitation and to process/manage your account activation. Please don't request an Invitation unless you've read our %{tos_link}, including the %{content_policy_link} and %{privacy_policy_link}, and agree to abide by those Terms.
+      invitations_per_day:
+        one: We are sending out %{count} invitation per day.
+        other: We are sending out %{count} invitations per day.
+      page_heading: Invitation Requests
+      privacy_policy: Privacy Policy
+      request_invitation_header: Request an invitation
+      tos: Terms of Service
+      waiting_list_count:
+        one: There is currently %{count} person on the waiting list.
+        other: There are currently %{count} people on the waiting list.
     invite_request:
       date: 'At our current rate, you should receive an invitation on or around: %{date}.'
       position_html: You are currently number %{position} on our waiting list!
@@ -701,6 +1391,33 @@ en:
         one: "%{formatted_count} work"
         other: "%{formatted_count} works"
   layouts:
+    footer:
+      about:
+        content_policy: Content Policy
+        diversity_statement: Diversity Statement
+        dmca_policy: DMCA Policy
+        header: About the Archive
+        privacy_policy: Privacy Policy
+        site_map: Site Map
+        tos: Terms of Service
+      contact_us:
+        header: Contact Us
+        pac: Policy Questions & Abuse Reports
+        support: Technical Support & Feedback
+      customize:
+        default: Default
+        header: Customize
+      development:
+        archive_version: otwarchive %{version_number}
+        gpl_2_0_or_later: GPL-2.0-or-later
+        header: Development
+        known_issues: Known Issues
+        license_details_html: "%{license_link} by the %{otw_link}"
+        view_license: View License
+      landmark: Footer
+      otw:
+        abbreviated: OTW
+        full: Organization for Transformative Works
     header:
       collections:
         new: New Collection
@@ -717,6 +1434,17 @@ en:
       faux_heading: 'Important message:'
       point1: You are using a proxy site that is not part of the Archive of Our Own.
       point2: The entity that set up the proxy site can see what you submit, including your IP address. If you log in through the proxy site, it can see your password.
+    tos_prompt:
+      agree_and_consent: I agree/consent to these Terms
+      content: Content
+      content_policy: Content Policy
+      data_processing_agreement: By checking this box, you consent to the processing of your personal data in the United States and other jurisdictions in connection with our provision of AO3 and its related services to you. You acknowledge that the data privacy laws of such jurisdictions may differ from those provided in your jurisdiction. For more information about how your personal data will be processed, please refer to our Privacy Policy.
+      learn_more_html: To learn more, check out our %{tos_link}, including the %{content_policy_link} and %{privacy_policy_link}.
+      page_heading: Archive of Our Own
+      privacy_policy: Privacy Policy
+      read_and_understood: I have read & understood the 2024 Terms of Service, including the Content Policy and Privacy Policy.
+      summary_html: On the Archive of Our Own (AO3), users can create works, bookmarks, comments, tags, and other %{content_link}. Any information you publish on AO3 may be accessible by the public, AO3 users, and/or AO3 personnel. Be mindful when sharing personal information, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites.
+      tos: Terms of Service
   menu:
     menu_about:
       about_us: About Us
@@ -923,8 +1651,13 @@ en:
         description: Recalculate the filters for this work based on the current set of tags. Use this option if wrangling seems to have gone wrong. (e.g. If you synned one of this work's tags to a canonical but it's not showing up in the tag listings, or if the wrong tags are listed in the sidebar when you drill down to a search that includes only this work.)
         title: Update Work Filters
   users:
+    change_email:
+      browser_title: Change Email
+    change_password:
+      browser_title: Change Password
     change_username:
       account_faq: Account FAQ
+      browser_title: Change Username
       caution: Please use this feature with caution.
       change_window:
         one: You can change your user name once per day.
@@ -964,13 +1697,34 @@ en:
         works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
     edit:
+      about_me: About Me
+      admin:
+        ticket_number:
+          numbers_only: Numbers only.
       browser_title: Edit Profile
+      change_profile_landmark: Change Profile
+      date_of_birth: Date of Birth
+      location: Location
+      page_heading: Edit My Profile
+      privacy_policy: Privacy Policy
+      public_information_notice_html: Any personal information you post on your public AO3 profile, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites, will be accessible by the general public. To learn more about what data AO3 collects when you're on the site and how we use it, check out our %{privacy_policy_link}.
+      title: Title
+      update: Update
     header_navigation:
       admin_user: User Administration
       edit_multiple: Edit Works
       invitations: Invitations
       new_work: Post New
     registrations:
+      legal:
+        agreement_confirm: Yes, I have read the Terms of Service, including the Content Policy and Privacy Policy, and agree to them.
+        agreement_required_html: Before you begin using AO3, you must agree to our %{terms_of_service_link}, including the %{content_policy_link} and %{privacy_policy_link}.
+        content_policy: Content Policy (opens in new window)
+        data_processing_confirm: By checking this box, you consent to the processing of your personal data in the United States and other jurisdictions in connection with our provision of AO3 and its related services to you. You acknowledge that the data privacy laws of such jurisdictions may differ from those provided in your jurisdiction. For more information about how your personal data will be processed, please refer to our Privacy Policy.
+        over_thirteen_confirm: Yes, I am at least 13.
+        over_thirteen_required: You need to be at least 13 years old to become a registered member of the Archive. (Sorry to anyone younger! You'll be more than welcome when the time comes.)
+        privacy_policy: Privacy Policy (opens in new window)
+        terms_of_service: Terms of Service (opens in new window)
       new:
         cancel: Cancel
         heading: Create Account
@@ -1023,16 +1777,17 @@ en:
           work_unavailable: This work is only available to registered users of the Archive.
     show:
       login_banner:
+        contact_abuse: contact our Policy & Abuse team
+        contact_support: contact our Support team
+        content_policy: Content Policy
         dismiss: Dismiss permanently
-        help_link: Learn some tips and tricks
-        help_text: For more guidance on using the site, %{link_faq}!  If you need technical support, you can %{link_support}. If you experience harassment or have specific questions about the %{link_tos}, you can %{link_abuse}.
-        help_title: First login help
+        help_html: If you need technical support, %{contact_support_link}. If you experience harassment or have questions about our %{tos_link} (including the %{content_policy_link} and %{privacy_policy_link}), %{contact_abuse_link}.
         hide: Hide first login help banner
-        link_abuse: contact our Policy & Abuse team
-        link_faq: check out our FAQ
-        link_support: contact us through our Support and Feedback form
-        link_tos: Terms of Service
-        welcome_text: Hi! It looks like you've just logged into the Archive for the first time. %{help_link} or dismiss this message permanently.
+        new_user_tips: useful tips for new users
+        our_faqs: our FAQs
+        privacy_policy: Privacy Policy
+        tos: Terms of Service
+        welcome_html: Hi! It looks like you've just logged in to AO3 for the first time. For help getting started on AO3, check out some %{new_user_tips_link} or browse through %{our_faqs_link}.
     sidebar:
       catch:
         history: History
@@ -1077,10 +1832,18 @@ en:
     byline:
       add_co-creators: Add co-creators
       show_co-creator_options: Add co-creators?
+    edit_tags:
+      content_policy: Content Policy
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
     meta:
       original_creators:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
+    new_import:
+      content_policy: Content Policy
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
     permissions:
       privacy: Privacy
       visibility:
@@ -1092,6 +1855,10 @@ en:
         unrestricted: Show to all
     preface:
       title: Preface
+    preview:
+      content_policy: Content Policy
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
     search_box:
       a11y_label: Work
       label: Work Search
@@ -1101,6 +1868,10 @@ en:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
     skin:
       select: Select work skin
+    standard_form:
+      content_policy: Content Policy
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"

@@ -1,3 +1,20 @@
-<h2 class="heading"><%= ts("Terms of Service") %></h2>
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".page_heading") %></h2>
+<!--/descriptions-->
 
-<%= render "home/tos" %>
+<!--subnav-->
+<h3 class="landmark heading"><%= t("a11y.navigation") %></h3>
+<%= render "tos_navigation" %>
+<!--/subnav-->
+
+<!--main content-->
+<h3 class="landmark heading"><%= t(".page_content_landmark") %></h3>
+<div id="tos" class="userstuff">
+  <%= render "tos" %>
+</div>
+<!--/content-->
+
+<!--subnav-->
+<h3 class="landmark heading"><%= t("a11y.navigation") %></h3>
+<%= render "tos_navigation", top_link: true %>
+<!--/subnav-->

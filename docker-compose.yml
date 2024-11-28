@@ -91,7 +91,7 @@ services:
   chrome:
     profiles:
       - test
-    image: selenium/standalone-chrome
+    image: selenium/standalone-chromium
     ports:
       - "4444:4444"
   test:
