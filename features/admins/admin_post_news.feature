@@ -272,7 +272,7 @@ Feature: Admin Actions to Post News
       And I should be on the show page for my latest comment
 
     # Access unreviewed comments
-    When I am logged in as a "communications" admin
+    When I am logged in as a "legal" admin
       And I go to the "Default Admin Post" admin post page
       And I follow "Unreviewed Comments (2)"
     Then I should see "Unreviewed Comments on Default Admin Post"

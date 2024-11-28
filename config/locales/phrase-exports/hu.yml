@@ -64,19 +64,18 @@ hu:
       guest:
         one: egy vendég
         other: "%{count} vendég"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           one: "%{givers_list} kudost hagyott itt: %{commentable_link}."
           other: "%{givers_list} kudost hagyott itt: %{commentable_link}."
-        single_guest:
-          giver_list: Egy vendég
-          left_kudos: "%{giver_list} kudost hagyott itt: %{commentable_link}."
-      subject: "​[%{app_name}]​​ ​Kudost kaptál!"
-      text:
-        left_kudos:
+        text:
           one: "%{givers_list} kudost hagyott itt: %{commentable_title} (%{commentable_url})."
           other: "%{givers_list} kudost hagyott itt: %{commentable_title} (%{commentable_url})."
-        single_guest: 'Egy vendég kudost hagyott itt: %{commentable_title} (%{commentable_url}).'
+      single_guest:
+        giver: Egy vendég
+        html: "%{giver} kudost hagyott itt: %{commentable_link}."
+        text: 'Egy vendég kudost hagyott itt: %{commentable_title} (%{commentable_url}).'
+      subject: "​[%{app_name}]​​ ​Kudost kaptál!"
   mailer:
     general:
       closing:
@@ -105,9 +104,9 @@ hu:
               %{support_url}.'
         sent_at: 'Dátum: %{sent_at}'
       greeting:
-        formal: Kedves %{name},
+        formal_html: Kedves %{name},
         informal:
-          addressed: Szia %{name}!
+          addressed_html: Szia %{name}!
           unaddressed: Szia!
         introductory: Üdvözlet az Archive of Our Own – AO3-tól (A Mi Archívumunk)!
       metadata_label_indicator: ":"

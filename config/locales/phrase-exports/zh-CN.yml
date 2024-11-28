@@ -48,17 +48,16 @@ zh-CN:
     batch_kudo_notification:
       guest:
         other: "%{count}名访客"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           other: "%{givers_list}给您的作品%{commentable_link}点了赞。"
-        single_guest:
-          giver_list: 一名访客
-          left_kudos: "%{giver_list}给您的作品%{commentable_link}点了赞。"
-      subject: "[%{app_name}] 您收到了点赞！"
-      text:
-        left_kudos:
+        text:
           other: "%{givers_list}给您的作品%{commentable_title}（%{commentable_url}）点了赞。"
-        single_guest: 一名访客给您的作品%{commentable_title}（%{commentable_url}）点了赞。
+      single_guest:
+        giver: 一名访客
+        html: "%{giver}给您的作品%{commentable_link}点了赞。"
+        text: 一名访客给您的作品%{commentable_title}（%{commentable_url}）点了赞。
+      subject: "[%{app_name}] 您收到了点赞！"
   layouts:
     proxy_notice:
       faux_heading: 重要提示：
@@ -88,9 +87,9 @@ zh-CN:
             text: 如果这封邮件被误发给了您，请于此联系支持团队：%{support_url}。
         sent_at: 于%{sent_at}发送。
       greeting:
-        formal: 尊敬的%{name}，
+        formal_html: 尊敬的%{name}，
         informal:
-          addressed: 您好，%{name}！
+          addressed_html: 您好，%{name}！
           unaddressed: 您好！
         introductory: Archive of Our Own – AO3（AO3作品库）向您问好！
       metadata_label_indicator: "："

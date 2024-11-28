@@ -1,0 +1,236 @@
+<%# IMPORTANT: Also update current_tos_version in application_controller %>
+<%# To ensure proper formatting, this must always be rendered inside an element
+  with the userstuff class. The userstuff element must be inside an element with
+  the classes "docs system". %>
+<p><big><strong><%= t(".intro.archive_description") %></strong></big></p>
+<p>
+  <%= t(".intro.ao3_exists_to_host_html",
+        personal_information_link: link_to(t(".intro.personal_information"), "#III.A.1")) %>
+</p>
+<ul>
+  <li><%= t(".intro.host_your_fanworks") %></li>
+  <li><%= t(".intro.show_you_works") %></li>
+  <li><%= t(".intro.enable_post_information") %></li>
+</ul>
+<p>
+  <%= t(".intro.details_how_and_why_html",
+        common_questions_bold: tag.strong(t(".intro.answers_common_questions_html",
+          tos_faq_link: link_to(t(".intro.tos_faq"), tos_faq_path(anchor: "privacy_faq"))))) %>
+</p>
+
+<% unless local_assigns[:suppress_toc] %>
+  <nav aria-labelledby="nav-toc-heading" class="toc">
+    <details open>
+      <summary><h3 class="heading" id="nav-toc-heading"><%= t(".toc.header") %></h3></summary>
+      <p><%= t(".toc.intro") %></p>
+      <ol class="toc" style="list-style-type:upper-roman;">
+        <li><%= tos_table_of_contents_section("tos") %></li>
+        <li><%= tos_table_of_contents_section("content") %></li>
+        <li><%= tos_table_of_contents_section("privacy") %></li>
+      </ol>
+    </details>
+  </nav>
+<% end %>
+
+<h3 class="heading"><%= t(".privacy_policy_heading") %></h3>
+<h4 class="heading" id="III.A"><span id="applicability"><%= t(".applicability.heading") %></span></h4>
+<ol>
+  <li id="III.A.1"><p><%= t(".applicability.policy_covers") %></p></li>
+  <li id="III.A.2">
+    <p>
+      <%= t(".applicability.global_subprocessors_html",
+            subprocessors_link: link_to(t(".applicability.subprocessors"),
+              "https://www.transformativeworks.org/otw_tos/organization-for-transformative-works-subprocessor-list/")) %>
+    </p>
+    <p>
+      <%= t(".applicability.transfers_necessary_html", consent_to_us_processing_bold: tag.strong(t(".applicability.consent_to_us_processing"))) %>
+    </p>
+  </li>
+</ol>
+
+<h4 class="heading" id="III.B"><span id="scope"><%= t(".information_scope.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="III.B.1">
+    <p>
+      <%= t(".information_scope.information_in_content_html",
+            content_link: link_to(t(".information_scope.content"), tos_path(anchor: "I.A.1")),
+            special_categories_link: link_to(t(".information_scope.special_categories"), "https://gdpr-info.eu/art-9-gdpr/")) %>
+    </p>
+  </li>
+  <li id="III.B.2"><p><%= t(".information_scope.collect_through_use") %></p></li>
+</ol>
+
+<h4 class="heading" id="III.C"><span id="information_types"><%= t(".types_of_information.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="III.C.1">
+    <p><strong><%= t(".types_of_information.emails.heading") %></strong></p>
+    <p><%= t(".types_of_information.emails.collect_process_retain") %></p>
+    <p>
+      <%= t(".types_of_information.emails.address_usage_html",
+            challenge_link: link_to(t(".types_of_information.emails.challenge"), archive_faq_path("glossary", anchor: "challengedef"))) %>
+    </p>
+    <p><%= t(".types_of_information.emails.unsubscribe") %></p>
+  </li>
+  <li id="III.C.2">
+    <p>
+      <strong><%= t(".types_of_information.ip_addresses.heading") %></strong>
+      <%= t(".types_of_information.ip_addresses.text") %>
+    </p>
+  </li>
+  <li id="III.C.3">
+    <p>
+      <strong><%= t(".types_of_information.logs.heading") %></strong>
+      <%= t(".types_of_information.logs.text") %>
+    </p>
+  </li>
+  <li id="III.C.4">
+    <p>
+      <strong><%= t(".types_of_information.cookies.heading") %></strong>
+      <%= t(".types_of_information.cookies.text") %>
+    </p>
+  </li>
+  <li id="III.C.5">
+    <p>
+      <strong><%= link_to t(".types_of_information.fnok.heading"), archive_faq_path("fannish-next-of-kin") %></strong>
+      <%= t(".types_of_information.fnok.text") %>
+    </p>
+  </li>
+  <li id="III.C.6">
+    <p>
+      <strong><%= t(".types_of_information.other_information.heading") %></strong>
+    </p>
+    <p><%= t(".types_of_information.other_information.to_maintain_integrity") %></p>
+    <p>
+      <%= t(".types_of_information.other_information.to_make_content_available_html",
+            tos_faq_link: link_to(t(".types_of_information.other_information.tos_faq"), tos_faq_path(anchor: "feature_information"))) %>
+    </p>
+  </li>
+</ol>
+
+<h4 class="heading" id="III.D"><span id="aggregate_anonymous"><%= t(".aggregate_anonymous_info.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="III.D.1"><p><%= t(".aggregate_anonymous_info.understand_ao3_usage") %></p></li>
+  <li id="III.D.2"><p><%= t(".aggregate_anonymous_info.anonymous_non_personal") %></p></li>
+</ol>
+
+<h4 class="heading" id="III.E"><span id="requests"><%= t(".your_rights.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="III.E.1">
+    <p>
+      <%= t(".your_rights.request_data_html",
+            applicable_jurisdiction_link: link_to(t(".your_rights.applicable_jurisdiction"), tos_faq_path(anchor: "privacy_rights"))) %>
+    </p>
+  </li>
+  <li id="III.E.2">
+    <p>
+      <%= t(".your_rights.potential_other_rights_html",
+            other_rights_link: link_to(t(".your_rights.other_rights"), tos_faq_path(anchor: "privacy_rights_faq"))) %>
+    </p>
+  </li>
+  <li id="III.E.3"><p><%= t(".your_rights.require_user_specific_proof") %></p></li>
+</ol>
+
+<h4 class="heading" id="III.F"><span id="sharing"><%= t(".third_parties.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="III.F.1"><p><%= t(".third_parties.do_not_sell_information") %></p></li>
+  <li id="III.F.2"><p><%= t(".third_parties.third_party_tools") %></p></li>
+  <li id="III.F.3">
+    <p><%= t(".third_parties.sharing_exceptions.intro") %></p>
+    <ol style="list-style-type:lower-alpha;">
+      <li>
+        <p>
+          <strong><%= t(".third_parties.sharing_exceptions.external_processing.heading") %></strong>
+          <%= t(".third_parties.sharing_exceptions.external_processing.html",
+                subprocessor_list_link: link_to(t(".third_parties.sharing_exceptions.external_processing.subprocessor_list"), "https://www.transformativeworks.org/otw_tos/organization-for-transformative-works-subprocessor-list/")) %>
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong>
+            <%= t(".third_parties.sharing_exceptions.challenge_signup.heading_html",
+                  challenge_link: link_to(t(".third_parties.sharing_exceptions.challenge_signup.challenge"), archive_faq_path("glossary", anchor: "challengedef"))) %>
+          </strong>
+          <%= t(".third_parties.sharing_exceptions.challenge_signup.text") %>
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong>
+            <%= t(".third_parties.sharing_exceptions.open_doors_import.heading_html",
+                  open_doors_link: link_to(t(".third_parties.sharing_exceptions.open_doors_import.open_doors"), "https://opendoors.transformativeworks.org/")) %>
+          </strong>
+          <%= t(".third_parties.sharing_exceptions.open_doors_import.text") %>
+        </p>
+      </li>
+      <li>
+        <p>
+          <strong><%= t(".third_parties.sharing_exceptions.handle_complaints.heading") %></strong>
+          <%= t(".third_parties.sharing_exceptions.handle_complaints.html",
+                dmca_notice_link: link_to(t(".third_parties.sharing_exceptions.handle_complaints.dmca_notice"), tos_faq_path(anchor: "dmca_complaint")),
+                pac_confidentiality_policy_link: link_to(t(".third_parties.sharing_exceptions.handle_complaints.pac_confidentiality_policy"), "https://www.transformativeworks.org/committees/policy-abuse-confidentiality-policy/")) %>
+        </p>
+      </li>
+
+      <li>
+        <strong><%= t(".third_parties.sharing_exceptions.legal_reasons.heading") %></strong>
+        <%= t(".third_parties.sharing_exceptions.legal_reasons.intro") %>
+        <ol style="list-style-type:lower-roman;">
+          <li><%= t(".third_parties.sharing_exceptions.legal_reasons.legally_compelled") %></li>
+          <li><%= t(".third_parties.sharing_exceptions.legal_reasons.good_faith_comply") %></li>
+          <li><%= t(".third_parties.sharing_exceptions.legal_reasons.cooperating_law_enforcement") %></li>
+        </ol>
+        <p><%= t(".third_parties.sharing_exceptions.legal_reasons.law_enforcement_cooperation_details") %></p>
+        <p><%= t(".third_parties.sharing_exceptions.legal_reasons.attempt_to_notify") %></p>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<h4 class="heading" id="III.G"><span id="termination"><%= t(".account_termination.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="III.G.1">
+    <p>
+      <%= t(".account_termination.deletion_after_termination_html",
+            terminate_your_account_link: link_to(t(".account_termination.terminate_your_account"), archive_faq_path("your-account", anchor: "deleteaccount"))) %>
+    </p>
+    <ol style="list-style-type:lower-alpha;">
+      <li>
+        <p>
+          <%= t(".account_termination.orphans_excluded_html",
+                orphan_link: link_to(t(".account_termination.orphan"), archive_faq_path("orphaning")),
+                pseud_link: link_to(t(".account_termination.pseud"), archive_faq_path("pseuds", anchor: "whatisapseud"))) %>
+        </p>
+      </li>
+      <li>
+        <p>
+          <%= t(".account_termination.backup_copies_html",
+                general_principles_link: link_to(t(".account_termination.general_principles"), tos_path(anchor: "I.E.2"))) %>
+        </p>
+      </li>
+    </ol>
+  </li>
+  <li id="III.G.2"><p><%= t(".account_termination.legal_enforcement_retention") %></p></li>
+</ol>
+
+<h4 class="heading" id="III.H"><span id="retention"><%= t(".retention_of_information.heading") %></span></h4>
+<p><%= t(".retention_of_information.text") %></p>
+
+<h4 class="heading" id="III.I"><span id="contact"><%= t(".contact_us.heading") %></span></h4>
+<p>
+  <%= t(".contact_us.html",
+        contact_pac_link: link_to(t(".contact_us.contact_pac"), new_abuse_report_path)) %>
+</p>
+
+<hr />
+<p><%= t(".effective") %></p>
+<p id="license">
+  <small>
+    <%= t(".license_html",
+          terms_of_service_link: link_to(t(".terms_of_service"), tos_path),
+          content_policy_link: link_to(t(".content_policy"), content_path),
+          privacy_policy_link: link_to(t(".privacy_policy"), privacy_path),
+          cc_attribution_4_0_international_link: link_to(t(".cc_attribution_4_0_international"),
+            "https://creativecommons.org/licenses/by/4.0/",
+            rel: "nofollow")) %>
+  </small>
+</p>

@@ -96,23 +96,22 @@ sl:
         one: "%{count} gost/ja"
         other: "%{count} gostov/ij"
         two: "%{count} gosta/ji"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           few: "%{givers_list} so pohvalili/e %{commentable_link}."
           one: "%{givers_list} je pohvalil/a %{commentable_link}."
           other: "%{givers_list} je pohvalilo %{commentable_link}."
           two: "%{givers_list} sta pohvalila/i %{commentable_link}."
-        single_guest:
-          giver_list: gost/ja
-          left_kudos: "%{giver_list} je pohvalil/a %{commentable_link}."
-      subject: "[%{app_name}] Dobili ste pohvalo!"
-      text:
-        left_kudos:
+        text:
           few: "%{givers_list} so pohvalili/e %{commentable_title} (%{commentable_url})."
           one: "%{givers_list} je pohvalil/a %{commentable_title} (%{commentable_url})."
           other: "%{givers_list} je pohvalilo %{commentable_title} (%{commentable_url})."
           two: "%{givers_list} sta pohvalila/i %{commentable_title} (%{commentable_url})."
-        single_guest: Gost/ja je pohvalil/a %{commentable_title} (%{commentable_url}).
+      single_guest:
+        giver: Gost/ja
+        html: "%{giver} je pohvalil/a %{commentable_link}."
+        text: Gost/ja je pohvalil/a %{commentable_title} (%{commentable_url}).
+      subject: "[%{app_name}] Dobili ste pohvalo!"
   mailer:
     general:
       closing:
@@ -143,9 +142,9 @@ sl:
               uporabnikom preko %{support_url}.
         sent_at: Poslano dne %{sent_at}.
       greeting:
-        formal: Spoštovani %{name},
+        formal_html: Spoštovani %{name},
         informal:
-          addressed: Zdravo, %{name}!
+          addressed_html: Zdravo, %{name}!
           unaddressed: Zdravo!
         introductory: Lep pozdrav od Archive Of Our Own - AO3!
       metadata_label_indicator: ":"
@@ -270,6 +269,24 @@ sl:
       unrevealed_info: Nerazkrita dela niso vključena v sezname oznak ali navedena
         na strani vaših del. Kdorkoli sledi povezavi do dela, bo prejel obvestilo,
         da je delo trenutno nerazkrito in da dostop do vsebine ni mogoč.
+    archivist_added_to_collection_notification:
+      approved_collection_items_page: Approved Collection Items (odobrena dela v zbirkah)
+      archivist_notice: Ker vzdrževalci_ke zbirke arhivirajo v imenu Open Doors (Odprtih
+        vrat), lahko vaše delo dodajo tej zbirki, tudi če ste onemogočili povabila
+        v zbirke. Dela se na ta način zbirkam dodajajo samo, če jih je prej gostil
+        arhiv, ki smo ga uvozili na AO3.
+      removal_instructions:
+        html: Če želite delo iz te zbirke odstraniti, prosimo, obiščite svojo stran
+          %{approved_items_link}.
+        text: 'Če želite delo iz te zbirke odstraniti, prosimo, obiščite svojo stran
+          Approved Collection Items (odobrena dela v zbirkah): %{approved_items_url}.'
+      subject: "[%{app_name}][%{collection_title}] Arhivist_ka Open Doors (Odprtih
+        vrat) je vaše delo dodal_a zbirki"
+      work_added:
+        html: Vzdrževalci_ke zbirke %{collection_link} so vaše delo %{work_link} dodali_e
+          svoji zbirki!
+        text: Vzdrževalci zbirke "%{collection_title}" (%{collection_url}) so vaše
+          delo "%{work_title}" (%{work_url}) dodali svoji zbirki!
     challenge_assignment_notification:
       any: Po želji
       assignment:
@@ -304,6 +321,97 @@ sl:
         text: "%{login}, elektronski naslov povezan z vašim računom je bil spremenjen
           v %{email}"
       subject: "[%{app_name}] Sprememba elektronskega naslova"
+    claim_notification:
+      access:
+        contact_support: podporo AO3
+        html: Od posameznega arhiva je odvisno, ali bodo dela kot privzeto na voljo
+          zgolj prijavljenim uporabnikom (v izogib pojavljanja med zadetki iskanja
+          v Googlu). V tem primeru bodo dela na voljo le prijavljenim članom, razen
+          če se odločite, da jih naredite vidne vsem uporabnikom. Za pomoč pri spreminjanju
+          vidnosti, opuščanju ali brisanju del se obrnite na %{contact_support_link}.
+        text: Od posameznega arhiva je odvisno, ali bodo dela kot privzeto na voljo
+          zgolj prijavljenim uporabnikom (v izogib pojavljanja med zadetki iskanja
+          v Googlu). V tem primeru bodo dela na voljo le prijavljenim članom, razen
+          če se odločite, da jih naredite vidne vsem uporabnikom. Za pomoč pri spreminjanju
+          vidnosti, opuščanju ali brisanju del se obrnite na podporo AO3 na %{support_url}.
+      email_tips: Če se nam odločite pisati, prosimo, dodajte @transformativeworks.org
+        med zaupanja vredne stike in za našim odgovorom pobrskajte po mapi z vsiljeno
+        pošto.
+      introduction:
+        ao3_name: Archive of Our Own – AO3 (Naš lastni arhiv)
+        html: To e-poštno sporočilo ste prejeli, ker so vaša dela gostovala na arhivu
+          fanovskih del, ki so ga na %{app_link} uvozila %{open_doors_name_link}.
+          Ker je ta e-poštni naslov povezan z e-poštnim naslovom, registriranim na
+          uvoženem arhivu, smo fanovska dela, ki ste jih z njim naložili (našteta
+          spodaj), avtomatično dodali vašemu računu AO3.
+        open_doors_name: Open Doors (Odprta vrata)
+        text: To e-poštno sporočilo ste prejeli, ker so vaša dela gostovala na arhivu
+          fanovskih del, ki so ga na Archive of Our Own – AO3 (Naš lastni arhiv) (%{app_url})
+          uvozila Open Doors (Odprta vrata) (%{open_doors_url}). Ker je ta e-poštni
+          naslov povezan z e-poštnim naslovom, registriranim na uvoženem arhivu, smo
+          fanovska dela, ki ste jih z njim naložili (našteta spodaj), avtomatično
+          dodali vašemu računu AO3.
+      mistake:
+        contact_open_doors: stopite v stik z Odprtimi vrati
+        html: Če je prišlo do pomote in dela niso vaša, jih nikar ne brišite. Prosimo,
+          da %{contact_open_doors_link}, ki vam bodo priskočila na pomoč.
+        text: Če je prišlo do pomote in dela niso vaša, jih nikar ne brišite. Prosimo,
+          da stopite v stik z Odprtimi vrati (%{open_doors_url}), ki vam bodo priskočila
+          na pomoč.
+      more_info:
+        ao3_news: novicah AO3
+        contact_support: podporo AO3
+        faq_page: pogostimi vprašanji
+        html: O aktualnih uvozih arhivov si lahko preberete v %{ao3_news_link}, dodatne
+          informacije pa poiščete med %{faq_page_link} o Odprtih vratih ali na %{tutorial_page_link}.
+          Vsa vprašanja, na katera ne najdete odgovora v pogostih vprašanjih, vodičih
+          ali tem e-poštnem sporočilu, lahko naslovite na %{contact_support_link}.
+        text: O aktualnih uvozih arhivov si lahko preberete v novicah AO3 (%{news_url}),
+          dodatne informacije pa poiščete med pogostimi vprašanji o Odprtih vratih
+          (%{open_doors_faq_url}) ali na strani z vodičem (%{open_doors_tutorial_url}).
+          Vsa vprašanja, na katera ne najdete odgovora v pogostih vprašanjih, vodičih
+          ali tem e-poštnem sporočilu, lahko naslovite na podporo uporabnikom na %{support_url}.
+        tutorial_page: strani z vodičem
+      other_works:
+        contact_open_doors: stopite v stik z Odprtimi vrati
+        html: Če ste imeli na uvoženem arhivu pod e-poštnim naslovom, do katerega
+          ste izgubili dostop, objavljena druga dela, prosimo, %{contact_open_doors_link}
+          z vsakršno informacijo, ki nam bo pomagala overiti vašo identiteto.
+        text: Če ste imeli na uvoženem arhivu pod e-poštnim naslovom, do katerega
+          ste izgubili dostop, objavljena druga dela, prosimo, stopite v stik z Odprtimi
+          vrati z vsakršno informacijo, ki nam bo pomagala overiti vašo identiteto.
+      questions:
+        contact_support: podporo AO3
+        html: Ostala vprašanja lahko naslovite na %{contact_support_link}.
+        text: Ostala vprašanja lahko naslovite na podporo uporabnikom AO3 na %{support_url}.
+      redirects:
+        html: Da se ohranijo seznami priporočil in zaznamki, bodo spletni naslovi
+          uvoženega arhiva nekaj časa morda preusmerjeni na uvožene kopije teh del
+          (če se želite prepričati o tem, si preberite oznanilo o uvozu za vaš arhiv).
+          Če ste kopije zgoraj navedenih del na AO3 že naložili sami in jih %{negation}
+          uvozili prek hiperpovezave, bosta na AO3 obstajali po dve kopiji vsakega
+          posameznega dela.
+      subject: Dela uvožena na [%{app_name}]
+      update_redirect:
+        contact_open_doors: Stopite v stik z Odprtimi vrati
+        html: Če želite, da Odprta vrata namesto na novo kopijo preusmerjajo na to,
+          ki ste jo že naložili, prosimo, izbrišite neželeno novo in %{contact_open_doors_link}
+          z vašima uporabniškima računoma na AO3 ter na uvoženem arhivu in z naslovom
+          dela ter hiperpovezavo, na katero naj po novem vodi preusmeritev. (Če želite
+          preusmeritve spremeniti za več del, jih lahko naštejete v enem samem e-poštnem
+          sporočilu.)
+        text: Če želite, da Odprta vrata namesto na novo kopijo preusmerjajo na to,
+          ki ste jo že naložili, prosimo, izbrišite neželeno novo in prek %{open_doors_url}
+          stopite v stik z Odpritimi vrati z vašima uporabniškima računoma na AO3
+          ter na uvoženem arhivu in z naslovom dela ter hiperpovezavo, na katero naj
+          po novem vodi preusmeritev. (Če želite preusmeritve spremeniti za več del,
+          jih lahko naštejete v enem samem e-poštnem sporočilu.)
+      works_by: Sledeča dela so bila povezana z e-poštnim naslovom %{email}
+      work_info:
+        html: "%{work_link} (%{fandom})"
+        text:
+          no_fandom: "- %{work_title} %{work_url}"
+          with_fandom: "- %{work_title} %{work_url} (%{fandom})"
     collection_notification:
       assignments_sent:
         complete: Vse naloge so bile poslane.

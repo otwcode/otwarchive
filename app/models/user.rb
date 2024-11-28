@@ -210,20 +210,12 @@ class User < ApplicationRecord
 
   validates :email, email_format: true, uniqueness: true
 
-  # Virtual attribute for age check and terms of service
-    attr_accessor :age_over_13
-    attr_accessor :terms_of_service
-    # attr_accessible :age_over_13, :terms_of_service
+  # Virtual attribute for age check, data processing agreement, and terms of service
+  attr_accessor :age_over_13, :data_processing, :terms_of_service
 
-  validates_acceptance_of :terms_of_service,
-                          allow_nil: false,
-                          message: ts("^Sorry, you need to accept the Terms of Service in order to sign up."),
-                          if: :first_save?
-
-  validates_acceptance_of :age_over_13,
-                          allow_nil: false,
-                          message: ts("^Sorry, you have to be over 13!"),
-                          if: :first_save?
+  validates :data_processing, acceptance: { allow_nil: false, if: :first_save? }
+  validates :age_over_13, acceptance: { allow_nil: false, if: :first_save? }
+  validates :terms_of_service, acceptance: { allow_nil: false, if: :first_save? }
 
   def to_param
     login
@@ -329,9 +321,18 @@ class User < ApplicationRecord
   end
 
   protected
-    def first_save?
-      self.new_record?
+
+  def first_save?
+    self.new_record?
+  end
+
+  # Override of Devise method for email sending to set I18n.locale
+  # Based on https://github.com/heartcombo/devise/blob/v4.9.3/lib/devise/models/authenticatable.rb#L200
+  def send_devise_notification(notification, *args)
+    I18n.with_locale(preference.locale.iso) do
+      devise_mailer.send(notification, self, *args).deliver_now
     end
+  end
 
   public
 
