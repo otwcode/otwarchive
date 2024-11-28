@@ -1,6 +1,9 @@
 ---
 en:
   admin:
+    access:
+      action_access_denied: Sorry, only an authorized admin can do that.
+      page_access_denied: Sorry, only an authorized admin can access the page you were trying to reach.
     admin_invitations:
       find:
         user_not_found: No results were found. Try another search.
