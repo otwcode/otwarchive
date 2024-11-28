@@ -114,6 +114,9 @@ en:
     not_found: Sorry, we couldn't find the FAQ you were looking for.
     update_positions:
       success: Question order has been successfully updated.
+  tag_wranglings:
+    index:
+      page_subtitle: fandoms
   users:
     passwords:
       create:
