@@ -93,6 +93,9 @@ en:
         page_heading: Invite New Users
     admin_nav:
       archive_faq: Archive FAQ
+      news:
+        delete_post: Delete Post
+      wrangling_guidelines: Wrangling Guidelines
     admin_options:
       delete:
         bookmark: Delete Bookmark
@@ -1788,6 +1791,34 @@ en:
         privacy_policy: Privacy Policy
         tos: Terms of Service
         welcome_html: Hi! It looks like you've just logged in to AO3 for the first time. For help getting started on AO3, check out some %{new_user_tips_link} or browse through %{our_faqs_link}.
+    sidebar:
+      catch:
+        history: History
+        inbox: Inbox (%{inbox_number})
+        statistics: Statistics
+        subscriptions: Subscriptions
+      choices:
+        all_pseuds: All Pseuds (%{pseud_number})
+        dashboard: Dashboard
+        preferences: Preferences
+        profile: Profile
+        pseud_switcher: Pseud Switcher
+        pseuds: Pseuds
+        skins: Skins
+      landmark:
+        catch: Catch
+        choices: Choices
+        pitch: Pitch
+        switch: Switch
+      pitch:
+        collections: Collections (%{coll_number})
+        drafts: Drafts (%{drafts_number})
+      switch:
+        assignments: Assignments (%{assignment_number})
+        claims: Claims (%{claim_number})
+        co_creator_requests: Co-Creator Requests (%{count})
+        related_works: Related Works (%{related_works_number})
+        sign_ups: Sign-ups (%{signup_number})
   works:
     adult:
       caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.

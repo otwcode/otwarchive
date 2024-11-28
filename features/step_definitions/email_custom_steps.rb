@@ -27,6 +27,12 @@ Then "the email to {string} should be translated" do |user|
   step(%{the email to "#{user}" should not contain "translation missing"}) # missing translations in the target language fall back to English
 end
 
+Then "the email to email address {string} should be translated" do |email_address|
+  step(%{the email to email address "#{email_address}" should contain "Translated footer"})
+  step(%{the email to email address "#{email_address}" should not contain "fan-run and fan-supported archive"}) # untranslated English text
+  step(%{the email to email address "#{email_address}" should not contain "translation missing"}) # missing translations in the target language fall back to English
+end
+
 Then "the last email to {string} should be translated" do |user|
   step(%{the last email to "#{user}" should contain "Translated footer"})
   step(%{the last email to "#{user}" should not contain "fan-run and fan-supported archive"}) # untranslated English text
@@ -44,6 +50,10 @@ Then "{string} should be emailed" do |user|
   expect(emails("to: \"#{email_for(@user.email)}\"")).not_to be_empty
 end
 
+Then "the email address {string} should be emailed" do |email_address|
+  expect(emails("to: \"#{email_for(email_address)}\"")).not_to be_empty
+end
+
 Then "{string} should not be emailed" do |user|
   @user = User.find_by(login: user)
   expect(emails("to: \"#{email_for(@user.email)}\"")).to be_empty
@@ -52,6 +62,16 @@ end
 Then "the email to {string} should contain {string}" do |user, text|
   @user = User.find_by(login: user)
   email = emails("to: \"#{email_for(@user.email)}\"").first
+  if email.multipart?
+    expect(email.text_part.body).to match(text)
+    expect(email.html_part.body).to match(text)
+  else
+    expect(email.body).to match(text)
+  end
+end
+
+Then "the email to email address {string} should contain {string}" do |email_address, text|
+  email = emails("to: \"#{email_for(email_address)}\"").first
   if email.multipart?
     expect(email.text_part.body).to match(text)
     expect(email.html_part.body).to match(text)
@@ -74,6 +94,16 @@ end
 Then "the email to {string} should not contain {string}" do |user, text|
   @user = User.find_by(login: user)
   email = emails("to: \"#{email_for(@user.email)}\"").first
+  if email.multipart?
+    expect(email.text_part.body).not_to match(text)
+    expect(email.html_part.body).not_to match(text)
+  else
+    expect(email.body).not_to match(text)
+  end
+end
+
+Then "the email to email address {string} should not contain {string}" do |email_address, text|
+  email = emails("to: \"#{email_for(email_address)}\"").first
   if email.multipart?
     expect(email.text_part.body).not_to match(text)
     expect(email.html_part.body).not_to match(text)
