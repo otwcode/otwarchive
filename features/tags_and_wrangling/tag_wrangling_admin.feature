@@ -1,11 +1,18 @@
 @users @tag_wrangling @admin
 Feature: Tag wrangling
 
-  Scenario: Admin can rename a tag
+  Scenario: Admin can rename a tag and it updates works and bookmarks.
 
-    Given I am logged in as a "tag_wrangling" admin
-      And a fandom exists with name: "Amelie", canonical: false
-    When I edit the tag "Amelie"
+    Given I am logged in as "audrey" with password "password"
+      And I post the work "Renoir's Boating Party"
+      And I bookmark the work "Renoir's Boating Party" with the tags "Amelie"
+      And I post the work "Luncheon" with fandom "Amelie"
+      # Visit the relevant pages to make sure the data gets cached.
+      And I go to my bookmarks page
+      And I go to my works page
+      And I go to the work "Luncheon"
+    When I am logged in as a "tag_wrangling" admin
+      And I edit the tag "Amelie"
       And I fill in "Synonym of" with "Amélie"
       And I press "Save changes"
     Then I should see "Amélie is considered the same as Amelie by the database"
@@ -15,6 +22,15 @@ Feature: Tag wrangling
     Then I should see "Tag was updated"
       And I should see "Amélie"
       And I should not see "Amelie"
+    When I go to audrey's works page
+    Then I should not see "Amelie"
+      And I should see "Amélie"
+    When I go to the work "Luncheon"
+    Then I should not see "Amelie"
+      And I should see "Amélie"
+    When I go to audrey's bookmarks page
+    Then I should not see "Amelie"
+      And I should see "Amélie"
 
   Scenario: Admin can rename a tag using Eastern characters
 
