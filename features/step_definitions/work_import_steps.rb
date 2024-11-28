@@ -72,6 +72,17 @@ When /^I start importing "(.*)"( with a mock website)?( as an archivist)?$/ do |
   step %{I select "English" from "Choose a language"}
 end
 
+When "I import the mock work {string} by {string} with email {string} and by {string} with email {string}" do |url, creator_name, creator_email, cocreator_name, cocreator_email|
+  step(%{I start importing "#{url}" with a mock website as an archivist})
+  step(%{I check "Import for others ONLY with permission"})
+  step(%{I fill in "external_author_name" with "#{creator_name}"})
+  step(%{I fill in "external_author_email" with "#{creator_email}"})
+  step(%{I fill in "external_coauthor_name" with "#{cocreator_name}"})
+  step(%{I fill in "external_coauthor_email" with "#{cocreator_email}"})
+  step(%{I check "Post without previewing"})
+  step(%{I press "Import"})
+end
+
 When /^I import "(.*)"( with a mock website)?$/ do |url, mock|
   step %{I start importing "#{url}"#{mock}}
   step %{I press "Import"}
