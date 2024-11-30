@@ -98,3 +98,17 @@ Feature: Brand new fandoms
       And I am logged in as a tag wrangler
       And I go to the fandom mass bin
     Then I should see "My Brand New Fandom"
+
+  Scenario: When the only draft using a brand new fandom is published, the fandom should be visible to tag wranglers.
+    Given I am logged in as a tag wrangler
+      And I set up the draft "Generic Work" with fandom "My Brand New Fandom"
+      And I press "Preview"
+      And the periodic tag count task is run
+      And all indexing jobs have been run
+    When I go to the fandom mass bin
+    Then I should not see "My Brand New Fandom"
+    When I post the work "Generic Work"
+      And the periodic tag count task is run
+      And all indexing jobs have been run
+      And I go to the fandom mass bin
+    Then I should see "My Brand New Fandom"
