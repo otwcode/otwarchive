@@ -116,7 +116,7 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   When I edit the tag "Stargate SG-1"
   Then I should see "Stargate SG-1: Ark of Truth" within "div#child_SubTag_associations_to_remove_checkboxes"
     And I should see "Stargate Franchise" within "div#parent_MetaTag_associations_to_remove_checkboxes"
-  When I am logged in as an admin
+  When I am logged in as a "tag_wrangling" admin
     And I edit the tag "Stargate SG-1"
     And I fill in "Synonym of" with "Stargate SG-1: Greatest Show in the Universe"
     And I press "Save changes"

@@ -269,12 +269,16 @@ public
   def admin_only_access_denied
     respond_to do |format|
       format.html do
-        flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
+        flash[:error] = t("admin.access.page_access_denied") 
         redirect_to root_path
       end
       format.json do
-        errors = [ts("Sorry, only an authorized admin can do that.")]
+        errors = [t("admin.access.action_access_denied")]
         render json: { errors: errors }, status: :forbidden
+      end
+      format.js do
+        flash[:error] = t("admin.access.page_access_denied") 
+        render js: "window.location.href = '#{root_path}';" 
       end
     end
   end

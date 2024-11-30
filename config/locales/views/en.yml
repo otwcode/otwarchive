@@ -91,6 +91,17 @@ en:
           queue: Manage Queue
           requests: Manage Requests
         page_heading: Invite New Users
+    admin_nav:
+      ao3_news: AO3 News
+      archive_faq: Archive FAQ
+      faq:
+        reorder_questions: Reorder Questions
+      known_issues: Known Issues
+      landmark: Admin Navigation
+      news:
+        delete_post: Delete Post
+      post_ao3_news: Post AO3 News
+      wrangling_guidelines: Wrangling Guidelines
     admin_options:
       delete:
         bookmark: Delete Bookmark
@@ -376,6 +387,24 @@ en:
       roles:
         heading: 'Your admin roles:'
         none: You currently have no admin roles assigned to you.
+  archive_faqs:
+    admin_index:
+      confirm_delete: Are you sure you want to delete this FAQ category?
+      created_updated_date: Created at %{date_created} and updated at %{date_updated}
+      delete: Delete
+      edit: Edit
+      manage_faqs: Manage Archive FAQs
+      new_faq_category: New FAQ Category
+      page_heading: Archive FAQ
+      reorder_faqs: Reorder FAQs
+      show: Show
+    show:
+      edit: Edit
+      elasticsearch_news: news post announcing the search and filter updates
+      elasticsearch_update_notice_html: Our search engine has recently been updated, and this FAQ is based on our old version. We're working on bringing you more up-to-date information, but in the meantime, you can find out more in our %{elasticsearch_news_link}!
+      no_category_entries: We're sorry, there are currently no entries in this category.
+      page_heading: Archive FAQ
+      screencast: 'Screencast:'
   blocked:
     block: Block
     unblock: Unblock
@@ -1583,6 +1612,34 @@ en:
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
       tags_wrangled_csv: Tags Wrangled (CSV)
+  tag_wranglings:
+    wrangler_dashboard:
+      characters_by_fandom: Characters by fandom (%{count})
+      fandoms_by_media: Fandoms by media (%{count})
+      freeforms_by_fandom: Freeforms by fandom (%{count})
+      new_tag: New Tag
+      relationships_by_fandom: Relationships by fandom (%{count})
+      search_tags: Search Tags
+      tag_type:
+        character: Characters
+        fandom: Fandoms
+        freeform: Freeforms
+        merger: Mergers
+        relationship: Relationships
+        subtag: SubTags
+      tag_type_and_count: "%{tag_type} (%{count})"
+      unsorted_tags: Unsorted Tags (%{count})
+      use_type:
+        bookmarks: Bookmarks
+        drafts: Drafts
+        external_works: External Works
+        private_bookmarks: Private Bookmarks
+        taggings_count: Taggings Count
+        works: Works
+      use_type_and_count: "%{use_type} (%{count})"
+      wranglers: Wranglers
+      wrangling_home: Wrangling Home
+      wrangling_tools: Wrangling Tools
   tags:
     index:
       about:
@@ -1768,6 +1825,34 @@ en:
         privacy_policy: Privacy Policy
         tos: Terms of Service
         welcome_html: Hi! It looks like you've just logged in to AO3 for the first time. For help getting started on AO3, check out some %{new_user_tips_link} or browse through %{our_faqs_link}.
+    sidebar:
+      catch:
+        history: History
+        inbox: Inbox (%{inbox_number})
+        statistics: Statistics
+        subscriptions: Subscriptions
+      choices:
+        all_pseuds: All Pseuds (%{pseud_number})
+        dashboard: Dashboard
+        preferences: Preferences
+        profile: Profile
+        pseud_switcher: Pseud Switcher
+        pseuds: Pseuds
+        skins: Skins
+      landmark:
+        catch: Catch
+        choices: Choices
+        pitch: Pitch
+        switch: Switch
+      pitch:
+        collections: Collections (%{coll_number})
+        drafts: Drafts (%{drafts_number})
+      switch:
+        assignments: Assignments (%{assignment_number})
+        claims: Claims (%{claim_number})
+        co_creator_requests: Co-Creator Requests (%{count})
+        related_works: Related Works (%{related_works_number})
+        sign_ups: Sign-ups (%{signup_number})
   works:
     adult:
       caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.

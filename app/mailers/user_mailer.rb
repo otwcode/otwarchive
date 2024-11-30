@@ -92,22 +92,14 @@ class UserMailer < ApplicationMailer
   end
 
   # Notifies a writer that their imported works have been claimed
-  def claim_notification(creator_id, claimed_work_ids, is_user=false)
-    if is_user
-      creator = User.find(creator_id)
-      locale = creator.preference.locale.iso
-    else
-      creator = ExternalAuthor.find(creator_id)
-      locale = I18n.default_locale
-    end
+  def claim_notification(creator_id, claimed_work_ids)
+    creator = User.find(creator_id)
     @external_email = creator.email
     @claimed_works = Work.where(id: claimed_work_ids)
-    I18n.with_locale(locale) do
-      mail(
-        to: creator.email,
-        subject: t("user_mailer.claim_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: creator.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends a batched subscription notification
@@ -170,12 +162,10 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @total = total
     @reason = reason
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: t("user_mailer.invite_request_declined.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   def collection_notification(collection_id, subject, message, email)
@@ -233,12 +223,10 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @old_email = old_email
     @new_email = new_email
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @old_email,
-        subject: t("user_mailer.change_email.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @old_email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   ### WORKS NOTIFICATIONS ###
