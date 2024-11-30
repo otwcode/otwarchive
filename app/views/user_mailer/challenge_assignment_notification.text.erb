@@ -38,7 +38,7 @@
 
 <%= t(".due") %> <%= to_plain_text(time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user)).gsub(/\n\s*/, "") %>.
 
-<%= t(".look_up.text", your_assignments_link: user_assignments_url(@assigned_user)) %>
+<%= t(".look_up.text", your_assignments_url: user_assignments_url(@assigned_user)) %>
 <% if @collection && !@collection.assignment_notification.blank? %>
 
 

@@ -240,7 +240,9 @@ module TagsHelper
 
   def get_title_string(tags, category_name = "")
     if tags && tags.size > 0
-      tags.collect(&:name).join(t("support.array.words_connector"))
+      # We don't use .to_sentence because these aren't links and we risk making any
+      # connector word (e.g., "and") look like part of the final tag.
+      tags.pluck(:name).join(t("support.array.words_connector"))
     elsif tags.blank? && category_name.blank?
      "Choose Not To Use Archive Warnings"
     else
