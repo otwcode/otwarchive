@@ -32,6 +32,6 @@ class AbuseReporter < FeedbackReporter
   def ticket_description
     return "No comment submitted." if description.blank?
 
-    strip_images(description.html_safe)
+    strip_images(description.html_safe, keep_src: true)
   end
 end

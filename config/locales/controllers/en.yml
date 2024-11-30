@@ -1,6 +1,9 @@
 ---
 en:
   admin:
+    access:
+      action_access_denied: Sorry, only an authorized admin can do that.
+      page_access_denied: Sorry, only an authorized admin can access the page you were trying to reach.
     admin_invitations:
       find:
         user_not_found: No results were found. Try another search.
@@ -8,12 +11,26 @@ en:
         success:
           one: "%{count} person from the invite queue is being invited."
           other: "%{count} people from the invite queue are being invited."
+    admin_users:
+      destroy_user_creations:
+        success: All creations by user %{login} have been deleted.
+  archive_faqs:
+    create:
+      success: Archive FAQ was successfully created.
+    default_locale_only: Sorry, this action is only available for English FAQs.
+    update:
+      success: Archive FAQ was successfully updated.
+    update_positions:
+      success: Archive FAQs order was successfully updated.
   blocked:
     users:
       create:
         blocked: You have blocked the user %{name}.
       destroy:
         unblocked: You have unblocked the user %{name}.
+  challenge_assignments:
+    validation:
+      not_owner: You aren't the owner of that assignment.
   chapters:
     destroy:
       only_chapter: You can't delete the only chapter in your work. If you want to delete the work, choose "Delete Work".
@@ -30,6 +47,11 @@ en:
     create:
       invited: invited
       invited_to_collections_html: This work has been %{invited_link} to your collection (%{collection_title}).
+  collection_participants:
+    update:
+      failure: Couldn't update %{participant}.
+    validation:
+      owners_required: You can't remove the only owner!
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.
@@ -45,6 +67,12 @@ en:
     check_permission_to_edit:
       error:
         frozen: Frozen comments cannot be edited.
+    create:
+      success:
+        moderated:
+          admin_post: Your comment was received! It will appear publicly after it has been approved.
+          work: Your comment was received! It will appear publicly after the work creator has approved it.
+        not_moderated: Comment created!
     freeze:
       error: Sorry, that comment thread could not be frozen.
       permission_denied: Sorry, you don't have permission to freeze that comment thread.
@@ -61,6 +89,18 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
+  external_works:
+    update:
+      successfully_updated: External work was successfully updated.
+  home:
+    content:
+      page_title: Content Policy
+    privacy:
+      page_title: Privacy Policy
+    tos:
+      page_title: Terms of Service
+    tos_faq:
+      page_title: Terms of Service FAQ
   kudos:
     create:
       success: Thank you for leaving kudos!
@@ -70,6 +110,13 @@ en:
         muted: You have muted the user %{name}.
       destroy:
         unmuted: You have unmuted the user %{name}.
+  questions:
+    not_found: Sorry, we couldn't find the FAQ you were looking for.
+    update_positions:
+      success: Question order has been successfully updated.
+  tag_wranglings:
+    index:
+      page_subtitle: fandoms
   users:
     passwords:
       create:
@@ -84,3 +131,15 @@ en:
           one: You may reset your password %{count} more time.
           other: You may reset your password %{count} more times.
         user_not_found: We couldn't find an account with that email address or username. Please try again.
+    status:
+      ban_notice_html: Your account has been banned. You are not permitted to add or edit archive content. Please %{contact_abuse_link} for more information.
+      contact_abuse: contact Abuse
+      suspension_notice_html: Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please %{contact_abuse_link} for more information.
+  works:
+    drafts:
+      page_title: "%{username} - Drafts"
+  wrangling_guidelines:
+    create: Wrangling Guideline was successfully created.
+    delete: Wrangling Guideline was successfully deleted.
+    reorder: Wrangling Guidelines order was successfully updated.
+    update: Wrangling Guideline was successfully updated.

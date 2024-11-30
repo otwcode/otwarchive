@@ -7,13 +7,25 @@ class HomeController < ApplicationController
   def unicorn_test
   end
 
+  def content
+    @page_title = t(".page_title")
+    render action: "content", layout: "application"
+  end
+
+  def privacy
+    @page_title = t(".page_title")
+    render action: "privacy", layout: "application"
+  end
+
   # terms of service
   def tos
+    @page_title = t(".page_title")
     render action: "tos", layout: "application"
   end
 
   # terms of service faq
   def tos_faq
+    @page_title = t(".page_title")
     render action: "tos_faq", layout: "application"
   end
 
@@ -52,6 +64,7 @@ class HomeController < ApplicationController
 
   # about
   def about
+    @page_subtitle = t(".page_title")
     render action: "about", layout: "application"
   end
 

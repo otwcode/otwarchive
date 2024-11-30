@@ -6,8 +6,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 6.1.7"
-
+gem "rails", "~> 7.0.8"
 gem "rails-i18n"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
@@ -81,14 +80,6 @@ gem 'escape_utils', '1.2.1'
 
 gem 'timeliness'
 
-# TODO: rpm_contrib is deprecated and needs to be replaced
-# Here is a list of possible alternatives:
-# https://github.com/newrelic/extends_newrelic_rpm
-#
-# The last working version is not compatible with Rails 5
-#
-# gem 'rpm_contrib', '2.2.0'
-
 # for generating graphs
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
@@ -115,8 +106,7 @@ gem 'connection_pool'
 gem 'dalli'
 gem 'kgio', '2.10.0'
 
-# TODO: AO3-6297 Update the download code so we can remove mimemagic.
-gem "mimemagic", "0.3.10"
+gem "marcel", "1.0.2"
 
 # Library for helping run pt-online-schema-change commands:
 gem "departure", "~> 6.5"
@@ -125,7 +115,7 @@ gem "departure", "~> 6.5"
 gem "mail", ">= 2.8"
 
 group :test do
-  gem "rspec-rails", "~> 4.0.1"
+  gem "rspec-rails", "~> 6.0"
   gem 'pickle'
   gem 'shoulda'
   gem "capybara"
@@ -137,7 +127,7 @@ group :test do
   gem 'launchy'    # So you can do Then show me the page
   
   # Record and replay data from external URLs
-  gem 'vcr', '~> 3.0', '>= 3.0.1'
+  gem "vcr", "~> 6.2"
   gem "webmock"
   gem 'timecop'
   gem 'cucumber-timecop', require: false
@@ -155,7 +145,6 @@ group :test, :development do
   gem 'whiny_validation'
   gem "factory_bot_rails"
   gem 'minitest'
-  gem "listen", "~> 3.3"
   gem "i18n-tasks", require: false
 end
 
@@ -166,7 +155,7 @@ end
 
 group :linters do
   gem "erb_lint", "0.4.0"
-  gem "rubocop", "1.22.1"
+  gem "rubocop", "1.22.3"
   gem "rubocop-rails", "2.12.4"
   gem "rubocop-rspec", "2.6.0"
 end
@@ -187,7 +176,8 @@ gem 'unicorn', '~> 5.5', require: false
 gem 'god', '~> 0.13.7'
 
 group :staging, :production do
-  # Place the New Relic gem as low in the list as possible, allowing the
-  # frameworks above it to be instrumented when the gem initializes.
-  gem "newrelic_rpm"
+  gem "stackprof"
+  gem "sentry-ruby"
+  gem "sentry-rails"
+  gem "sentry-resque"
 end

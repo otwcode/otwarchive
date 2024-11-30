@@ -1,0 +1,10 @@
+<% content_for :message do %>
+  <p><%= t("mailer.general.greeting.informal.addressed_html", name: style_bold(t("mailer.general.greeting.tag_wrangler_supervisors"))) %></p>
+
+  <p><%= t(".name_changed.html", old_username: style_bold(@old_username), new_username: style_bold(@new_username)) %></p>
+
+  <p>
+    <%= t("mailer.general.closing.informal") %><br />
+    <%= t("mailer.general.signature.app_short_name") %>
+  </p>
+<% end %>

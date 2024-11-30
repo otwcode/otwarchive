@@ -2,7 +2,7 @@ require 'webmock/cucumber'
 
 def content_fields
   {
-    title: "Detected Title", summary: "Detected summary", fandoms: "Detected Fandom", warnings: "Underage",
+    title: "Detected Title", summary: "Detected summary", fandoms: "Detected Fandom", warnings: "Underage Sex",
     characters: "Detected 1, Detected 2", rating: "Explicit", relationships: "Detected 1/Detected 2",
     categories: "F/F", freeform: "Detected tag 1, Detected tag 2", external_author_name: "Detected Author",
     external_author_email: "detected@foo.com", notes: "This is a <i>content note</i>.",
@@ -70,6 +70,17 @@ When /^I start importing "(.*)"( with a mock website)?( as an archivist)?$/ do |
   step %{I set up importing#{mock}#{is_archivist}}
   step %{I fill in "urls" with "#{url}"}
   step %{I select "English" from "Choose a language"}
+end
+
+When "I import the mock work {string} by {string} with email {string} and by {string} with email {string}" do |url, creator_name, creator_email, cocreator_name, cocreator_email|
+  step(%{I start importing "#{url}" with a mock website as an archivist})
+  step(%{I check "Import for others ONLY with permission"})
+  step(%{I fill in "external_author_name" with "#{creator_name}"})
+  step(%{I fill in "external_author_email" with "#{creator_email}"})
+  step(%{I fill in "external_coauthor_name" with "#{cocreator_name}"})
+  step(%{I fill in "external_coauthor_email" with "#{cocreator_email}"})
+  step(%{I check "Post without previewing"})
+  step(%{I press "Import"})
 end
 
 When /^I import "(.*)"( with a mock website)?$/ do |url, mock|

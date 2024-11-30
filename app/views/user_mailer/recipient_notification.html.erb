@@ -1,6 +1,6 @@
 <% content_for :message do %>
 
-  <p><%= t("mailer.general.greeting.informal.addressed", name: style_bold(@user.login)).html_safe %></p>
+  <p><%= t("mailer.general.greeting.informal.addressed_html", name: style_bold(@user.login)) %></p>
 
   <p>
     <% if @collection %>
