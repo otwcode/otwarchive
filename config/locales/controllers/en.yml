@@ -1,6 +1,9 @@
 ---
 en:
   admin:
+    access:
+      action_access_denied: Sorry, only an authorized admin can do that.
+      page_access_denied: Sorry, only an authorized admin can access the page you were trying to reach.
     admin_invitations:
       find:
         user_not_found: No results were found. Try another search.
@@ -11,6 +14,14 @@ en:
     admin_users:
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
+  archive_faqs:
+    create:
+      success: Archive FAQ was successfully created.
+    default_locale_only: Sorry, this action is only available for English FAQs.
+    update:
+      success: Archive FAQ was successfully updated.
+    update_positions:
+      success: Archive FAQs order was successfully updated.
   blocked:
     users:
       create:
@@ -99,6 +110,13 @@ en:
         muted: You have muted the user %{name}.
       destroy:
         unmuted: You have unmuted the user %{name}.
+  questions:
+    not_found: Sorry, we couldn't find the FAQ you were looking for.
+    update_positions:
+      success: Question order has been successfully updated.
+  tag_wranglings:
+    index:
+      page_subtitle: fandoms
   users:
     passwords:
       create:
@@ -120,3 +138,8 @@ en:
   works:
     drafts:
       page_title: "%{username} - Drafts"
+  wrangling_guidelines:
+    create: Wrangling Guideline was successfully created.
+    delete: Wrangling Guideline was successfully deleted.
+    reorder: Wrangling Guidelines order was successfully updated.
+    update: Wrangling Guideline was successfully updated.

@@ -149,8 +149,6 @@ ignore_missing:
   - successfully_sent # should be feedbacks.create.successfully_sent
   # Files: app/controllers/languages_controller.rb and app/controllers/locales_controller.rb
   - successfully_added # should be languages.create.successfully_added and locales.create.successfully_added
-  # Files: app/views/admin/_admin_nav.html.erb and app/views/admin_posts/show.html.erb
-  - admin.admin_nav.delete
   # File: app/views/admin/admin_invitations/find.html.erb
   - admin.admin_invitations.find.find_email
   - admin.admin_invitations.find.find_token

@@ -221,7 +221,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     When I am logged in as a random user
      And I view the tag "Cowboy Bebop"
     Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
-    When I am logged in as an admin
+    When I am logged in as a "tag_wrangling" admin
      And I view the tag "Cowboy Bebop"
     Then I should not see "Please log in as an admin"
      And I should see "Cowboy Bebop"

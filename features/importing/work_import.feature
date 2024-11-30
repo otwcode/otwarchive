@@ -355,3 +355,20 @@ Feature: Import Works
       And I should not see "This chapter is a draft and hasn't been posted yet!"
     When I follow "Next Chapter"
     Then I should not see "This chapter is a draft and hasn't been posted yet!"
+
+  Scenario: Importing as an archivist for an existing Archive author should send translated claim email
+    Given a locale with translated emails
+      And the following activated users exist
+        | login    | email              |
+        | sam      | sam@example.com    |
+        | notsam   | notsam@example.com |
+      And the user "sam" enables translated emails
+      And all emails have been delivered
+    When I import the mock work "http://import-site-without-tags" by "sam" with email "sam@example.com" and by "notsam" with email "notsam@example.com"
+    Then I should see import confirmation
+      And 1 email should be delivered to "sam@example.com"
+      And the email should contain claim information
+      And the email to "sam" should be translated
+      And 1 email should be delivered to "notsam@example.com"
+      And the email should contain claim information
+      And the email to "notsam" should be non-translated
