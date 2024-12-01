@@ -303,7 +303,7 @@ namespace :After do
     end
   end
 
-  desc "Add suffix to existing Underage Sex tag in prepartion for Underage warning rename"
+  desc "Add suffix to existing Underage Sex tag in preparation for Underage warning rename"
   task(add_suffix_to_underage_sex_tag: :environment) do
     puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
     login = $stdin.gets.chomp.strip
@@ -358,5 +358,8 @@ namespace :After do
       puts("Admin not found.")
     end
   end
+
+  # TODO Bilka
+
   # This is the end that you have to put new tasks above.
 end
