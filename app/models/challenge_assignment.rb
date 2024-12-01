@@ -43,10 +43,10 @@ class ChallengeAssignment < ApplicationRecord
   # sorting by request/offer
 
   REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON challenge_assignments.request_signup_id = challenge_signups.id
-                           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id"
+                           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id".freeze
 
   OFFERING_PSEUD_JOIN = "LEFT JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id
-                         INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id OR challenge_signups.pseud_id = pseuds.id)"
+                         INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id OR challenge_signups.pseud_id = pseuds.id)".freeze
 
   scope :order_by_requesting_pseud, -> { joins(REQUESTING_PSEUD_JOIN).order("pseuds.name") }
 

@@ -512,7 +512,7 @@ describe "rake After:migrate_pinch_request_signup" do
       expect do
         subject.invoke
       end.to avoid_changing { assignment.reload.request_signup_id }
-               .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
+        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
     end
   end
 
@@ -528,13 +528,13 @@ describe "rake After:migrate_pinch_request_signup" do
       expect do
         subject.invoke
       end.to avoid_changing { assignment.reload.request_signup_id }
-               .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
+        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
     end
   end
 
   context "for an assignment without a request_signup_id and a pinch_request_signup_id" do
-    let(:collection) {create(:collection)}
-    let(:signup) {create(:challenge_signup, collection: collection)}
+    let(:collection) { create(:collection) }
+    let(:signup) { create(:challenge_signup, collection: collection) }
     let(:assignment) do
       assignment = create(:challenge_assignment, collection: collection)
       assignment.update_columns(request_signup_id: nil, pinch_request_signup_id: signup.id)
@@ -545,9 +545,9 @@ describe "rake After:migrate_pinch_request_signup" do
       expect do
         subject.invoke
       end.to change { assignment.reload.request_signup_id }
-               .from(nil)
-               .to(signup.id)
-               .and output("Migrated pinch_request_signup for 1 challenge assignments.\n").to_stdout
+        .from(nil)
+        .to(signup.id)
+        .and output("Migrated pinch_request_signup for 1 challenge assignments.\n").to_stdout
     end
   end
 end

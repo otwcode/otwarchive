@@ -364,4 +364,5 @@ namespace :After do
     count = ChallengeAssignment.where("pinch_request_signup_id IS NOT NULL AND request_signup_id IS NULL").update_all("request_signup_id = pinch_request_signup_id")
     puts("Migrated pinch_request_signup for #{count} challenge assignments.")
   end
-end # This is the end that you have to put new tasks above.
+  # This is the end that you have to put new tasks above.
+end

@@ -22,7 +22,7 @@
 <!--main content-->
 
 <% if @challenge_assignment.request_signup %>
-  <%= render "challenge_signups/show_requests", :challenge_signup => @challenge_assignment.request_signup %>
+  <%= render "challenge_signups/show_requests", challenge_signup: @challenge_assignment.request_signup %>
 <% else %>
   <h3 class="heading"><%= ts("No request!") %></h3>
   <p class="note"><%= ts("Contact challenge moderators for help.") %></p>
