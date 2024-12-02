@@ -219,7 +219,7 @@ end
 
 # This is for buttons generated with the button_to helper method. They use a different HTML element,
 # <button> instead of <input type="submit">.
-When /^I click the (\d+)(?:st|nd|rd|th) button$/ do |index|
+When /^I click the (\d+)(?:st|nd|rd|th) button$/ do |index| # rubocop:disable Cucumber/RegexStepName
   page.all("button")[index.to_i - 1].click
 end
 
