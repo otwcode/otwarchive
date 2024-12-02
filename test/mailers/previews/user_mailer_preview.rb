@@ -42,7 +42,7 @@ class UserMailerPreview < ApplicationMailerPreview
   
   def invite_request_declined
     user = create(:user, :for_mailer_preview)
-    total = params[:total].to_i || 1
+    total = params[:total] ? params[:total].to_i : 1
     reason = "test reason"
     UserMailer.invite_request_declined(user.id, total, reason)
   end
