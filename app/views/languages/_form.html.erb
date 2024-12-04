@@ -10,31 +10,31 @@
         <%= f.label :name, t('.name', default: "Name") + " *" %>
       </dt>
       <dd class="required">
-        <%= f.text_field :name %>
+        <%= f.text_field :name, disabled: !policy(@language).can_edit_other_fields? %>
       </dd>
 
       <dt class="required">
         <%= f.label :short, t('.short', default: "Abbreviation") + " *" %>
       </dt>
       <dd class="required">
-        <%= f.text_field :short %>
+        <%= f.text_field :short, disabled: !policy(@language).can_edit_other_fields? %>
       </dd>
 
       <dt>
         <%= f.label :sortable_name, t('.sortable_name', default: "Name for alphabetical sorting") %>
       </dt>
       <dd>
-        <%= f.text_field :sortable_name %>
+        <%= f.text_field :sortable_name, disabled: !policy(@language).can_edit_other_fields? %>
       </dd>
 
       <dt>
-        <%= f.check_box :support_available %>
+        <%= f.check_box :support_available, disabled: !policy(@language).can_edit_other_fields? %>
       </dt>
       <dd>
         <%= f.label :support_available, t('.support_available', default: "Support available") %>
       </dd>
       <dt>
-        <%= f.check_box :abuse_support_available %>
+        <%= f.check_box :abuse_support_available, disabled: !policy(@language).can_edit_abuse_support_available?%>
       </dt>
       <dd>
         <%= f.label :abuse_support_available, t('.abuse_support_available', default: "Abuse support available") %>

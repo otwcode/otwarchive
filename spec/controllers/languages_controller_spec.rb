@@ -126,7 +126,7 @@ describe LanguagesController do
       end
     end
     
-    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
+    (Admin::VALID_ROLES - %w[superadmin translation support policy_and_abuse]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
         
@@ -139,7 +139,7 @@ describe LanguagesController do
       end
     end
 
-    %w[translation superadmin].each do |role|
+    %w[translation superadmin support policy_and_abuse].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
@@ -175,7 +175,7 @@ describe LanguagesController do
       end
     end
 
-    (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
+    (Admin::VALID_ROLES - %w[superadmin translation support policy_and_abuse]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
         
@@ -188,7 +188,7 @@ describe LanguagesController do
       end
     end
 
-    %w[translation superadmin].each do |role|
+    %w[translation superadmin support policy_and_abuse].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
