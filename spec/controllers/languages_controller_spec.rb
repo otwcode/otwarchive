@@ -59,7 +59,7 @@ describe LanguagesController do
   end
 
   describe "POST create" do
-    let(:language_params) { 
+    let(:language_params) do 
       {
         language: {
           name: "Suomi",
@@ -69,7 +69,7 @@ describe LanguagesController do
           sortable_name: "su"
         }
       }
-    }
+    end
 
     context "when not logged in" do
       it "redirects with error" do
@@ -140,13 +140,20 @@ describe LanguagesController do
     end
 
     %w[translation superadmin].each do |role|
+      Language.create(name: "Suomi", short: "fi")
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
-        it "renders the edit template" do
+        it "renders the edit template for a non-default language" do
+          fake_login_admin(admin)
+          get :edit, params: { id: "fi" }
+          expect(response).to render_template("edit")
+        end
+
+        it "redirects for the default language" do
           fake_login_admin(admin)
           get :edit, params: { id: "en" }
-          expect(response).to render_template("edit")
+          it_redirects_to_with_error(languages_path, "Sorry, you can’t edit the default language.")
         end
       end
     end
@@ -154,7 +161,7 @@ describe LanguagesController do
 
   describe "PUT update" do
     let(:finnish) { Language.create(name: "Suomi", short: "fi") }
-    let(:language_params) { 
+    let(:language_params) do 
       {
         id: finnish.short,
         language: {
@@ -165,7 +172,7 @@ describe LanguagesController do
           sortable_name: "su"
         }
       }
-    }
+    end
 
     context "when not logged in" do
       it "redirects with error" do
