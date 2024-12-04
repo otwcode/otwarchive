@@ -1,6 +1,4 @@
 class AbuseReporter < FeedbackReporter
-  attr_accessor :ip_address
-
   def report_attributes
     super.deep_merge(
       "departmentId" => department_id,
