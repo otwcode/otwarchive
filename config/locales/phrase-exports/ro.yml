@@ -320,6 +320,102 @@ ro:
         text: "%{login}, adresa de e-mail asociată cu contul tău a fost schimbată
           la %{email}"
       subject: "[%{app_name}] Adresa de e-mail schimbată"
+    claim_notification:
+      access:
+        contact_support: contactează echipa de Suport Tehnic AO3
+        html: În funcție de arhivă, este posibil ca lucrările tale să fi fost importate
+          cu acces limitat doar la utilizatorii/oarele înregistrați/e (pentru a le
+          ascunde de căutările Google). Dacă ăsta este cazul, lucrările vor fi accesibile
+          numai utilizatorilor/elor conectați/e, cu excepția cazului în care alegi
+          să le faci pe deplin vizibile. Pentru ajutor cu deblocarea, abandonarea
+          sau ștergerea lucrărilor tale, te rugăm %{contact_support_link}.
+        text: În funcție de arhivă, este posibil ca lucrările tale să fi fost importate
+          cu acces limitat doar la utilizatorii/oarele înregistrați/e (pentru a le
+          ascunde de căutările Google). Dacă ăsta este cazul, lucrările vor fi accesibile
+          numai utilizatorilor/elor conectați/e, cu excepția cazului în care alegi
+          să le faci pe deplin vizibile. Pentru ajutor cu deblocarea, abandonarea
+          sau ștergere a lucrărilor tale, te rugăm contactează echipa de Suport Tehnic
+          AO3 pe %{support_url}.
+      email_tips: Dacă ne contactezi, te rugăm să adaugi adrese de email de la @transformativeworks.org
+        la lista ta de contacte sigure și să verifici folderul de spam pentru răspunsul
+        nostru.
+      introduction:
+        ao3_name: Archive of Our Own – AO3 (Arhiva Noastră)
+        html: Primești acest email deoarece aveai lucrări într-o arhivă de lucrări
+          fanice care a fost importată de %{open_doors_name_link} pe %{app_link}.
+          Deoarece această adresă de email este conectată la o adresă înscrisă pe
+          arhiva importată, lucrările fanice asociate (enumerate mai jos) au fost
+          adăugate automat în contul tău AO3.
+        open_doors_name: Open Doors (Uși Deschise)
+        text: 'Primești acest email deoarece aveai lucrări într-o arhivă de lucrări
+          fanice care a fost importată de Open Doors (Uși Deschise) (%{open_doors_url})
+          pe Archive of Our Own – AO3 (Arhiva Noastră): %{app_url}. Deoarece această
+          adresă de email este conectată la o adresă înscrisă pe arhiva importată,
+          lucrările fanice asociate (enumerate mai jos) au fost adăugate automat în
+          contul tău AO3.'
+      mistake:
+        contact_open_doors: contactează echipa Uși Deschise
+        html: Dacă e o greșeală și acestea nu sunt lucrările tale, te rugăm să nu
+          le ștergi! Te rugăm doar %{contact_open_doors_link} și vom rezolva problema.
+        text: Dacă e o greșeală și acestea nu sunt lucrările tale, te rugăm să nu
+          le ștergi! Te rugăm doar contactează echipa Uși Deschise (%{open_doors_url})
+          și vom rezolva problema.
+      more_info:
+        ao3_news: Știri AO3
+        contact_support: contactează echipa de Suport Tehnic AO3
+        faq_page: pagina de Întrebări Frecvente
+        html: Poți citi anunțuri despre mutarea recentă a arhivei pe %{ao3_news_link}
+          și poți găsi informații suplimentare pe %{faq_page_link} sau %{tutorial_page_link}
+          ale Open Doors. Pentru orice întrebări la care nu ai găsit răspuns în Întrebările
+          Frecvente, tutoriale sau în acest email, te rugăm %{contact_support_link}.
+        text: Poți citi anunțuri despre mutarea recentă a arhivei pe AO3 News (%{news_url})
+          și poți găsi informații suplimentare pe pagina de Întrebări Frecvente (%{open_doors_faq_url})
+          sau pagina de tutoriale ale Open Doors. Pentru orice întrebări la care nu
+          ai găsit răspuns în Întrebările Frecvente, tutoriale sau in acest email,
+          te rugăm contactează echipa de Suport Tehnic la %{support_url}.
+        tutorial_page: pagina de tutorial
+      other_works:
+        contact_open_doors: contactează echipa Uși Deschise
+        html: Dacă ai avut alte lucrări în arhiva importată sub o adresă de e-mail
+          pe care nu o mai poți accesa, te rugăm %{contact_open_doors_link} cu orice
+          informații care te pot ajuta să îți dovedești identitatea.
+        text: Dacă ai avut alte lucrări în arhiva importată sub o adresă de e-mail
+          pe care nu o mai poți accesa, te rugăm contactează echipa Uși Deschise cu
+          orice informații care te pot ajuta să îți dovedești identitatea.
+      questions:
+        contact_support: contactează echipa de Suport Tehnic AO3
+        html: Pentru alte întrebări, te rugăm %{contact_support_link}.
+        text: Pentru alte întrebări, te rugăm contactează echipa de Suport Tehnic
+          AO3 la %{support_url}.
+      redirects:
+        html: Pentru a păstra listele de recomandări și semnele de carte, adresele
+          web ale arhivei importate pot redirecționa către copia importată a acestor
+          lucrări pentru un timp limitat (verifică postarea de anunț pentru arhivata
+          pentru a fi sigur/ă). Dacă ai încărcat deja o copie a acestor lucrări și
+          %{negation} ai folosit funcția de import din URL, vor exista două copii
+          ale aceleiași lucrări pe AO3.
+      subject: "[%{app_name}] Lucrări încărcate"
+      update_redirect:
+        contact_open_doors: contactează echipa Uși Deschise
+        html: Dacă dorești ca Open Doors să actualizeze redirecționarea pentru a ajunge
+          la lucrarea ta existentă, te rugăm să ștergi copia importată și %{contact_open_doors_link}
+          } cu numele contului tău AO3, numele contului tău din arhiva importată și
+          titlul și adresa URL a lucrării fanice la care ai dori să conducă redirecționarea.
+          (Dacă ai mai multe lucrări pentru care dorești să modifici redirecționările,
+          le poți enumera într-un singur email.)
+        text: Dacă dorești ca Open Doors să actualizeze redirecționarea pentru a ajunge
+          la lucrarea ta existentă, te rugăm să ștergi copia importată și contactează
+          echipa Uși Deschise la %{open_doors_url} cu numele contului tău AO3, numele
+          contului tău din arhiva importată și titlul și adresa URL a lucrării fanice
+          la care ai dori să conducă redirecționarea. (Dacă ai mai multe lucrări pentru
+          care dorești să modifici redirecționările, le poți enumera într-un singur
+          e-mail.)
+      works_by: 'Aceste lucrări au fost scrise sub e-mailul: %{email}'
+      work_info:
+        html: "%{work_link} (%{fandom})"
+        text:
+          no_fandom: "- %{work_title} %{work_url}"
+          with_fandom: "- %{work_title} %{work_url} (%{fandom})"
     collection_notification:
       assignments_sent:
         complete: Toate sarcinile au fost acum trimise.
