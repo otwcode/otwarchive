@@ -104,6 +104,12 @@ en:
   kudos:
     create:
       success: Thank you for leaving kudos!
+  languages:
+    successfully_added: Language was successfully added.
+    successfully_updated: Language was successfully updated.
+    update:
+      policy_and_abuse_admin_error: Policy and abuse admin can only update the 'Abuse support available' field.
+      support_admin_error: Support Admin cannot update the 'Abuse support available' field.
   muted:
     users:
       create:
