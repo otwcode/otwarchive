@@ -59,7 +59,7 @@ describe LanguagesController do
   end
 
   describe "POST create" do
-    let(:language_params) { 
+    let(:language_params) do 
       {
         language: {
           name: "Suomi",
@@ -69,7 +69,7 @@ describe LanguagesController do
           sortable_name: "su"
         }
       }
-    }
+    end
 
     context "when not logged in" do
       it "redirects with error" do
@@ -154,7 +154,7 @@ describe LanguagesController do
 
   describe "PUT update" do
     let(:finnish) { Language.create(name: "Suomi", short: "fi", support_available: false, abuse_support_available: true) }
-    let(:language_params) { 
+    let(:language_params) do 
       {
         id: finnish.short,
         language: {
@@ -165,9 +165,9 @@ describe LanguagesController do
           sortable_name: "su"
         }
       }
-    }
+    end
 
-    let(:language_params_support) { 
+    let(:language_params_support) do 
       {
         id: finnish.short,
         language: {
@@ -178,9 +178,9 @@ describe LanguagesController do
           sortable_name: ""
         }
       }
-    }
+    end
 
-    let(:language_params_abuse) { 
+    let(:language_params_abuse) do 
       {
         id: finnish.short,
         language: {
@@ -191,7 +191,7 @@ describe LanguagesController do
           sortable_name: ""
         }
       }
-    }
+    end
     
     context "when not logged in" do
       it "redirects with error" do
@@ -280,7 +280,6 @@ describe LanguagesController do
       it "redirects with error" do
         it_redirects_to_with_error(languages_path, "Support Admin cannot update the 'Abuse support available' field.")
       end
-
     end 
 
     context "when logged in as an admin with support role and attempt to edit non-abuse fields" do
