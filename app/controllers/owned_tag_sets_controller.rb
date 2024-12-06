@@ -144,7 +144,17 @@ class OwnedTagSetsController < ApplicationController
 
   def create
     @tag_set = OwnedTagSet.new(owned_tag_set_params)
-    @tag_set.add_owner(current_user.default_pseud)
+
+    # Check if the current user already owns the tag set, and only add them if they don't.
+    #
+    # This happens when the user adds themselves explicitly as an owner.
+    # This check is done by direct Enumerable.find rather than ActiveRecord `find_by`
+    # as we cannot use `find_by` before the record is stored in the database with `.save`
+    current_user_ownership = @tag_set.tag_set_ownerships.find do |ownership|
+      ownership.owner == true && ownership.pseud_id == current_user.default_pseud.id
+    end
+    @tag_set.add_owner(current_user.default_pseud) unless current_user_ownership
+
     if @tag_set.save
       flash[:notice] = ts('Tag Set was successfully created.')
       redirect_to tag_set_path(@tag_set)
