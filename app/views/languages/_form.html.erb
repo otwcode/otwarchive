@@ -7,14 +7,14 @@
   <fieldset>
     <dl>
       <dt class="required">
-        <%= f.label :name, "#{t(".name")} *" %>
+        <%= f.label :name, "#{t('.name')} *" %>
       </dt>
       <dd class="required">
         <%= f.text_field :name, disabled: !policy(@language).can_edit_non_abuse_fields? %>
       </dd>
 
       <dt class="required">
-        <%= f.label :short, "#{t(".short")} *" %>
+        <%= f.label :short, "#{t('.short')} *" %>
       </dt>
       <dd class="required">
         <%= f.text_field :short, disabled: !policy(@language).can_edit_non_abuse_fields? %>
