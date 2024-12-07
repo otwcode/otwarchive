@@ -377,7 +377,7 @@ describe UserMailer do
     let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
     let!(:otheruser) { create(:user) }
     let!(:offer) { create(:challenge_signup, collection: collection, pseud: otheruser.default_pseud) }
-    let!(:open_assignment) { create(:challenge_assignment, collection: collection, offer_signup: offer) }
+    let!(:open_assignment) { create(:challenge_assignment, collection: collection, offer_signup: offer, sent_at: Time.current) }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
