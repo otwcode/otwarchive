@@ -14,7 +14,7 @@ class LanguagePolicy < ApplicationPolicy
     user_has_roles?(%w[superadmin translation policy_and_abuse])
   end
 
-  def can_edit_other_fields?
+  def can_edit_non_abuse_fields?
     user_has_roles?(%w[superadmin translation support])
   end
 

@@ -33,13 +33,13 @@ class LanguagesController < ApplicationController
     
     unless User.current_user.roles.compact.flatten.include?("superadmin") || User.current_user.roles.compact.flatten.include?("translation")
       
-      if User.current_user.roles.compact.flatten.include?("policy_and_abuse") && (@language.name != language_params[:name] || @language.short != language_params[:short] || @language.sortable_name != language_params[:sortable_name] || @language.support_available != (language_params[:support_available] == "1"))
+      if !policy(@language).can_edit_other_fields? && (@language.name != language_params[:name] || @language.short != language_params[:short] || @language.sortable_name != language_params[:sortable_name] || @language.support_available != (language_params[:support_available] == "1"))
         flash[:error] = t("languages.update.policy_and_abuse_admin_error")
         redirect_to languages_path
         return
       end
 
-      if User.current_user.roles.compact.flatten.include?("support") && (@language.abuse_support_available != (language_params[:abuse_support_available] == "1"))
+      if !policy(@language).can_edit_abuse_support_available? && (@language.abuse_support_available != (language_params[:abuse_support_available] == "1"))
         flash[:error] = t("languages.update.support_admin_error")
         redirect_to languages_path
         return
