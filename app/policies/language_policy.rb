@@ -10,7 +10,7 @@ class LanguagePolicy < ApplicationPolicy
     user_has_roles?(LANGUAGE_EDIT_ACCESS)
   end
 
-  def can_edit_abuse_support_available?
+  def can_edit_abuse_fields?
     user_has_roles?(%w[superadmin translation policy_and_abuse])
   end
 

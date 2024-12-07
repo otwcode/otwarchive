@@ -1391,16 +1391,15 @@ en:
         other: "%{count} more users"
   languages:
     form:
-      fieldset:
-        abuse_support_available: Abuse support available
-        name: Name
-        short: Abbreviation
-        sortable_name: Name for alphabetical sorting
-        support_available: Support available
+      abuse_support_available: Abuse support available
+      name: Name
       required_notice: Required information
+      short: Abbreviation
+      sortable_name: Name for alphabetical sorting
       submit:
         create: Create Language
         update: Update Language
+      support_available: Support available
     index:
       navigation:
         add: Add a Language

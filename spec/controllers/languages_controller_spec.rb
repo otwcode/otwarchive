@@ -153,15 +153,15 @@ describe LanguagesController do
   end
 
   describe "PUT update" do
-    let(:finnish) { Language.create(name: "Suomi", short: "fi", support_available: false, abuse_support_available: true) }
+    let(:finnish) { Language.create(name: "Suomi", short: "fi", support_available: "0", abuse_support_available: "1") }
     let(:language_params) do 
       {
         id: finnish.short,
         language: {
           name: "Suomi",
           short: "fi",
-          support_available: true,
-          abuse_support_available: false,
+          support_available: "1",
+          abuse_support_available: "0",
           sortable_name: "su"
         }
       }
@@ -173,8 +173,8 @@ describe LanguagesController do
         language: {
           name: "Suomi",
           short: "fi",
-          support_available: true,
-          abuse_support_available: true,
+          support_available: "1",
+          abuse_support_available: "1",
           sortable_name: ""
         }
       }
@@ -186,8 +186,8 @@ describe LanguagesController do
         language: {
           name: "Suomi",
           short: "fi",
-          support_available: false,
-          abuse_support_available: false,
+          support_available: "0",
+          abuse_support_available: "0",
           sortable_name: ""
         }
       }
@@ -246,7 +246,7 @@ describe LanguagesController do
         put :update, params: language_params
       end
       it "redirects with error" do
-        it_redirects_to_with_error(languages_path, "Policy and abuse admin can only update the 'Abuse support available' field.")
+        it_redirects_to_with_error(languages_path, "Sorry, only an authorized admin can update fields other than 'Abuse support available'.")
       end
     end 
 
@@ -278,7 +278,7 @@ describe LanguagesController do
         put :update, params: language_params
       end
       it "redirects with error" do
-        it_redirects_to_with_error(languages_path, "Support Admin cannot update the 'Abuse support available' field.")
+        it_redirects_to_with_error(languages_path, "Sorry, only an authorized admin can update the 'Abuse support available' field.")
       end
     end 
 
