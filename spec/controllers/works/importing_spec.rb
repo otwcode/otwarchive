@@ -18,6 +18,21 @@ describe WorksController do
         expect(flash[:error]).to eq "Did you want to enter a URL?"
       end
 
+      context "when url is from this archive" do
+        it "is a work url" do
+          work_id = "1234"
+          params = { urls: "http://archiveofourown.org/works/#{work_id}" }
+          get :import, params: params
+          expect(flash[:error]).to eq "We couldn't successfully import that work, sorry: URL is for a work on the Archive. Please <a href=\"/works/#{work_id}/bookmarks/new\">bookmark it directly</a> instead."
+        end
+
+        it "is a different url" do
+          params = { urls: "http://archiveofourown.org/tags/search" }
+          get :import, params: params
+          expect(flash[:error]).to eq "We couldn't successfully import that work, sorry: URL is for a work on the Archive. Please bookmark it directly instead."
+        end
+      end
+
       it "there is an external author name but importing_for_others is NOT turned on" do
         params = {
           urls: "url1, url2",
