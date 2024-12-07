@@ -2,51 +2,50 @@
 
 <%= form_for(@language, html: { class: "post" }) do |f| %>
 
-  <p class="required notice">* <%= t('.required_notice', default: "Required information") %></p>
+  <p class="required notice">* <%= t(".required_notice") %></p>
 
   <fieldset>
     <dl>
       <dt class="required">
-        <%= f.label :name, t('.name', default: "Name") + " *" %>
+        <%= f.label :name, "#{t('.name')} *" %>
       </dt>
       <dd class="required">
-        <%= f.text_field :name %>
+        <%= f.text_field :name, disabled: !policy(@language).can_edit_non_abuse_fields? %>
       </dd>
 
       <dt class="required">
-        <%= f.label :short, t('.short', default: "Abbreviation") + " *" %>
+        <%= f.label :short, "#{t('.short')} *" %>
       </dt>
       <dd class="required">
-        <%= f.text_field :short %>
+        <%= f.text_field :short, disabled: !policy(@language).can_edit_non_abuse_fields? %>
       </dd>
 
       <dt>
-        <%= f.label :sortable_name, t('.sortable_name', default: "Name for alphabetical sorting") %>
+        <%= f.label :sortable_name, t(".sortable_name") %>
       </dt>
       <dd>
-        <%= f.text_field :sortable_name %>
+        <%= f.text_field :sortable_name, disabled: !policy(@language).can_edit_non_abuse_fields? %>
       </dd>
 
       <dt>
-        <%= f.check_box :support_available %>
+        <%= f.check_box :support_available, disabled: !policy(@language).can_edit_non_abuse_fields? %>
       </dt>
       <dd>
-        <%= f.label :support_available, t('.support_available', default: "Support available") %>
+        <%= f.label :support_available, t(".support_available") %>
       </dd>
       <dt>
-        <%= f.check_box :abuse_support_available %>
+        <%= f.check_box :abuse_support_available, disabled: !policy(@language).can_edit_abuse_fields? %>
       </dt>
       <dd>
-        <%= f.label :abuse_support_available, t('.abuse_support_available', default: "Abuse support available") %>
+        <%= f.label :abuse_support_available, t(".abuse_support_available") %>
       </dd>
     </dl>
     <p class="submit actions">
       <% if @language.new_record? %>
-        <%= f.submit t('.create', default: "Create Language") %>
+        <%= f.submit t(".submit.create") %>
       <% else %>
-        <%= f.submit t('.update', default: "Update Language") %>
+        <%= f.submit t(".submit.update") %>
       <% end %>
     </p>
   </fieldset>
 <% end %>
-
