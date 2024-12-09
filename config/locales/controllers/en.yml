@@ -138,6 +138,9 @@ en:
   works:
     drafts:
       page_title: "%{username} - Drafts"
+    import:
+      bookmark_it: bookmark it directly
+      on_archive: 'We couldn''t successfully import that work, sorry: URL is for a work on the Archive. Please %{bookmark_it_link} instead.'
   wrangling_guidelines:
     create: Wrangling Guideline was successfully created.
     delete: Wrangling Guideline was successfully deleted.
