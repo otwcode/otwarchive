@@ -636,7 +636,7 @@ GEM
     zeitwerk (2.6.18)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   actionpack-page_caching
