@@ -22,20 +22,19 @@ class SeriesController < ApplicationController
     end
     @user = User.find_by!(login: params[:user_id])
     @page_subtitle = ts("%{username} - Series", username: @user.login)
-    pseuds = @user.pseuds
-    if params[:pseud_id]
-      @pseud = @user.pseuds.find_by!(name: params[:pseud_id])   
-      @page_subtitle = ts("by ") + @pseud.byline
-      pseuds = [@pseud]
-    end
 
-    if current_user.nil?
-      @series = Series.visible_to_all
+    @series = if current_user.nil?
+                Series.visible_to_all
+              else
+                Series.visible_to_registered_user
+              end
+
+    if params[:pseud_id]
+      @pseud = @user.pseuds.find_by!(name: params[:pseud_id])
+      @page_subtitle = ts("by ") + @pseud.byline
+      @series = @series.exclude_anonymous.for_pseud(@pseud)
     else
-      @series = Series.visible_to_registered_user
-    end
-    if pseuds.present?
-      @series = @series.exclude_anonymous.for_pseuds(pseuds)
+      @series = @series.exclude_anonymous.for_user(@user)
     end
     @series = @series.paginate(page: params[:page])
   end

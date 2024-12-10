@@ -13,6 +13,7 @@ FactoryBot.define do
     login { generate(:login) }
     password { "password" }
     age_over_13 { "1" }
+    data_processing { "1" }
     terms_of_service { "1" }
     password_confirmation(&:password)
     email { Faker::Internet.unique.email }
@@ -23,6 +24,11 @@ FactoryBot.define do
 
     trait :unconfirmed do
       confirmed_at { nil }
+    end
+
+    # User names used in mailer preview should be unique but recognizable as user names
+    trait :for_mailer_preview do
+      login { "User#{Faker::Alphanumeric.alpha(number: 8)}" }
     end
 
     # Roles

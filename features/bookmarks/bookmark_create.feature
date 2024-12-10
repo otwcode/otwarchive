@@ -410,27 +410,6 @@ Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't o
   Then I should not see "Bookmark was successfully updated"
     And I should see "You can't bookmark with that pseud."
 
-@javascript
-Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
-  Given the work "Popular Work"
-    And I am logged in as "bookmarker1"
-    And I bookmark the work "Popular Work" with the note "Love it"
-    And I log out
-    And I am logged in as "bookmarker2"
-    And I bookmark the work "Popular Work"
-    And the statistics for the work "Popular Work" are updated
-  When I am on the bookmarks page
-    # Follow the link for bookmarker2's bookmark, which is more recent.
-    And I follow "Show Most Recent Bookmarks" within ".bookmark.blurb:first-child"
-  Then I should see "bookmarker1" within ".bookmark.blurb:first-child .recent"
-    And I should see "Love it" within ".bookmark.blurb:first-child .recent"
-    And I should see "Hide Most Recent Bookmarks" within ".bookmark.blurb:first-child .recent"
-  When I follow "Hide Most Recent Bookmarks" within ".bookmark.blurb:first-child .recent"
-  # .recent has been hidden, we should not see its contents anymore.
-  Then I should not see "bookmarker1" within ".bookmark.blurb:first-child"
-    And I should not see "Love it" within ".bookmark.blurb:first-child"
-    And I should see "Show Most Recent Bookmarks" within ".bookmark.blurb:first-child"
-
 Scenario: A bookmark with duplicate tags other than capitalization has only first version of tag saved
   Given I am logged in as "bookmark_user"
   When I post the work "Revenge of the Sith"

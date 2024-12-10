@@ -418,7 +418,10 @@ class Pseud < ApplicationRecord
   alias_method :delete_icon?, :delete_icon
 
   def clear_icon
-    self.icon = nil if delete_icon? && !icon.dirty?
+    return unless delete_icon?
+    
+    self.icon = nil unless icon.dirty?
+    self.icon_alt_text = nil
   end
 
   #################################

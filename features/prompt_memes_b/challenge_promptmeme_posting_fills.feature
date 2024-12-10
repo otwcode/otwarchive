@@ -120,7 +120,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Fulfilled By"
     And I should see "Mystery Work"
 
-  Scenario: Fulfilled claims are shown to mod
+  # Scenario: Fulfilled claims are shown to mod
  # TODO: We need to figure out if we want to hide claims from mods in 100% anonymous prompt memes
 #  Given I have Battle 12 prompt meme fully set up
 #  Given everyone has signed up for Battle 12

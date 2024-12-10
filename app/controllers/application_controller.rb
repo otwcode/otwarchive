@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Pundit
+  include Pundit::Authorization
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
 
@@ -176,7 +176,7 @@ public
   before_action :load_tos_popup
   def load_tos_popup
     # Integers only, YYYY-MM-DD format of date Board approved TOS
-    @current_tos_version = 20180523
+    @current_tos_version = 2024_11_19 # rubocop:disable Style/NumericLiterals
   end
 
   # store previous page in session to make redirecting back possible
@@ -269,12 +269,16 @@ public
   def admin_only_access_denied
     respond_to do |format|
       format.html do
-        flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
+        flash[:error] = t("admin.access.page_access_denied") 
         redirect_to root_path
       end
       format.json do
-        errors = [ts("Sorry, only an authorized admin can do that.")]
+        errors = [t("admin.access.action_access_denied")]
         render json: { errors: errors }, status: :forbidden
+      end
+      format.js do
+        flash[:error] = t("admin.access.page_access_denied") 
+        render js: "window.location.href = '#{root_path}';" 
       end
     end
   end
@@ -389,11 +393,11 @@ public
   # Prevents banned and suspended users from adding/editing content
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
-      if current_user.suspended?
-        flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
-      else
-        flash[:error] = t("ban_notice", default: "Your account has been banned. You are not permitted to add or edit archive content. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.").html_safe
-      end
+      flash[:error] = if current_user.suspended?
+                        t("users.status.suspension_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path), suspended_until: localize(current_user.suspended_until))
+                      else
+                        t("users.status.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path))
+                      end
       redirect_to current_user
     end
   end
@@ -402,7 +406,7 @@ public
   def check_user_not_suspended
     return unless current_user.is_a?(User) && current_user.suspended?
     
-    flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+    flash[:error] = t("users.status.suspension_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path), suspended_until: localize(current_user.suspended_until))
     redirect_to current_user
   end
 

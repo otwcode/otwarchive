@@ -28,7 +28,7 @@
       <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
     <% end %>
 
-    <% if @work && !is_author_of?(@work) && !blocked_by?(@work) %>
+    <% if @work && !is_author_of?(@work) && !blocked_by?(@work) && !logged_in_as_admin? %>
       <li>
         <%= form_for(:kudo, url: kudos_path, html: { method: 'post', id: 'new_kudo' }) do |kudo_form| %>
           <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
@@ -112,6 +112,10 @@
   <% elsif commentable_parent.is_a?(Work) && blocked_by?(commentable_parent) %>
     <p class="notice">
       <%= t(".blocked") %>
+    </p>
+  <% elsif logged_in_as_admin? %>
+    <p class="notice">
+      <%= t(".logged_as_admin") %>
     </p>
   <% else %>
     <div id="add_comment_placeholder" title="top level comment">

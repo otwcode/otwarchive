@@ -23,11 +23,12 @@ jobs:
           bundler-cache: true
 
       - name: rubocop
-        uses: reviewdog/action-rubocop@2c8048e3169487eccc1eed812daaa6e5275a809f
+        uses: reviewdog/action-rubocop@cd8c2943f425b54f97095777109ae9f1f2d79a61
         with:
           use_bundler: true
           reporter: github-pr-check
           skip_install: true
+          fail_level: any
 
   erb-lint:
     name: ERB Lint runner
@@ -44,7 +45,8 @@ jobs:
           bundler-cache: true
 
       - name: erb-lint
-        uses: tk0miya/action-erblint@667687e73b44e7b7a710a1204b180f49f80ebb5e
+        uses: tk0miya/action-erblint@b6e537f4616e4fa7a9eef209ca34ca944e1440dd
         with:
           use_bundler: true
-          reporter: github-pr-check # default
+          reporter: github-pr-check
+          fail_on_error: true

@@ -17,18 +17,21 @@ Scenario: Add details
   When I fill in the details of my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
+    And I should see "I live in"
 
 Scenario: Change details
 
   When I change the details in my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
+    And I should see "I live in"
 
 Scenario: Remove details
 
   When I remove details from my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
+    And I should not see "I live in"
 
 Scenario: Change details as an admin
 
@@ -144,6 +147,17 @@ Scenario: Changing email address -- can't be the same as another user's
     And I should not see "Email addresses don't match!"
     And I should not see "foo@ao3.org"
     And I should see "bar@ao3.org"
+
+Scenario: Changing email address -- Translated email is sent when user enables locale settings
+    Given a locale with translated emails
+      And the user "editname" enables translated emails
+      And all emails have been delivered
+    When I am logged in as "editname"
+      And I want to edit my profile
+      And I change my email
+    Then the email address "bar@ao3.org" should be emailed
+      And the email should have "Email changed" in the subject
+      And the email to email address "bar@ao3.org" should be translated
 
 Scenario: Date of birth - under age
 

@@ -18,8 +18,8 @@
 
   <% if logged_in_as_admin? %>
     <fieldset role="article">
-      <legend><%= ts('Associations') %></legend>
-      <h3 class="landmark heading"><%= ts('Associations') %></h3>
+      <legend><%= t("works.associations.title") %></legend>
+      <h3 class="landmark heading"><%= t("works.associations.title") %></h3>
       <dl>
         <%= render 'work_form_associations_language', f: f %>
       </dl>
@@ -28,6 +28,11 @@
 
   <fieldset>
     <legend><%= ts('Post Work') %></legend>
+      <p class="notice">
+        <%= t(".post_notice_html",
+              content_policy_link: link_to(t(".content_policy"), content_path),
+              tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
+      </p>
     <ul class="actions">
       <% unless @work.posted? %>
         <li><%= submit_tag ts('Save As Draft'), name: 'save_button' %></li>

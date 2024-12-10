@@ -37,7 +37,7 @@
           <%= time_in_zone(single_comment.created_at) %>
         </span>
       </h4>
-      <% cache([single_comment, single_comment.comment_owner, "body"], expires_in: 1.week) do %>
+      <% cache([single_comment, single_comment.comment_owner, "body", image_safety_mode_cache_key(single_comment)], expires_in: 1.week) do %>
         <div class="icon">
           <% if !single_comment.pseud.nil? %>
             <% if single_comment.by_anonymous_creator? %>
@@ -56,7 +56,7 @@
           <p class="notice"><%= ts("This comment has been hidden by an admin.") %></p>
         <% end %>
         <blockquote class="userstuff">
-          <%= raw sanitize_field(single_comment, :comment_content, strip_images: single_comment.ultimate_parent.is_a?(AdminPost)) %>
+          <%= raw sanitize_field(single_comment, :comment_content, image_safety_mode: single_comment.use_image_safety_mode?) %>
         </blockquote>
       <% end %>
       <% if single_comment.edited_at.present? %>
