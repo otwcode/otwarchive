@@ -104,6 +104,12 @@ en:
   kudos:
     create:
       success: Thank you for leaving kudos!
+  languages:
+    successfully_added: Language was successfully added.
+    successfully_updated: Language was successfully updated.
+    update:
+      abuse_field_error: Sorry, only an authorized admin can update the 'Abuse support available' field.
+      non_abuse_field_error: Sorry, only an authorized admin can update fields other than 'Abuse support available'.
   muted:
     users:
       create:
