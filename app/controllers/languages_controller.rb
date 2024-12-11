@@ -34,6 +34,19 @@ class LanguagesController < ApplicationController
   def update
     @language = Language.find_by(short: params[:id])
     authorize @language
+      
+    if !policy(@language).can_edit_non_abuse_fields? && (@language.name != language_params[:name] || @language.short != language_params[:short] || @language.sortable_name != language_params[:sortable_name] || @language.support_available != (language_params[:support_available] == "1"))
+      flash[:error] = t("languages.update.non_abuse_field_error")
+      redirect_to languages_path
+      return
+    end
+
+    if !policy(@language).can_edit_abuse_fields? && (@language.abuse_support_available != (language_params[:abuse_support_available] == "1"))
+      flash[:error] = t("languages.update.abuse_field_error")
+      redirect_to languages_path
+      return
+    end
+
     if @language.update(language_params)
       flash[:notice] = t("languages.successfully_updated")
       redirect_to languages_path

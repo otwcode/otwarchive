@@ -96,6 +96,9 @@ scr:
       subject: "[%{app_name}] Добили сте похвале!"
   mailer:
     general:
+      closing:
+        formal: Srdačan pozdrav,
+        informal: Sve najbolje,
       creation:
         link_with_word_count: "%{creation_link} (%{word_count})"
         title_with_chapter_number: "%{title}: Поглавље %{position}"
@@ -104,7 +107,34 @@ scr:
           few: "%{count} reči"
           one: "%{count} reč"
           other: "%{count} reči"
+      footer:
+        general:
+          about:
+            html: AO3 je arhiva koju vode i podržavaju fanovi, a oslanja se na %{donate_link}.
+            text: 'AO3 je arhiva koju vode i podržavaju fanovi, a oslanja se na Vaše
+              donacije: %{donate_url}.'
+          html:
+            donate_link_text: Vaše donacije
+            support_link_text: kontaktirajte Korisničku podršku
+          unwanted_email:
+            html: Ako ste greškom primili ovu poruku, molimo Vas %{support_link}.
+            text: Ako ste greškom primili ovu poruku, molimo Vas kontaktirajte Korisničku
+              podršku na %{support_url}.
+        sent_at: Poslato u %{sent_at}.
+      greeting:
+        formal_html: Poštovani/a %{name},
+        informal:
+          addressed_html: Zdravo, %{name}!
+          unaddressed: Zdravo!
+        introductory: Pozdrav od Archive of Our Own – AO3-a (Naše sopstvene arhive)!
       metadata_label_indicator: ":"
+      signature:
+        abuse_team: Tim Politike i zloupotrebe AO3-a
+        app_short_name: AO3
+        open_doors: Tim Open Doors (Otvorenih vrata)
+        parent_org: Organization for Transformative Works – OTW (Organizacija za transformativne
+          radove)
+        support: Tim Korisničke podrške AO3-a
   users:
     mailer:
       reset_password_instructions:

@@ -600,7 +600,6 @@ en:
           label: Your question or problem (required)
         email:
           label: Your email (required)
-        ip: Our spam filter does collect IP addresses, but we never see them.
         language:
           label: Select language (required)
         legend:
@@ -1390,6 +1389,16 @@ en:
         one: "%{count} more user"
         other: "%{count} more users"
   languages:
+    form:
+      abuse_support_available: Abuse support available
+      name: Name
+      required_notice: Required information
+      short: Abbreviation
+      sortable_name: Name for alphabetical sorting
+      submit:
+        create: Create Language
+        update: Update Language
+      support_available: Support available
     index:
       navigation:
         add: Add a Language
