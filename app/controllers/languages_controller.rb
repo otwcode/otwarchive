@@ -25,6 +25,10 @@ class LanguagesController < ApplicationController
   def edit
     @language = Language.find_by(short: params[:id])
     authorize @language
+    return unless @language == Language.default
+
+    flash[:error] = t("languages.cannot_edit_default")
+    redirect_to languages_path
   end
 
   def update
