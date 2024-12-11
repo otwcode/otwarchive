@@ -41,7 +41,7 @@ Feature: Hit Counts
     Then I should see "Hits: 0"
 
   Scenario: Viewing a work hidden by an admin doesn't increment the hit count
-    Given the spam work "Hit Count Test"
+    Given the hidden work "Hit Count Test"
       And I am logged in as an admin
       And all hit count information is reset
     When I go to the work "Hit Count Test"
