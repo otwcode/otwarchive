@@ -19,6 +19,8 @@ class FeedbacksController < ApplicationController
     @feedback.rollout = @feedback.rollout_string
     @feedback.user_agent = request.env["HTTP_USER_AGENT"]
     @feedback.ip_address = request.remote_ip
+    @feedback.referer = request.referer if request.referer && ArchiveConfig.PERMITTED_HOSTS.include?(URI(request.referer).host)
+    @feedback.site_skin = helpers.current_skin
     if @feedback.save
       @feedback.email_and_send
       flash[:notice] = t("successfully_sent",
@@ -42,5 +44,4 @@ class FeedbacksController < ApplicationController
       :comment, :email, :summary, :username, :language
     )
   end
-
 end

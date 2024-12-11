@@ -670,19 +670,7 @@ pt-BR:
     show:
       login_banner:
         dismiss: Desabilitar banner de forma permanente
-        help_link: Aprenda algumas dicas sobre como usar o AO3
-        help_text: Para mais informações sobre como usar o site, %{link_faq}! Se precisar
-          de ajuda técnica, %{link_support}. Se passar por algum incidente de assédio
-          ou se tiver perguntas específicas sobre nossos %{link_tos}, %{link_abuse}.
-        help_title: Banner de ajuda após o primeiro login
         hide: Desabilitar banner de ajuda para quem efetua login pela primeira vez
-        link_abuse: entre em contato com a nossa equipe de Diretrizes e Abuso
-        link_faq: dê uma olhada na nossa página de FAQ
-        link_support: entre em contato conosco pelo nosso formulário de Suporte e
-          Feedback
-        link_tos: Termos de Serviço
-        welcome_text: Oi! Parece que você efetuou login no AO3 pela primeira vez.
-          %{help_link} ou desabilite permanentemente essa mensagem de boas-vindas.
   user_mailer:
     admin_deleted_work_notification:
       bye: Uma cópia da obra removida encontra-se em anexo.

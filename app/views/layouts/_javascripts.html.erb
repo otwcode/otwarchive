@@ -52,52 +52,43 @@
   <%= yield :tinymce_init %>
 <% end %>
 
-<% unless Rails.env.test? ||
-    current_user && current_user.try(:accepted_tos_version) == @current_tos_version ||
-    params[:controller] == "home" && params[:action] == "tos" ||
-    params[:controller] == "home" && params[:action] == "tos_faq" ||
-    params[:controller] == "home" && params[:action] == "dmca" ||
-    params[:controller] == "abuse_reports" && params[:action] == "new" ||
-    params[:controller] == "feedbacks" && params[:action] == "new" %>
+<% unless Rails.env.test? || current_user.try(:accepted_tos_version) == @current_tos_version || tos_exempt_page? %>
   <%= javascript_tag do %>
-    <% # localStorage support check we only need for guests. %>
-    <% unless current_user %>
-      // We can't rely on !window.localStorage to test localStorage support in
-      // browsers like Safari 9, which technically support it, but which have a
-      // storage length of 0 in private mode.
-      // Credit: https://github.com/getgrav/grav-plugin-admin/commit/cfe2188f10c4ca604e03c96f3e21537fda1cdf9a
-      function isSupported() {
-          var item = "localStoragePolyfill";
-          try {
-              localStorage.setItem(item, item);
-              localStorage.removeItem(item);
-              return true;
-          } catch (e) {
-              return false;
-          }
-      }
-
-      function acceptTOS() {
-        if (isSupported()) {
-          localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
-        } else {
-          Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 365 });
+    // We can't rely on !window.localStorage to test localStorage support in
+    // browsers like Safari 9, which technically support it, but which have a
+    // storage length of 0 in private mode.
+    // Credit: https://github.com/getgrav/grav-plugin-admin/commit/cfe2188f10c4ca604e03c96f3e21537fda1cdf9a
+    function isSupported() {
+        var item = "localStoragePolyfill";
+        try {
+            localStorage.setItem(item, item);
+            localStorage.removeItem(item);
+            return true;
+        } catch (e) {
+            return false;
         }
+    }
+
+    function acceptTOS() {
+      if (isSupported()) {
+        localStorage.setItem("accepted_tos", "<%= @current_tos_version %>");
+      } else {
+        Cookies.set("accepted_tos", "<%= @current_tos_version %>", { expires: 365 });
       }
-    <% end %>
+    }
 
     $j(document).ready(function() {
       <% if current_user %>
-        <% # Users who haven't accepted this TOS need the popup. %>
+        <%# Users who haven't accepted this TOS need the popup. %>
         $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
       <% elsif params[:tos] == "yes" %>
-        <% # Guests can bypass the popup using ?tos=yes in the URLs. %>
+        <%# Guests can bypass the popup using ?tos=yes in the URLs. %>
         acceptTOS();
       <% else %>
-        <% # Otherwise, guests who don't have the localStorage item or the
-           # cookie need the popup.
-           # We have to use JavaScript to remember their choice or risk issues
-           # when full page caching is enabled. %>
+        <%# Otherwise, guests who don't have the localStorage item or the
+            cookie need the popup.
+            We have to use JavaScript to remember their choice or risk issues
+            when full page caching is enabled. %>
         if (localStorage.getItem("accepted_tos") !== "<%= @current_tos_version %>" && Cookies.get("accepted_tos") !== "<%= @current_tos_version %>") {
           $j("body").prepend("<%= escape_javascript(render "layouts/tos_prompt") %>");
         }

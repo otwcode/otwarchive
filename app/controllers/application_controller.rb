@@ -176,7 +176,7 @@ public
   before_action :load_tos_popup
   def load_tos_popup
     # Integers only, YYYY-MM-DD format of date Board approved TOS
-    @current_tos_version = 20180523
+    @current_tos_version = 2024_11_19 # rubocop:disable Style/NumericLiterals
   end
 
   # store previous page in session to make redirecting back possible
@@ -269,12 +269,16 @@ public
   def admin_only_access_denied
     respond_to do |format|
       format.html do
-        flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
+        flash[:error] = t("admin.access.page_access_denied") 
         redirect_to root_path
       end
       format.json do
-        errors = [ts("Sorry, only an authorized admin can do that.")]
+        errors = [t("admin.access.action_access_denied")]
         render json: { errors: errors }, status: :forbidden
+      end
+      format.js do
+        flash[:error] = t("admin.access.page_access_denied") 
+        render js: "window.location.href = '#{root_path}';" 
       end
     end
   end
@@ -389,11 +393,20 @@ public
   # Prevents banned and suspended users from adding/editing content
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
-      flash[:error] = if current_user.suspended?
-                        t("users.status.suspension_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path), suspended_until: localize(current_user.suspended_until))
-                      else
-                        t("users.status.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path))
-                      end
+      if current_user.suspended?
+        suspension_end = current_user.suspended_until
+
+        # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+        unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
+
+        # If the stated suspension end date is after the unban threshold we need to advance a day 
+        suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
+        localized_suspension_end = view_context.date_in_zone(suspension_end)
+        flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+        
+      else
+        flash[:error] = t("users.status.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+      end
       redirect_to current_user
     end
   end
@@ -401,8 +414,18 @@ public
   # Prevents temporarily suspended users from deleting content
   def check_user_not_suspended
     return unless current_user.is_a?(User) && current_user.suspended?
+
+    suspension_end = current_user.suspended_until
+
+    # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+    unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
+
+    # If the stated suspension end date is after the unban threshold we need to advance a day 
+    suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
+    localized_suspension_end = view_context.date_in_zone(suspension_end)
     
-    flash[:error] = t("users.status.suspension_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path), suspended_until: localize(current_user.suspended_until))
+    flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+
     redirect_to current_user
   end
 
