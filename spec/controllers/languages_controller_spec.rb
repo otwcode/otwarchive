@@ -153,7 +153,7 @@ describe LanguagesController do
         it "redirects for the default language" do
           fake_login_admin(admin)
           get :edit, params: { id: "en" }
-          it_redirects_to_with_error(languages_path, "Sorry, you can’t edit the default language.")
+          it_redirects_to_with_error(languages_path, "Sorry, you can't edit the default language.")
         end
       end
     end
