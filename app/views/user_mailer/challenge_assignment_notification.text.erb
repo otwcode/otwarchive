@@ -22,17 +22,37 @@
 
 <%= index + 1 %>. <%= prompt.title %>
 
-<% if fandoms %><%= t("activerecord.models.fandom", count: prompt.any_fandom ? 1 : tag_groups["Fandom"].count) + t("mailer.general.metadata_label_indicator") %> <%= fandoms %><% end %><% if chars %>
-<%= t("activerecord.models.character", count: prompt.any_character ? 1 : tag_groups["Character"].count) + t("mailer.general.metadata_label_indicator") %> <%= chars %><% end %><% if ships %>
-<%= t("activerecord.models.relationship", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count) + t("mailer.general.metadata_label_indicator") %> <%= ships %><% end %><% if ratings %>
-<%= t("activerecord.models.rating", count: 1) + t("mailer.general.metadata_label_indicator") %> <%= ratings %><% end %><% if warnings %>
-<%= t("activerecord.models.archive_warning", count: prompt.any_archive_warning ? 1 : tag_groups["ArchiveWarning"].count) + t("mailer.general.metadata_label_indicator") %> <%= warnings %><% end %><% if categories %>
-<%= t("activerecord.models.category", count: prompt.any_category ? 1 : tag_groups["Category"].count) + t("mailer.general.metadata_label_indicator") %> <%= categories %><% end %><% if atags %>
-<%= t("activerecord.models.freeform", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count) + t("mailer.general.metadata_label_indicator") %> <%= atags %><% end %><% if otags %>
-<%= t(".optional_tags") %> <%= otags %><% end %><% if prompt.url && !prompt.url.blank? %>
-<%= t(".prompt_url") %> <%= prompt.url %><% end %><% if prompt.description && !prompt.description.blank? %>
+<% if fandoms %>
+<%= t("activerecord.models.fandom", count: prompt.any_fandom ? 1 : tag_groups["Fandom"].count) + t("mailer.general.metadata_label_indicator") %><%= fandoms %>
+<% end %>
+<% if chars %>
+<%= t("activerecord.models.character", count: prompt.any_character ? 1 : tag_groups["Character"].count) + t("mailer.general.metadata_label_indicator") %><%= chars %>
+<% end %>
+<% if ships %>
+<%= t("activerecord.models.relationship", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count) + t("mailer.general.metadata_label_indicator") %><%= ships %>
+<% end %>
+<% if ratings %>
+<%= t("activerecord.models.rating", count: 1) + t("mailer.general.metadata_label_indicator") %><%= ratings %>
+<% end %>
+<% if warnings %>
+<%= t("activerecord.models.archive_warning", count: prompt.any_archive_warning ? 1 : tag_groups["ArchiveWarning"].count) + t("mailer.general.metadata_label_indicator") %><%= warnings %>
+<% end %>
+<% if categories %>
+<%= t("activerecord.models.category", count: prompt.any_category ? 1 : tag_groups["Category"].count) + t("mailer.general.metadata_label_indicator") %><%= categories %>
+<% end %>
+<% if atags %>
+<%= t("activerecord.models.freeform", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count) + t("mailer.general.metadata_label_indicator") %><%= atags %>
+<% end %>
+<% if otags %>
+<%= t(".optional_tags") %> <%= otags %>
+<% end %>
+<% if prompt.url && !prompt.url.blank? %>
+<%= t(".prompt_url") %> <%= prompt.url %>
+<% end %>
+<% if prompt.description && !prompt.description.blank? %>
 <%= t(".description") %>
-    <%= to_plain_text(prompt.description) %><% end %>
+    <%= to_plain_text(prompt.description) %>
+<% end %>
 
 <% end %><%= text_divider %>
 
@@ -43,5 +63,9 @@
 
 
 <%= @collection.assignment_notification %><% end %><% end %>
-<% content_for :footer_note do %><%= t(".footer.text", title: @collection.title, url: collection_url(@collection), challenge_profile_url: collection_profile_url(@collection)) %><% end %>
-<% content_for :sent_at do %><%= l(@assignment.sent_at) %><% end %>
+<% content_for :footer_note do %>
+<%= t(".footer.text", title: @collection.title, url: collection_url(@collection), challenge_profile_url: collection_profile_url(@collection)) -%>
+<% end %>
+<% content_for :sent_at do %>
+<%= l(@assignment.sent_at) -%>
+<% end %>
