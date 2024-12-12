@@ -3,10 +3,12 @@
 <!--/descriptions-->
 
 <!--Subnavigation, sorting and actions-->
-<ul class="navigation actions">
-  <% path = @commentable.is_a?(AdminPost) ? review_all_admin_post_comments_path(@commentable) : review_all_work_comments_path(@commentable) %>
-  <li><%= button_to(t(".approve_all"), path, method: :put) %></li>
-</ul>
+<% if can_review_all_comments?(@commentable) %>
+  <ul class="navigation actions">
+    <% path = @commentable.is_a?(AdminPost) ? review_all_admin_post_comments_path(@commentable) : review_all_work_comments_path(@commentable) %>
+    <li><%= button_to(t(".approve_all"), path, method: :put) %></li>
+  </ul>
+<% end %>
 <!--/subnav-->
 
 <!--main content-->

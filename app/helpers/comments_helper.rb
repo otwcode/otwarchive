@@ -210,6 +210,10 @@ module CommentsHelper
     is_author_of?(comment.ultimate_parent) || policy(comment).can_review_comment?
   end
 
+  def can_review_all_comments?(commentable)
+    commentable.is_a?(AdminPost) || is_author_of?(commentable)
+  end
+
   #### HELPERS FOR REPLYING TO COMMENTS #####
 
   # return link to add new reply to a comment
