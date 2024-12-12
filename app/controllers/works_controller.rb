@@ -486,7 +486,7 @@ class WorksController < ApplicationController
                           else
                             t(".on_archive", bookmark_it_link: t(".bookmark_it"))
                           end
-      render(:new_import) and return
+      render(:new_import) and return # rubocop:disable Lint/NonLocalExitFromIterator
     end
 
     @language_id = params[:language_id]
