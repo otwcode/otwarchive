@@ -31,7 +31,7 @@ class LanguagesController < ApplicationController
     @language = Language.find_by(short: params[:id])
     authorize @language
       
-    if (!policy(@language).can_edit_non_abuse_fields? && (language_params[:name].present? && language_params[:name] != @language.name)) || (language_params[:short].present? && @language.short != language_params[:short]) || (language_params[:sortable_name].present? && @language.sortable_name != language_params[:sortable_name]) || (language_params[:support_available].present? && @language.support_available != (language_params[:support_available] == "1"))
+    if !policy(@language).can_edit_non_abuse_fields? && ((language_params[:name].present? && language_params[:name] != @language.name) || (language_params[:short].present? && @language.short != language_params[:short]) || (language_params[:sortable_name].present? && @language.sortable_name != language_params[:sortable_name]) || (language_params[:support_available].present? && @language.support_available != (language_params[:support_available] == "1")))
       flash[:error] = t("languages.update.non_abuse_field_error")
       redirect_to languages_path
       return
