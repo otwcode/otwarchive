@@ -257,5 +257,7 @@ en:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.
         required: must exist and not be spam.
+  story_parser:
+    on_archive: URL is for a work on the Archive. Please bookmark it directly instead.
   subscriptions:
     deleted: Deleted item

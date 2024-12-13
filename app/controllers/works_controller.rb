@@ -476,19 +476,6 @@ class WorksController < ApplicationController
       render(:new_import) && return
     end
 
-    @urls.each do |url|
-      uri = UrlFormatter.new(url).standardized
-      next unless ArchiveConfig.PERMITTED_HOSTS.include?(uri.host)
-
-      work_id = uri.path[%r{/works/(\d+)}, 1]
-      flash.now[:error] = if work_id
-                            t(".on_archive", bookmark_it_link: view_context.link_to(t(".bookmark_it"), new_work_bookmark_path(work_id)))
-                          else
-                            t(".on_archive", bookmark_it_link: t(".bookmark_it"))
-                          end
-      render(:new_import) and return # rubocop:disable Lint/NonLocalExitFromIterator
-    end
-
     @language_id = params[:language_id]
     if @language_id.empty?
       flash.now[:error] = ts("Language cannot be blank.")
