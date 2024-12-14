@@ -22,7 +22,7 @@ class SupportReporter < FeedbackReporter
       "cf_rollout" => rollout.presence || "Unknown",
       "cf_user_agent" => user_agent.presence || "Unknown user agent",
       "cf_ip" => ip_address.presence || "Unknown IP",
-      "cf_referer" => truncated_referer,
+      "cf_url" => truncated_referer,
       "cf_site_skin" => site_skin&.public ? site_skin.title : "Custom skin"
     }
   end
