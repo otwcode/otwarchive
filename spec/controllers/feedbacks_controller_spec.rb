@@ -93,7 +93,7 @@ describe FeedbacksController do
         it "sets the referer in the Zoho ticket" do
           expect(mock_zoho).to receive(:create_ticket).with(ticket_attributes: include(
             "cf" => include(
-              "cf_referer" => "https://archiveofourown.org/works/1",
+              "cf_url" => "https://archiveofourown.org/works/1",
               "cf_ip" => "0.0.0.0"
             )
           ))
@@ -109,7 +109,7 @@ describe FeedbacksController do
         it "does not set the referer in the Zoho ticket" do
           expect(mock_zoho).to receive(:create_ticket).with(ticket_attributes: include(
             "cf" => include(
-              "cf_referer" => "Unknown URL",
+              "cf_url" => "Unknown URL",
               "cf_ip" => "0.0.0.0"
             )
           ))
