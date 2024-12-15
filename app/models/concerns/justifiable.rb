@@ -9,8 +9,7 @@ module Justifiable
     validates :ticket_number,
               presence: true,
               numericality: { only_integer: true,
-                              message: "may begin with an # and otherwise contain only numbers."
-              },
+                              message: "may begin with an # and otherwise contain only numbers." },
               if: :enabled?
 
     validate :ticket_number_exists_in_tracker, if: :enabled?

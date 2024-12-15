@@ -268,8 +268,7 @@ Scenario: Change details as an admin
   When I fill in "Ticket ID" with "#4798454#331"
     And I press "Update"
   Then I should see "may begin with an # and otherwise contain only numbers"
-    And the field labeled "Ticket ID" should contain "4798454#331`
-s"
+    And the field labeled "Ticket ID" should contain "4798454#331"
   When I fill in "Ticket ID" with "47"
    And I press "Update"
   Then I should see "Pseud was successfully updated."
