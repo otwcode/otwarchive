@@ -3,8 +3,9 @@ class FeedbacksController < ApplicationController
   before_action :load_support_languages
 
   def new
-    @feedback = Feedback.new
     @admin_setting = AdminSetting.current
+    @feedback = Feedback.new
+    @feedback.referer = request.referer
     if logged_in_as_admin?
       @feedback.email = current_admin.email
     elsif is_registered_user?
@@ -19,7 +20,7 @@ class FeedbacksController < ApplicationController
     @feedback.rollout = @feedback.rollout_string
     @feedback.user_agent = request.env["HTTP_USER_AGENT"]
     @feedback.ip_address = request.remote_ip
-    @feedback.referer = request.referer if request.referer && ArchiveConfig.PERMITTED_HOSTS.include?(URI(request.referer).host)
+    @feedback.referer = nil unless @feedback.referer && ArchiveConfig.PERMITTED_HOSTS.include?(URI(@feedback.referer).host)
     @feedback.site_skin = helpers.current_skin
     if @feedback.save
       @feedback.email_and_send
@@ -41,7 +42,7 @@ class FeedbacksController < ApplicationController
 
   def feedback_params
     params.require(:feedback).permit(
-      :comment, :email, :summary, :username, :language
+      :comment, :email, :summary, :username, :language, :referer
     )
   end
 end
