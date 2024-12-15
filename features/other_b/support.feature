@@ -74,7 +74,7 @@ Feature: Filing a support request
     And I press "Send"
   Then a Zoho ticket should be created with referer "http://www.example.com/works"
 
-  Scenario: Submit a request with an on-Archive referer
+  Scenario: Submit a request with a referer that is not on-Archive
 
   Given I am logged in as "puzzled"
     And basic languages
@@ -82,6 +82,6 @@ Feature: Filing a support request
   When I go to the works page
     And I follow "Support & Feedback"
     And I fill in "Brief summary" with "Just a brief note"
-    And I fill in "Your question or problem" with "Hi, I came from the Archive"
+    And I fill in "Your question or problem" with "Hi, I didn't come from the Archive"
     And I press "Send"
   Then a Zoho ticket should be created with referer "Unknown URL"
