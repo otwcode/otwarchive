@@ -196,6 +196,50 @@ describe User do
   describe "#update" do
     let!(:existing_user) { create(:user) }
 
+    context "when logged in as an admin" do
+      before do
+        User.current_user = build(:admin)
+      end
+
+      context "when username is changed" do
+        before do
+          allow(existing_user).to receive(:justification_enabled?).and_return(false)
+          allow(existing_user).to receive(:ticket_number).and_return(12_345)
+        end
+
+        it "requires the default format" do
+          existing_user.update(login: "custom_username")
+          expect(existing_user.errors[:login].first).to eq "must use the default, please contact your chairs to use something else."
+        end
+
+        it "does not set renamed_at" do
+          existing_user.update!(login: "user#{existing_user.id}")
+          expect(existing_user.renamed_at).to be nil
+        end
+
+        it "creates an admin log item" do
+          old_login = existing_user.login
+          existing_user.update!(login: "user#{existing_user.id}")
+          log_item = existing_user.reload.log_items.last
+          admin = User.current_user
+          expect(log_item.action).to eq(ArchiveConfig.ACTION_RENAME)
+          expect(log_item.admin_id).to eq(admin.id)
+          expect(log_item.note).to eq("Old Username: #{old_login}, New Username: #{existing_user.login}, Changed by: #{admin.login}, Ticket ID: #12345")
+        end
+      end
+
+      context "username was recently changed" do
+        before do
+          existing_user.update!(renamed_at: Time.current)
+        end
+
+        it "does not prevent changing the username" do
+          allow(existing_user).to receive(:justification_enabled?).and_return(false)
+          existing_user.update!(login: "user#{existing_user.id}")
+        end
+      end
+    end
+
     it "sets renamed_at if username is changed" do
       freeze_time
       existing_user.update!(login: "new_username")

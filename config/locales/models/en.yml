@@ -180,6 +180,7 @@ en:
               accepted: Sorry, you need to consent to the processing of your personal data in order to sign up.
               format: "%{message}"
             login:
+              admin_must_use_default: must use the default, please contact your chairs to use something else.
               changed_too_recently:
                 one: can only be changed once per day. You last changed your user name on %{renamed_at}.
                 other: can only be changed once every %{count} days. You last changed your user name on %{renamed_at}.

@@ -180,6 +180,7 @@ en:
           invitations:
             add: Add Invitations
             manage: Manage Invitations
+          rename: Rename
           roles: Manage Roles
           troubleshoot: Troubleshoot
         note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
@@ -1697,6 +1698,13 @@ en:
         description: Recalculate the filters for this work based on the current set of tags. Use this option if wrangling seems to have gone wrong. (e.g. If you synned one of this work's tags to a canonical but it's not showing up in the tag listings, or if the wrong tags are listed in the sidebar when you drill down to a search that includes only this work.)
         title: Update Work Filters
   users:
+    admin_change_username:
+      description: Change the name of this user to a generic name in the format user + their account ID.
+      navigation:
+        manage_user: Manage User
+      new_username_footnote: This username cannot be edited. If you need to change it to a different name, contact your chair.
+      page_heading: Change Username
+      ticket_id: Ticket ID
     change_email:
       browser_title: Change Email
     change_password:
@@ -1705,12 +1713,22 @@ en:
       account_faq: Account FAQ
       browser_title: Change Username
       caution: Please use this feature with caution.
+      change_user_name: Change User Name
       change_window:
         one: You can change your user name once per day.
         other: You can change your user name once every %{count} days.
+      confirm: Are you sure you want to change your user name?
       contact_support: contact Support
+      create_a_new_pseud: create a new Pseud
+      current_user_name: Current user name
       last_renamed: You last changed your user name on %{renamed_at}.
-      more_info: For information on how changing your user name will affect your account, please check out the %{account_faq_link}. Note that changes to your user name may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
+      more_info_html: For information on how changing your user name will affect your account, please check out the %{account_faq_link}. Note that changes to your user name may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
+      new_pseud_instead_html: If that is not what you want, you can %{create_a_new_pseud_link} instead.
+      new_user_name: New user name
+      page_heading: Change My User Name
+      password: Password
+      submit_landmark: Submit
+      username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
     confirmation:
       contact_support: contact Support
       go_back: Return to Archive front page
