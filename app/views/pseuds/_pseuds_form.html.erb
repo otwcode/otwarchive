@@ -62,8 +62,6 @@
     <dt><%= f.label :ticket_number, class: "required" %></dt>
     <dd>
       <%= f.text_field :ticket_number, class: "required" %>
-      <%= live_validation_for_field("pseud_ticket_number", numericality: true) %>
-      <p class="footnote"><%= t(".ticket_footnote") %></p>
     </dd>
   <% end %>
 

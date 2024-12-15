@@ -5,15 +5,22 @@ module Justifiable
     attr_accessor :ticket_number
     attr_reader :ticket_url
 
+    before_validation :strip_octothorpe
     validates :ticket_number,
               presence: true,
-              numericality: { only_integer: true },
+              numericality: { only_integer: true,
+                              message: "may begin with an # and otherwise contain only numbers."
+              },
               if: :enabled?
 
     validate :ticket_number_exists_in_tracker, if: :enabled?
   end
 
   private
+
+  def strip_octothorpe
+    self.ticket_number = self.ticket_number.delete_prefix("#") unless self.ticket_number.nil?
+  end
 
   def enabled?
     # Only require a ticket if the record has been changed by an admin.
