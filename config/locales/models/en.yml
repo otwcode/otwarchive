@@ -94,7 +94,6 @@ en:
     errors:
       messages:
         forbidden: "%{value} is not allowed"
-        numeric_with_optional_hash: 'may begin with an # and otherwise contain only numbers.'
       models:
         abuse_report:
           attributes:
@@ -224,6 +223,8 @@ en:
       freeform:
         one: Additional Tag
         other: Additional Tags
+      justifiable:
+        numeric_with_optional_hash: 'may begin with an # and otherwise contain only numbers.'
       pseud: Pseud
       rating:
         one: Rating

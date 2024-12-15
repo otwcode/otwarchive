@@ -1743,7 +1743,6 @@ en:
       submit: Save
     edit:
       about_me: About Me
-      admin:
       browser_title: Edit Profile
       change_profile_landmark: Change Profile
       date_of_birth: Date of Birth
