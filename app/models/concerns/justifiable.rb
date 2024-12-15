@@ -19,6 +19,7 @@ module Justifiable
 
   def strip_octothorpe
     return if ticket_number.is_a?(Integer)
+
     self.ticket_number = self.ticket_number.delete_prefix("#") unless self.ticket_number.nil?
   end
 
