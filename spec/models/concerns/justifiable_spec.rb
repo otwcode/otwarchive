@@ -129,3 +129,12 @@ describe Pseud do
     let(:attributes) { { description: "Edited by admin." } }
   end
 end
+
+describe User do
+  context "when login is changed" do
+    it_behaves_like "a justifiable model" do
+      let!(:record) { create(:user) }
+      let(:attributes) { { login: "user#{record.id}" } }
+    end
+  end
+end
