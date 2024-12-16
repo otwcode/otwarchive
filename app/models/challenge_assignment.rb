@@ -271,7 +271,11 @@ class ChallengeAssignment < ApplicationRecord
                       (self.pinch_hitter ? self.pinch_hitter.user : nil)
                     end
       request = self.request_signup || self.pinch_request_signup
-      UserMailer.challenge_assignment_notification(collection.id, assigned_to.id, self.id).deliver_later if assigned_to && request
+      if assigned_to && request
+        I18n.with_locale(assigned_to.preference.locale.iso) do
+          UserMailer.challenge_assignment_notification(collection.id, assigned_to.id, self.id).deliver_later
+        end
+      end
     end
   end
 
