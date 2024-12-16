@@ -120,7 +120,8 @@ Feature: Public skins
     And I follow "Preview"
   Then I should be on the works tagged "Major Crimes"
     And I should see "You are previewing the skin Usable Skin. This is a randomly chosen page."
-    And I should see "Go back or click any link to remove the skin"
-    And I should see "Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above."
-  When I follow "Return To Skin To Use"
+    And I should see "Go back or follow any link to remove the skin"
+    And I should see "Tip: You can preview any archive page you want by adding '?site_skin="
+    And I should see "' to the end of the URL."
+  When I follow "Return to Skin to Use"
   Then I should be on "Usable Skin" skin page
