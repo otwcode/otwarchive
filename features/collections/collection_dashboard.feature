@@ -62,3 +62,20 @@ Feature: Collection
   Then I should see "Dashboard Light"
     And I should see "Recent bookmarks"
     And I should see "Bookmarks (6)" within "#collection-bookmarks"
+
+  Scenario: Given that I am on a collection's homepage the "Random Items" button should work  
+  
+  Given I have a collection "Dashboard Light" with name "dashboard_light"
+    And I am logged in as "user"
+  When I post the work "Work 1" in the collection "Dashboard Light"
+    And I post the work "Work 2" in the collection "Dashboard Light"
+    And I post the work "Work 3" in the collection "Dashboard Light"
+    And I post the work "Work 4" in the collection "Dashboard Light"
+    And I post the work "Work 5" in the collection "Dashboard Light"
+    And I post the work "Work 6" in the collection "Dashboard Light"
+  When I go to "Dashboard Light" collection's page
+  Then I should see "Random Items" 
+
+  When I go to "Dashboard Light" collection's page
+    And I follow "Random Items"
+  Then I should see "Random works"
