@@ -209,7 +209,7 @@ describe User do
 
         it "requires the default format" do
           existing_user.update(login: "custom_username")
-          expect(existing_user.errors[:login].first).to eq "must use the default, please contact your chairs to use something else."
+          expect(existing_user.errors[:login].first).to eq "must use the default. Please contact your chairs to use something else."
         end
 
         it "does not set renamed_at" do
