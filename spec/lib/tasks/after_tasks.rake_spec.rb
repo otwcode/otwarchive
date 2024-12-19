@@ -532,7 +532,7 @@ describe "rake After:migrate_pinch_request_signup" do
     end
   end
 
-  context "for an assignment without a request_signup_id and a pinch_request_signup_id" do
+  context "for an assignment with a pinch_request_signup_id but no request_signup_id" do
     let(:collection) { create(:collection) }
     let(:signup) { create(:challenge_signup, collection: collection) }
     let(:assignment) do
