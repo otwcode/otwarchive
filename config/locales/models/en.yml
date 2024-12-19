@@ -75,7 +75,7 @@ en:
       skin/skin_parents:
         parent_skin: Parent skin
       user:
-        login: User name
+        login: Username
       work:
         chapter_total_display: Chapters
         summary: Summary

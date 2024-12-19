@@ -126,10 +126,10 @@ en:
   users:
     changed_username:
       admin:
-        successfully_updated: User name has been successfully updated.
+        successfully_updated: Username has been successfully updated.
       user:
         incorrect_password: Your password was incorrect
-        successfully_updated: Your user name has been successfully updated.
+        successfully_updated: Your username has been successfully updated.
     contact_abuse: contact Policy & Abuse
     passwords:
       create:

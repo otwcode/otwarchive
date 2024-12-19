@@ -1544,10 +1544,57 @@ en:
       orphaning_works_message_html: 'Orphaning will <strong>permanently</strong> remove your username and/or pseud from the bylines of: the following work(s), their chapters, associated series, and any comments you may have left on them while logged into this account.'
   preferences:
     index:
-      allow_collection_invitation: Allow others to invite my works to collections.
-      blocked_users: Blocked Users
-      guest_replies_off: Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately).
-      muted_users: Muted Users
+      browser_page_title_format: Browser page title format
+      collections_challenges_gifts:
+        allow_collection_invitation: Allow others to invite my works to collections.
+        allow_gifts: Allow anyone to gift me works.
+        heading: Collections, Challenges and Gifts
+        legend: Collections, Challenges and Gifts
+        turn_off_collection_emails: Turn off emails from collections.
+        turn_off_collection_inbox: Turn off inbox messages from collections.
+        turn_off_gift_emails: Turn off emails about gift works.
+      comments:
+        heading: Comments
+        legend: Comments
+        turn_off_copies_own_comments: Turn off copies of your own comments.
+        turn_off_emails: Turn off emails about comments.
+        turn_off_inbox: Turn off messages to your inbox about comments.
+        turn_off_kudos_emails: Turn off emails about kudos.
+      display:
+        guest_replies_off: Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately).
+        heading: Display
+        hide_additional_tags: Hide additional tags (you can still choose to show them).
+        hide_warnings: Hide warnings (you can still choose to show them).
+        hide_work_skins: Hide work skins (you can still choose to show them).
+        legend: Display
+        show_adult_content: Show me adult content without checking.
+        show_whole_work_default: Show the whole work by default.
+      misc:
+        heading: Misc
+        legend: Misc
+        turn_off_banner_every_page: Turn off the banner showing on every page.
+        turn_on_history: Turn on History.
+        turn_on_new_user_help: Turn the new user help banner back on.
+      navigation:
+        blocked_users: Blocked Users
+        change_my_username: Change My User Name
+        edit_my_profile: Edit My Profile
+        manage_my_pseuds: Manage My Pseuds
+        muted_users: Muted Users
+        orphan_my_works: Orphan My Works
+      page_heading: Set My Preferences
+      privacy:
+        allow_co_creator_invite: Allow others to invite me to be a co-creator.
+        heading: Privacy
+        hide_share_buttons: Hide the share buttons on my work.
+        hide_work_from_search_engines: Hide my work from search engines when possible.
+        legend: Privacy
+        show_date_of_birth: Show my date of birth to other people.
+        show_email_address: Show my email address to other people.
+      public_site_skins: Public Site Skins
+      your_locale: Your locale
+      your_site_skin: Your site skin
+      your_time_zone: Your time zone
   profile:
     pseud_list:
       more_pseuds:
@@ -1579,8 +1626,8 @@ en:
       orphan_landmark_text: " by %{pseud}"
       user_actions: User Actions
     pseuds_form:
-      change_matching_pseud_html: You cannot change the pseud that matches your user name. However, you can %{change_username_link} instead.
-      change_username: change your user name
+      cannot_change_matching_pseud_html: You cannot change the pseud that matches your username. However, you can %{change_username_link} instead.
+      change_username: change your username
       description: Description
       icon: Icon
       icon_alt: Icon alt text
@@ -1713,19 +1760,19 @@ en:
       account_faq: Account FAQ
       browser_title: Change Username
       caution: Please use this feature with caution.
-      change_user_name: Change User Name
+      change_username: Change Username
       change_window:
-        one: You can change your user name once per day.
-        other: You can change your user name once every %{count} days.
-      confirm: Are you sure you want to change your user name?
+        one: You can change your username once per day.
+        other: You can change your username once every %{count} days.
+      confirm: Are you sure you want to change your username?
       contact_support: contact Support
       create_a_new_pseud: create a new Pseud
-      current_user_name: Current user name
-      last_renamed: You last changed your user name on %{renamed_at}.
-      more_info_html: For information on how changing your user name will affect your account, please check out the %{account_faq_link}. Note that changes to your user name may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
+      current_username: Current username
+      last_renamed: You last changed your username on %{renamed_at}.
+      more_info_html: For information on how changing your username will affect your account, please check out the %{account_faq_link}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old username on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
       new_pseud_instead_html: If that is not what you want, you can %{create_a_new_pseud_link} instead.
-      new_user_name: New user name
-      page_heading: Change My User Name
+      new_username: New username
+      page_heading: Change My Username
       password: Password
       submit_landmark: Submit
       username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
@@ -1774,6 +1821,18 @@ en:
       public_information_notice_html: Any personal information you post on your public AO3 profile, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites, will be accessible by the general public. To learn more about what data AO3 collects when you're on the site and how we use it, check out our %{privacy_policy_link}.
       title: Title
       update: Update
+    edit_header_navigation:
+      change_email: Change Email
+      change_password: Change Password
+      change_username: Change Username
+      edit_default_pseud_and_icon: Edit Default Pseud and Icon
+      edit_profile: Edit Profile
+    edit_user_navigation:
+      change_email: Change Email
+      change_password: Change Password
+      change_username: Change Username
+      edit_default_pseud_and_icon: Edit Default Pseud and Icon
+      edit_my_profile: Edit My Profile
     header_navigation:
       admin_user: User Administration
       edit_multiple: Edit Works
