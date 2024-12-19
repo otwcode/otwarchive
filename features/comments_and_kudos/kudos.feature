@@ -208,9 +208,9 @@ Feature: Kudos
       And I press "Kudos ♥"
     Then I should see "oldusername1 left kudos on this work!"
     When I visit the change username page for oldusername1
-      And I fill in "New user name" with "newusername1"
+      And I fill in "New username" with "newusername1"
       And I fill in "Password" with "password"
-      And I press "Change User Name"
+      And I press "Change Username"
     Then I should get confirmation that I changed my username
       And I should see "Hi, newusername1"
     When the kudos cache has expired
