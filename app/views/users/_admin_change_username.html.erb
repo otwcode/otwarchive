@@ -8,9 +8,9 @@
 
 <%= form_tag changed_username_user_path(@user) do %>
   <dl>
-    <dt><%= t("users.change_username.current_user_name") %></dt>
+    <dt><%= t("users.change_username.current_username") %></dt>
     <dd><p class="important informational"><%= @user.login %></p></dd>
-    <dt><%= label_tag :new_login, t("users.change_username.new_user_name") %></dt>
+    <dt><%= label_tag :new_login, t("users.change_username.new_username") %></dt>
     <dd>
       <%= text_field_tag :new_login, "user#{@user.id}", readonly: true, autocomplete: "off" %>
       <p class="footnote" id="new-login-field-description">
@@ -21,7 +21,7 @@
     <dd><%= text_field_tag :ticket_id, nil, autocomplete: "disabled" %></dd>
     <dt class="landmark"><%= t("users.change_username.submit_landmark") %></dt>
     <dd class="submit actions">
-      <%= submit_tag t("users.change_username.change_user_name") %>
+      <%= submit_tag t("users.change_username.change_username") %>
     </dd>
   </dl>
 <% end %>

@@ -1554,6 +1554,7 @@ en:
         turn_off_collection_inbox: Turn off inbox messages from collections.
         turn_off_gift_emails: Turn off emails about gift works.
       comments:
+        guest_replies_off: Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately).
         heading: Comments
         legend: Comments
         turn_off_copies_own_comments: Turn off copies of your own comments.
@@ -1561,7 +1562,6 @@ en:
         turn_off_inbox: Turn off messages to your inbox about comments.
         turn_off_kudos_emails: Turn off emails about kudos.
       display:
-        guest_replies_off: Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately).
         heading: Display
         hide_additional_tags: Hide additional tags (you can still choose to show them).
         hide_warnings: Hide warnings (you can still choose to show them).
