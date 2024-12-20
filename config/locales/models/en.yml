@@ -94,6 +94,7 @@ en:
     errors:
       messages:
         forbidden: "%{value} is not allowed"
+        numeric_with_optional_hash: 'may begin with an # and otherwise contain only numbers.'
       models:
         abuse_report:
           attributes:
