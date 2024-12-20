@@ -8,6 +8,7 @@ module Justifiable
     before_validation :strip_octothorpe
     validates :ticket_number,
               presence: true,
+              # i18n-tasks-use t("activerecord.errors.messages.numeric_with_optional_hash")
               numericality: { only_integer: true,
                               message: :numeric_with_optional_hash },
               if: :enabled?
