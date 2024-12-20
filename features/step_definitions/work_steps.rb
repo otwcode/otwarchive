@@ -256,22 +256,22 @@ Given /^I am logged in as the author of "([^"]*)"$/ do |work|
   step %{I am logged in as "#{work.users.first.login}"}
 end
 
-Given /^the spam work "([^\"]*)"$/ do |work|
+Given "the spam work {string}" do |work|
   step %{I have a work "#{work}"}
   step %{I log out}
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   w.update_attribute(:spam, true)
 end
 
-Given /^the hidden work "([^\"]*)"$/ do |work|
+Given "the hidden work {string}" do |work|
   step %{I have a work "#{work}"}
   step %{I log out}
-  w = Work.find_by_title(work)
+  w = Work.find_by(title: work)
   w.update_attribute(:hidden_by_admin, true)
 end
 
-Given /^the work "([^\"]*)" is marked as spam$/ do |work|
-  w = Work.find_by_title(work)
+Given "the work {string} is marked as spam" do |work|
+  w = Work.find_by(title: work)
   w.update_attribute(:spam, true)
 end
 

@@ -75,7 +75,7 @@ class Work < ApplicationRecord
   attr_accessor :new_gifts
   attr_accessor :preview_mode
 
-  # Internal virtual attribute for whether if the hidden-for-spam email has been sent, so the normal work-hidden email should not be sent
+  # Virtual attribute for whether the hidden-for-spam email has been sent, so the normal work-hidden email should not be sent
   attr_accessor :notified_of_hiding_for_spam
 
   # return title.html_safe to overcome escaping done by sanitiser

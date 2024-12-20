@@ -25,7 +25,7 @@ Scenario: Review spam when spam works are already hidden
     And I should not see "Totally Legit"
     And the work "Spammity Spam" should be hidden
     And the work "Totally Legit" should not be hidden
-    And 0 email should be delivered
+    And 0 emails should be delivered
 
 
 Scenario: Review spam when spam works are not already hidden
