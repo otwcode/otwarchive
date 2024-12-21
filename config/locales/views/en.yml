@@ -1358,7 +1358,18 @@ en:
         what_you_cant_do: What you can't do
   invitations:
     invitation:
+      copy_and_use: copy and use
+      copy_link: Copy link
+      created_at: Created at
+      deleted_user: deleted user (%{user_id})
       email_address_label: Enter an email address
+      invitation_token: Invitation token
+      queue: queue
+      redeemed_at: Redeemed at
+      redeemed_by: Redeemed by
+      sender: Sender
+      sent_at: Sent at
+      sent_to: Sent to
   invite_requests:
     index_open:
       add_to_list: Add me to the list
