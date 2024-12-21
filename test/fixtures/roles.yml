@@ -48,3 +48,17 @@ role_00008:
   authorizable_type:
   id: 8
   authorizable_id:
+role_00009:
+  name: protected_user
+  created_at: 2024-12-20 21:45:02 Z
+  updated_at: 2024-12-20 21:45:02 Z
+  authorizable_type:
+  id: 9
+  authorizable_id:
+role_00010:
+  name: no_resets
+  created_at: 2024-12-20 21:45:02 Z
+  updated_at: 2024-12-20 21:45:02 Z
+  authorizable_type:
+  id: 10
+  authorizable_id:
