@@ -1,10 +1,11 @@
-# encoding: UTF-8
-require 'spec_helper'
+require "spec_helper"
 
 describe Tag do
   after(:each) do
     User.current_user = nil
   end
+
+  it { is_expected.not_to allow_values("", "a" * 151).for(:name) }
 
   context "checking count caching" do
     before(:each) do
@@ -66,7 +67,7 @@ describe Tag do
       end
 
       it "Writes to the database do not happen immediately" do
-        (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
+        (1..(40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR) - 1).each do |try|
           @fandom_tag.taggings_count = try
           @fandom_tag.reload
           expect(@fandom_tag.taggings_count_cache).to eq 0
@@ -159,13 +160,6 @@ describe Tag do
 
     tag.name = "something or other"
     expect(tag.save).to be_truthy
-  end
-
-  it "should not be valid if too long" do
-    tag = Tag.new
-    tag.name = "a" * 101
-    expect(tag.save).not_to be_truthy
-    expect(tag.errors[:name].join).to match(/too long/)
   end
 
   context "tags using restricted characters should not be saved" do
