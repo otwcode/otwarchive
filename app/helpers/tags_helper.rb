@@ -99,7 +99,7 @@ module TagsHelper
 
   # Should the current user be able to access tag wrangling pages?
   def can_wrangle?
-    logged_in_as_admin? || (current_user.is_a?(User) && current_user.is_tag_wrangler?)
+    policy(:wrangling).read_access? || (current_user.is_a?(User) && current_user.is_tag_wrangler?)
   end
 
   # Determines whether or not to display warnings for a creation
