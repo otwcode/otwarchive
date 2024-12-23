@@ -60,22 +60,22 @@ class TagsController < ApplicationController
     @page_subtitle = @tag.name
     if @tag.is_a?(Banned) 
       if !logged_in_as_admin?
-        flash[:error] = ts('Please log in as admin')
+        flash[:error] = t("admin.access.not_admin_denied")
         redirect_to(tag_wranglings_path) && return
       elsif !policy(:wrangling).read_access?
-        flash[:error] = ts('Sorry, only an authorized admin can access the page you were trying to reach.')
+        flash[:error] = t("admin.access.page_access_denied")
         redirect_to(root_path) && return
       end
     end
     # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
-      if logged_in? # current_user.is_a?User
-        @works = @tag.works.visible_to_registered_user.paginate(page: params[:page])
-      elsif logged_in_as_admin?
-        @works = @tag.works.visible_to_admin.paginate(page: params[:page])
-      else
-        @works = @tag.works.visible_to_all.paginate(page: params[:page])
-      end
+      @works = if logged_in? # current_user.is_a?User
+                 @tag.works.visible_to_registered_user.paginate(page: params[:page])
+               elsif logged_in_as_admin?
+                 @tag.works.visible_to_admin.paginate(page: params[:page])
+               else
+                 @tag.works.visible_to_all.paginate(page: params[:page])
+               end
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
     end
     # cache the children, since it's a possibly massive query

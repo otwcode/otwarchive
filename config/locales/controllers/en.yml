@@ -3,6 +3,7 @@ en:
   admin:
     access:
       action_access_denied: Sorry, only an authorized admin can do that.
+      not_admin_denied: Please log in as admin
       page_access_denied: Sorry, only an authorized admin can access the page you were trying to reach.
     admin_invitations:
       find:
