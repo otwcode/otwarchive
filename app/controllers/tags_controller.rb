@@ -60,11 +60,11 @@ class TagsController < ApplicationController
     @page_subtitle = @tag.name
     if @tag.is_a?(Banned) 
       if !logged_in_as_admin?
-      flash[:error] = ts('Please log in as admin')
-      redirect_to(tag_wranglings_path) && return
+        flash[:error] = ts('Please log in as admin')
+        redirect_to(tag_wranglings_path) && return
       elsif !policy(:wrangling).read_access?
-      flash[:error] = ts('Sorry, only an authorized admin can access the page you were trying to reach.')
-      redirect_to(root_path) && return
+        flash[:error] = ts('Sorry, only an authorized admin can access the page you were trying to reach.')
+        redirect_to(root_path) && return
       end
     end
     # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
