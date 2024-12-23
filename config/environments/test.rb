@@ -53,7 +53,7 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   # Configure strong parameters to raise an exception if an unpermitted attribute is used
-  config.action_controller.action_on_unpermitted_parameters = false
+  config.action_controller.action_on_unpermitted_parameters = :raise
 
   # Make sure that we don't have a host mismatch:
   config.action_controller.default_url_options = { host: "http://www.example.com", port: nil }

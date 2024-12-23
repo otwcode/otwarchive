@@ -238,12 +238,13 @@ describe LanguagesController do
       let(:admin) { create(:admin, roles: ["policy_and_abuse"]) }
       before do
         fake_login_admin(admin)
-        put :update, params: language_params
       end
-      it "doesn't save changes to non-abuse field" do
+      it "throws error and doesn't save changes to non-abuse field" do
+        expect do 
+          put :update, params: language_params
+        end.to raise_exception(ActionController::UnpermittedParameters)
         finnish.reload
         expect(finnish.support_available).to eq(false)
-        expect(finnish.abuse_support_available).to eq(false)
       end
     end 
 
@@ -272,11 +273,12 @@ describe LanguagesController do
       let(:admin) { create(:admin, roles: ["support"]) }
       before do
         fake_login_admin(admin)
-        put :update, params: language_params
       end
-      it "doesn't save changes to abuse_support_available field" do
+      it "throws error and doesn't save changes to abuse_support_available field" do
+        expect do 
+          put :update, params: language_params
+        end.to raise_exception(ActionController::UnpermittedParameters)
         finnish.reload
-        expect(finnish.support_available).to eq(true)
         expect(finnish.abuse_support_available).to eq(true)
       end
     end 
