@@ -288,10 +288,35 @@ describe TagsController do
   end
 
   describe "show" do   
+    context "displays the tag information page" do
+      let(:tag) { create(:tag) }
+      
+      subject { get :show, params: { id: tag.name } }
+      let(:success) do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "for guests" do
+        subject
+        success
+      end
+
+      it "for users" do
+        fake_login
+        subject
+        success
+      end
+      
+      it "for admins" do
+        fake_login_admin(create(:admin))
+        subject
+        success
+      end
+    end
     context "when showing a banned tag" do
       let(:tag) { create(:banned) } 
 
-      subject { get :edit, params: { id: tag.name } }
+      subject { get :show, params: { id: tag.name } }
       let(:success) do
         expect(response).to have_http_status(:success)
       end
