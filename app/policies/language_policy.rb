@@ -12,10 +12,10 @@ class LanguagePolicy < ApplicationPolicy
 
   # Define which roles can update which attributes
   ALLOWED_ATTRIBUTES_BY_ROLES = {
-    "superadmin" => [:name, :short, :support_available, :abuse_support_available, :sortable_name],
-    "translation" => [:name, :short, :support_available, :abuse_support_available, :sortable_name],
-    "support" => [:name, :short, :support_available, :sortable_name],
-    "policy_and_abuse" => [:abuse_support_available]
+    "superadmin" => %i[name short support_available abuse_support_available sortable_name],
+    "translation" => %i[name short support_available abuse_support_available sortable_name],
+    "support" => %i[name short support_available sortable_name],
+    "policy_and_abuse" => %i[abuse_support_available]
   }.freeze
 
   def permitted_attributes
