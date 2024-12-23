@@ -174,7 +174,6 @@ describe LanguagesController do
           name: "Suomi",
           short: "fi",
           support_available: "1",
-          abuse_support_available: "1",
           sortable_name: ""
         }
       }
@@ -184,11 +183,7 @@ describe LanguagesController do
       {
         id: finnish.short,
         language: {
-          name: "Suomi",
-          short: "fi",
-          support_available: "0",
-          abuse_support_available: "0",
-          sortable_name: ""
+          abuse_support_available: "0"
         }
       }
     end
@@ -245,8 +240,10 @@ describe LanguagesController do
         fake_login_admin(admin)
         put :update, params: language_params
       end
-      it "redirects with error" do
-        it_redirects_to_with_error(languages_path, "Sorry, only an authorized admin can update fields other than 'Abuse support available'.")
+      it "doesn't save changes to non-abuse field" do
+        finnish.reload
+        expect(finnish.support_available).to eq(false)
+        expect(finnish.abuse_support_available).to eq(false)
       end
     end 
 
@@ -277,8 +274,10 @@ describe LanguagesController do
         fake_login_admin(admin)
         put :update, params: language_params
       end
-      it "redirects with error" do
-        it_redirects_to_with_error(languages_path, "Sorry, only an authorized admin can update the 'Abuse support available' field.")
+      it "doesn't save changes to abuse_support_available field" do
+        finnish.reload
+        expect(finnish.support_available).to eq(true)
+        expect(finnish.abuse_support_available).to eq(true)
       end
     end 
 
