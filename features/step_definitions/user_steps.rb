@@ -136,7 +136,7 @@ Given /^I start a new session$/ do
   page.driver.reset!
 end
 
-Given "the user name {string} is on the forbidden list" do |username|
+Given "the username {string} is on the forbidden list" do |username|
   allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([username])
 end
 
@@ -314,14 +314,14 @@ end
 
 When /^I change my username to "([^"]*)"/ do |new_name|
   visit change_username_user_path(User.current_user)
-  fill_in("New user name", with: new_name)
+  fill_in("New username", with: new_name)
   fill_in("Password", with: "password")
-  click_button("Change User Name")
+  click_button("Change Username")
   step %{I should get confirmation that I changed my username}
 end
 
 Then /^I should get confirmation that I changed my username$/ do
-  step(%{I should see "Your user name has been successfully updated."})
+  step(%{I should see "Your username has been successfully updated."})
 end
 
 Then /^the user "([^"]*)" should be activated$/ do |login|
