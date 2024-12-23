@@ -20,7 +20,6 @@ describe InvitationsHelper do
 
     context "when the invitee is a deleted user" do
       let(:user) { create(:user) }
-      let!(:user_id) { user.id }
 
       before do
         invitation.update!(invitee: user)
@@ -29,7 +28,20 @@ describe InvitationsHelper do
       end
 
       it "returns a placeholder with the user ID" do
-        expect(helper.invitee_link(invitation)).to eq("deleted user (#{user_id})")
+        expect(helper.invitee_link(invitation)).to eq("deleted user")
+      end
+
+      context "when logged in as an admin" do
+        let(:admin) { build(:admin) }
+        let!(:user_id) { user.id }
+
+        before do
+          User.current_user = admin
+        end
+
+        it "returns a placeholder with the user ID" do
+          expect(helper.invitee_link(invitation)).to eq("deleted user (#{user_id})")
+        end
       end
     end
   end
