@@ -42,7 +42,7 @@ Scenario: Change details as an admin
     And I fill in "About Me" with "is it merely thy habit, to talk to dolls?"
     And I fill in "Ticket ID" with "fine"
     And I press "Update"
-  Then I should see "Ticket ID is not a number"
+  Then I should see "may begin with an # and otherwise contain only numbers."
     And the field labeled "Ticket ID" should contain "fine"
   When I fill in "Ticket ID" with "480000"
     And I press "Update"

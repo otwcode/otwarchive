@@ -5,15 +5,24 @@ module Justifiable
     attr_accessor :ticket_number
     attr_reader :ticket_url
 
+    before_validation :strip_octothorpe
     validates :ticket_number,
               presence: true,
-              numericality: { only_integer: true },
+              # i18n-tasks-use t("activerecord.errors.messages.numeric_with_optional_hash")
+              numericality: { only_integer: true,
+                              message: :numeric_with_optional_hash },
               if: :enabled?
 
     validate :ticket_number_exists_in_tracker, if: :enabled?
   end
 
   private
+
+  def strip_octothorpe
+    return if ticket_number.is_a?(Integer)
+
+    self.ticket_number = self.ticket_number.delete_prefix("#") unless self.ticket_number.nil?
+  end
 
   def enabled?
     # Only require a ticket if the record has been changed by an admin.
