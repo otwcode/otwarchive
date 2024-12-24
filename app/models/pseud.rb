@@ -81,8 +81,11 @@ class Pseud < ApplicationRecord
   validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
 
+  after_create :reindex_user
   after_update :check_default_pseud
   after_update :expire_caches
+  after_update :reindex_user, if: :name_changed?
+  after_destroy :reindex_user
   after_commit :reindex_creations, :touch_comments
 
   scope :alphabetical, -> { order(:name) }
@@ -419,7 +422,7 @@ class Pseud < ApplicationRecord
 
   def clear_icon
     return unless delete_icon?
-    
+
     self.icon = nil unless icon.dirty?
     self.icon_alt_text = nil
   end
@@ -448,5 +451,9 @@ class Pseud < ApplicationRecord
     IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
     IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
     IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
+  end
+
+  def reindex_user
+    user.enqueue_to_index
   end
 end
