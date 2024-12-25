@@ -1,0 +1,34 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".page_heading") %></h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<p class="navigation actions" role="navigation">
+  <% if policy(LocaleLanguage).new? %>
+    <%= link_to t(".navigation.add"), new_locale_language_path %>
+  <% else %>
+    <%= link_to t(".navigation.suggest"), new_feedback_report_path %>
+  <% end %>
+</p>
+<!--/subnav-->
+
+<!--main content-->
+<dl class="language index group">
+  <% @locale_languages.each do |locale_language| %>
+    <% if locale_language == LocaleLanguage.default %>
+      <dt><span lang="<%= locale_language.short %>"><%= locale_language.name %></span></dt>
+      <dd>
+      </dd>
+    <% else %>
+      <dt><%= link_to locale_language.name, locale_language, lang: locale_language.short %></dt>
+      <dd>
+        <% if policy(LocaleLanguage).edit? %>
+          <p class="actions">
+            <%= link_to t(".navigation.edit"), edit_locale_language_path(locale_language) %>
+          </p>
+        <% end %>
+      </dd>
+    <% end %>
+  <% end %>
+</dl>
+<!--main content-->

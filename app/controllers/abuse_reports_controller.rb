@@ -27,12 +27,12 @@ class AbuseReportsController < ApplicationController
   private
 
   def load_abuse_languages
-    @abuse_languages = Language.where(abuse_support_available: true).default_order
+    @abuse_languages = LocaleLanguage.where(abuse_support_available: true).default_order
   end
 
   def abuse_report_params
     params.require(:abuse_report).permit(
-      :username, :email, :language, :summary, :url, :comment
+      :username, :email, :locale_language, :summary, :url, :comment
     )
   end
 end
