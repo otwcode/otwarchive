@@ -196,7 +196,7 @@ describe LocaleLanguagesController do
       {
         id: finnish.short,
         locale_language: {
-          support_available: "1",
+          support_available: "1"
         }
       }
     end
