@@ -1388,23 +1388,6 @@ en:
       more_link:
         one: "%{count} more user"
         other: "%{count} more users"
-  locale_languages:
-    form:
-      abuse_support_available: Abuse support available
-      name: Name
-      required_notice: Required information
-      short: Abbreviation
-      sortable_name: Name for alphabetical sorting
-      submit:
-        create: Create Locale Language
-        update: Update Locale Language
-      support_available: Support available
-    index:
-      navigation:
-        add: Add a Locale Language
-        edit: Edit
-        suggest: Suggest a Locale Language
-      page_heading: Locale Languages
   languages:
     form:
       abuse_support_available: Abuse support available
@@ -1480,6 +1463,27 @@ en:
       read_and_understood: I have read & understood the 2024 Terms of Service, including the Content Policy and Privacy Policy.
       summary_html: On the Archive of Our Own (AO3), users can create works, bookmarks, comments, tags, and other %{content_link}. Any information you publish on AO3 may be accessible by the public, AO3 users, and/or AO3 personnel. Be mindful when sharing personal information, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites.
       tos: Terms of Service
+  locale_languages:
+    edit:
+      heading: Edit Locale Language
+    form:
+      abuse_support_available: Abuse support available
+      name: Name
+      required_notice: Required information
+      short: Abbreviation
+      sortable_name: Name for alphabetical sorting
+      submit:
+        create: Create Locale Language
+        update: Update Locale Language
+      support_available: Support available
+    index:
+      navigation:
+        add: Add a Locale Language
+        edit: Edit
+        suggest: Suggest a Locale Language
+      page_heading: Locale Languages
+    new:
+      heading: New Locale Language
   menu:
     menu_about:
       about_us: About Us
