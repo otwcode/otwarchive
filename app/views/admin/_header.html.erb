@@ -67,16 +67,18 @@
     <% if policy(:wrangling).full_access? %>
       <li><%= link_to t(".nav.wrangling"), tag_wranglings_path %></li>
     <% end %>
-    <% if policy(Locale).index? || policy(LocaleLanguage).index? || policy(Language).index? %>
-      <li class="dropdown">
-        <%= link_to t(".nav.locales_and_languages.menu"), locales_path %>
-        <ul class="menu">
-          <li><%= link_to t(".nav.locales_and_languages.locales"), locales_path %></li>
-          <li><%= link_to t(".nav.locales_and_languages.locale_languages"), locale_languages_path %></li>
-          <li><%= link_to t(".nav.locales_and_languages.work_languages"), languages_path %></li>
-        </ul>
-      </li>
+    <% if policy(Locale).index? %>
+      <li><%= link_to t(".nav.locales"), locales_path %></li>
     <% end %>
+    <li class="dropdown">
+      <%= link_to t(".nav.languages.languages"), languages_path %>
+      <ul class="menu">
+        <li><%= link_to t(".nav.languages.work_languages"), languages_path %></li>
+        <% if policy(LocaleLanguage).index? %>
+          <li><%= link_to t(".nav.languages.locale_languages"), locale_languages_path %></li>
+        <% end %>
+      </ul>
+    </li>
 
     <% if policy(AdminActivity).index? %>
       <li><%= link_to t(".nav.activities"), admin_activities_path %></li>

@@ -275,11 +275,11 @@ en:
           queue: Manage Queue
           requests: Manage Requests
         label: Admin
-        locales_and_languages:
+        languages:
+          languages: Languages
           locale_languages: Locale Languages
-          locales: Locales
-          menu: Locales and Languages
           work_languages: Work Languages
+        locales: Locales
         posts:
           admin_posts: Admin Posts
           faqs: Archive FAQ
