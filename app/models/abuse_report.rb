@@ -1,7 +1,6 @@
 class AbuseReport < ApplicationRecord
-  attr_accessor :locale_language
   validates :email, email_format: { allow_blank: false }
-  validates_presence_of :locale_language
+  validates_presence_of :language
   validates_presence_of :summary
   validates_presence_of :comment
   validates_presence_of :url
@@ -111,7 +110,7 @@ class AbuseReport < ApplicationRecord
     reporter = AbuseReporter.new(
       title: summary,
       description: comment,
-      locale_language: locale_language,
+      language: language,
       email: email,
       username: username,
       ip_address: ip_address,
