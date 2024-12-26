@@ -69,7 +69,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/listbox
   position: static;
 }
 
-/* magic number alert: line-height (1.286) plus vertical padding (0.15em * 2) of the actions */
+/* line-height (1.286) plus vertical padding (0.15em * 2) of the actions within the heading */
 .tagset .listbox > .heading:has(.actions), .tagset .listbox > .heading:has(~ .actions)  {
   line-height: 1.586;
 }
