@@ -32,4 +32,5 @@ class LocaleLanguagePolicy < ApplicationPolicy
 
   alias create? new?
   alias update? edit?
+  alias index? edit?
 end

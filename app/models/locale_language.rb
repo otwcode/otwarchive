@@ -1,5 +1,4 @@
 class LocaleLanguage < ApplicationRecord
-  include WorksOwner
   validates :short, presence: true
   validates :short, uniqueness: true
   validates :name, presence: true

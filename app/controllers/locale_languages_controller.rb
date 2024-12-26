@@ -1,5 +1,6 @@
 class LocaleLanguagesController < ApplicationController
   def index
+    authorize LocaleLanguage
     @locale_languages = LocaleLanguage.default_order
   end
 
@@ -12,7 +13,7 @@ class LocaleLanguagesController < ApplicationController
     @locale_language = LocaleLanguage.new(language_params)
     authorize @locale_language
     if @locale_language.save
-      flash[:notice] = t("languages.successfully_added")
+      flash[:notice] = t("locale_languages.successfully_added")
       redirect_to locale_languages_path
     else
       render action: "new"
@@ -29,7 +30,7 @@ class LocaleLanguagesController < ApplicationController
     authorize @locale_language
 
     if @locale_language.update(permitted_attributes(@locale_language))
-      flash[:notice] = t("languages.successfully_updated")
+      flash[:notice] = t("locale_languages.successfully_updated")
       redirect_to locale_languages_path
     else
       render action: "new"

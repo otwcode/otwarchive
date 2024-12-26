@@ -107,6 +107,9 @@ en:
   languages:
     successfully_added: Language was successfully added.
     successfully_updated: Language was successfully updated.
+  locale_languages:
+    successfully_added: Locale language was successfully added.
+    successfully_updated: Locale language was successfully updated.
   muted:
     users:
       create:
