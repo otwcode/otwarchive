@@ -69,7 +69,7 @@ class Rack::Attack
     req.ip if req.path == "/users/login" && req.post?
   end
 
-  # Throttle POST requests to /users/login by login param (user name or email)
+  # Throttle POST requests to /users/login by login param (username or email)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/email:#{login}"
   #

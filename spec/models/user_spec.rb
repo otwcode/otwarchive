@@ -257,7 +257,7 @@ describe User do
           .to raise_error(ActiveRecord::RecordInvalid)
         localized_renamed_at = I18n.l(existing_user.renamed_at, format: :long)
         expect(existing_user.errors[:login].first).to eq(
-          "can only be changed once every 7 days. You last changed your user name on #{localized_renamed_at}."
+          "can only be changed once every 7 days. You last changed your username on #{localized_renamed_at}."
         )
       end
 

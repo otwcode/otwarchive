@@ -182,8 +182,8 @@ en:
             login:
               admin_must_use_default: must use the default. Please contact your chairs to use something else.
               changed_too_recently:
-                one: can only be changed once per day. You last changed your user name on %{renamed_at}.
-                other: can only be changed once every %{count} days. You last changed your user name on %{renamed_at}.
+                one: can only be changed once per day. You last changed your username on %{renamed_at}.
+                other: can only be changed once every %{count} days. You last changed your username on %{renamed_at}.
               invalid: must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).
             password_confirmation:
               confirmation: doesn't match new password.

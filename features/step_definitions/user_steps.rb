@@ -99,7 +99,7 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, passwor
   step %{I am on the homepage}
   find_link('login-dropdown').click
 
-  fill_in "User name or email:", with: login
+  fill_in "Username or email:", with: login
   fill_in "Password:", with: password
   check "Remember Me"
   click_button "Log In"
@@ -243,14 +243,14 @@ end
 When "I request a password reset for {string}" do |login|
   step(%{I am on the login page})
   step(%{I follow "Reset password"})
-  step(%{I fill in "Email address or user name" with "#{login}"})
+  step(%{I fill in "Email address or username" with "#{login}"})
   step(%{I press "Reset Password"})
 end
 
 # THEN
 
-Then /^I should get the error message for wrong username or password$/ do
-  step(%{I should see "The password or user name you entered doesn't match our records. Please try again"})
+Then "I should get the error message for wrong username or password" do
+  step(%{I should see "The password or username you entered doesn't match our records. Please try again"})
 end
 
 Then /^I should get an activation email for "(.*?)"$/ do |login|

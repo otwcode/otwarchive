@@ -306,7 +306,7 @@ Feature: Admin Actions to Manage Invitations
       And "dax" has "2" invitations
       And I am logged in as an admin
     When I follow "Invite New Users"
-      And I fill in "Enter a user name" with "dax"
+      And I fill in "Enter a username" with "dax"
       And I press "Go"
     Then I should see "copy and use"
     When I follow "Invite New Users"
@@ -332,10 +332,10 @@ Feature: Admin Actions to Manage Invitations
   Scenario: An admin can't find a invitation for a nonexistent user
     Given I am logged in as an admin
       And I follow "Invite New Users"
-    When I fill in "Enter a user name" with "dax"
+    When I fill in "Enter a username" with "dax"
       And I press "Go"
     Then I should see "No results were found. Try another search"
-    When I fill in "Enter a user name" with ""
+    When I fill in "Enter a username" with ""
       And I fill in "Enter all or part of an email address" with "nonexistent@domain.com"
       And I press "Go"
     Then I should see "No results were found. Try another search"
@@ -370,7 +370,7 @@ Feature: Admin Actions to Manage Invitations
       And "dax" has "2" invitations
       And I am logged in as a "support" admin
     When I follow "Invite New Users"
-      And I fill in "Enter a user name" with "dax"
+      And I fill in "Enter a username" with "dax"
       And I press "Go"
     Then I should see "copy and use"
     When I follow "Invite New Users"

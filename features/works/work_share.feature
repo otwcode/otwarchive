@@ -77,7 +77,7 @@ Feature: Share Works
     Then I should see "Close" within "#modal"
     When I follow "Close"
       And I follow "Log In"
-      And I fill in "User name or email:" with "maduser"
+      And I fill in "Username or email:" with "maduser"
       And I fill in "Password:" with "password"
       And I press "Log In"
     Then the url should not include "share"
