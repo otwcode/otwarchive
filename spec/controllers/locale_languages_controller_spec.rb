@@ -196,10 +196,7 @@ describe LocaleLanguagesController do
       {
         id: finnish.short,
         locale_language: {
-          name: "Suomi",
-          short: "fi",
           support_available: "1",
-          sortable_name: ""
         }
       }
     end
@@ -259,7 +256,7 @@ describe LocaleLanguagesController do
     end
 
     
-    context "when logged in as an admin with policy_and_abuse role and I attempt to edit a non-abuse field" do
+    context "when logged in as an admin with policy_and_abuse role and I attempt to edit a field other than abuse_support_available" do
       let(:admin) { create(:admin, roles: ["policy_and_abuse"]) }
       before do
         fake_login_admin(admin)
@@ -308,7 +305,7 @@ describe LocaleLanguagesController do
       end
     end 
 
-    context "when logged in as an admin with support role and attempt to edit non-abuse fields" do
+    context "when logged in as an admin with support role and attempt to edit support_available field" do
       let(:admin) { create(:admin, roles: ["support"]) }
       before do
         fake_login_admin(admin)
@@ -316,11 +313,8 @@ describe LocaleLanguagesController do
       end
       it "updates the language" do
         finnish.reload
-        expect(finnish.name).to eq("Suomi")
-        expect(finnish.short).to eq("fi")
         expect(finnish.support_available).to eq(true)
         expect(finnish.abuse_support_available).to eq(true)
-        expect(finnish.sortable_name).to eq("")
       end
 
       it "redirects and returns success message" do
