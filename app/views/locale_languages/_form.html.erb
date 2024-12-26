@@ -10,31 +10,31 @@
         <%= f.label :name, "#{t('.name')} *" %>
       </dt>
       <dd class="required">
-        <%= f.text_field :name, disabled: !policy(@locale_language).can_edit_non_abuse_fields? %>
+        <%= f.text_field :name, disabled: !policy(@locale_language).can_edit_other_fields? %>
       </dd>
 
       <dt class="required">
         <%= f.label :short, "#{t('.short')} *" %>
       </dt>
       <dd class="required">
-        <%= f.text_field :short, disabled: !policy(@locale_language).can_edit_non_abuse_fields? %>
+        <%= f.text_field :short, disabled: !policy(@locale_language).can_edit_other_fields? %>
       </dd>
 
       <dt>
         <%= f.label :sortable_name, t(".sortable_name") %>
       </dt>
       <dd>
-        <%= f.text_field :sortable_name, disabled: !policy(@locale_language).can_edit_non_abuse_fields? %>
+        <%= f.text_field :sortable_name, disabled: !policy(@locale_language).can_edit_other_fields? %>
       </dd>
 
       <dt>
-        <%= f.check_box :support_available, disabled: !policy(@locale_language).can_edit_non_abuse_fields? %>
+        <%= f.check_box :support_available, disabled: !policy(@locale_language).can_edit_support_available? %>
       </dt>
       <dd>
         <%= f.label :support_available, t(".support_available") %>
       </dd>
       <dt>
-        <%= f.check_box :abuse_support_available, disabled: !policy(@locale_language).can_edit_abuse_fields? %>
+        <%= f.check_box :abuse_support_available, disabled: !policy(@locale_language).can_edit_abuse_available? %>
       </dt>
       <dd>
         <%= f.label :abuse_support_available, t(".abuse_support_available") %>
