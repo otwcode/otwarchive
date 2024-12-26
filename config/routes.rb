@@ -521,10 +521,8 @@ Rails.application.routes.draw do
   get "/languages/:id", to: redirect("/languages/%{id}/works", status: 302)
 
   resources :locale_languages, except: [:show] do
-    resources :works
     resources :admin_posts
   end
-  get "/locale_languages/:id", to: redirect("/locale_languages/%{id}/works", status: 302)
   
   resources :locales, except: :destroy
 

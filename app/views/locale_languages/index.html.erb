@@ -15,12 +15,11 @@
 <!--main content-->
 <dl class="language index group">
   <% @locale_languages.each do |locale_language| %>
+    <dt><span lang="<%= locale_language.short %>"><%= locale_language.name %></span></dt>
     <% if locale_language == LocaleLanguage.default %>
-      <dt><span lang="<%= locale_language.short %>"><%= locale_language.name %></span></dt>
       <dd>
       </dd>
     <% else %>
-      <dt><%= link_to locale_language.name, locale_language, lang: locale_language.short %></dt>
       <dd>
         <% if policy(LocaleLanguage).edit? %>
           <p class="actions">

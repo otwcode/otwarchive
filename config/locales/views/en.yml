@@ -1396,18 +1396,15 @@ en:
       short: Abbreviation
       sortable_name: Name for alphabetical sorting
       submit:
-        create: Create Language
-        update: Update Language
+        create: Create Locale Language
+        update: Update Locale Language
       support_available: Support available
     index:
       navigation:
-        add: Add a Language
+        add: Add a Locale Language
         edit: Edit
-        suggest: Suggest a Language
-      page_heading: Work Languages
-      works_count:
-        one: "%{formatted_count} work"
-        other: "%{formatted_count} works"
+        suggest: Suggest a Locale Language
+      page_heading: Locale Languages
   languages:
     form:
       abuse_support_available: Abuse support available
