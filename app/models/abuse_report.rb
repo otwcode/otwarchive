@@ -2,16 +2,16 @@ class AbuseReport < ApplicationRecord
   attr_accessor :locale_language
   
   validates :email, email_format: { allow_blank: false }
-  validates_presence_of :locale_language
-  validates_presence_of :summary
-  validates_presence_of :comment
-  validates_presence_of :url
+  validates :locale_language, presence: true
+  validates :summary, presence: true
+  validates :comment, presence: true
+  validates :url, presence: true
   validate :url_is_not_over_reported
   validate :email_is_not_over_reporting
-  validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
+  validates :summary, length: { maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
                                 too_long: ts('must be less than %{max}
                                              characters long.',
-                                max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
+                                             max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) }
 
   # It doesn't have the type set properly in the database, so override it here:
   attribute :summary_sanitizer_version, :integer, default: 0
@@ -27,7 +27,7 @@ class AbuseReport < ApplicationRecord
   end
 
   def akismet_attributes
-    name = username ? username : ""
+    name = username || ""
     {
       comment_type: "contact-form",
       key: ArchiveConfig.AKISMET_KEY,
@@ -39,7 +39,7 @@ class AbuseReport < ApplicationRecord
     }
   end
 
-  scope :by_date, -> { order('created_at DESC') }
+  scope :by_date, -> { order("created_at DESC") }
 
   # Standardize the format of work, chapter, and profile URLs to get it ready
   # for the url_is_not_over_reported validation.
@@ -48,7 +48,7 @@ class AbuseReport < ApplicationRecord
   # Profile URLs: "users/username"
   before_validation :standardize_url, on: :create
   def standardize_url
-    return unless url =~ %r{((chapters|works)/\d+)} || url =~ %r{(users\/\w+)}
+    return unless url =~ %r{((chapters|works)/\d+)} || url =~ %r{(users/\w+)}
 
     self.url = add_scheme_to_url(url)
     self.url = clean_url(url)
@@ -108,7 +108,8 @@ class AbuseReport < ApplicationRecord
   end
 
   def send_report
-    return unless %w(staging production).include?(Rails.env)
+    return unless %w[staging production].include?(Rails.env)
+
     reporter = AbuseReporter.new(
       title: summary,
       description: comment,
@@ -142,25 +143,21 @@ class AbuseReport < ApplicationRecord
     message = ts('This page has already been reported. Our volunteers only
                  need one report in order to investigate and resolve an issue,
                  so please be patient and do not submit another report.')
-    if url =~ /\/works\/\d+/
+    if url =~ %r{/works/\d+}
       # use "/works/123/" to avoid matching chapter or external work ids
-      work_params_only = url.match(/\/works\/\d+\//).to_s
+      work_params_only = url.match(%r{/works/\d+/}).to_s
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
                                                  1.month.ago,
                                                  "%#{work_params_only}%").count
-      if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
-        errors.add(:base, message)
-      end
-    elsif url =~ /\/users\/\w+/
-      user_params_only = url.match(/\/users\/\w+\//).to_s
+      errors.add(:base, message) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
+    elsif url =~ %r{/users/\w+}
+      user_params_only = url.match(%r{/users/\w+/}).to_s
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
                                                  1.month.ago,
                                                  "%#{user_params_only}%").count
-      if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
-        errors.add(:base, message)
-      end
+      errors.add(:base, message) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
     end
   end
 

@@ -132,7 +132,7 @@ Given "the fannish next of kin {string} for the user {string}" do |kin, user|
   user.create_fannish_next_of_kin(kin: kin, kin_email: "fnok@example.com")
 end
 
-Given /^the user "([^\"]*)" is suspended$/ do |user|
+Given /^the user "([^"]*)" is suspended$/ do |user|
   step %{the user "#{user}" exists and is activated}
   step %{I am logged in as a "policy_and_abuse" admin}
   step %{I go to the user administration page for "#{user}"}
@@ -142,7 +142,7 @@ Given /^the user "([^\"]*)" is suspended$/ do |user|
   click_button("Update")
 end
 
-Given /^the user "([^\"]*)" is banned$/ do |user|
+Given /^the user "([^"]*)" is banned$/ do |user|
   step %{the user "#{user}" exists and is activated}
   step(%{I am logged in as a "policy_and_abuse" admin})
   step %{I go to the user administration page for "#{user}"}
@@ -151,7 +151,7 @@ Given /^the user "([^\"]*)" is banned$/ do |user|
   click_button("Update")
 end
 
-Then /^the user "([^\"]*)" should be permanently banned$/ do |user|
+Then /^the user "([^"]*)" should be permanently banned$/ do |user|
   u = User.find_by(login: user)
   assert u.banned?
 end
@@ -324,7 +324,7 @@ When "I delete known issues" do
   step %{I follow "Delete"}
 end
 
-When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
+When /^I uncheck the "([^"]*)" role checkbox$/ do |role|
   role_name = role.parameterize.underscore
   role_id = Role.find_by(name: role_name).id
   uncheck("user_roles_#{role_id}")
@@ -333,7 +333,7 @@ end
 When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
-  admin_post_id = !admin_post.nil? ? admin_post.id : 0
+  admin_post_id = admin_post.nil? ? 0 : admin_post.id
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Deutsch Ankuendigung")
   fill_in("content", with: "Deutsch Woerter")
@@ -361,7 +361,7 @@ end
 
 ### THEN
 
-Then (/^the translation information should still be filled in$/) do
+Then(/^the translation information should still be filled in$/) do
   step %{the "admin_post_title" field should contain "Deutsch Ankuendigung"}
   step %{the "content" field should contain "Deutsch Woerter"}
   step %{"Deutsch" should be selected within "Choose a language"}
@@ -382,7 +382,7 @@ Then /^I should see a translated admin post( with tags "(.*?)")?$/ do |tags|
   end
 end
 
-Then (/^I should not see a translated admin post$/) do
+Then(/^I should not see a translated admin post$/) do
   step %{I go to the admin-posts page}
   step %{I should see "Default Admin Post"}
   step %{I should see "Deutsch Ankuendigung"}
@@ -390,38 +390,38 @@ Then (/^I should not see a translated admin post$/) do
   step %{I should not see "Translations: Deutsch"}
 end
 
-Then /^the work "([^\"]*)" should be hidden$/ do |work|
+Then /^the work "([^"]*)" should be hidden$/ do |work|
   w = Work.find_by_title(work)
   user = w.pseuds.first.user.login
   step %{logged out users should not see the hidden work "#{work}" by "#{user}"}
   step %{logged in users should not see the hidden work "#{work}" by "#{user}"}
 end
 
-Then /^the work "([^\"]*)" should not be hidden$/ do |work|
+Then /^the work "([^"]*)" should not be hidden$/ do |work|
   w = Work.find_by_title(work)
   user = w.pseuds.first.user.login
   step %{logged out users should see the unhidden work "#{work}" by "#{user}"}
   step %{logged in users should see the unhidden work "#{work}" by "#{user}"}
 end
 
-Then /^logged out users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+Then /^logged out users should not see the hidden work "([^"]*)" by "([^"]*)"?/ do |work, user|
   step "I am a visitor"
   step %{I should not see the hidden work "#{work}" by "#{user}"}
 end
 
-Then /^logged in users should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+Then /^logged in users should not see the hidden work "([^"]*)" by "([^"]*)"?/ do |work, user|
   step %{I am logged in as a random user}
   step %{I should not see the hidden work "#{work}" by "#{user}"}
 end
 
-Then /^I should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+Then /^I should not see the hidden work "([^"]*)" by "([^"]*)"?/ do |work, user|
   step %{I am on #{user}'s works page}
   step %{I should not see "#{work}"}
   step %{I view the work "#{work}"}
   step %{I should see "Sorry, you don't have permission to access the page you were trying to reach."}
 end
 
-Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
+Then /^"([^"]*)" should see their work "([^"]*)" is hidden?/ do |user, work|
   step %{I am logged in as "#{user}"}
   step %{I am on my works page}
   step %{I should not see "#{work}"}
@@ -429,17 +429,17 @@ Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
   step %{I should see the image "title" text "Hidden by Administrator"}
 end
 
-Then /^logged out users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+Then /^logged out users should see the unhidden work "([^"]*)" by "([^"]*)"?/ do |work, user|
   step "I am a visitor"
   step %{I should see the unhidden work "#{work}" by "#{user}"}
 end
 
-Then /^logged in users should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+Then /^logged in users should see the unhidden work "([^"]*)" by "([^"]*)"?/ do |work, user|
   step %{I am logged in as a random user}
   step %{I should see the unhidden work "#{work}" by "#{user}"}
 end
 
-Then /^I should see the unhidden work "([^\"]*)" by "([^\"]*)"?/ do |work, user|
+Then /^I should see the unhidden work "([^"]*)" by "([^"]*)"?/ do |work, user|
   step %{I am on #{user}'s works page}
   step %{I should see "#{work}"}
   step %{I view the work "#{work}"}
@@ -507,12 +507,12 @@ Then(/^I should be able to comment with the address "([^"]*)"$/) do |email|
   step %{I should see "Comment created!"}
 end
 
-Then /^the work "([^\"]*)" should be marked as spam/ do |work|
+Then /^the work "([^"]*)" should be marked as spam/ do |work|
   w = Work.find_by_title(work)
   assert w.spam?
 end
 
-Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
+Then /^the work "([^"]*)" should not be marked as spam/ do |work|
   w = Work.find_by_title(work)
   assert !w.spam?
 end
