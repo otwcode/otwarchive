@@ -84,7 +84,7 @@
       </dt>
       <dd class="required">
         <%= f.select(:locale_language, language_options_for_select(@abuse_languages, "name"),
-              { selected: @abuse_report.language || LocaleLanguage.default.name }) %>
+              { selected: @abuse_report.locale_language || LocaleLanguage.default.name }) %>
       </dd>
 
       <dt class="required"><%= f.label :url, t(".form.link.label") %></dt>

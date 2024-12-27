@@ -51,7 +51,7 @@ Feature: Filing an abuse report
     And I fill in "Description of the content you are reporting (required)" with "This is wrong"
     And I fill in "Link to the page you are reporting (required)" with "http://www.archiveofourown.org/works"
     And I fill in "Your email (required)" with ""
-    And I select "Deutsch" from "abuse_report_language"
+    And I select "Deutsch" from "abuse_report_locale_language"
     And I press "Submit"
     And I should see "Email should look like an email address."
     And "Deutsch" should be selected within "Select language (required)"

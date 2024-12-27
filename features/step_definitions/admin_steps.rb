@@ -40,6 +40,7 @@ end
 
 Given /^basic locale languages$/ do
   LocaleLanguage.default
+  LocaleLanguage.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
 end
 
 Given /^basic languages$/ do
