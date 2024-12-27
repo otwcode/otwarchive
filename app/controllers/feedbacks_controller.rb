@@ -24,12 +24,10 @@ class FeedbacksController < ApplicationController
     @feedback.site_skin = helpers.current_skin
     if @feedback.save
       @feedback.email_and_send
-      flash[:notice] = t("successfully_sent",
-        default: "Your message was sent to the Archive team - thank you!")
+      flash[:notice] = t("feedbacks.create.successfully_sent")
       redirect_back_or_default(root_path)
     else
-      flash[:error] = t("failure_send",
-        default: "Sorry, your message could not be saved - please try again!")
+      flash[:error] = t("feedbacks.create.failure_send")
       render action: "new"
     end
   end
@@ -37,12 +35,12 @@ class FeedbacksController < ApplicationController
   private
 
   def load_support_languages
-    @support_languages = Language.where(support_available: true).default_order
+    @support_languages = LocaleLanguage.where(support_available: true).default_order
   end
 
   def feedback_params
     params.require(:feedback).permit(
-      :comment, :email, :summary, :username, :language, :referer
+      :comment, :email, :summary, :username, :locale_language, :referer
     )
   end
 end

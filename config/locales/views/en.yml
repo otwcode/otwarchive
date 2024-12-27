@@ -595,7 +595,7 @@ en:
     new:
       abuse:
         contact: contact our Policy and Abuse team
-        reports: For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.
+        reports_html: For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.
       do_not_spam_html: "<strong>We respond to every report we receive, but we are a small volunteer team.</strong> For this reason, we ask you to not submit multiple reports regarding any one issue, or encourage other people to report the same issue, unless there is additional information to offer."
       form:
         comment:
@@ -643,7 +643,7 @@ en:
         tag_changes: Requests to canonize or change tags
         work_problems: Works labeled with the wrong language or duplicate works
       status:
-        current: For current updates on Archive performance or downtime, please check the %{twitter_link} or %{tumblr_link}.
+        current_html: For current updates on Archive performance or downtime, please check the %{twitter_link} or %{tumblr_link}.
         tumblr: ao3org Tumblr
         twitter: "@AO3_Status Twitter feed"
   home:

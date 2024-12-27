@@ -14,7 +14,7 @@ describe FeedbacksController do
           comment: "Hello",
           email: "test@example.com",
           summary: "Summary",
-          language: "en"
+          locale_language: "en"
         }
       }
     end

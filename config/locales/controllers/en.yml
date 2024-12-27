@@ -92,6 +92,10 @@ en:
   external_works:
     update:
       successfully_updated: External work was successfully updated.
+  feedbacks:
+    create:
+      failure_send: Sorry, your message could not be saved - please try again!
+      successfully_sent: Your message was sent to the Archive team - thank you!
   home:
     content:
       page_title: Content Policy

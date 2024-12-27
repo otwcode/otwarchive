@@ -48,17 +48,17 @@ Scenario: Adding Abuse support for a language
 
 Scenario: Adding a language to the Support form
 
-  Given the following language exists
+  Given the following locale language exists
       | name     | short |
       | Sindarin | sj    |
       | Klingon  | tlh   |
   When I am logged in as a "support" admin
-    And I go to the languages page
+    And I go to the locale_languages page
     # Languages are sorted by short name, so the first "Edit" is for Sindarin
     And I follow "Edit"
     And I check "Support available"
-    And I press "Update Language"
-  Then I should see "Language was successfully updated."
+    And I press "Update Locale Language"
+  Then I should see "Locale language was successfully updated."
   When I follow "Technical Support & Feedback"
-  Then I should see "Sindarin" within "select#feedback_language"
-    And I should not see "Klingon" within "select#feedback_language"
+  Then I should see "Sindarin" within "select#feedback_locale_language"
+    And I should not see "Klingon" within "select#feedback_locale_language"

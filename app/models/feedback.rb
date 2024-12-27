@@ -1,21 +1,21 @@
 # Class which holds feedback sent to the archive administrators about the archive as a whole
 class Feedback < ApplicationRecord
-  attr_accessor :ip_address, :referer, :site_skin
+  attr_accessor :ip_address, :referer, :site_skin, :locale_language
 
   # NOTE: this has NOTHING to do with the Comment class!
   # This is just the name of the text field in the Feedback
   # class which holds the user's comments.
-  validates_presence_of :comment
-  validates_presence_of :summary
-  validates_presence_of :language
+  validates :comment, presence: true
+  validates :summary, presence: true
+  validates :locale_language, presence: true
   validates :email, email_format: { allow_blank: false }
-  validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
+  validates :summary, length: { maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
+                                too_long: I18n.t("feedbacks.too_long", max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) }
 
   validate :check_for_spam
   def check_for_spam
     approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
-    errors.add(:base, ts("This report looks like spam to our system!")) unless approved
+    errors.add(:base, I18n.t("feedbacks.spam")) unless approved
   end
 
   def logged_in_with_matching_email?
@@ -49,7 +49,7 @@ class Feedback < ApplicationRecord
   end
 
   def rollout_string
-    string = ""
+    ""
     # ES UPGRADE TRANSITION #
     # Remove ES version logic, but leave this method for future rollout use
     # string << if Feedback.use_new_search?
@@ -65,7 +65,7 @@ class Feedback < ApplicationRecord
     reporter = SupportReporter.new(
       title: summary,
       description: comment,
-      language: language,
+      locale_language: locale_language,
       email: email,
       username: username,
       user_agent: user_agent,
