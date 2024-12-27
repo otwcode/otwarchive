@@ -9,9 +9,7 @@ class AbuseReport < ApplicationRecord
   validate :url_is_not_over_reported
   validate :email_is_not_over_reporting
   validates :summary, length: { maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
-                                too_long: ts('must be less than %{max}
-                                             characters long.',
-                                             max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) }
+                                too_long: t("abuse_report.too_long", max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) }
 
   # It doesn't have the type set properly in the database, so override it here:
   attribute :summary_sanitizer_version, :integer, default: 0
@@ -19,7 +17,7 @@ class AbuseReport < ApplicationRecord
   validate :check_for_spam
   def check_for_spam
     approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
-    errors.add(:base, ts("This report looks like spam to our system!")) unless approved
+    errors.add(:base, t("abuse_report.spam")) unless approved
   end
 
   def logged_in_with_matching_email?
@@ -140,10 +138,9 @@ class AbuseReport < ApplicationRecord
   # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX
   # or ABUSE_REPORTS_PER_USER_MAX times per month
   def url_is_not_over_reported
-    message = ts('This page has already been reported. Our volunteers only
-                 need one report in order to investigate and resolve an issue,
-                 so please be patient and do not submit another report.')
-    if url =~ %r{/works/\d+}
+    message = t("abuse_report.already_reported")
+    case url
+    when %r{/works/\d+}
       # use "/works/123/" to avoid matching chapter or external work ids
       work_params_only = url.match(%r{/works/\d+/}).to_s
       existing_reports_total = AbuseReport.where('created_at > ? AND
@@ -151,7 +148,7 @@ class AbuseReport < ApplicationRecord
                                                  1.month.ago,
                                                  "%#{work_params_only}%").count
       errors.add(:base, message) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
-    elsif url =~ %r{/users/\w+}
+    when %r{/users/\w+}
       user_params_only = url.match(%r{/users/\w+/}).to_s
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
@@ -168,9 +165,6 @@ class AbuseReport < ApplicationRecord
                                                email).count
     return if existing_reports_total < ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX
 
-    errors.add(:base, ts("You have reached our daily reporting limit. To keep our
-                          volunteers from being overwhelmed, please do not seek
-                          out violations to report, but only report violations you
-                          encounter during your normal browsing."))
+    errors.add(:base, t("abuse_report.daily_limit_reached"))
   end
 end
