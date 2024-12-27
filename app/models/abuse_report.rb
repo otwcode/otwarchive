@@ -9,7 +9,7 @@ class AbuseReport < ApplicationRecord
   validate :url_is_not_over_reported
   validate :email_is_not_over_reporting
   validates :summary, length: { maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
-                                too_long: t("abuse_report.too_long", max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) }
+                                too_long: I18n.t("abuse_report.too_long", max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) }
 
   # It doesn't have the type set properly in the database, so override it here:
   attribute :summary_sanitizer_version, :integer, default: 0
@@ -17,7 +17,7 @@ class AbuseReport < ApplicationRecord
   validate :check_for_spam
   def check_for_spam
     approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
-    errors.add(:base, t("abuse_report.spam")) unless approved
+    errors.add(:base, I18n.t("abuse_report.spam")) unless approved
   end
 
   def logged_in_with_matching_email?
@@ -138,7 +138,7 @@ class AbuseReport < ApplicationRecord
   # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX
   # or ABUSE_REPORTS_PER_USER_MAX times per month
   def url_is_not_over_reported
-    message = t("abuse_report.already_reported")
+    message = I18n.t("abuse_report.already_reported")
     case url
     when %r{/works/\d+}
       # use "/works/123/" to avoid matching chapter or external work ids
@@ -165,6 +165,6 @@ class AbuseReport < ApplicationRecord
                                                email).count
     return if existing_reports_total < ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX
 
-    errors.add(:base, t("abuse_report.daily_limit_reached"))
+    errors.add(:base, I18n.t("abuse_report.daily_limit_reached"))
   end
 end
