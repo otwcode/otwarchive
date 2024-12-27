@@ -1,7 +1,8 @@
 class Language < ApplicationRecord
   include WorksOwner
   validates_presence_of :short
-  validates :short, uniqueness: true
+  validates :short, uniqueness: true, length: { maximum: 5 }
+  validates :name, uniqueness: true
   validates_presence_of :name
 
   has_many :works
