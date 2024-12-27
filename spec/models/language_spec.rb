@@ -10,4 +10,36 @@ describe Language do
       expect(languages.default_order).to eq([indonesian, german, finnish])
     end
   end
+
+  describe 'validations' do
+    context 'for :short' do
+      it 'is valid with a value 5 characters or fewer' do
+        korean = Language.new(name: 'Korean', short: 'ko')
+
+        expect(korean).to be_valid
+      end
+
+      it 'is invalid if longer than 5 characters' do
+        korean = Language.new(name: 'Korean', short: 'korean')
+
+        expect(korean).not_to be_valid
+        expect(korean.errors[:short]).to include("is too long (maximum is 5 characters)")
+      end
+    end
+
+    context 'for :name' do
+      it 'is valid with a unique value' do
+        unique_language = Language.new(name: 'Unique Language Name', short: 'uniq')
+
+        expect(unique_language).to be_valid
+      end
+
+      it 'is invalid if not unique' do
+        duplicate_language = Language.new(name: 'English', short: 'eng')
+
+        expect(duplicate_language).not_to be_valid
+        expect(duplicate_language.errors[:name]).to include("has already been taken")
+      end
+    end
+  end
 end
