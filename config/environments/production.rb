@@ -33,8 +33,9 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  # Store uploaded files in S3, proxied (see config/storage.yml for options).
+  config.active_storage.service = :s3
+  config.active_storage.resolve_model_to_route = :rails_storage_proxy
 
   # Use a different cache store in production
   config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
@@ -94,7 +95,4 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  # Store uploaded files in AWS S3.
-  config.active_storage.service = :s3
 end
