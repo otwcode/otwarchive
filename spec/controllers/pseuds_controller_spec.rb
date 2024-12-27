@@ -212,7 +212,7 @@ describe PseudsController do
           matching_pseud.reload
 
           post :destroy, params: { user_id: user, id: matching_pseud }
-          it_redirects_to_with_error(user_pseuds_path(user), "You cannot delete the pseud matching your user name, sorry!")
+          it_redirects_to_with_error(user_pseuds_path(user), "You cannot delete the pseud matching your username, sorry!")
         end
       end
     end
