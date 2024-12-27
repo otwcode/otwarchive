@@ -46,6 +46,32 @@ describe "rake After:fix_teen_and_up_imported_rating" do
   end
 end
 
+describe "rake After:clean_up_multiple_ratings" do
+  let!(:default_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME, canonical: true) }
+  let!(:other_rating) { Rating.find_or_create_by!(name: ArchiveConfig.RATING_TEEN_TAG_NAME, canonical: true) }
+  let!(:work_with_multiple_ratings) do
+    create_invalid(:work, rating_string: [default_rating.name, other_rating.name].join(",")).tap do |work|
+      # Update the creatorship to a user so validation doesn't fail
+      work.creatorships.build(pseud: build(:pseud), approved: true)
+      work.save!(validate: false)
+    end
+  end
+
+  before do
+    run_all_indexing_jobs
+  end
+
+  it "changes and replaces the multiple tags" do
+    subject.invoke
+
+    work_with_multiple_ratings.reload
+
+    # Work with multiple ratings gets the default rating
+    expect(work_with_multiple_ratings.ratings.to_a).to contain_exactly(default_rating)
+    expect(work_with_multiple_ratings.rating_string).to eq(default_rating.name)
+  end
+end
+
 describe "rake After:clean_up_noncanonical_ratings" do
   let!(:noncanonical_rating) do
     tag = Rating.create(name: "Borked rating tag", canonical: false)
@@ -284,6 +310,117 @@ describe "rake After:remove_invalid_commas_from_tags" do
       end.to avoid_changing { chinese_tag.reload.name }
         .and avoid_changing { japanese_tag.reload.name }
         .and output("#{prompt}Could not rename Full-width，Comma\nCould not rename Ideographic、Comma\n").to_stdout
+    end
+  end
+end
+
+describe "rake After:add_suffix_to_underage_sex_tag" do
+  let(:prompt) { "Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:\n" }
+
+  context "without a valid admin" do
+    it "puts an error without a valid admin" do
+      allow($stdin).to receive(:gets) { "no-admin" }
+
+      expect do
+        subject.invoke
+      end.to output("#{prompt}Admin not found.\n").to_stdout
+    end
+  end
+
+  context "with a valid admin" do
+    let!(:admin) { create(:admin, login: "admin") }
+
+    before do
+      allow($stdin).to receive(:gets) { "admin" }
+      tag = ArchiveWarning.find_by_name("Underage Sex")
+      tag.destroy!
+    end
+
+    it "puts an error if tag does not exist" do
+      expect do
+        subject.invoke
+      end.to output("#{prompt}No Underage Sex tag found.\n").to_stdout
+    end
+
+    it "puts an error if tag is an ArchiveWarning" do
+      tag = create(:archive_warning, name: "Underage Sex")
+
+      expect do
+        subject.invoke
+      end.to avoid_changing { tag.reload.name }
+        .and output("#{prompt}Underage Sex is already an Archive Warning.\n").to_stdout
+    end
+
+    it "puts a success message if tag exists and can be renamed" do
+      tag = create(:relationship, name: "Underage Sex")
+
+      expect do
+        subject.invoke
+      end.to change { tag.reload.name }
+        .from("Underage Sex")
+        .to("Underage Sex - Relationship")
+        .and output("#{prompt}Renamed Underage Sex tag to Underage Sex - Relationship.\n").to_stdout
+    end
+
+    it "puts an error if tag exists and cannot be renamed" do
+      tag = create(:freeform, name: "Underage Sex")
+      allow_any_instance_of(Tag).to receive(:save).and_return(false)
+
+      expect do
+        subject.invoke
+      end.to avoid_changing { tag.reload.name }
+        .and output("#{prompt}Failed to rename Underage Sex tag to Underage Sex - Freeform.\n").to_stdout
+    end
+  end
+end
+
+describe "rake After:rename_underage_warning" do
+  let(:prompt) { "Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:\n" }
+
+  context "without a valid admin" do
+    it "puts an error without a valid admin" do
+      allow($stdin).to receive(:gets) { "no-admin" }
+
+      expect do
+        subject.invoke
+      end.to output("#{prompt}Admin not found.\n").to_stdout
+    end
+  end
+
+  context "with a valid admin" do
+    let!(:admin) { create(:admin, login: "admin") }
+
+    before do
+      allow($stdin).to receive(:gets) { "admin" }
+      tag = ArchiveWarning.find_by_name("Underage Sex")
+      tag.destroy!
+    end
+
+    it "puts an error if tag does not exist" do
+      expect do
+        subject.invoke
+      end.to output("#{prompt}No Underage warning tag found.\n").to_stdout
+    end
+
+    it "puts a success message if tag exists and can be renamed" do
+      tag = create(:archive_warning, name: "Underage")
+
+      expect do
+        subject.invoke
+      end.to change { tag.reload.name }
+        .from("Underage")
+        .to("Underage Sex")
+        .and output("#{prompt}Renamed Underage warning tag to Underage Sex.\n").to_stdout
+    end
+
+    it "puts an error if tag exists and cannot be renamed" do
+      tag = create(:archive_warning, name: "Underage")
+      allow_any_instance_of(Tag).to receive(:save).and_return(false)
+
+      expect do
+        subject.invoke
+      end.to avoid_changing { tag.reload.name }
+        .and output("#{prompt}Failed to rename Underage warning tag to Underage Sex.\n").to_stdout
     end
   end
 end

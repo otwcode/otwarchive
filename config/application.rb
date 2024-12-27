@@ -17,7 +17,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # TODO: Remove in Rails 7.1, where it's false by default.
     config.add_autoload_paths_to_load_path = false
@@ -40,8 +40,8 @@ module Otwarchive
     I18n.config.available_locales = [
       :en, :af, :ar, :bg, :bn, :ca, :cs, :cy, :da, :de, :el, :es, :fa, :fi,
       :fil, :fr, :he, :hi, :hr, :hu, :id, :it, :ja, :ko, :lt, :lv, :mk,
-      :mr, :ms, :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :sk, :sl, :sr, :sv,
-      :th, :tr, :uk, :vi, :"zh-CN"
+      :mr, :ms, :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :scr, :sk, :sl,
+      :sv, :th, :tr, :uk, :vi, :"zh-CN"
     ]
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.

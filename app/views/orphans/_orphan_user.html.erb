@@ -2,11 +2,9 @@
 <% works = user.works.to_a %>
 <h2 class="heading"><%= ts("Orphan All Works") %></h2>
 
-<p class="caution">
-  <%= ts("Orphaning all of your works will")%>
-  <strong><%= ts("permanently")%></strong>
-  <%= ts("remove all identifying data from the following work(s), their chapters, associated series, and any feedback replies you may have left on them.") %>
-</p>
+<p class="caution"><%= t(".orphaning_works_message_html") %></p>
+
+<p class="caution"><%= t(".orphaning_bylines_only_message_html") %></p>
 
 <p class="caution">
   <%= ts("Orphaning a work removes it from your account and re-attaches it to the specially created orphan_account. Please note that this is")%>

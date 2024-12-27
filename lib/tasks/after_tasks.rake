@@ -67,6 +67,54 @@ namespace :After do
     end
   end
 
+  desc "Clean up multiple rating tags"
+  task(clean_up_multiple_ratings: :environment) do
+    default_rating_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
+    es_results = $elasticsearch.search(index: WorkIndexer.index_name, body: {
+                                         query: {
+                                           bool: {
+                                             filter: {
+                                               script: {
+                                                 script: {
+                                                   source: "doc['rating_ids'].length > 1",
+                                                   lang: "painless"
+                                                 }
+                                               }
+                                             }
+                                           }
+                                         }
+                                       })
+    invalid_works = QueryResult.new("Work", es_results)
+
+    puts "There are #{invalid_works.size} works with multiple ratings."
+
+    fixed_work_ids = []
+    unfixed_word_ids = []
+    invalid_works.each do |work|
+      work.ratings = [default_rating_tag]
+      work.rating_string = default_rating_tag.name
+
+      if work.save
+        fixed_work_ids << work.id
+      else
+        unfixed_word_ids << work.id
+      end
+      print(".") && $stdout.flush
+    end
+
+    unless fixed_work_ids.empty?
+      puts "Cleaned up having multiple ratings on #{fixed_work_ids.size} works:"
+      puts fixed_work_ids.join(", ")
+      $stdout.flush
+    end
+
+    unless unfixed_word_ids.empty?
+      puts "The following #{unfixed_word_ids.size} works failed validations and could not be saved:"
+      puts unfixed_word_ids.join(", ")
+      $stdout.flush
+    end
+  end
+
   desc "Clean up noncanonical rating tags"
   task(clean_up_noncanonical_ratings: :environment) do
     canonical_not_rated_tag = Rating.find_by!(name: ArchiveConfig.RATING_DEFAULT_TAG_NAME)
@@ -213,6 +261,62 @@ namespace :After do
           end
           $stdout.flush
         end
+      end
+    else
+      puts("Admin not found.")
+    end
+  end
+
+  desc "Add suffix to existing Underage Sex tag in prepartion for Underage warning rename"
+  task(add_suffix_to_underage_sex_tag: :environment) do
+    puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
+    login = $stdin.gets.chomp.strip
+    admin = Admin.find_by(login: login)
+
+    if admin.present?
+      User.current_user = admin
+
+      tag = Tag.find_by_name("Underage Sex")
+
+      if tag.blank?
+        puts("No Underage Sex tag found.")
+      elsif tag.is_a?(ArchiveWarning)
+        puts("Underage Sex is already an Archive Warning.")
+      else
+        suffixed_name = "Underage Sex - #{tag.class}"
+        if tag.update(name: suffixed_name)
+          puts("Renamed Underage Sex tag to #{tag.reload.name}.")
+        else
+          puts("Failed to rename Underage Sex tag to #{suffixed_name}.")
+        end
+        $stdout.flush
+      end
+    else
+      puts("Admin not found.")
+    end
+  end
+
+  desc "Rename Underage warning to Underage Sex"
+  task(rename_underage_warning: :environment) do
+    puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
+    login = $stdin.gets.chomp.strip
+    admin = Admin.find_by(login: login)
+
+    if admin.present?
+      User.current_user = admin
+
+      tag = ArchiveWarning.find_by_name("Underage")
+
+      if tag.blank?
+        puts("No Underage warning tag found.")
+      else
+        new_name = "Underage Sex"
+        if tag.update(name: new_name)
+          puts("Renamed Underage warning tag to #{tag.reload.name}.")
+        else
+          puts("Failed to rename Underage warning tag to #{new_name}.")
+        end
+        $stdout.flush
       end
     else
       puts("Admin not found.")

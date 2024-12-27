@@ -91,7 +91,7 @@ class PseudsController < ApplicationController
           # if setting this one as default, unset the attribute of the current default pseud
           old_default.update_attribute(:is_default, false)
         end
-        redirect_to([@user, @pseud])
+        redirect_to polymorphic_path([@user, @pseud])
       else
         render action: "new"
       end

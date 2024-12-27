@@ -15,7 +15,7 @@ module ApiHelper
   # Values in API fake content
   def content_fields
     {
-      title: "Detected Title", summary: "Detected summary", fandoms: "Detected Fandom", warnings: "Underage",
+      title: "Detected Title", summary: "Detected summary", fandoms: "Detected Fandom", warnings: "Underage Sex",
       characters: "Detected 1, Detected 2", rating: "Explicit", relationships: "Detected 1/Detected 2",
       categories: "F/F", freeform: "Detected tag 1, Detected tag 2", external_author_name: "Detected Author",
       external_author_email: "detected@foo.com", notes: "This is a <i>content note</i>.",

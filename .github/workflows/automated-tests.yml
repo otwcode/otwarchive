@@ -54,18 +54,24 @@ jobs:
             arguments: db:otwseed
           - command: rspec
             arguments: spec/controllers
+            imagemagick: true
           - command: rspec
             arguments: spec/models
+            imagemagick: true
           - command: rspec
             arguments: --exclude-pattern 'spec/{controllers,models}/**/*.rb'
+            imagemagick: true
             libvips: true
           - command: cucumber
             arguments: features/admins
+            imagemagick: true
             libvips: true
           - command: cucumber
             arguments: features/bookmarks
+            imagemagick: true
           - command: cucumber
             arguments: features/collections
+            imagemagick: true
             libvips: true
           - command: cucumber
             arguments: features/comments_and_kudos
@@ -76,9 +82,11 @@ jobs:
             vcr: true
           - command: cucumber
             arguments: features/other_a
+            imagemagick: true
             libvips: true
           - command: cucumber
             arguments: features/other_b
+            imagemagick: true
             libvips: true
           - command: cucumber
             arguments: features/prompt_memes_a
@@ -97,6 +105,7 @@ jobs:
           - command: cucumber
             arguments: features/works
             ebook: true
+            imagemagick: true
 
     steps:
       - name: Check out code
@@ -134,6 +143,10 @@ jobs:
           restore-keys: |
             cassette-library-${{ hashFiles(matrix.tests.arguments) }}-
 
+      - name: Install imagemagick for image processing
+        if: ${{ matrix.tests.imagemagick }}
+        run: sudo apt-get install -y imagemagick
+
       - name: Install libvips for image processing
         if: ${{ matrix.tests.libvips }}
         run: sudo apt-get install -y libvips-dev
@@ -159,7 +172,7 @@ jobs:
         run: bundle exec ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           # Optional for public repos. However, individual forks can set this
           # secret to reduce the chance of being rate-limited by GitHub.
