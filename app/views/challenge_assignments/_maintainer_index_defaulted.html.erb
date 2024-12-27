@@ -5,8 +5,8 @@
   <% @assignments.each do |assignment| %>
     <dt class="assignment">
       <!-- the recipient and if THEY have defaulted on their own assignment -->
-      <%= link_to assignment.request_byline, collection_signup_path(@collection, assignment.request) %>
-      <% assignments = ChallengeAssignment.in_collection(@collection).by_offering_user(assignment.request.pseud.user) %>
+      <%= link_to assignment.request_byline, collection_signup_path(@collection, assignment.request_signup) %>
+      <% assignments = ChallengeAssignment.in_collection(@collection).by_offering_user(assignment.request_signup.pseud.user) %>
       <% if (defaulted = assignments.defaulted) && assignments && defaulted.size == assignments.size %>
         <span class="defaulter"><%= ts("(Also defaulted)") %></span>
       <% end %>
