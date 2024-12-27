@@ -38,6 +38,10 @@ Given "I am logged in as an admin" do
   step %{I should see "Successfully logged in"}
 end
 
+Given /^basic locale languages$/ do
+  LocaleLanguage.default
+end
+
 Given /^basic languages$/ do
   Language.default
   german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
@@ -170,6 +174,12 @@ end
 Given(/^the following language exists$/) do |table|
   table.hashes.each do |hash|
     FactoryBot.create(:language, hash)
+  end
+end
+
+Given(/^the following locale language exists$/) do |table|
+  table.hashes.each do |hash|
+    FactoryBot.create(:locale_language, hash)
   end
 end
 
