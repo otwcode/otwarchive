@@ -28,9 +28,7 @@ class PseudsController < ApplicationController
   def show
     raise ActiveRecord::RecordNotFound, t(".could_not_find_user", username: params[:user_id]) if @user.blank?
 
-    @pseud = @user.pseuds.find_by(name: params[:id])
-    raise ActiveRecord::RecordNotFound, t(".could_not_find_pseud", pseud: params[:id]) unless @pseud
-
+    @pseud = @user.pseuds.find_by!(name: params[:id])
     @page_subtitle = @pseud.name
 
     # very similar to show under users - if you change something here, change it there too

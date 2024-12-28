@@ -82,9 +82,11 @@ en:
         target: Target
     admin_invitations:
       find:
-        email: Enter all or part of an email address
-        token: Enter an invite token
-        username: Enter a username
+        email: 'Enter all or part of an email address:'
+        invitations_for: Invitations for
+        page_heading: Track invitations
+        token: 'Enter an invite token:'
+        username: 'Enter a username:'
       index:
         find:
           email: Enter all or part of an email address
@@ -510,7 +512,7 @@ en:
           search_by_pseud: Search By Pseud
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers %{down_arrow}
-        particpant_username: username
+        participant_username: username
         requests_html: Requests %{down_arrow}
   challenge_signups:
     signup_form:

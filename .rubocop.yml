@@ -42,7 +42,11 @@ Layout/TrailingWhitespace:
   Enabled: false
 
 Lint/AmbiguousBlockAssociation:
-  Enabled: false
+  Exclude:
+    # Exception for specs where we use change matchers:
+    # https://github.com/rubocop-hq/rubocop/issues/4222
+    - 'features/step_definitions/**/*.rb'
+    - 'spec/**/*.rb'
 
 Lint/AmbiguousRegexpLiteral:
   Enabled: false

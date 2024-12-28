@@ -236,6 +236,7 @@ describe User do
         it "does not prevent changing the username" do
           allow(existing_user).to receive(:justification_enabled?).and_return(false)
           existing_user.update!(login: "user#{existing_user.id}")
+          expect(existing_user.login).to eq("user#{existing_user.id}")
         end
       end
     end

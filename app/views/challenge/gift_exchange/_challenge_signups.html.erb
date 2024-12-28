@@ -33,7 +33,7 @@
 
   <dl class="index group">
     <% @challenge_signups.each do |signup| %>
-      <dt class="participant" title="<%= t(".particpant_username") %>">
+      <dt class="participant" title="<%= t(".participant_username") %>">
         <%= link_to signup.pseud.name, collection_signup_path(@collection, signup) %>
         <%= mailto_link signup.pseud.user, subject: "[#{h(@collection.title)}] Message from Collection Maintainer" %>
       </dt>

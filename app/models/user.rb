@@ -91,7 +91,7 @@ class User < ApplicationRecord
   before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :send_wrangler_username_change_notification, if: :is_tag_wrangler?
-  after_update :log_change_if_login_was_edited
+  after_update :log_change_if_login_was_edited, if: :saved_change_to_login?
   after_update :log_email_change, if: :saved_change_to_email?
 
   after_commit :reindex_user_creations_after_rename
@@ -578,15 +578,13 @@ class User < ApplicationRecord
   end
 
   def log_change_if_login_was_edited
-    return unless saved_change_to_login?
-
     current_admin = User.current_user if User.current_user.is_a?(Admin)
     options = {
       action: ArchiveConfig.ACTION_RENAME,
       admin: current_admin
     }
     options[:note] = if current_admin
-                       "Old Username: #{login_before_last_save}, New Username: #{login}, Changed by: #{User.current_user&.login}, Ticket ID: ##{ticket_number}"
+                       "Old Username: #{login_before_last_save}, New Username: #{login}, Changed by: #{current_admin.login}, Ticket ID: ##{ticket_number}"
                      else
                        "Old Username: #{login_before_last_save}; New Username: #{login}"
                      end
