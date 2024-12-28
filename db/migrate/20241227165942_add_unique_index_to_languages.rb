@@ -1,4 +1,4 @@
-class AddUniqueIndexToLanguages < ActiveRecord::Migration[6.1]
+class AddUniqueIndexToLanguages < ActiveRecord::Migration[7.0]
   def change
     # Remove existing non-unique index on :short if it exists
     remove_index :languages, :short if index_exists?(:languages, :short)
