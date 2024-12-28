@@ -511,7 +511,7 @@ describe "rake After:reindex_hidden_unrevealed_tags" do
     it "does not reindex the work's tags" do
       expect do
         subject.invoke
-      end.not_to add_to_reindex_queue(work.tags.first, :background)
+      end.not_to add_to_reindex_queue(work.tags.first, :main)
     end
   end
 
@@ -521,7 +521,7 @@ describe "rake After:reindex_hidden_unrevealed_tags" do
     it "reindexes the work's tags" do
       expect do
         subject.invoke
-      end.to add_to_reindex_queue(work.tags.first, :background)
+      end.to add_to_reindex_queue(work.tags.first, :main)
     end
   end
 
@@ -535,7 +535,7 @@ describe "rake After:reindex_hidden_unrevealed_tags" do
     it "reindexes the work's tags" do
       expect do
         subject.invoke
-      end.to add_to_reindex_queue(work.tags.first, :background)
+      end.to add_to_reindex_queue(work.tags.first, :main)
     end
   end
 end

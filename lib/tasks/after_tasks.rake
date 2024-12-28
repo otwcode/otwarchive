@@ -365,7 +365,7 @@ namespace :After do
     hidden_batches = (hidden_count + 999) / 1_000
     puts "Inspecting #{hidden_count} hidden works in #{hidden_batches} batches"
     Work.hidden.find_in_batches.with_index do |batch, index|
-      batch.each { |work| work.tags.reindex_all }
+      batch.each { |work| work.taggings.each(&:update_search) }
       puts "Finished batch #{index + 1} of #{hidden_batches}"
     end
 
@@ -373,7 +373,7 @@ namespace :After do
     unrevealed_batches = (unrevealed_count + 999) / 1_000
     puts "Inspecting #{unrevealed_count} unrevealed works in #{unrevealed_batches} batches"
     Work.unrevealed.find_in_batches.with_index do |batch, index|
-      batch.each { |work| work.tags.reindex_all }
+      batch.each { |work| work.taggings.each(&:update_search) }
       puts "Finished batch #{index + 1} of #{unrevealed_batches}"
     end
 
