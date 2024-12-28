@@ -181,7 +181,7 @@ describe UsersController do
       end
 
       subject do
-        post :changed_username, params: { id: user, new_login: new_username, ticket_id: 123 }
+        post :changed_username, params: { id: user, new_login: new_username, ticket_number: 123 }
       end
     end
 

@@ -75,7 +75,7 @@
       <dt><%= f.label :skin_id, t(".your_site_skin") %> <%= link_to_help "skins-basics" %></dt>
       <dd>
         <span class="actions"><%= link_to t(".public_site_skins"), skins_path %></span>
-        <%= f.select :skin_id, @available_skins.collect { |s| [s.title, s.id] } %>
+        <%= f.select :skin_id, (@available_skins.collect { |s| [s.title, s.id] }) %>
       </dd>
       <dt><%= f.label :time_zone, t(".your_time_zone") %></dt>
       <dd><%= f.time_zone_select :time_zone, nil, default: Time.zone.name %></dd>

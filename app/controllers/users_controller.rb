@@ -82,7 +82,7 @@ class UsersController < ApplicationController
     end
 
     @user.login = @new_login
-    @user.ticket_number = params[:ticket_id]
+    @user.ticket_number = params[:ticket_number]
 
     if @user.save
       if logged_in_as_admin?
