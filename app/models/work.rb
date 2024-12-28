@@ -310,10 +310,11 @@ class Work < ApplicationRecord
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
-  # If the work gets posted, we should (potentially) reindex the tags,
-  # so they get the correct draft-only status.
+  # If the work gets posted, hidden, or (un)revealed, we should (potentially) reindex the tags,
+  # so they get the correct visibility status.
   def update_tag_index
-    return unless saved_change_to_posted?
+    return unless saved_change_to_posted? || saved_change_to_hidden_by_admin? || saved_change_to_in_unrevealed_collection?
+
     taggings.each(&:update_search)
   end
 
