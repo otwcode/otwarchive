@@ -13,17 +13,17 @@ describe Language do
 
   describe "validations" do
     context "for :short" do
-      it "is valid with a value 5 characters or fewer" do
+      it "is valid with a value 4 characters or fewer" do
         korean = Language.new(name: "Korean", short: "ko")
 
         expect(korean).to be_valid
       end
 
-      it "is invalid if longer than 5 characters" do
+      it "is invalid if longer than 4 characters" do
         korean = Language.new(name: "Korean", short: "korean")
 
         expect(korean).not_to be_valid
-        expect(korean.errors[:short]).to include("is too long (maximum is 5 characters)")
+        expect(korean.errors[:short]).to include("is too long (maximum is 4 characters)")
       end
     end
 
