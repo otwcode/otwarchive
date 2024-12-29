@@ -102,7 +102,8 @@ en:
     tos_faq:
       page_title: Terms of Service FAQ
   invite_requests:
-    browser_page_title: Invitation Requests | Archive Of Our Own
+    index:
+      browser_page_title: Invitation Requests | Archive Of Our Own
   kudos:
     create:
       success: Thank you for leaving kudos!
