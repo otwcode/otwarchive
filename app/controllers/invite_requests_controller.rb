@@ -5,7 +5,7 @@ class InviteRequestsController < ApplicationController
   # Set Browser Page Title to Invitation Requests | Archive Of Our Own
   def index
     @invite_request = InviteRequest.new
-    @page_title = ts("Invitation Requests | Archive Of Our Own")
+    @page_title = t(".browser_page_title")
   end
 
   # GET /invite_requests/1
