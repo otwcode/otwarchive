@@ -70,6 +70,15 @@
     <% if policy(Locale).index? %>
       <li><%= link_to t(".nav.locales"), locales_path %></li>
     <% end %>
+    <li class="dropdown">
+      <%= link_to t(".nav.languages.languages"), languages_path %>
+      <ul class="menu">
+        <li><%= link_to t(".nav.languages.work_languages"), languages_path %></li>
+        <% if policy(LocaleLanguage).index? %>
+          <li><%= link_to t(".nav.languages.locale_languages"), locale_languages_path %></li>
+        <% end %>
+      </ul>
+    </li>
 
     <% if policy(AdminActivity).index? %>
       <li><%= link_to t(".nav.activities"), admin_activities_path %></li>

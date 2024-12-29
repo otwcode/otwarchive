@@ -1,0 +1,51 @@
+<%= error_messages_for :locale_language %>
+
+<%= form_for(@locale_language, html: { class: "post" }) do |f| %>
+
+  <p class="required notice">* <%= t(".required_notice") %></p>
+
+  <fieldset>
+    <dl>
+      <dt class="required">
+        <%= f.label :name, "#{t('.name')} *" %>
+      </dt>
+      <dd class="required">
+        <%= f.text_field :name, disabled: !policy(@locale_language).can_edit_other_fields? %>
+      </dd>
+
+      <dt class="required">
+        <%= f.label :short, "#{t('.short')} *" %>
+      </dt>
+      <dd class="required">
+        <%= f.text_field :short, disabled: !policy(@locale_language).can_edit_other_fields? %>
+      </dd>
+
+      <dt>
+        <%= f.label :sortable_name, t(".sortable_name") %>
+      </dt>
+      <dd>
+        <%= f.text_field :sortable_name, disabled: !policy(@locale_language).can_edit_other_fields? %>
+      </dd>
+
+      <dt>
+        <%= f.check_box :support_available, disabled: !policy(@locale_language).can_edit_support_available? %>
+      </dt>
+      <dd>
+        <%= f.label :support_available, t(".support_available") %>
+      </dd>
+      <dt>
+        <%= f.check_box :abuse_support_available, disabled: !policy(@locale_language).can_edit_abuse_available? %>
+      </dt>
+      <dd>
+        <%= f.label :abuse_support_available, t(".abuse_support_available") %>
+      </dd>
+    </dl>
+    <p class="submit actions">
+      <% if @locale_language.new_record? %>
+        <%= f.submit t(".submit.create") %>
+      <% else %>
+        <%= f.submit t(".submit.update") %>
+      <% end %>
+    </p>
+  </fieldset>
+<% end %>

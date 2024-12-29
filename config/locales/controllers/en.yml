@@ -92,6 +92,10 @@ en:
   external_works:
     update:
       successfully_updated: External work was successfully updated.
+  feedbacks:
+    create:
+      failure_send: Sorry, your message could not be saved - please try again!
+      successfully_sent: Your message was sent to the Archive team - thank you!
   home:
     content:
       page_title: Content Policy
@@ -107,6 +111,9 @@ en:
   languages:
     successfully_added: Language was successfully added.
     successfully_updated: Language was successfully updated.
+  locale_languages:
+    successfully_added: Locale language was successfully added.
+    successfully_updated: Locale language was successfully updated.
   muted:
     users:
       create:

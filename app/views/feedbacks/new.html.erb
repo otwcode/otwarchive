@@ -8,7 +8,7 @@
 <h4 class="landmark heading"><%= t(".heading.landmark.reference") %></h4>
 <ul class="navigation actions" role="navigation">
   <li><%= link_to t(".navigation.faqs"), archive_faqs_path %></li>
-  <li><%= link_to t(".navigation.release_notes"), admin_posts_path(:tag => 1) %></li>
+  <li><%= link_to t(".navigation.release_notes"), admin_posts_path(tag: 1) %></li>
   <li><%= link_to t(".navigation.known_issues"), known_issues_path %></li>
 </ul>
 <!--/subnav-->
@@ -21,8 +21,8 @@
 <% else %>
   <h3 class="heading"><%= t(".heading.instructions") %></h3>
   <div class="userstuff">
-    <p><%= t(".status.current", twitter_link: link_to(t(".status.twitter"), "https://twitter.com/AO3_Status"), tumblr_link: link_to(t(".status.tumblr"), "https://ao3org.tumblr.com")).html_safe %></p>
-    <p><%= t(".abuse.reports", contact_link: link_to(t(".abuse.contact"), new_abuse_report_path)).html_safe %></p>
+    <p><%= t(".status.current_html", twitter_link: link_to(t(".status.twitter"), "https://twitter.com/AO3_Status"), tumblr_link: link_to(t(".status.tumblr"), "https://ao3org.tumblr.com")) %></p>
+    <p><%= t(".abuse.reports_html", contact_link: link_to(t(".abuse.contact"), new_abuse_report_path)) %></p>
     <p><%= t(".reportable.intro") %></p>
     <ul>
       <li><%= t(".reportable.fnok.concerning_html", fnok_link: link_to(t(".reportable.fnok.fnok"), tos_faq_path(anchor: "next_of_kin"))) %></li>
@@ -37,9 +37,10 @@
       <li><%= t(".reportable.policy_questions") %></li>
     </ul>
     <p><%= t(".do_not_spam_html") %></p>
-    <p><%= t(".languages_html", list: @support_languages.map { |language| tag.span(language.name, lang: language.short) }.to_sentence.html_safe) %></p>
+    <p><%= t(".languages_html", list: @support_languages.map { |language| tag.span(language.name, lang: language.short) }
+.to_sentence.html_safe) %></p>
   </div>
-  <%= form_for(@feedback, html: {class: "post feedback"}) do |f| %>
+  <%= form_for(@feedback, html: { class: "post feedback" }) do |f| %>
     <fieldset>
       <legend><%= t(".form.legend.contact_info") %></legend>
       <dl>
@@ -59,11 +60,11 @@
       <%= f.hidden_field :referer %>
       <dl>
         <dt class="required">
-          <%= f.label :language, t(".form.language.label") %>
+          <%= f.label :locale_language, t(".form.language.label") %>
         </dt>
         <dd class="required">
-          <%= f.select(:language, language_options_for_select(@support_languages, "name"),
-                { selected: @feedback.language || Language.default.name }) %>
+          <%= f.select(:locale_language, language_options_for_select(@support_languages, "name"),
+                { selected: @feedback.locale_language || LocaleLanguage.default.name }) %>
         </dd>
         <dt class="required">
           <%= f.label :summary, t(".form.summary.label") %>

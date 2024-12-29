@@ -10,7 +10,7 @@ class FeedbackReporter
   attr_accessor :title,
                 :description,
                 :email,
-                :language,
+                :locale_language,
                 :category,
                 :username,
                 :url,
@@ -46,7 +46,7 @@ class FeedbackReporter
       "email" => email,
       "contactId" => zoho_contact_id,
       "cf" => {
-        "cf_language" => language.presence || Language.default.name,
+        "cf_language" => locale_language.presence || LocaleLanguage.default.name,
         "cf_name" => username.presence || "Anonymous user"
       }
     }

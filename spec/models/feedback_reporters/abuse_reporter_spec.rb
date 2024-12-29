@@ -9,7 +9,7 @@ describe AbuseReporter do
     {
       title: "This is a tragesy",
       description: "Nothing more to say",
-      language: "English",
+      locale_language: "English",
       email: "walrus@example.org",
       username: "Walrus",
       ip_address: "127.0.0.1",

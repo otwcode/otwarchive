@@ -5,6 +5,6 @@ FactoryBot.define do
     comment { Faker::Lorem.paragraph(sentence_count: 1) }
     email { Faker::Internet.email }
     summary { Faker::Lorem.sentence(word_count: 1) }
-    language { "English" }
+    locale_language { "English" }
   end
 end

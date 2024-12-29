@@ -1,15 +1,15 @@
 class AbuseReport < ApplicationRecord
+  attr_accessor :locale_language
+  
   validates :email, email_format: { allow_blank: false }
-  validates_presence_of :language
-  validates_presence_of :summary
-  validates_presence_of :comment
-  validates_presence_of :url
+  validates :locale_language, presence: true
+  validates :summary, presence: true
+  validates :comment, presence: true
+  validates :url, presence: true
   validate :url_is_not_over_reported
   validate :email_is_not_over_reporting
-  validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
-                                too_long: ts('must be less than %{max}
-                                             characters long.',
-                                max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
+  validates :summary, length: { maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
+                                too_long: I18n.t("abuse_report.too_long", max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED) }
 
   # It doesn't have the type set properly in the database, so override it here:
   attribute :summary_sanitizer_version, :integer, default: 0
@@ -17,7 +17,7 @@ class AbuseReport < ApplicationRecord
   validate :check_for_spam
   def check_for_spam
     approved = logged_in_with_matching_email? || !Akismetor.spam?(akismet_attributes)
-    errors.add(:base, ts("This report looks like spam to our system!")) unless approved
+    errors.add(:base, I18n.t("abuse_report.spam")) unless approved
   end
 
   def logged_in_with_matching_email?
@@ -25,7 +25,7 @@ class AbuseReport < ApplicationRecord
   end
 
   def akismet_attributes
-    name = username ? username : ""
+    name = username || ""
     {
       comment_type: "contact-form",
       key: ArchiveConfig.AKISMET_KEY,
@@ -37,7 +37,7 @@ class AbuseReport < ApplicationRecord
     }
   end
 
-  scope :by_date, -> { order('created_at DESC') }
+  scope :by_date, -> { order("created_at DESC") }
 
   # Standardize the format of work, chapter, and profile URLs to get it ready
   # for the url_is_not_over_reported validation.
@@ -46,7 +46,7 @@ class AbuseReport < ApplicationRecord
   # Profile URLs: "users/username"
   before_validation :standardize_url, on: :create
   def standardize_url
-    return unless url =~ %r{((chapters|works)/\d+)} || url =~ %r{(users\/\w+)}
+    return unless url =~ %r{((chapters|works)/\d+)} || url =~ %r{(users/\w+)}
 
     self.url = add_scheme_to_url(url)
     self.url = clean_url(url)
@@ -106,11 +106,12 @@ class AbuseReport < ApplicationRecord
   end
 
   def send_report
-    return unless %w(staging production).include?(Rails.env)
+    return unless %w[staging production].include?(Rails.env)
+
     reporter = AbuseReporter.new(
       title: summary,
       description: comment,
-      language: language,
+      locale_language: locale_language,
       email: email,
       username: username,
       ip_address: ip_address,
@@ -137,28 +138,23 @@ class AbuseReport < ApplicationRecord
   # make sure it isn't reported more than ABUSE_REPORTS_PER_WORK_MAX
   # or ABUSE_REPORTS_PER_USER_MAX times per month
   def url_is_not_over_reported
-    message = ts('This page has already been reported. Our volunteers only
-                 need one report in order to investigate and resolve an issue,
-                 so please be patient and do not submit another report.')
-    if url =~ /\/works\/\d+/
+    message = I18n.t("abuse_report.already_reported")
+    case url
+    when %r{/works/\d+}
       # use "/works/123/" to avoid matching chapter or external work ids
-      work_params_only = url.match(/\/works\/\d+\//).to_s
+      work_params_only = url.match(%r{/works/\d+/}).to_s
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
                                                  1.month.ago,
                                                  "%#{work_params_only}%").count
-      if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
-        errors.add(:base, message)
-      end
-    elsif url =~ /\/users\/\w+/
-      user_params_only = url.match(/\/users\/\w+\//).to_s
+      errors.add(:base, message) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
+    when %r{/users/\w+}
+      user_params_only = url.match(%r{/users/\w+/}).to_s
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
                                                  1.month.ago,
                                                  "%#{user_params_only}%").count
-      if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
-        errors.add(:base, message)
-      end
+      errors.add(:base, message) if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
     end
   end
 
@@ -169,9 +165,6 @@ class AbuseReport < ApplicationRecord
                                                email).count
     return if existing_reports_total < ArchiveConfig.ABUSE_REPORTS_PER_EMAIL_MAX
 
-    errors.add(:base, ts("You have reached our daily reporting limit. To keep our
-                          volunteers from being overwhelmed, please do not seek
-                          out violations to report, but only report violations you
-                          encounter during your normal browsing."))
+    errors.add(:base, I18n.t("abuse_report.daily_limit_reached"))
   end
 end

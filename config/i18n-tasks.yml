@@ -144,9 +144,6 @@ ignore_missing:
   - external_author_claimed # should be external_authors.complete_claim.external_author_claimed
   # Files: app/controllers/external_works_controller.rb and app/controllers/languages_controller.rb
   - successfully_updated # should be languages.update.successfully_updated
-  # File: app/controllers/feedbacks_controller.rb
-  - failure_send # should be feedbacks.create.failure_send
-  - successfully_sent # should be feedbacks.create.successfully_sent
   # Files: app/controllers/languages_controller.rb and app/controllers/locales_controller.rb
   - successfully_added # should be languages.create.successfully_added and locales.create.successfully_added
   # File: app/views/admin/admin_invitations/find.html.erb

@@ -9,7 +9,7 @@ describe SupportReporter do
     {
       title: "This is a tragesy",
       description: "Nothing more to say",
-      language: "English",
+      locale_language: "English",
       email: "walrus@example.org",
       username: "Walrus",
       user_agent: "HTTParty",

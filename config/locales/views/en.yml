@@ -275,6 +275,10 @@ en:
           queue: Manage Queue
           requests: Manage Requests
         label: Admin
+        languages:
+          languages: Languages
+          locale_languages: Locale Languages
+          work_languages: Work Languages
         locales: Locales
         posts:
           admin_posts: Admin Posts
@@ -591,7 +595,7 @@ en:
     new:
       abuse:
         contact: contact our Policy and Abuse team
-        reports: For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.
+        reports_html: For reports of violations of the Terms of Service such as harassment, spam, or plagiarism, or if you believe your account has been hacked, please %{contact_link} instead. We cannot act on these reports or provide information about Policy and Abuse cases.
       do_not_spam_html: "<strong>We respond to every report we receive, but we are a small volunteer team.</strong> For this reason, we ask you to not submit multiple reports regarding any one issue, or encourage other people to report the same issue, unless there is additional information to offer."
       form:
         comment:
@@ -639,7 +643,7 @@ en:
         tag_changes: Requests to canonize or change tags
         work_problems: Works labeled with the wrong language or duplicate works
       status:
-        current: For current updates on Archive performance or downtime, please check the %{twitter_link} or %{tumblr_link}.
+        current_html: For current updates on Archive performance or downtime, please check the %{twitter_link} or %{tumblr_link}.
         tumblr: ao3org Tumblr
         twitter: "@AO3_Status Twitter feed"
   home:
@@ -1463,6 +1467,27 @@ en:
       read_and_understood: I have read & understood the 2024 Terms of Service, including the Content Policy and Privacy Policy.
       summary_html: On the Archive of Our Own (AO3), users can create works, bookmarks, comments, tags, and other %{content_link}. Any information you publish on AO3 may be accessible by the public, AO3 users, and/or AO3 personnel. Be mindful when sharing personal information, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites.
       tos: Terms of Service
+  locale_languages:
+    edit:
+      heading: Edit Locale Language
+    form:
+      abuse_support_available: Abuse support available
+      name: Name
+      required_notice: Required information
+      short: Abbreviation
+      sortable_name: Name for alphabetical sorting
+      submit:
+        create: Create Locale Language
+        update: Update Locale Language
+      support_available: Support available
+    index:
+      navigation:
+        add: Add a Locale Language
+        edit: Edit
+        suggest: Suggest a Locale Language
+      page_heading: Locale Languages
+    new:
+      heading: New Locale Language
   menu:
     menu_about:
       about_us: About Us
