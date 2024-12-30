@@ -501,8 +501,8 @@ en:
   challenge:
     gift_exchange:
       challenge_signups:
-        close_offers_html: Close Offers %{up_arrow}
-        close_requests_html: Close Requests %{up_arrow}
+        close_offers_html: Close Offers &#8593;
+        close_requests_html: Close Requests &#8593;
         heading:
           for_collection: Sign-ups for collection %{collection}
           for_search: Sign-up
@@ -511,9 +511,9 @@ en:
           search: search
           search_by_pseud: Search By Pseud
         no_sign_ups_yet: No sign-ups yet!
-        offers_html: Offers %{down_arrow}
+        offers_html: Offers &#8595;
         participant_username: username
-        requests_html: Requests %{down_arrow}
+        requests_html: Requests &#8595;
   challenge_signups:
     signup_form:
       notice:

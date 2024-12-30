@@ -41,12 +41,12 @@
         <%= render "challenge_signups/signup_controls", challenge_signup: signup, subnav: false %>
         <ul class="actions">
           <li>
-            <%= link_to t(".requests_html", down_arrow: "&#8595;"), "#", class: "requests_#{signup.id}_open" %>
-            <%= link_to t(".close_requests_html", up_arrow: "&#8593;"), "#", class: "requests_#{signup.id}_close" %>
+            <%= link_to t(".requests_html"), "#", class: "requests_#{signup.id}_open" %>
+            <%= link_to t(".close_requests_html"), "#", class: "requests_#{signup.id}_close" %>
           </li>
           <li>
-            <%= link_to t(".offers_html", down_arrow: "&#8595;"), "#", class: "offers_#{signup.id}_open" %>
-            <%= link_to t(".close_offers_html", up_arrow: "&#8593;"), "#", class: "offers_#{signup.id}_close" %>
+            <%= link_to t(".offers_html"), "#", class: "offers_#{signup.id}_open" %>
+            <%= link_to t(".close_offers_html"), "#", class: "offers_#{signup.id}_close" %>
           </li>
         </ul>
         <div class="toggled" id="<%= "requests_#{signup.id}" %>">
