@@ -10,10 +10,10 @@
 
 <!--subnav-->
 <ul class="navigation actions">
-  <li class="search" role="search">
+  <li class="search">
     <%= form_tag collection_signups_path(@collection), class: "simple search", method: :get do |form| %>
       <fieldset>
-        <%= text_field_tag "query", @query, title: t(".navigation.search"), autocomplete: "on" %>
+        <%= text_field_tag "query", @query, title: t(".navigation.search"), autocomplete: "off" %>
         <%= submit_tag t(".navigation.search_by_pseud") %>
       </fieldset>
     <% end %>
@@ -33,7 +33,7 @@
 
   <dl class="index group">
     <% @challenge_signups.each do |signup| %>
-      <dt class="participant" title="<%= t(".participant_username") %>">
+      <dt class="participant">
         <%= link_to signup.pseud.name, collection_signup_path(@collection, signup) %>
         <%= mailto_link signup.pseud.user, subject: "[#{h(@collection.title)}] Message from Collection Maintainer" %>
       </dt>

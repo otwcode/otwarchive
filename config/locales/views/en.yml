@@ -82,32 +82,32 @@ en:
         target: Target
     admin_invitations:
       find:
-        email: 'Enter all or part of an email address:'
+        email: All or part of an email address
         invitations_for: Invitations for
         page_heading: Track invitations
-        token: 'Enter an invite token:'
-        username: 'Enter a username:'
+        token: Invite token
+        username: Username
       index:
         find:
-          email: Enter all or part of an email address
-          enter_invite_token: 'Enter an invite token:'
-          enter_username: 'Enter a username:'
+          email: All or part of an email address
           go: Go
           heading: Track invitations
+          invite_token: Invite token
           landmark_submit: Submit
+          username: Username
         grant_invites:
           all: All
           generate_invitations: Generate invitations
           heading: Give invite codes to current users
           landmark_submit: Submit
-          number_of_invitations: 'Number of invitations:'
-          users: 'Users:'
+          number_of_invitations: Number of invitations
+          users: Users
           with_no_unused: With no unused invitations
         invite_from_queue:
           heading_html: Send invite codes to people in our %{invitations_queue_link}
-          invitations_queue: invitations queue
+          invitations_queue: Invitations queue
           invite_from_queue: Invite from queue
-          number_to_invite: 'Number of people to invite:'
+          number_to_invite: Number of people to invite
           requests_in_queue:
             one: There is 1 request in the queue.
             other: There are %{count} requests in the queue.
@@ -116,9 +116,9 @@ en:
           requests: Manage Requests
         page_heading: Invite New Users
         send_to_email:
-          description: 'Send an invite code to the following email address:'
+          description: Email address
           heading: Send to Email
-          invite_by_email: invite by email
+          invite_by_email_title: Invite by email
           invite_user: Invite user
     admin_nav:
       ao3_news: AO3 News
@@ -504,15 +504,16 @@ en:
         close_offers_html: Close Offers &#8593;
         close_requests_html: Close Requests &#8593;
         heading:
-          for_collection: Sign-ups for collection %{collection}
-          for_search: Sign-up
+          for_collection: Sign-ups for %{collection}
+          for_search:
+            one: Sign-up
+            other: Sign-ups
         navigation:
           download_csv: Download (CSV)
-          search: search
-          search_by_pseud: Search By Pseud
+          search: Search
+          search_by_pseud: Search by Pseud
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
-        participant_username: username
         requests_html: Requests &#8595;
   challenge_signups:
     signup_form:
@@ -1412,16 +1413,19 @@ en:
     invitation:
       email_address_label: Enter an email address
     user_invitations:
-      copy_and_use: copy and use
-      copy_link: Copy Link
-      delete: Delete
-      delete_confirmation: Are you sure you want to delete this invitation?
-      external_author: External Author
-      invitation_information: Invitation Information
-      list_of_your_invitations: List of your invitation tokens and information regarding who you shared them with, along with the option to share unused tokens.
-      sent_to: Sent To
-      token: Token
-      username: Username
+      table:
+        actions:
+          copy_and_use: Copy and use
+          delete: Delete
+          delete_confirmation: Are you sure you want to delete this invitation?
+        caption: Invitation Information
+        headings:
+          copy_link: Copy Link
+          external_author: External Author
+          sent_to: Sent To
+          token: Token
+          username: Username
+        summary: List of your invitation tokens and information regarding who you shared them with, along with the option to share unused tokens.
   invite_requests:
     index_open:
       add_to_list: Add me to the list
@@ -1823,7 +1827,6 @@ en:
       account_faq: Account FAQ
       browser_title: Change Username
       caution: Please use this feature with caution.
-      change_username: Change Username
       change_window:
         one: You can change your username once per day.
         other: You can change your username once every %{count} days.
@@ -1837,6 +1840,7 @@ en:
       new_username: New username
       page_heading: Change My Username
       password: Password
+      submit: Change Username
       submit_landmark: Submit
       username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
     confirmation:

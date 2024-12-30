@@ -126,7 +126,7 @@ en:
       not_deleted: The pseud was not deleted.
       successfully_deleted: The pseud was successfully deleted.
     show:
-      could_not_find_user: Couldn't find user '%{username}'
+      could_not_find_user: Couldn't find user "%{username}"
     update:
       successfully_updated: Pseud was successfully updated.
   questions:

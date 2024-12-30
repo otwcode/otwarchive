@@ -9,14 +9,14 @@
 <%= form_tag url_for(controller: "admin/admin_invitations", action: "find"), method: :get do %>
   <dl>
     <dt><%= label_tag "invitation[user_name]", t(".username") %></dt>
-    <dd><%= text_field_tag "invitation[user_name]", params[:invitation][:user_name], autocomplete: "on" %></dd>
+    <dd><%= text_field_tag "invitation[user_name]", params[:invitation][:user_name], autocomplete: "off" %></dd>
     <dt><%= label_tag "invitation[token]", t(".token") %></dt>
-    <dd><%= text_field_tag "invitation[token]", params[:invitation][:token], autocomplete: "on" %></dd>
+    <dd><%= text_field_tag "invitation[token]", params[:invitation][:token], autocomplete: "off" %></dd>
     <dt><%= label_tag "invitee_email", t(".email") %></dt>
     <dd>
       <%= text_field_tag "invitation[invitee_email]",
             params[:invitation][:invitee_email],
-            autocomplete: "email",
+            autocomplete: "off",
             id: "invitee_email" %>
     </dd>
   </dl>
@@ -25,11 +25,11 @@
 
 <% if @user %>
 <h3 class="heading"><%= t(".invitations_for") %> <%= link_to @user.login, user_invitations_path(@user) %></h3>
-<%= render partial: "invitations/user_invitations", locals: { invitations: @invitations } %>
+<%= render partial: "invitations/user_invitations", invitations: @invitations %>
 <% elsif @invitation %>
-<%= render partial: "invitations/invitation", locals: { invitation: @invitation } %>
+<%= render partial: "invitations/invitation", invitation: @invitation %>
 <% elsif @invitations %>
-<%= render partial: "invitations/user_invitations", locals: { invitations: @invitations } %>
+<%= render partial: "invitations/user_invitations", invitations: @invitations %>
 <% end %>
 <!--/content-->
 

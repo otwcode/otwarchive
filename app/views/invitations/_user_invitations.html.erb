@@ -1,13 +1,13 @@
 <% unless invitations.blank? %>
-  <table summary="<%= t(".list_of_your_invitations") %>">
-    <caption><%= t(".invitation_information") %></caption>
+  <table summary="<%= t(".table.summary") %>">
+    <caption><%= t(".table.caption") %></caption>
     <thead>
       <tr>
-        <th scope="col"><%= t(".token") %></th>
-        <th scope="col"><%= t(".sent_to") %></th>
-        <th scope="col"><%= t(".username") %></th>
-        <th scope="col"><%= t(".external_author") %></th>
-        <th scope="col"><%= t(".copy_link") %></th>
+        <th scope="col"><%= t(".table.headings.token") %></th>
+        <th scope="col"><%= t(".table.headings.sent_to") %></th>
+        <th scope="col"><%= t(".table.headings.username") %></th>
+        <th scope="col"><%= t(".table.headings.external_author") %></th>
+        <th scope="col"><%= t(".table.headings.copy_link") %></th>
       </tr>
     </thead>
     <tbody>
@@ -23,13 +23,16 @@
           <td>
             <% unless invitation.redeemed_at %>
             <% if invitation.external_author %>
-              <%= link_to t(".copy_and_use"), claim_path(invitation_token: invitation.token) %>
+              <%= link_to t(".table.actions.copy_and_use"), claim_path(invitation_token: invitation.token) %>
             <% else %>
-              <%= link_to t(".copy_and_use"), signup_path(invitation_token: invitation.token) %><% end %>
+              <%= link_to t(".table.actions.copy_and_use"), signup_path(invitation_token: invitation.token) %><% end %>
             <% end %>
           </td>
           <% if logged_in_as_admin? && invitation.redeemed_at.blank? %>
-            <td><%= link_to(t(".delete"), invitation, data: { confirm: t(".delete_confirmation") }, method: :delete) %></td>
+            <td>
+              <%= link_to(t(".table.actions.delete"),
+                    invitation, data: { confirm: t(".table.actions.delete_confirmation") }, method: :delete) %>
+            </td>
           <% end %>
         </tr>
       <% end %>
