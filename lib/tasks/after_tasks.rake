@@ -359,7 +359,7 @@ namespace :After do
       ext = File.extname(image)
       image_original = "original#{ext}"
 
-      icon_url = if Rails.env.production
+      icon_url = if Rails.env.production?
                    "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
                  else
                    "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
