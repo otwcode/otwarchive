@@ -341,7 +341,7 @@ namespace :After do
                                filename: image_original,
                                content_type: collection.icon_content_type)
       rescue => e
-        puts "Error '#{e}' copying #{icon_url}; check original permissions"
+        puts "Error '#{e}' copying #{icon_url}"
       end
 
       puts "Finished up to ID #{collection.id}" if collection.id.modulo(100).zero?
@@ -369,7 +369,7 @@ namespace :After do
                           filename: image_original,
                           content_type: pseud.icon_content_type)
       rescue => e
-        puts "Error '#{e}' copying #{icon_url}; check original permissions"
+        puts "Error '#{e}' copying #{icon_url}"
       end
 
       puts "Finished up to ID #{pseud.id}" if pseud.id.modulo(100).zero?
@@ -394,7 +394,7 @@ namespace :After do
                          filename: image_original,
                          content_type: skin.icon_content_type)
       rescue => e
-        puts "Error '#{e}' copying #{icon_url}; check original permissions"
+        puts "Error '#{e}' copying #{icon_url}"
       end
 
       puts "Finished up to ID #{skin.id}" if skin.id.modulo(100).zero?
