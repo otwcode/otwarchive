@@ -2,10 +2,10 @@ class InviteRequestsController < ApplicationController
   before_action :admin_only, only: [:manage, :destroy]
 
   # GET /invite_requests
-  # Set Browser Page Title to Invitation Requests | Archive Of Our Own
+  # Set browser page title to Invitation Requests
   def index
     @invite_request = InviteRequest.new
-    @page_title = t(".browser_page_title")
+    @page_subtitle = t(".page_title")
   end
 
   # GET /invite_requests/1
