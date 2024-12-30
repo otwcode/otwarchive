@@ -340,7 +340,7 @@ namespace :After do
         collection.icon.attach(io: URI.parse(icon_url).open,
                                filename: image_original,
                                content_type: collection.icon_content_type)
-      rescue => e
+      rescue StandardError => e
         puts "Error '#{e}' copying #{icon_url}"
       end
 
@@ -368,7 +368,7 @@ namespace :After do
         pseud.icon.attach(io: URI.parse(icon_url).open,
                           filename: image_original,
                           content_type: pseud.icon_content_type)
-      rescue => e
+      rescue StandardError => e
         puts "Error '#{e}' copying #{icon_url}"
       end
 
@@ -393,7 +393,7 @@ namespace :After do
         skin.icon.attach(io: URI.parse(icon_url).open,
                          filename: image_original,
                          content_type: skin.icon_content_type)
-      rescue => e
+      rescue StandardError => e
         puts "Error '#{e}' copying #{icon_url}"
       end
 
