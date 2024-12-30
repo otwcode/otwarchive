@@ -336,9 +336,13 @@ namespace :After do
 
       # Collection icons are co-mingled in production and staging...
       icon_url = "https://s3.amazonaws.com/otw-ao3-icons/collections/icons/#{collection.id}/#{image_original}"
-      collection.icon.attach(io: URI.parse(icon_url).open,
-                             filename: image_original,
-                             content_type: collection.icon_content_type)
+      begin
+        collection.icon.attach(io: URI.parse(icon_url).open,
+                               filename: image_original,
+                               content_type: collection.icon_content_type)
+      rescue OpenURI::HTTPError
+        puts "Error copying #{icon_url}; check original permissions"
+      end
 
       print "." && $stdout.flush if collection.id.modulo(100).zero?
     end
@@ -360,9 +364,13 @@ namespace :After do
                  else
                    "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
                  end
-      pseud.icon.attach(io: URI.parse(icon_url).open,
-                        filename: image_original,
-                        content_type: pseud.icon_content_type)
+      begin
+        pseud.icon.attach(io: URI.parse(icon_url).open,
+                          filename: image_original,
+                          content_type: pseud.icon_content_type)
+      rescue OpenURI::HTTPError
+        puts "Error copying #{icon_url}; check original permissions"
+      end
 
       print "." && $stdout.flush if pseud.id.modulo(100).zero?
     end
@@ -381,9 +389,13 @@ namespace :After do
 
       # Skin icons are co-mingled in production and staging...
       icon_url = "https://s3.amazonaws.com/otw-ao3-icons/skins/icons/#{skin.id}/#{image_original}"
-      skin.icon.attach(io: URI.parse(icon_url).open,
-                       filename: image_original,
-                       content_type: skin.icon_content_type)
+      begin
+        skin.icon.attach(io: URI.parse(icon_url).open,
+                         filename: image_original,
+                         content_type: skin.icon_content_type)
+      rescue OpenURI::HTTPError
+        puts "Error copying #{icon_url}; check original permissions"
+      end
 
       print "." && $stdout.flush if skin.id.modulo(100).zero?
     end
