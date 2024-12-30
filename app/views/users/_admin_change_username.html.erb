@@ -6,19 +6,19 @@
   <li><%= link_to t(".navigation.manage_user"), admin_user_path(@user) %></li>
 </ul>
 
-<%= form_tag changed_username_user_path(@user) do %>
+<%= form_tag changed_username_user_path(@user), autocomplete: "off" do %>
   <dl>
     <dt><%= t("users.change_username.current_username") %></dt>
     <dd><p class="important informational"><%= @user.login %></p></dd>
     <dt><%= label_tag :new_login, t("users.change_username.new_username") %></dt>
     <dd>
-      <%= text_field_tag :new_login, "user#{@user.id}", readonly: true, autocomplete: "off", "aria-describedby": "new-login-field-description" %>
+      <%= text_field_tag :new_login, "user#{@user.id}", readonly: true "aria-describedby": "new-login-field-description" %>
       <p class="footnote" id="new-login-field-description">
         <%= t(".new_username_footnote") %>
       </p>
     </dd>
     <dt><%= label_tag :ticket_number, t(".ticket_id") %></dt>
-    <dd><%= text_field_tag :ticket_number, nil, autocomplete: "off" %></dd>
+    <dd><%= text_field_tag :ticket_number %></dd>
     <dt class="landmark"><%= t("users.change_username.submit_landmark") %></dt>
     <dd class="submit actions">
       <%= submit_tag t("users.change_username.submit") %>

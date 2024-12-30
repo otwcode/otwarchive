@@ -157,7 +157,7 @@ Feature: Gift Exchange Challenge
      And I go to "Awesome Gift Exchange" collection's page
      And I follow "Sign-ups"
      And I fill in "query" with "3"
-     And I press "Search By Pseud"
+     And I press "Search by Pseud"
    Then I should see "myname3" within "#main"
      And I should not see "myname4" within "#main"
 

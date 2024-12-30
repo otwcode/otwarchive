@@ -1,4 +1,4 @@
-<% unless invitations.blank? %>
+<% unless @invitations.blank? %>
   <table summary="<%= t(".table.summary") %>">
     <caption><%= t(".table.caption") %></caption>
     <thead>
@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody>
-      <% for invitation in invitations %>
+      <% @invitations.each do |invitation| %>
         <tr>
           <td><%= link_to invitation.token, (invitation.creator.is_a?(User) ? [invitation.creator, invitation] : invitation) %></td>
           <td><%= invitation.invitee_email %></td>

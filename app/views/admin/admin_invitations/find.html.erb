@@ -6,19 +6,14 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_tag url_for(controller: "admin/admin_invitations", action: "find"), method: :get do %>
+<%= form_tag url_for(controller: "admin/admin_invitations", action: "find"), autocomplete: "off", method: :get do %>
   <dl>
     <dt><%= label_tag "invitation[user_name]", t(".username") %></dt>
-    <dd><%= text_field_tag "invitation[user_name]", params[:invitation][:user_name], autocomplete: "off" %></dd>
+    <dd><%= text_field_tag "invitation[user_name]", params[:invitation][:user_name] %></dd>
     <dt><%= label_tag "invitation[token]", t(".token") %></dt>
-    <dd><%= text_field_tag "invitation[token]", params[:invitation][:token], autocomplete: "off" %></dd>
+    <dd><%= text_field_tag "invitation[token]", params[:invitation][:token] %></dd>
     <dt><%= label_tag "invitee_email", t(".email") %></dt>
-    <dd>
-      <%= text_field_tag "invitation[invitee_email]",
-            params[:invitation][:invitee_email],
-            autocomplete: "off",
-            id: "invitee_email" %>
-    </dd>
+    <dd><%= text_field_tag "invitation[invitee_email]", params[:invitation][:invitee_email], id: "invitee_email" %></dd>
   </dl>
   <p class="submit actions"><%= submit_tag "Go" %></p>
 <% end %>
