@@ -572,9 +572,11 @@ class User < ApplicationRecord
   end
 
   def add_renamed_at
-    return if User.current_user.is_a?(Admin)
-
-    self.renamed_at = Time.current
+    if User.current_user == self
+      self.renamed_at = Time.current
+    else
+      self.admin_renamed_at = Time.current
+    end
   end
 
   def log_change_if_login_was_edited

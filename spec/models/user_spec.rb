@@ -212,9 +212,11 @@ describe User do
           expect(existing_user.errors[:login].first).to eq "must use the default. Please contact your chairs to use something else."
         end
 
-        it "does not set renamed_at" do
+        it "only sets admin_renamed_at" do
+          freeze_time
           existing_user.update!(login: "user#{existing_user.id}")
           expect(existing_user.renamed_at).to be nil
+          expect(existing_user.admin_renamed_at).to eq(Time.current)
         end
 
         it "creates an admin log item" do
@@ -241,30 +243,38 @@ describe User do
       end
     end
 
-    it "sets renamed_at if username is changed" do
-      freeze_time
-      existing_user.update!(login: "new_username")
-      expect(existing_user.renamed_at).to eq(Time.current)
-    end
-
-    context "username was recently changed" do
+    context "when logged in as the user themselves" do
       before do
+        User.current_user = existing_user
+      end
+
+      it "sets renamed_at" do
         freeze_time
-        existing_user.update!(login: "new_login")
+        existing_user.update!(login: "new_username")
+        expect(existing_user.renamed_at).to eq(Time.current)
+        expect(existing_user.admin_renamed_at).to be nil
       end
 
-      it "does not allow another rename" do
-        expect { existing_user.update!(login: "new") }
-          .to raise_error(ActiveRecord::RecordInvalid)
-        localized_renamed_at = I18n.l(existing_user.renamed_at, format: :long)
-        expect(existing_user.errors[:login].first).to eq(
-          "can only be changed once every 7 days. You last changed your username on #{localized_renamed_at}."
-        )
-      end
+      context "username was recently changed" do
+        before do
+          freeze_time
+          existing_user.update!(login: "new_login")
+        end
 
-      it "allows changing email" do
-        existing_user.update!(email: "new_email@example.com")
-        expect(existing_user.email).to eq("new_email@example.com")
+        it "does not allow another rename" do
+          expect { existing_user.update!(login: "new") }
+            .to raise_error(ActiveRecord::RecordInvalid)
+          localized_renamed_at = I18n.l(existing_user.renamed_at, format: :long)
+          expect(existing_user.errors[:login].first)
+            .to eq(
+              "can only be changed once every 7 days. You last changed your username on #{localized_renamed_at}."
+            )
+        end
+
+        it "allows changing email" do
+          existing_user.update!(email: "new_email@example.com")
+          expect(existing_user.email).to eq("new_email@example.com")
+        end
       end
     end
 
