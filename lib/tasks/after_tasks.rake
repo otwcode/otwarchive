@@ -340,11 +340,11 @@ namespace :After do
         collection.icon.attach(io: URI.parse(icon_url).open,
                                filename: image_original,
                                content_type: collection.icon_content_type)
-      rescue OpenURI::HTTPError
-        puts "Error copying #{icon_url}; check original permissions"
+      rescue => e
+        puts "Error '#{e}' copying #{icon_url}; check original permissions"
       end
 
-      print "." && $stdout.flush if collection.id.modulo(100).zero?
+      puts "Finished up to ID #{collection.id}" if collection.id.modulo(100).zero?
     end
   end
 
@@ -368,11 +368,11 @@ namespace :After do
         pseud.icon.attach(io: URI.parse(icon_url).open,
                           filename: image_original,
                           content_type: pseud.icon_content_type)
-      rescue OpenURI::HTTPError
-        puts "Error copying #{icon_url}; check original permissions"
+      rescue => e
+        puts "Error '#{e}' copying #{icon_url}; check original permissions"
       end
 
-      print "." && $stdout.flush if pseud.id.modulo(100).zero?
+      puts "Finished up to ID #{pseud.id}" if pseud.id.modulo(100).zero?
     end
   end
 
@@ -393,11 +393,11 @@ namespace :After do
         skin.icon.attach(io: URI.parse(icon_url).open,
                          filename: image_original,
                          content_type: skin.icon_content_type)
-      rescue OpenURI::HTTPError
-        puts "Error copying #{icon_url}; check original permissions"
+      rescue => e
+        puts "Error '#{e}' copying #{icon_url}; check original permissions"
       end
 
-      print "." && $stdout.flush if skin.id.modulo(100).zero?
+      puts "Finished up to ID #{skin.id}" if skin.id.modulo(100).zero?
     end
   end
   # This is the end that you have to put new tasks above.
