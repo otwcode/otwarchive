@@ -21,21 +21,17 @@ module UsersHelper
   end
 
   # Determine which icon to show on user pages
-  def standard_icon(user = nil, pseud = nil)
-    if pseud && pseud.icon
-      pseud.icon.url(:standard).gsub(/^http:/, "https:")
-    elsif user && user.default_pseud && user.default_pseud.icon
-      user.default_pseud.icon.url(:standard).gsub(/^http:/, "https:")
-    else
-      '/images/skins/iconsets/default/icon_user.png'
-    end
+  def standard_icon(pseud = nil)
+    return "/images/skins/iconsets/default/icon_user.png" unless pseud&.icon&.attached?
+
+    pseud.icon.variant(:standard).processed.url
   end
 
   # no alt text if there isn't specific alt text
   def icon_display(user = nil, pseud = nil)
     path = user ? (pseud ? user_pseud_path(pseud.user, pseud) : user_path(user)) : nil
     pseud ||= user.default_pseud if user
-    icon = standard_icon(user, pseud)
+    icon = standard_icon(pseud)
     alt_text = pseud.try(:icon_alt_text) || nil
 
     if path

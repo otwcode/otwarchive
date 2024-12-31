@@ -56,7 +56,6 @@ gem "aws-sdk-s3"
 gem 'css_parser'
 
 gem "terrapin"
-gem "kt-paperclip", ">= 5.2.0"
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -183,3 +182,5 @@ group :staging, :production do
   gem "sentry-rails"
   gem "sentry-resque"
 end
+
+gem "image_processing", "~> 1.12"
