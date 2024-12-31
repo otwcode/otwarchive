@@ -12,7 +12,7 @@
     <dd><p class="important informational"><%= @user.login %></p></dd>
     <dt><%= label_tag :new_login, t("users.change_username.new_username") %></dt>
     <dd>
-      <%= text_field_tag :new_login, "user#{@user.id}", readonly: true "aria-describedby": "new-login-field-description" %>
+      <%= text_field_tag :new_login, "user#{@user.id}", readonly: true, "aria-describedby": "new-login-field-description" %>
       <p class="footnote" id="new-login-field-description">
         <%= t(".new_username_footnote") %>
       </p>
