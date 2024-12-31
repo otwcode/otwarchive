@@ -101,6 +101,9 @@ en:
       page_title: Terms of Service
     tos_faq:
       page_title: Terms of Service FAQ
+  invite_requests:
+    index:
+      page_title: Invitation Requests
   kudos:
     create:
       success: Thank you for leaving kudos!
