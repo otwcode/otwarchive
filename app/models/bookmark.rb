@@ -32,6 +32,8 @@ class Bookmark < ApplicationRecord
     end
   end
 
+  after_update :admin_hidden_bookmark_notification, if: :hidden_by_admin_changed?
+
   # renaming scope :public -> :is_public because otherwise it overlaps with the "public" keyword
   scope :is_public, -> { where(private: false, hidden_by_admin: false) }
   scope :not_public, -> { where(private: true) }
@@ -211,6 +213,16 @@ class Bookmark < ApplicationRecord
       bookmarkable.revised_at
     elsif bookmarkable.respond_to?(:updated_at)
       bookmarkable.updated_at
+    end
+  end
+
+  private
+
+  def admin_hidden_bookmark_notification
+    return unless hidden_by_admin?
+
+    users.each do |user|
+      UserMailer.send_bookmark_hidden_notification(id, user.id).deliver_later
     end
   end
 end
