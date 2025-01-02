@@ -1,18 +1,20 @@
 module InvitationsHelper
-
   def creator_link(invitation)
-    if invitation.creator.is_a?(User)
+    case invitation.creator
+    when User
       link_to(invitation.creator.login, invitation.creator)
-    elsif invitation.creator.is_a?(Admin)
+    when Admin
       invitation.creator.login
     else
-      "queue"
+      t("invitations.invitation.queue")
     end
   end
 
   def invitee_link(invitation)
-    if invitation.invitee && invitation.invitee.is_a?(User)
-      link_to(invitation.invitee.login, invitation.invitee)
-    end
+    return unless invitation.invitee_type == "User"
+    return link_to(invitation.invitee.login, invitation.invitee) if invitation.invitee.present?
+    return t("invitations.invitation.deleted_user_with_id", user_id: invitation.invitee_id) if User.current_user.is_a?(Admin)
+
+    t("invitations.invitation.deleted_user")
   end
 end
