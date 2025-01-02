@@ -8,14 +8,14 @@ module Justifiable
     validates :ticket_number,
               presence: true,
               numericality: { only_integer: true },
-              if: :enabled?
+              if: :justification_enabled?
 
-    validate :ticket_number_exists_in_tracker, if: :enabled?
+    validate :ticket_number_exists_in_tracker, if: :justification_enabled?
   end
 
   private
 
-  def enabled?
+  def justification_enabled?
     # Only require a ticket if the record has been changed by an admin.
     User.current_user.is_a?(Admin) && changed?
   end
