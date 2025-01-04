@@ -310,7 +310,7 @@ class Work < ApplicationRecord
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
-  # If the work gets posted, hidden, or (un)revealed, we should (potentially) reindex the tags,
+  # If the work gets posted, (un)hidden, or (un)revealed, we should (potentially) reindex the tags,
   # so they get the correct visibility status.
   def update_tag_index
     return unless saved_change_to_posted? || saved_change_to_hidden_by_admin? || saved_change_to_in_unrevealed_collection?
