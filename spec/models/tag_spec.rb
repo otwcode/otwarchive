@@ -1,5 +1,4 @@
-# encoding: UTF-8
-require 'spec_helper'
+require "spec_helper"
 
 describe Tag do
   after(:each) do
@@ -66,7 +65,7 @@ describe Tag do
       end
 
       it "Writes to the database do not happen immediately" do
-        (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
+        (1..(40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR) - 1).each do |try|
           @fandom_tag.taggings_count = try
           @fandom_tag.reload
           expect(@fandom_tag.taggings_count_cache).to eq 0
@@ -343,15 +342,19 @@ describe Tag do
   end
 
   describe "has_posted_works?" do
-    before do
-      create(:work, fandom_string: "love live,jjba")
-      create(:draft, fandom_string: "zombie land saga,jjba")
-    end
-
-    it "is true if used in posted works" do
-      expect(Tag.find_by(name: "zombie land saga").has_posted_works?).to be_falsey
-      expect(Tag.find_by(name: "love live").has_posted_works?).to be_truthy
-      expect(Tag.find_by(name: "jjba").has_posted_works?).to be_truthy
+    {
+      "draft" => { posted: false },
+      "unrevealed" => { in_unrevealed_collection: true },
+      "hidden" => { hidden_by_admin: true }
+    }.each do |description, attributes|
+      it "is false if only used on #{description} works" do
+        create(:work, fandom_string: "love live,jjba")
+        non_visible_work = create(:work, fandom_string: "zombie land saga,jjba")
+        non_visible_work.update!(**attributes)
+        expect(Tag.find_by(name: "zombie land saga").has_posted_works?).to be_falsey
+        expect(Tag.find_by(name: "love live").has_posted_works?).to be_truthy
+        expect(Tag.find_by(name: "jjba").has_posted_works?).to be_truthy
+      end
     end
   end
 

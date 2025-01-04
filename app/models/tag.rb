@@ -630,9 +630,9 @@ class Tag < ApplicationRecord
     !(self.canonical? || self.unwrangleable? || self.merger_id.present? || self.mergers.any?)
   end
 
-  # Returns true if a tag has been used in posted works
-  def has_posted_works?
-    self.works.posted.any?
+  # Returns true if a tag has been used in posted works that are revealed and not hidden
+  def has_posted_works? # rubocop:disable Naming/PredicateName
+    self.works.posted.revealed.unhidden.any?
   end
 
   # sort tags by name
