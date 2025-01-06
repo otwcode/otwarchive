@@ -321,7 +321,11 @@ describe TagsController do
         expect(response).to have_http_status(:success)
       end
 
-      it_behaves_like "an action only authorized admins can access", authorized_roles: wrangling_read_access_roles
+      it "displays the tag information page for admins" do
+        fake_login_admin(create(:admin))
+        subject
+        success
+      end
 
       it "redirects with an error when not an admin" do
         get :show, params: { id: tag.name }

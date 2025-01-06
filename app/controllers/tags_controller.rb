@@ -58,14 +58,9 @@ class TagsController < ApplicationController
 
   def show
     @page_subtitle = @tag.name
-    if @tag.is_a?(Banned) 
-      if !logged_in_as_admin?
-        flash[:error] = t("admin.access.not_admin_denied")
-        redirect_to(tag_wranglings_path) && return
-      elsif !policy(:wrangling).read_access?
-        flash[:error] = t("admin.access.page_access_denied")
-        redirect_to(root_path) && return
-      end
+    if @tag.is_a?(Banned) && !logged_in_as_admin?
+      flash[:error] = t("admin.access.not_admin_denied")
+      redirect_to(tag_wranglings_path) && return
     end
     # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
