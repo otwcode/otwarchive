@@ -329,22 +329,27 @@ namespace :After do
 
     return unless Rails.env.staging? || Rails.env.production?
 
-    Collection.where.not(icon_file_name: nil).find_each do |collection|
-      image = collection.icon_file_name
-      ext = File.extname(image)
-      image_original = "original#{ext}"
+    Collection.find_in_batches.with_index do |batch, index|
+      batch.each do |collection|
+        next if collection.icon_file_name.blank?
 
-      # Collection icons are co-mingled in production and staging...
-      icon_url = "https://s3.amazonaws.com/otw-ao3-icons/collections/icons/#{collection.id}/#{image_original}"
-      begin
-        collection.icon.attach(io: URI.parse(icon_url).open,
-                               filename: image_original,
-                               content_type: collection.icon_content_type)
-      rescue StandardError => e
-        puts "Error '#{e}' copying #{icon_url}"
+        image = collection.icon_file_name
+        ext = File.extname(image)
+        image_original = "original#{ext}"
+
+        # Collection icons are co-mingled in production and staging...
+        icon_url = "https://s3.amazonaws.com/otw-ao3-icons/collections/icons/#{collection.id}/#{image_original}"
+        begin
+          collection.icon.attach(io: URI.parse(icon_url).open,
+                                 filename: image_original,
+                                 content_type: collection.icon_content_type)
+        rescue StandardError => e
+          puts "Error '#{e}' copying #{icon_url}"
+        end
       end
 
-      puts "Finished up to ID #{collection.id}" if collection.id.modulo(100).zero?
+      puts "Finished batch #{index + 1}" && $stdout.flush
+      sleep 10
     end
   end
 
@@ -354,25 +359,30 @@ namespace :After do
 
     return unless Rails.env.staging? || Rails.env.production?
 
-    Pseud.where.not(icon_file_name: nil).find_each do |pseud|
-      image = pseud.icon_file_name
-      ext = File.extname(image)
-      image_original = "original#{ext}"
+    Pseud.find_in_batches.with_index do |batch, index|
+      batch.each do |pseud|
+        next if pseud.icon_file_name.blank?
 
-      icon_url = if Rails.env.production?
-                   "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
-                 else
-                   "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
-                 end
-      begin
-        pseud.icon.attach(io: URI.parse(icon_url).open,
-                          filename: image_original,
-                          content_type: pseud.icon_content_type)
-      rescue StandardError => e
-        puts "Error '#{e}' copying #{icon_url}"
+        image = pseud.icon_file_name
+        ext = File.extname(image)
+        image_original = "original#{ext}"
+
+        icon_url = if Rails.env.production?
+                     "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
+                   else
+                     "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
+                   end
+        begin
+          pseud.icon.attach(io: URI.parse(icon_url).open,
+                            filename: image_original,
+                            content_type: pseud.icon_content_type)
+        rescue StandardError => e
+          puts "Error '#{e}' copying #{icon_url}"
+        end
       end
 
-      puts "Finished up to ID #{pseud.id}" if pseud.id.modulo(100).zero?
+      puts "Finished batch #{index + 1}" && $stdout.flush
+      sleep 10
     end
   end
 
@@ -382,22 +392,27 @@ namespace :After do
 
     return unless Rails.env.staging? || Rails.env.production?
 
-    Skin.where.not(icon_file_name: nil).find_each do |skin|
-      image = skin.icon_file_name
-      ext = File.extname(image)
-      image_original = "original#{ext}"
+    Skin.find_in_batches.with_index do |batch, index|
+      batch.each do |skin|
+        next if skin.icon_file_name.blank?
 
-      # Skin icons are co-mingled in production and staging...
-      icon_url = "https://s3.amazonaws.com/otw-ao3-icons/skins/icons/#{skin.id}/#{image_original}"
-      begin
-        skin.icon.attach(io: URI.parse(icon_url).open,
-                         filename: image_original,
-                         content_type: skin.icon_content_type)
-      rescue StandardError => e
-        puts "Error '#{e}' copying #{icon_url}"
+        image = skin.icon_file_name
+        ext = File.extname(image)
+        image_original = "original#{ext}"
+
+        # Skin icons are co-mingled in production and staging...
+        icon_url = "https://s3.amazonaws.com/otw-ao3-icons/skins/icons/#{skin.id}/#{image_original}"
+        begin
+          skin.icon.attach(io: URI.parse(icon_url).open,
+                           filename: image_original,
+                           content_type: skin.icon_content_type)
+        rescue StandardError => e
+          puts "Error '#{e}' copying #{icon_url}"
+        end
       end
 
-      puts "Finished up to ID #{skin.id}" if skin.id.modulo(100).zero?
+      puts "Finished batch #{index + 1}" && $stdout.flush
+      sleep 10
     end
   end
   # This is the end that you have to put new tasks above.
