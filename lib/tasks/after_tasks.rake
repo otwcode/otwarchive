@@ -348,7 +348,7 @@ namespace :After do
         end
       end
 
-      puts "Finished batch #{index + 1}"
+      puts "Finished batch #{index + 1}" && $stdout.flush
       sleep 10
     end
   end
@@ -381,7 +381,7 @@ namespace :After do
         end
       end
 
-      puts "Finished batch #{index + 1}"
+      puts "Finished batch #{index + 1}" && $stdout.flush
       sleep 10
     end
   end
@@ -411,7 +411,7 @@ namespace :After do
         end
       end
 
-      puts "Finished batch #{index + 1}"
+      puts "Finished batch #{index + 1}" && $stdout.flush
       sleep 10
     end
   end
