@@ -342,8 +342,8 @@ namespace :After do
           icon_url = "https://s3.amazonaws.com/otw-ao3-icons/collections/icons/#{collection.id}/#{image_original}"
           begin
             collection.icon.attach(io: URI.parse(icon_url).open,
-                                  filename: image_original,
-                                  content_type: collection.icon_content_type)
+                                   filename: image_original,
+                                   content_type: collection.icon_content_type)
           rescue StandardError => e
             puts "Error '#{e}' copying #{icon_url}"
           end
@@ -371,10 +371,10 @@ namespace :After do
           image_original = "original#{ext}"
 
           icon_url = if Rails.env.production?
-                      "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
-                    else
-                      "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
-                    end
+                       "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
+                     else
+                       "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
+                     end
           begin
             pseud.icon.attach(io: URI.parse(icon_url).open,
                               filename: image_original,
@@ -409,8 +409,8 @@ namespace :After do
           icon_url = "https://s3.amazonaws.com/otw-ao3-icons/skins/icons/#{skin.id}/#{image_original}"
           begin
             skin.icon.attach(io: URI.parse(icon_url).open,
-                            filename: image_original,
-                            content_type: skin.icon_content_type)
+                             filename: image_original,
+                             content_type: skin.icon_content_type)
           rescue StandardError => e
             puts "Error '#{e}' copying #{icon_url}"
           end
