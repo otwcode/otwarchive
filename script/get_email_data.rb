@@ -60,7 +60,7 @@ audits = ActiveRecord::Base.connection.exec_query("SELECT * FROM audits WHERE au
 audits&.rows&.each do |audit|
   action = audit[8]
   changes = YAML.safe_load(audit[9],
-                           permitted_classes: [ActiveSupport::TimeWithZone, Time, ActiveSupport::TimeZone, BCrypt::Password],
+                           permitted_classes: Rails.application.config.active_record.yaml_column_permitted_classes,
                            aliases: true)
   ip = audit[12]
   # Created or deleted account
@@ -73,39 +73,39 @@ audits&.rows&.each do |audit|
       case k
       when "accepted_tos_version"
         ips << ip if ip.present?
-        # Changed email address
+      # Changed email address
       when "email"
         ips << ip if ip.present?
         previous_emails << v[0] if v[0].present?
-        # Changed password, post-Devise
+      # Changed password, post-Devise
       when "encrypted_password"
         ips << ip if ip.present?
-        # Failed login attempt, post-Devise
-        # This is currently only recorded after a password reset or after the
-        # account is locked and unlocked
+      # Failed login attempt, post-Devise
+      # This is currently only recorded after a password reset or after the
+      # account is locked and unlocked
       when "failed_attempts"
         ips << ip if ip.present?
-        # Failed login attempt, pre-Devise
+      # Failed login attempt, pre-Devise
       when "failed_login_count"
         ips << ip if ip.present?
-        # Failed login attempt that resulted in account being locked, post-Devise
+      # Failed login attempt that resulted in account being locked, post-Devise
       when "locked_at"
         ips << ip if ip.present?
-        # Changed username
+      # Changed username
       when "login"
         ips << ip if ip.present?
         previous_usernames << v[0] if v[0].present?
-        # Requested password reset email, pre-Devise
+      # Requested password reset email, pre-Devise
       when "recently_reset"
         ips << ip if ip.present?
-        # Submitted login form with "Remember me" checked, post-Devise
-        # This is recorded whether the login attempt was successful or not
+      # Submitted login form with "Remember me" checked, post-Devise
+      # This is recorded whether the login attempt was successful or not
       when "remember_created_at"
         ips << ip if ip.present?
-        # Requested password reset email, post-Devise
+      # Requested password reset email, post-Devise
       when "reset_password_sent_at"
         ips << ip if ip.present?
-        # Logged in, post-Devise
+      # Logged in, post-Devise
       when "sign_in_count"
         ips << ip if ip.present?
       end
