@@ -357,37 +357,43 @@ namespace :After do
 
   desc "Migrate pseud icons to ActiveStorage paths"
   task(migrate_pseud_icons: :environment) do
+    require "aws-sdk-s3"
     require "open-uri"
 
     return unless Rails.env.staging? || Rails.env.production?
 
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = Rails.env.production? ? "icons/" : "staging/icons/"
+    s3 = S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    bucket = s3.bucket(bucket_name)
+
     Pseud.no_touching do
-      Pseud.find_in_batches.with_index do |batch, index|
+      bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
+
+        pseud_id = path_parts[-2]
+        old_icon = URI.parse("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+
         ActiveRecord::Base.transaction do
-          batch.each do |pseud|
-            next if pseud.icon_file_name.blank?
-
-            image = pseud.icon_file_name
-            ext = File.extname(image)
-            image_original = "original#{ext}"
-
-            icon_url = if Rails.env.production?
-                         "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
-                       else
-                         "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
-                       end
-            begin
-              pseud.icon.attach(io: URI.parse(icon_url).open,
-                                filename: image_original,
-                                content_type: pseud.icon_content_type)
-            rescue StandardError => e
-              puts "Error '#{e}' copying #{icon_url}"
-            end
-          end
+          blob = ActiveStorage::Blob.create_after_upload!(
+            io: old_icon,
+            filename: path_parts[-1],
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Pseud",
+            record_id: pseud_id
+          )
         end
 
-        puts "Finished batch #{index + 1}" && $stdout.flush
-        sleep 10
+        puts "Finished pseud #{pseud_id}" && $stdout.flush
       end
     end
   end
