@@ -325,32 +325,43 @@ namespace :After do
 
   desc "Migrate collection icons to ActiveStorage paths"
   task(migrate_collection_icons: :environment) do
+    require "aws-sdk-s3"
     require "open-uri"
 
     return unless Rails.env.staging? || Rails.env.production?
 
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = "collections/icons/"
+    s3 = Aws::S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    bucket = s3.bucket(bucket_name)
+
     Collection.no_touching do
-      Collection.find_in_batches.with_index do |batch, index|
-        batch.each do |collection|
-          next if collection.icon_file_name.blank?
+      bucket.objects(prefix: prefix).each do |object|
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
 
-          image = collection.icon_file_name
-          ext = File.extname(image)
-          image_original = "original#{ext}"
+        collection_id = path_parts[-2]
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
 
-          # Collection icons are co-mingled in production and staging...
-          icon_url = "https://s3.amazonaws.com/otw-ao3-icons/collections/icons/#{collection.id}/#{image_original}"
-          begin
-            collection.icon.attach(io: URI.parse(icon_url).open,
-                                   filename: image_original,
-                                   content_type: collection.icon_content_type)
-          rescue StandardError => e
-            puts "Error '#{e}' copying #{icon_url}"
-          end
+        ActiveRecord::Base.transaction do
+          blob = ActiveStorage::Blob.create_and_upload!(
+            io: old_icon,
+            filename: path_parts[-1],
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Collection",
+            record_id: collection_id
+          )
         end
 
-        puts "Finished batch #{index + 1}" && $stdout.flush
-        sleep 10
+        puts "Finished collection #{collection_id}"
+        $stdout.flush
       end
     end
   end
@@ -364,7 +375,7 @@ namespace :After do
 
     bucket_name = ENV["S3_BUCKET"]
     prefix = Rails.env.production? ? "icons/" : "staging/icons/"
-    s3 = S3::Resource.new(
+    s3 = Aws::S3::Resource.new(
       region: ENV["S3_REGION"],
       access_key_id: ENV["S3_ACCESS_KEY_ID"],
       secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
@@ -378,10 +389,10 @@ namespace :After do
         next unless path_parts[-1]&.include?("original")
 
         pseud_id = path_parts[-2]
-        old_icon = URI.parse("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
 
         ActiveRecord::Base.transaction do
-          blob = ActiveStorage::Blob.create_after_upload!(
+          blob = ActiveStorage::Blob.create_and_upload!(
             io: old_icon,
             filename: path_parts[-1],
             content_type: Marcel::MimeType.for(old_icon)
@@ -393,39 +404,52 @@ namespace :After do
           )
         end
 
-        puts "Finished pseud #{pseud_id}" && $stdout.flush
+        puts "Finished pseud #{pseud_id}"
+        $stdout.flush
       end
     end
   end
 
   desc "Migrate skin icons to ActiveStorage paths"
   task(migrate_skin_icons: :environment) do
+    require "aws-sdk-s3"
     require "open-uri"
 
     return unless Rails.env.staging? || Rails.env.production?
 
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = "skins/icons/"
+    s3 = Aws::S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    bucket = s3.bucket(bucket_name)
+
     Skin.no_touching do
-      Skin.find_in_batches.with_index do |batch, index|
-        batch.each do |skin|
-          next if skin.icon_file_name.blank?
+      bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
 
-          image = skin.icon_file_name
-          ext = File.extname(image)
-          image_original = "original#{ext}"
+        skin_id = path_parts[-2]
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
 
-          # Skin icons are co-mingled in production and staging...
-          icon_url = "https://s3.amazonaws.com/otw-ao3-icons/skins/icons/#{skin.id}/#{image_original}"
-          begin
-            skin.icon.attach(io: URI.parse(icon_url).open,
-                             filename: image_original,
-                             content_type: skin.icon_content_type)
-          rescue StandardError => e
-            puts "Error '#{e}' copying #{icon_url}"
-          end
+        ActiveRecord::Base.transaction do
+          blob = ActiveStorage::Blob.create_and_upload!(
+            io: old_icon,
+            filename: path_parts[-1],
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Skin",
+            record_id: skin_id
+          )
         end
 
-        puts "Finished batch #{index + 1}" && $stdout.flush
-        sleep 10
+        puts "Finished skin #{skin_id}"
+        $stdout.flush
       end
     end
   end
