@@ -329,27 +329,29 @@ namespace :After do
 
     return unless Rails.env.staging? || Rails.env.production?
 
-    Collection.find_in_batches.with_index do |batch, index|
-      batch.each do |collection|
-        next if collection.icon_file_name.blank?
+    Collection.no_touching do
+      Collection.find_in_batches.with_index do |batch, index|
+        batch.each do |collection|
+          next if collection.icon_file_name.blank?
 
-        image = collection.icon_file_name
-        ext = File.extname(image)
-        image_original = "original#{ext}"
+          image = collection.icon_file_name
+          ext = File.extname(image)
+          image_original = "original#{ext}"
 
-        # Collection icons are co-mingled in production and staging...
-        icon_url = "https://s3.amazonaws.com/otw-ao3-icons/collections/icons/#{collection.id}/#{image_original}"
-        begin
-          collection.icon.attach(io: URI.parse(icon_url).open,
-                                 filename: image_original,
-                                 content_type: collection.icon_content_type)
-        rescue StandardError => e
-          puts "Error '#{e}' copying #{icon_url}"
+          # Collection icons are co-mingled in production and staging...
+          icon_url = "https://s3.amazonaws.com/otw-ao3-icons/collections/icons/#{collection.id}/#{image_original}"
+          begin
+            collection.icon.attach(io: URI.parse(icon_url).open,
+                                   filename: image_original,
+                                   content_type: collection.icon_content_type)
+          rescue StandardError => e
+            puts "Error '#{e}' copying #{icon_url}"
+          end
         end
-      end
 
-      puts "Finished batch #{index + 1}" && $stdout.flush
-      sleep 10
+        puts "Finished batch #{index + 1}" && $stdout.flush
+        sleep 10
+      end
     end
   end
 
@@ -359,30 +361,32 @@ namespace :After do
 
     return unless Rails.env.staging? || Rails.env.production?
 
-    Pseud.find_in_batches.with_index do |batch, index|
-      batch.each do |pseud|
-        next if pseud.icon_file_name.blank?
+    Pseud.no_touching do
+      Pseud.find_in_batches.with_index do |batch, index|
+        batch.each do |pseud|
+          next if pseud.icon_file_name.blank?
 
-        image = pseud.icon_file_name
-        ext = File.extname(image)
-        image_original = "original#{ext}"
+          image = pseud.icon_file_name
+          ext = File.extname(image)
+          image_original = "original#{ext}"
 
-        icon_url = if Rails.env.production?
-                     "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
-                   else
-                     "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
-                   end
-        begin
-          pseud.icon.attach(io: URI.parse(icon_url).open,
-                            filename: image_original,
-                            content_type: pseud.icon_content_type)
-        rescue StandardError => e
-          puts "Error '#{e}' copying #{icon_url}"
+          icon_url = if Rails.env.production?
+                       "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
+                     else
+                       "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
+                     end
+          begin
+            pseud.icon.attach(io: URI.parse(icon_url).open,
+                              filename: image_original,
+                              content_type: pseud.icon_content_type)
+          rescue StandardError => e
+            puts "Error '#{e}' copying #{icon_url}"
+          end
         end
-      end
 
-      puts "Finished batch #{index + 1}" && $stdout.flush
-      sleep 10
+        puts "Finished batch #{index + 1}" && $stdout.flush
+        sleep 10
+      end
     end
   end
 
@@ -392,27 +396,29 @@ namespace :After do
 
     return unless Rails.env.staging? || Rails.env.production?
 
-    Skin.find_in_batches.with_index do |batch, index|
-      batch.each do |skin|
-        next if skin.icon_file_name.blank?
+    Skin.no_touching do
+      Skin.find_in_batches.with_index do |batch, index|
+        batch.each do |skin|
+          next if skin.icon_file_name.blank?
 
-        image = skin.icon_file_name
-        ext = File.extname(image)
-        image_original = "original#{ext}"
+          image = skin.icon_file_name
+          ext = File.extname(image)
+          image_original = "original#{ext}"
 
-        # Skin icons are co-mingled in production and staging...
-        icon_url = "https://s3.amazonaws.com/otw-ao3-icons/skins/icons/#{skin.id}/#{image_original}"
-        begin
-          skin.icon.attach(io: URI.parse(icon_url).open,
-                           filename: image_original,
-                           content_type: skin.icon_content_type)
-        rescue StandardError => e
-          puts "Error '#{e}' copying #{icon_url}"
+          # Skin icons are co-mingled in production and staging...
+          icon_url = "https://s3.amazonaws.com/otw-ao3-icons/skins/icons/#{skin.id}/#{image_original}"
+          begin
+            skin.icon.attach(io: URI.parse(icon_url).open,
+                             filename: image_original,
+                             content_type: skin.icon_content_type)
+          rescue StandardError => e
+            puts "Error '#{e}' copying #{icon_url}"
+          end
         end
-      end
 
-      puts "Finished batch #{index + 1}" && $stdout.flush
-      sleep 10
+        puts "Finished batch #{index + 1}" && $stdout.flush
+        sleep 10
+      end
     end
   end
   # This is the end that you have to put new tasks above.
