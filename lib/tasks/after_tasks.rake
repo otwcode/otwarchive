@@ -363,24 +363,26 @@ namespace :After do
 
     Pseud.no_touching do
       Pseud.find_in_batches.with_index do |batch, index|
-        batch.each do |pseud|
-          next if pseud.icon_file_name.blank?
+        ActiveRecord::Base.transaction do
+          batch.each do |pseud|
+            next if pseud.icon_file_name.blank?
 
-          image = pseud.icon_file_name
-          ext = File.extname(image)
-          image_original = "original#{ext}"
+            image = pseud.icon_file_name
+            ext = File.extname(image)
+            image_original = "original#{ext}"
 
-          icon_url = if Rails.env.production?
-                       "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
-                     else
-                       "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
-                     end
-          begin
-            pseud.icon.attach(io: URI.parse(icon_url).open,
-                              filename: image_original,
-                              content_type: pseud.icon_content_type)
-          rescue StandardError => e
-            puts "Error '#{e}' copying #{icon_url}"
+            icon_url = if Rails.env.production?
+                         "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
+                       else
+                         "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
+                       end
+            begin
+              pseud.icon.attach(io: URI.parse(icon_url).open,
+                                filename: image_original,
+                                content_type: pseud.icon_content_type)
+            rescue StandardError => e
+              puts "Error '#{e}' copying #{icon_url}"
+            end
           end
         end
 
