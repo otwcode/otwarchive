@@ -8,7 +8,7 @@
       <%= t(".choose") %>
     </p>
     <ul>
-      <%= f.collection_check_boxes :pseuds, @orphan_pseuds, :id, :byline, {include_hidden: false} do |builder| %>
+      <%= f.collection_check_boxes :pseuds, @orphan_pseuds, :id, :byline, { include_hidden: false } do |builder| %>
         <li>
           <%= builder.check_box %>
           <%= builder.label %>
