@@ -8,24 +8,24 @@ class HomeController < ApplicationController
   end
 
   def content
-    @page_title = t(".page_title")
+    @page_subtitle = t(".page_title")
     render action: "content", layout: "application"
   end
 
   def privacy
-    @page_title = t(".page_title")
+    @page_subtitle = t(".page_title")
     render action: "privacy", layout: "application"
   end
 
   # terms of service
   def tos
-    @page_title = t(".page_title")
+    @page_subtitle = t(".page_title")
     render action: "tos", layout: "application"
   end
 
   # terms of service faq
   def tos_faq
-    @page_title = t(".page_title")
+    @page_subtitle = t(".page_title")
     render action: "tos_faq", layout: "application"
   end
 
