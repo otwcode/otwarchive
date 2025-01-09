@@ -2,16 +2,16 @@ class Collection < ApplicationRecord
   include Filterable
   include WorksOwner
 
-  has_attached_file :icon,
-                    styles: { standard: "100x100>" },
-                    url: "/system/:class/:attachment/:id/:style/:basename.:extension",
-                    path: %w[staging production].include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
-                    storage: %w[staging production].include?(Rails.env) ? :s3 : :filesystem,
-                    s3_protocol: "https",
-                    default_url: "/images/skins/iconsets/default/icon_collection.png"
+  has_one_attached :icon do |attachable|
+    attachable.variant(:standard, resize_to_limit: [100, 100])
+  end
 
-  validates_attachment_content_type :icon, content_type: %r{image/\S+}, allow_nil: true
-  validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
+  # i18n-tasks-use t("errors.attributes.icon.invalid_format")
+  # i18n-tasks-use t("errors.attributes.icon.too_large")
+  validates :icon, attachment: {
+    allowed_formats: %r{image/\S+},
+    maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
+  }
 
   belongs_to :parent, class_name: "Collection", inverse_of: :children
   has_many :children, class_name: "Collection", foreign_key: "parent_id", inverse_of: :parent
@@ -165,6 +165,7 @@ class Collection < ApplicationRecord
   scope :prompt_meme, -> { where(challenge_type: "PromptMeme") }
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
+  scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).with_attached_icon }
 
   def cleanup_url
     self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
@@ -339,7 +340,7 @@ class Collection < ApplicationRecord
 
   def collection_email
     return self.email if self.email.present?
-    return parent.email if parent && parent.email.present? 
+    return parent.email if parent && parent.email.present?
   end
 
   def notify_maintainers_assignments_sent
@@ -429,7 +430,7 @@ class Collection < ApplicationRecord
         query = query.no_challenge
       end
     end
-    query = query.order(sort)
+    query = query.order(sort).for_blurb
 
     if filters[:fandom].blank?
       query.paginate(pagination_args)
@@ -454,6 +455,10 @@ class Collection < ApplicationRecord
   alias delete_icon? delete_icon
 
   def clear_icon
-    self.icon = nil if delete_icon? && !icon.dirty?
+    return unless delete_icon?
+
+    self.icon.purge
+    self.icon_alt_text = nil
+    self.icon_comment_text = nil
   end
 end

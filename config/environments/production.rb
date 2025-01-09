@@ -33,8 +33,9 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  # Store uploaded files in S3, proxied (see config/storage.yml for options).
+  config.active_storage.service = :s3
+  config.active_storage.resolve_model_to_route = :rails_storage_proxy
 
   # Use a different cache store in production
   config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
@@ -94,11 +95,4 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  # paperclip config
-  Paperclip::Attachment.default_options[:storage] = :s3
-  Paperclip::Attachment.default_options[:s3_credentials] = { s3_region: ENV["S3_REGION"],
-                                                             bucket: ENV["S3_BUCKET"],
-                                                             access_key_id: ENV["S3_ACCESS_KEY_ID"],
-                                                             secret_access_key: ENV["S3_SECRET_ACCESS_KEY"] }
 end
