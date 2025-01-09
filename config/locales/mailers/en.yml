@@ -111,15 +111,14 @@ en:
       deleted:
         html: Your work %{title} was deleted from the Archive by a site admin.
         text: Your work "%{title}" was deleted from the Archive by a site admin.
-      html:
-        tos_violation: If it's possible your work violated the Archive's Terms of Service, please %{contact_abuse_link}.
+      tos_violation:
+        html: If it's possible your work violated the Archive's Terms of Service, please %{contact_abuse_link}.
+        text: If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{contact_abuse_url}).
       import_project:
         html: If your work was part of an import project managed by our Open Doors team, please %{opendoors_link} with any further questions.
         text: If your work was part of an import project managed by our Open Doors team, please contact Open Doors (%{opendoors_link}) with any further questions.
       opendoors: contact Open Doors
       subject: "[%{app_name}] Your work has been deleted by an admin"
-      text:
-        tos_violation: If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{contact_abuse_url}).
     admin_hidden_work_notification:
       access: While your work is hidden, you will still be able to access it through the link provided above, but it will not be listed on your works page, and it won't be available to other users of the Archive.
       check_email: Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your work was hidden.
