@@ -435,13 +435,22 @@ namespace :After do
 
         skin_id = path_parts[-2]
         old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest::MD5.new.tap do |checksum|
+          while chunk = old_icon.read(5.megabytes)
+            checksum << chunk
+          end
+          old_icon.rewind
+        end.base64digest
 
+        key = nil
         ActiveRecord::Base.transaction do
-          blob = ActiveStorage::Blob.create_before_direct_upload!!(
-            io: old_icon,
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
             filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
             content_type: Marcel::MimeType.for(old_icon)
           )
+          key = blob.key
           blob.attachments.create(
             name: "icon",
             record_type: "Skin",
@@ -449,7 +458,7 @@ namespace :After do
           )
         end
 
-        new_bucket.put_object(key: blob.key, body: old_icon)
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
         puts "Finished skin #{skin_id}"
         $stdout.flush
       end
