@@ -424,10 +424,11 @@ namespace :After do
       access_key_id: ENV["S3_ACCESS_KEY_ID"],
       secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
     )
-    bucket = s3.bucket(bucket_name)
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
 
     Skin.no_touching do
-      bucket.objects(prefix: prefix).each do |object|
+      old_bucket.objects(prefix: prefix).each do |object|
         # Path example: staging/icons/108621/original.png
         path_parts = object.key.split("/")
         next unless path_parts[-1]&.include?("original")
@@ -436,7 +437,7 @@ namespace :After do
         old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
 
         ActiveRecord::Base.transaction do
-          blob = ActiveStorage::Blob.create_and_upload!(
+          blob = ActiveStorage::Blob.create_before_direct_upload!!(
             io: old_icon,
             filename: path_parts[-1],
             content_type: Marcel::MimeType.for(old_icon)
@@ -448,6 +449,7 @@ namespace :After do
           )
         end
 
+        new_bucket.put_object(key: blob.key, body: old_icon)
         puts "Finished skin #{skin_id}"
         $stdout.flush
       end
