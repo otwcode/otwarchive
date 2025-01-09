@@ -236,6 +236,10 @@ Then /^I should see the text with tags "(.*)"$/ do |text|
   page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
+Then /^I should see the text with tags and line breaks (".*")$/ do |text|
+  page.body.should =~ /#{Regexp.escape(text.undump)}/m
+end
+
 Then /^I should see the text with tags '(.*)'$/ do |text|
   page.body.should =~ /#{Regexp.escape(text)}/m
 end
