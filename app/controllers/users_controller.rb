@@ -3,8 +3,8 @@ class UsersController < ApplicationController
 
   before_action :check_user_status, only: [:edit, :update, :change_username, :changed_username]
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
-  before_action :check_ownership, except: [:activate, :delete_confirmation, :edit, :index, :show, :update]
-  before_action :check_ownership_or_admin, only: [:edit, :update]
+  before_action :check_ownership, except: [:activate, :change_username, :changed_username, :delete_confirmation, :edit, :index, :show, :update]
+  before_action :check_ownership_or_admin, only: [:change_username, :changed_username, :edit, :update]
   skip_before_action :store_location, only: [:end_first_login]
 
   def load_user
@@ -48,6 +48,7 @@ class UsersController < ApplicationController
   end
 
   def change_username
+    authorize @user if logged_in_as_admin?
     @page_subtitle = t(".browser_title")
   end
 
@@ -70,20 +71,27 @@ class UsersController < ApplicationController
   end
 
   def changed_username
-    render(:change_username) && return unless params[:new_login].present?
+    authorize @user if logged_in_as_admin?
+    render(:change_username) && return if params[:new_login].blank?
 
     @new_login = params[:new_login]
 
-    unless @user.valid_password?(params[:password])
-      flash[:error] = ts('Your password was incorrect')
+    unless logged_in_as_admin? || @user.valid_password?(params[:password])
+      flash[:error] = t(".user.incorrect_password")
       render(:change_username) && return
     end
 
     @user.login = @new_login
+    @user.ticket_number = params[:ticket_number]
 
     if @user.save
-      flash[:notice] = ts('Your user name has been successfully updated.')
-      redirect_to @user
+      if logged_in_as_admin?
+        flash[:notice] = t(".admin.successfully_updated")
+        redirect_to admin_user_path(@user)
+      else
+        flash[:notice] = t(".user.successfully_updated")
+        redirect_to @user
+      end
     else
       @user.reload
       render :change_username
