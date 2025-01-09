@@ -247,23 +247,24 @@ class Work < ApplicationRecord
 
   before_destroy :send_deleted_work_notification, prepend: true
   def send_deleted_work_notification
-    if self.posted?
-      users = self.pseuds.collect(&:user).uniq
-      orphan_account = User.orphan_account
-      unless users.blank?
-        for user in users
-          next if user == orphan_account
-          # Check to see if this work is being deleted by an Admin
-          if User.current_user.is_a?(Admin)
-            # this has to use the synchronous version because the work is going to be destroyed
-            I18n.with_locale(user.preference.locale.iso) do
-              UserMailer.admin_deleted_work_notification(user, self).deliver_now
-            end
-          else
-            # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.delete_work_notification(user, self).deliver_now
-          end
+    return unless self.posted?
+    
+    users = self.pseuds.collect(&:user).uniq
+    orphan_account = User.orphan_account
+    return if users.blank?
+
+    users.each do |user|
+      next if user == orphan_account
+      
+      # Check to see if this work is being deleted by an Admin
+      if User.current_user.is_a?(Admin)
+        # this has to use the synchronous version because the work is going to be destroyed
+        I18n.with_locale(user.preference.locale.iso) do
+          UserMailer.admin_deleted_work_notification(user, self).deliver_now
         end
+      else
+        # this has to use the synchronous version because the work is going to be destroyed
+        UserMailer.delete_work_notification(user, self).deliver_now
       end
     end
   end
