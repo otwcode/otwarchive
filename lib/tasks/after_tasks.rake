@@ -345,7 +345,7 @@ namespace :After do
         # Path example: staging/icons/108621/original.png
         path_parts = object.key.split("/")
         next unless path_parts[-1]&.include?("original")
-        next if ActiveStorage::Attachment(record_type: "Collection", record_id: path_parts[-2]).any?
+        next if ActiveStorage::Attachment.where(record_type: "Collection", record_id: path_parts[-2]).any?
 
         collection_id = path_parts[-2]
         old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
@@ -401,7 +401,7 @@ namespace :After do
         # Path example: staging/icons/108621/original.png
         path_parts = object.key.split("/")
         next unless path_parts[-1]&.include?("original")
-        next if ActiveStorage::Attachment(record_type: "Pseud", record_id: path_parts[-2]).any?
+        next if ActiveStorage::Attachment.where(record_type: "Pseud", record_id: path_parts[-2]).any?
 
         pseud_id = path_parts[-2]
         old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
@@ -457,7 +457,7 @@ namespace :After do
         # Path example: staging/icons/108621/original.png
         path_parts = object.key.split("/")
         next unless path_parts[-1]&.include?("original")
-        next if ActiveStorage::Attachment(record_type: "Skin", record_id: path_parts[-2]).any?
+        next if ActiveStorage::Attachment.where(record_type: "Skin", record_id: path_parts[-2]).any?
 
         skin_id = path_parts[-2]
         old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
