@@ -409,6 +409,7 @@ SUPPORTED_CSS_PROPERTIES:
 - clip
 - color
 - color-profile
+- color-scheme
 - content
 - counter-increment
 - counter-reset
