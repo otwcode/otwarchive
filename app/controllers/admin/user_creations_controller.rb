@@ -1,5 +1,5 @@
 class Admin::UserCreationsController < Admin::BaseController
-  before_action :get_creation
+  before_action :get_creation, except: [:remove_pseud, :confirm_remove_pseud]
   before_action :can_be_marked_as_spam, only: [:set_spam]
 
   def get_creation
@@ -58,5 +58,38 @@ class Admin::UserCreationsController < Admin::BaseController
     else
       redirect_to works_path
     end
+  end
+
+  def confirm_remove_pseud
+    authorize @work = Work.find(params[:id])
+
+    @orphan_pseuds = @work.orphan_pseuds
+    return unless @orphan_pseuds.empty?
+
+    flash[:error] = t(".must_have_orphan_pseuds")
+    redirect_to work_path(@work) and return
+  end
+
+  def remove_pseud
+    authorize @work = Work.find(params[:id])
+
+    pseuds = params[:pseuds]
+    orphan_account = User.orphan_account
+    if pseuds.blank?
+      pseuds = @work.orphan_pseuds
+      if pseuds.length > 1
+        flash[:error] = t(".must_select_pseud")
+        redirect_to work_path(@work) and return
+      end
+    else
+      pseuds = Pseud.find(pseuds).select { |p| p.user_id == orphan_account.id }
+    end
+
+    pseuds.each do |pseud|
+      pseud.change_ownership(@work, User.orphan_account.default_pseud)
+    end
+    AdminActivity.log_action(current_admin, @work, action: "remove orphan_account pseuds")
+    flash[:notice] = t(".success", pseuds: pseuds.map(&:byline).to_sentence, count: pseuds.length)
+    redirect_to work_path(@work)
   end
 end

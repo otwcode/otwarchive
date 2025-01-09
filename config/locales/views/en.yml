@@ -119,6 +119,8 @@ en:
         work: Hide Work
       landmark: Admin Actions
       not_spam: Mark Not Spam
+      remove_pseud: Remove Pseud
+      remove_pseud_confirmation: Are you sure you want to remove the creator's pseud from this work?
       spam: Mark As Spam
       unhide:
         bookmark: Make Bookmark Visible
@@ -352,6 +354,13 @@ en:
         update: Update
       update:
         success: Archive settings were successfully updated.
+    user_creations:
+      confirm_remove_pseud:
+        caution: Are you sure you want to remove the creator's pseud from this work?
+        choose: Please choose which creators' pseuds you would like to remove from this work.
+        page_heading: Remove Pseud
+        submit_multiple: Remove Pseuds
+        submit_one: Yes, Remove Pseud
   admin_posts:
     admin_post_form:
       comment_permissions:
