@@ -1,10 +1,20 @@
 <div id="proxy-notice">
   <div class="userstuff">
-    <% # TODO: When the interface is localized, this should be revised to only show the notice in the user's selected language. %>
+    <%# TODO: When the interface is localized, this should be revised to only show the notice in the user's selected language. %>
     <p class="important"><%= t(".faux_heading") %></p>
     <ol>
       <li><%= t(".point1") %></li>
       <li><%= t(".point2") %></li>
+    </ol>
+    <p class="important"><%= t(".faux_heading", locale: :ru) %></p>
+    <ol>
+      <li><%= t(".point1", locale: :ru) %></li>
+      <li><%= t(".point2", locale: :ru) %></li>
+    </ol>
+    <p class="important"><%= t(".faux_heading", locale: :uk) %></p>
+    <ol>
+      <li><%= t(".point1", locale: :uk) %></li>
+      <li><%= t(".point2", locale: :uk) %></li>
     </ol>
     <p class="important"><%= t(".faux_heading", locale: :"zh-CN") %></p>
     <ol>
