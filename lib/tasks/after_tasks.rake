@@ -337,22 +337,33 @@ namespace :After do
       access_key_id: ENV["S3_ACCESS_KEY_ID"],
       secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
     )
-    bucket = s3.bucket(bucket_name)
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
 
     Collection.no_touching do
-      bucket.objects(prefix: prefix).each do |object|
+      old_bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
         path_parts = object.key.split("/")
         next unless path_parts[-1]&.include?("original")
 
         collection_id = path_parts[-2]
         old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest::MD5.new.tap do |checksum|
+          while chunk = old_icon.read(5.megabytes)
+            checksum << chunk
+          end
+          old_icon.rewind
+        end.base64digest
 
+        key = nil
         ActiveRecord::Base.transaction do
-          blob = ActiveStorage::Blob.create_and_upload!(
-            io: old_icon,
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
             filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
             content_type: Marcel::MimeType.for(old_icon)
           )
+          key = blob.key
           blob.attachments.create(
             name: "icon",
             record_type: "Collection",
@@ -360,6 +371,7 @@ namespace :After do
           )
         end
 
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
         puts "Finished collection #{collection_id}"
         $stdout.flush
       end
@@ -380,23 +392,33 @@ namespace :After do
       access_key_id: ENV["S3_ACCESS_KEY_ID"],
       secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
     )
-    bucket = s3.bucket(bucket_name)
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
 
     Pseud.no_touching do
-      bucket.objects(prefix: prefix).each do |object|
+      old_bucket.objects(prefix: prefix).each do |object|
         # Path example: staging/icons/108621/original.png
         path_parts = object.key.split("/")
         next unless path_parts[-1]&.include?("original")
 
         pseud_id = path_parts[-2]
         old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest::MD5.new.tap do |checksum|
+          while chunk = old_icon.read(5.megabytes)
+            checksum << chunk
+          end
+          old_icon.rewind
+        end.base64digest
 
+        key = nil
         ActiveRecord::Base.transaction do
-          blob = ActiveStorage::Blob.create_and_upload!(
-            io: old_icon,
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
             filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
             content_type: Marcel::MimeType.for(old_icon)
           )
+          key = blob.key
           blob.attachments.create(
             name: "icon",
             record_type: "Pseud",
@@ -404,6 +426,7 @@ namespace :After do
           )
         end
 
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
         puts "Finished pseud #{pseud_id}"
         $stdout.flush
       end
