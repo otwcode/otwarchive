@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Work do
   # see lib/collectible_spec for collection-related tests
@@ -10,16 +10,17 @@ describe Work do
   context "when posted" do
     it "posts the first chapter" do
       work = create(:work)
-      work.first_chapter.posted.should == true
+      expect(work.first_chapter.posted).to eq true
     end
   end
 
   context "create_stat_counter" do
     it "creates a stat counter for that work id" do
-      expect {
+      expect do
         @work = build(:work)
         @work.save!
-      }.to change{ StatCounter.all.count }.by(1)
+      end.to change { StatCounter.all.count }
+        .by(1)
       expect(StatCounter.where(work_id: @work.id)).to exist
     end
   end
@@ -48,10 +49,10 @@ describe Work do
 
     let(:too_short) { ArchiveConfig.TITLE_MIN - 1 }
     it "errors if the title without leading spaces is shorter than #{ArchiveConfig.TITLE_MIN}" do
-      expect {
+      expect do
         @work = create(:work, title: "     #{too_short}")
         @work.reload
-      }.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
+      end.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
     end
 
     # Reset the min characters in the title, so that the factory is valid
@@ -118,6 +119,34 @@ describe Work do
     it "does not save if author is blank" do
       expect(invalid_work.save).to be_falsey
       expect(invalid_work.errors[:base]).to include "Work must have at least one creator."
+    end
+  end
+
+  describe "reindexing" do
+    let!(:work) { create(:work) }
+
+    context "when draft status is changed" do
+      it "enqueues tags for reindex" do
+        expect do
+          work.update!(posted: false)
+        end.to add_to_reindex_queue(work.fandoms.last, :main)
+      end
+    end
+
+    context "when hidden by an admin" do
+      it "enqueues tags for reindex" do
+        expect do
+          work.update!(hidden_by_admin: true)
+        end.to add_to_reindex_queue(work.fandoms.last, :main)
+      end
+    end
+
+    context "when put in an unrevealed collection" do
+      it "enqueues tags for reindex" do
+        expect do
+          work.update!(in_unrevealed_collection: true)
+        end.to add_to_reindex_queue(work.fandoms.last, :main)
+      end
     end
   end
 
@@ -392,7 +421,7 @@ describe Work do
     let(:work) { build(:work) }
 
     before do
-      work.recipients = recipient1 + "," + recipient2
+      work.recipients = "#{recipient1},#{recipient2}"
     end
 
     it "contains gifts for the same recipients when they are first added" do
@@ -410,7 +439,7 @@ describe Work do
     end
 
     it "only contains one gift if the same recipient is entered twice" do
-      work.recipients = recipient2 + "," + recipient2
+      work.recipients = "#{recipient2},#{recipient2}"
       expect(work.new_gifts.collect(&:recipient)).to eq([recipient2])
     end
   end
@@ -511,8 +540,9 @@ describe Work do
         @admin_setting.update_attribute(:hide_spam, true)
       end
       it "automatically hides spam works and sends an email" do
-        expect { @work.update!(spam: true) }.
-          to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect { @work.update!(spam: true) }
+          .to change { ActionMailer::Base.deliveries.count }
+          .by(1)
         expect(@work.reload.hidden_by_admin).to be_truthy
         expect(ActionMailer::Base.deliveries.last.subject).to eq("[AO3] Your work was hidden as spam")
       end
@@ -522,8 +552,8 @@ describe Work do
         @admin_setting.update_attribute(:hide_spam, false)
       end
       it "does not automatically hide spam works and does not send an email" do
-        expect { @work.update!(spam: true) }.
-          not_to change { ActionMailer::Base.deliveries.count }
+        expect { @work.update!(spam: true) }
+          .not_to change { ActionMailer::Base.deliveries.count }
         expect(@work.reload.hidden_by_admin).to be_falsey
       end
     end
@@ -580,9 +610,10 @@ describe Work do
       before { work.reload }
 
       it "raises an error" do
-        expect { work.remove_author(to_remove) }.to raise_exception(
-          "Sorry, we can't remove all creators of a work."
-        )
+        expect { work.remove_author(to_remove) }
+          .to raise_exception(
+            "Sorry, we can't remove all creators of a work."
+          )
       end
     end
 
@@ -610,7 +641,8 @@ describe Work do
     let(:work) { create(:work) }
 
     it "does not save an original creator record" do
-      expect { work.destroy }.not_to change { WorkOriginalCreator.count }
+      expect { work.destroy }
+        .not_to change { WorkOriginalCreator.count }
     end
 
     context "when an original creator exists" do
@@ -618,7 +650,8 @@ describe Work do
 
       it "deletes the original creator" do
         work.destroy
-        expect { original_creator.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { original_creator.reload }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

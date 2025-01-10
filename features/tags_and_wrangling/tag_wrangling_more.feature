@@ -336,3 +336,67 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
     Then I should not see "bookmark char tag"
     When I follow "Relationships by fandom (0)"
     Then I should not see "bookmark rel tag"
+
+  Scenario: Tags from unrevealed works don't show in unwrangled bins
+    Given a canonical fandom "Testing"
+      And I have the hidden collection "Unrevealed Tags"
+      And I am logged in as a tag wrangler
+    When I post the work "Hello There" with fandom "Testing" with character "unrevealed char" in the collection "Unrevealed Tags"
+    Given the periodic tag count task is run
+      And all indexing jobs have been run
+      And I flush the wrangling sidebar caches
+    When I view the unwrangled character bin for "Testing"
+    Then I should not see "unrevealed char"
+  
+  Scenario: Tags from unrevealed works appear in unwrangled bins when the work is revealed
+    Given a canonical fandom "Testing"
+      And I have the hidden collection "Unrevealed Tags"
+      And I am logged in as a tag wrangler
+    When I post the work "Hello There" with fandom "Testing" with character "unrevealed char" in the collection "Unrevealed Tags"
+    Given the periodic tag count task is run
+      And all indexing jobs have been run
+      And I flush the wrangling sidebar caches
+    When I view the unwrangled character bin for "Testing"
+    Then I should not see "unrevealed char"
+    When I reveal works for "Unrevealed Tags"
+    Given the periodic tag count task is run
+      And all indexing jobs have been run
+      And I flush the wrangling sidebar caches
+      And I am logged in as a tag wrangler
+    When I view the unwrangled character bin for "Testing"
+    Then I should see "unrevealed char"
+
+  Scenario: Tags from hidden works don't appear in unwrangled bins
+    Given a canonical fandom "Testing"
+      And I am logged in as a tag wrangler
+    When I post the work "Hello There" with fandom "Testing" with character "hidden char"
+    When I am logged in as a super admin
+      And I hide the work "Hello There"
+    Given the periodic tag count task is run
+      And all indexing jobs have been run
+      And I flush the wrangling sidebar caches
+      And I am logged in as a tag wrangler
+    When I view the unwrangled character bin for "Testing"
+    Then I should not see "hidden char"
+
+  Scenario: Tags from hidden works appear in unwrangled bins when the work is un-hidden
+    Given a canonical fandom "Testing"
+      And I am logged in as a tag wrangler
+    When I post the work "Hello There" with fandom "Testing" with character "hidden char"
+    When I am logged in as a super admin
+      And I hide the work "Hello There"
+    Given the periodic tag count task is run
+      And all indexing jobs have been run
+      And I flush the wrangling sidebar caches
+      And I am logged in as a tag wrangler
+    When I view the unwrangled character bin for "Testing"
+    Then I should not see "hidden char"
+    When I am logged in as a super admin
+      And I view the work "Hello There"
+      And I follow "Make Work Visible"
+    Given the periodic tag count task is run
+      And all indexing jobs have been run
+      And I flush the wrangling sidebar caches
+      And I am logged in as a tag wrangler
+    When I view the unwrangled character bin for "Testing"
+    Then I should see "hidden char"
