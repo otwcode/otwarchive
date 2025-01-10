@@ -103,6 +103,15 @@ describe User do
         end
       end
 
+      context "missing data_processing flag" do
+        let(:no_data_processing) { build(:user, data_processing: "0") }
+
+        it "does not save" do
+          expect(no_data_processing.save).to be_falsey
+          expect(no_data_processing.errors[:data_processing].first).to include("you need to consent to the processing of your personal data")
+        end
+      end
+
       context "missing the terms_of_service flag" do
         let(:no_tos) { build(:user, terms_of_service: "0") }
 
@@ -189,18 +198,19 @@ describe User do
 
     it "sets renamed_at if username is changed" do
       freeze_time
-      existing_user.update(login: "new_username")
+      existing_user.update!(login: "new_username")
       expect(existing_user.renamed_at).to eq(Time.current)
     end
 
     context "username was recently changed" do
       before do
         freeze_time
-        existing_user.update(login: "new_login")
+        existing_user.update!(login: "new_login")
       end
 
       it "does not allow another rename" do
-        expect(existing_user.update(login: "new")).to be_falsey
+        expect { existing_user.update!(login: "new") }
+          .to raise_error(ActiveRecord::RecordInvalid)
         localized_renamed_at = I18n.l(existing_user.renamed_at, format: :long)
         expect(existing_user.errors[:login].first).to eq(
           "can only be changed once every 7 days. You last changed your user name on #{localized_renamed_at}."
@@ -208,8 +218,8 @@ describe User do
       end
 
       it "allows changing email" do
-        existing_user.update(email: "new_email")
-        expect(existing_user.email).to eq("new_email")
+        existing_user.update!(email: "new_email@example.com")
+        expect(existing_user.email).to eq("new_email@example.com")
       end
     end
 
@@ -247,12 +257,12 @@ describe User do
     context "username was changed outside window" do
       before do
         travel_to ArchiveConfig.USER_RENAME_LIMIT_DAYS.days.ago do
-          existing_user.update(login: "new_username")
+          existing_user.update!(login: "new_username")
         end
       end
 
       it "allows another rename" do
-        expect(existing_user.update(login: "new")).to be_truthy
+        expect(existing_user.update!(login: "new")).to be_truthy
         expect(existing_user.login).to eq("new")
       end
     end

@@ -163,6 +163,7 @@ Feature: Admin Abuse actions
       And I press "Update"
     Then I should see "permanently suspended"
       And the user "Spamster" should be permanently banned
+      And the page should have a dashboard sidebar
       And I should see "Are you sure you want to delete"
       And I should see "1 bookmarks"
       And I should see "1 collections"
@@ -182,6 +183,28 @@ Feature: Admin Abuse actions
       And the work "Not Spam" should not be deleted
       And there should be no bookmarks on the work "Not Spam"
       And there should be no comments on the work "Not Spam"
+
+  Scenario: A permabanned spammer's comments' replies from others should stay visible
+    Given I have a work "Generic Work"
+      And a comment "I like spam" by "Spamster" on the work "Generic Work"
+      And a reply "I don't :(" by "NotSpamster" on the work "Generic Work"
+      And a comment "A thread of spams" by "Spamster" on the work "Generic Work"
+      And a reply "more spam" by "Spamster" on the work "Generic Work"
+    When I am logged in as a "policy_and_abuse" admin
+      And I go to the user administration page for "Spamster"
+      And I choose "Spammer: ban and delete all creations"
+      And I press "Update"
+    Then I should see "permanently suspended"
+      And the user "Spamster" should be permanently banned
+      And I should see "I like spam"
+    When I press "Yes, Delete All Spammer Creations"
+    Then I should see "All creations by user Spamster have been deleted."
+    When I go to the work comments page for "Generic Work"
+    Then I should not see "I like spam"
+      And I should see "(Previous comment deleted.)"
+      And I should see "I don't :("
+      And I should not see "A thread of spams"
+      And I should not see "more spam"
 
   Scenario: A user's works cannot be destroyed unless they are banned
     Given I am logged in as "Spamster"

@@ -71,7 +71,7 @@ class Kudo < ApplicationRecord
     end
 
     # Expire the cached kudos section under the work.
-    ActionController::Base.new.expire_fragment("#{commentable.cache_key}/kudos-v3")
+    ActionController::Base.new.expire_fragment("#{commentable.cache_key}/kudos-v4")
   end
 
   def notify_user_by_email?(user)

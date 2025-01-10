@@ -1,4 +1,12 @@
-# encoding: utf-8
+Given "a nominated tag set {string} with a tag nomination in the wrong category" do |tag_set_name|
+  pseud = FactoryBot.create(:pseud, user: FactoryBot.create(:user, login: "tagsetter"))
+  owned_tag_set = FactoryBot.create(:owned_tag_set, title: tag_set_name, owner: pseud)
+  tag_set_nomination = FactoryBot.create(:tag_set_nomination, pseud: pseud, owned_tag_set: owned_tag_set)
+  FactoryBot.create(:relationship, name: "rel tag")
+  invalid_nom = tag_set_nomination.fandom_nominations.build(tagname: "rel tag") # intentional mismatch in tag category
+  invalid_nom.save(validate: false)
+end
+
 When /^I follow the add new tag ?set link$/ do
   step %{I follow "New Tag Set"}
 end

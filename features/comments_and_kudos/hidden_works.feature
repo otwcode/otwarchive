@@ -2,7 +2,7 @@ Feature: Comments on Hidden Works
 
   Scenario: When a work is hidden, admins and the creator can see (but not edit or add) comments, while everyone else is redirected.
     Given I am logged in as "creator"
-      And I post the work "To Be Hidden"
+      And I post the work "To Be Hidden" with guest comments enabled
       And I post the comment "Can I change this?" on the work "To Be Hidden"
       And I am logged in as "commenter"
       And I post the comment "Do you see?" on the work "To Be Hidden"
@@ -40,7 +40,7 @@ Feature: Comments on Hidden Works
 
   Scenario: When a work is unrevealed, admins and the creator can see (but not edit or add) comments, while everyone else is redirected.
     Given I am logged in as "creator"
-      And I post the work "Murder, She Wrote"
+      And I post the work "Murder, She Wrote" with guest comments enabled
       And I post the comment "Can I change this?" on the work "Murder, She Wrote"
       And I am logged in as "commenter"
       And I post the comment "Do you see?" on the work "Murder, She Wrote"

@@ -108,4 +108,9 @@ FactoryBot.define do
   factory :banned do |f|
     f.sequence(:name) { |n| "Banned #{n}" }
   end
+
+  factory :archive_warning do |f|
+    f.sequence(:name) { |n| "Archive Warning #{n}" }
+    canonical { true }
+  end
 end

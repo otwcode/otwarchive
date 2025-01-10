@@ -37,10 +37,13 @@ Feature: Comment Moderation
       And I set up the draft "Moderation"
       And I check "Enable comment moderation"
       And I post the work without preview
+      And I post a chapter for the work "Moderation"
     Then comment moderation should be enabled on "Moderation"
     When I am logged in as "commenter"
-      And I view the work "Moderation"
-    Then I should see "has chosen to moderate comments"
+      And I go to the work "Moderation" in full mode
+    Then I should see "This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator."
+    When I go to the 2nd chapter of the work "Moderation"
+    Then I should see "This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator."
 
   Scenario: Post a moderated comment
     Given the moderated work "Moderation" by "author"
@@ -304,3 +307,25 @@ Feature: Comment Moderation
     Then I should see "All moderated comments approved."
     When I view the work "Moderation"
     Then I should see "Comments (4)"
+
+  Scenario: I can view the parent thread of an unreviewed comment
+    Given the moderated work "Moderation" by "author" with the approved comment "Test comment" by "commenter"
+      And I am logged in as "new_commenter"
+    When I view the work "Moderation"
+      And I follow "Comments (1)"
+      And I follow "Reply" within ".odd"
+      And I fill in "Comment" with "A moderated reply" within ".odd"
+      And I press "Comment" within ".odd"
+    When I am logged in as "author"
+      And I view the work "Moderation"
+      And I follow "Unreviewed Comments (1)"
+      And I follow "Parent Thread"
+    Then I should see "Test comment"
+    When I view the unreviewed comments page for "Moderation"
+      And I press "Approve"
+    When I am logged in as "new_commenter"
+      And I post the comment "Zero-depth comment" on the work "Moderation"
+    When I am logged in as "author"
+      And I view the work "Moderation"
+      And I follow "Unreviewed Comments (1)"
+    Then I should not see "Parent Thread"

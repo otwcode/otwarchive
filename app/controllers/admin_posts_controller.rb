@@ -94,7 +94,8 @@ class AdminPostsController < Admin::BaseController
 
   def admin_post_params
     params.require(:admin_post).permit(
-      :admin_id, :title, :content, :translated_post_id, :language_id, :tag_list, :comment_permissions
+      :admin_id, :title, :content, :translated_post_id, :language_id, :tag_list,
+      :comment_permissions, :moderated_commenting_enabled
     )
   end
 end

@@ -21,6 +21,7 @@ jobs:
       TEST_GROUP: ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
       CUCUMBER_RETRY: 1
       CUCUMBER_FORMAT: Ao3Cucumber::Formatter
+      CUCUMBER_PUBLISH_QUIET: true
       SPEC_OPTS: --force-color
 
     services:
@@ -33,7 +34,7 @@ jobs:
           - 3306:3306
 
       elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.26
         ports:
           - 9200:9200
         options: >-
@@ -57,12 +58,15 @@ jobs:
             arguments: spec/models
           - command: rspec
             arguments: --exclude-pattern 'spec/{controllers,models}/**/*.rb'
+            libvips: true
           - command: cucumber
             arguments: features/admins
+            libvips: true
           - command: cucumber
             arguments: features/bookmarks
           - command: cucumber
             arguments: features/collections
+            libvips: true
           - command: cucumber
             arguments: features/comments_and_kudos
           - command: cucumber
@@ -72,8 +76,10 @@ jobs:
             vcr: true
           - command: cucumber
             arguments: features/other_a
+            libvips: true
           - command: cucumber
             arguments: features/other_b
+            libvips: true
           - command: cucumber
             arguments: features/prompt_memes_a
           - command: cucumber
@@ -128,6 +134,10 @@ jobs:
           restore-keys: |
             cassette-library-${{ hashFiles(matrix.tests.arguments) }}-
 
+      - name: Install libvips for image processing
+        if: ${{ matrix.tests.libvips }}
+        run: sudo apt-get install -y libvips-dev
+
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
         with:
@@ -149,7 +159,7 @@ jobs:
         run: bundle exec ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           # Optional for public repos. However, individual forks can set this
           # secret to reduce the chance of being rate-limited by GitHub.

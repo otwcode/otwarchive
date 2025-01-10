@@ -227,6 +227,21 @@ class Tag < ApplicationRecord
     end
   end
 
+  # queue_flush_work_cache will update the cached work (bookmarkable) info for
+  # bookmarks, but we still need to expire the portion of bookmark blurbs that
+  # contains the bookmarker's tags.
+  after_update :queue_flush_bookmark_cache
+  def queue_flush_bookmark_cache
+    async_after_commit(:flush_bookmark_cache) if saved_change_to_name?
+  end
+
+  def flush_bookmark_cache
+    self.bookmarks.each do |bookmark|
+      ActionController::Base.new.expire_fragment("bookmark-owner-blurb-#{bookmark.cache_key}-v2")
+      ActionController::Base.new.expire_fragment("bookmark-blurb-#{bookmark.cache_key}-v2")
+    end
+  end
+
   before_save :set_last_wrangler
   def set_last_wrangler
     unless User.current_user.nil?
@@ -1050,14 +1065,15 @@ class Tag < ApplicationRecord
   #################################
 
   def unwrangled_query(tag_type, options = {})
-    self_type = %w(Character Fandom Media).include?(self.type) ? self.type.downcase : "fandom"
+    self_type = %w[Character Fandom Media].include?(self.type) ? self.type.downcase : "fandom"
     TagQuery.new(options.merge(
-      type: tag_type,
-      unwrangleable: false,
-      wrangled: false,
-      "pre_#{self_type}_ids": [self.id],
-      per_page: Tag.per_page
-    ))
+                   type: tag_type,
+                   unwrangleable: false,
+                   wrangled: false,
+                   has_posted_works: true,
+                   "pre_#{self_type}_ids": [self.id],
+                   per_page: Tag.per_page
+                 ))
   end
 
   def unwrangled_tags(tag_type, options = {})
@@ -1188,6 +1204,16 @@ class Tag < ApplicationRecord
     parent_names << "" if parent_names.present?
 
     TagNomination.where(tagname: name, parent_tagname: parent_names).update_all(parented: true)
+
+    return unless saved_change_to_name? && name_before_last_save.present?
+
+    # Act as if the tag with the previous name was deleted and mirror clear_tag_nominations
+    TagNomination.where(tagname: name_before_last_save).update_all(
+      canonical: false,
+      exists: false,
+      parented: false,
+      synonym: nil
+    )
   end
 
   before_destroy :clear_tag_nominations

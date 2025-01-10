@@ -108,6 +108,18 @@ Scenario: extra commas in bookmark form (Issue 2284)
     And I press "Create"
   Then I should see "created"
 
+Scenario: Bookmark notes do not display images
+  Given I am logged in as "bookmarkuser"
+    And I post the work "Some Work"
+  When I follow "Bookmark"
+    And I fill in "Notes" with "Fantastic!<img src='http://example.com/icon.svg'>"
+    And I press "Create"
+    And all indexing jobs have been run
+  Then I should see "Bookmark was successfully created"
+  When I go to the bookmarks page
+  Then I should not see the image "src" text "http://example.com/icon.svg"
+    And I should see "Fantastic!"
+
 Scenario: bookmark added to moderated collection has flash notice only when not approved
   Given the following activated users exist
     | login      | password |
@@ -397,27 +409,6 @@ Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't o
   When I attempt to transfer my bookmark of "Random Work" to a pseud that is not mine
   Then I should not see "Bookmark was successfully updated"
     And I should see "You can't bookmark with that pseud."
-
-@javascript
-Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
-  Given the work "Popular Work"
-    And I am logged in as "bookmarker1"
-    And I bookmark the work "Popular Work" with the note "Love it"
-    And I log out
-    And I am logged in as "bookmarker2"
-    And I bookmark the work "Popular Work"
-    And the statistics for the work "Popular Work" are updated
-  When I am on the bookmarks page
-    # Follow the link for bookmarker2's bookmark, which is more recent.
-    And I follow "Show Most Recent Bookmarks" within ".bookmark.blurb:first-child"
-  Then I should see "bookmarker1" within ".bookmark.blurb:first-child .recent"
-    And I should see "Love it" within ".bookmark.blurb:first-child .recent"
-    And I should see "Hide Most Recent Bookmarks" within ".bookmark.blurb:first-child .recent"
-  When I follow "Hide Most Recent Bookmarks" within ".bookmark.blurb:first-child .recent"
-  # .recent has been hidden, we should not see its contents anymore.
-  Then I should not see "bookmarker1" within ".bookmark.blurb:first-child"
-    And I should not see "Love it" within ".bookmark.blurb:first-child"
-    And I should see "Show Most Recent Bookmarks" within ".bookmark.blurb:first-child"
 
 Scenario: A bookmark with duplicate tags other than capitalization has only first version of tag saved
   Given I am logged in as "bookmark_user"
