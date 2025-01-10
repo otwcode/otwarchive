@@ -17,6 +17,6 @@ Feature: Browse Bookmarks
       And I should not see "Bookmarked with Default Pseud"
 
   Scenario: When logged out, the "save" button on bookmarks does not show
-    Given I am not logged in
-      And I go to to the bookmarks page for the tag "Testing"
-    Then I should not see a link with the text "Save"
+    Given I am logged out
+      And I go to the bookmarks page for the tag "Testing"
+    Then I should not see a link "Save"
