@@ -86,16 +86,33 @@ Feature: User Authentication
       And I press "Log In"
     Then I should not see "Hi, sam"
 
+  Scenario: Translated reset password email
+    Given a locale with translated emails
+      And the following activated users exist
+        | login    | email              | password |
+        | sam      | sam@example.com    | password |
+        | notsam   | notsam@example.com | password |
+      And the user "sam" enables translated emails
+      And all emails have been delivered
+    When I request a password reset for "sam@example.com"
+    Then I should see "Check your email for instructions on how to reset your password."
+      And 1 email should be delivered to "sam@example.com"
+      And the email should have "Translated subject" in the subject
+      And the email to "sam" should be translated
+    # notsam didn't enable translated emails
+    When I request a password reset for "notsam@example.com"
+    Then I should see "Check your email for instructions on how to reset your password."
+      And 1 email should be delivered to "notsam@example.com"
+      And the email should have "Reset your password" in the subject
+      And the email to "notsam" should be non-translated
+
   Scenario: Forgot password, logging in with email address
     Given I have no users
       And the following activated user exists
         | login | email           | password |
         | sam   | sam@example.com | password |
       And all emails have been delivered
-    When I am on the login page
-      And I follow "Reset password"
-      And I fill in "Email address or user name" with "sam@example.com"
-      And I press "Reset Password"
+    When I request a password reset for "sam@example.com"
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
     When I start a new session
@@ -112,10 +129,7 @@ Feature: User Authentication
         | login | password |
         | sam   | password |
       And all emails have been delivered
-    When I am on the login page
-      And I follow "Reset password"
-      And I fill in "Email address or user name" with "sam"
-      And I press "Reset Password"
+    When I request a password reset for "sam"
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
     When it is currently 2 weeks from now
@@ -129,6 +143,26 @@ Feature: User Authentication
       And I should see "Log In"
       And I should not see "Your password has been changed"
       And I should not see "Hi, sam!"
+
+  Scenario: Forgot password, with enough attempts to trigger password reset cooldown
+    Given I have no users
+      And the following activated user exists
+        | login | password |
+        | sam   | password |
+      And all emails have been delivered
+    When I request a password reset for "sam"
+      And I request a password reset for "sam"
+      And I request a password reset for "sam"
+    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 0 more times."
+      And 3 emails should be delivered
+    When all emails have been delivered
+      And I request a password reset for "sam"
+    Then I should see "You cannot reset your password at this time. Please try again after"
+      And 0 emails should be delivered
+    When it is currently 12 hours from now
+      And I request a password reset for "sam"
+    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 2 more times."
+      And 1 email should be delivered
 
   Scenario: User is locked out
     Given I have no users

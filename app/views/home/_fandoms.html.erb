@@ -1,0 +1,10 @@
+<ul>
+  <li><%= link_to t(".all_fandoms"), media_path %></li>
+  <% cache "homepage-fandoms-version1", skip_digest: true do %>
+    <% Media.for_menu.each do |medium| %>
+      <% unless medium.id.nil? %>
+        <li><%= link_to ts("#{medium.name}"), medium_fandoms_path(medium) %></li>
+      <% end %>
+    <% end %>
+  <% end %>
+</ul>

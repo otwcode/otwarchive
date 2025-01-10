@@ -24,7 +24,7 @@
       <%= byline(work, visibility: "public") %>
 
 <% #### CACHE show/hide ####, if you update the key edit lib/tasks/memcached.rake %>
-<% cache("#{work.cache_key}-#{Work.work_blurb_version(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v9", skip_digest: true) do %>
+<% cache("#{work.cache_key}-#{Work.work_blurb_version(work.id)}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}-v10", skip_digest: true) do %>
 
       <% tag_groups = work.tag_groups %>
 
@@ -48,7 +48,7 @@
   </div>
 
   <% if !work.posted? %>
-   <p class="caution notice"><%= ts('This draft will be <strong>automatically deleted</strong> on %{time}', time: time_in_zone(work.created_at + 1.month)).html_safe %></p>
+   <p class="caution notice"><%= t('.draft_deletion_notice_html', deletion_date: date_in_zone(work.created_at + 29.days)) %></p>
   <% end %>
   <!--warnings again, cast, freeform tags-->
   <h6 class="landmark heading"><%= ts("Tags") %></h6>
@@ -80,7 +80,7 @@
   <dl class="stats">
     <% if work.language.present? %>
       <dt class="language"><%= ts("Language") %>:</dt>
-      <dd class="language"><%= work.language.name %></dd>
+      <dd class="language" lang="<%= work.language.short %>"><%= work.language.name %></dd>
     <% end %>
     <dt class="words"><%= ts('Words') %>:</dt>
     <dd class="words"><%= number_with_delimiter(work.word_count) %></dd>
@@ -91,29 +91,29 @@
 <% #### END CACHE show/hide %>
 
 <% #### CACHE stats #### %>
-<% cache("#{work.cache_key}/stats-v3", expires_in: 1.hour, skip_digest: true) do %>
+<% cache("#{work.cache_key}/stats-v4", expires_in: 1.hour, skip_digest: true) do %>
   <% unless work.approved_collections.empty? %>
     <dt class="collections"><%= ts('Collections') %>:</dt>
-    <dd class="collections"><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
+    <dd class="collections"><%= link_to number_with_delimiter(work.approved_collections.length), work_collections_path(work) %></dd>
   <% end %>
 
   <% if work.count_visible_comments > 0 %>
     <dt class="comments"><%= ts('Comments') %>:</dt>
-    <dd class="comments"><%= link_to work.count_visible_comments, work.number_of_posted_chapters > 1 ? work_path(work, anchor: "comments", show_comments: true, view_full_work: "true") : work_path(work, anchor: "comments", show_comments: true) %></dd>
+    <dd class="comments"><%= link_to number_with_delimiter(work.count_visible_comments), work.number_of_posted_chapters > 1 ? work_path(work, anchor: "comments", show_comments: true, view_full_work: "true") : work_path(work, anchor: "comments", show_comments: true) %></dd>
   <% end %>
 
   <% if work.all_kudos_count > 0 %>
     <dt class="kudos"><%= ts('Kudos') %>:</dt>
-    <dd class="kudos"><%= link_to work.all_kudos_count.to_s, work.number_of_posted_chapters > 1 ? work_path(work, anchor: "kudos", view_full_work: "true") : work_path(work, anchor: "kudos") %></dd>
+    <dd class="kudos"><%= link_to number_with_delimiter(work.all_kudos_count), work.number_of_posted_chapters > 1 ? work_path(work, anchor: "kudos", view_full_work: "true") : work_path(work, anchor: "kudos") %></dd>
 
   <% end %>
   <% if (bookmark_count = work.public_bookmarks_count) > 0 %>
     <dt class="bookmarks"><%= ts('Bookmarks') %>:</dt>
-    <dd class="bookmarks"><%= link_to_bookmarkable_bookmarks(work, bookmark_count.to_s) %></dd>
+    <dd class="bookmarks"><%= link_to_bookmarkable_bookmarks(work, number_with_delimiter(bookmark_count)) %></dd>
   <% end %>
 
   <dt class="hits"><%= ts("Hits") %>:</dt>
-  <dd class="hits"><%= work.hits %></dd>
+  <dd class="hits"><%= number_with_delimiter(work.hits) %></dd>
 <% end %>
 <% #### END CACHE stats #### %>
 

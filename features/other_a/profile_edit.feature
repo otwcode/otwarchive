@@ -13,21 +13,25 @@ Background:
 
 Scenario: Add details
 
+  Then I should see the page title "Edit Profile"
   When I fill in the details of my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
+    And I should see "I live in"
 
 Scenario: Change details
 
   When I change the details in my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
+    And I should see "I live in"
 
 Scenario: Remove details
 
   When I remove details from my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
+    And I should not see "I live in"
 
 Scenario: Change details as an admin
 
@@ -69,7 +73,7 @@ Scenario: Changing email address requires reauthenticating
 Scenario: Changing email address - entering an invalid email address
 
   When I enter an invalid email
-  Then I should see "Email does not seem to be a valid address"
+  Then I should see "Email should look like an email address"
     And 0 emails should be delivered
 
 Scenario: Changing email address - case-insensitive confirmation
@@ -112,6 +116,9 @@ Scenario: Changing email address and viewing
     And the email should not contain "translation missing"
   When I change my preferences to display my email address
   Then I should see "My email address: valid2@archiveofourown.org"
+  When I log out
+    And I go to editname's profile page
+  Then I should see "My email address: valid2@archiveofourown.org"
 
 Scenario: Changing email address after requesting password reset
 
@@ -141,6 +148,17 @@ Scenario: Changing email address -- can't be the same as another user's
     And I should not see "foo@ao3.org"
     And I should see "bar@ao3.org"
 
+Scenario: Changing email address -- Translated email is sent when user enables locale settings
+    Given a locale with translated emails
+      And the user "editname" enables translated emails
+      And all emails have been delivered
+    When I am logged in as "editname"
+      And I want to edit my profile
+      And I change my email
+    Then the email address "bar@ao3.org" should be emailed
+      And the email should have "Email changed" in the subject
+      And the email to email address "bar@ao3.org" should be translated
+
 Scenario: Date of birth - under age
 
   When I enter a birthdate that shows I am under age
@@ -153,6 +171,9 @@ Scenario: Entering date of birth and displaying
   When I change my preferences to display my date of birth
   Then I should see "My birthday: 1980-11-30"
     And 0 emails should be delivered
+  When I log out
+    And I go to editname's profile page
+  Then I should see "My birthday: 1980-11-30"
 
 Scenario: Change password - mistake in typing old password
 

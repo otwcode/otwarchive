@@ -1,0 +1,16 @@
+<% content_for :message do %>
+  <p><%= t("mailer.general.greeting.formal_html", name: style_bold(@user.login)) %></p>
+
+  <p>
+    <%= t(".work_added.html", 
+          collection_link: style_link(@collection.title, collection_url(@collection)),
+          work_link: style_creation_link(@work.title, work_url(@work))) %>
+  </p>
+
+  <p><%= t(".archivist_notice") %></p>
+
+  <p>
+    <%= t(".removal_instructions.html",
+          approved_items_link: style_link(t(".approved_collection_items_page"), user_collection_items_url(@user, status: "approved"))) %>
+   </p>
+<% end %>

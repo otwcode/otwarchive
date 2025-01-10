@@ -34,7 +34,8 @@ Otwarchive::Application.configure do
 
   # Use a different cache store in production
   config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
-                       { namespace: "ao3-v2", compress: true, pool_size: 5 }
+                       { namespace: "ao3-v#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}",
+                         compress: true, pool_size: 5 }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
@@ -68,5 +69,12 @@ Otwarchive::Application.configure do
     Bullet.counter_cache_enable = false
   end
 
+  # Store uploaded files in AWS S3, proxied so we can cache them.
+  config.active_storage.service = :s3
+  config.active_storage.resolve_model_to_route = :rails_storage_proxy
+
   config.middleware.use Rack::Attack
+
+  # Disable dumping schemas after migrations.
+  config.active_record.dump_schema_after_migration = false
 end

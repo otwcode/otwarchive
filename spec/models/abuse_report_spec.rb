@@ -29,7 +29,7 @@ describe AbuseReport do
     end
 
     context "provided email is invalid" do
-      [BAD_EMAILS, BADLY_FORMATTED_EMAILS].each do |email|
+      BAD_EMAILS.each do |email|
         let(:bad_email) { build(:abuse_report, email: email) }
         it "fails email format check and cannot be created" do
           expect(bad_email.save).to be_falsey
@@ -43,7 +43,7 @@ describe AbuseReport do
         let(:work) { create(:work) }
         let(:chapter) { work.chapters.first }
         let(:missing_work_id) { build(:abuse_report, url: "http://archiveofourown.org/chapters/#{chapter.id}/") }
-        
+
         it "saves and adds the correct work id to the URL" do
           expect(missing_work_id.save).to be_truthy
           expect(missing_work_id.url).to eq("http://archiveofourown.org/works/#{work.id}/chapters/#{chapter.id}/")
@@ -343,6 +343,34 @@ describe AbuseReport do
     it "is valid even with spam if logged in and providing correct email" do
       User.current_user = legit_user
       expect(safe_report.save).to be_truthy
+    end
+  end
+
+  describe "#attach_work_download" do
+    include ActiveJob::TestHelper
+
+    let(:ticket_id) { "123" }
+    let(:work) { create(:work) }
+
+    it "does not attach a download for non-work URLs asynchronously" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/someone/")
+
+      expect { subject.attach_work_download(ticket_id) }
+        .not_to have_enqueued_job
+    end
+
+    it "does not attach a download for comment sub-URLs asynchronously" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/comments/")
+
+      expect { subject.attach_work_download(ticket_id) }
+        .not_to have_enqueued_job
+    end
+
+    it "attaches a download for work URLs asynchronously" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+      expect { subject.attach_work_download(ticket_id) }
+        .to have_enqueued_job
     end
   end
 end

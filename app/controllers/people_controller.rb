@@ -8,14 +8,14 @@ class PeopleController < ApplicationController
     else
       options = people_search_params.merge(page: params[:page])
       @search = PseudSearchForm.new(options)
-      @people = @search.search_results
+      @people = @search.search_results.scope(:for_search)
       flash_search_warnings(@people)
     end
   end
 
   def index
     if @collection.present?
-      @people = @collection.participants.order(:name).page(params[:page])
+      @people = @collection.participants.with_attached_icon.includes(:user).order(:name).page(params[:page])
       @rec_counts = Pseud.rec_counts_for_pseuds(@people)
       @work_counts = Pseud.work_counts_for_pseuds(@people)
     else

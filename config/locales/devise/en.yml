@@ -25,7 +25,7 @@ en:
         not_found_in_database: The password or user name you entered doesn't match our records. Please try again or <a href="%{reset_path}">reset your password</a>. If you still can't log in, please visit <a href="%{problems_path}">Problems When Logging In</a> for help.
         timeout: Your session expired. Please sign in again to continue.
         unauthenticated: You need to sign in or sign up before continuing.
-        unconfirmed: You have to confirm your email before continuing. Please check your email for the confirmation link.
+        unconfirmed: You have to activate your account before continuing. Please check your email for the activation link.
     mailer:
       confirmation_instructions:
         subject: Confirmation instructions

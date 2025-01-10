@@ -41,6 +41,7 @@ he:
           other: 'מערכות יחסים:'
           two: 'מערכות יחסים:'
       work:
+        chapter_total_display: פרקים
         summary: תקציר
     models:
       archive_warning:
@@ -95,23 +96,18 @@ he:
         one: אורחת
         other: "%{count} אורחות"
         two: "%{count} אורחות"
-      html:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_link}."
+      left_kudos:
+        html:
           one: "%{givers_list} השאירה קודוס על %{commentable_link}."
           other: "%{givers_list} השאירו קודוס על %{commentable_link}."
-          two: "%{givers_list} השאירו קודוס על %{commentable_link}."
-        single_guest:
-          giver_list: אורחת
-          left_kudos: "%{giver_list} השאירה קודוס על %{commentable_link}."
-      subject: "[%{app_name}] קיבלת קודוס!"
-      text:
-        left_kudos:
-          many: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
+        text:
           one: "%{givers_list} השאירה קודוס על %{commentable_title} (%{commentable_url})."
           other: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
-          two: "%{givers_list} השאירו קודוס על %{commentable_title} (%{commentable_url})."
-        single_guest: אורחת השאירה קודוס על %{commentable_title} (%{commentable_url}).
+      single_guest:
+        giver: אורחת
+        html: "%{giver} השאירה קודוס על %{commentable_link}."
+        text: אורחת השאירה קודוס על %{commentable_title} (%{commentable_url}).
+      subject: "[%{app_name}] קיבלת קודוס!"
   mailer:
     general:
       closing:
@@ -128,28 +124,30 @@ he:
           two: "%{count} מילים"
       footer:
         general:
+          about:
+            html: AO3 הוא ארכיון המנוהל ונתמך על ידי מעריצים ומעריצות ונסמך על %{donate_link}.
+            text: 'AO3 הוא ארכיון המנוהל ונתמך על ידי מעריצים ומעריצות ונסמך על תרומות:
+              %{donate_url}.'
           html:
             donate_link_text: תרומות
-            part1: אם קיבלת הודעה זו בטעות, אנא %{support_link}.
-            part2: AO3 הוא ארכיון המנוהל ונתמך על ידי מעריצים ומעריצות ונסמך על %{donate_link}.
             support_link_text: צרו קשר עם צוות התמיכה שלנו
-          text:
-            part1: אם קיבלת הודעה זו בטעות, אנא צרו קשר עם צוות התמיכה שלנו בכתובת
+          unwanted_email:
+            html: אם קיבלת הודעה זו בטעות, אנא %{support_link}.
+            text: אם קיבלת הודעה זו בטעות, אנא צרו קשר עם צוות התמיכה שלנו בכתובת
               %{support_url}.
-            part2: 'AO3 הוא ארכיון המנוהל ונתמך על ידי מעריצים ומעריצות ונסמך על תרומות:
-              %{donate_url}.'
         sent_at: נשלח בשעה %{sent_at}.
       greeting:
-        formal: "%{name} שלום,"
+        formal_html: "%{name} שלום,"
         informal:
-          addressed: היי, %{name}!
+          addressed_html: היי, %{name}!
           unaddressed: היי!
-        introductory: שלום מ-Archive of Our Own – AO3 (ארכיון משלנו)!
-      metadata_label_indicator: " : "
+        introductory: שלום מ-Archive of Our Own – AO3 (ארכיון משלנו)!
+      metadata_label_indicator: ":"
       signature:
+        abuse_team: צוות מדיניות ושימוש לרעה של AO3
         app_short_name: AO3
         open_doors: צוות Open Doors (דלתות פתוחות)
-        parent_org: Organization for Transformative Works – OTW (ארגון למען יצירות
+        parent_org: Organization for Transformative Works – OTW (ארגון למען יצירות
           טרנספורמטיביות)
         support: צוות התמיכה של AO3
   users:
@@ -164,25 +162,22 @@ he:
         unrequested: אם לא ביקשת לשנות את סיסמתך, התעלמו מדוא"ל זה והסיסמה הנוכחית
           שלך תמשיך לשמש אותך כמקודם.
   user_mailer:
-    abuse_report:
-      description_para: 'פירוט ההפרה:'
-      para1: 'דו&quot;ח השימוש לרעה הבא נשלח לצוות מדיניות ושימוש לרעה:'
-      subject: "[%{app_name}] דו&quot;ח המדיניות ושימוש לרעה שלך"
-      url_para: 'כתובת האתר של הדף בו מתקיימת ההפרה:'
     admin_deleted_work_notification:
       bye: לנוחיותך, מצורף בזאת עותק של יצירתך.
       contact_abuse: צרו קשר עם ועדת מדיניות ושימוש לרעה
+      deleted:
+        html: יצירתך %{title} נמחקה מהארכיון על ידי אדמינית.
+        text: יצירתך "%{title}" נמחקה מהארכיון על ידי אדמינית.
       html:
-        part1: יצירתך %{title} נמחקה מהארכיון על ידי אדמינית.
-        part2: אם יצירתך הייתה שייכת למיזם שיובא לארכיון על ידי Open Doors (דלתות
-          פתוחות), ניתן %{opendoors_link}.
         tos_violation: אם ייתכן שיצירתך הפרה את תנאי השימוש של הארכיון, אנא %{contact_abuse_link}.
+      import_project:
+        html: אם יצירתך הייתה שייכת למיזם שיובא לארכיון על ידי Open Doors (דלתות פתוחות),
+          ניתן %{opendoors_link}.
+        text: אם יצירתך הייתה שייכת למיזם שיובא לארכיון על ידי Open Doors (דלתות פתוחות),
+          ניתן להפנות שאלות נוספות לצוות דלתות פתוחות (%{opendoors_link}).
       opendoors: להפנות שאלות נוספות לצוות דלתות פתוחות
       subject: "[%{app_name}] יצירתך נמחקה על ידי אדמינית"
       text:
-        part1: יצירתך "%{title}" נמחקה מהארכיון על ידי אדמינית.
-        part2: אם יצירתך הייתה שייכת למיזם שיובא לארכיון על ידי Open Doors (דלתות
-          פתוחות), ניתן להפנות שאלות נוספות לצוות דלתות פתוחות (%{opendoors_link}).
         tos_violation: אם ייתכן שיצירתך הפרה את תנאי השימוש של הארכיון, אנא צרו קשר
           עם ועדת מדיניות ושימוש לרעה (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -263,8 +258,27 @@ he:
       unrevealed_info: יצירות שטרם נחשפו לא יופיעו ברשימת התגיות או בדף היצירות שלך.
         שימוש בקישור לדף היצירה יוביל להודעה שהיצירה טרם נחשפה, ולא יהיה ניתן לגשת
         לתוכן שלה.
+    archivist_added_to_collection_notification:
+      approved_collection_items_page: Approved Collection Items (פריטים שאושרו לאוספים)
+      archivist_notice: כיוון שמנהלות האוסף פועלות במסגרת תפקידן כארכיונאיות של Open
+        Doors (דלתות פתוחות), הן רשאיות להוסיף את היצירה שלך לאוסף זה גם אם השבתת
+        את האפשרות להזמין אותך לאוספים. ארכיונאיות מוסיפות יצירה לאוסף רק אם היא הייתה
+        חלק מארכיון מיובא.
+      removal_instructions:
+        html: אם ברצונך להסיר את יצירתך מאוסף זה, עליך להיכנס לדף %{approved_items_link}
+          שלך.
+        text: 'אם ברצונך להסיר את יצירתך מאוסף זה, עליך להיכנס לדף Approved Collection
+          Items (פריטים שאושרו לאוספים) שלך: %{approved_items_url}.'
+      subject: "[%{app_name}][%{collection_title}] ארכיונאי/ת של Open Doors (דלתות
+        פתוחות) הוסיף/ה את היצירה שלך לאוסף"
+      work_added:
+        html: מנהלות האוסף %{collection_link} הוסיפו את היצירה שלך %{work_link} לאוסף!
+        text: מנהלות האוסף "%{collection_title}" (%{collection_url}) הוסיפו את היצירה
+          שלך "%{work_title}" (%{work_url}) לאוסף!
     challenge_assignment_notification:
       any: הכול
+      assignment:
+        html: קיבלת את הבקשה הבאה באתגר %{link} בארכיון משלנו!
       description: 'תיאור:'
       due: 'תאריך ההגשה של המשימה:'
       html:
@@ -273,12 +287,11 @@ he:
         footer_link: עמוד הפרופיל של האתגר
         look_up: ניתן למצוא משימה זו ב%{link}.
         look_up_link: עמוד ה-Assignments (משימות) שלך
-        part1: קיבלת את הבקשה הבאה באתגר %{link} בארכיון משלנו!
       optional_tags: 'תגיות אפשריות:'
       prompts: 'פרומפטים:'
       prompt_url: 'כתובת האתר (URL) של הפרומפט:'
       recipient: 'מקבלת:'
-      recipient_missing: 'ללא: צרו קשר עם מנהלת האתגר לקבלת סיוע!'
+      recipient_missing: 'ללא: יש לפנות למנהלת האתגר לקבלת סיוע!'
       subject: "[%{app_name}][%{collection_title}] המשימה שלך!"
       text:
         assignment: קיבלת את הבקשה הבאה באתגר "%{collection_title}" (%{collection_url})
@@ -287,7 +300,9 @@ he:
           אתגר זה ופרטי יצירת קשר עם המנהלות שלו זמינים בכתובת %{profile_url}.
         look_up: ניתן למצוא משימה זו בעמוד ה-Assignments (משימות) שלך בכתובת %{link}.
     change_email:
-      part1: '%{login}, כתובת הדוא"ל המשויכת לחשבונך שונתה ל-%{email}'
+      changed:
+        html: '%{login}, כתובת הדוא"ל המשויכת לחשבונך שונתה ל-%{email}'
+        text: '%{login}, כתובת הדוא"ל המשויכת לחשבונך שונתה ל-%{email}'
       subject: '[%{app_name}] כתובת הדוא"ל שלך שונתה'
     collection_notification:
       assignments_sent:
@@ -321,8 +336,8 @@ he:
           לערוך את הסדרה על מנת להסיר את עצמך כיוצר/ת: %{url}'
     creatorship_notification_archivist:
       explanation: כיוון שהארכיונאית פועלת במסגרת תפקידה במיזם Open Doors (דלתות פתוחות),
-        יש ביכולתה לשייך את שם העט שלך ללא הזמנה, גם אם ביטלת את האפשרות להגדירך כיוצר/ת
-        שותף/ה.
+        יש ביכולתה לשייך את שם העט שלך ללא שליחת בקשה, גם אם ביטלת את האפשרות להגדירך
+        כיוצר/ת שותף/ה.
       html:
         creation: "%{creation_link} מאת %{pseud_links}"
         edit_chapter: לערוך את הפרק
@@ -366,29 +381,45 @@ he:
         instructions: 'את ההזמנה ניתן לקבל או לדחות בדף Co-Creator Requests (בקשות
           להוספת יוצר/ת שותף/ה) שלך: %{url}'
     delete_work_notification:
-      html:
-        part1_other: יצירתך %{title} נמחקה לבקשת %{pseud}.
-        part1_yourself: יצירתך %{title} נמחקה על פי בקשתך.
-        part2: אם יש לך שאלות, אנא %{support}
-      part3: לנוחיותך, מצורף בזאת עותק של יצירתך.
+      attachment: לנוחיותך, מצורף בזאת עותק של יצירתך.
+      deleted_other:
+        html: יצירתך %{title} נמחקה לבקשת %{pseud}.
+        text: יצירתך "%{title}" נמחקה לבקשת %{pseud}.
+      deleted_yourself:
+        html: יצירתך %{title} נמחקה על פי בקשתך.
+        text: יצירתך "%{title}" נמחקה על פי בקשתך.
+      questions:
+        html: אם יש לך שאלות, אנא %{support}
+        text: אם יש לך שאלות, אנא %{support} (%{url}).
       subject: "[%{app_name}] יצירתך נמחקה"
       support: פנו לצוות התמיכה
-      text:
-        part1_other: יצירתך "%{title}" נמחקה לבקשת %{pseud}.
-        part1_yourself: יצירתך "%{title}" נמחקה על פי בקשתך.
-        part2: אם יש לך שאלות, אנא %{support} (%{url}).
     invite_increase_notification:
-      body:
-        many: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש על
-          מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך %{invitation_page}.
-        one: רק רצינו ליידע אותך שקיבלת הזמנה חדשה, בה ניתן להשתמש על מנת ליצור חשבון
-          חדש בארכיון. באפשרותך להזמין חבר/ה דרך %{invitation_page}.
-        other: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש על
-          מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך %{invitation_page}.
-        two: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש על
-          מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך %{invitation_page}.
+      html:
+        body:
+          many: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש
+            על מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך %{invitation_page_link}.
+          one: רק רצינו ליידע אותך שקיבלת הזמנה חדשה, בה ניתן להשתמש על מנת ליצור
+            חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך %{invitation_page_link}.
+          other: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש
+            על מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך %{invitation_page_link}.
+          two: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש על
+            מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך %{invitation_page_link}.
       invitation_page_link_text: דף ההזמנות שלך
       subject: "[%{app_name}] הזמנות חדשות"
+      text:
+        body:
+          many: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש
+            על מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך דף Invitations
+            (הזמנות), %{invitation_page_url}.
+          one: רק רצינו ליידע אותך שקיבלת הזמנה חדשה, בה ניתן להשתמש על מנת ליצור
+            חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך דף Invitations (הזמנות),
+            %{invitation_page_url}.
+          other: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש
+            על מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך דף Invitations
+            (הזמנות), %{invitation_page_url}.
+          two: רק רצינו ליידע אותך שקיבלת %{count} הזמנות חדשות, בהן ניתן להשתמש על
+            מנת ליצור חשבון חדש בארכיון. באפשרותך להזמין חבר/ה דרך דף Invitations
+            (הזמנות), %{invitation_page_url}.
     invite_request_declined:
       main:
         many: צר לנו לבשר לך כי אין באפשרותנו להיענות לבקשתך ל-%{count} הזמנות חדשות
@@ -411,28 +442,29 @@ he:
         collection: יצירה הוקדשה לך במתנה באוסף "%{collection_title}" (%{collection_url})
           ב-AO3!
     signup_notification:
+      activate:
+        html: אנא %{activate_account_link}.
+        text: 'אנא לחץ/י על קישור זה כדי להפעיל את חשבונך: %{activate_account_url}'
       activate_your_account: לחץ/י על קישור זה כדי להפעיל את חשבונך
       admin_posts: חדשות AO3
       bye: כולנו תקווה שתהנה/י מהשימוש באתר.
       contact_support: צרו קשר עם התמיכה
       faq: שאלות נפוצות
-      html:
-        part1: אנא %{activate_account_link}.
-        part2: ברגע שחשבונך יופעל, תוכל/י לפרסם יצירות, להגדיר רישומים לקבלת עדכונים
+      features:
+        html: ברגע שחשבונך יופעל, תוכל/י לפרסם יצירות, להגדיר רישומים לקבלת עדכונים
           בדוא&quot;ל כדי לקבל הודעה כאשר חשבונות או יצירות מועדפים מתעדכנים, להגדיר
           העדפות כדי להתאים באופן אישי את אופן ההצגה של האתר, לעקוב אחר היצירות אליהן
           ניגשת בעבר באמצעות ההיסטוריה, ודברים רבים נוספים.
-        part3: מידע ועצות בנוגע לשימוש בארכיון זמינים ב%{faq_link}. את החדשות האחרונות
+        text: ברגע שחשבונך יופעל, תוכל/י לפרסם יצירות, להגדיר רישומים לקבלת עדכונים
+          בדוא&quot;ל כדי לקבל הודעה כאשר חשבונות או יצירות מועדפים מתעדכנים, להגדיר
+          העדפות כדי להתאים באופן אישי את אופן ההצגה של האתר, לעקוב אחר היצירות אליהן
+          ניגשת בעבר באמצעות ההיסטוריה, ודברים רבים נוספים.
+      information:
+        html: מידע ועצות בנוגע לשימוש בארכיון זמינים ב%{faq_link}. את החדשות האחרונות
           אודות פיתוח האתר ניתן למצוא ב%{admin_posts_link}. אם דרושה לך עזרה נוספת,
           אם נתקלת בבעייה באתר או אם יש לך שאלות או הערות, אנא %{contact_support_link},
           שתמיד שמח לעזור.
-      text:
-        part1: 'אנא לחץ/י על קישור זה כדי להפעיל את חשבונך: %{activate_account_url}'
-        part2: ברגע שחשבונך יופעל, תוכל/י לפרסם יצירות, להגדיר רישומים לקבלת עדכונים
-          בדוא&quot;ל כדי לקבל הודעה כאשר חשבונות או יצירות מועדפים מתעדכנים, להגדיר
-          העדפות כדי להתאים באופן אישי את אופן ההצגה של האתר, לעקוב אחר היצירות אליהן
-          ניגשת בעבר באמצעות ההיסטוריה, ודברים רבים נוספים.
-        part3: 'מידע ועצות בנוגע לשימוש בארכיון זמינים בשאלות הנפוצות שלנו ב-%{faq_url}.
+        text: 'מידע ועצות בנוגע לשימוש בארכיון זמינים בשאלות הנפוצות שלנו ב-%{faq_url}.
           את החדשות האחרונות אודות פיתוח האתר ניתן למצוא בחדשות AO3 %{admin_posts_url}.
           אם דרושה לך עזרה נוספת, אם נתקלת בבעייה באתר או אם יש לך שאלות או הערות,
           אנא צור/צרי קשר עם צוות התמיכה שלנו, שתמיד שמח לעזור: %{contact_support_url}'

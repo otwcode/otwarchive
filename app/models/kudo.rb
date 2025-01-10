@@ -11,6 +11,8 @@ class Kudo < ApplicationRecord
             presence: true,
             if: proc { |c| VALID_COMMENTABLE_TYPES.include?(c.commentable_type) }
 
+  validates :user, not_blocked: { by: :commentable, on: :create }
+
   validate :cannot_be_author, on: :create
   def cannot_be_author
     return unless user&.is_author_of?(commentable)
@@ -69,7 +71,7 @@ class Kudo < ApplicationRecord
     end
 
     # Expire the cached kudos section under the work.
-    ActionController::Base.new.expire_fragment("#{commentable.cache_key}/kudos-v3")
+    ActionController::Base.new.expire_fragment("#{commentable.cache_key}/kudos-v4")
   end
 
   def notify_user_by_email?(user)

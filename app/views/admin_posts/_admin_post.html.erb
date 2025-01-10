@@ -17,7 +17,7 @@
       <dd class="translations">
         <ul class="languages commas">
           <% for translation in sorted_translations(admin_post) %>
-            <li><%= link_to translation.language.name, translation %></li>
+            <li><%= link_to translation.language.name, translation, lang: translation.language.short %></li>
           <% end %>
         </ul>
       </dd>

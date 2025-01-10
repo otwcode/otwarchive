@@ -79,5 +79,13 @@ describe AbuseReporter do
         expect(subject.report_attributes.fetch("cf").fetch("cf_url")).to eq("Unknown URL")
       end
     end
+
+    context "if the report has an image in description" do
+      it "strips all img tags but leaves the src URLs" do
+        allow(subject).to receive(:description).and_return('Hi!<img src="http://example.com/Camera-icon.svg">Bye!')
+
+        expect(subject.report_attributes.fetch("description")).to eq("Hi!http://example.com/Camera-icon.svgBye!")
+      end
+    end
   end
 end

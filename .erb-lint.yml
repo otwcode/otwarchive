@@ -1,6 +1,10 @@
 ---
 EnableDefaultLinters: true
 linters:
+  AllowedScriptType:
+    allowed_types:
+      - "text/javascript"
+      - "speculationrules"
   DeprecatedClasses:
     enabled: true
     rule_set:

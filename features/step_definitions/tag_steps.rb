@@ -59,18 +59,35 @@ Given /^the basic categories exist$/ do
   end
 end
 
+Given "a set of tags for tag sort by use exists" do
+  {
+    "10 uses" => 10,
+    "8 uses" => 8,
+    "also 8 uses" => 8,
+    "5 uses" => 5,
+    "2 uses" => 2,
+    "0 uses" => 0
+  }.each do |freeform, uses|
+    tag = Freeform.find_or_create_by_name(freeform.dup)
+    tag.taggings_count = uses
+  end
+
+  step "all indexing jobs have been run"
+  step "the periodic tag count task is run"
+end
+
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
   fandom = Fandom.find_or_create_by_name(fandom)
-  fandom.update(canonical: true)
+  fandom.update!(canonical: true)
   media = Media.find_or_create_by_name(media)
-  media.update(canonical: true)
+  media.update!(canonical: true)
   fandom.add_association media
 end
 
-Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, character|
-  char = Character.find_or_create_by(name: character)
+Given "I add the fandom {string} to the tag/character {string}" do |fandom, tag|
+  tag = Tag.find_or_create_by(name: tag)
   fand = Fandom.find_or_create_by_name(fandom)
-  char.add_association(fand)
+  tag.add_association(fand)
 end
 
 Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
@@ -175,11 +192,12 @@ Given /^the tag wrangling setup$/ do
   step %{I am logged in as a random user}
   step %{I post the work "Revenge of the Sith 2" with fandom "Star Wars, Stargate SG-1" with character "Daniel Jackson" with second character "Jack O'Neil" with rating "Not Rated" with relationship "JackDaniel"}
   step %{The periodic tag count task is run}
+  step %{all indexing jobs have been run}
   step %{I flush the wrangling sidebar caches}
 end
 
 Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "tag_wrangling" admin}
   visit new_wrangling_guideline_path
   if title
     fill_in("Guideline text", with: "This is a page about how we wrangle things.")
@@ -201,6 +219,11 @@ end
 Given /^the tag "([^"]*)" does not exist$/ do |tag_name|
   tag = Tag.find_by_name(tag_name)
   tag.destroy if tag.present?
+end
+
+Given "a zero width space tag exists" do
+  blank_tag = FactoryBot.build(:character, name: ["200B".hex].pack("U"))
+  blank_tag.save!(validate: true) # TODO: Change to validate: false when AO3-6777 is fixed
 end
 
 ### WHEN
@@ -404,6 +427,11 @@ Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname, tag_type|
   assert tag.type == tag_type
 end
 
+Then "the {string} tag should be an unsorted tag" do |tagname|
+  tag = Tag.find_by(name: tagname)
+  expect(tag).to be_a(UnsortedTag)
+end
+
 Then(/^the "([^"]*)" tag should (be|not be) canonical$/) do |tagname, canonical|
   tag = Tag.find_by(name: tagname)
   expected = canonical == "be"
@@ -425,4 +453,8 @@ end
 Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
   tag = Tag.find_by(name: tagname)
   puts tag.inspect
+end
+
+Then "no tag is scheduled for count update from now on" do
+  expect_any_instance_of(Tag).not_to receive(:update_filters_for_filterables)
 end

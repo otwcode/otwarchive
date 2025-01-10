@@ -9,6 +9,10 @@ module MailerHelper
     link_to(body.html_safe, url, html_options)
   end
 
+  def style_role(text)
+    tag.em(tag.strong(text))
+  end
+
   # For work, chapter, and series links
   def style_creation_link(title, url, html_options = {})
     html_options[:style] = "color:#990000"
@@ -174,6 +178,29 @@ module MailerHelper
 
     label = style_bold(work_tag_metadata_label(tags))
     "#{label}#{style_work_tag_metadata_list(tags)}".html_safe
+  end
+
+  def commenter_pseud_or_name_link(comment)
+    return style_bold(t("roles.anonymous_creator")) if comment.by_anonymous_creator?
+
+    if comment.comment_owner.nil?
+      t("roles.commenter_name.html", name: style_bold(comment.comment_owner_name), role_with_parens: style_role(t("roles.guest_with_parens")))
+    else
+      role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
+      pseud_link = style_link(comment.pseud.byline, user_pseud_url(comment.user, comment.pseud))
+      t("roles.commenter_name.html", name: tag.strong(pseud_link), role_with_parens: style_role(role))
+    end
+  end
+
+  def commenter_pseud_or_name_text(comment)
+    return t("roles.anonymous_creator") if comment.by_anonymous_creator?
+
+    if comment.comment_owner.nil?
+      t("roles.commenter_name.text", name: comment.comment_owner_name, role_with_parens: t("roles.guest_with_parens"))
+    else
+      role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
+      t("roles.commenter_name.text", name: text_pseud(comment.pseud), role_with_parens: role)
+    end
   end
 
   private

@@ -1,5 +1,4 @@
-Otwarchive::Application.routes.draw do
-
+Rails.application.routes.draw do
   devise_scope :admin do
     get "admin/logout" => "admin/sessions#confirm_logout"
 
@@ -165,7 +164,12 @@ Otwarchive::Application.routes.draw do
 
   #### ADMIN ####
   resources :admin_posts do
-    resources :comments
+    resources :comments do
+      collection do
+        get :unreviewed
+        put :review_all
+      end
+    end
   end
 
   namespace :admin do
@@ -199,8 +203,8 @@ Otwarchive::Application.routes.draw do
         get :confirm_delete_user_creations
         post :destroy_user_creations
         post :activate
-        post :send_activation
         get :check_user
+        get :creations
       end
       collection do
         get :bulk_search
@@ -281,7 +285,11 @@ Otwarchive::Application.routes.draw do
     end
     resources :nominations, controller: "tag_set_nominations", only: [:index]
     resources :preferences, only: [:index, :update]
-    resource :profile, only: [:show], controller: "profile"
+    resource :profile, only: [:show], controller: "profile" do
+      collection do
+        get :pseuds
+      end
+    end
     resources :pseuds do
       resources :works
       resources :series
@@ -506,10 +514,11 @@ Otwarchive::Application.routes.draw do
   #### I18N ####
 
   # should stay below the main works mapping
-  resources :languages do
+  resources :languages, except: [:show] do
     resources :works
     resources :admin_posts
   end
+  get "/languages/:id", to: redirect("/languages/%{id}/works", status: 302)
   resources :locales, except: :destroy
 
   #### API ####
@@ -610,8 +619,10 @@ Otwarchive::Application.routes.draw do
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
   get 'support' => 'feedbacks#new', as: 'new_feedback_report'
-  get 'tos' => 'home#tos'
-  get 'tos_faq' => 'home#tos_faq'
+  get "content" => "home#content"
+  get "privacy" => "home#privacy"
+  get "tos" => "home#tos"
+  get "tos_faq" => "home#tos_faq"
   get 'unicorn_test' => 'home#unicorn_test'
   get 'dmca' => 'home#dmca'
   get 'diversity' => 'home#diversity'
@@ -636,7 +647,7 @@ Otwarchive::Application.routes.draw do
 
   # See how all your routes lay out with "rake routes"
 
-  # These are whitelisted routes that are proven to be used throughout the
+  # These are allowlisted routes that are proven to be used throughout the
   # application, which previously relied on a deprecated catch-all route definition
   # (`get ':controller(/:action(/:id(.:format)))'`) to work.
   #
@@ -646,9 +657,6 @@ Otwarchive::Application.routes.draw do
   # can be refactored to not rely on their existence.
   #
   # Note written on August 1, 2017 during upgrade to Rails 5.1.
-  get '/bookmarks/fetch_recent/:id' => 'bookmarks#fetch_recent', as: :fetch_recent_bookmarks
-  get '/bookmarks/hide_recent/:id' => 'bookmarks#hide_recent', as: :hide_recent_bookmarks
-
   get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
   get '/user_invite_requests/update' => 'user_invite_requests#update'
 

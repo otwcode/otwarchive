@@ -21,7 +21,7 @@ class GiftsController < ApplicationController
         end
       end
     else
-      pseud = Pseud.parse_byline(@recipient_name, assume_matching_login: true).first
+      pseud = Pseud.parse_byline(@recipient_name)
       if pseud
         if current_user.nil?
           @works = pseud.gift_works.visible_to_all

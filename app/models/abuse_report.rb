@@ -85,17 +85,20 @@ class AbuseReport < ApplicationRecord
     work_id = Chapter.find_by(id: chapter_id).try(:work_id)
 
     return url if work_id.nil?
-    
+
     uri = Addressable::URI.parse(url)
     uri.path = "/works/#{work_id}" + uri.path
 
     uri.to_s
   end
 
-  app_url_regex = Regexp.new('^(https?:\/\/)?(www\.|(insecure\.))?(archiveofourown|ao3)\.(org|com).*', true)
-  validates_format_of :url, with: app_url_regex,
-                            message: ts('does not appear to be on this site.'),
-                            multiline: true
+  validate :url_on_archive, if: :will_save_change_to_url?
+  def url_on_archive
+    parsed_url = Addressable::URI.heuristic_parse(url)
+    errors.add(:url, :not_on_archive) unless ArchiveConfig.PERMITTED_HOSTS.include?(parsed_url.host)
+  rescue Addressable::URI::InvalidURIError
+    errors.add(:url, :not_on_archive)
+  end
 
   def email_and_send
     UserMailer.abuse_report(id).deliver_later
@@ -113,7 +116,20 @@ class AbuseReport < ApplicationRecord
       ip_address: ip_address,
       url: url
     )
-    reporter.send_report!
+    response = reporter.send_report!
+    ticket_id = response["id"]
+    return if ticket_id.blank?
+
+    attach_work_download(ticket_id)
+  end
+
+  def attach_work_download(ticket_id)
+    is_not_comments = url[%r{/comments/}, 0].nil?
+    work_id = url[%r{/works/(\d+)}, 1]
+    return unless work_id && is_not_comments
+
+    work = Work.find_by(id: work_id)
+    ReportAttachmentJob.perform_later(ticket_id, work) if work
   end
 
   # if the URL clearly belongs to a work (i.e. contains "/works/123")

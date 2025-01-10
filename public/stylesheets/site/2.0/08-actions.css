@@ -20,7 +20,7 @@ ul.actions {
   padding-top: 0;
 }
 
-.actions a, .actions a:link, .action, .action:link, .actions input, input[type="submit"], button, .current, .actions label {
+.actions a, .actions a:link, .action, .action:link, .actions button, .actions input, input[type="submit"], button, .current, .actions label {
   background: #eee;
   color: #444;
   width: auto;
@@ -46,7 +46,7 @@ ul.actions {
 }
 
 button {
-  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
   box-sizing: content-box;
 }
 
@@ -87,7 +87,7 @@ ol.pagination, div.pagination, ol.year {
   color: #111;
 }
 
-.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
+.actions a:hover, .actions button:hover, .actions input:hover, .actions a:focus, .actions button:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
   color: #900;
   border-top: 1px solid #999;
   border-left: 1px solid #999;
@@ -111,7 +111,7 @@ ol.pagination, div.pagination, ol.year {
    border-color: #aaa;
  }
 
-.actions li a, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
+.actions li a, .actions li button, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
   margin: 0.375em auto;
 }
 
@@ -140,6 +140,10 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
     opacity: 0;
 }
 
+h2.landmark {
+  display: block;
+}
+
 .secondary {
   background: #fff;
   position: absolute;
@@ -161,7 +165,7 @@ legend .action:link {
 
 .heading .actions, .heading .action, .heading span.actions {
   height: auto;
-  font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
   padding: 0.15em 0.375em;
 }
 
@@ -169,7 +173,7 @@ th .actions, td .actions {
   float: none;
 }
 
-dl.stats + .landmark + .actions {
+dl.stats + .landmark + .actions, .mystery .summary + .landmark + .actions {
   clear: none;
   float: left;
   margin: 0 auto;

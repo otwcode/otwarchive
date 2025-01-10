@@ -20,11 +20,11 @@
 
 <ul class="footnote actions">
   <li><%= link_to ts("Forgot password?"), new_user_password_path %></li>
-  <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
+  <% if AdminSetting.current.account_creation_enabled? && !AdminSetting.current.creation_requires_invite? %>
     <li>
       <%= link_to ts("Create an Account"), signup_path %>
     </li>
-  <% elsif @admin_settings.invite_from_queue_enabled? %>
+  <% elsif AdminSetting.current.invite_from_queue_enabled? %>
     <li>
       <%= link_to ts("Get an Invitation"), invite_requests_path %>
     </li>

@@ -23,4 +23,14 @@ module DateHelper
     end
   end
 
+  # show date in the time zone specified
+  # note: this does *not* append timezone and does *not* reflect user preferences
+  def date_in_zone(time, zone = nil)
+    zone ||= Time.zone.name
+    return nil if time.blank?
+
+    time_in_zone = time.in_time_zone(zone)
+    I18n.l(time_in_zone, format: :date_short_html).html_safe
+    # i18n-tasks-use t('time.formats.date_short_html')
+  end
 end

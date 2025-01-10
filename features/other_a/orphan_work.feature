@@ -24,6 +24,8 @@ Feature: Orphan work
     When I follow "Edit"
     Then I should see "Edit Work"
       And I should see "Orphan Work"
+      # Delay before orphaning to make sure the cache is expired
+      And it is currently 1 second from now
     When I follow "Orphan Work"
     Then I should see "Read More About The Orphaning Process"
     When I choose "Take my pseud off as well"
@@ -46,6 +48,8 @@ Feature: Orphan work
     When I follow "Edit"
     Then I should see "Edit Work"
       And I should see "Orphan Work"
+      # Delay before orphaning to make sure the cache is expired
+      And it is currently 1 second from now
     When I follow "Orphan Work"
     Then I should see "Read More About The Orphaning Process"
     When I choose "Leave a copy of my pseud on"
@@ -131,6 +135,8 @@ Feature: Orphan work
     And I should see "Glorious"
     And I should see "Excellent"
     And I should not see "Lovely"
+    # Delay before orphaning to make sure the cache is expired
+    And it is currently 1 second from now
   When I follow "Orphan Works Instead"
   Then I should see "Orphaning a work removes it from your account and re-attaches it to the specially created orphan_account."
   When I press "Yes, I'm sure"

@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= link_to ts("Archive FAQ"), archive_faqs_path %> > <%= @archive_faq.title %></h2>
+<h2 class="heading"><%= link_to t(".page_heading"), archive_faqs_path %> > <%= @archive_faq.title %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -8,34 +8,37 @@
 <!--main content-->
 <% if @archive_faq.slug == "search-and-browse" %>
   <p class="notice">
-    <%= ts("Our search engine has recently been updated, and this FAQ is based on our old version. We're working on bringing you more up-to-date information, but in the meantime, you can find out more in our %{elasticsearch_post}!", elasticsearch_post: link_to(ts("news post announcing the search and filter updates"), admin_post_path(10575))).html_safe %>
+    <%= t(".elasticsearch_update_notice_html", elasticsearch_news_link: link_to(t(".elasticsearch_news"), admin_post_path(10_575))) %>
   </p>
 <% end %>
 
 <div class="admin" role="article">
-  <% if logged_in_as_admin? %>
+  <% if policy(ArchiveFaq).translation_access? %>
     <div class="header">
       <h3 class="heading">
-        Updated: <%=h @archive_faq.updated_at %> | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
+        Updated: <%= h @archive_faq.updated_at %>
+        <% if Globalize.locale.to_s != "en" || policy(ArchiveFaq).full_access? -%>
+          | <%= link_to t(".edit"), edit_archive_faq_path(@archive_faq) %>
+        <% end %>
       </h3>
     </div>
   <% end %>
 
-  <% if @archive_faq.questions.blank?  %>
-    <p class="notice"><%= ts("We're sorry, there are currently no entries in this category.") %></p>
+  <% if @archive_faq.questions.blank? %>
+    <p class="notice"><%= t(".no_category_entries") %></p>
   <% else %>
     <div <% if rtl? %>dir="rtl"<% end %> class="userstuff">
-      <div id="toc" class="toc" role="navigation">
-        <h3 class="heading">
-          <% #TODO: Change this back to 'Questions in the NAME Category' once Translation system in place %>
-          <%= ts("#{@archive_faq.title}") %>
+      <nav id="toc" aria-labelledby="toc-nav-heading" class="toc">
+        <h3 class="heading" id="toc-nav-heading">
+          <%# TODO: The heading should be "Questions in the NAME Category" once interface translation is in place. If we do it now, everything except NAME will be in English/the interface default. %>
+          <%= @archive_faq.title %>
         </h3>
-        <ul role="navigation">
+        <ul class="toc">
           <% for q in @questions %>
-            <li><%= link_to q.question, archive_faq_path(@archive_faq, :anchor => q.anchor) %></li>
+            <li><%= link_to q.question, archive_faq_path(@archive_faq, anchor: q.anchor) %></li>
           <% end %>
         </ul>
-      </div>
+      </nav>
 
       <div id="faq">
         <% for q in @questions %>
@@ -44,7 +47,7 @@
           </h3>
           <% unless q.screencast.to_s == "" %>
             <p class="screencast">
-              <span class="label"><%= ts("Screencast") %>:</span> <%= link_to q.question, q.screencast.to_s %>
+              <span class="label"><%= t(".screencast") %></span> <%= link_to q.question, q.screencast.to_s %>
             </p>
           <% end %>
           <%= raw sanitize_field(q, :content) %>

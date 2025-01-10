@@ -1,6 +1,31 @@
 class Admin::AdminUsersController < Admin::BaseController
   include ExportsHelper
 
+  before_action :set_roles, only: [:index, :bulk_search]
+  before_action :load_user, only: [:show, :update, :confirm_delete_user_creations, :destroy_user_creations, :troubleshoot, :activate, :creations]
+  before_action :user_is_banned, only: [:confirm_delete_user_creations, :destroy_user_creations]
+  before_action :load_user_creations, only: [:confirm_delete_user_creations, :creations]
+
+  def set_roles
+    @roles = Role.assignable.distinct
+  end
+
+  def load_user
+    @user = User.find_by!(login: params[:id])
+  end
+
+  def user_is_banned
+    return if @user&.banned?
+
+    flash[:error] = ts("That user is not banned!")
+    redirect_to admin_users_path
+  end
+
+  def load_user_creations
+    @works = @user.works.paginate(page: params[:works_page])
+    @comments = @user.comments.paginate(page: params[:comments_page])
+  end
+
   def index
     authorize User
     @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
@@ -37,21 +62,16 @@ class Admin::AdminUsersController < Admin::BaseController
     end
   end
 
-  before_action :set_roles, only: [:index, :bulk_search]
-  def set_roles
-    @roles = Role.assignable.distinct
-  end
-
   # GET admin/users/1
   def show
-    @user = authorize User.find_by!(login: params[:id])
-    @hide_dashboard = true
-    @log_items = @user.log_items.sort_by(&:created_at).reverse
+    authorize @user
+    @page_subtitle = t(".page_title", login: @user.login)
+    log_items
   end
 
   # POST admin/users/update
   def update
-    @user = authorize User.find_by(login: params[:id])
+    authorize @user
 
     attributes = permitted_attributes(@user)
     @user.email = attributes[:email] if attributes[:email].present?
@@ -67,27 +87,35 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def update_next_of_kin
     @user = authorize User.find_by!(login: params[:user_login])
-    fnok = @user.fannish_next_of_kin
     kin = User.find_by(login: params[:next_of_kin_name])
     kin_email = params[:next_of_kin_email]
 
-    if kin.blank? && kin_email.blank?
-      if fnok.present?
-        fnok.destroy
-        flash[:notice] = ts("Fannish next of kin was removed.")
-      end
-      redirect_to admin_user_path(@user)
-      return
+    fnok = @user.fannish_next_of_kin
+    previous_kin = fnok&.kin
+    fnok ||= @user.build_fannish_next_of_kin
+    fnok.assign_attributes(kin: kin, kin_email: kin_email)
+
+    unless fnok.changed?
+      flash[:notice] = ts("No change to fannish next of kin.")
+      redirect_to admin_user_path(@user) and return
     end
 
-    fnok = @user.build_fannish_next_of_kin if fnok.blank?
-    fnok.assign_attributes(kin: kin, kin_email: kin_email)
+    # Remove FNOK that already exists.
+    if fnok.persisted? && kin.blank? && kin_email.blank?
+      fnok.destroy
+      @user.log_removal_of_next_of_kin(previous_kin, admin: current_admin)
+      flash[:notice] = ts("Fannish next of kin was removed.")
+      redirect_to admin_user_path(@user) and return
+    end
+
     if fnok.save
+      @user.log_removal_of_next_of_kin(previous_kin, admin: current_admin)
+      @user.log_assignment_of_next_of_kin(kin, admin: current_admin)
       flash[:notice] = ts("Fannish next of kin was updated.")
       redirect_to admin_user_path(@user)
     else
       @hide_dashboard = true
-      @log_items = @user.log_items.sort_by(&:created_at).reverse
+      log_items
       render :show
     end
   end
@@ -110,38 +138,35 @@ class Admin::AdminUsersController < Admin::BaseController
     end
   end
 
-  before_action :user_is_banned, only: [:confirm_delete_user_creations, :destroy_user_creations]
-  def user_is_banned
-    @user = User.find_by(login: params[:id])
-    unless @user && @user.banned?
-      flash[:error] = ts("That user is not banned!")
-      redirect_to admin_users_path and return
-    end
-  end
-
   def confirm_delete_user_creations
     authorize @user
-    @works = @user.works.paginate(page: params[:works_page])
-    @comments = @user.comments.paginate(page: params[:comments_page])
     @bookmarks = @user.bookmarks
-    @collections = @user.collections
+    @collections = @user.sole_owned_collections
     @series = @user.series
   end
 
   def destroy_user_creations
     authorize @user
-    creations = @user.works + @user.bookmarks + @user.collections + @user.comments
+
+    creations = @user.works + @user.bookmarks + @user.sole_owned_collections
     creations.each do |creation|
       AdminActivity.log_action(current_admin, creation, action: "destroy spam", summary: creation.inspect)
       creation.mark_as_spam! if creation.respond_to?(:mark_as_spam!)
       creation.destroy
     end
-    flash[:notice] = ts("All creations by user %{login} have been deleted.", login: @user.login)
+
+    # comments are special and needs to be handled separately
+    @user.comments.each do |comment|
+      AdminActivity.log_action(current_admin, comment, action: "destroy spam", summary: comment.inspect)
+      # Akismet spam procedures are skipped, since logged-in comments aren't spam-checked anyways
+      comment.destroy_or_mark_deleted # comments with replies cannot be destroyed, mark deleted instead
+    end
+
+    flash[:notice] = t(".success", login: @user.login)
     redirect_to(admin_users_path)
   end
 
   def troubleshoot
-    @user = User.find_by(login: params[:id])
     authorize @user
 
     @user.fix_user_subscriptions
@@ -154,7 +179,6 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   def activate
-    @user = User.find_by(login: params[:id])
     authorize @user
 
     @user.activate
@@ -168,12 +192,12 @@ class Admin::AdminUsersController < Admin::BaseController
     end
   end
 
-  def send_activation
-    @user = User.find_by(login: params[:id])
+  def creations
     authorize @user
-    # send synchronously to avoid getting caught in mail queue
-    UserMailer.signup_notification(@user.id).deliver_now
-    flash[:notice] = ts("Activation email sent")
-    redirect_to action: :show
+    @page_subtitle = t(".page_title", login: @user.login)
+  end
+
+  def log_items
+    @log_items ||= @user.log_items.sort_by(&:created_at).reverse
   end
 end

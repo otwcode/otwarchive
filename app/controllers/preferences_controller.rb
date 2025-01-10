@@ -67,7 +67,8 @@ class PreferencesController < ApplicationController
       :first_login,
       :banner_seen,
       :allow_cocreator,
-      :allow_gifts
+      :allow_gifts,
+      :guest_replies_off
     )
   end
 end

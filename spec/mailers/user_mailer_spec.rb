@@ -49,22 +49,22 @@ describe UserMailer do
     end
   end
 
-  describe "creatorship_notification" do
-    subject(:email) { UserMailer.creatorship_notification(work_creatorship.id, author.id) }
+  describe "#creatorship_notification" do
+    subject(:email) { UserMailer.creatorship_notification(chapter_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
     let(:second_author) { create(:user) }
-    let(:work) { create(:work, authors: [author.default_pseud, second_author.default_pseud]) }
-    let(:work_creatorship) { Creatorship.find_by(creation_id: work.id, pseud_id: second_author.default_pseud.id) }
+    let(:chapter) { create(:chapter, authors: [author.default_pseud, second_author.default_pseud]) }
+    let(:chapter_creatorship) { chapter.creatorships.last }
 
     context "when the creation is unavailable" do
-      before { work_creatorship.creation.delete }
+      before { chapter_creatorship.creation.delete }
 
       include_examples "it retries and fails on", ActionView::Template::Error
     end
 
     context "when the pseud being invited is unavailable" do
-      before { work_creatorship.pseud.delete }
+      before { chapter_creatorship.pseud.delete }
 
       include_examples "it retries and fails on", NoMethodError
     end
@@ -149,7 +149,7 @@ describe UserMailer do
     title = "Façade"
     title2 = Faker::Book.title
 
-    subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true) }
+    subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id]) }
 
     let(:author) { create(:user) }
     let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
@@ -173,6 +173,8 @@ describe UserMailer do
 
     # Test both body contents
     it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
 
     describe "HTML version" do
       it_behaves_like "a claim notification" do
@@ -676,11 +678,12 @@ describe UserMailer do
       end
 
       it "formats the date rightfully in French" do
-        I18n.locale = "fr"
-        travel_to "2022-03-14 13:27:09 +0000" do
-          expect(email).to have_html_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
-          expect(email).to have_text_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
-        end
+        I18n.with_locale("fr") do
+          travel_to "2022-03-14 13:27:09 +0000" do
+            expect(email).to have_html_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
+            expect(email).to have_text_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
+          end
+        end 
       end
     end
   end
@@ -701,6 +704,7 @@ describe UserMailer do
 
       # Test both body contents
       it_behaves_like "a multipart email"
+      it_behaves_like "a translated email"
 
       describe "HTML version" do
         it "has the correct content" do
@@ -732,6 +736,7 @@ describe UserMailer do
 
       # Test both body contents
       it_behaves_like "a multipart email"
+      it_behaves_like "a translated email"
 
       describe "HTML version" do
         it "has the correct content" do
@@ -819,8 +824,10 @@ describe UserMailer do
     end
   end
 
-  describe "added_to_collection_notification" do
-    subject(:email) { UserMailer.added_to_collection_notification(user.id, work.id, collection.id) }
+  describe "#archivist_added_to_collection_notification" do
+    subject(:email) do
+      UserMailer.archivist_added_to_collection_notification(user.id, work.id, collection.id)
+    end
 
     let(:collection) { create(:collection) }
     let(:user) { create(:user) }
@@ -830,7 +837,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Your work was added to a collection"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] An Open Doors archivist has added your work to a collection"
       expect(email.subject).to eq(subject)
     end
 
@@ -843,12 +850,16 @@ describe UserMailer do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
+        expect(email).to have_html_part_content(collection.title)
+        expect(email).to have_html_part_content(work.title)
       end
     end
 
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content(collection.title)
+        expect(email).to have_text_part_content(work.title)
       end
     end
   end
@@ -923,7 +934,7 @@ describe UserMailer do
   end
 
   describe "potential_match_generation_notification" do
-    subject(:email) { UserMailer.potential_match_generation_notification(collection.id) }
+    subject(:email) { UserMailer.potential_match_generation_notification(collection.id, "test@example.com") }
 
     let(:collection) { create(:collection) }
 
@@ -956,7 +967,7 @@ describe UserMailer do
   end
 
   describe "invalid_signup_notification" do
-    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id]) }
+    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id], "test@example.com") }
 
     let(:collection) { create(:collection) }
     let(:signup) { create(:challenge_signup) }
@@ -988,7 +999,7 @@ describe UserMailer do
   end
 
   describe "collection_notification" do
-    subject(:email) { UserMailer.collection_notification(collection.id, subject_text, message_text) }
+    subject(:email) { UserMailer.collection_notification(collection.id, subject_text, message_text, "test@example.com") }
 
     let(:collection) { create(:collection) }
     let(:subject_text) { Faker::Hipster.sentence }
@@ -1104,13 +1115,14 @@ describe UserMailer do
     end
 
     it "has the correct attachments" do
+      filename = work.title.gsub(/\s/, "_")
       expect(email.attachments.length).to eq(2)
       expect(email.attachments).to contain_exactly(
-        an_object_having_attributes(filename: "#{work.title}.html"),
-        an_object_having_attributes(filename: "#{work.title}.txt")
+        an_object_having_attributes(filename: "#{filename}.html"),
+        an_object_having_attributes(filename: "#{filename}.txt")
       )
     end
-    
+
     context "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")
@@ -1156,13 +1168,14 @@ describe UserMailer do
     end
 
     it "has the correct attachments" do
+      filename = work.title.gsub(/\s/, "_")
       expect(email.attachments.length).to eq(2)
       expect(email.attachments).to contain_exactly(
-        an_object_having_attributes(filename: "#{work.title}.html"),
-        an_object_having_attributes(filename: "#{work.title}.txt")
+        an_object_having_attributes(filename: "#{filename}.html"),
+        an_object_having_attributes(filename: "#{filename}.txt")
       )
     end
-    
+
     context "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Dear <b")

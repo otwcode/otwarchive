@@ -4,8 +4,12 @@ en:
     attributes:
       admin/role:
         board: Board
+        board_assistants_team: Board Assistants Team
         communications: Communications
+        development_and_membership: Development & Membership
         docs: AO3 Docs
+        elections: Elections
+        legal: Legal
         open_doors: Open Doors
         policy_and_abuse: Policy & Abuse
         superadmin: Super admin
@@ -41,6 +45,11 @@ en:
         name_with_colon:
           one: 'Additional Tag:'
           other: 'Additional Tags:'
+      gift_exchange:
+        offers_num_allowed: Number of offers allowed per sign-up
+        offers_num_required: Number of offers required per sign-up
+        requests_num_allowed: Number of requests allowed per sign-up
+        requests_num_required: Number of requests required per sign-up
       meta_tagging:
         meta_tag: Metatag
         meta_tag_id: Metatag
@@ -52,13 +61,26 @@ en:
         name_with_colon:
           one: 'Relationship:'
           other: 'Relationships:'
+      role:
+        archivist: Archivist
+        no_resets: No Resets
+        official: Official
+        opendoors: Open Doors
+        protected_user: Protected User
+        tag_wrangler: Tag Wrangler
+        translator: Translator
       series/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
+      skin/skin_parents:
+        parent_skin: Parent skin
+      user:
+        login: User name
       work:
         chapter_total_display: Chapters
         summary: Summary
         user_defined_tags_count: Fandom, relationship, character, and additional tags
+        word_count: Words
       work/chapters:
         base: 'Invalid chapter:'
         content: Content
@@ -70,7 +92,13 @@ en:
         title: The title of a parent work outside the archive
         url: Parent work URL
     errors:
+      messages:
+        forbidden: "%{value} is not allowed"
       models:
+        abuse_report:
+          attributes:
+            url:
+              not_on_archive: does not appear to be on this site.
         block:
           attributes:
             blocked:
@@ -83,6 +111,9 @@ en:
           format: "%{message}"
         comment:
           attributes:
+            commentable:
+              format: "%{message}"
+              guest_replies_off: Sorry, this user doesn't allow non-Archive users to reply to their comments.
             user:
               blocked_comment: Sorry, you have been blocked by one or more of this work's creators.
               blocked_reply: Sorry, you have been blocked by that user.
@@ -105,6 +136,8 @@ en:
               user_is_suspended: You cannot leave kudos while your account is suspended.
             commentable_type:
               inclusion: What did you want to leave kudos on?
+            user:
+              blocked: Sorry, you have been blocked by one or more of this work's creators.
           format: "%{message}"
           taken: You have already left kudos here. :)
         mute:
@@ -124,18 +157,44 @@ en:
               not_work: Only a link to a work can be listed as an inspiration.
               protected: You can't use the related works function to cite works by the protected user %{login}.
           format: "%{message}"
+        skin/skin_parents:
+          attributes:
+            base:
+              format: "%{message}"
+        skin_parent:
+          attributes:
+            base:
+              format: "%{message}"
+              site_parent: You can't use %{title} as a parent unless replacing the default archive skin.
+        subscription:
+          attributes:
+            subscribable:
+              blank: The item you tried to subscribe to does not exist. It may have been deleted.
+              format: "%{message}"
         user:
           attributes:
+            age_over_13:
+              accepted: Sorry, you have to be over 13!
+              format: "%{message}"
+            data_processing:
+              accepted: Sorry, you need to consent to the processing of your personal data in order to sign up.
+              format: "%{message}"
             login:
               changed_too_recently:
                 one: can only be changed once per day. You last changed your user name on %{renamed_at}.
                 other: can only be changed once every %{count} days. You last changed your user name on %{renamed_at}.
+              invalid: must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).
             password_confirmation:
               confirmation: doesn't match new password.
+            terms_of_service:
+              accepted: Sorry, you need to accept the Terms of Service in order to sign up.
+              format: "%{message}"
         work:
           attributes:
             user_defined_tags_count:
               at_most: must not add up to more than %{count}. Your work has %{value} of these tags, so you must remove %{diff} of them.
+          blocked_gifts: "%{byline} does not accept gifts."
+          blocked_your_gifts: "%{byline} does not accept gifts from you."
         work/parent_work_relationships:
           format: "%{message}"
     models:
@@ -145,7 +204,9 @@ en:
       archive_warning:
         one: Warning
         other: Warnings
-      bookmark: Bookmark
+      bookmark:
+        one: Bookmark
+        other: Bookmarks
       category:
         one: Category
         other: Categories
@@ -166,6 +227,9 @@ en:
       rating:
         one: Rating
         other: Ratings
+      related_work:
+        one: Related Work
+        other: Related Works
       relationship:
         one: Relationship
         other: Relationships
@@ -175,12 +239,26 @@ en:
       tag:
         one: Tag
         other: Tags
-      work: Work
+      work:
+        one: Work
+        other: Works
   attributes:
     ticket_number: Ticket ID
+  challenge_assignment:
+    offer_byline:
+      none: "- none -"
+      pinch_hitter: "%{pinch_hitter_byline}* (pinch hitter)"
+    request_byline:
+      none: "- None -"
+      pinch_recipient: "%{pinch_request_byline}* (pinch recipient)"
   errors:
     attributes:
+      icon:
+        invalid_format: content type is invalid
+        too_large: file size must be less than %{maximum_size}
       ticket_number:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.
         required: must exist and not be spam.
+  subscriptions:
+    deleted: Deleted item

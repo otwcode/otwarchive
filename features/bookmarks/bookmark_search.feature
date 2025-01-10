@@ -177,9 +177,8 @@ Feature: Search Bookmarks
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
       And I should see "You searched for: Notes: broken heart, With Notes"
-    When "AO3-3943" is fixed
-      # And I should see "1 Found"
-      # And I should see "fifth"
+      And I should see "1 Found"
+      And I should see "fifth"
     When I follow "Edit Your Search"
     Then the field labeled "Notes" should contain "broken heart"
       And the "With notes" checkbox should be checked
@@ -237,6 +236,19 @@ Feature: Search Bookmarks
       And I should see "1 Found"
       And I should see "german work"
       And I should not see "english work"
+
+  Scenario: Search bookmarks by bookmarker
+    Given "testuser2" has a bookmark of a work titled "Test Title 2"
+    When I fill in "Bookmarker" with "testuser2"
+      And I press "Search Bookmarks"
+    Then I should see "You searched for: Bookmarker: testuser2"
+      And I should see "1 Found"
+      And I should see "Test Title 2"
+    When I follow "Edit Your Search"
+      And I fill in "Bookmarker" with "testuser"
+      And I press "Search Bookmarks"
+    Then I should see "You searched for: Bookmarker: testuser"
+      And I should see "No results found."
 
   Scenario: Inputting bad queries
     Given I have bookmarks to search

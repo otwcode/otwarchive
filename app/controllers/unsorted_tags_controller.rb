@@ -1,24 +1,21 @@
 class UnsortedTagsController < ApplicationController
+  include WranglingHelper
 
   before_action :check_user_status
   before_action :check_permission_to_wrangle
 
   def index
+    authorize :wrangling, :read_access? if logged_in_as_admin?
+
     @tags = UnsortedTag.page(params[:page])
-    @counts = {}
-    [Fandom, Character, Relationship, Freeform].each do |klass|
-      @counts[klass.to_s.downcase.pluralize.to_sym] = Rails.cache.fetch("/wrangler/counts/sidebar/#{klass}", race_condition_ttl: 10, expires_in: 1.hour) do
-        klass.unwrangled.in_use.count
-      end
-    end
-    @counts[:UnsortedTag] = Rails.cache.fetch("/wrangler/counts/sidebar/UnsortedTag", race_condition_ttl: 10, expires_in: 1.hour) do 
-      UnsortedTag.count 
-    end
+    @counts = tag_counts_per_category
   end
 
   def mass_update
-    unless params[:tags].blank?
-      params[:tags].delete_if {|tag_id, tag_type| tag_type.blank? }
+    authorize :wrangling if logged_in_as_admin?
+
+    if params[:tags].present?
+      params[:tags].delete_if { |_, tag_type| tag_type.blank? }
       tags = UnsortedTag.where(id: params[:tags].keys)
       tags.each do |tag|
         new_type = params[:tags][tag.id.to_s]

@@ -57,7 +57,7 @@ module WorksHelper
 
   def language_link(work)
     if work.respond_to?(:language) && work.language
-      link_to work.language.name, work.language
+      link_to work.language.name, work.language, lang: work.language.short
     else
       "N/A"
     end
@@ -110,6 +110,39 @@ module WorksHelper
 
   def get_inspired_by(work)
     work.approved_related_works.where(translation: false)
+  end
+
+  def related_work_note(related_work, relation, download: false)
+    work_link = link_to related_work.title, polymorphic_url(related_work)
+    language = tag.span(related_work.language.name, lang: related_work.language.short) if related_work.language
+    default_locale = download ? :en : nil
+
+    creator_link = if download
+                     byline(related_work, visibility: "public", only_path: false)
+                   else
+                     byline(related_work)
+                   end
+
+    if related_work.respond_to?(:unrevealed?) && related_work.unrevealed?
+      if relation == "translated_to"
+        t(".#{relation}.unrevealed_html",
+          language: language)
+      else
+        t(".#{relation}.unrevealed",
+          locale: default_locale)
+      end
+    elsif related_work.restricted? && (download || !logged_in?)
+      t(".#{relation}.restricted_html",
+        language: language,
+        locale: default_locale,
+        creator_link: creator_link)
+    else
+      t(".#{relation}.revealed_html",
+        language: language,
+        locale: default_locale,
+        work_link: work_link,
+        creator_link: creator_link)
+    end
   end
 
   # Can the work be downloaded, i.e. is it posted and visible to all registered
@@ -183,12 +216,19 @@ module WorksHelper
   def chapter_total_display_with_link(work)
     total_posted_chapters = work.number_of_posted_chapters
     if total_posted_chapters > 1
-      link_to(total_posted_chapters.to_s,
+      link_to(number_with_delimiter(total_posted_chapters),
               work_chapter_path(work, work.last_posted_chapter.id)) +
         "/" +
-        work.wip_length.to_s
+        number_with_delimiter(work.wip_length)
     else
       chapter_total_display(work)
     end
+  end
+
+  def get_open_assignments(user)
+    offer_signups = user.offer_assignments.undefaulted.unstarted.sent
+    pinch_hits = user.pinch_hit_assignments.undefaulted.unstarted.sent
+
+    (offer_signups + pinch_hits)
   end
 end

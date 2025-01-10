@@ -2,13 +2,14 @@ class InviteRequestsController < ApplicationController
   before_action :admin_only, only: [:manage, :destroy]
 
   # GET /invite_requests
+  # Set browser page title to Invitation Requests
   def index
     @invite_request = InviteRequest.new
+    @page_subtitle = t(".page_title")
   end
 
   # GET /invite_requests/1
   def show
-    fetch_admin_settings # we normally skip this for js requests
     @invite_request = InviteRequest.find_by(email: params[:email])
     @position_in_queue = @invite_request.position if @invite_request.present?
     unless (request.xml_http_request?) || @invite_request
@@ -23,7 +24,7 @@ class InviteRequestsController < ApplicationController
 
   # POST /invite_requests
   def create
-    unless @admin_settings.invite_from_queue_enabled?
+    unless AdminSetting.current.invite_from_queue_enabled?
       flash[:error] = ts("<strong>New invitation requests are currently closed.</strong> For more information, please check the %{news}.",
                          news: view_context.link_to("\"Invitations\" tag on AO3 News", admin_posts_path(tag: 143))).html_safe
       redirect_to invite_requests_path

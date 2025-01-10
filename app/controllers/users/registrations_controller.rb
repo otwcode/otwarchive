@@ -3,6 +3,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_permitted_parameters
 
   def new
+    @page_title = "Create Account" # Displays "New Registration" otherwise
     super do |resource|
       if params[:invitation_token]
         @invitation = Invitation.find_by(token: params[:invitation_token])
@@ -16,20 +17,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def create
     @hide_dashboard = true
-    if params[:cancel_create_account]
-      redirect_to root_path
-    else
-      build_resource(sign_up_params)
+    build_resource(sign_up_params)
 
-      resource.transaction do
-        # skip sending the Devise confirmation notification
-        resource.skip_confirmation_notification!
-        resource.invitation_token = params[:invitation_token]
-        if resource.save
-          notify_and_show_confirmation_screen
-        else
-          render action: 'new'
-        end
+    resource.transaction do
+      # skip sending the Devise confirmation notification
+      resource.skip_confirmation_notification!
+      resource.invitation_token = params[:invitation_token]
+      if resource.save
+        notify_and_show_confirmation_screen
+      else
+        render action: "new"
       end
     end
   end
@@ -53,7 +50,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     devise_parameter_sanitizer.permit(
       :sign_up,
       keys: [
-        :password_confirmation, :email, :age_over_13, :terms_of_service, :accepted_tos_version
+        :password_confirmation, :email, :age_over_13, :data_processing, :terms_of_service, :accepted_tos_version
       ]
     )
   end
@@ -66,11 +63,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     token = params[:invitation_token]
 
-    if !@admin_settings.account_creation_enabled?
+    if !AdminSetting.current.account_creation_enabled?
       flash[:error] = ts('Account creation is suspended at the moment. Please check back with us later.')
       redirect_to root_path and return
     else
-      check_account_creation_invite(token) if @admin_settings.creation_requires_invite?
+      check_account_creation_invite(token) if AdminSetting.current.creation_requires_invite?
     end
   end
 
@@ -89,7 +86,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       return
     end
 
-    if !@admin_settings.invite_from_queue_enabled?
+    if !AdminSetting.current.invite_from_queue_enabled?
       flash[:error] = ts('Account creation currently requires an invitation. We are unable to give out additional invitations at present, but existing invitations can still be used to create an account.')
       redirect_to root_path
     else

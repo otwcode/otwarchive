@@ -13,11 +13,11 @@ class TagNomination < ApplicationRecord
     with: /\A[^,*<>^{}=`\\%]+\z/,
     message: ts("^Tag nominations cannot include the following restricted characters: , &#94; * < > { } = ` \\ %")
 
-  validate :type_validity
+  validate :type_validity, unless: :blank_tagname?
   def type_validity
-    if !tagname.blank? && (tag = Tag.find_by_name(tagname)) && "#{tag.type}Nomination" != self.type
-      errors.add(:base, ts("^The tag %{tagname} is already in the archive as a #{tag.type} tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom.", tagname: self.tagname))
-    end
+    return unless (tag = Tag.find_by_name(tagname)) && "#{tag.type}Nomination" != self.type
+
+    errors.add(:base, ts("^The tag %{tagname} is already in the archive as a #{tag.type} tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom.", tagname: self.tagname))
   end
 
   validate :not_already_reviewed, on: :update
@@ -32,7 +32,7 @@ class TagNomination < ApplicationRecord
   end
 
   # This makes sure no tagnames are nominated for different parents in this tag set
-  validate :require_unique_tagname_with_parent
+  validate :require_unique_tagname_with_parent, unless: :blank_tagname?
   def require_unique_tagname_with_parent
     query = TagNomination.for_tag_set(get_owned_tag_set).where(tagname: self.tagname).where("parent_tagname != ?", (self.get_parent_tagname || ''))
     # let people change their own!
@@ -43,18 +43,15 @@ class TagNomination < ApplicationRecord
     end
   end
 
-  after_save :destroy_if_blank
-  def destroy_if_blank
-    if tagname.blank?
-      self.destroy
-    end
-  end
-
   def get_owned_tag_set
     @tag_set || self.tag_set_nomination.owned_tag_set
   end
 
-  before_save :set_tag_status
+  def blank_tagname?
+    tagname.blank?
+  end
+
+  before_save :set_tag_status, unless: :blank_tagname?
   def set_tag_status
     if (tag = Tag.find_by_name(tagname))
       self.exists = true
@@ -69,7 +66,7 @@ class TagNomination < ApplicationRecord
     true
   end
 
-  before_save :set_parented
+  before_save :set_parented, unless: :blank_tagname?
   def set_parented
     if type == "FreeformNomination"
       # skip freeforms
@@ -88,7 +85,7 @@ class TagNomination < ApplicationRecord
 
   # sneaky bit: if the tag set moderator has already rejected or approved this tag, don't
   # show it to them again.
-  before_save :set_approval_status
+  before_save :set_approval_status, unless: :blank_tagname?
   def set_approval_status
     set_noms = tag_set_nomination
     set_noms = fandom_nomination.tag_set_nomination if !set_noms && from_fandom_nomination
@@ -103,6 +100,11 @@ class TagNomination < ApplicationRecord
       self.approved = set_noms.owned_tag_set.already_in_set?(tagname) || false
     end
     true
+  end
+
+  after_save :destroy_if_blank
+  def destroy_if_blank
+    self.destroy if blank_tagname?
   end
 
   def self.for_tag_set(tag_set)
@@ -150,7 +152,6 @@ class TagNomination < ApplicationRecord
   def self.change_tagname!(owned_tag_set_to_change, old_tagname, new_tagname)
     TagNomination.for_tag_set(owned_tag_set_to_change).where(tagname: old_tagname).readonly(false).each do |tagnom|
       tagnom.tagname = new_tagname
-      Rails.logger.info "Tagnom: #{tagnom.tagname} #{tagnom.valid?}"
       tagnom.save or return false
     end
     return true

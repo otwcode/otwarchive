@@ -6,7 +6,7 @@ require "cgi"
 module OtwSanitize
   # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
-    WHITELIST_REGEXES = {
+    ALLOWLIST_REGEXES = {
       archiveorg:       %r{^archive\.org\/embed/},
       bilibili:         %r{^(player\.)?bilibili\.com/},
       criticalcommons:  %r{^criticalcommons\.org/},
@@ -35,7 +35,7 @@ module OtwSanitize
     def self.transformer
       lambda do |env|
         # Don't continue if this node is already safelisted.
-        return if env[:is_whitelisted]
+        return if env[:is_allowlisted]
 
         new(env[:node]).sanitized_node
       end
@@ -80,11 +80,11 @@ module OtwSanitize
         %w(embed iframe).include?(node_name)
     end
 
-    # Compare the url to our list of whitelisted sources
+    # Compare the url to our list of allowlisted sources
     # and return the appropriate source symbol
     def source
       return @source if @source
-      WHITELIST_REGEXES.each_pair do |name, reg|
+      ALLOWLIST_REGEXES.each_pair do |name, reg|
         if source_url =~ reg
           @source = name
           break
@@ -141,7 +141,7 @@ module OtwSanitize
 
       disable_scripts(parent)
 
-      { node_whitelist: [node, parent] }
+      { node_allowlist: [node, parent] }
     end
 
     def sanitize_embed
@@ -163,7 +163,7 @@ module OtwSanitize
         disable_scripts(node)
         node['flashvars'] = "" unless allows_flashvars?
       end
-      { node_whitelist: [node] }
+      { node_allowlist: [node] }
     end
 
     # disable script access and networking

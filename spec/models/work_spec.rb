@@ -106,6 +106,12 @@ describe Work do
     end
   end
 
+  context "invalid rating" do
+    it "cannot have more than one rating" do
+      expect(build(:work, rating_string: "Not Rated, General Audiences")).to be_invalid
+    end
+  end
+
   context "validate authors" do
     let(:invalid_work) { build(:no_authors) }
 
@@ -411,12 +417,11 @@ describe Work do
 
   describe "#find_by_url" do
     it "should find imported works with various URL formats" do
-      [
-        'http://foo.com/bar.html',
-        'http://foo.com/bar',
-        'http://lj-site.com/bar/foo?color=blue',
-        'http://www.foo.com/bar'
-      ].each do |url|
+      %w[http://foo.com/bar.html
+         http://foo.com/bar
+         http://lj-site.com/bar/foo?color=blue
+         https://www.lj-site.com/bar/foo?color=blue
+         http://www.foo.com/bar https://www.foo.com/bar].each do |url|
         work = create(:work, imported_from_url: url)
         expect(Work.find_by_url(url)).to eq(work)
         work.destroy
@@ -425,9 +430,9 @@ describe Work do
 
     it "should not mix up imported works with similar URLs or significant query parameters" do
       {
-        'http://foo.com/12345' => 'http://foo.com/123',
-        'http://efiction-site.com/viewstory.php?sid=123' => 'http://efiction-site.com/viewstory.php?sid=456',
-        'http://www.foo.com/i-am-something' => 'http://foo.com/i-am-something/else'
+        "http://foo.com/12345" => "http://foo.com/123",
+        "http://efiction-site.com/viewstory.php?sid=123" => "http://efiction-site.com/viewstory.php?sid=456",
+        "http://www.foo.com/i-am-something" => "http://foo.com/i-am-something/else"
       }.each do |import_url, find_url|
         work = create(:work, imported_from_url: import_url)
         expect(Work.find_by_url(find_url)).to_not eq(work)
@@ -437,6 +442,18 @@ describe Work do
 
     it "should find works imported with irrelevant query parameters" do
       work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
+      expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
+      work.destroy
+    end
+
+    it "finds works imported with HTTP protocol and irrelevant query parameters" do
+      work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
+      expect(Work.find_by_url("https://lj-site.com/thing1?style=other")).to eq(work)
+      work.destroy
+    end
+
+    it "finds works imported with HTTPS protocol and irrelevant query parameters" do
+      work = create(:work, imported_from_url: "https://lj-site.com/thing1?style=mine")
       expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
       work.destroy
     end
@@ -522,8 +539,8 @@ describe Work do
       # be automatically approved), we need to make sure that User.current_user
       # is not nil.
       User.current_user = creator
-      co_creator.preference.update(allow_cocreator: true)
-      no_co_creator.preference.update(allow_cocreator: false)
+      co_creator.preference.update!(allow_cocreator: true)
+      no_co_creator.preference.update!(allow_cocreator: false)
     end
 
     it "allows normal users to invite others as chapter co-creators" do
@@ -613,8 +630,8 @@ describe Work do
 
     context "when all creators allow collection invitations" do
       before do
-        creator1.preference.update(allow_collection_invitation: true)
-        creator2.preference.update(allow_collection_invitation: true)
+        creator1.preference.update!(allow_collection_invitation: true)
+        creator2.preference.update!(allow_collection_invitation: true)
       end
 
       it "returns true" do
@@ -630,7 +647,7 @@ describe Work do
 
     context "when creators have a mix of collection invitation preferences" do
       before do
-        creator1.preference.update(allow_collection_invitation: true)
+        creator1.preference.update!(allow_collection_invitation: true)
       end
 
       it "returns true" do

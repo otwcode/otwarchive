@@ -1,0 +1,17 @@
+tasks:
+  - init: ./script/docker/init.sh
+    command: docker compose up -d web
+
+ports:
+  - port: 3000
+    onOpen: open-browser
+  - port: 3306
+    onOpen: ignore
+  - port: 6379
+    onOpen: ignore
+  - port: 9200
+    onOpen: ignore
+  - port: 9300
+    onOpen: ignore
+  - port: 9400
+    onOpen: ignore

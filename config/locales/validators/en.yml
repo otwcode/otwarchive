@@ -6,6 +6,3 @@ en:
       format:
         allow_blank: should look like an email address. Please use a different address or leave blank.
         no_blank: should look like an email address.
-      veracity:
-        allow_blank: does not seem to be a valid address. Please use a different address or leave blank.
-        no_blank: does not seem to be a valid address.

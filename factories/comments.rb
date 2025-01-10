@@ -20,6 +20,10 @@ FactoryBot.define do
       commentable { create(:fandom) }
     end
 
+    trait :on_work_with_guest_comments_on do
+      commentable { create(:work, :guest_comments_on).first_chapter }
+    end
+
     trait :unreviewed do
       commentable { create(:work, moderated_commenting_enabled: true).last_posted_chapter }
       unreviewed { true }

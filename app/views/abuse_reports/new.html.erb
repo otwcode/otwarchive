@@ -57,7 +57,7 @@
   <p id="reportlanguage">
     <strong>
       <%= t(".include.languages",
-            list_html: @abuse_languages.map(&:name).to_sentence) %>
+            list_html: @abuse_languages.map { |language| tag.span(language.name, lang: language.short) }.to_sentence.html_safe).html_safe %>
     </strong>
     <%= t(".include.delay") %>
   </p>
@@ -83,7 +83,8 @@
         <%= f.label :language, t(".form.language.label") %>
       </dt>
       <dd class="required">
-        <%= f.collection_select(:language, @abuse_languages, :name, :name, { selected: @abuse_report.language || Language.default.name }) %>
+        <%= f.select(:language, language_options_for_select(@abuse_languages, "name"),
+              { selected: @abuse_report.language || Language.default.name }) %>
       </dd>
 
       <dt class="required"><%= f.label :url, t(".form.link.label") %></dt>

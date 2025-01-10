@@ -1,6 +1,6 @@
 <% content_for :message do %>
 <% if @username.present? %>
-<%= t("mailer.general.greeting.informal.addressed", name: @username) %>
+<%= t("mailer.general.greeting.informal.addressed_html", name: @username) %>
 <% else %>
 <%= t("mailer.general.greeting.informal.unaddressed") %>
 <% end %>
@@ -20,7 +20,7 @@
 <%= to_plain_text(raw @summary) %>
 
 <%= work_metadata_label(t(".copy.comment")) %>
-<%= to_plain_text(raw @comment) %>
+<%= to_plain_text(raw(strip_images(@comment, keep_src: true))) %>
 
 <%= text_divider %>
 

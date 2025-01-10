@@ -56,12 +56,14 @@ class TagsController < ApplicationController
     flash_search_warnings(@tags)
   end
 
-  # if user is Admin or Tag Wrangler, show them details about the tag
+  # if user is admin with view access or Tag Wrangler, show them details about the tag
   # if user is not logged in or a regular user, show them
   #   1. the works, if the tag had been wrangled and we can redirect them to works using it or its canonical merger
   #   2. the tag, the works and the bookmarks using it, if the tag is unwrangled (because we can't redirect them
   #       to the works controller)
   def show
+    authorize :wrangling, :read_access? if logged_in_as_admin?
+
     @page_subtitle = @tag.name
     if @tag.is_a?(Banned) && !logged_in_as_admin?
       flash[:error] = ts('Please log in as admin')
@@ -166,6 +168,8 @@ class TagsController < ApplicationController
 
   # GET /tags/new
   def new
+    authorize :wrangling if logged_in_as_admin?
+
     @tag = Tag.new
 
     respond_to do |format|
@@ -209,6 +213,8 @@ class TagsController < ApplicationController
   end
 
   def edit
+    authorize :wrangling, :read_access? if logged_in_as_admin?
+
     @page_subtitle = ts('%{tag_name} - Edit', tag_name: @tag.name)
 
     if @tag.is_a?(Banned) && !logged_in_as_admin?
@@ -241,6 +247,8 @@ class TagsController < ApplicationController
   end
 
   def update
+    authorize :wrangling if logged_in_as_admin?
+
     # update everything except for the synonym,
     # so that the associations are there to move when the synonym is created
     syn_string = params[:tag].delete(:syn_string)
@@ -272,6 +280,8 @@ class TagsController < ApplicationController
   end
 
   def wrangle
+    authorize :wrangling, :read_access? if logged_in_as_admin?
+
     @page_subtitle = ts('%{tag_name} - Wrangle', tag_name: @tag.name)
     @counts = {}
     @tag.child_types.map { |t| t.underscore.pluralize.to_sym }.each do |tag_type|
@@ -303,6 +313,8 @@ class TagsController < ApplicationController
   end
 
   def mass_update
+    authorize :wrangling if logged_in_as_admin?
+
     params[:page] = '1' if params[:page].blank?
     params[:sort_column] = 'name' unless valid_sort_column(params[:sort_column], 'tag')
     params[:sort_direction] = 'ASC' unless valid_sort_direction(params[:sort_direction])
@@ -409,6 +421,7 @@ class TagsController < ApplicationController
       :type,
       :canonical,
       :created_at,
+      :uses,
       :sort_column,
       :sort_direction
     )

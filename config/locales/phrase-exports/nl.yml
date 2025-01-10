@@ -12,8 +12,8 @@ nl:
           other: 'Categorieën:'
       character:
         name_with_colon:
-          one: 'Karakter:'
-          other: 'Karakters:'
+          one: 'Personage:'
+          other: 'Personages:'
       fandom:
         name_with_colon:
           one: 'Fandom:'
@@ -42,8 +42,8 @@ nl:
         one: Hoofdstuk
         other: Hoofdstukken
       character:
-        one: Karakter
-        other: Karakters
+        one: Personage
+        other: Personages
       fandom:
         one: Fandom
         other: Fandoms
@@ -59,29 +59,25 @@ nl:
       series:
         one: Serie
         other: Series
-  chapters:
-    chapter_position: "- Hoofdstuk %{position}"
   kudo_mailer:
     batch_kudo_notification:
       guest:
         one: een bezoeker
         other: "%{count} bezoekers"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
           other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_link}.
-        single_guest:
-          giver_list: een bezoeker
-          left_kudos: Je hebt kudos gekregen van %{giver_list} voor %{commentable_link}.
-      subject: "[%{app_name}] Kudos!"
-      text:
-        left_kudos:
+        text:
           one: Je hebt kudos gekregen van %{givers_list} voor %{commentable_title}
             (%{commentable_url}).
           other: Je hebt kudos gekregen van %{givers_list} voor %{commentable_title}
             (%{commentable_url}).
-        single_guest: Je hebt kudos gekregen van een bezoeker voor %{commentable_title}
-          (%{commentable_url}).
+      single_guest:
+        giver: een bezoeker
+        html: Je hebt kudos gekregen van %{giver} voor %{commentable_link}.
+        text: Je hebt kudos gekregen van een bezoeker voor %{commentable_title} (%{commentable_url}).
+      subject: "[%{app_name}] Kudos!"
   mailer:
     general:
       closing:
@@ -96,29 +92,31 @@ nl:
           other: "%{count} woorden"
       footer:
         general:
+          about:
+            html: AO3 is een door fans beheerd en ondersteund archief dat afhankelijk
+              is van %{donate_link}
+            text: 'AO3 is een door fans beheerd en ondersteund archief dat afhankelijk
+              is van jouw donaties: %{donate_url}.'
           html:
             donate_link_text: jouw donaties
-            part1: Is dit bericht niet voor jou bedoeld? %{support_link}.
-            part2: AO3 is een door fans beheerd en ondersteund archief dat afhankelijk
-              is van %{donate_link}
             support_link_text: Neem contact op met Support
-          text:
-            part1: Is dit bericht niet voor jou bedoeld? Neem dan contact op met Support
+          unwanted_email:
+            html: Is dit bericht niet voor jou bedoeld? %{support_link}.
+            text: Is dit bericht niet voor jou bedoeld? Neem dan contact op met Support
               via %{support_url}.
-            part2: 'AO3 is een door fans beheerd en ondersteund archief dat afhankelijk
-              is van jouw donaties: %{donate_url}.'
         sent_at: Verstuurd om %{sent_at}.
       greeting:
-        formal: Beste %{name},
+        formal_html: Beste %{name},
         informal:
-          addressed: Hallo, %{name}!
+          addressed_html: Hallo, %{name}!
           unaddressed: Hallo!
-        introductory: Hallo van Archive of Our Own – AO3 (Ons Eigen Archief)!
-      metadata_label_indicator: ": "
+        introductory: Hallo van Archive of Our Own – AO3 (Ons Eigen Archief)!
+      metadata_label_indicator: ":"
       signature:
+        abuse_team: AO3 Beleids- en Misbruikcommissie
         app_short_name: AO3
         open_doors: Open Doors (Open Deuren)
-        parent_org: Organization for Transformative Works – OTW (Organisatie voor
+        parent_org: Organization for Transformative Works – OTW (Organisatie voor
           Transformatieve Werken)
         support: AO3 Support
   users:
@@ -134,27 +132,24 @@ nl:
         unrequested: Als je geen wachtwoordherstel hebt aangevraagd, kan je deze e-mail
           negeren en zal je vorige wachtwoord blijven werken.
   user_mailer:
-    abuse_report:
-      description_para: 'Omschrijving van het misbruik:'
-      para1: 'De volgende melding is naar het Beleid & Misbruik-team gestuurd:'
-      subject: "[%{app_name}] Jouw Beleid & Misbruik Melding"
-      url_para: 'URL van de pagina waarop misbruik is gevonden:'
     admin_deleted_work_notification:
       bye: Een kopie van je werk is ter referentie bijgevoegd.
       contact_abuse: neem dan contact op met Beleid & Misbruik
+      deleted:
+        html: Jouw werk %{title} is verwijderd uit AO3 door een site-admin.
+        text: Jouw werk "%{title}" is verwijderd uit AO3 door een site-admin.
       html:
-        part1: Jouw werk %{title} is verwijderd uit AO3 door een site-admin.
-        part2: Als jouw werk onderdeel was van een importproject beheerd door Open
-          Doors (Open Deuren) en je nog verdere vragen hebt, %{opendoors_link}.
         tos_violation: Als het mogelijk is dat jouw werk de servicevoorwaarden van
           AO3 schond, %{contact_abuse_link}.
+      import_project:
+        html: Als jouw werk onderdeel was van een importproject beheerd door Open
+          Doors (Open Deuren) en je nog verdere vragen hebt, %{opendoors_link}.
+        text: Als jouw werk onderdeel was van een importproject beheerd door Open
+          Doors (Open Deuren) en je nog verdere vragen hebt, neem dan contact op met
+          Open Deuren (%{opendoors_link}).
       opendoors: neem dan contact op met Open Deuren
       subject: "[%{app_name}] Jouw werk is verwijderd door een admin"
       text:
-        part1: Jouw werk "%{title}" is verwijderd uit AO3 door een site-admin.
-        part2: Als jouw werk onderdeel was van een importproject beheerd door Open
-          Doors (Open Deuren) en je nog verdere vragen hebt, neem dan contact op met
-          Open Deuren (%{opendoors_link}).
         tos_violation: Als het mogelijk is dat jouw werk de servicevoorwaarden van
           AO3 schond, neem dan contact op met Beleid & Misbruik (%{contact_abuse_url}).
     admin_hidden_work_notification:
@@ -251,8 +246,31 @@ nl:
         of op de pagina met jouw werken. Iedereen die een link naar het werk volgt,
         krijgt een waarschuwing dat het momenteel nog niet onthuld is en dat het niet
         mogelijk is om de inhoud te bereiken.
+    archivist_added_to_collection_notification:
+      approved_collection_items_page: Approved Collection Items (Toegestane collectie-items)
+        pagina
+      archivist_notice: Omdat de beheerders van de collectie in hun officiële capaciteit
+        als Open Doors (Open Deuren) archiefbeheerders handelen, is het hen toegestaan
+        jouw werk aan deze collectie toe te voegen, ook al heb je collectie uitnodigingen
+        uitstaan. Archiefbeheerders zullen enkel werken aan een collectie toevoegen
+        als het op een geïmporteerd archief gehost was.
+      removal_instructions:
+        html: Als je jouw werk uit deze collectie wil verwijderen, bezoek dan jouw
+          %{approved_items_link}.
+        text: 'Als je jouw werk uit deze collectie wil verwijderen, bezoek dan jouw
+          Approved Collection Items (Toegestane collectie-items) pagina: %{approved_items_url}.'
+      subject: "[%{app_name}][%{collection_title}] Een Open Doors (Open Deuren) archiefbeheerder
+        heeft je werk toegevoegd aan een collectie"
+      work_added:
+        html: De beheerders van de collectie %{collection_link} hebben jouw werk %{work_link}
+          toegevoegd aan hun collectie!
+        text: De beheerders van de collectie "%{collection_title}" (%{collection_url})
+          hebben jouw werk "%{work_title}" (%{work_url}) toegevoegd aan hun collectie!
     challenge_assignment_notification:
       any: Vrije keuze
+      assignment:
+        html: Het volgende verzoek wordt aan jou toegewezen in de %{link} uitdaging
+          op AO3!
       description: 'Beschrijving:'
       due: 'Deze taak moet klaar zijn op:'
       html:
@@ -262,25 +280,118 @@ nl:
         footer_link: de profielpagina van de uitdaging
         look_up: Je kan deze taak opzoeken vanaf %{link}.
         look_up_link: jouw Assignments (Taken) pagina
-        part1: De volgende aanvraag wordt aan jou toegewezen in de %{link} uitdaging
-          op Archive of Our Own - AO3 (Ons Eigen Archief)!
-      optional_tags: 'Optionele Tags:'
+      optional_tags: 'Optionele tags:'
       prompts: 'Prompts:'
       prompt_url: 'Prompt URL:'
       recipient: 'Ontvanger:'
       recipient_missing: 'Geen: vraag hulp aan een moderator!'
       subject: "[%{app_name}][%{collection_title}] Jouw taak!"
       text:
-        assignment: De volgende aanvraag wordt aan jou toegewezen in de "%{collection_title}"
-          (%{collection_url}) uitdaging op Archive of Our Own - AO3 (Ons Eigen Archief)!
+        assignment: Het volgende verzoek wordt aan jou toegewezen in de "%{collection_title}"
+          uitdaging (%{collection_url}) op AO3!
         footer: Je krijgt deze e-mail omdat je deelneemt aan de %{title} uitdaging
           (%{url}). Voor meer informatie over deze uitdaging en de contactinfo van
           de moderators, ga naar %{profile_url}.
         look_up: Je kan deze taak opzoeken vanaf je Assignments (Taken) pagina via
           %{link}.
     change_email:
-      part1: "%{login}, het e-mailadres van je account werd gewijzigd naar %{email}"
+      changed:
+        html: "%{login}, het e-mailadres van je account werd gewijzigd naar %{email}"
+        text: "%{login}, het e-mailadres van je account werd gewijzigd naar %{email}"
       subject: "[%{app_name}] E-mailadres gewijzigd"
+    claim_notification:
+      access:
+        contact_support: neem contact op met AO3 Support
+        html: Afhankelijk van het archief werden je werken misschien geïmporteerd
+          met de toegang beperkt tot gebruikers met een account (zodat ze niet op
+          Google verschijnen). Als dit het geval is, hebben alleen ingelogde gebruikers
+          toegang tot je werken, tenzij je ervoor kiest ze volledig zichtbaar te maken.
+          Voor hulp bij het vrijgeven, verlaten of verwijderen van je werken, %{contact_support_link}.
+        text: Afhankelijk van het archief werden je werken misschien geïmporteerd
+          met de toegang beperkt tot gebruikers met een account (zodat ze niet op
+          Google verschijnen). Als dit het geval is, hebben alleen ingelogde gebruikers
+          toegang tot je werken, tenzij je ervoor kiest ze volledig zichtbaar te maken.
+          Voor hulp bij het vrijgeven, verlaten of verwijderen van je werken, neem
+          contact op met Support via %{support_url}.
+      email_tips: Wanneer je contact met ons opneemt, voeg dan e-mailadressen van
+        @transformativeworks.org toe aan je lijst met veilige afzenders en controleer
+        of ons antwoord in je ongewenste e-mail zit.
+      introduction:
+        ao3_name: Archive of Our Own – AO3 (Ons Eigen Archief)
+        html: Je ontvangt deze e-mail omdat je werken had in een fanwerkarchief dat
+          nu geïmporteerd is door %{open_doors_name_link} naar %{app_link}. Omdat
+          dit e-mailadres bij een account hoort dat geregistreerd stond bij het geïmporteerde
+          archief, zijn de bijbehorende fanwerken (zie hieronder) automatisch toegevoegd
+          aan je AO3-account.
+        open_doors_name: Open Doors (Open Deuren)
+        text: 'Je ontvangt deze e-mail omdat je werken had in een archief dat geïmporteerd
+          is door Open Doors (Open Deuren) (%{open_doors_url}) naar Archive of Our
+          Own – AO3 (Ons Eigen Archief): %{app_url}. Omdat dit e-mailadres bij een
+          account hoort dat geregistreerd stond bij het geïmporteerde archief, zijn
+          de bijbehorende fanwerken (zie hieronder) automatisch toegevoegd aan je
+          AO3-account.'
+      mistake:
+        contact_open_doors: Neem contact op met Open Deuren
+        html: Als dit een fout is en deze werken niet van jou zijn, verwijder ze dan
+          niet! %{contact_open_doors_link} en we lossen het op.
+        text: Als dit een fout is en deze werken niet van jou zijn, verwijder ze dan
+          niet! Neem contact op met Open Deuren (%{open_doors_url}) en we lossen het
+          op.
+      more_info:
+        ao3_news: AO3 Nieuws
+        contact_support: neem dan contact op met AO3 Support
+        faq_page: veelgestelde vragen
+        html: Je kan aankondigen over recent verhuisde archieven lezen op %{ao3_news_link}
+          en extra informatie is te vinden bij de %{faq_page_link} en %{tutorial_page_link}
+          van Open Deuren. Als je vragen hebt die niet in de veelgestelde vragen,
+          tutorials of deze e-mail beantwoord worden, %{contact_support_link}.
+        text: Je kan aankondigen over recent verhuisde archieven lezen op AO3 Nieuws
+          (%{news_url}) en extra informatie is te vinden bij de veelgestelde vragen
+          (%{open_doors_faq_url}) en tutorials (%{open_doors_tutorial_url}) van Open
+          Deuren. Als je vragen hebt die niet in de veelgestelde vragen, tutorials
+          of deze e-mail beantwoord worden, neem dan contact op met Support via %{support_url}.
+        tutorial_page: tutorials
+      other_works:
+        contact_open_doors: neem dan contact op met Open Deuren
+        html: Als je andere werken op het geïmporteerde archief had onder een e-mailadres
+          waar je niet meer bij kan, %{contact_open_doors_link} met details die jouw
+          identiteit kunnen bewijzen.
+        text: Als je andere werken op het geïmporteerde archief had onder een e-mailadres
+          waar je niet meer bij kan, neem dan contact op met Open Deuren met details
+          die jouw identiteit kunnen bewijzen.
+      questions:
+        contact_support: neem contact op met AO3 Support
+        html: Voor andere vragen, %{contact_support_link}.
+        text: Voor andere vragen, neem contact op met AO3 Support via %{support_url}.
+      redirects:
+        html: Om lijsten met aanbevelingen en bladwijzers te bewaren kunnen de webadressen
+          van het geïmporteerde archief tijdelijk omgeleid worden naar de geïmporteerde
+          kopie van deze werken (zie de aankondiging voor jouw archief om dit te checken).
+          Als je zelf al een kopie van deze werken hebt geüpload en je hebt de functie
+          om te importeren vanaf een URL %{negation} gebruikt, zullen er twee kopieën
+          van hetzelfde werk op AO3 staan.
+      subject: "[%{app_name}] Werken geüpload"
+      update_redirect:
+        contact_open_doors: neem contact op met Open Deuren
+        html: Als je wil dat Open Deuren de omleiding updatet zodat hij naar jouw
+          bestaande werk leidt, verwijder dan de geïmporteerde kopie en %{contact_open_doors_link}
+          met je AO3-accountnaam, je accountnaam op het geïmporteerde archief en de
+          titel en URL van het fanwerk waar je naar wil laten omleiden. (Als je meerdere
+          werken hebt waarvan je de omleiding wil laten wijzigen, kan je deze allemaal
+          in dezelfde e-mail noemen.)
+        text: Als je wil dat Open Deuren de omleiding updatet zodat hij naar jouw
+          bestaande werk leidt, verwijder dan de geïmporteerde kopie en neem contact
+          op met Open Deuren via %{open_doors_url} met je AO3-accountnaam, je accountnaam
+          op het geïmporteerde archief en de titel en URL van het fanwerk waar je
+          naar wil laten omleiden. (Als je meerdere werken hebt waarvan je de omleiding
+          wil laten wijzigen, kan je deze allemaal in dezelfde e-mail noemen.)
+      works_by: 'Deze werken werden geschreven door de persoon met het e-mailadres:
+        %{email}'
+      work_info:
+        html: "%{work_link} (%{fandom})"
+        text:
+          no_fandom: "- %{work_title} %{work_url}"
+          with_fandom: "- %{work_title} %{work_url} (%{fandom})"
     collection_notification:
       assignments_sent:
         complete: Alle taken zijn verstuurd.
@@ -288,7 +399,7 @@ nl:
       html:
         received_message: 'Je hebt een bericht ontvangen over je collectie %{collection_link}:'
       text:
-        received_message: 'Je hebt een bericht ontvangen over je collectie “%{collection_title}”
+        received_message: 'Je hebt een bericht ontvangen over je collectie "%{collection_title}"
           (%{collection_url}):'
     creatorship_notification:
       explanation: Als medeproducent van een werk, kan je worden toegevoegd aan nieuwe
@@ -318,9 +429,9 @@ nl:
           bekend staan, dan kan je de serie bewerken om jezelf te verwijderen als
           producent: %{url}'
     creatorship_notification_archivist:
-      explanation: Omdat zij handelen in hun officiële capaciteit als Open Deuren
-        archiefbeheerder, zijn zij gemachtigd om je zonder uitnodiging toe te voegen,
-        zelfs als je medeproducent hebt uitgeschakeld.
+      explanation: Omdat ze handelen in hun officiële capaciteit als Open Deuren archiefbeheerder,
+        zijn ze gemachtigd om je zonder verzoek toe te voegen, zelfs als je medeproductie
+        hebt uitgeschakeld.
       html:
         creation: "%{creation_link} door %{pseud_links}"
         edit_chapter: het hoofdstuk bewerken
@@ -345,13 +456,13 @@ nl:
       text:
         creation: "%{title} (%{url}) door %{pseuds}"
         remove_chapter: 'Als je per ongeluk werd toegevoegd of als je niet als producent
-          bekend wilt staan, dan kan je het hoofdstuk aanpassen om jezelf te verwijderen
+          bekend wilt staan, dan kan je het hoofdstuk bewerken om jezelf te verwijderen
           als producent: %{url}'
         remove_series: 'Als je per ongeluk werd toegevoegd of als je niet als producent
-          bekend wilt staan, dan kan je de serie aanpassen om jezelf te verwijderen
+          bekend wilt staan, dan kan je de serie bewerken om jezelf te verwijderen
           als producent: %{url}'
         remove_work: 'Als je per ongeluk werd toegevoegd of als je niet als producent
-          bekend wilt staan, dan kan je het werk aanpassen om jezelf te verwijderen
+          bekend wilt staan, dan kan je het werk bewerken om jezelf te verwijderen
           als producent: %{url}'
     creatorship_request:
       html:
@@ -371,27 +482,37 @@ nl:
         instructions: 'Je kan dit verzoek aanvaarden of weigeren op je Co-Creator
           Requests (Medeproducent aanvragen) pagina: %{url}'
     delete_work_notification:
-      html:
-        part1_other: Je werk %{title} is op verzoek van %{pseud} verwijderd.
-        part1_yourself: Je werk %{title} is op jouw verzoek verwijderd.
-        part2: Als je vragen hebt, %{support}.
-      part3: Een kopie van je werk is voor jou bijgevoegd.
+      attachment: Een kopie van je werk is voor jou bijgevoegd.
+      deleted_other:
+        html: Je werk %{title} is op verzoek van %{pseud} verwijderd.
+        text: Je werk "%{title}" is op verzoek van %{pseud} verwijderd.
+      deleted_yourself:
+        html: Je werk %{title} is op jouw verzoek verwijderd.
+        text: Je werk "%{title}" is op jouw verzoek verwijderd.
+      questions:
+        html: Als je vragen hebt, %{support}.
+        text: Als je vragen hebt, %{support} (%{url}).
       subject: "[%{app_name}] Je werk is verwijderd"
       support: neem dan contact op met Support
-      text:
-        part1_other: Je werk "%{title}" is op verzoek van %{pseud} verwijderd.
-        part1_yourself: Je werk "%{title}" is op jouw verzoek verwijderd.
-        part2: Als je vragen hebt, %{support} (%{url}).
     invite_increase_notification:
-      body:
-        one: We willen je laten weten dat je een nieuwe uitnodiging hebt, waarmee
-          een AO3-account kan aangemaakt worden. Je kan een vriend uitnodigen via
-          %{invitation_page}.
-        other: We willen je laten weten dat je %{count} nieuwe uitnodigingen hebt,
-          waarmee AO3-accounts kunnen aangemaakt worden. Je kan een vriend uitnodigen
-          via %{invitation_page}.
+      html:
+        body:
+          one: We willen je laten weten dat je een nieuwe uitnodiging hebt, waarmee
+            een AO3-account kan aangemaakt worden. Je kan een vriend uitnodigen via
+            %{invitation_page_link}.
+          other: We willen je laten weten dat je %{count} nieuwe uitnodigingen hebt,
+            waarmee AO3-accounts kunnen aangemaakt worden. Je kan een vriend uitnodigen
+            via %{invitation_page_link}.
       invitation_page_link_text: je Invitations (Uitnodigingen) pagina
       subject: "[%{app_name}] Nieuwe Uitnodigingen"
+      text:
+        body:
+          one: We willen je laten weten dat je een nieuwe uitnodiging hebt, waarmee
+            een AO3-account kan aangemaakt worden. Je kan een vriend uitnodigen via
+            %{invitation_page_url}.
+          other: We willen je laten weten dat je %{count} nieuwe uitnodigingen hebt,
+            waarmee AO3-accounts kunnen aangemaakt worden. Je kan een vriend uitnodigen
+            via %{invitation_page_url}.
     invite_request_declined:
       main:
         one: Jammer genoeg kunnen we je verzoek voor een nieuwe uitnodiging op dit
@@ -412,32 +533,31 @@ nl:
         collection: Iemand heeft je een werk cadeau gedaan in de "%{collection_title}"
           collectie (%{collection_url}) op AO3!
     signup_notification:
+      activate:
+        html: "%{activate_account_link}."
+        text: 'Volg deze link om je account te activeren: %{activate_account_url}'
       activate_your_account: volg deze link om je account te activeren
       admin_posts: AO3 Nieuws
       bye: We hopen dat je veel plezier gaat beleven aan AO3.
       contact_support: contacteer het Support team
       faq: FAQ
-      html:
-        part1: "%{activate_account_link}."
-        part2: Als je account is geactiveerd, kun je je eigen werken plaatsen, je
-          via e-mail abonneren op je favoriete producenten en werken zodat je weet
-          wanneer deze updaten, aanpassen hoe de website eruit ziet en functioneert,
-          bijhouden welke werken je hebt bezocht op AO3 via je geschiedenis, en nog
-          veel meer.
-        part3: Er is veel informatie en advies over hoe je AO3 kunt gebruiken in onze
+      features:
+        html: Als je account is geactiveerd, kun je je eigen werken plaatsen, je via
+          e-mail abonneren op je favoriete producenten en werken zodat je weet wanneer
+          deze updaten, aanpassen hoe de website eruit ziet en functioneert, bijhouden
+          welke werken je hebt bezocht op AO3 via je geschiedenis, en nog veel meer.
+        text: Als je account is geactiveerd, kun je je eigen werken plaatsen, je via
+          e-mail abonneren op je favoriete producenten en werken zodat je weet wanneer
+          deze updaten, aanpassen hoe de website eruit ziet en functioneert, bijhouden
+          welke werken je hebt bezocht op AO3 via je geschiedenis, en nog veel meer.
+      information:
+        html: Er is veel informatie en advies over hoe je AO3 kunt gebruiken in onze
           %{faq_link}. Het laatste nieuws over site-ontwikkeling vind je in ons %{admin_posts_link}.
           Als je meer hulp nodig hebt, een probleem tegenkomt of vragen of opmerkingen
           hebt, %{contact_support_link}  en we helpen je graag verder.
-      text:
-        part1: 'Volg deze link om je account te activeren: %{activate_account_url}'
-        part2: Als je account is geactiveerd, kun je je eigen werken plaatsen, je
-          via e-mail abonneren op je favoriete producenten en werken zodat je weet
-          wanneer deze updaten, aanpassen hoe de website eruit ziet en functioneert,
-          bijhouden welke werken je hebt bezocht op AO3 via je geschiedenis, en nog
-          veel meer.
-        part3: 'Er is veel informatie en advies over hoe je AO3 kunt gebruiken in
-          onze FAQ via %{faq_url}. Het laatste nieuws over site-ontwikkeling vind
-          je in ons AO3 Nieuws via %{admin_posts_url}. Als je meer hulp nodig hebt,
-          een probleem tegenkomt of vragen of opmerkingen hebt, contacteer dan ons
-          Support team dat je altijd graag verder helpt: %{contact_support_url}.'
+        text: 'Er is veel informatie en advies over hoe je AO3 kunt gebruiken in onze
+          FAQ via %{faq_url}. Het laatste nieuws over site-ontwikkeling vind je in
+          ons AO3 Nieuws via %{admin_posts_url}. Als je meer hulp nodig hebt, een
+          probleem tegenkomt of vragen of opmerkingen hebt, contacteer dan ons Support
+          team dat je altijd graag verder helpt: %{contact_support_url}.'
       welcome: Welkom bij AO3, %{login}!

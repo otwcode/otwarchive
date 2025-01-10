@@ -21,6 +21,7 @@ jobs:
       TEST_GROUP: ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
       CUCUMBER_RETRY: 1
       CUCUMBER_FORMAT: Ao3Cucumber::Formatter
+      CUCUMBER_PUBLISH_QUIET: true
       SPEC_OPTS: --force-color
 
     services:
@@ -57,12 +58,15 @@ jobs:
             arguments: spec/models
           - command: rspec
             arguments: --exclude-pattern 'spec/{controllers,models}/**/*.rb'
+            libvips: true
           - command: cucumber
             arguments: features/admins
+            libvips: true
           - command: cucumber
             arguments: features/bookmarks
           - command: cucumber
             arguments: features/collections
+            libvips: true
           - command: cucumber
             arguments: features/comments_and_kudos
           - command: cucumber
@@ -72,8 +76,10 @@ jobs:
             vcr: true
           - command: cucumber
             arguments: features/other_a
+            libvips: true
           - command: cucumber
             arguments: features/other_b
+            libvips: true
           - command: cucumber
             arguments: features/prompt_memes_a
           - command: cucumber
@@ -94,7 +100,7 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run apt-get update
         run: sudo apt-get update
@@ -104,24 +110,17 @@ jobs:
           sudo apt-get install -y redis-server
           ./script/gh-actions/multiple_redis.sh
 
-      - name: Cache wkhtmltopdf package
-        if: ${{ matrix.tests.ebook }}
-        uses: actions/cache@v3
-        with:
-          path: wkhtmltopdf
-          key: wkhtmltopdf-${{ hashFiles('script/gh-actions/ebook_converters.sh') }}
-
       - name: Install ebook converters
         if: ${{ matrix.tests.ebook }}
         run: ./script/gh-actions/ebook_converters.sh
 
       - name: Cache VCR cassettes
         if: ${{ matrix.tests.vcr }}
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: features/cassette_library
 
-          # Unfortunately, the actions/cache@v3 version doesn't allow the cache
+          # Unfortunately, the actions/cache@v4 version doesn't allow the cache
           # key to be overwritten if there's an exact match. So instead we add
           # a unique identifier to the key to always force a "cache miss", and
           # restore from related keys to make sure that we still get to load a
@@ -134,6 +133,10 @@ jobs:
           key: cassette-library-${{ hashFiles(matrix.tests.arguments) }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             cassette-library-${{ hashFiles(matrix.tests.arguments) }}-
+
+      - name: Install libvips for image processing
+        if: ${{ matrix.tests.libvips }}
+        run: sudo apt-get install -y libvips-dev
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
@@ -156,7 +159,7 @@ jobs:
         run: bundle exec ${{ matrix.tests.command }} ${{ matrix.tests.arguments }}
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           # Optional for public repos. However, individual forks can set this
           # secret to reduce the chance of being rate-limited by GitHub.
@@ -167,7 +170,7 @@ jobs:
 
       - name: Upload failure screenshots
         if: ${{ failure() && matrix.tests.command == 'cucumber' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test failures ${{ hashFiles('tmp/capybara/*') }}
           path: tmp/capybara

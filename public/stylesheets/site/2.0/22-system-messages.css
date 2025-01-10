@@ -37,6 +37,7 @@ div.error {
   clear: right;
     box-shadow: inset 1px 1px 2px;
     border-radius: 0.25em;
+    word-wrap: break-word;
 }
 
 .caution {
@@ -51,7 +52,7 @@ div.error {
     box-shadow: 1px 1px 2px;
 }
 
-.notes {
+p.notes {
   clear: right;
 }
 
@@ -75,8 +76,12 @@ ul.notes li, .error ul li, .notice ul li, .caution ul li, .alert.flash ul li {
   padding-left: 1.5em;
 }
 
-span.error {
+dt span.error, dd span.error {
   display: block;
+}
+
+dd.complex span.error {
+  display: inline-block;
 }
 
 /* contexts */

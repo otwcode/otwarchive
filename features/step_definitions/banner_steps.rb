@@ -127,12 +127,12 @@ Then /^a logged-out user should not see a banner$/ do
   page.should_not have_xpath("//div[@class=\"announcement group\"]")
 end
 
-Then /^I should see the first login banner$/ do
-  step %{I should see "It looks like you've just logged into the Archive for the first time"}
+Then "I should see the first login banner" do
+  step %{I should see "It looks like you've just logged in to AO3 for the first time."}
 end
 
-Then /^I should not see the first login banner$/ do
-  step %{I should not see "It looks like you've just logged into the Archive for the first time"}
+Then "I should not see the first login banner" do
+  step %{I should not see "It looks like you've just logged in to AO3 for the first time."}
 end
 
 Then /^I should see the first login popup$/ do

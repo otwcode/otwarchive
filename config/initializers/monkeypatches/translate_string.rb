@@ -1,11 +1,11 @@
 module I18n
   class << self
-    # A shorthand for translation that takes a string as its first argument, which
-    # will be the default string.
+    # Formats a string. Used to mark strings that should eventually be
+    # translated with I18n, but aren't at the moment.
     #
     # Deprecated.
     def translate_string(str, **options)
-      translate(str, **options.merge(default: str))
+      str % options
     end
 
     alias :ts :translate_string
@@ -65,13 +65,11 @@ module ActionMailer #:nodoc:
   end
 end
 
-# Note: we define this separately for ActionView so that we get the controller/action name
-# in the key, and use the added scoping for translate in TranslationHelper.
 module ActionView
   module Helpers
     module TranslationHelper
       def translate_string(str, **options)
-        translate(str, **options.merge(default: str))
+        str % options
       end
 
       alias :ts :translate_string

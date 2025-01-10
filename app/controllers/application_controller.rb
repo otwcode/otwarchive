@@ -1,7 +1,6 @@
-PROFILER_SESSIONS_FILE = 'used_tags.txt'
-
 class ApplicationController < ActionController::Base
-  include Pundit
+  include ActiveStorage::SetCurrent
+  include Pundit::Authorization
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
 
@@ -74,6 +73,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_admin
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
+  helper_method :guest?
 
   # Title helpers
   helper_method :process_title
@@ -134,22 +134,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # mark the flash as being set (called when flash is set)
-  def set_flash_cookie(key=nil, msg=nil)
-    cookies[:flash_is_set] = 1
-  end
-  # aliasing setflash for set_flash_cookie
-  # def setflash (this is here in case someone is grepping for the definition of the method)
-  alias :setflash :set_flash_cookie
-
 protected
-
-  def record_not_found (exception)
-    @message=exception.message
-    respond_to do |f|
-      f.html{ render template: "errors/404", status: 404 }
-    end
-  end
 
   def logged_in?
     user_signed_in?
@@ -174,11 +159,6 @@ protected
 
 public
 
-  before_action :fetch_admin_settings
-  def fetch_admin_settings
-    @admin_settings = AdminSetting.current
-  end
-
   before_action :load_admin_banner
   def load_admin_banner
     if Rails.env.development?
@@ -197,7 +177,7 @@ public
   before_action :load_tos_popup
   def load_tos_popup
     # Integers only, YYYY-MM-DD format of date Board approved TOS
-    @current_tos_version = 20180523
+    @current_tos_version = 2024_11_19 # rubocop:disable Style/NumericLiterals
   end
 
   # store previous page in session to make redirecting back possible
@@ -205,7 +185,6 @@ public
   before_action :store_location
   def store_location
     if session[:return_to] == "redirected"
-      Rails.logger.debug "Return to back would cause infinite loop"
       session.delete(:return_to)
     elsif request.fullpath.length > 200
       # Sessions are stored in cookies, which has a 4KB size limit.
@@ -214,7 +193,6 @@ public
       session.delete(:return_to)
     else
       session[:return_to] = request.fullpath
-      Rails.logger.debug "Return to: #{session[:return_to]}"
     end
   end
 
@@ -224,11 +202,9 @@ public
     back = session[:return_to]
     session.delete(:return_to)
     if back
-      Rails.logger.debug "Returning to #{back}"
       session[:return_to] = "redirected"
       redirect_to(back) and return
     else
-      Rails.logger.debug "Returning to default (#{default})"
       redirect_to(default) and return
     end
   end
@@ -294,12 +270,16 @@ public
   def admin_only_access_denied
     respond_to do |format|
       format.html do
-        flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
+        flash[:error] = t("admin.access.page_access_denied") 
         redirect_to root_path
       end
       format.json do
-        errors = [ts("Sorry, only an authorized admin can do that.")]
+        errors = [t("admin.access.action_access_denied")]
         render json: { errors: errors }, status: :forbidden
+      end
+      format.js do
+        flash[:error] = t("admin.access.page_access_denied") 
+        render js: "window.location.href = '#{root_path}';" 
       end
     end
   end
@@ -360,8 +340,6 @@ public
   end
 
 
-  @over_anon_threshold = true if @over_anon_threshold.nil?
-
   def get_page_title(fandom, author, title, options = {})
     # truncate any piece that is over 15 chars long to the nearest word
     if options[:truncate]
@@ -389,11 +367,6 @@ public
   #### -- AUTHORIZATION -- ####
 
   # It is just much easier to do this here than to try to stuff variable values into a constant in environment.rb
-  before_action :set_redirects
-  def set_redirects
-    @logged_in_redirect = url_for(current_user) if current_user.is_a?(User)
-    @logged_out_redirect = new_user_session_path
-  end
 
   def is_registered_user?
     logged_in? || logged_in_as_admin?
@@ -405,7 +378,6 @@ public
 
   def see_adult?
     params[:anchor] = "comments" if (params[:show_comments] && params[:anchor].blank?)
-    Rails.logger.debug "Added anchor #{params[:anchor]}"
     return true if cookies[:view_adult] || logged_in_as_admin?
     return false unless current_user
     return true if current_user.is_author_of?(@work)
@@ -414,7 +386,7 @@ public
   end
 
   def use_caching?
-    %w(staging production test).include?(Rails.env) && @admin_settings.enable_test_caching?
+    %w(staging production test).include?(Rails.env) && AdminSetting.current.enable_test_caching?
   end
 
   protected
@@ -423,12 +395,39 @@ public
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended?
-        flash[:error] = t('suspension_notice', default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+        suspension_end = current_user.suspended_until
+
+        # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+        unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
+
+        # If the stated suspension end date is after the unban threshold we need to advance a day 
+        suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
+        localized_suspension_end = view_context.date_in_zone(suspension_end)
+        flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+        
       else
-        flash[:error] = t('ban_notice', default: "Your account has been banned. You are not permitted to add or edit archive content. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.").html_safe
+        flash[:error] = t("users.status.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
       end
       redirect_to current_user
     end
+  end
+
+  # Prevents temporarily suspended users from deleting content
+  def check_user_not_suspended
+    return unless current_user.is_a?(User) && current_user.suspended?
+
+    suspension_end = current_user.suspended_until
+
+    # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+    unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
+
+    # If the stated suspension end date is after the unban threshold we need to advance a day 
+    suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
+    localized_suspension_end = view_context.date_in_zone(suspension_end)
+    
+    flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+
+    redirect_to current_user
   end
 
   # Does the current user own a specific object?
@@ -464,19 +463,12 @@ public
 
   # Make sure user is allowed to access tag wrangling pages
   def check_permission_to_wrangle
-    if @admin_settings.tag_wrangling_off? && !logged_in_as_admin?
+    if AdminSetting.current.tag_wrangling_off? && !logged_in_as_admin?
       flash[:error] = "Wrangling is disabled at the moment. Please check back later."
       redirect_to root_path
     else
       logged_in_as_admin? || permit?("tag_wrangler") || access_denied
     end
-  end
-
-  private
- # With thanks from here: http://blog.springenwerk.com/2008/05/set-date-attribute-from-dateselect.html
-  def convert_date(hash, date_symbol_or_string)
-    attribute = date_symbol_or_string.to_s
-    return Date.new(hash[attribute + '(1i)'].to_i, hash[attribute + '(2i)'].to_i, hash[attribute + '(3i)'].to_i)
   end
 
   public
@@ -486,7 +478,7 @@ public
     if model.to_s.downcase == 'work'
       allowed = %w(author title date created_at word_count hit_count)
     elsif model.to_s.downcase == 'tag'
-      allowed = %w(name created_at taggings_count_cache)
+      allowed = %w[name created_at taggings_count_cache uses]
     elsif model.to_s.downcase == 'collection'
       allowed = %w(collections.title collections.created_at)
     elsif model.to_s.downcase == 'prompt'
@@ -520,9 +512,8 @@ public
   end
 
   # Don't get unnecessary data for json requests
-  skip_before_action  :fetch_admin_settings,
-                      :load_admin_banner,
-                      :set_redirects,
+
+  skip_before_action  :load_admin_banner,
                       :store_location,
                       if: proc { %w(js json).include?(request.format) }
 

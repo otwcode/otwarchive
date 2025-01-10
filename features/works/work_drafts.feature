@@ -19,7 +19,7 @@ Feature: Work Drafts
     And I fill in "Work Title" with "Draft Dodging"
     And I fill in "content" with "Klinger lay under his porch."
     And I press "Preview"
-  Then I should see "Draft was successfully created. It will be automatically deleted on"
+  Then I should see "Draft was successfully created. It will be scheduled for deletion on"
   When I press "Edit"
   Then I should see "Edit Work"
     And I fill in "content" with "Klinger, in Uncle Gus's Aunt Gussie dress, lay under his porch."
@@ -42,7 +42,7 @@ Feature: Work Drafts
     And I follow "Add Chapter"
     And I fill in "content" with "this is second chapter content"
     And I press "Preview"
-  Then I should see "This is a draft chapter in an unposted work. The work will be automatically deleted on"
+  Then I should see "This is a draft chapter in an unposted work. The work will be scheduled for deletion on"
 
   Scenario: Purging old drafts
   Given I am logged in as "drafter" with password "something"
@@ -69,6 +69,7 @@ Feature: Work Drafts
     Then I should see "Drafts (1)"
     When I follow "Drafts (1)"
     Then I should see "draft to post"
+      And the page title should include "drafter - Drafts"
       And I should see "Post Draft" within "#main .own.work.blurb .actions"
       And I should see "Delete Draft" within "#main .own.work.blurb .actions"
     When I follow "Post Draft"

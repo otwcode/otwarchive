@@ -1,0 +1,15 @@
+<% content_for :message do %>
+<%= t("mailer.general.greeting.formal_html", name: @user.login) %>
+
+<%= t(".work_added.text",
+      collection_title: @collection.title,
+      collection_url: collection_url(@collection),
+      work_title: @work.title,
+      work_url: work_url(@work)) %>
+
+<%= t(".archivist_notice") %>
+
+<%= t(".removal_instructions.text",
+      approved_items_url: user_collection_items_url(@user, status: "approved")) %>
+
+<% end %>
