@@ -32,8 +32,6 @@ class Bookmark < ApplicationRecord
     end
   end
 
-  after_update :admin_hidden_bookmark_notification, if: :hidden_by_admin_changed?
-
   # renaming scope :public -> :is_public because otherwise it overlaps with the "public" keyword
   scope :is_public, -> { where(private: false, hidden_by_admin: false) }
   scope :not_public, -> { where(private: true) }
@@ -126,6 +124,8 @@ class Bookmark < ApplicationRecord
 
   # Use the current user to determine what works are visible
   scope :visible, -> { visible_to_user(User.current_user) }
+
+  after_update :admin_hidden_bookmark_notification, if: :hidden_by_admin_changed?
 
   before_destroy :invalidate_bookmark_count
   after_save :invalidate_bookmark_count, :update_pseud_index
