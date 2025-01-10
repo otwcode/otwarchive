@@ -1,7 +1,7 @@
 <% content_for :message do %>
   <p><%= t("mailer.general.greeting.formal_html", name: style_bold(@user.login)) %></p>
 
-  <p><%= t(".hidden.html", bookmark_url: style_creation_link("bookmark", @bookmark)) %></p>
+  <p><%= t(".hidden.html", bookmark_link: style_creation_link("bookmark", @bookmark)) %></p>
 
   <p><%= t(".access") %></p>
 
