@@ -3,9 +3,6 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<script>
-  console.log("<%= current_user.readings.to_a %>");
-</script>
 <% if logged_in? && !current_user.readings.empty? %>
 <ul class="navigation actions" role="navigation">
   <li>

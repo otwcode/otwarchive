@@ -4,7 +4,7 @@
 <!--main content-->
 <%= form_with(method: :post, url: {action: "clear"}, class: "simple destroy") do |f| %>
   <p class="caution notice">
-    <%= t(".notice").html_safe %>
+    <%= t(".notice_html") %>
   </p>
   <p class="actions">
     <%= f.submit t(".submit") %>
