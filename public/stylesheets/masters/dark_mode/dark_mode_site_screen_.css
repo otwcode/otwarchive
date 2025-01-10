@@ -602,7 +602,11 @@ li.comment {
   border-color: #406280;
 }
 
-/* 7. ZONE: SYSTEM: TOS POPUP */
+/* 7. ZONE: SYSTEM: TOS, TOS FAQ, AND TOS POPUP */
+
+.tos .userstuff nav.toc > details > summary {
+  border-bottom-color: #eee;
+}
 
 #tos_prompt {
   background: #333;
