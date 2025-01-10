@@ -55,9 +55,9 @@ class UserMailerPreview < ApplicationMailerPreview
   end
 
   def admin_hidden_bookmark_notification
-    bookmark = create(:bookmark)
-    creator_id = bookmark.pseud.user_id
-    UserMailer.admin_hidden_bookmark_notification(bookmark.id, creator_id)
+    creator = create(:user, :for_mailer_preview)
+    bookmark = create(:bookmark, pseud: creator.default_pseud)
+    UserMailer.admin_hidden_bookmark_notification(bookmark.id, creator.id)
   end
 
   def admin_hidden_series_notification
