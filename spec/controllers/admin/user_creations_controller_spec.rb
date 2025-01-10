@@ -286,7 +286,7 @@ describe Admin::UserCreationsController do
         end
       end
 
-      context "with a pseuds parameter" do
+      context "with a orphan_account pseuds parameter" do
         subject { put :remove_pseud, params: { id: work.id, pseuds: [orphan_pseud.id] } }
 
         it "redirects removes only that pseud" do
@@ -295,6 +295,17 @@ describe Admin::UserCreationsController do
           expect(work.reload.pseuds).to include(orphan_account.default_pseud)
           expect(work.pseuds).not_to include(orphan_pseud)
           expect(work.reload.pseuds).to include(orphaneer_orphan_pseud)
+        end
+      end
+
+      context "with a pseud parameter by a normal user" do
+        subject { put :remove_pseud, params: { id: work.id, pseuds: [user.default_pseud.id] } }
+
+        it "does not modify the work" do
+          expect do
+            subject
+          end.not_to change { work.pseuds }
+          it_redirects_to_with_notice(work_path(work), "Successfully removed pseuds  from this work.")
         end
       end
     end

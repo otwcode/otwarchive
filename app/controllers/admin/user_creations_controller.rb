@@ -85,8 +85,9 @@ class Admin::UserCreationsController < Admin::BaseController
       pseuds = Pseud.find(pseuds).select { |p| p.user_id == orphan_account.id }
     end
 
+    orphan_pseud = orphan_account.default_pseud
     pseuds.each do |pseud|
-      pseud.change_ownership(@work, User.orphan_account.default_pseud)
+      pseud.change_ownership(@work, orphan_pseud)
     end
     AdminActivity.log_action(current_admin, @work, action: "remove orphan_account pseuds")
     flash[:notice] = t(".success", pseuds: pseuds.map(&:byline).to_sentence, count: pseuds.length)
