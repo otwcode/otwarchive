@@ -54,6 +54,13 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.change_email(user.id, old_email, new_email)
   end
 
+  def archivist_added_to_collection_notification
+    work = create(:work)
+    collection = create(:collection)  
+    user = create(:user, :for_mailer_preview)
+    UserMailer.archivist_added_to_collection_notification(user.id, work.id, collection.id)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)

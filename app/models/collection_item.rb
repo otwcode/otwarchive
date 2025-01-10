@@ -106,11 +106,13 @@ class CollectionItem < ApplicationRecord
     item.users.each do |email_recipient|
       next if email_recipient.preference.collection_emails_off
 
-      UserMailer.archivist_added_to_collection_notification(
-        email_recipient.id,
-        item.id,
-        collection.id
-      ).deliver_later
+      I18n.with_locale(email_recipient.preference.locale.iso) do
+        UserMailer.archivist_added_to_collection_notification(
+          email_recipient.id,
+          item.id,
+          collection.id
+        ).deliver_later
+      end
     end
   end
 
