@@ -136,7 +136,7 @@ en:
         html: If your bookmark was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your bookmark into compliance with the Terms of Service may lead to your bookmark being deleted from the Archive.
         text: If your bookmark was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your bookmark into compliance with the Terms of Service may lead to your bookmark being deleted from the Archive.
     admin_hidden_series_notification:
-      access: While your series is hidden, you will still be able to access it through the link provided above, but it will not be listed on your series' page, and it won't be available to other users of the Archive.
+      access: While your series is hidden, you will still be able to access it through the link provided above, but it will not be listed on your series page, and it won't be available to other users of the Archive.
       check_email: Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your series was hidden.
       contact_abuse: contact Policy & Abuse
       help:
