@@ -308,10 +308,10 @@ form.single fieldset {
 .actions a:link,
 .action,
 .action:link,
+.actions button,
 .actions input,
 input[type="submit"],
-button,
-.current,
+button, .current,
 .actions label {
   background: #555;
   border-color: #222;
@@ -328,8 +328,10 @@ button,
 }
 
 .actions a:hover,
+.actions button:hover,
 .actions input:hover,
 .actions a:focus,
+.actions button:focus,
 .actions input:focus,
 label.action:hover,
 .action:hover,
