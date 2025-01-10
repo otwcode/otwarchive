@@ -84,10 +84,10 @@ Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, f
   fandom.add_association media
 end
 
-Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, character|
-  char = Character.find_or_create_by(name: character)
+Given "I add the fandom {string} to the tag/character {string}" do |fandom, tag|
+  tag = Tag.find_or_create_by(name: tag)
   fand = Fandom.find_or_create_by_name(fandom)
-  char.add_association(fand)
+  tag.add_association(fand)
 end
 
 Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
@@ -197,7 +197,7 @@ Given /^the tag wrangling setup$/ do
 end
 
 Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "tag_wrangling" admin}
   visit new_wrangling_guideline_path
   if title
     fill_in("Guideline text", with: "This is a page about how we wrangle things.")
@@ -425,6 +425,11 @@ end
 Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname, tag_type|
   tag = Tag.find_by(name: tagname)
   assert tag.type == tag_type
+end
+
+Then "the {string} tag should be an unsorted tag" do |tagname|
+  tag = Tag.find_by(name: tagname)
+  expect(tag).to be_a(UnsortedTag)
 end
 
 Then(/^the "([^"]*)" tag should (be|not be) canonical$/) do |tagname, canonical|

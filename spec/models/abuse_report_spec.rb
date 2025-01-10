@@ -359,6 +359,13 @@ describe AbuseReport do
         .not_to have_enqueued_job
     end
 
+    it "does not attach a download for comment sub-URLs asynchronously" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/comments/")
+
+      expect { subject.attach_work_download(ticket_id) }
+        .not_to have_enqueued_job
+    end
+
     it "attaches a download for work URLs asynchronously" do
       allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
 

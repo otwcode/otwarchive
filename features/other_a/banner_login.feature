@@ -6,15 +6,22 @@ Feature: First login help banner
   Given I am logged in as "newname"
   When I am on newname's user page
   Then I should see the first login banner
-    And I should see "For more guidance on using the site, check out our FAQ! If you need technical support, you can contact us through our Support and Feedback form. If you experience harassment or have specific questions about the Terms of Service, you can contact our Policy & Abuse team."
-  When I follow "check out our FAQ"
+    And I should see "For help getting started on AO3, check out some useful tips for new users or browse through our FAQs."
+    And I should see "If you need technical support, contact our Support team. If you experience harassment or have questions about our Terms of Service (including the Content Policy and Privacy Policy), contact our Policy & Abuse team."
+  When I follow "our FAQs"
   Then I should be on the faq page
   When I am on newname's user page
-    And I follow "contact us through our Support and Feedback form"
+    And I follow "contact our Support team"
   Then I should be on the support page
   When I am on newname's user page
     And I follow "Terms of Service"
   Then I should be on the tos page
+  When I am on newname's user page
+    And I follow "Content Policy"
+  Then I should be on the content page
+  When I am on newname's user page
+    And I follow "Privacy Policy"
+  Then I should be on the privacy page
   When I am on newname's user page
     And I follow "contact our Policy & Abuse team"
   Then I should see "Policy Questions & Abuse Reports"
@@ -23,7 +30,7 @@ Feature: First login help banner
   
   Given I am logged in as "newname"
   When I am on newname's user page
-  When I follow "Learn some tips and tricks"
+  When I follow "useful tips for new users"
   Then I should see the first login popup
 
   Scenario: Turn off first login help banner directly

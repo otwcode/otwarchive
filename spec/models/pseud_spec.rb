@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Pseud do
   it { is_expected.to have_many(:gifts).conditions(rejected: false).dependent(:destroy) }
@@ -17,38 +17,32 @@ describe Pseud do
   end
 
   describe "save" do
-    before do
-      @user = User.new
-      @user.login = "mynamepseud"
-      @user.age_over_13 = "1"
-      @user.terms_of_service = "1"
-      @user.email = "foo1@archiveofourown.org"
-      @user.password = "password"
-      @user.save
+    context "when the pseud is valid" do
+      let(:pseud) { build(:pseud) }
+
+      it "succeeds" do
+        expect(pseud).to be_valid_verbose
+        expect(pseud.save).to be_truthy
+        expect(pseud.errors).to be_empty
+      end
     end
 
-    before(:each) do
-      @pseud = Pseud.new
-      @pseud.user_id = @user.id
-      @pseud.name = "MyName"
+    context "when the icon alt text is too long" do
+      let(:pseud) { build(:pseud, icon_alt_text: "a" * 251) }
+
+      it "fails" do
+        expect(pseud.save).to be_falsey
+        expect(pseud.errors[:icon_alt_text]).not_to be_empty
+      end
     end
 
-    it "should save a minimalistic pseud" do
-      @pseud.should be_valid_verbose
-      expect(@pseud.save).to be_truthy
-      @pseud.errors.should be_empty
-    end
+    context "when the icon comment text is too long" do
+      let(:pseud) { build(:pseud, icon_comment_text: "a" * 51) }
 
-    it "should not save pseud with too-long alt text for icon" do
-      @pseud.icon_alt_text = "Something that is too long blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah this needs 250 characters lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
-      expect(@pseud.save).to be_falsey
-      @pseud.errors[:icon_alt_text].should_not be_empty
-    end
-
-    it "should not save pseud with too-long comment text for icon" do
-      @pseud.icon_comment_text = "Something that is too long blah blah blah blah blah blah this needs a mere 50 characters"
-      expect(@pseud.save).to be_falsey
-      @pseud.errors[:icon_comment_text].should_not be_empty
+      it "fails" do
+        expect(pseud.save).to be_falsey
+        expect(pseud.errors[:icon_comment_text]).not_to be_empty
+      end
     end
   end
 
@@ -97,6 +91,36 @@ describe Pseud do
       expect(subject.map(&:name)).to eq(%w[Zaphod Agrajag Betelgeuse])
       expect(subject.map(&:name)).not_to include("Slartibartfast")
       expect(subject.length).to eq(ArchiveConfig.ITEMS_PER_PAGE)
+    end
+  end
+
+  describe "#clear_icon" do
+    subject { create(:pseud, icon_alt_text: "icon alt", icon_comment_text: "icon comment") }
+
+    before do
+      subject.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
+    end
+
+    context "when delete_icon is false" do
+      it "does not clear the icon, icon alt, or icon comment" do
+        subject.clear_icon
+        expect(subject.icon.attached?).to be(true)
+        expect(subject.icon_alt_text).to eq("icon alt")
+        expect(subject.icon_comment_text).to eq("icon comment")
+      end
+    end
+
+    context "when delete_icon is true" do
+      before do
+        subject.delete_icon = 1
+      end
+
+      it "clears the icon, icon alt, and icon comment" do
+        subject.clear_icon
+        expect(subject.icon.attached?).to be(false)
+        expect(subject.icon_alt_text).to be_nil
+        expect(subject.icon_comment_text).to be_nil
+      end
     end
   end
 end

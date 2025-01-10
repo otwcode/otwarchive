@@ -149,7 +149,7 @@ describe UserMailer do
     title = "Façade"
     title2 = Faker::Book.title
 
-    subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id], true) }
+    subject(:email) { UserMailer.claim_notification(author.id, [work.id, work2.id]) }
 
     let(:author) { create(:user) }
     let(:work) { create(:work, title: title, authors: [author.pseuds.first]) }
@@ -678,11 +678,12 @@ describe UserMailer do
       end
 
       it "formats the date rightfully in French" do
-        I18n.locale = "fr"
-        travel_to "2022-03-14 13:27:09 +0000" do
-          expect(email).to have_html_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
-          expect(email).to have_text_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
-        end
+        I18n.with_locale("fr") do
+          travel_to "2022-03-14 13:27:09 +0000" do
+            expect(email).to have_html_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
+            expect(email).to have_text_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
+          end
+        end 
       end
     end
   end
@@ -933,7 +934,7 @@ describe UserMailer do
   end
 
   describe "potential_match_generation_notification" do
-    subject(:email) { UserMailer.potential_match_generation_notification(collection.id) }
+    subject(:email) { UserMailer.potential_match_generation_notification(collection.id, "test@example.com") }
 
     let(:collection) { create(:collection) }
 
@@ -966,7 +967,7 @@ describe UserMailer do
   end
 
   describe "invalid_signup_notification" do
-    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id]) }
+    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id], "test@example.com") }
 
     let(:collection) { create(:collection) }
     let(:signup) { create(:challenge_signup) }
@@ -998,7 +999,7 @@ describe UserMailer do
   end
 
   describe "collection_notification" do
-    subject(:email) { UserMailer.collection_notification(collection.id, subject_text, message_text) }
+    subject(:email) { UserMailer.collection_notification(collection.id, subject_text, message_text, "test@example.com") }
 
     let(:collection) { create(:collection) }
     let(:subject_text) { Faker::Hipster.sentence }
