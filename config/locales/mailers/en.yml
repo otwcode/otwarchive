@@ -128,8 +128,8 @@ en:
         html: If you are uncertain why your bookmark was hidden, and you have not received further communication regarding this matter, please %{contact_abuse_link} directly.
         text: "If you are uncertain why your bookmark was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}."
       hidden:
-        html: Your %{bookmark_link} has been hidden by the Policy & Abuse team and is no longer publicly accessible.
-        text: Your bookmark (%{bookmark_link}) has been hidden by the Policy & Abuse team and is no longer publicly accessible.
+        html: Your bookmark of %{title} has been hidden by the Policy & Abuse team and is no longer publicly accessible.
+        text: Your bookmark of "%{title}" (%{bookmark_link}) has been hidden by the Policy & Abuse team and is no longer publicly accessible.
       subject: "[%{app_name}] Your bookmark has been hidden by the Policy & Abuse team"
       tos: Terms of Service
       tos_violation:

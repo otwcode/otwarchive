@@ -1,7 +1,7 @@
 <% content_for :message do %>
 <%= t("mailer.general.greeting.formal_html", name: @user.login) %>
 
-<%= t(".hidden.text", bookmark_url: bookmark_url(@bookmark)) %>
+<%= t(".hidden.text", title: @bookmark.bookmarkable.title, bookmark_link: bookmark_url(@bookmark)) %>
 
 <%= t(".access") %>
 
