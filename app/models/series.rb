@@ -22,8 +22,6 @@ class Series < ApplicationRecord
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
 
-  after_update :admin_hidden_series_notification, if: :hidden_by_admin_changed?
-
   # return title.html_safe to overcome escaping done by sanitiser
   def title
     read_attribute(:title).try(:html_safe)
@@ -39,6 +37,7 @@ class Series < ApplicationRecord
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
+  after_update :admin_hidden_series_notification, if: :hidden_by_admin_changed?
   after_save :adjust_restricted
   after_update_commit :expire_caches, :update_work_index
 
