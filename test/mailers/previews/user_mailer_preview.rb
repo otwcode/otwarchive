@@ -62,8 +62,8 @@ class UserMailerPreview < ApplicationMailerPreview
 
   def admin_hidden_series_notification
     series = create(:series)
-    creator_id = series.pseuds.first.user_id
-    UserMailer.admin_hidden_series_notification(series.id, creator_id)
+    creator = create(:user, :for_mailer_preview)
+    UserMailer.admin_hidden_series_notification(series.id, creator.id)
   end
 
   private
