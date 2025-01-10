@@ -329,7 +329,7 @@ describe AbuseReport do
   context "when report is spam" do
     let(:legit_user) { create(:user) }
     let(:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
-    let(:safe_report) { build(:abuse_report, username: 'viagra-test-123', email: legit_user.email) }
+    let!(:safe_report) { build(:abuse_report, username: 'viagra-test-123', email: legit_user.email) }
 
     before do
       allow(Akismetor).to receive(:spam?).and_return(true)
