@@ -1,8 +1,7 @@
 <% content_for :message do %>
   <p>
     <% if @username.present? %>
-      <%= t("mailer.general.greeting.informal.addressed", 
-              name: style_bold(@username)).html_safe %></p>
+      <%= t("mailer.general.greeting.informal.addressed_html", name: style_bold(@username)) %></p>
     <% else %>
       <%= t("mailer.general.greeting.informal.unaddressed") %>
   </p>
@@ -26,7 +25,7 @@
   </p>
 
   <p><%= style_work_metadata_label(t(".copy.comment")) %></p>
-  <p><%= style_quote(raw(strip_images(@comment))) %></p>
+  <p><%= style_quote(raw(strip_images(@comment, keep_src: true))) %></p>
 
   <p><%= t(".thank_you") %></p>
 

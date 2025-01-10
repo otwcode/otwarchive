@@ -24,14 +24,9 @@ module BookmarksHelper
     end
   end
 
-  # tag_bookmarks_path was behaving badly for tags with slashes
-  def link_to_tag_bookmarks(tag)
-    {controller: 'bookmarks', action: 'index', tag_id: tag}
-  end
-
   def link_to_bookmarkable_bookmarks(bookmarkable, link_text='')
     if link_text.blank?
-      link_text = Bookmark.count_visible_bookmarks(bookmarkable, current_user)
+      link_text = number_with_delimiter(Bookmark.count_visible_bookmarks(bookmarkable, current_user))
     end
     path = case bookmarkable.class.name
            when "Work"

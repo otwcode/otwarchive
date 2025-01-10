@@ -350,6 +350,22 @@ describe WorksController, work_search: true do
       expect(assigns(:fandom)).to eq(@fandom)
     end
 
+    describe "when the fandom id is invalid" do
+      it "raises a 404 for an invalid id" do
+        params = { fandom_id: 0 }
+        expect { get :index, params: params }
+          .to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    describe "when the fandom id is empty" do
+      it "returns the work" do
+        params = { fandom_id: nil }
+        get :index, params: params
+        expect(assigns(:works)).to include(@work)
+      end
+    end
+
     describe "without caching" do
       before do
         AdminSetting.first.update_attribute(:enable_test_caching, false)

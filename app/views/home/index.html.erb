@@ -36,11 +36,11 @@
       </h3>
       <div class="flash"></div>
       <p class="note"><%= t(".readings.note") %></p>
-      <ul class="readings works index group">
+      <ol class="reading work index group">
         <% @homepage.readings.each do |reading| %>
           <%= render "readings/reading_blurb", work: reading.work, reading: reading %>
         <% end %>
-      </ul>
+      </ol>
     </div>
   <% end %>
 

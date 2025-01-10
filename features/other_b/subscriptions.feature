@@ -141,8 +141,10 @@
   When I am on my subscriptions page
   Then I should see "My Subscriptions"
     And I should see "Awesome Series (Series)"
+    And I should see a link "series_author"
     And I should see "third_user"
     And I should see "Awesome Story (Work)"
+    And I should see a link "wip_author"
   When I follow "Series Subscriptions"
   Then I should see "My Series Subscriptions"
     And I should see "Awesome Series"

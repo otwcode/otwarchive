@@ -14,14 +14,14 @@ class Users::PasswordsController < Devise::PasswordsController
     end
 
     if user.prevent_password_resets?
-      flash[:error] = t(".reset_blocked", contact_abuse_link: view_context.link_to(t(".contact_abuse"), new_abuse_report_path)).html_safe
+      flash[:error] = t(".reset_blocked_html", contact_abuse_link: view_context.link_to(t(".contact_abuse"), new_abuse_report_path))
       redirect_to root_path and return
     elsif user.password_resets_limit_reached?
       available_time = ApplicationController.helpers.time_in_zone(
         user.password_resets_available_time, nil, user
       )
 
-      flash[:error] = t(".reset_cooldown", reset_available_time: available_time).html_safe
+      flash[:error] = t(".reset_cooldown_html", reset_available_time: available_time)
       redirect_to root_path and return
     end
 

@@ -150,11 +150,11 @@
         <fieldset>
           <ul>
             <li>
-              <%= radio_button_tag "comment_permissions", "enable_all", true %>
+              <%= radio_button_tag "comment_permissions", "enable_all" %>
               <%= label_tag "comment_permissions_enable_all", t("comments.commentable.permissions.options.enable_all") %>
             </li>
             <li>
-              <%= radio_button_tag "comment_permissions", "disable_anon" %>
+              <%= radio_button_tag "comment_permissions", "disable_anon", true %>
               <%= label_tag "comment_permissions_disable_anon", t("comments.commentable.permissions.options.disable_anon") %>
             </li>
             <li>
@@ -182,6 +182,11 @@
 
   <fieldset>
     <legend><%= ts("Submit") %></legend>
+    <p class="notice">
+      <%= t(".post_notice_html",
+            content_policy_link: link_to(t(".content_policy"), content_path),
+            tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
+    </p>
     <p class="submit actions">
       <%= submit_tag ts("Import") %>
     </p>

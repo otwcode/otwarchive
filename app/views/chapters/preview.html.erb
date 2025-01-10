@@ -21,6 +21,11 @@
 
   <fieldset>
     <legend><%= ts("Post Chapter") %></legend>
+    <p class="notice">
+      <%= t(".post_notice_html",
+            content_policy_link: link_to(t(".content_policy"), content_path),
+            tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
+    </p>
     <ul class="actions">
       <% if @chapter.posted? %>
         <li><%= submit_tag ts("Update"), name: "update_button" %></li>

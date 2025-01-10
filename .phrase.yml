@@ -134,15 +134,15 @@ phrase:
       - file: ./config/locales/phrase-exports/ru.yml
         params:
           locale_id: ru
+      - file: ./config/locales/phrase-exports/scr.yml
+        params:
+          locale_id: scr
       - file: ./config/locales/phrase-exports/sk.yml
         params:
           locale_id: sk
       - file: ./config/locales/phrase-exports/sl.yml
         params:
           locale_id: sl
-      - file: ./config/locales/phrase-exports/sr.yml
-        params:
-          locale_id: sr
       - file: ./config/locales/phrase-exports/sv.yml
         params:
           locale_id: sv
