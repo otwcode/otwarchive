@@ -1,0 +1,21 @@
+<% unless @user.works.empty? %>
+  <%# Checking @user.items.empty? rather than @items.empty? allows us to display
+# an empty listbox with pagination if the admin manually enters the wrong URL.
+# This is consistent with pagination on other site pages. %>
+  <div class="work listbox group" id="works-summary">
+    <h3 class="heading"><%= search_header(@works, nil, "Work") %></h3>
+    <%= render "works/work_abbreviated_list", works: works %>
+    <%= will_paginate(works, param_name: "works_page", params: { anchor: "works-summary" }) %>
+  </div>
+<% end %>
+
+<% unless @user.comments.empty? %>
+  <%# We use comments rather than comment as the class because .comment:after
+# create a clear that causes wonky styling when there are only a few
+# comments. %>
+  <div class="comments listbox group" id="comments-summary">
+    <h3 class="heading"><%= search_header(@comments, nil, "Comment") %></h3>
+    <%= render "comments/comment_abbreviated_list", comments: comments %>
+    <%= will_paginate(comments, param_name: "comments_page", params: { anchor: "comments-summary" }) %>
+  </div>
+<% end %>

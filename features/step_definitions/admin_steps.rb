@@ -102,8 +102,8 @@ Given "guest comments are off" do
   click_button("Update")
 end
 
-Given /^I have posted known issues$/ do
-  step %{I am logged in as an admin}
+Given "I have posted known issues" do
+  step %{I am logged in as a super admin}
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "make a new known issues post"}
@@ -218,6 +218,15 @@ Given "the admin {string} is unlocked" do |login|
   admin.unlock_access!
 end
 
+Given "there is/are {int} user creation(s) per page" do |amount|
+  allow(Work).to receive(:per_page).and_return(amount)
+  allow(Comment).to receive(:per_page).and_return(amount)
+end
+
+Given "an archive FAQ category with the title {string} exists" do |title|
+  FactoryBot.create(:archive_faq, title: title)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -230,7 +239,7 @@ When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/ do |field, login|
   fill_in(field, with: token)
 end
 
-When /^I start to make an admin post$/ do
+When "I start to make an admin post" do
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Default Admin Post")
   fill_in("content", with: "Content of the admin post.")
@@ -267,9 +276,18 @@ When /^I make a multi-question FAQ post$/ do
   click_button("Post")
 end
 
-When /^(\d+) Archive FAQs? exists?$/ do |n|
-  (1..n.to_i).each do |i|
-    FactoryBot.create(:archive_faq, id: i)
+When "{int} Archive FAQ(s) exist(s)" do |n|
+  (1..n).each do |i|
+    FactoryBot.create(:archive_faq, id: i, title: "The #{i} FAQ")
+  end
+end
+
+When "{int} Archive FAQ(s) with {int} question(s) exist(s)" do |faqs, questions|
+  (1..faqs).each do |i|
+    archive_faq = FactoryBot.create(:archive_faq, id: i)
+    (1..questions).each do
+      FactoryBot.create(:question, archive_faq: archive_faq)
+    end
   end
 end
 
@@ -281,8 +299,7 @@ When "the scheduled check_invite_queue job is run" do
   Resque.enqueue(AdminSetting, :check_queue)
 end
 
-When /^I edit known issues$/ do
-  step %{I am logged in as an admin}
+When "I edit known issues" do
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "Edit"}
@@ -291,8 +308,7 @@ When /^I edit known issues$/ do
   step %{I press "Post"}
 end
 
-When /^I delete known issues$/ do
-  step %{I am logged in as an admin}
+When "I delete known issues" do
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "Delete"}

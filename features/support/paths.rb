@@ -111,6 +111,8 @@ module NavigationHelpers
       user_invitations_path(User.current_user)
     when /my co-creator requests page/
       user_creatorships_path(User.current_user)
+    when /the show page for my latest comment$/
+      comment_path(User.current_user.comments.last)
     when /the gifts page$/
       gifts_path
     when /the gifts page for the recipient (.*)$/
@@ -285,8 +287,6 @@ module NavigationHelpers
       edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
     when /^the wrangling tools page$/
       tag_wranglings_path
-    when /^the "(.*)" fandom relationship page$/i
-      fandom_path($1)
     when /^the new external work page$/i
       new_external_work_path
     when /^the external works page$/i
@@ -297,10 +297,16 @@ module NavigationHelpers
       new_user_password_path
     when /^the edit user password page$/i
       edit_user_password_path
+    when /^the (.*) mass bin$/i
+      tag_wranglings_path(show: Regexp.last_match(1).pluralize)
 
     # Admin Pages
     when /^the admin-posts page$/i
       admin_posts_path
+    when /^the "(.*)" admin post page$/i
+      admin_post_path(AdminPost.find_by(title: Regexp.last_match(1)))
+    when /^the unreviewed comments page for the admin post "(.*)"$/i
+      unreviewed_admin_post_comments_path(AdminPost.find_by(title: Regexp.last_match(1)))
     when /^the admin-settings page$/i
       admin_settings_path
     when /^the admin-activities page$/i

@@ -1,5 +1,6 @@
 <% # expects "bookmark" %>
 <div class="<% if is_author_of?(bookmark) %>own <% end %>user module group">
+  <%# If you update the cache key, update flush_bookmark_cache in tag.rb %>
   <% blurb_cache_key = (is_author_of?(bookmark) ? "bookmark-owner-blurb-#{bookmark.cache_key}-v2" : "bookmark-blurb-#{bookmark.cache_key}-v2") %>
   <% cache(blurb_cache_key, skip_digest: true) do %>
     <!--bookmarker, time-->
@@ -14,7 +15,7 @@
       <h6 class="meta heading"><%= ts('Bookmarker\'s Tags:') %></h6>
       <ul class="meta tags commas">
         <% bookmark.tags.each do |tag| %>
-          <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') %></li>
+          <li><%= link_to(tag.name, tag_bookmarks_path(tag), class: "tag") %></li>
         <% end %>
       </ul>
     <% end %>
@@ -45,10 +46,10 @@
     <% end %>
 
     <!--notes-->
-    <% unless bookmark.bookmarker_notes.blank? %>
+    <% if bookmark.bookmarker_notes.present? %>
       <h6 class="landmark heading"><%= ts('Bookmarker\'s Notes') %></h6>
       <blockquote class="userstuff notes">
-        <%=raw sanitize_field(bookmark, :bookmarker_notes) %>
+        <%= raw sanitize_field(bookmark, :bookmarker_notes, image_safety_mode: true) %>
       </blockquote>
     <% end %>
     <% # end of information added by the bookmark owner %>

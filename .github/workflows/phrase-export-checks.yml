@@ -1,0 +1,84 @@
+name: Check Phrase exports
+on:
+  pull_request:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+jobs:
+  en-keys-to-remove:
+    if: github.head_ref == 'phrase-translations'
+    runs-on: ubuntu-latest
+    name: Check for outdated English keys in Phrase
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby and run bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run i18n-tasks missing (diff mode)
+        run: bundle exec i18n-tasks missing -t diff -f keys en | bundle exec i18n-tasks tree-mv -f keys "en.{*}" "\1" > en-keys-to-remove.txt
+
+      - name: Check that all keys exported from Phrase exist in English
+        run: "! test -s en-keys-to-remove.txt"
+
+      - name: Upload list of English keys that should be removed from Phrase
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: en-keys-to-remove
+          path: en-keys-to-remove.txt
+
+  unused-keys:
+    if: github.head_ref == 'phrase-translations'
+    runs-on: ubuntu-latest
+    needs: en-keys-to-remove
+    name: Check unused keys for all locales
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby and run bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run i18n-tasks unused
+        run: bundle exec i18n-tasks unused -f keys > unused-keys.txt
+
+      - name: Upload list of unused locale keys
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: unused-keys
+          path: unused-keys.txt
+
+  inconsistent-interpolations:
+    if: github.head_ref == 'phrase-translations'
+    runs-on: ubuntu-latest
+    name: Check consistent interpolations for all locales
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby and run bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run i18n-tasks check-consistent-interpolations
+        run: bundle exec i18n-tasks check-consistent-interpolations -f yaml > inconsistent-interpolations.yml
+        continue-on-error: true
+
+      - name: Upload yaml of inconsistent interpolations
+        uses: actions/upload-artifact@v4
+        with:
+          name: inconsistent-interpolations
+          path: inconsistent-interpolations.yml
