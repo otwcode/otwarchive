@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
-  before_action :check_user_status, only: [:edit, :update]
+  before_action :check_user_status, only: [:edit, :update, :change_username, :changed_username]
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
   before_action :check_ownership, except: [:activate, :delete_confirmation, :edit, :index, :show, :update]
   before_action :check_ownership_or_admin, only: [:edit, :update]
@@ -37,6 +37,18 @@ class UsersController < ApplicationController
   def edit
     @page_subtitle = t(".browser_title") 
     authorize @user.profile if logged_in_as_admin?
+  end
+
+  def change_email
+    @page_subtitle = t(".browser_title")
+  end
+
+  def change_password
+    @page_subtitle = t(".browser_title")
+  end
+
+  def change_username
+    @page_subtitle = t(".browser_title")
   end
 
   def changed_password
@@ -162,7 +174,9 @@ class UsersController < ApplicationController
 
       if @user.save
         flash.now[:notice] = ts("Your email has been successfully updated")
-        UserMailer.change_email(@user.id, old_email, new_email).deliver_later
+        I18n.with_locale(@user.preference.locale.iso) do
+          UserMailer.change_email(@user.id, old_email, new_email).deliver_later
+        end
       else
         # Make sure that on failure, the form still shows the old email as the "current" one.
         @user.email = old_email
@@ -315,7 +329,7 @@ class UsersController < ApplicationController
       use_default = params[:use_default] == 'true' || params[:sole_author] == 'orphan_pseud'
 
       Creatorship.orphan(pseuds, works, use_default)
-      Collection.orphan(pseuds, @sole_owned_collections, use_default)
+      Collection.orphan(pseuds, @sole_owned_collections, default: use_default)
     elsif params[:sole_author] == 'delete'
       # Deletes works where user is sole author
       @sole_authored_works.each(&:destroy)

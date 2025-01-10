@@ -58,6 +58,9 @@ public/system/test
 # /tmp/
 /tmp/*
 
+# ActiveRecord storage path
+storage/
+
 # /vendor/
 /vendor/gems
 
