@@ -11,18 +11,14 @@ class ArchiveDeviseMailer < Devise::Mailer
   def reset_password_instructions(record, token, options = {})
     @user = record
     @token = token
-    if @user.is_a?(Admin)
-      subject = t("admin.mailer.reset_password_instructions.subject",
+    subject = if @user.is_a?(Admin)
+                t("admin.mailer.reset_password_instructions.subject",
                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      devise_mail(record, :reset_password_instructions,
-                  options.merge(subject: subject))
-    else
-      I18n.with_locale(@user.preference.locale.iso) do
-        subject = t("users.mailer.reset_password_instructions.subject",
-                    app_name: ArchiveConfig.APP_SHORT_NAME)
-        devise_mail(record, :reset_password_instructions,
-                    options.merge(subject: subject))
-      end
-    end
+              else
+                t("users.mailer.reset_password_instructions.subject",
+                  app_name: ArchiveConfig.APP_SHORT_NAME)
+              end
+    devise_mail(record, :reset_password_instructions,
+                options.merge(subject: subject))
   end
 end

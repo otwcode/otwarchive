@@ -85,7 +85,7 @@ class Comment < ApplicationRecord
     includes(
       pseud: { user: [:roles, :block_of_current_user, :block_by_current_user, :preference] },
       parent: { work: [:pseuds, :users] }
-    )
+    ).merge(Pseud.with_attached_icon)
   }
 
   # Gets methods and associations from acts_as_commentable plugin
@@ -495,7 +495,11 @@ class Comment < ApplicationRecord
   end
 
   def sanitized_content
-    sanitize_field(self, :comment_content, strip_images: ultimate_parent.is_a?(AdminPost))
+    sanitize_field(self, :comment_content, image_safety_mode: use_image_safety_mode?)
+  end
+
+  def use_image_safety_mode?
+    parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE)
   end
   include Responder
 end

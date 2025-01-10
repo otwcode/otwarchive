@@ -140,8 +140,7 @@ describe PseudsController do
               let(:params) { { user_id: user, id: pseud, pseud: { delete_icon: "1", ticket_number: 1 } } }
 
               before do
-                pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
-                pseud.save
+                pseud.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
               end
 
               it_behaves_like "an attribute that can be updated by an admin"
@@ -149,9 +148,9 @@ describe PseudsController do
               it "removes pseud icon" do
                 expect do
                   put :update, params: params
-                end.to change { pseud.reload.icon_file_name }
-                  .from("icon.gif")
-                  .to(nil)
+                end.to change { pseud.reload.icon.attached? }
+                  .from(true)
+                  .to(false)
               end
             end
 

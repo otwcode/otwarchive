@@ -15,7 +15,7 @@ class PseudsController < ApplicationController
   # GET /pseuds.xml
   def index
     if @user
-      @pseuds = @user.pseuds.alphabetical.paginate(page: params[:page])
+      @pseuds = @user.pseuds.with_attached_icon.alphabetical.paginate(page: params[:page])
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
       @page_subtitle = @user.login
@@ -91,7 +91,7 @@ class PseudsController < ApplicationController
           # if setting this one as default, unset the attribute of the current default pseud
           old_default.update_attribute(:is_default, false)
         end
-        redirect_to([@user, @pseud])
+        redirect_to polymorphic_path([@user, @pseud])
       else
         render action: "new"
       end

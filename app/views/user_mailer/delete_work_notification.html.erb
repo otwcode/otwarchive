@@ -1,5 +1,5 @@
 <% content_for :message do %>
-<p><%= t("mailer.general.greeting.formal", name: style_bold(@user.login)).html_safe %></p>
+<p><%= t("mailer.general.greeting.formal_html", name: style_bold(@user.login)) %></p>
 <p><%= (@work.pseuds.count > 1 && @user != User.current_user) ?
 t('.deleted_other.html',
         title: style_creation_title(@work.title),

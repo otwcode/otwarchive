@@ -3,7 +3,7 @@ class CastNomination < TagNomination
   has_one :owned_tag_set, through: :tag_set_nomination
   belongs_to :fandom_nomination
   
-  validate :known_fandom
+  validate :known_fandom, unless: :blank_tagname?
   def known_fandom
     return true if (!parent_tagname.blank? || self.fandom_nomination || from_fandom_nomination)
     return true if (tag = Tag.find_by_name(self.tagname)) && tag.parents.any? {|p| p.is_a?(Fandom)}

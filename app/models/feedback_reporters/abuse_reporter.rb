@@ -1,6 +1,4 @@
 class AbuseReporter < FeedbackReporter
-  attr_accessor :ip_address
-
   def report_attributes
     super.deep_merge(
       "departmentId" => department_id,
@@ -32,6 +30,6 @@ class AbuseReporter < FeedbackReporter
   def ticket_description
     return "No comment submitted." if description.blank?
 
-    strip_images(description.html_safe)
+    strip_images(description.html_safe, keep_src: true)
   end
 end

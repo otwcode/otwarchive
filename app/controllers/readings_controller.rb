@@ -10,7 +10,7 @@ class ReadingsController < ApplicationController
   end
 
   def index
-    @readings = @user.readings
+    @readings = @user.readings.visible
     @page_subtitle = ts("History")
     if params[:show] == 'to-read'
       @readings = @readings.where(toread: true)
