@@ -54,6 +54,18 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.change_email(user.id, old_email, new_email)
   end
 
+  def admin_hidden_bookmark_notification
+    creator = create(:user, :for_mailer_preview)
+    bookmark = create(:bookmark, pseud: creator.default_pseud)
+    UserMailer.admin_hidden_bookmark_notification(bookmark.id, creator.id)
+  end
+
+  def admin_hidden_series_notification
+    series = create(:series)
+    creator = create(:user, :for_mailer_preview)
+    UserMailer.admin_hidden_series_notification(series.id, creator.id)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)
