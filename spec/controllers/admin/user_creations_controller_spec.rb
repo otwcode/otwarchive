@@ -300,6 +300,7 @@ describe Admin::UserCreationsController do
 
       context "with a pseud parameter by a normal user" do
         subject { put :remove_pseud, params: { id: work.id, pseuds: [user.default_pseud.id] } }
+        let(:work) { create(:work, authors: [user.default_pseud]) }
 
         it "does not modify the work" do
           expect do
