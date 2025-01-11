@@ -28,15 +28,11 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/:id.xml
   def show
     @tag_groups = @work.tag_groups
-    if params[:view_adult]
-      cookies[:view_adult] = "true"
-    elsif @work.adult? && !see_adult?
-      render "works/_adult", layout: "application" and return
-    end
 
     if params[:selected_id]
       redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return
     end
+
     @chapters = @work.chapters_in_order(
       include_content: false,
       include_drafts: (logged_in_as_admin? ||
@@ -59,6 +55,12 @@ class ChaptersController < ApplicationController
         title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
         author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
         @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
+      end
+
+      if params[:view_adult]
+        cookies[:view_adult] = "true"
+      elsif @work.adult? && !see_adult?
+        render "works/_adult", layout: "application" and return
       end
 
       @kudos = @work.kudos.with_user.includes(:user)
