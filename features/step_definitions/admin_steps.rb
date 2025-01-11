@@ -349,6 +349,10 @@ When "it is past the admin password reset token's expiration date" do
   step "it is currently #{days} days from now"
 end
 
+When "I confirm I want to remove the pseud" do
+  expect(page.accept_alert).to eq("Are you sure you want to remove the creator's pseud from this work?") if @javascript
+end
+
 ### THEN
 
 Then (/^the translation information should still be filled in$/) do

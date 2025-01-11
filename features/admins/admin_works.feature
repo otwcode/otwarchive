@@ -36,7 +36,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario Outline: Can unhide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "<role>" admin
       And I view the work "ToS Violation"
       And I follow "Hide Work"
       And all indexing jobs have been run
@@ -491,3 +491,115 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       | superadmin       |
       | legal            |
       | policy_and_abuse |
+
+  Scenario Outline: Certain admins can remove orphan_account pseuds from works
+    Given I have an orphan account
+      And I am logged in as "Leaver"
+      And I post the work "Bye"
+      And I orphan and keep my pseud on the work "Bye"
+    When I am logged in as a "<role>" admin
+      And I view the work "Bye"
+    Then I should see "Remove Pseud"
+    When I follow "Remove Pseud"
+    Then I should see "Are you sure you want to remove the creator's pseud from this work?"
+    # Expire byline cache
+    When it is currently 1 second from now
+      And I press "Yes, Remove Pseud"
+    Then I should see "Successfully removed pseud Leaver (orphan_account) from this work."
+      And I should see "orphan_account" within ".byline"
+      But I should not see "Leaver" within ".byline"
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
+
+  @javascript
+  Scenario Outline: Removing orphan_account pseuds from works with JavaScript shows a confirmation pop-up instead of a page
+    Given I have an orphan account
+      And I am logged in as "Leaver"
+      And I post the work "Bye"
+      And I orphan and keep my pseud on the work "Bye"
+    When I am logged in as a "<role>" admin
+      And I view the work "Bye"
+    Then I should see "Remove Pseud"
+    # Expire byline cache
+    When it is currently 1 second from now
+      And I follow "Remove Pseud"
+      And I confirm I want to remove the pseud
+    Then I should see "Successfully removed pseud Leaver (orphan_account) from this work."
+      And I should see "orphan_account" within ".byline"
+      But I should not see "Leaver" within ".byline"
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
+
+  Scenario: When removing orphan_account pseuds from a work with multiple pseuds admins choose which pseud to remove
+    Given I have an orphan account
+      And I am logged in as "Leaver"
+      And I post the work "Bye"
+      And I add the co-author "Another" to the work "Bye"
+      And it is currently 1 second from now
+      And I add the co-author "Third" to the work "Bye"
+      And I orphan and keep my pseud on the work "Bye"
+      And I am logged in as "Another"
+      And I orphan and keep my pseud on the work "Bye"
+      And I am logged in as "Third"
+      And I orphan and keep my pseud on the work "Bye"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Bye"
+    Then I should see "Remove Pseud"
+    When I follow "Remove Pseud"
+    Then I should see "Please choose which creators' pseuds you would like to remove from this work."
+      And I should see "Third (orphan_account)"
+    When I check "Leaver (orphan_account)"
+      And I check "Another (orphan_account)"
+      # Expire byline cache
+      And it is currently 1 second from now
+      And I press "Remove Pseud"
+    Then I should see "Successfully removed pseuds Leaver (orphan_account) and Another (orphan_account) from this work."
+      And I should see "orphan_account, " within ".byline"
+      And I should see "Third (orphan_account)" within ".byline"
+      But I should not see "Leaver" within ".byline"
+      And I should not see "Another" within ".byline"
+    When I go to the admin-activities page
+    Then I should see 1 admin activity log entry
+      And I should see "remove orphan_account pseuds"
+
+  Scenario: The Remove pseud option is only shown on orphaned works with non-default pseuds
+    Given I have an orphan account
+      And I am logged in as "Leaver"
+    And I post the work "Hey"
+      And I post the work "Bye"
+      And I orphan and take my pseud off the work "Bye"
+    When I am logged in as a "superadmin" admin
+      And I view the work "Hey"
+    Then I should not see "Remove Pseud"
+    When I view the work "Bye"
+    Then I should not see "Remove Pseud"
+
+  Scenario Outline: The Remove pseud option is not shown to admins who don't have permissions to remove pseuds
+    Given I have an orphan account
+    And I am logged in as "Leaver"
+    And I post the work "Bye"
+    And I orphan and keep my pseud on the work "Bye"
+    When I am logged in as a "<role>" admin
+      And I view the work "Bye"
+    Then I should not see "Remove Pseud"
+
+    Examples:
+      | role                       |
+      | board                      |
+      | board_assistants_team      |
+      | communications             |
+      | development_and_membership |
+      | docs                       |
+      | elections                  |
+      | legal                      |
+      | translation                |
+      | tag_wrangling              |
+      | open_doors                 |
