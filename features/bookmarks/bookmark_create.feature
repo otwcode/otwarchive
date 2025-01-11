@@ -448,3 +448,13 @@ Scenario: A bookmark with duplicate tags other than capitalization has only firs
       And I fill in "Relationships" with "Relationship 1, Relationship 2"
       And I press "Create"
     Then I should see "Fandom, relationship, and character tags must not add up to more than 5. You have entered 6 of these tags, so you must remove 1 of them."
+
+  Scenario: Bookmark can be added to collection by Archivist without error (Issue 6872)
+    Given I have an archivist "archivist"
+      And I am logged in as "archivist"
+      And I create the collection "My Collection" with name "MyCollection"
+    When I open a bookmarkable work
+      And I follow "Bookmark"
+      And I fill in "bookmark_collection_names" with "MyCollection"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
