@@ -31,7 +31,9 @@ class Invitation < ApplicationRecord
       total.times do
         user.invitations.create
       end
-      UserMailer.invite_increase_notification(user.id, total).deliver_later
+      I18n.with_locale(user.preference.locale.iso) do
+        UserMailer.invite_increase_notification(user.id, total).deliver_later
+      end
     end
     User.out_of_invites.update_all('out_of_invites = 0')
   end
@@ -43,7 +45,9 @@ class Invitation < ApplicationRecord
       total.times do
         user.invitations.create
       end
-      UserMailer.invite_increase_notification(user.id, total).deliver_later
+      I18n.with_locale(user.preference.locale.iso) do
+        UserMailer.invite_increase_notification(user.id, total).deliver_later
+      end
     end
     User.out_of_invites.update_all('out_of_invites = 0')
   end
