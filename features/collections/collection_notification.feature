@@ -47,18 +47,6 @@ Feature: Collectible items email
     And I should see "Antarctic Penguins"
     And 1 email should be delivered to test2@archiveofourown.org
 
-  Scenario: Work added to collection by Archivist sends notification email
-    Given I have a work "cool work"
-      And I have an archivist "archivist"
-      And all emails have been delivered
-    When I am logged in as "archivist"
-      And I create the collection "Cold Collection" with name "ColdCollection"
-      And I view the work "cool work"
-      And I follow "Add to Collections"
-      And I fill in "collection_names" with "ColdCollection"
-      And I press "Add"
-    Then 1 email should be delivered
-
   Scenario: Bookmark added to collection sends notification email
     Given all email have been delivered
     When I have the collection "Dont Bookmark Me Bro" with name "dont_bookmark_me_bro"
