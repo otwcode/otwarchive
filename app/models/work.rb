@@ -250,8 +250,10 @@ class Work < ApplicationRecord
     return unless self.posted?
     
     users = self.pseuds.collect(&:user).uniq
-    orphan_account = User.orphan_account
+    
     return if users.blank?
+
+    orphan_account = User.orphan_account
 
     users.each do |user|
       next if user == orphan_account
