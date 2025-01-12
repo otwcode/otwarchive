@@ -29,9 +29,7 @@ class ChaptersController < ApplicationController
   def show
     @tag_groups = @work.tag_groups
 
-    if params[:selected_id]
-      redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return
-    end
+    redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return if params[:selected_id]
 
     @chapters = @work.chapters_in_order(
       include_content: false,
@@ -91,6 +89,7 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/1/edit
   def edit
     return unless params["remove"] == "me"
+
     @chapter.creatorships.for_user(current_user).destroy_all
     if @work.chapters.any? { |c| current_user.is_author_of?(c) }
       flash[:notice] = ts("You have been removed as a creator from the chapter.")
@@ -266,16 +265,14 @@ class ChaptersController < ApplicationController
   def load_chapter
     @chapter = @work.chapters.find_by(id: params[:id])
 
-    unless @chapter
-      flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
-      redirect_to work_path(@work)
-    end
+    return if @chapter
+
+    flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
+    redirect_to work_path(@work)
   end
 
   def post_chapter
-    unless @work.posted
-      @work.update_attribute(:posted, true)
-    end
+    @work.update_attribute(:posted, true) unless @work.posted
     flash[:notice] = ts("Chapter has been posted!")
   end
 
