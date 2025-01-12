@@ -288,15 +288,44 @@ describe TagsController do
   end
 
   describe "show" do   
-    context "when showing a banned tag" do
-      let(:tag) { create(:banned) } 
-
-      subject { get :edit, params: { id: tag.name } }
+    context "displays the tag information page" do
+      let(:tag) { create(:tag) }
+      
+      subject { get :show, params: { id: tag.name } }
       let(:success) do
         expect(response).to have_http_status(:success)
       end
 
-      it_behaves_like "an action only authorized admins can access", authorized_roles: wrangling_read_access_roles
+      it "for guests" do
+        subject
+        success
+      end
+
+      it "for users" do
+        fake_login
+        subject
+        success
+      end
+      
+      it "for admins" do
+        fake_login_admin(create(:admin))
+        subject
+        success
+      end
+    end
+    context "when showing a banned tag" do
+      let(:tag) { create(:banned) } 
+
+      subject { get :show, params: { id: tag.name } }
+      let(:success) do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "displays the tag information page for admins" do
+        fake_login_admin(create(:admin))
+        subject
+        success
+      end
 
       it "redirects with an error when not an admin" do
         get :show, params: { id: tag.name }
