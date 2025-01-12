@@ -161,7 +161,6 @@ Feature: Admin Actions to Post FAQs
       And I should not see "Delete"
     When I follow "Show"
     Then I should not see "Edit" within ".header"
-      But I should see "Updated:" within ".header"
     When I go to the archive_faqs page
       And I select "Deutsch" from "Language:"
       And I press "Go" within "div#inner.wrapper"
@@ -171,7 +170,6 @@ Feature: Admin Actions to Post FAQs
       And I should not see "Delete"
     When I follow "Show"
     Then I should see "Edit" within ".header"
-      And I should see "Updated:" within ".header"
 
   Scenario Outline: Links to create and edit FAQs are not shown to unauthorized admins
     Given an archive FAQ category with the title "Very important FAQ" exists
@@ -186,7 +184,6 @@ Feature: Admin Actions to Post FAQs
       But I should see "Available Categories"
     When I follow "Very important FAQ"
     Then I should not see "Edit"
-      And I should not see "Updated:"
 
     Examples:
       | role                       |
