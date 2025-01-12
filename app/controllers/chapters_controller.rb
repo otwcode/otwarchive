@@ -1,6 +1,6 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
-  before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
+  before_action :users_only, except: [:index, :show, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :update, :update_positions]
   before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy]
   before_action :load_work
@@ -46,8 +46,8 @@ class ChaptersController < ApplicationController
  
     chapter_position = @chapters.index(@chapter)
     if @chapters.length > 1
-      @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
-      @next_chapter = @chapters[chapter_position+1]
+      @previous_chapter = @chapters[chapter_position - 1] unless chapter_position.zero?
+      @next_chapter = @chapters[chapter_position + 1]
     end
 
     if @work.unrevealed?
@@ -70,7 +70,7 @@ class ChaptersController < ApplicationController
 
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
-                                                        subscribable_type: 'Work').first ||
+                                                       subscribable_type: "Work").first ||
                       current_user.subscriptions.build(subscribable: @work)
     end
     # update the history.
@@ -90,14 +90,13 @@ class ChaptersController < ApplicationController
 
   # GET /work/:work_id/chapters/1/edit
   def edit
-    if params["remove"] == "me"
-      @chapter.creatorships.for_user(current_user).destroy_all
-      if @work.chapters.any? { |c| current_user.is_author_of?(c) }
-        flash[:notice] = ts("You have been removed as a creator from the chapter.")
-        redirect_to @work
-      else # remove from work if no longer co-creator on any chapter
-        redirect_to edit_work_path(@work, remove: "me")
-      end
+    return unless params["remove"] == "me"
+    @chapter.creatorships.for_user(current_user).destroy_all
+    if @work.chapters.any? { |c| current_user.is_author_of?(c) }
+      flash[:notice] = ts("You have been removed as a creator from the chapter.")
+      redirect_to @work
+    else # remove from work if no longer co-creator on any chapter
+      redirect_to edit_work_path(@work, remove: "me")
     end
   end
 
@@ -254,7 +253,7 @@ class ChaptersController < ApplicationController
   # fetch work these chapters belong to from db
   def load_work
     @work = params[:work_id] ? Work.find_by(id: params[:work_id]) : Chapter.find_by(id: params[:id]).try(:work)
-    unless @work.present?
+    if @work.blank?
       flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
     end
@@ -273,12 +272,11 @@ class ChaptersController < ApplicationController
     end
   end
 
-
   def post_chapter
-    if !@work.posted
+    unless @work.posted
       @work.update_attribute(:posted, true)
     end
-    flash[:notice] = ts('Chapter has been posted!')
+    flash[:notice] = ts("Chapter has been posted!")
   end
 
   private
@@ -288,6 +286,5 @@ class ChaptersController < ApplicationController
                                     :"published_at(2i)", :"published_at(1i)", :summary,
                                     :notes, :endnotes, :content, :published_at,
                                     author_attributes: [:byline, ids: [], coauthors: []])
-
   end
 end
