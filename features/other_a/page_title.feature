@@ -31,3 +31,13 @@ Scenario: Page title should change when tags are edited
   When I view the work "New Story"
   Then the page title should include "Harry Potter"
   And the page title should not include "Stargate"
+
+Scenario: Page title should be informative on the adult content notice page
+
+  Given I am logged in as "author"
+  And I post the 2 chapter work "New Story" with fandom "Stargate" with rating "Mature"
+  When I am logged out
+  And I view the work "New Story"
+  Then the page title should include "New Story - author - Stargate"
+  When I follow the recent chapter link for the work "New Story"
+  Then the page title should include "New Story - Chapter 2 - author - Stargate"
