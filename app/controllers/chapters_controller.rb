@@ -38,45 +38,47 @@ class ChaptersController < ApplicationController
       include_drafts: (logged_in_as_admin? ||
                        @work.user_is_owner_or_invited?(current_user))
     )
-    if !@chapters.include?(@chapter)
+
+    unless @chapters.include?(@chapter)
       access_denied
+      return
+    end
+ 
+    chapter_position = @chapters.index(@chapter)
+    if @chapters.length > 1
+      @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
+      @next_chapter = @chapters[chapter_position+1]
+    end
+
+    if @work.unrevealed?
+      @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
     else
-      chapter_position = @chapters.index(@chapter)
-      if @chapters.length > 1
-        @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
-        @next_chapter = @chapters[chapter_position+1]
-      end
+      fandoms = @tag_groups["Fandom"]
+      fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms[0].name
+      title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
+      author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
+      @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
+    end
 
-      if @work.unrevealed?
-        @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
-      else
-        fandoms = @tag_groups["Fandom"]
-        fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms[0].name
-        title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
-        author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
-        @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
-      end
+    if params[:view_adult]
+      cookies[:view_adult] = "true"
+    elsif @work.adult? && !see_adult?
+      render "works/_adult", layout: "application" and return
+    end
 
-      if params[:view_adult]
-        cookies[:view_adult] = "true"
-      elsif @work.adult? && !see_adult?
-        render "works/_adult", layout: "application" and return
-      end
+    @kudos = @work.kudos.with_user.includes(:user)
 
-      @kudos = @work.kudos.with_user.includes(:user)
+    if current_user.respond_to?(:subscriptions)
+      @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
+                                                        subscribable_type: 'Work').first ||
+                      current_user.subscriptions.build(subscribable: @work)
+    end
+    # update the history.
+    Reading.update_or_create(@work, current_user) if current_user
 
-      if current_user.respond_to?(:subscriptions)
-        @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
-                                                         subscribable_type: 'Work').first ||
-                        current_user.subscriptions.build(subscribable: @work)
-      end
-      # update the history.
-      Reading.update_or_create(@work, current_user) if current_user
-
-      respond_to do |format|
-        format.html
-        format.js
-      end
+    respond_to do |format|
+      format.html
+      format.js
     end
   end
 
