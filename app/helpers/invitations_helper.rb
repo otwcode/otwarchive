@@ -12,9 +12,15 @@ module InvitationsHelper
 
   def invitee_link(invitation)
     return unless invitation.invitee_type == "User"
-    return link_to(invitation.invitee.login, invitation.invitee) if invitation.invitee.present?
-    return t("invitations.invitation.deleted_user_with_id", user_id: invitation.invitee_id) if User.current_user.is_a?(Admin)
 
-    t("invitations.invitation.deleted_user")
+    if User.current_user.is_a?(Admin) && policy(invitation).access_invitee_details?
+      return t("invitations.invitation.user_id_deleted", user_id: invitation.invitee_id) if invitation.invitee.blank?
+
+      return link_to(invitation.invitee.login, admin_user_path(invitation.invitee))
+    end
+
+    return t("invitations.invitation.deleted_user") if invitation.invitee.blank?
+
+    link_to(invitation.invitee.login, invitation.invitee) if invitation.invitee.present?
   end
 end

@@ -1361,8 +1361,7 @@ en:
       copy_and_use: copy and use
       copy_link: Copy link
       created_at: Created at
-      deleted_user: deleted user
-      deleted_user_with_id: deleted user (%{user_id})
+      deleted_user: Deleted User
       email_address_label: Enter an email address
       invitation_token: Invitation token
       queue: queue
@@ -1371,6 +1370,7 @@ en:
       sender: Sender
       sent_at: Sent at
       sent_to: Sent to
+      user_id_deleted: User %{user_id} (Deleted)
   invite_requests:
     index_open:
       add_to_list: Add me to the list

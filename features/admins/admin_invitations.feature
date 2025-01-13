@@ -468,3 +468,28 @@ Feature: Admin Actions to Manage Invitations
       | position | email                   |
       | 1        | andy-jones@example.com  |
       | 5        | eliot-jones@example.com |
+
+  Scenario Outline: Viewing a user's invitation details
+    Given the user "creator" exists and is activated
+      And the user "invitee" exists and is activated
+      And an invitation created by "creator" and used by "invitee"
+      And I am logged in as a "<role>" admin
+    When I view the most recent invitation for "creator"
+    Then I should see "invitee"
+    When I follow "invitee"
+    Then I should see "User: invitee"
+    When I am logged in as "invitee"
+      And "invitee" deletes their account
+      And I am logged in as a "<role>" admin
+      And I view the most recent invitation for "creator"
+    Then I should see "User"
+      And I should see "(Deleted)"
+      But I should not see "invitee"
+
+    Examples:
+    | role             |
+    | superadmin       |
+    | tag_wrangling    |
+    | support          |
+    | policy_and_abuse |
+    | open_doors       |
