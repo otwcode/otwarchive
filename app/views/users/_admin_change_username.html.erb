@@ -7,6 +7,8 @@
 </ul>
 
 <%= form_tag changed_username_user_path(@user), autocomplete: "off" do %>
+  <legend><%= t("users.change_username.legend") %></legend>
+  <h3 class="landmark heading"><%= t("users.change_username.heading") %></h3>
   <dl>
     <dt><%= t("users.change_username.current_username") %></dt>
     <dd><p class="important informational"><%= @user.login %></p></dd>

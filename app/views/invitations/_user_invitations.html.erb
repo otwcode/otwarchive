@@ -17,6 +17,7 @@
           <td><%= invitation.invitee_email %></td>
           <td><%= invitee_link(invitation) %></td>
           <td>
+            <%# TODO: internationalize this, including .to_sentence (and also do something about the parentheses) %>
             <%= invitation.external_author ? "#{invitation.external_author.email} (#{invitation.external_author.names.collect(&:name).delete_if { |name| name == invitation.external_author.email }
 .join(',')})" : "" %>
           </td>

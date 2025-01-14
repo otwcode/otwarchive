@@ -6,7 +6,7 @@
 <%= form_for @admin_session do |form| %>
   <dl>
     <dt><%= form.label :login, t(".admin_username") %></dt>
-    <dd><%= form.text_field :login %></dd>
+    <dd><%= form.text_field :login, autocomplete: "on" %></dd>
     <dt><%= form.label :password, t(".admin_password") %></dt>
     <dd><%= form.password_field :password %></dd>
   </dl>

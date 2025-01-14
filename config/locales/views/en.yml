@@ -83,17 +83,18 @@ en:
     admin_invitations:
       find:
         email: All or part of an email address
-        invitations_for: Invitations for
+        invitations_for_html: Invitations for %{user_invitations_link}
         page_heading: Track invitations
+        search: Search
         token: Invite token
         username: Username
       index:
         find:
           email: All or part of an email address
-          go: Go
           heading: Track invitations
           invite_token: Invite token
           landmark_submit: Submit
+          search: Search
           username: Username
         grant_invites:
           all: All
@@ -1834,7 +1835,9 @@ en:
       contact_support: contact Support
       create_a_new_pseud: create a new Pseud
       current_username: Current username
+      heading: Change Username
       last_renamed: You last changed your username on %{renamed_at}.
+      legend: Change Username
       more_info_html: For information on how changing your username will affect your account, please check out the %{account_faq_link}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old username on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
       new_pseud_instead_html: If that is not what you want, you can %{create_a_new_pseud_link} instead.
       new_username: New username

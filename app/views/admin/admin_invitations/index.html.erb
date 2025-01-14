@@ -10,7 +10,7 @@
 </ul>
 <!--/subnav-->
 <!--main content-->
-<%= form_tag url_for(controller: "admin/admin_invitations", action: :create), autocomplete: "off" do |f| %>
+<%= form_tag url_for(controller: "admin/admin_invitations", action: :create), class: "invitation simple post", autocomplete: "off" do |f| %>
   <fieldset class="simple">
     <h3 class="heading"><%= t(".send_to_email.heading") %></h3>
     <p>
@@ -23,7 +23,7 @@
   </fieldset>
 <% end %>
 
-<%= form_tag url_for(controller: "admin/admin_invitations", action: :invite_from_queue), autocomplete: "off" do %>
+<%= form_tag url_for(controller: "admin/admin_invitations", action: :invite_from_queue), class: "queue invitation simple post", autocomplete: "off" do %>
   <fieldset class="simple">
     <h3 class="heading">
       <%= t(".invite_from_queue.heading_html",
@@ -38,7 +38,7 @@
   </fieldset>
 <% end %>
 
-<%= form_tag url_for(controller: "admin/admin_invitations", action: :grant_invites_to_users), autocomplete: "off" do %>
+<%= form_tag url_for(controller: "admin/admin_invitations", action: :grant_invites_to_users), class: "bulk invitation simple post", autocomplete: "off" do %>
   <fieldset>
     <h3 class="heading"><%= t(".grant_invites.heading") %></h3>
     <dl>
@@ -55,7 +55,7 @@
   </fieldset>
 <% end %>
 
-<%= form_tag url_for(controller: "admin/admin_invitations", action: :find), autocomplete: "off", method: :get do %>
+<%= form_tag url_for(controller: "admin/admin_invitations", action: :find), class: "invitation simple search", autocomplete: "off", method: :get do %>
   <fieldset>
     <h3 class="heading"><%= t(".find.heading") %></h3>
     <dl>
@@ -66,7 +66,7 @@
       <dt><%= label_tag "track_invitation_invitee_email", t(".find.email") %></dt>
       <dd><%= text_field_tag "invitation[invitee_email]", nil, id: "track_invitation_invitee_email" %></dd>
       <dt class="landmark"><%= t(".find.landmark_submit") %></dt>
-      <dd class="submit actions"><%= submit_tag t(".find.go") %></dd>
+      <dd class="submit actions"><%= submit_tag t(".find.search") %></dd>
     </dl>
   </fieldset>
 <% end %>

@@ -17,7 +17,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for(@preference, url: user_preference_path(@user, @preference)) do |f| %>
+<%= form_for(@preference, url: user_preference_path(@user, @preference), autocomplete: "off") do |f| %>
   <fieldset>
     <legend><%= t(".privacy.legend") %></legend>
     <h4 class="heading"><%= t(".privacy.heading") %> <%= link_to_help "privacy-preferences" %></h4>
