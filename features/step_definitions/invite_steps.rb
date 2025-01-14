@@ -163,7 +163,6 @@ When /^I check how long "(.*?)" will have to wait in the invite request queue$/ 
 end
 
 When "I manage invitations belonging to {string}" do |creator|
-  user = User.find_by(login: creator)
   visit manage_user_invitations_path(creator)
 end
 
