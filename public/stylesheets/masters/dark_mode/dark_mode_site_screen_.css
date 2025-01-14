@@ -57,13 +57,6 @@ form dl {
   border-color: #555;
 }
 
-/* 03-REGION HEADER, 04-REGION-DASHBOARD, 06-REGION FOOTER: Shared styles */
-
-#header ul.primary,
-#footer {
-  background: #2a2a2a url("/images/skins/textures/tiles/black-noise.jpg");
-}
-
 /* 03-REGION-HEADER: The header */
 
 #header a,
@@ -99,6 +92,10 @@ form dl {
   background: #111;
 }
 
+#header ul.primary {
+  background: #2a2a2a url("/images/skins/textures/tiles/black-noise.jpg");
+}
+
 /* 04-REGION-DASHBOARD: The dashboard side bar */
 
 #dashboard a,
@@ -119,7 +116,7 @@ form dl {
 #dashboard .current {
   background: #222;
   border: 1px solid #555;
-  box-shadow: -1px -1px 3px #000;
+    box-shadow: -1px -1px 3px #000;
 }
 
 #dashboard,
@@ -131,6 +128,7 @@ form dl {
 /* 06-FOOTER */
 
 #footer {
+  background: #2a2a2a url("/images/skins/textures/tiles/black-noise.jpg");
   border-color: #555;
 }
 
@@ -311,7 +309,8 @@ form.single fieldset {
 .actions button,
 .actions input,
 input[type="submit"],
-button, .current,
+button,
+.current,
 .actions label {
   background: #555;
   border-color: #222;
@@ -444,17 +443,12 @@ span.offered.requested {
   color: #fbbf25;
 }
 
-
 /* 10-TYPES-GROUPS */
 
 a.tag:hover,
 .listbox .heading a.tag:visited:hover {
   background: #5998D6;
   color: #111;
-}
-
-a.work {
-  color: #5998D6;
 }
 
 .wrapper {
@@ -464,6 +458,10 @@ a.work {
 dl.index dd,
 li.relationships a {
   background: #2a2a2a;
+}
+
+a.work {
+  color: #5998D6;
 }
 
 .actions .reindex a {
@@ -566,7 +564,7 @@ li.comment {
 /* 16-ZONE-SYSTEM */
 
 .splash .module h3 {
-  border-bottom-color: #c8c8c8;
+  border-bottom-color: #555;
   color: #5998D6;
 }
 
