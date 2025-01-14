@@ -104,7 +104,7 @@ Feature: Invite queue management
     When I am logged in as an admin
       And I follow "Invitations"
       And I fill in "track_invitation_invitee_email" with "test@archiveofourown.org"
-      And I press "Go"
+      And I press "Search"
     Then I should see "Sender queue"
     When I follow "copy and use"
     Then I should see "You are already logged in!"
