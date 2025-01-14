@@ -35,11 +35,16 @@ I want to use an invitation to create an account
       And the user "invitee" exists and is activated
       And an invitation created by "creator" and used by "invitee"
       And I am logged in as "creator"
+    When I manage invitations belonging to "creator"
+    Then I should see "invitee"
     When I view the most recent invitation for "creator"
     Then I should see "invitee"
     When I am logged in as "invitee"
       And "invitee" deletes their account
       And I am logged in as "creator"
-      And I view the most recent invitation for "creator"
+      And I manage invitations belonging to "creator"
+    Then I should see "Deleted User"
+      But I should not see "invitee"
+    When I view the most recent invitation for "creator"
     Then I should see "Deleted User"
       But I should not see "invitee"

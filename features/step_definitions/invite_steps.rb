@@ -162,6 +162,11 @@ When /^I check how long "(.*?)" will have to wait in the invite request queue$/ 
   click_button("Look me up")
 end
 
+When "I manage invitations belonging to {string}" do |creator|
+  user = User.find_by(login: creator)
+  visit manage_user_invitations_path(creator)
+end
+
 When "I view the most recent invitation for {string}" do |creator|
   user = User.find_by(login: creator)
   invitation = user.invitations.last
