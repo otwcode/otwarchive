@@ -99,8 +99,8 @@ Feature: Admin Actions to manage users
       And I should see "Past username: cats" within ".meta"
     When I am logged in as a "translation" admin
       And I go to the user administration page for "new_user"
-    Then I should not see "Past email: d@fake.com" within ".meta"
-      And I should not see "Past username: cats" within ".meta"
+    Then I should not see "Past email: d@fake.com"
+      And I should not see "Past username: cats"
 
   Scenario: An admin can access a user's creations from their administration page
     Given there is 1 user creation per page
