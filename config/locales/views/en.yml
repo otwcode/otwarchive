@@ -166,11 +166,11 @@ en:
           no_invitation: Created without invitation
           no_role: No roles
           past_emails:
-            one: 'Past Email:'
-            other: 'Past Emails:'
+            one: 'Past email:'
+            other: 'Past emails:'
           past_logins:
-            one: 'Past Username:'
-            other: 'Past Usernames:'
+            one: 'Past username:'
+            other: 'Past usernames:'
           role:
             one: 'Role:'
             other: 'Roles:'

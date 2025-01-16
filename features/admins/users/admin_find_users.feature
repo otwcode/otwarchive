@@ -18,7 +18,7 @@ Feature: Admin Find Users page
       And I should see "userB"
       And I should see "userCB"
 
-  Scenario: The Find Users page performs a exact match on name by default
+  Scenario: The Find Users page performs an exact match on name by default
     When I fill in "Name" with "user"
       And I submit
     Then I should see "0 users found"
@@ -51,7 +51,7 @@ Feature: Admin Find Users page
       And I should see "userCB"
       But I should not see "userA"
 
-  Scenario: The Find Users page performs a exact match on email by default
+  Scenario: The Find Users page performs an exact match on email by default
     When I fill in "Email" with "ao3"
       And I submit
     Then I should see "0 users found"

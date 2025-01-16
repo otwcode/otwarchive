@@ -454,6 +454,6 @@ class Pseud < ApplicationRecord
   end
 
   def reindex_user
-    user.enqueue_to_index
+    after_commit { user.enqueue_to_index }
   end
 end
