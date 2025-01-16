@@ -43,6 +43,10 @@ Feature: Admin Find Users page
       And I submit
     Then I should see "1 user found"
       And I should see "userD"
+    # Only selected admins can search past logins
+    When I am logged in as a "translation" admin
+      And I go to the manage users page
+    Then I should not see "Include past usernames and emails"
 
   Scenario: The Find Users page performs a partial match by email with * wildcard
     When I fill in "Email" with "*bo3*"
