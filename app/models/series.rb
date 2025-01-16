@@ -37,6 +37,7 @@ class Series < ApplicationRecord
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
+  after_update :admin_hidden_series_notification, if: :hidden_by_admin_changed?
   after_save :adjust_restricted
   after_update_commit :expire_caches, :update_work_index
 
@@ -306,5 +307,15 @@ class Series < ApplicationRecord
 
   def work_types
     works.map(&:work_types).flatten.uniq
+  end
+
+  private
+
+  def admin_hidden_series_notification
+    return unless hidden_by_admin?
+
+    users.each do |user|
+      UserMailer.send_series_hidden_notification(id, user.id).deliver_later
+    end
   end
 end
