@@ -40,19 +40,32 @@
         <fieldset>
           <ul>
             <li>
-              <%= f.radio_button :canonical, "T" %>
-              <%= f.label :canonical, ts("Canonical"), value: "T" %>
+              <%= f.radio_button :wrangling_status, "canonical" %>
+              <%= f.label :wrangling_status, ts("Canonical"), value: "canonical" %>
             </li>
             <li>
-              <%= f.radio_button :canonical, "F" %>
-              <%= f.label :canonical, ts("Non-canonical"), value: "F" %>
+              <%= f.radio_button :wrangling_status, "noncanonical" %>
+              <%= f.label :wrangling_status, ts("Non-canonical"), value: "noncanonical" %>
             </li>
             <li>
-              <%= f.radio_button :canonical, "" %>
-              <%= f.label :canonical, ts("Any status"), value: "" %>
+              <%= f.radio_button :wrangling_status, "synonymous" %>
+              <%= f.label :wrangling_status, ts("Synonymous"), value: "synonymous" %>
+            </li>
+            <li>
+              <%= f.radio_button :wrangling_status, "canonical_synonymous" %>
+              <%= f.label :wrangling_status, ts("Canonical or synonymous"), value: "canonical_synonymous" %>
+            </li>
+            <li>
+              <%= f.radio_button :wrangling_status, "noncanonical_nonsynonymous" %>
+              <%= f.label :wrangling_status, ts("Non-canonical and non-synonymous"), value: "noncanonical_nonsynonymous" %>
+            </li>
+            <li>
+              <%= f.radio_button :wrangling_status, "" %>
+              <%= f.label :wrangling_status, ts("Any status"), value: "" %>
             </li>
           </ul>
         </fieldset>
+      </dd>
       <dt>
         <%= f.label :sort_column, ts("Sort by") %>
       </dt>

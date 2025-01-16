@@ -342,6 +342,24 @@ describe Tag do
     end
   end
 
+  describe "synonymous?" do
+    it "is false for a canonical tag" do
+      tag = create(:freeform, canonical: true)
+      expect(tag.synonymous?).to be_falsey
+    end
+
+    it "is false for a non-canonical, non-synonymous tag" do
+      tag = create(:freeform, canonical: false)
+      expect(tag.synonymous?).to be_falsey
+    end
+
+    it "is true for a synonymous tag" do
+      canonical_tag = create(:freeform, canonical: true)
+      synonym_tag = create(:freeform, canonical: false, merger: canonical_tag)
+      expect(synonym_tag.synonymous?).to be_truthy
+    end
+  end
+
   describe "has_posted_works?" do
     before do
       create(:work, fandom_string: "love live,jjba")
