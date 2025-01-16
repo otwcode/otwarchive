@@ -54,6 +54,12 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.change_email(user.id, old_email, new_email)
   end
 
+  def admin_deleted_work_notification
+    work = create(:work)
+    user = create(:user, :for_mailer_preview)
+    UserMailer.admin_deleted_work_notification(user, work)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)
