@@ -35,7 +35,7 @@ Scenario: Page title should change when tags are edited
 Scenario: Page title should be informative on the adult content notice page
 
   Given I am logged in as "author"
-  And I post the 2 chapter work "New Story" with fandom "Stargate" with rating "Mature"
+    And I post the 2 chapter work "New Story" with fandom "Stargate" with rating "Mature"
   When I am logged out
     And I view the work "New Story"
   Then I should see "This work could have adult content"
