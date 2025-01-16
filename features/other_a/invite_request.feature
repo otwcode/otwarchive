@@ -156,3 +156,21 @@ Feature: Invite requests
     When I follow "Delete"
     Then I should see "Invitation successfully destroyed"
       And "user1" should have "4" invitations
+
+  Scenario: Translated email is sent when invitation request is declined by admin
+    Given a locale with translated emails
+      And invitations are required
+      And the user "user1" exists and is activated
+      And the user "notuser1" exists and is activated
+      And the user "user1" enables translated emails
+      And all emails have been delivered
+    When as "user1" I request some invites
+      And as "notuser1" I request some invites 
+      And I view requests as an admin
+      And I press "Decline All"
+    Then "user1" should be emailed
+      And the email should have "Additional invitation request declined" in the subject
+      And the email to "user1" should be translated
+    Then "notuser1" should be emailed
+      And the email should have "Additional invitation request declined" in the subject
+      And the email to "notuser1" should be non-translated

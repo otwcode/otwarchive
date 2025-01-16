@@ -86,6 +86,26 @@ Feature: User Authentication
       And I press "Log In"
     Then I should not see "Hi, sam"
 
+  Scenario: Translated reset password email
+    Given a locale with translated emails
+      And the following activated users exist
+        | login    | email              | password |
+        | sam      | sam@example.com    | password |
+        | notsam   | notsam@example.com | password |
+      And the user "sam" enables translated emails
+      And all emails have been delivered
+    When I request a password reset for "sam@example.com"
+    Then I should see "Check your email for instructions on how to reset your password."
+      And 1 email should be delivered to "sam@example.com"
+      And the email should have "Translated subject" in the subject
+      And the email to "sam" should be translated
+    # notsam didn't enable translated emails
+    When I request a password reset for "notsam@example.com"
+    Then I should see "Check your email for instructions on how to reset your password."
+      And 1 email should be delivered to "notsam@example.com"
+      And the email should have "Reset your password" in the subject
+      And the email to "notsam" should be non-translated
+
   Scenario: Forgot password, logging in with email address
     Given I have no users
       And the following activated user exists

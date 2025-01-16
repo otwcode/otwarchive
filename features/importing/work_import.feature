@@ -44,7 +44,7 @@ Feature: Import Works
       And I should see "Detected Title"
       And I should see "Language: Deutsch"
       And I should see "Explicit"
-      And I should see "Archive Warning: Underage"
+      And I should see "Archive Warning: Underage Sex"
       And I should see "Fandom: Detected Fandom"
       And I should see "Category: M/M"
       And I should see "Relationship: Detected 1/Detected 2"
@@ -120,22 +120,32 @@ Feature: Import Works
       And I should not see "Additional Tags:"
       And I should not see "Relationship: Detected 1/Detected 2"
 
-  Scenario: Admins see IP address on imported works
+  Scenario Outline: Admins see IP address on imported works
     Given I import "http://import-site-with-tags" with a mock website
       And I press "Post"
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "<role>" admin
       And I go to the "Detected Title" work page
     Then I should see "IP Address: 127.0.0.1"
 
-  Scenario: Admins see IP address on works imported without preview
+    Examples:
+    | role             |
+    | legal            |
+    | policy_and_abuse |
+
+  Scenario Outline: Admins see IP address on works imported without preview
     Given I start importing "http://import-site-with-tags" with a mock website
       And I check "Post without previewing"
       And I press "Import"
-    When I am logged in as a "policy_and_abuse" admin
+    When I am logged in as a "<role>" admin
       And I go to the "Detected Title" work page
     Then I should see "IP Address: 127.0.0.1"
 
-  Scenario: Admins see IP address on multi-chapter works imported without preview
+    Examples:
+    | role             |
+    | legal            |
+    | policy_and_abuse |
+
+  Scenario Outline: Admins see IP address on multi-chapter works imported without preview
     Given I import the urls with mock websites as chapters without preview
       """
       http://import-site-without-tags
@@ -145,6 +155,11 @@ Feature: Import Works
       And I go to the "Untitled Imported Work" work page
     Then I should see "Chapters:2/2"
       And I should see "IP Address: 127.0.0.1"
+
+    Examples:
+    | role             |
+    | legal            |
+    | policy_and_abuse |
 
   Scenario: Imported works can be set to restricted
     When I start importing "http://import-site-with-tags" with a mock website
@@ -163,7 +178,7 @@ Feature: Import Works
     When I am logged out
       And I go to the "Detected Title" work page
       And I follow "Yes, Continue"
-    Then I should see "Guest name:"
+    Then I should see "Guest name"
 
   Scenario: Imported works can have comments disabled to guests
     When I start importing "http://import-site-with-tags" with a mock website
@@ -340,3 +355,20 @@ Feature: Import Works
       And I should not see "This chapter is a draft and hasn't been posted yet!"
     When I follow "Next Chapter"
     Then I should not see "This chapter is a draft and hasn't been posted yet!"
+
+  Scenario: Importing as an archivist for an existing Archive author should send translated claim email
+    Given a locale with translated emails
+      And the following activated users exist
+        | login    | email              |
+        | sam      | sam@example.com    |
+        | notsam   | notsam@example.com |
+      And the user "sam" enables translated emails
+      And all emails have been delivered
+    When I import the mock work "http://import-site-without-tags" by "sam" with email "sam@example.com" and by "notsam" with email "notsam@example.com"
+    Then I should see import confirmation
+      And 1 email should be delivered to "sam@example.com"
+      And the email should contain claim information
+      And the email to "sam" should be translated
+      And 1 email should be delivered to "notsam@example.com"
+      And the email should contain claim information
+      And the email to "notsam" should be non-translated

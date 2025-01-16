@@ -17,8 +17,10 @@ module RuboCop
       #  # good
       #  t(".relative.path.to.translation")
       #  t(".greeting", name: "world")
+      #  # and in the en.yml locale file:
+      #  greeting: Hello %{name}
       class DeprecatedHelper < RuboCop::Cop::Base
-        MSG = "Prefer Rails built-in `t` helper over `ts`: the latter is not actually translatable. For more information, refer to https://github.com/otwcode/otwarchive/wiki/Internationalization-(i18n)-Standards"
+        MSG = "Prefer Rails built-in `t` helper over `ts` and move the text into the yml file. `ts` is not actually translatable. For more information, refer to https://github.com/otwcode/otwarchive/wiki/Internationalization-(i18n)-Standards"
 
         RESTRICT_ON_SEND = %i[ts].freeze
 
