@@ -201,9 +201,9 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def search_params
     allowed_params = if policy(User).can_view_past?
-                       %i[name email role_id user_id inactive page search_past]
+                       %i[name email role_id user_id inactive page commit search_past]
                      else
-                       %i[name email role_id user_id inactive page]
+                       %i[name email role_id user_id inactive page commit]
                      end
 
     params.permit(*allowed_params)
