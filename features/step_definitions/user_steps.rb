@@ -208,12 +208,13 @@ When /^the user "([^\"]*)" has failed to log in (\d+) times$/ do |login, count|
   user.update!(failed_attempts: count.to_i)
 end
 
-When /^I fill in the sign up form with valid data$/ do
+When "I fill in the sign up form with valid data" do
   step(%{I fill in "user_registration_login" with "#{NEW_USER}"})
   step(%{I fill in "user_registration_email" with "test@archiveofourown.org"})
   step(%{I fill in "user_registration_password" with "password1"})
   step(%{I fill in "user_registration_password_confirmation" with "password1"})
   step(%{I check "user_registration_age_over_13"})
+  step(%{I check "user_registration_data_processing"})
   step(%{I check "user_registration_terms_of_service"})
 end
 

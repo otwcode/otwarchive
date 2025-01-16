@@ -3,24 +3,16 @@ class Pseud < ApplicationRecord
   include WorksOwner
   include Justifiable
 
-  has_attached_file :icon,
-    styles: { standard: "100x100>" },
-    path: if Rails.env.production?
-            ":attachment/:id/:style.:extension"
-          elsif Rails.env.staging?
-            ":rails_env/:attachment/:id/:style.:extension"
-          else
-            ":rails_root/public/system/:rails_env/:class/:attachment/:id_partition/:style/:filename"
-          end,
-    storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
-    s3_protocol: "https",
-    default_url: "/images/skins/iconsets/default/icon_user.png"
+  has_one_attached :icon do |attachable|
+    attachable.variant(:standard, resize_to_limit: [100, 100])
+  end
 
-  validates_attachment_content_type :icon,
-                                    content_type: %w[image/gif image/jpeg image/png],
-                                    allow_nil: true
-
-  validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
+  # i18n-tasks-use t("errors.attributes.icon.invalid_format")
+  # i18n-tasks-use t("errors.attributes.icon.too_large")
+  validates :icon, attachment: {
+    allowed_formats: %w[image/gif image/jpeg image/png],
+    maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
+  }
 
   NAME_LENGTH_MIN = 1
   NAME_LENGTH_MAX = 40
@@ -91,6 +83,7 @@ class Pseud < ApplicationRecord
   scope :alphabetical, -> { order(:name) }
   scope :default_alphabetical, -> { order(is_default: :desc).alphabetical }
   scope :abbreviated_list, -> { default_alphabetical.limit(ArchiveConfig.ITEMS_PER_PAGE) }
+  scope :for_search, -> { includes(:user).with_attached_icon }
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -423,8 +416,9 @@ class Pseud < ApplicationRecord
   def clear_icon
     return unless delete_icon?
 
-    self.icon = nil unless icon.dirty?
+    self.icon.purge
     self.icon_alt_text = nil
+    self.icon_comment_text = nil
   end
 
   #################################

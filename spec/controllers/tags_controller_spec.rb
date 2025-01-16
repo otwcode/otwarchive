@@ -1,8 +1,11 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe TagsController do
   include LoginMacros
   include RedirectExpectationHelper
+
+  wrangling_full_access_roles = %w[superadmin tag_wrangling].freeze
+  wrangling_read_access_roles = (wrangling_full_access_roles + %w[policy_and_abuse]).freeze
 
   let(:user) { create(:tag_wrangler) }
 
@@ -11,6 +14,41 @@ describe TagsController do
   shared_examples "set last wrangling activity" do
     it "sets the last wrangling activity time to now", :frozen do
       expect(user.last_wrangling_activity.updated_at).to eq(Time.now.utc)
+    end
+  end
+
+  shared_examples "an action only authorized admins can access" do |authorized_roles:|
+    before { fake_login_admin(admin) }
+
+    context "with no role" do
+      let(:admin) { create(:admin, roles: []) }
+
+      it "redirects with an error" do
+        subject
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
+
+    (Admin::VALID_ROLES - authorized_roles).each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "redirects with an error" do
+          subject
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
+      end
+    end
+
+    authorized_roles.each do |role|
+      context "with role #{role}" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "succeeds" do
+          subject
+          success
+        end
+      end
     end
   end
 
@@ -72,6 +110,13 @@ describe TagsController do
         run_all_indexing_jobs
       end
 
+      subject { get :wrangle, params: { id: fandom.name, show: "freeforms", status: "unwrangled" } }
+      let(:success) do
+        expect(assigns(:tags)).to include(freeform1)
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: wrangling_read_access_roles
+
       it "includes unwrangled freeforms" do
         get :wrangle, params: { id: fandom.name, show: "freeforms", status: "unwrangled" }
         expect(assigns(:tags)).to include(freeform1)
@@ -121,40 +166,35 @@ describe TagsController do
       @character3 = FactoryBot.create(:character, canonical: false)
       @character2 = FactoryBot.create(:character, canonical: false, merger: @character3)
       @work = FactoryBot.create(:work,
-                                 fandom_string: "#{@fandom1.name}",
-                                 character_string: "#{@character1.name},#{@character2.name}",
-                                 freeform_string: "#{@freeform1.name}")
+                                fandom_string: @fandom1.name.to_s,
+                                character_string: "#{@character1.name},#{@character2.name}",
+                                freeform_string: @freeform1.name.to_s)
     end
 
     it "should redirect to the wrangle action for that tag" do
-      expect(put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled' }).
-        to redirect_to wrangle_tag_path(id: @fandom1.name,
-                                        show: 'freeforms',
-                                        status: 'unwrangled',
-                                        page: 1,
-                                        sort_column: 'name',
-                                        sort_direction: 'ASC')
+      expect(put(:mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled" }))
+        .to redirect_to wrangle_tag_path(id: @fandom1.name,
+                                         show: "freeforms",
+                                         status: "unwrangled",
+                                         page: 1,
+                                         sort_column: "name",
+                                         sort_direction: "ASC")
     end
 
-    context "with one canonical fandom in the fandom string and a selected freeform" do
-      before do
-        put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: @fandom2.name, selected_tags: [@freeform1.id] }
-      end
+    subject { put :mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled", fandom_string: @fandom2.name, selected_tags: [@freeform1.id] } }
+    let(:success) do
+      get :wrangle, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled" }
+      expect(assigns(:tags)).not_to include(@freeform1)
 
-      it "updates the tags successfully" do
-        get :wrangle, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled' }
-        expect(assigns(:tags)).not_to include(@freeform1)
-
-        @freeform1.reload
-        expect(@freeform1.fandoms).to include(@fandom2)
-      end
-
-      include_examples "set last wrangling activity"
+      @freeform1.reload
+      expect(@freeform1.fandoms).to include(@fandom2)
     end
+
+    it_behaves_like "an action only authorized admins can access", authorized_roles: wrangling_full_access_roles
 
     context "with one canonical and one noncanonical fandoms in the fandom string and a selected freeform" do
       before do
-        put :mass_update, params: { id: @fandom1.name, show: 'freeforms', status: 'unwrangled', fandom_string: "#{@fandom2.name},#{@fandom3.name}", selected_tags: [@freeform1.id] }
+        put :mass_update, params: { id: @fandom1.name, show: "freeforms", status: "unwrangled", fandom_string: "#{@fandom2.name},#{@fandom3.name}", selected_tags: [@freeform1.id] }
       end
 
       it "updates the tags successfully" do
@@ -168,7 +208,7 @@ describe TagsController do
 
     context "with two canonical fandoms in the fandom string and a selected character" do
       before do
-        put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name},#{@fandom2.name}", selected_tags: [@character1.id] }
+        put :mass_update, params: { id: @fandom1.name, show: "characters", status: "unwrangled", fandom_string: "#{@fandom1.name},#{@fandom2.name}", selected_tags: [@character1.id] }
       end
 
       it "updates the tags successfully" do
@@ -182,7 +222,7 @@ describe TagsController do
 
     context "with a canonical fandom in the fandom string, a selected unwrangled character, and the same character to be made canonical" do
       before do
-        put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unwrangled', fandom_string: "#{@fandom1.name}", selected_tags: [@character1.id], canonicals: [@character1.id] }
+        put :mass_update, params: { id: @fandom1.name, show: "characters", status: "unwrangled", fandom_string: @fandom1.name.to_s, selected_tags: [@character1.id], canonicals: [@character1.id] }
       end
 
       it "updates the tags successfully" do
@@ -196,7 +236,7 @@ describe TagsController do
 
     context "with a canonical fandom in the fandom string, a selected synonym character, and the same character to be made canonical" do
       before do
-        put :mass_update, params: { id: @fandom1.name, show: 'characters', status: 'unfilterable', fandom_string: "#{@fandom2.name}", selected_tags: [@character2.id], canonicals: [@character2.id] }
+        put :mass_update, params: { id: @fandom1.name, show: "characters", status: "unfilterable", fandom_string: @fandom2.name.to_s, selected_tags: [@character2.id], canonicals: [@character2.id] }
       end
 
       it "updates the tags successfully" do
@@ -231,6 +271,41 @@ describe TagsController do
     end
   end
 
+  describe "new" do 
+    subject { get :new }
+    let(:success) do
+      expect(response).to have_http_status(:success)
+    end
+
+    it_behaves_like "an action only authorized admins can access", authorized_roles: wrangling_full_access_roles
+
+    context "when logged in as a tag wrangler" do
+      it "allows access" do
+        get :new
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
+  describe "show" do   
+    context "when showing a banned tag" do
+      let(:tag) { create(:banned) } 
+
+      subject { get :edit, params: { id: tag.name } }
+      let(:success) do
+        expect(response).to have_http_status(:success)
+      end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: wrangling_read_access_roles
+
+      it "redirects with an error when not an admin" do
+        get :show, params: { id: tag.name }
+        it_redirects_to_with_error(tag_wranglings_path,
+                                   "Please log in as admin")
+      end
+    end
+  end
+  
   describe "show_hidden" do
     let(:work) { create(:work) }
 
@@ -251,12 +326,17 @@ describe TagsController do
 
   describe "edit" do
     context "when editing a banned tag" do
-      before do
-        @tag = FactoryBot.create(:banned)
+      let(:tag) { create(:banned) } 
+
+      subject { get :edit, params: { id: tag.name } }
+      let(:success) do
+        expect(response).to have_http_status(:success)
       end
 
+      it_behaves_like "an action only authorized admins can access", authorized_roles: wrangling_read_access_roles
+
       it "redirects with an error when not an admin" do
-        get :edit, params: { id: @tag.name }
+        get :edit, params: { id: tag.name }
         it_redirects_to_with_error(tag_wranglings_path,
                                    "Please log in as admin")
       end
@@ -299,16 +379,15 @@ describe TagsController do
         end
       end
 
-      context "when logged in as an admin" do
-        it "succeeds and redirects to the edit page" do
-          fake_login_admin(create(:admin))
-          put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" }
-          it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
-
-          tag.reload
-          expect(tag.merger_id).to eq(synonym.id)
-        end
+      subject { put :update, params: { id: tag, tag: { syn_string: synonym.name }, commit: "Save changes" } }
+      let(:success) do
+        it_redirects_to_with_notice(edit_tag_path(tag), "Tag was updated.")
+        tag.reload
+        expect(tag.merger_id).to eq(synonym.id)
       end
+
+      it_behaves_like "an action only authorized admins can access", authorized_roles: wrangling_full_access_roles
+      
     end
 
     shared_examples "success message" do
@@ -369,7 +448,7 @@ describe TagsController do
       end
 
       context "when the associated tag has an invalid type" do
-        # NOTE This will enter the associated tag into the freeform_string
+        # NOTE: This will enter the associated tag into the freeform_string
         # field, which is not displayed on the form. This still might come up
         # in the extremely rare case where a tag wrangler loads the form, a
         # different tag wrangler goes in and changes the type of the tag being

@@ -123,4 +123,16 @@ module CollectionsHelper
       [t("#{key}.rejected"), :rejected]
     ]
   end
+
+  # Fetches the icon URL for the given collection, using the standard (100x100) variant.
+  def standard_icon_url(collection)
+    return "/images/skins/iconsets/default/icon_collection.png" unless collection.icon.attached?
+
+    rails_blob_url(collection.icon.variant(:standard))
+  end
+
+  # Wraps the collection's standard_icon_url in an image tag
+  def collection_icon_display(collection)
+    image_tag(standard_icon_url(collection), size: "100x100", alt: collection.icon_alt_text, class: "icon", skip_pipeline: true)
+  end
 end

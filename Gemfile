@@ -56,7 +56,6 @@ gem "aws-sdk-s3"
 gem 'css_parser'
 
 gem "terrapin"
-gem "kt-paperclip", ">= 5.2.0"
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -115,7 +114,7 @@ gem "departure", "~> 6.5"
 gem "mail", ">= 2.8"
 
 group :test do
-  gem "rspec-rails", "~> 4.0.1"
+  gem "rspec-rails", "~> 6.0"
   gem 'pickle'
   gem 'shoulda'
   gem "capybara"
@@ -172,6 +171,8 @@ gem 'rvm-capistrano'
 
 # Use unicorn as the web server
 gem 'unicorn', '~> 5.5', require: false
+# Install puma so we can migrate to it
+gem "puma", "~> 6.5.0"
 # Use god as the monitor
 gem 'god', '~> 0.13.7'
 
@@ -181,3 +182,5 @@ group :staging, :production do
   gem "sentry-rails"
   gem "sentry-resque"
 end
+
+gem "image_processing", "~> 1.12"

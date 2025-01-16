@@ -117,11 +117,11 @@ Feature: Search works by tag
 
   Scenario: Using the header search to exclude works with certain warnings using the warnings' filter_ids
     Given a set of works with various warnings for searching
-    When I search for works without the "Rape/Non-Con" and "Underage" filter_ids
+    When I search for works without the "Rape/Non-Con" and "Underage Sex" filter_ids
     Then the search summary should include the filter_id for "Rape/Non-Con"
-      And the search summary should include the filter_id for "Underage"
+      And the search summary should include the filter_id for "Underage Sex"
       And I should see "5 Found"
-      And the results should not contain the warning tag "Underage"
+      And the results should not contain the warning tag "Underage Sex"
       And the results should not contain the warning tag "Rape/Non-Con"
 
   Scenario: Searching by category returns all works using that category; search

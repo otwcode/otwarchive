@@ -149,8 +149,6 @@ ignore_missing:
   - successfully_sent # should be feedbacks.create.successfully_sent
   # Files: app/controllers/languages_controller.rb and app/controllers/locales_controller.rb
   - successfully_added # should be languages.create.successfully_added and locales.create.successfully_added
-  # Files: app/views/admin/_admin_nav.html.erb and app/views/admin_posts/show.html.erb
-  - admin.admin_nav.delete
   # File: app/views/admin/admin_invitations/find.html.erb
   - admin.admin_invitations.find.find_email
   - admin.admin_invitations.find.find_token
@@ -173,37 +171,6 @@ ignore_missing:
   # File: app/views/gifts/_gift_search.html.erb
   - gifts.gift_search.forms.gift_search
   - gifts.gift_search.gifts.recipient_field
-  # File: app/views/home/site_map.html.erb
-  - home.site_map.ao3_news
-  - home.site_map.archive_faq
-  - home.site_map.bookmarks
-  - home.site_map.collections
-  - home.site_map.donate
-  - home.site_map.edit_user_profile
-  - home.site_map.fandoms
-  - home.site_map.freeform_tag_cloud
-  - home.site_map.homepage
-  - home.site_map.known_issues
-  - home.site_map.languages
-  - home.site_map.manage_pseuds
-  - home.site_map.my_bookmarks
-  - home.site_map.my_collections
-  - home.site_map.my_drafts
-  - home.site_map.my_history
-  - home.site_map.my_home
-  - home.site_map.my_inbox
-  - home.site_map.my_profile
-  - home.site_map.my_series
-  - home.site_map.my_subscriptions
-  - home.site_map.my_works
-  - home.site_map.people
-  - home.site_map.post_new
-  - home.site_map.recent_works
-  - home.site_map.report_abuse
-  - home.site_map.set_preferences
-  - home.site_map.site_map
-  - home.site_map.support_and_feedback
-  - home.site_map.terms_of_service
   # File: app/views/invitations/index.html.erb
   - invitations.index.choose_invite
   - invitations.index.email address # should be invitations.index.email_address

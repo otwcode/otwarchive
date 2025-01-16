@@ -182,6 +182,11 @@
 
   <fieldset>
     <legend><%= ts("Submit") %></legend>
+    <p class="notice">
+      <%= t(".post_notice_html",
+            content_policy_link: link_to(t(".content_policy"), content_path),
+            tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
+    </p>
     <p class="submit actions">
       <%= submit_tag ts("Import") %>
     </p>

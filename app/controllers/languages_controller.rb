@@ -1,5 +1,4 @@
 class LanguagesController < ApplicationController
-
   def index
     @languages = Language.default_order
     @works_counts = Rails.cache.fetch("/v1/languages/work_counts/#{current_user.present?}", expires_in: 1.day) do
@@ -16,7 +15,7 @@ class LanguagesController < ApplicationController
     @language = Language.new(language_params)
     authorize @language
     if @language.save
-      flash[:notice] = t('successfully_added', default: 'Language was successfully added.')
+      flash[:notice] = t("languages.successfully_added")
       redirect_to languages_path
     else
       render action: "new"
@@ -31,8 +30,9 @@ class LanguagesController < ApplicationController
   def update
     @language = Language.find_by(short: params[:id])
     authorize @language
-    if @language.update(language_params)
-      flash[:notice] = t('successfully_updated', default: 'Language was successfully updated.')
+
+    if @language.update(permitted_attributes(@language))
+      flash[:notice] = t("languages.successfully_updated")
       redirect_to languages_path
     else
       render action: "new"
@@ -40,6 +40,7 @@ class LanguagesController < ApplicationController
   end
 
   private
+
   def language_params
     params.require(:language).permit(
       :name, :short, :support_available, :abuse_support_available, :sortable_name

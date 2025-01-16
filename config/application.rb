@@ -17,7 +17,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # TODO: Remove in Rails 7.1, where it's false by default.
     config.add_autoload_paths_to_load_path = false
@@ -131,5 +131,15 @@ module Otwarchive
     end
 
     config.active_support.disable_to_s_conversion = true
+
+    # Disable ActiveStorage things that we don't need and can hit the DB hard
+    config.active_storage.analyzers = []
+    config.active_storage.previewers = []
+
+    # Set ActiveStorage queue name
+    config.active_storage.queues.mirror = :active_storage
+    config.active_storage.queues.preview_image = :active_storage
+    config.active_storage.queues.purge = :active_storage
+    config.active_storage.queues.transform = :active_storage
   end
 end

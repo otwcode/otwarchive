@@ -34,10 +34,24 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.feedback(feedback.id)
   end
 
-  def claim_notification_registered
+  def claim_notification
     work = create(:work)
     creator_id = work.pseuds.first.user.id
-    UserMailer.claim_notification(creator_id, [work.id], true)
+    UserMailer.claim_notification(creator_id, [work.id])
+  end
+  
+  def invite_request_declined
+    user = create(:user, :for_mailer_preview)
+    total = params[:total] ? params[:total].to_i : 1
+    reason = "test reason"
+    UserMailer.invite_request_declined(user.id, total, reason)
+  end
+
+  def change_email
+    user = create(:user, :for_mailer_preview)
+    old_email = user.email
+    new_email = "new_email"
+    UserMailer.change_email(user.id, old_email, new_email)
   end
 
   private

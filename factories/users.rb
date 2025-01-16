@@ -13,6 +13,7 @@ FactoryBot.define do
     login { generate(:login) }
     password { "password" }
     age_over_13 { "1" }
+    data_processing { "1" }
     terms_of_service { "1" }
     password_confirmation(&:password)
     email { Faker::Internet.unique.email }
