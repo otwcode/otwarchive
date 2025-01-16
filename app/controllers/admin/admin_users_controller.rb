@@ -206,7 +206,7 @@ class Admin::AdminUsersController < Admin::BaseController
                        %i[name email role_id user_id inactive page]
                      end
 
-    params.slice(*allowed_params).permit(*allowed_params)
+    params.permit(*allowed_params)
   end
 
   def log_items
