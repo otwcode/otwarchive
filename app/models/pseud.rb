@@ -2,6 +2,7 @@ class Pseud < ApplicationRecord
   include Searchable
   include WorksOwner
   include Justifiable
+  include AfterCommitEverywhere
 
   has_one_attached :icon do |attachable|
     attachable.variant(:standard, resize_to_limit: [100, 100])
