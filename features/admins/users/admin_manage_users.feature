@@ -95,8 +95,8 @@ Feature: Admin Actions to manage users
       And I change my username to "new_user"
     When I am logged in as a super admin
       And I go to the user administration page for "new_user"
-    Then I should see "Past Email: d@fake.com" within ".meta"
-      And I should see "Past Username: cats" within ".meta"
+    Then I should see "Past email: d@fake.com" within ".meta"
+      And I should see "Past username: cats" within ".meta"
 
   Scenario: An admin can access a user's creations from their administration page
     Given there is 1 user creation per page
