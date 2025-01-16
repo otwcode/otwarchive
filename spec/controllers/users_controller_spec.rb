@@ -4,6 +4,36 @@ describe UsersController do
   include RedirectExpectationHelper
   include LoginMacros
 
+  shared_examples "blocks access for banned and suspended users" do
+    context "when logged in as a banned user" do
+      let(:user) { create(:user, banned: true) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "redirects with an error" do
+        subject
+        it_redirects_to_simple(user_path(user))
+        expect(flash[:error]).to match("Your account has been banned")
+      end
+    end
+
+    context "when logged in as a suspended user" do
+      let(:user) { create(:user, suspended: true, suspended_until: 1.week.from_now) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "redirects with an error" do
+        subject
+        it_redirects_to_simple(user_path(user))
+        expect(flash[:error]).to match("Your account has been suspended")
+      end
+    end
+  end
+
   describe "GET #activate" do
     let(:user) { create(:user, confirmed_at: nil) }
 
@@ -58,6 +88,46 @@ describe UsersController do
         end.to raise_error ActiveRecord::RecordNotFound
       end
     end
+  end
+
+  describe "GET #change_username" do
+    subject { get :change_username, params: { id: user } }
+
+    context "when logged in as a valid user" do
+      let(:user) { create(:user) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "shows the change username form" do
+        subject
+        expect(response).to render_template(:change_username)
+      end
+    end
+
+    it_behaves_like "blocks access for banned and suspended users"
+  end
+
+  describe "POST #changed_username" do
+    subject do
+      post :changed_username, params: { id: user, new_login: "foo1234", password: user.password }
+    end
+
+    context "when logged in as a valid user" do
+      let(:user) { create(:user) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "updates the user's username" do
+        expect { subject }
+          .to change { user.reload.login }
+      end
+    end
+
+    it_behaves_like "blocks access for banned and suspended users"
   end
 
   describe "destroy" do

@@ -1,0 +1,322 @@
+<%# IMPORTANT: Also update current_tos_version in application_controller %>
+<%# To ensure proper formatting, this must always be rendered inside an element
+  with the userstuff class. The userstuff element must be inside an element with
+  the classes "docs system". %>
+<p><big><strong><%= t(".intro.archive_description") %></strong></big></p>
+<p>
+  <%= t(".intro.our_goal_html",
+        maximum_inclusiveness_link: link_to(t(".intro.maximum_inclusiveness"), tos_faq_path(anchor: "max_inclusiveness"))) %>
+</p>
+<p>
+  <%= t(".intro.review_before_posting_html",
+        all_content_must_comply_bold: tag.strong(t(".intro.all_content_must_comply_html",
+          content_link: link_to(t(".intro.content"), tos_faq_path(anchor: "define_content")))),
+        tos_faq_link: link_to(t(".intro.tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
+</p>
+<p>
+  <%= t(".intro.you_can_report_html",
+        report_it_to_us_link: link_to(t(".intro.report_it_to_us"), new_abuse_report_path),
+        we_do_not_prescreen_bold: tag.strong(t(".intro.we_do_not_prescreen"))) %>
+</p>
+
+<% unless local_assigns[:suppress_toc] %>
+  <nav aria-labelledby="nav-toc-heading" class="toc">
+    <details open>
+      <summary><h3 class="heading" id="nav-toc-heading"><%= t(".toc.header") %></h3></summary>
+      <p><%= t(".toc.intro") %></p>
+      <ol class="toc" style="list-style-type:upper-roman;">
+        <li><%= tos_table_of_contents_section("tos") %></li>
+        <li><%= tos_table_of_contents_section("content") %></li>
+        <li><%= tos_table_of_contents_section("privacy") %></li>
+      </ol>
+    </details>
+  </nav>
+<% end %>
+
+<h3 class="heading"><%= t(".content_policy_heading") %></h3>
+<h4 class="heading" id="II.A"><span id="offensive"><%= t(".offensive_content.heading") %></span></h4>
+<p><%= t(".offensive_content.removal_not_just_offensiveness") %></p>
+<p>
+  <small>
+    <%= t(".offensive_content.tos_faq_in_parens_html",
+          tos_faq_link: link_to(
+            t(".offensive_content.tos_faq"),
+            tos_faq_path(anchor: "offensive_content_faq"),
+            aria: {
+              label: t(".offensive_content.tos_faq_link_label")
+            }
+          )) %>
+  </small>
+</p>
+
+<h4 class="heading" id="II.B"><span id="fanwork"><%= t(".fanworks.heading") %></span></h4>
+<p>
+  <%= t(".fanworks.must_be_fanworks_html",
+        non_fanwork_content_link: link_to(t(".fanworks.non_fanwork_content"), tos_faq_path(anchor: "non_fanwork_examples"))) %>
+</p>
+<p>
+  <%= t(".fanworks.bookmarks_only_fanworks_html",
+        bookmarks_link: link_to(t(".fanworks.bookmarks"), archive_faq_path("bookmarks")),
+        external_bookmarks_link: link_to(t(".fanworks.external_bookmarks"), archive_faq_path("bookmarks", anchor: "externalbookmark"))) %>
+</p>
+<p>
+  <small>
+    <%= t(".fanworks.tos_faq_in_parens_html",
+          tos_faq_link: link_to(
+            t(".fanworks.tos_faq"),
+            tos_faq_path(anchor: "non_fanwork_faq"),
+            aria: {
+              label: t(".fanworks.tos_faq_link_label")
+            }
+          )) %>
+  </small>
+</p>
+
+<h4 class="heading" id="II.C"><span id="commercial"><%= t(".commercial_promotion.heading") %></span></h4>
+<p><%= t(".commercial_promotion.not_allowed") %></p>
+<p>
+  <small>
+    <%= t(".commercial_promotion.tos_faq_in_parens_html",
+          tos_faq_link: link_to(
+            t(".commercial_promotion.tos_faq"),
+            tos_faq_path(anchor: "commercial_promotion_faq"),
+            aria: {
+              label: t(".commercial_promotion.tos_faq_link_label")
+            }
+          )) %>
+  </small>
+</p>
+
+<h4 class="heading" id="II.D"><span id="copyright"><%= t(".copyright_infringement.heading") %></span></h4>
+<p><%= t(".copyright_infringement.not_allowed") %></p>
+<p><%= t(".copyright_infringement.epigraphs_small_quotations_allowed") %></p>
+<p>
+  <%= t(".copyright_infringement.transformative_works_legal_html",
+        transformative_fanworks_link: link_to(t(".copyright_infringement.transformative_fanworks"), tos_faq_path(anchor: "define_transformative"))) %>
+</p>
+<p>
+  <small>
+    <%= t(".copyright_infringement.tos_faq_in_parens_html",
+          tos_faq_link: link_to(
+            t(".copyright_infringement.tos_faq"),
+            tos_faq_path(anchor: "copyright_plagiarism_faq"),
+            aria: {
+              label: t(".copyright_infringement.tos_faq_link_label")
+            }
+          )) %>
+  </small>
+</p>
+
+<h4 class="heading" id="II.E"><span id="plagiarism"><%= t(".plagiarism.heading") %></span></h4>
+<p>
+  <%= t(".plagiarism.html",
+        their_expressions_of_their_ideas_link: link_to(t(".plagiarism.their_expressions_of_their_ideas"), tos_faq_path(anchor: "define_transformative"))) %>
+</p>
+<p>
+  <small>
+    <%= t(".plagiarism.tos_faq_in_parens_html",
+          tos_faq_link: link_to(
+            t(".plagiarism.tos_faq"),
+            tos_faq_path(anchor: "copyright_plagiarism_faq"),
+            aria: {
+              label: t(".plagiarism.tos_faq_link_label")
+            }
+          )) %>
+  </small>
+</p>
+
+<h4 class="heading" id="II.F"><span id="identities"><%= t(".personal_information.heading") %></span></h4>
+<p><%= t(".personal_information.not_allowed") %></p>
+<ol>
+  <li>
+    <%= t(".personal_information.revealing_orphaned_creator_html",
+          orphaned_link: link_to(t(".personal_information.orphaned"), archive_faq_path("glossary", anchor: "orphandef"))) %>
+  </li>
+  <li><%= t(".personal_information.linking_fannish_identity") %></li>
+  <li><%= t(".personal_information.sharing_sufficient_information") %></li>
+  <li>
+    <%= t(".personal_information.disclosing_personal_data_html",
+          special_categories_of_personal_data_link: link_to(t(".personal_information.special_categories_of_personal_data"), "https://gdpr-info.eu/art-9-gdpr/")) %>
+    <ol>
+      <li><%= t(".personal_information.rpf_exception") %></li>
+    </ol>
+  </li>
+</ol>
+<p><%= t(".personal_information.right_to_hide_delete") %></p>
+<p>
+  <small>
+    <%= t(".personal_information.tos_faq_in_parens_html",
+          tos_faq_link: link_to(
+            t(".personal_information.tos_faq"),
+            tos_faq_path(anchor: "identity_impersonation_faq"),
+            aria: {
+              label: t(".personal_information.tos_faq_link_label")
+            }
+          )) %>
+  </small>
+</p>
+
+<h4 class="heading" id="II.G"><span id="impersonation"><%= t(".impersonation.heading") %></span></h4>
+<p>
+  <%= t(".impersonation.html",
+        function_link: link_to(t(".impersonation.function"), tos_faq_path(anchor: "impersonate_function"))) %>
+</p>
+<p>
+  <small>
+    <%= t(".impersonation.tos_faq_in_parens_html",
+          tos_faq_link: link_to(
+            t(".impersonation.tos_faq"),
+            tos_faq_path(anchor: "identity_impersonation_faq"),
+            aria: {
+              label: t(".impersonation.tos_faq_link_label")
+            }
+          )) %>
+  </small>
+</p>
+
+<h4 class="heading" id="II.H"><span id="harassment"><%= t(".harassment.heading") %></span></h4>
+<p><%= t(".harassment.definition") %></p>
+<p><%= t(".harassment.not_allowed_and_context") %></p>
+<p>
+  <%= t(".harassment.threatening_versus_annoying_html",
+        blocking_link: link_to(t(".harassment.blocking"), tos_faq_path(anchor: "blocking")),
+        muting_link: link_to(t(".harassment.muting"), tos_faq_path(anchor: "muting")),
+        filtering_link: link_to(t(".harassment.filtering"), tos_faq_path(anchor: "filters"))) %>
+</p>
+<p>
+  <%= t(".harassment.policy_applicability_html",
+        applies_to_all_link: link_to(t(".harassment.applies_to_all"), tos_faq_path(anchor: "harassment_scope")),
+        otw_abbreviation: tag.abbr(t(".harassment.otw.abbreviated"), title: t(".harassment.otw.full"))) %>
+</p>
+<h5 class="heading" id="rpf"><%= t(".harassment.rpf.heading") %></h5>
+<p><%= t(".harassment.rpf.text") %>
+<h5 class="heading" id="advocating_harm"><%= t(".harassment.advocating_harm.heading") %></h5>
+<p><%= t(".harassment.advocating_harm.text") %>
+<p>
+  <small>
+    <%= t(".harassment.tos_faq_in_parens_html",
+          tos_faq_link: link_to(
+            t(".harassment.tos_faq"),
+            tos_faq_path(anchor: "harassment_faq"),
+            aria: {
+              label: t(".harassment.tos_faq_link_label")
+            }
+          )) %>
+  </small>
+</p>
+
+<h4 class="heading" id="II.I"><span id="icons"><%= t(".user_icons.heading") %></span></h4>
+<p><%= t(".user_icons.text") %>
+<p>
+  <small>
+    <%= t(".user_icons.tos_faq_in_parens_html",
+          tos_faq_link: link_to(
+            t(".user_icons.tos_faq"),
+            tos_faq_path(anchor: "username_icon_faq"),
+            aria: {
+              label: t(".user_icons.tos_faq_link_label")
+            }
+          )) %>
+  </small>
+</p>
+
+<h4 class="heading" id="II.J"><span id="tags"><%= t(".mandatory_tags.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="II.J.1">
+    <p>
+      <%= t(".mandatory_tags.ao3_may_designate_html",
+            minimum_criteria_link: link_to(t(".mandatory_tags.minimum_criteria"), tos_faq_path(anchor: "minimum_tags"))) %>
+    </p>
+  </li>
+  <li id="II.J.2">
+    <p>
+      <%= t(".mandatory_tags.choose_no_warnings_html",
+            rating_link: link_to(t(".mandatory_tags.rating"), tos_faq_path(anchor: "ratings_list")),
+            archive_warning_link: link_to(t(".mandatory_tags.archive_warning"), tos_faq_path(anchor: "warnings_list")),
+            non_specific_tags_link: link_to(t(".mandatory_tags.non_specific_tags"), tos_faq_path(anchor: "nonspecific_tags"))) %>
+    </p>
+  </li>
+  <li id="II.J.3">
+    <p>
+      <%= t(".mandatory_tags.applying_nonspecific_tag_html",
+            any_archive_warning_link: link_to(t(".mandatory_tags.any_archive_warning"), tos_faq_path(anchor: "warnings_list"))) %>
+    </p>
+  </li>
+  <li id="II.J.4">
+    <p>
+      <%= t(".mandatory_tags.tags_applied_automatically_html",
+            not_available_link: link_to(t(".mandatory_tags.not_available"), tos_faq_path(anchor: "no_language_tag_exists")),
+            tos_faq_link: link_to(t(".mandatory_tags.tos_faq"), tos_faq_path(anchor: "ratings_warnings_faq"))) %>
+    </p>
+  </li>
+</ol>
+<p>
+  <small>
+    <%= t(".mandatory_tags.tos_faq_in_parens_html",
+          tos_faq_link: link_to(
+            t(".mandatory_tags.tos_faq_endnote"),
+            tos_faq_path(anchor: "ratings_warnings_faq"),
+            aria: {
+              label: t(".mandatory_tags.tos_faq_link_label")
+            }
+          )) %>
+  </small>
+</p>
+
+<h4 class="heading" id="II.K"><span id="inappropriate"><%= t(".illegal_inappropriate_content.heading") %></span></h4>
+<ol style="list-style-type:decimal;">
+  <li id="II.K.1">
+    <p id="illegal">
+      <%= t(".illegal_inappropriate_content.no_illegal_content_html",
+            images_of_real_children_link: link_to(t(".illegal_inappropriate_content.images_of_real_children"),
+              tos_faq_path(anchor: "underage_images"))) %>
+    </p>
+    <p id="technical_integrity">
+      <%= t(".illegal_inappropriate_content.conduct_threatening_technical_integrity_html",
+            technical_integrity_link: link_to(t(".illegal_inappropriate_content.technical_integrity"), tos_faq_path(anchor: "technical_integrity_faq"))) %>
+    </p>
+  </li>
+  <li id="II.K.2">
+    <p id="spam">
+      <%= t(".illegal_inappropriate_content.spamming_behavior") %>
+    </p>
+    <p>
+      <%= t(".illegal_inappropriate_content.automated_spam_check_html",
+            contact_ao3_administrators_link: link_to(t(".illegal_inappropriate_content.contact_ao3_administrators"),
+              new_abuse_report_path)) %>
+    </p>
+  </li>
+</ol>
+<p>
+  <%= t(".illegal_inappropriate_content.violates_us_law_html",
+        report_it_to_us_link: link_to(t(".illegal_inappropriate_content.report_it_to_us"), new_abuse_report_path)) %>
+</p>
+<p>
+  <small>
+    <%= t(".illegal_inappropriate_content.tos_faq_in_parens_html",
+          tos_faq_link: link_to(
+            t(".illegal_inappropriate_content.tos_faq"),
+            tos_faq_path(anchor: "offensive_content_faq"),
+            aria: {
+              label: t(".illegal_inappropriate_content.tos_faq_link_label")
+            }
+          )) %>
+  </small>
+</p>
+
+<hr />
+
+<% unless local_assigns[:suppress_footer] %>
+  <p><%= t(".effective") %></p>
+  <p id="license">
+    <small>
+      <%= t(".license_html",
+            terms_of_service_link: link_to(t(".terms_of_service"), tos_path),
+            content_policy_link: link_to(t(".content_policy"), content_path),
+            privacy_policy_link: link_to(t(".privacy_policy"), privacy_path),
+            cc_attribution_4_0_international_link: link_to(t(".cc_attribution_4_0_international"),
+              "https://creativecommons.org/licenses/by/4.0/",
+              rel: "nofollow")) %>
+    </small>
+  </p>
+<% end %>

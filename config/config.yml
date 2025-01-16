@@ -34,6 +34,7 @@ RETURN_ADDRESS: 'do-not-reply@example.org'
 SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
 SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
+TAG_WRANGLER_SUPERVISORS_ADDRESS: 'tagwranglers-personnel@example.org'
 
 # Because the default email addresses are fake,
 # email delivery is turned off by default, even for production.
@@ -68,6 +69,7 @@ OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes
 REVISION: ''
 ES_URL: 'http://127.0.0.1:9400'
 MEMCACHED_SERVERS: '127.0.0.1:11211'
+ZOHO_URL: 'https://desk.zoho.com'
 
 # tag settings
 DELIMITER_FOR_INPUT: ','  # if you change this, you will need to change
@@ -110,6 +112,7 @@ INFO_MAX: 100000
 FAQ_MAX: 200000
 ICON_ALT_MAX: 250
 ICON_COMMENT_MAX: 50
+ICON_SIZE_KB_MAX: 500
 LOGIN_LENGTH_MIN: 3
 LOGIN_LENGTH_MAX: 40
 PASSWORD_LENGTH_MIN: 6
@@ -224,7 +227,7 @@ WARNING_NONE_TAG_DISPLAY_NAME: 'No Archive Warnings Apply'
 WARNING_VIOLENCE_TAG_NAME: 'Graphic Depictions Of Violence'
 WARNING_DEATH_TAG_NAME: 'Major Character Death'
 WARNING_NONCON_TAG_NAME: 'Rape/Non-Con'
-WARNING_CHAN_TAG_NAME: 'Underage'
+WARNING_CHAN_TAG_NAME: 'Underage Sex'
 
 RATING_CATEGORY_NAME: 'Rating'
 RATING_DEFAULT_TAG_NAME: 'Not Rated'
@@ -348,7 +351,7 @@ BANNED_MULTIMEDIA_SRCS: []
 #
 
 # We use this list for properties which can take shorthand values and also have
-# subproperties or variants (ie, because "border" is in here, we allow through: 
+# subproperties or variants (ie, because "border" is in here, we allow through:
 # border-right, border-bottom-left-radius, -moz-border-foo, etc)
 # It is slightly less secure so do NOT put any property in here if you aren't
 # sure all variations on it are okay!
@@ -553,11 +556,11 @@ SUPPORTED_CSS_PROPERTIES:
 - z-index
 
 # we allow through any string that is just a-z plus dashes (no spaces), so the
-# only keywords you need to specify would be ones that have something else or 
+# only keywords you need to specify would be ones that have something else or
 # url, if you want to allow url values
 SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 
-# if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this 
+# if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this
 # kind of resource will be allowed
 SUPPORTED_EXTERNAL_URLS: ["jpg", "jpeg", "png", "gif"]
 
@@ -737,3 +740,8 @@ PERCONA_ARGS: >
   --set-vars innodb_lock_wait_timeout=2
   --alter-foreign-keys-method=auto
   --no-check-unique-key-change
+
+# How many shards to have in elastic indexes.
+# Production has more than 5 for these
+BOOKMARKABLE_SHARDS: 5
+WORKS_SHARDS: 5

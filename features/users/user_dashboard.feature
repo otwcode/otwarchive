@@ -239,3 +239,36 @@ Feature: User dashboard
     When I go to Accumulator's "Centrifuge" pseud page
     Then I should see "Series (0)" within "#dashboard"
 
+  Scenario Outline: User and pseud dashboards, and user profiles, contain links to the user's administration page only for authorized admins
+  Given "a_user" has the pseud "a_pseud"
+  When I am <logged_in_status>
+    And I go to a_user's user page
+  Then I should <action> "User Administration" within ".user .primary"
+  When I go to a_user's profile page
+  Then I should <action> "User Administration" within ".user .primary"
+  When I go to the user page for user "a_user" with pseud "a_pseud"
+  Then I should <action> "User Administration" within ".user .primary"
+  Examples:
+    | logged_in_status                      | action  |
+    | logged in as a "superadmin" admin     | see     |
+    | logged in as a "communications" admin | not see |
+    | logged in as a random user            | not see |
+    | logged in as "a_user"                 | not see |
+    | a visitor                             | not see |
+
+  Scenario Outline: User and pseud dashboards, and user profiles, contain links to the user's invitations page only for the user and authorized admins
+  Given "a_user" has the pseud "a_pseud"
+  When I am <logged_in_status>
+    And I go to a_user's user page
+  Then I should <action> "Invitations" within ".user .primary"
+  When I go to a_user's profile page
+  Then I should <action> "Invitations" within ".user .primary"
+  When I go to the user page for user "a_user" with pseud "a_pseud"
+  Then I should <action> "Invitations" within ".user .primary"
+  Examples:
+    | logged_in_status                      | action  |
+    | logged in as a "superadmin" admin     | see     |
+    | logged in as a "communications" admin | not see |
+    | logged in as a random user            | not see |
+    | logged in as "a_user"                 | see     |
+    | a visitor                             | not see |

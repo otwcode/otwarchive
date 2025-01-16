@@ -211,3 +211,25 @@ Feature:
         And I press "Change User Name"
       Then I should get confirmation that I changed my username
         And I should see "Hi, notforbidden"
+
+  Scenario: Tag wrangling supervisors are emailed about tag wrangler username changes
+    Given the user "before" exists and is activated
+      And I am logged in as "before" with password "password"
+      And all emails have been delivered
+      And I visit the change username page for before
+      And I fill in "New user name" with "after"
+      And I fill in "Password" with "password"
+      And I press "Change User Name"
+    Then 0 email should be delivered to "tagwranglers-personnel@example.org"
+    When the user "wrangler_before" exists and has the role "tag_wrangler"
+      And I am logged in as "wrangler_before" with password "password"
+      And all emails have been delivered
+      And I visit the change username page for wrangler_before
+      And I fill in "New user name" with "wrangler_after"
+      And I fill in "Password" with "password"
+      And I press "Change User Name"
+    Then 1 email should be delivered to "tagwranglers-personnel@example.org"
+      And the email should contain "The wrangler"
+      And the email should contain "wrangler_before"
+      And the email should contain "has changed their name"
+      And the email should contain "wrangler_after"

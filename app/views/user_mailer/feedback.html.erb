@@ -1,27 +1,17 @@
 <% content_for :message do %>
   <p>
     <% if @username.present? %>
-      <%= t("mailer.general.greeting.informal.addressed",
-            name: style_bold(@username)).html_safe %>
+      <%= t("mailer.general.greeting.informal.addressed_html", name: style_bold(@username)) %>
     <% else %>
       <%= t("mailer.general.greeting.informal.unaddressed") %>
     <% end %>
   </p>
 
-  <p>
-    We're working hard to reply to everyone, and we'll respond to you as soon as we can.
-    Your communication is greatly valued, and it will be reviewed and
-    answered by our volunteer Support team. In the meantime, here is a copy of
-    the information you submitted through the Technical Support and Feedback
-    form:
-  </p>
+  <p><%= t(".introduction") %></p>
 
   <%= style_quote("<b>#{raw(strip_images(@summary))}</b> #{raw(strip_images(@comment, keep_src: true))}") %>
 
-  <p>
-    If you have additional questions or information, do not hesitate to send in
-    another ticket.
-  </p>
+  <p><%= t(".additional_ticket") %></p>
 
   <p>
     <%= t("mailer.general.closing.formal") %><br/>
