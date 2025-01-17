@@ -169,7 +169,7 @@ Feature: Invite queue management
     Then I should see "Invitation Request Status"
       And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
       And I should not see "Because your invitation was sent more than 24 hours ago, you can have your invitation resent."
-      And I should not see a "Resend Invitation" button
+      And I should not see "Resend Invitation"
 
     When all emails have been delivered
       And it is currently 25 hours from now
@@ -177,7 +177,7 @@ Feature: Invite queue management
     Then I should see "Invitation Request Status"
       And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
       And I should see "Because your invitation was sent more than 24 hours ago, you can have your invitation resent."
-      And I should see a "Resend Invitation" button
+      And I should see "Resend Invitation"
 
     When I press "Resend Invitation"
     Then 1 email should be delivered to invitee@example.org
