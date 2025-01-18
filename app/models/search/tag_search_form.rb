@@ -14,7 +14,7 @@ class TagSearchForm
     :uses,
     :sort_column,
     :sort_direction
-  ]
+  ].freeze
 
   attr_accessor :options
 
