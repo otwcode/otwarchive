@@ -50,7 +50,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     devise_parameter_sanitizer.permit(
       :sign_up,
       keys: [
-        :password_confirmation, :email, :age_over_13, :terms_of_service, :accepted_tos_version
+        :password_confirmation, :email, :age_over_13, :data_processing, :terms_of_service, :accepted_tos_version
       ]
     )
   end

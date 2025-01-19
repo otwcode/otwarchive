@@ -103,6 +103,15 @@ describe User do
         end
       end
 
+      context "missing data_processing flag" do
+        let(:no_data_processing) { build(:user, data_processing: "0") }
+
+        it "does not save" do
+          expect(no_data_processing.save).to be_falsey
+          expect(no_data_processing.errors[:data_processing].first).to include("you need to consent to the processing of your personal data")
+        end
+      end
+
       context "missing the terms_of_service flag" do
         let(:no_tos) { build(:user, terms_of_service: "0") }
 

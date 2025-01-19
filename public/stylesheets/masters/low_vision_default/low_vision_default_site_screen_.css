@@ -49,6 +49,9 @@ media .listbox {
 .actions input,
 .actions input:hover,
 .actions input:focus,
+.actions button,
+.actions button:hover,
+.actions button:focus,
 .flash,
 fieldset,
 #header ul.primary li.search,
@@ -124,6 +127,7 @@ pre {
 
 #header .menu {
   display: none;
+  position: static;
 }
 
 #footer {
@@ -132,7 +136,9 @@ pre {
 }
 
 #header,
-#header ul.primary,
+#header .open a,
+#header .primary .dropdown a:focus,
+#header .user .dropdown a:focus,
 #footer,
 .actions a:hover,
 .actions a:focus {
@@ -140,7 +146,7 @@ pre {
   color: #eee;
 }
 
-#header h1.heading a {
+#header h1 a {
   color: #fff;
 }
 
@@ -148,13 +154,13 @@ pre {
   background: transparent;
 }
 
-#header .menu a {
+#header .dropdown .menu a {
   background: #111;
   color: #fff;
 }
 
-#header .menu a:hover,
-#header .menu a:focus {
+#header .dropdown .menu a:hover,
+#header .dropdown .menu a:focus {
   background: #ccc;
   color: #111;
 }

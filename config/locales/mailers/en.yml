@@ -31,19 +31,18 @@ en:
       guest:
         one: a guest
         other: "%{count} guests"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           one: "%{givers_list} left kudos on %{commentable_link}."
           other: "%{givers_list} left kudos on %{commentable_link}."
-        single_guest:
-          giver_list: A guest
-          left_kudos: "%{giver_list} left kudos on %{commentable_link}."
-      subject: "[%{app_name}] You've got kudos!"
-      text:
-        left_kudos:
+        text:
           one: '%{givers_list} left kudos on "%{commentable_title}" (%{commentable_url}).'
           other: '%{givers_list} left kudos on "%{commentable_title}" (%{commentable_url}).'
-        single_guest: A guest left kudos on "%{commentable_title}" (%{commentable_url}).
+      single_guest:
+        giver: A guest
+        html: "%{giver} left kudos on %{commentable_link}."
+        text: A guest left kudos on "%{commentable_title}" (%{commentable_url}).
+      subject: "[%{app_name}] You've got kudos!"
   mailer:
     general:
       closing:
@@ -69,11 +68,12 @@ en:
             text: If you've received this message in error, please contact Support at %{support_url}.
         sent_at: Sent at %{sent_at}.
       greeting:
-        formal: Dear %{name},
+        formal_html: Dear %{name},
         informal:
-          addressed: Hi, %{name}!
+          addressed_html: Hi, %{name}!
           unaddressed: Hi!
         introductory: Hello from the Archive of Our Own!
+        tag_wrangler_supervisors: Tag Wrangler Supervisors
       metadata_label_indicator: ": "
       signature:
         abuse_team: The AO3 Policy & Abuse team
@@ -89,6 +89,11 @@ en:
     guest_with_parens: "(Guest)"
     official_with_parens: "(Official)"
     registered_with_parens: "(Registered User)"
+  tag_wrangling_supervisor_mailer:
+    wrangler_username_change_notification:
+      name_changed:
+        html: The wrangler %{old_username} has changed their name to %{new_username}.
+      subject: "[%{app_name}] Wrangler name change"
   user_mailer:
     abuse_report:
       copy:
@@ -246,6 +251,9 @@ en:
       assignments_sent:
         complete: All assignments have now been sent out.
         subject: Assignments sent
+      challenge_default:
+        complete: 'Signed-up participant %{offer_byline} has defaulted on their assignment for %{request_byline}. You may want to assign a pinch hitter on the collection assignments page: %{assignments_page_url}'
+        subject: Challenge default by %{offer_byline}
       html:
         received_message: 'You have received a message about your collection %{collection_link}:'
       text:
@@ -256,19 +264,15 @@ en:
         creation: "%{creation_link} by %{pseud_links}"
         edit_chapter: edit the chapter
         edit_series: edit the series
-        edit_work: edit the work
         remove_chapter: If you've been added in error or don't want to be listed as a creator, you can %{edit_chapter_link} to remove yourself as creator.
         remove_series: If you've been added in error or don't want to be listed as a creator, you can %{edit_series_link} to remove yourself as creator.
-        remove_work: If you've been added in error or don't want to be listed as a creator, you can %{edit_work_link} to remove yourself as creator.
       intro_chapter: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following series:'
-      intro_work: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following work:'
       subject: "[%{app_name}] Co-creator notification"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
         remove_series: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the series to remove yourself as creator: %{url}'
-        remove_work: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the work to remove yourself as creator: %{url}'
     creatorship_notification_archivist:
       explanation: Because they are acting in their official capacity as an Open Doors archivist, they are allowed to add you without a request, even if you have co-creation disabled.
       html:
