@@ -131,5 +131,15 @@ module Otwarchive
     end
 
     config.active_support.disable_to_s_conversion = true
+
+    # Disable ActiveStorage things that we don't need and can hit the DB hard
+    config.active_storage.analyzers = []
+    config.active_storage.previewers = []
+
+    # Set ActiveStorage queue name
+    config.active_storage.queues.mirror = :active_storage
+    config.active_storage.queues.preview_image = :active_storage
+    config.active_storage.queues.purge = :active_storage
+    config.active_storage.queues.transform = :active_storage
   end
 end
