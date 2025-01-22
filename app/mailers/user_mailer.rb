@@ -149,12 +149,10 @@ class UserMailer < ApplicationMailer
   def invite_increase_notification(user_id, total)
     @user = User.find(user_id)
     @total = total
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Emails a user to say that their request for invitation codes has been declined

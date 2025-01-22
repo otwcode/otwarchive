@@ -54,6 +54,12 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.change_email(user.id, old_email, new_email)
   end
 
+  def invite_increase_notification
+    user = create(:user, :for_mailer_preview)
+    total = params[:total] || 1
+    UserMailer.invite_increase_notification(user.id, total.to_i)
+  end
+  
   private
 
   def creatorship_notification_data(creation_type)
