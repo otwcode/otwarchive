@@ -9,37 +9,38 @@ module SkinsHelper
 
   # we only actually display an image if there's a file
   def skin_preview_display(skin)
-    if skin && skin.icon_file_name
-      link_to image_tag(skin.icon.url(:standard), alt: skin.icon_alt_text, class: "icon", skip_pipeline: true), skin.icon.url(:original)
-    end
+    return unless skin&.icon&.attached?
+
+    link_to image_tag(rails_blob_url(skin.icon.variant(:standard)),
+                      alt: skin.icon_alt_text,
+                      class: "icon",
+                      skip_pipeline: true),
+            rails_blob_url(skin.icon)
+  end
+
+  # Fetches the current skin. This is determined by the following
+  # 1. Skin ID set by request parameter
+  # 2. Skin ID set in the current session (if someone, a user or admin, is logged in)
+  # 3. Current user's skin preference
+  # 4. The default skin (as set by the active AdminSetting)
+  def current_skin
+    skin = Skin.approved_or_owned_by.usable.find_by(id: params[:site_skin]) if params[:site_skin]
+    skin ||= Skin.approved_or_owned_by.usable.find_by(id: session[:site_skin]) if (logged_in? || logged_in_as_admin?) && session[:site_skin]
+    skin ||= current_user&.preference&.skin
+    skin || AdminSetting.default_skin
   end
 
   def skin_tag
-    skin = nil
-
-    if params[:site_skin]
-      skin ||= Skin.approved_or_owned_by.usable.find_by(id: params[:site_skin])
-    end
-
-    if (logged_in? || logged_in_as_admin?) && session[:site_skin]
-      skin ||= Skin.approved_or_owned_by.usable.find_by(id: session[:site_skin])
-    end
-
-    skin_id = if skin.nil?
-                current_user&.preference&.skin_id || AdminSetting.default_skin_id
-              else
-                skin.id
-              end
-
-    return "" if skin_id.nil?
-
     roles = if logged_in_as_admin?
               Skin::DEFAULT_ROLES_TO_INCLUDE + ["admin"]
             else
               Skin::DEFAULT_ROLES_TO_INCLUDE
             end
 
-    # We include the version information for both the skin_id and the
+    skin = current_skin
+    return "" unless skin
+
+    # We include the version information for both the skin's id and the
     # AdminSetting.default_skin_id because the default skin is used in skins of
     # type "user", so we need to regenerate the cache block when it's modified.
     #
@@ -47,12 +48,11 @@ module SkinsHelper
     # regenerate the cache block when an admin updates the current default
     # skin.
     Rails.cache.fetch(
-      [:v1, :site_skin, skin_id, logged_in_as_admin?],
-      version: [skin_cache_version(skin_id),
+      [:v1, :site_skin, skin.id, logged_in_as_admin?],
+      version: [skin_cache_version(skin.id),
                 AdminSetting.default_skin_id,
                 skin_cache_version(AdminSetting.default_skin_id)]
     ) do
-      skin ||= Skin.find(skin_id)
       skin.get_style(roles)
     end
   end

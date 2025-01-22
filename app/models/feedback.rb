@@ -1,8 +1,8 @@
 # Class which holds feedback sent to the archive administrators about the archive as a whole
 class Feedback < ApplicationRecord
-  attr_accessor :ip_address
+  attr_accessor :ip_address, :referer, :site_skin
 
-  # note -- this has NOTHING to do with the Comment class!
+  # NOTE: this has NOTHING to do with the Comment class!
   # This is just the name of the text field in the Feedback
   # class which holds the user's comments.
   validates_presence_of :comment
@@ -60,7 +60,8 @@ class Feedback < ApplicationRecord
   end
 
   def send_report
-    return unless %w(staging production).include?(Rails.env)
+    return unless zoho_enabled?
+
     reporter = SupportReporter.new(
       title: summary,
       description: comment,
@@ -69,8 +70,17 @@ class Feedback < ApplicationRecord
       username: username,
       user_agent: user_agent,
       site_revision: ArchiveConfig.REVISION.to_s,
-      rollout: rollout
+      rollout: rollout,
+      ip_address: ip_address,
+      referer: referer,
+      site_skin: site_skin
     )
     reporter.send_report!
+  end
+
+  private
+
+  def zoho_enabled?
+    %w[staging production].include?(Rails.env)
   end
 end

@@ -16,6 +16,34 @@ lv:
         unrequested: Ja Tu nepieprasīji šo paroles nomaiņu, Tu vari ignorēt šo epastu
           un Tava iepriekšējā parole turpinās darboties.
   user_mailer:
+    admin_hidden_work_notification:
+      access: Kamēr Tavs darbs ir slēpts, Tu joprojām spēsi tam piekļūt, izmantojot
+        augstāk norādīto saiti, bet tas nebūs redzams Tavu darbu lapā, un tas nebūs
+        pieejams citiem AO3 lietotājiem.
+      check_email: Lūdzu, pārbaudi savu epasta adresi, ieskaitot spama sadaļu, jo
+        Pārkāpumu risināšanas komanda, iespējams, jau ir ar Tevi sazinājusies, lai
+        paskaidrotu, kāpēc Tavs darbs ir ticis paslēpts.
+      contact_abuse: sazinies ar Pārkāpumu risināšanas komandu
+      html:
+        help: Ja Tu neesi pārliecināts, kāpēc Tavs darbs ir ticis paslēpts un Tu neesi
+          saņēmis papildus informāciju, lūdzu, %{contact_abuse_link}.
+        hidden: Tavu darbu %{title} ir paslēpusi Pārkāpumu risināšanas komanda, un
+          tas vairs nav publiski pieejams.
+        tos_violation: Ja Tavs darbs tika paslēpts, jo tas pārkāpa AO3 %{tos_link},
+          Tev būs jānovērš pārkāpums. Ja tas netiks izdarīts, un darbs neatbildīs
+          Pakalpojumu sniegšanas noteikumiem, tas tiks dzēsts.
+      subject: "[%{app_name}] Tavu darbu ir paslēpusi Pārkāpumu risināšanas komanda"
+      text:
+        help: 'Ja Tu neesi pārliecināts par darba paslē''pšanas iemeslu un neesi saņēmis
+          papildus informāciju, lūdzu, sazinies ar Pārkāpumu risināšanas komandu:
+          %{contact_abuse_url}.'
+        hidden: Tavu darbu "%{title}" (%{work_url}) ir paslēpusi Pārkāpumu risināšanas
+          komanda, un tas vairs nav publiski pieejams.
+        tos_violation: Ja Tavs darbs tika paslēpts, jo tas neatbilst AO3 Pakalpojumu
+          sniegšanas noteikumiem (%{tos_url}), Tev nāksies veikt darba labojumus.
+          Ja darbu nepārveidosi, lai tas atbilstu Pakalpojumu sniegšanas noteikumiem.
+          Tavs darbs tiks dzēsts no AO3.
+      tos: Pakalpojumu sniegšanas noteikumi
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonīmi darbi ir iekļauti birku sarakstos, bet ne Tavā publisko
         darbu sarakstā. Darbā Tavs lietotājvārds tiks aizstāts ar "Anonīms" (Tulkošana).
@@ -211,6 +239,36 @@ lv:
         text:
           no_fandom: "- %{work_title} %{work_url}"
           with_fandom: "- %{work_title} %{work_url} (%{fandom})"
+    creatorship_notification_archivist:
+      explanation: Viņi izmanto savas oficiālās iespējas kā Open Doors (Translation)
+        (Atvērtās Durvis (Tulkošana)), viņiem ir atļauts Tevi pievienot bez uzaicinājuma
+        arī tad, ja esi bloķējis ko-autora funkciju.
+      html:
+        creation: "%{creation_link} %{pseud_links}"
+        edit_chapter: Mainīt vai labot nodaļu
+        edit_series: Mainīt vai labot stāstu sērijas
+        edit_work: mainīt vai labot darbu.
+        remove_chapter: Ja Tu es pievienots klūdas dēļ vai nevēlies būt atzīmēts kā
+          autors, Tu vari noņemt sevi kā ko-autoru.%{edit_chapter_link}
+        remove_series: Ja Tu es pievienots klūdas dēļ, vai nevēlies būt atzīmēts kā
+          autors, Tu vari %{edit_series_link} noņemt sevi kā ko-autoru.
+        remove_work: Ja Tu es pievienots klūdas dēļ, vai nevēlies būt atzīmēts kā
+          autors, Tu vari %{edit_work_link} noņemt sevi kā ko-autoru.
+      intro_chapter: 'Lietotājs %{archivist} ir Tevi %{pseud} pievienojis kā ko- autoru
+        sekojošajā nodaļā:'
+      intro_series: 'Lietotājs %{archivist} ir Tevi pievienojis %{pseud} kā ko- autoru
+        sekojošajās stāstu sērijās:'
+      intro_work: 'Lietotājs %{archivist} ir pievienojis Tavu pseud %{pseud} kā ko-autoru
+        sekojošajā darbā:'
+      subject: "[%{app_name}] Arhīvista ko -autora (co-creator) ziņa"
+      text:
+        creation: "%{title} (%{url})%{pseuds}"
+        remove_chapter: Ja Tu es pievienots klūdas dēļ, vai nevēlies būt atzīmēts
+          kā autors, Tu vari labot nodaļu noņemt sevi kā ko-autoru.%{url}
+        remove_series: Ja Tu es pievienots klūdas dēļ, vai nevēlies būt atzīmēts kā
+          autors, Tu vari labot stāstu sērijas un noņemt sevi kā ko-autoru.%{url}
+        remove_work: 'Ja Tu es pievienots klūdas dēļ vai nevēlies būt atzīmēts kā
+          autors, Tu vari labot darbu un noņemt sevi kā ko-autoru: %{url}'
     creatorship_request:
       html:
         creation: "%{creation_link} autors/i %{pseud_links}"

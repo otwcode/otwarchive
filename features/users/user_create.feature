@@ -30,21 +30,22 @@ Feature: Sign Up for a new account
     Then I should see "<error>"
       And I should not see "Almost Done!"
     Examples:
-      | field                 | error                                                               |
-      | user_registration_age_over_13      | Sorry, you have to be over 13!                                      |
-      | user_registration_terms_of_service | Sorry, you need to accept the Terms of Service in order to sign up. |
+      | field                              | error                                                                                   |
+      | user_registration_age_over_13      | Sorry, you have to be over 13!                                                          |
+      | user_registration_terms_of_service | Sorry, you need to accept the Terms of Service in order to sign up.                     |
+      | user_registration_data_processing  | Sorry, you need to consent to the processing of your personal data in order to sign up. |
 
   Scenario: The user should be able to sign up after fixing form errors.
     When I fill in the sign up form with valid data
       And I fill in "Valid email" with "lyingrobot@example.com"
-      And I uncheck "Yes, I have read the Terms of Service and agree to them."
+      And I uncheck "Yes, I have read the Terms of Service, including the Content Policy and Privacy Policy, and agree to them."
       And I press "Create Account"
     Then I should see "Sorry, you need to accept the Terms of Service in order to sign up."
       And I should not see "Sorry, you have to be over 13!"
       # Email should be what the user filled in, not the invitee email on the invitation
       And I should see "lyingrobot@example.com" in the "Valid email" input
 
-    When I check "Yes, I have read the Terms of Service and agree to them."
+    When I check "Yes, I have read the Terms of Service, including the Content Policy and Privacy Policy, and agree to them."
       And I fill in "Password" with "password"
       And I fill in "Confirm password" with "password"
       And all emails have been delivered

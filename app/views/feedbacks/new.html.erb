@@ -42,9 +42,6 @@
   <%= form_for(@feedback, html: {class: "post feedback"}) do |f| %>
     <fieldset>
       <legend><%= t(".form.legend.contact_info") %></legend>
-      <p class="notice">
-        <%= t(".form.ip") %>
-      </p>
       <dl>
         <dt><%= f.label :username, t(".form.name.label") %></dt>
         <dd>
@@ -59,6 +56,7 @@
 
     <fieldset>
       <legend><%= t(".form.legend.feedback") %></legend>
+      <%= f.hidden_field :referer %>
       <dl>
         <dt class="required">
           <%= f.label :language, t(".form.language.label") %>

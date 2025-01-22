@@ -42,7 +42,7 @@ Scenario: Change details as an admin
     And I fill in "About Me" with "is it merely thy habit, to talk to dolls?"
     And I fill in "Ticket ID" with "fine"
     And I press "Update"
-  Then I should see "Ticket ID is not a number"
+  Then I should see "may begin with an # and otherwise contain only numbers."
     And the field labeled "Ticket ID" should contain "fine"
   When I fill in "Ticket ID" with "480000"
     And I press "Update"
@@ -147,6 +147,17 @@ Scenario: Changing email address -- can't be the same as another user's
     And I should not see "Email addresses don't match!"
     And I should not see "foo@ao3.org"
     And I should see "bar@ao3.org"
+
+Scenario: Changing email address -- Translated email is sent when user enables locale settings
+    Given a locale with translated emails
+      And the user "editname" enables translated emails
+      And all emails have been delivered
+    When I am logged in as "editname"
+      And I want to edit my profile
+      And I change my email
+    Then the email address "bar@ao3.org" should be emailed
+      And the email should have "Email changed" in the subject
+      And the email to email address "bar@ao3.org" should be translated
 
 Scenario: Date of birth - under age
 
