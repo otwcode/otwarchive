@@ -1598,7 +1598,6 @@ en:
       make_default: Make this name default
       name: Name
       submit: Submit
-      ticket_footnote: Numbers only.
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
@@ -1748,9 +1747,6 @@ en:
       submit: Save
     edit:
       about_me: About Me
-      admin:
-        ticket_number:
-          numbers_only: Numbers only.
       browser_title: Edit Profile
       change_profile_landmark: Change Profile
       date_of_birth: Date of Birth
