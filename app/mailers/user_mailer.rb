@@ -149,12 +149,10 @@ class UserMailer < ApplicationMailer
   def invite_increase_notification(user_id, total)
     @user = User.find(user_id)
     @total = total
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Emails a user to say that their request for invitation codes has been declined
@@ -199,14 +197,12 @@ class UserMailer < ApplicationMailer
   def challenge_assignment_notification(collection_id, assigned_user_id, assignment_id)
     @collection = Collection.find(collection_id)
     @assigned_user = User.find(assigned_user_id)
-    assignment = ChallengeAssignment.find(assignment_id)
-    @request = (assignment.request_signup || assignment.pinch_request_signup)
-    I18n.with_locale(@assigned_user.preference.locale.iso) do
-      mail(
-        to: @assigned_user.email,
-        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
-      )
-    end
+    @assignment = ChallengeAssignment.find(assignment_id)
+    @request = (@assignment.request_signup || @assignment.pinch_request_signup)
+    mail(
+      to: @assigned_user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
+    )
   end
 
   # Asks a user to validate and activate their new account

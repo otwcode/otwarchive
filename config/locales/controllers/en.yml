@@ -124,10 +124,10 @@ en:
     index:
       page_subtitle: fandoms
   users:
-    contact_abuse: contact Policy & Abuse
+    contact_abuse: contact our Policy & Abuse team
     passwords:
       create:
-        contact_abuse: contact Policy & Abuse
+        contact_abuse: contact our Policy & Abuse team
         reset_blocked_html: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
         reset_cooldown_html: You cannot reset your password at this time. Please try again after %{reset_available_time}.
         send_cooldown_period:
@@ -139,8 +139,8 @@ en:
           other: You may reset your password %{count} more times.
         user_not_found: We couldn't find an account with that email address or username. Please try again.
     status:
-      ban_notice_html: Your account has been banned. You are not permitted to add or edit archive content. Please %{contact_abuse_link} for more information.
-      suspension_notice_html: Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please %{contact_abuse_link} for more information.
+      ban_notice_html: Your account has been banned. You are not permitted to post or edit content on AO3. Please check your email or %{contact_abuse_link} for more information.
+      suspension_notice_html: Your account has been suspended until %{suspended_until}. You cannot post, edit, or delete content until your suspension has ended. Please check your email or %{contact_abuse_link} for more information.
   works:
     drafts:
       page_title: "%{username} - Drafts"
