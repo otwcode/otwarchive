@@ -799,6 +799,8 @@ class StoryParser
         # we do a little cleanup here in case the user hasn't included the 'http://'
         # or if they've used capital letters or an underscore in the hostname
         uri = UrlFormatter.new(location).standardized
+        raise Error, I18n.t("story_parser.on_archive") if ArchiveConfig.PERMITTED_HOSTS.include?(uri.host)
+
         response = Net::HTTP.get_response(uri)
         case response
         when Net::HTTPSuccess
