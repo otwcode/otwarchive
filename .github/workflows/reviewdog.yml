@@ -23,12 +23,12 @@ jobs:
           bundler-cache: true
 
       - name: rubocop
-        uses: reviewdog/action-rubocop@a162a8e8976d8b3b7141c2147d7d79eed7cc8c4c
+        uses: reviewdog/action-rubocop@cd8c2943f425b54f97095777109ae9f1f2d79a61
         with:
           use_bundler: true
           reporter: github-pr-check
           skip_install: true
-          fail_on_error: true
+          fail_level: any
 
   erb-lint:
     name: ERB Lint runner

@@ -26,7 +26,7 @@ shared_examples "a justifiable model" do
 
       record.assign_attributes(attributes)
       expect(record).not_to be_valid
-      expect(record.errors[:ticket_number]).to contain_exactly("can't be blank", "is not a number")
+      expect(record.errors[:ticket_number]).to contain_exactly("can't be blank", "may begin with an # and otherwise contain only numbers.")
       expect(record.ticket_url).to be_nil
     end
 

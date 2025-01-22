@@ -232,6 +232,27 @@ ms:
         atau pada laman karya anda. Sesiapa yang mengikuti pautan ke karya tersebut
         akan menerima notis bahawa karya tersebut tidak dipamerkan, dan mereka tidak
         akan dapat mengakses kandungan tersebut.
+    archivist_added_to_collection_notification:
+      approved_collection_items_page: Halaman Approved Collection Items (Item Koleksi
+        yang Diluluskan)
+      archivist_notice: Oleh kerana penyelenggara koleksi bertindak dalam kapasiti
+        rasmi mereka sebagai ahli arkib Open Doors (Projek Pemeliharaan Bahan-Bahan
+        Digital dan Bukan Digital), mereka dibenarkan untuk menambah karya anda ke
+        koleksi ini, walaupun anda telah menutup jemputan koleksi. Ahli arkib hanya
+        akan menambah sesebuah karya ke koleksi jika ia dihoskan di arkib yang diimport.
+      removal_instructions:
+        html: Jika anda ingin mengalih keluar karya anda daripada koleksi ini, sila
+          lawati %{approved_items_link} anda.
+        text: 'Jika anda ingin mengalih keluar karya anda daripada koleksi ini, sila
+          lawati halaman Approved Collection Items (Item Koleksi yang Diluluskan)
+          anda: %{approved_items_url}.'
+      subject: "[%{app_name}][%{collection_title}] Ahli arkib Open Doors (Projek Pemeliharaan
+        Bahan-Bahan Digital dan Bukan Digital) telah menambah karya anda ke koleksi"
+      work_added:
+        html: Penyelenggara koleksi %{collection_link} telah menambah karya anda %{work_link}
+          ke koleksi mereka!
+        text: Penyelenggara koleksi bagi "%{collection_title}" (%{collection_url})
+          telah menambah karya anda "%{work_title}" (%{work_url}) ke koleksi mereka!
     challenge_assignment_notification:
       any: Mana-mana
       assignment:

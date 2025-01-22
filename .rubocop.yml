@@ -122,6 +122,11 @@ Migration/LargeTableSchemaUpdate:
     - users
     - works
 
+Naming/VariableNumber:
+  AllowedIdentifiers:
+    - age_over_13
+    - no_age_over_13
+
 Rails/DefaultScope:
   Enabled: true
 
@@ -149,6 +154,8 @@ Rails/OutputSafety:
 
 Rails/Output:
   Exclude:
+    # Allow patches to print warnings to console:
+    - 'config/initializers/monkeypatches/*.rb'
     # Allow migrations to print pt-osc comments to console:
     - 'db/migrate/*.rb'
 

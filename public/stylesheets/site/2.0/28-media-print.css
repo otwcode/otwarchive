@@ -46,6 +46,10 @@ a, a:link, a:visited {
   text-decoration: none;
 }
 
+.docs .userstuff summary .heading {
+  display: inline;
+}
+
 /*CSS3 perks, print urls after links*/
 
 a:after {

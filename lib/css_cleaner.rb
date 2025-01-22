@@ -227,7 +227,7 @@ module CssCleaner
     return value if value =~ /^\"([^\"]*)\"$/
 
     # or a valid img url
-    return value if value.match(URL_FUNCTION_REGEX)
+    return value if value.match(Regexp.new("^#{URL_FUNCTION_REGEX}$"))
 
     # or "none"
     return value if value == "none"
