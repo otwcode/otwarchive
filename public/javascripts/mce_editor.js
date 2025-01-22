@@ -81,7 +81,7 @@ tinyMCE.init({
     editor.on('init change undo redo', function() {
       editor.save();
       $j(editor.targetElm).trigger('change');
-    })
+    });
   }
 });
 
