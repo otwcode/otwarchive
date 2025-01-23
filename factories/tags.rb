@@ -71,6 +71,11 @@ FactoryBot.define do
   factory :fandom do
     sequence(:name) { |n| "The #{n} Fandom" }
 
+    # Tags names used in mailer preview should be unique but recognizable as tag names
+    trait :for_mailer_preview do
+      name { "Fandom#{Faker::Alphanumeric.alpha(number: 8)}" }
+    end
+
     factory :canonical_fandom do
       canonical { true }
     end
@@ -78,6 +83,11 @@ FactoryBot.define do
 
   factory :character do
     sequence(:name) { |n| "Character #{n}" }
+
+    # Tags names used in mailer preview should be unique but recognizable as tag names
+    trait :for_mailer_preview do
+      name { "Character#{Faker::Alphanumeric.alpha(number: 8)}" }
+    end
 
     factory :canonical_character do
       canonical { true }
@@ -87,6 +97,11 @@ FactoryBot.define do
   factory :relationship do
     sequence(:name) { |n| "Jane#{n}/John#{n}" }
 
+    # Tags names used in mailer preview should be unique but recognizable as tag names
+    trait :for_mailer_preview do
+      name { "Relationship#{Faker::Alphanumeric.alpha(number: 8)}" }
+    end
+
     factory :canonical_relationship do
       canonical { true }
     end
@@ -94,6 +109,11 @@ FactoryBot.define do
 
   factory :freeform do
     sequence(:name) { |n| "Freeform #{n}" }
+
+    # Tags names used in mailer preview should be unique but recognizable as tag names
+    trait :for_mailer_preview do
+      name { "Freeform#{Faker::Alphanumeric.alpha(number: 8)}" }
+    end
 
     factory :canonical_freeform do
       canonical { true }

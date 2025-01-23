@@ -79,7 +79,7 @@ class UserMailerPreview < ApplicationMailerPreview
     tag_set.rating_tagnames = [ArchiveConfig.RATING_EXPLICIT_TAG_NAME, ArchiveConfig.RATING_MATURE_TAG_NAME, ArchiveConfig.RATING_TEEN_TAG_NAME].join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
     tag_set.category_tagnames = [ArchiveConfig.CATEGORY_GEN_TAG_NAME, ArchiveConfig.CATEGORY_HET_TAG_NAME, ArchiveConfig.CATEGORY_SLASH_TAG_NAME].join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
     %w[fandom character relationship freeform].each do |type|
-      tag_set.tags += [create(:"canonical_#{type}"), create(:"canonical_#{type}"), create(:"canonical_#{type}")]
+      tag_set.tags += [create(:"canonical_#{type}",  :for_mailer_preview), create(:"canonical_#{type}",  :for_mailer_preview), create(:"canonical_#{type}",  :for_mailer_preview)]
     end
     tag_set.save!
 
@@ -87,7 +87,7 @@ class UserMailerPreview < ApplicationMailerPreview
     prompt.tag_set = tag_set
     prompt.title = "This is a title"
     prompt.url = "https://example.com/"
-    prompt.optional_tag_set = create(:tag_set, tags: [create(:freeform), create(:freeform), create(:freeform)])
+    prompt.optional_tag_set = create(:tag_set, tags: [create(:freeform,  :for_mailer_preview), create(:freeform,  :for_mailer_preview), create(:freeform, :for_mailer_preview)])
     prompt.save!
 
     UserMailer.challenge_assignment_notification(assignment.collection.id, assignment.offering_user.id, assignment.id)
