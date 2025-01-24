@@ -474,7 +474,7 @@ Feature: Admin Actions to Manage Invitations
       And the user "invitee" exists and is activated
       And an invitation created by "creator" and used by "invitee"
       And I am logged in as a "<role>" admin
-    When I manage invitations belonging to "creator"
+    When I go to creator's manage invitations page
     Then I should see "invitee"
     When I view the most recent invitation for "creator"
     Then I should see "invitee"
@@ -483,7 +483,7 @@ Feature: Admin Actions to Manage Invitations
     When I am logged in as "invitee"
       And "invitee" deletes their account
       And I am logged in as a "<role>" admin
-      And I manage invitations belonging to "creator"
+      And I go to creator's manage invitations page
     Then I should see "(Deleted)"
       But I should not see "invitee"
     When I view the most recent invitation for "creator"
