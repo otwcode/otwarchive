@@ -30,8 +30,8 @@ dl.meta {
 
 .meta .stats dl dd, .meta .stats dl dt {
   margin-block: 0 auto;
-  /* the 0.375em margin previously used here + 0.25em padding-left from .stats>* that is zeroed out in the ruleset below */
-  margin-inline: 0 0.625em;
+  margin-inline: 0 0.375em;
+  padding-inline-end: 0.25em;
   width: auto;
   min-width: 0;
   clear: none;
