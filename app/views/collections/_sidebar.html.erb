@@ -1,7 +1,7 @@
 <div id="dashboard" class="region" role="navigation region">
   <h3 class="landmark heading"><%= t(".landmark.dashboard") %></h3>
   <ul class="navigation actions">
-    <li><%= span_if_current t(".dashboard"), @collection %></li>
+    <li><%= span_if_current t(".dashboard"), collection_path(@collection), current_page?(collection_path(@collection)) && params[:show_random].blank? %></li>
     <li><%= span_if_current t(".profile"), collection_profile_path(@collection) %></li>
     <% if !@collection.collection_profile.faq.blank? %>
       <li><%= span_if_current t(".faq"), collection_profile_path(@collection, anchor: "faq") %></li>
