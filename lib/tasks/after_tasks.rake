@@ -189,42 +189,6 @@ namespace :After do
     puts("Added default rating to works: #{updated_works}") && STDOUT.flush
   end
 
-  desc "Fix pseuds with invalid icon data"
-  task(fix_invalid_pseud_icon_data: :environment) do
-    # From validates_attachment_content_type in pseuds model.
-    valid_types = %w[image/gif image/jpeg image/png]
-
-    # If you change either of these, update lookup_invalid_pseuds.rb in
-    # otwcode/otw-scripts to ensure the proper users are notified.
-    pseuds_with_invalid_icons = Pseud.where("icon_file_name IS NOT NULL AND icon_content_type NOT IN (?)", valid_types)
-    pseuds_with_invalid_text = Pseud.where("CHAR_LENGTH(icon_alt_text) > ? OR CHAR_LENGTH(icon_comment_text) > ?", ArchiveConfig.ICON_ALT_MAX, ArchiveConfig.ICON_COMMENT_MAX)
-
-    invalid_pseuds = [pseuds_with_invalid_icons, pseuds_with_invalid_text].flatten.uniq
-    invalid_pseuds_count = invalid_pseuds.count
-
-    skipped_pseud_ids = []
-
-    # Update the pseuds.
-    puts("Updating #{invalid_pseuds_count} pseuds") && STDOUT.flush
-
-    invalid_pseuds.each do |pseud|
-      # Change icon content type to jpeg if it's jpg.
-      pseud.icon_content_type = "image/jpeg" if pseud.icon_content_type == "image/jpg"
-      # Delete the icon if it's not a valid type.
-      pseud.icon = nil unless (valid_types + ["image/jpg"]).include?(pseud.icon_content_type)
-      # Delete the icon alt text if it's too long.
-      pseud.icon_alt_text = "" if pseud.icon_alt_text.length > ArchiveConfig.ICON_ALT_MAX
-      # Delete the icon comment if it's too long.
-      pseud.icon_comment_text = "" if pseud.icon_comment_text.length > ArchiveConfig.ICON_COMMENT_MAX
-      skipped_pseud_ids << pseud.id unless pseud.save
-      print(".") && STDOUT.flush
-    end
-    if skipped_pseud_ids.any?
-      puts
-      puts("Couldn't update #{skipped_pseud_ids.size} pseud(s): #{skipped_pseud_ids.join(',')}") && STDOUT.flush
-    end
-  end
-
   desc "Backfill renamed_at for existing users"
   task(add_renamed_at_from_log: :environment) do
     total_users = User.all.size
@@ -356,6 +320,174 @@ namespace :After do
       end
     else
       puts("Admin not found.")
+    end
+  end
+
+  desc "Migrate collection icons to ActiveStorage paths"
+  task(migrate_collection_icons: :environment) do
+    require "aws-sdk-s3"
+    require "open-uri"
+
+    return unless Rails.env.staging? || Rails.env.production?
+
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = "collections/icons/"
+    s3 = Aws::S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
+
+    Collection.no_touching do
+      old_bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
+        next if ActiveStorage::Attachment.where(record_type: "Collection", record_id: path_parts[-2]).any?
+
+        collection_id = path_parts[-2]
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest.new("MD5").tap do |result|
+          while (chunk = old_icon.read(5.megabytes))
+            result << chunk
+          end
+          old_icon.rewind
+        end.base64digest
+
+        key = nil
+        ActiveRecord::Base.transaction do
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
+            filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          key = blob.key
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Collection",
+            record_id: collection_id
+          )
+        end
+
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
+        puts "Finished collection #{collection_id}"
+        $stdout.flush
+      end
+    end
+  end
+
+  desc "Migrate pseud icons to ActiveStorage paths"
+  task(migrate_pseud_icons: :environment) do
+    require "aws-sdk-s3"
+    require "open-uri"
+
+    return unless Rails.env.staging? || Rails.env.production?
+
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = Rails.env.production? ? "icons/" : "staging/icons/"
+    s3 = Aws::S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
+
+    Pseud.no_touching do
+      old_bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
+        next if ActiveStorage::Attachment.where(record_type: "Pseud", record_id: path_parts[-2]).any?
+
+        pseud_id = path_parts[-2]
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest.new("MD5").tap do |result|
+          while (chunk = old_icon.read(5.megabytes))
+            result << chunk
+          end
+          old_icon.rewind
+        end.base64digest
+
+        key = nil
+        ActiveRecord::Base.transaction do
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
+            filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          key = blob.key
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Pseud",
+            record_id: pseud_id
+          )
+        end
+
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
+        puts "Finished pseud #{pseud_id}"
+        $stdout.flush
+      end
+    end
+  end
+
+  desc "Migrate skin icons to ActiveStorage paths"
+  task(migrate_skin_icons: :environment) do
+    require "aws-sdk-s3"
+    require "open-uri"
+
+    return unless Rails.env.staging? || Rails.env.production?
+
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = "skins/icons/"
+    s3 = Aws::S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
+
+    Skin.no_touching do
+      old_bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
+        next if ActiveStorage::Attachment.where(record_type: "Skin", record_id: path_parts[-2]).any?
+
+        skin_id = path_parts[-2]
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest.new("MD5").tap do |result|
+          while (chunk = old_icon.read(5.megabytes))
+            result << chunk
+          end
+          old_icon.rewind
+        end.base64digest
+
+        key = nil
+        ActiveRecord::Base.transaction do
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
+            filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          key = blob.key
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Skin",
+            record_id: skin_id
+          )
+        end
+
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
+        puts "Finished skin #{skin_id}"
+        $stdout.flush
+      end
     end
   end
   # This is the end that you have to put new tasks above.
