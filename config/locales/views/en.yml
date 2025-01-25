@@ -1621,6 +1621,8 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+    skin_actions:
+      revert_to_default: Revert to Default Skin
   subscriptions:
     index:
       button_html: Unsubscribe from %{name}
