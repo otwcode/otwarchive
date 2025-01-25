@@ -1944,6 +1944,9 @@ en:
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
+    work_header_navigation:
+      mark_as_read: Mark as Read
+      mark_for_later: Mark for Later
     work_header_notes:
       inspired_by:
         restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
