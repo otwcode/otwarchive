@@ -28,7 +28,11 @@ dl.meta {
   margin-top: 0;
 }
 
-.meta .stats dl dd, .meta .stats dl dt {
+dl.meta dd ul li, .meta .stats dl, .meta .stats dl dt, .meta .stats dl dd {
+  padding-inline-start: 0;
+}
+
+.meta .stats dl dt, .meta .stats dl dd {
   margin-block: 0 auto;
   margin-inline: 0 0.375em;
   padding-inline-end: 0.25em;
@@ -38,8 +42,8 @@ dl.meta {
   float: left;
 }
 
-.meta .stats dl, .meta .stats dl dd, .meta .stats dl dt, dl.meta dd ul li {
-  padding-inline-start: 0;
+.meta .stats dl dd {
+  padding-inline-end: 0.75em;
 }
 
 .meta p {
