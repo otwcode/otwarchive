@@ -482,10 +482,10 @@ Rails.application.routes.draw do
         post :purge
         get :send_out
         put :update_multiple
-        get :default_all
+        patch :default_all
       end
       member do
-        get :default
+        patch :default
       end
     end
     resources :claims, controller: "challenge_claims" do
