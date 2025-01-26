@@ -4,10 +4,8 @@ class Bookmark < ApplicationRecord
   include Responder
   include Taggable
 
-  validates :pseud_id, presence: true
-
   belongs_to :bookmarkable, polymorphic: true, inverse_of: :bookmarks
-  belongs_to :pseud
+  belongs_to :pseud, required: true
 
   validates_length_of :bookmarker_notes,
     maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
