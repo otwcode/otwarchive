@@ -75,7 +75,11 @@ Rails.application.routes.draw do
   #### INVITATIONS ####
 
   resources :invitations
-  resources :user_invite_requests
+  resources :user_invite_requests do
+    collection do
+      patch :update
+    end
+  end
   resources :invite_requests, only: [:index, :create, :destroy] do
     collection do
       get :manage
@@ -658,7 +662,6 @@ Rails.application.routes.draw do
   #
   # Note written on August 1, 2017 during upgrade to Rails 5.1.
   get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
-  get '/user_invite_requests/update' => 'user_invite_requests#update'
 
   patch '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
 
