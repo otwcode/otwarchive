@@ -555,6 +555,8 @@ en:
       guest_comments_disabled: Sorry, the Archive doesn't allow guests to comment right now.
       invite_to_collections_link: Invite To Collections
       logged_as_admin: Please log out of your admin account to comment.
+      mark_as_read: Mark as Read
+      mark_for_later: Mark for Later
       permissions:
         admin_post:
           alt_action: You can however %{support_link} with any feedback or questions.
