@@ -94,6 +94,14 @@ RSpec.configure do |config|
     BookmarkIndexer.delete_index
   end
 
+  config.before :each, user_search: true do
+    UserIndexer.prepare_for_testing
+  end
+
+  config.after :each, user_search: true do
+    UserIndexer.delete_index
+  end
+
   config.before :each, pseud_search: true do
     PseudIndexer.prepare_for_testing
   end
@@ -140,7 +148,7 @@ RSpec.configure do |config|
   VALID_URLS = %w[http://rocksalt-recs.livejournal.com/196316.html https://rocksalt-recs.livejournal.com/196316.html].freeze
   INACTIVE_URLS = %w[https://www.iaminactive.com http://www.iaminactive.com https://iaminactive.com http://iaminactive.com].freeze
   BYPASSED_URLS = %w[fanfiction.net ficbook.net].freeze
-  
+
   # rspec-rails 3 will no longer automatically infer an example group's spec type
   # from the file location. You can explicitly opt-in to the feature using this
   # config option.
