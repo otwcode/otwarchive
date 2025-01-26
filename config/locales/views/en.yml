@@ -555,8 +555,6 @@ en:
       guest_comments_disabled: Sorry, the Archive doesn't allow guests to comment right now.
       invite_to_collections_link: Invite To Collections
       logged_as_admin: Please log out of your admin account to comment.
-      mark_as_read: Mark as Read
-      mark_for_later: Mark for Later
       permissions:
         admin_post:
           alt_action: You can however %{support_link} with any feedback or questions.
@@ -1623,7 +1621,7 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
-    skin_actions:
+    revert_skin_form:
       revert_to_default: Revert to Default Skin
   subscriptions:
     index:
@@ -1948,9 +1946,6 @@ en:
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
-    work_header_navigation:
-      mark_as_read: Mark as Read
-      mark_for_later: Mark for Later
     work_header_notes:
       inspired_by:
         restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)

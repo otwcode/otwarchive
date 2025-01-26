@@ -5,6 +5,6 @@
 <% elsif logged_in? && current_user.preference.skin_id != AdminSetting.default_skin_id %>
   <%= form_for(current_user.preference, url: user_preference_path(current_user, current_user.preference), method: :patch) do |f| %>
     <%= f.hidden_field :skin_id, value: AdminSetting.default_skin_id %>
-    <%= f.submit ts(".revert_to_default") %>
+    <%= f.submit t(".revert_to_default") %>
   <% end %>
 <% end %>

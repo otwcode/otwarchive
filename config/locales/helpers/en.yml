@@ -45,3 +45,8 @@ en:
       troubleshot: Account Troubleshot
       validated: Account Validated
       warn: Warned
+  works_helper:
+    mark_as_read_link:
+      mark_as_read: Mark as Read
+    mark_for_later_link:
+      mark_for_later: Mark for Later
