@@ -4,6 +4,8 @@ class Bookmark < ApplicationRecord
   include Responder
   include Taggable
 
+  validates :pseud_id, presence: true
+
   belongs_to :bookmarkable, polymorphic: true, inverse_of: :bookmarks
   belongs_to :pseud
 
