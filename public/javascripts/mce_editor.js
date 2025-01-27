@@ -80,7 +80,7 @@ tinyMCE.init({
     // Update character count when switching to and editing in TinyMCE
     editor.on('init change undo redo', function() {
       editor.save();
-      $j(editor.targetElm).trigger('change');
+      $j(editor.getElement()).trigger('change');
     });
   }
 });
