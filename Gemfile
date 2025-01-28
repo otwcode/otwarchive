@@ -110,8 +110,7 @@ gem "marcel", "1.0.2"
 # Library for helping run pt-online-schema-change commands:
 gem "departure", "~> 6.5"
 
-# Ruby 3.1 means we need to specify a version of mail until we get to rails 7.x
-gem "mail", ">= 2.8"
+gem "rack-timeout"
 
 group :test do
   gem "rspec-rails", "~> 6.0"
