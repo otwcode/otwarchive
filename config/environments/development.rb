@@ -26,7 +26,7 @@ Rails.application.configure do
     memcached_servers = "127.0.0.1:11211"
     memcached_servers = YAML.load_file(Rails.root.join("config/local.yml")).fetch("MEMCACHED_SERVERS", memcached_servers) if File.file?(Rails.root.join("config/local.yml"))
     config.cache_store = :mem_cache_store, memcached_servers,
-                         { namespace: "ao3-v2-dev", compress: true, pool_size: 10 }
+                         { namespace: "ao3-v2-dev", compress: true, pool: { size: 10 } }
     config.public_file_server.headers = {
       "Cache-Control" => "public, max-age=#{2.days.to_i}"
     }

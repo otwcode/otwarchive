@@ -31,7 +31,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = true
 
   config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
-                       { namespace: "ao3-v2-test", compress: true, pool_size: 10, raise_errors: true }
+                       { namespace: "ao3-v2-test", compress: true, pool: { size: 10 }, raise_errors: true }
 
   # Render exception templates for rescuable exceptions and raise for other exceptions.
   config.action_dispatch.show_exceptions = :rescuable
