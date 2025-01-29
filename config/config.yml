@@ -746,3 +746,8 @@ PERCONA_ARGS: >
 # Production has more than 5 for these
 BOOKMARKABLE_SHARDS: 5
 WORKS_SHARDS: 5
+
+# Puma killer config (automatically restart Puma when resource constrained);
+# both are measured in seconds.
+PUMA_ROLLING_RESTART_FREQUENCY: 172800 # 2 days
+PUMA_ROLLING_RESTART_SPLAY: 702
