@@ -111,6 +111,7 @@ gem "marcel", "1.0.2"
 gem "departure", "~> 6.5"
 
 gem "rack-timeout"
+gem "puma_worker_killer"
 
 group :test do
   gem "rspec-rails", "~> 6.0"

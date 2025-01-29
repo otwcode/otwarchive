@@ -296,6 +296,9 @@ GEM
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
+    get_process_mem (1.0.0)
+      bigdecimal (>= 2.0)
+      ffi (~> 1.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
     god (0.13.7)
@@ -423,6 +426,10 @@ GEM
     public_suffix (5.0.4)
     puma (6.5.0)
       nio4r (~> 2.0)
+    puma_worker_killer (1.0.0)
+      bigdecimal (>= 2.0)
+      get_process_mem (>= 0.2)
+      puma (>= 2.7)
     pundit (2.3.1)
       activesupport (>= 3.0.0)
     raabro (1.4.0)
@@ -699,6 +706,7 @@ DEPENDENCIES
   pickle
   pry-byebug
   puma (~> 6.5.0)
+  puma_worker_killer
   pundit
   rack (~> 2.2)
   rack-attack
