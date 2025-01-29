@@ -6,7 +6,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 7.0.8"
+gem "rails", "~> 7.1"
 gem "rails-i18n"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
@@ -83,9 +83,7 @@ gem 'timeliness'
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
 # Globalize for translations
-# Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
-gem 'globalize', git: 'https://github.com/globalize/globalize'
-gem 'activemodel-serializers-xml'
+gem "globalize", "~> 7.0"
 
 # Add a clean notifier that shows we are on dev or test
 gem 'rack-dev-mark', '>=0.7.8'
@@ -108,7 +106,7 @@ gem 'kgio', '2.10.0'
 gem "marcel", "1.0.2"
 
 # Library for helping run pt-online-schema-change commands:
-gem "departure", "~> 6.5"
+gem "departure", "~> 6.7"
 
 gem "rack-timeout"
 gem "puma_worker_killer"
