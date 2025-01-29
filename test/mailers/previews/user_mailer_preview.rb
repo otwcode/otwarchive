@@ -112,6 +112,42 @@ class UserMailerPreview < ApplicationMailerPreview
     new_email = "new_email"
     UserMailer.change_email(user.id, old_email, new_email)
   end
+  
+  # Sends email when collection item changes status
+  [:anonymous_unrevealed_collection, :anonymous_collection, :unrevealed_collection].each do |status|
+    # anonymous_unrevealed
+    define_method :"anonymous_unrevealed_collection_notification" do
+      user, collection, item = anonymous_or_unrevealed_data(status)
+      newly_anonymous = true
+      newly_unrevealed = true
+      UserMailer.anonymous_or_unrevealed_notification(
+        user.id, item.id, collection.id,
+        anonymous: newly_anonymous, unrevealed: newly_unrevealed
+      )
+    end
+
+    # anonymous
+    define_method :"anonymous_collection_notification" do
+      user, collection, item = anonymous_or_unrevealed_data(status)
+      newly_anonymous = true
+      newly_unrevealed = false
+      UserMailer.anonymous_or_unrevealed_notification(
+        user.id, item.id, collection.id,
+        anonymous: newly_anonymous, unrevealed: newly_unrevealed
+      )
+    end
+
+    # unrevealed
+    define_method :"unrevealed_collection_notification" do
+      user, collection, item = anonymous_or_unrevealed_data(status)
+      newly_anonymous = false
+      newly_unrevealed = true
+      UserMailer.anonymous_or_unrevealed_notification(
+        user.id, item.id, collection.id,
+        anonymous: newly_anonymous, unrevealed: newly_unrevealed
+      )
+    end
+  end
 
   def invite_increase_notification
     user = create(:user, :for_mailer_preview)
@@ -126,5 +162,12 @@ class UserMailerPreview < ApplicationMailerPreview
     second_creator = create(:user, :for_mailer_preview)
     creation = create(creation_type, authors: [first_creator.default_pseud, second_creator.default_pseud])
     [creation.creatorships.last, first_creator]
+  end
+  
+  def anonymous_or_unrevealed_data(status)
+    user = create(:user, :for_mailer_preview)
+    collection = create(status)
+    item = create(:work, authors: [user.default_pseud], collections: [collection])
+    [user, collection, item]
   end
 end
