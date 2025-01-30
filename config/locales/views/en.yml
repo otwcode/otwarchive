@@ -856,6 +856,125 @@ en:
       why_we_build: We are building this archive because we believe it's possible for people of all opinions and persuasions to come together and share with each other.
       you_can_html: You are free to express your creativity within the %{few_restrictions_link} needed to keep the service viable for other users. The Archive strives to protect your rights to free expression and privacy; you can read about the details in our %{terms_of_service_link}.
       your_feedback: your feedback
+    dmca:
+      appeal:
+        copyright: Copyright infringement
+        dispute_html: you <em>cannot</em> reupload or repost the content unless you have filed a DMCA counternotice to dispute the takedown
+        heading: I was notified that my work was removed from AO3 due to a DMCA takedown notice. What can I do?
+        lumen: Lumen
+        notify: remove the content and notify you by email
+        plagiarism: plagiarism
+        removal_html: If the OTW receives a valid DMCA takedown notice for content you uploaded to AO3, we will %{notify_link}. We may also send a redacted version of the DMCA takedown notice to %{lumen_link} and other third parties at our discretion.
+        reupload_html: If your content was removed due to a DMCA takedown notice, %{dispute_bold}. If you reupload or repost the content without filing a DMCA counternotice, we may %{suspend_link}.
+        suspend: suspend your account
+        tos: Terms of Service
+        tos_faq: Terms of Service FAQ
+        violations_html: '%{copyright_link} and %{plagiarism_link} are violations of Sections II.D and II.E of our %{tos_link}, respectively. For more information, please refer to our %{tos_faq_link}.'
+      counternotice_instructions:
+        address_attn: 'Attention: Legal'
+        address_org: Organization for Transformative Works
+        address_state: New York, NY 10003-1502
+        address_street: '228 Park Ave S #18156'
+        contact_legal: the Legal committee's contact form
+        consider_html: If you are considering whether to file a DMCA counternotice, we recommend that you contact an intellectual property lawyer licensed to practice in your jurisdiction, so that you are aware of your legal rights and obligations. You can also review the %{lumen_faq_link}.
+        defend: you are willing to defend your use of the original copyrighted material in court
+        dispute_html: If you believe that your content does not infringe on the copyright owner's rights, you can file a DMCA counternotice to dispute the takedown. By filing a counternotice, you are indicating that %{defend_bold} if the party who submitted the original takedown notice chooses to pursue legal action against you.
+        heading: Filing a DMCA counternotice
+        initiate_html: "To initiate a formal DMCA counter-notification request, contact the OTW's designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:"
+        lumen_faq: Lumen DMCA Explanation and FAQ
+        prefer: We prefer to receive DMCA requests through the contact form or by email.
+        time_limit: You can file a DMCA counternotice at any point after your content has been removed; there is no time limit.
+      counternotice_process:
+        heading: DMCA counter-notification process
+        lumen: Lumen
+        notification_html: The original submitter will have 10 business days to prevent the restoration of your content by filing a lawsuit against you. If the original submitter does not file a lawsuit within 10 business days, the OTW will restore your content (or, if your content has already been deleted, allow you to reupload it) between 10 and 14 business days after we receive the counternotice. We may also send a redacted version of the DMCA counternotice to %{lumen_link} and other third parties at our discretion.
+        valid: If the OTW receives a valid DMCA counternotice, we will make reasonable efforts to notify the party who submitted the original takedown notice.
+      counternotice_requirements:
+        consent: 'a statement that you consent to the jurisdiction of a U.S. federal court in either:'
+        contact: your name, address, and phone number;
+        heading: Requirements of a DMCA counternotice
+        intro: 'The counternotice must substantially comply with the requirements of 17 U.S.C. § 512(g)(3). You are also required to consent to the jurisdiction of a United States court. The legal requirements of a valid DMCA counternotice include:'
+        liability: Per 17 U.S.C. § 512(f), you may be subject to liability if you knowingly and materially misrepresent your claim that the content was removed due to a mistake or misidentification.
+        mistake_html: a statement, %{perjury_bold}, that the content was removed due to a mistake or misidentification;
+        new_york: Manhattan, New York
+        non_us_resident_html: the district where the OTW is located (%{new_york_link}), if you are not in the U.S.; and
+        perjury: made under penalty of perjury
+        service: a statement that you will accept service of process from the party who submitted the original takedown notice.
+        signature: your physical or electronic signature;
+        url: the URL(s) of the content that was removed;
+        usa_resident: the district where you live, if you are in the U.S.; or
+      intro:
+        contact_legal: contact the OTW Legal committee
+        legality_html: The OTW will respond promptly to notices of alleged copyright infringement that substantially comply with all %{requirements_link}. However, we believe that %{transformative_works_legal_link}, and we reserve the right to review the allegedly infringing content and independently determine whether it is infringing. If you have any questions about our DMCA Policy, please %{contact_legal_link}.
+        purpose_html: The Digital Millennium Copyright Act (DMCA) establishes the procedure the Organization for Transformative Works (OTW) must follow when users of our sites, including the Archive of Our Own (AO3), %{reproduce_unauthorized_link}. Specifically, %{uscode_link} protects the OTW from potential liability when infringing content is present on our sites.
+        reproduce_unauthorized: reproduce copyrighted material without authorization
+        requirements: legal requirements
+        transformative_works_legal: transformative fanworks are legal
+        uscode: 17 U.S.C. § 512
+      license:
+        cc_license: Creative Commons Attribution-ShareAlike 4.0 International License
+        credit_html: AO3's DMCA policy is licensed under the %{cc_license_link}. Material in this policy has been drawn from Dreamwidth, the Electronic Frontier Foundation, and Wikipedia.
+      page_heading: DMCA Policy
+      removal:
+        abuse_report_html: '%{submit_abuse_bold} Abuse reports are evaluated by the Policy & Abuse committee for violations of the %{tos_link}, and held to a very high %{confidentiality_link}. When submitting an Abuse report about copyright infringement, you must provide a link to the violating content on AO3 and clearly identify the original source in your report description. For more information, please refer to the %{tos_faq_link}.'
+        confidentiality: standard of confidentiality
+        dmca_html: "%{file_dmca_bold} DMCA takedown notices can only be filed by the copyright owner or someone legally authorized to act on their behalf. DMCA notices must be sent to the OTW's designated agent and comply with all %{requirements_link}. DMCA notices are %{not_confidential_link}. The OTW reserves the right to make public all DMCA notices that we receive, though some information may be redacted for privacy."
+        do_not: do not
+        do_not_spam_html: Please %{do_not_bold} submit an Abuse report if you intend to file a DMCA notice. Submitting both an Abuse report and a DMCA notice about the same content may delay the processing of both requests.
+        file_dmca: File a DMCA takedown notice
+        file_dmca_html: '%{file_dmca_link}:'
+        heading:  My work was posted on AO3 without my permission. What can I do?
+        intro: 'If you encounter content on AO3 that you believe infringes on your copyright, you have the following options:'
+        not_confidential: not subject to confidentiality
+        requirements: legal requirements
+        submit_abuse: Submit an Abuse report
+        submit_abuse_html: '%{submit_abuse_link}:'
+        tos: AO3 Terms of Service
+        tos_faq: Terms of Service FAQ
+      repeat:
+        heading: Repeat offenses
+        required_html: As required by 17 U.S.C. § 512(i)(1)(A), we may %{suspend_link} users who repeatedly violate others' copyright. The OTW has the discretion to decide what qualifies as a repeated offense.
+        suspend: suspend
+      takedown_instructions:
+        address_attn: 'Attention: Legal'
+        address_org: Organization for Transformative Works
+        address_state: New York, NY 10003-1502
+        address_street: '228 Park Ave S #18156'
+        contact_legal: the Legal committee's contact form
+        heading: Filing a DMCA takedown notice
+        initiate_html: "To initiate a formal DMCA takedown request, contact the OTW's designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:"
+        prefer: We prefer to receive DMCA requests through the contact form or by email.
+      takedown_process:
+        counternotify: If the OTW receives a valid DMCA counternotice, we will make reasonable efforts to notify you. You will have 10 business days to file a lawsuit to prevent the restoration of the content. If you do not notify us within 10 business days that you have filed a lawsuit, we will allow the content to be restored in accordance with 17 U.S.C. § 512(g)(2)(B)-(C).
+        dispute: If the account owner believes that their content does not infringe upon your copyright, they may file a DMCA counternotice disputing the takedown. The account owner can file a DMCA counternotice at any point after the content has been removed; there is no time limit.
+        heading: DMCA takedown process
+        lumen: Lumen
+        notification_html: When the content is removed from AO3, the information you provided in the DMCA takedown notice will be forwarded to the owner of the account responsible for posting the content. We may also send a redacted version of the DMCA takedown notice to %{lumen_link} and other third parties at our discretion.
+        requirements: legal requirements
+        valid_html: If the OTW receives a DMCA takedown notice that fulfills all %{requirements_link}, we will remove the content once we review the validity of the infringement claim.
+      takedown_requirements:
+        accurate: a statement that the information you have provided is accurate.
+        authorized_html: a statement, %{perjury_bold}, that you are authorized to act on behalf of the copyright owner; and
+        contact: your contact information;
+        good_faith: a statement that you have a good-faith belief that the use of the content is not authorized by the copyright owner(s), their agent, or the law;
+        heading: Requirements of a DMCA takedown notice
+        intro: 'The takedown notice must substantially comply with the requirements of 17 U.S.C. § 512(c)(3)(A). You are also required to consent to the jurisdiction of a United States court. The legal requirements of a valid DMCA takedown notice include:'
+        liability: Per 17 U.S.C. § 512(f), you may be subject to liability if you knowingly and materially misrepresent your claim that the content infringes on your copyright.
+        perjury: made under penalty of perjury
+        signature: your physical or electronic signature;
+        source: identification of the copyrighted work being infringed upon (for example, a URL or publication listing);
+        url: the URL(s) of the specific content on our site that you believe to be infringing;
+      toc:
+        appeal: I was notified that my work was removed from AO3 due to a DMCA takedown notice. What can I do?
+        counternotice_instructions: Filing a DMCA counternotice
+        counternotice_process: DMCA counter-notification process
+        counternotice_requirements: Requirements of a DMCA counternotice
+        heading: Table of Contents
+        penalties: Repeat offenses
+        removal: My work was posted on AO3 without my permission. What can I do?
+        takedown_instructions: Filing a DMCA takedown notice
+        takedown_process: DMCA takedown process
+        takedown_requirements: Requirements of a DMCA takedown notice
     donate:
       general:
         text: There are two main ways to support the AO3 - donating your time or money.
