@@ -11,6 +11,7 @@ class SerialWork < ApplicationRecord
   after_destroy :update_series_index, :update_work_index
 
   scope :in_order, -> { order(:position) }
+  Resque::Job.extend(ResqueExecutorWrap)
 
   # If you add or remove a work from a series, make sure restricted? is still accurate
   def adjust_series_visibility

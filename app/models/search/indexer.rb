@@ -8,6 +8,7 @@ class Indexer
     Series: %w[BookmarkedSeriesIndexer],
     ExternalWork: %w[BookmarkedExternalWorkIndexer]
   }.freeze
+  Resque::Job.extend(ResqueExecutorWrap)
 
   delegate :klass, :klass_with_includes, :index_name, :document_type, to: :class
 

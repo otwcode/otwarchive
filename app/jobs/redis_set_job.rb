@@ -35,7 +35,7 @@ class RedisSetJob < ApplicationJob
 
   def perform(*args, **kwargs)
     scan_and_remove(redis, key, batch_size: batch_size) do |batch|
-      perform_on_batch(batch, *args, **kwargs)
+      Rails.application.executor.wrap {perform_on_batch(batch, *args, **kwargs)}
     end
   end
 

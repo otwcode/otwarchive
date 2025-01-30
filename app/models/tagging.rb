@@ -12,6 +12,8 @@ class Tagging < ApplicationRecord
   after_create :update_filters
   after_destroy :update_filters
 
+  Resque::Job.extend(ResqueExecutorWrap)
+
   def update_filters
     return unless taggable.is_a?(Filterable)
 

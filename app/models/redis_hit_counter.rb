@@ -3,6 +3,7 @@
 class RedisHitCounter
   class << self
     include RedisScanning
+    Resque::Job.extend(ResqueExecutorWrap)
 
     # Records a hit for the given IP address on the given work ID. If the IP
     # address hasn't visited the work within the current 24 hour block, we

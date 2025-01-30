@@ -1,4 +1,5 @@
 module Searchable
+  Resque::Job.extend(ResqueExecutorWrap)
 
   def self.included(searchable)
     searchable.class_eval do

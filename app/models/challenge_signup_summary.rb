@@ -1,5 +1,5 @@
 class ChallengeSignupSummary
-
+  Resque::Job.extend(ResqueExecutorWrap)
   attr_reader :collection, :challenge
 
   def initialize(collection)

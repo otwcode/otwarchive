@@ -3,6 +3,7 @@
 # A module for types that are supposed to have FilterTaggings, calculated based
 # on their tags. Includes Taggable.
 module Filterable
+  Resque::Job.extend(ResqueExecutorWrap)
   extend ActiveSupport::Concern
   include Taggable
 

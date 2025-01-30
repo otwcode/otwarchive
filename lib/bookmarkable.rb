@@ -1,4 +1,5 @@
 module Bookmarkable
+  Resque::Job.extend(ResqueExecutorWrap)
 
   def self.included(bookmarkable)
     bookmarkable.class_eval do
