@@ -858,8 +858,9 @@ en:
       your_feedback: your feedback
     dmca:
       appeal:
+        cannot: cannot
         copyright: Copyright infringement
-        dispute_html: you <em>cannot</em> reupload or repost the content unless you have filed a DMCA counternotice to dispute the takedown
+        dispute_html: you %{cannot_italic} reupload or repost the content unless you have filed a DMCA counternotice to dispute the takedown
         heading: I was notified that my work was removed from AO3 due to a DMCA takedown notice. What can I do?
         lumen: Lumen
         notify: remove the content and notify you by email

@@ -115,7 +115,7 @@
 </p>
 <p>
   <%= t(".appeal.reupload_html",
-        dispute_bold: tag.strong(t(".appeal.dispute_html")),
+        dispute_bold: tag.strong(t(".appeal.dispute_html", cannot_italic: tag.em(t(".appeal.cannot")))),
         suspend_link: link_to(t(".appeal.suspend"),"#repeat_offenses")) %>
 </p>
 
