@@ -131,6 +131,8 @@ class Bookmark < ApplicationRecord
   after_create :update_work_stats
   after_destroy :update_work_stats, :update_pseud_index
 
+  Resque::Job.extend(ResqueExecutorWrap)
+
   def invalidate_bookmark_count
     work = Work.where(id: self.bookmarkable_id)
     if work.present? && self.bookmarkable_type == 'Work'
