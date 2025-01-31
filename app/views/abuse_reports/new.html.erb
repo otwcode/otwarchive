@@ -4,38 +4,48 @@
 <!--/descriptions-->
 
 <!--subnav-->
+<h3 class="landmark heading"><%= t("a11y.navigation") %></h3>
+<%= render "home/tos_navigation" %>
 <!--/subnav-->
 
 <!--main content-->
+<h3 class="landmark heading"><%= t(".page_content_landmark") %></h3>
 <div class="userstuff">
-  <p class="important" id="reportwhat">
+  <p id="reportwhat"><big><strong>
     <%= t(".purview.about_html",
-          tos_link: (link_to t(".purview.tos"), tos_path)) %>
-  </p>
+          tos_link: link_to(t(".purview.tos"), tos_path),
+          tos_faq_link: link_to(t(".purview.tos_faq"), tos_faq_path(anchor: "how_to_report"))) %>
+  </strong></big></p>
 
   <p>
-    <%= t(".purview.technical_help_html",
-          support_link: (link_to t(".purview.support"), new_feedback_report_path)) %>
+    <%= t(".purview.contact_support_html",
+          fnok_link: link_to(t(".purview.fnok"), archive_faq_path("fannish-next-of-kin")),
+          support_link: link_to(t(".purview.support"), new_feedback_report_path)) %>
   </p>
 
   <p>
     <%= t(".purview.dmca_takedown_html",
-          dmca_link: (link_to t(".purview.dmca"), dmca_path)) %>
+          dmca_abbreviation: tag.abbr(t(".purview.dmca.abbreviated"), title: t(".purview.dmca.full")),
+          legal_link: link_to(t(".purview.legal"), dmca_path)) %>
   </p>
 
   <p id="reportwhy">
     <strong>
-      <%= t(".reportable.intro") %>
+      <%= t(".reportable.intro_html",
+          pac_link: link_to(t(".reportable.pac"), "https://www.transformativeworks.org/committees/policy-abuse-committee/")) %>
     </strong>
   </p>
 
   <ul>
     <li><%= t(".reportable.violation_html",
-              tos_link: (link_to t(".purview.tos"), tos_path, name: "reportwhat")) %></li>
-    <li><%= t(".reportable.content") %></li>
+              content_policy_link: link_to(t(".reportable.content_policy"), content_path),
+              tos_link: link_to(t(".reportable.tos"), tos_path)) %></li>
+    <li><%= t(".reportable.allowed") %></li>
     <li><%= t(".reportable.harassment") %></li>
     <li><%= t(".reportable.hack") %></li>
-    <li><%= t(".reportable.suspended") %></li>
+    <li><%= t(".reportable.suspended_html",
+              email_link: link_to(t(".reportable.email"), tos_faq_path(anchor:"complaint_notification"))) %>
+    </li>
   </ul>
 
   <p id="reporthow">
@@ -45,21 +55,24 @@
   </p>
 
   <ul>
-    <li><%= t(".include.username") %></li>
-    <li><%= t(".include.links") %></li>
-    <li><%= t(".include.quote_html",
-              tos_link: (link_to t(".include.ao3"), tos_path(anchor: "content"))) %></li>
-    <li><%= t(".include.sources") %></li>
+    <li><%= t(".include.username_html",
+              username_link: link_to(t(".include.username"), tos_faq_path(anchor:"user_unknown"))) %></li>
+    <li><%= t(".include.other_content") %></li>
+    <li><%= t(".include.quote") %></li>
+    <li><%= t(".include.sources_html",
+              sources_link: link_to(t(".include.sources"), tos_faq_path(anchor: "report_infringement"))) %></li>
   </ul>
 
-  <p><%= t(".do_not_spam") %></p>
+  <p>
+    <%= t(".do_not_spam.paragraph_html",
+          split_bold: tag.strong(t(".do_not_spam.split")),
+          delay_link: link_to(t(".do_not_spam.delay"), tos_faq_path(anchor: "complaint_resolution"))) %>
+  </p>
 
   <p id="reportlanguage">
-    <strong>
-      <%= t(".include.languages",
-            list_html: @abuse_languages.map { |language| tag.span(language.name, lang: language.short) }.to_sentence.html_safe).html_safe %>
-    </strong>
-    <%= t(".include.delay") %>
+    <%= t(".languages.intro",
+          list_html: @abuse_languages.map { |language| tag.span(language.name, lang: language.short) }.to_sentence.html_safe).html_safe %>
+    <strong><%= t(".languages.delay") %></strong>
   </p>
 </div>
 
@@ -116,8 +129,8 @@
       <dd class="required">
         <p id="comment-field-description">
           <%= t(".form.comment.description_html",
-                tos_link: (link_to t(".form.comment.tos"), tos_path(anchor: "content")),
-                include_link: (link_to t(".form.comment.include"), anchor: "reporthow")) %>
+                tos_link: link_to(t(".form.comment.tos"), tos_path(anchor: "content")),
+                include_link: link_to(t(".form.comment.include"), anchor: "reporthow")) %>
         </p>
         <%= f.text_area :comment, "aria-describedby" => "comment-field-description" %>
         <%= live_validation_for_field("abuse_report_comment",
