@@ -7,7 +7,7 @@ describe AbuseReporter do
 
   let(:abuse_report_attributes) do
     {
-      title: "This is a tragesy",
+      title: "This is a tragedy",
       description: "Nothing more to say",
       language: "English",
       email: "walrus@example.org",
@@ -22,7 +22,7 @@ describe AbuseReporter do
       "departmentId" => "abuse_dep_id",
       "email" => "walrus@example.org",
       "contactId" => "1",
-      "subject" => "[AO3] Abuse - This is a tragesy",
+      "subject" => "[AO3] Abuse - This is a tragedy",
       "description" => "Nothing more to say",
       "cf" => {
         "cf_language" => "English",
