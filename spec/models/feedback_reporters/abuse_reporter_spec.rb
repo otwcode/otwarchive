@@ -28,7 +28,7 @@ describe AbuseReporter do
         "cf_language" => "English",
         "cf_name" => "Walrus",
         "cf_ip" => "127.0.0.1",
-        "cf_url" => "http://localhost"
+        "cf_ticket_url" => "http://localhost"
       }
     }
   end
@@ -76,7 +76,7 @@ describe AbuseReporter do
       it "returns a hash containing 'Unknown URL'" do
         allow(subject).to receive(:url).and_return("")
 
-        expect(subject.report_attributes.fetch("cf").fetch("cf_url")).to eq("Unknown URL")
+        expect(subject.report_attributes.fetch("cf").fetch("cf_ticket_url")).to eq("Unknown URL")
       end
     end
 
