@@ -24,8 +24,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I view the work "ToS Violation"
       And I follow "Hide Work"
     Then I should see "Item has been hidden."
-      And logged out users should not see "ToS Violation" 
-      And logged in users should not see "ToS Violation" 
+      And the work "ToS Violation" should be hidden
       And "regular_user" should see their work "ToS Violation" is hidden
       And 2 emails should be delivered
       And the email to "regular_user" should contain "you will be required to take action to correct the violation"
