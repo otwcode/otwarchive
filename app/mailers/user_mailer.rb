@@ -363,12 +363,10 @@ class UserMailer < ApplicationMailer
     @user = User.find_by(id: user_id)
     @work = Work.find_by(id: creation_id)
 
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   def admin_spam_work_notification(creation_id, user_id)

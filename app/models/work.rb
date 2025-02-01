@@ -1149,7 +1149,9 @@ class Work < ApplicationRecord
       if spam?
         UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
       else
-        UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
+        I18n.with_locale(@user.preference.locale.iso) do
+          UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
+        end
       end
     end
   end
