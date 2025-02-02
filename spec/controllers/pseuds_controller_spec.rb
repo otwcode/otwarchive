@@ -78,7 +78,8 @@ describe PseudsController do
           end
 
           it "returns NotFound error when pseud doesn't exist" do
-            expect { get :edit, params: { user_id: user, id: "fake_pseud" } }.to raise_error(ActiveRecord::RecordNotFound)
+            expect { get :edit, params: { user_id: user, id: "fake_pseud" } }
+              .to raise_error(ActiveRecord::RecordNotFound)
           end
         end
       end
@@ -88,7 +89,8 @@ describe PseudsController do
       before { fake_login_known_user(user) }
 
       it "returns NotFound error when pseud doesn't exist" do
-        expect { get :edit, params: { user_id: user, id: "fake_pseud" } }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { get :edit, params: { user_id: user, id: "fake_pseud" } }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
