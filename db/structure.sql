@@ -1,3 +1,4 @@
+/*M!999999\- enable the sandbox mode */ 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -9,6 +10,133 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP TABLE IF EXISTS `_comments_old`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `_comments_old` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pseud_id` int(11) DEFAULT NULL,
+  `comment_content` text NOT NULL,
+  `depth` int(11) DEFAULT NULL,
+  `threaded_left` int(11) DEFAULT NULL,
+  `threaded_right` int(11) DEFAULT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `ip_address` varchar(255) DEFAULT NULL,
+  `commentable_id` int(11) DEFAULT NULL,
+  `commentable_type` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `thread` int(11) DEFAULT NULL,
+  `user_agent` varchar(255) DEFAULT NULL,
+  `approved` tinyint(1) NOT NULL DEFAULT 0,
+  `hidden_by_admin` tinyint(1) NOT NULL DEFAULT 0,
+  `edited_at` datetime DEFAULT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `parent_type` varchar(255) DEFAULT NULL,
+  `comment_content_sanitizer_version` smallint(6) NOT NULL DEFAULT 0,
+  `unreviewed` tinyint(1) NOT NULL DEFAULT 0,
+  `iced` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `index_comments_commentable` (`commentable_id`,`commentable_type`),
+  KEY `index_comments_on_pseud_id` (`pseud_id`),
+  KEY `index_comments_parent` (`parent_id`,`parent_type`),
+  KEY `comments_by_thread` (`thread`),
+  KEY `index_comments_on_ip_address` (`ip_address`),
+  KEY `index_comments_on_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `_preferences_old`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `_preferences_old` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `history_enabled` tinyint(1) DEFAULT 1,
+  `email_visible` tinyint(1) DEFAULT 0,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `date_of_birth_visible` tinyint(1) DEFAULT 0,
+  `edit_emails_off` tinyint(1) NOT NULL DEFAULT 0,
+  `comment_emails_off` tinyint(1) NOT NULL DEFAULT 0,
+  `adult` tinyint(1) DEFAULT 0,
+  `hide_warnings` tinyint(1) NOT NULL DEFAULT 0,
+  `comment_inbox_off` tinyint(1) DEFAULT 0,
+  `comment_copy_to_self_off` tinyint(1) NOT NULL DEFAULT 1,
+  `work_title_format` varchar(255) DEFAULT 'TITLE - AUTHOR - FANDOM',
+  `hide_freeform` tinyint(1) NOT NULL DEFAULT 0,
+  `first_login` tinyint(1) DEFAULT 1,
+  `collection_emails_off` tinyint(1) NOT NULL DEFAULT 0,
+  `collection_inbox_off` tinyint(1) NOT NULL DEFAULT 0,
+  `recipient_emails_off` tinyint(1) NOT NULL DEFAULT 0,
+  `view_full_works` tinyint(1) NOT NULL DEFAULT 0,
+  `time_zone` varchar(255) DEFAULT NULL,
+  `plain_text_skin` tinyint(1) NOT NULL DEFAULT 0,
+  `disable_work_skins` tinyint(1) NOT NULL DEFAULT 0,
+  `skin_id` int(11) DEFAULT NULL,
+  `minimize_search_engines` tinyint(1) NOT NULL DEFAULT 0,
+  `kudos_emails_off` tinyint(1) NOT NULL DEFAULT 0,
+  `disable_share_links` tinyint(1) NOT NULL DEFAULT 0,
+  `banner_seen` tinyint(1) NOT NULL DEFAULT 0,
+  `preferred_locale` int(11) NOT NULL DEFAULT 1,
+  `allow_cocreator` tinyint(1) DEFAULT 0,
+  `allow_gifts` tinyint(1) NOT NULL DEFAULT 0,
+  `allow_collection_invitation` tinyint(1) NOT NULL DEFAULT 0,
+  `guest_replies_off` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `index_preferences_on_user_id` (`user_id`),
+  KEY `index_preferences_on_skin_id` (`skin_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `_skins_old`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `_skins_old` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `author_id` int(11) DEFAULT NULL,
+  `css` text DEFAULT NULL,
+  `public` tinyint(1) DEFAULT 0,
+  `official` tinyint(1) DEFAULT 0,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `icon_file_name` varchar(255) DEFAULT NULL,
+  `icon_content_type` varchar(255) DEFAULT NULL,
+  `icon_file_size` int(11) DEFAULT NULL,
+  `icon_updated_at` datetime DEFAULT NULL,
+  `icon_alt_text` varchar(255) DEFAULT '',
+  `margin` int(11) DEFAULT NULL,
+  `paragraph_gap` int(11) DEFAULT NULL,
+  `font` varchar(255) DEFAULT NULL,
+  `base_em` int(11) DEFAULT NULL,
+  `background_color` varchar(255) DEFAULT NULL,
+  `foreground_color` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `rejected` tinyint(1) NOT NULL DEFAULT 0,
+  `admin_note` varchar(255) DEFAULT NULL,
+  `description_sanitizer_version` smallint(6) NOT NULL DEFAULT 0,
+  `type` varchar(255) DEFAULT NULL,
+  `paragraph_margin` float DEFAULT NULL,
+  `headercolor` varchar(255) DEFAULT NULL,
+  `accent_color` varchar(255) DEFAULT NULL,
+  `role` varchar(255) DEFAULT NULL,
+  `media` varchar(255) DEFAULT NULL,
+  `ie_condition` varchar(255) DEFAULT NULL,
+  `filename` varchar(255) DEFAULT NULL,
+  `do_not_upgrade` tinyint(1) NOT NULL DEFAULT 0,
+  `cached` tinyint(1) NOT NULL DEFAULT 0,
+  `unusable` tinyint(1) NOT NULL DEFAULT 0,
+  `featured` tinyint(1) NOT NULL DEFAULT 0,
+  `in_chooser` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `index_skins_on_type` (`type`),
+  KEY `index_skins_on_public_and_official` (`public`,`official`),
+  KEY `index_skins_on_author_id` (`author_id`),
+  KEY `index_skins_on_in_chooser` (`in_chooser`),
+  KEY `index_skins_on_title` (`title`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `abuse_reports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -27,6 +155,51 @@ CREATE TABLE `abuse_reports` (
   `username` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `active_storage_attachments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `active_storage_attachments` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `record_type` varchar(255) NOT NULL,
+  `record_id` bigint(20) NOT NULL,
+  `blob_id` bigint(20) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_active_storage_attachments_uniqueness` (`record_type`,`record_id`,`name`,`blob_id`),
+  KEY `index_active_storage_attachments_on_blob_id` (`blob_id`),
+  CONSTRAINT `fk_rails_c3b3935057` FOREIGN KEY (`blob_id`) REFERENCES `active_storage_blobs` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `active_storage_blobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `active_storage_blobs` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  `content_type` varchar(255) DEFAULT NULL,
+  `metadata` text DEFAULT NULL,
+  `service_name` varchar(255) NOT NULL,
+  `byte_size` bigint(20) NOT NULL,
+  `checksum` varchar(255) DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_active_storage_blobs_on_key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `active_storage_variant_records`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `active_storage_variant_records` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `blob_id` bigint(20) NOT NULL,
+  `variation_digest` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_active_storage_variant_records_uniqueness` (`blob_id`,`variation_digest`),
+  CONSTRAINT `fk_rails_993965df05` FOREIGN KEY (`blob_id`) REFERENCES `active_storage_blobs` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -107,6 +280,7 @@ CREATE TABLE `admin_posts` (
   `translated_post_id` int(11) DEFAULT NULL,
   `language_id` int(11) DEFAULT NULL,
   `comment_permissions` tinyint(4) NOT NULL DEFAULT 0,
+  `moderated_commenting_enabled` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `index_admin_posts_on_post_id` (`translated_post_id`),
   KEY `index_admin_posts_on_created_at` (`created_at`)
@@ -381,7 +555,7 @@ CREATE TABLE `chapters` (
   PRIMARY KEY (`id`),
   KEY `works_chapter_index` (`work_id`),
   KEY `index_chapters_on_work_id` (`work_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `collection_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -518,6 +692,7 @@ CREATE TABLE `comments` (
   `comment_content_sanitizer_version` smallint(6) NOT NULL DEFAULT 0,
   `unreviewed` tinyint(1) NOT NULL DEFAULT 0,
   `iced` tinyint(1) NOT NULL DEFAULT 0,
+  `spam` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `index_comments_commentable` (`commentable_id`,`commentable_type`),
   KEY `index_comments_on_pseud_id` (`pseud_id`),
@@ -634,7 +809,6 @@ CREATE TABLE `external_works` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(255) NOT NULL,
   `author` varchar(255) NOT NULL,
-  `dead` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `title` varchar(255) NOT NULL,
@@ -795,7 +969,7 @@ DROP TABLE IF EXISTS `innodb_monitor`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `innodb_monitor` (
   `a` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `invitations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -815,6 +989,7 @@ CREATE TABLE `invitations` (
   `redeemed_at` datetime DEFAULT NULL,
   `from_queue` tinyint(1) NOT NULL DEFAULT 0,
   `external_author_id` int(11) DEFAULT NULL,
+  `resent_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_invitations_on_invitee_id_and_invitee_type` (`invitee_id`,`invitee_type`),
   KEY `index_invitations_on_external_author_id` (`external_author_id`),
@@ -857,10 +1032,10 @@ DROP TABLE IF EXISTS `kudos`;
 CREATE TABLE `kudos` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `commentable_id` int(11) DEFAULT NULL,
-  `commentable_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `commentable_type` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `ip_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `ip_address` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_kudos_on_commentable_and_user` (`commentable_id`,`commentable_type`,`user_id`),
@@ -990,7 +1165,9 @@ CREATE TABLE `owned_set_taggings` (
   `set_taggable_type` varchar(100) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_owned_set_taggings_on_set_taggable_and_tag_set` (`set_taggable_id`,`set_taggable_type`,`owned_tag_set_id`),
+  KEY `index_owned_set_taggings_on_owned_tag_set_id` (`owned_tag_set_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `owned_tag_sets`;
@@ -1070,7 +1247,6 @@ CREATE TABLE `preferences` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `date_of_birth_visible` tinyint(1) DEFAULT 0,
-  `edit_emails_off` tinyint(1) NOT NULL DEFAULT 0,
   `comment_emails_off` tinyint(1) NOT NULL DEFAULT 0,
   `adult` tinyint(1) DEFAULT 0,
   `hide_warnings` tinyint(1) NOT NULL DEFAULT 0,
@@ -1084,7 +1260,6 @@ CREATE TABLE `preferences` (
   `recipient_emails_off` tinyint(1) NOT NULL DEFAULT 0,
   `view_full_works` tinyint(1) NOT NULL DEFAULT 0,
   `time_zone` varchar(255) DEFAULT NULL,
-  `plain_text_skin` tinyint(1) NOT NULL DEFAULT 0,
   `disable_work_skins` tinyint(1) NOT NULL DEFAULT 0,
   `skin_id` int(11) DEFAULT NULL,
   `minimize_search_engines` tinyint(1) NOT NULL DEFAULT 0,
@@ -1353,7 +1528,7 @@ CREATE TABLE `roles_users` (
   PRIMARY KEY (`id`),
   KEY `index_roles_users_on_role_id_and_user_id` (`role_id`,`user_id`),
   KEY `index_roles_users_on_user_id_and_role_id` (`user_id`,`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `schema_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1445,7 +1620,7 @@ CREATE TABLE `skins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
   `author_id` int(11) DEFAULT NULL,
-  `css` text DEFAULT NULL,
+  `css` longtext DEFAULT NULL,
   `public` tinyint(1) DEFAULT 0,
   `official` tinyint(1) DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
@@ -2094,7 +2269,6 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20151129234505'),
 ('20151130183602'),
 ('20160331005706'),
-('201604030319571'),
 ('20160416163754'),
 ('20160706031054'),
 ('20160724234958'),
@@ -2172,9 +2346,17 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20230113225105'),
 ('20230113225128'),
 ('20230408145819'),
+('20230418071728'),
+('20230418074141'),
 ('20230429120200'),
+('20230430160300'),
 ('20230610162442'),
 ('20230717161221'),
+('20230811004337'),
 ('20230819074500'),
 ('20230903180114'),
-('20230920094945');
+('20230920094945'),
+('20231027172035'),
+('20240303042804'),
+('20240323013245'),
+('20240404183910');
