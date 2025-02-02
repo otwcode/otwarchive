@@ -78,7 +78,8 @@ describe PseudsController do
           end
 
           it "returns NotFound error when pseud doesn't exist" do
-            expect { get :edit, params: { user_id: "fake_user", id: pseud } }.to raise_error(ActiveRecord::RecordNotFound)
+            expect { get :edit, params: { user_id: "fake_user", id: pseud } }
+              .to raise_error(ActiveRecord::RecordNotFound)
           end
         end
       end
