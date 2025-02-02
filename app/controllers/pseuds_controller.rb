@@ -74,12 +74,10 @@ class PseudsController < ApplicationController
 
   # GET /pseuds/1/edit
   def edit
-    if @user
-      @pseud = @user.pseuds.find_by(name: params[:id])
-      authorize @pseud if logged_in_as_admin?
-    else
-      raise ActiveRecord::RecordNotFound, "Couldn't find user '#{params[:user_id]}'"
-    end
+    raise ActiveRecord::RecordNotFound, "Couldn't find user '#{params[:user_id]}'" unless @user
+
+    @pseud = @user.pseuds.find_by(name: params[:id])
+    authorize @pseud if logged_in_as_admin?
   end
 
   # POST /pseuds
