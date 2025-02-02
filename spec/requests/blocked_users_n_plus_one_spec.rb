@@ -12,9 +12,7 @@ describe "n+1 queries in the blocked users controller" do
       populate do |n|
         blocked_users = create_list(:user, n)
         blocked_users.each do |blocked|
-          # Rails doesn't seem to want to include variants, so this won't work right now.
-          # We can revisit when https://github.com/rails/rails/pull/49231 is released OR we upgrade to Rails 7.1
-          # blocked.default_pseud.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
+          blocked.default_pseud.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
           Block.create(blocker: blocker, blocked: blocked)
         end
       end
