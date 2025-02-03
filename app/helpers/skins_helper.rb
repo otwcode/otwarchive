@@ -11,11 +11,11 @@ module SkinsHelper
   def skin_preview_display(skin)
     return unless skin&.icon&.attached?
 
-    link_to image_tag(rails_blob_url(skin.icon.variant(:standard)),
+    link_to image_tag(skin.icon.variant(:standard).processed.url,
                       alt: skin.icon_alt_text,
                       class: "icon",
                       skip_pipeline: true),
-            rails_blob_url(skin.icon)
+            skin.icon.url
   end
 
   # Fetches the current skin. This is determined by the following
