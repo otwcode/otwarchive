@@ -16,16 +16,21 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario Outline: Can hide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
+      And a locale with translated emails
+      And the user "regular_user" enables translated emails
+      And I add the co-author "Another" to the work "ToS Violation"
     When I am logged in as a "<role>" admin
       And all emails have been delivered
       And I view the work "ToS Violation"
       And I follow "Hide Work"
     Then I should see "Item has been hidden."
-      And logged out users should not see the hidden work "ToS Violation" by "regular_user"
-      And logged in users should not see the hidden work "ToS Violation" by "regular_user"
+      And the work "ToS Violation" should be hidden
       And "regular_user" should see their work "ToS Violation" is hidden
-      And 1 email should be delivered
-      And the email should contain "you will be required to take action to correct the violation"
+      And 2 emails should be delivered
+      And the email to "regular_user" should contain "you will be required to take action to correct the violation"
+      And the email to "regular_user" should be translated
+      And the email to "Another" should contain "you will be required to take action to correct the violation"
+      And the email to "Another" should be non-translated
     
     Examples:
       | role             |

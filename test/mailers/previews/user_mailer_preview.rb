@@ -119,6 +119,12 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.invite_increase_notification(user.id, total.to_i)
   end
   
+  def admin_hidden_work_notification
+    work = create(:work)
+    user = create(:user, :for_mailer_preview)
+    UserMailer.admin_hidden_work_notification(work, user.id)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)
