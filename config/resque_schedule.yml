@@ -6,7 +6,7 @@ run_main_reindex_queues:
   description: "Kick off a reindex of all main content indexing"
 
 run_background_reindex_queue:
-  every: 10m
+  every: 11m
   class: "ScheduledReindexJob"
   queue: utilities
   args: background
