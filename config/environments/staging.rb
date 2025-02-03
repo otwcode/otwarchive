@@ -69,9 +69,8 @@ Otwarchive::Application.configure do
     Bullet.counter_cache_enable = false
   end
 
-  # Store uploaded files in AWS S3, proxied so we can cache them.
+  # Store uploaded files in AWS S3.
   config.active_storage.service = :s3
-  config.active_storage.resolve_model_to_route = :rails_storage_proxy
 
   config.middleware.use Rack::Attack
 
