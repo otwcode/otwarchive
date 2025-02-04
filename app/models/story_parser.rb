@@ -554,7 +554,11 @@ class StoryParser
     # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
     # preserve line breaks in plain text documents
     # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
-    @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), encoding: encoding) rescue ""
+    begin
+      @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), encoding: encoding)
+    rescue StandardError
+      @doc = ""
+    end
 
     # Try to convert all relative links to absolute
     base = @doc.at_css("base") ? @doc.css("base")[0]["href"] : location.split("?").first
