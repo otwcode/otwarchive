@@ -128,7 +128,7 @@ module CollectionsHelper
   def standard_icon_url(collection)
     return "/images/skins/iconsets/default/icon_collection.png" unless collection.icon.attached?
 
-    collection.icon.variant(:standard).processed.url
+    rails_blob_url(collection.icon.variant(:standard))
   end
 
   # Wraps the collection's standard_icon_url in an image tag
