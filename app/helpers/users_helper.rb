@@ -24,7 +24,7 @@ module UsersHelper
   def standard_icon(pseud = nil)
     return "/images/skins/iconsets/default/icon_user.png" unless pseud&.icon&.attached?
 
-    pseud.icon.variant(:standard).processed.url
+    rails_blob_url(pseud.icon.variant(:standard))
   end
 
   # no alt text if there isn't specific alt text
