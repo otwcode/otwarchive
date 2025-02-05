@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby "3.1.4"
+ruby ">= 3.1.4", "< 3.3"
 
 gem 'test-unit', '~> 3.2'
 
@@ -110,8 +110,8 @@ gem "marcel", "1.0.2"
 # Library for helping run pt-online-schema-change commands:
 gem "departure", "~> 6.5"
 
-# Ruby 3.1 means we need to specify a version of mail until we get to rails 7.x
-gem "mail", ">= 2.8"
+gem "rack-timeout"
+gem "puma_worker_killer"
 
 group :test do
   gem "rspec-rails", "~> 6.0"

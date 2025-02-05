@@ -506,6 +506,26 @@ en:
     form:
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
+    sidebar:
+      bookmarks: Bookmarked Items (%{count})
+      challenge_settings: Challenge Settings
+      collection_settings: Collection Settings
+      dashboard: Dashboard
+      fandoms: Fandoms (%{count})
+      faq: FAQ
+      landmark:
+        choices: Choices
+        contents: Contents
+        dashboard: Dashboard
+      manage_items: Manage Items
+      parent_collection: Parent Collection
+      people: People
+      profile: Profile
+      random_items: Random Items
+      rules: Rules
+      subcollections: Subcollections (%{count})
+      tags: Tags
+      works: Works (%{count})
   comments:
     comment_form:
       anonymous_creator: Anonymous Creator
@@ -1598,7 +1618,6 @@ en:
       make_default: Make this name default
       name: Name
       submit: Submit
-      ticket_footnote: Numbers only.
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
@@ -1748,9 +1767,6 @@ en:
       submit: Save
     edit:
       about_me: About Me
-      admin:
-        ticket_number:
-          numbers_only: Numbers only.
       browser_title: Edit Profile
       change_profile_landmark: Change Profile
       date_of_birth: Date of Birth
@@ -1943,3 +1959,7 @@ en:
         unrevealed: A translation of a work in an unrevealed collection
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+  wrangling_guidelines:
+    show:
+      edit: Edit
+      heading: Wrangling Guidelines
