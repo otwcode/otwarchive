@@ -118,7 +118,14 @@ class UserMailerPreview < ApplicationMailerPreview
     total = params[:total] || 1
     UserMailer.invite_increase_notification(user.id, total.to_i)
   end
-  
+
+  def archivist_added_to_collection_notification
+    work = create(:work)
+    collection = create(:collection)
+    user = create(:user, :for_mailer_preview)
+    UserMailer.archivist_added_to_collection_notification(user.id, work.id, collection.id)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)
