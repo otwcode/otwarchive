@@ -402,6 +402,7 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    pagy (9.3.3)
     parallel (1.25.1)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -701,6 +702,7 @@ DEPENDENCIES
   mysql2
   n_plus_one_control
   nokogiri (>= 1.8.5)
+  pagy (~> 9.3)
   permit_yo
   phraseapp-in-context-editor-ruby (>= 1.0.6)
   pickle

@@ -42,6 +42,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  include Pagy::Backend
+  def pagy_query_result(query_result, vars = {})
+    Pagy.new(count: query_result.total_entries, page: params[:page], **vars)
+  end
+
   def display_auth_error
     respond_to do |format|
       format.html do

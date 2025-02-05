@@ -1,6 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   include HtmlCleaner
+  include Pagy::Frontend
 
   # TODO: Official recommendation from Rails indicates we should switch to
   # unobtrusive JavaScript instead of using anything like `link_to_function`

@@ -64,6 +64,6 @@
 <% end %>
 <!---/subnav-->
 
-<% if @works.respond_to?(:total_pages) %>
-  <%= will_paginate @works %>
+<% if @pagy %>
+  <%== pagy_nav @pagy %>
 <% end %>

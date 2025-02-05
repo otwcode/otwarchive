@@ -131,6 +131,10 @@ class WorksController < ApplicationController
       @works = Work.latest.for_blurb.to_a
     end
     set_own_works
+
+    if @works.respond_to?(:total_pages)
+      @pagy = pagy_query_result(@works)
+    end
   end
 
   def collected
