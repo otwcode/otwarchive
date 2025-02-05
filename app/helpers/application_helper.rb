@@ -1,7 +1,6 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   include HtmlCleaner
-  include Pagy::Frontend
 
   # TODO: Official recommendation from Rails indicates we should switch to
   # unobtrusive JavaScript instead of using anything like `link_to_function`
@@ -527,6 +526,52 @@ module ApplicationHelper
       options = options.merge renderer: PaginationListLinkRenderer
     end
     super(*[collection_or_options, options].compact)
+  end
+
+  include Pagy::Frontend
+  # Cf https://github.com/ddnexus/pagy/blob/master/gem/lib/pagy/frontend.rb
+  def pagy_nav(pagy, id: nil, aria_label: nil, **vars)
+    id = %( id="#{id}") if id
+    a  = pagy_anchor(pagy, **vars)
+
+    html = %(<h4 class="landmark heading">#{t("pagination.title")}</h4>)
+
+    html << %(<ol#{id} class="pagination actions pagy" role="navigation" aria-label="#{t("pagination.aria-label")}">)
+
+    prev_text = t("pagination.previous")
+    prev_a =
+      if (p_prev = pagy.prev)
+        a.(p_prev, prev_text)
+      else
+        %(<span class="disabled">#{prev_text}</span>)
+      end
+    html << %(<li class="previous">#{prev_a}</li>)
+
+    pagy.series(**vars).each do |item| # series example: [1, :gap, 7, 8, "9", 10, 11, :gap, 36]
+      html << %(<li>)
+      html << case item
+              when Integer
+                a.(item)
+              when String
+                %(<a role="link" aria-disabled="true" aria-current="page" class="current">#{pagy.label_for(item)}</a>)
+              when :gap
+                %(<span class="gap">#{pagy_t('pagy.gap')}</span>)
+              else
+                raise InternalError, "expected item types in series to be Integer, String or :gap; got #{item.inspect}"
+              end
+      html << %(</li>)
+    end
+
+    next_text = t("pagination.next")
+    next_a =
+      if (p_next = pagy.next)
+        a.(p_next, next_text)
+      else
+        %(<span class="disabled">#{next_text}</span>)
+      end
+    html << %(<li class="next">#{next_a}</li>)
+
+    html << %(</ol>)
   end
 
   # spans for nesting a checkbox or radio button inside its label to make custom
