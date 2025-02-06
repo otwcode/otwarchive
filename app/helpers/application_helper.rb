@@ -531,6 +531,11 @@ module ApplicationHelper
   include Pagy::Frontend
   # Cf https://github.com/ddnexus/pagy/blob/master/gem/lib/pagy/frontend.rb
   def pagy_nav(pagy, id: nil, aria_label: nil, **vars)
+    return nil unless pagy
+
+    # Keep will_paginate behavior of showing nothing if only one page
+    return nil if pagy.series.length <= 1
+
     id = %( id="#{id}") if id
     a  = pagy_anchor(pagy, **vars)
 
