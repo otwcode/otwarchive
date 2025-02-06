@@ -27,6 +27,7 @@ class TagWranglingsController < ApplicationController
                            in_use: true,
                            unwrangleable: false,
                            unwrangled: true,
+                           has_posted_works: true,
                            sort_column: params[:sort_column],
                            sort_direction: params[:sort_direction],
                            page: params[:page],

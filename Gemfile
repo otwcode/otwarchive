@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby "3.1.4"
+ruby ">= 3.1.4", "< 3.3"
 
 gem 'test-unit', '~> 3.2'
 
@@ -56,7 +56,6 @@ gem "aws-sdk-s3"
 gem 'css_parser'
 
 gem "terrapin"
-gem "kt-paperclip", ">= 5.2.0"
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -111,8 +110,8 @@ gem "marcel", "1.0.2"
 # Library for helping run pt-online-schema-change commands:
 gem "departure", "~> 6.5"
 
-# Ruby 3.1 means we need to specify a version of mail until we get to rails 7.x
-gem "mail", ">= 2.8"
+gem "rack-timeout"
+gem "puma_worker_killer"
 
 group :test do
   gem "rspec-rails", "~> 6.0"
@@ -172,6 +171,8 @@ gem 'rvm-capistrano'
 
 # Use unicorn as the web server
 gem 'unicorn', '~> 5.5', require: false
+# Install puma so we can migrate to it
+gem "puma", "~> 6.5.0"
 # Use god as the monitor
 gem 'god', '~> 0.13.7'
 
@@ -181,3 +182,5 @@ group :staging, :production do
   gem "sentry-rails"
   gem "sentry-resque"
 end
+
+gem "image_processing", "~> 1.12"

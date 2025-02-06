@@ -21,7 +21,7 @@ class AbuseReport < ApplicationRecord
   end
 
   def logged_in_with_matching_email?
-    User.current_user.present? && User.current_user.email == email
+    User.current_user.present? && User.current_user.email.downcase == email.downcase
   end
 
   def akismet_attributes
@@ -124,8 +124,9 @@ class AbuseReport < ApplicationRecord
   end
 
   def attach_work_download(ticket_id)
+    is_not_comments = url[%r{/comments/}, 0].nil?
     work_id = url[%r{/works/(\d+)}, 1]
-    return unless work_id
+    return unless work_id && is_not_comments
 
     work = Work.find_by(id: work_id)
     ReportAttachmentJob.perform_later(ticket_id, work) if work

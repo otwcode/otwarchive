@@ -174,3 +174,15 @@ Feature: Invite requests
     Then "notuser1" should be emailed
       And the email should have "Additional invitation request declined" in the subject
       And the email to "notuser1" should be non-translated
+
+  Scenario: Translated email is sent when new invitation is given to registered user
+    Given a locale with translated emails
+      And invitations are required
+      And the user "user1" exists and is activated
+      And the user "user1" enables translated emails
+      And all emails have been delivered
+    When as "user1" I request some invites
+      And an admin grants the request
+    Then "user1" should be emailed
+      And the email should have "New invitations" in the subject
+      And the email to "user1" should be translated

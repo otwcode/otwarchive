@@ -329,7 +329,7 @@ describe AbuseReport do
   context "when report is spam" do
     let(:legit_user) { create(:user) }
     let(:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
-    let(:safe_report) { build(:abuse_report, username: 'viagra-test-123', email: legit_user.email) }
+    let!(:safe_report) { build(:abuse_report, username: 'viagra-test-123', email: legit_user.email) }
 
     before do
       allow(Akismetor).to receive(:spam?).and_return(true)
@@ -338,6 +338,13 @@ describe AbuseReport do
     it "is not valid if Akismet flags it as spam" do
       expect(spam_report.save).to be_falsey
       expect(spam_report.errors[:base]).to include("This report looks like spam to our system!")
+    end
+
+    it "is valid even if the email casing is different" do
+      legit_user.email = legit_user.email.upcase
+      legit_user.save
+      User.current_user = legit_user
+      expect(safe_report.save).to be_truthy
     end
 
     it "is valid even with spam if logged in and providing correct email" do
@@ -354,6 +361,13 @@ describe AbuseReport do
 
     it "does not attach a download for non-work URLs asynchronously" do
       allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/someone/")
+
+      expect { subject.attach_work_download(ticket_id) }
+        .not_to have_enqueued_job
+    end
+
+    it "does not attach a download for comment sub-URLs asynchronously" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/comments/")
 
       expect { subject.attach_work_download(ticket_id) }
         .not_to have_enqueued_job

@@ -172,6 +172,9 @@ class Tag < ApplicationRecord
   validates :name,
             format: { with: /\A[^,，、*<>^{}=`\\%]+\z/,
                       message: "^Tag name '%{value}' cannot include the following restricted characters: , &#94; * < > { } = ` ， 、 \\ %" }
+  validates :name,
+            format: { without: /\A\p{Cf}+\z/,
+                      message: "^Tag name cannot be blank." }
   validates :sortable_name, presence: true
 
   validate :unwrangleable_status
@@ -1065,14 +1068,15 @@ class Tag < ApplicationRecord
   #################################
 
   def unwrangled_query(tag_type, options = {})
-    self_type = %w(Character Fandom Media).include?(self.type) ? self.type.downcase : "fandom"
+    self_type = %w[Character Fandom Media].include?(self.type) ? self.type.downcase : "fandom"
     TagQuery.new(options.merge(
-      type: tag_type,
-      unwrangleable: false,
-      wrangled: false,
-      "pre_#{self_type}_ids": [self.id],
-      per_page: Tag.per_page
-    ))
+                   type: tag_type,
+                   unwrangleable: false,
+                   wrangled: false,
+                   has_posted_works: true,
+                   "pre_#{self_type}_ids": [self.id],
+                   per_page: Tag.per_page
+                 ))
   end
 
   def unwrangled_tags(tag_type, options = {})

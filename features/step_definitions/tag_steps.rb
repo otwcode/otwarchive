@@ -84,10 +84,10 @@ Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, f
   fandom.add_association media
 end
 
-Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, character|
-  char = Character.find_or_create_by(name: character)
+Given "I add the fandom {string} to the tag/character {string}" do |fandom, tag|
+  tag = Tag.find_or_create_by(name: tag)
   fand = Fandom.find_or_create_by_name(fandom)
-  char.add_association(fand)
+  tag.add_association(fand)
 end
 
 Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
@@ -223,7 +223,7 @@ end
 
 Given "a zero width space tag exists" do
   blank_tag = FactoryBot.build(:character, name: ["200B".hex].pack("U"))
-  blank_tag.save!(validate: true) # TODO: Change to validate: false when AO3-6777 is fixed
+  blank_tag.save!(validate: false)
 end
 
 ### WHEN
