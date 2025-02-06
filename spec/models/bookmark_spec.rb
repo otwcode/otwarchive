@@ -18,6 +18,6 @@ describe Bookmark do
   it "is invalid without a pseud_id" do
     bookmark = build(:bookmark, pseud_id: nil)
     expect(bookmark).to_not be_valid
-    expect(bookmark.errors[:pseud].first).to include("must exist")
+    expect(bookmark.errors[:pseud].first).to eq("can't be blank")
   end
 end
