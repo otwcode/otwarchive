@@ -16,7 +16,8 @@ class ReadingsController < ApplicationController
       @readings = @readings.where(toread: true)
       @page_subtitle = ts("Marked For Later")
     end
-    @readings = @readings.order("last_viewed DESC").page(params[:page])
+    @readings.order("last_viewed DESC")
+    @pagy, @readings = pagy(@readings)
   end
 
   def destroy
