@@ -403,7 +403,7 @@ GEM
       racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.25.1)
-    parser (3.3.0.5)
+    parser (3.3.7.1)
       ast (~> 2.4.1)
       racc
     permit_yo (2.1.3)
