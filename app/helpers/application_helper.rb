@@ -539,14 +539,14 @@ module ApplicationHelper
     id = %( id="#{id}") if id
     a  = pagy_anchor(pagy, **vars)
 
-    html = %(<h4 class="landmark heading">#{t("pagination.title")}</h4>)
+    html = %(<h4 class="landmark heading">#{t('pagination.title')}</h4>)
 
-    html << %(<ol#{id} class="pagination actions pagy" role="navigation" aria-label="#{t("pagination.aria-label")}">)
+    html << %(<ol#{id} class="pagination actions pagy" role="navigation" aria-label="#{aria_label || t('pagination.aria-label')}">)
 
     prev_text = t("pagination.previous")
     prev_a =
       if (p_prev = pagy.prev)
-        a.(p_prev, prev_text)
+        a.call(p_prev, prev_text)
       else
         %(<span class="disabled">#{prev_text}</span>)
       end
@@ -556,7 +556,7 @@ module ApplicationHelper
       html << %(<li>)
       html << case item
               when Integer
-                a.(item)
+                a.call(item)
               when String
                 %(<a role="link" aria-disabled="true" aria-current="page" class="current">#{pagy.label_for(item)}</a>)
               when :gap
@@ -570,7 +570,7 @@ module ApplicationHelper
     next_text = t("pagination.next")
     next_a =
       if (p_next = pagy.next)
-        a.(p_next, next_text)
+        a.call(p_next, next_text)
       else
         %(<span class="disabled">#{next_text}</span>)
       end

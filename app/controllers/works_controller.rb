@@ -132,9 +132,7 @@ class WorksController < ApplicationController
     end
     set_own_works
 
-    if @works.respond_to?(:total_pages)
-      @pagy = pagy_query_result(@works)
-    end
+    @pagy = pagy_query_result(@works) if @works.respond_to?(:total_pages)
   end
 
   def collected

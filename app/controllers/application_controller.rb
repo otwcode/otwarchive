@@ -60,12 +60,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def pagy_overflow_handler(&block)
-    begin
-      yield
-    rescue Pagy::OverflowError
-      nil
-    end
+  def pagy_overflow_handler(*)
+    yield
+  rescue Pagy::OverflowError
+    nil
   end
 
   def display_auth_error

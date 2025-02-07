@@ -151,8 +151,6 @@ class BookmarksController < ApplicationController
         pagy_query_result(@bookmarks)
       elsif @bookmarkable_items.respond_to?(:total_pages)
         pagy_query_result(@bookmarkable_items)
-      else
-        nil
       end
   end
 
