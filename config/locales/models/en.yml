@@ -84,6 +84,10 @@ en:
             blocked_id:
               taken: You have already blocked that user.
           format: "%{message}"
+        bookmark:
+          attributes:
+            pseud:
+              required: can't be blank
         comment:
           attributes:
             commentable:

@@ -268,7 +268,7 @@ en:
         remove_series: If you've been added in error or don't want to be listed as a creator, you can %{edit_series_link} to remove yourself as creator.
       intro_chapter: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following series:'
-      subject: "[%{app_name}] Co-creator notification"
+      subject: "[%{app_name}] You've been added as a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
@@ -286,7 +286,7 @@ en:
       intro_chapter: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following series:'
       intro_work: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following work:'
-      subject: "[%{app_name}] Archivist co-creator notification"
+      subject: "[%{app_name}] An archivist has added you as a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
@@ -300,7 +300,7 @@ en:
       intro_chapter: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following chapter:'
       intro_series: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following series:'
       intro_work: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following work:'
-      subject: "[%{app_name}] Co-creator request"
+      subject: "[%{app_name}] You've received a request to be a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         instructions: 'You can accept or reject this request on your Co-Creator Requests page: %{url}'
