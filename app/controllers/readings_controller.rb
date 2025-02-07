@@ -16,7 +16,7 @@ class ReadingsController < ApplicationController
       @readings = @readings.where(toread: true)
       @page_subtitle = ts("Marked For Later")
     end
-    @readings.order("last_viewed DESC")
+    @readings = @readings.order("last_viewed DESC")
     @pagy, @readings = pagy(@readings)
   end
 
