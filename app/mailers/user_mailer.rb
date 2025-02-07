@@ -59,8 +59,7 @@ class UserMailer < ApplicationMailer
               end
     mail(
       to: @user.email,
-      subject: t(".subject.#{@status}",
-                  app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: t(".subject.#{@status}", app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 

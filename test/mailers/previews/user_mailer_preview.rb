@@ -113,40 +113,37 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.change_email(user.id, old_email, new_email)
   end
   
-  # Sends email when collection item changes status
-  [:anonymous_unrevealed_collection, :anonymous_collection, :unrevealed_collection].each do |status|
-    # anonymous_unrevealed
-    define_method :"anonymous_unrevealed_collection_notification" do
-      user, collection, item = anonymous_or_unrevealed_data(status)
-      newly_anonymous = true
-      newly_unrevealed = true
-      UserMailer.anonymous_or_unrevealed_notification(
-        user.id, item.id, collection.id,
-        anonymous: newly_anonymous, unrevealed: newly_unrevealed
+  # Sends email when collection item changes status: anonymous_unrevealed
+  def anonymous_or_unrevealed_notification_status_anonymous_and_unrevealed
+    user, collection, item = anonymous_or_unrevealed_data(:anonymous_unrevealed_collection)
+    newly_anonymous = true
+    newly_unrevealed = true
+    UserMailer.anonymous_or_unrevealed_notification(
+      user.id, item.id, collection.id,
+      anonymous: newly_anonymous, unrevealed: newly_unrevealed
       )
-    end
-
-    # anonymous
-    define_method :"anonymous_collection_notification" do
-      user, collection, item = anonymous_or_unrevealed_data(status)
-      newly_anonymous = true
-      newly_unrevealed = false
-      UserMailer.anonymous_or_unrevealed_notification(
-        user.id, item.id, collection.id,
-        anonymous: newly_anonymous, unrevealed: newly_unrevealed
+  end
+    
+  # Sends email when collection item changes status: anonymous
+  def anonymous_or_unrevealed_notification_status_anonymous
+    user, collection, item = anonymous_or_unrevealed_data(:anonymous_collection)
+    newly_anonymous = true
+    newly_unrevealed = false
+    UserMailer.anonymous_or_unrevealed_notification(
+      user.id, item.id, collection.id,
+      anonymous: newly_anonymous, unrevealed: newly_unrevealed
       )
-    end
-
-    # unrevealed
-    define_method :"unrevealed_collection_notification" do
-      user, collection, item = anonymous_or_unrevealed_data(status)
-      newly_anonymous = false
-      newly_unrevealed = true
-      UserMailer.anonymous_or_unrevealed_notification(
-        user.id, item.id, collection.id,
-        anonymous: newly_anonymous, unrevealed: newly_unrevealed
-      )
-    end
+  end
+    
+  # Sends email when collection item changes status: unrevealed
+  def anonymous_or_unrevealed_notification_status_unrevealed
+    user, collection, item = anonymous_or_unrevealed_data(:unrevealed_collection)
+    newly_anonymous = false
+    newly_unrevealed = true
+    UserMailer.anonymous_or_unrevealed_notification(
+      user.id, item.id, collection.id,
+      anonymous: newly_anonymous, unrevealed: newly_unrevealed
+    )
   end
 
   def invite_increase_notification

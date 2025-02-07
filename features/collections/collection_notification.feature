@@ -157,8 +157,9 @@ Feature: Collectible items email
       And I press "Add"
     Then I should see "Added to collection(s): Open Doors Collection"
       And 1 email should be delivered
-      And the email to "regular_user" should be translated    
-  Scenario: Scenario: Translated email is sent when the status of a Collection item is changed to anonymous
+      And the email to "regular_user" should be translated 
+
+  Scenario: Translated email is sent when the status of a Collection item is changed to anonymous
     Given a locale with translated emails
       And the user "user1" exists and is activated
       And the user "user1" enables translated emails
@@ -178,7 +179,7 @@ Feature: Collectible items email
       And the email should have "Your work was made anonymous" in the subject
       And the email to "user1" should be translated
 
-  Scenario: Scenario: Translated email is sent when the status of a Collection item is changed to unrevealed
+  Scenario: Translated email is sent when the status of a Collection item is changed to unrevealed
     Given a locale with translated emails
       And the user "user1" exists and is activated
       And the user "user1" enables translated emails
@@ -198,7 +199,7 @@ Feature: Collectible items email
       And the email should have "Your work was made unrevealed" in the subject
       And the email to "user1" should be translated
 
-  Scenario: Scenario: Translated email is sent when the status of a Collection item is changed to anonymous and unrevealed
+  Scenario: Translated email is sent when the status of a Collection item is changed to anonymous and unrevealed
     Given a locale with translated emails
       And the user "user1" exists and is activated
       And the user "user1" enables translated emails
