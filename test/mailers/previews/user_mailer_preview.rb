@@ -121,7 +121,7 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.anonymous_or_unrevealed_notification(
       user.id, item.id, collection.id,
       anonymous: newly_anonymous, unrevealed: newly_unrevealed
-      )
+    )
   end
     
   # Sends email when collection item changes status: anonymous
@@ -132,7 +132,7 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.anonymous_or_unrevealed_notification(
       user.id, item.id, collection.id,
       anonymous: newly_anonymous, unrevealed: newly_unrevealed
-      )
+    )
   end
     
   # Sends email when collection item changes status: unrevealed
