@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def pagy_query_result(query_result, vars = {})
+  def pagy_query_result(query_result, **vars)
     pagy_overflow_handler do
       Pagy.new(
         count: query_result.total_entries,
