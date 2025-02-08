@@ -321,9 +321,10 @@ class UserMailer < ApplicationMailer
   # Sends email to creators when a creation is deleted
   # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
   # TODO refactor to make it asynchronous by passing the content in the method
-  def delete_work_notification(user, work)
+  def delete_work_notification(user, work, deleter)
     @user = user
     @work = work
+    @deleter = deleter
     download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
     html = DownloadWriter.new(download).generate_html
     html = ::Mail::Encodings::Base64.encode(html)
@@ -332,7 +333,7 @@ class UserMailer < ApplicationMailer
 
     mail(
       to: user.email,
-      subject: t('user_mailer.delete_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 
