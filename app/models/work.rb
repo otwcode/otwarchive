@@ -253,7 +253,6 @@ class Work < ApplicationRecord
     return if users.blank?
 
     orphan_account = User.orphan_account
-    multiple_authors = users.count > 1
     users.each do |user|
       next if user == orphan_account
 
