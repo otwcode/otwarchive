@@ -1101,7 +1101,7 @@ describe UserMailer do
   end
 
   describe "delete_work_notification" do
-    subject(:email) { UserMailer.delete_work_notification(user, work) }
+    subject(:email) { UserMailer.delete_work_notification(user, work, user) }
 
     let(:user) { create(:user) }
     let(:work) { create(:work) }

@@ -1,6 +1,6 @@
 <% content_for :message do %>
   <p><%= t("mailer.general.greeting.formal_html", name: style_bold(@user.login)) %></p>
-    <% if @user == @deleter %>
+    <% if @user == @deleter || !@deleter %>
       <p><%= t(".deleted_yourself.html", title: style_creation_title(@work.title)) %></p>
     <% else %>
       <p><%= t(".deleted_other.html", title: style_creation_title(@work.title), pseud: style_pseud_link(@deleter.default_pseud)) %></p>
