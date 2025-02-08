@@ -1,7 +1,7 @@
 <% content_for :message do %>
 <%= t(".assignment.text", collection_title: @collection.title, collection_url: collection_url(@collection)) %>
 
-<%= work_metadata_label(t(".recipient")) %><%= @request.nil? ? t(".recipient_missing") : text_pseud(@request.pseud) %>
+<%= metadata_label(t(".recipient")) %><%= @request.nil? ? t(".recipient_missing") : text_pseud(@request.pseud) %>
 
 <%= t(".prompts") %>
 <% @request.requests.each_with_index do |prompt, index| %>
@@ -23,40 +23,40 @@
 <%= index + 1 %>. <%= prompt.title %>
 
 <% if fandoms %>
-<%= work_metadata_label(t("activerecord.models.fandom", count: prompt.any_fandom ? 1 : tag_groups["Fandom"].count)) %><%= fandoms %>
+<%= metadata_label(t("activerecord.models.fandom", count: prompt.any_fandom ? 1 : tag_groups["Fandom"].count)) %><%= fandoms %>
 <% end %>
 <% if chars %>
-<%= work_metadata_label(t("activerecord.models.character", count: prompt.any_character ? 1 : tag_groups["Character"].count)) %><%= chars %>
+<%= metadata_label(t("activerecord.models.character", count: prompt.any_character ? 1 : tag_groups["Character"].count)) %><%= chars %>
 <% end %>
 <% if ships %>
-<%= work_metadata_label(t("activerecord.models.relationship", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count)) %><%= ships %>
+<%= metadata_label(t("activerecord.models.relationship", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count)) %><%= ships %>
 <% end %>
 <% if ratings %>
-<%= work_metadata_label(t("activerecord.models.rating", count: prompt.any_rating ? 1 : tag_groups["Rating"].count)) %><%= ratings %>
+<%= metadata_label(t("activerecord.models.rating", count: prompt.any_rating ? 1 : tag_groups["Rating"].count)) %><%= ratings %>
 <% end %>
 <% if warnings %>
-<%= work_metadata_label(t("activerecord.models.archive_warning", count: prompt.any_archive_warning ? 1 : tag_groups["ArchiveWarning"].count)) %><%= warnings %>
+<%= metadata_label(t("activerecord.models.archive_warning", count: prompt.any_archive_warning ? 1 : tag_groups["ArchiveWarning"].count)) %><%= warnings %>
 <% end %>
 <% if categories %>
-<%= work_metadata_label(t("activerecord.models.category", count: prompt.any_category ? 1 : tag_groups["Category"].count)) %><%= categories %>
+<%= metadata_label(t("activerecord.models.category", count: prompt.any_category ? 1 : tag_groups["Category"].count)) %><%= categories %>
 <% end %>
 <% if atags %>
-<%= work_metadata_label(t("activerecord.models.freeform", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count)) %><%= atags %>
+<%= metadata_label(t("activerecord.models.freeform", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count)) %><%= atags %>
 <% end %>
 <% if otags %>
-<%= work_metadata_label(t(".optional_tags")) %><%= otags %>
+<%= metadata_label(t(".optional_tags")) %><%= otags %>
 <% end %>
 <% if prompt.url && !prompt.url.blank? %>
-<%= work_metadata_label(t(".prompt_url")) %><%= prompt.url %>
+<%= metadata_label(t(".prompt_url")) %><%= prompt.url %>
 <% end %>
 <% if prompt.description && !prompt.description.blank? %>
-<%= work_metadata_label(t(".description")) %>
+<%= metadata_label(t(".description")) %>
     <%= to_plain_text(prompt.description) %>
 <% end %>
 
 <% end %><%= text_divider %>
 
-<%= work_metadata_label(t(".due")) %><%= to_plain_text(time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user)).gsub(/\n\s*/, "") %>.
+<%= metadata_label(t(".due")) %><%= to_plain_text(time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user)).gsub(/\n\s*/, "") %>.
 
 <%= t(".look_up.text", your_assignments_url: user_assignments_url(@assigned_user)) %>
 <% if @collection && !@collection.assignment_notification.blank? %>
