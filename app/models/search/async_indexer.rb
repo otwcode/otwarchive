@@ -9,7 +9,7 @@ class AsyncIndexer
     # TODO: Keep the method so we can still run queued jobs from previous
     # versions. However, tests should no longer depend on it.
     #
-    # Remove in a future versions, once all old jobs have been retried or
+    # Remove in a future version, once all old jobs have been retried or
     # cleared.
     raise "Avoid using AsyncIndexer.perform in tests" if Rails.env.test?
 
