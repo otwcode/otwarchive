@@ -23,11 +23,11 @@ module PaginationHelper
     id = %( id="#{id}") if id
     a  = pagy_anchor(pagy, **vars)
 
-    html = %(<h4 class="landmark heading">#{t('pagination.title')}</h4>)
+    html = %(<h4 class="landmark heading">#{t('pagy.h4')}</h4>)
 
-    html << %(<ol#{id} class="pagination actions pagy" role="navigation" aria-label="#{aria_label || t('pagination.aria-label')}">)
+    html << %(<ol#{id} class="pagination actions pagy" role="navigation" #{nav_aria_label(pagy, aria_label:)}>)
 
-    prev_text = t("pagination.previous")
+    prev_text = pagy_t("pagy.prev")
     prev_a =
       if (p_prev = pagy.prev)
         a.call(p_prev, prev_text)
@@ -51,7 +51,7 @@ module PaginationHelper
       html << %(</li>)
     end
 
-    next_text = t("pagination.next")
+    next_text = pagy_t("pagy.next")
     next_a =
       if (p_next = pagy.next)
         a.call(p_next, next_text)
