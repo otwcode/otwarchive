@@ -7,9 +7,7 @@ module PaginationHelper
       options = collection_or_options
       collection_or_options = nil
     end
-    unless options[:renderer]
-      options = options.merge renderer: PaginationListLinkRenderer
-    end
+    options = options.merge renderer: PaginationListLinkRenderer unless options[:renderer]
     super(*[collection_or_options, options].compact)
   end
 
@@ -25,7 +23,7 @@ module PaginationHelper
 
     html = %(<h4 class="landmark heading">#{t('pagy.h4')}</h4>)
 
-    html << %(<ol#{id} class="pagination actions pagy" role="navigation" #{nav_aria_label(pagy, aria_label:)}>)
+    html << %(<ol#{id} class="pagination actions pagy" role="navigation" #{nav_aria_label(pagy, aria_label: aria_label)}>)
 
     prev_text = pagy_t("pagy.prev")
     prev_a =
