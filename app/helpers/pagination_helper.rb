@@ -12,6 +12,9 @@ module PaginationHelper
   end
 
   # Cf https://github.com/ddnexus/pagy/blob/master/gem/lib/pagy/frontend.rb
+  # i18n-tasks-use t("pagy.prev")
+  # i18n-tasks-use t("pagy.next")
+  # i18n-tasks-use t("pagy.aria_label.nav")
   def pagy_nav(pagy, id: nil, aria_label: nil, **vars)
     return nil unless pagy
 
