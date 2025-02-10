@@ -221,7 +221,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    date (3.3.4)
+    date (3.4.1)
     departure (6.7.0)
       activerecord (>= 6.0.0, < 7.2.0, != 7.0.0)
       mysql2 (>= 0.4.0, < 0.6.0)
@@ -379,7 +379,7 @@ GEM
     net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.2)
       connection_pool (~> 2.2)
-    net-imap (0.4.10)
+    net-imap (0.4.19)
       date
       net-protocol
     net-pop (0.1.2)
@@ -608,7 +608,7 @@ GEM
     tilt (2.3.0)
     timecop (0.9.8)
     timeliness (0.4.5)
-    timeout (0.4.1)
+    timeout (0.4.3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode (0.4.4.4)
