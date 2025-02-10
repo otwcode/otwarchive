@@ -3,6 +3,7 @@ require 'csv'
 
 class ChallengeSignupsController < ApplicationController
   include ExportsHelper
+  Resque::Job.extend(ResqueExecutorWrap)
 
   before_action :users_only, except: [:summary, :display_summary, :requests_summary]
   before_action :load_collection, except: [:index]

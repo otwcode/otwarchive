@@ -80,6 +80,7 @@ class ChallengeAssignment < ApplicationRecord
   }
 
   scope :posted, -> { joins(WORKS_JOIN).where("challenge_assignments.creation_id IS NOT NULL AND works.posted = 1") }
+  Resque::Job.extend(ResqueExecutorWrap)
 
   # should be faster than unfulfilled scope because no giant left joins
   def self.unfulfilled_in_collection(collection)

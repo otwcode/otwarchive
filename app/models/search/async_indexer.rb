@@ -1,5 +1,5 @@
 class AsyncIndexer
-
+  Resque::Job.extend(ResqueExecutorWrap)
   REDIS = REDIS_GENERAL
 
   ####################

@@ -1,4 +1,5 @@
 class IndexQueue
+  Resque::Job.extend(ResqueExecutorWrap)
 
   BATCH_SIZE = 1000
   REDIS = REDIS_GENERAL

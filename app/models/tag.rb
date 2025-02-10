@@ -7,6 +7,8 @@ class Tag < ApplicationRecord
   include Wrangleable
   include Rails.application.routes.url_helpers
 
+  Resque::Job.extend(ResqueExecutorWrap)
+
   NAME = "Tag"
 
   # Note: the order of this array is important.

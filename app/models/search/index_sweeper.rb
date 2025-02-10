@@ -1,4 +1,5 @@
 class IndexSweeper
+  Resque::Job.extend(ResqueExecutorWrap)
 
   REDIS = AsyncIndexer::REDIS
 

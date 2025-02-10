@@ -3,6 +3,7 @@
 # A controller used to let admins and tag wranglers perform some
 # troubleshooting on tags and works.
 class TroubleshootingController < ApplicationController
+  Resque::Job.extend(ResqueExecutorWrap)
   before_action :check_permission_to_wrangle
   before_action :load_item
   before_action :check_visibility

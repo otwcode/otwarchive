@@ -17,6 +17,8 @@ class User < ApplicationRecord
   # properly
   include BackwardsCompatiblePasswordDecryptor
 
+  Resque::Job.extend(ResqueExecutorWrap)
+
   # Allows other models to get the current user with User.current_user
   cattr_accessor :current_user
 

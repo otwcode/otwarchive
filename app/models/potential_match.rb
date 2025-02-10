@@ -1,4 +1,5 @@
 class PotentialMatch < ApplicationRecord
+  Resque::Job.extend(ResqueExecutorWrap)
   # We use "-1" to represent all the requested items matching
   ALL = -1
 

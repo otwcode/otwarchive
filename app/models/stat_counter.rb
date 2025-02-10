@@ -3,6 +3,8 @@ class StatCounter < ApplicationRecord
 
   after_commit :enqueue_to_index, on: :update
 
+  Resque::Job.extend(ResqueExecutorWrap)
+
   def enqueue_to_index
     IndexQueue.enqueue(self, :stats)
   end

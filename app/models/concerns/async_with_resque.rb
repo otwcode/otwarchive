@@ -22,14 +22,16 @@ module AsyncWithResque
 
     # Actually perform the delayed action.
     def perform(method, *args)
-      if method.is_a?(Integer)
-        # TODO: For backwards compatibility, if the "method" is an integer, we
-        # treat it like an ID and use perform_on_instance instead. But once all
-        # of the jobs in the queue have been processed (or deleted), we should
-        # be able to remove this check.
-        perform_on_instance(method, *args)
-      else
-        send(method, *args)
+      Rails.application.executor.wrap do
+        if method.is_a?(Integer)
+          # TODO: For backwards compatibility, if the "method" is an integer, we
+          # treat it like an ID and use perform_on_instance instead. But once all
+          # of the jobs in the queue have been processed (or deleted), we should
+          # be able to remove this check.
+          perform_on_instance(method, *args)
+        else
+          send(method, *args)
+        end
       end
     end
 

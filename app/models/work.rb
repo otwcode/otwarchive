@@ -8,6 +8,8 @@ class Work < ApplicationRecord
   include WorkChapterCountCaching
   include Creatable
 
+  Resque::Job.extend(ResqueExecutorWrap)
+
   ########################################################################
   # ASSOCIATIONS
   ########################################################################
