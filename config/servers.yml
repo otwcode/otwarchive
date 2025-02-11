@@ -52,8 +52,6 @@ production:
     roles: [app, db]
   - host: ao3-app31
     roles: [app]
-  - host: ao3-app32
-    roles: [app]
   - host: ao3-app33
     roles: [app]
     options:
@@ -81,4 +79,20 @@ staging:
   - host: test-front11
     roles: [web]
   - host: test-front12
+    roles: [web]
+
+i18n:
+  - host: i18n-app13
+    roles: [app, db, schedulers]
+  - host: i18n-app14
+    roles: [app, schedulers]
+  - host: i18n-app15
+    roles: [workers, schedulers]
+    options:
+      primary: true
+  - host: i18n-app16
+    roles: [schedulers]
+  - host: i18n-front11
+    roles: [web]
+  - host: i18n-front12
     roles: [web]
