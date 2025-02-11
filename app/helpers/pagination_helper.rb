@@ -24,7 +24,7 @@ module PaginationHelper
     id = %( id="#{id}") if id
     a  = pagy_anchor(pagy, **vars)
 
-    html = %(<h4 class="landmark heading">#{t('pagy.h4')}</h4>)
+    html = %(<h4 class="landmark heading">#{t('a11y.navigation')}</h4>)
 
     html << %(<ol#{id} class="pagination actions pagy" role="navigation" #{nav_aria_label(pagy, aria_label: aria_label)}>)
 

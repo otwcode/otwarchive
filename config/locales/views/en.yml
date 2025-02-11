@@ -1568,7 +1568,6 @@ en:
   pagy:
     aria_label:
       nav: Pagination
-    h4: Pages Navigation
     next: Next →
     prev: "← Previous"
   preferences:
