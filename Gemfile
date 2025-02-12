@@ -37,6 +37,7 @@ gem 'unicode_utils', '>=1.4.0'
 gem "lograge" # https://github.com/roidrage/lograge
 
 gem 'will_paginate', '>=3.0.2'
+gem "pagy", "~> 9.3"
 gem 'acts_as_list', '~> 0.9.7'
 gem 'akismetor'
 
