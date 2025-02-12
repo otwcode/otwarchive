@@ -1098,6 +1098,7 @@ class Work < ApplicationRecord
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
+      user_role: "user",
       comment_date_gmt: created_at.to_time.iso8601,
       blog_lang: language.short,
       comment_author: user.login,
