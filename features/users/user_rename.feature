@@ -182,35 +182,104 @@ Feature:
       And I should see "after" within "#main"
       And I should not see "before" within "#main"
 
-  Scenario: Changing username updates series blurbs
+  Scenario: Changing only username updates series blurbs
     Given I have no users
-      And I am logged in as "oldusername" with password "password"
+      And the following activated user exists
+      | login         | password | id |
+      | oldusername   | secret   | 1  |
+      And a pseud exists with name: "newusername", user_id: 1
+      And I am logged in as "oldusername" with password "secret"
       And I add the work "Great Work" to series "Best Series"
     When I go to the dashboard page for user "oldusername" with pseud "oldusername"
       And I follow "Series"
     Then I should see "Best Series by oldusername"
     When I visit the change username page for oldusername
       And I fill in "New user name" with "newusername"
-      And I fill in "Password" with "password"
+      And I fill in "Password" with "secret"
+      And I press "Change User Name"
+    Then I should get confirmation that I changed my username
+      And I should see "Hi, newusername"
+    When I follow "Series"
+    Then I should see "Best Series by oldusername (newusername)"
+
+  Scenario: Changing username and pseud updates series blurbs
+    Given I have no users
+      And I am logged in as "oldusername" with password "secret"
+      And I add the work "Great Work" to series "Best Series"
+    When I go to the dashboard page for user "oldusername" with pseud "oldusername"
+      And I follow "Series"
+    Then I should see "Best Series by oldusername"
+    When I visit the change username page for oldusername
+      And I fill in "New user name" with "newusername"
+      And I fill in "Password" with "secret"
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
       And I should see "Hi, newusername"
     When I follow "Series"
     Then I should see "Best Series by newusername"
+      And I should not see "Best Series by oldusername"
 
-    Scenario: Changing the username from a forbidden name to non-forbidden
-      Given I have no users
-        And the following activated user exists
-          | login     | password |
-          | forbidden | secret   |
-        And the user name "forbidden" is on the forbidden list
-      When I am logged in as "forbidden" with password "secret"
-        And I visit the change username page for forbidden
-        And I fill in "New user name" with "notforbidden"
-        And I fill in "Password" with "secret"
-        And I press "Change User Name"
-      Then I should get confirmation that I changed my username
-        And I should see "Hi, notforbidden"
+  Scenario: Changing only username updates gift blurbs
+    Given I have no users
+      And the following activated users exist
+        | login      | password    | email                | id |
+        | gifter     | something   | gifter@example.com   | 1  |
+        | giftee1    | something   | giftee1@example.com  | 2  |
+      And a pseud exists with name: "newusername", user_id: 2
+      And the user "giftee1" allows gifts
+      And I am logged in as "gifter" with password "something"
+      And I set up the draft "GiftStory1"
+      And I give the work to "giftee1"
+      And I press "Post"
+      And I am logged in as "giftee1" with password "something"
+    When I go to my gifts page
+    Then I should see "GiftStory1 by gifter for giftee1"
+    When I visit the change username page for giftee1
+      And I fill in "New user name" with "newusername"
+      And I fill in "Password" with "something"
+      And I press "Change User Name"
+    Then I should get confirmation that I changed my username
+      And I should see "Hi, newusername"
+    When I go to my gifts page
+    Then I should see "GiftStory1 by gifter for giftee1 (newusername)"
+
+  Scenario: Changing username and pseud updates gift blurbs
+    Given I have no users
+      And the following activated users exist
+        | login      | password    | email                | id |
+        | gifter     | something   | gifter@example.com   | 1  |
+        | giftee1    | something   | giftee1@example.com  | 2  |
+      And the user "giftee1" allows gifts
+      And I am logged in as "gifter" with password "something"
+      And I set up the draft "GiftStory1"
+      And I give the work to "giftee1"
+      And I press "Post"
+      And I am logged in as "giftee1" with password "something"
+    When I go to my gifts page
+    Then I should see "GiftStory1 by gifter for giftee1"
+    When I visit the change username page for giftee1
+      And I fill in "New user name" with "newusername"
+      And I fill in "Password" with "something"
+      And I press "Change User Name"
+    Then I should get confirmation that I changed my username
+      And I should see "Hi, newusername"
+    When I go to my gifts page
+    Then I should see "GiftStory1 by gifter for newusername"
+      And I should not see "GiftStory1 by gifter for giftee1"
+
+  Scenario: Changing the username from a forbidden name to non-forbidden
+    Given I have no users
+      And the following activated user exists
+        | login     | password |
+        | forbidden | secret   |
+      And the user name "forbidden" is on the forbidden list
+    When I am logged in as "forbidden" with password "secret"
+      And I visit the change username page for forbidden
+      And I fill in "New user name" with "notforbidden"
+      And I fill in "Password" with "secret"
+      And I press "Change User Name"
+    Then I should get confirmation that I changed my username
+      And I should see "Hi, notforbidden"
 
   Scenario: Tag wrangling supervisors are emailed about tag wrangler username changes
     Given the user "before" exists and is activated
