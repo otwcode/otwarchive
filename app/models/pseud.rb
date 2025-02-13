@@ -391,9 +391,11 @@ class Pseud < ApplicationRecord
   end
 
   def expire_caches
-    return unless saved_change_to_name? || (destroyed? && !user.nil? && !user.default_pseud.nil?)
+    return unless saved_change_to_name? || (destroyed? && !user.nil?)
 
     pseud = destroyed? ? user.default_pseud : self
+    return unless !pseud.nil?
+
     pseud.series.each(&:expire_byline_cache)
     pseud.works.each do |work|
       work.touch
