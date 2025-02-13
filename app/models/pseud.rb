@@ -394,7 +394,7 @@ class Pseud < ApplicationRecord
     return unless saved_change_to_name? || (destroyed? && !user.nil?)
 
     pseud = destroyed? ? user.default_pseud : self
-    return unless !pseud.nil?
+    return if pseud.nil?
 
     pseud.series.each(&:expire_byline_cache)
     pseud.works.each do |work|
