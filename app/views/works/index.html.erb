@@ -46,9 +46,7 @@
   <p><%= ts("These are some of the latest works posted to the Archive. To find more works, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_works_path}.").html_safe %>
 <% end %>
 
-<% if @works.respond_to?(:total_pages) %>
-  <%= will_paginate @works %>
-<% end %>
+<%== pagy_nav @pagy %>
 
 <!--main content-->
 <h3 class="landmark heading"><%= ts("Listing Works") %></h3>
@@ -64,6 +62,4 @@
 <% end %>
 <!---/subnav-->
 
-<% if @works.respond_to?(:total_pages) %>
-  <%= will_paginate @works %>
-<% end %>
+<%== pagy_nav @pagy %>

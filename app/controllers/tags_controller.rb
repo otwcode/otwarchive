@@ -56,28 +56,21 @@ class TagsController < ApplicationController
     flash_search_warnings(@tags)
   end
 
-  # if user is admin with view access or Tag Wrangler, show them details about the tag
-  # if user is not logged in or a regular user, show them
-  #   1. the works, if the tag had been wrangled and we can redirect them to works using it or its canonical merger
-  #   2. the tag, the works and the bookmarks using it, if the tag is unwrangled (because we can't redirect them
-  #       to the works controller)
   def show
-    authorize :wrangling, :read_access? if logged_in_as_admin?
-
     @page_subtitle = @tag.name
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-      flash[:error] = ts('Please log in as admin')
+      flash[:error] = t("admin.access.not_admin_denied")
       redirect_to(tag_wranglings_path) && return
     end
     # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
-      if logged_in? # current_user.is_a?User
-        @works = @tag.works.visible_to_registered_user.paginate(page: params[:page])
-      elsif logged_in_as_admin?
-        @works = @tag.works.visible_to_owner.paginate(page: params[:page])
-      else
-        @works = @tag.works.visible_to_all.paginate(page: params[:page])
-      end
+      @works = if logged_in? # current_user.is_a?User
+                 @tag.works.visible_to_registered_user.paginate(page: params[:page])
+               elsif logged_in_as_admin?
+                 @tag.works.visible_to_admin.paginate(page: params[:page])
+               else
+                 @tag.works.visible_to_all.paginate(page: params[:page])
+               end
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
     end
     # cache the children, since it's a possibly massive query
