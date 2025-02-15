@@ -112,6 +112,39 @@ class UserMailerPreview < ApplicationMailerPreview
     new_email = "new_email"
     UserMailer.change_email(user.id, old_email, new_email)
   end
+  
+  # Sends email when collection item changes status: anonymous_unrevealed
+  def anonymous_or_unrevealed_notification_status_anonymous_and_unrevealed
+    user, collection, item = anonymous_or_unrevealed_data(:anonymous_unrevealed_collection)
+    newly_anonymous = true
+    newly_unrevealed = true
+    UserMailer.anonymous_or_unrevealed_notification(
+      user.id, item.id, collection.id,
+      anonymous: newly_anonymous, unrevealed: newly_unrevealed
+    )
+  end
+    
+  # Sends email when collection item changes status: anonymous
+  def anonymous_or_unrevealed_notification_status_anonymous
+    user, collection, item = anonymous_or_unrevealed_data(:anonymous_collection)
+    newly_anonymous = true
+    newly_unrevealed = false
+    UserMailer.anonymous_or_unrevealed_notification(
+      user.id, item.id, collection.id,
+      anonymous: newly_anonymous, unrevealed: newly_unrevealed
+    )
+  end
+    
+  # Sends email when collection item changes status: unrevealed
+  def anonymous_or_unrevealed_notification_status_unrevealed
+    user, collection, item = anonymous_or_unrevealed_data(:unrevealed_collection)
+    newly_anonymous = false
+    newly_unrevealed = true
+    UserMailer.anonymous_or_unrevealed_notification(
+      user.id, item.id, collection.id,
+      anonymous: newly_anonymous, unrevealed: newly_unrevealed
+    )
+  end
 
   def invite_increase_notification
     user = create(:user, :for_mailer_preview)
@@ -133,5 +166,12 @@ class UserMailerPreview < ApplicationMailerPreview
     second_creator = create(:user, :for_mailer_preview)
     creation = create(creation_type, authors: [first_creator.default_pseud, second_creator.default_pseud])
     [creation.creatorships.last, first_creator]
+  end
+  
+  def anonymous_or_unrevealed_data(status)
+    user = create(:user, :for_mailer_preview)
+    collection = create(status)
+    item = create(:work, authors: [user.default_pseud], collections: [collection])
+    [user, collection, item]
   end
 end
