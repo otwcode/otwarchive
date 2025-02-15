@@ -412,7 +412,7 @@ class TagsController < ApplicationController
       :name,
       :fandoms,
       :type,
-      :canonical,
+      :wrangling_status,
       :created_at,
       :uses,
       :sort_column,

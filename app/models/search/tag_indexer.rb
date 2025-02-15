@@ -69,7 +69,8 @@ class TagIndexer < Indexer
       has_posted_works: object.has_posted_works?,
       tag_type: object.type,
       uses: object.taggings_count_cache,
-      unwrangled: object.unwrangled?
+      unwrangled: object.unwrangled?,
+      filterable: object.synonymous? || object.canonical
     ).merge(parent_data(object))
   end
 
