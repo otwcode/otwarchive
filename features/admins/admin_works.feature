@@ -32,6 +32,27 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       | superadmin       |
       | legal            |
       | policy_and_abuse |
+  
+    Scenario Outline: Can hide works already marked as spam
+    Given I am logged in as "regular_user"
+      And I post the work "ToS Violation + Spam"
+      And the work "ToS Violation + Spam" is marked as spam
+    When I am logged in as a "<role>" admin
+      And all emails have been delivered
+      And I view the work "ToS Violation + Spam"
+      And I follow "Hide Work"
+    Then I should see "Item has been hidden."
+      And logged out users should not see the hidden work "ToS Violation + Spam" by "regular_user"
+      And logged in users should not see the hidden work "ToS Violation + Spam" by "regular_user"
+      And "regular_user" should see their work "ToS Violation + Spam" is hidden
+      And 1 email should be delivered
+      And the email should contain "you will be required to take action to correct the violation"
+    
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
 
   Scenario Outline: Can unhide works
     Given I am logged in as "regular_user"
@@ -374,12 +395,16 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Given the work "Spammity Spam"
     And I am logged in as a "policy_and_abuse" admin
     And I view the work "Spammity Spam"
+    And all emails have been delivered
   Then I should see "Mark As Spam"
   When I follow "Mark As Spam"
   Then I should see "marked as spam and hidden"
     And I should see "Mark Not Spam"
     And the work "Spammity Spam" should be marked as spam
     And the work "Spammity Spam" should be hidden
+    And 1 email should be delivered
+    And the email should contain "has been flagged by our automated system as spam"
+
 
   Scenario: can mark a spam work as not-spam
   Given the spam work "Spammity Spam"
