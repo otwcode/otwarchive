@@ -13,6 +13,10 @@ class UserCreationPolicy < ApplicationPolicy
     user_has_roles?(FULL_ACCESS_ROLES)
   end
 
+  def remove_pseud?
+    user_has_roles?(%w[superadmin support policy_and_abuse])
+  end
+
   def show_ip_address?
     user_has_roles?(FULL_ACCESS_ROLES)
   end
@@ -20,4 +24,6 @@ class UserCreationPolicy < ApplicationPolicy
   def show_original_creators?
     user_has_roles?(FULL_ACCESS_ROLES)
   end
+
+  alias confirm_remove_pseud? remove_pseud?
 end
