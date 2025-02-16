@@ -1,7 +1,7 @@
 # Fix for https://github.com/departurerb/departure/issues/110, where advisory locks are not released after migration
 # is completed. This should be removed when a fix is available upstream.
 module Departure
-  class ConnectionBase < ActiveRecord::Base
+  class ConnectionBase < ActiveRecord::Base # rubocop:disable Rails/ApplicationRecord
     def self.establish_connection(config = nil)
       super
     end
