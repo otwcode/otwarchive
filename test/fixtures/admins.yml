@@ -4,5 +4,7 @@ admin_00001:
   encrypted_password: <%= Devise::Encryptor.digest(User, 'testadmin') %>
   updated_at: 2008-11-09 01:26:01 Z
   id: 1
-  login: testadmin
+  login: admin-testadmin
   email: user1@example.com
+  roles:
+    - superadmin
