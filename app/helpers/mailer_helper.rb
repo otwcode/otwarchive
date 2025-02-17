@@ -155,7 +155,7 @@ module MailerHelper
     end
   end
 
-  def work_metadata_label(text)
+  def metadata_label(text)
     text.html_safe + t("mailer.general.metadata_label_indicator")
   end
 
@@ -166,10 +166,8 @@ module MailerHelper
     "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
   end
 
-  # TODO: We're using this for labels in set_password_notification, too. Let's
-  # take the "work" out of the name.
-  def style_work_metadata_label(text)
-    style_bold(work_metadata_label(text))
+  def style_metadata_label(text)
+    style_bold(metadata_label(text))
   end
 
   # Spacing is dealt with in locale files, e.g. " : " for French.
