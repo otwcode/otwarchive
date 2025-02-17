@@ -46,9 +46,9 @@ class SeriesController < ApplicationController
 
     # sets the page title with the data for the series
     if @series.unrevealed?
-      @page_subtitle = ts("Mystery Series")
+      @page_subtitle = t(".unrevealed_series")
     else
-      @page_title = get_page_title(@series.allfandoms.collect(&:name).join(", "), @series.anonymous? ? ts("Anonymous") : @series.allpseuds.collect(&:byline).join(", "), @series.title)
+      @page_title = get_page_title(@series.allfandoms.collect(&:name).join(", "), @series.anonymous? ? t(".anonymous") : @series.allpseuds.collect(&:byline).join(", "), @series.title)
     end
 
     if current_user.respond_to?(:subscriptions)
