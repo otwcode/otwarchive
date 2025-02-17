@@ -124,6 +124,9 @@ en:
   series:
     index:
       page_title: "%{username} - Series"
+    show:
+      anonymous: Anonymous
+      unrevealed_series: Mystery Series
   tag_wranglings:
     index:
       page_subtitle: fandoms
