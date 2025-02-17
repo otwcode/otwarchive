@@ -83,6 +83,7 @@ Metrics/PerceivedComplexity:
 Migration/LargeTableSchemaUpdate:
   Tables:
     - abuse_reports
+    - active_storage_blobs
     - admin_activities
     - audits
     - bookmarks
@@ -154,6 +155,8 @@ Rails/OutputSafety:
 
 Rails/Output:
   Exclude:
+    # Allow patches to print warnings to console:
+    - 'config/initializers/monkeypatches/*.rb'
     # Allow migrations to print pt-osc comments to console:
     - 'db/migrate/*.rb'
 

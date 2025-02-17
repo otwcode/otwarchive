@@ -1,7 +1,7 @@
 Feature: Gift Exchange Notification Emails
   Make sure that gift exchange notification emails are formatted properly
 
-  Scenario: Assignment notification emails should be sent to two owners in their respective locales when assignments are generated
+  Scenario: Assignment sent notification emails should be sent to two owners in their respective locales when assignments are generated
     Given I have created the tagless gift exchange "Holiday Swap"
       And I open signups for "Holiday Swap"
     
@@ -148,3 +148,17 @@ Feature: Gift Exchange Notification Emails
 
     Then "participant1" should receive 1 email
       And the notification message to "participant1" should contain the no archive warnings tag
+
+  Scenario: Assignment notifications should be sent to participants in their respective locales
+    Given the gift exchange "Holiday Swap" is ready for matching
+      And a locale with translated emails
+      And the user "myname1" enables translated emails
+    When I close signups for "Holiday Swap"
+      And I have generated matches for "Holiday Swap"
+      And I have sent assignments for "Holiday Swap"
+    Then "myname1" should receive 1 email
+      And the email should have "Your assignment!" in the subject
+      And the email to "myname1" should be translated
+    And "myname2" should receive 1 email
+      And the email should have "Your assignment!" in the subject
+      And the email to "myname2" should be non-translated

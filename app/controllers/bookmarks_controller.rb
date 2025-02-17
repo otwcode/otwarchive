@@ -145,6 +145,13 @@ class BookmarksController < ApplicationController
       end
     end
     set_own_bookmarks
+
+    @pagy =
+      if @bookmarks.respond_to?(:total_pages)
+        pagy_query_result(@bookmarks)
+      elsif @bookmarkable_items.respond_to?(:total_pages)
+        pagy_query_result(@bookmarkable_items)
+      end
   end
 
   # GET    /:locale/bookmark/:id

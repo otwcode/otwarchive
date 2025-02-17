@@ -101,16 +101,18 @@ class CollectionItem < ApplicationRecord
   # Sends emails to item creator(s) in the case that an archivist
   # has added them to the collection.
   def notify_archivist_added
-    return unless User.current_user&.archivist && collection.user_is_maintainer?(User.current_user)
+    return unless item.is_a?(Work) && User.current_user&.archivist && collection.user_is_maintainer?(User.current_user)
 
     item.users.each do |email_recipient|
       next if email_recipient.preference.collection_emails_off
 
-      UserMailer.archivist_added_to_collection_notification(
-        email_recipient.id,
-        item.id,
-        collection.id
-      ).deliver_later
+      I18n.with_locale(email_recipient.preference.locale.iso) do
+        UserMailer.archivist_added_to_collection_notification(
+          email_recipient.id,
+          item.id,
+          collection.id
+        ).deliver_later
+      end
     end
   end
 
