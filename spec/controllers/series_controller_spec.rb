@@ -143,4 +143,15 @@ describe SeriesController do
       end
     end
   end
+
+  describe "show" do
+    it "assigns page_subtitle for unrevealed series" do
+      unrevealed_collection = create(:unrevealed_collection)
+      unrevealed_work = create(:work, collections: [unrevealed_collection])
+      create(:serial_work, work: unrevealed_work, series: series)
+      get :show, params: { id: series }
+      expect(assigns[:page_subtitle]).to eq("Mystery Series")
+
+   end
+  end
 end
