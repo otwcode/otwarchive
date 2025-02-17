@@ -143,6 +143,7 @@ describe SeriesController do
       end
     end
   end
+
   describe "show" do
     it "assigns page title for series" do
       work = create(:work, fandom_string: "Fandom", authors: [user.default_pseud])
