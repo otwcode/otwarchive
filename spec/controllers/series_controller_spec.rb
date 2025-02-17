@@ -151,7 +151,6 @@ describe SeriesController do
       create(:serial_work, work: unrevealed_work, series: series)
       get :show, params: { id: series }
       expect(assigns[:page_subtitle]).to eq("Mystery Series")
-
-   end
+    end
   end
 end
