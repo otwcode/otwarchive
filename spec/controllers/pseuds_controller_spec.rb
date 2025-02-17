@@ -76,7 +76,21 @@ describe PseudsController do
             subject.call
             expect(response).to render_template(:edit)
           end
+
+          it "returns NotFound error when pseud doesn't exist" do
+            expect { get :edit, params: { user_id: user, id: "fake_pseud" } }
+              .to raise_error(ActiveRecord::RecordNotFound)
+          end
         end
+      end
+    end
+
+    context "when logged in as user" do
+      before { fake_login_known_user(user) }
+
+      it "returns NotFound error when pseud doesn't exist" do
+        expect { get :edit, params: { user_id: user, id: "fake_pseud" } }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

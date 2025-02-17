@@ -74,7 +74,7 @@ class PseudsController < ApplicationController
 
   # GET /pseuds/1/edit
   def edit
-    @pseud = @user.pseuds.find_by(name: params[:id])
+    @pseud = @user.pseuds.find_by!(name: params[:id])
     authorize @pseud if logged_in_as_admin?
   end
 
