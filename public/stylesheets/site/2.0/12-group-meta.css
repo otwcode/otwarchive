@@ -28,16 +28,22 @@ dl.meta {
   margin-top: 0;
 }
 
-.meta .stats dl dd, .meta .stats dl dt {
-  margin: 0 0.375em auto 0;
+dl.meta dd ul li, .meta .stats dl, .meta .stats dl dt, .meta .stats dl dd {
+  padding-inline-start: 0;
+}
+
+.meta .stats dl dt, .meta .stats dl dd {
+  margin-block: 0 auto;
+  margin-inline: 0 0.375em;
+  padding-inline-end: 0.25em;
   width: auto;
   min-width: 0;
   clear: none;
   float: left;
 }
 
-.meta .stats dl, .meta .stats dl dt:first-child, dl.meta dd ul li:first-child {
-  padding-left: 0;
+.meta .stats dl dd {
+  padding-inline-end: 0.75em;
 }
 
 .meta p {
@@ -48,6 +54,7 @@ dl.meta {
 .meta dd ul li {
   display: inline;
   margin: auto;
+  padding-inline-end: 0.5em;
 }
 
 .meta dd blockquote {
