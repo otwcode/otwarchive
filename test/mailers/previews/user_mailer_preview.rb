@@ -112,7 +112,7 @@ class UserMailerPreview < ApplicationMailerPreview
     new_email = "new_email"
     UserMailer.change_email(user.id, old_email, new_email)
   end
-  
+
   # Sends email when collection item changes status: anonymous_unrevealed
   def anonymous_or_unrevealed_notification_status_anonymous_and_unrevealed
     user, collection, item = anonymous_or_unrevealed_data(:anonymous_unrevealed_collection)
@@ -123,7 +123,7 @@ class UserMailerPreview < ApplicationMailerPreview
       anonymous: newly_anonymous, unrevealed: newly_unrevealed
     )
   end
-    
+
   # Sends email when collection item changes status: anonymous
   def anonymous_or_unrevealed_notification_status_anonymous
     user, collection, item = anonymous_or_unrevealed_data(:anonymous_collection)
@@ -134,7 +134,7 @@ class UserMailerPreview < ApplicationMailerPreview
       anonymous: newly_anonymous, unrevealed: newly_unrevealed
     )
   end
-    
+
   # Sends email when collection item changes status: unrevealed
   def anonymous_or_unrevealed_notification_status_unrevealed
     user, collection, item = anonymous_or_unrevealed_data(:unrevealed_collection)
@@ -159,6 +159,12 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.archivist_added_to_collection_notification(user.id, work.id, collection.id)
   end
 
+  def admin_hidden_work_notification
+    work = create(:work)
+    user = create(:user, :for_mailer_preview)
+    UserMailer.admin_hidden_work_notification(work, user.id)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)
@@ -167,7 +173,7 @@ class UserMailerPreview < ApplicationMailerPreview
     creation = create(creation_type, authors: [first_creator.default_pseud, second_creator.default_pseud])
     [creation.creatorships.last, first_creator]
   end
-  
+
   def anonymous_or_unrevealed_data(status)
     user = create(:user, :for_mailer_preview)
     collection = create(status)
