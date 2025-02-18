@@ -194,7 +194,7 @@ class UserMailer < ApplicationMailer
     @collection = Collection.find(collection_id)
     @assigned_user = User.find(assigned_user_id)
     @assignment = ChallengeAssignment.find(assignment_id)
-    @request = (@assignment.request_signup || @assignment.pinch_request_signup)
+    @request = @assignment.request_signup
     mail(
       to: @assigned_user.email,
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)

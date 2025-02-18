@@ -229,7 +229,6 @@ en:
       pinch_hitter: "%{pinch_hitter_byline}* (pinch hitter)"
     request_byline:
       none: "- None -"
-      pinch_recipient: "%{pinch_request_byline}* (pinch recipient)"
   errors:
     attributes:
       icon:

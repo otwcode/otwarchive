@@ -6,11 +6,10 @@
       <%= challenge_assignment_byline(assignment) %> <%= challenge_assignment_email(assignment) %>
       <span class="recipient">
         <%= ts("for") %>
-        <% if assignment.request.nil? %>
+        <% if assignment.request_signup.nil? %>
           <strong><%= ts("No Recipient!")%></strong>
         <% else %>
-          <%= link_to assignment.request_byline, collection_signup_path(@collection, assignment.request) %>
-          <%= assignment.pinch_request_signup && assignment.pinch_request_signup == assignment.request ? "* (pinch recipient)" : "" %>
+          <%= link_to assignment.request_byline, collection_signup_path(@collection, assignment.request_signup) %>
         <% end %>
       </span>
     </dt>
