@@ -57,14 +57,10 @@ class UserMailer < ApplicationMailer
               else
                 :unrevealed
               end
-
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: t(".subject.#{@status}",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t(".subject.#{@status}", app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends an invitation to join the archive

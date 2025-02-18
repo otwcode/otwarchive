@@ -183,8 +183,8 @@ en:
       assignment:
         html: You have been assigned the following request in the %{link} challenge at the Archive of Our Own!
         text: You have been assigned the following request in the "%{collection_title}" challenge (%{collection_url}) at the Archive of Our Own!
-      description: 'Description:'
-      due: 'This assignment is due at:'
+      description: Description
+      due: This assignment is due at
       footer:
         challenge_profile: the challenge profile page
         html: You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{challenge_profile_link}.
@@ -193,10 +193,10 @@ en:
         html: You can look up this assignment from %{your_assignments_link}.
         text: You can look up this assignment from your Assignments page at %{your_assignments_url}.
         your_assignments: your Assignments page
-      optional_tags: 'Optional Tags:'
-      prompt_url: 'Prompt URL:'
+      optional_tags: Optional Tags
+      prompt_url: Prompt URL
       prompts: 'Prompts:'
-      recipient: 'Recipient:'
+      recipient: Recipient
       recipient_missing: 'None: contact a moderator for help!'
       subject: "[%{app_name}][%{collection_title}] Your assignment!"
     change_email:
@@ -269,7 +269,7 @@ en:
         remove_series: If you've been added in error or don't want to be listed as a creator, you can %{edit_series_link} to remove yourself as creator.
       intro_chapter: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following series:'
-      subject: "[%{app_name}] Co-creator notification"
+      subject: "[%{app_name}] You've been added as a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
@@ -287,7 +287,7 @@ en:
       intro_chapter: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following series:'
       intro_work: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following work:'
-      subject: "[%{app_name}] Archivist co-creator notification"
+      subject: "[%{app_name}] An archivist has added you as a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
@@ -301,7 +301,7 @@ en:
       intro_chapter: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following chapter:'
       intro_series: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following series:'
       intro_work: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following work:'
-      subject: "[%{app_name}] Co-creator request"
+      subject: "[%{app_name}] You've received a request to be a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         instructions: 'You can accept or reject this request on your Co-Creator Requests page: %{url}'
