@@ -261,10 +261,12 @@ class CollectionItem < ApplicationRecord
     return if item.users.include?(User.current_user)
 
     item.users.each do |user|
-      UserMailer.anonymous_or_unrevealed_notification(
-        user.id, item.id, collection.id,
-        anonymous: newly_anonymous, unrevealed: newly_unrevealed
-      ).deliver_after_commit
+      I18n.with_locale(user.preference.locale.iso) do
+        UserMailer.anonymous_or_unrevealed_notification(
+          user.id, item.id, collection.id,
+          anonymous: newly_anonymous, unrevealed: newly_unrevealed
+        ).deliver_after_commit
+      end
     end
   end
 end
