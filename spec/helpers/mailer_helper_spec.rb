@@ -71,9 +71,9 @@ describe MailerHelper do
     end
   end
 
-  describe "#work_metadata_label" do
+  describe "#metadata_label" do
     it "appends the metadata indicator to a string" do
-      expect(work_metadata_label("Text")).to eq("Text: ")
+      expect(metadata_label("Text")).to eq("Text: ")
     end
   end
 
