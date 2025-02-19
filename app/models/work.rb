@@ -75,6 +75,9 @@ class Work < ApplicationRecord
   attr_accessor :new_gifts
   attr_accessor :preview_mode
 
+  # Virtual attribute for whether the hidden-for-spam email has been sent, so the normal work-hidden email should not be sent
+  attr_accessor :notified_of_hiding_for_spam
+
   # return title.html_safe to overcome escaping done by sanitiser
   def title
     read_attribute(:title).try(:html_safe)
@@ -1122,7 +1125,10 @@ class Work < ApplicationRecord
     return unless spam?
     admin_settings = AdminSetting.current
     if admin_settings.hide_spam?
+      return if self.hidden_by_admin
+
       self.hidden_by_admin = true
+      notify_of_hiding_for_spam
     end
   end
 
@@ -1146,13 +1152,20 @@ class Work < ApplicationRecord
 
   def notify_of_hiding
     return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
+    return if notified_of_hiding_for_spam
+
     users.each do |user|
-      if spam?
-        UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
-      else
+      I18n.with_locale(user.preference.locale.iso) do
         UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
       end
     end
+  end
+
+  def notify_of_hiding_for_spam
+    users.each do |user|
+      UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
+    end
+    self.notified_of_hiding_for_spam = true
   end
 
   #############################################################################

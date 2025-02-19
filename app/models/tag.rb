@@ -172,6 +172,9 @@ class Tag < ApplicationRecord
   validates :name,
             format: { with: /\A[^,，、*<>^{}=`\\%]+\z/,
                       message: "^Tag name '%{value}' cannot include the following restricted characters: , &#94; * < > { } = ` ， 、 \\ %" }
+  validates :name,
+            format: { without: /\A\p{Cf}+\z/,
+                      message: "^Tag name cannot be blank." }
   validates :sortable_name, presence: true
 
   validate :unwrangleable_status

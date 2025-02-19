@@ -409,6 +409,7 @@ SUPPORTED_CSS_PROPERTIES:
 - clip
 - color
 - color-profile
+- color-scheme
 - content
 - counter-increment
 - counter-reset
@@ -676,7 +677,8 @@ HIT_COUNT_ROLLOVER_HOUR: 3
 # The batch size for calculating a work's filters from its tags:
 FILTER_UPDATE_BATCH_SIZE: 100
 
-# URLs for which we should not display the proxy notice. Alphabetical by
+# URLs for which we should not display the proxy notice. URLs from these hosts
+# are allowed in Abuse reports and disallowed in Work imports. Alphabetical by
 # environment.
 PERMITTED_HOSTS: [
   # Production
@@ -738,7 +740,7 @@ PERCONA_ARGS: >
   --max-load Threads_running=15
   --critical-load Threads_running=100
   --set-vars innodb_lock_wait_timeout=2
-  --alter-foreign-keys-method=auto
+  --alter-foreign-keys-method=rebuild_constraints
   --no-check-unique-key-change
 
 # How many shards to have in elastic indexes.

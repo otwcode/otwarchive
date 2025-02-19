@@ -16,35 +16,15 @@ en:
         support: Support
         tag_wrangling: Tag Wrangling
         translation: Translation
-      archive_warning:
-        name_with_colon:
-          one: 'Warning:'
-          other: 'Warnings:'
-      category:
-        name_with_colon:
-          one: 'Category:'
-          other: 'Categories:'
       chapters/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
-      character:
-        name_with_colon:
-          one: 'Character:'
-          other: 'Characters:'
       creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
       external_work:
         author: Creator
         user_defined_tags_count: Fandom, relationship, and character tags
-      fandom:
-        name_with_colon:
-          one: 'Fandom:'
-          other: 'Fandoms:'
-      freeform:
-        name_with_colon:
-          one: 'Additional Tag:'
-          other: 'Additional Tags:'
       gift_exchange:
         offers_num_allowed: Number of offers allowed per sign-up
         offers_num_required: Number of offers required per sign-up
@@ -55,12 +35,6 @@ en:
         meta_tag_id: Metatag
         sub_tag: Subtag
         sub_tag_id: Subtag
-      rating:
-        name_with_colon: 'Rating:'
-      relationship:
-        name_with_colon:
-          one: 'Relationship:'
-          other: 'Relationships:'
       role:
         archivist: Archivist
         no_resets: No Resets
@@ -94,6 +68,7 @@ en:
     errors:
       messages:
         forbidden: "%{value} is not allowed"
+        numeric_with_optional_hash: 'may begin with an # and otherwise contain only numbers.'
       models:
         abuse_report:
           attributes:
@@ -109,6 +84,10 @@ en:
             blocked_id:
               taken: You have already blocked that user.
           format: "%{message}"
+        bookmark:
+          attributes:
+            pseud:
+              required: can't be blank
         comment:
           attributes:
             commentable:
@@ -157,6 +136,13 @@ en:
               not_work: Only a link to a work can be listed as an inspiration.
               protected: You can't use the related works function to cite works by the protected user %{login}.
           format: "%{message}"
+        skin:
+          archive_in_title: Sorry, titles including the word 'Archive' are reserved for official skins.
+          attributes:
+            title:
+              taken: must be unique
+          invalid_media: We don't currently support the media type %{media}, sorry! If we should, please let Support know.
+          no_public_preview: You need to upload a screencap if you want to share your skin.
         skin/skin_parents:
           attributes:
             base:
@@ -250,7 +236,6 @@ en:
       pinch_hitter: "%{pinch_hitter_byline}* (pinch hitter)"
     request_byline:
       none: "- None -"
-      pinch_recipient: "%{pinch_request_byline}* (pinch recipient)"
   errors:
     attributes:
       icon:
@@ -260,5 +245,7 @@ en:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.
         required: must exist and not be spam.
+  story_parser:
+    on_archive: URL is for a work on the Archive. Please bookmark it directly instead.
   subscriptions:
     deleted: Deleted item
