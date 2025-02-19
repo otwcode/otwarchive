@@ -496,5 +496,26 @@ namespace :After do
     count = ChallengeAssignment.where("pinch_request_signup_id IS NOT NULL AND request_signup_id IS NULL").update_all("request_signup_id = pinch_request_signup_id")
     puts("Migrated pinch_request_signup for #{count} challenge assignments.")
   end
+
+  desc "Reindex tags associated with works that are hidden or unrevealed"
+  task(reindex_hidden_unrevealed_tags: :environment) do
+    hidden_count = Work.hidden.count
+    hidden_batches = (hidden_count + 999) / 1_000
+    puts "Inspecting #{hidden_count} hidden works in #{hidden_batches} batches"
+    Work.hidden.find_in_batches.with_index do |batch, index|
+      batch.each { |work| work.taggings.each(&:update_search) }
+      puts "Finished batch #{index + 1} of #{hidden_batches}"
+    end
+
+    unrevealed_count = Work.unrevealed.count
+    unrevealed_batches = (unrevealed_count + 999) / 1_000
+    puts "Inspecting #{unrevealed_count} unrevealed works in #{unrevealed_batches} batches"
+    Work.unrevealed.find_in_batches.with_index do |batch, index|
+      batch.each { |work| work.taggings.each(&:update_search) }
+      puts "Finished batch #{index + 1} of #{unrevealed_batches}"
+    end
+
+    puts "Finished reindexing tags on hidden and unrevealed works"
+  end
   # This is the end that you have to put new tasks above.
 end
