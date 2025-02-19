@@ -44,7 +44,7 @@ describe "API v2 WorksController - Search", type: :request, work_search: true do
       parsed_body = post_search_result(valid_params)
 
       expect(parsed_body[:works].first[:status]).to eq "found"
-      expect(parsed_body[:works].first[:messages]).to include("Work \"#{work.title}\", created on #{work.created_at.to_date.to_s(:iso_date)} was found at \"#{url_for(work)}\".")
+      expect(parsed_body[:works].first[:messages]).to include("Work \"#{work.title}\", created on #{work.created_at.to_date.to_fs(:iso_date)} was found at \"#{url_for(work)}\".")
     end
   
     it "returns an error when no works are provided" do

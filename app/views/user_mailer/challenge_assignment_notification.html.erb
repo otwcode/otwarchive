@@ -2,7 +2,7 @@
   <p><%= t(".assignment.html", link: style_link(@collection.title, collection_url(@collection))) %></p>
 
   <p>
-    <%= style_bold(t(".recipient")) %> <%= @request.nil? ? t(".recipient_missing") : style_link(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud)) %>
+    <%= style_metadata_label(t(".recipient")) %><%= @request.nil? ? t(".recipient_missing") : style_link(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud)) %>
   </p>
 
   <%= style_bold(t(".prompts")) %>
@@ -29,52 +29,43 @@
 
     <p>
       <% if fandoms %>
-        <%= style_bold(t("activerecord.models.fandom", count: prompt.any_fandom ? 1 : tag_groups["Fandom"].count) + t("mailer.general.metadata_label_indicator")) %>
-        <%= fandoms %>
+        <%= style_metadata_label(t("activerecord.models.fandom", count: prompt.any_fandom ? 1 : tag_groups["Fandom"].count)) %><%= fandoms %>
         <br />
       <% end %>
       <% if chars %>
-        <%= style_bold(t("activerecord.models.character", count: prompt.any_character ? 1 : tag_groups["Character"].count) + t("mailer.general.metadata_label_indicator")) %>
-        <%= chars %>
+        <%= style_metadata_label(t("activerecord.models.character", count: prompt.any_character ? 1 : tag_groups["Character"].count)) %><%= chars %>
         <br />
       <% end %>
       <% if ships %>
-        <%= style_bold(t("activerecord.models.relationship", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count) + t("mailer.general.metadata_label_indicator")) %>
-        <%= ships %>
+        <%= style_metadata_label(t("activerecord.models.relationship", count: prompt.any_relationship ? 1 : tag_groups["Relationship"].count)) %><%= ships %>
         <br />
       <% end %>
       <% if ratings %>
-        <%= style_bold(t("activerecord.models.rating", count: 1) + t("mailer.general.metadata_label_indicator")) %>
-        <%= ratings %>
+        <%= style_metadata_label(t("activerecord.models.rating", count: prompt.any_rating ? 1 : tag_groups["Rating"].count)) %><%= ratings %>
         <br />
       <% end %>
       <% if warnings %>
-        <%= style_bold(t("activerecord.models.archive_warning", count: prompt.any_archive_warning ? 1 : tag_groups["ArchiveWarning"].count) + t("mailer.general.metadata_label_indicator")) %>
-        <%= warnings %>
+        <%= style_metadata_label(t("activerecord.models.archive_warning", count: prompt.any_archive_warning ? 1 : tag_groups["ArchiveWarning"].count)) %><%= warnings %>
         <br />
       <% end %>
       <% if categories %>
-        <%= style_bold(t("activerecord.models.category", count: prompt.any_category ? 1 : tag_groups["Category"].count) + t("mailer.general.metadata_label_indicator")) %>
-        <%= categories %>
+        <%= style_metadata_label(t("activerecord.models.category", count: prompt.any_category ? 1 : tag_groups["Category"].count)) %><%= categories %>
         <br />
       <% end %>
       <% if atags %>
-        <%= style_bold(t("activerecord.models.freeform", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count) + t("mailer.general.metadata_label_indicator")) %>
-        <%= atags %>
+        <%= style_metadata_label(t("activerecord.models.freeform", count: prompt.any_freeform ? 1 : tag_groups["Freeform"].count)) %><%= atags %>
         <br />
       <% end %>
       <% if otags %>
-        <%= style_bold(t(".optional_tags")) %>
-        <%= otags %>
+        <%= style_metadata_label(t(".optional_tags")) %><%= otags %>
         <br />
       <% end %>
       <% if prompt.url && !prompt.url.blank? %>
-        <%= style_bold(t(".prompt_url")) %>
-        <%= style_link(prompt.url, prompt.url) %>
+        <%= style_metadata_label(t(".prompt_url")) %><%= style_link(prompt.url, prompt.url) %>
         <br />
       <% end %>
       <% if prompt.description && !prompt.description.blank? %>
-        <%= style_bold(t(".description")) %>
+        <%= style_metadata_label(t(".description")) %>
         <%= style_quote(prompt.description) %>
       <% end %>
     </p>
@@ -83,7 +74,7 @@
   <%= styled_divider %>
 
   <p>
-    <%= style_bold(t(".due")) %> <%= time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user) %>.
+    <%= style_metadata_label(t(".due")) %><%= time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user) %>.
   </p>
 
   <p><%= t(".look_up.html", your_assignments_link: style_link(t(".look_up.your_assignments"), user_assignments_url(@assigned_user))) %></p>

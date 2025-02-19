@@ -57,14 +57,10 @@ class UserMailer < ApplicationMailer
               else
                 :unrevealed
               end
-
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: t(".subject.#{@status}",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t(".subject.#{@status}", app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends an invitation to join the archive
@@ -198,7 +194,7 @@ class UserMailer < ApplicationMailer
     @collection = Collection.find(collection_id)
     @assigned_user = User.find(assigned_user_id)
     @assignment = ChallengeAssignment.find(assignment_id)
-    @request = (@assignment.request_signup || @assignment.pinch_request_signup)
+    @request = @assignment.request_signup
     mail(
       to: @assigned_user.email,
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
@@ -362,12 +358,10 @@ class UserMailer < ApplicationMailer
     @user = User.find_by(id: user_id)
     @work = Work.find_by(id: creation_id)
 
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   def admin_spam_work_notification(creation_id, user_id)
