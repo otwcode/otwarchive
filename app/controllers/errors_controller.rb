@@ -8,4 +8,8 @@ class ErrorsController < ApplicationController
   def auth_error
     @page_subtitle = "Auth Error"
   end
+
+  def timeout_error
+    @page_subtitle = "Timeout Error"
+  end
 end
