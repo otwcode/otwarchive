@@ -294,7 +294,7 @@ describe Admin::UserCreationsController do
           it_redirects_to_with_notice(work_path(work), "Successfully removed pseud Leaver (orphan_account) from this work.")
           expect(work.reload.pseuds).to include(orphan_account.default_pseud)
           expect(work.pseuds).not_to include(orphan_pseud)
-          expect(work.reload.pseuds).to include(orphaneer_orphan_pseud)
+          expect(work.pseuds).to include(orphaneer_orphan_pseud)
         end
       end
 
