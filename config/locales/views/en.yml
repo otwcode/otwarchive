@@ -39,14 +39,13 @@ en:
       heading:
         page_title: Policy Questions & Abuse Reports
       include:
-        ao3: AO3 Terms of Servic
+        evidence_html: links to any relevant %{sources_link} or screenshots
         intro: 'What to include in your report description:'
         other_content: links to any of their other content that you would like to report
-        quote: a quote from or summary of the content you are reporting that explains why it violates the Terms of Service
+        quote: a quote from or summary of the content that violates the Terms of Service
+        reported_username: username of the person you are reporting
         sources: sources
-        sources_html: links to any relevant %{sources_link} or screenshots
-        username: username of the person you are reporting
-        username_html: the %{username_link}
+        username_html: the %{reported_username_link}
       languages:
         delay: There will be an additional delay for responses in any language other than English.
         intro_html: We can answer Abuse reports in %{list_html}.
