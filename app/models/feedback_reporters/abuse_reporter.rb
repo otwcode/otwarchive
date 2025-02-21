@@ -17,7 +17,7 @@ class AbuseReporter < FeedbackReporter
     truncated_referer = referer.present? ? referer[0..2079] : ""
     {
       "cf_ip" => ip_address.presence || "Unknown IP",
-      "cf_ticket_url" => truncated_referer,
+      "cf_ticket_url" => truncated_referer
     }
   end
 
