@@ -51,7 +51,7 @@ class UserPolicy < ApplicationPolicy
     user_has_roles?(REVIEW_CREATIONS_ROLES)
   end
 
-  def change_username?
+  def can_change_username?
     user_has_roles?(CHANGE_USERNAME_ROLES)
   end
 
@@ -67,7 +67,8 @@ class UserPolicy < ApplicationPolicy
   alias bulk_search? can_manage_users?
   alias show? can_manage_users?
   alias update? can_manage_users?
-  alias changed_username? change_username?
+  alias change_username? can_change_username?
+  alias changed_username? can_change_username?
 
   alias update_next_of_kin? can_manage_next_of_kin?
 
