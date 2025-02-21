@@ -14,7 +14,7 @@ class AbuseReporter < FeedbackReporter
     # To avoid issues where Zoho ticket creation silently fails, only grab the first
     # 2080 characters of the referer URL. That may miss some complex search queries,
     # but still keep enough to be useful most of the time.
-    truncated_referer = referer.present? ? referer[0..2079] : "Unknown URL"
+    truncated_referer = referer.present? ? referer[0..2079] : ""
     {
       "cf_ip" => ip_address.presence || "Unknown IP",
       "cf_ticket_url" => truncated_referer,
