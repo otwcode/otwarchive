@@ -48,7 +48,7 @@ en:
         username: username of the person you are reporting
         username_html: the %{username_link}
       languages: 
-        intro: We can answer Abuse reports in %{list_html}.
+        intro_html: We can answer Abuse reports in %{list_html}.
         delay: There will be an additional delay for responses in any language other than English.
       page_content_landmark: Main Text
       purview:
