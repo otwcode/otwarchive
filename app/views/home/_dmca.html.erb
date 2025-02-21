@@ -15,19 +15,19 @@
     <ol>
       <li><%= link_to(t(".toc.removal"),"#removal_options") %>
         <ul>
-          <li><%= link_to(t(".toc.takedown_instructions"),"#takedown_instructions") %></li>
-          <li><%= link_to(t(".toc.takedown_requirements"),"#takedown_requirements") %></li>
-          <li><%= link_to(t(".toc.takedown_process"),"#takedown_process") %></li>
+          <li><%= link_to(t(".toc.takedown_instructions"), "#takedown_instructions") %></li>
+          <li><%= link_to(t(".toc.takedown_requirements"), "#takedown_requirements") %></li>
+          <li><%= link_to(t(".toc.takedown_process"), "#takedown_process") %></li>
         </ul>
       </li>
       <li><%= link_to(t(".toc.appeal"),"#appeal_options") %>
         <ul>
-          <li><%= link_to(t(".toc.counternotice_instructions"),"#counternotice_instructions") %></li>
-          <li><%= link_to(t(".toc.counternotice_requirements"),"#counternotice_requirements") %></li>
-          <li><%= link_to(t(".toc.counternotice_process"),"#counternotice_process") %></li>
+          <li><%= link_to(t(".toc.counternotice_instructions"), "#counternotice_instructions") %></li>
+          <li><%= link_to(t(".toc.counternotice_requirements"), "#counternotice_requirements") %></li>
+          <li><%= link_to(t(".toc.counternotice_process"), "#counternotice_process") %></li>
         </ul>
       </li>
-      <li><%= link_to(t(".toc.penalties"),"#repeat_offenses") %></li>
+      <li><%= link_to(t(".toc.penalties"), "#repeat_offenses") %></li>
     </ol>
 </nav>
 
@@ -116,7 +116,7 @@
 <p>
   <%= t(".appeal.reupload_html",
         dispute_bold: tag.strong(t(".appeal.dispute_html", cannot_italic: tag.em(t(".appeal.cannot")))),
-        suspend_link: link_to(t(".appeal.suspend"),"#repeat_offenses")) %>
+        suspend_link: link_to(t(".appeal.suspend"), "#repeat_offenses")) %>
 </p>
 
 <h4 class="heading" id="counternotice_instructions"><%= t(".counternotice_instructions.heading") %></h4>
