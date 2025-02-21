@@ -1581,6 +1581,11 @@ en:
     orphan_user:
       orphaning_bylines_only_message_html: Orphaning will automatically remove your personal information from <strong>bylines only</strong>. It will <strong>not</strong> automatically remove your personal information from anywhere else in the work(s). Social media accounts, contact information, email addresses, names, and any other personal information posted in the title, summary, notes, tags, work body, or comment text will <strong>not</strong> be automatically removed. Comments posted by other users will also <strong>not</strong> be affected by Orphaning. If you want information removed from these places, you should edit or delete it prior to Orphaning. <strong>Once you Orphan the work(s), you will no longer be able to delete information in these places yourself</strong>.
       orphaning_works_message_html: 'Orphaning will <strong>permanently</strong> remove your username and/or pseud from the bylines of: the following work(s), their chapters, associated series, and any comments you may have left on them while logged into this account.'
+  pagy:
+    aria_label:
+      nav: Pagination
+    next: Next →
+    prev: "← Previous"
   preferences:
     index:
       allow_collection_invitation: Allow others to invite my works to collections.
