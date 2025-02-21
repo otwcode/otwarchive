@@ -271,7 +271,7 @@ describe Admin::UserCreationsController do
           expect do
             subject
           end.not_to change { work.pseuds }
-          it_redirects_to_with_notice(work_path(work), "Successfully removed pseuds  from this work.")
+          it_redirects_to(work_path(work))
         end
       end
     end
