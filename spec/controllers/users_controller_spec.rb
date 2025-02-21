@@ -170,6 +170,8 @@ describe UsersController do
     end
 
     it_behaves_like "an action only authorized admins can access", authorized_roles: %w[superadmin policy_and_abuse] do
+      # Non-exhaustive check that users who cannot access this page themselves (i.e. because  they are banned)
+      # can still be renamed by an admin.
       let(:user) { create(:user, banned: true) }
       let(:new_username) { "user#{user.id}" }
 
