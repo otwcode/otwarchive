@@ -9,7 +9,7 @@ class AbuseReportsController < ApplicationController
       @abuse_report.email = reporter.email
       @abuse_report.username = reporter.login
     end
-    @abuse_report.referer = params[:referer] || request.env["HTTP_REFERER"]
+    @abuse_report.referer = params[:url] || request.env["HTTP_REFERER"]
   end
 
   def create
@@ -32,7 +32,7 @@ class AbuseReportsController < ApplicationController
 
   def abuse_report_params
     params.require(:abuse_report).permit(
-      :username, :email, :language, :summary, :referer, :comment
+      :username, :email, :language, :summary, :url, :comment
     )
   end
 end

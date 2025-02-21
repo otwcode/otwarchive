@@ -12,9 +12,9 @@ Given "{string} is a permitted Archive host" do |host|
   allow(ArchiveConfig).to receive(:PERMITTED_HOSTS).and_return([host])
 end
 
-Then "a Zoho ticket should be created with referer {string}" do |referer|
+Then "a Zoho ticket should be created with url {string}" do |url|
   # rubocop:disable Lint/AmbiguousBlockAssociation
   expect(WebMock).to have_requested(:post, "https://desk.zoho.com/api/v1/tickets")
-    .with { |req| JSON.parse(req.body)["cf"]["cf_ticket_url"] == referer }
+    .with { |req| JSON.parse(req.body)["cf"]["cf_ticket_url"] == url }
   # rubocop:enable Lint/AmbiguousBlockAssociation
 end
