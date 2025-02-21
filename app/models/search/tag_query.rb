@@ -16,7 +16,7 @@ class TagQuery < Query
     [
       type_filter,
       canonical_filter,
-      filterable_filter,
+      canonical_or_synonymous_filter,
       unwrangleable_filter,
       posted_works_filter,
       media_filter,
@@ -82,8 +82,8 @@ class TagQuery < Query
     term_filter(:canonical, bool_value(options[:canonical])) if options[:canonical].present?
   end
 
-  def filterable_filter
-    term_filter(:filterable, bool_value(options[:filterable])) if options[:filterable].present?
+  def canonical_or_synonymous_filter
+    term_filter(:canonical_or_synonymous, bool_value(options[:canonical_or_synonymous])) if options[:canonical_or_synonymous].present?
   end
 
   def unwrangleable_filter
