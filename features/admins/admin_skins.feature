@@ -137,3 +137,15 @@ Feature: Admin manage skins
   # A user created before changing the default skin will still have the same skin
   When I am logged in as "KnownUser"
   Then I should not see "{ text-decoration: blink; }" in the page style
+
+  Scenario: Admin can edit a skin with the word "archive" in the title
+  Given the approved public skin "official archive skin" has reserved words in the title
+    And I am logged in as a "superadmin" admin
+  When I go to "official archive skin" skin page
+    And I follow "Edit"
+    And I fill in "CSS" with "#greeting.logged-in { text-decoration: blink;}"
+    And I fill in "Description" with "all your skin are belong to us"
+    And I submit
+  Then I should see an update confirmation message
+    And I should see "all your skin are belong to us"
+    And I should see "#greeting.logged-in"

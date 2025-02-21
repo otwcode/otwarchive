@@ -31,7 +31,7 @@
       <li><%= t(".icon_notes.format") %></li>
       <li><%= t(".icon_notes.size") %></li>
     </ul>
-    <% if @pseud.icon_file_name %>
+    <% if @pseud.icon.attached? %>
       <%= f.check_box :delete_icon, checked: false %>
       <%= f.label :delete_icon, t(".icon_delete") %>
     <% end %>
@@ -62,8 +62,6 @@
     <dt><%= f.label :ticket_number, class: "required" %></dt>
     <dd>
       <%= f.text_field :ticket_number, class: "required" %>
-      <%= live_validation_for_field("pseud_ticket_number", numericality: true) %>
-      <p class="footnote"><%= t(".ticket_footnote") %></p>
     </dd>
   <% end %>
 
