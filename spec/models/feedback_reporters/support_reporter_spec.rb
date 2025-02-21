@@ -120,13 +120,13 @@ describe SupportReporter do
       end
 
       it "returns a hash containing a blank string for referer" do
-        expect(subject.report_attributes.dig("cf", "cf_ticket_url")).to eq("Unknown URL")
+        expect(subject.report_attributes.dig("cf", "cf_ticket_url")).to eq("")
       end
     end
 
     context "if the reporter has a very long referer" do
       before do
-        allow(subject).to receive(:referer).and_return("a" * 256)
+        allow(subject).to receive(:referer).and_return("a" * 2081)
       end
 
       it "truncates the referer to 2080 characters" do

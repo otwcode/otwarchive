@@ -72,11 +72,23 @@ describe AbuseReporter do
       end
     end
 
-    context "if the report does not have an URL" do
-      it "returns a hash containing 'Unknown URL'" do
-        allow(subject).to receive(:url).and_return("")
+    context "if the report has an empty referer" do
+      before do
+        allow(subject).to receive(:referer).and_return("")
+      end
 
-        expect(subject.report_attributes.fetch("cf").fetch("cf_ticket_url")).to eq("Unknown URL")
+      it "returns a hash containing a blank string for referer" do
+        expect(subject.report_attributes.dig("cf", "cf_ticket_url")).to eq("")
+      end
+    end
+
+    context "if the reporter has a very long referer" do
+      before do
+        allow(subject).to receive(:referer).and_return("a" * 2081)
+      end
+
+      it "truncates the referer to 2080 characters" do
+        expect(subject.report_attributes.dig("cf", "cf_ticket_url").length).to eq(2080)
       end
     end
 
