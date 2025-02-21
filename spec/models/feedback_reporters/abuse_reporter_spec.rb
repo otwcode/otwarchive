@@ -13,7 +13,7 @@ describe AbuseReporter do
       email: "walrus@example.org",
       username: "Walrus",
       ip_address: "127.0.0.1",
-      url: "http://localhost"
+      referer: "http://localhost"
     }
   end
 
