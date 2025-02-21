@@ -70,7 +70,7 @@
   </p>
 
   <p id="reportlanguage">
-    <%= t(".languages.intro_html", 
+    <%= t(".languages.intro_html",
           list_html: to_sentence(@abuse_languages.map { |language| tag.span(language.name, lang: language.short) })) %>
     <strong><%= t(".languages.delay") %></strong>
   </p>
