@@ -4,7 +4,7 @@ require 'csv'
 class ChallengeSignupsController < ApplicationController
   include ExportsHelper
 
-  before_action :users_only, except: [:summary, :display_summary, :requests_summary]
+  before_action :users_only, except: [:summary]
   before_action :load_collection, except: [:index]
   before_action :load_challenge, except: [:index]
   before_action :load_signup_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]

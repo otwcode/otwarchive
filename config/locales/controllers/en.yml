@@ -3,6 +3,7 @@ en:
   admin:
     access:
       action_access_denied: Sorry, only an authorized admin can do that.
+      not_admin_denied: Please log in as admin
       page_access_denied: Sorry, only an authorized admin can access the page you were trying to reach.
     admin_invitations:
       find:
@@ -108,6 +109,7 @@ en:
     create:
       success: Thank you for leaving kudos!
   languages:
+    cannot_edit_default: Sorry, you can't edit the default language.
     successfully_added: Language was successfully added.
     successfully_updated: Language was successfully updated.
   muted:
@@ -123,6 +125,9 @@ en:
   series:
     index:
       page_title: "%{username} - Series"
+    show:
+      anonymous: Anonymous
+      unrevealed_series: Mystery Series
   tag_wranglings:
     index:
       page_subtitle: fandoms
