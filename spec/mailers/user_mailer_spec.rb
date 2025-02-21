@@ -25,7 +25,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Co-creator request"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] You've received a request to be a co-creator"
       expect(email).to have_subject(subject)
     end
 
@@ -73,7 +73,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Co-creator notification"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] You've been added as a co-creator"
       expect(email).to have_subject(subject)
     end
 
@@ -121,7 +121,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Archivist co-creator notification"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] An archivist has added you as a co-creator"
       expect(email).to have_subject(subject)
     end
 
@@ -377,7 +377,7 @@ describe UserMailer do
     let!(:collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
     let!(:otheruser) { create(:user) }
     let!(:offer) { create(:challenge_signup, collection: collection, pseud: otheruser.default_pseud) }
-    let!(:open_assignment) { create(:challenge_assignment, collection: collection, offer_signup: offer) }
+    let!(:open_assignment) { create(:challenge_assignment, collection: collection, offer_signup: offer, sent_at: Time.current) }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"

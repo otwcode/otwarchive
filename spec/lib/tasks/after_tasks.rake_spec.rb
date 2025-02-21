@@ -424,3 +424,87 @@ describe "rake After:rename_underage_warning" do
     end
   end
 end
+
+describe "rake After:migrate_pinch_request_signup" do
+  context "for an assignment with a request_signup_id" do
+    let(:assignment) { create(:challenge_assignment) }
+
+    it "does nothing" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { assignment.reload.request_signup_id }
+        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
+    end
+  end
+
+  context "for an assignment with a request_signup_id and a pinch_request_signup_id" do
+    let(:collection) { create(:collection) }
+    let(:assignment) do
+      create(:challenge_assignment,
+             collection: collection,
+             pinch_request_signup_id: create(:challenge_signup, collection: collection).id)
+    end
+
+    it "does nothing" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { assignment.reload.request_signup_id }
+        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
+    end
+  end
+
+  context "for an assignment with a pinch_request_signup_id but no request_signup_id" do
+    let(:collection) { create(:collection) }
+    let(:signup) { create(:challenge_signup, collection: collection) }
+    let(:assignment) do
+      assignment = create(:challenge_assignment, collection: collection)
+      assignment.update_columns(request_signup_id: nil, pinch_request_signup_id: signup.id)
+      assignment
+    end
+
+    it "sets the request_signup_id to the pinch_request_signup_id" do
+      expect do
+        subject.invoke
+      end.to change { assignment.reload.request_signup_id }
+        .from(nil)
+        .to(signup.id)
+        .and output("Migrated pinch_request_signup for 1 challenge assignments.\n").to_stdout
+    end
+  end
+end
+
+describe "rake After:reindex_hidden_unrevealed_tags" do
+  context "with a posted work" do
+    let!(:work) { create(:work) }
+
+    it "does not reindex the work's tags" do
+      expect do
+        subject.invoke
+      end.not_to add_to_reindex_queue(work.tags.first, :main)
+    end
+  end
+
+  context "with a hidden work" do
+    let!(:work) { create(:work, hidden_by_admin: true) }
+
+    it "reindexes the work's tags" do
+      expect do
+        subject.invoke
+      end.to add_to_reindex_queue(work.tags.first, :main)
+    end
+  end
+
+  context "with an unrevealed work" do
+    let(:work) { create(:work) }
+
+    before do
+      work.update!(in_unrevealed_collection: true)
+    end
+
+    it "reindexes the work's tags" do
+      expect do
+        subject.invoke
+      end.to add_to_reindex_queue(work.tags.first, :main)
+    end
+  end
+end
