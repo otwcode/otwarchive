@@ -13,7 +13,7 @@ describe AbuseReporter do
       email: "walrus@example.org",
       username: "Walrus",
       ip_address: "127.0.0.1",
-      referer: "http://localhost"
+      referer: "https://example.com/works/1"
     }
   end
 
@@ -28,7 +28,7 @@ describe AbuseReporter do
         "cf_language" => "English",
         "cf_name" => "Walrus",
         "cf_ip" => "127.0.0.1",
-        "cf_ticket_url" => "http://localhost"
+        "cf_ticket_url" => "https://example.com/works/1"
       }
     }
   end
@@ -77,7 +77,7 @@ describe AbuseReporter do
         allow(subject).to receive(:referer).and_return("")
       end
 
-      it "returns a hash containing a blank string for referer" do
+      it "returns a hash containing a blank string for url" do
         expect(subject.report_attributes.dig("cf", "cf_ticket_url")).to eq("")
       end
     end
