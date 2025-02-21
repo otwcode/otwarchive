@@ -9,7 +9,6 @@ Feature:
     When I visit the change username page for testuser
     And I fill in "New username" with "anothertestuser"
       And I press "Change Username"
-    # TODO - better written error message
     Then I should see "Your password was incorrect"
 
   Scenario: The user should not be able to change their username with an incorrect password
