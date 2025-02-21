@@ -516,18 +516,6 @@ module ApplicationHelper
     end
   end
 
-  # change the default link renderer for will_paginate
-  def will_paginate(collection_or_options = nil, options = {})
-    if collection_or_options.is_a? Hash
-      options = collection_or_options
-      collection_or_options = nil
-    end
-    unless options[:renderer]
-      options = options.merge renderer: PaginationListLinkRenderer
-    end
-    super(*[collection_or_options, options].compact)
-  end
-
   # spans for nesting a checkbox or radio button inside its label to make custom
   # checkbox or radio designs
   def label_indicator_and_text(text)
