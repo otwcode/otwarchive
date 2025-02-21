@@ -32,7 +32,7 @@
   <p id="reportwhy">
     <strong>
       <%= t(".reportable.intro_html",
-          pac_link: link_to(t(".reportable.pac"), "https://www.transformativeworks.org/committees/policy-abuse-committee/")) %>
+            pac_link: link_to(t(".reportable.pac"), "https://www.transformativeworks.org/committees/policy-abuse-committee/")) %>
     </strong>
   </p>
 
@@ -44,7 +44,7 @@
     <li><%= t(".reportable.harassment") %></li>
     <li><%= t(".reportable.hack") %></li>
     <li><%= t(".reportable.suspended_html",
-              email_link: link_to(t(".reportable.email"), tos_faq_path(anchor:"complaint_notification"))) %>
+              email_link: link_to(t(".reportable.email"), tos_faq_path(anchor: "complaint_notification"))) %>
     </li>
   </ul>
 
@@ -56,7 +56,7 @@
 
   <ul>
     <li><%= t(".include.username_html",
-              username_link: link_to(t(".include.username"), tos_faq_path(anchor:"user_unknown"))) %></li>
+              username_link: link_to(t(".include.username"), tos_faq_path(anchor: "user_unknown"))) %></li>
     <li><%= t(".include.other_content") %></li>
     <li><%= t(".include.quote") %></li>
     <li><%= t(".include.sources_html",
@@ -71,7 +71,8 @@
 
   <p id="reportlanguage">
     <%= t(".languages.intro",
-          list_html: @abuse_languages.map { |language| tag.span(language.name, lang: language.short) }.to_sentence.html_safe).html_safe %>
+          list_html: @abuse_languages.map { |language| tag.span(language.name, lang: language.short) }
+          .to_sentence.html_safe).html_safe %>
     <strong><%= t(".languages.delay") %></strong>
   </p>
 </div>
