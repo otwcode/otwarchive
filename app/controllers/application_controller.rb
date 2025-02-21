@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   rescue_from Rack::Timeout::RequestTimeoutException, with: :raise_timeout
   
   def raise_timeout
-    redirect_to '/timeout'
+    redirect_to "/timeout"
   end
 
   helper :all # include all helpers, all the time

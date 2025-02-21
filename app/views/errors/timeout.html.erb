@@ -1,2 +1,3 @@
-<h3 class="heading">The page was responding too slowly. Please try again after a few minutes.</h3>
-<p>If you still get this error after a few tries, you can  <%= link_to ts('contact Support'), new_feedback_report_path %>. In the form, please include a link to the page you're trying to reach and what action you are taking.</p>
+<h2 class="heading"><%= t("errors.timeout.title") %></h2>
+<h3 class="heading"><%= t("errors.timeout.subtitle") %></h3>
+<p><%= t("errors.timeout.html", contact_support_link: link_to(ts("contact Support"), new_feedback_report_path)) %></p>
