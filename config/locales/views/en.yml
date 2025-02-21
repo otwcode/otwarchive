@@ -876,8 +876,8 @@ en:
         address_org: Organization for Transformative Works
         address_state: New York, NY 10003-1502
         address_street: '228 Park Ave S #18156'
-        contact_legal: the Legal committee's contact form
         consider_html: If you are considering whether to file a DMCA counternotice, we recommend that you contact an intellectual property lawyer licensed to practice in your jurisdiction, so that you are aware of your legal rights and obligations. You can also review the %{lumen_faq_link}.
+        contact_legal: the Legal committee's contact form
         defend: you are willing to defend your use of the original copyrighted material in court
         dispute_html: If you believe that your content does not infringe on the copyright owner's rights, you can file a DMCA counternotice to dispute the takedown. By filing a counternotice, you are indicating that %{defend_bold} if the party who submitted the original takedown notice chooses to pursue legal action against you.
         heading: Filing a DMCA counternotice
