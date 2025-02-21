@@ -870,7 +870,7 @@ en:
         suspend: suspend your account
         tos: Terms of Service
         tos_faq: Terms of Service FAQ
-        violations_html: '%{copyright_link} and %{plagiarism_link} are violations of Sections II.D and II.E of our %{tos_link}, respectively. For more information, please refer to our %{tos_faq_link}.'
+        violations_html: "%{copyright_link} and %{plagiarism_link} are violations of Sections II.D and II.E of our %{tos_link}, respectively. For more information, please refer to our %{tos_faq_link}."
       counternotice_instructions:
         address_attn: 'Attention: Legal'
         address_org: Organization for Transformative Works
@@ -881,7 +881,7 @@ en:
         defend: you are willing to defend your use of the original copyrighted material in court
         dispute_html: If you believe that your content does not infringe on the copyright owner's rights, you can file a DMCA counternotice to dispute the takedown. By filing a counternotice, you are indicating that %{defend_bold} if the party who submitted the original takedown notice chooses to pursue legal action against you.
         heading: Filing a DMCA counternotice
-        initiate_html: "To initiate a formal DMCA counter-notification request, contact the OTW's designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:"
+        initiate_html: 'To initiate a formal DMCA counter-notification request, contact the OTW''s designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:'
         lumen_faq: Lumen DMCA Explanation and FAQ
         prefer: We prefer to receive DMCA requests through the contact form or by email.
         time_limit: You can file a DMCA counternotice at any point after your content has been removed; there is no time limit.
@@ -917,19 +917,19 @@ en:
         credit_html: AO3's DMCA policy is licensed under the %{cc_license_link}. Material in this policy has been drawn from Dreamwidth, the Electronic Frontier Foundation, and Wikipedia.
       page_heading: DMCA Policy
       removal:
-        abuse_report_html: '%{submit_abuse_bold} Abuse reports are evaluated by the Policy & Abuse committee for violations of the %{tos_link}, and held to a very high %{confidentiality_link}. When submitting an Abuse report about copyright infringement, you must provide a link to the violating content on AO3 and clearly identify the original source in your report description. For more information, please refer to the %{tos_faq_link}.'
+        abuse_report_html: "%{submit_abuse_bold} Abuse reports are evaluated by the Policy & Abuse committee for violations of the %{tos_link}, and held to a very high %{confidentiality_link}. When submitting an Abuse report about copyright infringement, you must provide a link to the violating content on AO3 and clearly identify the original source in your report description. For more information, please refer to the %{tos_faq_link}."
         confidentiality: standard of confidentiality
         dmca_html: "%{file_dmca_bold} DMCA takedown notices can only be filed by the copyright owner or someone legally authorized to act on their behalf. DMCA notices must be sent to the OTW's designated agent and comply with all %{requirements_link}. DMCA notices are %{not_confidential_link}. The OTW reserves the right to make public all DMCA notices that we receive, though some information may be redacted for privacy."
         do_not: do not
         do_not_spam_html: Please %{do_not_bold} submit an Abuse report if you intend to file a DMCA notice. Submitting both an Abuse report and a DMCA notice about the same content may delay the processing of both requests.
         file_dmca: File a DMCA takedown notice
-        file_dmca_html: '%{file_dmca_link}:'
-        heading:  My work was posted on AO3 without my permission. What can I do?
+        file_dmca_html: "%{file_dmca_link}:"
+        heading: My work was posted on AO3 without my permission. What can I do?
         intro: 'If you encounter content on AO3 that you believe infringes on your copyright, you have the following options:'
         not_confidential: not subject to confidentiality
         requirements: legal requirements
         submit_abuse: Submit an Abuse report
-        submit_abuse_html: '%{submit_abuse_link}:'
+        submit_abuse_html: "%{submit_abuse_link}:"
         tos: AO3 Terms of Service
         tos_faq: Terms of Service FAQ
       repeat:
@@ -943,7 +943,7 @@ en:
         address_street: '228 Park Ave S #18156'
         contact_legal: the Legal committee's contact form
         heading: Filing a DMCA takedown notice
-        initiate_html: "To initiate a formal DMCA takedown request, contact the OTW's designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:"
+        initiate_html: 'To initiate a formal DMCA takedown request, contact the OTW''s designated agent using %{contact_legal_link}, via email to legal@transformativeworks.org, or by mailing a letter to:'
         prefer: We prefer to receive DMCA requests through the contact form or by email.
       takedown_process:
         counternotify: If the OTW receives a valid DMCA counternotice, we will make reasonable efforts to notify you. You will have 10 business days to file a lawsuit to prevent the restoration of the content. If you do not notify us within 10 business days that you have filed a lawsuit, we will allow the content to be restored in accordance with 17 U.S.C. § 512(g)(2)(B)-(C).
