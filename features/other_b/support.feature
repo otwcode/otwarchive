@@ -3,7 +3,7 @@ Feature: Filing a support request
   As a confused user
   I want to file a support request
 
-  Scenario: Filling a support request
+  Scenario: Filing a support request
   
   Given I am logged in as "puzzled"
   And basic languages

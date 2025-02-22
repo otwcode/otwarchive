@@ -20,7 +20,7 @@ class FeedbacksController < ApplicationController
     @feedback.rollout = @feedback.rollout_string
     @feedback.user_agent = request.env["HTTP_USER_AGENT"]
     @feedback.ip_address = request.remote_ip
-    @feedback.referer = nil unless @feedback.referer && ArchiveConfig.PERMITTED_HOSTS.include?(URI(@feedback.referer).host)
+    @feedback.url = nil unless @feedback.url && ArchiveConfig.PERMITTED_HOSTS.include?(URI(@feedback.url).host)
     @feedback.site_skin = helpers.current_skin
     if @feedback.save
       @feedback.email_and_send
@@ -42,7 +42,7 @@ class FeedbacksController < ApplicationController
 
   def feedback_params
     params.require(:feedback).permit(
-      :comment, :email, :summary, :username, :language, :referer
+      :comment, :email, :summary, :username, :language, :url
     )
   end
 end
