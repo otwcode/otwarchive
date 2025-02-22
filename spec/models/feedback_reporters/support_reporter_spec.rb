@@ -114,7 +114,7 @@ describe SupportReporter do
       end
     end
 
-    context "if the report has an empty URL" do
+    context "if the report has an empty referer" do
       before do
         allow(subject).to receive(:referer).and_return("")
       end
@@ -124,12 +124,12 @@ describe SupportReporter do
       end
     end
 
-    context "if the reporter has a very long referer URL" do
+    context "if the reporter has a very long referer" do
       before do
         allow(subject).to receive(:referer).and_return("a" * 2081)
       end
 
-      it "truncates the URL to 2080 characters" do
+      it "truncates the referer to 2080 characters" do
         expect(subject.report_attributes.dig("cf", "cf_ticket_url").length).to eq(2080)
       end
     end
