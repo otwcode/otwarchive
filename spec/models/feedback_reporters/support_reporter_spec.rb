@@ -16,7 +16,7 @@ describe SupportReporter do
       site_revision: "eternal_beta",
       rollout: "rollout_value",
       ip_address: "127.0.0.1",
-      url: "https://example.com/works/1",
+      referer: "https://example.com/works/1",
       site_skin: build(:skin, title: "Reversi", public: true)
     }
   end
@@ -116,17 +116,17 @@ describe SupportReporter do
 
     context "if the report has an empty URL" do
       before do
-        allow(subject).to receive(:url).and_return("")
+        allow(subject).to receive(:referer).and_return("")
       end
 
-      it "returns a hash containing a blank string for URL" do
+      it "returns a hash containing a blank string for referer" do
         expect(subject.report_attributes.dig("cf", "cf_ticket_url")).to eq("")
       end
     end
 
-    context "if the reporter has a very long URL" do
+    context "if the reporter has a very long referer URL" do
       before do
-        allow(subject).to receive(:url).and_return("a" * 2081)
+        allow(subject).to receive(:referer).and_return("a" * 2081)
       end
 
       it "truncates the URL to 2080 characters" do
