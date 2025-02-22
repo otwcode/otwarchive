@@ -5,7 +5,7 @@ class FeedbacksController < ApplicationController
   def new
     @admin_setting = AdminSetting.current
     @feedback = Feedback.new
-    @feedback.referer = request.referer
+    @feedback.url = request.url
     if logged_in_as_admin?
       @feedback.email = current_admin.email
     elsif is_registered_user?
