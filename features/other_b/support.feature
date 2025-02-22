@@ -72,7 +72,7 @@ Feature: Filing a support request
     And I fill in "Brief summary" with "Just a brief note"
     And I fill in "Your question or problem" with "Hi, I came from the Archive"
     And I press "Send"
-  Then a Zoho ticket should be created with URL "http://www.example.com/works"
+  Then a Zoho ticket should be created with url "http://www.example.com/works"
 
   Scenario: Submit a request with a referer URL that is not on-Archive
 
@@ -84,4 +84,4 @@ Feature: Filing a support request
     And I fill in "Brief summary" with "Just a brief note"
     And I fill in "Your question or problem" with "Hi, I didn't come from the Archive"
     And I press "Send"
-  Then a Zoho ticket should be created with URL ""
+  Then a Zoho ticket should be created with url ""
