@@ -84,6 +84,9 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario: Deleting works as a Policy & Abuse admin
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
+      And a locale with translated emails
+      And the user "regular_user" enables translated emails
+      And I add the co-author "Another" to the work "ToS Violation"
     When I am logged in as a "policy_and_abuse" admin
       # Don't let the admin password email mess up the count.
       And all emails have been delivered
@@ -91,9 +94,11 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I follow "Delete Work"
       And all indexing jobs have been run
     Then I should see "Item was successfully deleted."
-      And 1 email should be delivered
-      And the email should contain "deleted from the Archive by a site admin"
-      And the email should not contain "translation missing"
+      And 2 emails should be delivered
+      And the email to "regular_user" should contain "deleted from the Archive by a site admin"
+      And the email to "regular_user" should be translated
+      And the email to "Another" should contain "deleted from the Archive by a site admin"
+      And the email to "Another" should be non-translated
     When I visit the last activities item
     Then I should see "destroy"
       And I should see "#<Work id"
