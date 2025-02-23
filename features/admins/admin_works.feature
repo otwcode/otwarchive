@@ -16,14 +16,40 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Scenario Outline: Can hide works
     Given I am logged in as "regular_user"
       And I post the work "ToS Violation"
+      And a locale with translated emails
+      And the user "regular_user" enables translated emails
+      And I add the co-author "Another" to the work "ToS Violation"
     When I am logged in as a "<role>" admin
       And all emails have been delivered
       And I view the work "ToS Violation"
       And I follow "Hide Work"
     Then I should see "Item has been hidden."
-      And logged out users should not see the hidden work "ToS Violation" by "regular_user"
-      And logged in users should not see the hidden work "ToS Violation" by "regular_user"
+      And the work "ToS Violation" should be hidden
       And "regular_user" should see their work "ToS Violation" is hidden
+      And 2 emails should be delivered
+      And the email to "regular_user" should contain "you will be required to take action to correct the violation"
+      And the email to "regular_user" should be translated
+      And the email to "Another" should contain "you will be required to take action to correct the violation"
+      And the email to "Another" should be non-translated
+    
+    Examples:
+      | role             |
+      | superadmin       |
+      | legal            |
+      | policy_and_abuse |
+  
+    Scenario Outline: Can hide works already marked as spam
+    Given I am logged in as "regular_user"
+      And I post the work "ToS Violation + Spam"
+      And the work "ToS Violation + Spam" is marked as spam
+    When I am logged in as a "<role>" admin
+      And all emails have been delivered
+      And I view the work "ToS Violation + Spam"
+      And I follow "Hide Work"
+    Then I should see "Item has been hidden."
+      And logged out users should not see the hidden work "ToS Violation + Spam" by "regular_user"
+      And logged in users should not see the hidden work "ToS Violation + Spam" by "regular_user"
+      And "regular_user" should see their work "ToS Violation + Spam" is hidden
       And 1 email should be delivered
       And the email should contain "you will be required to take action to correct the violation"
     
@@ -118,6 +144,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     When I follow "Hide Bookmark"
       And all indexing jobs have been run
     Then I should see "Item has been hidden."
+      And I should see "Make Bookmark Visible"
+      And I should see "Rude comment"
     When I am logged in as "regular_user" with password "password1"
       And I am on bad_user's bookmarks page
     Then I should not see "Rude comment"
@@ -335,6 +363,19 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should see "rolex"
       And I should not see "This comment has been marked as spam."
 
+  Scenario: Moderated comments cannot be approved by admin
+    Given the moderated work "Moderation" by "author"
+      And I am logged in as "commenter"
+      And I post the comment "Test comment" on the work "Moderation"
+    When I am logged in as a "superadmin" admin
+      And I view the work "Moderation"
+    Then I should see "Unreviewed Comments (1)"
+      And the comment on "Moderation" should be marked as unreviewed
+    When I follow "Unreviewed Comments (1)"
+    Then I should see "Test comment"
+      And I should not see an "Approve All Unreviewed Comments" button
+      And I should not see an "Approve" button
+
   Scenario: Admin can edit language on works when posting without previewing
     Given basic languages
       And I am logged in as "regular_user"
@@ -366,12 +407,16 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   Given the work "Spammity Spam"
     And I am logged in as a "policy_and_abuse" admin
     And I view the work "Spammity Spam"
+    And all emails have been delivered
   Then I should see "Mark As Spam"
   When I follow "Mark As Spam"
   Then I should see "marked as spam and hidden"
     And I should see "Mark Not Spam"
     And the work "Spammity Spam" should be marked as spam
     And the work "Spammity Spam" should be hidden
+    And 1 email should be delivered
+    And the email should contain "has been flagged by our automated system as spam"
+
 
   Scenario: can mark a spam work as not-spam
   Given the spam work "Spammity Spam"

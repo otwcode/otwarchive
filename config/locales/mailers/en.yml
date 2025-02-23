@@ -123,16 +123,17 @@ en:
       access: While your work is hidden, you will still be able to access it through the link provided above, but it will not be listed on your works page, and it won't be available to other users of the Archive.
       check_email: Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your work was hidden.
       contact_abuse: contact Policy & Abuse
-      html:
-        help: If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please %{contact_abuse_link} directly.
-        hidden: Your work %{title} has been hidden by the Policy & Abuse team and is no longer publicly accessible.
-        tos_violation: If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
+      help:
+        html: If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please %{contact_abuse_link} directly.
+        text: 'If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}.'
+      hidden:
+        html: Your work %{title} has been hidden by the Policy & Abuse team and is no longer publicly accessible.
+        text: Your work "%{title}" (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible.
       subject: "[%{app_name}] Your work has been hidden by the Policy & Abuse team"
-      text:
-        help: 'If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}.'
-        hidden: Your work "%{title}" (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible.
-        tos_violation: If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
       tos: Terms of Service
+      tos_violation:
+        html: If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
+        text: If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
       anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
@@ -180,23 +181,23 @@ en:
       any: Any
       assignment:
         html: You have been assigned the following request in the %{link} challenge at the Archive of Our Own!
-      description: 'Description:'
-      due: 'This assignment is due at:'
-      html:
-        footer: You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{footer_link}.
-        footer_link: the challenge profile page
-        look_up: You can look up this assignment from %{link}.
-        look_up_link: your Assignments page
-      optional_tags: 'Optional Tags:'
-      prompt_url: 'Prompt URL:'
+        text: You have been assigned the following request in the "%{collection_title}" challenge (%{collection_url}) at the Archive of Our Own!
+      description: Description
+      due: This assignment is due at
+      footer:
+        challenge_profile: the challenge profile page
+        html: You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{challenge_profile_link}.
+        text: You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{challenge_profile_url}.
+      look_up:
+        html: You can look up this assignment from %{your_assignments_link}.
+        text: You can look up this assignment from your Assignments page at %{your_assignments_url}.
+        your_assignments: your Assignments page
+      optional_tags: Optional Tags
+      prompt_url: Prompt URL
       prompts: 'Prompts:'
-      recipient: 'Recipient:'
+      recipient: Recipient
       recipient_missing: 'None: contact a moderator for help!'
       subject: "[%{app_name}][%{collection_title}] Your assignment!"
-      text:
-        assignment: You have been assigned the following request in the "%{collection_title}" challenge (%{collection_url}) at the Archive of Our Own!
-        footer: You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{profile_url}.
-        look_up: You can look up this assignment from your Assignments page at %{link}.
     change_email:
       changed:
         html: "%{login}, the email associated with your account has been changed to %{email}"
@@ -267,7 +268,7 @@ en:
         remove_series: If you've been added in error or don't want to be listed as a creator, you can %{edit_series_link} to remove yourself as creator.
       intro_chapter: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following series:'
-      subject: "[%{app_name}] Co-creator notification"
+      subject: "[%{app_name}] You've been added as a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
@@ -285,7 +286,7 @@ en:
       intro_chapter: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following series:'
       intro_work: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following work:'
-      subject: "[%{app_name}] Archivist co-creator notification"
+      subject: "[%{app_name}] An archivist has added you as a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
@@ -299,7 +300,7 @@ en:
       intro_chapter: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following chapter:'
       intro_series: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following series:'
       intro_work: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following work:'
-      subject: "[%{app_name}] Co-creator request"
+      subject: "[%{app_name}] You've received a request to be a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         instructions: 'You can accept or reject this request on your Co-Creator Requests page: %{url}'
@@ -379,16 +380,15 @@ en:
         text: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and contact Open Doors at %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
       uploaded_list: 'The works uploaded include:'
     invite_increase_notification:
-      html:
-        body:
+      body:
+        html:
           one: We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page_link}.
           other: We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page_link}.
-      invitation_page_link_text: your invitations page
-      subject: "[%{app_name}] New invitations"
-      text:
-        body:
+        text:
           one: We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at your invitations page (%{invitation_page_url}).
           other: We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at your invitations page (%{invitation_page_url}).
+      invitation_page_link_text: your invitations page
+      subject: "[%{app_name}] New invitations"
     invite_request_declined:
       main:
         one: We regret to inform you that your request for a new invitation cannot be fulfilled at this time.

@@ -21,7 +21,7 @@ class SeriesController < ApplicationController
       redirect_to(root_path) and return
     end
     @user = User.find_by!(login: params[:user_id])
-    @page_subtitle = ts("%{username} - Series", username: @user.login)
+    @page_subtitle = t(".page_title", username: @user.login)
 
     @series = if current_user.nil?
                 Series.visible_to_all
@@ -31,7 +31,7 @@ class SeriesController < ApplicationController
 
     if params[:pseud_id]
       @pseud = @user.pseuds.find_by!(name: params[:pseud_id])
-      @page_subtitle = ts("by ") + @pseud.byline
+      @page_subtitle = t(".page_title", username: @pseud.name)
       @series = @series.exclude_anonymous.for_pseud(@pseud)
     else
       @series = @series.exclude_anonymous.for_user(@user)
@@ -45,7 +45,12 @@ class SeriesController < ApplicationController
     @works = @series.works_in_order.posted.select(&:visible?).paginate(page: params[:page])
 
     # sets the page title with the data for the series
-    @page_title = @series.unrevealed? ? ts("Mystery Series") : get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.anonymous? ? ts("Anonymous") : @series.allpseuds.collect(&:byline).join(', '), @series.title)
+    if @series.unrevealed?
+      @page_subtitle = t(".unrevealed_series")
+    else
+      @page_title = get_page_title(@series.allfandoms.collect(&:name).join(", "), @series.anonymous? ? t(".anonymous") : @series.allpseuds.collect(&:byline).join(", "), @series.title)
+    end
+
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @series.id,
                                                        subscribable_type: 'Series').first ||

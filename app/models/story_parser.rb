@@ -554,7 +554,11 @@ class StoryParser
     # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
     # preserve line breaks in plain text documents
     # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
-    @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), nil, encoding) rescue ""
+    begin
+      @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), encoding: encoding)
+    rescue StandardError
+      @doc = ""
+    end
 
     # Try to convert all relative links to absolute
     base = @doc.at_css("base") ? @doc.css("base")[0]["href"] : location.split("?").first
@@ -799,6 +803,8 @@ class StoryParser
         # we do a little cleanup here in case the user hasn't included the 'http://'
         # or if they've used capital letters or an underscore in the hostname
         uri = UrlFormatter.new(location).standardized
+        raise Error, I18n.t("story_parser.on_archive") if ArchiveConfig.PERMITTED_HOSTS.include?(uri.host)
+
         response = Net::HTTP.get_response(uri)
         case response
         when Net::HTTPSuccess
