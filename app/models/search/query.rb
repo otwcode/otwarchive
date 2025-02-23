@@ -237,7 +237,7 @@ class Query
     str = ""
     return str if text.blank?
     text.split(" ").each do |word|
-      if word[0] == "-"
+      if word.length >= 2 && word[0] == "-"
         str << " NOT"
         word.slice!(0)
       end
