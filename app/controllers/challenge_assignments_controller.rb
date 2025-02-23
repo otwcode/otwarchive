@@ -138,12 +138,12 @@ class ChallengeAssignmentsController < ApplicationController
 
   def set
     # update all the assignments
-    all_assignment_params = challenge_assignment_params.transform_keys(&:to_i)
+    all_assignment_params = challenge_assignment_params
 
     @assignments = []
 
     @collection.assignments.where(id: all_assignment_params.keys).each do |assignment|
-      assignment_params = all_assignment_params[assignment.id]
+      assignment_params = all_assignment_params[assignment.id.to_s]
       @assignments << assignment unless assignment.update(assignment_params)
     end
 

@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include ActiveStorage::SetCurrent
   include Pundit::Authorization
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
@@ -39,6 +40,30 @@ class ApplicationController < ActionController::Base
     sanitize_params(params.to_unsafe_h).each do |key, value|
       params[key] = transform_sanitized_hash_to_ac_params(key, value)
     end
+  end
+
+  include Pagy::Backend
+  def pagy(collection, **vars)
+    pagy_overflow_handler do
+      super
+    end
+  end
+
+  def pagy_query_result(query_result, **vars)
+    pagy_overflow_handler do
+      Pagy.new(
+        count: query_result.total_entries,
+        page: query_result.current_page,
+        limit: query_result.per_page,
+        **vars
+      )
+    end
+  end
+
+  def pagy_overflow_handler(*)
+    yield
+  rescue Pagy::OverflowError
+    nil
   end
 
   def display_auth_error

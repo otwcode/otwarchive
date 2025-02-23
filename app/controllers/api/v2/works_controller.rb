@@ -104,7 +104,7 @@ class Api::V2::WorksController < Api::V2::BaseController
       else
         work_results = search_results[:works].map do |work|
           archive_url = work_url(work)
-          message = "Work \"#{work.title}\", created on #{work.created_at.to_date.to_s(:iso_date)} was found at \"#{archive_url}\"."
+          message = "Work \"#{work.title}\", created on #{work.created_at.to_date.to_fs(:iso_date)} was found at \"#{archive_url}\"."
           messages << message
           { archive_url: archive_url,
             created: work.created_at,

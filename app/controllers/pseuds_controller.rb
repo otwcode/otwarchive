@@ -15,7 +15,7 @@ class PseudsController < ApplicationController
   # GET /pseuds.xml
   def index
     if @user
-      @pseuds = @user.pseuds.alphabetical.paginate(page: params[:page])
+      @pseuds = @user.pseuds.with_attached_icon.alphabetical.paginate(page: params[:page])
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
       @page_subtitle = @user.login
@@ -74,7 +74,7 @@ class PseudsController < ApplicationController
 
   # GET /pseuds/1/edit
   def edit
-    @pseud = @user.pseuds.find_by(name: params[:id])
+    @pseud = @user.pseuds.find_by!(name: params[:id])
     authorize @pseud if logged_in_as_admin?
   end
 
