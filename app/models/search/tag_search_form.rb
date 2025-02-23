@@ -25,7 +25,6 @@ class TagSearchForm
   def initialize(options={})
     @options = options
     set_fandoms
-    set_wrangling_status
     @searcher = TagQuery.new(@options.delete_if { |_, v| v.blank? })
   end
 
@@ -35,22 +34,6 @@ class TagSearchForm
 
   def search_results
     @searcher.search_results
-  end
-
-  def set_wrangling_status
-    case @options[:wrangling_status]
-    when "canonical"
-      @options[:canonical] = "T"
-    when "noncanonical"
-      @options[:canonical] = "F"
-    when "synonymous"
-      @options[:canonical] = "F"
-      @options[:canonical_or_synonymous] = "T"
-    when "canonical_synonymous"
-      @options[:canonical_or_synonymous] = "T"
-    when "noncanonical_nonsynonymous"
-      @options[:canonical_or_synonymous] = "F"
-    end
   end
 
   def set_fandoms

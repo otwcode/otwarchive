@@ -15,8 +15,7 @@ class TagQuery < Query
   def filters
     [
       type_filter,
-      canonical_filter,
-      canonical_or_synonymous_filter,
+      wrangling_status_filter,
       unwrangleable_filter,
       posted_works_filter,
       media_filter,
@@ -32,6 +31,7 @@ class TagQuery < Query
   def exclusion_filters
     [
       wrangled_filter
+      # wrangling_status_exclude_filter
     ].compact
   end
 
@@ -78,12 +78,19 @@ class TagQuery < Query
     { term: { tag_type: options[:type] } } if options[:type]
   end
 
-  def canonical_filter
-    term_filter(:canonical, bool_value(options[:canonical])) if options[:canonical].present?
-  end
-
-  def canonical_or_synonymous_filter
-    term_filter(:canonical_or_synonymous, bool_value(options[:canonical_or_synonymous])) if options[:canonical_or_synonymous].present?
+  def wrangling_status_filter
+    case options[:wrangling_status]
+    when "canonical"
+      term_filter(:canonical, true)
+    when "noncanonical"
+      term_filter(:canonical, false)
+    when "synonymous"
+      [{ exists: { field: "merger_id" } }, term_filter(:canonical, false)]
+    when "canonical_synonymous"
+      { bool: { should: [{ exists: { field: "merger_id" } }, term_filter(:canonical, true)] } }
+    when "noncanonical_nonsynonymous"
+      [{ bool: { must_not: { exists: { field: "merger_id" } } } }, term_filter(:canonical, false)]
+    end
   end
 
   def unwrangleable_filter

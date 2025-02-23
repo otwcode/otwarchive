@@ -635,11 +635,6 @@ class Tag < ApplicationRecord
     self.works.posted.any?
   end
 
-  # Returns true if a tag is a synonym of a canonical tag
-  def synonymous?
-    !self.canonical? && self.merger_id.present?
-  end
-
   # sort tags by name
   def <=>(another_tag)
     name.downcase <=> another_tag.name.downcase
