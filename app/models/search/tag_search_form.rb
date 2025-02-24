@@ -7,6 +7,7 @@ class TagSearchForm
   ATTRIBUTES = [
     :query,
     :name,
+    :canonical,
     :wrangling_status,
     :fandoms,
     :type,
@@ -25,6 +26,7 @@ class TagSearchForm
   def initialize(options={})
     @options = options
     set_fandoms
+    set_wrangling_status
     @searcher = TagQuery.new(@options.delete_if { |_, v| v.blank? })
   end
 
@@ -41,6 +43,12 @@ class TagSearchForm
 
     names = @options[:fandoms].split(",").map(&:squish)
     @options[:fandom_ids] = Tag.where(name: names).pluck(:id)
+  end
+
+  def set_wrangling_status
+    return unless @options[:canonical]
+    
+    @options[:wrangling_status] = "canonical"
   end
 
   def sort_columns
