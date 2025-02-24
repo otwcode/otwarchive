@@ -37,9 +37,9 @@ describe ErrorsController do
     end
   end
 
-  describe "timeout" do
+  describe "GET #timeout_error" do
     it "returns an HTML timeout error page" do
-      get :timeout
+      get :timeout_error
       expect(response.status).to eq(200)
       expect(response.header["Content-Type"]).to eq("text/html; charset=utf-8")
     end
