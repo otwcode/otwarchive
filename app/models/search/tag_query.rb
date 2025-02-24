@@ -31,7 +31,6 @@ class TagQuery < Query
   def exclusion_filters
     [
       wrangled_filter
-      # wrangling_status_exclude_filter
     ].compact
   end
 
@@ -85,11 +84,11 @@ class TagQuery < Query
     when "noncanonical"
       term_filter(:canonical, false)
     when "synonymous"
-      [{ exists: { field: "merger_id" } }, term_filter(:canonical, false)]
+      [exists_filter("merger_id"), term_filter(:canonical, false)]
     when "canonical_synonymous"
-      { bool: { should: [{ exists: { field: "merger_id" } }, term_filter(:canonical, true)] } }
+      { bool: { should: [exists_filter("merger_id"), term_filter(:canonical, true)] } }
     when "noncanonical_nonsynonymous"
-      [{ bool: { must_not: { exists: { field: "merger_id" } } } }, term_filter(:canonical, false)]
+      [{ bool: { must_not: exists_filter("merger_id") } }, term_filter(:canonical, false)]
     end
   end
 
@@ -142,7 +141,7 @@ class TagQuery < Query
   # the fandom exists, because this particular filter is included in the
   # exclusion_filters section.
   def wrangled_filter
-    { exists: { field: "fandom_ids" } } unless options[:wrangled].nil?
+    exists_filter("fandom_ids") unless options[:wrangled].nil?
   end
 
   ################
