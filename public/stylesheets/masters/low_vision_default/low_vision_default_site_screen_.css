@@ -37,7 +37,8 @@ form blockquote.userstuff {
 #inner .filters,
 #footer,
 .filters dt,
-media .listbox {
+media .listbox,
+.bookmark .recent .index {
   width: 100%;
 }
 
@@ -93,6 +94,16 @@ fieldset dl fieldset dl,
 dd fieldset {
   margin: 2% 0;
   border: 0;
+}
+
+.meta .stats dl {
+  float: left;
+  margin-top: 0;
+}
+
+.meta .stats dl dd,
+.meta .stats dl dt {
+  float: left;
 }
 
 textarea,
@@ -163,4 +174,9 @@ pre {
 #header .dropdown .menu a:focus {
   background: #ccc;
   color: #111;
+}
+
+.bookmark .recent,
+.bookmark .recent .index {
+  border: none;
 }

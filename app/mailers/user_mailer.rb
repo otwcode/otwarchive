@@ -57,14 +57,10 @@ class UserMailer < ApplicationMailer
               else
                 :unrevealed
               end
-
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: t(".subject.#{@status}",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t(".subject.#{@status}", app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends an invitation to join the archive
@@ -198,7 +194,7 @@ class UserMailer < ApplicationMailer
     @collection = Collection.find(collection_id)
     @assigned_user = User.find(assigned_user_id)
     @assignment = ChallengeAssignment.find(assignment_id)
-    @request = (@assignment.request_signup || @assignment.pinch_request_signup)
+    @request = @assignment.request_signup
     mail(
       to: @assigned_user.email,
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
@@ -349,13 +345,11 @@ class UserMailer < ApplicationMailer
     html = ::Mail::Encodings::Base64.encode(html)
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
     attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
-
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
+    
+    mail(
         to: user.email,
         subject: t("user_mailer.admin_deleted_work_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
       )
-    end
   end
 
   # Sends email to creators when a creation is hidden by an admin
@@ -363,12 +357,10 @@ class UserMailer < ApplicationMailer
     @user = User.find_by(id: user_id)
     @work = Work.find_by(id: creation_id)
 
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   def admin_spam_work_notification(creation_id, user_id)

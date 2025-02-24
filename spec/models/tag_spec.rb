@@ -1,10 +1,11 @@
-# encoding: UTF-8
-require 'spec_helper'
+require "spec_helper"
 
 describe Tag do
   after(:each) do
     User.current_user = nil
   end
+
+  it { is_expected.not_to allow_values("", "a" * 151).for(:name) }
 
   context "checking count caching" do
     before(:each) do
@@ -66,7 +67,7 @@ describe Tag do
       end
 
       it "Writes to the database do not happen immediately" do
-        (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
+        (1..(40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR) - 1).each do |try|
           @fandom_tag.taggings_count = try
           @fandom_tag.reload
           expect(@fandom_tag.taggings_count_cache).to eq 0
@@ -161,11 +162,37 @@ describe Tag do
     expect(tag.save).to be_truthy
   end
 
-  it "should not be valid if too long" do
-    tag = Tag.new
-    tag.name = "a" * 101
-    expect(tag.save).not_to be_truthy
-    expect(tag.errors[:name].join).to match(/too long/)
+  context "tags with blank names are invalid" do
+    [
+      ["200B".hex].pack("U"), # zero width space
+      ["200D".hex].pack("U"), # zero width joiner
+      ["2060".hex].pack("U"), # word joiner
+      (["200B".hex].pack("U") * 3),
+      ["200D".hex, "200D".hex, "2060".hex, "200B".hex].pack("U")
+    ].each do |tag_name|
+      tag = Tag.new
+      tag.name = tag_name
+      it "is not saved with an error message about a blank tag" do
+        expect(tag.save).to be_falsey
+        expect(tag.errors[:name].join).to match(/cannot be blank/)
+      end
+    end
+  end
+
+  context "tags with names that contain some zero-width characters are valid" do
+    %w[
+      👨‍👨‍👧‍👦
+      ප්‍රදානය
+      👩‍🔬
+    ].each do |tag_name|
+      tag = Tag.new
+      tag.name = tag_name
+      it "is saved" do
+        expect(tag.save).to be_truthy
+        expect(tag.errors).to be_empty
+        expect(tag.name).to eq(tag_name)
+      end
+    end
   end
 
   context "tags using restricted characters should not be saved" do
@@ -343,15 +370,19 @@ describe Tag do
   end
 
   describe "has_posted_works?" do
-    before do
-      create(:work, fandom_string: "love live,jjba")
-      create(:draft, fandom_string: "zombie land saga,jjba")
-    end
-
-    it "is true if used in posted works" do
-      expect(Tag.find_by(name: "zombie land saga").has_posted_works?).to be_falsey
-      expect(Tag.find_by(name: "love live").has_posted_works?).to be_truthy
-      expect(Tag.find_by(name: "jjba").has_posted_works?).to be_truthy
+    {
+      "draft" => { posted: false },
+      "unrevealed" => { in_unrevealed_collection: true },
+      "hidden" => { hidden_by_admin: true }
+    }.each do |description, attributes|
+      it "is false if only used on #{description} works" do
+        create(:work, fandom_string: "love live,jjba")
+        non_visible_work = create(:work, fandom_string: "zombie land saga,jjba")
+        non_visible_work.update!(**attributes)
+        expect(Tag.find_by(name: "zombie land saga").has_posted_works?).to be_falsey
+        expect(Tag.find_by(name: "love live").has_posted_works?).to be_truthy
+        expect(Tag.find_by(name: "jjba").has_posted_works?).to be_truthy
+      end
     end
   end
 

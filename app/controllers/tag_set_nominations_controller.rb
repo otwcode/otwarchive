@@ -5,7 +5,7 @@ class TagSetNominationsController < ApplicationController
   before_action :load_tag_set, except: [ :index ]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :load_nomination, only: [:show, :edit, :update, :destroy, :confirm_delete]
-  before_action :set_limit, only: [:new, :edit, :show, :create, :update, :review]
+  before_action :set_limit, only: [:new, :edit, :show, :create, :update]
 
   def check_pseud_ownership
     if !tag_set_nomination_params[:pseud_id].blank?

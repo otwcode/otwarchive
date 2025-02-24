@@ -12,8 +12,8 @@ describe "n+1 queries in the muted users controller" do
       populate do |n|
         muted_users = create_list(:user, n)
         muted_users.each do |muted|
-          # Rails doesn't seem to want to include variants, so this won't work right now.
-          # We can revisit when https://github.com/rails/rails/pull/49231 is released OR we upgrade to Rails 7.1
+          # TODO: Rails doesn't seem to want to include all variants for default_pseud when using .processed.url for the icon, so this won't work right now.
+          # This tests passes when using rails_blob_url (proxying)
           # muted.default_pseud.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
           Mute.create(muter: muter, muted: muted)
         end
