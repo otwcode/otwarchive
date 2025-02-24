@@ -6,10 +6,11 @@ class ErrorsController < ApplicationController
   end
 
   def auth_error
-    @page_subtitle = "Auth Error"
+    @page_subtitle = t(".subtitle")
   end
 
   def timeout_error
-    @page_subtitle = "Timeout Error"
+    @page_subtitle = t(".subtitle")
+    render "timeout_error", status: 200, formats: :html
   end
 end

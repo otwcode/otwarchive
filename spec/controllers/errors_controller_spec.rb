@@ -29,7 +29,7 @@ describe ErrorsController do
     end
   end
 
-  describe "auth_error" do
+  describe "GET #auth_error" do
     it "returns an HTML auth error page" do
       get :auth_error
       expect(response.status).to eq(200)
