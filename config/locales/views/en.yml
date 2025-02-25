@@ -4,7 +4,10 @@ en:
     navigation: Navigation
   abuse_reports:
     new:
-      do_not_spam: Please only report one user at a time, and do not submit multiple reports about the same user. Our volunteer team is small, so it may take several months for us to get to your report.
+      do_not_spam:
+        delay: it may take several months for us to get to your report
+        paragraph_html: "%{split_bold} Our volunteer team is small, so %{delay_link}."
+        split: Please only report one user at a time, and do not submit multiple reports about the same user.
       form:
         comment:
           description_html: Explain what about this content violates the %{tos_link}. Please be as specific as possible and %{include_link}. All information provided will remain confidential.
@@ -30,34 +33,46 @@ en:
         submit:
           active: Submit
         summary:
-          description: For example, "harassment", "not a fanwork", "commercial activities", etc.
+          description: Please specify why you are contacting us and/or what part of the Terms of Service is relevant to your complaint. (For example, "harassment", "not a fanwork", "commercial activities", etc.)
           error: Please enter a subject line for your report.
           label: Brief summary of Terms of Service violation (required)
       heading:
         page_title: Policy Questions & Abuse Reports
       include:
-        ao3: AO3 Terms of Service
-        delay: There will be an additional delay for responses in any language other than English.
+        evidence_html: links to any relevant %{sources_link} or screenshots
         intro: 'What to include in your report description:'
-        languages: We can answer Abuse reports in %{list_html}.
-        links: links to any of their other content that you would like to report
-        quote_html: a quote from or summary of the reported content explaining why it violates the %{tos_link}
-        sources: links to any relevant sources or screenshots
-        username: the username of the person you are reporting
+        other_content: links to any of their other content that you would like to report
+        quote: a quote from or summary of the content that violates the Terms of Service
+        reported_username: username of the person you are reporting
+        sources: sources
+        username_html: the %{reported_username_link}
+      languages:
+        delay: There will be an additional delay for responses in any language other than English.
+        intro_html: We can answer Abuse reports in %{list_html}.
+      page_content_landmark: Main Text
       purview:
-        about_html: Please use this form for questions or reports about violations of the Archive's %{tos_link}.
-        dmca: review our DMCA Policy and contact our Legal team
-        dmca_takedown_html: If you would like to initiate a formal DMCA takedown request, please %{dmca_link}.
+        about_html: Please use this form for questions or reports about violations of the %{tos_link}. For more information, please refer to the %{tos_faq_link}.
+        contact_support_html: If you need technical support, want to report a work tagged with an incorrect language, or would like to manage your %{fnok_link}, please %{support_link}.
+        dmca:
+          abbreviated: DMCA
+          full: Digital Millennium Copyright Act
+        dmca_takedown_html: If you would like to file a %{dmca_abbreviation} takedown request, please %{legal_link}.
+        fnok: Fannish Next-of-Kin
+        legal: review our DMCA Policy and contact our Legal team
         support: contact our Support team
-        technical_help_html: For technical help, or if you would like to manage your Fannish Next-of-Kin, please %{support_link}.
-        tos: Terms of Service
+        tos: AO3 Terms of Service
+        tos_faq: Terms of Service FAQ
       reportable:
-        content: You would like to know whether specific content is allowed on the Archive.
-        hack: You believe that your account was hacked.
-        harassment: You have experienced or witnessed harassment on the Archive.
-        intro: 'Potential reasons to submit a report to the Policy & Abuse team:'
-        suspended: You have been suspended or your work has been removed, and you have not received an email explaining why.
-        violation_html: You have encountered content on the Archive that violates the %{tos_link}.
+        allowed: You would like to know whether specific content is allowed on AO3.
+        content_policy: Content Policy
+        email: an email explaining why
+        hack: You believe that your AO3 account was hacked.
+        harassment: You have experienced or witnessed harassment taking place on AO3.
+        intro_html: 'Potential reasons to submit a report to the %{pac_link} team:'
+        pac: Policy & Abuse
+        suspended_html: You have been suspended or your work has been removed, and you have not received %{email_link}.
+        tos: Terms of Service
+        violation_html: You have encountered content on AO3 that violates the %{content_policy_link} or other parts of the %{tos_link}.
   admin:
     activities:
       index:
