@@ -45,10 +45,15 @@ class TagSearchForm
     @options[:fandom_ids] = Tag.where(name: names).pluck(:id)
   end
 
+  def bool_value(str)
+    %w[true 1 T].include?(str.to_s)
+  end
+
   def set_wrangling_status
-    return unless @options[:canonical]
+    return if @options[:canonical].blank?
     
-    @options[:wrangling_status] = "canonical"
+    # Match old behavior for canonical param
+    @options[:wrangling_status] = bool_value(@options[:canonical]) ? "canonical" : "noncanonical"
   end
 
   def sort_columns
