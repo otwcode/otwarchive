@@ -11,6 +11,6 @@ class ErrorsController < ApplicationController
 
   def timeout_error
     @page_subtitle = t(".subtitle")
-    render "timeout_error", status: 200, formats: :html
+    render "timeout_error", status: 504, formats: :html
   end
 end
