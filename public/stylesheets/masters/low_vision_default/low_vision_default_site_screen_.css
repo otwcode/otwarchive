@@ -97,10 +97,6 @@ dd fieldset {
   border: 0;
 }
 
-dl.meta {
-  overflow: hidden;
-}
-
 .meta .stats dl {
   margin-top: 0;
   text-align: left;
