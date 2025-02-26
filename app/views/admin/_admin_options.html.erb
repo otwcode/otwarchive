@@ -37,6 +37,20 @@
           <% end %>
         </li>
       <% end %>
+      <% if policy(@work).remove_pseud? %>
+        <% orphan_pseuds = @work.orphan_pseuds %>
+        <% if orphan_pseuds.length == 1 %>
+          <li>
+            <%= link_to t(".remove_pseud"),
+                  confirm_remove_pseud_admin_user_creation_path(@work),
+                  data: { confirm: t(".remove_pseud_confirmation") } %>
+          </li>
+        <% elsif orphan_pseuds.length > 1 %>
+          <li>
+            <%= link_to t(".remove_pseud"), confirm_remove_pseud_admin_user_creation_path(@work) %>
+          </li>
+        <% end %>
+      <% end %>
     <% end %>
     <% if item.class == ExternalWork %>
       <% if policy(item).edit? %>
