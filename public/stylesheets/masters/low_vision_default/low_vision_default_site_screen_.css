@@ -102,13 +102,13 @@ dl.meta {
 }
 
 .meta .stats dl {
-  display: block;
   margin-top: 0;
+  text-align: left;
 }
 
 .meta .stats dl dd,
 .meta .stats dl dt {
-  float: left;
+  display: inline-block;
 }
 
 textarea,
