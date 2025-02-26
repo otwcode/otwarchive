@@ -97,10 +97,6 @@ dd fieldset {
   border: 0;
 }
 
-.meta .stats dl {
-  text-align: left;
-}
-
 .meta .stats dl dd,
 .meta .stats dl dt {
   display: inline-block;
