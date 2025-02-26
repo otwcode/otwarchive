@@ -102,7 +102,7 @@ dl.meta {
 }
 
 .meta .stats dl {
-  float: left;
+  display: block;
   margin-top: 0;
 }
 
