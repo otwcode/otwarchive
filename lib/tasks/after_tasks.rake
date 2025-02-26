@@ -521,13 +521,14 @@ namespace :After do
   desc "Convert user kudos from users with the official role to guest kudos"
   task(convert_official_kudos: :environment) do
     official_role = Role.find_by(name: "official")
-    official_users = RolesUser.where(role_id: official_role.id).map(&:user) unless official_role.blank?
+    official_users = RolesUser.where(role_id: official_role.id).map(&:user) if official_role.present?
     if official_role.blank? || official_users.blank?
       puts "No official users found"
     else
       official_users.each do |user|
         kudos = user.kudos
-        next unless kudos.present?
+        next if kudos.blank?
+
         puts "Updating #{kudos.size} kudos from #{user.login}"
         user.kudos.each do |kudo|
           kudo.update_attribute(:user_id, nil)
