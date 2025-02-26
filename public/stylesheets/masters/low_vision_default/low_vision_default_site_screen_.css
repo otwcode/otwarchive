@@ -95,6 +95,10 @@ dd fieldset {
   border: 0;
 }
 
+dl.meta {
+  overflow: hidden;
+}
+
 .meta .stats dl {
   float: left;
   margin-top: 0;
