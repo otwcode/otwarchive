@@ -101,11 +101,6 @@ dl.meta {
   overflow: hidden;
 }
 
-.meta .stats dl {
-  float: left;
-  margin-top: 0;
-}
-
 .meta .stats dl dd,
 .meta .stats dl dt {
   float: left;
