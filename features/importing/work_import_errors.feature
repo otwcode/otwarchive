@@ -15,3 +15,12 @@ Feature: Import Works
     Then I should see "We couldn't successfully import that work, sorry: We couldn't download anything from http://no-content. Please make sure that the URL is correct and complete, and try again."
     When I go to my works page
     Then I should see "Drafts (0)"
+
+  Scenario: Cannot import works from the current archive
+    Given I set up importing
+      And I fill in "urls" with "https://archiveofourown.org/works/54711364"
+      And I select "English" from "Choose a language"
+    And I press "Import"
+    Then I should see "We couldn't successfully import that work, sorry: URL is for a work on the Archive. Please bookmark it directly instead."
+    When I go to my works page
+    Then I should see "Drafts (0)"

@@ -83,39 +83,5 @@ describe FeedbacksController do
         end
       end
     end
-
-    context "when accessed by a guest" do
-      context "when the referer is on the Archive" do
-        before do
-          request.env["HTTP_REFERER"] = "https://archiveofourown.org/works/1"
-        end
-
-        it "sets the referer in the Zoho ticket" do
-          expect(mock_zoho).to receive(:create_ticket).with(ticket_attributes: include(
-            "cf" => include(
-              "cf_referer" => "https://archiveofourown.org/works/1",
-              "cf_ip" => "0.0.0.0"
-            )
-          ))
-          post :create, params: default_parameters
-        end
-      end
-
-      context "when the referer is elsewhere" do
-        before do
-          request.env["HTTP_REFERER"] = "https://example.com/works/1"
-        end
-
-        it "does not set the referer in the Zoho ticket" do
-          expect(mock_zoho).to receive(:create_ticket).with(ticket_attributes: include(
-            "cf" => include(
-              "cf_referer" => "Unknown URL",
-              "cf_ip" => "0.0.0.0"
-            )
-          ))
-          post :create, params: default_parameters
-        end
-      end
-    end
   end
 end

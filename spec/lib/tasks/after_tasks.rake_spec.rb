@@ -174,85 +174,6 @@ describe "rake After:fix_tags_with_extra_spaces" do
   end
 end
 
-describe "rake After:fix_invalid_pseud_icon_data" do
-  let(:valid_pseud) { create(:user).default_pseud }
-  let(:invalid_pseud) { create(:user).default_pseud }
-
-  before do
-    stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
-    ArchiveConfig.ICON_ALT_MAX = 5
-    ArchiveConfig.ICON_COMMENT_MAX = 5
-  end
-
-  it "removes invalid icon" do
-    valid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
-    valid_pseud.save
-    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
-    invalid_pseud.save
-    invalid_pseud.update_column(:icon_content_type, "not/valid")
-
-    subject.invoke
-
-    invalid_pseud.reload
-    valid_pseud.reload
-    expect(invalid_pseud.icon.exists?).to be_falsey
-    expect(invalid_pseud.icon_content_type).to be_nil
-    expect(valid_pseud.icon.exists?).to be_truthy
-    expect(valid_pseud.icon_content_type).to eq("image/gif")
-  end
-
-  it "removes invalid icon_alt_text" do
-    invalid_pseud.update_column(:icon_alt_text, "not valid")
-    valid_pseud.update_attribute(:icon_alt_text, "valid")
-
-    subject.invoke
-
-    invalid_pseud.reload
-    valid_pseud.reload
-    expect(invalid_pseud.icon_alt_text).to be_empty
-    expect(valid_pseud.icon_alt_text).to eq("valid")
-  end
-
-  it "removes invalid icon_comment_text" do
-    invalid_pseud.update_column(:icon_comment_text, "not valid")
-    valid_pseud.update_attribute(:icon_comment_text, "valid")
-
-    subject.invoke
-
-    invalid_pseud.reload
-    valid_pseud.reload
-    expect(invalid_pseud.icon_comment_text).to be_empty
-    expect(valid_pseud.icon_comment_text).to eq("valid")
-  end
-
-  it "updates icon_content_type from jpg to jpeg" do
-    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.jpg"))
-    invalid_pseud.save
-    invalid_pseud.update_column(:icon_content_type, "image/jpg")
-
-    subject.invoke
-
-    invalid_pseud.reload
-    expect(invalid_pseud.icon.exists?).to be_truthy
-    expect(invalid_pseud.icon_content_type).to eq("image/jpeg")
-  end
-
-  it "updates multiple invalid fields on the same pseud" do
-    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
-    invalid_pseud.save
-    invalid_pseud.update_columns(icon_content_type: "not/valid",
-                                 icon_alt_text: "not valid",
-                                 icon_comment_text: "not valid")
-    subject.invoke
-
-    invalid_pseud.reload
-    expect(invalid_pseud.icon.exists?).to be_falsey
-    expect(invalid_pseud.icon_content_type).to be_nil
-    expect(invalid_pseud.icon_alt_text).to be_empty
-    expect(invalid_pseud.icon_comment_text).to be_empty
-  end
-end
-
 describe "rake After:fix_2009_comment_threads" do
   before { Comment.delete_all }
 
@@ -500,6 +421,90 @@ describe "rake After:rename_underage_warning" do
         subject.invoke
       end.to avoid_changing { tag.reload.name }
         .and output("#{prompt}Failed to rename Underage warning tag to Underage Sex.\n").to_stdout
+    end
+  end
+end
+
+describe "rake After:migrate_pinch_request_signup" do
+  context "for an assignment with a request_signup_id" do
+    let(:assignment) { create(:challenge_assignment) }
+
+    it "does nothing" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { assignment.reload.request_signup_id }
+        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
+    end
+  end
+
+  context "for an assignment with a request_signup_id and a pinch_request_signup_id" do
+    let(:collection) { create(:collection) }
+    let(:assignment) do
+      create(:challenge_assignment,
+             collection: collection,
+             pinch_request_signup_id: create(:challenge_signup, collection: collection).id)
+    end
+
+    it "does nothing" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { assignment.reload.request_signup_id }
+        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
+    end
+  end
+
+  context "for an assignment with a pinch_request_signup_id but no request_signup_id" do
+    let(:collection) { create(:collection) }
+    let(:signup) { create(:challenge_signup, collection: collection) }
+    let(:assignment) do
+      assignment = create(:challenge_assignment, collection: collection)
+      assignment.update_columns(request_signup_id: nil, pinch_request_signup_id: signup.id)
+      assignment
+    end
+
+    it "sets the request_signup_id to the pinch_request_signup_id" do
+      expect do
+        subject.invoke
+      end.to change { assignment.reload.request_signup_id }
+        .from(nil)
+        .to(signup.id)
+        .and output("Migrated pinch_request_signup for 1 challenge assignments.\n").to_stdout
+    end
+  end
+end
+
+describe "rake After:reindex_hidden_unrevealed_tags" do
+  context "with a posted work" do
+    let!(:work) { create(:work) }
+
+    it "does not reindex the work's tags" do
+      expect do
+        subject.invoke
+      end.not_to add_to_reindex_queue(work.tags.first, :main)
+    end
+  end
+
+  context "with a hidden work" do
+    let!(:work) { create(:work, hidden_by_admin: true) }
+
+    it "reindexes the work's tags" do
+      expect do
+        subject.invoke
+      end.to add_to_reindex_queue(work.tags.first, :main)
+    end
+  end
+
+  context "with an unrevealed work" do
+    let(:work) { create(:work) }
+
+    before do
+      work.update!(in_unrevealed_collection: true)
+    end
+
+    it "reindexes the work's tags" do
+      expect do
+        subject.invoke
+      end.to add_to_reindex_queue(work.tags.first, :main)
     end
   end
 end

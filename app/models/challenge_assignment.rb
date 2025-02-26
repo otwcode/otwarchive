@@ -6,7 +6,7 @@ class ChallengeAssignment < ApplicationRecord
   belongs_to :offer_signup, class_name: "ChallengeSignup"
   belongs_to :request_signup, class_name: "ChallengeSignup"
   belongs_to :pinch_hitter, class_name: "Pseud"
-  belongs_to :pinch_request_signup, class_name: "ChallengeSignup"
+  belongs_to :pinch_request_signup, class_name: "ChallengeSignup" # TODO: AO3-6851 Remove pinch_request_signup association from the challenge_assignments table
   belongs_to :creation, polymorphic: true
 
   # Make sure that the signups are an actual match if we're in the process of assigning
@@ -42,12 +42,11 @@ class ChallengeAssignment < ApplicationRecord
 
   # sorting by request/offer
 
-  REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_assignments.request_signup_id = challenge_signups.id
-                                                            OR challenge_assignments.pinch_request_signup_id = challenge_signups.id)
-                           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id"
+  REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON challenge_assignments.request_signup_id = challenge_signups.id
+                           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id".freeze
 
   OFFERING_PSEUD_JOIN = "LEFT JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id
-                         INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id OR challenge_signups.pseud_id = pseuds.id)"
+                         INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id OR challenge_signups.pseud_id = pseuds.id)".freeze
 
   scope :order_by_requesting_pseud, -> { joins(REQUESTING_PSEUD_JOIN).order("pseuds.name") }
 
@@ -128,10 +127,6 @@ class ChallengeAssignment < ApplicationRecord
     end
   end
 
-  def request
-    self.request_signup || self.pinch_request_signup
-  end
-
   def get_collection_item
     return nil unless self.creation
 
@@ -203,11 +198,7 @@ class ChallengeAssignment < ApplicationRecord
   end
 
   def requesting_pseud
-    if request_signup
-      request_signup.pseud
-    else
-      (pinch_request_signup ? pinch_request_signup.pseud : nil)
-    end
+    request_signup&.pseud
   end
 
   def offer_byline
@@ -219,11 +210,7 @@ class ChallengeAssignment < ApplicationRecord
   end
 
   def request_byline
-    if request_signup && request_signup.pseud
-      request_signup.pseud.byline
-    else
-      (pinch_request_signup ? I18n.t("challenge_assignment.request_byline.pinch_recipient", pinch_request_byline: pinch_request_byline) : I18n.t("challenge_assignment.request_byline.none"))
-    end
+    requesting_pseud&.byline || I18n.t("challenge_assignment.request_byline.none")
   end
 
   def pinch_hitter_byline
@@ -234,24 +221,15 @@ class ChallengeAssignment < ApplicationRecord
     self.pinch_hitter = Pseud.parse_byline(byline)
   end
 
-  def pinch_request_byline
-    pinch_request_signup ? pinch_request_signup.pseud.byline : ""
-  end
-
-  def pinch_request_byline=(byline)
-    signup = signup_for_byline(byline)
-    self.pinch_request_signup = signup if signup
-  end
-
   def default
     self.defaulted_at = Time.now
     save
   end
 
   def cover(pseud)
-    new_assignment = self.covered_at ? request.request_assignments.last : ChallengeAssignment.new
+    new_assignment = self.covered_at ? request_signup.request_assignments.last : ChallengeAssignment.new
     new_assignment.collection = self.collection
-    new_assignment.request_signup_id = request.id
+    new_assignment.request_signup_id = request_signup_id
     new_assignment.pinch_hitter = pseud
     new_assignment.sent_at = nil
     new_assignment.save!
@@ -270,8 +248,11 @@ class ChallengeAssignment < ApplicationRecord
                     else
                       (self.pinch_hitter ? self.pinch_hitter.user : nil)
                     end
-      request = self.request_signup || self.pinch_request_signup
-      UserMailer.challenge_assignment_notification(collection.id, assigned_to.id, self.id).deliver_later if assigned_to && request
+      if assigned_to && self.request_signup
+        I18n.with_locale(assigned_to.preference.locale.iso) do
+          UserMailer.challenge_assignment_notification(collection.id, assigned_to.id, self.id).deliver_later
+        end
+      end
     end
   end
 

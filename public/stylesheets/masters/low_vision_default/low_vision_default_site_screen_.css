@@ -28,7 +28,8 @@ form blockquote.userstuff {
 .alphabet .listbox li,
 .media .listbox,
 .works-index .index,
-.collections-index .index {
+.collections-index .index,
+.bookmarks-index .index {
   float: none;
   width: auto;
   max-width: 100%;
@@ -37,7 +38,8 @@ form blockquote.userstuff {
 #inner .filters,
 #footer,
 .filters dt,
-media .listbox {
+media .listbox,
+.bookmark .recent .index {
   width: 100%;
 }
 
@@ -177,4 +179,9 @@ pre {
 #header .dropdown .menu a:focus {
   background: #ccc;
   color: #111;
+}
+
+.bookmark .recent,
+.bookmark .recent .index {
+  border: none;
 }

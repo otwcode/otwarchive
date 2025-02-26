@@ -114,6 +114,10 @@ describe Skin do
         background:linear-gradient(top,#fafafa,#ddd);
         color:#555 }",
 
+      "allows color-scheme property and values" => 
+        ".color_scheme_light { color-scheme: light; }
+        .color_scheme_only_dark { color-scheme: only dark; }",
+
       "allows filter properties" => 
         ".filter_blur { filter: blur(5px); }
         .filter_brightness { filter: brightness(0.4); }
@@ -177,7 +181,8 @@ describe Skin do
       "errors when saving gradient with xss" => "div {background: -webkit-linear-gradient(url(xss.htc))}",
       "errors when saving dsf images" => "body {background: url(http://foo.com/bar.dsf)}",
       "errors when saving urls with invalid domain" => "body {background: url(http://foo.htc/bar.png)}",
-      "errors when saving xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}"
+      "errors when saving xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}",
+      "errors when saving url followed by something else" => 'a {content: url(/images/fakeimage.png) " (" attr(href) ")"}'
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css

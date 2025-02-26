@@ -177,8 +177,17 @@ end
 
 def run_all_indexing_jobs
   %w[main background stats].each do |reindex_type|
-    ScheduledReindexJob.perform reindex_type
+    ScheduledReindexJob.perform(reindex_type)
   end
+
+  # In Rails pre-7.2, "config.active_job.queue_adapter" is respected by some
+  # test cases but not others. In request specs, the queue adapter will be
+  # overridden to ":test", so we need to call "perform_enqueued_jobs" to
+  # process jobs.
+  #
+  # Refer to https://github.com/rails/rails/pull/48585.
+  perform_enqueued_jobs if ActiveJob::Base.queue_adapter.instance_of? ActiveJob::QueueAdapters::TestAdapter
+
   Indexer.all.map(&:refresh_index)
 end
 

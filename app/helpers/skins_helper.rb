@@ -9,9 +9,13 @@ module SkinsHelper
 
   # we only actually display an image if there's a file
   def skin_preview_display(skin)
-    if skin && skin.icon_file_name
-      link_to image_tag(skin.icon.url(:standard), alt: skin.icon_alt_text, class: "icon", skip_pipeline: true), skin.icon.url(:original)
-    end
+    return unless skin&.icon&.attached?
+
+    link_to image_tag(rails_blob_url(skin.icon.variant(:standard)),
+                      alt: skin.icon_alt_text,
+                      class: "icon",
+                      skip_pipeline: true),
+            rails_blob_url(skin.icon)
   end
 
   # Fetches the current skin. This is determined by the following
