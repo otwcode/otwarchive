@@ -98,6 +98,7 @@ class Comment < ApplicationRecord
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_agent: user_agent,
+      user_role: "guest",
       comment_author: name,
       comment_author_email: email,
       comment_content: comment_content

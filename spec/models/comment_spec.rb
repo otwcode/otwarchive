@@ -28,6 +28,14 @@ describe Comment do
           .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
+
+    context "when submitting comment to Akismet" do
+      subject { build(:comment) }
+
+      it "has user_role \"guest\"" do
+        expect(subject.akismet_attributes[:user_role]).to eq("guest")
+      end
+    end
   end
 
   context "with an existing comment from the same user" do

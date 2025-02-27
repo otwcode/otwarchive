@@ -83,4 +83,21 @@ describe Feedback do
       expect(safe_report.save).to be_truthy
     end
   end
+
+  context "when report is submitted to Akismet" do
+    let(:report) { build(:feedback) }
+
+    it "has comment_type \"contact-form\"" do
+      expect(report.akismet_attributes[:comment_type]).to eq("contact-form")
+    end
+
+    it "has user_role \"user-with-nonmatching-email\" when reporter is logged in" do
+      User.current_user = create(:user)
+      expect(report.akismet_attributes[:user_role]).to eq("user-with-nonmatching-email")
+    end
+
+    it "has user_role \"guest\" when reporter is logged out" do
+      expect(report.akismet_attributes[:user_role]).to eq("guest")
+    end
+  end
 end

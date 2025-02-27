@@ -23,11 +23,16 @@ class Feedback < ApplicationRecord
   end
 
   def akismet_attributes
+    # If the user is logged in and we're sending info to Akismet, we can assume
+    # the email does not match.
+    role = User.current_user.present? ? "user-with-nonmatching-email" : "guest"
     {
+      comment_type: "contact-form",
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_agent: user_agent,
+      user_role: role,
       comment_author_email: email,
       comment_content: comment
     }
