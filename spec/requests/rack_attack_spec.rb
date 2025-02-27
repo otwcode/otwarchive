@@ -18,10 +18,21 @@ describe "Rack::Attack" do
     { user: { login: generate(:login), password: "secret" } }
   end
 
+  def unique_admin_params
+    { admin: { login: generate(:login), password: "secretpassword" } }
+  end
+
   it "test utility returns valid parameters for successful user login attempts" do
     params = unique_user_params
     create(:user, login: params[:user][:login], password: params[:user][:password])
     post user_session_path, params: params.to_query
+    expect(response).to have_http_status(:redirect)
+  end
+
+  it "test utility returns valid parameters for successful admin login attempts" do
+    params = unique_admin_params
+    create(:admin, login: params[:admin][:login], password: params[:admin][:password])
+    post admin_session_path, params: params.to_query
     expect(response).to have_http_status(:redirect)
   end
 
@@ -110,6 +121,72 @@ describe "Rack::Attack" do
     it "does not throttle the next attempt for the same username after some time" do
       travel ArchiveConfig.RATE_LIMIT_LOGIN_PERIOD.seconds
       post user_session_path, params: params, env: unique_ip_env
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  context "when there have been max admin login attempts from an IP address" do
+    let(:ip) { Faker::Internet.unique.public_ip_v4_address }
+
+    before do
+      ArchiveConfig.RATE_LIMIT_ADMIN_LOGIN_ATTEMPTS.times do
+        post admin_session_path, params: unique_admin_params.to_query, env: { "REMOTE_ADDR" => ip }
+      end
+    end
+
+    it "response to the next attempt from the same IP includes retry-after header" do
+      post admin_session_path, params: unique_admin_params.to_query, env: { "REMOTE_ADDR" => ip }
+      expect(response).to have_http_status(:too_many_requests)
+      expect(response.headers["Retry-After"].to_i).to be > 0
+      expect(response.headers["Retry-After"].to_i).to be <= ArchiveConfig.RATE_LIMIT_ADMIN_LOGIN_PERIOD.seconds
+    end
+
+    it "throttles the next attempt from the same IP" do
+      post admin_session_path, params: unique_admin_params.to_query, env: { "REMOTE_ADDR" => ip }
+      expect(response).to have_http_status(:too_many_requests)
+    end
+
+    it "does not throttle an attempt from a different IP" do
+      post admin_session_path, params: unique_admin_params.to_query, env: unique_ip_env
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "does not throttle the next attempt from the same IP after some time" do
+      travel ArchiveConfig.RATE_LIMIT_ADMIN_LOGIN_PERIOD.seconds
+      post admin_session_path, params: unique_admin_params.to_query, env: { "REMOTE_ADDR" => ip }
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  context "when there have been max admin login attempts for a username" do
+    let(:params) { unique_admin_params.to_query }
+
+    before do
+      ArchiveConfig.RATE_LIMIT_ADMIN_LOGIN_ATTEMPTS.times do
+        post admin_session_path, params: params, env: unique_ip_env
+      end
+    end
+
+    it "response to the next attempt for the same username includes retry-after header" do
+      post admin_session_path, params: params, env: unique_ip_env
+      expect(response).to have_http_status(:too_many_requests)
+      expect(response.headers["Retry-After"].to_i).to be > 0
+      expect(response.headers["Retry-After"].to_i).to be <= ArchiveConfig.RATE_LIMIT_ADMIN_LOGIN_PERIOD.seconds
+    end
+
+    it "throttles the next attempt for the same username" do
+      post admin_session_path, params: params, env: unique_ip_env
+      expect(response).to have_http_status(:too_many_requests)
+    end
+
+    it "does not throttle an attempt for a different username" do
+      post admin_session_path, params: unique_admin_params.to_query, env: unique_ip_env
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "does not throttle the next attempt for the same username after some time" do
+      travel ArchiveConfig.RATE_LIMIT_ADMIN_LOGIN_PERIOD.seconds
+      post admin_session_path, params: params, env: unique_ip_env
       expect(response).to have_http_status(:ok)
     end
   end
