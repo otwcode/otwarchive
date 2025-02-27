@@ -69,6 +69,10 @@ form blockquote.userstuff {
   border: 2px solid;
 }
 
+ul.navigation + .index {
+  clear: both;
+}
+
 li.blurb,
 .group {
   visibility: visible;
