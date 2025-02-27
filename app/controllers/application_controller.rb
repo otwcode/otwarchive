@@ -25,6 +25,12 @@ class ApplicationController < ActionController::Base
     redirect_to '/404'
   end
 
+  rescue_from Rack::Timeout::RequestTimeoutException, with: :raise_timeout
+  
+  def raise_timeout
+    redirect_to timeout_error_path
+  end
+
   helper :all # include all helpers, all the time
 
   include HtmlCleaner
