@@ -530,7 +530,6 @@ namespace :After do
 
         puts "Updating #{kudos.size} kudos from #{user.login}"
         user.remove_user_from_kudos
-        end
       end
 
       puts "Finished converting kudos from official users to guest kudos"
