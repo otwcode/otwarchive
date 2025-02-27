@@ -29,7 +29,7 @@
           filter_works_link: link_to(t(".filter_works"), tag_works_path(@tag)),
           filter_bookmarks_link: link_to(t(".filter_bookmarks"), tag_bookmarks_path(@tag))) %>
     <% if @tag.is_a?(Fandom) %>
-      <%= t(".list_fandom_tags_html", fandom_relationship_tags_link: link_to(t(".fandom_relationship_tags"), fandom_path(@tag.name))) %>
+      <%= t(".list_fandom_tags_html", fandom_relationship_tags_link: link_to(t(".fandom_relationship_tags"), fandom_path(@tag))) %>
     <% end %>
   <% end %>
   </p>
