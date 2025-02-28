@@ -4,9 +4,11 @@ namespace :opendoors do
     def update_work(row)
       begin
         work = Work.find(row["AO3 id"])
+        # TODO AO3-6591
         if work&.imported_from_url.blank? || work&.imported_from_url == row["URL Imported From"]
           work.imported_from_url = row["Original URL"]
           work.save!
+          work.import_url!(row["Original URL"])
           "#{work.id}\twas updated: its import url is now #{work.imported_from_url}"
         else
           "#{work.id}\twas not changed: its import url is #{work.imported_from_url}"

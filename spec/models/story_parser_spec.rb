@@ -320,5 +320,11 @@ describe StoryParser do
       story = @sp.download_and_parse_story("http://non-sgml-character-number-3", pseuds: [@user.default_pseud])
       expect(story.chapters[0].content).to include("When I get out of here")
     end
+
+    it "records source url" do
+      story = @sp.download_and_parse_story("http://non-sgml-character-number-3", pseuds: [@user.default_pseud])
+      expect(story.imported_from_url).to eq "http://non-sgml-character-number-3"
+      expect(story.work_url.original).to eq "http://non-sgml-character-number-3"
+    end
   end
 end
