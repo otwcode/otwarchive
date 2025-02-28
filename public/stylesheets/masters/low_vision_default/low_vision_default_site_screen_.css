@@ -78,7 +78,8 @@ li.blurb,
   visibility: visible;
 }
 
-li.blurb {
+li.blurb,
+.bookmark div.user {
   padding: 3%;
 }
 
@@ -174,6 +175,10 @@ pre {
 #header .dropdown .menu a:focus {
   background: #ccc;
   color: #111;
+}
+
+.bookmark div.user {
+  box-sizing: border-box;
 }
 
 .bookmark .recent,
