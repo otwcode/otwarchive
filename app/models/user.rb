@@ -166,6 +166,10 @@ class User < ApplicationRecord
       work.touch
       work.expire_caches
     end
+    self.gift_works.each do |work|
+      work.touch
+      work.expire_caches
+    end
   end
 
   def remove_user_from_kudos
