@@ -865,6 +865,11 @@ $.TokenList = function (input, url_or_data, settings) {
                 clearTimeout(timeout);
 
                 timeout = setTimeout(function(){
+                    query = input_box.val().toLowerCase();
+                    if (query.length < settings.minChars) {
+                        hide_dropdown();
+                        return;
+                    }
                     run_search(query);
                 }, settings.searchDelay);
             } else {
