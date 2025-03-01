@@ -57,8 +57,6 @@ module NavigationHelpers
 
     when /^the tagsets page$/i
       tag_sets_path
-    when /^the unassigned fandoms page$/i
-      unassigned_fandoms_path
     when /^the login page$/i
       new_user_session_path
     when /^account creation page$/i
@@ -279,12 +277,16 @@ module NavigationHelpers
       tag_wrangler_path(User.find_by(login: Regexp.last_match(1)))
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
+    when /^the "(.*)" fandoms page$/i
+      medium_fandoms_path(Media.find_by(name: Regexp.last_match(1)))
     when /^the "(.*)" tag page$/i
       tag_path(Tag.find_by_name($1))
     when /^the '(.*)' tag edit page$/i
       edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
     when /^the "(.*)" tag edit page$/i
       edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
+    when /^the new tag page$/i
+      new_tag_path
     when /^the wrangling tools page$/
       tag_wranglings_path
     when /^the new external work page$/i

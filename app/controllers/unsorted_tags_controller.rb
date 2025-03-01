@@ -19,7 +19,7 @@ class UnsortedTagsController < ApplicationController
       tags = UnsortedTag.where(id: params[:tags].keys)
       tags.each do |tag|
         new_type = params[:tags][tag.id.to_s]
-        if %w(Fandom Character Relationship Freeform).include?(new_type)
+        if Tag::USER_DEFINED.include?(new_type)
           tag.update_attribute(:type, new_type)
         else
           raise ts("#{new_type} is not a valid tag type")

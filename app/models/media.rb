@@ -4,6 +4,14 @@ class Media < Tag
   has_many :common_taggings, as: :filterable
   has_many :fandoms, -> { where(type: 'Fandom') }, through: :common_taggings, source: :common_tag
 
+  after_save :expire_caches
+  after_destroy :expire_caches
+
+  def expire_caches
+    ActionController::Base.new.expire_fragment("menu-fandoms-version4")
+    ActionController::Base.new.expire_fragment("homepage-fandoms-version1")
+  end
+
   def child_types
     ['Fandom']
   end

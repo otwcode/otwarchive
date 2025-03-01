@@ -181,10 +181,10 @@ class TagsController < ApplicationController
       return
     end
 
-    raise "Redshirt: Attempted to constantize invalid class initialize create #{type.classify}" unless Tag::TYPES.include?(type.classify)
+    raise "Redshirt: Attempted to constantize invalid class initialize create #{type.classify}" unless Tag::TYPES.include?(type.classify) || type == "Media"
 
     model = begin
-              type.classify.constantize
+              type == "Media" ? type.constantize : type.classify.constantize
             rescue StandardError
               nil
             end
@@ -248,7 +248,8 @@ class TagsController < ApplicationController
     new_tag_type = params[:tag].delete(:type)
 
     # Limiting the conditions under which you can update the tag type
-    if @tag.can_change_type? && %w(Fandom Character Relationship Freeform UnsortedTag).include?(new_tag_type)
+    types = logged_in_as_admin? ? Tag::TYPES : Tag::USER_DEFINED
+    if @tag.can_change_type? && (types + %w(UnsortedTag)).include?(new_tag_type)
       @tag = @tag.recategorize(new_tag_type)
     end
 
