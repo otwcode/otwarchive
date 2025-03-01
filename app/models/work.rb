@@ -252,7 +252,7 @@ class Work < ApplicationRecord
   def send_deleted_work_notification
     return unless self.posted?
 
-    users = self.pseuds.pluck(&:user).uniq
+    users = self.pseuds.pluck(:user).uniq
     return if users.blank?
 
     orphan_account = User.orphan_account
