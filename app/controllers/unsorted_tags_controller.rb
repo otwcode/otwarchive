@@ -20,6 +20,7 @@ class UnsortedTagsController < ApplicationController
       tags.each do |tag|
         new_type = params[:tags][tag.id.to_s]
         raise "#{new_type} is not a valid tag type" unless Tag::USER_DEFINED.include?(new_type)
+
         tag.update_attribute(:type, new_type)
       end
       flash[:notice] = ts("Tags were successfully sorted.")
