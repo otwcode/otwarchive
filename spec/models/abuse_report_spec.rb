@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe AbuseReport do
   context "when report is not spam" do
@@ -9,7 +9,7 @@ describe AbuseReport do
     end
 
     context "comment missing" do
-      let(:report_without_comment) {build(:abuse_report, comment: nil)}
+      let(:report_without_comment) { build(:abuse_report, comment: nil) }
       it "is invalid" do
         expect(report_without_comment.save).to be_falsey
         expect(report_without_comment.errors[:comment]).not_to be_empty
@@ -328,8 +328,8 @@ describe AbuseReport do
 
   context "when report is spam" do
     let(:legit_user) { create(:user) }
-    let(:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
-    let!(:safe_report) { build(:abuse_report, username: 'viagra-test-123', email: legit_user.email) }
+    let(:spam_report) { build(:abuse_report, username: "viagra-test-123") }
+    let!(:safe_report) { build(:abuse_report, username: "viagra-test-123", email: legit_user.email) }
 
     before do
       allow(Akismetor).to receive(:spam?).and_return(true)
@@ -378,6 +378,148 @@ describe AbuseReport do
 
       expect { subject.attach_work_download(ticket_id) }
         .to have_enqueued_job
+    end
+  end
+
+  describe "#creator_ids" do
+    it "returns no creator ids for non-work URLs" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/users/someone/")
+
+      expect(subject.creator_ids).to be_nil
+    end
+
+    it "returns no creator ids for comment sub-URLs" do
+      allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/123/comments/")
+
+      expect(subject.creator_ids).to be_nil
+    end
+
+    context "for work URLs" do
+      it "returns deletedwork for a work that doesn't exist" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/000/")
+
+        expect(subject.creator_ids).to eq("deletedwork")
+      end
+
+      context "for a single creator" do
+        let(:work) { create(:work) }
+
+        it "returns a single creator id" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq(work.users.first.id.to_s)
+        end
+      end
+
+      context "for an anonymous work" do
+        let(:anonymous_collection) { create(:anonymous_collection) }
+        let(:work) { create(:work, collections: [anonymous_collection]) }
+
+        it "returns a single creator id" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq(work.users.first.id.to_s)
+        end
+      end
+
+      context "for an unrevealed work" do
+        let(:unrevealed_collection) { create(:unrevealed_collection) }
+        let(:work) { create(:work, collections: [unrevealed_collection]) }
+
+        it "returns a single creator id" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq(work.users.first.id.to_s)
+        end
+      end
+
+      context "for multiple pseuds of one creator" do
+        let(:user) { create(:user) }
+        let(:pseud) { create(:pseud, user: user) }
+        let(:work) { create(:work, authors: [pseud, user.default_pseud]) }
+
+        it "returns a single creator id" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+      end
+
+      context "for multiple creators" do
+        let(:user1) { create(:user, id: 10) }
+        let(:user2) { create(:user, id: 11) }
+        let(:work) { create(:work, authors: [user2.default_pseud, user1.default_pseud]) }
+
+        it "returns a sorted list of creator ids" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq("#{user1.id}, #{user2.id}")
+        end
+      end
+
+      context "for an invited co-creator that hasn't accepted yet" do
+        let(:user) { create(:user) }
+        let(:invited) { create(:user) }
+        let(:work) { create(:work, authors: [user.default_pseud, invited.default_pseud]) }
+        let(:creatorship) { work.creatorships.last }
+
+        before do
+          creatorship.approved = false
+          creatorship.save!(validate: false)
+        end
+
+        it "returns only the creator" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+      end
+    end
+
+    context "for an orphaned work" do
+      let!(:orphan_account) { create(:user, login: "orphan_account") }
+      let(:orphaneer) { create(:user, id: 20) }
+      let(:work) { create(:work, authors: [orphaneer.default_pseud]) }
+
+      context "recently orphaned" do
+        before do
+          Creatorship.orphan([orphaneer.default_pseud], [work], false)
+        end
+
+        it "returns orphanedwork and the original creator" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq("orphanedwork, #{orphaneer.id}")
+        end
+      end
+
+      context "orphaned a long time ago" do
+        before do
+          Creatorship.orphan([orphaneer.default_pseud], [work], false)
+          work.original_creators.destroy_all
+        end
+
+        it "returns orphanedwork" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq("orphanedwork")
+        end
+      end
+
+      context "partially orphaned" do
+        let(:cocreator) { create(:user, id: 21) }
+        let(:work) { create(:work, authors: [cocreator.default_pseud, orphaneer.default_pseud]) }
+
+        before do
+          Creatorship.orphan([orphaneer.default_pseud], [work], false)
+        end
+
+        it "returns a sorted list of orphanedwork, the co-creator and the original creator" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
+
+          expect(subject.creator_ids).to eq("orphanedwork, #{orphaneer.id}, #{cocreator.id}")
+        end
+      end
     end
   end
 end

@@ -106,7 +106,8 @@ class AbuseReport < ApplicationRecord
   end
 
   def send_report
-    return unless %w(staging production).include?(Rails.env)
+    return unless zoho_enabled?
+
     reporter = AbuseReporter.new(
       title: summary,
       description: comment,
@@ -114,7 +115,8 @@ class AbuseReport < ApplicationRecord
       email: email,
       username: username,
       ip_address: ip_address,
-      url: url
+      url: url,
+      creator_ids: creator_ids
     )
     response = reporter.send_report!
     ticket_id = response["id"]
@@ -123,10 +125,27 @@ class AbuseReport < ApplicationRecord
     attach_work_download(ticket_id)
   end
 
+  def creator_ids
+    work_id = reported_work_id
+    return unless work_id
+
+    work = Work.find_by(id: work_id)
+    return "deletedwork" unless work
+
+    ids = work.pseuds.pluck(:user_id).push(*work.original_creators.pluck(:user_id)).uniq.sort!
+    ids.prepend("orphanedwork") if ids.delete(User.orphan_account.id)
+    ids.join(", ")
+  end
+
+  # ID of the reported work, unless the report is about comment(s) on the work
+  def reported_work_id
+    comments = url[%r{/comments/}, 0]
+    url[%r{/works/(\d+)}, 1] if comments.nil?
+  end
+
   def attach_work_download(ticket_id)
-    is_not_comments = url[%r{/comments/}, 0].nil?
-    work_id = url[%r{/works/(\d+)}, 1]
-    return unless work_id && is_not_comments
+    work_id = reported_work_id
+    return unless work_id
 
     work = Work.find_by(id: work_id)
     ReportAttachmentJob.perform_later(ticket_id, work) if work
@@ -173,5 +192,11 @@ class AbuseReport < ApplicationRecord
                           volunteers from being overwhelmed, please do not seek
                           out violations to report, but only report violations you
                           encounter during your normal browsing."))
+  end
+
+  private
+
+  def zoho_enabled?
+    %w[staging production].include?(Rails.env)
   end
 end
