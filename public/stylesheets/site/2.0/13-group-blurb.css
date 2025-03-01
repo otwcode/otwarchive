@@ -331,7 +331,7 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 	top: 28px;
 }
 
-.bookmark div.user {
+.bookmark div.user, .bookmark div.recent {
   clear: right;
   box-sizing: border-box;
 }
@@ -395,6 +395,11 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 
 .bookmark .dynamic {
 	position: static;
+}
+
+.bookmark .recent .index {
+  float: none;
+  width: 100%;
 }
 
 /* mod: READING */

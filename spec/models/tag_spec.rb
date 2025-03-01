@@ -5,6 +5,8 @@ describe Tag do
     User.current_user = nil
   end
 
+  it { is_expected.not_to allow_values("", "a" * 151).for(:name) }
+
   context "checking count caching" do
     before(:each) do
       # Set the minimal amount of time a tag can be cached for.
@@ -158,13 +160,6 @@ describe Tag do
 
     tag.name = "something or other"
     expect(tag.save).to be_truthy
-  end
-
-  it "should not be valid if too long" do
-    tag = Tag.new
-    tag.name = "a" * 101
-    expect(tag.save).not_to be_truthy
-    expect(tag.errors[:name].join).to match(/too long/)
   end
 
   context "tags with blank names are invalid" do

@@ -165,6 +165,12 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.admin_hidden_work_notification(work, user.id)
   end
 
+  def admin_deleted_work_notification
+    work = create(:work)
+    user = create(:user, :for_mailer_preview)
+    UserMailer.admin_deleted_work_notification(user, work)
+  end
+
   def delete_work_notification_self
     user = create(:user, :for_mailer_preview)
     work = create(:work, authors: [user.default_pseud])

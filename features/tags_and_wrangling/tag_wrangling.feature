@@ -365,3 +365,19 @@ Feature: Tag wrangling
       And I should see "Characters by fandom (2)"
     When I follow "Characters by fandom (2)"
     Then I should see "Mass Wrangle New/Unwrangled Tags"
+
+  Scenario: Subtags are listed in alphabetical order
+    Given a canonical freeform "Angst"
+      And a canonical freeform "Angstc"
+      And it is currently 1 second from now
+      And a canonical freeform "Angstb"
+      And it is currently 1 second from now
+      And a canonical freeform "Angsta"
+      And "Angst" is a metatag of the freeform "Angstc"
+      And it is currently 1 second from now
+      And "Angst" is a metatag of the freeform "Angstb"
+      And it is currently 1 second from now
+      And "Angst" is a metatag of the freeform "Angsta"
+    When I view the tag "Angst"
+    Then "Angsta" should appear before "Angstb"
+      And "Angstb" should appear before "Angstc"
