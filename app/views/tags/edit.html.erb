@@ -50,7 +50,7 @@
         <% types = logged_in_as_admin? ? Tag::TYPES : Tag::USER_DEFINED %>
         <% if @tag.can_change_type? %>
           <%= f.select :type,
-                options_for_select(types + %w(UnsortedTag),
+                options_for_select(types + %w[UnsortedTag],
                 @tag.type.to_s) %>
         <% else %>
           <strong><%= ts("%{tag_type}", tag_type: tag_type_label_name(@tag.type.tableize)) %></strong>

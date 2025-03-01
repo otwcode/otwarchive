@@ -249,9 +249,7 @@ class TagsController < ApplicationController
 
     # Limiting the conditions under which you can update the tag type
     types = logged_in_as_admin? ? Tag::TYPES : Tag::USER_DEFINED
-    if @tag.can_change_type? && (types + %w(UnsortedTag)).include?(new_tag_type)
-      @tag = @tag.recategorize(new_tag_type)
-    end
+    @tag = @tag.recategorize(new_tag_type) if @tag.can_change_type? && (types + %w[UnsortedTag]).include?(new_tag_type)
 
     unless params[:tag].empty?
       @tag.attributes = tag_params
