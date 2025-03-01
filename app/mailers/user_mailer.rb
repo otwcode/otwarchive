@@ -369,7 +369,7 @@ class UserMailer < ApplicationMailer
 
     mail(
       to: @user.email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work was hidden as spam"
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 
