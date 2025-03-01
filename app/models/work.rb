@@ -250,10 +250,7 @@ class Work < ApplicationRecord
 
   before_destroy :send_deleted_work_notification, prepend: true
   def send_deleted_work_notification
-    return unless self.posted?
-
-    users = self.pseuds.includes(:user).collect(&:user).uniq
-    return if users.blank?
+    return unless self.posted? && users.present?
 
     orphan_account = User.orphan_account
     users.each do |user|
