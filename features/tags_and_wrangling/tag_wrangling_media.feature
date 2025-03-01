@@ -134,6 +134,36 @@ Feature: Media tags
     Then I should not see "Not a medium" within "#header .primary .dropdown .menu"
       And I should not see "Not a medium" within "#main .splash .browse"
 
+  Scenario: Renaming a media tag as admin changes it in the Fandoms header menu
+    Given I have just created the canonical media tag "New Mediia Tag"
+      And I am logged out
+      # Make sure the old state gets cached
+      And I go to the homepage
+      Then I should see "New Mediia Tag" within "#header .primary .dropdown .menu"
+    When I am logged in as a "tag_wrangling" admin
+      And I edit the tag "New Mediia Tag"
+    And I fill in "Name" with "New Media Tag"
+      And I press "Save changes"
+    Then I should see "Tag was updated."
+      And I am logged out
+    When I go to the homepage
+    Then I should see "New Media Tag" within "#header .primary .dropdown .menu"
+
+  Scenario: Renaming a media tag as admin changes it in the Fandoms list on the homepage
+    Given I have just created the canonical media tag "New Mediia Tag"
+      And I am logged out
+      # Make sure the old state gets cached
+      And I go to the homepage
+    Then I should see "New Mediia Tag" within "#main .splash .browse"
+    When I am logged in as a "tag_wrangling" admin
+      And I edit the tag "New Mediia Tag"
+      And I fill in "Name" with "New Media Tag"
+      And I press "Save changes"
+    Then I should see "Tag was updated."
+      And I am logged out
+    When I go to the homepage
+    Then I should see "New Media Tag" within "#main .splash .browse"
+
   @javascript
   Scenario: Wranglers can add fandoms to new media tags
     Given I have just created the canonical media tag "New Media 5"
