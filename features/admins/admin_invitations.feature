@@ -349,7 +349,7 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "There are 2 requests in the queue."
     When I fill in "Number of people to invite" with "1"
       And press "Invite from queue"
-    Then I should see "There are 1 requests in the queue."
+    Then I should see "There is 1 request in the queue."
       And I should see "1 person from the invite queue is being invited"
       And 1 email should be delivered to "fred@bedrock.com"
 
