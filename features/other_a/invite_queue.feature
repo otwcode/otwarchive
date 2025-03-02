@@ -49,7 +49,7 @@ Feature: Invite queue management
     When I am on the homepage
       And all emails have been delivered
       And I follow "Get an Invitation"
-    Then I should see "We are sending out 10 invitations per day."
+    Then I should see "We are sending out 10 invitations per 12 hours."
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
     Then I should see "You've been added to our queue"
@@ -57,6 +57,7 @@ Feature: Invite queue management
     # check your place in the queue - invalid address
     When I check how long "testttt@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Request Status"
+      And I should see "We are sending out 10 invitations per 12 hours."
       And I should see "Sorry, we can't find the email address you entered."
       And I should not see "You are currently number"
 

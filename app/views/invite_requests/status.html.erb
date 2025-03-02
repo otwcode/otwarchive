@@ -6,7 +6,9 @@
 <p>
   <%= t(".waiting_list", count: InviteRequest.count) %>
   <% if AdminSetting.current.invite_from_queue_enabled? %>
-    <%= t(".send_rate", invites: AdminSetting.current.invite_from_queue_number) %>
+    <%= t(".invitation_send_rate",
+          queue_invitation_number: t(".invitation_number", count: AdminSetting.current.invite_from_queue_number),
+          queue_frequency: t(".frequency", count: AdminSetting.current.invite_from_queue_frequency)) %>
   <% end %>
 </p>
 <!--/descriptions-->

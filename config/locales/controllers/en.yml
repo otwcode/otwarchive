@@ -103,12 +103,20 @@ en:
     tos_faq:
       page_title: Terms of Service FAQ
   invite_requests:
+    create:
+      queue_disabled:
+        closed: New invitation requests are currently closed.
+        html: "%{closed_bold} For more information, please check the %{news_link}."
+        news: '"Invitations" tag on AO3 News'
+      success: You've been added to our queue! Yay! We estimate that you'll receive an invitation around %{date}. We strongly recommend that you add %{return_address} to your address book to prevent the invitation email from getting blocked as spam by your email provider.
     index:
       page_title: Invitation Requests
     resend:
       not_found: Could not find an invitation associated with that email.
       not_yet: You cannot resend an invitation that was sent in the last %{count} hours.
       success: Invitation resent to %{email}.
+    status:
+      browser_title: Invitation Request Status
   kudos:
     create:
       success: Thank you for leaving kudos!

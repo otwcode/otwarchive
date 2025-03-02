@@ -48,8 +48,9 @@ class InviteRequestsController < ApplicationController
   # POST /invite_requests
   def create
     unless AdminSetting.current.invite_from_queue_enabled?
-      flash[:error] = ts("<strong>New invitation requests are currently closed.</strong> For more information, please check the %{news}.",
-                         news: view_context.link_to("\"Invitations\" tag on AO3 News", admin_posts_path(tag: 143))).html_safe
+      flash[:error] = t("invite_requests.create.queue_disabled.html",
+                        closed_bold: helpers.tag.strong(t("invite_requests.create.queue_disabled.closed")),
+                        news_link: helpers.link_to(t("invite_requests.create.queue_disabled.news"), admin_posts_path(tag: 143)))
       redirect_to invite_requests_path
       return
     end
@@ -57,7 +58,9 @@ class InviteRequestsController < ApplicationController
     @invite_request = InviteRequest.new(invite_request_params)
     @invite_request.ip_address = request.remote_ip
     if @invite_request.save
-      flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider."
+      flash[:notice] = t("invite_requests.create.success",
+                         date: l(@invite_request.proposed_fill_time.to_date, format: :long),
+                         return_address: ArchiveConfig.RETURN_ADDRESS)
       redirect_to invite_requests_path
     else
       render action: :index
@@ -108,7 +111,7 @@ class InviteRequestsController < ApplicationController
   end
 
   def status
-    @page_subtitle = ts("Invitation Request Status")
+    @page_subtitle = t(".browser_title")
   end
 
   private
