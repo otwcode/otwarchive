@@ -55,11 +55,11 @@ class AdminSetting < ApplicationRecord
 
   # run hourly with the resque scheduler
   def self.check_queue
-    if self.invite_from_queue_enabled? && InviteRequest.count > 0 && Time.current >= self.invite_from_queue_at
-      new_time = Time.current + self.invite_from_queue_frequency.hours
-      self.first.update_attribute(:invite_from_queue_at, new_time)
-      InviteFromQueueJob.perform_now(count: invite_from_queue_number)
-    end
+    return unless self.invite_from_queue_enabled? && InviteRequest.count.positive? && Time.current >= self.invite_from_queue_at
+
+    new_time = Time.current + self.invite_from_queue_frequency.hours
+    self.first.update_attribute(:invite_from_queue_at, new_time)
+    InviteFromQueueJob.perform_now(count: invite_from_queue_number)
   end
 
   @queue = :admin
