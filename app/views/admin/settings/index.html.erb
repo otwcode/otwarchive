@@ -82,7 +82,7 @@
 <% if @admin_setting.invite_from_queue_enabled? %>
   <p>
     <%= t(".queue_status",
-          number: @admin_setting.invite_from_queue_number,
+          count: @admin_setting.invite_from_queue_number,
           time: l(@admin_setting.invite_from_queue_at, format: :long)) %>
   </p>
 

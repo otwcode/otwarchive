@@ -57,7 +57,6 @@ Feature: Invite queue management
     # check your place in the queue - invalid address
     When I check how long "testttt@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Request Status"
-      And I should see "We are sending out 10 invitations per 12 hours."
       And I should see "Sorry, we can't find the email address you entered."
       And I should not see "You are currently number"
 
@@ -73,6 +72,7 @@ Feature: Invite queue management
     Then I should not see "Request an invitation"
       And I should not see "invite_request_email"
       And I should see "New invitation requests are currently closed."
+      And I should see "There are 0 people remaining on the waiting list."
       And I should not see "Add me to the list"
 
   Scenario: Can still check status when queue is off

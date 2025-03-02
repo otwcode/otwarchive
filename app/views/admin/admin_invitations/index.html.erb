@@ -10,52 +10,52 @@
 </ul>
 <!--/subnav-->
 <!--main content-->
-<%= form_tag  url_for(:controller => 'admin/admin_invitations', :action => :create) do |f| %>
+<%= form_tag url_for(controller: "admin/admin_invitations", action: :create) do %>
   <fieldset class="simple">
-    <h3 class="heading">Send to email</h3>
-    <p>Send an invite code to the following email address:
-      <%= text_field_tag "invitation[invitee_email]", (@invitation.try(:invitee_email) || ""), :title => ts("invite by email") %>
-      <span class="submit actions"><%= submit_tag ts('Invite user')  %></span>
+    <h3 class="heading"><%= t(".send_to_email.title") %></h3>
+    <p><%= t(".send_to_email.send_code_to_email") %>
+      <%= text_field_tag "invitation[invitee_email]", (@invitation.try(:invitee_email) || "") %>
+      <span class="submit actions"><%= submit_tag t(".send_to_email.submit") %></span>
     </p>
   </fieldset>
 <% end %>
 
-<%= form_tag url_for(:controller => 'admin/admin_invitations', :action => 'invite_from_queue') do %>
+<%= form_tag url_for(controller: "admin/admin_invitations", action: "invite_from_queue") do %>
   <fieldset class="simple">
-    <h3 class="heading">Send invite codes to people in our <%= link_to 'invitations queue', invite_requests_path %></h3>
-    <p>There are <%= InviteRequest.count %> requests in the queue.</p>
+    <h3 class="heading"><%= t(".send_to_queue.title_html", invitations_queue_link: link_to(t(".send_to_queue.invitations_queue"), invite_requests_path)) %></h3>
+    <p><%= t(".send_to_queue.current_request_count", count: InviteRequest.count) %></p>
     <p>
-      <%= label_tag "invitation[invite_from_queue]", ts('Number of people to invite') %>: <%= text_field_tag "invitation[invite_from_queue]" %>
-      <span class="submit actions"><%= submit_tag ts('Invite from queue')  %></span>
+      <%= label_tag "invitation[invite_from_queue]", t(".send_to_queue.invite_number") %> <%= text_field_tag "invitation[invite_from_queue]" %>
+      <span class="submit actions"><%= submit_tag t(".send_to_queue.submit") %></span>
     </p>
   </fieldset>
 <% end %>
 
-<%= form_tag  url_for(:controller => 'admin/admin_invitations', :action => 'grant_invites_to_users') do  %>
+<%= form_tag url_for(controller: "admin/admin_invitations", action: "grant_invites_to_users") do %>
   <fieldset>
-    <h3 class="heading"><%=h 'Give invite codes to current users' %></h3>
+    <h3 class="heading"><%= t(".grant_to_users.title") %></h3>
     <dl>
-      <dt><%= label_tag "invitation[number_of_invites]", ts('Number of invitations') %>:</dt>
+      <dt><%= label_tag "invitation[number_of_invites]", t(".grant_to_users.amount") %></dt>
       <dd><%= text_field_tag "invitation[number_of_invites]" %></dd>
-      <dt><%= label_tag "invitation[user_group]", ts('Users') %>:</dt>
-      <dd><%= select_tag "invitation[user_group]", "<option>All</option><option>With no unused invitations</option>".html_safe  %></dd>
-      <dt class="landmark">Submit</dt>
-      <dd class="submit actions"><%= submit_tag "Generate invitations" %></dd>
+      <dt><%= label_tag "invitation[user_group]", t(".grant_to_users.user_type") %></dt>
+      <dd><%= select_tag "invitation[user_group]", "<option>All</option><option>With no unused invitations</option>".html_safe %></dd>
+      <dt class="landmark"><%= t(".grant_to_users.submit_landmark") %></dt>
+      <dd class="submit actions"><%= submit_tag t(".grant_to_users.submit") %></dd>
   </fieldset>
 <% end %>
 
-<%= form_tag  url_for(:controller => 'admin/admin_invitations', :action => 'find'), :method => :get do  %>
+<%= form_tag url_for(controller: "admin/admin_invitations", action: "find"), method: :get do %>
   <fieldset>
-    <h3 class="heading"><%=h 'Track invitations' %></h3>
+    <h3 class="heading"><%= t(".track_invitations.title") %></h3>
     <dl>
-      <dt><%= label_tag "invitation[user_name]", ts('Enter a user name') %>:</dt>
-      <dd><%= text_field_tag "invitation[user_name]"  %></dd>
-      <dt><%= label_tag "invitation[token]", ts('Enter an invite token') %>:</dt>
-      <dd><%= text_field_tag "invitation[token]"  %></dd>
-      <dt><%= label_tag "track_invitation_invitee_email", t(".email") %>:</dt>
+      <dt><%= label_tag "invitation[user_name]", t(".track_invitations.user_name") %></dt>
+      <dd><%= text_field_tag "invitation[user_name]" %></dd>
+      <dt><%= label_tag "invitation[token]", t(".track_invitations.invite_token") %></dt>
+      <dd><%= text_field_tag "invitation[token]" %></dd>
+      <dt><%= label_tag "track_invitation_invitee_email", t(".track_invitations.email") %></dt>
       <dd><%= text_field_tag "invitation[invitee_email]", nil, id: "track_invitation_invitee_email" %></dd>
-      <dt class="landmark">Submit</dt>
-      <dd class="submit actions"><%= submit_tag "Go" %></dd>
+      <dt class="landmark"><%= t(".track_invitations.submit_landmark") %></dt>
+      <dd class="submit actions"><%= submit_tag t(".track_invitations.submit") %></dd>
     </dl>
   </fieldset>
 <% end %>
