@@ -11,7 +11,7 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
     when /the media page/
-      media_path
+      media_index_path
     when /^the search bookmarks page$/i
       step %{all indexing jobs have been run}
       search_bookmarks_path
@@ -278,7 +278,7 @@ module NavigationHelpers
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
     when /^the "(.*)" fandoms page$/i
-      medium_fandoms_path(Media.find_by(name: Regexp.last_match(1)))
+      media_fandoms_path(Media.find_by(name: Regexp.last_match(1)))
     when /^the "(.*)" tag page$/i
       tag_path(Tag.find_by_name($1))
     when /^the '(.*)' tag edit page$/i

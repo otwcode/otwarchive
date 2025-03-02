@@ -181,10 +181,10 @@ class TagsController < ApplicationController
       return
     end
 
-    raise "Redshirt: Attempted to constantize invalid class initialize create #{type.classify}" unless Tag::TYPES.include?(type.classify) || type == "Media"
+    raise "Redshirt: Attempted to constantize invalid class initialize create #{type.classify}" unless Tag::TYPES.include?(type.classify)
 
     model = begin
-              type == "Media" ? type.constantize : type.classify.constantize
+              type.classify.constantize
             rescue StandardError
               nil
             end
@@ -248,7 +248,7 @@ class TagsController < ApplicationController
     new_tag_type = params[:tag].delete(:type)
 
     # Limiting the conditions under which you can update the tag type
-    types = logged_in_as_admin? ? Tag::TYPES : Tag::USER_DEFINED
+    types = logged_in_as_admin? ? (Tag::USER_DEFINED + %w[Media]) : Tag::USER_DEFINED
     @tag = @tag.recategorize(new_tag_type) if @tag.can_change_type? && (types + %w[UnsortedTag]).include?(new_tag_type)
 
     unless params[:tag].empty?

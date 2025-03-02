@@ -102,10 +102,6 @@ Given /^a canonical relationship "([^\"]*)" in fandom "([^\"]*)"$/ do |relations
   rel.add_association(fand)
 end
 
-Given "the non(-)canonical media {string}" do |tag_name|
-  Media.find_or_create_by_name(tag_name)
-end
-
 Given /^a (non-?canonical|canonical) (\w+) "([^\"]*)"$/ do |canonical_status, tag_type, tag_name|
   t = tag_type.classify.constantize.find_or_create_by_name(tag_name)
   t.canonical = canonical_status == "canonical"
@@ -230,16 +226,16 @@ Given "a zero width space tag exists" do
   blank_tag.save!(validate: false)
 end
 
-Given "I have just created the canonical media tag {string}" do |name|
+Given "I create the canonical media tag {string}" do |name|
   step %{I am logged in as a "tag_wrangling" admin}
   visit(new_tag_path)
   fill_in("Name", with: name)
-  choose("Medium")
+  choose("Media")
   check("Canonical")
   click_button("Create Tag")
 end
 
-Given "I have just recategorized the {string} fandom as a {string} tag" do |name, tag_type|
+Given "I recategorize the {string} fandom as a {string} tag" do |name, tag_type|
   step %{I am logged in as a "tag_wrangling" admin}
   visit(edit_tag_path(Fandom.create(name: name)))
   select(tag_type, from: "tag_type")

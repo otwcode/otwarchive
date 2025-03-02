@@ -47,7 +47,7 @@
 
       <dt><%= ts("Category") %></dt>
       <dd>
-        <% types = logged_in_as_admin? ? Tag::TYPES : Tag::USER_DEFINED %>
+        <% types = logged_in_as_admin? ? (Tag::USER_DEFINED + %w[Media]) : Tag::USER_DEFINED %>
         <% if @tag.can_change_type? %>
           <%= f.select :type,
                 options_for_select(types + %w[UnsortedTag],

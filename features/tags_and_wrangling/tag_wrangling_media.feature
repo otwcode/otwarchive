@@ -5,7 +5,7 @@ Feature: Media tags
   other tags to media tags
     Given I am logged in as a tag wrangler
     When I go to the new tag page
-    Then I should not see "Medium" within "#new_tag"
+    Then I should not see "Media" within "#new_tag"
     When I fill in "Name" with "Not A Media Tag"
       And I choose "Fandom"
       And I press "Create Tag"
@@ -18,7 +18,7 @@ Feature: Media tags
     Given I am logged in as a "tag_wrangling" admin
     When I go to the new tag page
       And I fill in "Name" with "New Media 1"
-      And I choose "Medium"
+      And I choose "Media"
       And I press "Create Tag"
     Then I should see "Tag was successfully created."
       And "Media" should be selected within "tag_type"
@@ -35,7 +35,7 @@ Feature: Media tags
     When I go to the new tag page
       And I fill in "Name" with "New Media 2"
       And I check "Canonical"
-      And I choose "Medium"
+      And I choose "Media"
       And I press "Create Tag"
     Then I should see "Tag was successfully created."
       And the "New Media 2" tag should be canonical
@@ -57,21 +57,21 @@ Feature: Media tags
   Scenario: Admins can recategorize tags into other types
     Given I am logged in as a "tag_wrangling" admin
     When I go to the new tag page
-      And I fill in "Name" with "Not A Medium Anymore"
-      And I choose "Medium"
+      And I fill in "Name" with "Not A Media Anymore"
+      And I choose "Media"
       And I press "Create Tag"
     Then I should see "Tag was successfully created."
       And "Media" should be selected within "tag_type"
     When I select "Relationship" from "tag_type"
       And I press "Save changes"
     Then I should see "Tag was updated."
-      And the "Not A Medium Anymore" tag should be a "Relationship" tag
+      And the "Not A Media Anymore" tag should be a "Relationship" tag
 
   Scenario: New media tags are added to the Fandoms header menu
     # Make sure the old state gets cached
     When I go to the homepage
     Then I should not see "New Media 3" within "#header .primary .dropdown .menu"
-    When I have just created the canonical media tag "New Media 3"
+    When I create the canonical media tag "New Media 3"
       And I am logged out
     When I go to the homepage
     Then I should see "New Media 3" within "#header .primary .dropdown .menu"
@@ -83,7 +83,7 @@ Feature: Media tags
     # Make sure the old state gets cached
     Given I go to the homepage
     Then I should not see "New Media 3b" within "#main .splash .browse"
-    When I have just created the canonical media tag "New Media 3b"
+    When I create the canonical media tag "New Media 3b"
       And I am logged out
     When I go to the homepage
     Then I should see "New Media 3b" within "#main .splash .browse"
@@ -92,7 +92,7 @@ Feature: Media tags
       And I should see "No fandoms found"
 
   Scenario: New media tags are added to the Fandoms page
-    Given I have just created the canonical media tag "New Media 4"
+    Given I create the canonical media tag "New Media 4"
     When I go to the fandoms page
     Then I should see "New Media 4" within "#main .media"
     When I follow "New Media 4" within "#main .media"
@@ -102,23 +102,23 @@ Feature: Media tags
   Scenario: Recategorizing a tag as media tag adds it to the Fandoms header menu
     # Make sure the old state gets cached
     When I go to the homepage
-    Then I should not see "Yet Another Medium" within "#header .primary .dropdown .menu"
-    When I have just recategorized the "Yet Another Medium" fandom as a "Media" tag
+    Then I should not see "Yet Another Media" within "#header .primary .dropdown .menu"
+    When I recategorize the "Yet Another Media" fandom as a "Media" tag
       And I am logged out
     When I go to the homepage
-    Then I should see "Yet Another Medium" within "#header .primary .dropdown .menu"
+    Then I should see "Yet Another Media" within "#header .primary .dropdown .menu"
 
   Scenario: Recategorizing a tag as media tag adds it to the Fandoms list on the homepage
     # Make sure the old state gets cached
     When I go to the homepage
-    Then I should not see "Yet Another Medium" within "#main .splash .browse"
-    When I have just recategorized the "Yet Another Medium" fandom as a "Media" tag
+    Then I should not see "Yet Another Media" within "#main .splash .browse"
+    When I recategorize the "Yet Another Media" fandom as a "Media" tag
       And I am logged out
     When I go to the homepage
-    Then I should see "Yet Another Medium" within "#main .splash .browse"
+    Then I should see "Yet Another Media" within "#main .splash .browse"
 
   Scenario: Recategorizing a media tag removes it from to the Fandoms header menu and the Fandoms list on the homepage
-    Given the non-canonical media "Not a medium"
+    Given a non-canonical media "Not a medium"
       # Make sure the old state gets cached
       And I go to the homepage
     Then I should see "Not a medium" within "#header .primary .dropdown .menu"
@@ -135,7 +135,7 @@ Feature: Media tags
       And I should not see "Not a medium" within "#main .splash .browse"
 
   Scenario: Renaming a media tag as admin changes it in the Fandoms header menu
-    Given I have just created the canonical media tag "New Mediia Tag"
+    Given I create the canonical media tag "New Mediia Tag"
       And I am logged out
       # Make sure the old state gets cached
       And I go to the homepage
@@ -150,7 +150,7 @@ Feature: Media tags
     Then I should see "New Media Tag" within "#header .primary .dropdown .menu"
 
   Scenario: Renaming a media tag as admin changes it in the Fandoms list on the homepage
-    Given I have just created the canonical media tag "New Mediia Tag"
+    Given I create the canonical media tag "New Mediia Tag"
       And I am logged out
       # Make sure the old state gets cached
       And I go to the homepage
@@ -166,7 +166,7 @@ Feature: Media tags
 
   @javascript
   Scenario: Wranglers can add fandoms to new media tags
-    Given I have just created the canonical media tag "New Media 5"
+    Given I create the canonical media tag "New Media 5"
       And a canonical fandom "Great Fandom"
       And I am logged in as a tag wrangler
       And I post the work "Some Work" with fandom "Great Fandom"
@@ -179,7 +179,7 @@ Feature: Media tags
 
   @javascript
   Scenario: Wranglers can add fandoms to new media tags on the medium's tag page
-    Given I have just created the canonical media tag "New Media 6"
+    Given I create the canonical media tag "New Media 6"
       And a canonical fandom "Great Fandom"
      And I am logged in as a tag wrangler
       And I post the work "Some Work" with fandom "Great Fandom"
