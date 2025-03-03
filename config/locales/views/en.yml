@@ -462,6 +462,11 @@ en:
           comments_on_works: delete or hide comments they previously left on your works; you can delete these individually
           hide_works: hide their works or bookmarks from you
           intro: 'Blocking a user will not:'
+  bookmarks:
+    index:
+      advanced_search: try our advanced search
+      choose_fandom: choose a fandom
+      recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
   challenge_signups:
     signup_form:
       notice:
@@ -611,6 +616,9 @@ en:
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
+  fandoms:
+    index:
+      page_heading: Fandoms
   feedbacks:
     new:
       abuse:
@@ -1515,6 +1523,10 @@ en:
       read_and_understood: I have read & understood the 2024 Terms of Service, including the Content Policy and Privacy Policy.
       summary_html: On the Archive of Our Own (AO3), users can create works, bookmarks, comments, tags, and other %{content_link}. Any information you publish on AO3 may be accessible by the public, AO3 users, and/or AO3 personnel. Be mindful when sharing personal information, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites.
       tos: Terms of Service
+  media:
+    index:
+      all: All %{media_type}...
+      page_heading: Fandoms
   menu:
     menu_about:
       about_us: About Us

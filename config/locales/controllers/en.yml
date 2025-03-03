@@ -93,6 +93,9 @@ en:
   external_works:
     update:
       successfully_updated: External work was successfully updated.
+  fandoms:
+    index:
+      choose_media: Please choose a media category to start browsing fandoms.
   home:
     content:
       page_title: Content Policy

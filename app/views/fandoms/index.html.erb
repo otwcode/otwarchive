@@ -1,11 +1,11 @@
 <!--SEARCHBROWSE Descriptive page name, messages and instructions-->
 <h2 class="heading">
   <% if @collection %>
-    <%= link_to(@collection.title, @collection) %> > <%= ts("Fandoms") %>
+    <%= link_to(@collection.title, @collection) %> > <%= t(".page_heading") %>
   <% elsif @medium %>
-    <%= link_to ts("Fandoms"), media_index_path %> > <%= @medium.name %>
+    <%= link_to t(".page_heading"), media_index_path %> > <%= @medium.name %>
   <% else %>
-    <%= link_to ts("Fandoms"), media_index_path %>
+    <%= link_to t(".page_heading"), media_index_path %>
   <% end %>
 </h2>
 <p>You can search this page by pressing <kbd>ctrl F</kbd> / <kbd>cmd F</kbd> and typing in what you are looking for.</p>
@@ -14,7 +14,7 @@
   <%= form_tag "", method: :get, class: "filter", id: "media-filter" do %>
     <fieldset>
       <p title="<%=ts("Choose media type") %>">
-        <%= select_tag :media_id, options_for_select(["All Media Types"] + @media.map{|m| m.name}, params[:media_id]) %>
+        <%= select_tag :media_id, options_for_select(["All Media Types"] + @media.map(&:name), params[:media_id]) %>
         <%= submit_tag ts("Show") %>
       </p>
     </fieldset>

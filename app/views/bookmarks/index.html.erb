@@ -46,7 +46,7 @@
 <% end %>
 
 <% unless @owner.present? || @bookmarkable.present? %>
-  <p><%= ts("These are some of the latest bookmarks created on the Archive. To find more bookmarks, #{link_to 'choose a fandom', media_index_path} or #{link_to 'try our advanced search', search_bookmarks_path}.").html_safe %>
+  <p><%= t(".recent_bookmarks_html", choose_fandom_link: link_to(t(".choose_fandom"), media_index_path), advanced_search_link: link_to(t(".advanced_search"), search_bookmarks_path)) %>
 <% end %>
 
 <%== pagy_nav @pagy %>

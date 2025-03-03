@@ -9,21 +9,18 @@ class FandomsController < ApplicationController
       @counts = SearchCounts.fandom_ids_for_collection(@collection)
       @fandoms = (@medium ? @medium.fandoms : Fandom.all).where(id: @counts.keys).by_name
     elsif params[:media_id]
-      if @medium = Media.find_by_name(params[:media_id])
-         @page_subtitle = @medium.name
-        if @medium == Media.uncategorized
-          @fandoms = @medium.fandoms.in_use.by_name
-        else
-          @fandoms = @medium.fandoms.canonical.by_name.with_count
-        end
-      else
-        raise ActiveRecord::RecordNotFound, "Couldn't find media category named '#{params[:media_id]}'"
-      end
+      @medium = Media.find_by_name!(params[:media_id]) # rubocop:disable Rails/DynamicFindBy
+      @page_subtitle = @medium.name
+      @fandoms = if @medium == Media.uncategorized
+                   @medium.fandoms.in_use.by_name
+                 else
+                   @medium.fandoms.canonical.by_name.with_count
+                 end
     else
-      redirect_to media_index_path(notice: "Please choose a media category to start browsing fandoms.")
-      return
+      flash[:notice] = t(".choose_media")
+      redirect_to media_index_path and return
     end
-    @fandoms_by_letter = @fandoms.group_by {|f| f.sortable_name[0].upcase}
+    @fandoms_by_letter = @fandoms.group_by { |f| f.sortable_name[0].upcase }
   end
 
   def show

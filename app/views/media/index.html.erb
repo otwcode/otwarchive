@@ -1,5 +1,5 @@
 <!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
-<h2 class="heading"><%= ts('Fandoms') %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
 <!--/descriptions-->
 
 <!--main content-->
@@ -20,7 +20,7 @@
     </ol>
 
     <% unless @fandom_listing[medium].size < 5 %>
-    <p class="actions" role="navigation"><%= link_to ts("All %{media_type}...", :media_type => medium.name), media_fandoms_path(medium) %></p>
+    <p class="actions" role="navigation"><%= link_to t(".all", media_type: medium.name), media_fandoms_path(medium) %></p>
     <% end %>
   </li>
 <% end %>
