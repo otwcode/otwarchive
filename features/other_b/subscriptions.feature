@@ -261,3 +261,35 @@
     And I go to my subscriptions page
     And I press "Unsubscribe from I am <strong>er Than Yesterday & Other Lies"
   Then I should see "You have successfully unsubscribed from I am <strong>er Than Yesterday & Other Lies"
+
+Scenario: delete all subscriptions
+
+  When I am logged in as "second_user"
+    And "second_user" subscribes to author "third_user"
+    And "second_user" subscribes to work "Awesome Story"
+    And "second_user" subscribes to series "Awesome Series"
+  When I am on my subscriptions page
+    Then I should see "My Subscriptions"
+    And I should see "Awesome Series (Series)"
+    And I should see "third_user"
+    And I should see "Awesome Story (Work)"
+  When I follow "Delete All Subscriptions"
+    Then I should see "Are you sure you want to delete"
+  When I press "Yes, Delete All Subscriptions"
+    Then I should see "Your subscriptions have been deleted"
+    And I should not see "Awesome Series (Series)"
+    And I should not see "third_user"
+    And I should not see "Awesome Story (Work)"
+
+Scenario: subscriptions are not deleted without confirmation
+
+  When I am logged in as "second_user"
+    And "second_user" subscribes to work "Awesome Story"
+  When I go to my subscriptions page
+    Then I should see "My Subscriptions"
+    And I should see "Awesome Story (Work)"
+  When I follow "Delete All Subscriptions"
+    Then I should see "Are you sure you want to delete"
+  When I go to my subscriptions page
+    Then I should see "My Subscriptions"
+    And I should see "Awesome Story (Work)"
