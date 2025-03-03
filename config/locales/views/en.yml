@@ -86,35 +86,38 @@ en:
         token: Enter an invite token
         user_name: Enter a user name
       index:
-        grant_to_users:
-          amount: 'Number of invitations:'
-          submit: Generate invitations
-          submit_landmark: Submit
-          title: Give invite codes to current users
-          user_type: 'Users:'
+        find:
+          email: All or part of an email address
+          heading: Track invitations
+          invite_token: Invite token
+          landmark_submit: Submit
+          search: Search
+          username: Username
+        grant_invites:
+          all: All
+          generate_invitations: Generate invitations
+          heading: Give invite codes to current users
+          landmark_submit: Submit
+          number_of_invitations: Number of invitations
+          users: Users
+          with_no_unused: With no unused invitations
+        invite_from_queue:
+          heading_html: Send invite codes to people in our %{invitations_queue_link}
+          invitations_queue: Invitations queue
+          invite_from_queue: Invite from queue
+          number_to_invite: Number of people to invite
+          requests_in_queue:
+            one: There is %{count} request in the queue.
+            other: There are %{count} requests in the queue.
         navigation:
           queue: Manage Queue
           requests: Manage Requests
         page_heading: Invite New Users
         send_to_email:
-          send_code_to_email: 'Send an invite code to the following email address:'
-          submit: Invite user
-          title: Send to email
-        send_to_queue:
-          current_request_count:
-            one: There is %{count} request in the queue.
-            other: There are %{count} requests in the queue.
-          invitations_queue: invitations queue
-          invite_number: 'Number of people to invite:'
-          submit: Invite from queue
-          title_html: Send invite codes to people in our %{invitations_queue_link}
-        track_invitations:
-          email: 'Enter all or part of an email address:'
-          invite_token: 'Enter an invite token:'
-          submit: Go
-          submit_landmark: Submit
-          title: Track invitations
-          user_name: 'Enter a user name:'
+          description: Email address
+          heading: Send to Email
+          invite_by_email_title: Invite by email
+          invite_user: Invite user
     admin_nav:
       ao3_news: AO3 News
       archive_faq: Archive FAQ
