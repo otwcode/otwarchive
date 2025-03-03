@@ -132,7 +132,7 @@ class AbuseReport < ApplicationRecord
     work = Work.find_by(id: work_id)
     return "deletedwork" unless work
 
-    ids = work.pseuds.pluck(:user_id).push(*work.original_creators.pluck(:user_id)).uniq.sort!
+    ids = work.pseuds.pluck(:user_id).push(*work.original_creators.pluck(:user_id)).uniq.sort
     ids.prepend("orphanedwork") if ids.delete(User.orphan_account.id)
     ids.join(", ")
   end
