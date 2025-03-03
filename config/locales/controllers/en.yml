@@ -92,9 +92,9 @@ en:
       success: Comment successfully unhidden!
   errors:
     timeout_error:
-      subtitle: "Timeout Error"
+      browser_title: "Timeout Error"
     auth_error:
-      subtitle: "Authentication Error"
+      browser_title: "Auth Error"
   external_works:
     update:
       successfully_updated: External work was successfully updated.

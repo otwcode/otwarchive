@@ -6,11 +6,11 @@ class ErrorsController < ApplicationController
   end
 
   def auth_error
-    @page_subtitle = t(".subtitle")
+    @page_subtitle = t(".browser_title")
   end
 
   def timeout_error
-    @page_subtitle = t(".subtitle")
-    render "timeout_error", status: 504, formats: :html
+    @page_subtitle = t(".browser_title")
+    render "timeout_error", status: :gateway_timeout
   end
 end
