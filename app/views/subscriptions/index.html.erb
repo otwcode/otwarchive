@@ -31,6 +31,10 @@
           user_subscriptions_path(@user, type: "works"),
           @subscribable_type == "works") %>
   </li>
+  <li>
+  <%= link_to ts('Delete All Subscriptions'),
+          confirm_delete_all_user_subscriptions_path(@user) %>
+  </li>
 </ul>
 <!--/subnav-->
 

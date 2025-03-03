@@ -61,6 +61,21 @@ class SubscriptionsController < ApplicationController
     end
   end
 
+  def confirm_delete_all
+  end
+
+  def delete_all
+    @user.subscriptions.each do |subscription|
+      begin
+        subscription.destroy
+      rescue
+        @errors << ts("There were problems deleting your subscriptions.")
+      end
+    end
+    flash[:notice] = ts("Your subscriptions have been deleted.")
+    redirect_to user_subscriptions_path(current_user)
+  end
+
   private
 
   def subscription_params

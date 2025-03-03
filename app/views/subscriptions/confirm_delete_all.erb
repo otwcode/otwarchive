@@ -1,0 +1,13 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= ts("Delete All Subscriptions") %></h2>
+
+<!--main content-->
+<%= form_for(@user, :url => delete_all_user_subscriptions_path(@user), :html => {:method => :post, :class => "simple destroy"}) do |f| %>
+  <p class="caution notice">
+    <%= ts("Are you sure you want to <strong><em>delete</em></strong> all your Subscriptions? <strong>This cannot be undone</strong>.").html_safe %>
+  </p>
+  <p class="actions">
+    <%= f.submit ts("Yes, Delete All Subscriptions") %>
+  </p>
+<% end %>
+<!--/content-->
