@@ -73,14 +73,19 @@ class SubscriptionsController < ApplicationController
       @subscriptions = @user.subscriptions
     end
 
+    success = true
     @subscriptions.each do |subscription|
-      begin
-        subscription.destroy
-      rescue
-        @errors << t(".error")
-      end
+      subscription.destroy
+    rescue StandardError
+      success = false
     end
-    flash[:notice] = t(".success")
+
+    if success
+      flash[:notice] = t(".success")
+    else
+      flash[:error] = t(".error")
+    end
+
     redirect_to user_subscriptions_path(current_user, type: @subscribable_type)
   end
 
