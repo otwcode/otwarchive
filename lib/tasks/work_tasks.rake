@@ -52,4 +52,16 @@ namespace :work do
     end
     puts && STDOUT.flush
   end
+
+  desc "Migrate imported_url into a dedicated table"
+  task(:migrate_imported_urls => :environment) do
+    Work
+      .left_joins(:work_url)
+      .where('imported_from_url IS NOT NULL AND work_urls.id IS NULL')
+      .find_in_batches do |batch|
+        batch.each do |work|
+          work.import_url!(work.imported_from_url)
+        end
+      end
+  end
 end

@@ -164,3 +164,28 @@ describe "rake work:reset_word_counts" do
     end
   end
 end
+
+describe "rake work:migrate_imported_urls" do
+  it "creates missing entries in the new table" do
+    work = create(:work, imported_from_url: "www.someplace.org")
+
+    expect(work.work_url).to be_nil
+
+    subject.invoke
+
+    work.reload
+
+    expect(work.work_url.original).to eq("www.someplace.org")
+  end
+
+  it "does nothing if an entry already exists (even if there's a mismatch)" do
+    work = create(:work, imported_from_url: "www.someplace.org")
+    work.import_url!("someotherplace.com")
+
+    subject.invoke
+
+    work.reload
+
+    expect(work.work_url.original).to eq("someotherplace.com")
+  end
+end
