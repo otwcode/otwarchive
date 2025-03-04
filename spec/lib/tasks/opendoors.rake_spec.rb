@@ -18,7 +18,7 @@ describe 'rake opendoors:import_url_mapping' do
       expect(Work.find(work_with_no_url.id).work_url.original).to eq(original_url2)
       expect(Work.find(work_with_no_url.id).work_url.original).to eq(original_url2)
 
-      # TODO AO3-6591
+      # TODO: AO3-6591
       expect(Work.find(work_with_temp_url.id).imported_from_url).to eq(original_url)
       expect(Work.find(work_with_temp_url.id).imported_from_url).to eq(original_url)
     end

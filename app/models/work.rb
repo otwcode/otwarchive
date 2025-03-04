@@ -303,7 +303,8 @@ class Work < ApplicationRecord
     series.each(&:expire_caches)
 
     Work.expire_work_blurb_version(id)
-    WorkUrl.flush_find_by_url_cache unless work_url.nil? && imported_from_url.blank? #TODO AO3-6591
+    # TODO: AO3-6591
+    WorkUrl.flush_find_by_url_cache unless work_url.nil? && imported_from_url.blank?
   end
 
   def update_pseud_index
