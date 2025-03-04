@@ -1666,6 +1666,7 @@ en:
         series: Series Subscriptions
         user: User Subscriptions
         work: Work Subscriptions
+        delete_all: Delete All Subscriptions
       page_heading:
         all: My Subscriptions
         series: My Series Subscriptions
@@ -1673,6 +1674,18 @@ en:
         works: My Work Subscriptions
       series: "(Series)"
       work: "(Work)"
+    confirm_delete_all:
+      caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? <strong>This cannot be undone</strong>.
+      page_heading:
+        all: Delete All Subscriptions
+        series: Delete All Series Subscriptions
+        users: Delete All User Subscriptions
+        works: Delete All Work Subscriptions
+      submit:
+        all: Yes, Delete All Subscriptions
+        series: Yes, Delete All Series Subscriptions
+        users: Yes, Delete All User Subscriptions
+        works: Yes, Delete All Work Subscriptions
   tag_wranglers:
     show:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."

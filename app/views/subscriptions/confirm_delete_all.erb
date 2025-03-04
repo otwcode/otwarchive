@@ -1,13 +1,23 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Delete All Subscriptions") %></h2>
+<h2 class="heading">
+  <% if @subscribable_type %>
+    <%= t(".page_heading.#{@subscribable_type}") %>
+  <% else %>
+    <%= t(".page_heading.all") %>
+  <% end %>
+</h2>
 
 <!--main content-->
-<%= form_for(@user, :url => delete_all_user_subscriptions_path(@user), :html => {:method => :post, :class => "simple destroy"}) do |f| %>
+<%= form_for(@user, :url => delete_all_user_subscriptions_path(@user, type: @subscribable_type), :html => {:method => :post, :class => "simple destroy"}) do |f| %>
   <p class="caution notice">
-    <%= ts("Are you sure you want to <strong><em>delete</em></strong> all your Subscriptions? <strong>This cannot be undone</strong>.").html_safe %>
+    <%= t(".caution_html").html_safe %>
   </p>
   <p class="actions">
-    <%= f.submit ts("Yes, Delete All Subscriptions") %>
+    <% if @subscribable_type %>
+      <%= f.submit t(".submit.#{@subscribable_type}") %>
+    <% else %>
+      <%= f.submit t(".submit.all") %>
+    <% end %>
   </p>
 <% end %>
 <!--/content-->

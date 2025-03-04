@@ -62,18 +62,26 @@ class SubscriptionsController < ApplicationController
   end
 
   def confirm_delete_all
+    @subscribable_type = params[:type] if params[:type] && Subscription::VALID_SUBSCRIBABLES.include?(params[:type].singularize.titleize)
   end
 
   def delete_all
-    @user.subscriptions.each do |subscription|
+    if params[:type] && Subscription::VALID_SUBSCRIBABLES.include?(params[:type].singularize.titleize)
+      @subscribable_type = params[:type]
+      @subscriptions = @user.subscriptions.where(subscribable_type: @subscribable_type.classify)
+    else
+      @subscriptions = @user.subscriptions
+    end
+
+    @subscriptions.each do |subscription|
       begin
         subscription.destroy
       rescue
-        @errors << ts("There were problems deleting your subscriptions.")
+        @errors << t(".error")
       end
     end
-    flash[:notice] = ts("Your subscriptions have been deleted.")
-    redirect_to user_subscriptions_path(current_user)
+    flash[:notice] = t(".success")
+    redirect_to user_subscriptions_path(current_user, type: @subscribable_type)
   end
 
   private
