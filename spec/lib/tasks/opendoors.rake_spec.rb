@@ -27,8 +27,7 @@ describe 'rake opendoors:import_url_mapping' do
     end
   end
 
-  context "UrlUpdater" do
-    let(:url_updater) { UrlUpdater.new }
+  context "update_work_from_csv" do
     let(:work_with_other_url) { create(:work, imported_from_url: "http://another/1") }
 
     it "returns an error if the work is not found" do
@@ -37,7 +36,7 @@ describe 'rake opendoors:import_url_mapping' do
         "Original URL" => "http://another/2",
         "AO3 id" => 7777773
       }
-      result = url_updater.update_work(row)
+      result = Opendoors.update_work_from_csv(row)
       expect(result).to eq("7777773\twas not changed: Couldn't find Work with 'id'=7777773")
     end
     
@@ -47,7 +46,7 @@ describe 'rake opendoors:import_url_mapping' do
         "Original URL" => "http://another/2",
         "AO3 id" => work_with_other_url.id
       }
-      result = url_updater.update_work(row)
+      result = Opendoors.update_work_from_csv(row)
       expect(result).to match("\\d+\twas not changed: its import url is http://another/1")
     end
     
@@ -57,7 +56,7 @@ describe 'rake opendoors:import_url_mapping' do
         "Original URL" => "http://another/2",
         "AO3 id" => work_with_no_url.id
       }
-      result = url_updater.update_work(row)
+      result = Opendoors.update_work_from_csv(row)
       expect(result).to match("\\d+\twas updated: its import url is now http://another/2")
     end
     
@@ -67,7 +66,7 @@ describe 'rake opendoors:import_url_mapping' do
         "Original URL" => "http://another/2",
         "AO3 id" => work_with_temp_url.id
       }
-      result = url_updater.update_work(row)
+      result = Opendoors.update_work_from_csv(row)
       expect(result).to match("\\d+\twas updated: its import url is now http://another/2")
     end
   end
