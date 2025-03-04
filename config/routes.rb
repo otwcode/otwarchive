@@ -80,7 +80,6 @@ Rails.application.routes.draw do
     collection do
       get :manage
       get :status
-      post :resend
     end
   end
 
