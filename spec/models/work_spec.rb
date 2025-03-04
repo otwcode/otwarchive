@@ -446,11 +446,14 @@ describe Work do
 
   describe "#find_by_url" do
     it "should find imported works with various URL formats" do
-      %w[http://foo.com/bar.html
+      %w[
+        http://foo.com/bar.html
         http://foo.com/bar
         http://lj-site.com/bar/foo?color=blue
         https://www.lj-site.com/bar/foo?color=blue
-        http://www.foo.com/bar https://www.foo.com/bar].each do |url|
+        http://www.foo.com/bar
+        https://www.foo.com/bar
+      ].each do |url|
         work = create(:work)
         work.import_url!(url)
         expect(Work.find_by_url(url)).to eq(work)
@@ -504,11 +507,14 @@ describe Work do
 
     describe "legacy – to be removed eventually – cf AO3-6591" do
       it "should find imported works with various URL formats" do
-        %w[http://foo.com/bar.html
+        %w[
+          http://foo.com/bar.html
           http://foo.com/bar
           http://lj-site.com/bar/foo?color=blue
           https://www.lj-site.com/bar/foo?color=blue
-          http://www.foo.com/bar https://www.foo.com/bar].each do |url|
+          http://www.foo.com/bar
+          https://www.foo.com/bar
+        ].each do |url|
           work = create(:work, imported_from_url: url)
           expect(Work.find_by_url(url)).to eq(work)
           work.destroy
