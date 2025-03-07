@@ -48,7 +48,7 @@ class InviteRequestsController < ApplicationController
   # POST /invite_requests
   def create
     unless AdminSetting.current.invite_from_queue_enabled?
-      flash[:error] = t("invite_requests.create.queue_disabled.html",
+      flash[:error] = t(".queue_disabled.html",
                         closed_bold: helpers.tag.strong(t("invite_requests.create.queue_disabled.closed")),
                         news_link: helpers.link_to(t("invite_requests.create.queue_disabled.news"), admin_posts_path(tag: 143)))
       redirect_to invite_requests_path
@@ -58,7 +58,7 @@ class InviteRequestsController < ApplicationController
     @invite_request = InviteRequest.new(invite_request_params)
     @invite_request.ip_address = request.remote_ip
     if @invite_request.save
-      flash[:notice] = t("invite_requests.create.success",
+      flash[:notice] = t(".success",
                          date: l(@invite_request.proposed_fill_time.to_date, format: :long),
                          return_address: ArchiveConfig.RETURN_ADDRESS)
       redirect_to invite_requests_path
