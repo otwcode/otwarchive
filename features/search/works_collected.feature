@@ -8,8 +8,11 @@ Feature: Search collected works
       And I create the collection "Author Collection"
       And I create the collection "Other Collection"
       And I post the work "Old Title" to the collection "Author Collection"
+      And I wait 1 second
       And I post the work "Revised Title" to the collection "Author Collection"
+      And I wait 1 second
       And I post the work "New Title" to the collection "Other Collection"
+      And I wait 1 second
       And I post a chapter for the work "Revised Title"
     When I go to author's user page
       And I follow "Works (3)"
