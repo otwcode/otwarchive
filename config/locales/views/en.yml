@@ -1436,7 +1436,7 @@ en:
       invitation_number:
         one: "%{count} invitation"
         other: "%{count} invitations"
-      invitation_send_rate: We are sending out %{queue_invitation_number} per %{queue_frequency}.
+      invitation_send_rate: We are sending out %{queue_invitation_number} every %{queue_frequency}.
       page_heading: Invitation Requests
       privacy_policy: Privacy Policy
       request_invitation_header: Request an invitation
@@ -1477,7 +1477,7 @@ en:
       invitation_number:
         one: "%{count} invitation"
         other: "%{count} invitations"
-      invitation_send_rate: We are sending out %{queue_invitation_number} per %{queue_frequency}.
+      invitation_send_rate: We are sending out %{queue_invitation_number} every %{queue_frequency}.
       search: Look me up
       waiting_list:
         one: There is currently %{count} person on the waiting list.
