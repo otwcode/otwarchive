@@ -133,8 +133,9 @@ Rails/DefaultScope:
 
 Rails/DynamicFindBy:
   AllowedMethods:
-    # Exception for Tag.find_by_name
+    # Exceptions for Tag.find_by_name and Tag.find_by_name!
     - find_by_name
+    - find_by_name!
     # Exception for Tagging.find_by_tag
     - find_by_tag
     # Exceptions for Work.find_by_*

@@ -9,7 +9,7 @@ class FandomsController < ApplicationController
       @counts = SearchCounts.fandom_ids_for_collection(@collection)
       @fandoms = (@medium ? @medium.fandoms : Fandom.all).where(id: @counts.keys).by_name
     elsif params[:media_id]
-      @medium = Media.find_by_name!(params[:media_id]) # rubocop:disable Rails/DynamicFindBy
+      @medium = Media.find_by_name!(params[:media_id])
       @page_subtitle = @medium.name
       @fandoms = if @medium == Media.uncategorized
                    @medium.fandoms.in_use.by_name
