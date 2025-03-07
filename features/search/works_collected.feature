@@ -26,3 +26,8 @@ Feature: Search collected works
     Then "Title" should be selected within "Sort by"
       And "New Title" should appear before "Old Title"
       And "Old Title" should appear before "Revised Title"
+    When I select "Date Posted" from "Sort by"
+      And I press "Sort and Filter"
+    Then "Date Posted" should be selected within "Sort by"
+      And "New Title" should appear before "Revised Title"
+      And "Revised Title" should appear before "Old Title"
