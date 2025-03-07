@@ -91,10 +91,10 @@ en:
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
   errors:
-    timeout_error:
-      browser_title: "Timeout Error"
     auth_error:
-      browser_title: "Auth Error"
+      browser_title: Auth Error
+    timeout_error:
+      browser_title: Timeout Error
   external_works:
     update:
       successfully_updated: External work was successfully updated.
