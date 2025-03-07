@@ -31,3 +31,18 @@ Feature: Search collected works
     Then "Date Posted" should be selected within "Sort by"
       And "New Title" should appear before "Revised Title"
       And "Revised Title" should appear before "Old Title"
+    When I check "Author Collection"
+      And I check "Other Collection"
+      And I press "Sort and Filter"
+    Then the "Author Collection" checkbox should be checked
+      And the "Other Collection" checkbox should be checked
+      And I should see "New Title"
+      And I should see "Revised Title"
+      And I should see "Old Title"
+    When I uncheck "Other Collection"
+      And I press "Sort and Filter"
+    Then the "Author Collection" checkbox should be checked
+      And I should not see "Other Collection"
+      And I should not see "New Title"
+      And I should see "Revised Title"
+      And I should see "Old Title"
