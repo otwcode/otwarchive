@@ -15,7 +15,7 @@ en:
           error: Please describe what you are reporting and why you are reporting it.
           include: include all relevant links and other information in your report
           label: Description of the content you are reporting (required)
-          tos: AO3 Terms of Service
+          tos: Terms of Service
         email:
           description: We cannot contact you if the email address you provide is invalid.
           label: Your email (required)
