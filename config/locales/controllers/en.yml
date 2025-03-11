@@ -15,6 +15,14 @@ en:
     admin_users:
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
+    user_creations:
+      confirm_remove_pseud:
+        must_have_orphan_pseuds: Sorry, this action is only available for works by orphan_account pseuds.
+      remove_pseud:
+        must_select_pseud: You must select which orphan_account pseud to remove.
+        success:
+          one: Successfully removed pseud %{pseuds} from this work.
+          other: Successfully removed pseuds %{pseuds} from this work.
   archive_faqs:
     create:
       success: Archive FAQ was successfully created.
