@@ -143,6 +143,10 @@ class Query
     { terms: options.merge(field => value) }
   end
 
+  def exists_filter(field)
+    { exists: { field: field } }
+  end
+
   # A filter used to match all words in a particular field, most frequently
   # used for matching non-existent tags. The match query doesn't allow
   # negation/or/and/wildcards, so it should only be used on fields where the
