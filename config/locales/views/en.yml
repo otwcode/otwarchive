@@ -10,11 +10,12 @@ en:
         split: Please only report one user at a time, and do not submit multiple reports about the same user.
       form:
         comment:
-          description_html: Explain what about this content violates the %{tos_link}. Please be as specific as possible and %{include_link}. All information provided will remain confidential.
+          content_policy: Content Policy
+          description_html: Explain how the content you are reporting violates the %{content_policy_link} or other parts of the %{tos_link}. Please be as specific as possible and %{include_link}. All information provided will remain confidential.
           error: Please describe what you are reporting and why you are reporting it.
           include: include all relevant links and other information in your report
           label: Description of the content you are reporting (required)
-          tos: AO3 Terms of Service
+          tos: Terms of Service
         email:
           description: We cannot contact you if the email address you provide is invalid.
           label: Your email (required)
