@@ -8,9 +8,9 @@
 </h2>
 
 <!--main content-->
-<%= form_for(@user, :url => delete_all_user_subscriptions_path(@user, type: @subscribable_type), :html => {:method => :post, :class => "simple destroy"}) do |f| %>
+<%= form_for(@user, url: delete_all_user_subscriptions_path(@user, type: @subscribable_type), html: { method: :post, class: "simple destroy" }) do |f| %>
   <p class="caution notice">
-    <%= t(".caution_html").html_safe %>
+    <%= t(".caution_html") %>
   </p>
   <p class="actions">
     <% if @subscribable_type %>

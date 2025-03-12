@@ -1675,7 +1675,11 @@ en:
           list: List of Subscriptions
       navigation:
         all: All Subscriptions
-        delete_all: Delete All Subscriptions
+        delete_all:
+          all: Delete All Subscriptions
+          series: Delete All Series Subscriptions
+          users: Delete All User Subscriptions
+          works: Delete All Work Subscriptions
         series: Series Subscriptions
         user: User Subscriptions
         work: Work Subscriptions
