@@ -483,21 +483,32 @@ class Comment < ApplicationRecord
                     elsif !self.pseud_id.nil? && !self.pseud.user.should_spam_check_comments?
                       # or if the comment is 'signed' by an account over a certain age
                       true
+                    elsif !self.pseud_id.nil? && self.on_tag?
+                      # or if the comment is by a logged-in user on a tag
+                      true
                     else
                       !Akismetor.spam?(akismet_attributes)
                     end
   end
 
-  def mark_as_spam!
-    update_attribute(:approved, false)
+  def submit_spam
     # don't submit spam reports unless in production mode
     Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
   end
 
-  def mark_as_ham!
-    update_attribute(:approved, true)
+  def submit_ham
     # don't submit ham reports unless in production mode
     Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+  end
+
+  def mark_as_spam!
+    update_attribute(:approved, false)
+    self.submit_spam
+  end
+
+  def mark_as_ham!
+    update_attribute(:approved, true)
+    self.submit_ham
   end
 
   # Freeze single comment.
