@@ -477,15 +477,15 @@ class Comment < ApplicationRecord
   end
 
   def check_for_spam?
-    self.approved = if !%w(staging production).include?(Rails.env)
-      # don't check for spam while in a dev or test environment
-      true
-    elsif !self.pseud_id.nil? && !self.pseud.user.should_spam_check_comments?
-      # or if the comment is 'signed' by an account over a certain age
-      true
-    else
-      !Akismetor.spam?(akismet_attributes)
-    end
+    self.approved = if %w[staging production].exclude?(Rails.env)
+                      # don't check for spam while in a dev or test environment
+                      true
+                    elsif !self.pseud_id.nil? && !self.pseud.user.should_spam_check_comments?
+                      # or if the comment is 'signed' by an account over a certain age
+                      true
+                    else
+                      !Akismetor.spam?(akismet_attributes)
+                    end
   end
 
   def mark_as_spam!
