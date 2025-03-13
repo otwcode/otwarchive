@@ -65,7 +65,7 @@ class Comment < ApplicationRecord
   validate :check_for_spam, on: :create
 
   def check_for_spam
-    errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
+    errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again.")) unless check_for_spam?
   end
 
   validates :comment_content, uniqueness: {
@@ -97,15 +97,26 @@ class Comment < ApplicationRecord
     # access granted by admins, so we never spam check them, unlike comments on
     # works or admin posts.
     comment_type = ultimate_parent.is_a?(Work) ? "fanwork-comment" : "comment"
+
+    if self.pseud_id.nil?
+      user_role = "guest"
+      comment_author = name
+      comment_author_email = email
+    else
+      user_role = "user"
+      comment_author = self.pseud.user.login
+      comment_author_email = self.pseud.user.email
+    end
+    
     {
       comment_type: comment_type,
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_agent: user_agent,
-      user_role: "guest",
-      comment_author: name,
-      comment_author_email: email,
+      user_role: user_role,
+      comment_author: comment_author,
+      comment_author_email: comment_author_email,
       comment_content: comment_content
     }
   end
@@ -466,8 +477,17 @@ class Comment < ApplicationRecord
   end
 
   def check_for_spam?
-    #don't check for spam while running tests or if the comment is 'signed'
-    self.approved = Rails.env.test? || !self.pseud_id.nil? || !Akismetor.spam?(akismet_attributes)
+    if !(['staging', 'production'].include?(Rails.env))
+      # don't check for spam while in a dev or test environment
+      self.approved = true
+    elsif (!self.pseud_id.nil? && !self.pseud.user.should_spam_check_comments?)
+      # or if the comment is 'signed' by an account over a certain age
+      self.approved = true
+    else
+      self.approved = !Akismetor.spam?(akismet_attributes)
+    end
+
+    self.approved
   end
 
   def mark_as_spam!
