@@ -517,5 +517,23 @@ namespace :After do
 
     puts "Finished reindexing tags on hidden and unrevealed works"
   end
+
+  desc "Convert user kudos from users with the official role to guest kudos"
+  task(convert_official_kudos: :environment) do
+    official_users = Role.find_by(name: "official")&.users
+    if official_users.blank?
+      puts "No official users found"
+    else
+      official_users.each do |user|
+        kudos = user.kudos
+        next if kudos.blank?
+
+        puts "Updating #{kudos.size} kudos from #{user.login}"
+        user.remove_user_from_kudos
+      end
+
+      puts "Finished converting kudos from official users to guest kudos"
+    end
+  end
   # This is the end that you have to put new tasks above.
 end
