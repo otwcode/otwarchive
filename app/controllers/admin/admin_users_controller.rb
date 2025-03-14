@@ -158,7 +158,7 @@ class Admin::AdminUsersController < Admin::BaseController
     # comments are special and needs to be handled separately
     @user.comments.each do |comment|
       AdminActivity.log_action(current_admin, comment, action: "destroy spam", summary: comment.inspect)
-      # Akismet spam procedures are skipped, since logged-in comments aren't spam-checked anyways
+      comment.submit_spam
       comment.destroy_or_mark_deleted # comments with replies cannot be destroyed, mark deleted instead
     end
 

@@ -342,6 +342,8 @@ en:
     settings:
       index:
         fields:
+          account_age_threshold_for_comment_spam_check: How old (in days) accounts should be before we stop checking comments for spam
+          account_age_threshold_for_comment_spam_check_note: Enter 0 to turn off comment spam checks for all logged in users.
           account_creation_enabled: Account creation enabled
           cache_expiration: How often (in minutes) should we refresh caching
           creation_requires_invite: Account creation requires invitation
@@ -363,6 +365,7 @@ en:
         legend:
           account_and_invitations: Accounts and Invitations
           actions: Actions
+          content: Content
           disable_support_form: Turn Off Support Form
           performance_and_misc: Performance and Misc
         queue_status: "%{number} people are scheduled to be sent invitations on %{date}."
