@@ -143,6 +143,7 @@ class Admin::AdminUsersController < Admin::BaseController
     @bookmarks = @user.bookmarks
     @collections = @user.sole_owned_collections
     @series = @user.series
+    @page_subtitle = t(".page_title", login: @user.login)
   end
 
   def destroy_user_creations
