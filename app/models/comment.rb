@@ -487,13 +487,11 @@ class Comment < ApplicationRecord
   end
 
   def submit_spam
-    # don't submit spam reports unless in production mode
-    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+    Akismet.submit_spam(akismet_attributes)
   end
 
   def submit_ham
-    # don't submit ham reports unless in production mode
-    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+    Akismet.submit_ham(akismet_attributes)
   end
 
   def mark_as_spam!

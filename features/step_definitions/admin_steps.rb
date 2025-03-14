@@ -102,7 +102,7 @@ Given "guest comments are off" do
   click_button("Update")
 end
 
-Given /^account age threshold for comment spam check is set to ([^\"]*) days$/ do |days|
+Given "account age threshold for comment spam check is set to {int} days" do |days|
   step("I am logged in as a super admin")
   visit(admin_settings_path)
   fill_in("admin_setting_account_age_threshold_for_comment_spam_check", with: days)
@@ -135,7 +135,7 @@ Given "the fannish next of kin {string} for the user {string}" do |kin, user|
   user.create_fannish_next_of_kin(kin: kin, kin_email: "fnok@example.com")
 end
 
-Given /^the user "([^\"]*)" is suspended$/ do |user|
+Given "the user {string} is suspended" do |user|
   step %{the user "#{user}" exists and is activated}
   step %{I am logged in as a "policy_and_abuse" admin}
   step %{I go to the user administration page for "#{user}"}
@@ -540,4 +540,12 @@ end
 Then "the history table should show they were {word} as next of kin of {string}" do |action, username|
   user_id = User.find_by(login: username).id
   step %{I should see "#{action.capitalize} as Fannish Next of Kin for: #{user_id}" within "#user_history"}
+end
+
+When "Akismet can receive spam submissions" do
+  allow(Akismet).to receive(:submit_spam)
+end
+
+Then "Akismet should have received {int} spam submissions" do |n|
+  expect(Akismet).to have_received(:submit_spam).exactly(n).times
 end
