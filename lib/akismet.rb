@@ -1,8 +1,10 @@
 module Akismet
   # A wrapper around Akismetor that prevents the API from being called when in dev or test
+  # These methods are overridden in tests, so don't put any business logic in here
 
   def self.spam?(akismet_attributes)
     return false if %w[staging production].exclude?(Rails.env)
+
     Akismetor.spam?(akismet_attributes)
   end
 
