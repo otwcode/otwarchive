@@ -102,6 +102,13 @@ Given "guest comments are off" do
   click_button("Update")
 end
 
+Given /^account age threshold for comment spam check is set to ([^\"]*) days$/ do |days|
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  fill_in("admin_setting_account_age_threshold_for_comment_spam_check", with: days)
+  click_button("Update")
+end
+
 Given "I have posted known issues" do
   step %{I am logged in as a super admin}
   step %{I follow "Admin Posts"}

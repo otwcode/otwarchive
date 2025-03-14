@@ -477,18 +477,13 @@ class Comment < ApplicationRecord
   end
 
   def check_for_spam?
-    self.approved = if %w[staging production].exclude?(Rails.env)
-                      # don't check for spam while in a dev or test environment
-                      true
-                    elsif !self.pseud_id.nil? && !self.pseud.user.should_spam_check_comments?
-                      # or if the comment is 'signed' by an account over a certain age
-                      true
-                    elsif !self.pseud_id.nil? && self.on_tag?
-                      # or if the comment is by a logged-in user on a tag
-                      true
-                    else
-                      !Akismetor.spam?(akismet_attributes)
-                    end
+    is_logged_in = !self.pseud_id.nil? 
+    is_account_old_enough = is_logged_in && !self.pseud.user.should_spam_check_comments?
+    is_on_tag = self.on_tag?
+    
+    should_skip_checking = is_logged_in && (is_account_old_enough || is_on_tag)
+
+    self.approved = should_skip_checking || !Akismet.spam?(akismet_attributes)
   end
 
   def submit_spam
