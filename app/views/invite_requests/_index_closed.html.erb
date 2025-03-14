@@ -1,21 +1,16 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-  <%= ts("Invitation Requests") %>
+  <%= t(".page_heading") %>
 </h2>
 
 <p class="notice">
-  <%= ts("<strong>New invitation requests are currently closed.</strong> For     
-        more information, please check the %{news}.",
-      news: link_to("\"Invitations\" tag on AO3 News",
-                    admin_posts_path(tag: 143))
-      ).html_safe %>
+  <%= t(".queue_disabled.html",
+        closed_bold: tag.strong(t(".queue_disabled.closed")),
+        news_link: link_to(t(".queue_disabled.news"), admin_posts_path(tag: 143))) %>
 </p>
 <p>
-  <%= ts("If you have already requested an invitation, you can %{status}. There are %{count} people remaining on the waiting list.",
-      status: link_to("check your position on the waiting list",
-                      status_invite_requests_path),
-      count: InviteRequest.count
-  ).html_safe %>
+  <%= t(".already_requested_html", check_waitlist_position_link: link_to(t(".check_waitlist_position"), status_invite_requests_path)) %>
+  <%= t(".waiting_list_count", count: InviteRequest.count) %>
 <p>
 <!--/descriptions-->
 
