@@ -294,7 +294,7 @@ Scenario: delete all subscriptions of a specific type
     And I should see "Awesome Story (Work)"
   When I follow "Work Subscriptions"
     Then I should see "My Work Subscriptions"
-  When I follow "Delete All Subscriptions"
+  When I follow "Delete All Work Subscriptions"
     Then I should see "Delete All Work Subscriptions"
     And I should see "Are you sure you want to delete"
   When I press "Yes, Delete All Work Subscriptions"
