@@ -439,7 +439,9 @@ class User < ApplicationRecord
     return unless is_tag_wrangler?
 
     last_activity = LastWranglingActivity.find_or_create_by(user: self)
-    last_activity.touch
+    last_activity.notified_inactive_wrangler = false
+    last_activity.notified_inactive_supervisors = false
+    last_activity.save!
   end
 
   # Returns true if user is the sole author of a work

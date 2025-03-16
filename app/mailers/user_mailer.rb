@@ -402,4 +402,11 @@ class UserMailer < ApplicationMailer
     )
   end
 
+  def inactive_wrangler_notification(user)
+    mail(
+      to: user.email,
+      from: email_address_with_name(ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS, ArchiveConfig.APP_NAME),
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
+  end
 end
