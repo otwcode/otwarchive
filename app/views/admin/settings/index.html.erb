@@ -78,8 +78,8 @@
 
       <dt><%= f.label :account_age_threshold_for_comment_spam_check, t(".fields.account_age_threshold_for_comment_spam_check") %></dt>
       <dd>
-        <%= admin_setting_text_field(f, :account_age_threshold_for_comment_spam_check, size: "3", "aria-labelledby" => "account_age_threshold_for_comment_spam_check_note") %>
-        <p id="account_age_threshold_for_comment_spam_check_note" role="label" class="footnote"><%= t(".fields.account_age_threshold_for_comment_spam_check_note") %></p>
+        <%= admin_setting_text_field(f, :account_age_threshold_for_comment_spam_check, size: "3", "aria-describedby": "account-age-threshold-for-comment-spam-check-note") %>
+        <p id="account-age-threshold-for-comment-spam-check-note" role="label" class="footnote"><%= t(".fields.account_age_threshold_for_comment_spam_check_note") %></p>
       </dd>
     </dl>
   </fieldset>

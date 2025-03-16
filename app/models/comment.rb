@@ -479,9 +479,8 @@ class Comment < ApplicationRecord
   def check_for_spam?
     is_logged_in = !self.pseud_id.nil? 
     is_account_old_enough = is_logged_in && !self.pseud.user.should_spam_check_comments?
-    is_on_tag = self.on_tag?
     
-    should_skip_checking = is_logged_in && (is_account_old_enough || is_on_tag)
+    should_skip_checking = is_logged_in && (is_account_old_enough || self.on_tag?)
 
     self.approved = should_skip_checking || !Akismet.spam?(akismet_attributes)
   end
