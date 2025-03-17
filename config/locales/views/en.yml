@@ -148,7 +148,6 @@ en:
         caution_html: Are you sure you want to <strong><em>delete</em></strong> all the works and comments created by this user, along with their %{bookmarks} bookmarks, %{series} series, and %{collections} collections? This <strong>cannot be undone</strong>.
         confirm: Are you sure? Remember this will destroy ALL these objects!
         page_heading: Delete Spammer Creations
-        page_title: "%{login} - Confirm Deletion of User Creations"
         submit: Yes, Delete All Spammer Creations
       creations:
         navigation:
