@@ -176,7 +176,7 @@ module TagsHelper
     sub_ul = ""
     unless tag.direct_sub_tags.empty?
       sub_ul << "<ul class='tags tree index'>"
-      tag.direct_sub_tags.each do |sub|
+      tag.direct_sub_tags.order(:name).each do |sub|
         sub_ul << "<li>" + link_to_tag(sub)
         unless sub.direct_sub_tags.empty?
           sub_ul << sub_tag_tree(sub)

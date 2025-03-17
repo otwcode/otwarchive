@@ -95,6 +95,12 @@ Given "there are {int} invite request(s) per page" do |amount|
   allow(InviteRequest).to receive(:per_page).and_return(amount)
 end
 
+Given "an invitation created by {string} and used by {string}" do |creator, invitee|
+  creator = User.find_by(login: creator)
+  invitee = User.find_by(login: invitee)
+  FactoryBot.create(:invitation, creator: creator, invitee: invitee)
+end
+
 ### WHEN
 
 When /^I use an invitation to sign up$/ do
@@ -154,6 +160,12 @@ When /^I check how long "(.*?)" will have to wait in the invite request queue$/ 
   visit(status_invite_requests_path)
   fill_in("email", with: "#{email}")
   click_button("Look me up")
+end
+
+When "I view the most recent invitation for {string}" do |creator|
+  user = User.find_by(login: creator)
+  invitation = user.invitations.last
+  visit user_invitation_path(creator, invitation)
 end
 
 ### Then

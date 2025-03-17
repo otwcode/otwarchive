@@ -353,6 +353,23 @@ describe AbuseReport do
     end
   end
 
+  context "when report is submitted to Akismet" do
+    let(:report) { build(:abuse_report) }
+
+    it "has comment_type \"contact-form\"" do
+      expect(report.akismet_attributes[:comment_type]).to eq("contact-form")
+    end
+
+    it "has user_role \"user-with-nonmatching-email\" when reporter is logged in" do
+      User.current_user = create(:user)
+      expect(report.akismet_attributes[:user_role]).to eq("user-with-nonmatching-email")
+    end
+
+    it "has user_role \"guest\" when reporter is logged out" do
+      expect(report.akismet_attributes[:user_role]).to eq("guest")
+    end
+  end
+
   describe "#attach_work_download" do
     include ActiveJob::TestHelper
 

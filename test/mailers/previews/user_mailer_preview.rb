@@ -165,6 +165,25 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.admin_hidden_work_notification(work, user.id)
   end
 
+  def admin_deleted_work_notification
+    work = create(:work)
+    user = create(:user, :for_mailer_preview)
+    UserMailer.admin_deleted_work_notification(user, work)
+  end
+
+  def delete_work_notification_self
+    user = create(:user, :for_mailer_preview)
+    work = create(:work, authors: [user.default_pseud])
+    UserMailer.delete_work_notification(user, work, user)
+  end
+
+  def delete_work_notification_co_creator
+    first_creator = create(:user, :for_mailer_preview)
+    second_creator = create(:user, :for_mailer_preview)
+    work = create(:work, authors: [first_creator.default_pseud, second_creator.default_pseud])
+    UserMailer.delete_work_notification(first_creator, work, second_creator)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)

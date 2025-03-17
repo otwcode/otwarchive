@@ -93,11 +93,17 @@ class Comment < ApplicationRecord
   has_comment_methods
 
   def akismet_attributes
+    # While we do have tag comments, those are from logged-in users with special
+    # access granted by admins, so we never spam check them, unlike comments on
+    # works or admin posts.
+    comment_type = ultimate_parent.is_a?(Work) ? "fanwork-comment" : "comment"
     {
+      comment_type: comment_type,
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_agent: user_agent,
+      user_role: "guest",
       comment_author: name,
       comment_author_email: email,
       comment_content: comment_content

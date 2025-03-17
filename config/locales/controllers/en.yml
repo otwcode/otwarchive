@@ -15,6 +15,14 @@ en:
     admin_users:
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
+    user_creations:
+      confirm_remove_pseud:
+        must_have_orphan_pseuds: Sorry, this action is only available for works by orphan_account pseuds.
+      remove_pseud:
+        must_select_pseud: You must select which orphan_account pseud to remove.
+        success:
+          one: Successfully removed pseud %{pseuds} from this work.
+          other: Successfully removed pseuds %{pseuds} from this work.
   archive_faqs:
     create:
       success: Archive FAQ was successfully created.
@@ -105,6 +113,10 @@ en:
   invite_requests:
     index:
       page_title: Invitation Requests
+    resend:
+      not_found: Could not find an invitation associated with that email.
+      not_yet: You cannot resend an invitation that was sent in the last %{count} hours.
+      success: Invitation resent to %{email}.
   kudos:
     create:
       success: Thank you for leaving kudos!

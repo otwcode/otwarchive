@@ -407,6 +407,12 @@ function prepareDeleteLinks() {
     $j(this).attr("data-method", "delete");
   });
 
+  // Removing non-default orphan_account pseuds from works
+  $j('a[href$="/confirm_remove_pseud"][data-confirm]').each(function() {
+    this.href = this.href.replace(/\/confirm_remove_pseud$/, "/remove_pseud");
+    $j(this).attr("data-method", "put");
+  });
+
   // For purging assignments in gift exchanges. This is only on one page and easy to
   // check, so don't worry about adding a fallback data-confirm message.
   $j('a[href$="/confirm_purge"][data-confirm]').each(function() {

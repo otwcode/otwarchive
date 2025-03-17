@@ -1,29 +1,35 @@
 <dl>
-	<dt>Sender</dt>
-    <dd><%= creator_link(@invitation) %></dd>
- 	<dt>Invitation token</dt>
-    <dd><%= @invitation.token %></dd>
- 	<dt>Copy link</dt>
-    <dd><% unless @invitation.redeemed_at %><%= link_to "copy and use", signup_path(invitation_token: @invitation.token) %><% end %></dd>
- 	<dt>Sent to</dt>
+  <dt><%= t(".sender") %></dt>
+  <dd><%= creator_link(@invitation) %></dd>
+  <dt><%= t(".invitation_token") %></dt>
+  <dd><%= @invitation.token %></dd>
+  <dt><%= t(".copy_link") %></dt>
+  <dd>
+    <% unless @invitation.redeemed_at %>
+      <%= link_to t(".copy_and_use"), signup_path(invitation_token: @invitation.token) %>
+    <% end %>
+  </dd>
+  <dt><%= t(".sent_to") %></dt>
+  <dd>
     <% if @invitation.redeemed_at %>
-    <dd><%= @invitation.invitee_email %></dd>
+      <%= @invitation.invitee_email %>
     <% else %>
-    <dd>
       <%= form_for(@invitation) do |f| %>
         <%= error_messages_for @invitation %>
         <p><%= f.label :invitee_email, t(".email_address_label") %> <%= f.text_field :invitee_email %></p>
         <p><%= hidden_field_tag :user_id, @user.try(:login) %></p>
         <p class="submit actions"><%= f.submit %></p>
       <% end %>
-    </dd>
     <% end %>
- <dt>Redeemed by</dt>
-    <dd><%= invitee_link(@invitation) %></dd>
- <dt>Created at</dt>
-    <dd><%= @invitation.created_at %></dd>
- <dt>Sent at</dt>
-    <dd><%= @invitation.sent_at %></dd>
- <dt>Redeemed at</dt>
-    <dd><%= @invitation.redeemed_at %></dd>
+  </dd>
+  <dt><%= t(".redeemed_by") %></dt>
+  <dd><%= invitee_link(@invitation) %></dd>
+  <dt><%= t(".created_at") %></dt>
+  <dd><%= @invitation.created_at %></dd>
+  <dt><%= t(".sent_at") %></dt>
+  <dd><%= @invitation.sent_at %></dd>
+  <dt><%= t(".last_resent_at") %></dt>
+  <dd><%= @invitation.resent_at %></dd>
+  <dt><%= t(".redeemed_at") %></dt>
+  <dd><%= @invitation.redeemed_at %></dd>
 </dl>
