@@ -12,6 +12,7 @@ Feature: Filters
       And I post the work "A Hobbit's Meandering" with fandom "The Hobbit"
       And I post the work "Bilbo Does the Thing" with fandom "The Hobbit, Legend of Korra"
       And I post the work "Roonal Woozlib and the Ferrets of Nimh" with fandom "Harry Potter"
+      And the dashboard counts have expired
 
   @javascript
   Scenario: You can filter through a user's works using inclusion filters
@@ -106,6 +107,7 @@ Feature: Filters
       And I bookmark the work "Bilbo Does the Thing"
       And I bookmark the work "A Hobbit's Meandering"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh"
+      And the dashboard counts have expired
     When I go to recengine's user page
       And I follow "Bookmarks (3)"
     Then I should see "Bilbo Does the Thing"
@@ -138,6 +140,7 @@ Feature: Filters
       And I bookmark the work "Bilbo Does the Thing"
       And I bookmark the work "A Hobbit's Meandering"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh"
+      And the dashboard counts have expired
     When I go to recengine's user page
       And I follow "Bookmarks (3)"
     When I press "Fandoms" within "dd.exclude"
@@ -287,6 +290,7 @@ Feature: Filters
       And I am logged in as "recengine"
       And I bookmark the work "A Hobbit's Meandering" with the tags "fun"
       And I bookmark the work "Bilbo Does the Thing" with the tags "fun little crossover"
+      And the dashboard counts have expired
 
     When I go to my bookmarks page
       And I fill in "Other work tags to include" with "legend korra"
