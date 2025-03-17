@@ -1,1 +1,29 @@
-<%# TODO Bilka  %>
+<% content_for :message do %>
+  <p><%= t("mailer.general.greeting.informal.addressed_html", name: @username) %></p>
+
+  <p><%= t(".inactive", app_name: ArchiveConfig.APP_NAME, count: @inactivity_weeks, weeks: @inactivity_weeks_formatted) %></p>
+
+  <p>
+    <%= t(".must_wrangle", count: @inactivity_weeks, weeks: @inactivity_weeks_formatted) %>
+    <%= t(".email_to_supervisors.html", count: @hiatus_distance_weeks, weeks: @hiatus_distance_weeks_formatted, assigned_fandoms_policy_link: style_link(t(".assigned_fandoms_policy"), ArchiveConfig.ASSIGNED_FANDOMS_POLICY_URL)) %>
+  </p>
+
+  <p><%= t(".please_reply.title") %></p>
+
+  <ul>
+    <li><%= t(".please_reply.technical_difficulties") %></li>
+    <li><%= t(".please_reply.training_extension") %></li>
+    <li><%= t(".please_reply.more_work", count: @inactivity_weeks, weeks: @inactivity_weeks_formatted) %></li>
+    <li><%= t(".please_reply.mentor") %></li>
+    <li><%= t(".please_reply.another_issue") %></li>
+  </ul>
+
+  <p><%= t(".request_hiatus.html", hiatus_form_link: style_link(t(".hiatus_form"), ArchiveConfig.WRANGLING_HIATUS_FORM_URL)) %></p>
+
+  <p><%= t(".contact_us") %></p>
+
+  <p>
+    <%= t("mailer.general.closing.informal") %><br />
+    <%= t("mailer.general.signature.tag_wrangling_supervisors") %>
+  </p>
+<% end %>

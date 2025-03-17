@@ -1205,4 +1205,39 @@ describe UserMailer do
       it_behaves_like "an email with a deleted work with draft chapters attached"
     end
   end
+
+  describe "#inactive_wrangler_notification" do
+    subject(:email) { UserMailer.inactive_wrangler_notification(user) }
+
+    let(:user) { create(:user) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has tagwranglers-personnel@example.org as reply_to" do
+      expect(email).to reply_to("#{ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS}")
+    end
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Wrangling absence notice - automatic hiatus in 7 days"
+      expect(email).to have_subject(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("detected any wrangling from you in the past 2 weeks.")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("detected any wrangling from you in the past 2 weeks.")
+      end
+    end
+  end
 end

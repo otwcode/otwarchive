@@ -1,1 +1,23 @@
-<%# TODO Bilka  %>
+<% content_for :message do %>
+<%= t("mailer.general.greeting.informal.addressed_html", name: @username) %>
+
+<%= t(".inactive", app_name: ArchiveConfig.APP_NAME, count: @inactivity_weeks, weeks: @inactivity_weeks_formatted) %>
+
+<%= t(".must_wrangle", count: @inactivity_weeks, weeks: @inactivity_weeks_formatted) %>
+<%= t(".email_to_supervisors.text", count: @hiatus_distance_weeks, weeks: @hiatus_distance_weeks_formatted, assigned_fandoms_policy_url: ArchiveConfig.ASSIGNED_FANDOMS_POLICY_URL) %>
+
+<%= t(".please_reply.title") %>
+
+  - <%= t(".please_reply.technical_difficulties") %>
+  - <%= t(".please_reply.training_extension") %>
+  - <%= t(".please_reply.more_work", count: @inactivity_weeks, weeks: @inactivity_weeks_formatted) %>
+  - <%= t(".please_reply.mentor") %>
+  - <%= t(".please_reply.another_issue") %>
+
+<%= t(".request_hiatus.text", hiatus_form_url: ArchiveConfig.WRANGLING_HIATUS_FORM_URL) %>
+
+<%= t(".contact_us") %>
+
+<%= t("mailer.general.closing.informal") %>
+<%= t("mailer.general.signature.tag_wrangling_supervisors") %>
+<% end %>
