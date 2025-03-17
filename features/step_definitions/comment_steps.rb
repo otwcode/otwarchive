@@ -236,6 +236,12 @@ When "Akismet will flag any comment by spammer" do
   end
 end
 
+When "Akismet will flag any comment containing {string}" do |comment|
+  allow(Akismet).to receive(:spam?) do |akismet_attributes|
+    akismet_attributes[:comment_content].include?(comment)
+  end
+end
+
 When /^I post a guest comment$/ do
   fill_in("comment[name]", with: "guest")
   fill_in("comment[email]", with: "guest@example.org")
