@@ -236,9 +236,9 @@ When "Akismet will flag any comment by spammer" do
   end
 end
 
-When "Akismet will flag any comment containing {string}" do |comment_text|
+When "Akismet will flag any comment containing {string}" do |spam_text|
   allow_any_instance_of(Comment).to receive(:spam?) do |comment|
-    comment.comment_content.include?(comment)
+    comment.comment_content.include?(spam_text)
   end
 end
 
