@@ -62,7 +62,7 @@ class Comment < ApplicationRecord
     ultimate_parent.try(:anonymous?) && user&.is_author_of?(ultimate_parent)
   end
 
-  validate :check_for_spam, on: [:create, :update]
+  validate :check_for_spam, on: :create
 
   def check_for_spam
     errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again.")) unless check_for_spam?

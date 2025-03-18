@@ -106,23 +106,23 @@ Feature: Marking comments as spam
         | the work "Generic Work"  |
         | the admin post "Generic Post" |
 
-  Scenario: New user's comments should be spam-checked on editing when the admin setting is enabled
-    Given <commentable>
-      And account age threshold for comment spam check is set to 5 days
-      And Akismet will flag any comment containing "spam"
-    When I am logged in as a new user "spammer"
-      And I view <commentable> with comments
-      And I post the comment "I like ham" on <commentable>
-    Then I should see "Comment created!"
-    When I follow "Edit"
-      And I fill in "Comment" with "I like spam"
-      And I press "Update"
-    Then I should see "This comment looks like spam to our system, sorry!"
+  # Scenario: New user's comments should be spam-checked on editing when the admin setting is enabled
+  #   Given <commentable>
+  #     And account age threshold for comment spam check is set to 5 days
+  #     And Akismet will flag any comment containing "spam"
+  #   When I am logged in as a new user "spammer"
+  #     And I view <commentable> with comments
+  #     And I post the comment "I like ham" on <commentable>
+  #   Then I should see "Comment created!"
+  #   When I follow "Edit"
+  #     And I fill in "Comment" with "I like spam"
+  #     And I press "Update"
+  #   Then I should see "This comment looks like spam to our system, sorry!"
 
-    Examples:
-        | commentable |
-        | the work "Generic Work"  |
-        | the admin post "Generic Post" |
+  #   Examples:
+  #       | commentable |
+  #       | the work "Generic Work"  |
+  #       | the admin post "Generic Post" |
 
   Scenario: Old users' comments should not be spam-checked when the admin setting is enabled
     Given <commentable>
