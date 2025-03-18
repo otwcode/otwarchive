@@ -98,14 +98,12 @@ class Comment < ApplicationRecord
     # works or admin posts.
     comment_type = ultimate_parent.is_a?(Work) ? "fanwork-comment" : "comment"
 
-    if self.pseud_id.nil?
+    if pseud_id.nil?
       user_role = "guest"
       comment_author = name
-      comment_author_email = email
     else
       user_role = "user"
-      comment_author = self.pseud.user.login
-      comment_author_email = self.pseud.user.email
+      comment_author = user.login
     end
     
     {
@@ -116,7 +114,7 @@ class Comment < ApplicationRecord
       user_agent: user_agent,
       user_role: user_role,
       comment_author: comment_author,
-      comment_author_email: comment_author_email,
+      comment_author_email: comment_owner_email,
       comment_content: comment_content
     }
   end
@@ -477,8 +475,8 @@ class Comment < ApplicationRecord
   end
 
   def check_for_spam?
-    is_logged_in = !self.pseud_id.nil? 
-    is_account_old_enough = is_logged_in && !self.pseud.user.should_spam_check_comments?
+    is_logged_in = !pseud_id.nil? 
+    is_account_old_enough = is_logged_in && !user.should_spam_check_comments?
     
     should_skip_checking = is_logged_in && (is_account_old_enough || on_tag?)
 
@@ -486,7 +484,7 @@ class Comment < ApplicationRecord
   end
 
   def spam?
-    return false if %w[staging production].exclude?(Rails.env)
+    return false unless %w[staging production].include?(Rails.env)
 
     Akismetor.spam?(akismet_attributes)
   end
@@ -501,12 +499,12 @@ class Comment < ApplicationRecord
 
   def mark_as_spam!
     update_attribute(:approved, false)
-    self.submit_spam
+    submit_spam
   end
 
   def mark_as_ham!
     update_attribute(:approved, true)
-    self.submit_ham
+    submit_ham
   end
 
   # Freeze single comment.

@@ -432,7 +432,7 @@ class User < ApplicationRecord
   # Should this user's comments be spam-checked?
   def should_spam_check_comments?
     # When account_age_threshold_for_comment_spam_check is 0, no users' comments should be spam-checked
-    (Time.zone.now.to_date - confirmed_at.to_date).to_i < AdminSetting.current.account_age_threshold_for_comment_spam_check
+    (Time.current - confirmed_at).seconds.in_days.to_i < AdminSetting.current.account_age_threshold_for_comment_spam_check
   end
 
   # Creates log item tracking changes to user

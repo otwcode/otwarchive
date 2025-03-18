@@ -230,9 +230,9 @@ When "I post a spam comment" do
   step %{I should see "Comment created!"}
 end
 
-When "Akismet will flag any comment by spammer" do
+When "Akismet will flag any comment by {string}" do |username|
   allow_any_instance_of(Comment).to receive(:spam?) do |comment|
-    comment.name == "spammer" || comment.pseud.user.login == "spammer"
+    comment.name == username || comment.user.login == username
   end
 end
 
