@@ -231,14 +231,14 @@ When "I post a spam comment" do
 end
 
 When "Akismet will flag any comment by spammer" do
-  allow(Akismet).to receive(:spam?) do |akismet_attributes|
-    akismet_attributes[:comment_author] == "spammer"
+  allow_any_instance_of(Comment).to receive(:spam?) do |comment|
+    comment.name == "spammer" || comment.pseud.user.login == "spammer"
   end
 end
 
-When "Akismet will flag any comment containing {string}" do |comment|
-  allow(Akismet).to receive(:spam?) do |akismet_attributes|
-    akismet_attributes[:comment_content].include?(comment)
+When "Akismet will flag any comment containing {string}" do |comment_text|
+  allow_any_instance_of(Comment).to receive(:spam?) do |comment|
+    comment.comment_content.include?(comment)
   end
 end
 

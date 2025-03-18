@@ -227,16 +227,3 @@ Feature: Admin Abuse actions
     Then I should see "Are you sure you want to delete"
     When I press "Yes, Delete All Spammer Creations"
     Then I should see "All creations by user Spamster have been deleted."
-
-  Scenario: When a spammer is spam-banned, their comments are submitted to Akismet for training
-    Given I have a work "Not Spam"
-      And I am logged in as "Spamster"
-      And I post the comment "I like spam" on the work "Not Spam"
-      And I post the comment "spam spam spam" on the work "Not Spam"
-      And Akismet can receive spam submissions
-    When I am logged in as a "policy_and_abuse" admin
-      And I go to the user administration page for "Spamster"
-      And I choose "Spammer: ban and delete all creations"
-      And I press "Update"
-      And I press "Yes, Delete All Spammer Creations"
-    Then Akismet should have received 2 spam submissions

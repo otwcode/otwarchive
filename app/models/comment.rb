@@ -480,17 +480,23 @@ class Comment < ApplicationRecord
     is_logged_in = !self.pseud_id.nil? 
     is_account_old_enough = is_logged_in && !self.pseud.user.should_spam_check_comments?
     
-    should_skip_checking = is_logged_in && (is_account_old_enough || self.on_tag?)
+    should_skip_checking = is_logged_in && (is_account_old_enough || on_tag?)
 
-    self.approved = should_skip_checking || !Akismet.spam?(akismet_attributes)
+    self.approved = should_skip_checking || !spam?
+  end
+
+  def spam?
+    return false if %w[staging production].exclude?(Rails.env)
+
+    Akismetor.spam?(akismet_attributes)
   end
 
   def submit_spam
-    Akismet.submit_spam(akismet_attributes)
+    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
   end
 
   def submit_ham
-    Akismet.submit_ham(akismet_attributes)
+    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
   end
 
   def mark_as_spam!
