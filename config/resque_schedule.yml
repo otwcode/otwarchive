@@ -125,3 +125,13 @@ notify_inactive_wranglers:
     queue_name: utilities
     arguments: []
   description: "Sends emails to inactive wranglers"
+
+notify_supervisors_inactive_wranglers:
+  every: 1d
+  class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
+  queue: utilities
+  args:
+    job_class: InactiveWranglerSupervisorNotificationJob
+    queue_name: utilities
+    arguments: []
+  description: "Sends email about inactive wranglers to supervisors"

@@ -9,4 +9,11 @@ class TagWranglingSupervisorMailer < ApplicationMailer
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
+
+  def inactive_wrangler_notification(users)
+    # TODO Bilka
+    mail(
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
+  end
 end

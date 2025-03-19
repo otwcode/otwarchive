@@ -95,6 +95,8 @@ en:
       name_changed:
         html: The wrangler %{old_username} has changed their name to %{new_username}.
       subject: "[%{app_name}] Wrangler name change"
+    inactive_wrangler_notification:
+      subject: "[%{app_name}] TODO Bilka"
   user_mailer:
     abuse_report:
       copy:
