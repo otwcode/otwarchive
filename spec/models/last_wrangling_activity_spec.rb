@@ -4,10 +4,29 @@ describe LastWranglingActivity do
   include ActiveJob::TestHelper
 
   describe "#notify_inactive_wranglers" do
-    let(:user) { create(:tag_wrangler) }
+    let!(:user) { create(:tag_wrangler) }
+
+    context "freshly created wrangler" do
+      it "does nothing" do
+        expect { LastWranglingActivity.notify_inactive_wranglers }
+          .not_to have_enqueued_mail(UserMailer, :inactive_wrangler_notification)
+      end
+
+      context "wrangler never wrangles" do
+        it "notifies the wrangler" do
+          travel_to(40.days.from_now) do
+            expect { LastWranglingActivity.notify_inactive_wranglers }
+              .to have_enqueued_mail(UserMailer, :inactive_wrangler_notification).with(user).exactly(1)
+          end
+        end
+      end
+    end
 
     context "recently active wrangler" do
-      let!(:activity) { create(:last_wrangling_activity, user: user, updated_at: 1.day.ago) }
+      before do
+        user.last_wrangling_activity.updated_at = 1.day.ago
+        user.last_wrangling_activity.save!(touch: false)
+      end
 
       it "does nothing" do
         expect { LastWranglingActivity.notify_inactive_wranglers }
@@ -16,7 +35,11 @@ describe LastWranglingActivity do
     end
 
     context "one inactive wrangler" do
-      let!(:activity) { create(:last_wrangling_activity, user: user, updated_at: 60.days.ago) }
+      before do
+        user.last_wrangling_activity.updated_at = 60.days.ago
+        user.last_wrangling_activity.save!(touch: false)
+      end
+
       it "enqueues one email" do
         expect { LastWranglingActivity.notify_inactive_wranglers }
           .to have_enqueued_mail(UserMailer, :inactive_wrangler_notification).with(user).exactly(1)
@@ -27,7 +50,7 @@ describe LastWranglingActivity do
         expect(user.reload.last_wrangling_activity.updated_at).to be <= 60.days.ago
       end
 
-      context "the wrangler has already been notified" do
+      context "wrangler has already been notified" do
         before do
           expect { LastWranglingActivity.notify_inactive_wranglers }
             .to have_enqueued_mail(UserMailer, :inactive_wrangler_notification).with(user).exactly(1)
@@ -59,6 +82,7 @@ describe LastWranglingActivity do
         let(:user) { create(:tag_wrangler, login: ArchiveConfig.USERS_EXCLUDED_FROM_WRANGLING_INACTIVITY.last) }
 
         it "does nothing" do
+          expect(user.reload.last_wrangling_activity.updated_at).to be <= 60.days.ago
           expect { LastWranglingActivity.notify_inactive_wranglers }
             .not_to have_enqueued_mail(UserMailer, :inactive_wrangler_notification)
         end
@@ -66,9 +90,14 @@ describe LastWranglingActivity do
     end
 
     context "multiple inactive wranglers" do
-      let!(:activity) { create(:last_wrangling_activity, user: user, updated_at: 60.days.ago) }
       let(:user2) { create(:tag_wrangler) }
-      let!(:activity2) { create(:last_wrangling_activity, user: user2, updated_at: 40.days.ago) }
+
+      before do
+        user.last_wrangling_activity.updated_at = 60.days.ago
+        user.last_wrangling_activity.save!(touch: false)
+        user2.last_wrangling_activity.updated_at = 40.days.ago
+        user2.last_wrangling_activity.save!(touch: false)
+      end
 
       it "enqueues multiple emails" do
         expect { LastWranglingActivity.notify_inactive_wranglers }
