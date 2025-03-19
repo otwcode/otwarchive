@@ -35,11 +35,9 @@ class Rack::Attack
 
   # This stanza allows us to limit by user which backend is selected by nginx.
   
-  if req&.env["HTTP_X-AO3-SESSION-USER"].present?
-    ArchiveConfig.RATE_LIMIT_PER_NGINX_UPSTREAM_USER.each do |k, v| 
-      throttle("req/#{k}/user", limit: v["limit"], period: v["period"]) do |req|
-        req.env["HTTP_X-AO3-SESSION-USER"] if req.env["HTTP_X_UNICORNS"] == k
-      end
+  ArchiveConfig.RATE_LIMIT_PER_NGINX_UPSTREAM_USER.each do |k, v| 
+    throttle("req/#{k}/user", limit: v["limit"], period: v["period"]) do |req|
+      req.env["HTTP_X-AO3-SESSION-USER"] if req.env["HTTP_X_UNICORNS"] == k && req.env["HTTP_X-AO3-SESSION-USER"].present?
     end
   end
 
