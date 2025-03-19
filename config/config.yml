@@ -198,6 +198,10 @@ RATE_LIMIT_PER_NGINX_UPSTREAM:
   unicorn_elastic_bookmarks:
     limit: 300
     period: 300
+RATE_LIMIT_PER_NGINX_UPSTREAM_USER:
+  unicorn_elastic:
+    limit: 300
+    period: 300
 RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]
 
 # The number of tags to show on the search page:
