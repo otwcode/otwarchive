@@ -41,7 +41,7 @@ Feature: Prompt Meme Challenge
     And I press "Post"
   Then I should see "Kinky Story"
     And I should find a list for associations
-    And I should see "In response to a prompt by Anonymous in the promptcollection collection"
+    And I should see "In response to a prompt by Anonymous in the The Kissing Game collection"
     And I should see a link "prompt"
     And 1 email should be delivered to "my1@e.org"
 # TODO: when work_anonymous is implemented, test that the prompt filler can be anon too

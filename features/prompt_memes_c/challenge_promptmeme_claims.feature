@@ -446,3 +446,11 @@ Feature: Prompt Meme Challenge
       And I go to "Battle 12" collection's page
       And I follow "Prompt Form"
     Then I should not see "any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings"
+
+  Scenario: When a work is posted to fulfill a prompt, the notes should contain the collection title
+  Given I have Battle 12 prompt meme fully set up
+    And everyone has signed up for Battle 12
+  When I am logged in as "myname1"
+    And I claim a prompt from "Battle 12"
+    And I fulfill my claim
+  Then I should see "In response to a prompt by myname4 in the Battle 12 collection"
