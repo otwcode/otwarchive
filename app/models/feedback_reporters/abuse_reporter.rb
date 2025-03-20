@@ -1,4 +1,6 @@
 class AbuseReporter < FeedbackReporter
+  attr_accessor :creator_ids
+
   def report_attributes
     super.deep_merge(
       "departmentId" => department_id,
@@ -13,7 +15,8 @@ class AbuseReporter < FeedbackReporter
   def custom_zoho_fields
     {
       "cf_ip" => ip_address.presence || "Unknown IP",
-      "cf_url" => url.presence || "Unknown URL"
+      "cf_url" => url.presence || "Unknown URL",
+      "cf_user_id" => creator_ids.presence || ""
     }
   end
 
