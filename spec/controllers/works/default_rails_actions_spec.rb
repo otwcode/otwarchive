@@ -277,17 +277,22 @@ describe WorksController, work_search: true do
     context "as a tag wrangler" do
       let(:user) { create(:tag_wrangler) }
 
+      before do
+        user.last_wrangling_activity.updated_at = 60.days.ago
+        user.last_wrangling_activity.save!(touch: false)
+      end
+
       it "does not set wrangling activity when posting with a new fandom" do
         work_attributes = attributes_for(:work).except(:posted, :fandom_string).merge(fandom_string: "New Fandom")
         post :create, params: { work: work_attributes }
-        expect(user.last_wrangling_activity).to be_nil
+        expect(user.reload.last_wrangling_activity.updated_at).to be_within(1.minute).of 60.days.ago
       end
 
       it "does not set wrangling activity when posting with an unsorted tag" do
         tag = create(:unsorted_tag)
         work_attributes = attributes_for(:work).except(:posted, :freeform_string).merge(freeform_string: tag.name)
         post :create, params: { work: work_attributes }
-        expect(user.last_wrangling_activity).to be_nil
+        expect(user.reload.last_wrangling_activity.updated_at).to be_within(1.minute).of 60.days.ago
       end
     end
 

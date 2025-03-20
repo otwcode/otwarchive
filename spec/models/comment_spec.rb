@@ -326,9 +326,14 @@ describe Comment do
     context "as a tag wrangler" do
       let(:tag_wrangler) { create(:tag_wrangler) }
 
+      before do
+        tag_wrangler.last_wrangling_activity.updated_at = 60.days.ago
+        tag_wrangler.last_wrangling_activity.save!(touch: false)
+      end
+
       shared_examples "updates last wrangling activity" do
-        it "tracks last wrangling activity", :frozen do
-          expect(tag_wrangler.last_wrangling_activity.updated_at).to eq(Time.now.utc)
+        it "tracks last wrangling activity" do
+          expect(tag_wrangler.reload.last_wrangling_activity.updated_at).to be_within(1.minute).of Time.current
         end
       end
 
@@ -348,7 +353,7 @@ describe Comment do
 
       shared_examples "does not update last wrangling activity" do
         it "does not track last wrangling activity" do
-          expect(tag_wrangler.last_wrangling_activity).to be_nil
+          expect(tag_wrangler.reload.last_wrangling_activity.updated_at).to be_within(1.minute).of 60.days.ago
         end
       end
 
