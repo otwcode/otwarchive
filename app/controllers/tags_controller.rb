@@ -29,6 +29,7 @@ class TagsController < ApplicationController
   def index
     if @collection
       @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
+      @page_subtitle = "#{@collection.title} - Tags"
     else
       no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
       @tags = no_fandom.children.by_type('Freeform').first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)

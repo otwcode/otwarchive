@@ -7,7 +7,7 @@ class CollectionProfileController < ApplicationController
       flash[:error] = "What collection did you want to look at?"
       redirect_to collections_path and return
     end
-    @page_subtitle = @collection.title
+    @page_subtitle = "#{@collection.title} - Profile".html_safe
   end
 
 end

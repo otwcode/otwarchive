@@ -34,6 +34,7 @@ class CollectionsController < ApplicationController
         .by_title
         .for_blurb
         .paginate(page: params[:page])
+      @page_subtitle = "#{@collection.title} - Subcollections"
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       @collections = @user.maintained_collections
         .by_title

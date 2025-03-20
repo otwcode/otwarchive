@@ -18,6 +18,7 @@ class PeopleController < ApplicationController
       @people = @collection.participants.with_attached_icon.includes(:user).order(:name).page(params[:page])
       @rec_counts = Pseud.rec_counts_for_pseuds(@people)
       @work_counts = Pseud.work_counts_for_pseuds(@people)
+      @page_subtitle = "#{@collection.title} - People"
     else
       redirect_to search_people_path
     end
