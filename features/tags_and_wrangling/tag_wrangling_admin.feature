@@ -198,3 +198,32 @@ Feature: Tag wrangling
     When it is currently 40 days from now
       And the scheduled inactive wrangler notification jobs are run
     Then 0 emails should be delivered
+
+    Scenario: A inactive wrangler who wrangles and then goes inactive again is emailed again
+      Given it is currently 2025-01-16 10:00 AM
+        And the following activated tag wrangler exists
+          | login |
+          | katti |
+        And a canonical fandom "Generic Fandom"
+        And I am logged in as "katti"
+        And I post the comment "Wrangling activity" on the tag "Generic Fandom"
+      When I go to my wrangling page
+      Then I should see "katti last wrangled at Thu 16 Jan 2025"
+      When it is currently 23 days from now
+        And the scheduled inactive wrangler notification jobs are run
+      Then 1 email should be delivered to "katti"
+        And the email to "katti" should contain "detected any wrangling from you in the past 2 weeks."
+        And tag wrangling supervisors should receive 1 email
+        And the last email should contain "not been recorded as wrangling any tags in the past 3 weeks:"
+        And the last email should contain "katti"
+      When I am logged in as "katti"
+        And I post the comment "More activity" on the tag "Generic Fandom"
+      When I go to my wrangling page
+      Then I should see "katti last wrangled at Sat 08 Feb 2025"
+      When it is currently 23 days from now
+        And the scheduled inactive wrangler notification jobs are run
+      Then 1 email should be delivered to "katti"
+        And the email to "katti" should contain "detected any wrangling from you in the past 2 weeks."
+        And tag wrangling supervisors should receive 1 email
+        And the last email should contain "not been recorded as wrangling any tags in the past 3 weeks:"
+        And the last email should contain "katti"

@@ -61,20 +61,6 @@ describe InactiveWranglerSupervisorNotificationJob do
             .not_to have_enqueued_mail(TagWranglingSupervisorMailer, :inactive_wrangler_notification)
         end
       end
-
-      context "wrangler wrangles and then goes inactive again" do
-        before do
-          user.update_last_wrangling_activity
-          expect(user.reload.last_wrangling_activity.updated_at).to be >= 1.hour.ago # should be a recent time
-        end
-
-        it "notifies the supervisors again" do
-          travel_to(40.days.from_now) do
-            expect { InactiveWranglerSupervisorNotificationJob.perform_now }
-              .to have_enqueued_mail(TagWranglingSupervisorMailer, :inactive_wrangler_notification).with([user.login]).exactly(1)
-          end
-        end
-      end
     end
 
     context "wrangler is excluded from activity checking" do
