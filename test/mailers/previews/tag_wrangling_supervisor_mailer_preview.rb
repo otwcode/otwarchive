@@ -5,6 +5,6 @@ class TagWranglingSupervisorMailerPreview < ApplicationMailerPreview
   end
 
   def inactive_wrangler_notification
-    TagWranglingSupervisorMailer.inactive_wrangler_notification(["niki", "fed"])
+    TagWranglingSupervisorMailer.inactive_wrangler_notification(%w[niki fed])
   end
 end
