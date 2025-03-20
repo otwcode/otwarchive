@@ -24,7 +24,7 @@ class RolesUser < ApplicationRecord
 
   # After creating the tag_wrangler role, update the
   # user's last wrangling activity.
-  after_commit :create_last_wrangling_activity
+  after_commit :create_last_wrangling_activity, on: :create
   def create_last_wrangling_activity
     return unless role.name == "tag_wrangler"
 
