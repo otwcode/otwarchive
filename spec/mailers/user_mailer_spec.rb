@@ -1214,8 +1214,8 @@ describe UserMailer do
     # Test the headers
     it_behaves_like "an email with a valid sender"
 
-    it "has tagwranglers-personnel@example.org as reply_to" do
-      expect(email).to reply_to("#{ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS}")
+    it "has tagwranglers-personnel as reply_to" do
+      expect(email).to reply_to ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS
     end
 
     it "has the correct subject line" do

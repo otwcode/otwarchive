@@ -237,6 +237,12 @@ When /^the periodic filter count task is run$/i do
   FilterCount.update_counts_for_large_queue
 end
 
+When "the scheduled inactive wrangler notification jobs are run" do
+  step "all emails have been delivered"
+  InactiveWranglerNotificationJob.perform_now
+  InactiveWranglerSupervisorNotificationJob.perform_now
+end
+
 When /^I check the canonical option for the tag "([^"]*)"$/ do |tagname|
   tag = Tag.find_by(name: tagname)
   check("canonicals_#{tag.id}")

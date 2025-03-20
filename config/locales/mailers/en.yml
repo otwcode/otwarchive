@@ -91,12 +91,18 @@ en:
     official_with_parens: "(Official)"
     registered_with_parens: "(Registered User)"
   tag_wrangling_supervisor_mailer:
+    inactive_wrangler_notification:
+      inactive_wranglers:
+        one: 'The following wranglers have not been recorded as wrangling any tags in the past week:'
+        other: 'The following wranglers have not been recorded as wrangling any tags in the past %{weeks} weeks:'
+      start_procedures: Please start the procedures for inactive wranglers, as appropriate.
+      subject:
+        one: "[%{app_name}] Wranglers who have not wrangled in %{weeks} week"
+        other: "[%{app_name}] Wranglers who have not wrangled in %{weeks} weeks"
     wrangler_username_change_notification:
       name_changed:
         html: The wrangler %{old_username} has changed their name to %{new_username}.
       subject: "[%{app_name}] Wrangler name change"
-    inactive_wrangler_notification:
-      subject: "[%{app_name}] TODO Bilka"
   user_mailer:
     abuse_report:
       copy:
@@ -325,25 +331,8 @@ en:
       introduction: 'We''re working hard to reply to everyone, and we''ll respond to you as soon as we can. Your communication is greatly valued, and it will be reviewed and answered by our volunteer Support team. In the meantime, here is a copy of the information you submitted through the Technical Support and Feedback form:'
       subject: "[%{app_name}] Support - %{summary}"
     inactive_wrangler_notification:
-      subject:
-        one: "[%{app_name}] Wrangling absence notice - automatic hiatus in %{count} day"
-        other: "[%{app_name}] Wrangling absence notice - automatic hiatus in %{count} days"
-      inactive:
-        one: This is an automated email from %{app_name}. You are receiving this email because the Archive hasn't detected any wrangling from you in the past %{weeks} week.
-        other: This is an automated email from %{app_name}. You are receiving this email because the Archive hasn't detected any wrangling from you in the past %{weeks} weeks.
-      must_wrangle:
-        one: Wrangling policies require that everyone wrangle at least once every week.
-        other: Wrangling policies require that everyone wrangle at least once every %{weeks} weeks.
-      please_reply:
-        title: 'Please reply to this email if:'
-        technical_difficulties: You are having technical difficulties accessing the Archive.
-        training_extension: You are in training and need an extension.
-        more_work:
-          one: You need more work in order to have tags to wrangle every %{weeks} week.
-          other: You need more work in order to have tags to wrangle every %{weeks} weeks.
-        mentor: You would like a mentor or have questions.
-        another_issue: You have another issue.
       assigned_fandoms_policy: Assigned Fandoms Policy
+      contact_us: Thank you for your wrangling work! Please contact us if you need anything.
       email_to_supervisors:
         html:
           one: An automated email will be sent to the wrangling supervisors if you do not wrangle in the next week. If that happens, wrangling supervisors will place you on hiatus, per the %{assigned_fandoms_policy_link}.
@@ -352,10 +341,27 @@ en:
           one: 'An automated email will be sent to the wrangling supervisors if you do not wrangle in the next week. If that happens, wrangling supervisors will place you on hiatus, per the Assigned Fandoms Policy: %{assigned_fandoms_policy_url}.'
           other: 'An automated email will be sent to the wrangling supervisors if you do not wrangle in the next %{count} weeks. If that happens, wrangling supervisors will place you on hiatus, per the Assigned Fandoms Policy: %{assigned_fandoms_policy_url}.'
       hiatus_form: Wrangler Hiatus & Retirement Form
+      inactive:
+        one: This is an automated email from %{app_name}. You are receiving this email because the Archive hasn't detected any wrangling from you in the past %{weeks} week.
+        other: This is an automated email from %{app_name}. You are receiving this email because the Archive hasn't detected any wrangling from you in the past %{weeks} weeks.
+      must_wrangle:
+        one: Wrangling policies require that everyone wrangle at least once every week.
+        other: Wrangling policies require that everyone wrangle at least once every %{weeks} weeks.
+      please_reply:
+        another_issue: You have another issue.
+        mentor: You would like a mentor or have questions.
+        more_work:
+          one: You need more work in order to have tags to wrangle every %{weeks} week.
+          other: You need more work in order to have tags to wrangle every %{weeks} weeks.
+        technical_difficulties: You are having technical difficulties accessing the Archive.
+        title: 'Please reply to this email if:'
+        training_extension: You are in training and need an extension.
       request_hiatus:
         html: You can request a hiatus using the %{hiatus_form_link}.
         text: 'You can request a hiatus using the Wrangler Hiatus & Retirement Form: %{hiatus_form_url}.'
-      contact_us: Thank you for your wrangling work! Please contact us if you need anything.
+      subject:
+        one: "[%{app_name}] Wrangling absence notice - automatic hiatus in %{count} day"
+        other: "[%{app_name}] Wrangling absence notice - automatic hiatus in %{count} days"
     invitation:
       been_invited: You've been invited to join the Archive of Our Own!
       features: With an account, you can post fanworks, use bookmarks to keep track of works you enjoyed, receive subscription emails when your favorite creators or works update, customize the way the site looks for you, and more!

@@ -1,3 +1,18 @@
 <% content_for :message do %>
-  <p><%# TODO Bilka %></p>
+  <p><%= t("mailer.general.greeting.informal.addressed_html", name: style_bold(t("mailer.general.greeting.tag_wrangler_supervisors"))) %></p>
+
+  <p><%= t(".inactive_wranglers", count: @hiatus_weeks, weeks: @hiatus_weeks_formatted) %></p>
+
+  <ul>
+    <% @users.each do |user| %>
+      <li><%= user %></li>
+    <% end %>
+  </ul>
+
+  <p><%= t(".start_procedures") %></p>
+
+  <p>
+    <%= t("mailer.general.closing.informal") %><br />
+    <%= t("mailer.general.signature.app_short_name") %>
+  </p>
 <% end %>
