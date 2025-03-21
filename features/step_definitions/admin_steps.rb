@@ -291,8 +291,8 @@ When "{int} Archive FAQ(s) with {int} question(s) exist(s)" do |faqs, questions|
   end
 end
 
-When /^the invite_from_queue_at is yesterday$/ do
-  AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
+When "the invite_from_queue_at is yesterday" do
+  AdminSetting.first.update_attribute(:invite_from_queue_at, Time.current - 1.day)
 end
 
 When "the scheduled check_invite_queue job is run" do
