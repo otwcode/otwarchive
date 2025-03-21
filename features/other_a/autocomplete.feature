@@ -237,3 +237,13 @@ Feature: Display autocomplete for tags
     # Zero width space tag
     When I enter "​" in the "tag_merger_string_autocomplete" autocomplete field
     Then I should not see "No suggestions found" in the autocomplete
+
+  @javascript
+  Scenario: Vertical bar is treated as a word separator
+    Given I am logged in
+      And a canonical character "Taylor Hebert | Skitter | Weaver"
+      And I go to the new work page
+    When I enter "|" in the "Characters" autocomplete field
+    Then I should see "No suggestions found" in the autocomplete
+    When I enter "Taylor|Skitter" in the "Characters" autocomplete field
+    Then I should see "Taylor Hebert | Skitter | Weaver" in the autocomplete
