@@ -20,3 +20,4 @@ admin_setting_3:
   downloads_enabled: true
   hide_spam: false
   guest_comments_off: false
+  account_age_threshold_for_comment_spam_check: 0

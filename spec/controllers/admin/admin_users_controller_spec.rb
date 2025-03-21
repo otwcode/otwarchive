@@ -482,6 +482,8 @@ describe Admin::AdminUsersController do
     let(:other_owner) { create(:user, banned: false) }
     let!(:collection1) { create(:collection) }
     let!(:collection2) { create(:collection) }
+    let!(:comment) { create(:comment, pseud: user.default_pseud) }
+
     authorized_roles = %w[superadmin policy_and_abuse].freeze
 
     before do
@@ -529,6 +531,13 @@ describe Admin::AdminUsersController do
 
               it_redirects_to_with_notice(admin_users_path, "All creations by user #{user.login} have been deleted.")
               expect(Work.exists?(work.id)).to be false
+              expect(Comment.exists?(comment.id)).to be_falsey
+            end
+
+            it "sends all of the user's comments as spam reports to Akismet" do
+              expect_any_instance_of(Comment).to receive(:submit_spam)
+
+              subject.call
             end
           end
         end
