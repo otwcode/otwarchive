@@ -37,7 +37,7 @@ class Rack::Attack
   
   ArchiveConfig.RATE_LIMIT_PER_NGINX_UPSTREAM_USER.each do |k, v| 
     throttle("req/#{k}/user", limit: v["limit"], period: v["period"]) do |req|
-      req.env["HTTP_X-AO3-SESSION-USER"] if req.env["HTTP_X_UNICORNS"] == k && req.env["HTTP_X-AO3-SESSION-USER"].present?
+      req.env["HTTP_X_AO3_SESSION_USER"] if req.env["HTTP_X_UNICORNS"] == k && req.env["HTTP_X_AO3_SESSION_USER"].present?
     end
   end
 
