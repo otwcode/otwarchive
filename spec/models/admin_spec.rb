@@ -30,7 +30,7 @@ describe Admin, :ready do
   end
 
   context "invalid" do
-    it "without a user name" do
+    it "without a username" do
       expect { create(:admin, login: nil) }
         .to raise_error(ActiveRecord::RecordInvalid,
                         "Validation failed: Login can't be blank, Login is too short (minimum is #{ArchiveConfig.LOGIN_LENGTH_MIN} characters)")
