@@ -4,6 +4,7 @@ class SubscriptionsController < ApplicationController
 
   before_action :users_only
   before_action :load_user
+  before_action :load_subscribable_type, only: [:index, :confirm_delete_all, :delete_all]
   before_action :check_ownership
 
   def load_user
@@ -15,11 +16,7 @@ class SubscriptionsController < ApplicationController
   # GET /subscriptions.xml
   def index
     @subscriptions = @user.subscriptions.includes(:subscribable)
-
-    if params[:type] && Subscription::VALID_SUBSCRIBABLES.include?(params[:type].singularize.titleize)
-      @subscribable_type = params[:type]
-      @subscriptions = @subscriptions.where(subscribable_type: @subscribable_type.classify)
-    end
+    @subscriptions = @subscriptions.where(subscribable_type: @subscribable_type.classify) if @subscribable_type
 
     @subscriptions = @subscriptions.to_a.sort { |a,b| a.name.downcase <=> b.name.downcase }
     @subscriptions = @subscriptions.paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
@@ -62,16 +59,11 @@ class SubscriptionsController < ApplicationController
   end
 
   def confirm_delete_all
-    @subscribable_type = params[:type] if params[:type] && Subscription::VALID_SUBSCRIBABLES.include?(params[:type].singularize.titleize)
   end
 
   def delete_all
-    if params[:type] && Subscription::VALID_SUBSCRIBABLES.include?(params[:type].singularize.titleize)
-      @subscribable_type = params[:type]
-      @subscriptions = @user.subscriptions.where(subscribable_type: @subscribable_type.classify)
-    else
-      @subscriptions = @user.subscriptions
-    end
+    @subscriptions = @user.subscriptions
+    @subscriptions = @subscriptions.where(subscribable_type: @subscribable_type.classify) if @subscribable_type
 
     success = true
     @subscriptions.each do |subscription|
@@ -90,6 +82,10 @@ class SubscriptionsController < ApplicationController
   end
 
   private
+
+  def load_subscribable_type
+    @subscribable_type = params[:type].pluralize.downcase if params[:type] && Subscription::VALID_SUBSCRIBABLES.include?(params[:type].singularize.titleize)
+  end
 
   def subscription_params
     params.require(:subscription).permit(
