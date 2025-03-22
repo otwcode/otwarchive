@@ -8,7 +8,7 @@
 </h2>
 
 <!--main content-->
-<%= form_for(@user, url: delete_all_user_subscriptions_path(@user, type: @subscribable_type), html: { method: :post, class: "simple destroy" }) do |f| %>
+<%= form_with(model: @user, url: delete_all_user_subscriptions_path(@user, type: @subscribable_type), method: :post, class: "simple destroy") do |f| %>
   <p class="caution notice">
     <%= t(".caution_html") %>
   </p>

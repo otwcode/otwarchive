@@ -75,7 +75,7 @@ class SubscriptionsController < ApplicationController
 
     success = true
     @subscriptions.each do |subscription|
-      subscription.destroy
+      subscription.destroy!
     rescue StandardError
       success = false
     end

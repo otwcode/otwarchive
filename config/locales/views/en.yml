@@ -1656,7 +1656,7 @@ en:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
   subscriptions:
     confirm_delete_all:
-      caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? <strong>This cannot be undone</strong>.
+      caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
       page_heading:
         all: Delete All Subscriptions
         series: Delete All Series Subscriptions
