@@ -301,7 +301,7 @@ Scenario: delete all subscriptions of a specific type
   When I press "Yes, Delete All Work Subscriptions"
   Then I should see "Your subscriptions have been deleted"
   When I go to my subscriptions page
-  Then should see "Awesome Series (Series)"
+  Then I should see "Awesome Series (Series)"
     And I should see "third_user"
     But I should not see "Awesome Story (Work)"
 
