@@ -11,6 +11,7 @@ describe Admin::AdminUsersController do
 
   manage_roles = %w[superadmin legal open_doors policy_and_abuse support tag_wrangling].freeze
   search_roles = %w[superadmin legal open_doors policy_and_abuse support tag_wrangling].freeze
+  search_past_roles = %w[superadmin open_doors policy_and_abuse support tag_wrangling].freeze
 
   shared_examples "an action unauthorized admins can't access" do |authorized_roles:|
     before { fake_login_admin(admin) }
@@ -75,6 +76,50 @@ describe Admin::AdminUsersController do
 
       it_behaves_like "an action authorized admins can access",
                       authorized_roles: search_roles
+    end
+
+    context "when passing search_past", user_search: true do
+      subject { -> { get :index, params: { name: "old", search_past: "1" } } }
+      let(:user) { create(:user, login: "old") }
+
+      before do
+        user.update!(login: "new")
+        run_all_indexing_jobs
+      end
+
+      shared_examples "a search unauthorized admins can't perform" do |authorized_roles:|
+        (Admin::VALID_ROLES - authorized_roles).each do |role|
+          context "with role #{role}" do
+            let(:admin) { create(:admin, roles: [role]) }
+
+            it "does not find the user" do
+              subject.call
+              expect(assigns(:users)).to be_nil
+            end
+          end
+        end
+      end
+
+      shared_examples "a search authorized admins can perform" do |authorized_roles:|
+        before { fake_login_admin(admin) }
+
+        authorized_roles.each do |role|
+          context "with role #{role}" do
+            let(:admin) { create(:admin, roles: [role]) }
+
+            it "finds the user" do
+              subject.call
+              expect(assigns(:users)).to include(user)
+            end
+          end
+        end
+      end
+
+      it_behaves_like "a search unauthorized admins can't perform",
+                      authorized_roles: search_past_roles
+
+      it_behaves_like "a search authorized admins can perform",
+                      authorized_roles: search_past_roles
     end
   end
 
