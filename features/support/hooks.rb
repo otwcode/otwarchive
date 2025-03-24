@@ -25,9 +25,6 @@ Before do
   # Don't authenticate for Zoho.
   allow_any_instance_of(ZohoAuthClient).to receive(:access_token)
 
-  # Reset the current user:
-  User.current_user = nil
-
   # Clear Memcached
   Rails.cache.clear
 

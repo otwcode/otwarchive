@@ -1,10 +1,6 @@
 require "spec_helper"
 
 describe Tag do
-  after(:each) do
-    User.current_user = nil
-  end
-
   it { is_expected.not_to allow_values("", "a" * 151).for(:name) }
 
   context "checking count caching" do

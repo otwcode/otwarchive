@@ -7,8 +7,6 @@ describe BookmarkableQuery do
       let(:bookmarkable_query) { bookmark_query.bookmarkable_query }
 
       it "excludes hidden, draft, and restricted bookmarkables when logged out" do
-        User.current_user = nil
-
         excluded = bookmarkable_query.generated_query.dig(:query, :bool, :must_not)
         expect(excluded).to include(term: { hidden_by_admin: "true" })
         expect(excluded).to include(term: { posted: "false" })

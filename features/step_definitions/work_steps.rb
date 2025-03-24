@@ -127,7 +127,6 @@ Given /^I have no works or comments$/ do
 end
 
 Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)? "([^"]*)"$/ do |n_chapters, n_comments, title|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -166,7 +165,6 @@ Given /^I have a multi-chapter draft$/ do
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -178,7 +176,6 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_co
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_bookmarks|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
