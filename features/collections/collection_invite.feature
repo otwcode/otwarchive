@@ -21,7 +21,7 @@ Feature: Collection
   Then I should see "Murder in Milan"
     And I should see /Works and bookmarks listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to "Approved\."/
   When I am logged in as "Scott" with password "password"
-    And "Scott" accepts the invitation for my work in the collection "scotts collection"
+    And "Scott" accepts the invitation for their work in the collection "scotts collection"
     And I press "Submit"
   Then I should not see "Murder in Milan"
   When I follow "Approved"
@@ -80,7 +80,7 @@ Feature: Collection
       And I invite the work "Over the Limit" to the collection "Favorites"
     Then I should see "This work has been invited to your collection (Favorites)."
     When I am logged in as "sky"
-      And "sky" accepts the invitation for my work in the collection "Favorites"
+      And "sky" accepts the invitation for their work in the collection "Favorites"
       And I submit
     Then I should see "Collection status updated!"
       And I should not see "Over the Limit"

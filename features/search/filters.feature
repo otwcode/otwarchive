@@ -167,6 +167,7 @@ Feature: Filters
     Given I am logged in as "recengine"
       And I bookmark the work "Bilbo Does the Thing" with the tags "hobbit"
       And I bookmark the work "A Hobbit's Meandering" with the tags "bilbo"
+      And the dashboard counts have expired
 
     When I go to recengine's bookmarks page
       And I fill in "Search within results" with "bilbo"
@@ -188,6 +189,7 @@ Feature: Filters
       And I bookmark the work "Bilbo Does the Thing" with the tags "to read,been here"
       And I bookmark the work "A Hobbit's Meandering" with the tags "to read"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh" with the tags "been here"
+      And the dashboard counts have expired
 
     # Use an include checkbox
     When I go to recengine's bookmarks page
@@ -248,6 +250,7 @@ Feature: Filters
     Given I am logged in as "recengine"
       And I bookmark the work "Bilbo Does the Thing"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh" with the tags "The Hobbit"
+      And the dashboard counts have expired
 
     # Exclude a tag as a work tag but not as a bookmarker's tag
     When I go to recengine's bookmarks page

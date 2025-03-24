@@ -181,7 +181,7 @@ When /^I check all the collection settings checkboxes$/ do
   check("collection_collection_preference_attributes_email_notify")
 end
 
-When "{string} accepts the invitation for my work in the collection {string}" do |username, collection|
+When "{string} accepts the invitation for their work in the collection {string}" do |username, collection|
   the_collection = Collection.find_by(title: collection)
   collection_item_id = the_collection.collection_items.first.id
   visit user_collection_items_path(User.find_by(login: username))
