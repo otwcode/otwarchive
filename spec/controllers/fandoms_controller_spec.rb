@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe FandomsController do
+describe FandomsController, work_search: true do
   let(:collection) { create(:collection) }
 
   describe "GET #index" do

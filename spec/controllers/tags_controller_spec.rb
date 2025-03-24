@@ -8,7 +8,6 @@ describe TagsController do
   wrangling_read_access_roles = (wrangling_full_access_roles + %w[policy_and_abuse]).freeze
 
   let(:user) { create(:tag_wrangler) }
-  let(:collection) { create(:collection) }
 
   before { fake_login_known_user(user) }
 
@@ -623,6 +622,8 @@ describe TagsController do
   end
 
   describe "GET #index" do
+    let(:collection) { create(:collection) }
+
     it "assigns subtitle with collection title and tags" do
       get :index, params: { collection_id: collection.name }
       expect(assigns[:page_subtitle]).to eq("#{collection.title} - Tags")
