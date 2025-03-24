@@ -29,7 +29,7 @@ end
 
 When(/^I delete the pseud "([^\"]*)"$/) do |pseud|
   visit user_pseuds_path(User.current_user)
-  click_link("delete_#{pseud}")
+  click_link("delete_#{pseud.downcase}")
 end
 
 When /^"([^\"]*)" creates the default pseud "([^"]*)"$/ do |username, newpseud|

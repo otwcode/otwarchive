@@ -75,6 +75,7 @@ class Pseud < ApplicationRecord
 
   after_update :check_default_pseud
   after_update :expire_caches
+  after_destroy :expire_caches
   after_commit :reindex_creations, :touch_comments
 
   scope :alphabetical, -> { order(:name) }
@@ -390,9 +391,19 @@ class Pseud < ApplicationRecord
   end
 
   def expire_caches
-    if saved_change_to_name?
-      works.touch_all
-      series.each(&:expire_byline_cache)
+    return unless saved_change_to_name? || (destroyed? && !user.nil?)
+
+    pseud = destroyed? ? user.default_pseud : self
+    return if pseud.nil?
+
+    pseud.series.each(&:expire_byline_cache)
+    pseud.works.each do |work|
+      work.touch
+      work.expire_caches
+    end
+    pseud.gift_works.each do |work|
+      work.touch
+      work.expire_caches
     end
   end
 
