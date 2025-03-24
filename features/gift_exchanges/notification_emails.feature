@@ -61,7 +61,7 @@ Feature: Gift Exchange Notification Emails
       And the user "mod1" enables translated emails
 
     When I am logged in as "myname1"
-      And I go to my assignments page
+      And I go to the assignments page for "myname1"
       And I follow "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
       And 7 emails should be delivered

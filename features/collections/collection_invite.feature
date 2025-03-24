@@ -21,7 +21,7 @@ Feature: Collection
   Then I should see "Murder in Milan"
     And I should see /Works and bookmarks listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to "Approved\."/
   When I am logged in as "Scott" with password "password"
-    And I accept the invitation for my work in the collection "scotts collection"
+    And "Scott" accepts the invitation for my work in the collection "scotts collection"
     And I press "Submit"
   Then I should not see "Murder in Milan"
   When I follow "Approved"
@@ -72,15 +72,15 @@ Feature: Collection
   Scenario: A work with too many tags can be invited to a collection, and the user can accept the invitation
     Given the user-defined tag limit is 2
       And the collection "Favorites"
-      And the work "Over the Limit"
+      And the work "Over the Limit" by "sky"
       And the work "Over the Limit" has 3 fandom tags
-      And I am logged in as the author of "Over the Limit"
+      And I am logged in as "sky"
       And I set my preferences to allow collection invitations
     When I am logged in as "moderator"
       And I invite the work "Over the Limit" to the collection "Favorites"
     Then I should see "This work has been invited to your collection (Favorites)."
-    When I am logged in as the author of "Over the Limit"
-      And I accept the invitation for my work in the collection "Favorites"
+    When I am logged in as "sky"
+      And "sky" accepts the invitation for my work in the collection "Favorites"
       And I submit
     Then I should see "Collection status updated!"
       And I should not see "Over the Limit"

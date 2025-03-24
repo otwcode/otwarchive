@@ -49,13 +49,15 @@ end
 
 When /^I approve a related work$/ do
   step %{I am logged in as "inspiration"}
-  step %{I go to my related works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Related Works ("}
   step %{I follow "Approve"}
   step %{I press "Yes, link me!"}
 end
 
 When /^I view my related works$/ do
-  step %{I go to my related works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Related Works ("}
 end
 
 # when for remixes / related works

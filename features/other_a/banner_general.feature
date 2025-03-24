@@ -65,7 +65,7 @@ Scenario: User can turn off banner in preferences
     And an admin creates an active banner
     And I am logged in as "banner_tester"
     And I set my preferences to turn off the banner showing on every page
-  When I go to my user page
+  When I go to banner_tester's user page
   Then the page should not have a banner
 
 Scenario: User can turn off banner in preferences, but will still see a banner when an admin deactivates the existing banner and sets a new banner
@@ -73,7 +73,7 @@ Scenario: User can turn off banner in preferences, but will still see a banner w
     And an admin creates an active banner
     And I am logged in as "banner_tester_2"
   When I set my preferences to turn off the banner showing on every page
-    And I go to my user page
+    And I go to banner_tester_2's user page
   Then the page should not have a banner
   When an admin deactivates the banner
     And an admin creates a different active banner

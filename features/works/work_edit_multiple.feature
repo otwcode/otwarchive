@@ -9,7 +9,7 @@ Feature: Edit Multiple Works
       And I post the work "Glorious" with fandom "SGA"
       And I post the work "Excellent" with fandom "Star Trek"
       And I post the work "Lovely" with fandom "Steven Universe"
-      And I go to my works page
+      And I go to author's works page
     When I follow "Edit Works"
     Then I should see the page title "Edit Multiple Works"
       And I should see "Edit Multiple Works"
@@ -24,7 +24,7 @@ Feature: Edit Multiple Works
     When I press "Yes, Delete Works"
     Then I should see "Your works Glorious, Excellent were deleted."
     When all indexing jobs have been run
-      And I go to my works page
+      And I go to author's works page
     Then I should not see "Glorious"
       And I should not see "Excellent"
       And I should see "Lovely"
@@ -33,7 +33,7 @@ Feature: Edit Multiple Works
     Given I am logged in as "author"
       And I post the work "Glorious" with fandom "SGA"
       And I post the work "Excellent" with fandom "Star Trek"
-      And I go to my works page
+      And I go to author's works page
     When I follow "Edit Works"
     Then I should see the page title "Edit Multiple Works"
       And I should see "Edit Multiple Works"
@@ -159,7 +159,7 @@ Feature: Edit Multiple Works
 
   Scenario: User can change the pseud on multiple works at once
     Given I am logged in as "author"
-      And I add the pseud "My New Pseud"
+      And "author" creates the pseud "My New Pseud"
       And I edit the multiple works "First" and "Second"
       And it is currently 1 second from now
     When I select "My New Pseud" from "Creator/Pseud(s)"
@@ -201,6 +201,7 @@ Feature: Edit Multiple Works
       And I am logged in as "lead_author"
       And I edit multiple works coauthored as "lead_author" with "coauthor"
     When I check "Remove me as co-creator"
+      And it is currently 1 second from now
       And I press "Update All Works"
     Then I should see "Your edits were put through"
     When I view the work "Shared Work 1"
@@ -214,7 +215,9 @@ Feature: Edit Multiple Works
       And I am logged in as "lead_creator"
       And I post the work "Solo"
       And I coauthored the work "Shared" as "lead_creator" with "co_creator"
-    When I go to my edit multiple works page
+    When I follow "My Dashboard"
+      And I follow "Works ("
+      And I follow "Edit Works"
       And I select "Solo" for editing
       And I select "Shared" for editing
       And I press "Edit"

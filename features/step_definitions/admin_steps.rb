@@ -417,7 +417,7 @@ end
 
 Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
   step %{I am logged in as "#{user}"}
-  step %{I am on my works page}
+  step %{I am on #{user}'s works page}
   step %{I should not see "#{work}"}
   step %{I view the work "#{work}"}
   step %{I should see the image "title" text "Hidden by Administrator"}
