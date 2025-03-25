@@ -38,9 +38,13 @@ module CreationNotifier
                                    recipient_emails_off: false).pluck(:user_id)
     recip_ids.each do |userid|
       if self.collections.empty? || self.collections.first.nil?
-        UserMailer.recipient_notification(userid, self.id).deliver_after_commit
+        I18n.with_locale(User.find(userid).preference.locale.iso) do
+          UserMailer.recipient_notification(userid, self.id).deliver_after_commit
+        end
       else
-        UserMailer.recipient_notification(userid, self.id, self.collections.first.id).deliver_after_commit
+        I18n.with_locale(User.find(userid).preference.locale.iso) do
+          UserMailer.recipient_notification(userid, self.id, self.collections.first.id).deliver_after_commit
+        end
       end
     end
   end

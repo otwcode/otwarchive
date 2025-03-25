@@ -223,7 +223,9 @@ class CollectionItem < ApplicationRecord
       recipient_pseuds = Pseud.parse_bylines(self.recipients)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
-          UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver_after_commit
+          I18n.with_locale(pseud.user.preference.locale.iso) do
+            UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver_after_commit
+          end
         end
       end
 

@@ -146,6 +146,21 @@ class UserMailerPreview < ApplicationMailerPreview
     )
   end
 
+  # Send notification for a regular gift work
+  def recipient_notification_status_regular
+    count = params[:count].to_i || 1
+    user, work = recipient_notification_data(count)   
+    UserMailer.recipient_notification(user.id, work.id)
+  end
+  
+  # Send notification for a gift work in a collection
+  def recipient_notification_status_collection
+    count = params[:count].to_i || 1
+    user, work = recipient_notification_data(count)
+    collection = create(:collection)
+    UserMailer.recipient_notification(user.id, work.id, collection.id)
+  end
+
   def invite_increase_notification
     user = create(:user, :for_mailer_preview)
     total = params[:total] || 1
@@ -198,5 +213,58 @@ class UserMailerPreview < ApplicationMailerPreview
     collection = create(status)
     item = create(:work, authors: [user.default_pseud], collections: [collection])
     [user, collection, item]
+  end
+
+  def recipient_notification_data(count)
+    fandoms = []
+    relationships = []
+    characters = []
+    tags = []
+    categories = [ArchiveConfig.CATEGORY_GEN_TAG_NAME,
+    ArchiveConfig.CATEGORY_SLASH_TAG_NAME,
+    ArchiveConfig.CATEGORY_HET_TAG_NAME,
+    ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME,
+    ArchiveConfig.CATEGORY_MULTI_TAG_NAME,
+    ArchiveConfig.CATEGORY_OTHER_TAG_NAME]
+    warnings = [ArchiveConfig.WARNING_DEFAULT_TAG_NAME,
+    ArchiveConfig.WARNING_NONE_TAG_NAME,
+    ArchiveConfig.WARNING_VIOLENCE_TAG_NAME,
+    ArchiveConfig.WARNING_DEATH_TAG_NAME,
+    ArchiveConfig.WARNING_NONCON_TAG_NAME]
+    series_list = []
+    
+    count = 1 if count < 1
+    if count >= 1
+      for n in 1..count 
+        fandoms.append("fandom" + n.to_s)
+        relationships.append("relationship" + n.to_s)
+        characters.append("character" + n.to_s)
+        tags.append("tag" + n.to_s)
+        series_list.append(create(:series))
+      end
+      if count <=5
+        warnings = warnings[0...count]
+      end  
+      if count <=6
+        categories = categories[0...count]
+      end
+    end
+
+    user = create(:user, :for_mailer_preview)
+    work = create(:work, 
+    authors: [user.default_pseud], 
+    expected_number_of_chapters: count, 
+    rating_string: ArchiveConfig.RATING_DEFAULT_TAG_NAME,
+    fandom_string: fandoms, 
+    relationship_string: relationships,  
+    character_string: characters,
+    freeform_string: tags, 
+    category_strings: categories,
+    archive_warning_strings: warnings,
+    summary: Faker::Lorem.paragraph(sentence_count: count),
+    chapter_attributes: { content: count.times.map { Faker::Lorem.characters(number: 11) } },
+    series: series_list
+    )
+    [user, work]
   end
 end
