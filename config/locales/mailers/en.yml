@@ -396,7 +396,7 @@ en:
       reason: 'Your request was:'
       subject: "[%{app_name}] Additional invitation request declined"
     recipient_notification:
-      collection: 
+      collection:
         html: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
         text: A gift work has been posted for you in the "%{collection_title}" collection (%{collection_url}) at the Archive of Our Own!
       no_collection: A gift work has been posted for you at the Archive of Our Own!
