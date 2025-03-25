@@ -240,10 +240,10 @@ class UserMailerPreview < ApplicationMailerPreview
     count = 1 if count < 1
     if count >= 1
       (1..count).each do |n| 
-        fandoms.append("fandom_#{n.to_s}")
-        relationships.append("relationship_#{n.to_s}")
-        characters.append("character_#{n.to_s}")
-        tags.append("tag_#{n.to_s}")
+        fandoms.append("fandom_#{n}")
+        relationships.append("relationship_#{n}")
+        characters.append("character_#{n}")
+        tags.append("tag_#{n}")
         series_list.append(create(:series))
       end
       warnings = warnings[0...count] if count <= 5
