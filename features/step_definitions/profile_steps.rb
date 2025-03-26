@@ -1,5 +1,5 @@
 Given /^I want to edit my profile$/ do
-  visit user_profile_path(User.current_user)
+  step "I view my profile"
   click_link("Edit My Profile")
   step %{I should see "Edit My Profile"}
 end
@@ -48,7 +48,7 @@ end
 
 
 When /^I view my profile$/ do
-  visit user_path(User.current_user)
+  step %{I follow "My Dashboard"}
   step %{I should see "Dashboard"}
   click_link("Profile")
 end
@@ -95,7 +95,7 @@ When /^I change my preferences to display my date of birth$/ do
   click_link("Preferences")
   check ("Show my date of birth to other people.")
   click_button("Update")
-  visit user_path(User.current_user)
+  step %{I follow "My Dashboard"}
   click_link("Profile")
 end
 
@@ -104,7 +104,7 @@ When /^I change my preferences to display my email address$/ do
   click_link("Preferences")
   check ("Show my email address to other people.")
   click_button("Update")
-  visit user_path(User.current_user)
+  step %{I follow "My Dashboard"}
   click_link("Profile")
 end
 

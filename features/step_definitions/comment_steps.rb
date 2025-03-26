@@ -7,13 +7,6 @@ Given /^I have the receive all comment notifications setup$/ do
   step %{I set my preferences to turn on copies of my own comments}
 end
 
-Given /^I have the receive no comment notifications setup$/ do
-  user = User.current_user
-  user.preference.comment_emails_off = true
-  user.preference.kudos_emails_off = true
-  user.preference.save
-end
-
 ParameterType(
   name: "commentable",
   regexp: /the (work|admin post|tag) "([^"]*)"/,
@@ -311,10 +304,10 @@ When /^I reload the comments on "([^\"]*?)"/ do |work|
   w.find_all_comments.each { |c| c.reload }
 end
 
-When /^I post a deeply nested comment thread on "([^\"]*?)"$/ do |work|
+When "{string} posts a deeply nested comment thread on {string}" do |username, work|
   work = Work.find_by(title: work)
   chapter = work.chapters[0]
-  user = User.current_user
+  user = User.find_by(login: username)
 
   commentable = chapter
 

@@ -65,7 +65,7 @@ end
 
 When /^I turn off the banner$/ do
   step %{I am logged in as "newname"}
-  step %{I am on my user page}
+  step %{I am on newname's user page}
   click_button("×")
 end
 

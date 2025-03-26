@@ -526,7 +526,8 @@ Feature: Edit chapters
   Scenario: The Post Draft option on your drafts page only posts the first
   chapter of a multi-chapter draft
     Given I have a multi-chapter draft
-      And I am on my drafts page
+      And I follow "My Dashboard"
+      And I follow "Drafts ("
     When I follow "Post Draft"
     Then I should see "Your work was successfully posted."
       And I should not see "This chapter is a draft and hasn't been posted yet!"

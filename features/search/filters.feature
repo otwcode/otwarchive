@@ -167,15 +167,16 @@ Feature: Filters
     Given I am logged in as "recengine"
       And I bookmark the work "Bilbo Does the Thing" with the tags "hobbit"
       And I bookmark the work "A Hobbit's Meandering" with the tags "bilbo"
+      And the dashboard counts have expired
 
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I fill in "Search within results" with "bilbo"
       And I press "Sort and Filter"
     Then I should see "1 Bookmark found by recengine"
       And I should see "Bilbo Does the Thing"
       And I should not see "A Hobbit's Meandering"
 
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I fill in "Search bookmarker's tags and notes" with "bilbo"
       And I press "Sort and Filter"
     Then I should see "1 Bookmark found by recengine"
@@ -188,9 +189,10 @@ Feature: Filters
       And I bookmark the work "Bilbo Does the Thing" with the tags "to read,been here"
       And I bookmark the work "A Hobbit's Meandering" with the tags "to read"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh" with the tags "been here"
+      And the dashboard counts have expired
 
     # Use an include checkbox
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I press "Bookmarker's Tags" within "dd.include"
     Then the "to read (2)" checkbox within "#include_tag_tags" should not be checked
       And the "been here (2)" checkbox within "#include_tag_tags" should not be checked
@@ -209,7 +211,7 @@ Feature: Filters
       And I should see "Bilbo Does the Thing"
 
     # Use an exclude checkbox
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I press "Bookmarker's Tags" within "dd.exclude"
     Then the "to read (2)" checkbox within "#exclude_tag_tags" should not be checked
       And the "been here (2)" checkbox within "#exclude_tag_tags" should not be checked
@@ -227,7 +229,7 @@ Feature: Filters
     Then I should see "0 Bookmarks by recengine"
 
     # Use include field
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I fill in "Other bookmarker's tags to include" with "to read"
       And I press "Sort and Filter"
     Then I should see "2 Bookmarks by recengine"
@@ -236,7 +238,7 @@ Feature: Filters
       And I should not see "Roonal Woozlib and the Ferrets of Nimh"
 
     # Use exclude field
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I fill in "Other bookmarker's tags to exclude" with "to read"
       And I press "Sort and Filter"
     Then I should see "1 Bookmark by recengine"
@@ -248,9 +250,10 @@ Feature: Filters
     Given I am logged in as "recengine"
       And I bookmark the work "Bilbo Does the Thing"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh" with the tags "The Hobbit"
+      And the dashboard counts have expired
 
     # Exclude a tag as a work tag but not as a bookmarker's tag
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
     Then the "The Hobbit (1)" checkbox within "#exclude_fandom_tags" should not be checked
       And the "The Hobbit (1)" checkbox within "#exclude_tag_tags" should not be checked
 
@@ -263,7 +266,7 @@ Feature: Filters
       And the "The Hobbit (1)" checkbox within "#exclude_tag_tags" should not be checked
 
     # Exclude a tag as a bookmarker's tag but not as a work tag
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I check "The Hobbit (1)" within "#exclude_tag_tags"
       And I press "Sort and Filter"
     Then I should see "1 Bookmark by recengine"
@@ -273,7 +276,7 @@ Feature: Filters
       And the "The Hobbit (1)" checkbox within "#exclude_fandom_tags" should not be checked
 
     # Exclude a tag as a bookmarker's tag AND as a work tag
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I check "The Hobbit (1)" within "#exclude_fandom_tags"
       And I check "The Hobbit (1)" within "#exclude_tag_tags"
       And I press "Sort and Filter"
@@ -292,28 +295,28 @@ Feature: Filters
       And I bookmark the work "Bilbo Does the Thing" with the tags "fun little crossover"
       And the dashboard counts have expired
 
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I fill in "Other work tags to include" with "legend korra"
       And I press "Sort and Filter"
     Then I should see "1 Bookmark by recengine"
       And I should not see "A Hobbit's Meandering"
       And I should see "Bilbo Does the Thing"
 
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I fill in "Other work tags to exclude" with "legend korra"
       And I press "Sort and Filter"
     Then I should see "1 Bookmark by recengine"
       And I should see "A Hobbit's Meandering"
       And I should not see "Bilbo Does the Thing"
 
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I fill in "Other bookmarker's tags to include" with "fun crossover"
       And I press "Sort and Filter"
     Then I should see "1 Bookmark by recengine"
       And I should not see "A Hobbit's Meandering"
       And I should see "Bilbo Does the Thing"
 
-    When I go to my bookmarks page
+    When I go to recengine's bookmarks page
       And I fill in "Other bookmarker's tags to exclude" with "fun crossover"
       And I press "Sort and Filter"
     Then I should see "1 Bookmark by recengine"

@@ -28,7 +28,7 @@ Feature: Marking comments as spam
       And I should see "Comments (1)"
 
     When I am logged in as "author"
-      And I go to my stats page
+      And I go to author's stats page
     Then I should see "Comment Threads: 1"
 
   Scenario: Spam comments are not included in an admin post's comment count

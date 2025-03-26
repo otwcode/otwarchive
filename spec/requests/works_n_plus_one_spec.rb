@@ -6,7 +6,6 @@ describe "n+1 queries in the WorksController" do
   shared_examples "displaying multiple works efficiently" do
     context "when all works are cached", :n_plus_one do
       populate do |n|
-        User.current_user = nil # prevent treating the logged-in user as the work creator
         WorkIndexer.prepare_for_testing
         create_list(:work, n, **work_attributes)
         run_all_indexing_jobs
@@ -23,7 +22,6 @@ describe "n+1 queries in the WorksController" do
 
     context "when no works are cached", :n_plus_one do
       populate do |n|
-        User.current_user = nil # prevent treating the logged-in user as the work creator
         WorkIndexer.prepare_for_testing
         create_list(:work, n, **work_attributes)
         run_all_indexing_jobs

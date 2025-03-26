@@ -60,8 +60,8 @@ Feature: Delete Works
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
-      And I add the pseud "Pseud2"
-      And I add the pseud "Pseud3"
+      And "thorough" creates the pseud "Pseud2"
+      And "thorough" creates the pseud "Pseud3"
     When I go to the new work page
       And all emails have been delivered
       And I select "Not Rated" from "Rating"

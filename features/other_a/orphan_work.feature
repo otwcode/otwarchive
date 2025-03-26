@@ -55,7 +55,7 @@ Feature: Orphan work
     When I choose "Leave a copy of my pseud on"
     And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
-    When I am on my works page
+    When I go to orphaneer's works page
     Then I should not see "Shenanigans2"
     When I view the work "Shenanigans2"
     Then I should see "orphaneer (orphan_account)"
@@ -125,7 +125,7 @@ Feature: Orphan work
     And I post the work "Glorious" with fandom "SGA"
     And I post the work "Excellent" with fandom "Star Trek"
     And I post the work "Lovely" with fandom "Steven Universe"
-    And I go to my works page
+    And I go to author's works page
   When I follow "Edit Works"
   Then I should see "Edit Multiple Works"
   When I select "Glorious" for editing
@@ -142,7 +142,7 @@ Feature: Orphan work
   When I press "Yes, I'm sure"
     And all indexing jobs have been run
   Then I should see "Orphaning was successful."
-  When I go to my works page
+  When I go to author's works page
   Then I should not see "Glorious"
     And I should not see "Excellent"
     And I should see "Lovely"
