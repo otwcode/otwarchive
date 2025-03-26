@@ -101,16 +101,17 @@ Feature: Invite requests
 
   Scenario: Banned users cannot access their invitations page
 
-    Given I am logged in as a banned user
-    When I go to my invitations page
-    Then I should be on my user page
-    And I should see "Your account has been banned."
+    Given the user "bad_user" is banned
+      And I am logged in as "bad_user"
+    When I go to bad_user's invitations page
+    Then I should be on bad_user's user page
+      And I should see "Your account has been banned."
 
   Scenario:  A user can manage their invitations
 
     Given I am logged in as "user1"
       And "user1" has "5" invitations
-    When I go to my user page
+    When I go to user1's user page
      And I follow "Invitations"
      And I follow "Manage Invitations"
     Then I should see "Unsent (5)"

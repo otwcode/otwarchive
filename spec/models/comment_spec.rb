@@ -32,8 +32,32 @@ describe Comment do
     context "when submitting comment to Akismet" do
       subject { create(:comment) }
 
-      it "has user_role \"guest\"" do
-        expect(subject.akismet_attributes[:user_role]).to eq("guest")
+      it "has user_role \"user\"" do
+        expect(subject.akismet_attributes[:user_role]).to eq("user")
+      end
+
+      it "has comment_author as the user's username" do
+        expect(subject.akismet_attributes[:comment_author]).to eq(subject.pseud.user.login)
+      end
+
+      it "has comment_author_email as the user's email" do
+        expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.pseud.user.email)
+      end
+
+      context "when the comment is from a guest" do
+        subject { create(:comment, :by_guest) }
+
+        it "has user_role \"guest\"" do
+          expect(subject.akismet_attributes[:user_role]).to eq("guest")
+        end
+
+        it "has comment_author as the commenter's name" do
+          expect(subject.akismet_attributes[:comment_author]).to eq(subject.name)
+        end
+  
+        it "has comment_author_email as the commenter's email" do
+          expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.email)
+        end
       end
 
       context "when the commentable is a chapter" do

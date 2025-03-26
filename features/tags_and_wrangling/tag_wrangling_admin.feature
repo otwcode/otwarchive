@@ -8,8 +8,8 @@ Feature: Tag wrangling
       And I bookmark the work "Renoir's Boating Party" with the tags "Amelie"
       And I post the work "Luncheon" with fandom "Amelie"
       # Visit the relevant pages to make sure the data gets cached.
-      And I go to my bookmarks page
-      And I go to my works page
+      And I go to audrey's bookmarks page
+      And I go to audrey's works page
       And I go to the work "Luncheon"
     When I am logged in as a "tag_wrangling" admin
       And I edit the tag "Amelie"
@@ -177,7 +177,7 @@ Feature: Tag wrangling
         | login |
         | katti |
       And I am logged in as "katti"
-    When I go to my wrangling page
+    When I go to the wrangling page for "katti"
     Then I should see "katti last wrangled at Thu 16 Jan 2025"
     When the scheduled inactive wrangler notification jobs are run
     Then 0 emails should be delivered
@@ -207,7 +207,7 @@ Feature: Tag wrangling
         And a canonical fandom "Generic Fandom"
         And I am logged in as "katti"
         And I post the comment "Wrangling activity" on the tag "Generic Fandom"
-      When I go to my wrangling page
+      When I go to the wrangling page for "katti"
       Then I should see "katti last wrangled at Thu 16 Jan 2025"
       When it is currently 23 days from now
         And the scheduled inactive wrangler notification jobs are run
@@ -218,7 +218,7 @@ Feature: Tag wrangling
         And the last email should contain "katti"
       When I am logged in as "katti"
         And I post the comment "More activity" on the tag "Generic Fandom"
-      When I go to my wrangling page
+      When I go to the wrangling page for "katti"
       Then I should see "katti last wrangled at Sat 08 Feb 2025"
       When it is currently 23 days from now
         And the scheduled inactive wrangler notification jobs are run

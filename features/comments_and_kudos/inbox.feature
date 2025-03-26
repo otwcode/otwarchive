@@ -10,7 +10,7 @@ Feature: Get messages in the inbox
     When I am logged in as "cutman"
       And I post the comment "You should not receive this in your inbox." on the work "Another Round"
     When I am logged in as "boxer" with password "10987tko"
-      And I go to my inbox page
+      And I go to boxer's inbox page
     Then I should not see "cutman on Another Round"
       And I should not see "You should not receive this in your inbox."
 
@@ -21,7 +21,7 @@ Feature: Get messages in the inbox
     When I am logged in as "cutman"
       And I post the comment "You should receive this in your inbox." on the work "The Fight"
     When I am logged in as "boxer" with password "10987tko"
-      And I go to my inbox page
+      And I go to boxer's inbox page
     Then I should see "cutman on The Fight"
       And I should see "You should receive this in your inbox."
 
@@ -31,7 +31,7 @@ Feature: Get messages in the inbox
     When I am logged in as "cutman"
       And I post the comment "It was a right hook... with a bit of a jab. (And he did it with his left hand.)" on the work "Down for the Count"
     When I am logged in as "boxer" with password "10987tko"
-      And I go to my inbox page
+      And I go to boxer's inbox page
     Then I should see "cutman on Down for the Count"
       And I should see "less than 1 minute ago"
 
@@ -40,7 +40,7 @@ Feature: Get messages in the inbox
       And I post the work "Down for the Count"
     When I post the comment "The fight game's complex." on the work "Down for the Count" as a guest
     When I am logged in as "boxer" with password "10987tko"
-      And I go to my inbox page
+      And I go to boxer's inbox page
       And I choose "Show unread"
       And I press "Filter"
     Then I should see "guest (Guest) on Down for the Count"
@@ -56,7 +56,7 @@ Feature: Get messages in the inbox
       And I post the comment "You should receive this in your inbox." on the work "The Fight"
       And I post the comment "A second message for your inbox!" on the work "The Fight"
     When I am logged in as "boxer"
-      And I go to my inbox page
+      And I go to boxer's inbox page
     Then I should see "cutman on The Fight"
       And I should see "You should receive this in your inbox."
       And I should see "A second message for your inbox!"

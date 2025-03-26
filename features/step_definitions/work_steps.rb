@@ -127,7 +127,6 @@ Given /^I have no works or comments$/ do
 end
 
 Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)? "([^"]*)"$/ do |n_chapters, n_comments, title|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -166,7 +165,6 @@ Given /^I have a multi-chapter draft$/ do
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -178,7 +176,6 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_co
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_bookmarks|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -445,7 +442,9 @@ When /^I edit the multiple works "([^"]*)" and "([^"]*)"/ do |title1, title2|
   unless Work.where(title: title2).exists?
     step %{I post the work "#{title2}"}
   end
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "#{title1}" for editing}
   step %{I select "#{title2}" for editing}
   step %{I press "Edit"}
@@ -457,7 +456,9 @@ When /^I edit multiple works with different comment moderation settings$/ do
   choose("Registered users and guests can comment")
   step %{I post the work without preview}
   step %{I post the work "Work with Comment Moderation Disabled"}
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "Work with Comment Moderation Enabled" for editing}
   step %{I select "Work with Comment Moderation Disabled" for editing}
   step %{I press "Edit"}
@@ -476,7 +477,9 @@ When /^I edit multiple works with different commenting settings$/ do
   choose("No one can comment")
   step %{I post the work without preview}
 
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "Work with All Commenting Enabled" for editing}
   step %{I select "Work with Anonymous Commenting Disabled" for editing}
   step %{I select "Work with All Commenting Disabled" for editing}
@@ -486,7 +489,9 @@ end
 When /^I edit multiple works coauthored as "(.*)" with "(.*)"$/ do |author, coauthor|
   step %{I coauthored the work "Shared Work 1" as "#{author}" with "#{coauthor}"}
   step %{I coauthored the work "Shared Work 2" as "#{author}" with "#{coauthor}"}
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "Shared Work 1" for editing}
   step %{I select "Shared Work 2" for editing}
   step %{I press "Edit"}
