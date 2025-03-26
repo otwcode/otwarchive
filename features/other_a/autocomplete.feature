@@ -106,6 +106,17 @@ Feature: Display autocomplete for tags
       And the pseud autocomplete should not contain "different_user (funny)"
 
   @javascript
+  Scenario: People search autocomplete shows current users pseuds when searching for space
+    Given I am logged in as "basic"
+      And "basic" creates the pseud "one"
+      And "basic" creates the pseud "two"
+      And I go to the search people page
+    When I enter " " in the "Name" autocomplete field
+    Then I should see "basic" in the autocomplete
+      And I should see "one (basic)" in the autocomplete
+      And I should see "two (basic)" in the autocomplete
+
+  @javascript
   Scenario: Characters in a fandom with non-ASCII uppercase letters should appear in the autocomplete.
 
     Given basic tags
