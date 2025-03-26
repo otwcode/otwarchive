@@ -2,7 +2,7 @@
 Feature: Admin Settings Page
   In order to improve performance
   As an admin
-  I want to be able to control downloading and tag wrangling.
+  I want to be able to control downloading, tag wrangling and guest comments.
 
   Scenario: Turn off downloads
     Given downloads are off
@@ -51,7 +51,7 @@ Feature: Admin Settings Page
         | the work "Generic Work" |
         | the admin post "Generic Post" |
 
-  Scenario Outline: Guests cannot comment when guest comments are disabled, even if works or admin posts allow commets
+  Scenario Outline: Guests cannot comment when guest comments are disabled, even if works or admin posts allow comments
     Given guest comments are off
       And I am logged out
       And <commentable>

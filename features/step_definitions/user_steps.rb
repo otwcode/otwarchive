@@ -111,6 +111,14 @@ Given /^I am logged in as "([^"]*)"$/ do |login|
   step(%{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"})
 end
 
+Given "I am logged in as a new user {string}" do |login|
+  step(%{I am logged in as "#{login}"})
+  user = User.find_by(login: login)
+  user.created_at = Time.current
+  user.confirmed_at = Time.current
+  user.save!
+end
+
 Given /^I am logged in$/ do
   step(%{I am logged in as "#{DEFAULT_USER}"})
 end

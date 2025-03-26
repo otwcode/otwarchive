@@ -128,6 +128,12 @@ When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, 
   fill_in("comment[comment_content]", with: comment_text)
 end
 
+When "I set up the comment {string} on the admin post {string}" do |comment_text, admin_post|
+  admin_post = AdminPost.find_by(title: admin_post)
+  visit admin_post_path(admin_post)
+  fill_in("comment[comment_content]", with: comment_text)
+end
+
 When "I set up the comment {string} on the work {string} with guest comments enabled" do |comment_text, work|
   work = Work.find_by(title: work)
   work.update_attribute(:comment_permissions, :enable_all)
@@ -155,6 +161,11 @@ end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
   step "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
+  click_button("Comment")
+end
+
+When "I post the comment {string} on the admin post {string}" do |comment_text, work|
+  step "I set up the comment \"#{comment_text}\" on the admin post \"#{work}\""
   click_button("Comment")
 end
 
@@ -200,12 +211,28 @@ When /^I comment on an admin post$/ do
   step %{I press "Comment"}
 end
 
-When /^I post a spam comment$/ do
+When "I try to post a spam comment" do
   fill_in("comment[name]", with: "spammer")
   fill_in("comment[email]", with: "spammer@example.org")
   fill_in("comment[comment_content]", with: "Buy my product! http://spam.org")
   click_button("Comment")
+end
+
+When "I post a spam comment" do
+  step "I try to post a spam comment"
   step %{I should see "Comment created!"}
+end
+
+When "Akismet will flag any comment by {string}" do |username|
+  allow_any_instance_of(Comment).to receive(:spam?) do |comment|
+    comment.name == username || comment.user.login == username
+  end
+end
+
+When "Akismet will flag any comment containing {string}" do |spam_text|
+  allow_any_instance_of(Comment).to receive(:spam?) do |comment|
+    comment.comment_content.include?(spam_text)
+  end
 end
 
 When /^I post a guest comment$/ do
