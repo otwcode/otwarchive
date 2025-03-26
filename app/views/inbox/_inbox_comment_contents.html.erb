@@ -4,6 +4,12 @@
   <% else %>
     <%= get_commenter_pseud_or_name(feedback_comment) %> <%= ts('on') %> <%= commentable_description_link(feedback_comment) %>
   <% end %>
+  <% if feedback_comment.parent.is_a?(Chapter) && feedback_comment.ultimate_parent.expected_number_of_chapters != 1 %>
+    <span class='parent'>
+      <%= ts('at') %>
+      <%= chapter_description_link(feedback_comment) %>
+    </span>
+  <% end %>
   <% if feedback_comment.unreviewed? %>
     <span class="unreviewed status">
       <%= ts("(Unreviewed)") %>
