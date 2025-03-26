@@ -582,7 +582,18 @@ class Tag < ApplicationRecord
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
     return unless string.is_a? String
-    string = string.gsub(
+
+    self.find_by(name: from_param(string))
+  end
+
+  def self.find_by_name!(string)
+    return unless string.is_a? String
+
+    self.find_by!(name: from_param(string))
+  end
+
+  def self.from_param(string)
+    string.gsub(
       /\*[sadqh]\*/,
       '*s*' => '/',
       '*a*' => '&',
@@ -590,7 +601,6 @@ class Tag < ApplicationRecord
       '*q*' => '?',
       '*h*' => '#'
     )
-    self.where('tags.name = ?', string).first
   end
 
   # If a tag by this name exists in another class, add a suffix to disambiguate them
