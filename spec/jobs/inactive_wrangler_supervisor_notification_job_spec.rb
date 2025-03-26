@@ -64,7 +64,10 @@ describe InactiveWranglerSupervisorNotificationJob do
     end
 
     context "wrangler is excluded from activity checking" do
-      let(:user) { create(:tag_wrangler, login: ArchiveConfig.USERS_EXCLUDED_FROM_WRANGLING_INACTIVITY.last) }
+      let(:system_username) { "AO3_Wrangling_Project" }
+      let(:user) { create(:tag_wrangler, login: system_username) }
+
+      before { allow(ArchiveConfig).to receive(:USERS_EXCLUDED_FROM_WRANGLING_INACTIVITY).and_return([system_username, "some_other_system_user"]) }
 
       it "does nothing" do
         expect(user.reload.last_wrangling_activity.updated_at).to be <= 60.days.ago

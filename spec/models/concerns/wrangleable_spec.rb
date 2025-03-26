@@ -22,7 +22,7 @@ shared_examples "a wrangleable" do
         it "sets a last wrangling time" do
           freeze_time do
             expect(wrangleable.save).to be_truthy
-            expect(User.current_user.reload.last_wrangling_activity.updated_at).to eq(Time.now.utc)
+            expect(User.current_user.reload.last_wrangling_activity.updated_at).to eq(Time.current)
           end
         end
       end

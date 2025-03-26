@@ -269,15 +269,7 @@ WRANGLING_INACTIVITY_THRESHOLD: 14
 WRANGLING_HIATUS_THRESHOLD: 21
 WRANGLING_HIATUS_FORM_URL: "https://example.com/hiatus_form_placeholder"
 ASSIGNED_FANDOMS_POLICY_URL: "https://example.com/Assigned_Fandoms_Policy_placeholder"
-USERS_EXCLUDED_FROM_WRANGLING_INACTIVITY:
-- AO3_Wrangling_Project
-- zz9pzza
-- Qem_Chibati
-- AO3_Support
-- AO3_Tag_Wranglers
-- testy_wrangler
-- elz
-- astolat
+USERS_EXCLUDED_FROM_WRANGLING_INACTIVITY: []
 
 # DATE TIME FORMAT see http://ruby-doc.org/core/classes/Time.html#M000392
 DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %I:%M%p'
