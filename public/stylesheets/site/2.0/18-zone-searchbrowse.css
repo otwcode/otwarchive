@@ -18,6 +18,10 @@ Arguably filter and search could be styled in interactions but I've put them her
   min-height: 17.5em;
 }
 
+.media-index .listbox:nth-of-type(odd) {
+  clear: left;
+}
+
 /* INTERACTION: SEARCH */
 
 form.search input[type="text"] {
