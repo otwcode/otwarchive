@@ -84,6 +84,24 @@ class AdminPostsController < Admin::BaseController
     redirect_to(admin_posts_path)
   end
 
+  # POST /admin_posts/1/approve
+  def approve
+    @admin_post = AdminPost.find(params[:id])
+    authorize @admin_post
+    @admin_post.update(approved: true)
+    flash[:notice] = ts("Admin Post was successfully approved.")
+    redirect_to(admin_posts_path)
+  end
+
+  # POST /admin_posts/1/reject
+  def reject
+    @admin_post = AdminPost.find(params[:id])
+    authorize @admin_post
+    @admin_post.update(approved: false)
+    flash[:notice] = ts("Admin Post was successfully rejected.")
+    redirect_to(admin_posts_path)
+  end
+
   protected
 
   def load_languages

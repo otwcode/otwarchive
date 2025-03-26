@@ -171,6 +171,10 @@ Rails.application.routes.draw do
         put :review_all
       end
     end
+    member do
+      post :approve
+      post :reject
+    end
   end
 
   namespace :admin do
