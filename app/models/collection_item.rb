@@ -32,7 +32,7 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  scope :include_for_works, -> { includes(item: :pseuds)}
+  scope :include_for_works, -> { includes(item: :pseuds) }
   scope :unrevealed, -> { where(unrevealed: true) }
   scope :anonymous, -> { where(anonymous:  true) }
 
