@@ -117,6 +117,12 @@ Feature: Display autocomplete for tags
       And I should see "two (basic)" in the autocomplete
 
   @javascript
+  Scenario: People search autocomplete shows no results when searching for space as guest
+    Given I go to the search people page
+    When I enter " " in the "Name" autocomplete field
+    Then I should see "No suggestions found" in the autocomplete
+
+  @javascript
   Scenario: Characters in a fandom with non-ASCII uppercase letters should appear in the autocomplete.
 
     Given basic tags
