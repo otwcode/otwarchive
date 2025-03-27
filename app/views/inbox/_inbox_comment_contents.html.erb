@@ -6,7 +6,7 @@
   <% end %>
   <% if feedback_comment.parent.is_a?(Chapter) && feedback_comment.ultimate_parent.expected_number_of_chapters != 1 %>
     <span class='parent'>
-      <%= ts('at') %>
+      <%= ts("at") %>
       <%= chapter_description_link(feedback_comment) %>
     </span>
   <% end %>

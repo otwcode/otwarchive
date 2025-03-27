@@ -24,7 +24,7 @@
           <% end %>
           <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.expected_number_of_chapters != 1 %>
             <span class='parent'>
-              <%= ts('on') %>
+              <%= ts("on") %>
               <%= chapter_description_link(single_comment) %>
             </span>
           <% end %>

@@ -66,7 +66,7 @@ module CommentsHelper
   end
 
   def chapter_description_link(comment)
-    link_to ts('Chapter %{position}', position: comment.parent.position), work_chapter_path(comment.parent.work, comment.parent)
+    link_to ts("Chapter %{position}", position: comment.parent.position), work_chapter_path(comment.parent.work, comment.parent)
   end
 
   def image_safety_mode_cache_key(comment)
