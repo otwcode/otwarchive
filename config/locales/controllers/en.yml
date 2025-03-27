@@ -52,9 +52,6 @@ en:
       multifandom: Multifandom
       unrevealed: Mystery Work
       unspecified_fandom: No fandom specified
-  collections:
-    index:
-      subcollections_page_title: "%{collection_title} - Subcollections"
   collection_items:
     create:
       invited: invited
@@ -67,6 +64,9 @@ en:
   collection_profile:
     show:
       page_title: "%{collection_title} - Profile"
+  collections:
+    index:
+      subcollections_page_title: "%{collection_title} - Subcollections"
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.
@@ -152,12 +152,12 @@ en:
     show:
       anonymous: Anonymous
       unrevealed_series: Mystery Series
-  tags:
-    index:
-      collection_page_title: "%{collection_title} - Tags"
   tag_wranglings:
     index:
       page_subtitle: fandoms
+  tags:
+    index:
+      collection_page_title: "%{collection_title} - Tags"
   users:
     contact_abuse: contact our Policy & Abuse team
     passwords:
