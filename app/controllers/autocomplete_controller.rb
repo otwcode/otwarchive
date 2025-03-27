@@ -21,10 +21,7 @@ class AutocompleteController < ApplicationController
 
   # PSEUDS
   def pseud
-    if params[:term].blank? && logged_in?
-      # get the user's own pseuds
-      render_output(current_user.pseuds.collect(&:byline))
-    else
+    if params[:term].present?
       render_output(Pseud.autocomplete_lookup(search_param: params[:term], autocomplete_prefix: "autocomplete_pseud").map {|res| Pseud.fullname_from_autocomplete(res)})
     end
   end
