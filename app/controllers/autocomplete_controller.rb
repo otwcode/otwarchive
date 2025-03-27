@@ -21,9 +21,9 @@ class AutocompleteController < ApplicationController
 
   # PSEUDS
   def pseud
-    if params[:term].present?
-      render_output(Pseud.autocomplete_lookup(search_param: params[:term], autocomplete_prefix: "autocomplete_pseud").map {|res| Pseud.fullname_from_autocomplete(res)})
-    end
+    return if params[:term].blank?
+
+    render_output(Pseud.autocomplete_lookup(search_param: params[:term], autocomplete_prefix: "autocomplete_pseud").map { |res| Pseud.fullname_from_autocomplete(res) })
   end
 
   ## TAGS
