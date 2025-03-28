@@ -483,6 +483,7 @@ describe Admin::AdminUsersController do
     let!(:collection1) { create(:collection) }
     let!(:collection2) { create(:collection) }
     let!(:comment) { create(:comment, pseud: user.default_pseud) }
+    let!(:deleted_comment) { create(:comment, pseud: user.default_pseud, is_deleted: true) }
 
     authorized_roles = %w[superadmin policy_and_abuse].freeze
 
@@ -536,6 +537,12 @@ describe Admin::AdminUsersController do
 
             it "sends all of the user's comments as spam reports to Akismet" do
               expect_any_instance_of(Comment).to receive(:submit_spam)
+
+              subject.call
+            end
+
+            it "does not send deleted comments to Akismet" do
+              expect(deleted_comment).to_not receive(:submit_spam)
 
               subject.call
             end

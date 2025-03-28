@@ -156,7 +156,7 @@ class Admin::AdminUsersController < Admin::BaseController
     end
 
     # comments are special and needs to be handled separately
-    @user.comments.each do |comment|
+    @user.comments.not_deleted.each do |comment|
       AdminActivity.log_action(current_admin, comment, action: "destroy spam", summary: comment.inspect)
       comment.submit_spam
       comment.destroy_or_mark_deleted # comments with replies cannot be destroyed, mark deleted instead
