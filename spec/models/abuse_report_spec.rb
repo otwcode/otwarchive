@@ -1,6 +1,8 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe AbuseReport do
+  it { is_expected.to validate_presence_of(:url) }
+
   context "when report is not spam" do
     context "valid reports" do
       it "is valid" do
@@ -9,7 +11,7 @@ describe AbuseReport do
     end
 
     context "comment missing" do
-      let(:report_without_comment) {build(:abuse_report, comment: nil)}
+      let(:report_without_comment) { build(:abuse_report, comment: nil) }
       it "is invalid" do
         expect(report_without_comment.save).to be_falsey
         expect(report_without_comment.errors[:comment]).not_to be_empty
@@ -77,6 +79,16 @@ describe AbuseReport do
             expect(missing_work_id.url).to eq("https://#{chapter_url}/")
           end
         end
+      end
+    end
+
+    context "with a very long URL" do
+      let(:long_url) { "https://archiveofourown.org/#{'a' * 2080}" }
+      let(:abuse_report) { build(:abuse_report, url: long_url) }
+
+      it "truncates the url to the maximum length" do
+        expect(abuse_report.save).to be_truthy
+        expect(abuse_report.url).to eq(long_url[0..2079])
       end
     end
 
@@ -328,8 +340,8 @@ describe AbuseReport do
 
   context "when report is spam" do
     let(:legit_user) { create(:user) }
-    let(:spam_report) { build(:abuse_report, username: 'viagra-test-123') }
-    let!(:safe_report) { build(:abuse_report, username: 'viagra-test-123', email: legit_user.email) }
+    let(:spam_report) { build(:abuse_report, username: "viagra-test-123") }
+    let!(:safe_report) { build(:abuse_report, username: "viagra-test-123", email: legit_user.email) }
 
     before do
       allow(Akismetor).to receive(:spam?).and_return(true)
