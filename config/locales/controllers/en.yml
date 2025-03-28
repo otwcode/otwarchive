@@ -13,6 +13,8 @@ en:
           one: "%{count} person from the invite queue is being invited."
           other: "%{count} people from the invite queue are being invited."
     admin_users:
+      confirm_delete_user_creations:
+        page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
     user_creations:
