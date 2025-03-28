@@ -4,7 +4,7 @@ class FandomsController < ApplicationController
   def index
     if @collection
       @media = Media.canonical.by_name - [Media.find_by(name: ArchiveConfig.MEDIA_NO_TAG_NAME)] - [Media.find_by(name: ArchiveConfig.MEDIA_UNCATEGORIZED_NAME)]
-      @page_subtitle = @collection.title
+      @page_subtitle = t(".collection_page_title", collection_title: @collection.title)
       @medium = Media.find_by_name(params[:medium_id]) if params[:medium_id]
       @counts = SearchCounts.fandom_ids_for_collection(@collection)
       @fandoms = (@medium ? @medium.fandoms : Fandom.all).where(id: @counts.keys).by_name

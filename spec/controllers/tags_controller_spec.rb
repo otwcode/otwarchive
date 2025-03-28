@@ -620,4 +620,13 @@ describe TagsController do
       expect(tag.reload.direct_meta_tags).to eq [new_metatag]
     end
   end
+
+  describe "GET #index" do
+    let(:collection) { create(:collection) }
+
+    it "assigns subtitle with collection title and tags" do
+      get :index, params: { collection_id: collection.name }
+      expect(assigns[:page_subtitle]).to eq("#{collection.title} - Tags")
+    end
+  end
 end
