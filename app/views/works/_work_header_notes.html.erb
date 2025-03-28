@@ -45,9 +45,9 @@
       <% unless claim.request_prompt.nil? %>
         <li><%= ts("In response to a ") %><%= link_to("prompt", collection_prompt_path(claim.collection, claim.request_prompt)) %> <%= ts("by") %>
           <% if claim.request_prompt.anonymous? %>
-            <%= ts("Anonymous in the ") %><%= link_to(claim.collection.name, collection_path(claim.collection)) %>
+            <%= ts("Anonymous in the ") %><%= link_to(claim.collection.title, collection_path(claim.collection)) %>
           <% else %>
-            <%= link_to(claim.request_signup.pseud.byline, user_pseud_path(claim.request_signup.user, claim.request_signup.pseud)) %> <%= ts(" in the ") %> <%= link_to(claim.collection.name, collection_path(claim.collection)) %>
+            <%= link_to(claim.request_signup.pseud.byline, user_pseud_path(claim.request_signup.user, claim.request_signup.pseud)) %> <%= ts(" in the ") %> <%= link_to(claim.collection.title, collection_path(claim.collection)) %>
           <% end %>
           <%= ts("collection.") %>
         </li>
