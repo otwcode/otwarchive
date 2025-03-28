@@ -4,7 +4,7 @@
 
   <p>
     <% if @collection %>
-      <%= t(".html.collection", collection_link: style_link(@collection.title, collection_url(@collection))).html_safe %>
+      <%= t(".collection.html", collection_link: style_link(@collection.title, collection_url(@collection))) %>
     <% else %>
       <%= t(".no_collection") %>
     <% end %>
