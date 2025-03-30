@@ -46,8 +46,8 @@ Feature: Get messages in the inbox
     When I am logged in as "author"
       And I go to author's inbox page
     Then I should see "on Single-chapter Work"
-      And I should not see "on Single-chapter Work at Chapter 1"
-      And I should see "on Multi-chapter Work at Chapter 1"
+      And I should not see "on Chapter 1 of Single-chapter Work"
+      And I should see "on Chapter 1 of Multi-chapter Work"
 
   Scenario: Comments in my inbox should be filterable
     Given I am logged in as "boxer" with password "10987tko"
