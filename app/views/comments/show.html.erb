@@ -1,5 +1,11 @@
 <%= flash_div :comment_error, :comment_notice %>
 
-<h3 class="heading"><%=h t('.comment_on', :default => "Comment on") %>  <%= link_to_comment_ultimate_parent(@comment) %></h3>
+<h3 class="heading"><%=h t('.comment_on', :default => "Comment on") %>
+  <% if @comment.parent.is_a?(Chapter) && @comment.ultimate_parent.expected_number_of_chapters != 1 %>
+    <%= chapter_description_link(@comment) %>
+    <%= ts("of") %>
+  <% end %>
+  <%= link_to_comment_ultimate_parent(@comment) %>
+</h3>
 
 <%= render :partial => 'comments/comment_thread', :locals => { :comments => @comments, :depth => 0 } %></ol>
