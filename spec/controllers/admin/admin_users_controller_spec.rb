@@ -483,7 +483,6 @@ describe Admin::AdminUsersController do
     let!(:collection1) { create(:collection) }
     let!(:collection2) { create(:collection) }
     let!(:comment) { create(:comment, pseud: user.default_pseud) }
-    let!(:deleted_comment) { create(:comment, pseud: user.default_pseud, is_deleted: true) }
 
     authorized_roles = %w[superadmin policy_and_abuse].freeze
 
@@ -542,7 +541,9 @@ describe Admin::AdminUsersController do
             end
 
             it "does not send deleted comments to Akismet" do
-              expect(deleted_comment).to_not receive(:submit_spam)
+              comment.is_deleted = true
+              comment.save!(validate: false)
+              expect_any_instance_of(Comment).to_not receive(:submit_spam)
 
               subject.call
             end
