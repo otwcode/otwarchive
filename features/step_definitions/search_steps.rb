@@ -24,3 +24,8 @@ Given /^dashboard counts expire after (\d+) seconds?$/ do |seconds|
   stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
   ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE = seconds.to_i
 end
+
+When "the dashboard counts have expired" do
+  step "all indexing jobs have been run"
+  step "it is currently #{ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE} seconds from now"
+end

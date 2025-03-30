@@ -131,6 +131,8 @@ class WorksController < ApplicationController
       @works = Work.latest.for_blurb.to_a
     end
     set_own_works
+
+    @pagy = pagy_query_result(@works) if @works.respond_to?(:total_pages)
   end
 
   def collected
@@ -899,7 +901,7 @@ class WorksController < ApplicationController
       external_coauthor_name: params[:external_coauthor_name],
       external_coauthor_email: params[:external_coauthor_email],
       language_id: params[:language_id]
-    }
+    }.compact_blank!
   end
 
   def work_params

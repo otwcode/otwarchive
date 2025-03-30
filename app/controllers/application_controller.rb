@@ -42,6 +42,30 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  include Pagy::Backend
+  def pagy(collection, **vars)
+    pagy_overflow_handler do
+      super
+    end
+  end
+
+  def pagy_query_result(query_result, **vars)
+    pagy_overflow_handler do
+      Pagy.new(
+        count: query_result.total_entries,
+        page: query_result.current_page,
+        limit: query_result.per_page,
+        **vars
+      )
+    end
+  end
+
+  def pagy_overflow_handler(*)
+    yield
+  rescue Pagy::OverflowError
+    nil
+  end
+
   def display_auth_error
     respond_to do |format|
       format.html do
@@ -310,7 +334,7 @@ public
 
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
-  before_action :set_current_user
+  around_action :set_current_user
   def set_current_user
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
@@ -320,6 +344,11 @@ public
                                expires_in: 2.hours,
                                race_condition_ttl: 5) { "#{current_user.subscriptions.count}, #{current_user.visible_work_count}, #{current_user.bookmarks.count}, #{current_user.owned_collections.count}, #{current_user.challenge_signups.count}, #{current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count}, #{current_user.unposted_works.size}" }.split(",").map(&:to_i)
     end
+
+    yield
+
+    User.current_user = nil
+    @current_user = nil
   end
 
   def load_collection

@@ -33,11 +33,19 @@ class Rack::Attack
   # quickly. If so, enable the condition to exclude them from tracking.
   #
 
-  # This stanza allows us to limit by which backend is selected by nginx.
+  # This stanza allows us to limit by user which backend is selected by nginx.
+  
+  ArchiveConfig.RATE_LIMIT_PER_NGINX_UPSTREAM_USER.each do |k, v| 
+    throttle("req/#{k}/user", limit: v["limit"], period: v["period"]) do |req|
+      req.env["HTTP_X_AO3_SESSION_USER"] if req.env["HTTP_X_UNICORNS"] == k && req.env["HTTP_X_AO3_SESSION_USER"].present?
+    end
+  end
+
+  # This stanza allows us to limit by ip which backend is selected by nginx.
 
   ArchiveConfig.RATE_LIMIT_PER_NGINX_UPSTREAM.each do |k, v|
     throttle("req/#{k}/ip", limit: v["limit"], period: v["period"]) do |req|
-      req.ip if req.env['HTTP_X_UNICORNS'] == k
+      req.ip if req.env["HTTP_X_UNICORNS"] == k
     end
   end
 
@@ -79,6 +87,24 @@ class Rack::Attack
   # on wood!)
   throttle("logins/email", limit: login_limit, period: login_period) do |req|
     req.params.dig("user", "login").presence if req.path == "/users/login" && req.post?
+  end
+  
+  ### Add Rate Limits for Admin Login ###
+  admin_login_limit = ArchiveConfig.RATE_LIMIT_ADMIN_LOGIN_ATTEMPTS
+  admin_login_period = ArchiveConfig.RATE_LIMIT_ADMIN_LOGIN_PERIOD
+  
+  # Throttle POST requests to /admin/login by IP address
+  #
+  # Key: "rack::attack:#{Time.now.to_i/:period}:admin_logins/ip:#{req.ip}"
+  throttle("admin_logins/ip", limit: admin_login_limit, period: admin_login_period) do |req|
+    req.ip if req.path == "/admin/login" && req.post?
+  end
+
+  # Throttle POST requests to /admin/login by login param (user name or email)
+  #
+  # Key: "rack::attack:#{Time.now.to_i/:period}:admin_logins/email:#{login}"
+  throttle("admin_logins/email", limit: admin_login_limit, period: admin_login_period) do |req|
+    req.params.dig("admin", "login").presence if req.path == "/admin/login" && req.post?
   end
   
   # Add Retry-After response header to let polite clients know

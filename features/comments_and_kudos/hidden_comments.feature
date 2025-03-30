@@ -29,7 +29,7 @@ Feature: Comment hiding
       And I should not see "This comment is under review by an admin and is currently unavailable."
       And I should not see "A suspicious comment"
       And I should not see "This comment has been hidden by an admin."
-    When I go to my inbox page
+    When I go to author's inbox page
     Then I should not see "This comment is under review by an admin and is currently unavailable."
       And I should not see "A suspicious comment"
       And I should not see "This comment has been hidden by an admin."
