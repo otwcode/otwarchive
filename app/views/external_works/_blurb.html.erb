@@ -15,11 +15,11 @@
       <%= fandoms.collect{ |tag| link_to_tag_works(tag) }.join(", ").html_safe if fandoms %>
     </h5>
 
-    <p class="notice"><%= ts("This work isn't hosted on the Archive so this blurb might not be complete or accurate.") %></p>
-
     <%= get_symbols_for(external_work) %>
     <p class="datetime"><%= set_format_for_date(external_work.created_at) %></p>
   </div>
+
+  <p class="notice"><%= ts("This work isn't hosted on the Archive so this blurb might not be complete or accurate.") %></p>
 
   <!--warnings again, cast, freeform tags-->
   <h6 class="landmark heading"><%= ts('Tags') %></h6>
