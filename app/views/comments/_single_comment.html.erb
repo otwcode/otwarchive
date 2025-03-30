@@ -22,6 +22,11 @@
           <% else %>
             <%= get_commenter_pseud_or_name(single_comment) %>
           <% end %>
+          <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.expected_number_of_chapters != 1 %>
+            <span class='parent'>
+              <%= ts('on Chapter %{position}', :position => single_comment.parent.position) %>
+            </span>
+          <% end %>
           <% if single_comment.unreviewed? %>
             <span class="unreviewed status">
               <%= ts("(Unreviewed)") %>
