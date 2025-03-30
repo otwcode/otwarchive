@@ -5,7 +5,7 @@
 
 <!--subnav-->
 <%= render "archive_faqs/filters" %>
-<%= render "admin/admin_nav" %>
+<%= render :partial => 'admin/admin_nav' %>
 <ul class="navigation actions" role="navigation">
   <% if Globalize.locale.to_s == "en" && policy(ArchiveFaq).full_access? %>
     <li><%= link_to t(".new_faq_category"), new_archive_faq_path %></li>

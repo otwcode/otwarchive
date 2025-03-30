@@ -100,6 +100,8 @@ en:
       landmark: Admin Navigation
       news:
         delete_post: Delete Post
+      guideline:
+        delete_guideline: Delete Wrangling Guideline
       post_ao3_news: Post AO3 News
       wrangling_guidelines: Wrangling Guidelines
     admin_options:
@@ -398,6 +400,12 @@ en:
       page_heading: Archive FAQ
       reorder_faqs: Reorder FAQs
       show: Show
+    manage:
+      new_faq_category: New FAQ Category
+      reorder_faqs: Reorder FAQs
+    new:
+      new_faq_category: New FAQ Category
+      reorder_faqs: Reorder FAQs
     show:
       edit: Edit
       elasticsearch_news: news post announcing the search and filter updates
