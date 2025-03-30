@@ -18,10 +18,10 @@ module CommentsHelper
     ultimate = comment.ultimate_parent
     case ultimate.class.to_s
       when 'Work' then
-        if ultimate.expected_number_of_chapters != 1
-          t("comments_helper.links_to_chapter_and_work_html", chapter_link: chapter_description_link(comment), work_link: link_to(ultimate.title, ultimate))
-        else
+        if ultimate.expected_number_of_chapters == 1
           link_to ultimate.title, ultimate
+        else
+          t("comments_helper.links_to_chapter_and_work_html", chapter_link: chapter_description_link(comment), work_link: link_to(ultimate.title, ultimate))
         end
       when 'Pseud' then
         link_to ultimate.name, ultimate
