@@ -9,7 +9,7 @@ module InboxHelper
     elsif commentable.is_a?(AdminPost)
       link_to commentable.title, admin_post_comment_path(commentable, comment)
     elsif commentable.expected_number_of_chapters != 1
-      link_to ts("Chapter %{position} of %{title}", position: comment.parent.position, title: commentable.title), work_comment_path(commentable, comment)
+      link_to t("inbox_helper.link_to_chapter_and_work", position: comment.parent.position, title: commentable.title), work_comment_path(commentable, comment)
     else
       link_to commentable.title, work_comment_path(commentable, comment)
     end
