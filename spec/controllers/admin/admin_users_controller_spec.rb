@@ -550,8 +550,9 @@ describe Admin::AdminUsersController do
 
             it "deletes marked-as-deleted comments when all its replies are deleted" do
               reply = create(:comment, commentable: comment, pseud: user.default_pseud)
-              comment.is_deleted = true
-              comment.save!(validate: false)
+              comment.destroy_or_mark_deleted
+
+              expect(comment.is_deleted).to be_truthy
 
               subject.call
 
