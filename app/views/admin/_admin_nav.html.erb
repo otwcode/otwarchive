@@ -1,12 +1,5 @@
 <h3 class="landmark heading"><%= t(".landmark") %></h3>
 <ul class="navigation actions">
-  <% if params[:controller] == "known_issues" %>
-    <% if policy(KnownIssue).admin_index? %>
-      <li>
-        <%= span_if_current t(".known_issues"), known_issues_path %>
-      </li>
-    <% end %>
-  <% end %>
   <% if params[:controller] == "wrangling_guidelines" %>
     <% if policy(:wrangling).new? %>
       <li>

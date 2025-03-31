@@ -92,11 +92,9 @@ en:
           requests: Manage Requests
         page_heading: Invite New Users
     admin_nav:
-      known_issues: Known Issues
       landmark: Admin Navigation
       guideline:
         delete_guideline: Delete Wrangling Guideline
-      post_ao3_news: Post AO3 News
       wrangling_guidelines: Wrangling Guidelines
     admin_options:
       delete:
@@ -1413,6 +1411,10 @@ en:
       date: 'At our current rate, you should receive an invitation on or around: %{date}.'
       position_html: You are currently number %{position} on our waiting list!
       title: Invitation Status for %{email}
+  known_issues:
+    navigation:
+      landmark: Known Issues Navigation
+      known_issues: Known Issues
   kudos:
     guest_header:
       one: "%{count} guest has also left kudos"

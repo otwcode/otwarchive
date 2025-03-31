@@ -1,0 +1,9 @@
+<h3 class="landmark heading"><%= t(".landmark") %></h3>
+<ul class="navigation actions">
+  <% if policy(KnownIssue).admin_index? %>
+    <li>
+      <%= span_if_current t(".known_issues"), known_issues_path %>
+    </li>
+  <% end %>
+  <li><%= link_to ts('New Known Issue'), new_known_issue_path %></li>
+</ul>
