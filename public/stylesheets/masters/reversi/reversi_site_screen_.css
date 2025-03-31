@@ -362,3 +362,8 @@ form dd.required {
 .filters .expander {
   color: #eee;
 }
+
+.caution {
+  border-color: #807640;
+  color: #dbbc54;
+}
