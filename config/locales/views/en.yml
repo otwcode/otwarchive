@@ -91,11 +91,6 @@ en:
           queue: Manage Queue
           requests: Manage Requests
         page_heading: Invite New Users
-    admin_nav:
-      landmark: Admin Navigation
-      guideline:
-        delete_guideline: Delete Wrangling Guideline
-      wrangling_guidelines: Wrangling Guidelines
     admin_options:
       delete:
         bookmark: Delete Bookmark
@@ -1971,6 +1966,11 @@ en:
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
   wrangling_guidelines:
+    navigation:
+      landmark: Wrangling Guidelines Navigation
+      guideline:
+        delete_guideline: Delete Wrangling Guideline
+      wrangling_guidelines: Wrangling Guidelines
     show:
       edit: Edit
       heading: Wrangling Guidelines
