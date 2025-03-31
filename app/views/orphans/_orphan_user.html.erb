@@ -6,7 +6,7 @@
 
 <p class="caution"><%= t(".orphaning_bylines_only_message_html") %></p>
 
-<p class="caution">
+<p class="caution notice">
   <%= ts("Orphaning a work removes it from your account and re-attaches it to the specially created orphan_account. Please note that this is")%>
   <strong><%= ts("permanent and irreversible.")%></strong>
   <%= ts("You are giving up control over the work,")%>
@@ -15,7 +15,7 @@
 
 <%= render "works/work_abbreviated_list", works: works %>
 
-<p class="caution">
+<p class="caution notice">
   <%= ts("Are you")%>
   <strong><%= ts("really")%></strong>
   <%= ts("sure you want to do this?")%>
