@@ -92,9 +92,6 @@ en:
           requests: Manage Requests
         page_heading: Invite New Users
     admin_nav:
-      archive_faq: Archive FAQ
-      faq:
-        reorder_questions: Reorder Questions
       known_issues: Known Issues
       landmark: Admin Navigation
       guideline:
@@ -366,7 +363,7 @@ en:
     navigation:
       ao3_news: AO3 News
       post_ao3_news: Post AO3 News
-      landmark: Admin Navigation
+      landmark: Admin Post Navigation
       news:
         delete_post: Delete Post
     show:
@@ -403,12 +400,13 @@ en:
       page_heading: Archive FAQ
       reorder_faqs: Reorder FAQs
       show: Show
-    manage:
+    navigation:
+      archive_faq: Archive FAQ
+      landmark: FAQ Navigation
       new_faq_category: New FAQ Category
       reorder_faqs: Reorder FAQs
-    new:
-      new_faq_category: New FAQ Category
-      reorder_faqs: Reorder FAQs
+      faq:
+        reorder_questions: Reorder Questions
     show:
       edit: Edit
       elasticsearch_news: news post announcing the search and filter updates

@@ -4,12 +4,7 @@
   <!--/descriptions-->
 
   <!--subnav-->
-  <%= render :partial => 'admin/admin_nav' %>
-  <ul class="navigation actions">
-  <% if Globalize.locale.to_s == "en" && policy(ArchiveFaq).full_access? %>
-    <li><%= link_to t(".new_faq_category"), new_archive_faq_path %></li>
-    <li><%= link_to t(".reorder_faqs"), manage_archive_faqs_path(language_id: params[:language_id]) %></li>
-  <% end %>
+  <%= render :partial => "navigation" %>
 </ul>
   <!--/subnav-->
 
