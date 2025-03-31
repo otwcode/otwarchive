@@ -92,14 +92,11 @@ en:
           requests: Manage Requests
         page_heading: Invite New Users
     admin_nav:
-      ao3_news: AO3 News
       archive_faq: Archive FAQ
       faq:
         reorder_questions: Reorder Questions
       known_issues: Known Issues
       landmark: Admin Navigation
-      news:
-        delete_post: Delete Post
       guideline:
         delete_guideline: Delete Wrangling Guideline
       post_ao3_news: Post AO3 News
@@ -366,6 +363,12 @@ en:
         footnote_comment_permissions: Comment permissions from the selected post will replace any permissions selected on this page.
         footnote_tags: Tags from the selected post will replace any tags entered on this page.
         label: Translation of
+    navigation:
+      ao3_news: AO3 News
+      post_ao3_news: Post AO3 News
+      landmark: Admin Navigation
+      news:
+        delete_post: Delete Post
     show:
       navigation:
         admin:
