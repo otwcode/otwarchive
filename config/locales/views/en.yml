@@ -417,9 +417,7 @@ en:
       delete: Delete
       edit: Edit
       manage_faqs: Manage Archive FAQs
-      new_faq_category: New FAQ Category
       page_heading: Archive FAQ
-      reorder_faqs: Reorder FAQs
       show: Show
     navigation:
       archive_faq: Archive FAQ
