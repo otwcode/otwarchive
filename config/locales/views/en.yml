@@ -1408,8 +1408,9 @@ en:
       title: Invitation Status for %{email}
   known_issues:
     navigation:
-      landmark: Known Issues Navigation
       known_issues: Known Issues
+      landmark: Known Issues Navigation
+      new_known_issue: New Known Issue
   kudos:
     guest_header:
       one: "%{count} guest has also left kudos"
@@ -1967,9 +1968,11 @@ en:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
   wrangling_guidelines:
     navigation:
-      landmark: Wrangling Guidelines Navigation
       guideline:
         delete_guideline: Delete Wrangling Guideline
+      landmark: Wrangling Guidelines Navigation
+      new_guideline: New Guideline
+      reorder_guidelines: Reorder Guidelines
       wrangling_guidelines: Wrangling Guidelines
     show:
       edit: Edit
