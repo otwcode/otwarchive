@@ -7,9 +7,9 @@
     <% if params[:action] == "edit" %>
       <li>
         <%= link_to t(".guideline.delete_guideline"),
-                    @wrangling_guideline,
-                    data: { confirm: "Are you sure you want to delete this wrangling guideline?" },
-                    method: :delete %>
+                      @wrangling_guideline,
+                      data: { confirm: "Are you sure you want to delete this wrangling guideline?" },
+                      method: :delete %>
       </li>
     <% end %>
   </ul>

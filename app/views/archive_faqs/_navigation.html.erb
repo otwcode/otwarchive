@@ -8,7 +8,7 @@
   <% if policy(ArchiveFaq).full_access? %>
     <li><%= link_to t(".new_faq_category"), new_archive_faq_path %></li>
     <% if Globalize.locale.to_s == "en" %>
-      <% if params[:action] == "edit"  %>
+      <% if params[:action] == "edit" %>
         <li>
           <%= link_to t(".faq.reorder_questions"), manage_archive_faq_questions_path(@archive_faq) %>
         </li>

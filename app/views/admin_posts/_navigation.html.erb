@@ -6,9 +6,9 @@
     <% if params[:action] == "edit" %>
       <li>
         <%= link_to t(".news.delete_post"),
-                    @admin_post,
-                    data: { confirm: "Are you sure you want to delete this news post?" },
-                    method: :delete %>
+                      @admin_post,
+                      data: { confirm: "Are you sure you want to delete this news post?" },
+                      method: :delete %>
       </li>
     <% end %>
   </ul>
