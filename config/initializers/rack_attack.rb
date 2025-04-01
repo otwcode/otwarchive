@@ -33,11 +33,19 @@ class Rack::Attack
   # quickly. If so, enable the condition to exclude them from tracking.
   #
 
-  # This stanza allows us to limit by which backend is selected by nginx.
+  # This stanza allows us to limit by user which backend is selected by nginx.
+  
+  ArchiveConfig.RATE_LIMIT_PER_NGINX_UPSTREAM_USER.each do |k, v| 
+    throttle("req/#{k}/user", limit: v["limit"], period: v["period"]) do |req|
+      req.env["HTTP_X_AO3_SESSION_USER"] if req.env["HTTP_X_UNICORNS"] == k && req.env["HTTP_X_AO3_SESSION_USER"].present?
+    end
+  end
+
+  # This stanza allows us to limit by ip which backend is selected by nginx.
 
   ArchiveConfig.RATE_LIMIT_PER_NGINX_UPSTREAM.each do |k, v|
     throttle("req/#{k}/ip", limit: v["limit"], period: v["period"]) do |req|
-      req.ip if req.env['HTTP_X_UNICORNS'] == k
+      req.ip if req.env["HTTP_X_UNICORNS"] == k
     end
   end
 

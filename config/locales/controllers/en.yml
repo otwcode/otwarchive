@@ -13,6 +13,8 @@ en:
           one: "%{count} person from the invite queue is being invited."
           other: "%{count} people from the invite queue are being invited."
     admin_users:
+      confirm_delete_user_creations:
+        page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
     user_creations:
@@ -61,6 +63,12 @@ en:
       failure: Couldn't update %{participant}.
     validation:
       owners_required: You can't remove the only owner!
+  collection_profile:
+    show:
+      page_title: "%{collection_title} - Profile"
+  collections:
+    index:
+      subcollections_page_title: "%{collection_title} - Subcollections"
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.
@@ -101,6 +109,9 @@ en:
   external_works:
     update:
       successfully_updated: External work was successfully updated.
+  fandoms:
+    index:
+      collection_page_title: "%{collection_title} - Fandoms"
   home:
     content:
       page_title: Content Policy
@@ -130,6 +141,9 @@ en:
         muted: You have muted the user %{name}.
       destroy:
         unmuted: You have unmuted the user %{name}.
+  people:
+    index:
+      collection_page_title: "%{collection_title} - People"
   pseuds:
     create:
       already_have_pseud_with_name: You already have a pseud with that name.
@@ -156,6 +170,9 @@ en:
   tag_wranglings:
     index:
       page_subtitle: fandoms
+  tags:
+    index:
+      collection_page_title: "%{collection_title} - Tags"
   users:
     changed_username:
       admin:

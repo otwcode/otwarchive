@@ -124,7 +124,7 @@ end
 ### WHEN
 
 When /^I change my skin to "([^\"]*)"$/ do |skin_name|
-  step "I am on my user page"
+  step %{I follow "My Dashboard"}
     step %{I follow "Preferences"}
     step %{I select "#{skin_name}" from "preference_skin_id"}
     step %{I submit}

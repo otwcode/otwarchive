@@ -111,6 +111,14 @@ Given /^I am logged in as "([^"]*)"$/ do |login|
   step(%{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"})
 end
 
+Given "I am logged in as a new user {string}" do |login|
+  step(%{I am logged in as "#{login}"})
+  user = User.find_by(login: login)
+  user.created_at = Time.current
+  user.confirmed_at = Time.current
+  user.save!
+end
+
 Given /^I am logged in$/ do
   step(%{I am logged in as "#{DEFAULT_USER}"})
 end
@@ -119,11 +127,6 @@ Given /^I am logged in as a random user$/ do
   name = "testuser#{User.count + 1}"
   step(%{I am logged in as "#{name}" with password "#{DEFAULT_PASSWORD}"})
   step(%{confirmation emails have been delivered})
-end
-
-Given /^I am logged in as a banned user$/ do
-  step(%{user "banned" is banned})
-  step(%{I am logged in as "banned"})
 end
 
 Given /^user "([^"]*)" is banned$/ do |login|
@@ -279,7 +282,8 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  expect(User.current_user).to be(nil)
+  step %{I should not see "Log Out"}
+  step %{I should see "Log In"}
 end
 
 def get_work_name(age, classname, name)
@@ -313,7 +317,8 @@ Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) 
 end
 
 When /^I change my username to "([^"]*)"/ do |new_name|
-  visit change_username_user_path(User.current_user)
+  step %{I follow "My Preferences"}
+  step %{I follow "Change My User Name"}
   fill_in("New username", with: new_name)
   fill_in("Password", with: "password")
   click_button("Change Username")

@@ -63,8 +63,8 @@ Feature: Orphan pseud
   Scenario: Orphan a pseud with works co-created by another pseud
     Given I have an orphan account
       And I am logged in as "halfandhalf"
-      And I add the pseud "To Be Kept"
-      And I add the pseud "To Be Orphaned"
+      And "halfandhalf" creates the pseud "To Be Kept"
+      And "halfandhalf" creates the pseud "To Be Orphaned"
 
     When I set up the draft "Treasure"
       And I unselect "halfandhalf" from "Creator/Pseud(s)"
@@ -84,7 +84,7 @@ Feature: Orphan pseud
     Then I should see "To Be Kept" within ".byline"
       And I should see "To Be Orphaned" within ".byline"
 
-    When I go to my pseuds page
+    When I go to halfandhalf's pseuds page
       And I follow "Orphan Works by To Be Orphaned"
     Then I should see "Orphan All Works by To Be Orphaned"
     When I choose "Take my pseud off as well"
