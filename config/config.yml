@@ -81,6 +81,8 @@ DELIMITER_FOR_OUTPUT: ', '
 INVITE_FROM_QUEUE_ENABLED: true
 INVITE_FROM_QUEUE_NUMBER: 10
 INVITE_FROM_QUEUE_FREQUENCY: 7
+
+HOURS_BEFORE_RESEND_INVITATION: 24
 # this is whether or not people without invitations can create accounts
 ACCOUNT_CREATION_ENABLED: false
 DAYS_TO_PURGE_UNACTIVATED: 7
@@ -100,7 +102,7 @@ TITLE_MIN: 1
 SUMMARY_MAX: 1250
 NOTES_MAX: 5000
 COMMENT_MAX: 10000
-TAG_MAX: 100
+TAG_MAX: 150
 CONTENT_MIN: 10
 CONTENT_MAX: 510000
 CONTENT_MAX_DISPLAYED: 500000
@@ -189,11 +191,17 @@ RATE_LIMIT_NUMBER: 300
 RATE_LIMIT_PERIOD: 300
 RATE_LIMIT_LOGIN_ATTEMPTS: 5
 RATE_LIMIT_LOGIN_PERIOD: 20
+RATE_LIMIT_ADMIN_LOGIN_ATTEMPTS: 10
+RATE_LIMIT_ADMIN_LOGIN_PERIOD: 300
 RATE_LIMIT_PER_NGINX_UPSTREAM:
   unicorn_elastic:
     limit: 300
     period: 300
   unicorn_elastic_bookmarks:
+    limit: 300
+    period: 300
+RATE_LIMIT_PER_NGINX_UPSTREAM_USER:
+  unicorn_elastic:
     limit: 300
     period: 300
 RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]
@@ -740,7 +748,7 @@ PERCONA_ARGS: >
   --max-load Threads_running=15
   --critical-load Threads_running=100
   --set-vars innodb_lock_wait_timeout=2
-  --alter-foreign-keys-method=auto
+  --alter-foreign-keys-method=rebuild_constraints
   --no-check-unique-key-change
 
 # How many shards to have in elastic indexes.

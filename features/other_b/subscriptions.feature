@@ -57,10 +57,10 @@
   When I am logged in as "second_user"
     And I go to first_user's user page
     And I press "Subscribe"
-  When I go to my subscriptions page
+  When I go to the subscriptions page for "second_user"
     And I press "Unsubscribe from first_user"
   Then I should see "successfully unsubscribed"
-    And I should be on my subscriptions page
+    And I should be on the subscriptions page for "second_user"
 
   Scenario: subscribe button on profile page
 
@@ -138,7 +138,7 @@
     And "second_user" subscribes to author "third_user"
     And "second_user" subscribes to work "Awesome Story"
     And "second_user" subscribes to series "Awesome Series"
-  When I am on my subscriptions page
+  When I go to the subscriptions page for "second_user"
   Then I should see "My Subscriptions"
     And I should see "Awesome Series (Series)"
     And I should see a link "series_author"
@@ -258,6 +258,6 @@
     #And the email should have "I am <strong>er Than Yesterday & Other Lies" in the subject
     #And the email should contain "I am <strong>er Than Yesterday & Other Lies"
   When I am logged in as "subscriber" with password "password"
-    And I go to my subscriptions page
+    And I go to the subscriptions page for "subscriber"
     And I press "Unsubscribe from I am <strong>er Than Yesterday & Other Lies"
   Then I should see "You have successfully unsubscribed from I am <strong>er Than Yesterday & Other Lies"

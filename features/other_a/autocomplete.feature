@@ -80,21 +80,21 @@ Feature: Display autocomplete for tags
   Scenario: Pseuds should be added and removed from autocomplete as they are changed
     Given I am logged in as "new_user"
     Then the pseud autocomplete should contain "new_user"
-    When I add the pseud "extra"
+    When "new_user" creates the pseud "extra"
     Then the pseud autocomplete should contain "extra (new_user)"
-    When I change the pseud "extra" to "funny"
-      And I go to my pseuds page
+    When "new_user" changes the pseud "extra" to "funny"
+      And I go to new_user's pseuds page
     Then I should not see "extra"
       And I should see "funny"
       And the pseud autocomplete should not contain "extra (new_user)"
       And the pseud autocomplete should contain "funny (new_user)"
-    When I delete the pseud "funny"
+    When "new_user" deletes the pseud "funny"
     Then the pseud autocomplete should not contain "funny (new_user)"
       And the pseud autocomplete should contain "new_user"
 
   Scenario: Pseuds should be added and removed from autocomplete as usernames change
     Given I am logged in as "new_user"
-      And I add the pseud "funny"
+      And "new_user" creates the pseud "funny"
     When I change my username to "different_user"
     Then the pseud autocomplete should not contain "funny (new_user)"
       And the pseud autocomplete should not contain "new_user"
@@ -104,6 +104,19 @@ Feature: Display autocomplete for tags
     Then a user account should not exist for "funny"
       And the pseud autocomplete should not contain "funny"
       And the pseud autocomplete should not contain "different_user (funny)"
+
+  @javascript
+  Scenario: People search autocomplete shows no results when searching for space
+    Given I go to the search people page
+    When I enter " " in the "Name" autocomplete field
+    Then I should see "Searching..." in the autocomplete
+    When I am logged in as "basic"
+      And "basic" creates the pseud "one"
+      And I go to the search people page
+    When I enter " " in the "Name" autocomplete field
+    Then I should see "Searching..." in the autocomplete
+      And I should not see "one (basic)" in the autocomplete
+      And I should not see "basic" in the autocomplete
 
   @javascript
   Scenario: Characters in a fandom with non-ASCII uppercase letters should appear in the autocomplete.

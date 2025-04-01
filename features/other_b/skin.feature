@@ -90,7 +90,7 @@ Feature: Non-public site and work skins
 
   Scenario: log out from my skins page (Issue 2271)
   Given I am logged in as "skinner"
-    And I am on my user page
+    And I am on skinner's user page
   When I follow "Skins"
     And I log out
   Then I should be on the login page
@@ -182,18 +182,14 @@ Feature: Non-public site and work skins
   Scenario: The cache should be flushed with a parent and not when unrelated
   Given I have loaded site skins
     And I am logged in as "skinner"
-  When I set up the skin "Complex"
-    And I select "replace archive skin entirely" from "What it does:"
-    And I check "Load Archive Skin Components"
-    And I submit
-  Then I should see a create confirmation message
+    And I have a skin "Child" with a parent "Parent"
    When I am on the new skin page
-    And I fill in "Title" with "my blinking skin"
+    And I fill in "Title" with "Unrelated"
     And I fill in "CSS" with "#title { text-decoration: blink;}"
     And I submit
   Then I should see "Skin was successfully created"
-    And the cache of the skin on "my blinking skin" should not expire after I save "Complex"
-    And the cache of the skin on "Complex" should expire after I save a parent skin
+    And the cache of the skin on "Unrelated" should not expire after I save "Child"
+    And the cache of the skin on "Child" should expire after I save a parent skin
 
   Scenario: Users should be able to create skins using @media queries
   Given I am logged in as "skinner"
@@ -231,9 +227,8 @@ Feature: Non-public site and work skins
   Scenario: A user can't make a skin with "Archive" in the title
   Given I am logged in as "skinner"
     And I set up the skin "My Archive Skin" with some css
-  When "AO3-4820" is fixed
-    # And I press "Submit"
-  # Then I should see "You can't use the word 'archive' in your skin title, sorry! (We have to reserve it for official skins.)"
+    And I press "Submit"
+  Then I should see "Sorry, titles including the word 'Archive' are reserved for official skins."
 
   Scenario: A user can't look at another user's skins
   Given the user "scully" exists and is activated

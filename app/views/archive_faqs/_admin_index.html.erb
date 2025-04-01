@@ -14,7 +14,7 @@
   <% @archive_faqs.each do |archive_faq| %>
     <dt><%= link_to archive_faq.title, archive_faq %></dt>
     <dd>
-      <p class="datetime"><%= t(".created_updated_date", date_created: l(archive_faq.created_at), date_updated: l(archive_faq.updated_at)) %></p>
+      <p class="datetime"><%= t(".created_date", date_created: l(archive_faq.created_at)) %></p>
       <ul class="navigation actions">
         <li><%= link_to t(".show"), archive_faq %></li>
         <% if Globalize.locale.to_s != "en" || policy(ArchiveFaq).full_access? %>

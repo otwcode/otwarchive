@@ -143,6 +143,10 @@ class Query
     { terms: options.merge(field => value) }
   end
 
+  def exists_filter(field)
+    { exists: { field: field } }
+  end
+
   # A filter used to match all words in a particular field, most frequently
   # used for matching non-existent tags. The match query doesn't allow
   # negation/or/and/wildcards, so it should only be used on fields where the
@@ -237,7 +241,7 @@ class Query
     str = ""
     return str if text.blank?
     text.split(" ").each do |word|
-      if word[0] == "-"
+      if word.length >= 2 && word[0] == "-"
         str << " NOT"
         word.slice!(0)
       end

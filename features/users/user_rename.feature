@@ -71,7 +71,7 @@ Feature:
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
       And I should see "Hi, newusername"
-    When I go to my pseuds page
+    When I go to newusername's pseuds page
       Then I should not see "oldusername"
     When I follow "Edit"
     Then I should see "You cannot change the pseud that matches your user name"
@@ -86,7 +86,7 @@ Feature:
       And I press "Change User Name"
     Then I should get confirmation that I changed my username
       And I should see "Hi, Uppercrust"
-    When I go to my pseuds page
+    When I go to Uppercrust's pseuds page
       Then I should not see "uppercrust"
     When I follow "Edit"
     Then I should see "You cannot change the pseud that matches your user name"
@@ -133,7 +133,7 @@ Feature:
   Scenario: Comments reflect username changes immediately
     Given the work "Interesting"
       And I am logged in as "before" with password "password"
-      And I add the pseud "mine"
+      And "before" creates the pseud "mine"
     When I set up the comment "Wow!" on the work "Interesting"
       And I select "mine" from "comment[pseud_id]"
       And I press "Comment"
