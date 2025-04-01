@@ -16,10 +16,6 @@ When /^I add the series "([^\"]*)"$/ do |series_title|
 end
 
 When /^I add the work "([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]*)")?$/ do |work_title, series_title, pseud|
-  unless pseud.blank? && Pseud.where(name: pseud).exists?
-    step %{I add the pseud "#{pseud}"}
-  end
-
   if Work.where(title: work_title).exists?
     # an existing work
     step %{I edit the work "#{work_title}"}

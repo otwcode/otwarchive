@@ -108,7 +108,7 @@ Feature: Prompt Meme Challenge
   When I sign up for "Battle 12" fixed-fandom prompt meme
   When I sign up for "Battle 13" many-fandom prompt meme
   When I sign up for "Battle 14" many-fandom prompt meme
-  When I am on my user page
+  When I am on prolific_writer's user page
     And I follow "Sign-ups"
   # TODO
 
@@ -324,7 +324,7 @@ Feature: Prompt Meme Challenge
   When I reveal the "Battle 12" challenge
   When I reveal the authors of the "Battle 12" challenge
   When I am logged in as "myname2"
-  When I am on my user page
+  When I am on myname2's user page
     And I follow "Claims"
     # note that user Claims page currently only shows unfulfilled claims
   Then I should not see "myname4"
@@ -371,7 +371,7 @@ Feature: Prompt Meme Challenge
     And I follow "Unposted Claims"
   Then I should see "myname4"
   When I am logged in as "myname4"
-    And I go to my claims page
+    And I go to myname4's claims page
     # Draft not shown. Instead we see that there is a 'Fulfill' button which
     # we can use. Then use the 'Restore From Last Unposted Draft?' button
   When I follow "Fulfill"

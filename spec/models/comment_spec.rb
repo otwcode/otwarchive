@@ -28,6 +28,70 @@ describe Comment do
           .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
+
+    context "when submitting comment to Akismet" do
+      subject { create(:comment) }
+
+      it "has user_role \"user\"" do
+        expect(subject.akismet_attributes[:user_role]).to eq("user")
+      end
+
+      it "has comment_author as the user's username" do
+        expect(subject.akismet_attributes[:comment_author]).to eq(subject.pseud.user.login)
+      end
+
+      it "has comment_author_email as the user's email" do
+        expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.pseud.user.email)
+      end
+
+      context "when the comment is from a guest" do
+        subject { create(:comment, :by_guest) }
+
+        it "has user_role \"guest\"" do
+          expect(subject.akismet_attributes[:user_role]).to eq("guest")
+        end
+
+        it "has comment_author as the commenter's name" do
+          expect(subject.akismet_attributes[:comment_author]).to eq(subject.name)
+        end
+  
+        it "has comment_author_email as the commenter's email" do
+          expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.email)
+        end
+      end
+
+      context "when the commentable is a chapter" do
+        it "has comment_type \"fanwork-comment\"" do
+          expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
+        end
+      end
+
+      context "when the commentable is an admin post" do
+        subject { create(:comment, :on_admin_post) }
+
+        it "has comment_type \"comment\"" do
+          expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+        end
+      end
+
+      context "when the commentable is a comment" do
+        context "when the comment is on a chapter" do
+          subject { create(:comment, commentable: create(:comment)) }
+
+          it "has comment_type \"fanwork-comment\"" do
+            expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
+          end
+        end
+
+        context "when the comment is on an admin post" do
+          subject { create(:comment, commentable: create(:comment, :on_admin_post)) }
+
+          it "has comment_type \"comment\"" do
+            expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+          end
+        end
+      end
+    end
   end
 
   context "with an existing comment from the same user" do

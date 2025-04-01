@@ -13,7 +13,7 @@ Feature: Import Works
       And I select "English" from "Choose a language"
       And I press "Import"
     Then I should see "We couldn't successfully import that work, sorry: We couldn't download anything from http://no-content. Please make sure that the URL is correct and complete, and try again."
-    When I go to my works page
+    When I follow "My Dashboard"
     Then I should see "Drafts (0)"
 
   Scenario: Cannot import works from the current archive
@@ -22,5 +22,5 @@ Feature: Import Works
       And I select "English" from "Choose a language"
     And I press "Import"
     Then I should see "We couldn't successfully import that work, sorry: URL is for a work on the Archive. Please bookmark it directly instead."
-    When I go to my works page
+    When I follow "My Dashboard"
     Then I should see "Drafts (0)"

@@ -12,7 +12,7 @@ Feature: Image safety mode
     When I go to the homepage
     Then I should see the image "src" text "https://example.com/image.jpg"
       And I should not see "OMG! https://example.com/image.jpg"
-    When I go to my inbox page
+    When I go to commentrecip's inbox page
     Then I should see the image "src" text "https://example.com/image.jpg"
     When image safety mode is enabled for comments on a "<parent_type>"
       And I view <commentable> with comments
@@ -21,7 +21,7 @@ Feature: Image safety mode
     When I go to the homepage
     Then I should not see the image "src" text "https://example.com/image.jpg"
       But I should see "OMG! https://example.com/image.jpg"
-    When I go to my inbox page
+    When I go to commentrecip's inbox page
     Then I should not see the image "src" text "https://example.com/image.jpg"
       But I should see "OMG! https://example.com/image.jpg"
 
@@ -40,7 +40,7 @@ Feature: Image safety mode
     When I go to the homepage
     Then I should not see the image "src" text "https://example.com/image.jpg"
       But I should see "OMG! https://example.com/image.jpg"
-    When I go to my inbox page
+    When I go to commentrecip's inbox page
     Then I should not see the image "src" text "https://example.com/image.jpg"
       But I should see "OMG! https://example.com/image.jpg"
     When image safety mode is disabled for comments
@@ -50,7 +50,7 @@ Feature: Image safety mode
     When I go to the homepage
     Then I should see the image "src" text "https://example.com/image.jpg"
       And I should not see "OMG! https://example.com/image.jpg"
-    When I go to my inbox page
+    When I go to commentrecip's inbox page
     Then I should see the image "src" text "https://example.com/image.jpg"
       And I should not see "OMG! https://example.com/image.jpg"
 

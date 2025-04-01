@@ -250,26 +250,23 @@ class Work < ApplicationRecord
 
   before_destroy :send_deleted_work_notification, prepend: true
   def send_deleted_work_notification
-    return unless self.posted?
-    
-    users = self.pseuds.collect(&:user).uniq
-    
-    return if users.blank?
+    return unless self.posted? && users.present?
 
     orphan_account = User.orphan_account
-
     users.each do |user|
       next if user == orphan_account
-      
+
       # Check to see if this work is being deleted by an Admin
       if User.current_user.is_a?(Admin)
-        # this has to use the synchronous version because the work is going to be destroyed
         I18n.with_locale(user.preference.locale.iso) do
+          # this has to use the synchronous version because the work is going to be destroyed
           UserMailer.admin_deleted_work_notification(user, self).deliver_now
         end
       else
-        # this has to use the synchronous version because the work is going to be destroyed
-        UserMailer.delete_work_notification(user, self).deliver_now
+        I18n.with_locale(user.preference.locale.iso) do
+          # this has to use the synchronous version because the work is going to be destroyed
+          UserMailer.delete_work_notification(user, self, User.current_user).deliver_now
+        end
       end
     end
   end
@@ -1107,6 +1104,7 @@ class Work < ApplicationRecord
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
+      user_role: "user",
       comment_date_gmt: created_at.to_time.iso8601,
       blog_lang: language.short,
       comment_author: user.login,

@@ -95,7 +95,7 @@ Feature: Comment Blocking
       And I go to the homepage
     Then I should see "OMG!"
       But I should not see a link "Reply"
-    When I go to my inbox page
+    When I go to pest's inbox page
     Then I should see "OMG!"
       But I should not see a link "Reply"
 
@@ -108,6 +108,6 @@ Feature: Comment Blocking
       And I go to the homepage
     Then I should see "OMG!"
       But I should not see a link "Reply"
-    When I go to my inbox page
+    When I go to pest's inbox page
     Then I should see "OMG!"
       But I should not see a link "Reply"
