@@ -383,10 +383,10 @@ en:
         label: Translation of
     navigation:
       ao3_news: AO3 News
-      post_ao3_news: Post AO3 News
       landmark: Admin Post Navigation
       news:
         delete_post: Delete Post
+      post_ao3_news: Post AO3 News
     show:
       navigation:
         admin:
@@ -423,11 +423,11 @@ en:
       show: Show
     navigation:
       archive_faq: Archive FAQ
+      faq:
+        reorder_questions: Reorder Questions
       landmark: FAQ Navigation
       new_faq_category: New FAQ Category
       reorder_faqs: Reorder FAQs
-      faq:
-        reorder_questions: Reorder Questions
     show:
       edit: Edit
       elasticsearch_news: news post announcing the search and filter updates
@@ -2181,8 +2181,8 @@ en:
       guideline:
         delete_guideline: Delete Wrangling Guideline
       landmark: Wrangling Guidelines Navigation
-      new_guideline: New Guideline
-      reorder_guidelines: Reorder Guidelines
+      new_guideline: New Wrangling Guideline
+      reorder_guidelines: Reorder Wrangling Guidelines
       wrangling_guidelines: Wrangling Guidelines
     show:
       edit: Edit
