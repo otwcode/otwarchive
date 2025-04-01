@@ -2170,3 +2170,8 @@ en:
     show:
       edit: Edit
       heading: Wrangling Guidelines
+  external_works:
+    work_module:
+      notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
+    blurb:
+      notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
