@@ -4,7 +4,7 @@
   <!--Descriptive page name, messages and instructions-->
   <h2 class="heading"><%= t(".page_heading") %></h2>
   <%= error_messages_for :user %>
-  <div class="caution">
+  <div class="caution notice">
     <p>
       <strong><%= t(".caution") %></strong>
       <%= t(".change_window", count: ArchiveConfig.USER_RENAME_LIMIT_DAYS) %>
