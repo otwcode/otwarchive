@@ -18,6 +18,8 @@ a.tag:hover {
 .actions a:hover,
 .actions button:hover,
 .actions input:hover,
+label.action:hover,
+.action:hover,
 .delete a,
 span.delete,
 span.unread,
