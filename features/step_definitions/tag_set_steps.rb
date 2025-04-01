@@ -210,9 +210,7 @@ When /^I view associations for a tag set that does not exist/ do
 end
 
 When /^I expand the unassociated characters and relationships$/ do
-  within('span[action_target="#list_for_unassociated_char_and_rel"]') do
-    click_link("↓")
-  end
+  find('button[data-action-target="#list_for_unassociated_char_and_rel"]').click
 end
 
 Then /^"([^\"]*)" should be associated with the "([^\"]*)" fandom "([^\"]*)"$/ do |tag, fandom_type, fandom_name|
