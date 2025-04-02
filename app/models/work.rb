@@ -1166,7 +1166,9 @@ class Work < ApplicationRecord
 
   def notify_of_hiding_for_spam
     users.each do |user|
-      UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
+      I18n.with_locale(user.preference.locale.iso) do
+        UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
+      end
     end
     self.notified_of_hiding_for_spam = true
   end

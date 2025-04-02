@@ -51,3 +51,24 @@ Scenario: Review spam when spam works are not already hidden
     And the work "Totally Legit" should not be hidden
     And 1 email should be delivered
     And the email should contain "has been flagged by our automated system as spam"
+
+Scenario: Translated work hidden as spam email
+  Given I am logged in as "spammer"
+    And I post the work "Spammity Spam Work"
+    And a locale with translated emails
+    And the user "spammer" enables translated emails
+    And I add the co-author "Another" to the work "Spammity Spam Work"
+  When I am logged in as a "policy_and_abuse" admin
+    And all emails have been delivered
+    And I view the work "Spammity Spam Work"
+  Then I should see "Mark As Spam"
+  When I follow "Mark As Spam"
+  Then I should see "marked as spam and hidden"
+    And I should see "Mark Not Spam"
+    And the work "Spammity Spam Work" should be marked as spam
+    And the work "Spammity Spam Work" should be hidden
+    And 2 emails should be delivered
+    And the email to "spammer" should contain "has been flagged by our automated system as spam"
+    And the email to "spammer" should be translated
+    And the email to "Another" should contain "has been flagged by our automated system as spam"
+    And the email to "Another" should be non-translated
