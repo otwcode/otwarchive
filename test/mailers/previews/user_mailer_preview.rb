@@ -220,35 +220,17 @@ class UserMailerPreview < ApplicationMailerPreview
     relationships = []
     characters = []
     tags = []
-    categories = [
-      ArchiveConfig.CATEGORY_GEN_TAG_NAME,
-      ArchiveConfig.CATEGORY_SLASH_TAG_NAME,
-      ArchiveConfig.CATEGORY_HET_TAG_NAME,
-      ArchiveConfig.CATEGORY_FEMSLASH_TAG_NAME,
-      ArchiveConfig.CATEGORY_MULTI_TAG_NAME,
-      ArchiveConfig.CATEGORY_OTHER_TAG_NAME
-    ]
-    warnings = [
-      ArchiveConfig.WARNING_DEFAULT_TAG_NAME,
-      ArchiveConfig.WARNING_NONE_TAG_NAME,
-      ArchiveConfig.WARNING_VIOLENCE_TAG_NAME,
-      ArchiveConfig.WARNING_DEATH_TAG_NAME,
-      ArchiveConfig.WARNING_NONCON_TAG_NAME
-    ]
     series_list = []
     
     count = 1 if count < 1
-    if count >= 1
-      (1..count).each do |n| 
-        fandoms.append("fandom_#{n}")
-        relationships.append("relationship_#{n}")
-        characters.append("character_#{n}")
-        tags.append("tag_#{n}")
-        series_list.append(create(:series))
-      end
-      warnings = warnings[0...count] if count <= 5
-      categories = categories[0...count] if count <= 6
+    (1..count).each do |n| 
+      fandoms.append("fandom_#{n}")
+      relationships.append("relationship_#{n}")
+      characters.append("character_#{n}")
+      tags.append("tag_#{n}")
+      series_list.append(create(:series))
     end
+    warnings = ArchiveWarning.canonical.first(count).pluck(:name)
 
     user = create(:user, :for_mailer_preview)
     work = create(
@@ -260,7 +242,6 @@ class UserMailerPreview < ApplicationMailerPreview
       relationship_string: relationships,  
       character_string: characters,
       freeform_string: tags, 
-      category_strings: categories,
       archive_warning_strings: warnings,
       summary: Faker::Lorem.paragraph(sentence_count: count),
       chapter_attributes: { content: count.times.map { Faker::Lorem.characters(number: 11) } },

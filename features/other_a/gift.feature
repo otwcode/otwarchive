@@ -401,10 +401,10 @@ Feature: Create Gifts
       And I set up the draft "GiftStory2" as a gift to "giftee2"
       And I press "Post"
     Then "giftee1" should be emailed
-      And the email should have "\[AO3\] A gift work for you" in the subject
+      And the email should have "A gift work for you" in the subject
       And the email to "giftee1" should be translated
     Then "giftee2" should be emailed
-      And the email should have "\[AO3\] A gift work for you" in the subject
+      And the email should have "A gift work for you" in the subject
       And the email to "giftee2" should be non-translated
 
   Scenario: Translated email is sent when a work in a collection is gifted
@@ -420,10 +420,10 @@ Feature: Create Gifts
       And I give the work to "giftee2"
       And I press "Post"
     Then "giftee1" should be emailed
-      And the email should have "\[AO3\]\[SomeCollection\] A gift work for you from SomeCollection" in the subject
+      And the email should have "\[SomeCollection\] A gift work for you from SomeCollection" in the subject
       And the email to "giftee1" should be translated
     Then "giftee2" should be emailed
-      And the email should have "\[AO3\]\[SomeCollection\] A gift work for you from SomeCollection" in the subject
+      And the email should have "\[SomeCollection\] A gift work for you from SomeCollection" in the subject
       And the email to "giftee2" should be non-translated
 
   Scenario: Translated email is sent when a gift work in a hidden collection is revealed
@@ -443,8 +443,8 @@ Feature: Create Gifts
     When I am logged in as "moderator"
       And I reveal works for "Hidden Treasury"
     Then "giftee1" should be emailed
-      And the email should have "\[AO3\]\[Hidden Treasury\] A gift work for you from Hidden Treasury" in the subject
+      And the email should have "\[Hidden Treasury\] A gift work for you from Hidden Treasury" in the subject
       And the email to "giftee1" should be translated
     Then "giftee2" should be emailed
-      And the email should have "\[AO3\]\[Hidden Treasury\] A gift work for you from Hidden Treasury" in the subject
+      And the email should have "\[Hidden Treasury\] A gift work for you from Hidden Treasury" in the subject
       And the email to "giftee2" should be non-translated
