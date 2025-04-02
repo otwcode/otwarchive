@@ -122,7 +122,7 @@ end
 
 When /^I try to invite a friend from my user page$/ do
   step %{I am logged in as "user1"}
-  step %{I go to my user page}
+  step %{I go to user1's user page}
   step %{I follow "Invitations"}
 end
 
@@ -136,7 +136,7 @@ end
 
 When "as {string} I request some invites" do |user|
   step %{I am logged in as "#{user}"}
-  step %{I go to my user page}
+  step %{I go to #{user}'s user page}
   step %{I follow "Invitations"}
   step %{I follow "Request invitations"}
   step %{I fill in "How many invitations would you like? (max 10)" with "3"}

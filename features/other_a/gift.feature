@@ -243,7 +243,7 @@ Feature: Create Gifts
     Then I should not see "Refuse Gift"
       And I should not see "Refused Gifts"
     When I am logged in as "associate" with password "something"
-      And I go to my gifts page
+      And I go to associate's gifts page
     Then I should see "GiftStory1"
       And I should see "Refuse Gift"
       And I should see "Refused Gifts"
@@ -259,7 +259,7 @@ Feature: Create Gifts
 
   Scenario: A user should be able to re-accept a gift
     Given I have refused the work
-      And I am on my gifts page
+      And I am on giftee1's gifts page
       And I follow "Refused Gifts"
     Then I should see "Accept Gift"
       And I should not see "by gifter for giftee1"
@@ -326,7 +326,7 @@ Feature: Create Gifts
       And I post the work "Rude Gift" as a gift for "giftee1"
       And the user "giftee1" disallows gifts
     When I am logged in as "giftee1"
-      And I go to my gifts page
+      And I go to giftee1's gifts page
       # Delay to make sure the cache is expired when the gift is refused:
       And it is currently 1 second from now
       And I follow "Refuse Gift"
@@ -374,14 +374,14 @@ Feature: Create Gifts
     Given I am logged in as "gifter"
       And I post the work "Rude Gift" as a gift for "giftee1"
     When I am logged in as "giftee1"
-      And I go to my gifts page
+      And I go to giftee1's gifts page
     Then I should see "Rude Gift"
-    When I go to my blocked users page
+    When I go to the blocked users page for "giftee1"
       And I fill in "blocked_id" with "gifter"
       And I press "Block"
       And I press "Yes, Block User"
     Then I should see "You have blocked the user gifter."
-    When I go to my gifts page
+    When I go to giftee1's gifts page
       And it is currently 1 second from now
       And I follow "Refuse Gift"
     Then I should see "This work will no longer be listed among your gifts."

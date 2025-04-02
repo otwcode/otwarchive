@@ -64,7 +64,6 @@ describe BookmarkQuery do
     end
 
     it "excludes restricted works when logged out" do
-      User.current_user = nil
       expect(excluded_parent_filter.dig(:has_parent, :query, :bool, :should)).to \
         include({ term: { restricted: "true" } })
     end

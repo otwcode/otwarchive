@@ -1,8 +1,10 @@
 ### GIVEN
 
 Given /^I am editing a pseud$/ do
-  step %{I am logged in as "myname"}
-  visit edit_user_pseud_path(User.current_user, User.current_user.default_pseud)
+  username = "myname"
+  step %{I am logged in as "#{username}"}
+  user = User.find_by(login: username)
+  visit edit_user_pseud_path(user, user.default_pseud)
 end
 
 #' cancelling highlighting
@@ -35,7 +37,8 @@ When /^I delete the icon from the collection "([^"]*)"$/ do |title|
 end
 
 When "I delete the icon from my pseud" do
-  visit edit_user_pseud_path(User.current_user, User.current_user.default_pseud)
+  user = User.find_by(login: "myname")
+  visit edit_user_pseud_path(user, user.default_pseud)
   check("pseud_delete_icon")
   step %{I press "Update"}
 end
