@@ -16,6 +16,10 @@ Feature: Admin Actions to Post Known Issues
       And I should see "First known problem"
     When I follow "Admin Posts"
       And I follow "Known Issues" within "#header"
+    Then I should see "Known Issues"
+      And I should see "New Known Issue"
+    When I follow "Admin Posts"
+      And I follow "Known Issues" within "#header"
       And I follow "Show"
     Then I should see "First known problem"
     When I edit known issues

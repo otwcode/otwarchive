@@ -8,6 +8,10 @@ Feature: Admin Actions to Post News
     Given I am logged in as a "tag_wrangling" admin
     When I go to the admin-posts page
     Then I should not see "Post AO3 News"
+    Given I am logged in as a "communications" admin
+    When I go to the admin-posts page
+    Then I should see "AO3 News"
+      And I should see "Post AO3 News"
 
   Scenario: Make an admin post
     Given I am logged in as a "communications" admin
