@@ -107,17 +107,6 @@ en:
           queue: Manage Queue
           requests: Manage Requests
         page_heading: Invite New Users
-    admin_nav:
-      ao3_news: AO3 News
-      archive_faq: Archive FAQ
-      faq:
-        reorder_questions: Reorder Questions
-      known_issues: Known Issues
-      landmark: Admin Navigation
-      news:
-        delete_post: Delete Post
-      post_ao3_news: Post AO3 News
-      wrangling_guidelines: Wrangling Guidelines
     admin_options:
       delete:
         bookmark: Delete Bookmark
@@ -392,6 +381,12 @@ en:
         footnote_comment_permissions: Comment permissions from the selected post will replace any permissions selected on this page.
         footnote_tags: Tags from the selected post will replace any tags entered on this page.
         label: Translation of
+    navigation:
+      ao3_news: AO3 News
+      landmark: Admin Post Navigation
+      news:
+        delete_post: Delete Post
+      post_ao3_news: Post AO3 News
     show:
       navigation:
         admin:
@@ -422,10 +417,15 @@ en:
       delete: Delete
       edit: Edit
       manage_faqs: Manage Archive FAQs
-      new_faq_category: New FAQ Category
       page_heading: Archive FAQ
-      reorder_faqs: Reorder FAQs
       show: Show
+    navigation:
+      archive_faq: Archive FAQ
+      faq:
+        reorder_questions: Reorder Questions
+      landmark: FAQ Navigation
+      new_faq_category: New FAQ Category
+      reorder_faqs: Reorder FAQs
     show:
       edit: Edit
       elasticsearch_news: news post announcing the search and filter updates
@@ -1593,6 +1593,11 @@ en:
       waiting_list:
         one: There is currently %{count} person on the waiting list.
         other: There are currently %{count} people on the waiting list.
+  known_issues:
+    navigation:
+      known_issues: Known Issues
+      landmark: Known Issues Navigation
+      new_known_issue: New Known Issue
   kudos:
     guest_header:
       one: "%{count} guest has also left kudos"
@@ -2170,6 +2175,13 @@ en:
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
   wrangling_guidelines:
+    navigation:
+      guideline:
+        delete_guideline: Delete Wrangling Guideline
+      landmark: Wrangling Guidelines Navigation
+      new_guideline: New Wrangling Guideline
+      reorder_guidelines: Reorder Wrangling Guidelines
+      wrangling_guidelines: Wrangling Guidelines
     show:
       edit: Edit
       heading: Wrangling Guidelines

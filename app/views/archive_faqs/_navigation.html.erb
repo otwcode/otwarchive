@@ -1,0 +1,22 @@
+<h3 class="landmark heading"><%= t(".landmark") %></h3>
+<ul class="navigation actions">
+  <% if policy(ArchiveFaq).translation_access? %>
+    <li>
+      <%= span_if_current t(".archive_faq"), archive_faqs_path %>
+    </li>
+  <% end %>
+  <% if policy(ArchiveFaq).full_access? %>
+    <% if Globalize.locale.to_s == "en" %>
+      <li><%= link_to t(".new_faq_category"), new_archive_faq_path %></li>
+      <% if params[:action] == "edit" %>
+        <li>
+          <%= link_to t(".faq.reorder_questions"), manage_archive_faq_questions_path(@archive_faq) %>
+        </li>
+      <% else %>
+        <li>
+          <%= link_to t(".reorder_faqs"), manage_archive_faqs_path(language_id: params[:language_id]) %>
+        </li>
+      <% end %>
+    <% end %>
+  <% end %>
+</ul>

@@ -1,0 +1,16 @@
+<h3 class="landmark heading"><%= t(".landmark") %></h3>
+<% if policy(:wrangling).full_access? %>
+  <ul class="navigation actions">
+    <li><%= span_if_current t(".wrangling_guidelines"), wrangling_guidelines_path %></li>
+    <li><%= span_if_current t(".new_guideline"), new_wrangling_guideline_path %></li>
+    <li><%= span_if_current t(".reorder_guidelines"), manage_wrangling_guidelines_path %></li>
+    <% if params[:action] == "edit" %>
+      <li>
+        <%= link_to t(".guideline.delete_guideline"),
+              @wrangling_guideline,
+              data: { confirm: "Are you sure you want to delete this wrangling guideline?" },
+              method: :delete %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

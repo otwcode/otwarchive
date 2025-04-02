@@ -8,10 +8,13 @@ Feature: Wrangling Guidelines
 
   Given I am logged in as a "tag_wrangling" admin
     And I am on the wrangling guidelines page
-  And I follow "New Wrangling Guideline"
+  Then I should see "Wrangling Guidelines"
+    And I should see "New Wrangling Guideline"
+    And I should see "Reorder Wrangling Guidelines"
+  When I follow "New Wrangling Guideline"
     And I fill in "Guideline text" with "This series of documents (Wrangling Guidelines) are intended to help tag wranglers remain consistent as they go about the business of wrangling tags by providing a set of formatting guidelines."
     And I fill in "Title" with "Intro and General Concepts"
-  When I press "Post"
+    And I press "Post"
   Then I should see "Wrangling Guideline was successfully created"
   When I go to the wrangling_guidelines page
     And I follow "Intro and General Concepts"
