@@ -5,6 +5,7 @@ class RelatedWorksController < ApplicationController
   before_action :get_instance_variables, except: [:index]
 
   def index
+    @page_subtitle = ts("%{username} - Related Works", username: @user.login)
     @translations_of_user = @user.related_works.posted.where(translation: true)
     @remixes_of_user = @user.related_works.posted.where(translation: false)
     @translations_by_user = @user.parent_work_relationships.posted.where(translation: true)
@@ -19,7 +20,6 @@ class RelatedWorksController < ApplicationController
     @translations_by_user = @translations_by_user.merge(Work.revealed.non_anon)
     @remixes_by_user = @remixes_by_user.merge(Work.revealed.non_anon)
     
-    @page_subtitle = ts("%{username} - Related Works", username: @user.login)
   end
 
   # GET /related_works/1
