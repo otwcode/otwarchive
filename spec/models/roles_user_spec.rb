@@ -1,10 +1,24 @@
 require "spec_helper"
 
 describe RolesUser do
+  describe "add role" do
+    context "tag_wrangler" do
+      let(:user) { create(:user) }
+
+      it "assigning the role sets last wrangler activity to now" do
+        freeze_time do
+          role = Role.find_or_create_by(name: "tag_wrangler")
+          user.roles.push(role)
+          expect(user.last_wrangling_activity).not_to be_nil
+          expect(user.last_wrangling_activity.updated_at).to eq(Time.current)
+        end
+      end
+    end
+  end
+
   describe "remove role" do
     context "tag_wrangler" do
       let(:user) { create(:tag_wrangler) }
-      let!(:activity) { create(:last_wrangling_activity, user: user) }
 
       it "clears last wrangler activity" do
         user.roles = []
