@@ -19,7 +19,6 @@ class RelatedWorksController < ApplicationController
     @remixes_of_user = @remixes_of_user.merge(Work.revealed.non_anon)
     @translations_by_user = @translations_by_user.merge(Work.revealed.non_anon)
     @remixes_by_user = @remixes_by_user.merge(Work.revealed.non_anon)
-    
   end
 
   # GET /related_works/1
