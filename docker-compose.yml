@@ -29,34 +29,34 @@ services:
   db:
     image: mariadb:10.5.4-focal
     environment:
-      - MYSQL_ROOT_PASSWORD=change_me
+      - MYSQL_ROOT_PASSWORD=password
     ports:
-      - "3306:3306"
+      - '3306:3306'
     command:
       [
-        "mysqld",
-        "--sql-mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION",
+        'mysqld',
+        '--sql-mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION',
       ]
     volumes:
       - my-datavolume:/var/lib/mysql:rw
   redis:
     image: redis:5
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis-data:/var/lib/redis:rw
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.26
     ports:
-      - "9200:9200"
-      - "9300:9300"
-      - "9400:9400"
+      - '9200:9200'
+      - '9300:9300'
+      - '9400:9400'
     volumes:
       - esdata1:/usr/share/elasticsearch/data:rw
     environment:
       - transport.host=localhost
       - bootstrap.memory_lock=false
-      - "ES_JAVA_OPTS=-Xms1500m -Xmx1500m"
+      - 'ES_JAVA_OPTS=-Xms1500m -Xmx1500m'
       - discovery.type=single-node
       # Silence "security features are not enabled" warnings
       # https://github.com/elastic/elasticsearch/issues/78500
@@ -64,7 +64,7 @@ services:
   mc:
     image: memcached:1.5
     ports:
-      - "11211:11211"
+      - '11211:11211'
   web:
     profiles:
       - dev
@@ -79,7 +79,7 @@ services:
     volumes:
       - .:/otwa
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - db
       - redis
@@ -93,7 +93,7 @@ services:
       - test
     image: selenium/standalone-chromium
     ports:
-      - "4444:4444"
+      - '4444:4444'
   test:
     profiles:
       - test
@@ -109,7 +109,7 @@ services:
     volumes:
       - .:/otwa
     ports:
-      - "5100:5100"
+      - '5100:5100'
     depends_on:
       - db
       - redis
