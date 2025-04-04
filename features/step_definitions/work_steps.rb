@@ -706,16 +706,18 @@ When /^I add the end notes "([^"]*)"$/ do |notes|
   fill_in("work_endnotes", with: "#{notes}")
 end
 
-When /^I add the beginning notes "([^"]*)" to the work "([^"]*)"$/ do |notes, work|
+When "I add the beginning notes {string} to the work {string}" do |notes, work|
+  step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the beginning notes "#{notes}"}
-  step %{I post the work without preview}
+  step %{I post the work}
 end
 
-When /^I add the end notes "([^"]*)" to the work "([^"]*)"$/ do |notes, work|
+When "I add the end notes {string} to the work {string}" do |notes, work|
+  step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the end notes "#{notes}"}
-  step %{I post the work without preview}
+  step %{I post the work}
 end
 
 When /^I mark the work "([^"]*)" for later$/ do |work|
