@@ -150,13 +150,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
 end
 
 Given /^I have a work "([^"]*)"$/ do |work|
-  step %{I am logged in as a random user}
-  step %{I post the work "#{work}"}
-end
-
-Given /^I have a locked work "([^"]*)"$/ do |work|
-  step %{I am logged in as a random user}
-  step %{I post the locked work "#{work}"}
+  step %{the work "#{work}"}
 end
 
 Given /^I have a multi-chapter draft$/ do
@@ -261,17 +255,11 @@ Given /^I am logged in as the author of "([^"]*)"$/ do |work|
 end
 
 Given "the spam work {string}" do |work|
-  step %{I have a work "#{work}"}
-  step %{I log out}
-  w = Work.find_by(title: work)
-  w.update_attribute(:spam, true)
+  FactoryBot.create(:work, title: work).update_attribute(:spam, true)
 end
 
 Given "the hidden work {string}" do |work|
-  step %{I have a work "#{work}"}
-  step %{I log out}
-  w = Work.find_by(title: work)
-  w.update_attribute(:hidden_by_admin, true)
+  FactoryBot.create(:work, title: work).update_attribute(:hidden_by_admin, true)
 end
 
 Given "the work {string} is marked as spam" do |work|
