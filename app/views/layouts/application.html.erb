@@ -17,20 +17,7 @@
       <meta name="googlebot" content="noindex" />
     <% end %>
   	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>
-      <% if defined?(@page_title) %>
-        <%= @page_title %>
-      <% else %>
-        <% if defined?(@page_subtitle) %>
-          <%= @page_subtitle %>
-        <% else %>
-          <%= controller.action_name == "index" ? "" : process_title(controller.action_name) %>
-          <%= controller.action_name == "index" ? process_title(controller.controller_name) : process_title(controller.controller_name.singularize) %>
-        <% end %>
-        |
-        <%= ArchiveConfig.APP_NAME  %>
-      <% end %>
-    </title>
+    <title><%= browser_page_title %></title>
 
     <%= render :partial => 'layouts/includes' %>
     <%= phraseapp_in_context_editor_js %>

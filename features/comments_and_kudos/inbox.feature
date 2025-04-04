@@ -159,3 +159,8 @@ Feature: Get messages in the inbox
       And I go to the homepage
     Then I should see "sewwiththeflo on Cat Thor's Bizarre Adventure"
       And I should see "Thank you! Please go to bed."
+
+   Scenario: Inbox has the expected browser page title
+    Given I am logged in as "boxer"
+    When I go to boxer's inbox page
+    Then I should see the page title "Show Inbox | Example Archive"
