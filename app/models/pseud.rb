@@ -185,7 +185,7 @@ class Pseud < ApplicationRecord
 
   # Parse a string of the "pseud.name (user.login)" format into a list of
   # pseuds. Usually this will be just one pseud, but if the byline is of the
-  # form "pseud.name" with no parenthesized user name, it'll look for any pseud
+  # form "pseud.name" with no parenthesized username, it'll look for any pseud
   # with that name.
   def self.parse_byline_ambiguous(byline)
     pseud_name, login = split_byline(byline)

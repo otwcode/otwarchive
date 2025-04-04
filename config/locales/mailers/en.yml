@@ -135,8 +135,8 @@ en:
         html: If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
         text: If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
     anonymous_or_unrevealed_notification:
-      anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
-      anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
+      anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
+      anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
       changed_status:
         anonymous:
           html: The collection maintainers of %{collection_link} have changed the status of your work %{work_link} to anonymous.
