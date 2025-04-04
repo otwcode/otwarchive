@@ -29,12 +29,12 @@ describe RelatedWorksController do
       end
     end
 
-    context 'for a valid user' do
+    context "for a valid user" do
       before(:each) do
         get :index, params: { user_id: parent_creator.login }
       end
 
-      it 'sets the page subtitle correctly' do
+      it "sets the page subtitle correctly" do
         expect(assigns(:page_subtitle)).to eq("#{parent_creator.login} - Related Works")
       end
     end
