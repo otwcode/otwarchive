@@ -34,13 +34,16 @@ module CreationNotifier
     recipient_pseuds = Pseud.parse_bylines(self.new_gifts.collect(&:recipient).join(","))[:pseuds]
     # check user prefs to see which recipients want to get gift notifications
     # (since each user has only one preference item, this removes duplicates)
-    recip_ids = Preference.where(user_id: recipient_pseuds.map(&:user_id),
-                                   recipient_emails_off: false).pluck(:user_id)
-    recip_ids.each do |userid|
+    recip_preferences = Preference.where(user_id: recipient_pseuds.map(&:user_id), recipient_emails_off: false)
+    recip_preferences.each do |userpref|
       if self.collections.empty? || self.collections.first.nil?
-        UserMailer.recipient_notification(userid, self.id).deliver_after_commit
+        I18n.with_locale(userpref.locale.iso) do
+          UserMailer.recipient_notification(userpref.user_id, self.id).deliver_after_commit
+        end
       else
-        UserMailer.recipient_notification(userid, self.id, self.collections.first.id).deliver_after_commit
+        I18n.with_locale(userpref.locale.iso) do
+          UserMailer.recipient_notification(userpref.user_id, self.id, self.collections.first.id).deliver_after_commit
+        end
       end
     end
   end
