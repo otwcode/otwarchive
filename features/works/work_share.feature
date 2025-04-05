@@ -70,7 +70,7 @@ Feature: Share Works
       And the following activated user exists
       | login   | password |
       | MadUser | password |
-    When I am logged out
+    When I am a visitor
       And I view the work "Blabla"
     Then I should see "Share"
     When I follow "Share"

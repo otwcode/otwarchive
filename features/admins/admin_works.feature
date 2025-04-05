@@ -4,8 +4,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   I should be able to perform special actions
 
   Scenario: Can troubleshoot works
-    Given I am logged in as "regular_user"
-      And I post the work "Just a work you know"
+    Given the work "Just a work you know"
     When I am logged in as a "support" admin
       And I view the work "Just a work you know"
       And I follow "Troubleshoot"
@@ -39,8 +38,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       | policy_and_abuse |
   
     Scenario Outline: Can hide works already marked as spam
-    Given I am logged in as "regular_user"
-      And I post the work "ToS Violation + Spam"
+    Given the work "ToS Violation + Spam" by "regular_user"
       And the work "ToS Violation + Spam" is marked as spam
     When I am logged in as a "<role>" admin
       And all emails have been delivered
@@ -60,8 +58,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       | policy_and_abuse |
 
   Scenario Outline: Can unhide works
-    Given I am logged in as "regular_user"
-      And I post the work "ToS Violation"
+    Given the work "ToS Violation" by "regular_user"
     When I am logged in as a "<role>" admin
       And I view the work "ToS Violation"
       And I follow "Hide Work"
@@ -110,8 +107,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should not see "ToS Violation"
 
   Scenario: Deleting works as a Legal admin
-    Given I am logged in as "regular_user"
-      And I post the work "ToS Violation"
+    Given the work "ToS Violation" by "regular_user"
     When I am logged in as a "legal" admin
       # Don't let the admin password email mess up the count.
       And all emails have been delivered
@@ -130,8 +126,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should not see "ToS Violation"
 
   Scenario Outline: Can hide bookmarks
-    Given I am logged in as "regular_user" with password "password1"
-      And I post the work "A Nice Work"
+    Given the work "A Nice Work" by "regular_user"
     When I am logged in as "bad_user"
       And I view the work "A Nice Work"
     When I follow "Bookmark"
@@ -157,8 +152,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       | policy_and_abuse |
 
   Scenario Outline: Deleting bookmarks
-    Given I am logged in as "regular_user" with password "password1"
-      And I post the work "A Nice Work"
+    Given the work "A Nice Work"
     When I am logged in as "bad_user"
       And I view the work "A Nice Work"
     When I follow "Bookmark"
@@ -378,8 +372,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
   Scenario: Admin can edit language on works when posting without previewing
     Given basic languages
-      And I am logged in as "regular_user"
-      And I post the work "Wrong Language"
+      And the work "Wrong Language"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Wrong Language"
       And I follow "Edit Tags and Language"
@@ -391,8 +384,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
   Scenario: Admin can edit language on works when previewing first
     Given basic languages
-      And I am logged in as "regular_user"
-      And I post the work "Wrong Language"
+      And the work "Wrong Language"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Wrong Language"
       And I follow "Edit Tags and Language"
@@ -544,9 +536,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
   Scenario Outline: Certain admins can remove orphan_account pseuds from works
     Given I have an orphan account
-      And I am logged in as "Leaver"
-      And I post the work "Bye"
-      And I orphan and keep my pseud on the work "Bye"
+      And the work "Bye" by "Leaver"
+      And "Leaver" orphans and keeps their pseud on the work "Bye"
     When I am logged in as a "<role>" admin
       And I view the work "Bye"
     Then I should see "Remove Pseud"
@@ -568,9 +559,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   @javascript
   Scenario Outline: Removing orphan_account pseuds from works with JavaScript shows a confirmation pop-up instead of a page
     Given I have an orphan account
-      And I am logged in as "Leaver"
-      And I post the work "Bye"
-      And I orphan and keep my pseud on the work "Bye"
+      And the work "Bye" by "Leaver"
+      And "Leaver" orphans and keeps their pseud on the work "Bye"
     When I am logged in as a "<role>" admin
       And I view the work "Bye"
     Then I should see "Remove Pseud"
@@ -595,11 +585,9 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I add the co-author "Another" to the work "Bye"
       And it is currently 1 second from now
       And I add the co-author "Third" to the work "Bye"
-      And I orphan and keep my pseud on the work "Bye"
-      And I am logged in as "Another"
-      And I orphan and keep my pseud on the work "Bye"
-      And I am logged in as "Third"
-      And I orphan and keep my pseud on the work "Bye"
+      And "Leaver" orphans and keeps their pseud on the work "Bye"
+      And "Another" orphans and keeps their pseud on the work "Bye"
+      And "Third" orphans and keeps their pseud on the work "Bye"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Bye"
     Then I should see "Remove Pseud"
@@ -622,10 +610,9 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
   Scenario: The Remove pseud option is only shown on orphaned works with non-default pseuds
     Given I have an orphan account
-      And I am logged in as "Leaver"
-    And I post the work "Hey"
-      And I post the work "Bye"
-      And I orphan and take my pseud off the work "Bye"
+      And the work "Bye" by "Leaver"
+      And "Leaver" orphans and takes their pseud off the work "Bye"
+      And the work "Hey" by "Leaver"
     When I am logged in as a "superadmin" admin
       And I view the work "Hey"
     Then I should not see "Remove Pseud"
@@ -634,9 +621,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
   Scenario Outline: The Remove pseud option is not shown to admins who don't have permissions to remove pseuds
     Given I have an orphan account
-    And I am logged in as "Leaver"
-    And I post the work "Bye"
-    And I orphan and keep my pseud on the work "Bye"
+      And the work "Bye" by "Leaver"
+      And "Leaver" orphans and keeps their pseud on the work "Bye"
     When I am logged in as a "<role>" admin
       And I view the work "Bye"
     Then I should not see "Remove Pseud"

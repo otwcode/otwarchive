@@ -1,7 +1,6 @@
 Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
-  step %{I am logged in as "#{username}"}
-  step %{"#{username}" creates the pseud "#{pseud}"}
-  step %{I start a new session}
+  u = ensure_user(username)
+  u.pseuds.create!(name: pseud)
 end
 
 Given "there are {int} pseuds per page" do |amount|
