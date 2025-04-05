@@ -206,11 +206,9 @@ Given "an abuse ticket ID exists" do
 end
 
 Given "a work {string} with the original creator {string}" do |title, creator|
-  step %{I am logged in as "#{creator}"}
-  step %{I post the work "#{title}"}
-  FactoryBot.create(:user, login: "orphan_account")
-  step %{I orphan the work "#{title}"}
-  step %{I log out}
+  step %{the work "#{title}" by "#{creator}"}
+  step %{I have an orphan account}
+  step %{"#{creator}" orphans and takes their pseud off the work "#{title}"}
 end
 
 Given "the admin {string} is locked" do |login|
