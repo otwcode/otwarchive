@@ -306,12 +306,12 @@ Feature: Admin Actions to Manage Invitations
       And "dax" has "2" invitations
       And I am logged in as an admin
     When I follow "Invite New Users"
-      And I fill in "Enter a user name" with "dax"
-      And I press "Go"
+      And I fill in "Username" with "dax"
+      And I press "Search" within "form.invitation.simple.search"
     Then I should see "copy and use"
     When I follow "Invite New Users"
-      And I fill in "Enter an invite token" with "dax's" invite code
-      And I press "Go"
+      And I fill in "Invite token" with "dax's" invite code
+      And I press "Search" within "form.invitation.simple.search"
     Then I should see "copy and use"
 
   Scenario: An admin can find all invitations via email partial match
@@ -324,16 +324,16 @@ Feature: Admin Actions to Manage Invitations
     When I fill in "Number of people to invite" with "2"
       And I press "Invite from queue"
     Then I should see "2 people from the invite queue are being invited"
-    When I fill in "Enter all or part of an email address" with "@"
-      And I press "Go"
+    When I fill in "All or part of an email address" with "@"
+      And I press "Search" within "form.invitation.simple.search"
     Then I should see "fred@bedrock.com"
       And I should see "barney@bedrock.com"
 
   Scenario: An admin can't find a invitation for a nonexistent user
     Given I am logged in as an admin
       And I follow "Invite New Users"
-    When I fill in "Enter a user name" with "dax"
-      And I press "Go"
+    When I fill in "Username" with "dax"
+      And I press "Search" within "form.invitation.simple.search"
     Then I should see "No results were found. Try another search"
     When I fill in "Enter a user name" with ""
       And I fill in "Enter all or part of an email address" with "nonexistent@domain.com"
@@ -349,7 +349,7 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "There are 2 requests in the queue."
     When I fill in "Number of people to invite" with "1"
       And press "Invite from queue"
-    Then I should see "There are 1 requests in the queue."
+    Then I should see "There is 1 request in the queue."
       And I should see "1 person from the invite queue is being invited"
       And 1 email should be delivered to "fred@bedrock.com"
 
@@ -360,7 +360,7 @@ Feature: Admin Actions to Manage Invitations
     When I fill in "Number of people to invite" with "1"
       And press "Invite from queue"
     Then I should see "1 person from the invite queue is being invited"
-    When I press "Go"
+    When I press "Search" within "form.invitation.simple.search"
       And I fill in "Enter all or part of an email address" with "test@example.com"
       And I press "Go"
     Then I should see "Sender testadmin-support"
@@ -370,12 +370,12 @@ Feature: Admin Actions to Manage Invitations
       And "dax" has "2" invitations
       And I am logged in as a "support" admin
     When I follow "Invite New Users"
-      And I fill in "Enter a user name" with "dax"
-      And I press "Go"
+      And I fill in "Username" with "dax"
+      And I press "Search" within "form.invitation.simple.search"
     Then I should see "copy and use"
     When I follow "Invite New Users"
-      And I fill in "Enter an invite token" with "dax's" invite code
-      And I press "Go"
+      And I fill in "Invite token" with "dax's" invite code
+      And I press "Search" within "form.invitation.simple.search"
     Then I should see "copy and use"
     When I fill in "Enter an email address" with "oldman@ds9.com"
       And I press "Update Invitation"

@@ -102,11 +102,38 @@ en:
         token: Enter an invite token
         user_name: Enter a user name
       index:
-        email: Enter all or part of an email address
+        find:
+          email: All or part of an email address
+          heading: Track invitations
+          invite_token: Invite token
+          landmark_submit: Submit
+          search: Search
+          username: Username
+        grant_invites:
+          all: All
+          generate_invitations: Generate invitations
+          heading: Give invite codes to current users
+          landmark_submit: Submit
+          number_of_invitations: Number of invitations
+          users: Users
+          with_no_unused: With no unused invitations
+        invite_from_queue:
+          heading_html: Send invite codes to people in our %{invitations_queue_link}
+          invitations_queue: Invitations queue
+          invite_from_queue: Invite from queue
+          number_to_invite: Number of people to invite
+          requests_in_queue:
+            one: There is %{count} request in the queue.
+            other: There are %{count} requests in the queue.
         navigation:
           queue: Manage Queue
           requests: Manage Requests
         page_heading: Invite New Users
+        send_to_email:
+          description: Email address
+          heading: Send to Email
+          invite_by_email_title: Invite by email
+          invite_user: Invite user
     admin_nav:
       ao3_news: AO3 News
       archive_faq: Archive FAQ
@@ -355,7 +382,7 @@ en:
           guest_comments_off: Turn off guest comments across the site
           hide_spam: Automatically hide spam works
           invite_from_queue_enabled: Invite from queue enabled (People can add themselves to the queue and invitations are sent out automatically)
-          invite_from_queue_frequency: How often (in days) should we invite people from the queue
+          invite_from_queue_frequency: How often (in hours) should we invite people from the queue
           invite_from_queue_number: Number of people to invite from the queue at once
           request_invite_enabled: Users can request invitations
           suspend_filter_counts: Suspend some filter tracking due to high posting volume
@@ -368,8 +395,10 @@ en:
           content: Content
           disable_support_form: Turn Off Support Form
           performance_and_misc: Performance and Misc
-        queue_status: "%{number} people are scheduled to be sent invitations on %{date}."
-        queue_status_help: "(The automatic task that invites people from the queue only runs once a day. Don't be alarmed if the date you see is yesterday's. Do be alarmed if the date you see is more than one day in the past and the queue is supposed to be active.)"
+        queue_status:
+          one: "%{count} person is scheduled to be sent an invitation at %{time}."
+          other: "%{count} people are scheduled to be sent invitations at %{time}."
+        queue_status_help: "(The automatic task that invites people from the queue runs at most every hour. Don't be alarmed if the time you see is within the last hour. Do be alarmed if the time you see is more than one hour in the past and the queue is supposed to be active.)"
         update: Update
       update:
         success: Archive settings were successfully updated.
@@ -1545,15 +1574,30 @@ en:
       sent_to: Sent to
       user_id_deleted: User %{user_id} (Deleted)
   invite_requests:
+    index_closed:
+      already_requested_html: If you have already requested an invitation, you can %{check_waitlist_position_link}.
+      check_waitlist_position: check your position on the waiting list
+      page_heading: Invitation Requests
+      queue_disabled:
+        closed: New invitation requests are currently closed.
+        html: "%{closed_bold} For more information, please check the %{news_link}."
+        news: '"Invitations" tag on AO3 News'
+      waiting_list_count:
+        one: There is %{count} person remaining on the waiting list.
+        other: There are %{count} people remaining on the waiting list.
     index_open:
       add_to_list: Add me to the list
-      already_requested_html: If you have already requested an invitation, you can %{check_status_link}.
+      already_requested_html: If you have already requested an invitation, you can %{check_waitlist_position_link}.
       check_waitlist_position: check your position on the waiting list
       content_policy: Content Policy
       details_html: To get a free Archive of Our Own account, you need an Invitation. By submitting your email address to our invitation queue, you confirm that you are at least 13 years old, and if you're in a country whose residents/citizens have to be of an age older than 13 to consent, you are old enough to consent to the processing of your personal data without our obtaining written permission from a parent or legal guardian. We will use the email address you submit only to send you an Invitation and to process/manage your account activation. Please don't request an Invitation unless you've read our %{tos_link}, including the %{content_policy_link} and %{privacy_policy_link}, and agree to abide by those Terms.
-      invitations_per_day:
-        one: We are sending out %{count} invitation per day.
-        other: We are sending out %{count} invitations per day.
+      frequency:
+        one: hour
+        other: "%{count} hours"
+      invitation_number:
+        one: "%{count} invitation"
+        other: "%{count} invitations"
+      invitation_send_rate: We are sending out %{queue_invitation_number} every %{queue_frequency}.
       page_heading: Invitation Requests
       privacy_policy: Privacy Policy
       request_invitation_header: Request an invitation
@@ -1587,9 +1631,15 @@ en:
     show:
       instructions_html: To check on the status of your invitation, go to the %{status_link} and enter your email in the space provided.
     status:
+      frequency:
+        one: hour
+        other: "%{count} hours"
       heading: Invitation Request Status
+      invitation_number:
+        one: "%{count} invitation"
+        other: "%{count} invitations"
+      invitation_send_rate: We are sending out %{queue_invitation_number} every %{queue_frequency}.
       search: Look me up
-      send_rate: We are sending out %{invites} invitations per day.
       waiting_list:
         one: There is currently %{count} person on the waiting list.
         other: There are currently %{count} people on the waiting list.
