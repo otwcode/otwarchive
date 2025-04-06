@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe AbuseReport do
+  it { is_expected.to validate_presence_of(:url) }
+
   context "when report is not spam" do
     context "valid reports" do
       it "is valid" do
@@ -77,6 +79,16 @@ describe AbuseReport do
             expect(missing_work_id.url).to eq("https://#{chapter_url}/")
           end
         end
+      end
+    end
+
+    context "with a very long URL" do
+      let(:long_url) { "https://archiveofourown.org/#{'a' * 2080}" }
+      let(:abuse_report) { build(:abuse_report, url: long_url) }
+
+      it "truncates the url to the maximum length" do
+        expect(abuse_report.save).to be_truthy
+        expect(abuse_report.url).to eq(long_url[0..2079])
       end
     end
 
@@ -350,6 +362,23 @@ describe AbuseReport do
     it "is valid even with spam if logged in and providing correct email" do
       User.current_user = legit_user
       expect(safe_report.save).to be_truthy
+    end
+  end
+
+  context "when report is submitted to Akismet" do
+    let(:report) { build(:abuse_report) }
+
+    it "has comment_type \"contact-form\"" do
+      expect(report.akismet_attributes[:comment_type]).to eq("contact-form")
+    end
+
+    it "has user_role \"user-with-nonmatching-email\" when reporter is logged in" do
+      User.current_user = create(:user)
+      expect(report.akismet_attributes[:user_role]).to eq("user-with-nonmatching-email")
+    end
+
+    it "has user_role \"guest\" when reporter is logged out" do
+      expect(report.akismet_attributes[:user_role]).to eq("guest")
     end
   end
 

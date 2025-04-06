@@ -45,7 +45,7 @@ class AdminSetting < ApplicationRecord
   end
 
   def self.current
-    Rails.cache.fetch("admin_settings-v1", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
+    Rails.cache.fetch("admin_settings-v2", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
   end
 
   class << self
@@ -53,15 +53,13 @@ class AdminSetting < ApplicationRecord
     delegate :default_skin, to: :current
   end
 
-  # run once a day from cron
+  # run hourly with the resque scheduler
   def self.check_queue
-    if self.invite_from_queue_enabled? && InviteRequest.count > 0
-      if Date.today >= self.invite_from_queue_at.to_date
-        new_date = Time.now + self.invite_from_queue_frequency.days
-        self.first.update_attribute(:invite_from_queue_at, new_date)
-        InviteFromQueueJob.perform_now(count: invite_from_queue_number)
-      end
-    end
+    return unless self.invite_from_queue_enabled? && InviteRequest.any? && Time.current >= self.invite_from_queue_at
+
+    new_time = Time.current + self.invite_from_queue_frequency.hours
+    self.first.update_attribute(:invite_from_queue_at, new_time)
+    InviteFromQueueJob.perform_now(count: invite_from_queue_number)
   end
 
   @queue = :admin
@@ -79,7 +77,7 @@ class AdminSetting < ApplicationRecord
     self.reload
 
     # However, we only cache it if the transaction is successful.
-    after_commit { Rails.cache.write("admin_settings-v1", self) }
+    after_commit { Rails.cache.write("admin_settings-v2", self) }
   end
 
   private
@@ -96,7 +94,7 @@ class AdminSetting < ApplicationRecord
 
   def update_invite_date
     if self.invite_from_queue_frequency_changed?
-      self.invite_from_queue_at = Time.now + self.invite_from_queue_frequency.days
+      self.invite_from_queue_at = Time.current + self.invite_from_queue_frequency.hours
     end
   end
 end

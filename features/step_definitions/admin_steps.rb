@@ -102,6 +102,13 @@ Given "guest comments are off" do
   click_button("Update")
 end
 
+Given "account age threshold for comment spam check is set to {int} days" do |days|
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  fill_in("admin_setting_account_age_threshold_for_comment_spam_check", with: days)
+  click_button("Update")
+end
+
 Given "I have posted known issues" do
   step %{I am logged in as a super admin}
   step %{I follow "Admin Posts"}
@@ -128,7 +135,7 @@ Given "the fannish next of kin {string} for the user {string}" do |kin, user|
   user.create_fannish_next_of_kin(kin: kin, kin_email: "fnok@example.com")
 end
 
-Given /^the user "([^\"]*)" is suspended$/ do |user|
+Given "the user {string} is suspended" do |user|
   step %{the user "#{user}" exists and is activated}
   step %{I am logged in as a "policy_and_abuse" admin}
   step %{I go to the user administration page for "#{user}"}
@@ -291,8 +298,8 @@ When "{int} Archive FAQ(s) with {int} question(s) exist(s)" do |faqs, questions|
   end
 end
 
-When /^the invite_from_queue_at is yesterday$/ do
-  AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
+When "the invite_from_queue_at is yesterday" do
+  AdminSetting.first.update_attribute(:invite_from_queue_at, Time.current - 1.day)
 end
 
 When "the scheduled check_invite_queue job is run" do
@@ -347,6 +354,10 @@ end
 When "it is past the admin password reset token's expiration date" do
   days = ArchiveConfig.DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES + 1
   step "it is currently #{days} days from now"
+end
+
+When "I confirm I want to remove the pseud" do
+  expect(page.accept_alert).to eq("Are you sure you want to remove the creator's pseud from this work?") if @javascript
 end
 
 ### THEN
@@ -413,7 +424,7 @@ end
 
 Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
   step %{I am logged in as "#{user}"}
-  step %{I am on my works page}
+  step %{I am on #{user}'s works page}
   step %{I should not see "#{work}"}
   step %{I view the work "#{work}"}
   step %{I should see the image "title" text "Hidden by Administrator"}

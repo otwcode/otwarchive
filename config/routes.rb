@@ -197,6 +197,8 @@ Rails.application.routes.draw do
       member do
         put :hide
         put :set_spam
+        get :confirm_remove_pseud
+        put :remove_pseud
       end
     end
     resources :users, controller: "admin_users", only: [:index, :show] do

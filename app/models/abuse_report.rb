@@ -3,7 +3,7 @@ class AbuseReport < ApplicationRecord
   validates_presence_of :language
   validates_presence_of :summary
   validates_presence_of :comment
-  validates_presence_of :url
+  validates :url, presence: true, length: { maximum: 2080 }
   validate :url_is_not_over_reported
   validate :email_is_not_over_reporting
   validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
@@ -11,8 +11,16 @@ class AbuseReport < ApplicationRecord
                                              characters long.',
                                 max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
+  before_validation :truncate_url, if: :will_save_change_to_url?
+
   # It doesn't have the type set properly in the database, so override it here:
   attribute :summary_sanitizer_version, :integer, default: 0
+
+  # Truncates the user-provided URL to the maximum we can store in the database. We don't want to reject reports with very long URLs, but we need to do
+  # something to avoid a 500 error for long URLs.
+  def truncate_url
+    self.url = url[0..2079]
+  end
 
   validate :check_for_spam
   def check_for_spam
@@ -26,11 +34,15 @@ class AbuseReport < ApplicationRecord
 
   def akismet_attributes
     name = username ? username : ""
+    # If the user is logged in and we're sending info to Akismet, we can assume
+    # the email does not match.
+    role = User.current_user.present? ? "user-with-nonmatching-email" : "guest"
     {
       comment_type: "contact-form",
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
+      user_role: role,
       comment_author: name,
       comment_author_email: email,
       comment_content: comment

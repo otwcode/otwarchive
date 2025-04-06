@@ -108,7 +108,7 @@ Feature: Prompt Meme Challenge
   When I sign up for "Battle 12" fixed-fandom prompt meme
   When I sign up for "Battle 13" many-fandom prompt meme
   When I sign up for "Battle 14" many-fandom prompt meme
-  When I am on my user page
+  When I am on prolific_writer's user page
     And I follow "Sign-ups"
   # TODO
 
@@ -324,7 +324,7 @@ Feature: Prompt Meme Challenge
   When I reveal the "Battle 12" challenge
   When I reveal the authors of the "Battle 12" challenge
   When I am logged in as "myname2"
-  When I am on my user page
+  When I am on myname2's user page
     And I follow "Claims"
     # note that user Claims page currently only shows unfulfilled claims
   Then I should not see "myname4"
@@ -371,7 +371,7 @@ Feature: Prompt Meme Challenge
     And I follow "Unposted Claims"
   Then I should see "myname4"
   When I am logged in as "myname4"
-    And I go to my claims page
+    And I go to myname4's claims page
     # Draft not shown. Instead we see that there is a 'Fulfill' button which
     # we can use. Then use the 'Restore From Last Unposted Draft?' button
   When I follow "Fulfill"
@@ -446,3 +446,11 @@ Feature: Prompt Meme Challenge
       And I go to "Battle 12" collection's page
       And I follow "Prompt Form"
     Then I should not see "any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings"
+
+  Scenario: When a work is posted to fulfill a prompt, the notes should contain the collection title
+  Given I have Battle 12 prompt meme fully set up
+    And everyone has signed up for Battle 12
+  When I am logged in as "myname1"
+    And I claim a prompt from "Battle 12"
+    And I fulfill my claim
+  Then I should see "In response to a prompt by myname4 in the Battle 12 collection"

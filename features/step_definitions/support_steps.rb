@@ -15,6 +15,6 @@ end
 Then "a Zoho ticket should be created with referer {string}" do |referer|
   # rubocop:disable Lint/AmbiguousBlockAssociation
   expect(WebMock).to have_requested(:post, "https://desk.zoho.com/api/v1/tickets")
-    .with { |req| JSON.parse(req.body)["cf"]["cf_url"] == referer }
+    .with { |req| JSON.parse(req.body)["cf"]["cf_ticket_url"] == referer }
   # rubocop:enable Lint/AmbiguousBlockAssociation
 end

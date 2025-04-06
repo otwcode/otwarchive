@@ -269,7 +269,7 @@ Feature: Admin Actions to Post News
     When I fill in "Comment" with "Second perfectly nice comment"
       And I press "Comment"
     Then I should see "Your comment was received! It will appear publicly after it has been approved."
-      And I should be on the show page for my latest comment
+      And I should see "Second perfectly nice comment"
 
     # Access unreviewed comments
     When I am logged in as a "legal" admin
