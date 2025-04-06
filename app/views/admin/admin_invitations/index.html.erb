@@ -48,7 +48,7 @@
       <dd>
         <%= select_tag "invitation[user_group]",
               options_for_select([[t(".grant_invites.all"), "All"],
-                                  [t(".grant_invites.with_no_unused")], "With no unused invitations"],
+                                  [t(".grant_invites.with_no_unused"), "With no unused invitations"]],
                 "All") %>
       </dd>
       <dt class="landmark"><%= t(".grant_invites.landmark_submit") %></dt>
