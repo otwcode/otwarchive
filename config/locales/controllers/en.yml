@@ -148,6 +148,9 @@ en:
     not_found: Sorry, we couldn't find the FAQ you were looking for.
     update_positions:
       success: Question order has been successfully updated.
+  related_works:
+    index:
+      page_title: '%{login} - Related Works'
   series:
     index:
       page_title: "%{username} - Series"
