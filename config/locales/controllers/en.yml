@@ -150,7 +150,7 @@ en:
       success: Question order has been successfully updated.
   related_works:
     index:
-      page_title: '%{login} - Related Works'
+      page_title: "%{login} - Related Works"
   series:
     index:
       page_title: "%{username} - Series"
