@@ -18,7 +18,11 @@ module CommentsHelper
     ultimate = comment.ultimate_parent
     case ultimate.class.to_s
       when 'Work' then
-        link_to ultimate.title, ultimate
+        if ultimate.expected_number_of_chapters == 1
+          link_to ultimate.title, ultimate
+        else
+          t("comments_helper.links_to_chapter_and_work_html", chapter_link: chapter_description_link(comment), work_link: link_to(ultimate.title, ultimate))
+        end
       when 'Pseud' then
         link_to ultimate.name, ultimate
       when 'AdminPost' then
@@ -63,6 +67,10 @@ module CommentsHelper
     else
       content_tag(:span, comment.name) + content_tag(:span, " #{ts('(Guest)')}", class: "role")
     end
+  end
+
+  def chapter_description_link(comment)
+    link_to t("comments_helper.chapter_link_html", position: comment.parent.position), work_chapter_path(comment.parent.work, comment.parent)
   end
 
   def image_safety_mode_cache_key(comment)
