@@ -7,6 +7,7 @@ module OtwSanitize
   # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
     ALLOWLIST_REGEXES = {
+      "4shared":        %r{^(w\.)?4shared\.com\/web\/embed},
       archiveorg:       %r{^archive\.org\/embed/},
       bilibili:         %r{^(player\.)?bilibili\.com/},
       criticalcommons:  %r{^criticalcommons\.org/},
@@ -27,6 +28,7 @@ module OtwSanitize
     ].freeze
 
     SUPPORTS_HTTPS = %i[
+      4shared
       archiveorg bilibili eighttracks podfic
       soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze
