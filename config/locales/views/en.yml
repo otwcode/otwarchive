@@ -689,6 +689,8 @@ en:
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
+  external_works:
+    notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
   feedbacks:
     new:
       abuse:
