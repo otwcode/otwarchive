@@ -79,8 +79,7 @@ th,
 #outer,
 .javascript,
 .statistics .index li:nth-of-type(even),
-#tos_prompt,
-.announcement input[type="submit"] {
+#tos_prompt {
   background: #333;
 }
 
@@ -361,6 +360,16 @@ form dd.required {
 .event.announcement .userstuff a,
 .filters .expander {
   color: #eee;
+}
+
+.announcement .action {
+  background: #333;
+}
+
+.announcement .action:hover,
+.announcement .action:focus {
+  color: #fff;
+  box-shadow: inset 2px 2px 2px #000;
 }
 
 .caution {
