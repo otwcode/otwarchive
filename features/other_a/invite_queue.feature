@@ -49,7 +49,7 @@ Feature: Invite queue management
     When I am on the homepage
       And all emails have been delivered
       And I follow "Get an Invitation"
-    Then I should see "We are sending out 10 invitations per day."
+    Then I should see "We are sending out 10 invitations every 12 hours."
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
     Then I should see "You've been added to our queue"
@@ -72,6 +72,7 @@ Feature: Invite queue management
     Then I should not see "Request an invitation"
       And I should not see "invite_request_email"
       And I should see "New invitation requests are currently closed."
+      And I should see "There are 0 people remaining on the waiting list."
       And I should not see "Add me to the list"
 
   Scenario: Can still check status when queue is off

@@ -13,7 +13,8 @@ describe AbuseReporter do
       email: "walrus@example.org",
       username: "Walrus",
       ip_address: "127.0.0.1",
-      url: "https://example.com/works/1"
+      url: "https://example.com/works/1",
+      creator_ids: "3, 4"
     }
   end
 
@@ -28,7 +29,8 @@ describe AbuseReporter do
         "cf_language" => "English",
         "cf_name" => "Walrus",
         "cf_ip" => "127.0.0.1",
-        "cf_ticket_url" => "https://example.com/works/1"
+        "cf_ticket_url" => "https://example.com/works/1",
+        "cf_user_id" => "3, 4"
       }
     }
   end
@@ -97,6 +99,14 @@ describe AbuseReporter do
         allow(subject).to receive(:description).and_return('Hi!<img src="http://example.com/Camera-icon.svg">Bye!')
 
         expect(subject.report_attributes.fetch("description")).to eq("Hi!http://example.com/Camera-icon.svgBye!")
+      end
+    end
+
+    context "if the report does not have creator_ids" do
+      it "returns a hash containing a blank string for the user id" do
+        allow(subject).to receive(:creator_ids).and_return(nil)
+
+        expect(subject.report_attributes.fetch("cf").fetch("cf_user_id")).to eq("")
       end
     end
   end

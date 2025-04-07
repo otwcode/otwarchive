@@ -10,7 +10,7 @@
 </ul>
 <!--/subnav-->
 <!--main content-->
-<%= form_tag url_for(controller: "admin/admin_invitations", action: :create), class: "invitation simple post", autocomplete: "off" do |f| %>
+<%= form_tag url_for(controller: "admin/admin_invitations", action: :create), class: "invitation simple post", autocomplete: "off" do %>
   <fieldset class="simple">
     <h3 class="heading"><%= t(".send_to_email.heading") %></h3>
     <p>

@@ -539,6 +539,26 @@ describe Admin::AdminUsersController do
 
               subject.call
             end
+
+            it "does not send deleted comments to Akismet" do
+              comment.is_deleted = true
+              comment.save!(validate: false)
+              expect_any_instance_of(Comment).to_not receive(:submit_spam)
+
+              subject.call
+            end
+
+            it "deletes marked-as-deleted comments when all its replies are deleted" do
+              reply = create(:comment, commentable: comment, pseud: user.default_pseud)
+              comment.destroy_or_mark_deleted
+
+              expect(comment.is_deleted).to be_truthy
+
+              subject.call
+
+              expect(Comment.exists?(comment.id)).to be_falsey
+              expect(Comment.exists?(reply.id)).to be_falsey
+            end
           end
         end
       end
