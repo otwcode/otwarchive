@@ -98,9 +98,12 @@ en:
         target: Target
     admin_invitations:
       find:
-        email: Enter all or part of an email address
-        token: Enter an invite token
-        user_name: Enter a user name
+        email: All or part of an email address
+        invitations_for_html: Invitations for %{user_invitations_link}
+        page_heading: Track invitations
+        search: Search
+        token: Invite token
+        username: Username
       index:
         find:
           email: All or part of an email address
@@ -225,6 +228,7 @@ en:
           invitations:
             add: Add Invitations
             manage: Manage Invitations
+          rename: Rename
           roles: Manage Roles
           troubleshoot: Troubleshoot
         note: To fix common errors with this user's Subscriptions and Stats pages, and to reindex their works and bookmarks, choose "Troubleshoot."
@@ -352,14 +356,14 @@ en:
         page_heading: Set My Admin Password
         submit: Set Admin Password
       new:
-        instructions: If you've forgotten or would like to change your admin password, we can send instructions that will allow you to reset it. Please tell us the user name for your admin account.
+        instructions: If you've forgotten or would like to change your admin password, we can send instructions that will allow you to reset it. Please tell us the username for your admin account.
         page_heading: Forgotten your admin password?
-        reset_login_html: Admin user name
+        reset_login_html: Admin username
         submit: Reset Admin Password
     sessions:
       new:
         label:
-          login: Admin user name
+          login: Admin username
           password: Admin password
         landmark:
           reset: Reset password
@@ -519,6 +523,23 @@ en:
           comments_on_works: delete or hide comments they previously left on your works; you can delete these individually
           hide_works: hide their works or bookmarks from you
           intro: 'Blocking a user will not:'
+  challenge:
+    gift_exchange:
+      challenge_signups:
+        close_offers_html: Close Offers &#8593;
+        close_requests_html: Close Requests &#8593;
+        heading:
+          for_collection: Sign-ups for %{collection}
+          for_search:
+            one: Sign-up
+            other: Sign-ups
+        navigation:
+          download_csv: Download (CSV)
+          search: Search
+          search_by_pseud: Search by Pseud
+        no_sign_ups_yet: No sign-ups yet!
+        offers_html: Offers &#8595;
+        requests_html: Requests &#8595;
   challenge_signups:
     signup_form:
       notice:
@@ -1573,6 +1594,20 @@ en:
       sent_at: Sent at
       sent_to: Sent to
       user_id_deleted: User %{user_id} (Deleted)
+    user_invitations:
+      table:
+        actions:
+          copy_and_use: Copy and use
+          delete: Delete
+          delete_confirmation: Are you sure you want to delete this invitation?
+        caption: Invitation Information
+        headings:
+          copy_link: Copy Link
+          external_author: External Author
+          sent_to: Sent To
+          token: Token
+          username: Username
+        summary: List of your invitation tokens and information regarding who you shared them with, along with the option to share unused tokens.
   invite_requests:
     index_closed:
       already_requested_html: If you have already requested an invitation, you can %{check_waitlist_position_link}.
@@ -1811,10 +1846,58 @@ en:
     prev: "← Previous"
   preferences:
     index:
-      allow_collection_invitation: Allow others to invite my works to collections.
-      blocked_users: Blocked Users
-      guest_replies_off: Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately).
-      muted_users: Muted Users
+      browser_page_title_format: Browser page title format
+      collections_challenges_gifts:
+        allow_collection_invitation: Allow others to invite my works to collections.
+        allow_gifts: Allow anyone to gift me works.
+        heading: Collections, Challenges and Gifts
+        legend: Collections, Challenges and Gifts
+        turn_off_collection_emails: Turn off emails from collections.
+        turn_off_collection_inbox: Turn off inbox messages from collections.
+        turn_off_gift_emails: Turn off emails about gift works.
+      comments:
+        guest_replies_off: Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately).
+        heading: Comments
+        legend: Comments
+        turn_off_copies_own_comments: Turn off copies of your own comments.
+        turn_off_emails: Turn off emails about comments.
+        turn_off_inbox: Turn off messages to your inbox about comments.
+        turn_off_kudos_emails: Turn off emails about kudos.
+      display:
+        heading: Display
+        hide_additional_tags: Hide additional tags (you can still choose to show them).
+        hide_warnings: Hide warnings (you can still choose to show them).
+        hide_work_skins: Hide work skins (you can still choose to show them).
+        legend: Display
+        show_adult_content: Show me adult content without checking.
+        show_whole_work_default: Show the whole work by default.
+      misc:
+        heading: Misc
+        legend: Misc
+        turn_off_banner_every_page: Turn off the banner showing on every page.
+        turn_on_history: Turn on History.
+        turn_on_new_user_help: Turn the new user help banner back on.
+      navigation:
+        blocked_users: Blocked Users
+        change_my_username: Change My Username
+        edit_my_profile: Edit My Profile
+        landmark: Navigation
+        manage_my_pseuds: Manage My Pseuds
+        muted_users: Muted Users
+        orphan_my_works: Orphan My Works
+      page_heading: Set My Preferences
+      privacy:
+        allow_co_creator_invite: Allow others to invite me to be a co-creator.
+        heading: Privacy
+        hide_share_buttons: Hide the share buttons on my work.
+        hide_work_from_search_engines: Hide my work from search engines when possible.
+        legend: Privacy
+        show_date_of_birth: Show my date of birth to other people.
+        show_email_address: Show my email address to other people.
+      public_site_skins: Public Site Skins
+      your_locale: Your locale
+      your_site_skin: Your site skin
+      your_time_zone: Your time zone
   profile:
     pseud_list:
       more_pseuds:
@@ -1846,8 +1929,8 @@ en:
       orphan_landmark_text: " by %{pseud}"
       user_actions: User Actions
     pseuds_form:
-      change_matching_pseud_html: You cannot change the pseud that matches your user name. However, you can %{change_username_link} instead.
-      change_username: change your user name
+      cannot_change_matching_pseud_html: You cannot change the pseud that matches your username. However, you can %{change_username_link} instead.
+      change_username: change your username
       description: Description
       icon: Icon
       icon_alt: Icon alt text
@@ -1980,6 +2063,13 @@ en:
         description: Recalculate the filters for this work based on the current set of tags. Use this option if wrangling seems to have gone wrong. (e.g. If you synned one of this work's tags to a canonical but it's not showing up in the tag listings, or if the wrong tags are listed in the sidebar when you drill down to a search that includes only this work.)
         title: Update Work Filters
   users:
+    admin_change_username:
+      description: Change the name of this user to a generic name in the format user + their account ID.
+      navigation:
+        manage_user: Manage User
+      new_username_footnote: This username cannot be edited. If you need to change it to a different name, contact your chair.
+      page_heading: Change Username
+      ticket_id: Ticket ID
     change_email:
       browser_title: Change Email
     change_password:
@@ -1989,11 +2079,23 @@ en:
       browser_title: Change Username
       caution: Please use this feature with caution.
       change_window:
-        one: You can change your user name once per day.
-        other: You can change your user name once every %{count} days.
+        one: You can change your username once per day.
+        other: You can change your username once every %{count} days.
+      confirm: Are you sure you want to change your username?
       contact_support: contact Support
-      last_renamed: You last changed your user name on %{renamed_at}.
-      more_info: For information on how changing your user name will affect your account, please check out the %{account_faq_link}. Note that changes to your user name may take several days or longer to appear. If you are still seeing your old user name on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
+      create_a_new_pseud: create a new Pseud
+      current_username: Current username
+      heading: Change Username
+      last_renamed: You last changed your username on %{renamed_at}.
+      legend: Change Username
+      more_info_html: For information on how changing your username will affect your account, please check out the %{account_faq_link}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old username on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
+      new_pseud_instead_html: If that is not what you want, you can %{create_a_new_pseud_link} instead.
+      new_username: New username
+      page_heading: Change My Username
+      password: Password
+      submit: Change Username
+      submit_landmark: Submit
+      username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
     confirmation:
       contact_support: contact Support
       go_back: Return to Archive front page
@@ -2036,11 +2138,30 @@ en:
       public_information_notice_html: Any personal information you post on your public AO3 profile, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites, will be accessible by the general public. To learn more about what data AO3 collects when you're on the site and how we use it, check out our %{privacy_policy_link}.
       title: Title
       update: Update
+    edit_header_navigation:
+      change_email: Change Email
+      change_password: Change Password
+      change_username: Change Username
+      edit_default_pseud_and_icon: Edit Default Pseud and Icon
+      edit_profile: Edit Profile
+    edit_user_navigation:
+      change_email: Change Email
+      change_password: Change Password
+      change_username: Change Username
+      edit_default_pseud_and_icon: Edit Default Pseud and Icon
+      edit_my_profile: Edit My Profile
     header_navigation:
       admin_user: User Administration
       edit_multiple: Edit Works
       invitations: Invitations
       new_work: Post New
+    passwords:
+      new:
+        email_or_username_html: Email address %{or} username
+        instructions: If you've forgotten your password, we can send instructions that will allow you to reset it. Please tell us the username or email address you used when you signed up for your Archive account.
+        or: or
+        page_heading: Forgotten your password?
+        reset_password: Reset Password
     registrations:
       legal:
         agreement_confirm: Yes, I have read the Terms of Service, including the Content Policy and Privacy Policy, and agree to them.
@@ -2059,6 +2180,16 @@ en:
           user: User Details
         submit: Create Account
         wait: Please wait...
+      passwd:
+        confirm_password: Confirm password
+        confirm_password_validation: Please enter the same password in both fields.
+        password: Password
+        password_requirements: "%{minimum} to %{maximum} characters"
+        password_validation: Please enter a password! (At least %{minimum} letters long, please.)
+        username: Username
+        username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
+        username_validation: You need a username! (At least %{minimum} letters long, please.)
+        valid_email: Valid email
     sessions:
       greeting:
         nav:
@@ -2088,7 +2219,7 @@ en:
           warning: This site is in beta. Things may break or crash without notice.
         login:
           create_account: Create an account now
-          forgot: Forgot your password or user name? %{reset_password_link}.
+          forgot: Forgot your password or username? %{reset_password_link}.
           log_in: Log in
           no_account: Don't have an account? %{join_link}.
           request_invite: Request an invitation to join
@@ -2101,6 +2232,20 @@ en:
           signup: Or join us for free - it's easy.
           sorry: Sorry!
           work_unavailable: This work is only available to registered users of the Archive.
+      passwd:
+        landmark_submit: Submit
+        log_in: Log in
+        password: 'Password:'
+        remember_me: Remember me
+        username_or_email: 'Username or email:'
+      passwd_small:
+        create_an_account: Create an Account
+        forgot_password: Forgot password?
+        get_an_invitation: Get an Invitation
+        log_in: Log In
+        password: 'Password:'
+        remember_me: Remember Me
+        username_or_email: 'Username or email:'
     show:
       login_banner:
         contact_abuse: contact our Policy & Abuse team

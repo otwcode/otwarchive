@@ -152,6 +152,19 @@ en:
   people:
     index:
       collection_page_title: "%{collection_title} - People"
+  pseuds:
+    create:
+      already_have_pseud_with_name: You already have a pseud with that name.
+      successfully_created: Pseud was successfully created.
+    destroy:
+      cannot_delete_default: You cannot delete your default pseudonym, sorry!
+      cannot_delete_matching_username: You cannot delete the pseud matching your username, sorry!
+      not_deleted: The pseud was not deleted.
+      successfully_deleted: The pseud was successfully deleted.
+    show:
+      could_not_find_user: Couldn't find user "%{username}"
+    update:
+      successfully_updated: Pseud was successfully updated.
   questions:
     not_found: Sorry, we couldn't find the FAQ you were looking for.
     update_positions:
@@ -169,6 +182,12 @@ en:
     index:
       collection_page_title: "%{collection_title} - Tags"
   users:
+    changed_username:
+      admin:
+        successfully_updated: Username has been successfully updated.
+      user:
+        incorrect_password: Your password was incorrect
+        successfully_updated: Your username has been successfully updated.
     contact_abuse: contact our Policy & Abuse team
     passwords:
       create:

@@ -22,7 +22,7 @@ Given "I am logged in as a(n) {string} admin" do |role|
   login = "testadmin-#{role}"
   FactoryBot.create(:admin, login: login, roles: [role]) if Admin.find_by(login: login).nil?
   visit new_admin_session_path
-  fill_in "Admin user name", with: login
+  fill_in "Admin username", with: login
   fill_in "Admin password", with: "adminpassword"
   click_button "Log In as Admin"
   step %{I should see "Successfully logged in"}
@@ -32,7 +32,7 @@ Given "I am logged in as an admin" do
   step "I start a new session"
   FactoryBot.create(:admin, login: "testadmin", email: "testadmin@example.org") if Admin.find_by(login: "testadmin").nil?
   visit new_admin_session_path
-  fill_in "Admin user name", with: "testadmin"
+  fill_in "Admin username", with: "testadmin"
   fill_in "Admin password", with: "adminpassword"
   click_button "Log In as Admin"
   step %{I should see "Successfully logged in"}

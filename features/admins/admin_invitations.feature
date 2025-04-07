@@ -308,7 +308,7 @@ Feature: Admin Actions to Manage Invitations
     When I follow "Invite New Users"
       And I fill in "Username" with "dax"
       And I press "Search" within "form.invitation.simple.search"
-    Then I should see "copy and use"
+    Then I should see "Copy and use"
     When I follow "Invite New Users"
       And I fill in "Invite token" with "dax's" invite code
       And I press "Search" within "form.invitation.simple.search"
@@ -335,9 +335,9 @@ Feature: Admin Actions to Manage Invitations
     When I fill in "Username" with "dax"
       And I press "Search" within "form.invitation.simple.search"
     Then I should see "No results were found. Try another search"
-    When I fill in "Enter a user name" with ""
-      And I fill in "Enter all or part of an email address" with "nonexistent@domain.com"
-      And I press "Go"
+    When I fill in "Username" with ""
+      And I fill in "All or part of an email address" with "nonexistent@domain.com"
+      And I press "Search" within "form.invitation.simple.search"
     Then I should see "No results were found. Try another search"
 
   Scenario: An admin can invite people from the queue
@@ -361,8 +361,8 @@ Feature: Admin Actions to Manage Invitations
       And press "Invite from queue"
     Then I should see "1 person from the invite queue is being invited"
     When I press "Search" within "form.invitation.simple.search"
-      And I fill in "Enter all or part of an email address" with "test@example.com"
-      And I press "Go"
+      And I fill in "All or part of an email address" with "test@example.com"
+      And I press "Search" within "form.invitation.simple.search"
     Then I should see "Sender testadmin-support"
 
   Scenario: An admin can edit an invitation
@@ -372,7 +372,7 @@ Feature: Admin Actions to Manage Invitations
     When I follow "Invite New Users"
       And I fill in "Username" with "dax"
       And I press "Search" within "form.invitation.simple.search"
-    Then I should see "copy and use"
+    Then I should see "Copy and use"
     When I follow "Invite New Users"
       And I fill in "Invite token" with "dax's" invite code
       And I press "Search" within "form.invitation.simple.search"
