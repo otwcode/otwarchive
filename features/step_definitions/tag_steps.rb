@@ -223,6 +223,22 @@ Given "a zero width space tag exists" do
   blank_tag.save!(validate: false)
 end
 
+Given "I create the canonical media tag {string}" do |name|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(new_tag_path)
+  fill_in("Name", with: name)
+  choose("Media")
+  check("Canonical")
+  click_button("Create Tag")
+end
+
+Given "I recategorize the {string} fandom as a {string} tag" do |name, tag_type|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(edit_tag_path(Fandom.create(name: name)))
+  select(tag_type, from: "tag_type")
+  click_button("Save changes")
+end
+
 ### WHEN
 
 When /^the periodic tag count task is run$/i do
@@ -251,10 +267,7 @@ end
 
 When "I edit the tag {string}" do |tag|
   tag = Tag.find_by!(name: tag)
-  visit tag_path(tag)
-  within(".header") do
-    click_link("Edit")
-  end
+  visit edit_tag_path(tag)
 end
 
 When /^I view the tag "([^\"]*)"$/ do |tag|

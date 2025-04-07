@@ -249,9 +249,8 @@ class TagsController < ApplicationController
     new_tag_type = params[:tag].delete(:type)
 
     # Limiting the conditions under which you can update the tag type
-    if @tag.can_change_type? && %w(Fandom Character Relationship Freeform UnsortedTag).include?(new_tag_type)
-      @tag = @tag.recategorize(new_tag_type)
-    end
+    types = logged_in_as_admin? ? (Tag::USER_DEFINED + %w[Media]) : Tag::USER_DEFINED
+    @tag = @tag.recategorize(new_tag_type) if @tag.can_change_type? && (types + %w[UnsortedTag]).include?(new_tag_type)
 
     unless params[:tag].empty?
       @tag.attributes = tag_params
