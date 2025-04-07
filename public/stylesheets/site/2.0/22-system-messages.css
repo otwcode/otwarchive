@@ -116,11 +116,11 @@ alert => yellow-orange to alert users of problems or planned downtime
 }
 
 .announcement p.submit {
-  bottom: -0.25em;
+  bottom: -0.3em;
   margin: 0;
   padding: 0;
   position: absolute;
-  right: 1em;
+  right: 1.5em;
 }
 
 .announcement .action {
