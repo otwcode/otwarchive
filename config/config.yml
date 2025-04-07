@@ -80,7 +80,8 @@ DELIMITER_FOR_OUTPUT: ', '
 # these can be overridden in the admin controller
 INVITE_FROM_QUEUE_ENABLED: true
 INVITE_FROM_QUEUE_NUMBER: 10
-INVITE_FROM_QUEUE_FREQUENCY: 7
+# How often INVITE_FROM_QUEUE_NUMBER of invites are sent from the queue, in hours
+INVITE_FROM_QUEUE_FREQUENCY: 12
 
 HOURS_BEFORE_RESEND_INVITATION: 24
 # this is whether or not people without invitations can create accounts
@@ -191,11 +192,17 @@ RATE_LIMIT_NUMBER: 300
 RATE_LIMIT_PERIOD: 300
 RATE_LIMIT_LOGIN_ATTEMPTS: 5
 RATE_LIMIT_LOGIN_PERIOD: 20
+RATE_LIMIT_ADMIN_LOGIN_ATTEMPTS: 10
+RATE_LIMIT_ADMIN_LOGIN_PERIOD: 300
 RATE_LIMIT_PER_NGINX_UPSTREAM:
   unicorn_elastic:
     limit: 300
     period: 300
   unicorn_elastic_bookmarks:
+    limit: 300
+    period: 300
+RATE_LIMIT_PER_NGINX_UPSTREAM_USER:
+  unicorn_elastic:
     limit: 300
     period: 300
 RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]

@@ -99,7 +99,7 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, passwor
   step %{I am on the homepage}
   find_link('login-dropdown').click
 
-  fill_in "User name or email:", with: login
+  fill_in "Username or email:", with: login
   fill_in "Password:", with: password
   check "Remember Me"
   click_button "Log In"
@@ -109,6 +109,14 @@ end
 
 Given /^I am logged in as "([^"]*)"$/ do |login|
   step(%{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"})
+end
+
+Given "I am logged in as a new user {string}" do |login|
+  step(%{I am logged in as "#{login}"})
+  user = User.find_by(login: login)
+  user.created_at = Time.current
+  user.confirmed_at = Time.current
+  user.save!
 end
 
 Given /^I am logged in$/ do
@@ -121,11 +129,6 @@ Given /^I am logged in as a random user$/ do
   step(%{confirmation emails have been delivered})
 end
 
-Given /^I am logged in as a banned user$/ do
-  step(%{user "banned" is banned})
-  step(%{I am logged in as "banned"})
-end
-
 Given /^user "([^"]*)" is banned$/ do |login|
   user = find_or_create_new_user(login, DEFAULT_PASSWORD)
   user.banned = true
@@ -136,7 +139,7 @@ Given /^I start a new session$/ do
   page.driver.reset!
 end
 
-Given "the user name {string} is on the forbidden list" do |username|
+Given "the username {string} is on the forbidden list" do |username|
   allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([username])
 end
 
@@ -243,14 +246,14 @@ end
 When "I request a password reset for {string}" do |login|
   step(%{I am on the login page})
   step(%{I follow "Reset password"})
-  step(%{I fill in "Email address or user name" with "#{login}"})
+  step(%{I fill in "Email address or username" with "#{login}"})
   step(%{I press "Reset Password"})
 end
 
 # THEN
 
-Then /^I should get the error message for wrong username or password$/ do
-  step(%{I should see "The password or user name you entered doesn't match our records. Please try again"})
+Then "I should get the error message for wrong username or password" do
+  step(%{I should see "The password or username you entered doesn't match our records. Please try again"})
 end
 
 Then /^I should get an activation email for "(.*?)"$/ do |login|
@@ -279,7 +282,8 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  expect(User.current_user).to be(nil)
+  step %{I should not see "Log Out"}
+  step %{I should see "Log In"}
 end
 
 def get_work_name(age, classname, name)
@@ -313,15 +317,16 @@ Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) 
 end
 
 When /^I change my username to "([^"]*)"/ do |new_name|
-  visit change_username_user_path(User.current_user)
-  fill_in("New user name", with: new_name)
+  step %{I follow "My Preferences"}
+  step %{I follow "Change My Username"}
+  fill_in("New username", with: new_name)
   fill_in("Password", with: "password")
-  click_button("Change User Name")
+  click_button("Change Username")
   step %{I should get confirmation that I changed my username}
 end
 
 Then /^I should get confirmation that I changed my username$/ do
-  step(%{I should see "Your user name has been successfully updated."})
+  step(%{I should see "Your username has been successfully updated."})
 end
 
 Then /^the user "([^"]*)" should be activated$/ do |login|

@@ -60,8 +60,8 @@ Feature: Delete Works
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough"
-      And I add the pseud "Pseud2"
-      And I add the pseud "Pseud3"
+      And "thorough" creates the pseud "Pseud2"
+      And "thorough" creates the pseud "Pseud3"
     When I go to the new work page
       And all emails have been delivered
       And I select "Not Rated" from "Rating"
@@ -194,3 +194,21 @@ Feature: Delete Works
     When I am logged in as the author of "Over the Limit"
       And I delete the work "Over the Limit"
     Then I should see "Your work Over the Limit was deleted."
+
+  Scenario: Deleting a work sends translated deletion notification emails
+    Given a locale with translated emails
+      And the user "owner" exists and is activated
+      And the user "owner" enables translated emails
+      And the user "someone_else" exists and is activated
+      And the user "someone_else" enables translated emails
+      And the work "Many" by "owner", "someone_else" and "off"
+      And I am logged in as "owner"
+    When I delete the work "Many"
+    Then I should see "Your work Many was deleted."
+      And 3 emails should be delivered
+      And the email to "owner" should contain "was deleted at your request"
+      And the email to "owner" should be translated
+      And the email to "someone_else" should contain "was deleted at the request of"
+      And the email to "someone_else" should be translated
+      And the email to "off" should contain "was deleted at the request of"
+      And the email to "off" should be non-translated
