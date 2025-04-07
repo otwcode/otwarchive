@@ -230,7 +230,8 @@ Feature: Edit Works
     Then I should not see "F/F"
 
   Scenario: When editing a work, the title field should not escape HTML
-    Given I have a work "What a title! :< :& :>"
+    Given the work "What a title! :< :& :>" by "author"
+      And I am logged in as "author"
       And I go to the works page
       And I follow "What a title! :< :& :>"
       And I follow "Edit"
