@@ -1,5 +1,4 @@
 class RedisMailQueue
-
   # queue a kudo notification in redis
   # we create a separate list in redis for each author and work to be notified on
   # and store the names of each kudo'er in that list ("guest" for guest kudos)
@@ -19,17 +18,17 @@ class RedisMailQueue
       keys = REDIS_KUDOS.keys("kudos_#{author_id}_*")
       keys.each do |key|
         # atomically get the info and then delete the key
-        guest_count, names, resp = REDIS_KUDOS.multi do
+        guest_count, names, = REDIS_KUDOS.multi do
           REDIS_KUDOS.lrem(key, 0, "guest")
           REDIS_KUDOS.lrange(key, 0, -1)
           REDIS_KUDOS.del(key)
         end
 
         # get the commentable
-        prefix, author, commentable_type, commentable_id = key.split("_")
+        _prefix, _author, commentable_type, commentable_id = key.split("_")
 
         # batch it
-        user_kudos["#{ commentable_type }_#{ commentable_id }"] = {names: names, guest_count: guest_count}
+        user_kudos["#{commentable_type}_#{commentable_id}"] = { names: names, guest_count: guest_count }
       end
 
       next if user_kudos.blank?
@@ -40,7 +39,9 @@ class RedisMailQueue
         I18n.with_locale(User.find(author_id).preference.locale.iso) do
           KudoMailer.batch_kudo_notification(author_id, user_kudos.to_json).deliver_later
         end
-      rescue
+      rescue StandardError
+        # TODO: this should be reported to monitoring software so it can be used in analysis and alerting.
+        # However, we likely want this moved to ApplicationJob from its current Rake home first.
       end
     end
   end
@@ -61,7 +62,7 @@ class RedisMailQueue
     subscription_list = to_notify("subscription")
     subscription_list.each do |subscription_id|
       key = "subscription_#{subscription_id}"
-      entries, resp = REDIS_GENERAL.multi do
+      entries, = REDIS_GENERAL.multi do
         REDIS_GENERAL.lrange(key, 0, -1)
         REDIS_GENERAL.del(key)
       end
@@ -85,7 +86,7 @@ class RedisMailQueue
   def self.to_notify(notification_type)
     redis = redis_for_type(notification_type)
     # atomically get all the users to notify and then delete the list
-    list, response = redis.multi do
+    list, = redis.multi do
       redis.smembers("notification_#{notification_type}")
       redis.del "notification_#{notification_type}"
     end
@@ -93,7 +94,6 @@ class RedisMailQueue
   end
 
   def self.redis_for_type(notification_type)
-    notification_type == 'kudos' ? REDIS_KUDOS : REDIS_GENERAL
+    notification_type == "kudos" ? REDIS_KUDOS : REDIS_GENERAL
   end
-
 end
