@@ -42,27 +42,19 @@ Feature: Media tags
       And the "New Media 2" tag should be a "Media" tag
 
   Scenario: Admins can recategorize tags into media tags
-    Given I am logged in as a "tag_wrangling" admin
-    When I go to the new tag page
-      And I fill in "Name" with "Ambiguous Tag"
-      And I choose "Fandom"
-      And I press "Create Tag"
-    Then I should see "Tag was successfully created."
-      And "Fandom" should be selected within "tag_type"
-    When I select "Media" from "tag_type"
+    Given a non-canonical fandom "Ambiguous Tag"
+      And I am logged in as a "tag_wrangling" admin
+    When I go to the "Ambiguous Tag" tag edit page
+      And I select "Media" from "tag_type"
       And I press "Save changes"
     Then I should see "Tag was updated."
       And the "Ambiguous Tag" tag should be a "Media" tag
 
-  Scenario: Admins can recategorize tags into other types
-    Given I am logged in as a "tag_wrangling" admin
-    When I go to the new tag page
-      And I fill in "Name" with "Not A Media Anymore"
-      And I choose "Media"
-      And I press "Create Tag"
-    Then I should see "Tag was successfully created."
-      And "Media" should be selected within "tag_type"
-    When I select "Relationship" from "tag_type"
+  Scenario: Admins can recategorize media tags into other types
+    Given a non-canonical media "Not A Media Anymore"
+      And I am logged in as a "tag_wrangling" admin
+    When I go to the "Not A Media Anymore" tag edit page
+      And I select "Relationship" from "tag_type"
       And I press "Save changes"
     Then I should see "Tag was updated."
       And the "Not A Media Anymore" tag should be a "Relationship" tag
@@ -99,23 +91,16 @@ Feature: Media tags
     Then I should see "Fandoms > New Media 4"
       And I should see "No fandoms found"
 
-  Scenario: Recategorizing a tag as media tag adds it to the Fandoms header menu
+  Scenario: Recategorizing a tag as media tag adds it to the Fandoms header menu and the Fandoms list on the homepage
     # Make sure the old state gets cached
     When I go to the homepage
     Then I should not see "Yet Another Media" within "#header .primary .dropdown .menu"
+      And I should not see "Yet Another Media" within "#main .splash .browse"
     When I recategorize the "Yet Another Media" fandom as a "Media" tag
       And I am logged out
     When I go to the homepage
     Then I should see "Yet Another Media" within "#header .primary .dropdown .menu"
-
-  Scenario: Recategorizing a tag as media tag adds it to the Fandoms list on the homepage
-    # Make sure the old state gets cached
-    When I go to the homepage
-    Then I should not see "Yet Another Media" within "#main .splash .browse"
-    When I recategorize the "Yet Another Media" fandom as a "Media" tag
-      And I am logged out
-    When I go to the homepage
-    Then I should see "Yet Another Media" within "#main .splash .browse"
+      And I should see "Yet Another Media" within "#main .splash .browse"
 
   Scenario: Recategorizing a media tag removes it from to the Fandoms header menu and the Fandoms list on the homepage
     Given a non-canonical media "Not a medium"
@@ -134,58 +119,38 @@ Feature: Media tags
     Then I should not see "Not a medium" within "#header .primary .dropdown .menu"
       And I should not see "Not a medium" within "#main .splash .browse"
 
-  Scenario: Renaming a media tag as admin changes it in the Fandoms header menu
-    Given I create the canonical media tag "New Mediia Tag"
-      And I am logged out
+  Scenario: Renaming a media tag as admin changes it in the Fandoms header menu and the Fandoms list on the homepage
+    Given a canonical media "New Mediia Tag"
       # Make sure the old state gets cached
       And I go to the homepage
-      Then I should see "New Mediia Tag" within "#header .primary .dropdown .menu"
+    Then I should see "New Mediia Tag" within "#header .primary .dropdown .menu"
+      And I should see "New Mediia Tag" within "#main .splash .browse"
     When I am logged in as a "tag_wrangling" admin
       And I edit the tag "New Mediia Tag"
     And I fill in "Name" with "New Media Tag"
       And I press "Save changes"
     Then I should see "Tag was updated."
-      And I am logged out
-    When I go to the homepage
-    Then I should see "New Media Tag" within "#header .primary .dropdown .menu"
-
-  Scenario: Renaming a media tag as admin changes it in the Fandoms list on the homepage
-    Given I create the canonical media tag "New Mediia Tag"
-      And I am logged out
-      # Make sure the old state gets cached
+    When I am logged out
       And I go to the homepage
-    Then I should see "New Mediia Tag" within "#main .splash .browse"
-    When I am logged in as a "tag_wrangling" admin
-      And I edit the tag "New Mediia Tag"
-      And I fill in "Name" with "New Media Tag"
-      And I press "Save changes"
-    Then I should see "Tag was updated."
-      And I am logged out
-    When I go to the homepage
-    Then I should see "New Media Tag" within "#main .splash .browse"
+    Then I should see "New Media Tag" within "#header .primary .dropdown .menu"
+      And I should see "New Media Tag" within "#main .splash .browse"
 
   @javascript
-  Scenario: Wranglers can add fandoms to new media tags
-    Given I create the canonical media tag "New Media 5"
+  Scenario: Wranglers can add media tags to fandoms and fandoms to media tags
+    Given a canonical media "Big Media"
       And a canonical fandom "Great Fandom"
+      And a canonical fandom "Greater Fandom"
       And I am logged in as a tag wrangler
-      And I post the work "Some Work" with fandom "Great Fandom"
+      And I post the work "Some work" with fandom "Great Fandom"
+      And I post the work "Some other work" with fandom "Greater Fandom"
     When I edit the tag "Great Fandom"
-      And I choose "New Media 5" from the "tag_media_string_autocomplete" autocomplete
+      And I choose "Big Media" from the "tag_media_string_autocomplete" autocomplete
       And I press "Save changes"
     Then I should see "Tag was updated."
-    When I go to the "New Media 5" fandoms page
-    Then I should see "Great Fandom"
-
-  @javascript
-  Scenario: Wranglers can add fandoms to new media tags on the medium's tag page
-    Given I create the canonical media tag "New Media 6"
-      And a canonical fandom "Great Fandom"
-     And I am logged in as a tag wrangler
-      And I post the work "Some Work" with fandom "Great Fandom"
-    When I edit the tag "New Media 6"
-      And I choose "Great Fandom" from the "tag_fandom_string_autocomplete" autocomplete
+    When I edit the tag "Big Media"
+      And I choose "Greater Fandom" from the "tag_fandom_string_autocomplete" autocomplete
       And I press "Save changes"
     Then I should see "Tag was updated."
-    When I go to the "New Media 6" fandoms page
+    When I go to the "Big Media" fandoms page
     Then I should see "Great Fandom"
+      And I should see "Greater Fandom"

@@ -267,10 +267,7 @@ end
 
 When "I edit the tag {string}" do |tag|
   tag = Tag.find_by!(name: tag)
-  visit tag_path(tag)
-  within(".header") do
-    click_link("Edit")
-  end
+  visit edit_tag_path(tag)
 end
 
 When /^I view the tag "([^\"]*)"$/ do |tag|
