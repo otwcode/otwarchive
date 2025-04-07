@@ -623,7 +623,7 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("Hi <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
         expect(email).to have_html_part_content("> has been hidden")
       end
@@ -631,7 +631,7 @@ describe UserMailer do
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content("Hi #{user.login},")
         expect(email).to have_text_part_content(") has been hidden")
       end
     end
@@ -776,7 +776,7 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("Hi <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
         expect(email).to have_html_part_content("> has been flagged by our automated system")
       end
@@ -784,7 +784,7 @@ describe UserMailer do
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content("Hi #{user.login},")
         expect(email).to have_text_part_content(") has been flagged by our automated system")
       end
     end
@@ -812,14 +812,14 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("Hi <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content("Hi #{user.login},")
       end
     end
   end
@@ -848,7 +848,7 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("Hi <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
         expect(email).to have_html_part_content(collection.title)
         expect(email).to have_html_part_content(work.title)
@@ -857,7 +857,7 @@ describe UserMailer do
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content("Hi #{user.login},")
         expect(email).to have_text_part_content(collection.title)
         expect(email).to have_text_part_content(work.title)
       end
@@ -1125,7 +1125,7 @@ describe UserMailer do
 
     context "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("Hi <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
         expect(email).to have_html_part_content("was deleted at your request")
       end
@@ -1133,7 +1133,7 @@ describe UserMailer do
 
     context "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content("Hi #{user.login},")
         expect(email).to have_text_part_content("Your work \"#{work.title}\" was deleted at your request")
       end
     end
@@ -1178,7 +1178,7 @@ describe UserMailer do
 
     context "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("Dear <b")
+        expect(email).to have_html_part_content("Hi <b")
         expect(email).to have_html_part_content("#{user.login}</b>,")
         expect(email).to have_html_part_content("was deleted from the Archive by a site admin")
       end
@@ -1186,7 +1186,7 @@ describe UserMailer do
 
     context "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("Dear #{user.login},")
+        expect(email).to have_text_part_content("Hi #{user.login},")
         expect(email).to have_text_part_content("Your work \"#{work.title}\" was deleted from the Archive by a site admin")
       end
     end

@@ -1,0 +1,11 @@
+<% content_for :message do %>
+<%= t("mailer.general.greeting.formal.unaddressed") %>
+
+<%= t(".request_to_change_email_html", username: @resource.login) %>
+
+<%= t(".made_request.text", count: @resource.class.confirm_within.in_days.to_i, confirm_email_change_url: reconfirm_email_user_url(@resource, confirmation_token: @token)) %>
+
+<%= t(".confirm_by.text", date: l((@resource.confirmation_sent_at + @resource.class.confirm_within).to_date, format: :long), email_change_form_url: change_email_user_url(@user)) %>
+
+<%= t(".did_not_make_request") %>
+<% end %>

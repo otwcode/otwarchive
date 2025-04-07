@@ -250,6 +250,7 @@ Rails.application.routes.draw do
       post :end_first_login
       post :end_banner
       post :end_tos_prompt
+      get :reconfirm_email
     end
     resources :assignments, controller: "challenge_assignments", only: [:index]
     resources :claims, controller: "challenge_claims", only: [:index]

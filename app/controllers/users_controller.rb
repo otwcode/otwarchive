@@ -160,6 +160,21 @@ class UsersController < ApplicationController
     end
   end
 
+  # TODO Bilka If they are logged in to a different account, they should be redirected to the homepage with a custom error message (not the usual "Sorry, you don't have permission to access the page you were trying to reach.")
+  #   But also the redirect for logged out should use the standard error
+  # GET /users/1/reconfirm_email?confirmation_token=abcdef
+  def reconfirm_email
+    confirmed_user = User.confirm_by_token(params[:confirmation_token])
+
+    if confirmed_user.errors.empty?
+      flash[:notice] = t(".success")
+    else
+      flash[:error] = t(".invalid_token")
+    end
+
+    redirect_to change_email_user_path(@user)
+  end
+
   def changed_email
     if !params[:new_email].blank? && reauthenticate
       new_email = params[:new_email]
@@ -181,9 +196,9 @@ class UsersController < ApplicationController
       @user.email = new_email
 
       if @user.save
-        flash.now[:notice] = ts("Your email has been successfully updated")
+        flash.now[:notice] = ts("Your email has been successfully updated") # TODO Bilka fix all of this
         I18n.with_locale(@user.preference.locale.iso) do
-          UserMailer.change_email(@user.id, old_email, new_email).deliver_later
+          UserMailer.change_email(@user.id, old_email, new_email).deliver_later # TODO Bilka fix all of this
         end
       else
         # Make sure that on failure, the form still shows the old email as the "current" one.

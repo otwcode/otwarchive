@@ -202,6 +202,9 @@ en:
           one: You may reset your password %{count} more time.
           other: You may reset your password %{count} more times.
         user_not_found: We couldn't find an account with that email address or username. Please try again.
+    reconfirm_email:
+      invalid_token: This email confirmation link is invalid or expired. Please check your email for the correct link or submit the email change form again.
+      success: Your email has been successfully updated.
     status:
       ban_notice_html: Your account has been banned. You are not permitted to post or edit content on AO3. Please check your email or %{contact_abuse_link} for more information.
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You cannot post, edit, or delete content until your suspension has ended. Please check your email or %{contact_abuse_link} for more information.
