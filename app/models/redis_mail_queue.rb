@@ -5,6 +5,7 @@ class RedisMailQueue
   def self.queue_kudo(author, kudo)
     key = "kudos_#{author.id}_#{kudo.commentable_type}_#{kudo.commentable_id}"
     REDIS_KUDOS.rpush(key, kudo.name)
+    REDIS_KUDOS.sadd("kudos_#{author.id}", key)
     REDIS_KUDOS.sadd("notification_kudos", author.id)
   end
 
@@ -15,7 +16,11 @@ class RedisMailQueue
 
     author_list.each do |author_id|
       user_kudos = {}
-      keys = REDIS_KUDOS.keys("kudos_#{author_id}_*")
+      keys, = REDIS_KUDOS.multi do |redis|
+        kudos_list = "kudos_#{author_id}"
+        redis.smembers(kudos_list)
+        redis.del(kudos_list)
+      end
       keys.each do |key|
         # atomically get the info and then delete the key
         guest_count, names, = REDIS_KUDOS.multi do
