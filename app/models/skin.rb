@@ -111,7 +111,7 @@ class Skin < ApplicationRecord
     errors.add(:base, :no_public_preview)
   end
 
-  validates :title, presence: true, uniqueness: { case_sensitive: true }
+  validates :title, presence: true, uniqueness: { case_sensitive: false }
   validate :allowed_title
   def allowed_title
     return true unless self.title.match(/archive/i)
