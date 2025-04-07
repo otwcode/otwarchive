@@ -194,6 +194,7 @@ p.kudos {
   padding: 0.5em 0.5em 0.5em 60px;
   margin: 2em 0;
   min-height: 50px;
+    word-wrap: break-word;
 }
 
 .icon {
