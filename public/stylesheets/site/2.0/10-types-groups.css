@@ -23,8 +23,12 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
   padding-right: 0.25em;
 }
 
-.filters .tags li, .review .tags {
+.filters .tags li, .review .tags, .tagset .listbox .tags li {
   display: block;
+}
+
+.tagset .listbox .tags li {
+  padding: 0;
 }
 
 /*GROUP CLOUD */
