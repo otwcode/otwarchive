@@ -65,8 +65,8 @@ gem 'fastimage'
 gem 'devise'
 gem 'devise-async'       # To mails through queues
 gem 'bcrypt'
-gem 'devise-two-factor'
-gem 'rqrcode'
+gem "devise-two-factor"
+gem "rqrcode"
 
 # Needed for modern ssh
 gem "ed25519", ">= 1.2", "< 2.0"

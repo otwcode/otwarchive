@@ -67,7 +67,8 @@ class Admin < ApplicationRecord
     update!(
       otp_required_for_login: false,
       otp_secret: nil,
-      otp_backup_codes: nil)
+      otp_backup_codes: nil
+    )
   end
 
   # URI for OTP two-factor QR code
@@ -82,5 +83,4 @@ class Admin < ApplicationRecord
   def two_factor_backup_codes_generated?
     otp_backup_codes.present?
   end
-
 end
