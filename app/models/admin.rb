@@ -73,10 +73,7 @@ class Admin < ApplicationRecord
 
   # URI for OTP two-factor QR code
   def two_factor_qr_code_uri
-    issuer = ArchiveConfig.APP_NAME
-    label = login
-
-    otp_provisioning_uri(label, issuer: issuer)
+    otp_provisioning_uri(login, issuer: ArchiveConfig.APP_NAME)
   end
 
   # Determine if backup codes have been generated

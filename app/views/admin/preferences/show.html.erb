@@ -6,7 +6,7 @@
 <fieldset>
   <h4 class="heading"><%= t(".two_factor_authentication") %></h4>
   <dt>
-    <%= t(".totp") %>: <%= @totp_enabled ? t(".enabled") : t(".disabled") %>
+    <%= t(".totp", status: @totp_enabled ? t(".enabled") : t(".disabled")) %>
   </dt>
   <dd class="submit actions">
     <% if @totp_enabled %>

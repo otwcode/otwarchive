@@ -52,7 +52,7 @@ Feature: User Authentication
     When I fill in "New password" with "new<pass"
       And I fill in "Confirm new password" with "new<pass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully. You are now signed in."
+    Then I should see "Your password has been changed successfully."
       And I should see "Hi, sam"
 
     # password reset link should no longer work
