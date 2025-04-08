@@ -272,17 +272,17 @@ describe CommentsController do
   describe "GET #cancel_comment_reply" do
     context "with only valid params" do
         it "redirects to comment path with the comments anchor and without an error" do
-        get :cancel_comment_reply, params: { comment_id: comment.id }
-        expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(comment_path(comment, anchor: "comments"))
+          get :cancel_comment_reply, params: { comment_id: comment.id }
+          expect(flash[:error]).to be_nil
+          expect(response).to redirect_to(comment_path(comment, anchor: "comments"))
         end
     end
 
     context "with valid and invalid params" do
         it "removes invalid params and redirects without an error to comment path with valid params and the comments anchor" do
-        get :cancel_comment_reply, params: { comment_id: comment.id, show_comments: "yes", random_option: "no" }
-        expect(flash[:error]).to be_nil
-        expect(response).to redirect_to(comment_path(comment, show_comments: "yes", anchor: "comments"))
+          get :cancel_comment_reply, params: { comment_id: comment.id, show_comments: "yes", random_option: "no" }
+          expect(flash[:error]).to be_nil
+          expect(response).to redirect_to(comment_path(comment, show_comments: "yes", anchor: "comments"))
         end
     end
   end

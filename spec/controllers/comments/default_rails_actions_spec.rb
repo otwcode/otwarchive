@@ -52,9 +52,9 @@ describe CommentsController do
         it "shows an error and redirects" do
           get :new, params: { tag_id: fandom.name }
           it_redirects_to_with_error(user_path(controller.current_user),
-                                  "Sorry, you don't have permission to " \
-                                  "access the page you were trying to " \
-                                  "reach.")
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
+                                     "reach.")
         end
       end
 
@@ -64,9 +64,9 @@ describe CommentsController do
         it "shows an error and redirects" do
           get :new, params: { tag_id: fandom.name }
           it_redirects_to_with_error(new_user_session_path,
-                                  "Sorry, you don't have permission to " \
-                                  "access the page you were trying to " \
-                                  "reach. Please log in.")
+                                     "Sorry, you don't have permission to " \
+                                     "access the page you were trying to " \
+                                     "reach. Please log in.")
         end
       end
     end
