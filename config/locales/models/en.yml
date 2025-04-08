@@ -97,6 +97,9 @@ en:
               blocked_comment: Sorry, you have been blocked by one or more of this work's creators.
               blocked_reply: Sorry, you have been blocked by that user.
               format: "%{message}"
+            comment_content:
+              duplicate_comment: You've already left this comment here. (It may not appear right away for performance reasons.)
+              format: "%{message}"
         creatorship:
           attributes:
             pseud_id:

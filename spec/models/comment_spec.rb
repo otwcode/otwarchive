@@ -94,7 +94,7 @@ describe Comment do
     end
   end
 
-  context "with an existing comment from the same user" do
+  context "with an existing comment from the same user" do 
     let(:first_comment) { create(:comment) }
 
     let(:second_comment) do
@@ -102,9 +102,10 @@ describe Comment do
       Comment.new(first_comment.attributes.slice(*attributes))
     end
 
-    it "should be invalid if exactly duplicated" do
+    it "should be invalid if exactly duplicated" do |message:|
       expect(second_comment.valid?).to be_falsy
       expect(second_comment.errors.attribute_names).to include(:comment_content)
+      expect(comment.errors.full_messages).to include(message)
     end
 
     it "should not be invalid if in the process of being deleted" do

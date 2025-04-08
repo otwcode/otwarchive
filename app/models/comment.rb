@@ -71,7 +71,7 @@ class Comment < ApplicationRecord
   validates :comment_content, uniqueness: {
     scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id],
     unless: :is_deleted?,
-    message: ts("^You’ve already left this comment here. (It may not appear right away for performance reasons.")
+    message: :duplicate_comment
   }
 
   scope :ordered_by_date, -> { order('created_at DESC') }
