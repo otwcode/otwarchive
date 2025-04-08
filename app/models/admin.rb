@@ -8,7 +8,8 @@ class Admin < ApplicationRecord
          :validatable,
          :two_factor_authenticatable,
          :two_factor_backupable,
-         otp_backup_code_length: 10, otp_number_of_backup_codes: 4,
+         otp_backup_code_length: ArchiveConfig.ADMIN_TOTP_BACKUP_CODE_LENGTH,
+         otp_number_of_backup_codes: ArchiveConfig.ADMIN_TOTP_BACKUP_CODES,
          password_length: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN..ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX,
          reset_password_within: ArchiveConfig.DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES.days,
          lock_strategy: :none,
@@ -52,6 +53,7 @@ class Admin < ApplicationRecord
   # Generate an OTP secret it it does not already exist
   def generate_two_factor_secret_if_missing!
     return unless otp_secret.nil?
+
     update!(otp_secret: Admin.generate_otp_secret)
   end
 
@@ -63,15 +65,15 @@ class Admin < ApplicationRecord
   # Disable the use of OTP-based two-factor.
   def disable_two_factor!
     update!(
-        otp_required_for_login: false,
-        otp_secret: nil,
-        otp_backup_codes: nil)
+      otp_required_for_login: false,
+      otp_secret: nil,
+      otp_backup_codes: nil)
   end
 
   # URI for OTP two-factor QR code
   def two_factor_qr_code_uri
     issuer = ArchiveConfig.APP_NAME
-    label = email
+    label = login
 
     otp_provisioning_uri(label, issuer: issuer)
   end

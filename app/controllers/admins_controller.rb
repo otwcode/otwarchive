@@ -25,7 +25,7 @@ class AdminsController < Admin::BaseController
       return redirect_to totp_setup_admin_path
     end
 
-    if current_admin.validate_and_consume_otp!(enable_2fa_params[:code])
+    if current_admin.validate_and_consume_otp!(enable_2fa_params[:otp_attempt])
       current_admin.enable_two_factor!
 
       flash[:notice] = t(".success")
@@ -66,6 +66,6 @@ class AdminsController < Admin::BaseController
   private
 
   def enable_2fa_params
-    params.permit(:code, :password)
+    params.permit(:otp_attempt, :password)
   end
 end

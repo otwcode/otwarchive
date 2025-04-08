@@ -31,7 +31,7 @@ class Admin
   
     def valid_otp_attempt?(admin)
       admin.validate_and_consume_otp!(admin_params[:otp_attempt]) ||
-          admin.invalidate_otp_backup_code!(admin_params[:otp_attempt])
+        admin.invalidate_otp_backup_code!(admin_params[:otp_attempt])
     end
   
     def prompt_for_otp_two_factor(admin)
@@ -39,7 +39,7 @@ class Admin
   
       session[:otp_admin_id] = admin.id
 
-      render 'admin/sessions/totp'
+      render "admin/sessions/totp"
     end
   
     def authenticate_admin_with_otp_two_factor(admin)
