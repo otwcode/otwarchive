@@ -367,7 +367,7 @@ en:
         enable_totp: Enable TOTP
         enabled: Enabled
         set_my_preferences: Set My Preferences
-        totp: "Time-based One-Time Password (TOTP): %{status}"
+        totp: 'Time-based One-Time Password (TOTP): %{status}'
         two_factor_authentication: Two-Factor Authentication
       totp_setup:
         confirm_and_enable: Confirm and Enable
