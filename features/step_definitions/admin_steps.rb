@@ -38,6 +38,21 @@ Given "I am logged in as an admin" do
   step %{I should see "Successfully logged in"}
 end
 
+Given "I am logged in as admin {string} with password {string}" do |login, password|
+  step "I start a new session"
+  visit new_admin_session_path
+  fill_in "Admin username", with: login
+  fill_in "Admin password", with: password
+  click_button "Log In as Admin"
+  step %{I should see "Successfully logged in"}
+end
+
+Given "admin {string} has TOTP 2FA enabled" do |login|
+  admin = Admin.find_by(login: login) || FactoryBot.create(:admin, login: login)
+  admin.generate_two_factor_secret_if_missing!
+  admin.enable_two_factor!
+end
+
 Given /^basic languages$/ do
   Language.default
   german = Language.find_or_create_by(short: "DE", name: "Deutsch", support_available: true, abuse_support_available: true)
@@ -358,6 +373,23 @@ end
 
 When "I confirm I want to remove the pseud" do
   expect(page.accept_alert).to eq("Are you sure you want to remove the creator's pseud from this work?") if @javascript
+end
+
+When "I fill in a valid TOTP token for admin {string}" do |login|
+  admin = Admin.find_by(login: login)
+  fill_in "admin[otp_attempt]", with: admin.current_otp
+end
+
+When "I fill in a valid TOTP recovery code for admin {string}" do |login|
+  admin = Admin.find_by(login: login)
+  codes = admin.generate_otp_backup_codes!
+  admin.save!
+  fill_in "admin[otp_attempt]", with: codes.first
+  @used_totp_recovery_code = codes.first
+end
+
+When "I fill in a used TOTP recovery code" do
+  fill_in "admin[otp_attempt]", with: @used_totp_recovery_code
 end
 
 ### THEN

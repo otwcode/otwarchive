@@ -18,8 +18,7 @@ en:
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
     sessions:
-      authenticate_admin_with_otp_two_factor:
-        invalid_totp: Invalid two-factor authentication code.
+      invalid_totp: Invalid two-factor authentication code.
     user_creations:
       confirm_remove_pseud:
         must_have_orphan_pseuds: Sorry, this action is only available for works by orphan_account pseuds.

@@ -105,6 +105,9 @@ services:
       dockerfile: ./config/docker/Dockerfile
     environment:
       - RAILS_ENV=test
+      - ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=bEZjYLY9tCYGh6WlcMtEJpIi7GO2plZC
+      - ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=PpLWizzsQHIWnIihtECw8nDHZQd0amzf
+      - ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=3S99KdpdEWLnCYudBgUfdCFDBWePWCud
       - CHROME_URL=http://chrome:4444
       - DOCKER=true
       - CAPYBARA_PORT=5100

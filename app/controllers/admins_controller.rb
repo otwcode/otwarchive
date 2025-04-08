@@ -66,6 +66,6 @@ class AdminsController < Admin::BaseController
   private
 
   def enable_2fa_params
-    params.permit(:otp_attempt, :password)
+    params.require(:admin).permit(:otp_attempt, :password)
   end
 end

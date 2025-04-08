@@ -46,7 +46,7 @@ class Admin < ApplicationRecord
     AdminMailer.set_password_notification(self, token).deliver
   end
 
-  serialize :otp_backup_codes, Array
+  serialize :otp_backup_codes, type: Array
 
   attr_accessor :otp_plain_backup_codes
 
