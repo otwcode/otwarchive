@@ -102,10 +102,10 @@ describe Comment do
       Comment.new(first_comment.attributes.slice(*attributes))
     end
 
-    it "should be invalid if exactly duplicated" do |message:|
+    it "should be invalid if exactly duplicated" do 
       expect(second_comment.valid?).to be_falsy
       expect(second_comment.errors.attribute_names).to include(:comment_content)
-      expect(comment.errors.full_messages).to include(message)
+      expect(second_comment.errors.full_messages).to include('You\'ve already left this comment here. (It may not appear right away for performance reasons.)')
     end
 
     it "should not be invalid if in the process of being deleted" do
