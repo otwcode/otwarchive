@@ -1,0 +1,21 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading">Two Factor Authentication Set-Up</h2>
+<!--/descriptions-->
+
+<!--main content-->
+<fieldset>
+  <h3 class="heading"><%= t(".step_3.heading") %></h3>
+  <p><%= t(".step_3.write_codes_down") %></p>
+  <% @backup_codes.each do |code| %>
+    <div>
+      <code style="font-size: 1.75em; font-weight: bold"><%= code %></code>
+    </div>
+  <% end %>
+  <p><%= t(".step_3.you_wont_see_them_again") %></p>
+</fieldset>
+
+<dt class="landmark"><%= t(".finish") %></dt>
+<dd class="submit actions">
+  <%= link_to t(".finish"), admins_path %>
+</dd>
+<!--/content-->

@@ -1,0 +1,19 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".set_my_preferences") %></h2>
+<!--/descriptions-->
+
+<!--main content-->
+<fieldset>
+  <h4 class="heading"><%= t(".two_factor_authentication") %></h4>
+  <dt>
+    <%= t(".totp") %>: <%= @totp_enabled ? t(".enabled") : t(".disabled") %>
+  </dt>
+  <dd class="submit actions">
+    <% if @totp_enabled %>
+      <%= link_to t(".disable_totp"), totp_disable_admin_path, method: :delete %>
+    <% else %>
+      <%= link_to t(".enable_totp"), totp_setup_admin_path %>
+    <% end %>
+  </dd>
+</fieldset>
+<!--/content-->

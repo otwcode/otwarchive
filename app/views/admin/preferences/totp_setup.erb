@@ -1,0 +1,33 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".two_factor_authentication_set_up") %></h2>
+<!--/descriptions-->
+
+<!--main content-->
+<fieldset>
+  <h3 class="heading"><%= t(".step_1.heading") %></h3>
+  <p><%= t(".step_1.scan_code") %></p>
+  <p><%= qr_code_as_svg(current_admin.two_factor_qr_code_uri)%></p>
+  <p><%= t(".step_1.manually_enter_code") %></p>
+  <code style="font-size: 1.75em; font-weight: bold">
+    <%= current_admin.otp_secret.scan(/.{1,4}/).join(' ') %>
+  </code>
+</fieldset>
+
+<fieldset>
+  <h3 class="heading"><%= t(".step_2.heading") %></h3>
+  <p><%= t(".step_2.instructions") %></p>
+  <%= form_tag totp_setup_form_admin_path do |f| %>
+    <dl>
+      <dt><%= label_tag :password, t(".step_2.account_password") %></dt>
+      <dd><%= password_field_tag :password %></dd>
+      <dt><%= label_tag :code, t(".step_2.otp_code") %></dt>
+      <dd><%= text_field_tag :code %></dd>
+    </dl>
+    
+    <dt class="landmark"><%= label_tag :submit, t(".submit") %></dt>
+    <dd class="submit actions">
+      <%= submit_tag t(".confirm_and_enable") %>
+    </dd>
+  <% end %>
+</fieldset>
+<!--/content-->

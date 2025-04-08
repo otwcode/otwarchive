@@ -3,14 +3,19 @@ class Admin < ApplicationRecord
 
   serialize :roles, type: Array
 
-  devise :database_authenticatable,
-         :lockable,
+  devise :lockable,
          :recoverable,
          :validatable,
+         :two_factor_authenticatable,
+         :two_factor_backupable,
+         otp_backup_code_length: 10, otp_number_of_backup_codes: 4,
          password_length: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN..ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX,
          reset_password_within: ArchiveConfig.DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES.days,
          lock_strategy: :none,
          unlock_strategy: :none
+
+  # https://github.com/devise-two-factor/devise-two-factor?tab=readme-ov-file#disabling-automatic-login-after-password-resets
+  self.sign_in_after_reset_password = false
 
   include BackwardsCompatiblePasswordDecryptor
 
@@ -39,4 +44,41 @@ class Admin < ApplicationRecord
     token = set_reset_password_token
     AdminMailer.set_password_notification(self, token).deliver
   end
+
+  serialize :otp_backup_codes, Array
+
+  attr_accessor :otp_plain_backup_codes
+
+  # Generate an OTP secret it it does not already exist
+  def generate_two_factor_secret_if_missing!
+    return unless otp_secret.nil?
+    update!(otp_secret: Admin.generate_otp_secret)
+  end
+
+  # Ensure that the user is prompted for their OTP when they login
+  def enable_two_factor!
+    update!(otp_required_for_login: true)
+  end
+
+  # Disable the use of OTP-based two-factor.
+  def disable_two_factor!
+    update!(
+        otp_required_for_login: false,
+        otp_secret: nil,
+        otp_backup_codes: nil)
+  end
+
+  # URI for OTP two-factor QR code
+  def two_factor_qr_code_uri
+    issuer = ArchiveConfig.APP_NAME
+    label = email
+
+    otp_provisioning_uri(label, issuer: issuer)
+  end
+
+  # Determine if backup codes have been generated
+  def two_factor_backup_codes_generated?
+    otp_backup_codes.present?
+  end
+
 end

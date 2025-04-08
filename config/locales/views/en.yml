@@ -360,6 +360,34 @@ en:
         page_heading: Forgotten your admin password?
         reset_login_html: Admin username
         submit: Reset Admin Password
+    preferences:
+      show:
+        disable_totp: Disable TOTP
+        disabled: Disabled
+        enable_totp: Enable TOTP
+        enabled: Enabled
+        set_my_preferences: Set My Preferences
+        totp: Time-based One-Time Password (TOTP)
+        two_factor_authentication: Two-Factor Authentication
+      totp_setup:
+        confirm_and_enable: Confirm and Enable
+        step_1:
+          heading: 'Step 1: Set up your authenticator app'
+          manually_enter_code: 'If you cannot scan the QR code, you can also enter the following code manually:'
+          scan_code: Please scan the below QR code using an OTP compatible app (such as Google Authenticator or Authy).
+        step_2:
+          account_password: Account password
+          heading: Step 2. Confirm OTP code
+          instructions: Please confirm that your authentication application is working by entering a generated code below.
+          otp_code: OTP code
+        submit: Submit
+        two_factor_authentication_set_up: Two Factor Authentication Set-Up
+      totp_setup_backup_codes:
+        finish: Finish
+        step_3:
+          heading: Step 3. Write down your backup codes
+          write_codes_down: 'Keep these backup codes written down in a safe place in case you lose access to your authenticator app:'
+          you_wont_see_them_again: For security reasons, you will not be able to see these codes again after you leave this page.
     sessions:
       new:
         label:
@@ -370,6 +398,9 @@ en:
         page_heading: Log In as Admin
         reset_link: Forgot admin password?
         submit: Log In as Admin
+      totp:
+        backup_codes_also_usable: If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
+        two_factor_authentication_code: Two-Factor Authentication Code
     settings:
       index:
         fields:
@@ -2193,6 +2224,7 @@ en:
     sessions:
       greeting:
         nav:
+          account: My Account
           assignments: My Assignments
           bookmarks: My Bookmarks
           collections: My Collections
