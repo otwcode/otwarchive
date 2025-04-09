@@ -309,10 +309,12 @@ Feature: Admin Actions to Manage Invitations
       And I fill in "Username" with "dax"
       And I press "Search" within "form.invitation.simple.search"
     Then I should see "Copy and use"
+    Then I should see "Delete"
     When I follow "Invite New Users"
       And I fill in "Invite token" with "dax's" invite code
       And I press "Search" within "form.invitation.simple.search"
-    Then I should see "copy and use"
+    Then I should see "Copy and use"
+    Then I should see "Delete"
 
   Scenario: An admin can find all invitations via email partial match
     Given I am logged in as an admin
@@ -373,10 +375,12 @@ Feature: Admin Actions to Manage Invitations
       And I fill in "Username" with "dax"
       And I press "Search" within "form.invitation.simple.search"
     Then I should see "Copy and use"
+    Then I should see "Delete"
     When I follow "Invite New Users"
       And I fill in "Invite token" with "dax's" invite code
       And I press "Search" within "form.invitation.simple.search"
-    Then I should see "copy and use"
+    Then I should see "Copy and use"
+    Then I should see "Delete"
     When I fill in "Enter an email address" with "oldman@ds9.com"
       And I press "Update Invitation"
     Then I should see "oldman@ds9.com" in the "Enter an email address" input
