@@ -22,7 +22,7 @@
 <h3 class="heading"><%= t(".invitations_for_html", user_invitations_link: link_to(@user.login, user_invitations_path(@user))) %></h3>
 <% end %>
 <% if @invitations %>
-<%= render :partial => 'invitations/user_invitations', :locals => {:invitations => @invitations} %>
+<%= render "invitations/user_invitations", invitations: @invitations %>
 <% end %>
 <!--/content-->
 
