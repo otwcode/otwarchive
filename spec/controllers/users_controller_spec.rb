@@ -4,6 +4,43 @@ describe UsersController do
   include RedirectExpectationHelper
   include LoginMacros
 
+  shared_examples "an action only authorized admins can access" do |authorized_roles:|
+    before do
+      fake_login_admin(admin)
+    end
+
+    context "when logged in as an admin with no role" do
+      let(:admin) { create(:admin) }
+
+      it "redirects with an error" do
+        subject
+        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      end
+    end
+
+    (Admin::VALID_ROLES - authorized_roles).each do |admin_role|
+      context "when logged in as an admin with role #{admin_role}" do
+        let(:admin) { create(:admin, roles: [admin_role]) }
+
+        it "redirects with an error" do
+          subject
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
+      end
+    end
+
+    authorized_roles.each do |admin_role|
+      context "when logged in as an admin with role #{admin_role}" do
+        let(:admin) { create(:admin, roles: [admin_role]) }
+
+        it "succeeds" do
+          subject
+          success
+        end
+      end
+    end
+  end
+
   shared_examples "blocks access for banned and suspended users" do
     context "when logged in as a banned user" do
       let(:user) { create(:user, banned: true) }
@@ -91,39 +128,62 @@ describe UsersController do
   end
 
   describe "GET #change_username" do
+    let(:user) { create(:user) }
+    let(:success) { expect(response).to render_template(:change_username) }
     subject { get :change_username, params: { id: user } }
 
     context "when logged in as a valid user" do
-      let(:user) { create(:user) }
-
       before do
         fake_login_known_user(user)
       end
 
       it "shows the change username form" do
         subject
-        expect(response).to render_template(:change_username)
+        success
       end
     end
 
+    it_behaves_like "an action only authorized admins can access", authorized_roles: %w[superadmin policy_and_abuse]
     it_behaves_like "blocks access for banned and suspended users"
   end
 
   describe "POST #changed_username" do
+    let(:user) { create(:user) }
+    let(:new_username) { "foo1234" }
+    let(:success) do
+      expect(user.reload.login).to eq(new_username)
+    end
+
     subject do
-      post :changed_username, params: { id: user, new_login: "foo1234", password: user.password }
+      post :changed_username, params: { id: user, new_login: new_username, password: user.password }
     end
 
     context "when logged in as a valid user" do
-      let(:user) { create(:user) }
-
       before do
         fake_login_known_user(user)
       end
 
       it "updates the user's username" do
-        expect { subject }
-          .to change { user.reload.login }
+        subject
+        success
+      end
+    end
+
+    it_behaves_like "an action only authorized admins can access", authorized_roles: %w[superadmin policy_and_abuse] do
+      # Non-exhaustive check that users who cannot access this page themselves (i.e. because  they are banned)
+      # can still be renamed by an admin.
+      let(:user) { create(:user, banned: true) }
+      let(:new_username) { "user#{user.id}" }
+
+      before do
+        allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return({
+                                                                                        "status" => "Open",
+                                                                                        "departmentId" => ""
+                                                                                      })
+      end
+
+      subject do
+        post :changed_username, params: { id: user, new_login: new_username, ticket_number: 123 }
       end
     end
 
