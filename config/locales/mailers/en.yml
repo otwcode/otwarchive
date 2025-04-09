@@ -26,6 +26,9 @@ en:
       subject: "[%{app_name}] Your AO3 admin account"
       url: Admin login URL
       username: Admin username
+    totp_2fa_backup_codes:
+      created: A set of new backup codes has been requested for your account. Please use one of the following to log in, and then re-setup your two-factor authentication.
+      subject: "[%{app_name}] Your admin account recovery codes"
   kudo_mailer:
     batch_kudo_notification:
       guest:
