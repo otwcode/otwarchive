@@ -19,11 +19,9 @@
 <% end %>
 
 <% if @user %>
-<h3 class="heading"><%h= 'Invitations for' %> <%= link_to @user.login, user_invitations_path(@user) %></h3>
-<%= render :partial => 'invitations/user_invitations', :locals => {:invitations => @invitations} %>
-<% elsif @invitation %>
-<%= render :partial => 'invitations/invitation', :locals => {:invitation => @invitation} %>
-<% elsif @invitations %>
+<h3 class="heading"><%= 'Invitations for' %> <%= link_to @user.login, user_invitations_path(@user) %></h3>
+<% end %>
+<% if @invitations %>
 <%= render :partial => 'invitations/user_invitations', :locals => {:invitations => @invitations} %>
 <% end %>
 <!--/content-->

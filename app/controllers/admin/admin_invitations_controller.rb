@@ -42,13 +42,12 @@ class Admin::AdminInvitationsController < Admin::BaseController
       @invitations = @user.invitations if @user
     end
     if !invitation_params[:token].blank?
-      @invitation = Invitation.find_by(token: invitation_params[:token])
+      @invitations = [Invitation.find_by(token: invitation_params[:token])].compact
     elsif invitation_params[:invitee_email].present?
       @invitations = Invitation.where("invitee_email LIKE ?", "%#{invitation_params[:invitee_email]}%")
-      @invitation = @invitations.first if @invitations.length == 1
     end
 
-    return if @user || @invitation || @invitations.present?
+    return if @user || @invitations.present?
 
     flash.now[:error] = t(".user_not_found")
   end
