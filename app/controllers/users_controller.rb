@@ -160,8 +160,50 @@ class UsersController < ApplicationController
     end
   end
 
-  # TODO Bilka If they are logged in to a different account, they should be redirected to the homepage with a custom error message (not the usual "Sorry, you don't have permission to access the page you were trying to reach.")
-  #   But also the redirect for logged out should use the standard error
+  def confirm_change_email
+    @page_subtitle = t(".browser_title")
+
+    if params[:new_email].blank?
+      flash[:error] = t("users.confirm_change_email.blank_email")
+      render :change_email and return
+    end
+
+    render :change_email and return unless reauthenticate
+
+    @new_email = params[:new_email]
+
+    # Please note: This comparison is not technically correct. According to
+    # RFC 5321, the local part of an email address is case sensitive, while the
+    # domain is case insensitive. That said, all major email providers treat
+    # the local part as case insensitive, so it would probably cause more
+    # confusion if we did this correctly.
+    #
+    # Also, email addresses are validated on the client, and will only contain
+    # a limited subset of ASCII, so we don't need to do a unicode casefolding pass.
+    return if @new_email.downcase == params[:email_confirmation].downcase
+
+    flash[:error] = t("users.confirm_change_email.nonmatching_email")
+    render :change_email and return
+  end
+
+  def changed_email
+    new_email = params[:new_email]
+
+    old_email = @user.email
+    @user.email = new_email
+
+    if @user.save
+      I18n.with_locale(@user.preference.locale.iso) do
+        UserMailer.change_email(@user.id, old_email, new_email).deliver_later # TODO Bilka fix all of this
+      end
+    else
+      # Make sure that on failure, the form still shows the old email as the "current" one.
+      @user.email = old_email
+    end
+
+    render :change_email
+  end
+
   # GET /users/1/reconfirm_email?confirmation_token=abcdef
   def reconfirm_email
     confirmed_user = User.confirm_by_token(params[:confirmation_token])
@@ -173,40 +215,6 @@ class UsersController < ApplicationController
     end
 
     redirect_to change_email_user_path(@user)
-  end
-
-  def changed_email
-    if !params[:new_email].blank? && reauthenticate
-      new_email = params[:new_email]
-
-      # Please note: This comparison is not technically correct. According to
-      # RFC 5321, the local part of an email address is case sensitive, while the
-      # domain is case insensitive. That said, all major email providers treat
-      # the local part as case insensitive, so it would probably cause more
-      # confusion if we did this correctly.
-      #
-      # Also, email addresses are validated on the client, and will only contain
-      # a limited subset of ASCII, so we don't need to do a unicode casefolding pass.
-      if new_email.downcase != params[:email_confirmation].downcase
-        flash.now[:error] = ts("Email addresses don't match! Please retype and try again.")
-        render :change_email and return
-      end
-
-      old_email = @user.email
-      @user.email = new_email
-
-      if @user.save
-        flash.now[:notice] = ts("Your email has been successfully updated") # TODO Bilka fix all of this
-        I18n.with_locale(@user.preference.locale.iso) do
-          UserMailer.change_email(@user.id, old_email, new_email).deliver_later # TODO Bilka fix all of this
-        end
-      else
-        # Make sure that on failure, the form still shows the old email as the "current" one.
-        @user.email = old_email
-      end
-    end
-
-    render :change_email
   end
 
   # DELETE /users/1
@@ -265,16 +273,16 @@ class UsersController < ApplicationController
   def reauthenticate
     if params[:password_check].blank?
       return wrong_password!(params[:new_email],
-                             ts('You must enter your password'),
-                             ts('You must enter your old password'))
+                             t("users.confirm_change_email.blank_password"),
+                             t("users.changed_password.blank_password"))
     end
 
     if @user.valid_password?(params[:password_check])
       true
     else
       wrong_password!(params[:new_email],
-                      ts('Your password was incorrect'),
-                      ts('Your old password was incorrect'))
+                      t("users.confirm_change_email.wrong_password_html", contact_support_link: helpers.link_to(t("users.confirm_change_email.contact_support"), new_feedback_report_path)),
+                      t("users.changed_password.wrong_password"))
     end
   end
 

@@ -1,7 +1,7 @@
 <% content_for :message do %>
 <%= t("mailer.general.greeting.formal.unaddressed") %>
 
-<%= t(".request_to_change_email_html", username: @resource.login) %>
+<%= t(".request_to_change_email_html", username: @resource.login, app_name: ArchiveConfig.APP_SHORT_NAME) %>
 
 <%= t(".made_request.text", count: @resource.class.confirm_within.in_days.to_i, confirm_email_change_url: reconfirm_email_user_url(@resource, confirmation_token: @token)) %>
 

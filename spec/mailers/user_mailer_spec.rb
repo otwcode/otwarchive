@@ -1,5 +1,5 @@
 require "spec_helper"
-
+# TODO Bilka change_email spec
 describe UserMailer do
   describe "creatorship_request" do
     subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id) }

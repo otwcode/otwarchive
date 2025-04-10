@@ -1,7 +1,7 @@
 <% content_for :message do %>
   <p><%= t("mailer.general.greeting.formal.unaddressed") %></p>
 
-  <p><%= t(".request_to_change_email_html", username: style_bold(@resource.login)) %></p>
+  <p><%= t(".request_to_change_email_html", username: style_bold(@resource.login), app_name: ArchiveConfig.APP_SHORT_NAME) %></p>
 
   <p><%= t(".made_request.html", count: @resource.class.confirm_within.in_days.to_i, confirm_email_change_link: link_to(t(".confirm_email_change"), reconfirm_email_user_url(@resource, confirmation_token: @token))) %></p>
 

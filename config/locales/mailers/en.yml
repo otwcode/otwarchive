@@ -439,7 +439,7 @@ en:
           text:
             one: 'If you made this request, please confirm your email change within %{count} day: %{confirm_email_change_url}.'
             other: 'If you made this request, please confirm your email change within %{count} days: %{confirm_email_change_url}.'
-        request_to_change_email_html: Someone has made a request to change the email address associated with the AO3 account %{username} to this email address.
+        request_to_change_email_html: Someone has made a request to change the email address associated with the %{app_name} account %{username} to this email address.
         subject: "[%{app_name}] Confirm your email change"
       reset_password_instructions:
         expiration: If you do not use this link to reset your password within a week, it will expire, and you will have to request a new one.

@@ -19,7 +19,7 @@ Scenario: Orphan all works belonging to a user
     And I should see "Shenanigans 2"
     And I should see "Shenanigans - the early years"
   When I follow "Preferences"
-  When I follow "Orphan My Works"
+  When I go to the orphan all works page
   Then I should see "Orphan All Works"
     And I should see "Are you really sure you want to"
   When I choose "Take my pseud off as well"
@@ -52,7 +52,7 @@ Given I have an orphan account
     And I should see "Shenanigans 2"
     And I should see "Shenanigans - the early years"
   When I follow "Preferences"
-  When I follow "Orphan My Works"
+  When I go to the orphan all works page
   Then I should see "Orphan All Works"
     And I should see "Are you really sure you want to"
   When I choose "Leave a copy of my pseud on"
