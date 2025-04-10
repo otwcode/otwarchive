@@ -56,17 +56,19 @@ en:
           one: "%{count} word"
           other: "%{count} words"
       footer:
-        general:
-          about:
-            html: The Archive of Our Own is a fan-run and fan-supported archive that relies on %{donate_link}.
-            text: 'The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}.'
-          html:
-            donate_link_text: your donations
-            support_link_text: contact Support
-          unwanted_email:
-            html: If you've received this message in error, please %{support_link}.
-            text: If you've received this message in error, please contact Support at %{support_url}.
+        about:
+          html: The Archive of Our Own is a fan-run and fan-supported archive that relies on %{your_donations_link}.
+          text: 'The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{your_donations_url}.'
+          your_donations: your donations
         sent_at: Sent at %{sent_at}.
+        why_policy_abuse:
+          contact_policy_abuse: contact Policy & Abuse
+          html: If you don't understand why you received this email, please %{contact_policy_abuse_link}.
+          text: 'If you don''t understand why you received this email, please contact Policy & Abuse: %{contact_policy_abuse_url}.'
+        why_support:
+          contact_support: contact Support
+          html: If you don't understand why you received this email, please %{contact_support_link}.
+          text: 'If you don''t understand why you received this email, please contact Support: %{contact_support_url}.'
       greeting:
         formal:
           addressed_html: Hi %{name},

@@ -101,7 +101,5 @@ describe ArchiveDeviseMailer do
         expect(email).to have_text_part_content("If you don't confirm your request by April #{ArchiveConfig.DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES + 10}, 2020, the link in")
       end
     end
-
-    # TODO Bilka PAC footer
   end
 end
