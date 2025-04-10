@@ -25,6 +25,10 @@ en:
         success:
           one: Successfully removed pseud %{pseuds} from this work.
           other: Successfully removed pseuds %{pseuds} from this work.
+  application:
+    access_denied:
+      access_denied:
+        logged_in: Sorry, you don't have permission to access the page you were trying to reach.
   archive_faqs:
     create:
       success: Archive FAQ was successfully created.
@@ -213,6 +217,8 @@ en:
           other: You may reset your password %{count} more times.
         user_not_found: We couldn't find an account with that email address or username. Please try again.
     reconfirm_email:
+      access_denied:
+        logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.
       invalid_token: This email confirmation link is invalid or expired. Please check your email for the correct link or submit the email change form again.
       success: Your email has been successfully updated.
     status:

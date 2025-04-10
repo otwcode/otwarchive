@@ -24,8 +24,7 @@ class ArchiveDeviseMailer < Devise::Mailer
 
   def confirmation_instructions(record, token, opts = {})
     @token = token
-    subject =  t("users.mailer.confirmation_instructions.subject",
-                 app_name: ArchiveConfig.APP_SHORT_NAME)
+    subject = t("users.mailer.confirmation_instructions.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
     devise_mail(record, :confirmation_instructions, opts.merge(subject: subject))
   end
 end

@@ -70,7 +70,7 @@ describe ArchiveDeviseMailer do
   end
 
   describe "#confirmation_instructions" do
-    let(:user) { create(:user, confirmation_sent_at: Time.new(2020, 4, 10, 10, 51)) }
+    let(:user) { create(:user, confirmation_sent_at: Time.new(2020, 4, 10, 10, 51, 0, "+00:00")) }
     subject(:email) { ArchiveDeviseMailer.confirmation_instructions(user, token: "fakeToken") }
 
     # Test the headers

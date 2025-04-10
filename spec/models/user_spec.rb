@@ -272,6 +272,7 @@ describe User do
         end
 
         it "allows changing email" do
+          existing_user.skip_reconfirmation!
           existing_user.update!(email: "new_email@example.com")
           expect(existing_user.email).to eq("new_email@example.com")
         end
@@ -324,6 +325,7 @@ describe User do
 
     context "when email is changed" do
       before do
+        existing_user.skip_reconfirmation!
         existing_user.update!(email: "newemail@example.com")
         existing_user.reload
       end
@@ -345,6 +347,7 @@ describe User do
 
       before do
         User.current_user = admin
+        existing_user.skip_reconfirmation!
         existing_user.update!(email: "new_email@example.com")
         existing_user.reload
       end

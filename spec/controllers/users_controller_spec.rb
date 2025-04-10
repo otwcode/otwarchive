@@ -209,11 +209,11 @@ describe UsersController do
       expect(flash[:error]).to include("Your password was incorrect. Please try again or log out and reset your password via the link on")
     end
 
-    xit "requires a valid email address" do # TODO Bilka
+    it "requires a valid email address" do
       put :confirm_change_email, params: { id: user, new_email: "wrong", email_confirmation: "wrong", password_check: "password" }
 
       expect(response).to render_template(:change_email)
-      expect(flash[:error]).to eq("Email should look like an email address")
+      expect(assigns[:user].errors.full_messages).to include("Email should look like an email address.")
     end
 
     it "disallows non-matching email confirmation" do
@@ -230,12 +230,12 @@ describe UsersController do
       expect(flash[:error]).to be_blank
     end
 
-    xit "disallows using another user's email" do # TODO Bilka
+    it "disallows using another user's email" do
       create(:user, email: "new@example.com")
-      put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "NEW@example.com", password_check: "password" }
+      put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "new@example.com", password_check: "password" }
 
       expect(response).to render_template(:change_email)
-      expect(flash[:error]).to eq("Email has already been taken")
+      expect(assigns[:user].errors.full_messages).to include("Email has already been taken")
     end
   end
 
@@ -246,21 +246,21 @@ describe UsersController do
       before { fake_login_known_user(user) }
 
       it "disallows invalid tokens" do
-        get :reconfirm_email, params: { id: user, confirmation_token: "foo"}
+        get :reconfirm_email, params: { id: user, confirmation_token: "foo" }
 
         it_redirects_to_with_error(change_email_user_path(user), "This email confirmation link is invalid or expired. Please check your email for the correct link or submit the email change form again.")
       end
     end
 
     context "when logged in as the wrong user" do
-      let (:another_user) { create(:user) }
+      let(:another_user) { create(:user) }
 
       before { fake_login_known_user(another_user) }
 
-      xit "the error tells the user to log out" do # TODO Bilka
-        get :reconfirm_email, params: { id: user, confirmation_token: "foo"}
+      it "the error tells the user to log out" do
+        get :reconfirm_email, params: { id: user, confirmation_token: "foo" }
 
-        it_redirects_to_with_error(user_path(another_user), "You are not logged in to the account whose email you are trying to change. Please log out and try again.")
+        it_redirects_to_with_error(user_path(user), "You are not logged in to the account whose email you are trying to change. Please log out and try again.")
       end
     end
   end
