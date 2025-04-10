@@ -74,7 +74,10 @@ class Admin::AdminUsersController < Admin::BaseController
     authorize @user
 
     attributes = permitted_attributes(@user)
-    @user.email = attributes[:email] if attributes[:email].present?
+    if attributes[:email].present?
+      @user.skip_reconfirmation!
+      @user.email = attributes[:email]
+    end
     @user.roles = Role.where(id: attributes[:roles]) if attributes[:roles].present?
 
     if @user.save

@@ -1,0 +1,24 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".heading") %></h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<%= render "edit_header_navigation" %>
+<!--/subnav-->
+
+<!--main content-->
+<%= form_with model: @user, url: changed_email_user_path(@user), method: :post do %>
+  <%= hidden_field_tag :new_email, @new_email %>
+
+  <div class="caution notice">
+    <p><%= t(".are_you_sure_html", unconfirmed_email: tag.strong(@new_email)) %></p>
+    <p><%= t(".confirm_via_link_html", if_not_confirm_bold: tag.strong(t(".if_not_confirm", count: User.confirm_within.in_days.to_i))) %></p>
+  </div>
+
+  <p class="actions">
+    <%= link_to t(".cancel"), change_email_user_path(@user) %>
+    <%= submit_tag t(".confirm") %>
+  </p>
+<% end %>
+
+<!--/content-->

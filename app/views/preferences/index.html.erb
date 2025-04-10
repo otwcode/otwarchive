@@ -11,8 +11,9 @@
   <li><%= link_to t(".navigation.manage_my_pseuds"), user_pseuds_path(@user) %></li>
   <li><%= link_to t(".navigation.blocked_users"), user_blocked_users_path %></li>
   <li><%= link_to t(".navigation.muted_users"), user_muted_users_path %></li>
-  <li><%= link_to t(".navigation.change_my_username"), change_username_user_path(@user) %></li>
-  <li><%= link_to t(".navigation.orphan_my_works"), new_orphan_path %></li>
+  <li><%= link_to t(".navigation.change_username"), change_username_user_path(@user) %></li>
+  <li><%= link_to t(".navigation.change_password"), change_password_user_path(@user) %></li>
+  <li><%= link_to t(".navigation.change_email"), change_email_user_path(@user) %></li>
 </ul>
 <!--/subnav-->
 

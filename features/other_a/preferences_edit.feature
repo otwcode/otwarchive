@@ -62,7 +62,6 @@ Feature: Edit preferences
     And I should see "Profile" within "div#dashboard"
   When I follow "Preferences" within "div#dashboard"
   Then I should see "Set My Preferences"
-    And I should see "Orphan My Works"
   When I follow "Edit My Profile"
   Then I should see "Password"
   # TODO: figure out why pseud switcher doesn't show up in cukes
