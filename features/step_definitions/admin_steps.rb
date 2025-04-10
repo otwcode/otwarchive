@@ -360,6 +360,11 @@ When "I confirm I want to remove the pseud" do
   expect(page.accept_alert).to eq("Are you sure you want to remove the creator's pseud from this work?") if @javascript
 end
 
+When /^I find and press the invitation token url/ do
+  link = first('a[href*="/invitations/token/"]')
+  link.click if link
+end
+
 ### THEN
 
 Then (/^the translation information should still be filled in$/) do
