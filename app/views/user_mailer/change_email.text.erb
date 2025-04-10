@@ -7,5 +7,8 @@
 
 <%= t(".wrong_email.text", email_change_form_url: change_email_user_url(@user)) %>
 
-<%= t(".not_made_request.text", reset_password_url: new_user_password_url, contact_policy_abuse_url: new_abuse_report_url) %>
+<%= t(".not_made_request.text",
+      reset_password_url: new_user_password_url,
+      contact_policy_abuse_url: new_abuse_report_url,
+      app_name: ArchiveConfig.APP_SHORT_NAME) %>
 <% end %>

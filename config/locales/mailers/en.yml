@@ -215,8 +215,8 @@ en:
       email_change_form: submit the email change form
       made_request: Someone has made a request to change the email address associated with your %{app_name} account.
       not_made_request:
-        html: If you did not make this request, someone else may have access to your AO3 account. Please %{reset_password_link}. If you are unable to reset your password, %{contact_policy_abuse_link}.
-        text: 'If you did not make this request, someone else may have access to your AO3 account. Please reset your password now: %{reset_password_url}. If you are unable to reset your password, contact Policy & Abuse: %{contact_policy_abuse_url}.'
+        html: If you did not make this request, someone else may have access to your %{app_name} account. Please %{reset_password_link}. If you are unable to reset your password, %{contact_policy_abuse_link}.
+        text: 'If you did not make this request, someone else may have access to your %{app_name} account. Please reset your password now: %{reset_password_url}. If you are unable to reset your password, contact Policy & Abuse: %{contact_policy_abuse_url}.'
       reset_password: reset your password now
       subject: "[%{app_name}] Email change request"
       wrong_email:
