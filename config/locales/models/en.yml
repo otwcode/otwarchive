@@ -90,6 +90,8 @@ en:
               required: can't be blank
         comment:
           attributes:
+            comment_content:
+              duplicate_comment: "^You've already left this comment here. (It may not appear right away for performance reasons.)"
             commentable:
               format: "%{message}"
               guest_replies_off: Sorry, this user doesn't allow non-Archive users to reply to their comments.
