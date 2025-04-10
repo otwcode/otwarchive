@@ -80,9 +80,8 @@ Scenario: Changing email address shows a confirmation page and sends a confirmat
     And I should see "If you don't confirm your request by April 14, 2020"
     And I should see "bar@ao3.org"
     And 1 email should be delivered to "bar@ao3.org"
-    # TODO Bilka
-    #And the email should contain "Someone has made a request to change the email address associated with your AO3 account."
-    #And the email should contain "valid2@archiveofourown.org"
+    And the email should contain "Someone has made a request to change the email address associated with your AO3 account."
+    And the email should contain "valid2@archiveofourown.org"
     And 1 email should be delivered to "valid2@archiveofourown.org"
     And the email should contain "request to change the email address associated with the AO3 account"
     And the email should contain "editname"
@@ -200,8 +199,7 @@ Scenario: Changing email address -- translated emails are sent when user enables
       And I follow "Change Email"
       And I request to change my email to "valid2@archiveofourown.org"
     Then the email address "bar@ao3.org" should be emailed
-      # TODO Bilka
-      #And the email should have "Email change request" in the subject
+      And the email should have "Email change request" in the subject
       And the email to email address "bar@ao3.org" should be translated
       And 1 email should be delivered to "valid2@archiveofourown.org"
       And the email should have "Confirm your email change" in the subject

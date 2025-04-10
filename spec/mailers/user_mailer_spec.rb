@@ -10,7 +10,7 @@ describe UserMailer do
     # Test the headers
     it_behaves_like "an email with a valid sender"
 
-    xit "has the correct subject line" do # TODO Bilka
+    it "has the correct subject line" do
       subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Email change request"
       expect(email.subject).to eq(subject)
     end
@@ -22,9 +22,10 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        # TODO Bilka
-        #expect(email).to have_text_part_content("Hi #{login},")
-        #expect(email).to have_text_part_content("If you made this request, check your email at #{new_email} within #{ArchiveConfig.DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES} days to confirm your email change")
+        expect(email).to have_html_part_content("Hi <b")
+        expect(email).to have_html_part_content(">#{login}</b>,")
+        expect(email).to have_html_part_content("If you made this request, check your email at <a")
+        expect(email).to have_html_part_content("#{new_email}</a> within #{ArchiveConfig.DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES} days to confirm your email change")
 
         expect(email).to have_html_part_content("don't understand why you received this email, please <a")
         expect(email).to have_html_part_content(">contact Policy & Abuse</a>.")
@@ -33,9 +34,8 @@ describe UserMailer do
 
     describe "text version" do
       it "has the correct content" do
-        # TODO Bilka
-        #expect(email).to have_text_part_content("Hi #{login},")
-        #expect(email).to have_text_part_content("If you made this request, check your email at #{new_email} within #{ArchiveConfig.DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES} days to confirm your email change")
+        expect(email).to have_text_part_content("Hi #{login},")
+        expect(email).to have_text_part_content("If you made this request, check your email at #{new_email} within #{ArchiveConfig.DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES} days to confirm your email change")
 
         expect(email).to have_text_part_content("If you don't understand why you received this email, please contact Policy & Abuse")
       end

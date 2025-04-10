@@ -194,7 +194,7 @@ class UsersController < ApplicationController
 
     if @user.save
       I18n.with_locale(@user.preference.locale.iso) do
-        UserMailer.change_email(@user.id, old_email, new_email).deliver_later # TODO Bilka fix all of this
+        UserMailer.change_email(@user.id, old_email, new_email).deliver_later
       end
     else
       # Make sure that on failure, the form still shows the old email as the "current" one.
