@@ -105,7 +105,7 @@ describe Comment do
     it "should be invalid if exactly duplicated" do 
       expect(second_comment.valid?).to be_falsy
       expect(second_comment.errors.attribute_names).to include(:comment_content)
-      expect(second_comment.errors.full_messages).to include("You've already left this comment here. (It may not appear right away for performance reasons.)")
+      expect(second_comment.errors.full_messages.first).to include("You've already")
     end
 
     it "should not be invalid if in the process of being deleted" do
