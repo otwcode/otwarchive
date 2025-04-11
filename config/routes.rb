@@ -218,7 +218,7 @@ Rails.application.routes.draw do
       end
     end
     resources :invitations, controller: 'admin_invitations' do
-      collection do
+      collection do 
         post :invite_from_queue
         post :grant_invites_to_users
         get :find
@@ -227,8 +227,7 @@ Rails.application.routes.draw do
     resources :api
   end
   resources :admins, only: [:index] do
-    member do
-      get :preferences
+    resource :preferences, controller: "admin/preferences", only: [:show] do
       get :totp_setup
       post :totp_setup_form
       get :totp_setup_backup_codes

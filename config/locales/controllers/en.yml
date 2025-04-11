@@ -17,6 +17,18 @@ en:
         page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
+    preferences:
+      totp_disable:
+        failure: Could not disable two factor authentication.
+        success: TOTP two-factor authentication successfully disabled.
+      totp_setup:
+        already_enabled: TOTP two-factor authentication is already enabled.
+      totp_setup_backup_codes:
+        already_seen: You have already seen your backup codes. For security reasons, they cannot be seen again.
+        not_enabled: Please enable two factor authentication first.
+      totp_setup_form:
+        incorrect_code: Incorrect authentication code. Your code may have expired, or you may need to re-setup your authenticator app.
+        success: Successfully enabled two factor authentication, please make note of your backup codes.
     sessions:
       invalid_totp: Invalid two-factor authentication code.
     user_creations:
@@ -27,18 +39,6 @@ en:
         success:
           one: Successfully removed pseud %{pseuds} from this work.
           other: Successfully removed pseuds %{pseuds} from this work.
-  admins:
-    totp_disable:
-      failure: Could not disable two factor authentication.
-      success: TOTP two-factor authentication successfully disabled.
-    totp_setup:
-      already_enabled: TOTP two-factor authentication is already enabled.
-    totp_setup_backup_codes:
-      already_seen: You have already seen your backup codes. For security reasons, they cannot be seen again.
-      not_enabled: Please enable two factor authentication first.
-    totp_setup_form:
-      incorrect_code: Incorrect authentication code. Your code may have expired, or you may need to re-setup your authenticator app.
-      success: Successfully enabled two factor authentication, please make note of your backup codes.
   archive_faqs:
     create:
       success: Archive FAQ was successfully created.

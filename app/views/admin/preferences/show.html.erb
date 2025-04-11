@@ -10,9 +10,9 @@
   </dt>
   <dd class="submit actions">
     <% if @totp_enabled %>
-      <%= link_to t(".disable_totp"), totp_disable_admin_path, method: :delete %>
+      <%= link_to t(".disable_totp"), totp_disable_admin_preferences_path, method: :delete %>
     <% else %>
-      <%= link_to t(".enable_totp"), totp_setup_admin_path %>
+      <%= link_to t(".enable_totp"), totp_setup_admin_preferences_path %>
     <% end %>
   </dd>
 </fieldset>
