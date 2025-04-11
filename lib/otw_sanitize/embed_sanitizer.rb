@@ -7,18 +7,19 @@ module OtwSanitize
   # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
     ALLOWLIST_REGEXES = {
-      archiveorg:       %r{^archive\.org\/embed/},
-      bilibili:         %r{^(player\.)?bilibili\.com/},
-      criticalcommons:  %r{^criticalcommons\.org/},
-      eighttracks:      %r{^8tracks\.com/},
-      google:           %r{^google\.com/},
-      podfic:           %r{^podfic\.com/},
-      soundcloud:       %r{^(w\.)?soundcloud\.com/},
-      spotify:          %r{^(open\.)?spotify\.com/},
-      viddersnet:       %r{^vidders\.net/},
-      viddertube:       %r{^viddertube\.com/},
-      vimeo:            %r{^(player\.)?vimeo\.com/},
-      youtube:          %r{^youtube(-nocookie)?\.com/}
+      "4shared": %r{^4shared\.com/web/embed},
+      archiveorg: %r{^archive\.org/embed/},
+      bilibili: %r{^(player\.)?bilibili\.com/},
+      criticalcommons: %r{^criticalcommons\.org/},
+      eighttracks: %r{^8tracks\.com/},
+      google: %r{^google\.com/},
+      podfic: %r{^podfic\.com/},
+      soundcloud: %r{^(w\.)?soundcloud\.com/},
+      spotify: %r{^(open\.)?spotify\.com/},
+      viddersnet: %r{^vidders\.net/},
+      viddertube: %r{^viddertube\.com/},
+      vimeo: %r{^(player\.)?vimeo\.com/},
+      youtube: %r{^youtube(-nocookie)?\.com/}
     }.freeze
 
     ALLOWS_FLASHVARS = %i[
@@ -27,6 +28,7 @@ module OtwSanitize
     ].freeze
 
     SUPPORTS_HTTPS = %i[
+      4shared
       archiveorg bilibili eighttracks podfic
       soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze
@@ -54,7 +56,7 @@ module OtwSanitize
 
       ensure_https
 
-      if parent_name == 'object'
+      if parent_name == "object"
         sanitize_object
       else
         sanitize_embed
@@ -65,9 +67,7 @@ module OtwSanitize
       node.name.to_s.downcase
     end
 
-    def parent
-      node.parent
-    end
+    delegate :parent, to: :node
 
     def parent_name
       parent.name.to_s.downcase if parent
@@ -76,14 +76,15 @@ module OtwSanitize
     # Since the transformer receives the deepest nodes first, we look for a
     # <param> element whose parent is an <object>, or an embed or iframe
     def embed_node?
-      (node_name == 'param' && parent_name == 'object') ||
-        %w(embed iframe).include?(node_name)
+      (node_name == "param" && parent_name == "object") ||
+        %w[embed iframe].include?(node_name)
     end
 
     # Compare the url to our list of allowlisted sources
     # and return the appropriate source symbol
     def source
       return @source if @source
+
       ALLOWLIST_REGEXES.each_pair do |name, reg|
         if source_url =~ reg
           @source = name
@@ -96,12 +97,14 @@ module OtwSanitize
     # Get the url of the thing we're embedding and standardize it
     def source_url
       return @source_url if @source_url
-      if node_name == 'param'
+
+      if node_name == "param"
         # Quick XPath search to find the <param> node that contains the video URL.
-        return unless movie_node = node.parent.search('param[@name="movie"]')[0]
-        url = movie_node['value']
+        return unless (movie_node = node.parent.search('param[@name="movie"]')[0])
+
+        url = movie_node["value"]
       else
-        url = node['src']
+        url = node["src"]
       end
       @source_url = standardize_url(url)
     end
@@ -111,17 +114,22 @@ module OtwSanitize
       protocol_regex = %r{^(?:https?:)?//(?:www\.)?}i
       # normalize the url
       url = url&.gsub(protocol_regex, "")
-      Addressable::URI.parse(url).normalize.to_s rescue nil
+      begin
+        Addressable::URI.parse(url).normalize.to_s
+      rescue StandardError
+        nil
+      end
     end
 
     # For sites that support https, ensure we use a secure embed
     def ensure_https
-      return unless supports_https? && node['src'].present?
-      node['src'] = node['src'].gsub("http:", "https:")
-      if allows_flashvars? && node['flashvars'].present?
-        node['flashvars'] = node['flashvars'].gsub("http:", "https:")
-        node['flashvars'] = node['flashvars'].gsub("http%3A", "https%3A")
-      end
+      return unless supports_https? && node["src"].present?
+
+      node["src"] = node["src"].gsub("http:", "https:")
+      return unless allows_flashvars? && node["flashvars"].present?
+
+      node["flashvars"] = node["flashvars"].gsub("http:", "https:")
+      node["flashvars"] = node["flashvars"].gsub("http%3A", "https%3A")
     end
 
     # We're now certain that this is an embed from a trusted source, but we
@@ -133,9 +141,9 @@ module OtwSanitize
         parent,
         elements: %w[embed object param],
         attributes: {
-          'embed'  => %w[allowfullscreen height src type width],
-          'object' => %w[height width],
-          'param'  => %w[name value]
+          "embed" => %w[allowfullscreen height src type width],
+          "object" => %w[height width],
+          "param" => %w[name value]
         }
       )
 
@@ -149,27 +157,27 @@ module OtwSanitize
         node,
         elements: %w[embed iframe],
         attributes: {
-          'embed' => %w[
+          "embed" => %w[
             allowfullscreen height src type width
           ] + optional_embed_attributes,
-          'iframe' => %w[
+          "iframe" => %w[
             allowfullscreen frameborder height src title
             class type width
           ]
         }
       )
 
-      if node_name == 'embed'
+      if node_name == "embed"
         disable_scripts(node)
-        node['flashvars'] = "" unless allows_flashvars?
+        node["flashvars"] = "" unless allows_flashvars?
       end
       { node_allowlist: [node] }
     end
 
     # disable script access and networking
     def disable_scripts(embed_node)
-      embed_node['allowscriptaccess'] = 'never'
-      embed_node['allownetworking'] = 'internal'
+      embed_node["allowscriptaccess"] = "never"
+      embed_node["allownetworking"] = "internal"
 
       embed_node.search("param").each do |param_node|
         param_node.unlink if param_node[:name].casecmp?("allowscriptaccess") ||
