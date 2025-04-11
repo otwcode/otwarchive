@@ -18,7 +18,8 @@ en:
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
     preferences:
-      totp_already_enabled: TOTP two-factor authentication is already enabled.
+      check_totp_disabled:
+        already_enabled: TOTP two-factor authentication is already enabled.
       totp_disable:
         already_disabled: TOTP two-factor authentication is already disabled.
         failure: Could not disable two factor authentication.
