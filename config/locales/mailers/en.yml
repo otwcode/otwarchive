@@ -73,7 +73,7 @@ en:
           addressed_html: Hi, %{name}!
           unaddressed: Hi!
         introductory: Hello from the Archive of Our Own!
-        tag_wrangler_supervisors: Tag Wrangler Supervisors
+        tag_wrangling_supervisors: Tag Wrangling Supervisors
       metadata_label_indicator: ": "
       signature:
         abuse_team: The AO3 Policy & Abuse team
