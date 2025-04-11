@@ -28,9 +28,9 @@
 
       <% if comments_are_moderated(commentable) && !current_user_is_work_creator(commentable) %>
         <p class="notice">
-          <% if commentable.is_a?(AdminPost) %>
+          <% if find_parent(commentable).is_a?(AdminPost) %>
             <%= t("comments.commentable.permissions.moderated_commenting.notice.admin_post") %>
-          <% else %>
+          <% else  %>
             <%= t("comments.commentable.permissions.moderated_commenting.notice.work") %>
           <% end %>
         </p>
