@@ -1,9 +1,17 @@
 class Admin::PreferencesController < Admin::BaseController
   before_action :check_ownership
+  before_action :check_totp_disabled, only: [:totp_setup, :totp_setup_form]
 
   def check_ownership
     unless params[:admin_id] == current_admin.login
       flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach."
+      redirect_to admins_path
+    end
+  end
+
+  def check_totp_disabled
+    if current_admin.otp_required_for_login
+      flash[:error] = t(".totp_already_enabled")
       redirect_to admins_path
     end
   end
@@ -15,11 +23,6 @@ class Admin::PreferencesController < Admin::BaseController
   end
 
   def totp_setup
-    if current_admin.otp_required_for_login
-      flash[:alert] = t(".already_enabled")
-      return redirect_to admins_path
-    end
-
     current_admin.generate_two_factor_secret_if_missing!
 
     render "admin/preferences/totp_setup"
@@ -27,7 +30,7 @@ class Admin::PreferencesController < Admin::BaseController
 
   def totp_setup_form
     unless current_admin.valid_password?(enable_2fa_params[:password])
-      flash[:alert] = t("devise.failure.admin.invalid")
+      flash[:error] = t("devise.failure.admin.invalid")
       return redirect_to totp_setup_admin_preferences_path
     end
 
@@ -37,19 +40,19 @@ class Admin::PreferencesController < Admin::BaseController
       flash[:notice] = t(".success")
       redirect_to totp_setup_backup_codes_admin_preferences_path
     else
-      flash[:alert] = t(".incorrect_code")
+      flash[:error] = t(".incorrect_code")
       redirect_to totp_setup_admin_preferences_path
     end
   end
 
   def totp_setup_backup_codes
     unless current_admin.otp_required_for_login
-      flash[:alert] = t(".not_enabled")
+      flash[:error] = t(".not_enabled")
       return redirect_to totp_setup_admin_preferences_path
     end
 
     if current_admin.two_factor_backup_codes_generated?
-      flash[:alert] = t(".already_seen")
+      flash[:error] = t(".already_seen")
       return redirect_to admins_path
     end
 
@@ -60,10 +63,15 @@ class Admin::PreferencesController < Admin::BaseController
   end
 
   def totp_disable
+    unless current_admin.otp_required_for_login
+      flash[:error] = t(".already_disabled")
+      return redirect_to admin_preferences_path
+    end
+
     if current_admin.disable_two_factor!
       flash[:notice] = t(".success")
     else
-      flash[:alert] = t(".failure")
+      flash[:error] = t(".failure")
     end
 
     redirect_to admin_preferences_path
