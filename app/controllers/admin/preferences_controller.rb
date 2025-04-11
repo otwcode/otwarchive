@@ -7,10 +7,10 @@ class Admin::PreferencesController < Admin::BaseController
   end
 
   def check_totp_disabled
-    if current_admin.otp_required_for_login
-      flash[:error] = t(".totp_already_enabled")
-      redirect_to admins_path
-    end
+    return unless current_admin.otp_required_for_login
+
+    flash[:error] = t(".totp_already_enabled")
+    redirect_to admins_path
   end
 
   def show
