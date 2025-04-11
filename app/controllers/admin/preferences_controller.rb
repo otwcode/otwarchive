@@ -3,10 +3,7 @@ class Admin::PreferencesController < Admin::BaseController
   before_action :check_totp_disabled, only: [:totp_setup, :totp_setup_form]
 
   def check_ownership
-    unless params[:admin_id] == current_admin.login
-      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach."
-      redirect_to admins_path
-    end
+    admin_only_access_denied unless params[:admin_id] == current_admin.login
   end
 
   def check_totp_disabled
