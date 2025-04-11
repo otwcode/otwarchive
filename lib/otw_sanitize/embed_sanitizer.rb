@@ -7,7 +7,7 @@ module OtwSanitize
   # Creates a Sanitize transformer to sanitize embedded media
   class EmbedSanitizer
     ALLOWLIST_REGEXES = {
-      "4shared": %r{^(w\.)?4shared\.com/web/embed},
+      "4shared": %r{^4shared\.com/web/embed},
       archiveorg: %r{^archive\.org/embed/},
       bilibili: %r{^(player\.)?bilibili\.com/},
       criticalcommons: %r{^criticalcommons\.org/},
