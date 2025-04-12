@@ -165,6 +165,8 @@ class Prompt < ApplicationRecord
     restriction = prompt_restriction
     return unless restriction
 
+    tag_set_associations = TagSetAssociation.where(owned_tag_set_id: restriction.owned_tag_sets.pluck(:id))
+
     TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
       next unless restriction.send("#{tag_type}_restrict_to_fandom")
 
@@ -173,13 +175,8 @@ class Prompt < ApplicationRecord
       disallowed_taglist = tag_set ? tag_set.send("#{tag_type}_taglist") - allowed_tags : []
 
       # check for tag set associations
-      tag_set_associations = tag_set.owned_tag_set&.tag_set_associations
-      if tag_set_associations
-        disallowed_taglist.reject! do |tag|
-          tag_set_associations.exists?(tag_id: tag.id, parent_tag_id: tag_set.fandom_taglist)
-        end
-      end
-
+      disallowed_taglist -= tag_set_associations.where(tag: disallowed_taglist, parent_tag_id: tag_set.fandom_taglist)
+                                                .map(&:tag)
       next if disallowed_taglist.empty?
 
       errors.add(:base, :tags_not_in_fandom,
