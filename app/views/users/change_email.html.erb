@@ -12,7 +12,7 @@
   <div class="caution notice">
     <p><%= t(".caution.requested_change_html", unconfirmed_email: tag.strong(@user.unconfirmed_email)) %></p>
     <p><%= t(".caution.check_spam_html", must_confirm_bold: tag.strong(t(".caution.must_confirm")), contact_support_link: link_to(t(".caution.contact_support"), new_feedback_report_path)) %></p>
-    <p><strong><%= t(".caution.confirm_by", date: l(reconfirmation_date.to_date, format: :long)) %></strong></p>
+    <p><strong><%= t(".caution.confirm_by", date: l(reconfirmation_date)) %></strong></p>
   </div>
 <% end %>
 

@@ -77,7 +77,7 @@ Scenario: Changing email address shows a confirmation page and sends a confirmat
     And 0 emails should be delivered
   When I press "Yes, Change Email"
   Then I should see "You have requested to change your email address to valid2@archiveofourown.org."
-    And I should see "If you don't confirm your request by April 14, 2020"
+    And I should see "If you don't confirm your request by Tue, 14 Apr 2020"
     And I should see "bar@ao3.org"
     And 1 email should be delivered to "bar@ao3.org"
     And the email should contain "Someone has made a request to change the email address associated with your AO3 account."
@@ -121,7 +121,7 @@ Scenario: Changing email address -- request expires
     And the email address change confirmation period is set to 4 days
     And I follow "Change Email"
     And I request to change my email to "valid2@archiveofourown.org"
-  Then I should see "If you don't confirm your request by April 14, 2020"
+  Then I should see "If you don't confirm your request by Tue, 14 Apr 2020"
     And 1 email should be delivered to "valid2@archiveofourown.org"
     And the email should contain "request to change the email address"
     And I should see "You have requested to change your email address"
@@ -143,7 +143,7 @@ Scenario: Changing email address -- resubmitting form changes target email and e
     And the email address change confirmation period is set to 4 days
     And I follow "Change Email"
     And I request to change my email to "valid2@archiveofourown.org"
-  Then I should see "If you don't confirm your request by April 14, 2020"
+  Then I should see "If you don't confirm your request by Tue, 14 Apr 2020"
     And 1 email should be delivered to "bar@ao3.org"
     And 1 email should be delivered to "valid2@archiveofourown.org"
     And the email should contain "request to change the email address"
@@ -151,7 +151,7 @@ Scenario: Changing email address -- resubmitting form changes target email and e
   When it is currently 2020-04-12 14:00
     And I request to change my email to "another@archiveofourown.org"
   Then I should see "You have requested to change your email address to another@archiveofourown.org."
-    And I should see "If you don't confirm your request by April 16, 2020"
+    And I should see "If you don't confirm your request by Thu, 16 Apr 2020"
     # The original email gets another notification
     And 2 emails should be delivered to "bar@ao3.org"
     # Old link should be invalid

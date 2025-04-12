@@ -264,7 +264,7 @@ describe User do
         it "does not allow another rename" do
           expect { existing_user.update!(login: "new") }
             .to raise_error(ActiveRecord::RecordInvalid)
-          localized_renamed_at = I18n.l(existing_user.renamed_at, format: :long)
+          localized_renamed_at = I18n.l(existing_user.renamed_at)
           expect(existing_user.errors[:login].first)
             .to eq(
               "can only be changed once every 7 days. You last changed your username on #{localized_renamed_at}."
