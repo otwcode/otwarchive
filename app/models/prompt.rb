@@ -175,8 +175,9 @@ class Prompt < ApplicationRecord
       disallowed_taglist = tag_set ? tag_set.send("#{tag_type}_taglist") - allowed_tags : []
 
       # check for tag set associations
-      disallowed_taglist -= tag_set_associations.where(tag: disallowed_taglist, parent_tag_id: tag_set.fandom_taglist)
-                                                .map(&:tag)
+      disallowed_taglist -= tag_set_associations
+        .where(tag: disallowed_taglist, parent_tag_id: tag_set.fandom_taglist)
+        .map(&:tag)
       next if disallowed_taglist.empty?
 
       errors.add(:base, :tags_not_in_fandom,
