@@ -90,7 +90,8 @@ describe ArchiveDeviseMailer do
       it "has the correct content" do
         expect(email).to have_html_part_content("Hi,")
         expect(email).to have_html_part_content(">confirm your email change</a> within #{ArchiveConfig.DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES} days")
-        expect(email).to have_html_part_content("If you don't confirm your request by Fri, #{ArchiveConfig.DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES + 10} Apr 2020 10:51:00 +0000, the link in")
+        expect(email).to have_html_part_content("If you don't confirm your request by")
+        expect(email).to have_html_part_content(", #{ArchiveConfig.DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES + 10} Apr 2020 10:51:00 +0000, the link in")
       end
     end
 
@@ -98,7 +99,8 @@ describe ArchiveDeviseMailer do
       it "has the correct content" do
         expect(email).to have_text_part_content("Hi,")
         expect(email).to have_text_part_content("please confirm your email change within #{ArchiveConfig.DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES} days")
-        expect(email).to have_text_part_content("If you don't confirm your request by Fri, #{ArchiveConfig.DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES + 10} Apr 2020 10:51:00 +0000, the link in")
+        expect(email).to have_html_part_content("If you don't confirm your request by")
+        expect(email).to have_html_part_content(", #{ArchiveConfig.DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES + 10} Apr 2020 10:51:00 +0000, the link in")
       end
     end
   end

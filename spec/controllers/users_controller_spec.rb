@@ -193,62 +193,102 @@ describe UsersController do
   describe "PUT #confirm_change_email" do
     let(:user) { create(:user, email: "old@example.com", password: "password") }
 
-    before { fake_login_known_user(user) }
+    context "when logged out" do
+      it "errors and tells the user to log in" do
+        put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "new@example.com", password_check: "password" }
 
-    it "requires reauthentication" do
-      put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "new@example.com" }
-
-      expect(response).to render_template(:change_email)
-      expect(flash[:error]).to eq("You must enter your password.")
+        it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
     end
 
-    it "disallows incorrect password" do
-      put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "new@example.com", password_check: "wrong" }
+    context "when logged in" do
+      before { fake_login_known_user(user) }
 
-      expect(response).to render_template(:change_email)
-      expect(flash[:error]).to include("Your password was incorrect. Please try again or log out and reset your password via the link on")
+      it "requires reauthentication" do
+        put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "new@example.com" }
+
+        expect(response).to render_template(:change_email)
+        expect(flash[:error]).to eq("You must enter your password.")
+      end
+
+      it "disallows incorrect password" do
+        put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "new@example.com", password_check: "wrong" }
+
+        expect(response).to render_template(:change_email)
+        expect(flash[:error]).to include("Your password was incorrect. Please try again or log out and reset your password via the link on")
+      end
+
+      it "disallows blank email address" do
+        put :confirm_change_email, params: { id: user, new_email: "", email_confirmation: "", password_check: "password" }
+
+        expect(response).to render_template(:change_email)
+        expect(flash[:error]).to eq("You must enter a new email address.")
+      end
+
+      it "requires a valid email address" do
+        put :confirm_change_email, params: { id: user, new_email: "wrong", email_confirmation: "wrong", password_check: "password" }
+
+        expect(response).to render_template(:change_email)
+        expect(assigns[:user].errors.full_messages).to include("Email should look like an email address.")
+      end
+
+      it "disallows non-matching email confirmation" do
+        put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "different@example.com", password_check: "password" }
+
+        expect(response).to render_template(:change_email)
+        expect(flash[:error]).to eq("Email addresses don't match! Please retype and try again.")
+      end
+
+      it "allows case-insensitive email confirmation" do
+        put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "NEW@example.com", password_check: "password" }
+
+        expect(response).to render_template(:confirm_change_email)
+        expect(flash[:error]).to be_blank
+      end
+
+      it "disallows using another user's email" do
+        create(:user, email: "new@example.com")
+        put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "new@example.com", password_check: "password" }
+
+        expect(response).to render_template(:change_email)
+        expect(assigns[:user].errors.full_messages).to include("Email has already been taken")
+        expect(assigns[:user].email).to eq("old@example.com")
+      end
+    end
+  end
+
+  describe "POST #changed_email" do
+    let(:user) { create(:user, email: "old@example.com") }
+
+    context "when logged out" do
+      it "errors and tells the user to log in" do
+        post :changed_email, params: { id: user, new_email: "new@example.com" }
+
+        it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
     end
 
-    it "requires a valid email address" do
-      put :confirm_change_email, params: { id: user, new_email: "wrong", email_confirmation: "wrong", password_check: "password" }
+    context "when logged in" do
+      before { fake_login_known_user(user) }
 
-      expect(response).to render_template(:change_email)
-      expect(assigns[:user].errors.full_messages).to include("Email should look like an email address.")
-    end
+      it "requires a valid email address" do
+        post :changed_email, params: { id: user, new_email: "wrong" }
 
-    it "disallows non-matching email confirmation" do
-      put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "different@example.com", password_check: "password" }
-
-      expect(response).to render_template(:change_email)
-      expect(flash[:error]).to eq("Email addresses don't match! Please retype and try again.")
-    end
-
-    it "allows case-insensitive email confirmation" do
-      put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "NEW@example.com", password_check: "password" }
-
-      expect(response).to render_template(:confirm_change_email)
-      expect(flash[:error]).to be_blank
-    end
-
-    it "disallows using another user's email" do
-      create(:user, email: "new@example.com")
-      put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "new@example.com", password_check: "password" }
-
-      expect(response).to render_template(:change_email)
-      expect(assigns[:user].errors.full_messages).to include("Email has already been taken")
+        expect(response).to render_template(:change_email)
+        expect(assigns[:user].errors.full_messages).to include("Email should look like an email address.")
+        expect(assigns[:user].email).to eq("old@example.com")
+      end
     end
   end
 
   describe "GET #reconfirm_email" do
     let(:user) { create(:user) }
 
-    context "when logged in as right user" do
-      before { fake_login_known_user(user) }
-
-      it "disallows invalid tokens" do
+    context "when logged out" do
+      it "errors and tells the user to log in" do
         get :reconfirm_email, params: { id: user, confirmation_token: "foo" }
 
-        it_redirects_to_with_error(change_email_user_path(user), "This email confirmation link is invalid or expired. Please check your email for the correct link or submit the email change form again.")
+        it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
 
@@ -257,10 +297,20 @@ describe UsersController do
 
       before { fake_login_known_user(another_user) }
 
-      it "the error tells the user to log out" do
+      it "errors and tells the user to log out" do
         get :reconfirm_email, params: { id: user, confirmation_token: "foo" }
 
         it_redirects_to_with_error(user_path(user), "You are not logged in to the account whose email you are trying to change. Please log out and try again.")
+      end
+    end
+
+    context "when logged in as right user" do
+      before { fake_login_known_user(user) }
+
+      it "disallows invalid tokens" do
+        get :reconfirm_email, params: { id: user, confirmation_token: "foo" }
+
+        it_redirects_to_with_error(change_email_user_path(user), "This email confirmation link is invalid or expired. Please check your email for the correct link or submit the email change form again.")
       end
     end
   end

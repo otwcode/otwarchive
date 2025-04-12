@@ -18,7 +18,6 @@ Scenario: Orphan all works belonging to a user
     And I should see "Shenanigans"
     And I should see "Shenanigans 2"
     And I should see "Shenanigans - the early years"
-  When I follow "Preferences"
   When I go to the orphan all works page
   Then I should see "Orphan All Works"
     And I should see "Are you really sure you want to"
@@ -51,7 +50,6 @@ Given I have an orphan account
     And I should see "Shenanigans"
     And I should see "Shenanigans 2"
     And I should see "Shenanigans - the early years"
-  When I follow "Preferences"
   When I go to the orphan all works page
   Then I should see "Orphan All Works"
     And I should see "Are you really sure you want to"
