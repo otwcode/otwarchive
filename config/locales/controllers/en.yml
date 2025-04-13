@@ -180,6 +180,10 @@ en:
     show:
       anonymous: Anonymous
       unrevealed_series: Mystery Series
+  subscriptions:
+    delete_all:
+      error: There were problems deleting your subscriptions.
+      success: Your subscriptions have been deleted.
   tag_wranglings:
     index:
       page_subtitle: fandoms

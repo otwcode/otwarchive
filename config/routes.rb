@@ -314,7 +314,12 @@ Rails.application.routes.draw do
     resources :signups, controller: "challenge_signups", only: [:index]
     resources :skins, only: [:index]
     resources :stats, only: [:index]
-    resources :subscriptions, only: [:index, :create, :destroy]
+    resources :subscriptions, only: [:index, :create, :destroy] do
+      collection do
+        get :confirm_delete_all
+        post :delete_all
+      end
+    end
     resources :tag_sets, controller: "owned_tag_sets", only: [:index]
     resources :works do
       collection do
