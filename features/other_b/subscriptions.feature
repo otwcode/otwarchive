@@ -268,7 +268,7 @@ Scenario: delete all subscriptions
     And "second_user" subscribes to author "third_user"
     And "second_user" subscribes to work "Awesome Story"
     And "second_user" subscribes to series "Awesome Series"
-  When I am on my subscriptions page
+  When I go to the subscriptions page for "second_user"
   Then I should see "My Subscriptions"
     And I should see "Awesome Series (Series)"
     And I should see "third_user"
@@ -288,7 +288,7 @@ Scenario: delete all subscriptions of a specific type
     And "second_user" subscribes to author "third_user"
     And "second_user" subscribes to work "Awesome Story"
     And "second_user" subscribes to series "Awesome Series"
-  When I am on my subscriptions page
+  When I go to the subscriptions page for "second_user"
   Then I should see "My Subscriptions"
     And I should see "Awesome Series (Series)"
     And I should see "third_user"
@@ -300,7 +300,7 @@ Scenario: delete all subscriptions of a specific type
     And I should see "Are you sure you want to delete"
   When I press "Yes, Delete All Work Subscriptions"
   Then I should see "Your subscriptions have been deleted"
-  When I go to my subscriptions page
+  When I go to the subscriptions page for "second_user"
   Then I should see "Awesome Series (Series)"
     And I should see "third_user"
     But I should not see "Awesome Story (Work)"
@@ -309,11 +309,11 @@ Scenario: subscriptions are not deleted without confirmation
 
   When I am logged in as "second_user"
     And "second_user" subscribes to work "Awesome Story"
-  When I go to my subscriptions page
+  When I go to the subscriptions page for "second_user"
   Then I should see "My Subscriptions"
     And I should see "Awesome Story (Work)"
   When I follow "Delete All Subscriptions"
   Then I should see "Are you sure you want to delete"
-  When I go to my subscriptions page
+  When I go to the subscriptions page for "second_user"
   Then I should see "My Subscriptions"
     And I should see "Awesome Story (Work)"

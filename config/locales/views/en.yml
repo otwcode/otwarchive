@@ -695,6 +695,8 @@ en:
       html: If you still get this error after a few tries, you can %{contact_support_link}.
       page_heading: Timeout Error
       subtitle: The page was responding too slowly. Please try again after a few minutes.
+  external_works:
+    notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
   feedbacks:
     new:
       abuse:
