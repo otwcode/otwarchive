@@ -689,6 +689,12 @@ en:
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
+  errors:
+    timeout_error:
+      contact_support: contact Support
+      html: If you still get this error after a few tries, you can %{contact_support_link}.
+      page_heading: Timeout Error
+      subtitle: The page was responding too slowly. Please try again after a few minutes.
   feedbacks:
     new:
       abuse:
