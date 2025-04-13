@@ -4,7 +4,7 @@ class Pseud < ApplicationRecord
   include Justifiable
 
   has_one_attached :icon do |attachable|
-    attachable.variant(:standard, resize_to_limit: [100, 100])
+    attachable.variant(:standard, resize_to_limit: [100, 100], loader: { n: -1 })
   end
 
   # i18n-tasks-use t("errors.attributes.icon.invalid_format")
@@ -185,7 +185,7 @@ class Pseud < ApplicationRecord
 
   # Parse a string of the "pseud.name (user.login)" format into a list of
   # pseuds. Usually this will be just one pseud, but if the byline is of the
-  # form "pseud.name" with no parenthesized user name, it'll look for any pseud
+  # form "pseud.name" with no parenthesized username, it'll look for any pseud
   # with that name.
   def self.parse_byline_ambiguous(byline)
     pseud_name, login = split_byline(byline)

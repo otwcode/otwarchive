@@ -25,6 +25,12 @@ class ApplicationController < ActionController::Base
     redirect_to '/404'
   end
 
+  rescue_from Rack::Timeout::RequestTimeoutException, with: :raise_timeout
+  
+  def raise_timeout
+    redirect_to timeout_error_path
+  end
+
   helper :all # include all helpers, all the time
 
   include HtmlCleaner
@@ -334,7 +340,7 @@ public
 
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
-  before_action :set_current_user
+  around_action :set_current_user
   def set_current_user
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
@@ -344,6 +350,11 @@ public
                                expires_in: 2.hours,
                                race_condition_ttl: 5) { "#{current_user.subscriptions.count}, #{current_user.visible_work_count}, #{current_user.bookmarks.count}, #{current_user.owned_collections.count}, #{current_user.challenge_signups.count}, #{current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count}, #{current_user.unposted_works.size}" }.split(",").map(&:to_i)
     end
+
+    yield
+
+    User.current_user = nil
+    @current_user = nil
   end
 
   def load_collection

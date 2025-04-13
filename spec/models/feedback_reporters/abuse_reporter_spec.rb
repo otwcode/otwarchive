@@ -7,13 +7,14 @@ describe AbuseReporter do
 
   let(:abuse_report_attributes) do
     {
-      title: "This is a tragesy",
+      title: "This is a tragedy",
       description: "Nothing more to say",
       language: "English",
       email: "walrus@example.org",
       username: "Walrus",
       ip_address: "127.0.0.1",
-      url: "http://localhost"
+      url: "https://example.com/works/1",
+      creator_ids: "3, 4"
     }
   end
 
@@ -22,13 +23,14 @@ describe AbuseReporter do
       "departmentId" => "abuse_dep_id",
       "email" => "walrus@example.org",
       "contactId" => "1",
-      "subject" => "[AO3] Abuse - This is a tragesy",
+      "subject" => "[AO3] Abuse - This is a tragedy",
       "description" => "Nothing more to say",
       "cf" => {
         "cf_language" => "English",
         "cf_name" => "Walrus",
         "cf_ip" => "127.0.0.1",
-        "cf_url" => "http://localhost"
+        "cf_ticket_url" => "https://example.com/works/1",
+        "cf_user_id" => "3, 4"
       }
     }
   end
@@ -72,11 +74,23 @@ describe AbuseReporter do
       end
     end
 
-    context "if the report does not have an URL" do
-      it "returns a hash containing 'Unknown URL'" do
+    context "if the report has an empty URL" do
+      before do
         allow(subject).to receive(:url).and_return("")
+      end
 
-        expect(subject.report_attributes.fetch("cf").fetch("cf_url")).to eq("Unknown URL")
+      it "returns a hash containing a blank string for URL" do
+        expect(subject.report_attributes.dig("cf", "cf_ticket_url")).to eq("")
+      end
+    end
+
+    context "if the reporter has a very long URL" do
+      before do
+        allow(subject).to receive(:url).and_return("a" * 2081)
+      end
+
+      it "truncates the URL to 2080 characters" do
+        expect(subject.report_attributes.dig("cf", "cf_ticket_url").length).to eq(2080)
       end
     end
 
@@ -85,6 +99,14 @@ describe AbuseReporter do
         allow(subject).to receive(:description).and_return('Hi!<img src="http://example.com/Camera-icon.svg">Bye!')
 
         expect(subject.report_attributes.fetch("description")).to eq("Hi!http://example.com/Camera-icon.svgBye!")
+      end
+    end
+
+    context "if the report does not have creator_ids" do
+      it "returns a hash containing a blank string for the user id" do
+        allow(subject).to receive(:creator_ids).and_return(nil)
+
+        expect(subject.report_attributes.fetch("cf").fetch("cf_user_id")).to eq("")
       end
     end
   end

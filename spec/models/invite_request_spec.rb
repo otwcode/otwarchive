@@ -39,4 +39,27 @@ describe InviteRequest do
       end
     end
   end
+
+  describe "#proposed_fill_time" do
+    let(:invite_request) { create(:invite_request) }
+
+    before do
+      freeze_time
+
+      admin_setting = AdminSetting.default
+      admin_setting.invite_from_queue_number = 3
+      admin_setting.invite_from_queue_frequency = 11
+      admin_setting.save(validate: false)
+    end
+
+    it "returns time of next check for invite in next batch" do
+      expect(invite_request.proposed_fill_time).to eq(Time.current + 11.hours)
+    end
+
+    it "returns time with x3 check duration for invite in 3rd batch" do
+      allow(invite_request).to receive(:position).and_return(9)
+
+      expect(invite_request.proposed_fill_time).to eq(Time.current + 33.hours)
+    end
+  end
 end

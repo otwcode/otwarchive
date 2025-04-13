@@ -208,9 +208,9 @@ Feature: Kudos
       And I press "Kudos ♥"
     Then I should see "oldusername1 left kudos on this work!"
     When I visit the change username page for oldusername1
-      And I fill in "New user name" with "newusername1"
+      And I fill in "New username" with "newusername1"
       And I fill in "Password" with "password"
-      And I press "Change User Name"
+      And I press "Change Username"
     Then I should get confirmation that I changed my username
       And I should see "Hi, newusername1"
     When the kudos cache has expired
@@ -222,8 +222,16 @@ Feature: Kudos
       And I view the work "Interesting beans"
     Then I should not see "newusername1 left kudos on this work!"
 
-  Scenario: Cannot leave kudos (no button) while logged as admin
+  Scenario: Cannot leave kudos (no button) while logged in as admin
     Given I am logged in as an admin
       And I view the work "Awesome Story"
     Then I should see "Awesome Story"
       And I should not see a "Kudos ♥" button
+
+  @javascript
+  Scenario: Cannot leave kudos while logged in as a user with the official role
+    Given the user "clicker" exists and has the role "official"
+      And I am logged in as "clicker"
+    When I view the work "Awesome Story"
+      And I press "Kudos ♥"
+    Then I should see "Please log out of your official account!"

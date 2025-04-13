@@ -65,13 +65,13 @@ class Comment < ApplicationRecord
   validate :check_for_spam, on: :create
 
   def check_for_spam
-    errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
+    errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again.")) unless check_for_spam?
   end
 
   validates :comment_content, uniqueness: {
     scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id],
     unless: :is_deleted?,
-    message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")
+    message: :duplicate_comment
   }
 
   scope :ordered_by_date, -> { order('created_at DESC') }
@@ -97,15 +97,24 @@ class Comment < ApplicationRecord
     # access granted by admins, so we never spam check them, unlike comments on
     # works or admin posts.
     comment_type = ultimate_parent.is_a?(Work) ? "fanwork-comment" : "comment"
+
+    if pseud_id.nil?
+      user_role = "guest"
+      comment_author = name
+    else
+      user_role = "user"
+      comment_author = user.login
+    end
+    
     {
       comment_type: comment_type,
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_agent: user_agent,
-      user_role: "guest",
-      comment_author: name,
-      comment_author_email: email,
+      user_role: user_role,
+      comment_author: comment_author,
+      comment_author_email: comment_owner_email,
       comment_content: comment_content
     }
   end
@@ -466,20 +475,36 @@ class Comment < ApplicationRecord
   end
 
   def check_for_spam?
-    #don't check for spam while running tests or if the comment is 'signed'
-    self.approved = Rails.env.test? || !self.pseud_id.nil? || !Akismetor.spam?(akismet_attributes)
+    is_logged_in = !pseud_id.nil? 
+    is_account_old_enough = is_logged_in && !user.should_spam_check_comments?
+    
+    should_skip_checking = is_logged_in && (is_account_old_enough || on_tag?)
+
+    self.approved = should_skip_checking || !spam?
+  end
+
+  def spam?
+    return false unless %w[staging production].include?(Rails.env)
+
+    Akismetor.spam?(akismet_attributes)
+  end
+
+  def submit_spam
+    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+  end
+
+  def submit_ham
+    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
   end
 
   def mark_as_spam!
     update_attribute(:approved, false)
-    # don't submit spam reports unless in production mode
-    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+    submit_spam
   end
 
   def mark_as_ham!
     update_attribute(:approved, true)
-    # don't submit ham reports unless in production mode
-    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+    submit_ham
   end
 
   # Freeze single comment.
