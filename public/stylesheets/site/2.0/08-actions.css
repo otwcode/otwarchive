@@ -63,7 +63,6 @@ p.submit, input.submit, dd.submit {
   text-align: right;
 }
 
-
 .actions input[type="checkbox"] {
   background: transparent;
   border: none;
@@ -167,6 +166,11 @@ legend .action:link {
   height: auto;
   font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
   padding: 0.15em 0.375em;
+}
+
+.heading .actions button {
+  padding: 0.25em 0.75em;
+  margin-left: 0.25em;
 }
 
 th .actions, td .actions {
