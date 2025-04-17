@@ -542,8 +542,8 @@ namespace :After do
     # This might be possible with pure Ruby, but unfortunately the parent tag in common_taggings is polymorphic
     # (even though it doesn't need to be), which makes that trickier.
     non_canonicals = SetTagging
-                       .joins("INNER JOIN `tag_sets` `tag_set` ON `tag_set`.`id` = `set_taggings`.`tag_set_id` INNER JOIN `owned_tag_sets` ON `owned_tag_sets`.`tag_set_id` = `tag_set`.`id` INNER JOIN `tags` `tag` ON `tag`.`id` = `set_taggings`.`tag_id` JOIN `common_taggings` `common_tagging` ON `tag`.`id` = `common_tagging`.`common_tag_id` JOIN `tags` `tag2` ON `common_tagging`.`filterable_id` = `tag2`.`id`")
-                       .where("`tag`.`canonical` = FALSE AND `tag`.`type` IN ('Character', 'Relationship') AND `tag_set`.`id` IS NOT NULL AND `tag2`.`type` = 'Fandom' AND `tag2`.`canonical` = TRUE")
+      .joins("INNER JOIN `tag_sets` `tag_set` ON `tag_set`.`id` = `set_taggings`.`tag_set_id` INNER JOIN `owned_tag_sets` ON `owned_tag_sets`.`tag_set_id` = `tag_set`.`id` INNER JOIN `tags` `tag` ON `tag`.`id` = `set_taggings`.`tag_id` JOIN `common_taggings` `common_tagging` ON `tag`.`id` = `common_tagging`.`common_tag_id` JOIN `tags` `tag2` ON `common_tagging`.`filterable_id` = `tag2`.`id`")
+      .where("`tag`.`canonical` = FALSE AND `tag`.`type` IN ('Character', 'Relationship') AND `tag_set`.`id` IS NOT NULL AND `tag2`.`type` = 'Fandom' AND `tag2`.`canonical` = TRUE")
 
     non_canonicals.find_in_batches.with_index do |batch, index|
       puts "Creating TagSetAssociations for batch #{index + 1}"
