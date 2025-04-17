@@ -113,6 +113,27 @@ Feature: Commenting on admin posts
     Then I should see "Comment created!"
       And I should see "zug zug"
 
+  Scenario: Admin post with comment moderation
+    Given I have posted an admin post
+      And I am logged in as a "communications" admin
+    When I go to the admin-posts page
+      And I follow "Edit"
+      And I check "Enable comment moderation"
+    When I am logged out
+      And I go to the admin-posts page
+      And I follow "Default Admin Post"
+      And I fill in "comment[name]" with "tester"
+      And I fill in "comment[email]" with "tester@example.com"
+      And I fill in "comment[comment_content]" with "guz guz"
+      And I press "Comment"
+    When I follow "Reply"
+      And I fill in "comment[name]" with "tester"
+      And I fill in "comment[email]" with "tester@example.com"
+      And I fill in "comment[comment_content]" with "guz guz"
+      And I press "Comment"
+    Then I should see "Comments on this news post are moderated."
+
+
   Scenario: Modifying the comment permissions of an admin post with translations
     Given I have posted an admin post
       And basic languages
