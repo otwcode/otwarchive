@@ -129,7 +129,7 @@ Feature: Commenting on admin posts
     When I follow "Reply"
       And I fill in "comment[name]" with "tester"
       And I fill in "comment[email]" with "tester@example.com"
-      And I fill in "comment[comment_content]" with "guz guz"
+      And I fill in "comment[comment_content]" with "guz"
       And I press "Comment"
     Then I should see "Comments on this news post are moderated."
 
