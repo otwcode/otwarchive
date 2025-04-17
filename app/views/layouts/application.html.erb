@@ -17,7 +17,7 @@
       <meta name="googlebot" content="noindex" />
     <% end %>
   	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title><%= browser_page_title %></title>
+    <title><%= browser_page_title(@page_title, @page_subtitle) %></title>
 
     <%= render :partial => 'layouts/includes' %>
     <%= phraseapp_in_context_editor_js %>

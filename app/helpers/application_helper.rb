@@ -632,17 +632,17 @@ module ApplicationHelper
     end
   end
 
-  def browser_page_title
-    return @page_title if @page_title
+  def browser_page_title(page_title, page_subtitle)
+    return page_title if page_title
 
-    page = if @page_subtitle
-             @page_subtitle
+    page = if page_subtitle
+             page_subtitle
            elsif controller.action_name == "index"
              process_title(controller.controller_name)
            else
              "#{process_title(controller.action_name)} #{process_title(controller.controller_name.singularize)}"
            end
-    # @page_subtitle sometimes contains user (including admin) content, so let's
+    # page_subtitle sometimes contains user (including admin) content, so let's
     # not html_safe the entire string. Let's require html_safe be called when
     # we set @page_subtitle, so we're conscious of what we're doing.
     page + " | #{ArchiveConfig.APP_NAME}"
