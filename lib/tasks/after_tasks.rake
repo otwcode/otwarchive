@@ -535,5 +535,25 @@ namespace :After do
       puts "Finished converting kudos from official users to guest kudos"
     end
   end
+
+  desc "Create TagSetAssociations for non-canonical tags belonging to canonical fandoms in TagSets"
+  task(create_non_canonical_tagset_associations: :environment) do
+    # We want to get all set taggings where the tag is not canonical, but has a parent fandom that _is_ canonical.
+    # This might be possible with pure Ruby, but unfortunately the parent tag in common_taggings is polymorphic
+    # (even though it doesn't need to be), which makes that trickier.
+    non_canonicals = SetTagging
+                       .joins("INNER JOIN `tag_sets` `tag_set` ON `tag_set`.`id` = `set_taggings`.`tag_set_id` INNER JOIN `owned_tag_sets` ON `owned_tag_sets`.`tag_set_id` = `tag_set`.`id` INNER JOIN `tags` `tag` ON `tag`.`id` = `set_taggings`.`tag_id` JOIN `common_taggings` `common_tagging` ON `tag`.`id` = `common_tagging`.`common_tag_id` JOIN `tags` `tag2` ON `common_tagging`.`filterable_id` = `tag2`.`id`")
+                       .where("`tag`.`canonical` = FALSE AND `tag`.`type` IN ('Character', 'Relationship') AND `tag_set`.`id` IS NOT NULL AND `tag2`.`type` = 'Fandom' AND `tag2`.`canonical` = TRUE")
+
+    non_canonicals.find_in_batches.with_index do |batch, index|
+      puts "Creating TagSetAssociations for batch #{index + 1}"
+      batch.each do |set_tagging|
+        set_tagging.tag.fandoms.where(canonical: true).find_each do |fandom|
+          TagSetAssociation.create!(owned_tag_set: set_tagging.tag_set.owned_tag_set,
+                                    tag: set_tagging.tag, parent_tag: fandom)
+        end
+      end
+    end
+  end
   # This is the end that you have to put new tasks above.
 end
