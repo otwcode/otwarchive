@@ -21,8 +21,8 @@
 <% else %>
   <h3 class="heading"><%= t(".heading.instructions") %></h3>
   <div class="userstuff">
-    <p><%= t(".status.current", twitter_link: link_to(t(".status.twitter"), "https://twitter.com/AO3_Status"), tumblr_link: link_to(t(".status.tumblr"), "https://ao3org.tumblr.com")).html_safe %></p>
-    <p><%= t(".abuse.reports", contact_link: link_to(t(".abuse.contact"), new_abuse_report_path)).html_safe %></p>
+    <p><%= t(".status.current_html", status_page_link: link_to(t(".status.status_page"), "https://www.otwstatus.org")) %></p>
+    <p><%= t(".abuse.reports_html", contact_link: link_to(t(".abuse.contact"), new_abuse_report_path)) %></p>
     <p><%= t(".reportable.intro") %></p>
     <ul>
       <li><%= t(".reportable.fnok.concerning_html", fnok_link: link_to(t(".reportable.fnok.fnok"), tos_faq_path(anchor: "next_of_kin"))) %></li>

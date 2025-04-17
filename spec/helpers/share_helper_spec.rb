@@ -76,6 +76,13 @@ describe ShareHelper do
     end
 
     context "with valid site" do
+      context "when site is bluesky" do
+        it "returns HTML for a Bluesky button" do
+          share_button = '<a href="https://bsky.app" class="resp-sharing-button__link" aria-label="Follow us on Bluesky"><div class="resp-sharing-button resp-sharing-button--bluesky resp-sharing-button--medium"><div class="resp-sharing-button__icon resp-sharing-button__icon--solid" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 10.8c-1.087 -2.114 -4.046 -6.053 -6.798 -7.995C2.566 0.944 1.561 1.266 0.902 1.565 0.139 1.908 0 3.08 0 3.768c0 0.69 0.378 5.65 0.624 6.479 0.815 2.736 3.713 3.66 6.383 3.364 0.136 -0.02 0.275 -0.039 0.415 -0.056 -0.138 0.022 -0.276 0.04 -0.415 0.056 -3.912 0.58 -7.387 2.005 -2.83 7.078 5.013 5.19 6.87 -1.113 7.823 -4.308 0.953 3.195 2.05 9.271 7.733 4.308 4.267 -4.308 1.172 -6.498 -2.74 -7.078a8.741 8.741 0 0 1 -0.415 -0.056c0.14 0.017 0.279 0.036 0.415 0.056 2.67 0.297 5.568 -0.628 6.383 -3.364 0.246 -0.828 0.624 -5.79 0.624 -6.478 0 -0.69 -0.139 -1.861 -0.902 -2.206 -0.659 -0.298 -1.664 -0.62 -4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z" /></svg></div>Follow us on Bluesky</div></a>'
+          expect(helper.sharing_button("bluesky", "https://bsky.app", "Follow us on Bluesky")).to eq(share_button)
+        end
+      end
+
       context "when site is tumblr" do
         it "returns HTML for a Tumblr button" do
           share_button = '<a href="https://tumblr.com" class="resp-sharing-button__link" aria-label="Share on Tumblr"><div class="resp-sharing-button resp-sharing-button--tumblr resp-sharing-button--medium"><div class="resp-sharing-button__icon resp-sharing-button__icon--solid" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.5.5v5h5v4h-5V15c0 5 3.5 4.4 6 2.8v4.4c-6.7 3.2-12 0-12-4.2V9.5h-3V6.7c1-.3 2.2-.7 3-1.3.5-.5 1-1.2 1.4-2 .3-.7.6-1.7.7-3h3.8z" /></svg></div>Share on Tumblr</div></a>'

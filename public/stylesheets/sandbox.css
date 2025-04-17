@@ -74,6 +74,14 @@ a.resp-sharing-button__link:hover {
   stroke: none;
 }
 
+.resp-sharing-button--bluesky {
+  background-color: #0085ff;
+}
+
+.resp-sharing-button--bluesky:hover, a:focus .resp-sharing-button--bluesky {
+  background-color: #0168d6;
+}
+
 .resp-sharing-button--twitter {
   background-color: #55acee;
 }
@@ -88,6 +96,17 @@ a.resp-sharing-button__link:hover {
 
 .resp-sharing-button--tumblr:hover, a:focus .resp-sharing-button--tumblr {
   background-color: #222d3c;
+}
+
+.resp-sharing-button--bluesky {
+  background-color: #0085ff;
+  border-color: #0085ff;
+}
+
+.resp-sharing-button--bluesky:hover,
+.resp-sharing-button--bluesky:active {
+  background-color: #0168d6;
+  border-color: #0168d6;
 }
 
 .resp-sharing-button--twitter {
