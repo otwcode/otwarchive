@@ -1887,12 +1887,13 @@ en:
         turn_on_new_user_help: Turn the new user help banner back on.
       navigation:
         blocked_users: Blocked Users
-        change_my_username: Change My Username
+        change_email: Change Email
+        change_password: Change Password
+        change_username: Change Username
         edit_my_profile: Edit My Profile
         landmark: Navigation
         manage_my_pseuds: Manage My Pseuds
         muted_users: Muted Users
-        orphan_my_works: Orphan My Works
       page_heading: Set My Preferences
       privacy:
         allow_co_creator_invite: Allow others to invite me to be a co-creator.
@@ -2097,6 +2098,26 @@ en:
       ticket_id: Ticket ID
     change_email:
       browser_title: Change Email
+      caution:
+        check_spam_html: "%{must_confirm_bold} Please check your spam folder or %{contact_support_link} if you do not receive the confirmation email."
+        confirm_by: If you don't confirm your request by %{date}, your email address will not be changed.
+        contact_support: contact Support
+        must_confirm: You must use the link in the confirmation email in order to finish confirming your email change.
+        requested_change_html: You have requested to change your email address to %{unconfirmed_email}. A confirmation email has been sent to this address.
+      form:
+        confirm: Confirm New Email
+        current_email: Current email
+        email_again: Enter new email again
+        new_email: New email
+        password: Password
+        submit_landmark: Submit
+      heading: Change Email
+      invalidate: invalidate any pending email change requests
+      must_confirm:
+        one: You must use the link in the confirmation email in order to finish confirming your email change. If you don't confirm your request within %{count} day, the link will expire and your email address will not be changed.
+        other: You must use the link in the confirmation email in order to finish confirming your email change. If you don't confirm your request within %{count} days, the link will expire and your email address will not be changed.
+      request_for_confirmation: Changing your email will send a request for confirmation to your new email address and a notification to your current email address.
+      resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
     change_password:
       browser_title: Change Password
     change_username:
@@ -2121,6 +2142,15 @@ en:
       submit: Change Username
       submit_landmark: Submit
       username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
+    confirm_change_email:
+      are_you_sure_html: Are you sure you want to change your email address to %{unconfirmed_email}? A confirmation email will be sent to this address.
+      cancel: Cancel
+      confirm: Yes, Change Email
+      confirm_via_link_html: You must use the link in the confirmation email in order to finish confirming your email change. %{if_not_confirm_bold}
+      heading: Confirm New Email
+      if_not_confirm:
+        one: If you don't confirm your request within %{count} day, the link will expire and your email address will not be changed.
+        other: If you don't confirm your request within %{count} days, the link will expire and your email address will not be changed.
     confirmation:
       contact_support: contact Support
       go_back: Return to Archive front page

@@ -243,6 +243,7 @@ Rails.application.routes.draw do
   resources :users, except: [:new, :create] do
     member do
       get :change_email
+      put :confirm_change_email
       post :changed_email
       get :change_password
       post :changed_password
@@ -251,6 +252,7 @@ Rails.application.routes.draw do
       post :end_first_login
       post :end_banner
       post :end_tos_prompt
+      get :reconfirm_email
     end
     resources :assignments, controller: "challenge_assignments", only: [:index]
     resources :claims, controller: "challenge_claims", only: [:index]

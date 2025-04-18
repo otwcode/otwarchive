@@ -109,7 +109,7 @@ class UserMailerPreview < ApplicationMailerPreview
   def change_email
     user = create(:user, :for_mailer_preview)
     old_email = user.email
-    new_email = "new_email"
+    new_email = "new_email@example.com"
     UserMailer.change_email(user.id, old_email, new_email)
   end
 

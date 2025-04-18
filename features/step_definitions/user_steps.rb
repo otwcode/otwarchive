@@ -318,7 +318,7 @@ end
 
 When /^I change my username to "([^"]*)"/ do |new_name|
   step %{I follow "My Preferences"}
-  step %{I follow "Change My Username"}
+  step %{I follow "Change Username"}
   fill_in("New username", with: new_name)
   fill_in("Password", with: "password")
   click_button("Change Username")
