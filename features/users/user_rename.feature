@@ -235,17 +235,13 @@ Feature:
 
   Scenario: Bookmarker's bookmark blurbs reflect username changes immediately
     Given the work "Interesting"
-      And I am logged in as "before" with password "password"
-      And I add the pseud "mine"
-      And I bookmark the work "Interesting" as "mine"
+      And I am logged in as "before"
+      And I bookmark the work "Interesting"
       And I go to before's bookmarks page
-    Then I should see "Bookmarked by mine (before)"
+    Then I should see "Bookmarked by before"
 
     When it is currently 1 second from now
-      And I visit the change username page for before
-      And I fill in "New user name" with "after"
-      And I fill in "Password" with "password"
-      And I press "Change User Name"
+      And I change my username to "after"
       And I go to after's bookmarks page
-    Then I should see "Bookmarked by mine (after)"
-      And I should not see "Bookmarked by mine (before)"
+    Then I should see "Bookmarked by after"
+      And I should not see "Bookmarked by before"

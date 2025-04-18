@@ -298,18 +298,17 @@ Scenario: Change details as an admin
   When I go to the admin-activities page
   Then I should see 1 admin activity log entry
 
-
 Scenario: Bookmarks reflect pseud changes immediately
 
   Given the work "Interesting"
     And I am logged in as "myself"
-    And I add the pseud "before"
+    And "myself" has the pseud "before"
     And I bookmark the work "Interesting" as "before"
     And I go to myself's bookmarks page
   Then I should see "Bookmarked by before (myself)"
 
   When it is currently 1 second from now
-    And I change the pseud "before" to "after"
+    And "myself" changes the pseud "before" to "after"
     And I go to myself's bookmarks page
   Then I should see "Bookmarked by after (myself)"
     And I should not see "Bookmarked by before (myself)"

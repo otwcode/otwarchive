@@ -2,7 +2,7 @@
 <div class="<% if is_author_of?(bookmark) %>own <% end %>user module group">
   <!--bookmarker-->
   <h5 class="byline heading">
-    <%= t("Bookmarked by") %> <%= link_to(bookmark.pseud.byline, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud)) %>
+    <%= t(".bookmarked_by_html", pseud_link: link_to(bookmark.pseud.byline, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud))) %>
   </h5>
   <%# If you update the cache key, update flush_bookmark_cache in tag.rb %>
   <% blurb_cache_key = (is_author_of?(bookmark) ? "bookmark-owner-blurb-#{bookmark.cache_key}-v3" : "bookmark-blurb-#{bookmark.cache_key}-v3") %>
