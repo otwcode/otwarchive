@@ -163,22 +163,28 @@ class Prompt < ApplicationRecord
   validate :restricted_tags
   def restricted_tags
     restriction = prompt_restriction
-    if restriction
-      TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
-        if restriction.send("#{tag_type}_restrict_to_fandom")
-          # tag_type is one of a set set so we know it is safe for constantize
-          allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
-          disallowed_taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") - allowed_tags : []
-          # check for tag set associations
-          disallowed_taglist.reject! {|tag| TagSetAssociation.where(tag_id: tag.id, parent_tag_id: tag_set.fandom_taglist).exists?}
-          unless disallowed_taglist.empty?
-            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)",
-                              prompt_type: self.class.name.downcase,
-                              tag_label: tag_type_label_name(tag_type).downcase, fandom: tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
-                              taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
-          end
-        end
-      end
+    return unless restriction
+
+    tag_set_associations = TagSetAssociation.where(owned_tag_set_id: restriction.owned_tag_sets.pluck(:id))
+
+    TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
+      next unless restriction.send("#{tag_type}_restrict_to_fandom")
+
+      # tag_type is one of a set set so we know it is safe for constantize
+      allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
+      disallowed_taglist = tag_set ? tag_set.send("#{tag_type}_taglist") - allowed_tags : []
+
+      # check for tag set associations
+      disallowed_taglist -= tag_set_associations
+        .where(tag: disallowed_taglist, parent_tag_id: tag_set.fandom_taglist)
+        .includes(:tag)
+        .map(&:tag)
+      next if disallowed_taglist.empty?
+
+      errors.add(:base, :tags_not_in_fandom,
+                 prompt_type: self.class.name.downcase,
+                 tag_label: tag_type_label_name(tag_type).downcase, fandom: tag_set.fandom_taglist.pluck(:name).join(I18n.t("support.array.words_connector")),
+                 taglist: disallowed_taglist.pluck(:name).join(I18n.t("support.array.words_connector")))
     end
   end
 
