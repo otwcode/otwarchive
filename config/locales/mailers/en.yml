@@ -138,6 +138,16 @@ en:
       tos_violation:
         html: If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
         text: If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
+    admin_spam_work_notification:
+      contact_abuse: contact our Policy & Abuse Team
+      flagged_as_spam:
+        html: Your work %{work_link} has been flagged by our automated system as spam and hidden until it can be reviewed by our Policy & Abuse team. While the work is hidden it can only be accessed by you and AO3 site admins.
+        text: Your work "%{work_title}" (%{work_url}) has been flagged by our automated system as spam and hidden until it can be reviewed by our Abuse team. While the work is hidden it can only be accessed by you and AO3 site admins.
+      future: If we determine that your work is not spam, we'll unhide it. Other users will then be able to access and leave feedback on it as usual. Please note that we do not screen works for other kinds of violations at this time. If your work is reported to us for a different reason in the future, that will be investigated separately.
+      questions:
+        html: If you have any questions, please %{contact_abuse_link}.
+        text: If you have any questions, please contact our Policy & Abuse team (%{contact_abuse_url}).
+      subject: "[%{app_name}] Your work was hidden as spam"
     anonymous_or_unrevealed_notification:
       anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
       anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
