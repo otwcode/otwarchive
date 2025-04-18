@@ -177,13 +177,14 @@ class Prompt < ApplicationRecord
       # check for tag set associations
       disallowed_taglist -= tag_set_associations
         .where(tag: disallowed_taglist, parent_tag_id: tag_set.fandom_taglist)
+        .includes(:tag)
         .map(&:tag)
       next if disallowed_taglist.empty?
 
       errors.add(:base, :tags_not_in_fandom,
                  prompt_type: self.class.name.downcase,
-                 tag_label: tag_type_label_name(tag_type).downcase, fandom: tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
-                 taglist: disallowed_taglist.collect(&:name).join(I18n.t("support.array.words_connector")))
+                 tag_label: tag_type_label_name(tag_type).downcase, fandom: tag_set.fandom_taglist.pluck(:name).join(I18n.t("support.array.words_connector")),
+                 taglist: disallowed_taglist.pluck(:name).join(I18n.t("support.array.words_connector")))
     end
   end
 

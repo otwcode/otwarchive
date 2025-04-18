@@ -3,22 +3,21 @@
 require "spec_helper"
 
 describe Prompt do
-  describe "validations" do
+  describe "#restricted_tags" do
     let(:fandom) { create(:fandom, canonical: true) }
     let(:non_fandom_character) { create(:character, canonical: true) }
     let(:collection) { create(:collection, challenge: challenge) }
+    let(:owned_tag_set) { create(:owned_tag_set, tags: [fandom, non_fandom_character]) }
+
+    before do
+      create(:tag_set_association, tag: non_fandom_character, parent_tag: fandom, owned_tag_set: owned_tag_set)
+    end
 
     context "when the prompt uses a non-fandom tag that is in the challenge TagSet" do
-      let(:owned_tag_set) { create(:owned_tag_set, tags: [fandom, non_fandom_character]) }
-
       let!(:challenge) do
         create(:gift_exchange,
                offer_restriction: create(:prompt_restriction,
                                          character_restrict_to_fandom: true, owned_tag_sets: [owned_tag_set]))
-      end
-
-      before do
-        create(:tag_set_association, tag: non_fandom_character, parent_tag: fandom, owned_tag_set: owned_tag_set)
       end
 
       it "marks the prompt as valid" do
@@ -31,15 +30,9 @@ describe Prompt do
     end
 
     context "when the prompt uses a non-fandom tag that is not in the challenge TagSet" do
-      let(:owned_tag_set) { create(:owned_tag_set, tags: [fandom, non_fandom_character]) }
-
       let!(:challenge) do
         create(:gift_exchange,
                offer_restriction: create(:prompt_restriction, character_restrict_to_fandom: true))
-      end
-
-      before do
-        create(:tag_set_association, tag: non_fandom_character, parent_tag: fandom, owned_tag_set: owned_tag_set)
       end
 
       it "marks the prompt as invalid" do
