@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'spec_helper'
+
+require "spec_helper"
 
 describe OwnedTagSetsController do
   include LoginMacros
@@ -113,7 +114,7 @@ describe OwnedTagSetsController do
   describe "show" do
     context "where tag set is not found" do
       it "redirects and displays an error" do
-        get :show, params: { id: 12345 }
+        get :show, params: { id: 12_345 }
         it_redirects_to_with_error(tag_sets_path, "What Tag Set did you want to look at?")
       end
     end
@@ -136,16 +137,42 @@ describe OwnedTagSetsController do
         end
       end
 
-      context "where tag set is visible" do
+      context "when the tag set is visible" do
         let(:visible) { true }
 
-        context "where tag set has type character" do
-          it "sets the correct data" do
+        context "when the tag set has a non-canonical character" do
+          it "is listed as an uncategorized tag" do
             get :show, params: { id: owned_tag_set.id }
             tag_hash = assigns(:tag_hash)
             expect(tag_hash).to be_present
-            filterable = Tag.find(tag.common_taggings.first.filterable_id)
-            expect(tag_hash["character"][filterable.name].first).to eq tag.name
+            expect(tag_hash["character"]["(No linked fandom - might need association)"]).to include(tag.name)
+          end
+
+          context "when the character has a tag set association" do
+            let(:fandom) { create(:fandom) }
+
+            before do
+              create(:tag_set_association, owned_tag_set: owned_tag_set, tag: tag, parent_tag: fandom)
+            end
+
+            it "is categorized under the associated fandom" do
+              get :show, params: { id: owned_tag_set.id }
+              tag_hash = assigns(:tag_hash)
+              expect(tag_hash).to be_present
+              expect(tag_hash["character"][fandom.name]).to include(tag.name)
+            end
+          end
+        end
+
+        context "when the tag set has a canonical character" do
+          let(:tag) { create(:character, canonical: true, common_taggings: [create(:common_tagging)]) }
+
+          it "is categorized under the character's fandom" do
+            get :show, params: { id: owned_tag_set.id }
+            tag_hash = assigns(:tag_hash)
+            expect(tag_hash).to be_present
+            parent = Tag.find(tag.common_taggings.first.filterable_id)
+            expect(tag_hash["character"][parent.name].first).to eq tag.name
           end
         end
       end
