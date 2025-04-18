@@ -114,6 +114,25 @@ describe Skin do
         background:linear-gradient(top,#fafafa,#ddd);
         color:#555 }",
 
+      "allows color-scheme property and values" => 
+        ".color_scheme_light { color-scheme: light; }
+        .color_scheme_only_dark { color-scheme: only dark; }",
+
+      "allows filter properties" => 
+        ".filter_blur { filter: blur(5px); }
+        .filter_brightness { filter: brightness(0.4); }
+        .filter_contrast { filter: contrast(200%); }
+        .filter_drop { filter: drop-shadow(16px 16px 20px blue); }
+        .filter_grayscale { filter: grayscale(50%); }
+        .filter_hue { filter: hue-rotate(90deg); }
+        .filter_invert { filter: invert(75%); }
+        .filter_opacity { filter: opacity(25%); }
+        .filter_saturate { filter: saturate(30%); }
+        .filter_sepia { filter: sepia(60%); }",
+
+      "allows filter properties with multiple values" => 
+        ".filter_multi { filter: contrast(175%) brightness(3%) drop-shadow(3px 3px red) sepia(100%) drop-shadow(blue -3px -3px 5px); }",
+
       "allows display property with flex values" =>
         ".flex-container { display: flex; }
         .flex-container-inline { display: inline-flex; }",
@@ -162,7 +181,8 @@ describe Skin do
       "errors when saving gradient with xss" => "div {background: -webkit-linear-gradient(url(xss.htc))}",
       "errors when saving dsf images" => "body {background: url(http://foo.com/bar.dsf)}",
       "errors when saving urls with invalid domain" => "body {background: url(http://foo.htc/bar.png)}",
-      "errors when saving xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}"
+      "errors when saving xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}",
+      "errors when saving url followed by something else" => 'a {content: url(/images/fakeimage.png) " (" attr(href) ")"}'
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
@@ -180,6 +200,13 @@ describe Skin do
     it "has a unique title" do
       expect(@skin.save).to be_truthy
       skin2 = Skin.new(title: "Test Skin")
+      expect(skin2.save).not_to be_truthy
+      expect(skin2.errors[:title]).not_to be_empty
+    end
+
+    it "has a unique title ignoring case" do
+      expect(@skin.save).to be_truthy
+      skin2 = Skin.new(title: "test skin")
       expect(skin2.save).not_to be_truthy
       expect(skin2.errors[:title]).not_to be_empty
     end

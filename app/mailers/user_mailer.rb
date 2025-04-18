@@ -30,9 +30,9 @@ class UserMailer < ApplicationMailer
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id)
     mail(
-         to: @user.email,
-         subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
-    )
+      to: @user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
+       )
   end
 
   # We use an options hash here, instead of keyword arguments, to avoid
@@ -57,14 +57,10 @@ class UserMailer < ApplicationMailer
               else
                 :unrevealed
               end
-
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: t(".subject.#{@status}",
-                   app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: t(".subject.#{@status}", app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends an invitation to join the archive
@@ -72,7 +68,7 @@ class UserMailer < ApplicationMailer
   # TODO refactor to make it asynchronous
   def invitation(invitation_id)
     @invitation = Invitation.find(invitation_id)
-    @user_name = (@invitation.creator.is_a?(User) ? @invitation.creator.login : '')
+    @user_name = (@invitation.creator.is_a?(User) ? @invitation.creator.login : "")
     mail(
       to: @invitation.invitee_email,
       subject: t("user_mailer.invitation.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -92,22 +88,14 @@ class UserMailer < ApplicationMailer
   end
 
   # Notifies a writer that their imported works have been claimed
-  def claim_notification(creator_id, claimed_work_ids, is_user=false)
-    if is_user
-      creator = User.find(creator_id)
-      locale = creator.preference.locale.iso
-    else
-      creator = ExternalAuthor.find(creator_id)
-      locale = I18n.default_locale
-    end
+  def claim_notification(creator_id, claimed_work_ids)
+    creator = User.find(creator_id)
     @external_email = creator.email
     @claimed_works = Work.where(id: claimed_work_ids)
-    I18n.with_locale(locale) do
-      mail(
-        to: creator.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Works uploaded"
-      )
-    end
+    mail(
+      to: creator.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends a batched subscription notification
@@ -116,6 +104,7 @@ class UserMailer < ApplicationMailer
     # then the resque job does not error and we just silently fail.
     @subscription = Subscription.find_by(id: subscription_id)
     return if @subscription.nil?
+
     creation_entries = JSON.parse(entries)
     @creations = []
     # look up all the creations that have generated updates for this subscription
@@ -123,13 +112,14 @@ class UserMailer < ApplicationMailer
       creation_type, creation_id = creation_info.split("_")
       creation = creation_type.constantize.where(id: creation_id).first
       next unless creation && creation.try(:posted)
-      next if (creation.is_a?(Chapter) && !creation.work.try(:posted))
-      next if creation.pseuds.any? {|p| p.user == User.orphan_account} # no notifications for orphan works
+      next if creation.is_a?(Chapter) && !creation.work.try(:posted)
+      next if creation.pseuds.any? { |p| p.user == User.orphan_account } # no notifications for orphan works
+
       # TODO: allow subscriptions to orphan_account to receive notifications
 
       # If the subscription notification is for a user subscription, we don't
       # want to send updates about works that have recently become anonymous.
-      if @subscription.subscribable_type == 'User'
+      if @subscription.subscribable_type == "User"
         next if Subscription.anonymous_creation?(creation)
       end
 
@@ -142,9 +132,7 @@ class UserMailer < ApplicationMailer
     @creations.uniq!
 
     subject = @subscription.subject_text(@creations.first)
-    if @creations.count > 1
-      subject += " and #{@creations.count - 1} more"
-    end
+    subject += " and #{@creations.count - 1} more" if @creations.count > 1
     I18n.with_locale(@subscription.user.preference.locale.iso) do
       mail(
         to: @subscription.user.email,
@@ -157,12 +145,10 @@ class UserMailer < ApplicationMailer
   def invite_increase_notification(user_id, total)
     @user = User.find(user_id)
     @total = total
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: "#{t 'user_mailer.invite_increase_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME}"
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Emails a user to say that their request for invitation codes has been declined
@@ -170,40 +156,36 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @total = total
     @reason = reason
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        subject: t('user_mailer.invite_request_declined.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
-  # TODO: This may be sent to multiple users simultaneously. We need to ensure
-  # each user gets the email for their preferred locale.
-  def collection_notification(collection_id, subject, message)
+  def collection_notification(collection_id, subject, message, email)
     @message = message
     @collection = Collection.find(collection_id)
     mail(
-      to: @collection.get_maintainers_email,
+      to: email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
     )
   end
 
-  def invalid_signup_notification(collection_id, invalid_signup_ids)
+  def invalid_signup_notification(collection_id, invalid_signup_ids, email)
     @collection = Collection.find(collection_id)
     @invalid_signups = invalid_signup_ids
     mail(
-      to: @collection.get_maintainers_email,
+      to: email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Invalid sign-ups found"
     )
   end
 
   # This is sent at the end of matching, i.e., after assignments are generated.
   # It is also sent when assignments are regenerated.
-  def potential_match_generation_notification(collection_id)
+  def potential_match_generation_notification(collection_id, email)
     @collection = Collection.find(collection_id)
     mail(
-      to: @collection.get_maintainers_email,
+      to: email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential assignment generation complete"
     )
   end
@@ -211,15 +193,12 @@ class UserMailer < ApplicationMailer
   def challenge_assignment_notification(collection_id, assigned_user_id, assignment_id)
     @collection = Collection.find(collection_id)
     @assigned_user = User.find(assigned_user_id)
-    assignment = ChallengeAssignment.find(assignment_id)
-    @request = (assignment.request_signup || assignment.pinch_request_signup)
-    I18n.with_locale(@assigned_user.preference.locale.iso) do
-      mail(
-        to: @assigned_user.email,
-        # i18n-tasks-use t('user_mailer.challenge_assignment_notification.subject')
-        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
-      )
-    end
+    @assignment = ChallengeAssignment.find(assignment_id)
+    @request = @assignment.request_signup
+    mail(
+      to: @assigned_user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
+    )
   end
 
   # Asks a user to validate and activate their new account
@@ -228,7 +207,7 @@ class UserMailer < ApplicationMailer
     I18n.with_locale(@user.preference.locale.iso) do
       mail(
         to: @user.email,
-        subject: t('user_mailer.signup_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t("user_mailer.signup_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
       )
     end
   end
@@ -238,12 +217,10 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @old_email = old_email
     @new_email = new_email
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @old_email,
-        subject: t('user_mailer.change_email.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @old_email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   ### WORKS NOTIFICATIONS ###
@@ -306,24 +283,22 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
-    I18n.with_locale(@user.preference.locale.iso) do
-      subject = if @collection
-                  t("user_mailer.recipient_notification.subject.collection",
-                    app_name: ArchiveConfig.APP_SHORT_NAME,
-                    collection_title: @collection.title)
-                else
-                  t("user_mailer.recipient_notification.subject.no_collection",
-                    app_name: ArchiveConfig.APP_SHORT_NAME)
-                end
-      mail(
-        to: @user.email,
-        subject: subject
-      )
-    end
+    subject = if @collection
+                t("user_mailer.recipient_notification.subject.collection",
+                  app_name: ArchiveConfig.APP_SHORT_NAME,
+                  collection_title: @collection.title)
+              else
+                t("user_mailer.recipient_notification.subject.no_collection",
+                  app_name: ArchiveConfig.APP_SHORT_NAME)
+              end
+    mail(
+      to: @user.email,
+      subject: subject
+    )
   end
 
   # Emails a prompter to say that a response has been posted to their prompt
-  def prompter_notification(work_id, collection_id=nil)
+  def prompter_notification(work_id, collection_id = nil)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
     @work.challenge_claims.each do |claim|
@@ -340,21 +315,20 @@ class UserMailer < ApplicationMailer
   # Sends email to creators when a creation is deleted
   # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
   # TODO refactor to make it asynchronous by passing the content in the method
-  def delete_work_notification(user, work)
+  def delete_work_notification(user, work, deleter)
     @user = user
     @work = work
+    @deleter = deleter
     download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
     html = DownloadWriter.new(download).generate_html
     html = ::Mail::Encodings::Base64.encode(html)
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
     attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
 
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: user.email,
-        subject: t('user_mailer.delete_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends email to creators when a creation is deleted by an admin
@@ -368,13 +342,11 @@ class UserMailer < ApplicationMailer
     html = ::Mail::Encodings::Base64.encode(html)
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
     attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
-
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
+    
+    mail(
         to: user.email,
-        subject: t('user_mailer.admin_deleted_work_notification.subject', app_name: ArchiveConfig.APP_SHORT_NAME)
+        subject: t("user_mailer.admin_deleted_work_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
       )
-    end
   end
 
   # Sends email to creators when a creation is hidden by an admin
@@ -382,13 +354,10 @@ class UserMailer < ApplicationMailer
     @user = User.find_by(id: user_id)
     @work = Work.find_by(id: creation_id)
 
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: @user.email,
-        # i18n-tasks-use t('user_mailer.admin_hidden_work_notification.subject')
-        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   def admin_spam_work_notification(creation_id, user_id)
@@ -396,8 +365,8 @@ class UserMailer < ApplicationMailer
     @work = Work.find_by(id: creation_id)
 
     mail(
-        to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work was hidden as spam"
+      to: @user.email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work was hidden as spam"
     )
   end
 
@@ -407,13 +376,14 @@ class UserMailer < ApplicationMailer
   def feedback(feedback_id)
     feedback = Feedback.find(feedback_id)
     return unless feedback.email
+
     @summary = feedback.summary
     @comment = feedback.comment
     @username = feedback.username if feedback.username.present?
     @language = feedback.language
     mail(
       to: feedback.email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Support - #{strip_html_breaks_simple(feedback.summary)}"
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(feedback.summary))
     )
   end
 
@@ -429,7 +399,5 @@ class UserMailer < ApplicationMailer
       subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
     )
   end
-
-  protected
 
 end

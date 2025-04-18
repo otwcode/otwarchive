@@ -6,12 +6,12 @@
     <% if @tag.canonical || @tag.merger || can_wrangle? %>
       <ul class="navigation actions" role="navigation">
         <% if @tag.canonical || @tag.merger %>
-          <li><%= link_to ts('Works'), {:controller => :works, :action => :index, :tag_id => @tag} %></li>
-          <li><%= link_to ts('Bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %></li>
+          <li><%= link_to ts("Works"), tag_works_path(@tag) %></li>
+          <li><%= link_to ts("Bookmarks"), tag_bookmarks_path(@tag) %></li>
         <% end %>
     	<% if can_wrangle? %>
-      	  <li><%= link_to ts('Edit'), {:controller => :tags, :action => :edit, :id => @tag} %> </li>
-      	  <li><%= tag_comment_link(@tag) %></li>
+          <li><%= link_to ts("Edit"), edit_tag_path(@tag) %> </li>
+          <li><%= tag_comment_link(@tag) %></li>
           <li class="reindex"><%= link_to ts("Troubleshoot"), tag_troubleshooting_path(@tag) %> </li>
         <% end %>
       </ul>
@@ -24,12 +24,13 @@
   <!--main content-->
   <p><%= ts("This tag belongs to the %{tag_class} Category.", :tag_class => @tag.class::NAME) %>
   <% if @tag.canonical %>
+    <%= t(".canonical_html",
+          canonical_tag_link: link_to(t(".canonical_tag"), archive_faq_path("glossary", anchor: "canonicaldef")),
+          filter_works_link: link_to(t(".filter_works"), tag_works_path(@tag)),
+          filter_bookmarks_link: link_to(t(".filter_bookmarks"), tag_bookmarks_path(@tag))) %>
     <% if @tag.is_a?(Fandom) %>
-      <%= t(".list_fandom_tags_html", fandom_relationship_tags_link: link_to(t(".fandom_relationship_tags"), fandom_path(@tag.name))) %>
+      <%= t(".list_fandom_tags_html", fandom_relationship_tags_link: link_to(t(".fandom_relationship_tags"), fandom_path(@tag))) %>
     <% end %>
-    <%= ts("It's a common tag. You can use it to ") %> 
-    <%= link_to ts('filter works'), {:controller => :works, :action => :index, :tag_id => @tag} %> <%= ts('and to') %> 
-    <%= link_to ts('filter bookmarks'), {:controller => :bookmarks, :action => :index, :tag_id => @tag} %>.
   <% end %>
   </p>
   
@@ -82,7 +83,7 @@
   <% unless @tag.direct_sub_tags.blank? %>
   <div class="sub listbox group">
     <h3 class="heading"><%= ts('Subtags') %>:</h3>
-    <% cache "tag-#{@tag.cache_key}-subtags-v2", expires_in: 24.hours, skip_digest: true do %>
+    <% cache "tag-#{@tag.cache_key}-subtags-v3", expires_in: 24.hours, skip_digest: true do %>
       <%= sub_tag_tree(@tag) %>
     <% end %>
   </div>

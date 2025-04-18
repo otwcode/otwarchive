@@ -28,9 +28,73 @@ describe Comment do
           .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
+
+    context "when submitting comment to Akismet" do
+      subject { create(:comment) }
+
+      it "has user_role \"user\"" do
+        expect(subject.akismet_attributes[:user_role]).to eq("user")
+      end
+
+      it "has comment_author as the user's username" do
+        expect(subject.akismet_attributes[:comment_author]).to eq(subject.pseud.user.login)
+      end
+
+      it "has comment_author_email as the user's email" do
+        expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.pseud.user.email)
+      end
+
+      context "when the comment is from a guest" do
+        subject { create(:comment, :by_guest) }
+
+        it "has user_role \"guest\"" do
+          expect(subject.akismet_attributes[:user_role]).to eq("guest")
+        end
+
+        it "has comment_author as the commenter's name" do
+          expect(subject.akismet_attributes[:comment_author]).to eq(subject.name)
+        end
+  
+        it "has comment_author_email as the commenter's email" do
+          expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.email)
+        end
+      end
+
+      context "when the commentable is a chapter" do
+        it "has comment_type \"fanwork-comment\"" do
+          expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
+        end
+      end
+
+      context "when the commentable is an admin post" do
+        subject { create(:comment, :on_admin_post) }
+
+        it "has comment_type \"comment\"" do
+          expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+        end
+      end
+
+      context "when the commentable is a comment" do
+        context "when the comment is on a chapter" do
+          subject { create(:comment, commentable: create(:comment)) }
+
+          it "has comment_type \"fanwork-comment\"" do
+            expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
+          end
+        end
+
+        context "when the comment is on an admin post" do
+          subject { create(:comment, commentable: create(:comment, :on_admin_post)) }
+
+          it "has comment_type \"comment\"" do
+            expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+          end
+        end
+      end
+    end
   end
 
-  context "with an existing comment from the same user" do
+  context "with an existing comment from the same user" do 
     let(:first_comment) { create(:comment) }
 
     let(:second_comment) do
@@ -38,9 +102,10 @@ describe Comment do
       Comment.new(first_comment.attributes.slice(*attributes))
     end
 
-    it "should be invalid if exactly duplicated" do
+    it "should be invalid if exactly duplicated" do 
       expect(second_comment.valid?).to be_falsy
       expect(second_comment.errors.attribute_names).to include(:comment_content)
+      expect(second_comment.errors.full_messages.first).to include("You've already")
     end
 
     it "should not be invalid if in the process of being deleted" do
@@ -376,6 +441,95 @@ describe Comment do
             comment.destroy
           end.not_to change { tag_wrangler.reload.last_wrangling_activity.updated_at }
         end
+      end
+    end
+  end
+
+  describe "#use_image_safety_mode?" do
+    let(:admin_post_comment) { create(:comment, :on_admin_post) }
+    let(:chapter_comment) { create(:comment) }
+    let(:tag_comment) { create(:comment, :on_tag) }
+    let(:admin_post_reply) { create(:comment, commentable: admin_post_comment) }
+    let(:chapter_reply) { create(:comment, commentable: chapter_comment) }
+    let(:tag_reply) { create(:comment, commentable: tag_comment) }
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is empty" do
+      it "returns false for comments and replies for all parent types" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to something that doesn't match an existing parent type" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Work"]) }
+
+      it "returns false for comments and replies for all parent types" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to AdminPost" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["AdminPost"]) }
+
+      it "returns true for AdminPost comments and replies and false for Chapter and Tag comments and replies" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_truthy
+        expect(admin_post_reply.use_image_safety_mode?).to be_truthy
+
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to Chapter" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Chapter"]) }
+
+      it "returns true for Chapter comments and false for AdminPost and Tag comments and replies" do
+        expect(chapter_comment.use_image_safety_mode?).to be_truthy
+        expect(chapter_reply.use_image_safety_mode?).to be_truthy
+
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(tag_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(tag_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE is set to Tag" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(["Tag"]) }
+
+      it "returns true for Tag comments and replies and false for AdminPost and Chapter comments and replies" do
+        expect(tag_comment.use_image_safety_mode?).to be_truthy
+        expect(tag_reply.use_image_safety_mode?).to be_truthy
+
+        expect(admin_post_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(admin_post_reply.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE includes multiple parent types" do
+      before { allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(%w[AdminPost Tag]) }
+
+      it "returns true for comments and replies on the listed parent types and false for the other" do
+        expect(admin_post_comment.use_image_safety_mode?).to be_truthy
+        expect(tag_comment.use_image_safety_mode?).to be_truthy
+        expect(admin_post_reply.use_image_safety_mode?).to be_truthy
+        expect(tag_reply.use_image_safety_mode?).to be_truthy
+
+        expect(chapter_comment.use_image_safety_mode?).to be_falsey
+        expect(chapter_reply.use_image_safety_mode?).to be_falsey
       end
     end
   end

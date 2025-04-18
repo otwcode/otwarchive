@@ -175,7 +175,7 @@ Feature: Edit Works
     Then I should see "Lead Author's Work Skin" within "#work_work_skin_id"
       And I should see "Coauthor's Work Skin" within "#work_work_skin_id"
       And I should not see "Random User's Work Skin" within "#work_work_skin_id"
-    When I select "Coauthor's Work Skin" from "Select Work Skin"
+    When I select "Coauthor's Work Skin" from "Select work skin"
       And I press "Post"
     Then I should see "Work was successfully updated"
 
@@ -230,7 +230,8 @@ Feature: Edit Works
     Then I should not see "F/F"
 
   Scenario: When editing a work, the title field should not escape HTML
-    Given I have a work "What a title! :< :& :>"
+    Given the work "What a title! :< :& :>" by "author"
+      And I am logged in as "author"
       And I go to the works page
       And I follow "What a title! :< :& :>"
       And I follow "Edit"

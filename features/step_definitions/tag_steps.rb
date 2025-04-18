@@ -84,10 +84,10 @@ Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, f
   fandom.add_association media
 end
 
-Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, character|
-  char = Character.find_or_create_by(name: character)
+Given "I add the fandom {string} to the tag/character {string}" do |fandom, tag|
+  tag = Tag.find_or_create_by(name: tag)
   fand = Fandom.find_or_create_by_name(fandom)
-  char.add_association(fand)
+  tag.add_association(fand)
 end
 
 Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
@@ -125,7 +125,6 @@ Given /^"([^\"]*)" is a metatag of the (\w+) "([^\"]*)"$/ do |metatag, tag_type,
 end
 
 Given /^I am logged in as a tag wrangler$/ do
-  step "I start a new session"
   username = "wrangler"
   step %{I am logged in as "#{username}"}
   user = User.find_by(login: username)
@@ -157,7 +156,6 @@ end
 
 Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
-  step "I start a new session"
 
   n_comments = 3 if n_comments.blank? || n_comments.zero?
   FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
@@ -174,7 +172,6 @@ end
 
 Given /^a period-containing tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
-  step "I start a new session"
 
   n_comments = 3 if n_comments.blank? || n_comments.zero?
   FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
@@ -197,7 +194,7 @@ Given /^the tag wrangling setup$/ do
 end
 
 Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "tag_wrangling" admin}
   visit new_wrangling_guideline_path
   if title
     fill_in("Guideline text", with: "This is a page about how we wrangle things.")
@@ -219,6 +216,11 @@ end
 Given /^the tag "([^"]*)" does not exist$/ do |tag_name|
   tag = Tag.find_by_name(tag_name)
   tag.destroy if tag.present?
+end
+
+Given "a zero width space tag exists" do
+  blank_tag = FactoryBot.build(:character, name: ["200B".hex].pack("U"))
+  blank_tag.save!(validate: false)
 end
 
 ### WHEN
@@ -420,6 +422,11 @@ end
 Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname, tag_type|
   tag = Tag.find_by(name: tagname)
   assert tag.type == tag_type
+end
+
+Then "the {string} tag should be an unsorted tag" do |tagname|
+  tag = Tag.find_by(name: tagname)
+  expect(tag).to be_a(UnsortedTag)
 end
 
 Then(/^the "([^"]*)" tag should (be|not be) canonical$/) do |tagname, canonical|

@@ -49,7 +49,7 @@ Feature: Invite queue management
     When I am on the homepage
       And all emails have been delivered
       And I follow "Get an Invitation"
-    Then I should see "We are sending out 10 invitations per day."
+    Then I should see "We are sending out 10 invitations every 12 hours."
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
     Then I should see "You've been added to our queue"
@@ -57,7 +57,7 @@ Feature: Invite queue management
     # check your place in the queue - invalid address
     When I check how long "testttt@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Request Status"
-      And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
+      And I should see "Sorry, we can't find the email address you entered."
       And I should not see "You are currently number"
 
     # check your place in the queue - correct address
@@ -72,6 +72,7 @@ Feature: Invite queue management
     Then I should not see "Request an invitation"
       And I should not see "invite_request_email"
       And I should see "New invitation requests are currently closed."
+      And I should see "There are 0 people remaining on the waiting list."
       And I should not see "Add me to the list"
 
   Scenario: Can still check status when queue is off
@@ -98,13 +99,13 @@ Feature: Invite queue management
     Then 1 email should be delivered to test@archiveofourown.org
     When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Request Status"
-      And I should see "If you can't find it, your invitation may have already been emailed to that address;"
+      And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
 
     # invite can be used
     When I am logged in as an admin
       And I follow "Invitations"
       And I fill in "track_invitation_invitee_email" with "test@archiveofourown.org"
-      And I press "Go"
+      And I press "Search" within "form.invitation.simple.search"
     Then I should see "Sender queue"
     When I follow "copy and use"
     Then I should see "You are already logged in!"
@@ -155,3 +156,29 @@ Feature: Invite queue management
       And I fill in "invite_request_email" with "fred@bedrock.com"
       And I press "Add me to the list"
     Then I should see "Email is already being used by an account holder."
+
+  Scenario: Users can resend their invitation after enough time has passed
+    Given account creation is enabled
+      And the invitation queue is enabled
+      And account creation requires an invitation
+      And the invite_from_queue_at is yesterday
+      And an invitation request for "invitee@example.org"
+    When the scheduled check_invite_queue job is run
+    Then 1 email should be delivered to invitee@example.org
+
+    When I check how long "invitee@example.org" will have to wait in the invite request queue
+    Then I should see "Invitation Request Status"
+      And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
+      And I should not see "Because your invitation was sent more than 24 hours ago, you can have your invitation resent."
+      And I should not see "Resend Invitation"
+
+    When all emails have been delivered
+      And it is currently 25 hours from now
+      And I check how long "invitee@example.org" will have to wait in the invite request queue
+    Then I should see "Invitation Request Status"
+      And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
+      And I should see "Because your invitation was sent more than 24 hours ago, you can have your invitation resent."
+      And I should see "Resend Invitation"
+
+    When I press "Resend Invitation"
+    Then 1 email should be delivered to invitee@example.org

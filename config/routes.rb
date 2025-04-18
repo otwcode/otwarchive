@@ -53,6 +53,7 @@ Rails.application.routes.draw do
   get '/422', to: 'errors#422'
   get '/500', to: 'errors#500'
   get '/auth_error', to: 'errors#auth_error'
+  get "/timeout_error", to: "errors#timeout_error"
 
   #### DOWNLOADS ####
 
@@ -80,6 +81,7 @@ Rails.application.routes.draw do
     collection do
       get :manage
       get :status
+      post :resend
     end
   end
 
@@ -164,7 +166,12 @@ Rails.application.routes.draw do
 
   #### ADMIN ####
   resources :admin_posts do
-    resources :comments
+    resources :comments do
+      collection do
+        get :unreviewed
+        put :review_all
+      end
+    end
   end
 
   namespace :admin do
@@ -191,6 +198,8 @@ Rails.application.routes.draw do
       member do
         put :hide
         put :set_spam
+        get :confirm_remove_pseud
+        put :remove_pseud
       end
     end
     resources :users, controller: "admin_users", only: [:index, :show] do
@@ -199,6 +208,7 @@ Rails.application.routes.draw do
         post :destroy_user_creations
         post :activate
         get :check_user
+        get :creations
       end
       collection do
         get :bulk_search
@@ -304,7 +314,12 @@ Rails.application.routes.draw do
     resources :signups, controller: "challenge_signups", only: [:index]
     resources :skins, only: [:index]
     resources :stats, only: [:index]
-    resources :subscriptions, only: [:index, :create, :destroy]
+    resources :subscriptions, only: [:index, :create, :destroy] do
+      collection do
+        get :confirm_delete_all
+        post :delete_all
+      end
+    end
     resources :tag_sets, controller: "owned_tag_sets", only: [:index]
     resources :works do
       collection do
@@ -613,8 +628,10 @@ Rails.application.routes.draw do
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
   get 'support' => 'feedbacks#new', as: 'new_feedback_report'
-  get 'tos' => 'home#tos'
-  get 'tos_faq' => 'home#tos_faq'
+  get "content" => "home#content"
+  get "privacy" => "home#privacy"
+  get "tos" => "home#tos"
+  get "tos_faq" => "home#tos_faq"
   get 'unicorn_test' => 'home#unicorn_test'
   get 'dmca' => 'home#dmca'
   get 'diversity' => 'home#diversity'
@@ -649,9 +666,6 @@ Rails.application.routes.draw do
   # can be refactored to not rely on their existence.
   #
   # Note written on August 1, 2017 during upgrade to Rails 5.1.
-  get '/bookmarks/fetch_recent/:id' => 'bookmarks#fetch_recent', as: :fetch_recent_bookmarks
-  get '/bookmarks/hide_recent/:id' => 'bookmarks#hide_recent', as: :hide_recent_bookmarks
-
   get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
   get '/user_invite_requests/update' => 'user_invite_requests#update'
 

@@ -69,6 +69,7 @@ Feature: Work Drafts
     Then I should see "Drafts (1)"
     When I follow "Drafts (1)"
     Then I should see "draft to post"
+      And the page title should include "drafter - Drafts"
       And I should see "Post Draft" within "#main .own.work.blurb .actions"
       And I should see "Delete Draft" within "#main .own.work.blurb .actions"
     When I follow "Post Draft"
@@ -145,7 +146,8 @@ Feature: Work Drafts
         And I fill in "content" with "Help there are unicorns everywhere"
         And I press "Preview"
         And I press "Save As Draft"
-      When I go to my drafts page
+      When I follow "My Dashboard"
+        And I follow "Drafts ("
         And I follow "Post Draft"
       Then I should be on the work "Unicorns are everywhere"
         And I should see "Words:5"

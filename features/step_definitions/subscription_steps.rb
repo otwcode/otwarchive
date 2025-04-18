@@ -29,6 +29,6 @@ When /^"([^\"]*)" subscribes to (author|work|series) "([^\"]*)"$/ do |user, type
   end
   step %{I press "Subscribe"}
   step %{I should see "You are now following #{name}. If you'd like to stop receiving email updates, you can unsubscribe from your Subscriptions page."}
-  step %{I go to my subscriptions page}
+  step %{I go to the subscriptions page for "#{user}"}
   step %{I should see an "Unsubscribe from #{name}" button}
 end

@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
-  include Pundit
+  include ActiveStorage::SetCurrent
+  include Pundit::Authorization
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
 
@@ -24,6 +25,12 @@ class ApplicationController < ActionController::Base
     redirect_to '/404'
   end
 
+  rescue_from Rack::Timeout::RequestTimeoutException, with: :raise_timeout
+  
+  def raise_timeout
+    redirect_to timeout_error_path
+  end
+
   helper :all # include all helpers, all the time
 
   include HtmlCleaner
@@ -39,6 +46,30 @@ class ApplicationController < ActionController::Base
     sanitize_params(params.to_unsafe_h).each do |key, value|
       params[key] = transform_sanitized_hash_to_ac_params(key, value)
     end
+  end
+
+  include Pagy::Backend
+  def pagy(collection, **vars)
+    pagy_overflow_handler do
+      super
+    end
+  end
+
+  def pagy_query_result(query_result, **vars)
+    pagy_overflow_handler do
+      Pagy.new(
+        count: query_result.total_entries,
+        page: query_result.current_page,
+        limit: query_result.per_page,
+        **vars
+      )
+    end
+  end
+
+  def pagy_overflow_handler(*)
+    yield
+  rescue Pagy::OverflowError
+    nil
   end
 
   def display_auth_error
@@ -176,7 +207,7 @@ public
   before_action :load_tos_popup
   def load_tos_popup
     # Integers only, YYYY-MM-DD format of date Board approved TOS
-    @current_tos_version = 20180523
+    @current_tos_version = 2024_11_19 # rubocop:disable Style/NumericLiterals
   end
 
   # store previous page in session to make redirecting back possible
@@ -269,12 +300,16 @@ public
   def admin_only_access_denied
     respond_to do |format|
       format.html do
-        flash[:error] = ts("Sorry, only an authorized admin can access the page you were trying to reach.")
+        flash[:error] = t("admin.access.page_access_denied") 
         redirect_to root_path
       end
       format.json do
-        errors = [ts("Sorry, only an authorized admin can do that.")]
+        errors = [t("admin.access.action_access_denied")]
         render json: { errors: errors }, status: :forbidden
+      end
+      format.js do
+        flash[:error] = t("admin.access.page_access_denied") 
+        render js: "window.location.href = '#{root_path}';" 
       end
     end
   end
@@ -305,7 +340,7 @@ public
 
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
-  before_action :set_current_user
+  around_action :set_current_user
   def set_current_user
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
@@ -315,6 +350,11 @@ public
                                expires_in: 2.hours,
                                race_condition_ttl: 5) { "#{current_user.subscriptions.count}, #{current_user.visible_work_count}, #{current_user.bookmarks.count}, #{current_user.owned_collections.count}, #{current_user.challenge_signups.count}, #{current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count}, #{current_user.unposted_works.size}" }.split(",").map(&:to_i)
     end
+
+    yield
+
+    User.current_user = nil
+    @current_user = nil
   end
 
   def load_collection
@@ -390,9 +430,18 @@ public
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended?
-        flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+        suspension_end = current_user.suspended_until
+
+        # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+        unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
+
+        # If the stated suspension end date is after the unban threshold we need to advance a day 
+        suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
+        localized_suspension_end = view_context.date_in_zone(suspension_end)
+        flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+        
       else
-        flash[:error] = t("ban_notice", default: "Your account has been banned. You are not permitted to add or edit archive content. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.").html_safe
+        flash[:error] = t("users.status.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
       end
       redirect_to current_user
     end
@@ -401,8 +450,18 @@ public
   # Prevents temporarily suspended users from deleting content
   def check_user_not_suspended
     return unless current_user.is_a?(User) && current_user.suspended?
+
+    suspension_end = current_user.suspended_until
+
+    # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+    unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
+
+    # If the stated suspension end date is after the unban threshold we need to advance a day 
+    suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
+    localized_suspension_end = view_context.date_in_zone(suspension_end)
     
-    flash[:error] = t("suspension_notice", default: "Your account has been suspended until %{suspended_until}. You may not add or edit content until your suspension has been resolved. Please <a href=\"#{new_abuse_report_path}\">contact Abuse</a> for more information.", suspended_until: localize(current_user.suspended_until)).html_safe
+    flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+
     redirect_to current_user
   end
 

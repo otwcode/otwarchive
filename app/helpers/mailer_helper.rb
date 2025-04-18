@@ -155,7 +155,7 @@ module MailerHelper
     end
   end
 
-  def work_metadata_label(text)
+  def metadata_label(text)
     text.html_safe + t("mailer.general.metadata_label_indicator")
   end
 
@@ -166,10 +166,8 @@ module MailerHelper
     "#{work_tag_metadata_label(tags)}#{work_tag_metadata_list(tags)}"
   end
 
-  # TODO: We're using this for labels in set_password_notification, too. Let's
-  # take the "work" out of the name.
-  def style_work_metadata_label(text)
-    style_bold(work_metadata_label(text))
+  def style_metadata_label(text)
+    style_bold(metadata_label(text))
   end
 
   # Spacing is dealt with in locale files, e.g. " : " for French.
@@ -181,22 +179,25 @@ module MailerHelper
   end
 
   def commenter_pseud_or_name_link(comment)
+    return style_bold(t("roles.anonymous_creator")) if comment.by_anonymous_creator?
+
     if comment.comment_owner.nil?
-      t("roles.guest_commenter_name_html", name: style_bold(comment.comment_owner_name), role: style_role(t("roles.guest_with_parens")))
-    elsif comment.by_anonymous_creator?
-      style_bold(t("roles.anonymous_creator"))
+      t("roles.commenter_name.html", name: style_bold(comment.comment_owner_name), role_with_parens: style_role(t("roles.guest_with_parens")))
     else
-      style_pseud_link(comment.pseud)
+      role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
+      pseud_link = style_link(comment.pseud.byline, user_pseud_url(comment.user, comment.pseud))
+      t("roles.commenter_name.html", name: tag.strong(pseud_link), role_with_parens: style_role(role))
     end
   end
 
   def commenter_pseud_or_name_text(comment)
+    return t("roles.anonymous_creator") if comment.by_anonymous_creator?
+
     if comment.comment_owner.nil?
-      t("roles.guest_commenter_name_text", name: comment.comment_owner_name, role: t("roles.guest_with_parens"))
-    elsif comment.by_anonymous_creator?
-      t("roles.anonymous_creator")
+      t("roles.commenter_name.text", name: comment.comment_owner_name, role_with_parens: t("roles.guest_with_parens"))
     else
-      text_pseud(comment.pseud)
+      role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
+      t("roles.commenter_name.text", name: text_pseud(comment.pseud), role_with_parens: role)
     end
   end
 

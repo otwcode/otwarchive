@@ -8,7 +8,7 @@
 # webserver with the command:
 #
 # ```
-# docker-compose up -d web
+# docker compose up -d web
 # ```
 #
 # Once it is running, it will be visible at http://localhost:3000/
@@ -18,17 +18,16 @@
 # You can run tests like this:
 #
 # ```
-# docker-compose run --rm test bundle exec cucumber features/other_a/autocomplete.feature
+# docker compose run --rm test bundle exec cucumber features/other_a/autocomplete.feature
 # ```
 
-version: "3"
 volumes:
   my-datavolume:
   redis-data:
   esdata1:
 services:
   db:
-    image: mariadb:10.5.4-focal 
+    image: mariadb:10.5.4-focal
     environment:
       - MYSQL_ROOT_PASSWORD=change_me
     ports:
@@ -47,7 +46,7 @@ services:
     volumes:
       - redis-data:/var/lib/redis:rw
   es:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.26
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -74,6 +73,8 @@ services:
       dockerfile: ./config/docker/Dockerfile
     environment:
       - RAILS_ENV=development
+      - GITPOD_WORKSPACE_ID=${GITPOD_WORKSPACE_ID:-}
+      - GITPOD_WORKSPACE_CLUSTER_HOST=${GITPOD_WORKSPACE_CLUSTER_HOST:-}
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/otwa
@@ -84,10 +85,13 @@ services:
       - redis
       - es
       - mc
+    # Make `docker compose attach web` work for debugging
+    stdin_open: true
+    tty: true
   chrome:
     profiles:
       - test
-    image: selenium/standalone-chrome
+    image: selenium/standalone-chromium
     ports:
       - "4444:4444"
   test:

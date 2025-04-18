@@ -61,7 +61,7 @@ Feature: Delete a comment
     Given the work "Testing"
       And I am logged in as "commenter"
 
-    When I post a deeply nested comment thread on "Testing"
+    When "commenter" posts a deeply nested comment thread on "Testing"
       And I view the work "Testing" with comments
     Then I should see "(2 more comments in this thread)"
       And I should not see the deeply nested comments

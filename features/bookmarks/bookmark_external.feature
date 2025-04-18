@@ -105,7 +105,7 @@ Feature: Create bookmarks of external works
     Given a fandom exists with name: "Testing BEW Button", canonical: true
       And I am logged in as "markie" with password "theunicorn"
       And I create the collection "Testing BEW Collection"
-    When I go to my bookmarks page
+    When I go to markie's bookmarks page
     Then I should see "Bookmark External Work"
     When I go to the bookmarks page
     Then I should see "Bookmark External Work"

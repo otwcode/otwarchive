@@ -354,7 +354,7 @@ Scenario: Delete bookmarks of a work and a series
   And I press "Yes, Delete Bookmark"
     And all indexing jobs have been run
   Then I should see "Bookmark was successfully deleted."
-  When I go to my bookmarks page
+  When I go to markymark's bookmarks page
   Then I should see "A Mighty Duck2 the sequel"
   When I log out
     And I am logged in as "wahlly"
@@ -363,7 +363,7 @@ Scenario: Delete bookmarks of a work and a series
   Then I should see "A Mighty Duck2 the sequel was deleted."
   When I log out
     And I am logged in as "markymark"
-    And I go to my bookmarks page
+    And I go to markymark's bookmarks page
   Then I should see "This has been deleted, sorry!"
     And I follow "Edit"
     And I check "bookmark_private"
@@ -390,7 +390,7 @@ Scenario: Editing a bookmark's tags should expire the bookmark cache
 Scenario: User can't bookmark same work twice
   Given the work "Haven"
     And I am logged in as "Mara"
-    And I add the pseud "Audrey"
+    And "Mara" creates the pseud "Audrey"
     And I bookmark the work "Haven" as "Mara"
   When I bookmark the work "Haven" as "Mara" from new bookmark page
   Then I should see "You have already bookmarked that."
@@ -409,27 +409,6 @@ Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't o
   When I attempt to transfer my bookmark of "Random Work" to a pseud that is not mine
   Then I should not see "Bookmark was successfully updated"
     And I should see "You can't bookmark with that pseud."
-
-@javascript
-Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
-  Given the work "Popular Work"
-    And I am logged in as "bookmarker1"
-    And I bookmark the work "Popular Work" with the note "Love it"
-    And I log out
-    And I am logged in as "bookmarker2"
-    And I bookmark the work "Popular Work"
-    And the statistics for the work "Popular Work" are updated
-  When I am on the bookmarks page
-    # Follow the link for bookmarker2's bookmark, which is more recent.
-    And I follow "Show Most Recent Bookmarks" within ".bookmark.blurb:first-child"
-  Then I should see "bookmarker1" within ".bookmark.blurb:first-child .recent"
-    And I should see "Love it" within ".bookmark.blurb:first-child .recent"
-    And I should see "Hide Most Recent Bookmarks" within ".bookmark.blurb:first-child .recent"
-  When I follow "Hide Most Recent Bookmarks" within ".bookmark.blurb:first-child .recent"
-  # .recent has been hidden, we should not see its contents anymore.
-  Then I should not see "bookmarker1" within ".bookmark.blurb:first-child"
-    And I should not see "Love it" within ".bookmark.blurb:first-child"
-    And I should see "Show Most Recent Bookmarks" within ".bookmark.blurb:first-child"
 
 Scenario: A bookmark with duplicate tags other than capitalization has only first version of tag saved
   Given I am logged in as "bookmark_user"
@@ -469,3 +448,13 @@ Scenario: A bookmark with duplicate tags other than capitalization has only firs
       And I fill in "Relationships" with "Relationship 1, Relationship 2"
       And I press "Create"
     Then I should see "Fandom, relationship, and character tags must not add up to more than 5. You have entered 6 of these tags, so you must remove 1 of them."
+
+  Scenario: Archivists can add bookmarks to collections
+    Given I have an archivist "archivist"
+      And I am logged in as "archivist"
+      And I create the collection "My Collection" with name "MyCollection"
+    When I open a bookmarkable work
+      And I follow "Bookmark"
+      And I fill in "bookmark_collection_names" with "MyCollection"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"

@@ -1,10 +1,10 @@
 class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
-  before_action :check_user_status, only: [:edit, :update]
+  before_action :check_user_status, only: [:edit, :update, :change_username, :changed_username]
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
-  before_action :check_ownership, except: [:activate, :delete_confirmation, :edit, :index, :show, :update]
-  before_action :check_ownership_or_admin, only: [:edit, :update]
+  before_action :check_ownership, except: [:activate, :change_username, :changed_username, :delete_confirmation, :edit, :index, :show, :update]
+  before_action :check_ownership_or_admin, only: [:change_username, :changed_username, :edit, :update]
   skip_before_action :store_location, only: [:end_first_login]
 
   def load_user
@@ -39,6 +39,19 @@ class UsersController < ApplicationController
     authorize @user.profile if logged_in_as_admin?
   end
 
+  def change_email
+    @page_subtitle = t(".browser_title")
+  end
+
+  def change_password
+    @page_subtitle = t(".browser_title")
+  end
+
+  def change_username
+    authorize @user if logged_in_as_admin?
+    @page_subtitle = t(".browser_title")
+  end
+
   def changed_password
     unless params[:password] && reauthenticate
       render(:change_password) && return
@@ -58,20 +71,27 @@ class UsersController < ApplicationController
   end
 
   def changed_username
-    render(:change_username) && return unless params[:new_login].present?
+    authorize @user if logged_in_as_admin?
+    render(:change_username) && return if params[:new_login].blank?
 
     @new_login = params[:new_login]
 
-    unless @user.valid_password?(params[:password])
-      flash[:error] = ts('Your password was incorrect')
+    unless logged_in_as_admin? || @user.valid_password?(params[:password])
+      flash[:error] = t(".user.incorrect_password")
       render(:change_username) && return
     end
 
     @user.login = @new_login
+    @user.ticket_number = params[:ticket_number]
 
     if @user.save
-      flash[:notice] = ts('Your user name has been successfully updated.')
-      redirect_to @user
+      if logged_in_as_admin?
+        flash[:notice] = t(".admin.successfully_updated")
+        redirect_to admin_user_path(@user)
+      else
+        flash[:notice] = t(".user.successfully_updated")
+        redirect_to @user
+      end
     else
       @user.reload
       render :change_username
@@ -162,7 +182,9 @@ class UsersController < ApplicationController
 
       if @user.save
         flash.now[:notice] = ts("Your email has been successfully updated")
-        UserMailer.change_email(@user.id, old_email, new_email).deliver_later
+        I18n.with_locale(@user.preference.locale.iso) do
+          UserMailer.change_email(@user.id, old_email, new_email).deliver_later
+        end
       else
         # Make sure that on failure, the form still shows the old email as the "current" one.
         @user.email = old_email
@@ -315,7 +337,7 @@ class UsersController < ApplicationController
       use_default = params[:use_default] == 'true' || params[:sole_author] == 'orphan_pseud'
 
       Creatorship.orphan(pseuds, works, use_default)
-      Collection.orphan(pseuds, @sole_owned_collections, use_default)
+      Collection.orphan(pseuds, @sole_owned_collections, default: use_default)
     elsif params[:sole_author] == 'delete'
       # Deletes works where user is sole author
       @sole_authored_works.each(&:destroy)

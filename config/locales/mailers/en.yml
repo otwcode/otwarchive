@@ -31,19 +31,18 @@ en:
       guest:
         one: a guest
         other: "%{count} guests"
-      html:
-        left_kudos:
+      left_kudos:
+        html:
           one: "%{givers_list} left kudos on %{commentable_link}."
           other: "%{givers_list} left kudos on %{commentable_link}."
-        single_guest:
-          giver_list: A guest
-          left_kudos: "%{giver_list} left kudos on %{commentable_link}."
-      subject: "[%{app_name}] You've got kudos!"
-      text:
-        left_kudos:
+        text:
           one: '%{givers_list} left kudos on "%{commentable_title}" (%{commentable_url}).'
           other: '%{givers_list} left kudos on "%{commentable_title}" (%{commentable_url}).'
-        single_guest: A guest left kudos on "%{commentable_title}" (%{commentable_url}).
+      single_guest:
+        giver: A guest
+        html: "%{giver} left kudos on %{commentable_link}."
+        text: A guest left kudos on "%{commentable_title}" (%{commentable_url}).
+      subject: "[%{app_name}] You've got kudos!"
   mailer:
     general:
       closing:
@@ -69,11 +68,12 @@ en:
             text: If you've received this message in error, please contact Support at %{support_url}.
         sent_at: Sent at %{sent_at}.
       greeting:
-        formal: Dear %{name},
+        formal_html: Dear %{name},
         informal:
-          addressed: Hi, %{name}!
+          addressed_html: Hi, %{name}!
           unaddressed: Hi!
         introductory: Hello from the Archive of Our Own!
+        tag_wrangler_supervisors: Tag Wrangler Supervisors
       metadata_label_indicator: ": "
       signature:
         abuse_team: The AO3 Policy & Abuse team
@@ -83,9 +83,17 @@ en:
         support: The AO3 Support team
   roles:
     anonymous_creator: Anonymous Creator
-    guest_commenter_name_html: "%{name} %{role}"
-    guest_commenter_name_text: "%{name} %{role}"
+    commenter_name:
+      html: "%{name} %{role_with_parens}"
+      text: "%{name} %{role_with_parens}"
     guest_with_parens: "(Guest)"
+    official_with_parens: "(Official)"
+    registered_with_parens: "(Registered User)"
+  tag_wrangling_supervisor_mailer:
+    wrangler_username_change_notification:
+      name_changed:
+        html: The wrangler %{old_username} has changed their name to %{new_username}.
+      subject: "[%{app_name}] Wrangler name change"
   user_mailer:
     abuse_report:
       copy:
@@ -103,32 +111,32 @@ en:
       deleted:
         html: Your work %{title} was deleted from the Archive by a site admin.
         text: Your work "%{title}" was deleted from the Archive by a site admin.
-      html:
-        tos_violation: If it's possible your work violated the Archive's Terms of Service, please %{contact_abuse_link}.
       import_project:
         html: If your work was part of an import project managed by our Open Doors team, please %{opendoors_link} with any further questions.
         text: If your work was part of an import project managed by our Open Doors team, please contact Open Doors (%{opendoors_link}) with any further questions.
       opendoors: contact Open Doors
       subject: "[%{app_name}] Your work has been deleted by an admin"
-      text:
-        tos_violation: If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{contact_abuse_url}).
+      tos_violation:
+        html: If it's possible your work violated the Archive's Terms of Service, please %{contact_abuse_link}.
+        text: If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{contact_abuse_url}).
     admin_hidden_work_notification:
       access: While your work is hidden, you will still be able to access it through the link provided above, but it will not be listed on your works page, and it won't be available to other users of the Archive.
       check_email: Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your work was hidden.
       contact_abuse: contact Policy & Abuse
-      html:
-        help: If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please %{contact_abuse_link} directly.
-        hidden: Your work %{title} has been hidden by the Policy & Abuse team and is no longer publicly accessible.
-        tos_violation: If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
+      help:
+        html: If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please %{contact_abuse_link} directly.
+        text: 'If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}.'
+      hidden:
+        html: Your work %{title} has been hidden by the Policy & Abuse team and is no longer publicly accessible.
+        text: Your work "%{title}" (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible.
       subject: "[%{app_name}] Your work has been hidden by the Policy & Abuse team"
-      text:
-        help: 'If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}.'
-        hidden: Your work "%{title}" (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible.
-        tos_violation: If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
       tos: Terms of Service
+      tos_violation:
+        html: If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
+        text: If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
     anonymous_or_unrevealed_notification:
-      anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
-      anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
+      anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
+      anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
       changed_status:
         anonymous:
           html: The collection maintainers of %{collection_link} have changed the status of your work %{work_link} to anonymous.
@@ -173,32 +181,79 @@ en:
       any: Any
       assignment:
         html: You have been assigned the following request in the %{link} challenge at the Archive of Our Own!
-      description: 'Description:'
-      due: 'This assignment is due at:'
-      html:
-        footer: You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{footer_link}.
-        footer_link: the challenge profile page
-        look_up: You can look up this assignment from %{link}.
-        look_up_link: your Assignments page
-      optional_tags: 'Optional Tags:'
-      prompt_url: 'Prompt URL:'
+        text: You have been assigned the following request in the "%{collection_title}" challenge (%{collection_url}) at the Archive of Our Own!
+      description: Description
+      due: This assignment is due at
+      footer:
+        challenge_profile: the challenge profile page
+        html: You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{challenge_profile_link}.
+        text: You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{challenge_profile_url}.
+      look_up:
+        html: You can look up this assignment from %{your_assignments_link}.
+        text: You can look up this assignment from your Assignments page at %{your_assignments_url}.
+        your_assignments: your Assignments page
+      optional_tags: Optional Tags
+      prompt_url: Prompt URL
       prompts: 'Prompts:'
-      recipient: 'Recipient:'
+      recipient: Recipient
       recipient_missing: 'None: contact a moderator for help!'
       subject: "[%{app_name}][%{collection_title}] Your assignment!"
-      text:
-        assignment: You have been assigned the following request in the "%{collection_title}" challenge (%{collection_url}) at the Archive of Our Own!
-        footer: You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{profile_url}.
-        look_up: You can look up this assignment from your Assignments page at %{link}.
     change_email:
       changed:
         html: "%{login}, the email associated with your account has been changed to %{email}"
         text: "%{login}, the email associated with your account has been changed to %{email}"
       subject: "[%{app_name}] Email changed"
+    claim_notification:
+      access:
+        contact_support: contact AO3 Support
+        html: Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{contact_support_link}.
+        text: Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please contact AO3 Support at %{support_url}.
+      email_tips: If you're contacting us, please add email addresses from @transformativeworks.org to your list of safe contacts and check your spam folders for our reply.
+      introduction:
+        ao3_name: Archive of Our Own
+        html: You're receiving this e-mail because you had works in a fanworks archive that has been imported by %{open_doors_name_link} into the %{app_link} (AO3). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.
+        open_doors_name: Open Doors
+        text: You're receiving this e-mail because you had works in a fanworks archive that has been imported by Open Doors (%{open_doors_url}) into the Archive of Our Own (AO3 - %{app_url}). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.
+      mistake:
+        contact_open_doors: contact Open Doors
+        html: If this is a mistake and these are not your works, please don't delete them! Please just %{contact_open_doors_link} and we will sort it out.
+        text: If this is a mistake and these are not your works, please don't delete them! Please just contact Open Doors (%{open_doors_url}) and we will sort it out.
+      more_info:
+        ao3_news: AO3 News
+        contact_support: contact AO3 Support
+        faq_page: FAQ page
+        html: You can read announcements about recent archive moves at %{ao3_news_link}, and find additional information on Open Doors' %{faq_page_link} or %{tutorial_page_link}. For any questions not answered in the FAQ, tutorials, or this e-mail, please %{contact_support_link}.
+        text: You can read announcements about recent archive moves at AO3 News (%{news_url}), and find additional information on Open Doors' FAQ page (%{open_doors_faq_url}) or tutorials page (%{open_doors_tutorial_url}). For any questions not answered in the FAQ, tutorials, or this e-mail, please contact Support at %{support_url}.
+        tutorial_page: tutorial page
+      other_works:
+        contact_open_doors: contact Open Doors
+        html: If you had other works on the imported archive under an e-mail address you can no longer access, please %{contact_open_doors_link} with any information that can help verify your identity.
+        text: If you had other works on the imported archive under an e-mail address you can no longer access, please contact Open Doors with any information that can help verify your identity.
+      questions:
+        contact_support: contact AO3 Support
+        html: For other inquiries, please %{contact_support_link}.
+        text: For other inquiries, please contact AO3 Support at %{support_url}.
+      redirects:
+        html: To preserve rec lists and bookmarks, the imported archive's web addresses may redirect to the imported copy of these works for a limited time (check the announcement post for your archive to be sure). If you've already uploaded a copy of these works and you did %{negation} use the import from URL feature, there will be two copies of the same work on the AO3.
+        negation: NOT
+      subject: "[%{app_name}] Works uploaded"
+      update_redirect:
+        contact_open_doors: contact Open Doors
+        html: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and %{contact_open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
+        text: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and contact Open Doors at %{open_doors_url} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
+      work_info:
+        html: "%{work_link} (%{fandom})"
+        text:
+          no_fandom: "- %{work_title} %{work_url}"
+          with_fandom: "- %{work_title} %{work_url} (%{fandom})"
+      works_by: 'These works were written under the e-mail: %{email}'
     collection_notification:
       assignments_sent:
         complete: All assignments have now been sent out.
         subject: Assignments sent
+      challenge_default:
+        complete: 'Signed-up participant %{offer_byline} has defaulted on their assignment for %{request_byline}. You may want to assign a pinch hitter on the collection assignments page: %{assignments_page_url}'
+        subject: Challenge default by %{offer_byline}
       html:
         received_message: 'You have received a message about your collection %{collection_link}:'
       text:
@@ -209,19 +264,15 @@ en:
         creation: "%{creation_link} by %{pseud_links}"
         edit_chapter: edit the chapter
         edit_series: edit the series
-        edit_work: edit the work
         remove_chapter: If you've been added in error or don't want to be listed as a creator, you can %{edit_chapter_link} to remove yourself as creator.
         remove_series: If you've been added in error or don't want to be listed as a creator, you can %{edit_series_link} to remove yourself as creator.
-        remove_work: If you've been added in error or don't want to be listed as a creator, you can %{edit_work_link} to remove yourself as creator.
       intro_chapter: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following series:'
-      intro_work: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following work:'
-      subject: "[%{app_name}] Co-creator notification"
+      subject: "[%{app_name}] You've been added as a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
         remove_series: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the series to remove yourself as creator: %{url}'
-        remove_work: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the work to remove yourself as creator: %{url}'
     creatorship_notification_archivist:
       explanation: Because they are acting in their official capacity as an Open Doors archivist, they are allowed to add you without a request, even if you have co-creation disabled.
       html:
@@ -235,7 +286,7 @@ en:
       intro_chapter: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following series:'
       intro_work: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following work:'
-      subject: "[%{app_name}] Archivist co-creator notification"
+      subject: "[%{app_name}] An archivist has added you as a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
@@ -249,7 +300,7 @@ en:
       intro_chapter: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following chapter:'
       intro_series: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following series:'
       intro_work: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following work:'
-      subject: "[%{app_name}] Co-creator request"
+      subject: "[%{app_name}] You've received a request to be a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         instructions: 'You can accept or reject this request on your Co-Creator Requests page: %{url}'
@@ -266,6 +317,10 @@ en:
         text: If you have questions, please %{support} (%{url}).
       subject: "[%{app_name}] Your work has been deleted"
       support: contact Support
+    feedback:
+      additional_ticket: If you have additional questions or information, do not hesitate to send in another ticket.
+      introduction: 'We''re working hard to reply to everyone, and we''ll respond to you as soon as we can. Your communication is greatly valued, and it will be reviewed and answered by our volunteer Support team. In the meantime, here is a copy of the information you submitted through the Technical Support and Feedback form:'
+      subject: "[%{app_name}] Support - %{summary}"
     invitation:
       been_invited: You've been invited to join the Archive of Our Own!
       features: With an account, you can post fanworks, use bookmarks to keep track of works you enjoyed, receive subscription emails when your favorite creators or works update, customize the way the site looks for you, and more!
@@ -325,16 +380,15 @@ en:
         text: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and contact Open Doors at %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
       uploaded_list: 'The works uploaded include:'
     invite_increase_notification:
-      html:
-        body:
+      body:
+        html:
           one: We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page_link}.
           other: We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page_link}.
-      invitation_page_link_text: your invitations page
-      subject: "[%{app_name}] New invitations"
-      text:
-        body:
+        text:
           one: We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at your invitations page (%{invitation_page_url}).
           other: We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at your invitations page (%{invitation_page_url}).
+      invitation_page_link_text: your invitations page
+      subject: "[%{app_name}] New invitations"
     invite_request_declined:
       main:
         one: We regret to inform you that your request for a new invitation cannot be fulfilled at this time.
@@ -342,14 +396,13 @@ en:
       reason: 'Your request was:'
       subject: "[%{app_name}] Additional invitation request declined"
     recipient_notification:
-      html:
-        collection: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
+      collection:
+        html: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
+        text: A gift work has been posted for you in the "%{collection_title}" collection (%{collection_url}) at the Archive of Our Own!
       no_collection: A gift work has been posted for you at the Archive of Our Own!
       subject:
         collection: "[%{app_name}][%{collection_title}] A gift work for you from %{collection_title}"
         no_collection: "[%{app_name}] A gift work for you"
-      text:
-        collection: A gift work has been posted for you in the "%{collection_title}" collection (%{collection_url}) at the Archive of Our Own!
     signup_notification:
       activate:
         html: Please %{activate_account_link}.

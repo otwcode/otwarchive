@@ -1,0 +1,8 @@
+<% content_for :message do %>
+<%= t("mailer.general.greeting.informal.addressed_html", name: t("mailer.general.greeting.tag_wrangler_supervisors")) %>
+
+<%= t(".name_changed.html", old_username: @old_username, new_username: @new_username) %>
+
+<%= t("mailer.general.closing.informal") %>
+<%= t("mailer.general.signature.app_short_name") %>
+<% end %>

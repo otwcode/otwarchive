@@ -6,7 +6,7 @@ class ChallengeAssignment < ApplicationRecord
   belongs_to :offer_signup, class_name: "ChallengeSignup"
   belongs_to :request_signup, class_name: "ChallengeSignup"
   belongs_to :pinch_hitter, class_name: "Pseud"
-  belongs_to :pinch_request_signup, class_name: "ChallengeSignup"
+  belongs_to :pinch_request_signup, class_name: "ChallengeSignup" # TODO: AO3-6851 Remove pinch_request_signup association from the challenge_assignments table
   belongs_to :creation, polymorphic: true
 
   # Make sure that the signups are an actual match if we're in the process of assigning
@@ -14,52 +14,50 @@ class ChallengeAssignment < ApplicationRecord
   validate :signups_match, on: :update
   def signups_match
     if self.sent_at.nil? &&
-      self.request_signup.present? &&
-      self.offer_signup.present? &&
-      !self.request_signup.request_potential_matches.pluck(:offer_signup_id).include?(self.offer_signup_id)
+       self.request_signup.present? &&
+       self.offer_signup.present? &&
+       !self.request_signup.request_potential_matches.pluck(:offer_signup_id).include?(self.offer_signup_id)
       errors.add(:base, ts("does not match. Did you mean to write-in a giver?"))
     end
   end
 
-  scope :for_request_signup, lambda {|signup| where('request_signup_id = ?', signup.id)}
+  scope :for_request_signup, ->(signup) { where("request_signup_id = ?", signup.id) }
 
-  scope :for_offer_signup, lambda {|signup| where('offer_signup_id = ?', signup.id)}
+  scope :for_offer_signup, ->(signup) { where("offer_signup_id = ?", signup.id) }
 
-  scope :in_collection, lambda {|collection| where('challenge_assignments.collection_id = ?', collection.id) }
+  scope :in_collection, ->(collection) { where("challenge_assignments.collection_id = ?", collection.id) }
 
-  scope :defaulted, -> { where("defaulted_at IS NOT NULL") }
+  scope :defaulted, -> { where.not(defaulted_at: nil) }
   scope :undefaulted, -> { where("defaulted_at IS NULL") }
   scope :uncovered, -> { where("covered_at IS NULL") }
-  scope :covered, -> { where("covered_at IS NOT NULL") }
-  scope :sent, -> { where("sent_at IS NOT NULL") }
+  scope :covered, -> { where.not(covered_at: nil) }
+  scope :sent, -> { where.not(sent_at: nil) }
 
-  scope :with_pinch_hitter, -> { where("pinch_hitter_id IS NOT NULL") }
+  scope :with_pinch_hitter, -> { where.not(pinch_hitter_id: nil) }
 
   scope :with_offer, -> { where("offer_signup_id IS NOT NULL OR pinch_hitter_id IS NOT NULL") }
-  scope :with_request, -> { where("request_signup_id IS NOT NULL") }
+  scope :with_request, -> { where.not(request_signup_id: nil) }
   scope :with_no_request, -> { where("request_signup_id IS NULL") }
   scope :with_no_offer, -> { where("offer_signup_id IS NULL AND pinch_hitter_id IS NULL") }
 
   # sorting by request/offer
 
-  REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_assignments.request_signup_id = challenge_signups.id
-                                                            OR challenge_assignments.pinch_request_signup_id = challenge_signups.id)
-                           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id"
+  REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON challenge_assignments.request_signup_id = challenge_signups.id
+                           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id".freeze
 
   OFFERING_PSEUD_JOIN = "LEFT JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id
-                         INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id OR challenge_signups.pseud_id = pseuds.id)"
+                         INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id OR challenge_signups.pseud_id = pseuds.id)".freeze
 
   scope :order_by_requesting_pseud, -> { joins(REQUESTING_PSEUD_JOIN).order("pseuds.name") }
 
   scope :order_by_offering_pseud, -> { joins(OFFERING_PSEUD_JOIN).order("pseuds.name") }
 
-
   # Get all of a user's assignments
-  scope :by_offering_user, lambda {|user|
-    select("DISTINCT challenge_assignments.*").
-    joins(OFFERING_PSEUD_JOIN).
-    joins("INNER JOIN users ON pseuds.user_id = users.id").
-    where('users.id = ?', user.id)
+  scope :by_offering_user, lambda { |user|
+    select("DISTINCT challenge_assignments.*")
+      .joins(OFFERING_PSEUD_JOIN)
+      .joins("INNER JOIN users ON pseuds.user_id = users.id")
+      .where("users.id = ?", user.id)
   }
 
   # sorting by fulfilled/posted status
@@ -67,26 +65,25 @@ class ChallengeAssignment < ApplicationRecord
                                                            collection_items.item_id = challenge_assignments.creation_id AND
                                                            collection_items.item_type = challenge_assignments.creation_type)"
 
-  COLLECTION_ITEMS_LEFT_JOIN =  "LEFT JOIN collection_items ON (collection_items.collection_id = challenge_assignments.collection_id AND
+  COLLECTION_ITEMS_LEFT_JOIN = "LEFT JOIN collection_items ON (collection_items.collection_id = challenge_assignments.collection_id AND
                                                                 collection_items.item_id = challenge_assignments.creation_id AND
                                                                 collection_items.item_type = challenge_assignments.creation_type)"
 
   WORKS_JOIN = "INNER JOIN works ON works.id = challenge_assignments.creation_id AND challenge_assignments.creation_type = 'Work'"
   WORKS_LEFT_JOIN = "LEFT JOIN works ON works.id = challenge_assignments.creation_id AND challenge_assignments.creation_type = 'Work'"
 
-  scope :fulfilled, -> {
+  scope :fulfilled, lambda {
     joins(COLLECTION_ITEMS_JOIN).joins(WORKS_JOIN)
       .where("challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = 1",
              CollectionItem.user_approval_statuses[:approved], CollectionItem.collection_approval_statuses[:approved])
   }
-
 
   scope :posted, -> { joins(WORKS_JOIN).where("challenge_assignments.creation_id IS NOT NULL AND works.posted = 1") }
 
   # should be faster than unfulfilled scope because no giant left joins
   def self.unfulfilled_in_collection(collection)
     fulfilled_ids = ChallengeAssignment.in_collection(collection).fulfilled.pluck(:id)
-    fulfilled_ids.empty? ? in_collection(collection) : in_collection(collection).where("challenge_assignments.id NOT IN (?)", fulfilled_ids)
+    fulfilled_ids.empty? ? in_collection(collection) : in_collection(collection).where.not(challenge_assignments: { id: fulfilled_ids })
   end
 
   # faster than unposted scope because no left join!
@@ -106,7 +103,7 @@ class ChallengeAssignment < ApplicationRecord
   end
 
   # has to be a left join to get assignments that don't have a collection item
-  scope :unfulfilled, -> {
+  scope :unfulfilled, lambda {
     joins(COLLECTION_ITEMS_LEFT_JOIN).joins(WORKS_LEFT_JOIN)
       .where("challenge_assignments.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ? OR works.posted = 0",
              CollectionItem.user_approval_statuses[:approved], CollectionItem.collection_approval_statuses[:approved])
@@ -116,7 +113,6 @@ class ChallengeAssignment < ApplicationRecord
   scope :unposted, -> { joins(WORKS_LEFT_JOIN).where("challenge_assignments.creation_id IS NULL OR works.posted = 0") }
 
   scope :unstarted, -> { where("challenge_assignments.creation_id IS NULL") }
-
 
   before_destroy :clear_assignment
   def clear_assignment
@@ -131,12 +127,9 @@ class ChallengeAssignment < ApplicationRecord
     end
   end
 
-  def request
-    self.request_signup || self.pinch_request_signup
-  end
-
   def get_collection_item
     return nil unless self.creation
+
     CollectionItem.where("collection_id = ? AND item_id = ? AND item_type = ?", self.collection_id, self.creation_id, self.creation_type).first
   end
 
@@ -153,17 +146,13 @@ class ChallengeAssignment < ApplicationRecord
   end
 
   def defaulted=(value)
-    if value == "1"
-      self.defaulted_at = Time.now
-    else
-      self.defaulted_at = nil
-    end
+    self.defaulted_at = (Time.now if value == "1")
   end
 
   def defaulted
     !self.defaulted_at.nil?
   end
-  alias_method :defaulted?, :defaulted
+  alias defaulted? defaulted
 
   def offer_signup_pseud=(pseud_byline)
     if pseud_byline.blank?
@@ -209,16 +198,19 @@ class ChallengeAssignment < ApplicationRecord
   end
 
   def requesting_pseud
-    request_signup ? request_signup.pseud : (pinch_request_signup ? pinch_request_signup.pseud : nil)
+    request_signup&.pseud
   end
 
-
   def offer_byline
-    offer_signup && offer_signup.pseud ? offer_signup.pseud.byline : (pinch_hitter ? (pinch_hitter.byline + "* (pinch hitter)") : "- none -")
+    if offer_signup && offer_signup.pseud
+      offer_signup.pseud.byline
+    else
+      (pinch_hitter ? I18n.t("challenge_assignment.offer_byline.pinch_hitter", pinch_hitter_byline: pinch_hitter.byline) : I18n.t("challenge_assignment.offer_byline.none"))
+    end
   end
 
   def request_byline
-    request_signup && request_signup.pseud ? request_signup.pseud.byline : (pinch_request_signup ? (pinch_request_byline + "* (pinch recipient)") : "- None -")
+    requesting_pseud&.byline || I18n.t("challenge_assignment.request_byline.none")
   end
 
   def pinch_hitter_byline
@@ -229,24 +221,15 @@ class ChallengeAssignment < ApplicationRecord
     self.pinch_hitter = Pseud.parse_byline(byline)
   end
 
-  def pinch_request_byline
-    pinch_request_signup ? pinch_request_signup.pseud.byline : ""
-  end
-
-  def pinch_request_byline=(byline)
-    signup = signup_for_byline(byline)
-    self.pinch_request_signup = signup if signup
-  end
-
   def default
     self.defaulted_at = Time.now
     save
   end
 
   def cover(pseud)
-    new_assignment = self.covered_at ? request.request_assignments.last : ChallengeAssignment.new
+    new_assignment = self.covered_at ? request_signup.request_assignments.last : ChallengeAssignment.new
     new_assignment.collection = self.collection
-    new_assignment.request_signup_id = request.id
+    new_assignment.request_signup_id = request_signup_id
     new_assignment.pinch_hitter = pseud
     new_assignment.sent_at = nil
     new_assignment.save!
@@ -260,9 +243,16 @@ class ChallengeAssignment < ApplicationRecord
     unless self.sent_at
       self.sent_at = Time.now
       save
-      assigned_to = self.offer_signup ? self.offer_signup.pseud.user : (self.pinch_hitter ? self.pinch_hitter.user : nil)
-      request = self.request_signup || self.pinch_request_signup
-      UserMailer.challenge_assignment_notification(collection.id, assigned_to.id, self.id).deliver_later if assigned_to && request
+      assigned_to = if self.offer_signup
+                      self.offer_signup.pseud.user
+                    else
+                      (self.pinch_hitter ? self.pinch_hitter.user : nil)
+                    end
+      if assigned_to && self.request_signup
+        I18n.with_locale(assigned_to.preference.locale.iso) do
+          UserMailer.challenge_assignment_notification(collection.id, assigned_to.id, self.id).deliver_later
+        end
+      end
     end
   end
 
@@ -289,9 +279,7 @@ class ChallengeAssignment < ApplicationRecord
     collection.assignments.each do |assignment|
       assignment.send_out
     end
-    subject = I18n.t("user_mailer.collection_notification.assignments_sent.subject")
-    message = I18n.t("user_mailer.collection_notification.assignments_sent.complete")
-    collection.notify_maintainers(subject, message)
+    collection.notify_maintainers_assignments_sent
 
     # purge the potential matches! we don't want bazillions of them in our db
     PotentialMatch.clear!(collection)
@@ -332,13 +320,14 @@ class ChallengeAssignment < ApplicationRecord
     @offer_match_buckets = {}
     @max_match_count = 0
     if settings.nil? || settings.no_match_required?
-       # stuff everyone into the same bucket
-       @max_match_count = 1
-       @request_match_buckets[1] = collection.signups
-       @offer_match_buckets[1] = collection.signups
+      # stuff everyone into the same bucket
+      @max_match_count = 1
+      @request_match_buckets[1] = collection.signups
+      @offer_match_buckets[1] = collection.signups
     else
       collection.signups.find_each do |signup|
         next if signup.nil?
+
         request_match_count = signup.request_potential_matches.count
         @request_match_buckets[request_match_count] ||= []
         @request_match_buckets[request_match_count] << signup
@@ -357,24 +346,37 @@ class ChallengeAssignment < ApplicationRecord
     # matches.)
     0.upto(@max_match_count) do |count|
       if @request_match_buckets[count]
-        @request_match_buckets[count].sort_by {rand}.each do |request_signup|
+        @request_match_buckets[count].sort_by { rand }
+          .each do |request_signup|
           # go through the potential matches in order from best to worst and try and assign
           request_signup.reload
           next if request_signup.assigned_as_request
+
           ChallengeAssignment.assign_request!(collection, request_signup)
         end
       end
 
-      if @offer_match_buckets[count]
-        @offer_match_buckets[count].sort_by {rand}.each do |offer_signup|
-          offer_signup.reload
-          next if offer_signup.assigned_as_offer
-          ChallengeAssignment.assign_offer!(collection, offer_signup)
-        end
+      next unless @offer_match_buckets[count]
+
+      @offer_match_buckets[count].sort_by { rand }
+        .each do |offer_signup|
+        offer_signup.reload
+        next if offer_signup.assigned_as_offer
+
+        ChallengeAssignment.assign_offer!(collection, offer_signup)
       end
     end
     REDIS_GENERAL.del(progress_key(collection))
-    UserMailer.potential_match_generation_notification(collection.id).deliver_later
+
+    if collection.collection_email.present?
+      UserMailer.potential_match_generation_notification(collection.id, collection.collection_email).deliver_later
+    else
+      collection.maintainers_list.each do |user|
+        I18n.with_locale(user.preference.locale.iso) do
+          UserMailer.potential_match_generation_notification(collection.id, user.email).deliver_later
+        end
+      end 
+    end 
   end
 
   # go through the request's potential matches in order from best to worst and try and assign
@@ -388,7 +390,7 @@ class ChallengeAssignment < ApplicationRecord
 
       # if there's a circular match let's save it as our last choice
       if potential_match.offer_signup.assigned_as_request && !last_choice &&
-          collection.assignments.for_request_signup(potential_match.offer_signup).first.offer_signup == request_signup
+         collection.assignments.for_request_signup(potential_match.offer_signup).first.offer_signup == request_signup
         last_choice = potential_match
         next
       end
@@ -398,9 +400,7 @@ class ChallengeAssignment < ApplicationRecord
       break
     end
 
-    if !assigned && last_choice
-      ChallengeAssignment.do_assign_request!(assignment, last_choice)
-    end
+    ChallengeAssignment.do_assign_request!(assignment, last_choice) if !assigned && last_choice
 
     request_signup.assigned_as_request = true
     request_signup.save!
@@ -420,7 +420,7 @@ class ChallengeAssignment < ApplicationRecord
 
       # if there's a circular match let's save it as our last choice
       if potential_match.request_signup.assigned_as_offer && !last_choice &&
-          collection.assignments.for_offer_signup(potential_match.request_signup).first.request_signup == offer_signup
+         collection.assignments.for_offer_signup(potential_match.request_signup).first.request_signup == offer_signup
         last_choice = potential_match
         next
       end
@@ -430,9 +430,7 @@ class ChallengeAssignment < ApplicationRecord
       break
     end
 
-    if !assigned && last_choice
-      ChallengeAssignment.do_assign_offer!(assignment, last_choice)
-    end
+    ChallengeAssignment.do_assign_offer!(assignment, last_choice) if !assigned && last_choice
 
     offer_signup.assigned_as_offer = true
     offer_signup.save!

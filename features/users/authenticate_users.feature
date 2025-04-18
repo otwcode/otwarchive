@@ -9,14 +9,14 @@ Feature: User Authentication
       | sam      | secret   |
       And all emails have been delivered
     When I am on the home page
-      And I fill in "User name or email:" with "sam"
+      And I fill in "Username or email:" with "sam"
       And I fill in "Password:" with "test"
       And I press "Log In"
-    Then I should see "The password or user name you entered doesn't match our records"
-      And I should see "Forgot your password or user name?"
+    Then I should see "The password or username you entered doesn't match our records"
+      And I should see "Forgot your password or username?"
     When I follow "Reset password"
-    Then I should see "Please tell us the user name or email address you used when you signed up for your Archive account"
-    When I fill in "Email address or user name" with "sam"
+    Then I should see "Please tell us the username or email address you used when you signed up for your Archive account"
+    When I fill in "Email address or username" with "sam"
       And I press "Reset Password"
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
@@ -26,7 +26,7 @@ Feature: User Authentication
 
     # existing password should still work
     When I am on the homepage
-      And I fill in "User name or email:" with "sam"
+      And I fill in "Username or email:" with "sam"
       And I fill in "Password:" with "secret"
       And I press "Log In"
     Then I should see "Hi, sam"
@@ -66,14 +66,14 @@ Feature: User Authentication
 
     # old password should no longer work
     When I am on the homepage
-      And I fill in "User name or email:" with "sam"
+      And I fill in "Username or email:" with "sam"
       And I fill in "Password:" with "secret"
       And I press "Log In"
     Then I should not see "Hi, sam"
 
     # new password should work
     When I am on the homepage
-      And I fill in "User name or email:" with "sam"
+      And I fill in "Username or email:" with "sam"
       And I fill in "Password:" with "new<pass"
       And I press "Log In"
     Then I should see "Hi, sam"
@@ -81,10 +81,30 @@ Feature: User Authentication
     # password entered the second time should not work
     When I log out
       And I am on the homepage
-      And I fill in "User name or email:" with "sam"
+      And I fill in "Username or email:" with "sam"
       And I fill in "Password:" with "override"
       And I press "Log In"
     Then I should not see "Hi, sam"
+
+  Scenario: Translated reset password email
+    Given a locale with translated emails
+      And the following activated users exist
+        | login    | email              | password |
+        | sam      | sam@example.com    | password |
+        | notsam   | notsam@example.com | password |
+      And the user "sam" enables translated emails
+      And all emails have been delivered
+    When I request a password reset for "sam@example.com"
+    Then I should see "Check your email for instructions on how to reset your password."
+      And 1 email should be delivered to "sam@example.com"
+      And the email should have "Translated subject" in the subject
+      And the email to "sam" should be translated
+    # notsam didn't enable translated emails
+    When I request a password reset for "notsam@example.com"
+    Then I should see "Check your email for instructions on how to reset your password."
+      And 1 email should be delivered to "notsam@example.com"
+      And the email should have "Reset your password" in the subject
+      And the email to "notsam" should be non-translated
 
   Scenario: Forgot password, logging in with email address
     Given I have no users
@@ -152,7 +172,7 @@ Feature: User Authentication
       And all emails have been delivered
       And the user "sam" has failed to log in 50 times
       When I am on the home page
-        And I fill in "User name or email:" with "sam"
+        And I fill in "Username or email:" with "sam"
         And I fill in "Password:" with "badpassword"
         And I press "Log In"
       Then I should see "Your account has been locked for 5 minutes"
@@ -160,7 +180,7 @@ Feature: User Authentication
 
       # User should not be able to log back in even with correct password
       When I am on the home page
-        And I fill in "User name or email:" with "sam"
+        And I fill in "Username or email:" with "sam"
         And I fill in "Password:" with "password"
         And I press "Log In"
       Then I should see "Your account has been locked for 5 minutes"
@@ -169,7 +189,7 @@ Feature: User Authentication
       # User should be able to log in with the correct password 5 minutes later
       When it is currently 5 minutes from now
         And I am on the home page
-        And I fill in "User name or email:" with "sam"
+        And I fill in "Username or email:" with "sam"
         And I fill in "Password:" with "password"
         And I press "Log In"
       Then I should see "Successfully logged in."
@@ -182,10 +202,10 @@ Feature: User Authentication
       | sam      | secret   |
       And all emails have been delivered
     When I am on the home page
-      And I fill in "User name or email:" with "sammy"
+      And I fill in "Username or email:" with "sammy"
       And I fill in "Password:" with "test"
       And I press "Log In"
-    Then I should see "The password or user name you entered doesn't match our records. Please try again or reset your password. If you still can't log in, please visit Problems When Logging In for help."
+    Then I should see "The password or username you entered doesn't match our records. Please try again or reset your password. If you still can't log in, please visit Problems When Logging In for help."
 
   Scenario: Wrong password
     Given I have no users
@@ -194,10 +214,10 @@ Feature: User Authentication
       | sam      | secret   |
       And all emails have been delivered
     When I am on the home page
-      And I fill in "User name or email:" with "sam"
+      And I fill in "Username or email:" with "sam"
       And I fill in "Password:" with "tester"
       And I press "Log In"
-    Then I should see "The password or user name you entered doesn't match our records. Please try again or reset your password. If you still can't log in, please visit Problems When Logging In for help."
+    Then I should see "The password or username you entered doesn't match our records. Please try again or reset your password. If you still can't log in, please visit Problems When Logging In for help."
 
   Scenario: Logged out
     Given I have no users
@@ -212,7 +232,7 @@ Feature: User Authentication
       | login      | password |
       | TheMadUser | password1 |
     When I am on the home page
-      And I fill in "User name or email:" with "themaduser"
+      And I fill in "Username or email:" with "themaduser"
       And I fill in "Password:" with "password1"
       And I press "Log In"
     Then I should see "Successfully logged in."
@@ -223,7 +243,7 @@ Feature: User Authentication
       | login      | email                  | password |
       | TheMadUser | themaduser@example.com | password |
     When I am on the home page
-      And I fill in "User name or email:" with "themaduser@example.com"
+      And I fill in "Username or email:" with "themaduser@example.com"
       And I fill in "Password:" with "password"
       And I press "Log In"
       Then I should see "Successfully logged in."
@@ -234,7 +254,7 @@ Feature: User Authentication
       | login   | password |
       | MadUser | password |
     When I am on the home page
-      And I fill in "User name or email:" with "maduser"
+      And I fill in "Username or email:" with "maduser"
       And I fill in "Password:" with "password"
       And I press "Log In"
     Then I should see "Successfully logged in."
@@ -247,13 +267,13 @@ Feature: User Authentication
       And the user "target" <role>
     When I am on the home page
       And I follow "Forgot password?"
-      And I fill in "Email address or user name" with "target"
+      And I fill in "Email address or username" with "target"
       And I press "Reset Password"
     Then I should be on the home page
       And I should see "Password resets are disabled for that user."
       And 0 emails should be delivered
     When I follow "Forgot password?"
-      And I fill in "Email address or user name" with "user@example.com"
+      And I fill in "Email address or username" with "user@example.com"
       And I press "Reset Password"
     Then I should be on the home page
       And I should see "Password resets are disabled for that user."
@@ -269,11 +289,11 @@ Feature: User Authentication
       | login | password      |
       | admin | adminpassword |
     When I go to the login page
-      And I fill in "User name or email" with "admin"
+      And I fill in "Username or email" with "admin"
       And I fill in "Password" with "adminpassword"
       And I press "Log In"
     Then I should not see "Successfully logged in"
-      And I should see "The password or user name you entered doesn't match our records."
+      And I should see "The password or username you entered doesn't match our records."
     When I am logged in as an admin
       And I go to the new user password page
     Then I should be on the homepage

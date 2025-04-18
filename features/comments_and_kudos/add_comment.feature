@@ -180,17 +180,6 @@ Scenario: Set preference and receive comment notifications of your own comments
     And "commenter" should be emailed
     And 1 email should be delivered to "commenter"
 
-Scenario: Work comment displays images
-
-  Given the work "Generic Work"
-    And I am logged in as "commenter"
-    And I visit the new comment page for the work "Generic Work"
-  When I fill in "Comment" with "Fantastic!<img src='http://example.com/icon.svg'>"
-    And I press "Comment"
-  Then I should see "Comment created!"
-    And I should see "Fantastic!"
-    And I should see the image "src" text "http://example.com/icon.svg"
-
 Scenario: Try to post a comment with a < angle bracket before a linebreak, without a space before the bracket
 
     Given the work "Generic Work"
@@ -222,7 +211,7 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, with 
 Scenario: Users with different time zone preferences should see the time in their own timezone
   Given the work "Generic Work"
     And I am logged in as "commenter"
-    And I set my time zone to "UTC"
+    And the user "commenter" sets the time zone to "UTC"
     And I post the comment "Something" on the work "Generic Work"
     And it is currently 1 second from now
     And I follow "Edit"
@@ -231,7 +220,71 @@ Scenario: Users with different time zone preferences should see the time in thei
   Then I should see "UTC" within ".posted.datetime"
     And I should see "UTC" within ".edited.datetime"
   When I am logged in as "reader"
-    And I set my time zone to "Brisbane"
+    And the user "reader" sets the time zone to "Brisbane"
     And I view the work "Generic Work" with comments
   Then I should see "AEST" within ".posted.datetime"
     And I should see "AEST" within ".edited.datetime"
+
+Scenario: It hides comment actions when a reply form is open
+  Given the work "The One Where Neal is Awesome"
+    And I am logged in as "commenter"
+    And I post the comment "I loved this!" on the work "The One Where Neal is Awesome"
+  When I follow "Reply"
+  Then I should see "Comment as commenter"
+    And I should not see "Thread"
+
+@javascript
+Scenario: It shows and hides cancel buttons properly
+  Given the work "Aftermath" by "creator" with guest comments enabled
+    And a comment "Ugh." by "pest" on the work "Aftermath"
+  When I view the work "Aftermath"
+    And I display comments
+  Then I should see "Ugh."
+  When I open the reply box
+  Then I should see "Cancel"
+    But I should not see "Reply"
+  When I cancel the reply box
+  Then I should not see "Cancel"
+    But I should see "Reply"
+
+@javascript
+Scenario: It shows and hides cancel buttons properly even on a new page
+Given the work "Aftermath" by "creator" with guest comments enabled
+    And a comment "Ugh." by "pest" on the work "Aftermath"
+  When I view the work "Aftermath"
+    And I display comments
+  Then I should see "Ugh."
+  # Go to /chapters/XX?add_comment_reply_id=YY&show_comments=true#comment_YY"; akin to a Ctrl+Click on "Reply"
+  When I reply on a new page
+  Then I should see "Cancel"
+    But I should not see "Reply"
+  When I cancel the reply box
+  Then I should not see "Cancel"
+    But I should see "Reply"
+
+Scenario: Cannot comment (no form) while logged as admin
+
+    Given the work "Generic Work" by "creator" with guest comments enabled
+      And I am logged in as an admin
+      And I view the work "Generic Work"
+    Then I should see "Generic Work"
+      And I should not see "Post Comment"
+      And I should not see a "Comment" button
+      And I should see "Please log out of your admin account to comment."
+
+Scenario: Cannot reply to comments (no button) while logged as admin
+
+    Given the work "Generic Work" by "creator" with guest comments enabled
+    When I am logged in as "commenter"
+      And I view the work "Generic Work"
+      And I post a comment "Woohoo"
+    When I am logged in as an admin
+      And I view the work "Generic Work"
+      And I follow "Comments (1)"
+    Then I should see "Woohoo"
+      And I should not see "Reply"
+    When I am logged out
+      And I view the work "Generic Work"
+      And I follow "Comments (1)"
+    Then I should see "Woohoo"
+      And I should see "Reply"

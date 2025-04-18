@@ -6,7 +6,7 @@ Feature: Read guest comments
 
 Scenario: View guest comments in homepage, inbox and works
   Given I am logged in as "normal_user"
-    And I post the work "My very meta work about AO3"
+    And I post the work "My very meta work about AO3" with guest comments enabled
     And I am logged out
   When I post a guest comment
   Then I should see "(Guest)"

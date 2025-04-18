@@ -164,4 +164,116 @@ describe Admin::UserCreationsController do
       it_behaves_like "unauthorized admin cannot delete bookmarks"
     end
   end
+
+  authorized_roles = %w[superadmin policy_and_abuse support].freeze
+
+  describe "GET #confirm_remove_pseud" do
+    subject { get :confirm_remove_pseud, params: { id: work.id } }
+    let(:work) do
+      work = create(:work)
+      create(:user, login: "orphan_account")
+      Creatorship.orphan(work.pseuds, [work], false)
+      work
+    end
+    let(:success) do
+      expect(response).to render_template(:confirm_remove_pseud)
+    end
+
+    it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
+
+    context "when logged in as user" do
+      it "redirects with notice" do
+        fake_login
+        subject
+        it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
+      end
+    end
+
+    context "for a non-orphaned work" do
+      let(:work) { create(:work) }
+
+      before do
+        fake_login_admin(create(:superadmin))
+      end
+
+      it "redirects with an error" do
+        subject
+        it_redirects_to_with_error(work_path(work), "Sorry, this action is only available for works by orphan_account pseuds.")
+      end
+    end
+  end
+
+  describe "PUT #remove_pseud" do
+    subject { put :remove_pseud, params: { id: work.id } }
+    let(:user) { create(:user, login: "Leaver") }
+    let!(:orphan_account) { create(:user, login: "orphan_account") }
+    let!(:orphan_pseud) { create(:pseud, name: "Leaver", user: orphan_account) }
+    let(:work) do
+      work = create(:work, authors: [user.default_pseud])
+      Creatorship.orphan([user.default_pseud], [work], false)
+      work
+    end
+    let(:success) do
+      it_redirects_to_with_notice(work_path(work), "Successfully removed pseud Leaver (orphan_account) from this work.")
+      expect(work.reload.pseuds).to include(orphan_account.default_pseud)
+      expect(work.pseuds).not_to include(orphan_pseud)
+    end
+
+    it_behaves_like "an action only authorized admins can access", authorized_roles: authorized_roles
+
+    context "when logged in as user" do
+      it "redirects with notice" do
+        fake_login
+        subject
+        it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
+      end
+    end
+
+    context "for a work with multiple orphan pseuds" do
+      let!(:orphaneer_orphan_pseud) { create(:pseud, name: "orphaneer", user: orphan_account) }
+
+      let(:work) do
+        orphaneer = create(:user, login: "orphaneer")
+        work = create(:work, authors: [user.default_pseud, orphaneer.default_pseud])
+        Creatorship.orphan([user.default_pseud, orphaneer.default_pseud], [work], false)
+        work
+      end
+
+      before do
+        fake_login_admin(create(:superadmin))
+      end
+
+      context "without a pseuds parameter" do
+        it "redirects with an error" do
+          subject
+          it_redirects_to_with_error(work_path(work), "You must select which orphan_account pseud to remove.")
+          expect(work.reload.pseuds).not_to include(orphan_account.default_pseud)
+        end
+      end
+
+      context "with a orphan_account pseuds parameter" do
+        subject { put :remove_pseud, params: { id: work.id, pseuds: [orphan_pseud.id] } }
+
+        it "redirects removes only that pseud" do
+          subject
+          it_redirects_to_with_notice(work_path(work), "Successfully removed pseud Leaver (orphan_account) from this work.")
+          expect(work.reload.pseuds).to include(orphan_account.default_pseud)
+          expect(work.pseuds).not_to include(orphan_pseud)
+          expect(work.pseuds).to include(orphaneer_orphan_pseud)
+        end
+      end
+
+      context "with a pseud parameter by a normal user" do
+        subject { put :remove_pseud, params: { id: work.id, pseuds: [user.default_pseud.id] } }
+        let(:work) { create(:work, authors: [user.default_pseud]) }
+
+        it "does not modify the work" do
+          expect do
+            subject
+          end.not_to change { work.pseuds }
+          it_redirects_to(work_path(work))
+        end
+      end
+    end
+  end
 end
