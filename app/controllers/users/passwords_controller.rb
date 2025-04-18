@@ -48,7 +48,7 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def after_resetting_password_path_for(resource)
-    resource.create_log_item(options = { action: ArchiveConfig.ACTION_PASSWORD_RESET })
+    resource.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_RESET)
     super
   end
 end

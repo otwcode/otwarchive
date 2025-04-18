@@ -62,7 +62,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:notice] = ts("Your password has been changed. To protect your account, you have been logged out of all active sessions. Please log in with your new password.")
-      @user.create_log_item(options = { action: ArchiveConfig.ACTION_PASSWORD_CHANGE })
+      @user.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_CHANGE)
 
       redirect_to(user_profile_path(@user)) && return
     else
