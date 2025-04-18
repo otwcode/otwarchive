@@ -182,7 +182,7 @@ class UsersController < ApplicationController
 
       if @user.save
         flash.now[:notice] = ts("Your email has been successfully updated")
-        I18n.with_locale(@user.preference.locale.iso) do
+        I18n.with_locale(@user.preference.locale_for_mails) do
           UserMailer.change_email(@user.id, old_email, new_email).deliver_later
         end
       else

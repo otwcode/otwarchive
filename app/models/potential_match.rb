@@ -94,7 +94,7 @@ class PotentialMatch < ApplicationRecord
         UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, collection.collection_email).deliver_later
       else
         collection.maintainers_list.each do |user|
-          I18n.with_locale(user.preference.locale.iso) do
+          I18n.with_locale(user.preference.locale_for_mails) do
             UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, user.email).deliver_later
           end
         end
