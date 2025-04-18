@@ -331,7 +331,7 @@ class User < ApplicationRecord
   # Override of Devise method for email sending to set I18n.locale
   # Based on https://github.com/heartcombo/devise/blob/v4.9.3/lib/devise/models/authenticatable.rb#L200
   def send_devise_notification(notification, *args)
-    I18n.with_locale(preference.locale.iso) do
+    I18n.with_locale(preference.locale_for_mails) do
       devise_mailer.send(notification, self, *args).deliver_now
     end
   end

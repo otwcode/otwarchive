@@ -106,7 +106,7 @@ class CollectionItem < ApplicationRecord
     item.users.each do |email_recipient|
       next if email_recipient.preference.collection_emails_off
 
-      I18n.with_locale(email_recipient.preference.locale.iso) do
+      I18n.with_locale(email_recipient.preference.locale_for_mails) do
         UserMailer.archivist_added_to_collection_notification(
           email_recipient.id,
           item.id,
@@ -225,7 +225,7 @@ class CollectionItem < ApplicationRecord
         user_preference = pseud.user.preference
         next if user_preference.recipient_emails_off
 
-        I18n.with_locale(user_preference.locale.iso) do
+        I18n.with_locale(user_preference.locale_for_mails) do
           UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver_after_commit
         end
       end
@@ -264,7 +264,7 @@ class CollectionItem < ApplicationRecord
     return if item.users.include?(User.current_user)
 
     item.users.each do |user|
-      I18n.with_locale(user.preference.locale.iso) do
+      I18n.with_locale(user.preference.locale_for_mails) do
         UserMailer.anonymous_or_unrevealed_notification(
           user.id, item.id, collection.id,
           anonymous: newly_anonymous, unrevealed: newly_unrevealed

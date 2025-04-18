@@ -133,7 +133,7 @@ class UserMailer < ApplicationMailer
 
     subject = @subscription.subject_text(@creations.first)
     subject += " and #{@creations.count - 1} more" if @creations.count > 1
-    I18n.with_locale(@subscription.user.preference.locale.iso) do
+    I18n.with_locale(@subscription.user.preference.locale_for_mails) do
       mail(
         to: @subscription.user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] #{subject}"
@@ -204,7 +204,7 @@ class UserMailer < ApplicationMailer
   # Asks a user to validate and activate their new account
   def signup_notification(user_id)
     @user = User.find(user_id)
-    I18n.with_locale(@user.preference.locale.iso) do
+    I18n.with_locale(@user.preference.locale_for_mails) do
       mail(
         to: @user.email,
         subject: t("user_mailer.signup_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -270,7 +270,7 @@ class UserMailer < ApplicationMailer
     @related_work = RelatedWork.find(related_work_id)
     @related_parent_link = url_for(controller: :works, action: :show, id: @related_work.parent)
     @related_child_link = url_for(controller: :works, action: :show, id: @related_work.work)
-    I18n.with_locale(@user.preference.locale.iso) do
+    I18n.with_locale(@user.preference.locale_for_mails) do
       mail(
         to: @user.email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Related work notification"
@@ -303,7 +303,7 @@ class UserMailer < ApplicationMailer
     @collection = Collection.find(collection_id) if collection_id
     @work.challenge_claims.each do |claim|
       user = User.find(claim.request_signup.pseud.user.id)
-      I18n.with_locale(user.preference.locale.iso) do
+      I18n.with_locale(user.preference.locale_for_mails) do
         mail(
           to: user.email,
           subject: "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"

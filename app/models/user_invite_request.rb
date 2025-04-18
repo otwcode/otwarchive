@@ -26,7 +26,7 @@ class UserInviteRequest < ApplicationRecord
       self.quantity.times do
         self.user.invitations.create
       end
-      I18n.with_locale(self.user.preference.locale.iso) do
+      I18n.with_locale(self.user.preference.locale_for_mails) do
         UserMailer.invite_increase_notification(self.user.id, self.quantity).deliver_after_commit
       end
     end

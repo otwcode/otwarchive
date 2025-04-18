@@ -249,7 +249,7 @@ class ChallengeAssignment < ApplicationRecord
                       (self.pinch_hitter ? self.pinch_hitter.user : nil)
                     end
       if assigned_to && self.request_signup
-        I18n.with_locale(assigned_to.preference.locale.iso) do
+        I18n.with_locale(assigned_to.preference.locale_for_mails) do
           UserMailer.challenge_assignment_notification(collection.id, assigned_to.id, self.id).deliver_later
         end
       end
@@ -372,7 +372,7 @@ class ChallengeAssignment < ApplicationRecord
       UserMailer.potential_match_generation_notification(collection.id, collection.collection_email).deliver_later
     else
       collection.maintainers_list.each do |user|
-        I18n.with_locale(user.preference.locale.iso) do
+        I18n.with_locale(user.preference.locale_for_mails) do
           UserMailer.potential_match_generation_notification(collection.id, user.email).deliver_later
         end
       end 
