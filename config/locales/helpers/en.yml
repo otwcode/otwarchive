@@ -38,6 +38,7 @@ en:
       lift_suspension: Suspension Lifted
       note: Note Added
       password_change: Password Changed
+      password_reset: Password Reset
       rename: Username Changed
       role_added: 'Role Added: '
       role_removed: 'Role Removed: '

@@ -46,4 +46,9 @@ class Users::PasswordsController < Devise::PasswordsController
                        send_cooldown_period: t("users.passwords.create.send_cooldown_period",
                                                count: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS))
   end
+
+  def after_resetting_password_path_for(resource)
+    resource.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_RESET)
+    super
+  end
 end
