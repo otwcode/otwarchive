@@ -1954,6 +1954,9 @@ en:
       make_default: Make this name default
       name: Name
       submit: Submit
+  related_works:
+    index:
+      page_heading: "%{login}'s Related Works"
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
