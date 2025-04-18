@@ -357,6 +357,12 @@ $.TokenList = function (input, url_or_data, settings) {
                     }
                     break;
             }
+        })
+        .keyup(function () {
+            if ($(this).val().length < settings.minChars) {
+                hide_dropdown();
+                clearTimeout(timeout);
+            }
         });
 
     // If the parent form is submitted and there is data in the input box, submit it
