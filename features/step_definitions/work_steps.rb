@@ -127,7 +127,6 @@ Given /^I have no works or comments$/ do
 end
 
 Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)? "([^"]*)"$/ do |n_chapters, n_comments, title|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -151,13 +150,7 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
 end
 
 Given /^I have a work "([^"]*)"$/ do |work|
-  step %{I am logged in as a random user}
-  step %{I post the work "#{work}"}
-end
-
-Given /^I have a locked work "([^"]*)"$/ do |work|
-  step %{I am logged in as a random user}
-  step %{I post the locked work "#{work}"}
+  step %{the work "#{work}"}
 end
 
 Given /^I have a multi-chapter draft$/ do
@@ -166,7 +159,6 @@ Given /^I have a multi-chapter draft$/ do
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_comments|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -178,7 +170,6 @@ Given /^the work(?: "([^"]*)")? with(?: (\d+))? comments setup$/ do |title, n_co
 end
 
 Given /^the work(?: "([^"]*)")? with(?: (\d+))? bookmarks? setup$/ do |title, n_bookmarks|
-  step %{I start a new session}
   step %{basic tags}
 
   title ||= "Blabla"
@@ -225,6 +216,13 @@ Given "the work {string} by {string} and {string}" do |title, login1, login2|
   FactoryBot.create(:work, title: title, authors: [user1.default_pseud, user2.default_pseud])
 end
 
+Given "the work {string} by {string}, {string} and {string}" do |title, login1, login2, login3|
+  user1 = ensure_user(login1)
+  user2 = ensure_user(login2)
+  user3 = ensure_user(login3)
+  FactoryBot.create(:work, title: title, authors: [user1.default_pseud, user2.default_pseud, user3.default_pseud])
+end
+
 Given "the work {string} by {string} and {string} with guest comments enabled" do |title, login1, login2|
   user1 = ensure_user(login1)
   user2 = ensure_user(login2)
@@ -257,17 +255,11 @@ Given /^I am logged in as the author of "([^"]*)"$/ do |work|
 end
 
 Given "the spam work {string}" do |work|
-  step %{I have a work "#{work}"}
-  step %{I log out}
-  w = Work.find_by(title: work)
-  w.update_attribute(:spam, true)
+  FactoryBot.create(:work, title: work).update_attribute(:spam, true)
 end
 
 Given "the hidden work {string}" do |work|
-  step %{I have a work "#{work}"}
-  step %{I log out}
-  w = Work.find_by(title: work)
-  w.update_attribute(:hidden_by_admin, true)
+  FactoryBot.create(:work, title: work).update_attribute(:hidden_by_admin, true)
 end
 
 Given "the work {string} is marked as spam" do |work|
@@ -438,7 +430,9 @@ When /^I edit the multiple works "([^"]*)" and "([^"]*)"/ do |title1, title2|
   unless Work.where(title: title2).exists?
     step %{I post the work "#{title2}"}
   end
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "#{title1}" for editing}
   step %{I select "#{title2}" for editing}
   step %{I press "Edit"}
@@ -450,7 +444,9 @@ When /^I edit multiple works with different comment moderation settings$/ do
   choose("Registered users and guests can comment")
   step %{I post the work without preview}
   step %{I post the work "Work with Comment Moderation Disabled"}
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "Work with Comment Moderation Enabled" for editing}
   step %{I select "Work with Comment Moderation Disabled" for editing}
   step %{I press "Edit"}
@@ -469,7 +465,9 @@ When /^I edit multiple works with different commenting settings$/ do
   choose("No one can comment")
   step %{I post the work without preview}
 
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "Work with All Commenting Enabled" for editing}
   step %{I select "Work with Anonymous Commenting Disabled" for editing}
   step %{I select "Work with All Commenting Disabled" for editing}
@@ -479,7 +477,9 @@ end
 When /^I edit multiple works coauthored as "(.*)" with "(.*)"$/ do |author, coauthor|
   step %{I coauthored the work "Shared Work 1" as "#{author}" with "#{coauthor}"}
   step %{I coauthored the work "Shared Work 2" as "#{author}" with "#{coauthor}"}
-  step %{I go to my edit multiple works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Works ("}
+  step %{I follow "Edit Works"}
   step %{I select "Shared Work 1" for editing}
   step %{I select "Shared Work 2" for editing}
   step %{I press "Edit"}
@@ -694,16 +694,18 @@ When /^I add the end notes "([^"]*)"$/ do |notes|
   fill_in("work_endnotes", with: "#{notes}")
 end
 
-When /^I add the beginning notes "([^"]*)" to the work "([^"]*)"$/ do |notes, work|
+When "I add the beginning notes {string} to the work {string}" do |notes, work|
+  step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the beginning notes "#{notes}"}
-  step %{I post the work without preview}
+  step %{I post the work}
 end
 
-When /^I add the end notes "([^"]*)" to the work "([^"]*)"$/ do |notes, work|
+When "I add the end notes {string} to the work {string}" do |notes, work|
+  step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the end notes "#{notes}"}
-  step %{I post the work without preview}
+  step %{I post the work}
 end
 
 When /^I mark the work "([^"]*)" for later$/ do |work|

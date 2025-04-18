@@ -15,7 +15,7 @@ Scenario: Remixer can see their remix / related work on their related works page
 
   Given I have related works setup
   When I post a related work as remixer
-  When I go to my user page
+  When I go to remixer's user page
   Then I should see "Related Works (1)"
   When I follow "Related Works"
   Then I should see "Works that inspired remixer"
@@ -41,7 +41,7 @@ Scenario: Translator can see their translation on their related works page
 
   Given I have related works setup
   When I post a translation as translator
-  When I go to my user page
+  When I go to translator's user page
   Then I should see "Related Works (1)"
   When I follow "Related Works"
   Then I should see "Works translated by translator"
@@ -236,7 +236,7 @@ Scenario: Draft works should not show up on related works
     And I am logged in as "translator"
     And I draft a translation
   When I am logged in as "inspiration"
-    And I go to my user page
+    And I go to inspiration's user page
   Then I should not see "Related Works (1)"
   When I view my related works
   Then I should not see "Worldbuilding Translated"
@@ -351,13 +351,13 @@ Scenario: Anonymous works listed as inspiration should have links to the authors
     And I view the work "Worldbuilding"
   Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
   When I follow "remixer" within ".afterword .children"
-  Then I should be on my "remixer" pseud page
+  Then I should be on the dashboard page for user "remixer" with pseud "remixer"
 
   When I am logged in as an admin
     And I view the work "Worldbuilding"
   Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
   When I follow "remixer" within ".afterword .children"
-  Then I should be on remixer's "remixer" pseud page
+  Then I should be on the dashboard page for user "remixer" with pseud "remixer"
 
   When I am logged out
     And I view the work "Worldbuilding"

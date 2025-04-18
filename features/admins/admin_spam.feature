@@ -54,7 +54,7 @@ Scenario: Review spam when spam works are not already hidden
 
 Scenario: Translated work hidden as spam email
   Given I am logged in as "spammer"
-    And I post the work "Spammity Spam Work"
+    And the work "Spammity Spam Work" by "spammer"
     And a locale with translated emails
     And the user "spammer" enables translated emails
     And I add the co-author "Another" to the work "Spammity Spam Work"

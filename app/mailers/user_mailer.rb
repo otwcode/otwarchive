@@ -283,20 +283,18 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
-    I18n.with_locale(@user.preference.locale.iso) do
-      subject = if @collection
-                  t("user_mailer.recipient_notification.subject.collection",
-                    app_name: ArchiveConfig.APP_SHORT_NAME,
-                    collection_title: @collection.title)
-                else
-                  t("user_mailer.recipient_notification.subject.no_collection",
-                    app_name: ArchiveConfig.APP_SHORT_NAME)
-                end
-      mail(
-        to: @user.email,
-        subject: subject
-      )
-    end
+    subject = if @collection
+                t("user_mailer.recipient_notification.subject.collection",
+                  app_name: ArchiveConfig.APP_SHORT_NAME,
+                  collection_title: @collection.title)
+              else
+                t("user_mailer.recipient_notification.subject.no_collection",
+                  app_name: ArchiveConfig.APP_SHORT_NAME)
+              end
+    mail(
+      to: @user.email,
+      subject: subject
+    )
   end
 
   # Emails a prompter to say that a response has been posted to their prompt
@@ -317,21 +315,20 @@ class UserMailer < ApplicationMailer
   # Sends email to creators when a creation is deleted
   # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
   # TODO refactor to make it asynchronous by passing the content in the method
-  def delete_work_notification(user, work)
+  def delete_work_notification(user, work, deleter)
     @user = user
     @work = work
+    @deleter = deleter
     download = Download.new(@work, mime_type: "text/html", include_draft_chapters: true)
     html = DownloadWriter.new(download).generate_html
     html = ::Mail::Encodings::Base64.encode(html)
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
     attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
 
-    I18n.with_locale(@user.preference.locale.iso) do
-      mail(
-        to: user.email,
-        subject: t("user_mailer.delete_work_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
-    end
+    mail(
+      to: user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends email to creators when a creation is deleted by an admin

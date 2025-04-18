@@ -49,7 +49,7 @@ class Skin < ApplicationRecord
   accepts_nested_attributes_for :skin_parents, allow_destroy: true, reject_if: proc { |attrs| attrs[:position].blank? || (attrs[:parent_skin_title].blank? && attrs[:parent_skin_id].blank?) }
 
   has_one_attached :icon do |attachable|
-    attachable.variant(:standard, resize_to_limit: [100, 100])
+    attachable.variant(:standard, resize_to_limit: [100, 100], loader: { n: -1 })
   end
 
   # i18n-tasks-use t("errors.attributes.icon.invalid_format")
@@ -111,7 +111,7 @@ class Skin < ApplicationRecord
     errors.add(:base, :no_public_preview)
   end
 
-  validates :title, presence: true, uniqueness: { case_sensitive: true }
+  validates :title, presence: true, uniqueness: { case_sensitive: false }
   validate :allowed_title
   def allowed_title
     return true unless self.title.match(/archive/i)

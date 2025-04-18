@@ -3,7 +3,7 @@ Feature: Filing a support request
   As a confused user
   I want to file a support request
 
-  Scenario: Filling a support request
+  Scenario: Filing a support request
   
   Given I am logged in as "puzzled"
   And basic languages
@@ -84,4 +84,4 @@ Feature: Filing a support request
     And I fill in "Brief summary" with "Just a brief note"
     And I fill in "Your question or problem" with "Hi, I didn't come from the Archive"
     And I press "Send"
-  Then a Zoho ticket should be created with referer "Unknown URL"
+  Then a Zoho ticket should be created with referer ""

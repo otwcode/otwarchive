@@ -70,14 +70,14 @@ Feature: Share Works
       And the following activated user exists
       | login   | password |
       | MadUser | password |
-    When I am logged out
+    When I am a visitor
       And I view the work "Blabla"
     Then I should see "Share"
     When I follow "Share"
     Then I should see "Close" within "#modal"
     When I follow "Close"
       And I follow "Log In"
-      And I fill in "User name or email:" with "maduser"
+      And I fill in "Username or email:" with "maduser"
       And I fill in "Password:" with "password"
       And I press "Log In"
     Then the url should not include "share"

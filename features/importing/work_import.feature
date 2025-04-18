@@ -240,8 +240,8 @@ Feature: Import Works
   Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
     Given basic languages
       And basic tags
-      And I am logged in
-      And I set my time zone to "UTC"
+      And I am logged in as "human"
+      And the user "human" sets the time zone to "UTC"
     When I go to the import page
       And I fill in "urls" with
         """
@@ -349,7 +349,8 @@ Feature: Import Works
       http://import-site-without-tags
       http://second-import-site-without-tags
       """
-    When I go to my drafts page
+    When I follow "My Dashboard"
+      And I follow "Drafts ("
       And I follow "Post Draft"
     Then I should see "Your work was successfully posted."
       And I should not see "This chapter is a draft and hasn't been posted yet!"

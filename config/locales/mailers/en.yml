@@ -145,8 +145,8 @@ en:
         text: If you have any questions, please contact our Policy & Abuse team (%{contact_abuse_url}).
       subject: "[%{app_name}] Your work was hidden as spam"
     anonymous_or_unrevealed_notification:
-      anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
-      anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
+      anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
+      anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
       changed_status:
         anonymous:
           html: The collection maintainers of %{collection_link} have changed the status of your work %{work_link} to anonymous.
@@ -406,14 +406,13 @@ en:
       reason: 'Your request was:'
       subject: "[%{app_name}] Additional invitation request declined"
     recipient_notification:
-      html:
-        collection: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
+      collection:
+        html: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
+        text: A gift work has been posted for you in the "%{collection_title}" collection (%{collection_url}) at the Archive of Our Own!
       no_collection: A gift work has been posted for you at the Archive of Our Own!
       subject:
         collection: "[%{app_name}][%{collection_title}] A gift work for you from %{collection_title}"
         no_collection: "[%{app_name}] A gift work for you"
-      text:
-        collection: A gift work has been posted for you in the "%{collection_title}" collection (%{collection_url}) at the Archive of Our Own!
     signup_notification:
       activate:
         html: Please %{activate_account_link}.

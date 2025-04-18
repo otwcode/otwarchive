@@ -1,4 +1,6 @@
 class AbuseReporter < FeedbackReporter
+  attr_accessor :creator_ids
+
   def report_attributes
     super.deep_merge(
       "departmentId" => department_id,
@@ -11,9 +13,14 @@ class AbuseReporter < FeedbackReporter
   private
 
   def custom_zoho_fields
+    # To avoid issues where Zoho ticket creation silently fails, only grab the first
+    # 2080 characters of the referer URL. That may miss some complex search queries,
+    # but still keep enough to be useful most of the time.
+    truncated_referer = url.present? ? url[0..2079] : ""
     {
       "cf_ip" => ip_address.presence || "Unknown IP",
-      "cf_url" => url.presence || "Unknown URL"
+      "cf_ticket_url" => truncated_referer,
+      "cf_user_id" => creator_ids.presence || ""
     }
   end
 

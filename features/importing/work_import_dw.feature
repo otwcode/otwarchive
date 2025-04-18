@@ -135,7 +135,7 @@ Feature: Import Works from DW
         | login          | password    |
         | cosomeone      | something   |
       And I am logged in as "cosomeone" with password "something"
-      And I set my time zone to "UTC"
+      And the user "cosomeone" sets the time zone to "UTC"
     When I go to the import page
       And I fill in "urls" with
         """
