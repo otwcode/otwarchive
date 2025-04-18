@@ -171,6 +171,7 @@ GEM
       capybara (>= 1.0, < 4)
       launchy
     chronic (0.10.2)
+    chunky_png (1.4.0)
     climate_control (1.2.0)
     coderay (1.1.3)
     concurrent-ruby (1.3.5)
@@ -235,6 +236,11 @@ GEM
     devise-async (1.0.0)
       activejob (>= 5.0)
       devise (>= 4.0)
+    devise-two-factor (6.1.0)
+      activesupport (>= 7.0, < 8.1)
+      devise (~> 4.0)
+      railties (>= 7.0, < 8.1)
+      rotp (~> 6.0)
     diff-lcs (1.5.1)
     docile (1.4.0)
     domain_name (0.6.20240107)
@@ -539,6 +545,11 @@ GEM
       netrc (~> 0.8)
     rexml (3.3.9)
     rollout (2.4.3)
+    rotp (6.3.0)
+    rqrcode (2.2.0)
+      chunky_png (~> 1.0)
+      rqrcode_core (~> 1.0)
+    rqrcode_core (1.2.0)
     rspec-core (3.13.0)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.2)
@@ -708,6 +719,7 @@ DEPENDENCIES
   departure (~> 6.7)
   devise
   devise-async
+  devise-two-factor
   ed25519 (>= 1.2, < 2.0)
   elasticsearch (= 7.17.1)
   email_spec (= 1.6.0)
@@ -755,6 +767,7 @@ DEPENDENCIES
   resque-scheduler
   rest-client (~> 2.1.0)
   rollout
+  rqrcode
   rspec-rails (~> 6.0)
   rubocop (= 1.22.3)
   rubocop-rails (= 2.12.4)
