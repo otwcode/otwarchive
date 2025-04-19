@@ -12,7 +12,7 @@ Scenario: user reads a TOS or FAQ page
 Scenario: Page title should respect user preference
 
   Given I am logged in as "author"
-    And I go to my preferences page
+    And I follow "My Preferences"
     And I fill in "Browser page title format" with "FANDOM - AUTHOR - TITLE"
     And I press "Update"
     And I post the work "New Story" with fandom "Stargate"

@@ -90,7 +90,7 @@ Feature: Non-public site and work skins
 
   Scenario: log out from my skins page (Issue 2271)
   Given I am logged in as "skinner"
-    And I am on my user page
+    And I am on skinner's user page
   When I follow "Skins"
     And I log out
   Then I should be on the login page

@@ -4,8 +4,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
   I should be able to perform special actions
 
   Scenario: Can troubleshoot works
-    Given I am logged in as "regular_user"
-      And I post the work "Just a work you know"
+    Given the work "Just a work you know"
     When I am logged in as a "support" admin
       And I view the work "Just a work you know"
       And I follow "Troubleshoot"
@@ -39,8 +38,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       | policy_and_abuse |
   
     Scenario Outline: Can hide works already marked as spam
-    Given I am logged in as "regular_user"
-      And I post the work "ToS Violation + Spam"
+    Given the work "ToS Violation + Spam" by "regular_user"
       And the work "ToS Violation + Spam" is marked as spam
     When I am logged in as a "<role>" admin
       And all emails have been delivered
@@ -60,9 +58,8 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       | policy_and_abuse |
 
   Scenario Outline: Can unhide works
-    Given I am logged in as "regular_user"
-      And I post the work "ToS Violation"
-    When I am logged in as a "policy_and_abuse" admin
+    Given the work "ToS Violation" by "regular_user"
+    When I am logged in as a "<role>" admin
       And I view the work "ToS Violation"
       And I follow "Hide Work"
       And all indexing jobs have been run
@@ -110,8 +107,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should not see "ToS Violation"
 
   Scenario: Deleting works as a Legal admin
-    Given I am logged in as "regular_user"
-      And I post the work "ToS Violation"
+    Given the work "ToS Violation" by "regular_user"
     When I am logged in as a "legal" admin
       # Don't let the admin password email mess up the count.
       And all emails have been delivered
@@ -130,8 +126,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
     Then I should not see "ToS Violation"
 
   Scenario Outline: Can hide bookmarks
-    Given I am logged in as "regular_user" with password "password1"
-      And I post the work "A Nice Work"
+    Given the work "A Nice Work" by "regular_user"
     When I am logged in as "bad_user"
       And I view the work "A Nice Work"
     When I follow "Bookmark"
@@ -157,8 +152,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       | policy_and_abuse |
 
   Scenario Outline: Deleting bookmarks
-    Given I am logged in as "regular_user" with password "password1"
-      And I post the work "A Nice Work"
+    Given the work "A Nice Work"
     When I am logged in as "bad_user"
       And I view the work "A Nice Work"
     When I follow "Bookmark"
@@ -378,8 +372,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
   Scenario: Admin can edit language on works when posting without previewing
     Given basic languages
-      And I am logged in as "regular_user"
-      And I post the work "Wrong Language"
+      And the work "Wrong Language"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Wrong Language"
       And I follow "Edit Tags and Language"
@@ -391,8 +384,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
 
   Scenario: Admin can edit language on works when previewing first
     Given basic languages
-      And I am logged in as "regular_user"
-      And I post the work "Wrong Language"
+      And the work "Wrong Language"
     When I am logged in as a "policy_and_abuse" admin
       And I view the work "Wrong Language"
       And I follow "Edit Tags and Language"
@@ -541,3 +533,109 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       | superadmin       |
       | legal            |
       | policy_and_abuse |
+
+  Scenario Outline: Certain admins can remove orphan_account pseuds from works
+    Given I have an orphan account
+      And the work "Bye" by "Leaver"
+      And "Leaver" orphans and keeps their pseud on the work "Bye"
+    When I am logged in as a "<role>" admin
+      And I view the work "Bye"
+    Then I should see "Remove Pseud"
+    When I follow "Remove Pseud"
+    Then I should see "Are you sure you want to remove the creator's pseud from this work?"
+    # Expire byline cache
+    When it is currently 1 second from now
+      And I press "Yes, Remove Pseud"
+    Then I should see "Successfully removed pseud Leaver (orphan_account) from this work."
+      And I should see "orphan_account" within ".byline"
+      But I should not see "Leaver" within ".byline"
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
+
+  @javascript
+  Scenario Outline: Removing orphan_account pseuds from works with JavaScript shows a confirmation pop-up instead of a page
+    Given I have an orphan account
+      And the work "Bye" by "Leaver"
+      And "Leaver" orphans and keeps their pseud on the work "Bye"
+    When I am logged in as a "<role>" admin
+      And I view the work "Bye"
+    Then I should see "Remove Pseud"
+    # Expire byline cache
+    When it is currently 1 second from now
+      And I follow "Remove Pseud"
+      And I confirm I want to remove the pseud
+    Then I should see "Successfully removed pseud Leaver (orphan_account) from this work."
+      And I should see "orphan_account" within ".byline"
+      But I should not see "Leaver" within ".byline"
+
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
+
+  Scenario: When removing orphan_account pseuds from a work with multiple pseuds admins choose which pseud to remove
+    Given I have an orphan account
+      And I am logged in as "Leaver"
+      And I post the work "Bye"
+      And I add the co-author "Another" to the work "Bye"
+      And it is currently 1 second from now
+      And I add the co-author "Third" to the work "Bye"
+      And "Leaver" orphans and keeps their pseud on the work "Bye"
+      And "Another" orphans and keeps their pseud on the work "Bye"
+      And "Third" orphans and keeps their pseud on the work "Bye"
+    When I am logged in as a "policy_and_abuse" admin
+      And I view the work "Bye"
+    Then I should see "Remove Pseud"
+    When I follow "Remove Pseud"
+    Then I should see "Please choose which creators' pseuds you would like to remove from this work."
+      And I should see "Third (orphan_account)"
+    When I check "Leaver (orphan_account)"
+      And I check "Another (orphan_account)"
+      # Expire byline cache
+      And it is currently 1 second from now
+      And I press "Remove Pseud"
+    Then I should see "Successfully removed pseuds Leaver (orphan_account) and Another (orphan_account) from this work."
+      And I should see "orphan_account, " within ".byline"
+      And I should see "Third (orphan_account)" within ".byline"
+      But I should not see "Leaver" within ".byline"
+      And I should not see "Another" within ".byline"
+    When I go to the admin-activities page
+    Then I should see 1 admin activity log entry
+      And I should see "remove orphan_account pseuds"
+
+  Scenario: The Remove pseud option is only shown on orphaned works with non-default pseuds
+    Given I have an orphan account
+      And the work "Bye" by "Leaver"
+      And "Leaver" orphans and takes their pseud off the work "Bye"
+      And the work "Hey" by "Leaver"
+    When I am logged in as a "superadmin" admin
+      And I view the work "Hey"
+    Then I should not see "Remove Pseud"
+    When I view the work "Bye"
+    Then I should not see "Remove Pseud"
+
+  Scenario Outline: The Remove pseud option is not shown to admins who don't have permissions to remove pseuds
+    Given I have an orphan account
+      And the work "Bye" by "Leaver"
+      And "Leaver" orphans and keeps their pseud on the work "Bye"
+    When I am logged in as a "<role>" admin
+      And I view the work "Bye"
+    Then I should not see "Remove Pseud"
+
+    Examples:
+      | role                       |
+      | board                      |
+      | board_assistants_team      |
+      | communications             |
+      | development_and_membership |
+      | docs                       |
+      | elections                  |
+      | legal                      |
+      | translation                |
+      | tag_wrangling              |
+      | open_doors                 |

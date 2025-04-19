@@ -33,7 +33,7 @@ class OrphansController < ApplicationController
     use_default = params[:use_default] == "true"
     Creatorship.orphan(@pseuds, @orphans, use_default)
     flash[:notice] = ts("Orphaning was successful.")
-    redirect_to(current_user)
+    redirect_to user_path(current_user)
   end
 
   protected

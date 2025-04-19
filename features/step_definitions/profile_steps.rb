@@ -1,5 +1,5 @@
 Given /^I want to edit my profile$/ do
-  visit user_profile_path(User.current_user)
+  step "I view my profile"
   click_link("Edit My Profile")
   step %{I should see "Edit My Profile"}
 end
@@ -28,58 +28,32 @@ When /^I remove details from my profile$/ do
   click_button("Update")
 end
 
-
-When /^I enter an incorrect password$/ do
-  click_link("Change Email")
-  fill_in("new_email", with: "valid2@archiveofourown.org")
-  fill_in("email_confirmation", with: "valid2@archiveofourown.org")
-  fill_in("password_check", with: "passw")
-  click_button("Change Email")
+When "the email address change confirmation period is set to {int} days" do |amount|
+  allow(Devise).to receive(:confirm_within).and_return(amount.days)
 end
 
+When "I start to change my email to {string}" do |email|
+  step %{I fill in "New email" with "#{email}"}
+  step %{I fill in "Enter new email again" with "#{email}"}
+  step %{I fill in "Password" with "password"}
+  step %{I press "Confirm New Email"}
+end
 
-When /^I change my email$/ do
-  click_link("Change Email")
-  fill_in("new_email", with: "valid2@archiveofourown.org")
-  fill_in("email_confirmation", with: "valid2@archiveofourown.org")
-  fill_in("password_check", with: "password")
-  click_button("Change Email")
+When "I confirm my email change request to {string}" do |email|
+  step %{I should see "Are you sure you want to change your email address to #{email}?"}
+  step %{I press "Yes, Change Email"}
+end
+
+When "I request to change my email to {string}" do |email|
+  step %{I start to change my email to "#{email}"}
+  step %{I confirm my email change request to "#{email}"}
 end
 
 
 When /^I view my profile$/ do
-  visit user_path(User.current_user)
+  step %{I follow "My Dashboard"}
   step %{I should see "Dashboard"}
   click_link("Profile")
-end
-
-
-When /^I enter an invalid email$/ do
-  click_link("Change Email")
-  fill_in("new_email", with: "bob.bob.bob")
-  fill_in("email_confirmation", with: "bob.bob.bob")
-  fill_in("password_check", with: "password")
-  click_button("Change Email")
-end
-
-
-When "I enter non-matching emails" do
-  click_link("Change Email")
-  fill_in("new_email", with: "correct@example.com")
-  fill_in("email_confirmation", with: "invalid@example.com")
-  fill_in("password_check", with: "password")
-  click_button("Change Email")
-end
-
-When /^I enter a duplicate email$/ do
-  user = FactoryBot.create(:user, login: "testuser2", password: "password", email: "foo@ao3.org")
-  step %{confirmation emails have been delivered}
-
-  click_link("Change Email")
-  fill_in("new_email", with: "foo@ao3.org")
-  fill_in("email_confirmation", with: "foo@ao3.org")
-  fill_in("password_check", with: "password")
-  click_button("Change Email")
 end
 
 When /^I enter a birthdate that shows I am under age$/ do
@@ -95,7 +69,7 @@ When /^I change my preferences to display my date of birth$/ do
   click_link("Preferences")
   check ("Show my date of birth to other people.")
   click_button("Update")
-  visit user_path(User.current_user)
+  step %{I follow "My Dashboard"}
   click_link("Profile")
 end
 
@@ -104,7 +78,7 @@ When /^I change my preferences to display my email address$/ do
   click_link("Preferences")
   check ("Show my email address to other people.")
   click_button("Update")
-  visit user_path(User.current_user)
+  step %{I follow "My Dashboard"}
   click_link("Profile")
 end
 

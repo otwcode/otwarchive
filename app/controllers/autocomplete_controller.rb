@@ -2,7 +2,7 @@ class AutocompleteController < ApplicationController
   respond_to :json
 
   skip_before_action :store_location
-  skip_before_action :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
+  skip_around_action :set_current_user, except: [:collection_parent_name, :owned_tag_sets, :site_skins]
   skip_before_action :sanitize_ac_params # can we dare!
 
   #### DO WE NEED THIS AT ALL? IF IT FIRES WITHOUT A TERM AND 500s BECAUSE USER DID SOMETHING WACKY SO WHAT
@@ -21,13 +21,9 @@ class AutocompleteController < ApplicationController
 
   # PSEUDS
   def pseud
-    if params[:term].blank?
-      # get the user's own pseuds
-      set_current_user
-      render_output(current_user.pseuds.collect(&:byline))
-    else
-      render_output(Pseud.autocomplete_lookup(search_param: params[:term], autocomplete_prefix: "autocomplete_pseud").map {|res| Pseud.fullname_from_autocomplete(res)})
-    end
+    return if params[:term].blank?
+
+    render_output(Pseud.autocomplete_lookup(search_param: params[:term], autocomplete_prefix: "autocomplete_pseud").map { |res| Pseud.fullname_from_autocomplete(res) })
   end
 
   ## TAGS

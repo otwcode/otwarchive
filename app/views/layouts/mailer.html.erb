@@ -95,12 +95,16 @@
                             <p><%= yield(:footer_note) %></p>
                           <% end %>
 
-                          <p><%= t("mailer.general.footer.general.unwanted_email.html", support_link: style_footer_link(t("mailer.general.footer.general.html.support_link_text"), new_feedback_report_url)) %></p>
+                          <% if @pac_footer %>
+                            <p><%= t("mailer.general.footer.why_policy_abuse.html", contact_policy_abuse_link: style_footer_link(t("mailer.general.footer.why_policy_abuse.contact_policy_abuse"), new_abuse_report_url)) %></p>
+                          <% else %>
+                            <p><%= t("mailer.general.footer.why_support.html", contact_support_link: style_footer_link(t("mailer.general.footer.why_support.contact_support"), new_feedback_report_url)) %></p>
+                          <% end %>
 
-                          <p><%= t("mailer.general.footer.general.about.html", donate_link: style_footer_link(t("mailer.general.footer.general.html.donate_link_text"), donate_url)) %></p>
+                          <p><%= t("mailer.general.footer.about.html", your_donations_link: style_footer_link(t("mailer.general.footer.about.your_donations"), donate_url)) %></p>
 
                           <% if content_for?(:sent_at) %>
-                            <p><%= t 'mailer.general.footer.sent_at', sent_at: yield(:sent_at).strip %></p>
+                            <p><%= t("mailer.general.footer.sent_at", sent_at: yield(:sent_at).strip) %></p>
                           <% end %>
 <!-- /footer -->
 
