@@ -351,7 +351,7 @@ describe CommentsController do
         it "renders the :new template" do
           get :new, params: { tag_id: fandom.name }
           expect(response).to render_template("new")
-          expect(assigns(:name)).to eq("Fandom")
+          expect(assigns(:name)).to eq("The 8 Fandom")
         end
       end
 

@@ -31,6 +31,7 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
   before_action :check_permission_to_modify_hidden_status, only: [:hide, :unhide]
   before_action :admin_logout_required, only: [:new, :create, :add_comment_reply]
+  before_action :set_page_title, only: [:index, :unreviewed, :new]
 
   include BlockHelper
 
@@ -292,6 +293,7 @@ class CommentsController < ApplicationController
     @thread_view = true
     @thread_root = @comment
     params[:comment_id] = params[:id]
+    @page_title = t("comments.show.page_title", comment_id: params[:comment_id].to_s, name: @thread_root.commentable_name)
   end
 
   # GET /comments/new
@@ -303,20 +305,11 @@ class CommentsController < ApplicationController
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
       @name =
-        case @commentable.class.name
-        when /Work/
-          @commentable.title
-        when /Chapter/
-          @commentable.work.title
-        when /Tag/
-          @commentable.name
-        when /AdminPost/
-          @commentable.title
-        when /Comment/
-          ts("Previous Comment")
-        else
-          @commentable.class.name
-        end
+      if @commentable.class.name =~ /Comment/
+        ts("Previous Comment")
+      else
+        @commentable.commentable_name
+      end
     end
   end
 
@@ -694,5 +687,9 @@ class CommentsController < ApplicationController
 
   def filter_params
     params.permit!
+  end
+
+  def set_page_title
+    @page_title = t("comments.#{action_name}.page_title", name: @commentable.commentable_name) if @commentable.present?
   end
 end
