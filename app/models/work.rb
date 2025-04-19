@@ -900,6 +900,10 @@ class Work < ApplicationRecord
   # Comment support -- work acts as a commentable object even though really we
   # override to consolidate the comments on all the chapters.
   ################################################################################
+  # Return the name to link comments to for this object
+  def commentable_name
+    self.title
+  end
 
   # Gets all comments for all chapters in the work
   def find_all_comments
