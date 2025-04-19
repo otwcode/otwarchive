@@ -105,7 +105,9 @@ en:
     index:
       page_title: "Comments on %{name}"
     new:
+      comment_on_question: "What did you want to comment on?"
       page_title: "New Comment on %{name}"
+      previous_comment: "Previous Comment"
     show:
       page_title: "Comment %{comment_id} on %{name}"
     unfreeze:

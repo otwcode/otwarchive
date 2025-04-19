@@ -299,17 +299,17 @@ class CommentsController < ApplicationController
   # GET /comments/new
   def new
     if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
+      flash[:error] = t("comments.new.comment_on_question")
       redirect_back_or_default(root_path)
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
       @name =
-      if @commentable.class.name =~ /Comment/
-        ts("Previous Comment")
-      else
-        @commentable.commentable_name
-      end
+        if @commentable.class.name =~ /Comment/
+          t("comments.new.previous_comment")
+        else
+          @commentable.commentable_name
+        end
     end
   end
 
@@ -325,7 +325,7 @@ class CommentsController < ApplicationController
   # POST /comments.xml
   def create
     if @commentable.nil?
-      flash[:error] = ts("What did you want to comment on?")
+      flash[:error] = t("comments.new.comment_on_question")
       redirect_back_or_default(root_path)
     else
       @comment = Comment.new(comment_params)
