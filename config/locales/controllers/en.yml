@@ -103,13 +103,13 @@ en:
       permission_denied: Sorry, you don't have permission to hide that comment.
       success: Comment successfully hidden!
     index:
-      page_title: "Comments on %{name}"
+      page_title: Comments on %{name}
     new:
-      comment_on_question: "What did you want to comment on?"
-      page_title: "New Comment on %{name}"
-      previous_comment: "Previous Comment"
+      comment_on_question: What did you want to comment on?
+      page_title: New Comment on %{name}
+      previous_comment: Previous Comment
     show:
-      page_title: "Comment %{comment_id} on %{name}"
+      page_title: Comment %{comment_id} on %{name}
     unfreeze:
       error: Sorry, that comment thread could not be unfrozen.
       permission_denied: Sorry, you don't have permission to unfreeze that comment thread.
@@ -119,7 +119,7 @@ en:
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
     unreviewed:
-      page_title: "Unreviewed Comments on %{name}"
+      page_title: Unreviewed Comments on %{name}
   errors:
     auth_error:
       browser_title: Auth Error
