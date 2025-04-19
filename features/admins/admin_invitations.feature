@@ -309,7 +309,7 @@ Feature: Admin Actions to Manage Invitations
       And I fill in "Username" with "dax"
       And I press "Search" within "form.invitation.simple.search"
     Then I should see "Copy and use"
-    Then I should see "Delete"
+      And I should see "Delete"
     When I follow "Invite New Users"
       And I fill in "Invite token" with "dax's" invite code
       And I press "Search" within "form.invitation.simple.search"
@@ -366,7 +366,7 @@ Feature: Admin Actions to Manage Invitations
       And I fill in "All or part of an email address" with "test@example.com"
       And I press "Search" within "form.invitation.simple.search"
     Then I should see "Copy and use"
-    Then I should see "Delete"
+      And I should see "Delete"
     When I find and press the invitation token url
     Then I should see "Sender testadmin-support"
 
@@ -378,18 +378,18 @@ Feature: Admin Actions to Manage Invitations
       And I fill in "Username" with "dax"
       And I press "Search" within "form.invitation.simple.search"
     Then I should see "Copy and use"
-    Then I should see "Delete"
+      And I should see "Delete"
     When I follow "Invite New Users"
       And I fill in "Invite token" with "dax's" invite code
       And I press "Search" within "form.invitation.simple.search"
     Then I should see "Copy and use"
-    Then I should see "Delete"
+      And I should see "Delete"
     When I find and press the invitation token url
     Then I should see "Redeemed at -"
     When I fill in "Enter an email address" with "oldman@ds9.com"
       And I press "Update Invitation"
     Then I should see "oldman@ds9.com"
-    Then I should see "Invitation was successfully sent."
+      And I should see "Invitation was successfully sent."
 
   Scenario: An admin can search the invitation queue, and search parameters are
   kept even if deleting without JavaScript

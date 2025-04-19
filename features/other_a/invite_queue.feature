@@ -106,7 +106,7 @@ Feature: Invite queue management
       And I follow "Invitations"
       And I fill in "track_invitation_invitee_email" with "test@archiveofourown.org"
       And I press "Search" within "form.invitation.simple.search"
-    When I follow "Copy and use"
+      And I follow "Copy and use"
     Then I should see "You are already logged in!"
 
     # user uses email invite

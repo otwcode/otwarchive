@@ -42,7 +42,7 @@ class Admin::AdminInvitationsController < Admin::BaseController
       @invitations = @user.invitations if @user
     end
     if !invitation_params[:token].blank?
-      @invitations = [Invitation.find_by(token: invitation_params[:token])].compact
+      @invitations = Invitation.where(token: invitation_params[:token]).limit(1)
     elsif invitation_params[:invitee_email].present?
       @invitations = Invitation.where("invitee_email LIKE ?", "%#{invitation_params[:invitee_email]}%")
     end
