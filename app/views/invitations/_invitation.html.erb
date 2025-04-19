@@ -1,15 +1,15 @@
 <dl>
-  <dt><%= t(".sender") %></dt>
+  <dt class="heading"><%= t(".sender") %></dt>
   <dd><%= creator_link(@invitation) %></dd>
-  <dt><%= t(".invitation_token") %></dt>
+  <dt class="heading"><%= t(".invitation_token") %></dt>
   <dd><%= @invitation.token %></dd>
-  <dt><%= t(".copy_link") %></dt>
+  <dt class="heading"><%= t(".copy_link") %></dt>
   <dd>
     <% unless @invitation.redeemed_at %>
       <%= link_to t(".copy_and_use"), signup_path(invitation_token: @invitation.token) %>
     <% end %>
   </dd>
-  <dt><%= t(".sent_to") %></dt>
+  <dt class="heading"><%= t(".sent_to") %></dt>
   <dd>
     <% if @invitation.redeemed_at %>
       <%= @invitation.invitee_email %>
@@ -22,14 +22,14 @@
       <% end %>
     <% end %>
   </dd>
-  <dt><%= t(".redeemed_by") %></dt>
-  <dd><%= invitee_link(@invitation) %></dd>
-  <dt><%= t(".created_at") %></dt>
-  <dd><%= @invitation.created_at %></dd>
-  <dt><%= t(".sent_at") %></dt>
-  <dd><%= @invitation.sent_at %></dd>
-  <dt><%= t(".last_resent_at") %></dt>
-  <dd><%= @invitation.resent_at %></dd>
-  <dt><%= t(".redeemed_at") %></dt>
-  <dd><%= @invitation.redeemed_at %></dd>
+  <dt class="heading"><%= t(".redeemed_by") %></dt>
+  <dd><%= invitee_link(@invitation) || "-" %></dd>
+  <dt class="heading"><%= t(".created_at") %></dt>
+  <dd><%= @invitation.created_at || "-" %></dd>
+  <dt class="heading"><%= t(".sent_at") %></dt>
+  <dd><%= @invitation.sent_at || "-" %></dd>
+  <dt class="heading"><%= t(".last_resent_at") %></dt>
+  <dd><%= @invitation.resent_at || "-" %></dd>
+  <dt class="heading"><%= t(".redeemed_at") %></dt>
+  <dd><%= @invitation.redeemed_at || "-" %></dd>
 </dl>
