@@ -234,6 +234,10 @@ Given "an archive FAQ category with the title {string} exists" do |title|
   FactoryBot.create(:archive_faq, title: title)
 end
 
+Given "the app name is {string}" do |app_name|
+  allow(ArchiveConfig).to receive(:APP_NAME).and_return(app_name)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do

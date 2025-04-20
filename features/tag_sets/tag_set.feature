@@ -173,8 +173,3 @@ Feature: Creating and editing tag sets
     And I fill in "Character nomination limit" with "1"
     And I submit
   Then I should see "You cannot make changes to nomination settings when nominations already exist. Please review and delete existing nominations first."
-
-  Scenario: New tag set page has the expected browser page title
-  Given I am logged in as "user"
-  When I go to the new tag set page
-  Then I should see the page title "New Owned Tag Set | Example Archive"
