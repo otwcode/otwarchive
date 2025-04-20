@@ -606,6 +606,7 @@ $.TokenList = function (input, url_or_data, settings) {
             // put focus on the last token's remove option, then hide the input
             input_box.parent().prev("li").find("a").focus();
             input_box.hide();
+            clearTimeout(timeout);
         } else {
             input_box.focus();
         }
