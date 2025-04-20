@@ -1954,6 +1954,15 @@ en:
       make_default: Make this name default
       name: Name
       submit: Submit
+  readings:
+    index:
+      clear_history:
+        confirm: Are you sure you want to clear your History and Marked for Later lists? This cannot be undone!
+        text: Clear History
+      full_history: Full History
+      history: History
+      list_of_history_items: List of History Items
+      marked_for_later: Marked for Later
   related_works:
     index:
       page_heading: "%{login}'s Related Works"
