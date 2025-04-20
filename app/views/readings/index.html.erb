@@ -4,17 +4,17 @@
 
 <!--subnav-->
 <% if !current_user.readings.empty? %>
-<ul class="navigation actions">
-  <li>
-    <%= span_if_current t(".full_history"), user_readings_path(@user), params[:show].blank? %>
-  </li>
-  <li>
-    <%= span_if_current t(".marked_for_later"), user_readings_path(@user, show: "to-read"), params[:show] == "to-read" %>
-  </li>
-  <li>
-    <%= link_to t(".clear_history.text"), clear_user_readings_path(current_user), data: { confirm: t(".clear_history.confirm") }, method: :post %>
-  </li>
-</ul>
+  <ul class="navigation actions">
+    <li>
+      <%= span_if_current t(".full_history"), user_readings_path(@user), params[:show].blank? %>
+    </li>
+    <li>
+      <%= span_if_current t(".marked_for_later"), user_readings_path(@user, show: "to-read"), params[:show] == "to-read" %>
+    </li>
+    <li>
+      <%= link_to t(".clear_history.text"), clear_user_readings_path(current_user), data: { confirm: t(".clear_history.confirm") }, method: :post %>
+    </li>
+  </ul>
 <% end %>
 
 <%== pagy_nav @pagy %>
