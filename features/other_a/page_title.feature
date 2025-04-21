@@ -8,6 +8,7 @@ Background:
 
 Scenario: An index page uses only the controller name in the default browser page title
 
+  Given a fandom exists with name: "No Fandom", canonical: true
   When I go to the tags page
   Then I should see the page title "Tags | Example Archive"
 
@@ -22,7 +23,7 @@ Scenario: user reads a TOS or FAQ page
   When I go to the TOS page
   Then the page title should include "Terms of Service | Example Archive"
   When I go to the FAQ page
-  Then the page title should include "FAQ | Example Archive"
+  Then the page title should include "Archive FAQs | Example Archive"
 
 Scenario: Work page title should respect user preference
 
