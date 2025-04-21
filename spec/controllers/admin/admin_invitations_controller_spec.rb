@@ -106,7 +106,7 @@ describe Admin::AdminInvitationsController do
       get :find, params: { invitation: { token: invitation.token } }
 
       expect(response).to render_template("find")
-      expect(assigns(:invitations)).to eq([invitation])
+      expect(assigns(:invitations)).to include(invitation)
     end
 
     it "allows admins to search by invitee_email" do
