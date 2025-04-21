@@ -260,6 +260,8 @@ module NavigationHelpers
       tag_wranglings_path(show: Regexp.last_match(1).pluralize)
     when /^the tags page$/i
       tags_path
+    when /^the orphan all works page$/i
+      new_orphan_path
 
     # Admin Pages
     when /^the admin-posts page$/i

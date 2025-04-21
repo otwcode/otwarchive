@@ -1,4 +1,6 @@
 class AbuseReporter < FeedbackReporter
+  attr_accessor :creator_ids
+
   def report_attributes
     super.deep_merge(
       "departmentId" => department_id,
@@ -17,7 +19,8 @@ class AbuseReporter < FeedbackReporter
     truncated_referer = url.present? ? url[0..2079] : ""
     {
       "cf_ip" => ip_address.presence || "Unknown IP",
-      "cf_ticket_url" => truncated_referer
+      "cf_ticket_url" => truncated_referer,
+      "cf_user_id" => creator_ids.presence || ""
     }
   end
 
