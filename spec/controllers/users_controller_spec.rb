@@ -251,7 +251,7 @@ describe UsersController do
         put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "new@example.com", password_check: "password" }
 
         expect(response).to render_template(:change_email)
-        expect(assigns[:user].errors.full_messages).to include("Email has already been taken")
+        expect(assigns[:user].errors.full_messages.first).to include("This email is already associated with another account. Please try again with a different email address.")
         expect(assigns[:user].email).to eq("old@example.com")
       end
     end
