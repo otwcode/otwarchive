@@ -351,13 +351,15 @@ class UserMailer < ApplicationMailer
   end
 
   # Sends email to creators when a creation is hidden by an admin
-  def admin_hidden_work_notification(creation_id, user_id)
+  def admin_hidden_work_notification(creation_ids, user_id)
+    @pac_footer = true
     @user = User.find_by(id: user_id)
-    @work = Work.find_by(id: creation_id)
+    @works = creation_ids.map { |work_id| Work.find_by(id: work_id) }.compact
+    return if @works.empty?
 
     mail(
       to: @user.email,
-      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, count: @works.size)
     )
   end
 

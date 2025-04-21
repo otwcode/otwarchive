@@ -1159,7 +1159,7 @@ class Work < ApplicationRecord
 
     users.each do |user|
       I18n.with_locale(user.preference.locale.iso) do
-        UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
+        UserMailer.admin_hidden_work_notification([id], user.id).deliver_after_commit
       end
     end
   end
