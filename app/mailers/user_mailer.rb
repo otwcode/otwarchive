@@ -354,7 +354,8 @@ class UserMailer < ApplicationMailer
   def admin_hidden_work_notification(creation_ids, user_id)
     @pac_footer = true
     @user = User.find_by(id: user_id)
-    @works = creation_ids.map { |work_id| Work.find_by(id: work_id) }.compact
+    @works = creation_ids.map { |work_id| Work.find_by(id: work_id) }
+      .compact
     return if @works.empty?
 
     mail(
@@ -402,5 +403,4 @@ class UserMailer < ApplicationMailer
       subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
     )
   end
-
 end
