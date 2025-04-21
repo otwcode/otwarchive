@@ -313,8 +313,8 @@ Feature: Admin Actions to Manage Invitations
     When I follow "Invite New Users"
       And I fill in "Invite token" with "dax's" invite code
       And I press "Search" within "form.invitation.simple.search"
-    When I follow the first invitation token url
     # Only certain admin roles have access to this page; other admins will see the following error message
+    When I follow the first invitation token url
     Then I should see "Please log out of your admin account first!"
 
   Scenario: An admin can find all invitations via email partial match
