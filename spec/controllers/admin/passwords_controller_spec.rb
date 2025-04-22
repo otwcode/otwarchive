@@ -56,7 +56,7 @@ describe Admin::PasswordsController do
       end
 
       it "rejects the request" do
-        it_redirects_to_with_error(edit_admin_password_path(reset_password_token: reset_token), "Invalid two-factor authentication code.")
+        it_redirects_to_with_error(edit_admin_password_path(reset_password_token: reset_token), "Incorrect two-factor authentication code.")
       end
     end
 

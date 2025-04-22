@@ -39,7 +39,8 @@ Feature: Authenticate Admin Users
   When I fill in "New password" with "newpassword"
     And I fill in "Confirm new password" with "newpassword"
     And I press "Set Admin Password"
-  Then I should see "Your password has been changed successfully."
+  Then I should see "Your password has been changed successfully. You are now signed in."
+    And I should see "Hi, admin!"
 
   Scenario: Set password link expires.
   Given the following admin exists
@@ -103,7 +104,8 @@ Feature: Authenticate Admin Users
   When I fill in "New password" with "newpassword"
     And I fill in "Confirm new password" with "newpassword"
     And I press "Set Admin Password"
-  Then I should see "Your password has been changed successfully."
+  Then I should see "Your password has been changed successfully. You are now signed in."
+    And I should see "Hi, admin!"
 
   Scenario: Reset password link expires.
   Given the following admin exists
@@ -148,8 +150,7 @@ Feature: Authenticate Admin Users
   When I fill in "New password" with "newpassword"
     And I fill in "Confirm new password" with "newpassword"
     And I press "Set Admin Password"
-  Then I should see "Your password has been changed successfully."
-    And I should not see "Hi, admin!"
+  Then I should see "Your password has been changed successfully. Your account is locked."
   When the admin "admin" is unlocked
     And I fill in "Admin username" with "admin"
     And I fill in "Admin password" with "newpassword"

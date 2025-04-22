@@ -142,7 +142,7 @@ Feature: Authenticate Admin Users With TOTP 2FA
       And I press "Log In as Admin"
       And I fill in a used TOTP recovery code
       And I press "Log In as Admin"
-    Then I should see "Invalid two-factor authentication code."
+    Then I should see "Incorrect two-factor authentication code."
       And I should not see "Successfully logged in"
 
   Scenario: Admins with TOTP 2FA enabled should not be prompted for their code if they enter invalid credentials
@@ -169,7 +169,7 @@ Feature: Authenticate Admin Users With TOTP 2FA
     Then I should see "Two-Factor Authentication Code"
     When I fill in "Two-Factor Authentication Code" with "000000"
       And I press "Log In as Admin"
-    Then I should see "Invalid two-factor authentication code."
+    Then I should see "Incorrect two-factor authentication code."
       And I should not see "Successfully logged in"
 
   Scenario: Admins with TOTP 2FA enabled can reset their password after providing their code
@@ -206,5 +206,18 @@ Feature: Authenticate Admin Users With TOTP 2FA
       And I fill in "Confirm new password" with "newpassword"
     When I fill in "Two-Factor Authentication Code" with "000000"
       And I press "Set Admin Password"
-    Then I should see "Invalid two-factor authentication code."
+    Then I should see "Incorrect two-factor authentication code."
       And I should not see "Your password has been changed successfully."
+  
+  Scenario: Admins with TOTP 2FA disabled cannot see the TOTP field when resetting their password
+    Given the following admin exists
+      | login | password     | email             |
+      | admin | testpassword | admin@example.com |
+      And all emails have been delivered
+    When I go to the admin login page
+      And I follow "Forgot admin password?"
+      And I fill in "Admin username" with "admin"
+      And I press "Reset Admin Password"
+      And 1 email should be delivered to "admin@example.com"
+      And I follow "Change my password" in the email
+    Then I should not see "Two-Factor Authentication Code"
