@@ -172,6 +172,11 @@ class UsersController < ApplicationController
 
     @new_email = params[:new_email]
 
+    if @new_email.downcase == @user.email.downcase
+      flash[:error] = t("users.confirm_change_email.same_as_current")
+      render :change_email and return
+    end
+
     # Please note: This comparison is not technically correct. According to
     # RFC 5321, the local part of an email address is case sensitive, while the
     # domain is case insensitive. That said, all major email providers treat
