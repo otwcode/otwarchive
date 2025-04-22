@@ -133,6 +133,11 @@ kbd, tt, code, var, pre, samp {
   margin: auto;
 }
 
+code.big {
+  font-size: 1.75em;
+  font-weight: bold
+}
+
 pre {
   white-space: pre-wrap;
 }

@@ -49,7 +49,7 @@ class AdminMailer < ApplicationMailer
 
     mail(
       to: @admin.email,
-      subject: t(".subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME) 
     )
   end
 
@@ -61,7 +61,7 @@ class AdminMailer < ApplicationMailer
 
     mail(
       to: admin.email,
-      subject: t(".subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME) 
     )
   end
 end

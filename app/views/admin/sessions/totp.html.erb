@@ -4,6 +4,7 @@
 
 <!--main content-->
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), method: :post) do |form| %>
+  <fieldset>
   <dl>
     <dt><%= label_tag "admin[otp_attempt]", t(".two_factor_authentication_code") %></dt>
     <dd>
@@ -12,5 +13,6 @@
     </dd>
   </dl>
   <p class="submit actions"><%= submit_tag t("admin.sessions.new.submit") %></p>
+  </fieldset>
 <% end %>
 <!--/content-->
