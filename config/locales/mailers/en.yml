@@ -380,7 +380,7 @@ en:
         another_issue: You have another issue.
         mentor: You would like a mentor or have questions.
         more_work:
-          one: You need more work in order to have tags to wrangle every %{weeks} week.
+          one: You need more work in order to have tags to wrangle every week.
           other: You need more work in order to have tags to wrangle every %{weeks} weeks.
         technical_difficulties: You are having technical difficulties accessing the Archive.
         title: 'Please reply to this email if:'

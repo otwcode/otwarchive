@@ -449,7 +449,7 @@ class User < ApplicationRecord
     last_activity = LastWranglingActivity.find_or_create_by(user: self)
     last_activity.notified_inactive_wrangler = false
     last_activity.notified_inactive_supervisors = false
-    last_activity.touch
+    last_activity.touch unless last_activity.will_save_change_to_notified_inactive_wrangler? || last_activity.will_save_change_to_notified_inactive_supervisors?
     last_activity.save!
   end
 
