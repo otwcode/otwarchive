@@ -4,9 +4,6 @@ describe CommentsController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  let(:comment) { create(:comment) }
-  let(:unreviewed_comment) { create(:comment, :unreviewed) }
-
   before do
     request.env["HTTP_REFERER"] = "/where_i_came_from"
   end
