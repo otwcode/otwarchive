@@ -15,9 +15,6 @@ class Admin < ApplicationRecord
          lock_strategy: :none,
          unlock_strategy: :none
 
-  # https://github.com/devise-two-factor/devise-two-factor?tab=readme-ov-file#disabling-automatic-login-after-password-resets
-  #self.sign_in_after_reset_password = false
-
   include BackwardsCompatiblePasswordDecryptor
 
   has_many :log_items

@@ -21,11 +21,11 @@ class Admin::PasswordsController < Devise::PasswordsController
 
     return unless admin
 
-    if admin.otp_required_for_login && !valid_otp_attempt?(admin)
-      flash[:error] = t("admin.sessions.invalid_totp")
+    return unless admin.otp_required_for_login && !valid_otp_attempt?(admin)
 
-      redirect_to edit_admin_password_path(reset_password_token: admin_params[:reset_password_token])
-    end
+    flash[:error] = t("admin.sessions.invalid_totp")
+
+    redirect_to edit_admin_password_path(reset_password_token: admin_params[:reset_password_token])
   end
 
   private
@@ -33,7 +33,7 @@ class Admin::PasswordsController < Devise::PasswordsController
   def find_admin_by_reset_password_token(original_token)
     reset_password_token = Devise.token_generator.digest(self, :reset_password_token, original_token)
 
-    Admin.find_by_reset_password_token(reset_password_token)
+    Admin.find_by(reset_password_token: reset_password_token)
   end
 
   def valid_otp_attempt?(admin)

@@ -61,6 +61,9 @@ class Admin::PreferencesController < Admin::BaseController
     current_admin.save!
   end
 
+  def totp_disable
+  end
+
   def totp_disable_form
     unless current_admin.valid_password?(enable_2fa_params[:password])
       flash[:error] = t("devise.failure.admin.invalid")
