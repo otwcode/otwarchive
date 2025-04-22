@@ -16,10 +16,6 @@ class Admin::PasswordsController < Devise::PasswordsController
     @totp_required = admin.otp_required_for_login
   end
 
-  def edit
-    super
-  end
-
   def verify_otp_code
     admin = find_admin_by_reset_password_token(admin_params[:reset_password_token])
 
@@ -30,10 +26,6 @@ class Admin::PasswordsController < Devise::PasswordsController
     flash[:error] = t("admin.sessions.invalid_totp")
 
     redirect_to edit_admin_password_path(reset_password_token: admin_params[:reset_password_token])
-  end
-
-  def update
-    super
   end
 
   private
