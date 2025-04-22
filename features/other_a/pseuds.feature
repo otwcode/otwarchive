@@ -9,7 +9,7 @@ Scenario: pseud creation and playing with the default pseud
   # Check that you can't edit your default pseud.
   Then I should see "Default Pseud"
   When I follow "Edit"
-  Then I should see "You cannot change the pseud that matches your user name."
+  Then I should see "You cannot change the pseud that matches your username."
     And the "Make this name default" checkbox should be checked and disabled
 
   # Make a new default pseud called "Me."

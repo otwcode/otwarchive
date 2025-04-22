@@ -227,3 +227,13 @@ Feature: Admin Abuse actions
     Then I should see "Are you sure you want to delete"
     When I press "Yes, Delete All Spammer Creations"
     Then I should see "All creations by user Spamster have been deleted."
+
+  Scenario: Rename a user with an inappropriate username
+    Given the user "otheruserstinks" exists and is activated
+      And I am logged in as a "policy_and_abuse" admin
+      And an abuse ticket ID exists
+    When I visit the change username page for otheruserstinks
+      And I fill in "Ticket ID" with "480000"
+      And I press "Change Username"
+    Then I should see "Username has been successfully updated."
+      But I should not see "otheruserstinks" within "h2.heading"

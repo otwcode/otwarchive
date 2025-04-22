@@ -81,7 +81,7 @@ remove_old_hit_count_data:
   description: "Remove old hit count information from redis."
 
 check_invite_queue:
-  cron: "21 6 * * *"
+  every: 1h
   class: "AdminSetting"
   queue: utilities
   args: check_queue

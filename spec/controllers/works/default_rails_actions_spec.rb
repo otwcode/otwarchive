@@ -820,6 +820,51 @@ describe WorksController, work_search: true do
         expect(assigns(:works)).to include(work, unrevealed_work)
       end
     end
+
+    context "with sorting options" do
+      let!(:new_work) do
+        create(:work,
+               title: "New Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 3.days.ago,
+               revised_at: 3.days.ago)
+      end
+
+      let!(:old_work) do
+        create(:work,
+               title: "Old Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 30.days.ago,
+               revised_at: 30.days.ago)
+      end
+
+      let!(:revised_work) do
+        create(:work,
+               title: "Revised Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 20.days.ago,
+               revised_at: 2.days.ago)
+      end
+
+      before { run_all_indexing_jobs }
+
+      it "sorts by date" do
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works).map(&:title)).to eq([revised_work, new_work, old_work].map(&:title))
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_direction: "asc" } }
+        expect(assigns(:works).map(&:title)).to eq([old_work, new_work, revised_work].map(&:title))
+      end
+
+      it "sorts by title" do
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_column: "title_to_sort_on" } }
+        expect(assigns(:works).map(&:title)).to eq([new_work, old_work, revised_work].map(&:title))
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_column: "title_to_sort_on", sort_direction: "desc" } }
+        expect(assigns(:works).map(&:title)).to eq([revised_work, old_work, new_work].map(&:title))
+      end
+    end
   end
 
   describe "destroy" do

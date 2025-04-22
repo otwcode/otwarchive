@@ -109,7 +109,7 @@ class UserMailerPreview < ApplicationMailerPreview
   def change_email
     user = create(:user, :for_mailer_preview)
     old_email = user.email
-    new_email = "new_email"
+    new_email = "new_email@example.com"
     UserMailer.change_email(user.id, old_email, new_email)
   end
 
@@ -146,6 +146,21 @@ class UserMailerPreview < ApplicationMailerPreview
     )
   end
 
+  # Send notification for a regular gift work
+  def recipient_notification_status_regular
+    count = params[:count].to_i || 1
+    user, work = recipient_notification_data(count)   
+    UserMailer.recipient_notification(user.id, work.id)
+  end
+  
+  # Send notification for a gift work in a collection
+  def recipient_notification_status_collection
+    count = params[:count].to_i || 1
+    user, work = recipient_notification_data(count)
+    collection = create(:collection)
+    UserMailer.recipient_notification(user.id, work.id, collection.id)
+  end
+
   def invite_increase_notification
     user = create(:user, :for_mailer_preview)
     total = params[:total] || 1
@@ -157,6 +172,12 @@ class UserMailerPreview < ApplicationMailerPreview
     collection = create(:collection)
     user = create(:user, :for_mailer_preview)
     UserMailer.archivist_added_to_collection_notification(user.id, work.id, collection.id)
+  end
+
+  def admin_spam_work_notification
+    work = create(:work)
+    user = create(:user, :for_mailer_preview)
+    UserMailer.admin_spam_work_notification(work.id, user.id)
   end
 
   def admin_hidden_work_notification
@@ -203,5 +224,40 @@ class UserMailerPreview < ApplicationMailerPreview
     collection = create(status)
     item = create(:work, authors: [user.default_pseud], collections: [collection])
     [user, collection, item]
+  end
+
+  def recipient_notification_data(count)
+    fandoms = []
+    relationships = []
+    characters = []
+    tags = []
+    series_list = []
+    
+    count = 1 if count < 1
+    (1..count).each do |n| 
+      fandoms.append("fandom_#{n}")
+      relationships.append("relationship_#{n}")
+      characters.append("character_#{n}")
+      tags.append("tag_#{n}")
+      series_list.append(create(:series))
+    end
+    warnings = ArchiveWarning.canonical.first(count).pluck(:name)
+
+    user = create(:user, :for_mailer_preview)
+    work = create(
+      :work, 
+      authors: [user.default_pseud], 
+      expected_number_of_chapters: count, 
+      rating_string: ArchiveConfig.RATING_DEFAULT_TAG_NAME,
+      fandom_string: fandoms, 
+      relationship_string: relationships,  
+      character_string: characters,
+      freeform_string: tags, 
+      archive_warning_strings: warnings,
+      summary: Faker::Lorem.paragraph(sentence_count: count),
+      chapter_attributes: { content: count.times.map { Faker::Lorem.characters(number: 11) } },
+      series: series_list
+    )
+    [user, work]
   end
 end

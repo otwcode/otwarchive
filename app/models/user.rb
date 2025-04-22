@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   audited redacted: [:encrypted_password, :password_salt]
+  include Justifiable
   include WorksOwner
   include PasswordResetsLimitable
   include UserLoggable
@@ -90,7 +91,7 @@ class User < ApplicationRecord
   before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :send_wrangler_username_change_notification, if: :is_tag_wrangler?
-  after_update :log_change_if_login_was_edited
+  after_update :log_change_if_login_was_edited, if: :saved_change_to_login?
   after_update :log_email_change, if: :saved_change_to_email?
 
   after_commit :reindex_user_creations_after_rename
@@ -198,6 +199,7 @@ class User < ApplicationRecord
             uniqueness: true,
             not_forbidden_name: { if: :will_save_change_to_login? }
   validate :username_is_not_recently_changed, if: :will_save_change_to_login?
+  validate :admin_username_generic, if: :will_save_change_to_login?
 
   # allow nil so can save existing users
   validates_length_of :password,
@@ -534,6 +536,12 @@ class User < ApplicationRecord
 
   private
 
+  # Override the default Justifiable enabled check, because we only need to justify
+  # username changes at the moment.
+  def justification_enabled?
+    User.current_user.is_a?(Admin) && login_changed?
+  end
+
   # Create and/or return a user account for holding orphaned works
   def self.fetch_orphan_account
     orphan_account = User.find_or_create_by(login: "orphan_account")
@@ -573,11 +581,25 @@ class User < ApplicationRecord
   end
 
   def add_renamed_at
-    self.renamed_at = Time.current
+    if User.current_user == self
+      self.renamed_at = Time.current
+    else
+      self.admin_renamed_at = Time.current
+    end
   end
 
   def log_change_if_login_was_edited
-    create_log_item(action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}") if saved_change_to_login?
+    current_admin = User.current_user if User.current_user.is_a?(Admin)
+    options = {
+      action: ArchiveConfig.ACTION_RENAME,
+      admin: current_admin
+    }
+    options[:note] = if current_admin
+                       "Old Username: #{login_before_last_save}, New Username: #{login}, Changed by: #{current_admin.login}, Ticket ID: ##{ticket_number}"
+                     else
+                       "Old Username: #{login_before_last_save}; New Username: #{login}"
+                     end
+    create_log_item(options)
   end
 
   def send_wrangler_username_change_notification
@@ -601,13 +623,21 @@ class User < ApplicationRecord
   end
 
   def username_is_not_recently_changed
+    return if User.current_user.is_a?(Admin)
+
     change_interval_days = ArchiveConfig.USER_RENAME_LIMIT_DAYS
     return unless renamed_at && change_interval_days.days.ago <= renamed_at
 
     errors.add(:login,
                :changed_too_recently,
                count: change_interval_days,
-               renamed_at: I18n.l(renamed_at, format: :long))
+               renamed_at: I18n.l(renamed_at))
+  end
+
+  def admin_username_generic
+    return unless User.current_user.is_a?(Admin)
+
+    errors.add(:login, :admin_must_use_default) unless login == "user#{id}"
   end
 
   # Extra callback to make sure readings are deleted in an order consistent

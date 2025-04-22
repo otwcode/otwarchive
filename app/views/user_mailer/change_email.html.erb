@@ -1,3 +1,14 @@
 <% content_for :message do %>
-  <%= t('.changed.html', login: style_bold(@user.login), email: style_email(@user.email)) %>
+  <p><%= t("mailer.general.greeting.formal.addressed_html", name: style_bold(@user.login)) %></p>
+
+  <p><%= t(".made_request", app_name: ArchiveConfig.APP_SHORT_NAME) %></p>
+
+  <p><%= t(".confirm_change.html", unconfirmed_email: style_email(@new_email), count: User.confirm_within.in_days.to_i, contact_support_link: link_to(t(".contact_support"), new_feedback_report_url)) %></p>
+
+  <p><%= t(".wrong_email.html", email_change_form_link: link_to(t(".email_change_form"), change_email_user_url(@user))) %></p>
+
+  <p><%= t(".not_made_request.html",
+           reset_password_link: link_to(t(".reset_password"), new_user_password_url),
+           contact_policy_abuse_link: link_to(t(".contact_policy_abuse"), new_abuse_report_url),
+           app_name: ArchiveConfig.APP_SHORT_NAME) %></p>
 <% end %>
