@@ -152,8 +152,8 @@ Feature: Invite requests
       And I am logged in as a "support" admin
     When I follow "Invite New Users"
       And I fill in "invitation[user_name]" with "user1"
-      And I press "Go"
-    Then I should see "Token"
+      And I press "Search" within "form.invitation.simple.search"
+    Then I should see "Invite token"
     When I follow "Delete"
     Then I should see "Invitation successfully destroyed"
       And "user1" should have "4" invitations

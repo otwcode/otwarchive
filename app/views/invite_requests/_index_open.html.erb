@@ -26,8 +26,10 @@
 <% end %>
 
 <p>
-  <%= t(".already_requested_html", check_status_link: link_to(t(".check_waitlist_position"), status_invite_requests_path)) %>
+  <%= t(".already_requested_html", check_waitlist_position_link: link_to(t(".check_waitlist_position"), status_invite_requests_path)) %>
   <%= t(".waiting_list_count", count: InviteRequest.count) %>
-  <%= t(".invitations_per_day", count: AdminSetting.current.invite_from_queue_number) %>
+  <%= t(".invitation_send_rate",
+        queue_invitation_number: t(".invitation_number", count: AdminSetting.current.invite_from_queue_number),
+        queue_frequency: t(".frequency", count: AdminSetting.current.invite_from_queue_frequency)) %>
 </p>
 <!--/content-->
