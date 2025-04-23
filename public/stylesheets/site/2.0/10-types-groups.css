@@ -28,7 +28,7 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
 }
 
 .tagset .listbox .tags li {
-  padding: 0;
+  padding-right: 0;
 }
 
 /*GROUP CLOUD */

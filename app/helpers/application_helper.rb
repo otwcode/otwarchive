@@ -253,8 +253,8 @@ module ApplicationHelper
 
   # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc)
   def expand_contract_all(target = "listbox")
-    expand_all = content_tag(:button, ts("Expand All"), class: "expand_all", data: { target_class: target })
-    contract_all = content_tag(:button, ts("Contract All"), class: "contract_all", data: { target_class: target })
+    expand_all = button_tag(ts("Expand All"), class: "expand_all", data: { target_class: target })
+    contract_all = button_tag(ts("Contract All"), class: "contract_all", data: { target_class: target })
 
     expand_all + contract_all
   end
@@ -263,11 +263,11 @@ module ApplicationHelper
   # See the jquery code in application.js
   # Note that these start hidden because if javascript is not available, we
   # don't want to show the user the buttons at all.
-  def expand_contract_shuffle(list_id, shuffle = true)
+  def expand_contract_shuffle(list_id, shuffle: true)
     target = "##{list_id}"
-    expander = content_tag(:button, "&#8595;".html_safe, class: "expand hidden", title: "expand", data: { action_target: target })
-    contractor = content_tag(:button, "&#8593;".html_safe, class: "contract hidden", title: "contract", data: { action_target: target })
-    shuffler = content_tag(:button, "&#8646;".html_safe, class: "shuffle hidden", title: "shuffle", data: { action_target: target }) if shuffle
+    expander = button_tag("&#8595;".html_safe, class: "expand hidden", title: "expand", data: { action_target: target })
+    contractor = button_tag("&#8593;".html_safe, class: "contract hidden", title: "contract", data: { action_target: target })
+    shuffler = button_tag("&#8646;".html_safe, class: "shuffle hidden", title: "shuffle", data: { action_target: target }) if shuffle
 
     expander + contractor + shuffler
   end

@@ -26,6 +26,10 @@ http://otwcode.github.com/docs/front_end_coding/patterns/listbox
   padding: 0.25em;
 }
 
+.listbox > .note {
+  padding: 0.25em;
+}
+
 .listbox .index {
   width: auto;
   padding: 0.643em;
@@ -69,9 +73,9 @@ http://otwcode.github.com/docs/front_end_coding/patterns/listbox
   position: static;
 }
 
-/* line-height (1.286) plus vertical padding (0.15em * 2) of the actions within the heading */
-.tagset .listbox > .heading:has(.actions), .tagset .listbox > .heading:has(~ .actions)  {
-  line-height: 1.586;
+/* The height (1.286em) of the buttons plus their veritcal padding (0.25em * 2) plus the vertical padding (0.15em * 2) of the actions container (=2.086em), multiplied by 0.75 because the actions are only 75% of the heading's font size. Unfortunately, this doesn't account for the buttons' vertical borders (1px * 2). */
+.tagset .listbox > .heading:has(.actions) {
+  line-height: 1.5645;
 }
 
 /*INTERACTION context (show many/more/lots)*/

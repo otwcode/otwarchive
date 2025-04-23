@@ -23,7 +23,7 @@
             <%= ts("Unassociated Characters & Relationships") %> (<%= @unassociated_chars.size + @unassociated_rels.size %>)
             <span class="actions"><%= expand_contract_shuffle("list_for_unassociated_char_and_rel") %></span>
           </h3>
-          <h4 class="heading"><%= ts("The following characters and relationships don't seem to be associated with any fandom in the tagset. You might need to add the fandom, or set up associations for them.") %></h4>
+          <p class="notice"><%= ts("The following characters and relationships don't seem to be associated with any fandom in the tagset. You might need to add the fandom, or set up associations for them.") %></p>
           <ol id="list_for_unassociated_char_and_rel" class="tags index">
             <%= @unassociated_chars.sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')}.map {|tag| content_tag(:li, tag)}.join("\n").html_safe %>
             <%= @unassociated_rels.sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')}.map {|tag| content_tag(:li, tag)}.join("\n").html_safe %>

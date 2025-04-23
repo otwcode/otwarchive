@@ -26,7 +26,7 @@
                 <%= ts("%{fandom}", :fandom => fandom) %>
                 <% list_id = "list_for_fandom_#{fandom.gsub(/[^\w]/, '_')}_in_#{media.gsub(/[^\w]/, '_')}" %>
                 (<%= has_relationships + has_characters %>)
-                <span class="actions"><%= expand_contract_shuffle(list_id, shuffle = false) %></span>
+                <span class="actions"><%= expand_contract_shuffle(list_id, shuffle: false) %></span>
               </h4>
               <ol id="<%= list_id %>" class="tags index group">
                 <% if has_characters > 0 %>
