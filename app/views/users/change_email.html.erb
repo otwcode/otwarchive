@@ -29,10 +29,10 @@
     <dd><%= @user.email %></dd>
 
     <dt><%= label_tag :new_email, t(".form.new_email") %></dt>
-    <dd><%= email_field_tag :new_email %></dd>
+    <dd><%= email_field_tag :new_email, nil, autocomplete: "off" %></dd>
 
     <dt><%= label_tag :email_confirmation, t(".form.email_again") %></dt>
-    <dd><%= email_field_tag :email_confirmation %></dd>
+    <dd><%= email_field_tag :email_confirmation, nil, autocomplete: "off" %></dd>
 
     <dt><%= label_tag :password_check, t(".form.password") %></dt>
     <dd><%= password_field_tag :password_check %></dd>

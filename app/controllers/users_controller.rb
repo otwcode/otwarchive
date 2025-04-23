@@ -166,7 +166,7 @@ class UsersController < ApplicationController
     render :change_email and return unless reauthenticate
 
     if params[:new_email].blank?
-      flash[:error] = t("users.confirm_change_email.blank_email")
+      flash.now[:error] = t("users.confirm_change_email.blank_email")
       render :change_email and return
     end
 
@@ -181,12 +181,12 @@ class UsersController < ApplicationController
     # Also, email addresses are validated on the client, and will only contain
     # a limited subset of ASCII, so we don't need to do a unicode casefolding pass.
     if @new_email.downcase == @user.email.downcase
-      flash[:error] = t("users.confirm_change_email.same_as_current")
+      flash.now[:error] = t("users.confirm_change_email.same_as_current")
       render :change_email and return
     end
 
     if @new_email.downcase != params[:email_confirmation].downcase
-      flash[:error] = t("users.confirm_change_email.nonmatching_email")
+      flash.now[:error] = t("users.confirm_change_email.nonmatching_email")
       render :change_email and return
     end
 
