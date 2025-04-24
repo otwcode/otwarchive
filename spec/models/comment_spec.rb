@@ -161,7 +161,6 @@ describe Comment do
       end
     end
 
-
     context "when submitting comment to Akismet" do
       subject { create(:comment) }
 

@@ -345,7 +345,7 @@ class Comment < ApplicationRecord
         end
       end
 
-      return cost > threshold
+      cost > threshold
     end
 
     def not_user_commenter?(parent_comment)
