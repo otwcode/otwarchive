@@ -19,6 +19,11 @@
     </dd>
     <dt><%= label_tag :edit_password_confirmation, t(".label.confirmation") %></dt>
     <dd><%= f.password_field :password_confirmation, id: :edit_password_confirmation %></dd>
+    <% if @totp_required %>
+      <dt><%= f.label :otp_attempt, t(".label.two_factor_authentication_code") %></dt>
+      <dd><%= f.text_field :otp_attempt, "aria-describedby": "otp-field-description" %></dd>
+      <p class="footnote" id="otp-field-description"><%= t(".describedby.backup_codes_also_usable") %></p>
+    <% end %>
     <dt class="landmark"><%= t(".landmark.submit") %></dt>
     <dd class="submit actions"><%= f.submit t(".submit") %></dd>
   </dl>
