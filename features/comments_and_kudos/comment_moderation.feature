@@ -121,14 +121,14 @@ Feature: Comment Moderation
       And I am logged in as "commenter"
       And I post the comment "Test comment" on the work "Moderation"
     When I am logged in as "author"
-      And I go to my inbox page
+      And I go to author's inbox page
     Then I should see "Test comment"
       And I should not see "Reply"
       And I should see "Unreviewed"
     # we can only test the non-javascript version here
     When I follow "Unreviewed Comments"
       And I press "Approve"
-      And I go to my inbox page
+      And I go to author's inbox page
     Then I should see "Reply"
       And I should not see "Unreviewed"
       And I should not see "Unread"
@@ -225,7 +225,7 @@ Feature: Comment Moderation
     When all emails have been delivered
       And I am logged in as "commenter"
       And I set my preferences to turn on copies of my own comments
-      And I go to my inbox page
+      And I go to commenter's inbox page
     Then I should not see "A moderated reply"
     When I view the work "Moderation"
       And I follow "Comments (1)"
@@ -238,7 +238,7 @@ Feature: Comment Moderation
       And "author" should not be emailed
       And "new_commenter" should not be emailed
     When I am logged in as "commenter"
-      And I go to my inbox page
+      And I go to commenter's inbox page
     Then I should see "A moderated reply"
 
   Scenario: When I turn off moderation, comments stay unreviewed
@@ -253,7 +253,7 @@ Feature: Comment Moderation
     When I view the work "Moderation"
     Then I should see "Unreviewed Comments"
       And I should not see "Comments:1"
-    When I go to my inbox page
+    When I go to author's inbox page
     Then I should not see "Reply"
     When I am logged in as "commenter"
       And I view the work "Moderation"

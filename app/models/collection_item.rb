@@ -32,7 +32,7 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  scope :include_for_works, -> { includes(work: :pseuds)}
+  scope :include_for_works, -> { includes(item: :pseuds) }
   scope :unrevealed, -> { where(unrevealed: true) }
   scope :anonymous, -> { where(anonymous:  true) }
 
@@ -222,7 +222,10 @@ class CollectionItem < ApplicationRecord
     unless self.unrevealed? || !self.posted?
       recipient_pseuds = Pseud.parse_bylines(self.recipients)[:pseuds]
       recipient_pseuds.each do |pseud|
-        unless pseud.user.preference.recipient_emails_off
+        user_preference = pseud.user.preference
+        next if user_preference.recipient_emails_off
+
+        I18n.with_locale(user_preference.locale.iso) do
           UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver_after_commit
         end
       end

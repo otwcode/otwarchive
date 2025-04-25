@@ -812,7 +812,9 @@ class StoryParser
           story = response.body
         when Net::HTTPRedirection
           if limit.positive?
-            story = download_with_timeout(response['location'], limit - 1)
+            new_uri = URI.parse(response["location"])
+            new_uri = URI.join(uri, new_uri) if new_uri.relative?
+            story = download_with_timeout(new_uri.to_s, limit - 1)
           end
         else
           Rails.logger.error("------- STORY PARSER: download_with_timeout: response is not success or redirection ------")

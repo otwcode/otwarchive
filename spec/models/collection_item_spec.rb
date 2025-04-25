@@ -77,4 +77,19 @@ describe CollectionItem, :ready do
       end
     end
   end
+
+  describe "include_for_works scope" do
+    let(:collection) { create(:collection) }
+    let(:work) { create(:work, id: 63) }
+    let(:bookmark) { create(:bookmark, id: 63) }
+
+    before { bookmark.collections << collection }
+
+    it "returns the correct type item for bookmarks" do
+      expect(work.id).to eq(bookmark.id)
+      expect(collection.collection_items).not_to be_empty
+      expect(collection.collection_items.first.item_type).to eq("Bookmark")
+      expect(collection.collection_items.include_for_works.first.item_type).to eq("Bookmark")
+    end
+  end
 end

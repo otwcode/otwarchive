@@ -354,7 +354,7 @@ Scenario: Delete bookmarks of a work and a series
   And I press "Yes, Delete Bookmark"
     And all indexing jobs have been run
   Then I should see "Bookmark was successfully deleted."
-  When I go to my bookmarks page
+  When I go to markymark's bookmarks page
   Then I should see "A Mighty Duck2 the sequel"
   When I log out
     And I am logged in as "wahlly"
@@ -363,7 +363,7 @@ Scenario: Delete bookmarks of a work and a series
   Then I should see "A Mighty Duck2 the sequel was deleted."
   When I log out
     And I am logged in as "markymark"
-    And I go to my bookmarks page
+    And I go to markymark's bookmarks page
   Then I should see "This has been deleted, sorry!"
     And I follow "Edit"
     And I check "bookmark_private"
@@ -390,7 +390,7 @@ Scenario: Editing a bookmark's tags should expire the bookmark cache
 Scenario: User can't bookmark same work twice
   Given the work "Haven"
     And I am logged in as "Mara"
-    And I add the pseud "Audrey"
+    And "Mara" creates the pseud "Audrey"
     And I bookmark the work "Haven" as "Mara"
   When I bookmark the work "Haven" as "Mara" from new bookmark page
   Then I should see "You have already bookmarked that."

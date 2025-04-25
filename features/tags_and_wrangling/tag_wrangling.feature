@@ -26,7 +26,7 @@ Feature: Tag wrangling
   Scenario Outline: Tag wrangler navigation/sidebar
     Given the tag wrangling setup
       And I am logged in as a tag wrangler
-    When I go to my wrangling page
+    When I go to the wrangling page for "wrangler"
     Then I should see "Wrangling Home"
       And I should see "Fandoms by media (2)"
       And I should see "Characters by fandom (2)"
@@ -70,7 +70,7 @@ Feature: Tag wrangling
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
       And I am logged in as a tag wrangler
-    When I go to my wrangling page
+    When I go to the wrangling page for "wrangler"
       And I follow "Wranglers"
       And I fill in "tag_fandom_string" with "Stargate SG-1"
       And I press "Assign"
@@ -120,7 +120,7 @@ Feature: Tag wrangling
 
   Scenario Outline: Creating new non-canonical tags
     Given I am logged in as a tag wrangler
-      And I go to my wrangling page
+      And I go to the wrangling page for "wrangler"
     When I follow "New Tag"
       And I fill in "Name" with "MyNewTag"
       And I choose <type>
@@ -136,7 +136,7 @@ Feature: Tag wrangling
 
   Scenario Outline: Creating new canonical tags
     Given I am logged in as a tag wrangler
-      And I go to my wrangling page
+      And I go to the wrangling page for "wrangler"
     When I follow "New Tag"
       And I fill in "Name" with "MyNewTag"
       And I choose <type>
@@ -205,7 +205,7 @@ Feature: Tag wrangling
       And I press "Save changes"
     Then I should see "Tag was updated"
       And the "Apophis" tag should be unwrangleable
-    When I am on my wrangling page
+    When I go to the wrangling page for "wrangler"
       And I follow "Stargate SG-1"
     Then I should see "Wrangle Tags for Stargate SG-1"
     When I follow "Characters (4)"
@@ -360,7 +360,7 @@ Feature: Tag wrangling
     Given the tag wrangling setup
       And I am logged in as a tag wrangler
     Then no tag is scheduled for count update from now on
-    When I go to my wrangling page
+    When I go to the wrangling page for "wrangler"
     Then I should see "Wrangling Home"
       And I should see "Characters by fandom (2)"
     When I follow "Characters by fandom (2)"

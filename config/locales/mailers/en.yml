@@ -56,19 +56,23 @@ en:
           one: "%{count} word"
           other: "%{count} words"
       footer:
-        general:
-          about:
-            html: The Archive of Our Own is a fan-run and fan-supported archive that relies on %{donate_link}.
-            text: 'The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}.'
-          html:
-            donate_link_text: your donations
-            support_link_text: contact Support
-          unwanted_email:
-            html: If you've received this message in error, please %{support_link}.
-            text: If you've received this message in error, please contact Support at %{support_url}.
+        about:
+          html: The Archive of Our Own is a fan-run and fan-supported archive that relies on %{your_donations_link}.
+          text: 'The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{your_donations_url}.'
+          your_donations: your donations
         sent_at: Sent at %{sent_at}.
+        why_policy_abuse:
+          contact_policy_abuse: contact Policy & Abuse
+          html: If you don't understand why you received this email, please %{contact_policy_abuse_link}.
+          text: 'If you don''t understand why you received this email, please contact Policy & Abuse: %{contact_policy_abuse_url}.'
+        why_support:
+          contact_support: contact Support
+          html: If you don't understand why you received this email, please %{contact_support_link}.
+          text: 'If you don''t understand why you received this email, please contact Support: %{contact_support_url}.'
       greeting:
-        formal_html: Dear %{name},
+        formal:
+          addressed_html: Hi %{name},
+          unaddressed: Hi,
         informal:
           addressed_html: Hi, %{name}!
           unaddressed: Hi!
@@ -134,9 +138,19 @@ en:
       tos_violation:
         html: If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
         text: If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
+    admin_spam_work_notification:
+      contact_abuse: contact our Policy & Abuse Team
+      flagged_as_spam:
+        html: Your work %{work_link} has been flagged by our automated system as spam and hidden until it can be reviewed by our Policy & Abuse team. While the work is hidden it can only be accessed by you and AO3 site admins.
+        text: Your work "%{work_title}" (%{work_url}) has been flagged by our automated system as spam and hidden until it can be reviewed by our Abuse team. While the work is hidden it can only be accessed by you and AO3 site admins.
+      future: If we determine that your work is not spam, we'll unhide it. Other users will then be able to access and leave feedback on it as usual. Please note that we do not screen works for other kinds of violations at this time. If your work is reported to us for a different reason in the future, that will be investigated separately.
+      questions:
+        html: If you have any questions, please %{contact_abuse_link}.
+        text: If you have any questions, please contact our Policy & Abuse team (%{contact_abuse_url}).
+      subject: "[%{app_name}] Your work was hidden as spam"
     anonymous_or_unrevealed_notification:
-      anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
-      anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
+      anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
+      anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
       changed_status:
         anonymous:
           html: The collection maintainers of %{collection_link} have changed the status of your work %{work_link} to anonymous.
@@ -199,10 +213,25 @@ en:
       recipient_missing: 'None: contact a moderator for help!'
       subject: "[%{app_name}][%{collection_title}] Your assignment!"
     change_email:
-      changed:
-        html: "%{login}, the email associated with your account has been changed to %{email}"
-        text: "%{login}, the email associated with your account has been changed to %{email}"
-      subject: "[%{app_name}] Email changed"
+      confirm_change:
+        html:
+          one: If you made this request, check your email at %{unconfirmed_email} within %{count} day to confirm your email change. If you do not receive a confirmation email, or if you have other issues, please %{contact_support_link}.
+          other: If you made this request, check your email at %{unconfirmed_email} within %{count} days to confirm your email change. If you do not receive a confirmation email, or if you have other issues, please %{contact_support_link}.
+        text:
+          one: 'If you made this request, check your email at %{unconfirmed_email} within %{count} day to confirm your email change. If you do not receive a confirmation email, or if you have other issues, please contact Support: %{contact_support_url}.'
+          other: 'If you made this request, check your email at %{unconfirmed_email} within %{count} days to confirm your email change. If you do not receive a confirmation email, or if you have other issues, please contact Support: %{contact_support_url}.'
+      contact_policy_abuse: contact Policy & Abuse
+      contact_support: contact Support
+      email_change_form: submit the email change form
+      made_request: Someone has made a request to change the email address associated with your %{app_name} account.
+      not_made_request:
+        html: If you did not make this request, someone else may have access to your %{app_name} account. Please %{reset_password_link} or %{contact_policy_abuse_link}.
+        text: 'If you did not make this request, someone else may have access to your %{app_name} account. Please reset your password now (%{reset_password_url}) or contact Policy & Abuse: %{contact_policy_abuse_url}.'
+      reset_password: reset your password now
+      subject: "[%{app_name}] Email change request"
+      wrong_email:
+        html: If you entered the wrong email address, you will need to %{email_change_form_link} again.
+        text: 'If you entered the wrong email address, you will need to submit the email change form again: %{email_change_form_url}.'
     claim_notification:
       access:
         contact_support: contact AO3 Support
@@ -396,14 +425,13 @@ en:
       reason: 'Your request was:'
       subject: "[%{app_name}] Additional invitation request declined"
     recipient_notification:
-      html:
-        collection: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
+      collection:
+        html: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
+        text: A gift work has been posted for you in the "%{collection_title}" collection (%{collection_url}) at the Archive of Our Own!
       no_collection: A gift work has been posted for you at the Archive of Our Own!
       subject:
         collection: "[%{app_name}][%{collection_title}] A gift work for you from %{collection_title}"
         no_collection: "[%{app_name}] A gift work for you"
-      text:
-        collection: A gift work has been posted for you in the "%{collection_title}" collection (%{collection_url}) at the Archive of Our Own!
     signup_notification:
       activate:
         html: Please %{activate_account_link}.
@@ -423,6 +451,22 @@ en:
       welcome: Welcome to the Archive of Our Own, %{login}!
   users:
     mailer:
+      confirmation_instructions:
+        confirm_by:
+          html: If you don't confirm your request by %{date}, the link in this email will expire and you will need to %{email_change_form_link} again.
+          text: 'If you don''t confirm your request by %{date}, the link in this email will expire and you will need to submit the email change form again: %{email_change_form_url}.'
+        confirm_email_change: confirm your email change
+        did_not_make_request: If you did not make this request, you can safely ignore and delete this email. Someone else may have entered your email address by mistake.
+        email_change_form: submit the email change form
+        made_request:
+          html:
+            one: If you made this request, please log in and %{confirm_email_change_link} within %{count} day.
+            other: If you made this request, please log in and %{confirm_email_change_link} within %{count} days.
+          text:
+            one: 'If you made this request, please log in and confirm your email change within %{count} day: %{confirm_email_change_url}.'
+            other: 'If you made this request, please log in and confirm your email change within %{count} days: %{confirm_email_change_url}.'
+        request_to_change_email_html: Someone has made a request to change the email address associated with the %{app_name} account %{username} to this email address.
+        subject: "[%{app_name}] Confirm your email change"
       reset_password_instructions:
         expiration: If you do not use this link to reset your password within a week, it will expire, and you will have to request a new one.
         intro: 'Someone has requested a password reset for your account. You can change your account password by following the link below and entering your new password:'
