@@ -267,11 +267,10 @@ When /^I view the latest comment$/ do
   visit comment_path(Comment.last)
 end
 
-Given(/^the moderated work "([^\"]*?)" by "([^\"]*?)"$/) do |work, user|
-  step %{I am logged in as "#{user}"}
-  step %{I set up the draft "#{work}"}
-  check("work_moderated_commenting_enabled")
-  step %{I post the work without preview}
+Given "the moderated work {string} by {string}" do |title, login|
+  user = ensure_user(login)
+  w = FactoryBot.create(:work, title: title, authors: [user.default_pseud])
+  w.update_attribute(:moderated_commenting_enabled, true)
 end
 
 Then /^comment moderation should be enabled on "([^\"]*?)"/ do |work|

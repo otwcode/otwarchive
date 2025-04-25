@@ -217,6 +217,7 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @old_email = old_email
     @new_email = new_email
+    @pac_footer = true
     mail(
       to: @old_email,
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
@@ -283,20 +284,18 @@ class UserMailer < ApplicationMailer
     @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
-    I18n.with_locale(@user.preference.locale.iso) do
-      subject = if @collection
-                  t("user_mailer.recipient_notification.subject.collection",
-                    app_name: ArchiveConfig.APP_SHORT_NAME,
-                    collection_title: @collection.title)
-                else
-                  t("user_mailer.recipient_notification.subject.no_collection",
-                    app_name: ArchiveConfig.APP_SHORT_NAME)
-                end
-      mail(
-        to: @user.email,
-        subject: subject
-      )
-    end
+    subject = if @collection
+                t("user_mailer.recipient_notification.subject.collection",
+                  app_name: ArchiveConfig.APP_SHORT_NAME,
+                  collection_title: @collection.title)
+              else
+                t("user_mailer.recipient_notification.subject.no_collection",
+                  app_name: ArchiveConfig.APP_SHORT_NAME)
+              end
+    mail(
+      to: @user.email,
+      subject: subject
+    )
   end
 
   # Emails a prompter to say that a response has been posted to their prompt
@@ -368,7 +367,7 @@ class UserMailer < ApplicationMailer
 
     mail(
       to: @user.email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Your work was hidden as spam"
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 

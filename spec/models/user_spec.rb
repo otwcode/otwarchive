@@ -181,13 +181,13 @@ describe User do
         it "does not save a duplicate email" do
           new_user.email = existing_user.email
           expect(new_user.save).to be_falsey
-          expect(new_user.errors[:email].first).to include("has already been taken")
+          expect(new_user.errors[:email].first).to include("This email is already associated with another account. Please try again with a different email address.")
         end
 
         it "does not save a duplicate email with different capitalization" do
           new_user.email = existing_user.email.capitalize
           expect(new_user.save).to be_falsey
-          expect(new_user.errors[:email].first).to include("has already been taken")
+          expect(new_user.errors[:email].first).to include("This email is already associated with another account. Please try again with a different email address.")
         end
       end
     end
@@ -264,7 +264,7 @@ describe User do
         it "does not allow another rename" do
           expect { existing_user.update!(login: "new") }
             .to raise_error(ActiveRecord::RecordInvalid)
-          localized_renamed_at = I18n.l(existing_user.renamed_at, format: :long)
+          localized_renamed_at = I18n.l(existing_user.renamed_at)
           expect(existing_user.errors[:login].first)
             .to eq(
               "can only be changed once every 7 days. You last changed your username on #{localized_renamed_at}."
@@ -272,6 +272,7 @@ describe User do
         end
 
         it "allows changing email" do
+          existing_user.skip_reconfirmation!
           existing_user.update!(email: "new_email@example.com")
           expect(existing_user.email).to eq("new_email@example.com")
         end
@@ -324,6 +325,7 @@ describe User do
 
     context "when email is changed" do
       before do
+        existing_user.skip_reconfirmation!
         existing_user.update!(email: "newemail@example.com")
         existing_user.reload
       end
@@ -345,6 +347,7 @@ describe User do
 
       before do
         User.current_user = admin
+        existing_user.skip_reconfirmation!
         existing_user.update!(email: "new_email@example.com")
         existing_user.reload
       end

@@ -260,6 +260,8 @@ module NavigationHelpers
       edit_user_password_path
     when /^the (.*) mass bin$/i
       tag_wranglings_path(show: Regexp.last_match(1).pluralize)
+    when /^the orphan all works page$/i
+      new_orphan_path
 
     # Admin Pages
     when /^the admin-posts page$/i
