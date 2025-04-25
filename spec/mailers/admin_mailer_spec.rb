@@ -177,7 +177,7 @@ describe AdminMailer do
     subject(:email) { AdminMailer.totp_2fa_backup_codes(admin, codes) }
 
     let(:admin) { create(:admin) }
-    let(:codes) { ["code1", "code2", "code3", "code4"] }
+    let(:codes) { %w[code1 code2 code3 code4] }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
