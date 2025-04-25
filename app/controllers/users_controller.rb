@@ -160,38 +160,74 @@ class UsersController < ApplicationController
     end
   end
 
+  def confirm_change_email
+    @page_subtitle = t(".browser_title")
+
+    render :change_email and return unless reauthenticate
+
+    if params[:new_email].blank?
+      flash.now[:error] = t("users.confirm_change_email.blank_email")
+      render :change_email and return
+    end
+
+    @new_email = params[:new_email]
+
+    # Please note: This comparison is not technically correct. According to
+    # RFC 5321, the local part of an email address is case sensitive, while the
+    # domain is case insensitive. That said, all major email providers treat
+    # the local part as case insensitive, so it would probably cause more
+    # confusion if we did this correctly.
+    #
+    # Also, email addresses are validated on the client, and will only contain
+    # a limited subset of ASCII, so we don't need to do a unicode casefolding pass.
+    if @new_email.downcase == @user.email.downcase
+      flash.now[:error] = t("users.confirm_change_email.same_as_current")
+      render :change_email and return
+    end
+
+    if @new_email.downcase != params[:email_confirmation].downcase
+      flash.now[:error] = t("users.confirm_change_email.nonmatching_email")
+      render :change_email and return
+    end
+
+    old_email = @user.email
+    @user.email = @new_email
+    return if @user.valid?(:update)
+
+    # Make sure that on failure, the form doesn't show the new invalid email as the current one
+    @user.email = old_email
+    render :change_email
+  end
+
   def changed_email
-    if !params[:new_email].blank? && reauthenticate
-      new_email = params[:new_email]
+    new_email = params[:new_email]
 
-      # Please note: This comparison is not technically correct. According to
-      # RFC 5321, the local part of an email address is case sensitive, while the
-      # domain is case insensitive. That said, all major email providers treat
-      # the local part as case insensitive, so it would probably cause more
-      # confusion if we did this correctly.
-      #
-      # Also, email addresses are validated on the client, and will only contain
-      # a limited subset of ASCII, so we don't need to do a unicode casefolding pass.
-      if new_email.downcase != params[:email_confirmation].downcase
-        flash.now[:error] = ts("Email addresses don't match! Please retype and try again.")
-        render :change_email and return
+    old_email = @user.email
+    @user.email = new_email
+
+    if @user.save
+      I18n.with_locale(@user.preference.locale_for_mails) do
+        UserMailer.change_email(@user.id, old_email, new_email).deliver_later
       end
-
-      old_email = @user.email
-      @user.email = new_email
-
-      if @user.save
-        flash.now[:notice] = ts("Your email has been successfully updated")
-        I18n.with_locale(@user.preference.locale_for_mails) do
-          UserMailer.change_email(@user.id, old_email, new_email).deliver_later
-        end
-      else
-        # Make sure that on failure, the form still shows the old email as the "current" one.
-        @user.email = old_email
-      end
+    else
+      # Make sure that on failure, the form still shows the old email as the "current" one.
+      @user.email = old_email
     end
 
     render :change_email
+  end
+
+  # GET /users/1/reconfirm_email?confirmation_token=abcdef
+  def reconfirm_email
+    confirmed_user = User.confirm_by_token(params[:confirmation_token])
+
+    if confirmed_user.errors.empty?
+      flash[:notice] = t(".success")
+    else
+      flash[:error] = t(".invalid_token")
+    end
+
+    redirect_to change_email_user_path(@user)
   end
 
   # DELETE /users/1
@@ -250,16 +286,16 @@ class UsersController < ApplicationController
   def reauthenticate
     if params[:password_check].blank?
       return wrong_password!(params[:new_email],
-                             ts('You must enter your password'),
-                             ts('You must enter your old password'))
+                             t("users.confirm_change_email.blank_password"),
+                             t("users.changed_password.blank_password"))
     end
 
     if @user.valid_password?(params[:password_check])
       true
     else
       wrong_password!(params[:new_email],
-                      ts('Your password was incorrect'),
-                      ts('Your old password was incorrect'))
+                      t("users.confirm_change_email.wrong_password_html", contact_support_link: helpers.link_to(t("users.confirm_change_email.contact_support"), new_feedback_report_path)),
+                      t("users.changed_password.wrong_password"))
     end
   end
 

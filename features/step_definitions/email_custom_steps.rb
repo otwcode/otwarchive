@@ -5,7 +5,7 @@ end
 Given "a locale with translated emails" do
   FactoryBot.create(:locale, iso: "new", email_enabled: true)
   # The footer keys are used in most emails
-  I18n.backend.store_translations(:new, { mailer: { general: { footer: { general: { about: { html: "Translated footer", text: "Translated footer" } } } } } })
+  I18n.backend.store_translations(:new, { mailer: { general: { footer: { about: { html: "Translated footer", text: "Translated footer" } } } } })
   I18n.backend.store_translations(:new, { kudo_mailer: { batch_kudo_notification: { subject: "Translated subject" } } })
   I18n.backend.store_translations(:new, { users: { mailer: { reset_password_instructions: { subject: "Translated subject" } } } })
 end

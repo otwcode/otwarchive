@@ -1,5 +1,5 @@
 <% content_for :message do %>
-  <p><%= t("mailer.general.greeting.formal_html", name: style_bold(@user.login)) %></p>
+  <p><%= t("mailer.general.greeting.formal.addressed_html", name: style_bold(@user.login)) %></p>
 
   <p><%= t(".changed_status.#{@status}.html",
            collection_link: style_link(@collection.title, collection_url(@collection)),

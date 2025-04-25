@@ -628,7 +628,7 @@ class User < ApplicationRecord
     errors.add(:login,
                :changed_too_recently,
                count: change_interval_days,
-               renamed_at: I18n.l(renamed_at, format: :long))
+               renamed_at: I18n.l(renamed_at))
   end
 
   def admin_username_generic
