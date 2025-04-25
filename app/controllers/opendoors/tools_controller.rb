@@ -51,7 +51,7 @@ class Opendoors::ToolsController < ApplicationController
         flash[:error] = ts("There is already a work imported from the url %{url}.", url: @imported_from_url)
       else
         # ok let's try to update
-        # TODO: AO3-6591
+        # TODO: AO3-6979
         @work.update_attribute(:imported_from_url, @imported_from_url)
         WorkUrl.prepare(@work, @imported_from_url).save
         flash[:notice] = "Updated imported-from url for #{@work.title} to #{@imported_from_url}"

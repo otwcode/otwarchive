@@ -505,7 +505,7 @@ describe Work do
       work.destroy
     end
 
-    describe "legacy – to be removed eventually – cf AO3-6591" do
+    describe "legacy – to be removed eventually – cf AO3-6979" do
       it "should find imported works with various URL formats" do
         %w[
           http://foo.com/bar.html

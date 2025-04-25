@@ -49,7 +49,7 @@ class WorkUrl < ApplicationRecord
         .join(" OR "),
       *VARIANTS.map { |method| url.send(method) }
     ).first&.work ||
-      # TODO: AO3-6591
+      # TODO: AO3-6979
       Work.where(imported_from_url: url.original).first ||
       Work.where(imported_from_url: [url.minimal,
                                      url.with_http, url.with_https,
