@@ -173,6 +173,49 @@ describe AdminMailer do
     end
   end
 
+  describe "#totp_2fa_backup_codes" do
+    subject(:email) { AdminMailer.totp_2fa_backup_codes(admin, codes) }
+
+    let(:admin) { create(:admin) }
+    let(:codes) { ["code1", "code2", "code3", "code4"] }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "delivers to the correct address" do
+      expect(email).to deliver_to(admin.email)
+    end
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your admin account recovery codes"
+      expect(email).to have_subject(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("A set of new backup codes has been requested")
+        expect(email).to have_html_part_content("<li><code>")
+        codes.each do |code|
+          expect(email).to have_html_part_content(code)
+        end
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("A set of new backup codes has been requested")
+        codes.each do |code|
+          expect(email).to have_html_part_content(code)
+        end
+      end
+    end
+  end
+
   let(:commenter) { create(:user, login: "Accumulator") }
   let(:commenter_pseud) { create(:pseud, user: commenter, name: "Blueprint") }
   let(:comment) { create(:comment, :on_admin_post, pseud: commenter_pseud) }
