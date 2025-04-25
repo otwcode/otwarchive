@@ -145,7 +145,11 @@ describe Admin::AdminUsersController do
 
       %w[policy_and_abuse superadmin].each do |admin_role|
         context "with role #{admin_role}" do
-          before { admin.update!(roles: [admin_role]) }
+          before do
+            admin.update!(roles: [admin_role])
+            old_role.update!(name: "no_resets")
+            role.update!(name: "protected_user")
+          end
 
           it "allows admins to update all attributes" do
             expect do
@@ -168,27 +172,55 @@ describe Admin::AdminUsersController do
         end
       end
 
-      %w[open_doors tag_wrangling].each do |admin_role|
-        context "with role #{admin_role}" do
-          before { admin.update!(roles: [admin_role]) }
+      context "with role open_doors" do
+        before do
+          admin.update!(roles: ["open_doors"])
+          old_role.update!(name: "archivist")
+          role.update!(name: "opendoors")
+        end
 
-          it "does not allow updating email" do
-            expect do
-              put :update, params: { id: user.login, user: { email: "updated@example.com" } }
-            end.to raise_exception(ActionController::UnpermittedParameters)
-            expect(user.reload.email).not_to eq("updated@example.com")
-          end
+        it "does not allow updating email" do
+          expect do
+            put :update, params: { id: user.login, user: { email: "updated@example.com" } }
+          end.to raise_exception(ActionController::UnpermittedParameters)
+          expect(user.reload.email).not_to eq("updated@example.com")
+        end
 
-          it "allows updating roles" do
-            expect do
-              put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
-            end.to change { user.reload.roles.pluck(:name) }
-              .from([old_role.name])
-              .to([role.name])
-              .and avoid_changing { user.reload.email }
+        it "allows updating roles" do
+          expect do
+            put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
+          end.to change { user.reload.roles.pluck(:name) }
+            .from([old_role.name])
+            .to([role.name])
+            .and avoid_changing { user.reload.email }
 
-            it_redirects_to_with_notice(root_path, "User was successfully updated.")
-          end
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+        end
+      end
+
+      context "with role tag_wrangling" do
+        before do
+          admin.update!(roles: ["tag_wrangling"])
+          user.update!(roles: [])
+          role.update!(name: "tag_wrangler")
+        end
+
+        it "does not allow updating email" do
+          expect do
+            put :update, params: { id: user.login, user: { email: "updated@example.com" } }
+          end.to raise_exception(ActionController::UnpermittedParameters)
+          expect(user.reload.email).not_to eq("updated@example.com")
+        end
+
+        it "allows updating roles" do
+          expect do
+            put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
+          end.to change { user.reload.roles.pluck(:name) }
+            .from([])
+            .to([role.name])
+            .and avoid_changing { user.reload.email }
+
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
         end
       end
 
