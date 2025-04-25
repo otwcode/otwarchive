@@ -236,6 +236,68 @@ describe Admin::AdminUsersController do
           end
         end
       end
+
+      context "with available user roles restricted by type of admin" do
+        let!(:opendoors_role) { create(:role, name: "opendoors") }
+        let!(:archivist_role) { create(:role, name: "archivist") }
+        let!(:tag_wrangler_role) { create(:role, name: "tag_wrangler") }
+
+        before do
+          admin.update!(roles: ["open_doors"])
+        end
+
+        it "can add a permitted role" do
+          user.update!(roles: [])
+
+          put :update, params: {
+            id: user.login,
+            user: {
+              roles: [opendoors_role.id.to_s]
+            }
+          }
+          expect(flash[:notice]).to eq "User was successfully updated."
+          expect(user.reload.roles).to eq([opendoors_role])
+        end
+
+        it "can remove a permitted role" do
+          user.update!(roles: [opendoors_role, archivist_role])
+
+          put :update, params: {
+            id: user.login,
+            user: {
+              roles: [opendoors_role.id.to_s]
+            }
+          }
+          expect(flash[:notice]).to eq "User was successfully updated."
+          expect(user.reload.roles).to eq([opendoors_role])
+        end
+
+        it "does not add unpermitted roles" do
+          user.update!(roles: [opendoors_role])
+
+          put :update, params: {
+            id: user.login,
+            user: {
+              roles: [opendoors_role.id.to_s, tag_wrangler_role.id.to_s]
+            }
+          }
+          expect(flash[:notice]).to eq "User was successfully updated."
+          expect(user.reload.roles).to eq([opendoors_role])
+        end
+
+        it "does not remove unpermitted roles" do
+          user.update!(roles: [opendoors_role, tag_wrangler_role])
+
+          put :update, params: {
+            id: user.login,
+            user: {
+              roles: [opendoors_role.id.to_s]
+            }
+          }
+          expect(flash[:notice]).to eq "User was successfully updated."
+          expect(user.reload.roles).to eq([opendoors_role, tag_wrangler_role])
+        end
+      end
     end
   end
 
