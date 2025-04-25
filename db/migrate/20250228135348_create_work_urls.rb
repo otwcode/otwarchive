@@ -9,7 +9,7 @@ class CreateWorkUrls < ActiveRecord::Migration[7.1]
       t.string :decoded, null: false, index: true
       t.string :minimal_no_protocol_no_www, null: false, index: true
 
-      t.references :work, type: :integer, null: false, foreign_key: true, index: { unique: true }
+      t.references :work, type: :integer, null: false, index: { unique: true }
 
       t.timestamps
     end
