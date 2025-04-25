@@ -53,7 +53,7 @@ class Opendoors::ToolsController < ApplicationController
         # ok let's try to update
         # TODO: AO3-6591
         @work.update_attribute(:imported_from_url, @imported_from_url)
-        WorkUrl.prepare(@work, @imported_from_url).save(validate: false)
+        WorkUrl.prepare(@work, @imported_from_url).save
         flash[:notice] = "Updated imported-from url for #{@work.title} to #{@imported_from_url}"
       end
     end    
