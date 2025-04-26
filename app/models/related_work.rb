@@ -51,7 +51,9 @@ class RelatedWork < ActiveRecord::Base
       orphan_account = User.orphan_account
       users.each do |user|
         unless user == orphan_account
-          UserMailer.related_work_notification(user.id, self.id).deliver_after_commit
+          I18n.with_locale(user.preference.locale.iso) do
+            UserMailer.related_work_notification(user.id, self.id).deliver_after_commit
+          end
         end
       end
     end
