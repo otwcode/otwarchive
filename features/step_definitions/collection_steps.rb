@@ -75,8 +75,7 @@ end
 
 Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
   mod = ensure_user("moderator")
-  owner = FactoryBot.create(:collection_participant, pseud: mod.default_pseud)
-  collection = FactoryBot.create(:collection, title: title, name: (name.presence || title.gsub(/[^\w]/, "_")), collection_participants: [owner])
+  collection = FactoryBot.create(:collection, title: title, name: (name.presence || title.gsub(/[^\w]/, "_")), owners: [mod.default_pseud])
   collection.collection_preference.update_attribute(:anonymous, true) if anon.present?
   collection.collection_preference.update_attribute(:unrevealed, true) if hidden.present?
   collection.collection_preference.update_attribute(:moderated, true) if moderated.present?
