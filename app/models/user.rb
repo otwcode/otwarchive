@@ -19,7 +19,7 @@ class User < ApplicationRecord
   include BackwardsCompatiblePasswordDecryptor
 
   # Allows other models to get the current user with User.current_user
-  cattr_accessor :current_user
+  thread_cattr_accessor :current_user
 
   # Authorization plugin
   acts_as_authorized_user
