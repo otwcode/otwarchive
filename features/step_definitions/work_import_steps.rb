@@ -118,13 +118,6 @@ When /^I import "(.*)"( with a mock website)?$/ do |url, mock|
   step %{I press "Import"}
 end
 
-When /^I import the urls$/ do |urls|
-  step %{I set up importing}
-  step %{I fill in "urls" with "#{urls}"}
-  step %{I select "English" from "Choose a language"}
-  step %{I press "Import"}
-end
-
 When /^I import the urls with mock websites( as chapters)?( without preview)?$/ do |chapters, no_preview, urls|
   step %{I set up importing with a mock website}
   step %{I fill in "urls" with "#{urls}"}
