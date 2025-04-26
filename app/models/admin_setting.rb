@@ -1,4 +1,6 @@
 class AdminSetting < ApplicationRecord
+  self.ignored_columns = [:days_to_purge_unactivated]
+
   include AfterCommitEverywhere
 
   belongs_to :last_updated, class_name: 'Admin', foreign_key: :last_updated_by
