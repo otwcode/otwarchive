@@ -518,10 +518,12 @@ class Comment < ApplicationRecord
   end
 
   def mark_hidden!
+    update_attribute(:comment_content, sanitize_field(self, :comment_content, image_safety_mode: true))
     update_attribute(:hidden_by_admin, true)
   end
 
   def mark_unhidden!
+    # update_attribute(:comment_content, wrap_url_with_img(self.comment_content))
     update_attribute(:hidden_by_admin, false)
   end
 
