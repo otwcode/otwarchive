@@ -523,7 +523,6 @@ class Comment < ApplicationRecord
   end
 
   def mark_unhidden!
-    # update_attribute(:comment_content, wrap_url_with_img(self.comment_content))
     update_attribute(:hidden_by_admin, false)
   end
 
