@@ -4,7 +4,6 @@ admin_setting_3:
   invite_from_queue_enabled: true
   invite_from_queue_number: 10
   invite_from_queue_frequency: 7
-  days_to_purge_unactivated: 7
   last_updated_by:
   created_at: 2015-04-11 21:57:43.000000000 Z
   updated_at: 2015-04-11 21:57:43.000000000 Z

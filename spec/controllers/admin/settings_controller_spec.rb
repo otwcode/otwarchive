@@ -56,7 +56,6 @@ describe Admin::SettingsController do
               invite_from_queue_enabled: "1",
               invite_from_queue_number: "10",
               invite_from_queue_frequency: "7",
-              days_to_purge_unactivated: "7",
               disable_support_form: "1",
               disabled_support_form_text: "Disable support",
               suspend_filter_counts: "0",
