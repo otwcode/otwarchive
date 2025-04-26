@@ -74,14 +74,13 @@ Given /^mod1 lives in Alaska$/ do
 end
 
 Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
-  step %{I am logged in as "moderator"}
-  step %{I set up the collection "#{title}" with name "#{name}"}
-  check("This collection is unrevealed") unless hidden.blank?
-  check("This collection is anonymous") unless anon.blank?
-  check("This collection is moderated") unless moderated.blank?
-  check("This collection is closed") unless closed.blank?
-  step %{I submit}
-  step %{I am logged out}
+  mod = ensure_user("moderator")
+  owner = FactoryBot.create(:collection_participant, pseud: mod.default_pseud)
+  collection = FactoryBot.create(:collection, title: title, name: (name.blank? ? title.gsub(/[^\w]/, "_") : name), collection_participants: [owner])
+  collection.collection_preference.update_attribute(:anonymous, true) unless anon.blank?
+  collection.collection_preference.update_attribute(:unrevealed, true) unless hidden.blank?
+  collection.collection_preference.update_attribute(:moderated, true) unless moderated.blank?
+  collection.collection_preference.update_attribute(:closed, true) unless closed.blank?
 end
 
 Given /^I open the collection with the title "([^\"]*)"$/ do |title|
