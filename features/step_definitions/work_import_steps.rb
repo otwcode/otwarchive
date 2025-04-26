@@ -1,4 +1,4 @@
-require 'webmock/cucumber'
+require "webmock/cucumber"
 
 def content_fields
   {
@@ -46,8 +46,38 @@ stubbed response", headers: {})
               body: "",
               headers: {})
 
-  WebMock.stub_request(:any, /bar/).
-    to_return(status: 404, headers: {})
+  WebMock.stub_request(:any, /bar/)
+    .to_return(status: 404, headers: {})
+
+  WebMock.stub_request(:any, /second-import-site-with-tags/)
+    .to_return(status: 200,
+               headers: {},
+               body: <<~BODY
+                 <html><head>
+                 <title>Huddling</title></head>
+                 <body>
+
+                 <!-- STORYINFO
+                 title: Huddling
+                 fandom: OTW RPF
+                 date: 2010-01-11
+                 summary: "Are we in a test?" Tester asked.
+                 wordcount: 12,034
+                 -->
+
+
+                 <p><strong>Huddling</strong></p>
+                 <p>by an_author for the <a href="http://example.com">otwarchive testing meme</a>.</p>
+
+                 <p>"What is this place?" orphan_account asked.</p>
+
+                 <p>"I&mdash;don't know," Tester said.</p>
+
+                 <p>= End =</p>
+
+                 </body></html>
+               BODY
+              )
 end
 
 Given /^I set up importing( with a mock website)?( as an archivist)?$/ do |mock, is_archivist|

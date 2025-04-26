@@ -219,34 +219,26 @@ Feature: Import Works
       And I follow "Yes, Continue"
     Then I should see "This work's creator has chosen to moderate comments on the work."
 
-  @work_import_multi_work_backdate
   Scenario: Importing multiple works with backdating
-    When I import the urls
+    When I import the urls with mock websites
         """
-        http://www.intimations.org/fanfic/idol/Huddling.html
-        http://www.intimations.org/fanfic/idol/Stardust.html
+        http://example.com/second-import-site-with-tags.html
+        http://example.com/import-site-with-tags
         """
     Then I should see "Imported Works"
       And I should see "We were able to successfully upload"
       And I should see "Huddling"
-      And I should see "Stardust"
+      And I should see "Detected Title"
     When I follow "Huddling"
     Then I should see "Preview"
       And I should see "2010-01-11"
 
-  # TODO: Enable after AO3-6353.
-  @wip
-  @work_import_multi_chapter_backdate
   Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
-    Given basic languages
-      And basic tags
-      And I am logged in as "human"
-      And the user "human" sets the time zone to "UTC"
-    When I go to the import page
-      And I fill in "urls" with
+    Given I set up importing with a mock website
+    When I fill in "urls" with
         """
-        http://rebecca2525.dreamwidth.org/3506.html
-        http://rebecca2525.dreamwidth.org/4024.html
+        http://example.com/import-site-with-tags
+        http://example.com/second-import-site-with-tags.html
         """
       And I choose "Chapters in a single work"
       And I select "Deutsch" from "Choose a language"
@@ -254,11 +246,11 @@ Feature: Import Works
     Then I should see "Preview"
     When I press "Post"
     Then I should see "Language: Deutsch"
-      And I should see "Published:2000-01-10"
-      And I should see "Completed:2000-01-22"
+      And I should see "Published:2002-01-12"
+      And I should see "Completed:2010-01-11"
     When I follow "Chapter Index"
-    Then I should see "1. Chapter 1 (2000-01-10)"
-      And I should see "2. Importing Test Part 2 (2000-01-22)"
+    Then I should see "1. Chapter 1 (2002-01-12)"
+      And I should see "2. Huddling (2010-01-11)"
 
   Scenario: Imported multichapter work should have the correct word count
     Given I import the urls with mock websites as chapters without preview
