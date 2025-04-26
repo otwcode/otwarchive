@@ -27,13 +27,11 @@ FactoryBot.define do
     title { generate(:collection_title) }
 
     transient do
-      owners { [build(:pseud)] }
+      owner { build(:pseud) }
     end
 
     after(:build) do |collection, evaluator|
-      evaluator.owners.each do |pseud|
-        collection.collection_participants.build(pseud_id: pseud.id, participant_role: "Owner")
-      end
+      collection.collection_participants.build(pseud: evaluator.owner, participant_role: "Owner")
     end
 
     factory :anonymous_collection do
