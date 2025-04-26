@@ -76,11 +76,11 @@ end
 Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
   mod = ensure_user("moderator")
   owner = FactoryBot.create(:collection_participant, pseud: mod.default_pseud)
-  collection = FactoryBot.create(:collection, title: title, name: (name.blank? ? title.gsub(/[^\w]/, "_") : name), collection_participants: [owner])
-  collection.collection_preference.update_attribute(:anonymous, true) unless anon.blank?
-  collection.collection_preference.update_attribute(:unrevealed, true) unless hidden.blank?
-  collection.collection_preference.update_attribute(:moderated, true) unless moderated.blank?
-  collection.collection_preference.update_attribute(:closed, true) unless closed.blank?
+  collection = FactoryBot.create(:collection, title: title, name: (name.presence || title.gsub(/[^\w]/, "_")), collection_participants: [owner])
+  collection.collection_preference.update_attribute(:anonymous, true) if anon.present?
+  collection.collection_preference.update_attribute(:unrevealed, true) if hidden.present?
+  collection.collection_preference.update_attribute(:moderated, true) if moderated.present?
+  collection.collection_preference.update_attribute(:closed, true) if closed.present?
 end
 
 Given /^I open the collection with the title "([^\"]*)"$/ do |title|
