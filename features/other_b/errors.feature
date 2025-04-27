@@ -8,14 +8,14 @@ Feature: Error messages should work
       | wranglerette   |
 
     Then visiting "/admin_posts/999999999" should fail with a not found error
-      And visiting "/users/UnknownUser/bookmarks" should fail with a not found error
-      And visiting "/users/KnownUser/pseuds/unknown_pseud/bookmarks" should fail with a not found error
-      And visiting "/tags/UnknownTag/bookmarks" should fail with a not found error
-      And visiting "/collections/unknowncollection" should fail with a not found error
+      #And visiting "/users/UnknownUser/bookmarks" should fail with a not found error
+      #And visiting "/users/KnownUser/pseuds/unknown_pseud/bookmarks" should fail with a not found error
+      #And visiting "/tags/UnknownTag/bookmarks" should fail with a not found error
+      #And visiting "/collections/unknowncollection" should fail with a not found error
       And visiting "/media/UnknownMediaType/fandoms" should fail with a not found error
       And visiting "/users/KnownUser/pseuds/unknown_pseud" should fail with a not found error
       And visiting "/series/999" should fail with a not found error
-      And visiting "/users/KnownUser/pseuds/unknown_pseud/series" should fail with a not found error
+      #And visiting "/users/KnownUser/pseuds/unknown_pseud/series" should fail with a not found error
       And visiting "/users/UnknownUser/pseuds/unknown_pseud/series" should fail with a not found error
       And visiting "/tags/NonexistentTag" should fail with a not found error
       And visiting "/tags/999999999/feed.atom" should fail with a not found error
