@@ -206,7 +206,7 @@ class UsersController < ApplicationController
     @user.email = new_email
 
     if @user.save
-      I18n.with_locale(@user.preference.locale.iso) do
+      I18n.with_locale(@user.preference.locale_for_mails) do
         UserMailer.change_email(@user.id, old_email, new_email).deliver_later
       end
     else
