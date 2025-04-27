@@ -224,14 +224,14 @@ class UserMailer < ApplicationMailer
     )
   end
 
-  def change_username(user_id, old_username, new_username, time_changed)
-    @user = User.find(user_id)
+  def change_username(user, old_username)
+    @user = user
     @old_username = old_username
-    @new_username = new_username
-    @next_change_date = (time_changed + ArchiveConfig.USER_RENAME_LIMIT_DAYS.days).to_date
+    @new_username = user.login
+    @next_change_time = (user.renamed_at + ArchiveConfig.USER_RENAME_LIMIT_DAYS.days).to_time
     mail(
       to: @user.email,
-      subject: t("user_mailer.change_username.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 

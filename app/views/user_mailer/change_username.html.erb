@@ -7,16 +7,16 @@
            new_username: style_bold(@new_username)) %></p>
 
   <p><%= t(".effects.html",
-           refer_faq_link: style_link(t(".refer_faq"), archive_faq_url(id: "your-account", anchor: "changenameaffect")),
-           contact_support_link: style_link(t(".contact_support"), feedbacks_url)) %></p>
+           refer_faq_link: style_link(t(".refer_faq"), archive_faq_url("your-account", anchor: "changenameaffect")),
+           contact_support_link: support_link(t(".contact_support"))) %></p>
 
   <p><%= t(".change_cooldown_html",
            app_name: ArchiveConfig.APP_SHORT_NAME,
            count: ArchiveConfig.USER_RENAME_LIMIT_DAYS,
-           date: l(@next_change_date, format: :long)) %></p>
+           date: l(@next_change_time)) %></p>
 
   <p><%= t(".not_made_request.html",
            reset_password_link: style_link(t(".reset_password"), new_user_password_url),
-           contact_policy_abuse_link: style_link(t(".contact_policy_abuse"), new_abuse_report_url),
+           contact_policy_abuse_link: abuse_link(t(".contact_policy_abuse")),
            app_name: ArchiveConfig.APP_SHORT_NAME) %></p>
 <% end %>

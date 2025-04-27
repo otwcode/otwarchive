@@ -7,16 +7,16 @@
       new_username: @new_username) %>
 
 <%= t(".effects.text", 
-      refer_faq_link: archive_faq_url(id: "your-account", anchor: "changenameaffect"),
-      contact_support_link: feedbacks_url) %>
+      refer_faq_url: archive_faq_url("your-account", anchor: "changenameaffect"),
+      contact_support_url: feedbacks_url) %>
 
 <%= t(".change_cooldown_html", 
       app_name: ArchiveConfig.APP_SHORT_NAME, 
       count: ArchiveConfig.USER_RENAME_LIMIT_DAYS, 
-      date: l(@next_change_date, format: :long)) %>
+      date: l(@next_change_time)) %>
 
 <%= t(".not_made_request.text",
-      reset_password_link: new_user_password_url,
-      contact_policy_abuse_link: new_abuse_report_url,
+      reset_password_url: new_user_password_url,
+      contact_policy_abuse_url: new_abuse_report_url,
       app_name: ArchiveConfig.APP_SHORT_NAME) %>
 <% end %>

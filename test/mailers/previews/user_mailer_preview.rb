@@ -115,9 +115,10 @@ class UserMailerPreview < ApplicationMailerPreview
 
   def change_username
     user = create(:user, :for_mailer_preview)
-    old_username = user.login
-    new_username = "new_username"
-    UserMailer.change_username(user.id, old_username, new_username)
+    user.renamed_at = Time.current
+    old_username = "old_username"
+    new_username = user.login
+    UserMailer.change_username(user, old_username)
   end
 
   # Sends email when collection item changes status: anonymous_unrevealed

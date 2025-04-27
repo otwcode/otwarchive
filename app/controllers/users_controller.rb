@@ -90,12 +90,12 @@ class UsersController < ApplicationController
         flash[:notice] = t(".admin.successfully_updated")
         redirect_to admin_user_path(@user)
       else
+        I18n.with_locale(@user.preference.locale_for_mails) do
+          UserMailer.change_username(@user, old_login).deliver_later
+        end
+
         flash[:notice] = t(".user.successfully_updated")
         redirect_to @user
-
-        I18n.with_locale(@user.preference.locale.iso) do
-          UserMailer.change_username(@user.id, old_login, @new_login, Time.current).deliver_later
-        end
       end
     else
       @user.reload
