@@ -160,7 +160,10 @@ describe ReadingsController do
 
         delete :clear, params: { user_id: user }
 
-        it_redirects_to_with_notice(user_readings_path(user), I18n.t("readings.clear.success"))
+        it_redirects_to_with_notice(
+          user_readings_path(user),
+          I18n.t("readings.clear.success")
+        )
         expect { reading1.reload }.to raise_error(ActiveRecord::RecordNotFound)
         expect { reading2.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
@@ -174,7 +177,10 @@ describe ReadingsController do
 
         delete :clear, params: { user_id: user }
 
-        it_redirects_to_with_error(user_readings_path(user), [I18n.t("readings.clear.error", message: error_message)])
+        it_redirects_to_with_error(
+          user_readings_path(user),
+          [I18n.t("readings.clear.error", message: error_message)]
+        )
       end
     end
 
