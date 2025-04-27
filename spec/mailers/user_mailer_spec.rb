@@ -42,6 +42,66 @@ describe UserMailer do
     end
   end
 
+  describe "#change_username" do
+    let(:old_username) { "olduser" }
+    let(:new_username) { "newuser" }
+    let(:user) { create(:user, login: old_username) }
+    subject(:email) { UserMailer.change_username(user.id, old_username, new_username, Time.zone.parse("2025-01-01 00:00:00")) }
+
+    before do
+      allow(ArchiveConfig).to receive(:USER_RENAME_LIMIT_DAYS).and_return(5)
+    end
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your username has been changed"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("Hi,")
+        expect(email).to have_html_part_content(">#{old_username}</b>")
+        expect(email).to have_html_part_content(">#{new_username}</b>")
+        expect(email).to have_html_part_content("refer to our FAQ")
+        expect(email).to have_html_part_content("contact Support")
+
+        expect(email).to have_html_part_content("can only be changed once every 5 days")
+        expect(email).to have_html_part_content("You will be able to change your username again on January 06, 2025")
+
+        expect(email).to have_html_part_content("If you did not make this change")
+        expect(email).to have_html_part_content(">reset your password now</a>")
+        expect(email).to have_html_part_content(">contact Policy & Abuse</a>")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("Hi,")
+        expect(email).to have_text_part_content(old_username)
+        expect(email).to have_text_part_content(new_username)
+        expect(email).to have_text_part_content("refer to our FAQ to learn how changing your username will affect your account: ")
+        expect(email).to have_text_part_content("contact Support: ")
+
+        expect(email).to have_text_part_content("can only be changed once every 5 days")
+        expect(email).to have_text_part_content("You will be able to change your username again on January 06, 2025")
+
+        expect(email).to have_text_part_content("If you did not make this change")
+        expect(email).to have_text_part_content("reset your password now")
+        expect(email).to have_text_part_content("contact Policy & Abuse: ")
+      
+        expect(email).to have_text_part_content("If you don't understand why you received this email, please contact Support: ")
+      end
+    end
+  end
+
   describe "creatorship_request" do
     subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id) }
 

@@ -113,6 +113,13 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.change_email(user.id, old_email, new_email)
   end
 
+  def change_username
+    user = create(:user, :for_mailer_preview)
+    old_username = user.login
+    new_username = "new_username"
+    UserMailer.change_username(user.id, old_username, new_username)
+  end
+
   # Sends email when collection item changes status: anonymous_unrevealed
   def anonymous_or_unrevealed_notification_status_anonymous_and_unrevealed
     user, collection, item = anonymous_or_unrevealed_data(:anonymous_unrevealed_collection)

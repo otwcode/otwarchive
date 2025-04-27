@@ -81,6 +81,7 @@ class UsersController < ApplicationController
       render(:change_username) && return
     end
 
+    old_login = @user.login
     @user.login = @new_login
     @user.ticket_number = params[:ticket_number]
 
@@ -91,6 +92,10 @@ class UsersController < ApplicationController
       else
         flash[:notice] = t(".user.successfully_updated")
         redirect_to @user
+
+        I18n.with_locale(@user.preference.locale.iso) do
+          UserMailer.change_username(@user.id, old_login, @new_login, Time.current).deliver_later
+        end
       end
     else
       @user.reload

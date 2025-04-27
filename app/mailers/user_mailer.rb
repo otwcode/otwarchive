@@ -224,6 +224,17 @@ class UserMailer < ApplicationMailer
     )
   end
 
+  def change_username(user_id, old_username, new_username, time_changed)
+    @user = User.find(user_id)
+    @old_username = old_username
+    @new_username = new_username
+    @next_change_date = (time_changed + ArchiveConfig.USER_RENAME_LIMIT_DAYS.days).to_date
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.change_username.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
+  end
+
   ### WORKS NOTIFICATIONS ###
 
   # Sends email when an archivist adds someone as a co-creator.
