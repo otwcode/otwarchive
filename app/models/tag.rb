@@ -240,8 +240,8 @@ class Tag < ApplicationRecord
 
   def flush_bookmark_cache
     self.bookmarks.each do |bookmark|
-      ActionController::Base.new.expire_fragment("bookmark-owner-blurb-#{bookmark.cache_key}-v2")
-      ActionController::Base.new.expire_fragment("bookmark-blurb-#{bookmark.cache_key}-v2")
+      ActionController::Base.new.expire_fragment("bookmark-owner-blurb-#{bookmark.cache_key}-v3")
+      ActionController::Base.new.expire_fragment("bookmark-blurb-#{bookmark.cache_key}-v3")
     end
   end
 

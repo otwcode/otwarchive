@@ -232,3 +232,16 @@ Feature:
       And the email should contain "wrangler_before"
       And the email should contain "has changed their name"
       And the email should contain "wrangler_after"
+
+  Scenario: Bookmarker's bookmark blurbs reflect username changes immediately
+    Given the work "Interesting"
+      And I am logged in as "before"
+      And I bookmark the work "Interesting"
+      And I go to before's bookmarks page
+    Then I should see "Bookmarked by before"
+
+    When it is currently 1 second from now
+      And I change my username to "after"
+      And I go to after's bookmarks page
+    Then I should see "Bookmarked by after"
+      And I should not see "Bookmarked by before"

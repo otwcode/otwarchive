@@ -90,6 +90,8 @@ en:
               required: can't be blank
         comment:
           attributes:
+            comment_content:
+              duplicate_comment: "^You've already left this comment here. (It may not appear right away for performance reasons.)"
             commentable:
               format: "%{message}"
               guest_replies_off: Sorry, this user doesn't allow non-Archive users to reply to their comments.
@@ -122,6 +124,7 @@ en:
               inclusion: What did you want to leave kudos on?
             user:
               blocked: Sorry, you have been blocked by one or more of this work's creators.
+              official: Please log out of your official account!
           format: "%{message}"
           taken: You have already left kudos here. :)
         mute:
@@ -170,6 +173,8 @@ en:
             data_processing:
               accepted: Sorry, you need to consent to the processing of your personal data in order to sign up.
               format: "%{message}"
+            email:
+              taken: "^This email is already associated with another account. Please try again with a different email address."
             login:
               admin_must_use_default: must use the default. Please contact your chairs to use something else.
               changed_too_recently:
