@@ -160,10 +160,12 @@ describe UsersController do
 
     context "when logged in as a valid user" do
       before do
+        allow(Time).to receive(:current).and_return(Time.zone.parse("2025-01-01 00:00:00"))
         fake_login_known_user(user)
       end
 
       it "updates the user's username" do
+        receive(:change_username).with(user.id, user.login, new_username, Time.zone.parse("2025-01-01 00:00:00")).at_least(:once).and_call_original
         subject
         success
       end
