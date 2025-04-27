@@ -65,3 +65,26 @@ Feature: Comment hiding
       And I view the work "Popular Fic" with comments
     Then I should see "A suspicious comment"
       And I should not see "This comment has been hidden by an admin."
+
+  Scenario Outline: Embedded images in hidden comments are replaced with their URLs.
+    Given I am logged in as "author"
+    And I post the work "Popular Fic"
+    And I am logged out
+    And I am logged in as "commenter"
+    And I post the comment "OMG! <img src= 'https://example.com/image.jpg'>" on the work "Popular Fic"
+    And I am logged out
+
+    # Delay to make sure the cache is expired when the comment is hidden:
+    When it is currently 1 second from now
+      And I am logged in as a super admin
+      And I view the work "Popular Fic" with comments
+    Then I should see the image "src" text "https://example.com/image.jpg"
+      And I should not see "OMG! https://example.com/image.jpg"
+      And I press "Hide Comment"
+    Then I should see "Comment successfully hidden!"
+    Then I should not see the image "src" text "https://example.com/image.jpg"
+      And I should see "OMG! https://example.com/image.jpg"
+    Then I press "Make Comment Visible"
+      And I should see "Comment successfully unhidden!"
+    Then I should not see the image "src" text "https://example.com/image.jpg"
+      And I should see "OMG! https://example.com/image.jpg"
