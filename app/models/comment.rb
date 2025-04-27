@@ -530,7 +530,7 @@ class Comment < ApplicationRecord
   end
 
   def use_image_safety_mode?
-    parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE) || self.hidden_by_admin
+    parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE) || hidden_by_admin
   end
   include Responder
 end
