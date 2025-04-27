@@ -36,6 +36,18 @@ describe WorksController do
       before { fake_login_known_user(work.users.first) }
 
       it_behaves_like "can update work tags and language"
+
+      context "when adding a tag that contains '^'" do
+        it "displays the error message including '^' in the tag name" do
+          expect do
+            post :update_tags, params: {
+              id: work, work: { fandom_string: "fandom^tag" }
+            }
+          end.to avoid_changing { work.reload.updated_at }
+          expect(assigns[:work].errors.full_messages).to \
+            include("Tag name 'fandom^tag' cannot include the following restricted characters: , ^ * < > { } = ` ， 、 \ %")
+        end
+      end
     end
 
     context "when admin does not have correct authorization" do

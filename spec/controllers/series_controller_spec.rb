@@ -120,7 +120,7 @@ describe SeriesController do
           context "when pseud_id does not exist" do
             it "raises an error" do
               expect do
-                get :index, params: { user_id: "nobody", pseud_id: "nobody"}
+                get :index, params: { user_id: "nobody", pseud_id: "nobody" }
               end.to raise_error ActiveRecord::RecordNotFound
             end
           end
