@@ -147,4 +147,52 @@ describe ReadingsController do
       end
     end
   end
+
+  describe "DELETE #clear" do
+    context "when logged in as the user" do
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "clears all readings and redirects with success notice" do
+        reading1 = create(:reading, user: user)
+        reading2 = create(:reading, user: user)
+
+        delete :clear, params: { user_id: user }
+
+        it_redirects_to_with_notice(user_readings_path(user), I18n.t("readings.clear.success"))
+        expect { reading1.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { reading2.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "failure to clear readings sets flash error" do
+        error_message = "Cannot destroy reading"
+        reading = create(:reading, user: user)
+
+        allow_any_instance_of(Reading).to receive(:destroy!).and_raise(ActiveRecord::RecordNotDestroyed.new(error_message))
+
+        delete :clear, params: { user_id: user }
+
+        it_redirects_to_with_error(user_readings_path(user), [I18n.t("readings.clear.error", message: error_message)])
+      end
+    end
+
+    context "when logged out" do
+      it "redirects to login page with error" do
+        delete :clear, params: { user_id: user }
+
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context "when logged in as another user" do
+      it "redirects to requested user's dashboard with error" do
+        fake_login
+
+        delete :clear, params: { user_id: user }
+
+        it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+  end
 end
