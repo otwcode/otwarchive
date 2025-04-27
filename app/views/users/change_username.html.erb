@@ -9,7 +9,7 @@
       <strong><%= t(".caution") %></strong>
       <%= t(".change_window", count: ArchiveConfig.USER_RENAME_LIMIT_DAYS) %>
       <% if @user.renamed_at %>
-        <%= t(".last_renamed", renamed_at: l(@user.renamed_at, format: :long)) %>
+        <%= t(".last_renamed", renamed_at: l(@user.renamed_at)) %>
       <% end %>
     </p>
     <p>

@@ -25,6 +25,10 @@ en:
         success:
           one: Successfully removed pseud %{pseuds} from this work.
           other: Successfully removed pseuds %{pseuds} from this work.
+  application:
+    access_denied:
+      access_denied:
+        logged_in: Sorry, you don't have permission to access the page you were trying to reach.
   archive_faqs:
     create:
       success: Archive FAQ was successfully created.
@@ -106,6 +110,11 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
+  errors:
+    auth_error:
+      browser_title: Auth Error
+    timeout_error:
+      browser_title: Timeout Error
   external_works:
     update:
       successfully_updated: External work was successfully updated.
@@ -169,12 +178,19 @@ en:
     not_found: Sorry, we couldn't find the FAQ you were looking for.
     update_positions:
       success: Question order has been successfully updated.
+  related_works:
+    index:
+      page_title: "%{login} - Related Works"
   series:
     index:
       page_title: "%{username} - Series"
     show:
       anonymous: Anonymous
       unrevealed_series: Mystery Series
+  subscriptions:
+    delete_all:
+      error: There were problems deleting your subscriptions.
+      success: Your subscriptions have been deleted.
   tag_wranglings:
     index:
       page_subtitle: fandoms
@@ -182,12 +198,23 @@ en:
     index:
       collection_page_title: "%{collection_title} - Tags"
   users:
+    changed_password:
+      blank_password: You must enter your old password.
+      wrong_password: Your old password was incorrect.
     changed_username:
       admin:
         successfully_updated: Username has been successfully updated.
       user:
         incorrect_password: Your password was incorrect
         successfully_updated: Your username has been successfully updated.
+    confirm_change_email:
+      blank_email: You must enter a new email address.
+      blank_password: You must enter your password.
+      browser_title: Confirm New Email
+      contact_support: contact Support
+      nonmatching_email: The email addresses you entered do not match. Please try again.
+      same_as_current: Your new email address must be different from your current email.
+      wrong_password_html: Your password was incorrect. Please try again or log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
     contact_abuse: contact our Policy & Abuse team
     passwords:
       create:
@@ -202,6 +229,11 @@ en:
           one: You may reset your password %{count} more time.
           other: You may reset your password %{count} more times.
         user_not_found: We couldn't find an account with that email address or username. Please try again.
+    reconfirm_email:
+      access_denied:
+        logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.
+      invalid_token: This email confirmation link is invalid or expired. Please check your email for the correct link or submit the email change form again.
+      success: Your email has been successfully updated.
     status:
       ban_notice_html: Your account has been banned. You are not permitted to post or edit content on AO3. Please check your email or %{contact_abuse_link} for more information.
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You cannot post, edit, or delete content until your suspension has ended. Please check your email or %{contact_abuse_link} for more information.

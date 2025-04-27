@@ -61,66 +61,116 @@ Scenario: Change details as an admin
   When I go to the admin-activities page
   Then I should see 1 admin activity log entry
 
-Scenario: Changing email address requires reauthenticating
+Scenario: Changing email address shows a confirmation page and sends a confirmation mail
 
-  When I follow "Change Email"
-    And I fill in "New Email" with "blah@a.com"
-    And I fill in "Confirm New Email" with "blah@a.com"
-    And I press "Change Email"
-  Then I should see "You must enter your password"
-    And 0 emails should be delivered
-
-Scenario: Changing email address - entering an invalid email address
-
-  When I enter an invalid email
-  Then I should see "Email should look like an email address"
-    And 0 emails should be delivered
-
-Scenario: Changing email address - case-insensitive confirmation
-
-  When I follow "Change Email"
-    And I fill in "New Email" with "foo@example.com"
-    And I fill in "Confirm New Email" with "FoO@example.com"
+  When it is currently 2020-04-10 13:37
+    And the email address change confirmation period is set to 4 days
+    And I change my preferences to display my email address
+    And I follow "Edit My Profile"
+    And I follow "Change Email"
+    And I fill in "New email" with "valid2@archiveofourown.org"
+    And I fill in "Enter new email again" with "valid2@archiveofourown.org"
     And I fill in "Password" with "password"
-    And I press "Change Email"
-  Then I should see "Your email has been successfully updated"
-    And 1 email should be delivered to "bar@ao3.org"
-    And all emails have been delivered
-    And the email should contain "the email associated with your account has been changed to"
-    And the email should contain "foo@example.com"
-    And the email should not contain "translation missing"
-  When I change my preferences to display my email address
-  Then I should see "My email address: foo@example.com"
-
-Scenario: Changing email address - entering an incorrect password
-
-  When I enter an incorrect password
-  Then I should see "Your password was incorrect"
+    And I press "Confirm New Email"
+  Then I should see "Are you sure you want to change your email address to valid2@archiveofourown.org?"
+    And I should see "If you don't confirm your request within 4 days"
     And 0 emails should be delivered
-
-Scenario: Changing email address - entering non-matching new email addresses
-
-  When I enter non-matching emails
-  Then I should see "Email addresses don't match!"
-    And 0 emails should be delivered
+  When I press "Yes, Change Email"
+  Then I should see "You have requested to change your email address to valid2@archiveofourown.org."
+    And I should see "If you don't confirm your request by Tue, 14 Apr 2020"
     And I should see "bar@ao3.org"
-
-Scenario: Changing email address and viewing
-
-  When I change my email
-  Then I should see "Your email has been successfully updated"
     And 1 email should be delivered to "bar@ao3.org"
-    And all emails have been delivered
-    And the email should contain "the email associated with your account has been changed to"
+    And the email should contain "Someone has made a request to change the email address associated with your AO3 account."
     And the email should contain "valid2@archiveofourown.org"
-    And the email should not contain "translation missing"
-  When I change my preferences to display my email address
+    And 1 email should be delivered to "valid2@archiveofourown.org"
+    And the email should contain "request to change the email address associated with the AO3 account"
+    And the email should contain "editname"
+
+  When I am a visitor
+    And I follow "confirm your email change" in the email
+  Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
+  When I go to editname's profile page
+  Then I should see "My email address: bar@ao3.org"
+
+  When I am logged in as "editname"
+    And I follow "confirm your email change" in the email
+  Then I should see "Your email has been successfully updated."
+    And I should see "valid2@archiveofourown.org"
+    But I should not see "bar@ao3.org"
+    But I should not see "You have requested to change your email address"
+  When I go to editname's profile page
   Then I should see "My email address: valid2@archiveofourown.org"
   When I log out
     And I go to editname's profile page
   Then I should see "My email address: valid2@archiveofourown.org"
 
-Scenario: Changing email address after requesting password reset
+Scenario: Changing email address -- canceling in confirmation step
+
+  When I follow "Change Email"
+    And I start to change my email to "valid2@archiveofourown.org"
+  Then I should see "Are you sure you want to change your email address"
+    And 0 emails should be delivered
+  When I follow "Cancel"
+  Then I should see "Change Email" within "h2.heading"
+    And 0 emails should be delivered
+    And I should not see "You have requested to change your email address"
+
+Scenario: Changing email address -- request expires
+
+  When it is currently 2020-04-10 13:37
+    And the email address change confirmation period is set to 4 days
+    And I follow "Change Email"
+    And I request to change my email to "valid2@archiveofourown.org"
+  Then I should see "If you don't confirm your request by Tue, 14 Apr 2020"
+    And 1 email should be delivered to "valid2@archiveofourown.org"
+    And the email should contain "request to change the email address"
+    And I should see "You have requested to change your email address"
+
+  When it is currently 2020-04-15 14:00
+    And I follow "My Preferences"
+    And I follow "Change Email"
+  Then I should not see "You have requested to change your email address"
+    And I should see "bar@ao3.org"
+    But I should not see "valid2@archiveofourown.org"
+  When I follow "confirm your email change" in the email
+  Then I should see "This email confirmation link is invalid or expired. Please check your email for the correct link or submit the email change form again."
+    And I should see "bar@ao3.org"
+    But I should not see "valid2@archiveofourown.org"
+
+Scenario: Changing email address -- resubmitting form changes target email and expiration date
+
+  When it is currently 2020-04-10 13:37
+    And the email address change confirmation period is set to 4 days
+    And I follow "Change Email"
+    And I request to change my email to "valid2@archiveofourown.org"
+  Then I should see "If you don't confirm your request by Tue, 14 Apr 2020"
+    And 1 email should be delivered to "bar@ao3.org"
+    And 1 email should be delivered to "valid2@archiveofourown.org"
+    And the email should contain "request to change the email address"
+
+  When it is currently 2020-04-12 14:00
+    And I request to change my email to "another@archiveofourown.org"
+  Then I should see "You have requested to change your email address to another@archiveofourown.org."
+    And I should see "If you don't confirm your request by Thu, 16 Apr 2020"
+    # The original email gets another notification
+    And 2 emails should be delivered to "bar@ao3.org"
+    # Old link should be invalid
+    And 1 email should be delivered to "valid2@archiveofourown.org"
+  When I follow "confirm your email change" in the email
+  Then I should see "This email confirmation link is invalid or expired. Please check your email for the correct link or submit the email change form again."
+    And I should see "bar@ao3.org"
+    And I should see "You have requested to change your email address to another@archiveofourown.org"
+    But I should not see "valid2@archiveofourown.org"
+    # Newest email gets new link that should work
+    And 1 email should be delivered to "another@archiveofourown.org"
+    And the email should contain "request to change the email address"
+  When I follow "confirm your email change" in the email
+  Then I should see "Your email has been successfully updated."
+    And I should see "another@archiveofourown.org"
+    But I should not see "valid2@archiveofourown.org"
+    But I should not see "bar@ao3.org"
+
+Scenario: Changing email address -- after requesting password reset
 
   When I am logged out
     And I follow "Forgot password?"
@@ -129,35 +179,31 @@ Scenario: Changing email address after requesting password reset
   Then 1 email should be delivered to "bar@ao3.org"
   When all emails have been delivered
     And I am logged in as "editname"
-    And I want to edit my profile
-    And I change my email
-  Then I should see "Your email has been successfully updated"
+    And I follow "My Preferences"
+    And I follow "Change Email"
+    And I request to change my email to "valid2@archiveofourown.org"
+  Then I should see "You have requested to change your email address to valid2@archiveofourown.org."
     And 1 email should be delivered to "bar@ao3.org"
-    And the email should contain "the email associated with your account has been changed to"
-    And the email should contain "valid2@archiveofourown.org"
-    And the email should not contain "translation missing"
-  When I change my preferences to display my email address
-  Then I should see "My email address: valid2@archiveofourown.org"
+    And 1 email should be delivered to "valid2@archiveofourown.org"
+  When I follow "confirm your email change" in the email
+  Then I should see "Your email has been successfully updated."
+    And I should see "valid2@archiveofourown.org"
+    But I should not see "bar@ao3.org"
 
-Scenario: Changing email address -- can't be the same as another user's
-
-  When I enter a duplicate email
-  Then I should see "Email has already been taken"
-    And 0 emails should be delivered
-    And I should not see "Email addresses don't match!"
-    And I should not see "foo@ao3.org"
-    And I should see "bar@ao3.org"
-
-Scenario: Changing email address -- Translated email is sent when user enables locale settings
+Scenario: Changing email address -- translated emails are sent when user enables locale settings
     Given a locale with translated emails
       And the user "editname" enables translated emails
       And all emails have been delivered
     When I am logged in as "editname"
-      And I want to edit my profile
-      And I change my email
+      And I follow "My Preferences"
+      And I follow "Change Email"
+      And I request to change my email to "valid2@archiveofourown.org"
     Then the email address "bar@ao3.org" should be emailed
-      And the email should have "Email changed" in the subject
+      And the email should have "Email change request" in the subject
       And the email to email address "bar@ao3.org" should be translated
+      And 1 email should be delivered to "valid2@archiveofourown.org"
+      And the email should have "Confirm your email change" in the subject
+      And the email to email address "valid2@archiveofourown.org" should be translated
 
 Scenario: Date of birth - under age
 
@@ -190,3 +236,7 @@ Scenario: Change password
   When I change my password
   Then I should see "Your password has been changed. To protect your account, you have been logged out of all active sessions. Please log in with your new password."
     And 0 emails should be delivered
+  When I am logged in as a super admin
+    And I go to the user administration page for "editname"
+  Then I should see "Password Changed" within "#user_history"
+    But I should not see "Password Reset" within "#user_history"
