@@ -62,7 +62,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:notice] = ts("Your password has been changed. To protect your account, you have been logged out of all active sessions. Please log in with your new password.")
-      @user.create_log_item(options = { action: ArchiveConfig.ACTION_PASSWORD_RESET })
+      @user.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_CHANGE)
 
       redirect_to(user_profile_path(@user)) && return
     else
@@ -206,7 +206,7 @@ class UsersController < ApplicationController
     @user.email = new_email
 
     if @user.save
-      I18n.with_locale(@user.preference.locale.iso) do
+      I18n.with_locale(@user.preference.locale_for_mails) do
         UserMailer.change_email(@user.id, old_email, new_email).deliver_later
       end
     else

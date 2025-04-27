@@ -34,4 +34,12 @@ class Preference < ApplicationRecord
   def locale
     $rollout.active?(:set_locale_preference, user) ? super : Locale.default
   end
+
+  def locale_for_mails
+    # Use preferred_locale to bypass the second $rollout check
+    l = Locale.find(preferred_locale)
+    return I18n.default_locale.to_s unless $rollout.active?(:set_locale_preference, user) && l.email_enabled
+
+    l.iso
+  end
 end
