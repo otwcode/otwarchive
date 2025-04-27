@@ -542,15 +542,18 @@ namespace :After do
     # This might be possible with pure Ruby, but unfortunately the parent tag in common_taggings is polymorphic
     # (even though it doesn't need to be), which makes that trickier.
     non_canonicals = SetTagging
-      .joins("INNER JOIN `tag_sets` `tag_set` ON `tag_set`.`id` = `set_taggings`.`tag_set_id` INNER JOIN `owned_tag_sets` ON `owned_tag_sets`.`tag_set_id` = `tag_set`.`id` INNER JOIN `tags` `tag` ON `tag`.`id` = `set_taggings`.`tag_id` JOIN `common_taggings` `common_tagging` ON `tag`.`id` = `common_tagging`.`common_tag_id` JOIN `tags` `tag2` ON `common_tagging`.`filterable_id` = `tag2`.`id`")
-      .where("`tag`.`canonical` = FALSE AND `tag`.`type` IN ('Character', 'Relationship') AND `tag_set`.`id` IS NOT NULL AND `tag2`.`type` = 'Fandom' AND `tag2`.`canonical` = TRUE")
+      .joins("INNER JOIN `tag_sets` `tag_set` ON `tag_set`.`id` = `set_taggings`.`tag_set_id` INNER JOIN `owned_tag_sets` ON `owned_tag_sets`.`tag_set_id` = `tag_set`.`id` INNER JOIN `tags` `tag` ON `tag`.`id` = `set_taggings`.`tag_id` INNER JOIN `common_taggings` `common_tagging` ON  `common_tagging`.`common_tag_id` = `tag`.`id` INNER JOIN `tags` `parent_tag` ON `common_tagging`.`filterable_id` = `parent_tag`.`id`")
+      .where("`tag`.`canonical` = FALSE AND `tag`.`type` IN ('Character', 'Relationship') AND `tag_set`.`id` IS NOT NULL AND `parent_tag`.`type` = 'Fandom' AND `parent_tag`.`canonical` = TRUE")
 
     non_canonicals.find_in_batches.with_index do |batch, index|
       puts "Creating TagSetAssociations for batch #{index + 1}"
       batch.each do |set_tagging|
-        set_tagging.tag.fandoms.where(canonical: true).find_each do |fandom|
-          TagSetAssociation.create!(owned_tag_set: set_tagging.tag_set.owned_tag_set,
-                                    tag: set_tagging.tag, parent_tag: fandom)
+        owned_tag_set = set_tagging.tag_set.owned_tag_set
+        tag = set_tagging.tag
+
+        fandoms = set_tagging.tag.fandoms.joins(:set_taggings).where(canonical: true, set_taggings: { tag_set_id: set_tagging.tag_set.id })
+        fandoms.find_each do |fandom|
+          TagSetAssociation.create!(owned_tag_set: owned_tag_set, tag: tag, parent_tag: fandom)
         end
       end
     end
