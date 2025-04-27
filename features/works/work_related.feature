@@ -729,3 +729,23 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Then I should see the inspiring parent work in the beginning notes
     And I should see the translation listed on the original work
     And I should see the related work listed on the original work
+
+Scenario: Notification emails for related works are translated
+
+  Given a locale with translated emails
+    And I have related works setup
+    And the user "inspiration" enables translated emails
+    And a related work has been posted
+  Then 1 email should be delivered to "inspiration"
+    And the email to "inspiration" should be translated
+    And the email should have "Related work notification" in the subject
+
+Scenario: Notification emails for translations are translated
+
+  Given a locale with translated emails
+    And I have related works setup
+    And the user "inspiration" enables translated emails
+    And a translation has been posted
+  Then 1 email should be delivered to "inspiration"
+    And the email to "inspiration" should be translated
+    And the email should have "Related work notification" in the subject
