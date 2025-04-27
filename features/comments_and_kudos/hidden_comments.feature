@@ -86,5 +86,5 @@ Feature: Comment hiding
       And I should see "OMG! https://example.com/image.jpg"
     Then I press "Make Comment Visible"
       And I should see "Comment successfully unhidden!"
-    Then I should not see the image "src" text "https://example.com/image.jpg"
-      And I should see "OMG! https://example.com/image.jpg"
+    Then I should see the image "src" text "https://example.com/image.jpg"
+      And I should not see "OMG! https://example.com/image.jpg"

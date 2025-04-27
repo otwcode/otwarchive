@@ -518,7 +518,6 @@ class Comment < ApplicationRecord
   end
 
   def mark_hidden!
-    update_attribute(:comment_content, sanitize_field(self, :comment_content, image_safety_mode: true))
     update_attribute(:hidden_by_admin, true)
   end
 
@@ -531,7 +530,7 @@ class Comment < ApplicationRecord
   end
 
   def use_image_safety_mode?
-    parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE)
+    parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE) || self.hidden_by_admin
   end
   include Responder
 end
