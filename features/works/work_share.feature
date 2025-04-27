@@ -5,14 +5,14 @@ Feature: Share Works
 
   @javascript
   Scenario: Share a work
-    Given I am logged in as "testuser1"
-      And I post the work "Blabla"
+    Given the work "Blabla" by "testuser1" with fandom "Stargate SG-1"
+      And I am logged in as "testuser1"
     When I view the work "Blabla"
     Then I should see "Share"
     When I follow "Share"
     Then I should see "Copy and paste the following code to link back to this work" within "#share"
       And I should see "or use the Tweet or Tumblr links to share the work" within "#share"
-      And I should see '<strong>Blabla</strong></a> (6 words)' within "#share textarea"
+      And I should see '<strong>Blabla</strong></a> (8 words)' within "#share textarea"
       And I should see 'by <a href="http://www.example.com/users/testuser1"><strong>testuser1</strong></a>' within "#share textarea"
       And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share textarea"
       And I should see "Rating: Not Rated" within "#share textarea"
@@ -28,7 +28,7 @@ Feature: Share Works
     When I follow "Share"
     Then I should see "Copy and paste the following code to link back to this work" within "#share"
       And I should see "or use the Tweet or Tumblr links to share the work" within "#share"
-      And I should see '<strong>Blabla</strong></a> (6 words)' within "#share textarea"
+      And I should see '<strong>Blabla</strong></a> (8 words)' within "#share textarea"
       And I should see 'by <a href="http://www.example.com/users/testuser1"><strong>testuser1</strong></a>' within "#share textarea"
       And I should see 'Fandom: <a href="http://www.example.com/tags/Stargate%20SG-1">Stargate SG-1</a>' within "#share textarea"
       And I should see "Rating: Not Rated" within "#share textarea"
@@ -43,7 +43,7 @@ Feature: Share Works
   
   Given I am logged in as "PrivaC"
     And I set my preferences to hide the share buttons on my work
-    And I post the work "Don't Lie When You're Hurting Inside"
+    And the work "Don't Lie When You're Hurting Inside" by "PrivaC"
     And the user "EitherWay" allows co-creators
   When I view the work "Don't Lie When You're Hurting Inside"
   Then I should not see "Share"
