@@ -164,8 +164,14 @@ describe ReadingsController do
           user_readings_path(user),
           I18n.t("readings.clear.success")
         )
-        expect { reading1.reload }.to raise_error(ActiveRecord::RecordNotFound)
-        expect { reading2.reload }.to raise_error(ActiveRecord::RecordNotFound)
+
+        expect do
+          reading1.reload
+        end.to raise_error(ActiveRecord::RecordNotFound)
+
+        expect do
+          reading2.reload
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       it "failure to clear readings sets flash error" do
