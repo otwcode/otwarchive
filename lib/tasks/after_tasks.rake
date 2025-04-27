@@ -552,7 +552,7 @@ namespace :After do
         owned_tag_set = set_tagging.tag_set.owned_tag_set
         tag = set_tagging.tag
 
-        fandoms = set_tagging.tag.fandoms.joins(:set_taggings).where(canonical: true, set_taggings: { tag_set_id: set_tagging.tag_set.id })
+        fandoms = tag.fandoms.joins(:set_taggings).where(canonical: true, set_taggings: { tag_set_id: set_tagging.tag_set.id })
         fandoms.find_each do |fandom|
           TagSetAssociation.create!(owned_tag_set: owned_tag_set, tag: tag, parent_tag: fandom)
         end
