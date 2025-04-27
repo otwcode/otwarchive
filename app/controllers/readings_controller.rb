@@ -43,11 +43,9 @@ class ReadingsController < ApplicationController
     @errors = []
 
     @user.readings.each do |reading|
-      begin
-        reading.destroy!
-      rescue => e
-        @errors << t(".error", message: e.message)
-      end
+      reading.destroy!
+    rescue ActiveRecord::RecordNotDestroyed => e
+      @errors << t(".error", message: e.message)
     end
 
     if @errors.any?

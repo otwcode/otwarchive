@@ -166,8 +166,9 @@ describe ReadingsController do
       end
 
       it "failure to clear readings sets flash error" do
+        create(:reading, user: user)
+
         error_message = "Cannot destroy reading"
-        reading = create(:reading, user: user)
 
         allow_any_instance_of(Reading).to receive(:destroy!).and_raise(ActiveRecord::RecordNotDestroyed.new(error_message))
 
