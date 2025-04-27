@@ -3,7 +3,12 @@
 work_url: @related_parent_link,
 related_work_title: @related_work.work.title.html_safe,
 related_work_url: @related_child_link,
-work_authors: @related_work.work.anonymous? ? t(".work_listed.anonymous") : (@related_work.work.pseuds.map{|p| text_pseud(p)}.to_sentence)) %>
+work_authors: if @related_work.work.anonymous?
+                t(".anonymous")
+              else
+                @related_work.work.pseuds.map { |p| text_pseud(p) }
+                                         .to_sentence
+              end) %>
 
 <%= t(".text.approve", related_work_url: related_work_url(@related_work)) %>
 
