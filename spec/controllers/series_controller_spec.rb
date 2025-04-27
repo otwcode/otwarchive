@@ -156,6 +156,14 @@ describe SeriesController do
   end
 
   describe "show" do
+    context "when series does not exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "99999999" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
     it "assigns page title for series" do
       work = create(:work, fandom_string: "Fandom", authors: [user.default_pseud])
       create(:serial_work, work: work, series: series)
