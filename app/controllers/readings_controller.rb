@@ -40,14 +40,22 @@ class ReadingsController < ApplicationController
   end
 
   def clear
+    @errors = []
+
     @user.readings.each do |reading|
-       begin
-         reading.destroy
-       rescue
-         @errors << ts("There were problems deleting your history.")
-       end
-     end
-    flash[:notice] = ts("Your history is now cleared.")
+      begin
+        reading.destroy!
+      rescue => e
+        @errors << t(".error", message: e.message)
+      end
+    end
+
+    if @errors.any?
+      flash[:error] = @errors
+    else
+      flash[:notice] = t(".success")
+    end
+
     redirect_to user_readings_path(current_user)
   end
 
