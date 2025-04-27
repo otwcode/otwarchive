@@ -523,6 +523,9 @@ en:
           comments_on_works: delete or hide comments they previously left on your works; you can delete these individually
           hide_works: hide their works or bookmarks from you
           intro: 'Blocking a user will not:'
+  bookmarks:
+    bookmark_user_module:
+      bookmarked_by_html: Bookmarked by %{pseud_link}
   challenge:
     gift_exchange:
       challenge_signups:
@@ -1588,7 +1591,7 @@ en:
         what_you_cant_do: What you can't do
   invitations:
     invitation:
-      copy_and_use: copy and use
+      copy_and_use: Copy and use
       copy_link: Copy link
       created_at: Created at
       deleted_user: Deleted User
