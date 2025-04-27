@@ -109,10 +109,21 @@ describe SeriesController do
 
     context "with user_id parameter" do
       context "when user_id does not exist" do
-        it "raises an error" do
-          expect do
-            get :index, params: { user_id: "nobody" }
-          end.to raise_error ActiveRecord::RecordNotFound
+        context "without a pseud_id parameter" do
+          it "raises an error" do
+            expect do
+              get :index, params: { user_id: "nobody" }
+            end.to raise_error ActiveRecord::RecordNotFound
+          end
+        end
+        context "with pseud_id parameter" do
+          context "when pseud_id does not exist" do
+            it "raises an error" do
+              expect do
+                get :index, params: { user_id: "nobody", pseud_id: "nobody"}
+              end.to raise_error ActiveRecord::RecordNotFound
+            end
+          end
         end
       end
 
