@@ -433,7 +433,7 @@ en:
         collection: "[%{app_name}][%{collection_title}] A gift work for you from %{collection_title}"
         no_collection: "[%{app_name}] A gift work for you"
     related_work_notification:
-      anonymous: an anonymous author
+      anonymous: an anonymous creator
       can_come_back: "(You can come back to this page if you change your mind.)"
       html:
         approve_link_text: Approve relationship and link back to this work from your work
