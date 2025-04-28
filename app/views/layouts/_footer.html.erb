@@ -45,7 +45,7 @@
           </li>
         <% end %>
         <li><%= link_to t(".development.known_issues"), known_issues_path %></li>
-        <li><%= link_to t(".development.status_page"), "https://www.otwstatus.org" %></li>
+        <li><%= link_to t(".development.status_page"), ArchiveConfig.STATUS_PAGE_URL %></li>
         <li>
           <%= t(".development.license_details_html",
                 license_link: link_to(t(".development.gpl_2_0_or_later"),
