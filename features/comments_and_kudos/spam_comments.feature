@@ -109,11 +109,11 @@ Feature: Marking comments as spam
     Then I should see "Comment created!"
     When I follow "Thread"
       And I follow "Edit"
-      And I fill in "Comment" with "abccccccccc"
+      And I fill in "Comment" with "abcspamcccc"
       And it is currently 1 second from now
       And I press "Update"
     Then I should see "Comment was successfully updated."
-      And I should see "abccccccccc"
+      And I should see "abcspamcccc"
     When I follow "Thread"
       And I follow "Edit"
       And I fill in "Comment" with "I like spam"
