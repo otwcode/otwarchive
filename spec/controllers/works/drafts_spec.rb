@@ -129,15 +129,6 @@ describe WorksController do
       put :post_draft, params: { id: draft.id }
       it_redirects_to_with_notice(
         work_path(draft),
-        'Your work was successfully posted.'
-      )
-    end
-
-    it "should post the draft if there is none of the aforementioned issues" do
-      draft = create(:draft, authors: [drafts_user.default_pseud])
-      put :post_draft, params: { id: draft.id }
-      it_redirects_to_with_notice(
-        work_path(draft),
         "Your work was successfully posted."
       )
     end
