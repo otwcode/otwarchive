@@ -99,7 +99,7 @@ en:
               blocked_comment: Sorry, you have been blocked by one or more of this work's creators.
               blocked_reply: Sorry, you have been blocked by that user.
               format: "%{message}"
-          spam: "^This comment looks like spam to our system, sorry! Please try again."
+          spam: This comment looks like spam to our system, sorry! Please try again.
         creatorship:
           attributes:
             pseud_id:

@@ -34,7 +34,7 @@ describe Comment do
         subject.edited_at = Time.current
         subject.comment_content = "Spam content" * 12
         expect(subject.save).to be_falsey
-        expect(subject.errors[:comment_content].first).to include("This comment looks like spam to our system, sorry! Please try again.")
+        expect(subject.errors[:base]).to include("This comment looks like spam to our system, sorry! Please try again.")
       end
 
       it "allows editing the comment if it's not changed significantly" do

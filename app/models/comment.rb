@@ -65,7 +65,9 @@ class Comment < ApplicationRecord
   validate :check_for_spam, on: :create
 
   def check_for_spam
-    errors.add(:base, :spam) unless check_for_spam?
+    self.approved = skip_spamcheck? || !spam?
+
+    errors.add(:base, :spam) unless approved
   end
 
   validate :edited_spam, on: :update, if: [:will_save_change_to_edited_at?, :will_save_change_to_comment_content?]
@@ -73,7 +75,7 @@ class Comment < ApplicationRecord
   def edited_spam
     return if skip_spamcheck? || !content_too_different?(comment_content, comment_content_in_database, ArchiveConfig.EDITED_COMMENT_SPAM_CHECK_THRESHOLD)
 
-    errors.add(:comment_content, :spam) if spam?
+    errors.add(:base, :spam) if spam?
   end
 
   validates :comment_content, uniqueness: {
@@ -486,10 +488,6 @@ class Comment < ApplicationRecord
     return false unless pseud_id
 
     on_tag? || !user.should_spam_check_comments? || is_creator_comment?
-  end
-
-  def check_for_spam?
-    self.approved = skip_spamcheck? || !spam?
   end
 
   def spam?
