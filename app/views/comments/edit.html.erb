@@ -9,7 +9,7 @@
 
 <!--main content-->
 <li class="comment group <%= cycle :odd, :even %>" id="comment_<%= @comment.id %>" role="article">
-  <%= render partial: "comments/comment_form", locals: {comment: @comment, commentable: @comment.commentable, button_name: t(".update")}%>
+  <%= render partial: "comments/comment_form", locals: { comment: @comment, commentable: @comment.commentable, button_name: t(".update") } %>
 </li>
 <!--/content-->
 

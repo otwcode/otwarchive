@@ -3,6 +3,6 @@
 $j("<%= comment_field_id %>").slideUp();
 /* render the comment form in its place */
 $j("<%= comment_field_id %>").html("<%= escape_javascript(render partial: "comments/comment_form",
-  locals: {comment: @comment, commentable: @comment.commentable, button_name: t(".update"), show_errors: true}) %>");
+  locals: { comment: @comment, commentable: @comment.commentable, button_name: t(".update"), show_errors: true }) %>");
 /* roll down the comment form */
 $j("<%= comment_field_id %>").slideDown();
