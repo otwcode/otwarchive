@@ -263,3 +263,24 @@ Feature: Reading count
   When I am logged in as "reader"
     And I go to reader's reading page
   Then I should not see "Testy"
+
+  Scenario: When a chapter is added to a work, "update available" should not appear until it is posted
+
+    Given I am logged in as "writer"
+      And I post the work "Some Work"
+      And I am logged out
+    When I am logged in as "reader"
+      And I mark the work "Some Work" for later
+      And the readings are saved to the database
+      And I am logged out
+    When a draft chapter is added to "Some Work"
+      And I am logged in as "reader"
+      And I go to reader's reading page
+    Then I should not see "(Update available.)"
+    When I am logged in as "writer"
+      And I view the work "Some Work"
+      And I view the 2nd chapter
+      And I post the draft chapter
+    When I am logged in as "reader"
+      And I go to reader's reading page
+    Then I should see "(Update available.)"
