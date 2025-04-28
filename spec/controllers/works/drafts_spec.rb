@@ -138,7 +138,7 @@ describe WorksController do
       put :post_draft, params: { id: draft.id }
       it_redirects_to_with_notice(
         work_path(draft),
-        'Your work was successfully posted.'
+        "Your work was successfully posted."
       )
     end
 
@@ -152,7 +152,7 @@ describe WorksController do
       put :post_draft, params: { id: draft.id }
       it_redirects_to_with_notice(
         work_path(draft),
-        'Your work was successfully posted.'
+        "Your work was successfully posted."
       )
 
       expect(draft.reload.first_chapter.posted).to be true
