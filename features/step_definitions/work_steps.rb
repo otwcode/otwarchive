@@ -205,6 +205,11 @@ Given "the work {string} by {string}" do |title, login|
   FactoryBot.create(:work, title: title, authors: [user.default_pseud])
 end
 
+Given "the work {string} by {string} with fandom {string}" do |title, login, fandom|
+  user = ensure_user(login)
+  FactoryBot.create(:work, title: title, authors: [user.default_pseud], fandom_string: fandom)
+end
+
 Given "the work {string} by {string} with guest comments enabled" do |title, login|
   user = ensure_user(login)
   FactoryBot.create(:work, :guest_comments_on, title: title, authors: [user.default_pseud])

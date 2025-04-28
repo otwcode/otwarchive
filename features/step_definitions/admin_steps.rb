@@ -232,6 +232,10 @@ Given "an archive FAQ category with the title {string} exists" do |title|
   FactoryBot.create(:archive_faq, title: title)
 end
 
+Given "the app name is {string}" do |app_name|
+  allow(ArchiveConfig).to receive(:APP_NAME).and_return(app_name)
+end
+
 ### WHEN
 
 When /^I visit the last activities item$/ do
@@ -356,6 +360,10 @@ end
 
 When "I confirm I want to remove the pseud" do
   expect(page.accept_alert).to eq("Are you sure you want to remove the creator's pseud from this work?") if @javascript
+end
+
+When "I follow the first invitation token url" do
+  first('//td/a[href*="/invitations/"]').click
 end
 
 ### THEN
