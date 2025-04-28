@@ -437,11 +437,11 @@ en:
       can_come_back: "(You can come back to this page if you change your mind.)"
       html:
         approve_link_text: Approve relationship and link back to this work from your work
-        work_listed_html: Your work %{work_link} was listed as the inspiration of %{related_work_link} by %{work_authors}.
+        work_listed_html: Your work %{work_link} was listed as the inspiration of %{related_work_link} by %{work_creators}.
       subject: "[%{app_name}] Related work notification"
       text:
         approve: 'Approve relationship and link back to this work from your work: %{related_work_url}'
-        work_listed: Your work "%{work_title}" (%{work_url}) was listed as the inspiration of "%{related_work_title}" (%{related_work_url}) by %{work_authors}.
+        work_listed: Your work "%{work_title}" (%{work_url}) was listed as the inspiration of "%{related_work_title}" (%{related_work_url}) by %{work_creators}.
     signup_notification:
       activate:
         html: Please %{activate_account_link}.
