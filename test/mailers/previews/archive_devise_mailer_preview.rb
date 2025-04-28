@@ -13,9 +13,15 @@ class ArchiveDeviseMailerPreview < ApplicationMailerPreview
     ArchiveDeviseMailer.confirmation_instructions(user, "fakeToken")
   end
 
-  # URL: /rails/mailers/archive_devise_mailer/password_change
-  def password_change
+  # URL: /rails/mailers/archive_devise_mailer/password_change_user
+  def password_change_user
     user = create(:user, :for_mailer_preview)
     ArchiveDeviseMailer.password_change(user)
+  end
+
+  # URL: /rails/mailers/archive_devise_mailer/password_change_admin
+  def password_change_admin
+    admin = create(:admin, login: "admin-#{Faker::Alphanumeric.alpha(number: 8)}")
+    ArchiveDeviseMailer.password_change(admin)
   end
 end

@@ -30,7 +30,13 @@ class ArchiveDeviseMailer < Devise::Mailer
 
   def password_change(record, opts = {})
     @pac_footer = true
-    subject = t("users.mailer.password_change.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+    subject = if record.is_a?(Admin)
+                t("admin.mailer.password_change.subject",
+                  app_name: ArchiveConfig.APP_SHORT_NAME)
+              else
+                t("users.mailer.password_change.subject",
+                  app_name: ArchiveConfig.APP_SHORT_NAME)
+              end
     devise_mail(record, :password_change, opts.merge(subject: subject))
   end
 end

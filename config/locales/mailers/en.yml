@@ -2,6 +2,18 @@
 en:
   admin:
     mailer:
+      password_change:
+        changed: The password for your AO3 admin account was changed on %{date}.
+        did_not_make_change:
+          html: If you did not make this change, someone else may have access to your %{app_name} admin account. Please %{reset_password_link}.
+          reset_password: reset your password now
+          text: 'If you did not make this change, someone else may have access to your %{app_name} admin account. Please reset your password now: %{reset_password_url}.'
+        made_change:
+          html: If you made this change, you can %{login_link} or %{reset_password_link} if you've forgotten it.
+          login: log in with your new password
+          reset_password: reset your password
+          text: If you made this change, you can log in with your new password (%{login_url}) or reset your password if you've forgotten it (%{reset_password_url}).
+        subject: "[%{app_name}] Your admin password has been changed"
       reset_password_instructions:
         expiration:
           one: If you do not use this link to reset your password within %{count} day, it will expire, and you will have to request a new one.
