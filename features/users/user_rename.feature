@@ -52,6 +52,18 @@ Feature:
     Then I should get confirmation that I changed my username
       And I should see "Hi, DownThemAll!"
 
+  Scenario: The user should receive an email notification after they change their username
+    Given I am logged in as "before" with password "password"
+      And a locale with translated emails
+      And the user "before" enables translated emails
+      And it is currently 2025-01-01 00:00 AM
+    When I change my username to "after"
+    Then "after" should receive 1 email
+      And the email should contain "account .*before.* has been changed to .*after"
+      And the email should contain "usernames can only be changed once every 7 days"
+      And the email should contain "You will be able to change your username again on Wed, 08 Jan 2025 00:00:00 \+0000"
+      And the email to "after" should be translated
+
   Scenario: The user should be able to change their username to a similar version with underscores
     Given I am logged in as "downthemall" with password "password"
     When I visit the change username page for downthemall

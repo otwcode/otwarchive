@@ -68,8 +68,7 @@ describe UserMailer do
     describe "HTML version" do
       it "has the correct content" do
         expect(email).to have_html_part_content("Hi,")
-        expect(email).to have_html_part_content(">#{old_username}</b>")
-        expect(email).to have_html_part_content(">#{new_username}</b>")
+        expect(email).to have_html_part_content(">#{old_username}</b> has been changed to <b style=\"color:#990000\">#{new_username}</b>")
 
         expect(email).to have_html_part_content("can only be changed once every 5 days")
         expect(email).to have_html_part_content("You will be able to change your username again on Mon, 06 Jan 2025 00:00:00 +0000")
@@ -79,8 +78,7 @@ describe UserMailer do
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("Hi,")
-        expect(email).to have_text_part_content(old_username)
-        expect(email).to have_text_part_content(new_username)
+        expect(email).to have_text_part_content("#{old_username} has been changed to #{new_username}")
 
         expect(email).to have_text_part_content("can only be changed once every 5 days")
         expect(email).to have_text_part_content("You will be able to change your username again on Mon, 06 Jan 2025 00:00:00 +0000")

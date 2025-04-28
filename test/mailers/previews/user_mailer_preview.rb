@@ -117,7 +117,6 @@ class UserMailerPreview < ApplicationMailerPreview
     user = create(:user, :for_mailer_preview)
     user.renamed_at = Time.current
     old_username = "old_username"
-    new_username = user.login
     UserMailer.change_username(user, old_username)
   end
 
