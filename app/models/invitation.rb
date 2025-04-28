@@ -32,7 +32,7 @@ class Invitation < ApplicationRecord
       total.times do
         user.invitations.create
       end
-      I18n.with_locale(user.preference.locale.iso) do
+      I18n.with_locale(user.preference.locale_for_mails) do
         UserMailer.invite_increase_notification(user.id, total).deliver_later
       end
     end
@@ -46,7 +46,7 @@ class Invitation < ApplicationRecord
       total.times do
         user.invitations.create
       end
-      I18n.with_locale(user.preference.locale.iso) do
+      I18n.with_locale(user.preference.locale_for_mails) do
         UserMailer.invite_increase_notification(user.id, total).deliver_later
       end
     end

@@ -18,8 +18,6 @@ end
 VCR.cucumber_tags do |t|
   t.tags "@archivist_import", use_scenario_name: true
 
-  t.tags "@work_import_multi_work_backdate"
-  t.tags "@work_import_multi_chapter_backdate"
   t.tags "@work_import_special_characters_auto_utf"
   t.tags "@work_import_special_characters_auto_latin"
   t.tags "@work_import_special_characters_man_latin"
