@@ -104,4 +104,37 @@ describe ArchiveDeviseMailer do
       end
     end
   end
+
+  describe "#password_change" do
+    let(:user) { create(:user) }
+    subject(:email) { ArchiveDeviseMailer.password_change(user) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your password has been changed"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("Hi <b")
+        expect(email).to have_html_part_content("#{user.login}</b>,")
+        expect(email).to have_html_part_content("The password for your AO3 account was changed")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("Hi #{user.login},")
+        expect(email).to have_text_part_content("The password for your AO3 account was changed")
+      end
+    end
+  end
 end

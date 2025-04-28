@@ -12,4 +12,10 @@ class ArchiveDeviseMailerPreview < ApplicationMailerPreview
     user = create(:user, :for_mailer_preview, confirmation_sent_at: (params[:confirmation_sent_at] ? params[:confirmation_sent_at].to_time : Time.current))
     ArchiveDeviseMailer.confirmation_instructions(user, "fakeToken")
   end
+
+  # URL: /rails/mailers/archive_devise_mailer/password_change
+  def password_change
+    user = create(:user, :for_mailer_preview)
+    ArchiveDeviseMailer.password_change(user)
+  end
 end

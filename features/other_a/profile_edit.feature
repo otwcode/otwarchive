@@ -233,9 +233,12 @@ Scenario: Change password - mistake in typing new password confirmation
 
 Scenario: Change password
 
-  When I change my password
+  When it is currently 2025-04-12 17:00 UTC
+    And I change my password
   Then I should see "Your password has been changed. To protect your account, you have been logged out of all active sessions. Please log in with your new password."
-    And 0 emails should be delivered
+    And 1 email should be delivered to "editname"
+    And the email should have "Your password has been changed" in the subject
+    And the email should contain "The password for your AO3 account was changed on Sat, 12 Apr 2025 17:00:.+ \+0000"
   When I am logged in as a super admin
     And I go to the user administration page for "editname"
   Then I should see "Password Changed" within "#user_history"

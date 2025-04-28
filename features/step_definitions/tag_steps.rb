@@ -138,6 +138,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   if tw.blank?
     tw = FactoryBot.create(:user, login: user, password: password)
   else
+    tw.skip_password_change_notification!
     tw.password = password
     tw.password_confirmation = password
     tw.save
