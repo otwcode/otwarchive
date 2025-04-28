@@ -4,11 +4,11 @@
           work_link: "<i><b>#{style_link(@related_work.parent.title, @related_parent_link)}</b></i>".html_safe,
           related_work_link: "<i><b>#{style_link(@related_work.work.title, @related_child_link)}</b></i>".html_safe,
           work_creators: if @related_work.work.anonymous?
-                          t(".anonymous")
-                        else
-                          @related_work.work.pseuds.map { |p| style_pseud_link(p) }
-                                                   .to_sentence.html_safe
-                        end) %>
+                           t(".anonymous")
+                         else
+                           @related_work.work.pseuds.map { |p| style_pseud_link(p) }
+                                                    .to_sentence.html_safe
+                         end) %>
   </p>
 
   <p>
