@@ -9,6 +9,11 @@ Given /^basic skins$/ do
   assert WorkSkin.basic_formatting
 end
 
+Given "the skin {string} by {string}" do |skin_name, login|
+  user = ensure_user(login)
+  FactoryBot.create(:skin, title: skin_name, author_id: user.id)
+end
+
 Given /^I set up the skin "([^"]*)"$/ do |skin_name|
   visit new_skin_path
   fill_in("Title", with: skin_name)

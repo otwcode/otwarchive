@@ -234,8 +234,8 @@ en:
       email_change_form: submit the email change form
       made_request: Someone has made a request to change the email address associated with your %{app_name} account.
       not_made_request:
-        html: If you did not make this request, someone else may have access to your %{app_name} account. Please %{reset_password_link}. If you are unable to reset your password, %{contact_policy_abuse_link}.
-        text: 'If you did not make this request, someone else may have access to your %{app_name} account. Please reset your password now: %{reset_password_url}. If you are unable to reset your password, contact Policy & Abuse: %{contact_policy_abuse_url}.'
+        html: If you did not make this request, someone else may have access to your %{app_name} account. Please %{reset_password_link} or %{contact_policy_abuse_link}.
+        text: 'If you did not make this request, someone else may have access to your %{app_name} account. Please reset your password now (%{reset_password_url}) or contact Policy & Abuse: %{contact_policy_abuse_url}.'
       reset_password: reset your password now
       subject: "[%{app_name}] Email change request"
       wrong_email:
@@ -501,11 +501,11 @@ en:
         email_change_form: submit the email change form
         made_request:
           html:
-            one: If you made this request, please %{confirm_email_change_link} within %{count} day.
-            other: If you made this request, please %{confirm_email_change_link} within %{count} days.
+            one: If you made this request, please log in and %{confirm_email_change_link} within %{count} day.
+            other: If you made this request, please log in and %{confirm_email_change_link} within %{count} days.
           text:
-            one: 'If you made this request, please confirm your email change within %{count} day: %{confirm_email_change_url}.'
-            other: 'If you made this request, please confirm your email change within %{count} days: %{confirm_email_change_url}.'
+            one: 'If you made this request, please log in and confirm your email change within %{count} day: %{confirm_email_change_url}.'
+            other: 'If you made this request, please log in and confirm your email change within %{count} days: %{confirm_email_change_url}.'
         request_to_change_email_html: Someone has made a request to change the email address associated with the %{app_name} account %{username} to this email address.
         subject: "[%{app_name}] Confirm your email change"
       reset_password_instructions:

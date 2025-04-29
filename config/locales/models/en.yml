@@ -173,6 +173,8 @@ en:
             data_processing:
               accepted: Sorry, you need to consent to the processing of your personal data in order to sign up.
               format: "%{message}"
+            email:
+              taken: "^This email is already associated with another account. Please try again with a different email address."
             login:
               admin_must_use_default: must use the default. Please contact your chairs to use something else.
               changed_too_recently:

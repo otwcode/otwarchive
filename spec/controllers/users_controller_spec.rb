@@ -236,7 +236,7 @@ describe UsersController do
         put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "different@example.com", password_check: "password" }
 
         expect(response).to render_template(:change_email)
-        expect(flash[:error]).to eq("Email addresses don't match! Please retype and try again.")
+        expect(flash[:error]).to eq("The email addresses you entered do not match. Please try again.")
       end
 
       it "allows case-insensitive email confirmation" do
@@ -251,8 +251,15 @@ describe UsersController do
         put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "new@example.com", password_check: "password" }
 
         expect(response).to render_template(:change_email)
-        expect(assigns[:user].errors.full_messages).to include("Email has already been taken")
+        expect(assigns[:user].errors.full_messages.first).to include("This email is already associated with another account. Please try again with a different email address.")
         expect(assigns[:user].email).to eq("old@example.com")
+      end
+
+      it "disallows using current email" do
+        put :confirm_change_email, params: { id: user, new_email: "old@example.com", email_confirmation: "old@example.com", password_check: "password" }
+
+        expect(response).to render_template(:change_email)
+        expect(flash[:error]).to eq("Your new email address must be different from your current email.")
       end
     end
   end

@@ -62,7 +62,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:notice] = ts("Your password has been changed. To protect your account, you have been logged out of all active sessions. Please log in with your new password.")
-      @user.create_log_item(options = { action: ArchiveConfig.ACTION_PASSWORD_RESET })
+      @user.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_CHANGE)
 
       redirect_to(user_profile_path(@user)) && return
     else
@@ -166,7 +166,7 @@ class UsersController < ApplicationController
     render :change_email and return unless reauthenticate
 
     if params[:new_email].blank?
-      flash[:error] = t("users.confirm_change_email.blank_email")
+      flash.now[:error] = t("users.confirm_change_email.blank_email")
       render :change_email and return
     end
 
@@ -180,8 +180,13 @@ class UsersController < ApplicationController
     #
     # Also, email addresses are validated on the client, and will only contain
     # a limited subset of ASCII, so we don't need to do a unicode casefolding pass.
+    if @new_email.downcase == @user.email.downcase
+      flash.now[:error] = t("users.confirm_change_email.same_as_current")
+      render :change_email and return
+    end
+
     if @new_email.downcase != params[:email_confirmation].downcase
-      flash[:error] = t("users.confirm_change_email.nonmatching_email")
+      flash.now[:error] = t("users.confirm_change_email.nonmatching_email")
       render :change_email and return
     end
 
@@ -201,7 +206,7 @@ class UsersController < ApplicationController
     @user.email = new_email
 
     if @user.save
-      I18n.with_locale(@user.preference.locale.iso) do
+      I18n.with_locale(@user.preference.locale_for_mails) do
         UserMailer.change_email(@user.id, old_email, new_email).deliver_later
       end
     else
