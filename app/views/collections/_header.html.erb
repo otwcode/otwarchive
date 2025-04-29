@@ -28,7 +28,7 @@
           data: { confirm: ts('Are you certain you want to leave this collection?') }, 
           method: :delete %></li>
       <% elsif logged_in? && @collection.moderated? %>
-        <li><%= link_to ts("Join"), join_collection_participants_path(@collection) %></li>
+        <li><%= link_to ts("Join"), join_collection_participants_path(@collection), method: :post %></li>
       <% end %>
     <% end %>
 
