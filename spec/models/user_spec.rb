@@ -181,13 +181,13 @@ describe User do
         it "does not save a duplicate email" do
           new_user.email = existing_user.email
           expect(new_user.save).to be_falsey
-          expect(new_user.errors[:email].first).to include("has already been taken")
+          expect(new_user.errors[:email].first).to include("This email is already associated with another account. Please try again with a different email address.")
         end
 
         it "does not save a duplicate email with different capitalization" do
           new_user.email = existing_user.email.capitalize
           expect(new_user.save).to be_falsey
-          expect(new_user.errors[:email].first).to include("has already been taken")
+          expect(new_user.errors[:email].first).to include("This email is already associated with another account. Please try again with a different email address.")
         end
       end
     end

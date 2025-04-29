@@ -36,12 +36,10 @@ module CreationNotifier
     # (since each user has only one preference item, this removes duplicates)
     recip_preferences = Preference.where(user_id: recipient_pseuds.map(&:user_id), recipient_emails_off: false)
     recip_preferences.each do |userpref|
-      if self.collections.empty? || self.collections.first.nil?
-        I18n.with_locale(userpref.locale.iso) do
+      I18n.with_locale(userpref.locale_for_mails) do
+        if self.collections.empty? || self.collections.first.nil?
           UserMailer.recipient_notification(userpref.user_id, self.id).deliver_after_commit
-        end
-      else
-        I18n.with_locale(userpref.locale.iso) do
+        else
           UserMailer.recipient_notification(userpref.user_id, self.id, self.collections.first.id).deliver_after_commit
         end
       end

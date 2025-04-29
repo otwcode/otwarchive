@@ -131,7 +131,7 @@ class ExternalAuthor < ApplicationRecord
 
   def notify_user_of_claim(claimed_work_ids)
     # send announcement to user of the stories they have been given
-    I18n.with_locale(self.user.preference.locale.iso) do
+    I18n.with_locale(self.user.preference.locale_for_mails) do
       UserMailer.claim_notification(self.user_id, claimed_work_ids).deliver_later
     end
   end
