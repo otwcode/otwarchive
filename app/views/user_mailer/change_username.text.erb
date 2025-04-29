@@ -1,7 +1,7 @@
 <% content_for :message do %>
 <%= t("mailer.general.greeting.formal.unaddressed") %>
 
-<%= t(".username_changed_html", 
+<%= t(".changed_html", 
       app_name: ArchiveConfig.APP_SHORT_NAME, 
       old_username: @old_username, 
       new_username: @new_username) %>
@@ -15,7 +15,7 @@
       count: ArchiveConfig.USER_RENAME_LIMIT_DAYS, 
       date: l(@next_change_time)) %>
 
-<%= t(".not_made_request.text",
+<%= t(".did_not_make_change.text",
       reset_password_url: new_user_password_url,
       contact_policy_abuse_url: new_abuse_report_url,
       app_name: ArchiveConfig.APP_SHORT_NAME) %>

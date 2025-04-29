@@ -228,7 +228,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @old_username = old_username
     @new_username = user.login
-    @next_change_time = (user.renamed_at + ArchiveConfig.USER_RENAME_LIMIT_DAYS.days).to_time
+    @next_change_time = user.renamed_at + ArchiveConfig.USER_RENAME_LIMIT_DAYS.days
     mail(
       to: @user.email,
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
