@@ -143,6 +143,9 @@ Feature: User Authentication
       And I should see "Log In"
       And I should not see "Your password has been changed"
       And I should not see "Hi, sam!"
+    When I am logged in as a super admin
+      And I go to the user administration page for "sam"
+    Then I should not see "Password Reset" within "#user_history"
 
   Scenario: Forgot password, with enough attempts to trigger password reset cooldown
     Given I have no users
@@ -163,6 +166,27 @@ Feature: User Authentication
       And I request a password reset for "sam"
     Then I should see "Check your email for instructions on how to reset your password. You may reset your password 2 more times."
       And 1 email should be delivered
+
+  Scenario: Resetting password adds admin log item
+    Given the following activated user exists
+      | login | email           |
+      | sam   | sam@example.com |
+      And all emails have been delivered
+    When I request a password reset for "sam@example.com"
+    Then 1 email should be delivered
+    When I am logged in as a super admin
+      And I go to the user administration page for "sam"
+    Then I should not see "Password Reset" within "#user_history"
+    When I start a new session
+      And I follow "Change my password." in the email
+      And I fill in "New password" with "newpass"
+      And I fill in "Confirm new password" with "newpass"
+      And I press "Change Password"
+    Then I should see "Your password has been changed successfully."
+    When I am logged in as a super admin
+      And I go to the user administration page for "sam"
+    Then I should see "Password Reset" within "#user_history"
+      But I should not see "Password Changed" within "#user_history"
 
   Scenario: User is locked out
     Given I have no users

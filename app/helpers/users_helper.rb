@@ -137,7 +137,7 @@ module UsersHelper
       t("users_helper.log.warn")
     when ArchiveConfig.ACTION_RENAME
       t("users_helper.log.rename")
-    when ArchiveConfig.ACTION_PASSWORD_RESET
+    when ArchiveConfig.ACTION_PASSWORD_CHANGE
       t("users_helper.log.password_change")
     when ArchiveConfig.ACTION_NEW_EMAIL
       t("users_helper.log.email_change")
@@ -145,6 +145,8 @@ module UsersHelper
       t("users_helper.log.troubleshot")
     when ArchiveConfig.ACTION_NOTE
       t("users_helper.log.note")
+    when ArchiveConfig.ACTION_PASSWORD_RESET
+      t("users_helper.log.password_reset")
     end
   end
 

@@ -256,14 +256,12 @@ class Work < ApplicationRecord
     users.each do |user|
       next if user == orphan_account
 
-      # Check to see if this work is being deleted by an Admin
-      if User.current_user.is_a?(Admin)
-        I18n.with_locale(user.preference.locale.iso) do
+      I18n.with_locale(user.preference.locale_for_mails) do
+        # Check to see if this work is being deleted by an Admin
+        if User.current_user.is_a?(Admin)
           # this has to use the synchronous version because the work is going to be destroyed
           UserMailer.admin_deleted_work_notification(user, self).deliver_now
-        end
-      else
-        I18n.with_locale(user.preference.locale.iso) do
+        else
           # this has to use the synchronous version because the work is going to be destroyed
           UserMailer.delete_work_notification(user, self, User.current_user).deliver_now
         end
@@ -1158,7 +1156,7 @@ class Work < ApplicationRecord
     return if notified_of_hiding_for_spam
 
     users.each do |user|
-      I18n.with_locale(user.preference.locale.iso) do
+      I18n.with_locale(user.preference.locale_for_mails) do
         UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
       end
     end
@@ -1166,7 +1164,7 @@ class Work < ApplicationRecord
 
   def notify_of_hiding_for_spam
     users.each do |user|
-      I18n.with_locale(user.preference.locale.iso) do
+      I18n.with_locale(user.preference.locale_for_mails) do
         UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
       end
     end

@@ -236,3 +236,7 @@ Scenario: Change password
   When I change my password
   Then I should see "Your password has been changed. To protect your account, you have been logged out of all active sessions. Please log in with your new password."
     And 0 emails should be delivered
+  When I am logged in as a super admin
+    And I go to the user administration page for "editname"
+  Then I should see "Password Changed" within "#user_history"
+    But I should not see "Password Reset" within "#user_history"

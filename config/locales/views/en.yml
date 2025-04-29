@@ -524,6 +524,8 @@ en:
           hide_works: hide their works or bookmarks from you
           intro: 'Blocking a user will not:'
   bookmarks:
+    bookmark_user_module:
+      bookmarked_by_html: Bookmarked by %{pseud_link}
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
@@ -1596,7 +1598,7 @@ en:
         what_you_cant_do: What you can't do
   invitations:
     invitation:
-      copy_and_use: copy and use
+      copy_and_use: Copy and use
       copy_link: Copy link
       created_at: Created at
       deleted_user: Deleted User
