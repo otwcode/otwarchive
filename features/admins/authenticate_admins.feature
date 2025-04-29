@@ -110,7 +110,7 @@ Feature: Authenticate Admin Users
     And I should see "Hi, admin!"
     And 1 emails should be delivered to "admin@example.com"
     And the email should have "Your admin password has been changed" in the subject
-    And the email should contain "The password for your AO3 admin account was changed on Sat, 12 Apr 2025 17:00:.+ \+0000"
+    And the email should contain "The password for your AO3 admin account was changed on Sat, 12 Apr 2025 17:00:\d+ \+0000"
 
   Scenario: Reset password link expires.
   Given the following admin exists

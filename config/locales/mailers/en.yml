@@ -3,10 +3,6 @@ en:
   admin:
     mailer:
       password_change:
-        access_again:
-          html: When your accounts are secure again, please %{reset_password_link}.
-          reset_password: reset your admin password
-          text: 'When your accounts are secure again, please reset your admin password: %{reset_password_url}.'
         changed: The password for your AO3 admin account was changed on %{date}.
         did_not_make_change: If you did not make this change, someone else may have access to your %{app_name} admin account or your OTW email. Please let AD&T and VolCom know immediately so they can take steps to secure your accounts.
         made_change:
@@ -14,6 +10,10 @@ en:
           login: log in with your new password
           reset_password: reset your password
           text: If you made this change, you can log in with your new password (%{login_url}) or reset your password if you've forgotten it (%{reset_password_url}).
+        secure_again:
+          html: When your accounts are secure again, please %{reset_password_link}.
+          reset_password: reset your admin password
+          text: 'When your accounts are secure again, please reset your admin password: %{reset_password_url}.'
         subject: "[%{app_name}] Your admin password has been changed"
       reset_password_instructions:
         expiration:
