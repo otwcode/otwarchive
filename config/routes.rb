@@ -468,8 +468,8 @@ Rails.application.routes.draw do
     end
     resources :participants, controller: "collection_participants", only: [:index, :update, :destroy] do
       collection do
-        get :add
-        get :join
+        post :add
+        post :join
       end
     end
     resources :items, controller: "collection_items" do
@@ -488,10 +488,10 @@ Rails.application.routes.draw do
     resources :assignments, controller: "challenge_assignments", only: [:index, :show] do
       collection do
         get :confirm_purge
-        get :generate
+        post :generate
         put :set
         post :purge
-        get :send_out
+        post :send_out
         put :update_multiple
         patch :default_all
       end
@@ -507,9 +507,9 @@ Rails.application.routes.draw do
     end
     resources :potential_matches do
       collection do
-        get :generate
-        get :cancel_generate
-        get :regenerate_for_signup
+        post :generate
+        post :cancel_generate
+        post :regenerate_for_signup
       end
     end
     resources :requests, controller: "challenge_requests"
