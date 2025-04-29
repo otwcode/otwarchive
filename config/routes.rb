@@ -586,11 +586,11 @@ Rails.application.routes.draw do
   resources :skins do
     member do
       get :preview
-      patch :set
+      post :set
       get :confirm_delete
     end
     collection do
-      patch :unset
+      post :unset
     end
   end
   resources :known_issues
