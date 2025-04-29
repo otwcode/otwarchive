@@ -45,6 +45,7 @@ Lint/AmbiguousBlockAssociation:
   Exclude:
     # Exception for specs where we use change matchers:
     # https://github.com/rubocop-hq/rubocop/issues/4222
+    - 'features/step_definitions/**/*.rb'
     - 'spec/**/*.rb'
 
 Lint/AmbiguousRegexpLiteral:
@@ -83,6 +84,7 @@ Metrics/PerceivedComplexity:
 Migration/LargeTableSchemaUpdate:
   Tables:
     - abuse_reports
+    - active_storage_blobs
     - admin_activities
     - audits
     - bookmarks

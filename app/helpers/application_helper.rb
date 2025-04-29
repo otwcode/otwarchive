@@ -516,18 +516,6 @@ module ApplicationHelper
     end
   end
 
-  # change the default link renderer for will_paginate
-  def will_paginate(collection_or_options = nil, options = {})
-    if collection_or_options.is_a? Hash
-      options = collection_or_options
-      collection_or_options = nil
-    end
-    unless options[:renderer]
-      options = options.merge renderer: PaginationListLinkRenderer
-    end
-    super(*[collection_or_options, options].compact)
-  end
-
   # spans for nesting a checkbox or radio button inside its label to make custom
   # checkbox or radio designs
   def label_indicator_and_text(text)
@@ -642,5 +630,21 @@ module ApplicationHelper
     when "archive_faqs"
       %w[index show].include?(params[:action])
     end
+  end
+
+  def browser_page_title(page_title, page_subtitle)
+    return page_title if page_title
+
+    page = if page_subtitle
+             page_subtitle
+           elsif controller.action_name == "index"
+             process_title(controller.controller_name)
+           else
+             "#{process_title(controller.action_name)} #{process_title(controller.controller_name.singularize)}"
+           end
+    # page_subtitle sometimes contains user (including admin) content, so let's
+    # not html_safe the entire string. Let's require html_safe be called when
+    # we set @page_subtitle, so we're conscious of what we're doing.
+    page + " | #{ArchiveConfig.APP_NAME}"
   end
 end

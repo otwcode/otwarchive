@@ -172,6 +172,9 @@ class Tag < ApplicationRecord
   validates :name,
             format: { with: /\A[^,，、*<>^{}=`\\%]+\z/,
                       message: "^Tag name '%{value}' cannot include the following restricted characters: , &#94; * < > { } = ` ， 、 \\ %" }
+  validates :name,
+            format: { without: /\A\p{Cf}+\z/,
+                      message: "^Tag name cannot be blank." }
   validates :sortable_name, presence: true
 
   validate :unwrangleable_status
@@ -237,8 +240,8 @@ class Tag < ApplicationRecord
 
   def flush_bookmark_cache
     self.bookmarks.each do |bookmark|
-      ActionController::Base.new.expire_fragment("bookmark-owner-blurb-#{bookmark.cache_key}-v2")
-      ActionController::Base.new.expire_fragment("bookmark-blurb-#{bookmark.cache_key}-v2")
+      ActionController::Base.new.expire_fragment("bookmark-owner-blurb-#{bookmark.cache_key}-v3")
+      ActionController::Base.new.expire_fragment("bookmark-blurb-#{bookmark.cache_key}-v3")
     end
   end
 
@@ -630,9 +633,9 @@ class Tag < ApplicationRecord
     !(self.canonical? || self.unwrangleable? || self.merger_id.present? || self.mergers.any?)
   end
 
-  # Returns true if a tag has been used in posted works
-  def has_posted_works?
-    self.works.posted.any?
+  # Returns true if a tag has been used in posted works that are revealed and not hidden
+  def has_posted_works? # rubocop:disable Naming/PredicateName
+    self.works.posted.revealed.unhidden.any?
   end
 
   # sort tags by name

@@ -17,41 +17,6 @@ describe TagsController do
     end
   end
 
-  shared_examples "an action only authorized admins can access" do |authorized_roles:|
-    before { fake_login_admin(admin) }
-
-    context "with no role" do
-      let(:admin) { create(:admin, roles: []) }
-
-      it "redirects with an error" do
-        subject
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
-    end
-
-    (Admin::VALID_ROLES - authorized_roles).each do |role|
-      context "with role #{role}" do
-        let(:admin) { create(:admin, roles: [role]) }
-
-        it "redirects with an error" do
-          subject
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-      end
-    end
-
-    authorized_roles.each do |role|
-      context "with role #{role}" do
-        let(:admin) { create(:admin, roles: [role]) }
-
-        it "succeeds" do
-          subject
-          success
-        end
-      end
-    end
-  end
-
   describe "#create" do
     let(:tag_params) do
       { name: Faker::FunnyName.name, canonical: "0", type: "Character" }
@@ -288,15 +253,44 @@ describe TagsController do
   end
 
   describe "show" do   
-    context "when showing a banned tag" do
-      let(:tag) { create(:banned) } 
-
-      subject { get :edit, params: { id: tag.name } }
+    context "displays the tag information page" do
+      let(:tag) { create(:tag) }
+      
+      subject { get :show, params: { id: tag.name } }
       let(:success) do
         expect(response).to have_http_status(:success)
       end
 
-      it_behaves_like "an action only authorized admins can access", authorized_roles: wrangling_read_access_roles
+      it "for guests" do
+        subject
+        success
+      end
+
+      it "for users" do
+        fake_login
+        subject
+        success
+      end
+      
+      it "for admins" do
+        fake_login_admin(create(:admin))
+        subject
+        success
+      end
+    end
+    context "when showing a banned tag" do
+      let(:tag) { create(:banned) } 
+
+      subject { get :show, params: { id: tag.name } }
+      let(:success) do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "displays the tag information page for admins" do
+        fake_login_admin(create(:admin))
+        subject
+        success
+      end
 
       it "redirects with an error when not an admin" do
         get :show, params: { id: tag.name }
@@ -624,6 +618,15 @@ describe TagsController do
 
       put :update, params: { id: tag.name, tag: { associations_to_remove: [old_metatag.id], meta_tag_string: new_metatag.name } }
       expect(tag.reload.direct_meta_tags).to eq [new_metatag]
+    end
+  end
+
+  describe "GET #index" do
+    let(:collection) { create(:collection) }
+
+    it "assigns subtitle with collection title and tags" do
+      get :index, params: { collection_id: collection.name }
+      expect(assigns[:page_subtitle]).to eq("#{collection.title} - Tags")
     end
   end
 end

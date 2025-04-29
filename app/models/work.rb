@@ -75,6 +75,9 @@ class Work < ApplicationRecord
   attr_accessor :new_gifts
   attr_accessor :preview_mode
 
+  # Virtual attribute for whether the hidden-for-spam email has been sent, so the normal work-hidden email should not be sent
+  attr_accessor :notified_of_hiding_for_spam
+
   # return title.html_safe to overcome escaping done by sanitiser
   def title
     read_attribute(:title).try(:html_safe)
@@ -247,20 +250,20 @@ class Work < ApplicationRecord
 
   before_destroy :send_deleted_work_notification, prepend: true
   def send_deleted_work_notification
-    if self.posted?
-      users = self.pseuds.collect(&:user).uniq
-      orphan_account = User.orphan_account
-      unless users.blank?
-        for user in users
-          next if user == orphan_account
-          # Check to see if this work is being deleted by an Admin
-          if User.current_user.is_a?(Admin)
-            # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.admin_deleted_work_notification(user, self).deliver_now
-          else
-            # this has to use the synchronous version because the work is going to be destroyed
-            UserMailer.delete_work_notification(user, self).deliver_now
-          end
+    return unless self.posted? && users.present?
+
+    orphan_account = User.orphan_account
+    users.each do |user|
+      next if user == orphan_account
+
+      I18n.with_locale(user.preference.locale_for_mails) do
+        # Check to see if this work is being deleted by an Admin
+        if User.current_user.is_a?(Admin)
+          # this has to use the synchronous version because the work is going to be destroyed
+          UserMailer.admin_deleted_work_notification(user, self).deliver_now
+        else
+          # this has to use the synchronous version because the work is going to be destroyed
+          UserMailer.delete_work_notification(user, self, User.current_user).deliver_now
         end
       end
     end
@@ -310,10 +313,11 @@ class Work < ApplicationRecord
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
-  # If the work gets posted, we should (potentially) reindex the tags,
-  # so they get the correct draft-only status.
+  # If the work gets posted, (un)hidden, or (un)revealed, we should (potentially) reindex the tags,
+  # so they get the correct visibility status.
   def update_tag_index
-    return unless saved_change_to_posted?
+    return unless saved_change_to_posted? || saved_change_to_hidden_by_admin? || saved_change_to_in_unrevealed_collection?
+
     taggings.each(&:update_search)
   end
 
@@ -1098,6 +1102,7 @@ class Work < ApplicationRecord
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
+      user_role: "user",
       comment_date_gmt: created_at.to_time.iso8601,
       blog_lang: language.short,
       comment_author: user.login,
@@ -1121,7 +1126,10 @@ class Work < ApplicationRecord
     return unless spam?
     admin_settings = AdminSetting.current
     if admin_settings.hide_spam?
+      return if self.hidden_by_admin
+
       self.hidden_by_admin = true
+      notify_of_hiding_for_spam
     end
   end
 
@@ -1145,13 +1153,22 @@ class Work < ApplicationRecord
 
   def notify_of_hiding
     return unless hidden_by_admin? && saved_change_to_hidden_by_admin?
+    return if notified_of_hiding_for_spam
+
     users.each do |user|
-      if spam?
-        UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
-      else
+      I18n.with_locale(user.preference.locale_for_mails) do
         UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
       end
     end
+  end
+
+  def notify_of_hiding_for_spam
+    users.each do |user|
+      I18n.with_locale(user.preference.locale_for_mails) do
+        UserMailer.admin_spam_work_notification(id, user.id).deliver_after_commit
+      end
+    end
+    self.notified_of_hiding_for_spam = true
   end
 
   #############################################################################

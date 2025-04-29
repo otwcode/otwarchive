@@ -1,49 +1,24 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe AsyncIndexer do
-  it "should enqueue ids" do
-    tag = Tag.new
-    tag.id = 34
+  include ActiveJob::TestHelper
 
-    indexer = AsyncIndexer.new(TagIndexer, :background)
+  it "enqueues IDs" do
+    freeze_time
+    batch_key = "WorkIndexer:34:#{Time.now.to_i}"
 
-    expect(AsyncIndexer).to receive(:new).with(TagIndexer, :background).and_return(indexer)
-    expect(indexer).to receive(:enqueue_ids).with([34]).and_return(true)
+    expect do
+      AsyncIndexer.index(Work, [34], :background)
+    end.to enqueue_job.on_queue("reindex_low").with(batch_key)
 
-    AsyncIndexer.index('Tag', [34], :background)
+    expect(AsyncIndexer::REDIS.smembers(batch_key)).to contain_exactly("34")
   end
 
-  it "should retry batch errors" do
-    work = Work.new
-    work.id = 34
+  context "when persistent indexing failures occur" do
+    let(:work_id) { create(:work).id }
 
-    indexer = WorkIndexer.new([34])
-    batch = {
-      "errors" => true,
-      "items" => [{
-        "update" => {
-          "_id" => 34,
-          "error" => {
-            "problem" => "description"
-          }
-        }
-      }]
-    }
-
-    async_indexer = AsyncIndexer.new(WorkIndexer, "failures")
-
-    expect(AsyncIndexer::REDIS).to receive(:smembers).and_return([34])
-    expect(WorkIndexer).to receive(:new).with([34]).and_return(indexer)
-    expect(indexer).to receive(:index_documents).and_return(batch)
-    expect(AsyncIndexer).to receive(:new).with(WorkIndexer, "failures").and_return(async_indexer)
-    expect(async_indexer).to receive(:enqueue_ids).with([34]).and_return(true)
-
-    AsyncIndexer.perform("WorkIndexer:34:#{Time.now.to_i}")
-  end
-
-  context "when persistent failures occur" do
     before do
-      # Make elasticsearch always fail.
+      # Make batch indexing always fail.
       allow($elasticsearch).to receive(:bulk) do |options|
         {
           "errors" => true,
@@ -62,33 +37,37 @@ describe AsyncIndexer do
       end
     end
 
-    it "should call the BookmarkedWorkIndexer three times with the same ID" do
-      expect(BookmarkedWorkIndexer).to receive(:new).with(["99999"]).
-        exactly(3).times.
-        and_call_original
-      AsyncIndexer.index(BookmarkedWorkIndexer, [99_999], "main")
-    end
+    it "tries indexing IDs up to 3 times" do
+      expect(BookmarkedWorkIndexer).to receive(:new).with([work_id.to_s])
+        .exactly(3).times
+        .and_call_original
 
-    it "should add the ID to the BookmarkedWorkIndexer's permanent failures" do
-      AsyncIndexer.index(BookmarkedWorkIndexer, [99_999], "main")
+      expect do
+        AsyncIndexer.index(BookmarkedWorkIndexer, [work_id], :main)
+      end.to enqueue_job
 
-      permanent_store = IndexSweeper.permanent_failures(BookmarkedWorkIndexer)
+      2.times do
+        # Batch keys in Redis contain a timestamp. Ensure that each retry has
+        # a different batch key.
+        travel(1.second)
+        expect { perform_enqueued_jobs }
+          .to enqueue_job.on_queue("reindex_failures")
+      end
 
-      expect(permanent_store).to include(
-        "99999-work" => { "an error" => "with a message" }
-      )
+      # The third failure does not enqueue a retry.
+      travel(1.second)
+      expect { perform_enqueued_jobs }
+        .not_to enqueue_job
     end
   end
 
   context "when there are no IDs to index" do
-    before do
-      allow(AsyncIndexer::REDIS).to receive(:smembers).and_return([])
-    end
-
     it "doesn't call the indexer" do
+      expect(AsyncIndexer::REDIS).to receive(:smembers).and_return([])
       expect(WorkIndexer).not_to receive(:new)
 
-      AsyncIndexer.perform("WorkIndexer:34:#{Time.now.to_i}")
+      AsyncIndexer.index(WorkIndexer, [34], :main)
+      perform_enqueued_jobs
     end
   end
 end

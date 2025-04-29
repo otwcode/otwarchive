@@ -146,7 +146,8 @@ Feature: Work Drafts
         And I fill in "content" with "Help there are unicorns everywhere"
         And I press "Preview"
         And I press "Save As Draft"
-      When I go to my drafts page
+      When I follow "My Dashboard"
+        And I follow "Drafts ("
         And I follow "Post Draft"
       Then I should be on the work "Unicorns are everywhere"
         And I should see "Words:5"

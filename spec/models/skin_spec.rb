@@ -114,6 +114,10 @@ describe Skin do
         background:linear-gradient(top,#fafafa,#ddd);
         color:#555 }",
 
+      "allows color-scheme property and values" => 
+        ".color_scheme_light { color-scheme: light; }
+        .color_scheme_only_dark { color-scheme: only dark; }",
+
       "allows filter properties" => 
         ".filter_blur { filter: blur(5px); }
         .filter_brightness { filter: brightness(0.4); }
@@ -196,6 +200,13 @@ describe Skin do
     it "has a unique title" do
       expect(@skin.save).to be_truthy
       skin2 = Skin.new(title: "Test Skin")
+      expect(skin2.save).not_to be_truthy
+      expect(skin2.errors[:title]).not_to be_empty
+    end
+
+    it "has a unique title ignoring case" do
+      expect(@skin.save).to be_truthy
+      skin2 = Skin.new(title: "test skin")
       expect(skin2.save).not_to be_truthy
       expect(skin2.errors[:title]).not_to be_empty
     end

@@ -30,8 +30,7 @@ describe CollectionItem, :ready do
       end
 
       context "when the archivist maintains the collection" do
-        let(:participant) { create(:collection_participant, pseud: archivist.default_pseud) }
-        let(:collection) { create(:collection, collection_participants: [participant]) }
+        let(:collection) { create(:collection, owner: archivist.default_pseud) }
 
         it "automatically approves the item" do
           item = create(:collection_item, item: work, collection: collection)
@@ -75,6 +74,21 @@ describe CollectionItem, :ready do
         expect(UserMailer).not_to receive(:archivist_added_to_collection_notification)
         create(:collection_item, item: work, collection: collection)
       end
+    end
+  end
+
+  describe "include_for_works scope" do
+    let(:collection) { create(:collection) }
+    let(:work) { create(:work, id: 63) }
+    let(:bookmark) { create(:bookmark, id: 63) }
+
+    before { bookmark.collections << collection }
+
+    it "returns the correct type item for bookmarks" do
+      expect(work.id).to eq(bookmark.id)
+      expect(collection.collection_items).not_to be_empty
+      expect(collection.collection_items.first.item_type).to eq("Bookmark")
+      expect(collection.collection_items.include_for_works.first.item_type).to eq("Bookmark")
     end
   end
 end

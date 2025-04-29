@@ -267,7 +267,7 @@ namespace :After do
     end
   end
 
-  desc "Add suffix to existing Underage Sex tag in prepartion for Underage warning rename"
+  desc "Add suffix to existing Underage Sex tag in preparation for Underage warning rename"
   task(add_suffix_to_underage_sex_tag: :environment) do
     puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
     login = $stdin.gets.chomp.strip
@@ -488,6 +488,51 @@ namespace :After do
         puts "Finished skin #{skin_id}"
         $stdout.flush
       end
+    end
+  end
+
+  desc "Migrate pinch_request_signup to request_signup"
+  task(migrate_pinch_request_signup: :environment) do
+    count = ChallengeAssignment.where("pinch_request_signup_id IS NOT NULL AND request_signup_id IS NULL").update_all("request_signup_id = pinch_request_signup_id")
+    puts("Migrated pinch_request_signup for #{count} challenge assignments.")
+  end
+
+  desc "Reindex tags associated with works that are hidden or unrevealed"
+  task(reindex_hidden_unrevealed_tags: :environment) do
+    hidden_count = Work.hidden.count
+    hidden_batches = (hidden_count + 999) / 1_000
+    puts "Inspecting #{hidden_count} hidden works in #{hidden_batches} batches"
+    Work.hidden.find_in_batches.with_index do |batch, index|
+      batch.each { |work| work.taggings.each(&:update_search) }
+      puts "Finished batch #{index + 1} of #{hidden_batches}"
+    end
+
+    unrevealed_count = Work.unrevealed.count
+    unrevealed_batches = (unrevealed_count + 999) / 1_000
+    puts "Inspecting #{unrevealed_count} unrevealed works in #{unrevealed_batches} batches"
+    Work.unrevealed.find_in_batches.with_index do |batch, index|
+      batch.each { |work| work.taggings.each(&:update_search) }
+      puts "Finished batch #{index + 1} of #{unrevealed_batches}"
+    end
+
+    puts "Finished reindexing tags on hidden and unrevealed works"
+  end
+
+  desc "Convert user kudos from users with the official role to guest kudos"
+  task(convert_official_kudos: :environment) do
+    official_users = Role.find_by(name: "official")&.users
+    if official_users.blank?
+      puts "No official users found"
+    else
+      official_users.each do |user|
+        kudos = user.kudos
+        next if kudos.blank?
+
+        puts "Updating #{kudos.size} kudos from #{user.login}"
+        user.remove_user_from_kudos
+      end
+
+      puts "Finished converting kudos from official users to guest kudos"
     end
   end
   # This is the end that you have to put new tasks above.

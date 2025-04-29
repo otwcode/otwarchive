@@ -1,5 +1,4 @@
 <% # expects "assignment" %>
-<% request = assignment.request_signup || assignment.pinch_request_signup %>
 <dt>
   <% if @collection && @collection.user_is_maintainer?(current_user) %>
     <% # we're listing assignments for a mod by the assigned writer %>
@@ -18,9 +17,8 @@
 
   <% if @collection && @collection.user_is_maintainer?(current_user) %>
     <% # for a mod: list recipient (and check in case there are some people without recipients) %>
-    <% if request %>
+    <% if assignment.request_signup %>
       <%= ts("for") %> <%= link_to assignment.request_byline, collection_assignment_path(@collection, assignment) %>
-      <%= assignment.pinch_request_signup && assignment.pinch_request_signup == request ? "* (pinch recipient)" : "" %>
     <% else %>
       <strong><%= ts("No Recipient") %></strong>
     <% end %>
