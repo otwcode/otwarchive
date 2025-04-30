@@ -402,7 +402,7 @@ describe ChaptersController do
 
             expect(co_created_chapter.reload.pseuds).to eq [user.pseuds.first]
             expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
-            
+
             it_redirects_to(edit_work_path(work, remove: "me"))
           end
         end
@@ -804,6 +804,10 @@ describe ChaptersController do
     end
   end
 
+  describe "PATCH #remove_user_creatorship" do
+
+  end
+
   describe "update_positions" do
     let(:chapter1) { work.chapters.first }
     let!(:chapter2) { create(:chapter, :draft, work: work, position: 2, authors: [user.pseuds.first]) }
@@ -867,18 +871,18 @@ describe ChaptersController do
         before do
           fake_login_known_user(suspended_user)
         end
-        
+
         it "errors and redirects to user page" do
           post :update_positions, params: { work_id: suspended_users_work.id, chapter: [suspended_users_work_chapter2, suspended_users_work.chapters.first] }
           expect(flash[:error]).to include("Your account has been suspended")
         end
       end
-  
+
       context "when the logged in user is banned" do
         before do
           fake_login_known_user(banned_user)
         end
-        
+
         it "errors and redirects to user page" do
           post :update_positions, params: { work_id: banned_users_work.id, chapter: [banned_users_work_chapter2, banned_users_work.chapters.first] }
           expect(flash[:error]).to include("Your account has been banned")

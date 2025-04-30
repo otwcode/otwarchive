@@ -13,8 +13,9 @@ describe SeriesController do
     end
   end
 
-  describe 'edit' do
-    it 'redirects to orphan if there are no pseuds left' do
+  describe "PATCH #remove_user_creatorship" do
+    # todo
+    it "redirects to orphan if there are no pseuds left" do
       fake_login_known_user(user)
       get :edit, params: { remove: "me", id: series }
       it_redirects_to(new_orphan_path(series_id: series))
