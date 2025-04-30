@@ -274,9 +274,7 @@ describe Admin::AdminUsersController do
         let!(:archivist_role) { create(:role, name: "archivist") }
         let!(:tag_wrangler_role) { create(:role, name: "tag_wrangler") }
 
-        before do
-          admin.update!(roles: ["open_doors"])
-        end
+        before { admin.update!(roles: ["open_doors"]) }
 
         it "does not add unpermitted roles" do
           user.update!(roles: [opendoors_role])
