@@ -50,6 +50,36 @@ button {
   box-sizing: content-box;
 }
 
+.actions form.button_to {
+  line-height: 1.5
+}
+
+.actions button.button_link:focus {
+  outline: 1px dotted;
+}
+
+.actions button.button_link {
+  box-shadow: none;
+  background: transparent;
+  border: 0;
+  margin: auto;
+  padding: 0;
+  border-radius: 0;
+  color: #fff;
+  display: inline;
+  border-bottom: 1px solid;
+  white-space: normal;
+  cursor: pointer;
+}
+
+.actions button.button_link:hover,
+.actions button.button_link:focus {
+  box-shadow: none;
+  border-top: 0;
+  border-left: 0;
+  color: #fff;
+}
+
 label.action {
   padding: 0.15em 0.375em;
 }

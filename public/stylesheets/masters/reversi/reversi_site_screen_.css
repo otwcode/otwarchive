@@ -159,6 +159,8 @@ fieldset fieldset.listbox,
 
 #footer a:hover,
 #footer a:focus,
+#footer .button_link:hover,
+#footer .button_link:focus,
 .autocomplete .dropdown ul li:hover,
 .autocomplete .dropdown li.selected,
 a.tag:hover,
