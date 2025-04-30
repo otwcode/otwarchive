@@ -284,7 +284,7 @@ end
 Given /^I have generated matches for "([^\"]*)"$/ do |challengename|
   step %{I close signups for "#{challengename}"}
   step %{I follow "Matching"}
-  step %{I follow "Generate Potential Matches"}
+  step %{I press "Generate Potential Matches"}
   step %{I reload the page}
   step %{all emails have been delivered}
 end
