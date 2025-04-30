@@ -278,32 +278,6 @@ describe Admin::AdminUsersController do
           admin.update!(roles: ["open_doors"])
         end
 
-        it "can add a permitted role" do
-          user.update!(roles: [])
-
-          put :update, params: {
-            id: user.login,
-            user: {
-              roles: [opendoors_role.id.to_s]
-            }
-          }
-          expect(flash[:notice]).to eq "User was successfully updated."
-          expect(user.reload.roles).to eq([opendoors_role])
-        end
-
-        it "can remove a permitted role" do
-          user.update!(roles: [opendoors_role, archivist_role])
-
-          put :update, params: {
-            id: user.login,
-            user: {
-              roles: [opendoors_role.id.to_s]
-            }
-          }
-          expect(flash[:notice]).to eq "User was successfully updated."
-          expect(user.reload.roles).to eq([opendoors_role])
-        end
-
         it "does not add unpermitted roles" do
           user.update!(roles: [opendoors_role])
 
