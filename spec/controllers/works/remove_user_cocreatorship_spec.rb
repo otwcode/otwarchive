@@ -11,24 +11,32 @@ describe WorksController do
     let(:second_creator) { create(:user) }
 
     context "all co-creators are pseuds of same user" do
-      # fake_login
-      # let(:work) { create(:work, authors: [user.default_pseud, other_pseud]) }
+      before do
+        fake_login_known_user(user)
+      end
 
-      # it "redirects to orphan page" do
+      let(:work) { create(:work, authors: [user.default_pseud, other_pseud]) }
 
-      #   # does not change co creatorship.
+      it "does not remove creatorship and redirects to orphan page" do
+        patch :remove_user_creatorship, params: { id: work.id }
 
-      # end
+        expect(work.pseuds.reload).to contain_exactly(user.default_pseud, other_pseud)
+        it_redirects_to(new_orphan_path(work_id: work.id))
+      end
     end
 
     context "co-creators of multiple users" do
-    #   let(:work) { create(:work, authors: [user.default_pseud, second_creator.default_pseud]) }
+      before do
+        fake_login_known_user(user)
+      end
 
-    #   it "successfully removes user creatorship" do
+      let(:work) { create(:work, authors: [user.default_pseud, second_creator.default_pseud]) }
 
-    #     # it changes co creatorship
+      it "successfully removes user creatorship" do
+        patch :remove_user_creatorship, params: { id: work.id }
 
-    #   end
+        expect(work.pseuds.reload).to contain_exactly(second_creator.default_pseud)
+      end
     end
   end
 end
