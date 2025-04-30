@@ -82,12 +82,12 @@ module WorksHelper
     reading && reading.toread?
   end
 
-  def mark_as_read_link(work)
-    link_to t(".mark_as_read"), mark_as_read_work_path(work), method: :delete
+  def mark_as_read_button(work)
+    button_to t(".mark_as_read"), mark_as_read_work_path(work), method: :delete
   end
 
-  def mark_for_later_link(work)
-    link_to t(".mark_for_later"), mark_for_later_work_path(work), method: :post
+  def mark_for_later_button(work)
+    button_to t(".mark_for_later"), mark_for_later_work_path(work), method: :post
   end
 
   def get_endnotes_link

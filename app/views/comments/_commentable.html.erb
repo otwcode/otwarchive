@@ -58,7 +58,7 @@
     <%# i18n-tasks-use t("comments.commentable.mark_as_read") %>
     <% if logged_in? && @work && marked_for_later?(@work) %>
       <li>
-        <%= mark_as_read_link(@work) %>
+        <%= mark_as_read_button(@work) %>
       </li>
     <% end %>
 
