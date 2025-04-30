@@ -54,11 +54,11 @@ button {
   line-height: 1.5
 }
 
-.actions button.button_link:focus {
+.actions .button_link:focus {
   outline: 1px dotted;
 }
 
-.actions button.button_link {
+.actions .button_link {
   box-shadow: none;
   background: transparent;
   border: 0;
@@ -67,16 +67,19 @@ button {
   border-radius: 0;
   color: #fff;
   display: inline;
-  border-bottom: 1px solid;
+  text-decoration: underline;
+  text-underline-offset: 5px;
   white-space: normal;
   cursor: pointer;
+  text-align: start;
+  line-height: normal;
+  height: unset;
 }
 
-.actions button.button_link:hover,
-.actions button.button_link:focus {
+.actions .button_link:hover,
+.actions .button_link:focus {
   box-shadow: none;
-  border-top: 0;
-  border-left: 0;
+  border: 0;
   color: #fff;
 }
 

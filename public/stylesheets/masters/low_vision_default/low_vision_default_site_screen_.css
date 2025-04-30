@@ -119,6 +119,7 @@ pre {
 .blurb .actions a,
 #header li a,
 #footer li a,
+#footer li .button_link,
 #header .open .menu {
   display: block;
 }
@@ -128,6 +129,13 @@ pre {
 #footer ul,
 #footer li a {
   float: none;
+}
+
+#footer .button_link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  border-bottom: 1px solid;
 }
 
 #header h1 img,
