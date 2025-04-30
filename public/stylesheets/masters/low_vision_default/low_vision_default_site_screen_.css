@@ -124,6 +124,10 @@ pre {
   display: block;
 }
 
+#footer li a {
+  height: unset;
+}
+
 #header .navigation,
 #header li a,
 #footer ul,
