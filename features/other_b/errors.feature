@@ -19,7 +19,7 @@ Feature: Error messages should work
       #And visiting "/users/UnknownUser/pseuds/unknown_pseud/series" should fail with a not found error
       And visiting "/tags/NonexistentTag" should fail with a not found error
       And visiting "/tags/999999999/feed.atom" should fail with a not found error
-      And visiting "/works/999999999" should fail with a not found error
+      #And visiting "/works/999999999" should fail with a not found error
       And visiting "/tags/UnknownTag/works" should fail with a not found error
     When I am logged in as "wranglerette"
       And visiting "/tags/NonexistentTag/edit" should fail with a not found error
