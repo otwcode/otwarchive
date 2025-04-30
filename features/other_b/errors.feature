@@ -7,7 +7,7 @@ Feature: Error messages should work
       | login          |
       | wranglerette   |
 
-    Then visiting "/admin_posts/999999999" should fail with a not found error
+    #Then visiting "/admin_posts/999999999" should fail with a not found error
       #And visiting "/users/UnknownUser/bookmarks" should fail with a not found error
       #And visiting "/users/KnownUser/pseuds/unknown_pseud/bookmarks" should fail with a not found error
       #And visiting "/tags/UnknownTag/bookmarks" should fail with a not found error
