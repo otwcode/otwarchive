@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 require "spec_helper"
 
@@ -12,24 +11,24 @@ describe WorksController do
     let(:second_creator) { create(:user) }
 
     context "all co-creators are pseuds of same user" do
-      fake_login
-      let(:work) { create(:work, authors: [user.default_pseud, other_pseud]) }
+      # fake_login
+      # let(:work) { create(:work, authors: [user.default_pseud, other_pseud]) }
 
-      it "redirects to orphan page" do
+      # it "redirects to orphan page" do
 
-        # does not change co creatorship.
+      #   # does not change co creatorship.
 
-      end
+      # end
     end
 
     context "co-creators of multiple users" do
-      let(:work) { create(:work, authors: [user.default_pseud, second_creator.default_pseud]) }
+    #   let(:work) { create(:work, authors: [user.default_pseud, second_creator.default_pseud]) }
 
-      it "successfully removes user creatorship" do
+    #   it "successfully removes user creatorship" do
 
-        # it changes co creatorship
+    #     # it changes co creatorship
 
-      end
+    #   end
     end
   end
 end
