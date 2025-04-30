@@ -289,8 +289,8 @@ describe Admin::AdminUsersController do
           expect(user.reload.roles).to eq([opendoors_role])
         end
 
-        it "does not remove unpermitted roles" do
-          user.update!(roles: [opendoors_role, tag_wrangler_role])
+        it "does not change unpermitted roles when adding a role" do
+          user.update!(roles: [tag_wrangler_role])
 
           put :update, params: {
             id: user.login,
@@ -300,6 +300,19 @@ describe Admin::AdminUsersController do
           }
           it_redirects_to_with_notice(root_path, "User was successfully updated.")
           expect(user.reload.roles).to eq([opendoors_role, tag_wrangler_role])
+        end
+
+        it "does not change unpermitted roles when removing a role" do
+          user.update!(roles: [tag_wrangler_role, opendoors_role])
+
+          put :update, params: {
+            id: user.login,
+            user: {
+              roles: [""]
+            }
+          }
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+          expect(user.reload.roles).to eq([tag_wrangler_role])
         end
       end
     end
