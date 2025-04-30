@@ -101,7 +101,7 @@ class ChaptersController < ApplicationController
     pseuds_with_author_removed = @work.pseuds - current_user.pseuds
 
     if pseuds_with_author_removed.empty?
-      redirect_to controller: 'orphans', action: 'new', work_id: @work.id
+      redirect_to controller: "orphans", action: "new", work_id: @work.id
     else
       @work.remove_author(current_user)
       flash[:notice] = ts("You have been removed as a creator from the work.")

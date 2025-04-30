@@ -11,14 +11,14 @@
         <span class="defaulted"><%= ts("Defaulted") %></span>
       <% else %>
         <%= button_to t("challenge_assignments.to_default.button"),
-          default_collection_assignment_path(@challenge_assignment.collection, @challenge_assignment),
-          data: { confirm: t("challenge_assignments.to_default.confirmation") },
-          method: :patch %>
+              default_collection_assignment_path(@challenge_assignment.collection, @challenge_assignment),
+              data: { confirm: t("challenge_assignments.to_default.confirmation") },
+              method: :patch %>
       <% end %>
     </li>
     <li><%= link_to t("challenge_assignments.to_fulfill.button"),
-      new_collection_work_path(@challenge_assignment.collection,
-      assignment_id: @challenge_assignment.id) %></li>
+              new_collection_work_path(@challenge_assignment.collection,
+              assignment_id: @challenge_assignment.id) %></li>
   </ul>
 <% end %>
 <!--/subnav-->

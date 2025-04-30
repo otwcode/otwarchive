@@ -55,9 +55,9 @@
         <li><%= link_to t("challenge_assignments.to_fulfill.button"), new_collection_work_path(assignment.collection, assignment_id: assignment.id) %></li>
         <li role="button">
           <%= button_to t("challenge_assignments.to_default.button"),
-            default_collection_assignment_path(assignment.collection, assignment),
-            data: { confirm: t("challenge_assignments.to_default.confirmation") },
-            method: :patch %>
+                default_collection_assignment_path(assignment.collection, assignment),
+                data: { confirm: t("challenge_assignments.to_default.confirmation") },
+                method: :patch %>
         </li>
       <% elsif @collection && @collection.user_is_maintainer?(current_user) %>
         <%= fields_for "challenge_assignments[]", assignment do |assignment_form| %>

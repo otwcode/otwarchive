@@ -10,7 +10,7 @@
             <ul class="menu">
               <li><%= button_to t(".customize.default"), unset_skins_path, method: :post, class: "button_link" %></li>
               <% Skin.in_chooser.order(:title).each do |s| %>
-                <li><%= button_to s.title, set_skin_path(s), method: :post,class: "button_link" %></li>
+                <li><%= button_to s.title, set_skin_path(s), method: :post, class: "button_link" %></li>
               <% end %>
             </ul>
           </li>
