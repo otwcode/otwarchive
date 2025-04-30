@@ -287,7 +287,7 @@ describe Admin::AdminUsersController do
               roles: [opendoors_role.id.to_s, tag_wrangler_role.id.to_s]
             }
           }
-          expect(flash[:notice]).to eq "User was successfully updated."
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
           expect(user.reload.roles).to eq([opendoors_role])
         end
 
@@ -300,7 +300,7 @@ describe Admin::AdminUsersController do
               roles: [opendoors_role.id.to_s]
             }
           }
-          expect(flash[:notice]).to eq "User was successfully updated."
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
           expect(user.reload.roles).to eq([opendoors_role, tag_wrangler_role])
         end
       end
