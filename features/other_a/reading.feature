@@ -266,9 +266,7 @@ Feature: Reading count
 
   Scenario: When a chapter is added to a work, "update available" should not appear until it is posted
 
-    Given I am logged in as "writer"
-      And I post the work "Some Work"
-      And I am logged out
+    Given the work "Some Work" by "writer"
     When I am logged in as "reader"
       And I mark the work "Some Work" for later
       And the readings are saved to the database

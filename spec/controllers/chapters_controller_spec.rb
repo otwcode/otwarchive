@@ -516,10 +516,12 @@ describe ChaptersController do
         expect(response).to have_http_status :redirect
       end
 
-      it "does not update the work's major version" do
-        expect(work.major_version).to eq(1)
-        post :create, params: { work_id: work.id, chapter: chapter_attributes }
-        expect(assigns[:work].major_version).to eq(1)
+      context "when no button is clicked" do
+        it "does not update the work's major version" do
+          expect(work.major_version).to eq(1)
+          post :create, params: { work_id: work.id, chapter: chapter_attributes }
+          expect(assigns[:work].major_version).to eq(1)
+        end
       end
 
       context "when the post button is clicked" do
