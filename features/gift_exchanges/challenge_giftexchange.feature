@@ -200,7 +200,7 @@ Feature: Gift Exchange Challenge
     Then I should see "Assignments updated"
       And I should see "No Recipient"
       And I should see "No Giver"
-    When I follow "Send Assignments"
+    When I press "Send Assignments"
     Then I should see "aren't assigned"
     When I follow "No Giver"
       And I assign a pinch hitter
@@ -211,7 +211,7 @@ Feature: Gift Exchange Challenge
       And I assign a pinch recipient
       And I press "Save Assignment Changes"
       And I should not see "No Recipient"
-    When I follow "Send Assignments"
+    When I press "Send Assignments"
     Then I should see "Assignments are now being sent out"
 
   Scenario: Issues with assignments
@@ -263,7 +263,7 @@ Feature: Gift Exchange Challenge
   Scenario: Assignments can be sent
     Given the gift exchange "Awesome Gift Exchange" is ready for matching
       And I have generated matches for "Awesome Gift Exchange"
-    When I follow "Send Assignments"
+    When I press "Send Assignments"
     Then I should see "Assignments are now being sent out"
     When I reload the page
     Then I should not see "Assignments are now being sent out"

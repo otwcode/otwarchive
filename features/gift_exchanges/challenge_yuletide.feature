@@ -165,11 +165,11 @@ Feature: Collection
     And I should see "Offer: Your Offer must include between 2 and 3 character tags, but you have included 4 character tags in your current Offer"
     And I should see a not-in-fandom error message for "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat" in "Care Bears"
     And I should see "You have submitted more than one offer with the same fandom tags. This challenge requires them all to be unique."
-  
-  
+
+
   # now fill in correctly
   # We have six participants who sign up as follows:
-  
+
   # myname1 requests: SGA (JS, TE), Tiny fandom (Obscure person)
   #         offers: Tiny fandom (Obscure person, JS), Hippos (Any)
   # (is the only person who can write for myname2 and should therefore be assigned to them)
@@ -203,7 +203,7 @@ Feature: Collection
 
   # myname2 requests: Unoffered (no chars), Hippos (no chars)
   #         offers: S&H (JS, TE), SGA (JS, TE)
-  # can only get from myname1 
+  # can only get from myname1
   When I follow "Sign Up"
     And I check the 1st checkbox with value "Unoffered"
     And I check the 2nd checkbox with value "Yuletide Hippos RPF"
@@ -220,7 +220,7 @@ Feature: Collection
   Then I should see "Sign-up was successfully created"
 
   # and a third person signs up
-  # myname3 requests: S&H (JS), Tiny fandom; 
+  # myname3 requests: S&H (JS), Tiny fandom;
   #           offers: SGA (JS, TE), S&H (JS, TE, Foo)
   When I log out
     And I am logged in as "myname3"
@@ -377,7 +377,7 @@ Feature: Collection
 
   # mod sends assignments out
   When all emails have been delivered
-    And I follow "Send Assignments"
+    And I press "Send Assignments"
   Then I should see "Assignments are now being sent out"
     And I should see "No assignments to review"
     And I should see "Defaulted"
@@ -398,7 +398,7 @@ Feature: Collection
   #         offers: Tiny fandom (Obscure person, JS), Hippos (Any)
   # myname2 requests: Unoffered (no chars), Hippos (no chars)
   #         offers: S&H (JS, TE), SGA (JS, TE)
-  # myname3 requests: S&H (JS), Tiny fandom; 
+  # myname3 requests: S&H (JS), Tiny fandom;
   #           offers: SGA (JS, TE), S&H (JS, TE, Foo)
   # myname4 requests SGA, S&H (JS, TE)
   #     offers Tiny (Obscure, JS), S&H (Foo, JS)
@@ -409,7 +409,7 @@ Feature: Collection
   #
   # so myname1 is the only person who can write for myname2 and therefore myname2 should be their assignment
   #
-  
+
   # first user starts posting
   When I log out
     And I am logged in as "myname1"
@@ -536,7 +536,7 @@ Feature: Collection
   Then 1 email should be delivered
     And the email should contain "You have been assigned the following request"
     And I should see "Assignment updates complete!"
-    And all emails have been delivered    
+    And all emails have been delivered
   When I follow "Pinch Hits"
   Then I should see "pinchhitter"
 

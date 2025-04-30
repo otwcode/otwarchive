@@ -290,7 +290,7 @@ Given /^I have generated matches for "([^\"]*)"$/ do |challengename|
 end
 
 Given /^I have sent assignments for "([^\"]*)"$/ do |challengename|
-  step %{I follow "Send Assignments"}
+  step %{I press "Send Assignments"}
   step %{I reload the page}
   step %{I should not see "Assignments are now being sent out"}
 end
