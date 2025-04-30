@@ -13,10 +13,10 @@ Feature: Public skins
     And the skin "public skin" is cached
     And the skin "public skin" is in the chooser
   When I am logged in as "skinner"
-    And I follow "public skin"
+    And I press "public skin"
   Then I should see "The skin public skin has been set. This will last for your current session."
     And the page should have the cached skin "public skin"
-  When I follow "Default"
+  When I press "Default"
   Then I should see "You are now using the default Archive skin again!"
     And the page should not have the cached skin "public skin"
 
