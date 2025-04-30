@@ -384,7 +384,7 @@ describe ChaptersController do
         end
 
         it "removes user from chapter, gives notice, and redirects to work" do
-          patch :remove_user_creatorship, params: { work_id: work.id, id: co_created_chapter.id }
+          patch :remove_user_creatorship, params: { id: co_created_chapter.id }
 
           expect(co_created_chapter.reload.pseuds).to eq [co_creator.pseuds.first]
           expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
@@ -412,6 +412,7 @@ describe ChaptersController do
         end
 
         it "errors and redirects to user page" do
+          suspended_users_work
           patch :remove_user_creatorship, params: { id: suspended_users_work_chapter2.id }
 
           expect(flash[:error]).to include("Your account has been suspended")
@@ -424,6 +425,7 @@ describe ChaptersController do
         end
 
         it "removes user from chapter, gives notice, and redirects to work" do
+          banned_users_work
           patch :remove_user_creatorship, params: { id: banned_users_work_chapter2.id }
 
           expect(banned_users_work_chapter2.reload.pseuds).to eq [co_creator.pseuds.first]
