@@ -597,7 +597,7 @@ describe ChaptersController do
 
           it "does not update the work's major version" do
             expect(work.major_version).to eq(1)
-            post :create, params: { work_id: work.id, chapter: chapter_attributes, post_without_preview: true }
+            post :create, params: { work_id: work.id, chapter: chapter_attributes, preview_button: true }
             expect(assigns[:work].major_version).to eq(1)
           end
 
