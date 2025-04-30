@@ -371,6 +371,7 @@ Rails.application.routes.draw do
       post :post
       put :post_draft
       get :navigate
+      patch :remove_user_creatorship
       get :edit_tags
       get :preview_tags
       patch :update_tags
@@ -414,6 +415,7 @@ Rails.application.routes.draw do
     member do
       get :preview
       post :post
+      patch :remove_user_creatorship
     end
     resources :comments
   end
@@ -433,6 +435,7 @@ Rails.application.routes.draw do
       get :confirm_delete
       get :manage
       post :update_positions
+      patch :remove_user_creatorship
     end
     resources :bookmarks
   end
