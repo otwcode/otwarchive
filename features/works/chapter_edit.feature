@@ -389,7 +389,7 @@ Feature: Edit chapters
     When I view the work "OP's Work"
       And I follow "Edit"
       And I follow "Manage Chapters"
-    When I view "Remove Me As Chapter Co-Creator"
+    When I follow "Remove Me As Chapter Co-Creator"
     Then I should see "You have been removed as a creator from the chapter."
       And I should see "Chapter 1"
     When I view the 2nd chapter

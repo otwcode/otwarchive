@@ -376,7 +376,7 @@ Feature: Gift Exchange Challenge
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I go to the assignments page for "myname1"
-      And I follow "Default"
+      And I press "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
@@ -393,7 +393,7 @@ Feature: Gift Exchange Challenge
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I go to the assignments page for "myname1"
-      And I follow "Default"
+      And I press "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
