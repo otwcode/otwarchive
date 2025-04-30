@@ -174,7 +174,7 @@ Feature: Gift Exchange Challenge
     Given the gift exchange "Awesome Gift Exchange" is ready for matching
       And I close signups for "Awesome Gift Exchange"
     When I follow "Matching"
-      And I follow "Generate Potential Matches"
+      And I press "Generate Potential Matches"
     Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
     When I reload the page
     Then I should see "Reviewing Assignments"
@@ -185,7 +185,7 @@ Feature: Gift Exchange Challenge
       And I create an invalid signup in the gift exchange "Awesome Gift Exchange"
     When I close signups for "Awesome Gift Exchange"
       And I follow "Matching"
-      And I follow "Generate Potential Matches"
+      And I press "Generate Potential Matches"
     Then 1 email should be delivered to "mod1"
       And the email should contain "invalid sign-up"
     When I go to "Awesome Gift Exchange" gift exchange matching page
@@ -226,7 +226,7 @@ Feature: Gift Exchange Challenge
     Then I should see "Regenerate Assignments"
       And I should see "Regenerate All Potential Matches"
       And I should see "try regenerating assignments"
-    When I follow "Regenerate Assignments"
+    When I press "Regenerate Assignments"
       And I reload the page
     Then I should see "Reviewing Assignments"
       And I should see "Complete"
@@ -249,12 +249,12 @@ Feature: Gift Exchange Challenge
       And I submit
       And I follow "Matching"
       And I follow "No Potential Recipients"
-      And I follow "Regenerate Matches For Mismatch"
+      And I press "Regenerate Matches For Mismatch"
     Then I should see "Matches are being regenerated for Mismatch"
     When I reload the page
     Then I should not see "No Potential Givers"
       And I should not see "No Potential Recipients"
-    When I follow "Regenerate Assignments"
+    When I press "Regenerate Assignments"
       And I reload the page
     Then I should not see "No Potential Givers"
       And I should not see "No Potential Recipients"
@@ -364,7 +364,7 @@ Feature: Gift Exchange Challenge
       And I fulfill my assignment
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
-      And I follow "Default All Incomplete"
+      And I press "Default All Incomplete"
     Then I should see "All unfulfilled assignments marked as defaulting."
       And I should see "Undefault myname2"
       And I should see "Undefault myname3"

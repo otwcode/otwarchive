@@ -353,7 +353,7 @@ Feature: Collection
     And I should see "Generate Potential Matches"
     And I should see "No potential matches yet"
   When all emails have been delivered
-  When I follow "Generate Potential Matches"
+  When I press "Generate Potential Matches"
   Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
   When I reload the page
   Then I should see "Reviewing Assignments"
@@ -367,7 +367,7 @@ Feature: Collection
 
   # mod regenerates the assignments
   When all emails have been delivered
-  When I follow "Regenerate Assignments"
+  When I press "Regenerate Assignments"
   Then I should see "Beginning regeneration of assignments. This may take some time, especially if your challenge is large."
   When I reload the page
   Then I should see "Complete"
@@ -528,7 +528,7 @@ Feature: Collection
     And I should see "myname3" within "dl.index.group"
     And I should see "myname4" within "dl.index.group"
     And I should see "Fulfilling Story"
-  When I follow "Default All Incomplete"
+  When I press "Default All Incomplete"
   Then I should see "All unfulfilled assignments marked as defaulting."
   And I should not see "No assignments to review!"
   When I fill in the 1st field with id matching "cover" with "pinchhitter"
