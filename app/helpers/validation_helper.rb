@@ -28,7 +28,7 @@ module ValidationHelper
   }
   
   # much simplified and html-safed version of error_messages_for
-  # error messages containing a "^" will have everything before the "^" wiped out 
+  # error messages containing a "^" will have everything before the "^" wiped out
   def error_messages_for(object)
     if object.is_a? Symbol
       object = instance_variable_get("@#{object}")
