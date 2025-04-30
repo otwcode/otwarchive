@@ -112,6 +112,28 @@ pre {
   font-size: 200%;
 }
 
+#footer .button_link {
+  background: #eee;
+  color: #444;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 0.25em;
+  width: 100%;
+  padding: 0.25em 0;
+  line-height: 1.286;
+  height: 1.286em;
+  box-shadow: 0 0 0 2px #444;
+}
+
+#footer .button_link:hover,
+#footer .button_link:focus {
+  box-shadow: 0 0 0 2px #eee;
+}
+
+#footer .button_link:active {
+  outline: 1px dotted;
+}
+
 #header li,
 #footer li,
 .home .primary .navigation a,
@@ -124,22 +146,11 @@ pre {
   display: block;
 }
 
-#footer li a {
-  height: unset;
-}
-
 #header .navigation,
 #header li a,
 #footer ul,
 #footer li a {
   float: none;
-}
-
-#footer .button_link {
-  display: block;
-  width: 100%;
-  text-decoration: none;
-  border-bottom: 1px solid;
 }
 
 #header h1 img,
@@ -165,7 +176,9 @@ pre {
 #header .user .dropdown a:focus,
 #footer,
 .actions a:hover,
-.actions a:focus {
+.actions a:focus,
+#footer .button_link:hover,
+#footer .button_link:focus {
   background: #900;
   color: #eee;
 }
