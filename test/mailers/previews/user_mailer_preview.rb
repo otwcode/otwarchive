@@ -212,6 +212,13 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.related_work_notification(user.id, related_work.id)
   end
 
+  def related_work_notification_anon
+    user = create(:user, :for_mailer_preview)
+    parent_work = create(:work, authors: [user.default_pseud], title: "Inspiration")
+    related_work = create(:related_work, parent_id: parent_work.id, collections: [create(:anonymous_collection)])
+    UserMailer.related_work_notification(user.id, related_work.id)
+  end
+
   private
 
   def creatorship_notification_data(creation_type)
