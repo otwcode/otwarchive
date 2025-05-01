@@ -1,18 +1,17 @@
 <% content_for :message do %>
   <p>
-    <%= t(".html.work_listed_html",
-          work_link: "<i><b>#{style_link(@related_work.parent.title, @related_parent_link)}</b></i>".html_safe,
-          related_work_link: "<i><b>#{style_link(@related_work.work.title, @related_child_link)}</b></i>".html_safe,
+    <%= t(".work_listed.html",
+          work_link: style_creation_link(@related_work.parent.title, @related_parent_link),
+          related_work_link: style_creation_link(@related_work.work.title, @related_child_link),
           work_creators: if @related_work.work.anonymous?
                            t(".anonymous")
                          else
-                           @related_work.work.pseuds.map { |p| style_pseud_link(p) }
-                                                    .to_sentence.html_safe
+                          to_sentence(@related_work.work.pseuds.map { |p| style_pseud_link(p) })
                          end) %>
   </p>
 
   <p>
-    <%= style_link(t(".html.approve_link_text"), related_work_url(@related_work)) %>
+    <%= style_link(t(".approve.html"), related_work_url(@related_work)) %>
   </p>
 
   <p><%= t(".can_come_back") %></p>
