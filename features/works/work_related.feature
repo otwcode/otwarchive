@@ -735,17 +735,41 @@ Scenario: Notification emails for related works are translated
   Given a locale with translated emails
     And I have related works setup
     And the user "inspiration" enables translated emails
+    And the user "encouragement" allows co-creators
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+    And I invite the co-author "encouragement"
+    And I press "Post"
+  Then 1 email should be delivered to "encouragement"
+    And the email should contain "The user inspiration has invited your pseud encouragement to be listed as a co-creator on the following work"
+  When the user "encouragement" accepts all co-creator requests
     And a related work has been posted
-  Then 1 email should be delivered to "inspiration"
+  Then 3 emails should be delivered
+    And "inspiration" should receive 1 email
     And the email to "inspiration" should be translated
     And the email should have "Related work notification" in the subject
+    And "encouragement" should receive 2 emails
+    And the last email to "encouragement" should be non-translated
+    And the last email should have "Related work notification" in the subject
 
 Scenario: Notification emails for translations are translated
 
   Given a locale with translated emails
     And I have related works setup
     And the user "inspiration" enables translated emails
+    And the user "encouragement" allows co-creators
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+    And I invite the co-author "encouragement"
+    And I press "Post"
+  Then 1 email should be delivered to "encouragement"
+    And the email should contain "The user inspiration has invited your pseud encouragement to be listed as a co-creator on the following work"
+  When the user "encouragement" accepts all co-creator requests
     And a translation has been posted
-  Then 1 email should be delivered to "inspiration"
+  Then 3 emails should be delivered
+    And "inspiration" should receive 1 email
     And the email to "inspiration" should be translated
     And the email should have "Related work notification" in the subject
+    And "encouragement" should receive 2 emails
+    And the last email to "encouragement" should be non-translated
+    And the last email should have "Related work notification" in the subject
