@@ -327,10 +327,7 @@ describe CollectionItemsController do
       let(:work) { create(:work) }
 
       let(:collection) do
-        # NB: the `collection_participant` factory actually creates a
-        # collection owner.
-        owner = create(:collection_participant, pseud: archivist.default_pseud)
-        create(:collection, collection_participants: [owner])
+        create(:collection, owner: archivist.default_pseud)
       end
 
       let(:params) do

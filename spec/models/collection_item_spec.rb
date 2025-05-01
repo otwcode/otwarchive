@@ -30,8 +30,7 @@ describe CollectionItem, :ready do
       end
 
       context "when the archivist maintains the collection" do
-        let(:participant) { create(:collection_participant, pseud: archivist.default_pseud) }
-        let(:collection) { create(:collection, collection_participants: [participant]) }
+        let(:collection) { create(:collection, owner: archivist.default_pseud) }
 
         it "automatically approves the item" do
           item = create(:collection_item, item: work, collection: collection)

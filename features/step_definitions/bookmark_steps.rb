@@ -375,10 +375,7 @@ end
 
 When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
   work = Work.find_by(title: title)
-  if !work
-    step %{I post the work "#{title}"}
-    work = Work.find_by(title: title)
-  end
+  work ||= FactoryBot.create(:work, title: title)
   visit work_path(work)
 end
 
