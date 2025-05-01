@@ -613,7 +613,7 @@ describe Work do
         expect { work.remove_author(to_remove) }
           .to raise_error(
             ActiveRecord::RecordInvalid,
-            "Sorry, we can't remove all creators of a work."
+            "Validation failed: Sorry, we can't remove all creators of a work."
           )
       end
     end
