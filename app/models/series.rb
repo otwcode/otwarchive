@@ -177,7 +177,12 @@ class Series < ApplicationRecord
   # make sure that we can handle tricky chapter creatorship cases.
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
-    raise Exception.new("Sorry, we can't remove all authors of a series.") if pseuds_with_author_removed.empty?
+
+    if pseuds_with_author_removed.empty?
+      errors.add(:base, ts("Sorry, we can't remove all creators of a series.")
+      raise ActiveRecord::RecordInvalid, self
+    end
+
     transaction do
       authored_works_in_series = self.works.merge(author_to_remove.works)
 

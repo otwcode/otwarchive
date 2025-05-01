@@ -5,8 +5,8 @@
         <li>
           <% if !@settings || @settings.no_match_required? %>
             <%= button_to ts("Generate Potential Matches"), generate_collection_potential_matches_path(@collection),
-              data: { confirm: ts("Your challenge settings don't require any matching. Assignments will be completely random. Is this what you want?") },
-              method: :post %>
+                  data: { confirm: ts("Your challenge settings don't require any matching. Assignments will be completely random. Is this what you want?") },
+                  method: :post %>
           <% else %>
             <%= button_to ts("Generate Potential Matches"), generate_collection_potential_matches_path(@collection), method: :post %>
           <% end %>
@@ -14,15 +14,15 @@
       <% else %>
         <li><%= submit_tag ts("Save Assignment Changes") %></li>
         <li><%= button_to ts("Regenerate Assignments"), generate_collection_assignments_path(@collection),
-          data: { confirm: ts("Are you sure? This will delete all current assignments.") },
-          method: :post %></li>
+                  data: { confirm: ts("Are you sure? This will delete all current assignments.") },
+                  method: :post %></li>
         <li><%= button_to ts("Regenerate All Potential Matches"), generate_collection_potential_matches_path(@collection),
-          data: { confirm: ts("Are you sure? This will delete all current assignments and potential matches.") },
-          method: :post %></li>
+                  data: { confirm: ts("Are you sure? This will delete all current assignments and potential matches.") },
+                  method: :post %></li>
         <li>
           <%= button_to ts("Send Assignments"), send_out_collection_assignments_path(@collection),
-            data: { confirm: ts("Are you sure? This will send out the currently saved assignments to all participants!") },
-            method: :post %></li>
+                data: { confirm: ts("Are you sure? This will send out the currently saved assignments to all participants!") },
+                method: :post %></li>
       <% end %>
     </ul>
   </div>

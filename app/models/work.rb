@@ -438,7 +438,11 @@ class Work < ApplicationRecord
   # need to update the chapter to add the other creators on the work.
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
-    raise Exception.new("Sorry, we can't remove all creators of a work.") if pseuds_with_author_removed.empty?
+
+    if pseuds_with_author_removed.empty?
+      errors.add(:base, ts("Sorry, we can't remove all creators of a work.")
+      raise ActiveRecord::RecordInvalid, self
+    end
 
     transaction do
       chapters.each do |chapter|

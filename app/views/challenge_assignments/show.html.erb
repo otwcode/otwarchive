@@ -19,7 +19,9 @@
     <li><%= link_to t("challenge_assignments.to_fulfill.button"),
               new_collection_work_path(
                 @challenge_assignment.collection,
-                assignment_id: @challenge_assignment.id) %></li>
+                assignment_id: @challenge_assignment.id
+              ) %>
+    </li>
   </ul>
 <% end %>
 <!--/subnav-->
