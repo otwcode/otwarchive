@@ -440,7 +440,7 @@ class Work < ApplicationRecord
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
 
     if pseuds_with_author_removed.empty?
-      errors.add(:base, ts("Sorry, we can't remove all creators of a work.")
+      errors.add(:base, ts("Sorry, we can't remove all creators of a work."))
       raise ActiveRecord::RecordInvalid, self
     end
 
