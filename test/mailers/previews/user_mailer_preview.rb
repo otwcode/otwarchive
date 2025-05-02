@@ -209,7 +209,7 @@ class UserMailerPreview < ApplicationMailerPreview
     creator_count = params[:creator_count] ? params[:creator_count].to_i : 1
     user = create(:user, :for_mailer_preview)
     parent_work = create(:work, authors: [user.default_pseud], title: "Inspiration")
-    child_work_pseuds = create_list(:user, creator_count).map{ |user| user.default_pseud }
+    child_work_pseuds = create_list(:user, creator_count).map(&:default_pseud)
     child_work = create(:work, authors: child_work_pseuds)
     related_work = create(:related_work, parent_id: parent_work.id, work_id: child_work.id)
     UserMailer.related_work_notification(user.id, related_work.id)
