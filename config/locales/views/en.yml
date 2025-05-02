@@ -526,6 +526,10 @@ en:
   bookmarks:
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
+    index:
+      advanced_search: try our advanced search
+      choose_fandom: choose a fandom
+      recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
   challenge:
     gift_exchange:
       challenge_signups:
@@ -700,6 +704,9 @@ en:
       subtitle: The page was responding too slowly. Please try again after a few minutes.
   external_works:
     notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
+  fandoms:
+    index:
+      page_heading: Fandoms
   feedbacks:
     new:
       abuse:
@@ -1772,6 +1779,10 @@ en:
       read_and_understood: I have read & understood the 2024 Terms of Service, including the Content Policy and Privacy Policy.
       summary_html: On the Archive of Our Own (AO3), users can create works, bookmarks, comments, tags, and other %{content_link}. Any information you publish on AO3 may be accessible by the public, AO3 users, and/or AO3 personnel. Be mindful when sharing personal information, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites.
       tos: Terms of Service
+  media:
+    index:
+      all: All %{media_type}...
+      page_heading: Fandoms
   menu:
     menu_about:
       about_us: About Us
@@ -2368,6 +2379,10 @@ en:
       content_policy: Content Policy
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
+    index:
+      advanced_search: try our advanced search
+      choose_fandom: choose a fandom
+      recent_works_html: These are some of the latest works posted to the Archive. To find more works, %{choose_fandom_link} or %{advanced_search_link}.
     meta:
       original_creators:
         one: 'Original Creator ID:'
