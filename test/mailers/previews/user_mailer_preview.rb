@@ -206,16 +206,20 @@ class UserMailerPreview < ApplicationMailerPreview
   end
 
   def related_work_notification
+    creator_count = params[:creator_count] ? params[:creator_count].to_i : 1
     user = create(:user, :for_mailer_preview)
     parent_work = create(:work, authors: [user.default_pseud], title: "Inspiration")
-    related_work = create(:related_work, parent_id: parent_work.id)
+    child_work_pseuds = create_list(:user, creator_count).map{ |user| user.default_pseud }
+    child_work = create(:work, authors: child_work_pseuds)
+    related_work = create(:related_work, parent_id: parent_work.id, work_id: child_work.id)
     UserMailer.related_work_notification(user.id, related_work.id)
   end
 
   def related_work_notification_anon
     user = create(:user, :for_mailer_preview)
     parent_work = create(:work, authors: [user.default_pseud], title: "Inspiration")
-    related_work = create(:related_work, parent_id: parent_work.id, collections: [create(:anonymous_collection)])
+    child_work = create(:work, collections: [create(:anonymous_collection)])
+    related_work = create(:related_work, parent_id: parent_work.id, work_id: child_work.id)
     UserMailer.related_work_notification(user.id, related_work.id)
   end
 
