@@ -434,11 +434,11 @@ en:
         no_collection: "[%{app_name}] A gift work for you"
     related_work_notification:
       anonymous: an anonymous creator
+      approve:
+        html: Approve relationship and link back to this work from your work
+        text: 'Approve relationship and link back to this work from your work: %{related_work_url}'
       can_come_back: "(You can come back to this page if you change your mind.)"
       subject: "[%{app_name}] Related work notification"
-      approve:
-        text: 'Approve relationship and link back to this work from your work: %{related_work_url}'
-        html: Approve relationship and link back to this work from your work
       work_listed:
         html: Your work %{work_link} was listed as the inspiration of %{related_work_link} by %{work_creators}.
         text: Your work "%{work_title}" (%{work_url}) was listed as the inspiration of "%{related_work_title}" (%{related_work_url}) by %{work_creators}.

@@ -6,7 +6,7 @@
           work_creators: if @related_work.work.anonymous?
                            t(".anonymous")
                          else
-                          to_sentence(@related_work.work.pseuds.map { |p| style_pseud_link(p) })
+                           to_sentence(@related_work.work.pseuds.map { |p| style_pseud_link(p) })
                          end) %>
   </p>
 

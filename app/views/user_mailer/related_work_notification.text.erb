@@ -4,10 +4,10 @@
   related_work_title: @related_work.work.title,
   related_work_url: @related_child_link,
   work_creators: if @related_work.work.anonymous?
-                  t(".anonymous")
-                else
-                  to_sentence(@related_work.work.pseuds.map { |p| text_pseud(p) })
-                end) %>
+                   t(".anonymous")
+                 else
+                   to_sentence(@related_work.work.pseuds.map { |p| text_pseud(p) })
+                 end) %>
 
 <%= t(".approve.text", related_work_url: related_work_url(@related_work)) %>
 
