@@ -126,13 +126,20 @@ Feature: Commenting on admin posts
       And I fill in "comment[email]" with "tester@example.com"
       And I fill in "comment[comment_content]" with "guz guz"
       And I press "Comment"
+    When I am logged in as a "communications" admin
+      And I go to the admin-posts page
+      And I follow "Default Admin Post"
+      And I follow "Unreviewed Comments"
+      And I press "Approve"
+    When I am logged out
+      And I go to the admin-posts page
+      And I follow "Default Admin Post"
     When I follow "Reply"
       And I fill in "comment[name]" with "tester"
       And I fill in "comment[email]" with "tester@example.com"
       And I fill in "comment[comment_content]" with "guz"
       And I press "Comment"
     Then I should see "Comments on this news post are moderated."
-
 
   Scenario: Modifying the comment permissions of an admin post with translations
     Given I have posted an admin post

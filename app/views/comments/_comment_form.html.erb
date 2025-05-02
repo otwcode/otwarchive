@@ -30,7 +30,7 @@
         <p class="notice">
           <% if find_parent(commentable).is_a?(AdminPost) %>
             <%= t("comments.commentable.permissions.moderated_commenting.notice.admin_post") %>
-          <% else  %>
+          <% else %>
             <%= t("comments.commentable.permissions.moderated_commenting.notice.work") %>
           <% end %>
         </p>
