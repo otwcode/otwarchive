@@ -565,3 +565,52 @@ describe "rake After:convert_official_kudos" do
     end
   end
 end
+
+describe "rake After:create_non_canonical_tagset_associations" do
+  shared_examples "no TagSetAssociation is created" do
+    it "does not create a TagSetAssociation" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { TagSetAssociation.count }
+    end
+  end
+
+  context "when a tag is already canonical" do
+    let!(:character) { create(:canonical_character) }
+    let!(:relationship) { create(:canonical_relationship) }
+    let!(:owned_tag_set) { create(:owned_tag_set, tags: [character, relationship]) }
+
+    it_behaves_like "no TagSetAssociation is created"
+  end
+
+  context "when a canonical tag belongs to a canonical fandom" do
+    let!(:character) { create(:common_tagging, common_tag: create(:canonical_character)).common_tag }
+    let!(:relationship) { create(:common_tagging, common_tag: create(:canonical_relationship)).common_tag }
+    let!(:owned_tag_set) { create(:owned_tag_set, tags: [character, relationship]) }
+
+    it_behaves_like "no TagSetAssociation is created"
+  end
+
+  context "when a non-canonical tag belongs to a canonical fandom" do
+    let!(:character) { create(:common_tagging, common_tag: create(:character)).common_tag }
+    let!(:relationship) { create(:common_tagging).common_tag }
+
+    context "when the fandom does not belong to the TagSet" do
+      let!(:owned_tag_set) { create(:owned_tag_set, tags: [character, relationship]) }
+
+      it_behaves_like "no TagSetAssociation is created"
+    end
+
+    context "when the fandom belongs to the TagSet" do
+      let!(:owned_tag_set) do
+        create(:owned_tag_set, tags: [character, character.fandoms, relationship, relationship.fandoms].flatten)
+      end
+
+      it "creates a TagSetAssociation for each tag" do
+        subject.invoke
+        expect(TagSetAssociation.where(tag: character, owned_tag_set: owned_tag_set)).to exist
+        expect(TagSetAssociation.where(tag: relationship, owned_tag_set: owned_tag_set)).to exist
+      end
+    end
+  end
+end
