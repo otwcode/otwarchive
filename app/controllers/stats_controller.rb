@@ -3,7 +3,7 @@ class StatsController < ApplicationController
   before_action :users_only
   before_action :load_user
   before_action :check_ownership
-  
+
   # only the current user
   def load_user
     @user = current_user
@@ -12,20 +12,17 @@ class StatsController < ApplicationController
 
   # gather statistics for the user on all their works
   def index
-    user_works = Work.joins(pseuds: :user).where("users.id = ?", @user.id).where(posted: true)
-    work_query = user_works.joins(:taggings).
-      joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
-      select("distinct tags.name as fandom,
-              works.id as id,
-              works.title as title,
-              works.revised_at as date,
-              works.word_count as word_count")
+    user_works = Work.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
+    user_chapters = Chapter.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
+    work_query = user_works.joins(:taggings)
+                           .joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'")
+                           .select("distinct tags.name as fandom, works.id as id, works.title as title")
 
     # sort
 
     # NOTE: Because we are going to be eval'ing the @sort variable later we MUST make sure that its content is
     # checked against the allowlist of valid options
-    sort_options = %w(hits date kudos.count comment_thread_count bookmarks.count subscriptions.count word_count)
+    sort_options = %w[hits date kudos.count comment_thread_count bookmarks.count subscriptions.count word_count]
     @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
 
     @dir = params[:sort_direction] == "ASC" ? "ASC" : "DESC"
@@ -33,20 +30,25 @@ class StatsController < ApplicationController
     params[:sort_direction] = @dir
 
     # gather works and sort by specified count
-    @years = ["All Years"] + user_works.pluck(:revised_at).map {|date| date.year.to_s}.uniq.sort
+    @years = ["All Years"] + user_chapters.pluck(:published_at).map { |date| date.year.to_s }
+      .uniq.sort
     @current_year = @years.include?(params[:year]) ? params[:year] : "All Years"
-    if @current_year != "All Years"
+    if @current_year == "All Years"
+      work_query = work_query.select("works.revised_at as date, works.word_count as word_count")
+    else
       next_year = @current_year.to_i + 1
       start_date = DateTime.parse("01/01/#{@current_year}")
       end_date = DateTime.parse("01/01/#{next_year}")
-      work_query = work_query.where("works.revised_at >= ? AND works.revised_at <= ?", start_date, end_date)
+      work_query = work_query
+                     .joins(:chapters)
+                     .where("chapters.posted = 1 AND chapters.published_at >= ? AND chapters.published_at <= ?", start_date, end_date)
+                     .select("convert(MAX(chapters.published_at), datetime) as date, SUM(chapters.word_count) as word_count")
+                     .group(:id)
     end
     works = work_query.all.sort_by { |w| @dir == "ASC" ? (stat_element(w, @sort) || 0) : (0 - (stat_element(w, @sort) || 0).to_i) }
 
     # on the off-chance a new user decides to look at their stats and have no works
-    if works.blank?
-      render "no_stats" and return
-    end
+    render "no_stats" and return if works.blank?
 
     # group by fandom or flat view
     if params[:flat_view]
@@ -96,7 +98,7 @@ class StatsController < ApplicationController
     options = {
       colors: ["#993333"],
       title: chart_title,
-      vAxis: { 
+      vAxis: {
         viewWindow: { min: 0 }
       }
     }
