@@ -234,6 +234,14 @@ describe TagsController do
       get :feed, params: { id: @tag.id, format: :atom }
       it_redirects_to(tag_works_path(tag_id: @tag.name))
     end
+
+    context "when tag doesn't exist" do
+      it "raises an error" do
+        expect do
+          get :feed, params: { id: "notatag", format: "atom" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
 
   describe "new" do 
