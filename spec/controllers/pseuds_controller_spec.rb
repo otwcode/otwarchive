@@ -62,13 +62,13 @@ describe PseudsController do
       context "when pseud_id does not exist" do
         it "raises an error" do
           expect do
-            get :show, params: { user_id: user, pseud_id: "nonexistent_pseud" }
+            get :show, params: { user_id: user, id: "nonexistent_pseud" }
           end.to raise_error ActiveRecord::RecordNotFound
         end
       end
     end
   end
-  
+
   describe "edit" do
     subject { -> { get :edit, params: { user_id: user, id: pseud } } }
 
