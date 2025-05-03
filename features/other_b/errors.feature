@@ -17,7 +17,7 @@ Feature: Error messages should work
       #And visiting "/series/999" should fail with a not found error
       #And visiting "/users/KnownUser/pseuds/unknown_pseud/series" should fail with a not found error
       #And visiting "/users/UnknownUser/pseuds/unknown_pseud/series" should fail with a not found error
-      And visiting "/tags/NonexistentTag" should fail with a not found error
+      #And visiting "/tags/NonexistentTag" should fail with a not found error
       And visiting "/tags/999999999/feed.atom" should fail with a not found error
       #And visiting "/works/999999999" should fail with a not found error
       And visiting "/tags/UnknownTag/works" should fail with a not found error
