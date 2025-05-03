@@ -251,4 +251,13 @@ describe PseudsController do
       it_behaves_like "an action admins can't access"
     end
   end
+
+  describe "index" do
+    context "when user_id does not exist" do
+      it "redirects without an error" do
+        get :index, params: { user_id: "nonexistent_user" }
+        redirect_to(search_people_path)
+      end
+    end
+  end
 end
