@@ -13,7 +13,7 @@ Feature: Error messages should work
       #And visiting "/tags/UnknownTag/bookmarks" should fail with a not found error
       #And visiting "/collections/unknowncollection" should fail with a not found error
       And visiting "/media/UnknownMediaType/fandoms" should fail with a not found error
-      And visiting "/users/KnownUser/pseuds/unknown_pseud" should fail with a not found error
+      #And visiting "/users/KnownUser/pseuds/unknown_pseud" should fail with a not found error
       #And visiting "/series/999" should fail with a not found error
       #And visiting "/users/KnownUser/pseuds/unknown_pseud/series" should fail with a not found error
       #And visiting "/users/UnknownUser/pseuds/unknown_pseud/series" should fail with a not found error

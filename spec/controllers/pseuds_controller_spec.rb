@@ -57,6 +57,18 @@ describe PseudsController do
   let(:user) { create(:user) }
   let(:pseud) { user.pseuds.first }
 
+  describe "show" do
+    context "when user_id exists" do
+      context "when pseud_id does not exist" do
+        it "raises an error" do
+          expect do
+            get :show, params: { user_id: user, pseud_id: "nonexistent_pseud" }
+          end.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+    end
+  end
+  
   describe "edit" do
     subject { -> { get :edit, params: { user_id: user, id: pseud } } }
 
