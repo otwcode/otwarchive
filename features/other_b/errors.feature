@@ -21,8 +21,8 @@ Feature: Error messages should work
       #And visiting "/tags/999999999/feed.atom" should fail with a not found error
       #And visiting "/works/999999999" should fail with a not found error
       And visiting "/tags/UnknownTag/works" should fail with a not found error
-    When I am logged in as "wranglerette"
-      And visiting "/tags/NonexistentTag/edit" should fail with a not found error
+    #When I am logged in as "wranglerette"
+      #And visiting "/tags/NonexistentTag/edit" should fail with a not found error
 
   Scenario: Error messages should be able to display '^'
     Given I am logged in as a random user

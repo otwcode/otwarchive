@@ -350,6 +350,14 @@ describe TagsController do
                                    "Please log in as admin")
       end
     end
+    
+    context "when tag doesn't exist" do
+      it "raises an error" do
+        expect do
+          get :edit, params: { id: "notatag" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
 
   describe "update" do
