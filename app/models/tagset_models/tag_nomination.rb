@@ -68,19 +68,16 @@ class TagNomination < ApplicationRecord
 
   before_save :set_parented, unless: :blank_tagname?
   def set_parented
-    if type == "FreeformNomination"
-      # skip freeforms
-      self.parented = true
-    elsif (tag = Tag.find_by_name(tagname)) &&
-      ((!tag.parents.empty? && get_parent_tagname.blank?) || tag.parents.collect(&:name).include?(get_parent_tagname))
-      # if this is an existing tag and has matching parents, or no parent specified and it already has one
-      self.parented = true
-      self.parent_tagname ||= get_parent_tagname
-    else
+    tag = Tag.find_by(name: tagname)
+    unless tag
       self.parented = false
-      self.parent_tagname ||= get_parent_tagname
+      return
     end
-    true
+
+    self.parent_tagname ||= get_parent_tagname
+    self.parented = tag.canonical? &&
+                    ((!tag.parents.empty? && self.parent_tagname.blank?) ||
+                      tag.parents.pluck(:name).include?(self.parent_tagname))
   end
 
   # sneaky bit: if the tag set moderator has already rejected or approved this tag, don't
