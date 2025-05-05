@@ -555,6 +555,8 @@ namespace :After do
         fandoms = tag.fandoms.joins(:set_taggings).where(canonical: true, set_taggings: { tag_set_id: set_tagging.tag_set.id })
         fandoms.find_each do |fandom|
           TagSetAssociation.create!(owned_tag_set: owned_tag_set, tag: tag, parent_tag: fandom)
+        rescue ActiveRecord::RecordInvalid
+          puts "Association already exists for fandom '#{fandom.name}' and tag '#{tag.name}'"
         end
       end
     end

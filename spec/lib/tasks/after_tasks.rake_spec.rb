@@ -612,5 +612,20 @@ describe "rake After:create_non_canonical_tagset_associations" do
         expect(TagSetAssociation.where(tag: relationship, owned_tag_set: owned_tag_set)).to exist
       end
     end
+
+    context "when a TagSetAssociation already exists for the fandom and tag" do
+      let!(:owned_tag_set) do
+        create(:owned_tag_set, tags: [character, character.fandoms, relationship, relationship.fandoms].flatten)
+      end
+
+      before do
+        create(:tag_set_association,
+               owned_tag_set: owned_tag_set, tag: character, parent_tag: character.fandoms.first)
+        create(:tag_set_association,
+               owned_tag_set: owned_tag_set, tag: relationship, parent_tag: relationship.fandoms.first)
+      end
+
+      it_behaves_like "no TagSetAssociation is created"
+    end
   end
 end
