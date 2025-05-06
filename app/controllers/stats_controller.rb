@@ -14,9 +14,10 @@ class StatsController < ApplicationController
   def index
     user_works = Work.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
     user_chapters = Chapter.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
-    work_query = user_works.joins(:taggings)
-                           .joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'")
-                           .select("distinct tags.name as fandom, works.id as id, works.title as title")
+    work_query = user_works
+      .joins(:taggings)
+      .joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'")
+      .select("distinct tags.name as fandom, works.id as id, works.title as title")
 
     # sort
 
@@ -40,10 +41,10 @@ class StatsController < ApplicationController
       start_date = DateTime.parse("01/01/#{@current_year}")
       end_date = DateTime.parse("01/01/#{next_year}")
       work_query = work_query
-                     .joins(:chapters)
-                     .where("chapters.posted = 1 AND chapters.published_at >= ? AND chapters.published_at < ?", start_date, end_date)
-                     .select("convert(MAX(chapters.published_at), datetime) as date, SUM(chapters.word_count) as word_count")
-                     .group(:id)
+        .joins(:chapters)
+        .where("chapters.posted = 1 AND chapters.published_at >= ? AND chapters.published_at < ?", start_date, end_date)
+        .select("convert(MAX(chapters.published_at), datetime) as date, SUM(chapters.word_count) as word_count")
+        .group(:id)
     end
     works = work_query.all.sort_by { |w| @dir == "ASC" ? (stat_element(w, @sort) || 0) : (0 - (stat_element(w, @sort) || 0).to_i) }
 
