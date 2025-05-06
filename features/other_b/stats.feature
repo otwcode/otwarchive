@@ -69,5 +69,5 @@ Feature: User statistics
     And I follow "2023"
     And I follow "Flat View"
     And I follow "Date"
-    Then "New-Year Celebration" should appear before "Midyear Madness"
-    Then "Midyear Madness" should appear before "Year-End Party"
+  Then "New-Year Celebration" should appear before "Midyear Madness"
+    And "Midyear Madness" should appear before "Year-End Party"
