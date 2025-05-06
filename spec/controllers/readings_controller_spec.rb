@@ -150,19 +150,19 @@ describe ReadingsController do
 
   describe "DELETE #clear" do
     context "when logged in as the user" do
+      let!(:reading1) { create(:reading, user: user) }
+      let!(:reading2) { create(:reading, user: user) }
+
       before do
         fake_login_known_user(user)
       end
 
       it "clears all readings and redirects with success notice" do
-        reading1 = create(:reading, user: user)
-        reading2 = create(:reading, user: user)
-
         delete :clear, params: { user_id: user }
 
         it_redirects_to_with_notice(
           user_readings_path(user),
-          I18n.t("readings.clear.success")
+          "Your history is now cleared."
         )
 
         expect do
@@ -175,17 +175,13 @@ describe ReadingsController do
       end
 
       it "failure to clear readings sets flash error" do
-        create(:reading, user: user)
-
-        error_message = "Cannot destroy reading"
-
-        allow_any_instance_of(Reading).to receive(:destroy!).and_raise(ActiveRecord::RecordNotDestroyed.new(error_message))
+        allow_any_instance_of(Reading).to receive(:destroy!).and_raise(ActiveRecord::RecordNotDestroyed.new)
 
         delete :clear, params: { user_id: user }
 
         it_redirects_to_with_error(
           user_readings_path(user),
-          [I18n.t("readings.clear.error", message: error_message)]
+          "There were problems deleting your history. Please try again later."
         )
       end
     end

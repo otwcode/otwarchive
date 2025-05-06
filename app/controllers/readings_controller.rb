@@ -40,18 +40,18 @@ class ReadingsController < ApplicationController
   end
 
   def clear
-    @errors = []
+    success = true
 
     @user.readings.each do |reading|
       reading.destroy!
-    rescue ActiveRecord::RecordNotDestroyed => e
-      @errors << t(".error", message: e.message)
+    rescue ActiveRecord::RecordNotDestroyed
+      success = false
     end
 
-    if @errors.any?
-      flash[:error] = @errors
-    else
+    if success
       flash[:notice] = t(".success")
+    else
+      flash[:error] = t(".error")
     end
 
     redirect_to user_readings_path(current_user)

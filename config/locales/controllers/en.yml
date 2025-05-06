@@ -180,7 +180,7 @@ en:
       success: Question order has been successfully updated.
   readings:
     clear:
-      error: 'There were problems deleting your history: %{message}'
+      error: There were problems deleting your history. Please try again later.
       success: Your history is now cleared.
   related_works:
     index:
