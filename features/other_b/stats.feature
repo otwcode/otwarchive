@@ -57,7 +57,7 @@ Feature: User statistics
     And I set the publication date to 1 January 2023
     And I press "Post"
     And I follow "Add Chapter"
-    And I set the publication date to 2 January 2024
+    And I set the publication date to 1 January 2024
     And I press "Post"
     And I set up the draft "Year-End Party"
     And I set the publication date to 9 December 2023

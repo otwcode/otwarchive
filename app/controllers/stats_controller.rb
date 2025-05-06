@@ -41,7 +41,7 @@ class StatsController < ApplicationController
       end_date = DateTime.parse("01/01/#{next_year}")
       work_query = work_query
                      .joins(:chapters)
-                     .where("chapters.posted = 1 AND chapters.published_at >= ? AND chapters.published_at <= ?", start_date, end_date)
+                     .where("chapters.posted = 1 AND chapters.published_at >= ? AND chapters.published_at < ?", start_date, end_date)
                      .select("convert(MAX(chapters.published_at), datetime) as date, SUM(chapters.word_count) as word_count")
                      .group(:id)
     end
