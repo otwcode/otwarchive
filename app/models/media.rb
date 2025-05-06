@@ -5,12 +5,12 @@ class Media < Tag
   has_many :fandoms, -> { where(type: 'Fandom') }, through: :common_taggings, source: :common_tag
 
   after_create :expire_caches
-  after_update :expire_caches, if: -> { :saved_change_to_name? || :saved_change_to_type? }
+  after_update :expire_caches, if: -> { :saved_change_to_name? || :saved_change_to_type? || :saved_changed_to_canonical? }
   after_destroy :expire_caches
 
   def expire_caches
-    ActionController::Base.new.expire_fragment("menu-fandoms-version4")
-    ActionController::Base.new.expire_fragment("homepage-fandoms-version1")
+    ActionController::Base.new.expire_fragment("menu-fandoms-version5")
+    ActionController::Base.new.expire_fragment("homepage-fandoms-version2")
   end
 
   def child_types
@@ -28,7 +28,7 @@ class Media < Tag
   # Media" and "Uncategorized Fandoms" are listed in order, and then
   # "Uncategorized Fandoms" is tacked onto the list at the end.
   def self.for_menu
-    by_name.where.not(
+    canonical.by_name.where.not(
       name: [ArchiveConfig.MEDIA_UNCATEGORIZED_NAME,
              ArchiveConfig.MEDIA_NO_TAG_NAME]
     ).to_a + [uncategorized]

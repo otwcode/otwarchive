@@ -232,10 +232,19 @@ Given "I create the canonical media tag {string}" do |name|
   click_button("Create Tag")
 end
 
+Given "I create the non-canonical media tag {string}" do |name|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(new_tag_path)
+  fill_in("Name", with: name)
+  choose("Media")
+  click_button("Create Tag")
+end
+
 Given "I recategorize the {string} fandom as a {string} tag" do |name, tag_type|
   step %{I am logged in as a "tag_wrangling" admin}
   visit(edit_tag_path(Fandom.create(name: name)))
   select(tag_type, from: "tag_type")
+  check("Canonical")
   click_button("Save changes")
 end
 
