@@ -174,7 +174,7 @@ class UserMailer < ApplicationMailer
   def invalid_signup_notification(collection_id, invalid_signup_ids, email)
     @collection = Collection.find(collection_id)
     @invalid_signups = invalid_signup_ids
-    @is_collection_email = (email === @collection.collection_email)
+    @is_collection_email = (email == @collection.collection_email)
     mail(
       to: email,
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
