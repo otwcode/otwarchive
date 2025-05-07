@@ -77,8 +77,8 @@ class TagNomination < ApplicationRecord
     end
 
     self.parented = tag.canonical? &&
-                    ((!tag.parents.empty? && self.parent_tagname.blank?) ||
-                      tag.parents.pluck(:name).include?(self.parent_tagname))
+                    ((!tag.parents.empty? && get_parent_tagname.blank?) ||
+                      tag.parents.pluck(:name).include?(get_parent_tagname))
   end
 
   # sneaky bit: if the tag set moderator has already rejected or approved this tag, don't
