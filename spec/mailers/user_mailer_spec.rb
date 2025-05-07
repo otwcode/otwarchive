@@ -1072,13 +1072,13 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("invalid sign-ups in your challenge <")
+        expect(email).to have_html_part_content("invalid sign-ups in your gift exchange <")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("invalid sign-ups in your challenge \"#{collection.title}\"")
+        expect(email).to have_text_part_content("invalid sign-ups in your gift exchange \"#{collection.title}\"")
       end
     end
   end
