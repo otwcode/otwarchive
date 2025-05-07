@@ -44,6 +44,13 @@ en:
         text: A guest left kudos on "%{commentable_title}" (%{commentable_url}).
       subject: "[%{app_name}] You've got kudos!"
   mailer:
+    collections:
+      why_collection_email:
+        html: You're receiving this email because your email address has been listed as the collection email for the collection %{collection_link}.
+        text: You're receiving this email because your email address has been listed as the collection email for the collection "%{collection_title}" (%{collection_url}).
+      why_maintainer:
+        html: You're receiving this email because you are an owner or moderator of the collection %{collection_link}.
+        text: You're receiving this email because you are an owner or moderator of the collection "%{collection_title}" (%{collection_url}).
     general:
       closing:
         formal: Sincerely,
@@ -366,6 +373,16 @@ en:
       additional_ticket: If you have additional questions or information, do not hesitate to send in another ticket.
       introduction: 'We''re working hard to reply to everyone, and we''ll respond to you as soon as we can. Your communication is greatly valued, and it will be reviewed and answered by our volunteer Support team. In the meantime, here is a copy of the information you submitted through the Technical Support and Feedback form:'
       subject: "[%{app_name}] Support - %{summary}"
+    invalid_signup_notification:
+      found_invalid:
+        html: We have found some invalid sign-ups in your gift exchange %{collection_link}. Potential matches can't be generated until these are cleaned up.
+        text: We have found some invalid sign-ups in your gift exchange "%{collection_title}" (%{collection_url}). Potential matches can't be generated until these are cleaned up.
+      see_details:
+        help_link_text: the challenge matching help
+        html: Invalid sign-ups may be duplicates, or may not meet the requirements you've set for your challenge. Unfortunately, there is no automatic way to fix them, so you will have to manually edit or delete them. For more details, refer to %{help_link}.
+        text: 'Invalid sign-ups may be duplicates, or may not meet the requirements you''ve set for your challenge. Unfortunately, there is no automatic way to fix them, so you will have to manually edit or delete them. For more details, refer to the challenge matching help: %{help_url}.'
+      signups_here: 'Here are the invalid sign-ups:'
+      subject: "[%{app_name}] Invalid sign-ups found"
     invitation:
       been_invited: You've been invited to join the Archive of Our Own!
       features: With an account, you can post fanworks, use bookmarks to keep track of works you enjoyed, receive subscription emails when your favorite creators or works update, customize the way the site looks for you, and more!
