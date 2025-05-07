@@ -204,12 +204,10 @@ module MailerHelper
   def collection_footer_note_html(is_collection_email, collection)
     if (is_collection_email)
       t("mailer.collections.why_collection_email.html",
-        collection_link: style_footer_link(collection.title, collection_url(collection))
-      )
+        collection_link: style_footer_link(collection.title, collection_url(collection)))
     else
       t("mailer.collections.why_maintainer.html",
-        collection_link: style_footer_link(collection.title, collection_url(collection))
-      )
+        collection_link: style_footer_link(collection.title, collection_url(collection)))
     end
   end
 
@@ -218,12 +216,12 @@ module MailerHelper
       t("mailer.collections.why_collection_email.text",
         collection_title: collection.title,
         collection_url: collection_url(collection)
-      )
+       )
     else
       t("mailer.collections.why_maintainer.text",
         collection_title: collection.title,
         collection_url: collection_url(collection)
-      )
+       )
     end
   end
 
