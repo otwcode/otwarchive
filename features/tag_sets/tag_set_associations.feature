@@ -52,9 +52,6 @@ Feature: Reviewing tag set associations
   Then I should see "What tag set did you want to look at?"
     And I should be on the tagsets page
 
-  # TODO
-  # Scenario: Tags with brackets should work in associations
-
   Scenario: Nominating a canonical tag in its fandom does not generate associations for review
     Given a canonical character "Jack Carter" in fandom "Eureka"
       And I nominate and approve fandom "Eureka" and character "Jack Carter" in "Canonical Associations"
@@ -123,3 +120,6 @@ Feature: Reviewing tag set associations
       And I review associations for "New Associations"
     Then I should see "Jack Stark → Eureka"
       And I should see "Nathan Stark → Eureka"
+
+  # TODO
+  # Scenario: Tags with brackets should work in associations
