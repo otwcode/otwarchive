@@ -84,6 +84,27 @@ Feature: Reviewing tag set associations
       And I review associations for "Non-canonical Associations"
     Then I should see "Nathan Carter → Eureka"
 
+  Scenario: When a nominated non-canonical is renamed, its associations remain for review
+    Given a canonical character "Jack Carter" in fandom "Eureka"
+      And a canonical character "Nathan Stark" in fandom "Eureka"
+      And a synonym "nathan carter" of the tag "Nathan Stark"
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "Non-canonical Associations" with 1 fandom nom and 2 character noms
+      And I nominate fandom "Eureka" and characters "Jack Carter,nathan carter" in "Non-canonical Associations" as "tagsetter"
+    When I am logged in as a tag wrangler
+      And I edit the tag "nathan carter"
+      And I fill in "Name" with "Nathan Carter"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+    When I am logged in as "tagsetter"
+      And I review nominations for "Non-canonical Associations"
+      And I check "fandom_approve_Eureka"
+      And I check "character_approve_Jack_Carter"
+      And I check "character_approve_nathan_carter"
+      And I press "Submit"
+      And I review associations for "Non-canonical Associations"
+    Then I should see "Nathan Carter → Eureka"
+
   Scenario: Nominating a new tag in a fandom generates associations for review
     Given a canonical fandom "Eureka"
       And I am logged in as "tagsetter"
