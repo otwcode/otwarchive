@@ -4,6 +4,14 @@ require "spec_helper"
 
 describe TagNomination do
   describe "#set_parented" do
+    context "when the nominated tag is a freeform" do
+      let(:nomination) { create(:tag_nomination, type: "FreeformNomination", tagname: generate(:tag_name)) }
+
+      it "sets parented to true" do
+        expect(nomination.parented).to be(true)
+      end
+    end
+
     context "when the nominated tag does not already exist" do
       let(:nomination) { create(:tag_nomination, tagname: generate(:tag_name)) }
 

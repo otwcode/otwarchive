@@ -68,6 +68,8 @@ class TagNomination < ApplicationRecord
 
   before_save :set_parented, unless: :blank_tagname?
   def set_parented
+    self.parented = true and return if type == "FreeformNomination"
+
     self.parent_tagname ||= get_parent_tagname
 
     tag = Tag.find_by(name: tagname)
