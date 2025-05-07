@@ -73,6 +73,7 @@ services:
       dockerfile: ./config/docker/Dockerfile
     environment:
       - RAILS_ENV=development
+      - RACK_TIMEOUT_SERVICE_TIMEOUT=0
       - GITPOD_WORKSPACE_ID=${GITPOD_WORKSPACE_ID:-}
       - GITPOD_WORKSPACE_CLUSTER_HOST=${GITPOD_WORKSPACE_CLUSTER_HOST:-}
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
