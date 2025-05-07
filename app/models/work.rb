@@ -611,6 +611,14 @@ class Work < ApplicationRecord
     self.invalidate_work_chapter_count(self)
     return if self.posted? && !chapter.posted?
 
+    unless self.posted_changed?
+      if chapter.posted_changed?
+        self.major_version = self.major_version + 1
+      else
+        self.minor_version = self.minor_version + 1
+      end
+    end
+
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.current
       self.set_revised_at(Time.current) # a new chapter is being posted, so most recent update is now
     else

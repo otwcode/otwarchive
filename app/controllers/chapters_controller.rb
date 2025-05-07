@@ -117,7 +117,6 @@ class ChaptersController < ApplicationController
     if params[:edit_button] || chapter_cannot_be_saved?
       render :new
     else # :post_without_preview or :preview
-      @work.major_version = @work.major_version + 1
       @chapter.posted = true if params[:post_without_preview_button]
       @work.set_revised_at_by_chapter(@chapter)
       if @chapter.save && @work.save
@@ -157,7 +156,6 @@ class ChaptersController < ApplicationController
       end
       render :preview
     else
-      @work.minor_version = @work.minor_version + 1
       @chapter.posted = true if params[:post_button] || params[:post_without_preview_button]
       posted_changed = @chapter.posted_changed?
       @work.set_revised_at_by_chapter(@chapter)
@@ -224,7 +222,7 @@ class ChaptersController < ApplicationController
 
     was_draft = !@chapter.posted?
     if @chapter.destroy
-      @work.minor_version = @work.minor_version + 1
+      @work.minor_version = @work.minor_version + 1 unless was_draft
       @work.set_revised_at
       @work.save
       flash[:notice] = ts("The chapter #{was_draft ? 'draft ' : ''}was successfully deleted.")

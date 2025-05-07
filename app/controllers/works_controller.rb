@@ -395,7 +395,6 @@ class WorksController < ApplicationController
       @work.set_revised_at_by_chapter(@chapter)
       posted_changed = @work.posted_changed?
 
-      @work.minor_version = @work.minor_version + 1
       if @chapter.save && @work.save
         flash[:notice] = ts("Work was successfully #{posted_changed ? 'posted' : 'updated'}.")
         if posted_changed
