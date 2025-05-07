@@ -54,3 +54,51 @@ Feature: Reviewing tag set associations
 
   # TODO
   # Scenario: Tags with brackets should work in associations
+
+  Scenario: Nominating a canonical tag in its fandom does not generate associations for review
+    Given a canonical character "Jack Carter" in fandom "Eureka"
+      And I nominate and approve fandom "Eureka" and character "Jack Carter" in "Canonical Associations"
+    When I review associations for "Canonical Associations"
+    Then I should not see "Jack Carter"
+      And I should not see "Eureka"
+
+  Scenario: Nominating a canonical tag in another fandom generates associations for review
+    Given a canonical character "Nathan Stark" in fandom "Eureka"
+      And I nominate and approve fandom "Iron Man" and character "Nathan Stark" in "Canonical Associations"
+    When I review associations for "Canonical Associations"
+    Then I should see "Nathan Stark → Iron Man"
+      But I should not see "Eureka"
+
+  Scenario: Nominating a non-canonical tag in its own fandom generates associations for review
+    Given a canonical character "Jack Carter" in fandom "Eureka"
+      And a canonical character "Nathan Stark" in fandom "Eureka"
+      And a synonym "Nathan Carter" of the tag "Nathan Stark"
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "Non-canonical Associations" with 1 fandom nom and 2 character noms
+      And I nominate fandom "Eureka" and characters "Jack Carter,Nathan Carter" in "Non-canonical Associations" as "tagsetter"
+    When I review nominations for "Non-canonical Associations"
+      And I check "fandom_approve_Eureka"
+      And I check "character_approve_Jack_Carter"
+      And I check "character_approve_Nathan_Carter"
+      And I press "Submit"
+      And I review associations for "Non-canonical Associations"
+    Then I should see "Nathan Carter → Eureka"
+
+  Scenario: Nominating a new tag in a fandom generates associations for review
+    Given a canonical fandom "Eureka"
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "New Associations" with 1 fandom nom and 2 character noms
+      And I nominate fandom "Eureka" and character "Jack Stark" in "New Associations" as "tagsetter"
+    When I review nominations for "New Associations"
+      And I check "fandom_approve_Eureka"
+      And I press "Submit"
+      And I edit nominations for "tagsetter" in "New Associations" to include characters "Jack Stark,Nathan Stark" under fandom "Eureka"
+      And I review nominations for "New Associations"
+    Then I should see "Jack Stark"
+      And I should see "Nathan Stark"
+    When I check "character_approve_Jack_Stark"
+      And I check "character_approve_Nathan_Stark"
+      And I press "Submit"
+      And I review associations for "New Associations"
+    Then I should see "Jack Stark → Eureka"
+      And I should see "Nathan Stark → Eureka"

@@ -68,13 +68,14 @@ class TagNomination < ApplicationRecord
 
   before_save :set_parented, unless: :blank_tagname?
   def set_parented
+    self.parent_tagname ||= get_parent_tagname
+
     tag = Tag.find_by(name: tagname)
     unless tag
       self.parented = false
       return
     end
 
-    self.parent_tagname ||= get_parent_tagname
     self.parented = tag.canonical? &&
                     ((!tag.parents.empty? && self.parent_tagname.blank?) ||
                       tag.parents.pluck(:name).include?(self.parent_tagname))
