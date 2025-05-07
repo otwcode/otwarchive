@@ -5,7 +5,7 @@ class Media < Tag
   has_many :fandoms, -> { where(type: 'Fandom') }, through: :common_taggings, source: :common_tag
 
   after_create :expire_caches
-  after_update :expire_caches, if: -> { :saved_change_to_name? || :saved_change_to_type? || :saved_changed_to_canonical? }
+  after_update :expire_caches, if: -> { saved_change_to_name? || saved_change_to_type? || saved_change_to_canonical? }
   after_destroy :expire_caches
 
   def expire_caches
