@@ -108,6 +108,13 @@ Given /^a (non-?canonical|canonical) (\w+) "([^\"]*)"$/ do |canonical_status, ta
   t.save
 end
 
+Given "a non-canonical character {string} in fandom {string}" do |character_name, fandom_name|
+  character = Character.where(name: character_name).first_or_create
+  character.update!(canonical: false)
+  fandom = Fandom.where(name: fandom_name).first_or_create
+  character.add_association(fandom)
+end
+
 Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
   merger = Tag.find_by_name(merger)
   merger_type = merger.type
