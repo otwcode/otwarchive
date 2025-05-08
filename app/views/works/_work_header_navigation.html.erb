@@ -48,6 +48,8 @@
 
 
   <% # for users, bookmark and mark to read later %>
+  <%# i18n-tasks-use t("works.work_header_navigation.mark_as_read") %>
+  <%# i18n-tasks-use t("works.work_header_navigation.mark_for_later") %>
   <% if current_user.is_a?(User) %>
     <% @bookmark ||= bookmark_if_exists(@work) %>
     <li class="bookmark">
@@ -58,9 +60,9 @@
     <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
     <li class="mark">
       <% if marked_for_later?(@work) %>
-        <%= mark_as_read_link(@work) %>
+        <%= mark_as_read_button(@work) %>
       <% else %>
-        <%= mark_for_later_link(@work) %>
+        <%= mark_for_later_button(@work) %>
       <% end %>
     </li>
     <% end %>

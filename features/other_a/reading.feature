@@ -106,14 +106,14 @@ Feature: Reading count
     And I am logged in as "reader"
     And I view the work "Testy"
   Then I should see "Mark for Later"
-  When I follow "Mark for Later"
+  When I press "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
     And I go to reader's reading page
   Then I should see "Testy"
     And I should see "(Marked for Later.)"
   When I view the work "Testy"
   Then I should see "Mark as Read"
-  When I follow "Mark as Read"
+  When I press "Mark as Read"
   Then I should see "This work was removed from your Marked for Later list."
     And I go to reader's reading page
   Then I should see "Testy"
@@ -160,7 +160,7 @@ Feature: Reading count
     And I should see "Visited 3 times"
   When I view the work "multichapter work"
     And I follow "Next Chapter"
-  When I follow "Mark for Later"
+  When I press "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
     And the readings are saved to the database
     And I go to fandomer's reading page
@@ -254,7 +254,7 @@ Feature: Reading count
   When I am logged in as "reader"
     And I view the work "Testy"
   Then I should see "Mark for Later"
-  When I follow "Mark for Later"
+  When I press "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
   When I am logged in as a "policy_and_abuse" admin
     And I view the work "Testy"
