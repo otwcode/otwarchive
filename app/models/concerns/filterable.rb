@@ -66,41 +66,30 @@ module Filterable
     (tags.pluck(:name) + filters.pluck(:name)).uniq
   end
 
-  # Index all the filters for pulling works
-  def filter_ids
-    (tags.pluck(:id) + filters.pluck(:id)).uniq
-  end
+  # Restricted tags only really apply to series, as works are either fully
+  # restricted or fully public. We define the various visibility-based methods
+  # to be the same here, and they are overridden in the Series class.
+  %w[restricted public].each do |visibility|
+    alias_method :"tags_#{visibility}", :tag
 
-  # Index only direct filters (non meta-tags) for facets
-  def filters_for_facets
-    @filters_for_facets ||= direct_filters.to_a
-  end
+    # Index all the filters for pulling works
+    define_method("filter_ids_#{visibility}") do
+      (tags.pluck(:id) + filters.pluck(:id)).uniq
+    end
 
-  def rating_ids
-    filters_for_facets.select { |t| t.type == "Rating" }.map(&:id)
-  end
+    # Index only direct filters (non meta-tags) for facets
+    define_method("filters_for_facets_#{visibility}") do
+      cache_variable = "@filters_for_facets_#{visibility}"
+      instance_variable_set(cache_variable, direct_filters.to_a) unless instance_variable_defined?(cache_variable)
+      instance_variable_get(cache_variable)
+    end
 
-  def archive_warning_ids
-    filters_for_facets.select { |t| t.type == "ArchiveWarning" }.map(&:id)
-  end
-
-  def category_ids
-    filters_for_facets.select { |t| t.type == "Category" }.map(&:id)
-  end
-
-  def fandom_ids
-    filters_for_facets.select { |t| t.type == "Fandom" }.map(&:id)
-  end
-
-  def character_ids
-    filters_for_facets.select { |t| t.type == "Character" }.map(&:id)
-  end
-
-  def relationship_ids
-    filters_for_facets.select { |t| t.type == "Relationship" }.map(&:id)
-  end
-
-  def freeform_ids
-    filters_for_facets.select { |t| t.type == "Freeform" }.map(&:id)
+    %w[archive_warning category character fandom freeform rating relationship].each do |tag_type|
+      define_method("#{tag_type}_ids_#{visibility}") do
+        send("filters_for_facets_#{visibility}")
+          .select { |tag| tag.type.to_s == tag_type.camelcase }
+          .map(&:id)
+      end
+    end
   end
 end

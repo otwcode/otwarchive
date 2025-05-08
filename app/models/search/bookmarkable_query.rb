@@ -13,7 +13,7 @@ class BookmarkableQuery < Query
   # return objects from more than one table, so we need to use a special class
   # that can handle IDs of multiple types.
   def klass
-    'BookmarkableDecorator'
+    "BookmarkableDecorator"
   end
 
   def index_name
@@ -122,7 +122,7 @@ class BookmarkableQuery < Query
       %w[rating archive_warning category fandom character relationship freeform].each do |facet_type|
         aggs[facet_type] = {
           terms: {
-            field: "#{facet_type}_ids"
+            field: restrictable_field_name("#{facet_type}_ids").to_s
           }
         }
       end
@@ -198,7 +198,7 @@ class BookmarkableQuery < Query
   ####################
 
   def complete_filter
-    term_filter(:complete, 'true') if options[:complete].present?
+    term_filter(:complete, "true") if options[:complete].present?
   end
 
   def language_filter
@@ -206,9 +206,9 @@ class BookmarkableQuery < Query
   end
 
   def filter_id_filter
-    if filter_ids.present?
-      filter_ids.map { |filter_id| term_filter(:filter_ids, filter_id) }
-    end
+    return if filter_ids.blank?
+
+    filter_ids.map { |filter_id| term_filter(restrictable_field_name(:filter_ids), filter_id) }
   end
 
   # The date filter on the bookmarkable (i.e. when the bookmarkable was last
@@ -223,42 +223,43 @@ class BookmarkableQuery < Query
   # Note that this is used as an exclusion filter, not an inclusion filter, so
   # the boolean is flipped from the way you might expect.
   def unposted_filter
-    term_filter(:posted, 'false')
+    term_filter(:posted, "false")
   end
 
   # Exclude items hidden by admin from bookmarkable search results.
   # Note that this is used as an exclusion filter, not an inclusion filter, so
   # the boolean is flipped from the way you might expect.
   def hidden_filter
-    term_filter(:hidden_by_admin, 'true')
+    term_filter(:hidden_by_admin, "true")
   end
 
   # Exclude restricted works/series when the user isn't logged in.
   # Note that this is used as an exclusion filter, not an inclusion filter, so
   # the boolean is flipped from the way you might expect.
   def restricted_filter
-    term_filter(:restricted, 'true') unless include_restricted?
+    term_filter(:restricted, "true") unless include_restricted?
   end
 
   def tag_exclusion_filter
-    if exclusion_ids.present?
-      terms_filter(:filter_ids, exclusion_ids)
-    end
+    return if exclusion_ids.blank?
+
+    terms_filter(restrictable_field_name(:filter_ids), exclusion_ids)
   end
 
   # This filter is used to restrict our results to only include bookmarkables
-  # whose "tag" text matches all of the tag names in included_tag_names. This
-  # is useful when the user enters a non-existent tag, which would be discarded
+  # whose "tags_(restricted|public)" text matches all of the tag names in included_tag_names.
+  # This is useful when the user enters a non-existent tag, which would be discarded
   # by the TaggableQuery.filter_ids function.
   def named_tag_inclusion_filter
     return if included_tag_names.blank?
-    match_filter(:tag, included_tag_names.join(" "))
+
+    match_filter(restrictable_field_name(:tags), included_tag_names.join(" "))
   end
 
   # This set of filters is used to prevent us from matching any bookmarkables
-  # whose "tag" text matches one of the passed-in tag names. This is useful
-  # when the user enters a non-existent tag, which would be discarded by the
-  # TaggableQuery.exclusion_ids function.
+  # whose "tags_(restricted|public)" text matches one of the passed-in tag names.
+  # This is useful when the user enters a non-existent tag, which would be discarded
+  # by the TaggableQuery.exclusion_ids function.
   #
   # Note that we separate these into different filters to get the logic of tag
   # exclusion right: if we're excluding "A B" and "C D", we want the query to
@@ -266,7 +267,7 @@ class BookmarkableQuery < Query
   # match query.
   def named_tag_exclusion_filter
     excluded_tag_names.map do |tag_name|
-      match_filter(:tag, tag_name)
+      match_filter(restrictable_field_name(:tags), tag_name)
     end
   end
 
@@ -283,5 +284,11 @@ class BookmarkableQuery < Query
     # Use fetch instead of || here to make sure that we don't accidentally
     # override a deliberate choice not to show restricted bookmarks.
     options.fetch(:show_restricted, User.current_user.present?)
+  end
+
+  private
+
+  def restrictable_field_name(field_name)
+    :"#{field_name}_#{include_restricted? ? "restricted" : "public"}"
   end
 end

@@ -86,16 +86,21 @@ class ExternalWork < ApplicationRecord
   ######################
 
   def bookmarkable_json
+    methods = %i[creators posted restricted revised_at]
+    %w[restricted public].each do |visibility|
+      methods << :"tags_#{visibility}"
+
+      %w[archive_warning category character fandom filter freeform rating relationship].each do |tag_type|
+        methods << :"#{tag_type}_ids_#{visibility}"
+      end
+    end
+
     as_json(
       root: false,
       only: [
         :title, :summary, :hidden_by_admin, :created_at
       ],
-      methods: [
-        :posted, :restricted, :tag, :filter_ids, :rating_ids,
-        :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :creators, :revised_at
-      ]
+      methods: methods
     ).merge(
       language_id: language&.short,
       bookmarkable_type: "ExternalWork",
