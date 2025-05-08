@@ -37,7 +37,7 @@ shared_examples "denies access for work that isn't visible to user" do
   shared_examples "denies access to random user" do
     it "allows access for work creator" do
       fake_login_known_user(creator)
-      subjectq
+      subject
       success
     end
 
