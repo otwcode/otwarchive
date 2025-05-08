@@ -72,7 +72,7 @@ class TagNomination < ApplicationRecord
 
     self.parent_tagname ||= get_parent_tagname
 
-    tag = Tag.find_by(name: tagname)
+    tag = Tag.find_by_name(tagname)
     unless tag
       self.parented = false
       return

@@ -195,6 +195,10 @@ When /^I nominate and approve tags with Unicode characters in "([^\"]*)"/ do |ti
   step %{I should see "Successfully added to set"}
 end
 
+When "I approve the nominated {word} tag {string}" do |tag_type, tag_name|
+  check("#{tag_type.downcase}_approve_#{tag_name.tr(' ', '_')}")
+end
+
 When /^I should see the tags with Unicode characters/ do
   tags = "The Hobbit - All Media Types, Dís, Éowyn, Kíli, Bifur/Óin, スマイルプリキュア, 新白雪姫伝説プリーティア".split(', ')
   tags.each do |tag|
