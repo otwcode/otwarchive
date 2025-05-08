@@ -277,12 +277,12 @@ class Series < ApplicationRecord
   end
 
   # Index all the filters for pulling works
-  def filter_ids_public
-    (work_tags.pluck(:id) + filters_public.pluck(:id)).uniq
+  def filter_ids_restricted
+    (work_tags.pluck(:id) + filters_restricted.pluck(:id)).uniq
   end
 
-  def filter_ids_restricted
-    (work_tags.where(works: { restricted: false }).pluck(:id) + filters_restricted.pluck(:id)).uniq
+  def filter_ids_public
+    (work_tags.where(works: { restricted: false }).pluck(:id) + filters_public.pluck(:id)).uniq
   end
 
   %w[restricted public].each do |tag_visibility|
