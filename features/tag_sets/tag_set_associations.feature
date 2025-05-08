@@ -68,8 +68,7 @@ Feature: Reviewing tag set associations
 
   Scenario: Nominating a non-canonical tag in its own fandom generates associations for review
     Given a canonical character "Jack Carter" in fandom "Eureka"
-      And a canonical character "Nathan Stark" in fandom "Eureka"
-      And a synonym "Nathan Carter" of the tag "Nathan Stark"
+      And a non-canonical character "Nathan Carter" in fandom "Eureka"
       And I am logged in as "tagsetter"
       And I set up the nominated tag set "Non-canonical Associations" with 1 fandom nom and 2 character noms
       And I nominate fandom "Eureka" and characters "Jack Carter,Nathan Carter" in "Non-canonical Associations" as "tagsetter"
@@ -83,8 +82,7 @@ Feature: Reviewing tag set associations
 
   Scenario: When a nominated non-canonical is renamed, its associations remain for review
     Given a canonical character "Jack Carter" in fandom "Eureka"
-      And a canonical character "Nathan Stark" in fandom "Eureka"
-      And a synonym "nathan carter" of the tag "Nathan Stark"
+      And a non-canonical character "nathan carter" in fandom "Nathan Stark"
       And I am logged in as "tagsetter"
       And I set up the nominated tag set "Non-canonical Associations" with 1 fandom nom and 2 character noms
       And I nominate fandom "Eureka" and characters "Jack Carter,nathan carter" in "Non-canonical Associations" as "tagsetter"
