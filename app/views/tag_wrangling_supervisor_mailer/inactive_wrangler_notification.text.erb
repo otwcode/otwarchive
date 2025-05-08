@@ -1,7 +1,13 @@
 <% content_for :message do %>
 <%= t("mailer.general.greeting.informal.addressed_html", name: t("mailer.general.greeting.tag_wrangling_supervisors")) %>
 
-<%= t(".name_changed.html", old_username: @old_username, new_username: @new_username) %>
+<%= t(".inactive_wranglers", count: @hiatus_weeks, weeks: @hiatus_weeks_formatted) %>
+
+<% @users.each do |user| %>
+  - <%= user %>
+<% end %>
+
+<%= t(".start_procedures") %>
 
 <%= t("mailer.general.closing.informal") %>
 <%= t("mailer.general.signature.app_short_name") %>
