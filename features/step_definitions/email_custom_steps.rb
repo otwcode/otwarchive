@@ -49,6 +49,12 @@ Then "the email to {string} should be non-translated" do |user|
   step(%{the email to "#{user}" should not contain "translation missing"})
 end
 
+Then "the last email to {string} should be non-translated" do |user|
+  step(%{the last email to "#{user}" should not contain "Translated footer"})
+  step(%{the last email to "#{user}" should contain "fan-run and fan-supported archive"})
+  step(%{the last email to "#{user}" should not contain "translation missing"})
+end
+
 Then "{string} should be emailed" do |user|
   @user = User.find_by(login: user)
   expect(emails("to: \"#{email_for(@user.email)}\"")).not_to be_empty
