@@ -264,7 +264,7 @@ describe PseudsController do
     end
   end
 
-  describe "index" do
+  describe "index" do #should change with AO3-6989
     context "when user_id does not exist" do
       it "redirects without an error" do
         get :index, params: { user_id: "nonexistent_user" }
