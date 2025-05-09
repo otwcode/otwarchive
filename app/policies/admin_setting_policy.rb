@@ -14,7 +14,6 @@ class AdminSettingPolicy < ApplicationPolicy
       account_creation_enabled
       cache_expiration
       creation_requires_invite
-      days_to_purge_unactivated
       disable_support_form
       disabled_support_form_text
       downloads_enabled

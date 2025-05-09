@@ -1,4 +1,6 @@
 class AdminSetting < ApplicationRecord
+  self.ignored_columns = [:days_to_purge_unactivated]
+
   include AfterCommitEverywhere
 
   belongs_to :last_updated, class_name: 'Admin', foreign_key: :last_updated_by
@@ -18,7 +20,6 @@ class AdminSetting < ApplicationRecord
     invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
     invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
     account_creation_enabled?: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
-    days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED,
     suspend_filter_counts?: false,
     enable_test_caching?: false,
     cache_expiration: 10,
@@ -38,14 +39,13 @@ class AdminSetting < ApplicationRecord
       invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
       invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
       account_creation_enabled: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
-      days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
     )
     settings.save(validate: false)
     settings
   end
 
   def self.current
-    Rails.cache.fetch("admin_settings-v2", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
+    Rails.cache.fetch("admin_settings-v3", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
   end
 
   class << self
@@ -77,7 +77,7 @@ class AdminSetting < ApplicationRecord
     self.reload
 
     # However, we only cache it if the transaction is successful.
-    after_commit { Rails.cache.write("admin_settings-v2", self) }
+    after_commit { Rails.cache.write("admin_settings-v3", self) }
   end
 
   private
