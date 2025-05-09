@@ -120,6 +120,7 @@ en:
       successfully_updated: External work was successfully updated.
   fandoms:
     index:
+      choose_media: Please choose a media category to start browsing fandoms.
       collection_page_title: "%{collection_title} - Fandoms"
   home:
     content:
@@ -152,6 +153,9 @@ en:
     cannot_edit_default: Sorry, you can't edit the default language.
     successfully_added: Language was successfully added.
     successfully_updated: Language was successfully updated.
+  media:
+    index:
+      browser_title: Fandoms
   muted:
     users:
       create:

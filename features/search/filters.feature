@@ -8,11 +8,12 @@ Feature: Filters
     Given a canonical fandom "The Hobbit"
       And a canonical fandom "Harry Potter"
       And a canonical fandom "Legend of Korra"
-      And I am logged in as "meatloaf"
-      And I post the work "A Hobbit's Meandering" with fandom "The Hobbit"
-      And I post the work "Bilbo Does the Thing" with fandom "The Hobbit, Legend of Korra"
-      And I post the work "Roonal Woozlib and the Ferrets of Nimh" with fandom "Harry Potter"
+      And the work "A Hobbit's Meandering" by "meatloaf" with fandom "The Hobbit"
+      And the work "Bilbo Does the Thing" by "meatloaf" with fandom "The Hobbit, Legend of Korra"
+      And the work "Roonal Woozlib and the Ferrets of Nimh" by "meatloaf" with fandom "Harry Potter"
+      And all indexing jobs have been run
       And the dashboard counts have expired
+      And I am logged in as "meatloaf"
 
   @javascript
   Scenario: You can filter through a user's works using inclusion filters
@@ -84,6 +85,7 @@ Feature: Filters
   @javascript
   Scenario: Filter through a user's works with non-existent tags
     Given the tag "legend korra" does not exist
+      And all indexing jobs have been run
 
     When I go to meatloaf's works page
       And I fill in "Other tags to include" with "legend korra"
@@ -167,6 +169,7 @@ Feature: Filters
     Given I am logged in as "recengine"
       And I bookmark the work "Bilbo Does the Thing" with the tags "hobbit"
       And I bookmark the work "A Hobbit's Meandering" with the tags "bilbo"
+      And all indexing jobs have been run
       And the dashboard counts have expired
 
     When I go to recengine's bookmarks page
@@ -189,6 +192,7 @@ Feature: Filters
       And I bookmark the work "Bilbo Does the Thing" with the tags "to read,been here"
       And I bookmark the work "A Hobbit's Meandering" with the tags "to read"
       And I bookmark the work "Roonal Woozlib and the Ferrets of Nimh" with the tags "been here"
+      And all indexing jobs have been run
       And the dashboard counts have expired
 
     # Use an include checkbox
@@ -293,6 +297,7 @@ Feature: Filters
       And I am logged in as "recengine"
       And I bookmark the work "A Hobbit's Meandering" with the tags "fun"
       And I bookmark the work "Bilbo Does the Thing" with the tags "fun little crossover"
+      And all indexing jobs have been run
       And the dashboard counts have expired
 
     When I go to recengine's bookmarks page

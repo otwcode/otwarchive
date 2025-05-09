@@ -65,7 +65,17 @@ class Comment < ApplicationRecord
   validate :check_for_spam, on: :create
 
   def check_for_spam
-    errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again.")) unless check_for_spam?
+    self.approved = skip_spamcheck? || !spam?
+
+    errors.add(:base, :spam) unless approved
+  end
+
+  validate :edited_spam, on: :update, if: [:will_save_change_to_edited_at?, :will_save_change_to_comment_content?]
+
+  def edited_spam
+    return if skip_spamcheck? || !content_too_different?(comment_content, comment_content_in_database, ArchiveConfig.EDITED_COMMENT_SPAM_CHECK_THRESHOLD)
+
+    errors.add(:base, :spam) if spam?
   end
 
   validates :comment_content, uniqueness: {
@@ -149,7 +159,7 @@ class Comment < ApplicationRecord
                   comment_content_changed? &&
                   moderated_commenting_enabled? &&
                   !is_creator_comment? &&
-                  content_too_different?(comment_content, comment_content_was)
+                  content_too_different?(comment_content, comment_content_was, ArchiveConfig.COMMENT_MODERATION_THRESHOLD)
 
     self.unreviewed = true
   end
@@ -306,9 +316,9 @@ class Comment < ApplicationRecord
       new_feedback.save
     end
 
-    def content_too_different?(new_content, old_content)
+    def content_too_different?(new_content, old_content, threshold)
       # we added more than the threshold # of chars, just return
-      return true if new_content.length > (old_content.length + ArchiveConfig.COMMENT_MODERATION_THRESHOLD)
+      return true if new_content.length > (old_content.length + threshold)
 
       # quick and dirty iteration to compare the two strings
       cost = 0
@@ -323,7 +333,7 @@ class Comment < ApplicationRecord
 
         cost += 1
         # interrupt as soon as we have changed > threshold chars
-        return true if cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
+        return true if cost > threshold
 
         # peek ahead to see if we can catch up on either side eg if a letter has been inserted/deleted
         if new_content[new_i + 1] == old_content[old_i]
@@ -337,7 +347,7 @@ class Comment < ApplicationRecord
         end
       end
 
-      return cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
+      cost > threshold
     end
 
     def not_user_commenter?(parent_comment)
@@ -474,13 +484,10 @@ class Comment < ApplicationRecord
     self.children_count #FIXME
   end
 
-  def check_for_spam?
-    is_logged_in = !pseud_id.nil? 
-    is_account_old_enough = is_logged_in && !user.should_spam_check_comments?
-    
-    should_skip_checking = is_logged_in && (is_account_old_enough || on_tag?)
+  def skip_spamcheck?
+    return false unless pseud_id
 
-    self.approved = should_skip_checking || !spam?
+    on_tag? || !user.should_spam_check_comments? || is_creator_comment?
   end
 
   def spam?
@@ -530,7 +537,7 @@ class Comment < ApplicationRecord
   end
 
   def use_image_safety_mode?
-    parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE)
+    parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE) || hidden_by_admin
   end
   include Responder
 end

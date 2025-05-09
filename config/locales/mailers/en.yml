@@ -232,6 +232,22 @@ en:
       wrong_email:
         html: If you entered the wrong email address, you will need to %{email_change_form_link} again.
         text: 'If you entered the wrong email address, you will need to submit the email change form again: %{email_change_form_url}.'
+    change_username:
+      change_cooldown_html:
+        one: "%{app_name} usernames can only be changed once per day. You will be able to change your username again on %{date}."
+        other: "%{app_name} usernames can only be changed once every %{count} days. You will be able to change your username again on %{date}."
+      changed_html: The username for your %{app_name} account %{old_username} has been changed to %{new_username}.
+      contact_policy_abuse: contact Policy & Abuse
+      contact_support: contact Support
+      did_not_make_change:
+        html: If you did not make this change, someone else may have access to your %{app_name} account. Please %{reset_password_link} or %{contact_policy_abuse_link}.
+        text: 'If you did not make this change, someone else may have access to your %{app_name} account. Please reset your password now (%{reset_password_url}) or contact Policy & Abuse: %{contact_policy_abuse_url}.'
+      effects:
+        html: You can %{refer_faq_link} to learn how changing your username will affect your account. If you experience technical issues, such as seeing your old username on your works or bookmarks after a week, please %{contact_support_link}.
+        text: 'You can refer to our FAQ to learn how changing your username will affect your account: %{refer_faq_url}. If you experience technical issues, such as seeing your old username on your works or bookmarks after a week, please contact Support: %{contact_support_url}.'
+      refer_faq: refer to our FAQ
+      reset_password: reset your password now
+      subject: "[%{app_name}] Your username has been changed"
     claim_notification:
       access:
         contact_support: contact AO3 Support
