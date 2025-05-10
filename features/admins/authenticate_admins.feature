@@ -92,6 +92,7 @@ Feature: Authenticate Admin Users
     | login | password     | email             |
     | admin | testpassword | admin@example.com |
     And all emails have been delivered
+    And it is currently 2025-04-12 17:00 UTC
   When I go to the admin login page
     And I follow "Forgot admin password?"
   Then I should see "Forgotten your admin password?"
@@ -100,12 +101,16 @@ Feature: Authenticate Admin Users
   Then I should see "Check your email for instructions on how to reset your password."
     And 1 email should be delivered to "admin@example.com"
   When I follow "Change my password" in the email
+    And all emails have been delivered
   Then I should see "Set My Admin Password"
   When I fill in "New password" with "newpassword"
     And I fill in "Confirm new password" with "newpassword"
     And I press "Set Admin Password"
   Then I should see "Your password has been changed successfully. You are now signed in."
     And I should see "Hi, admin!"
+    And 1 emails should be delivered to "admin@example.com"
+    And the email should have "Your admin password has been changed" in the subject
+    And the email should contain "The password for your AO3 admin account was changed on Sat, 12 Apr 2025 17:00:\d+ \+0000"
 
   Scenario: Reset password link expires.
   Given the following admin exists

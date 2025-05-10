@@ -2,6 +2,19 @@
 en:
   admin:
     mailer:
+      password_change:
+        changed: The password for your %{app_name} admin account was changed on %{date}.
+        did_not_make_change: If you did not make this change, someone else may have access to your %{app_name} admin account or your OTW email. Please let AD&T and VolCom know immediately so they can take steps to secure your accounts.
+        made_change:
+          html: If you made this change, you can %{login_link} or %{reset_password_link} if you've forgotten it.
+          login: log in with your new password
+          reset_password: reset your password
+          text: If you made this change, you can log in with your new password (%{login_url}) or reset your password if you've forgotten it (%{reset_password_url}).
+        secure_again:
+          html: When your accounts are secure again, please %{reset_password_link}.
+          reset_password: reset your admin password
+          text: 'When your accounts are secure again, please reset your admin password: %{reset_password_url}.'
+        subject: "[%{app_name}] Your admin password has been changed"
       reset_password_instructions:
         expiration:
           one: If you do not use this link to reset your password within %{count} day, it will expire, and you will have to request a new one.
@@ -483,6 +496,20 @@ en:
             other: 'If you made this request, please log in and confirm your email change within %{count} days: %{confirm_email_change_url}.'
         request_to_change_email_html: Someone has made a request to change the email address associated with the %{app_name} account %{username} to this email address.
         subject: "[%{app_name}] Confirm your email change"
+      password_change:
+        changed: The password for your %{app_name} account was changed on %{date}.
+        did_not_make_change:
+          contact_policy_abuse: contact Policy & Abuse
+          html: If you did not make this change, someone else may have access to your %{app_name} account. Please %{reset_password_link} or %{contact_policy_abuse_link}.
+          reset_password: reset your password now
+          text: 'If you did not make this change, someone else may have access to your %{app_name} account. Please reset your password now (%{reset_password_url}) or contact Policy & Abuse: %{contact_policy_abuse_url}.'
+        made_change:
+          contact_support: contact Support
+          html: If you made this change, you can %{login_link} or %{reset_password_link} if you've forgotten it. If you experience technical issues, please %{contact_support_link}.
+          login: log in with your new password
+          reset_password: reset your password
+          text: 'If you made this change, you can log in with your new password (%{login_url}) or reset your password if you''ve forgotten it (%{reset_password_url}). If you experience technical issues, please contact Support: %{contact_support_url}'
+        subject: "[%{app_name}] Your password has been changed"
       reset_password_instructions:
         expiration: If you do not use this link to reset your password within a week, it will expire, and you will have to request a new one.
         intro: 'Someone has requested a password reset for your account. You can change your account password by following the link below and entering your new password:'
