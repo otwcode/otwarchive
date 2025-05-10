@@ -285,7 +285,7 @@ describe UserMailer do
       end
 
       it "lists the second imported work with a leading hyphen" do
-        expect(email).to have_text_part_content("- #{title2}")
+        expect(email).to have_text_part_content("- \"#{title2}\"")
       end
 
       it "displays titles with non-ASCII characters" do
@@ -377,7 +377,7 @@ describe UserMailer do
       end
 
       it "lists the second imported work with a leading hyphen" do
-        expect(email).to have_text_part_content("- #{title2}")
+        expect(email).to have_text_part_content("- \"#{title2}\"")
       end
     end
   end
@@ -688,7 +688,7 @@ describe UserMailer do
   end
 
   describe "admin_hidden_work_notification" do
-    subject(:email) { UserMailer.admin_hidden_work_notification(work.id, user.id) }
+    subject(:email) { UserMailer.admin_hidden_work_notification([work.id], user.id) }
 
     let(:user) { create(:user) }
     let(:work) { create(:work, authors: [user.pseuds.first]) }
@@ -697,7 +697,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Policy & Abuse team"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Policy & Abuse committee"
       expect(email.subject).to eq(subject)
     end
 
