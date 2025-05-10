@@ -229,4 +229,14 @@ describe KudosController do
       end
     end
   end
+
+  describe "GET #index" do
+    context "denies access for work that isn't visible to user" do
+      subject { get :index, params: { work_id: work } }
+      let(:success) { expect(response).to render_template("index") }
+      let(:success_admin) { success }
+
+      include_examples "denies access for work that isn't visible to user"
+    end
+  end
 end
