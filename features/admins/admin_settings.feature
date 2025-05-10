@@ -145,3 +145,25 @@ Feature: Admin Settings Page
     Then I should not see "Sorry, the Archive doesn't allow guests to comment right now."
     When I post the comment "Sent you a syn" on the tag "Stargate SG-1"
     Then I should see "Comment created!"
+
+  Scenario: Timestamp and admin for last update is not affected by invitation sending
+    Given time is frozen at 2025-04-12 17:00
+      And the invitation queue is enabled
+      And an invitation request for "invitee@example.org"
+      And an invitation request for "invitee2@example.org"
+      And an invitation request for "invitee3@example.org"
+      And I am logged in as a "superadmin" admin
+    When I go to the admin-settings page
+      And I fill in "Number of people to invite from the queue at once" with "2"
+      And I fill in "How often (in hours) should we invite people from the queue" with "1"
+      And I press "Update"
+    Then I should see "Settings last updated on 2025-04-12 17:00:00 UTC by testadmin-superadmin."
+      And I should see "2 people are scheduled to be sent invitations at April 12, 2025 18:00."
+    When time is frozen at 2025-04-14 03:00
+      And I go to the admin-settings page
+    Then I should see "Settings last updated on 2025-04-12 17:00:00 UTC by testadmin-superadmin."
+      And I should see "2 people are scheduled to be sent invitations at April 12, 2025 18:00."
+    When the scheduled check_invite_queue job is run
+      And I go to the admin-settings page
+    Then I should see "Settings last updated on 2025-04-12 17:00:00 UTC by testadmin-superadmin."
+      And I should see "2 people are scheduled to be sent invitations at April 14, 2025 04:00."

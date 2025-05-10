@@ -58,7 +58,9 @@ class AdminSetting < ApplicationRecord
     return unless self.invite_from_queue_enabled? && InviteRequest.any? && Time.current >= self.invite_from_queue_at
 
     new_time = Time.current + self.invite_from_queue_frequency.hours
-    self.first.update_attribute(:invite_from_queue_at, new_time)
+    current_setting = self.first
+    current_setting.invite_from_queue_at = new_time
+    current_setting.save(validate: false, touch: false)
     InviteFromQueueJob.perform_now(count: invite_from_queue_number)
   end
 

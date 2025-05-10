@@ -95,9 +95,8 @@
     <%= t(".queue_status",
           count: @admin_setting.invite_from_queue_number,
           time: l(@admin_setting.invite_from_queue_at, format: :long)) %>
+    <%= t(".queue_status_help") %>
   </p>
-
-  <p><%= t(".queue_status_help") %></p>
 <% end %>
 
 <p>
