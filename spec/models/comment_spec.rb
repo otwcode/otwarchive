@@ -135,7 +135,7 @@ describe Comment do
 
           context "when they change their email address" do
             before do
-              user.update(confirmed_at: Time.current)
+              user.update!(confirmed_at: Time.current)
             end
 
             subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
