@@ -78,7 +78,7 @@ describe Comment do
         end
 
         context "for a new user" do
-          let(:user) { create(:user, confirmed_at: Time.current) }
+          let(:user) { create(:user, created_at: Time.current) }
 
           it_behaves_like "disallows editing the comment if it's changed significantly"
 
@@ -110,7 +110,7 @@ describe Comment do
         end
 
         context "for an old user" do
-          let(:user) { create(:user, confirmed_at: 12.days.ago) }
+          let(:user) { create(:user, created_at: 12.days.ago) }
 
           it_behaves_like "always allows changing the comment"
 
@@ -132,6 +132,16 @@ describe Comment do
 
             it_behaves_like "always allows changing the comment"
           end
+
+          context "when they change their email address" do
+            before do
+              user.update(confirmed_at: Time.current)
+            end
+
+            subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+            it_behaves_like "always allows changing the comment"
+          end
         end
       end
 
@@ -141,7 +151,7 @@ describe Comment do
         end
 
         context "for a new user" do
-          let(:user) { create(:user, confirmed_at: Time.current) }
+          let(:user) { create(:user, created_at: Time.current) }
 
           it_behaves_like "always allows changing the comment"
 
