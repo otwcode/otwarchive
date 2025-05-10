@@ -331,7 +331,7 @@ Then /^I should get confirmation that I changed my username$/ do
   step(%{the email should contain "The username for your .* has been changed to"})
 end
 
-When /^I change my email to "([^"]*)"/ do |new_email|
+When "I change my email to {string}" do |new_email|
   step %{I follow "My Preferences"}
   step %{I follow "Change Email"}
   fill_in("New email", with: new_email)
