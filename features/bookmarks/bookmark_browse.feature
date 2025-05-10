@@ -19,14 +19,16 @@ Feature: Browse Bookmarks
 
   Scenario: Bookmarked series' blurbs show tags on restricted works only to logged in users
     Given I am logged in as "bookmarker"
-      And I post the work "Public Work" with fandom "FandomP" as part of a series "Mixed Access"
-      And I post the work "Restricted Work" with fandom "FandomR" as part of a series "Mixed Access"
+      And I post the work "Public Work" with fandom "FandomP" with character "Foobar" as part of a series "Mixed Access"
+      And I post the work "Restricted Work" with fandom "FandomR" with character "Foobar" as part of a series "Mixed Access"
       And I lock the work "Restricted Work"
       And I bookmark the series "Mixed Access"
     When I go to the first bookmark for the series "Mixed Access"
     Then I should see "FandomP"
       And I should see "FandomR"
+      And I should see "Foobar"
     When I am logged out
       And I go to the first bookmark for the series "Mixed Access"
     Then I should see "FandomP"
+      And I should see "Foobar"
       But I should not see "FandomR"
