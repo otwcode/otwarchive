@@ -17,7 +17,8 @@
   </h4>
   <h5 class="fandoms heading">
     <span class="landmark"><%= t(".landmark.fandom") %></span>
-    <%= series.fandoms.map { |tag| link_to_tag_works(tag) }.join(t("support.array.words_connector")).html_safe %>
+    <%= series.fandoms.map { |tag| link_to_tag_works(tag) }
+          .join(t("support.array.words_connector")).html_safe %>
   </h5>
   <%= get_symbols_for(series) %>
   <p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
@@ -32,7 +33,7 @@
 <% unless series.summary.blank? %>
   <h6 class="landmark heading"><%= t(".landmark.summary") %></h6>
   <blockquote class="userstuff summary">
-    <%=raw strip_images(sanitize_field(series, :summary)) %>
+    <%= raw strip_images(sanitize_field(series, :summary)) %>
   </blockquote>
 <% end %>
 <!--stats-->
