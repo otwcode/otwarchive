@@ -234,6 +234,14 @@ describe TagsController do
       get :feed, params: { id: @tag.id, format: :atom }
       it_redirects_to(tag_works_path(tag_id: @tag.name))
     end
+
+    context "when tag doesn't exist" do
+      it "raises an error" do
+        expect do
+          get :feed, params: { id: "notatag", format: "atom" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
 
   describe "new" do 
@@ -298,6 +306,13 @@ describe TagsController do
                                    "Please log in as admin")
       end
     end
+    context "when tag doesn't exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "notatag" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
   
   describe "show_hidden" do
@@ -333,6 +348,14 @@ describe TagsController do
         get :edit, params: { id: tag.name }
         it_redirects_to_with_error(tag_wranglings_path,
                                    "Please log in as admin")
+      end
+    end
+    
+    context "when tag doesn't exist" do
+      it "raises an error" do
+        expect do
+          get :edit, params: { id: "notatag" }
+        end.to raise_error ActiveRecord::RecordNotFound
       end
     end
   end

@@ -20,6 +20,16 @@ describe AdminPostsController do
     end
   end
 
+  describe "GET #show" do
+    context "when admin post does not exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "999999999" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+  end
+
   describe "POST #create" do
     let(:base_params) { { title: "AdminPost Title",
                           content: "AdminPost content long enough to pass validation" } }
