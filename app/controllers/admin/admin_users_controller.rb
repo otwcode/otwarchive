@@ -78,7 +78,23 @@ class Admin::AdminUsersController < Admin::BaseController
       @user.skip_reconfirmation!
       @user.email = attributes[:email]
     end
-    @user.roles = Role.where(id: attributes[:roles]) if attributes[:roles].present?
+    if attributes[:roles].present?
+      # Roles that the current admin can add or remove
+      allowed_roles = UserPolicy::ALLOWED_USER_ROLES_BY_ADMIN_ROLES
+        .values_at(*current_admin.roles)
+        .compact
+        .flatten
+
+      # Other roles the current user has
+      out_of_scope_roles = @user.roles.to_a.reject { |role| allowed_roles.include?(role.name) }
+
+      request_roles = Role.where(
+        id: attributes[:roles],
+        name: [allowed_roles]
+      )
+
+      @user.roles = out_of_scope_roles + request_roles
+    end
 
     if @user.save
       flash[:notice] = ts("User was successfully updated.")
