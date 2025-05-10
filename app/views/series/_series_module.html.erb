@@ -1,27 +1,23 @@
-<% # expects "series" %>
+<%# expects "series" %>
 
 <!--title etc-->
 <div class="header module">
   <h4 class="heading">
-    <%= link_to series.title, series %>
-    <%= ts('by') %>
-    <%= byline(series) %>
+    <%= t(".series_by_html", series_title_link: link_to(series.title, series), byline: byline(series)) %>
     <% if series.restricted %>
-      <%= image_tag("lockblue.png", size: "15x15", alt: ts("(Restricted)"),
-                    title: ts("Restricted"),
+      <%= image_tag("lockblue.png", size: "15x15", alt: t(".restricted_alt"),
+                    title: t(".restricted"),
                     skip_pipeline: true) %>
     <% end %>
     <% if series.hidden_by_admin %>
-      <%= image_tag("lockred.png", size: "15x15", alt: ts("(Hidden by Admin)"),
-                    title: ts("Hidden by Administrator"),
+      <%= image_tag("lockred.png", size: "15x15", alt: t(".hidden_by_admin_alt"),
+                    title: t(".hidden_by_administrator"),
                     skip_pipeline: true) %>
     <% end %>
   </h4>
   <h5 class="fandoms heading">
-    <span class="landmark"><%= ts('Fandom') %>:</span>
-    <%= series.work_tags.select{ |tag| tag.type == "Fandom" }.
-                         sort.collect{ |tag| link_to_tag_works(tag) }.
-                         join(', ').html_safe %>
+    <span class="landmark"><%= t(".landmark.fandom") %></span>
+    <%= series.fandoms.map { |tag| link_to_tag_works(tag) }.join(t("support.array.words_connector")).html_safe %>
   </h5>
   <%= get_symbols_for(series) %>
   <p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
@@ -34,7 +30,7 @@
 
 <!--summary-->
 <% unless series.summary.blank? %>
-  <h6 class="landmark heading"><%= ts("Summary") %></h6>
+  <h6 class="landmark heading"><%= t(".landmark.summary") %></h6>
   <blockquote class="userstuff summary">
     <%=raw strip_images(sanitize_field(series, :summary)) %>
   </blockquote>

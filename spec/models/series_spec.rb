@@ -1,28 +1,45 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Series do
   let(:unrestricted_work) { create(:work, restricted: false) }
   let(:restricted_work) { create(:work, restricted: true) }
   let(:series) { create(:series) }
 
-  it "should be unrestricted when it has unrestricted works" do
-    series.works = [unrestricted_work]
-    series.reload
-    expect(series.restricted).not_to be_truthy
-  end
+  describe "#restricted" do
+    context "when the series has only unrestricted works" do
+      before do
+        series.works = [unrestricted_work]
+        series.reload
+      end
 
-  it "should be restricted when it has no unrestricted works" do
-    series.works = [restricted_work]
-    series.reload
-    expect(series.restricted).to be_truthy
-  end
+      it "returns false" do
+        expect(series.restricted).to be_falsy
+      end
+    end
 
-  it "should be unrestricted when it has both restricted and unrestricted works" do
-    series.works = [restricted_work, unrestricted_work]
-    series.reload
-    expect(series.restricted).not_to be_truthy
+    context "when the series only has restricted works" do
+      before do
+        series.works = [restricted_work]
+        series.reload
+      end
+
+      it "returns true" do
+        expect(series.restricted).to be_truthy
+      end
+    end
+
+    context "when the series has both restricted and unrestricted works" do
+      before do
+        series.works = [restricted_work, unrestricted_work]
+        series.reload
+      end
+
+      it "returns false" do
+        expect(series.restricted).to be_falsy
+      end
+    end
   end
 
   it "has all of the pseuds from all of its serial works" do
@@ -107,6 +124,82 @@ describe Series do
         expect(series.pseuds.reload).to contain_exactly(other.default_pseud)
         expect(work.pseuds.reload).to contain_exactly(other.default_pseud)
         expect(solo_chapter.pseuds.reload).to contain_exactly(other.default_pseud)
+      end
+    end
+  end
+
+  describe "#fandoms" do
+    let(:restricted_work) { create(:work, restricted: true, fandom_string: "Testing2") }
+
+    before do
+      series.works = [unrestricted_work, restricted_work]
+      series.reload
+    end
+
+    context "when no user is logged in" do
+      it "only returns fandoms on unrestricted works" do
+        expect(series.fandoms).to include(*unrestricted_work.fandoms)
+        expect(series.fandoms).not_to include(*restricted_work.fandoms)
+      end
+    end
+
+    context "when logged in as a regular user" do
+      before do
+        User.current_user = create(:user)
+      end
+
+      it "returns fandoms on unrestricted and restricted works" do
+        expect(series.fandoms).to include(*unrestricted_work.fandoms)
+        expect(series.fandoms).to include(*restricted_work.fandoms)
+      end
+    end
+
+    context "when loggged in as an admin" do
+      before do
+        User.current_user = create(:admin)
+      end
+
+      it "returns fandoms on unrestricted and restricted works" do
+        expect(series.fandoms).to include(*unrestricted_work.fandoms)
+        expect(series.fandoms).to include(*restricted_work.fandoms)
+      end
+    end
+  end
+
+  describe "#tag_groups" do
+    let(:restricted_work) { create(:work, restricted: true, fandom_string: "Testing2") }
+
+    before do
+      series.works = [unrestricted_work, restricted_work]
+      series.reload
+    end
+
+    context "when no user is logged in" do
+      it "only returns tags on unrestricted works" do
+        expect(series.tag_groups["Fandom"]).to include(*unrestricted_work.fandoms)
+        expect(series.tag_groups["Fandom"]).not_to include(*restricted_work.fandoms)
+      end
+    end
+
+    context "when logged in as a regular user" do
+      before do
+        User.current_user = create(:user)
+      end
+
+      it "returns tags on unrestricted and restricted works" do
+        expect(series.tag_groups["Fandom"]).to include(*unrestricted_work.fandoms)
+        expect(series.tag_groups["Fandom"]).to include(*restricted_work.fandoms)
+      end
+    end
+
+    context "when loggged in as an admin" do
+      before do
+        User.current_user = create(:admin)
+      end
+
+      it "returns tags on unrestricted and restricted works" do
+        expect(series.tag_groups["Fandom"]).to include(*unrestricted_work.fandoms)
+        expect(series.tag_groups["Fandom"]).to include(*restricted_work.fandoms)
       end
     end
   end

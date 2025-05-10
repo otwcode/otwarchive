@@ -1976,6 +1976,16 @@ en:
   related_works:
     index:
       page_heading: "%{login}'s Related Works"
+  series:
+    series_module:
+      hidden_by_admin_alt: "(Hidden by Admin)"
+      hidden_by_administrator: Hidden by Administrator
+      landmark:
+        fandom: Fandom
+        summary: Summary
+      restricted: Restricted
+      restricted_alt: "(Restricted)"
+      series_by_html: "%{series_title_link} by %{byline}"
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
