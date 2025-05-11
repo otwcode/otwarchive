@@ -10,7 +10,11 @@ shared_examples "a wrangleable" do
 
   describe "#update_last_wrangling_activity" do
     context "as a tag wrangler" do
-      before { User.current_user = create(:tag_wrangler) }
+      before do
+        User.current_user = create(:tag_wrangler)
+        User.current_user.last_wrangling_activity.updated_at = 60.days.ago
+        User.current_user.last_wrangling_activity.save!(touch: false)
+      end
 
       context "a wrangling activity has happened" do
         before { User.should_update_wrangling_activity = true }
@@ -18,7 +22,7 @@ shared_examples "a wrangleable" do
         it "sets a last wrangling time" do
           freeze_time do
             expect(wrangleable.save).to be_truthy
-            expect(User.current_user.last_wrangling_activity.updated_at).to eq(Time.now.utc)
+            expect(User.current_user.reload.last_wrangling_activity.updated_at).to eq(Time.current)
           end
         end
       end
@@ -26,7 +30,10 @@ shared_examples "a wrangleable" do
       context "no wrangling activity has happened" do
         before { User.should_update_wrangling_activity = false }
 
-        include_examples "no wrangling activity recorded"
+        it "does not set a new last wrangling time" do
+          expect(wrangleable.save).to be_truthy
+          expect(User.current_user.reload.last_wrangling_activity.updated_at).to be_within(1.minute).of 60.days.ago
+        end
       end
     end
   end
