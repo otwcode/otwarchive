@@ -240,6 +240,8 @@ en:
   works:
     drafts:
       page_title: "%{username} - Drafts"
+    show_multiple:
+      no_works: You have no works or drafts to edit.
   wrangling_guidelines:
     create: Wrangling Guideline was successfully created.
     delete: Wrangling Guideline was successfully deleted.
