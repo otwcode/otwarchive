@@ -42,7 +42,7 @@
                       <%= check_box_tag "work_ids[]", work.id, false, id: "work_ids_#{work.id}" %>
                     </label>
                   <%= link_to work.title + (work.posted? ? "" : t(".draft")), work_path(id: work.id) %>
-  		            </li>
+                  </li>
                 <% end %>
               </ul>
             </fieldset>
