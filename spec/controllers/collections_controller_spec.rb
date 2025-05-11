@@ -9,4 +9,14 @@ describe CollectionsController do
       expect(assigns[:page_subtitle]).to eq("#{collection.title} - Subcollections")
     end
   end
+
+  describe "GET #load_collection_from_id" do
+    context "when id does not exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "nonexistent" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+  end
 end
