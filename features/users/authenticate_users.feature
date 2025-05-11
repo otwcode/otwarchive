@@ -105,8 +105,8 @@ Feature: User Authentication
       And 1 email should be delivered to "notsam@example.com"
       And the email should have "Reset your password" in the subject
       And the email to "notsam" should be non-translated
-    When 1 email should be delivered to "sam@example.com"
-      And I follow "Change my password." in the email
+      And 1 email should be delivered to "sam@example.com"
+    When I follow "Change my password." in the email
       And all emails have been delivered
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"

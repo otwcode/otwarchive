@@ -108,7 +108,7 @@ describe ArchiveDeviseMailer do
   describe "#password_change" do
     subject(:email) { ArchiveDeviseMailer.password_change(record) }
 
-    context "when record is user" do
+    context "when the record is a user" do
       let(:record) { create(:user) }
 
       # Test the headers
@@ -140,7 +140,7 @@ describe ArchiveDeviseMailer do
       end
     end
 
-    context "when record is admin" do
+    context "when the record is an admin" do
       let(:record) { create(:admin) }
 
       # Test the headers
