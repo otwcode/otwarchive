@@ -71,3 +71,19 @@ Feature: User statistics
     And I follow "Date"
   Then "New-Year Celebration" should appear before "Midyear Madness"
     And "Midyear Madness" should appear before "Year-End Party"
+
+  Scenario: Multifandom works once per fandom in Fandoms View
+
+  Given I am logged in as "statistician"
+    And I set up the draft "Fandom Alphabet"
+    And I fill in "Fandoms" with "Fandom A, Fandom B, Fandom C"
+    And I set the publication date to 1 May 2025
+    And I press "Post"
+  When I go to statistician's stats page
+  Then I should see "Fandom A" within ".fandom.listbox.group[1]"
+    And I should see "Fandom B" within ".fandom.listbox.group[2]"
+    And I should see "Fandom C" within ".fandom.listbox.group[3]"
+  When I follow "2025"
+  Then I should see "Fandom A" within ".fandom.listbox.group[1]"
+    And I should see "Fandom B" within ".fandom.listbox.group[2]"
+    And I should see "Fandom C" within ".fandom.listbox.group[3]"

@@ -44,7 +44,7 @@ class StatsController < ApplicationController
         .joins(:chapters)
         .where("chapters.posted = 1 AND chapters.published_at >= ? AND chapters.published_at < ?", start_date, end_date)
         .select("CONVERT(MAX(chapters.published_at), datetime) as date, SUM(chapters.word_count) as word_count")
-        .group(:id)
+        .group(:id, :fandom)
     end
     works = work_query.all.sort_by { |w| @dir == "ASC" ? (stat_element(w, @sort) || 0) : (0 - (stat_element(w, @sort) || 0).to_i) }
 
