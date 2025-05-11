@@ -241,6 +241,7 @@ en:
     drafts:
       page_title: "%{username} - Drafts"
     show_multiple:
+      draft: " (Draft)"
       no_works: You have no works or drafts to edit.
   wrangling_guidelines:
     create: Wrangling Guideline was successfully created.
