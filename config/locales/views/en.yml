@@ -378,7 +378,7 @@ en:
           account_creation_enabled: Account creation enabled
           cache_expiration: How often (in minutes) should we refresh caching
           creation_requires_invite: Account creation requires invitation
-          days_to_purge_unactivated: How many days you have to activate your account before we purge it
+          days_to_purge_unactivated: How many weeks you have to activate your account before we purge it
           disable_support_form: Turn off support form
           disabled_support_form_text: Disabled support form text
           downloads_enabled: Allow downloads
