@@ -10,8 +10,8 @@ describe CollectionsController do
     end
   end
 
-  describe "GET #load_collection_from_id" do
-    context "when id does not exist" do
+  describe "GET #show" do
+    context "when collection does not exist" do
       it "raises an error" do
         expect do
           get :show, params: { id: "nonexistent" }
