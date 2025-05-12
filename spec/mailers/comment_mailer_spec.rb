@@ -186,6 +186,16 @@ describe CommentMailer do
     end
   end
 
+  shared_examples "a notification email for admins" do
+    it "is not delivered to the admin who is the commentable owner" do
+      expect(email).not_to deliver_to(comment.ultimate_parent.commentable_owners.first.email)
+    end
+
+    it "is delivered to the admin address" do
+      expect(email).to deliver_to(ArchiveConfig.ADMIN_ADDRESS)
+    end
+  end
+
   describe "#comment_notification" do
     subject(:email) { CommentMailer.comment_notification(user, comment) }
 
@@ -218,8 +228,10 @@ describe CommentMailer do
     end
 
     context "when the comment is on an admin post" do
+      let(:user) { comment.ultimate_parent.commentable_owners.first }
       let(:comment) { create(:comment, :on_admin_post) }
 
+      it_behaves_like "a notification email for admins"
       it_behaves_like "a comment subject to image safety mode settings"
     end
 
@@ -279,8 +291,10 @@ describe CommentMailer do
     end
 
     context "when the comment is on an admin post" do
+      let(:user) { comment.ultimate_parent.commentable_owners.first }
       let(:comment) { create(:comment, :on_admin_post) }
 
+      it_behaves_like "a notification email for admins"
       it_behaves_like "a comment subject to image safety mode settings"
     end
 

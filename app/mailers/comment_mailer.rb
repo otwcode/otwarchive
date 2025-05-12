@@ -1,22 +1,28 @@
 class CommentMailer < ApplicationMailer
   # Sends email to an owner of the top-level commentable when a new comment is created
+  # This may be an admin, in which case we use the admin address instead
   def comment_notification(user, comment)
     @comment = comment
     @owner = user
-    I18n.with_locale(user.preference.locale_for_mails) do
+    email = user.is_a?(Admin) ? ArchiveConfig.ADMIN_ADDRESS : user.email
+    locale = user.try(:preference).try(:locale_for_mails) || I18n.default_locale.to_s
+    I18n.with_locale(locale) do
       mail(
-        to: user.email,
+        to: email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
       )
     end
   end
 
   # Sends email to an owner of the top-level commentable when a comment is edited
+  # This may be an admin, in which case we use the admin address instead
   def edited_comment_notification(user, comment)
     @comment = comment
-    I18n.with_locale(user.preference.locale_for_mails) do
+    email = user.is_a?(Admin) ? ArchiveConfig.ADMIN_ADDRESS : user.email
+    locale = user.try(:preference).try(:locale_for_mails) || I18n.default_locale.to_s
+    I18n.with_locale(locale) do
       mail(
-        to: user.email,
+        to: email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
       )
     end

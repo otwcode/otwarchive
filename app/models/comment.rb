@@ -167,7 +167,6 @@ class Comment < ApplicationRecord
   after_update :after_update
   def after_update
     users = []
-    admins = []
 
     if self.saved_change_to_edited_at? || (self.saved_change_to_unreviewed? && !self.unreviewed?)
       # Reply to owner of parent comment if this is a reply comment
@@ -192,7 +191,7 @@ class Comment < ApplicationRecord
 
       # send notification to the owner(s) of the ultimate parent, who can be users or admins
       if self.ultimate_parent.is_a?(AdminPost)
-        AdminMailer.edited_comment_notification(self.id).deliver_after_commit
+        CommentMailer.comment_notification(self.ultimate_parent.commentable_owners.first, self).deliver_after_commit
       else
         # at this point, users contains those who've already been notified
         if users.empty?
@@ -212,7 +211,6 @@ class Comment < ApplicationRecord
           end
         end
       end
-
     end
   end
 
@@ -222,7 +220,6 @@ class Comment < ApplicationRecord
     # eventually we will set the locale to the user's stored language of choice
     #Locale.set ArchiveConfig.SUPPORTED_LOCALES[ArchiveConfig.DEFAULT_LOCALE]
     users = []
-    admins = []
 
     # notify the commenter
     if self.comment_owner && notify_user_of_own_comments?(self.comment_owner)
@@ -243,7 +240,7 @@ class Comment < ApplicationRecord
 
     # send notification to the owner(s) of the ultimate parent, who can be users or admins
     if self.ultimate_parent.is_a?(AdminPost)
-      AdminMailer.comment_notification(self.id).deliver_after_commit
+      CommentMailer.comment_notification(self.ultimate_parent.commentable_owners.first, self).deliver_after_commit
     else
       # at this point, users contains those who've already been notified
       if users.empty?
