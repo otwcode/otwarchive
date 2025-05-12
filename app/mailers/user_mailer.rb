@@ -354,8 +354,7 @@ class UserMailer < ApplicationMailer
   def admin_hidden_work_notification(creation_ids, user_id)
     @pac_footer = true
     @user = User.find_by(id: user_id)
-    @works = creation_ids.map { |work_id| Work.find_by(id: work_id) }
-      .compact
+    @works = Work.where(id: creation_ids)
     return if @works.empty?
 
     mail(
