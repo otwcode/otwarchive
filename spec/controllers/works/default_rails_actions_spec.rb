@@ -313,6 +313,14 @@ describe WorksController, work_search: true do
 
       expect(assigns(:page_title)).to include "No fandom specified"
     end
+
+    context "when work does not exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "999999999" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
 
   describe "share" do
