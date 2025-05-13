@@ -1,5 +1,7 @@
 ---
 en:
+  application_helper:
+    archivist_byline_html: "%{external_author} [archived by %{pseud_byline}]"
   collections_helper:
     collection_item_approval_options:
       collection:
