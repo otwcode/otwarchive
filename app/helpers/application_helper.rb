@@ -79,46 +79,61 @@ module ApplicationHelper
     non_anonymous_byline(creation, options[:only_path])
   end
 
+  private
+
   def non_anonymous_byline(creation, url_path = nil)
     only_path = url_path.nil? ? true : url_path
 
-    if @preview_mode
-      # Skip cache in preview mode
-      return byline_text(creation, only_path)
-    end
+    # Skip cache in preview mode
+    return byline_text_uncached(creation, only_path) if @preview_mode
 
-    Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
-      byline_text(creation, only_path)
+    byline_text_cached(creation, only_path)
+  end
+
+  def byline_text_cached(creation, only_path)
+    # Update Series#expire_byline_cache when changing cache keys here
+    Rails.cache.fetch("byline_text/#{creation.cache_key}_#{only_path}_#{I18n.locale}") do
+      creators = Rails.cache.fetch("byline_internal/#{creation.cache_key}") { byline_data(creation) }
+      byline_text_internal(creators, only_path)
     end
   end
 
-  def byline_text(creation, only_path, text_only = false)
-    if creation.respond_to?(:author)
-      creation.author
-    else
-      pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a
-      pseuds = pseuds.flatten.uniq.sort
+  def byline_text_uncached(creation, only_path, text_only = false)
+    creators = byline_data(creation)
+    byline_text_internal(creators, only_path, text_only)
+  end
 
-      archivists = Hash.new []
-      if creation.is_a?(Work)
-        external_creatorships = creation.external_creatorships.select { |ec| !ec.claimed? }
-        external_creatorships.each do |ec|
-          archivist_pseud = pseuds.select { |p| ec.archivist.pseuds.include?(p) }.first
-          archivists[archivist_pseud] += [ec.author_name]
-        end
+  def byline_text_internal(creators, only_path, text_only = false)
+    return creators if creators.is_a?(String)
+
+    safe_join(creators.map do |creator|
+      pseud_byline = text_only ? creator[:pseud].byline : pseud_link(creator[:pseud], only_path)
+      if creator[:archivists].empty?
+        pseud_byline
+      else
+        safe_join(creator[:archivists].map do |ext_author|
+          t("application_helper.archivist_byline_html", external_author: ext_author, pseud_byline: pseud_byline)
+        end, t("support.array.words_connector"))
       end
+    end, t("support.array.words_connector"))
+  end
 
-      pseuds.map { |pseud|
-        pseud_byline = text_only ? pseud.byline : pseud_link(pseud, only_path)
-        if archivists[pseud].empty?
-          pseud_byline
-        else
-          archivists[pseud].map { |ext_author|
-            ts("%{ext_author} [archived by %{name}]", ext_author: ext_author, name: pseud_byline)
-          }.join(', ')
-        end
-      }.join(', ').html_safe
+  def byline_data(creation)
+    return creation.author if creation.respond_to?(:author)
+
+    pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a
+    pseuds = pseuds.flatten.uniq.sort
+
+    archivists = Hash.new []
+    if creation.is_a?(Work)
+      external_creatorships = creation.external_creatorships.select { |ec| !ec.claimed? }
+      external_creatorships.each do |ec|
+        archivist_pseud = pseuds.find { |p| ec.archivist.pseuds.include?(p) }
+        archivists[archivist_pseud] += [ec.author_name]
+      end
     end
+
+    pseuds.map { |pseud| { pseud: pseud, archivists: archivists[pseud] } }
   end
 
   def pseud_link(pseud, only_path = true)
@@ -128,6 +143,8 @@ module ApplicationHelper
       link_to(pseud.byline, user_pseud_url(pseud.user, pseud), rel: "author")
     end
   end
+
+  public
 
   # A plain text version of the byline, for when we don't want to deliver a linkified version.
   def text_byline(creation, options={})
@@ -140,7 +157,7 @@ module ApplicationHelper
     else
       only_path = false
       text_only = true
-      byline_text(creation, only_path, text_only)
+      byline_text_uncached(creation, only_path, text_only)
     end
   end
 
