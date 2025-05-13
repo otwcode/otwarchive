@@ -186,7 +186,7 @@ Feature: Create and Edit Series
     Then I should see "penguins30"
     When I follow "Next"
     Then I should see "penguins0"
-	
+
   Scenario: Series show page with many works
     Given I am logged in as "author"
       And I post the work "Caesar" as part of a series "Salads"
@@ -216,7 +216,7 @@ Feature: Create and Edit Series
     When the user "moon" accepts all co-creator requests
     Then "moon" should be a creator of the series "Ponies"
     When I view the series "Ponies"
-      And I follow "Remove Me As Co-Creator"
+      And I press "Remove Me As Co-Creator"
     Then I should see "Sorry, we can't remove all creators of a work."
 
   Scenario: Removing self as co-creator from co-created series
@@ -232,7 +232,7 @@ Feature: Create and Edit Series
       And "son" should be a creator on the series "Ponies"
       # Delay to make sure the cache is expired
       And it is currently 1 second from now
-    When I follow "Remove Me As Co-Creator"
+    When I press "Remove Me As Co-Creator"
     Then I should see "You have been removed as a creator from the series and its works."
       And "moon" should not be the creator of the series "Ponies"
       And "son" should be a creator on the series "Ponies"
