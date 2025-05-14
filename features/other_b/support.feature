@@ -59,7 +59,7 @@ Feature: Filing a support request
   Then 1 email should be delivered
     # The sanitizer adds the domain in front of relative image URLs as of AO3-6571
     And the email should not contain "<img src="http://www.example.org/foo.jpg" />"
-    But the email should contain "http://www.example.org/foo.jpgHi"
+    But the email should contain "img src="http://www.example.org/foo.jpg"Hi"
 
   Scenario: Submit a request with an on-Archive referer
 

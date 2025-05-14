@@ -95,10 +95,10 @@ describe AbuseReporter do
     end
 
     context "if the report has an image in description" do
-      it "strips all img tags but leaves the src URLs" do
+      it "strips all img tags but leaves the HTML attributes" do
         allow(subject).to receive(:description).and_return('Hi!<img src="http://example.com/Camera-icon.svg">Bye!')
 
-        expect(subject.report_attributes.fetch("description")).to eq("Hi!http://example.com/Camera-icon.svgBye!")
+        expect(subject.report_attributes.fetch("description")).to eq('Hi!img src="http://example.com/Camera-icon.svg"Bye!')
       end
     end
 

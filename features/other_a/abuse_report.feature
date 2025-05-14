@@ -74,4 +74,4 @@ Feature: Filing an abuse report
     And the email should not contain "<img src="http://www.example.org/foo.jpg" />"
     And the email should not contain "<img src="http://www.example.org/bar.jpeg" />"
     But the email should contain "Gross"
-    And the email should contain "This is wrong http://www.example.org/bar.jpeg"
+    And the email should contain "This is wrong img src="http://www.example.org/bar.jpeg""
