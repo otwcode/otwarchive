@@ -243,7 +243,7 @@ When "I post a guest comment {string}" do |comment_content|
   step %{I should see "Comment created!"}
 end
 
-When /^I post a guest comment$/ do
+When "I post a guest comment" do
   step "I post a guest comment \"This was really lovely!\""
 end
 
