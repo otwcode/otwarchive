@@ -263,6 +263,10 @@ Feature: Admin Actions to Post News
       And I press "Comment"
     Then I should see "Your comment was received! It will appear publicly after it has been approved."
       And I should be on the "Default Admin Post" admin post page
+      And 1 email should be delivered to "admin@example.org"
+      # TODO: Update when AO3-6735 is fixed.
+      And the email should contain "Comments on this work are moderated and will not appear until approved by the work creator."
+      And the email should not contain "Review comments on Default Admin Post"
 
     # Leave a logged in comment on a moderated admin post
     When I am logged in as "commenter"
