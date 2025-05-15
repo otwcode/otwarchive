@@ -190,24 +190,20 @@ class Comment < ApplicationRecord
       end
 
       # send notification to the owner(s) of the ultimate parent, who can be users or admins
-      if self.ultimate_parent.is_a?(AdminPost)
-        CommentMailer.comment_notification(self.ultimate_parent.commentable_owners.first, self).deliver_after_commit
+      # at this point, users contains those who've already been notified
+      if users.empty?
+        users = self.ultimate_parent.commentable_owners
       else
-        # at this point, users contains those who've already been notified
-        if users.empty?
-          users = self.ultimate_parent.commentable_owners
-        else
-          # replace with the owners of the commentable who haven't already been notified
-          users = self.ultimate_parent.commentable_owners - users
-        end
-        users.each do |user|
-          unless user == self.comment_owner && !notify_user_of_own_comments?(user)
-            if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
-              CommentMailer.edited_comment_notification(user, self).deliver_after_commit
-            end
-            if notify_user_by_inbox?(user)
-              update_feedback_in_inbox(user)
-            end
+        # replace with the owners of the commentable who haven't already been notified
+        users = self.ultimate_parent.commentable_owners - users
+      end
+      users.each do |user|
+        unless user == self.comment_owner && !notify_user_of_own_comments?(user)
+          if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
+            CommentMailer.edited_comment_notification(user, self).deliver_after_commit
+          end
+          if user.is_a?(User) && notify_user_by_inbox?(user)
+            update_feedback_in_inbox(user)
           end
         end
       end
@@ -239,24 +235,20 @@ class Comment < ApplicationRecord
     end
 
     # send notification to the owner(s) of the ultimate parent, who can be users or admins
-    if self.ultimate_parent.is_a?(AdminPost)
-      CommentMailer.comment_notification(self.ultimate_parent.commentable_owners.first, self).deliver_after_commit
+    # at this point, users contains those who've already been notified
+    if users.empty?
+      users = self.ultimate_parent.commentable_owners
     else
-      # at this point, users contains those who've already been notified
-      if users.empty?
-        users = self.ultimate_parent.commentable_owners
-      else
-        # replace with the owners of the commentable who haven't already been notified
-        users = self.ultimate_parent.commentable_owners - users
-      end
-      users.each do |user|
-        unless user == self.comment_owner && !notify_user_of_own_comments?(user)
-          if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
-            CommentMailer.comment_notification(user, self).deliver_after_commit
-          end
-          if notify_user_by_inbox?(user)
-            add_feedback_to_inbox(user)
-          end
+      # replace with the owners of the commentable who haven't already been notified
+      users = self.ultimate_parent.commentable_owners - users
+    end
+    users.each do |user|
+      unless user == self.comment_owner && !notify_user_of_own_comments?(user)
+        if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
+          CommentMailer.comment_notification(user, self).deliver_after_commit
+        end
+        if user.is_a?(User) && notify_user_by_inbox?(user)
+          add_feedback_to_inbox(user)
         end
       end
     end
