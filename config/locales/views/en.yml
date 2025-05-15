@@ -1730,6 +1730,8 @@ en:
         one: "%{formatted_count} work"
         other: "%{formatted_count} works"
   layouts:
+    banner:
+      hide: hide banner
     footer:
       about:
         content_policy: Content Policy
