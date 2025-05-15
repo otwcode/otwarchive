@@ -235,12 +235,16 @@ When "Akismet will flag any comment containing {string}" do |spam_text|
   end
 end
 
-When /^I post a guest comment$/ do
+When "I post a guest comment {string}" do |comment_content|
   fill_in("comment[name]", with: "guest")
   fill_in("comment[email]", with: "guest@example.org")
-  fill_in("comment[comment_content]", with: "This was really lovely!")
+  fill_in("comment[comment_content]", with: comment_content)
   click_button("Comment")
   step %{I should see "Comment created!"}
+end
+
+When /^I post a guest comment$/ do
+  step "I post a guest comment \"This was really lovely!\""
 end
 
 When /^all comments by "([^"]*)" are marked as spam$/ do |name|

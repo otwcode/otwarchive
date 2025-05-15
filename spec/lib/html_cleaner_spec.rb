@@ -1146,8 +1146,28 @@ describe HtmlCleaner do
     end
 
     context "with keep_src: false" do
-      it "removes the img tag entirely" do
-        string = 'Hi! <img src="http://example.org/image.png" alt=\'something\' /> Bye'
+      it "removes the img tag entirely when the src uses double quotes" do
+        string = 'Hi! <img src="http://example.org/image.png" /> Bye'
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses single quotes" do
+        string = "Hi! <img src='http://example.org/image.png'> Bye"
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src uses mismatched quotes" do
+        string = "Hi! <img src=\"http://example.org/image.png'> Bye"
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing" do
+        string = 'Hi! <img alt="a11y"> Bye'
+        expect(strip_images(string, keep_src: false)).to eq(result)
+      end
+
+      it "removes the img tag entirely when the src is missing a closing quotation mark" do
+        string = 'Hi! <img src="http://example.org/image.png /> Bye'
         expect(strip_images(string, keep_src: false)).to eq(result)
       end
     end
@@ -1159,8 +1179,14 @@ describe HtmlCleaner do
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
 
-      it "does not keep tag trailing slash" do
+      it "does not keep tag trailing slash without a space" do
         string = 'Hi! <img src="http://example.org/image.png" alt=\'something\' /> Bye'
+        result = 'Hi! img src="http://example.org/image.png" alt=\'something\' Bye'
+        expect(strip_images(string, keep_src: true)).to eq(result)
+      end
+
+      it "does not keep tag trailing slash with a space" do
+        string = 'Hi! <img src="http://example.org/image.png" alt=\'something\'/> Bye'
         result = 'Hi! img src="http://example.org/image.png" alt=\'something\' Bye'
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
