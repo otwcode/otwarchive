@@ -633,7 +633,7 @@ describe CommentsController do
           fake_login_known_user(user)
           post :create, params: { work_id: work.id, comment: comment_attributes }
           comment = assigns[:comment]
-          it_redirects_to_with_comment_notice(chapter_path(work, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
+          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
           expect(comment.user_agent.length).to eq(500)
         end
       end
@@ -651,7 +651,7 @@ describe CommentsController do
           fake_login_known_user(user)
           post :create, params: { work_id: work.id, comment: comment_attributes }
           comment = assigns[:comment]
-          it_redirects_to_with_comment_notice(chapter_path(work, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
+          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
           expect(comment.user_agent).to be_nil
         end
       end
