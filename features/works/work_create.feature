@@ -64,9 +64,9 @@ Feature: Create Works
       And the user "recipient" allows gifts
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
+      And "thorough" has the pseud "Pseud2"
+      And "thorough" has the pseud "Pseud3"
       And I am logged in as "thorough"
-      And "thorough" creates the pseud "Pseud2"
-      And "thorough" creates the pseud "Pseud3"
       And all emails have been delivered
     When I go to the new work page
       And I select "Not Rated" from "Rating"

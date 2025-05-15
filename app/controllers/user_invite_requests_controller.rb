@@ -59,7 +59,7 @@ class UserInviteRequestsController < ApplicationController
           requested_total = request.quantity.to_i
           request.quantity = 0
           request.save!
-          I18n.with_locale(user.preference.locale.iso) do
+          I18n.with_locale(user.preference.locale_for_mails) do
             UserMailer.invite_request_declined(request.user_id, requested_total, request.reason).deliver_later
           end
         end

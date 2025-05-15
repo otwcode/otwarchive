@@ -10,9 +10,7 @@ Feature: Kudos
         | myname1        | myname1@foo.com |
         | myname2        | myname2@foo.com |
         | myname3        | myname3@foo.com |
-      And I am logged in as "myname1"
-      And I post the work "Awesome Story"
-      And I log out
+      And the work "Awesome Story" by "myname1"
 
   Scenario: Leaving kudos
 
@@ -139,10 +137,9 @@ Feature: Kudos
 
   Scenario: Batched kudos email
 
-    Given I am logged in as "myname1"
-      And I post the work "Another Awesome Story"
-      And I post the work "Meh Story"
-      And I post the work "Okay Story"
+    Given the work "Another Awesome Story" by "myname1"
+      And the work "Meh Story" by "myname1"
+      And the work "Okay Story" by "myname1"
       And all emails have been delivered
       And the kudos queue is cleared
       And I am logged in as "myname2"
@@ -194,6 +191,25 @@ Feature: Kudos
       And the email to "myname1" should contain "Awesome Story"
       And the email to "myname1" should be non-translated
 
+  Scenario: Emails should not obey user's locale preference when localised emails for that locale are deactivated
+
+    Given a locale with translated emails
+      And the user "myname1" enables translated emails
+      And all emails have been delivered
+      And the kudos queue is cleared
+      And I am logged in as "myname2"
+      And I leave kudos on "Awesome Story"
+    When kudos are sent
+    Then 1 email should be delivered to "myname1@foo.com"
+      And the email to "myname1" should be translated
+    When translated emails are disabled for the locale
+      And all emails have been delivered
+      And I am logged in as "myname3"
+      And I leave kudos on "Awesome Story"
+      And kudos are sent
+    Then 1 email should be delivered to "myname1@foo.com"
+      And the email to "myname1" should be non-translated
+
   Scenario: Blocked users should not see a kudos button on their blocker's works
     Given the work "Aftermath" by "creator"
       And the user "creator" has blocked the user "pest"
@@ -222,8 +238,16 @@ Feature: Kudos
       And I view the work "Interesting beans"
     Then I should not see "newusername1 left kudos on this work!"
 
-  Scenario: Cannot leave kudos (no button) while logged as admin
+  Scenario: Cannot leave kudos (no button) while logged in as admin
     Given I am logged in as an admin
       And I view the work "Awesome Story"
     Then I should see "Awesome Story"
       And I should not see a "Kudos ♥" button
+
+  @javascript
+  Scenario: Cannot leave kudos while logged in as a user with the official role
+    Given the user "clicker" exists and has the role "official"
+      And I am logged in as "clicker"
+    When I view the work "Awesome Story"
+      And I press "Kudos ♥"
+    Then I should see "Please log out of your official account!"

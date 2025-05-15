@@ -523,6 +523,13 @@ en:
           comments_on_works: delete or hide comments they previously left on your works; you can delete these individually
           hide_works: hide their works or bookmarks from you
           intro: 'Blocking a user will not:'
+  bookmarks:
+    bookmark_user_module:
+      bookmarked_by_html: Bookmarked by %{pseud_link}
+    index:
+      advanced_search: try our advanced search
+      choose_fandom: choose a fandom
+      recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
   challenge:
     gift_exchange:
       challenge_signups:
@@ -660,6 +667,11 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+    edit:
+      back: Back
+      page_heading: Editing comment
+      show: Show
+      update: Update
     unreviewed:
       approve_all: Approve All Unreviewed Comments
       no_unreviewed: No unreviewed comments.
@@ -689,6 +701,17 @@ en:
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
+  errors:
+    timeout_error:
+      contact_support: contact Support
+      html: If you still get this error after a few tries, you can %{contact_support_link}.
+      page_heading: Timeout Error
+      subtitle: The page was responding too slowly. Please try again after a few minutes.
+  external_works:
+    notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
+  fandoms:
+    index:
+      page_heading: Fandoms
   feedbacks:
     new:
       abuse:
@@ -1580,7 +1603,7 @@ en:
         what_you_cant_do: What you can't do
   invitations:
     invitation:
-      copy_and_use: copy and use
+      copy_and_use: Copy and use
       copy_link: Copy link
       created_at: Created at
       deleted_user: Deleted User
@@ -1761,6 +1784,10 @@ en:
       read_and_understood: I have read & understood the 2024 Terms of Service, including the Content Policy and Privacy Policy.
       summary_html: On the Archive of Our Own (AO3), users can create works, bookmarks, comments, tags, and other %{content_link}. Any information you publish on AO3 may be accessible by the public, AO3 users, and/or AO3 personnel. Be mindful when sharing personal information, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites.
       tos: Terms of Service
+  media:
+    index:
+      all: All %{media_type}...
+      page_heading: Fandoms
   menu:
     menu_about:
       about_us: About Us
@@ -1879,12 +1906,13 @@ en:
         turn_on_new_user_help: Turn the new user help banner back on.
       navigation:
         blocked_users: Blocked Users
-        change_my_username: Change My Username
+        change_email: Change Email
+        change_password: Change Password
+        change_username: Change Username
         edit_my_profile: Edit My Profile
         landmark: Navigation
         manage_my_pseuds: Manage My Pseuds
         muted_users: Muted Users
-        orphan_my_works: Orphan My Works
       page_heading: Set My Preferences
       privacy:
         allow_co_creator_invite: Allow others to invite me to be a co-creator.
@@ -1945,10 +1973,25 @@ en:
       make_default: Make this name default
       name: Name
       submit: Submit
+  related_works:
+    index:
+      page_heading: "%{login}'s Related Works"
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
   subscriptions:
+    confirm_delete_all:
+      caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
+      page_heading:
+        all: Delete All Subscriptions
+        series: Delete All Series Subscriptions
+        users: Delete All User Subscriptions
+        works: Delete All Work Subscriptions
+      submit:
+        all: Yes, Delete All Subscriptions
+        series: Yes, Delete All Series Subscriptions
+        users: Yes, Delete All User Subscriptions
+        works: Yes, Delete All Work Subscriptions
     index:
       button_html: Unsubscribe from %{name}
       byline_html: by %{creators}
@@ -1957,6 +2000,11 @@ en:
           list: List of Subscriptions
       navigation:
         all: All Subscriptions
+        delete_all:
+          all: Delete All Subscriptions
+          series: Delete All Series Subscriptions
+          users: Delete All User Subscriptions
+          works: Delete All Work Subscriptions
         series: Series Subscriptions
         user: User Subscriptions
         work: Work Subscriptions
@@ -2072,6 +2120,26 @@ en:
       ticket_id: Ticket ID
     change_email:
       browser_title: Change Email
+      caution:
+        check_spam_html: "%{must_confirm_bold} Please check your spam folder or %{contact_support_link} if you do not receive the confirmation email."
+        confirm_by: If you don't confirm your request by %{date}, your email address will not be changed.
+        contact_support: contact Support
+        must_confirm: You must use the link in the confirmation email in order to finish confirming your email change.
+        requested_change_html: You have requested to change your email address to %{unconfirmed_email}. A confirmation email has been sent to this address.
+      form:
+        confirm: Confirm New Email
+        current_email: Current email
+        email_again: Enter new email again
+        new_email: New email
+        password: Password
+        submit_landmark: Submit
+      heading: Change Email
+      invalidate: invalidate any pending email change requests
+      must_confirm:
+        one: You must use the link in the confirmation email in order to finish confirming your email change. If you don't confirm your request within %{count} day, the link will expire and your email address will not be changed.
+        other: You must use the link in the confirmation email in order to finish confirming your email change. If you don't confirm your request within %{count} days, the link will expire and your email address will not be changed.
+      request_for_confirmation: Changing your email will send a request for confirmation to your new email address and a notification to your current email address.
+      resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
     change_password:
       browser_title: Change Password
     change_username:
@@ -2096,6 +2164,15 @@ en:
       submit: Change Username
       submit_landmark: Submit
       username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
+    confirm_change_email:
+      are_you_sure_html: Are you sure you want to change your email address to %{unconfirmed_email}? A confirmation email will be sent to this address.
+      cancel: Cancel
+      confirm: Yes, Change Email
+      confirm_via_link_html: You must use the link in the confirmation email in order to finish confirming your email change. %{if_not_confirm_bold}
+      heading: Confirm New Email
+      if_not_confirm:
+        one: If you don't confirm your request within %{count} day, the link will expire and your email address will not be changed.
+        other: If you don't confirm your request within %{count} days, the link will expire and your email address will not be changed.
     confirmation:
       contact_support: contact Support
       go_back: Return to Archive front page
@@ -2307,6 +2384,10 @@ en:
       content_policy: Content Policy
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
+    index:
+      advanced_search: try our advanced search
+      choose_fandom: choose a fandom
+      recent_works_html: These are some of the latest works posted to the Archive. To find more works, %{choose_fandom_link} or %{advanced_search_link}.
     meta:
       original_creators:
         one: 'Original Creator ID:'

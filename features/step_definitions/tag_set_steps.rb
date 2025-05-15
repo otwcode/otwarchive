@@ -130,6 +130,19 @@ When /^I nominate fandoms? "([^\"]*)" and characters? "([^\"]*)" in "([^\"]*)"(?
   step %{I should see a success message}
 end
 
+When "I edit nominations for {string} in {string} to include character(s) {string} under fandom {string}" do |user, title, characters, fandom|
+  step %{I am logged in as "#{user}"}
+  step %{I go to the "#{title}" tag set page}
+  step %{I follow "My Nominations"}
+  step %{I follow "Edit"}
+  character_inputs = find("dd", text: fandom).find_all(:xpath, "..//input[contains(@id, 'character')]")
+  characters.split(/, ?/).each.with_index do |character, index|
+    character_inputs[index].fill_in(with: character)
+  end
+  step %{I submit}
+  step %{I should see a success message}
+end
+
 When /^there are (\d+) unreviewed nominations$/ do |n|
   (1..n.to_i).each do |i|
     step %{I am logged in as \"nominator#{i}\"}
@@ -182,6 +195,10 @@ When /^I nominate and approve tags with Unicode characters in "([^\"]*)"/ do |ti
   step %{I should see "Successfully added to set"}
 end
 
+When "I approve the nominated {word} tag {string}" do |tag_type, tag_name|
+  check("#{tag_type.downcase}_approve_#{tag_name.tr(' ', '_')}")
+end
+
 When /^I should see the tags with Unicode characters/ do
   tags = "The Hobbit - All Media Types, Dís, Éowyn, Kíli, Bifur/Óin, スマイルプリキュア, 新白雪姫伝説プリーティア".split(', ')
   tags.each do |tag|
@@ -210,9 +227,7 @@ When /^I view associations for a tag set that does not exist/ do
 end
 
 When /^I expand the unassociated characters and relationships$/ do
-  within('span[action_target="#list_for_unassociated_char_and_rel"]') do
-    click_link("↓")
-  end
+  find('button[data-action-target="#list_for_unassociated_char_and_rel"]').click
 end
 
 Then /^"([^\"]*)" should be associated with the "([^\"]*)" fandom "([^\"]*)"$/ do |tag, fandom_type, fandom_name|
