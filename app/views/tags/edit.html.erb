@@ -17,9 +17,9 @@
 
 <%= form_for @tag, as: :tag, url: { action: "update", id: @tag}, html: { method: :put } do |f| %>
 <fieldset>
-    <legend><%= ts("Submit") %></legend>
+    <legend><%= t(".submit_legend") %></legend>
     <p class="submit actions">
-      <%= submit_tag ts("Save changes") %>
+      <%= submit_tag t(".save_changes") %>
     </p>
   </fieldset>
   <fieldset>
@@ -223,9 +223,9 @@
   <% end %>
 
   <fieldset>
-    <legend><%= ts("Submit") %></legend>
+    <legend><%= t(".submit_legend") %></legend>
     <p class="submit actions">
-      <%= submit_tag ts("Save changes") %>
+      <%= submit_tag t(".save_changes") %>
     </p>
   </fieldset>
 <% end %>
