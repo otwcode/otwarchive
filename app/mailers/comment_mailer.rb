@@ -3,7 +3,7 @@ class CommentMailer < ApplicationMailer
   # This may be an admin, in which case we use the admin address instead
   def comment_notification(user, comment)
     @comment = comment
-    @owner = user
+    @owner = true
     email = user.is_a?(Admin) ? ArchiveConfig.ADMIN_ADDRESS : user.email
     locale = user.try(:preference).try(:locale_for_mails) || I18n.default_locale.to_s
     I18n.with_locale(locale) do
@@ -18,6 +18,7 @@ class CommentMailer < ApplicationMailer
   # This may be an admin, in which case we use the admin address instead
   def edited_comment_notification(user, comment)
     @comment = comment
+    @owner = true
     email = user.is_a?(Admin) ? ArchiveConfig.ADMIN_ADDRESS : user.email
     locale = user.try(:preference).try(:locale_for_mails) || I18n.default_locale.to_s
     I18n.with_locale(locale) do
