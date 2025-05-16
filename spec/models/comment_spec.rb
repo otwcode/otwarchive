@@ -674,5 +674,13 @@ describe Comment do
         expect(chapter_reply.use_image_safety_mode?).to be_falsey
       end
     end
+
+    context "when the comment is from a guest" do
+      let(:comment) { create(:comment, :by_guest) }
+
+      it "returns true" do
+        expect(comment.use_image_safety_mode?).to be_truthy
+      end
+    end
   end
 end
