@@ -26,7 +26,7 @@ class CollectionsController < ApplicationController
   def check_parent_visible
     return unless params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
 
-    check_parent_visibility(@work)
+    check_visibility_for(@work)
   end
 
   def index

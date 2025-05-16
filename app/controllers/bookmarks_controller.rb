@@ -24,7 +24,7 @@ class BookmarksController < ApplicationController
   end
 
   def check_parent_visible
-    check_parent_visibility(@bookmarkable)
+    check_visibility_for(@bookmarkable)
   end
 
   # get the parent

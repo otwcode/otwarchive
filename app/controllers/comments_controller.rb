@@ -67,7 +67,7 @@ class CommentsController < ApplicationController
   end
 
   def check_parent_visible
-    check_parent_visibility(find_parent)
+    check_visibility_for(find_parent)
   end
 
   def check_modify_parent

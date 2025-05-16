@@ -508,12 +508,12 @@ public
   end
 
   # Checks if user is allowed to see related page if parent item is hidden or in unrevealed collection
-  def check_parent_visibility(parent)
+  def check_visibility_for(parent)
     # Only admins and the owner can see related pages on something hidden by an admin.
-    logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path) if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
+    logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path) if parent.try(:hidden_by_admin)
 
     # Only admins and the owner can see related pages on unrevealed works.
-    logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path) if parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection
+    logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path) if parent.try(:in_unrevealed_collection)
   end
 
   public
