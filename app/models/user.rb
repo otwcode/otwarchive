@@ -5,6 +5,8 @@ class User < ApplicationRecord
   include PasswordResetsLimitable
   include UserLoggable
 
+  self.ignored_columns = [:recently_reset]
+
   devise :database_authenticatable,
          :confirmable,
          :registerable,
