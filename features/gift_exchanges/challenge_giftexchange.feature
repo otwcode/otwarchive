@@ -180,14 +180,23 @@ Feature: Gift Exchange Challenge
     Then I should see "Reviewing Assignments"
       And I should see "Complete"
 
-  Scenario: Invalid signups are caught before generation
+  Scenario: Invalid signups are caught before generation and a translated email is sent
     Given the gift exchange "Awesome Gift Exchange" is ready for matching
       And I create an invalid signup in the gift exchange "Awesome Gift Exchange"
+      And I have added a co-moderator "mod2" to collection "Awesome Gift Exchange"
+      And a locale with translated emails
+      And the user "mod1" enables translated emails
     When I close signups for "Awesome Gift Exchange"
       And I follow "Matching"
       And I follow "Generate Potential Matches"
     Then 1 email should be delivered to "mod1"
+      And the email to "mod1" should be translated
       And the email should contain "invalid sign-up"
+      And the email should contain "you are an owner or moderator of the collection"
+      And 1 email should be delivered to "mod2"
+      And the email to "mod2" should be non-translated
+      And the email should contain "invalid sign-up"
+      And the email should contain "you are an owner or moderator of the collection"
     When I go to "Awesome Gift Exchange" gift exchange matching page
     Then I should see "Generate Potential Matches"
       And I should see "invalid sign-ups"
