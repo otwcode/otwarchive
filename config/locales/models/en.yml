@@ -16,6 +16,8 @@ en:
         support: Support
         tag_wrangling: Tag Wrangling
         translation: Translation
+      challenge_signup/requests:
+        url: Request URL
       chapters/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
@@ -35,6 +37,8 @@ en:
         meta_tag_id: Metatag
         sub_tag: Subtag
         sub_tag_id: Subtag
+      request:
+        url: URL
       role:
         archivist: Archivist
         no_resets: No Resets

@@ -120,6 +120,18 @@ Feature: Gift Exchange Challenge
       And I submit
     Then I should see "URL: https://example.com/url_for_prompt"
 
+  Scenario: Invalid URL is disallowed when editing a signup
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I edit settings for "Awesome Gift Exchange" challenge
+      And I check "gift_exchange[request_restriction_attributes][url_allowed]"
+      And I submit
+    When I am logged in as "myname1"
+      And I sign up for "Awesome Gift Exchange" with combination A
+      And I follow "Edit Sign-up"
+      And I fill in "Prompt URL:" with "i am broken."
+      And I submit
+    Then I should see "Request URL does not appear to be a valid URL."
+
   Scenario: Sign-ups can be seen in the dashboard
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
     When I am logged in as "myname1"

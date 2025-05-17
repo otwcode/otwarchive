@@ -42,6 +42,8 @@ class ExternalWork < ApplicationRecord
   validates :url, presence: true, url_format: true, url_active: true
   def cleanup_url
     self.url = Addressable::URI.heuristic_parse(self.url) if self.url
+  rescue Addressable::URI::InvalidURIError
+    # url_format validation creates the error message
   end
 
   # Allow encoded characters to display correctly in titles
