@@ -1,9 +1,18 @@
 class KudosController < ApplicationController
   skip_before_action :store_location
+  before_action :load_parent, only: [:index]
+  before_action :check_parent_visible, only: [:index]
   before_action :admin_logout_required, only: [:create]
 
-  def index
+  def load_parent
     @work = Work.find(params[:work_id])
+  end
+
+  def check_parent_visible
+    check_visibility_for(@work)
+  end
+
+  def index
     @kudos = @work.kudos.includes(:user).with_user
     @guest_kudos_count = @work.kudos.by_guest.count
 

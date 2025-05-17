@@ -1,10 +1,10 @@
 class CollectionsController < ApplicationController
-
   before_action :users_only, only: [:new, :edit, :create, :update]
   before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
   before_action :validate_challenge_type
+  before_action :check_parent_visible, only: [:index]
   cache_sweeper :collection_sweeper
 
   # Lazy fix to prevent passing unsafe values to eval via challenge_type
@@ -21,6 +21,12 @@ class CollectionsController < ApplicationController
     unless @collection
         raise ActiveRecord::RecordNotFound, "Couldn't find collection named '#{params[:id]}'"
     end
+  end
+
+  def check_parent_visible
+    return unless params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
+
+    check_visibility_for(@work)
   end
 
   def index
