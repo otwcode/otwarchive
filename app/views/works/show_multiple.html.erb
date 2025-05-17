@@ -8,7 +8,7 @@
 
 <!--main content-->
 <% if @works.empty? %>
-  <p>
+  <p class="note">
     <%= t(".no_works") %>
   </p>
 <% else %>
@@ -38,10 +38,11 @@
               <ul class="index concise">
                 <% @works_by_fandom[fandom].each do |work| %>
                   <li>
-                    <label class="action" title="select <%= work.title + (work.posted? ? "" : t(".draft")) %>">
+                    <% work_title_with_status = work.title + (work.posted? ? "" : t(".draft")) %>
+                    <label class="action" title="select <%= work_title_with_status %>">
                       <%= check_box_tag "work_ids[]", work.id, false, id: "work_ids_#{work.id}" %>
                     </label>
-                  <%= link_to work.title + (work.posted? ? "" : t(".draft")), work_path(id: work.id) %>
+                  <%= link_to work_title_with_status, work_path(id: work.id) %>
                   </li>
                 <% end %>
               </ul>
