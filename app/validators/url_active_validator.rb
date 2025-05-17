@@ -5,9 +5,10 @@ class UrlActiveValidator < ActiveModel::EachValidator
 
   # Checks the status of the webpage at the given url
   # To speed things up we ONLY request the head and not the entire page.
-  # Bypass check for fanfiction.net because of ip block
+  # Bypass check for fanfiction.net and ficbook.net because of ip block
   def validate_each(record,attribute,value)
-    return true if value.match("fanfiction.net")
+    return true if value.match("fanfiction.net") || value.match("ficbook.net")
+    
     inactive_url_msg = "could not be reached. If the URL is correct and the site is currently down, please try again later."
     inactive_url_timeout = 10 # seconds
     begin

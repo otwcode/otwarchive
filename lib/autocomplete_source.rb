@@ -84,7 +84,6 @@ module AutocompleteSource
   end
 
   def remove_stale_from_autocomplete
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_before_last_save}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_before_last_save, self.autocomplete_prefixes, self.autocomplete_value_before_last_save)
   end
 
@@ -247,9 +246,9 @@ module AutocompleteSource
       # letters with accents or other diacritics.
       normalized = self.transliterate(string).downcase.to_s
 
-      # Split on one or more spaces, ampersand, slash, double quotation mark,
-      # opening parenthesis, closing parenthesis (just in case), tilde, hyphen
-      normalized.split(/(?:\s+|\&|\/|"|\(|\)|\~|-)/).reject(&:blank?)
+      # Split on one or more spaces, ampersands, slashes, double quotation marks,
+      # opening parentheses, closing parentheses (just in case), tildes, hyphens, vertical bars
+      normalized.split(%r{(?:\s|&|/|"|\(|\)|~|-|\|)+})
     end
 
     def autocomplete_pieces(string)

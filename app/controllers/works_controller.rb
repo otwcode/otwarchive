@@ -5,14 +5,15 @@ class WorksController < ApplicationController
   before_action :load_collection
   before_action :load_owner, only: [:index]
   before_action :users_only, except: [:index, :show, :navigate, :search, :collected, :edit_tags, :update_tags, :drafts, :share]
-  before_action :check_user_status, except: [:index, :show, :navigate, :search, :collected, :share]
+  before_action :check_user_status, except: [:index, :edit, :edit_multiple, :confirm_delete_multiple, :delete_multiple, :confirm_delete, :destroy, :show, :show_multiple, :navigate, :search, :collected, :share]
+  before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy, :show_multiple, :edit_multiple, :confirm_delete_multiple, :delete_multiple]
   before_action :load_work, except: [:new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts, :collected]
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
   before_action :check_ownership, except: [:index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :edit_tags, :update_tags, :update_multiple, :delete_multiple, :search, :mark_for_later, :mark_as_read, :drafts, :collected, :share]
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
   before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
   before_action :log_admin_activity, only: [:update_tags]
-  before_action :check_visibility, only: [:show, :navigate, :share]
+  before_action :check_visibility, only: [:show, :navigate, :share, :mark_for_later, :mark_as_read]
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
 
@@ -55,12 +56,11 @@ class WorksController < ApplicationController
 
     options = params[:work_search].present? ? clean_work_search_params : {}
 
-    if params[:fandom_id] || (@collection.present? && @tag.present?)
-      if params[:fandom_id].present?
-        @fandom = Fandom.find_by(id: params[:fandom_id])
-      end
+    if params[:fandom_id].present? || (@collection.present? && @tag.present?)
+      @fandom = Fandom.find(params[:fandom_id]) if params[:fandom_id]
 
       tag = @fandom || @tag
+
       options[:filter_ids] ||= []
       options[:filter_ids] << tag.id
     end
@@ -131,6 +131,8 @@ class WorksController < ApplicationController
       @works = Work.latest.for_blurb.to_a
     end
     set_own_works
+
+    @pagy = pagy_query_result(@works) if @works.respond_to?(:total_pages)
   end
 
   def collected
@@ -159,6 +161,8 @@ class WorksController < ApplicationController
       redirect_to logged_in? ? user_path(current_user) : new_user_session_path
       return
     end
+    
+    @page_subtitle = t(".page_title", username: @user.login)
 
     if params[:pseud_id]
       @pseud = @user.pseuds.find_by(name: params[:pseud_id])
@@ -281,7 +285,7 @@ class WorksController < ApplicationController
     set_work_form_fields
 
     if params[:import]
-      @page_subtitle = ts('import')
+      @page_subtitle = ts("Import New Work")
       render(:new_import)
     elsif @work.persisted?
       render(:edit)
@@ -317,7 +321,7 @@ class WorksController < ApplicationController
 
       if @work.save
         if params[:preview_button]
-          flash[:notice] = ts("Draft was successfully created. It will be <strong>automatically deleted</strong> on %{deletion_date}", deletion_date: view_context.time_in_zone(@work.created_at + 1.month)).html_safe
+          flash[:notice] = ts("Draft was successfully created. It will be <strong>scheduled for deletion</strong> on %{deletion_date}.", deletion_date: view_context.date_in_zone(@work.created_at + 29.days)).html_safe
           in_moderated_collection
           redirect_to preview_work_path(@work)
         else
@@ -391,7 +395,6 @@ class WorksController < ApplicationController
       @work.set_revised_at_by_chapter(@chapter)
       posted_changed = @work.posted_changed?
 
-      @work.minor_version = @work.minor_version + 1
       if @chapter.save && @work.save
         flash[:notice] = ts("Work was successfully #{posted_changed ? 'posted' : 'updated'}.")
         if posted_changed
@@ -770,7 +773,8 @@ class WorksController < ApplicationController
         end
       end
     end
-    @owner = @pseud || @user || @collection || @tag
+    @language = Language.find_by(short: params[:language_id]) if params[:language_id].present?
+    @owner = @pseud || @user || @collection || @tag || @language
   end
 
   def load_work
@@ -878,6 +882,8 @@ class WorksController < ApplicationController
       post_without_preview: params[:post_without_preview],
       importing_for_others: params[:importing_for_others],
       restricted: params[:restricted],
+      moderated_commenting_enabled: params[:moderated_commenting_enabled],
+      comment_permissions: params[:comment_permissions],
       override_tags: params[:override_tags],
       detect_tags: params[:detect_tags] == "true",
       fandom: params[:work][:fandom_string],
@@ -894,7 +900,7 @@ class WorksController < ApplicationController
       external_coauthor_name: params[:external_coauthor_name],
       external_coauthor_email: params[:external_coauthor_email],
       language_id: params[:language_id]
-    }
+    }.compact_blank!
   end
 
   def work_params

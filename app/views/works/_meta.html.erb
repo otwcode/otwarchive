@@ -1,9 +1,9 @@
-<% cache_unless(@preview_mode, "/v3/#{work.cache_key}-#{Work.work_blurb_version(work.id)}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}", skip_digest: true) do %>
+<% cache_unless(@preview_mode, "/v4/#{work.cache_key}-#{Work.work_blurb_version(work.id)}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}", skip_digest: true) do %>
 <h3 class="landmark heading"><%= ts("Work Header") %></h3>
 
 <div class="wrapper">
 
-  <dl class="work meta group" role="complementary">
+  <dl class="work meta group">
     <% tag_group = work.tag_groups
        Tag::VISIBLE.each do |type| %>
       <% tags = tag_group[type] %>
@@ -35,7 +35,7 @@
       <dt class="language">
         <%= ts("Language:") %>
       </dt>
-      <dd class="language">
+      <dd class="language" lang="<%= @work.language.short %>">
         <%= @work.language.name %>
       </dd>
     <% end %>

@@ -1,8 +1,8 @@
-require File.expand_path("boot", __dir__)
+require_relative "boot"
 
 require "rails/all"
 
-# If you have a Gemfile, require the gems listed there, including any gems
+# Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
@@ -12,11 +12,17 @@ module Otwarchive
     app_config.merge!(YAML.load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
     ::ArchiveConfig = OpenStruct.new(app_config)
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
 
-    config.load_defaults "6.0"
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
+
+    config.load_defaults 7.0
 
     # TODO: Remove in Rails 7.1, where it's false by default.
     config.add_autoload_paths_to_load_path = false
@@ -28,7 +34,6 @@ module Otwarchive
       app/models/potential_matcher
       app/models/search
       app/models/tagset_models
-      lib
     ].each do |dir|
       config.eager_load_paths << Rails.root.join(dir)
     end
@@ -38,18 +43,17 @@ module Otwarchive
     I18n.config.enforce_available_locales = false
     I18n.config.available_locales = [
       :en, :af, :ar, :bg, :bn, :ca, :cs, :cy, :da, :de, :el, :es, :fa, :fi,
-      :fil, :fr, :he, :hi, :hr, :hu, :id, :it, :ja, :ko, :ky, :lt, :lv, :mk,
-      :mr, :ms, :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :sk, :sl, :sr, :sv,
-      :th, :tr, :uk, :vi, :"zh-CN"
+      :fil, :fr, :he, :hi, :hr, :hu, :id, :it, :ja, :ko, :lt, :lv, :mk,
+      :mr, :ms, :nb, :nl, :pl, :"pt-BR", :"pt-PT", :ro, :ru, :scr, :sk, :sl,
+      :sv, :th, :tr, :uk, :vi, :"zh-CN"
     ]
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = "UTC"
 
-    # The default locale is :en and all translations from config/locales/**/*.rb,yml are auto loaded.
-    config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.{rb,yml}")]
-    # config.i18n.default_locale = :de
+    # The default locale is :en.
+    config.i18n.default_locale = ArchiveConfig.DEFAULT_LOCALE_ISO.to_sym
 
     # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
     # the I18n.default_locale when a translation can not be found)
@@ -67,6 +71,8 @@ module Otwarchive
     config.filter_parameters += [:content, :password, :terms_of_service_non_production]
 
     # Disable dumping schemas after migrations.
+    # This can cause problems since we don't always update versions on merge.
+    # Ideally this would be enabled in dev, but we're not quite ready for that.
     config.active_record.dump_schema_after_migration = false
 
     # Allows belongs_to associations to be optional
@@ -75,8 +81,13 @@ module Otwarchive
     # Keeps updated_at in cache keys
     config.active_record.cache_versioning = false
 
-    # This class is not allowed by deafult when upgrading Rails to 6.0.5.1 patch
-    config.active_record.yaml_column_permitted_classes = [ActiveSupport::TimeWithZone, Time, ActiveSupport::TimeZone]
+    # This class is not allowed by default when upgrading Rails to 6.0.5.1 patch
+    config.active_record.yaml_column_permitted_classes = [
+      ActiveSupport::TimeWithZone,
+      Time,
+      ActiveSupport::TimeZone,
+      BCrypt::Password
+    ]
 
     # handle errors with custom error pages:
     config.exceptions_app = self.routes
@@ -91,7 +102,6 @@ module Otwarchive
       "X-Frame-Options" => "SAMEORIGIN",
       "X-XSS-Protection" => "1; mode=block",
       "X-Content-Type-Options" => "nosniff",
-      "X-Download-Options" => "noopen",
       "X-Permitted-Cross-Domain-Policies" => "none"
     }
 
@@ -111,6 +121,7 @@ module Otwarchive
       domain: ArchiveConfig.SMTP_DOMAIN,
       port: ArchiveConfig.SMTP_PORT,
       enable_starttls_auto: ArchiveConfig.SMTP_ENABLE_STARTTLS_AUTO,
+      enable_starttls: ArchiveConfig.SMTP_ENABLE_STARTTLS,
       openssl_verify_mode: ArchiveConfig.SMTP_OPENSSL_VERIFY_MODE
     }
     if ArchiveConfig.SMTP_AUTHENTICATION
@@ -120,5 +131,18 @@ module Otwarchive
                                                   authentication: ArchiveConfig.SMTP_AUTHENTICATION
                                                 })
     end
+
+    # Disable ActiveStorage things that we don't need and can hit the DB hard
+    config.active_storage.analyzers = []
+    config.active_storage.previewers = []
+
+    # Set ActiveStorage queue name
+    config.active_storage.queues.mirror = :active_storage
+    config.active_storage.queues.preview_image = :active_storage
+    config.active_storage.queues.purge = :active_storage
+    config.active_storage.queues.transform = :active_storage
+
+    # Use secret from archive config
+    config.secret_key_base = ArchiveConfig.SESSION_SECRET
   end
 end

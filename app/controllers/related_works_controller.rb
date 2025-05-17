@@ -5,6 +5,7 @@ class RelatedWorksController < ApplicationController
   before_action :get_instance_variables, except: [:index]
 
   def index
+    @page_subtitle = t(".page_title", login: @user.login)
     @translations_of_user = @user.related_works.posted.where(translation: true)
     @remixes_of_user = @user.related_works.posted.where(translation: false)
     @translations_by_user = @user.parent_work_relationships.posted.where(translation: true)
@@ -65,7 +66,7 @@ class RelatedWorksController < ApplicationController
       end
     end
     @related_work.destroy
-    redirect_back_or_default(user_related_works_path(current_user))
+    redirect_back(fallback_location: user_related_works_path(current_user))
   end
 
   private

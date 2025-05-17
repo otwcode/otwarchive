@@ -9,6 +9,11 @@ Given /^basic skins$/ do
   assert WorkSkin.basic_formatting
 end
 
+Given "the skin {string} by {string}" do |skin_name, login|
+  user = ensure_user(login)
+  FactoryBot.create(:skin, title: skin_name, author_id: user.id)
+end
+
 Given /^I set up the skin "([^"]*)"$/ do |skin_name|
   visit new_skin_path
   fill_in("Title", with: skin_name)
@@ -80,15 +85,22 @@ Given /^I have loaded site skins$/ do
   Skin.load_site_css
 end
 
-Given /^the approved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
-  step "the unapproved public skin \"#{skin_name}\" with css \"#{css}\""
-  step "I am logged in as an admin"
-  step "I approve the skin \"#{skin_name}\""
+Given "the approved public skin {string} with css {string}" do |skin_name, css|
+  step %{the unapproved public skin "#{skin_name}" with css "#{css}"}
+  step %{I approve the skin "#{skin_name}"}
   step "I am logged out"
 end
 
 Given /^the approved public skin "([^"]*)"$/ do |skin_name|
   step "the approved public skin \"#{skin_name}\" with css #{DEFAULT_CSS}"
+end
+
+Given "the approved public skin {string} has reserved words in the title" do |skin_name|
+  # Admins can't create skins, so we have to create it this way.
+  FactoryBot.build(:skin, title: skin_name, public: true).save!(validate: false)
+
+  step %{I approve the skin "#{skin_name}"}
+  step "I am logged out"
 end
 
 Given /^"([^"]*)" is using the approved public skin "([^"]*)" with css "([^"]*)"$/ do |login, skin_name, css|
@@ -117,7 +129,7 @@ end
 ### WHEN
 
 When /^I change my skin to "([^\"]*)"$/ do |skin_name|
-  step "I am on my user page"
+  step %{I follow "My Dashboard"}
     step %{I follow "Preferences"}
     step %{I select "#{skin_name}" from "preference_skin_id"}
     step %{I submit}
@@ -181,6 +193,10 @@ When /^I set the skin "([^\"]*)" for this session$/ do |skin_name|
 end
 
 ### THEN
+
+Then "I should see a parent skin text field" do
+  step %{I should see "Parent #"}
+end
 
 Then "I should see {string} in the page style" do |css|
   expect(page).to have_css("style", text: css, visible: false)

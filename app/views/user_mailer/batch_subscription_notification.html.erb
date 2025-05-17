@@ -36,7 +36,7 @@
     <% unless @seen[this_work.id] %>
       <% cache("subscription-email-meta-#{creation.cache_key}") do %>
       <p>
-        <%= style_bold("Chapters:") %> <%= this_work.chapter_total_display %>
+        <%= style_bold("Chapters:") %> <%= chapter_total_display(this_work) %>
         <br><%= style_bold("Fandom:") %> <%= this_work.fandoms.map{|f| style_link(f.name, fandom_url(f))}.to_sentence.html_safe %>
         <br><%= style_bold("Rating:") %> <%= this_work.rating_string %>
         <br><%= style_bold("Warnings:") %> <%= this_work.archive_warning_string %>

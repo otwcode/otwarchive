@@ -1,12 +1,9 @@
-# encoding: UTF-8
-require 'spec_helper'
+require "spec_helper"
 
 describe Tag do
-  after(:each) do
-    User.current_user = nil
-  end
+  it { is_expected.not_to allow_values("", "a" * 151).for(:name) }
 
-  context 'checking count caching' do
+  context "checking count caching" do
     before(:each) do
       # Set the minimal amount of time a tag can be cached for.
       ArchiveConfig.TAGGINGS_COUNT_MIN_TIME = 1
@@ -17,15 +14,15 @@ describe Tag do
       @fandom_tag = FactoryBot.create(:fandom)
     end
 
-    context 'without updating taggings_count_cache' do
-      it 'should not cache tags which are not used much' do
+    context "without updating taggings_count_cache" do
+      it "should not cache tags which are not used much" do
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
         @fandom_tag.reload
         expect(@fandom_tag.taggings_count_cache).to eq 0
         expect(@fandom_tag.taggings_count).to eq 1
       end
 
-      it 'will start caching a when tag when that tag is used significantly' do
+      it "will start caching a when tag when that tag is used significantly" do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           FactoryBot.create(:work, fandom_string: @fandom_tag.name)
           @fandom_tag.reload
@@ -40,41 +37,115 @@ describe Tag do
       end
     end
 
-    context 'updating taggings_count_cache' do
-      it 'should not cache tags which are not used much' do
+    context "updating taggings_count_cache" do
+      it "should not cache tags which are not used much" do
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
-        RedisSetJobSpawner.perform_now("TagCountUpdateJob")
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
         @fandom_tag.reload
         expect(@fandom_tag.taggings_count_cache).to eq 1
         expect(@fandom_tag.taggings_count).to eq 1
       end
 
-      it 'will start caching a when tag when that tag is used significantly' do
+      it "will start caching a tag when that tag is used significantly" do
         (1..ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT).each do |try|
           FactoryBot.create(:work, fandom_string: @fandom_tag.name)
-          RedisSetJobSpawner.perform_now("TagCountUpdateJob")
+          RedisJobSpawner.perform_now("TagCountUpdateJob")
           @fandom_tag.reload
           expect(@fandom_tag.taggings_count_cache).to eq try
           expect(@fandom_tag.taggings_count).to eq try
         end
         FactoryBot.create(:work, fandom_string: @fandom_tag.name)
-        RedisSetJobSpawner.perform_now("TagCountUpdateJob")
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
         @fandom_tag.reload
         # This value should be cached and wrong
         expect(@fandom_tag.taggings_count_cache).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
         expect(@fandom_tag.taggings_count).to eq ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT
       end
 
-      it "Writes to the database do not happen immeadiately" do
-        (1..40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR - 1).each do |try|
+      it "Writes to the database do not happen immediately" do
+        (1..(40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR) - 1).each do |try|
           @fandom_tag.taggings_count = try
           @fandom_tag.reload
           expect(@fandom_tag.taggings_count_cache).to eq 0
         end
         @fandom_tag.taggings_count = 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
-        RedisSetJobSpawner.perform_now("TagCountUpdateJob")
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
         @fandom_tag.reload
         expect(@fandom_tag.taggings_count_cache).to eq 40 * ArchiveConfig.TAGGINGS_COUNT_CACHE_DIVISOR
+      end
+    end
+
+    describe "write_redis_to_database" do
+      let(:tag) { create(:fandom) }
+      let!(:work) { create(:work, fandom_string: tag.name) }
+
+      before do
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
+        tag.reload
+      end
+
+      def expect_tag_update_flag_in_redis_to_be(flag)
+        expect(REDIS_GENERAL.sismember("tag_update", tag.id)).to eq flag
+      end
+
+      it "does not write to the database when reading the count" do
+        tag.taggings_count
+        expect_tag_update_flag_in_redis_to_be(false)
+      end
+
+      it "does not write to the database when assigning the same count" do
+        tag.taggings_count = 1
+        expect_tag_update_flag_in_redis_to_be(false)
+      end
+
+      it "writes to the database when assigning a new count" do
+        tag.taggings_count = 2
+        expect_tag_update_flag_in_redis_to_be(true)
+
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
+        tag.reload
+
+        # Actual number of taggings has not changed though count cache has.
+        expect(tag.taggings_count_cache).to eq 2
+        expect(tag.taggings_count).to eq 1
+      end
+
+      it "writes to the database when adding a new work with the same tag" do
+        create(:work, fandom_string: tag.name)
+        expect_tag_update_flag_in_redis_to_be(true)
+
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
+        tag.reload
+
+        expect(tag.taggings_count_cache).to eq 2
+        expect(tag.taggings_count).to eq 2
+      end
+
+      it "does not write to the database with a blank value" do
+        # Blank values will cause errors if assigned earlier due to division
+        # in taggings_count_expiry.
+        REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
+        REDIS_GENERAL.sadd("tag_update", tag.id)
+
+        RedisJobSpawner.perform_now("TagCountUpdateJob")
+
+        expect(tag.reload.taggings_count_cache).to eq 1
+      end
+
+      it "triggers reindexing of tags which aren't used much" do
+        create(:work, fandom_string: tag.name)
+
+        expect { RedisJobSpawner.perform_now("TagCountUpdateJob") }
+          .to add_to_reindex_queue(tag.reload, :main)
+      end
+
+      it "triggers reindexing of tags which are used significantly" do
+        ArchiveConfig.TAGGINGS_COUNT_MIN_CACHE_COUNT.times do
+          create(:work, fandom_string: tag.name)
+        end
+
+        expect { RedisJobSpawner.perform_now("TagCountUpdateJob") }
+          .to add_to_reindex_queue(tag.reload, :main)
       end
     end
   end
@@ -87,18 +158,62 @@ describe Tag do
     expect(tag.save).to be_truthy
   end
 
-  it "should not be valid if too long" do
-    tag = Tag.new
-    tag.name = "a" * 101
-    expect(tag.save).not_to be_truthy
-    expect(tag.errors[:name].join).to match(/too long/)
+  context "tags with blank names are invalid" do
+    [
+      ["200B".hex].pack("U"), # zero width space
+      ["200D".hex].pack("U"), # zero width joiner
+      ["2060".hex].pack("U"), # word joiner
+      (["200B".hex].pack("U") * 3),
+      ["200D".hex, "200D".hex, "2060".hex, "200B".hex].pack("U")
+    ].each do |tag_name|
+      tag = Tag.new
+      tag.name = tag_name
+      it "is not saved with an error message about a blank tag" do
+        expect(tag.save).to be_falsey
+        expect(tag.errors[:name].join).to match(/cannot be blank/)
+      end
+    end
   end
 
-  it "should not be valid with disallowed characters" do
-    tag = Tag.new
-    tag.name = "bad<tag"
-    expect(tag.save).to be_falsey
-    expect(tag.errors[:name].join).to match(/restricted characters/)
+  context "tags with names that contain some zero-width characters are valid" do
+    %w[
+      👨‍👨‍👧‍👦
+      ප්‍රදානය
+      👩‍🔬
+    ].each do |tag_name|
+      tag = Tag.new
+      tag.name = tag_name
+      it "is saved" do
+        expect(tag.save).to be_truthy
+        expect(tag.errors).to be_empty
+        expect(tag.name).to eq(tag_name)
+      end
+    end
+  end
+
+  context "tags using restricted characters should not be saved" do
+    [
+      "bad, tag",
+      "also， bad",
+      "no、good",
+      "wild*card",
+      "back\\slash",
+      "lesser<tag",
+      "greater>tag",
+      "^tag",
+      "{open",
+      "close}",
+      "not=allowed",
+      "suspicious`character",
+      "no%maths"
+    ].each do |tag|
+      forbidden_tag = Tag.new
+      forbidden_tag.name = tag 
+      it "is not saved and receives an error message about restricted characters" do
+        expect(forbidden_tag.save).to be_falsey
+        expect(forbidden_tag.errors[:name].join).to match(/restricted characters/)
+      end
+    end
   end
 
   context "unwrangleable" do
@@ -176,20 +291,20 @@ describe Tag do
         expect(tag.save).to be_falsey
       end
 
-      it 'autocomplete should work' do
-        tag_character = FactoryBot.create(:character, canonical: true, name: 'kirk')
-        tag_fandom = FactoryBot.create(:fandom, name: 'Star Trek', canonical: true)
+      it "autocomplete should work" do
+        tag_character = FactoryBot.create(:character, canonical: true, name: "kirk")
+        tag_fandom = FactoryBot.create(:fandom, name: "Star Trek", canonical: true)
         tag_fandom.add_to_autocomplete
-        results = Tag.autocomplete_fandom_lookup(term: 'ki', fandom: 'Star Trek')
+        results = Tag.autocomplete_fandom_lookup(term: "ki", fandom: "Star Trek")
         expect(results.include?("#{tag_character.id}: #{tag_character.name}")).to be_truthy
         expect(results.include?("brave_sire_robin")).to be_falsey
       end
 
-      it 'old tag maker still works' do
-        tag_adult = Rating.create_canonical('adult', true)
-        tag_normal = ArchiveWarning.create_canonical('other')
-        expect(tag_adult.name).to eq('adult')
-        expect(tag_normal.name).to eq('other')
+      it "old tag maker still works" do
+        tag_adult = Rating.create_canonical("adult", true)
+        tag_normal = ArchiveWarning.create_canonical("other")
+        expect(tag_adult.name).to eq("adult")
+        expect(tag_normal.name).to eq("other")
         expect(tag_adult.adult).to be_truthy
         expect(tag_normal.adult).to be_falsey
       end
@@ -251,15 +366,19 @@ describe Tag do
   end
 
   describe "has_posted_works?" do
-    before do
-      create(:work, fandom_string: "love live,jjba")
-      create(:draft, fandom_string: "zombie land saga,jjba")
-    end
-
-    it "is true if used in posted works" do
-      expect(Tag.find_by(name: "zombie land saga").has_posted_works?).to be_falsey
-      expect(Tag.find_by(name: "love live").has_posted_works?).to be_truthy
-      expect(Tag.find_by(name: "jjba").has_posted_works?).to be_truthy
+    {
+      "draft" => { posted: false },
+      "unrevealed" => { in_unrevealed_collection: true },
+      "hidden" => { hidden_by_admin: true }
+    }.each do |description, attributes|
+      it "is false if only used on #{description} works" do
+        create(:work, fandom_string: "love live,jjba")
+        non_visible_work = create(:work, fandom_string: "zombie land saga,jjba")
+        non_visible_work.update!(**attributes)
+        expect(Tag.find_by(name: "zombie land saga").has_posted_works?).to be_falsey
+        expect(Tag.find_by(name: "love live").has_posted_works?).to be_truthy
+        expect(Tag.find_by(name: "jjba").has_posted_works?).to be_truthy
+      end
     end
   end
 

@@ -3,7 +3,6 @@
 Given /^I have related works setup$/ do
   step "basic tags"
   step "all emails have been delivered"
-  step "I start a new session"
   step %{I have loaded the "languages" fixture}
 
   inspiration = FactoryBot.create(:user, login: "inspiration", confirmed_at: Time.now.utc)
@@ -15,7 +14,7 @@ Given /^I have related works setup$/ do
 end
 
 Given /^an inspiring parent work has been posted$/ do
-  step %{I post an inspiring parent work as testy}
+  step "I post an inspiring parent work as testuser"
 end
 
 # given for remixes / related works
@@ -42,20 +41,22 @@ end
 
 ### WHEN
 
-When /^I post an inspiring parent work as testy$/ do
+When "I post an inspiring parent work as testuser" do
   step %{I am logged in as "testuser"}
   step %{I post the work "Parent Work"}
 end
 
 When /^I approve a related work$/ do
   step %{I am logged in as "inspiration"}
-  step %{I go to my related works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Related Works ("}
   step %{I follow "Approve"}
   step %{I press "Yes, link me!"}
 end
 
 When /^I view my related works$/ do
-  step %{I go to my related works page}
+  step %{I follow "My Dashboard"}
+  step %{I follow "Related Works ("}
 end
 
 # when for remixes / related works
@@ -159,10 +160,20 @@ Then /^I should see the related work in the end notes$/ do
   step %{I should see "Followup by remixer" within ".afterword .children"}
 end
 
+Then "I should see the related work listed on the original work" do
+  step %{I should see "See the end of the work for other works inspired by this one"}
+  step %{I should see "Works inspired by this one:"}
+  step %{I should see "Followup by remixer"}
+end
+
 Then /^I should not see the related work listed on the original work$/ do
   step %{I should not see "See the end of the work for other works inspired by this one"}
   step %{I should not see "Works inspired by this one:"}
   step %{I should not see "Followup by remixer"}
+end
+
+Then "I should not see the inspiring parent work in the beginning notes" do
+  step %{I should not see "Inspired by Parent Work by testuser" within ".preface .notes"}
 end
 
 # then for translations
@@ -173,9 +184,14 @@ Then /^a parent translated work should be seen$/ do
   step %{I should see "A translation of Worldbuilding by inspiration" within ".preface .notes"}
 end
 
-Then /^I should see the translation in the beginning notes$/ do
+Then "I should see the translation in the beginning notes" do
   step %{I should see "Translation into Deutsch available:" within ".preface .notes"}
   step %{I should see "Worldbuilding Translated by translator" within ".preface .notes"}
+end
+
+Then "I should see the translation listed on the original work" do
+  step %{I should see "Translation into Deutsch available:"}
+  step %{I should see "Worldbuilding Translated by translator"}
 end
 
 Then /^I should not see the translation listed on the original work$/ do

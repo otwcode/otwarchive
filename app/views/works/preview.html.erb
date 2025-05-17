@@ -20,7 +20,7 @@
     <% inspired_by = get_inspired_by(@work) %>
     <% if !@work.endnotes.blank? || !@work.serial_works.blank? || !inspired_by.empty? %>
     <!--afterword-->
-    <div class="afterword preface group" role="complementary">
+    <div class="afterword preface group">
       <% unless @work.endnotes.blank? %>
         <%= render "works/work_endnotes" %>
       <% end %>
@@ -45,6 +45,11 @@
 
   <fieldset>
     <legend><%= ts("Post Work") %></legend>
+    <p class="notice">
+      <%= t(".post_notice_html",
+            content_policy_link: link_to(t(".content_policy"), content_path),
+            tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
+    </p>
     <ul class="actions">
       <% if @work.posted? %>
         <li><%= submit_tag ts("Update"), name: "update_button" %></li>

@@ -5,7 +5,7 @@
 
   <% if logged_in? && @homepage.favorite_tags.present? %>
     <div class="favorite module">
-      <h3 class="heading"><%= ts('Find your favorites') %></h3>
+      <h3 class="heading"><%= t(".find_your_favorites") %></h3>
       <ul>
         <% @homepage.favorite_tags.each do |favorite_tag| %>
           <li>
@@ -15,12 +15,12 @@
       </ul>
     </div>
   <% else %>
-    <div class="browse module">
-      <h3 class="heading"><%= ts('Find your favorites') %></h3>
+    <div role="navigation" aria-label="<%= t(".media_navigation_label") %>" class="browse module">
+      <h3 class="heading"><%= t(".find_your_favorites") %></h3>
       <% if logged_in? %>
-        <p class="note"><%= ts('Browse fandoms by media or favorite up to %{maximum} tags to have them listed here!', maximum: ArchiveConfig.MAX_FAVORITE_TAGS) %></p>
+        <p class="note"><%= t(".browse_or_favorite", count: ArchiveConfig.MAX_FAVORITE_TAGS) %></p>
       <% end %>
-      <%= render 'menu/menu_fandoms' %>
+      <%= render 'fandoms' %>
     </div>
   <% end %>
 
@@ -31,16 +31,16 @@
   <% if logged_in? && @homepage.readings.present? %>
     <div class="random readings module">
       <h3 class="heading">
-        <span class="title"><%= ts('Is it later already?') %></span>
-        <span class="link"><%= link_to ts('My History'), user_readings_path(current_user) %></span>
+        <span class="title"><%= t(".readings.heading.title") %></span>
+        <span class="link"><%= link_to t(".readings.heading.history_link"), user_readings_path(current_user) %></span>
       </h3>
       <div class="flash"></div>
-      <p class="note"><%= ts('Some works you\'ve marked for later.') %></p>
-      <ul class="readings works index group">
+      <p class="note"><%= t(".readings.note") %></p>
+      <ol class="reading work index group">
         <% @homepage.readings.each do |reading| %>
-          <%= render 'readings/reading_blurb', work: reading.work, reading: reading %>
+          <%= render "readings/reading_blurb", work: reading.work, reading: reading %>
         <% end %>
-      </ul>
+      </ol>
     </div>
   <% end %>
 
@@ -48,9 +48,13 @@
     <%= render 'inbox_module', inbox_comments: @homepage.inbox_comments %>
   <% end %>
 
-  <div class="latest tweets module">
-    <h3 class="heading"><%= ts('Tweets') %></h3>
-    <a class="twitter-timeline" href="https://twitter.com/otw_status/lists/otw-tweets" data-dnt="true" data-height="600"><%= ts('Tweets from https://twitter.com/otw_status/lists/otw-tweets') %></a>
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+  <div class="social module">
+    <h3 class="heading"><%= t(".social.heading") %></h3>
+    <p class="note"><%= t(".social.note_html", other_outlets_link: link_to(t(".social.other_outlets"), "https://www.transformativeworks.org/where-find-us/")) %></p>
+
+    <ul>
+      <li class="twitter"><%= sharing_button("twitter", "https://twitter.com/AO3_Status", t(".social.twitter")) %></li>
+      <li class="tumblr"><%= sharing_button("tumblr", "https://ao3org.tumblr.com", t(".social.tumblr")) %></li>
+    </ul>
   </div>
 </div>

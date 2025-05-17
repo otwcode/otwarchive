@@ -1,5 +1,5 @@
 <% content_for :message do %>
-  <p><%= t("mailer.general.greeting.formal", name: style_bold(@user.login)).html_safe %></p>
+  <p><%= t("mailer.general.greeting.formal.addressed_html", name: style_bold(@user.login)) %></p>
 
   <p>The collection maintainers of <%= style_link(@collection.title, collection_url(@collection)) %> would
     like to include your work <%= style_creation_link(@work.title, work_url(@work)) %> in their collection!</p>

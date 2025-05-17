@@ -33,7 +33,7 @@ class ChallengeAssignmentsController < ApplicationController
   def owner_only
     return if current_user == @challenge_assignment.offering_pseud.user
 
-    flash[:error] = t("challenge_assignments.not_owner", default: "You aren't the owner of that assignment.")
+    flash[:error] = t("challenge_assignments.validation.not_owner")
     redirect_to root_path
   end
 
@@ -138,12 +138,12 @@ class ChallengeAssignmentsController < ApplicationController
 
   def set
     # update all the assignments
-    all_assignment_params = challenge_assignment_params.transform_keys(&:to_i)
+    all_assignment_params = challenge_assignment_params
 
     @assignments = []
 
     @collection.assignments.where(id: all_assignment_params.keys).each do |assignment|
-      assignment_params = all_assignment_params[assignment.id]
+      assignment_params = all_assignment_params[assignment.id.to_s]
       @assignments << assignment unless assignment.update(assignment_params)
     end
 
@@ -181,21 +181,21 @@ class ChallengeAssignmentsController < ApplicationController
       case action
       when "default"
         # default_assignment_id = y/n
-        assignment.default || @errors << ts("We couldn't default the assignment for #{assignment.offer_byline}")
+        assignment.default || (@errors << ts("We couldn't default the assignment for %{offer}", offer: assignment.offer_byline))
       when "undefault"
         # undefault_[assignment_id] = y/n - if set, undefault
         assignment.defaulted_at = nil
-        assignment.save || @errors << ts("We couldn't undefault the assignment covering #{assignment.request_byline}.")
+        assignment.save || (@errors << ts("We couldn't undefault the assignment covering %{request}.", request: assignment.request_byline))
       when "approve"
         assignment.get_collection_item.approve_by_collection if assignment.get_collection_item
       when "cover"
         # cover_[assignment_id] = pinch hitter pseud
         next if val.blank? || assignment.pinch_hitter.try(:byline) == val
-        pseud = Pseud.parse_byline(val).first
+        pseud = Pseud.parse_byline(val)
         if pseud.nil?
-          @errors << ts("We couldn't find the user #{val} to assign that to.")
+          @errors << ts("We couldn't find the user %{val} to assign that to.", val: val)
         else
-          assignment.cover(pseud) || @errors << ts("We couldn't assign #{val} to cover #{assignment.request_byline}.")
+          assignment.cover(pseud) || (@errors << ts("We couldn't assign %{val} to cover %{request}.", val: val, request: assignment.request_byline))
         end
       end
     end
@@ -219,9 +219,11 @@ class ChallengeAssignmentsController < ApplicationController
   def default
     @challenge_assignment.defaulted_at = Time.now
     @challenge_assignment.save
-    @challenge_assignment.collection.notify_maintainers("Challenge default by #{@challenge_assignment.offer_byline}",
-        "Signed-up participant #{@challenge_assignment.offer_byline} has defaulted on their assignment for #{@challenge_assignment.request_byline}. " +
-        "You may want to assign a pinch hitter on the collection assignments page: #{collection_assignments_url(@challenge_assignment.collection)}")
+    
+    assignments_page_url = collection_assignments_url(@challenge_assignment.collection)
+    
+    @challenge_assignment.collection.notify_maintainers_challenge_default(@challenge_assignment, assignments_page_url)
+
     flash[:notice] = "We have notified the collection maintainers that you had to default on your assignment."
     redirect_to user_assignments_path(current_user)
   end

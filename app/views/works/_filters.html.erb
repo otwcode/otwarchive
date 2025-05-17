@@ -150,12 +150,14 @@
             <%= f.text_field :query %>
           </dd>
 
-          <dt class="language">
-            <%= f.label :language_id, ts("Language") %>
-          </dt>
-          <dd class="language">
-            <%= f.collection_select(:language_id, Language.default_order, :short, :name, include_blank: true) %>
-          </dd>
+          <% unless @language %>
+            <dt class="language">
+              <%= f.label :language_id, ts("Language") %>
+            </dt>
+            <dd class="language">
+              <%= f.select(:language_id, language_options_for_select(Language.default_order, "short"), include_blank: true) %>
+            </dd>
+          <% end %>
         </dl>
       </dd>
       <dt class="landmark"><%= ts("Submit") %></dt>
@@ -174,6 +176,7 @@
       <%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
       <%= hidden_field_tag("pseud_id", @pseud.name) if @pseud %>
       <%= hidden_field_tag("user_id", @user.login) if @user %>
+      <%= hidden_field_tag("language_id", @language.short) if @language %>
     </div>
 
   <% end %>

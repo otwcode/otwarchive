@@ -84,4 +84,55 @@ module CollectionsHelper
       ts('Deleted or unknown item')
     end
   end
+
+  def collection_item_approval_options_label(actor:, item_type:)
+    item_type = item_type.downcase
+    actor = actor.downcase
+
+    case actor
+    when "user"
+      t("collections_helper.collection_item_approval_options_label.user.#{item_type}")
+    when "collection"
+      t("collections_helper.collection_item_approval_options_label.collection")
+    end
+  end
+
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.collection.unreviewed')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.bookmark.unreviewed')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.approved')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.rejected')
+  # i18n-tasks-use t('collections_helper.collection_item_approval_options.user.work.unreviewed')
+  def collection_item_approval_options(actor:, item_type:)
+    item_type = item_type.downcase
+    actor = actor.downcase
+
+    key = case actor
+          when "user"
+            "collections_helper.collection_item_approval_options.user.#{item_type}"
+          when "collection"
+            "collections_helper.collection_item_approval_options.collection"
+          end
+
+    [
+      [t("#{key}.unreviewed"), :unreviewed],
+      [t("#{key}.approved"), :approved],
+      [t("#{key}.rejected"), :rejected]
+    ]
+  end
+
+  # Fetches the icon URL for the given collection, using the standard (100x100) variant.
+  def standard_icon_url(collection)
+    return "/images/skins/iconsets/default/icon_collection.png" unless collection.icon.attached?
+
+    rails_blob_url(collection.icon.variant(:standard))
+  end
+
+  # Wraps the collection's standard_icon_url in an image tag
+  def collection_icon_display(collection)
+    image_tag(standard_icon_url(collection), size: "100x100", alt: collection.icon_alt_text, class: "icon", skip_pipeline: true)
+  end
 end

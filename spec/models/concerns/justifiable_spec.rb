@@ -26,7 +26,7 @@ shared_examples "a justifiable model" do
 
       record.assign_attributes(attributes)
       expect(record).not_to be_valid
-      expect(record.errors[:ticket_number]).to contain_exactly("can't be blank", "is not a number")
+      expect(record.errors[:ticket_number]).to contain_exactly("can't be blank", "may begin with an # and otherwise contain only numbers.")
       expect(record.ticket_url).to be_nil
     end
 
@@ -120,5 +120,21 @@ describe Profile do
   it_behaves_like "a justifiable model" do
     let!(:record) { create(:user).profile.tap(&:save!) }
     let(:attributes) { { about_me: "I stole a fragment of the Rune of Death." } }
+  end
+end
+
+describe Pseud do
+  it_behaves_like "a justifiable model" do
+    let!(:record) { create(:pseud) }
+    let(:attributes) { { description: "Edited by admin." } }
+  end
+end
+
+describe User do
+  context "when login is changed" do
+    it_behaves_like "a justifiable model" do
+      let!(:record) { create(:user) }
+      let(:attributes) { { login: "user#{record.id}" } }
+    end
   end
 end

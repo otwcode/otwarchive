@@ -1,49 +1,75 @@
 <% # expects collection_item, form %>
-<ul class="actions" role="menu">
+<ul class="actions">
   <% if collection_item.item %>
     <li>
+      <% # TODO: AO3-6508 Revamp this so we don't have two useless links showing when JavaScript is disabled. %>
       <% id = "blurb_#{collection_item.item_type}_#{collection_item.item_id}_#{collection_item.collection.name}" %>
       <%= link_to h(ts("Details")) + ' &#8595;'.html_safe, "#", :class => "#{id}_open" %>
       <%= link_to h(ts("Close Details")) + ' &#8593;'.html_safe, "#", :class => "#{id}_close" %>
     </li>
   <% end %>
-  <li class="status action">
-    <% if @user %>
-      <%= form.select(:user_approval_status, CollectionItem::APPROVAL_OPTIONS) %>
-    <% else %>
-      <%= form.select(:collection_approval_status, CollectionItem::APPROVAL_OPTIONS) %>
+
+  <li class="user status">
+    <%= form.label(:user_approval_status,
+      options = {},
+      html_options = { class: @collection ? "disabled" :  nil }) do %>
+      <span class="landmark"><%= collection_item_approval_options_label(
+        actor: "user",
+        item_type: collection_item.item_type) %></span>
+      <%= form.select(:user_approval_status,
+        collection_item_approval_options(
+          actor: "user",
+          item_type: collection_item.item_type),
+        options = {},
+        html_options = { disabled: @collection ? true :  nil }) %>
     <% end %>
   </li>
 
-  <% id = "collection_items_" %>
+  <li class="collection status">
+    <%= form.label(:collection_approval_status,
+      options = {},
+      html_options = { class: @user ? "disabled" :  nil }) do %>
+      <span class="landmark"><%= collection_item_approval_options_label(
+          actor: "collection",
+          item_type: collection_item.item_type) %></span>
+      <%= form.select(:collection_approval_status,
+        collection_item_approval_options(
+          actor: "collection",
+          item_type: collection_item.item_type),
+        options = {},
+        html_options = { disabled: @user ? true :  nil }) %>
+    <% end %>
+  </li>
+
   <% if collection_item.collection.unrevealed? %>
     <li>
-      <label for="collection_items_<%= collection_item.id %>_unrevealed" <% if @user %>class="disabled"<% end %>>
+      <%= form.label(:unrevealed,
+        options = {},
+        html_options = { class: @user ? "disabled" :  nil }) do %>
+        <%= form.check_box :unrevealed, disabled: @user %>
         <%= ts("Unrevealed") %>
-        <% if @user %>
-          <%= form.check_box :unrevealed, :disabled => true %>
-        <% else %>
-          <%= form.check_box :unrevealed %>
-        <% end %>
-      </label>
+      <% end %>
     </li>
   <% end %>
+
   <% if collection_item.collection.anonymous? %>
     <li>
-      <label for="collection_items_<%= collection_item.id %>_anonymous" <% if @user %>class="disabled"<% end %>>
+      <%= form.label(:anonymous,
+        options = {},
+        html_options = { class: @user ? "disabled" :  nil }) do %>
+        <%= form.check_box :anonymous, disabled: @user %>
         <%= ts("Anonymous") %>
-        <% if @user %>
-          <%= form.check_box :anonymous, :disabled => true %>
-        <% else %>
-          <%= form.check_box :anonymous %>
-        <% end %>
-      </label>
+      <% end %>
     </li>
   <% end %>        
+
   <li>
-    <label for="collection_items_<%= collection_item.id %>_remove">
+    <% disable_destroy = !collection_item.user_allowed_to_destroy?(@current_user) %>
+    <%= form.label(:remove,
+      options = {},
+      html_options = { class: disable_destroy ? "disabled" : nil }) do %>
+      <%= form.check_box :remove, disabled: disable_destroy %>
       <%= ts("Remove") %>
-      <%= form.check_box :remove %>
-    </label>
+    <% end %>
   </li>
 </ul>

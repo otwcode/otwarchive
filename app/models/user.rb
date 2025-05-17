@@ -1,6 +1,9 @@
 class User < ApplicationRecord
-  audited
+  audited redacted: [:encrypted_password, :password_salt]
+  include Justifiable
   include WorksOwner
+  include PasswordResetsLimitable
+  include UserLoggable
 
   devise :database_authenticatable,
          :confirmable,
@@ -16,7 +19,7 @@ class User < ApplicationRecord
   include BackwardsCompatiblePasswordDecryptor
 
   # Allows other models to get the current user with User.current_user
-  cattr_accessor :current_user
+  thread_cattr_accessor :current_user
 
   # Authorization plugin
   acts_as_authorized_user
@@ -87,7 +90,8 @@ class User < ApplicationRecord
 
   before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
-  after_update :log_change_if_login_was_edited
+  after_update :send_wrangler_username_change_notification, if: :is_tag_wrangler?
+  after_update :log_change_if_login_was_edited, if: :saved_change_to_login?
   after_update :log_email_change, if: :saved_change_to_email?
 
   after_commit :reindex_user_creations_after_rename
@@ -158,6 +162,7 @@ class User < ApplicationRecord
 
   def expire_caches
     return unless saved_change_to_login?
+    series.each(&:expire_byline_cache)
     self.works.each do |work|
       work.touch
       work.expire_caches
@@ -165,7 +170,6 @@ class User < ApplicationRecord
   end
 
   def remove_user_from_kudos
-    # TODO: AO3-5054 Expire kudos cache when deleting a user.
     # TODO: AO3-2195 Display orphaned kudos (no users; no IPs so not counted as guest kudos).
     Kudo.where(user: self).update_all(user_id: nil)
   end
@@ -185,13 +189,17 @@ class User < ApplicationRecord
   scope :valid, -> { where(banned: false, suspended: false) }
   scope :out_of_invites, -> { where(out_of_invites: true) }
 
-  ## used in app/views/users/new.html.erb
-  validates_length_of :login,
-                      within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX,
-                      too_short: ts("is too short (minimum is %{min_login} characters)",
-                                    min_login: ArchiveConfig.LOGIN_LENGTH_MIN),
-                      too_long: ts("is too long (maximum is %{max_login} characters)",
-                                   max_login: ArchiveConfig.LOGIN_LENGTH_MAX)
+  validates :login,
+            length: { within: ArchiveConfig.LOGIN_LENGTH_MIN..ArchiveConfig.LOGIN_LENGTH_MAX },
+            format: {
+              with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/,
+              min_login: ArchiveConfig.LOGIN_LENGTH_MIN,
+              max_login: ArchiveConfig.LOGIN_LENGTH_MAX
+            },
+            uniqueness: true,
+            not_forbidden_name: { if: :will_save_change_to_login? }
+  validate :username_is_not_recently_changed, if: :will_save_change_to_login?
+  validate :admin_username_generic, if: :will_save_change_to_login?
 
   # allow nil so can save existing users
   validates_length_of :password,
@@ -202,28 +210,14 @@ class User < ApplicationRecord
                       too_long: ts("is too long (maximum is %{max_pwd} characters)",
                                    max_pwd: ArchiveConfig.PASSWORD_LENGTH_MAX)
 
-  validates_format_of :login,
-                      message: ts("must be 3 to 40 characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)."),
-                      with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  validates :login, uniqueness: { message: ts("has already been taken") }
-  validate :login, :username_is_not_recently_changed, if: :will_save_change_to_login?
+  validates :email, email_format: true, uniqueness: true
 
-  validates :email, email_veracity: true, email_format: true, uniqueness: true
+  # Virtual attribute for age check, data processing agreement, and terms of service
+  attr_accessor :age_over_13, :data_processing, :terms_of_service
 
-  # Virtual attribute for age check and terms of service
-    attr_accessor :age_over_13
-    attr_accessor :terms_of_service
-    # attr_accessible :age_over_13, :terms_of_service
-
-  validates_acceptance_of :terms_of_service,
-                          allow_nil: false,
-                          message: ts("Sorry, you need to accept the Terms of Service in order to sign up."),
-                          if: :first_save?
-
-  validates_acceptance_of :age_over_13,
-                          allow_nil: false,
-                          message: ts("Sorry, you have to be over 13!"),
-                          if: :first_save?
+  validates :data_processing, acceptance: { allow_nil: false, if: :first_save? }
+  validates :age_over_13, acceptance: { allow_nil: false, if: :first_save? }
+  validates :terms_of_service, acceptance: { allow_nil: false, if: :first_save? }
 
   def to_param
     login
@@ -321,7 +315,7 @@ class User < ApplicationRecord
   def create_default_associateds
     self.pseuds << Pseud.new(name: self.login, is_default: true)
     self.profile = Profile.new
-    self.preference = Preference.new(preferred_locale: Locale.default.id)
+    self.preference = Preference.new(locale: Locale.default)
   end
 
   def prevent_password_resets?
@@ -329,9 +323,18 @@ class User < ApplicationRecord
   end
 
   protected
-    def first_save?
-      self.new_record?
+
+  def first_save?
+    self.new_record?
+  end
+
+  # Override of Devise method for email sending to set I18n.locale
+  # Based on https://github.com/heartcombo/devise/blob/v4.9.3/lib/devise/models/authenticatable.rb#L200
+  def send_devise_notification(notification, *args)
+    I18n.with_locale(preference.locale_for_mails) do
+      devise_mailer.send(notification, self, *args).deliver_now
     end
+  end
 
   public
 
@@ -428,6 +431,12 @@ class User < ApplicationRecord
     has_role?(:no_resets)
   end
 
+  # Should this user's comments be spam-checked?
+  def should_spam_check_comments?
+    # When account_age_threshold_for_comment_spam_check is 0, no users' comments should be spam-checked
+    (Time.current - created_at).seconds.in_days.to_i < AdminSetting.current.account_age_threshold_for_comment_spam_check
+  end
+
   # Creates log item tracking changes to user
   def create_log_item(options = {})
     options.reverse_merge! note: "System Generated", user_id: self.id
@@ -468,6 +477,11 @@ class User < ApplicationRecord
       end
     end
     return @coauthored_works
+  end
+
+  #  Returns array of collections where the user is the sole author
+  def sole_owned_collections
+    self.collections.to_a.delete_if { |collection| !(collection.all_owners - pseuds).empty? }
   end
 
   ### BETA INVITATIONS ###
@@ -519,6 +533,12 @@ class User < ApplicationRecord
 
   private
 
+  # Override the default Justifiable enabled check, because we only need to justify
+  # username changes at the moment.
+  def justification_enabled?
+    User.current_user.is_a?(Admin) && login_changed?
+  end
+
   # Create and/or return a user account for holding orphaned works
   def self.fetch_orphan_account
     orphan_account = User.find_or_create_by(login: "orphan_account")
@@ -558,11 +578,31 @@ class User < ApplicationRecord
   end
 
   def add_renamed_at
-    self.renamed_at = Time.current
+    if User.current_user == self
+      self.renamed_at = Time.current
+    else
+      self.admin_renamed_at = Time.current
+    end
   end
 
   def log_change_if_login_was_edited
-    create_log_item(action: ArchiveConfig.ACTION_RENAME, note: "Old Username: #{login_before_last_save}; New Username: #{login}") if saved_change_to_login?
+    current_admin = User.current_user if User.current_user.is_a?(Admin)
+    options = {
+      action: ArchiveConfig.ACTION_RENAME,
+      admin: current_admin
+    }
+    options[:note] = if current_admin
+                       "Old Username: #{login_before_last_save}, New Username: #{login}, Changed by: #{current_admin.login}, Ticket ID: ##{ticket_number}"
+                     else
+                       "Old Username: #{login_before_last_save}; New Username: #{login}"
+                     end
+    create_log_item(options)
+  end
+
+  def send_wrangler_username_change_notification
+    return unless saved_change_to_login? && login_before_last_save.present?
+
+    TagWranglingSupervisorMailer.wrangler_username_change_notification(login_before_last_save, login).deliver_now
   end
 
   def log_email_change
@@ -576,18 +616,25 @@ class User < ApplicationRecord
   end
 
   def remove_stale_from_autocomplete
-    Rails.logger.debug "Removing stale from autocomplete: #{autocomplete_search_string_was}"
     self.class.remove_from_autocomplete(self.autocomplete_search_string_was, self.autocomplete_prefixes, self.autocomplete_value_was)
   end
 
   def username_is_not_recently_changed
+    return if User.current_user.is_a?(Admin)
+
     change_interval_days = ArchiveConfig.USER_RENAME_LIMIT_DAYS
     return unless renamed_at && change_interval_days.days.ago <= renamed_at
 
     errors.add(:login,
                :changed_too_recently,
                count: change_interval_days,
-               renamed_at: I18n.l(renamed_at, format: :long))
+               renamed_at: I18n.l(renamed_at))
+  end
+
+  def admin_username_generic
+    return unless User.current_user.is_a?(Admin)
+
+    errors.add(:login, :admin_must_use_default) unless login == "user#{id}"
   end
 
   # Extra callback to make sure readings are deleted in an order consistent

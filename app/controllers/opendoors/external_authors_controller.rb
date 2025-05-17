@@ -33,7 +33,7 @@ class Opendoors::ExternalAuthorsController < ApplicationController
     unless @external_author.save
       flash[:error] = ts("We couldn't save that address.")
     else
-      flash[:notice] = ts("We have saved and blocked the email address #{@external_author.email}")
+      flash[:notice] = ts("We have saved and blocked the email address %{email}", email: @external_author.email)
     end
 
     redirect_to opendoors_tools_path
@@ -58,9 +58,9 @@ class Opendoors::ExternalAuthorsController < ApplicationController
     @invitation.invitee_email = @email
     @invitation.creator = User.find_by(login: "open_doors") || current_user
     if @invitation.save
-      flash[:notice] = ts("Claim invitation for #{@external_author.email} has been forwarded to #{@invitation.invitee_email}!")
+      flash[:notice] = ts("Claim invitation for %{author_email} has been forwarded to %{invitee_email}!", author_email: @external_author.email, invitee_email: @invitation.invitee_email)
     else
-      flash[:error] = ts("We couldn't forward the claim for #{@external_author.email} to that email address.") + @invitation.errors.full_messages.join(", ")
+      flash[:error] = ts("We couldn't forward the claim for %{author_email} to that email address.", author_email: @external_author.email) + @invitation.errors.full_messages.join(", ")
     end
 
     # redirect to external author listing for that user

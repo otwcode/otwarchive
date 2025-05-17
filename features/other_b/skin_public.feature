@@ -1,4 +1,4 @@
-@skins
+@set-default-skin
 Feature: Public skins
 
   Scenario: A user's initial skin should be set to default

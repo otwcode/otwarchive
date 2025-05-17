@@ -10,13 +10,14 @@ class ReadingsController < ApplicationController
   end
 
   def index
-    @readings = @user.readings
+    @readings = @user.readings.visible
     @page_subtitle = ts("History")
     if params[:show] == 'to-read'
       @readings = @readings.where(toread: true)
       @page_subtitle = ts("Marked For Later")
     end
-    @readings = @readings.order("last_viewed DESC").page(params[:page])
+    @readings = @readings.order("last_viewed DESC")
+    @pagy, @readings = pagy(@readings)
   end
 
   def destroy

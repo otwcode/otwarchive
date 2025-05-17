@@ -6,7 +6,6 @@ describe "n+1 queries in the WorksController" do
   shared_examples "displaying multiple works efficiently" do
     context "when all works are cached", :n_plus_one do
       populate do |n|
-        User.current_user = nil # prevent treating the logged-in user as the work creator
         WorkIndexer.prepare_for_testing
         create_list(:work, n, **work_attributes)
         run_all_indexing_jobs
@@ -23,13 +22,12 @@ describe "n+1 queries in the WorksController" do
 
     context "when no works are cached", :n_plus_one do
       populate do |n|
-        User.current_user = nil # prevent treating the logged-in user as the work creator
         WorkIndexer.prepare_for_testing
         create_list(:work, n, **work_attributes)
         run_all_indexing_jobs
       end
 
-      it "performs around 13 queries per work" do
+      it "performs around 11 queries per work" do
         # TODO: Ideally, we'd like the uncached work listings to also have a
         # constant number of queries, instead of the linear number of queries
         # we're checking for here. But we also don't want to put too much
@@ -38,7 +36,7 @@ describe "n+1 queries in the WorksController" do
         expect do
           subject.call
           expect(response.body.scan('<li id="work_').size).to eq(current_scale.to_i)
-        end.to perform_linear_number_of_queries(slope: 13).with_warming_up
+        end.to perform_linear_number_of_queries(slope: 11).with_warming_up
       end
     end
   end

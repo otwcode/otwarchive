@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby "3.0.5"
+ruby "~> 3.2.7"
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 6.1.0"
+gem "rails", "~> 7.1"
 gem "rails-i18n"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
@@ -37,6 +37,7 @@ gem 'unicode_utils', '>=1.4.0'
 gem "lograge" # https://github.com/roidrage/lograge
 
 gem 'will_paginate', '>=3.0.2'
+gem "pagy", "~> 9.3"
 gem 'acts_as_list', '~> 0.9.7'
 gem 'akismetor'
 
@@ -56,7 +57,6 @@ gem "aws-sdk-s3"
 gem 'css_parser'
 
 gem "terrapin"
-gem "kt-paperclip", ">= 5.2.0"
 
 # for looking up image dimensions quickly
 gem 'fastimage'
@@ -65,6 +65,10 @@ gem 'fastimage'
 gem 'devise'
 gem 'devise-async'       # To mails through queues
 gem 'bcrypt'
+
+# Needed for modern ssh
+gem "ed25519", ">= 1.2", "< 2.0"
+gem "bcrypt_pbkdf", ">= 1.0", "< 2.0"
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
@@ -76,21 +80,11 @@ gem 'escape_utils', '1.2.1'
 
 gem 'timeliness'
 
-# TODO: rpm_contrib is deprecated and needs to be replaced
-# Here is a list of possible alternatives:
-# https://github.com/newrelic/extends_newrelic_rpm
-#
-# The last working version is not compatible with Rails 5
-#
-# gem 'rpm_contrib', '2.2.0'
-
 # for generating graphs
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
 # Globalize for translations
-# Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
-gem 'globalize', git: 'https://github.com/globalize/globalize'
-gem 'activemodel-serializers-xml'
+gem "globalize", "~> 7.0"
 
 # Add a clean notifier that shows we are on dev or test
 gem 'rack-dev-mark', '>=0.7.8'
@@ -100,7 +94,7 @@ gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
-gem 'audited', '~> 4.4'
+gem 'audited', '~> 5.3'
 
 # For controlling application behavour dynamically
 gem 'rollout'
@@ -110,23 +104,28 @@ gem 'connection_pool'
 gem 'dalli'
 gem 'kgio', '2.10.0'
 
-# TODO: AO3-6297 Update the download code so we can remove mimemagic.
-gem "mimemagic", "0.3.10"
+gem "marcel", "1.0.2"
+
+# Library for helping run pt-online-schema-change commands:
+gem "departure", "~> 6.7"
+
+gem "rack-timeout"
+gem "puma_worker_killer"
 
 group :test do
-  gem "rspec-rails", "~> 4.0.1"
+  gem "rspec-rails", "~> 6.0"
   gem 'pickle'
   gem 'shoulda'
   gem "capybara"
   gem "cucumber"
   gem 'database_cleaner'
-  gem 'poltergeist'
+  gem "selenium-webdriver"
   gem 'capybara-screenshot'
   gem 'cucumber-rails', require: false
   gem 'launchy'    # So you can do Then show me the page
-  gem 'delorean'
+  
   # Record and replay data from external URLs
-  gem 'vcr', '~> 3.0', '>= 3.0.1'
+  gem "vcr", "~> 6.2"
   gem "webmock"
   gem 'timecop'
   gem 'cucumber-timecop', require: false
@@ -144,6 +143,7 @@ group :test, :development do
   gem 'whiny_validation'
   gem "factory_bot_rails"
   gem 'minitest'
+  gem "i18n-tasks", require: false
 end
 
 group :development do
@@ -152,10 +152,10 @@ group :development do
 end
 
 group :linters do
-  gem "erb_lint", "0.0.29"
-  gem "rubocop", "0.83.0"
-  gem "rubocop-rails", "2.6.0"
-  gem "rubocop-rspec", "1.41.0"
+  gem "erb_lint", "0.4.0"
+  gem "rubocop", "1.22.3"
+  gem "rubocop-rails", "2.12.4"
+  gem "rubocop-rspec", "2.6.0"
 end
 
 group :test, :development, :staging do
@@ -170,11 +170,16 @@ gem 'rvm-capistrano'
 
 # Use unicorn as the web server
 gem 'unicorn', '~> 5.5', require: false
+# Install puma so we can migrate to it
+gem "puma", "~> 6.5.0"
 # Use god as the monitor
 gem 'god', '~> 0.13.7'
 
 group :staging, :production do
-  # Place the New Relic gem as low in the list as possible, allowing the
-  # frameworks above it to be instrumented when the gem initializes.
-  gem "newrelic_rpm"
+  gem "stackprof"
+  gem "sentry-ruby"
+  gem "sentry-rails"
+  gem "sentry-resque"
 end
+
+gem "image_processing", "~> 1.12"

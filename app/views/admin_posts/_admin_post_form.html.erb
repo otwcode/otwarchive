@@ -51,7 +51,7 @@
         </dt>
         <dd>
           <select id="admin_post_language_id" name="admin_post[language_id]">
-            <%= options_from_collection_for_select(@news_languages, :id, :name, @admin_post.language_id || Language.default.id) %>
+            <%= options_for_select(language_options_for_select(@news_languages, "id"), @admin_post.language_id || Language.default.id) %>
           </select>
         </dd>
         <dt>
@@ -66,6 +66,12 @@
             <p class="footnote"><%= t(".translated_post.footnote_comment_permissions") %></p>
             <p class="footnote"><%= t(".translated_post.footnote_tags") %></p>
           <% end %>
+        </dd>
+        <dt class="moderated comments">
+          <%= f.check_box :moderated_commenting_enabled %>
+        </dt>
+        <dd class="moderated comments">
+          <%= f.label :moderated_commenting_enabled, t("comments.commentable.permissions.moderated_commenting.enable") %>
         </dd>
         <dt class="permissions comments">
           <%= t(".comment_permissions.label") %>

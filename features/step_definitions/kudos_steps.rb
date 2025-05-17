@@ -1,7 +1,6 @@
 ### GIVEN
 
 Given "a work {string} with {int} kudo(s)" do |title, count|
-  step "I start a new session"
   step "basic tags"
 
   work = FactoryBot.create(:work, title: title)
@@ -22,6 +21,10 @@ end
 When /^I leave kudos on "([^\"]*)"$/ do |work_title|
   step %{I view the work "#{work_title}"}
   click_button("kudo_submit")
+end
+
+When "the kudos cache has expired" do
+  step "it is currently #{ArchiveConfig.MINUTES_UNTIL_COMMENTABLE_KUDOS_LISTS_EXPIRE} minutes from now"
 end
 
 ### THEN

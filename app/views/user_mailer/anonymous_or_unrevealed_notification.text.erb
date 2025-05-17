@@ -1,5 +1,5 @@
 <% content_for :message do %>
-<%= t("mailer.general.greeting.formal", name: @user.login) %>
+<%= t("mailer.general.greeting.formal.addressed_html", name: @user.login) %>
 
 <%= t(".changed_status.#{@status}.text",
       collection_title: @collection.title,
@@ -18,7 +18,7 @@
 <% end %>
 
 <%= t(".do_not_want.#{@status}.text",
-      collection_items_url: user_collection_items_url(@user, approved: true)) %>
+      collection_items_url: user_collection_items_url(@user, status: "approved")) %>
 
 <%= t(".more_info.text",
       faq_url: archive_faq_url("collections",

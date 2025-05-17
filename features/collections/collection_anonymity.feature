@@ -60,6 +60,8 @@ Feature: Collection
       And all emails have been delivered
     When I am logged in as "first_user"
       And I post the work "First Snippet" to the collection "Hidden Treasury" as a gift for "third_user"
+      # Delay before posting to make sure first work is clearly older
+      And it is currently 1 second from now
       And I post the work "Second Snippet" to the collection "Hidden Treasury" as a gift for "fourth_user"
       And subscription notifications are sent
     Then 0 emails should be delivered
@@ -160,6 +162,8 @@ Feature: Collection
       And the user "third_user" allows gifts
       And I am logged in as "first_user"
       And I post the work "First Snippet" to the collection "Anonymous Hugs" as a gift for "third_user"
+      # Delay before posting to make sure first work is clearly older
+      And it is currently 1 second from now
       And I post the work "Second Snippet" to the collection "Anonymous Hugs" as a gift for "not a user"
     When subscription notifications are sent
     Then "second_user" should not be emailed
@@ -167,6 +171,8 @@ Feature: Collection
       And I view the approved collection items page for "Anonymous Hugs"
       # items listed in date order so checking the second will reveal the older work
       And I uncheck the 2nd checkbox with id matching "collection_items_\d+_anonymous"
+      # Delay before submitting to make sure the cache is expired
+      And it is currently 1 second from now
       And I submit
     Then the author of "First Snippet" should be publicly visible
     When subscription notifications are sent
@@ -382,12 +388,14 @@ Feature: Collection
       And I am logged in as "creator"
       And I post the work "Secret Work" to the collection "Anonymous Collection"
 
-    When I go to my works page
+    When I go to creator's works page
     Then I should not see "Secret Work"
 
     When I am logged in as the owner of "Anonymous Collection"
       And I go to "Anonymous Collection" collection edit page
       And I follow "Delete Collection"
+      # Delay before deleting to make sure the cache is expired
+      And it is currently 1 second from now
       And I press "Yes, Delete Collection"
       And I go to creator's works page
     Then I should see "Secret Work"
@@ -412,12 +420,14 @@ Feature: Collection
       And I am logged in as "creator"
       And I post the work "Secret Work" to the collection "Anonymous Collection"
 
-    When I go to my works page
+    When I go to creator's works page
     Then I should not see "Secret Work"
 
     When I am logged in as the owner of "Anonymous Collection"
       And I view the approved collection items page for "Anonymous Collection"
       And I check "Remove"
+      # Delay before submitting to make sure the cache is expired
+      And it is currently 1 second from now
       And I submit
       And I go to creator's works page
     Then I should see "Secret Work"
@@ -446,14 +456,15 @@ Feature: Collection
       And I set up the draft "Secret Work"
       And I fill in "Collections" with "Anonymizing,Fluffy"
       And I press "Post"
-      And I go to my works page
+      And I go to creator's works page
     Then I should not see "Secret Work"
 
     When I edit the work "Secret Work"
       And I fill in "Collections" with "Holidays,Fluffy"
+      # Delay before posting to make sure the cache is expired
+      And it is currently 1 second from now
       And I press "Post"
-      And all indexing jobs have been run
-      And I go to my works page
+      And I go to creator's works page
     Then I should see "Secret Work"
 
   Scenario: Changing a collection item to anonymous triggers a notification
@@ -513,7 +524,8 @@ Feature: Collection
       And the email should contain "The collection maintainers may later reveal your work but leave it anonymous."
       And the email should not contain "translation missing"
 
-  @javascript
+  # We need to load the site skin to make the share modal work:
+  @javascript @load-default-skin
   Scenario: Work share modal should not reveal anonymous authors
     Given I have the anonymous collection "Anonymous Hugs"
     When I am logged in as "first_user"

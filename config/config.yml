@@ -22,11 +22,19 @@ DAYS_UNTIL_RESET_PASSWORD_LINK_EXPIRES: 7
 # This also affects the link included in the admin account creation email.
 DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES: 5
 
+# If more than PASSWORD_RESET_LIMIT password reset emails are sent within
+# PASSWORD_RESET_COOLDOWN_HOURS time, then password resets for that user
+# will be prevented until PASSWORD_RESET_COOLDOWN_HOURS after the last
+# password reset.
+PASSWORD_RESET_LIMIT: 3
+PASSWORD_RESET_COOLDOWN_HOURS: 12
+
 # email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SPAM_ALERT_ADDRESS: 'abuse-discuss@example.org'
 SPAM_THRESHOLD: 15
 ADMIN_ADDRESS: 'admin@example.org'
+TAG_WRANGLER_SUPERVISORS_ADDRESS: 'tagwranglers-personnel@example.org'
 
 # Because the default email addresses are fake,
 # email delivery is turned off by default, even for production.
@@ -43,6 +51,7 @@ SMTP_PORT: 25
 SMTP_DOMAIN: localhost
 SMTP_OPENSSL_VERIFY_MODE: none
 SMTP_ENABLE_STARTTLS_AUTO: false
+SMTP_ENABLE_STARTTLS: false
 # if required for email authentication
 #SMTP_USER:
 #SMTP_PASSWORD:
@@ -60,6 +69,7 @@ OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes
 REVISION: ''
 ES_URL: 'http://127.0.0.1:9400'
 MEMCACHED_SERVERS: '127.0.0.1:11211'
+ZOHO_URL: 'https://desk.zoho.com'
 
 # tag settings
 DELIMITER_FOR_INPUT: ','  # if you change this, you will need to change
@@ -70,10 +80,13 @@ DELIMITER_FOR_OUTPUT: ', '
 # these can be overridden in the admin controller
 INVITE_FROM_QUEUE_ENABLED: true
 INVITE_FROM_QUEUE_NUMBER: 10
-INVITE_FROM_QUEUE_FREQUENCY: 7
+# How often INVITE_FROM_QUEUE_NUMBER of invites are sent from the queue, in hours
+INVITE_FROM_QUEUE_FREQUENCY: 12
+
+HOURS_BEFORE_RESEND_INVITATION: 24
 # this is whether or not people without invitations can create accounts
 ACCOUNT_CREATION_ENABLED: false
-DAYS_TO_PURGE_UNACTIVATED: 7
+DAYS_TO_CONFIRM_EMAIL_CHANGE: 7
 # number of invites users can request
 MAX_USER_INVITE_REQUEST: 10
 # number of accounts users can block
@@ -90,7 +103,7 @@ TITLE_MIN: 1
 SUMMARY_MAX: 1250
 NOTES_MAX: 5000
 COMMENT_MAX: 10000
-TAG_MAX: 100
+TAG_MAX: 150
 CONTENT_MIN: 10
 CONTENT_MAX: 510000
 CONTENT_MAX_DISPLAYED: 500000
@@ -102,6 +115,7 @@ INFO_MAX: 100000
 FAQ_MAX: 200000
 ICON_ALT_MAX: 250
 ICON_COMMENT_MAX: 50
+ICON_SIZE_KB_MAX: 500
 LOGIN_LENGTH_MIN: 3
 LOGIN_LENGTH_MAX: 40
 PASSWORD_LENGTH_MIN: 6
@@ -178,11 +192,17 @@ RATE_LIMIT_NUMBER: 300
 RATE_LIMIT_PERIOD: 300
 RATE_LIMIT_LOGIN_ATTEMPTS: 5
 RATE_LIMIT_LOGIN_PERIOD: 20
+RATE_LIMIT_ADMIN_LOGIN_ATTEMPTS: 10
+RATE_LIMIT_ADMIN_LOGIN_PERIOD: 300
 RATE_LIMIT_PER_NGINX_UPSTREAM:
   unicorn_elastic:
     limit: 300
     period: 300
   unicorn_elastic_bookmarks:
+    limit: 300
+    period: 300
+RATE_LIMIT_PER_NGINX_UPSTREAM_USER:
+  unicorn_elastic:
     limit: 300
     period: 300
 RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]
@@ -216,7 +236,7 @@ WARNING_NONE_TAG_DISPLAY_NAME: 'No Archive Warnings Apply'
 WARNING_VIOLENCE_TAG_NAME: 'Graphic Depictions Of Violence'
 WARNING_DEATH_TAG_NAME: 'Major Character Death'
 WARNING_NONCON_TAG_NAME: 'Rape/Non-Con'
-WARNING_CHAN_TAG_NAME: 'Underage'
+WARNING_CHAN_TAG_NAME: 'Underage Sex'
 
 RATING_CATEGORY_NAME: 'Rating'
 RATING_DEFAULT_TAG_NAME: 'Not Rated'
@@ -276,13 +296,23 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 # whether a comment should go back into moderation after editing or not
 COMMENT_MODERATION_THRESHOLD: 10
 
+# This is used to determine how tolerant of changes to be when determining
+# whether a comment should be spam checked again when edited
+EDITED_COMMENT_SPAM_CHECK_THRESHOLD: 10
+
 # SANITIZER VERSION
-SANITIZER_VERSION: 3
+SANITIZER_VERSION: 4
 
 # parameters that must be natural integers and their default values
 NONZERO_INTEGER_PARAMETERS:
   page: 1
   per_page: 25
+
+# Enable image safety mode when sanitizing comments on the following parents for
+# display. This is the parent_type of the comment, not the ultimate_parent,
+# so if you want to add extra sanitization to work comments, use Chapter here.
+# Options: AdminPost, Chapter, Tag.
+PARENTS_WITH_IMAGE_SAFETY_MODE: []
 
 # These fields are encrypted and should not have characters escaped or be treated as HTML
 FIELDS_WITHOUT_SANITIZATION: ["password", "password_check", "password_confirmation"]
@@ -319,52 +349,233 @@ FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 
 # Domains that are not allowed be used as the src for audio and video HTML tags.
 # Format: ["google.com", "archiveofourown.org"]
-BLACKLISTED_MULTIMEDIA_SRCS: []
+BANNED_MULTIMEDIA_SRCS: []
 
 # Allowed CSS
 #
-# *** IMPORTANT: if you edit these values please also update the css-help.html file in public/help ***
+# *** IMPORTANT: if you edit these values please also update the
+# skins-creating.html file in public/help ***
 #
-# the following properties and keywords will be ADDED to the default set allowed in user-submitted CSS code, along with:
+# the following properties and keywords will be ADDED to the default set allowed
+# in user-submitted CSS code, along with:
 # - hex and rgb color values
 # - numeric values specified with percentages or cm|em|ex|in|mm|pc|pt|px|%
 # - image files specified with url(http://image.url/blahblah/whatever.(jpg|png|gif))
 #
 
-# We use this list for properties which can take shorthand values and also have subproperties or variants
-# (ie, because "border" is in here, we allow through: border-right, border-bottom-left-radius, -moz-border-foo, etc)
-# It is slightly less secure so do NOT put any property in here if you aren't sure all variations on it are okay!
-SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "column", "cue", "font", "layer-background",
-"layout-grid", "list-style", "margin", "marker", "outline", "overflow", "padding", "page-break", "pause",
-"scrollbar", "text", "transform", "transition"]
+# We use this list for properties which can take shorthand values and also have
+# subproperties or variants (ie, because "border" is in here, we allow through:
+# border-right, border-bottom-left-radius, -moz-border-foo, etc)
+# It is slightly less secure so do NOT put any property in here if you aren't
+# sure all variations on it are okay!
+SUPPORTED_CSS_SHORTHAND_PROPERTIES:
+- background
+- border
+- column
+- cue
+- flex
+- font
+- layer-background
+- layout-grid
+- list-style
+- margin
+- marker
+- outline
+- overflow
+- padding
+- page-break
+- pause
+- scrollbar
+- text
+- transform
+- transition
 
-SUPPORTED_CSS_PROPERTIES: ["-replace", "-use-link-source",
-  "accelerator", "alignment-adjust", "alignment-baseline", "appearance", "azimuth",
-  "baseline-shift", "behavior", "binding", "bookmark-label", "bookmark-level", "bookmark-target", "bottom", "box-align", "box-direction",
-  "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-shadow", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile",
-  "content", "counter-increment", "counter-reset", "crop", "cue", "cue-after", "cue-before",
-  "cursor", "direction", "display", "dominant-baseline", "drop-initial-after-adjust", "drop-initial-after-align", "drop-initial-before-adjust",
-  "drop-initial-before-align", "drop-initial-size", "drop-initial-value", "elevation", "empty-cells", "filter", "fit", "fit-position", "float",
-  "float-offset", "font", "font-effect", "font-emphasize", "font-emphasize-position", "font-emphasize-style", "font-family", "font-size", "font-size-adjust",
-  "font-smooth", "font-stretch", "font-style", "font-variant", "font-weight", "grid-columns", "grid-rows", "hanging-punctuation", "height", "hyphenate-after",
-  "hyphenate-before", "hyphenate-character", "hyphenate-lines", "hyphenate-resource", "hyphens", "icon", "image-orientation", "image-resolution", "ime-mode",
-  "include-source", "inline-box-align", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "line-stacking", "line-stacking-ruby",
-  "line-stacking-shift", "line-stacking-strategy", "mark", "mark-after", "mark-before", "marks", "marquee-direction", "marquee-play-count",
-  "marquee-speed", "marquee-style", "max-height", "max-width", "min-height", "min-width", "move-to", "nav-down", "nav-index", "nav-left", "nav-right",
-  "nav-up", "opacity", "orphans", "page",
-  "page-policy", "phonemes", "pitch", "pitch-range", "play-during", "position", "presentation-level", "punctuation-trim",
-  "quotes", "rendering-intent", "resize", "rest", "rest-after", "rest-before", "richness", "right", "rotation", "rotation-point", "ruby-align", "ruby-overhang",
-  "ruby-position", "ruby-span", "size", "speak", "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "string-set", "tab-side",
-  "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", "user-select",
-  "vertical-align", "visibility", "voice-balance", "voice-duration", "voice-family", "voice-pitch", "voice-pitch-range", "voice-rate", "voice-stress",
-  "voice-volume", "volume", "white-space", "white-space-collapse", "widows", "width", "word-break", "word-spacing", "word-wrap", "writing-mode", "z-index"]
+SUPPORTED_CSS_PROPERTIES:
+- -replace
+- -use-link-source
+- accelerator
+- align-content
+- align-items
+- align-self
+- alignment-adjust
+- alignment-baseline
+- appearance
+- azimuth
+- baseline-shift
+- behavior
+- binding
+- bookmark-label
+- bookmark-level
+- bookmark-target
+- bottom
+- box-align
+- box-direction
+- box-flex
+- box-flex-group
+- box-lines
+- box-orient
+- box-pack
+- box-shadow
+- box-sizing
+- caption-side
+- clear
+- clip
+- color
+- color-profile
+- color-scheme
+- content
+- counter-increment
+- counter-reset
+- crop
+- cue
+- cue-after
+- cue-before
+- cursor
+- direction
+- display
+- dominant-baseline
+- drop-initial-after-adjust
+- drop-initial-after-align
+- drop-initial-before-adjust
+- drop-initial-before-align
+- drop-initial-size
+- drop-initial-value
+- elevation
+- empty-cells
+- filter
+- fit
+- fit-position
+- float
+- float-offset
+- font
+- font-effect
+- font-emphasize
+- font-emphasize-position
+- font-emphasize-style
+- font-family
+- font-size
+- font-size-adjust
+- font-smooth
+- font-stretch
+- font-style
+- font-variant
+- font-weight
+- grid-columns
+- grid-rows
+- hanging-punctuation
+- height
+- hyphenate-after
+- hyphenate-before
+- hyphenate-character
+- hyphenate-lines
+- hyphenate-resource
+- hyphens
+- icon
+- image-orientation
+- image-resolution
+- ime-mode
+- include-source
+- inline-box-align
+- justify-content
+- layout-flow
+- left
+- letter-spacing
+- line-break
+- line-height
+- line-stacking
+- line-stacking-ruby
+- line-stacking-shift
+- line-stacking-strategy
+- mark
+- mark-after
+- mark-before
+- marks
+- marquee-direction
+- marquee-play-count
+- marquee-speed
+- marquee-style
+- max-height
+- max-width
+- min-height
+- min-width
+- move-to
+- nav-down
+- nav-index
+- nav-left
+- nav-right
+- nav-up
+- opacity
+- order
+- orphans
+- page
+- page-policy
+- phonemes
+- pitch
+- pitch-range
+- play-during
+- position
+- presentation-level
+- punctuation-trim
+- quotes
+- rendering-intent
+- resize
+- rest
+- rest-after
+- rest-before
+- richness
+- right
+- rotation
+- rotation-point
+- ruby-align
+- ruby-overhang
+- ruby-position
+- ruby-span
+- size
+- speak
+- speak-header
+- speak-numeral
+- speak-punctuation
+- speech-rate
+- stress
+- string-set
+- tab-side
+- table-layout
+- target
+- target-name
+- target-new
+- target-position
+- top
+- unicode-bibi
+- unicode-bidi
+- user-select
+- vertical-align
+- visibility
+- voice-balance
+- voice-duration
+- voice-family
+- voice-pitch
+- voice-pitch-range
+- voice-rate
+- voice-stress
+- voice-volume
+- volume
+- white-space
+- white-space-collapse
+- widows
+- width
+- word-break
+- word-spacing
+- word-wrap
+- writing-mode
+- z-index
 
-# we allow through any string that is just a-z plus dashes (no spaces), so the only keywords you need to specify would
-# be ones that have something else or url, if you want to allow url values
+# we allow through any string that is just a-z plus dashes (no spaces), so the
+# only keywords you need to specify would be ones that have something else or
+# url, if you want to allow url values
 SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 
-# if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this kind of
-# resource will be allowed
+# if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this
+# kind of resource will be allowed
 SUPPORTED_EXTERNAL_URLS: ["jpg", "jpeg", "png", "gif"]
 
 # variables for Askimet http://akismet.com/
@@ -424,10 +635,15 @@ ACTION_UNSUSPEND: 4
 ACTION_BAN: 5
 ACTION_WARN: 6
 ACTION_RENAME: 7
-ACTION_PASSWORD_RESET: 8
+ACTION_PASSWORD_CHANGE: 8
 ACTION_NEW_EMAIL: 9
 ACTION_TROUBLESHOOT: 10
 ACTION_NOTE: 11
+ACTION_ADD_FNOK: 12
+ACTION_REMOVE_FNOK: 13
+ACTION_ADDED_AS_FNOK: 14
+ACTION_REMOVED_AS_FNOK: 15
+ACTION_PASSWORD_RESET: 16
 
 
 # Elasticsearch index prefix
@@ -448,6 +664,9 @@ CHARACTER_COUNT_SCRIPTS: ["Han", "Hiragana", "Katakana", "Thai"]
 SECONDS_UNTIL_WORK_INDEX_EXPIRE: 1800
 SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE: 1800
 
+# Cache duration for commentable kudos list of names
+MINUTES_UNTIL_COMMENTABLE_KUDOS_LISTS_EXPIRE: 60
+
 # Cache duration for comment counts:
 SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE: 3600
 
@@ -455,7 +674,13 @@ SECONDS_UNTIL_COMMENT_COUNTS_EXPIRE: 3600
 # bookmarks, # of fandoms):
 SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE: 300
 
-# Batch size used for the RedisHitCounter class:
+# Cache durations for work and bookmark searches (in minutes)
+MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE: 120
+
+# Job size used for the HitCountUpdateJob class:
+HIT_COUNT_JOB_SIZE: 1000
+
+# Batch size used for the HitCountUpdateJob class:
 HIT_COUNT_BATCH_SIZE: 100
 
 # The hour (in UTC time) that we want the hit counts to rollover at. If someone
@@ -466,17 +691,22 @@ HIT_COUNT_ROLLOVER_HOUR: 3
 # The batch size for calculating a work's filters from its tags:
 FILTER_UPDATE_BATCH_SIZE: 100
 
-# URLs for which we should not display the proxy notice. Alphabetical by
+# URLs for which we should not display the proxy notice. URLs from these hosts
+# are allowed in Abuse reports and disallowed in Work imports. Alphabetical by
 # environment.
 PERMITTED_HOSTS: [
   # Production
   "104.153.64.122",
   "208.85.241.152",
   "208.85.241.157",
+  "ao3.org",
+  "archiveofourown.com",
+  "archiveofourown.net",
   "archiveofourown.org",
   "download.archiveofourown.org",
   "insecure.archiveofourown.org",
   "secure.archiveofourown.org",
+  "www.ao3.org",
   "www.archiveofourown.com",
   "www.archiveofourown.net",
   "www.archiveofourown.org",
@@ -503,3 +733,31 @@ STAT_COUNTER_BATCH_SIZE: 100
 # Number of hours to retain the original creator for works that have been
 # orphaned.
 ORIGINAL_CREATOR_TTL_HOURS: 72
+
+# The maximum number of tags to provide in a tag wrangling report.
+WRANGLING_REPORT_LIMIT: 1000
+
+# The number of days after which an Admin Post should allow comments.
+# After this window, all comments are disabled. Setting this value to
+# something below 1 -- or commenting it out -- will turn off comment disabling.
+ADMIN_POST_COMMENTING_EXPIRATION_DAYS: 14
+
+# Usernames in this list are not allowed to avoid potential confusion (like
+# a user who has the username 'admin', for example).
+FORBIDDEN_USERNAMES: []
+
+# The arguments to pass to pt-online-schema-change:
+PERCONA_ARGS: >
+  --chunk-size=5k
+  --max-flow-ctl 0
+  --pause-file /tmp/pauseme
+  --max-load Threads_running=15
+  --critical-load Threads_running=100
+  --set-vars innodb_lock_wait_timeout=2
+  --alter-foreign-keys-method=rebuild_constraints
+  --no-check-unique-key-change
+
+# How many shards to have in elastic indexes.
+# Production has more than 5 for these
+BOOKMARKABLE_SHARDS: 5
+WORKS_SHARDS: 5

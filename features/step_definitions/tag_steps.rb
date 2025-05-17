@@ -59,18 +59,35 @@ Given /^the basic categories exist$/ do
   end
 end
 
+Given "a set of tags for tag sort by use exists" do
+  {
+    "10 uses" => 10,
+    "8 uses" => 8,
+    "also 8 uses" => 8,
+    "5 uses" => 5,
+    "2 uses" => 2,
+    "0 uses" => 0
+  }.each do |freeform, uses|
+    tag = Freeform.find_or_create_by_name(freeform.dup)
+    tag.taggings_count = uses
+  end
+
+  step "all indexing jobs have been run"
+  step "the periodic tag count task is run"
+end
+
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
   fandom = Fandom.find_or_create_by_name(fandom)
-  fandom.update(canonical: true)
+  fandom.update!(canonical: true)
   media = Media.find_or_create_by_name(media)
-  media.update(canonical: true)
+  media.update!(canonical: true)
   fandom.add_association media
 end
 
-Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, character|
-  char = Character.find_or_create_by(name: character)
+Given "I add the fandom {string} to the tag/character {string}" do |fandom, tag|
+  tag = Tag.find_or_create_by(name: tag)
   fand = Fandom.find_or_create_by_name(fandom)
-  char.add_association(fand)
+  tag.add_association(fand)
 end
 
 Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
@@ -91,6 +108,13 @@ Given /^a (non-?canonical|canonical) (\w+) "([^\"]*)"$/ do |canonical_status, ta
   t.save
 end
 
+Given "a non-canonical character {string} in fandom {string}" do |character_name, fandom_name|
+  character = Character.where(name: character_name).first_or_create
+  character.update!(canonical: false)
+  fandom = Fandom.where(name: fandom_name).first_or_create
+  character.add_association(fandom)
+end
+
 Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
   merger = Tag.find_by_name(merger)
   merger_type = merger.type
@@ -108,7 +132,6 @@ Given /^"([^\"]*)" is a metatag of the (\w+) "([^\"]*)"$/ do |metatag, tag_type,
 end
 
 Given /^I am logged in as a tag wrangler$/ do
-  step "I start a new session"
   username = "wrangler"
   step %{I am logged in as "#{username}"}
   user = User.find_by(login: username)
@@ -122,6 +145,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   if tw.blank?
     tw = FactoryBot.create(:user, login: user, password: password)
   else
+    tw.skip_password_change_notification!
     tw.password = password
     tw.password_confirmation = password
     tw.save
@@ -140,7 +164,6 @@ end
 
 Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
-  step "I start a new session"
 
   n_comments = 3 if n_comments.blank? || n_comments.zero?
   FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
@@ -157,7 +180,6 @@ end
 
 Given /^a period-containing tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
-  step "I start a new session"
 
   n_comments = 3 if n_comments.blank? || n_comments.zero?
   FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
@@ -175,11 +197,12 @@ Given /^the tag wrangling setup$/ do
   step %{I am logged in as a random user}
   step %{I post the work "Revenge of the Sith 2" with fandom "Star Wars, Stargate SG-1" with character "Daniel Jackson" with second character "Jack O'Neil" with rating "Not Rated" with relationship "JackDaniel"}
   step %{The periodic tag count task is run}
+  step %{all indexing jobs have been run}
   step %{I flush the wrangling sidebar caches}
 end
 
 Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "tag_wrangling" admin}
   visit new_wrangling_guideline_path
   if title
     fill_in("Guideline text", with: "This is a page about how we wrangle things.")
@@ -203,10 +226,40 @@ Given /^the tag "([^"]*)" does not exist$/ do |tag_name|
   tag.destroy if tag.present?
 end
 
+Given "a zero width space tag exists" do
+  blank_tag = FactoryBot.build(:character, name: ["200B".hex].pack("U"))
+  blank_tag.save!(validate: false)
+end
+
+Given "I create the canonical media tag {string}" do |name|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(new_tag_path)
+  fill_in("Name", with: name)
+  choose("Media")
+  check("Canonical")
+  click_button("Create Tag")
+end
+
+Given "I create the non-canonical media tag {string}" do |name|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(new_tag_path)
+  fill_in("Name", with: name)
+  choose("Media")
+  click_button("Create Tag")
+end
+
+Given "I recategorize the {string} fandom as a {string} tag" do |name, tag_type|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(edit_tag_path(Fandom.create(name: name)))
+  select(tag_type, from: "tag_type")
+  check("Canonical")
+  click_button("Save changes")
+end
+
 ### WHEN
 
 When /^the periodic tag count task is run$/i do
-  RedisSetJobSpawner.perform_now("TagCountUpdateJob")
+  RedisJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^the periodic filter count task is run$/i do
@@ -231,10 +284,7 @@ end
 
 When "I edit the tag {string}" do |tag|
   tag = Tag.find_by!(name: tag)
-  visit tag_path(tag)
-  within(".header") do
-    click_link("Edit")
-  end
+  visit edit_tag_path(tag)
 end
 
 When /^I view the tag "([^\"]*)"$/ do |tag|
@@ -404,6 +454,11 @@ Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname, tag_type|
   assert tag.type == tag_type
 end
 
+Then "the {string} tag should be an unsorted tag" do |tagname|
+  tag = Tag.find_by(name: tagname)
+  expect(tag).to be_a(UnsortedTag)
+end
+
 Then(/^the "([^"]*)" tag should (be|not be) canonical$/) do |tagname, canonical|
   tag = Tag.find_by(name: tagname)
   expected = canonical == "be"
@@ -425,4 +480,8 @@ end
 Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
   tag = Tag.find_by(name: tagname)
   puts tag.inspect
+end
+
+Then "no tag is scheduled for count update from now on" do
+  expect_any_instance_of(Tag).not_to receive(:update_filters_for_filterables)
 end

@@ -10,20 +10,18 @@ class KudoMailer < ApplicationMailer
     user = User.find(user_id)
     kudos_hash = JSON.parse(user_kudos)
 
-    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
-      kudos_hash.each_pair do |commentable_info, kudo_givers_hash|
-        # Parse the key to extract the type and id of the commentable so we can
-        # weed out any commentables that no longer exist.
-        commentable_type, commentable_id = commentable_info.split("_")
-        commentable = commentable_type.constantize.find_by(id: commentable_id)
-        next unless commentable
+    kudos_hash.each_pair do |commentable_info, _kudo_givers_hash|
+      # Parse the key to extract the type and id of the commentable so we can
+      # weed out any commentables that no longer exist.
+      commentable_type, commentable_id = commentable_info.split("_")
+      commentable = commentable_type.constantize.find_by(id: commentable_id)
+      next unless commentable
 
-        @commentables << commentable
-      end
-      mail(
-        to: user.email,
-        subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
-      )
+      @commentables << commentable
     end
+    mail(
+      to: user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 end

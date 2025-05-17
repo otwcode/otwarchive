@@ -1,10 +1,10 @@
 class BookmarksController < ApplicationController
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :load_bookmarkable, only: [:index, :new, :create, :fetch_recent, :hide_recent]
+  before_action :load_bookmarkable, only: [:index, :new, :create]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete, :share]
+  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :confirm_delete, :share]
   before_action :check_visibility, only: [:show, :share]
   before_action :check_ownership, only: [:edit, :update, :destroy, :confirm_delete, :share]
 
@@ -60,8 +60,9 @@ class BookmarksController < ApplicationController
 
   def index
     if @bookmarkable
-      access_denied unless is_admin? || @bookmarkable.visible?
-      @bookmarks = @bookmarkable.bookmarks.is_public.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      access_denied unless logged_in_as_admin? || @bookmarkable.visible?
+      @bookmarks = @bookmarkable.bookmarks.not_private.order_by_created_at.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      @bookmarks = @bookmarks.where(hidden_by_admin: false) unless logged_in_as_admin?
     else
       base_options = {
         show_private: (@user.present? && @user == current_user),
@@ -145,6 +146,13 @@ class BookmarksController < ApplicationController
       end
     end
     set_own_bookmarks
+
+    @pagy =
+      if @bookmarks.respond_to?(:total_pages)
+        pagy_query_result(@bookmarks)
+      elsif @bookmarkable_items.respond_to?(:total_pages)
+        pagy_query_result(@bookmarkable_items)
+      end
   end
 
   # GET    /:locale/bookmark/:id
@@ -203,12 +211,12 @@ class BookmarksController < ApplicationController
     bookmark_params[:collection_names]&.split(",")&.map(&:strip)&.uniq&.each do |collection_name|
       collection = Collection.find_by(name: collection_name)
       if collection.nil?
-        errors << ts("#{collection_name} does not exist.")
+        errors << ts("%{name} does not exist.", name: collection_name)
       else
         if @bookmark.collections.include?(collection)
           next
         elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
-          errors << ts("#{collection.title} is closed to new submissions.")
+          errors << ts("%{title} is closed to new submissions.", title: collection.title)
         elsif @bookmark.add_to_collection(collection) && @bookmark.save
           if @bookmark.approved_collections.include?(collection)
             new_collections << collection
@@ -216,7 +224,7 @@ class BookmarksController < ApplicationController
             unapproved_collections << collection
           end
         else
-          errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!")
+          errors << ts("Something went wrong trying to add collection %{title}, sorry!", title: collection.title)
         end
       end
     end
@@ -277,26 +285,6 @@ class BookmarksController < ApplicationController
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
     redirect_to user_bookmarks_path(current_user)
-  end
-
-  # Used on index page to show 4 most recent bookmarks (after bookmark being currently viewed) via RJS
-  # Only main bookmarks page or tag bookmarks page
-  # non-JS fallback should be to the 'view all bookmarks' link which serves the same function
-  def fetch_recent
-    @bookmarkable = @bookmark.bookmarkable
-    respond_to do |format|
-      format.js {
-        @bookmarks = @bookmarkable.bookmarks.visible.order("created_at DESC").offset(1).limit(4)
-        set_own_bookmarks
-      }
-      format.html do
-        id_symbol = (@bookmarkable.class.to_s.underscore + '_id').to_sym
-        redirect_to url_for({action: :index, id_symbol => @bookmarkable})
-      end
-    end
-  end
-  def hide_recent
-    @bookmarkable = @bookmark.bookmarkable
   end
 
   protected

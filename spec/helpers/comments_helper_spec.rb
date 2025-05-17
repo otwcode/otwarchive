@@ -1,6 +1,49 @@
 require "spec_helper"
 
 describe CommentsHelper do
+  describe "#comment_link_with_commentable_name" do
+    context "when ultimate parent is AdminPost" do
+      let(:comment) { create(:comment, :on_admin_post) }
+
+      it "links to comment" do
+        text = "Comment on the news post #{comment.ultimate_parent.commentable_name}"
+        expect(helper.comment_link_with_commentable_name(comment)).to eq(link_to(text, comment_path(comment)))
+      end
+    end
+
+    context "when ultimate parent is Tag" do
+      let(:comment) { create(:comment, :on_tag) }
+
+      it "links to comment" do
+        text = "Comment on the tag #{comment.ultimate_parent.commentable_name}"
+        expect(helper.comment_link_with_commentable_name(comment)).to eq(link_to(text, comment_path(comment)))
+      end
+    end
+
+    context "when ultimate parent is Work" do
+      let(:comment) { create(:comment) }
+
+      it "links to comment" do
+        text = "Comment on the work #{comment.ultimate_parent.commentable_name}"
+        expect(helper.comment_link_with_commentable_name(comment)).to eq(link_to(text, comment_path(comment)))
+      end
+    end
+
+    context "when ultimate parent is unknown" do
+      let(:comment) { create(:comment) }
+
+      before do
+        comment.parent.delete
+        comment.reload
+      end
+
+      it "links to comment" do
+        text = "Comment on unknown item"
+        expect(helper.comment_link_with_commentable_name(comment)).to eq(link_to(text, comment_path(comment)))
+      end
+    end
+  end
+
   describe "#commenter_id_for_css_classes" do
     context "when commenter is a user" do
       let(:user) { create(:user) }

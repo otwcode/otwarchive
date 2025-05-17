@@ -34,7 +34,7 @@ Given /the following users exist with BCrypt encrypted passwords/ do |table|
                            [hash[:password], salt].flatten.join,
                            cost: ArchiveConfig.BCRYPT_COST || 14)
 
-    user.update(
+    user.update!(
       password_salt: salt,
       encrypted_password: encrypted_password
     )
@@ -54,7 +54,7 @@ Given /the following users exist with SHA-512 encrypted passwords/ do |table|
     encrypted_password = [hash[:password], salt].flatten.join
     20.times { encrypted_password = Digest::SHA512.hexdigest(encrypted_password) }
 
-    user.update(
+    user.update!(
       password_salt: salt,
       encrypted_password: encrypted_password
     )
@@ -99,7 +99,7 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, passwor
   step %{I am on the homepage}
   find_link('login-dropdown').click
 
-  fill_in "User name or email:", with: login
+  fill_in "Username or email:", with: login
   fill_in "Password:", with: password
   check "Remember Me"
   click_button "Log In"
@@ -109,6 +109,14 @@ end
 
 Given /^I am logged in as "([^"]*)"$/ do |login|
   step(%{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"})
+end
+
+Given "I am logged in as a new user {string}" do |login|
+  step(%{I am logged in as "#{login}"})
+  user = User.find_by(login: login)
+  user.created_at = Time.current
+  user.confirmed_at = Time.current
+  user.save!
 end
 
 Given /^I am logged in$/ do
@@ -121,11 +129,6 @@ Given /^I am logged in as a random user$/ do
   step(%{confirmation emails have been delivered})
 end
 
-Given /^I am logged in as a banned user$/ do
-  step(%{user "banned" is banned})
-  step(%{I am logged in as "banned"})
-end
-
 Given /^user "([^"]*)" is banned$/ do |login|
   user = find_or_create_new_user(login, DEFAULT_PASSWORD)
   user.banned = true
@@ -134,6 +137,10 @@ end
 
 Given /^I start a new session$/ do
   page.driver.reset!
+end
+
+Given "the username {string} is on the forbidden list" do |username|
+  allow(ArchiveConfig).to receive(:FORBIDDEN_USERNAMES).and_return([username])
 end
 
 # TODO: This should eventually be removed in favor of the "I log out" step,
@@ -159,9 +166,9 @@ end
 Given(/^I coauthored the work "(.*?)" as "(.*?)" with "(.*?)"$/) do |title, login, coauthor|
   step %{basic tags}
   author1 = User.find_by(login: login).default_pseud
-  author1.user.preference.update(allow_cocreator: true)
+  author1.user.preference.update!(allow_cocreator: true)
   author2 = User.find_by(login: coauthor).default_pseud
-  author2.user.preference.update(allow_cocreator: true)
+  author2.user.preference.update!(allow_cocreator: true)
   work = FactoryBot.create(:work, authors: [author1, author2], title: title)
   work.creatorships.unapproved.each(&:accept!)
 end
@@ -182,6 +189,15 @@ Given "the user {string} has the no resets role" do |login|
   user.roles = [Role.find_or_create_by(name: "no_resets")]
 end
 
+Given "the user {string} with the email {string} exists" do |login, email|
+  FactoryBot.create(:user, login: login, email: email)
+end
+
+Given "the user {string} was created using an invitation" do |login|
+  invitation = FactoryBot.create(:invitation)
+  FactoryBot.create(:user, login: login, invitation: invitation)
+end
+
 # WHEN
 
 When /^I follow the link for "([^"]*)" first invite$/ do |login|
@@ -192,15 +208,16 @@ end
 
 When /^the user "([^\"]*)" has failed to log in (\d+) times$/ do |login, count|
   user = User.find_by(login: login)
-  user.update(failed_attempts: count.to_i)
+  user.update!(failed_attempts: count.to_i)
 end
 
-When /^I fill in the sign up form with valid data$/ do
+When "I fill in the sign up form with valid data" do
   step(%{I fill in "user_registration_login" with "#{NEW_USER}"})
   step(%{I fill in "user_registration_email" with "test@archiveofourown.org"})
   step(%{I fill in "user_registration_password" with "password1"})
   step(%{I fill in "user_registration_password_confirmation" with "password1"})
   step(%{I check "user_registration_age_over_13"})
+  step(%{I check "user_registration_data_processing"})
   step(%{I check "user_registration_terms_of_service"})
 end
 
@@ -226,10 +243,17 @@ When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
   user.creatorships.unapproved.each(&:accept!)
 end
 
+When "I request a password reset for {string}" do |login|
+  step(%{I am on the login page})
+  step(%{I follow "Reset password"})
+  step(%{I fill in "Email address or username" with "#{login}"})
+  step(%{I press "Reset Password"})
+end
+
 # THEN
 
-Then /^I should get the error message for wrong username or password$/ do
-  step(%{I should see "The password or user name you entered doesn't match our records. Please try again"})
+Then "I should get the error message for wrong username or password" do
+  step(%{I should see "The password or username you entered doesn't match our records. Please try again"})
 end
 
 Then /^I should get an activation email for "(.*?)"$/ do |login|
@@ -258,7 +282,8 @@ Then /^a new user account should exist$/ do
 end
 
 Then /^I should be logged out$/ do
-  expect(User.current_user).to be(nil)
+  step %{I should not see "Log Out"}
+  step %{I should see "Log In"}
 end
 
 def get_work_name(age, classname, name)
@@ -292,18 +317,26 @@ Then /^I should not see the (most recent|oldest) (work|series) for (pseud|user) 
 end
 
 When /^I change my username to "([^"]*)"/ do |new_name|
-  visit change_username_user_path(User.current_user)
-  fill_in("New user name", with: new_name)
+  step %{I follow "My Preferences"}
+  step %{I follow "Change Username"}
+  fill_in("New username", with: new_name)
   fill_in("Password", with: "password")
-  click_button("Change User Name")
+  click_button("Change Username")
   step %{I should get confirmation that I changed my username}
 end
 
 Then /^I should get confirmation that I changed my username$/ do
-  step(%{I should see "Your user name has been successfully updated."})
+  step(%{I should see "Your username has been successfully updated."})
+  step(%{1 email should be delivered})
+  step(%{the email should contain "The username for your .* has been changed to"})
 end
 
 Then /^the user "([^"]*)" should be activated$/ do |login|
   user = User.find_by(login: login)
   expect(user).to be_active
+end
+
+Then "I should see the invitation id for the user {string}" do |login|
+  invitation_id = User.find_by(login: login).invitation.id
+  step %{I should see "Invitation: #{invitation_id}"}
 end

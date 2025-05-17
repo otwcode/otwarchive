@@ -35,7 +35,7 @@ describe ZohoAuthClient do
           client_id: "111",
           client_secret: "a1b2c3",
           redirect_uri: "https://archiveofourown.org/support",
-          scope: "Desk.contacts.CREATE,Desk.contacts.READ,Desk.search.READ,Desk.tickets.CREATE,Desk.tickets.READ",
+          scope: "Desk.contacts.CREATE,Desk.contacts.READ,Desk.search.READ,Desk.tickets.CREATE,Desk.tickets.READ,Desk.tickets.UPDATE",
           grant_type: "refresh_token",
           refresh_token: "x1y2z3"
         }

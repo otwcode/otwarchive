@@ -59,7 +59,7 @@ li.blurb:after, .blurb .blurb:after {
   vertical-align: bottom;
 }
 
-.blurb .header p.notice, .blurb ul.series {
+.blurb ul.series {
   margin: 1.25em 0 0;
 }
 
@@ -232,7 +232,6 @@ li.blurb:after, .blurb .blurb:after {
 }
 
 .blurb blockquote {
-  clear: none;
   margin: 0.643em auto;
   text-align: justify;
 }

@@ -42,15 +42,17 @@ When "I edit the work {string} to be in the collection(s) {string}" do |work, co
   step %{I post the work}
 end
 
-When(/^I view the(?: ([^"]*)) collection items page for "(.*?)"$/) do |item_status, collection|
+When /^I view the ([^"]*) collection items page for "(.*?)"$/ do |item_status, collection|
   c = Collection.find_by(title: collection)
   if item_status == "approved"
-    visit collection_items_path(c, approved: true)
-  elsif item_status == "rejected"
-    visit collection_items_path(c, rejected: true)
-  elsif item_status == "invited"
-    visit collection_items_path(c, invited: true)
-  else
+    visit collection_items_path(c, status: "approved")
+  elsif item_status == "rejected by user"
+    visit collection_items_path(c, status: "rejected_by_user")
+  elsif item_status == "rejected by collection"
+    visit collection_items_path(c, status: "rejected_by_collection")
+  elsif item_status == "awaiting user approval"
+    visit collection_items_path(c, status: "unreviewed_by_user")
+  elsif item_status == "awaiting collection approval"
     visit collection_items_path(c)
   end
 end
@@ -58,6 +60,10 @@ end
 When "the collection counts have expired" do
   step "all indexing jobs have been run"
   step "it is currently #{ArchiveConfig.SECONDS_UNTIL_COLLECTION_COUNTS_EXPIRE} seconds from now"
+end
+
+When "the collection blurb cache has expired" do
+  step "it is currently #{ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE} minutes from now"
 end
 
 Given /^mod1 lives in Alaska$/ do
@@ -68,14 +74,12 @@ Given /^mod1 lives in Alaska$/ do
 end
 
 Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
-  step %{I am logged in as "moderator"}
-  step %{I set up the collection "#{title}" with name "#{name}"}
-  check("This collection is unrevealed") unless hidden.blank?
-  check("This collection is anonymous") unless anon.blank?
-  check("This collection is moderated") unless moderated.blank?
-  check("This collection is closed") unless closed.blank?
-  step %{I submit}
-  step %{I am logged out}
+  mod = ensure_user("moderator")
+  collection = FactoryBot.create(:collection, title: title, name: (name.presence || title.gsub(/[^\w]/, "_")), owner: mod.default_pseud)
+  collection.collection_preference.update_attribute(:anonymous, true) if anon.present?
+  collection.collection_preference.update_attribute(:unrevealed, true) if hidden.present?
+  collection.collection_preference.update_attribute(:moderated, true) if moderated.present?
+  collection.collection_preference.update_attribute(:closed, true) if closed.present?
 end
 
 Given /^I open the collection with the title "([^\"]*)"$/ do |title|
@@ -109,6 +113,13 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
   # TODO: fix the form, it is malformed right now
   click_button("#{name}_submit")
   step %{I should see "Updated #{name}"}
+end
+
+Given "I have joined the collection {string} as {string}" do |title, login|
+  collection = Collection.find_by(title: title)
+  user = User.find_by(login: login)
+  FactoryBot.create(:collection_participant, pseud: user.default_pseud, collection: collection, participant_role: "Member")
+  visit collections_path
 end
 
 ### WHEN
@@ -168,10 +179,10 @@ When /^I check all the collection settings checkboxes$/ do
   check("collection_collection_preference_attributes_email_notify")
 end
 
-When /^I accept the invitation for my work in the collection "([^\"]*)"$/ do |collection|
+When "{string} accepts the invitation for their work in the collection {string}" do |username, collection|
   the_collection = Collection.find_by(title: collection)
   collection_item_id = the_collection.collection_items.first.id
-  visit user_collection_items_path(User.current_user)
+  visit user_collection_items_path(User.find_by(login: username))
   step %{I select "Approved" from "collection_items_#{collection_item_id}_user_approval_status"}
 end
 

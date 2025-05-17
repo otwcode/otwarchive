@@ -9,5 +9,5 @@ Given /^(.*) first read "([^"]*)" on "([^"]*)"$/ do |login, title, date|
 end
 
 When "the readings are saved to the database" do
-  RedisSetJobSpawner.perform_now("ReadingsJob")
+  RedisJobSpawner.perform_now("ReadingsJob")
 end
