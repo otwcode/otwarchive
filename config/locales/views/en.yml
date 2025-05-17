@@ -2398,6 +2398,9 @@ en:
       tooltip_label: 'tip:'
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    show_multiple:
+      draft: " (Draft)"
+      no_works: You have no works or drafts to edit.
     skin:
       select: Select work skin
     standard_form:
