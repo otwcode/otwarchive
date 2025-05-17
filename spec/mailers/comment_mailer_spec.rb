@@ -186,6 +186,106 @@ describe CommentMailer do
     end
   end
 
+  shared_examples "a notification email for admins" do
+    it "is not delivered to the admin who is the commentable owner" do
+      expect(email).not_to deliver_to(comment.ultimate_parent.commentable_owners.first.email)
+    end
+
+    it "is delivered to the admin address" do
+      expect(email).to deliver_to(ArchiveConfig.ADMIN_ADDRESS)
+    end
+  end
+
+  shared_examples "a notification email to someone who can review comments" do
+    describe "HTML email" do
+      it "has a note about needing to approve comments" do
+        note = if comment.ultimate_parent.is_a?(AdminPost)
+                 "Comments on this news post are moderated and will not appear until approved."
+               else
+                 "Comments on this work are moderated and will not appear until you approve them."
+               end
+        expect(subject).to have_html_part_content(note)
+      end
+
+      it "has a link to review comments" do
+        url = if comment.ultimate_parent.is_a?(AdminPost)
+                unreviewed_admin_post_comments_url(comment.ultimate_parent)
+              else
+                unreviewed_work_comments_url(comment.ultimate_parent)
+              end
+        expect(subject.html_part).to have_xpath(
+          "//a[@href=\"#{url}\"]",
+          text: "Review comments on #{comment.ultimate_parent.commentable_name}"
+        )
+      end
+    end
+
+    describe "text email" do
+      it "has a note about needing to approve comments" do
+        note = if comment.ultimate_parent.is_a?(AdminPost)
+                 "Comments on this news post are moderated and will not appear until approved."
+               else
+                 "Comments on this work are moderated and will not appear until you approve them."
+               end
+        expect(subject).to have_text_part_content(note)
+      end
+
+      it "has a link to review comments" do
+        url = if comment.ultimate_parent.is_a?(AdminPost)
+                unreviewed_admin_post_comments_url(comment.ultimate_parent)
+              else
+                unreviewed_work_comments_url(comment.ultimate_parent)
+              end
+        expect(subject).to have_text_part_content("Review comments on \"#{comment.ultimate_parent.commentable_name}\": #{url}")
+      end
+    end
+  end
+
+  shared_examples "a notification email to someone who can't review comments" do
+    describe "HTML email" do
+      it "has a note about the comment not appearing until it is approved" do
+        note = if comment.ultimate_parent.is_a?(AdminPost)
+                 "Comments on this news post are moderated and will not appear until approved."
+               else
+                 "Comments on this work are moderated and will not appear until approved by the work creator."
+               end
+        expect(subject).to have_html_part_content(note)
+      end
+
+      it "does not have a link to review comments" do
+        url = if comment.ultimate_parent.is_a?(AdminPost)
+                unreviewed_admin_post_comments_url(comment.ultimate_parent)
+              else
+                unreviewed_work_comments_url(comment.ultimate_parent)
+              end
+        expect(subject.html_part).not_to have_xpath(
+          "//a[@href=\"#{url}\"]",
+          text: "Review comments on #{comment.ultimate_parent.commentable_name}"
+        )
+      end
+    end
+
+    describe "text email" do
+      it "has a note about the comment not appearing until it is approved" do
+        note = if comment.ultimate_parent.is_a?(AdminPost)
+                 "Comments on this news post are moderated and will not appear until approved."
+               else
+                 "Comments on this work are moderated and will not appear until approved by the work creator."
+               end
+        expect(subject).to have_text_part_content(note)
+      end
+
+      it "does not have a link to review comments" do
+        url = if comment.ultimate_parent.is_a?(AdminPost)
+                unreviewed_admin_post_comments_url(comment.ultimate_parent)
+              else
+                unreviewed_work_comments_url(comment.ultimate_parent)
+              end
+        expect(subject).not_to have_text_part_content("Review comments on \"#{comment.ultimate_parent.commentable_name}\": #{url}")
+      end
+    end
+  end
+
   describe "#comment_notification" do
     subject(:email) { CommentMailer.comment_notification(user, comment) }
 
@@ -218,9 +318,17 @@ describe CommentMailer do
     end
 
     context "when the comment is on an admin post" do
+      let(:user) { comment.ultimate_parent.commentable_owners.first }
       let(:comment) { create(:comment, :on_admin_post) }
 
+      it_behaves_like "a notification email for admins"
       it_behaves_like "a comment subject to image safety mode settings"
+
+      context "when the comment is unreviewed" do
+        before { comment.update!(unreviewed: true) }
+
+        it_behaves_like "a notification email to someone who can review comments"
+      end
     end
 
     context "when the comment is a reply to another comment" do
@@ -231,6 +339,12 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username"
       it_behaves_like "a comment subject to image safety mode settings"
+    end
+
+    context "when the comment is unreviewed" do
+      before { comment.update!(unreviewed: true) }
+
+      it_behaves_like "a notification email to someone who can review comments"
     end
 
     context "when the comment is on a tag" do
@@ -279,9 +393,17 @@ describe CommentMailer do
     end
 
     context "when the comment is on an admin post" do
+      let(:user) { comment.ultimate_parent.commentable_owners.first }
       let(:comment) { create(:comment, :on_admin_post) }
 
+      it_behaves_like "a notification email for admins"
       it_behaves_like "a comment subject to image safety mode settings"
+
+      context "when the comment is unreviewed" do
+        before { comment.update!(unreviewed: true) }
+
+        it_behaves_like "a notification email to someone who can review comments"
+      end
     end
 
     context "when the comment is a reply to another comment" do
@@ -292,6 +414,12 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username"
       it_behaves_like "a comment subject to image safety mode settings"
+    end
+
+    context "when the comment is unreviewed" do
+      before { comment.update!(unreviewed: true) }
+
+      it_behaves_like "a notification email to someone who can review comments"
     end
 
     context "when the comment is on a tag" do
@@ -353,6 +481,18 @@ describe CommentMailer do
       let(:comment) { create(:comment, :on_admin_post) }
 
       it_behaves_like "a comment subject to image safety mode settings"
+
+      context "when the comment is unreviewed" do
+        before { comment.update!(unreviewed: true) }
+
+        it_behaves_like "a notification email to someone who can't review comments"
+      end
+    end
+
+    context "when the comment is unreviewed" do
+      before { comment.update!(unreviewed: true) }
+
+      it_behaves_like "a notification email to someone who can't review comments"
     end
 
     context "when the comment is on a tag" do
@@ -434,6 +574,18 @@ describe CommentMailer do
       let(:comment) { create(:comment, :on_admin_post) }
 
       it_behaves_like "a comment subject to image safety mode settings"
+
+      context "when the comment is unreviewed" do
+        before { comment.update!(unreviewed: true) }
+
+        it_behaves_like "a notification email to someone who can't review comments"
+      end
+    end
+
+    context "when the comment is unreviewed" do
+      before { comment.update!(unreviewed: true) }
+
+      it_behaves_like "a notification email to someone who can't review comments"
     end
 
     context "when the comment is on a tag" do
@@ -475,6 +627,18 @@ describe CommentMailer do
       let(:comment) { create(:comment, :on_admin_post) }
 
       it_behaves_like "a comment subject to image safety mode settings"
+
+      context "when the comment is unreviewed" do
+        before { comment.update!(unreviewed: true) }
+
+        it_behaves_like "a notification email to someone who can't review comments"
+      end
+    end
+
+    context "when the comment is unreviewed" do
+      before { comment.update!(unreviewed: true) }
+
+      it_behaves_like "a notification email to someone who can't review comments"
     end
 
     context "when the comment is on a tag" do
@@ -503,6 +667,12 @@ describe CommentMailer do
       let(:parent_comment) { create(:comment, :on_admin_post) }
 
       it_behaves_like "a comment subject to image safety mode settings"
+
+      context "when the comment is unreviewed" do
+        before { comment.update!(unreviewed: true) }
+
+        it_behaves_like "a notification email to someone who can't review comments"
+      end
     end
 
     context "when the comment is by an official user using their default pseud" do
@@ -517,6 +687,12 @@ describe CommentMailer do
       let(:parent_comment) { create(:comment, pseud: commenter.default_pseud) }
 
       it_behaves_like "a notification email with only the commenter's username" # for parent comment
+    end
+
+    context "when the comment is unreviewed" do
+      before { comment.update!(unreviewed: true) }
+
+      it_behaves_like "a notification email to someone who can't review comments"
     end
 
     context "when the parent comment is on a tag" do
