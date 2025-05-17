@@ -628,5 +628,25 @@ describe TagsController do
       get :index, params: { collection_id: collection.name }
       expect(assigns[:page_subtitle]).to eq("#{collection.title} - Tags")
     end
+
+    context "ArchiveConfig.FANDOM_NO_TAG_NAME doesn't exist" do
+      before do
+        allow(Fandom).to receive(:find_by_name).and_return(nil)
+      end
+
+      it "does not 500 error on /tags" do
+        get :index
+
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+      end
+
+      it "does not 500 error on /tags?show=random" do
+        get :index, params: { show: :random }
+
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+      end
+    end
   end
 end

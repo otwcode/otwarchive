@@ -31,15 +31,19 @@ class TagsController < ApplicationController
       @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
       @page_subtitle = t(".collection_page_title", collection_title: @collection.title)
     else
-      no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-      @tags = no_fandom.children.by_type('Freeform').first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
-      # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
-      # and then sort again at the very end to make it alphabetic
-      @tags = if params[:show] == 'random'
-                @tags.random.canonical.sort
-              else
-                @tags.popular.canonical.sort
-              end
+      if no_fandom
+        no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
+        @tags = no_fandom.children.by_type('Freeform').first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
+        # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
+        # and then sort again at the very end to make it alphabetic
+        @tags = if params[:show] == 'random'
+                  @tags.random.canonical.sort
+                else
+                  @tags.popular.canonical.sort
+                end
+      else
+        @tags = []
+      end
     end
   end
 
