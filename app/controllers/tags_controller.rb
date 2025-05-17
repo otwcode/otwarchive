@@ -33,10 +33,10 @@ class TagsController < ApplicationController
     else
       no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
       if no_fandom
-        @tags = no_fandom.children.by_type('Freeform').first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
+        @tags = no_fandom.children.by_type("Freeform").first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
         # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
         # and then sort again at the very end to make it alphabetic
-        @tags = if params[:show] == 'random'
+        @tags = if params[:show] == "random"
                   @tags.random.canonical.sort
                 else
                   @tags.popular.canonical.sort
