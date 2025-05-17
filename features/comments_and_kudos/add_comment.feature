@@ -33,6 +33,16 @@ Scenario: When logged in I can comment on a work
     When "AO3-4214" is fixed
     # Then I should see "commenter on Chapter 1" within "h4.heading.byline"
 
+  Scenario: When commenting on a multi-chapter work, the full-page view should link to the chapter, but the partial view should not
+    Given the work "The One Where Neal is Awesome"
+      And a chapter is added to "The One Where Neal is Awesome"
+      And I am logged in as "commenter"
+      And I post the comment "I loved this! 😍🤩" on the work "The One Where Neal is Awesome"
+    Then I should see "commenter on Chapter 1"
+      And I should not see a link "Chapter 1" within ".comment h4.heading.byline"
+    When I follow "Thread"
+    Then I should see a link "Chapter 1" within ".comment h4.heading.byline"
+
 Scenario: I cannot comment with a pseud that I don't own
 
   Given the work "Random Work"

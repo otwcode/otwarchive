@@ -16,16 +16,19 @@
     <% else %>
       <%# FRONT END, update this if a.user comes in %>
       <h4 class="heading byline">
-        <% cache([single_comment, single_comment.comment_owner, "heading"], expires_in: 1.week) do %>
+        <% cache([single_comment, single_comment.comment_owner, @thread_view, "heading"], expires_in: 1.week) do %>
           <% if single_comment.by_anonymous_creator? %>
             <%= ts("Anonymous Creator") %>
           <% else %>
             <%= get_commenter_pseud_or_name(single_comment) %>
           <% end %>
-          <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.expected_number_of_chapters != 1 %>
-            <span class='parent'>
+          <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.chaptered? %>
+            <% if @thread_view %>
+              <%= ts("on") %>
+              <%= chapter_description_link(single_comment) %>
+            <% else %>
               <%= ts('on Chapter %{position}', :position => single_comment.parent.position) %>
-            </span>
+            <% end %>
           <% end %>
           <% if single_comment.unreviewed? %>
             <span class="unreviewed status">
