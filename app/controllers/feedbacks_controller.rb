@@ -18,7 +18,7 @@ class FeedbacksController < ApplicationController
     @admin_setting = AdminSetting.current
     @feedback = Feedback.new(feedback_params)
     @feedback.rollout = @feedback.rollout_string
-    @feedback.user_agent = request.env["HTTP_USER_AGENT"]
+    @feedback.user_agent = request.env["HTTP_USER_AGENT"]&.to(499)
     @feedback.ip_address = request.remote_ip
     @feedback.referer = nil unless @feedback.referer && ArchiveConfig.PERMITTED_HOSTS.include?(URI(@feedback.referer).host)
     @feedback.site_skin = helpers.current_skin
