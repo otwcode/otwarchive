@@ -299,11 +299,13 @@ describe StoryParser do
       stubbed response
     STUB
 
+    binary_body = body.clone.force_encoding("ASCII-8BIT")
+
     WebMock.allow_net_connect!
 
     WebMock.stub_request(:any, /ascii-8bit/).
       to_return(status: 200,
-                body: body.force_encoding("ASCII-8BIT"),
+                body: binary_body,
                 headers: {})
 
     WebMock.stub_request(:any, /utf-8/).
@@ -313,7 +315,7 @@ describe StoryParser do
 
     WebMock.stub_request(:any, /win-1252/).
       to_return(status: 200,
-                body: body.force_encoding("Windows-1252"),
+                body: body.encode("Windows-1252"),
                 headers: {})
 
     WebMock.stub_request(:any, /non-sgml-character-number-3/).

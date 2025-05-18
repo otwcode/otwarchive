@@ -563,12 +563,9 @@ class StoryParser
     # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
     story.prepend("<foo><foo/>")
     @doc = begin
-             # Using Nokogiri::HTML4 here for its better encoding handling.
-             # Sanitizer will make content HTML5 later anyway.
-             # https://nokogiri.org/rdoc/Nokogiri/HTML4/Document.html#method-c-parse
-             Nokogiri::HTML4.parse(story, encoding: encoding)
+             Nokogiri::HTML5.parse(story, encoding: encoding)
            rescue StandardError
-             Nokogiri::HTML4.parse("")
+             Nokogiri::HTML5.parse("")
            end
 
     # Try to convert all relative links to absolute
