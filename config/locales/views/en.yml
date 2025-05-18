@@ -732,7 +732,7 @@ en:
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
       updated_html: 'Updated: %{date}'
-      words_html: 'Words: %{count_with_delimiter}'
+      words_html: 'Words: %{count_with_delimiters}'
       work_notes: Notes
   errors:
     timeout_error:
