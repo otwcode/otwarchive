@@ -141,13 +141,9 @@ module HtmlCleaner
   # These assume they are running on well-formed XHTML, which we can do
   # because they will only be used on already-cleaned fields.
 
-  # strip img tags, optionally leaving the src URL exposed
+  # strip img tags, optionally leaving the HTML attributes (e.g. src and alt) exposed
   def strip_images(value, keep_src: false)
-    value.gsub(/(<img .*?>)/) do |img_tag|
-      match_data = img_tag.match(/src="([^"]+)"/) if keep_src
-      src = match_data[1] if match_data
-      src || ""
-    end
+    value.gsub(%r{(?:<(img .*?) ?/?>)}, keep_src ? "\\1" : "")
   end
 
   def strip_html_breaks_simple(value)

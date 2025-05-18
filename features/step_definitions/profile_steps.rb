@@ -49,6 +49,14 @@ When "I request to change my email to {string}" do |email|
   step %{I confirm my email change request to "#{email}"}
 end
 
+When "I change my email to {string}" do |email|
+  step %{I follow "My Preferences"}
+  step %{I follow "Change Email"}
+  step %{I request to change my email to "#{email}"}
+  step %{1 email should be delivered to "#{email}"}
+  step %{I follow "confirm your email change" in the email}
+  step %{I should see "Your email has been successfully updated."}
+end
 
 When /^I view my profile$/ do
   step %{I follow "My Dashboard"}

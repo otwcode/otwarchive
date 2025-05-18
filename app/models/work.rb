@@ -611,6 +611,14 @@ class Work < ApplicationRecord
     self.invalidate_work_chapter_count(self)
     return if self.posted? && !chapter.posted?
 
+    unless self.posted_changed?
+      if chapter.posted_changed?
+        self.major_version = self.major_version + 1
+      else
+        self.minor_version = self.minor_version + 1
+      end
+    end
+
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.current
       self.set_revised_at(Time.current) # a new chapter is being posted, so most recent update is now
     else
@@ -1157,7 +1165,7 @@ class Work < ApplicationRecord
 
     users.each do |user|
       I18n.with_locale(user.preference.locale_for_mails) do
-        UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
+        UserMailer.admin_hidden_work_notification([id], user.id).deliver_after_commit
       end
     end
   end
