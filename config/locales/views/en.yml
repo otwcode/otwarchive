@@ -681,6 +681,8 @@ en:
       page_heading_html: Unreviewed Comments on %{commentable_link}
   downloads:
     download_afterword:
+      endnotes: End Notes
+      toc_heading: Afterword
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link}"
         revealed_html: "%{work_link} by %{creator_link}"
