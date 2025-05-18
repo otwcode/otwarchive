@@ -464,14 +464,14 @@ describe HtmlCleaner do
         context "when given an <img> tag with a relative src" do
           it "converts the src value to an absolute URL" do
             content = sanitize_value(field, "<img src=\"relative\">")
-            expect(content).to eq("<p>\n  <img src=\"#{ArchiveConfig.APP_URL}/relative\" \/>\n</p>")
+            expect(content).to eq("<p><img src=\"#{ArchiveConfig.APP_URL}/relative\"></p>")
           end
         end
 
         context "when given an <img> tag with an absolute src" do
           it "doesn't modify the src value" do
             content = sanitize_value(field, "<img src=\"http://random.com/image.png\">")
-            expect(content).to eq("<p>\n  <img src=\"http://random.com/image.png\" \/>\n</p>")
+            expect(content).to eq("<p><img src=\"http://random.com/image.png\"></p>")
           end
         end
       end
@@ -1143,7 +1143,7 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text('<strong><a href=ao3.org">mylink</a></strong>')
       doc = Nokogiri::HTML5.fragment(result)
       node = doc.xpath(".//a").first
-      expect(node.attribute("href").value).to eq("ao3.org%22")
+      expect(node.attribute("href").value).to eq('ao3.org"')
       expect(node.text.strip).to eq("mylink")
     end
   end
