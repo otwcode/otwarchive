@@ -2,11 +2,10 @@
   <h2 class="toc-heading"><%= t(".toc_heading") %></h2>
 
   <p class="message">
-    <b><%= @work.title %></b><br/>
+    <b><%= @work.title %></b><br />
     <%= t(".originally_posted_html",
           archive_link: link_to(ArchiveConfig.APP_NAME, root_url),
-          work_url: link_to(work_url(@work), work_url(@work))
-        ) %>
+          work_url: link_to(work_url(@work), work_url(@work))) %>
   </p>
 
   <div class="meta">
@@ -15,7 +14,8 @@
         <% tags = @work.tag_groups[type] %>
         <% unless tags.blank? %>
           <dt><%= t(".tag_type_html", tag_type: tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize) %></dt>
-          <dd><%= to_sentence(tags.map{ |t| link_to(t.display_name, tag_url(t)) }.html_safe) %></dd>
+          <dd><%= to_sentence(tags.map { |t| link_to(t.display_name, tag_url(t)) }
+          .html_safe) %></dd>
         <% end %>
       <% end %>
 
@@ -24,14 +24,16 @@
         <dd><%= @work.language.name %></dd>
       <% end %>
 
-      <% series_list = @work.serial_works.reject{ |sw| sw.series.nil? } %>
+      <% series_list = @work.serial_works.reject { |sw| sw.series.nil? } %>
       <% unless series_list.blank? %>
         <dt><%= t(".series", count: series_list.size) %></dt>
-        <dd><%= to_sentence(series_list.map{ |s| t(".series_list_html", position: s.position, series_link: link_to(s.series.title, series_url(s.series))) }.html_safe) %></dd>
+        <dd><%= to_sentence(series_list.map { |s| t(".series_list_html", position: s.position, series_link: link_to(s.series.title, series_url(s.series))) }
+        .html_safe) %></dd>
       <% end %>
       <% unless @work.approved_collections.empty? %>
         <dt><%= t(".collections", count: @work.approved_collections.size) %></dt>
-        <dd><%= to_sentence(@work.approved_collections.map{ |c| link_to(c.title, collection_url(c)) }.html_safe) %></dd>
+        <dd><%= to_sentence(@work.approved_collections.map { |c| link_to(c.title, collection_url(c)) }
+        .html_safe) %></dd>
       <% end %>
       <dt><%= t(".stats") %></dt>
       <dd>
@@ -47,17 +49,17 @@
     <div class="byline"><%= t(".byline_html", byline_names: byline(@work, visibility: "public", only_path: false)) %></div>
     <% unless @work.summary.blank? %>
       <p><%= t(".summary") %></p>
-      <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
+      <blockquote class="userstuff"><%= raw sanitize_field(@work, :summary) %></blockquote>
     <% end %>
 
     <% unless @work.notes.blank? && @work.endnotes.blank? %>
       <p><%= t(".work_notes") %></p>
       <% unless @work.notes.blank? %>
-        <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
+        <blockquote class="userstuff"><%= raw sanitize_field(@work, :notes) %></blockquote>
       <% end %>
       <% unless @work.endnotes.blank? %>
         <div class="endnote-link">
-          <% @work.notes.present? ? t(".endnotes_with_worknotes", notes_link: link_to(t(".notes"), "#endnotes")) : t(".endnotes_no_worknotes", notes_link: link_to(t(".notes"), "#endnotes"))%>
+          <% @work.notes.present? ? t(".endnotes_with_worknotes_html", notes_link: link_to(t(".notes"), "#endnotes")) : t(".endnotes_no_worknotes_html", notes_link: link_to(t(".notes"), "#endnotes")) %>
         </div>
       <% end %>
     <% end %>

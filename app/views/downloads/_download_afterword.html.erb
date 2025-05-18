@@ -6,7 +6,7 @@
       <% unless @work.endnotes.blank? %>
         <div id="endnotes">
           <p><%= t(".endnotes") %></p>
-          <blockquote class="userstuff"><%=raw sanitize_field(@work, :endnotes) %></blockquote>
+          <blockquote class="userstuff"><%= raw sanitize_field(@work, :endnotes) %></blockquote>
         </div>
       <% end %>
 

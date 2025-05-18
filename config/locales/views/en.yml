@@ -690,6 +690,14 @@ en:
       please_comment_html: Please %{work_comment_link} to let the creator know if you enjoyed their work!
       toc_heading: Afterword
       work_comment: drop by the Archive and comment
+    download_chapter:
+      chapter_byline_html: 'Chapter by: %{byline_names}'
+      chapter_endnotes: Chapter End Notes
+      chapter_notes: Chapter Notes
+      chapter_summary: Chapter Summary
+      endnotes_no_chapternotes_html: See the end of the chapter for %{notes_link}
+      endnotes_with_chapternotes_html: See the end of the chapter for more %{notes_link}
+      notes: notes
     download_preface:
       byline_html: by %{byline_names}
       chapters_html: 'Chapters: %{chapter_total_display}'
@@ -697,8 +705,8 @@ en:
         one: 'Collection:'
         other: 'Collections:'
       completed_html: 'Completed: %{date}'
-      endnotes_no_worknotes: See the end of the work for %{notes_link}
-      endnotes_with_worknotes: See the end of the work for more %{notes_link}
+      endnotes_no_worknotes_html: See the end of the work for %{notes_link}
+      endnotes_with_worknotes_html: See the end of the work for more %{notes_link}
       inspired_by:
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
