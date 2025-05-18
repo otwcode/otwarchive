@@ -873,7 +873,7 @@ describe HtmlCleaner do
     it "converts single linebreak to br" do
       result = add_paragraphs_to_text("some\ntext")
       doc = Nokogiri::HTML5.fragment(result)
-      expect(doc.xpath("./p[1]/node()").to_s.strip).to match(%r{some<br\/?>text})
+      expect(doc.xpath("./p[1]/node()").to_s.strip).to match(%r{some<br/?>text})
     end
 
     it "converts double linebreaks to paragraph break" do
