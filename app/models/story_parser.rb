@@ -562,11 +562,12 @@ class StoryParser
     # preserve line breaks in plain text documents
     # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
     story.prepend("<foo><foo/>")
-    @doc = begin
-             Nokogiri::HTML5.parse(story, encoding: encoding)
-           rescue StandardError
-             Nokogiri::HTML5.parse("")
-           end
+    @doc =
+      begin
+        Nokogiri::HTML5.parse(story, encoding: encoding)
+      rescue StandardError
+        Nokogiri::HTML5.parse("")
+      end
 
     # Try to convert all relative links to absolute
     base = @doc.at_css("base") ? @doc.css("base")[0]["href"] : location.split("?").first
