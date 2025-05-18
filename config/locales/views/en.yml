@@ -392,7 +392,7 @@ en:
           suspend_filter_counts: Suspend some filter tracking due to high posting volume
           tag_wrangling_off: Turn off tag wrangling for non-admins
         heading: Archive Settings
-        last_updated_by_admin: Last updated on %{updated_at} by %{admin_name}.
+        last_updated_by_admin: Settings last updated on %{updated_at} by %{admin_name}.
         legend:
           account_and_invitations: Accounts and Invitations
           actions: Actions
@@ -1763,6 +1763,8 @@ en:
         one: "%{formatted_count} work"
         other: "%{formatted_count} works"
   layouts:
+    banner:
+      hide: hide banner
     footer:
       about:
         content_policy: Content Policy
@@ -2081,6 +2083,9 @@ en:
       wrangling_home: Wrangling Home
       wrangling_tools: Wrangling Tools
   tags:
+    edit:
+      save_changes: Save changes
+      submit_legend: Submit
     index:
       about:
         popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.

@@ -105,12 +105,6 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do 
   end
 end
 
-Then /^visiting "([^"]*)" should fail with a not found error$/ do |path|
-  expect {
-    visit path
-  }.to raise_error(ActiveRecord::RecordNotFound)
-end
-
 Then /^(?:|I )should see JSON:$/ do |expected_json|
   require 'json'
   expected = JSON.pretty_generate(JSON.parse(expected_json))
