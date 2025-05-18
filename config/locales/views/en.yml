@@ -682,19 +682,39 @@ en:
   downloads:
     download_afterword:
       endnotes: End Notes
-      toc_heading: Afterword
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link}"
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
       please_comment_html: Please %{work_comment_link} to let the creator know if you enjoyed their work!
+      toc_heading: Afterword
       work_comment: drop by the Archive and comment
     download_preface:
+      byline_html: by %{byline_names}
+      chapters_html: 'Chapters: %{chapter_total_display}'
+      collections:
+        one: 'Collection:'
+        other: 'Collections:'
+      completed_html: 'Completed: %{date}'
+      endnotes_no_worknotes: See the end of the work for %{notes_link}
+      endnotes_with_worknotes: See the end of the work for more %{notes_link}
       inspired_by:
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
+      language: 'Language:'
+      notes: notes
+      originally_posted_html: Posted originally on the %{archive_link} at %{work_url}.
+      published_html: 'Published: %{date}'
+      series:
+        one: 'Series:'
+        other: 'Series:'
+      series_list_html: Part %{position} of %{series_link}
+      stats: 'Stats:'
+      summary: Summary
+      tag_type_html: "%{tag_type}:"
+      toc_heading: Preface
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
@@ -703,6 +723,9 @@ en:
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
+      updated_html: 'Updated: %{date}'
+      words_html: 'Words: %{count_with_delimiter}'
+      work_notes: Notes
   errors:
     timeout_error:
       contact_support: contact Support
