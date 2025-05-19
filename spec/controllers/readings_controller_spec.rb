@@ -147,4 +147,61 @@ describe ReadingsController do
       end
     end
   end
+
+  describe "POST #clear" do
+    context "when logged in as the user" do
+      let!(:reading1) { create(:reading, user: user) }
+      let!(:reading2) { create(:reading, user: user) }
+
+      before do
+        fake_login_known_user(user)
+      end
+
+      it "clears all readings and redirects with success notice" do
+        post :clear, params: { user_id: user }
+
+        it_redirects_to_with_notice(
+          user_readings_path(user),
+          "Your history is now cleared."
+        )
+
+        expect do
+          reading1.reload
+        end.to raise_error(ActiveRecord::RecordNotFound)
+
+        expect do
+          reading2.reload
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "failure to clear readings sets flash error" do
+        allow_any_instance_of(Reading).to receive(:destroy!).and_raise(ActiveRecord::RecordNotDestroyed)
+
+        post :clear, params: { user_id: user }
+
+        it_redirects_to_with_error(
+          user_readings_path(user),
+          "There were problems deleting your history. Please try again later."
+        )
+      end
+    end
+
+    context "when logged out" do
+      it "redirects to login page with error" do
+        post :clear, params: { user_id: user }
+
+        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
+    context "when logged in as another user" do
+      it "redirects to requested user's dashboard with error" do
+        fake_login
+
+        post :clear, params: { user_id: user }
+
+        it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
+      end
+    end
+  end
 end
