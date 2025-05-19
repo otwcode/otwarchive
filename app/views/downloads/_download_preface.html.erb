@@ -14,7 +14,7 @@
         <% tags = @work.tag_groups[type] %>
         <% unless tags.blank? %>
           <dt><%= t(".tag_type_html", tag_type: tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize) %></dt>
-          <dd><%= to_sentence(tags.map { |t| link_to(t.display_name, tag_url(t)) } ).html_safe %></dd>
+          <dd><%= to_sentence(tags.map { |t| link_to(t.display_name, tag_url(t)) }).html_safe %></dd>
         <% end %>
       <% end %>
 
@@ -26,11 +26,11 @@
       <% series_list = @work.serial_works.reject { |sw| sw.series.nil? } %>
       <% unless series_list.blank? %>
         <dt><%= t(".series", count: series_list.size) %></dt>
-        <dd><%= to_sentence(series_list.map { |s| t(".series_list_html", position: s.position, series_link: link_to(s.series.title, series_url(s.series))) } ).html_safe %></dd>
+        <dd><%= to_sentence(series_list.map { |s| t(".series_list_html", position: s.position, series_link: link_to(s.series.title, series_url(s.series))) }).html_safe %></dd>
       <% end %>
       <% unless @work.approved_collections.empty? %>
         <dt><%= t(".collections", count: @work.approved_collections.size) %></dt>
-        <dd><%= to_sentence(@work.approved_collections.map { |c| link_to(c.title, collection_url(c)) } ).html_safe %></dd>
+        <dd><%= to_sentence(@work.approved_collections.map { |c| link_to(c.title, collection_url(c)) }).html_safe %></dd>
       <% end %>
       <dt><%= t(".stats") %></dt>
       <dd>
