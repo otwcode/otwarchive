@@ -1,13 +1,13 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
   <% if @user %>
-    <%= ts("%{user_name}'s Collections", :user_name => @user.login) %>
+    <%= t(".page_heading.user", user: @user.login) %>
   <% elsif @collection %>
-    <%= ts("Challenges/Subcollections in %{collection_name}", :collection_name => @collection.title) %>
+    <%= t(".page_heading.collection", collection: @collection.title) %>
   <% elsif @work %>
-    <%= ts("Collections including ") + @work.title %>
+    <%= t(".page_heading.work", work: @work.title) %>
   <% else %>
-    <%= ts("Collections in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %>
+    <%= t(".page_heading.archive", archive: ArchiveConfig.APP_NAME) %>
   <% end %>
 </h2>
 

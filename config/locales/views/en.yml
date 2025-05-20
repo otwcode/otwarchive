@@ -591,6 +591,12 @@ en:
     form:
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
+    index:
+      page_heading:
+        archive: Collections in the %{archive}
+        collection: Challenges/Subcollections in %{collection}
+        user: "%{user}'s Collections"
+        work: Collections including %{work}
     sidebar:
       bookmarks: Bookmarked Items (%{count})
       challenge_settings: Challenge Settings
@@ -2393,10 +2399,16 @@ en:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
       recent_works_html: These are some of the latest works posted to the Archive. To find more works, %{choose_fandom_link} or %{advanced_search_link}.
+    import:
+      draft_work_title_html: '%{work_link} (Draft)'
+      page_heading: Imported Works
+      success: We were able to successfully upload the following works.
     meta:
       original_creators:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
+    navigate:
+      page_heading_html: Chapter Index for %{work_link} by %{creators}
     new_import:
       content_policy: Content Policy
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
