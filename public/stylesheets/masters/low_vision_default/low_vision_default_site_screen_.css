@@ -112,7 +112,7 @@ pre {
   font-size: 200%;
 }
 
-#footer .button_link {
+#footer button {
   background: #eee;
   color: #444;
   text-decoration: none;
@@ -125,12 +125,12 @@ pre {
   box-shadow: 0 0 0 2px #444;
 }
 
-#footer .button_link:hover,
-#footer .button_link:focus {
+#footer button:hover,
+#footer button:focus {
   box-shadow: 0 0 0 2px #eee;
 }
 
-#footer .button_link:active {
+#footer button:active {
   outline: 1px dotted;
 }
 
@@ -141,7 +141,7 @@ pre {
 .blurb .actions a,
 #header li a,
 #footer li a,
-#footer li .button_link,
+#footer li button,
 #header .open .menu {
   display: block;
 }
@@ -177,8 +177,8 @@ pre {
 #footer,
 .actions a:hover,
 .actions a:focus,
-#footer .button_link:hover,
-#footer .button_link:focus {
+#footer button:hover,
+#footer button:focus {
   background: #900;
   color: #eee;
 }
