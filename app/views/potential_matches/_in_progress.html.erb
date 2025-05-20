@@ -13,4 +13,4 @@
   <%= ts("Potential match generation progress:") %> <strong><%= @progress %>%</strong>
 </p>
 
-<span class="actions" role="button"><%= button_to ts("Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection), method: :post %></span>
+<span class="actions"><%= button_to ts("Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection), method: :post %></span>
