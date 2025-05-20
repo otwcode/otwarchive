@@ -117,7 +117,7 @@ pre {
   color: #444;
   text-decoration: none;
   text-align: center;
-  border-radius: 0.25em;
+  border: 0;
   width: 100%;
   padding: 0.25em 0;
   line-height: 1.286;
