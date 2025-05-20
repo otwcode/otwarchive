@@ -2,9 +2,9 @@
 
 <p>
   <%= ts('Would you like to remove the link from your work') %>
-  <%= link_to(related_work.parent.title.html_safe, related_work.parent) %>
+  <%= link_to(related_work.parent.title, related_work.parent) %>
   <%= ts("to") %>
-  <%= link_to(related_work.work.title.html_safe, related_work.work) %>
+  <%= link_to(related_work.work.title, related_work.work) %>
   <%= ts("by") %>
   <%= byline(related_work.work) %>?
 </p>

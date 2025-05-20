@@ -17,7 +17,7 @@
 
   <ul>
   <% @external_author.works.each do |work| %>
-    <li><%= style_link(work.title.html_safe, work_url(work)) %>
+    <li><%= style_link(work.title, work_url(work)) %>
       <%= (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %></li>
   <% end %>
   </ul>

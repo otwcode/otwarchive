@@ -8,7 +8,7 @@
 <%= creation.is_a?(Work) ? work_url(this_work) : work_chapter_url(this_work, creation) %>
 <% end %>
 
-<%= creation.is_a?(Work) ? this_work.title.html_safe : creation.full_chapter_title.html_safe %> (<%= creation.word_count%> words)<% unless @seen[this_work.id] %>
+<%= creation.is_a?(Work) ? this_work.title : creation.full_chapter_title.html_safe %> (<%= creation.word_count%> words)<% unless @seen[this_work.id] %>
 by <%= creator_text(this_work) %><% end %>
 
 <% if !creation.summary.blank? && creation.is_a?(Chapter) %>

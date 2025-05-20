@@ -5,6 +5,6 @@
               end %>
 
 <%= ts("%{work_link} (%{word_count} words) by %{creators}",
-      work_link: link_to(tag.strong(work.title.html_safe), work_url(work)),
+      work_link: link_to(tag.strong(work.title), work_url(work)),
       word_count: work.word_count,
       creators: creators).html_safe %>
