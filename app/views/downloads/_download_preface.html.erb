@@ -2,7 +2,7 @@
   <h2 class="toc-heading"><%= ts("Preface") %></h2>
 
   <p class="message">
-    <b><%= @work.title %></b><br/>
+    <b><%= @work.title %></b><br />
     <%= ts("Posted originally on the %{archive_link} at %{work_url}.",
           archive_link: link_to(ArchiveConfig.APP_NAME, root_url),
           work_url: link_to(work_url(@work), work_url(@work))
