@@ -131,6 +131,8 @@ en:
       page_title: Terms of Service
     tos_faq:
       page_title: Terms of Service FAQ
+  inbox:
+    page_title: "%{user} - Inbox"
   invite_requests:
     create:
       queue_disabled:
