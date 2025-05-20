@@ -5,7 +5,7 @@
   <% elsif @collection %>
     <%= ts("Challenges/Subcollections in %{collection_name}", :collection_name => @collection.title) %>
   <% elsif @work %>
-    <%= ts("Collections including ") + @work.title.html_safe %>
+    <%= ts("Collections including ") + @work.title %>
   <% else %>
     <%= ts("Collections in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %>
   <% end %>
@@ -64,7 +64,7 @@
   <!--filters subnav-->
   <%= render 'collections/filters' %>
   <!---/subnav-->
-<% end %> 
+<% end %>
 
 <% unless @collections.blank? %>
   <%= will_paginate @collections %>
