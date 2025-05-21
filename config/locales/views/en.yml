@@ -721,7 +721,7 @@ en:
         landmark:
           reference: Reference Links
         page_title: Support and Feedback
-      languages_html: "<strong>We can answer Support inquiries in %{list}.</strong> Please allow for additional delay for responses in any language other than English."
+      languages_html: "<strong>We can answer Support inquiries in %{list_html}.</strong> Please allow for additional delay for responses in any language other than English."
       navigation:
         faqs: FAQs & Tutorials
         known_issues: Known Issues

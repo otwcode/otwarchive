@@ -21,7 +21,9 @@
 <% else %>
   <h3 class="heading"><%= t(".heading.instructions") %></h3>
   <div class="userstuff">
-    <p><%= t(".status.current_html", status_page_link: link_to(t(".status.status_page"), "https://www.otwstatus.org")) %></p>
+    <% unless ArchiveConfig.STATUS_PAGE_URL.blank? %>
+      <p><%= t(".status.current_html", status_page_link: link_to(t(".status.status_page"), ArchiveConfig.STATUS_PAGE_URL)) %></p>
+    <% end %>
     <p><%= t(".abuse.reports_html", contact_link: link_to(t(".abuse.contact"), new_abuse_report_path)) %></p>
     <p><%= t(".reportable.intro") %></p>
     <ul>
@@ -37,7 +39,7 @@
       <li><%= t(".reportable.policy_questions") %></li>
     </ul>
     <p><%= t(".do_not_spam_html") %></p>
-    <p><%= t(".languages_html", list: @support_languages.map { |language| tag.span(language.name, lang: language.short) }.to_sentence.html_safe) %></p>
+    <p><%= t(".languages_html", list_html: to_sentence(@support_languages.map { |language| tag.span(language.name, lang: language.short) })) %></p>
   </div>
   <%= form_for(@feedback, html: {class: "post feedback"}) do |f| %>
     <fieldset>
