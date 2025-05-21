@@ -92,22 +92,23 @@ hi:
           one: "%{count} शब्द"
           other: "%{count} शब्द"
       footer:
-        general:
-          about:
-            html: AO3 एक प्रशंसकों द्वारा संचालित और फैन-समर्थित संग्रह है जो %{donate_link}
-              पर निर्भर करता है।
-            text: 'AO3 एक प्रशंसकों द्वारा संचालित और फैन-समर्थित संग्रह है जो आपके
-              दान: %{donate_url} पर निर्भर करता है।'
-          html:
-            donate_link_text: आपके दान
-            support_link_text: सहायता से सम्पर्क करें
-          unwanted_email:
-            html: अगर आपको यह संदेश गलती से मिला है, तो कृपया %{support_link}।
-            text: अगर आपको यह संदेश गलती से मिला है, तो कृपया सहायता से %{support_url}
-              पर संपर्क करें।
+        about:
+          html: AO3 एक प्रशंसकों द्वारा संचालित और फैन-समर्थित संग्रह है जो %{your_donations_link} पर निर्भर करता है।
+          text: 'AO3 एक प्रशंसकों द्वारा संचालित और फैन-समर्थित संग्रह है जो आपके दान: %{your_donations_url} पर निर्भर करता है।'
+          your_donations: आपके दान
         sent_at: "%{sent_at} पर भेजा गया।"
+        why_policy_abuse:
+          contact_policy_abuse: नीति और दुरुपयोग से संपर्क करें।
+          html: यदि आपको नही समझ रहा है कि आपको यह ईमेल क्यों भेजा गया है, तो कृपया नीति और दुरुपयोग से संपर्क करें %{contact_policy_abuse_link}।
+          text: यदि आपको नही समझ रहा है कि आपको यह ईमेल क्यों भेजा गया है, तो कृपया नीति और दुरुपयोग से संपर्क करें %{contact_policy_abuse_url}।
+        why_support:
+          contact_support: सहायता से सम्पर्क करें
+          html: यदि आपको नही समझ रहा है कि आपको यह ईमेल क्यों भेजा गया है, तो कृपया सहायता से संपर्क करें %{contact_support_link}।
+          text: यदि आपको नही समझ रहा है कि आपको यह ईमेल क्यों भेजा गया है, तो कृपया सहायता से संपर्क करें %{contact_support_url}।
       greeting:
-        formal_html: प्रिय %{name},
+        formal:
+          addressed_html: नमस्कार %{name},
+          unaddressed: नमस्कार!
         informal:
           addressed_html: नमस्कार, %{name}!
           unaddressed: नमस्कार!
@@ -117,8 +118,7 @@ hi:
         abuse_team: AO3 नीति और दुरुपयोग समिति
         app_short_name: AO3
         open_doors: Open Doors (खुले दरवाज़े) समिति
-        parent_org: Organization for Transformative Works – OTW (परिवर्तनकारी कार्य
-          हेतु संगठन)
+        parent_org: Organization for Transformative Works – OTW (परिवर्तनकारी कार्य हेतु संगठन)
         support: AO3 सहायता समिति
   users:
     mailer:
