@@ -9,6 +9,7 @@ module UserHelpers
       # triggering Sweeper hooks
       user.pseuds.first.add_to_autocomplete
     else
+      user.skip_password_change_notification!
       user.password = password
       user.password_confirmation = password
       user.save

@@ -240,8 +240,8 @@ class Tag < ApplicationRecord
 
   def flush_bookmark_cache
     self.bookmarks.each do |bookmark|
-      ActionController::Base.new.expire_fragment("bookmark-owner-blurb-#{bookmark.cache_key}-v2")
-      ActionController::Base.new.expire_fragment("bookmark-blurb-#{bookmark.cache_key}-v2")
+      ActionController::Base.new.expire_fragment("bookmark-owner-blurb-#{bookmark.cache_key}-v3")
+      ActionController::Base.new.expire_fragment("bookmark-blurb-#{bookmark.cache_key}-v3")
     end
   end
 
@@ -582,7 +582,18 @@ class Tag < ApplicationRecord
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
     return unless string.is_a? String
-    string = string.gsub(
+
+    self.find_by(name: from_param(string))
+  end
+
+  def self.find_by_name!(string)
+    return unless string.is_a? String
+
+    self.find_by!(name: from_param(string))
+  end
+
+  def self.from_param(string)
+    string.gsub(
       /\*[sadqh]\*/,
       '*s*' => '/',
       '*a*' => '&',
@@ -590,7 +601,6 @@ class Tag < ApplicationRecord
       '*q*' => '?',
       '*h*' => '#'
     )
-    self.where('tags.name = ?', string).first
   end
 
   # If a tag by this name exists in another class, add a suffix to disambiguate them
@@ -1196,17 +1206,19 @@ class Tag < ApplicationRecord
       exists: true
     )
 
-    # Calculate the fandoms associated with this tag, because we'll set any
-    # TagNominations with a matching parent_tagname to have parented: true.
-    parent_names = parents.where(type: "Fandom").pluck(:name)
+    if canonical?
+      # Calculate the fandoms associated with this tag, because we'll set any
+      # TagNominations with a matching parent_tagname to have parented: true.
+      parent_names = parents.where(type: "Fandom").pluck(:name)
 
-    # If this tag has any fandoms at all, we also want to count it as parented
-    # for nominations with a blank parent_tagname. See the set_parented
-    # function in TagNominations for the calculation that we're trying to mimic
-    # here.
-    parent_names << "" if parent_names.present?
+      # If this tag has any fandoms at all, we also want to count it as parented
+      # for nominations with a blank parent_tagname. See the set_parented
+      # function in TagNominations for the calculation that we're trying to mimic
+      # here.
+      parent_names << "" if parent_names.present?
 
-    TagNomination.where(tagname: name, parent_tagname: parent_names).update_all(parented: true)
+      TagNomination.where(tagname: name, parent_tagname: parent_names).update_all(parented: true)
+    end
 
     return unless saved_change_to_name? && name_before_last_save.present?
 

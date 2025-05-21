@@ -11,7 +11,7 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
     when /the media page/
-      media_path
+      media_index_path
     when /^the search bookmarks page$/i
       step %{all indexing jobs have been run}
       search_bookmarks_path
@@ -57,8 +57,6 @@ module NavigationHelpers
 
     when /^the tagsets page$/i
       tag_sets_path
-    when /^the unassigned fandoms page$/i
-      unassigned_fandoms_path
     when /^the login page$/i
       new_user_session_path
     when /^account creation page$/i
@@ -238,12 +236,16 @@ module NavigationHelpers
       tag_wrangler_path(User.find_by(login: Regexp.last_match(1)))
     when /^the unassigned fandoms page $/i
       unassigned_fandoms_path
+    when /^the "(.*)" fandoms page$/i
+      media_fandoms_path(Media.find_by(name: Regexp.last_match(1)))
     when /^the "(.*)" tag page$/i
       tag_path(Tag.find_by_name($1))
     when /^the '(.*)' tag edit page$/i
       edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
     when /^the "(.*)" tag edit page$/i
       edit_tag_path(Tag.find_by(name: Regexp.last_match(1)))
+    when /^the new tag page$/i
+      new_tag_path
     when /^the wrangling tools page$/
       tag_wranglings_path
     when /^the new external work page$/i
@@ -258,6 +260,10 @@ module NavigationHelpers
       edit_user_password_path
     when /^the (.*) mass bin$/i
       tag_wranglings_path(show: Regexp.last_match(1).pluralize)
+    when /^the tags page$/i
+      tags_path
+    when /^the orphan all works page$/i
+      new_orphan_path
 
     # Admin Pages
     when /^the admin-posts page$/i

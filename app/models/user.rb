@@ -5,6 +5,8 @@ class User < ApplicationRecord
   include PasswordResetsLimitable
   include UserLoggable
 
+  self.ignored_columns = [:recently_reset]
+
   devise :database_authenticatable,
          :confirmable,
          :registerable,
@@ -19,7 +21,7 @@ class User < ApplicationRecord
   include BackwardsCompatiblePasswordDecryptor
 
   # Allows other models to get the current user with User.current_user
-  cattr_accessor :current_user
+  thread_cattr_accessor :current_user
 
   # Authorization plugin
   acts_as_authorized_user
@@ -331,7 +333,7 @@ class User < ApplicationRecord
   # Override of Devise method for email sending to set I18n.locale
   # Based on https://github.com/heartcombo/devise/blob/v4.9.3/lib/devise/models/authenticatable.rb#L200
   def send_devise_notification(notification, *args)
-    I18n.with_locale(preference.locale.iso) do
+    I18n.with_locale(preference.locale_for_mails) do
       devise_mailer.send(notification, self, *args).deliver_now
     end
   end
@@ -434,7 +436,7 @@ class User < ApplicationRecord
   # Should this user's comments be spam-checked?
   def should_spam_check_comments?
     # When account_age_threshold_for_comment_spam_check is 0, no users' comments should be spam-checked
-    (Time.current - confirmed_at).seconds.in_days.to_i < AdminSetting.current.account_age_threshold_for_comment_spam_check
+    (Time.current - created_at).seconds.in_days.to_i < AdminSetting.current.account_age_threshold_for_comment_spam_check
   end
 
   # Creates log item tracking changes to user
@@ -628,7 +630,7 @@ class User < ApplicationRecord
     errors.add(:login,
                :changed_too_recently,
                count: change_interval_days,
-               renamed_at: I18n.l(renamed_at, format: :long))
+               renamed_at: I18n.l(renamed_at))
   end
 
   def admin_username_generic

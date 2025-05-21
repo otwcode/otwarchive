@@ -205,15 +205,6 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I press "Wrangle"
     Then I should see "The following tags were successfully made canonical: Faye Valentine, Ed"
 
-  Scenario: Tags that don't exist cause errors
-    Given the following activated tag wrangler exists
-      | login          |
-      | wranglerette   |
-    When I am logged in as "wranglerette"
-    Then visiting "/tags/this_is_an_unknown_tag/edit" should fail with a not found error
-      And visiting "/tags/this_is_an_unknown_tag" should fail with a not found error
-      And visiting "/tags/this_is_an_unknown_tag/feed.atom" should fail with a not found error
-
   Scenario: Banned tags can only be viewed by an admin
     Given the following typed tags exists
         | name                                   | type         |

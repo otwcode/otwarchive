@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-require 'spec_helper'
-require 'nokogiri'
+require "spec_helper"
+require "nokogiri"
 
 describe HtmlCleaner do
   include HtmlCleaner
@@ -11,7 +10,7 @@ describe HtmlCleaner do
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com 
            vidders.net criticalcommons.org google.com podfic.com archive.org
            open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com
-           bilibili.com player.bilibili.com].each do |source|
+           bilibili.com player.bilibili.com 4shared.com/web/embed].each do |source|
 
           it "keeps embeds from #{source}" do
             html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
@@ -23,7 +22,7 @@ describe HtmlCleaner do
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
            archive.org 8tracks.com podfic.com
            open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com
-           bilibili.com player.bilibili.com].each do |source|
+           bilibili.com player.bilibili.com 4shared.com/web/embed].each do |source|
 
           it "converts src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
@@ -1174,29 +1173,21 @@ describe HtmlCleaner do
     end
 
     context "with keep_src: true" do
-      it "keeps the img src URL when the src uses double quotes" do
-        string = 'Hi! <img src="http://example.org/image.png" /> Bye'
-        result = "Hi! http://example.org/image.png Bye"
+      it "keeps the img tag attributes" do
+        string = 'Hi! <img src="http://example.org/image.png" alt=\'something\'> Bye'
+        result = 'Hi! img src="http://example.org/image.png" alt=\'something\' Bye'
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
 
-      it "removes the img tag entirely when the src uses single quotes" do
-        string = "Hi! <img src='http://example.org/image.png'> Bye"
+      it "does not keep tag trailing slash without a space" do
+        string = 'Hi! <img src="http://example.org/image.png" alt=\'something\' /> Bye'
+        result = 'Hi! img src="http://example.org/image.png" alt=\'something\' Bye'
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
 
-      it "removes the img tag entirely when the src uses mismatched quotes" do
-        string = "Hi! <img src=\"http://example.org/image.png'> Bye"
-        expect(strip_images(string, keep_src: true)).to eq(result)
-      end
-
-      it "removes the img tag entirely when the src is missing" do
-        string = 'Hi! <img alt="a11y"> Bye'
-        expect(strip_images(string, keep_src: true)).to eq(result)
-      end
-
-      it "removes the img tag entirely when the src is missing a closing quotation mark" do
-        string = 'Hi! <img src="http://example.org/image.png /> Bye'
+      it "does not keep tag trailing slash with a space" do
+        string = 'Hi! <img src="http://example.org/image.png" alt=\'something\'/> Bye'
+        result = 'Hi! img src="http://example.org/image.png" alt=\'something\' Bye'
         expect(strip_images(string, keep_src: true)).to eq(result)
       end
     end

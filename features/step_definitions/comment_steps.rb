@@ -235,12 +235,16 @@ When "Akismet will flag any comment containing {string}" do |spam_text|
   end
 end
 
-When /^I post a guest comment$/ do
+When "I post a guest comment {string}" do |comment_content|
   fill_in("comment[name]", with: "guest")
   fill_in("comment[email]", with: "guest@example.org")
-  fill_in("comment[comment_content]", with: "This was really lovely!")
+  fill_in("comment[comment_content]", with: comment_content)
   click_button("Comment")
   step %{I should see "Comment created!"}
+end
+
+When "I post a guest comment" do
+  step "I post a guest comment \"This was really lovely!\""
 end
 
 When /^all comments by "([^"]*)" are marked as spam$/ do |name|
@@ -267,11 +271,10 @@ When /^I view the latest comment$/ do
   visit comment_path(Comment.last)
 end
 
-Given(/^the moderated work "([^\"]*?)" by "([^\"]*?)"$/) do |work, user|
-  step %{I am logged in as "#{user}"}
-  step %{I set up the draft "#{work}"}
-  check("work_moderated_commenting_enabled")
-  step %{I post the work without preview}
+Given "the moderated work {string} by {string}" do |title, login|
+  user = ensure_user(login)
+  w = FactoryBot.create(:work, title: title, authors: [user.default_pseud])
+  w.update_attribute(:moderated_commenting_enabled, true)
 end
 
 Then /^comment moderation should be enabled on "([^\"]*?)"/ do |work|
