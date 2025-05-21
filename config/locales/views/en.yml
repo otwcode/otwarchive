@@ -1198,7 +1198,7 @@ en:
       social:
         bluesky: "@status.archiveofourown.org on Bluesky"
         heading: Follow us
-        note_html: Follow AO3 on Bluesky or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
+        note_html: Follow the Archive on Bluesky or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
         other_outlets: Organization for Transformative Works' news outlets
         tumblr: ao3org on Tumblr
     privacy:
