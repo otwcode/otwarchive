@@ -75,20 +75,20 @@ class Series < ApplicationRecord
     Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id
                JOIN works ON works.id = filter_taggings.filterable_id
                JOIN serial_works ON serial_works.work_id = works.id")
-       .where(serial_works: { series_id: self.id },
-              works: { hidden_by_admin: false, posted: true },
-              filter_taggings: { filterable_type: "Work" })
-       .group("tags.id")
+      .where(serial_works: { series_id: self.id },
+             works: { hidden_by_admin: false, posted: true },
+             filter_taggings: { filterable_type: "Work" })
+      .group("tags.id")
   end
 
   def filters_public
     Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id
                JOIN works ON works.id = filter_taggings.filterable_id
                JOIN serial_works ON serial_works.work_id = works.id")
-       .where(serial_works: { series_id: self.id },
-              works: { hidden_by_admin: false, posted: true, restricted: false },
-              filter_taggings: { filterable_type: "Work" })
-       .group("tags.id")
+      .where(serial_works: { series_id: self.id },
+             works: { hidden_by_admin: false, posted: true, restricted: false },
+             filter_taggings: { filterable_type: "Work" })
+      .group("tags.id")
   end
 
   # visibility aped from the work model
