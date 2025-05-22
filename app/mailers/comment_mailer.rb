@@ -28,6 +28,9 @@ class CommentMailer < ApplicationMailer
     return if your_comment.comment_owner_email.blank?
     return if your_comment.pseud_id.nil? && AdminBlacklistedEmail.is_blacklisted?(your_comment.comment_owner_email)
 
+    # Edge case of the original comment owner having lost tag_wrangling permissions since
+    return if your_comment.ultimate_parent.is_a?(Tag) && !your_comment.comment_owner&.is_tag_wrangler?
+
     @your_comment = your_comment
     @comment = comment
     mail(
@@ -42,6 +45,8 @@ class CommentMailer < ApplicationMailer
     return if your_comment.comment_owner_email.blank?
     return if your_comment.pseud_id.nil? && AdminBlacklistedEmail.is_blacklisted?(your_comment.comment_owner_email)
     return if your_comment.is_deleted?
+
+    return if your_comment.ultimate_parent.is_a?(Tag) && !your_comment.comment_owner&.is_tag_wrangler?
 
     @your_comment = your_comment
     @comment = edited_comment
