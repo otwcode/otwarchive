@@ -177,7 +177,7 @@ class WorksController < ApplicationController
   def show
     @tag_groups = @work.tag_groups
     if @work.unrevealed?
-      @page_subtitle = ts("Mystery Work")
+      @page_subtitle = t(".unrevealed")
     else
       page_creator = if @work.anonymous?
                        ts("Anonymous")

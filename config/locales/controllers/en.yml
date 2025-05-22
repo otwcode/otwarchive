@@ -244,6 +244,8 @@ en:
   works:
     drafts:
       page_title: "%{username} - Drafts"
+    show:
+      unrevealed: Mystery Work
   wrangling_guidelines:
     create: Wrangling Guideline was successfully created.
     delete: Wrangling Guideline was successfully deleted.
