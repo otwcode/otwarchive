@@ -6,6 +6,7 @@ class Series < ApplicationRecord
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works
   has_many :work_tags, -> { distinct }, through: :works, source: :tags
+  has_many :unhidden_work_tags, -> { where(works: { hidden_by_admin: false }) }, through: :works, source: :tags
   has_many :work_pseuds, -> { distinct }, through: :works, source: :pseuds
 
   has_many :taggings, as: :taggable, dependent: :destroy
@@ -74,7 +75,9 @@ class Series < ApplicationRecord
     Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id
                JOIN works ON works.id = filter_taggings.filterable_id
                JOIN serial_works ON serial_works.work_id = works.id")
-       .where(serial_works: { series_id: self.id }, works: { posted: true }, filter_taggings: { filterable_type: "Work" })
+       .where(serial_works: { series_id: self.id },
+              works: { hidden_by_admin: false, posted: true },
+              filter_taggings: { filterable_type: "Work" })
        .group("tags.id")
   end
 
@@ -82,7 +85,10 @@ class Series < ApplicationRecord
     Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id
                JOIN works ON works.id = filter_taggings.filterable_id
                JOIN serial_works ON serial_works.work_id = works.id")
-       .where(serial_works: { series_id: self.id }, works: { posted: true, restricted: false }, filter_taggings: { filterable_type: "Work" })
+       .where(serial_works: { series_id: self.id },
+              works: { hidden_by_admin: false, posted: true, restricted: false },
+              filter_taggings: { filterable_type: "Work" })
+       .group("tags.id")
   end
 
   # visibility aped from the work model
@@ -269,20 +275,20 @@ class Series < ApplicationRecord
 
   # Simple name to make it easier for people to use in full-text search
   def tags_restricted
-    (work_tags.pluck(:name) + filters_restricted.pluck(:name)).uniq
+    (unhidden_work_tags.pluck(:name) + filters_restricted.pluck(:name)).uniq
   end
 
   def tags_public
-    (work_tags.where(works: { restricted: false }).pluck(:name) + filters_public.pluck(:name)).uniq
+    (unhidden_work_tags.where(works: { restricted: false }).pluck(:name) + filters_public.pluck(:name)).uniq
   end
 
   # Index all the filters for pulling works
   def filter_ids_restricted
-    (work_tags.pluck(:id) + filters_restricted.pluck(:id)).uniq
+    (unhidden_work_tags.pluck(:id) + filters_restricted.pluck(:id)).uniq
   end
 
   def filter_ids_public
-    (work_tags.where(works: { restricted: false }).pluck(:id) + filters_public.pluck(:id)).uniq
+    (unhidden_work_tags.where(works: { restricted: false }).pluck(:id) + filters_public.pluck(:id)).uniq
   end
 
   %w[restricted public].each do |tag_visibility|
