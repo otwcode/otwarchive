@@ -27,9 +27,8 @@ en:
       on_tag_html: Comment on the tag %{name}
       on_unknown: Comment on unknown item
       on_work_html: Comment on the work %{title}
-    links_to_chapter_and_work_html: "%{chapter_link} of %{work_link}"
   inbox_helper:
-    link_to_chapter_and_work: Chapter %{position} of %{title}
+    comment_link_with_chapter_number: Chapter %{position} of %{title}
   users_helper:
     log:
       ban: Suspended Permanently

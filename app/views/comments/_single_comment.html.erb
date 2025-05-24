@@ -23,12 +23,9 @@
             <%= get_commenter_pseud_or_name(single_comment) %>
           <% end %>
           <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.chaptered? %>
-            <% if @thread_view %>
-              <%= ts("on") %>
-              <%= chapter_description_link(single_comment) %>
-            <% else %>
-              <%= ts('on Chapter %{position}', :position => single_comment.parent.position) %>
-            <% end %>
+            <span class='parent'>
+              <%= t(".on_chapter_html", commentable_link: chapter_description_link(single_comment)) %>
+            </span>
           <% end %>
           <% if single_comment.unreviewed? %>
             <span class="unreviewed status">

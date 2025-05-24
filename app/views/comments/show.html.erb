@@ -1,8 +1,7 @@
 <%= flash_div :comment_error, :comment_notice %>
 
 <h3 class="heading">
-  <%= t(".comment_on") %>
-  <%= link_to_comment_ultimate_parent(@comment) %>
+  <%= t(".comment_on_html", commentable_link: link_to_comment_ultimate_parent(@comment)) %>
 </h3>
 
 <%= render :partial => 'comments/comment_thread', :locals => { :comments => @comments, :depth => 0 } %></ol>
