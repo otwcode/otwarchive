@@ -629,9 +629,49 @@ describe TagsController do
       expect(assigns[:page_subtitle]).to eq("#{collection.title} - Tags")
     end
 
+    context "ArchiveConfig.FANDOM_NO_TAG_NAME exists and has tags" do
+      let!(:no_fandom) { create(:fandom, name: ArchiveConfig.FANDOM_NO_TAG_NAME, canonical: true) }
+      let!(:freeform1) { create(:freeform, canonical: true) }
+      let!(:freeform2) { create(:freeform, canonical: true) }
+
+      before do
+        CommonTagging.create!(filterable: no_fandom, common_tag: freeform1)
+        CommonTagging.create!(filterable: no_fandom, common_tag: freeform2)
+
+        FilterCount.create!(
+          filter: freeform1,
+          public_works_count: 1,
+          unhidden_works_count: 1
+        )
+        FilterCount.create!(
+          filter: freeform2,
+          public_works_count: 1,
+          unhidden_works_count: 1
+        )
+      end
+
+      it "assigns non-empty tags on /tags" do
+        get :index
+
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+        expect(assigns(:tags)).to include(freeform1, freeform2)
+      end
+
+      it "assigns non-empty tags on /tags?show=random" do
+        get :index, params: { show: :random }
+
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+        expect(assigns(:tags)).to include(freeform1, freeform2)
+      end
+    end
+
     context "ArchiveConfig.FANDOM_NO_TAG_NAME doesn't exist" do
       before do
-        allow(Fandom).to receive(:find_by_name).and_return(nil)
+        if (fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
+          fandom.destroy!
+        end
       end
 
       it "does not 500 error on /tags" do
@@ -639,6 +679,7 @@ describe TagsController do
 
         expect(response).to have_http_status(:success)
         expect(response).to render_template(:index)
+        expect(assigns(:tags)).to be_empty
       end
 
       it "does not 500 error on /tags?show=random" do
@@ -646,6 +687,7 @@ describe TagsController do
 
         expect(response).to have_http_status(:success)
         expect(response).to render_template(:index)
+        expect(assigns(:tags)).to be_empty
       end
     end
   end
