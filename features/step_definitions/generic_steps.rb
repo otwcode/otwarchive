@@ -144,6 +144,14 @@ Then "I should see a link to {string} within {string}" do |url, selector|
   assure_xpath_present("a", "href", url, selector)
 end
 
+Then "I should see a link {string} within {string}" do |text, selector|
+  expect(page.find(selector)).to have_link(text)
+end
+
+Then "I should not see a link {string} within {string}" do |text, selector|
+  expect(page.find(selector)).to_not have_link(text)
+end
+
 Then "the {string} input should be blank" do |label|
   expect(find_field(label).value).to be_blank
 end
