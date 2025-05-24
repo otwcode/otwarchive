@@ -256,8 +256,6 @@ en:
       none: "- None -"
   errors:
     attributes:
-      url:
-        invalid: does not appear to be a valid URL.
       icon:
         invalid_format: content type is invalid
         too_large: file size must be less than %{maximum_size}
@@ -265,6 +263,8 @@ en:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.
         required: must exist and not be spam.
+      url:
+        invalid: does not appear to be a valid URL.
   story_parser:
     on_archive: URL is for a work on the Archive. Please bookmark it directly instead.
   subscriptions:
