@@ -13,6 +13,8 @@ en:
           one: "%{count} person from the invite queue is being invited."
           other: "%{count} people from the invite queue are being invited."
     admin_users:
+      confirm_delete_user_creations:
+        page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
     user_creations:
@@ -23,6 +25,10 @@ en:
         success:
           one: Successfully removed pseud %{pseuds} from this work.
           other: Successfully removed pseuds %{pseuds} from this work.
+  application:
+    access_denied:
+      access_denied:
+        logged_in: Sorry, you don't have permission to access the page you were trying to reach.
   archive_faqs:
     create:
       success: Archive FAQ was successfully created.
@@ -61,6 +67,12 @@ en:
       failure: Couldn't update %{participant}.
     validation:
       owners_required: You can't remove the only owner!
+  collection_profile:
+    show:
+      page_title: "%{collection_title} - Profile"
+  collections:
+    index:
+      subcollections_page_title: "%{collection_title} - Subcollections"
   comments:
     check_blocked:
       parent: Sorry, you have been blocked by one or more of this work's creators.
@@ -98,9 +110,18 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
+  errors:
+    auth_error:
+      browser_title: Auth Error
+    timeout_error:
+      browser_title: Timeout Error
   external_works:
     update:
       successfully_updated: External work was successfully updated.
+  fandoms:
+    index:
+      choose_media: Please choose a media category to start browsing fandoms.
+      collection_page_title: "%{collection_title} - Fandoms"
   home:
     content:
       page_title: Content Policy
@@ -111,12 +132,20 @@ en:
     tos_faq:
       page_title: Terms of Service FAQ
   invite_requests:
+    create:
+      queue_disabled:
+        closed: New invitation requests are currently closed.
+        html: "%{closed_bold} For more information, please check the %{news_link}."
+        news: '"Invitations" tag on AO3 News'
+      success: You've been added to our queue! Yay! We estimate that you'll receive an invitation around %{date}. We strongly recommend that you add %{return_address} to your address book to prevent the invitation email from getting blocked as spam by your email provider.
     index:
       page_title: Invitation Requests
     resend:
       not_found: Could not find an invitation associated with that email.
       not_yet: You cannot resend an invitation that was sent in the last %{count} hours.
       success: Invitation resent to %{email}.
+    status:
+      browser_title: Invitation Request Status
   kudos:
     create:
       success: Thank you for leaving kudos!
@@ -124,26 +153,72 @@ en:
     cannot_edit_default: Sorry, you can't edit the default language.
     successfully_added: Language was successfully added.
     successfully_updated: Language was successfully updated.
+  media:
+    index:
+      browser_title: Fandoms
   muted:
     users:
       create:
         muted: You have muted the user %{name}.
       destroy:
         unmuted: You have unmuted the user %{name}.
+  people:
+    index:
+      collection_page_title: "%{collection_title} - People"
+  pseuds:
+    create:
+      already_have_pseud_with_name: You already have a pseud with that name.
+      successfully_created: Pseud was successfully created.
+    destroy:
+      cannot_delete_default: You cannot delete your default pseudonym, sorry!
+      cannot_delete_matching_username: You cannot delete the pseud matching your username, sorry!
+      not_deleted: The pseud was not deleted.
+      successfully_deleted: The pseud was successfully deleted.
+    show:
+      could_not_find_user: Couldn't find user "%{username}"
+    update:
+      successfully_updated: Pseud was successfully updated.
   questions:
     not_found: Sorry, we couldn't find the FAQ you were looking for.
     update_positions:
       success: Question order has been successfully updated.
+  related_works:
+    index:
+      page_title: "%{login} - Related Works"
   series:
     index:
       page_title: "%{username} - Series"
     show:
       anonymous: Anonymous
       unrevealed_series: Mystery Series
+  subscriptions:
+    delete_all:
+      error: There were problems deleting your subscriptions.
+      success: Your subscriptions have been deleted.
   tag_wranglings:
     index:
       page_subtitle: fandoms
+  tags:
+    index:
+      collection_page_title: "%{collection_title} - Tags"
   users:
+    changed_password:
+      blank_password: You must enter your old password.
+      wrong_password: Your old password was incorrect.
+    changed_username:
+      admin:
+        successfully_updated: Username has been successfully updated.
+      user:
+        incorrect_password: Your password was incorrect
+        successfully_updated: Your username has been successfully updated.
+    confirm_change_email:
+      blank_email: You must enter a new email address.
+      blank_password: You must enter your password.
+      browser_title: Confirm New Email
+      contact_support: contact Support
+      nonmatching_email: The email addresses you entered do not match. Please try again.
+      same_as_current: Your new email address must be different from your current email.
+      wrong_password_html: Your password was incorrect. Please try again or log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
     contact_abuse: contact our Policy & Abuse team
     passwords:
       create:
@@ -158,6 +233,11 @@ en:
           one: You may reset your password %{count} more time.
           other: You may reset your password %{count} more times.
         user_not_found: We couldn't find an account with that email address or username. Please try again.
+    reconfirm_email:
+      access_denied:
+        logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.
+      invalid_token: This email confirmation link is invalid or expired. Please check your email for the correct link or submit the email change form again.
+      success: Your email has been successfully updated.
     status:
       ban_notice_html: Your account has been banned. You are not permitted to post or edit content on AO3. Please check your email or %{contact_abuse_link} for more information.
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You cannot post, edit, or delete content until your suspension has ended. Please check your email or %{contact_abuse_link} for more information.

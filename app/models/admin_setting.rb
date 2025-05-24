@@ -18,7 +18,7 @@ class AdminSetting < ApplicationRecord
     invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
     invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
     account_creation_enabled?: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
-    days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED,
+    days_to_purge_unactivated: 2,
     suspend_filter_counts?: false,
     enable_test_caching?: false,
     cache_expiration: 10,
@@ -38,7 +38,7 @@ class AdminSetting < ApplicationRecord
       invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
       invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
       account_creation_enabled: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
-      days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+      days_to_purge_unactivated: 2
     )
     settings.save(validate: false)
     settings
@@ -53,15 +53,15 @@ class AdminSetting < ApplicationRecord
     delegate :default_skin, to: :current
   end
 
-  # run once a day from cron
+  # run hourly with the resque scheduler
   def self.check_queue
-    if self.invite_from_queue_enabled? && InviteRequest.count > 0
-      if Date.today >= self.invite_from_queue_at.to_date
-        new_date = Time.now + self.invite_from_queue_frequency.days
-        self.first.update_attribute(:invite_from_queue_at, new_date)
-        InviteFromQueueJob.perform_now(count: invite_from_queue_number)
-      end
-    end
+    return unless self.invite_from_queue_enabled? && InviteRequest.any? && Time.current >= self.invite_from_queue_at
+
+    new_time = Time.current + self.invite_from_queue_frequency.hours
+    current_setting = self.first
+    current_setting.invite_from_queue_at = new_time
+    current_setting.save(validate: false, touch: false)
+    InviteFromQueueJob.perform_now(count: invite_from_queue_number)
   end
 
   @queue = :admin
@@ -96,7 +96,7 @@ class AdminSetting < ApplicationRecord
 
   def update_invite_date
     if self.invite_from_queue_frequency_changed?
-      self.invite_from_queue_at = Time.now + self.invite_from_queue_frequency.days
+      self.invite_from_queue_at = Time.current + self.invite_from_queue_frequency.hours
     end
   end
 end

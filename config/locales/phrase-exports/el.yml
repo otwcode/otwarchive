@@ -89,22 +89,23 @@ el:
           one: "%{count} λέξη"
           other: "%{count} λέξεις"
       footer:
-        general:
-          about:
-            html: Το ΑΟ3 είναι ένα αρχείο το οποίο διαχειρίζονται και υποστηρίζουν
-              θαυμαστές και βασίζεται %{donate_link}.
-            text: 'Το AO3 είναι ένα αρχείο το οποίο διαχειρίζονται και υποστηρίζουν
-              θαυμαστές και βασίζεται στις δωρεές σας: %{donate_url}.'
-          html:
-            donate_link_text: στις δωρεές σας
-            support_link_text: επικοινωνήστε με την Επιτροπή Υποστήριξης
-          unwanted_email:
-            html: Εάν λάβατε αυτό το μήνυμα κατά λάθος, παρακαλούμε %{support_link}.
-            text: Εάν λάβατε αυτό το μήνυμα κατά λάθος, παρακαλούμε επικοινωνήστε
-              με την Επιτροπή Υποστήριξης %{support_url}.
+        about:
+          html: Το ΑΟ3 είναι ένα αρχείο το οποίο διαχειρίζονται και υποστηρίζουν θαυμαστές και βασίζεται %{your_donations_link}.
+          text: 'Το AO3 είναι ένα αρχείο το οποίο διαχειρίζονται και υποστηρίζουν θαυμαστές και βασίζεται στις δωρεές σας: %{your_donations_url}.'
+          your_donations: στις δωρεές σας
         sent_at: Στάλθηκε στις %{sent_at}.
+        why_policy_abuse:
+          contact_policy_abuse: επικοινωνήστε με τη Επιτροπή Πολιτικής & Κατάχρησης
+          html: Αν δεν καταλαβαίνετε τον λόγο που λάβατε αυτό το μήνυμα, παρακαλούμε %{contact_policy_abuse_link}.
+          text: 'Εάν δεν καταλαβαίνετε τον λόγο που λάβατε αυτό το μήνυμα, παρακαλούμε επικοινωνήστε με την Επιτροπή Πολιτικής & Κατάχρησης: %{contact_policy_abuse_url}.'
+        why_support:
+          contact_support: επικοινωνήστε με την Επιτροπή Υποστήριξης
+          html: Αν δεν καταλαβαίνετε τον λόγο που λάβατε αυτό το μήνυμα, παρακαλούμε %{contact_support_link}.
+          text: Εάν δεν καταλαβαίνετε τον λόγο που λάβατε αυτό το μήνυμα, παρακαλούμε επικοινωνήστε με την Επιτροπή Υποστήριξης %{contact_support_url}.
       greeting:
-        formal_html: Αγαπητή/έ %{name},
+        formal:
+          addressed_html: Γειά, %{name},
+          unaddressed: Γειά,
         informal:
           addressed_html: Γεια %{name}!
           unaddressed: Γεια!
@@ -114,8 +115,7 @@ el:
         abuse_team: Η ομάδα Πολιτικής & Κατάχρησης του AO3
         app_short_name: AO3
         open_doors: Η ομάδα των Open Doors (Ανοιχτές Πόρτες)
-        parent_org: Organization for Transformative Works – OTW (Οργανισμός Μετασχηματιστικών
-          Έργων)
+        parent_org: Organization for Transformative Works – OTW (Οργανισμός Μετασχηματιστικών Έργων)
         support: Η ομάδα Υποστήριξης του AO3
   users:
     mailer:

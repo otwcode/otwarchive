@@ -106,6 +106,19 @@ Feature: Display autocomplete for tags
       And the pseud autocomplete should not contain "different_user (funny)"
 
   @javascript
+  Scenario: People search autocomplete shows no results when searching for space
+    Given I go to the search people page
+    When I enter " " in the "Name" autocomplete field
+    Then I should see "Searching..." in the autocomplete
+    When I am logged in as "basic"
+      And "basic" creates the pseud "one"
+      And I go to the search people page
+    When I enter " " in the "Name" autocomplete field
+    Then I should see "Searching..." in the autocomplete
+      And I should not see "one (basic)" in the autocomplete
+      And I should not see "basic" in the autocomplete
+
+  @javascript
   Scenario: Characters in a fandom with non-ASCII uppercase letters should appear in the autocomplete.
 
     Given basic tags
@@ -237,3 +250,13 @@ Feature: Display autocomplete for tags
     # Zero width space tag
     When I enter "​" in the "tag_merger_string_autocomplete" autocomplete field
     Then I should not see "No suggestions found" in the autocomplete
+
+  @javascript
+  Scenario: Vertical bar is treated as a word separator
+    Given I am logged in
+      And a canonical character "Taylor Hebert | Skitter | Weaver"
+      And I go to the new work page
+    When I enter "|" in the "Characters" autocomplete field
+    Then I should see "No suggestions found" in the autocomplete
+    When I enter "Taylor|Skitter" in the "Characters" autocomplete field
+    Then I should see "Taylor Hebert | Skitter | Weaver" in the autocomplete

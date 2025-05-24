@@ -22,7 +22,7 @@ Given "I am logged in as a(n) {string} admin" do |role|
   login = "testadmin-#{role}"
   FactoryBot.create(:admin, login: login, roles: [role]) if Admin.find_by(login: login).nil?
   visit new_admin_session_path
-  fill_in "Admin user name", with: login
+  fill_in "Admin username", with: login
   fill_in "Admin password", with: "adminpassword"
   click_button "Log In as Admin"
   step %{I should see "Successfully logged in"}
@@ -32,7 +32,7 @@ Given "I am logged in as an admin" do
   step "I start a new session"
   FactoryBot.create(:admin, login: "testadmin", email: "testadmin@example.org") if Admin.find_by(login: "testadmin").nil?
   visit new_admin_session_path
-  fill_in "Admin user name", with: "testadmin"
+  fill_in "Admin username", with: "testadmin"
   fill_in "Admin password", with: "adminpassword"
   click_button "Log In as Admin"
   step %{I should see "Successfully logged in"}
@@ -206,11 +206,9 @@ Given "an abuse ticket ID exists" do
 end
 
 Given "a work {string} with the original creator {string}" do |title, creator|
-  step %{I am logged in as "#{creator}"}
-  step %{I post the work "#{title}"}
-  FactoryBot.create(:user, login: "orphan_account")
-  step %{I orphan the work "#{title}"}
-  step %{I log out}
+  step %{the work "#{title}" by "#{creator}"}
+  step %{I have an orphan account}
+  step %{"#{creator}" orphans and takes their pseud off the work "#{title}"}
 end
 
 Given "the admin {string} is locked" do |login|
@@ -232,6 +230,10 @@ end
 
 Given "an archive FAQ category with the title {string} exists" do |title|
   FactoryBot.create(:archive_faq, title: title)
+end
+
+Given "the app name is {string}" do |app_name|
+  allow(ArchiveConfig).to receive(:APP_NAME).and_return(app_name)
 end
 
 ### WHEN
@@ -298,8 +300,8 @@ When "{int} Archive FAQ(s) with {int} question(s) exist(s)" do |faqs, questions|
   end
 end
 
-When /^the invite_from_queue_at is yesterday$/ do
-  AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
+When "the invite_from_queue_at is yesterday" do
+  AdminSetting.first.update_attribute(:invite_from_queue_at, Time.current - 1.day)
 end
 
 When "the scheduled check_invite_queue job is run" do
@@ -358,6 +360,10 @@ end
 
 When "I confirm I want to remove the pseud" do
   expect(page.accept_alert).to eq("Are you sure you want to remove the creator's pseud from this work?") if @javascript
+end
+
+When "I follow the first invitation token url" do
+  first('//td/a[href*="/invitations/"]').click
 end
 
 ### THEN

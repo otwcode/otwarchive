@@ -517,5 +517,49 @@ namespace :After do
 
     puts "Finished reindexing tags on hidden and unrevealed works"
   end
+
+  desc "Convert user kudos from users with the official role to guest kudos"
+  task(convert_official_kudos: :environment) do
+    official_users = Role.find_by(name: "official")&.users
+    if official_users.blank?
+      puts "No official users found"
+    else
+      official_users.each do |user|
+        kudos = user.kudos
+        next if kudos.blank?
+
+        puts "Updating #{kudos.size} kudos from #{user.login}"
+        user.remove_user_from_kudos
+      end
+
+      puts "Finished converting kudos from official users to guest kudos"
+    end
+  end
+
+  desc "Create TagSetAssociations for non-canonical tags belonging to canonical fandoms in TagSets"
+  task(create_non_canonical_tagset_associations: :environment) do
+    # We want to get all set taggings where the tag is not canonical, but has a parent fandom that _is_ canonical.
+    # This might be possible with pure Ruby, but unfortunately the parent tag in common_taggings is polymorphic
+    # (even though it doesn't need to be), which makes that trickier.
+    non_canonicals = SetTagging
+      .joins("INNER JOIN `tag_sets` `tag_set` ON `tag_set`.`id` = `set_taggings`.`tag_set_id` INNER JOIN `owned_tag_sets` ON `owned_tag_sets`.`tag_set_id` = `tag_set`.`id` INNER JOIN `tags` `tag` ON `tag`.`id` = `set_taggings`.`tag_id` INNER JOIN `common_taggings` `common_tagging` ON  `common_tagging`.`common_tag_id` = `tag`.`id` INNER JOIN `tags` `parent_tag` ON `common_tagging`.`filterable_id` = `parent_tag`.`id`")
+      .where("`tag`.`canonical` = FALSE AND `tag`.`type` IN ('Character', 'Relationship') AND `tag_set`.`id` IS NOT NULL AND `parent_tag`.`type` = 'Fandom' AND `parent_tag`.`canonical` = TRUE")
+      .distinct
+
+    non_canonicals.find_in_batches.with_index do |batch, index|
+      puts "Creating TagSetAssociations for batch #{index + 1}"
+      batch.each do |set_tagging|
+        owned_tag_set = set_tagging.tag_set.owned_tag_set
+        tag = set_tagging.tag
+
+        fandoms = tag.fandoms.joins(:set_taggings).where(canonical: true, set_taggings: { tag_set_id: set_tagging.tag_set.id })
+        fandoms.find_each do |fandom|
+          TagSetAssociation.create!(owned_tag_set: owned_tag_set, tag: tag, parent_tag: fandom)
+        rescue ActiveRecord::RecordInvalid
+          puts "Association already exists for fandom '#{fandom.name}' and tag '#{tag.name}'"
+        end
+      end
+    end
+  end
   # This is the end that you have to put new tasks above.
 end

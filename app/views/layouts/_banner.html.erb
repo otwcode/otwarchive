@@ -6,12 +6,16 @@
       </blockquote>
       <% if current_user.nil? %>
         <p class="submit">
-          <%= link_to "&times;".html_safe, current_path_with(hide_banner: true), class: "showme action", title: ts("hide banner") %>
+          <%= link_to current_path_with(hide_banner: true), "aria-label": t(".hide"), class: "showme action" do
+                content_tag(:span, "&times;".html_safe, "aria-hidden": true)
+              end %>
         </p>
       <% else %>
         <%= form_tag end_banner_user_path(current_user), method: :post, remote: true do %>
           <p class="submit">
-            <%= submit_tag "&times;".html_safe, title: ts("hide banner") %>
+          <%= button_tag "aria-label": t(".hide"), class: "showme action" do
+                content_tag(:span, "&times;".html_safe, "aria-hidden": true)
+              end %>
           </p>
         <% end %>
       <% end %>

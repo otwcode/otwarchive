@@ -57,6 +57,18 @@ describe PseudsController do
   let(:user) { create(:user) }
   let(:pseud) { user.pseuds.first }
 
+  describe "show" do
+    context "when user_id exists" do
+      context "when pseud_id does not exist" do
+        it "raises an error" do
+          expect do
+            get :show, params: { user_id: user, id: "nonexistent_pseud" }
+          end.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+    end
+  end
+
   describe "edit" do
     subject { -> { get :edit, params: { user_id: user, id: pseud } } }
 
@@ -230,7 +242,7 @@ describe PseudsController do
           matching_pseud.reload
 
           post :destroy, params: { user_id: user, id: matching_pseud }
-          it_redirects_to_with_error(user_pseuds_path(user), "You cannot delete the pseud matching your user name, sorry!")
+          it_redirects_to_with_error(user_pseuds_path(user), "You cannot delete the pseud matching your username, sorry!")
         end
       end
     end
@@ -249,6 +261,15 @@ describe PseudsController do
 
     context "when logged in as admin" do
       it_behaves_like "an action admins can't access"
+    end
+  end
+
+  describe "index" do # will change with AO3-6989
+    context "when user_id does not exist" do
+      it "redirects without an error" do
+        get :index, params: { user_id: "nonexistent_user" }
+        redirect_to(search_people_path)
+      end
     end
   end
 end

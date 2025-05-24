@@ -9,7 +9,7 @@ Scenario: pseud creation and playing with the default pseud
   # Check that you can't edit your default pseud.
   Then I should see "Default Pseud"
   When I follow "Edit"
-  Then I should see "You cannot change the pseud that matches your user name."
+  Then I should see "You cannot change the pseud that matches your username."
     And the "Make this name default" checkbox should be checked and disabled
 
   # Make a new default pseud called "Me."
@@ -297,3 +297,18 @@ Scenario: Change details as an admin
   Then I should see "Pseud was successfully updated."
   When I go to the admin-activities page
   Then I should see 1 admin activity log entry
+
+Scenario: Bookmarks reflect pseud changes immediately
+
+  Given the work "Interesting"
+    And I am logged in as "myself"
+    And "myself" has the pseud "before"
+    And I bookmark the work "Interesting" as "before"
+    And I go to myself's bookmarks page
+  Then I should see "Bookmarked by before (myself)"
+
+  When it is currently 1 second from now
+    And "myself" changes the pseud "before" to "after"
+    And I go to myself's bookmarks page
+  Then I should see "Bookmarked by after (myself)"
+    And I should not see "Bookmarked by before (myself)"

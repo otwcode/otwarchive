@@ -80,7 +80,7 @@ th,
 .javascript,
 .statistics .index li:nth-of-type(even),
 #tos_prompt,
-.announcement input[type="submit"] {
+.nomination dt {
   background: #333;
 }
 
@@ -275,6 +275,8 @@ button,
 .actions button:hover,
 .actions input:hover,
 #dashboard a:hover,
+label.action:hover,
+.action:hover,
 .actions a:focus,
 .actions button:focus,
 .actions input:focus,
@@ -361,4 +363,19 @@ form dd.required {
 .event.announcement .userstuff a,
 .filters .expander {
   color: #eee;
+}
+
+.announcement .action {
+  background: #333;
+}
+
+.announcement .action:hover,
+.announcement .action:focus {
+  color: #fff;
+  box-shadow: inset 2px 2px 2px #000;
+}
+
+.caution {
+  border-color: #807640;
+  color: #dbbc54;
 }

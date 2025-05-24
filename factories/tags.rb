@@ -1,4 +1,5 @@
-require 'faker'
+require "faker"
+
 FactoryBot.define do
   sequence(:tag_title) do |n|
     "Owned Tag Set #{n}"
@@ -49,14 +50,20 @@ FactoryBot.define do
     association :pseud
   end
 
+  factory :tag_set_association do
+    association :owned_tag_set
+    association :tag
+    association :parent_tag
+  end
+
   factory :tag_nomination do
-    type { 'FandomNomination' }
+    type { "FandomNomination" }
 
     canonical { true }
     association :owned_tag_set
 
     after(:build) do |nomination|
-      nomination.tagname = Fandom.last.name
+      nomination.tagname ||= Fandom.last.name
     end
   end
 

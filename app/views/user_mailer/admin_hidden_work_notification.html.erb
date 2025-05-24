@@ -1,13 +1,22 @@
 <% content_for :message do %>
-  <p><%= t("mailer.general.greeting.formal_html", name: style_bold(@user.login)) %></p>
+  <p><%= t("mailer.general.greeting.formal.addressed_html", name: style_bold(@user.login)) %></p>
 
-  <p><%= t(".hidden.html", title: style_creation_link(@work.title, @work)) %></p>
+  <% if @works.size == 1 %>
+    <p><%= t(".hidden_one.html", title: style_creation_link(@works.first.title, @works.first)) %></p>
+  <% else %>
+    <p><%= t(".hidden_multiple", count: @works.size) %></p>
+    <ul>
+      <% @works.each do |work| %>
+      <li><%= style_creation_link(work.title, work) %></li>
+      <% end %>
+    </ul>
+  <% end %>
 
-  <p><%= t(".access") %></p>
+  <p><%= t(".access", count: @works.size) %></p>
 
-  <p><%= t(".check_email") %></p>
+  <p><%= t(".check_email", count: @works.size) %></p>
 
-  <p><%= t(".tos_violation.html", tos_link: tos_link(t(".tos"))) %></p>
+  <p><%= t(".tos_violation.html", count: @works.size, tos_link: tos_link(t(".tos")), content_policy_link: style_link(t(".content_policy"), content_url), tos_faq_link: style_link(t(".tos_faq"), tos_faq_url(anchor: "policy_procedures_faq"))) %></p>
 
-  <p><%= t(".help.html", contact_abuse_link: abuse_link(t(".contact_abuse"))) %></p>
+  <p><%= t(".help.html", count: @works.size, contact_abuse_link: abuse_link(t(".contact_abuse"))) %></p>
 <% end %>
