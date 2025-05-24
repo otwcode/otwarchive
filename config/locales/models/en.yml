@@ -256,6 +256,8 @@ en:
       none: "- None -"
   errors:
     attributes:
+      url:
+        invalid: does not appear to be a valid URL.
       icon:
         invalid_format: content type is invalid
         too_large: file size must be less than %{maximum_size}
