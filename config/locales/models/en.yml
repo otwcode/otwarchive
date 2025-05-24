@@ -16,6 +16,8 @@ en:
         support: Support
         tag_wrangling: Tag Wrangling
         translation: Translation
+      challenge_signup/requests:
+        url: Request URL
       chapters/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
@@ -35,6 +37,8 @@ en:
         meta_tag_id: Metatag
         sub_tag: Subtag
         sub_tag_id: Subtag
+      request:
+        url: URL
       role:
         archivist: Archivist
         no_resets: No Resets
@@ -259,6 +263,8 @@ en:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.
         required: must exist and not be spam.
+      url:
+        invalid: does not appear to be a valid URL.
   story_parser:
     on_archive: URL is for a work on the Archive. Please bookmark it directly instead.
   subscriptions:
