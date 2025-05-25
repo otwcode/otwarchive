@@ -315,8 +315,8 @@ describe WorksController, work_search: true do
     end
 
     it "assigns @page_subtitle with unrevealed work and not @page_title" do
-      allow_any_instance_of(Work).to receive(:unrevealed?).and_return(true)
-      get :show, params: { work_id: work.id, id: work.chapters.first.id }
+      work.update!(in_unrevealed_collection: true)
+      get :show, params: { id: work.id }
       expect(assigns[:page_subtitle]).to eq("Mystery Work")
       expect(assigns[:page_title]).to be_nil
     end
