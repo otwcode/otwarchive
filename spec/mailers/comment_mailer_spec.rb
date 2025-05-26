@@ -358,19 +358,11 @@ describe CommentMailer do
     context "when the comment is on a tag" do
       let(:parent_comment) { create(:comment, :on_tag, pseud: commenter_pseud) }
 
-      before { parent_comment.comment_owner.update!(roles: [Role.new(name: "tag_wrangler")]) }
-
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username"
       it_behaves_like "a comment subject to image safety mode settings"
-
-      context "the parent comment's owner if not a tag wrangler (anymore)" do
-        before { parent_comment.comment_owner.update!(roles: []) }
-
-        it_behaves_like "an unsent email"
-      end
     end
 
     context "when the comment is from a user using a banned email" do
@@ -447,19 +439,11 @@ describe CommentMailer do
     context "when the comment is on a tag" do
       let(:parent_comment) { create(:comment, :on_tag, pseud: commenter_pseud) }
 
-      before { parent_comment.comment_owner.update!(roles: [Role.new(name: "tag_wrangler")]) }
-
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a notification email with a link to reply to the comment"
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username"
       it_behaves_like "a comment subject to image safety mode settings"
-
-      context "the parent comment's owner if not a tag wrangler (anymore)" do
-        before { parent_comment.comment_owner.update!(roles: []) }
-
-        it_behaves_like "an unsent email"
-      end
     end
 
     context "when the comment is from a user using a banned email" do

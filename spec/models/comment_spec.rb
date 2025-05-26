@@ -567,6 +567,20 @@ describe Comment do
             comment.update!(comment_content: Faker::Lorem.sentence(word_count: 25))
           end.not_to change { tag_wrangler.reload.last_wrangling_activity.updated_at }
         end
+
+        it "notifies the tag wrangler when their comment on a tag is replied to" do
+          reply_comment = create(:comment, commentable: comment, pseud: create(:tag_wrangler).default_pseud)
+          expect(tag_wrangler.inbox_comments.last.feedback_comment_id).to eq(reply_comment.id)
+          expect(ActionMailer::Base.deliveries.last.subject).to include("Reply to your comment on the tag")
+        end
+
+        it "does not notify the parent comment owner if not a wrangler any more" do
+          tag_wrangler.update!(roles: [])
+          expect do
+            create(:comment, commentable: comment, pseud: create(:tag_wrangler).default_pseud)
+          end.to change { ActionMailer::Base.deliveries.count }.by(0)
+          expect(tag_wrangler.inbox_comments.last).to be_nil
+        end
       end
     end
   end
