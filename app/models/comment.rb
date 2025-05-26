@@ -365,10 +365,8 @@ class Comment < ApplicationRecord
       parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
 
       # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
-      if self.comment_owner
-        if (inbox_comment = self.comment_owner.inbox_comments.find_by(feedback_comment_id: parent_comment.id))
-          inbox_comment.update(replied_to: true, read: true)
-        end
+      if self.comment_owner && (inbox_comment = self.comment_owner.inbox_comments.find_by(feedback_comment_id: parent_comment.id))
+        inbox_comment.update(replied_to: true, read: true)
       end
 
       return unless have_different_owner?(parent_comment)

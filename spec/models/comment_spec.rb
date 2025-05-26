@@ -578,7 +578,8 @@ describe Comment do
           tag_wrangler.update!(roles: [])
           expect do
             create(:comment, commentable: comment, pseud: create(:tag_wrangler).default_pseud)
-          end.to change { ActionMailer::Base.deliveries.count }.by(0)
+          end.to change { ActionMailer::Base.deliveries.count }
+            .by(0)
           expect(tag_wrangler.inbox_comments.last).to be_nil
         end
       end
