@@ -359,39 +359,38 @@ class Comment < ApplicationRecord
     end
 
     def notify_parent_comment_owner
-      if self.reply_comment? && !self.unreviewed?
-        parent_comment = self.commentable
-        parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
+      return unless self.reply_comment? && !self.unreviewed?
 
-        # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
-        if self.comment_owner
-          if (inbox_comment = self.comment_owner.inbox_comments.find_by(feedback_comment_id: parent_comment.id))
-            inbox_comment.update(replied_to: true, read: true)
-          end
-        end
+      parent_comment = self.commentable
+      parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
 
-        # send notification to the owner of the original comment if they're not the same as the commenter
-        if (have_different_owner?(parent_comment))
-          if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
-            if self.saved_change_to_edited_at?
-              CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver_after_commit
-            else
-              CommentMailer.comment_reply_notification(parent_comment, self).deliver_after_commit
-            end
-          end
-          if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
-            if self.saved_change_to_edited_at?
-              update_feedback_in_inbox(parent_comment_owner)
-            else
-              add_feedback_to_inbox(parent_comment_owner)
-            end
-          end
-          if parent_comment_owner
-            return parent_comment_owner
-          end
+      # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
+      if self.comment_owner
+        if (inbox_comment = self.comment_owner.inbox_comments.find_by(feedback_comment_id: parent_comment.id))
+          inbox_comment.update(replied_to: true, read: true)
         end
-        return nil
       end
+
+      return unless have_different_owner?(parent_comment)
+
+      # send notification to the owner of the original comment if they're not the same as the commenter
+      if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
+        if self.saved_change_to_edited_at?
+          CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver_after_commit
+        else
+          CommentMailer.comment_reply_notification(parent_comment, self).deliver_after_commit
+        end
+      end
+
+      if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
+        if self.saved_change_to_edited_at?
+          update_feedback_in_inbox(parent_comment_owner)
+        else
+          add_feedback_to_inbox(parent_comment_owner)
+        end
+      end
+
+      parent_comment_owner
     end
 
   public
