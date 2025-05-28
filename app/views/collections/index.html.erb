@@ -1,13 +1,13 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <h2 class="heading">
   <% if @user %>
-    <%= t(".page_heading.user", user: @user.login) %>
+    <%= t(".page_heading.users_collections", user: @user.login) %>
   <% elsif @collection %>
-    <%= t(".page_heading.collection", collection: @collection.title) %>
+    <%= t(".page_heading.challenges_subcollections_in", collection: @collection.title) %>
   <% elsif @work %>
-    <%= t(".page_heading.work", work: @work.title) %>
+    <%= t(".page_heading.collections_including", work: @work.title) %>
   <% else %>
-    <%= t(".page_heading.archive", archive: ArchiveConfig.APP_NAME) %>
+    <%= t(".page_heading.collections_in_the", archive: ArchiveConfig.APP_NAME) %>
   <% end %>
 </h2>
 

@@ -593,10 +593,10 @@ en:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
     index:
       page_heading:
-        archive: Collections in the %{archive}
-        collection: Challenges/Subcollections in %{collection}
-        user: "%{user}'s Collections"
-        work: Collections including %{work}
+        challenges_subcollections_in: Challenges/Subcollections in %{collection}
+        collections_in_the: Collections in the %{archive}
+        collections_including: Collections including %{work}
+        users_collections: "%{user}'s Collections"
     sidebar:
       bookmarks: Bookmarked Items (%{count})
       challenge_settings: Challenge Settings
@@ -1984,6 +1984,9 @@ en:
   related_works:
     index:
       page_heading: "%{login}'s Related Works"
+  series:
+    series_order:
+      draft_work_title: "%{title} (DRAFT)"
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
