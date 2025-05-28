@@ -305,7 +305,8 @@ class Series < ApplicationRecord
 
     %w[archive_warning category character fandom freeform rating relationship].each do |tag_type|
       define_method("#{tag_type}_ids_#{tag_visibility}") do
-        send("filters_for_facets_#{tag_visibility}").select { |tag| tag.type.to_s == tag_type.camelcase }.map(&:id)
+        send("filters_for_facets_#{tag_visibility}").select { |tag| tag.type.to_s == tag_type.camelcase }
+          .map(&:id)
       end
     end
   end
