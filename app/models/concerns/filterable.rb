@@ -92,4 +92,10 @@ module Filterable
       end
     end
   end
+
+  # For filterables like Work, restricted tags are filtered out by virtue of the filterable having
+  # restricted set to true. Therefore, we just want a generic "<tag_type>_ids" method as well.
+  %w[archive_warning category character fandom filter freeform rating relationship].each do |search_field|
+    alias_method :"#{search_field}_ids", :"#{search_field}_ids_restricted"
+  end
 end
