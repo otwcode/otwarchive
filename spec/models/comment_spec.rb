@@ -596,7 +596,7 @@ describe Comment do
           it "notifies the original tag wrangler when a reply to their comment is edited" do
             expect do
               reply_comment.update!(
-                comment_content: reply_comment.comment_content + '!',
+                comment_content: "#{reply_comment.comment_content}!",
                 edited_at: Time.current
               )
             end.to change { ActionMailer::Base.deliveries.count }
@@ -611,7 +611,7 @@ describe Comment do
 
             expect do
               reply_comment.update!(
-                comment_content: reply_comment.comment_content + '!',
+                comment_content: "#{reply_comment.comment_content}!",
                 edited_at: Time.current
               )
             end.to change { ActionMailer::Base.deliveries.count }
