@@ -12,6 +12,7 @@
 
 <!--main content-->
 <%= form_for(@work, html: { id: "work-form", class: "verbose work post" }, url: { action: "update_tags" }) do |f| %>
+  <%= f.hidden_field(:from, name: "from", value: params[:from]) if params[:from] %>
   <p class="required notice">* <%= ts('Required information') %></p>
 
   <%= render 'work_form_tags', include_blank: false %>

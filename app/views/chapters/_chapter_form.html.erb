@@ -1,5 +1,6 @@
 <div id="chapter-form" class="verbose post work chapter">
   <%= form_for([@work, chapter]) do |f| %>
+    <%= f.hidden_field(:from, name: "from", value: params[:from]) if params[:from] %>
     <p class="required notice"><%= ts("* Required information") %></p>
     <fieldset id="chapter-ordering">
       <legend><%= ts("Name, Order and Date") %></legend>
