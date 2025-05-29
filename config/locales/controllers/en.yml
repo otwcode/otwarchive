@@ -184,6 +184,10 @@ en:
     not_found: Sorry, we couldn't find the FAQ you were looking for.
     update_positions:
       success: Question order has been successfully updated.
+  readings:
+    clear:
+      error: There were problems deleting your history. Please try again later.
+      success: Your history is now cleared.
   related_works:
     index:
       page_title: "%{login} - Related Works"
