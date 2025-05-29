@@ -5,12 +5,12 @@ describe HtmlCleaner do
   include HtmlCleaner
 
   describe "sanitize_value" do
-    ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.each do |field|
-      context "#{field} is configured to allow video embeds" do
+    ArchiveConfig.FIELDS_ALLOWING_MEDIA_EMBEDS.each do |field|
+      context "#{field} is configured to allow media embeds" do
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com 
            vidders.net criticalcommons.org google.com podfic.com archive.org
            open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com
-           bilibili.com player.bilibili.com 4shared.com/web/embed].each do |source|
+           bilibili.com player.bilibili.com 4shared.com/web/embed audio.com/embed/audio].each do |source|
 
           it "keeps embeds from #{source}" do
             html = '<iframe width="560" height="315" src="//' + source + '/embed/123" frameborder="0"></iframe>'
@@ -22,7 +22,7 @@ describe HtmlCleaner do
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
            archive.org 8tracks.com podfic.com
            open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com
-           bilibili.com player.bilibili.com 4shared.com/web/embed].each do |source|
+           bilibili.com player.bilibili.com 4shared.com/web/embed audio.com/embed/audio].each do |source|
 
           it "converts src to https for #{source}" do
             html = '<iframe width="560" height="315" src="http://' + source + '/embed/123" frameborder="0"></iframe>'
