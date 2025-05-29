@@ -239,15 +239,16 @@ public
     end
   end
 
-  def after_sign_in_path_for(resource)
-    if resource.is_a?(Admin)
-      admins_path
-    else
-      back = session[:return_to]
-      session.delete(:return_to)
+  def relative_uri(uri)
+    return uri if URI.parse(uri).relative? && uri.start_with?("/") && !uri.start_with?("//")
+  rescue URI::InvalidURIError
+    nil
+  end
 
-      back || user_path(current_user)
-    end
+  def after_sign_in_path_for(resource)
+    return admins_path if resource.is_a?(Admin)
+
+    relative_uri(params[:return_to]) || user_path(current_user)
   end
 
   def authenticate_admin!
