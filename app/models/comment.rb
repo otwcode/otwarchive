@@ -372,7 +372,7 @@ class Comment < ApplicationRecord
     return unless different_owner?(parent_comment)
 
     # Never notify people who are not tag wranglers any more about comments on tags
-    return if parent_comment.ultimate_parent.is_a?(Tag) && !parent_comment.comment_owner&.is_tag_wrangler?
+    return if self.ultimate_parent.is_a?(Tag) && !parent_comment.comment_owner&.is_tag_wrangler?
 
     # send notification to the owner of the original comment if they're not the same as the commenter
     if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
