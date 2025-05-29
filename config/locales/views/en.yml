@@ -591,6 +591,12 @@ en:
     form:
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
+    index:
+      page_heading:
+        challenges_subcollections_in: Challenges/Subcollections in %{collection}
+        collections_in_the: Collections in the %{archive}
+        collections_including: Collections including %{work}
+        users_collections: "%{user}'s Collections"
     sidebar:
       bookmarks: Bookmarked Items (%{count})
       challenge_settings: Challenge Settings
@@ -1978,6 +1984,9 @@ en:
   related_works:
     index:
       page_heading: "%{login}'s Related Works"
+  series:
+    series_order:
+      draft_work_title: "%{title} (DRAFT)"
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
@@ -2389,6 +2398,10 @@ en:
       content_policy: Content Policy
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
+    import:
+      draft_work_title_html: "%{work_link} (Draft)"
+      page_heading: Imported Works
+      success: We were able to successfully upload the following works.
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
@@ -2397,6 +2410,8 @@ en:
       original_creators:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
+    navigate:
+      page_heading_html: Chapter Index for %{work_link} by %{creators}
     new_import:
       content_policy: Content Policy
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
