@@ -29,7 +29,7 @@ module OtwSanitize
     ].freeze
 
     SUPPORTS_HTTPS = %i[
-      4shared
+      4shared audiocom
       archiveorg bilibili eighttracks podfic
       soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze
