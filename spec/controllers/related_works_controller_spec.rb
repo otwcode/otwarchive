@@ -15,7 +15,7 @@ describe RelatedWorksController do
       end
 
       it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(user_related_works_path, "Whose related works were you looking for?") 
+        it_redirects_to_with_error(search_people_path, "Whose related works were you looking for?")
       end
     end
 
@@ -25,7 +25,7 @@ describe RelatedWorksController do
       end
 
       it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(user_related_works_path, "Sorry, we couldn't find that user")
+        it_redirects_to_with_error(search_people_path, "Sorry, we couldn't find that user")
       end
     end
 

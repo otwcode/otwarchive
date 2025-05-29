@@ -31,6 +31,7 @@ class Users::SessionsController < Devise::SessionsController
 
     session[:return_to] = return_to
 
-    redirect_back_or_default root_path
+    # TODO(M): redirect back? there's a decent chance that it will lead to an immediate access denied
+    redirect_to root_path
   end
 end

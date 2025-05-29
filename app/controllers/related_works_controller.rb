@@ -27,17 +27,16 @@ class RelatedWorksController < ApplicationController
   end
 
   def update
-    # updates are done by the owner of the parent, to aprove or remove links on the parent work.
+    # updates are done by the owner of the parent, to approve or remove links on the parent work.
     unless @user
       if current_user_owns?(@child)
         flash[:error] = ts("Sorry, but you don't have permission to do that. Try removing the link from your own work.")
-        redirect_back_or_default(user_related_works_path(current_user))
-        return
+        redirect_back_or_to user_related_works_path(current_user)
       else
         flash[:error] = ts("Sorry, but you don't have permission to do that.")
-        redirect_back_or_default(root_path)
-        return
+        redirect_back_or_to root_path
       end
+      return
     end
     # the assumption here is that any update is a toggle from what was before
     @related_work.reciprocal = !@related_work.reciprocal?
@@ -57,16 +56,15 @@ class RelatedWorksController < ApplicationController
     unless current_user_owns?(@child)
       if @user
         flash[:error] = ts("Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
-        redirect_back_or_default(user_related_works_path(current_user))
-        return
+        redirect_back_or_to user_related_works_path(current_user)
       else
         flash[:error] = ts("Sorry, but you don't have permission to do that.")
-        redirect_back_or_default(root_path)
-        return
+        redirect_back_or_to root_path
       end
+      return
     end
     @related_work.destroy
-    redirect_back(fallback_location: user_related_works_path(current_user))
+    redirect_back_or_to user_related_works_path(current_user)
   end
 
   private
@@ -74,12 +72,12 @@ class RelatedWorksController < ApplicationController
   def load_user
     if params[:user_id].blank?
       flash[:error] = ts("Whose related works were you looking for?")
-      redirect_back_or_default(search_people_path)
+      redirect_to search_people_path
     else
       @user = User.find_by(login: params[:user_id])
       if @user.blank?
         flash[:error] = ts("Sorry, we couldn't find that user")
-        redirect_back_or_default(root_path)
+        redirect_to search_people_path
       end
     end
   end
