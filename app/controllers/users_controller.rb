@@ -238,6 +238,12 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.xml
   def destroy
+    if params[:cancel_button]
+      flash[:notice] = ts('Account deletion canceled.')
+      redirect_to user_profile_path(@user)
+      return
+    end
+
     @hide_dashboard = true
     @works = @user.works.where(posted: true)
     @sole_owned_collections = @user.sole_owned_collections
@@ -341,13 +347,6 @@ class UsersController < ApplicationController
   def destroy_author
     @sole_authored_works = @user.sole_authored_works
     @coauthored_works = @user.coauthored_works
-
-    if params[:cancel_button]
-      flash[:notice] = ts('Account deletion canceled.')
-      redirect_to user_profile_path(@user)
-
-      return
-    end
 
     if params[:coauthor] == 'keep_pseud' || params[:coauthor] == 'orphan_pseud'
       # Orphans co-authored works.
