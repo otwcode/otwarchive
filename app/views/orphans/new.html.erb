@@ -2,5 +2,5 @@
 
 <ul class="actions" role="navigation">
   <li><%= link_to t('.orphans_about', default: "Read More About The Orphaning Process"), archive_faq_path("orphaning") %></li> 
-  <li><%= link_to t('.links.cancel', default: "Cancel"), :back %></li>
+  <li><%= link_to t('.links.cancel', default: "Cancel"), @return_to %></li>
 </ul>
