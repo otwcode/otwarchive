@@ -129,7 +129,7 @@ class CommentsController < ApplicationController
     admin_settings = AdminSetting.current
 
     return unless admin_settings.guest_comments_off? && guest?
-    
+
     flash[:error] = t("comments.commentable.guest_comments_disabled")
     redirect_back(fallback_location: root_path)
   end
@@ -290,7 +290,7 @@ class CommentsController < ApplicationController
   def new
     if @commentable.nil?
       flash[:error] = ts("What did you want to comment on?")
-      redirect_back_or_default(root_path)
+      redirect_to root_path
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
@@ -325,7 +325,7 @@ class CommentsController < ApplicationController
   def create
     if @commentable.nil?
       flash[:error] = ts("What did you want to comment on?")
-      redirect_back_or_default(root_path)
+      redirect_back_or_to root_path
     else
       @comment = Comment.new(comment_params)
       @comment.ip_address = request.remote_ip
@@ -405,7 +405,7 @@ class CommentsController < ApplicationController
     elsif unreviewed
       # go back to the rest of the unreviewed comments
       flash[:notice] = ts("Comment deleted.")
-      redirect_back(fallback_location: unreviewed_work_comments_path(@comment.commentable))
+      redirect_back_or_to(unreviewed_work_comments_path(@comment.commentable))
     elsif parent_comment
       flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
@@ -449,7 +449,7 @@ class CommentsController < ApplicationController
     authorize @commentable, policy_class: CommentPolicy if logged_in_as_admin?
     unless (@commentable && current_user_owns?(@commentable)) || (@commentable && logged_in_as_admin? && @commentable.is_a?(AdminPost))
       flash[:error] = ts("What did you want to review comments on?")
-      redirect_back_or_default(root_path)
+      redirect_back_or_to(root_path)
       return
     end
 
@@ -650,10 +650,10 @@ class CommentsController < ApplicationController
 
     if commentable.is_a?(Tag)
       redirect_to comments_path(tag_id: commentable.to_param,
-                  add_comment_reply_id: options[:add_comment_reply_id],
-                  delete_comment_id: options[:delete_comment_id],
-                  page: options[:page],
-                  anchor: options[:anchor])
+                                add_comment_reply_id: options[:add_comment_reply_id],
+                                delete_comment_id: options[:delete_comment_id],
+                                page: options[:page],
+                                anchor: options[:anchor])
     else
       if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
         commentable = commentable.work
