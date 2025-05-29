@@ -5,7 +5,7 @@ describe HtmlCleaner do
   include HtmlCleaner
 
   describe "sanitize_value" do
-    ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.each do |field|
+    ArchiveConfig.FIELDS_ALLOWING_MEDIA_EMBEDS.each do |field|
       context "#{field} is configured to allow media embeds" do
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com 
            vidders.net criticalcommons.org google.com podfic.com archive.org
