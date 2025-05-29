@@ -36,7 +36,7 @@ protected
   def load_work
     unless AdminSetting.current.downloads_enabled?
       flash[:error] = ts("Sorry, downloads are currently disabled.")
-      redirect_back_or_default works_path
+      redirect_to work_path(params[:id])
       return
     end
 
