@@ -129,7 +129,7 @@ Feature: Commenting on admin posts
     When I am logged in as a "communications" admin
       And I go to the admin-posts page
       And I follow "Default Admin Post"
-      And I follow "Unreviewed Comments"
+      And I follow "Unreviewed Comments (1)"
       And I press "Approve"
     When I am logged out
       And I go to the admin-posts page
