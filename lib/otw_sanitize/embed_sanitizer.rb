@@ -8,6 +8,7 @@ module OtwSanitize
   class EmbedSanitizer
     ALLOWLIST_REGEXES = {
       "4shared": %r{^4shared\.com/web/embed},
+      audiocom: %r{^audio\.com/embed/audio/},
       archiveorg: %r{^archive\.org/embed/},
       bilibili: %r{^(player\.)?bilibili\.com/},
       criticalcommons: %r{^criticalcommons\.org/},
