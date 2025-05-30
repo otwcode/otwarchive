@@ -1,5 +1,4 @@
 class FeedbacksController < ApplicationController
-  skip_before_action :store_location
   before_action :load_support_languages
 
   def new

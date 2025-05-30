@@ -1,5 +1,4 @@
 class CommentsController < ApplicationController
-  skip_before_action :store_location, except: [:show, :index, :new]
   before_action :load_commentable,
                 only: [:index, :new, :create, :edit, :update, :show_comments,
                        :hide_comments, :add_comment_reply,

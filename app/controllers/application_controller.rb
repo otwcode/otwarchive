@@ -210,35 +210,6 @@ public
     @current_tos_version = 2024_11_19 # rubocop:disable Style/NumericLiterals
   end
 
-  # store previous page in session to make redirecting back possible
-  # if already redirected once, don't redirect again.
-  before_action :store_location
-  def store_location
-    if session[:return_to] == "redirected"
-      session.delete(:return_to)
-    elsif request.fullpath.length > 200
-      # Sessions are stored in cookies, which has a 4KB size limit.
-      # Don't store paths that are too long (e.g. filters with lots of exclusions).
-      # Also remove the previous stored path.
-      session.delete(:return_to)
-    else
-      session[:return_to] = request.fullpath
-    end
-  end
-
-  # Redirect to the URI stored by the most recent store_location call or
-  # to the passed default.
-  def redirect_back_or_default(default = root_path)
-    back = session[:return_to]
-    session.delete(:return_to)
-    if back
-      session[:return_to] = "redirected"
-      redirect_to(back) and return
-    else
-      redirect_to(default) and return
-    end
-  end
-
   def relative_uri(uri)
     return uri if URI.parse(uri).relative? && uri.start_with?("/") && !uri.start_with?("//")
   rescue URI::InvalidURIError
@@ -285,7 +256,6 @@ public
   # to access the requested action.  For example, a popup window might
   # simply close itself.
   def access_denied(options ={})
-    store_location
     if logged_in?
       destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
       # i18n-tasks-use t('users.reconfirm_email.access_denied.logged_in')
@@ -559,7 +529,6 @@ public
   # Don't get unnecessary data for json requests
 
   skip_before_action  :load_admin_banner,
-                      :store_location,
                       if: proc { %w(js json).include?(request.format) }
 
 end
