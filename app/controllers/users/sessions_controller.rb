@@ -2,7 +2,6 @@ class Users::SessionsController < Devise::SessionsController
 
   layout "session"
   before_action :admin_logout_required
-  skip_before_action :store_location
 
   # POST /users/login
   def create
@@ -23,13 +22,8 @@ class Users::SessionsController < Devise::SessionsController
 
   # DELETE /users/logout
   def destroy
-    # signed_out clears the session
-    return_to = session[:return_to]
-
     signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
     set_flash_message! :notice, :signed_out if signed_out
-
-    session[:return_to] = return_to
 
     # TODO(M): redirect back? there's a decent chance that it will lead to an immediate access denied
     redirect_to root_path

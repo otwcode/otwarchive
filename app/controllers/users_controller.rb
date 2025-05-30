@@ -5,7 +5,6 @@ class UsersController < ApplicationController
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
   before_action :check_ownership, except: [:activate, :change_username, :changed_username, :delete_confirmation, :edit, :index, :show, :update]
   before_action :check_ownership_or_admin, only: [:change_username, :changed_username, :edit, :update]
-  skip_before_action :store_location, only: [:end_first_login]
 
   def load_user
     @user = User.find_by!(login: params[:id])
