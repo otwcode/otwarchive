@@ -1,6 +1,5 @@
 class DownloadsController < ApplicationController
 
-  skip_before_action :store_location, only: :show
   before_action :load_work, only: :show
   before_action :check_download_posted_status, only: :show
   before_action :check_download_visibility, only: :show

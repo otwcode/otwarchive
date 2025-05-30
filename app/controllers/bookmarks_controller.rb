@@ -11,8 +11,6 @@ class BookmarksController < ApplicationController
 
   before_action :check_pseud_ownership, only: [:create, :update]
 
-  skip_before_action :store_location, only: [:share]
-
   def check_pseud_ownership
     if params[:bookmark][:pseud_id]
       pseud = Pseud.find(bookmark_params[:pseud_id])

@@ -21,8 +21,6 @@ class WorksController < ApplicationController
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
 
-  skip_before_action :store_location, only: [:share]
-
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params
     QueryCleaner.new(work_search_params || {}).clean

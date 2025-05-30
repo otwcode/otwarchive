@@ -1,5 +1,4 @@
 class AbuseReportsController < ApplicationController
-  skip_before_action :store_location
   before_action :load_abuse_languages
 
   def new
