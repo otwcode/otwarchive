@@ -93,11 +93,6 @@
                   <dd class="comments"><%= number_with_delimiter(work.comment_thread_count) %></dd>
                   <dt class="bookmarks"><%= ts("Bookmarks:") %></dt>
                   <dd class="bookmarks"><%= number_with_delimiter(work.bookmarks.count) %></dd>
-                  <% # dt ts("Newest Link:") /dt %>
-                    <% # dd %>
-                    <% # work.work_links.last.try(:url) || ts("none yet") %>
-                    <% # ( link_to ts("see all"), work_links_path(:work_id => work.id) /a ) %>
-                  <% # /dd %>
                 </dl>
               </dd>
             </dl>
