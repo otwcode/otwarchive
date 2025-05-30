@@ -13,10 +13,21 @@ describe SeriesController do
     end
   end
 
-  describe 'edit' do
-    it 'redirects to orphan if there are no pseuds left' do
+  describe "PATCH #remove_user_creatorship" do
+    it "removes creatorship if there are non-user pseuds left" do
       fake_login_known_user(user)
-      get :edit, params: { remove: "me", id: series }
+      other_user_pseud = create(:user).default_pseud
+      series = create(:series, authors: [user.default_pseud, other_user_pseud])
+
+      patch :remove_user_creatorship, params: { id: series }
+
+      expect(series.pseuds.reload).to contain_exactly(other_user_pseud)
+      it_redirects_to_with_notice(series_path(series), "You have been removed as a creator from the series and its works.")
+    end
+
+    it "redirects to orphan if there are no pseuds left" do
+      fake_login_known_user(user)
+      patch :remove_user_creatorship, params: { id: series }
       it_redirects_to(new_orphan_path(series_id: series))
     end
   end
