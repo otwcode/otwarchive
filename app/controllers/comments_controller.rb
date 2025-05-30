@@ -100,7 +100,8 @@ class CommentsController < ApplicationController
     parent = find_parent
 
     return unless parent.respond_to?(:restricted) && parent.restricted? && !(logged_in? || logged_in_as_admin?)
-    redirect_to new_user_session_path(restricted_commenting: true)
+
+    redirect_to new_user_session_path(restricted_commenting: true, return_to: request.fullpath)
   end
 
   # Check to see if the ultimate_parent is a Work or AdminPost, and if so, if it allows
