@@ -154,8 +154,6 @@ class ChaptersController < ApplicationController
       case params[:from]
       when "edit-work"
         redirect_to edit_work_path(@work)
-      when "edit"
-        redirect_to edit_chapter_path(@chapter)
       when "manage"
         redirect_to manage_work_chapters_path(@work)
       else
@@ -176,7 +174,6 @@ class ChaptersController < ApplicationController
       else
         draft_flash_message(@work)
       end
-      params[:from] = "edit"
       render :preview
     else
       @chapter.posted = true if params[:post_button] || params[:post_without_preview_button]

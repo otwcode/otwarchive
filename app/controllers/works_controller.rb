@@ -375,7 +375,6 @@ class WorksController < ApplicationController
     if params[:edit_button] || work_cannot_be_saved?
       render :edit
     elsif params[:preview_button]
-      params[:from] = "edit"
       unless @work.posted?
         flash[:notice] = ts("Your changes have not been saved. Please post your work or save as draft if you want to keep them.")
       end
@@ -828,7 +827,6 @@ class WorksController < ApplicationController
       if @work.posted
         flash[:notice] = ts('The work was not updated.')
         redirect_to user_works_path(current_user) and return if params[:from] == "blurb"
-        redirect_to edit_work_path(@work) and return if params[:from] == "edit"
         redirect_to edit_tags_work_path(@work) and return if params[:from] == "edit-tags"
       else
         flash[:notice] = ts('The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive.')
