@@ -313,7 +313,7 @@ describe CommentsController do
 
         it "redirects to the login page" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          it_redirects_to(new_user_session_path(restricted_commenting: true))
+          it_redirects_to(new_user_session_path(restricted_commenting: true, return_to: request.fullpath))
         end
       end
 
@@ -888,7 +888,7 @@ describe CommentsController do
 
               it "redirects to the login page" do
                 delete :destroy, params: { id: comment.id }
-                it_redirects_to(new_user_session_path(restricted_commenting: true))
+                it_redirects_to(new_user_session_path(restricted_commenting: true, return_to: request.fullpath))
               end
             end
           end

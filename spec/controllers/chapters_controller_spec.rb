@@ -100,7 +100,7 @@ describe ChaptersController do
       it "errors and redirects to login when work is restricted" do
         restricted_work = create(:work, restricted: true)
         get :show, params: { work_id: restricted_work.id, id: restricted_work.chapters.first }
-        it_redirects_to(new_user_session_path(restricted: true))
+        it_redirects_to(new_user_session_path(restricted: true, return_to: request.fullpath))
       end
 
       it "assigns @chapters to only posted chapters" do
