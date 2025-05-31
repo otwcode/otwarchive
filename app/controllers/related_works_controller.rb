@@ -31,11 +31,11 @@ class RelatedWorksController < ApplicationController
     unless @user
       if current_user_owns?(@child)
         flash[:error] = ts("Sorry, but you don't have permission to do that. Try removing the link from your own work.")
-        redirect_back_or_to user_related_works_path(current_user)
       else
         flash[:error] = ts("Sorry, but you don't have permission to do that.")
-        redirect_back_or_to root_path
       end
+      # TODO(M): test - the spec dictates this
+      redirect_back_or_to related_work_path(@related_work)
       return
     end
     # the assumption here is that any update is a toggle from what was before
@@ -56,7 +56,7 @@ class RelatedWorksController < ApplicationController
     unless current_user_owns?(@child)
       if @user
         flash[:error] = ts("Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
-        redirect_back_or_to user_related_works_path(current_user)
+        redirect_back_or_to related_work_path(@related_work)
       else
         flash[:error] = ts("Sorry, but you don't have permission to do that.")
         redirect_back_or_to root_path
