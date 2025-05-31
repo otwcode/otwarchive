@@ -78,7 +78,7 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_falsey
-            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+            it_redirects_to_user_login
           end
         end
 
@@ -351,7 +351,7 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_truthy
-            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+            it_redirects_to_user_login
           end
         end
 
@@ -605,7 +605,7 @@ describe CommentsController do
             put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_falsey
-            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+            it_redirects_to_user_login
           end
         end
 
@@ -857,7 +857,7 @@ describe CommentsController do
             put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_truthy
-            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+            it_redirects_to_user_login
           end
         end
 

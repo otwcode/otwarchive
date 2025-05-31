@@ -63,10 +63,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           get :new, params: { tag_id: fandom.name }
-          it_redirects_to_with_error(new_user_session_path,
-                                     "Sorry, you don't have permission to " \
-                                     "access the page you were trying to " \
-                                     "reach. Please log in.")
+          it_redirects_to_user_login
         end
       end
     end
@@ -305,10 +302,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
-          it_redirects_to_with_error(new_user_session_path,
-                                     "Sorry, you don't have permission to " \
-                                     "access the page you were trying to " \
-                                     "reach. Please log in.")
+          it_redirects_to_user_login
         end
       end
     end
@@ -776,7 +770,7 @@ describe CommentsController do
           it "doesn't destroy comment and redirects with error" do
             delete :destroy, params: { id: comment.id }
 
-            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+            it_redirects_to_user_login
             expect { comment.reload }.not_to raise_exception
           end
         end

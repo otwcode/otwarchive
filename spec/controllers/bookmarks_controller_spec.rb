@@ -4,10 +4,6 @@ describe BookmarksController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  def it_redirects_to_user_login
-    it_redirects_to_simple new_user_session_path
-  end
-
   describe "new" do
     context "without javascript" do
       it "redirects logged out users" do
@@ -35,7 +31,7 @@ describe BookmarksController do
     context "denies access for work that isn't visible to user" do
       subject { get :new, params: { work_id: work } }
       let(:success) { expect(response).to render_template("new") }
-      let(:success_admin) { it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.") }
+      let(:success_admin) { it_redirects_to_user_login }
 
       include_examples "denies access for work that isn't visible to user"
     end
