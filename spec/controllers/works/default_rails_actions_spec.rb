@@ -32,8 +32,7 @@ describe WorksController, work_search: true do
     context "when no work search parameters are given" do
       it "redirects to the login screen when no user is logged in" do
         get :clean_work_search_params, params: params
-        it_redirects_to_with_error(new_user_session_path,
-                                   "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login
       end
     end
 
