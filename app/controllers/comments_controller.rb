@@ -650,10 +650,10 @@ class CommentsController < ApplicationController
 
     if commentable.is_a?(Tag)
       redirect_to comments_path(tag_id: commentable.to_param,
-                                add_comment_reply_id: options[:add_comment_reply_id],
-                                delete_comment_id: options[:delete_comment_id],
-                                page: options[:page],
-                                anchor: options[:anchor])
+                  add_comment_reply_id: options[:add_comment_reply_id],
+                  delete_comment_id: options[:delete_comment_id],
+                  page: options[:page],
+                  anchor: options[:anchor])
     else
       if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
         commentable = commentable.work
