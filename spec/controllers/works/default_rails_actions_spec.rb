@@ -180,8 +180,7 @@ describe WorksController, work_search: true do
   describe "new" do
     it "doesn't return the form for anyone not logged in" do
       get :new
-      it_redirects_to_with_error(new_user_session_path,
-                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      it_redirects_to_user_login
     end
 
     it "renders the form if logged in" do

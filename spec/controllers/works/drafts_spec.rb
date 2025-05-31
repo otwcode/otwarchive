@@ -31,7 +31,7 @@ describe WorksController do
 
       it "redirects to the login page and displays a error message" do
         get :drafts, params: { user_id: drafts_user.login }
-        it_redirects_to_user_login("You can only see your own drafts, sorry!")
+        it_redirects_to_with_error(new_user_session_path, "You can only see your own drafts, sorry!")
       end
     end
 
