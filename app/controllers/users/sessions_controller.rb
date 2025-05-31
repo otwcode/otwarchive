@@ -25,7 +25,6 @@ class Users::SessionsController < Devise::SessionsController
     signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
     set_flash_message! :notice, :signed_out if signed_out
 
-    # TODO(M): redirect back? there's a decent chance that it will lead to an immediate access denied
-    redirect_to root_path
+    redirect_back_or_to root_path
   end
 end
