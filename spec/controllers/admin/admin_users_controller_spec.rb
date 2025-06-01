@@ -198,6 +198,30 @@ describe Admin::AdminUsersController do
         end
       end
 
+      context "with role support" do
+        before do
+          admin.update!(roles: ["support"])
+          user.update!(roles: [])
+          role.update!(name: "no_resets")
+        end
+
+        it "allows updating email" do
+          put :update, params: { id: user.login, user: { email: "updated@example.com" } }
+          expect(user.reload.email).to eq("updated@example.com")
+        end
+
+        it "allows updating roles" do
+          expect do
+            put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
+          end.to change { user.reload.roles.pluck(:name) }
+                   .from([])
+                   .to([role.name])
+                   .and avoid_changing { user.reload.email }
+
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+        end
+      end
+
       context "with role tag_wrangling" do
         before do
           admin.update!(roles: ["tag_wrangling"])
@@ -221,31 +245,6 @@ describe Admin::AdminUsersController do
             .and avoid_changing { user.reload.email }
 
           it_redirects_to_with_notice(root_path, "User was successfully updated.")
-        end
-      end
-
-      # Keep the array in case we need to add another role like this.
-      %w[support].each do |admin_role|
-        context "with role #{admin_role}" do
-          before { admin.update!(roles: [admin_role]) }
-
-          it "does not allow updating roles" do
-            expect do
-              put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
-            end.to raise_exception(ActionController::UnpermittedParameters)
-            expect(user.reload.roles).not_to include(role)
-          end
-
-          it "allows updating email" do
-            expect do
-              put :update, params: { id: user.login, user: { email: "updated@example.com" } }
-            end.to change { user.reload.email }
-              .from("user@example.com")
-              .to("updated@example.com")
-              .and avoid_changing { user.reload.roles.pluck(:name) }
-
-            it_redirects_to_with_notice(root_path, "User was successfully updated.")
-          end
         end
       end
 
