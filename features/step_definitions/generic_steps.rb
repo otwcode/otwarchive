@@ -144,11 +144,11 @@ Then "I should see a link to {string} within {string}" do |url, selector|
   assure_xpath_present("a", "href", url, selector)
 end
 
-Then /^I should see a page link to (.+) within "(.*?)"$/ do |page_name, selector|
+Then /^I should see a page link to (.+) within "(.*?)"$/ do |page_name, selector| # rubocop:disable Cucumber/RegexStepName
   expect(page.find(selector)).to have_link("", href: path_to(page_name))
 end
 
-Then /^I should not see a page link to (.+) within "(.*?)"$/ do |page_name, selector|
+Then /^I should not see a page link to (.+) within "(.*?)"$/ do |page_name, selector| # rubocop:disable Cucumber/RegexStepName
   expect(page.find(selector)).to_not have_link("", href: path_to(page_name))
 end
 
