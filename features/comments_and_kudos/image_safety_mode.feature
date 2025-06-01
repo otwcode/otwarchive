@@ -8,22 +8,25 @@ Feature: Image safety mode
       And image safety mode is disabled for comments
     When I view <commentable> with comments
     Then I should see the image "src" text "https://example.com/image.jpg"
-      And I should not see "OMG! https://example.com/image.jpg"
+      And I should not see "OMG! img src="
     When I go to the homepage
     Then I should see the image "src" text "https://example.com/image.jpg"
-      And I should not see "OMG! https://example.com/image.jpg"
+      And I should not see "OMG! img src="
     When I go to commentrecip's inbox page
     Then I should see the image "src" text "https://example.com/image.jpg"
     When image safety mode is enabled for comments on a "<parent_type>"
       And I view <commentable> with comments
     Then I should not see the image "src" text "https://example.com/image.jpg"
-      But I should see "OMG! https://example.com/image.jpg"
+      But I should see "OMG! img src="
+      And I should see "https://example.com/image.jpg"
     When I go to the homepage
     Then I should not see the image "src" text "https://example.com/image.jpg"
-      But I should see "OMG! https://example.com/image.jpg"
+      But I should see "OMG! img src="
+      And I should see "https://example.com/image.jpg"
     When I go to commentrecip's inbox page
     Then I should not see the image "src" text "https://example.com/image.jpg"
-      But I should see "OMG! https://example.com/image.jpg"
+      But I should see "OMG! img src="
+      And I should see "https://example.com/image.jpg"
 
     Examples:
       | commentable                 | parent_type |
@@ -36,23 +39,26 @@ Feature: Image safety mode
       And image safety mode is enabled for comments on a "<parent_type>"
     When I view <commentable> with comments
     Then I should not see the image "src" text "https://example.com/image.jpg"
-      But I should see "OMG! https://example.com/image.jpg"
+      But I should see "OMG! img src="
+      And I should see "https://example.com/image.jpg"
     When I go to the homepage
     Then I should not see the image "src" text "https://example.com/image.jpg"
-      But I should see "OMG! https://example.com/image.jpg"
+      But I should see "OMG! img src="
+      And I should see "https://example.com/image.jpg"
     When I go to commentrecip's inbox page
     Then I should not see the image "src" text "https://example.com/image.jpg"
-      But I should see "OMG! https://example.com/image.jpg"
+      But I should see "OMG! img src="
+      And I should see "https://example.com/image.jpg"
     When image safety mode is disabled for comments
       And I view <commentable> with comments
     Then I should see the image "src" text "https://example.com/image.jpg"
-      And I should not see "OMG! https://example.com/image.jpg"
+      And I should not see "OMG! img src="
     When I go to the homepage
     Then I should see the image "src" text "https://example.com/image.jpg"
-      And I should not see "OMG! https://example.com/image.jpg"
+      And I should not see "OMG! img src="
     When I go to commentrecip's inbox page
     Then I should see the image "src" text "https://example.com/image.jpg"
-      And I should not see "OMG! https://example.com/image.jpg"
+      And I should not see "OMG! img src="
 
     Examples:
       | parent_type | commentable                 |

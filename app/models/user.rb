@@ -5,6 +5,8 @@ class User < ApplicationRecord
   include PasswordResetsLimitable
   include UserLoggable
 
+  self.ignored_columns = [:recently_reset]
+
   devise :database_authenticatable,
          :confirmable,
          :registerable,
@@ -434,7 +436,7 @@ class User < ApplicationRecord
   # Should this user's comments be spam-checked?
   def should_spam_check_comments?
     # When account_age_threshold_for_comment_spam_check is 0, no users' comments should be spam-checked
-    (Time.current - confirmed_at).seconds.in_days.to_i < AdminSetting.current.account_age_threshold_for_comment_spam_check
+    (Time.current - created_at).seconds.in_days.to_i < AdminSetting.current.account_age_threshold_for_comment_spam_check
   end
 
   # Creates log item tracking changes to user
