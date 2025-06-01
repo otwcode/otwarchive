@@ -29,7 +29,7 @@ class UserPolicy < ApplicationPolicy
 
   # Define which admin roles can edit which user roles.
   ALLOWED_USER_ROLES_BY_ADMIN_ROLES = {
-    "open_doors" => %w[archivist opendoors],
+    "open_doors" => %w[archivist no_resets opendoors],
     "policy_and_abuse" => %w[no_resets protected_user],
     "superadmin" => %w[archivist no_resets official opendoors protected_user tag_wrangler],
     "tag_wrangling" => %w[tag_wrangler]
