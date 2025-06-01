@@ -23,7 +23,7 @@ class UserPolicy < ApplicationPolicy
     "open_doors" => [roles: []],
     "policy_and_abuse" => [:email, { roles: [] }],
     "superadmin" => [:email, { roles: [] }],
-    "support" => %i[email],
+    "support" => [:email, { roles: [] }],
     "tag_wrangling" => [roles: []]
   }.freeze
 
@@ -32,6 +32,7 @@ class UserPolicy < ApplicationPolicy
     "open_doors" => %w[archivist no_resets opendoors],
     "policy_and_abuse" => %w[no_resets protected_user],
     "superadmin" => %w[archivist no_resets official opendoors protected_user tag_wrangler],
+    "support" => %w[no_resets],
     "tag_wrangling" => %w[tag_wrangler]
   }.freeze
 
