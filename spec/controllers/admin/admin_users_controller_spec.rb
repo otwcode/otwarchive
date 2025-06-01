@@ -214,9 +214,9 @@ describe Admin::AdminUsersController do
           expect do
             put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
           end.to change { user.reload.roles.pluck(:name) }
-                   .from([])
-                   .to([role.name])
-                   .and avoid_changing { user.reload.email }
+            .from([])
+            .to([role.name])
+            .and avoid_changing { user.reload.email }
 
           it_redirects_to_with_notice(root_path, "User was successfully updated.")
         end
