@@ -34,7 +34,7 @@ Feature: Get messages in the inbox
     Then I should see "cutman on Down for the Count"
       And I should see "less than 1 minute ago"
 
-  Scenario: Comments should display which chapter it's on, if and only if the work is multi-chapter
+  Scenario: Inbox comments should display which chapter it's on, if and only if the work is multi-chapter
     Given I am logged in as "author"
       And I post the work "Single-chapter Work"
       And I post the chaptered work "Multi-chapter Work"
