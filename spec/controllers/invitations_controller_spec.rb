@@ -169,6 +169,14 @@ describe InvitationsController do
 
       it_redirects_to_with_notice(invitation_path(invitation), "Invitation was successfully sent.")
     end
+
+    it "renders #show if the invitation fails to save" do
+      admin.update!(roles: ["policy_and_abuse"])
+      fake_login_admin(admin)
+      allow(invitation).to receive(:save).and_return(false)
+
+      expect(response).to render_template("show")
+    end
   end
 
   describe "POST #create" do
@@ -220,13 +228,25 @@ describe InvitationsController do
       )
     end
 
-    it "allows admin to delete invitations" do
-      invitation = create(:invitation)
-      admin.update!(roles: ["policy_and_abuse"])
-      fake_login_admin(admin)
- 
-      delete :destroy, params: { id: invitation.id }
-      it_redirects_to_with_notice(admin_invitations_path, "Invitation successfully destroyed")
+    context "when logged in as policy_and_abuse admin" do
+      before do
+        admin.update!(roles: ["policy_and_abuse"])
+        fake_login_admin(admin)
+      end
+
+      it "allows admin to delete invitations" do
+        invitation = create(:invitation)
+        delete :destroy, params: { id: invitation.id }
+        
+        it_redirects_to_with_notice(admin_invitations_path, "Invitation successfully destroyed")
+      end
+
+      it "errors if the invitation fails to destroy" do
+        invitation = create(:invitation)
+        allow(invitation).to receive(:destroy).and_return(false)
+
+        expect(flash[:error]).to match("Invitation was not destroyed.")
+      end
     end
   end
 end
