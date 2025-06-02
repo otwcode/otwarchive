@@ -1,7 +1,15 @@
 <% content_for :message do %>
-Your work "<%= @related_work.parent.title.html_safe %>" (<%= @related_parent_link %>) was listed as the inspiration of "<%= @related_work.work.title.html_safe %>" (<%= @related_child_link %>) by <%= @related_work.work.anonymous? ? "an anonymous author" : (@related_work.work.pseuds.map{|p| text_pseud(p)}.to_sentence) %>.
+<%= t(".work_listed.text", work_title: @related_work.parent.title,
+  work_url: @related_parent_link,
+  related_work_title: @related_work.work.title,
+  related_work_url: @related_child_link,
+  work_creators: if @related_work.work.anonymous?
+                   t(".anonymous")
+                 else
+                   to_sentence(@related_work.work.pseuds.map { |p| text_pseud(p) })
+                 end) %>
 
-Approve relationship and link back to this work from your work: <%= related_work_url(@related_work) %>
+<%= t(".approve.text", related_work_url: related_work_url(@related_work)) %>
 
-(You can come back to this page if you change your mind.)
+<%= t(".can_come_back") %>
 <% end %>
