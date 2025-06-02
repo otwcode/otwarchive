@@ -187,11 +187,12 @@ describe Admin::AdminUsersController do
         end
 
         it "allows updating roles" do
+          role_no_resets = create(:role, name: "no_resets")
           expect do
-            put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
+            put :update, params: { id: user.login, user: { roles: [role.id.to_s, role_no_resets.id.to_s] } }
           end.to change { user.reload.roles.pluck(:name) }
             .from([old_role.name])
-            .to([role.name])
+            .to([role.name, role_no_resets.name])
             .and avoid_changing { user.reload.email }
 
           it_redirects_to_with_notice(root_path, "User was successfully updated.")
