@@ -314,6 +314,13 @@ describe WorksController, work_search: true do
       expect(assigns(:page_title)).to include "No fandom specified"
     end
 
+    it "assigns @page_subtitle with unrevealed work and not @page_title" do
+      work.update!(in_unrevealed_collection: true)
+      get :show, params: { id: work.id }
+      expect(assigns[:page_subtitle]).to eq("Mystery Work")
+      expect(assigns[:page_title]).to be_nil
+    end
+
     context "when work does not exist" do
       it "raises an error" do
         expect do
