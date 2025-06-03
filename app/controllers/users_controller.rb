@@ -5,7 +5,6 @@ class UsersController < ApplicationController
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
   before_action :check_ownership, except: [:activate, :change_username, :changed_username, :delete_confirmation, :edit, :index, :show, :update]
   before_action :check_ownership_or_admin, only: [:change_username, :changed_username, :edit, :update]
-  skip_before_action :store_location, only: [:end_first_login]
 
   def load_user
     @user = User.find_by!(login: params[:id])
@@ -238,6 +237,12 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.xml
   def destroy
+    if params[:cancel_button]
+      flash[:notice] = ts('Account deletion canceled.')
+      redirect_to user_profile_path(@user)
+      return
+    end
+
     @hide_dashboard = true
     @works = @user.works.where(posted: true)
     @sole_owned_collections = @user.sole_owned_collections
@@ -341,13 +346,6 @@ class UsersController < ApplicationController
   def destroy_author
     @sole_authored_works = @user.sole_authored_works
     @coauthored_works = @user.coauthored_works
-
-    if params[:cancel_button]
-      flash[:notice] = ts('Account deletion canceled.')
-      redirect_to user_profile_path(@user)
-
-      return
-    end
 
     if params[:coauthor] == 'keep_pseud' || params[:coauthor] == 'orphan_pseud'
       # Orphans co-authored works.

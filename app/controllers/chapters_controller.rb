@@ -107,7 +107,11 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters.xml
   def create
     if params[:cancel_button]
-      redirect_back_or_default(root_path)
+      if params[:from] == "edit-work"
+        redirect_to edit_work_path(@work)
+      else
+        redirect_to @work
+      end
       return
     end
 
@@ -137,8 +141,14 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1.xml
   def update
     if params[:cancel_button]
-      # Not quite working yet - should send the user back to wherever they were before they hit edit
-      redirect_back_or_default(root_path)
+      case params[:from]
+      when "edit-work"
+        redirect_to edit_work_path(@work)
+      when "manage"
+        redirect_to manage_work_chapters_path(@work)
+      else
+        redirect_to @chapter
+      end
       return
     end
 
