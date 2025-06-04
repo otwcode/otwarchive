@@ -438,6 +438,15 @@ module ApplicationHelper
         options[:checked_method]
       when options[:checked_method].nil?
         []
+      when attribute.is_a?(String) && attribute.include?("tagnames")
+        tagnames = form.object.send(options[:checked_method])
+        if tagnames.empty?
+          []
+        elsif tagnames.is_a?(String)
+          tagnames.split(", ") 
+        else 
+          tagnames
+        end
       else
         form.object.send(options[:checked_method]) || []
       end
