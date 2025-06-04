@@ -18,6 +18,10 @@
 <% end %>
 <!--/subnav-->
 
+<!--subnav-->
+<%== pagy_nav @pagy %>
+<!--/subnav-->
+
 <!--main content-->
 <h3 class="landmark heading"><%= ts('List of History Items') %></h3>
 <% if logged_in? && @readings.present? %>
