@@ -7,8 +7,8 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if logged_in? && !current_user.readings.empty? %>
-<ul class="navigation actions" role="navigation">
+<% if !current_user.readings.empty? %>
+<ul class="navigation actions">
   <li>
     <%= span_if_current t(".history.navigation"), user_readings_path(@user), params[:show].blank? %>
   </li>
@@ -22,11 +22,15 @@
 <% end %>
 <!--/subnav-->
 
+<!--subnav-->
+<%== pagy_nav @pagy %>
+<!--/subnav-->
+
 <!--main content-->
 <h3 class="landmark heading">
   <%= t(".#{mode}.landmark") %>
 </h3>
-<% if logged_in? && @readings.present? %>
+<% if @readings.present? %>
   <ol class="reading work index group">
     <% @readings.each do |reading| %>
       <%= render "reading_blurb", work: reading.work, reading: reading %>
