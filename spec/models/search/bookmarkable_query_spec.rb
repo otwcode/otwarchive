@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe BookmarkableQuery do
   describe "#generated_query" do
@@ -40,10 +40,38 @@ describe BookmarkableQuery do
       let(:bookmarkable_query) { bookmark_query.bookmarkable_query }
       let(:aggregations) { bookmarkable_query.generated_query[:aggs] }
 
-      Tag::FILTERS.each do |type|
-        it "includes #{type.underscore.humanize.downcase} aggregations" do
-          expect(aggregations[type.underscore]).to \
-            include({ terms: { field: "#{type.underscore}_ids" } })
+      context "when run by a logged-in user" do
+        before do
+          User.current_user = create(:user)
+        end
+
+        Tag::FILTERS.each do |type|
+          it "includes #{type.underscore.humanize.downcase} aggregations" do
+            expect(aggregations[type.underscore]).to \
+              include({ terms: { field: "#{type.underscore}_ids_restricted" } })
+          end
+        end
+      end
+
+      context "when run by a logged-in admin" do
+        before do
+          User.current_user = create(:admin)
+        end
+
+        Tag::FILTERS.each do |type|
+          it "includes #{type.underscore.humanize.downcase} aggregations" do
+            expect(aggregations[type.underscore]).to \
+              include({ terms: { field: "#{type.underscore}_ids_restricted" } })
+          end
+        end
+      end
+
+      context "when run by a guest" do
+        Tag::FILTERS.each do |type|
+          it "includes #{type.underscore.humanize.downcase} aggregations" do
+            expect(aggregations[type.underscore]).to \
+              include({ terms: { field: "#{type.underscore}_ids_public" } })
+          end
         end
       end
 
@@ -69,6 +97,62 @@ describe BookmarkableQuery do
       expect(child_filter.dig(:has_child, :query, :bool, :filter)).to include(term: { private: "false" })
       expect(child_filter.dig(:has_child, :query, :bool, :filter)).to include(term: { user_id: 5 })
       expect(child_filter.dig(:has_child, :query, :bool, :must_not)).to include(terms: { tag_ids: [666] })
+    end
+
+    context "when querying as a user" do
+      before do
+        User.current_user = create(:user)
+      end
+
+      it "converts the 'tag' field to 'tags_restricted'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tag:foo")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("tags_restricted:foo")
+      end
+
+      it "converts the 'tags_public' field to 'tags_restricted'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tags_public:foo")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("tags_restricted:foo")
+      end
+    end
+
+    context "when querying as an admin" do
+      before do
+        User.current_user = create(:admin)
+      end
+
+      it "converts the 'tag' field to 'tags_restricted'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tag:foo")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("tags_restricted:foo")
+      end
+
+      it "converts the 'tags_public' field to 'tags_restricted'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tags_public:foo")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("tags_restricted:foo")
+      end
+    end
+
+    context "when querying as a guest" do
+      it "converts the 'tag' field to 'tags_public'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tag:foo")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("tags_public:foo")
+      end
+
+      it "converts the 'tags_restricted' field to 'tags_public'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tags_restricted:foo")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("tags_public:foo")
+      end
     end
   end
 end

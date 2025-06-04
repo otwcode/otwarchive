@@ -301,7 +301,7 @@ Feature: Edit preferences
     # Check hidden tags on the blurb
     Then I should see "Asteroid Blues"
       And I should not see "No Archive Warnings Apply" within "li.warnings"
-      And I should not see "Ed is a sweetie"
+      And I should not see "Ed is a sweetie" within "li.freeforms"
     When I follow "Show additional tags"
     Then I should see "Sorry, you need to have JavaScript enabled for this."
       And I should see "Show additional tags"
