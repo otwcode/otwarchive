@@ -4,7 +4,7 @@
 
 <!--subnav-->
 <% if logged_in? && !current_user.readings.empty? %>
-<ul class="navigation actions" role="navigation">
+<ul class="navigation actions">
   <li>
     <%= span_if_current ts('Full History'), user_readings_path(@user), params[:show].blank? %>
   </li>
