@@ -22,9 +22,9 @@
           <% else %>
             <%= get_commenter_pseud_or_name(single_comment) %>
           <% end %>
-          <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.expected_number_of_chapters != 1 %>
+          <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.chaptered? %>
             <span class='parent'>
-              <%= ts('on Chapter %{position}', :position => single_comment.parent.position) %>
+              <%= t(".on_chapter_html", commentable_link: chapter_description_link(single_comment)) %>
             </span>
           <% end %>
           <% if single_comment.unreviewed? %>
