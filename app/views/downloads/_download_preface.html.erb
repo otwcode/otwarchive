@@ -2,7 +2,7 @@
   <h2 class="toc-heading"><%= ts("Preface") %></h2>
 
   <p class="message">
-    <b><%= @work.title.html_safe %></b><br/>
+    <b><%= @work.title %></b><br />
     <%= ts("Posted originally on the %{archive_link} at %{work_url}.",
           archive_link: link_to(ArchiveConfig.APP_NAME, root_url),
           work_url: link_to(work_url(@work), work_url(@work))
@@ -45,7 +45,7 @@
         <%= ts("Chapters") %>: <%= chapter_total_display(@work) %>
       </dd>
     </dl>
-    <h1><%= @work.title.html_safe %></h1>
+    <h1><%= @work.title %></h1>
     <div class="byline"><%= ts("by") %> <%= byline(@work, visibility: 'public', only_path: false) %></div>
     <% unless @work.summary.blank? %>
       <p><%= ts("Summary") %></p>
