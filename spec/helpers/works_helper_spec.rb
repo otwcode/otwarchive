@@ -71,34 +71,28 @@ describe WorksHelper do
       before { allow(helper).to receive(:current_page?).and_return(false) }
 
       it "returns #work_endnotes" do
-        expect(helper.get_endnotes_link).to eq("#work_endnotes")
+        expect(helper.get_endnotes_link(work)).to eq("#work_endnotes")
       end
     end
 
     context "chapters#show for a posted work" do
-      before do
-        @work = work
-        allow(helper).to receive(:current_page?).and_return(true)
-      end
+      before { allow(helper).to receive(:current_page?).and_return(true) }
 
       it "returns path to last posted chapter's endnotes" do
-        expect(helper.get_endnotes_link).to eq(chapter_path(work.last_posted_chapter, anchor: "work_endnotes"))
+        expect(helper.get_endnotes_link(work)).to eq(chapter_path(work.last_posted_chapter, anchor: "work_endnotes"))
       end
 
       it "returns path to last chapter's endnotes if no posted chapters" do
         chapter.destroy!
-        expect(helper.get_endnotes_link).to eq(chapter_path(work.last_chapter, anchor: "work_endnotes"))
+        expect(helper.get_endnotes_link(work)).to eq(chapter_path(work.last_chapter, anchor: "work_endnotes"))
       end
     end
 
     context "chapters#show for a draft work" do
-      before do
-        @work = unposted_work
-        allow(helper).to receive(:current_page?).and_return(true)
-      end
+      before { allow(helper).to receive(:current_page?).and_return(true) }
 
       it "returns path to last chapter's endnotes" do
-        expect(helper.get_endnotes_link).to eq(chapter_path(unposted_work.last_chapter, anchor: "work_endnotes"))
+        expect(helper.get_endnotes_link(unposted_work)).to eq(chapter_path(unposted_work.last_chapter, anchor: "work_endnotes"))
       end
     end
   end
