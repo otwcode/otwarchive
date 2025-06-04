@@ -531,7 +531,7 @@ describe Comment do
             expect do
               create(:comment, commentable: parent_comment, pseud: tag_wrangler.default_pseud)
             end.to avoid_changing { parent_comment_owner.inbox_comments.count }
-            .and not_enqueue_mail(CommentMailer, :comment_reply_notification)
+              .and not_enqueue_mail(CommentMailer, :comment_reply_notification)
           end
         end
       end
@@ -624,7 +624,7 @@ describe Comment do
                 comment_content: "#{reply_comment.comment_content}!",
                 edited_at: Time.current
               )
-            end.to avoid_changing{ inbox_comment.reload.read }
+            end.to avoid_changing { inbox_comment.reload.read }
               .and not_enqueue_mail(CommentMailer, :edited_comment_reply_notification)
           end
         end
