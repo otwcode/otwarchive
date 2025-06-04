@@ -236,6 +236,11 @@ When /^I visit the change username page for (.*)$/ do |login|
   visit change_username_user_path(user)
 end
 
+When "I visit the change email page for {word}" do |login|
+  user = User.find_by(login: login)
+  visit change_email_user_path(user)
+end
+
 When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
   # To make sure that we don't have caching issues with the byline:
   step %{I wait 1 second}
@@ -329,6 +334,10 @@ Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your username has been successfully updated."})
   step(%{1 email should be delivered})
   step(%{the email should contain "The username for your .* has been changed to"})
+end
+
+Then "I should get confirmation that I changed my email" do
+  step(%{I should see "Your email has been successfully updated"})
 end
 
 Then /^the user "([^"]*)" should be activated$/ do |login|
