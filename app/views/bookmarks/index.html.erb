@@ -46,14 +46,10 @@
 <% end %>
 
 <% unless @owner.present? || @bookmarkable.present? %>
-  <p><%= ts("These are some of the latest bookmarks created on the Archive. To find more bookmarks, #{link_to 'choose a fandom', media_path} or #{link_to 'try our advanced search', search_bookmarks_path}.").html_safe %>
+  <p><%= t(".recent_bookmarks_html", choose_fandom_link: link_to(t(".choose_fandom"), media_index_path), advanced_search_link: link_to(t(".advanced_search"), search_bookmarks_path)) %>
 <% end %>
 
-<% if @bookmarks.respond_to?(:total_pages) %>
-  <%= will_paginate @bookmarks %>
-<% elsif @bookmarkable_items.respond_to?(:total_pages) %>
-  <%= will_paginate @bookmarkable_items %>
-<% end %>
+<%== pagy_nav @pagy %>
 
 <!--main content-->
 <h3 class="landmark heading"><%= ts("List of Bookmarks") %></h3>
@@ -71,9 +67,5 @@
 <div id="dynamic-bookmark" class="dynamic hidden"></div>
 
 <!--subnav-->
-<% if @bookmarks.respond_to?(:total_pages) %>
-  <%= will_paginate @bookmarks %>
-<% elsif @bookmarkable_items.respond_to?(:total_pages) %>
-  <%= will_paginate @bookmarkable_items %>
-<% end %>
+<%== pagy_nav @pagy %>
 <!-- /subnav-->

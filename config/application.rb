@@ -12,6 +12,11 @@ module Otwarchive
     app_config.merge!(YAML.load_file(Rails.root.join("config/local.yml"))) if File.exist?(Rails.root.join("config/local.yml"))
     ::ArchiveConfig = OpenStruct.new(app_config)
 
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
@@ -29,7 +34,6 @@ module Otwarchive
       app/models/potential_matcher
       app/models/search
       app/models/tagset_models
-      lib
     ].each do |dir|
       config.eager_load_paths << Rails.root.join(dir)
     end
@@ -48,9 +52,8 @@ module Otwarchive
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = "UTC"
 
-    # The default locale is :en and all translations from config/locales/**/*.rb,yml are auto loaded.
-    config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.{rb,yml}")]
-    # config.i18n.default_locale = :de
+    # The default locale is :en.
+    config.i18n.default_locale = ArchiveConfig.DEFAULT_LOCALE_ISO.to_sym
 
     # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
     # the I18n.default_locale when a translation can not be found)
@@ -99,7 +102,6 @@ module Otwarchive
       "X-Frame-Options" => "SAMEORIGIN",
       "X-XSS-Protection" => "1; mode=block",
       "X-Content-Type-Options" => "nosniff",
-      "X-Download-Options" => "noopen",
       "X-Permitted-Cross-Domain-Policies" => "none"
     }
 
@@ -130,6 +132,17 @@ module Otwarchive
                                                 })
     end
 
-    config.active_support.disable_to_s_conversion = true
+    # Disable ActiveStorage things that we don't need and can hit the DB hard
+    config.active_storage.analyzers = []
+    config.active_storage.previewers = []
+
+    # Set ActiveStorage queue name
+    config.active_storage.queues.mirror = :active_storage
+    config.active_storage.queues.preview_image = :active_storage
+    config.active_storage.queues.purge = :active_storage
+    config.active_storage.queues.transform = :active_storage
+
+    # Use secret from archive config
+    config.secret_key_base = ArchiveConfig.SESSION_SECRET
   end
 end

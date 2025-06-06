@@ -267,7 +267,7 @@ namespace :After do
     end
   end
 
-  desc "Add suffix to existing Underage Sex tag in prepartion for Underage warning rename"
+  desc "Add suffix to existing Underage Sex tag in preparation for Underage warning rename"
   task(add_suffix_to_underage_sex_tag: :environment) do
     puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
     login = $stdin.gets.chomp.strip
@@ -325,79 +325,240 @@ namespace :After do
 
   desc "Migrate collection icons to ActiveStorage paths"
   task(migrate_collection_icons: :environment) do
+    require "aws-sdk-s3"
     require "open-uri"
 
     return unless Rails.env.staging? || Rails.env.production?
 
-    Collection.where.not(icon_file_name: nil).find_each do |collection|
-      image = collection.icon_file_name
-      ext = File.extname(image)
-      image_original = "original#{ext}"
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = "collections/icons/"
+    s3 = Aws::S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
 
-      # Collection icons are co-mingled in production and staging...
-      icon_url = "https://s3.amazonaws.com/otw-ao3-icons/collections/icons/#{collection.id}/#{image_original}"
-      begin
-        collection.icon.attach(io: URI.parse(icon_url).open,
-                               filename: image_original,
-                               content_type: collection.icon_content_type)
-      rescue StandardError => e
-        puts "Error '#{e}' copying #{icon_url}"
+    Collection.no_touching do
+      old_bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
+        next if ActiveStorage::Attachment.where(record_type: "Collection", record_id: path_parts[-2]).any?
+
+        collection_id = path_parts[-2]
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest.new("MD5").tap do |result|
+          while (chunk = old_icon.read(5.megabytes))
+            result << chunk
+          end
+          old_icon.rewind
+        end.base64digest
+
+        key = nil
+        ActiveRecord::Base.transaction do
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
+            filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          key = blob.key
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Collection",
+            record_id: collection_id
+          )
+        end
+
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
+        puts "Finished collection #{collection_id}"
+        $stdout.flush
       end
-
-      puts "Finished up to ID #{collection.id}" if collection.id.modulo(100).zero?
     end
   end
 
   desc "Migrate pseud icons to ActiveStorage paths"
   task(migrate_pseud_icons: :environment) do
+    require "aws-sdk-s3"
     require "open-uri"
 
     return unless Rails.env.staging? || Rails.env.production?
 
-    Pseud.where.not(icon_file_name: nil).find_each do |pseud|
-      image = pseud.icon_file_name
-      ext = File.extname(image)
-      image_original = "original#{ext}"
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = Rails.env.production? ? "icons/" : "staging/icons/"
+    s3 = Aws::S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
 
-      icon_url = if Rails.env.production?
-                   "https://s3.amazonaws.com/otw-ao3-icons/icons/#{pseud.id}/#{image_original}"
-                 else
-                   "https://s3.amazonaws.com/otw-ao3-icons/staging/icons/#{pseud.id}/#{image_original}"
-                 end
-      begin
-        pseud.icon.attach(io: URI.parse(icon_url).open,
-                          filename: image_original,
-                          content_type: pseud.icon_content_type)
-      rescue StandardError => e
-        puts "Error '#{e}' copying #{icon_url}"
+    Pseud.no_touching do
+      old_bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
+        next if ActiveStorage::Attachment.where(record_type: "Pseud", record_id: path_parts[-2]).any?
+
+        pseud_id = path_parts[-2]
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest.new("MD5").tap do |result|
+          while (chunk = old_icon.read(5.megabytes))
+            result << chunk
+          end
+          old_icon.rewind
+        end.base64digest
+
+        key = nil
+        ActiveRecord::Base.transaction do
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
+            filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          key = blob.key
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Pseud",
+            record_id: pseud_id
+          )
+        end
+
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
+        puts "Finished pseud #{pseud_id}"
+        $stdout.flush
       end
-
-      puts "Finished up to ID #{pseud.id}" if pseud.id.modulo(100).zero?
     end
   end
 
   desc "Migrate skin icons to ActiveStorage paths"
   task(migrate_skin_icons: :environment) do
+    require "aws-sdk-s3"
     require "open-uri"
 
     return unless Rails.env.staging? || Rails.env.production?
 
-    Skin.where.not(icon_file_name: nil).find_each do |skin|
-      image = skin.icon_file_name
-      ext = File.extname(image)
-      image_original = "original#{ext}"
+    bucket_name = ENV["S3_BUCKET"]
+    prefix = "skins/icons/"
+    s3 = Aws::S3::Resource.new(
+      region: ENV["S3_REGION"],
+      access_key_id: ENV["S3_ACCESS_KEY_ID"],
+      secret_access_key: ENV["S3_SECRET_ACCESS_KEY"]
+    )
+    old_bucket = s3.bucket(bucket_name)
+    new_bucket = s3.bucket(ENV["TARGET_BUCKET"])
 
-      # Skin icons are co-mingled in production and staging...
-      icon_url = "https://s3.amazonaws.com/otw-ao3-icons/skins/icons/#{skin.id}/#{image_original}"
-      begin
-        skin.icon.attach(io: URI.parse(icon_url).open,
-                         filename: image_original,
-                         content_type: skin.icon_content_type)
-      rescue StandardError => e
-        puts "Error '#{e}' copying #{icon_url}"
+    Skin.no_touching do
+      old_bucket.objects(prefix: prefix).each do |object|
+        # Path example: staging/icons/108621/original.png
+        path_parts = object.key.split("/")
+        next unless path_parts[-1]&.include?("original")
+        next if ActiveStorage::Attachment.where(record_type: "Skin", record_id: path_parts[-2]).any?
+
+        skin_id = path_parts[-2]
+        old_icon = URI.open("https://s3.amazonaws.com/#{bucket_name}/#{object.key}")
+        checksum = OpenSSL::Digest.new("MD5").tap do |result|
+          while (chunk = old_icon.read(5.megabytes))
+            result << chunk
+          end
+          old_icon.rewind
+        end.base64digest
+
+        key = nil
+        ActiveRecord::Base.transaction do
+          blob = ActiveStorage::Blob.create_before_direct_upload!(
+            filename: path_parts[-1],
+            byte_size: old_icon.size,
+            checksum: checksum,
+            content_type: Marcel::MimeType.for(old_icon)
+          )
+          key = blob.key
+          blob.attachments.create(
+            name: "icon",
+            record_type: "Skin",
+            record_id: skin_id
+          )
+        end
+
+        new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
+        puts "Finished skin #{skin_id}"
+        $stdout.flush
+      end
+    end
+  end
+
+  desc "Migrate pinch_request_signup to request_signup"
+  task(migrate_pinch_request_signup: :environment) do
+    count = ChallengeAssignment.where("pinch_request_signup_id IS NOT NULL AND request_signup_id IS NULL").update_all("request_signup_id = pinch_request_signup_id")
+    puts("Migrated pinch_request_signup for #{count} challenge assignments.")
+  end
+
+  desc "Reindex tags associated with works that are hidden or unrevealed"
+  task(reindex_hidden_unrevealed_tags: :environment) do
+    hidden_count = Work.hidden.count
+    hidden_batches = (hidden_count + 999) / 1_000
+    puts "Inspecting #{hidden_count} hidden works in #{hidden_batches} batches"
+    Work.hidden.find_in_batches.with_index do |batch, index|
+      batch.each { |work| work.taggings.each(&:update_search) }
+      puts "Finished batch #{index + 1} of #{hidden_batches}"
+    end
+
+    unrevealed_count = Work.unrevealed.count
+    unrevealed_batches = (unrevealed_count + 999) / 1_000
+    puts "Inspecting #{unrevealed_count} unrevealed works in #{unrevealed_batches} batches"
+    Work.unrevealed.find_in_batches.with_index do |batch, index|
+      batch.each { |work| work.taggings.each(&:update_search) }
+      puts "Finished batch #{index + 1} of #{unrevealed_batches}"
+    end
+
+    puts "Finished reindexing tags on hidden and unrevealed works"
+  end
+
+  desc "Convert user kudos from users with the official role to guest kudos"
+  task(convert_official_kudos: :environment) do
+    official_users = Role.find_by(name: "official")&.users
+    if official_users.blank?
+      puts "No official users found"
+    else
+      official_users.each do |user|
+        kudos = user.kudos
+        next if kudos.blank?
+
+        puts "Updating #{kudos.size} kudos from #{user.login}"
+        user.remove_user_from_kudos
       end
 
-      puts "Finished up to ID #{skin.id}" if skin.id.modulo(100).zero?
+      puts "Finished converting kudos from official users to guest kudos"
+    end
+  end
+
+  desc "Create TagSetAssociations for non-canonical tags belonging to canonical fandoms in TagSets"
+  task(create_non_canonical_tagset_associations: :environment) do
+    # We want to get all set taggings where the tag is not canonical, but has a parent fandom that _is_ canonical.
+    # This might be possible with pure Ruby, but unfortunately the parent tag in common_taggings is polymorphic
+    # (even though it doesn't need to be), which makes that trickier.
+    non_canonicals = SetTagging
+      .joins("INNER JOIN `tag_sets` `tag_set` ON `tag_set`.`id` = `set_taggings`.`tag_set_id` INNER JOIN `owned_tag_sets` ON `owned_tag_sets`.`tag_set_id` = `tag_set`.`id` INNER JOIN `tags` `tag` ON `tag`.`id` = `set_taggings`.`tag_id` INNER JOIN `common_taggings` `common_tagging` ON  `common_tagging`.`common_tag_id` = `tag`.`id` INNER JOIN `tags` `parent_tag` ON `common_tagging`.`filterable_id` = `parent_tag`.`id`")
+      .where("`tag`.`canonical` = FALSE AND `tag`.`type` IN ('Character', 'Relationship') AND `tag_set`.`id` IS NOT NULL AND `parent_tag`.`type` = 'Fandom' AND `parent_tag`.`canonical` = TRUE")
+      .distinct
+
+    non_canonicals.find_in_batches.with_index do |batch, index|
+      puts "Creating TagSetAssociations for batch #{index + 1}"
+      batch.each do |set_tagging|
+        owned_tag_set = set_tagging.tag_set.owned_tag_set
+        tag = set_tagging.tag
+
+        fandoms = tag.fandoms.joins(:set_taggings).where(canonical: true, set_taggings: { tag_set_id: set_tagging.tag_set.id })
+        fandoms.find_each do |fandom|
+          TagSetAssociation.create!(owned_tag_set: owned_tag_set, tag: tag, parent_tag: fandom)
+        rescue ActiveRecord::RecordInvalid
+          puts "Association already exists for fandom '#{fandom.name}' and tag '#{tag.name}'"
+        end
+      end
     end
   end
   # This is the end that you have to put new tasks above.

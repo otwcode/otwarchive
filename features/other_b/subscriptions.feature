@@ -57,10 +57,10 @@
   When I am logged in as "second_user"
     And I go to first_user's user page
     And I press "Subscribe"
-  When I go to my subscriptions page
+  When I go to the subscriptions page for "second_user"
     And I press "Unsubscribe from first_user"
   Then I should see "successfully unsubscribed"
-    And I should be on my subscriptions page
+    And I should be on the subscriptions page for "second_user"
 
   Scenario: subscribe button on profile page
 
@@ -138,7 +138,7 @@
     And "second_user" subscribes to author "third_user"
     And "second_user" subscribes to work "Awesome Story"
     And "second_user" subscribes to series "Awesome Series"
-  When I am on my subscriptions page
+  When I go to the subscriptions page for "second_user"
   Then I should see "My Subscriptions"
     And I should see "Awesome Series (Series)"
     And I should see a link "series_author"
@@ -258,6 +258,62 @@
     #And the email should have "I am <strong>er Than Yesterday & Other Lies" in the subject
     #And the email should contain "I am <strong>er Than Yesterday & Other Lies"
   When I am logged in as "subscriber" with password "password"
-    And I go to my subscriptions page
+    And I go to the subscriptions page for "subscriber"
     And I press "Unsubscribe from I am <strong>er Than Yesterday & Other Lies"
   Then I should see "You have successfully unsubscribed from I am <strong>er Than Yesterday & Other Lies"
+
+Scenario: delete all subscriptions
+
+  When I am logged in as "second_user"
+    And "second_user" subscribes to author "third_user"
+    And "second_user" subscribes to work "Awesome Story"
+    And "second_user" subscribes to series "Awesome Series"
+  When I go to the subscriptions page for "second_user"
+  Then I should see "My Subscriptions"
+    And I should see "Awesome Series (Series)"
+    And I should see "third_user"
+    And I should see "Awesome Story (Work)"
+  When I follow "Delete All Subscriptions"
+  Then I should see "Are you sure you want to delete"
+  When I press "Yes, Delete All Subscriptions"
+  Then I should see "My Subscriptions"
+    And I should see "Your subscriptions have been deleted"
+    And I should not see "Awesome Series (Series)"
+    And I should not see "third_user"
+    And I should not see "Awesome Story (Work)"
+
+Scenario: delete all subscriptions of a specific type
+
+  When I am logged in as "second_user"
+    And "second_user" subscribes to author "third_user"
+    And "second_user" subscribes to work "Awesome Story"
+    And "second_user" subscribes to series "Awesome Series"
+  When I go to the subscriptions page for "second_user"
+  Then I should see "My Subscriptions"
+    And I should see "Awesome Series (Series)"
+    And I should see "third_user"
+    And I should see "Awesome Story (Work)"
+  When I follow "Work Subscriptions"
+  Then I should see "My Work Subscriptions"
+  When I follow "Delete All Work Subscriptions"
+  Then I should see "Delete All Work Subscriptions"
+    And I should see "Are you sure you want to delete"
+  When I press "Yes, Delete All Work Subscriptions"
+  Then I should see "Your subscriptions have been deleted"
+  When I go to the subscriptions page for "second_user"
+  Then I should see "Awesome Series (Series)"
+    And I should see "third_user"
+    But I should not see "Awesome Story (Work)"
+
+Scenario: subscriptions are not deleted without confirmation
+
+  When I am logged in as "second_user"
+    And "second_user" subscribes to work "Awesome Story"
+  When I go to the subscriptions page for "second_user"
+  Then I should see "My Subscriptions"
+    And I should see "Awesome Story (Work)"
+  When I follow "Delete All Subscriptions"
+  Then I should see "Are you sure you want to delete"
+  When I go to the subscriptions page for "second_user"
+  Then I should see "My Subscriptions"
+    And I should see "Awesome Story (Work)"

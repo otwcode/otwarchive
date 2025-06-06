@@ -301,8 +301,8 @@ Given /^everyone has their assignments for "([^\"]*)"$/ do |challenge_title|
   step %{I have sent assignments for "#{challenge_title}"}
 end
 
-Given "I have an assignment for the user {string} in the collection {string}" do |recip_login, collection_name|
-  giver = User.current_user
+Given "{string} has an assignment for the user {string} in the collection {string}" do |giver_login, recip_login, collection_name|
+  giver = User.find_by(login: giver_login)
   recip = User.find_by(login: recip_login)
   collection = FactoryBot.create(:collection, name: collection_name, title: collection_name)
   assignment = FactoryBot.create(:challenge_assignment, sent_at: Time.zone.now, collection_id: collection.id)
@@ -314,7 +314,7 @@ end
 ### Fulfilling assignments
 
 When /^I start to fulfill my assignment$/ do
-  step %{I am on my user page}
+  step %{I follow "My Dashboard"}
   step %{I follow "Assignments ("}
   step %{I follow "Fulfill"}
     step %{I fill in "Work Title" with "Fulfilled Story"}

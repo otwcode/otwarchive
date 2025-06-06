@@ -32,7 +32,7 @@ class CollectionItem < ApplicationRecord
     end
   end
 
-  scope :include_for_works, -> { includes(work: :pseuds)}
+  scope :include_for_works, -> { includes(item: :pseuds) }
   scope :unrevealed, -> { where(unrevealed: true) }
   scope :anonymous, -> { where(anonymous:  true) }
 
@@ -101,16 +101,18 @@ class CollectionItem < ApplicationRecord
   # Sends emails to item creator(s) in the case that an archivist
   # has added them to the collection.
   def notify_archivist_added
-    return unless User.current_user&.archivist && collection.user_is_maintainer?(User.current_user)
+    return unless item.is_a?(Work) && User.current_user&.archivist && collection.user_is_maintainer?(User.current_user)
 
     item.users.each do |email_recipient|
       next if email_recipient.preference.collection_emails_off
 
-      UserMailer.archivist_added_to_collection_notification(
-        email_recipient.id,
-        item.id,
-        collection.id
-      ).deliver_later
+      I18n.with_locale(email_recipient.preference.locale_for_mails) do
+        UserMailer.archivist_added_to_collection_notification(
+          email_recipient.id,
+          item.id,
+          collection.id
+        ).deliver_later
+      end
     end
   end
 
@@ -220,7 +222,10 @@ class CollectionItem < ApplicationRecord
     unless self.unrevealed? || !self.posted?
       recipient_pseuds = Pseud.parse_bylines(self.recipients)[:pseuds]
       recipient_pseuds.each do |pseud|
-        unless pseud.user.preference.recipient_emails_off
+        user_preference = pseud.user.preference
+        next if user_preference.recipient_emails_off
+
+        I18n.with_locale(user_preference.locale_for_mails) do
           UserMailer.recipient_notification(pseud.user.id, self.item.id, self.collection.id).deliver_after_commit
         end
       end
@@ -259,10 +264,12 @@ class CollectionItem < ApplicationRecord
     return if item.users.include?(User.current_user)
 
     item.users.each do |user|
-      UserMailer.anonymous_or_unrevealed_notification(
-        user.id, item.id, collection.id,
-        anonymous: newly_anonymous, unrevealed: newly_unrevealed
-      ).deliver_after_commit
+      I18n.with_locale(user.preference.locale_for_mails) do
+        UserMailer.anonymous_or_unrevealed_notification(
+          user.id, item.id, collection.id,
+          anonymous: newly_anonymous, unrevealed: newly_unrevealed
+        ).deliver_after_commit
+      end
     end
   end
 end

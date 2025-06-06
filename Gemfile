@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby "3.1.4"
+ruby "~> 3.2.7"
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 7.0.8"
+gem "rails", "~> 7.1"
 gem "rails-i18n"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
@@ -37,6 +37,7 @@ gem 'unicode_utils', '>=1.4.0'
 gem "lograge" # https://github.com/roidrage/lograge
 
 gem 'will_paginate', '>=3.0.2'
+gem "pagy", "~> 9.3"
 gem 'acts_as_list', '~> 0.9.7'
 gem 'akismetor'
 
@@ -83,9 +84,7 @@ gem 'timeliness'
 gem 'google_visualr', git: 'https://github.com/winston/google_visualr'
 
 # Globalize for translations
-# Must use master branch and activemodel-serializers-xml for Rails 5 upgrade
-gem 'globalize', git: 'https://github.com/globalize/globalize'
-gem 'activemodel-serializers-xml'
+gem "globalize", "~> 7.0"
 
 # Add a clean notifier that shows we are on dev or test
 gem 'rack-dev-mark', '>=0.7.8'
@@ -108,10 +107,10 @@ gem 'kgio', '2.10.0'
 gem "marcel", "1.0.2"
 
 # Library for helping run pt-online-schema-change commands:
-gem "departure", "~> 6.5"
+gem "departure", "~> 6.7"
 
-# Ruby 3.1 means we need to specify a version of mail until we get to rails 7.x
-gem "mail", ">= 2.8"
+gem "rack-timeout"
+gem "puma_worker_killer"
 
 group :test do
   gem "rspec-rails", "~> 6.0"

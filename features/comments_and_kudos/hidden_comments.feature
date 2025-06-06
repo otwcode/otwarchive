@@ -29,7 +29,7 @@ Feature: Comment hiding
       And I should not see "This comment is under review by an admin and is currently unavailable."
       And I should not see "A suspicious comment"
       And I should not see "This comment has been hidden by an admin."
-    When I go to my inbox page
+    When I go to author's inbox page
     Then I should not see "This comment is under review by an admin and is currently unavailable."
       And I should not see "A suspicious comment"
       And I should not see "This comment has been hidden by an admin."
@@ -65,3 +65,24 @@ Feature: Comment hiding
       And I view the work "Popular Fic" with comments
     Then I should see "A suspicious comment"
       And I should not see "This comment has been hidden by an admin."
+
+  Scenario: Embedded images in hidden comments are replaced with their URLs.
+    Given the work "Popular Fic"
+      And I am logged in as "commenter"
+      And I post the comment "OMG! <img src= 'https://example.com/image.jpg'>" on the work "Popular Fic"
+
+    # Delay to make sure the cache is expired when the comment is hidden:
+    When it is currently 1 second from now
+      And I am logged in as a super admin
+      And I view the work "Popular Fic" with comments
+    Then I should see the image "src" text "https://example.com/image.jpg"
+      And I should not see "OMG! img src="
+      And I press "Hide Comment"
+    Then I should see "Comment successfully hidden!"
+    Then I should not see the image "src" text "https://example.com/image.jpg"
+      And I should see "OMG! img src="
+      And I should see "https://example.com/image.jpg"
+    Then I press "Make Comment Visible"
+      And I should see "Comment successfully unhidden!"
+    Then I should see the image "src" text "https://example.com/image.jpg"
+      And I should not see "OMG! img src="

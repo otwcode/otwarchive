@@ -65,13 +65,23 @@ class Comment < ApplicationRecord
   validate :check_for_spam, on: :create
 
   def check_for_spam
-    errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
+    self.approved = skip_spamcheck? || !spam?
+
+    errors.add(:base, :spam) unless approved
+  end
+
+  validate :edited_spam, on: :update, if: [:will_save_change_to_edited_at?, :will_save_change_to_comment_content?]
+
+  def edited_spam
+    return if skip_spamcheck? || !content_too_different?(comment_content, comment_content_in_database, ArchiveConfig.EDITED_COMMENT_SPAM_CHECK_THRESHOLD)
+
+    errors.add(:base, :spam) if spam?
   end
 
   validates :comment_content, uniqueness: {
     scope: [:commentable_id, :commentable_type, :name, :email, :pseud_id],
     unless: :is_deleted?,
-    message: ts("^This comment has already been left on this work. (It may not appear right away for performance reasons.)")
+    message: :duplicate_comment
   }
 
   scope :ordered_by_date, -> { order('created_at DESC') }
@@ -93,13 +103,28 @@ class Comment < ApplicationRecord
   has_comment_methods
 
   def akismet_attributes
+    # While we do have tag comments, those are from logged-in users with special
+    # access granted by admins, so we never spam check them, unlike comments on
+    # works or admin posts.
+    comment_type = ultimate_parent.is_a?(Work) ? "fanwork-comment" : "comment"
+
+    if pseud_id.nil?
+      user_role = "guest"
+      comment_author = name
+    else
+      user_role = "user"
+      comment_author = user.login
+    end
+    
     {
+      comment_type: comment_type,
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
       user_agent: user_agent,
-      comment_author: name,
-      comment_author_email: email,
+      user_role: user_role,
+      comment_author: comment_author,
+      comment_author_email: comment_owner_email,
       comment_content: comment_content
     }
   end
@@ -134,7 +159,7 @@ class Comment < ApplicationRecord
                   comment_content_changed? &&
                   moderated_commenting_enabled? &&
                   !is_creator_comment? &&
-                  content_too_different?(comment_content, comment_content_was)
+                  content_too_different?(comment_content, comment_content_was, ArchiveConfig.COMMENT_MODERATION_THRESHOLD)
 
     self.unreviewed = true
   end
@@ -291,9 +316,9 @@ class Comment < ApplicationRecord
       new_feedback.save
     end
 
-    def content_too_different?(new_content, old_content)
+    def content_too_different?(new_content, old_content, threshold)
       # we added more than the threshold # of chars, just return
-      return true if new_content.length > (old_content.length + ArchiveConfig.COMMENT_MODERATION_THRESHOLD)
+      return true if new_content.length > (old_content.length + threshold)
 
       # quick and dirty iteration to compare the two strings
       cost = 0
@@ -308,7 +333,7 @@ class Comment < ApplicationRecord
 
         cost += 1
         # interrupt as soon as we have changed > threshold chars
-        return true if cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
+        return true if cost > threshold
 
         # peek ahead to see if we can catch up on either side eg if a letter has been inserted/deleted
         if new_content[new_i + 1] == old_content[old_i]
@@ -322,7 +347,7 @@ class Comment < ApplicationRecord
         end
       end
 
-      return cost > ArchiveConfig.COMMENT_MODERATION_THRESHOLD
+      cost > threshold
     end
 
     def not_user_commenter?(parent_comment)
@@ -459,21 +484,34 @@ class Comment < ApplicationRecord
     self.children_count #FIXME
   end
 
-  def check_for_spam?
-    #don't check for spam while running tests or if the comment is 'signed'
-    self.approved = Rails.env.test? || !self.pseud_id.nil? || !Akismetor.spam?(akismet_attributes)
+  def skip_spamcheck?
+    return false unless pseud_id
+
+    on_tag? || !user.should_spam_check_comments? || is_creator_comment?
+  end
+
+  def spam?
+    return false unless %w[staging production].include?(Rails.env)
+
+    Akismetor.spam?(akismet_attributes)
+  end
+
+  def submit_spam
+    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+  end
+
+  def submit_ham
+    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
   end
 
   def mark_as_spam!
     update_attribute(:approved, false)
-    # don't submit spam reports unless in production mode
-    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
+    submit_spam
   end
 
   def mark_as_ham!
     update_attribute(:approved, true)
-    # don't submit ham reports unless in production mode
-    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
+    submit_ham
   end
 
   # Freeze single comment.
@@ -499,7 +537,8 @@ class Comment < ApplicationRecord
   end
 
   def use_image_safety_mode?
-    parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE)
+    pseud_id.nil? || hidden_by_admin || parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE)
   end
+
   include Responder
 end

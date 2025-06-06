@@ -64,9 +64,9 @@
     <% media_movie = Media.find_by_name("Movies") %>
     <%= t(".browsing.html",
           fandoms_link: link_to(t(".browsing.fandoms"), menu_fandoms_path),
-          all_fandoms_link: link_to(t(".browsing.all_fandoms"), media_path),
+          all_fandoms_link: link_to(t(".browsing.all_fandoms"), media_index_path),
           movies_link: if media_movie
-                         link_to(t(".browsing.movies"), medium_fandoms_path(media_movie))
+                         link_to(t(".browsing.movies"), media_fandoms_path(media_movie))
                        else
                          t(".browsing.movies")
                        end,

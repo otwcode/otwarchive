@@ -6,21 +6,21 @@ Feature: Authenticate Admin Users
     | login | password      |
     | Zooey | adminpassword |
   When I go to the home page
-    And I fill in "User name or email" with "Zooey"
+    And I fill in "Username or email" with "Zooey"
     And I fill in "Password" with "adminpassword"
     And I press "Log In"
-  Then I should see "The password or user name you entered doesn't match our records"
+  Then I should see "The password or username you entered doesn't match our records"
 
   Scenario: Ordinary user cannot log in or reset password as admin.
   Given the following activated user exists
     | login       | password      |
     | dizmo       | wrangulator   |
   When I go to the admin login page
-    And I fill in "Admin user name" with "dizmo"
+    And I fill in "Admin username" with "dizmo"
     And I fill in "Admin password" with "wrangulator"
     And I press "Log In as Admin"
   Then I should not see "Successfully logged in"
-    And I should see "The password or admin user name you entered doesn't match our records."
+    And I should see "The password or admin username you entered doesn't match our records."
   When I am logged in as "dizmo" with password "wrangulator"
     And I go to the new admin password page
   Then I should be on the homepage
@@ -62,17 +62,17 @@ Feature: Authenticate Admin Users
       | Zooey | adminpassword |
     And I have loaded the "roles" fixture
   When I go to the admin login page
-    And I fill in "Admin user name" with "Zooey"
+    And I fill in "Admin username" with "Zooey"
     And I fill in "Admin password" with "adminpassword"
     And I press "Log In as Admin"
   Then I should see "Successfully logged in"
 
-  Scenario: Admin user name is case insensitive.
+  Scenario: Admin username is case insensitive.
   Given the following admin exists
     | login       | password      |
     | TheMadAdmin | adminpassword |
   When I go to the admin login page
-    And I fill in "Admin user name" with "themadadmin"
+    And I fill in "Admin username" with "themadadmin"
     And I fill in "Admin password" with "adminpassword"
     And I press "Log In as Admin"
   Then I should see "Successfully logged in"
@@ -82,30 +82,35 @@ Feature: Authenticate Admin Users
     | login | password      |
     | Zooey | adminpassword |
   When I go to the admin login page
-    And I fill in "Admin user name" with "Zooey"
+    And I fill in "Admin username" with "Zooey"
     And I fill in "Admin password" with "wrongpassword"
     And I press "Log In"
-  Then I should see "The password or user name you entered doesn't match our records."
+  Then I should see "The password or username you entered doesn't match our records."
 
   Scenario: Admin resets password.
   Given the following admin exists
     | login | password     | email             |
     | admin | testpassword | admin@example.com |
     And all emails have been delivered
+    And it is currently 2025-04-12 17:00 UTC
   When I go to the admin login page
     And I follow "Forgot admin password?"
   Then I should see "Forgotten your admin password?"
-  When I fill in "Admin user name" with "admin"
+  When I fill in "Admin username" with "admin"
     And I press "Reset Admin Password"
   Then I should see "Check your email for instructions on how to reset your password."
     And 1 email should be delivered to "admin@example.com"
   When I follow "Change my password" in the email
+    And all emails have been delivered
   Then I should see "Set My Admin Password"
   When I fill in "New password" with "newpassword"
     And I fill in "Confirm new password" with "newpassword"
     And I press "Set Admin Password"
   Then I should see "Your password has been changed successfully. You are now signed in."
     And I should see "Hi, admin!"
+    And 1 emails should be delivered to "admin@example.com"
+    And the email should have "Your admin password has been changed" in the subject
+    And the email should contain "The password for your AO3 admin account was changed on Sat, 12 Apr 2025 17:00:\d+ \+0000"
 
   Scenario: Reset password link expires.
   Given the following admin exists
@@ -115,7 +120,7 @@ Feature: Authenticate Admin Users
   When I go to the admin login page
     And I follow "Forgot admin password?"
   Then I should see "Forgotten your admin password?"
-  When I fill in "Admin user name" with "admin"
+  When I fill in "Admin username" with "admin"
     And I press "Reset Admin Password"
   Then I should see "Check your email for instructions on how to reset your password."
     And 1 email should be delivered to "admin@example.com"
@@ -130,7 +135,7 @@ Feature: Authenticate Admin Users
   Scenario: Locked admin cannot sign in.
   Given the admin "admin" is locked
   When I go to the admin login page
-    And I fill in "Admin user name" with "admin"
+    And I fill in "Admin username" with "admin"
     And I fill in "Admin password" with "adminpassword"
     And I press "Log In as Admin"
   Then I should see "Your account is locked."
@@ -141,7 +146,7 @@ Feature: Authenticate Admin Users
     And all emails have been delivered
     And I am on the admin login page
   When I follow "Forgot admin password?"
-    And I fill in "Admin user name" with "admin"
+    And I fill in "Admin username" with "admin"
     And I press "Reset Admin Password"
   Then I should see "Check your email for instructions on how to reset your password."
     And 1 email should be delivered
@@ -152,7 +157,7 @@ Feature: Authenticate Admin Users
     And I press "Set Admin Password"
   Then I should see "Your password has been changed successfully. Your account is locked."
   When the admin "admin" is unlocked
-    And I fill in "Admin user name" with "admin"
+    And I fill in "Admin username" with "admin"
     And I fill in "Admin password" with "newpassword"
     And I press "Log In as Admin"
   Then I should see "Successfully logged in."
