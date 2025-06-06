@@ -94,6 +94,7 @@ describe Admin::SettingsController do
           hide_spam: true,
           invite_from_queue_enabled: false,
           invite_from_queue_number: 11,
+          request_invite_enabled: true,
           account_age_threshold_for_comment_spam_check: 10
         }.each_pair do |field, value|
           it "allows admins with policy_and_abuse role to update #{field}" do
