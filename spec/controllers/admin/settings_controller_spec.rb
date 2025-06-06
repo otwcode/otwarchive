@@ -91,14 +91,15 @@ describe Admin::SettingsController do
         end
 
         {
-          hide_spam: true,
-          invite_from_queue_enabled: false,
+          account_age_threshold_for_comment_spam_check: 10,
+          hide_spam: 1,
+          invite_from_queue_enabled: 0,
           invite_from_queue_number: 11,
-          account_age_threshold_for_comment_spam_check: 10
+          request_invite_enabled: 1
         }.each_pair do |field, value|
           it "allows admins with policy_and_abuse role to update #{field}" do
             put :update, params: { id: setting.id, admin_setting: { field => value } }
-            expect(setting.reload.send(field)).to eq(value)
+            expect(setting.reload.read_attribute_before_type_cast(field)).to eq(value)
             it_redirects_to_with_notice(admin_settings_path, "Archive settings were successfully updated.")
           end
         end

@@ -8,6 +8,7 @@ class AdminSettingPolicy < ApplicationPolicy
       hide_spam
       invite_from_queue_enabled
       invite_from_queue_number
+      request_invite_enabled
       account_age_threshold_for_comment_spam_check
     ],
     "superadmin" => %i[
