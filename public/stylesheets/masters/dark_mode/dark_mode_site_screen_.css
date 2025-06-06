@@ -674,7 +674,6 @@ form.search input[type="text"] {
 
 /* 22-SYSTEM-MESSAGES */
 
-.announcement input[type="submit"],
 .announcement .action {
   background: #333;
   border-color: #222;
