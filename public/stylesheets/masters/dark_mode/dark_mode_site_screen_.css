@@ -640,6 +640,11 @@ form.search input[type="text"] {
   border-color: #111;
 }
 
+form.filters fieldset {
+  border: 1px solid #555;
+    box-shadow: 1px 1px 3px #000;
+}
+
 .filters .expander {
   color: #eee;
     box-shadow: none;

@@ -4,12 +4,20 @@
   color: #5998d6;
 }
 
-#outer,
-.javascript {
+#outer {
   background: #333;
 }
 
 #dashboard .secondary {
   background: #2a2a2a;
     box-shadow: 1px 1px 3px #000;
+}
+
+.javascript {
+  background: #2a2a2a;
+}
+
+.javascript form.filters fieldset,
+.javascript form.filters dl {
+  background: transparent;
 }
