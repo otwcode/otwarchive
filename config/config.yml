@@ -80,10 +80,13 @@ DELIMITER_FOR_OUTPUT: ', '
 # these can be overridden in the admin controller
 INVITE_FROM_QUEUE_ENABLED: true
 INVITE_FROM_QUEUE_NUMBER: 10
-INVITE_FROM_QUEUE_FREQUENCY: 7
+# How often INVITE_FROM_QUEUE_NUMBER of invites are sent from the queue, in hours
+INVITE_FROM_QUEUE_FREQUENCY: 12
+
+HOURS_BEFORE_RESEND_INVITATION: 24
 # this is whether or not people without invitations can create accounts
 ACCOUNT_CREATION_ENABLED: false
-DAYS_TO_PURGE_UNACTIVATED: 7
+DAYS_TO_CONFIRM_EMAIL_CHANGE: 7
 # number of invites users can request
 MAX_USER_INVITE_REQUEST: 10
 # number of accounts users can block
@@ -100,7 +103,7 @@ TITLE_MIN: 1
 SUMMARY_MAX: 1250
 NOTES_MAX: 5000
 COMMENT_MAX: 10000
-TAG_MAX: 100
+TAG_MAX: 150
 CONTENT_MIN: 10
 CONTENT_MAX: 510000
 CONTENT_MAX_DISPLAYED: 500000
@@ -189,11 +192,17 @@ RATE_LIMIT_NUMBER: 300
 RATE_LIMIT_PERIOD: 300
 RATE_LIMIT_LOGIN_ATTEMPTS: 5
 RATE_LIMIT_LOGIN_PERIOD: 20
+RATE_LIMIT_ADMIN_LOGIN_ATTEMPTS: 10
+RATE_LIMIT_ADMIN_LOGIN_PERIOD: 300
 RATE_LIMIT_PER_NGINX_UPSTREAM:
   unicorn_elastic:
     limit: 300
     period: 300
   unicorn_elastic_bookmarks:
+    limit: 300
+    period: 300
+RATE_LIMIT_PER_NGINX_UPSTREAM_USER:
+  unicorn_elastic:
     limit: 300
     period: 300
 RATE_LIMIT_SAFELIST: ["127.0.0.0/8", "10.0.0.0/8"]
@@ -286,6 +295,10 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 # This is used to determine how tolerant of changes to be when determining
 # whether a comment should go back into moderation after editing or not
 COMMENT_MODERATION_THRESHOLD: 10
+
+# This is used to determine how tolerant of changes to be when determining
+# whether a comment should be spam checked again when edited
+EDITED_COMMENT_SPAM_CHECK_THRESHOLD: 10
 
 # SANITIZER VERSION
 SANITIZER_VERSION: 4
@@ -622,7 +635,7 @@ ACTION_UNSUSPEND: 4
 ACTION_BAN: 5
 ACTION_WARN: 6
 ACTION_RENAME: 7
-ACTION_PASSWORD_RESET: 8
+ACTION_PASSWORD_CHANGE: 8
 ACTION_NEW_EMAIL: 9
 ACTION_TROUBLESHOOT: 10
 ACTION_NOTE: 11
@@ -630,6 +643,7 @@ ACTION_ADD_FNOK: 12
 ACTION_REMOVE_FNOK: 13
 ACTION_ADDED_AS_FNOK: 14
 ACTION_REMOVED_AS_FNOK: 15
+ACTION_PASSWORD_RESET: 16
 
 
 # Elasticsearch index prefix

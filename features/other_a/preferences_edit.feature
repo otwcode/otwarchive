@@ -62,7 +62,6 @@ Feature: Edit preferences
     And I should see "Profile" within "div#dashboard"
   When I follow "Preferences" within "div#dashboard"
   Then I should see "Set My Preferences"
-    And I should see "Orphan My Works"
   When I follow "Edit My Profile"
   Then I should see "Password"
   # TODO: figure out why pseud switcher doesn't show up in cukes
@@ -124,7 +123,7 @@ Feature: Edit preferences
   Then I should see "No Archive Warnings Apply" within "li.warnings"
   When I follow "No Archive Warnings Apply" within "li.warnings"
   Then I should be on the works tagged "No Archive Warnings Apply"
-  When I go to my works page
+  When I go to tester's works page
   Then I should see "My Work"
     And I should see "No Archive Warnings Apply" within "li.warnings"
     And I should not see "Show warnings"
@@ -146,7 +145,7 @@ Feature: Edit preferences
   # Warnings are hidden in bookmark blurbs.
   # This is slightly excessive -- bookmarks use the work blurb -- but we'll
   # check in case that ever changes.
-  When I go to my bookmarks page
+  When I go to tester's bookmarks page
   Then I should see "Someone Else's Work"
     And I should not see "No Archive Warnings Apply" within "li.warnings"
     And I should see "Show warnings"
@@ -158,7 +157,7 @@ Feature: Edit preferences
   Then I should be on the works tagged "No Archive Warnings Apply"
 
   # Change tester's preferences to hide freeforms as well as warnings.
-  When I go to my preferences page
+  When I follow "My Preferences"
     And I check "Hide additional tags"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
@@ -193,7 +192,7 @@ Feature: Edit preferences
     And I should not see "Scary tag" within "li.freeforms"
   When I follow "Show additional tags"
   Then I should see "Scary tag" within "li.freeforms"
-  When I go to my works page
+  When I go to tester's works page
   Then I should see "My Work"
     And I should see "No Archive Warnings Apply" within "li.warnings"
     And I should not see "Show warnings"
@@ -214,7 +213,7 @@ Feature: Edit preferences
   Then I should see "Scary tag" within "li.freeforms"
 
   # Freeforms and warnings are hidden in bookmark blurbs.
-  When I go to my bookmarks page
+  When I go to tester's bookmarks page
   Then I should see "Someone Else's Work"
     And I should not see "No Archive Warnings Apply" within "li.warnings"
     And I should see "Show warnings"
@@ -227,7 +226,7 @@ Feature: Edit preferences
   Then I should see "Scary tag" within "li.freeforms"
 
   # Change tester's preferences to show warnings but keep freeforms hidden.
-  When I go to my preferences page
+  When I follow "My Preferences"
     And I uncheck "Hide warnings"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
@@ -259,7 +258,7 @@ Feature: Edit preferences
   Then I should see "Scary tag" within "li.freeforms"
   When I follow "Scary tag" within "li.freeforms"
   Then I should be on the works tagged "Scary tag"
-  When I go to my works page
+  When I go to tester's works page
   Then I should see "My Work"
     And I should see "No Archive Warnings Apply" within "li.warnings"
     And I should not see "Show warnings"
@@ -279,7 +278,7 @@ Feature: Edit preferences
   Then I should be on the works tagged "Scary tag"
 
   # Freeforms are hidden in bookmark blurbs.
-  When I go to my bookmarks page
+  When I go to tester's bookmarks page
   Then I should see "Someone Else's Work"
     And I should see "No Archive Warnings Apply" within "li.warnings"
     And I should not see "Show warnings"

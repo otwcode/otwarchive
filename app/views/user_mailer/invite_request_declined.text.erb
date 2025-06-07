@@ -1,5 +1,5 @@
 <% content_for :message do %>
-<%= t("mailer.general.greeting.formal_html", name: @user.login) %>
+<%= t("mailer.general.greeting.formal.addressed_html", name: @user.login) %>
 
 <%= t(".main", count: @total) %>
 

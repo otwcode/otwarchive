@@ -100,7 +100,7 @@ GEM
       activerecord (>= 3.0)
     addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
-    after_commit_everywhere (1.4.0)
+    after_commit_everywhere (1.6.0)
       activerecord (>= 4.2)
       activesupport
     akismetor (1.0.0)
@@ -376,7 +376,7 @@ GEM
     net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.2)
       connection_pool (~> 2.2)
-    net-imap (0.5.6)
+    net-imap (0.5.7)
       date
       net-protocol
     net-pop (0.1.2)
@@ -395,7 +395,7 @@ GEM
     netrc (0.11.0)
     nio4r (2.7.4)
     nkf (0.2.0)
-    nokogiri (1.18.2)
+    nokogiri (1.18.8)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -438,7 +438,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (2.2.11)
+    rack (2.2.14)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
     rack-dev-mark (0.8.0)

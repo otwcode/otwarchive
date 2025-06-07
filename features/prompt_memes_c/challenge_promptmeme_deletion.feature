@@ -82,7 +82,7 @@ Feature: Prompt Meme Challenge
   Given I am logged in as "myname1"
     And I sign up for Battle 12 with combination A
   When I delete my signup for the prompt meme "Battle 12"
-    And I go to my signups page
+    And I go to myname1's signups page
   Then I should see "Sign-ups (0)"
     And I should not see "Battle 12"
 
@@ -135,7 +135,7 @@ Feature: Prompt Meme Challenge
   Given everyone has signed up for Battle 12
     And the challenge "Battle 12" is deleted
   When I am logged in as "myname1"
-    And I go to my signups page
+    And I go to myname1's signups page
   Then I should see "Challenge Sign-ups for myname1"
     And I should not see "Battle 12"
 
@@ -146,7 +146,7 @@ Feature: Prompt Meme Challenge
     And "myname1" has claimed a prompt from Battle 12
     And the challenge "Battle 12" is deleted
   When I am logged in as "myname1"
-    And I go to my signups page
+    And I go to myname1's signups page
   Then I should see "Challenge Sign-ups for myname1"
     And I should not see "Battle 12"
 
@@ -157,7 +157,7 @@ Feature: Prompt Meme Challenge
     And "myname4" has fulfilled a claim from Battle 12
     And the challenge "Battle 12" is deleted
   When I am logged in as "myname4"
-    And I go to my claims page
+    And I go to myname4's claims page
   Then I should see "My Claims"
   When I follow "Fulfilled Claims"
   Then I should not see "Battle 12"
@@ -211,5 +211,5 @@ Feature: Prompt Meme Challenge
     And "myname4" has claimed a prompt from Battle 12
     And "myname1" has deleted their sign up for the prompt meme "Battle 12"
   When I am logged in as "myname4"
-    And I go to my claims page
+    And I go to myname4's claims page
   Then I should see "Claims (0)"

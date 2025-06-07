@@ -140,13 +140,20 @@ describe LanguagesController do
     end
 
     %w[translation superadmin support policy_and_abuse].each do |role|
+      Language.create(name: "Deutsch", short: "de")
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
 
-        it "renders the edit template" do
+        it "renders the edit template for a non-default language" do
+          fake_login_admin(admin)
+          get :edit, params: { id: "de" }
+          expect(response).to render_template("edit")
+        end
+
+        it "redirects for the default language" do
           fake_login_admin(admin)
           get :edit, params: { id: "en" }
-          expect(response).to render_template("edit")
+          it_redirects_to_with_error(languages_path, "Sorry, you can't edit the default language.")
         end
       end
     end

@@ -105,12 +105,6 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do 
   end
 end
 
-Then /^visiting "([^"]*)" should fail with a not found error$/ do |path|
-  expect {
-    visit path
-  }.to raise_error(ActiveRecord::RecordNotFound)
-end
-
 Then /^(?:|I )should see JSON:$/ do |expected_json|
   require 'json'
   expected = JSON.pretty_generate(JSON.parse(expected_json))
@@ -127,31 +121,6 @@ end
 Then /^(?:|I )should see the raw text "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
     page.body.should =~ /#{Regexp.escape(text)}/m
-  end
-end
-
-Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)") on my work?$/ do |text, selector|
-  my_work = User.current_user.works.first.id
-  selector = "#work_#{my_work}"
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_content(text)
-    else
-      assert page.has_content?(text)
-    end
-  end
-end
-
-Then /^(?:|I )should not see "([^"]*)"(?: within "([^"]*)") on the other work?$/ do |text, selector|
-  other_user = User.find_by(login: "mywarning1")
-  other_work = other_user.works.first.id
-  selector = "#work_#{other_work}"
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_no_content(text)
-    else
-      assert page.has_no_content?(text)
-    end
   end
 end
 

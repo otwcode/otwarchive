@@ -45,6 +45,7 @@ Lint/AmbiguousBlockAssociation:
   Exclude:
     # Exception for specs where we use change matchers:
     # https://github.com/rubocop-hq/rubocop/issues/4222
+    - 'features/step_definitions/**/*.rb'
     - 'spec/**/*.rb'
 
 Lint/AmbiguousRegexpLiteral:
@@ -133,8 +134,9 @@ Rails/DefaultScope:
 
 Rails/DynamicFindBy:
   AllowedMethods:
-    # Exception for Tag.find_by_name
+    # Exceptions for Tag.find_by_name and Tag.find_by_name!
     - find_by_name
+    - find_by_name!
     # Exception for Tagging.find_by_tag
     - find_by_tag
     # Exceptions for Work.find_by_*

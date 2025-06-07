@@ -53,7 +53,7 @@ module Otwarchive
     config.time_zone = "UTC"
 
     # The default locale is :en.
-    # config.i18n.default_locale = :de
+    config.i18n.default_locale = ArchiveConfig.DEFAULT_LOCALE_ISO.to_sym
 
     # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
     # the I18n.default_locale when a translation can not be found)

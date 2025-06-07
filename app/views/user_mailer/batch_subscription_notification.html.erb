@@ -4,7 +4,7 @@
   <% @creations.each_with_index do |creation, index| %>
 
     <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
-    <% work_link = style_link(this_work.title.html_safe, work_url(this_work)) %>
+    <% work_link = style_link(this_work.title, work_url(this_work)) %>
 
     <% cache("subscription-email-preface-#{creation.cache_key}") do %>
       <%= creator_links(this_work) %> posted a
