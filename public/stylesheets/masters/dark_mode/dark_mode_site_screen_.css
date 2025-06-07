@@ -184,7 +184,7 @@ input[type="file"] {
 }
 
 select {
-  border-color: #000;
+  border-color: #222;
 }
 
 form dt {
@@ -198,9 +198,9 @@ form dd.required {
 /* widget: live validation  */
 
 .LV_invalid {
-  background: #633;
-  border-color: #804040;
-  color: #fb8080;
+  background: #333;
+  border-color: #ff7575;
+  color: #ffada8;
     box-shadow: none;
 }
 
@@ -209,11 +209,11 @@ input.LV_invalid_field:hover,
 input.LV_invalid_field:active,
 textarea.LV_invalid_field:hover,
 textarea.LV_invalid_field:active {
-  border-color: #fb8080;
+  border-color: #ff7575;
 }
 
 .LV_invalid:before {
-  border-color: #804040 transparent;
+  border-color: #ff7575 transparent;
 }
 
 /* widget: autocomplete */
@@ -393,7 +393,7 @@ span.claimed,
 
 .delete a,
 span.delete {
-  color: #fb8080;
+  color: #ffada8;
 }
 
 .secondary {
@@ -427,14 +427,14 @@ span.claimed,
 .draggable,
 .droppable,
 span.requested {
-  color: #fb8080;
+  color: #ffada8;
 }
 
 .draggable,
 .droppable,
 span.requested,
 .nominations .rejected {
-  color: #fb8080;
+  color: #ffada8;
 }
 
 .actions span.defaulted {
@@ -444,19 +444,16 @@ span.requested,
 span.offered,
 .replied,
 .nominations .approved {
-  color: #55ff31;
+  color: #a8ffad;
 }
 
-.nominations .approved {
-  background: #008000;
-}
-
+.nominations .approved,
 .nominations .rejected {
-  background: #633;
+  background: #333;
 }
 
 span.offered.requested {
-  color: #fbbf25;
+  color: #debe56;
 }
 
 /* 10-TYPES-GROUPS */
@@ -640,7 +637,7 @@ li.comment {
 /* 8. ZONE: SYSTEM: PROXY NOTICE */
 
 #proxy-notice {
-  background: #663333;
+  background: #330f0f;
   border-bottom-color: #804040;
 }
 
@@ -720,8 +717,8 @@ ul.notes,
 
 .caution {
   background: #333;
-  border-color: #807640;
-  color: #dbbc54;
+  border-color: #ffd875;
+  color: #ffe6a8;
     box-shadow: none;
 }
 
@@ -729,8 +726,9 @@ ul.notes,
 .comment_error,
 .kudos_error,
 .alert.flash {
-  background: #663333;
-  border-color: #804040;
+  background: #333;
+  border-color: #ff7575;
+  color: #ffada8;
     box-shadow: none;
 }
 
