@@ -372,11 +372,7 @@ span.claimed,
 
 .current,
 a.current,
-a:link.current,
-span.unread,
-.replied,
-span.claimed,
-.actions span.defaulted {
+a:link.current {
   background: #222;
   border-color: #555;
     box-shadow: -1px -1px 3px #000;
@@ -409,7 +405,7 @@ input[type="submit"] {
     -webkit-appearance: none;
 }
 
-/* 09-ROLES-STATES: Because span.unread, .replied, span.claimed, and .actions span.defaulted spoof .actions .current, they're in 08-ACTIONS */
+/* 09-ROLES-STATES */
 
 .own,
 .draft,
@@ -423,11 +419,12 @@ input[type="submit"] {
 }
 
 span.unread,
+.replied,
 span.claimed,
-.draggable,
-.droppable,
-span.requested {
-  color: #ffada8;
+.actions span.defaulted {
+  background: #222;
+  border-color: #555;
+    box-shadow: -1px -1px 3px #000;
 }
 
 .draggable,
