@@ -172,6 +172,21 @@ textarea:focus {
   background: #2a2a2a;
 }
 
+select:focus {
+  background-color: initial;
+}
+
+select,
+input[type="radio"],
+input[type="checkbox"],
+input[type="file"] {
+    color-scheme: dark;
+}
+
+select {
+  border-color: #000;
+}
+
 form dt {
   border-bottom-color: #555;
 }
