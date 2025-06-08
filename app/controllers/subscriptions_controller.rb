@@ -20,7 +20,7 @@ class SubscriptionsController < ApplicationController
 
     @subscriptions = @subscriptions.to_a.sort { |a,b| a.name.downcase <=> b.name.downcase }
     @subscriptions = @subscriptions.paginate page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE
-    @page_subtitle = t("subscriptions.page_title", username: @user.login, subscription_type: @subscribable_type ? "#{@subscribable_type.classify} " : "")
+    @page_subtitle = @subscribable_type ? t("subscriptions.subscription_type_page_title", username: @user.login, subscription_type: @subscribable_type.classify) : t("subscriptions.page_title", username: @user.login)
   end
 
   # POST /subscriptions
