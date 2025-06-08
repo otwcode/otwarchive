@@ -101,7 +101,6 @@ Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, passwor
   user = find_or_create_new_user(login, password)
   step("I start a new session")
   step %{I am on the homepage}
-  find_link('login-dropdown').click
 
   fill_in "Username or email:", with: login
   fill_in "Password:", with: password
