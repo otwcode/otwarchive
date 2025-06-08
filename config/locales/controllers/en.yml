@@ -198,10 +198,10 @@ en:
       anonymous: Anonymous
       unrevealed_series: Mystery Series
   subscriptions:
-    page_title: "%{username} - %{subscription_type}Subscriptions"
     delete_all:
       error: There were problems deleting your subscriptions.
       success: Your subscriptions have been deleted.
+    page_title: "%{username} - %{subscription_type}Subscriptions"
   tag_wranglings:
     index:
       page_subtitle: fandoms
