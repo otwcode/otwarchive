@@ -132,7 +132,6 @@ class SkinsController < ApplicationController
     else
       flash[:error] = ts("Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{title} to be added!", title: @skin.title)
     end
-    # TODO(M): check after AO3-5953 is merged - POST requests shouldn't be cached?
     redirect_back_or_to @skin
   end
 
@@ -143,7 +142,6 @@ class SkinsController < ApplicationController
       current_user.preference.save
     end
     flash[:notice] = ts("You are now using the default Archive skin again!")
-    # TODO(M): check after AO3-5953 is merged - POST requests shouldn't be cached?
     redirect_back_or_to root_path
   end
 
