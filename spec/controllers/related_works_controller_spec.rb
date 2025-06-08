@@ -49,7 +49,7 @@ describe RelatedWorksController do
       end
 
       it "sets a flash message and redirects the requester" do
-        it_redirects_to_with_error(related_work_path(@related_work), "Sorry, but you don't have permission to do that. Try removing the link from your own work.")
+        it_redirects_to_with_error(user_related_works_path(child_creator), "Sorry, but you don't have permission to do that. Try removing the link from your own work.")
       end
     end
 
