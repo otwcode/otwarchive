@@ -238,7 +238,7 @@ class UsersController < ApplicationController
   # DELETE /users/1.xml
   def destroy
     if params[:cancel_button]
-      flash[:notice] = ts('Account deletion canceled.')
+      flash[:notice] = ts("Account deletion canceled.")
       redirect_to user_profile_path(@user)
       return
     end
