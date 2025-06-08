@@ -31,7 +31,7 @@ class RelatedWorksController < ApplicationController
     unless @user
       if current_user_owns?(@child)
         flash[:error] = ts("Sorry, but you don't have permission to do that. Try removing the link from your own work.")
-        redirect_to related_works_path(current_user)
+        redirect_to user_related_works_path(current_user)
       else
         flash[:error] = ts("Sorry, but you don't have permission to do that.")
         redirect_to related_work_path(@related_work)
