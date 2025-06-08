@@ -411,7 +411,6 @@ class WorksController < ApplicationController
     if params[:edit_button] || work_cannot_be_saved?
       render :edit_tags
     elsif params[:preview_button]
-      params[:from] = "edit-tags"
       @preview_mode = true
       render :preview_tags
     elsif params[:save_button]
