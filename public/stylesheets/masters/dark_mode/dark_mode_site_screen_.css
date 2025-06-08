@@ -72,7 +72,7 @@ form dl {
 #header .heading a,
 #header .user a:hover,
 #header .user a:focus {
-  color: #5998D6;
+  color: #95c6f4;
 }
 
 #header .actions a:hover,
@@ -121,8 +121,8 @@ form dl {
 
 #dashboard,
 #dashboard.own {
-  border-bottom-color: #5998D6;
-  border-top-color: #5998D6;
+  border-bottom-color: #95c6f4;
+  border-top-color: #95c6f4;
 }
 
 /* 06-FOOTER */
@@ -134,7 +134,7 @@ form dl {
 
 #footer a:hover,
 #footer a:focus {
-  background: #5998D6;
+  background: #95c6f4;
   color: #111;
 }
 
@@ -226,7 +226,7 @@ textarea.LV_invalid_field:active {
 
 .autocomplete .dropdown ul li:hover,
 .autocomplete .dropdown li.selected {
-  background: #5998D6;
+  background: #95c6f4;
 }
 
 .required .autocomplete,
@@ -457,7 +457,7 @@ span.offered.requested {
 
 a.tag:hover,
 .listbox .heading a.tag:visited:hover {
-  background: #5998D6;
+  background: #95c6f4;
   color: #111;
 }
 
@@ -471,11 +471,11 @@ li.relationships a {
 }
 
 a.work {
-  color: #5998D6;
+  color: #95c6f4;
 }
 
 .actions .reindex a {
-  border-bottom-color: #5998d6;
+  border-bottom-color: #95c6f4;
 }
 
 span.series .divider {
@@ -532,7 +532,7 @@ li.blurb,
 }
 
 .blurb h4 a:link {
-  color: #5998D6;
+  color: #95c6f4;
 }
 
 .picture .header {
@@ -575,13 +575,13 @@ li.comment {
 
 .splash .module h3 {
   border-bottom-color: #555;
-  color: #5998D6;
+  color: #95c6f4;
 }
 
 /* module: browse */
 
 .splash .browse li a:before {
-  color: #5998D6;
+  color: #95c6f4;
 }
 
 /* module: favorite tags */
@@ -592,7 +592,7 @@ li.comment {
 
 .splash .favorite li:nth-of-type(odd) a:hover,
 .splash .favorite li:nth-of-type(odd) a:focus {
-  background: #5998D6;
+  background: #95c6f4;
 }
 
 /* module: news */
@@ -624,7 +624,7 @@ li.comment {
 
 #tos_prompt .heading {
   background: #2a2a2a;
-  color: #5998d6;
+  color: #95c6f4;
 }
 
 #tos_prompt [disabled] {
@@ -645,7 +645,7 @@ form.search input[type="text"] {
 }
 
 .search [role="tooltip"] {
-  background: #5998D6;
+  background: #95c6f4;
   border-color: #111;
 }
 
@@ -737,11 +737,11 @@ form ul.notes {
 /* symbols */
 
 span.symbol {
-  color: #5998D6;
+  color: #95c6f4;
 }
 
 span.question {
-  background: #5998D6;
+  background: #95c6f4;
   border-color: #111;
   color: #111;
     box-shadow: none;
