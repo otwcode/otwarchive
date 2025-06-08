@@ -532,14 +532,13 @@ class Comment < ApplicationRecord
     update_attribute(:hidden_by_admin, false)
   end
 
-  def sanitized_content(is_mailer = "false")
+  def sanitized_content
     sanitize_field(self, :comment_content, image_safety_mode: use_image_safety_mode?)
   end
 
   def sanitized_mailer_content
     sanitize_field(self, :comment_content, image_safety_mode: true)
   end
-
 
   def use_image_safety_mode?
     pseud_id.nil? || hidden_by_admin || parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE)
