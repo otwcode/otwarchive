@@ -87,7 +87,7 @@ describe SubscriptionsController do
         it "sets no type in page subtitle" do
             get :index, params: { user_id: user.login, type: "Invalid" }
             expect(assigns[:page_subtitle]).to eq("#{user.login} - Subscriptions")
-          end
+        end
       end
     end
   end
