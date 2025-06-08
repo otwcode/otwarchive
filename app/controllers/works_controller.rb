@@ -825,16 +825,16 @@ class WorksController < ApplicationController
   def cancel_posting_and_redirect
     if @work
       if @work.posted
-        flash[:notice] = ts('The work was not updated.')
+        flash[:notice] = ts("The work was not updated.")
         redirect_to user_works_path(current_user) and return if params[:from] == "blurb"
         redirect_to edit_tags_work_path(@work) and return if params[:from] == "edit-tags"
       else
-        flash[:notice] = ts('The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive.')
+        flash[:notice] = ts("The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive.")
         redirect_to drafts_user_works_path(current_user) and return if params[:from] == "blurb"
       end
       redirect_to @work
     else
-      flash[:notice] = ts('New work posting canceled.')
+      flash[:notice] = ts("New work posting canceled.")
       redirect_to current_user
     end
   end
