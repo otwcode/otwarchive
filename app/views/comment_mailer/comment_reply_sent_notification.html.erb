@@ -10,12 +10,12 @@
 
   <p>
     <%= commenter_pseud_or_name_link(@parent_comment) %> wrote:
-    <%= style_quote(raw @parent_comment.sanitized_content) %>
+    <%= style_quote(raw @parent_comment.sanitized_mailer_content) %>
   </p>
 
   <p>
     You responded:
-    <%= style_quote(raw @comment.sanitized_content) %>
+    <%= style_quote(raw @comment.sanitized_mailer_content) %>
   </p>
 
   <%= render 'comment_notification_footer' %>
