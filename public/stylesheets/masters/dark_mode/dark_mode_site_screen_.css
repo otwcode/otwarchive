@@ -635,7 +635,7 @@ li.comment {
 
 #proxy-notice {
   background: #330f0f;
-  border-bottom-color: #804040;
+  border-bottom-color: #ff7575;
 }
 
 /* 18-ZONE-SEARCH-BROWSE */
@@ -698,7 +698,8 @@ form.filters fieldset {
   color: #83caff;
 }
 
-.error, .alert.flash {
+.error,
+.alert.flash {
   color: #eee;
 }
 
