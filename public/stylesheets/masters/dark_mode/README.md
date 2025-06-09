@@ -41,7 +41,8 @@ The "Dark Mode - Midsize" skin contains adjustments for screens less than
 
 ## Dark Mode
 
-The "Dark Mode" skin combines the two previous skins so they can be used.
+The "Dark Mode" skin combines the two previous skins so they can be used. It has
+placeholder CSS because the CSS field cannot be blank.
 
 * Include the placeholder CSS `#unused-selector { content: none; }`.
 * Expand the "Advanced" section.
