@@ -34,7 +34,7 @@ screen sizes.
 The "Dark Mode - Midsize" skin contains adjustments for screens less than
 62em in width.
 
-* Use the CSS from dark_mode_midsize.handheld_.css.
+* Use the CSS from dark_mode_midsize_.css.
 * Expand the "Advanced" section.
 * Check "Parent Only."
 * For "Media," check the "only screen and (max-width: 62em)" option.
@@ -43,7 +43,7 @@ The "Dark Mode - Midsize" skin contains adjustments for screens less than
 
 The "Dark Mode" skin combines the two previous skins so they can be used.
 
-* Do not include any CSS.
+* Include the placeholder CSS `#unused-selector { content: none; }`.
 * Expand the "Advanced" section.
 * Press the "Add parent skin" button.
 * For Parent #1, enter "Dark Mode - Screen".
