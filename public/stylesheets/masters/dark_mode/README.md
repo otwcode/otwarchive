@@ -1,6 +1,6 @@
 # Dark Mode Overview
 
-Dark Mode is a dark theme with white text on a dark grey background. It has blue
+Dark Mode is a dark theme with light text on a dark grey background. It has blue
 accents and branding in place of red.
 
 Dark Mode favors maintainability over brevity. To avoid introducing
