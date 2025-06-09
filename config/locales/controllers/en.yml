@@ -201,8 +201,9 @@ en:
     delete_all:
       error: There were problems deleting your subscriptions.
       success: Your subscriptions have been deleted.
-    page_title: "%{username} - Subscriptions"
-    subscription_type_page_title: "%{username} - %{subscription_type} Subscriptions"
+    index:
+      page_title: "%{username} - Subscriptions"
+      subscription_type_page_title: "%{username} - %{subscription_type} Subscriptions"
   tag_wranglings:
     index:
       page_subtitle: fandoms
