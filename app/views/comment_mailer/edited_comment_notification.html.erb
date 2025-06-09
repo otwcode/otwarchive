@@ -10,7 +10,7 @@
   <% end %>
 
   <p>
-    <%= style_quote(raw(@comment.sanitized_content)) %>
+    <%= style_quote(raw(@comment.sanitized_mailer_content)) %>
   </p>
 
   <%= render 'comment_notification_footer' %>
