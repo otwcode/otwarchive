@@ -312,7 +312,7 @@ form.single fieldset {
 }
 
 .mce-container input:focus {
-  background: #F3EFEC;
+  background: #f3efec;
 }
 
 /* 08-ACTIONS */
@@ -609,7 +609,7 @@ li.comment {
 
 .faq .example,
 .guideline .example {
-  border-color: #406280;
+  border-color: #75bcff;
 }
 
 /* 7. ZONE: SYSTEM: TOS, TOS FAQ, AND TOS POPUP */
@@ -695,7 +695,7 @@ form.filters fieldset {
 }
 
 .required {
-  color: #68b1f9;
+  color: #83caff;
 }
 
 .error, .alert.flash {
@@ -708,7 +708,7 @@ form.filters fieldset {
 ul.notes,
 .qtip-content {
   background: #333;
-  border-color: #406280;
+  border-color: #75bcff;
     box-shadow: none;
 }
 
