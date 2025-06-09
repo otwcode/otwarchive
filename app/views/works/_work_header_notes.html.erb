@@ -1,16 +1,16 @@
 <div class="notes module">
   <h3 class="heading"><%= ts("Notes:") %></h3>
 
-  <% # We don't want the ul tag hanging around when it's empty (i.e. when there are no recipients, parent works, or claims) but we can't skip this entire section because line 25 generates the link to child works that appear under any notes. We repeat this logic on line 63 to close the ul. %>
+  <%# We don't want the ul tag hanging around when it's empty (i.e. when there are no recipients, parent works, or claims) but we can't skip this entire section because line 25 generates the link to child works that appear under any notes. We repeat this logic on line 63 to close the ul. %>
   <% if show_associations?(@work) %>
     <ul class="associations">
   <% end %>
-    <% # dedication %>
+    <%# dedication %>
     <% if @work.gifts.not_rejected.exists? %>
       <li><%= ts("For") %> <%= recipients_link(@work) %>.</li>
     <% end %>
 
-    <% # translations %>
+    <%# translations %>
     <%# i18n-tasks-use t("works.work_header_notes.translated_to.restricted_html") %>
     <%# i18n-tasks-use t("works.work_header_notes.translated_to.revealed_html") %>
     <%# i18n-tasks-use t("works.work_header_notes.translated_to.unrevealed_html") %>
@@ -20,11 +20,11 @@
           <%= related_work_note(related_work.work, "translated_to") %>
         </li>
       <% else %>
-        <% related_works_link ||= link_to ts("other works inspired by this one"), get_related_works_url %>
+        <% related_works_link ||= link_to t(".inspired_by.other_works_inspired_by_this_one"), get_related_works_url %>
       <% end %>
     <% end %>
 
-    <% # parent works %>
+    <%# parent works %>
     <%# i18n-tasks-use t("works.work_header_notes.translation_of.restricted_html") %>
     <%# i18n-tasks-use t("works.work_header_notes.translation_of.revealed_html") %>
     <%# i18n-tasks-use t("works.work_header_notes.translation_of.unrevealed") %>
@@ -40,7 +40,7 @@
       <% end %>
     <% end %>
 
-    <% # prompts %>
+    <%# prompts %>
     <% @work.challenge_claims.each do |claim| %>
       <% unless claim.request_prompt.nil? %>
         <li><%= ts("In response to a ") %><%= link_to("prompt", collection_prompt_path(claim.collection, claim.request_prompt)) %> <%= ts("by") %>
@@ -57,19 +57,23 @@
     </ul>
   <% end %>
 
-  <% # notes %>
+  <%# notes %>
   <% unless @work.notes.blank? %>
     <blockquote class="userstuff">
       <%=raw sanitize_field(@work, :notes) %>
     </blockquote>
   <% end %>
 
-  <% endnotes_link = link_to (@work.notes.blank? ? ts("notes") : ts("more notes")), get_endnotes_link %>
-  <% if !@work.endnotes.blank? && related_works_link %>
-    <p class="jump">(<%= ts("See the end of the work for ") %><%= endnotes_link %><%= ts(" and ") %><%= related_works_link %>.)</p>
-  <% elsif !@work.endnotes.blank? %>
-    <p class="jump">(<%= ts("See the end of the work for ") %><%= endnotes_link %>.)</p>
-  <% elsif related_works_link %>
-    <p class="jump">(<%= ts("See the end of the work for ") %><%= related_works_link %>.)</p>
+  <% if @work.endnotes.present? || related_works_link %>
+    <% endnotes_link = link_to (@work.notes.blank? ? t(".jump.notes") : t(".jump.more_notes")), get_endnotes_link(@work) %>
+    <p class="jump">
+      <% if @work.endnotes.present? && related_works_link %>
+        <%= t(".jump.endnotes_and_related_works_html", endnotes_link: endnotes_link, related_works_link: related_works_link) %>
+      <% elsif @work.endnotes.present? %>
+        <%= t(".jump.endnotes_html", endnotes_link: endnotes_link) %>
+      <% elsif related_works_link %>
+        <%= t(".jump.related_works_html", related_works_link: related_works_link) %>
+      <% end %>
+    </p>
   <% end %>
 </div>
