@@ -372,66 +372,66 @@ describe ChaptersController do
         it_redirects_to_with_error(work_path(work), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
     end
+  end
 
-    context "with valid remove params" do
-      context "when work is multichaptered and co-created" do
-        let!(:co_created_chapter) { create(:chapter, work: work, authors: [user.pseuds.first, co_creator.pseuds.first]) }
+  describe "PATCH #remove_user_creatorship" do
+    context "when work is multichaptered and co-created" do
+      let!(:co_created_chapter) { create(:chapter, work: work, authors: [user.pseuds.first, co_creator.pseuds.first]) }
 
-        context "when logged in user also owns other chapters" do
-          before do
-            fake_login_known_user(user)
-          end
-
-          it "removes user from chapter, gives notice, and redirects to work" do
-            get :edit, params: { work_id: work.id, id: co_created_chapter.id, remove: "me" }
-
-            expect(co_created_chapter.reload.pseuds).to eq [co_creator.pseuds.first]
-            expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
-
-            it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter.")
-          end
+      context "when logged in user also owns other chapters" do
+        before do
+          fake_login_known_user(user)
         end
 
-        context "when logged in user only owns this chapter" do
-          before do
-            fake_login_known_user(co_creator)
-          end
+        it "removes user from chapter, gives notice, and redirects to work" do
+          patch :remove_user_creatorship, params: { id: co_created_chapter.id }
 
-          it "removes user from chapter and delegates removal of the user from the work to the work controller" do
-            get :edit, params: { work_id: work.id, id: co_created_chapter.id, remove: "me" }
+          expect(co_created_chapter.reload.pseuds).to eq [co_creator.pseuds.first]
+          expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
 
-            expect(co_created_chapter.reload.pseuds).to eq [user.pseuds.first]
-            expect(work.reload.pseuds).to eq [user.pseuds.first, co_creator.pseuds.first]
-            
-            it_redirects_to(edit_work_path(work, remove: "me"))
-          end
+          it_redirects_to_with_notice(work_path(work), "You have been removed as a creator from the chapter.")
+        end
+      end
+
+      context "when logged in user only owns this chapter" do
+        before do
+          fake_login_known_user(co_creator)
         end
 
-        context "when the logged in user is suspended" do
-          before do
-            fake_login_known_user(suspended_user)
-          end
+        it "removes user from chapter and work" do
+          patch :remove_user_creatorship, params: { id: co_created_chapter.id }
 
-          it "errors and redirects to user page" do
-            get :edit, params: { work_id: suspended_users_work.id, id: suspended_users_work_chapter2.id, remove: "me" }
+          expect(co_created_chapter.reload.pseuds).to eq [user.pseuds.first]
+          expect(work.reload.pseuds).to eq [user.pseuds.first]
+        end
+      end
 
-            expect(flash[:error]).to include("Your account has been suspended")
-          end
+      context "when the logged in user is suspended" do
+        before do
+          fake_login_known_user(suspended_user)
         end
 
-        context "when the logged in user is banned" do
-          before do
-            fake_login_known_user(banned_user)
-          end
+        it "errors and redirects to user page" do
+          suspended_users_work
+          patch :remove_user_creatorship, params: { id: suspended_users_work_chapter2.id }
 
-          it "removes user from chapter, gives notice, and redirects to work" do
-            get :edit, params: { work_id: banned_users_work.id, id: banned_users_work_chapter2.id, remove: "me" }
+          expect(flash[:error]).to include("Your account has been suspended")
+        end
+      end
 
-            expect(banned_users_work_chapter2.reload.pseuds).to eq [co_creator.pseuds.first]
-            expect(banned_users_work.reload.pseuds).to eq [co_creator.pseuds.first, banned_user.pseuds.first]
+      context "when the logged in user is banned" do
+        before do
+          fake_login_known_user(banned_user)
+        end
 
-            it_redirects_to_with_notice(work_path(banned_users_work), "You have been removed as a creator from the chapter.")
-          end
+        it "removes user from chapter, gives notice, and redirects to work" do
+          banned_users_work
+          patch :remove_user_creatorship, params: { id: banned_users_work_chapter2.id }
+
+          expect(banned_users_work_chapter2.reload.pseuds).to eq [co_creator.pseuds.first]
+          expect(banned_users_work.reload.pseuds).to eq [co_creator.pseuds.first, banned_user.pseuds.first]
+
+          it_redirects_to_with_notice(work_path(banned_users_work), "You have been removed as a creator from the chapter.")
         end
       end
     end
@@ -904,18 +904,18 @@ describe ChaptersController do
         before do
           fake_login_known_user(suspended_user)
         end
-        
+
         it "errors and redirects to user page" do
           post :update_positions, params: { work_id: suspended_users_work.id, chapter: [suspended_users_work_chapter2, suspended_users_work.chapters.first] }
           expect(flash[:error]).to include("Your account has been suspended")
         end
       end
-  
+
       context "when the logged in user is banned" do
         before do
           fake_login_known_user(banned_user)
         end
-        
+
         it "errors and redirects to user page" do
           post :update_positions, params: { work_id: banned_users_work.id, chapter: [banned_users_work_chapter2, banned_users_work.chapters.first] }
           expect(flash[:error]).to include("Your account has been banned")
