@@ -55,7 +55,6 @@ class Work < ApplicationRecord
     end
   end
   # statistics
-  has_many :work_links, dependent: :destroy
   has_one :stat_counter, dependent: :destroy
   after_create :create_stat_counter
   def create_stat_counter
