@@ -389,6 +389,17 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     And the email should link to misterdeejay's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/misterdeejay/pseuds/misterdeejay&quot;"
 
+  Scenario: When using an invalid URL
+    Given I am logged in
+      And I set up a draft "Naughty"
+    When I check "parent-options-show"
+      And I fill in "URL" with "not valid."
+      And I fill in "Title" with "Breaking rules"
+      And I fill in "Author" with "human"
+      And I press "Post"
+    Then I should see a save error message
+      And I should see "Parent work URL does not appear to be a valid URL."
+
   Scenario: When using a URL on the site to cite a parent work, the URL can't be
   for something that isn't a work
   Given I am logged in
