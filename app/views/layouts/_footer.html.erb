@@ -1,7 +1,7 @@
 <!-- BEGIN footer -->
 <div id="footer" role="contentinfo" class="region">
   <h3 class="landmark heading"><%= t(".landmark") %></h3>
-  <ul class="navigation actions" role="navigation">
+  <ul class="navigation actions">
     <% if logged_in? || logged_in_as_admin? %>
       <% cache(skin_chooser_key, skip_digest: true) do %>
         <% unless Skin.in_chooser.empty? %>
