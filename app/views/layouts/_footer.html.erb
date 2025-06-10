@@ -26,6 +26,9 @@
         <li><%= link_to t(".about.content_policy"), content_path %></li>
         <li><%= link_to t(".about.privacy_policy"), privacy_path %></li>
         <li><%= link_to t(".about.dmca_policy"), dmca_path %> </li>
+        <% unless ArchiveConfig.STATUS_PAGE_URL.blank? %>
+          <li><%= link_to t(".about.status_page"), ArchiveConfig.STATUS_PAGE_URL %></li>
+        <% end %>
       </ul>
     </li>
     <li class="module group">
@@ -45,9 +48,6 @@
           </li>
         <% end %>
         <li><%= link_to t(".development.known_issues"), known_issues_path %></li>
-        <% unless ArchiveConfig.STATUS_PAGE_URL.blank? %>
-          <li><%= link_to t(".development.status_page"), ArchiveConfig.STATUS_PAGE_URL %></li>
-        <% end %>
         <li>
           <%= t(".development.license_details_html",
                 license_link: link_to(t(".development.gpl_2_0_or_later"),

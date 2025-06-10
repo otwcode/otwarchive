@@ -1739,6 +1739,7 @@ en:
         header: About the Archive
         privacy_policy: Privacy Policy
         site_map: Site Map
+        status_page: Site Status
         tos: Terms of Service
       contact_us:
         header: Contact Us
@@ -1753,7 +1754,6 @@ en:
         header: Development
         known_issues: Known Issues
         license_details_html: "%{license_link} by the %{otw_link}"
-        status_page: Status Page
         view_license: View License
       landmark: Footer
       otw:
