@@ -1,25 +1,21 @@
-//Init script for calling tinyMCE rich text editor: basic configuration can be done here.
+// Init script for calling tinyMCE rich text editor: basic configuration can be done here.
 
-tinyMCE.init({
+const OPTIONS = {
   branding: false,
-  plugins: "directionality hr image link lists paste tabfocus",
-  contextmenu: false,
+  plugins: "directionality image link lists",
   menubar: false,
   toolbar: "paste | bold italic underline strikethrough | link unlink image | blockquote | hr | bullist numlist | alignleft aligncenter alignright alignjustify | undo redo | ltr rtl",
-  
+
   browser_spellcheck: true,
-  
+
   // Disable inline styles, partly because our sanitizer strips them but mostly because strike and u won't work otherwise
   inline_styles: false,
-  
-  // Restore URLs to their original correct value instead of using shortened broken versions some browsers produce 
+
+  // Restore URLs to their original correct value instead of using shortened broken versions some browsers produce
   convert_urls: false,
-  
+
   // Add a custom stylesheet with cache busting to override the way text displays in the editor
   content_css: "/stylesheets/tiny_mce_custom.css?" + new Date().getTime(),
-  
-  // Put the keyboard focus on the text input area rather than the first button when tabbing into the editor (requires tabfocus plugin)
-  tabfocus_elements: "tinymce",
 
   // Add HTML tags the editor will accept
   // - b so it doesn't convert to strong
@@ -35,7 +31,7 @@ tinyMCE.init({
   // - underline: u tag instead of span style="text-decoration:underline"
   // - strikethrough: strike tag instead of span style="text-decoration:line-through"
   // -- strikethrough should also remove del tag
-  formats: {
+  styles: {
     alignleft: {
       selector: 'div, h1, h2, h3, h4, h5, h6, img, p, table, td, th, ul, ol, li',
       attributes: { align: 'left' }
@@ -60,34 +56,25 @@ tinyMCE.init({
     ]
   },
 
-  // Override the list of elements that can be pasted from Word. It's necessary to copy the list from the plugin source.
-  // - allow align attribue
-  // - stop allowing style attribute
-  paste_word_valid_elements: "@[align],-strong/b,-em/i,-u,-span,-p,-ol,-ul,-li,-h1,-h2,-h3,-h4,-h5,-h6,-table,-tr,-td[colspan|rowspan],-th,-thead,-tfoot,-tbody,-a[href|name],sub,sup,strike,br",
-  
   // Override the list of targets provided in the link plugin. We do not allow the target attribute, so we want an empty list.
-  target_list: [
-    { title: 'None', value: '' }  
+  link_target_list: [
+    { title: 'None', value: '' }
   ],
-
-  mobile: {
-    // As of version 5.0, TinyMCE has a very limited mobile version it inflicts on Android and iOS phones by default.
-    // This forces the desktop version. Note that this is only implicitly documented and may break.
-    theme: "silver",
-  },
 
   setup: function (editor) {
     // Update character count when switching to and editing in TinyMCE
-    editor.on('init change undo redo', function() {
+    editor.on('init change undo redo keyup', function() {
       editor.save();
       $j(editor.getElement()).trigger('change');
     });
   }
-});
+}
 
-// Require the user to turn the RTE on instead of loading automatically using selector option 
+tinyMCE.init(OPTIONS);
+
+// Require the user to turn the RTE on instead of loading automatically using selector option
 function addEditor(id) {
-  tinyMCE.execCommand('mceAddEditor', false, id)
+  tinyMCE.execCommand('mceAddEditor', false, {id: id, options: OPTIONS})
 }
 
 // Let the user turn the RTE back off
@@ -99,7 +86,7 @@ function removeEditor(id) {
 $j(document).ready(function(){
   $j(".rtf-html-switch").removeClass('hidden');
 
-  $j(".html-link").addClass('current'); 
+  $j(".html-link").addClass('current');
 
   $j(".rtf-link").click(function(event){
     addEditor('content');
@@ -108,7 +95,7 @@ $j(document).ready(function(){
     $j('.html-link').removeClass('current');
     $j('.html-notes').addClass('hidden');
     event.preventDefault();
-  });            
+  });
 
   $j('.html-link').click(function(event){
     removeEditor('content');
