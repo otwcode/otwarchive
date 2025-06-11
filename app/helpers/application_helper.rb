@@ -230,7 +230,7 @@ module ApplicationHelper
   def use_tinymce
     @content_for_tinymce = ""
     content_for :tinymce do
-      javascript_include_tag "tinymce/tinymce.min.js", skip_pipeline: true
+      javascript_include_tag "tinymce/js/tinymce/tinymce.min.js", skip_pipeline: true
     end
     @content_for_tinymce_init = ""
     content_for :tinymce_init do
