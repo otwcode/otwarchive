@@ -159,8 +159,8 @@ class Skin < ApplicationRecord
   # Only official users should be allowed to apply to make a skin public.
   validate :public_application, if: :will_save_change_to_public?
   def public_application
-    return unless self.public
-    return true if User.current_user&.official
+    return unless self.public && User.current_user.is_a?(User)
+    return true if User.current_user.official
 
     errors.add(:base, :public_application)
   end

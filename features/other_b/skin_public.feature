@@ -124,3 +124,23 @@ Feature: Public skins
     And I should see "Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above."
   When I follow "Return To Skin To Use"
   Then I should be on "Usable Skin" skin page
+
+  Scenario: A regular user can't apply to make a skin public
+  Given I am logged in
+  When I go to the new skin page
+  Then I should not see "Apply to make public"
+
+  Scenario: A user with the official role can apply to make a skin public
+  Given the user "SkinTeam" exists and has the role "official"
+    And I am logged in as "SkinTeam"
+  When I set up the skin "Skin We're Gonna Add"
+    And I attach a preview for the skin
+    And I check "Apply to make public"
+    And I submit
+  Then I should see "Skin was successfully created"
+
+  Scenario: An admin doesn't have an option to change the skin's public status
+  Given the approved public skin "Usable Skin"
+    And I am logged in as a "superadmin" admin
+  When I edit the skin "Usable Skin"
+  Then I should not see "Apply to make public"

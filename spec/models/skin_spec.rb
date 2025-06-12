@@ -274,8 +274,60 @@ describe Skin do
       expect(@skin.save).to be_truthy
       expect(@skin.errors[:ie_condition]).to be_empty
     end
-  end
 
+    context "when the current user is a user" do
+      before { allow_any_instance_of(Skin).to receive(:valid_public_preview).and_return(true) }
+
+      context "without the official role" do
+        it "does not allow public to be set to true" do
+          User.current_user = create(:user)
+          @skin.public = true
+          expect(@skin.save).not_to be_truthy
+          expect(@skin.errors[:base]).to include("You're not allowed to apply to make a skin public.")
+        end
+
+        it "allows public to be changed from true to false" do
+          @skin.update!(public: true)
+          User.current_user = create(:user)
+          @skin.public = false
+          expect(@skin.save).to be_truthy
+          expect(@skin.errors[:base]).to be_empty
+        end
+
+        it "allows other changes if public is already true" do
+          @skin.update!(public: true)
+          User.current_user = create(:user)
+          @skin.title = "Edited Skin"
+          expect(@skin.save).to be_truthy
+          expect(@skin.errors[:base]).to be_empty
+        end
+      end
+
+      context "with the official role" do
+        it "allows public to be set to true" do
+          User.current_user = create(:official_user)
+          @skin.public = true
+          expect(@skin.save).to be_truthy
+          expect(@skin.errors[:base]).to be_empty
+        end
+      end
+    end
+
+    it "allows public to be set to true when the current user is an admin" do
+      allow_any_instance_of(Skin).to receive(:valid_public_preview).and_return(true)
+      User.current_user = create(:admin)
+      @skin.public = true
+      expect(@skin.save).to be_truthy
+      expect(@skin.errors[:base]).to be_empty
+    end
+
+    it "allows public to be set to true when there is no current user" do
+      allow_any_instance_of(Skin).to receive(:valid_public_preview).and_return(true)
+      @skin.public = true
+      expect(@skin.save).to be_truthy
+      expect(@skin.errors[:base]).to be_empty
+    end
+  end
 
   describe "use", default_skin: true do
     before do
