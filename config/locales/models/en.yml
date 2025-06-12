@@ -154,6 +154,7 @@ en:
               taken: must be unique
           invalid_media: We don't currently support the media type %{media}, sorry! If we should, please let Support know.
           no_public_preview: You need to upload a screencap if you want to share your skin.
+          public_application: You're not allowed to apply to make a skin public.
         skin/skin_parents:
           attributes:
             base:

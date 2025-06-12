@@ -156,6 +156,15 @@ class Skin < ApplicationRecord
     self.css = clean_css_code(self.css)
   end
 
+  # Only official users should be allowed to apply to make a skin public.
+  validate :public_application, if: :will_save_change_to_public?
+  def public_application
+    return unless self.public
+    return true if User.current_user&.official
+
+    errors.add(:base, :public_application)
+  end
+
   scope :public_skins, -> { where(public: true) }
   scope :approved_skins, -> { where(official: true, public: true) }
   scope :unapproved_skins, -> { where(public: true, official: false, rejected: false) }
