@@ -58,7 +58,7 @@ module NavigationHelpers
     when /^the tagsets page$/i
       tag_sets_path
     when /^the login page$/i
-      new_user_session_path(return_to: root_path)
+      new_user_session_path
     when /^account creation page$/i
       signup_path
     when /^invite requests page$/i

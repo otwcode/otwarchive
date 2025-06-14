@@ -96,7 +96,7 @@ end
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
   user = find_or_create_new_user(login, password)
   step("I start a new session")
-  step("I am on the login page")
+  visit(new_user_session_path(return_to: root_path))
 
   with_scope("#main") do
     fill_in "Username or email:", with: login
