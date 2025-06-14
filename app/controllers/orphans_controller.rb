@@ -30,7 +30,7 @@ class OrphansController < ApplicationController
       check_one_owned(@to_be_orphaned, current_user.pseuds)
     else
       @to_be_orphaned = current_user
-      @return_to = user_path(@to_be_orphaned)
+      @return_to = show_multiple_user_works_path(@to_be_orphaned)
     end
   end
 
