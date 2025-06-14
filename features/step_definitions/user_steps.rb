@@ -96,12 +96,15 @@ end
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
   user = find_or_create_new_user(login, password)
   step("I start a new session")
-  step %{I am on the homepage}
+  step("I am on the login page")
 
-  fill_in "Username or email:", with: login
-  fill_in "Password:", with: password
-  check "Remember Me"
-  click_button "Log In"
+  with_scope("#main") do
+    fill_in "Username or email:", with: login
+    fill_in "Password:", with: password
+    check "Remember me"
+    click_button "Log in"
+  end
+
   step %{I should see "Hi, #{login}!" within "#greeting"}
   step %{confirmation emails have been delivered}
 end
