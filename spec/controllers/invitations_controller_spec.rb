@@ -153,29 +153,31 @@ describe InvitationsController do
   describe "POST #invite_friend" do
     let(:invitation) { create(:invitation) }
 
-    it "does not send invite if email is missing" do
-      admin.update!(roles: ["policy_and_abuse"])
-      fake_login_admin(admin)
-      post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: nil, number_of_invites: 1 } }
+    context "when logged in as policy_and_abuse admin" do
+      before do
+        admin.update!(roles: ["policy_and_abuse"])
+        fake_login_admin(admin)
+      end
 
-      expect(response).to render_template("show")
-      expect(flash[:error]).to match("Please enter an email address.")
-    end
+      it "allows admin to send invite" do
+        post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: user.email, number_of_invites: 1 } }
 
-    it "sends invite" do
-      admin.update!(roles: ["policy_and_abuse"])
-      fake_login_admin(admin)
-      post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: user.email, number_of_invites: 1 } }
+        it_redirects_to_with_notice(invitation_path(invitation), "Invitation was successfully sent.")
+      end
 
-      it_redirects_to_with_notice(invitation_path(invitation), "Invitation was successfully sent.")
-    end
+      it "errors if email is missing" do
+        post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: nil, number_of_invites: 1 } }
 
-    it "renders #show if the invitation fails to save" do
-      admin.update!(roles: ["policy_and_abuse"])
-      fake_login_admin(admin)
-      allow(invitation).to receive(:save).and_return(false)
+        expect(response).to render_template("show")
+        expect(flash[:error]).to match("Please enter an email address.")
+      end
 
-      expect(response).to render_template("show")
+      it "renders #show if the invitation fails to save" do
+        allow_any_instance_of(Invitation).to receive(:save).and_return(false)
+        post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: user.email, number_of_invites: 1 } }
+
+        expect(response).to render_template("show")
+      end
     end
   end
 
@@ -217,15 +219,28 @@ describe InvitationsController do
   end
 
   describe "DELETE #destroy" do
-    it "does not allow non-admins to destroy" do
-      invitation = create(:invitation)
-      fake_login
-      delete :destroy, params: { id: invitation.id }
+    let(:invitation) { create(:invitation) }
 
-      it_redirects_to_with_error(
-        user_path(controller.current_user),
-        "Sorry, you don't have permission to access the page you were trying to reach."
-      )
+    context "when not logged in" do
+      it "redirects with error and does not delete the invitation" do
+        delete :destroy, params: { id: invitation.id }
+
+        it_redirects_to_with_error(root_url, "Sorry, you don't have permission to access the page you were trying to reach.")
+        expect(invitation).to exist
+      end
+    end
+
+    context "when logged in as a user" do
+      before do
+        fake_login
+      end
+
+      it "redirects with error and does not delete the invitation" do
+        delete :destroy, params: { id: invitation.id }
+
+        it_redirects_to_with_error(root_url, "Sorry, you don't have permission to access the page you were trying to reach.")
+        expect(invitation).to exist
+      end
     end
 
     context "when logged in as policy_and_abuse admin" do
@@ -234,16 +249,20 @@ describe InvitationsController do
         fake_login_admin(admin)
       end
 
-      it "allows admin to delete invitations" do
-        invitation = create(:invitation)
-        delete :destroy, params: { id: invitation.id }
-        
-        it_redirects_to_with_notice(admin_invitations_path, "Invitation successfully destroyed")
+      context "when invitation creator is a user" do
+        invitation_creator = create(:user)
+        invitation.creator = invitation_creator
+
+        it "allows admin to delete invitation and redirects to user invitations path" do
+          delete :destroy, params: { id: invitation.id }
+
+          it_redirects_to_with_notice(user_invitations_path(invitation_creator), "Invitation successfully destroyed")
+        end
       end
 
       it "errors if the invitation fails to destroy" do
-        invitation = create(:invitation)
-        allow(invitation).to receive(:destroy).and_return(false)
+        allow_any_instance_of(Invitation).to receive(:destroy).and_return(false)
+        delete :destroy, params: { id: invitation.id }
 
         expect(flash[:error]).to match("Invitation was not destroyed.")
       end
