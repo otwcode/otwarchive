@@ -317,7 +317,7 @@ class WorksController < ApplicationController
         if params[:preview_button]
           flash[:notice] = ts("Draft was successfully created. It will be <strong>scheduled for deletion</strong> on %{deletion_date}.", deletion_date: view_context.date_in_zone(@work.created_at + 29.days)).html_safe
           in_moderated_collection
-          redirect_to preview_work_path(@work)
+          redirect_to preview_work_path(@work, from: "new")
         else
           # We check here to see if we are attempting to post to moderated collection
           flash[:notice] = ts("Work was successfully posted. It should appear in work listings within the next few minutes.")
@@ -828,7 +828,7 @@ class WorksController < ApplicationController
         redirect_to user_works_path(current_user) and return if params[:from] == "blurb"
       else
         flash[:notice] = ts("The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive.")
-        redirect_to drafts_user_works_path(current_user) and return if params[:from] == "blurb"
+        redirect_to drafts_user_works_path(current_user) and return if params[:from] == "blurb" || params[:from] == "new"
       end
       redirect_to @work
     else
