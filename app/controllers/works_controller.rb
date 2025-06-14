@@ -21,8 +21,6 @@ class WorksController < ApplicationController
   cache_sweeper :collection_sweeper
   cache_sweeper :feed_sweeper
 
-  skip_before_action :store_location, only: [:share]
-
   # we want to extract the countable params from work_search and move them into their fields
   def clean_work_search_params
     QueryCleaner.new(work_search_params || {}).clean
@@ -297,11 +295,7 @@ class WorksController < ApplicationController
 
   # POST /works
   def create
-    if params[:cancel_button]
-      flash[:notice] = ts('New work posting canceled.')
-      redirect_to current_user
-      return
-    end
+    return cancel_posting_and_redirect if params[:cancel_button]
 
     @work = Work.new(work_params)
 
@@ -324,7 +318,7 @@ class WorksController < ApplicationController
         if params[:preview_button]
           flash[:notice] = ts("Draft was successfully created. It will be <strong>scheduled for deletion</strong> on %{deletion_date}.", deletion_date: view_context.date_in_zone(@work.created_at + 29.days)).html_safe
           in_moderated_collection
-          redirect_to preview_work_path(@work)
+          redirect_to preview_work_path(@work, from: "new")
         else
           # We check here to see if we are attempting to post to moderated collection
           flash[:notice] = ts("Work was successfully posted. It should appear in work listings within the next few minutes.")
@@ -367,9 +361,7 @@ class WorksController < ApplicationController
 
   # PUT /works/1
   def update
-    if params[:cancel_button]
-      return cancel_posting_and_redirect
-    end
+    return cancel_posting_and_redirect if params[:cancel_button]
 
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_params
@@ -412,9 +404,7 @@ class WorksController < ApplicationController
 
   def update_tags
     authorize @work if logged_in_as_admin?
-    if params[:cancel_button]
-      return cancel_posting_and_redirect
-    end
+    return cancel_posting_and_redirect if params[:cancel_button]
 
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_tag_params
@@ -835,12 +825,19 @@ class WorksController < ApplicationController
   end
 
   def cancel_posting_and_redirect
-    if @work && @work.posted
-      flash[:notice] = ts('The work was not updated.')
-      redirect_to user_works_path(current_user)
+    if @work
+      if @work.posted
+        flash[:notice] = ts("The work was not updated.")
+        redirect_to user_works_path(current_user) and return if params[:from] == "blurb"
+        redirect_to edit_tags_work_path(@work) and return if params[:from] == "edit-tags"
+      else
+        flash[:notice] = ts("The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive.")
+        redirect_to drafts_user_works_path(current_user) and return if params[:from] == "blurb" || params[:from] == "new"
+      end
+      redirect_to @work
     else
-      flash[:notice] = ts('The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive.')
-      redirect_to drafts_user_works_path(current_user)
+      flash[:notice] = ts("New work posting canceled.")
+      redirect_to current_user
     end
   end
 
