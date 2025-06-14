@@ -67,18 +67,18 @@ describe CommentsController do
       let(:work) { unreviewed_comment.commentable.work }
       let(:user) { work.users.first }
 
-      it "redirects logged out user to root path with error and does not mark comment reviewed" do
+      it "redirects logged out user to referrer with error and does not mark comment reviewed" do
         put :review_all, params: { work_id: work.id }
-        it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+        it_redirects_to_with_error("/where_i_came_from", "What did you want to review comments on?")
         expect(unreviewed_comment.reload.unreviewed).to be_truthy
       end
 
       context "when logged in" do
         context "when current user does not own the work" do
-          it "redirects to root path with error and does not mark comment reviewed" do
+          it "redirects to referrer with error and does not mark comment reviewed" do
             fake_login
             put :review_all, params: { work_id: work.id }
-            it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+            it_redirects_to_with_error("/where_i_came_from", "What did you want to review comments on?")
             expect(unreviewed_comment.reload.unreviewed).to be_truthy
           end
         end
@@ -106,17 +106,17 @@ describe CommentsController do
       let!(:comment1) { create(:comment, :unreviewed, commentable: admin_post) }
       let!(:comment2) { create(:comment, :unreviewed, commentable: admin_post) }
 
-      it "redirects logged out user to root path with error and does not mark comments reviewed" do
+      it "redirects logged out user to referrer with error and does not mark comments reviewed" do
         put :review_all, params: { admin_post_id: admin_post.id }
-        it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+        it_redirects_to_with_error("/where_i_came_from", "What did you want to review comments on?")
         expect(comment1.reload.unreviewed).to be_truthy
         expect(comment2.reload.unreviewed).to be_truthy
       end
 
-      it "redirects logged in user to root path with error and does not mark comments reviewed" do
+      it "redirects logged in user to referrer with error and does not mark comments reviewed" do
         fake_login
         put :review_all, params: { admin_post_id: admin_post.id }
-        it_redirects_to_with_error(root_path, "What did you want to review comments on?")
+        it_redirects_to_with_error("/where_i_came_from", "What did you want to review comments on?")
         expect(comment1.reload.unreviewed).to be_truthy
         expect(comment2.reload.unreviewed).to be_truthy
       end
