@@ -137,12 +137,16 @@ describe BookmarksController do
         let(:user) { create(:tag_wrangler) }
         let(:pseud) { user.default_pseud }
 
-        before { fake_login_known_user(user) }
+        before do
+          fake_login_known_user(user)
+          user.last_wrangling_activity.updated_at = 60.days.ago
+          user.last_wrangling_activity.save!(touch: false)
+        end
 
         it "does not set last wrangling activity when the bookmark has a new tag" do
           bookmark_attributes = { pseud_id: pseud.id, tag_string: "My special new tag!" }
           post :create, params: { work_id: work.id, bookmark: bookmark_attributes }
-          expect(user.last_wrangling_activity).to be_nil
+          expect(user.reload.last_wrangling_activity.updated_at).to be_within(1.minute).of 60.days.ago
         end
       end
     end
