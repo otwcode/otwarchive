@@ -7,6 +7,10 @@
     <fieldset>
       <legend><%= t(".legend") %></legend>
 
+      <% if local_assigns[:show_errors] %>
+        <%= error_messages_for :comment %>
+      <% end %>
+
       <%# here come the hacks (hidden fields to transmit various info to the create action) %>
       <% if commentable.is_a?(Tag) %>
         <%= hidden_field_tag :tag_id, commentable.name %>

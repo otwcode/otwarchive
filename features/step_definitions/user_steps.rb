@@ -318,7 +318,7 @@ end
 
 When /^I change my username to "([^"]*)"/ do |new_name|
   step %{I follow "My Preferences"}
-  step %{I follow "Change My Username"}
+  step %{I follow "Change Username"}
   fill_in("New username", with: new_name)
   fill_in("Password", with: "password")
   click_button("Change Username")
@@ -327,6 +327,8 @@ end
 
 Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your username has been successfully updated."})
+  step(%{1 email should be delivered})
+  step(%{the email should contain "The username for your .* has been changed to"})
 end
 
 Then /^the user "([^"]*)" should be activated$/ do |login|

@@ -221,11 +221,9 @@ Given "an abuse ticket ID exists" do
 end
 
 Given "a work {string} with the original creator {string}" do |title, creator|
-  step %{I am logged in as "#{creator}"}
-  step %{I post the work "#{title}"}
-  FactoryBot.create(:user, login: "orphan_account")
-  step %{I orphan the work "#{title}"}
-  step %{I log out}
+  step %{the work "#{title}" by "#{creator}"}
+  step %{I have an orphan account}
+  step %{"#{creator}" orphans and takes their pseud off the work "#{title}"}
 end
 
 Given "the admin {string} is locked" do |login|
@@ -247,6 +245,10 @@ end
 
 Given "an archive FAQ category with the title {string} exists" do |title|
   FactoryBot.create(:archive_faq, title: title)
+end
+
+Given "the app name is {string}" do |app_name|
+  allow(ArchiveConfig).to receive(:APP_NAME).and_return(app_name)
 end
 
 ### WHEN
@@ -373,6 +375,10 @@ end
 
 When "I confirm I want to remove the pseud" do
   expect(page.accept_alert).to eq("Are you sure you want to remove the creator's pseud from this work?") if @javascript
+end
+
+When "I follow the first invitation token url" do
+  first('//td/a[href*="/invitations/"]').click
 end
 
 When "I fill in a valid TOTP token for admin {string}" do |login|

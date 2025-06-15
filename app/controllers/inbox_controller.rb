@@ -14,6 +14,7 @@ class InboxController < ApplicationController
 
   def show
     authorize InboxComment if logged_in_as_admin?
+    @page_subtitle = t("inbox.page_title", user: @user.login)
     @inbox_total = @user.inbox_comments.with_bad_comments_removed.count
     @unread = @user.inbox_comments.with_bad_comments_removed.count_unread
     @filters = filter_params[:filters] || {}

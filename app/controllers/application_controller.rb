@@ -25,6 +25,12 @@ class ApplicationController < ActionController::Base
     redirect_to '/404'
   end
 
+  rescue_from Rack::Timeout::RequestTimeoutException, with: :raise_timeout
+  
+  def raise_timeout
+    redirect_to timeout_error_path
+  end
+
   helper :all # include all helpers, all the time
 
   include HtmlCleaner
@@ -288,7 +294,8 @@ public
     store_location
     if logged_in?
       destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
-      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach."
+      # i18n-tasks-use t('users.reconfirm_email.access_denied.logged_in')
+      flash[:error] = t(".access_denied.logged_in", default: t("application.access_denied.access_denied.logged_in")) # rubocop:disable I18n/DefaultTranslation
       redirect_to destination
     else
       destination = options[:redirect].blank? ? new_user_session_path : options[:redirect]
@@ -505,6 +512,15 @@ public
     else
       logged_in_as_admin? || permit?("tag_wrangler") || access_denied
     end
+  end
+
+  # Checks if user is allowed to see related page if parent item is hidden or in unrevealed collection
+  def check_visibility_for(parent)
+    # Only admins and the owner can see related pages on something hidden by an admin.
+    logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path) if parent.try(:hidden_by_admin)
+
+    # Only admins and the owner can see related pages on unrevealed works.
+    logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path) if parent.try(:in_unrevealed_collection)
   end
 
   public

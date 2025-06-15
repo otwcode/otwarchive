@@ -14,8 +14,8 @@ Feature: Skin wizard
 
   @javascript
   Scenario: User can add a parent skin using the wizard
-  Given I am logged in
-    And I create the skin "Dad"
+  Given the skin "Dad" by "mage"
+    And I am logged in as "mage"
   When I go to the new skin page
     And I follow "Use Wizard"
   Then I should see "Site Skin Wizard"

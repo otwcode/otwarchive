@@ -73,6 +73,7 @@ services:
       dockerfile: ./config/docker/Dockerfile
     environment:
       - RAILS_ENV=development
+      - RACK_TIMEOUT_SERVICE_TIMEOUT=0
       - GITPOD_WORKSPACE_ID=${GITPOD_WORKSPACE_ID:-}
       - GITPOD_WORKSPACE_CLUSTER_HOST=${GITPOD_WORKSPACE_CLUSTER_HOST:-}
       - ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=bEZjYLY9tCYGh6WlcMtEJpIi7GO2plZC
@@ -111,6 +112,7 @@ services:
       - CHROME_URL=http://chrome:4444
       - DOCKER=true
       - CAPYBARA_PORT=5100
+      - CUCUMBER_PUBLISH_QUIET=true
     command: bundle exec cucumber
     volumes:
       - .:/otwa
