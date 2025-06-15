@@ -225,6 +225,17 @@ class UserMailer < ApplicationMailer
     )
   end
 
+  def change_username(user, old_username)
+    @user = user
+    @old_username = old_username
+    @new_username = user.login
+    @next_change_time = user.renamed_at + ArchiveConfig.USER_RENAME_LIMIT_DAYS.days
+    mail(
+      to: @user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
+  end
+
   ### WORKS NOTIFICATIONS ###
 
   # Sends email when an archivist adds someone as a co-creator.
@@ -272,12 +283,10 @@ class UserMailer < ApplicationMailer
     @related_work = RelatedWork.find(related_work_id)
     @related_parent_link = url_for(controller: :works, action: :show, id: @related_work.parent)
     @related_child_link = url_for(controller: :works, action: :show, id: @related_work.work)
-    I18n.with_locale(@user.preference.locale_for_mails) do
-      mail(
-        to: @user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Related work notification"
-      )
-    end
+    mail(
+      to: @user.email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Emails a recipient to say that a gift has been posted for them
@@ -352,13 +361,15 @@ class UserMailer < ApplicationMailer
   end
 
   # Sends email to creators when a creation is hidden by an admin
-  def admin_hidden_work_notification(creation_id, user_id)
+  def admin_hidden_work_notification(creation_ids, user_id)
+    @pac_footer = true
     @user = User.find_by(id: user_id)
-    @work = Work.find_by(id: creation_id)
+    @works = Work.where(id: creation_ids)
+    return if @works.empty?
 
     mail(
       to: @user.email,
-      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, count: @works.size)
     )
   end
 

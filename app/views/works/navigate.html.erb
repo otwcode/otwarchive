@@ -1,4 +1,4 @@
-<h2 class="heading"><%= ts("Chapter Index for") %> <%= link_to(@work.title.html_safe, @work) %> <%= ts("by") %> <%= byline(@work) %></h2>
+<h2 class="heading"><%= t(".page_heading_html", work_link: link_to(@work.title, @work), creators: byline(@work)) %></h2>
 
 <ol class="chapter index group" role="navigation">
 <% for chapter in @chapters %>

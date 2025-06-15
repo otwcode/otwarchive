@@ -392,7 +392,7 @@ en:
           suspend_filter_counts: Suspend some filter tracking due to high posting volume
           tag_wrangling_off: Turn off tag wrangling for non-admins
         heading: Archive Settings
-        last_updated_by_admin: Last updated on %{updated_at} by %{admin_name}.
+        last_updated_by_admin: Settings last updated on %{updated_at} by %{admin_name}.
         legend:
           account_and_invitations: Accounts and Invitations
           actions: Actions
@@ -526,6 +526,10 @@ en:
   bookmarks:
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
+    index:
+      advanced_search: try our advanced search
+      choose_fandom: choose a fandom
+      recent_bookmarks_html: These are some of the latest bookmarks created on the Archive. To find more bookmarks, %{choose_fandom_link} or %{advanced_search_link}.
   challenge:
     gift_exchange:
       challenge_signups:
@@ -587,6 +591,12 @@ en:
     form:
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
+    index:
+      page_heading:
+        challenges_subcollections_in: Challenges/Subcollections in %{collection}
+        collections_in_the: Collections in the %{archive}
+        collections_including: Collections including %{work}
+        users_collections: "%{user}'s Collections"
     sidebar:
       bookmarks: Bookmarked Items (%{count})
       challenge_settings: Challenge Settings
@@ -663,6 +673,11 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+    edit:
+      back: Back
+      page_heading: Editing comment
+      show: Show
+      update: Update
     unreviewed:
       approve_all: Approve All Unreviewed Comments
       no_unreviewed: No unreviewed comments.
@@ -700,6 +715,9 @@ en:
       subtitle: The page was responding too slowly. Please try again after a few minutes.
   external_works:
     notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
+  fandoms:
+    index:
+      page_heading: Fandoms
   feedbacks:
     new:
       abuse:
@@ -1718,6 +1736,8 @@ en:
         one: "%{formatted_count} work"
         other: "%{formatted_count} works"
   layouts:
+    banner:
+      hide: hide banner
     footer:
       about:
         content_policy: Content Policy
@@ -1772,6 +1792,10 @@ en:
       read_and_understood: I have read & understood the 2024 Terms of Service, including the Content Policy and Privacy Policy.
       summary_html: On the Archive of Our Own (AO3), users can create works, bookmarks, comments, tags, and other %{content_link}. Any information you publish on AO3 may be accessible by the public, AO3 users, and/or AO3 personnel. Be mindful when sharing personal information, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites.
       tos: Terms of Service
+  media:
+    index:
+      all: All %{media_type}...
+      page_heading: Fandoms
   menu:
     menu_about:
       about_us: About Us
@@ -1960,6 +1984,9 @@ en:
   related_works:
     index:
       page_heading: "%{login}'s Related Works"
+  series:
+    series_order:
+      draft_work_title: "%{title} (DRAFT)"
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
@@ -2032,6 +2059,9 @@ en:
       wrangling_home: Wrangling Home
       wrangling_tools: Wrangling Tools
   tags:
+    edit:
+      save_changes: Save changes
+      submit_legend: Submit
     index:
       about:
         popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
@@ -2368,10 +2398,20 @@ en:
       content_policy: Content Policy
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
+    import:
+      draft_work_title_html: "%{work_link} (Draft)"
+      page_heading: Imported Works
+      success: We were able to successfully upload the following works.
+    index:
+      advanced_search: try our advanced search
+      choose_fandom: choose a fandom
+      recent_works_html: These are some of the latest works posted to the Archive. To find more works, %{choose_fandom_link} or %{advanced_search_link}.
     meta:
       original_creators:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
+    navigate:
+      page_heading_html: Chapter Index for %{work_link} by %{creators}
     new_import:
       content_policy: Content Policy
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
@@ -2398,6 +2438,9 @@ en:
       tooltip_label: 'tip:'
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    show_multiple:
+      draft: " (Draft)"
+      no_works: You have no works or drafts to edit.
     skin:
       select: Select work skin
     standard_form:
@@ -2412,9 +2455,16 @@ en:
         unrevealed: A work in an unrevealed collection
     work_header_notes:
       inspired_by:
+        other_works_inspired_by_this_one: other works inspired by this one
         restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
+      jump:
+        endnotes_and_related_works_html: "(See the end of the work for %{endnotes_link} and %{related_works_link}.)"
+        endnotes_html: "(See the end of the work for %{endnotes_link}.)"
+        more_notes: more notes
+        notes: notes
+        related_works_html: "(See the end of the work for %{related_works_link}.)"
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link} (Log in to access.)'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'

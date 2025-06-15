@@ -234,6 +234,14 @@ describe TagsController do
       get :feed, params: { id: @tag.id, format: :atom }
       it_redirects_to(tag_works_path(tag_id: @tag.name))
     end
+
+    context "when tag doesn't exist" do
+      it "raises an error" do
+        expect do
+          get :feed, params: { id: "notatag", format: "atom" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
 
   describe "new" do 
@@ -298,6 +306,13 @@ describe TagsController do
                                    "Please log in as admin")
       end
     end
+    context "when tag doesn't exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "notatag" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
   
   describe "show_hidden" do
@@ -333,6 +348,14 @@ describe TagsController do
         get :edit, params: { id: tag.name }
         it_redirects_to_with_error(tag_wranglings_path,
                                    "Please log in as admin")
+      end
+    end
+    
+    context "when tag doesn't exist" do
+      it "raises an error" do
+        expect do
+          get :edit, params: { id: "notatag" }
+        end.to raise_error ActiveRecord::RecordNotFound
       end
     end
   end
@@ -618,6 +641,33 @@ describe TagsController do
 
       put :update, params: { id: tag.name, tag: { associations_to_remove: [old_metatag.id], meta_tag_string: new_metatag.name } }
       expect(tag.reload.direct_meta_tags).to eq [new_metatag]
+    end
+
+    context "recategorizing a tag to media" do
+      let(:unsorted_tag) { create(:unsorted_tag) }
+      let(:subject) { put :update, params: { id: unsorted_tag, tag: { type: "Media" }, commit: "Save changes" } }
+
+      context "as a wrangler" do
+        it "doesn't change the tag type and redirects" do
+          subject
+
+          it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
+          expect(unsorted_tag.reload.class).to eq(UnsortedTag)
+        end
+      end
+
+      context "as an admin" do
+        let(:admin) { create(:superadmin) }
+
+        before { fake_login_admin(admin) }
+
+        it "changes the tag type and redirects" do
+          subject
+
+          it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
+          expect(Tag.find(unsorted_tag.id).class).to eq(Media)
+        end
+      end
     end
   end
 

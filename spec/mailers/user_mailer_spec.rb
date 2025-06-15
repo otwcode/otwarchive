@@ -42,6 +42,50 @@ describe UserMailer do
     end
   end
 
+  describe "#change_username" do
+    let(:old_username) { "olduser" }
+    let(:new_username) { "newuser" }
+    let(:user) { create(:user, login: new_username, renamed_at: Time.zone.parse("2025-01-01 00:00:00")) }
+    subject(:email) { UserMailer.change_username(user, old_username) }
+
+    before do
+      allow(ArchiveConfig).to receive(:USER_RENAME_LIMIT_DAYS).and_return(5)
+    end
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your username has been changed"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("Hi,")
+        expect(email).to have_html_part_content(">#{old_username}</b> has been changed to <b style=\"color:#990000\">#{new_username}</b>")
+
+        expect(email).to have_html_part_content("can only be changed once every 5 days")
+        expect(email).to have_html_part_content("You will be able to change your username again on Mon, 06 Jan 2025 00:00:00 +0000")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("Hi,")
+        expect(email).to have_text_part_content("#{old_username} has been changed to #{new_username}")
+
+        expect(email).to have_text_part_content("can only be changed once every 5 days")
+        expect(email).to have_text_part_content("You will be able to change your username again on Mon, 06 Jan 2025 00:00:00 +0000")
+      end
+    end
+  end
+
   describe "creatorship_request" do
     subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id) }
 
@@ -241,7 +285,7 @@ describe UserMailer do
       end
 
       it "lists the second imported work with a leading hyphen" do
-        expect(email).to have_text_part_content("- #{title2}")
+        expect(email).to have_text_part_content("- \"#{title2}\"")
       end
 
       it "displays titles with non-ASCII characters" do
@@ -333,7 +377,7 @@ describe UserMailer do
       end
 
       it "lists the second imported work with a leading hyphen" do
-        expect(email).to have_text_part_content("- #{title2}")
+        expect(email).to have_text_part_content("- \"#{title2}\"")
       end
     end
   end
@@ -644,7 +688,7 @@ describe UserMailer do
   end
 
   describe "admin_hidden_work_notification" do
-    subject(:email) { UserMailer.admin_hidden_work_notification(work.id, user.id) }
+    subject(:email) { UserMailer.admin_hidden_work_notification([work.id], user.id) }
 
     let(:user) { create(:user) }
     let(:work) { create(:work, authors: [user.pseuds.first]) }
@@ -653,7 +697,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Policy & Abuse team"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Policy & Abuse committee"
       expect(email.subject).to eq(subject)
     end
 

@@ -615,6 +615,47 @@ describe CommentsController do
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
       end
     end
+
+    context "with unusual user agents" do
+      let(:work) { create(:work) }
+      let(:user) { create(:user) }
+
+      context "when the user agent is very long" do
+        before do
+          request.env["HTTP_USER_AGENT"] = "Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0" * 10
+        end
+
+        it "creates the comment with a truncated user agent" do
+          comment_attributes = {
+            pseud_id: user.default_pseud_id,
+            comment_content: "I love this!"
+          }
+          fake_login_known_user(user)
+          post :create, params: { work_id: work.id, comment: comment_attributes }
+          comment = assigns[:comment]
+          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
+          expect(comment.user_agent.length).to eq(500)
+        end
+      end
+
+      context "when no user agent is set" do
+        before do
+          request.env["HTTP_USER_AGENT"] = nil
+        end
+
+        it "creates the comment with no user agent" do
+          comment_attributes = {
+            pseud_id: user.default_pseud_id,
+            comment_content: "I love this!"
+          }
+          fake_login_known_user(user)
+          post :create, params: { work_id: work.id, comment: comment_attributes }
+          comment = assigns[:comment]
+          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
+          expect(comment.user_agent).to be_nil
+        end
+      end
+    end
   end
 
   describe "DELETE #destroy" do

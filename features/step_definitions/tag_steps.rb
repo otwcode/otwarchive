@@ -108,6 +108,13 @@ Given /^a (non-?canonical|canonical) (\w+) "([^\"]*)"$/ do |canonical_status, ta
   t.save
 end
 
+Given "a non-canonical character {string} in fandom {string}" do |character_name, fandom_name|
+  character = Character.where(name: character_name).first_or_create
+  character.update!(canonical: false)
+  fandom = Fandom.where(name: fandom_name).first_or_create
+  character.add_association(fandom)
+end
+
 Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
   merger = Tag.find_by_name(merger)
   merger_type = merger.type
@@ -138,6 +145,7 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   if tw.blank?
     tw = FactoryBot.create(:user, login: user, password: password)
   else
+    tw.skip_password_change_notification!
     tw.password = password
     tw.password_confirmation = password
     tw.save
@@ -223,6 +231,31 @@ Given "a zero width space tag exists" do
   blank_tag.save!(validate: false)
 end
 
+Given "I create the canonical media tag {string}" do |name|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(new_tag_path)
+  fill_in("Name", with: name)
+  choose("Media")
+  check("Canonical")
+  click_button("Create Tag")
+end
+
+Given "I create the non-canonical media tag {string}" do |name|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(new_tag_path)
+  fill_in("Name", with: name)
+  choose("Media")
+  click_button("Create Tag")
+end
+
+Given "I recategorize the {string} fandom as a {string} tag" do |name, tag_type|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(edit_tag_path(Fandom.create(name: name)))
+  select(tag_type, from: "tag_type")
+  check("Canonical")
+  click_button("Save changes")
+end
+
 ### WHEN
 
 When /^the periodic tag count task is run$/i do
@@ -257,10 +290,7 @@ end
 
 When "I edit the tag {string}" do |tag|
   tag = Tag.find_by!(name: tag)
-  visit tag_path(tag)
-  within(".header") do
-    click_link("Edit")
-  end
+  visit edit_tag_path(tag)
 end
 
 When /^I view the tag "([^\"]*)"$/ do |tag|

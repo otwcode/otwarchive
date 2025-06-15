@@ -4,6 +4,7 @@ class BookmarksController < ApplicationController
   before_action :load_bookmarkable, only: [:index, :new, :create]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
+  before_action :check_parent_visible, only: [:index, :new]
   before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :confirm_delete, :share]
   before_action :check_visibility, only: [:show, :share]
   before_action :check_ownership, only: [:edit, :update, :destroy, :confirm_delete, :share]
@@ -20,6 +21,10 @@ class BookmarksController < ApplicationController
         redirect_to root_path and return
       end
     end
+  end
+
+  def check_parent_visible
+    check_visibility_for(@bookmarkable)
   end
 
   # get the parent
@@ -60,7 +65,6 @@ class BookmarksController < ApplicationController
 
   def index
     if @bookmarkable
-      access_denied unless logged_in_as_admin? || @bookmarkable.visible?
       @bookmarks = @bookmarkable.bookmarks.not_private.order_by_created_at.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       @bookmarks = @bookmarks.where(hidden_by_admin: false) unless logged_in_as_admin?
     else
