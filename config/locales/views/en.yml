@@ -706,7 +706,7 @@ en:
       see_chapter_end_notes_html: See the end of the chapter for %{chapter_end_notes_link}
     download_preface:
       byline_html: by %{byline_names_link}
-      chapters_html: 'Chapters: %{chapter_total_display}'
+      chapters: 'Chapters: %{chapter_total_display}'
       collections: 'Collections:'
       completed: 'Completed: %{date}'
       inspired_by:
