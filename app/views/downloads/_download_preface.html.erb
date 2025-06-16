@@ -42,7 +42,7 @@
           <%= @work.is_wip ? t(".updated", date: l(@work.revised_at.to_date)) : t(".completed", date: l(@work.revised_at.to_date)) %>
         <% end %>
         <%= t(".words", count_with_delimiters: number_with_delimiter(@work.word_count)) %>
-        <%= t(".chapters_html", chapter_total_display: chapter_total_display(@work)) %>
+        <%= t(".chapters", chapter_total_display: chapter_total_display(@work)) %>
       </dd>
     </dl>
     <h1><%= @work.title %></h1>
