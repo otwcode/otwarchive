@@ -15,7 +15,7 @@
         <% unless tags.blank? %>
           <dt><%= t(".tag_type", tag_type: tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize) %></dt>
           <dd><%= tags.map { |t| link_to(t.display_name, tag_url(t)) }
-                    .safe_join(t("support.array.words_connector")) %></dd>
+                    safe_join(t("support.array.words_connector")) %></dd>
         <% end %>
       <% end %>
 
@@ -28,12 +28,12 @@
       <% unless series_list.blank? %>
         <dt><%= t(".series") %></dt>
         <dd><%= series_list.map { |s| t(".series_list_html", position: s.position, series_link: link_to(s.series.title, series_url(s.series))) }
-                  .safe_join(t("support.array.words_connector")) %></dd>
+                  safe_join(t("support.array.words_connector")) %></dd>
       <% end %>
       <% unless @work.approved_collections.empty? %>
         <dt><%= t(".collections") %></dt>
         <dd><%= @work.approved_collections.map { |c| link_to(c.title, collection_url(c)) }
-                  .safe_join(t("support.array.words_connector")) %></dd>
+                  safe_join(t("support.array.words_connector")) %></dd>
       <% end %>
       <dt><%= t(".stats") %></dt>
       <dd>
