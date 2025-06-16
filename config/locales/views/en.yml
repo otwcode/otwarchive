@@ -2488,9 +2488,16 @@ en:
         unrevealed: A work in an unrevealed collection
     work_header_notes:
       inspired_by:
+        other_works_inspired_by_this_one: other works inspired by this one
         restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
+      jump:
+        endnotes_and_related_works_html: "(See the end of the work for %{endnotes_link} and %{related_works_link}.)"
+        endnotes_html: "(See the end of the work for %{endnotes_link}.)"
+        more_notes: more notes
+        notes: notes
+        related_works_html: "(See the end of the work for %{related_works_link}.)"
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link} (Log in to access.)'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
