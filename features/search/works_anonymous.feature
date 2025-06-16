@@ -22,7 +22,7 @@ Feature: Search anonymous works
       And I should see "1 Found"
       And I should see "Fulfilled Story-thing"
     When I search for works by "Anonymous"
-    Then I should see "You searched for: Creator: Anonymous"
+    Then I should see "You searched for: creator: Anonymous"
       And I should see "1 Found"
       And I should see "Fulfilled Story-thing"
     When I go to the search works page
