@@ -1608,7 +1608,7 @@ en:
       clear_entire_history: Clear Entire History
     confirm_clear:
       page_heading: Clear Entire History
-      notice: Are you sure you want to <strong><em>clear</em></strong> your entire history? This <strong>cannot be undone</strong>.
+      notice_html: Are you sure you want to <strong><em>clear</em></strong> your entire history? This <strong>cannot be undone</strong>.
       submit: Yes, Clear Entire History
   skins:
     confirm_delete:
