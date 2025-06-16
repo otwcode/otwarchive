@@ -41,7 +41,7 @@ Feature: Search anonymous works
       And I should see "1 Found"
       And I should see "Fulfilled Story-thing"
     When I search for works by "mod1"
-    Then I should see "You searched for: Creator: mod1"
+    Then I should see "You searched for: creator: mod1"
       And I should see "1 Found"
       And I should see "Fulfilled Story-thing"
     When I go to the search works page
