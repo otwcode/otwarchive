@@ -11,7 +11,7 @@ Feature: Search anonymous works
     Then I should see "You searched for: mod1"
       And I should see "No results found"
     When I search for works by "mod1"
-    Then I should see "You searched for: Creator: mod1"
+    Then I should see "You searched for: creator: mod1"
       And I should see "No results found"
 
   Scenario: Works that are anonymous should show up in searches for the
