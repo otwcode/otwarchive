@@ -4,7 +4,7 @@
   <h2 class="heading"><%= @chapter.chapter_title.html_safe %></h2>
   <% if (!@chapter.pseuds.blank? && (@chapter.pseuds != @work.pseuds) && (!@work.anonymous?)) %>
     <%# only display byline if different from the main byline %>
-    <p class="byline"><%= t(".chapter_byline_html", byline_names: byline(@chapter, only_path: false)) %></p>
+    <p class="byline"><%= t(".chapter_byline_html", byline_names_link: byline(@chapter, only_path: false)) %></p>
   <% end %>
 
   <% unless @chapter.summary.blank? %>
@@ -19,7 +19,7 @@
     <% end %>
     <% unless @chapter.endnotes.blank? %>
       <div class="endnote-link">
-        <%= @chapter.notes.present? ? t(".endnotes_with_chapternotes_html", notes_link: link_to(t(".notes"), "#endnotes#{@chapter.position}")) : t(".endnotes_no_chapternotes_html", notes_link: link_to(t(".notes"), "#endnotes#{@chapter.position}")) %>
+        <% t(".see_chapter_end_notes_html", chapter_end_notes_link: link_to(@chapter.notes.present? ? t(".more_notes_link") : t(".notes_link"), "#endnotes##{@chapter.position}")) %>
       </div>
     <% end %>
   <% end %>
@@ -33,7 +33,7 @@
 
 <% unless @chapter.endnotes.blank? %>
   <div class="meta" id="endnotes<%= @chapter.position %>">
-    <p><%= t(".chapter_endnotes") %></p>
+    <p><%= t(".chapter_end_notes") %></p>
     <blockquote class="userstuff"><%= raw sanitize_field(@chapter, :endnotes) %></blockquote>
   </div>
 <% end %>

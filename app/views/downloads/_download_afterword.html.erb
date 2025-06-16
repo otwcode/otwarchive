@@ -1,11 +1,11 @@
 <div id="afterword">
-  <h2 class="toc-heading"><%= t(".toc_heading") %></h2>
+  <h2 class="toc-heading"><%= t(".afterword") %></h2>
 
   <% unless @work.endnotes.blank? && @work.approved_children.blank? %>
     <div class="meta">
       <% unless @work.endnotes.blank? %>
         <div id="endnotes">
-          <p><%= t(".endnotes") %></p>
+          <p><%= t(".end_notes") %></p>
           <blockquote class="userstuff"><%= raw sanitize_field(@work, :endnotes) %></blockquote>
         </div>
       <% end %>
@@ -28,5 +28,5 @@
     </div>
   <% end %>
 
-  <p class="message"><%= t(".please_comment_html", work_comment_link: link_to(t(".work_comment"), new_work_comment_url(@work))) %></p>
+  <p class="message"><%= t(".please_comment_html", comment_link: link_to(t(".comment"), new_work_comment_url(@work))) %></p>
 </div>
