@@ -14,8 +14,7 @@
         <% tags = @work.tag_groups[type] %>
         <% unless tags.blank? %>
           <dt><%= t(".tag_type", tag_type: tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize) %></dt>
-          <dd><%= tags.map { |t| link_to(t.display_name, tag_url(t)) }
-                    safe_join(t("support.array.words_connector")) %></dd>
+          <dd><%= safe_join(tags.map { |t| link_to(t.display_name, tag_url(t)) }, t("support.array.words_connector")) %></dd>
         <% end %>
       <% end %>
 
@@ -27,13 +26,11 @@
       <% series_list = @work.serial_works.reject { |sw| sw.series.nil? } %>
       <% unless series_list.blank? %>
         <dt><%= t(".series") %></dt>
-        <dd><%= series_list.map { |s| t(".series_list_html", position: s.position, series_link: link_to(s.series.title, series_url(s.series))) }
-                  safe_join(t("support.array.words_connector")) %></dd>
+        <dd><%= safe_join(series_list.map { |s| t(".series_list_html", position: s.position, series_link: link_to(s.series.title, series_url(s.series))) }, t("support.array.words_connector")) %></dd>
       <% end %>
       <% unless @work.approved_collections.empty? %>
         <dt><%= t(".collections") %></dt>
-        <dd><%= @work.approved_collections.map { |c| link_to(c.title, collection_url(c)) }
-                  safe_join(t("support.array.words_connector")) %></dd>
+        <dd><%= safe_join(@work.approved_collections.map { |c| link_to(c.title, collection_url(c)) }, t("support.array.words_connector")) %></dd>
       <% end %>
       <dt><%= t(".stats") %></dt>
       <dd>
