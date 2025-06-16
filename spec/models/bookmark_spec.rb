@@ -14,4 +14,10 @@ describe Bookmark do
   it "has a valid factory for series bookmarks" do
     expect(build(:series_bookmark)).to be_valid
   end
+
+  it "is invalid without a pseud_id" do
+    bookmark = build(:bookmark, pseud_id: nil)
+    expect(bookmark).to_not be_valid
+    expect(bookmark.errors[:pseud].first).to eq("can't be blank")
+  end
 end

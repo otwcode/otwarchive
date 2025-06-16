@@ -1,6 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <% if @user %>
-<h2 class="heading"><%= ts("%{user_login}'s Related Works", :user_login => @user.login) %></h2>
+<h2 class="heading"><%= t(".page_heading", login: @user.login) %></h2>
 <% end %>
 <!--/descriptions-->
 

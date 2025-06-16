@@ -1,6 +1,4 @@
 class InviteRequest < ApplicationRecord
-  self.ignored_columns = [:position]
-
   validates :email, presence: true, email_format: true
   validates :email, uniqueness: { message: "is already part of our queue." }
   before_validation :compare_with_users, on: :create
@@ -21,11 +19,11 @@ class InviteRequest < ApplicationRecord
     end
   end
 
-  def proposed_fill_date
+  def proposed_fill_time
     admin_settings = AdminSetting.current
     number_of_rounds = (self.position.to_f/admin_settings.invite_from_queue_number.to_f).ceil - 1
-    proposed_date = admin_settings.invite_from_queue_at.to_date + (admin_settings.invite_from_queue_frequency * number_of_rounds).days
-    Date.today > proposed_date ? Date.today : proposed_date
+    proposed_time = admin_settings.invite_from_queue_at + (admin_settings.invite_from_queue_frequency * number_of_rounds).hours
+    Time.current > proposed_time ? Time.current : proposed_time
   end
 
   def position

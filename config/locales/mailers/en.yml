@@ -2,6 +2,19 @@
 en:
   admin:
     mailer:
+      password_change:
+        changed: The password for your %{app_name} admin account was changed on %{date}.
+        did_not_make_change: If you did not make this change, someone else may have access to your %{app_name} admin account or your OTW email. Please let AD&T and VolCom know immediately so they can take steps to secure your accounts.
+        made_change:
+          html: If you made this change, you can %{login_link} or %{reset_password_link} if you've forgotten it.
+          login: log in with your new password
+          reset_password: reset your password
+          text: If you made this change, you can log in with your new password (%{login_url}) or reset your password if you've forgotten it (%{reset_password_url}).
+        secure_again:
+          html: When your accounts are secure again, please %{reset_password_link}.
+          reset_password: reset your admin password
+          text: 'When your accounts are secure again, please reset your admin password: %{reset_password_url}.'
+        subject: "[%{app_name}] Your admin password has been changed"
       reset_password_instructions:
         expiration:
           one: If you do not use this link to reset your password within %{count} day, it will expire, and you will have to request a new one.
@@ -56,19 +69,23 @@ en:
           one: "%{count} word"
           other: "%{count} words"
       footer:
-        general:
-          about:
-            html: The Archive of Our Own is a fan-run and fan-supported archive that relies on %{donate_link}.
-            text: 'The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{donate_url}.'
-          html:
-            donate_link_text: your donations
-            support_link_text: contact Support
-          unwanted_email:
-            html: If you've received this message in error, please %{support_link}.
-            text: If you've received this message in error, please contact Support at %{support_url}.
+        about:
+          html: The Archive of Our Own is a fan-run and fan-supported archive that relies on %{your_donations_link}.
+          text: 'The Archive of Our Own is a fan-run and fan-supported archive that relies on your donations: %{your_donations_url}.'
+          your_donations: your donations
         sent_at: Sent at %{sent_at}.
+        why_policy_abuse:
+          contact_policy_abuse: contact Policy & Abuse
+          html: If you don't understand why you received this email, please %{contact_policy_abuse_link}.
+          text: 'If you don''t understand why you received this email, please contact Policy & Abuse: %{contact_policy_abuse_url}.'
+        why_support:
+          contact_support: contact Support
+          html: If you don't understand why you received this email, please %{contact_support_link}.
+          text: 'If you don''t understand why you received this email, please contact Support: %{contact_support_url}.'
       greeting:
-        formal_html: Dear %{name},
+        formal:
+          addressed_html: Hi %{name},
+          unaddressed: Hi,
         informal:
           addressed_html: Hi, %{name}!
           unaddressed: Hi!
@@ -111,32 +128,60 @@ en:
       deleted:
         html: Your work %{title} was deleted from the Archive by a site admin.
         text: Your work "%{title}" was deleted from the Archive by a site admin.
-      html:
-        tos_violation: If it's possible your work violated the Archive's Terms of Service, please %{contact_abuse_link}.
       import_project:
         html: If your work was part of an import project managed by our Open Doors team, please %{opendoors_link} with any further questions.
         text: If your work was part of an import project managed by our Open Doors team, please contact Open Doors (%{opendoors_link}) with any further questions.
       opendoors: contact Open Doors
       subject: "[%{app_name}] Your work has been deleted by an admin"
-      text:
-        tos_violation: If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{contact_abuse_url}).
+      tos_violation:
+        html: If it's possible your work violated the Archive's Terms of Service, please %{contact_abuse_link}.
+        text: If it's possible your work violated the Archive's Terms of Service, please contact our Policy & Abuse team (%{contact_abuse_url}).
     admin_hidden_work_notification:
-      access: While your work is hidden, you will still be able to access it through the link provided above, but it will not be listed on your works page, and it won't be available to other users of the Archive.
-      check_email: Please check your email, including your spam folder, as the Policy & Abuse team may have already contacted you explaining why your work was hidden.
-      contact_abuse: contact Policy & Abuse
-      html:
-        help: If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please %{contact_abuse_link} directly.
-        hidden: Your work %{title} has been hidden by the Policy & Abuse team and is no longer publicly accessible.
-        tos_violation: If your work was hidden due to being in violation of the Archive of Our Own's %{tos_link}, you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
-      subject: "[%{app_name}] Your work has been hidden by the Policy & Abuse team"
-      text:
-        help: 'If you are uncertain why your work was hidden, and you have not received further communication regarding this matter, please contact Policy & Abuse directly: %{contact_abuse_url}.'
-        hidden: Your work "%{title}" (%{work_url}) has been hidden by the Policy & Abuse team and is no longer publicly accessible.
-        tos_violation: If your work was hidden due to being in violation of the Archive of Our Own's Terms of Service (%{tos_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may lead to your work being deleted from the Archive.
-      tos: Terms of Service
+      access:
+        one: While your work is hidden, you will still be able to access it through the link provided above, but it won't be available to other users or listed on your works page.
+        other: While your works are hidden, you will still be able to access them through the links provided above, but they won't be available to other users or listed on your works page.
+      check_email:
+        one: Please check your email, including your spam folder, as the Policy & Abuse committee may have already contacted you to explain why your work was hidden.
+        other: Please check your email, including your spam folder, as the Policy & Abuse committee may have already contacted you to explain why your works were hidden.
+      contact_abuse: contact the Policy & Abuse committee
+      content_policy: Content Policy
+      help:
+        html:
+          one: If you don't know why your work was hidden, and you have not received a separate email explaining why, please %{contact_abuse_link} directly.
+          other: If you don't know why your works were hidden, and you have not received a separate email explaining why, please %{contact_abuse_link} directly.
+        text:
+          one: 'If you don''t know why your work was hidden, and you have not received a separate email explaining why, please contact the Policy & Abuse committee directly: %{contact_abuse_url}.'
+          other: 'If you don''t know why your works were hidden, and you have not received a separate email explaining why, please contact the Policy & Abuse committee directly: %{contact_abuse_url}.'
+      hidden_multiple: "%{count} of your works have been hidden by the Policy & Abuse committee:"
+      hidden_one:
+        html: Your work %{title} has been hidden by the Policy & Abuse committee.
+        text: Your work "%{title}" (%{work_url}) has been hidden by the Policy & Abuse committee.
+      subject:
+        one: "[%{app_name}] Your work has been hidden by the Policy & Abuse committee"
+        other: "[%{app_name}] Your works have been hidden by the Policy & Abuse committee"
+      tos: AO3 Terms of Service
+      tos_faq: Terms of Service FAQ
+      tos_violation:
+        html:
+          one: If your work was hidden due to being in violation of the %{tos_link} (including the %{content_policy_link}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may result in your work being deleted from AO3. For more information, please refer to the %{tos_faq_link}.
+          other: If your works were hidden due to being in violation of the %{tos_link} (including the %{content_policy_link}), you will be required to take action to correct the violations. Failure to bring your works into compliance with the Terms of Service may result in your works being deleted from AO3. For more information, please refer to the %{tos_faq_link}.
+        text:
+          one: 'If your work was hidden due to being in violation of the AO3 Terms of Service (%{tos_url}), including the Content Policy (%{content_policy_url}), you will be required to take action to correct the violation. Failure to bring your work into compliance with the Terms of Service may result in your work being deleted from AO3. For more information, please refer to the Terms of Service FAQ: %{tos_faq_url}.'
+          other: 'If your works were hidden due to being in violation of the AO3 Terms of Service (%{tos_url}), including the Content Policy (%{content_policy_url}), you will be required to take action to correct the violations. Failure to bring your works into compliance with the Terms of Service may result in your works being deleted from AO3. For more information, please refer to the Terms of Service FAQ: %{tos_faq_url}.'
+      work_info: '- "%{title}" (%{work_url})'
+    admin_spam_work_notification:
+      contact_abuse: contact our Policy & Abuse Team
+      flagged_as_spam:
+        html: Your work %{work_link} has been flagged by our automated system as spam and hidden until it can be reviewed by our Policy & Abuse team. While the work is hidden it can only be accessed by you and AO3 site admins.
+        text: Your work "%{work_title}" (%{work_url}) has been flagged by our automated system as spam and hidden until it can be reviewed by our Abuse team. While the work is hidden it can only be accessed by you and AO3 site admins.
+      future: If we determine that your work is not spam, we'll unhide it. Other users will then be able to access and leave feedback on it as usual. Please note that we do not screen works for other kinds of violations at this time. If your work is reported to us for a different reason in the future, that will be investigated separately.
+      questions:
+        html: If you have any questions, please %{contact_abuse_link}.
+        text: If you have any questions, please contact our Policy & Abuse team (%{contact_abuse_url}).
+      subject: "[%{app_name}] Your work was hidden as spam"
     anonymous_or_unrevealed_notification:
-      anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
-      anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your user name will be replaced with "Anonymous."
+      anonymous_info: Anonymous works are included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
+      anonymous_unrevealed_info: The collection maintainers may later reveal your work but leave it anonymous. People who subscribe to you will not be notified of this change. Your work will be included in tag listings, but not on your works page. On the work, your username will be replaced with "Anonymous."
       changed_status:
         anonymous:
           html: The collection maintainers of %{collection_link} have changed the status of your work %{work_link} to anonymous.
@@ -181,28 +226,59 @@ en:
       any: Any
       assignment:
         html: You have been assigned the following request in the %{link} challenge at the Archive of Our Own!
-      description: 'Description:'
-      due: 'This assignment is due at:'
-      html:
-        footer: You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{footer_link}.
-        footer_link: the challenge profile page
-        look_up: You can look up this assignment from %{link}.
-        look_up_link: your Assignments page
-      optional_tags: 'Optional Tags:'
-      prompt_url: 'Prompt URL:'
+        text: You have been assigned the following request in the "%{collection_title}" challenge (%{collection_url}) at the Archive of Our Own!
+      description: Description
+      due: This assignment is due at
+      footer:
+        challenge_profile: the challenge profile page
+        html: You're receiving this email because you signed up for the %{title} challenge. For more information about this challenge and contact information for the moderators, please visit %{challenge_profile_link}.
+        text: You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{challenge_profile_url}.
+      look_up:
+        html: You can look up this assignment from %{your_assignments_link}.
+        text: You can look up this assignment from your Assignments page at %{your_assignments_url}.
+        your_assignments: your Assignments page
+      optional_tags: Optional Tags
+      prompt_url: Prompt URL
       prompts: 'Prompts:'
-      recipient: 'Recipient:'
+      recipient: Recipient
       recipient_missing: 'None: contact a moderator for help!'
       subject: "[%{app_name}][%{collection_title}] Your assignment!"
-      text:
-        assignment: You have been assigned the following request in the "%{collection_title}" challenge (%{collection_url}) at the Archive of Our Own!
-        footer: You're receiving this email because you signed up for the %{title} challenge (%{url}). For more information about this challenge and contact information for the moderators, please visit %{profile_url}.
-        look_up: You can look up this assignment from your Assignments page at %{link}.
     change_email:
-      changed:
-        html: "%{login}, the email associated with your account has been changed to %{email}"
-        text: "%{login}, the email associated with your account has been changed to %{email}"
-      subject: "[%{app_name}] Email changed"
+      confirm_change:
+        html:
+          one: If you made this request, check your email at %{unconfirmed_email} within %{count} day to confirm your email change. If you do not receive a confirmation email, or if you have other issues, please %{contact_support_link}.
+          other: If you made this request, check your email at %{unconfirmed_email} within %{count} days to confirm your email change. If you do not receive a confirmation email, or if you have other issues, please %{contact_support_link}.
+        text:
+          one: 'If you made this request, check your email at %{unconfirmed_email} within %{count} day to confirm your email change. If you do not receive a confirmation email, or if you have other issues, please contact Support: %{contact_support_url}.'
+          other: 'If you made this request, check your email at %{unconfirmed_email} within %{count} days to confirm your email change. If you do not receive a confirmation email, or if you have other issues, please contact Support: %{contact_support_url}.'
+      contact_policy_abuse: contact Policy & Abuse
+      contact_support: contact Support
+      email_change_form: submit the email change form
+      made_request: Someone has made a request to change the email address associated with your %{app_name} account.
+      not_made_request:
+        html: If you did not make this request, someone else may have access to your %{app_name} account. Please %{reset_password_link} or %{contact_policy_abuse_link}.
+        text: 'If you did not make this request, someone else may have access to your %{app_name} account. Please reset your password now (%{reset_password_url}) or contact Policy & Abuse: %{contact_policy_abuse_url}.'
+      reset_password: reset your password now
+      subject: "[%{app_name}] Email change request"
+      wrong_email:
+        html: If you entered the wrong email address, you will need to %{email_change_form_link} again.
+        text: 'If you entered the wrong email address, you will need to submit the email change form again: %{email_change_form_url}.'
+    change_username:
+      change_cooldown_html:
+        one: "%{app_name} usernames can only be changed once per day. You will be able to change your username again on %{date}."
+        other: "%{app_name} usernames can only be changed once every %{count} days. You will be able to change your username again on %{date}."
+      changed_html: The username for your %{app_name} account %{old_username} has been changed to %{new_username}.
+      contact_policy_abuse: contact Policy & Abuse
+      contact_support: contact Support
+      did_not_make_change:
+        html: If you did not make this change, someone else may have access to your %{app_name} account. Please %{reset_password_link} or %{contact_policy_abuse_link}.
+        text: 'If you did not make this change, someone else may have access to your %{app_name} account. Please reset your password now (%{reset_password_url}) or contact Policy & Abuse: %{contact_policy_abuse_url}.'
+      effects:
+        html: You can %{refer_faq_link} to learn how changing your username will affect your account. If you experience technical issues, such as seeing your old username on your works or bookmarks after a week, please %{contact_support_link}.
+        text: 'You can refer to our FAQ to learn how changing your username will affect your account: %{refer_faq_url}. If you experience technical issues, such as seeing your old username on your works or bookmarks after a week, please contact Support: %{contact_support_url}.'
+      refer_faq: refer to our FAQ
+      reset_password: reset your password now
+      subject: "[%{app_name}] Your username has been changed"
     claim_notification:
       access:
         contact_support: contact AO3 Support
@@ -244,8 +320,8 @@ en:
       work_info:
         html: "%{work_link} (%{fandom})"
         text:
-          no_fandom: "- %{work_title} %{work_url}"
-          with_fandom: "- %{work_title} %{work_url} (%{fandom})"
+          no_fandom: '- "%{work_title}" (%{work_url})'
+          with_fandom: '- "%{work_title}" (%{work_url}) (%{fandom})'
       works_by: 'These works were written under the e-mail: %{email}'
     collection_notification:
       assignments_sent:
@@ -268,7 +344,7 @@ en:
         remove_series: If you've been added in error or don't want to be listed as a creator, you can %{edit_series_link} to remove yourself as creator.
       intro_chapter: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{adding_user} has listed your pseud %{pseud} as a co-creator on the following series:'
-      subject: "[%{app_name}] Co-creator notification"
+      subject: "[%{app_name}] You've been added as a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
@@ -286,7 +362,7 @@ en:
       intro_chapter: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following chapter:'
       intro_series: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following series:'
       intro_work: 'The user %{archivist} has added your pseud %{pseud} as a co-creator on the following work:'
-      subject: "[%{app_name}] Archivist co-creator notification"
+      subject: "[%{app_name}] An archivist has added you as a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         remove_chapter: 'If you''ve been added in error or don''t want to be listed as a creator, you can edit the chapter to remove yourself as creator: %{url}'
@@ -300,7 +376,7 @@ en:
       intro_chapter: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following chapter:'
       intro_series: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following series:'
       intro_work: 'The user %{inviting_user} has invited your pseud %{pseud} to be listed as a co-creator on the following work:'
-      subject: "[%{app_name}] Co-creator request"
+      subject: "[%{app_name}] You've received a request to be a co-creator"
       text:
         creation: "%{title} (%{url}) by %{pseuds}"
         instructions: 'You can accept or reject this request on your Co-Creator Requests page: %{url}'
@@ -379,17 +455,19 @@ en:
         html: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and %{contact_open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
         text: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and contact Open Doors at %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
       uploaded_list: 'The works uploaded include:'
+      work_info:
+        no_fandom: '- "%{work_title}" (%{work_url})'
+        with_fandom: '- "%{work_title}" (%{work_url}) (%{fandom})'
     invite_increase_notification:
-      html:
-        body:
+      body:
+        html:
           one: We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at %{invitation_page_link}.
           other: We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at %{invitation_page_link}.
-      invitation_page_link_text: your invitations page
-      subject: "[%{app_name}] New invitations"
-      text:
-        body:
+        text:
           one: We just wanted to let you know that you have %{count} new invitation, which can be used to create a new account at the Archive. You can invite a friend at your invitations page (%{invitation_page_url}).
           other: We just wanted to let you know that you have %{count} new invitations, which can be used to create new accounts at the Archive. You can invite a friend at your invitations page (%{invitation_page_url}).
+      invitation_page_link_text: your invitations page
+      subject: "[%{app_name}] New invitations"
     invite_request_declined:
       main:
         one: We regret to inform you that your request for a new invitation cannot be fulfilled at this time.
@@ -397,14 +475,23 @@ en:
       reason: 'Your request was:'
       subject: "[%{app_name}] Additional invitation request declined"
     recipient_notification:
-      html:
-        collection: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
+      collection:
+        html: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
+        text: A gift work has been posted for you in the "%{collection_title}" collection (%{collection_url}) at the Archive of Our Own!
       no_collection: A gift work has been posted for you at the Archive of Our Own!
       subject:
         collection: "[%{app_name}][%{collection_title}] A gift work for you from %{collection_title}"
         no_collection: "[%{app_name}] A gift work for you"
-      text:
-        collection: A gift work has been posted for you in the "%{collection_title}" collection (%{collection_url}) at the Archive of Our Own!
+    related_work_notification:
+      anonymous: an anonymous creator
+      approve:
+        html: Approve relationship and link back to this work from your work
+        text: 'Approve relationship and link back to this work from your work: %{related_work_url}'
+      can_come_back: "(You can come back to this page if you change your mind.)"
+      subject: "[%{app_name}] Related work notification"
+      work_listed:
+        html: Your work %{work_link} was listed as the inspiration of %{related_work_link} by %{work_creators}.
+        text: Your work "%{work_title}" (%{work_url}) was listed as the inspiration of "%{related_work_title}" (%{related_work_url}) by %{work_creators}.
     signup_notification:
       activate:
         html: Please %{activate_account_link}.
@@ -424,6 +511,36 @@ en:
       welcome: Welcome to the Archive of Our Own, %{login}!
   users:
     mailer:
+      confirmation_instructions:
+        confirm_by:
+          html: If you don't confirm your request by %{date}, the link in this email will expire and you will need to %{email_change_form_link} again.
+          text: 'If you don''t confirm your request by %{date}, the link in this email will expire and you will need to submit the email change form again: %{email_change_form_url}.'
+        confirm_email_change: confirm your email change
+        did_not_make_request: If you did not make this request, you can safely ignore and delete this email. Someone else may have entered your email address by mistake.
+        email_change_form: submit the email change form
+        made_request:
+          html:
+            one: If you made this request, please log in and %{confirm_email_change_link} within %{count} day.
+            other: If you made this request, please log in and %{confirm_email_change_link} within %{count} days.
+          text:
+            one: 'If you made this request, please log in and confirm your email change within %{count} day: %{confirm_email_change_url}.'
+            other: 'If you made this request, please log in and confirm your email change within %{count} days: %{confirm_email_change_url}.'
+        request_to_change_email_html: Someone has made a request to change the email address associated with the %{app_name} account %{username} to this email address.
+        subject: "[%{app_name}] Confirm your email change"
+      password_change:
+        changed: The password for your %{app_name} account was changed on %{date}.
+        did_not_make_change:
+          contact_policy_abuse: contact Policy & Abuse
+          html: If you did not make this change, someone else may have access to your %{app_name} account. Please %{reset_password_link} or %{contact_policy_abuse_link}.
+          reset_password: reset your password now
+          text: 'If you did not make this change, someone else may have access to your %{app_name} account. Please reset your password now (%{reset_password_url}) or contact Policy & Abuse: %{contact_policy_abuse_url}.'
+        made_change:
+          contact_support: contact Support
+          html: If you made this change, you can %{login_link} or %{reset_password_link} if you've forgotten it. If you experience technical issues, please %{contact_support_link}.
+          login: log in with your new password
+          reset_password: reset your password
+          text: 'If you made this change, you can log in with your new password (%{login_url}) or reset your password if you''ve forgotten it (%{reset_password_url}). If you experience technical issues, please contact Support: %{contact_support_url}'
+        subject: "[%{app_name}] Your password has been changed"
       reset_password_instructions:
         expiration: If you do not use this link to reset your password within a week, it will expire, and you will have to request a new one.
         intro: 'Someone has requested a password reset for your account. You can change your account password by following the link below and entering your new password:'

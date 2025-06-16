@@ -1,6 +1,6 @@
 class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
-  before_action :users_only, except: [ :index, :show, :destroy, :confirm_delete ]
+  before_action :users_only, except: [:index, :show, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :update, :update_positions]
   before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy]
   before_action :load_work
@@ -28,53 +28,55 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/:id.xml
   def show
     @tag_groups = @work.tag_groups
+
+    redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return if params[:selected_id]
+
+    @chapters = @work.chapters_in_order(
+      include_content: false,
+      include_drafts: (logged_in_as_admin? ||
+                       @work.user_is_owner_or_invited?(current_user))
+    )
+
+    unless @chapters.include?(@chapter)
+      access_denied
+      return
+    end
+ 
+    chapter_position = @chapters.index(@chapter)
+    if @chapters.length > 1
+      @previous_chapter = @chapters[chapter_position - 1] unless chapter_position.zero?
+      @next_chapter = @chapters[chapter_position + 1]
+    end
+
+    if @work.unrevealed?
+      @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
+    else
+      fandoms = @tag_groups["Fandom"]
+      fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms[0].name
+      title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
+      author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
+      @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
+    end
+
     if params[:view_adult]
       cookies[:view_adult] = "true"
     elsif @work.adult? && !see_adult?
       render "works/_adult", layout: "application" and return
     end
 
-    if params[:selected_id]
-      redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return
+    @kudos = @work.kudos.with_user.includes(:user)
+
+    if current_user.respond_to?(:subscriptions)
+      @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
+                                                       subscribable_type: "Work").first ||
+                      current_user.subscriptions.build(subscribable: @work)
     end
-    @chapters = @work.chapters_in_order(
-      include_content: false,
-      include_drafts: (logged_in_as_admin? ||
-                       @work.user_is_owner_or_invited?(current_user))
-    )
-    if !@chapters.include?(@chapter)
-      access_denied
-    else
-      chapter_position = @chapters.index(@chapter)
-      if @chapters.length > 1
-        @previous_chapter = @chapters[chapter_position-1] unless chapter_position == 0
-        @next_chapter = @chapters[chapter_position+1]
-      end
+    # update the history.
+    Reading.update_or_create(@work, current_user) if current_user
 
-      if @work.unrevealed?
-        @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
-      else
-        fandoms = @tag_groups["Fandom"]
-        fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms[0].name
-        title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
-        author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
-        @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
-      end
-
-      @kudos = @work.kudos.with_user.includes(:user)
-
-      if current_user.respond_to?(:subscriptions)
-        @subscription = current_user.subscriptions.where(subscribable_id: @work.id,
-                                                         subscribable_type: 'Work').first ||
-                        current_user.subscriptions.build(subscribable: @work)
-      end
-      # update the history.
-      Reading.update_or_create(@work, current_user) if current_user
-
-      respond_to do |format|
-        format.html
-        format.js
-      end
+    respond_to do |format|
+      format.html
+      format.js
     end
   end
 
@@ -86,14 +88,14 @@ class ChaptersController < ApplicationController
 
   # GET /work/:work_id/chapters/1/edit
   def edit
-    if params["remove"] == "me"
-      @chapter.creatorships.for_user(current_user).destroy_all
-      if @work.chapters.any? { |c| current_user.is_author_of?(c) }
-        flash[:notice] = ts("You have been removed as a creator from the chapter.")
-        redirect_to @work
-      else # remove from work if no longer co-creator on any chapter
-        redirect_to edit_work_path(@work, remove: "me")
-      end
+    return unless params["remove"] == "me"
+
+    @chapter.creatorships.for_user(current_user).destroy_all
+    if @work.chapters.any? { |c| current_user.is_author_of?(c) }
+      flash[:notice] = ts("You have been removed as a creator from the chapter.")
+      redirect_to @work
+    else # remove from work if no longer co-creator on any chapter
+      redirect_to edit_work_path(@work, remove: "me")
     end
   end
 
@@ -115,7 +117,6 @@ class ChaptersController < ApplicationController
     if params[:edit_button] || chapter_cannot_be_saved?
       render :new
     else # :post_without_preview or :preview
-      @work.major_version = @work.major_version + 1
       @chapter.posted = true if params[:post_without_preview_button]
       @work.set_revised_at_by_chapter(@chapter)
       if @chapter.save && @work.save
@@ -155,7 +156,6 @@ class ChaptersController < ApplicationController
       end
       render :preview
     else
-      @work.minor_version = @work.minor_version + 1
       @chapter.posted = true if params[:post_button] || params[:post_without_preview_button]
       posted_changed = @chapter.posted_changed?
       @work.set_revised_at_by_chapter(@chapter)
@@ -222,7 +222,7 @@ class ChaptersController < ApplicationController
 
     was_draft = !@chapter.posted?
     if @chapter.destroy
-      @work.minor_version = @work.minor_version + 1
+      @work.minor_version = @work.minor_version + 1 unless was_draft
       @work.set_revised_at
       @work.save
       flash[:notice] = ts("The chapter #{was_draft ? 'draft ' : ''}was successfully deleted.")
@@ -250,7 +250,7 @@ class ChaptersController < ApplicationController
   # fetch work these chapters belong to from db
   def load_work
     @work = params[:work_id] ? Work.find_by(id: params[:work_id]) : Chapter.find_by(id: params[:id]).try(:work)
-    unless @work.present?
+    if @work.blank?
       flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
     end
@@ -263,18 +263,15 @@ class ChaptersController < ApplicationController
   def load_chapter
     @chapter = @work.chapters.find_by(id: params[:id])
 
-    unless @chapter
-      flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
-      redirect_to work_path(@work)
-    end
+    return if @chapter
+
+    flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
+    redirect_to work_path(@work)
   end
 
-
   def post_chapter
-    if !@work.posted
-      @work.update_attribute(:posted, true)
-    end
-    flash[:notice] = ts('Chapter has been posted!')
+    @work.update_attribute(:posted, true) unless @work.posted
+    flash[:notice] = ts("Chapter has been posted!")
   end
 
   private
@@ -284,6 +281,5 @@ class ChaptersController < ApplicationController
                                     :"published_at(2i)", :"published_at(1i)", :summary,
                                     :notes, :endnotes, :content, :published_at,
                                     author_attributes: [:byline, ids: [], coauthors: []])
-
   end
 end
