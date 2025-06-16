@@ -126,6 +126,7 @@ en:
             user:
               blocked: Sorry, you have been blocked by one or more of this work's creators.
               official: Please log out of your official account!
+              archivist: Please log out of your archivist account!
           format: "%{message}"
           taken: You have already left kudos here. :)
         mute:
