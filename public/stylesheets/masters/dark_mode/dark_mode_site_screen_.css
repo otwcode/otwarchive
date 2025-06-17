@@ -92,7 +92,7 @@ form dl {
   background: #111;
 }
 
-#header ul.primary {
+#header .primary {
   background: #2a2a2a url("/images/skins/textures/tiles/black-noise.jpg");
 }
 
@@ -596,6 +596,14 @@ li.comment {
   background: #95c6f4;
 }
 
+/* module: intro */
+
+.splash .module div.account {
+  background: transparent;
+  border-color: #555;
+    box-shadow: 1px 1px 3px #000;
+}
+
 /* module: news */
 
 .splash .news li {
@@ -747,4 +755,30 @@ span.question {
   border-color: #111;
   color: #111;
     box-shadow: none;
+}
+
+/* 24-ROLE-ADMIN */
+
+/* Note: There is no reasonable way to change the #footer background for admins outside the default site skin, which only loads 24-role-admin.css if the user is logged in as an admin. Styles in this and other skins will be loaded for everyone. */
+
+#header .admin {
+  background: #277e7e;
+  border-top-color: #333;
+}
+
+#header .admin a:hover,
+#header .admin a:focus {
+  color: #fff;
+}
+
+.admin .management a {
+  border-bottom-color: #73c4c4;
+}
+
+#admin_users_table th a:visited {
+  color: #c2c2c2;
+}
+
+#admin_users_table th a:hover {
+  color: #73c4c4;
 }
