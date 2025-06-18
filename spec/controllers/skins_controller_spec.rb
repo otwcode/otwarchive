@@ -166,16 +166,12 @@ describe SkinsController do
         it_behaves_like "user cannot set it"
       end
 
-      (Admin::VALID_ROLES - %w[superadmin]).each do |role|
+      Admin::VALID_ROLES.each do |role|
         context "when admin has #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
 
           it_behaves_like "user cannot set it"
         end
-      end
-
-      context "when admin has superadmin role" do
-        it_behaves_like "user cannot set it"
       end
     end
 
@@ -186,16 +182,12 @@ describe SkinsController do
         it_behaves_like "user can set it"
       end
 
-      (Admin::VALID_ROLES - %w[superadmin]).each do |role|
+      Admin::VALID_ROLES.each do |role|
         context "when admin has #{role} role" do
           let(:admin) { create(:admin, roles: [role]) }
 
           it_behaves_like "user can set it"
         end
-      end
-
-      context "when admin has superadmin role" do
-        it_behaves_like "user can set it"
       end
     end
   end
