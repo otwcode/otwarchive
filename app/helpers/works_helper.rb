@@ -83,7 +83,7 @@ module WorksHelper
   end
 
   def mark_as_read_button(work)
-    button_to t("works_helper.mark_as_read_button"), mark_as_read_work_path(work), method: :delete
+    button_to t("works_helper.mark_as_read_button"), mark_as_read_work_path(work), method: :post
   end
 
   def mark_for_later_button(work)
