@@ -163,6 +163,7 @@ describe SkinsController do
       let(:skin) { create(:skin, :public, title: "Uncached Public Skin") }
 
       context "when logged in as a registered user" do
+        before { fake_login }
         it_behaves_like "user cannot set it"
       end
 
@@ -183,6 +184,7 @@ describe SkinsController do
       let(:skin) { create(:skin, :public, title: "Cached Public Skin", cached: true) }
 
       context "when logged in as a registered user" do
+        before { fake_login }
         it_behaves_like "user can set it"
       end
 
