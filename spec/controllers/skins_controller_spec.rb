@@ -162,6 +162,10 @@ describe SkinsController do
     context "with an uncached site skin" do
       let(:skin) { create(:skin, :public, title: "Uncached Public Skin") }
 
+      context "when logged in as a registered user" do
+        it_behaves_like "user cannot set it"
+      end
+
       context "when admin has no role" do
         it_behaves_like "user cannot set it"
       end
@@ -177,6 +181,10 @@ describe SkinsController do
 
     context "with a cached site skin" do
       let(:skin) { create(:skin, :public, title: "Cached Public Skin", cached: true) }
+
+      context "when logged in as a registered user" do
+        it_behaves_like "user can set it"
+      end
 
       context "when admin has no role" do
         it_behaves_like "user can set it"
