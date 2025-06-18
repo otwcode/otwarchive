@@ -112,6 +112,28 @@ pre {
   font-size: 200%;
 }
 
+#footer button {
+  background: #eee;
+  color: #444;
+  text-decoration: none;
+  text-align: center;
+  border: 0;
+  width: 100%;
+  padding: 0.25em 0;
+  line-height: 1.286;
+  height: 1.286em;
+  box-shadow: 0 0 0 2px #444;
+}
+
+#footer button:hover,
+#footer button:focus {
+  box-shadow: 0 0 0 2px #eee;
+}
+
+#footer button:active {
+  outline: 1px dotted;
+}
+
 #header li,
 #footer li,
 .home .primary .navigation a,
@@ -119,6 +141,7 @@ pre {
 .blurb .actions a,
 #header li a,
 #footer li a,
+#footer li button,
 #header .open .menu {
   display: block;
 }
@@ -153,7 +176,9 @@ pre {
 #header .user .dropdown a:focus,
 #footer,
 .actions a:hover,
-.actions a:focus {
+.actions a:focus,
+#footer button:hover,
+#footer button:focus {
   background: #900;
   color: #eee;
 }
