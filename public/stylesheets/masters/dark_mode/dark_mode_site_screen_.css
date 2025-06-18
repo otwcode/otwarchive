@@ -500,8 +500,7 @@ fieldset fieldset.listbox {
     box-shadow: 1px 1px 3px #000;
 }
 
-/* this should have a direct child selector but cannot, so be careful */
-.listbox .heading {
+.listbox > .heading {
   color: #fff;
 }
 
