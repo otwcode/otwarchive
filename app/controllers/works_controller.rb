@@ -638,7 +638,7 @@ class WorksController < ApplicationController
     # AO3-3498: since a work's word count is calculated in a before_save and the chapter is posted in an after_save,
     # work's word count needs to be updated with the chapter's word count after the chapter is posted
     # AO3-6273 Cannot rely on set_word_count here in a production environment, as it might query an older version of the database
-    # Instead, as the the work in this context is reduced its first chapter, we copy the value directly
+    # Instead, as the work in this context is reduced its first chapter, we copy the value directly
     @work.word_count = @work.first_chapter.word_count
     @work.save
 
