@@ -14,9 +14,9 @@ describe WorksController do
       fake_login_known_user(user)
     end
 
-    describe "POST #mark_for_later" do
+    describe "PATCH #mark_for_later" do
       it "marks the work for later" do
-        post :mark_for_later, params: { id: work.id }
+        patch :mark_for_later, params: { id: work.id }
         it_redirects_to_simple(root_path)
         expect(flash[:notice]).to include("This work was added to your ")
         expect(flash[:notice]).to include("Marked for Later list")
@@ -24,9 +24,9 @@ describe WorksController do
       end
     end
 
-    describe "POST #mark_as_read" do
+    describe "PATCH #mark_as_read" do
       it "removes the work from mark for later" do
-        post :mark_as_read, params: { id: work.id }
+        patch :mark_as_read, params: { id: work.id }
         it_redirects_to_simple(root_path)
         expect(flash[:notice]).to include("This work was removed from your ")
         expect(flash[:notice]).to include("Marked for Later list")

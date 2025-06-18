@@ -375,8 +375,8 @@ Rails.application.routes.draw do
       get :edit_tags
       get :preview_tags
       patch :update_tags
-      post :mark_for_later
-      post :mark_as_read
+      patch :mark_for_later
+      patch :mark_as_read
       get :confirm_delete
       get :share
     end
