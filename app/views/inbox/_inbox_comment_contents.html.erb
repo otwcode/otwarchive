@@ -27,5 +27,5 @@
 </div>
 
 <blockquote class="userstuff">
-  <%= raw sanitize_field(feedback_comment, :comment_content, image_safety_mode: feedback_comment.use_image_safety_mode?) %>
+  <%= raw feedback_comment.sanitized_content %>
 </blockquote>

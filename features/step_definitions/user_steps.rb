@@ -327,6 +327,8 @@ end
 
 Then /^I should get confirmation that I changed my username$/ do
   step(%{I should see "Your username has been successfully updated."})
+  step(%{1 email should be delivered})
+  step(%{the email should contain "The username for your .* has been changed to"})
 end
 
 Then /^the user "([^"]*)" should be activated$/ do |login|

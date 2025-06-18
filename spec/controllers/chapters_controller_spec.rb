@@ -516,10 +516,13 @@ describe ChaptersController do
         expect(response).to have_http_status :redirect
       end
 
-      it "updates the work's major version" do
-        expect(work.major_version).to eq(1)
-        post :create, params: { work_id: work.id, chapter: chapter_attributes }
-        expect(assigns[:work].major_version).to eq(2)
+      context "when neither posting nor previewing is explicitly specified" do
+        it "does not update the work's version" do
+          expect do
+            post :create, params: { work_id: work.id, chapter: chapter_attributes }
+          end.to avoid_changing { work.reload.major_version }
+            .and avoid_changing { work.reload.minor_version }
+        end
       end
 
       context "when the post button is clicked" do
@@ -536,6 +539,14 @@ describe ChaptersController do
               .from(1).to(2)
               .and change { work.number_of_posted_chapters }
               .from(1).to(2)
+          end
+
+          it "updates the work's major version" do
+            expect do
+              post :create, params: { work_id: work.id, chapter: chapter_attributes, post_without_preview_button: true }
+            end.to change { work.reload.major_version }
+              .from(1).to(2)
+              .and avoid_changing { work.reload.minor_version }
           end
 
           it "posts the work if the work was not posted before" do
@@ -585,6 +596,13 @@ describe ChaptersController do
             end.to change { work.number_of_chapters }
               .from(1).to(2)
               .and avoid_changing { work.number_of_posted_chapters }
+          end
+
+          it "does not update the work's version" do
+            expect do
+              post :create, params: { work_id: work.id, chapter: chapter_attributes, preview_button: true }
+            end.to avoid_changing { work.reload.major_version }
+              .and avoid_changing { work.reload.minor_version }
           end
 
           it "gives a notice that the chapter is a draft and redirects to the chapter preview" do
@@ -724,9 +742,11 @@ describe ChaptersController do
       end
 
       it "updates the work's minor version" do
-        expect(work.minor_version).to eq(0)
-        put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
-        expect(assigns[:work].minor_version).to eq(1)
+        expect do
+          put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
+        end.to change { work.reload.minor_version }
+          .from(0).to(1)
+          .and avoid_changing { work.reload.major_version }
       end
 
       context "when the post button is clicked" do
@@ -751,6 +771,23 @@ describe ChaptersController do
             unposted_chapter = create(:chapter, :draft, work: work, authors: [user.pseuds.first])
             put :update, params: { work_id: work.id, id: unposted_chapter.id, chapter: chapter_attributes, post_button: true }
             it_redirects_to_with_notice(work_chapter_path(work_id: work.id, id: unposted_chapter.id), "Chapter was successfully posted.")
+          end
+
+          it "updates the work's minor version if the chapter was already posted" do
+            expect do
+              put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes, post_button: true }
+            end.to change { work.reload.minor_version }
+              .from(0).to(1)
+              .and avoid_changing { work.reload.major_version }
+          end
+
+          it "updates the work's major version if the chapter was not already posted" do
+            unposted_chapter = create(:chapter, :draft, work: work, authors: [user.pseuds.first])
+            expect do
+              put :update, params: { work_id: work.id, id: unposted_chapter.id, chapter: chapter_attributes, post_button: true }
+            end.to change { work.reload.major_version }
+              .from(1).to(2)
+              .and avoid_changing { work.reload.minor_version }
           end
         end
 
@@ -959,6 +996,14 @@ describe ChaptersController do
           it_redirects_to_with_notice(work, "Chapter has been posted!")
         end
 
+        it "updates the work's major version when posted" do
+          expect do
+            post :post, params: { work_id: work.id, id: @chapter_to_post.id }
+          end.to change { work.reload.major_version }
+            .from(1).to(2)
+            .and avoid_changing { work.reload.minor_version }
+        end
+
         it "posts the work if the work was not posted before" do
           post :post, params: { work_id: unposted_work.id, id: unposted_work.chapters.first.id }
           expect(assigns[:work].posted).to be true
@@ -1067,9 +1112,11 @@ describe ChaptersController do
         let!(:chapter2) { create(:chapter, work: work, position: 2, authors: [user.pseuds.first]) }
 
         it "updates the work's minor version" do
-          expect(work.minor_version).to eq(0)
-          delete :destroy, params: { work_id: work.id, id: chapter2.id }
-          expect(assigns[:work].minor_version).to eq(1)
+          expect do
+            delete :destroy, params: { work_id: work.id, id: chapter2.id }
+          end.to change { work.reload.minor_version }
+            .from(0).to(1)
+            .and avoid_changing { work.reload.major_version }
         end
 
         it "updates the work's revision date" do
@@ -1163,6 +1210,13 @@ describe ChaptersController do
           end.to change { work.number_of_chapters }
             .from(2).to(1)
             .and avoid_changing { work.number_of_posted_chapters }
+        end
+
+        it "does not update the work's version" do
+          expect do
+            delete :destroy, params: { work_id: work.id, id: chapter2.id }
+          end.to avoid_changing { work.reload.major_version }
+            .and avoid_changing { work.reload.minor_version }
         end
       end
 

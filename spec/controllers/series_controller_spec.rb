@@ -120,10 +120,21 @@ describe SeriesController do
 
     context "with user_id parameter" do
       context "when user_id does not exist" do
-        it "raises an error" do
-          expect do
-            get :index, params: { user_id: "nobody" }
-          end.to raise_error ActiveRecord::RecordNotFound
+        context "without a pseud_id parameter" do
+          it "raises an error" do
+            expect do
+              get :index, params: { user_id: "nobody" }
+            end.to raise_error ActiveRecord::RecordNotFound
+          end
+        end
+        context "with pseud_id parameter" do
+          context "when pseud_id does not exist" do
+            it "raises an error" do
+              expect do
+                get :index, params: { user_id: "nobody", pseud_id: "nobody" }
+              end.to raise_error ActiveRecord::RecordNotFound
+            end
+          end
         end
       end
 
@@ -156,6 +167,14 @@ describe SeriesController do
   end
 
   describe "show" do
+    context "when series does not exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "99999999" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
     it "assigns page title for series" do
       work = create(:work, fandom_string: "Fandom", authors: [user.default_pseud])
       create(:serial_work, work: work, series: series)

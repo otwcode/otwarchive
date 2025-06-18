@@ -232,8 +232,10 @@ Feature: Admin Abuse actions
     Given the user "otheruserstinks" exists and is activated
       And I am logged in as a "policy_and_abuse" admin
       And an abuse ticket ID exists
+      And all emails have been delivered
     When I visit the change username page for otheruserstinks
       And I fill in "Ticket ID" with "480000"
       And I press "Change Username"
     Then I should see "Username has been successfully updated."
       But I should not see "otheruserstinks" within "h2.heading"
+      And 0 emails should be delivered
