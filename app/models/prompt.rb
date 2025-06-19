@@ -60,11 +60,14 @@ class Prompt < ApplicationRecord
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
 
+  # i18n-tasks-use t("errors.attributes.url.invalid")
   validates :url, url_format: {allow_blank: true} # we validate the presence above, conditionally
 
   before_validation :cleanup_url
   def cleanup_url
     self.url = Addressable::URI.heuristic_parse(self.url) if self.url
+  rescue Addressable::URI::InvalidURIError
+    # url_format validation creates the error message
   end
 
   validate :correct_number_of_tags
