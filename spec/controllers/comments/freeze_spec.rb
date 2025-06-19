@@ -547,6 +547,7 @@ describe CommentsController do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
           put :freeze, params: { id: comment.id }
 
+          expect(comment.reload.iced).to be true
           it_redirects_to_with_comment_error(
             work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
             "Sorry, that comment thread could not be frozen."
@@ -800,6 +801,7 @@ describe CommentsController do
           fake_login_known_user(comment.ultimate_parent.pseuds.first.user)
           put :unfreeze, params: { id: comment.id }
 
+          expect(comment.reload.iced).to be false
           it_redirects_to_with_comment_error(
             work_path(comment.ultimate_parent, show_comments: true, anchor: :comments),
             "Sorry, that comment thread could not be unfrozen."
