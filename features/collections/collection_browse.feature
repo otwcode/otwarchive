@@ -169,6 +169,7 @@ Feature: Collection
     And I should see "About Some Test Collection (sometest)"
 
   Scenario: Open Challenges link should not appear on subcollections page
+  
   Given I have loaded the fixtures
     And "Some Test Collection" has subcollections
   When I go to "Some Test Collection" subcollections page
