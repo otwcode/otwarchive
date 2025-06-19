@@ -31,22 +31,13 @@
   <% unless @user || @collection %>
     <li><%= link_to ts("Open Challenges"), list_challenges_collections_path %></li>
   <% end %>
-  <% if logged_in? %>
-    <%# Logged in user on own collections index gets links for user Collections and Manage Collection Items %>
-    <% if @user && @user == current_user %>
-      <li><%= span_if_current ts("Collections"), user_collections_path(@user) %></li>
+  <% if @user %>
+    <%# User collections index gets link for user Collections %>
+    <li><%= span_if_current ts("Collections"), user_collections_path(@user) %></li>
+    <%# Logged in user on own collections index gets link for Manage Collections Item %>
+    <% if logged_in? && @user && @user == current_user %>
       <li><%= link_to ts("Manage Collection Items"), user_collection_items_path(@user) %></li>
     <% end %>
-    <%# Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
-    <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
-      <li><%= link_to ts("New Subcollection"), new_collection_collection_path(@collection) %></li>
-    <% else %>
-      <li><%= link_to ts("New Collection"), new_collection_path %></li>
-    <% end %>
-  <% end %>
-  <% if @sort_and_filter %>
-    <%# Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
-    <li class="narrow-shown hidden"><a href="#collection-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
   <% end %>
 </ul>
 
