@@ -362,11 +362,10 @@ Feature: Archivist bulk imports
     When I follow "http://example.com/my-immortal"
     Then I should be on the "My Immortal" work page
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Open Doors committee members can block an email address from having imports
     Given I have an Open Doors committee member "OpenDoors"
       And I have an archivist "archivist"
+      And I set up mock websites for importing
       And the default ratings exist
       And I am logged in as "OpenDoors"
     When I go to the Open Doors tools page
@@ -374,17 +373,16 @@ Feature: Archivist bulk imports
       And I submit with the 3rd button
     Then I should see "We have saved and blocked the email address random@example.com"
     When I am logged in as "archivist"
-      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "ao3testing" with email "random@example.com"
+      And I import the work "http://example.com/second-import-site-with-tags" by "ao3testing" with email "random@example.com"
     Then I should see "Author ao3testing at random@example.com does not allow importing their work to this archive."
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Open Doors committee members can supply a new email address for an already imported work.
     Given I have an Open Doors committee member "OpenDoors"
       And I have an archivist "archivist"
+      And I set up mock websites for importing
       And the default ratings exist
       And I am logged in as "archivist"
-    When I import the work "http://ao3testing.dreamwidth.org/593.html" by "randomtestname" with email "random@example.com"
+    When I import the work "http://example.com/second-import-site-with-tags" by "randomtestname" with email "random@example.com"
       And I am logged in as "OpenDoors"
       And I go to the Open Doors external authors page
     Then I should see "random@example.com"
