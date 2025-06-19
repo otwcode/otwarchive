@@ -39,6 +39,18 @@
       <li><%= link_to ts("Manage Collection Items"), user_collection_items_path(@user) %></li>
     <% end %>
   <% end %>
+  <%# New Collection/Subcollection links for logged in users %>
+  <% if logged_in? %>
+    <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
+      <li><%= link_to ts("New Subcollection"), new_collection_collection_path(@collection) %></li>
+    <% else %>
+      <li><%= link_to ts("New Collection"), new_collection_path %></li>
+    <% end %>
+  <% end %>
+  <% if @sort_and_filter %>
+    <%# Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+    <li class="narrow-shown hidden"><a href="#collection-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
+  <% end %>
 </ul>
 
 <% unless @collections.blank? %>
