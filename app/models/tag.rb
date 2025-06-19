@@ -1206,17 +1206,19 @@ class Tag < ApplicationRecord
       exists: true
     )
 
-    # Calculate the fandoms associated with this tag, because we'll set any
-    # TagNominations with a matching parent_tagname to have parented: true.
-    parent_names = parents.where(type: "Fandom").pluck(:name)
+    if canonical?
+      # Calculate the fandoms associated with this tag, because we'll set any
+      # TagNominations with a matching parent_tagname to have parented: true.
+      parent_names = parents.where(type: "Fandom").pluck(:name)
 
-    # If this tag has any fandoms at all, we also want to count it as parented
-    # for nominations with a blank parent_tagname. See the set_parented
-    # function in TagNominations for the calculation that we're trying to mimic
-    # here.
-    parent_names << "" if parent_names.present?
+      # If this tag has any fandoms at all, we also want to count it as parented
+      # for nominations with a blank parent_tagname. See the set_parented
+      # function in TagNominations for the calculation that we're trying to mimic
+      # here.
+      parent_names << "" if parent_names.present?
 
-    TagNomination.where(tagname: name, parent_tagname: parent_names).update_all(parented: true)
+      TagNomination.where(tagname: name, parent_tagname: parent_names).update_all(parented: true)
+    end
 
     return unless saved_change_to_name? && name_before_last_save.present?
 

@@ -131,6 +131,8 @@ en:
       page_title: Terms of Service
     tos_faq:
       page_title: Terms of Service FAQ
+  inbox:
+    page_title: "%{user} - Inbox"
   invite_requests:
     create:
       queue_disabled:
@@ -153,6 +155,9 @@ en:
     cannot_edit_default: Sorry, you can't edit the default language.
     successfully_added: Language was successfully added.
     successfully_updated: Language was successfully updated.
+  media:
+    index:
+      browser_title: Fandoms
   muted:
     users:
       create:
@@ -179,6 +184,10 @@ en:
     not_found: Sorry, we couldn't find the FAQ you were looking for.
     update_positions:
       success: Question order has been successfully updated.
+  readings:
+    clear:
+      error: There were problems deleting your history. Please try again later.
+      success: Your history is now cleared.
   related_works:
     index:
       page_title: "%{login} - Related Works"
@@ -241,6 +250,9 @@ en:
   works:
     drafts:
       page_title: "%{username} - Drafts"
+    show:
+      page_title:
+        unrevealed: Mystery Work
   wrangling_guidelines:
     create: Wrangling Guideline was successfully created.
     delete: Wrangling Guideline was successfully deleted.

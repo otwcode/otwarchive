@@ -86,7 +86,7 @@ INVITE_FROM_QUEUE_FREQUENCY: 12
 HOURS_BEFORE_RESEND_INVITATION: 24
 # this is whether or not people without invitations can create accounts
 ACCOUNT_CREATION_ENABLED: false
-DAYS_TO_PURGE_UNACTIVATED: 7
+DAYS_TO_CONFIRM_EMAIL_CHANGE: 7
 # number of invites users can request
 MAX_USER_INVITE_REQUEST: 10
 # number of accounts users can block
@@ -343,7 +343,7 @@ FIELDS_ALLOWING_HTML: ["about_me", "bookmarker_notes", "comment", "comment_conte
 
 FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
 
-FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
+FIELDS_ALLOWING_MEDIA_EMBEDS: ["content"]
 
 FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 

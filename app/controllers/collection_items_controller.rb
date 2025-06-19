@@ -2,6 +2,7 @@ class CollectionItemsController < ApplicationController
   before_action :load_collection
   before_action :load_user, only: [:update_multiple]
   before_action :load_collectible_item, only: [:new, :create]
+  before_action :check_parent_visible, only: [:new]
 
   cache_sweeper :collection_sweeper
 
@@ -51,6 +52,10 @@ class CollectionItemsController < ApplicationController
     elsif params[:bookmark_id]
       @item = Bookmark.find(params[:bookmark_id])
     end
+  end
+
+  def check_parent_visible
+    check_visibility_for(@item)
   end
 
   def load_user

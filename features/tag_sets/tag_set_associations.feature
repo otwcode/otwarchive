@@ -52,5 +52,72 @@ Feature: Reviewing tag set associations
   Then I should see "What tag set did you want to look at?"
     And I should be on the tagsets page
 
+  Scenario: Nominating a canonical tag in its fandom does not generate associations for review
+    Given a canonical character "Jack Carter" in fandom "Eureka"
+      And I nominate and approve fandom "Eureka" and character "Jack Carter" in "Canonical Associations"
+    When I review associations for "Canonical Associations"
+    Then I should not see "Jack Carter"
+      And I should not see "Eureka"
+
+  Scenario: Nominating a canonical tag in another fandom generates associations for review
+    Given a canonical character "Nathan Stark" in fandom "Eureka"
+      And I nominate and approve fandom "Iron Man" and character "Nathan Stark" in "Canonical Associations"
+    When I review associations for "Canonical Associations"
+    Then I should see "Nathan Stark → Iron Man"
+      But I should not see "Eureka"
+
+  Scenario: Nominating a non-canonical tag in its own fandom generates associations for review
+    Given a canonical character "Jack Carter" in fandom "Eureka"
+      And a non-canonical character "Nathan Carter" in fandom "Eureka"
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "Non-canonical Associations" with 1 fandom nom and 2 character noms
+      And I nominate fandom "Eureka" and characters "Jack Carter,Nathan Carter" in "Non-canonical Associations" as "tagsetter"
+    When I review nominations for "Non-canonical Associations"
+      And I approve the nominated fandom tag "Eureka"
+      And I approve the nominated character tag "Jack Carter"
+      And I approve the nominated character tag "Nathan Carter"
+      And I press "Submit"
+      And I review associations for "Non-canonical Associations"
+    Then I should see "Nathan Carter → Eureka"
+
+  Scenario: When a nominated non-canonical is renamed, its associations remain for review
+    Given a canonical character "Jack Carter" in fandom "Eureka"
+      And a non-canonical character "nathan carter" in fandom "Nathan Stark"
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "Non-canonical Associations" with 1 fandom nom and 2 character noms
+      And I nominate fandom "Eureka" and characters "Jack Carter,nathan carter" in "Non-canonical Associations" as "tagsetter"
+    When I am logged in as a tag wrangler
+      And I edit the tag "nathan carter"
+      And I fill in "Name" with "Nathan Carter"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+    When I am logged in as "tagsetter"
+      And I review nominations for "Non-canonical Associations"
+      And I approve the nominated fandom tag "Eureka"
+      And I approve the nominated character tag "Jack Carter"
+      And I approve the nominated character tag "nathan carter"
+      And I press "Submit"
+      And I review associations for "Non-canonical Associations"
+    Then I should see "Nathan Carter → Eureka"
+
+  Scenario: Nominating a new tag in an approved fandom generates associations for review
+    Given a canonical fandom "Eureka"
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "New Associations" with 1 fandom nom and 2 character noms
+      And I nominate fandom "Eureka" and character "Jack Stark" in "New Associations" as "tagsetter"
+    When I review nominations for "New Associations"
+      And I approve the nominated fandom tag "Eureka"
+      And I press "Submit"
+      And I edit nominations for "tagsetter" in "New Associations" to include characters "Jack Stark,Nathan Stark" under fandom "Eureka"
+      And I review nominations for "New Associations"
+    Then I should see "Jack Stark"
+      And I should see "Nathan Stark"
+    When I approve the nominated character tag "Jack Stark"
+      And I approve the nominated character tag "Nathan Stark"
+      And I press "Submit"
+      And I review associations for "New Associations"
+    Then I should see "Jack Stark → Eureka"
+      And I should see "Nathan Stark → Eureka"
+
   # TODO
   # Scenario: Tags with brackets should work in associations
