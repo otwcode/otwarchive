@@ -1,7 +1,7 @@
 class Admin < ApplicationRecord
   VALID_ROLES = %w[superadmin board board_assistants_team communications development_and_membership docs elections legal translation tag_wrangling support policy_and_abuse open_doors].freeze
 
-  serialize :roles, type: Array
+  serialize :roles, type: Array, coder: YAML, yaml: { permitted_classes: [String] }
 
   devise :database_authenticatable,
          :lockable,

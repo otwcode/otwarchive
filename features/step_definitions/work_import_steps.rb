@@ -80,6 +80,10 @@ stubbed response", headers: {})
               )
 end
 
+Given "I set up mock websites for importing" do
+  mock_external
+end
+
 Given /^I set up importing( with a mock website)?( as an archivist)?$/ do |mock, is_archivist|
   unless mock.blank?
     mock_external
