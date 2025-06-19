@@ -22,10 +22,13 @@
 
 <!--Subnavigation, sorting and actions-->
 <h3 class="landmark heading"><%= ts("Navigation") %></h3>
-<ul class="navigation actions" role="navigation">
-  <% # Collections and Open Challenges links unless a logged in user viewing own collections page %>
-  <% unless logged_in? && @user && @user == current_user %>
+<ul class="navigation actions">
+  <% # Collections and link unless a logged in user viewing own collections page %>
+  <% unless logged_in? && @user && @user == current_user  %>
     <li><%= span_if_current ts("Collections"), collections_path %></li>
+  <% end %>
+  <% # Open Challenges link unless a logged in user viewing own collections page or on an individual collection page %>  
+  <% unless (logged_in? && @user && @user == current_user) || @collection  %>
     <li><%= link_to ts("Open Challenges"), list_challenges_collections_path %></li>
   <% end %>
   <% if logged_in? %>
