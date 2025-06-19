@@ -5,15 +5,22 @@ Feature: Collection
   I want to locate and browse an existing collection
 
   Scenario: Collections index should have different links for logged in and logged out users
+    Given I am logged in as "onlooker"
+    When I go to the collections page
+    Then I should see "Open Challenges"
+      And I should see "New Collection"
+    When I log out
+      And I go to the collections page
+    Then I should see "Open Challenges"
+      And I should not see "New Collection"
 
-  Given I am logged in as "onlooker"
-  When I go to the collections page
-  Then I should see "Open Challenges"
-    And I should see "New Collection"
-  When I log out
-    And I go to the collections page
-  Then I should see "Open Challenges"
-    And I should not see "New Collection"
+  Scenario: Open Challenges link should not appear on subcollections page
+    Given I have a collection "Some Test Collection" with name "sometest"
+    When I am logged in as the owner of "Some Test Collection"
+      And I add the subcollection "Subcollection" to the parent collection named "sometest"
+      And all indexing jobs have been run
+      And I go to the "Some Test Collection" subcollections page
+    Then I should not see "Open Challenges"
 
   Scenario: Filter collections index to only show prompt memes
 
