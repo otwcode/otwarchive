@@ -1051,7 +1051,7 @@ describe UserMailer do
     end
   end
 
-  describe "invalid_signup_notification" do
+  describe "c_signup_notification" do
     subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id], "test@example.com") }
 
     let(:collection) { create(:collection) }
@@ -1079,6 +1079,27 @@ describe UserMailer do
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("invalid sign-ups in your gift exchange \"#{collection.title}\"")
+      end
+    end
+  end
+
+  describe "invalid_signup_notification_collection_email" do
+    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id], collection.collection_email) }
+
+    let(:collection) { create(:collection) }
+    let(:signup) { create(:challenge_signup) }
+
+    it_behaves_like "an email with a valid sender"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("your email address has been listed as the collection email")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("your email address has been listed as the collection email")
       end
     end
   end

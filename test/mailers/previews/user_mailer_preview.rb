@@ -184,16 +184,18 @@ class UserMailerPreview < ApplicationMailerPreview
   end
 
   def invalid_signup_notification_collection_email
+    signup_count = params[:signup_count] ? params[:signup_count].to_i : 1
     collection = create(:collection, email: "collection@example.com")
-    invalid_signup_ids = [create(:challenge_signup).id]
+    invalid_signup_ids = create_list(:challenge_signup, signup_count).map(&:id)
     email = collection.collection_email
     UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, email)
   end
 
   def invalid_signup_notification_maintainer
+    signup_count = params[:signup_count] ? params[:signup_count].to_i : 1
     user = create(:user, :for_mailer_preview)
     collection = create(:collection, owners: [user.default_pseud])
-    invalid_signup_ids = [create(:challenge_signup).id]
+    invalid_signup_ids = create_list(:challenge_signup, signup_count).map(&:id)
     email = user.email
     UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, email)
   end

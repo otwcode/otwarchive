@@ -1,19 +1,19 @@
 <% content_for :message do %>
   <p><%= t(".found_invalid.html", collection_link: style_link(@collection.title, collection_url(@collection))) %></p>
 
-  <p><%= t(".see_details.html", help_link: style_link(t(".see_details.help_link_text"), "#{root_url}help/challenge_matching.html#invalid_signups")) %></p>
+  <p><%= t(".see_details.html", challenge_matching_help_link: style_link(t(".see_details.challenge_matching_help_link_text"), "#{root_url}help/challenge-matching.html#invalid_signups")) %></p>
 
   <p><%= t(".signups_here") %>
     <ul>
     <% @invalid_signups.each do |signup_id| %>
-      <li><%= style_link("Sign-up #{signup_id}", collection_signup_url(@collection, signup_id)) %></li>
+      <li><%= style_link(t(".signup", signup_id: signup_id), collection_signup_url(@collection, signup_id)) %></li>
     <% end %>
     </ul>
   </p>
 <% end %>
 
 <% content_for :footer_note do %>
-  <p><%= collection_footer_note_html(@is_collection_email, @collection) %></p>
+  <%= collection_footer_note_html(@is_collection_email, @collection) %>
 <% end %>
 
 <% content_for :sent_at do %><%= l(Time.current) %><% end %>

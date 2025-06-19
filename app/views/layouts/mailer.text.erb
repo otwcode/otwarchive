@@ -9,6 +9,7 @@ Archive of Our Own
 -----------------------------------------
 <% if content_for?(:footer_note) %>
 <%= yield(:footer_note) %>
+
 <% end %>
 <% if @pac_footer %>
 <%= t("mailer.general.footer.why_policy_abuse.text", contact_policy_abuse_url: new_abuse_report_url) %>

@@ -1,16 +1,16 @@
 <% content_for :message do %>
 <%= t(".found_invalid.text", collection_title: @collection.title, collection_url: collection_url(@collection)) %>
 
-<%= t(".see_details.text", help_url: "#{root_url}help/challenge_matching.html#invalid_signups") %>
+<%= t(".see_details.text", challenge_matching_help_url: "#{root_url}help/challenge-matching.html#invalid_signups") %>
 
 <%= t(".signups_here") %>
 <% @invalid_signups.each do |signup_id| %>
- - <%= collection_signup_url(@collection, signup_id) %>
+- <%= collection_signup_url(@collection, signup_id) %>
 <% end %>
 <% end %>
 
 <% content_for :footer_note do %>
-<%= collection_footer_note_text(@is_collection_email, @collection) %>
+<%= collection_footer_note_text(@is_collection_email, @collection) -%>
 <% end %>
 
 <% content_for :sent_at do %><%= l(Time.current) %><% end %>
