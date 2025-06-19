@@ -30,4 +30,4 @@
 <%= t("mailer.general.signature.abuse_team") %>
 <% end %>
 
-<% content_for :sent_at do %><%= l(Time.now) %><% end %>
+<% content_for :sent_at do %><%= l(Time.current) %><% end %>
