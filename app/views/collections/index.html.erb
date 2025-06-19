@@ -23,21 +23,21 @@
 <!--Subnavigation, sorting and actions-->
 <h3 class="landmark heading"><%= ts("Navigation") %></h3>
 <ul class="navigation actions">
-  <% # Collections and link unless a logged in user viewing own collections page %>
-  <% unless logged_in? && @user && @user == current_user  %>
+# Collections and link unless a logged in user viewing own collections page %>
+  <% unless logged_in? && @user && @user == current_user %>
     <li><%= span_if_current ts("Collections"), collections_path %></li>
   <% end %>
-  <% # Open Challenges link unless a logged in user viewing own collections page or on an individual collection page %>  
-  <% unless (logged_in? && @user && @user == current_user) || @collection  %>
-    <li><%= link_to ts("Open Challenges"), list_challenges_collections_path %></li>
+# Open Challenges link unless a logged in user viewing own collections page or on an individual collection page %>
+  <li><%= link_to ts("Open Challenges"), list_challenges_collections_path %></li>
+  <% unless (logged_in? && @user && @user == current_user) || @collection %>
   <% end %>
   <% if logged_in? %>
-    <% # Logged in user on own collections index gets links for user Collections and Manage Collection Items %>
+# Logged in user on own collections index gets links for user Collections and Manage Collection Items %>
     <% if @user && @user == current_user %>
       <li><%= span_if_current ts("Collections"), user_collections_path(@user) %></li>
       <li><%= link_to ts("Manage Collection Items"), user_collection_items_path(@user) %></li>
     <% end %>
-    <% # Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
+# Logged in collection maintainer on own collection gets link for New Subcollection and all other logged in users get New Collection link %>
     <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
       <li><%= link_to ts("New Subcollection"), new_collection_collection_path(@collection) %></li>
     <% else %>
@@ -45,7 +45,7 @@
     <% end %>
   <% end %>
   <% if @sort_and_filter %>
-    <% # Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
+# Filters button for narrow screens jumps to filters when JavaScript is disabled and opens filters when JavaScript is enabled %>
     <li class="narrow-shown hidden"><a href="#collection-filters" id="go_to_filters"><%= ts("Filters") %></a></li>
   <% end %>
 </ul>
@@ -58,14 +58,14 @@
   <h3 class="landmark heading"><%= ts("List of Collections") %></h3>
   <ul class="collection picture index group">
     <% @collections.each do |collection| %>
-      <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>
+      <%= render partial: "collection_blurb", locals: { collection: collection } %>
     <% end %>
   </ul>
 <% end %>
 
 <% if @sort_and_filter %>
   <!--filters subnav-->
-  <%= render 'collections/filters' %>
+  <%= render "collections/filters" %>
   <!---/subnav-->
 <% end %>
 
