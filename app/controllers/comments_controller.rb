@@ -129,7 +129,7 @@ class CommentsController < ApplicationController
     admin_settings = AdminSetting.current
 
     return unless admin_settings.guest_comments_off? && guest?
-    
+
     flash[:error] = t("comments.commentable.guest_comments_disabled")
     redirect_back(fallback_location: root_path)
   end
@@ -474,26 +474,36 @@ class CommentsController < ApplicationController
   # PUT /comments/1/freeze
   def freeze
     # TODO: When AO3-5939 is fixed, we can use
-    # @comment.full_set.each(&:mark_frozen!)
-    if !@comment.iced? && @comment.save
-      @comment.set_to_freeze_or_unfreeze.each(&:mark_frozen!)
+    # comments = @comment.full_set
+    unless @comment.iced?
+      comments = @comment.set_to_freeze_or_unfreeze
+      @comment.mark_all_frozen!(comments)
       flash[:comment_notice] = t(".success")
     else
       flash[:comment_error] = t(".error")
     end
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+
+  rescue StandardError => e
+    flash[:comment_error] = t(".error")
     redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
   # PUT /comments/1/unfreeze
   def unfreeze
     # TODO: When AO3-5939 is fixed, we can use
-    # @comment.full_set.each(&:mark_unfrozen!)
-    if @comment.iced? && @comment.save
-      @comment.set_to_freeze_or_unfreeze.each(&:mark_unfrozen!)
+    # comments = @comment.full_set
+    if @comment.iced?
+      comments = @comment.set_to_freeze_or_unfreeze
+      @comment.mark_all_unfrozen!(comments)
       flash[:comment_notice] = t(".success")
     else
       flash[:comment_error] = t(".error")
     end
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+
+  rescue StandardError => e
+    flash[:comment_error] = t(".error")
     redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
