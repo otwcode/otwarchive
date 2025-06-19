@@ -13,4 +13,4 @@
 <%= collection_footer_note_text(@is_collection_email, @collection) %>
 <% end %>
 
-<% content_for :sent_at do %><%= l(Time.now) %><% end %>
+<% content_for :sent_at do %><%= l(Time.current) %><% end %>

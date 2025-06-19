@@ -5,4 +5,4 @@
 <%= raw @message %>
 
 <% end %>
-<% content_for :sent_at do %><%= l(Time.now) %><% end %>
+<% content_for :sent_at do %><%= l(Time.current) %><% end %>
