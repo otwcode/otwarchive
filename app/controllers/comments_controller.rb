@@ -475,16 +475,16 @@ class CommentsController < ApplicationController
   def freeze
     # TODO: When AO3-5939 is fixed, we can use
     # comments = @comment.full_set
-    unless @comment.iced?
+    if @comment.iced?
+      flash[:comment_error] = t(".error")
+    else
       comments = @comment.set_to_freeze_or_unfreeze
       @comment.mark_all_frozen!(comments)
       flash[:comment_notice] = t(".success")
-    else
-      flash[:comment_error] = t(".error")
     end
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
 
-  rescue StandardError => e
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+  rescue StandardError
     flash[:comment_error] = t(".error")
     redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
@@ -500,9 +500,9 @@ class CommentsController < ApplicationController
     else
       flash[:comment_error] = t(".error")
     end
-    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
 
-  rescue StandardError => e
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+  rescue StandardError
     flash[:comment_error] = t(".error")
     redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
