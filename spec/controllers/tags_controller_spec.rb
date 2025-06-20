@@ -95,6 +95,36 @@ describe TagsController do
                                                    freeform2.name])
       end
     end
+
+    context "when showing canonical relationships for a character" do
+      let(:character1) { create(:canonical_character, name: "A") }
+      let(:relationship1) { create(:canonical_relationship, name: "A/B", taggings_count_cache: 1) }
+      let(:relationship2) { create(:canonical_relationship, name: "A/C", taggings_count_cache: 2) }
+      let(:relationship3) { create(:canonical_relationship, name: "A/D") }
+      let(:relationship4) { create(:canonical_relationship, name: "A/E") }
+
+      before do
+        relationship1.add_association(character1)
+        relationship2.add_association(character1)
+        relationship3.add_association(character1)
+        relationship4.add_association(character1)
+        run_all_indexing_jobs
+      end
+
+      it "sorts tags by taggings count" do
+        get :wrangle, params: { id: character1.name, show: "relationships", status: "canonical", sort_column: "taggings_count_cache", sort_direction: "DESC" }
+        expect(assigns(:tags).pluck(:name)).to eq([relationship2.name,
+                                                   relationship1.name,
+                                                   relationship3.name,
+                                                   relationship4.name])
+
+        get :wrangle, params: { id: character1.name, show: "relationships", status: "canonical", sort_column: "taggings_count_cache", sort_direction: "ASC" }
+        expect(assigns(:tags).pluck(:name)).to eq([relationship3.name,
+                                                   relationship4.name,
+                                                   relationship1.name,
+                                                   relationship2.name])
+      end
+    end
   
     context "when showing unwrangled relationships for a character" do
       let(:character1) { create(:character, canonical: true) }
