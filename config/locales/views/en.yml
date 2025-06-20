@@ -678,6 +678,10 @@ en:
       page_heading: Editing comment
       show: Show
       update: Update
+    show:
+      comment_on_html: Comment on %{commentable_link}
+    single_comment:
+      on_chapter_html: on %{commentable_link}
     unreviewed:
       approve_all: Approve All Unreviewed Comments
       no_unreviewed: No unreviewed comments.
