@@ -219,7 +219,7 @@ class CollectionItem < ApplicationRecord
   end
 
   def notify_of_reveal
-    unless self.unrevealed? || self.posted?
+    unless self.unrevealed? || !self.posted?
       recipient_pseuds = Pseud.parse_bylines(self.recipients)[:pseuds]
       recipient_pseuds.each do |pseud|
         user_preference = pseud.user.preference
