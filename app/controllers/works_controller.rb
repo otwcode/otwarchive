@@ -13,6 +13,7 @@ class WorksController < ApplicationController
   # admins should have the ability to edit tags (:edit_tags, :update_tags) as per our ToS
   before_action :check_ownership_or_admin, only: [:edit_tags, :update_tags]
   before_action :log_admin_activity, only: [:update_tags]
+  before_action :check_parent_visible, only: [:navigate]
   before_action :check_visibility, only: [:show, :navigate, :share, :mark_for_later, :mark_as_read]
 
   before_action :load_first_chapter, only: [:show, :edit, :update, :preview]
@@ -177,7 +178,7 @@ class WorksController < ApplicationController
   def show
     @tag_groups = @work.tag_groups
     if @work.unrevealed?
-      @page_title = ts("Mystery Work")
+      @page_subtitle = t(".page_title.unrevealed")
     else
       page_creator = if @work.anonymous?
                        ts("Anonymous")
@@ -788,6 +789,10 @@ class WorksController < ApplicationController
 
     @check_ownership_of = @work
     @check_visibility_of = @work
+  end
+
+  def check_parent_visible
+    check_visibility_for(@work)
   end
 
   def load_first_chapter
