@@ -56,7 +56,7 @@
       <% end %>
       <% unless @work.endnotes.blank? %>
         <div class="endnote-link">
-          <% t(".see_end_notes_html", end_notes_link: link_to(@work.notes.present? ? t(".more_notes_link") : t(".notes_link"), "#endnotes")) %>
+          <%= t(".see_end_notes_html", end_notes_link: link_to(@work.notes.present? ? t(".more_notes_link") : t(".notes_link"), "#endnotes")) %>
         </div>
       <% end %>
     <% end %>
