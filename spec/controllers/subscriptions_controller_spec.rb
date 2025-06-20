@@ -53,6 +53,11 @@ describe SubscriptionsController do
         end
       end
 
+      it "sets no subscription type in page subtitle without type" do
+        get :index, params: { user_id: user.login }
+        expect(assigns[:page_subtitle]).to eq("#{user.login} - Subscriptions")
+      end
+
       context "with valid subscription types in params" do
         %w[series works users].each do |sub_type|
           it "renders #{sub_type} subscriptions only" do
@@ -61,6 +66,11 @@ describe SubscriptionsController do
             expect(response).to render_template("index")
             expect(assigns(:subscribable_type)).to eq(sub_type)
             expect(assigns(:subscriptions).count).to eq(1)
+          end
+
+          it "sets #{sub_type} type in page subtitle" do
+            get :index, params: { user_id: user.login, type: sub_type }
+            expect(assigns[:page_subtitle]).to eq("#{user.login} - #{sub_type.classify} Subscriptions")
           end
         end
       end
@@ -72,6 +82,11 @@ describe SubscriptionsController do
           expect(response).to render_template("index")
           expect(assigns(:subscribable_type)).to be_nil
           expect(assigns(:subscriptions)).to contain_exactly(sub_series, sub_work, sub_user)
+        end
+
+        it "sets no type in page subtitle" do
+          get :index, params: { user_id: user.login, type: "Invalid" }  
+          expect(assigns[:page_subtitle]).to eq("#{user.login} - Subscriptions")
         end
       end
     end
