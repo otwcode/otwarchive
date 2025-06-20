@@ -10,7 +10,6 @@
       <dd><%= form.password_field :password %></dd>
       <dt><%= form.label :otp_attempt, t(".two_factor_authentication_code") %></dt>
       <dd><%= form.text_field :otp_attempt, "aria-describedby": "otp-field-description" %></dd>
-      <p class="footnote" id="otp-field-description"><%= t(".backup_codes_also_usable") %></p>
     </dl>
     
     <dt class="landmark"><%= label_tag :submit, t(".submit") %></dt>

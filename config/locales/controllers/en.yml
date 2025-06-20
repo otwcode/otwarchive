@@ -30,10 +30,10 @@ en:
         already_seen: You have already seen your backup codes. For security reasons, they cannot be seen again.
         not_enabled: Please enable two-factor authentication first.
       totp_setup_form:
-        incorrect_code: Incorrect authentication code. Your code may have expired, or you may need to re-setup your authenticator app.
+        incorrect_code: Incorrect authentication code. Your code may have expired, or you may need to setup your authenticator app again.
         success: Successfully enabled two-factor authentication; please make note of your backup codes.
     sessions:
-      invalid_totp: Incorrect two-factor authentication code.
+      invalid_totp: Incorrect two-factor authentication code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
     user_creations:
       confirm_remove_pseud:
         must_have_orphan_pseuds: Sorry, this action is only available for works by orphan_account pseuds.

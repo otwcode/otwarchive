@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t("admin.sessions.new.page_heading") %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
 <!--/descriptions-->
 
 <!--main content-->
@@ -9,7 +9,6 @@
     <dt><%= label_tag "admin[otp_attempt]", t(".two_factor_authentication_code") %></dt>
     <dd>
       <%= form.text_field :otp_attempt, "aria-describedby": "otp-field-description" %>
-      <p class="footnote" id="otp-field-description"><%= t(".backup_codes_also_usable") %></p>
     </dd>
   </dl>
   <p class="submit actions"><%= submit_tag t("admin.sessions.new.submit") %></p>
