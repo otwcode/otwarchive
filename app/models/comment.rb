@@ -520,7 +520,7 @@ class Comment < ApplicationRecord
   end
 
   # Freeze all comments.
-  def mark_all_frozen!(comments)
+  def self.mark_all_frozen!(comments)
     transaction do
       comments.each(&:mark_frozen!)
     end
@@ -532,7 +532,7 @@ class Comment < ApplicationRecord
   end
 
   # Unfreeze all comments.
-  def mark_all_unfrozen!(comments)
+  def self.mark_all_unfrozen!(comments)
     transaction do
       comments.each(&:mark_unfrozen!)
     end

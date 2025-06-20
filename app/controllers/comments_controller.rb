@@ -479,7 +479,7 @@ class CommentsController < ApplicationController
       flash[:comment_error] = t(".error")
     else
       comments = @comment.set_to_freeze_or_unfreeze
-      @comment.mark_all_frozen!(comments)
+      Comment.mark_all_frozen!(comments)
       flash[:comment_notice] = t(".success")
     end
 
@@ -495,7 +495,7 @@ class CommentsController < ApplicationController
     # comments = @comment.full_set
     if @comment.iced?
       comments = @comment.set_to_freeze_or_unfreeze
-      @comment.mark_all_unfrozen!(comments)
+      Comment.mark_all_unfrozen!(comments)
       flash[:comment_notice] = t(".success")
     else
       flash[:comment_error] = t(".error")
