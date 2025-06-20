@@ -219,7 +219,7 @@ class CollectionItem < ApplicationRecord
   end
 
   def notify_of_reveal
-    unless self.unrevealed? || !self.posted?
+    unless self.unrevealed? || self.posted?
       recipient_pseuds = Pseud.parse_bylines(self.recipients)[:pseuds]
       recipient_pseuds.each do |pseud|
         user_preference = pseud.user.preference
@@ -232,7 +232,13 @@ class CollectionItem < ApplicationRecord
 
       # also notify prompters of responses to their prompt
       if item_type == "Work" && !item.challenge_claims.blank?
-        UserMailer.prompter_notification(self.item.id, self.collection.id).deliver_after_commit
+        item.challenge_claims.each do |claim|
+          user = User.find(claim.request_signup.pseud.user.id)
+
+          I18n.with_locale(user.preference.locale_for_mails) do
+            UserMailer.prompter_notification(user.id, self.item.id, self.collection.id).deliver_after_commit
+          end
+        end
       end
 
       # also notify the owners of any parent/inspired-by works

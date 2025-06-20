@@ -308,18 +308,15 @@ class UserMailer < ApplicationMailer
   end
 
   # Emails a prompter to say that a response has been posted to their prompt
-  def prompter_notification(work_id, collection_id = nil)
+  def prompter_notification(user_id, work_id, collection_id = nil)
+    @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
-    @work.challenge_claims.each do |claim|
-      user = User.find(claim.request_signup.pseud.user.id)
-      I18n.with_locale(user.preference.locale_for_mails) do
-        mail(
-          to: user.email,
-          subject: "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
-        )
-      end
-    end
+    mail(
+      to: @user.email,
+      subject: t("user_mailer.prompter_notification.subject",
+                  app_name: ArchiveConfig.APP_SHORT_NAME)
+    )
   end
 
   # Sends email to creators when a creation is deleted
@@ -352,7 +349,7 @@ class UserMailer < ApplicationMailer
     html = ::Mail::Encodings::Base64.encode(html)
     attachments["#{download.file_name}.html"] = { content: html, encoding: "base64" }
     attachments["#{download.file_name}.txt"] = { content: html, encoding: "base64" }
-    
+
     mail(
         to: user.email,
         subject: t("user_mailer.admin_deleted_work_notification.subject", app_name: ArchiveConfig.APP_SHORT_NAME)

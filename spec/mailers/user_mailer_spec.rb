@@ -768,7 +768,7 @@ describe UserMailer do
             expect(email).to have_html_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
             expect(email).to have_text_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
           end
-        end 
+        end
       end
     end
   end
@@ -1128,6 +1128,7 @@ describe UserMailer do
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
+      it_behaves_like "a translated email"
 
       it "has the correct subject line" do
         subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
@@ -1160,6 +1161,7 @@ describe UserMailer do
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
+      it_behaves_like "a translated email"
 
       it "has the correct subject line" do
         subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"

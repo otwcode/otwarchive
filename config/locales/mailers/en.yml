@@ -474,6 +474,19 @@ en:
         other: We regret to inform you that your request for %{count} new invitations cannot be fulfilled at this time.
       reason: 'Your request was:'
       subject: "[%{app_name}] Additional invitation request declined"
+    prompter_notification:
+      a_response_to_your_prompt:
+        collection:
+          html: A response to your prompt has been posted in the %{collection_link} collection at the Archive of Our Own!
+          text: A response to your prompt has been posted in the "%{collection_title}" collection (%{collection_url}) at the Archive of Our Own!
+        text: A response to your prompt has been posted at the Archive of Our Own!
+      byline:
+        html: by %{work_creator_links}
+        text: by %{work_creators}
+      label:
+        fandom: 'Fandom:'
+        summary: 'Summary:'
+      subject: "[%{app_name}] A response to your prompt"
     recipient_notification:
       collection:
         html: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
