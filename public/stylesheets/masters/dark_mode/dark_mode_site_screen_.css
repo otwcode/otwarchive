@@ -212,6 +212,12 @@ textarea.LV_invalid_field:active {
   border-color: #ff7575;
 }
 
+/* Firefox's focus indicator is very bright in dark mode, so tone our error color down by decreasing the opacity */
+input.LV_invalid_field:focus,
+textarea.LV_invalid_field:focus {
+  border-color: rgba(255, 117, 117, 0.75);
+}
+
 .LV_invalid:before {
   border-color: #ff7575 transparent;
 }
