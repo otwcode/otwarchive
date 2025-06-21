@@ -460,7 +460,7 @@ Then /^I should not see the hidden work "([^\"]*)" by "([^\"]*)"?/ do |work, use
   step %{I should see "Sorry, you don't have permission to access the page you were trying to reach."}
 end
 
-Then /^"([^"]*)" should see their work "([^"]*)" is hidden?/ do |user, work|
+Then "{string} should see their work {string} is hidden" do |user, work|
   step %{I am logged in as "#{user}"}
   step %{I am on #{user}'s works page}
   step %{I should not see "#{work}"}

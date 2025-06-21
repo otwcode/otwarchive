@@ -8,7 +8,7 @@ Feature: Authenticate Admin Users With TOTP 2FA
     When I go to the home page
       And I follow "My Preferences"
       And I follow "Enable TOTP"
-    Then I should see "Two-Factor Authentication Set-Up"
+    Then I should see "Two-Factor Authentication Setup"
     When I fill in "password" with "testpassword"
       And I fill in a valid TOTP token for admin "admin"
       And I press "Confirm and Enable"
@@ -23,7 +23,7 @@ Feature: Authenticate Admin Users With TOTP 2FA
     When I go to the home page
       And I follow "My Preferences"
       And I follow "Enable TOTP"
-    Then I should see "Two-Factor Authentication Set-Up"
+    Then I should see "Two-Factor Authentication Setup"
     When I fill in "password" with "wrongpassword"
       And I fill in a valid TOTP token for admin "admin"
       And I press "Confirm and Enable"
@@ -39,11 +39,11 @@ Feature: Authenticate Admin Users With TOTP 2FA
     When I go to the home page
       And I follow "My Preferences"
       And I follow "Enable TOTP"
-    Then I should see "Two-Factor Authentication Set-Up"
+    Then I should see "Two-Factor Authentication Setup"
     When I fill in "password" with "testpassword"
       And I fill in "OTP code" with "000000"
       And I press "Confirm and Enable"
-    Then I should see "Incorrect authentication code. Your code may have expired, or you may need to re-setup your authenticator app."
+    Then I should see "Incorrect authentication code. Your code may have expired, or you may need to set up your authenticator app again."
       And I should not see "Successfully enabled two-factor authentication, please make note of your backup codes."
       And I should not see "Finish"
   

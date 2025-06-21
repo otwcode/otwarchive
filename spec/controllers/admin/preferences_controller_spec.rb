@@ -101,7 +101,7 @@ describe Admin::PreferencesController do
         fake_login_admin(admin)
         post :totp_setup_form, params: { admin_id: admin.login, admin: { otp_attempt: "000000", password: "correct_password" } }
         expect(admin.reload.otp_required_for_login).to be_falsey
-        it_redirects_to_with_error(totp_setup_admin_preferences_path, "Incorrect authentication code. Your code may have expired, or you may need to setup your authenticator app again.")
+        it_redirects_to_with_error(totp_setup_admin_preferences_path, "Incorrect authentication code. Your code may have expired, or you may need to set up your authenticator app again.")
       end
 
       it "denies access when password is wrong" do
