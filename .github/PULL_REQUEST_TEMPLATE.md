@@ -32,4 +32,4 @@ Are there other relevant issues/pull requests/mailing list discussions? If not, 
 
 ## Credit
 
-Hamham6. it/its
+Hamham6 it/its
