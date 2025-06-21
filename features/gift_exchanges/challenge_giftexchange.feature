@@ -146,7 +146,7 @@ Feature: Gift Exchange Challenge
    Then I should see "myname4" within "#main"
      And I should see "myname3" within "#main"
      And I should see "myname2" within "#main"
-     And I should see "myname1" within "#main"
+     And I should see "myname1_pseud (myname1)" within "#main"
      And I should see "Something else weird"
      And I should see "Alternate Universe - Historical"
 

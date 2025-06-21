@@ -138,6 +138,11 @@ When /^I sign up for "([^\"]*)" with combination A$/ do |title|
   click_button "Submit"
 end
 
+When /^I sign up with a pseud "([^\"]*)" that is mine$/ do |pseud_name|
+  select pseud_name, from: 'challenge_signup[pseud_id]'
+  click_button "Submit"
+end
+
 When /^I attempt to sign up for "([^\"]*)" with a pseud that is not mine$/ do |title|
   step %{the user "gooduser" exists and is activated}
   step %{I am logged in as "baduser"}
@@ -272,7 +277,10 @@ end
 
 Given /^everyone has signed up for the gift exchange "([^\"]*)"$/ do |challengename|
   step %{I am logged in as "myname1"}
-  step %{I sign up for "#{challengename}" with combination A}
+  pseud_name = "myname1_pseud"
+  FactoryBot.create(:pseud, name: pseud_name, user_id: User.find_by_login("myname1").id)
+  step %{I set up a signup for "#{challengename}" with combination A}
+  step %{I sign up with a pseud "#{pseud_name}" that is mine}
   step %{I am logged in as "myname2"}
   step %{I sign up for "#{challengename}" with combination B}
   step %{I am logged in as "myname3"}
