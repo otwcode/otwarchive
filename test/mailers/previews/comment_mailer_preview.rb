@@ -25,6 +25,14 @@ class CommentMailerPreview < ApplicationMailerPreview
     CommentMailer.comment_notification(user, comment)
   end
 
+  # Sent to a user when they get an unreviewed comment on a top-level creation
+  def comment_notification_unreviewed
+    user = create(:user)
+
+    comment = create(:comment, :unreviewed)
+    CommentMailer.comment_notification(user, comment)
+  end
+
   # Sent to a user when they get a comment reply to their comment
   def comment_reply_notification
     comment = create(:comment)
@@ -51,5 +59,56 @@ class CommentMailerPreview < ApplicationMailerPreview
     comment = create(:comment, pseud: commenter.default_pseud)
     reply = create(:comment, commentable: comment)
     CommentMailer.comment_reply_sent_notification(reply)
+  end
+
+  # Sent to a user when someone edits a comment
+  def edited_comment_notification
+    user = create(:user)
+
+    comment = create(:comment)
+    CommentMailer.edited_comment_notification(user, comment)
+  end
+
+  # Sent to a user when someone edits an unreviewed comment on a news post
+  def edited_comment_notification_unreviewed
+    user = create(:user)
+
+    comment = create(:comment, :unreviewed)
+    CommentMailer.edited_comment_notification(user, comment)
+  end
+
+  # Sent to the admin mailing list when someone leaves a new comment on a news post
+  def admin_comment_notification
+    admin = create(:admin)
+
+    comment = create(:comment, :on_admin_post)
+    CommentMailer.comment_notification(admin, comment)
+  end
+
+  # Sent to the admin mailing list when someone leaves a new unreviewed comment on a news post
+  def admin_comment_notification_unreviewed
+    admin = create(:admin)
+
+    commentable = create(:admin_post, moderated_commenting_enabled: true)
+    comment = create(:comment, commentable: commentable, unreviewed: true)
+    CommentMailer.comment_notification(admin, comment)
+  end
+
+
+  # Sent to the admin mailing list when someone edits a comment on a news post
+  def admin_edited_comment_notification
+    admin = create(:admin)
+
+    comment = create(:comment, :on_admin_post)
+    CommentMailer.edited_comment_notification(admin, comment)
+  end
+
+  # Sent to the admin mailing list when someone edits an unreviewed comment on a news post
+  def admin_edited_comment_notification_unreviewed
+    admin = create(:admin)
+
+    commentable = create(:admin_post, moderated_commenting_enabled: true)
+    comment = create(:comment, commentable: commentable, unreviewed: true)
+    CommentMailer.edited_comment_notification(admin, comment)
   end
 end
