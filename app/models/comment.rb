@@ -167,7 +167,6 @@ class Comment < ApplicationRecord
   after_update :after_update
   def after_update
     users = []
-    admins = []
 
     if self.saved_change_to_edited_at? || (self.saved_change_to_unreviewed? && !self.unreviewed?)
       # Reply to owner of parent comment if this is a reply comment
@@ -191,28 +190,23 @@ class Comment < ApplicationRecord
       end
 
       # send notification to the owner(s) of the ultimate parent, who can be users or admins
-      if self.ultimate_parent.is_a?(AdminPost)
-        AdminMailer.edited_comment_notification(self.id).deliver_after_commit
+      # at this point, users contains those who've already been notified
+      if users.empty?
+        users = self.ultimate_parent.commentable_owners
       else
-        # at this point, users contains those who've already been notified
-        if users.empty?
-          users = self.ultimate_parent.commentable_owners
-        else
-          # replace with the owners of the commentable who haven't already been notified
-          users = self.ultimate_parent.commentable_owners - users
-        end
-        users.each do |user|
-          unless user == self.comment_owner && !notify_user_of_own_comments?(user)
-            if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
-              CommentMailer.edited_comment_notification(user, self).deliver_after_commit
-            end
-            if notify_user_by_inbox?(user)
-              update_feedback_in_inbox(user)
-            end
+        # replace with the owners of the commentable who haven't already been notified
+        users = self.ultimate_parent.commentable_owners - users
+      end
+      users.each do |user|
+        unless user == self.comment_owner && !notify_user_of_own_comments?(user)
+          if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
+            CommentMailer.edited_comment_notification(user, self).deliver_after_commit
+          end
+          if user.is_a?(User) && notify_user_by_inbox?(user)
+            update_feedback_in_inbox(user)
           end
         end
       end
-
     end
   end
 
@@ -222,7 +216,6 @@ class Comment < ApplicationRecord
     # eventually we will set the locale to the user's stored language of choice
     #Locale.set ArchiveConfig.SUPPORTED_LOCALES[ArchiveConfig.DEFAULT_LOCALE]
     users = []
-    admins = []
 
     # notify the commenter
     if self.comment_owner && notify_user_of_own_comments?(self.comment_owner)
@@ -242,24 +235,20 @@ class Comment < ApplicationRecord
     end
 
     # send notification to the owner(s) of the ultimate parent, who can be users or admins
-    if self.ultimate_parent.is_a?(AdminPost)
-      AdminMailer.comment_notification(self.id).deliver_after_commit
+    # at this point, users contains those who've already been notified
+    if users.empty?
+      users = self.ultimate_parent.commentable_owners
     else
-      # at this point, users contains those who've already been notified
-      if users.empty?
-        users = self.ultimate_parent.commentable_owners
-      else
-        # replace with the owners of the commentable who haven't already been notified
-        users = self.ultimate_parent.commentable_owners - users
-      end
-      users.each do |user|
-        unless user == self.comment_owner && !notify_user_of_own_comments?(user)
-          if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
-            CommentMailer.comment_notification(user, self).deliver_after_commit
-          end
-          if notify_user_by_inbox?(user)
-            add_feedback_to_inbox(user)
-          end
+      # replace with the owners of the commentable who haven't already been notified
+      users = self.ultimate_parent.commentable_owners - users
+    end
+    users.each do |user|
+      unless user == self.comment_owner && !notify_user_of_own_comments?(user)
+        if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
+          CommentMailer.comment_notification(user, self).deliver_after_commit
+        end
+        if user.is_a?(User) && notify_user_by_inbox?(user)
+          add_feedback_to_inbox(user)
         end
       end
     end
