@@ -17,41 +17,6 @@ describe TagsController do
     end
   end
 
-  shared_examples "an action only authorized admins can access" do |authorized_roles:|
-    before { fake_login_admin(admin) }
-
-    context "with no role" do
-      let(:admin) { create(:admin, roles: []) }
-
-      it "redirects with an error" do
-        subject
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      end
-    end
-
-    (Admin::VALID_ROLES - authorized_roles).each do |role|
-      context "with role #{role}" do
-        let(:admin) { create(:admin, roles: [role]) }
-
-        it "redirects with an error" do
-          subject
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-      end
-    end
-
-    authorized_roles.each do |role|
-      context "with role #{role}" do
-        let(:admin) { create(:admin, roles: [role]) }
-
-        it "succeeds" do
-          subject
-          success
-        end
-      end
-    end
-  end
-
   describe "#create" do
     let(:tag_params) do
       { name: Faker::FunnyName.name, canonical: "0", type: "Character" }
@@ -269,6 +234,14 @@ describe TagsController do
       get :feed, params: { id: @tag.id, format: :atom }
       it_redirects_to(tag_works_path(tag_id: @tag.name))
     end
+
+    context "when tag doesn't exist" do
+      it "raises an error" do
+        expect do
+          get :feed, params: { id: "notatag", format: "atom" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
 
   describe "new" do 
@@ -288,20 +261,56 @@ describe TagsController do
   end
 
   describe "show" do   
-    context "when showing a banned tag" do
-      let(:tag) { create(:banned) } 
-
-      subject { get :edit, params: { id: tag.name } }
+    context "displays the tag information page" do
+      let(:tag) { create(:tag) }
+      
+      subject { get :show, params: { id: tag.name } }
       let(:success) do
         expect(response).to have_http_status(:success)
       end
 
-      it_behaves_like "an action only authorized admins can access", authorized_roles: wrangling_read_access_roles
+      it "for guests" do
+        subject
+        success
+      end
+
+      it "for users" do
+        fake_login
+        subject
+        success
+      end
+      
+      it "for admins" do
+        fake_login_admin(create(:admin))
+        subject
+        success
+      end
+    end
+    context "when showing a banned tag" do
+      let(:tag) { create(:banned) } 
+
+      subject { get :show, params: { id: tag.name } }
+      let(:success) do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "displays the tag information page for admins" do
+        fake_login_admin(create(:admin))
+        subject
+        success
+      end
 
       it "redirects with an error when not an admin" do
         get :show, params: { id: tag.name }
         it_redirects_to_with_error(tag_wranglings_path,
                                    "Please log in as admin")
+      end
+    end
+    context "when tag doesn't exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "notatag" }
+        end.to raise_error ActiveRecord::RecordNotFound
       end
     end
   end
@@ -339,6 +348,14 @@ describe TagsController do
         get :edit, params: { id: tag.name }
         it_redirects_to_with_error(tag_wranglings_path,
                                    "Please log in as admin")
+      end
+    end
+    
+    context "when tag doesn't exist" do
+      it "raises an error" do
+        expect do
+          get :edit, params: { id: "notatag" }
+        end.to raise_error ActiveRecord::RecordNotFound
       end
     end
   end
@@ -624,6 +641,42 @@ describe TagsController do
 
       put :update, params: { id: tag.name, tag: { associations_to_remove: [old_metatag.id], meta_tag_string: new_metatag.name } }
       expect(tag.reload.direct_meta_tags).to eq [new_metatag]
+    end
+
+    context "recategorizing a tag to media" do
+      let(:unsorted_tag) { create(:unsorted_tag) }
+      let(:subject) { put :update, params: { id: unsorted_tag, tag: { type: "Media" }, commit: "Save changes" } }
+
+      context "as a wrangler" do
+        it "doesn't change the tag type and redirects" do
+          subject
+
+          it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
+          expect(unsorted_tag.reload.class).to eq(UnsortedTag)
+        end
+      end
+
+      context "as an admin" do
+        let(:admin) { create(:superadmin) }
+
+        before { fake_login_admin(admin) }
+
+        it "changes the tag type and redirects" do
+          subject
+
+          it_redirects_to_with_notice(edit_tag_path(unsorted_tag), "Tag was updated.")
+          expect(Tag.find(unsorted_tag.id).class).to eq(Media)
+        end
+      end
+    end
+  end
+
+  describe "GET #index" do
+    let(:collection) { create(:collection) }
+
+    it "assigns subtitle with collection title and tags" do
+      get :index, params: { collection_id: collection.name }
+      expect(assigns[:page_subtitle]).to eq("#{collection.title} - Tags")
     end
   end
 end

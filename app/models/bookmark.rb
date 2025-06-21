@@ -5,7 +5,7 @@ class Bookmark < ApplicationRecord
   include Taggable
 
   belongs_to :bookmarkable, polymorphic: true, inverse_of: :bookmarks
-  belongs_to :pseud
+  belongs_to :pseud, optional: false
 
   validates_length_of :bookmarker_notes,
     maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
@@ -101,7 +101,7 @@ class Bookmark < ApplicationRecord
 
   scope :latest, -> { is_public.order_by_created_at.limit(ArchiveConfig.ITEMS_PER_PAGE).join_work }
 
-  scope :for_blurb, -> { includes(:bookmarkable, :pseud, :tags, :collections) }
+  scope :for_blurb, -> { includes(:bookmarkable, :tags, :collections, pseud: [:user]) }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope

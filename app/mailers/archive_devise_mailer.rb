@@ -21,4 +21,22 @@ class ArchiveDeviseMailer < Devise::Mailer
     devise_mail(record, :reset_password_instructions,
                 options.merge(subject: subject))
   end
+
+  def confirmation_instructions(record, token, opts = {})
+    @token = token
+    subject = t("users.mailer.confirmation_instructions.subject", app_name: ArchiveConfig.APP_SHORT_NAME)
+    devise_mail(record, :confirmation_instructions, opts.merge(subject: subject))
+  end
+
+  def password_change(record, opts = {})
+    @pac_footer = true
+    subject = if record.is_a?(Admin)
+                t("admin.mailer.password_change.subject",
+                  app_name: ArchiveConfig.APP_SHORT_NAME)
+              else
+                t("users.mailer.password_change.subject",
+                  app_name: ArchiveConfig.APP_SHORT_NAME)
+              end
+    devise_mail(record, :password_change, opts.merge(subject: subject))
+  end
 end

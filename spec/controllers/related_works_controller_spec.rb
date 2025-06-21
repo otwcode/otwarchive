@@ -28,6 +28,16 @@ describe RelatedWorksController do
         it_redirects_to_with_error(user_related_works_path, "Sorry, we couldn't find that user")
       end
     end
+
+    context "for a valid user" do
+      before(:each) do
+        get :index, params: { user_id: parent_creator.login }
+      end
+
+      it "sets the page subtitle correctly" do
+        expect(assigns(:page_subtitle)).to eq("#{parent_creator.login} - Related Works")
+      end
+    end
   end
 
   describe "PUT #update" do

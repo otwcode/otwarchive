@@ -155,6 +155,29 @@ describe StoryParser do
     end
   end
 
+  describe "#download_text" do
+    before do
+      WebMock.stub_request(:get, "http://example.org/foo")
+        .to_return(status: 200, body: "the response of the redirect target", headers: {})
+    end
+
+    it "follows relative redirects" do
+      input_url = "http://example.org/bar"
+      WebMock.stub_request(:get, input_url)
+        .to_return(status: 302, headers: { "Location" => "/foo" })
+
+      expect(@sp.send(:download_text, input_url)).to eq("the response of the redirect target")
+    end
+
+    it "follows absolute redirects" do
+      input_url = "http://foo.com/"
+      WebMock.stub_request(:get, input_url)
+        .to_return(status: 302, headers: { "Location" => "http://example.org/foo" })
+
+      expect(@sp.send(:download_text, input_url)).to eq("the response of the redirect target")
+    end
+  end
+
   describe "#parse_common" do
     it "converts relative to absolute links" do
       # This one doesn't work because the sanitizer is converting the & to &amp;
