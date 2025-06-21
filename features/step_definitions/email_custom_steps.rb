@@ -3,9 +3,9 @@ Given "the email queue is clear" do
 end
 
 Given "a locale with translated emails" do
-  FactoryBot.create(:locale, iso: "new")
+  FactoryBot.create(:locale, iso: "new", email_enabled: true)
   # The footer keys are used in most emails
-  I18n.backend.store_translations(:new, { mailer: { general: { footer: { general: { about: { html: "Translated footer", text: "Translated footer" } } } } } })
+  I18n.backend.store_translations(:new, { mailer: { general: { footer: { about: { html: "Translated footer", text: "Translated footer" } } } } })
   I18n.backend.store_translations(:new, { kudo_mailer: { batch_kudo_notification: { subject: "Translated subject" } } })
   I18n.backend.store_translations(:new, { users: { mailer: { reset_password_instructions: { subject: "Translated subject" } } } })
 end
@@ -16,9 +16,13 @@ Given "the user {string} enables translated emails" do |user|
   user.preference.update!(locale: Locale.find_by(iso: "new"))
 end
 
-Given "the locale preference feature flag is disabled for user {string}" do |user|
+When "the locale preference feature flag is disabled for user {string}" do |user|
   user = User.find_by(login: user)
   $rollout.deactivate_user(:set_locale_preference, user)
+end
+
+When "translated emails are disabled for the locale" do
+  Locale.find_by(iso: "new").update_attribute(:email_enabled, false)
 end
 
 Then "the email to {string} should be translated" do |user|
@@ -43,6 +47,12 @@ Then "the email to {string} should be non-translated" do |user|
   step(%{the email to "#{user}" should not contain "Translated footer"})
   step(%{the email to "#{user}" should contain "fan-run and fan-supported archive"})
   step(%{the email to "#{user}" should not contain "translation missing"})
+end
+
+Then "the last email to {string} should be non-translated" do |user|
+  step(%{the last email to "#{user}" should not contain "Translated footer"})
+  step(%{the last email to "#{user}" should contain "fan-run and fan-supported archive"})
+  step(%{the last email to "#{user}" should not contain "translation missing"})
 end
 
 Then "{string} should be emailed" do |user|

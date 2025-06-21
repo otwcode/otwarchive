@@ -357,6 +357,12 @@ $.TokenList = function (input, url_or_data, settings) {
                     }
                     break;
             }
+        })
+        .keyup(function () {
+            if ($(this).val().length < settings.minChars) {
+                hide_dropdown();
+                clearTimeout(timeout);
+            }
         });
 
     // If the parent form is submitted and there is data in the input box, submit it
@@ -600,6 +606,7 @@ $.TokenList = function (input, url_or_data, settings) {
             // put focus on the last token's remove option, then hide the input
             input_box.parent().prev("li").find("a").focus();
             input_box.hide();
+            clearTimeout(timeout);
         } else {
             input_box.focus();
         }

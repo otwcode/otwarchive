@@ -1,10 +1,10 @@
 class CollectionsController < ApplicationController
-
   before_action :users_only, only: [:new, :edit, :create, :update]
   before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
   before_action :validate_challenge_type
+  before_action :check_parent_visible, only: [:index]
   cache_sweeper :collection_sweeper
 
   # Lazy fix to prevent passing unsafe values to eval via challenge_type
@@ -23,6 +23,12 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def check_parent_visible
+    return unless params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
+
+    check_visibility_for(@work)
+  end
+
   def index
     if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
       @collections = @work.approved_collections
@@ -34,6 +40,7 @@ class CollectionsController < ApplicationController
         .by_title
         .for_blurb
         .paginate(page: params[:page])
+      @page_subtitle = t(".subcollections_page_title", collection_title: @collection.title)
     elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       @collections = @user.maintained_collections
         .by_title

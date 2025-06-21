@@ -6,6 +6,9 @@ class UserPolicy < ApplicationPolicy
   # This is further restricted using ALLOWED_ATTRIBUTES_BY_ROLES.
   MANAGE_ROLES = %w[superadmin legal policy_and_abuse open_doors support tag_wrangling].freeze
 
+  # Roles that are allowed to set a generic username for users.
+  CHANGE_USERNAME_ROLES = %w[superadmin policy_and_abuse].freeze
+
   # Roles that allow updating the Fannish Next Of Kin of a user.
   MANAGE_NEXT_OF_KIN_ROLES = %w[superadmin policy_and_abuse support].freeze
 
@@ -18,17 +21,18 @@ class UserPolicy < ApplicationPolicy
   # Define which roles can update which attributes.
   ALLOWED_ATTRIBUTES_BY_ROLES = {
     "open_doors" => [roles: []],
-    "policy_and_abuse" => [:email, roles: []],
-    "superadmin" => [:email, roles: []],
-    "support" => %i[email],
+    "policy_and_abuse" => [:email, { roles: [] }],
+    "superadmin" => [:email, { roles: [] }],
+    "support" => [:email, { roles: [] }],
     "tag_wrangling" => [roles: []]
   }.freeze
 
   # Define which admin roles can edit which user roles.
   ALLOWED_USER_ROLES_BY_ADMIN_ROLES = {
-    "open_doors" => %w[archivist opendoors],
+    "open_doors" => %w[archivist no_resets opendoors],
     "policy_and_abuse" => %w[no_resets protected_user],
     "superadmin" => %w[archivist no_resets official opendoors protected_user tag_wrangler],
+    "support" => %w[no_resets],
     "tag_wrangling" => %w[tag_wrangler]
   }.freeze
 
@@ -48,6 +52,10 @@ class UserPolicy < ApplicationPolicy
     user_has_roles?(REVIEW_CREATIONS_ROLES)
   end
 
+  def can_change_username?
+    user_has_roles?(CHANGE_USERNAME_ROLES)
+  end
+
   def permitted_attributes
     ALLOWED_ATTRIBUTES_BY_ROLES.values_at(*user.roles).compact.flatten
   end
@@ -60,6 +68,8 @@ class UserPolicy < ApplicationPolicy
   alias bulk_search? can_manage_users?
   alias show? can_manage_users?
   alias update? can_manage_users?
+  alias change_username? can_change_username?
+  alias changed_username? can_change_username?
 
   alias update_next_of_kin? can_manage_next_of_kin?
 

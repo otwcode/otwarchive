@@ -53,6 +53,7 @@ Rails.application.routes.draw do
   get '/422', to: 'errors#422'
   get '/500', to: 'errors#500'
   get '/auth_error', to: 'errors#auth_error'
+  get "/timeout_error", to: "errors#timeout_error"
 
   #### DOWNLOADS ####
 
@@ -80,6 +81,7 @@ Rails.application.routes.draw do
     collection do
       get :manage
       get :status
+      post :resend
     end
   end
 
@@ -196,6 +198,8 @@ Rails.application.routes.draw do
       member do
         put :hide
         put :set_spam
+        get :confirm_remove_pseud
+        put :remove_pseud
       end
     end
     resources :users, controller: "admin_users", only: [:index, :show] do
@@ -239,6 +243,7 @@ Rails.application.routes.draw do
   resources :users, except: [:new, :create] do
     member do
       get :change_email
+      put :confirm_change_email
       post :changed_email
       get :change_password
       post :changed_password
@@ -247,6 +252,7 @@ Rails.application.routes.draw do
       post :end_first_login
       post :end_banner
       post :end_tos_prompt
+      get :reconfirm_email
     end
     resources :assignments, controller: "challenge_assignments", only: [:index]
     resources :claims, controller: "challenge_claims", only: [:index]
@@ -311,7 +317,12 @@ Rails.application.routes.draw do
     resources :signups, controller: "challenge_signups", only: [:index]
     resources :skins, only: [:index]
     resources :stats, only: [:index]
-    resources :subscriptions, only: [:index, :create, :destroy]
+    resources :subscriptions, only: [:index, :create, :destroy] do
+      collection do
+        get :confirm_delete_all
+        post :delete_all
+      end
+    end
     resources :tag_sets, controller: "owned_tag_sets", only: [:index]
     resources :works do
       collection do
@@ -392,7 +403,6 @@ Rails.application.routes.draw do
     end
     resource :hit_count, controller: :hit_count, only: [:create]
     resources :kudos, only: [:index]
-    resources :links, controller: "work_links", only: [:index]
     resource :troubleshooting, controller: :troubleshooting, only: [:show, :update]
   end
 

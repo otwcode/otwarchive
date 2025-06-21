@@ -6,7 +6,7 @@ run_main_reindex_queues:
   description: "Kick off a reindex of all main content indexing"
 
 run_background_reindex_queue:
-  every: 10m
+  every: 11m
   class: "ScheduledReindexJob"
   queue: utilities
   args: background
@@ -81,7 +81,7 @@ remove_old_hit_count_data:
   description: "Remove old hit count information from redis."
 
 check_invite_queue:
-  cron: "21 6 * * *"
+  every: 1h
   class: "AdminSetting"
   queue: utilities
   args: check_queue

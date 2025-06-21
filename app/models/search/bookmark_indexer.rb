@@ -84,7 +84,7 @@ class BookmarkIndexer < Indexer
     json_object = object.as_json(
       root: false,
       only: [
-        :id, :created_at, :bookmarkable_type, :bookmarkable_id, :user_id,
+        :id, :created_at, :bookmarkable_type, :bookmarkable_id,
         :private, :updated_at, :hidden_by_admin, :pseud_id, :rec
       ],
       methods: [:bookmarker, :collection_ids, :with_notes, :bookmarkable_date]

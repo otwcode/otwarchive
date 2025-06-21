@@ -61,10 +61,10 @@ Feature: First login help banner
   Scenario: Banner comes back if turned off using X
   
   Given I am logged in as "newname2"
-  When I am on newname2's user page
+  When I go to newname2's user page
   # Note this is "&times;" and not a letter "x"
   When I follow "×" within "div#main"
   When I am logged out
     And I am logged in as "newname2"
-    And I am on my user page
+    And I go to newname2's user page
   Then I should see the first login banner

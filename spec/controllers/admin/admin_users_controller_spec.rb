@@ -145,7 +145,11 @@ describe Admin::AdminUsersController do
 
       %w[policy_and_abuse superadmin].each do |admin_role|
         context "with role #{admin_role}" do
-          before { admin.update!(roles: [admin_role]) }
+          before do
+            admin.update!(roles: [admin_role])
+            old_role.update!(name: "no_resets")
+            role.update!(name: "protected_user")
+          end
 
           it "allows admins to update all attributes" do
             expect do
@@ -168,52 +172,80 @@ describe Admin::AdminUsersController do
         end
       end
 
-      %w[open_doors tag_wrangling].each do |admin_role|
-        context "with role #{admin_role}" do
-          before { admin.update!(roles: [admin_role]) }
+      context "with role open_doors" do
+        before do
+          admin.update!(roles: ["open_doors"])
+          old_role.update!(name: "archivist")
+          role.update!(name: "opendoors")
+        end
 
-          it "does not allow updating email" do
-            expect do
-              put :update, params: { id: user.login, user: { email: "updated@example.com" } }
-            end.to raise_exception(ActionController::UnpermittedParameters)
-            expect(user.reload.email).not_to eq("updated@example.com")
-          end
+        it "does not allow updating email" do
+          expect do
+            put :update, params: { id: user.login, user: { email: "updated@example.com" } }
+          end.to raise_exception(ActionController::UnpermittedParameters)
+          expect(user.reload.email).not_to eq("updated@example.com")
+        end
 
-          it "allows updating roles" do
-            expect do
-              put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
-            end.to change { user.reload.roles.pluck(:name) }
-              .from([old_role.name])
-              .to([role.name])
-              .and avoid_changing { user.reload.email }
+        it "allows updating roles" do
+          role_no_resets = create(:role, name: "no_resets")
+          expect do
+            put :update, params: { id: user.login, user: { roles: [role.id.to_s, role_no_resets.id.to_s] } }
+          end.to change { user.reload.roles.pluck(:name) }
+            .from([old_role.name])
+            .to([role.name, role_no_resets.name])
+            .and avoid_changing { user.reload.email }
 
-            it_redirects_to_with_notice(root_path, "User was successfully updated.")
-          end
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
         end
       end
 
-      # Keep the array in case we need to add another role like this.
-      %w[support].each do |admin_role|
-        context "with role #{admin_role}" do
-          before { admin.update!(roles: [admin_role]) }
+      context "with role support" do
+        before do
+          admin.update!(roles: ["support"])
+          user.update!(roles: [])
+          role.update!(name: "no_resets")
+        end
 
-          it "does not allow updating roles" do
-            expect do
-              put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
-            end.to raise_exception(ActionController::UnpermittedParameters)
-            expect(user.reload.roles).not_to include(role)
-          end
+        it "allows updating email" do
+          put :update, params: { id: user.login, user: { email: "updated@example.com" } }
+          expect(user.reload.email).to eq("updated@example.com")
+        end
 
-          it "allows updating email" do
-            expect do
-              put :update, params: { id: user.login, user: { email: "updated@example.com" } }
-            end.to change { user.reload.email }
-              .from("user@example.com")
-              .to("updated@example.com")
-              .and avoid_changing { user.reload.roles.pluck(:name) }
+        it "allows updating roles" do
+          expect do
+            put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
+          end.to change { user.reload.roles.pluck(:name) }
+            .from([])
+            .to([role.name])
+            .and avoid_changing { user.reload.email }
 
-            it_redirects_to_with_notice(root_path, "User was successfully updated.")
-          end
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+        end
+      end
+
+      context "with role tag_wrangling" do
+        before do
+          admin.update!(roles: ["tag_wrangling"])
+          user.update!(roles: [])
+          role.update!(name: "tag_wrangler")
+        end
+
+        it "does not allow updating email" do
+          expect do
+            put :update, params: { id: user.login, user: { email: "updated@example.com" } }
+          end.to raise_exception(ActionController::UnpermittedParameters)
+          expect(user.reload.email).not_to eq("updated@example.com")
+        end
+
+        it "allows updating roles" do
+          expect do
+            put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
+          end.to change { user.reload.roles.pluck(:name) }
+            .from([])
+            .to([role.name])
+            .and avoid_changing { user.reload.email }
+
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
         end
       end
 
@@ -234,6 +266,53 @@ describe Admin::AdminUsersController do
             end.to raise_exception(ActionController::UnpermittedParameters)
             expect(user.reload.email).not_to eq("updated@example.com")
           end
+        end
+      end
+
+      context "with available user roles restricted by type of admin" do
+        let!(:opendoors_role) { create(:role, name: "opendoors") }
+        let!(:archivist_role) { create(:role, name: "archivist") }
+        let!(:tag_wrangler_role) { create(:role, name: "tag_wrangler") }
+
+        before { admin.update!(roles: ["open_doors"]) }
+
+        it "does not add unpermitted roles" do
+          user.update!(roles: [opendoors_role])
+
+          put :update, params: {
+            id: user.login,
+            user: {
+              roles: [opendoors_role.id.to_s, tag_wrangler_role.id.to_s]
+            }
+          }
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+          expect(user.reload.roles).to eq([opendoors_role])
+        end
+
+        it "does not change unpermitted roles when adding a role" do
+          user.update!(roles: [tag_wrangler_role])
+
+          put :update, params: {
+            id: user.login,
+            user: {
+              roles: [opendoors_role.id.to_s]
+            }
+          }
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+          expect(user.reload.roles).to eq([opendoors_role, tag_wrangler_role])
+        end
+
+        it "does not change unpermitted roles when removing a role" do
+          user.update!(roles: [tag_wrangler_role, opendoors_role])
+
+          put :update, params: {
+            id: user.login,
+            user: {
+              roles: [""]
+            }
+          }
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+          expect(user.reload.roles).to eq([tag_wrangler_role])
         end
       end
     end
@@ -482,6 +561,8 @@ describe Admin::AdminUsersController do
     let(:other_owner) { create(:user, banned: false) }
     let!(:collection1) { create(:collection) }
     let!(:collection2) { create(:collection) }
+    let!(:comment) { create(:comment, pseud: user.default_pseud) }
+
     authorized_roles = %w[superadmin policy_and_abuse].freeze
 
     before do
@@ -529,6 +610,33 @@ describe Admin::AdminUsersController do
 
               it_redirects_to_with_notice(admin_users_path, "All creations by user #{user.login} have been deleted.")
               expect(Work.exists?(work.id)).to be false
+              expect(Comment.exists?(comment.id)).to be_falsey
+            end
+
+            it "sends all of the user's comments as spam reports to Akismet" do
+              expect_any_instance_of(Comment).to receive(:submit_spam)
+
+              subject.call
+            end
+
+            it "does not send deleted comments to Akismet" do
+              comment.is_deleted = true
+              comment.save!(validate: false)
+              expect_any_instance_of(Comment).to_not receive(:submit_spam)
+
+              subject.call
+            end
+
+            it "deletes marked-as-deleted comments when all its replies are deleted" do
+              reply = create(:comment, commentable: comment, pseud: user.default_pseud)
+              comment.destroy_or_mark_deleted
+
+              expect(comment.is_deleted).to be_truthy
+
+              subject.call
+
+              expect(Comment.exists?(comment.id)).to be_falsey
+              expect(Comment.exists?(reply.id)).to be_falsey
             end
           end
         end
