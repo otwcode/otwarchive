@@ -52,13 +52,17 @@ fieldset dd dl, form .meta dd, fieldset dl fieldset dl, dd fieldset {
 
 /*end nesting */
 
-legend, input[type="hidden"] {
+legend {
   height: 0;
   width: 0;
   font-size: 0;
   opacity: 0;
   padding: 0;
   margin: 0;
+}
+
+input[type="hidden"] {
+  display: none !important;
 }
 
 label {
