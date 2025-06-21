@@ -94,7 +94,6 @@ class CommentMailerPreview < ApplicationMailerPreview
     CommentMailer.comment_notification(admin, comment)
   end
 
-
   # Sent to the admin mailing list when someone edits a comment on a news post
   def admin_edited_comment_notification
     admin = create(:admin)
