@@ -151,6 +151,9 @@ Rails/DynamicFindBy:
 Rails/EnvironmentVariableAccess:
   Enabled: true
 
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+
 # Allow all uses of html_safe, they're everywhere...
 Rails/OutputSafety:
   Enabled: false
