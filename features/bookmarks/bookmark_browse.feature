@@ -16,7 +16,14 @@ Feature: Browse Bookmarks
     Then I should see "Bookmarked with Other Pseud"
       And I should not see "Bookmarked with Default Pseud"
 
+  Scenario: When logged in, the "save" button on bookmarks shows
+    Given I am logged in as "bookmarker"
+    When I go to the bookmarks page
+    Then I should see a link "Save"
+
   Scenario: When logged out, the "save" button on bookmarks does not show
-    Given I am logged out
+    Given I am logged in as "bookmarker"
+      And I bookmark the work "Test" with the tag "Testing"
+    When I log out
       And I go to the bookmarks page for the tag "Testing"
     Then I should not see a link "Save"
