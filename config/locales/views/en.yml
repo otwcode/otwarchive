@@ -530,6 +530,9 @@ en:
       saved_link: Saved
     bookmark_user_module:
       bookmarked_by_html: Bookmarked by %{pseud_link}
+    bookmarkable_blurb:
+      save_link: Save
+      saved_link: Saved
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
