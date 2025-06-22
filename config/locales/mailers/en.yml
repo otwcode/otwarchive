@@ -409,7 +409,7 @@ en:
         html: We have found some invalid sign-ups in your gift exchange %{collection_link}. Potential matches can't be generated until these are cleaned up.
         text: We have found some invalid sign-ups in your gift exchange "%{collection_title}" (%{collection_url}). Potential matches can't be generated until these are cleaned up.
       see_details:
-        challenge_matching_help_link_text: the challenge matching help
+        challenge_matching_help: the challenge matching help
         html: Invalid sign-ups may be duplicates, or may not meet the requirements you've set for your challenge. Unfortunately, there is no automatic way to fix them, so you will have to manually edit or delete them. For more details, refer to %{challenge_matching_help_link}.
         text: 'Invalid sign-ups may be duplicates, or may not meet the requirements you''ve set for your challenge. Unfortunately, there is no automatic way to fix them, so you will have to manually edit or delete them. For more details, refer to the challenge matching help: %{challenge_matching_help_url}.'
       signup: 'Signup #%{signup_id}'

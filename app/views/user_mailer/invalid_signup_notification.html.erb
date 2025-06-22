@@ -1,7 +1,7 @@
 <% content_for :message do %>
   <p><%= t(".found_invalid.html", collection_link: style_link(@collection.title, collection_url(@collection))) %></p>
 
-  <p><%= t(".see_details.html", challenge_matching_help_link: style_link(t(".see_details.challenge_matching_help_link_text"), "#{root_url}help/challenge-matching.html#invalid_signups")) %></p>
+  <p><%= t(".see_details.html", challenge_matching_help_link: style_link(t(".see_details.challenge_matching_help"), "#{root_url}help/challenge-matching.html#invalid_signups")) %></p>
 
   <p><%= t(".signups_here") %>
     <ul>
