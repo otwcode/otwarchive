@@ -251,8 +251,8 @@ en:
     request_byline:
       none: "- None -"
   chapter:
-    full_chapter_title: 'Chapter %{position}: %{title}'
     chapter_header: Chapter %{position}
+    full_chapter_title: 'Chapter %{position}: %{title}'
   errors:
     attributes:
       icon:
