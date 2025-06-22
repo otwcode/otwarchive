@@ -18,7 +18,7 @@ Feature: Browse Bookmarks
 
   Scenario: When logged out, the "save" button on bookmarks does not show
     Given I am logged in as "bookmarker"
-      And I bookmark the work "Test" with the tag "testing"
+      And I bookmark the work "Test" with the tags "testing"
     When I log out
       And I go to the bookmarks page for the tag "testing"
     Then I should see "Test"
