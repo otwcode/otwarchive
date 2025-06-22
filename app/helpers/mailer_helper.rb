@@ -119,7 +119,8 @@ module MailerHelper
     title = if creation.is_a?(Chapter)
               creation.full_chapter_title.html_safe
             else
-              creation.title.html_safe
+              # FIRST-STRONG ISOLATE and POP DIRECTIONAL ISOLATE respectively, so a bidi title won't affect the parenthesis, see AO3-4590
+              "&#x2068;#{creation.title}&#x2069;".html_safe
             end
     t("mailer.general.creation.link_with_word_count",
       creation_link: style_creation_link(title, creation_url),
@@ -131,7 +132,8 @@ module MailerHelper
     title = if creation.is_a?(Chapter)
               creation.full_chapter_title.html_safe
             else
-              creation.title.html_safe
+              # FIRST-STRONG ISOLATE and POP DIRECTIONAL ISOLATE respectively, so a bidi title won't affect the parenthesis, see AO3-4590
+              "&#x2068;#{creation.title}&#x2069;".html_safe
             end
     t("mailer.general.creation.title_with_word_count",
       creation_title: title, word_count: creation_word_count(creation))
