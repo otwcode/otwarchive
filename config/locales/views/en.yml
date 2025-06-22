@@ -1982,16 +1982,16 @@ en:
       name: Name
       submit: Submit
   readings:
+    confirm_clear:
+      notice_html: Are you sure you want to <strong><em>clear</em></strong> your entire history? This <strong>cannot be undone</strong>.
+      page_heading: Clear Entire History
+      submit: Yes, Clear Entire History
     index:
-      page_heading: History
+      clear_entire_history: Clear Entire History
       content_heading: List of History Items
       full_history: Full History
       marked_for_later: Marked for Later
-      clear_entire_history: Clear Entire History
-    confirm_clear:
-      page_heading: Clear Entire History
-      notice_html: Are you sure you want to <strong><em>clear</em></strong> your entire history? This <strong>cannot be undone</strong>.
-      submit: Yes, Clear Entire History
+      page_heading: History
   related_works:
     index:
       page_heading: "%{login}'s Related Works"
