@@ -551,13 +551,6 @@ class StoryParser
   def parse_common(story, location = nil, encoding = nil, detect_tags = true)
     work_params = { title: "Untitled Imported Work", chapter_attributes: { content: "" } }
 
-    # check if the given encoding is valid, otherwise fallback to nil
-    begin
-      Encoding.find(encoding) if encoding
-    rescue ArgumentError
-      encoding = nil
-    end
-
     # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
     # preserve line breaks in plain text documents
     # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
