@@ -1981,7 +1981,6 @@ en:
       make_default: Make this name default
       name: Name
       submit: Submit
-      ticket_footnote: Numbers only.
   readings:
     index:
       page_heading: History
