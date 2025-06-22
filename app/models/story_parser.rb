@@ -561,7 +561,7 @@ class StoryParser
     # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
     # preserve line breaks in plain text documents
     # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
-    story.prepend("<foo><foo/>")
+    story.prepend("<foo></foo>")
     @doc =
       begin
         Nokogiri::HTML5.parse(story, encoding: encoding)
