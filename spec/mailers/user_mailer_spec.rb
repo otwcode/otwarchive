@@ -629,6 +629,7 @@ describe UserMailer do
 
     let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
     let(:chapter) { create(:chapter, work: work, summary: "<p><b>Another</b> HTML summary.</p>") }
+    let(:series) { create(:series, works: [work]) }
     let(:subscription) { create(:subscription, subscribable: work) }
 
     context "when the user is unavailable" do
@@ -663,6 +664,12 @@ describe UserMailer do
       it "includes HTML from the work summary" do
         expect(email).to have_html_part_content("<p>Paragraph <u>one</u>.</p>")
         expect(email).to have_html_part_content("<p>Paragraph 2.</p>")
+      end
+
+      it "includes the series link" do
+        label = "<b style=\"color:#990000\">Series:</b>"
+        link = "Part 1 of <a style=\"color:#990000\" href=\"#{series_url(series)}\">#{series.title}</a>"
+        expect(email).to have_html_part_content("#{label} #{link}")
       end
 
       it "includes HTML from the chapter summary" do
