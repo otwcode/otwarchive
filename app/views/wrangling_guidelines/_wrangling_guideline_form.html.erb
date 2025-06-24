@@ -11,7 +11,7 @@
       <%= live_validation_for_field('wrangling_guideline_title', :failureMessage => ts('Please enter a title.')) %>
     </dd>
 
-    <dt class="required"><%= f.label :content, ts('Guideline text') + '*' %></dt>
+    <dt class="required"><%= label_tag :content, ts('Guideline text') + '*' %></dt>
     <dd class="required">
       <ul class="hidden rtf-html-switch actions" role="menu">
         <li><a class="rtf-link" href="#"><%= ts('Rich Text') %></a></li>
