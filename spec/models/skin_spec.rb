@@ -204,6 +204,13 @@ describe Skin do
       expect(skin2.errors[:title]).not_to be_empty
     end
 
+    it "has a unique title ignoring case" do
+      expect(@skin.save).to be_truthy
+      skin2 = Skin.new(title: "test skin")
+      expect(skin2.save).not_to be_truthy
+      expect(skin2.errors[:title]).not_to be_empty
+    end
+
     it "requires a preview image if public" do
       @skin.css = "body {background: #fff;}"
       @skin.public = true

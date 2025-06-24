@@ -1,0 +1,23 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading">
+  <% if @subscribable_type %>
+    <%= t(".page_heading.#{@subscribable_type}") %>
+  <% else %>
+    <%= t(".page_heading.all") %>
+  <% end %>
+</h2>
+
+<!--main content-->
+<%= form_with(model: @user, url: delete_all_user_subscriptions_path(@user, type: @subscribable_type), method: :post, class: "simple destroy") do |f| %>
+  <p class="caution notice">
+    <%= t(".caution_html") %>
+  </p>
+  <p class="actions">
+    <% if @subscribable_type %>
+      <%= f.submit t(".submit.#{@subscribable_type}") %>
+    <% else %>
+      <%= f.submit t(".submit.all") %>
+    <% end %>
+  </p>
+<% end %>
+<!--/content-->

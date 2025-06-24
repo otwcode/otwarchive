@@ -18,7 +18,7 @@ Given(/^I have refused the work/) do
   step "it is currently 1 second from now"
 
   step %{I am logged in as "giftee1" with password "something"}
-  step %{I go to my gifts page}
+  step %{I go to giftee1's gifts page}
   step %{I follow "Refuse Gift"}
 end
 

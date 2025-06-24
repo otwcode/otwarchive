@@ -8,8 +8,8 @@ Feature: Tag wrangling
       And I bookmark the work "Renoir's Boating Party" with the tags "Amelie"
       And I post the work "Luncheon" with fandom "Amelie"
       # Visit the relevant pages to make sure the data gets cached.
-      And I go to my bookmarks page
-      And I go to my works page
+      And I go to audrey's bookmarks page
+      And I go to audrey's works page
       And I go to the work "Luncheon"
     When I am logged in as a "tag_wrangling" admin
       And I edit the tag "Amelie"

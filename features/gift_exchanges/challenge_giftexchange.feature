@@ -124,7 +124,7 @@ Feature: Gift Exchange Challenge
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
     When I am logged in as "myname1"
       And I sign up for "Awesome Gift Exchange" with combination A
-    When I am on my user page
+    When I am on myname1's user page
     Then I should see "Sign-ups (1)"
     When I follow "Sign-ups (1)"
     Then I should see "Awesome Gift Exchange"
@@ -157,7 +157,7 @@ Feature: Gift Exchange Challenge
      And I go to "Awesome Gift Exchange" collection's page
      And I follow "Sign-ups"
      And I fill in "query" with "3"
-     And I press "Search By Pseud"
+     And I press "Search by Pseud"
    Then I should see "myname3" within "#main"
      And I should not see "myname4" within "#main"
 
@@ -332,7 +332,7 @@ Feature: Gift Exchange Challenge
   Scenario: User can see their assignment, but no email links
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
-      And I go to my user page
+      And I go to myname1's user page
       And I follow "Assignments"
     Then I should see "Awesome Gift Exchange"
     When I follow "Awesome Gift Exchange"
@@ -346,7 +346,7 @@ Feature: Gift Exchange Challenge
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I fulfill my assignment
-    When I go to my user page
+    When I go to myname1's user page
       And I follow "Assignments"
     Then I should see "Awesome Gift Exchange"
       And I should not see "Not yet posted"
@@ -375,7 +375,7 @@ Feature: Gift Exchange Challenge
 
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
-      And I go to my assignments page
+      And I go to the assignments page for "myname1"
       And I follow "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
     When I am logged in as "mod1"
@@ -385,14 +385,14 @@ Feature: Gift Exchange Challenge
     Then I should see "Assignment updates complete!"
       And I should not see "Undefault"
     When I am logged in as "myname1"
-      And I go to my assignments page
+      And I go to the assignments page for "myname1"
       And I should see "Default"
 
   Scenario: User can default and a mod can assign a pinch hitter
 
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
-      And I go to my assignments page
+      And I go to the assignments page for "myname1"
       And I follow "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
     When I am logged in as "mod1"
@@ -556,7 +556,7 @@ Feature: Gift Exchange Challenge
       And everyone has signed up for the gift exchange "Bad Gift Exchange"
       And the challenge "Bad Gift Exchange" is deleted
     When I am logged in as "myname1"
-      And I go to my signups page
+      And I go to myname1's signups page
     Then I should see "Challenge Sign-ups"
       And I should not see "Bad Gift Exchange"
 
@@ -565,7 +565,7 @@ Feature: Gift Exchange Challenge
     Given everyone has their assignments for "Bad Gift Exchange"
       And the challenge "Bad Gift Exchange" is deleted
     When I am logged in as "myname1"
-      And I go to my assignments page
+      And I go to the assignments page for "myname1"
     Then I should see "My Assignments"
       And I should not see "Bad Gift Exchange"
 
@@ -574,7 +574,7 @@ Feature: Gift Exchange Challenge
     Given an assignment has been fulfilled in a gift exchange
       And the challenge "Awesome Gift Exchange" is deleted
     When I am logged in as "myname1"
-      And I go to my assignments page
+      And I go to the assignments page for "myname1"
     Then I should see "My Assignments"
       And I should not see "Awesome Gift Exchange"
 
@@ -617,7 +617,7 @@ Feature: Gift Exchange Challenge
       And the user "recip" exists and is activated
       And the user "recip" disallows gifts
       And I am logged in as "gifter"
-      And I have an assignment for the user "recip" in the collection "exchange_collection"
+      And "gifter" has an assignment for the user "recip" in the collection "exchange_collection"
     When I fulfill my assignment
     Then I should see "For recip."
     When I follow "Edit"
@@ -632,7 +632,7 @@ Feature: Gift Exchange Challenge
       And the user "recip" exists and is activated
       And the user "recip" disallows gifts
       And I am logged in as "gifter"
-      And I have an assignment for the user "recip" in the collection "exchange_collection"
+      And "gifter" has an assignment for the user "recip" in the collection "exchange_collection"
     When I start to fulfill my assignment
       And I fill in "Gift this work to" with "recip"
       And I press "Post"
@@ -650,7 +650,7 @@ Feature: Gift Exchange Challenge
       And the user "recip" allows gifts
       And the user "recip" has blocked the user "gifter"
       And I am logged in as "gifter"
-      And I have an assignment for the user "recip" in the collection "exchange_collection"
+      And "gifter" has an assignment for the user "recip" in the collection "exchange_collection"
     When I fulfill my assignment
     Then I should see "For recip."
     When I follow "Edit"
@@ -666,7 +666,7 @@ Feature: Gift Exchange Challenge
       And the user "recip" allows gifts
       And the user "recip" has blocked the user "gifter"
       And I am logged in as "gifter"
-      And I have an assignment for the user "recip" in the collection "exchange_collection"
+      And "gifter" has an assignment for the user "recip" in the collection "exchange_collection"
     When I start to fulfill my assignment
       And I fill in "Gift this work to" with "recip"
       And I press "Post"

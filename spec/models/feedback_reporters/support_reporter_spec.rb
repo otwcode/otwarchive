@@ -7,7 +7,7 @@ describe SupportReporter do
 
   let(:support_report_attributes) do
     {
-      title: "This is a tragesy",
+      title: "This is a tragedy",
       description: "Nothing more to say",
       language: "English",
       email: "walrus@example.org",
@@ -26,7 +26,7 @@ describe SupportReporter do
       "departmentId" => "support_dep_id",
       "email" => "walrus@example.org",
       "contactId" => "1",
-      "subject" => "[AO3] Support - This is a tragesy",
+      "subject" => "[AO3] Support - This is a tragedy",
       "description" => "Nothing more to say",
       "cf" => {
         "cf_language" => "English",
@@ -35,7 +35,7 @@ describe SupportReporter do
         "cf_rollout" => "rollout_value",
         "cf_user_agent" => "HTTParty",
         "cf_ip" => "127.0.0.1",
-        "cf_url" => "https://example.com/works/1",
+        "cf_ticket_url" => "https://example.com/works/1",
         "cf_site_skin" => "Reversi"
       }
     }
@@ -97,10 +97,10 @@ describe SupportReporter do
     end
 
     context "if the report has an image in description" do
-      it "strips all img tags but leaves the src URLs" do
+      it "strips all img tags but leaves the HTML attributes" do
         allow(subject).to receive(:description).and_return('Hi!<img src="http://example.com/Camera-icon.svg">Bye!')
 
-        expect(subject.report_attributes.fetch("description")).to eq("Hi!http://example.com/Camera-icon.svgBye!")
+        expect(subject.report_attributes.fetch("description")).to eq('Hi!img src="http://example.com/Camera-icon.svg"Bye!')
       end
     end
 
@@ -120,17 +120,17 @@ describe SupportReporter do
       end
 
       it "returns a hash containing a blank string for referer" do
-        expect(subject.report_attributes.dig("cf", "cf_url")).to eq("Unknown URL")
+        expect(subject.report_attributes.dig("cf", "cf_ticket_url")).to eq("")
       end
     end
 
     context "if the reporter has a very long referer" do
       before do
-        allow(subject).to receive(:referer).and_return("a" * 256)
+        allow(subject).to receive(:referer).and_return("a" * 2081)
       end
 
-      it "truncates the referer to 255 characters" do
-        expect(subject.report_attributes.dig("cf", "cf_url").length).to eq(255)
+      it "truncates the referer to 2080 characters" do
+        expect(subject.report_attributes.dig("cf", "cf_ticket_url").length).to eq(2080)
       end
     end
 

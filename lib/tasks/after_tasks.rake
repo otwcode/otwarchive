@@ -267,7 +267,7 @@ namespace :After do
     end
   end
 
-  desc "Add suffix to existing Underage Sex tag in prepartion for Underage warning rename"
+  desc "Add suffix to existing Underage Sex tag in preparation for Underage warning rename"
   task(add_suffix_to_underage_sex_tag: :environment) do
     puts("Tags can only be renamed by an admin, who will be listed as the tag's last wrangler. Enter the admin login we should use:")
     login = $stdin.gets.chomp.strip
@@ -487,6 +487,77 @@ namespace :After do
         new_bucket.put_object(key: key, body: old_icon, acl: "bucket-owner-full-control")
         puts "Finished skin #{skin_id}"
         $stdout.flush
+      end
+    end
+  end
+
+  desc "Migrate pinch_request_signup to request_signup"
+  task(migrate_pinch_request_signup: :environment) do
+    count = ChallengeAssignment.where("pinch_request_signup_id IS NOT NULL AND request_signup_id IS NULL").update_all("request_signup_id = pinch_request_signup_id")
+    puts("Migrated pinch_request_signup for #{count} challenge assignments.")
+  end
+
+  desc "Reindex tags associated with works that are hidden or unrevealed"
+  task(reindex_hidden_unrevealed_tags: :environment) do
+    hidden_count = Work.hidden.count
+    hidden_batches = (hidden_count + 999) / 1_000
+    puts "Inspecting #{hidden_count} hidden works in #{hidden_batches} batches"
+    Work.hidden.find_in_batches.with_index do |batch, index|
+      batch.each { |work| work.taggings.each(&:update_search) }
+      puts "Finished batch #{index + 1} of #{hidden_batches}"
+    end
+
+    unrevealed_count = Work.unrevealed.count
+    unrevealed_batches = (unrevealed_count + 999) / 1_000
+    puts "Inspecting #{unrevealed_count} unrevealed works in #{unrevealed_batches} batches"
+    Work.unrevealed.find_in_batches.with_index do |batch, index|
+      batch.each { |work| work.taggings.each(&:update_search) }
+      puts "Finished batch #{index + 1} of #{unrevealed_batches}"
+    end
+
+    puts "Finished reindexing tags on hidden and unrevealed works"
+  end
+
+  desc "Convert user kudos from users with the official role to guest kudos"
+  task(convert_official_kudos: :environment) do
+    official_users = Role.find_by(name: "official")&.users
+    if official_users.blank?
+      puts "No official users found"
+    else
+      official_users.each do |user|
+        kudos = user.kudos
+        next if kudos.blank?
+
+        puts "Updating #{kudos.size} kudos from #{user.login}"
+        user.remove_user_from_kudos
+      end
+
+      puts "Finished converting kudos from official users to guest kudos"
+    end
+  end
+
+  desc "Create TagSetAssociations for non-canonical tags belonging to canonical fandoms in TagSets"
+  task(create_non_canonical_tagset_associations: :environment) do
+    # We want to get all set taggings where the tag is not canonical, but has a parent fandom that _is_ canonical.
+    # This might be possible with pure Ruby, but unfortunately the parent tag in common_taggings is polymorphic
+    # (even though it doesn't need to be), which makes that trickier.
+    non_canonicals = SetTagging
+      .joins("INNER JOIN `tag_sets` `tag_set` ON `tag_set`.`id` = `set_taggings`.`tag_set_id` INNER JOIN `owned_tag_sets` ON `owned_tag_sets`.`tag_set_id` = `tag_set`.`id` INNER JOIN `tags` `tag` ON `tag`.`id` = `set_taggings`.`tag_id` INNER JOIN `common_taggings` `common_tagging` ON  `common_tagging`.`common_tag_id` = `tag`.`id` INNER JOIN `tags` `parent_tag` ON `common_tagging`.`filterable_id` = `parent_tag`.`id`")
+      .where("`tag`.`canonical` = FALSE AND `tag`.`type` IN ('Character', 'Relationship') AND `tag_set`.`id` IS NOT NULL AND `parent_tag`.`type` = 'Fandom' AND `parent_tag`.`canonical` = TRUE")
+      .distinct
+
+    non_canonicals.find_in_batches.with_index do |batch, index|
+      puts "Creating TagSetAssociations for batch #{index + 1}"
+      batch.each do |set_tagging|
+        owned_tag_set = set_tagging.tag_set.owned_tag_set
+        tag = set_tagging.tag
+
+        fandoms = tag.fandoms.joins(:set_taggings).where(canonical: true, set_taggings: { tag_set_id: set_tagging.tag_set.id })
+        fandoms.find_each do |fandom|
+          TagSetAssociation.create!(owned_tag_set: owned_tag_set, tag: tag, parent_tag: fandom)
+        rescue ActiveRecord::RecordInvalid
+          puts "Association already exists for fandom '#{fandom.name}' and tag '#{tag.name}'"
+        end
       end
     end
   end

@@ -388,7 +388,7 @@ Feature: Collection
       And I am logged in as "creator"
       And I post the work "Secret Work" to the collection "Anonymous Collection"
 
-    When I go to my works page
+    When I go to creator's works page
     Then I should not see "Secret Work"
 
     When I am logged in as the owner of "Anonymous Collection"
@@ -420,7 +420,7 @@ Feature: Collection
       And I am logged in as "creator"
       And I post the work "Secret Work" to the collection "Anonymous Collection"
 
-    When I go to my works page
+    When I go to creator's works page
     Then I should not see "Secret Work"
 
     When I am logged in as the owner of "Anonymous Collection"
@@ -456,7 +456,7 @@ Feature: Collection
       And I set up the draft "Secret Work"
       And I fill in "Collections" with "Anonymizing,Fluffy"
       And I press "Post"
-      And I go to my works page
+      And I go to creator's works page
     Then I should not see "Secret Work"
 
     When I edit the work "Secret Work"
@@ -464,7 +464,7 @@ Feature: Collection
       # Delay before posting to make sure the cache is expired
       And it is currently 1 second from now
       And I press "Post"
-      And I go to my works page
+      And I go to creator's works page
     Then I should see "Secret Work"
 
   Scenario: Changing a collection item to anonymous triggers a notification
