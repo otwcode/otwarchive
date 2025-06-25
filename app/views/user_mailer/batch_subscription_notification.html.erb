@@ -50,7 +50,7 @@
           <br><%= style_bold("Additional Tags:") %> <%= this_work.freeform_string %>
         <% end %>
         <% if this_work.series.count > 0 %>
-          <br><%= style_bold("Series:") %> <%= series_list(this_work, red_link: true).html_safe %>
+          <br /><%= style_bold("Series:") %> <%= series_list(this_work, red_link: true).html_safe %>
         <% end %>
       </p>
       <% end %>
