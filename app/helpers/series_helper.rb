@@ -60,13 +60,13 @@ module SeriesHelper
 
   def series_list_for_feeds(work)
     series = work.series
-    return "None" if series.empty?
+    return t("series_helper.none") if series.empty?
 
     list = []
     series.each do |s|
-      list << t("series_helper.feed_description", serial_index: s.serial_works.where(work_id: work.id).select(:position).first.position, link_to_series: style_link(s.title, series_url(s)))
+      list << t("series_helper.list_for_feeds_html", index: s.serial_works.where(work_id: work.id).select(:position).first.position, series_link: style_link(s.title, series_url(s)))
     end
-    list.join(", ")
+    list.join(t("support.array.words_connector"))
   end
 
   # Generates confirmation message for "Remove Me As Co-Creator"

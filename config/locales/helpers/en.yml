@@ -30,7 +30,8 @@ en:
   inbox_helper:
     comment_link_with_chapter_number: Chapter %{position} of %{title}
   series_helper:
-    feed_description: Part %{serial_index} of %{link_to_series}
+    list_for_feeds_html: Part %{index} of %{series_link}
+    none: None
   users_helper:
     log:
       ban: Suspended Permanently
