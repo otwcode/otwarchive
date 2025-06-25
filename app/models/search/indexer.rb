@@ -7,7 +7,8 @@ class Indexer
     "Tag" => %w(TagIndexer),
     "Pseud" => %w(PseudIndexer),
     "Series" => %w(BookmarkedSeriesIndexer),
-    "ExternalWork" => %w(BookmarkedExternalWorkIndexer)
+    "ExternalWork" => %w(BookmarkedExternalWorkIndexer),
+    "Collection" => %w(CollectionIndexer)
   }.freeze
 
   delegate :klass, :index_name, :document_type, to: :class
@@ -26,6 +27,7 @@ class Indexer
       BookmarkedSeriesIndexer,
       BookmarkedWorkIndexer,
       BookmarkIndexer,
+      CollectionIndexer,
       PseudIndexer,
       TagIndexer,
       WorkIndexer
@@ -175,6 +177,8 @@ class Indexer
   end
 
   def batch
+    return @batch if @batch
+
     @batch = []
     ids.each do |id|
       object = objects[id.to_i]
@@ -189,6 +193,8 @@ class Indexer
   end
 
   def index_documents
+    return if batch.empty?
+
     $elasticsearch.bulk(body: batch)
   end
 

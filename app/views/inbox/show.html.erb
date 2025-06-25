@@ -64,8 +64,11 @@
                 </li>
               <% end %>
 
-              <li class="action">
-                <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, :title => ts("select this comment"), :id => "inbox_comments_#{inbox_comment.id}" %>
+              <li>
+                <%= label_tag "inbox_comments_#{inbox_comment.id}" do %>
+                  <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, id: "inbox_comments_#{inbox_comment.id}" %>
+                  <%= ts("Select") %>
+                <% end %>
               </li>
             </ul>
           </li>

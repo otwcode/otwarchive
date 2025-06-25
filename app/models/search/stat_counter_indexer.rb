@@ -26,6 +26,8 @@ class StatCounterIndexer
   end
 
   def batch
+    return @batch if @batch
+
     @batch = []
     objects.each do |object|
       @batch << { update: routing_info(object) }
@@ -35,6 +37,8 @@ class StatCounterIndexer
   end
 
   def index_documents
+    return if batch.empty?
+
     $elasticsearch.bulk(body: batch)
   end
 

@@ -182,7 +182,7 @@ Feature: Edit Multiple Works
     Then I should not see "coauthor" within ".byline"
     When I view the work "First Shared"
     Then I should not see "coauthor" within ".byline"
-    When the user "coauthor" accepts all co-creator invitations
+    When the user "coauthor" accepts all co-creator requests
       And I view the work "First Shared"
     Then I should see "coauthor" within ".byline"
     When I view the work "Second Shared"

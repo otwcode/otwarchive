@@ -1,14 +1,16 @@
 class BookmarksController < ApplicationController
   before_action :load_collection
-  before_action :load_owner, only: [ :index ]
-  before_action :load_bookmarkable, only: [ :index, :new, :create, :fetch_recent, :hide_recent ]
+  before_action :load_owner, only: [:index]
+  before_action :load_bookmarkable, only: [:index, :new, :create, :fetch_recent, :hide_recent]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_bookmark, only: [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete ]
-  before_action :check_visibility, only: [ :show ]
-  before_action :check_ownership, only: [ :edit, :update, :destroy, :confirm_delete ]
+  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete, :share]
+  before_action :check_visibility, only: [:show, :share]
+  before_action :check_ownership, only: [:edit, :update, :destroy, :confirm_delete, :share]
 
   before_action :check_pseud_ownership, only: [:create, :update]
+
+  skip_before_action :store_location, only: [:share]
 
   def check_pseud_ownership
     if params[:bookmark][:pseud_id]
@@ -184,8 +186,8 @@ class BookmarksController < ApplicationController
   # POST /bookmarks
   # POST /bookmarks.xml
   def create
-    @bookmark = Bookmark.new(bookmark_params)
-    @bookmarkable = @bookmark.bookmarkable
+    @bookmarkable ||= ExternalWork.new(external_work_params)
+    @bookmark = @bookmarkable.bookmarks.build(bookmark_params)
     if @bookmarkable.new_record? && @bookmarkable.fandoms.blank?
        @bookmark.errors.add(:base, "Fandom tag is required")
        render :new and return
@@ -260,6 +262,21 @@ class BookmarksController < ApplicationController
       @bookmark.update_attributes(bookmark_params)
       @bookmarkable = @bookmark.bookmarkable
       render :edit and return
+    end
+  end
+
+  # GET /bookmarks/1/share
+  def share
+    if request.xhr?
+      if @bookmark.bookmarkable.is_a?(Work) && @bookmark.bookmarkable.unrevealed?
+        render template: "errors/404", status: :not_found
+      else
+        render layout: false
+      end
+    else
+      # Avoid getting an unstyled page if JavaScript is disabled
+      flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
+      redirect_back(fallback_location: root_path)
     end
   end
 
@@ -358,12 +375,14 @@ class BookmarksController < ApplicationController
 
   def bookmark_params
     params.require(:bookmark).permit(
-      :bookmarkable_id, :bookmarkable_type,
-      :pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec,
-      external: [
-        :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
-        :character_string, :summary, category_string: []
-      ]
+      :pseud_id, :bookmarker_notes, :tag_string, :collection_names, :private, :rec
+    )
+  end
+
+  def external_work_params
+    params.require(:external_work).permit(
+      :url, :author, :title, :fandom_string, :rating_string, :relationship_string,
+      :character_string, :summary, category_strings: []
     )
   end
 

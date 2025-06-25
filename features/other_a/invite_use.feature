@@ -21,7 +21,7 @@ I want to use an invitation to create an account
 
   Scenario: I visit the invitations page for a non-existent user
 
-  Given I am logged out
+  Given I am a visitor
     And I go to SOME_USER's invitations page
   Then I should be on the login page
     And I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."

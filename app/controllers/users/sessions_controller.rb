@@ -4,6 +4,7 @@ class Users::SessionsController < Devise::SessionsController
   before_action :admin_logout_required
   skip_before_action :store_location
 
+  # POST /users/login
   def create
     super do |resource|
       unless resource.remember_me
@@ -14,6 +15,13 @@ class Users::SessionsController < Devise::SessionsController
     end
   end
 
+  # GET /users/logout
+  def confirm_logout
+    # If the user is already logged out, we just redirect to the front page.
+    redirect_to root_path unless user_signed_in?
+  end
+
+  # DELETE /users/logout
   def destroy
     # signed_out clears the session
     return_to = session[:return_to]

@@ -103,7 +103,7 @@ Feature: Delete Works
       And I should see "Pseud2" within ".byline"
       And I should see "Pseud3" within ".byline"
       But I should not see "coauthor" within ".byline"
-    When the user "coauthor" accepts all creator invitations
+    When the user "coauthor" accepts all co-creator requests
       And I view the work "All Something Breaks Loose"
     Then I should see "coauthor" within ".byline"
     When I follow "Add Chapter"
@@ -138,7 +138,7 @@ Feature: Delete Works
       And I should see "Pseud3" within ".byline"
       But I should not see "cosomeone" within ".byline"
       And 1 email should be delivered to "cosomeone@example.org"
-    When the user "cosomeone" accepts all creator invites
+    When the user "cosomeone" accepts all co-creator requests
       And I view the work "All Something Breaks Loose"
     Then I should see "cosomeone" within ".byline"
     When all emails have been delivered

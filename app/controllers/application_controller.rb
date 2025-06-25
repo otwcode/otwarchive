@@ -488,7 +488,7 @@ public
     elsif model.to_s.downcase == 'tag'
       allowed = %w(name created_at taggings_count_cache)
     elsif model.to_s.downcase == 'collection'
-      allowed = %w(collections.title collections.created_at)
+      allowed = %w(title created_at)
     elsif model.to_s.downcase == 'prompt'
       allowed = %w(fandom created_at prompter)
     elsif model.to_s.downcase == 'claim'

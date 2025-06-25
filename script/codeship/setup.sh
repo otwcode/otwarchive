@@ -11,7 +11,7 @@ bundle install
 
 # Elasticsearch
 # https://documentation.codeship.com/basic/services/elasticsearch/
-export ELASTICSEARCH_VERSION=6.8.8
+export ELASTICSEARCH_VERSION=6.8.9
 export ELASTICSEARCH_PORT=9400
 \curl -sSL https://raw.githubusercontent.com/codeship/scripts/master/packages/elasticsearch.sh | bash -s
 

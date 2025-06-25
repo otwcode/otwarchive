@@ -6,7 +6,7 @@ module SearchHelper
     if !collection.respond_to?(:total_pages)
       header << ts("Recent #{item_name.pluralize}")
     elsif collection.total_pages < 2
-      header << pluralize(collection.size, item_name)
+      header << pluralize(collection.total_entries, item_name)
     else
       total_entries = collection.total_entries
       total_entries = collection.unlimited_total_entries if collection.respond_to?(:unlimited_total_entries)

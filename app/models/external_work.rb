@@ -10,7 +10,8 @@ class ExternalWork < ApplicationRecord
 
   belongs_to :language
 
-  scope :duplicate, -> { group("url HAVING count(DISTINCT id) > 1") }
+  # .duplicate.count.size returns the number of URLs with multiple external works
+  scope :duplicate, -> { group(:url).having("count(DISTINCT id) > 1") }
 
   AUTHOR_LENGTH_MAX = 500
 
@@ -81,6 +82,12 @@ class ExternalWork < ApplicationRecord
   def should_reindex_pseuds?
     pertinent_attributes = %w[id hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  # Visibility has changed, which means we need to reindex
+  # the external work's bookmarker collections, to update their bookmark counts.
+  def should_reindex_collections?
+    should_reindex_pseuds?
   end
 
   #######################################################################

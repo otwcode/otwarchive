@@ -176,8 +176,8 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index
-  after_destroy :expire_caches, :update_pseud_index
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_collection_index, :update_tag_index
+  after_destroy :expire_caches, :update_pseud_index, :update_collection_index
 
   before_destroy :send_deleted_work_notification, prepend: true
   def send_deleted_work_notification
@@ -232,13 +232,28 @@ class Work < ApplicationRecord
 
   def update_pseud_index
     return unless should_reindex_pseuds?
+
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
   end
-
+  
   # Visibility has changed, which means we need to reindex
   # the work's pseuds, to update their work counts, as well as
   # the work's bookmarker pseuds, to update their bookmark counts.
   def should_reindex_pseuds?
+    pertinent_attributes = %w(id posted restricted in_anon_collection
+                              in_unrevealed_collection hidden_by_admin)
+    destroyed? || (saved_changes.keys & pertinent_attributes).present?
+  end
+
+  def update_collection_index
+    return unless should_reindex_collections?
+
+    IndexQueue.enqueue_ids(Collection, collection_ids, :background)
+  end
+  
+  # Visibility has changed, which means we need to reindex
+  # the work's associated collections to update their bookmark counts.
+  def should_reindex_collections?
     pertinent_attributes = %w(id posted restricted in_anon_collection
                               in_unrevealed_collection hidden_by_admin)
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
@@ -920,22 +935,6 @@ class Work < ApplicationRecord
     )
   end
 
-  def comment_permissions=(value)
-    write_attribute(:comment_permissions, value)
-
-    # Map the special value back to an integer, and write it to the
-    # anon_commenting_disabled column so that if we do have to revert, we can
-    # go back to using the anon_commenting_disabled column without data loss.
-    write_attribute(:anon_commenting_disabled,
-                    Work.comment_permissions[comment_permissions])
-  end
-
-  def anon_commenting_disabled=(value)
-    write_attribute(:anon_commenting_disabled, value)
-    write_attribute(:comment_permissions,
-                    anon_commenting_disabled ? :disable_anon : :enable_all)
-  end
-
   ########################################################################
   # RELATED WORKS
   # These are for inspirations/remixes/etc
@@ -1213,15 +1212,8 @@ class Work < ApplicationRecord
     approved_collections.pluck(:id, :parent_id).flatten.uniq.compact
   end
 
-  def comments_count
-    self.stat_counter.comments_count
-  end
-  def kudos_count
-    self.stat_counter.kudos_count
-  end
-  def bookmarks_count
-    self.stat_counter.bookmarks_count
-  end
+  delegate :comments_count, :kudos_count, :bookmarks_count,
+           to: :stat_counter, allow_nil: true
 
   def hits
     stat_counter&.hit_count
@@ -1238,38 +1230,7 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    # Short-circuit the check if there's only one fandom tag:
-    return false if fandoms.count == 1
-
-    # Replace fandoms with their mergers if possible,
-    # as synonyms should have no meta tags themselves
-    all_without_syns = fandoms.map { |f| f.merger || f }.uniq
-
-    # For each fandom, find the set of all meta tags for that fandom (including
-    # the fandom itself).
-    meta_tag_groups = all_without_syns.map do |f|
-      # TODO: This is more complicated than it has to be. Once the
-      # meta_taggings table is fixed so that the inherited meta-tags are
-      # correctly calculated, this can be simplified.
-      boundary = [f] + f.meta_tags
-      all_meta_tags = []
-
-      until boundary.empty?
-        all_meta_tags.concat(boundary)
-        boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
-      end
-
-      all_meta_tags.uniq
-    end
-
-    # Two fandoms are "related" if they share at least one meta tag. A work is
-    # considered a crossover if there is no single fandom on the work that all
-    # the other fandoms on the work are "related" to.
-    meta_tag_groups.none? do |meta_tags1|
-      meta_tag_groups.all? do |meta_tags2|
-        (meta_tags1 & meta_tags2).any?
-      end
-    end
+    FandomCrossover.new.check_for_crossover(fandoms)
   end
 
   # Does this work have only one relationship tag?

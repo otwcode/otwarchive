@@ -75,9 +75,9 @@
     <dd class="relationship" title="<%= ts('relationships') %>">
       <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, 
                          autocomplete_options("relationship_in_fandom",
-                           :id => "work_relationship",
-                           :title => ts('relationships'),
-                           :autocomplete_live_params => 'fandom=work_fandom') %>
+                           id: "work_relationship",
+                           title: ts('relationships'),
+                           data: { autocomplete_live_params: "fandom=work_fandom" }) %>
     </dd>
 
     <dt class="character" title="<%= ts('characters') %>">
@@ -87,9 +87,9 @@
     <dd class="character" title="<%= ts('characters') %>">
       <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, 
                         autocomplete_options('character_in_fandom', 
-                          :id => "work_character",
-                          :title => ts('characters'),
-                          :autocomplete_live_params => 'fandom=work_fandom') %>
+                          id: "work_character",
+                          title: ts('characters'),
+                          data: { autocomplete_live_params: "fandom=work_fandom" }) %>
     </dd>
 
     <dt class="freeform" title="<%= ts('additional tags') %>">

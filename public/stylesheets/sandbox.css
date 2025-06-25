@@ -30,8 +30,86 @@ and preserve the balance/symmetry of the page */
   margin-left: 2.75em;
 }
 
-/* AO3-5907 avoid size change for modal during twitter button loads */
-.twitter {
-  width: 76px;
-  height: 28px;
+/* While implementing AO3-5987 it was suggested we move to non-JS share buttons.
+ * These are statically styled with CSS instead.
+ *
+ * These styles are currently only used in app/views/share/_share.html.erb.
+ *
+ * Sourced from: https://sharingbuttons.io/
+ * See: https://github.com/otwcode/otwarchive/pull/3874#pullrequestreview-460459176
+ */
+
+a.resp-sharing-button__link,
+.resp-sharing-button__icon {
+  display: inline-block;
+}
+
+a.resp-sharing-button__link,
+a.resp-sharing-button__link:hover {
+  text-decoration: none;
+  color: #fff;
+  border: none;
+}
+
+.resp-sharing-button {
+  border-radius: 5px;
+  transition: 25ms ease-out;
+  padding: 0.5em 0.75em;
+}
+
+.resp-sharing-button__icon svg {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.4em;
+  vertical-align: top
+}
+
+/* Non solid icons get a stroke */
+.resp-sharing-button__icon {
+  stroke: #fff;
+  fill: none;
+}
+
+/* Solid icons get a fill */
+.resp-sharing-button__icon--solid {
+  fill: #fff;
+  stroke: none;
+}
+
+.resp-sharing-button--twitter {
+  background-color: #55acee;
+}
+
+.resp-sharing-button--twitter:hover, a:focus .resp-sharing-button--twitter {
+  background-color: #2795e9;
+}
+
+.resp-sharing-button--tumblr {
+  background-color: #35465C;
+}
+
+.resp-sharing-button--tumblr:hover, a:focus .resp-sharing-button--tumblr {
+  background-color: #222d3c;
+}
+
+.resp-sharing-button--twitter {
+  background-color: #55acee;
+  border-color: #55acee;
+}
+
+.resp-sharing-button--twitter:hover,
+.resp-sharing-button--twitter:active {
+  background-color: #2795e9;
+  border-color: #2795e9;
+}
+
+.resp-sharing-button--tumblr {
+  background-color: #35465C;
+  border-color: #35465C;
+}
+
+.resp-sharing-button--tumblr:hover,
+.resp-sharing-button--tumblr:active {
+  background-color: #222d3c;
+  border-color: #222d3c;
 }

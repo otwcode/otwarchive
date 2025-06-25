@@ -225,7 +225,7 @@ td {
 }
 
 th {
-  text-align: left;
+  text-align: start;
 }
 
 thead td {
@@ -245,7 +245,7 @@ th a, th a:visited, th a:link {
 }
 
 tbody tr th {
-  text-align: left;
+  text-align: start;
 }
 
 /*END== */

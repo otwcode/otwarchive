@@ -56,5 +56,13 @@ describe StatCounterIndexer, work_search: true do
         WorkIndexer.refresh_index
       end.not_to change { result_count(title: "unique title") }
     end
+
+    context "when there are no IDs in the batch" do
+      let(:indexer) { WorkIndexer.new([]) }
+
+      it "returns a valid result" do
+        expect(indexer.index_documents).to be_nil
+      end
+    end
   end
 end

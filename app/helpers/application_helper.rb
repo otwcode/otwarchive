@@ -99,7 +99,7 @@ module ApplicationHelper
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = ts("Anonymous").html_safe
-      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation)) 
+      if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
         anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
       end
       return anon_byline
@@ -298,12 +298,14 @@ module ApplicationHelper
   def autocomplete_options(method, options={})
     {
       class: "autocomplete",
-      autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
-      autocomplete_hint_text: ts("Start typing for suggestions!"),
-      autocomplete_no_results_text: ts("(No suggestions found)"),
-      autocomplete_min_chars: 1,
-      autocomplete_searching_text: ts("Searching...")
-    }.merge(options)
+      data: {
+        autocomplete_method: (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
+        autocomplete_hint_text: ts("Start typing for suggestions!"),
+        autocomplete_no_results_text: ts("(No suggestions found)"),
+        autocomplete_min_chars: 1,
+        autocomplete_searching_text: ts("Searching...")
+      }
+    }.deep_merge(options)
   end
 
   # see http://asciicasts.com/episodes/197-nested-model-form-part-2

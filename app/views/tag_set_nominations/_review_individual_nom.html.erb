@@ -25,7 +25,7 @@
       <% end %>
     </dd>
 
-    <dd class="autocomplete"><%= text_field_tag "#{tag_type}_change_#{tagname}", nil, autocomplete_options("tag?type=#{tag_type}", :autocomplete_token_limit => 1, :title => "change tag name") %></dd>
+    <dd class="autocomplete"><%= text_field_tag "#{tag_type}_change_#{tagname}", nil, autocomplete_options("tag?type=#{tag_type}", data: { autocomplete_token_limit: 1 }, title: "change tag name") %></dd>
 
 
     <% if nom.synonym %>

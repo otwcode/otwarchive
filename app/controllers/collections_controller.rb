@@ -24,27 +24,20 @@ class CollectionsController < ApplicationController
   end
 
   def index
-    if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
+    if params[:work_id] && (@work = Work.find_by!(id: params[:work_id]))
       @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
-    elsif params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
-      @collections = @collection.children.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
-    elsif params[:user_id] && (@user = User.find_by(login: params[:user_id]))
-      @collections = @user.maintained_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
+    elsif params[:collection_id] && (@collection = Collection.find_by!(name: params[:collection_id]))
+      @search = CollectionSearchForm.new({ parent_id: @collection.id }.merge(page: params[:page]))
+      @collections = @search.search_results
+    elsif params[:user_id] && (@user = User.find_by!(login: params[:user_id]))
+      @search = CollectionSearchForm.new({ maintainer_id: @user.id }.merge(page: params[:page]))
+      @collections = @search.search_results
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
-      if params[:user_id]
-        flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
-      elsif params[:collection_id]
-        flash.now[:error] = ts("We couldn't find a collection by that name.")
-      elsif params[:work_id]
-        flash.now[:error] = ts("We couldn't find that work.")
-      end
       @sort_and_filter = true
-      params[:collection_filters] ||= {}
-      params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
-      params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
-      sort = params[:sort_column] + " " + params[:sort_direction]
-      @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
+      @search = CollectionSearchForm.new(collection_filter_params.merge(page: params[:page]))
+      @collections = @search.search_results
+      flash_search_warnings(@collections)
     end
   end
 
@@ -52,17 +45,19 @@ class CollectionsController < ApplicationController
   def list_challenges
     @page_subtitle = "Open Challenges"
     @hide_dashboard = true
-    @challenge_collections = (Collection.signup_open("GiftExchange").limit(15) + Collection.signup_open("PromptMeme").limit(15))
+
+    @challenge_collections = (CollectionSearchForm.new(challenge_type: "GiftExchange", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results.to_a +
+                             CollectionSearchForm.new(challenge_type: "PromptMeme", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results.to_a)
   end
 
   def list_ge_challenges
     @page_subtitle = "Open Gift Exchange Challenges"
-    @challenge_collections = Collection.signup_open("GiftExchange").limit(15)
+    @challenge_collections = CollectionSearchForm.new(challenge_type: "GiftExchange", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results
   end
 
   def list_pm_challenges
     @page_subtitle = "Open Prompt Meme Challenges"
-    @challenge_collections = Collection.signup_open("PromptMeme").limit(15)
+    @challenge_collections = CollectionSearchForm.new(challenge_type: "PromptMeme", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results
   end
 
   def show
@@ -115,7 +110,7 @@ class CollectionsController < ApplicationController
           redirect_to new_collection_gift_exchange_path(@collection) and return
         end
       else
-        redirect_to(@collection)
+        redirect_to collection_path(@collection)
       end
     else
       @challenge_type = params[:challenge_type]
@@ -150,7 +145,7 @@ class CollectionsController < ApplicationController
           end
         end
       end
-      redirect_to(@collection)
+      redirect_to collection_path(@collection)
     else
       render action: "edit"
     end
@@ -173,11 +168,20 @@ class CollectionsController < ApplicationController
 
   private
 
+  def collection_filter_params
+    safe_list = %w(title challenge_type moderated closed tag sort_column sort_direction)
+    search_params = params[:collection_search].present? ? params[:collection_search].to_unsafe_h : {}
+    collection_filters = search_params.select { |k, _| safe_list.include?(k) }
+    collection_filters = collection_filters.delete_if { |_, value| value.blank? }
+
+    collection_filters
+  end
+
   def collection_params
     params.require(:collection).permit(
       :name, :title, :email, :header_image_url, :description,
       :parent_name, :challenge_type, :icon, :delete_icon,
-      :icon_alt_text, :icon_comment_text,
+      :icon_alt_text, :icon_comment_text, :tag_string, :multifandom,
       collection_profile_attributes: [
         :id, :intro, :faq, :rules,
         :gift_notification, :assignment_notification
@@ -188,5 +192,4 @@ class CollectionsController < ApplicationController
       ]
     )
   end
-
 end

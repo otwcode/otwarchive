@@ -71,17 +71,13 @@ module BookmarksHelper
   end
 
   def bookmark_form_path(bookmark, bookmarkable)
-    if bookmark && bookmark.new_record?
-      return "" unless bookmarkable
-      case bookmarkable.class.to_s
-      when "Work"
-        work_bookmarks_path(bookmarkable)
-      when "ExternalWork"
+    if bookmark.new_record?
+      if bookmarkable.new_record?
         bookmarks_path
-      when "Series"
-        series_bookmarks_path(bookmarkable)
+      else
+        polymorphic_path([bookmarkable, bookmark])
       end
-    elsif bookmark
+    else
       bookmark_path(bookmark)
     end
   end

@@ -36,10 +36,10 @@
       <% if related_work.parent && related_work.work %>
       <tr>
         <% if related_work.work.unrevealed? %>
-          <td><%= ts("A work in an unrevealed challenge") %></td>
+          <td><%= ts("A work in an unrevealed collection") %></td>
         <% else %>
-          <td scope="row"><%= link_to related_work.work.title.html_safe, related_work.work %> <%= ts("by") %> <%= byline(related_work.work) %></td>
-          <td><%= link_to related_work.parent.title.html_safe, related_work.parent %></td>
+          <td scope="row"><%= link_to related_work.work.title, related_work.work %> <%= ts("by") %> <%= byline(related_work.work) %></td>
+          <td><%= link_to related_work.parent.title, related_work.parent %></td>
           <td>
             <%= ts("From") %> <%= language_link(related_work.parent) %> <%= ts("to") %> <%= language_link(related_work.work) %>
           </td>
@@ -78,17 +78,19 @@
     <% @translations_by_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
         <tr>
-          <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
-            <td><%= ts("A work in an unrevealed or anonymous challenge") %></td>
-          <% else %>
-            <td scope="row"><%= link_to related_work.parent.title.html_safe, related_work.parent %> <%= ts("by") %> <%= byline(related_work.parent) %></td>
-            <td><%= link_to related_work.work.title.html_safe, related_work.work %></td>
-            <td>
-              <%= ts("From") %> <%= language_link(related_work.parent) %> <%= ts("to") %> <%= language_link(related_work.work) %>
-            </td>
-            <% if current_user == @user %>
-              <td><%= link_to ts("Remove"), {:controller => :related_works, :action => :destroy, :id => related_work.id},  data: {confirm: ts('Are you sure?')}, :method => :delete %></td>
+          <td scope="row">
+            <% if related_work.parent.is_a?(Work) && related_work.parent.unrevealed? %>
+              <%= ts("A work in an unrevealed collection") %>
+            <% else %>
+              <%= link_to related_work.parent.title, related_work.parent %> <%= ts("by") %> <%= byline(related_work.parent) %>
             <% end %>
+          </td>
+          <td><%= link_to related_work.work.title, related_work.work %></td>
+          <td>
+            <%= ts("From") %> <%= language_link(related_work.parent) %> <%= ts("to") %> <%= language_link(related_work.work) %>
+          </td>
+          <% if current_user == @user %>
+            <td><%= button_to ts("Remove"), related_work_path(related_work), data: { confirm: ts("Are you sure?") }, method: :delete %></td>
           <% end %>
         </tr>
       <% end %>
@@ -104,11 +106,11 @@
       <% if related_work.parent && related_work.work %>
         <dt class="child">
           <% if related_work.work.unrevealed? %>
-            <%= ts("A work in an unrevealed challenge") %>
+            <%= ts("A work in an unrevealed collection") %>
           <% else %>
-            <%= link_to related_work.work.title.html_safe, related_work.work %> <%= ts("by") %> <%= byline(related_work.work) %>
+            <%= link_to related_work.work.title, related_work.work %> <%= ts("by") %> <%= byline(related_work.work) %>
           </dt>
-          <dd class="parent"><%= ts("was inspired by ") %><%= link_to related_work.parent.title.html_safe, related_work.parent %>
+          <dd class="parent"><%= ts("was inspired by ") %><%= link_to related_work.parent.title, related_work.parent %>
             <% if current_user == @user %>
               <span class="submit actions">
                 <% if related_work.reciprocal? %>
@@ -132,23 +134,17 @@
       <% unless related_work.translation? %>
         <% if related_work.parent && related_work.work %>
           <dt class="parent">
-            <% if related_work.parent.is_a?(ExternalWork) %>
-               <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>
-            <% elsif related_work.parent.unrevealed? || related_work.parent.anonymous? %>
-              <%= ts("A work in an unrevealed or anonymous challenge") %>
+            <% if related_work.parent.is_a?(Work) && related_work.parent.unrevealed? %>
+              <%= ts("A work in an unrevealed collection") %>
             <% else %>
               <%= link_to related_work.parent.title, related_work.parent %> <%= ts("by") %> <%= byline(related_work.parent) %>
             <% end %>
           </dt>
- 		      <dd class="child">
- 		        <%= ts("inspired") %>
-            <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
-              <%= ts("A work in an unrevealed or anonymous challenge") %>
-            <% else %>
-              <%= link_to related_work.work.title, related_work.work %>
-            <% end %>
+          <dd class="child">
+            <%= ts("inspired") %>
+            <%= link_to related_work.work.title, related_work.work %>
             <% if current_user == @user %>
-              <span class="actions" role="button"><%= link_to ts("Remove"), {:controller => :related_works, :action => :destroy, :id => related_work.id},  data: {confirm: ts('Are you sure?')}, :method => :delete %></span>
+              <span class="actions"><%= button_to ts("Remove"), related_work_path(related_work), data: { confirm: ts("Are you sure?") }, method: :delete %></span>
             <% end %>
           </dd>
         <% end %>

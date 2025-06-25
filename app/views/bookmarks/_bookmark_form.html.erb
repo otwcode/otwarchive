@@ -51,15 +51,9 @@
 
       <% # What we're bookmarking %>
       <% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
-        <%= fields_for 'bookmark[external]', bookmarkable do |ew_form| %>
+        <%= fields_for :external_work, bookmarkable do |ew_form| %>
           <%= render "bookmarks/external_work_fields", ew: ew_form %>
         <% end %>
-      <% else %>
-        <% bookmarkable = bookmarkable.work if bookmarkable.class == Chapter %>
-        <div>
-          <%= f.hidden_field :bookmarkable_id, value: bookmarkable.id if bookmarkable %>
-          <%= f.hidden_field :bookmarkable_type, value: bookmarkable.class.to_s if bookmarkable %>
-        </div>
       <% end %>
 
       <fieldset>

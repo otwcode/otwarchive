@@ -1,14 +1,16 @@
+RTL_LOCALES = %w[ar fa he].freeze
+
 module LanguageHelper
   def available_faq_locales
     ArchiveFaq.translated_locales.map { |code| Locale.find_by(iso: code) }
   end
 
   def rtl?
-    %w(ar he).include?(Globalize.locale.to_s)
+    RTL_LOCALES.include?(Globalize.locale.to_s)
   end
 
   def rtl_language?(language)
-    %w(ar he).include?(language.short)
+    RTL_LOCALES.include?(language.short)
   end
 
   def english?

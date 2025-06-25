@@ -20,10 +20,8 @@ Acknowledgments
 <p><a href="https://www.percona.com/software/mysql-database/percona-xtradb-cluster"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo_percona_xtradbcluster_new.png" width="200"/> Percona XtraDB Cluster</a> for our relational database.</p>
 <p><a href="http://rubyonrails.org/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/rails.png" width="200"/> Rails</a> for our framework.</p>
 <p><a href="https://redis.io/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/Redis_Logo.svg" width="200"/> Redis</a> for NoSQL.</p>
-<p><a href="http://rspec.info/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/rspec.png" width="200"/> Rspec</a> for unit tests.</p>
+<p><a href="http://rspec.info/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/rspec.png" width="200"/> RSpec</a> for unit tests.</p>
 <p><a href="https://www.ruby-lang.org/en/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/ruby.png" width="200"/> Ruby</a> as our language.</p>
 <p><a href="https://www.jetbrains.com/ruby/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo_RubyMine.svg" width="200"/> RubyMine</a> for our integrated development environment.</p>
 <p><a href="https://slack.com/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/Slack_RGB.svg" width="200"/> Slack</a> for communications.</p>
-<p><a href="https://travis-ci.com/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/TravisCI-Full-Color-45e242791b7752b745a7ae53f265acd4.png" width="200"/> Travis</a> for continuous integration.</p>
 <p><a href="https://www.vagrantup.com/"><img alt="" valign="middle" src="http://media.archiveofourown.org/ao3/logos/logo_wide-56017ded.png" width="200"/> Vagrant</a> for our development environment.</p>
-

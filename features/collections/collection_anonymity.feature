@@ -237,7 +237,7 @@ Feature: Collection
       And I follow "2" within "div#main.works-edit.region"
       And I invite the co-author "Amos"
       And I press "Post"
-      And the user "Amos" accepts all co-creator invites
+      And the user "Amos" accepts all co-creator requests
     Then the author of "Cone of Silence" should be visible to me on the work page
     When I am logged out
     Then the author of "Cone of Silence" should be hidden from me

@@ -4,11 +4,10 @@ class Bookmark < ApplicationRecord
   include Collectible
   include Searchable
   include Responder
+  include Taggable
 
   belongs_to :bookmarkable, polymorphic: true
   belongs_to :pseud
-  has_many :taggings, as: :taggable, inverse_of: :taggable, dependent: :destroy
-  has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
   validates_length_of :bookmarker_notes,
     maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
@@ -113,10 +112,10 @@ class Bookmark < ApplicationRecord
   scope :visible, -> { visible_to_user(User.current_user) }
 
   before_destroy :invalidate_bookmark_count
-  after_save :invalidate_bookmark_count, :update_pseud_index
+  after_save :invalidate_bookmark_count, :update_pseud_and_collection_index
 
   after_create :update_work_stats
-  after_destroy :update_work_stats, :update_pseud_index
+  after_destroy :update_work_stats, :update_pseud_and_collection_index
 
   def invalidate_bookmark_count
     work = Work.where(id: self.bookmarkable_id)
@@ -125,10 +124,11 @@ class Bookmark < ApplicationRecord
     end
   end
 
-  # We index the bookmark count, so if it should change, update the pseud
-  def update_pseud_index
+  # We index the bookmark count for pseuds and collections, so update those if they should change
+  def update_pseud_and_collection_index
     return unless destroyed? || saved_change_to_id? || saved_change_to_private? || saved_change_to_hidden_by_admin?
     IndexQueue.enqueue_id(Pseud, pseud_id, :background)
+    IndexQueue.enqueue_ids(Collection, collection_ids, :background)
   end
 
   def visible?(current_user=User.current_user)
@@ -156,41 +156,6 @@ class Bookmark < ApplicationRecord
   # Returns the number of bookmarks on an item visible to the current user
   def self.count_visible_bookmarks(bookmarkable, current_user=:false)
     bookmarkable.bookmarks.visible.size
-  end
-
-  # Virtual attribute for external works
-  def external=(attributes)
-    unless attributes.values.to_s.blank?
-      !self.bookmarkable ? self.bookmarkable = ExternalWork.new(attributes) : self.bookmarkable.attributes = attributes
-    end
-  end
-
-  def tag_string
-    tags.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
-  end
-
-  def tag_string=(tag_string)
-    # Make sure that we trigger the callback for our taggings.
-    self.taggings.destroy_all
-
-    self.tags = []
-
-    # Replace unicode full-width commas
-    tag_string.gsub!(/\uff0c|\u3001/, ',')
-    tag_array = tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT)
-
-    tag_array.each do |string|
-      string.strip!
-      unless string.blank?
-        tag = Tag.find_by_name(string)
-        if tag
-          self.tags << tag
-        else
-          self.tags << UnsortedTag.create(name: string)
-        end
-      end
-    end
-    return self.tags
   end
 
   # TODO: Is this necessary anymore?

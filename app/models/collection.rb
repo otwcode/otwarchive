@@ -1,7 +1,9 @@
 class Collection < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
+  include Filterable
   include UrlHelpers
   include WorksOwner
+  include Searchable
 
   has_attached_file :icon,
   styles: { standard: "100x100>" },
@@ -60,9 +62,6 @@ class Collection < ApplicationRecord
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
   has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
-
-  has_many :fandoms, -> { distinct }, through: :approved_works
-  has_many :filters, -> { distinct }, through: :approved_works
 
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
@@ -285,17 +284,17 @@ class Collection < ApplicationRecord
   def all_approved_works
     work_ids = all_items.where(item_type: "Work", user_approval_status: CollectionItem::APPROVED,
       collection_approval_status: CollectionItem::APPROVED).pluck(:item_id)
-    Work.where(id: work_ids, posted: true)
+    Work.where(id: work_ids).visible_to_registered_user
   end
 
   def all_approved_works_count
     if !User.current_user.nil?
-      count = self.approved_works.count
-      self.children.each {|child| count += child.approved_works.count}
+      count = self.approved_works.unhidden.count
+      self.children.each { |child| count += child.approved_works.unhidden.count }
       count
     else
-      count = self.approved_works.where(restricted: false).count
-      self.children.each {|child| count += child.approved_works.where(restricted: false).count}
+      count = self.approved_works.where(restricted: false).unhidden.count
+      self.children.each { |child| count += child.approved_works.where(restricted: false).unhidden.count }
       count
     end
   end
@@ -313,15 +312,14 @@ class Collection < ApplicationRecord
   # Return the count of all bookmarkable items (works, series, external works)
   # that are in this collection (or any of its children) and visible to
   # the current user. Excludes bookmarks of deleted works/series.
-  def all_bookmarked_items_count
+  # Takes logged_in as an optional param, to calculate bookmarkables for public and registered users
+  def all_bookmarked_items_count(logged_in = User.current_user.present?)
     # The set of all bookmarks in this collection and its children.
     # Note that "approved_by_collection" forces the bookmarks to be approved
     # both by the collection AND by the user.
     bookmarks = Bookmark.is_public.joins(:collection_items).
                 merge(CollectionItem.approved_by_collection).
                 where(collection_items: { collection_id: children.ids + [id] })
-
-    logged_in = User.current_user.present?
 
     [
       logged_in ? Work.visible_to_registered_user : Work.visible_to_all,
@@ -489,5 +487,4 @@ class Collection < ApplicationRecord
   def clear_icon
     self.icon = nil if delete_icon? && !icon.dirty?
   end
-
 end

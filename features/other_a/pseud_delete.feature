@@ -91,7 +91,7 @@ Feature: Delete pseud.
       And I follow "My Prompts"
     Then I should see "Antidisestablishmentarianism."
 
-  Scenario: Deleting a pseud should preserve approved creatorships even if the default pseud has an invitation for the same work.
+  Scenario: Deleting a pseud should preserve approved creatorships even if the default pseud has a request for the same work.
     Given I am logged in as "original_pseud"
       And I add the pseud "other_pseud"
       And I am logged in as "coauthor"
@@ -103,15 +103,15 @@ Feature: Delete pseud.
     Then I should see "Work was successfully posted."
 
     When I am logged in as "original_pseud"
-      And I go to my creator invitations page
-    Then I should see "Creator Invitations (2)"
+      And I go to my co-creator requests page
+    Then I should see "Co-Creator Requests (2)"
 
     When I check the 1st checkbox with id matching "selected"
       And I press "Accept"
     Then I should see "You are now listed as a co-creator on Original Invited."
       And I should see "original_pseud" within ".creatorships"
       And I should see "Original Invited" within ".creatorships"
-      And I should see "Creator Invitations (1)"
+      And I should see "Co-Creator Requests (1)"
 
     When I view the work "Original Invited"
     Then I should see "Edit"
@@ -125,7 +125,7 @@ Feature: Delete pseud.
     Then I should see "Edit"
       But I should not see "You've been invited to become a co-creator of this work."
 
-  Scenario: Deleting a pseud should preserve creator invites.
+  Scenario: Deleting a pseud should preserve co-creator requests.
     Given I am logged in as "original_pseud"
       And I add the pseud "other_pseud"
       And I am logged in as "coauthor"
@@ -137,18 +137,18 @@ Feature: Delete pseud.
     Then I should see "Work was successfully posted."
 
     When I am logged in as "original_pseud"
-      And I go to my creator invitations page
+      And I go to my co-creator requests page
     Then I should see "other_pseud" within ".creatorships"
       And I should see "Other Invited" within ".creatorships"
-      And I should see "Creator Invitations (1)"
+      And I should see "Co-Creator Requests (1)"
 
     When I go to my pseuds page
       And I follow "Delete"
     Then I should see "The pseud was successfully deleted."
 
-    # We should still have an invitation for Other Invited:
-    When I go to my creator invitations page
+    # We should still have a request for Other Invited:
+    When I go to my co-creator requests page
     Then I should see "Other Invited" within ".creatorships"
       And I should see "original_pseud" within ".creatorships"
-      And I should see "Creator Invitations (1)"
+      And I should see "Co-Creator Requests (1)"
       And I should not see "other_pseud" within ".creatorships"

@@ -1,4 +1,1 @@
-<%= render 'share/share', :shareable => @work %>
-
-<% # FRONTEND NOTE: Twitter widget JavaScript included here to ensure that it is only loaded when users share a work, not on every page load. This improves user privacy. %>
-<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+<%= render 'share/share', shareable: @work %>

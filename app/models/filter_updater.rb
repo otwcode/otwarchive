@@ -18,7 +18,7 @@ class FilterUpdater
     @ids = ids.to_a
     @reindex_queue = reindex_queue
 
-    @klass = [Work, ExternalWork].find { |klass| klass.to_s == @type }
+    @klass = [Work, ExternalWork, Collection].find { |klass| klass.to_s == @type }
 
     raise "FilterUpdater type '#{type}' not allowed." unless @klass
 

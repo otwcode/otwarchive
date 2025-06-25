@@ -155,7 +155,7 @@ class Creatorship < ApplicationRecord
         UserMailer.creatorship_notification(id, User.current_user.id).deliver_later
       end
     else
-      UserMailer.creatorship_invitation(id, User.current_user.id).deliver_later
+      UserMailer.creatorship_request(id, User.current_user.id).deliver_later
     end
   end
 

@@ -86,8 +86,9 @@ class Api::V2::BookmarksController < Api::V2::BaseController
   # Create a bookmark for this archivist using the Bookmark model
   def create_bookmark(archivist, params, archivist_bookmarks)
     found_result = {}
-    bookmark_request = bookmark_request(archivist, params)
-    bookmark_status, bookmark_messages = bookmark_errors(bookmark_request)
+    bookmark_attributes = bookmark_attributes(archivist, params)
+    external_work_attributes = external_work_attributes(params)
+    bookmark_status, bookmark_messages = external_work_errors(external_work_attributes)
     bookmark_url = nil
     original_url = nil
     bookmarkable = nil
@@ -97,15 +98,15 @@ class Api::V2::BookmarksController < Api::V2::BaseController
 
         # Check if this bookmark is already imported by filtering the archivist's bookmarks
         unless archivist_bookmarks.empty?
-          found_result = check_archivist_bookmark(archivist, bookmark_request[:external][:url], archivist_bookmarks)
+          found_result = check_archivist_bookmark(archivist, external_work_attributes[:url], archivist_bookmarks)
           bookmarkable = found_result[:bookmarkable]
         end
 
         if found_result[:bookmark_status] == :found
           found_result[:bookmark_status] = :already_imported
         else
-          bookmark = Bookmark.new(bookmark_request)
-          bookmarkable = bookmark.bookmarkable
+          bookmarkable = ExternalWork.new(external_work_attributes)
+          bookmark = bookmarkable.bookmarks.build(bookmark_attributes)
           if bookmarkable.save && bookmark.save
             @bookmarks << bookmark
             @some_success = true
@@ -149,16 +150,15 @@ class Api::V2::BookmarksController < Api::V2::BaseController
   end
 
   # Handling for incomplete requests
-  def bookmark_errors(bookmark_request)
+  def external_work_errors(external_work_attributes)
     status = :bad_request
     errors = []
 
     # Perform basic validation which the ExternalWork model doesn't do or returns strange messages for
     # (title is validated correctly in the model and so isn't checked here)
-    external_work = bookmark_request[:external]
-    url = external_work[:url]
-    author = external_work[:author]
-    fandom = external_work[:fandom_string]
+    url = external_work_attributes[:url]
+    author = external_work_attributes[:author]
+    fandom = external_work_attributes[:fandom_string]
 
     if url.nil?
       # Unreachable and AO3 URLs are handled in the ExternalWork model
@@ -179,21 +179,10 @@ class Api::V2::BookmarksController < Api::V2::BaseController
 
   # Request and response hashes
 
-  # Map Json request to Bookmark request for external work
-  def bookmark_request(archivist, params)
+  # Map JSON request to attributes for bookmark
+  def bookmark_attributes(archivist, params)
     {
       pseud_id: archivist.default_pseud_id,
-      external: {
-        url: params[:url],
-        author: params[:author],
-        title: params[:title],
-        summary: params[:summary],
-        fandom_string: params[:fandom_string] || "",
-        rating_string: params[:rating_string] || "",
-        category_string: params[:category_string] ? params[:category_string].to_s.split(",") : [], # category is actually an array on bookmarks
-        relationship_string: params[:relationship_string] || "",
-        character_string: params[:character_string] || ""
-      },
       bookmarker_notes: params[:bookmarker_notes],
       tag_string: params[:tag_string] || "",
       collection_names: params[:collection_names],
@@ -201,7 +190,22 @@ class Api::V2::BookmarksController < Api::V2::BaseController
       rec: params[:recommendation].blank? ? false : params[:recommendation]
     }
   end
-  
+
+  # Map JSON request to attributes for external work
+  def external_work_attributes(params)
+    {
+      url: params[:url],
+      author: params[:author],
+      title: params[:title],
+      summary: params[:summary],
+      fandom_string: params[:fandom_string] || "",
+      rating_string: params[:rating_string] || "",
+      category_string: params[:category_string] ? params[:category_string].to_s.split(",") : [], # category is actually an array on bookmarks
+      relationship_string: params[:relationship_string] || "",
+      character_string: params[:character_string] || ""
+    }
+  end
+
   def bookmark_response(status:, bookmark_url:, bookmark_id:, original_url:, messages:)
     messages = [messages] unless messages.respond_to?('each')
     {

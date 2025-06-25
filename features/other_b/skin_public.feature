@@ -47,7 +47,7 @@ Feature: Public skins
 
   Scenario: Public skins should not be viewable by users until approved
   Given the unapproved public skin "public skin"
-    And I am logged out
+    And I log out
   When I go to "public skin" skin page
     Then I should see "Sorry, you don't have permission"
   When I go to "public skin" edit skin page
@@ -104,7 +104,6 @@ Feature: Public skins
   Given the approved public skin "Uncached skin"
     And the approved public skin "Cached skin"
     And the skin "Cached skin" is cached
-    And I am logged out
   When I go to the public skins page
   Then I should see "Cached skin"
     And I should not see "Uncached skin"

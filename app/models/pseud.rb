@@ -20,7 +20,10 @@ class Pseud < ApplicationRecord
   DESCRIPTION_MAX = 500
 
   belongs_to :user
-  delegate :login, to: :user, prefix: true
+
+  delegate :login, to: :user, prefix: true, allow_nil: true
+  alias user_name user_login
+
   has_many :bookmarks, dependent: :destroy
   has_many :recs, -> { where(rec: true) }, class_name: 'Bookmark'
   has_many :comments
@@ -123,11 +126,6 @@ class Pseud < ApplicationRecord
     (self.name.downcase <=> other.name.downcase) == 0 ? (self.user_name.downcase <=> other.user_name.downcase) : (self.name.downcase <=> other.name.downcase)
   end
 
-  # For use with the work and chapter forms
-  def user_name
-     self.user.login
-  end
-
   def to_param
     name
   end
@@ -214,7 +212,7 @@ class Pseud < ApplicationRecord
 
   # Produces a byline that indicates the user's name if pseud is not unique
   def byline
-    (name != user_name) ? name + " (" + user_name + ")" : name
+    (name != user_name) ? "#{name} (#{user_name})" : name
   end
 
   # get the former byline
