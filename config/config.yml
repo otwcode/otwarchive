@@ -264,6 +264,14 @@ FREEFORM_CATEGORY_NAME: 'Additional Tags'
 COMMON_CATEGORY_NAME: 'Common'
 BANNED_CATEGORY_NAME: 'Banned'
 
+# Wrangler is considered inactive if they haven't wrangled for this many days
+WRANGLING_INACTIVITY_THRESHOLD: 14
+# Wrangler is considered for hiatus if they haven't wrangled for this many total days
+WRANGLING_HIATUS_THRESHOLD: 21
+WRANGLING_HIATUS_FORM_URL: "https://example.com/hiatus_form_placeholder"
+ASSIGNED_FANDOMS_POLICY_URL: "https://example.com/Assigned_Fandoms_Policy_placeholder"
+USERS_EXCLUDED_FROM_WRANGLING_INACTIVITY: []
+
 # DATE TIME FORMAT see http://ruby-doc.org/core/classes/Time.html#M000392
 DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %I:%M%p'
 

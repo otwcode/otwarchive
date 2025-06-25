@@ -10,6 +10,7 @@ class UserMailer < ApplicationMailer
   helper :users
   helper :date
   helper :series
+  include ActiveSupport::NumberHelper
   include HtmlCleaner
 
   # Send an email letting a creator know that their work has been added to a collection by an archivist
@@ -409,6 +410,20 @@ class UserMailer < ApplicationMailer
     mail(
       to: abuse_report.email,
       subject: t("user_mailer.abuse_report.subject", app_name: ArchiveConfig.APP_SHORT_NAME, summary: strip_html_breaks_simple(@summary))
+    )
+  end
+
+  def inactive_wrangler_notification(user)
+    @username = user.login
+    hiatus_distance = ArchiveConfig.WRANGLING_HIATUS_THRESHOLD - ArchiveConfig.WRANGLING_INACTIVITY_THRESHOLD
+    @hiatus_distance_weeks = hiatus_distance.days.in_weeks
+    @hiatus_distance_weeks_formatted = number_to_human(@hiatus_distance_weeks)
+    @inactivity_weeks = ArchiveConfig.WRANGLING_INACTIVITY_THRESHOLD.days.in_weeks
+    @inactivity_weeks_formatted = number_to_human(@inactivity_weeks)
+    mail(
+      to: user.email,
+      reply_to: ArchiveConfig.TAG_WRANGLER_SUPERVISORS_ADDRESS,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, count: hiatus_distance)
     )
   end
 end

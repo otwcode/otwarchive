@@ -231,6 +231,11 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.delete_work_notification(first_creator, work, second_creator)
   end
 
+  def inactive_wrangler_notification
+    user = create(:user, :for_mailer_preview)
+    UserMailer.inactive_wrangler_notification(user)
+  end
+  
   def related_work_notification
     creator_count = params[:creator_count] ? params[:creator_count].to_i : 1
     user = create(:user, :for_mailer_preview)
