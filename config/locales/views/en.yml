@@ -2469,7 +2469,7 @@ en:
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
   wrangling_guidelines:
-    brevity_content_min: Brevity is the soul of wit, but your content does have to be at least %{min} letters long
+    brevity_content_min: Brevity is the soul of wit, but your content does have to be at least %{min} letters long.
     content_required: You need to post some content here.
     content_too_long: We salute your ambition! But sadly the conten must be less than %{max} letters long.
     guideline_text: Guideline text
