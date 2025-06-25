@@ -9,7 +9,7 @@ Feature: Wrangling Guidelines
   Given I am logged in as a "tag_wrangling" admin
     And I am on the wrangling guidelines page
   And I follow "New Wrangling Guideline"
-    And I fill in "Guideline text*" with "This series of documents (Wrangling Guidelines) are intended to help tag wranglers remain consistent as they go about the business of wrangling tags by providing a set of formatting guidelines."
+    And I fill in "Guideline text" with "This series of documents (Wrangling Guidelines) are intended to help tag wranglers remain consistent as they go about the business of wrangling tags by providing a set of formatting guidelines."
     And I fill in "Title" with "Intro and General Concepts"
   When I press "Post"
   Then I should see "Wrangling Guideline was successfully created"
@@ -22,7 +22,7 @@ Feature: Wrangling Guidelines
   Given I have posted a Wrangling Guideline
     And I am on the wrangling guidelines page
   When I follow "Edit"
-    And I fill in "Guideline text*" with "These guidelines are an in-progress affair, subject to change."
+    And I fill in "Guideline text" with "These guidelines are an in-progress affair, subject to change."
   When I press "Post"
   Then I should see "Wrangling Guideline was successfully updated"
     And I should see "These guidelines are an in-progress affair, subject to change."

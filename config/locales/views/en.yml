@@ -2474,7 +2474,7 @@ en:
       heading: Wrangling Guidelines
     required_information: "* Required information"
     brevity_content_min: "Brevity is the soul of wit, but your content does have to be at least %{min} letters long"
-    guideline_text: "Guideline text*"
+    guideline_text: "Guideline text"
     html: HTML
     post: Post
     title: Title

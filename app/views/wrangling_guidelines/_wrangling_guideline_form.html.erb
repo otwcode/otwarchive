@@ -11,14 +11,13 @@
       <%= live_validation_for_field("wrangling_guideline_title", failureMessage: t("works.wrangling_guidelines.title_failure")) %>
     </dd>
 
-    <dt class="required"><%= f.label :content, t('works.wrangling_guidelines.guideline_text'), for: "content" %></dt>
+    <dt class="required"><%= f.label :content, t("works.wrangling_guidelines.guideline_text"), for: "content" %></dt>
     <dd class="required">
       <ul class="hidden rtf-html-switch actions" role="menu">
         <li><a class="rtf-link" href="#"><%= t("works.wrangling_guidelines.rich_text") %></a></li>
         <li><a class="html-link" href="#"><%= t("works.wrangling_guidelines.html") %></a></li>
       </ul>
-      <p class="rtf-html-instructions    guideline_text: "Guideline text*"
- note">
+      <p class="rtf-html-instructions note">
         <span class="html-notes"><%= allowed_html_instructions %></span>
         <span class="hidden rtf-notes"><%= t("works.wrangling_guidelines.rich_text_notes") %><%= link_to_help("rte-help") %></span>
       </p>
