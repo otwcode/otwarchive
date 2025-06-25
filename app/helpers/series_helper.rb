@@ -58,13 +58,13 @@ module SeriesHelper
     ts("Part <strong>%{position}</strong> of %{title}".html_safe, position: serial.position, title: link_to(series.title, series))
   end
 
-  def series_list_for_feeds(work)
+  def series_list(work, red_link: false)
     series = work.series
     return t("series_helper.none") if series.empty?
 
     list = []
     series.each do |s|
-      list << t("series_helper.list_for_feeds_html", index: s.serial_works.where(work_id: work.id).select(:position).first.position, series_link: style_link(s.title, series_url(s)))
+      list << t("series_helper.series_description_html", index: s.serial_works.where(work_id: work.id).select(:position).first.position, series_link: red_link ? style_link(s.title, series_url(s)) : link_to(s.title, series_url(s)))
     end
     list.join(t("support.array.words_connector"))
   end
