@@ -2490,6 +2490,6 @@ en:
       post: Post
       required_information: "* Required information"
       rich_text: Rich Text
-      rich_text_notes: Type or paste formatted text
+      rich_text_notes: "Type or paste formatted text %{link}"
       title: "Title*"
       title_failure: Please enter a title
