@@ -222,7 +222,7 @@ Feature:
       And I press "Change Username"
     Then I should see "Your username has been successfully updated."
     When I view the work "Title"
-      And I wait 1 second
+      And it is currently 1 second from now
       And I view the 3rd chapter
     Then I should see "Chapter by after"
 
