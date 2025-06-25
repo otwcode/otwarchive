@@ -90,15 +90,13 @@ module WorksHelper
     link_to ts("Mark for Later"), mark_for_later_work_path(work)
   end
 
-  def get_endnotes_link
-    if current_page?({ controller: "chapters", action: "show" })
-      if @work.posted?
-        chapter_path(@work.last_posted_chapter.id, anchor: 'work_endnotes')
-      else
-        chapter_path(@work.last_chapter.id, anchor: 'work_endnotes')
-      end
+  def get_endnotes_link(work)
+    return "#work_endnotes" unless current_page?({ controller: "chapters", action: "show" })
+
+    if work.posted? && work.last_posted_chapter
+      chapter_path(work.last_posted_chapter.id, anchor: "work_endnotes")
     else
-      "#work_endnotes"
+      chapter_path(work.last_chapter.id, anchor: "work_endnotes")
     end
   end
 

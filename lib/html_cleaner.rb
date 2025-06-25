@@ -61,7 +61,7 @@ module HtmlCleaner
         Sanitize::Config::OPEN_ATTRIBUTE_TRANSFORMER,
         Sanitize::Config::RELATIVE_IMAGE_PATH_TRANSFORMER
       ]
-      if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
+      if ArchiveConfig.FIELDS_ALLOWING_MEDIA_EMBEDS.include?(field.to_s)
         transformers << OtwSanitize::EmbedSanitizer.transformer
         transformers << OtwSanitize::MediaSanitizer.transformer
       end
