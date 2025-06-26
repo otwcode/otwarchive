@@ -34,6 +34,20 @@ Feature: Get messages in the inbox
     Then I should see "cutman on Down for the Count"
       And I should see "less than 1 minute ago"
 
+  Scenario: Inbox comments should display which chapter it's on, if and only if the work is multi-chapter
+    Given I am logged in as "author"
+      And I post the work "Single-chapter Work"
+      And I post the chaptered work "Multi-chapter Work"
+      And I set my preferences to turn on messages to my inbox about comments
+    When I am logged in as "commenter"
+      And I post the comment "You should receive this in your inbox." on the work "Single-chapter Work"
+      And I post the comment "And this one too." on the work "Multi-chapter Work"
+    When I am logged in as "author"
+      And I go to author's inbox page
+    Then I should see "on Single-chapter Work"
+      And I should not see "on Chapter 1 of Single-chapter Work"
+      And I should see "on Chapter 1 of Multi-chapter Work"
+
   Scenario: Comments in my inbox should be filterable
     Given the work "Down for the Count" by "boxer"
     When I post the comment "The fight game's complex." on the work "Down for the Count" as a guest
