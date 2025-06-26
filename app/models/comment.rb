@@ -115,7 +115,7 @@ class Comment < ApplicationRecord
       user_role = "user"
       comment_author = user.login
     end
-    
+
     {
       comment_type: comment_type,
       key: ArchiveConfig.AKISMET_KEY,
@@ -519,9 +519,23 @@ class Comment < ApplicationRecord
     update_attribute(:iced, true)
   end
 
+  # Freeze all comments.
+  def self.mark_all_frozen!(comments)
+    transaction do
+      comments.each(&:mark_frozen!)
+    end
+  end
+
   # Unfreeze single comment.
   def mark_unfrozen!
     update_attribute(:iced, false)
+  end
+
+  # Unfreeze all comments.
+  def self.mark_all_unfrozen!(comments)
+    transaction do
+      comments.each(&:mark_unfrozen!)
+    end
   end
 
   def mark_hidden!
