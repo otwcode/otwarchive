@@ -1,9 +1,7 @@
 class Language < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
-  validates_presence_of :short
-  validates_uniqueness_of :short
-  validates_presence_of :name
+  include WorksOwner
+  validates :short, presence: true, uniqueness: true, length: { maximum: 4 }
+  validates :name, presence: true, uniqueness: true
 
   has_many :works
   has_many :locales
@@ -25,7 +23,6 @@ class Language < ApplicationRecord
   end
 
   def fandom_count
-    Fandom.joins(:works).where(works: {id: self.works.posted.collect(&:id)}).distinct.select('tags.id').count
+    Fandom.joins(:works).where(works: { id: self.works.posted.collect(&:id) }).distinct.select("tags.id").count
   end
-
 end

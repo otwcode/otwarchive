@@ -1,9 +1,7 @@
 class AdminBlacklistedEmail < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   before_validation :canonicalize_email
 
-  validates :email, presence: true, uniqueness: true, email_veracity: true
+  validates :email, presence: true, uniqueness: { case_sensitive: false }, email_format: true
 
   def canonicalize_email
     self.email = AdminBlacklistedEmail.canonical_email(self.email) if self.email
@@ -32,5 +30,4 @@ class AdminBlacklistedEmail < ApplicationRecord
   def self.is_blacklisted?(email_to_check)
     AdminBlacklistedEmail.where(email: AdminBlacklistedEmail.canonical_email(email_to_check)).exists?
   end
-
 end

@@ -26,7 +26,7 @@
                                      title: ts("Hidden by Administrator"),
                                      skip_pipeline: true) %>
       <% end %>
-      <%= @work.title.html_safe %>
+      <%= @work.title %>
     </h2>
     <h3 class="byline heading">
       <%= byline(@work).html_safe %>
@@ -35,7 +35,7 @@
     <% if @chapter == @work.first_chapter %>
 
       <% unless @work.summary.blank? %>
-        <div class="summary module" role="complementary">
+        <div class="summary module">
           <h3 class="heading"><%= ts("Summary:") %></h3>
           <% unless @work.summary.blank? %>
             <blockquote class="userstuff">

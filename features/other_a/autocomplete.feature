@@ -48,13 +48,31 @@ Feature: Display autocomplete for tags
       And the collection item autocomplete field should list matching collections
 
   @javascript
+  Scenario: Work co-author and association autocompletes should work with pseuds containing diacrictics
+    Given basic tags
+      And a set of users for testing autocomplete
+      And "coauthor" has the pseud "çola"
+      And I am logged in
+      And I go to the new work page
+    Then the coauthor autocomplete field should list matching users
+    When I enter "c" in the "pseud_byline_autocomplete" autocomplete field
+    Then the pseud autocomplete should contain "çola (coauthor)"
+      And the pseud autocomplete should contain "coauthor"
+    When I enter "ç" in the "pseud_byline_autocomplete" autocomplete field
+    Then the pseud autocomplete should contain "çola (coauthor)"
+      And the pseud autocomplete should contain "coauthor"
+
+
+  @javascript
   Scenario: Collection autocomplete shows collection title and name
-    Given I have the collection "Issue" with name "jb_fletcher"
-      And I have the collection "Issue" with name "robert_stack"
-      And I am logged in as "Scott" with password "password"
+    Given I am logged in as "Scott" with password "password"
       And I post the work "All The Nice Things"
-      And I view the work "All The Nice Things"
-      And I follow "Add To Collections"
+      And I set my preferences to allow collection invitations
+      And I have the collection "Issue" with name "jb_fletcher"
+      And I have the collection "Ïssue" with name "robert_stack"
+      And I am logged in as "moderator"
+    When I view the work "All The Nice Things"
+      And I follow "Invite To Collections"
       And I enter "Issue" in the "Collection name(s)" autocomplete field
     Then I should see "jb_fletcher" in the autocomplete
       And I should see "robert_stack" in the autocomplete
@@ -62,34 +80,43 @@ Feature: Display autocomplete for tags
   Scenario: Pseuds should be added and removed from autocomplete as they are changed
     Given I am logged in as "new_user"
     Then the pseud autocomplete should contain "new_user"
-    When I add the pseud "extra"
+    When "new_user" creates the pseud "extra"
     Then the pseud autocomplete should contain "extra (new_user)"
-    When I change the pseud "extra" to "funny"
-      And I go to my pseuds page
+    When "new_user" changes the pseud "extra" to "funny"
+      And I go to new_user's pseuds page
     Then I should not see "extra"
       And I should see "funny"
       And the pseud autocomplete should not contain "extra (new_user)"
       And the pseud autocomplete should contain "funny (new_user)"
-    When I delete the pseud "funny"
+    When "new_user" deletes the pseud "funny"
     Then the pseud autocomplete should not contain "funny (new_user)"
       And the pseud autocomplete should contain "new_user"
 
   Scenario: Pseuds should be added and removed from autocomplete as usernames change
     Given I am logged in as "new_user"
-      And I add the pseud "funny"
+      And "new_user" creates the pseud "funny"
     When I change my username to "different_user"
     Then the pseud autocomplete should not contain "funny (new_user)"
       And the pseud autocomplete should not contain "new_user"
       And the pseud autocomplete should contain "different_user"
       And the pseud autocomplete should contain "funny (different_user)"
-    When I change my username to "funny"
-    Then the pseud autocomplete should not contain "funny (different_user)"
-      And the pseud autocomplete should contain "funny"
-      And the pseud autocomplete should contain "different_user (funny)"
-    When I try to delete my account as funny
+    When I try to delete my account as different_user
     Then a user account should not exist for "funny"
       And the pseud autocomplete should not contain "funny"
       And the pseud autocomplete should not contain "different_user (funny)"
+
+  @javascript
+  Scenario: People search autocomplete shows no results when searching for space
+    Given I go to the search people page
+    When I enter " " in the "Name" autocomplete field
+    Then I should see "Searching..." in the autocomplete
+    When I am logged in as "basic"
+      And "basic" creates the pseud "one"
+      And I go to the search people page
+    When I enter " " in the "Name" autocomplete field
+    Then I should see "Searching..." in the autocomplete
+      And I should not see "one (basic)" in the autocomplete
+      And I should not see "basic" in the autocomplete
 
   @javascript
   Scenario: Characters in a fandom with non-ASCII uppercase letters should appear in the autocomplete.
@@ -117,6 +144,10 @@ Feature: Display autocomplete for tags
     When I enter "é" in the "Characters" autocomplete field
     Then I should see "Éowyn (Tolkien)" in the autocomplete
       And I should see "Tybalt (Rómeó és Júlia)" in the autocomplete
+    When I enter "e" in the "Characters" autocomplete field
+    Then I should see "Éowyn (Tolkien)" in the autocomplete
+      And I should see "Tybalt (Rómeó és Júlia)" in the autocomplete
+
 
   @javascript
   Scenario: Other non-ASCII uppercase letters should appear in the autocomplete.
@@ -127,6 +158,8 @@ Feature: Display autocomplete for tags
       And I go to the new work page
 
     When I enter "ø" in the "Fandoms" autocomplete field
+    Then I should see "Østenfor sol og vestenfor måne" in the autocomplete
+    When I enter "ostenfor" in the "Fandoms" autocomplete field
     Then I should see "Østenfor sol og vestenfor måne" in the autocomplete
 
   @javascript
@@ -140,12 +173,15 @@ Feature: Display autocomplete for tags
     When I choose "Lord of the Rings" from the "Fandoms" autocomplete
       And I enter "É" in the "Characters" autocomplete field
     Then I should see "Éowyn" in the autocomplete
+    When I enter "e" in the "Characters" autocomplete field
+    Then I should see "Éowyn" in the autocomplete
 
   @javascript
   Scenario: Search terms are highlighted in autocomplete results
     Given I am logged in
       And basic tags
       And a canonical relationship "Cassian Andor & Jyn Erso"
+      And a canonical character "Éowyn"
       And I go to the new work page
 
     When I enter "Jyn" in the "Relationships" autocomplete field
@@ -159,6 +195,9 @@ Feature: Display autocomplete for tags
 
     When I enter "Cassian Andor & Jyn Erso" in the "Relationships" autocomplete field
     Then I should see HTML "<b>Cassian</b> <b>Andor</b> &amp; <b>Jyn</b> <b>Erso</b>" in the autocomplete
+
+    When I enter "é" in the "Characters" autocomplete field
+    Then I should see HTML "<b>É</b>owyn" in the autocomplete
 
     # AO3-4976 There should not be stray semicolons if the query has...
     # ...trailing spaces
@@ -179,9 +218,45 @@ Feature: Display autocomplete for tags
       And a canonical freeform "AU - Canon"
       And a canonical freeform "AU - Cats"
       And a canonical freeform "Science Fiction & Fantasy"
+      And a canonical freeform "日月"
+      And a canonical freeform "大小"
       And I go to the new work page
 
     When I enter "AU - Ca" in the "Additional Tags" autocomplete field
     Then I should see "AU - Canon" in the autocomplete
       And I should see "AU - Cats" in the autocomplete
       But I should not see "Science Fiction & Fantasy" in the autocomplete
+    When I enter "日" in the "Additional Tags" autocomplete field
+    Then I should see "日月" in the autocomplete
+      But I should not see "大小" in the autocomplete
+
+  @javascript
+  Scenario: Zero width space tag doesn't appear in the autocomplete for space
+    Given a canonical character "Gold"
+      And a zero width space tag exists
+      And I am logged in as a tag wrangler
+    When I go to the "Gold" tag edit page
+    Then I should see "This is the official name for the Character"
+    When I enter " " in the "tag_merger_string_autocomplete" autocomplete field
+    Then I should see "No suggestions found" in the autocomplete
+
+  @javascript
+  Scenario: Zero width space tag appears in the autocomplete for zero width space
+    Given a canonical character "Gold"
+      And a zero width space tag exists
+      And I am logged in as a tag wrangler
+    When I go to the "Gold" tag edit page
+    Then I should see "This is the official name for the Character"
+    # Zero width space tag
+    When I enter "​" in the "tag_merger_string_autocomplete" autocomplete field
+    Then I should not see "No suggestions found" in the autocomplete
+
+  @javascript
+  Scenario: Vertical bar is treated as a word separator
+    Given I am logged in
+      And a canonical character "Taylor Hebert | Skitter | Weaver"
+      And I go to the new work page
+    When I enter "|" in the "Characters" autocomplete field
+    Then I should see "No suggestions found" in the autocomplete
+    When I enter "Taylor|Skitter" in the "Characters" autocomplete field
+    Then I should see "Taylor Hebert | Skitter | Weaver" in the autocomplete

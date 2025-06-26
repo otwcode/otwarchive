@@ -4,7 +4,7 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_for resource, url: user_password_path, html: { method: :put } do |f| %>
+<%= form_for resource, url: users_password_reset_path, html: { method: :put, class: "reset password post" } do |f| %>
   <%= f.hidden_field :reset_password_token %>
   <dl>
     <dt><%= label_tag :edit_password, ts("New password") %></dt>
@@ -19,11 +19,10 @@
     </dd>
     <dt><%= label_tag :edit_password_confirmation, ts("Confirm new password") %></dt>
     <dd><%= f.password_field :password_confirmation, id: :edit_password_confirmation %></dd>
-    <dt class="landmark"><%= f.label :submit, ts("Submit") %></dt>
+    <dt class="landmark"><%= ts("Submit") %></dt>
     <dd class="submit actions">
       <%= f.submit ts("Change Password") %>
     </dd>
   </dl>
 <% end %>
-
 <!--/content-->

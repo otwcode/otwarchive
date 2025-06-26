@@ -21,7 +21,7 @@
           </p>
         </dd>
         <dt id="managePublicationDate"><%= f.label :published_at, ts("Chapter Publication Date") %>  <%= link_to_help "backdating-help" %></dt>
-        <dd class="datetime"><%= f.date_select "published_at", start_year: Date.today.year, end_year: 1950, default: @work.default_date, order: [:day, :month, :year] %></dd>
+        <dd class="datetime"><%= f.date_select "published_at", start_year: Date.current.year, end_year: 1950, default: @work.default_date, order: [:day, :month, :year] %></dd>
       </dl>
     </fieldset>
 
@@ -69,6 +69,11 @@
 
     <fieldset>
       <legend><%= ts("Post Chapter") %></legend>
+      <p class="notice">
+        <%= t(".post_notice_html",
+              content_policy_link: link_to(t(".content_policy"), content_path),
+              tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
+      </p>
       <ul class="actions">
         <% unless @chapter.new_record? || @chapter.posted? %>
           <li><%= submit_tag ts("Save As Draft"), name: "save_button" %></li>

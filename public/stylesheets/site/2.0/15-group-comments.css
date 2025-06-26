@@ -15,6 +15,7 @@ div.comment, li.comment {
   position: relative;
   border: 1px solid #ddd;
   overflow: visible;
+  text-align: start;
 }
 
 .comment:after,
@@ -34,12 +35,12 @@ div.comment, li.comment {
 }
 
 .comment .icon .anonymous {
-  background: url("/images/imageset.png") no-repeat 0px -635px;
+  background: url("/images/imageset.png") no-repeat -0px -735px;
   display: block;
 }
 
 .comment .icon .visitor {
-  background: url("/images/imageset.png") no-repeat 0px -75px;
+  background: url("/images/imageset.png") no-repeat 0px -635px;
   display: block;
 }
 
@@ -47,6 +48,10 @@ div.comment, li.comment {
   background: #ddd;
   padding: 0.25em 0.25em 0.25em 108px;
   margin: 0 auto -0.25em;
+}
+
+.comment .role {
+  font-weight: bold;
 }
 
 .thread .thread {
@@ -82,6 +87,10 @@ fieldset.comments, .comment .userstuff {
   margin: 1.286em 0.643em 0.25em;
 }
 
+.comment .message {
+  padding: 0.643em;
+}
+
 /* mods */
 
 .abbreviated .icon {
@@ -90,11 +99,11 @@ fieldset.comments, .comment .userstuff {
 }
 
 .abbreviated .icon .anonymous {
-  background: url("/images/imageset.png") no-repeat 0px -450px;
+  background: url("/images/imageset.png") no-repeat -75px -450px;
 }
 
 .abbreviated .icon .visitor {
-  background: url("/images/imageset.png") no-repeat 0px -375px;
+  background: url("/images/imageset.png") no-repeat 0px -450px;
 }
 
 .abbreviated h4.byline {

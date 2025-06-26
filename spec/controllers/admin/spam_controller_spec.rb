@@ -7,8 +7,6 @@ describe Admin::SpamController do
   include RedirectExpectationHelper
 
   describe "GET #index" do    
-    let(:admin) { create(:admin) }
-
     context "when logged in as user" do
       it "redirects with notice" do
         fake_login
@@ -18,21 +16,45 @@ describe Admin::SpamController do
       end
     end
 
-    context "when logged in as admin without correct authorization" do
-      xit "redirects with notice" do
-        fake_login_admin(admin)
-        get :index, params: { reviewed: false, approved: false }
+    (Admin::VALID_ROLES - %w[superadmin policy_and_abuse]).each do |role|
+      context "when logged in as an admin with #{role} role" do
+        let(:admin) { create(:admin, roles: [role]) }
 
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        it "redirects with error" do
+          fake_login_admin(admin)
+          get :index, params: { reviewed: false, approved: false }
+
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end 
       end
     end
 
-    context "when logged in as admin" do
-      it "renders index template" do
-        fake_login_admin(admin)
-        get :index, params: { reviewed: false, approved: false }
- 
-        expect(response).to render_template(:index)
+    %w[policy_and_abuse superadmin].each do |role|
+      context "when logged in as an admin with #{role} role" do
+        let(:admin) { create(:admin, roles: [role]) }
+
+        it "renders index template" do
+          fake_login_admin(admin)
+          get :index, params: { reviewed: false, approved: false }
+
+          expect(response).to render_template(:index)
+        end
+      end
+    end
+
+    context "when a ModeratedWork has no corresponding Work" do
+      let!(:spam_with_work) { create(:moderated_work) }
+      let!(:spam_missing_work) { create(:moderated_work, work_id: -1) }
+
+      before do
+        fake_login_admin(create(:superadmin))
+      end
+
+      it "only loads the existing work" do
+        get :index
+
+        expect(assigns(:works)).to include(spam_with_work)
+        expect(assigns(:works)).not_to include(spam_missing_work)
       end
     end
   end
@@ -49,27 +71,35 @@ describe Admin::SpamController do
       end
     end
 
-    context "when logged in as admin without correct authorization" do
-      xit "redirects with notice" do
-        fake_login_admin(admin)
-        post :bulk_update, params: { ham: true }
+    (Admin::VALID_ROLES - %w[superadmin policy_and_abuse]).each do |role|
+      context "when logged in as an admin with #{role} role" do
+        let(:admin) { create(:admin, roles: [role]) }
 
-        it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        it "redirects with error" do
+          fake_login_admin(admin)
+          post :bulk_update, params: { ham: true }
+          
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        end
       end
     end
 
-    context "when logged in as admin" do
-      it "marks moderated workd as reviewed, marks works as spam, hides the works, and redirects with notice" do
-        FactoryBot.create_list(:moderated_work, 3)
-        fake_login_admin(admin)
-        post :bulk_update, params: { spam: ModeratedWork.all.map(&:id) }
+    %w[policy_and_abuse superadmin].each do |role|
+      context "when logged in as an admin with #{role} role" do
+        let(:admin) { create(:admin, roles: [role]) }
 
-        it_redirects_to_with_notice(admin_spam_index_path, "Works were successfully updated")
-        ModeratedWork.all.each do |moderated_work|
-          moderated_work.reload
-          expect(moderated_work.reviewed).to eq(true)
-          expect(moderated_work.work.spam).to eq(true)
-          expect(moderated_work.work.hidden_by_admin).to eq(true)
+        it "marks moderated works as reviewed, marks works as spam, hides the works, and redirects with notice" do
+          FactoryBot.create_list(:moderated_work, 3)
+          fake_login_admin(admin)
+          post :bulk_update, params: { spam: ModeratedWork.all.map(&:id) }
+
+          it_redirects_to_with_notice(admin_spam_index_path, "Works were successfully updated")
+          ModeratedWork.all.each do |moderated_work|
+            moderated_work.reload
+            expect(moderated_work.reviewed).to eq(true)
+            expect(moderated_work.work.spam).to eq(true)
+            expect(moderated_work.work.hidden_by_admin).to eq(true)
+          end
         end
       end
     end

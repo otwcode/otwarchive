@@ -1,11 +1,17 @@
 ---
 EnableDefaultLinters: true
 linters:
+  AllowedScriptType:
+    allowed_types:
+      - "text/javascript"
+      - "speculationrules"
   DeprecatedClasses:
     enabled: true
     rule_set:
       - deprecated: ["bookmarks", "collections", "readings", "works"]
         suggestion: "Avoid the plural form of these classes."
+  RequireInputAutocomplete:
+    enabled: false
   Rubocop:
     enabled: true
     rubocop_config:

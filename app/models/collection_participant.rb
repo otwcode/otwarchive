@@ -1,6 +1,4 @@
 class CollectionParticipant < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   belongs_to :pseud
   has_one :user, through: :pseud
   belongs_to :collection
@@ -61,7 +59,7 @@ class CollectionParticipant < ApplicationRecord
 
   def reindex_collection
     return unless MAINTAINER_ROLES.include?(participant_role) || MAINTAINER_ROLES.include?(participant_role_before_last_save)
- 
+
     ids = [collection_id]
     ids += collection.children.pluck(:id) if collection.present?
     IndexQueue.enqueue_ids(Collection, ids, :background)

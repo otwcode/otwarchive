@@ -1,13 +1,12 @@
-FROM ruby:2.6.5
+FROM ruby:3.2.7
 
 # Install additional packages
 RUN apt-get update             && \
     apt-get install -y            \
         calibre                   \
         default-mysql-client      \
-        phantomjs                 \
-        pwgen                     \
-        wkhtmltopdf               \
+        libvips                   \
+        shared-mime-info          \
         zip
 
 # Clean and mount repository at /otwa
@@ -18,7 +17,7 @@ VOLUME /otwa
 # Install ruby packages
 COPY Gemfile .
 COPY Gemfile.lock .
-RUN gem install bundler -v 1.17.3 && bundle install
+RUN gem install bundler -v 2.6.3 && bundle install
 
 # Default command to run in a new container
 EXPOSE 3000

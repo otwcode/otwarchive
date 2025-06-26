@@ -96,7 +96,7 @@ describe Opendoors::ToolsController do
         it "updates work if imported-from URL has non-ASCII characters" do
           url = "https://example.com/work/resurrección"
           post :url_update, params: { work_url: "http://example.org/works/#{work.id}/", imported_from_url: url }
-          encoded_url = URI.encode(url)
+          encoded_url = URI::Parser.new.escape(url)
           it_redirects_to_with_notice(opendoors_tools_path(imported_from_url: encoded_url), "Updated imported-from url for #{work.title} to #{encoded_url}")
           work.reload
           expect(work.imported_from_url).to eq(encoded_url)

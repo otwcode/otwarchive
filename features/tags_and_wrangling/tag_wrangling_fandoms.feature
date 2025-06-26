@@ -65,6 +65,11 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "TV Shows"
     And I should see "SG1"
     And the "Canonical" checkbox should be disabled
+    And all indexing jobs have been run
+  When I enter "The whole sta" in the "tag_merger_string_autocomplete" autocomplete field
+    And I should see "the whole Stargate franchise" in the autocomplete
+    And I should not see "Stargate SG-1" in the autocomplete
+    And I should not see "Stargates SG-1" in the autocomplete
   When I enter "Stargate" in the "tag_merger_string_autocomplete" autocomplete field
   Then I should see "Stargates SG-1" in the autocomplete
     And I should see "the whole Stargate franchise" in the autocomplete
@@ -88,7 +93,7 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     And I check "Canonical"
     And I choose "Fandom"
     And I press "Create Tag"
-    And I fill in "tag_media_string" with "TV Shows"
+    And I choose "TV Shows" from the "Add:" autocomplete
     And I choose "Stargate Atlantis" from the "Add SubTags" autocomplete
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -107,10 +112,11 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
     And I press "Create Tag"
     And I fill in "MetaTags" with "Stargate SG-1"
     And I press "Save changes"
-    And I follow "Stargate SG-1"
+  Then I should see "Tag was updated"
+  When I edit the tag "Stargate SG-1"
   Then I should see "Stargate SG-1: Ark of Truth" within "div#child_SubTag_associations_to_remove_checkboxes"
     And I should see "Stargate Franchise" within "div#parent_MetaTag_associations_to_remove_checkboxes"
-  When I am logged in as an admin
+  When I am logged in as a "tag_wrangling" admin
     And I edit the tag "Stargate SG-1"
     And I fill in "Synonym of" with "Stargate SG-1: Greatest Show in the Universe"
     And I press "Save changes"

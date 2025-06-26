@@ -1,7 +1,7 @@
 class ExternalAuthorsController < ApplicationController
   before_action :load_user
-  before_action :check_ownership, only: [:create, :edit, :destroy, :new]
-  before_action :check_user_status, only: [:new, :create, :edit]
+  before_action :check_ownership, only: [:edit]
+  before_action :check_user_status, only: [:edit]
   before_action :get_external_author_from_invitation, only: [:claim, :complete_claim]
   before_action :users_only, only: [:complete_claim]
 
@@ -64,11 +64,8 @@ class ExternalAuthorsController < ApplicationController
 
     flash[:notice] = ""
     if params[:imported_stories] == "nothing"
-      flash[:notice] += "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind."
-      redirect_to root_path
-      return
-    end
-    if params[:imported_stories] == "orphan"
+      flash[:notice] += "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind. "
+    elsif params[:imported_stories] == "orphan"
       # orphan the works
       @external_author.orphan(params[:remove_pseud])
       flash[:notice] += "Your imported stories have been orphaned. Thank you for leaving them in the archive! "
@@ -77,9 +74,14 @@ class ExternalAuthorsController < ApplicationController
       @external_author.delete_works
       flash[:notice] += "Your imported stories have been deleted. "
     end
-    @invitation.mark_as_redeemed if @invitation && !params[:imported_stories].blank?
 
-    if @external_author.update_attributes(external_author_params[:external_author] || {})
+    if @invitation &&
+       params[:imported_stories].present? &&
+       params[:imported_stories] != "nothing"
+      @invitation.mark_as_redeemed
+    end
+
+    if @external_author.update(external_author_params[:external_author] || {})
       flash[:notice] += "Your preferences have been saved."
       redirect_to @user ? user_external_authors_path(@user) : root_path
     else

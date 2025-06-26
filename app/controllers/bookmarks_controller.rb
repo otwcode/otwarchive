@@ -1,10 +1,11 @@
 class BookmarksController < ApplicationController
   before_action :load_collection
   before_action :load_owner, only: [:index]
-  before_action :load_bookmarkable, only: [:index, :new, :create, :fetch_recent, :hide_recent]
+  before_action :load_bookmarkable, only: [:index, :new, :create]
   before_action :users_only, only: [:new, :create, :edit, :update]
   before_action :check_user_status, only: [:new, :create, :edit, :update]
-  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :fetch_recent, :hide_recent, :confirm_delete, :share]
+  before_action :check_parent_visible, only: [:index, :new]
+  before_action :load_bookmark, only: [:show, :edit, :update, :destroy, :confirm_delete, :share]
   before_action :check_visibility, only: [:show, :share]
   before_action :check_ownership, only: [:edit, :update, :destroy, :confirm_delete, :share]
 
@@ -22,12 +23,14 @@ class BookmarksController < ApplicationController
     end
   end
 
+  def check_parent_visible
+    check_visibility_for(@bookmarkable)
+  end
+
   # get the parent
   def load_bookmarkable
     if params[:work_id]
       @bookmarkable = Work.find(params[:work_id])
-    elsif params[:chapter_id]
-      @bookmarkable = Chapter.find(params[:chapter_id]).try(:work)
     elsif params[:external_work_id]
       @bookmarkable = ExternalWork.find(params[:external_work_id])
     elsif params[:series_id]
@@ -53,7 +56,7 @@ class BookmarksController < ApplicationController
       if @search.query.present?
         @page_subtitle = ts("Bookmarks Matching '%{query}'", query: @search.query)
       end
-      @bookmarks = @search.search_results
+      @bookmarks = @search.search_results.scope(:for_blurb)
       flash_search_warnings(@bookmarks)
       set_own_bookmarks
       render 'search_results'
@@ -62,8 +65,8 @@ class BookmarksController < ApplicationController
 
   def index
     if @bookmarkable
-      access_denied unless is_admin? || @bookmarkable.visible?
-      @bookmarks = @bookmarkable.bookmarks.is_public.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      @bookmarks = @bookmarkable.bookmarks.not_private.order_by_created_at.paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+      @bookmarks = @bookmarks.where(hidden_by_admin: false) unless logged_in_as_admin?
     else
       base_options = {
         show_private: (@user.present? && @user == current_user),
@@ -101,13 +104,13 @@ class BookmarksController < ApplicationController
         if @user.blank?
           # When it's not a particular user's bookmarks, we want
           # to list *bookmarkable* items to avoid duplication
-          @bookmarkable_items = @search.bookmarkable_search_results
+          @bookmarkable_items = @search.bookmarkable_search_results.scope(:for_blurb)
           flash_search_warnings(@bookmarkable_items)
           @facets = @bookmarkable_items.facets
         else
           # We're looking at a particular user's bookmarks, so
           # just retrieve the standard search results and their facets.
-          @bookmarks = @search.search_results
+          @bookmarks = @search.search_results.scope(:for_blurb)
           flash_search_warnings(@bookmarks)
           @facets = @bookmarks.facets
         end
@@ -138,15 +141,22 @@ class BookmarksController < ApplicationController
       elsif use_caching?
         @bookmarks = Rails.cache.fetch("bookmarks/index/latest/v2_true", expires_in: ArchiveConfig.SECONDS_UNTIL_BOOKMARK_INDEX_EXPIRE.seconds) do
           search = BookmarkSearchForm.new(show_private: false, show_restricted: false, sort_column: 'created_at')
-          results = search.search_results
+          results = search.search_results.scope(:for_blurb)
           flash_search_warnings(results)
           results.to_a
         end
       else
-        @bookmarks = Bookmark.latest.includes(:bookmarkable, :pseud, :tags, :collections).to_a
+        @bookmarks = Bookmark.latest.for_blurb.to_a
       end
     end
     set_own_bookmarks
+
+    @pagy =
+      if @bookmarks.respond_to?(:total_pages)
+        pagy_query_result(@bookmarks)
+      elsif @bookmarkable_items.respond_to?(:total_pages)
+        pagy_query_result(@bookmarkable_items)
+      end
   end
 
   # GET    /:locale/bookmark/:id
@@ -187,19 +197,13 @@ class BookmarksController < ApplicationController
   # POST /bookmarks.xml
   def create
     @bookmarkable ||= ExternalWork.new(external_work_params)
-    @bookmark = @bookmarkable.bookmarks.build(bookmark_params)
-    if @bookmarkable.new_record? && @bookmarkable.fandoms.blank?
-       @bookmark.errors.add(:base, "Fandom tag is required")
-       render :new and return
+    @bookmark = Bookmark.new(bookmark_params.merge(bookmarkable: @bookmarkable))
+    if @bookmark.errors.empty? && @bookmark.save
+      flash[:notice] = ts("Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.")
+      redirect_to(bookmark_path(@bookmark))
+    else
+      render :new
     end
-    if @bookmark.errors.empty?
-      if @bookmarkable.save && @bookmark.save
-        flash[:notice] = ts('Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.')
-        redirect_to(bookmark_path(@bookmark)) && return
-      end
-    end
-    @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
-    render action: "new" and return
   end
 
   # PUT /bookmarks/1
@@ -208,15 +212,15 @@ class BookmarksController < ApplicationController
     new_collections = []
     unapproved_collections = []
     errors = []
-    bookmark_params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
+    bookmark_params[:collection_names]&.split(",")&.map(&:strip)&.uniq&.each do |collection_name|
       collection = Collection.find_by(name: collection_name)
       if collection.nil?
-        errors << ts("#{collection_name} does not exist.")
+        errors << ts("%{name} does not exist.", name: collection_name)
       else
         if @bookmark.collections.include?(collection)
           next
         elsif collection.closed? && !collection.user_is_maintainer?(User.current_user)
-          errors << ts("#{collection.title} is closed to new submissions.")
+          errors << ts("%{title} is closed to new submissions.", title: collection.title)
         elsif @bookmark.add_to_collection(collection) && @bookmark.save
           if @bookmark.approved_collections.include?(collection)
             new_collections << collection
@@ -224,7 +228,7 @@ class BookmarksController < ApplicationController
             unapproved_collections << collection
           end
         else
-          errors << ts("Something went wrong trying to add collection #{collection.title}, sorry!")
+          errors << ts("Something went wrong trying to add collection %{title}, sorry!", title: collection.title)
         end
       end
     end
@@ -234,32 +238,28 @@ class BookmarksController < ApplicationController
       flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
     end
 
-    flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
-      flash[:notice] += ts("Added to collection(s): %{collections}.",
+      flash[:notice] = ts("Added to collection(s): %{collections}.",
                           collections: new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
-      flash[:notice] ||= ""
+      flash[:notice] = flash[:notice] ? flash[:notice] + " " : ""
       flash[:notice] += if unapproved_collections.size > 1
-                          ts(" You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map { |f| f.title }.join(', '))
+                          ts("You have submitted your bookmark to moderated collections (%{all_collections}). It will not become a part of those collections until it has been approved by a moderator.", all_collections: unapproved_collections.map(&:title).join(", "))
                         else
-                          ts(" You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
+                          ts("You have submitted your bookmark to the moderated collection '%{collection}'. It will not become a part of the collection until it has been approved by a moderator.", collection: unapproved_collections.first.title)
                         end
     end
 
     flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
     flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
-    if errors.empty?
-      if @bookmark.update_attributes(bookmark_params)
-        flash[:notice] ||= ""
-        flash[:notice] = ts(" Bookmark was successfully updated. ").html_safe + flash[:notice]
-        flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
-        redirect_to(@bookmark)
-      end
+    if @bookmark.update(bookmark_params) && errors.empty?
+      flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""
+      flash[:notice] = ts("Bookmark was successfully updated.").html_safe + flash[:notice]
+      flash[:notice] = flash[:notice].html_safe
+      redirect_to(@bookmark)
     else
-      @bookmark.update_attributes(bookmark_params)
       @bookmarkable = @bookmark.bookmarkable
       render :edit and return
     end
@@ -289,26 +289,6 @@ class BookmarksController < ApplicationController
     @bookmark.destroy
     flash[:notice] = ts("Bookmark was successfully deleted.")
     redirect_to user_bookmarks_path(current_user)
-  end
-
-  # Used on index page to show 4 most recent bookmarks (after bookmark being currently viewed) via RJS
-  # Only main bookmarks page or tag bookmarks page
-  # non-JS fallback should be to the 'view all bookmarks' link which serves the same function
-  def fetch_recent
-    @bookmarkable = @bookmark.bookmarkable
-    respond_to do |format|
-      format.js {
-        @bookmarks = @bookmarkable.bookmarks.visible.order("created_at DESC").offset(1).limit(4)
-        set_own_bookmarks
-      }
-      format.html do
-        id_symbol = (@bookmarkable.class.to_s.underscore + '_id').to_sym
-        redirect_to url_for({action: :index, id_symbol => @bookmarkable})
-      end
-    end
-  end
-  def hide_recent
-    @bookmarkable = @bookmark.bookmarkable
   end
 
   protected

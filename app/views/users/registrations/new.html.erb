@@ -1,15 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Create Account") %></h2>
-<% if resource.errors.any? %>
-  <div class="error">
-     <h4 class="heading"><%= ts("Oops, there's some problems with the stuff you told us.") %></h4>
-     <ul>
-        <% resource.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-     </ul>
-  </div>
-<% end %>
+<h2 class="heading"><%= t(".heading") %></h2>
+<%= error_messages_for :user %>
 <!--/descriptions-->
 
 <!--main content-->
@@ -18,29 +9,21 @@
   <%= hidden_field_tag :invitation_token, resource.invitation_token %>
 
   <fieldset>
-    <legend><%= ts("User Details") %></legend>
+    <legend><%= t(".legend.user") %></legend>
     <%= render :partial => "passwd", :locals => {:f => f} %>
   </fieldset>
 
   <fieldset>
-    <legend><%= ts("Legal Agreements") %></legend>
+    <legend><%= t(".legend.legal") %></legend>
     <%= render :partial => "legal", :locals => {:f => f} %>
   </fieldset>
 
   <fieldset>
-    <legend><%= ts("Submit") %></legend>
+    <legend><%= t(".submit") %></legend>
     <p class="submit cancel actions">
-      <input type="submit" name="cancel_create_account" value="Cancel" />
-      <%= submit_tag ts('Create Account') %>
+      <%= link_to t(".cancel"), root_path %>
+      <%= submit_tag t(".submit"), data: { disable_with: t(".wait") } %>
     </p>
   </fieldset>
 <% end %>
 <!--/content-->
-
-<%= content_for :footer_js do %>
-  <%= javascript_tag do %>
-    $j(document).ready(function(){
-        $j('#user_registration_form').preventDoubleSubmit();
-     })
-  <% end %>
-<% end %>

@@ -59,14 +59,16 @@ class PreferencesController < ApplicationController
       :comment_copy_to_self_off,
       :kudos_emails_off,
       :admin_emails_off,
-      :automatically_approve_collections,
+      :allow_collection_invitation,
       :collection_emails_off,
       :collection_inbox_off,
       :recipient_emails_off,
       :history_enabled,
       :first_login,
       :banner_seen,
-      :allow_cocreator
+      :allow_cocreator,
+      :allow_gifts,
+      :guest_replies_off
     )
   end
 end

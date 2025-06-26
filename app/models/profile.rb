@@ -1,5 +1,5 @@
 class Profile < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
+  include Justifiable
 
   PROFILE_TITLE_MAX = 255
   LOCATION_MAX = 255
@@ -24,5 +24,4 @@ class Profile < ApplicationRecord
       throw :abort
     end
   end
-
 end

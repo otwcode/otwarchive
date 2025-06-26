@@ -64,9 +64,23 @@
 
       <dt><%= f.label :cache_expiration, t(".fields.cache_expiration") %></dt>
       <dd><%= admin_setting_text_field(f, :cache_expiration, size: "3") %></dd>
+    </dl>
+  </fieldset>
 
+  <fieldset>
+    <legend><%= t(".legend.content") %></legend>
+    <dl>
       <dt><%= admin_setting_checkbox(f, :hide_spam) %></dt>
       <dd><%= f.label :hide_spam, t(".fields.hide_spam") %></dd>
+
+      <dt><%= admin_setting_checkbox(f, :guest_comments_off) %></dt>
+      <dd><%= f.label :guest_comments_off, t(".fields.guest_comments_off") %></dd>
+
+      <dt><%= f.label :account_age_threshold_for_comment_spam_check, t(".fields.account_age_threshold_for_comment_spam_check") %></dt>
+      <dd>
+        <%= admin_setting_text_field(f, :account_age_threshold_for_comment_spam_check, size: "3", "aria-describedby": "account-age-threshold-for-comment-spam-check-note") %>
+        <p id="account-age-threshold-for-comment-spam-check-note" class="footnote"><%= t(".fields.account_age_threshold_for_comment_spam_check_note") %></p>
+      </dd>
     </dl>
   </fieldset>
 
@@ -79,11 +93,10 @@
 <% if @admin_setting.invite_from_queue_enabled? %>
   <p>
     <%= t(".queue_status",
-          number: @admin_setting.invite_from_queue_number,
-          date: l(@admin_setting.invite_from_queue_at.to_date, format: :long)) %>
+          count: @admin_setting.invite_from_queue_number,
+          time: l(@admin_setting.invite_from_queue_at, format: :long)) %>
+    <%= t(".queue_status_help") %>
   </p>
-
-  <p><%= t(".queue_status_help") %></p>
 <% end %>
 
 <p>

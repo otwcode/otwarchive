@@ -28,7 +28,7 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
   display: block;
 }
 
-#footer a, #footer .secondary {
+#footer a {
   background: transparent;
   border: 0;
   font-weight: 400;
@@ -65,15 +65,6 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
 #footer .heading {
   display: block;
   color: #fff;
-}
-
-#footer .secondary {
-  position: static;
-    box-shadow: none;
-}
-
-#footer .secondary li {
-  display: block;
 }
 
 /*END== */

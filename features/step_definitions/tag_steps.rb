@@ -14,25 +14,31 @@ Given /^basic tags$/ do
 end
 
 Given /^the default ratings exist$/ do
-  ratings = [ArchiveConfig.RATING_DEFAULT_TAG_NAME,
-             ArchiveConfig.RATING_GENERAL_TAG_NAME,
-             ArchiveConfig.RATING_TEEN_TAG_NAME,
-             ArchiveConfig.RATING_MATURE_TAG_NAME,
-             ArchiveConfig.RATING_EXPLICIT_TAG_NAME]
-  ratings.each do |rating|
-    Rating.find_or_create_by(name: rating, canonical: true)
+  # TODO: "Not Rated" should be adult, to match the behavior in production, but
+  # there are many tests that rely on being able to view a "Not Rated" work
+  # without clicking through the adult content warning. So until those tests
+  # are fixed, we leave "Not Rated" as a non-adult rating.
+  [
+    ArchiveConfig.RATING_DEFAULT_TAG_NAME,
+    ArchiveConfig.RATING_GENERAL_TAG_NAME,
+    ArchiveConfig.RATING_TEEN_TAG_NAME
+  ].each do |rating|
+    Rating.find_or_create_by!(name: rating, canonical: true)
   end
-end
 
-Given(/^an adult canonical rating exists with name: "([^"]*)"$/) do |rating|
-  Rating.find_or_create_by(name: rating, canonical: true, adult: true)
+  [
+    ArchiveConfig.RATING_MATURE_TAG_NAME,
+    ArchiveConfig.RATING_EXPLICIT_TAG_NAME
+  ].each do |rating|
+    Rating.find_or_create_by!(name: rating, canonical: true, adult: true)
+  end
 end
 
 Given /^the basic warnings exist$/ do
   warnings = [ArchiveConfig.WARNING_DEFAULT_TAG_NAME,
               ArchiveConfig.WARNING_NONE_TAG_NAME]
   warnings.each do |warning|
-    ArchiveWarning.find_or_create_by_name(warning).update(canonical: true)
+    ArchiveWarning.find_or_create_by!(name: warning, canonical: true)
   end
 end
 
@@ -43,28 +49,45 @@ Given /^all warnings exist$/ do
               ArchiveConfig.WARNING_NONCON_TAG_NAME,
               ArchiveConfig.WARNING_CHAN_TAG_NAME]
   warnings.each do |warning|
-    ArchiveWarning.find_or_create_by_name(warning).update(canonical: true)
+    ArchiveWarning.find_or_create_by!(name: warning, canonical: true)
   end
 end
 
 Given /^the basic categories exist$/ do
   %w(Gen Other F/F Multi F/M M/M).each do |category|
-    Category.find_or_create_by(name: category).update(canonical: true)
+    Category.find_or_create_by!(name: category, canonical: true)
   end
+end
+
+Given "a set of tags for tag sort by use exists" do
+  {
+    "10 uses" => 10,
+    "8 uses" => 8,
+    "also 8 uses" => 8,
+    "5 uses" => 5,
+    "2 uses" => 2,
+    "0 uses" => 0
+  }.each do |freeform, uses|
+    tag = Freeform.find_or_create_by_name(freeform.dup)
+    tag.taggings_count = uses
+  end
+
+  step "all indexing jobs have been run"
+  step "the periodic tag count task is run"
 end
 
 Given /^I have a canonical "([^\"]*)" fandom tag named "([^\"]*)"$/ do |media, fandom|
   fandom = Fandom.find_or_create_by_name(fandom)
-  fandom.update(canonical: true)
+  fandom.update!(canonical: true)
   media = Media.find_or_create_by_name(media)
-  media.update(canonical: true)
+  media.update!(canonical: true)
   fandom.add_association media
 end
 
-Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, character|
-  char = Character.find_or_create_by(name: character)
+Given "I add the fandom {string} to the tag/character {string}" do |fandom, tag|
+  tag = Tag.find_or_create_by(name: tag)
   fand = Fandom.find_or_create_by_name(fandom)
-  char.add_association(fand)
+  tag.add_association(fand)
 end
 
 Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
@@ -85,6 +108,13 @@ Given /^a (non-?canonical|canonical) (\w+) "([^\"]*)"$/ do |canonical_status, ta
   t.save
 end
 
+Given "a non-canonical character {string} in fandom {string}" do |character_name, fandom_name|
+  character = Character.where(name: character_name).first_or_create
+  character.update!(canonical: false)
+  fandom = Fandom.where(name: fandom_name).first_or_create
+  character.add_association(fandom)
+end
+
 Given /^a synonym "([^\"]*)" of the tag "([^\"]*)"$/ do |synonym, merger|
   merger = Tag.find_by_name(merger)
   merger_type = merger.type
@@ -102,11 +132,11 @@ Given /^"([^\"]*)" is a metatag of the (\w+) "([^\"]*)"$/ do |metatag, tag_type,
 end
 
 Given /^I am logged in as a tag wrangler$/ do
-  step "I start a new session"
   username = "wrangler"
   step %{I am logged in as "#{username}"}
   user = User.find_by(login: username)
-  user.tag_wrangler = '1'
+  role = Role.find_or_create_by(name: "tag_wrangler")
+  user.roles = [role]
 end
 
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
@@ -114,14 +144,15 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
 
   if tw.blank?
     tw = FactoryBot.create(:user, login: user, password: password)
-    tw.activate
   else
+    tw.skip_password_change_notification!
     tw.password = password
     tw.password_confirmation = password
     tw.save
   end
 
-  tw.tag_wrangler = '1'
+  role = Role.find_or_create_by(name: "tag_wrangler")
+  tw.roles = [role]
 
   step %{I am logged in as "#{user}" with password "#{password}"}
 
@@ -133,7 +164,6 @@ end
 
 Given /^a tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
-  step "I start a new session"
 
   n_comments = 3 if n_comments.blank? || n_comments.zero?
   FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
@@ -150,7 +180,6 @@ end
 
 Given /^a period-containing tag "([^\"]*)" with(?: (\d+))? comments$/ do |tagname, n_comments|
   tag = Fandom.find_or_create_by_name(tagname)
-  step "I start a new session"
 
   n_comments = 3 if n_comments.blank? || n_comments.zero?
   FactoryBot.create_list(:comment, n_comments.to_i, :on_tag, commentable: tag)
@@ -168,11 +197,12 @@ Given /^the tag wrangling setup$/ do
   step %{I am logged in as a random user}
   step %{I post the work "Revenge of the Sith 2" with fandom "Star Wars, Stargate SG-1" with character "Daniel Jackson" with second character "Jack O'Neil" with rating "Not Rated" with relationship "JackDaniel"}
   step %{The periodic tag count task is run}
+  step %{all indexing jobs have been run}
   step %{I flush the wrangling sidebar caches}
 end
 
 Given /^I have posted a Wrangling Guideline?(?: titled "([^\"]*)")?$/ do |title|
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "tag_wrangling" admin}
   visit new_wrangling_guideline_path
   if title
     fill_in("Guideline text", with: "This is a page about how we wrangle things.")
@@ -196,10 +226,40 @@ Given /^the tag "([^"]*)" does not exist$/ do |tag_name|
   tag.destroy if tag.present?
 end
 
+Given "a zero width space tag exists" do
+  blank_tag = FactoryBot.build(:character, name: ["200B".hex].pack("U"))
+  blank_tag.save!(validate: false)
+end
+
+Given "I create the canonical media tag {string}" do |name|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(new_tag_path)
+  fill_in("Name", with: name)
+  choose("Media")
+  check("Canonical")
+  click_button("Create Tag")
+end
+
+Given "I create the non-canonical media tag {string}" do |name|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(new_tag_path)
+  fill_in("Name", with: name)
+  choose("Media")
+  click_button("Create Tag")
+end
+
+Given "I recategorize the {string} fandom as a {string} tag" do |name, tag_type|
+  step %{I am logged in as a "tag_wrangling" admin}
+  visit(edit_tag_path(Fandom.create(name: name)))
+  select(tag_type, from: "tag_type")
+  check("Canonical")
+  click_button("Save changes")
+end
+
 ### WHEN
 
 When /^the periodic tag count task is run$/i do
-  Tag.write_redis_to_database
+  RedisJobSpawner.perform_now("TagCountUpdateJob")
 end
 
 When /^the periodic filter count task is run$/i do
@@ -222,12 +282,9 @@ When /^I check the (?:mass )?wrangling option for "([^"]*)"$/ do |tagname|
   check("selected_tags_#{tag.id}")
 end
 
-When /^I edit the tag "([^\"]*)"$/ do |tag|
+When "I edit the tag {string}" do |tag|
   tag = Tag.find_by!(name: tag)
-  visit tag_path(tag)
-  within(".header") do
-    click_link("Edit")
-  end
+  visit edit_tag_path(tag)
 end
 
 When /^I view the tag "([^\"]*)"$/ do |tag|
@@ -256,7 +313,7 @@ end
 
 When /^I post the comment "([^"]*)" on the period-containing tag "([^"]*)"$/ do |comment_text, tag|
   step "I am on the search tags page"
-  fill_in("tag_search", with: tag)
+  fill_in("tag_search_name", with: tag)
   click_button "Search tags"
   click_link(tag)
   click_link(" comment")
@@ -270,11 +327,6 @@ When /^I post the comment "([^"]*)" on the tag "([^"]*)" via web$/ do |comment_t
     step %{I fill in "Comment" with "#{comment_text}"}
     step %{I press "Comment"}
   step %{I should see "Comment created!"}
-end
-
-When /^I view tag wrangling discussions$/ do
-  step %{I follow "Tag Wrangling"}
-  step %{I follow "Discussion"}
 end
 
 When /^I add "([^\"]*)" to my favorite tags$/ do |tag|
@@ -371,6 +423,13 @@ Then /^I should not see the tag search result "([^\"]*)"(?: within "([^"]*)")?$/
     end
 end
 
+Then /^the ([\d]+)(?:st|nd|rd|th) tag result should contain "(.*?)"$/ do |n, text|
+  selector = "ol.tag > li:nth-of-type(#{n})"
+  with_scope(selector) do
+    expect(page).to have_content(text)
+  end
+end
+
 Then /^"([^\"]*)" should not be a tag wrangler$/ do |username|
   user = User.find_by(login: username)
   user.tag_wrangler.should be_falsey
@@ -395,6 +454,11 @@ Then(/^the "([^"]*)" tag should be a "([^"]*)" tag$/) do |tagname, tag_type|
   assert tag.type == tag_type
 end
 
+Then "the {string} tag should be an unsorted tag" do |tagname|
+  tag = Tag.find_by(name: tagname)
+  expect(tag).to be_a(UnsortedTag)
+end
+
 Then(/^the "([^"]*)" tag should (be|not be) canonical$/) do |tagname, canonical|
   tag = Tag.find_by(name: tagname)
   expected = canonical == "be"
@@ -408,7 +472,7 @@ Then(/^the "([^"]*)" tag should (be|not be) unwrangleable$/) do |tagname, unwran
 end
 
 Then(/^the "([^"]*)" tag should be in the "([^"]*)" fandom$/) do |tagname, fandom_name|
-  tag = Tag.find_by(name: tagname) 
+  tag = Tag.find_by(name: tagname)
   fandom = Fandom.find_by(name: fandom_name)
   assert tag.has_parent?(fandom)
 end
@@ -416,4 +480,8 @@ end
 Then(/^show me what the tag "([^"]*)" is like$/) do |tagname|
   tag = Tag.find_by(name: tagname)
   puts tag.inspect
+end
+
+Then "no tag is scheduled for count update from now on" do
+  expect_any_instance_of(Tag).not_to receive(:update_filters_for_filterables)
 end

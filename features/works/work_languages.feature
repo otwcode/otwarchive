@@ -47,3 +47,12 @@ Feature: Create Works
     Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
+
+  Scenario: Previewing a work after changing the language should show the new language
+    Given basic languages
+      And I am logged in as a random user
+      And I post the work "Incorrect"
+    When I edit the work "Incorrect"
+      And I select "Deutsch" from "Choose a language"
+      And I press "Preview"
+    Then I should see "Language: Deutsch"

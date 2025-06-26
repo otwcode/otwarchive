@@ -116,7 +116,7 @@ Given /^"(.*?)" has two pinchhit assignments in the gift exchange "(.*?)"$/ do |
   collection = Collection.find_by(title: collection_title)
   user = User.find_by(login: user)
   assignments = ChallengeAssignment.where(collection_id: collection.id).limit(2)
-  assignments.each do |a| 
+  assignments.each do |a|
     a.pinch_hitter_id = user.default_pseud_id
     a.save
     a.reload
@@ -285,16 +285,12 @@ Given /^I have generated matches for "([^\"]*)"$/ do |challengename|
   step %{I close signups for "#{challengename}"}
   step %{I follow "Matching"}
   step %{I follow "Generate Potential Matches"}
-  step %{the system processes jobs}
-    step %{I wait 3 seconds}
   step %{I reload the page}
   step %{all emails have been delivered}
 end
 
 Given /^I have sent assignments for "([^\"]*)"$/ do |challengename|
   step %{I follow "Send Assignments"}
-  step %{the system processes jobs}
-    step %{I wait 3 seconds}
   step %{I reload the page}
   step %{I should not see "Assignments are now being sent out"}
 end
@@ -305,10 +301,20 @@ Given /^everyone has their assignments for "([^\"]*)"$/ do |challenge_title|
   step %{I have sent assignments for "#{challenge_title}"}
 end
 
+Given "{string} has an assignment for the user {string} in the collection {string}" do |giver_login, recip_login, collection_name|
+  giver = User.find_by(login: giver_login)
+  recip = User.find_by(login: recip_login)
+  collection = FactoryBot.create(:collection, name: collection_name, title: collection_name)
+  assignment = FactoryBot.create(:challenge_assignment, sent_at: Time.zone.now, collection_id: collection.id)
+  assignment.offer_signup.update_column(:pseud_id, giver.default_pseud_id)
+  assignment.request_signup.update_column(:pseud_id, recip.default_pseud_id)
+  assignment.reload
+end
+
 ### Fulfilling assignments
 
 When /^I start to fulfill my assignment$/ do
-  step %{I am on my user page}
+  step %{I follow "My Dashboard"}
   step %{I follow "Assignments ("}
   step %{I follow "Fulfill"}
     step %{I fill in "Work Title" with "Fulfilled Story"}

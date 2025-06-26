@@ -1,10 +1,10 @@
 class OwnedTagSetsController < ApplicationController
   cache_sweeper :tag_set_sweeper
 
-  before_action :load_tag_set, except: [ :index, :new, :create, :show_options ]
-  before_action :users_only, only: [ :new, :create, :nominate ]
-  before_action :moderators_only, except: [ :index, :new, :create, :show, :show_options ]
-  before_action :owners_only, only: [ :destroy ]
+  before_action :load_tag_set, except: [:index, :new, :create, :show_options]
+  before_action :users_only, only: [:new, :create]
+  before_action :moderators_only, except: [:index, :new, :create, :show, :show_options]
+  before_action :owners_only, only: [:destroy]
 
   def load_tag_set
     @tag_set = OwnedTagSet.find_by(id: params[:id])
@@ -74,31 +74,31 @@ class OwnedTagSetsController < ApplicationController
       # we use this to store the tag name results
       @tag_hash = HashWithIndifferentAccess.new
 
-      %w(character relationship).each do |tag_type|
-        if @tag_set.has_type?(tag_type)
-          ## names_by_parent returns a hash of arrays like so:
-          ## hash[parent_name] => [child name, child name, child name]
+      %w[character relationship].each do |tag_type|
+        next unless @tag_set.has_type?(tag_type)
 
-          # get the manually associated fandoms
-          assoc_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), tag_type)
+        ## names_by_parent returns a hash of arrays like so:
+        ## hash[parent_name] => [child name, child name, child name]
 
-          # get canonically associated fandoms
-          # Safe for constantize as tag_type restricted to character relationship
-          canonical_hash = Tag.names_by_parent(tag_type.classify.constantize.in_tag_set(@tag_set), "fandom")
+        # get the manually associated fandoms
+        assoc_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), tag_type)
 
-          # merge the values of the two hashes (each value is an array) as a set (ie remove duplicates)
-          @tag_hash[tag_type] = assoc_hash.merge(canonical_hash) {|key, oldval, newval| (oldval | newval) }
+        # get canonically associated fandoms
+        # Safe for constantize as tag_type restricted to character relationship
+        canonical_hash = Tag.names_by_parent(tag_type.classify.constantize.in_tag_set(@tag_set).canonical, "fandom")
 
-          # get any tags without a fandom
-          remaining = @tag_set.with_type(tag_type).with_no_parents
-          if remaining.count > 0
-            @tag_hash[tag_type]["(No linked fandom - might need association)"] ||= []
-            @tag_hash[tag_type]["(No linked fandom - might need association)"] += remaining.pluck(:name)
-          end
+        # merge the values of the two hashes (each value is an array) as a set (ie remove duplicates)
+        @tag_hash[tag_type] = assoc_hash.merge(canonical_hash) { |_key, oldval, newval| (oldval | newval) }
 
-          # store the parents
-          @fandom_keys_from_other_tags += @tag_hash[tag_type].keys
+        # get any tags without a fandom
+        remaining = @tag_set.with_type(tag_type).where.not(name: @tag_hash[tag_type].values.flatten)
+        if remaining.any?
+          @tag_hash[tag_type]["(No linked fandom - might need association)"] ||= []
+          @tag_hash[tag_type]["(No linked fandom - might need association)"] += remaining.pluck(:name)
         end
+
+        # store the parents
+        @fandom_keys_from_other_tags += @tag_hash[tag_type].keys
       end
 
       # get rid of duplicates and sort
@@ -158,7 +158,7 @@ class OwnedTagSetsController < ApplicationController
   end
 
   def update
-    if @tag_set.update_attributes(owned_tag_set_params) && @tag_set.tag_set.save!
+    if @tag_set.update(owned_tag_set_params) && @tag_set.tag_set.save!
       flash[:notice] = ts("Tag Set was successfully updated.")
       redirect_to tag_set_path(@tag_set)
     else

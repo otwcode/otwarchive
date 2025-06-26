@@ -1,12 +1,85 @@
-<% @query = {} unless @query %>
-<%= form_tag url_for(:controller => 'tags', :action => 'search'), :class => 'simple search', :role => "search", :method => :get do %>
-<fieldset class="search tags">
-  <legend>Search tags</legend>
-  <p>
-	<%= link_to_help "tag-search-text-help" %> <%= text_field_tag "query[name]", @query[:name], :id => 'tag_search', :title => ts("Enter tags")  %>
-    <%= select_tag "query[type]", options_for_select([""] + Tag::USER_DEFINED, @query[:type]), :title => ts("Choose type") %>
-    <label for="canonical" class="action">Canonical <%= check_box_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %></label>
-  <span class="submit actions"><%= submit_tag ts("Search tags"), :name => nil %></span>
-</p>
-</fieldset>
+<%= form_for @search, as: :tag_search, url: search_tags_path, html: { class: "search", method: :get } do |f| %>
+  <fieldset>
+    <dl>
+      <dt>
+        <%= f.label :name, t(".tag_name") %>
+        <%= link_to_help "tag-search-text-help" %>
+      </dt>
+      <dd>
+        <%= f.text_field :name %>
+      </dd>
+      <dt>
+        <%= f.label :fandoms, t(".fandoms") %>
+      </dt>
+      <dd>
+        <%= f.text_field :fandoms, autocomplete_options("fandom", "aria-describedby" => "fandom-field-description") %>
+        <p class="footnote" id="fandom-field-description">
+          <%= t(".fandoms_footnote") %>
+        </p>
+      </dd>
+      <dt><%= t(".type") %></dt>
+      <dd>
+        <fieldset>
+          <ul>
+            <% types = Tag::USER_DEFINED %>
+            <% types.each do |type| %>
+              <li>
+                <%= f.radio_button :type, type %>
+                <%= f.label :type, ts("%{type}", type: type), value: type %>
+              </li>
+            <% end %>
+            <li>
+              <%= f.radio_button :type, "" %>
+              <%= f.label :type, ts("Any type"), value: "" %>
+            </li>
+          </ul>
+        </fieldset>
+      </dd>
+      <dt><%= t(".wrangling_status") %></dt>
+      <dd>
+        <fieldset>
+          <ul>
+            <li>
+              <%= f.radio_button :wrangling_status, "canonical" %>
+              <%= f.label :wrangling_status, t(".status_option.canonical"), value: "canonical" %>
+            </li>
+            <li>
+              <%= f.radio_button :wrangling_status, "noncanonical" %>
+              <%= f.label :wrangling_status, t(".status_option.noncanonical"), value: "noncanonical" %>
+            </li>
+            <li>
+              <%= f.radio_button :wrangling_status, "synonymous" %>
+              <%= f.label :wrangling_status, t(".status_option.synonymous"), value: "synonymous" %>
+            </li>
+            <li>
+              <%= f.radio_button :wrangling_status, "canonical_synonymous" %>
+              <%= f.label :wrangling_status, t(".status_option.canonical_or_synonymous"), value: "canonical_synonymous" %>
+            </li>
+            <li>
+              <%= f.radio_button :wrangling_status, "noncanonical_nonsynonymous" %>
+              <%= f.label :wrangling_status, t(".status_option.noncanonical_and_nonsynonymous"), value: "noncanonical_nonsynonymous" %>
+            </li>
+            <li>
+              <%= f.radio_button :wrangling_status, "" %>
+              <%= f.label :wrangling_status, t(".status_option.any_status"), value: "" %>
+            </li>
+          </ul>
+        </fieldset>
+      </dd>
+      <dt>
+        <%= f.label :sort_column, t(".sort_by") %>
+      </dt>
+      <dd>
+        <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
+      </dd>
+      <dt>
+        <%= f.label :sort_direction, t(".sort_direction") %>
+      </dt>
+      <dd>
+        <%= f.select :sort_direction,
+          options_for_select([["Ascending", "asc"], ["Descending", "desc"]], @search.sort_direction) %>
+      </dd>
+    </dl>
+    <p class="submit actions"><%= f.submit t(".search_tags") %></p>
+  </fieldset>
 <% end %>

@@ -3,9 +3,6 @@ Feature: Invite queue management
 
   Background:
     Given I have no users
-    And the following admin exists
-      | login       | password   | email                    |
-      | admin-sam   | password   | test@archiveofourown.org |
     And the following users exist
       | login | password |
       | user1 | password |
@@ -37,7 +34,7 @@ Feature: Invite queue management
   Scenario: An admin can delete people from the queue
 
     Given an invitation request for "invitee@example.org"
-      And I am logged in as an admin
+      And I am logged in as a "policy_and_abuse" admin
     When I go to the manage invite queue page
       And I press "Delete"
     Then I should see "Request for invitee@example.org was removed from the queue."
@@ -52,7 +49,7 @@ Feature: Invite queue management
     When I am on the homepage
       And all emails have been delivered
       And I follow "Get an Invitation"
-    Then I should see "We are sending out 10 invitations per day."
+    Then I should see "We are sending out 10 invitations every 12 hours."
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
     Then I should see "You've been added to our queue"
@@ -60,7 +57,7 @@ Feature: Invite queue management
     # check your place in the queue - invalid address
     When I check how long "testttt@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Request Status"
-      And I should see "If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
+      And I should see "Sorry, we can't find the email address you entered."
       And I should not see "You are currently number"
 
     # check your place in the queue - correct address
@@ -75,6 +72,7 @@ Feature: Invite queue management
     Then I should not see "Request an invitation"
       And I should not see "invite_request_email"
       And I should see "New invitation requests are currently closed."
+      And I should see "There are 0 people remaining on the waiting list."
       And I should not see "Add me to the list"
 
   Scenario: Can still check status when queue is off
@@ -97,28 +95,30 @@ Feature: Invite queue management
       And I follow "Get an Invitation"
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
-      And the check_queue rake task is run
+      And the scheduled check_invite_queue job is run
     Then 1 email should be delivered to test@archiveofourown.org
     When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Request Status"
-      And I should see "If you can't find it, your invitation may have already been emailed to that address;"
+      And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
 
     # invite can be used
     When I am logged in as an admin
       And I follow "Invitations"
       And I fill in "track_invitation_invitee_email" with "test@archiveofourown.org"
-      And I press "Go"
-    Then I should see "Sender queue"
-    When I follow "copy and use"
+      And I press "Search" within "form.invitation.simple.search"
+      And I follow "Copy and use"
     Then I should see "You are already logged in!"
 
     # user uses email invite
     Given I am a visitor
     # "You've" removed from test due to escaping on apostrophes
-    Then the email should contain "been invited to join our beta!"
+    Then the email should contain "been invited to join the Archive of Our Own"
       And the email should contain "fanart"
       And the email should contain "podfic"
-    When I click the first link in the email
+      And the email should contain "If you do not receive this email after 48 hours"
+      And the email should contain "With an account, you can post fanworks"
+
+    When I follow "follow this link to sign up" in the email
       And I fill in the sign up form with valid data
       And I fill in the following:
         | user_registration_login                 | newuser                  |
@@ -155,3 +155,29 @@ Feature: Invite queue management
       And I fill in "invite_request_email" with "fred@bedrock.com"
       And I press "Add me to the list"
     Then I should see "Email is already being used by an account holder."
+
+  Scenario: Users can resend their invitation after enough time has passed
+    Given account creation is enabled
+      And the invitation queue is enabled
+      And account creation requires an invitation
+      And the invite_from_queue_at is yesterday
+      And an invitation request for "invitee@example.org"
+    When the scheduled check_invite_queue job is run
+    Then 1 email should be delivered to invitee@example.org
+
+    When I check how long "invitee@example.org" will have to wait in the invite request queue
+    Then I should see "Invitation Request Status"
+      And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
+      And I should not see "Because your invitation was sent more than 24 hours ago, you can have your invitation resent."
+      And I should not see "Resend Invitation"
+
+    When all emails have been delivered
+      And it is currently 25 hours from now
+      And I check how long "invitee@example.org" will have to wait in the invite request queue
+    Then I should see "Invitation Request Status"
+      And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
+      And I should see "Because your invitation was sent more than 24 hours ago, you can have your invitation resent."
+      And I should see "Resend Invitation"
+
+    When I press "Resend Invitation"
+    Then 1 email should be delivered to invitee@example.org

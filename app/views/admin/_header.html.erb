@@ -1,51 +1,82 @@
-<h3 class="landmark heading"><%= ts("Admin Navigation", key: "header") %></h3>
-<ul class="admin primary navigation actions" role="navigation">
-  <% if policy(User).can_manage_users? %>
+<nav aria-label="<%= t(".nav.label") %>">
+  <ul class="admin primary navigation actions">
+    <% if policy(User).can_manage_users? %>
+      <li class="dropdown">
+        <%= link_to t(".nav.users.manage"), admin_users_path %>
+        <ul class="menu">
+          <li><%= link_to t(".nav.users.search"), admin_users_path %></li>
+          <li><%= link_to t(".nav.users.email_search"), bulk_search_admin_users_path %></li>
+        </ul>
+      </li>
+    <% end %>
+
     <li class="dropdown">
-      <%= link_to ts("Manage Users", key: "header"), admin_users_path %>
-      <ul class="menu" role="menu">
-        <li><%= link_to ts("Find Users", key: "header"), admin_users_path %></li>
-        <li><%= link_to ts("Bulk Email Search", key: "header"), bulk_search_admin_users_path %></li>
+      <%= link_to t(".nav.invitations.invitations"), admin_invitations_path %>
+      <ul class="menu">
+        <li><%= link_to t(".nav.invitations.new"), admin_invitations_path %></li>
+        <li><%= link_to t(".nav.invitations.requests"), user_invite_requests_path %></li>
+        <% if policy(InviteRequest).can_manage? %>
+          <li><%= link_to t(".nav.invitations.queue"), manage_invite_requests_path %></li>
+        <% end %>
       </ul>
     </li>
-  <% end %>
+    <li class="dropdown">
+      <%= link_to t(".nav.posts.admin_posts"), admin_posts_path %>
+      <ul class="menu">
+        <li><%= link_to t(".nav.posts.news"), admin_posts_path %></li>
+        <% if policy(AdminPost).can_post? %>
+          <li><%= link_to t(".nav.posts.post_news"), new_admin_post_path %></li>
+        <% end %>
+        <% if policy(ArchiveFaq).translation_access? %>
+          <li><%= link_to t(".nav.posts.faqs"), archive_faqs_path %></li>
+        <% end %>
+        <% if policy(KnownIssue).admin_index? %>
+          <li><%= link_to t(".nav.posts.known_issues"), known_issues_path %></li>
+        <% end %>
+        <% if policy(:wrangling).new? %>
+          <li><%= link_to t(".nav.posts.wrangling_guidelines"), wrangling_guidelines_path %></li>
+        <% end %>
+      </ul>
+    </li>
+    <% if policy(AdminBlacklistedEmail).index? %>
+      <li><%= link_to t(".nav.banned_emails"), admin_blacklisted_emails_path %></li>
+    <% end %>
 
-  <li class="dropdown">
-    <%= link_to ts("Invitations", key: "header"), admin_invitations_path %>
-    <ul class="menu" role="menu">
-      <li><%= span_if_current ts("Invite New Users", key: "header"), admin_invitations_path %></li>
-      <li><%= span_if_current ts("Manage Requests", key: "header"), user_invite_requests_path %></li>
-      <li><%= span_if_current ts("Manage Queue", key: "header"), manage_invite_requests_path %></li>
-    </ul>
-  </li>
-  <li class="dropdown">
-    <%= link_to ts("Admin Posts", key: "header"), admin_posts_path %>
-    <ul class="menu" role="menu">
-      <li><%= span_if_current ts("AO3 News", key: "header"), admin_posts_path %></li>
-      <% if policy(AdminPost).can_post? %>
-        <li><%= span_if_current ts("Post AO3 News", key: "header"), new_admin_post_path %></li>
-      <% end %>
-      <li><%= span_if_current ts("Archive FAQ", key: "header"), archive_faqs_path %></li>
-      <li><%= span_if_current ts("Known Issues", key: "header"), known_issues_path %></li>
-      <li><%= span_if_current ts("Wrangling Guidelines", key: "header"), wrangling_guidelines_path %></li>
-    </ul>
-  </li>
-  <li><%= link_to ts("Blacklist", key: "header"), admin_blacklisted_emails_path %></li>
-  <li><%= link_to ts("Spam", key: "header"), admin_spam_index_path %></li>
-  <% if policy(AdminSetting).can_view_settings? %>
-    <li><%= link_to ts("Settings", key: "header"), admin_settings_path %></li>
-  <% end %>
-  <li><%= link_to ts("Banners", key: "header"), admin_banners_path %></li>
-  <li class="dropdown">
-    <%= link_to ts("Skins", key: "header"), admin_skins_path %>
-    <ul class="menu" role="menu">
-      <li><%= span_if_current ts("Approval Queue", key: "header"), admin_skins_path %></li>
-      <li><%= span_if_current ts("Approved Skins", key: "header"), index_approved_admin_skins_path %></li>
-      <li><%= span_if_current ts("Rejected Skins", key: "header"), index_rejected_admin_skins_path %></li>
-    </ul>
-  </li>
-  <li><%= link_to ts("Tag Wrangling", key: "header"), tag_wranglings_path %></li>
-  <li><%= link_to ts("Locales", key: "header"), locales_path %></li>
-  <li><%= link_to ts("Activities", key: "header"), admin_activities_path %></li>
-  <li><%= link_to ts("Manage API Tokens", key: "header"), admin_api_index_path %></li>
-</ul>
+    <% if policy(ModeratedWork).index? %>
+      <li><%= link_to t(".nav.spam"), admin_spam_index_path %></li>
+    <% end %>
+
+    <% if policy(AdminSetting).can_view_settings? %>
+      <li><%= link_to t(".nav.settings"), admin_settings_path %></li>
+    <% end %>
+
+    <% if policy(AdminBanner).index? %>
+      <li><%= link_to t(".nav.banners"), admin_banners_path %></li>
+    <% end %>
+
+    <% if policy(Skin).index? %>
+      <li class="dropdown">
+        <%= link_to t(".nav.skins.skins"), admin_skins_path %>
+        <ul class="menu">
+          <li><%= link_to t(".nav.skins.queue"), admin_skins_path %></li>
+          <li><%= link_to t(".nav.skins.approved"), index_approved_admin_skins_path %></li>
+          <li><%= link_to t(".nav.skins.rejected"), index_rejected_admin_skins_path %></li>
+        </ul>
+      </li>
+    <% end %>
+    <% if policy(:wrangling).full_access? %>
+      <li><%= link_to t(".nav.wrangling"), tag_wranglings_path %></li>
+    <% end %>
+    <% if policy(Locale).index? %>
+      <li><%= link_to t(".nav.locales"), locales_path %></li>
+    <% end %>
+
+    <% if policy(AdminActivity).index? %>
+      <li><%= link_to t(".nav.activities"), admin_activities_path %></li>
+    <% end %>
+
+    <% if policy(ApiKey).index? %>
+      <li><%= link_to t(".nav.api_tokens"), admin_api_index_path %></li>
+    <% end %>
+  </ul>
+</nav>

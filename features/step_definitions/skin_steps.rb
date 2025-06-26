@@ -9,6 +9,11 @@ Given /^basic skins$/ do
   assert WorkSkin.basic_formatting
 end
 
+Given "the skin {string} by {string}" do |skin_name, login|
+  user = ensure_user(login)
+  FactoryBot.create(:skin, title: skin_name, author_id: user.id)
+end
+
 Given /^I set up the skin "([^"]*)"$/ do |skin_name|
   visit new_skin_path
   fill_in("Title", with: skin_name)
@@ -45,6 +50,10 @@ Given /^I edit the skin "([^"]*)"$/ do |skin_name|
 end
 
 Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
+  # Delay to make sure all skins have at least 1 second of separation in their
+  # creation dates, so that they will be listed in the right order:
+  step "it is currently 1 second from now"
+
   step %{I am logged in as "skinner"}
   step %{I set up the skin "#{skin_name}" with css "#{css}"}
   attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
@@ -58,14 +67,14 @@ Given /^the unapproved public skin "([^"]*)"$/ do |skin_name|
 end
 
 Given /^I approve the skin "([^"]*)"$/ do |skin_name|
-  step "I am logged in as an admin"
+  step %{I am logged in as a "superadmin" admin}
   visit admin_skins_url
   check("make_official_#{skin_name.downcase.gsub(/\s/, '_')}")
   step %{I submit}
 end
 
 Given /^I unapprove the skin "([^"]*)"$/ do |skin_name|
-  step "I am logged in as an admin"
+  step %{I am logged in as a "superadmin" admin}
   visit admin_skins_url
   step "I follow \"Approved Skins\""
   check("make_unofficial_#{skin_name.downcase.gsub(/\s/, '_')}")
@@ -76,15 +85,22 @@ Given /^I have loaded site skins$/ do
   Skin.load_site_css
 end
 
-Given /^the approved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
-  step "the unapproved public skin \"#{skin_name}\" with css \"#{css}\""
-  step "I am logged in as an admin"
-  step "I approve the skin \"#{skin_name}\""
+Given "the approved public skin {string} with css {string}" do |skin_name, css|
+  step %{the unapproved public skin "#{skin_name}" with css "#{css}"}
+  step %{I approve the skin "#{skin_name}"}
   step "I am logged out"
 end
 
 Given /^the approved public skin "([^"]*)"$/ do |skin_name|
   step "the approved public skin \"#{skin_name}\" with css #{DEFAULT_CSS}"
+end
+
+Given "the approved public skin {string} has reserved words in the title" do |skin_name|
+  # Admins can't create skins, so we have to create it this way.
+  FactoryBot.build(:skin, title: skin_name, public: true).save!(validate: false)
+
+  step %{I approve the skin "#{skin_name}"}
+  step "I am logged out"
 end
 
 Given /^"([^"]*)" is using the approved public skin "([^"]*)" with css "([^"]*)"$/ do |login, skin_name, css|
@@ -113,7 +129,7 @@ end
 ### WHEN
 
 When /^I change my skin to "([^\"]*)"$/ do |skin_name|
-  step "I am on my user page"
+  step %{I follow "My Dashboard"}
     step %{I follow "Preferences"}
     step %{I select "#{skin_name}" from "preference_skin_id"}
     step %{I submit}
@@ -178,28 +194,40 @@ end
 
 ### THEN
 
-Then /^the page should have the cached skin "([^"]*)"$/ do |skin_name|
+Then "I should see a parent skin text field" do
+  step %{I should see "Parent #"}
+end
+
+Then "I should see {string} in the page style" do |css|
+  expect(page).to have_css("style", text: css, visible: false)
+end
+
+Then "I should not see {string} in the page style" do |css|
+  expect(page).not_to have_css("style", text: css, visible: false)
+end
+
+Then "the page should have the cached skin {string}" do |skin_name|
   skin = Skin.find_by(title: skin_name)
-  page.should have_xpath("//link[contains(@href, '#{skin.skin_dirname}')]")
+  expect(page).to have_css("link[href*='#{skin.skin_dirname}']", visible: false)
 end
 
-Then /^the page should not have the cached skin "([^"]*)"$/ do |skin_name|
+Then "the page should not have the cached skin {string}" do |skin_name|
   skin = Skin.find_by(title: skin_name)
-  page.should_not have_xpath("//link[contains(@href, '#{skin.skin_dirname}')]")
+  expect(page).not_to have_css("link[href*='#{skin.skin_dirname}']", visible: false)
 end
 
-Then /^I should see a pink header$/ do
-  step %{I should see "#header .primary" within "style"}
-  step %{I should see "background-image: none; background-color: pink;" within "style"}
+Then "I should see a pink header" do
+  step %{I should see "#header .primary" in the page style}
+  step %{I should see "background-image: none; background-color: pink;" in the page style}
 end
 
-Then /^I should see a different accent color$/ do
-  step %{I should see "fieldset, form dl, fieldset dl dl" within "style"}
-  step %{I should see "background: blue; border-color: blue;" within "style"}
+Then "I should see a different accent color" do
+  step %{I should see "fieldset, form dl, fieldset dl dl" in the page style}
+  step %{I should see "background: blue; border-color: blue;" in the page style}
 end
 
-Then /^the page should have a skin with the media query "([^"]*)"$/ do |query|
-  page.should have_xpath("//style[@media='#{query}']")
+Then "the page should have a skin with the media query {string}" do |query|
+  expect(page).to have_css("style[media='#{query}']", visible: false)
 end
 
 Then /^the cache of the skin on "([^\"]*)" should expire after I save the skin$/ do |title|
@@ -232,18 +260,18 @@ Then(/^the cache of the skin on "(.*?)" should expire after I save a parent skin
   assert orig_skin_version != skin_cache_version(skin), "Cache version #{orig_skin_version} matches #{skin_cache_version(skin)}"
 end
 
-Then /^I should see a purple logo$/ do
-  page.should have_xpath('//style', text: "#header .heading a { color: purple; }")
+Then "I should see a purple logo" do
+  step %|I should see "#header .heading a { color: purple; }" in the page style|
 end
 
 Then /^I should see the skin "(.*?)" in the skin chooser$/ do |skin|
-  with_scope("#skin_chooser") do
+  with_scope("#footer .menu") do
     expect(page).to have_content(skin)
   end
 end
 
 Then /^I should not see the skin chooser$/ do
-  expect(page).not_to have_css("#skin_chooser")
+  expect(page).not_to have_content("Customize")
 end
 
 Then /^the filesystem cache of the skin "(.*?)" should include "(.*?)"$/ do |title, contents|

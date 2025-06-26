@@ -5,7 +5,7 @@ class TagSetNominationsController < ApplicationController
   before_action :load_tag_set, except: [ :index ]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :load_nomination, only: [:show, :edit, :update, :destroy, :confirm_delete]
-  before_action :set_limit, only: [:new, :edit, :show, :create, :update, :review]
+  before_action :set_limit, only: [:new, :edit, :show, :create, :update]
 
   def check_pseud_ownership
     if !tag_set_nomination_params[:pseud_id].blank?
@@ -26,7 +26,7 @@ class TagSetNominationsController < ApplicationController
   end
 
   def load_nomination
-    @tag_set_nomination = TagSetNomination.find_by_id(params[:id])
+    @tag_set_nomination = @tag_set.tag_set_nominations.find_by(id: params[:id])
     unless @tag_set_nomination
       flash[:error] = ts("Which nominations did you want to work with?")
       redirect_to tag_set_path(@tag_set) and return
@@ -99,7 +99,7 @@ class TagSetNominationsController < ApplicationController
   end
 
   def create
-    @tag_set_nomination = TagSetNomination.new(tag_set_nomination_params)
+    @tag_set_nomination = @tag_set.tag_set_nominations.build(tag_set_nomination_params)
     if @tag_set_nomination.save
       flash[:notice] = ts('Your nominations were successfully submitted.')
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
@@ -111,7 +111,7 @@ class TagSetNominationsController < ApplicationController
 
 
   def update
-    if @tag_set_nomination.update_attributes(tag_set_nomination_params)
+    if @tag_set_nomination.update(tag_set_nomination_params)
       flash[:notice] = ts("Your nominations were successfully updated.")
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
@@ -139,6 +139,10 @@ class TagSetNominationsController < ApplicationController
   # set up various variables for reviewing nominations
   def setup_for_review
     set_limit
+
+    # Only this amount of tag nominations is shown on the review page.
+    # If there are more (more_noms == true), moderators have to approve/reject from the shown noms to see more noms.
+    # TODO: AO3-3764 Show all tag set nominations
     @nom_limit = 30
     @nominations = HashWithIndifferentAccess.new
     @nominations_count = HashWithIndifferentAccess.new
@@ -147,7 +151,8 @@ class TagSetNominationsController < ApplicationController
     if @tag_set.includes_fandoms?
       # all char and rel tags happen under fandom noms
       @nominations_count[:fandom] = @tag_set.fandom_nominations.unreviewed.count
-      more_noms = true if  @nominations_count[:fandom] > @nom_limit
+      more_noms = true if @nominations_count[:fandom] > @nom_limit
+      # Show a random selection of nominations if there are more noms than can be shown at once
       @nominations[:fandom] = more_noms ? base_nom_query("fandom").random_order : base_nom_query("fandom").order(:tagname)
       if (@limit[:character] > 0 || @limit[:relationship] > 0)
         @nominations[:cast] = base_nom_query(%w(character relationship)).
@@ -162,7 +167,7 @@ class TagSetNominationsController < ApplicationController
       more_noms = true if (@tag_set.character_nominations.unreviewed.count > @nom_limit || @tag_set.relationship_nominations.unreviewed.count > @nom_limit)
       @nominations[:character] = base_nom_query("character") if @limit[:character] > 0
       @nominations[:relationship] = base_nom_query("relationship") if @limit[:relationship] > 0
-      if more_noms
+      if more_noms # Show a random selection of nominations if there are more noms than can be shown at once
         parent_tagnames = TagNomination.for_tag_set(@tag_set).unreviewed.random_order.limit(100).pluck(:parent_tagname).uniq.first(30)
         @nominations[:character] = @nominations[:character].where(parent_tagname: parent_tagnames) if @limit[:character] > 0
         @nominations[:relationship] = @nominations[:relationship].where(parent_tagname: parent_tagnames) if @limit[:relationship] > 0
@@ -172,6 +177,7 @@ class TagSetNominationsController < ApplicationController
     end
     @nominations_count[:freeform] =  @tag_set.freeform_nominations.unreviewed.count
     more_noms = true if @nominations_count[:freeform] > @nom_limit
+    # Show a random selection of nominations if there are more noms than can be shown at once
     @nominations[:freeform] = (more_noms ? base_nom_query("freeform").random_order : base_nom_query("freeform").order(:tagname)) unless @limit[:freeform].zero?
 
     if more_noms
@@ -312,10 +318,10 @@ class TagSetNominationsController < ApplicationController
             # this is the tricky one: make sure we can do this name change
             tagnom = TagNomination.for_tag_set(@tag_set).where(type: "#{type.classify}Nomination", tagname: name).first
             if !tagnom
-              @errors << ts("Couldn't find a #{type} nomination for #{name}")
+              @errors << ts("Couldn't find a #{type} nomination for %{name}", name: name)
               @force_expand[type] = true
             elsif !tagnom.change_tagname?(val)
-              @errors << ts("Invalid name change for #{name} to #{val}: %{msg}", msg: tagnom.errors.full_messages.join(', '))
+              @errors << ts("Invalid name change for %{name} to %{val}: %{msg}", name: name, val: val, msg: tagnom.errors.full_messages.join(", "))
               @force_expand[type] = true
             elsif action == "synonym"
               @synonym[type] << val
@@ -340,7 +346,6 @@ class TagSetNominationsController < ApplicationController
   def tag_set_nomination_params
     params.require(:tag_set_nomination).permit(
       :pseud_id,
-      :owned_tag_set_id,
       fandom_nominations_attributes: [
         :id,
         :tagname,

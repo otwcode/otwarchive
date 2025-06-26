@@ -11,7 +11,7 @@ class BookmarkIndexer < Indexer
     unless options[:skip_delete]
       options[:skip_delete] = true
       BookmarkableIndexer.delete_index
-      BookmarkableIndexer.create_index(shards: 18)
+      BookmarkableIndexer.create_index(shards: ArchiveConfig.BOOKMARKABLE_SHARDS)
       create_mapping
     end
     BookmarkedExternalWorkIndexer.index_all(skip_delete: true)
@@ -22,36 +22,37 @@ class BookmarkIndexer < Indexer
 
   def self.mapping
     {
-      "bookmark" => {
-        "properties" => {
-          "bookmarkable_join" => {
-            "type" => "join",
-            "relations" => {
-              "bookmarkable" => "bookmark"
-            }
-          },
-          "title" => {
-            "type" => "text",
-            "analyzer" => "simple"
-          },
-          "creators" => {
-            "type" => "text",
-            "analyzer" => "simple"
-          },
-          "work_types" => {
-            "type" => "keyword"
-          },
-          "bookmarkable_type" => {
-            "type" => "keyword"
-          },
-          "bookmarker" => {
-            type: "text",
-            analyzer: "simple"
-          },
-          "tag" => {
-            "type" => "text",
-            "analyzer" => "simple"
+      properties: {
+        bookmarkable_join: {
+          type: "join",
+          relations: {
+            bookmarkable: "bookmark"
           }
+        },
+        title: {
+          type: "text",
+          analyzer: "simple"
+        },
+        creators: {
+          type: "text",
+          analyzer: "standard"
+        },
+        work_types: {
+          type: "keyword"
+        },
+        bookmarkable_type: {
+          type: "keyword"
+        },
+        bookmarker: {
+          type: "text",
+          analyzer: "standard"
+        },
+        tag: {
+          type: "text",
+          analyzer: "simple"
+        },
+        sort_id: {
+          type: "keyword"
         }
       }
     }
@@ -65,7 +66,6 @@ class BookmarkIndexer < Indexer
     object = objects[id.to_i]
     {
       "_index" => index_name,
-      "_type" => document_type,
       "_id" => id,
       "routing" => parent_id(id, object)
     }
@@ -84,7 +84,7 @@ class BookmarkIndexer < Indexer
     json_object = object.as_json(
       root: false,
       only: [
-        :id, :created_at, :bookmarkable_type, :bookmarkable_id, :user_id,
+        :id, :created_at, :bookmarkable_type, :bookmarkable_id,
         :private, :updated_at, :hidden_by_admin, :pseud_id, :rec
       ],
       methods: [:bookmarker, :collection_ids, :with_notes, :bookmarkable_date]

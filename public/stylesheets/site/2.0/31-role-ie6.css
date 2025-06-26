@@ -49,10 +49,6 @@ h1, h2, h3, h4, h5, h6, #header .navigation a {
   font-weight: bold;
 }
 
-#header .primary .current {
-  background: #fff;
-}
-
 /*ie6 links not buttons */
 
 .actions a:hover {

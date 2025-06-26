@@ -18,9 +18,19 @@ module CssCleaner
   SHAPE_NAME_REGEX = Regexp.new('rect', Regexp::IGNORECASE)
   SHAPE_FUNCTION_REGEX = Regexp.new("#{SHAPE_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
 
-  RGBA_REGEX = Regexp.new('rgba?' + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
-  COLOR_REGEX = Regexp.new('#[0-9a-f]{3,6}|' + ALPHA_REGEX.to_s + '|' + RGBA_REGEX.to_s)
+  RGBA_REGEX = Regexp.new("rgba?" + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
+  HSLA_REGEX = Regexp.new("hsla?" + PAREN_NUMBER_REGEX.to_s, Regexp::IGNORECASE)
+  COLOR_REGEX = Regexp.new("#[0-9a-f]{3,6}|" + ALPHA_REGEX.to_s + "|" + RGBA_REGEX.to_s + "|" + HSLA_REGEX.to_s)
   COLOR_STOP_FUNCTION_REGEX = Regexp.new('color-stop\s*\(' + NUMBER_WITH_UNIT_REGEX.to_s + '\s*\,?\s*' + COLOR_REGEX.to_s + '\s*\)', Regexp::IGNORECASE)
+  
+  # list of filter functions can be found at https://developer.mozilla.org/en-US/docs/Web/CSS/filter#syntax
+  FILTER_NAME_REGEX = Regexp.new("blur|brightness|contrast|grayscale|hue-rotate|invert|opacity|saturate|sepia", Regexp::IGNORECASE)
+  FILTER_FUNCTION_REGEX = Regexp.new("#{FILTER_NAME_REGEX}#{PAREN_NUMBER_REGEX}")
+
+  # drop-shadow can take multiple values, which are a mix of numbers and colors
+  DROP_SHADOW_NAME_REGEX = Regexp.new("drop-shadow", Regexp::IGNORECASE)
+  DROP_SHADOW_VALUE_REGEX = Regexp.new("\\(\\s*(#{NUMBER_WITH_UNIT_REGEX}|#{COLOR_REGEX}\\s*)+\\s*\\)")
+  DROP_SHADOW_FUNCTION_REGEX = Regexp.new("#{DROP_SHADOW_NAME_REGEX}#{DROP_SHADOW_VALUE_REGEX}")
 
   # from the ICANN list at http://www.icann.org/en/registries/top-level-domains.htm
   TOP_LEVEL_DOMAINS = %w(ac ad ae aero af ag ai al am an ao aq ar arpa as asia at au aw ax az ba bb bd be bf bg bh bi biz bj bm bn bo br bs bt bv bw by bz ca cat cc cd cf cg ch ci ck cl cm cn co com coop cr cu cv cx cy cz de dj dk dm do dz ec edu ee eg er es et eu fi fj fk fm fo fr ga gb gd ge gf gg gh gi gl gm gn gov gp gq gr gs gt gu gw gy hk hm hn hr ht hu id ie il im in info int io iq ir is it je jm jo jobs jp ke kg kh ki km kn kp kr kw ky kz la lb lc li lk lr ls lt lu lv ly ma mc md me mg mh mil mk ml mm mn mo mobi mp mq mr ms mt mu museum mv mw mx my mz na name nc ne net nf ng ni nl no np nr nu nz om org pa pe pf pg ph pk pl pm pn pr pro ps pt pw py qa re ro rs ru rw sa sb sc sd se sg sh si sj sk sl sm sn so sr st su sv sy sz tc td tel tf tg th tj tk tl tm tn to tp tr travel tt tv tw tz ua ug uk us uy uz va vc ve vg vi vn vu wf ws xn xxx ye yt za zm zw)
@@ -30,7 +40,7 @@ module CssCleaner
   URL_REGEX = Regexp.new(URI_REGEX.to_s + '|"' + URI_REGEX.to_s + '"|\'' + URI_REGEX.to_s + '\'')
   URL_FUNCTION_REGEX = Regexp.new('url\(\s*' + URL_REGEX.to_s + '\s*\)')
 
-  VALUE_REGEX = Regexp.new("#{TRANSFORM_FUNCTION_REGEX}|#{URL_FUNCTION_REGEX}|#{COLOR_STOP_FUNCTION_REGEX}|#{COLOR_REGEX}|#{NUMBER_WITH_UNIT_REGEX}|#{ALPHA_REGEX}|#{SHAPE_FUNCTION_REGEX}")
+  VALUE_REGEX = Regexp.new("#{TRANSFORM_FUNCTION_REGEX}|#{URL_FUNCTION_REGEX}|#{COLOR_STOP_FUNCTION_REGEX}|#{COLOR_REGEX}|#{NUMBER_WITH_UNIT_REGEX}|#{ALPHA_REGEX}|#{SHAPE_FUNCTION_REGEX}|#{FILTER_FUNCTION_REGEX}|#{DROP_SHADOW_FUNCTION_REGEX}")
 
 
   # For use in ActiveRecord models
@@ -62,17 +72,17 @@ module CssCleaner
         clean_declarations = ""
         rs.each_declaration do |property, value, is_important|
           if property.blank? || value.blank?
-            errors.add(:base, ts("The code for #{rs.selectors.join(',')} doesn't seem to be a valid CSS rule."))
+            errors.add(:base, ts("The code for %{selectors} doesn't seem to be a valid CSS rule.", selectors: rs.selectors.join(",")))
           elsif sanitize_css_property(property).blank?
-            errors.add(:base, ts("We don't currently allow the CSS property #{property} -- please notify support if you think this is an error."))
+            errors.add(:base, ts("We don't currently allow the CSS property %{property} -- please notify support if you think this is an error.", property: property))
           elsif (cleanval = sanitize_css_declaration_value(property, value)).blank?
-            errors.add(:base, ts("The #{property} property in #{rs.selectors.join(', ')} cannot have the value #{value}, sorry!"))
+            errors.add(:base, ts("The %{property} property in %{selectors} cannot have the value %{value}, sorry!", property: property, selectors: rs.selectors.join(", "), value: value))
           elsif (!caller_check || caller_check.call(rs, property, value))
             clean_declarations += "  #{property}: #{cleanval}#{is_important ? ' !important' : ''};\n"
           end
         end
         if clean_declarations.blank?
-          errors.add(:base, ts("There don't seem to be any rules for #{rs.selectors.join(',')}"))
+          errors.add(:base, ts("There don't seem to be any rules for %{selectors}", selectors: rs.selectors.join(",")))
         else
           # everything looks ok, add it to the css
           clean_css += "#{selectors.join(",\n")} {\n"
@@ -104,7 +114,7 @@ module CssCleaner
   #   empty property returned.
   def sanitize_css_declaration_value(property, value)
     clean = ""
-    property.downcase!
+    property = property.downcase
     if property == "font-family"
       if !sanitize_css_font(value).blank?
         # preserve the original capitalization
@@ -217,7 +227,7 @@ module CssCleaner
     return value if value =~ /^\"([^\"]*)\"$/
 
     # or a valid img url
-    return value if value.match(URL_FUNCTION_REGEX)
+    return value if value.match(Regexp.new("^#{URL_FUNCTION_REGEX}$"))
 
     # or "none"
     return value if value == "none"

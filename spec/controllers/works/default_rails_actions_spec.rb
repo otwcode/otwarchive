@@ -5,6 +5,22 @@ describe WorksController, work_search: true do
   include LoginMacros
   include RedirectExpectationHelper
 
+  let(:banned_user) { create(:user, banned: true) }
+  let(:banned_users_work) do
+    banned_user.update!(banned: false)
+    work = create(:work, authors: [banned_user.pseuds.first])
+    banned_user.update!(banned: true)
+    work
+  end
+
+  let(:suspended_user) { create(:user, suspended: true, suspended_until: 1.week.from_now) }
+  let(:suspended_users_work) do
+    suspended_user.update!(suspended: false, suspended_until: nil)
+    work = create(:work, authors: [suspended_user.pseuds.first])
+    suspended_user.update!(suspended: true, suspended_until: 1.week.from_now)
+    work
+  end
+  
   describe "before_action #clean_work_search_params" do
     let(:params) { {} }
 
@@ -79,7 +95,7 @@ describe WorksController, work_search: true do
           { query: "sort by: word count", expected: "word_count" },
           { query: "sort by: words", expected: "word_count" },
           { query: "sort by: word", expected: "word_count" },
-          { query: "sort by: author", expected: "authors_to_sort_on" },
+          { query: "sort by: creator", expected: "authors_to_sort_on" },
           { query: "sort by: title", expected: "title_to_sort_on" },
           { query: "sort by: date", expected: "created_at" },
           { query: "sort by: date posted", expected: "created_at" },
@@ -174,13 +190,19 @@ describe WorksController, work_search: true do
       get :new
       expect(response).to render_template("new")
     end
+
+    it "errors and redirects to user page when user is banned" do
+      fake_login_known_user(banned_user)
+      get :new
+      it_redirects_to_simple(user_path(banned_user))
+      expect(flash[:error]).to include("Your account has been banned.")
+    end
   end
 
   describe "create" do
-    before do
-      @user = create(:user)
-      fake_login_known_user(@user)
-    end
+    let(:user) { create(:user) }
+
+    before { fake_login_known_user(user) }
 
     it "doesn't allow a user to create a work in a series that they don't own" do
       @series = create(:series)
@@ -195,9 +217,9 @@ describe WorksController, work_search: true do
     end
 
     it "doesn't allow a user to submit only a pseud that is not theirs" do
-      @user2 = create(:user)
+      user2 = create(:user)
       work_attributes = attributes_for(:work).except(:posted)
-      work_attributes[:author_attributes] = { ids: [@user2.pseuds.first.id] }
+      work_attributes[:author_attributes] = { ids: [user2.pseuds.first.id] }
       expect {
         post :create, params: { work: work_attributes }
       }.to_not change(Work, :count)
@@ -208,7 +230,7 @@ describe WorksController, work_search: true do
 
     it "renders new if the work has invalid pseuds" do
       work_attributes = attributes_for(:work).except(:posted)
-      work_attributes[:author_attributes] = { ids: @user.pseud_ids,
+      work_attributes[:author_attributes] = { ids: user.pseud_ids,
                                               byline: "*impossible*" }
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
@@ -220,7 +242,7 @@ describe WorksController, work_search: true do
       create(:pseud, name: "ambiguous")
       create(:pseud, name: "ambiguous")
       work_attributes = attributes_for(:work).except(:posted)
-      work_attributes[:author_attributes] = { ids: @user.pseud_ids,
+      work_attributes[:author_attributes] = { ids: user.pseud_ids,
                                               byline: "ambiguous" }
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
@@ -233,7 +255,7 @@ describe WorksController, work_search: true do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-        include "Please add all required tags. Warning is missing."
+        include /Only canonical warning tags are allowed./
     end
 
     it "renders new if the work has noncanonical rating" do
@@ -241,7 +263,41 @@ describe WorksController, work_search: true do
       post :create, params: { work: work_attributes }
       expect(response).to render_template("new")
       expect(assigns[:work].errors.full_messages).to \
-        include "Please add all required tags."
+        include /Only canonical rating tags are allowed./
+    end
+
+    it "renders new if the work has noncanonical category" do
+      work_attributes = attributes_for(:work).except(:posted).merge(category_strings: ["Category"])
+      post :create, params: { work: work_attributes }
+      expect(response).to render_template("new")
+      expect(assigns[:work].errors.full_messages).to \
+        include /Only canonical category tags are allowed./
+    end
+
+    context "as a tag wrangler" do
+      let(:user) { create(:tag_wrangler) }
+
+      it "does not set wrangling activity when posting with a new fandom" do
+        work_attributes = attributes_for(:work).except(:posted, :fandom_string).merge(fandom_string: "New Fandom")
+        post :create, params: { work: work_attributes }
+        expect(user.last_wrangling_activity).to be_nil
+      end
+
+      it "does not set wrangling activity when posting with an unsorted tag" do
+        tag = create(:unsorted_tag)
+        work_attributes = attributes_for(:work).except(:posted, :freeform_string).merge(freeform_string: tag.name)
+        post :create, params: { work: work_attributes }
+        expect(user.last_wrangling_activity).to be_nil
+      end
+    end
+
+    it "errors and redirects to user page when user is banned" do
+      fake_login_known_user(banned_user)
+      tag = create(:unsorted_tag)
+      work_attributes = attributes_for(:work).except(:posted, :freeform_string).merge(freeform_string: tag.name)
+      post :create, params: { work: work_attributes }
+      it_redirects_to_simple(user_path(banned_user))
+      expect(flash[:error]).to include("Your account has been banned.")
     end
   end
 
@@ -249,12 +305,28 @@ describe WorksController, work_search: true do
     let(:work) { create(:work) }
 
     it "doesn't error when a work has no fandoms" do
-      work_no_fandoms = create(:work, fandoms: [])
+      work_no_fandoms = build(:work, fandom_string: "")
+      work_no_fandoms.save!(validate: false)
       fake_login
 
       get :show, params: { id: work_no_fandoms.id }
 
       expect(assigns(:page_title)).to include "No fandom specified"
+    end
+
+    it "assigns @page_subtitle with unrevealed work and not @page_title" do
+      work.update!(in_unrevealed_collection: true)
+      get :show, params: { id: work.id }
+      expect(assigns[:page_subtitle]).to eq("Mystery Work")
+      expect(assigns[:page_title]).to be_nil
+    end
+
+    context "when work does not exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "999999999" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
     end
   end
 
@@ -291,6 +363,22 @@ describe WorksController, work_search: true do
       params = { fandom_id: @fandom.id }
       get :index, params: params
       expect(assigns(:fandom)).to eq(@fandom)
+    end
+
+    describe "when the fandom id is invalid" do
+      it "raises a 404 for an invalid id" do
+        params = { fandom_id: 0 }
+        expect { get :index, params: params }
+          .to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    describe "when the fandom id is empty" do
+      it "returns the work" do
+        params = { fandom_id: nil }
+        get :index, params: params
+        expect(assigns(:works)).to include(@work)
+      end
     end
 
     describe "without caching" do
@@ -483,7 +571,7 @@ describe WorksController, work_search: true do
 
     it "allows the user to invite co-creators" do
       co_creator = create(:user)
-      co_creator.preference.update(allow_cocreator: true)
+      co_creator.preference.update!(allow_cocreator: true)
       put :update, params: { id: update_work.id, work: { author_attributes: { byline: co_creator.login } } }
       expect(update_work.pseuds.reload).not_to include(co_creator.default_pseud)
       expect(update_work.user_has_creator_invite?(co_creator)).to be_truthy
@@ -491,13 +579,101 @@ describe WorksController, work_search: true do
 
     it "prevents inviting users who have disallowed co-creators" do
       no_co_creator = create(:user)
-      no_co_creator.preference.update(allow_cocreator: false)
+      no_co_creator.preference.update!(allow_cocreator: false)
       put :update, params: { id: update_work.id, work: { author_attributes: { byline: no_co_creator.login } } }
       expect(response).to render_template :edit
       expect(assigns[:work].errors.full_messages).to \
         include "Invalid creator: #{no_co_creator.login} does not allow others to invite them to be a co-creator."
       expect(update_work.pseuds.reload).not_to include(no_co_creator.default_pseud)
       expect(update_work.user_has_creator_invite?(no_co_creator)).to be_falsey
+    end
+
+    context "when the work has broken dates" do
+      let(:update_work) { create(:work, authors: [update_user.default_pseud]) }
+      let(:update_chapter) { update_work.first_chapter }
+
+      let(:attributes) do
+        {
+          backdate: "1",
+          chapter_attributes: {
+            published_at: "2021-09-01"
+          }
+        }
+      end
+
+      before do
+        # Work where chapter published_at did not override revised_at, times
+        # taken from AO3-5392
+        update_work.update_column(:revised_at, Time.new(2018, 4, 22, 23, 51, 42, "+04:00"))
+        update_chapter.update_column(:published_at, Date.new(2015, 7, 23))
+      end
+
+      it "can be backdated" do
+        put :update, params: { id: update_work.id, work: attributes }
+
+        expect(update_chapter.reload.published_at).to eq(Date.new(2021, 9, 1))
+        expect(update_work.reload.revised_at).to eq(Time.utc(2021, 9, 1, 12)) # noon UTC
+      end
+    end
+
+    # If the time zone in config/application.rb is changed to something other
+    # than the default (UTC), these tests will need adjusting:
+    context "when redating to the present" do
+      let!(:update_work) do
+        # November 30, 2 PM UTC -- no time zone oddities here
+        travel_to(Time.utc(2021, 11, 30, 14)) do
+          create(:work, authors: [update_user.default_pseud])
+        end
+      end
+
+      let(:attributes) do
+        {
+          backdate: "1",
+          chapter_attributes: {
+            published_at: "2021-12-05"
+          }
+        }
+      end
+
+      before do
+        travel_to(redate_time)
+
+        # Simulate the system time being UTC:
+        allow(Time).to receive(:now).and_return(redate_time)
+        allow(DateTime).to receive(:now).and_return(redate_time)
+        allow(Date).to receive(:today).and_return(redate_time.to_date)
+
+        put :update, params: { id: update_work.id, work: attributes }
+      end
+
+      context "before midnight UTC and after midnight Samara" do
+        # December 5, 3 AM Europe/Samara (UTC+04:00) -- still December 4 in UTC
+        let(:redate_time) { Time.new(2021, 12, 5, 3, 0, 0, "+04:00") }
+
+        it "prevents setting the publication date to the future" do
+          expect(response).to render_template :edit
+          expect(assigns[:work].errors.full_messages).to \
+            include("Publication date can't be in the future.")
+        end
+      end
+
+      context "before noon UTC" do
+        # December 5, 6 AM Europe/Samara -- before noon, but after midnight in both time zones
+        let(:redate_time) { Time.new(2021, 12, 5, 6, 0, 0, "+04:00") }
+
+        it "doesn't set revised_at to the future" do
+          update_work.reload
+          expect(update_work.revised_at).to be <= Time.current
+        end
+      end
+    end
+
+    it "errors and redirects to user page when user is banned" do
+      fake_login_known_user(banned_user)
+      attrs = { title: "New Work Title" }
+      put :update, params: { id: banned_users_work.id, work: attrs }
+      it_redirects_to_simple(user_path(banned_user))
+      expect(flash[:error]).to include("Your account has been banned.")
     end
   end
 
@@ -635,15 +811,129 @@ describe WorksController, work_search: true do
 
       before { run_all_indexing_jobs }
 
-      it "returns unrevealed works in collections for guests" do
+      it "doesn't return unrevealed works in collections for guests" do
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work)
+        expect(assigns(:works)).not_to include(unrevealed_work)
+      end
+
+      it "doesn't return unrevealed works in collections for logged-in users" do
+        fake_login
+        get :collected, params: { user_id: collected_user.login }
+        expect(assigns(:works)).to include(work)
+        expect(assigns(:works)).not_to include(unrevealed_work)
+      end
+
+      it "returns unrevealed works in collections for the author" do
+        fake_login_known_user(collected_user)
         get :collected, params: { user_id: collected_user.login }
         expect(assigns(:works)).to include(work, unrevealed_work)
       end
+    end
 
-      it "returns unrevealed works in collections for logged-in users" do
-        fake_login
+    context "with sorting options" do
+      let!(:new_work) do
+        create(:work,
+               title: "New Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 3.days.ago,
+               revised_at: 3.days.ago)
+      end
+
+      let!(:old_work) do
+        create(:work,
+               title: "Old Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 30.days.ago,
+               revised_at: 30.days.ago)
+      end
+
+      let!(:revised_work) do
+        create(:work,
+               title: "Revised Title",
+               authors: [collected_user.default_pseud],
+               collection_names: collection.name,
+               created_at: 20.days.ago,
+               revised_at: 2.days.ago)
+      end
+
+      before { run_all_indexing_jobs }
+
+      it "sorts by date" do
         get :collected, params: { user_id: collected_user.login }
-        expect(assigns(:works)).to include(work, unrevealed_work)
+        expect(assigns(:works).map(&:title)).to eq([revised_work, new_work, old_work].map(&:title))
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_direction: "asc" } }
+        expect(assigns(:works).map(&:title)).to eq([old_work, new_work, revised_work].map(&:title))
+      end
+
+      it "sorts by title" do
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_column: "title_to_sort_on" } }
+        expect(assigns(:works).map(&:title)).to eq([new_work, old_work, revised_work].map(&:title))
+        get :collected, params: { user_id: collected_user.login, work_search: { sort_column: "title_to_sort_on", sort_direction: "desc" } }
+        expect(assigns(:works).map(&:title)).to eq([revised_work, old_work, new_work].map(&:title))
+      end
+    end
+  end
+
+  describe "destroy" do
+    let(:work) { create(:work) }
+    let(:work_title) { work.title }
+
+    context "when a work has consecutive deleted comments in a thread" do
+      before do
+        thread_depth = 4
+        chapter = work.first_chapter
+
+        commentable = chapter
+        comments = []
+        thread_depth.times do
+          commentable = create(:comment, commentable: commentable, parent: chapter)
+          comments << commentable
+        end
+
+        # Delete all but the last comment in the thread.
+        # We should have (thread_depth - 1) consecutive deleted comment placeholders.
+        comments.reverse.drop(1).each(&:destroy_or_mark_deleted)
+
+        fake_login_known_user(work.users.first)
+      end
+
+      it "deletes the work and redirects to the user's works with a notice" do
+        delete :destroy, params: { id: work.id }
+
+        it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{work_title} was deleted.")
+        expect { work.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect(Comment.count).to eq(0)
+      end
+    end
+
+    context "when a logged in user is suspended" do
+      before do
+        fake_login_known_user(suspended_user)
+      end
+
+      it "errors and redirects to user page" do
+        fake_login_known_user(suspended_user)
+        delete :destroy, params: { id: suspended_users_work.id }
+        
+        it_redirects_to_simple(user_path(suspended_user))
+        expect(flash[:error]).to include("Your account has been suspended")
+      end
+    end
+
+    context "when a logged in user is banned" do
+      before do
+        fake_login_known_user(banned_user)
+      end
+
+      it "deletes the work and redirects to the user's works with a notice" do
+        delete :destroy, params: { id: banned_users_work.id }
+
+        it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{banned_users_work.title} was deleted.")
+        expect { banned_users_work.reload }
+          .to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
   end

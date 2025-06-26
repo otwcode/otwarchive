@@ -6,7 +6,6 @@
 <!--subnav-->
 <% unless @collection %>
   <ul class="navigation actions" role="navigation">
-    <li class="search"><%= render 'tags/search_form' %></li>
     <% if logged_in? %><li><%= link_to ts("Tag Sets"), tag_sets_path %></li><% end %>
     <li><%= span_if_current(ts('Most Popular'), tags_path, params[:show].blank?) %></li>
     <li><%= span_if_current ts('Random'), tags_path(:show => "random") %></li>
@@ -26,6 +25,19 @@
 <% end %>
 
 <% if @tags %>
+  <% if params[:show] == "random" %>
+    <% if @collection %>
+      <p><%= t(".about.random_in_collection") %></p>
+    <% else %>
+      <p><%= t(".about.random", search_tags_link: (link_to t(".search_tags"), search_tags_path)).html_safe %></p>
+    <% end %>
+  <% else %>
+    <% if @collection %>
+      <p><%= t(".about.popular_in_collection") %></p>
+    <% else %>
+      <p><%= t(".about.popular", search_tags_link: (link_to t(".search_tags"), search_tags_path)).html_safe %></p>
+    <% end %>
+  <% end %>
   <ul class="tags cloud index group">
     <!--FRONT END REVIEW: these classes are irregular-->
     <% tag_cloud @tags, %w(cloud1 cloud2 cloud3 cloud4 cloud5 cloud6 cloud7 cloud8) do |tag, css_class| %>

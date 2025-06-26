@@ -1,40 +1,62 @@
-<div id="dashboard" role="navigation region" class="tag wrangling region">
-  <ul class="navigation actions">
-    <% if current_user.is_a?(User) %>
-      <li><%= span_if_current(ts('Wrangling Home'), tag_wrangler_path(current_user)) %></li>
+<% if (logged_in_as_admin? && policy(:wrangling).read_access?) || current_user.try(:is_tag_wrangler?) || @counts %>
+  <div id="dashboard" role="navigation region" class="tag wrangling region">
+    <% if (logged_in_as_admin? && policy(:wrangling).read_access?) || current_user.try(:is_tag_wrangler?) %>
+      <ul class="navigation actions">
+        <% if current_user.is_a?(User) %>
+          <li><%= span_if_current(t(".wrangling_home"), tag_wrangler_path(current_user)) %></li>
+        <% end %>
+        <li><%= span_if_current(t(".wrangling_tools"), tag_wranglings_path, current_page?(tag_wranglings_path) && params[:show].blank?) %></li>
+        <% if policy(:wrangling).full_access? || current_user.try(:is_tag_wrangler?) %>
+          <li><%= span_if_current(t(".wranglers"), tag_wranglers_path) %></li>
+        <% end %>
+        <li><%= span_if_current(t(".search_tags"), search_tags_path) %></li>
+        <% if policy(:wrangling).full_access? || current_user.try(:is_tag_wrangler?) %>
+          <li><%= span_if_current(t(".new_tag"), new_tag_path) %></li>
+        <% end %>
+      </ul>
     <% end %>
-    <li><%= span_if_current(ts('Wrangling Tools'), tag_wranglings_path) %></li>
-    <li><%= span_if_current(ts('Wranglers'), tag_wranglers_path) %></li>
-    <li><%= span_if_current(ts('Discussion'), discuss_tag_wranglings_path) %></li>
-    <li><%= span_if_current(ts('Search Tags'), search_tags_path) %></li>
-    <li><%= span_if_current(ts('New Tag'), new_tag_path) %></li>
-  </ul>
 
-  <% if @counts %>
-    <ul class="navigation actions">
-      <% if @tag && @uses %>
-        <% @uses.each do |key| %>
-          <% if key == 'Works' || key == 'Bookmarks' %>
-            <li><%= span_if_current "#{key} (#{@counts[key]})", { controller: key.downcase.to_sym, action: :index, tag_id: @tag } %></li>
-          <% elsif key == 'External Works' %>
-            <li><%= span_if_current "#{key} (#{@counts[key]})", { controller: :bookmarks, action: :index, tag_id: @tag } %></li>
-          <% else %>
-            <li><span><%= "#{key} (#{@counts[key]})" %></span></li>
+    <% if @counts %>
+      <ul class="navigation actions">
+        <% if @tag && @uses %>
+          <% @uses.each do |key| %>
+            <% if key == "Works" || key == "Bookmarks" %>
+              <li>
+              <%= span_if_current t(".use_type_and_count", use_type: t(".use_type.#{key.downcase}"), count: @counts[key]),
+                    { controller: key.downcase.to_sym, action: :index, tag_id: @tag } %>
+            </li>
+            <% elsif key == "External Works" %>
+              <li>
+              <%= span_if_current t(".use_type_and_count", use_type: t(".use_type.external_works"), count: @counts[key]),
+                    { controller: :bookmarks, action: :index, tag_id: @tag } %>
+            </li>
+            <% else %>
+              <li>
+              <span>
+                <%= t(".use_type_and_count",
+                      use_type: t(".use_type.#{key.downcase.gsub(' ', '_')}"),
+                      count: @counts[key]) %>
+              </span>
+            </li>
+            <% end %>
           <% end %>
+        <% elsif @tag && @tag.child_types %>
+          <% @tag.child_types.each do |tag_type| %>
+            <li>
+              <%= span_if_current t(".tag_type_and_count",
+                    tag_type: t(".tag_type.#{tag_type.downcase.gsub(' ', '_')}"),
+                    count: @counts[tag_type.underscore.pluralize.to_sym]),
+                    url_for(show: tag_type.underscore.pluralize, id: @tag) %>
+            </li>
+          <% end %>
+        <% else %>
+          <li><%= span_if_current t(".fandoms_by_media", count: @counts[:fandoms]), tag_wranglings_path(show: "fandoms") %></li>
+          <li><%= span_if_current t(".characters_by_fandom", count: @counts[:characters]), tag_wranglings_path(show: "characters") %></li>
+          <li><%= span_if_current t(".relationships_by_fandom", count: @counts[:relationships]), tag_wranglings_path(show: "relationships") %></li>
+          <li><%= span_if_current t(".freeforms_by_fandom", count: @counts[:freeforms]), tag_wranglings_path(show: "freeforms") %></li>
+          <li><%= span_if_current t(".unsorted_tags", count: @counts[:UnsortedTag]), unsorted_tags_path %></li>
         <% end %>
-      <% elsif @tag && @tag.child_types %>
-        <% @tag.child_types.each do |tag_type| %>
-          <li>
-            <%= span_if_current tag_type.pluralize + " (#{@counts[tag_type.underscore.pluralize.to_sym]})", url_for(show: tag_type.underscore.pluralize, id: @tag) %>
-          </li>
-        <% end %>
-      <% else %>
-        <li><%= span_if_current ts("Fandoms by media (%{count})", count: @counts[:fandoms]), tag_wranglings_path(show: "fandoms") %></li>
-        <li><%= span_if_current ts("Characters by fandom (%{count})", count: @counts[:characters]), tag_wranglings_path(show: "characters") %></li>
-        <li><%= span_if_current ts("Relationships by fandom (%{count})", count: @counts[:relationships]), tag_wranglings_path(show: "relationships") %></li>
-        <li><%= span_if_current ts("Freeforms by fandom (%{count})", count: @counts[:freeforms]), tag_wranglings_path(show: "freeforms") %></li>
-        <li><%= span_if_current(ts("Unsorted Tags (%{count})", count: @counts[:UnsortedTag]), unsorted_tags_path) %></li>
-      <% end %>
-    </ul>
-  <% end %>
-</div>
+      </ul>
+    <% end %>
+  </div>
+<% end %>

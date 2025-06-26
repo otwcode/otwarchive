@@ -5,8 +5,8 @@ module Collectible
 
       has_many :collection_items, as: :item, inverse_of: :item
       accepts_nested_attributes_for :collection_items, allow_destroy: true
-      has_many :approved_collection_items, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, class_name: "CollectionItem", as: :item
-      has_many :user_approved_collection_items, -> { where('collection_items.user_approval_status = ?', CollectionItem::APPROVED) }, class_name: "CollectionItem", as: :item
+      has_many :approved_collection_items, -> { approved_by_both }, class_name: "CollectionItem", as: :item
+      has_many :user_approved_collection_items, -> { approved_by_user }, class_name: "CollectionItem", as: :item
 
       has_many :collections,
                through: :collection_items,
@@ -23,6 +23,11 @@ module Collectible
                -> { CollectionItem.rejected_by_user },
                through: :collection_items,
                source: :collection
+
+      # Note: this scope includes the items in the children of the specified collection
+      scope :in_collection, lambda { |collection|
+        distinct.joins(:approved_collection_items).merge(collection.all_items)
+      }
 
       after_destroy :clean_up_collection_items
     end

@@ -1,29 +1,29 @@
 <div class="admin">
   <!--Descriptive page name, messages and instructions-->
-  <h2 class="heading"><%= t("admin.admin_email_blacklist.index.page_heading", default: "Manage Email Blacklist") %></h2>
+  <h2 class="heading"><%= t(".page_heading") %></h2>
 
   <ul class="notes">
-    <li><%= ts("Blacklisted email addresses cannot be used in guest comments.") %></li>
+    <li><%= t(".notes.guest_comments") %></li>
     <li><%= ts("They will not affect users who share the same email address or prevent invitations from being sent to or used by those email addresses.") %></li>
-    <li><%= ts("All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is blacklisted).") %></li>
+    <li><%= t(".notes.canonical_format") %></li>
   </ul>
   <!--/descriptions-->
 
   <!--main content-->
-  <h3 class="heading"><%= ts("Add email address to blacklist") %></h3>
+  <h3 class="heading"><%= t(".heading.new") %></h3>
 
   <%= form_for(@admin_blacklisted_email, html: { class: "simple post" }) do |f| %>
     <%= error_messages_for @admin_blacklisted_email %>
     <fieldset>
       <p>
-        <%= f.label :email, ts("Email to add") %>
+        <%= f.label :email, t(".form.new.label") %>
         <%= f.text_field :email %>
-        <%= f.submit ts("Add To Blacklist") %>
+        <%= f.submit t(".form.new.submit") %>
       </p>
     </fieldset>
   <% end %>
 
-  <h3 class="heading"><%= ts("Find blacklisted emails")%></h3>
+  <h3 class="heading"><%= t(".heading.search")%></h3>
 
   <!-- search form -->
   <%= form_tag url_for(controller: "admin/blacklisted_emails", action: "index"),
@@ -32,7 +32,7 @@
       <p>
         <%= label_tag "query", ts("Email to find") %>
         <%= text_field_tag "query", params[:query] %>
-        <%= submit_tag ts("Search Blacklist") %>
+        <%= submit_tag t(".form.search.submit") %>
       </p>
     </fieldset>
   <% end %>
@@ -50,8 +50,7 @@
             <%= link_to ts("Remove %{email}", email: blacklisted_email.email),
                         blacklisted_email,
                         method: :delete,
-                        data: { confirm: ts("Are you sure you want to remove %{email} from the blacklist?",
-                                email: blacklisted_email.email) } %>
+                        data: { confirm: t(".confirm_remove", email: blacklisted_email.email) } %>
           </li>
           <% end %>
         </ul>

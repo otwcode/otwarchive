@@ -1,0 +1,288 @@
+---
+lv:
+  mailer:
+    general:
+      creation:
+        title_with_chapter_number: "%{title} %{position} nodaļa"
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: Ja Tu nedēļas laikā neizmantosi šo saiti, lai nomainītu paroli,
+          beigsies tās derīguma termiņš, un Tev vajadzēs to pieprasīt atkārtoti.
+        intro: 'Kāds ir pieprasījis paroles nomaiņu Tavam kontam. Tu vari nomainīt
+          sava konta paroli sekojot norādītajai saitei un ievadot savu jauno paroli:'
+        link_title: Mainīt manu paroli.
+        subject: "[%{app_name}] Atiestati savu paroli"
+        unrequested: Ja Tu nepieprasīji šo paroles nomaiņu, Tu vari ignorēt šo epastu
+          un Tava iepriekšējā parole turpinās darboties.
+  user_mailer:
+    admin_hidden_work_notification:
+      access: Kamēr Tavs darbs ir slēpts, Tu joprojām spēsi tam piekļūt, izmantojot
+        augstāk norādīto saiti, bet tas nebūs redzams Tavu darbu lapā, un tas nebūs
+        pieejams citiem AO3 lietotājiem.
+      check_email: Lūdzu, pārbaudi savu epasta adresi, ieskaitot spama sadaļu, jo
+        Pārkāpumu risināšanas komanda, iespējams, jau ir ar Tevi sazinājusies, lai
+        paskaidrotu, kāpēc Tavs darbs ir ticis paslēpts.
+      contact_abuse: sazinies ar Pārkāpumu risināšanas komandu
+      html:
+        help: Ja Tu neesi pārliecināts, kāpēc Tavs darbs ir ticis paslēpts un Tu neesi
+          saņēmis papildus informāciju, lūdzu, %{contact_abuse_link}.
+        hidden: Tavu darbu %{title} ir paslēpusi Pārkāpumu risināšanas komanda, un
+          tas vairs nav publiski pieejams.
+        tos_violation: Ja Tavs darbs tika paslēpts, jo tas pārkāpa AO3 %{tos_link},
+          Tev būs jānovērš pārkāpums. Ja tas netiks izdarīts, un darbs neatbildīs
+          Pakalpojumu sniegšanas noteikumiem, tas tiks dzēsts.
+      subject: "[%{app_name}] Tavu darbu ir paslēpusi Pārkāpumu risināšanas komanda"
+      text:
+        help: 'Ja Tu neesi pārliecināts par darba paslē''pšanas iemeslu un neesi saņēmis
+          papildus informāciju, lūdzu, sazinies ar Pārkāpumu risināšanas komandu:
+          %{contact_abuse_url}.'
+        hidden: Tavu darbu "%{title}" (%{work_url}) ir paslēpusi Pārkāpumu risināšanas
+          komanda, un tas vairs nav publiski pieejams.
+        tos_violation: Ja Tavs darbs tika paslēpts, jo tas neatbilst AO3 Pakalpojumu
+          sniegšanas noteikumiem (%{tos_url}), Tev nāksies veikt darba labojumus.
+          Ja darbu nepārveidosi, lai tas atbilstu Pakalpojumu sniegšanas noteikumiem.
+          Tavs darbs tiks dzēsts no AO3.
+      tos: Pakalpojumu sniegšanas noteikumi
+    anonymous_or_unrevealed_notification:
+      anonymous_info: Anonīmi darbi ir iekļauti birku sarakstos, bet ne Tavā publisko
+        darbu sarakstā. Darbā Tavs lietotājvārds tiks aizstāts ar "Anonīms" (Tulkošana).
+      anonymous_unrevealed_info: Kolekcijas uzturētāji var vēlāk padarīt Tavu darbu
+        par atklātu, bet atstāt to anonīmu. Cilvēki, kuri seko Tavam profilam, netiks
+        informēti par šīm izmaiņām. Kad tas tiek padarīts par atklātu, Tavs darbs
+        tiks iekļauts birku sarakstos, bet ne Tavu darbu sarakstos. Darba autora vārds
+        tiks mainīts uz ''Anonīms'' (Tulkošana).
+      changed_status:
+        anonymous:
+          html: "%{collection_link} kolekcijas uzturētāji ir padarījuši tavu darbu
+            %{work_link} anonīmu."
+          text: '"%{collection_title}" (%{collection_url}) kolekcijas uzturētāji ir
+            nomainījuši Tava darba "%{work_title}" (%{work_url}) statusu uz anonīmu.'
+        anonymous_unrevealed:
+          html: "%{collection_link} kolekcijas uzturētāji ir nomainījuši Tava darba
+            %{work_link} statusu uz anonīmu un slēptu."
+          text: '"%{collection_title}" (%{collection_url}) kolekcijas uzturētāji ir
+            nomainījuši Tava darba "%{work_title}" (%{work_url}) statusu uz anonīmu
+            un slēptu.'
+        unrevealed:
+          html: "%{collection_link} kolekcijas uzturētāji ir mainījuši Tava darba
+            %{work_link} statusu, un ir padarījuši to par slēptu."
+          text: '"%{collection_title}" (%{collection_url}) kolekcijas uzturētāji ir
+            nomainījuši Tava darba "%{work_title}" (%{work_url}) statusu uz slēptu.'
+      collection_items_link_text: Apstiprināto Kolekcijas vienumu (Tulkošana) lapa
+      do_not_want:
+        anonymous:
+          html: Ja Tu nevēlies, lai Tavs darbs ir anonīms, lūdzu apmeklē %{collection_items_link},
+            lai to noņemtu no šī saraksta.
+          text: 'Ja Tu nevēlies, lai Tavs darbs ir anonīms, apmeklē savu Apstirpināto
+            Kolekcijas Vienumu (Tulkošana) lapu, lai to noņemtu no šīs kolekcijas:
+            %{collection_items_url}'
+        anonymous_unrevealed:
+          html: Ja Tu nevēlies, lai Tavs darbs ir anonīms un slēpts, lūdzu, apmeklē
+            %{collection_items_link}, lai to noņemtu no šīs kolekcijas.
+          text: 'Ja Tu nevēlies, lai Tavs darbs ir anonīms un slēpts, apmeklē savu
+            Apstirpināto Kolekcijas Vienumu (Tulkošana) lapu, lai to noņemtu no šīs
+            kolekcijas: %{collection_items_url}'
+        unrevealed:
+          html: Ja Tu nevēlies, lai Tavs darbs ir slēpts, apmeklē savu %{collection_items_link},
+            lai to noņemtu no šīs kolekcijas.
+          text: 'Ja Tu nevēlies, lai Tavs darbs ir slēpts, apmeklē savu Apstirpināto
+            Kolekcijas Vienumu (Tulkošana) lapu, lai to noņemtu no šīs kolekcijas:
+            %{collection_items_url}'
+      faq_link_text: BUJ par kolekcijām
+      more_info:
+        html: Lai saņemtu papildus informāciju, apmeklē mūsu %{faq_link}.
+        text: 'Lai saņemtu papildus informāciju, apmeklē mūsu BUJ par kolekcijām:
+          %{faq_url}'
+      subject:
+        anonymous: "[%{app_name}] Tavs darbs tika padarīts anonīms"
+        anonymous_unrevealed: Tavs darbs [%{app_name}] tika padarīts par anonīmu un
+          slēptu.
+        unrevealed: Tavs darbs [%{app_name}] tika padarīts slēpts
+      unrevealed_info: Slēpti darbi nav iekļauti birku sarakstos un Tavu darbu sarakstā.
+        Ikviens, kurš izmanto saiti, lai apskatītu Tavu darbu, saņems paziņojumu,
+        ka tas pašlaik ir slēpts, un nespēs tam piekļūt.
+    archivist_added_to_collection_notification:
+      approved_collection_items_page: Apstiprinātās Kolekcijas (Tulkošana) lapa
+      archivist_notice: Kolekcijas uzturētāji darbojas viņu oficiālajā kapacitātē
+        kā Atvērto Durvju(Tulkošana) arhīvisti, tāpēc viņiem ir atļauts pievienot
+        Tavu darbu kolekcijai, arī tādos gadījumos, kad esi bloķējis ielūgumus uz
+        kolekcijām. Arhīvisti pievieno darbu kolekcijai tikai tad, ja ja tas tika
+        pievienots importētam arhīvam.
+      removal_instructions:
+        html: Ja Tu vēlies noņemt savu darbu no šīs kolekcijas, lūdzu, apmeklē %{approved_items_link}.
+        text: 'Ja Tu vēlies noņemt savu darbu no šīs kolekcijas, lūdzu, apmeklē savu
+          Apstiprināto kolekciju (Tulkošana) lapu: %{approved_items_url}.'
+      subject: "[%{app_name}][%{collection_title}]Open Doors(Atvērtās Durvis (Tulkošana))
+        arhīvists ir pievienojis Tavu darbu kolekcijai."
+      work_added:
+        html: "%{collection_link}Kolekcijas uzturētāji ir pievienojuši Tavu darbu
+          %{work_link} viņu kolekcijai!"
+        text: '"%{collection_title}" (%{collection_url})Kolekcijas uzturētāji ir pievienojuši
+          Tavu darbu "%{work_title}" (%{work_url}) viņu kolekcijai!'
+    challenge_assignment_notification:
+      any: Jebkurš un pēc izvēles
+      assignment:
+        html: Tev ir iedots sekojošs pieprasījums AO3 %{link} izaicinājumā.
+      description: 'Apraksts:'
+      due: 'Šī uzdevuma izpildes termiņš ir:'
+      html:
+        footer: Tu esi saņēmis šo e-pastu, jo Tu pieteicies %{title} izaicinājumam.
+          Lai uzzinātu vairāk par šo izaicinājumu un, lai saņemtu moderatoru kontaktinformāciju,
+          lūdzu, apmeklē %{footer_link}.
+        footer_link: izaicinājuma profila mājaslapu
+        look_up: Tu vari aplūkot uzdevumu Savā %{link}.
+        look_up_link: Assignments (Tulkošana) lapā
+      optional_tags: 'Tagi pēc izvēles:'
+      prompts: 'Prompti:'
+      prompt_url: 'Promptu URL:'
+      recipient: 'Saņēmējs:'
+      recipient_missing: 'Neviens: lūdz palīdzību moderatoram.'
+      subject: "[%{app_name}][%{collection_title}]Tavs uzdevums!"
+      text:
+        assignment: Tev ir piešķirts sekojošs pieprasījums "%{collection_title}" AO3
+          izaicinājumā(%{collection_url})!
+        footer: Tu esi saņēmis šo e-pastu, jo Tu pieteicies %{title} izaicinājumam
+          (%{url}). Lai uzzinātu vairāk par šo izaicinājumu un, lai saņemtu moderatoru
+          kontaktinformāciju, lūdzu, apmeklē %{profile_url}.
+        look_up: Tu vari aplūkot savu izaicinājumu Savā Assignments (Tulkošana) lapā
+          %{link}.
+    change_email:
+      changed:
+        html: "%{login}, Epasta adrese, kura ir asociēta ar Tavu profilu, ir mainīta
+          uz %{email}"
+        text: Epasta adrese %{login}, kura ir asociēta ar Tavu profilu, ir nomainīta
+          uz %{email}
+      subject: "[%{app_name}] Epasta adrese ir mainīta"
+    claim_notification:
+      access:
+        contact_support: sazinies ar AO3 Support (Atbalsts)
+        html: Atkarībā no arhīva Tavi darbi var būt importēti un tos var redzēt tikai
+          reģistrēti lietotāji (Lai paslēptu tos no Google meklētāja). Ja tas ir tā,
+          darbi būs pieejami tikai reģistrētiem lietotājiem, izņemot gadījumus, kad
+          Tu izvēlies tos padarīt redzamus citiem. Lai saņemtu palīdzību šīs darbības
+          veikšanai vai savu darbu dzēšanai, lūdzu sazinies ar %{contact_support_link}.
+        text: Atkarībā no arhīva Tavi darbi var būt importēti un tos var redzēt tikai
+          reģistrēti lietotāji (Lai paslēptu tos no Google meklētāja). Ja tas ir tā,
+          darbi būs pieejami tikai reģistrētiem lietotājiem, izņemot gadījumus, kad
+          Tu izvēlies tos padarīt redzamus citiem. Lai saņemtu palīdzību šīs darbības
+          veikšanai vai savu darbu dzēšanai, lūdzu sazinies ar user_mailer.claim_notification.access.contact_support
+          Sazinies ar AO3 Support(Atbalsts)%{support_url}.
+      email_tips: Ja Tu sazinies ar Mums, lūdzu pievieno e-pasta adreses no @transformativeworks.org
+        uz savu drošo kontaktu sarakstu un pārbaudi savu spamu, lai redzētu Mūsu atbildi.
+      introduction:
+        ao3_name: Archive Of Our Own-AO3 (Tulkošana) (Mūsu pašu arhīvs)
+        html: Tu esi saņēmis šo e-pastu, jo Tavi darbi ir iekļauti fanworks arhīvā,
+          kurš tika importēts no %{open_doors_name_link} uz %{app_link}. Šī e-pasta
+          adrese ir saistīta ar to, kas ir reģistrēta importētajā arhīvā, asociētie
+          fanu darbi (minēti lejā) automātiski tika pievienoti Tavam AO3 kontam.
+        open_doors_name: "(Atvērtās Durvis (Tulkošana)"
+        text: Tu esi saņēmis šo e-pastu, jo Tavi darbi ir iekļauti fanworks arhīvā,
+          kurš tika importēts no Atvērtajām Durvīm(%{open_doors_url}) uz AO3 arhīvu.%{app_url}.
+          . Šī e-pasta adrese ir saistīta ar to, kas ir reģistrēta importētajā arhīvā,
+          asociētie fanu darbi( minēti lejā) automātiski tika pievienoti Tavam AO3
+          kontam.
+      mistake:
+        contact_open_doors: sazinies ar Atvērtajām Durvīm (Open Doors)
+        html: Ja šī ir kļūda, un šie nav Tavi darbi, lūdzu, neizdēs tos! Lūdzu, sazinies
+          ar %{contact_open_doors_link} un Mēs to nokārtosim.
+        text: Ja šī ir kļūda, un šie nav Tavi darbi, lūdzu, neizdēs tos! Lūdzu, sazinies
+          ar (%{open_doors_url}) un Mēs to nokārtosim
+      more_info:
+        ao3_news: AO3 ziņas
+        contact_support: Sazinies ar AO3 Support (AO3 Atbalsts)
+        faq_page: BUJ lapa
+        html: Tu vari izlasīt paziņojumus par nesenām arhīva pārcelšanām %{ao3_news_link},
+          un atrast papildus informāciju Open Doors (Atvērtās Durvis) %{faq_page_link}
+          vai%{tutorial_page_link}. Ja ir kādi jautājumi, kas nav atbildēti FAQ apmācībā,
+          vai šajā e-pastā, lūdzu %{contact_support_link}.
+        text: Tu vari izlasīt paziņojumus par nesenām arhīva pārcelšanām AO3 Ziņās
+          (%{news_url}), un atrast papildus informāciju Open Doors (Atvērtās Durvis)(%{open_doors_faq_url})
+          vai apmācības lapā (%{open_doors_tutorial_url}). Ja ir kādi jautājumi, kas
+          nav atbildēti FAQ apmācība, vai šajā e-pastā, lūdzu%{support_url}.
+        tutorial_page: apmācības lapa
+      other_works:
+        contact_open_doors: sazinies ar Atvērtajām Durvīm
+        html: Ja ir bijuši citi darbi importētajā arhīvā zem e-pasta adreses, kurai
+          Tu vairs nevari piekļūt, lūdzu, sazinies %{contact_open_doors_link} ar jebkādu
+          informāciju, kas varētu palīdzēt vertificēt Tavu identitāti.
+        text: Ja ir bijuši citi darbi importētajā arhīvā zem e-pasta adreses, kurai
+          Tu vairs nevari piekļūt, lūdzu, sazinies ar jebkādu informāciju, kas varētu
+          palīdzēt vertificēt Tavu identitāti.
+      questions:
+        contact_support: sazinies ar AO3 Atbalstu
+        html: Citām nepieciešamībām, lūdzu,%{contact_support_link}.
+        text: Citām nepieciešamībām, lūdzu,%{support_url}.
+      redirects:
+        html: Lai saglabātu rec (rekomendāciju) sarakstu un grāmatzīmes, importēto
+          arhīvu mājaslapu adreses var norādit uz šo darbu importētajām kopijām uz
+          noteiktu laiku( pārbaudi sava arhīva paziņojumu, lai pārliecinātos). Ja
+          Tu jau esi lejupielādējis šo darbu kopiju un %{negation} izmantoji URL funkciju,
+          būs divas tāda paša darba kopijas AO3.
+      subject: "[%{app_name}] Darbi ir augšupielādēti"
+      update_redirect:
+        contact_open_doors: Sazinies ar Atvērtajām Durvīm
+        html: Ja Tu vēlies, lai Open Doors atjauninātu novirzījumu, lai tas norādītu
+          uz jau eksistējošu darbu, lūdzu,%{contact_open_doors_link} izdzēs importēto
+          kopiju ar savu AO3 vārdu, sava konta vārdu importētajā arhīvā un nosaukumu
+          un tā fanu darba URL, uz kuru tu gribi novirzīt. (Ja ir vairāki darbi, kurus
+          Tu vēlies novirzīt vai mainīt novirzījumu, Tu vari to pierakstīt vienā e-pastā.)
+        text: Ja Tu vēlies, lai Open Doors atjauninātu novirzījumu , lai tas norādītu
+          uz jau eksistējošu darbu un sazināties ar Open Doors %{open_doors_url} ,
+          lūdzu, izdzēs importēto kopiju ar savu AO3 vārdu, sava konta vārdu importētajā
+          arhīvā un nosaukumu un tā fanu darba URL, uz kuru tu gribi novirzīt. (Ja
+          ir vairāki darbi, kurus Tu vēlies novirzīt vai mainīt novirzījumu, Tu vari
+          to pierakstīt vienā e-pastā.)
+      works_by: 'Šie darbi tika rakstīti izmantojot šo e-pasta adresi: %{email}'
+      work_info:
+        html: "%{work_link} (%{fandom})"
+        text:
+          no_fandom: "- %{work_title} %{work_url}"
+          with_fandom: "- %{work_title} %{work_url} (%{fandom})"
+    creatorship_notification_archivist:
+      explanation: Viņi izmanto savas oficiālās iespējas kā Open Doors (Translation)
+        (Atvērtās Durvis (Tulkošana)), viņiem ir atļauts Tevi pievienot bez uzaicinājuma
+        arī tad, ja esi bloķējis ko-autora funkciju.
+      html:
+        creation: "%{creation_link} %{pseud_links}"
+        edit_chapter: Mainīt vai labot nodaļu
+        edit_series: Mainīt vai labot stāstu sērijas
+        edit_work: mainīt vai labot darbu.
+        remove_chapter: Ja Tu es pievienots klūdas dēļ vai nevēlies būt atzīmēts kā
+          autors, Tu vari noņemt sevi kā ko-autoru.%{edit_chapter_link}
+        remove_series: Ja Tu es pievienots klūdas dēļ, vai nevēlies būt atzīmēts kā
+          autors, Tu vari %{edit_series_link} noņemt sevi kā ko-autoru.
+        remove_work: Ja Tu es pievienots klūdas dēļ, vai nevēlies būt atzīmēts kā
+          autors, Tu vari %{edit_work_link} noņemt sevi kā ko-autoru.
+      intro_chapter: 'Lietotājs %{archivist} ir Tevi %{pseud} pievienojis kā ko- autoru
+        sekojošajā nodaļā:'
+      intro_series: 'Lietotājs %{archivist} ir Tevi pievienojis %{pseud} kā ko- autoru
+        sekojošajās stāstu sērijās:'
+      intro_work: 'Lietotājs %{archivist} ir pievienojis Tavu pseud %{pseud} kā ko-autoru
+        sekojošajā darbā:'
+      subject: "[%{app_name}] Arhīvista ko -autora (co-creator) ziņa"
+      text:
+        creation: "%{title} (%{url})%{pseuds}"
+        remove_chapter: Ja Tu es pievienots klūdas dēļ, vai nevēlies būt atzīmēts
+          kā autors, Tu vari labot nodaļu noņemt sevi kā ko-autoru.%{url}
+        remove_series: Ja Tu es pievienots klūdas dēļ, vai nevēlies būt atzīmēts kā
+          autors, Tu vari labot stāstu sērijas un noņemt sevi kā ko-autoru.%{url}
+        remove_work: 'Ja Tu es pievienots klūdas dēļ vai nevēlies būt atzīmēts kā
+          autors, Tu vari labot darbu un noņemt sevi kā ko-autoru: %{url}'
+    creatorship_request:
+      html:
+        creation: "%{creation_link} autors/i %{pseud_links}"
+        instructions: Tu vari apstiprināt vai noraidīt uzaicinājumu savā %{page_name}
+          lapā.
+        page_name: Līdzradītāja Uzaicinājums (Tulkošana)
+      intro_chapter: 'Lietotājs %{inviting_user} ir uzaicinājis Tavu pseidonīmu %{pseud}
+        norādīt kā līdzradītāju sekojošajai nodaļai:'
+      intro_series: 'Lietotājs %{inviting_user} ir uzaicinājis Tavu pseidonīmu %{pseud}
+        norādīt kā līdzradītāju sekojošajai sērijai:'
+      intro_work: 'Lietotājs %{inviting_user} ir uzaicinājis Tavu pseidonīmu %{pseud}
+        norādīt kā līdzradītāju sekojošajam darbam:'
+      subject: "[%{app_name}] Līdzradītāja pieprasījums"
+      text:
+        creation: Autora %{pseuds} %{title} (%{url})
+        instructions: 'Tu vari apstiprināt vai noraidīt uzaicinājumu savā Līdzradītāja
+          Uzaicinājumu (Tulkošana) lapā: %{url}'

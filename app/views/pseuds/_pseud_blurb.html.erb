@@ -1,36 +1,44 @@
 <li class="user pseud picture blurb group" role="article">
-  <div class="header module">
-    <h4 class="heading"><%= link_to(pseud.name, user_pseud_path(pseud.user, pseud)) %>
-      <% if (pseud.name != pseud.user_name || pseud.user.pseuds.size > 1) %>
-        (<%= link_to(pseud.user_name, user_path(pseud.user)) %>)
-      <% end %>
-    </h4>
-    <!--BACK END- suggest comma separator instead of pipe-->
-    <% unless authored_items(pseud, @work_counts, @rec_counts).blank? %>
-      <h5 class="heading"><%= authored_items(pseud, @work_counts, @rec_counts) %></h5>
-    <% end %>
-    <div class="icon">
-      <%= icon_display(@user, pseud) %>
-    </div>
-  </div>
-  <% unless pseud.description.blank? %>
-    <blockquote class="userstuff">
-      <%=raw sanitize_field(pseud, :description) %>
-    </blockquote>
-  <% end %>
-  <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->
+  <%= render "pseud_module", pseud: pseud %>
 
-  <% if current_user == pseud.user %>
-    <h6 class="landmark heading">User Actions</h6>
+  <% if current_user == pseud.user || policy(pseud).edit? %>
+    <h6 class="landmark heading"><%= t(".user_actions") %></h6>
     <ul class="actions" role="navigation">
-      <li><%= link_to "#{h(ts('Edit'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [:edit, @user, pseud], :id => "edit_#{pseud.name.downcase.gsub(" ", "_")}" %></li>
-      <% unless pseud.works.blank? %>
-        <li><%= link_to "#{h(ts('Orphan Works'))} <span class=\"landmark\">by #{h pseud.name}</span>".html_safe, {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} %></li>
+      <%# These links use landmarks so they are distinct for screen readers,
+# e.g., Edit Pseud1, Edit Pseud2. The landmark text " Pseud2" is inside the
+# landmark span, so there's no extra space for sighted users. If your
+# language says "Pseud2 Edit", your landmark text would be "Pseud 2 " and
+# your link string "%{landmark_span}Edit". %>
+      <li><%= link_to(
+                t(".edit_html",
+                  landmark_span: content_tag(:span,
+                    t(".edit_landmark_text", pseud: pseud.name),
+                    class: "landmark")),
+                edit_user_pseud_path(@user, pseud),
+                id: "edit_#{pseud.name.downcase.gsub(' ', '_')}"
+              ) %></li>
+      <% if pseud.works.present? && current_user == pseud.user %>
+        <li><%= link_to(
+                  t(".orphan_html",
+                    landmark_span: content_tag(:span,
+                      t(".orphan_landmark_text", pseud: pseud.name),
+                      class: "landmark")),
+                  new_orphan_path(pseud_id: pseud.id)
+                ) %></li>
       <% end %>
       <% if pseud.is_default? %>
-        <li><span class="current">Default Pseud</span></li>
-      <% elsif @user.login != pseud.name %>
-        <li><%= link_to "#{h(ts('Delete'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [@user, pseud], data: {confirm: ts('Are you sure?')}, :id => "delete_#{pseud.name.underscore}", :method => :delete %></li>
+        <li><span class="current"><%= t(".default_pseud") %></span></li>
+      <% elsif @user.login != pseud.name && current_user == pseud.user %>
+        <li><%= link_to(
+                  t(".delete_html",
+                    landmark_span: content_tag(:span,
+                      t(".delete_landmark_text", pseud: pseud.name),
+                      class: "landmark")),
+                  user_pseud_path(@user, pseud),
+                  data: { confirm: t(".confirm_delete") },
+                  id: "delete_#{pseud.name.underscore}",
+                  method: :delete
+                ) %></li>
       <% end %>
     </ul>
   <% end %>

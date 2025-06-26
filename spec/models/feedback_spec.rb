@@ -29,12 +29,25 @@ describe Feedback do
     end
 
     context "provided email is invalid" do
-      [BAD_EMAILS, BADLY_FORMATTED_EMAILS].each do |email|
+      BAD_EMAILS.each do |email|
         let(:bad_email) { build(:feedback, email: email) }
         it "fails email format check and cannot be created" do
           expect(bad_email.save).to be_falsey
           expect(bad_email.errors[:email]).to include("should look like an email address.")
         end
+      end
+    end
+
+    context "with IP address" do
+      let(:ip) { Faker::Internet.ip_v4_address }
+      let(:feedback) { create(:feedback, ip_address: ip) }
+  
+      it "has IP in Akismet attributes" do
+        expect(feedback.akismet_attributes[:user_ip]).to eq(ip)
+      end
+  
+      it "does not store IP in the database" do
+        expect(Feedback.find(feedback.id)[:ip_address]).to be_nil
       end
     end
 
@@ -68,6 +81,23 @@ describe Feedback do
     it "is valid even with spam if logged in and providing correct email" do
       User.current_user = legit_user
       expect(safe_report.save).to be_truthy
+    end
+  end
+
+  context "when report is submitted to Akismet" do
+    let(:report) { build(:feedback) }
+
+    it "has comment_type \"contact-form\"" do
+      expect(report.akismet_attributes[:comment_type]).to eq("contact-form")
+    end
+
+    it "has user_role \"user-with-nonmatching-email\" when reporter is logged in" do
+      User.current_user = create(:user)
+      expect(report.akismet_attributes[:user_role]).to eq("user-with-nonmatching-email")
+    end
+
+    it "has user_role \"guest\" when reporter is logged out" do
+      expect(report.akismet_attributes[:user_role]).to eq("guest")
     end
   end
 end

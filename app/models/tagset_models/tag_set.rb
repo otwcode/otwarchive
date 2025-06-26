@@ -1,6 +1,4 @@
-
 class TagSet < ApplicationRecord
-
   # a complete match is numerically represented with ALL
   ALL = -1
 
@@ -25,6 +23,7 @@ class TagSet < ApplicationRecord
   def tagnames
     @tagnames || tags.select('tags.name').order('tags.name').collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
+
   def taglist
     @tagnames ? tagnames_to_list(@tagnames) : tags
   end
@@ -33,7 +32,6 @@ class TagSet < ApplicationRecord
   def tagnames_to_remove
     @tagnames_to_remove || ""
   end
-
 
   # this code just sets up functions fandom_tagnames/fandom_tagnames=, character_tagnames... etc
   # that work like tagnames above, except on separate types.
@@ -153,16 +151,6 @@ class TagSet < ApplicationRecord
     end
   end
 
-
-  scope :matching, lambda {|tag_set_to_match|
-    select("DISTINCT tag_sets.*").
-    joins(:tags).
-    group('tag_sets.id').
-    where("tag_sets.id != ? AND tags.id in (?)", tag_set_to_match.id, tag_set_to_match.tags).
-    order("count(tags.id) desc")
-  }
-
-
   ### Various utility methods
 
   def +(other)
@@ -184,20 +172,8 @@ class TagSet < ApplicationRecord
     with_type(type).exists?
   end
 
-  def with_type_from_redis(type)
-
-  end
-
   def empty?
     self.tags.empty?
-  end
-
-  # returns the topmost tag type we have in this set
-  def topmost_tag_type
-    TagSet::TAG_TYPES.each do |tag_type|
-      return tag_type if self.has_type?(tag_type)
-    end
-    ""
   end
 
   ### Matching
@@ -235,61 +211,6 @@ class TagSet < ApplicationRecord
     TagSet.match_array_rank(request, offer)
   end
 
-  def exact_match?(another, type=nil)
-    if type
-      self.with_type(type).to_a == another.with_type(type).to_a
-    else
-      self.tags == another.tags
-    end
-  end
-
-  def no_match?(another, type=nil)
-    if type
-      (self.with_type(type).to_a & another.with_type(type).to_a).empty? && !self.tags.empty?
-    else
-      (self.tags & another.tags).empty? && !self.tags.empty?
-    end
-  end
-
-  def partial_match?(another, type=nil)
-    if type
-      !(self.with_type(type).to_a & another.with_type(type).to_a).empty?
-    else
-      !(self.tags & another.tags).empty?
-    end
-  end
-
-  # checks to see if this is a subset of another tagset
-  # note: we have to cast with_type to an array because one of the tag sets may actually
-  # be an activequery object
-  def is_subset_of?(another, type=nil)
-    if type
-      (self.with_type(type).to_a & another.with_type(type).to_a) == self.with_type(type).to_a
-    else
-      (self.tags & another.tags) == self.tags
-    end
-  end
-
-  # checks to see if this is a superset of another tagset
-  # note: we have to cast with_type to an array because one of the tag sets may actually
-  # be an activequery object
-  def is_superset_of?(another, type=nil)
-    if type
-      (self.with_type(type).to_a & another.with_type(type).to_a) == another.with_type(type).to_a
-    else
-      (self.tags & another.tags) == another.tags
-    end
-  end
-
-  # returns matching tags
-  def matching_tags(another, type=nil)
-    if type
-      self.with_type(type).to_a & another.with_type(type).to_a
-    else
-      self.tags & another.tags
-    end
-  end
-
   ### protected
 
   protected
@@ -307,7 +228,6 @@ class TagSet < ApplicationRecord
         taglist.reject {|tagname| tagname.blank? }.map {|tagname| Tag.find_by_name(tagname.squish) || Freeform.find_or_create_by_name(tagname.squish)}
       end
     end
-
 
   ### autocomplete
   public
@@ -374,5 +294,4 @@ class TagSet < ApplicationRecord
       return results
     end
   end
-
 end

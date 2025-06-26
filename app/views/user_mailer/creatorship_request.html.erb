@@ -1,7 +1,11 @@
-<% creation_type = @creation.model_name.human.downcase %>
+<% creation_type = @creation.class.name.underscore %>
 <% content_for :message do %>
-  <p><%= t(".intro", type: creation_type, inviting_user: @inviting_user.login,
-           pseud: @creatorship.pseud.name) %></p>
+  <p>
+    <%# i18n-tasks-use t('user_mailer.creatorship_request.intro_chapter')
+      i18n-tasks-use t('user_mailer.creatorship_request.intro_series')
+      i18n-tasks-use t('user_mailer.creatorship_request.intro_work')-%>
+    <%= t(".intro_#{creation_type}", inviting_user: @inviting_user.login, pseud: @creatorship.pseud.name) %>
+  </p>
 
   <p>
     <%= t(".html.creation",
@@ -10,7 +14,7 @@
   </p>
 
   <p>
-    <%= t(".html.instructions", type: creation_type,
+    <%= t(".html.instructions",
           page_name: style_link(t(".html.page_name"), user_creatorships_url(@user))).html_safe %>
   </p>
 <% end %>

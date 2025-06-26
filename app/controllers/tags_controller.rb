@@ -1,9 +1,12 @@
 class TagsController < ApplicationController
+  include TagWrangling
+
   before_action :load_collection
   before_action :check_user_status, except: [:show, :index, :show_hidden, :search, :feed]
   before_action :check_permission_to_wrangle, except: [:show, :index, :show_hidden, :search, :feed]
   before_action :load_tag, only: [:edit, :update, :wrangle, :mass_update]
   before_action :load_tag_and_subtags, only: [:show]
+  around_action :record_wrangling_activity, only: [:create, :update, :mass_update]
 
   caches_page :feed
 
@@ -26,55 +29,53 @@ class TagsController < ApplicationController
   def index
     if @collection
       @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
+      @page_subtitle = t(".collection_page_title", collection_title: @collection.title)
     else
       no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-      @tags = no_fandom.children.by_type('Freeform').first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
-      # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
-      # and then sort again at the very end to make it alphabetic
-      @tags = if params[:show] == 'random'
-                @tags.random.canonical.sort
-              else
-                @tags.popular.canonical.sort
-              end
+      if no_fandom
+        @tags = no_fandom.children.by_type("Freeform").first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
+        # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
+        # and then sort again at the very end to make it alphabetic
+        @tags = if params[:show] == "random"
+                  @tags.random.canonical.sort
+                else
+                  @tags.popular.canonical.sort
+                end
+      else
+        @tags = []
+      end
     end
   end
 
   def search
-    @page_subtitle = ts('Search Tags')
-    if params[:query].present?
-      # TODO: tag_search_params
-      options = params[:query].permit!.dup
-      @query = options
-      if @query[:name].present?
-        @page_subtitle = ts("Tags Matching '%{query}'", query: @query[:name])
-      end
-      options[:page] = params[:page] || 1
-      search = TagSearchForm.new(options)
-      @tags = search.search_results
-      flash_search_warnings(@tags)
-    end
+    options = params[:tag_search].present? ? tag_search_params : {}
+    options.merge!(page: params[:page]) if params[:page].present?
+    @search = TagSearchForm.new(options)
+    @page_subtitle = ts("Search Tags")
+
+    return if params[:tag_search].blank?
+
+    @page_subtitle = ts("Tags Matching '%{query}'", query: options[:name]) if options[:name].present?
+
+    @tags = @search.search_results
+    flash_search_warnings(@tags)
   end
 
-  # if user is Admin or Tag Wrangler, show them details about the tag
-  # if user is not logged in or a regular user, show them
-  #   1. the works, if the tag had been wrangled and we can redirect them to works using it or its canonical merger
-  #   2. the tag, the works and the bookmarks using it, if the tag is unwrangled (because we can't redirect them
-  #       to the works controller)
   def show
     @page_subtitle = @tag.name
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-      flash[:error] = ts('Please log in as admin')
+      flash[:error] = t("admin.access.not_admin_denied")
       redirect_to(tag_wranglings_path) && return
     end
     # if tag is NOT wrangled, prepare to show works, collections, and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
-      if logged_in? # current_user.is_a?User
-        @works = @tag.works.visible_to_registered_user.paginate(page: params[:page])
-      elsif logged_in_as_admin?
-        @works = @tag.works.visible_to_owner.paginate(page: params[:page])
-      else
-        @works = @tag.works.visible_to_all.paginate(page: params[:page])
-      end
+      @works = if logged_in? # current_user.is_a?User
+                 @tag.works.visible_to_registered_user.paginate(page: params[:page])
+               elsif logged_in_as_admin?
+                 @tag.works.visible_to_admin.paginate(page: params[:page])
+               else
+                 @tag.works.visible_to_all.paginate(page: params[:page])
+               end
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
       @collections = @tag.collections.paginate(page: params[:page])
     end
@@ -166,6 +167,8 @@ class TagsController < ApplicationController
 
   # GET /tags/new
   def new
+    authorize :wrangling if logged_in_as_admin?
+
     @tag = Tag.new
 
     respond_to do |format|
@@ -176,34 +179,41 @@ class TagsController < ApplicationController
   # POST /tags
   def create
     type = tag_params[:type] if params[:tag]
-    if type
-      raise "Redshirt: Attempted to constantize invalid class initialize create #{type.classify}" unless Tag::TYPES.include?(type.classify)
-      model = begin
-                type.classify.constantize
-              rescue
-                nil
-              end
-      @tag = model.find_or_create_by_name(tag_params[:name]) if model.is_a? Class
-    else
-      flash[:error] = ts('Please provide a category.')
+
+    unless type
+      flash[:error] = ts("Please provide a category.")
       @tag = Tag.new(name: tag_params[:name])
-      render(action: 'new') && return
+      render(action: "new")
+      return
     end
-    if @tag && @tag.valid?
-      if (@tag.name != tag_params[:name]) && @tag.name.casecmp(tag_params[:name].downcase).zero? # only capitalization different
-        @tag.update_attribute(:name, tag_params[:name]) # use the new capitalization
-        flash[:notice] = ts('Tag was successfully modified.')
-      else
-        flash[:notice] = ts('Tag was successfully created.')
-      end
+
+    raise "Redshirt: Attempted to constantize invalid class initialize create #{type.classify}" unless Tag::TYPES.include?(type.classify)
+
+    model = begin
+              type.classify.constantize
+            rescue StandardError
+              nil
+            end
+    @tag = model.find_or_create_by_name(tag_params[:name]) if model.is_a? Class
+
+    unless @tag&.valid?
+      render(action: "new")
+      return
+    end
+
+    if @tag.id_previously_changed? # i.e. tag is new
       @tag.update_attribute(:canonical, tag_params[:canonical])
-      redirect_to edit_tag_path(@tag)
+      flash[:notice] = ts("Tag was successfully created.")
     else
-      render(action: 'new') && return
+      flash[:notice] = ts("Tag already existed and was not modified.")
     end
+
+    redirect_to edit_tag_path(@tag)
   end
 
   def edit
+    authorize :wrangling, :read_access? if logged_in_as_admin?
+
     @page_subtitle = ts('%{tag_name} - Edit', tag_name: @tag.name)
 
     if @tag.is_a?(Banned) && !logged_in_as_admin?
@@ -237,15 +247,16 @@ class TagsController < ApplicationController
   end
 
   def update
+    authorize :wrangling if logged_in_as_admin?
+
     # update everything except for the synonym,
     # so that the associations are there to move when the synonym is created
     syn_string = params[:tag].delete(:syn_string)
     new_tag_type = params[:tag].delete(:type)
 
     # Limiting the conditions under which you can update the tag type
-    if @tag.can_change_type? && %w(Fandom Character Relationship Freeform UnsortedTag).include?(new_tag_type)
-      @tag = @tag.recategorize(new_tag_type)
-    end
+    types = logged_in_as_admin? ? (Tag::USER_DEFINED + %w[Media]) : Tag::USER_DEFINED
+    @tag = @tag.recategorize(new_tag_type) if @tag.can_change_type? && (types + %w[UnsortedTag]).include?(new_tag_type)
 
     unless params[:tag].empty?
       @tag.attributes = tag_params
@@ -268,6 +279,8 @@ class TagsController < ApplicationController
   end
 
   def wrangle
+    authorize :wrangling, :read_access? if logged_in_as_admin?
+
     @page_subtitle = ts('%{tag_name} - Wrangle', tag_name: @tag.name)
     @counts = {}
     @tag.child_types.map { |t| t.underscore.pluralize.to_sym }.each do |tag_type|
@@ -285,20 +298,22 @@ class TagsController < ApplicationController
       end
       # this makes sure params[:status] is safe
       status = params[:status]
-      if %w(unfilterable canonical synonymous unwrangleable).include?(status)
-        @tags = @tag.send(show).order(sort).send(status).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      elsif status == 'unwrangled'
-        @tags = @tag.unwrangled_tags(
-          params[:show].singularize.camelize,
-          params.permit!.slice(:sort_column, :sort_direction, :page)
-        )
-      else
-        @tags = @tag.send(show).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      end
+      @tags = if %w[unfilterable canonical synonymous unwrangleable].include?(status)
+                @tag.send(show).reorder(sort).send(status).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+              elsif status == "unwrangled"
+                @tag.unwrangled_tags(
+                  params[:show].singularize.camelize,
+                  params.permit!.slice(:sort_column, :sort_direction, :page)
+                )
+              else
+                @tag.send(show).reorder(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+              end
     end
   end
 
   def mass_update
+    authorize :wrangling if logged_in_as_admin?
+
     params[:page] = '1' if params[:page].blank?
     params[:sort_column] = 'name' unless valid_sort_column(params[:sort_column], 'tag')
     params[:sort_direction] = 'ASC' unless valid_sort_direction(params[:sort_direction])
@@ -314,7 +329,7 @@ class TagsController < ApplicationController
       tags = Tag.where(id: params[:canonicals])
 
       tags.each do |tag_to_canonicalize|
-        if tag_to_canonicalize.update_attributes(canonical: true)
+        if tag_to_canonicalize.update(canonical: true)
           saved_canonicals << tag_to_canonicalize
         else
           not_saved_canonicals << tag_to_canonicalize
@@ -394,6 +409,21 @@ class TagsController < ApplicationController
       :media_string, :fandom_string, :character_string, :relationship_string,
       :freeform_string,
       associations_to_remove: []
+    )
+  end
+
+  def tag_search_params
+    params.require(:tag_search).permit(
+      :query,
+      :name,
+      :fandoms,
+      :type,
+      :canonical,
+      :wrangling_status,
+      :created_at,
+      :uses,
+      :sort_column,
+      :sort_direction
     )
   end
 end

@@ -304,7 +304,7 @@ class StoryParser
     work.ip_address = options[:ip_address]
     work.expected_number_of_chapters = work.chapters.length
     work.revised_at = work.chapters.last.published_at
-    if work.revised_at && work.revised_at.to_date < Date.today
+    if work.revised_at && work.revised_at.to_date < Date.current
       work.backdate = true
     end
 
@@ -343,6 +343,10 @@ class StoryParser
 
     # lock to registered users if specified or importing for others
     work.restricted = options[:restricted] || options[:importing_for_others] || false
+
+    # set comment permissions
+    work.comment_permissions = options[:comment_permissions] || "enable_all"
+    work.moderated_commenting_enabled = options[:moderated_commenting_enabled] || false
 
     # set default values for required tags
     work.fandom_string = meta_or_default(work.fandom_string, options[:fandom], ArchiveConfig.FANDOM_NO_TAG_NAME)
@@ -412,23 +416,25 @@ class StoryParser
   end
 
   def parse_author_common(email, name)
-    if name.present? && email.present?
-      # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
-      name = name.to_ascii.gsub(/[^\w[ \-@.]]/u, "")
+    errors = []
+
+    errors << "No author name specified" if name.blank?
+
+    if email.present?
       external_author = ExternalAuthor.find_or_create_by(email: email)
-      external_author_name = external_author.default_name
-      unless name.blank?
-        external_author_name = ExternalAuthorName.where(name: name, external_author_id: external_author.id).first ||
-                               ExternalAuthorName.new(name: name)
-        external_author.external_author_names << external_author_name
-        external_author.save
-      end
-      external_author_name
+      errors += external_author.errors.full_messages
     else
-      messages = []
-      messages << "No author name specified" if name.blank?
-      messages << "No author email specified" if email.blank?
-      raise Error, messages.join("\n")
+      errors << "No author email specified"
+    end
+
+    raise Error, errors.join("\n") if errors.present?
+
+    # convert to ASCII and strip out invalid characters (everything except alphanumeric characters, _, @ and -)
+    redacted_name = name.to_ascii.gsub(/[^\w[ \-@.]]/u, "")
+    if redacted_name.present?
+      external_author.names.find_or_create_by(name: redacted_name)
+    else
+      external_author.default_name
     end
   end
 
@@ -438,7 +444,7 @@ class StoryParser
     chapter_params = work_params.delete_if do |name, _param|
       !@chapter.attribute_names.include?(name.to_s) || !@chapter.send(name.to_s).blank?
     end
-    @chapter.update_attributes(chapter_params)
+    @chapter.update(chapter_params)
     @chapter
   end
 
@@ -548,7 +554,11 @@ class StoryParser
     # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
     # preserve line breaks in plain text documents
     # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
-    @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), nil, encoding) rescue ""
+    begin
+      @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), encoding: encoding)
+    rescue StandardError
+      @doc = ""
+    end
 
     # Try to convert all relative links to absolute
     base = @doc.at_css("base") ? @doc.css("base")[0]["href"] : location.split("?").first
@@ -792,17 +802,18 @@ class StoryParser
       begin
         # we do a little cleanup here in case the user hasn't included the 'http://'
         # or if they've used capital letters or an underscore in the hostname
-        uri = URI.parse(location)
-        uri = URI.parse('http://' + location) if uri.class.name == "URI::Generic"
-        uri.host.downcase!
-        uri.host.tr!(" ", "-")
+        uri = UrlFormatter.new(location).standardized
+        raise Error, I18n.t("story_parser.on_archive") if ArchiveConfig.PERMITTED_HOSTS.include?(uri.host)
+
         response = Net::HTTP.get_response(uri)
         case response
         when Net::HTTPSuccess
           story = response.body
         when Net::HTTPRedirection
           if limit.positive?
-            story = download_with_timeout(response['location'], limit - 1)
+            new_uri = URI.parse(response["location"])
+            new_uri = URI.join(uri, new_uri) if new_uri.relative?
+            story = download_with_timeout(new_uri.to_s, limit - 1)
           end
         else
           Rails.logger.error("------- STORY PARSER: download_with_timeout: response is not success or redirection ------")
@@ -904,7 +915,7 @@ class StoryParser
         date = Time.at(Regex.last_match[1].to_i)
       end
       date ||= Date.parse(date_string)
-      return '' if date > Date.today
+      return '' if date > Date.current
       return date
     rescue ArgumentError, TypeError
       return ''

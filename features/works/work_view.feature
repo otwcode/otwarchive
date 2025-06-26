@@ -42,3 +42,41 @@ Feature: View a work with various options
     And I should see "DeletedChapterWork"
     And I follow "Site Map"
   Then I should not see "Sorry, we couldn't find the chapter you were looking for."
+
+  Scenario: other users cannot collect a work by default
+  Given the work "Whatever"
+  When I have the collection "test collection" with name "test_collection"
+    And I am logged in as "moderator"
+    And I view the work "Whatever"
+  Then I should not see a link "Invite To Collections"
+    And I should not see the "new_collection_item" form
+
+  Scenario: other users can collect a work when the creator has opted-in
+  Given the work "Whatever"
+    And I am logged in as the author of "Whatever"
+    And I set my preferences to allow collection invitations
+  When I have the collection "test collection" with name "test_collection"
+    And I am logged in as "moderator"
+    And I view the work "Whatever"
+  Then I should see a link "Invite To Collections"
+    And I should see the "new_collection_item" form
+
+  Scenario: archivists can add works to collections regardless of invitation preferences
+  Given the work "Imported Work"
+    And I have an archivist "archivist"
+    And I am logged in as "archivist"
+  When I create the collection "Open Doors Collection 1"
+    And I view the work "Imported Work"
+  Then I should see a link "Add to Collections"
+    And I should see the "new_collection_item" form
+
+  Scenario: chapter title displays in View Full Work mode when chaptered work has one published chapter
+  Given I am logged in as a random user
+    And I set my preferences to View Full Work mode by default
+  When I set up the draft "multiChap"
+    And I check "This work has multiple chapters"
+    And I fill in "Chapter Title" with "cool chapter title"
+    And I fill in "Chapter 1 of" with "?"
+    And I press "Post"
+  Then I should see "Chapter 1: "
+    And I should see "cool chapter title"

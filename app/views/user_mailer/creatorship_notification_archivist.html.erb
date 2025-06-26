@@ -1,7 +1,11 @@
-<% creation_type = @creation.model_name.human.downcase %>
+<% creation_type = @creation.class.name.underscore %>
 <% content_for :message do %>
-  <p><%= t(".intro", type: creation_type, archivist: @archivist.login,
-           pseud: @creatorship.pseud.name) %></p>
+  <p>
+    <%# i18n-tasks-use t('user_mailer.creatorship_notification_archivist.intro_chapter')
+      i18n-tasks-use t('user_mailer.creatorship_notification_archivist.intro_series')
+      i18n-tasks-use t('user_mailer.creatorship_notification_archivist.intro_work')-%>
+    <%= t(".intro_#{creation_type}", archivist: @archivist.login, pseud: @creatorship.pseud.name) %>
+  </p>
 
   <p>
     <%= t(".html.creation",
@@ -11,5 +15,13 @@
 
   <p><%= t(".explanation") %></p>
 
-  <p><%= t(".html.remove", edit: style_link(t(".html.edit", type: creation_type), edit_polymorphic_url(@creation))).html_safe %></p>
+  <p>
+    <%# i18n-tasks-use t('user_mailer.creatorship_notification_archivist.html.remove_chapter')
+      i18n-tasks-use t('user_mailer.creatorship_notification_archivist.html.remove_series')
+      i18n-tasks-use t('user_mailer.creatorship_notification_archivist.html.remove_work')
+      i18n-tasks-use t('user_mailer.creatorship_notification_archivist.html.edit_chapter')
+      i18n-tasks-use t('user_mailer.creatorship_notification_archivist.html.edit_series')
+      i18n-tasks-use t('user_mailer.creatorship_notification_archivist.html.edit_work')-%>
+    <%= t(".html.remove_#{creation_type}", "edit_#{creation_type}_link": style_link(t(".html.edit_#{creation_type}"), edit_polymorphic_url(@creation))).html_safe %>
+  </p>
 <% end %>

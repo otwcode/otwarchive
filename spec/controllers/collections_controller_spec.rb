@@ -22,6 +22,11 @@ describe CollectionsController do
       run_all_indexing_jobs
     end
 
+    it "assigns subtitle with collection title and subcollections" do
+      get :index, params: { collection_id: gift_exchange.name }
+      expect(assigns[:page_subtitle]).to eq("#{gift_exchange.title} - Subcollections")
+    end
+
     context "collections index" do
       it "includes all collections in index" do
         get :index
@@ -112,6 +117,23 @@ describe CollectionsController do
         expect(assigns(:collections)).not_to include parent
       end
     end
+
+    context "denies access for work that isn't visible to user" do
+      subject { get :index, params: { work_id: work } }
+      let(:success) { expect(response).to render_template("index") }
+      let(:success_admin) { success }
+
+      include_examples "denies access for work that isn't visible to user"
+    end
+
+    context "denies access for restricted work to guest" do
+      let(:work) { create(:work, restricted: true) }
+
+      it "redirects with an error" do
+        get :index, params: { work_id: work }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
   end
 
   describe "challenges indexes" do
@@ -148,6 +170,16 @@ describe CollectionsController do
         expect(response).to have_http_status(:success)
         expect(assigns(:challenge_collections)).to include prompt_meme_collection
         expect(assigns(:challenge_collections)).not_to include gift_exchange_collection
+      end
+    end
+  end
+
+  describe "GET #show" do
+    context "when collection does not exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "nonexistent" }
+        end.to raise_error ActiveRecord::RecordNotFound
       end
     end
   end

@@ -67,7 +67,7 @@ describe IndexQueue do
 
     it "should call the stat counter indexer" do
       stats = create(:work).stat_counter
-      stats.update_attributes(hit_count: 10_000)
+      stats.update!(hit_count: 10_000)
       expect(StatCounterIndexer).to receive(:new).with(
         array_including(stats.id.to_s)
       ).at_least(:once).and_call_original

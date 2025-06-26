@@ -2,12 +2,12 @@
 
 .userstuff {
     word-wrap: break-word;
+    line-height: 1.5;
 }
 
-.userstuff p {
+.userstuff p, .userstuff details {
   margin: 1.286em auto;
   padding: 0;
-  line-height: 1.5;
 }
 
 /*lists */
@@ -29,7 +29,6 @@
 
 .userstuff dd {
   display: block;
-  line-height: 1.5;
   margin-block-start: 1.25em;
   margin-block-end: 1.25em;
   margin-inline-start: 3em;
@@ -43,6 +42,10 @@
 .userstuff ul {
   margin: 1.125em auto;
   padding: 0 1em;
+}
+
+.userstuff ul li { 
+  display: list-item; 
 }
 
 .userstuff li, .userstuff ol ul li {
@@ -119,8 +122,8 @@
 .userstuff caption {
   font-size: 1em;
   height: auto;
-  opacity: 1.0;
   width: auto;
+    opacity: 1;
 }
 
 .userstuff table, .userstuff td, .userstuff col, .userstuff tr, .userstuff thead, .userstuff tfoot, .userstuff tbody, .userstuff th, .userstuff thead td, .userstuff th a, .userstuff th a:link {
@@ -131,6 +134,7 @@
 /* quotes and stresses */
 
 .userstuff blockquote {
+  line-height: 1.5;
   margin-inline-start: 1.5em;
   padding: 0.75em;
   border-inline-start: 2px solid #999;
@@ -179,11 +183,21 @@
 /* contexts */
 
 .bookmark .user .userstuff {
-	line-height: 1.5;
+  line-height: 1.5;
 }
 
 .bookmark .user .userstuff blockquote {
-	margin-bottom: 1.286em;
+  margin-bottom: 1.286em;
+}
+
+.faq .userstuff dd {
+  margin-block-start: 0.75em;
+  margin-block-end: 0.75em;
+  margin-inline-start: 1.75em;
+}
+
+.faq .userstuff dl {
+  margin: 0.75em 0;
 }
 
 /*END== */

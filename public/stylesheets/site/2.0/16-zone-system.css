@@ -42,7 +42,7 @@ SUBSECTIONS:
   width: 36%;
 }
 
-.splash .intro, .splash .tweets {
+.splash .intro, .splash .social {
   float: right;
   width: 60%;
 }
@@ -185,16 +185,19 @@ SUBSECTIONS:
   margin: 1em;
 }
 
-/* module: twitter */
+/* module: social */
 
-.tweets iframe {
-  display: block !important;
-  margin: 0 auto;
+.splash .social ul {
+  text-align: center;
+}
+
+.splash .social li {
+  display: inline-block;
 }
 
 /* mod: logged-in */
 
-.logged-in .splash .module {
+.logged-in .splash > .module {
   float: left;
   margin: 0 1% 1.571em 1%;
   width: 48%;
@@ -211,14 +214,14 @@ SUBSECTIONS:
   width: 100%;
 }
 
-/* 2. ZONE: SYSTEM: SESSIONS (login and signup)*/
+/* 2. ZONE: SYSTEM: SESSIONS (login) */
 
 .session #signin {
   margin-left: 48%;
   width: 48%;
 }
 
-.sessions-new .new_admin {
+.sessions-new #new_admin {
   width: 75%;
   margin: auto;
 }
@@ -227,15 +230,18 @@ SUBSECTIONS:
   min-width: 0;
 }
 
-#tos-partial .tos {
-  height: 36em;
-  overflow: auto;
+/* 3. ZONE: SYSTEM: DOCS
+For practicality, /home .docs have been given the .userstuff class as well, to
+save doubling up that sheet or confusing end users. We will just cope with the
+inconsistency. Docs encompasses pages in /home as well as FAQs and Wrangling
+Guidelines. */
+
+.docs .userstuff h6 {
+  border-bottom: none;
+  margin: 0.714em 0;
 }
 
-/*3. ZONE: SYSTEM: DOCS
-For practicality, /home .docs have been given the .userstuff class as well, to save doubling up that sheet or confusing end users. We will just cope with the inconsistency.*/
-
-.docs .userstuff ul, .docs .userstuff ol {
+.docs .userstuff ul, .docs .userstuff ol, .docs .userstuff details .toc {
   margin: 0.643em auto;
   padding: 0;
 }
@@ -244,12 +250,36 @@ For practicality, /home .docs have been given the .userstuff class as well, to s
   padding: 0 1.5em;
 }
 
-.docs .userstuff .toc li {
+.docs .userstuff ul ul li {
+  list-style-type: circle;
+}
+
+.docs .userstuff ol.toc li {
   list-style-type: upper-roman;
 }
 
-.docs .userstuff .toc {
-  margin: 3.215em auto;
+.docs .userstuff ol.toc li ol li {
+  list-style-type: upper-alpha;
+}
+
+.docs .userstuff summary .heading {
+  display: inline;
+}
+
+/* module: tos
+For practicality, the in-page full TOS module on the account creation page
+(located in /users/registrations/_legal.html.erb) has been given the .docs and
+.system classes to ensure it has the same styling it is given on the individual
+/content, /privacy, and /tos pages. */
+
+#tos-partial .tos {
+  height: 36em;
+  overflow: auto;
+}
+
+#tos-partial .userstuff {
+  margin: 0.643em;
+  max-width: 100%;
 }
 
 /*4. ZONE: SYSTEM: ADMIN COMMS
@@ -290,7 +320,7 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
   padding: 0;
 }
 
-.faq .categories .questions li, .faq .userstuff .toc li {
+.faq .userstuff .toc li {
   list-style-type: circle;
 }
 
@@ -311,7 +341,27 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
   border: 1px solid #c2d2df;
 }
 
-/* 7. ZONE: SYSTEM: TOS POPUP */
+.faq .userstuff nav.toc {
+  margin: 3.215em auto;
+}
+
+/* 7. ZONE: SYSTEM: TOS, TOS FAQ, AND TOS POPUP */
+
+.tos .userstuff nav.toc > details {
+  margin-top: 3em;
+}
+
+.tos .userstuff nav.toc > details > summary {
+  border-bottom: 0.25em double #333;
+}
+
+.tos .userstuff nav.toc > details > summary h3 {
+  border-bottom: none;
+}
+
+.tos_faq .userstuff .toc {
+  margin-bottom: 3.215em;
+}
 
 #tos_prompt {
   background: #fff;
@@ -334,7 +384,7 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
 
 #tos_prompt .heading span {
   display: block;
-	margin: auto;
+  margin: auto;
   width: 40rem;
   max-width: 80%;
 }
@@ -343,12 +393,15 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
   margin: auto;
   overflow: hidden;
   width: 40rem;
-	max-width: 80%;
+  max-width: 80%;
 }
 
-#tos_prompt .summary {
-  margin: 2em 0 0.643em 0;
+#tos_prompt p {
   line-height: 1.4;
+}
+
+#tos_prompt p:first-of-type {
+  margin: 2em 0 0.643em 0;
 }
 
 #tos_prompt .confirmation {
@@ -356,7 +409,8 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
 }
 
 #tos_prompt p.submit {
-	margin-bottom: 2em;
+  margin-bottom: 2em;
+  line-height: 1.125;
 }
 
 #tos_prompt .submit input, #tos_prompt .submit button {
@@ -370,6 +424,7 @@ For practicality, /archive_faqs are also .docs and .support and have the .userst
 }
 
 /* 8. ZONE: SYSTEM: PROXY NOTICE */
+
 #proxy-notice {
   background: #efd1d1;
   border-bottom: 1px solid #900;

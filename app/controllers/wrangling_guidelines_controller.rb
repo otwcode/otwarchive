@@ -3,7 +3,7 @@ class WranglingGuidelinesController < ApplicationController
 
   # GET /wrangling_guidelines
   def index
-    @wrangling_guidelines = WranglingGuideline.order('position ASC')
+    @wrangling_guidelines = WranglingGuideline.order("position ASC")
   end
 
   # GET /wrangling_guidelines/1
@@ -13,57 +13,64 @@ class WranglingGuidelinesController < ApplicationController
 
   # GET /wrangling_guidelines/new
   def new
+    authorize :wrangling
     @wrangling_guideline = WranglingGuideline.new
   end
 
   # GET /wrangling_guidelines/1/edit
   def edit
+    authorize :wrangling
     @wrangling_guideline = WranglingGuideline.find(params[:id])
   end
 
   # GET /wrangling_guidelines/manage
   def manage
-    @wrangling_guidelines = WranglingGuideline.order('position ASC')
+    authorize :wrangling
+    @wrangling_guidelines = WranglingGuideline.order("position ASC")
   end
 
   # POST /wrangling_guidelines
   def create
+    authorize :wrangling
     @wrangling_guideline = WranglingGuideline.new(wrangling_guideline_params)
 
     if @wrangling_guideline.save
-      flash[:notice] = ts('Wrangling Guideline was successfully created.')
+      flash[:notice] = t("wrangling_guidelines.create")
       redirect_to(@wrangling_guideline)
     else
-      render action: 'new'
+      render action: "new"
     end
   end
 
   # PUT /wrangling_guidelines/1
   def update
+    authorize :wrangling
     @wrangling_guideline = WranglingGuideline.find(params[:id])
 
-    if @wrangling_guideline.update_attributes(wrangling_guideline_params)
-      flash[:notice] = ts('Wrangling Guideline was successfully updated.')
+    if @wrangling_guideline.update(wrangling_guideline_params)
+      flash[:notice] = t("wrangling_guidelines.update")
       redirect_to(@wrangling_guideline)
     else
-      render action: 'edit'
+      render action: "edit"
     end
   end
 
   # reorder FAQs
   def update_positions
+    authorize :wrangling
     if params[:wrangling_guidelines]
       @wrangling_guidelines = WranglingGuideline.reorder_list(params[:wrangling_guidelines])
-      flash[:notice] = ts('Wrangling Guidelines order was successfully updated.')
+      flash[:notice] = t("wrangling_guidelines.reorder")
     end
     redirect_to(wrangling_guidelines_path)
   end
 
   # DELETE /wrangling_guidelines/1
   def destroy
+    authorize :wrangling
     @wrangling_guideline = WranglingGuideline.find(params[:id])
     @wrangling_guideline.destroy
-    flash[:notice] = ts('Wrangling Guideline was successfully deleted.')
+    flash[:notice] = t("wrangling_guidelines.delete")
     redirect_to(wrangling_guidelines_path)
   end
 
@@ -72,5 +79,4 @@ class WranglingGuidelinesController < ApplicationController
   def wrangling_guideline_params
     params.require(:wrangling_guideline).permit(:title, :content)
   end
-
 end

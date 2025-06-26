@@ -1,31 +1,30 @@
 <div id="dashboard" class="region <%= @user == current_user ? "own" : "" %>" role="navigation region">
-<h4 class="landmark heading"><%= ts("Choices")%></h4>
+<h4 class="landmark heading"><%= t(".landmark.choices") %></h4>
 <ul class="navigation actions">
-  <li><%= span_if_current ts("Dashboard"), @user %></li>
-  <li><%= span_if_current ts("Profile"), user_profile_path(@user) %></li>
+  <li><%= span_if_current t(".choices.dashboard"), @user %></li>
+  <li><%= span_if_current t(".choices.profile"), user_profile_path(@user) %></li>
   <% if @user.pseuds.size > 1 %>
     <li class="pseud" aria-haspopup="true">
-      <% pseud_link_text = current_page?(@user) ? ts("Pseuds") : (@author ? @author.name : @user.login) %>
-      <a href="#" title="<%= ts("Pseud Switcher") %>"><%= pseud_link_text %></a>
+      <a href="#" title="<%= t(".choices.pseud_switcher") %>"><%= t(".choices.pseuds") %></a>
       <ul class="expandable secondary">
-        <%= print_pseud_selector(@user.pseuds) %>
-        <li><%= span_if_current ts("All Pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
+        <%= pseud_selector(pseuds_for_sidebar(@user, @pseud)) %>
+        <li><%= span_if_current t(".choices.all_pseuds", pseud_number: @user.pseuds.count), user_pseuds_path(@user) %></li>
       </ul>
     </li>
 	<% end %>
 
 	<% if @user == current_user %>
-    <li><%= span_if_current ts("Preferences"), user_preferences_path(@user) %></li>
-    <li><%= span_if_current ts("Skins"), user_skins_path(@user) %></li>
+    <li><%= span_if_current t(".choices.preferences"), user_preferences_path(@user) %></li>
+    <li><%= span_if_current t(".choices.skins"), user_skins_path(@user) %></li>
   <% end %>
 </ul>
 
 
-<h4 class="landmark heading"><%= ts("Pitch")%></h4>
+<h4 class="landmark heading"><%= t(".landmark.pitch") %></h4>
 <ul class="navigation actions">
 	<li><%= works_link(@user, @pseud) %></li>
 	<% if @user == current_user || logged_in_as_admin? %>
-	  <li><%= span_if_current ts("Drafts") + " (#{@user.unposted_works.size})", drafts_user_works_path(@user) %></li>
+    <li><%= span_if_current t(".pitch.drafts", drafts_number: @user.unposted_works.size), drafts_user_works_path(@user) %></li>
   <% end %>
 	<li><%= series_link(@user, @pseud) %></li>
 
@@ -33,31 +32,33 @@
 	  <li><%= bookmarks_link(@user, @pseud) %></li>
 	<% end %>
 
-  <li><%= span_if_current ts("Collections (%{coll_number})", :coll_number => @user.maintained_collections.count), user_collections_path(@user) %></li>
+  <li><%= span_if_current t(".pitch.collections", coll_number: @user.maintained_collections.count), user_collections_path(@user) %></li>
 </ul>
 
-<% if @user == current_user %>
-  <h4 class="landmark heading"><%= ts("Catch")%></h4>
+<% if @user == current_user || policy(:inbox_comment).show? %>
+  <h4 class="landmark heading"><%= t(".landmark.catch") %></h4>
   <ul class="navigation actions">
-	  <li><%= span_if_current ts("Inbox (%{inbox_number})", :inbox_number => @user.unread_inbox_comments_count.to_s), user_inbox_path(@user) %></li>
-	  <li><%= span_if_current ts("Statistics"), user_stats_path(@user) %></li>
-    <% if @user.preference.try(:history_enabled?) %>
-      <li><%= span_if_current ts("History"), user_readings_path(@user) %></li>
+    <li><%= span_if_current t(".catch.inbox", inbox_number: @user.unread_inbox_comments_count.to_s), user_inbox_path(@user) %></li>
+    <% if @user == current_user %>
+      <li><%= span_if_current t(".catch.statistics"), user_stats_path(@user) %></li>
+      <% if @user.preference.try(:history_enabled?) %>
+        <li><%= span_if_current t(".catch.history"), user_readings_path(@user) %></li>
+      <% end %>
+      <li><%= span_if_current t(".catch.subscriptions"), user_subscriptions_path(@user) %></li>
     <% end %>
-    <li><%= span_if_current ts("Subscriptions"), user_subscriptions_path(@user) %></li>
   </ul>
 <% end %>
 
-<h4 class="landmark heading"><%= ts("Switch")%></h4>
+<h4 class="landmark heading"><%= t(".landmark.switch") %></h4>
 <ul class="navigation actions">
   <% if @user == current_user %>
     <% if @user.preference.allow_cocreator %>
-      <li><%= span_if_current ts("Co-Creator Requests (%{count})", count: Creatorship.unapproved.for_user(@user).count), user_creatorships_path(@user) %></li>
+      <li><%= span_if_current t(".switch.co_creator_requests", count: Creatorship.unapproved.for_user(@user).count), user_creatorships_path(@user) %></li>
     <% end %>
-    <li><%= span_if_current ts("Sign-ups (%{signup_number})", :signup_number =>@user.challenge_signups.count), user_signups_path(@user) %></li>
-    <li><%= span_if_current ts("Assignments (%{assignment_number})", :assignment_number => (@user.offer_assignments.undefaulted.count + @user.pinch_hit_assignments.undefaulted.count)), user_assignments_path(@user) %></li>
-    <li><%= span_if_current ts("Claims (%{claim_number})", :claim_number => (@user.request_claims.unposted.count)), user_claims_path(@user) %></li>
-    <li><%= span_if_current ts("Related Works (%{related_works_number})", :related_works_number => (@user.related_works.posted.count + @user.parent_work_relationships.count)), user_related_works_path(@user) %></li>
+    <li><%= span_if_current t(".switch.sign_ups", signup_number: @user.challenge_signups.count), user_signups_path(@user) %></li>
+    <li><%= span_if_current t(".switch.assignments", assignment_number: (@user.offer_assignments.undefaulted.count + @user.pinch_hit_assignments.undefaulted.count)), user_assignments_path(@user) %></li>
+    <li><%= span_if_current t(".switch.claims", claim_number: @user.request_claims.unposted.count), user_claims_path(@user) %></li>
+    <li><%= span_if_current t(".switch.related_works", related_works_number: (@user.related_works.posted.count + @user.parent_work_relationships.count)), user_related_works_path(@user) %></li>
   <% end %>
   <li><%= gifts_link(@user) %></li>
 </ul>

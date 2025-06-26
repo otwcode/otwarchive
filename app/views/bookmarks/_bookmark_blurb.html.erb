@@ -1,7 +1,7 @@
 <% # expects "bookmark" %>
 <% bookmarkable = bookmark.bookmarkable %>
 <% bookmark_form_id = (bookmarkable.blank? ? "#{bookmark.id}" : "#{bookmarkable.id}") %>
-<li id="bookmark_<%= bookmark.id %>" class="bookmark blurb group" role="article">
+<li id="bookmark_<%= bookmark.id %>" class="<%= css_classes_for_bookmark_blurb(bookmark) %>" role="article">
 
   <% if bookmarkable.blank? %>
     <p class="message"><%= ts("This has been deleted, sorry!") %></p>
@@ -31,16 +31,6 @@
             <% end %>
           </li>
         <% end %>
-
-        <% if bookmark_count > 1 %>
-          <% if params[:tag_id] || (@owner.blank? && @bookmarkable.blank?) %>
-            <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;" class="showme">
-              <%= link_to ts("Show Most Recent Bookmarks"),
-                fetch_recent_bookmarks_path(bookmark.id),
-                class: "actions", remote: true %>
-            </li>
-          <% end %>
-        <% end %>
       </ul>
     <% end %>
 
@@ -49,9 +39,6 @@
   <% end %>
 
   <%= render "bookmarks/bookmark_user_module", bookmark: bookmark %>
-
-  <% # recent bookmarks will be loaded up here if requested %>
-  <div class="recent dynamic" id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.id}" %>" style="display: none;"></div>
 
   <% if logged_in_as_admin? && bookmarkable.class == ExternalWork %>
     <%= render "admin/admin_options", item: bookmarkable %>

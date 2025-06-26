@@ -24,3 +24,41 @@ shared_examples_for "an email with a valid sender" do
     expect(email).to deliver_from("Archive of Our Own <#{ArchiveConfig.RETURN_ADDRESS}>")
   end
 end
+
+shared_examples_for "an unsent email" do
+  it "is not delivered" do
+    expect(email.message).to be_a(ActionMailer::Base::NullMail)
+  end
+end
+
+shared_examples "it retries and fails on" do |error|
+  it "retries 3 times and ultimately fails with a #{error}" do
+    assert_performed_jobs 3, only: ApplicationMailerJob do
+      expect { subject.deliver_later }.to raise_exception(error)
+    end
+  end
+end
+
+shared_examples "an email with a deleted work with draft chapters attached" do
+  it "has html and txt attachments" do
+    filename = work.title.gsub(/\s/, "_")
+    expect(email.attachments.length).to eq(2)
+    expect(email.attachments).to contain_exactly(
+      an_object_having_attributes(filename: "#{filename}.html"),
+      an_object_having_attributes(filename: "#{filename}.txt")
+    )
+  end
+
+  it "includes draft chapters in attachments" do
+    filename = work.title.gsub(/\s/, "_")
+    html_attachment = email.attachments["#{filename}.html"].body.raw_source
+    txt_attachment = email.attachments["#{filename}.txt"].body.raw_source
+    decoded_html_content = Base64.decode64(html_attachment)
+    decoded_txt_content = Base64.decode64(txt_attachment)
+
+    work.chapters.where(posted: false).each do |draft_chapter|
+      expect(decoded_html_content).to have_content(draft_chapter.content)
+      expect(decoded_txt_content).to have_content(draft_chapter.content)
+    end
+  end
+end

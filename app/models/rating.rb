@@ -1,4 +1,5 @@
 class Rating < Tag
+  validates :canonical, presence: { message: "^Only canonical rating tags are allowed." }
 
   NAME = ArchiveConfig.RATING_CATEGORY_NAME
 

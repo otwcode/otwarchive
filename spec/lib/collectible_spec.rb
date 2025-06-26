@@ -28,8 +28,8 @@ describe Collectible do
 
     work.collections << [collection1, collection2]
     work.collection_items.update_all(
-      user_approval_status: CollectionItem::APPROVED,
-      collection_approval_status: CollectionItem::APPROVED
+      user_approval_status: "approved",
+      collection_approval_status: "approved"
     )
 
     expect(work.approved_collections.count).to eq(2)
@@ -47,14 +47,14 @@ describe Collectible do
       work1.collections << [collection]
       work2.collections << [collection]
 
-      work1.collection_items.first.update(
-        user_approval_status: CollectionItem::APPROVED,
-        collection_approval_status: CollectionItem::APPROVED
+      work1.collection_items.first.update!(
+        user_approval_status: "approved",
+        collection_approval_status: "approved"
       )
 
-      work2.collection_items.first.update(
-        user_approval_status: CollectionItem::APPROVED,
-        collection_approval_status: CollectionItem::APPROVED
+      work2.collection_items.first.update!(
+        user_approval_status: "approved",
+        collection_approval_status: "approved"
       )
 
       expect(work1.approved_collections.count).to eq(1)

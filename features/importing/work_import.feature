@@ -44,7 +44,7 @@ Feature: Import Works
       And I should see "Detected Title"
       And I should see "Language: Deutsch"
       And I should see "Explicit"
-      And I should see "Archive Warning: Underage"
+      And I should see "Archive Warning: Underage Sex"
       And I should see "Fandom: Detected Fandom"
       And I should see "Category: M/M"
       And I should see "Relationship: Detected 1/Detected 2"
@@ -120,56 +120,125 @@ Feature: Import Works
       And I should not see "Additional Tags:"
       And I should not see "Relationship: Detected 1/Detected 2"
 
-  Scenario: Admins see IP address on imported works
+  Scenario Outline: Admins see IP address on imported works
     Given I import "http://import-site-with-tags" with a mock website
       And I press "Post"
-    When I am logged in as an admin
+    When I am logged in as a "<role>" admin
       And I go to the "Detected Title" work page
     Then I should see "IP Address: 127.0.0.1"
 
-  Scenario: Admins see IP address on works imported without preview
+    Examples:
+    | role             |
+    | legal            |
+    | policy_and_abuse |
+
+  Scenario Outline: Admins see IP address on works imported without preview
     Given I start importing "http://import-site-with-tags" with a mock website
       And I check "Post without previewing"
       And I press "Import"
-    When I am logged in as an admin
+    When I am logged in as a "<role>" admin
       And I go to the "Detected Title" work page
     Then I should see "IP Address: 127.0.0.1"
 
-  Scenario: Admins see IP address on multi-chapter works imported without preview
+    Examples:
+    | role             |
+    | legal            |
+    | policy_and_abuse |
+
+  Scenario Outline: Admins see IP address on multi-chapter works imported without preview
     Given I import the urls with mock websites as chapters without preview
       """
       http://import-site-without-tags
       http://second-import-site-without-tags
       """
-    When I am logged in as an admin
+    When I am logged in as a "policy_and_abuse" admin
       And I go to the "Untitled Imported Work" work page
     Then I should see "Chapters:2/2"
       And I should see "IP Address: 127.0.0.1"
 
+    Examples:
+    | role             |
+    | legal            |
+    | policy_and_abuse |
+
+  Scenario: Imported works can be set to restricted
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I check "Only show imported works to registered users"
+      And I press "Import"
+      And I press "Post"
+    When I am logged out
+      And I go to the "Detected Title" work page
+    Then I should see "This work is only available to registered users of the Archive."
+
+  Scenario: Imported works can have comments enabled to guests
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I choose "comment_permissions_enable_all"
+      And I press "Import"
+      And I press "Post"
+    When I am logged out
+      And I go to the "Detected Title" work page
+      And I follow "Yes, Continue"
+    Then I should see "Guest name"
+
+  Scenario: Imported works can have comments disabled to guests
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I choose "comment_permissions_disable_anon"
+      And I press "Import"
+      And I press "Post"
+    When I am logged out
+      And I go to the "Detected Title" work page
+      And I follow "Yes, Continue"
+    Then I should see "Sorry, this work doesn't allow non-Archive users to comment."
+
+  Scenario: Imported works can have comments disabled
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I choose "comment_permissions_disable_all"
+      And I press "Import"
+      And I press "Post"
+    When I go to the "Detected Title" work page
+    Then I should see "Sorry, this work doesn't allow comments."
+
+  Scenario: Imported works can have comment moderation off
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I uncheck "moderated_commenting_enabled"
+      And I press "Import"
+      And I press "Post"
+    When I am logged out
+      And I go to the "Detected Title" work page
+      And I follow "Yes, Continue"
+    Then I should not see "This work's creator has chosen to moderate comments on the work."
+
+  Scenario: Imported works can have comment moderation on
+    When I start importing "http://import-site-with-tags" with a mock website
+      And I choose "comment_permissions_enable_all"
+      And I check "moderated_commenting_enabled"
+      And I press "Import"
+      And I press "Post"
+    When I am logged out
+      And I go to the "Detected Title" work page
+      And I follow "Yes, Continue"
+    Then I should see "This work's creator has chosen to moderate comments on the work."
+
   Scenario: Importing multiple works with backdating
-    When I import the urls
+    When I import the urls with mock websites
         """
-        http://www.intimations.org/fanfic/idol/Huddling.html
-        http://www.intimations.org/fanfic/idol/Stardust.html
+        http://example.com/second-import-site-with-tags.html
+        http://example.com/import-site-with-tags
         """
     Then I should see "Imported Works"
       And I should see "We were able to successfully upload"
       And I should see "Huddling"
-      And I should see "Stardust"
+      And I should see "Detected Title"
     When I follow "Huddling"
     Then I should see "Preview"
       And I should see "2010-01-11"
 
   Scenario: Importing a new multichapter work with backdating should have correct chapter index dates
-    Given basic languages
-      And basic tags
-      And I am logged in
-      And I set my time zone to "UTC"
-    When I go to the import page
-      And I fill in "urls" with
+    Given I set up importing with a mock website
+    When I fill in "urls" with
         """
-        http://rebecca2525.dreamwidth.org/3506.html
-        http://rebecca2525.dreamwidth.org/4024.html
+        http://example.com/import-site-with-tags
+        http://example.com/second-import-site-with-tags.html
         """
       And I choose "Chapters in a single work"
       And I select "Deutsch" from "Choose a language"
@@ -177,11 +246,11 @@ Feature: Import Works
     Then I should see "Preview"
     When I press "Post"
     Then I should see "Language: Deutsch"
-      And I should see "Published:2000-01-10"
-      And I should see "Completed:2000-01-22"
+      And I should see "Published:2002-01-12"
+      And I should see "Completed:2010-01-11"
     When I follow "Chapter Index"
-    Then I should see "1. Chapter 1 (2000-01-10)"
-      And I should see "2. Importing Test Part 2 (2000-01-22)"
+    Then I should see "1. Chapter 1 (2002-01-12)"
+      And I should see "2. Huddling (2010-01-11)"
 
   Scenario: Imported multichapter work should have the correct word count
     Given I import the urls with mock websites as chapters without preview
@@ -213,12 +282,14 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  @work_import_special_characters_auto_latin
   Scenario: Import a work with special characters (latin-1, autodetect from page encoding)
     When I import "http://www.rbreu.de/otwtest/latin1_specified.html"
     Then I should see "Preview"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  @work_import_special_characters_man_latin
   Scenario: Import a work with special characters (latin-1, must set manually)
     When I start importing "http://www.rbreu.de/otwtest/latin1_notspecified.html"
       And I select "ISO-8859-1" from "encoding"
@@ -227,6 +298,7 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  @work_import_special_characters_man_cp
   Scenario: Import a work with special characters (cp-1252, must set manually)
     When I start importing "http://rbreu.de/otwtest/cp1252.txt"
       And I select "Windows-1252" from "encoding"
@@ -236,6 +308,7 @@ Feature: Import Works
       And I should see "So—what’s up?"
       And I should see "“Something witty.”"
 
+  @work_import_special_characters_man_utf
   Scenario: Import a work with special characters (utf-8, must overwrite wrong page encoding)
     When I start importing "http://www.rbreu.de/otwtest/utf8_notspecified.html"
       And I select "UTF-8" from "encoding"
@@ -244,6 +317,8 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  # TODO: scarvesandcoffee.net is 403.
+  @wip
   Scenario: Import a chaptered work from an efiction site
   When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
   Then I should see "Preview"
@@ -253,12 +328,12 @@ Feature: Import Works
   Then I should see "Chapter 2"
 
   Scenario: Searching for an imported work by URL will redirect you to the work
-    When I import "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+    When I import "http://import-site-with-tags" with a mock website
       And I press "Post"
       And I go to the redirect page
-      And I fill in "Original URL of work" with "http://www.scarvesandcoffee.net/viewstory.php?sid=9570"
+      And I fill in "Original URL of work" with "http://import-site-with-tags"
       And I press "Go"
-    Then I should see "This is what Blaine's been thinking written in poems."
+    Then I should see "Detected Title"
 
   Scenario: Import URLs as chapters of a single work and post from drafts page
     Given I import the urls with mock websites as chapters
@@ -266,9 +341,27 @@ Feature: Import Works
       http://import-site-without-tags
       http://second-import-site-without-tags
       """
-    When I go to my drafts page
+    When I follow "My Dashboard"
+      And I follow "Drafts ("
       And I follow "Post Draft"
     Then I should see "Your work was successfully posted."
       And I should not see "This chapter is a draft and hasn't been posted yet!"
     When I follow "Next Chapter"
     Then I should not see "This chapter is a draft and hasn't been posted yet!"
+
+  Scenario: Importing as an archivist for an existing Archive author should send translated claim email
+    Given a locale with translated emails
+      And the following activated users exist
+        | login    | email              |
+        | sam      | sam@example.com    |
+        | notsam   | notsam@example.com |
+      And the user "sam" enables translated emails
+      And all emails have been delivered
+    When I import the mock work "http://import-site-without-tags" by "sam" with email "sam@example.com" and by "notsam" with email "notsam@example.com"
+    Then I should see import confirmation
+      And 1 email should be delivered to "sam@example.com"
+      And the email should contain claim information
+      And the email to "sam" should be translated
+      And 1 email should be delivered to "notsam@example.com"
+      And the email should contain claim information
+      And the email to "notsam" should be non-translated

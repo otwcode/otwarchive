@@ -8,7 +8,7 @@
 <%= creation.is_a?(Work) ? work_url(this_work) : work_chapter_url(this_work, creation) %>
 <% end %>
 
-<%= creation.is_a?(Work) ? this_work.title.html_safe : creation.full_chapter_title.html_safe %> (<%= creation.word_count%> words)<% unless @seen[this_work.id] %>
+<%= creation.is_a?(Work) ? this_work.title : creation.full_chapter_title.html_safe %> (<%= creation.word_count%> words)<% unless @seen[this_work.id] %>
 by <%= creator_text(this_work) %><% end %>
 
 <% if !creation.summary.blank? && creation.is_a?(Chapter) %>
@@ -17,7 +17,7 @@ Chapter Summary: <%= raw to_plain_text(sanitize_field(creation, :summary)) %>
 
 <% unless @seen[this_work.id] %>
 <% cache "subscription-email-txt-meta-#{creation.cache_key}" do %>
-Chapters: <%= this_work.chapter_total_display %>
+Chapters: <%= chapter_total_display(this_work) %>
 Fandom: <%= this_work.fandoms.map{|f| f.name}.to_sentence.html_safe %>
 Rating: <%= this_work.rating_string %>
 Warnings: <%= this_work.archive_warning_string %>

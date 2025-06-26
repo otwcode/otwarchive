@@ -4,7 +4,6 @@
   <% offer_signup = assignment.offer_signup %>
   <tr>
     <th scope="row">
-      <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
       <%= link_to assignment.id, collection_assignment_path(@collection, assignment) %>
     </th>
     <td id="request_signup_for_<%= assignment.id %>">

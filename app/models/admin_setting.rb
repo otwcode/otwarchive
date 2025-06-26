@@ -1,5 +1,5 @@
 class AdminSetting < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
+  include AfterCommitEverywhere
 
   belongs_to :last_updated, class_name: 'Admin', foreign_key: :last_updated_by
   validates_presence_of :last_updated_by
@@ -8,7 +8,6 @@ class AdminSetting < ApplicationRecord
 
   before_save :update_invite_date
   before_update :check_filter_status
-  after_save :expire_cached_settings
 
   belongs_to :default_skin, class_name: 'Skin'
 
@@ -19,7 +18,7 @@ class AdminSetting < ApplicationRecord
     invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
     invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
     account_creation_enabled?: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
-    days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED,
+    days_to_purge_unactivated: 2,
     suspend_filter_counts?: false,
     enable_test_caching?: false,
     cache_expiration: 10,
@@ -39,14 +38,14 @@ class AdminSetting < ApplicationRecord
       invite_from_queue_number: ArchiveConfig.INVITE_FROM_QUEUE_NUMBER,
       invite_from_queue_frequency: ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
       account_creation_enabled: ArchiveConfig.ACCOUNT_CREATION_ENABLED,
-      days_to_purge_unactivated: ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
+      days_to_purge_unactivated: 2
     )
     settings.save(validate: false)
     settings
   end
 
   def self.current
-    Rails.cache.fetch("admin_settings", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
+    Rails.cache.fetch("admin_settings-v2", race_condition_ttl: 10.seconds) { AdminSetting.first } || OpenStruct.new(DEFAULT_SETTINGS)
   end
 
   class << self
@@ -54,15 +53,15 @@ class AdminSetting < ApplicationRecord
     delegate :default_skin, to: :current
   end
 
-  # run once a day from cron
+  # run hourly with the resque scheduler
   def self.check_queue
-    if self.invite_from_queue_enabled? && InviteRequest.count > 0
-      if Date.today >= self.invite_from_queue_at.to_date
-        new_date = Time.now + self.invite_from_queue_frequency.days
-        self.first.update_attribute(:invite_from_queue_at, new_date)
-        InviteRequest.invite
-      end
-    end
+    return unless self.invite_from_queue_enabled? && InviteRequest.any? && Time.current >= self.invite_from_queue_at
+
+    new_time = Time.current + self.invite_from_queue_frequency.hours
+    current_setting = self.first
+    current_setting.invite_from_queue_at = new_time
+    current_setting.save(validate: false, touch: false)
+    InviteFromQueueJob.perform_now(count: invite_from_queue_number)
   end
 
   @queue = :admin
@@ -71,11 +70,19 @@ class AdminSetting < ApplicationRecord
     self.send(method, *args)
   end
 
-  private
+  after_save :recache_settings
+  def recache_settings
+    # If the default skin has just been created and set, it will have a closed
+    # file handle from attaching a preview image, and cannot be serialized for
+    # caching. To avoid that, we need to reload a fresh copy of the record,
+    # within the current transaction to guarantee up-to-date data.
+    self.reload
 
-  def expire_cached_settings
-    Rails.cache.delete("admin_settings")
+    # However, we only cache it if the transaction is successful.
+    after_commit { Rails.cache.write("admin_settings-v2", self) }
   end
+
+  private
 
   def check_filter_status
     if self.suspend_filter_counts_changed?
@@ -89,7 +96,7 @@ class AdminSetting < ApplicationRecord
 
   def update_invite_date
     if self.invite_from_queue_frequency_changed?
-      self.invite_from_queue_at = Time.now + self.invite_from_queue_frequency.days
+      self.invite_from_queue_at = Time.current + self.invite_from_queue_frequency.hours
     end
   end
 end

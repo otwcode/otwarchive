@@ -3,9 +3,10 @@
 class ZohoResourceClient
   CONTACT_SEARCH_ENDPOINT = "https://desk.zoho.com/api/v1/contacts/search"
   CONTACT_CREATE_ENDPOINT = "https://desk.zoho.com/api/v1/contacts"
+  TICKET_SEARCH_ENDPOINT = "https://desk.zoho.com/api/v1/tickets/search"
   TICKET_CREATE_ENDPOINT = "https://desk.zoho.com/api/v1/tickets"
 
-  def initialize(access_token:, email:)
+  def initialize(access_token:, email: nil)
     @access_token = access_token
     @email = email
   end
@@ -14,40 +15,59 @@ class ZohoResourceClient
     (find_contact || create_contact).fetch("id")
   end
 
+  def find_ticket(ticket_number)
+    response = HTTParty.get(
+      TICKET_SEARCH_ENDPOINT,
+      query: search_params.merge(ticketNumber: ticket_number),
+      headers: headers
+    ).parsed_response
+
+    # Note that Zoho returns an empty 204 if the ticket is marked as spam.
+    return if response.blank? || response.key?("errorCode")
+
+    response.fetch("data").first
+  end
+
   def create_ticket(ticket_attributes:)
-    response_raw = HTTParty.post(
+    HTTParty.post(
       TICKET_CREATE_ENDPOINT,
       headers: headers,
       body: ticket_attributes.to_json
-    )
-    JSON.parse(response_raw.body)
+    ).parsed_response
   end
 
-  private
+  def create_ticket_attachment(ticket_id:, attachment_attributes:)
+    response = HTTParty.post(
+      ticket_attachment_create_endpoint(ticket_id),
+      headers: headers,
+      body: attachment_attributes
+    ).parsed_response
+    raise response["message"] if response["errorCode"]
+
+    response
+  end
 
   def find_contact
-    response_raw = HTTParty.get(
+    response = HTTParty.get(
       CONTACT_SEARCH_ENDPOINT,
-      query: search_params,
+      query: search_params.merge(email: @email),
       headers: headers
-    )
-    return if response_raw.nil?
+    ).parsed_response
+    return if response.blank? || response.key?("errorCode")
 
-    JSON.parse(response_raw.body).fetch("data").first
+    response.fetch("data").first
   end
 
   def create_contact
-    response_raw = HTTParty.post(
+    HTTParty.post(
       CONTACT_CREATE_ENDPOINT,
       headers: headers,
       body: contact_body.to_json
-    )
-    JSON.parse(response_raw.body)
+    ).parsed_response
   end
 
   def search_params
     {
-      email: @email,
       limit: 1,
       sortBy: "modifiedTime"
     }
@@ -66,5 +86,11 @@ class ZohoResourceClient
       "lastName" => @email,
       "email" => @email
     }
+  end
+
+  private
+
+  def ticket_attachment_create_endpoint(ticket_id)
+    "#{ArchiveConfig.ZOHO_URL}/api/v1/tickets/#{ticket_id}/attachments"
   end
 end

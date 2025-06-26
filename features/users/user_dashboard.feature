@@ -6,14 +6,14 @@ Feature: User dashboard
 
   Scenario: If I have no creations my dashboard is empty
   Given I am logged in as "first_user"
-    And I go to my user page
+    And I follow "My Dashboard"
   Then I should see "You don't have anything posted under this name yet"
   Given I am logged in as "second_user"
     And I go to first_user's user page
   Then I should see "There are no works or bookmarks under this name yet"
   When I am logged in as "first_user"
     And I post the work "First Work"
-    And I go to my user page
+    And I follow "My Dashboard"
   Then I should not see "You don't have anything posted under this name yet"
     And I should see "First Work"
   When I am logged in as "second_user"
@@ -36,7 +36,7 @@ Feature: User dashboard
   # view user dashboard - when posting a work with the canonical, metatag and synonym should not be seen
   When I am logged in as "first_user"
     And I post the work "Revenge of the Sith" with fandom "Stargate SG-1"
-    And I go to my user page
+    And I follow "My Dashboard"
   Then I should see "Stargate SG-1" within "#user-fandoms"
     And I should not see "Stargate Franchise"
     And I should not see "Stargatte SG-oops"
@@ -46,7 +46,7 @@ Feature: User dashboard
     And I press "Preview"
     And I press "Update"
   Then I should see "Work was successfully updated"
-  When I go to my user page
+  When I follow "My Dashboard"
   Then I should see "Stargate SG-1" within "#user-fandoms"
     And I should not see "Stargate Franchise"
     And I should not see "Stargatte SG-oops" within "#user-fandoms"
@@ -77,6 +77,17 @@ Feature: User dashboard
     And I should see "Oldest Work"
     And I should see "Newest Work"
 
+  Scenario: The user dashboard should not list anonymous works by the user
+  Given I have the anonymous collection "Anon Treasury"
+    And I am logged in as "meatloaf"
+    And I post the work "Anon Work" to the collection "Anon Treasury"
+  When I go to meatloaf's user page
+  Then I should not see "Recent Works"
+  When I post the work "New Work"
+    And I go to meatloaf's user page
+  Then I should see "Recent works"
+    And I should not see "Anon Work" within "#user-works"
+
   Scenario: The user dashboard should list up to five of the user's series and link to more
   Given I am logged in as "meatloaf"
     And I post the work "My Work"
@@ -98,6 +109,18 @@ Feature: User dashboard
   Then I should see "6 Series by meatloaf"
     And I should see "Oldest Series"
     And I should see "Newest Series"
+
+  Scenario: The user dashboard should not list anonymous series by the user
+  Given I have the anonymous collection "Anon Treasury"
+    And I am logged in as "meatloaf"
+    And I post the work "Anon Work" to the collection "Anon Treasury"
+    And I add the work "Anon Work" to series "Anon Series"
+  When I go to meatloaf's user page
+  Then I should not see "Recent Series"
+  When I add the work "New Work" to series "Cool Series"
+    And I go to meatloaf's user page
+  Then I should see "Recent series"
+    And I should not see "Anon Series" within "#user-series"
 
   Scenario: The user dashboard should list up to five of the user's bookmarks and link to more
   Given dashboard counts expire after 10 seconds
@@ -140,6 +163,7 @@ Feature: User dashboard
     And I post the works "Oldest Work, Work 2, Work 3, Work 4, Work 5"
     And I add the work "Oldest Work" to series "Oldest Series"
     And I bookmark the work "Oldest Work"
+    And "meatloaf" creates the pseud "gravy"
   When I add the work "Pseud's Work 1" to series "Pseud Series A" as "gravy"
     And I bookmark the work "Work 5" as "gravy"
     And I go to meatloaf's user page
@@ -173,3 +197,79 @@ Feature: User dashboard
   Then I should see "2 Works by meatloaf in Star Trek"
   When I press "Sort and Filter"
   Then I should see "2 Works by meatloaf in Star Trek"
+
+  Scenario: The dashboard sidebar series count should exclude restricted series when logged out
+    Given I have the anonymous collection "Anon works"
+      And I am logged in as "Accumulator"
+      And "Accumulator" creates the pseud "Battery"
+      And "Accumulator" creates the pseud "Centrifuge"
+      And I post the work "Normal work" as part of a series "Mine" using the pseud "Battery"
+      And I post the work "Normal work 2" as part of a series "Mine" using the pseud "Battery"
+      And I post the work "Restricted work" as part of a series "Restricted" using the pseud "Battery"
+      And I lock the work "Restricted work"
+      And I post the work "Another restricted work" as part of a series "Restricted" using the pseud "Battery"
+      And I lock the work "Another restricted work"
+    When I go to Accumulator's user page
+    Then I should see "Series (2)" within "#dashboard"
+    When I go to the dashboard page for user "Accumulator" with pseud "Battery"
+    Then I should see "Series (2)" within "#dashboard"
+    When I go to the dashboard page for user "Accumulator" with pseud "Centrifuge"
+    Then I should see "Series (0)" within "#dashboard"
+    When I am logged out
+      And I go to Accumulator's user page
+    Then I should see "Series (1)" within "#dashboard"
+    When I go to the dashboard page for user "Accumulator" with pseud "Battery"
+    Then I should see "Series (1)" within "#dashboard"
+    When I go to the dashboard page for user "Accumulator" with pseud "Centrifuge"
+    Then I should see "Series (0)" within "#dashboard"
+    # Series with anon works are never counted
+    When I am logged in as "Accumulator"
+      And I post the work "Another normal work" as part of a series "Anon" using the pseud "Battery"
+      And I post the work "Anon work" in the collection "Anon works" as part of a series "Anon" using the pseud "Battery"
+      And I go to Accumulator's user page
+    Then I should see "Series (2)" within "#dashboard"
+    When I go to the dashboard page for user "Accumulator" with pseud "Battery"
+    Then I should see "Series (2)" within "#dashboard"
+    When I go to the dashboard page for user "Accumulator" with pseud "Centrifuge"
+    Then I should see "Series (0)" within "#dashboard"
+    When I am logged out
+      And I go to Accumulator's user page
+    Then I should see "Series (1)" within "#dashboard"
+    When I go to the dashboard page for user "Accumulator" with pseud "Battery"
+    Then I should see "Series (1)" within "#dashboard"
+    When I go to the dashboard page for user "Accumulator" with pseud "Centrifuge"
+    Then I should see "Series (0)" within "#dashboard"
+
+  Scenario Outline: User and pseud dashboards, and user profiles, contain links to the user's administration page only for authorized admins
+  Given "a_user" has the pseud "a_pseud"
+  When I am <logged_in_status>
+    And I go to a_user's user page
+  Then I should <action> "User Administration" within ".user .primary"
+  When I go to a_user's profile page
+  Then I should <action> "User Administration" within ".user .primary"
+  When I go to the user page for user "a_user" with pseud "a_pseud"
+  Then I should <action> "User Administration" within ".user .primary"
+  Examples:
+    | logged_in_status                      | action  |
+    | logged in as a "superadmin" admin     | see     |
+    | logged in as a "communications" admin | not see |
+    | logged in as a random user            | not see |
+    | logged in as "a_user"                 | not see |
+    | a visitor                             | not see |
+
+  Scenario Outline: User and pseud dashboards, and user profiles, contain links to the user's invitations page only for the user and authorized admins
+  Given "a_user" has the pseud "a_pseud"
+  When I am <logged_in_status>
+    And I go to a_user's user page
+  Then I should <action> "Invitations" within ".user .primary"
+  When I go to a_user's profile page
+  Then I should <action> "Invitations" within ".user .primary"
+  When I go to the user page for user "a_user" with pseud "a_pseud"
+  Then I should <action> "Invitations" within ".user .primary"
+  Examples:
+    | logged_in_status                      | action  |
+    | logged in as a "superadmin" admin     | see     |
+    | logged in as a "communications" admin | not see |
+    | logged in as a random user            | not see |
+    | logged in as "a_user"                 | see     |
+    | a visitor                             | not see |

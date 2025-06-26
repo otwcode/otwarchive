@@ -1,4 +1,4 @@
-@skins
+@set-default-skin
 Feature: Admin manage skins
 
   Scenario: Users should not be able to see the admin skins page
@@ -9,7 +9,7 @@ Feature: Admin manage skins
   Scenario: Admin can cache and uncache a public skin
   Given basic skins
     And the approved public skin "public skin"
-    And I am logged in as an admin
+    And I am logged in as a "superadmin" admin
   When I follow "Approved Skins"
     And I check "Cache"
   Then I press "Update"
@@ -22,7 +22,7 @@ Feature: Admin manage skins
   Scenario: Admin can add a public skin to the chooser and then remove it
   Given the approved public skin "public skin"
     And the skin "public skin" is cached
-  When I am logged in as an admin
+  When I am logged in as a "superadmin" admin
   Then I should not see the skin chooser
   When I follow "Approved Skins"
     And I check "Chooser"
@@ -37,7 +37,7 @@ Feature: Admin manage skins
 
   Scenario: An admin can reject and unreject a skin
   Given the unapproved public skin "public skin"
-    And I am logged in as an admin
+    And I am logged in as a "superadmin" admin
   When I go to admin's skins page
     And I check "make_rejected_public_skin"
     And I submit
@@ -52,7 +52,7 @@ Feature: Admin manage skins
 
   Scenario: An admin can feature and unfeature skin
   Given the approved public skin "public skin"
-    And I am logged in as an admin
+    And I am logged in as a "superadmin" admin
   When I follow "Approved Skins"
     And I check "Feature"
     And I submit
@@ -64,13 +64,13 @@ Feature: Admin manage skins
 
   Scenario: Admins should be able to see public skins in the admin skins page
   Given the unapproved public skin "public skin"
-    And I am logged in as an admin
+    And I am logged in as a "superadmin" admin
   When I go to admin's skins page
   Then I should see "public skin" within "table#unapproved_skins"
 
   Scenario: Admins should not be able to edit unapproved skins
   Given the unapproved public skin "public skin"
-    And I am logged in as an admin
+    And I am logged in as a "superadmin" admin
   When I go to "public skin" skin page
   Then I should not see "Edit"
     And I should not see "Delete"
@@ -79,7 +79,7 @@ Feature: Admin manage skins
 
   Scenario: Admins should be able to approve public skins
   Given the unapproved public skin "public skin"
-    And I am logged in as an admin
+    And I am logged in as a "superadmin" admin
   When I go to admin's skins page
     And I check "public skin"
     And I submit
@@ -89,7 +89,7 @@ Feature: Admin manage skins
 
   Scenario: Admins should be able to edit but not delete public approved skins
   Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
-    And I am logged in as an admin
+    And I am logged in as a "superadmin" admin
   When I go to "public skin" skin page
   Then I should see "Edit"
     But I should not see "Delete"
@@ -124,17 +124,28 @@ Feature: Admin manage skins
   When I am on skinner's preferences page
     And I select "strange skin" from "preference_skin_id"
     And I submit
-  Then I should see "{ text-decoration: underline; }"
-  When I am logged in as an admin
-  Then I should not see "{ text-decoration: blink; }"
+  Then I should see "{ text-decoration: underline; }" in the page style
+  When I am logged in as a "superadmin" admin
+  Then I should not see "{ text-decoration: blink; }" in the page style
   When I follow "Approved Skins"
     And I fill in "set_default" with "public skin"
     And I press "Update"
   Then I should see "Default skin changed to public skin"
-    And I should see "{ text-decoration: blink; }"
+    And I should see "{ text-decoration: blink; }" in the page style
   When I am logged in as "skinner"
-  Then I should see "{ text-decoration: underline; }"
+  Then I should see "{ text-decoration: underline; }" in the page style
   # A user created before changing the default skin will still have the same skin
   When I am logged in as "KnownUser"
-  Then I should not see "{ text-decoration: blink; }"
+  Then I should not see "{ text-decoration: blink; }" in the page style
 
+  Scenario: Admin can edit a skin with the word "archive" in the title
+  Given the approved public skin "official archive skin" has reserved words in the title
+    And I am logged in as a "superadmin" admin
+  When I go to "official archive skin" skin page
+    And I follow "Edit"
+    And I fill in "CSS" with "#greeting.logged-in { text-decoration: blink;}"
+    And I fill in "Description" with "all your skin are belong to us"
+    And I submit
+  Then I should see an update confirmation message
+    And I should see "all your skin are belong to us"
+    And I should see "#greeting.logged-in"

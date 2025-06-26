@@ -1,16 +1,9 @@
 # Available linter versions:
 # http://help.houndci.com/en/articles/2461415-supported-linters
-#
-# Keep versions in sync with Gemfile.linters.
-
-erblint:
-  enabled: true
-  config_file: .erb-lint.yml
 
 jshint:
   config_file: .jshintrc
   ignore_file: .jshintignore
 
 rubocop:
-  version: 0.83.0
-  config_file: .rubocop.yml
+  enabled: false

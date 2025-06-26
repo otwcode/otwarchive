@@ -20,5 +20,9 @@ module TaskExampleGroup
       subject.all_prerequisite_tasks.each { |prerequisite| Rake::Task[prerequisite].reenable }
       subject.reenable
     end
+
+    it "depends on the :environment task" do
+      expect(subject.all_prerequisite_tasks.map(&:name)).to include("environment")
+    end
   end
 end

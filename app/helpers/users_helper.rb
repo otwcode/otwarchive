@@ -15,38 +15,23 @@ module UsersHelper
     current_user.is_a?(User) ? current_user.maintained_collections.present? : false
   end
 
-  def sidebar_pseud_link_text(user, pseud)
-    text = if current_page?(user)
-             ts('Pseuds')
-           elsif pseud.present? && !pseud.new_record?
-             pseud.name
-           else
-             user.login
-           end
-    (text + ' &#8595;').html_safe
-  end
-
   # Prints user pseuds with links to anchors for each pseud on the page and the description as the title
   def print_pseuds(user)
     user.pseuds.collect(&:name).join(', ')
   end
 
   # Determine which icon to show on user pages
-  def standard_icon(user = nil, pseud = nil)
-    if pseud && pseud.icon
-      pseud.icon.url(:standard).gsub(/^http:/, "https:")
-    elsif user && user.default_pseud && user.default_pseud.icon
-      user.default_pseud.icon.url(:standard).gsub(/^http:/, "https:")
-    else
-      '/images/skins/iconsets/default/icon_user.png'
-    end
+  def standard_icon(pseud = nil)
+    return "/images/skins/iconsets/default/icon_user.png" unless pseud&.icon&.attached?
+
+    rails_blob_url(pseud.icon.variant(:standard))
   end
 
   # no alt text if there isn't specific alt text
   def icon_display(user = nil, pseud = nil)
     path = user ? (pseud ? user_pseud_path(pseud.user, pseud) : user_path(user)) : nil
     pseud ||= user.default_pseud if user
-    icon = standard_icon(user, pseud)
+    icon = standard_icon(pseud)
     alt_text = pseud.try(:icon_alt_text) || nil
 
     if path
@@ -66,12 +51,12 @@ module UsersHelper
   def bookmarks_link(user, pseud = nil)
     return pseud_bookmarks_link(pseud) if pseud.present? && !pseud.new_record?
 
-    total = BookmarkSearchForm.count_for_user(user)
+    total = SearchCounts.bookmark_count_for_user(user)
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_bookmarks_path(@user)
   end
 
   def pseud_bookmarks_link(pseud)
-    total = BookmarkSearchForm.count_for_pseud(pseud)
+    total = SearchCounts.bookmark_count_for_pseud(pseud)
     span_if_current ts('Bookmarks (%{bookmark_number})', bookmark_number: total.to_s), user_pseud_bookmarks_path(@user, pseud)
   end
 
@@ -80,12 +65,12 @@ module UsersHelper
   def works_link(user, pseud = nil)
     return pseud_works_link(pseud) if pseud.present? && !pseud.new_record?
 
-    total = WorkSearchForm.count_for_user(user)
+    total = SearchCounts.work_count_for_user(user)
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_works_path(@user)
   end
 
   def pseud_works_link(pseud)
-    total = WorkSearchForm.count_for_pseud(pseud)
+    total = SearchCounts.work_count_for_pseud(pseud)
     span_if_current ts('Works (%{works_number})', works_number: total.to_s), user_pseud_works_path(@user, pseud)
   end
 
@@ -93,21 +78,21 @@ module UsersHelper
   def series_link(user, pseud = nil)
     return pseud_series_link(pseud) if pseud.present? && !pseud.new_record?
 
-    if current_user.nil?
-      total = Series.visible_to_all.exclude_anonymous.for_pseuds(user.pseuds).length
-    else
-      total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(user.pseuds).length
-    end
-    span_if_current ts('Series (%{series_number})', series_number: total.to_s), user_series_index_path(@user)
+    total = if current_user.nil?
+              Series.visible_to_all.exclude_anonymous.for_user(user).count.size
+            else
+              Series.visible_to_registered_user.exclude_anonymous.for_user(user).count.size
+            end
+    span_if_current ts("Series (%{series_number})", series_number: total.to_s), user_series_index_path(user)
   end
 
   def pseud_series_link(pseud)
-    if current_user.nil?
-      total = Series.visible_to_all.exclude_anonymous.for_pseuds([pseud]).length
-    else
-      total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([pseud]).length
-    end
-    span_if_current ts('Series (%{series_number})', series_number: total.to_s), user_pseud_series_index_path(@user, pseud)
+    total = if current_user.nil?
+              Series.visible_to_all.exclude_anonymous.for_pseud(pseud).count.size
+            else
+              Series.visible_to_registered_user.exclude_anonymous.for_pseud(pseud).count.size
+            end
+    span_if_current ts("Series (%{series_number})", series_number: total.to_s), user_pseud_series_index_path(pseud.user, pseud)
   end
 
   def gifts_link(user)
@@ -130,31 +115,38 @@ module UsersHelper
     items.html_safe
   end
 
-  def log_item_action_name(action)
-    if action == ArchiveConfig.ACTION_ACTIVATE
-      t('users_helper.log_validated', default: 'Account Validated')
-    elsif action == ArchiveConfig.ACTION_ADD_ROLE
-      t('users_helper.log_role_added', default: 'Role Added: ')
-    elsif action == ArchiveConfig.ACTION_REMOVE_ROLE
-      t('users_helper.log_role_removed', default: 'Role Removed: ')
-    elsif action == ArchiveConfig.ACTION_SUSPEND
-      t('users_helper.log_suspended', default: 'Suspended until ')
-    elsif action == ArchiveConfig.ACTION_UNSUSPEND
-      t('users_helper.log_lift_suspension', default: 'Suspension Lifted')
-    elsif action == ArchiveConfig.ACTION_BAN
-      t('users_helper.log_ban', default: 'Suspended Permanently')
-    elsif action == ArchiveConfig.ACTION_WARN
-      t('users_helper.log_warn', default: 'Warned')
-    elsif action == ArchiveConfig.ACTION_RENAME
-      t('users_helper.log_rename', default: 'Username Changed')
-    elsif action == ArchiveConfig.ACTION_PASSWORD_RESET
-      t('users_helper.log_password_change', default: 'Password Changed')
-    elsif action == ArchiveConfig.ACTION_NEW_EMAIL
-      t('users_helper.log_email_change', default: 'Email Changed')
-    elsif action == ArchiveConfig.ACTION_TROUBLESHOOT
-      t('users_helper.log_troubleshot', default: 'Account Troubleshot')
-    elsif action == ArchiveConfig.ACTION_NOTE
-      t('users_helper.log_note', default: 'Note Added')
+  def log_item_action_name(item)
+    action = item.action
+    
+    return fnok_action_name(item) if fnok_action?(action)
+
+    case action
+    when ArchiveConfig.ACTION_ACTIVATE
+      t("users_helper.log.validated")
+    when ArchiveConfig.ACTION_ADD_ROLE
+      t("users_helper.log.role_added")
+    when ArchiveConfig.ACTION_REMOVE_ROLE
+      t("users_helper.log.role_removed")
+    when ArchiveConfig.ACTION_SUSPEND
+      t("users_helper.log.suspended")
+    when ArchiveConfig.ACTION_UNSUSPEND
+      t("users_helper.log.lift_suspension")
+    when ArchiveConfig.ACTION_BAN
+      t("users_helper.log.ban")
+    when ArchiveConfig.ACTION_WARN
+      t("users_helper.log.warn")
+    when ArchiveConfig.ACTION_RENAME
+      t("users_helper.log.rename")
+    when ArchiveConfig.ACTION_PASSWORD_CHANGE
+      t("users_helper.log.password_change")
+    when ArchiveConfig.ACTION_NEW_EMAIL
+      t("users_helper.log.email_change")
+    when ArchiveConfig.ACTION_TROUBLESHOOT
+      t("users_helper.log.troubleshot")
+    when ArchiveConfig.ACTION_NOTE
+      t("users_helper.log.note")
+    when ArchiveConfig.ACTION_PASSWORD_RESET
+      t("users_helper.log.password_reset")
     end
   end
 
@@ -166,5 +158,35 @@ module UsersHelper
     else
       'terms_of_service_non_production'
     end
+  end
+
+  private
+
+  def fnok_action?(action)
+    [
+      ArchiveConfig.ACTION_ADD_FNOK,
+      ArchiveConfig.ACTION_REMOVE_FNOK,
+      ArchiveConfig.ACTION_ADDED_AS_FNOK,
+      ArchiveConfig.ACTION_REMOVED_AS_FNOK
+    ].include?(action)
+  end
+
+  def fnok_action_name(item)
+    action_leaf =
+      case item.action
+      when ArchiveConfig.ACTION_ADD_FNOK
+        "has_added"
+      when ArchiveConfig.ACTION_REMOVE_FNOK
+        "has_removed"
+      when ArchiveConfig.ACTION_ADDED_AS_FNOK
+        "was_added"
+      when ArchiveConfig.ACTION_REMOVED_AS_FNOK
+        "was_removed"
+      end
+
+    t(
+      "users_helper.log.fnok.#{action_leaf}",
+      user_id: item.fnok_user_id
+    )
   end
 end

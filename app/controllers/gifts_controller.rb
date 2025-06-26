@@ -3,7 +3,7 @@ class GiftsController < ApplicationController
   before_action :load_collection
 
   def index
-    @user = User.find_by(login: params[:user_id]) if params[:user_id]
+    @user = User.find_by!(login: params[:user_id]) if params[:user_id]
     @recipient_name = params[:recipient]
     @page_subtitle = ts("Gifts for %{name}", name: (@user ? @user.login : @recipient_name))
     unless @user || @recipient_name
@@ -21,7 +21,7 @@ class GiftsController < ApplicationController
         end
       end
     else
-      pseud = Pseud.parse_byline(@recipient_name, assume_matching_login: true).first
+      pseud = Pseud.parse_byline(@recipient_name)
       if pseud
         if current_user.nil?
           @works = pseud.gift_works.visible_to_all

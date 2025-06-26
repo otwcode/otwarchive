@@ -10,7 +10,7 @@ Feature: Tag wrangling
       And I go to the manage users page
       And I fill in "Name" with "dizmo"
       And I press "Find"
-    Then I should see "dizmo" within "#admin_users_table"    
+    Then I should see "dizmo" within "#admin_users_table"
     # admin making user tag wrangler
     When I check "user_roles_1"
       And I press "Update"
@@ -26,22 +26,22 @@ Feature: Tag wrangling
   Scenario Outline: Tag wrangler navigation/sidebar
     Given the tag wrangling setup
       And I am logged in as a tag wrangler
-    When I go to my wrangling page
+    When I go to the wrangling page for "wrangler"
     Then I should see "Wrangling Home"
-      And I should see "Fandoms by media (3)"
+      And I should see "Fandoms by media (2)"
       And I should see "Characters by fandom (2)"
       And I should see "Relationships by fandom (1)"
     When I follow <link_text>
     Then I should see <heading>
-    
+
     Examples:
       | link_text                     | heading                            |
       | "Wranglers"                   | "Tag Wrangling Assignments"        |
       | "Wrangling Tools"             | "Tag Wrangling"                    |
       | "Characters by fandom (2)"    | "Mass Wrangle New/Unwrangled Tags" |
       | "Relationships by fandom (1)" | "Mass Wrangle New/Unwrangled Tags" |
-      | "Fandoms by media (3)"        | "Mass Wrangle New/Unwrangled Tags" |
-      
+      | "Fandoms by media (2)"        | "Mass Wrangle New/Unwrangled Tags" |
+
   Scenario: Edit tag page
     Given the tag wrangling setup
       And I am logged in as a tag wrangler
@@ -55,10 +55,6 @@ Feature: Tag wrangling
       And I should see "Unwrangleable"
       And I should see "Fandom"
       And I should see "Meta"
-    When I go to the "Stargate SG-1" tag edit page
-    Then I should see "Edit Stargate SG-1 Tag"
-      # Fandoms cannot be unwrangleable
-      And I should not see "Unwrangleable"
 
   Scenario: Making a fandom canonical and assigning media to it
     Given the tag wrangling setup
@@ -74,7 +70,7 @@ Feature: Tag wrangling
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
       And I am logged in as a tag wrangler
-    When I go to my wrangling page
+    When I go to the wrangling page for "wrangler"
       And I follow "Wranglers"
       And I fill in "tag_fandom_string" with "Stargate SG-1"
       And I press "Assign"
@@ -85,7 +81,7 @@ Feature: Tag wrangling
     Then I should see "Stargate SG-1"
       And I should see "wrangler" within "ul.wranglers"
 
-  Scenario: Making a character canonical and assiging it to a fandom
+  Scenario: Making a character canonical and assigning it to a fandom
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
       And I am logged in as a tag wrangler
@@ -107,7 +103,7 @@ Feature: Tag wrangling
     Then I should see "Tag was updated"
       And the "Daniel Jackson" tag should not be canonical
       And the "Daniel Jackson" tag should be in the "Stargate SG-1" fandom
-    
+
   Scenario: Merging canonical and non-canonical character tags
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate SG-1"
@@ -121,10 +117,10 @@ Feature: Tag wrangling
     When I view the tag "Stargate SG-1"
     Then I should see "Jack O'Neil"
       And I should see "Jack O'Neill"
-      
+
   Scenario Outline: Creating new non-canonical tags
     Given I am logged in as a tag wrangler
-      And I go to my wrangling page
+      And I go to the wrangling page for "wrangler"
     When I follow "New Tag"
       And I fill in "Name" with "MyNewTag"
       And I choose <type>
@@ -132,7 +128,7 @@ Feature: Tag wrangling
     Then I should see "Tag was successfully created"
       And the "MyNewTag" tag should be a <type> tag
       And the "MyNewTag" tag should not be canonical
-    
+
     Examples:
       | type        |
       | "Fandom"    |
@@ -140,7 +136,7 @@ Feature: Tag wrangling
 
   Scenario Outline: Creating new canonical tags
     Given I am logged in as a tag wrangler
-      And I go to my wrangling page
+      And I go to the wrangling page for "wrangler"
     When I follow "New Tag"
       And I fill in "Name" with "MyNewTag"
       And I choose <type>
@@ -149,12 +145,12 @@ Feature: Tag wrangling
     Then I should see "Tag was successfully created"
       And the "MyNewTag" tag should be a <type> tag
       And the "MyNewTag" tag should be canonical
-    
+
     Examples:
       | type        |
       | "Fandom"    |
       | "Character" |
-    
+
   Scenario: Trying to assign a non-canonical fandom to a character
     Given the tag wrangling setup
       And a non-canonical fandom "Stargate Atlantis"
@@ -166,7 +162,7 @@ Feature: Tag wrangling
     Then I should see "Cannot add association to 'Stargate Atlantis':"
       And I should see "Parent tag is not canonical."
       And I should not see "Stargate Atlantis" within "form"
-    
+
   Scenario: Assigning a fandom to a non-canonical relationship tag
     Given the tag wrangling setup
       And I have a canonical "TV Shows" fandom tag named "Stargate Atlantis"
@@ -178,7 +174,7 @@ Feature: Tag wrangling
     When I follow "JackDaniel"
     Then I should see "Stargate Atlantis"
 
-  Scenario: Creating a canonical merger and adding characters to a non-canonical relationship 
+  Scenario: Creating a canonical merger and adding characters to a non-canonical relationship
     Given I have a canonical "TV Shows" fandom tag named "RWBY"
       And a canonical character "Blake Belladonna" in fandom "RWBY"
       And a canonical character "Yang Xiao Long" in fandom "RWBY"
@@ -209,7 +205,7 @@ Feature: Tag wrangling
       And I press "Save changes"
     Then I should see "Tag was updated"
       And the "Apophis" tag should be unwrangleable
-    When I am on my wrangling page
+    When I go to the wrangling page for "wrangler"
       And I follow "Stargate SG-1"
     Then I should see "Wrangle Tags for Stargate SG-1"
     When I follow "Characters (4)"
@@ -273,7 +269,7 @@ Feature: Tag wrangling
     Then I should see "Sign Up"
     When I follow "Sign Up"
     Then I should see "Assign fandoms to yourself"
-      And I should see "'Allo 'Allo" in the "tag_fandom_string" input
+      And I should see "'Allo 'Allo" within ".autocomplete .added"
     When I press "Assign"
     Then I should see "Wranglers were successfully assigned"
     When I edit the tag "'Allo 'Allo"
@@ -315,7 +311,7 @@ Feature: Tag wrangling
   Scenario: An admin can see the troubleshoot button on a tag page
 
     Given a canonical fandom "Cowboy Bebop"
-      And I am logged in as an admin
+      And I am logged in as a "tag_wrangling" admin
     When I view the tag "Cowboy Bebop"
     Then I should see "Troubleshoot"
 
@@ -334,6 +330,8 @@ Feature: Tag wrangling
     When I edit the tag "Child"
       And I check the 1st checkbox with id matching "MetaTag"
       And I fill in "tag_meta_tag_string" with "Grandparent"
+      # Ensure a new cache key will be used
+      And it is currently 1 second from now
       And I press "Save changes"
     Then I should see "Tag was updated"
       And I should see "Grandparent" within "#parent_MetaTag_associations_to_remove_checkboxes"
@@ -357,3 +355,29 @@ Feature: Tag wrangling
     Then I should see "Youngest"
       But I should not see "Oldest"
       And I should not see "Middle"
+
+  Scenario: No call to Redis when no action is taken
+    Given the tag wrangling setup
+      And I am logged in as a tag wrangler
+    Then no tag is scheduled for count update from now on
+    When I go to the wrangling page for "wrangler"
+    Then I should see "Wrangling Home"
+      And I should see "Characters by fandom (2)"
+    When I follow "Characters by fandom (2)"
+    Then I should see "Mass Wrangle New/Unwrangled Tags"
+
+  Scenario: Subtags are listed in alphabetical order
+    Given a canonical freeform "Angst"
+      And a canonical freeform "Angstc"
+      And it is currently 1 second from now
+      And a canonical freeform "Angstb"
+      And it is currently 1 second from now
+      And a canonical freeform "Angsta"
+      And "Angst" is a metatag of the freeform "Angstc"
+      And it is currently 1 second from now
+      And "Angst" is a metatag of the freeform "Angstb"
+      And it is currently 1 second from now
+      And "Angst" is a metatag of the freeform "Angsta"
+    When I view the tag "Angst"
+    Then "Angsta" should appear before "Angstb"
+      And "Angstb" should appear before "Angstc"

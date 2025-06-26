@@ -1,0 +1,404 @@
+---
+ja:
+  activerecord:
+    attributes:
+      archive_warning:
+        name_with_colon:
+          other: 警告：
+      category:
+        name_with_colon:
+          other: カテゴリー：
+      character:
+        name_with_colon:
+          other: キャラクター：
+      fandom:
+        name_with_colon:
+          other: ジャンル：
+      freeform:
+        name_with_colon:
+          other: その他のタグ：
+      rating:
+        name_with_colon: レイティング：
+      relationship:
+        name_with_colon:
+          other: カップリング：
+      work:
+        chapter_total_display: 章
+        summary: あらすじ
+    models:
+      archive_warning:
+        other: 警告
+      category:
+        other: カテゴリー
+      chapter:
+        other: 章
+      character:
+        other: キャラクター
+      fandom:
+        other: ジャンル
+      freeform:
+        other: その他のタグ
+      rating:
+        other: レイティング
+      relationship:
+        other: カップリング
+      series:
+        other: シリーズ
+  kudo_mailer:
+    batch_kudo_notification:
+      guest:
+        other: ゲスト%{count}名
+      left_kudos:
+        html:
+          other: "%{givers_list}があなたの作品 %{commentable_link}にいいねを送りました。"
+        text:
+          other: "%{givers_list} があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。"
+      single_guest:
+        giver: ゲスト1名
+        html: "%{giver}があなたの作品 %{commentable_link}にいいねを送りました。"
+        text: ゲスト1名があなたの作品 %{commentable_title} (%{commentable_url})にいいねを送りました。
+      subject: "[%{app_name}] あなたにいいねが届きました！"
+  mailer:
+    general:
+      closing:
+        formal: 敬具、
+        informal: 以上、
+      creation:
+        link_with_word_count: "%{creation_link} （%{word_count}）"
+        title_with_chapter_number: "『 %{title}』の %{position} 章"
+        title_with_word_count: "『%{creation_title}』（%{word_count}）"
+        word_count:
+          other: "%{count} 語"
+      footer:
+        general:
+          about:
+            html: みんなのアーカイブ（AO3）はファンによって運営され、ファンに支えられているアーカイブです。AO3は%{donate_link}に頼っています。
+            text: みんなのアーカイブ（AO3）はファンによって運営され、ファンに支えられているアーカイブです。AO3は皆様からのご寄付に頼っています：%{donate_url}.
+          html:
+            donate_link_text: 皆様からのご寄付
+            support_link_text: ユーザーサポートまでご連絡ください
+          unwanted_email:
+            html: エラーにてこのメッセージを受けた場合は%{support_link}。
+            text: 間違ってこのメッセージを受けた場合はユーザーサポート（%{support_url}）までご連絡ください。
+        sent_at: "%{sent_at}に送信されました。"
+      greeting:
+        formal_html: "%{name}さん、"
+        informal:
+          addressed_html: こんにちは、%{name}さん！
+          unaddressed: こんにちは！
+        introductory: みんなのアーカイブ（AO3）から、こんにちは！
+      metadata_label_indicator: "："
+      signature:
+        abuse_team: 迷惑・不正行為対策チーム
+        app_short_name: AO3
+        open_doors: The Open Doors (オープンドア) チーム
+        parent_org: Organization for Transformative Works ー OTW（変形的作品のためのNPO）
+        support: AO3ユーザーサポートチーム
+  users:
+    mailer:
+      reset_password_instructions:
+        expiration: 1週間以内にこのリンクからパスワード再設定をしない場合、リンクの有効期限が切れるため、新たなリンクをリクエストする必要があります。
+        intro: あなたのアカウントのパスワード再設定がリクエストされました。下記のリンクから新しいパスワードを入力することで、アカウントのパスワードを変更できます。
+        link_title: パスワードを変更する
+        subject: "[%{app_name}] パスワードの再設定"
+        unrequested: もしあなたがパスワード再設定をリクエストしなかった場合は、このメールを無視しても、元のパスワードを引き続きお使い頂けます。
+  user_mailer:
+    admin_deleted_work_notification:
+      bye: ご参考のために、あなたの作品のコピーを添付しました。
+      contact_abuse: 迷惑・不正行為対策委員会にご連絡ください
+      deleted:
+        html: あなたの作品 %{title} はサイト管理者によってAO3から削除されました。
+        text: あなたの作品「%{title}」はサイト管理者によってAO3から削除されました。
+      html:
+        tos_violation: あなたの作品がAO3のサービス利用規約を違反している可能性がある場合は、%{contact_abuse_link}。
+      import_project:
+        html: あなたの作品がOpen Doors（オープンドア）チームによって管理されているインポート企画の一部であった場合は、%{opendoors_link}。
+        text: あなたの作品がOpen Doors（オープンドア）チームによって管理されているインポート企画の一部であった場合は、オープンドアプロジェクト（%{opendoors_link}）にご連絡ください。
+      opendoors: オープンドアプロジェクトにご連絡ください
+      subject: "[%{app_name}] あなたの作品は管理者によって削除されました"
+      text:
+        tos_violation: あなたの作品がAO3のサービス利用規約を違反している可能性がある場合は、迷惑・不正行為対策委員会（%{contact_abuse_url}）にご連絡ください。
+    admin_hidden_work_notification:
+      access: 作品が非表示されている間も、上記のリンクから作品にアクセスできますが、あなたの投稿作品ページには掲載されず、他のAO3のユーザーが閲覧することはできません。
+      check_email: すでに迷惑・不正行為対策委員会からあなたの作品が非表示となった理由を連絡している可能性がありますので、迷惑メールフォルダも含めてメールをご確認ください。
+      contact_abuse: 迷惑・不正行為対策委員会をご連絡ください
+      html:
+        help: もし作品が非表示となった理由が確認できない、そしてこの件に関する連絡を受けていない場合は、直接に%{contact_abuse_link}。
+        hidden: あなたの作品%{title}は迷惑・不正行為対策委員会によって隠され、非表示状態になっております。
+        tos_violation: あなたの作品がAO3の%{tos_link}に違反しているために非表示となった場合、違反を修正するための措置が求められます。利用規約に従わない場合、あなたの作品はAO3から削除されることがあります。
+      subject: "[%{app_name}] あなたの作品は迷惑・不正行為対策委員会によって非表示とされました。"
+      text:
+        help: もし作品が非表示となった理由が確認できない、そしてこの件に関する連絡を受けていない場合は、直接に迷惑・不正行為対策委員会へご連絡ください：%{contact_abuse_url}。
+        hidden: あなたの作品「%{title}」（%{work_url}）は迷惑・不正行為対策委員会によって隠され、非表示状態になっております。
+        tos_violation: あなたの作品がAO3の（ %{tos_url}）に違反しているために非表示となった場合、違反を修正するための措置が求められます。利用規約に従わない場合、あなたの作品はAO3から削除されることがあります。
+      tos: サービス利用規約
+    anonymous_or_unrevealed_notification:
+      anonymous_info: 匿名化された作品はタグリストに含まれますが、あなたの投稿作品ページには表示されません。該当作品の作者欄にはあなたのユーザー名の代わりに「Anonymous」（匿名）と表示されます。
+      anonymous_unrevealed_info: コレクション管理者は、後であなたの作品を公開するかもしれませんが、匿名化はされません。この変更は、あなたのフォロワーには通知されません。あなたの作品は公開した後にタグリストに含まれますが、あなたの投稿作品ページには表示されません。該当作品の作者欄にはあなたのユーザー名の代わりに「Anonymous」（匿名）と表示されます。
+      changed_status:
+        anonymous:
+          html: "%{collection_link}のコレクション管理者はあなたの作品「%{work_link}」を匿名化しました。"
+          text: '"%{collection_title}" (%{collection_url}) のコレクション管理者は、あなたの作品 "%{work_title}"
+            (%{work_url}) のステータスを匿名に変更しました。'
+        anonymous_unrevealed:
+          html: "%{collection_link}のコレクション管理者はあなたの作品「%{work_link}」の状況を匿名・未公開に変更しました。"
+          text: '"%{collection_title}" (%{collection_url}) のコレクション管理者は、あなたの作品 "%{work_title}"
+            (%{work_url}) のステータスを匿名・未公開に変更しました。'
+        unrevealed:
+          html: "%{collection_link}のコレクション管理者はあなたの作品「%{work_link}」の状況を未公開に変更しました。"
+          text: '"%{collection_title}" (%{collection_url}) のコレクション管理者は、あなたの作品 "%{work_title}"
+            (%{work_url}) のステータスを未公開に変更しました。'
+      collection_items_link_text: Approved Collection Items（承認済みのコレクション作品）のページ
+      do_not_want:
+        anonymous:
+          html: 作品を匿名化したくない場合は、あなたの%{collection_items_link}ページで作品をコレクションから削除してください。
+          text: 作品を匿名化したくない場合は、あなたのApproved Collection Items（承認済みのコレクション作品）ページで作品をコレクションから削除してください：%{collection_items_url}
+        anonymous_unrevealed:
+          html: 作品の状況を匿名・未公開に変更したくない場合は、あなたの%{collection_items_link}ページで作品をコレクションから削除してください。
+          text: 作品の状況を匿名・未公開に変更したくない場合は、あなたのApproved Collection Items（承認済みのコレクション作品）ページで作品をコレクションから削除してください：%{collection_items_url}
+        unrevealed:
+          html: 作品の状況を未公開に変更したくない場合は、あなたの%{collection_items_link}ページで作品をコレクションから削除してください。
+          text: 作品の状況を未公開に変更したくない場合は、あなたのApproved Collection Items（承認済みのコレクション作品）ページで作品をコレクションから削除してください：%{collection_items_url}
+      faq_link_text: コレクションFAQ
+      more_info:
+        html: 詳しくは、%{faq_link}をご覧ください。
+        text: 詳しくは、コレクションFAQをご覧ください：%{faq_url}
+      subject:
+        anonymous: "[%{app_name}] あなたの作品は匿名化されました"
+        anonymous_unrevealed: "[%{app_name}] あなたの作品は匿名・未公開化されました"
+        unrevealed: "[%{app_name}] あなたの作品は未公開化されました"
+      unrevealed_info: 未公開作品はタグリストにも、あなたの投稿作品ページにも表示されません。リンクで作品にアクセスしたいユーザーには、作品は未公開とのお知らせが表示され、作品にアクセスできません。
+    archivist_added_to_collection_notification:
+      approved_collection_items_page: Approved Collection Items (承認済みコレクションアイテム) ページ
+      archivist_notice: コレクションメンテナーはOpen Doors（オープンドアプロジェクト）の公式管理人として行動しているため、あなたがコレクションへの招待を無効にした場合でも、作品をコレクションに追加することができます。ただし管理人はインポートされたアーカイブでホストされている作品のみ、コレクションに追加します。
+      removal_instructions:
+        html: このコレクションから作品を削除したい場合は、%{approved_items_link}をご覧ください。
+        text: このコレクションから作品を削除したい場合は、Approved Collection Items（承認済みコレクションアイテム）ページをご覧ください：
+          %{approved_items_url}。
+      subject: "[%{app_name}][%{collection_title}] Open Doors（オープンドアプロジェクト）の管理人が、あなたの作品をコレクションに追加しました"
+      work_added:
+        html: "%{collection_link}のコレクションメンテナーは、%{work_link}をコレクションに追加しました！"
+        text: コレクション「"%{collection_title}」 (%{collection_url})のコレクションメンテナーは、「"%{work_title}」
+          (%{work_url})をコレクションに追加しました！
+    challenge_assignment_notification:
+      any: 何でも
+      assignment:
+        html: Archive of Our Own – AO3（みんなのアーカイブ）の %{link}チャレンジで、あなたは次のリクエストに割り当てられました。
+      description: 概要：
+      due: 課題の締め切り：
+      html:
+        footer: あなたは%{title}チャレンジに登録したため、このメールを受信しています。このチャレンジの詳細と課題管理者の連絡先情報については、%{footer_link}にてご確認ください。
+        footer_link: チャレンジのプロフィールページ
+        look_up: この課題は%{link}からご確認いただけます。
+        look_up_link: あなたのAssignments（課題）ページ
+      optional_tags: タグ（必須ではありません）：
+      prompts: お題：
+      prompt_url: お題URL：
+      recipient: 受信者：
+      recipient_missing: 受信者なし：課題管理者にお問い合わせください！
+      subject: "[%{app_name}][%{collection_title}]あなたへの課題です！"
+      text:
+        assignment: Archive of Our Own – AO3（みんなのアーカイブ）の %{collection_title} チャレンジ(%{collection_url})
+          で、次のリクエストがあなたの課題として割り当てられました。
+        footer: あなたは%{title}チャレンジ（%{url}）に登録したため、このメールを受信しています。このチャレンジの詳細と課題管理者の連絡先情報については、%{profile_url}にてご確認ください。
+        look_up: この課題については、Assignments（課題）のページ %{link}からご確認いただけます。
+    change_email:
+      changed:
+        html: "%{login}さん、あなたのアカウントのメールアドレスは%{email}に変更されました。"
+        text: "%{login}さん、あなたのアカウントのメールアドレスは%{email}に変更されました。"
+      subject: "[%{app_name}] メールアドレス変更のお知らせ"
+    claim_notification:
+      access:
+        contact_support: AO3サポートまでお問い合わせ
+        html: アーカイブによっては、あなたの作品がGoogle検索から除外され、AO3の登録ユーザーのみに公開されます。あなたが作品の公開範囲を変更しない限り、あなたの作品にはログインしたユーザーのみがアクセスできます。作品の公開範囲変更・所有権放棄・削除については、%{contact_support_link}ください。
+        text: アーカイブによっては、あなたの作品がGoogle検索から除外され、AO3の登録ユーザーのみに公開されます。あなたが作品の公開範囲を変更しない限り、あなたの作品にはログインしたユーザーのみがアクセスできます。作品の公開範囲変更・所有権放棄・削除については、以下のリンクでAO3サポートまでご連絡ください：%{support_url}。
+      email_tips: お問い合わせの際は、@transformativeworks.orgを安全な連絡先リストに追加し、迷惑メールフォルダをチェックして返信をお待ちください。
+      introduction:
+        ao3_name: Archive of Our Own – AO3（みんなのアーカイブ）
+        html: あなたの作品は%{open_doors_name_link}により、別のファン作品アーカイブから%{app_link}にインポートされました。このメールアドレスはインポートされたアーカイブに登録されているため、あなたのアカウントに関連する作品は自動的にあなたのAO3アカウントに追加されました。（作品について詳しくは、以下のリストを参照してください。）
+        open_doors_name: Open Doors（オープンドアプロジェクト）
+        text: あなたの作品はOpen Doors（オープンドアプロジェクト）（%{open_doors_url}）により、別のファン作品アーカイブからArchive
+          of Our Own – AO3（みんなのアーカイブ）（%{app_url}）にインポートされました。このメールアドレスはインポートされたアーカイブに登録されているため、あなたのアカウントに関連する作品は自動的にあなたのAO3アカウントに追加されました。（作品について詳しくは、以下のリストを参照してください。）
+      mistake:
+        contact_open_doors: Open Doorsに連絡して
+        html: もしこれが間違いであり、追加されたのがあなたの作品でない場合、どうか作品を削除しないでください！　%{contact_open_doors_link}いただければ、私たちが対処いたします。
+        text: もしこれが間違いであり、追加されたのがあなたの作品でない場合、どうか作品を削除しないでください！Open Doors （%{open_doors_url}）に連絡していただければ、私たちが対処いたします。
+      more_info:
+        ao3_news: AO3ニュース
+        contact_support: AO3サポートまでご連絡
+        faq_page: よくある質問ページ
+        html: アーカイブのインポートに関するニュース記事やお知らせは%{ao3_news_link}で読むことができます。Open Doors（オープンドアプロジェクト）についての情報は%{faq_page_link}や
+          %{tutorial_page_link}で掲載されています。これらをご覧いただき、まだ質問がある場合は、%{contact_support_link}ください。
+        text: アーカイブのインポートに関するニュース記事やお知らせはAO3ニュース（%{news_url}）で読むことができます。Open Doors
+          (オープンドアプロジェクト) についての情報はよくある質問ページ（%{open_doors_faq_url}）やチュートリアルページ （%{open_doors_tutorial_url}）で掲載されています。これらをご覧いただき、まだ質問がある場合は、以下のリンクでAO3サポートまでご連絡ください：%{support_url}。
+        tutorial_page: チュートリアルページ
+      other_works:
+        contact_open_doors: Open Doorsまでご連絡
+        html: インポートされたアーカイブに、アクセスできなくなったメールアドレスで他の作品を投稿した場合は、本人確認に役立つ情報を%{contact_open_doors_link}ください。
+        text: インポートされたアーカイブに、アクセスできなくなったメールアドレスで他の作品を投稿した場合は、本人確認に役立つ情報をOpen Doorsまでご連絡ください。
+      questions:
+        contact_support: AO3サポートまでご連絡
+        html: その他のお問い合わせは、%{contact_support_link}ください。
+        text: その他のお問い合わせは、以下のリンクでAO3サポートまでご連絡ください：%{support_url}。
+      redirects:
+        html: おすすめリストやブックマークを保存するため、インポートされたアーカイブの作品ページは、短期間でAO3のコピーまでリダイレクトされる可能性があります（詳細はニュース記事をご確認ください）。もし、あなたはすでに自分の作品のコピーをURLインポート機能を%{negation}にAO3に投稿した場合、同じ作品が2つあることになります。
+      subject: "[%{app_name}] アップロードされた作品について"
+      update_redirect:
+        contact_open_doors: Open Doorsまでご連絡
+        html: リダイレクト先を既存の作品ページにしたい場合、まずはインポートされたコピーを削除し、そして%{contact_open_doors_link}ください。連絡する際に、AO3と元のアーカイブ両方のアカウント名、作品タイトルとリダイレクトしたいURLを明記してください。（複数作品のリダイレクトを変更したい場合は、1通のメールにまとめてもいいです）。
+        text: リダイレクト先を既存の作品ページにしたい場合、先ずはインポートされたコピーを削除し、そして以下のリンクでOpen Doorsまでご連絡ください：%{open_doors_url}。連絡する際に、AO3と元のアーカイブ両方のアカウント名、作品タイトルとリダイレクトしたいURLを明記してください。（複数作品のリダイレクトを変更したい場合は、1通のメールにまとめてもいいです。）
+      works_by: 下記の作品はこのメールアドレスで書かれました：%{email}
+      work_info:
+        html: "%{work_link} （%{fandom}）"
+        text:
+          no_fandom: "- %{work_title} %{work_url}"
+          with_fandom: "- %{work_title} %{work_url} (%{fandom})"
+    collection_notification:
+      assignments_sent:
+        complete: すべての課題が割り当てられ、各参加者に送信されました。
+        subject: 課題が送信されました
+      html:
+        received_message: あなたのコレクション %{collection_link} に関するメッセージが届いています。
+      text:
+        received_message: あなたのコレクション「%{collection_title}」（%{collection_url}）に関するメッセージが届いています。
+    creatorship_notification:
+      explanation: あなたが作品の合作者の場合は、あなたの共同制作の設定に関わらず、新しいチャプターにあなたのペンネームが合作者として追加されます。また、作品が加えられたシリーズにも追加されます。
+      html:
+        creation: "%{creation_link}　作者：%{pseud_links}"
+        edit_chapter: 章を編集して
+        edit_series: シリーズを編集して
+        remove_chapter: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、%{edit_chapter_link}合作者から自分を削除できます。
+        remove_series: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、%{edit_series_link}合作者として自身を削除することができます。
+      intro_chapter: "%{adding_user}さんは以下の章の合作者として、あなたのペンネーム%{pseud}を追加しました："
+      intro_series: "%{adding_user}さんは以下のシリーズの合作者としてあなたのペンネーム%{pseud} を追加しました："
+      subject: "[%{app_name}] 合作者のお知らせ"
+      text:
+        creation: "%{title} (%{url})　作者：%{pseuds}"
+        remove_chapter: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、章を編集して自身を合作者から削除することができます：
+          %{url}
+        remove_series: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、シリーズを編集して自身を合作者から削除することができます：
+          %{url}
+    creatorship_notification_archivist:
+      explanation: Open Doors（オープンドアプロジェクト）の公式な権限を持つ管理人は、あなたが合作者機能を無効化している場合でも、リクエストを送ることなくあなたを合作者として追加することがあります。
+      html:
+        creation: "%{creation_link}　作者：%{pseud_links}"
+        edit_chapter: 章を編集して
+        edit_series: シリーズを編集して
+        edit_work: 作品を編集して
+        remove_chapter: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、%{edit_chapter_link}合作者として自身を削除することができます。
+        remove_series: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、%{edit_series_link}合作者として自身を削除することができます。
+        remove_work: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、%{edit_work_link}合作者として自身を削除することができます。
+      intro_chapter: "%{archivist}さんはあなたのペンネーム%{pseud}を以下の章の合作者として追加しました："
+      intro_series: "%{archivist}さんはあなたのペンネーム%{pseud}を以下のシリーズの合作者として追加しました："
+      intro_work: "%{archivist}さんはあなたのペンネーム%{pseud}を以下の作品の合作者として追加しました："
+      subject: "[%{app_name}]管理人による合作者追加のお知らせ"
+      text:
+        creation: "%{title} (%{url})　作者： %{pseuds}"
+        remove_chapter: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、章を編集して合作者として自身を削除することができます：%{url}
+        remove_series: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、シリーズを編集して合作者として自身を削除することができます：%{url}
+        remove_work: 間違って合作者に追加された場合や、合作者としてリストに追加されたくない場合は、作品を編集して合作者として自身を削除することができます：%{url}
+    creatorship_request:
+      html:
+        creation: "%{creation_link} 作者：%{pseud_links}"
+        instructions: "%{page_name}ページでこのリクエストを承認または拒否することができます。"
+        page_name: Co-Creator Requests（合作者リクエスト）
+      intro_chapter: "%{inviting_user} さんはあなた（ペンネーム%{pseud}）を以下の章の合作者として招待しました："
+      intro_series: "%{inviting_user} さんはあなた（ペンネーム%{pseud}）を以下のシリーズの合作者として招待しました："
+      intro_work: "%{inviting_user} さんはあなた（ペンネーム%{pseud}）を以下の作品の合作者として招待しました："
+      subject: "[%{app_name}] 合作者リクエスト"
+      text:
+        creation: "%{title}（%{url}）　作者：%{pseuds}"
+        instructions: Co-Creator Requests（合作者リクエスト）ページでこのリクエストを承認または拒否することができます：%{url}
+    delete_work_notification:
+      attachment: ご参考までに、当該作品のコピーを添付にてお送りいたします。
+      deleted_other:
+        html: "%{pseud}からの要望により、あなたの作品 %{title} が削除されました。"
+        text: "%{pseud}からの要望により、あなたの作品 %{title} が削除されました。"
+      deleted_yourself:
+        html: ご要望通りに、あなたの作品 %{title} が削除されました。
+        text: ご要望通りに、あなたの作品 %{title} が削除されました。
+      questions:
+        html: ご質問がございましたら、 %{support}
+        text: ご質問がございましたら %{support} (%{url})
+      subject: "[%{app_name}] あなたの作品が削除されました"
+      support: ユーザーサポートまでお問い合わせください。
+    invitation:
+      been_invited: あなたは私たちのβ版に招待されました！
+      has_invited: "%{user_name}さんはあなたを私たちのβ版に招待しました！"
+      html:
+        faq_link_text: 私たちのFAQ
+      subject: "[%{app_name}] 招待状"
+    invitation_to_claim:
+      access:
+        text: アーカイブによっては、インポートされた作品が登録ユーザーにしか閲覧できない場合があります（作品がグーグル検索結果に表示されないようにするためです）。
+          この場合、 全体公開に設定しない限り、作品はログイン済みのユーザーにのみアクセス可能となります。作品のアンロック・匿名化・削除に関しては、 AO3サポートまでご連絡ください。
+      claim_or_remove:
+        html: こちらから作品の担当表明や削除を行えます。
+        text: 'こちらから作品の担当表明や削除を行えます: %{claim_url}'
+      email_tips: お問い合わせの際はメールアドレス@transformativeworks.orgをホワイトリストへ追加の上、こちらからの返信が迷惑メールに送信されていないかご確認ください。
+      html:
+        ao3_news: AO3ニュース
+        contact_open_doors: オープンドアまでご連絡ください
+        contact_support: AO3サポートまでご連絡ください
+        faq_page: FAQページ
+        tutorial_page: チュートリアルページ
+      introduction:
+        text: アーカイブが%{open_doors_link} より%{app_name}（%{app_short_name} - %{app_url}）へインポートされました件でメールを送らせていただいています。下記には作品の一覧が載せられていますが、ご希望の場合は、作品の担当表明（または削除・匿名化）が可能です。また、アカウントをお持ちでない場合は、ぜひアカウント登録をお願いします！
+      mistake:
+        text: アーカイブ情報に間違いがある場合、また下記の作品がご自身の作品でない場合は作品を削除しないようにお願いいたします！　こちらが改めて整理できますようオープンドア（%{open_doors_link}）までご連絡ください。
+      more_info:
+        text: アーカイブに関する最新動向についてはAO3ニュース（%{news_link}）からご覧できます。また、オープンドアの関連情報についてはFAQページ(%{open_doors_faq_link})
+          かチュートリアルページ (%{open_doors_tutorial_link})をご参照ください。 FAQやチュートリアルに記載されていないご質問またはこのメールに関するご質問がある場合は、%{support_link}でAO3サポートまでご連絡ください。
+      other_works:
+        text: アーカイブのインポート時に利用したメールアドレスにアクセスできなくなり、そのアーカイブにまだ他の作品がある場合は、ご身分を証明できる情報をオープンドアまでご連絡ください。
+      questions:
+        text: その他のご質問に関しては%{support_link}でAO3サポートまでご連絡ください。
+      redirects: オススメリスト及びブックマークを保存するために、インポートされたアーカイブ内のWebアドレスは一定期間作品のコピーまでリダイレクトされます（詳しくはご自身のアーカイブの告知ポストをご確認ください）。作品のコピーをアップロード済みであり、かつURLインポート機能をご利用でない場合、アーカイブの同じ作品のコピーが2つ作成されます。
+      subject: "[%{app_name}]作品担当表明へのご招待"
+      unwanted:
+        text: ご自身の作品ではありますが公表したくない場合は作品を匿名化（作品はAO3に保存されますが、作者名は表示されません）または削除（作品は AO3から完全削除されます）できます。上記の担当表明リンクからそのまま作品の匿名化と削除ができますので、匿名化と削除のために作品を特定のアカウント下に置く必要はありません。(協力が必要な場合は%{support_link}でAO3サポートまでご連絡ください。)
+      update_redirect:
+        text: オープンドアに既存の作品までのリダイレクトを依頼する場合は、インポートされたコピーを削除し、AO3アカウント名・インポートされたアーカイブにおけるアカウント名・リダイレクト先の作品名とURLをオープンドア%{open_doors_link}までご連絡ください（複数の作品のリダイレクト先を変更したい場合は、作品リストをメールでお知らせください）。
+      uploaded_list: 'アップロードされた作品は以下の通りです:'
+    invite_increase_notification:
+      html:
+        body:
+          other: 新しい招待状が%{count}枚あなたに届いていることをお知らせいたします。招待状はアーカイブで新しいアカウントを作成するために使えます。%{invitation_page_link}にて友達を招待することもできます。
+      invitation_page_link_text: 招待管理ページ
+      subject: "[%{app_name}] 新しい招待状"
+      text:
+        body:
+          other: 新しい招待状が%{count}枚あなたに届いていることをお知らせいたします。招待状はアーカイブで新しいアカウントを作成するために使えます。Invitations（招待状）ページ（%{invitation_page_url}）で友達を招待することができます。
+    invite_request_declined:
+      main:
+        other: 申し訳ございませんが、あなたのリクエストされた%{count} 件の新しい招待コードは、今回は承認できませんでした。
+      reason: あなたのリクエストは以下の通りでした。
+      subject: "[%{app_name}]追加招待コードのリクエストが拒否されました"
+    recipient_notification:
+      html:
+        collection: あなたへのプレゼント作品が、AO3の%{collection_link} コレクションに投稿されました！
+      no_collection: あなたへのプレゼント作品がAO3に投稿されました！
+      subject:
+        collection: "[%{app_name}][%{collection_title}] %{collection_title} からあなたへのプレゼント作品が届きました"
+        no_collection: "[%{app_name}] あなたへのプレゼント作品が届きました"
+      text:
+        collection: あなたへのプレゼント作品が、AO3の 「 %{collection_title} 」コレクション（%{collection_url}）に投稿されました！
+    signup_notification:
+      activate:
+        html: こちらよりどうぞ %{activate_account_link}。
+        text: 'このリンクに従いアカウントを有効化してください: %{activate_account_url}'
+      activate_your_account: このリンクに従いアアカウントを有効化してください
+      admin_posts: AO3ニュース
+      bye: AO3の利用が楽しいものとなりますよう願っております。
+      contact_support: ユーザーサポートまでご連絡ください
+      faq: FAQ
+      features:
+        html: アカウントが有効化されると、ファン作品を投稿したり、お気に入りの作者や作品が更新された時にメール通知するフォローを設定したり、サイトの見た目や機能が自分好みになるよう設定からカスタマイズしたり、AO3でアクセスした作品を確認したり、他にも沢山のことができるようになります。
+        text: 'アカウントが有効化されると、ファン作品を投稿したり、お気に入りの作者や作品が更新された時にメール通知するフォローを設定したり、サイトの見た目や機能が自分好みになるよう設定からカスタマイズしたり、AO3でアクセスした作品を確認したり、他にも沢山のことができるようになります。  '
+      information:
+        html: 私たちの %{faq_link} には、AO3の使い方に関する沢山の情報やアドバイスが掲載されています。 サイトの最新の更新状況は %{admin_posts_link}
+          にて確認できます。サポートが必要な場合、バグを見つけた場合、またはご質問やコメントがある場合は、%{contact_support_link}
+          へご連絡下さいましたら喜んでお手伝いいたします。
+        text: 私たちの %{faq_url} には、AO3の使い方に関する沢山の情報やアドバイスが掲載されています。 サイトの最新の更新状況は %{admin_posts_url}
+          にて確認できます。サポートが必要な場合、バグを見つけた場合、またはご質問やコメントがある場合は、%{contact_support_url} へご連絡下さいましたら喜んでお手伝いいたします。
+      welcome: Archive of Our Own – AO3（みんなのアーカイブ）へようこそ、 %{login} さん！

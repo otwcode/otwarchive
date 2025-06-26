@@ -15,15 +15,17 @@ class TagQuery < Query
   def filters
     [
       type_filter,
-      canonical_filter,
+      wrangling_status_filter,
       unwrangleable_filter,
       posted_works_filter,
       media_filter,
       fandom_filter,
       character_filter,
       suggested_fandom_filter,
-      suggested_character_filter
-    ].compact
+      suggested_character_filter,
+      in_use_filter,
+      unwrangled_filter
+    ].flatten.compact
   end
 
   def exclusion_filters
@@ -44,7 +46,7 @@ class TagQuery < Query
   def sort
     direction = options[:sort_direction]&.downcase
     case options[:sort_column]
-    when "taggings_count_cache"
+    when "taggings_count_cache", "uses"
       column = "uses"
       direction ||= "desc"
     when "created_at"
@@ -60,7 +62,11 @@ class TagQuery < Query
       sort_hash[column][:unmapped_type] = "date"
     end
 
-    sort_hash
+    sort_by_id = { id: { order: direction } }
+
+    return [sort_hash, { "name.keyword" => { order: "asc" } }, sort_by_id] if column == "uses"
+
+    [sort_hash, sort_by_id]
   end
 
   ################
@@ -71,8 +77,19 @@ class TagQuery < Query
     { term: { tag_type: options[:type] } } if options[:type]
   end
 
-  def canonical_filter
-    term_filter(:canonical, bool_value(options[:canonical])) if options[:canonical].present?
+  def wrangling_status_filter
+    case options[:wrangling_status]
+    when "canonical"
+      term_filter(:canonical, true)
+    when "noncanonical"
+      term_filter(:canonical, false)
+    when "synonymous"
+      [exists_filter("merger_id"), term_filter(:canonical, false)]
+    when "canonical_synonymous"
+      { bool: { should: [exists_filter("merger_id"), term_filter(:canonical, true)] } }
+    when "noncanonical_nonsynonymous"
+      [{ bool: { must_not: exists_filter("merger_id") } }, term_filter(:canonical, false)]
+    end
   end
 
   def unwrangleable_filter
@@ -88,7 +105,7 @@ class TagQuery < Query
   end
 
   def fandom_filter
-    terms_filter(:fandom_ids, options[:fandom_ids]) if options[:fandom_ids]
+    options[:fandom_ids]&.map { |fandom_id| term_filter(:fandom_ids, fandom_id) }
   end
 
   def character_filter
@@ -103,11 +120,28 @@ class TagQuery < Query
     terms_filter(:pre_character_ids, options[:pre_character_ids]) if options[:pre_character_ids]
   end
 
+  # Canonical tags are treated as used even if they technically aren't
+  def in_use_filter
+    return if options[:in_use].nil?
+
+    unless options[:in_use]
+      # Check if not used AND not canonical
+      return [term_filter(:uses, 0), term_filter(:canonical, false)]
+    end
+
+    # Check if used OR canonical
+    { bool: { should: [{ range: { uses: { gt: 0 } } }, term_filter(:canonical, true)] } }
+  end
+
+  def unwrangled_filter
+    term_filter(:unwrangled, bool_value(options[:unwrangled])) unless options[:unwrangled].nil?
+  end
+
   # Filter to only include tags that have no assigned fandom_ids. Checks that
   # the fandom exists, because this particular filter is included in the
   # exclusion_filters section.
   def wrangled_filter
-    { exists: { field: "fandom_ids" } } unless options[:wrangled].nil?
+    exists_filter("fandom_ids") unless options[:wrangled].nil?
   end
 
   ################

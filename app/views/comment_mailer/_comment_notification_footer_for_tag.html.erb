@@ -1,42 +1,18 @@
 <%= style_link("Read all comments on " + @comment.ultimate_parent.name, 
-  {
-    :controller => :comments, 
-    :action => :index, 
-    :tag_id => @comment.ultimate_parent, 
-    :only_path => false
-  }) %>  
+               tag_comments_url(@comment.ultimate_parent)) %>
 <br />
 
 <% unless @noreply %>
   <%= style_link("Reply to this comment",
-    {
-      :controller => :comments, 
-      :action => :index, 
-      :tag_id => @comment.ultimate_parent, 
-      :only_path => false, 
-      :add_comment_reply_id => @comment.id, 
-      :anchor => "comment_#{@comment.id}"
-    }) %>
+                 comment_url(@comment, add_comment_reply_id: @comment.id)) %>
   <br />
 <% end %>
 
 <%= style_link("Go to the thread starting from this comment", 
-  {
-    :controller => :comments, 
-    :action => :index, 
-    :tag_id => @comment.ultimate_parent, 
-    :only_path => false, 
-    :anchor => "comment_#{@comment.id}"
-  }) %>  
+               comment_url(@comment)) %>
 <br />
 
 <% unless @comment.id == @comment.thread %>
   <%= style_link("Go to the thread to which this comment belongs", 
-    {
-      :controller => :comments, 
-      :action => :index, 
-      :tag_id => @comment.ultimate_parent, 
-      :anchor => "comment_#{@comment.thread}", 
-      :only_path => false
-    }) %>
+                 comment_url(@comment.thread)) %>
 <% end %>

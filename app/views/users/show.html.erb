@@ -2,15 +2,17 @@
   <!-- pseudoflash because putting it in a real one was making for some ugly code -->
   <div class="flash notice" id="first-login-help-banner">
     <p>
-      <%= t(".login_banner.welcome_text", help_link: link_to_modal(t(".login_banner.help_link"), for: first_login_help_path, title: t(".login_banner.help_title"))).html_safe %>
+      <%= t(".login_banner.welcome_html",
+            new_user_tips_link: link_to(t(".login_banner.new_user_tips"), first_login_help_path),
+            our_faqs_link: link_to(t(".login_banner.our_faqs"), archive_faqs_path)) %>
     </p>
     <p>
-      <%= t(".login_banner.help_text", 
-            link_abuse: link_to(t(".login_banner.link_abuse"), new_abuse_report_path),
-            link_faq: link_to(t(".login_banner.link_faq"), archive_faqs_path),
-            link_support: link_to(t(".login_banner.link_support"), new_feedback_report_path),
-            link_tos: link_to(t(".login_banner.link_tos"), tos_path)
-          ).html_safe %>
+      <%= t(".login_banner.help_html",
+            contact_support_link: link_to(t(".login_banner.contact_support"), new_feedback_report_path),
+            tos_link: link_to(t(".login_banner.tos"), tos_path),
+            content_policy_link: link_to(t(".login_banner.content_policy"), content_path),
+            privacy_policy_link: link_to(t(".login_banner.privacy_policy"), privacy_path),
+            contact_abuse_link: link_to(t(".login_banner.contact_abuse"), new_abuse_report_path)) %>
     </p>
     <%= form_tag end_first_login_user_path(current_user), method: :post, remote: true do %>
       <p class="submit actions">
@@ -24,7 +26,7 @@
 <div class="user home">
   <%= render "users/header" %>
   <%= render "users/contents" %>
-</div> 
+</div>
 
 <%= content_for :footer_js do %>
   <%= javascript_tag do %>

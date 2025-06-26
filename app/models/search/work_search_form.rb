@@ -45,7 +45,7 @@ class WorkSearchForm
     :sort_column,
     :sort_direction,
     :page
-  ]
+  ].freeze
 
   attr_accessor :options
 
@@ -125,7 +125,7 @@ class WorkSearchForm
       summary << "Title: #{@options[:title]}"
     end
     if @options[:creators].present?
-      summary << "Author/Artist: #{@options[:creators]}"
+      summary << "Creator: #{@options[:creators]}"
     end
     tags = @searcher.included_tag_names
     all_tag_ids = @searcher.filter_ids
@@ -151,7 +151,7 @@ class WorkSearchForm
     if @options[:language_id].present?
       language = Language.find_by(short: @options[:language_id])
       if language.present?
-        summary << "Language: #{language.name}"
+        summary << "Language: <span lang=#{language.short}>#{language.name}</span>"
       end
     end
     [:word_count, :hits, :kudos_count, :comments_count, :bookmarks_count, :revised_at].each do |countable|
@@ -160,9 +160,14 @@ class WorkSearchForm
       end
     end
     if @options[:sort_column].present?
-      summary << "sort by: #{name_for_sort_column(@options[:sort_column]).downcase}" +
-        (@options[:sort_direction].present? ?
-          (@options[:sort_direction] == "asc" ? " ascending" : " descending") : "")
+      # Use pretty name if available, otherwise fall back to plain column name
+      pretty_sort_name = name_for_sort_column(@options[:sort_column])
+      direction = if @options[:sort_direction].present?
+                    @options[:sort_direction] == "asc" ? " ascending" : " descending"
+                  else
+                    ""
+                  end
+      summary << ("sort by: #{pretty_sort_name&.downcase || @options[:sort_column]}" + direction)
     end
     summary.join(" ")
   end
@@ -176,16 +181,16 @@ class WorkSearchForm
   ###############
 
   SORT_OPTIONS = [
-    ['Best Match', '_score'],
-    ['Author', 'authors_to_sort_on'],
-    ['Title', 'title_to_sort_on'],
-    ['Date Posted', 'created_at'],
-    ['Date Updated', 'revised_at'],
-    ['Word Count', 'word_count'],
-    ['Hits', 'hits'],
-    ['Kudos', 'kudos_count'],
-    ['Comments', 'comments_count'],
-    ['Bookmarks', 'bookmarks_count']
+    ["Best Match", "_score"],
+    %w[Creator authors_to_sort_on],
+    %w[Title title_to_sort_on],
+    ["Date Posted", "created_at"],
+    ["Date Updated", "revised_at"],
+    ["Word Count", "word_count"],
+    %w[Hits hits],
+    %w[Kudos kudos_count],
+    %w[Comments comments_count],
+    %w[Bookmarks bookmarks_count]
   ].freeze
 
   def sort_columns
@@ -214,42 +219,10 @@ class WorkSearchForm
   end
 
   def default_sort_direction
-    if %w(authors_to_sort_on title_to_sort_on).include?(sort_column)
+    if %w[authors_to_sort_on title_to_sort_on].include?(sort_column)
       'asc'
     else
       'desc'
     end
-  end
-
-  ###############
-  # COUNTING
-  ###############
-
-  def self.count_for_user(user)
-    Rails.cache.fetch(count_cache_key(user), count_cache_options) do
-      WorkQuery.new(user_ids: [user.id]).count
-    end
-  end
-
-  def self.count_for_pseud(pseud)
-    Rails.cache.fetch(count_cache_key(pseud), count_cache_options) do
-      WorkQuery.new(pseud_ids: [pseud.id]).count
-    end
-  end
-
-  # If we want to invalidate cached work counts whenever the owner (which for
-  # this method can only be a user or a pseud) has a new work, we can use
-  # "#{owner.works_index_cache_key}" instead of "#{owner.class.name.underscore}_#{owner.id}".
-  # See lib/works_owner.rb.
-  def self.count_cache_key(owner)
-    status = User.current_user ? 'logged_in' : 'logged_out'
-    "work_count_#{owner.class.name.underscore}_#{owner.id}_#{status}"
-  end
-
-  def self.count_cache_options
-    {
-      expires_in: ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE.seconds,
-      race_condition_ttl: 10.seconds
-    }
   end
 end

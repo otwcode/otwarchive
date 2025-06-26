@@ -5,7 +5,7 @@
 
   <div class="account module">
 
-    <% if !@admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
+    <% if !AdminSetting.current.invite_from_queue_enabled? && AdminSetting.current.creation_requires_invite? %>
       <p>
         <%= ts("Joining the Archive currently requires an invitation; however, we 
                are not accepting new invitation requests at this time. Please check
@@ -27,13 +27,13 @@
       <li><%= ts("Keep track of works you've visited and works you want to check out later") %></li>
     </ul>
 
-    <% if @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? && @admin_settings.request_invite_enabled? %>
+    <% if AdminSetting.current.invite_from_queue_enabled? && AdminSetting.current.creation_requires_invite? && AdminSetting.current.request_invite_enabled? %>
       <p><%= ts("You can join by getting an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!") %></p>
       <p class="actions"><%= link_to ts("Get Invited!"), invite_requests_path %></p>
-    <% elsif @admin_settings.invite_from_queue_enabled? && @admin_settings.creation_requires_invite? %>
+    <% elsif AdminSetting.current.invite_from_queue_enabled? && AdminSetting.current.creation_requires_invite? %>
       <p><%= ts("You can join by getting an invitation from our automated invite queue. All fans and fanworks are welcome!") %></p>
       <p class="actions"><%= link_to ts("Get Invited!"), invite_requests_path %></p>
-    <% elsif @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
+    <% elsif AdminSetting.current.account_creation_enabled? && !AdminSetting.current.creation_requires_invite? %>
       <p class="actions"><%= link_to ts("Create an Account!"), signup_path %></p>
     <% end %>
   </div>

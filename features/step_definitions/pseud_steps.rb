@@ -1,28 +1,27 @@
 Given /^"([^"]*)" has the pseud "([^"]*)"$/ do |username, pseud|
-  step %{I am logged in as "#{username}"}
-  step %{"#{username}" creates the pseud "#{pseud}"}
-  step %{I am logged out}
+  u = ensure_user(username)
+  u.pseuds.create!(name: pseud)
 end
 
-When /^I change the pseud "([^\"]*)" to "([^\"]*)"/ do |old_pseud, new_pseud|
-  step %{I edit the pseud "#{old_pseud}"}
+Given "there are {int} pseuds per page" do |amount|
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.ITEMS_PER_PAGE = amount.to_i
+  allow(Pseud).to receive(:per_page).and_return(amount)
+end
+
+When "{string} changes the pseud {string} to {string}" do |username, old_pseud, new_pseud|
+  step %{"#{username}" edits the pseud "#{old_pseud}"}
   fill_in("Name", with: new_pseud)
   click_button("Update")
 end
 
-When /^I edit the pseud "([^\"]*)"/ do |pseud| 
-  p = Pseud.where(name: pseud, user_id: User.current_user.id).first
-  visit edit_user_pseud_path(User.current_user, p)
+When "{string} edits the pseud {string}" do |username, pseud|
+  p = Pseud.where(name: pseud, user_id: User.find_by(login: username)).first
+  visit edit_user_pseud_path(User.find_by(login: username), p)
 end
 
-When /^I add the pseud "([^\"]*)"/ do |pseud| 
-  visit new_user_pseud_path(User.current_user)
-  fill_in("Name", with: pseud)
-  click_button("Create")
-end
-
-When(/^I delete the pseud "([^\"]*)"$/) do |pseud|
-  visit user_pseuds_path(User.current_user)
+When "{string} deletes the pseud {string}" do |username, pseud|
+  visit user_pseuds_path(User.find_by(login: username))
   click_link("delete_#{pseud}")
 end
 

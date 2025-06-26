@@ -108,6 +108,18 @@ Scenario: extra commas in bookmark form (Issue 2284)
     And I press "Create"
   Then I should see "created"
 
+Scenario: Bookmark notes do not display images
+  Given I am logged in as "bookmarkuser"
+    And I post the work "Some Work"
+  When I follow "Bookmark"
+    And I fill in "Notes" with "Fantastic!<img src='http://example.com/icon.svg'>"
+    And I press "Create"
+    And all indexing jobs have been run
+  Then I should see "Bookmark was successfully created"
+  When I go to the bookmarks page
+  Then I should not see the image "src" text "http://example.com/icon.svg"
+    And I should see "Fantastic!"
+
 Scenario: bookmark added to moderated collection has flash notice only when not approved
   Given the following activated users exist
     | login      | password |
@@ -130,6 +142,8 @@ Scenario: bookmark added to moderated collection has flash notice only when not 
     Then I should see "The collection Five Pillars is currently moderated."
   When I log out
     And I am logged in as "moderator" with password "password"
+    # Delay before approving to make sure the cache is expired
+    And it is currently 1 second from now
     And I approve the first item in the collection "Five Pillars"
     And all indexing jobs have been run
     And I am logged in as "bookmarker" with password "password"
@@ -340,7 +354,7 @@ Scenario: Delete bookmarks of a work and a series
   And I press "Yes, Delete Bookmark"
     And all indexing jobs have been run
   Then I should see "Bookmark was successfully deleted."
-  When I go to my bookmarks page
+  When I go to markymark's bookmarks page
   Then I should see "A Mighty Duck2 the sequel"
   When I log out
     And I am logged in as "wahlly"
@@ -349,7 +363,7 @@ Scenario: Delete bookmarks of a work and a series
   Then I should see "A Mighty Duck2 the sequel was deleted."
   When I log out
     And I am logged in as "markymark"
-    And I go to my bookmarks page
+    And I go to markymark's bookmarks page
   Then I should see "This has been deleted, sorry!"
     And I follow "Edit"
     And I check "bookmark_private"
@@ -373,6 +387,16 @@ Scenario: Editing a bookmark's tags should expire the bookmark cache
     And the cache of the bookmark on "Really Good Thing" should not expire if I have not edited the bookmark
     And the cache of the bookmark on "Really Good Thing" should expire after I edit the bookmark tags
 
+Scenario: User can't bookmark same work twice
+  Given the work "Haven"
+    And I am logged in as "Mara"
+    And "Mara" creates the pseud "Audrey"
+    And I bookmark the work "Haven" as "Mara"
+  When I bookmark the work "Haven" as "Mara" from new bookmark page
+  Then I should see "You have already bookmarked that."
+  When I bookmark the work "Haven" as "Audrey" from new bookmark page
+  Then I should see "You have already bookmarked that."
+
 Scenario: I cannot create a bookmark that I don't own
   Given the work "Random Work"
   When I attempt to create a bookmark of "Random Work" with a pseud that is not mine
@@ -386,26 +410,51 @@ Scenario: I cannot edit an existing bookmark to transfer it to a pseud I don't o
   Then I should not see "Bookmark was successfully updated"
     And I should see "You can't bookmark with that pseud."
 
-@javascript
-Scenario: Can use "Show Most Recent Bookmarks" from the bookmarks page
-  Given the work "Popular Work"
-    And I am logged in as "bookmarker1"
-    And I bookmark the work "Popular Work" with the note "Love it"
-    And I log out
-    And I am logged in as "bookmarker2"
-    And I bookmark the work "Popular Work"
-    And the statistics for the work "Popular Work" are updated
-  When I am on the bookmarks page
-    # There are two of these links, but bookmarker2's bookmark is more recent,
-    # and it follows the first link matching the specified text
-    And I follow "Show Most Recent Bookmarks"
-  # Again, we're relying on the fact that it uses the first element that
-  # matches the specified selector, since each bookmark on the page will have a
-  # div with the class .recent
-  Then I should see "bookmarker1" within ".recent"
-    And I should see "Love it" within ".recent"
-    And I should see "Hide Most Recent Bookmarks" within ".recent"
-  When I follow "Hide Most Recent Bookmarks"
-  Then I should not see "bookmarker1" within ".recent"
-    And I should not see "Love it" within ".recent"
-    And I should see "Show Most Recent Bookmarks" within "li.bookmark"
+Scenario: A bookmark with duplicate tags other than capitalization has only first version of tag saved
+  Given I am logged in as "bookmark_user"
+  When I post the work "Revenge of the Sith"
+    And I follow "Bookmark"
+    And I fill in "Your tags" with "my tags,My Tags"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created"
+    And I should see "Bookmarker's Tags: my tags"
+    And I should not see "Bookmarker's Tags: My Tags"
+
+  Scenario: Users can bookmark a work with too many tags
+    Given the user-defined tag limit is 2
+      And the work "Over the Limit"
+      And the work "Over the Limit" has 3 fandom tags
+      And I am logged in as "bookmarker"
+    When I bookmark the work "Over the Limit"
+    Then I should see "Bookmark was successfully created"
+
+  Scenario: Users can bookmark a pre-existing external work with too many tags
+    Given the user-defined tag limit is 2
+      And I am logged in as "bookmarker1"
+      And I bookmark the external work "Over the Limit"
+      And the external work "Over the Limit" has 3 fandom tags
+      And I am logged in as "bookmarker2"
+    When I go to bookmarker1's bookmarks page
+      And I follow "Save"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+
+  Scenario: Users cannot bookmark a new external work with too many tags
+    Given the user-defined tag limit is 5
+      And I am logged in as "bookmarker"
+    When I set up an external work
+      And I fill in "Fandoms" with "Fandom 1, Fandom 2"
+      And I fill in "Characters" with "Character 1, Character 2"
+      And I fill in "Relationships" with "Relationship 1, Relationship 2"
+      And I press "Create"
+    Then I should see "Fandom, relationship, and character tags must not add up to more than 5. You have entered 6 of these tags, so you must remove 1 of them."
+
+  Scenario: Archivists can add bookmarks to collections
+    Given I have an archivist "archivist"
+      And I am logged in as "archivist"
+      And I create the collection "My Collection" with name "MyCollection"
+    When I open a bookmarkable work
+      And I follow "Bookmark"
+      And I fill in "bookmark_collection_names" with "MyCollection"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"

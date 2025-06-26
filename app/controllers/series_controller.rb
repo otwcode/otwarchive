@@ -16,30 +16,25 @@ class SeriesController < ApplicationController
   # GET /series
   # GET /series.xml
   def index
-    if params[:user_id]
-      @user = User.find_by(login: params[:user_id])
-      unless @user
-        raise ActiveRecord::RecordNotFound, "Couldn't find user '#{params[:user_id]}'"
-      end
-      @page_subtitle = ts("%{username} - Series", username: @user.login)
-      pseuds = @user.pseuds
-      if params[:pseud_id]
-        @pseud = @user.pseuds.find_by(name: params[:pseud_id])
-        unless @pseud
-          raise ActiveRecord::RecordNotFound, "Couldn't find pseud '#{params[:pseud_id]}'"
-        end
-        @page_subtitle = ts("by ") + @pseud.byline
-        pseuds = [@pseud]
-      end
+    unless params[:user_id]
+      flash[:error] = ts("Whose series did you want to see?")
+      redirect_to(root_path) and return
     end
+    @user = User.find_by!(login: params[:user_id])
+    @page_subtitle = t(".page_title", username: @user.login)
 
-    if current_user.nil?
-      @series = Series.visible_to_all
+    @series = if current_user.nil?
+                Series.visible_to_all
+              else
+                Series.visible_to_registered_user
+              end
+
+    if params[:pseud_id]
+      @pseud = @user.pseuds.find_by!(name: params[:pseud_id])
+      @page_subtitle = t(".page_title", username: @pseud.name)
+      @series = @series.exclude_anonymous.for_pseud(@pseud)
     else
-      @series = Series.visible_to_registered_user
-    end
-    if pseuds.present?
-      @series = @series.exclude_anonymous.for_pseuds(pseuds)
+      @series = @series.exclude_anonymous.for_user(@user)
     end
     @series = @series.paginate(page: params[:page])
   end
@@ -47,10 +42,15 @@ class SeriesController < ApplicationController
   # GET /series/1
   # GET /series/1.xml
   def show
-    @works = @series.works_in_order.posted.select(&:visible?)
+    @works = @series.works_in_order.posted.select(&:visible?).paginate(page: params[:page])
 
     # sets the page title with the data for the series
-    @page_title = @series.unrevealed? ? ts("Mystery Series") : get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.anonymous? ? ts("Anonymous") : @series.allpseuds.collect(&:byline).join(', '), @series.title)
+    if @series.unrevealed?
+      @page_subtitle = t(".unrevealed_series")
+    else
+      @page_title = get_page_title(@series.allfandoms.collect(&:name).join(", "), @series.anonymous? ? t(".anonymous") : @series.allpseuds.collect(&:byline).join(", "), @series.title)
+    end
+
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @series.id,
                                                        subscribable_type: 'Series').first ||
@@ -124,7 +124,7 @@ class SeriesController < ApplicationController
       end
     end
     respond_to do |format|
-      format.html { redirect_to(@series) and return }
+      format.html { redirect_to series_path(@series) and return }
       format.json { head :ok }
     end
   end

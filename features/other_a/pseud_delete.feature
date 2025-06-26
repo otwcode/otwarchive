@@ -22,14 +22,14 @@ Feature: Delete pseud.
 
     When I am on testuser's pseuds page
       And I follow "delete_tester_pseud"
-      And I choose "Delete these bookmarks"
+      And I choose "Delete this bookmark"
       And I press "Submit"
     Then I should see "The pseud was successfully deleted."
     When I am on testuser's pseuds page
     Then I should not see "tester_pseud"
 
     When I follow "delete_testy"
-      And I choose "Transfer these bookmarks to the default pseud"
+      And I choose "Transfer this bookmark to the default pseud"
       And I press "Submit"
     Then I should see "The pseud was successfully deleted."
     When I am on testuser's pseuds page
@@ -44,7 +44,7 @@ Feature: Delete pseud.
       And I check "Sign-up open?"
       And I press "Submit"
       And I am logged in as "test"
-      And I add the pseud "testpseud"
+      And "test" creates the pseud "testpseud"
 
     When I start signing up for "Exchange1"
       And I select "testpseud" from "challenge_signup_pseud_id"
@@ -71,7 +71,7 @@ Feature: Delete pseud.
       And I press "Submit"
       And I press "Submit"
       And I am logged in as "test"
-      And I add the pseud "testpseud"
+      And "test" creates the pseud "testpseud"
 
     When I start signing up for "PromptsGalore"
       And I select "testpseud" from "challenge_signup_pseud_id"
@@ -93,7 +93,7 @@ Feature: Delete pseud.
 
   Scenario: Deleting a pseud should preserve approved creatorships even if the default pseud has a request for the same work.
     Given I am logged in as "original_pseud"
-      And I add the pseud "other_pseud"
+      And "original_pseud" creates the pseud "other_pseud"
       And I am logged in as "coauthor"
       And the user "original_pseud" allows co-creators
 
@@ -103,7 +103,7 @@ Feature: Delete pseud.
     Then I should see "Work was successfully posted."
 
     When I am logged in as "original_pseud"
-      And I go to my co-creator requests page
+      And I go to original_pseud's co-creator requests page
     Then I should see "Co-Creator Requests (2)"
 
     When I check the 1st checkbox with id matching "selected"
@@ -117,7 +117,7 @@ Feature: Delete pseud.
     Then I should see "Edit"
       And I should see "You've been invited to become a co-creator of this work."
 
-    When I go to my pseuds page
+    When I go to original_pseud's pseuds page
       And I follow "Delete"
     Then I should see "The pseud was successfully deleted."
 
@@ -127,7 +127,7 @@ Feature: Delete pseud.
 
   Scenario: Deleting a pseud should preserve co-creator requests.
     Given I am logged in as "original_pseud"
-      And I add the pseud "other_pseud"
+      And "original_pseud" creates the pseud "other_pseud"
       And I am logged in as "coauthor"
       And the user "original_pseud" allows co-creators
 
@@ -137,18 +137,68 @@ Feature: Delete pseud.
     Then I should see "Work was successfully posted."
 
     When I am logged in as "original_pseud"
-      And I go to my co-creator requests page
+      And I go to original_pseud's co-creator requests page
     Then I should see "other_pseud" within ".creatorships"
       And I should see "Other Invited" within ".creatorships"
       And I should see "Co-Creator Requests (1)"
 
-    When I go to my pseuds page
+    When I go to original_pseud's pseuds page
       And I follow "Delete"
     Then I should see "The pseud was successfully deleted."
 
     # We should still have a request for Other Invited:
-    When I go to my co-creator requests page
+    When I go to original_pseud's co-creator requests page
     Then I should see "Other Invited" within ".creatorships"
       And I should see "original_pseud" within ".creatorships"
       And I should see "Co-Creator Requests (1)"
       And I should not see "other_pseud" within ".creatorships"
+
+  Scenario: Collections reflect pseud deletion of the owner after the cache expires
+
+    When I am logged in as "original_pseud"
+      And "original_pseud" creates the pseud "other_pseud"
+      And I set up the collection "My Collection Thing"
+      And I select "other_pseud" from "Owner pseud(s)"
+      And I unselect "original_pseud" from "Owner pseud(s)"
+      And I press "Submit"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "other_pseud (original_pseud)" within "#main"
+
+    When "original_pseud" deletes the pseud "other_pseud"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "other_pseud (original_pseud)" within "#main"
+    When the collection blurb cache has expired
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "original_pseud" within "#main"
+      And I should not see "other_pseud" within "#main"
+
+
+  Scenario: Collections reflect pseud deletion of moderators after the cache expires
+
+    Given "myself" has the pseud "other_pseud"
+    When I have the collection "My Collection Thing"
+      And I am logged in as the owner of "My Collection Thing"
+      And I am on the "My Collection Thing" participants page
+      And I fill in "participants_to_invite" with "other_pseud (myself)"
+      And I press "Submit"
+    Then I should see "New members invited: other_pseud (myself)"
+    When I select "Moderator" from "myself_role"
+      And I submit with the 4th button
+    Then I should see "Updated other_pseud."
+    When I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "other_pseud (myself)" within "#main"
+
+    When I am logged in as "myself"
+      And "myself" deletes the pseud "other_pseud"
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should see "other_pseud (myself)" within "#main"
+    When the collection blurb cache has expired
+      And I go to the collections page
+    Then I should see "My Collection Thing"
+      And I should not see "other_pseud (myself)" within "#main"
+      And I should see "myself" within "#main"

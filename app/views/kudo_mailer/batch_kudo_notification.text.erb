@@ -1,14 +1,28 @@
 <% content_for :message do %>
-  <% @commentables.each_with_index do |commentable, index| %>
-    <%
-      givers_list = @kudo_givers["#{commentable.class.name}_#{commentable.id}"].to_sentence
-      commentable_link = "\"#{commentable.commentable_name.html_safe}\" (#{polymorphic_url(commentable)})".html_safe
-    %>
+<% @commentables.each_with_index do |commentable, index| %>
+<%
+  commentable_title = commentable.commentable_name.html_safe
+  commentable_url = polymorphic_url(commentable).html_safe
+  givers_hash = @user_kudos["#{commentable.class.name}_#{commentable.id}"]
+  names = givers_hash["names"]
+  guest_count = givers_hash["guest_count"].to_i
+  kudo_count = names.size + guest_count
+  # dup so we don't add "a guest" or "5 guests" to the original array. If that
+  # happens, kudo_count ends up too high whenever both named and guest kudos are
+  # present.
+  givers = names.dup
+  givers << t(".guest", count: guest_count) unless guest_count.zero?
+  givers_list = to_sentence(givers)
+%>
 
-    <%= t 'mailer.kudos.text.left_kudos', givers_list: givers_list, commentable_link: commentable_link, count: @kudos_count.to_i %>
+<% if kudo_count == 1 && guest_count == 1 %>
+<%= t(".single_guest.text", commentable_title: commentable_title, commentable_url: commentable_url) %>
+<% else %>
+<%= t(".left_kudos.text", givers_list: givers_list, commentable_title: commentable_title, commentable_url: commentable_url, count: kudo_count) %>
+<% end %>
 
-    <% if (index < @commentables.length-1) %>
-      <%= text_divider %>
-    <% end %>
-  <% end %>
+<% if (index < @commentables.length - 1) %>
+<%= text_divider %>
+<% end %>
+<% end %>
 <% end %>

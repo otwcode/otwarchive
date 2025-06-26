@@ -26,7 +26,7 @@ Feature: Basic collection navigation
     And I fill in "Post to Collections / Challenges" with "my_collection"
     And I press "Preview"
     And I press "Post"
-    And all indexing jobs have been run
+    And the collection counts have expired
     And I follow "My Collection"
   When I follow "Profile"
   Then I should see "About My Collection (my_collection)"
@@ -66,6 +66,7 @@ Feature: Basic collection navigation
     And I edit the work "Sesame Street"
     And I fill in "Fandoms" with "A League of Their Own, Merlin, Teen Wolf, The Borgias"
     And I press "Post"
+    And the collection counts have expired
     And I go to "My ABCs" collection's page
     And I follow "Fandoms ("
   Then "The Borgias" should appear before "A League of Their Own"
@@ -81,11 +82,11 @@ Feature: Basic collection navigation
       And I post the work "Breaking Free" with fandom "High School Musical" in the collection "We all sing together"
       And I go to "We all sing together" collection's page
       And I follow "Fandoms ("
-      And I select "Movies" from "medium_id"
+      And I select "Movies" from "media_id"
       And I press "Show"
     Then I should see "High School Musical"
       And I should not see "Steven's Universe"
-    When I select "TV Shows" from "medium_id"
+    When I select "TV Shows" from "media_id"
       And I press "Show"
     Then I should not see "High School Musical"
       And I should see "Steven's Universe"
@@ -96,6 +97,7 @@ Feature: Basic collection navigation
       And a canonical freeform "Crack"
       And I am logged in
       And I post the work "Has some tags" with fandom "Naruto" with freeform "Crack" in the collection "Randomness"
+      And the collection counts have expired
 
     # Tag links from the work blurb in a collection should not be collection-scoped
     When I go to "Randomness" collection's page

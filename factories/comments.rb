@@ -2,7 +2,7 @@ require 'faker'
 
 FactoryBot.define do
   factory :comment do
-    comment_content { Faker::Lorem.sentence(25) }
+    comment_content { Faker::Lorem.sentence(word_count: 25) }
     commentable { create(:work).last_posted_chapter }
     pseud { create(:user).default_pseud }
 
@@ -18,6 +18,10 @@ FactoryBot.define do
 
     trait :on_tag do
       commentable { create(:fandom) }
+    end
+
+    trait :on_work_with_guest_comments_on do
+      commentable { create(:work, :guest_comments_on).first_chapter }
     end
 
     trait :unreviewed do

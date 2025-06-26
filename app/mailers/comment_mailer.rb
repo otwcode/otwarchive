@@ -1,62 +1,64 @@
-class CommentMailer < ActionMailer::Base
-  layout 'mailer'
-  helper :mailer
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
-
+class CommentMailer < ApplicationMailer
   # Sends email to an owner of the top-level commentable when a new comment is created
+  # This may be an admin, in which case we use the admin address instead
   def comment_notification(user, comment)
     @comment = comment
-    @owner = user
-    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
+    @owner = true
+    email = user.is_a?(Admin) ? ArchiveConfig.ADMIN_ADDRESS : user.email
+    locale = user.try(:preference).try(:locale_for_mails) || I18n.default_locale.to_s
+    I18n.with_locale(locale) do
       mail(
-        to: user.email,
+        to: email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends email to an owner of the top-level commentable when a comment is edited
+  # This may be an admin, in which case we use the admin address instead
   def edited_comment_notification(user, comment)
     @comment = comment
-    I18n.with_locale(Locale.find(user.preference.preferred_locale).iso) do
+    @owner = true
+    email = user.is_a?(Admin) ? ArchiveConfig.ADMIN_ADDRESS : user.email
+    locale = user.try(:preference).try(:locale_for_mails) || I18n.default_locale.to_s
+    I18n.with_locale(locale) do
       mail(
-        to: user.email,
+        to: email,
         subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
       )
     end
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends email to commenter when a reply is posted to their comment
   # This may be a non-user of the archive
   def comment_reply_notification(your_comment, comment)
+    return if your_comment.comment_owner_email.blank?
+    return if your_comment.pseud_id.nil? && AdminBlacklistedEmail.is_blacklisted?(your_comment.comment_owner_email)
+
     @your_comment = your_comment
     @comment = comment
     mail(
       to: @your_comment.comment_owner_email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
   # Sends email to commenter when a reply to their comment is edited
   # This may be a non-user of the archive
   def edited_comment_reply_notification(your_comment, edited_comment)
+    return if your_comment.comment_owner_email.blank?
+    return if your_comment.pseud_id.nil? && AdminBlacklistedEmail.is_blacklisted?(your_comment.comment_owner_email)
+    return if your_comment.is_deleted?
+
     @your_comment = your_comment
     @comment = edited_comment
     mail(
       to: @your_comment.comment_owner_email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
-  # Sends email to the poster of a comment
+  # Sends email to the poster of a top-level comment
   def comment_sent_notification(comment)
     @comment = comment
     @noreply = true # don't give reply link to your own comment
@@ -64,8 +66,16 @@ class CommentMailer < ActionMailer::Base
       to: @comment.comment_owner_email,
       subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment you left on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
-    ensure
-      I18n.locale = I18n.default_locale
   end
 
+  # Sends email to the poster of a reply to a comment
+  def comment_reply_sent_notification(comment)
+    @comment = comment
+    @parent_comment = comment.commentable
+    @noreply = true
+    mail(
+      to: @comment.comment_owner_email,
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+    )
+  end
 end

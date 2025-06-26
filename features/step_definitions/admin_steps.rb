@@ -20,11 +20,12 @@ end
 Given "I am logged in as a(n) {string} admin" do |role|
   step "I start a new session"
   login = "testadmin-#{role}"
-  FactoryBot.create(:admin, login: login, roles: [role]) if Admin.find_by(login: login).nil?
+  email = "#{login}@example.org"
+  FactoryBot.create(:admin, login: login, email: email, roles: [role]) if Admin.find_by(login: login, email: email).nil?
   visit new_admin_session_path
-  fill_in "Admin user name", with: login
-  fill_in "Admin password", with: "password"
-  click_button "Log in as admin"
+  fill_in "Admin username", with: login
+  fill_in "Admin password", with: "adminpassword"
+  click_button "Log In as Admin"
   step %{I should see "Successfully logged in"}
 end
 
@@ -32,9 +33,9 @@ Given "I am logged in as an admin" do
   step "I start a new session"
   FactoryBot.create(:admin, login: "testadmin", email: "testadmin@example.org") if Admin.find_by(login: "testadmin").nil?
   visit new_admin_session_path
-  fill_in "Admin user name", with: "testadmin"
-  fill_in "Admin password", with: "password"
-  click_button "Log in as admin"
+  fill_in "Admin username", with: "testadmin"
+  fill_in "Admin password", with: "adminpassword"
+  click_button "Log In as Admin"
   step %{I should see "Successfully logged in"}
 end
 
@@ -61,7 +62,7 @@ Given /^tag wrangling is off$/ do
   step(%{I am logged in as a "tag_wrangling" admin})
   visit(admin_settings_path)
   step(%{I check "Turn off tag wrangling for non-admins"})
-  step(%{I press "Update"})  
+  step(%{I press "Update"})
   step("I log out")
 end
 
@@ -88,13 +89,29 @@ Given /^the support form is enabled$/ do
   click_button("Update")
 end
 
-Given /^I have posted a FAQ$/ do
-  step("I am logged in as an admin")
-  step %{I make a 1st FAQ post}
+Given "guest comments are on" do
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  uncheck("Turn off guest comments across the site")
+  click_button("Update")
 end
 
-Given /^I have posted known issues$/ do
-  step %{I am logged in as an admin}
+Given "guest comments are off" do
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  check("Turn off guest comments across the site")
+  click_button("Update")
+end
+
+Given "account age threshold for comment spam check is set to {int} days" do |days|
+  step("I am logged in as a super admin")
+  visit(admin_settings_path)
+  fill_in("admin_setting_account_age_threshold_for_comment_spam_check", with: days)
+  click_button("Update")
+end
+
+Given "I have posted known issues" do
+  step %{I am logged in as a super admin}
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "make a new known issues post"}
@@ -109,20 +126,20 @@ Given /^I have posted an admin post$/ do
   step("I log out")
 end
 
-Given /^the fannish next of kin "([^\"]*)" for the user "([^\"]*)"$/ do |kin, user|
-  step %{the user "#{kin}" exists and is activated}
-  step %{the user "#{user}" exists and is activated}
-  step %{I am logged in as a "policy_and_abuse" admin}
-  step %{I go to the abuse administration page for "#{user}"}
-  fill_in("Fannish next of kin's username", with: "#{kin}")
-  fill_in("Fannish next of kin's email", with: "testing@foo.com")
-  click_button("Update")
+Given "the admin post {string}" do |title|
+  FactoryBot.create(:admin_post, title: title)
 end
 
-Given /^the user "([^\"]*)" is suspended$/ do |user|
+Given "the fannish next of kin {string} for the user {string}" do |kin, user|
+  user = ensure_user(user)
+  kin = ensure_user(kin)
+  user.create_fannish_next_of_kin(kin: kin, kin_email: "fnok@example.com")
+end
+
+Given "the user {string} is suspended" do |user|
   step %{the user "#{user}" exists and is activated}
   step %{I am logged in as a "policy_and_abuse" admin}
-  step %{I go to the abuse administration page for "#{user}"}
+  step %{I go to the user administration page for "#{user}"}
   choose("admin_action_suspend")
   fill_in("suspend_days", with: 30)
   fill_in("Notes", with: "Why they are suspended")
@@ -132,7 +149,7 @@ end
 Given /^the user "([^\"]*)" is banned$/ do |user|
   step %{the user "#{user}" exists and is activated}
   step(%{I am logged in as a "policy_and_abuse" admin})
-  step %{I go to the abuse administration page for "#{user}"}
+  step %{I go to the user administration page for "#{user}"}
   choose("admin_action_ban")
   fill_in("Notes", with: "Why they are banned")
   click_button("Update")
@@ -149,12 +166,12 @@ Given /^I have posted an admin post without paragraphs$/ do
   step("I log out")
 end
 
-Given /^I have posted an admin post with tags$/ do
+Given /^I have posted an admin post with tags "(.*?)"$/ do |tags|
   step(%{I am logged in as a "communications" admin})
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Default Admin Post")
   fill_in("content", with: "Content of the admin post.")
-  fill_in("admin_post_tag_list", with: "quotes, futurama")
+  fill_in("admin_post_tag_list", with: tags)
   click_button("Post")
 end
 
@@ -162,6 +179,62 @@ Given(/^the following language exists$/) do |table|
   table.hashes.each do |hash|
     FactoryBot.create(:language, hash)
   end
+end
+
+Given /^I have posted an admin post with guest comments disabled$/ do
+  step %{I am logged in as a "communications" admin}
+  step %{I start to make an admin post}
+  choose("Only registered users can comment")
+  click_button("Post")
+  step %{I log out}
+end
+
+Given /^I have posted an admin post with comments disabled$/ do
+  step %{I am logged in as a "communications" admin}
+  step %{I start to make an admin post}
+  choose("No one can comment")
+  click_button("Post")
+  step %{I log out}
+end
+
+Given "an abuse ticket ID exists" do
+  ticket = {
+    "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID,
+    "status" => "Open",
+    "webUrl" => Faker::Internet.url
+  }
+  allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
+end
+
+Given "a work {string} with the original creator {string}" do |title, creator|
+  step %{the work "#{title}" by "#{creator}"}
+  step %{I have an orphan account}
+  step %{"#{creator}" orphans and takes their pseud off the work "#{title}"}
+end
+
+Given "the admin {string} is locked" do |login|
+  admin = Admin.find_by(login: login) || FactoryBot.create(:admin, login: login)
+  # Same as script/lock_admin.rb
+  admin.lock_access!({ send_instructions: false })
+end
+
+Given "the admin {string} is unlocked" do |login|
+  admin = Admin.find_by(login: login) || FactoryBot.create(:admin, login: login)
+  # Same as script/unlock_admin.rb
+  admin.unlock_access!
+end
+
+Given "there is/are {int} user creation(s) per page" do |amount|
+  allow(Work).to receive(:per_page).and_return(amount)
+  allow(Comment).to receive(:per_page).and_return(amount)
+end
+
+Given "an archive FAQ category with the title {string} exists" do |title|
+  FactoryBot.create(:archive_faq, title: title)
+end
+
+Given "the app name is {string}" do |app_name|
+  allow(ArchiveConfig).to receive(:APP_NAME).and_return(app_name)
 end
 
 ### WHEN
@@ -176,10 +249,14 @@ When /^I fill in "([^"]*)" with "([^"]*)'s" invite code$/ do |field, login|
   fill_in(field, with: token)
 end
 
-When /^I make an admin post$/ do
+When "I start to make an admin post" do
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Default Admin Post")
   fill_in("content", with: "Content of the admin post.")
+end
+
+When /^I make an admin post$/ do
+  step %(I start to make an admin post)
   click_button("Post")
 end
 
@@ -187,16 +264,6 @@ When /^I make an admin post without paragraphs$/ do
   visit new_admin_post_path
   fill_in("admin_post_title", with: "Admin Post Without Paragraphs")
   fill_in("content", with: "<ul><li>This post</li><li>is just</li><li>a list</li></ul>")
-  click_button("Post")
-end
-
-When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
-  n = 1 if n.zero?
-  visit new_archive_faq_path
-  fill_in("Question*", with: "Number #{n} Question.")
-  fill_in("Answer*", with: "Number #{n} posted FAQ, this is.")
-  fill_in("Category name*", with: "Number #{n} FAQ")
-  fill_in("Anchor name*", with: "Number#{n}anchor")
   click_button("Post")
 end
 
@@ -219,22 +286,30 @@ When /^I make a multi-question FAQ post$/ do
   click_button("Post")
 end
 
-When /^(\d+) Archive FAQs? exists?$/ do |n|
-  (1..n.to_i).each do |i|
-    FactoryBot.create(:archive_faq, id: i)
+When "{int} Archive FAQ(s) exist(s)" do |n|
+  (1..n).each do |i|
+    FactoryBot.create(:archive_faq, id: i, title: "The #{i} FAQ")
   end
 end
 
-When /^the invite_from_queue_at is yesterday$/ do
-  AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
+When "{int} Archive FAQ(s) with {int} question(s) exist(s)" do |faqs, questions|
+  (1..faqs).each do |i|
+    archive_faq = FactoryBot.create(:archive_faq, id: i)
+    (1..questions).each do
+      FactoryBot.create(:question, archive_faq: archive_faq)
+    end
+  end
 end
 
-When /^the check_queue rake task is run$/ do
-  step %{I run the rake task "invitations:check_queue"}
+When "the invite_from_queue_at is yesterday" do
+  AdminSetting.first.update_attribute(:invite_from_queue_at, Time.current - 1.day)
 end
 
-When /^I edit known issues$/ do
-  step %{I am logged in as an admin}
+When "the scheduled check_invite_queue job is run" do
+  Resque.enqueue(AdminSetting, :check_queue)
+end
+
+When "I edit known issues" do
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "Edit"}
@@ -243,8 +318,7 @@ When /^I edit known issues$/ do
   step %{I press "Post"}
 end
 
-When /^I delete known issues$/ do
-  step %{I am logged in as an admin}
+When "I delete known issues" do
   step %{I follow "Admin Posts"}
   step %{I follow "Known Issues" within "#header"}
   step %{I follow "Delete"}
@@ -256,7 +330,7 @@ When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
   uncheck("user_roles_#{role_id}")
 end
 
-When (/^I make a translation of an admin post( with tags)?$/) do |with_tags|
+When /^I make a translation of an admin post( with tags "(.*?)")?$/ do |tags|
   admin_post = AdminPost.find_by(title: "Default Admin Post")
   # If post doesn't exist, assume we want to reference a non-existent post
   admin_post_id = !admin_post.nil? ? admin_post.id : 0
@@ -265,7 +339,7 @@ When (/^I make a translation of an admin post( with tags)?$/) do |with_tags|
   fill_in("content", with: "Deutsch Woerter")
   step %{I select "Deutsch" from "Choose a language"}
   fill_in("admin_post_translated_post_id", with: admin_post_id)
-  fill_in("admin_post_tag_list", with: "quotes, futurama") if with_tags
+  fill_in("admin_post_tag_list", with: tags) if tags
   click_button("Post")
 end
 
@@ -273,6 +347,24 @@ When /^I hide the work "(.*?)"$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
   step %{I follow "Hide Work"}
+end
+
+When "the search criteria contains the ID for {string}" do |login|
+  user_id = User.find_by(login: login).id
+  fill_in("user_id", with: user_id)
+end
+
+When "it is past the admin password reset token's expiration date" do
+  days = ArchiveConfig.DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES + 1
+  step "it is currently #{days} days from now"
+end
+
+When "I confirm I want to remove the pseud" do
+  expect(page.accept_alert).to eq("Are you sure you want to remove the creator's pseud from this work?") if @javascript
+end
+
+When "I follow the first invitation token url" do
+  first('//td/a[href*="/invitations/"]').click
 end
 
 ### THEN
@@ -283,24 +375,19 @@ Then (/^the translation information should still be filled in$/) do
   step %{"Deutsch" should be selected within "Choose a language"}
 end
 
-Then (/^I should see a translated admin post$/) do
+Then /^I should see a translated admin post( with tags "(.*?)")?$/ do |tags|
+  tags = tags.split(/, ?/) if tags
   step %{I go to the admin-posts page}
   step %{I should see "Default Admin Post"}
+  step %{I should see "Tags: #{tags.join(' ')}"} if tags
   step %{I should see "Translations: Deutsch"}
   step %{I follow "Default Admin Post"}
   step %{I should see "Deutsch" within "dd.translations"}
   step %{I follow "Deutsch"}
   step %{I should see "Deutsch Woerter"}
-end
-
-Then (/^I should see a translated admin post with tags$/) do
-  step %{I go to the admin-posts page}
-  step %{I should see "Default Admin Post"}
-  step %{I should see "Tags: quotes futurama"}
-  step %{I should see "Translations: Deutsch"}
-  step %{I follow "Default Admin Post"}
-  step %{I should see "Deutsch" within "dd.translations"}
-  step %{I should see "futurama" within "dd.tags"}
+  tags&.each do |tag|
+    step %{I should see "#{tag}" within "dd.tags"}
+  end
 end
 
 Then (/^I should not see a translated admin post$/) do
@@ -344,7 +431,7 @@ end
 
 Then /^"([^\"]*)" should see their work "([^\"]*)" is hidden?/ do |user, work|
   step %{I am logged in as "#{user}"}
-  step %{I am on my works page}
+  step %{I am on #{user}'s works page}
   step %{I should not see "#{work}"}
   step %{I view the work "#{work}"}
   step %{I should see the image "title" text "Hidden by Administrator"}
@@ -387,30 +474,30 @@ When(/^the user "(.*?)" is unbanned in the background/) do |user|
   u.update_attribute(:banned, false)
 end
 
-Given(/^I have blacklisted the address "([^"]*)"$/) do |email|
+Given "I have banned the address {string}" do |email|
   visit admin_blacklisted_emails_url
-  fill_in("Email", with: email)
-  click_button("Add To Blacklist")
+  fill_in("Email to ban", with: email)
+  click_button("Ban Email")
 end
 
-Given(/^I have blacklisted the address for user "([^"]*)"$/) do |user|
+Given "I have banned the address for user {string}" do |user|
   visit admin_blacklisted_emails_url
   u = User.find_by(login: user)
   fill_in("admin_blacklisted_email_email", with: u.email)
-  click_button("Add To Blacklist")
+  click_button("Ban Email")
 end
 
-Then(/^the address "([^"]*)" should be in the blacklist$/) do |email|
+Then "the address {string} should be banned" do |email|
   visit admin_blacklisted_emails_url
   fill_in("Email to find", with: email)
-  click_button("Search Blacklist")
+  click_button("Search Banned Emails")
   assert page.should have_content(email)
 end
 
-Then(/^the address "([^"]*)" should not be in the blacklist$/) do |email|
+Then "the address {string} should not be banned" do |email|
   visit admin_blacklisted_emails_url
   fill_in("Email to find", with: email)
-  click_button("Search Blacklist")
+  click_button("Search Banned Emails")
   step %{I should see "0 emails found"}
 end
 
@@ -438,6 +525,26 @@ Then /^the work "([^\"]*)" should not be marked as spam/ do |work|
   assert !w.spam?
 end
 
+Then "I should see {int} admin activity log entry/entries" do |count|
+  expect(page).to have_css("tr[id^=admin_activity_]", count: count)
+end
+
 Then /^the user content should be shown as right-to-left$/ do
   page.should have_xpath("//div[contains(@class, 'userstuff') and @dir='rtl']")
+end
+
+Then "I should see the original creator {string}" do |creator|
+  user = User.find_by(login: creator)
+  expect(page).to have_selector(".original_creators",
+                                text: "#{user.id} (#{creator})")
+end
+
+Then "the history table should show that {string} was {word} as next of kin" do |username, action|
+  user_id = User.find_by(login: username).id
+  step %{I should see "Fannish Next of Kin #{action.capitalize}: #{user_id}" within "#user_history"}
+end
+
+Then "the history table should show they were {word} as next of kin of {string}" do |action, username|
+  user_id = User.find_by(login: username).id
+  step %{I should see "#{action.capitalize} as Fannish Next of Kin for: #{user_id}" within "#user_history"}
 end

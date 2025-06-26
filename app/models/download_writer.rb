@@ -1,4 +1,4 @@
-require 'open3'
+require "open3"
 
 class DownloadWriter
   attr_reader :download, :work
@@ -14,32 +14,33 @@ class DownloadWriter
     download
   end
 
-  private
-
-  # Write the HTML version
-  def generate_html_download
-    return if download.exists?
-
+  def generate_html
     renderer = ApplicationController.renderer.new(
       http_host: ArchiveConfig.APP_HOST
     )
-    @html = renderer.render(
-      template: 'downloads/show',
-      layout: 'barebones',
+    renderer.render(
+      template: "downloads/show",
+      layout: "barebones",
       assigns: {
         work: work,
         page_title: download.page_title,
         chapters: download.chapters
       }
     )
+  end
 
-    # write to file
-    File.open(download.html_file_path, 'w:UTF-8') { |f| f.write(@html) }
+  private
+
+  # Write the HTML version to file
+  def generate_html_download
+    return if download.exists?
+
+    File.open(download.html_file_path, "w:UTF-8") { |f| f.write(generate_html) }
   end
 
   # transform HTML version into ebook version
   def generate_ebook_download
-    return unless %w(azw3 epub mobi pdf).include?(download.file_type)
+    return unless %w[azw3 epub mobi pdf].include?(download.file_type)
     return if download.exists?
 
     cmds = get_commands
@@ -51,28 +52,14 @@ class DownloadWriter
       exit_status = nil
       Open3.popen3(*cmd) { |_stdin, _stdout, _stderr, wait_thread| exit_status = wait_thread.value }
       unless exit_status
-        Rails.logger.debug "Download generation failed: " + cmd.to_s
+        Rails.logger.warn "Download generation failed: " + cmd.to_s
       end
     end
   end
 
   # Get the version of the command we need to execute
   def get_commands
-    download.file_type == "pdf" ? [get_pdf_command] :
-      [get_web2disk_command, get_zip_command, get_calibre_command]
-  end
-
-  # We're sticking with wkhtmltopdf for PDF files since using calibre for PDF requires the use of xvfb
-  def get_pdf_command
-    [
-      'wkhtmltopdf',
-      '--encoding', 'utf-8',
-      '--disable-javascript',
-      '--disable-smart-shrinking',
-      '--log-level', 'none',
-      '--title', download.file_name,
-      download.html_file_path, download.file_path
-    ]
+    [get_web2disk_command, get_zip_command, get_calibre_command]
   end
 
   # Create the format-specific command-line call to calibre/ebook-convert
@@ -80,37 +67,59 @@ class DownloadWriter
     # Add info about first series if any
     series = []
     if meta[:series_title].present?
-      series = ['--series', meta[:series_title], '--series-index', meta[:series_position]]
+      series = ["--series", meta[:series_title],
+                "--series-index", meta[:series_position]]
     end
 
     ### Format-specific options
     # epub: don't generate a cover image
-    epub = download.file_type == "epub" ? ['--no-default-epub-cover'] : []
+    epub = download.file_type == "epub" ? ["--no-default-epub-cover"] : []
+
+    pdf = []
+    if download.file_type == "pdf"
+      pdf = [
+        # pdf: decrease margins from 72pt default
+        "--pdf-page-margin-top", "36",
+        "--pdf-page-margin-right", "36",
+        "--pdf-page-margin-bottom", "36",
+        "--pdf-page-margin-left", "36",
+        "--pdf-default-font-size", "17",
+        # pdf: only include necessary characters when embedding fonts
+        "--subset-embedded-fonts"
+      ]
+    end
+
+    ### CSS options
+    # azw3, epub, and mobi get a special stylesheet
+    css = []
+    if %w[azw3 epub mobi].include?(download.file_type)
+      css = ["--extra-css",
+             Rails.public_path.join("stylesheets/ebooks.css").to_s]
+    end
 
     [
-      'ebook-convert',
+      "ebook-convert",
       download.zip_path,
       download.file_path,
-      '--input-encoding', 'utf-8',
+      "--input-encoding", "utf-8",
       # Prevent it from turning links to endnotes into entries for the table of
       # contents on works with fewer than the specified number of chapters.
-      '--toc-threshold', '0',
-      '--use-auto-toc',
-      '--title', meta[:title],
-      '--title-sort', meta[:sortable_title],
-      '--authors', meta[:authors],
-      '--author-sort', meta[:sortable_authors],
-      '--comments', meta[:summary],
-      '--tags', meta[:tags],
-      '--pubdate', meta[:pubdate],
-      '--publisher', ArchiveConfig.APP_NAME,
-      '--language', meta[:language],
-      '--extra-css', Rails.public_path.join('stylesheets/ebooks.css').to_s,
+      "--toc-threshold", "0",
+      "--use-auto-toc",
+      "--title", meta[:title],
+      "--title-sort", meta[:sortable_title],
+      "--authors", meta[:authors],
+      "--author-sort", meta[:sortable_authors],
+      "--comments", meta[:summary],
+      "--tags", meta[:tags],
+      "--pubdate", meta[:pubdate],
+      "--publisher", ArchiveConfig.APP_NAME,
+      "--language", meta[:language],
       # XPaths for detecting chapters are overly specific to make sure we don't grab
       # anything inputted by the user. First path is for single-chapter works,
       # second for multi-chapter, and third for the preface and afterword
-      '--chapter', "//h:body/h:div[@id='chapters']/h:h2[@class='toc-heading'] | //h:body/h:div[@id='chapters']/h:div[@class='meta group']/h:h2[@class='heading'] | //h:body/h:div[@id='preface' or @id='afterword']/h:h2[@class='toc-heading']"
-    ] + series + epub
+      "--chapter", "//h:body/h:div[@id='chapters']/h:h2[@class='toc-heading'] | //h:body/h:div[@id='chapters']/h:div[@class='meta group']/h:h2[@class='heading'] | //h:body/h:div[@id='preface' or @id='afterword']/h:h2[@class='toc-heading']"
+    ] + series + css + epub + pdf
   end
 
   # Grab the HTML file and any images and put them in --base-dir.
@@ -119,10 +128,10 @@ class DownloadWriter
   # creating an empty stylesheets directory.
   def get_web2disk_command
     [
-      'web2disk',
-      '--base-dir', download.assets_path,
-      '--max-recursions', '0',
-      '--dont-download-stylesheets',
+      "web2disk",
+      "--base-dir", download.assets_path,
+      "--max-recursions", "0",
+      "--dont-download-stylesheets",
       "file://#{download.html_file_path}"
     ]
   end
@@ -130,8 +139,8 @@ class DownloadWriter
   # Zip the directory containing the HTML file and images.
   def get_zip_command
     [
-      'zip',
-      '-r',
+      "zip",
+      "-r",
       download.zip_path,
       download.assets_path
     ]

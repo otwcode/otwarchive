@@ -73,43 +73,44 @@ describe Collection do
     end # challenges type loop
   end
 
-  describe "all_bookmarked_items_count" do
+  describe "save" do
     let(:collection) { create(:collection) }
 
-    it "does not include bookmarks of deleted works" do
-      work = create(:work)
-      create(:bookmark, collections: [collection], bookmarkable: work)
-      expect do
-        work.destroy
-      end.to change { collection.all_bookmarked_items_count }.from(1).to(0)
+    it "checks the tag limit" do
+      collection.tag_string = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11"
+      expect(collection.save).to be_falsey
+      expect(collection.errors.full_messages).to \
+        include /Sorry, a collection can only have 10 tags./
+    end
+  end
+
+  describe "#clear_icon" do
+    subject { create(:collection, icon_alt_text: "icon alt", icon_comment_text: "icon comment") }
+
+    before do
+      subject.icon.attach(io: File.open(Rails.root.join("features/fixtures/icon.gif")), filename: "icon.gif", content_type: "image/gif")
     end
 
-    it "does not include multiple bookmarks of the same work" do
-      work = create(:work)
-      create(:bookmark, collections: [collection], bookmarkable: work)
-      create(:bookmark, collections: [collection], bookmarkable: work)
-      expect(collection.all_bookmarked_items_count).to eq 1
-    end
-
-    it "doesn't include private bookmarks" do
-      create(:bookmark, collections: [collection], private: true)
-      expect(collection.all_bookmarked_items_count).to eq 0
-    end
-
-    it "includes bookmarks of restricted works only when logged-in" do
-      work = create(:work, restricted: true)
-      create(:bookmark, collections: [collection], bookmarkable: work)
-      expect do
-        User.current_user = User.new
-      end.to change { collection.all_bookmarked_items_count }.from(0).to(1)
-    end
-
-    it "counts bookmarks of all types" do
-      %i[work series_with_a_work external_work].each do |factory|
-        item = create(factory)
-        create(:bookmark, collections: [collection], bookmarkable: item)
+    context "when delete_icon is false" do
+      it "does not clear the icon, icon alt, or icon comment" do
+        subject.clear_icon
+        expect(subject.icon.attached?).to be(true)
+        expect(subject.icon_alt_text).to eq("icon alt")
+        expect(subject.icon_comment_text).to eq("icon comment")
       end
-      expect(collection.all_bookmarked_items_count).to eq 3
+    end
+
+    context "when delete_icon is true" do
+      before do
+        subject.delete_icon = 1
+      end
+
+      it "clears the icon, icon alt, and icon comment" do
+        subject.clear_icon
+        expect(subject.icon.attached?).to be(false)
+        expect(subject.icon_alt_text).to be_nil
+        expect(subject.icon_comment_text).to be_nil
+      end
     end
   end
 end

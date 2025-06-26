@@ -5,42 +5,24 @@ module AdminHelper
     activity.admin.nil? ? ts("Admin deleted") : activity.admin_login
   end
 
-  # Show the admin menu with the options for hiding, editing, deleting, or
-  # marking user creations as spam.
-  def can_access_admin_options?
-    return unless logged_in_as_admin?
-
-    admin_can_destroy_creations? ||
-      admin_can_edit_creations? ||
-      admin_can_hide_creations? ||
-      admin_can_mark_creations_spam?
+  def admin_activity_target_link(activity)
+    url = if activity.target.is_a?(Pseud)
+            user_pseuds_path(activity.target.user)
+          else
+            activity.target
+          end
+    link_to(activity.target_name, url)
   end
 
-  def admin_can_destroy_creations?
-    return unless logged_in_as_admin?
-
-    UserCreationPolicy.can_destroy_creations?(current_admin)
-  end
-
-  # Currently applies to editing ExternalWorks and the tags or language of
-  # Works.
-  def admin_can_edit_creations?
-    return unless logged_in_as_admin?
-
-    UserCreationPolicy.can_edit_creations?(current_admin)
-  end
-
-  def admin_can_hide_creations?
-    return unless logged_in_as_admin?
-
-    UserCreationPolicy.can_hide_creations?(current_admin)
-  end
-
-  # Currently applies to Works.
-  def admin_can_mark_creations_spam?
-    return unless logged_in_as_admin?
-
-    UserCreationPolicy.can_mark_creations_spam?(current_admin)
+  # Summaries for profile and pseud edits, which contain links, need to be
+  # handled differently from summaries that use item.inspect (and thus contain
+  # angle brackets).
+  def admin_activity_summary(activity)
+    if activity.action == "edit pseud" || activity.action == "edit profile"
+      raw sanitize_field(activity, :summary)
+    else
+      activity.summary
+    end
   end
 
   def admin_setting_disabled?(field)

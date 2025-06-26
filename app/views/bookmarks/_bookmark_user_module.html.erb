@@ -1,29 +1,28 @@
-<% # expects "bookmark" %>
+<%# expects "bookmark" %>
 <div class="<% if is_author_of?(bookmark) %>own <% end %>user module group">
-  <% blurb_cache_key = (is_author_of?(bookmark) ? "bookmark-owner-blurb-#{bookmark.cache_key}-v2" : "bookmark-blurb-#{bookmark.cache_key}-v2") %>
+  <h5 class="byline heading">
+    <%= t(".bookmarked_by_html", pseud_link: link_to(bookmark.pseud.byline, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud))) %>
+  </h5>
+  <%# If you update the cache key, update flush_bookmark_cache in tag.rb %>
+  <% blurb_cache_key = (is_author_of?(bookmark) ? "bookmark-owner-blurb-#{bookmark.cache_key}-v3" : "bookmark-blurb-#{bookmark.cache_key}-v3") %>
   <% cache(blurb_cache_key, skip_digest: true) do %>
-    <!--bookmarker, time-->
-    <h5 class="byline heading">
-      <%= ts('Bookmarked by') %> <%= link_to(bookmark.pseud.byline, user_pseud_bookmarks_path(bookmark.pseud.user, bookmark.pseud)) %>
-    </h5>
     <p class="datetime"><%= set_format_for_date(bookmark.created_at) %></p>
 
-    <% # information added by the bookmark owner %>
-    <!--meta-->
+    <%# information added by the bookmark owner %>
     <% unless bookmark.tag_string.blank? %>
       <h6 class="meta heading"><%= ts('Bookmarker\'s Tags:') %></h6>
       <ul class="meta tags commas">
         <% bookmark.tags.each do |tag| %>
-          <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') %></li>
+          <li><%= link_to(tag.name, tag_bookmarks_path(tag), class: "tag") %></li>
         <% end %>
       </ul>
     <% end %>
 
-    <% # When the user views their own bookmark blurb, they are warned about seeing their bookmark in a modded collection %>
+    <%# When the user views their own bookmark blurb, they are warned about seeing their bookmark in a modded collection %>
     <% unless bookmark.collections.blank? %>
       <% bookmark.collections.each do |modded| %>
         <% if modded.moderated? && !bookmark.approved_collections.include?(modded) && is_author_of?(bookmark)  %>
-          <p class="notice"><%= ts("The collection #{modded.title} is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there.") %></p>
+          <p class="notice"><%= ts("The collection %{title} is currently moderated. Your bookmark must be approved by the collection maintainers before being listed there.", title: modded.title) %></p>
         <% end %>
       <% end %>
       <% unless bookmark.approved_collections.empty? && !is_author_of?(bookmark) %>
@@ -44,20 +43,18 @@
       <% end %>
     <% end %>
 
-    <!--notes-->
-    <% unless bookmark.bookmarker_notes.blank? %>
+    <% if bookmark.bookmarker_notes.present? %>
       <h6 class="landmark heading"><%= ts('Bookmarker\'s Notes') %></h6>
       <blockquote class="userstuff notes">
-        <%=raw sanitize_field(bookmark, :bookmarker_notes) %>
+        <%= raw sanitize_field(bookmark, :bookmarker_notes, image_safety_mode: true) %>
       </blockquote>
     <% end %>
-    <% # end of information added by the bookmark owner %>
+    <%# end of information added by the bookmark owner %>
   <% end %>
 
-  <!--navigation and actions-->
   <% if is_author_of?(bookmark) %>
     <%= render "bookmarks/bookmark_owner_navigation", bookmark: bookmark %>
-  <% elsif can_access_admin_options? %>
+  <% elsif policy(bookmark).show_admin_options? %>
     <%= render "admin/admin_options", item: bookmark %>
   <% end %>
 </div>

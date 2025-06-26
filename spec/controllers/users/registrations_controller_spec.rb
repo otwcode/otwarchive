@@ -1,12 +1,16 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Users::RegistrationsController do
   include RedirectExpectationHelper
 
   def valid_user_attributes
     {
-      email: "sna.foo@gmail.com", login: "myname", age_over_13: "1",
-      terms_of_service: "1", password: "password"
+      email: "sna.foo@gmail.com",
+      login: "myname",
+      age_over_13: "1",
+      data_processing: "1",
+      terms_of_service: "1",
+      password: "password"
     }
   end
 
@@ -75,7 +79,7 @@ describe Users::RegistrationsController do
 
         before do
           invitation.mark_as_redeemed(previous_user)
-          previous_user.update_attributes(invitation_id: invitation.id)
+          previous_user.update!(invitation_id: invitation.id)
         end
 
         it "redirects with an error" do

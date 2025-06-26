@@ -91,6 +91,16 @@ Given /^an invitation request for "([^"]*)"$/ do |email|
   click_button("Add me to the list")
 end
 
+Given "there are {int} invite request(s) per page" do |amount|
+  allow(InviteRequest).to receive(:per_page).and_return(amount)
+end
+
+Given "an invitation created by {string} and used by {string}" do |creator, invitee|
+  creator = User.find_by(login: creator)
+  invitee = User.find_by(login: invitee)
+  FactoryBot.create(:invitation, creator: creator, invitee: invitee)
+end
+
 ### WHEN
 
 When /^I use an invitation to sign up$/ do
@@ -112,7 +122,7 @@ end
 
 When /^I try to invite a friend from my user page$/ do
   step %{I am logged in as "user1"}
-  step %{I go to my user page}
+  step %{I go to user1's user page}
   step %{I follow "Invitations"}
 end
 
@@ -124,10 +134,20 @@ When /^I request some invites$/ do
   step %{I press "Send Request"}
 end
 
+When "as {string} I request some invites" do |user|
+  step %{I am logged in as "#{user}"}
+  step %{I go to #{user}'s user page}
+  step %{I follow "Invitations"}
+  step %{I follow "Request invitations"}
+  step %{I fill in "How many invitations would you like? (max 10)" with "3"}
+  step %{I fill in "Please specify why you'd like them:" with "I want them for a friend"}
+  step %{I press "Send Request"}
+end
+
 When /^I view requests as an admin$/ do
   step %{I am logged in as an admin}
   step %{I follow "Invitations"}
-  step %{I follow "Manage requests"}
+  step %{I follow "Manage Requests"}
 end
 
 When /^an admin grants the request$/ do
@@ -142,14 +162,31 @@ When /^I check how long "(.*?)" will have to wait in the invite request queue$/ 
   click_button("Look me up")
 end
 
+When "I view the most recent invitation for {string}" do |creator|
+  user = User.find_by(login: creator)
+  invitation = user.invitations.last
+  visit user_invitation_path(creator, invitation)
+end
+
 ### Then
 
 Then /^I should see how long I have to activate my account$/ do
-  days_to_activate = AdminSetting.first.days_to_purge_unactivated? ? (AdminSetting.first.days_to_purge_unactivated * 7) : ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED
-  step %{I should see "You must confirm your email address within #{days_to_activate} days"}
+  days_to_activate = AdminSetting.first.days_to_purge_unactivated * 7
+  step %{I should see "You must activate your account within #{days_to_activate} days"}
 end
 
 Then /^"([^"]*)" should have "([^"]*)" invitations$/ do |login, invitation_count|
   user = User.find_by(login: login)
   assert user.invitations.count == invitation_count.to_i
+end
+
+Then "the invite queue should list the following:" do |desired|
+  actual = all("table tbody tr").map do |row|
+    {
+      "position" => row.find("td:nth-child(1)").text,
+      "email" => row.find("td:nth-child(2)").text
+    }
+  end
+
+  expect(actual).to eq(desired.hashes)
 end

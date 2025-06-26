@@ -1,9 +1,6 @@
 <!--page description, messages-->
 <% if @work.unrevealed? %>
-  <p class="notice">
-    <%= ts("This work is part of an ongoing challenge and will be revealed soon! You can find details here: ") %>
-    <%= @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ").html_safe %>
-  </p>
+  <%= render "works/work_unrevealed_notice" %>
 <% end %>
 <% if @work.user_has_creator_invite?(current_user) %>
   <p class="notice">
@@ -14,12 +11,12 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<% if can_access_admin_options? %>
+<% if policy(@work).show_admin_options? %>
   <%= render "admin/admin_options", item: @work %>
 <% end %>
 <!--/subnav-->
 
-<% if !@work.unrevealed? || logged_in_as_admin? || @work.user_is_owner_or_invited?(current_user) || can_see_work(@work, current_user) %>
+<% if !@work.unrevealed? || logged_in_as_admin? || can_access_unrevealed_work(@work, current_user) %>
   <!-- BEGIN work -->
   <div class="work"><p class="landmark"><a name="top">&nbsp;</a></p>
     <%= render :partial => 'works/work_header' %>
@@ -27,12 +24,12 @@
     <div id="chapters">
       <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
     </div>
-  
+
     <% inspired_by = get_inspired_by(@work) %>
     <% last_chapter = @work.posted? ? @work.last_posted_chapter : @work.last_chapter %>
     <% if @chapter == last_chapter && (@work.endnotes.present? || @work.series.present? || inspired_by.present?) %>
       <!--afterword-->
-      <div class="afterword preface group" role="complementary">  
+      <div class="afterword preface group">
         <% if !@work.endnotes.blank? %>
           <%= render :partial => 'works/work_endnotes' %>
         <% end %>
@@ -45,7 +42,7 @@
       </div>
       <!--/afterword-->
     <% end %>
-  
+
     </div>
     <!-- END work skin -->
   </div>
@@ -54,6 +51,19 @@
   <!-- BEGIN comment section -->
   <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
   <!-- END comment section -->
+
+  <% if @next_chapter %>
+    <script type="speculationrules">
+      {
+        "prerender": [
+          {
+            "source": "list",
+            "urls": ["<%= work_chapter_path(@work, @next_chapter, anchor: "workskin") %>"]
+          }
+        ]
+      }
+    </script>
+  <% end %>
 <% end %>
 
 <%= render "hit_count/include" %>

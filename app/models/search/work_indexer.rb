@@ -1,13 +1,29 @@
 class WorkIndexer < Indexer
-
   def self.klass
     "Work"
+  end
+
+  def self.klass_with_includes
+    Work.includes(
+      :approved_collections,
+      :direct_filters,
+      :external_author_names,
+      :filters,
+      :language,
+      :stat_counter,
+      :tags,
+      :users,
+      :relationships,
+      fandoms: { meta_tags: :meta_tags, merger: { meta_tags: :meta_tags } },
+      pseuds: :user,
+      serial_works: :series
+    )
   end
 
   def self.index_all(options = {})
     unless options[:skip_delete]
       delete_index
-      create_index(shards: 12)
+      create_index(shards: ArchiveConfig.WORKS_SHARDS)
     end
     options[:skip_delete] = true
     super(options)
@@ -15,40 +31,42 @@ class WorkIndexer < Indexer
 
   def self.mapping
     {
-      "work" => {
-        properties: {
-          title: {
-            type: "text",
-            analyzer: "simple"
-          },
-          creators: {
-            type: "text"
-          },
-          tag: {
-            type: "text"
-          },
-          series: {
-            type: "object"
-          },
-          authors_to_sort_on: {
-            type: "keyword"
-          },
-          title_to_sort_on: {
-            type: "keyword"
-          },
-          imported_from_url: {
-            type: "keyword"
-          },
-          work_types: {
-            type: "keyword"
-          },
-          posted: { type: "boolean" },
-          restricted: { type: "boolean" },
-          hidden_by_admin: { type: "boolean" },
-          complete: { type: "boolean" },
-          in_anon_collection: { type: "boolean" },
-          in_unrevealed_collection: { type: "boolean" }
-        }
+      properties: {
+        creator_join: {
+          type: :join,
+          relations: { work: :creator }
+        },
+        title: {
+          type: "text",
+          analyzer: "standard"
+        },
+        creators: {
+          type: "text"
+        },
+        tag: {
+          type: "text"
+        },
+        series: {
+          type: "object"
+        },
+        authors_to_sort_on: {
+          type: "keyword"
+        },
+        title_to_sort_on: {
+          type: "keyword"
+        },
+        imported_from_url: {
+          type: "keyword"
+        },
+        work_types: {
+          type: "keyword"
+        },
+        posted: { type: "boolean" },
+        restricted: { type: "boolean" },
+        hidden_by_admin: { type: "boolean" },
+        complete: { type: "boolean" },
+        in_anon_collection: { type: "boolean" },
+        in_unrevealed_collection: { type: "boolean" }
       }
     }
   end
@@ -75,8 +93,6 @@ class WorkIndexer < Indexer
         :freeform_ids,
         :filter_ids,
         :tag,
-        :pseud_ids,
-        :user_ids,
         :collection_ids,
         :hits,
         :comments_count,
@@ -90,16 +106,30 @@ class WorkIndexer < Indexer
       ]
     ).merge(
       language_id: object.language&.short,
-      series: series_data(object)
-    )
+      series: series_data(object),
+      creator_join: { name: :work }
+    ).merge(creator_data(object))
   end
 
-  # Pluck the desired series data and then turn it back
-  # into a hash
+  def creator_data(work)
+    if work.anonymous? || work.unrevealed?
+      {}
+    else
+      {
+        user_ids: work.user_ids,
+        pseud_ids: work.pseud_ids
+      }
+    end
+  end
+
+  # Format the id, title, and position of each series as a hash:
   def series_data(object)
-    series_attrs = [:id, :title, :position]
-    object.series.pluck(*series_attrs).map do |values|
-      series_attrs.zip(values).to_h
+    object.serial_works.map do |sw|
+      {
+        id: sw.series_id,
+        title: sw.series&.title,
+        position: sw.position
+      }
     end
   end
 end

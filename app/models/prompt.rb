@@ -1,17 +1,8 @@
 class Prompt < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
-  include UrlHelpers
   include TagTypeHelper
 
   # -1 represents all matching
   ALL = -1
-
-  # number of checkbox options to keep visible by default in form
-  OPTIONS_TO_SHOW = 3
-
-  # maximum number of options to allow to be shown via checkboxes
-  MAX_OPTIONS_FOR_CHECKBOXES = 10
 
   # ASSOCIATIONS
 
@@ -29,7 +20,7 @@ class Prompt < ApplicationRecord
   accepts_nested_attributes_for :optional_tag_set
   has_many :optional_tags, through: :optional_tag_set, source: :tag
 
-  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: 'request_prompt_id'
+  has_many :request_claims, class_name: "ChallengeClaim", foreign_key: "request_prompt_id", inverse_of: :request_prompt, dependent: :destroy
 
   # SCOPES
 
@@ -37,65 +28,52 @@ class Prompt < ApplicationRecord
 
   scope :in_collection, lambda {|collection| where(collection_id: collection.id) }
 
-  scope :unused, -> { where(used_up: false) }
-
   scope :with_tag, lambda { |tag|
     joins("JOIN set_taggings ON set_taggings.tag_set_id = prompts.tag_set_id").
     where("set_taggings.tag_id = ?", tag.id)
   }
 
-  # CALLBACKS
-
-  before_destroy :clear_claims
-  def clear_claims
-    # remove this prompt reference from any existing assignments
-    request_claims.each {|claim| claim.destroy}
-  end
-
   # VALIDATIONS
+
+  before_validation :inherit_from_signup, on: :create, if: :challenge_signup
+  def inherit_from_signup
+    self.pseud = challenge_signup.pseud
+    self.collection = challenge_signup.collection
+  end
 
   validates_presence_of :collection_id
 
   validates_presence_of :challenge_signup
-  before_save :set_pseud
-  def set_pseud
-    unless self.pseud
-      self.pseud = self.challenge_signup.pseud
-    end
-    true
-  end
 
   # based on the prompt restriction
   validates_presence_of :url, if: :url_required?
   validates_presence_of :description, if: :description_required?
   validates_presence_of :title, if: :title_required?
-  def url_required?
-    (restriction = get_prompt_restriction) && restriction.url_required
-  end
-  def description_required?
-    (restriction = get_prompt_restriction) && restriction.description_required
-  end
+
+  delegate :url_required?, :description_required?, :title_required?,
+           to: :prompt_restriction, allow_nil: true
+
   validates_length_of :description,
     maximum: ArchiveConfig.NOTES_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
-  def title_required?
-    (restriction = get_prompt_restriction) && restriction.title_required
-  end
   validates_length_of :title,
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
 
+  # i18n-tasks-use t("errors.attributes.url.invalid")
   validates :url, url_format: {allow_blank: true} # we validate the presence above, conditionally
 
   before_validation :cleanup_url
   def cleanup_url
-    self.url = reformat_url(self.url) if self.url
+    self.url = Addressable::URI.heuristic_parse(self.url) if self.url
+  rescue Addressable::URI::InvalidURIError
+    # url_format validation creates the error message
   end
 
   validate :correct_number_of_tags
   def correct_number_of_tags
     prompt_type = self.class.name
-    restriction = get_prompt_restriction
+    restriction = prompt_restriction
     if restriction
       # make sure tagset has no more/less than the required/allowed number of tags of each type
       TagSet::TAG_TYPES.each do |tag_type|
@@ -139,29 +117,45 @@ class Prompt < ApplicationRecord
   # are within that set, or otherwise canonical
   validate :allowed_tags
   def allowed_tags
-    restriction = get_prompt_restriction
-    if restriction && tag_set
-      TagSet::TAG_TYPES.each do |tag_type|
-        # if we have a specified set of tags of this type, make sure that all the
-        # tags in the prompt are in the set.
-        if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom")
-          # skip the check, these will be tested in restricted_tags below
-        elsif restriction.has_tags?(tag_type)
-          disallowed_taglist = tag_set.send("#{tag_type}_taglist") - restriction.tags(tag_type)
-          unless disallowed_taglist.empty?
-            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
+    restriction = prompt_restriction
+
+    return unless restriction && tag_set
+
+    TagSet::TAG_TYPES.each do |tag_type|
+      # if we have a specified set of tags of this type, make sure that all the
+      # tags in the prompt are in the set.
+
+      # skip the check, these will be tested in restricted_tags below
+      next if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom")
+
+      taglist = tag_set.send("#{tag_type}_taglist")
+      next if taglist.empty?
+
+      if restriction.has_tags?(tag_type)
+        disallowed_taglist = taglist - restriction.tags(tag_type)
+        unless disallowed_taglist.empty?
+          errors.add(
+            :base,
+            ts(
+              "^These %{tag_label} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
               tag_label: tag_type_label_name(tag_type).downcase,
               prompt_type: self.class.name.downcase,
-              taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
-          end
-        else
-          noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
-          unless noncanonical_taglist.empty?
-            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
+              taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+            )
+          )
+        end
+      else
+        noncanonical_taglist = taglist.reject(&:canonical)
+        unless noncanonical_taglist.empty?
+          errors.add(
+            :base,
+            ts(
+              "^These %{tag_label} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
               tag_label: tag_type_label_name(tag_type).downcase,
               prompt_type: self.class.name.downcase,
-              taglist: noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
-          end
+              taglist: noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+            )
+          )
         end
       end
     end
@@ -171,40 +165,33 @@ class Prompt < ApplicationRecord
   # actually in the fandom they have chosen.
   validate :restricted_tags
   def restricted_tags
-    restriction = get_prompt_restriction
-    if restriction
-      TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
-        if restriction.send("#{tag_type}_restrict_to_fandom")
-          # tag_type is one of a set set so we know it is safe for constantize
-          allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
-          disallowed_taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") - allowed_tags : []
-          # check for tag set associations
-          disallowed_taglist.reject! {|tag| TagSetAssociation.where(tag_id: tag.id, parent_tag_id: tag_set.fandom_taglist).exists?}
-          unless disallowed_taglist.empty?
-            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)",
-                              prompt_type: self.class.name.downcase,
-                              tag_label: tag_type_label_name(tag_type).downcase, fandom: tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
-                              taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
-          end
-        end
-      end
+    restriction = prompt_restriction
+    return unless restriction
+
+    tag_set_associations = TagSetAssociation.where(owned_tag_set_id: restriction.owned_tag_sets.pluck(:id))
+
+    TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
+      next unless restriction.send("#{tag_type}_restrict_to_fandom")
+
+      # tag_type is one of a set set so we know it is safe for constantize
+      allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
+      disallowed_taglist = tag_set ? tag_set.send("#{tag_type}_taglist") - allowed_tags : []
+
+      # check for tag set associations
+      disallowed_taglist -= tag_set_associations
+        .where(tag: disallowed_taglist, parent_tag_id: tag_set.fandom_taglist)
+        .includes(:tag)
+        .map(&:tag)
+      next if disallowed_taglist.empty?
+
+      errors.add(:base, :tags_not_in_fandom,
+                 prompt_type: self.class.name.downcase,
+                 tag_label: tag_type_label_name(tag_type).downcase, fandom: tag_set.fandom_taglist.pluck(:name).join(I18n.t("support.array.words_connector")),
+                 taglist: disallowed_taglist.pluck(:name).join(I18n.t("support.array.words_connector")))
     end
   end
 
   # INSTANCE METHODS
-
-  # make sure we are not blank
-  def blank?
-    return false if (url || description)
-    tagcount = 0
-    [tag_set, optional_tag_set].each do |set|
-      if set
-        tagcount += set.taglist.size + (TagSet::TAG_TYPES.collect {|type| eval("set.#{type}_taglist.size")}.sum)
-      end
-    end
-    return false if tagcount > 0
-    true # everything empty
-  end
 
   def can_delete?
     if challenge_signup && !challenge_signup.can_delete?(self)
@@ -220,17 +207,6 @@ class Prompt < ApplicationRecord
 
   def fulfilled_claims
     self.request_claims.fulfilled
-  end
-
-  # We want to have all the matching methods defined on
-  # TagSet available here, too, without rewriting them,
-  # so we just pass them through method_missing
-  def method_missing(method, *args, &block)
-    super || (tag_set && tag_set.respond_to?(method) ? tag_set.send(method) : super)
-  end
-
-  def respond_to?(method, include_private = false)
-    super || tag_set.respond_to?(method, include_private)
   end
 
   # Computes the "full" tag set (tag_set + optional_tag_set), and stores the
@@ -290,52 +266,13 @@ class Prompt < ApplicationRecord
     send("any_#{type.downcase}")
   end
 
-  def get_prompt_restriction
-    if collection && collection.challenge
-      collection.challenge.prompt_restriction
-    else
-      nil
-    end
-  end
-
-  def self.reset_positions_in_collection!(collection)
-    minpos = collection.prompts.minimum(:position) - 1
-    collection.prompts.by_position.each do |prompt|
-      prompt.position = prompt.position - minpos
-      prompt.save
-    end
+  def prompt_restriction
+    raise "Base-type Prompt objects cannot have prompt restrictions. Try creating a Request or an Offer."
   end
 
   # tag groups
   def tag_groups
     self.tag_set ? self.tag_set.tags.group_by { |t| t.type.to_s } : {}
-  end
-
-  # Takes an array of tags and returns a comma-separated list, without the markup
-  def tag_list(tags)
-    tags = tags.uniq.compact
-    if !tags.blank? && tags.respond_to?(:collect)
-      last_tag = tags.pop
-      tag_list = tags.collect{|tag|  tag.name + ", "}.join
-      tag_list += last_tag.name
-      tag_list.html_safe
-    else
-      ""
-    end
-  end
-
-  # gets the list of tags for this prompt
-  def tag_unlinked_list
-    list = ""
-    TagSet::TAG_TYPES.each do |type|
-      eval("@show_request_#{type}_tags = (self.collection.challenge.request_restriction.#{type}_num_allowed > 0)")
-      if eval("@show_request_#{type}_tags")
-          if self && self.tag_set && !self.tag_set.with_type(type).empty?
-              list += " - " + tag_list(self.tag_set.with_type(type))
-          end
-      end
-    end
-    return list
   end
 
   def claim_by(user)

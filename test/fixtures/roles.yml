@@ -1,50 +1,22 @@
---- 
-role_00002: 
+---
+role_00002:
   name: translator
-  created_at: 2008-11-09 03:26:02 Z
-  updated_at: 2008-11-09 03:26:02 Z
-  authorizable_type: 
   id: 2
-  authorizable_id: 
-role_00003: 
-  name: translation_admin
-  created_at: 2009-06-27 18:53:45 Z
-  updated_at: 2009-06-27 18:53:45 Z
-  authorizable_type: 
-  id: 3
-  authorizable_id: 
-role_00004: 
-  name: translator
-  created_at: 2009-06-27 18:59:55 Z
-  updated_at: 2009-06-27 18:59:55 Z
-  authorizable_type: Locale
-  id: 4
-  authorizable_id: 3
-role_00005: 
-  name: translator
-  created_at: 2009-06-27 18:59:55 Z
-  updated_at: 2009-06-27 18:59:55 Z
-  authorizable_type: Locale
-  id: 5
-  authorizable_id: 4
-role_00006: 
+role_00006:
   name: archivist
-  created_at: 2008-11-09 03:26:02 Z
-  updated_at: 2008-11-09 03:26:02 Z
-  authorizable_type: 
   id: 6
-  authorizable_id: 
-role_00001: 
+role_00001:
   name: tag_wrangler
-  created_at: 2008-11-09 03:26:02 Z
-  updated_at: 2008-11-09 03:26:02 Z
-  authorizable_type: 
   id: 1
-  authorizable_id: 
 role_00007:
   name: opendoors
-  created_at: 2008-11-09 03:26:02 Z
-  updated_at: 2008-11-09 03:26:02 Z
-  authorizable_type:
   id: 7
-  authorizable_id:
+role_00008:
+  name: official
+  id: 8
+role_00009:
+  name: protected_user
+  id: 9
+role_00010:
+  name: no_resets
+  id: 10

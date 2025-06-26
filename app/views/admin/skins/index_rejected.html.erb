@@ -26,13 +26,14 @@
     </thead>
     <tbody>
       <% @rejected_skins.each_with_index do |skin, i| %>
+        <% disabled = !policy(skin).update? %>
         <tr>
           <th scope="row"><%= link_to skin.title, skin_path(skin) %></td>
           <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>
           <td><%=h skin.admin_note %></td>
           <% skin_name = skin.title.downcase.gsub(/ +/, '_') %>
-          <td><%= check_box_tag "make_unrejected[]", skin.id, false, :id => "make_unrejected_#{skin_name}" %></td>
+          <td><%= check_box_tag "make_unrejected[]", skin.id, false, id: "make_unrejected_#{skin_name}", disabled: disabled %></td>
         </tr>
       <% end %>
     </tbody>

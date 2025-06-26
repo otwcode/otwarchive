@@ -4,7 +4,7 @@
   <% @creations.each_with_index do |creation, index| %>
 
     <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
-    <% work_link = style_link(this_work.title.html_safe, work_url(this_work)) %>
+    <% work_link = style_link(this_work.title, work_url(this_work)) %>
 
     <% cache("subscription-email-preface-#{creation.cache_key}") do %>
       <%= creator_links(this_work) %> posted a
@@ -36,7 +36,7 @@
     <% unless @seen[this_work.id] %>
       <% cache("subscription-email-meta-#{creation.cache_key}") do %>
       <p>
-        <%= style_bold("Chapters:") %> <%= this_work.chapter_total_display %>
+        <%= style_bold("Chapters:") %> <%= chapter_total_display(this_work) %>
         <br><%= style_bold("Fandom:") %> <%= this_work.fandoms.map{|f| style_link(f.name, fandom_url(f))}.to_sentence.html_safe %>
         <br><%= style_bold("Rating:") %> <%= this_work.rating_string %>
         <br><%= style_bold("Warnings:") %> <%= this_work.archive_warning_string %>

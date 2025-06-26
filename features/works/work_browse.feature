@@ -16,15 +16,20 @@ Scenario: If works in a listing exceed the maximum search result count,
     And 2 items are displayed per page
     And I am logged in
     And I post the work "Whatever 1" with fandom "Aggressive Retsuko"
+    # Ensure stable work order
+    And it is currently 1 second from now
     And I post the work "Whatever 2" with fandom "Aggressive Retsuko"
+    And it is currently 1 second from now
     And I post the work "Whatever 3" with fandom "Aggressive Retsuko"
+    And it is currently 1 second from now
     And I post the work "Whatever 4" with fandom "Aggressive Retsuko"
 
   When I browse the "Aggressive Retsuko" works with page parameter "2"
   Then I should see "3 - 4 of 4 Works"
     And I should not see "Please use the filters"
 
-  When I post the work "Whatever 5" with fandom "Aggressive Retsuko"
+  When it is currently 1 second from now
+    And I post the work "Whatever 5" with fandom "Aggressive Retsuko"
     And I browse the "Aggressive Retsuko" works
   Then I should see "1 - 2 of 5 Works"
     And I should not see "Please use the filters"
@@ -57,21 +62,19 @@ Scenario: The recent chapter link in a work's blurb should show the adult
 content notice to visitors who are not logged in
 
   Given I am logged in as a random user
-    And an adult canonical rating exists with name: "Mature"
     And a canonical fandom "Canonical Fandom"
     And I post the 3 chapter work "WIP" with fandom "Canonical Fandom" with rating "Mature"
   When I am logged out
     And I browse the "Canonical Fandom" works
     And I follow the recent chapter link for the work "WIP"
   Then I should see "adult content"
-  When I follow "Proceed"
+  When I follow "Yes, Continue"
   Then I should be on the 3rd chapter of the work "WIP"
 
 Scenario: The recent chapter link in a work's blurb should honor the logged-in
 user's "Show me adult content without checking" preference
 
   Given I am logged in as a random user
-    And an adult canonical rating exists with name: "Mature"
     And a canonical fandom "Canonical Fandom"
     And I post the 2 chapter work "WIP" with fandom "Canonical Fandom" with rating "Mature"
   When I am logged in as "adultuser"
@@ -84,7 +87,7 @@ user's "Show me adult content without checking" preference
     And I browse the "Canonical Fandom" works
     And I follow the recent chapter link for the work "WIP"
   Then I should see "adult content"
-  When I follow "Proceed"
+  When I follow "Yes, Continue"
   Then I should be on the 2nd chapter of the work "WIP"
 
 Scenario: The recent chapter link in a work's blurb should point to
@@ -118,3 +121,60 @@ chapter when the chapters are reordered.
   When I browse the "Canonical Fandom" works
     And I follow the recent chapter link for the work "My WIP"
   Then I should be on the 2nd chapter of the work "My WIP"
+
+  Scenario: Kudos link from from work browsing leads to full work page
+  Given the chaptered work with 2 chapters "Awesome Work"
+  When I am logged in as "reader"
+    And I go to the works page
+  Then I should not see "Kudos: 1" within the work blurb of "Awesome Work"
+  When I view the work "Awesome Work"
+    And I leave kudos on "Awesome Work"
+  Then I should see "reader left kudos on this work!"
+  When I am logged out
+    And the cache for the work "Awesome Work" is cleared
+    And I go to the works page
+  Then I should see "Kudos: 1" within the work blurb of "Awesome Work"
+  When I follow the kudos link for the work "Awesome Work"
+  Then I should be on the work "Awesome Work"
+    And I should see "reader left kudos on this work!"
+
+  Scenario: Comments link from from work browsing leads to full work page
+  Given the chaptered work with 2 chapters "Awesome Work"
+  When I am logged in as "reader"
+    And I go to the works page
+  Then I should not see "Comments: 1" within the work blurb of "Awesome Work"
+  When I post the comment "Bravo!" on the work "Awesome Work"
+  Then I should see "Bravo!"
+  When I am logged out
+    And the cache for the work "Awesome Work" is cleared
+    And I go to the works page
+  Then I should see "Comments: 1" within the work blurb of "Awesome Work"
+  When I follow the comments link for the work "Awesome Work"
+  Then I should be on the work "Awesome Work"
+    And I should see "Bravo!"
+
+Scenario: Can also browse work indexed by language
+    Given basic languages
+      And Persian language
+      And basic tags
+      And I am logged in
+      And I post the work "Whatever 1" with fandom "Aggressive Retsuko"
+      And I post the work "Whatever 2" with fandom "Aggressive Retsuko"
+    When I go to the new work page
+      And I select "Not Rated" from "Rating"
+      And I check "No Archive Warnings Apply"
+      And I fill in "Fandoms" with "Weiß Kreuz"
+      And I fill in "Work Title" with "Überraschende Überraschung"
+      And I fill in "content" with "Dies ist eine Fanfic in Deutsch."
+      And I select "Deutsch" from "Choose a language"
+    When I press "Post"
+    Then I should see "Work was successfully posted."
+      And I should see "Deutsch" within "dd.language"
+    When I browse works in language "English"
+      Then I should see "2 Works in English"
+    When I press "Sort and Filter"
+      Then I should see "2 Works in English"
+    When I browse works in language "Deutsch"
+      Then I should see "1 Work in Deutsch"
+    When I browse works in language "Persian"
+      Then I should see "0 Works in Persian"

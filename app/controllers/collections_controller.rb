@@ -1,10 +1,10 @@
 class CollectionsController < ApplicationController
-
   before_action :users_only, only: [:new, :edit, :create, :update]
   before_action :load_collection_from_id, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :collection_owners_only, only: [:edit, :update, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :edit, :update, :destroy]
   before_action :validate_challenge_type
+  before_action :check_parent_visible, only: [:index]
   cache_sweeper :collection_sweeper
 
   # Lazy fix to prevent passing unsafe values to eval via challenge_type
@@ -23,9 +23,18 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def check_parent_visible
+    return unless params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
+
+    check_visibility_for(@work)
+  end
+
   def index
     if params[:work_id] && (@work = Work.find_by!(id: params[:work_id]))
-      @collections = @work.approved_collections.by_title.includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).paginate(page: params[:page])
+      @collections = @work.approved_collections
+        .by_title
+        .for_blurb
+        .paginate(page: params[:page])
     elsif params[:collection_id] && (@collection = Collection.find_by!(name: params[:collection_id]))
       @search = CollectionSearchForm.new({ parent_id: @collection.id }.merge(page: params[:page]))
       @collections = @search.search_results
@@ -65,17 +74,27 @@ class CollectionsController < ApplicationController
 
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
-      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
-      visible_bookmarks = @collection.approved_bookmarks.visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
+      @works = WorkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?
+      ).sample(count: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+
+      @bookmarks = BookmarkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?
+      ).sample(count: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     else
       # show recent
-      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).includes(:pseuds, :tags, :series, :language, :approved_collections)
-      # visible_bookmarks = @collection.approved_bookmarks.visible(order: 'bookmarks.created_at DESC')
-      visible_bookmarks = Bookmark.in_collection(@collection).visible.order('bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
-    end
-    # Having the number of items as a limit was finding the limited number of items, then visible ones within them
-    @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]
+      @works = WorkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?,
+        sort_column: "revised_at",
+        per_page: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD
+      ).search_results
 
+      @bookmarks = BookmarkQuery.new(
+        collection_ids: [@collection.id], show_restricted: is_registered_user?,
+        sort_column: "created_at",
+        per_page: ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD
+      ).search_results
+    end
   end
 
   def new
@@ -119,7 +138,7 @@ class CollectionsController < ApplicationController
   end
 
   def update
-    if @collection.update_attributes(collection_params)
+    if @collection.update(collection_params)
       flash[:notice] = ts('Collection was successfully updated.')
       if params[:challenge_type].blank?
         if @collection.challenge

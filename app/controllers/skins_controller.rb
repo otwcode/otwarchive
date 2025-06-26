@@ -1,12 +1,10 @@
 class SkinsController < ApplicationController
-
   before_action :users_only, only: [:new, :create, :destroy]
   before_action :load_skin, except: [:index, :new, :create, :unset]
-  before_action :check_title, only: [:create, :update]
   before_action :check_ownership_or_admin, only: [:edit, :update]
-  before_action :check_ownership, only: [:destroy]
+  before_action :check_ownership, only: [:confirm_delete, :destroy]
   before_action :check_visibility, only: [:show]
-  before_action :check_editability, only: [:edit, :update, :destroy]
+  before_action :check_editability, only: [:edit, :update, :confirm_delete, :destroy]
 
   #### ACTIONS
 
@@ -23,22 +21,22 @@ class SkinsController < ApplicationController
         redirect_to skins_path and return
       end
       if is_work_skin
-        @skins = @user.work_skins.sort_by_recent
+        @skins = @user.work_skins.sort_by_recent.includes(:author).with_attached_icon
         @title = ts('My Work Skins')
       else
-        @skins = @user.skins.site_skins.sort_by_recent
+        @skins = @user.skins.site_skins.sort_by_recent.includes(:author).with_attached_icon
         @title = ts('My Site Skins')
       end
     else
       if is_work_skin
-        @skins = WorkSkin.approved_skins.sort_by_recent_featured
+        @skins = WorkSkin.approved_skins.sort_by_recent_featured.includes(:author).with_attached_icon
         @title = ts('Public Work Skins')
       else
-        if logged_in?
-          @skins = Skin.approved_skins.usable.site_skins.sort_by_recent_featured
-        else
-          @skins = Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured
-        end
+        @skins = if logged_in?
+                   Skin.approved_skins.usable.site_skins.sort_by_recent_featured.with_attached_icon
+                 else
+                   Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured.with_attached_icon
+                 end
         @title = ts('Public Site Skins')
       end
     end
@@ -77,7 +75,7 @@ class SkinsController < ApplicationController
         flash[:notice] += ts(" We've added all the archive skin components as parents. You probably want to remove some of them now!")
         redirect_to edit_skin_path(@skin)
       else
-        redirect_to @skin
+        redirect_to skin_path(@skin)
       end
     else
       if params[:wizard]
@@ -90,11 +88,14 @@ class SkinsController < ApplicationController
 
   # GET /skins/1/edit
   def edit
+    authorize @skin if logged_in_as_admin?
   end
 
   def update
+    authorize @skin if logged_in_as_admin?
+
     loaded = load_archive_parents
-    if @skin.update_attributes(skin_params)
+    if @skin.update(skin_params)
       @skin.cache! if @skin.cached?
       @skin.recache_children!
       flash[:notice] = ts("Skin was successfully updated.")
@@ -169,12 +170,13 @@ class SkinsController < ApplicationController
 
   def skin_params
     params.require(:skin).permit(
-        :title, :description, :public, :css, :role, :ie_condition, :unusable,
-        :font, :base_em, :margin, :paragraph_margin, :background_color,
-        :foreground_color, :headercolor, :accent_color, :icon,
-        {media: []},
-        skin_parents_attributes:
-            [:id, :position, :parent_skin_id, :parent_skin_title, :child_skin_id, :_destroy],
+      :title, :description, :public, :css, :role, :ie_condition, :unusable,
+      :font, :base_em, :margin, :paragraph_margin, :background_color,
+      :foreground_color, :headercolor, :accent_color, :icon,
+      media: [],
+      skin_parents_attributes: [
+        :id, :position, :parent_skin_id, :parent_skin_title, :_destroy
+      ]
     )
   end
 
@@ -195,13 +197,6 @@ class SkinsController < ApplicationController
     end
   end
 
-  def check_title
-    if params[:skin][:title].match(/archive/i)
-      flash[:error] = ts("You can't use the word 'archive' in your skin title, sorry! (We have to reserve it for official skins.)")
-      render @skin ? :edit : :new
-    end
-  end
-
   # if we've been asked to load the archive parents, we do so and add them to params
   def load_archive_parents
     if params[:add_site_parents]
@@ -217,7 +212,7 @@ class SkinsController < ApplicationController
       last_position = params[:skin][:skin_parents_attributes]&.keys&.map(&:to_i)&.max || 0
       archive_parents.each do |parent_skin|
         last_position += 1
-        new_skin_parent_hash = ActionController::Parameters.new({position: last_position, parent_skin_id: parent_skin.id})
+        new_skin_parent_hash = ActionController::Parameters.new({ position: last_position, parent_skin_id: parent_skin.id })
         params[:skin][:skin_parents_attributes].merge!({last_position.to_s => new_skin_parent_hash})
       end
       return true

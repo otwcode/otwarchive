@@ -41,12 +41,12 @@
 <% end %>
 <!--stats-->
 <dl class="stats">
-  <dt><%= ts('Words:') %></dt> 
-  <dd><%= number_with_delimiter(series.visible_word_count) %></dd>
-  <dt><%= ts('Works:') %></dt> 
-  <dd><%= series.visible_work_count %></dd>
+  <dt class="words"><%= Work.human_attribute_name("word_count") %>:</dt>
+  <dd class="words"><%= number_with_delimiter(series.visible_word_count) %></dd>
+  <dt class="works"><%= Work.model_name.human(count: :many) %>:</dt>
+  <dd class="works"><%= number_with_delimiter(series.visible_work_count) %></dd>
   <% if (bookmark_count = series.bookmarks.is_public.count) > 0 %>
-    <dt><%= ts('Bookmarks:') %></dt>
-    <dd><%= link_to_bookmarkable_bookmarks(series, bookmark_count.to_s) %></dd>
+    <dt class="bookmarks"><%= Bookmark.model_name.human(count: :many) %>:</dt>
+    <dd class="bookmarks"><%= link_to_bookmarkable_bookmarks(series, number_with_delimiter(bookmark_count)) %></dd>
   <% end %>
 </dl>

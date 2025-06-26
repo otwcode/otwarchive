@@ -1,12 +1,22 @@
 <% content_for :message do %>
-    <p>Dear <%= @user.default_pseud.byline %>,</p>
+  <p><%= t("mailer.general.greeting.formal.addressed_html", name: style_bold(@user.login)) %></p>
 
-    <p>Your work <i><%= style_link(@work.title.html_safe, work_url(@work)) %></i> has been reported as being in violation of the Archive of Our Own's <%= style_link("Terms of Service", tos_url) %>.</p>
+  <% if @works.size == 1 %>
+    <p><%= t(".hidden_one.html", title: style_creation_link(@works.first.title, @works.first)) %></p>
+  <% else %>
+    <p><%= t(".hidden_multiple", count: @works.size) %></p>
+    <ul>
+      <% @works.each do |work| %>
+      <li><%= style_creation_link(work.title, work) %></li>
+      <% end %>
+    </ul>
+  <% end %>
 
-    <p>We are investigating the matter and will contact you once the investigation has been completed. While the work is under investigation it has been hidden; only you will be able to access it.</p>
+  <p><%= t(".access", count: @works.size) %></p>
 
-    <p>If you have any questions, please <%= abuse_link("contact our Abuse Team") %>.</p>
+  <p><%= t(".check_email", count: @works.size) %></p>
 
-    <p>Sincerely,</p>
-    <p><%= style_bold("AO3 Abuse") %></p>
+  <p><%= t(".tos_violation.html", count: @works.size, tos_link: tos_link(t(".tos")), content_policy_link: style_link(t(".content_policy"), content_url), tos_faq_link: style_link(t(".tos_faq"), tos_faq_url(anchor: "policy_procedures_faq"))) %></p>
+
+  <p><%= t(".help.html", count: @works.size, contact_abuse_link: abuse_link(t(".contact_abuse"))) %></p>
 <% end %>

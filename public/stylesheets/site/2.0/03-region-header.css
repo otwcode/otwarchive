@@ -14,7 +14,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
 }
 
 /* check login and greeting; was a quick fix to remove bg */
-#header a, #header .current, #header fieldset, #header form, #header p, #header li, #header h1, #small_login dl {
+#header a, #header fieldset, #header form, #header p, #header li, #header h1, #small_login dl {
   background: transparent;
   font-size: 100%;
   border: none;
@@ -37,16 +37,12 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   position: relative;
 }
 
-#header a, #header a:visited, #header .current, #header .primary .open a, #header .primary .dropdown:hover a, #header .primary .dropdown a:focus {
+#header a, #header a:visited, #header .primary .open a, #header .primary .dropdown:hover a, #header .primary .dropdown a:focus {
   color: #111;
 }
 
 #header .actions a:hover, #header .actions a:focus, #header .dropdown:hover a, #header .open a {
   background: #ddd;
-}
-
-#header .current {
-  background: #ccc;
 }
 
 /*BRANDING: logo and title */
@@ -76,7 +72,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
 
 /*ACTION: dropdown*/
 
-#header .menu, #small_login, #header .dropdown:hover .current + .menu {
+#header .menu, #small_login {
   background: #ddd;
   display: none;
   padding: 0.25em 0;
@@ -106,7 +102,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   border-bottom: none;
 }
 
-#header .dropdown .menu a, #header .dropdown .menu .current {
+#header .dropdown .menu a {
   background: transparent;
   display: block;
   padding: 0.75em 0.5em 0.5em;
@@ -114,11 +110,6 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
 
 #header .dropdown .menu a:hover, #header .dropdown .menu a:focus {
   background: rgba(255, 255, 255, 0.25);
-}
-
-#header .menu .current {
-  color: #111;
-  font-weight: 800;
 }
 
 /* login and greeting */
@@ -134,11 +125,11 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   z-index: 20;
 }
 
-#header .user a, #header .user .current, #small_login .action {
+#header .user a, #small_login .action {
   padding: 0.25em 0.75em;
 }
 
-#header .user a:hover, #header .user a:focus, #header .user .current {
+#header .user a:hover, #header .user a:focus {
   color: #900;
     border-radius: 0.25em;
 }
@@ -251,7 +242,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   color: #fff;
 }
 
-#header .primary .menu a, #header .primary .menu .current {
+#header .primary .menu a {
   color: #111;
   padding: 0.75em 0.5em 0.5em;
 }

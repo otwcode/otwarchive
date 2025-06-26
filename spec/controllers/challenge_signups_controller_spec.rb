@@ -120,11 +120,11 @@ describe ChallengeSignupsController do
         }
       end
 
-      it "renders edit if update_attributes fails" do
+      it "renders edit if update fails" do
         fake_login_known_user(open_signup_owner)
-        allow_any_instance_of(ChallengeSignup).to receive(:update_attributes).and_return(false)
+        allow_any_instance_of(ChallengeSignup).to receive(:update).and_return(false)
         put :update, params: params
-        allow_any_instance_of(ChallengeSignup).to receive(:update_attributes).and_call_original
+        allow_any_instance_of(ChallengeSignup).to receive(:update).and_call_original
         expect(response).to render_template :edit
       end
 
@@ -195,11 +195,17 @@ describe ChallengeSignupsController do
     let(:signup) { create(:gift_exchange_signup, collection_id: collection.id) }
 
     before do
+      challenge = collection.challenge
+      challenge.offer_restriction.update!(title_allowed: true)
+      challenge.request_restriction.update!(title_allowed: true)
+
       signup_offer = signup.offers.first
+      signup_offer.description = ""
       signup_offer.tag_set = create(:tag_set)
       signup_offer.save
 
       signup_request = signup.requests.first
+      signup_request.description = ""
       signup_request.tag_set = create(:tag_set)
       signup_request.save
     end
@@ -208,30 +214,70 @@ describe ChallengeSignupsController do
       controller.instance_variable_set(:@challenge, collection.challenge)
       controller.instance_variable_set(:@collection, collection)
       expect(controller.send(:gift_exchange_to_csv))
-        .to eq([["Pseud", "Email", "Sign-up URL", "Request 1 Tags", "Request 1 Description", "Offer 1 Tags", "Offer 1 Description"],
+        .to eq([["Pseud", "Email", "Sign-up URL", "Request 1 Tags", "Request 1 Title", "Request 1 Description", "Offer 1 Tags", "Offer 1 Title", "Offer 1 Description"],
                 [signup.pseud.name, signup.pseud.user.email, collection_signup_url(collection, signup),
-                 signup.requests.first.tag_set.tags.first.name, "", signup.offers.first.tag_set.tags.first.name, ""]])
+                 signup.requests.first.tag_set.tags.first.name, "", "", signup.offers.first.tag_set.tags.first.name, "", ""]])
     end
   end
 
   describe "prompt_meme_to_csv" do
-    let(:tag_set) { create(:tag_set) }
     let(:collection) { create(:collection, challenge: create(:prompt_meme)) }
     let(:signup) { create(:prompt_meme_signup, collection_id: collection.id) }
+    let(:challenge) { collection.challenge }
+    let(:prompt) { signup.prompts.first }
 
     before do
-      prompt = signup.prompts.first
+      prompt.description = ""
       prompt.tag_set = create(:tag_set)
       prompt.save
+
+      controller.instance_variable_set(:@challenge, collection.challenge)
+      controller.instance_variable_set(:@collection, collection)
     end
 
     it "generates a CSV with all the challenge information" do
-      controller.instance_variable_set(:@challenge, collection.challenge)
-      controller.instance_variable_set(:@collection, collection)
       expect(controller.send(:prompt_meme_to_csv))
-        .to eq([["Pseud", "Email", "Sign-up URL", "Tags", "Description"],
-                [signup.pseud.name, signup.pseud.user.email, collection_signup_url(collection, signup),
+        .to eq([["Pseud", "Sign-up URL", "Tags", "Description"],
+                [signup.pseud.name, collection_signup_url(collection, signup),
                  signup.requests.first.tag_set.tags.first.name, ""]])
+    end
+
+    context "when title is allowed" do
+      before do
+        challenge.request_restriction.update!(title_allowed: true)
+      end
+
+      it "includes title in CSV" do
+        expect(controller.send(:prompt_meme_to_csv))
+          .to eq([["Pseud", "Sign-up URL", "Tags", "Title", "Description"],
+                  [signup.pseud.name, collection_signup_url(collection, signup),
+                   signup.requests.first.tag_set.tags.first.name, "", ""]])
+      end
+    end
+
+    context "when description is not allowed" do
+      before do
+        challenge.request_restriction.update!(description_allowed: false)
+      end
+
+      it "omits description from CSV" do
+        expect(controller.send(:prompt_meme_to_csv))
+          .to eq([["Pseud", "Sign-up URL", "Tags"],
+                  [signup.pseud.name, collection_signup_url(collection, signup),
+                   signup.requests.first.tag_set.tags.first.name]])
+      end
+    end
+
+    context "when prompt is anonymous" do
+      before do
+        prompt.update!(anonymous: true)
+      end
+
+      it "omits the anonymous prompt's pseud and sign-up URL from CSV" do
+        expect(controller.send(:prompt_meme_to_csv))
+          .to eq([["Pseud", "Sign-up URL", "Tags", "Description"],
+                  ["(Anonymous)", "", signup.requests.first.tag_set.tags.first.name, ""]])
+      end
     end
   end
 end

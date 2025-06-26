@@ -96,7 +96,7 @@ Feature: Prompt Meme Challenge
   Then I should see "In response to a prompt by Anonymous"
     And I should see "In response to a prompt by myname2"
 
-  Scenario: User claims two prompts in different challenges and fulfills both of them at once
+  # Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
 
   Scenario: Sign up for several challenges and see Sign-ups are sorted
@@ -108,7 +108,7 @@ Feature: Prompt Meme Challenge
   When I sign up for "Battle 12" fixed-fandom prompt meme
   When I sign up for "Battle 13" many-fandom prompt meme
   When I sign up for "Battle 14" many-fandom prompt meme
-  When I am on my user page
+  When I am on prolific_writer's user page
     And I follow "Sign-ups"
   # TODO
 
@@ -184,7 +184,7 @@ Feature: Prompt Meme Challenge
     And I should see "by myname4"
     And I should see "Stargate Atlantis"
 
-  Scenario: check that claims can't be viewed even after challenge is revealed
+  # Scenario: check that claims can't be viewed even after challenge is revealed
   # TODO: Find a way to construct the link to a claim show page for someone who shouldn't be able to see it
 
   Scenario: Mod can reveal challenge
@@ -324,7 +324,7 @@ Feature: Prompt Meme Challenge
   When I reveal the "Battle 12" challenge
   When I reveal the authors of the "Battle 12" challenge
   When I am logged in as "myname2"
-  When I am on my user page
+  When I am on myname2's user page
     And I follow "Claims"
     # note that user Claims page currently only shows unfulfilled claims
   Then I should not see "myname4"
@@ -348,7 +348,7 @@ Feature: Prompt Meme Challenge
   Then I should not see "myname4"
     And I should see "Anonymous"
 
-  Scenario: check that anon prompts are still anon on the fulfilling work
+  # Scenario: check that anon prompts are still anon on the fulfilling work
   # TODO
 
   Scenario: work left in draft so claim is not yet totally fulfilled
@@ -371,7 +371,7 @@ Feature: Prompt Meme Challenge
     And I follow "Unposted Claims"
   Then I should see "myname4"
   When I am logged in as "myname4"
-    And I go to my claims page
+    And I go to myname4's claims page
     # Draft not shown. Instead we see that there is a 'Fulfill' button which
     # we can use. Then use the 'Restore From Last Unposted Draft?' button
   When I follow "Fulfill"
@@ -380,21 +380,22 @@ Feature: Prompt Meme Challenge
     And I should see "Work was successfully posted."
   Then I should see "Fulfilled Story"
 
-  Scenario: Download prompt CSV from signups page
+  Scenario: Maintainers can download CSV from requests or sign-ups page
 
   Given I am logged in as "mod1"
     And I have standard challenge tags setup
     And I create Battle 12 promptmeme
   When I go to the "Battle 12" signups page
+  Then I should see "Download (CSV)"
+  When I go to the "Battle 12" requests page
     And I follow "Download (CSV)"
-  Then I should download a csv file with the header row "Pseud Email Sign-up URL Tags Description"
+  Then I should download a csv file with the header row "Pseud Sign-up URL Tags Title Description"
 
-  Scenario: Can't download prompt CSV from requests page
-  # it's aimed at users, not mods
+  Scenario: Users can't download prompt CSV from requests page
 
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
-    And I am logged in as "mod1"
+    And I am logged in
   When I go to the "Battle 12" requests page
   Then I should not see "Download (CSV)"
 
@@ -410,7 +411,8 @@ Feature: Prompt Meme Challenge
     And the "Semi-anonymous Prompt" checkbox should be checked
 
   Scenario: Dates should be correctly set on PromptMemes
-    Given I am logged in as "mod1"
+    Given it is currently 2015-09-21 12:40 AM
+      And I am logged in as "mod1"
       And I have standard challenge tags set up
       And I have no prompts
     When I set up Battle 12 promptmeme collection
@@ -431,3 +433,24 @@ Feature: Prompt Meme Challenge
       And I use tomorrow as the "Sign-up closes" date
       And I submit
     Then I should see "Challenge was successfully created."
+
+  Scenario: A user who disallows gift works is cautioned about signing up for
+  a prompt meme, and a user who allows them is not.
+    Given I have Battle 12 prompt meme fully set up
+      And I am logged in as "participant"
+      And the user "participant" disallows gifts
+    When I go to "Battle 12" collection's page
+      And I follow "Prompt Form"
+    Then I should see "any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings"
+    When the user "participant" allows gifts
+      And I go to "Battle 12" collection's page
+      And I follow "Prompt Form"
+    Then I should not see "any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings"
+
+  Scenario: When a work is posted to fulfill a prompt, the notes should contain the collection title
+  Given I have Battle 12 prompt meme fully set up
+    And everyone has signed up for Battle 12
+  When I am logged in as "myname1"
+    And I claim a prompt from "Battle 12"
+    And I fulfill my claim
+  Then I should see "In response to a prompt by myname4 in the Battle 12 collection"

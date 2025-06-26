@@ -1,16 +1,16 @@
 class ErrorsController < ApplicationController
-  
-  %w(403 404 422 500 502).each do |error_code|
+  %w[403 404 422 500].each do |error_code|
     define_method error_code.to_sym do
-      respond_to do |format|
-        format.any(:html, :text, :pdf, :mobi, :epub, :azw3) { render error_code, status: error_code.to_i }
-        format.all { render nothing: true, status: error_code.to_i }
-      end
+      render error_code, status: error_code.to_i, formats: :html
     end
   end
 
   def auth_error
-    @page_subtitle = "Auth Error"
+    @page_subtitle = t(".browser_title")
   end
-  
+
+  def timeout_error
+    @page_subtitle = t(".browser_title")
+    render "timeout_error", status: :gateway_timeout
+  end
 end

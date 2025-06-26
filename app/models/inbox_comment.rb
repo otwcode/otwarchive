@@ -35,9 +35,9 @@ class InboxComment < ApplicationRecord
     where(read: false).count
   end
 
-  # Get only the comments with a feedback_comment that exists
-  def self.with_feedback_comment
-    joins("LEFT JOIN comments ON comments.id = inbox_comments.feedback_comment_id").
-    where("comments.id IS NOT NULL AND comments.is_deleted = 0")
+  # Remove comments that do not exist, were flagged as spam, or hidden by admin
+  def self.with_bad_comments_removed
+    joins("LEFT JOIN comments ON comments.id = inbox_comments.feedback_comment_id")
+      .where("comments.id IS NOT NULL AND comments.is_deleted = 0 AND comments.approved AND NOT comments.hidden_by_admin")
   end
 end

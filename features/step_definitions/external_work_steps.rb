@@ -1,4 +1,4 @@
-DEFAULT_EXTERNAL_URL = "http://zooey-glass.dreamwidth.org"
+DEFAULT_EXTERNAL_URL = "http://example.org/200"
 DEFAULT_EXTERNAL_CREATOR = "Zooey Glass"
 DEFAULT_EXTERNAL_TITLE = "A Work Not Posted To The AO3"
 DEFAULT_EXTERNAL_SUMMARY = "This is my story, I am its author."
@@ -15,20 +15,21 @@ Given /^an external work$/ do
 end
 
 Given /^I set up an external work$/ do
+  step %{mock websites with no content}
   visit new_external_work_path
-  fill_in("external_work_url", with: DEFAULT_EXTERNAL_URL)
+  fill_in("URL", with: DEFAULT_EXTERNAL_URL)
   fill_in("external_work_author", with: DEFAULT_EXTERNAL_CREATOR)
   fill_in("external_work_title", with: DEFAULT_EXTERNAL_TITLE)
   step %{I fill in basic external work tags}
   fill_in("bookmark_notes", with: DEFAULT_BOOKMARK_NOTES)
-  fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
+  fill_in("Your tags", with: DEFAULT_BOOKMARK_TAGS)
 end
 
 Given /^I bookmark the external work "([^\"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?$/ do |title, fandom, character|
   step %{I set up an external work}
   fill_in("external_work_title", with: title)
-  fill_in("external_work_fandom_string", with: fandom) if fandom.present?
-  fill_in("external_work_character_string", with: character) if character.present?
+  fill_in("Fandoms", with: fandom) if fandom.present?
+  fill_in("Characters", with: character) if character.present?
   click_button("Create")
 end
 
@@ -41,7 +42,7 @@ Given "{string} has bookmarked an external work" do |user|
   # field's id attribute over its label. But in this case,
   # we have to use the labels for some fields because the ids
   # change when JavaScript is enabled.
-  fill_in("URL", with: "http://example.org/200")
+  fill_in("URL", with: DEFAULT_EXTERNAL_URL)
   fill_in("external_work_author", with: DEFAULT_EXTERNAL_CREATOR)
   fill_in("external_work_title", with: DEFAULT_EXTERNAL_TITLE)
   fill_in("external_work_summary", with: DEFAULT_EXTERNAL_SUMMARY)
@@ -51,6 +52,11 @@ Given "{string} has bookmarked an external work" do |user|
   fill_in("Relationships", with: DEFAULT_EXTERNAL_RELATIONSHIP)
   fill_in("Characters", with: DEFAULT_EXTERNAL_CHARACTERS)
   click_button("Create")
+end
+
+Given "the external work {string} has {int} {word} tag(s)" do |title, count, type|
+  work = ExternalWork.find_by(title: title)
+  work.send("#{type.pluralize}=", FactoryBot.create_list(type.to_sym, count))
 end
 
 When /^I view the external work "([^\"]*)"$/ do |external_work|

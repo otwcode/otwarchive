@@ -1,0 +1,17 @@
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+# Example AWS S3 configuration for ActiveStorage.
+# This should be overridden by config/storage/<environment>.yml
+s3:
+  service: S3
+  access_key_id: ""
+  secret_access_key: ""
+  region: ""
+  bucket: ""
+  public: true

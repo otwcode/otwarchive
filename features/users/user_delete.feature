@@ -45,6 +45,8 @@ Scenario: Allow a user to orphan their works when deleting their account
   When I try to delete my account as orphaner
   Then I should see "What do you want to do with your works?"
   When I choose "Change my pseud to "orphan" and attach to the orphan account"
+    # Delay before orphaning to make sure the cache is expired
+    And it is currently 1 second from now
     And I press "Save"
   Then I should see "You have successfully deleted your account."
     And 0 emails should be delivered
@@ -66,6 +68,8 @@ Scenario: Delete a user with a collection
   When I try to delete my account as moderator
   Then I should see "You have 1 collection(s) under the following pseuds: moderator."
   When I choose "Change my pseud to "orphan" and attach to the orphan account"
+  # Delay before orphaning to make sure the cache is expired
+    And it is currently 1 second from now
     And I press "Save"
   Then I should see "You have successfully deleted your account."
     And 0 emails should be delivered
@@ -73,9 +77,8 @@ Scenario: Delete a user with a collection
     And a user account should not exist for "moderator"
   When I go to the collections page
   Then I should see "fake"
-    # TODO: And a caching bug is fixed...
-    # And I should see "orphan_account"
-    # And I should not see "moderator"
+    And I should see "orphan_account"
+    And I should not see "moderator"
 
 Scenario: Delete a user who has coauthored a work
   Given  the following activated users exist
@@ -97,13 +100,7 @@ Scenario: Delete a user who has coauthored a work
 
   Scenario: Can delete a user who has an empty series
     Given I am logged in as "testuser"
-    # The only way to create an empty series is to add a new series to an
-    # unsaved work that's invalid in some way (in this case, the work has a
-    # fandom tag with invalid characters):
-    When I set up a draft "Invalid" with fandom "%" as part of a series "Empty"
-      And I press "Post"
-    Then I should see "Sorry! We couldn't save this work because:"
-      And I should see "Fandom is missing."
+      And "testuser" has an empty series "Empty"
     When I try to delete my account
     Then I should see "You have successfully deleted your account."
       And a user account should not exist for "testuser"

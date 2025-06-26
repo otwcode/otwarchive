@@ -28,7 +28,8 @@ form blockquote.userstuff {
 .alphabet .listbox li,
 .media .listbox,
 .works-index .index,
-.collections-index .index {
+.collections-index .index,
+.bookmarks-index .index {
   float: none;
   width: auto;
   max-width: 100%;
@@ -50,6 +51,9 @@ media .listbox,
 .actions input,
 .actions input:hover,
 .actions input:focus,
+.actions button,
+.actions button:hover,
+.actions button:focus,
 .flash,
 fieldset,
 #header ul.primary li.search,
@@ -59,9 +63,14 @@ form dl,
 fieldset dl dl,
 fieldset fieldset fieldset,
 fieldset fieldset dl dl,
+form.single fieldset,
 dd.hideme,
 form blockquote.userstuff {
   border: 2px solid;
+}
+
+ul.navigation + .index {
+  clear: both;
 }
 
 li.blurb,
@@ -69,7 +78,8 @@ li.blurb,
   visibility: visible;
 }
 
-li.blurb {
+li.blurb,
+.bookmark div.user {
   padding: 3%;
 }
 
@@ -92,6 +102,11 @@ dd fieldset {
   border: 0;
 }
 
+.meta .stats dl dd,
+.meta .stats dl dt {
+  display: inline-block;
+}
+
 textarea,
 pre {
   font-size: 200%;
@@ -103,7 +118,6 @@ pre {
 .blurb .blurb,
 .blurb .actions a,
 #header li a,
-#header li .current,
 #footer li a,
 #header .open .menu {
   display: block;
@@ -111,7 +125,6 @@ pre {
 
 #header .navigation,
 #header li a,
-#header li .current,
 #footer ul,
 #footer li a {
   float: none;
@@ -126,6 +139,7 @@ pre {
 
 #header .menu {
   display: none;
+  position: static;
 }
 
 #footer {
@@ -134,7 +148,9 @@ pre {
 }
 
 #header,
-#header ul.primary,
+#header .open a,
+#header .primary .dropdown a:focus,
+#header .user .dropdown a:focus,
 #footer,
 .actions a:hover,
 .actions a:focus {
@@ -142,7 +158,7 @@ pre {
   color: #eee;
 }
 
-#header h1.heading a {
+#header h1 a {
   color: #fff;
 }
 
@@ -150,15 +166,19 @@ pre {
   background: transparent;
 }
 
-#header .menu a {
+#header .dropdown .menu a {
   background: #111;
   color: #fff;
 }
 
-#header .menu a:hover,
-#header .menu a:focus {
+#header .dropdown .menu a:hover,
+#header .dropdown .menu a:focus {
   background: #ccc;
   color: #111;
+}
+
+.bookmark div.user {
+  box-sizing: border-box;
 }
 
 .bookmark .recent,

@@ -3,6 +3,8 @@
 .bundle
 .idea
 stdout
+*~
+.vscode/
 # /
 /*.tmproj
 /sphinx
@@ -12,10 +14,10 @@ stdout
 /.dropbox
 /.dropbox.attr
 /.rspec
-Gemfile.linters.lock
 REVISION
 
 # /config/
+/config/brakeman.ignore
 /config/database.yml
 /config/local.yml
 /config/backup.yml
@@ -44,7 +46,9 @@ REVISION
 /public/downloads
 /public/stylesheets/cached_for_screen.css
 /public/stylesheets/skins
+public/system/development
 /public/system/skins
+public/system/test
 /public/system/work_skins
 /public/tags
 
@@ -54,6 +58,9 @@ REVISION
 # /tmp/
 /tmp/*
 
+# ActiveRecord storage path
+storage/
+
 # /vendor/
 /vendor/gems
 
@@ -62,11 +69,7 @@ REVISION
 
 # /vendor/plugins/
 
-# fix for vcr
-features/cassette_library/cucumber_tags/work_import_special_characters_auto_latin.yml
-features/cassette_library/cucumber_tags/work_import_special_characters_man_cp.yml
-features/cassette_library/cucumber_tags/work_import_special_characters_man_latin.yml
-features/cassette_library/cucumber_tags/import_lj_comm.yml
+features/cassette_library/
 
 spec/results.html
 spec/results

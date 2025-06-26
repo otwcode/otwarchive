@@ -1,3 +1,0 @@
-$j("#add_comment_link").html("<%= escape_javascript(cancel_comment_link(@commentable)) %>");
-$j("#add_comment_placeholder").html("<%= escape_javascript(render :partial => "comments/comment_form", :locals => {:comment => @comment, :commentable => @commentable, :button_name => ts("Comment")}) %>");
-$j("#add_comment_placeholder").slideDown();

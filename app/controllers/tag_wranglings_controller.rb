@@ -1,35 +1,43 @@
 class TagWranglingsController < ApplicationController
+  include TagWrangling
+  include WranglingHelper
+
   before_action :check_user_status
   before_action :check_permission_to_wrangle
+  around_action :record_wrangling_activity, only: [:wrangle]
 
   def index
-    @counts = {}
-    [Fandom, Character, Relationship, Freeform].each do |klass|
-      @counts[klass.to_s.downcase.pluralize.to_sym] = Rails.cache.fetch("/wrangler/counts/sidebar/#{klass}", race_condition_ttl: 10, expires_in: 1.hour) do
-        klass.unwrangled.in_use.count
-      end
+    @counts = tag_counts_per_category
+    authorize :wrangling, :read_access? if logged_in_as_admin?
+    return if params[:show].blank?
+
+    raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
+
+    params[:sort_column] = "created_at" unless valid_sort_column(params[:sort_column], "tag")
+    params[:sort_direction] = "ASC" unless valid_sort_direction(params[:sort_direction])
+
+    if params[:show] == "fandoms"
+      @media_names = Media.by_name.pluck(:name)
+      @page_subtitle = t(".page_subtitle")
     end
-    @counts[:UnsortedTag] = Rails.cache.fetch("/wrangler/counts/sidebar/UnsortedTag", race_condition_ttl: 10, expires_in: 1.hour) do
-      UnsortedTag.count
-    end
-    unless params[:show].blank?
-      params[:sort_column] = 'created_at' if !valid_sort_column(params[:sort_column], 'tag')
-      params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
-      sort = params[:sort_column] + " " + params[:sort_direction]
-      sort = sort + ", name ASC" if sort.include?('taggings_count_cache')
-      if params[:show] == "fandoms"
-        @media_names = Media.by_name.pluck(:name)
-        @page_subtitle = ts("fandoms")
-        @tags = Fandom.unwrangled.in_use.order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      else # by fandom
-        raise "Redshirt: Attempted to constantize invalid class initialize tag_wranglings_controller_index #{params[:show].classify}" unless Tag::USER_DEFINED.include?(params[:show].classify)
-        klass = params[:show].classify.constantize
-        @tags = klass.unwrangled.in_use.order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      end
-    end
+
+    type = params[:show].singularize.capitalize
+    @tags = TagQuery.new({
+                           type: type,
+                           in_use: true,
+                           unwrangleable: false,
+                           unwrangled: true,
+                           has_posted_works: true,
+                           sort_column: params[:sort_column],
+                           sort_direction: params[:sort_direction],
+                           page: params[:page],
+                           per_page: ArchiveConfig.ITEMS_PER_PAGE
+                         }).search_results
   end
 
   def wrangle
+    authorize :wrangling, :full_access? if logged_in_as_admin?
+
     params[:page] = '1' if params[:page].blank?
     params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
     params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
@@ -43,7 +51,7 @@ class TagWranglingsController < ApplicationController
       tags = Tag.where(id: params[:canonicals])
 
       tags.each do |tag_to_canonicalize|
-        if tag_to_canonicalize.update_attributes(canonical: true)
+        if tag_to_canonicalize.update(canonical: true)
           saved_canonicals << tag_to_canonicalize
         else
           not_saved_canonicals << tag_to_canonicalize
@@ -96,9 +104,5 @@ class TagWranglingsController < ApplicationController
     flash[:error] = error_messages.join('<br />').html_safe unless error_messages.empty?
 
     redirect_to tag_wranglings_path(options)
-  end
-
-  def discuss
-    @comments = Comment.where(commentable_type: 'Tag').order('updated_at DESC').paginate(page: params[:page])
   end
 end

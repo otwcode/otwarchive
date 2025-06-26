@@ -1,22 +1,18 @@
 class Collection < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include Filterable
-  include UrlHelpers
   include WorksOwner
   include Searchable
 
-  has_attached_file :icon,
-  styles: { standard: "100x100>" },
-  url: "/system/:class/:attachment/:id/:style/:basename.:extension",
-  path: %w(staging production).include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
-  storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
-  s3_protocol: "https",
-  s3_credentials: "#{Rails.root}/config/s3.yml",
-  bucket: %w(staging production).include?(Rails.env) ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
-  default_url: "/images/skins/iconsets/default/icon_collection.png"
+  has_one_attached :icon do |attachable|
+    attachable.variant(:standard, resize_to_limit: [100, 100], loader: { n: -1 })
+  end
 
-  validates_attachment_content_type :icon, content_type: /image\/\S+/, allow_nil: true
-  validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
+  # i18n-tasks-use t("errors.attributes.icon.invalid_format")
+  # i18n-tasks-use t("errors.attributes.icon.too_large")
+  validates :icon, attachment: {
+    allowed_formats: %r{image/\S+},
+    maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
+  }
 
   belongs_to :parent, class_name: "Collection", inverse_of: :children
   has_many :children, class_name: "Collection", foreign_key: "parent_id", inverse_of: :parent
@@ -27,12 +23,13 @@ class Collection < ApplicationRecord
   has_one :collection_preference, dependent: :destroy
   accepts_nested_attributes_for :collection_preference
 
+  before_validation :clear_icon
+  before_validation :cleanup_url
   before_create :ensure_associated
   def ensure_associated
-    self.collection_preference = CollectionPreference.new unless  self.collection_preference
-    self.collection_profile = CollectionProfile.new unless  self.collection_profile
+    self.collection_preference = CollectionPreference.new unless self.collection_preference
+    self.collection_profile = CollectionProfile.new unless self.collection_profile
   end
-
 
   belongs_to :challenge, dependent: :destroy, polymorphic: true
   has_many :prompts, dependent: :destroy
@@ -55,54 +52,46 @@ class Collection < ApplicationRecord
 
   has_many :collection_items, dependent: :destroy
   accepts_nested_attributes_for :collection_items, allow_destroy: true
-  has_many :approved_collection_items, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, class_name: "CollectionItem"
+  has_many :approved_collection_items, -> { approved_by_both }, class_name: "CollectionItem"
 
-  has_many :works, through: :collection_items, source: :item, source_type: 'Work'
-  has_many :approved_works, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Work'
+  has_many :works, through: :collection_items, source: :item, source_type: "Work"
+  has_many :approved_works, -> { posted }, through: :approved_collection_items, source: :item, source_type: "Work"
 
-  has_many :bookmarks, through: :collection_items, source: :item, source_type: 'Bookmark'
-  has_many :approved_bookmarks, -> { where('collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED) }, through: :collection_items, source: :item, source_type: 'Bookmark'
-
+  has_many :bookmarks, through: :collection_items, source: :item, source_type: "Bookmark"
+  has_many :approved_bookmarks, through: :approved_collection_items, source: :item, source_type: "Bookmark"
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
 
   has_many :participants, through: :collection_participants, source: :pseud
   has_many :users, through: :participants, source: :user
-  has_many :invited, -> { where('collection_participants.participant_role = ?', CollectionParticipant::INVITED) }, through: :collection_participants, source: :pseud
-  has_many :owners, -> { where('collection_participants.participant_role = ?', CollectionParticipant::OWNER) }, through: :collection_participants, source: :pseud
-  has_many :moderators, -> { where('collection_participants.participant_role = ?', CollectionParticipant::MODERATOR) }, through: :collection_participants, source: :pseud
-  has_many :members, -> { where('collection_participants.participant_role = ?', CollectionParticipant::MEMBER) }, through: :collection_participants, source: :pseud
-  has_many :posting_participants, -> { where('collection_participants.participant_role in (?)', [CollectionParticipant::MEMBER,CollectionParticipant::MODERATOR, CollectionParticipant::OWNER ] ) }, through: :collection_participants, source: :pseud
-
-
+  has_many :invited, -> { where(collection_participants: { participant_role: CollectionParticipant::INVITED }) }, through: :collection_participants, source: :pseud
+  has_many :owners, -> { where(collection_participants: { participant_role: CollectionParticipant::OWNER }) }, through: :collection_participants, source: :pseud
+  has_many :moderators, -> { where(collection_participants: { participant_role: CollectionParticipant::MODERATOR }) }, through: :collection_participants, source: :pseud
+  has_many :members, -> { where(collection_participants: { participant_role: CollectionParticipant::MEMBER }) }, through: :collection_participants, source: :pseud
+  has_many :posting_participants, -> { where(collection_participants: { participant_role: [CollectionParticipant::MEMBER, CollectionParticipant::MODERATOR, CollectionParticipant::OWNER] }) }, through: :collection_participants, source: :pseud
 
   CHALLENGE_TYPE_OPTIONS = [
-                             ["", ""],
-                             [ts("Gift Exchange"), "GiftExchange"],
-                             [ts("Prompt Meme"), "PromptMeme"],
-                           ]
-
-  before_validation :clear_icon
+    ["", ""],
+    [ts("Gift Exchange"), "GiftExchange"],
+    [ts("Prompt Meme"), "PromptMeme"]
+  ].freeze
 
   validate :must_have_owners
   def must_have_owners
     # we have to use collection participants because the association may not exist until after
     # the collection is saved
-    errors.add(:base, ts("Collection has no valid owners.")) if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select {|p| p.is_owner?}.empty?
+    errors.add(:base, ts("Collection has no valid owners.")) if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select(&:is_owner?)
+      .empty?
   end
 
   validate :collection_depth
   def collection_depth
-    if (self.parent && self.parent.parent) || (self.parent && !self.children.empty?) || (!self.children.empty? && !self.children.collect(&:children).flatten.empty?)
-      errors.add(:base, ts("Sorry, but %{name} is a subcollection, so it can't also be a parent collection.", name: parent.name))
-    end
+    errors.add(:base, ts("Sorry, but %{name} is a subcollection, so it can't also be a parent collection.", name: parent.name)) if self.parent&.parent || (self.parent && !self.children.empty?) || (!self.children.empty? && !self.children.collect(&:children).flatten.empty?)
   end
 
   validate :parent_exists
   def parent_exists
-    unless parent_name.blank? || Collection.find_by(name: parent_name)
-      errors.add(:base, ts("We couldn't find a collection with name %{name}.", name: parent_name))
-    end
+    errors.add(:base, ts("We couldn't find a collection with name %{name}.", name: parent_name)) unless parent_name.blank? || Collection.find_by(name: parent_name)
   end
 
   validate :parent_is_allowed
@@ -116,107 +105,112 @@ class Collection < ApplicationRecord
     end
   end
 
-  validates_presence_of :name, message: ts("Please enter a name for your collection.")
-  validates_uniqueness_of :name, case_sensitive: false, message: ts('Sorry, that name is already taken. Try again, please!')
-  validates_length_of :name,
-    minimum: ArchiveConfig.TITLE_MIN,
-    too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN)
-  validates_length_of :name,
-    maximum: ArchiveConfig.TITLE_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
-  validates_format_of :name,
-    message: ts('must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces.'),
-    with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  validates_length_of :icon_alt_text, allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX)
-  validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
+  validates :name, presence: { message: ts("Please enter a name for your collection.") }
+  validates :name, uniqueness: { message: ts("Sorry, that name is already taken. Try again, please!") }
+  validates :name,
+            length: { minimum: ArchiveConfig.TITLE_MIN,
+                      too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN) }
+  validates :name,
+            length: { maximum: ArchiveConfig.TITLE_MAX,
+                      too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX) }
+  validates :name,
+            format: { message: ts("must begin and end with a letter or number; it may also contain underscores. It may not contain any other characters, including spaces."),
+                      with: /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/ }
+  validates :icon_alt_text, length: { allow_blank: true, maximum: ArchiveConfig.ICON_ALT_MAX,
+                                      too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_ALT_MAX) }
+  validates :icon_comment_text, length: { allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
+                                          too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX) }
 
-  validates :email, email_veracity: {allow_blank: true}
+  validates :email, email_format: { allow_blank: true }
 
-  validates_presence_of :title, message: ts("Please enter a title to be displayed for your collection.")
-  validates_length_of :title,
-    minimum: ArchiveConfig.TITLE_MIN,
-    too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN)
-  validates_length_of :title,
-    maximum: ArchiveConfig.TITLE_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
+  validates :title, presence: { message: ts("Please enter a title to be displayed for your collection.") }
+  validates :title,
+            length: { minimum: ArchiveConfig.TITLE_MIN,
+                      too_short: ts("must be at least %{min} characters long.", min: ArchiveConfig.TITLE_MIN) }
+  validates :title,
+            length: { maximum: ArchiveConfig.TITLE_MAX,
+                      too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX) }
   validate :no_reserved_strings
   def no_reserved_strings
     errors.add(:title, ts("^Sorry, the ',' character cannot be in a collection Display Title.")) if
-      title.match(/\,/)
+      title.match(/,/)
   end
 
   # return title.html_safe to overcome escaping done by sanitiser
   def title
-    read_attribute(:title).try(:html_safe)
+    self[:title].try(:html_safe)
   end
 
-  validates_length_of :description,
-    allow_blank: true,
-    maximum: ArchiveConfig.SUMMARY_MAX,
-    too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX)
+  validates :description,
+            length: { allow_blank: true,
+                      maximum: ArchiveConfig.SUMMARY_MAX,
+                      too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX) }
 
-  validates_format_of :header_image_url, allow_blank: true, with: URI::regexp(%w(http https)), message: ts("is not a valid URL.")
-  validates_format_of :header_image_url, allow_blank: true, with: /\.(png|gif|jpg)$/, message: ts("can only point to a gif, jpg, or png file."), multiline: true
+  validates :header_image_url, format: { allow_blank: true, with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: ts("is not a valid URL.") }
+  validates :header_image_url, format: { allow_blank: true, with: /\A\S+\.(png|gif|jpg)\z/, message: ts("can only point to a gif, jpg, or png file.") }
+
+  validates :tags_after_saving,
+            length: { maximum: ArchiveConfig.COLLECTION_TAGS_MAX,
+                      message: "^Sorry, a collection can only have %{count} tags." }
 
   scope :top_level, -> { where(parent_id: nil) }
-  scope :closed, -> { joins(:collection_preference).where("collection_preferences.closed = ?", true) }
-  scope :not_closed, -> { joins(:collection_preference).where("collection_preferences.closed = ?", false) }
-  scope :moderated, -> { joins(:collection_preference).where("collection_preferences.moderated = ?", true) }
-  scope :unmoderated, -> { joins(:collection_preference).where("collection_preferences.moderated = ?", false) }
-  scope :unrevealed, -> { joins(:collection_preference).where("collection_preferences.unrevealed = ?", true) }
-  scope :anonymous, -> { joins(:collection_preference).where("collection_preferences.anonymous = ?", true) }
+  scope :closed, -> { joins(:collection_preference).where(collection_preferences: { closed: true }) }
+  scope :not_closed, -> { joins(:collection_preference).where(collection_preferences: { closed: false }) }
+  scope :moderated, -> { joins(:collection_preference).where(collection_preferences: { moderated: true }) }
+  scope :unmoderated, -> { joins(:collection_preference).where(collection_preferences: { moderated: false }) }
+  scope :unrevealed, -> { joins(:collection_preference).where(collection_preferences: { unrevealed: true }) }
+  scope :anonymous, -> { joins(:collection_preference).where(collection_preferences: { anonymous: true }) }
   scope :no_challenge, -> { where(challenge_type: nil) }
-  scope :gift_exchange, -> { where(challenge_type: 'GiftExchange') }
-  scope :prompt_meme, -> { where(challenge_type: 'PromptMeme') }
+  scope :gift_exchange, -> { where(challenge_type: "GiftExchange") }
+  scope :prompt_meme, -> { where(challenge_type: "PromptMeme") }
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
+  scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).with_attached_icon }
 
-  before_validation :cleanup_url
   def cleanup_url
-    self.header_image_url = reformat_url(self.header_image_url) if self.header_image_url
+    self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
   end
 
   # Get only collections with running challenges
   def self.signup_open(challenge_type)
-    if challenge_type == "PromptMeme"
-      not_closed.where(challenge_type: challenge_type).
-        joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").where("prompt_memes.signup_open = 1").
-        where("prompt_memes.signups_close_at > ?", Time.now).order("prompt_memes.signups_close_at DESC")
-    elsif challenge_type == "GiftExchange"
-      not_closed.where(challenge_type: challenge_type).
-        joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("gift_exchanges.signup_open = 1").
-        where("gift_exchanges.signups_close_at > ?", Time.now).order("gift_exchanges.signups_close_at DESC")
+    case challenge_type
+    when "PromptMeme"
+      not_closed.where(challenge_type: challenge_type)
+        .joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").where("prompt_memes.signup_open = 1")
+        .where("prompt_memes.signups_close_at > ?", Time.zone.now).order("prompt_memes.signups_close_at DESC")
+    when "GiftExchange"
+      not_closed.where(challenge_type: challenge_type)
+        .joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("gift_exchanges.signup_open = 1")
+        .where("gift_exchanges.signups_close_at > ?", Time.zone.now).order("gift_exchanges.signups_close_at DESC")
     end
   end
 
-  scope :with_name_like, lambda {|name|
-    where("collections.name LIKE ?", '%' + name + '%').
-    limit(10)
+  scope :with_name_like, lambda { |name|
+    where("collections.name LIKE ?", "%#{name}%")
+      .limit(10)
   }
 
-  scope :with_title_like, lambda {|title|
-    where("collections.title LIKE ?", '%' + title + '%')
+  scope :with_title_like, lambda { |title|
+    where("collections.title LIKE ?", "%#{title}%")
   }
 
-  scope :with_item_count, -> {
-    select("collections.*, count(distinct collection_items.id) as item_count").
-    joins("left join collections child_collections on child_collections.parent_id = collections.id
+  scope :with_item_count, lambda {
+    select("collections.*, count(distinct collection_items.id) as item_count")
+      .joins("left join collections child_collections on child_collections.parent_id = collections.id
            left join collection_items on ( (collection_items.collection_id = child_collections.id OR collection_items.collection_id = collections.id)
                                      AND collection_items.user_approval_status = 1
-                                     AND collection_items.collection_approval_status = 1)").
-    group("collections.id")
+                                     AND collection_items.collection_approval_status = 1)")
+      .group("collections.id")
   }
 
   def to_param
-   name_was
+    name_was
   end
 
   # Change membership of collection(s) from a particular pseud to the orphan account
-  def self.orphan(pseuds, collections, default=true)
-    for pseud in pseuds
-      for collection in collections
+  def self.orphan(pseuds, collections, default: true)
+    pseuds.each do |pseud|
+      collections.each do |collection|
         if pseud && collection && collection.owners.include?(pseud)
           orphan_pseud = default ? User.orphan_account.default_pseud : User.orphan_account.pseuds.find_or_create_by(name: pseud.name)
           pseud.change_membership(collection, orphan_pseud)
@@ -238,15 +232,14 @@ class Collection < ApplicationRecord
   end
 
   def autocomplete_prefixes
-    [ "autocomplete_collection_all",
-      "autocomplete_collection_#{closed? ? 'closed' : 'open'}" ]
+    ["autocomplete_collection_all",
+     "autocomplete_collection_#{closed? ? 'closed' : 'open'}"]
   end
 
   def autocomplete_score
-    all_approved_works_count + all_approved_bookmarks_count
+    all_items.approved_by_collection.approved_by_user.count
   end
   ## END AUTOCOMPLETE
-
 
   def parent_name=(name)
     @parent_name = name
@@ -281,97 +274,37 @@ class Collection < ApplicationRecord
     CollectionItem.where(collection_id: ([self.id] + self.children.pluck(:id)))
   end
 
-  def all_approved_works
-    work_ids = all_items.where(item_type: "Work", user_approval_status: CollectionItem::APPROVED,
-      collection_approval_status: CollectionItem::APPROVED).pluck(:item_id)
-    Work.where(id: work_ids).visible_to_registered_user
-  end
-
-  def all_approved_works_count
-    if !User.current_user.nil?
-      count = self.approved_works.unhidden.count
-      self.children.each { |child| count += child.approved_works.unhidden.count }
-      count
-    else
-      count = self.approved_works.where(restricted: false).unhidden.count
-      self.children.each { |child| count += child.approved_works.where(restricted: false).unhidden.count }
-      count
-    end
-  end
-
-  def all_approved_bookmarks
-    (self.approved_bookmarks + (self.children ? self.children.collect(&:approved_bookmarks).flatten : [])).uniq
-  end
-
-  def all_approved_bookmarks_count
-    count = self.approved_bookmarks.where(private: false).count
-    self.children.each {|child| count += child.approved_bookmarks.where(private: false).count}
-    count
-  end
-
-  # Return the count of all bookmarkable items (works, series, external works)
-  # that are in this collection (or any of its children) and visible to
-  # the current user. Excludes bookmarks of deleted works/series.
-  # Takes logged_in as an optional param, to calculate bookmarkables for public and registered users
-  def all_bookmarked_items_count(logged_in = User.current_user.present?)
-    # The set of all bookmarks in this collection and its children.
-    # Note that "approved_by_collection" forces the bookmarks to be approved
-    # both by the collection AND by the user.
-    bookmarks = Bookmark.is_public.joins(:collection_items).
-                merge(CollectionItem.approved_by_collection).
-                where(collection_items: { collection_id: children.ids + [id] })
-
-    [
-      logged_in ? Work.visible_to_registered_user : Work.visible_to_all,
-      logged_in ? Series.visible_to_registered_user : Series.visible_to_all,
-      ExternalWork.visible_to_all
-    ].map do |relation|
-      relation.joins(:bookmarks).merge(bookmarks).distinct.
-        count("bookmarks.bookmarkable_id")
-    end.sum
-  end
-
-  def all_fandoms
-    # We want filterable fandoms, but not inherited metatags:
-    Fandom.for_collections([self] + children).
-      where('filter_taggings.inherited = 0').distinct
-  end
-
-  def all_fandoms_count
-    # Rails now handles .uniq.count correctly, so we can make this simpler:
-    all_fandoms.count
-  end
-
   def maintainers
     self.all_owners + self.all_moderators
   end
 
   def user_is_owner?(user)
-    user && user != :false && !(user.pseuds & self.all_owners).empty?
+    user && user != false && !(user.pseuds & self.all_owners).empty?
   end
 
   def user_is_moderator?(user)
-    user && user != :false && !(user.pseuds & self.all_moderators).empty?
+    user && user != false && !(user.pseuds & self.all_moderators).empty?
   end
 
   def user_is_maintainer?(user)
-    user && user != :false && !(user.pseuds & (self.all_moderators + self.all_owners)).empty?
+    user && user != false && !(user.pseuds & (self.all_moderators + self.all_owners)).empty?
   end
 
   def user_is_participant?(user)
-    user && user != :false && !get_participating_pseuds_for_user(user).empty?
+    user && user != false && !get_participating_pseuds_for_user(user).empty?
   end
 
   def user_is_posting_participant?(user)
-    user && user != :false && !(user.pseuds & self.all_posting_participants).empty?
+    user && user != false && !(user.pseuds & self.all_posting_participants).empty?
   end
 
   def get_participating_pseuds_for_user(user)
-    (user && user != :false) ? user.pseuds & self.all_participants : []
+    (user && user != false) ? user.pseuds & self.all_participants : []
   end
 
   def get_participants_for_user(user)
     return [] unless user
+
     CollectionParticipant.in_collection(self).for_user(user)
   end
 
@@ -383,32 +316,65 @@ class Collection < ApplicationRecord
     self.collection_profile.gift_notification || (parent ? parent.collection_profile.gift_notification : "")
   end
 
-  def moderated? ; self.collection_preference.moderated ; end
-  def closed? ; self.collection_preference.closed ; end
-  def unrevealed? ; self.collection_preference.unrevealed ; end
-  def anonymous? ; self.collection_preference.anonymous ; end
-  def challenge? ; !self.challenge.nil? ; end
+  def moderated?() = self.collection_preference.moderated
+
+  def closed?() = self.collection_preference.closed
+
+  def unrevealed?() = self.collection_preference.unrevealed
+
+  def anonymous?() = self.collection_preference.anonymous
+
+  def challenge?() = !self.challenge.nil?
 
   def gift_exchange?
-    return self.challenge_type == "GiftExchange"
+    self.challenge_type == "GiftExchange"
   end
+
   def prompt_meme?
-    return self.challenge_type == "PromptMeme"
+    self.challenge_type == "PromptMeme"
   end
 
-  def not_empty?
-    self.all_approved_works.count > 0 || self.children.count > 0 || self.all_approved_bookmarks.count > 0
+  def maintainers_list
+    self.maintainers.collect(&:user).flatten.uniq
   end
 
-  def get_maintainers_email
-    return self.email if !self.email.blank?
-    return parent.email if parent && !parent.email.blank?
-    "#{self.maintainers.collect(&:user).flatten.uniq.collect(&:email).join(',')}"
+  def collection_email
+    return self.email if self.email.present?
+    return parent.email if parent && parent.email.present?
   end
 
-  def notify_maintainers(subject, message)
-    # send maintainers a notice via email
-    UserMailer.collection_notification(self.id, subject, message).deliver_later
+  def notify_maintainers_assignments_sent
+    subject = I18n.t("user_mailer.collection_notification.assignments_sent.subject")
+    message = I18n.t("user_mailer.collection_notification.assignments_sent.complete")
+    if self.collection_email.present?
+      UserMailer.collection_notification(self.id, subject, message, self.collection_email).deliver_later
+    else
+      # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
+      self.maintainers_list.each do |user|
+        I18n.with_locale(user.preference.locale_for_mails) do
+          translated_subject = I18n.t("user_mailer.collection_notification.assignments_sent.subject")
+          translated_message = I18n.t("user_mailer.collection_notification.assignments_sent.complete")
+          UserMailer.collection_notification(self.id, translated_subject, translated_message, user.email).deliver_later
+        end
+      end
+    end
+  end
+
+  def notify_maintainers_challenge_default(challenge_assignment, assignments_page_url)
+    if self.collection_email.present?
+      subject = I18n.t("user_mailer.collection_notification.challenge_default.subject", offer_byline: challenge_assignment.offer_byline)
+      message = I18n.t("user_mailer.collection_notification.challenge_default.complete", offer_byline: challenge_assignment.offer_byline, request_byline: challenge_assignment.request_byline, assignments_page_url: assignments_page_url)
+      UserMailer.collection_notification(self.id, subject, message, self.collection_email).deliver_later
+    else
+      # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
+      self.maintainers_list.each do |user|
+        I18n.with_locale(user.preference.locale_for_mails) do
+          translated_subject = I18n.t("user_mailer.collection_notification.challenge_default.subject", offer_byline: challenge_assignment.offer_byline)
+          translated_message = I18n.t("user_mailer.collection_notification.challenge_default.complete", offer_byline: challenge_assignment.offer_byline, request_byline: challenge_assignment.request_byline, assignments_page_url: assignments_page_url)
+          UserMailer.collection_notification(self.id, translated_subject, translated_message, user.email).deliver_later
+        end
+      end
+    end
   end
 
   include AsyncWithResque
@@ -432,45 +398,49 @@ class Collection < ApplicationRecord
   end
 
   def send_reveal_notifications
-    approved_collection_items.each {|collection_item| collection_item.notify_of_reveal}
+    approved_collection_items.each(&:notify_of_reveal)
   end
 
   def self.sorted_and_filtered(sort, filters, page)
-    pagination_args = {page: page}
+    pagination_args = { page: page }
 
     # build up the query with scopes based on the options the user specifies
     query = Collection.top_level
 
-    if !filters[:title].blank?
+    if filters[:title].present?
       # we get the matching collections out of autocomplete and use their ids
       ids = Collection.autocomplete_lookup(search_param: filters[:title],
-                autocomplete_prefix: (filters[:closed].blank? ? "autocomplete_collection_all" : (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open"))
-             ).map {|result| Collection.id_from_autocomplete(result)}
-      query = query.where("collections.id in (?)", ids)
-    else
-      query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
+                                           autocomplete_prefix: (if filters[:closed].blank?
+                                                                   "autocomplete_collection_all"
+                                                                 else
+                                                                   (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open")
+                                                                 end)).map { |result| Collection.id_from_autocomplete(result) }
+      query = query.where(collections: { id: ids })
+    elsif filters[:closed].present?
+      query = (filters[:closed] == "true" ? query.closed : query.not_closed)
     end
-    query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?
+    query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if filters[:moderated].present?
     if filters[:challenge_type].present?
-      if filters[:challenge_type] == "gift_exchange"
+      case filters[:challenge_type]
+      when "gift_exchange"
         query = query.gift_exchange
-      elsif filters[:challenge_type] == "prompt_meme"
+      when "prompt_meme"
         query = query.prompt_meme
-      elsif filters[:challenge_type] == "no_challenge"
+      when "no_challenge"
         query = query.no_challenge
       end
     end
-    query = query.order(sort)
+    query = query.order(sort).for_blurb
 
-    if !filters[:fandom].blank?
+    if filters[:fandom].blank?
+      query.paginate(pagination_args)
+    else
       fandom = Fandom.find_by_name(filters[:fandom])
       if fandom
         (fandom.approved_collections & query).paginate(pagination_args)
       else
         []
       end
-    else
-      query.paginate(pagination_args)
     end
   end
 
@@ -482,9 +452,13 @@ class Collection < ApplicationRecord
   def delete_icon
     !!@delete_icon
   end
-  alias_method :delete_icon?, :delete_icon
+  alias delete_icon? delete_icon
 
   def clear_icon
-    self.icon = nil if delete_icon? && !icon.dirty?
+    return unless delete_icon?
+
+    self.icon.purge
+    self.icon_alt_text = nil
+    self.icon_comment_text = nil
   end
 end

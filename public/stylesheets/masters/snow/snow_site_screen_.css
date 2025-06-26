@@ -5,6 +5,7 @@ col.name,
 fieldset fieldset,
 fieldset dl dl,
 form blockquote.userstuff,
+button:focus,
 input:focus,
 select:focus,
 textarea:focus,
@@ -25,7 +26,7 @@ textarea:focus,
 #footer ul,
 #footer ul.navigation a,
 .autocomplete .dropdown ul li:hover,
-li.selected,
+.autocomplete .dropdown li.selected,
 a.tag:hover {
   color: #fff;
 }
@@ -45,8 +46,7 @@ form dt,
 .current,
 a.current,
 .current a:visited,
-.search span.tip,
-#header ul.primary .current {
+.search span.tip {
   border-color: #fff;
 }
 

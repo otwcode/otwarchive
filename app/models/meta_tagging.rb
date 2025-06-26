@@ -1,6 +1,8 @@
 # Relationships between meta and sub tags
 # Meta tags represent a superset of sub tags
 class MetaTagging < ApplicationRecord
+  include Wrangleable
+
   belongs_to :meta_tag, class_name: 'Tag'
   belongs_to :sub_tag, class_name: 'Tag'
 

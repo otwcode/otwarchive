@@ -18,7 +18,7 @@
         <%= f.text_field :title %>
       </dd>
       <dt>
-        <%= f.label :creators, ts("Author/Artist") %>
+        <%= f.label :creators, t(".creator") %>
       </dt>
       <dd>
         <%= f.text_field :creators %>
@@ -85,7 +85,7 @@
         <%= link_to_help "work-search-language-help" %>
       </dt>
       <dd>
-        <%= f.collection_select :language_id, @languages, :short, :name, include_blank: true %>
+        <%= f.select(:language_id, language_options_for_select(@languages, "short"), include_blank: true) %>
       </dd>
     </dl>
   </fieldset>
@@ -203,8 +203,7 @@
       </dt>
       <dd>
         <%= f.select :sort_direction,
-          options_for_select([["Ascending", "asc"], ["Descending", "desc"]], @search.sort_direction),
-          { :include_blank => true } %>
+          options_for_select([["Ascending", "asc"], ["Descending", "desc"]], @search.sort_direction) %>
       </dd>
     </dl>
     <p class="submit"><%= f.submit ts("Search") %></p>

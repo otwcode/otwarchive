@@ -1,8 +1,13 @@
 class TagWranglersController < ApplicationController
+  include ExportsHelper
+  include WranglingHelper
+
   before_action :check_user_status
-	before_action :check_permission_to_wrangle
+  before_action :check_permission_to_wrangle, except: [:report_csv]
 
   def index
+    authorize :wrangling, :full_access? if logged_in_as_admin?
+
     @wranglers = Role.find_by(name: "tag_wrangler").users.alphabetical
     conditions = ["canonical = 1"]
     joins = "LEFT JOIN wrangling_assignments ON (wrangling_assignments.fandom_id = tags.id)
@@ -36,21 +41,35 @@ class TagWranglersController < ApplicationController
   end
 
   def show
-    @wrangler = User.find_by(login: params[:id])
+    authorize :wrangling if logged_in_as_admin?
+
+    @wrangler = User.find_by!(login: params[:id])
     @page_subtitle = @wrangler.login
     @fandoms = @wrangler.fandoms.by_name
-    @counts = {}
-    [Fandom, Character, Relationship, Freeform].each do |klass|
-      @counts[klass.to_s.downcase.pluralize.to_sym] = Rails.cache.fetch("/wrangler/counts/sidebar/#{klass}", race_condition_ttl: 10, expires_in: 1.hour) do
-        klass.unwrangled.in_use.count
-      end
+    @counts = tag_counts_per_category
+  end
+
+  def report_csv
+    authorize :wrangling
+
+    wrangler = User.find_by!(login: params[:id])
+    wrangled_tags = Tag
+      .where(last_wrangler: wrangler)
+      .limit(ArchiveConfig.WRANGLING_REPORT_LIMIT)
+      .includes(:merger, :parents)
+    results = [%w[Name Last\ Updated Type Merger Fandoms Unwrangleable]]
+    wrangled_tags.find_each(order: :desc) do |tag|
+      merger = tag.merger&.name || ""
+      fandoms = tag.parents.filter_map { |parent| parent.name if parent.is_a?(Fandom) }.join(", ")
+      results << [tag.name, tag.updated_at, tag.type, merger, fandoms, tag.unwrangleable]
     end
-    @counts[:UnsortedTag] = Rails.cache.fetch("/wrangler/counts/sidebar/UnsortedTag", race_condition_ttl: 10, expires_in: 1.hour) do
-      UnsortedTag.count
-    end
+    filename = "wrangled_tags_#{wrangler.login}_#{Time.now.utc.strftime('%Y-%m-%d-%H%M')}.csv"
+    send_csv_data(results, filename)
   end
 
   def create
+    authorize :wrangling if logged_in_as_admin?
+
     unless params[:tag_fandom_string].blank?
       names = params[:tag_fandom_string].gsub(/$/, ',').split(',').map(&:strip)
       fandoms = Fandom.where('name IN (?)', names)
@@ -82,6 +101,8 @@ class TagWranglersController < ApplicationController
   end
 
   def destroy
+    authorize :wrangling if logged_in_as_admin?
+
     wrangler = User.find_by(login: params[:id])
     assignment = WranglingAssignment.where(user_id: wrangler.id, fandom_id: params[:fandom_id]).first
     assignment.destroy

@@ -1,15 +1,38 @@
 <% content_for :message do %>
-  <p><%= t 'user_mailer.abuse_report.para1' %></p>
-  
   <p>
-    <%= style_bold(t 'user_mailer.abuse_report.url_para') %> <%= style_link(@url, @url) %>
+    <% if @username.present? %>
+      <%= t("mailer.general.greeting.informal.addressed_html", name: style_bold(@username)) %></p>
+    <% else %>
+      <%= t("mailer.general.greeting.informal.unaddressed") %>
   </p>
-  
-  <%= style_bold(t 'user_mailer.abuse_report.description_para') %>
-  <%= style_quote(@comment) %>
+  <% end %>
 
+  <p><%= t(".report_received") %></p>
+
+  <p><%= t(".resubmission") %></p>
+
+  <p><%= t(".copy.intro") %></p>
+
+  <p>
+    <%= style_metadata_label(t(".copy.url")) %><%= style_link(@url, @url) %>
+  </p>
+
+  <p>
+    <%# TODO: Remove to_plain_text when AO3-6519 is fixed. %>
+    <%= style_metadata_label(t(".copy.summary")) %><%= to_plain_text(raw(@summary)) %>
+  </p>
+
+  <p><%= style_metadata_label(t(".copy.comment")) %></p>
+  <p><%= style_quote(raw(strip_images(@comment, keep_src: true))) %></p>
+
+  <p><%= t(".thank_you") %></p>
+
+  <p>
+    <%= t("mailer.general.closing.formal") %><br />
+    <%= style_bold(t("mailer.general.signature.abuse_team")) %>
+  </p>
 <% end %>
 
 <% content_for :sent_at do %>
-  <%= Time.now.to_s(:time_for_mailers) %>
+  <%= l(Time.current) %>
 <% end %>

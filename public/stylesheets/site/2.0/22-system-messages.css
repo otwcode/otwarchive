@@ -29,7 +29,7 @@ div.error {
     border-radius: 0.25em;
 }
 
-.notice, .comment_notice, ul.notes, .caution, .error, .comment_error, .alert.flash {
+.notice, .comment_notice, .kudos_notice, ul.notes, .caution, .error, .comment_error, .kudos_error, .alert.flash {
   background: #d1e1ef;
   border: 1px solid #c2d2df;
   margin: 0.643em auto;
@@ -37,6 +37,7 @@ div.error {
   clear: right;
     box-shadow: inset 1px 1px 2px;
     border-radius: 0.25em;
+    word-wrap: break-word;
 }
 
 .caution {
@@ -45,13 +46,13 @@ div.error {
   border-color: #d89e36;
 }
 
-.error, .comment_error, .alert.flash {
+.error, .comment_error, .kudos_error, .alert.flash {
   background: #efd1d1;
   border-color: #900;
     box-shadow: 1px 1px 2px;
 }
 
-.notes {
+p.notes {
   clear: right;
 }
 
@@ -59,19 +60,28 @@ form .notice, form ul.notes {
     box-shadow: 0px 0 3px #fff;
 }
 
-ul.notes, .error ul, .alert.flash ul {
+.notice p {
+  margin: 0;
+  padding: 0.643em;
+}
+
+ul.notes, .error ul, .notice ul, .caution ul, .alert.flash ul {
   position: static;
   margin: auto 0.643em;
   padding: 0.25em 2.5em;
 }
 
-ul.notes li, .error ul li, .alert.flash ul li {
+ul.notes li, .error ul li, .notice ul li, .caution ul li, .alert.flash ul li {
   list-style-type: disc;
   padding-left: 1.5em;
 }
 
-span.error {
+p span.error, dt span.error, dd span.error {
   display: block;
+}
+
+dd.complex span.error {
+  display: inline-block;
 }
 
 /* contexts */
@@ -106,17 +116,17 @@ alert => yellow-orange to alert users of problems or planned downtime
 }
 
 .announcement p.submit {
-  bottom: -0.25em;
+  bottom: -1em;
   margin: 0;
   padding: 0;
   position: absolute;
   right: 1em;
+  z-index: 1;
 }
 
-.announcement input[type="submit"], .announcement .action {
+.announcement .action {
   background: #fff none;
   border: 1px solid #bbb;
-  font-size: 0.875em;
   padding: 0.25em 0.5em;
     border-radius: 2em;
 }

@@ -1,9 +1,9 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe WorkSearchForm, work_search: true do
   describe "#process_options" do
     it "removes blank options" do
-      options = { foo: nil, bar: '', baz: false, boo: true }
+      options = { foo: nil, bar: "", baz: false, boo: true }
       searcher = WorkSearchForm.new(options)
       expect(searcher.options.keys).to include(:boo)
       expect(searcher.options.keys).not_to include(:foo, :bar, :baz)
@@ -108,6 +108,14 @@ describe WorkSearchForm, work_search: true do
         expect(searcher.options[:sort_direction]).to eq("desc")
       end
     end
+
+    context "when sorting by field without pretty name" do
+      it "displays the field name in search summary" do
+        options = { sort_column: "expected_number_of_chapters", sort_direction: "desc" }
+        searcher = WorkSearchForm.new(options)
+        expect(searcher.summary).to eq("sort by: expected_number_of_chapters descending")
+      end
+    end
   end
 
   describe "searching" do
@@ -119,23 +127,23 @@ describe WorkSearchForm, work_search: true do
 
     let!(:work) do
       FactoryBot.create(:work,
-                         title: "There and back again",
-                         authors: [Pseud.find_by(name: "JRR Tolkien") || FactoryBot.create(:pseud, name: "JRR Tolkien")],
-                         summary: "An unexpected journey",
-                         fandom_string: "The Hobbit",
-                         character_string: "Bilbo Baggins",
-                         expected_number_of_chapters: 3,
-                         complete: false)
+                        title: "There and back again",
+                        authors: [Pseud.find_by(name: "JRR Tolkien") || FactoryBot.create(:pseud, name: "JRR Tolkien")],
+                        summary: "An unexpected journey",
+                        fandom_string: "The Hobbit",
+                        character_string: "Bilbo Baggins",
+                        expected_number_of_chapters: 3,
+                        complete: false)
     end
 
     let!(:second_work) do
       FactoryBot.create(:work,
-                         title: "Harry Potter and the Sorcerer's Stone",
-                         authors: [Pseud.find_by(name: "JK Rowling") || FactoryBot.create(:pseud, name: "JK Rowling")],
-                         summary: "Mr and Mrs Dursley, of number four Privet Drive...",
-                         fandom_string: "Harry Potter",
-                         character_string: "Harry Potter, Ron Weasley, Hermione Granger",
-                         language_id: language.id)
+                        title: "Harry Potter and the Sorcerer's Stone",
+                        authors: [Pseud.find_by(name: "JK Rowling") || FactoryBot.create(:pseud, name: "JK Rowling")],
+                        summary: "Mr and Mrs Dursley, of number four Privet Drive...",
+                        fandom_string: "Harry Potter",
+                        character_string: "Harry Potter, Ron Weasley, Hermione Granger",
+                        language_id: language.id)
     end
 
     before(:each) do
@@ -143,8 +151,8 @@ describe WorkSearchForm, work_search: true do
       second_work.collection_ids = [collection.id]
       second_work.save
 
-      work.stat_counter.update_attributes(kudos_count: 1200, comments_count: 120, bookmarks_count: 12)
-      second_work.stat_counter.update_attributes(kudos_count: 999, comments_count: 99, bookmarks_count: 9)
+      work.stat_counter.update!(kudos_count: 1200, comments_count: 120, bookmarks_count: 12)
+      second_work.stat_counter.update!(kudos_count: 999, comments_count: 99, bookmarks_count: 9)
       run_all_indexing_jobs
     end
 
@@ -174,6 +182,64 @@ describe WorkSearchForm, work_search: true do
       results = WorkSearchForm.new(query: "\"Season/Series 99\"").search_results
       expect(results).not_to include work
       expect(results).to include second_work
+    end
+
+    describe "when searching using user_ids in the query" do
+      let(:user_id) { second_work.user_ids.first }
+
+      context "when the work is in an anonymous collection" do
+        let(:collection) { create(:anonymous_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is in an unrevealed collection" do
+        let(:collection) { create(:unrevealed_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is neither anonymous or unrevealed" do
+        it "includes the work" do
+          work_search = WorkSearchForm.new(query: "user_ids: #{user_id}")
+          expect(work_search.search_results).to include second_work
+        end
+      end
+    end
+
+    describe "when searching using pseud_ids in the query" do
+      let(:pseud_id) { second_work.pseud_ids.first }
+
+      context "when the work is in an anonymous collection" do
+        let(:collection) { create(:anonymous_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is in an unrevealed collection" do
+        let(:collection) { create(:unrevealed_collection) }
+
+        it "doesn't include the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).not_to include second_work
+        end
+      end
+
+      context "when the work is neither anonymous or unrevealed" do
+        it "includes the work" do
+          work_search = WorkSearchForm.new(query: "pseud_ids: #{pseud_id}")
+          expect(work_search.search_results).to include second_work
+        end
+      end
     end
 
     describe "when searching unposted works" do
@@ -242,7 +308,7 @@ describe WorkSearchForm, work_search: true do
     end
 
     describe "when searching by language" do
-      let(:unused_language) { create(:language, short: "tlh") }
+      let(:unused_language) { create(:language, name: "unused", short: "tlh") }
 
       it "should only return works in that language" do
         # "Language" dropdown, with short names
@@ -390,10 +456,10 @@ describe WorkSearchForm, work_search: true do
 
     describe "when searching by word count" do
       before(:each) do
-        work.chapters.first.update_attributes(content: "This is a work with a word count of ten.", posted: true)
+        work.chapters.first.update!(content: "This is a work with a word count of ten.")
         work.save
 
-        second_work.chapters.first.update_attributes(content: "This is a work with a word count of fifteen which is more than ten.", posted: true)
+        second_work.chapters.first.update!(content: "This is a work with a word count of fifteen which is more than ten.")
         second_work.save
 
         run_all_indexing_jobs
@@ -506,14 +572,14 @@ describe WorkSearchForm, work_search: true do
   describe "sorting results" do
     describe "by authors" do
       before do
-        %w(21st_wombat 007aardvark).each do |pseud_name|
+        %w[21st_wombat 007aardvark].each do |pseud_name|
           create(:work, authors: [create(:pseud, name: pseud_name)])
         end
         run_all_indexing_jobs
       end
 
       it "returns all works in the correct order of sortable pseud values" do
-        sorted_pseuds_asc = ["007aardvark", "21st_wombat"]
+        sorted_pseuds_asc = %w[007aardvark 21st_wombat]
 
         work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on")
         expect(work_search.search_results.map(&:authors_to_sort_on)).to eq sorted_pseuds_asc
@@ -527,25 +593,41 @@ describe WorkSearchForm, work_search: true do
     end
 
     describe "by authors who changes username" do
-      let!(:user_1) { create(:user, login: "cioelle") }
-      let!(:user_2) { create(:user, login: "ruth") }
+      let!(:user1) { create(:user, login: "cioelle") }
+      let!(:user2) { create(:user, login: "ruth") }
 
       before do
-        create(:work, authors: [user_1.default_pseud])
-        create(:work, authors: [user_2.default_pseud])
+        create(:work, authors: [user1.default_pseud])
+        create(:work, authors: [user2.default_pseud])
         run_all_indexing_jobs
       end
 
       it "returns all works in the correct order of sortable pseud values" do
         work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on")
-        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq ["cioelle", "ruth"]
+        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq %w[cioelle ruth]
 
-        user_1.login = "yabalchoath"
-        user_1.save!
+        user1.login = "yabalchoath"
+        user1.save!
         run_all_indexing_jobs
 
         work_search = WorkSearchForm.new(sort_column: "authors_to_sort_on")
-        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq ["ruth", "yabalchoath"]
+        expect(work_search.search_results.map(&:authors_to_sort_on)).to eq %w[ruth yabalchoath]
+      end
+    end
+
+    it "keeps sort order of tied works the same when work info is updated" do
+      user = FactoryBot.create(:user)
+      work1 = FactoryBot.create(:work, authors: [user.default_pseud])
+      work2 = FactoryBot.create(:work, authors: [user.default_pseud])
+      q = WorkQuery.new(sort_column: "authors_to_sort_on", sort_direction: "desc")
+
+      run_all_indexing_jobs
+      res = q.search_results.map(&:id)
+
+      [work1, work2].each do |work|
+        work.update!(summary: "Updated")
+        run_all_indexing_jobs
+        expect(q.search_results.map(&:id)).to eq(res)
       end
     end
   end

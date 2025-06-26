@@ -5,7 +5,7 @@
 <%= error_messages_for :work %>
 <div class="notice">
   <p class="important">
-    <%= ts("Please note! Fanfiction.net and Quotev.com do not allow imports from their sites.") %>
+    <%= ts("Please note! Fanfiction.net, Wattpad.com, and Quotev.com do not allow imports from their sites.") %>
   </p>
   <p><%= ts("You might find the #{ link_to(ts("Import FAQ"), archive_faqs_path + "/posting-and-editing#importwork") } useful.").html_safe %></p>
 </div>
@@ -46,7 +46,7 @@
       <dd class="required">
         <select id="language_id" name="language_id">
           <option value=""><%= ts("Please select a language") %></option>
-          <%= options_from_collection_for_select(sorted_languages, :id, :name, @language_id) %>
+          <%= options_for_select(language_options_for_select(sorted_languages, "id"), @language_id) %>
         </select>
       </dd>
       <dt><%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt> 
@@ -93,15 +93,7 @@
         <ul>
           <li>
             <%= check_box_tag "post_without_preview" %>
-            <% if current_user.archivist %>
-              <%= label_tag "post_without_preview", ts("Post without previewing (STRONGLY recommended if importing for others!)") %>
-            <% else %>
-              <%= label_tag "post_without_preview", ts("Post without previewing.") %>
-            <% end %>
-          </li>
-          <li>
-            <%= check_box_tag "restricted" %>
-            <%= label_tag "restricted", ts("Lock all imports to registered users only.") %>
+            <%= label_tag "post_without_preview", ts("Post without previewing.") %>
           </li>
         </ul>
       </dd>
@@ -130,6 +122,51 @@
     </dl>
   </fieldset>
 
+  <fieldset>
+    <legend><%= t("works.permissions.privacy") %></legend>
+    <h3 class="landmark heading"><%= t("works.permissions.privacy") %></h3>
+    <dl>
+      <dt class="restricted">
+        <%= check_box_tag "restricted" %>
+      </dt>
+      <dd class="restricted">
+        <%= label_tag "restricted", t("works.permissions.visibility.import_works_restricted") %>
+        <%= link_to_help "registered-users" %>
+      </dd>
+
+      <dt class="moderated comments">
+        <%= check_box_tag "moderated_commenting_enabled" %>
+      </dt>
+      <dd class="moderated comments">
+        <%= label_tag :moderated_commenting_enabled, t("comments.commentable.permissions.moderated_commenting.enable") %>
+        <%= link_to_help "comments-moderated" %>
+      </dd>
+
+      <dt class="permissions comments">
+        <%= t("comments.commentable.permissions.options.multiple_works_label") %>
+        <%= link_to_help "who-can-comment-on-this-work" %>
+      </dt>
+      <dd class="permissions comments">
+        <fieldset>
+          <ul>
+            <li>
+              <%= radio_button_tag "comment_permissions", "enable_all" %>
+              <%= label_tag "comment_permissions_enable_all", t("comments.commentable.permissions.options.enable_all") %>
+            </li>
+            <li>
+              <%= radio_button_tag "comment_permissions", "disable_anon", true %>
+              <%= label_tag "comment_permissions_disable_anon", t("comments.commentable.permissions.options.disable_anon") %>
+            </li>
+            <li>
+              <%= radio_button_tag "comment_permissions", "disable_all" %>
+              <%= label_tag "comment_permissions_disable_all", t("comments.commentable.permissions.options.disable_all") %>
+            </li>
+          </ul>
+        </fieldset>
+      </dd>
+    </dl>
+  </fieldset>
+
   <%= render :partial => 'work_form_tags', locals: { include_blank: true, import: true } %>
 
   <fieldset>
@@ -145,6 +182,11 @@
 
   <fieldset>
     <legend><%= ts("Submit") %></legend>
+    <p class="notice">
+      <%= t(".post_notice_html",
+            content_policy_link: link_to(t(".content_policy"), content_path),
+            tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
+    </p>
     <p class="submit actions">
       <%= submit_tag ts("Import") %>
     </p>

@@ -1,59 +1,58 @@
-<div id="greeting">
+<nav id="greeting" aria-label="<%= t(".nav.label") %>">
   <% if logged_in? %>
-    <h3 class="landmark heading"><%= ts('User Navigation', key: 'header') %></h3>
-    <ul class="user navigation actions" role="navigation">
+    <ul class="user navigation actions">
       <li class="dropdown">
-        <%= link_to ts("Hi, %{current_user}!", :current_user => current_user.login, key: 'header'), user_path(current_user) %>
-        <ul class="menu" role="menu">
-          <li><%= span_if_current ts('My Dashboard', key: 'header'), user_path(current_user) %></li>
+        <%= link_to t(".nav.greeting", current_user: current_user.login), user_path(current_user) %>
+        <ul class="menu">
+          <li><%= link_to t(".nav.dashboard"), user_path(current_user) %></li>
           <% if @current_user_subscriptions_count > 0 %>
-            <li><%= span_if_current ts('My Subscriptions', key: 'header'), user_subscriptions_path(current_user) %></li>
+            <li><%= link_to t(".nav.subscriptions"), user_subscriptions_path(current_user) %></li>
           <% end %>
           <% if @current_user_visible_work_count > 0 %>
-            <li><%= span_if_current ts("My Works", key: 'header'), user_works_path(@current_user) %></li>
+            <li><%= link_to t(".nav.works"), user_works_path(@current_user) %></li>
           <% end %>
           <% if @current_user_bookmarks_count > 0 %>
-            <li><%= span_if_current ts("My Bookmarks", key: 'header'), user_bookmarks_path(current_user) %></li>
+            <li><%= link_to t(".nav.bookmarks"), user_bookmarks_path(current_user) %></li>
           <% end %>
           <% if @current_user_owned_collections_count > 0 %>
-            <li><%= span_if_current ts("My Collections", key: 'header'), user_collections_path(current_user) %></li>
+            <li><%= link_to t(".nav.collections"), user_collections_path(current_user) %></li>
           <% end %>
           <% if @current_user_challenge_signups_count > 0 %>
-            <li><%= span_if_current ts("My Sign-ups", key: 'header'), user_signups_path(current_user) %></li>
+            <li><%= link_to t(".nav.sign_ups"), user_signups_path(current_user) %></li>
           <% end %>
           <% if @current_user_offer_assignments > 0 %>
-            <li><%= span_if_current ts("My Assignments", key: 'header'), user_assignments_path(current_user) %></li>
+            <li><%= link_to t(".nav.assignments"), user_assignments_path(current_user) %></li>
           <% end %>
           <% if @current_user.preference.try(:history_enabled?) %>
-            <li><%= span_if_current ts('My History', key: 'header'), user_readings_path(current_user) %></li>
+            <li><%= link_to t(".nav.history"), user_readings_path(current_user) %></li>
           <% end %>
-          <li><%= span_if_current ts('My Preferences', key: 'header'), user_preferences_path(current_user) %></li>
-          <% if permit?('opendoors') %>
-            <li><%= span_if_current ts('Open Doors', key: 'header'), opendoors_tools_path %></li>
+          <li><%= link_to t(".nav.preferences"), user_preferences_path(current_user) %></li>
+          <% if permit?("opendoors") %>
+            <li><%= link_to t(".nav.open_doors"), opendoors_tools_path %></li>
           <% end %>
           <% if current_user.is_tag_wrangler? %>
-            <li><%= span_if_current ts('Tag Wrangling', key: 'header'), tag_wrangler_path(current_user) %></li>
+            <li><%= link_to t(".nav.tag_wrangling"), tag_wrangler_path(current_user) %></li>
           <% end %>
         </ul>
       </li>
       <li class="dropdown">
-      	<%= link_to ts('Post', key: 'header'), new_work_path %>
-      	<ul class="menu" role="menu">
-          <li><%= link_to ts('New Work', key: 'header'), new_work_path %></li>
-          <li><%= link_to ts('Import Work', key: 'header'), new_work_path(:import => "true") %></li>
+        <%= link_to t(".nav.post"), new_work_path %>
+        <ul class="menu">
+          <li><%= link_to t(".nav.new_work"), new_work_path %></li>
+          <li><%= link_to t(".nav.import"), new_work_path(import: "true") %></li>
           <% if @current_user_unposted_works_size > 0 %>
-            <li><%= span_if_current ts('From Draft', key: 'header'), drafts_user_works_path(@current_user) %></li>
+            <li><%= link_to t(".nav.post_draft"), drafts_user_works_path(@current_user) %></li>
           <% end %>
-      	</ul>
+        </ul>
       </li>
-      <li><%= link_to ts('Log Out', key: 'header'), destroy_user_session_path, method: :delete %></li>
+      <li><%= link_to t(".nav.log_out"), destroy_user_session_path, method: :delete %></li>
     </ul>
 
     <% elsif logged_in_as_admin? %>
-      <ul class="user navigation actions" role="navigation">
-        <li><%= link_to ts("Hi, %{name}!", name: current_admin.login, key: 'header'), admins_path %></li>
-        <li><%= link_to ts('Log Out', key: 'header'), destroy_admin_session_path, method: :delete %></li>
+      <ul class="user navigation actions">
+        <li><%= link_to t(".nav.greeting", current_user: current_admin.login), admins_path %></li>
+        <li><%= link_to t(".nav.log_out"), destroy_admin_session_path, method: :delete %></li>
       </ul>
     <% end %>
   <p class="icon"><%= icon_display(current_user) %></p>
-</div>
+</nav>

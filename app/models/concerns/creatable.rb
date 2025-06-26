@@ -132,13 +132,13 @@ module Creatable
     names = pseud_names.split(",").reject(&:blank?).map(&:strip)
 
     names.each do |name|
-      possible_pseuds = Pseud.parse_byline(name)
+      possible_pseuds = Pseud.parse_byline_ambiguous(name)
 
-      if possible_pseuds.size > 1
-        possible_pseuds = Pseud.parse_byline(name, assume_matching_login: true)
-      end
-
-      pseud = possible_pseuds.first
+      pseud = if possible_pseuds.size > 1
+                Pseud.parse_byline(name)
+              else
+                possible_pseuds.first
+              end
 
       if pseud
         creatorship = creatorships.find_or_initialize_by(pseud: pseud)
@@ -219,5 +219,10 @@ module Creatable
   def user_is_owner_or_invited?(user)
     return false unless user.is_a?(User)
     creatorships.for_user(user).exists?
+  end
+
+  # Get all orphan_account pseuds that (co-)created this creatable, excluding the orphan_account's default_pseud
+  def orphan_pseuds
+    self.pseuds.where(user_id: User.orphan_account.id, is_default: false)
   end
 end

@@ -20,15 +20,6 @@ When /^I take a screenshot$/ do
   screenshot_and_save_page
 end
 
-# We set the default domain to example.org.
-# The phantomjs drive fetchs pages directly so some tests will go to example.org
-# setting this whitelist stops this happening which is in itself a good thing
-# and makes the network traces easier to read as there are less calls to twitter etc.
-
-When /^I limit myself to the Archive$/ do
-  page.driver.browser.url_whitelist = ['http://127.0.0.1']
-end
-
 When /^I clear the network traffic$/ do
   page.driver.clear_network_traffic
 end
@@ -44,6 +35,12 @@ When /^(?:|I )press "([^"]*)"(?: within "([^"]*)")?$/ do |button, selector|
 end
 
 When /^(?:|I )follow "([^"]*)"(?: within "([^"]*)")?$/ do |link, selector|
+  with_scope(selector) do
+    click_link(link)
+  end
+end
+
+When /^(?:|I )follow '([^']*)'(?: within "([^"]*)")?$/ do |link, selector|
   with_scope(selector) do
     click_link(link)
   end
@@ -108,17 +105,6 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do 
   end
 end
 
-Then /^visiting "([^"]*)" should fail with a not found error$/ do |path|
-  expect {
-    visit path
-  }.to raise_error(ActiveRecord::RecordNotFound)
-end
-
-Then /^visiting "([^"]*)" should fail with "([^"]*)"$/ do |path, flash_error|
-  visit path
-  step %{I should see "#{flash_error}" within ".flash"}
-end
-
 Then /^(?:|I )should see JSON:$/ do |expected_json|
   require 'json'
   expected = JSON.pretty_generate(JSON.parse(expected_json))
@@ -135,31 +121,6 @@ end
 Then /^(?:|I )should see the raw text "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
     page.body.should =~ /#{Regexp.escape(text)}/m
-  end
-end
-
-Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)") on my work?$/ do |text, selector|
-  my_work = User.current_user.works.first.id
-  selector = "#work_#{my_work}"
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_content(text)
-    else
-      assert page.has_content?(text)
-    end
-  end
-end
-
-Then /^(?:|I )should not see "([^"]*)"(?: within "([^"]*)") on the other work?$/ do |text, selector|
-  other_user = User.find_by(login: "mywarning1")
-  other_work = other_user.works.first.id
-  selector = "#work_#{other_work}"
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_no_content(text)
-    else
-      assert page.has_no_content?(text)
-    end
   end
 end
 
@@ -253,7 +214,7 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ 
   end
 end
 
-Then /^the "(.*?)" checkbox(?: within "(.*?)")? should be checked( and disabled)?$/ do |label, selector, disabled|
+Then /^the "(.*?)" (checkbox|radio button)(?: within "(.*?)")? should be checked( and disabled)?$/ do |label, _input_type, selector, disabled|
   with_scope(selector) do
     assert has_checked_field?(label, disabled: disabled.present?)
   end
@@ -276,6 +237,10 @@ end
 
 Then /^(?:|The )url should include (.+)$/ do |url|
   current_url.should include(url)
+end
+
+Then "the url should not include {string}" do |url|
+  expect(current_url).not_to include(url)
 end
 
 Then /^(?:|I )should have the following query string:$/ do |expected_pairs|

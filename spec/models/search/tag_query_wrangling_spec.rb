@@ -63,7 +63,7 @@ describe TagQuery, tag_search: true do
       expect(results).to contain_exactly("slice of life", "horror")
 
       # draft gets posted
-      draft.update_attributes(posted: true)
+      draft.update!(posted: true)
       run_all_indexing_jobs
 
       results = TagQuery.new(type: "Fandom", has_posted_works: true).search_results.map(&:name)

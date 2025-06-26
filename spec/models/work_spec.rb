@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Work do
   # see lib/collectible_spec for collection-related tests
@@ -10,16 +10,17 @@ describe Work do
   context "when posted" do
     it "posts the first chapter" do
       work = create(:work)
-      work.first_chapter.posted.should == true
+      expect(work.first_chapter.posted).to eq true
     end
   end
 
   context "create_stat_counter" do
     it "creates a stat counter for that work id" do
-      expect {
+      expect do
         @work = build(:work)
         @work.save!
-      }.to change{ StatCounter.all.count }.by(1)
+      end.to change { StatCounter.all.count }
+        .by(1)
       expect(StatCounter.where(work_id: @work.id)).to exist
     end
   end
@@ -27,14 +28,12 @@ describe Work do
   context "invalid title" do
     it { expect(build(:work, title: nil)).to be_invalid }
 
-    let(:too_short) { ArchiveConfig.TITLE_MIN - 1 }
     it "cannot be shorter than ArchiveConfig.TITLE_MIN" do
-      expect(build(:work, title: Faker::Lorem.characters(too_short))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.TITLE_MIN - 1))).to be_invalid
     end
 
-    let(:too_long) { ArchiveConfig.TITLE_MAX + 1 }
     it "cannot be longer than ArchiveConfig.TITLE_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.TITLE_MAX + 1))).to be_invalid
     end
   end
 
@@ -50,10 +49,10 @@ describe Work do
 
     let(:too_short) { ArchiveConfig.TITLE_MIN - 1 }
     it "errors if the title without leading spaces is shorter than #{ArchiveConfig.TITLE_MIN}" do
-      expect {
+      expect do
         @work = create(:work, title: "     #{too_short}")
         @work.reload
-      }.to raise_error(ActiveRecord::RecordInvalid,"Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
+      end.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Title must be at least #{ArchiveConfig.TITLE_MIN} characters long without leading spaces.")
     end
 
     # Reset the min characters in the title, so that the factory is valid
@@ -63,23 +62,20 @@ describe Work do
   end
 
   context "invalid summary" do
-    let(:too_long) { ArchiveConfig.SUMMARY_MAX + 1 }
     it "cannot be longer than ArchiveConfig.SUMMARY_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.SUMMARY_MAX + 1))).to be_invalid
     end
   end
 
   context "invalid notes" do
-    let(:too_long) { ArchiveConfig.NOTES_MAX + 1 }
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.NOTES_MAX + 1))).to be_invalid
     end
   end
 
   context "invalid endnotes" do
-    let(:too_long) { ArchiveConfig.NOTES_MAX + 1 }
     it "cannot be longer than ArchiveConfig.NOTES_MAX" do
-      expect(build(:work, title: Faker::Lorem.characters(too_long))).to be_invalid
+      expect(build(:work, title: Faker::Lorem.characters(number: ArchiveConfig.NOTES_MAX + 1))).to be_invalid
     end
   end
 
@@ -111,12 +107,46 @@ describe Work do
     end
   end
 
+  context "invalid rating" do
+    it "cannot have more than one rating" do
+      expect(build(:work, rating_string: "Not Rated, General Audiences")).to be_invalid
+    end
+  end
+
   context "validate authors" do
     let(:invalid_work) { build(:no_authors) }
 
     it "does not save if author is blank" do
       expect(invalid_work.save).to be_falsey
       expect(invalid_work.errors[:base]).to include "Work must have at least one creator."
+    end
+  end
+
+  describe "reindexing" do
+    let!(:work) { create(:work) }
+
+    context "when draft status is changed" do
+      it "enqueues tags for reindex" do
+        expect do
+          work.update!(posted: false)
+        end.to add_to_reindex_queue(work.fandoms.last, :main)
+      end
+    end
+
+    context "when hidden by an admin" do
+      it "enqueues tags for reindex" do
+        expect do
+          work.update!(hidden_by_admin: true)
+        end.to add_to_reindex_queue(work.fandoms.last, :main)
+      end
+    end
+
+    context "when put in an unrevealed collection" do
+      it "enqueues tags for reindex" do
+        expect do
+          work.update!(in_unrevealed_collection: true)
+        end.to add_to_reindex_queue(work.fandoms.last, :main)
+      end
     end
   end
 
@@ -383,45 +413,44 @@ describe Work do
     end
   end
 
-  describe "new recipients virtual attribute"  do
+  describe "new gifts virtual attribute" do
+    let(:recipient1) { create(:user).pseuds.first.name }
+    let(:recipient2) { create(:user).pseuds.first.name }
+    let(:recipient3) { create(:user).pseuds.first.name }
 
-    before(:each) do
-      @recipient1 = create(:user)
-      @recipient2 = create(:user)
-      @recipient3 = create(:user)
+    let(:work) { build(:work) }
 
-      @work = build(:work)
-      @work.recipients = @recipient1.pseuds.first.name + "," + @recipient2.pseuds.first.name
+    before do
+      work.recipients = "#{recipient1},#{recipient2}"
     end
 
-    it "should be the same as recipients when they are first added" do
-      expect(@work.new_recipients).to eq(@work.recipients)
+    it "contains gifts for the same recipients when they are first added" do
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient1, recipient2])
     end
 
-    it "should only contain the new recipient if replacing the previous recipient" do
-      @work.recipients = @recipient3.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient3.pseuds.first.name)
+    it "only contains a gift for the new recipient if replacing the previous recipients" do
+      work.recipients = recipient3
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient3])
     end
 
-    it "simple assignment should work" do
-      @work.recipients = @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
+    it "simple assignment works" do
+      work.recipients = recipient2
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient2])
     end
 
-    it "recipients should be unique" do
-      @work.recipients = @recipient2.pseuds.first.name + "," + @recipient2.pseuds.first.name
-      expect(@work.new_recipients).to eq(@recipient2.pseuds.first.name)
+    it "only contains one gift if the same recipient is entered twice" do
+      work.recipients = "#{recipient2},#{recipient2}"
+      expect(work.new_gifts.collect(&:recipient)).to eq([recipient2])
     end
   end
 
   describe "#find_by_url" do
     it "should find imported works with various URL formats" do
-      [
-        'http://foo.com/bar.html',
-        'http://foo.com/bar',
-        'http://lj-site.com/bar/foo?color=blue',
-        'http://www.foo.com/bar'
-      ].each do |url|
+      %w[http://foo.com/bar.html
+         http://foo.com/bar
+         http://lj-site.com/bar/foo?color=blue
+         https://www.lj-site.com/bar/foo?color=blue
+         http://www.foo.com/bar https://www.foo.com/bar].each do |url|
         work = create(:work, imported_from_url: url)
         expect(Work.find_by_url(url)).to eq(work)
         work.destroy
@@ -430,9 +459,9 @@ describe Work do
 
     it "should not mix up imported works with similar URLs or significant query parameters" do
       {
-        'http://foo.com/12345' => 'http://foo.com/123',
-        'http://efiction-site.com/viewstory.php?sid=123' => 'http://efiction-site.com/viewstory.php?sid=456',
-        'http://www.foo.com/i-am-something' => 'http://foo.com/i-am-something/else'
+        "http://foo.com/12345" => "http://foo.com/123",
+        "http://efiction-site.com/viewstory.php?sid=123" => "http://efiction-site.com/viewstory.php?sid=456",
+        "http://www.foo.com/i-am-something" => "http://foo.com/i-am-something/else"
       }.each do |import_url, find_url|
         work = create(:work, imported_from_url: import_url)
         expect(Work.find_by_url(find_url)).to_not eq(work)
@@ -442,6 +471,18 @@ describe Work do
 
     it "should find works imported with irrelevant query parameters" do
       work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
+      expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
+      work.destroy
+    end
+
+    it "finds works imported with HTTP protocol and irrelevant query parameters" do
+      work = create(:work, imported_from_url: "http://lj-site.com/thing1?style=mine")
+      expect(Work.find_by_url("https://lj-site.com/thing1?style=other")).to eq(work)
+      work.destroy
+    end
+
+    it "finds works imported with HTTPS protocol and irrelevant query parameters" do
+      work = create(:work, imported_from_url: "https://lj-site.com/thing1?style=mine")
       expect(Work.find_by_url("http://lj-site.com/thing1?style=other")).to eq(work)
       work.destroy
     end
@@ -464,8 +505,28 @@ describe Work do
 
     it "marks a work incomplete when it's no longer completed" do
       work = create(:work, expected_number_of_chapters: 1)
-      work.update_attributes!(expected_number_of_chapters: nil)
+      work.update!(expected_number_of_chapters: nil)
       expect(work.reload.complete).to be_falsey
+    end
+  end
+
+  describe "#wip_length" do
+    it "updating chapter count via wip_length sets a sensible expected_number_of_chapters value" do
+      work = create(:work)
+      create(:chapter, work: work)
+      work.reload
+
+      work.wip_length = 1
+      expect(work.expected_number_of_chapters).to be_nil
+      expect(work.wip_length).to eq("?")
+
+      work.wip_length = 2
+      expect(work.expected_number_of_chapters).to eq(2)
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
+
+      work.wip_length = 3
+      expect(work.expected_number_of_chapters).to eq(3)
+      expect(work.wip_length).to eq(work.expected_number_of_chapters)
     end
   end
 
@@ -479,8 +540,9 @@ describe Work do
         @admin_setting.update_attribute(:hide_spam, true)
       end
       it "automatically hides spam works and sends an email" do
-        expect { @work.update_attributes!(spam: true) }.
-          to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect { @work.update!(spam: true) }
+          .to change { ActionMailer::Base.deliveries.count }
+          .by(1)
         expect(@work.reload.hidden_by_admin).to be_truthy
         expect(ActionMailer::Base.deliveries.last.subject).to eq("[AO3] Your work was hidden as spam")
       end
@@ -490,8 +552,8 @@ describe Work do
         @admin_setting.update_attribute(:hide_spam, false)
       end
       it "does not automatically hide spam works and does not send an email" do
-        expect { @work.update_attributes!(spam: true) }.
-          not_to change { ActionMailer::Base.deliveries.count }
+        expect { @work.update!(spam: true) }
+          .not_to change { ActionMailer::Base.deliveries.count }
         expect(@work.reload.hidden_by_admin).to be_falsey
       end
     end
@@ -507,8 +569,8 @@ describe Work do
       # be automatically approved), we need to make sure that User.current_user
       # is not nil.
       User.current_user = creator
-      co_creator.preference.update(allow_cocreator: true)
-      no_co_creator.preference.update(allow_cocreator: false)
+      co_creator.preference.update!(allow_cocreator: true)
+      no_co_creator.preference.update!(allow_cocreator: false)
     end
 
     it "allows normal users to invite others as chapter co-creators" do
@@ -548,9 +610,10 @@ describe Work do
       before { work.reload }
 
       it "raises an error" do
-        expect { work.remove_author(to_remove) }.to raise_exception(
-          "Sorry, we can't remove all creators of a work."
-        )
+        expect { work.remove_author(to_remove) }
+          .to raise_exception(
+            "Sorry, we can't remove all creators of a work."
+          )
       end
     end
 
@@ -570,6 +633,58 @@ describe Work do
         work.remove_author(to_remove)
         expect(work.pseuds.reload).to contain_exactly(other.default_pseud)
         expect(solo_chapter.pseuds.reload).to contain_exactly(other.default_pseud)
+      end
+    end
+  end
+
+  describe "#destroy" do
+    let(:work) { create(:work) }
+
+    it "does not save an original creator record" do
+      expect { work.destroy }
+        .not_to change { WorkOriginalCreator.count }
+    end
+
+    context "when an original creator exists" do
+      let!(:original_creator) { create(:work_original_creator, work: work) }
+
+      it "deletes the original creator" do
+        work.destroy
+        expect { original_creator.reload }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe "#allow_collection_invitation?" do
+    let(:creator1) { create(:user) }
+    let(:creator2) { create(:user) }
+    let(:work) { create(:work, authors: [creator1.default_pseud, creator2.default_pseud]) }
+
+    context "when all creators allow collection invitations" do
+      before do
+        creator1.preference.update!(allow_collection_invitation: true)
+        creator2.preference.update!(allow_collection_invitation: true)
+      end
+
+      it "returns true" do
+        expect(work.allow_collection_invitation?).to be true
+      end
+    end
+
+    context "when all creators disallow collection invitations" do
+      it "returns false" do
+        expect(work.allow_collection_invitation?).to be false
+      end
+    end
+
+    context "when creators have a mix of collection invitation preferences" do
+      before do
+        creator1.preference.update!(allow_collection_invitation: true)
+      end
+
+      it "returns true" do
+        expect(work.allow_collection_invitation?).to be true
       end
     end
   end

@@ -1,5 +1,4 @@
 class ChallengeSignup < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
   include TagTypeHelper
 
   # -1 represents all matching
@@ -102,69 +101,30 @@ class ChallengeSignup < ApplicationRecord
   # make sure that tags are unique across each group of prompts
   validate :unique_tags
   def unique_tags
-    if (challenge = collection.challenge)
-      errors_to_add = []
-      %w(prompts requests).each do |prompt_type|
-        restriction = case prompt_type
-          when "prompts"
-          then challenge.prompt_restriction
-          when "requests"
-          then challenge.request_restriction
+    return unless (challenge = collection.challenge)
+
+    challenge.class::PROMPT_TYPES.each do |prompt_type|
+      # requests => request_restriction, offers => offer_restriction
+      restriction = challenge.send("#{prompt_type.singularize}_restriction")
+
+      next unless restriction
+
+      prompts = send(prompt_type)
+
+      TagSet::TAG_TYPES.each do |tag_type|
+        next unless restriction.require_unique?(tag_type)
+
+        all_tags_used = prompts.flat_map do |prompt|
+          prompt.tag_set.send("#{tag_type}_taglist")
         end
 
-        if restriction
-          prompts = instance_variable_get("@#{prompt_type}") || self.send("#{prompt_type}")
-          TagSet::TAG_TYPES.each do |tag_type|
-            if restriction.send("require_unique_#{tag_type}")
-              all_tags_used = []
-              prompts.each do |prompt|
-                new_tags = prompt.tag_set.send("#{tag_type}_taglist")
-                unless (all_tags_used & new_tags).empty?
-                  errors_to_add << ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.",
-                                      prompt_type: prompt_type.singularize, tag_type: tag_type_label_name(tag_type).downcase)
-                  break
-                end
-                all_tags_used += new_tags
-              end
-            end
-          end
+        unless all_tags_used.size == all_tags_used.uniq.size
+          errors.add(:base, ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.",
+                               prompt_type: prompt_type.singularize, tag_type: tag_type_label_name(tag_type).downcase))
         end
-      end
-      if self.collection.challenge_type == "GiftExchange"
-      %w(offers).each do |prompt_type|
-        restriction = case prompt_type
-          when "offers"
-          then challenge.offer_restriction
-        end
-
-        if restriction
-          prompts = instance_variable_get("@#{prompt_type}") || self.send("#{prompt_type}")
-          TagSet::TAG_TYPES.each do |tag_type|
-            if restriction.send("require_unique_#{tag_type}")
-              all_tags_used = []
-              prompts.each do |prompt|
-                new_tags = prompt.tag_set.send("#{tag_type}_taglist")
-                unless (all_tags_used & new_tags).empty?
-                  errors_to_add << ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.",
-                                      prompt_type: prompt_type.singularize, tag_type: tag_type_label_name(tag_type).downcase)
-                  break
-                end
-                all_tags_used += new_tags
-              end
-            end
-          end
-        end
-      end
-      end
-
-
-      unless errors_to_add.empty?
-        # yuuuuuck :( but so much less ugly than define-method'ing these all
-        self.errors.add(:base, errors_to_add.join("</li><li>").html_safe)
       end
     end
   end
-
 
   # define "offers_num_allowed" etc here
   %w(offers requests).each do |prompt_type|
@@ -239,5 +199,4 @@ class ChallengeSignup < ApplicationRecord
 
     builder.build_potential_match
   end
-
 end

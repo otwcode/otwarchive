@@ -1,33 +1,46 @@
-Otwarchive::Application.configure do
-  # Settings specified here will take precedence over those in config/environment.rb
+require "active_support/core_ext/integer/time"
 
-  # The test environment is used exclusively to run your application's
-  # test suite.  You never need to work with it otherwise.  Remember that
-  # your test database is "scratch space" for the test suite and is wiped
-  # and recreated between test runs.  Don't rely on the data there!
-  config.cache_classes = true
-  config.eager_load = true
+# The test environment is used exclusively to run your application's
+# test suite. You never need to work with it otherwise. Remember that
+# your test database is "scratch space" for the test suite and is wiped
+# and recreated between test runs. Don't rely on the data there!
 
-  # Log error messages when you accidentally call methods on nil.
-  # config.whiny_nils = true
+Rails.application.configure do
+  # Settings specified here will take precedence over those in config/application.rb.
 
-  # Show full error reports and enable caching
-  config.consider_all_requests_local       = true
+  # While tests run files are not watched, reloading is not necessary.
+  config.enable_reloading = false
+
+  # Eager loading loads your entire application. When running a single test locally,
+  # this is usually not necessary, and can slow down your test suite. However, it's
+  # recommended that you enable it in continuous integration systems to ensure eager
+  # loading is working properly before deploying your code.
+  config.eager_load = ENV["CI"].present?
+
+  # Configure public file server for tests with Cache-Control for performance.
+  config.public_file_server.enabled = true
+  config.public_file_server.headers = {
+    "Cache-Control" => "public, max-age=#{1.hour.to_i}"
+  }
+
+  # Show full error reports and enable caching.
+  config.consider_all_requests_local = true
   config.action_controller.perform_caching = true
   config.action_controller.page_cache_directory = Rails.root.join("public/test_cache")
 
   config.action_mailer.perform_caching = true
 
-  memcached_servers = "127.0.0.1:11211"
-  memcached_servers = YAML.load_file(Rails.root.join("config/local.yml")).fetch("MEMCACHED_SERVERS", memcached_servers) if File.file?(Rails.root.join("config/local.yml"))
-  config.cache_store = :mem_cache_store, memcached_servers,
-                       { namespace: "ao3-v1-test", compress: true, pool_size: 10, raise_errors: true }
+  config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
+                       { namespace: "ao3-v2-test", compress: true, pool: { size: 10 }, raise_errors: true }
 
-  # Raise exceptions instead of rendering exception templates
-  config.action_dispatch.show_exceptions = false
+  # Render exception templates for rescuable exceptions and raise for other exceptions.
+  config.action_dispatch.show_exceptions = :rescuable
 
-  # Disable request forgery protection in test environment
+  # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
+
+  # Store uploaded files on the local file system in a temporary directory.
+  config.active_storage.service = :test
 
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
@@ -37,29 +50,28 @@ Otwarchive::Application.configure do
   # Inline ActiveJob when testing:
   config.active_job.queue_adapter = :inline
 
-  # Use SQL instead of Active Record's schema dumper when creating the test database.
-  # This is necessary if your schema can't be completely dumped by the schema dumper,
-  # like if you have constraints or database-specific column types
-  # config.active_record.schema_format = :sql
-
-  # Print deprecation notices to the stderr
+  # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
-
-  # https://github.com/winebarrel/activerecord-mysql-reconnect
-  config.active_record.enable_retry = true
-  config.active_record.execution_tries = 20 # times
-  config.active_record.execution_retry_wait = 0.3 # sec
-  # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
-  config.active_record.retry_mode = :rw
 
   # Configure strong parameters to raise an exception if an unpermitted attribute is used
   config.action_controller.action_on_unpermitted_parameters = :raise
 
-  config.serve_static_files = true
-  config.eager_load = false
-  config.assets.enabled = false
-
   # Make sure that we don't have a host mismatch:
   config.action_controller.default_url_options = { host: "http://www.example.com", port: nil }
   config.action_mailer.default_url_options = config.action_controller.default_url_options
+
+  # Raise exceptions for disallowed deprecations.
+  config.active_support.disallowed_deprecation = :raise
+
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
+
+  # Raises error for missing translations.
+  # config.i18n.raise_on_missing_translations = true
+
+  # Annotate rendered view with file names.
+  # config.action_view.annotate_rendered_view_with_filenames = true
+
+  # Raise error when a before_action's only/except options reference missing actions
+  config.action_controller.raise_on_missing_callback_actions = true
 end

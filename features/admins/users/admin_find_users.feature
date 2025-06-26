@@ -57,6 +57,21 @@ Feature: Admin Find Users page
       And I submit
     Then I should see "0 users found"
 
+  Scenario: The Find Users page should perform an exact match by ID in addition to any other criteria
+    When the search criteria contains the ID for "userB"
+      And I submit
+    Then I should see "1 user found"
+      And I should see "userB"
+      But I should not see "userA"
+      And I should not see "userCB"
+    When I fill in "Name" with "A"
+      And I submit
+    Then I should see "0 users found"
+    When I fill in "Name" with "B"
+      And I submit
+    Then I should see "1 user found"
+      And I should see "userB"
+
   # Bulk email search
   Scenario: The Bulk Email Search page should find all existing matching users
     When I go to the Bulk Email Search page

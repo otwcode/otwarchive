@@ -37,10 +37,13 @@ Feature: Comment Moderation
       And I set up the draft "Moderation"
       And I check "Enable comment moderation"
       And I post the work without preview
+      And I post a chapter for the work "Moderation"
     Then comment moderation should be enabled on "Moderation"
     When I am logged in as "commenter"
-      And I view the work "Moderation"
-    Then I should see "has chosen to moderate comments"
+      And I go to the work "Moderation" in full mode
+    Then I should see "This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator."
+    When I go to the 2nd chapter of the work "Moderation"
+    Then I should see "This work's creator has chosen to moderate comments on the work. Your comment will not appear until it has been approved by the creator."
 
   Scenario: Post a moderated comment
     Given the moderated work "Moderation" by "author"
@@ -72,6 +75,7 @@ Feature: Comment Moderation
     Given the moderated work "Moderation" by "author"
       And I am logged in as "commenter"
       And I post the comment "Fail comment" on the work "Moderation"
+      And it is currently 1 second from now
     When I follow "Edit"
       And I fill in "Comment" with "Edited unfail comment"
       And I press "Update"
@@ -106,7 +110,8 @@ Feature: Comment Moderation
     Then I should see "Comment approved"
     When I am logged out
       And I view the work "Moderation"
-    Then I should see "Comments (1)"
+    Then I should see "Comments:1"
+      And I should see "Comments (1)"
     When I follow "Comments (1)"
     Then I should see "Test comment"
       And the comment on "Moderation" should not be marked as unreviewed
@@ -116,19 +121,20 @@ Feature: Comment Moderation
       And I am logged in as "commenter"
       And I post the comment "Test comment" on the work "Moderation"
     When I am logged in as "author"
-      And I go to my inbox page
+      And I go to author's inbox page
     Then I should see "Test comment"
       And I should not see "Reply"
       And I should see "Unreviewed"
     # we can only test the non-javascript version here
     When I follow "Unreviewed Comments"
       And I press "Approve"
-      And I go to my inbox page
+      And I go to author's inbox page
     Then I should see "Reply"
       And I should not see "Unreviewed"
       And I should not see "Unread"
     When I view the work "Moderation"
-    Then I should see "Comments (1)"
+    Then I should see "Comments:1"
+      And I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
 
   Scenario: Comments can be approved from the home page inbox
@@ -144,7 +150,8 @@ Feature: Comment Moderation
     When I follow "Unreviewed Comments"
       And I press "Approve"
       And I view the work "Moderation"
-    Then I should see "Comments (1)"
+    Then I should see "Comments:1"
+      And I should see "Comments (1)"
       And I should not see "Unreviewed Comments (1)"
 
   Scenario: Moderated comments can be deleted by the author
@@ -218,7 +225,7 @@ Feature: Comment Moderation
     When all emails have been delivered
       And I am logged in as "commenter"
       And I set my preferences to turn on copies of my own comments
-      And I go to my inbox page
+      And I go to commenter's inbox page
     Then I should not see "A moderated reply"
     When I view the work "Moderation"
       And I follow "Comments (1)"
@@ -231,7 +238,7 @@ Feature: Comment Moderation
       And "author" should not be emailed
       And "new_commenter" should not be emailed
     When I am logged in as "commenter"
-      And I go to my inbox page
+      And I go to commenter's inbox page
     Then I should see "A moderated reply"
 
   Scenario: When I turn off moderation, comments stay unreviewed
@@ -246,7 +253,7 @@ Feature: Comment Moderation
     When I view the work "Moderation"
     Then I should see "Unreviewed Comments"
       And I should not see "Comments:1"
-    When I go to my inbox page
+    When I go to author's inbox page
     Then I should not see "Reply"
     When I am logged in as "commenter"
       And I view the work "Moderation"
@@ -266,7 +273,8 @@ Feature: Comment Moderation
       And I am logged in as "author"
       And I view the unreviewed comments page for "Moderation"
       And I press "Approve"
-    When I am logged in as "commenter"
+    When it is currently 1 second from now
+      And I am logged in as "commenter"
       And I view the work "Moderation"
       And I follow "Comments (1)"
       And I follow "Edit"
@@ -277,11 +285,14 @@ Feature: Comment Moderation
     Then I should see "Comments (1)"
     When I follow "Comments (1)"
     Then I should see "Interesting Commentary"
-    When I follow "Edit"
+    When it is currently 1 second from now
+      And I follow "Edit"
       And I fill in "Comment" with "AHAHAHA LOOK I HAVE TOTALLY CHANGED IT"
       And it is currently 1 second from now
       And I press "Update"
     Then the comment on "Moderation" should be marked as unreviewed
+      And I should not see "Comments:"
+      And I should not see "Comments (1)"
 
   Scenario: I can approve multiple comments at once
     Given the moderated work "Moderation" by "author"
@@ -296,3 +307,25 @@ Feature: Comment Moderation
     Then I should see "All moderated comments approved."
     When I view the work "Moderation"
     Then I should see "Comments (4)"
+
+  Scenario: I can view the parent thread of an unreviewed comment
+    Given the moderated work "Moderation" by "author" with the approved comment "Test comment" by "commenter"
+      And I am logged in as "new_commenter"
+    When I view the work "Moderation"
+      And I follow "Comments (1)"
+      And I follow "Reply" within ".odd"
+      And I fill in "Comment" with "A moderated reply" within ".odd"
+      And I press "Comment" within ".odd"
+    When I am logged in as "author"
+      And I view the work "Moderation"
+      And I follow "Unreviewed Comments (1)"
+      And I follow "Parent Thread"
+    Then I should see "Test comment"
+    When I view the unreviewed comments page for "Moderation"
+      And I press "Approve"
+    When I am logged in as "new_commenter"
+      And I post the comment "Zero-depth comment" on the work "Moderation"
+    When I am logged in as "author"
+      And I view the work "Moderation"
+      And I follow "Unreviewed Comments (1)"
+    Then I should not see "Parent Thread"

@@ -26,13 +26,34 @@ describe ExternalWork do
     end
   end
 
-  context "valid urls" do
-    URLS = ["http://the--ivorytower.livejournal.com/153798.html"]
+  context "for bypassed URLs" do
+    BYPASSED_URLS.each do |url|
+      context "for #{url}" do
+        let(:bypassed_url) { build(:external_work, url: url) }
 
-    URLS.each do |url|
-      let(:valid_url) {build(:external_work, url: url)}
-      it "saves the external work" do
-        expect(valid_url.save).to be_truthy
+        before do
+          WebMock.stub_request(:any, bypassed_url.url).to_return(status: 403)
+        end
+
+        it "saves" do
+          expect(bypassed_url.save).to be_truthy
+        end
+      end
+    end
+  end
+
+  context "for valid URLs" do
+    [200, 301, 302, 307, 308].each do |status|
+      context "returning #{status}" do
+        let(:external_work) { build(:external_work) }
+  
+        before do
+          WebMock.stub_request(:any, external_work.url).to_return(status: status)
+        end
+  
+        it "saves" do
+          expect(external_work.save).to be_truthy
+        end
       end
     end
   end

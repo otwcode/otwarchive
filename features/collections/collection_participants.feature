@@ -18,9 +18,9 @@
     And I press "Submit"
   Then I should see "New members invited: sam"
   When I select "Owner" from "sam_role"
-     And I submit with the 5th button
+     And I submit with the 4th button
   Then I should see "Updated sam."
-  When I submit with the 6th button
+  When I click the 2nd button
   Then I should see "Removed sam from collection."
 
   Scenario: Owner can't invite a nonexistent user to the collection
@@ -39,7 +39,7 @@
   When I am on the "Such a nice collection" participants page
     And I fill in "participants_to_invite" with "sam"
     And I press "Submit"
-  Then I should see "sam is currently banned and cannot participate in challenges."
+  Then I should see "sam cannot participate in challenges."
 
   Scenario: A user can ask to join a closed collection
   Given I have a moderated closed collection "Such a nice collection"
@@ -60,9 +60,18 @@
     And I press "Submit"
   Then I should see "New members invited: sam"
   When I select "Invited" from "sam_role"
-    And I submit with the 5th button
+    And I submit with the 4th button
   Then I should see "Updated sam."
   When I am in sam's browser
     And I follow "Join"
   Then I should see "You are now a member of Such a nice collection"
   When I am in the default browser
+
+Scenario: Collection member should see correct button text
+  Given I have the moderated collection "ModeratedCollection"
+    And I have the moderated collection "ModeratedCollectionTheSequel"
+    And I am logged in as "sam"
+    And I have joined the collection "ModeratedCollection" as "sam"
+  When I am on the collections page
+  Then I should see "Leave" exactly 1 time
+    And I should see "Join" exactly 1 time

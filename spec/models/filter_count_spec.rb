@@ -6,7 +6,7 @@ describe FilterCount do
     let(:tag) { create(:canonical_fandom) }
 
     it "should place small filters in the small queue" do
-      tag.build_filter_count.update_attributes(
+      tag.build_filter_count.update!(
         public_works_count: 5,
         unhidden_works_count: 4
       )
@@ -20,7 +20,7 @@ describe FilterCount do
     end
 
     it "should place large filters in the large queue" do
-      tag.build_filter_count.update_attributes(
+      tag.build_filter_count.update!(
         public_works_count: 5000,
         unhidden_works_count: 4000
       )
@@ -40,8 +40,8 @@ describe FilterCount do
 
     before do
       # Set incorrect values, so that we know when they've been recalculated.
-      tag_small.build_filter_count.update_attributes(public_works_count: 13)
-      tag_large.build_filter_count.update_attributes(public_works_count: 13)
+      tag_small.build_filter_count.update!(public_works_count: 13)
+      tag_large.build_filter_count.update!(public_works_count: 13)
 
       FilterCount::REDIS.sadd(FilterCount::QUEUE_KEY_SMALL, tag_small.id)
       FilterCount::REDIS.sadd(FilterCount::QUEUE_KEY_LARGE, tag_large.id)

@@ -10,13 +10,14 @@ class ReadingsController < ApplicationController
   end
 
   def index
-    @readings = @user.readings
+    @readings = @user.readings.visible
     @page_subtitle = ts("History")
     if params[:show] == 'to-read'
       @readings = @readings.where(toread: true)
       @page_subtitle = ts("Marked For Later")
     end
-    @readings = @readings.order("last_viewed DESC").page(params[:page])
+    @readings = @readings.order("last_viewed DESC")
+    @pagy, @readings = pagy(@readings)
   end
 
   def destroy
@@ -39,14 +40,20 @@ class ReadingsController < ApplicationController
   end
 
   def clear
+    success = true
+
     @user.readings.each do |reading|
-       begin
-         reading.destroy
-       rescue
-         @errors << ts("There were problems deleting your history.")
-       end
-     end
-    flash[:notice] = ts("Your history is now cleared.")
+      reading.destroy!
+    rescue ActiveRecord::RecordNotDestroyed
+      success = false
+    end
+
+    if success
+      flash[:notice] = t(".success")
+    else
+      flash[:error] = t(".error")
+    end
+
     redirect_to user_readings_path(current_user)
   end
 

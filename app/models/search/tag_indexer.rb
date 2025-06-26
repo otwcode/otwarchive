@@ -6,26 +6,25 @@ class TagIndexer < Indexer
 
   def self.mapping
     {
-      tag: {
-        properties: {
-          name: {
-            type: "text",
-            analyzer: "tag_name_analyzer",
-            fields: {
-              exact: {
-                type:     "text",
-                analyzer: "exact_tag_analyzer"
-              },
-              keyword: {
-                type: "keyword",
-                normalizer: "keyword_lowercase"
-              }
+      properties: {
+        name: {
+          type: "text",
+          analyzer: "tag_name_analyzer",
+          fields: {
+            exact: {
+              type: "text",
+              analyzer: "exact_tag_analyzer"
+            },
+            keyword: {
+              type: "keyword",
+              normalizer: "keyword_lowercase"
             }
-          },
-          tag_type: { type: "keyword" },
-          sortable_name: { type: "keyword" },
-          uses: { type: "integer" }
-        }
+          }
+        },
+        tag_type: { type: "keyword" },
+        sortable_name: { type: "keyword" },
+        uses: { type: "integer" },
+        unwrangled: { type: "boolean" }
       }
     }
   end
@@ -69,7 +68,8 @@ class TagIndexer < Indexer
     ).merge(
       has_posted_works: object.has_posted_works?,
       tag_type: object.type,
-      uses: object.taggings_count_cache
+      uses: object.taggings_count_cache,
+      unwrangled: object.unwrangled?
     ).merge(parent_data(object))
   end
 

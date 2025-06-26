@@ -1,65 +1,102 @@
-Otwarchive::Application.configure do
-  # Settings specified here will take precedence over those in config/environment.rb
+require "active_support/core_ext/integer/time"
 
-  # The production environment is meant for finished, "live" apps.
-  # Code is not reloaded between requests
-  config.cache_classes = true
+Rails.application.configure do
+  # Settings specified here will take precedence over those in config/application.rb.
+
+  config.hosts = ArchiveConfig.PERMITTED_HOSTS
+
+  # Code is not reloaded between requests.
+  config.enable_reloading = false
+
+  # Eager load code on boot. This eager loads most of Rails and
+  # your application in memory, allowing both threaded web servers
+  # and those relying on copy on write to perform better.
+  # Rake tasks automatically ignore this option for performance.
   config.eager_load = true
 
-  # Full error reports are disabled and caching is turned on
-  config.consider_all_requests_local       = false
+  # Full error reports are disabled and caching is turned on.
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
-  config.action_mailer.perform_caching     = true
 
-  # Specifies the header that your server uses for sending files
-  # config.action_dispatch.x_sendfile_header = "X-Sendfile"
+  # Ensures that a master key has been made available in ENV["RAILS_MASTER_KEY"], config/master.key, or an environment
+  # key such as config/credentials/production.key. This key is used to decrypt credentials (and other encrypted files).
+  # config.require_master_key = true
 
-  # For nginx:
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
+  # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
-  # If you have no front-end server that supports something like X-Sendfile,
-  # just comment this out and Rails will serve the files
+  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+  # config.asset_host = "http://assets.example.com"
 
-  # Disable IP spoofing protection
-  config.action_dispatch.ip_spoofing_check = false
+  # Specifies the header that your server uses for sending files.
+  # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
+  # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
-  # See everything in the log (default is now :debug)
-  # config.log_level = :debug
-  config.log_level = :info
-
-  # Use a different logger for distributed setups
-  # config.logger = SyslogLogger.new
+  # Store uploaded files in S3, proxied (see config/storage.yml for options).
+  config.active_storage.service = :s3
+  config.active_storage.resolve_model_to_route = :rails_storage_proxy
 
   # Use a different cache store in production
-  config.cache_store = :mem_cache_store, YAML.load_file(Rails.root.join("config/local.yml"))["MEMCACHED_SERVERS"],
-                       { namespace: "ao3-v1", compress: true, pool_size: 10 }
+  config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
+                       { namespace: "ao3-v#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}",
+                         compress: true, pool: { size: 10 } }
 
-  # Disable Rails's static asset server
-  # In production, Apache or nginx will already do this
-  config.serve_static_files = false
+  # Mount Action Cable outside main process or domain.
+  # config.action_cable.mount_path = nil
+  # config.action_cable.url = "wss://example.com/cable"
+  # config.action_cable.allowed_request_origins = [ "http://example.com", /http:\/\/example.*/ ]
 
-  # Enable serving of images, stylesheets, and javascripts from an asset server
-  # config.action_controller.asset_host = "http://assets.example.com"
+  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
+  # Can be used together with config.force_ssl for Strict-Transport-Security and secure cookies.
+  # config.assume_ssl = true
 
-  # Disable delivery errors, bad email addresses will be ignored
+  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  # config.force_ssl = true
+
+  # Use default logging formatter so that PID and timestamp are not suppressed.
+  config.log_formatter = ::Logger::Formatter.new
+
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
+    config.logger = ActiveSupport::Logger.new($stdout)
+      .tap  { |logger| logger.formatter = config.log_formatter }
+      .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+  end
+
+  # Prepend all log lines with the following tags.
+  config.log_tags = [:request_id]
+
+  # "info" includes generic and useful information about system operation, but avoids logging too much
+  # information to avoid inadvertent exposure of personally identifiable information (PII). If you
+  # want to log everything, set the level to "debug".
+  # config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
+  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "error")
+
+  # Use a different cache store in production.
+  # config.cache_store = :mem_cache_store
+
+  config.action_mailer.perform_caching = false
+
+  # Ignore bad email addresses and do not raise email delivery errors.
+  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
-  # Enable threaded mode
-  # config.threadsafe!
-
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation can not be found)
+  # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
 
-  # Send deprecation notices to registered listeners
-  config.active_support.deprecation = :notify
-
-  # https://github.com/winebarrel/activerecord-mysql-reconnect
-  config.active_record.enable_retry = true
-  config.active_record.execution_tries = 20 # times
-  config.active_record.execution_retry_wait = 0.3 # sec
-  # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
-  config.active_record.retry_mode = :rw
+  # Don't log any deprecations.
+  config.active_support.report_deprecations = false
 
   config.middleware.use Rack::Attack
+
+  # Do not dump schema after migrations.
+  config.active_record.dump_schema_after_migration = false
+
+  # Enable DNS rebinding protection and other `Host` header attacks.
+  # config.hosts = [
+  #   "example.com",     # Allow requests from example.com
+  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
+  # ]
+  # Skip DNS rebinding protection for the default health check endpoint.
+  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end

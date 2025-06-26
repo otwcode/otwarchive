@@ -61,7 +61,7 @@
 <fieldset>
   <legend><%= ts("Colors") %></legend>
   <p class="notes">
-    <%= ts('You may wish to refer to this <a href="http://www.webmonkey.com/2010/02/color_charts/">handy list of colors</a>.').html_safe %>
+    <%= ts('You may wish to refer to this <a href="https://www.w3schools.com/colors/colors_names.asp">handy list of colors</a>.').html_safe %>
   </p>
   <dl>
     <dt>
@@ -107,5 +107,26 @@
   </dl>
   <%= hidden_field_tag 'wizard', true %>
 </fieldset>
-
+<fieldset>
+  <legend>
+    <%= ts("Parent Skins") %>
+    <%= link_to_help "skins-parents" %>
+  </legend>
+  <h4 class="heading landmark">
+    <%= ts("Parent Skins") %>
+  </h4>
+  <ul class="index group">
+    <% f.object.skin_parents.each_with_index do |parent, index| %>
+      <%= f.fields_for :skin_parents, parent do |parent_form| %>
+        <%= render "skin_parent_fields", form: parent_form, index: index %>
+      <% end %>
+    <% end %>
+    <% if f.object.skin_parents.count == 0 %>
+      <li class="last_id" style="display:none;">0</li>
+    <% end %>
+    <li class="actions" role="button">
+      <%= link_to_add_section(ts("Add parent skin"), f, :skin_parents, "skin_parent_fields") %>
+    </li>
+  </ul>
+</fieldset>
 <%= submit_fieldset(f) %>

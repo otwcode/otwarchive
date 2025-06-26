@@ -11,7 +11,7 @@ end
 
 describe "API v2 WorksController - Search", type: :request, work_search: true do
   describe "valid work URL request" do
-    work = FactoryBot.create(:work, imported_from_url: "foo")
+    let!(:work) { create(:work, imported_from_url: "foo") }
     
     it "returns 200 OK" do
       valid_params = { works: [{ original_urls: %w(bar foo) }] }
@@ -44,7 +44,7 @@ describe "API v2 WorksController - Search", type: :request, work_search: true do
       parsed_body = post_search_result(valid_params)
 
       expect(parsed_body[:works].first[:status]).to eq "found"
-      expect(parsed_body[:works].first[:messages]).to include("Work \"#{work.title}\", created on #{work.created_at.to_date.to_s(:iso_date)} was found at \"#{url_for(work)}\".")
+      expect(parsed_body[:works].first[:messages]).to include("Work \"#{work.title}\", created on #{work.created_at.to_date.to_fs(:iso_date)} was found at \"#{url_for(work)}\".")
     end
   
     it "returns an error when no works are provided" do

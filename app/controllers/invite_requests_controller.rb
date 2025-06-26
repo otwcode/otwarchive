@@ -1,31 +1,56 @@
 class InviteRequestsController < ApplicationController
-  before_action :admin_only, only: [:manage, :reorder, :destroy]
+  before_action :admin_only, only: [:manage, :destroy]
 
   # GET /invite_requests
+  # Set browser page title to Invitation Requests
   def index
     @invite_request = InviteRequest.new
+    @page_subtitle = t(".page_title")
   end
 
   # GET /invite_requests/1
   def show
-    fetch_admin_settings # we normally skip this for js requests
     @invite_request = InviteRequest.find_by(email: params[:email])
-    @position_in_queue = InviteRequest.where(["position <= ?", @invite_request.position])&.count if @invite_request.present?
-    unless (request.xml_http_request?) || @invite_request
-      flash[:error] = "You can search for the email address you signed up with below. If you can't find it, your invitation may have already been emailed to that address; please check your email spam folder as your spam filters may have placed it there."
-      redirect_to status_invite_requests_path and return
+
+    if @invite_request.present?
+      @position_in_queue = @invite_request.position
+    else
+      @invitation = Invitation.unredeemed.from_queue.find_by(invitee_email: params[:email])
     end
+
     respond_to do |format|
       format.html
       format.js
     end
   end
 
+  def resend
+    @invitation = Invitation.unredeemed.from_queue.find_by(invitee_email: params[:email])
+
+    if @invitation.nil?
+      flash[:error] = t("invite_requests.resend.not_found")
+    elsif !@invitation.can_resend?
+      flash[:error] = t("invite_requests.resend.not_yet",
+                        count: ArchiveConfig.HOURS_BEFORE_RESEND_INVITATION)
+    else
+      @invitation.send_and_set_date(resend: true)
+
+      if @invitation.errors.any?
+        flash[:error] = @invitation.errors.full_messages.first
+      else
+        flash[:notice] = t("invite_requests.resend.success", email: @invitation.invitee_email)
+      end
+    end
+
+    redirect_to status_invite_requests_path
+  end
+
   # POST /invite_requests
   def create
-    unless @admin_settings.invite_from_queue_enabled?
-      flash[:error] = ts("<strong>New invitation requests are currently closed.</strong> For more information, please check the %{news}.",
-                         news: view_context.link_to("\"Invitations\" tag on AO3 News", admin_posts_path(tag: 143))).html_safe
+    unless AdminSetting.current.invite_from_queue_enabled?
+      flash[:error] = t(".queue_disabled.html",
+                        closed_bold: helpers.tag.strong(t("invite_requests.create.queue_disabled.closed")),
+                        news_link: helpers.link_to(t("invite_requests.create.queue_disabled.news"), admin_posts_path(tag: 143)))
       redirect_to invite_requests_path
       return
     end
@@ -33,7 +58,9 @@ class InviteRequestsController < ApplicationController
     @invite_request = InviteRequest.new(invite_request_params)
     @invite_request.ip_address = request.remote_ip
     if @invite_request.save
-      flash[:notice] = "You've been added to our queue! Yay! We estimate that you'll receive an invitation around #{@invite_request.proposed_fill_date}. We strongly recommend that you add do-not-reply@archiveofourown.org to your address book to prevent the invitation email from getting blocked as spam by your email provider."
+      flash[:notice] = t(".success",
+                         date: l(@invite_request.proposed_fill_time.to_date, format: :long),
+                         return_address: ArchiveConfig.RETURN_ADDRESS)
       redirect_to invite_requests_path
     else
       render action: :index
@@ -41,32 +68,32 @@ class InviteRequestsController < ApplicationController
   end
 
   def manage
-    @invite_requests = InviteRequest.order(:position).page(params[:page])
-    if params[:query].present?
-      @invite_requests = InviteRequest.where("simplified_email LIKE ?",
-                                             "%#{params[:query]}%")
-                                      .order(:position)
-                                      .page(params[:page])
-    end
-  end
+    authorize(InviteRequest)
 
-  def reorder
-    if InviteRequest.reset_order
-      flash[:notice] = "The queue has been successfully updated."
-    else
-      flash[:error] = "Something went wrong. Please try that again."
+    @invite_requests = InviteRequest.all
+
+    if params[:query].present?
+      query = "%#{params[:query]}%"
+      @invite_requests = InviteRequest.where(
+        "simplified_email LIKE ? OR ip_address LIKE ?",
+        query, query
+      )
+
+      # Keep track of the fact that this has been filtered, so the position
+      # will not cleanly correspond to the page that we're on and the index of
+      # the request on the page:
+      @filtered = true
     end
-    redirect_to manage_invite_requests_path
+
+    @invite_requests = @invite_requests.order(:id).page(params[:page])
   end
 
   def destroy
-    @invite_request = InviteRequest.find_by(id: params[:id])
-    if @invite_request.nil? || @invite_request.destroy
-      success_message = if @invite_request.nil?
-                          ts("Request was removed from the queue.")
-                        else
-                          ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
-                        end
+    @invite_request = InviteRequest.find(params[:id])
+    authorize @invite_request
+
+    if @invite_request.destroy
+      success_message = ts("Request for %{email} was removed from the queue.", email: @invite_request.email)
       respond_to do |format|
         format.html { redirect_to manage_invite_requests_path(page: params[:page], query: params[:query]), notice: success_message }
         format.json { render json: { item_success_message: success_message }, status: :ok }
@@ -84,7 +111,7 @@ class InviteRequestsController < ApplicationController
   end
 
   def status
-    @page_subtitle = ts("Invitation Request Status")
+    @page_subtitle = t(".browser_title")
   end
 
   private

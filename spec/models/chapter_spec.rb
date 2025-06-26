@@ -11,9 +11,9 @@ describe Chapter do
     expect(build(:chapter, content: nil)).to be_invalid
   end
 
-  it "is unposted by default" do
+  it "is posted by default when produced by a factory" do
     chapter = create(:chapter)
-    chapter.posted.should == false
+    expect(chapter.posted).to be_truthy
   end
 
   describe "save" do
@@ -37,8 +37,8 @@ describe Chapter do
       # be automatically approved), we need to make sure that User.current_user
       # is not nil.
       User.current_user = creator
-      co_creator.preference.update(allow_cocreator: true)
-      no_co_creator.preference.update(allow_cocreator: false)
+      co_creator.preference.update!(allow_cocreator: true)
+      no_co_creator.preference.update!(allow_cocreator: false)
     end
 
     it "allows normal users to invite others as chapter co-creators" do
@@ -73,10 +73,10 @@ describe Chapter do
 
     it "allows users to automatically add work co-creators as chapter co-creators" do
       # Set up a work co-created with a user that doesn't allow co-creators:
-      no_co_creator.preference.update(allow_cocreator: true)
+      no_co_creator.preference.update!(allow_cocreator: true)
       work = create(:work, authors: creator.pseuds + no_co_creator.pseuds)
       work.creatorships.for_user(no_co_creator).each(&:accept!)
-      no_co_creator.preference.update(allow_cocreator: false)
+      no_co_creator.preference.update!(allow_cocreator: false)
 
       attributes = {
         content: "new chapter content",
@@ -93,9 +93,9 @@ describe Chapter do
 
     it "doesn't allow users to automatically add invited work co-creators" do
       # Set up a work with an invitation for a user that doesn't allow co-creators:
-      no_co_creator.preference.update(allow_cocreator: true)
+      no_co_creator.preference.update!(allow_cocreator: true)
       work = create(:work, authors: creator.pseuds + no_co_creator.pseuds)
-      no_co_creator.preference.update(allow_cocreator: false)
+      no_co_creator.preference.update!(allow_cocreator: false)
 
       attributes = {
         content: "new chapter content",

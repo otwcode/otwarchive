@@ -1,32 +1,29 @@
-<% # We need to override the ids to avoid accessibility issues on the new user
-   # session page, which has a second user session form %>
+<%# We need to override the ids to avoid accessibility issues on the new user session page,
+which has a second user session form %>
 <%= form_for(User.new, url: user_session_path, html: { id: "new_user_session_small" }) do |f| %>
-	<dl>
-    <dt>
-      <%= f.label :login, ts("User name or email:"),
-              for: "user_session_login_small" %></dt>
-    <dd><%= f.text_field :login,
-              id: "user_session_login_small" %></dd>
-    <dt><%= f.label :password, ts("Password:"),
-              for: "user_session_password_small" %></dt>
-    <dd><%= f.password_field :password,
-              id: "user_session_password_small" %></dd>
+  <dl>
+    <dt><%= f.label :login, t(".username_or_email"), for: "user_session_login_small" %></dt>
+    <dd><%= f.text_field :login, autocomplete: "on", id: "user_session_login_small" %></dd>
+    <dt><%= f.label :password, t(".password"), for: "user_session_password_small" %></dt>
+    <dd><%= f.password_field :password, id: "user_session_password_small" %></dd>
   </dl>
   <p class="submit actions">
-    <label for="user_remember_me_small" class="action"><%= check_box_tag "user[remember_me]", 1, false, id: "user_remember_me_small" %><%= ts("Remember Me") %></label>
-    <%= f.submit ts("Log In") %>
+    <label for="user_remember_me_small" class="action">
+      <%= check_box_tag "user[remember_me]", 1, false, id: "user_remember_me_small" %><%= t(".remember_me") %>
+    </label>
+    <%= f.submit t(".log_in") %>
   </p>
 <% end %>
 
 <ul class="footnote actions">
-  <li><%= link_to ts("Forgot password?"), new_user_password_path %></li>
-  <% if @admin_settings.account_creation_enabled? && !@admin_settings.creation_requires_invite? %>
+  <li><%= link_to t(".forgot_password"), new_user_password_path %></li>
+  <% if AdminSetting.current.account_creation_enabled? && !AdminSetting.current.creation_requires_invite? %>
     <li>
-      <%= link_to ts("Create an Account"), signup_path %>
+      <%= link_to t(".create_an_account"), signup_path %>
     </li>
-  <% elsif @admin_settings.invite_from_queue_enabled? %>
+  <% elsif AdminSetting.current.invite_from_queue_enabled? %>
     <li>
-      <%= link_to ts("Get an Invitation"), invite_requests_path %>
+      <%= link_to t(".get_an_invitation"), invite_requests_path %>
     </li>
   <% end %>
 </ul>

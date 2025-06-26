@@ -5,9 +5,15 @@ Given /^mock websites with no content$/ do
   WebMock.stub_request(:head, "http://example.org/404").to_return(status: 404)
 end
 
+Given "all pages on the host {string} return status 200" do |url|
+  WebMock.disable_net_connect!
+  parsed_url = Addressable::URI.parse(url)
+  WebMock.stub_request(:any, %r[https?://#{parsed_url.host}.*]).to_return(status: 200)
+end
+
 Given /^I have a bookmark for "([^\"]*)"$/ do |title|
   step %{I start a new bookmark for "#{title}"}
-  fill_in("bookmark_tag_string", with: DEFAULT_BOOKMARK_TAGS)
+  fill_in("Your tags", with: DEFAULT_BOOKMARK_TAGS)
   step %{I press "Create"}
   step %{all indexing jobs have been run}
 end
@@ -304,13 +310,34 @@ Given /^"(.*?)" has bookmarks of works in various languages$/ do |user|
   step %{all indexing jobs have been run}
 end
 
-When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
-  step %{I start a new bookmark for "#{title}"}
+Given "{string} has a bookmark of a work titled {string}" do |user, title|
+  step %{the user "#{user}" exists and is activated}
+
+  user_pseud = User.find_by(login: user).default_pseud
+  work1 = FactoryBot.create(:work, title: title)
+  FactoryBot.create(:bookmark,
+                    bookmarkable: work1,
+                    pseud: user_pseud)
+
+  step %{all indexing jobs have been run}
+end
+
+def submit_bookmark_form(pseud, note, tags)
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
-  fill_in("bookmark_tag_string", with: tags) unless tags.nil?
+  fill_in("Your tags", with: tags) unless tags.nil?
   click_button("Create")
   step %{all indexing jobs have been run}
+end
+
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
+  step %{I start a new bookmark for "#{title}"}
+  submit_bookmark_form(pseud, note, tags)
+end
+
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")? from new bookmark page$/ do |title, pseud, note, tags|
+  step %{I go to the new bookmark page for work "#{title}"}
+  submit_bookmark_form(pseud, note, tags)
 end
 
 When /^I bookmark the series "([^\"]*)"$/ do |series_title|
@@ -333,6 +360,7 @@ end
 When /^I bookmark the works "([^\"]*)"$/ do |worklist|
   worklist.split(/, ?/).each do |work_title|
     step %{I bookmark the work "#{work_title}"}
+    step %{it is currently 1 second from now}
   end
 end
 
@@ -347,17 +375,14 @@ end
 
 When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
   work = Work.find_by(title: title)
-  if !work
-    step %{I post the work "#{title}"}
-    work = Work.find_by(title: title)
-  end
+  work ||= FactoryBot.create(:work, title: title)
   visit work_path(work)
 end
 
 When /^I add my bookmark to the collection "([^\"]*)"$/ do |collection_name|
   step %{I follow "Add To Collection"}
-    fill_in("collection_names", with: "#{collection_name}")
-    click_button("Add")
+  fill_in("collection_names", with: collection_name)
+  click_button("Add")
 end
 
 When /^I rec the current work$/ do

@@ -1,13 +1,9 @@
-class CollectionMailer < ActionMailer::Base
+class CollectionMailer < ApplicationMailer
   helper :application
-  helper :mailer
   helper :tags
   helper :works
   helper :series
 
-  layout 'mailer'
-  default from: "Archive of Our Own " + "<#{ArchiveConfig.RETURN_ADDRESS}>"
-  
   def item_added_notification(creation_id, collection_id, item_type)
     @item_type = item_type
     @item_type == "Work" ? @creation = Work.find(creation_id) : @creation = Bookmark.find(creation_id)

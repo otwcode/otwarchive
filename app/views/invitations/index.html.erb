@@ -29,7 +29,7 @@
             <% for unsent_invite in @unsent_invitations %>
             <li>
               <%= radio_button_tag "invitation[id]", unsent_invite.id, checked: (unsent_invite == @unsent_invitations.first) %>
-              <%= label_tag 'id_' + unsent_invite.id.to_s, unsent_invite.token %>
+              <%= label_tag 'invitation_id_' + unsent_invite.id.to_s, unsent_invite.token %>
             </li>
             <% end %>
           </ul>

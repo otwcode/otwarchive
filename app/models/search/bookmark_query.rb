@@ -21,41 +21,51 @@ class BookmarkQuery < Query
     self.bookmarkable_query = BookmarkableQuery.new(self)
   end
 
-  # After the initial search, run an additional query to get work/series tag filters
-  # Elasticsearch doesn't support parent aggregations, and doing the main query on the parents
-  # limits searching and sorting on the bookmarks themselves
-  # Hopefully someday they'll fix this and we can get the data from a single query
-  def search_results
-    response = search
-    if response['aggregations']
-      response['aggregations'].merge!(bookmarkable_query.aggregation_results)
-    end
-    QueryResult.new(klass, response, options.slice(:page, :per_page))
+  # Combine the filters and queries for both the bookmark and the bookmarkable.
+  def filtered_query
+    make_bool(
+      # Score is based on our query + the bookmarkable query:
+      must: make_list(queries, bookmarkable_queries_and_filters),
+      filter: filters,
+      must_not: make_list(exclusion_filters, bookmarkable_exclusion_filters)
+    )
   end
 
-  # Combine the query on the bookmark with the query on the bookmarkable.
+  # Queries that apply only to the bookmark. Bookmarkable queries are handled
+  # in filtered_query, and should not be included here.
   def queries
-    @queries ||= [
-      bookmark_query_or_filter,
-      parent_bookmarkable_query_or_filter
-    ].flatten.compact
+    @queries ||= make_list(
+      general_query
+    )
   end
 
-  # Combine the filters on the bookmark with the filters on the bookmarkable.
+  # Filters that apply only to the bookmark. Bookmarkable filters are handled
+  # in filtered_query, and should not be included here.
   def filters
-    @filters ||= [
-      bookmark_filters,
-      bookmarkable_filter
-    ].flatten.compact
+    @filters ||= make_list(
+      privacy_filter,
+      hidden_filter,
+      bookmarks_only_filter,
+      pseud_filter,
+      user_filter,
+      rec_filter,
+      notes_filter,
+      tags_filter,
+      named_tag_inclusion_filter,
+      collections_filter,
+      type_filter,
+      date_filter
+    )
   end
 
-  # Combine the exclusion filters on the bookmark with the exclusion filters on
-  # the bookmarkable.
+  # Exclusion filters that apply only to the bookmark. Exclusion filters for
+  # the bookmarkable are handled in filtered_query, and should not be included
+  # here.
   def exclusion_filters
-    @exclusion_filters ||= [
-      bookmark_exclusion_filters,
-      bookmarkable_exclusion_filter
-    ].flatten.compact
+    @exclusion_filters ||= make_list(
+      tag_exclusion_filter,
+      named_tag_exclusion_filter
+    )
   end
 
   def add_owner
@@ -82,20 +92,10 @@ class BookmarkQuery < Query
   # QUERIES
   ####################
 
-  def bookmark_query_or_filter
+  def general_query
     return nil if bookmark_query_text.blank?
-    { query_string: { query: bookmark_query_text, default_operator: "AND" } }
-  end
 
-  def parent_bookmarkable_query_or_filter
-    return nil if bookmarkable_query.bookmarkable_query_or_filter.blank?
-    {
-      has_parent: {
-        parent_type: "bookmarkable",
-        score: true, # include the score from the bookmarkable
-        query: bookmarkable_query.bookmarkable_query_or_filter
-      }
-    }
+    { query_string: { query: bookmark_query_text, default_operator: "AND" } }
   end
 
   def bookmark_query_text
@@ -130,11 +130,13 @@ class BookmarkQuery < Query
       sort_hash[sort_column][:unmapped_type] = 'date'
     end
 
-    sort_hash
+    [sort_hash, { id: { order: sort_direction } }]
   end
 
-  def aggregations
+  # The aggregations for just the bookmarks:
+  def bookmark_aggregations
     aggs = {}
+
     if facet_collections?
       aggs[:collections] = { terms: { field: 'collection_ids' } }
     end
@@ -143,55 +145,45 @@ class BookmarkQuery < Query
       aggs[:tag] = { terms: { field: "tag_ids" } }
     end
 
-    { aggs: aggs }
+    aggs
+  end
+
+  # Combine the bookmark aggregations with the bookmarkable aggregations from
+  # the bookmarkable query.
+  def aggregations
+    aggs = bookmark_aggregations
+
+    bookmarkable_aggregations = bookmarkable_query.bookmarkable_aggregations
+    if bookmarkable_aggregations.present?
+      aggs[:bookmarkable] = {
+        parent: { type: "bookmark" },
+        aggs: bookmarkable_aggregations
+      }
+    end
+
+    { aggs: aggs } if aggs.present?
   end
 
   ####################
-  # GROUPS OF FILTERS
+  # BOOKMARKABLE
   ####################
 
-  # Filters that apply only to the bookmark. These are must/and filters,
-  # meaning that all of them are required to occur in all bookmarks.
-  def bookmark_filters
-    @bookmark_filters ||= [
-      privacy_filter,
-      hidden_filter,
-      bookmarks_only_filter,
-      pseud_filter,
-      user_filter,
-      rec_filter,
-      notes_filter,
-      tags_filter,
-      named_tag_inclusion_filter,
-      collections_filter,
-      type_filter,
-      date_filter
-    ].flatten.compact
-  end
+  # Wrap both the queries and the filters from the bookmarkable query into a
+  # single has_parent query. (The fewer has_parent queries we have, the faster
+  # the query will be.)
+  def bookmarkable_queries_and_filters
+    bool = make_bool(
+      must: bookmarkable_query.queries,
+      filter: bookmarkable_query.filters
+    )
 
-  # Exclusion filters that apply only to the bookmark. These are must_not/not
-  # filters, meaning that none of them are allowed to occur in any search
-  # results. DO NOT INCLUDE FILTERS ON THE BOOKMARKABLE HERE. If you do, this
-  # may cause an infinite loop.
-  def bookmark_exclusion_filters
-    @bookmark_exclusion_filters ||= [
-      tag_exclusion_filter,
-      named_tag_exclusion_filter
-    ].flatten.compact
-  end
+    return if bool.nil?
 
-  # Wrap all of the must/and filters on the bookmarkable into a single
-  # has_parent query. (The more has_parent queries we have, the slower our
-  # search will be.)
-  def bookmarkable_filter
-    return if bookmarkable_query.bookmarkable_filters.blank?
-
-    @bookmarkable_filter ||= {
+    {
       has_parent: {
         parent_type: "bookmarkable",
-        query: make_bool(
-          must: bookmarkable_query.bookmarkable_filters
-        )
+        score: true, # include the score from the bookmarkable
+        query: bool
       }
     }
   end
@@ -200,14 +192,14 @@ class BookmarkQuery < Query
   # has_parent query. Note that we wrap them in a should/or query because if
   # any of the parent queries return true, we want to return false. (De
   # Morgan's Law.)
-  def bookmarkable_exclusion_filter
-    return if bookmarkable_query.bookmarkable_exclusion_filters.blank?
+  def bookmarkable_exclusion_filters
+    return if bookmarkable_query.exclusion_filters.blank?
 
-    @bookmarkable_exclusion_filter ||= {
+    {
       has_parent: {
         parent_type: "bookmarkable",
         query: make_bool(
-          should: bookmarkable_query.bookmarkable_exclusion_filters
+          should: bookmarkable_query.exclusion_filters
         )
       }
     }

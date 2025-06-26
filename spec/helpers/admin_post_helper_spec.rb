@@ -13,7 +13,7 @@ describe AdminPostHelper do
       finnish_post = create(:admin_post, language: finnish, translated_post: english_post)
       indonesian_post = create(:admin_post, language: indonesian, translated_post: english_post)
 
-      expect(sorted_translations(english_post)).to eq([indonesian_post, german_post, finnish_post])
+      expect(sorted_translations(english_post.reload)).to eq([indonesian_post, german_post, finnish_post])
     end
   end
 end

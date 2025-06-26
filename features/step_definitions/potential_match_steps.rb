@@ -60,8 +60,8 @@ Given /^I create the gift exchange "([^\"]*)" with the following options$/ do |n
       # constraints simpler to express. (The tests are designed to verify
       # potential match generation, not challenge signups, so we don't need
       # that kind of fine-grained control.)
-      collection.challenge.request_restriction.update_attributes(attributes)
-      collection.challenge.offer_restriction.update_attributes(attributes)
+      collection.challenge.request_restriction.update!(attributes)
+      collection.challenge.offer_restriction.update!(attributes)
 
       potential_match_settings.update_attribute(
         "num_required_#{type.pluralize}", match

@@ -1,0 +1,9 @@
+# Label to be added when the PR is updated:
+"Coder Has Actioned Review":
+- changed-files:
+  - any-glob-to-any-file: "**/*"
+
+# Condition is always false so the label is removed when the PR is updated:
+"Reviewed: Action Needed":
+- changed-files:
+  - any-glob-to-any-file: "!**/*"

@@ -112,7 +112,8 @@ class ChallengeClaimsController < ApplicationController
 
   def create
     # create a new claim
-    claim = ChallengeClaim.new(challenge_claim_params)
+    prompt = @collection.prompts.find(params[:prompt_id])
+    claim = prompt.request_claims.build(claiming_user: current_user)
     if claim.save
       flash[:notice] = "New claim made."
     else
@@ -140,12 +141,6 @@ class ChallengeClaimsController < ApplicationController
   end
 
   private
-
-  def challenge_claim_params
-    params.require(:challenge_claim).permit(
-      :collection_id, :request_signup_id, :request_prompt_id, :claiming_user_id
-    )
-  end
 
   def user_scoped?
     params[:for_user].to_s.casecmp?("true")

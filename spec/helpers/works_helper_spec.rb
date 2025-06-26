@@ -1,44 +1,6 @@
 require 'spec_helper'
 
 describe WorksHelper do
-
-  describe '#get_tweet_text' do
-
-    before(:each) do
-      @work = FactoryBot.create(:work)
-    end
-
-    context "for an unrevealed work" do
-      it "should say that it's a mystery work" do
-        @work.in_unrevealed_collection = true
-        expect(helper.get_tweet_text(@work)).to eq("Mystery Work")
-      end
-    end
-
-    context "for an anonymous work" do
-      it "should not include the author's name" do
-        @work.in_anon_collection = true
-        expect(helper.get_tweet_text(@work)).to match "Anonymous"
-        expect(helper.get_tweet_text(@work)).not_to match "test pseud"
-      end
-    end
-
-    context "for a multifandom work" do
-      it "should not try to include all the fandoms" do
-        @work.fandom_string = "Testing, Battlestar Galactica, Naruto"
-        expect(helper.get_tweet_text(@work)).to match "Multifandom"
-        expect(helper.get_tweet_text(@work)).not_to match "Battlestar"
-      end
-    end
-
-    context "for a revealed, non-anon work with one fandom" do
-      it "should include all info" do
-        expect(helper.get_tweet_text(@work)).to eq("My title is long enough by #{@work.pseuds.first.name} - Testing")
-      end
-    end
-
-  end
-
   describe '#all_coauthor_skins' do
     before do
       @users = Array.new(5) { FactoryBot.create(:user) }
@@ -97,6 +59,41 @@ describe WorksHelper do
 
       # sort them
       expect(sorted_languages).to eq([indonesian, german, english, finnish])
+    end
+  end
+
+  describe "#get_endnotes_link" do
+    let(:work) { create(:work) }
+    let(:chapter) { create(:chapter, work: work) }
+    let(:unposted_work) { create(:draft) }
+
+    context "not on chapters#show" do
+      before { allow(helper).to receive(:current_page?).and_return(false) }
+
+      it "returns #work_endnotes" do
+        expect(helper.get_endnotes_link(work)).to eq("#work_endnotes")
+      end
+    end
+
+    context "chapters#show for a posted work" do
+      before { allow(helper).to receive(:current_page?).and_return(true) }
+
+      it "returns path to last posted chapter's endnotes" do
+        expect(helper.get_endnotes_link(work)).to eq(chapter_path(work.last_posted_chapter, anchor: "work_endnotes"))
+      end
+
+      it "returns path to last chapter's endnotes if no posted chapters" do
+        chapter.destroy!
+        expect(helper.get_endnotes_link(work)).to eq(chapter_path(work.last_chapter, anchor: "work_endnotes"))
+      end
+    end
+
+    context "chapters#show for a draft work" do
+      before { allow(helper).to receive(:current_page?).and_return(true) }
+
+      it "returns path to last chapter's endnotes" do
+        expect(helper.get_endnotes_link(unposted_work)).to eq(chapter_path(unposted_work.last_chapter, anchor: "work_endnotes"))
+      end
     end
   end
 end

@@ -1,6 +1,8 @@
 Otwarchive::Application.configure do
   # Settings specified here will take precedence over those in config/environment.rb
 
+  config.hosts = ArchiveConfig.PERMITTED_HOSTS
+
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = true
@@ -31,8 +33,9 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :mem_cache_store, YAML.load_file(Rails.root.join("config/local.yml"))["MEMCACHED_SERVERS"],
-                       { namespace: "ao3-v1", compress: true, pool_size: 5 }
+  config.cache_store = :mem_cache_store, ArchiveConfig.MEMCACHED_SERVERS,
+                       { namespace: "ao3-v#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}",
+                         compress: true, pool: { size: 5 } }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
@@ -44,12 +47,11 @@ Otwarchive::Application.configure do
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
 
+  # Enable mailer previews.
+  config.action_mailer.show_previews = true
+
   # Enable threaded mode
   # config.threadsafe!
-
-  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation can not be found)
-  config.i18n.fallbacks = true
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
@@ -67,12 +69,12 @@ Otwarchive::Application.configure do
     Bullet.counter_cache_enable = false
   end
 
-  # https://github.com/winebarrel/activerecord-mysql-reconnect
-  config.active_record.enable_retry = true
-  config.active_record.execution_tries = 20 # times
-  config.active_record.execution_retry_wait = 0.3 # sec
-  # :rw Retry in all SQL, but does not retry if Lost connection has happened in write SQL
-  config.active_record.retry_mode = :rw
+  # Store uploaded files in AWS S3, proxied so we can cache them.
+  config.active_storage.service = :s3
+  config.active_storage.resolve_model_to_route = :rails_storage_proxy
 
   config.middleware.use Rack::Attack
+
+  # Disable dumping schemas after migrations.
+  config.active_record.dump_schema_after_migration = false
 end

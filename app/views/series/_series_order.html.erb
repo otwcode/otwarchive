@@ -1,11 +1,13 @@
 <div id="manage-series">
-  <%= form_tag url_for(:action => 'update_positions') do %>
+  <%= form_tag update_positions_series_path, method: :post do %>
   <ul id="sortable_series_list">
     <% @serial_works.each_with_index do |serial, i| %>
       <li id="serial_<%= serial.id %>" class="serial-position-list">
         <%= text_field_tag 'serial_works[]', nil, :size => 3, :maxlength => 3, :class => 'number serial-position-field', :id => "serial_#{i}" %>
         <span id='position-for-<%= serial.id %>'><%= serial.position %></span>.
-        <h3 class="heading"><%=serial.work.title.html_safe + (serial.work.posted? ? "" : " (DRAFT)") %></h3>
+        <h3 class="heading">
+          <%= serial.work.posted? ? serial.work.title : t(".draft_work_title", title: serial.work.title) %>
+        </h3>
       </li>
     <% end %>
   </ul>
@@ -25,8 +27,8 @@
                 $j.ajax({
                   type: 'post',
                   data: $j("#sortable_series_list").sortable("serialize"),
-                  dataType: 'script',
-                  url: "<%= url_for(:action => :update_positions) %>"})
+                  dataType: 'json',
+                  url: "<%= update_positions_series_path %>"})
               }
       })
   <% end %>

@@ -41,7 +41,8 @@ class ModeratedWork < ApplicationRecord
     where(id: ids).update_all(reviewed: true, approved: false)
     # Ensure works are hidden and spam if they weren't already
     Work.joins(:moderated_work).where("moderated_works.id IN (?)", ids).each do |work|
-      work.update_attributes(hidden_by_admin: true, spam: true)
+      work.notify_of_hiding_for_spam unless work.hidden_by_admin?
+      work.update(hidden_by_admin: true, spam: true)
     end
   end
 

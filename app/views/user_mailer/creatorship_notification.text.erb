@@ -1,7 +1,8 @@
-<% creation_type = @creation.model_name.human.downcase %>
+<% creation_type = @creation.class.name.underscore %>
 <% content_for :message do %>
-<%= t(".intro", type: creation_type, adding_user: @adding_user.login,
-      pseud: @creatorship.pseud.name) %>
+<%# i18n-tasks-use t('user_mailer.creatorship_notification.intro_chapter')
+    i18n-tasks-use t('user_mailer.creatorship_notification.intro_series')-%>
+<%= t(".intro_#{creation_type}", adding_user: @adding_user.login, pseud: @creatorship.pseud.name) %>
 
 <%= t ".text.creation", title: creation_title(@creation),
   url: polymorphic_url(@creation),
@@ -9,6 +10,7 @@
 
 <%= t ".explanation" %>
 
-<%= t ".text.remove", type: creation_type,
-  url: edit_polymorphic_url(@creation) %>
+<%# i18n-tasks-use t('user_mailer.creatorship_notification.text.remove_chapter')
+  i18n-tasks-use t('user_mailer.creatorship_notification.text.remove_series')-%>
+<%= t(".text.remove_#{creation_type}", url: edit_polymorphic_url(@creation)) %>
 <% end %>

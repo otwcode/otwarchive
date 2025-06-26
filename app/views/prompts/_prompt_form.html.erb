@@ -27,10 +27,6 @@
     <legend><%= prompt_label %></legend>
     <h3 class="heading"><%= form.object.new_record? ? prompt_label : link_to(prompt_label, collection_prompt_path(@collection, form.object)) %></h3>  
 
-    <div>
-      <%= form.hidden_field :collection_id, :value => @collection.id %>
-    </div>
-  
     <dl>
       <% if restriction.title_allowed %>
         <dt<%= restriction.title_required ? ' class="required"'.html_safe : '' %>>

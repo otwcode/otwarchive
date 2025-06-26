@@ -1,15 +1,11 @@
 <div class="mystery header picture module">
-  <h4 class="heading"><%= item.is_a?(Work) ? ts("Mystery Work") : ts("Mystery Series") %></h4>
-  <% if item.is_a?(Work) %>
-    <h5 class="heading"><%= h(ts("Part of ")) + (unrevealed ? item.collections.unrevealed : item.collections.anonymous).map {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ").html_safe %></h5>
+  <h4 class="heading"><%= ts("Mystery Work") %></h4>
+  <% if item.approved_collections.unrevealed.present? %>
+    <h5 class="heading"><%= h(ts("Part of ")) + show_collections_data(item.approved_collections.unrevealed) %></h5>
   <% end %>
   <div class="icon"></div>
 </div>
-<h6 class="landmark heading"><%= ts('Summary') %></h6>
+<h6 class="landmark heading"><%= ts("Summary") %></h6>
 <blockquote class="userstuff summary">
-  <% if unrevealed %>
-    <p><%= ts("This is part of an ongoing challenge and will be revealed soon!") %></p>
-  <% else # anonymous %>
-    <%= ts("This is part of an ongoing anonymous challenge. You can read the stories in the challenge now, and the authors will be revealed soon.") %>
-  <% end %>
+  <p><%= ts("This is part of an ongoing challenge and will be revealed soon!") %></p>
 </blockquote>

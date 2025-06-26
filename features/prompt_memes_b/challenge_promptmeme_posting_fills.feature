@@ -41,7 +41,8 @@ Feature: Prompt Meme Challenge
     And I press "Post"
   Then I should see "Kinky Story"
     And I should find a list for associations
-    And I should see "In response to a prompt by Anonymous in the promptcollection collection"
+    And I should see "In response to a prompt by Anonymous in the The Kissing Game collection"
+    And I should see a link "prompt"
     And 1 email should be delivered to "my1@e.org"
 # TODO: when work_anonymous is implemented, test that the prompt filler can be anon too
 
@@ -83,7 +84,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4"
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
-  When I am on my user page
+  When I am on myname4's user page
     And I follow "Claims"
 		And I follow "Fulfilled Claims"
   Then I should see "Fulfilled Story"
@@ -98,7 +99,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4"
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
-  When I am on my user page
+  When I am on myname4's user page
   # Then show me the sidebar # TODO: it has Claims (0) but why?
   Then I should see "Claims (0)"
   When I follow "Claims"
@@ -119,7 +120,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Fulfilled By"
     And I should see "Mystery Work"
 
-  Scenario: Fulfilled claims are shown to mod
+  # Scenario: Fulfilled claims are shown to mod
  # TODO: We need to figure out if we want to hide claims from mods in 100% anonymous prompt memes
 #  Given I have Battle 12 prompt meme fully set up
 #  Given everyone has signed up for Battle 12
@@ -261,9 +262,8 @@ Feature: Prompt Meme Challenge
     And I check "Battle 12"
     And I press "Preview"
   Then I should see "In response to a prompt by"
-    When "AO3-3455" is fixed
-  #  And I should see "Collections:"
-   # And I should see "Battle 12"
+    And I should see "Collections:"
+    And I should see "Battle 12"
   When I press "Update"
   Then I should see "Work was successfully updated"
     And I should not see "draft"
@@ -294,7 +294,7 @@ Feature: Prompt Meme Challenge
     And I fill in the basic work information for "Existing work"
     And I check "random SGA love in Battle 12 (Anonymous)"
     And I press "Preview"
-  When I am on my user page
+  When I am on myname4's user page
     And I follow "Drafts"
     And all emails have been delivered
   When I follow "Post Draft"
@@ -335,9 +335,8 @@ Feature: Prompt Meme Challenge
   Then I should see "Draft was successfully created"
     And I should see "In response to a prompt by myname4"
     And 0 emails should be delivered
-    When "AO3-3455" is fixed
-  #  And I should see "Collections:"
-   # And I should see "Battle 12"
+    And I should see "Collections:"
+    And I should see "Battle 12"
   When I view the work "Existing work"
   Then I should see "draft"
 
@@ -411,7 +410,7 @@ Feature: Prompt Meme Challenge
   Given everyone has signed up for Battle 12
   When I am logged in as "mod1"
   When I claim a prompt from "Battle 12"
-  When I am on my user page
+  When I am on mod1's user page
   Then I should see "Claims (1)"
   When I follow "Claims"
   Then I should see "My Claims"
@@ -438,7 +437,7 @@ Feature: Prompt Meme Challenge
     And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
   When I press "Preview"
     And I press "Post"
-  When I am on my user page
+  When I am on mod1's user page
   Then I follow "Claims"
     And I should not see "mod" within "h4"
   Then I follow "Fulfilled Claims"
@@ -460,3 +459,103 @@ Feature: Prompt Meme Challenge
   Then I should see "In response to a prompt by myname4"
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
+    And I should see a link "prompt"
+
+  Scenario: Work links to the prompt it fulfils, for all users
+
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+    And I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+    And I fulfill my claim
+    And I reveal works for "Battle 12"
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
+  When I am logged in as "myname2"
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
+  When I am logged in as "mod"
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
+  When I log out
+    And I view the work "Fulfilled Story"
+  Then I should see "Fulfilled Story"
+    And I should see "In response to a prompt by Anonymous"
+    And I should see a link "prompt"
+  When I follow "prompt"
+  Then I should see "Request by Anonymous"
+
+  Scenario: A creator can give a gift to a user who disallows gifts if the work is connected to a claim of a non-anonymous prompt belonging to the recipient, and the recipient remains attached even if the work is later disconnected from the claim
+
+  Given I have Battle 12 prompt meme fully set up
+    And the user "prompter" exists and is activated
+    And the user "prompter" disallows gifts
+    And "prompter" has signed up for Battle 12 with combination A
+  When I am logged in as "gifter"
+    And I claim a prompt from "Battle 12"
+    And I start to fulfill my claim
+    And I fill in "Gift this work to" with "prompter"
+    And I press "Post"
+  Then I should see "For prompter."
+  When I follow "Edit"
+    And I uncheck "Battle 12 (prompter)"
+    And I press "Post"
+  Then I should see "For prompter."
+
+  Scenario: A creator cannot give a gift to a user who disallows gifts if the work is connected to a claim of an anonymous prompt belonging to the recipient
+
+  Given I have Battle 12 prompt meme fully set up
+    And the user "prompter" exists and is activated
+    And the user "prompter" disallows gifts
+    And "prompter" has signed up for Battle 12 with combination B
+  When I am logged in as "gifter"
+    And I claim a prompt from "Battle 12"
+    And I start to fulfill my claim
+    And I fill in "Gift this work to" with "prompter"
+    And I press "Post"
+  Then I should see "prompter does not accept gifts."
+
+  Scenario: A creator cannot give a gift to a user who disallows gifts if the work is connected to a claim of a non-anonymous prompt belonging to a different user
+
+  Given I have Battle 12 prompt meme fully set up
+    And the user "prompter" exists and is activated
+    And the user "prompter" disallows gifts
+    And "prompter" has signed up for Battle 12 with combination A
+    And the user "bystander" exists and is activated
+    And the user "bystander" disallows gifts
+  When I am logged in as "gifter"
+    And I claim a prompt from "Battle 12"
+    And I start to fulfill my claim
+    And I fill in "Gift this work to" with "prompter, bystander"
+    And I press "Post"
+  Then I should see "bystander does not accept gifts."
+
+  Scenario: A creator can give a gift to a user who has blocked them if the work is connected to a claim of a non-anonymous prompt belonging to the recipient
+
+  Given I have Battle 12 prompt meme fully set up
+    And the user "prompter" exists and is activated
+    And the user "prompter" has blocked the user "gifter"
+    And "prompter" has signed up for Battle 12 with combination A
+  When I am logged in as "gifter"
+    And I claim a prompt from "Battle 12"
+    And I start to fulfill my claim
+    And I fill in "Gift this work to" with "prompter"
+    And I press "Post"
+  Then I should see "For prompter."
+  When I follow "Edit"
+    And I uncheck "Battle 12 (prompter)"
+    And I press "Post"
+  Then I should see "For prompter."

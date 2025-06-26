@@ -4,9 +4,14 @@
     <h2 class="heading"><%= ts("%{wrangler_login}'s Wrangling Page", :wrangler_login => @wrangler.login) %></h2>
     <p class="icon"><%= icon_display(@wrangler) %></p>
     <!--/descriptions-->
+    <!--subnav-->
+    <% if policy(:wrangling).report_csv? %>
+      <ul class="navigation actions" role="navigation">
+        <li><%= link_to t(".tags_wrangled_csv"), report_csv_tag_wrangler_path %></li>
+      </ul>
+    <% end %>
+    <!--/subnav-->
   </div>
-  <!--subnav-->
-  <!--/subnav-->
 
   <!--main content-->
   <!--TEST NOTE: these tds are titled to expose headings to Chromevox, which doesn't read scope
@@ -17,6 +22,12 @@
       <p><%= ts("Your lack of fandoms makes the wrangulator sad. Fandoms can be assigned via the") %> <%= link_to ts('tag wranglers page'), tag_wranglers_path %>.</p>
     <% else %>
       <p><%= ts('Fandoms assigned to you via the ') %> <%= link_to ts('tag wranglers page'), tag_wranglers_path %>. <%= ts('The unwrangled count is the number of unwrangled tags which were used on works in the given fandom.') %></p>
+    <% end %>
+    <% if (@wrangler == @current_user || logged_in_as_admin?) && @wrangler.last_wrangling_activity %>
+      <% wrangled_time_html = tag.span(time_in_zone(@wrangler.last_wrangling_activity.updated_at), class: "datetime") %>
+      <p><%= t(".last_wrangled_html", wrangler_login: @wrangler.login, time: wrangled_time_html) %></p>
+    <% end %>
+    <% if @fandoms.any? %>
       <table summary="<%= ts('Overview of your assigned fandoms and how many unfilterable and unwrangled tags belong to each assigned fandom.') %>">
         <caption><%= ts('Unfilterable and Unwrangled Tag Counts for Your Assigned Fandoms') %></caption>
         <thead>

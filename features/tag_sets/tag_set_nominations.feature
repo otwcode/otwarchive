@@ -64,7 +64,8 @@ Feature: Nominating and reviewing nominations for a tag set
   Then I should see "Not Yet Reviewed (may be edited or deleted)"
     And I should see "Floobry"
   When I follow "Edit"
-    And I fill in "tag_set_nomination_fandom_nominations_attributes_0_tagname" with "Bloob"
+  Then I should see the input with id "tag_set_nomination_fandom_nominations_attributes_0_tagname" within "div#main"
+  When I fill in "tag_set_nomination_fandom_nominations_attributes_0_tagname" with "Bloob"
   When I press "Submit"
   Then I should see "Your nominations were successfully updated"
   Given I am logged in as "tagsetter"
@@ -79,7 +80,7 @@ Feature: Nominating and reviewing nominations for a tag set
     And I follow "My Nominations"
   Then I should see "Partially Reviewed (unreviewed nominations may be edited)"
   When I follow "Edit"
-  Then I should not see the field "tag_set_nomination_fandom_nominations_attributes_0_tagname" within "div#main"
+  Then I should not see the input with id "tag_set_nomination_fandom_nominations_attributes_0_tagname" within "div#main"
 
   Scenario: You should be able to edit your nominated characters when the tagset doesn't allow fandom nominations
   Given I am logged in as "tagsetter"
@@ -112,6 +113,25 @@ Feature: Nominating and reviewing nominations for a tag set
   Then I should see "Your nominations were successfully updated."
     And I should see "My Favorite Character/Their Worst Enemy"
     But I should not see "Their Best Friend"
+
+  Scenario: You should be able to delete a nominated character and its fandom at once
+  when the tagset doesn't allow fandom nominations
+    Given a canonical character "Common Character" in fandom "Canon"
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "Nominated Tags" with 0 fandom noms and 3 character noms
+    When I follow "Nominate"
+      And I fill in "Character 1" with "Obscure Character"
+      And I fill in "Fandom?" with "Canon"
+      And I press "Submit"
+    Then I should see "Your nominations were successfully submitted."
+      And I should see "Obscure Character"
+    When I follow "Edit"
+      And I fill in "Character 1" with ""
+      And I fill in "Fandom?" with ""
+      And I press "Submit"
+    Then I should see "Your nominations were successfully updated."
+      And I should see "None nominated in this category."
+      But I should not see "We need to know what fandom belongs in."
 
   Scenario: Owner of a tag set can clear all nominations
   Given I am logged in as "tagsetter"
@@ -231,3 +251,90 @@ Feature: Nominating and reviewing nominations for a tag set
       And I submit
     Then I should see "The tag Veronica Mars is already in the archive as a Character tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom."
 
+  Scenario: If a tag was nominated as another type of tag, "My Nominations" and "Review Nominations" can still be accessed
+    Given a nominated tag set "bad" with a tag nomination in the wrong category
+      And I am logged in as "tagsetter"
+      And I go to the "bad" tag set page
+    # preexisting non-canonical tag
+    When I follow "My Nominations"
+    Then I should see "My Nominations for bad"
+      And I should see "rel tag"
+    When I review nominations for "bad"
+    Then I should see "Fandoms (1 left to review)"
+      And I should see "rel tag"
+    # canonical tag
+    When the tag "rel tag" is canonized
+      And I go to the "bad" tag set page
+    When I follow "My Nominations"
+    Then I should see "My Nominations for bad"
+      And I should see "rel tag"
+    When I review nominations for "bad"
+    Then I should see "Fandoms (1 left to review)"
+      And I should see "rel tag"
+    # synonym tag
+    When the tag "rel tag" is decanonized
+      And a canonical relationship "canon tag"
+      And a synonym "rel tag" of the tag "canon tag"
+      And I go to the "bad" tag set page
+    When I follow "My Nominations"
+    Then I should see "My Nominations for bad"
+      And I should see "rel tag"
+    When I review nominations for "bad"
+    Then I should see "Fandoms (1 left to review)"
+      And I should see "rel tag (canon tag)"
+
+  Scenario: The zero width space tag doesn't replace deleted tag nominations
+    Given a canonical fandom "Treasure Chest"
+      And a zero width space tag exists
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "Nominated Tags" with 2 fandom noms and 3 character noms
+      And I nominate fandom "Treasure Chest" and character "Gold" in "Nominated Tags"
+      And I go to the "Nominated Tags" tag set page
+      And I follow "My Nominations"
+    Then I should see "Not Yet Reviewed (may be edited or deleted)"
+    When I follow "Edit"
+      And I fill in "Character" with ""
+      And I press "Submit"
+    Then I should see "Your nominations were successfully updated."
+      And I should see "Treasure Chest"
+      But I should not see "Gold"
+      And I should see "None nominated in this fandom."
+
+  Scenario: A tag nomination with the zero width space tag doesn't prevent removing other tag nominations
+    Given a canonical fandom "First"
+      And a canonical fandom "Treasure Chest"
+      And a zero width space tag exists
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "Nominated Tags" with 2 fandom noms and 1 character noms
+      # Zero width space character tag in first fandom
+      And I nominate fandom "First,Treasure Chest" and character "​,Gold" in "Nominated Tags"
+      And I go to the "Nominated Tags" tag set page
+      And I follow "My Nominations"
+    Then I should see "First"
+      And I should not see "None nominated in this fandom."
+      And I should see "Treasure Chest"
+      And I should see "Gold"
+    When I follow "Edit"
+      # Empty second fandom character field
+      And I fill in "tag_set_nomination_fandom_nominations_attributes_1_character_nominations_attributes_0_tagname" with ""
+      And I press "Submit"
+    Then I should see "Your nominations were successfully updated."
+      And I should not see "Someone else has already nominated the tag for this set but in fandom First."
+      And I should not see "Gold"
+      And I should see "None nominated in this fandom."
+
+  Scenario: A nominated canonical tag can be renamed by a tag wrangling admin without affecting the nomination
+    Given a canonical character "Before" in fandom "Treasure Chest"
+      And I am logged in as "tagsetter"
+      And I set up the nominated tag set "Nominated Tags" with 1 fandom nom and 1 character nom
+      And I nominate fandom "Treasure Chest" and character "Before" in "Nominated Tags" as "tagsetter"
+    When I am logged in as an "tag_wrangling" admin
+      And I edit the tag "Before"
+      And I fill in "Name" with "After"
+      And I press "Save changes"
+    Then I should see "Tag was updated."
+    When I am logged in as "tagsetter"
+      And I go to the "Nominated Tags" tag set page
+      And I follow "My Nominations"
+    Then I should see "Treasure Chest"
+      And I should see "Before"

@@ -41,7 +41,7 @@ Feature: Search works by work info
     Then I should see "You searched for: word count: >15000 revised at: > 2 years ago"
       And I should see "No results found"
 
-  Scenario: Search with the header search field and then refine by author/artist
+  Scenario: Search with the header search field and then refine by creator
     Given I have the Battle set loaded
     When I fill in "site_search" with "testuser2"
       And I press "Search"
@@ -54,9 +54,9 @@ Feature: Search works by work info
     Then I should be on the search works page
       And the field labeled "Any Field" should contain "testuser2"
     When I fill in "Any Field" with ""
-      And I fill in "Author/Artist" with "testuser2"
+      And I fill in "Creator" with "testuser2"
       And I press "Search" within "#new_work_search"
-    Then I should see "You searched for: Author/Artist: testuser2"
+    Then I should see "You searched for: Creator: testuser2"
       And I should see "3 Found"
       And I should see "fourth"
       And I should see "fifth"
@@ -82,23 +82,21 @@ Feature: Search works by work info
       And I should see "I am <strong>er Than Yesterday & Other Lies"
 
   Scenario: Search by crossovers
-    Given I have loaded the fixtures
+    Given a set of crossover works for searching
     When I am on the search works page
       And I choose "Exclude crossovers"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: No Crossovers"
-      And I should see "6 Found"
-      And I should see "First work"
-      And I should see "second work"
-      And I should see "third work"
-      And I should see "fourth"
-      And I should see "fifth"
-      And I should see "I am <strong>er Than Yesterday & Other Lies"
+      And I should see "5 Found"
+      But I should not see "Work With Multiple Fandoms"
     When I am on the search works page
       And I choose "Only crossovers"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Only Crossovers"
-      And I should see "No results found"
+      And I should see "3 Found"
+      And I should see "First Work With Multiple Fandoms"
+      And I should see "Second Work With Multiple Fandoms"
+      And I should see "Third Work With Multiple Fandoms"
 
   Scenario: Search by single chapter
     Given I have the Battle set loaded
@@ -139,3 +137,17 @@ Feature: Search works by work info
     Then the field labeled "Title" should contain "work"
       And "Title" should be selected within "Sort by"
       And "Ascending" should be selected within "Sort direction"
+
+  Scenario: Search by number in title
+    Given I have loaded the fixtures
+    When I am on the search works page
+      And I fill in "Title" with "work 2 6"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Title: work 2 6"
+      And I should see "1 Found"
+      And the 1st result should contain "second work (2 of 6)"
+    When I am on the search works page
+      And I fill in "Title" with "work 1"
+      And I press "Search" within "#new_work_search"
+    Then I should see "You searched for: Title: work 1"
+      And I should see "No results found"

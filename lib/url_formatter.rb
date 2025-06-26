@@ -19,41 +19,49 @@ class UrlFormatter
     uri = Addressable::URI.parse(input)
     queries = CGI::parse(uri.query) unless uri.query.nil?
     if queries.nil?
-      return input.gsub(/(\?|#).*$/, '')
+      input.gsub(/[?#].*$/, "")
     else
-      queries.keep_if { |k,v| ['sid'].include? k }
-      querystring = ('?' + URI.encode_www_form(queries)) unless queries.empty?
-      return input.gsub(/(\?|#).*$/, '') << querystring.to_s
+      queries.keep_if { |k, _| ["sid"].include? k }
+      querystring = "?#{URI.encode_www_form(queries)}" unless queries.empty?
+      input.gsub(/[?#].*$/, "") << querystring.to_s
     end
   end
 
-  def minimal_no_http
-    minimal.gsub(/https?:\/\/www\./, "")
+  def minimal_no_protocol_no_www
+    minimal.gsub(%r{^https?://(www\.)?}, "")
   end
   
   def no_www
-    minimal.gsub(/http:\/\/www\./, "http://")
+    minimal.gsub(%r{^(https?)://www\.}, "\\1://")
   end
   
   def with_www
-    minimal.gsub(/http:\/\//, "http://www.")
+    minimal.gsub(%r{^(https?)://}, "\\1://www.")
   end
-  
+
+  def with_http
+    minimal.gsub(%r{^https?://}, "").prepend("http://")
+  end
+
+  def with_https
+    minimal.gsub(%r{^https?://}, "").prepend("https://")
+  end
+
   def encoded
-    minimal URI.encode(url)
+    minimal URI::Parser.new.escape(url)
   end
   
   def decoded
-    URI.decode(minimal)
+    URI::Parser.new.unescape(minimal)
   end
   
-  # Adds http if not present and downcases the host
+  # Adds http if not present, downcases the host and hyphenates spaces
   # Extracted from story parser class
+  # Returns a Generic::URI
   def standardized
-    clean_url = URI.parse(url)
-    clean_url = URI.parse('http://' + url) if clean_url.class.name == "URI::Generic"
-    clean_url.host.downcase!
-    clean_url.to_s
+    uri = URI.parse(url)
+    uri = URI.parse("http://#{url}") if uri.instance_of?(URI::Generic)
+    uri.host = uri.host.downcase.tr(" ", "-")
+    uri
   end
-  
 end

@@ -1,6 +1,4 @@
 class Subscription < ApplicationRecord
-  include ActiveModel::ForbiddenAttributesProtection
-
   VALID_SUBSCRIBABLES = %w(Work User Series).freeze
 
   belongs_to :user
@@ -13,7 +11,7 @@ class Subscription < ApplicationRecord
   # if there's an invalid subscribable type
   validates :subscribable, presence: true,
                            if: proc { |s| VALID_SUBSCRIBABLES.include?(s.subscribable_type) }
-  
+
   # Get the subscriptions associated with this work
   # currently: users subscribed to work, users subscribed to creator of work
   scope :for_work, lambda {|work|
@@ -22,7 +20,7 @@ class Subscription < ApplicationRecord
             OR (subscribable_id IN (?) AND subscribable_type = 'Series')",
             work.id,
             work.pseuds.pluck(:user_id),
-            work.series.pluck(:id)]).
+            work.serial_works.pluck(:series_id)]).
     group(:user_id)
   }
 
@@ -34,6 +32,8 @@ class Subscription < ApplicationRecord
       subscribable.name
     elsif subscribable.respond_to?(:title)
       subscribable.title
+    else
+      I18n.t("subscriptions.deleted")
     end
   end
 

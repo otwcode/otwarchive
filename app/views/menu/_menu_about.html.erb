@@ -1,7 +1,7 @@
-<ul class="menu" role="menu">
-  <li><%= span_if_current ts('About Us', key: 'header.about'), about_path %></li>
-  <li><%= span_if_current ts('News', key: 'header.about'), admin_posts_path %></li>
-  <li><%= span_if_current ts('FAQ', key: 'header.about'), archive_faqs_path %></li>
-  <li><%= span_if_current ts('Wrangling Guidelines', key: 'header.about'), wrangling_guidelines_path %></li>
-  <li><%= span_if_current ts('Donate or Volunteer', key: 'header.about'), donate_path %></li>
+<ul class="menu">
+  <li><%= link_to t(".about_us"), about_path %></li>
+  <li><%= link_to t(".news"), admin_posts_path %></li>
+  <li><%= link_to t(".faq"), archive_faqs_path %></li>
+  <li><%= link_to t(".wrangling_guidelines"), wrangling_guidelines_path %></li>
+  <li><%= link_to t(".donate"), donate_path %></li>
 </ul>

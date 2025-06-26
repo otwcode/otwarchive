@@ -1,13 +1,14 @@
 class ArchiveFaqsController < ApplicationController
-
   before_action :admin_only, except: [:index, :show]
   before_action :set_locale
+  before_action :validate_locale, if: :logged_in_as_admin?
   before_action :require_language_id
+  before_action :default_locale_only, only: [:new, :create, :manage, :update_positions, :confirm_delete, :destroy]
   around_action :with_locale
 
   # GET /archive_faqs
   def index
-    @archive_faqs = ArchiveFaq.order('position ASC')
+    @archive_faqs = ArchiveFaq.order("position ASC")
     unless logged_in_as_admin?
       @archive_faqs = @archive_faqs.with_translations(I18n.locale)
     end
@@ -39,6 +40,7 @@ class ArchiveFaqsController < ApplicationController
   end
 
   protected
+
   def build_questions
     notice = ""
     num_to_build = params["num_questions"] ? params["num_questions"].to_i : @archive_faq.questions.count
@@ -58,9 +60,10 @@ class ArchiveFaqsController < ApplicationController
   end
 
   public
+
   # GET /archive_faqs/new
   def new
-    @archive_faq = ArchiveFaq.new
+    @archive_faq = authorize ArchiveFaq.new
     1.times { @archive_faq.questions.build(attributes: { question: "This is a temporary question", content: "This is temporary content", anchor: "ThisIsATemporaryAnchor"})}
     respond_to do |format|
       format.html # new.html.erb
@@ -69,32 +72,34 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1/edit
   def edit
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
+    authorize :archive_faq, :full_access? if default_locale?
     build_questions
   end
 
   # GET /archive_faqs/manage
   def manage
-    @archive_faqs = ArchiveFaq.order('position ASC')
+    @archive_faqs = authorize ArchiveFaq.order("position ASC")
   end
 
   # POST /archive_faqs
   def create
-    @archive_faq = ArchiveFaq.new(archive_faq_params)
-      if @archive_faq.save
-        flash[:notice] = 'ArchiveFaq was successfully created.'
-        redirect_to(@archive_faq)
-      else
-        render action: "new"
-      end
+    @archive_faq = authorize ArchiveFaq.new(archive_faq_params)
+    if @archive_faq.save
+      flash[:notice] = t(".success")
+      redirect_to(@archive_faq)
+    else
+      render action: "new"
+    end
   end
 
   # PUT /archive_faqs/1
   def update
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
+    authorize :archive_faq, :full_access? if default_locale?
 
-    if @archive_faq.update_attributes(archive_faq_params)
-      flash[:notice] = 'ArchiveFaq was successfully updated.'
+    if @archive_faq.update(archive_faq_params)
+      flash[:notice] = t(".success")
       redirect_to(@archive_faq)
     else
       render action: "edit"
@@ -103,9 +108,10 @@ class ArchiveFaqsController < ApplicationController
 
   # reorder FAQs
   def update_positions
+    authorize :archive_faq
     if params[:archive_faqs]
       @archive_faqs = ArchiveFaq.reorder_list(params[:archive_faqs])
-      flash[:notice] = ts("Archive FAQs order was successfully updated.")
+      flash[:notice] = t(".success")
     elsif params[:archive_faq]
       params[:archive_faq].each_with_index do |id, position|
         ArchiveFaq.update(id, position: position + 1)
@@ -126,23 +132,33 @@ class ArchiveFaqsController < ApplicationController
 
   # Set the locale as an instance variable first
   def set_locale
-    if params[:language_id] && session[:language_id] != params[:language_id]
-      session[:language_id] = params[:language_id]
-    end
-    if current_user.present? && $rollout.active?(:set_locale_preference,
-                                                 current_user)
-      @i18n_locale = session[:language_id] || Locale.find(current_user.
-        preference.preferred_locale).iso
+    session[:language_id] = params[:language_id] if Locale.exists?(iso: params[:language_id])
+
+    if current_user.present?
+      @i18n_locale = session[:language_id].presence || current_user.preference.locale.iso
     else
-      @i18n_locale = session[:language_id] || I18n.default_locale
+      @i18n_locale = session[:language_id].presence || I18n.default_locale
     end
   end
 
+  def validate_locale
+    return if params[:language_id].blank? || Locale.exists?(iso: params[:language_id])
+
+    flash[:error] = "The specified locale does not exist."
+    redirect_to url_for(request.query_parameters.merge(language_id: I18n.default_locale))
+  end
+
   def require_language_id
-    if params[:language_id].blank?
-      redirect_to url_for(request.query_parameters.merge(language_id:
-                                                         @i18n_locale.to_s))
-    end
+    return if params[:language_id].present? && Locale.exists?(iso: params[:language_id])
+
+    redirect_to url_for(request.query_parameters.merge(language_id: @i18n_locale.to_s))
+  end
+
+  def default_locale_only
+    return if default_locale?
+
+    flash[:error] = t("archive_faqs.default_locale_only")
+    redirect_to archive_faqs_path
   end
 
   # Setting I18n.locale directly is not thread safe
@@ -152,17 +168,21 @@ class ArchiveFaqsController < ApplicationController
 
   # GET /archive_faqs/1/confirm_delete
   def confirm_delete
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
   end
 
   # DELETE /archive_faqs/1
   def destroy
-    @archive_faq = ArchiveFaq.find_by(slug: params[:id])
+    @archive_faq = authorize ArchiveFaq.find_by(slug: params[:id])
     @archive_faq.destroy
     redirect_to(archive_faqs_path)
   end
 
   private
+
+  def default_locale?
+    @i18n_locale.to_s == I18n.default_locale.to_s
+  end
 
   def archive_faq_params
     params.require(:archive_faq).permit(

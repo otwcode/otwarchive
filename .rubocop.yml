@@ -3,20 +3,28 @@
 require:
   - rubocop-rails
   - rubocop-rspec
+  - ./rubocop/rubocop
+
+inherit_mode:
+  merge:
+    - Exclude
 
 AllCops:
-  RSpec:
-    Patterns:
-      - "(?:^|/)factories/"
-      - "(?:^|/)features/"
-      - "(?:^|/)spec/"
-  TargetRubyVersion: 2.6
+  NewCops: enable
+  TargetRubyVersion: 3.1
 
 Bundler/OrderedGems:
   Enabled: false
 
+I18n/DeprecatedTranslationKey:
+    Rules:
+      name_with_colon: "Prefer `name` with `mailer.general.metadata_label_indicator` over `name_with_colon`"
+
 Layout/DotPosition:
   EnforcedStyle: leading
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: false
 
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
@@ -27,6 +35,9 @@ Layout/LineLength:
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
+Layout/SingleLineBlockChain:
+  Enabled: true
+
 Layout/TrailingWhitespace:
   Enabled: false
 
@@ -34,10 +45,17 @@ Lint/AmbiguousBlockAssociation:
   Exclude:
     # Exception for specs where we use change matchers:
     # https://github.com/rubocop-hq/rubocop/issues/4222
+    - 'features/step_definitions/**/*.rb'
     - 'spec/**/*.rb'
 
 Lint/AmbiguousRegexpLiteral:
   Enabled: false
+
+Lint/RedundantSafeNavigation:
+  Exclude:
+    # Take a better safe than sorry approach to safe navigation in admin
+    # policies.
+    - 'app/policies/*.rb'
 
 Metrics/AbcSize:
   Enabled: false
@@ -57,13 +75,68 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
 Metrics/PerceivedComplexity:
   Enabled: false
 
+Migration/LargeTableSchemaUpdate:
+  Tables:
+    - abuse_reports
+    - active_storage_blobs
+    - admin_activities
+    - audits
+    - bookmarks
+    - comments
+    - common_taggings
+    - collection_items
+    - collection_participants
+    - collection_profiles
+    - collections
+    - creatorships
+    - external_works
+    - favorite_tags
+    - feedbacks
+    - filter_counts
+    - filter_taggings
+    - gifts
+    - inbox_comments
+    - invitations
+    - kudos
+    - log_items
+    - mutes
+    - preferences
+    - profiles
+    - prompts
+    - pseuds
+    - readings
+    - set_taggings
+    - serial_works
+    - series
+    - skins
+    - stat_counters
+    - subscriptions
+    - tag_nominations
+    - tag_set_associations
+    - tags
+    - taggings
+    - users
+    - works
+
+Naming/VariableNumber:
+  AllowedIdentifiers:
+    - age_over_13
+    - no_age_over_13
+
+Rails/DefaultScope:
+  Enabled: true
+
 Rails/DynamicFindBy:
   AllowedMethods:
-    # Exception for Tag.find_by_name
+    # Exceptions for Tag.find_by_name and Tag.find_by_name!
     - find_by_name
+    - find_by_name!
     # Exception for Tagging.find_by_tag
     - find_by_tag
     # Exceptions for Work.find_by_*
@@ -72,6 +145,11 @@ Rails/DynamicFindBy:
     - find_by_url_generation
     - find_by_url_generation_key
     - find_by_url_uncached
+    # Exceptions for InboxComment.find_by_filters
+    - find_by_filters
+
+Rails/EnvironmentVariableAccess:
+  Enabled: true
 
 # Allow all uses of html_safe, they're everywhere...
 Rails/OutputSafety:
@@ -79,11 +157,16 @@ Rails/OutputSafety:
 
 Rails/Output:
   Exclude:
+    # Allow patches to print warnings to console:
+    - 'config/initializers/monkeypatches/*.rb'
     # Allow migrations to print pt-osc comments to console:
     - 'db/migrate/*.rb'
 
 Rails/RakeEnvironment:
   Enabled: false
+
+Rails/ReversibleMigrationMethodDefinition:
+  Enabled: true
 
 # Allow update_attribute, update_all, touch, etc.
 Rails/SkipsModelValidations:
@@ -96,6 +179,12 @@ Rails/UnknownEnv:
     - staging
     - production
 
+RSpec:
+  Include:
+    - "(?:^|/)factories/"
+    - "(?:^|/)features/"
+    - "(?:^|/)spec/"
+
 # Allow "allow_any_instance_of"
 RSpec/AnyInstance:
   Enabled: false
@@ -107,6 +196,8 @@ RSpec/ContextWording:
 
 RSpec/DescribeClass:
   Exclude:
+    # Exception for specs about I18n configurations
+    - 'spec/lib/i18n/**/*.rb'
     # Exception for rake specs, where the top level describe uses a task name
     - 'spec/lib/tasks/*.rake_spec.rb'
     # Exception for integration specs, which may not test a specific class
@@ -127,6 +218,8 @@ RSpec/FilePath:
   Exclude:
     # Exception for WorksController, whose many specs need multiple files
     - 'spec/controllers/works/*.rb'
+    # Exception for concern specs, which may test multiple classes
+    - 'spec/models/concerns/**/*.rb'
 
 # Avoid instance variables, except for those not assigned within the spec,
 # e.g. @request.
@@ -160,6 +253,9 @@ RSpec/NestedGroups:
 RSpec/PredicateMatcher:
   Enabled: false
 
+Style/AndOr:
+  EnforcedStyle: conditionals
+
 Style/ClassAndModuleChildren:
   Enabled: false
 
@@ -189,6 +285,9 @@ Style/PercentLiteralDelimiters:
 # Stop checking if uses of "self" are redundant
 Style/RedundantSelf:
   Enabled: false
+
+Style/SelectByRegexp:
+  Enabled: true
 
 Style/SingleLineMethods:
   AllowIfMethodIsEmpty: false

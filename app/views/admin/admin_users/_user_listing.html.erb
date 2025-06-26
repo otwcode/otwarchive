@@ -1,6 +1,5 @@
 <th scope="row"><%= user.login.html_safe %></th>
 <td title="<%= ts("Email") %>"><%= user.email.html_safe %></td>
-<td><%= ts("Translation Admin") if user.is_translation_admin? %></td>
 <td><%= ts("Tag Wrangler") if user.tag_wrangler %></td>
 <td><%= ts("Archivist") if user.archivist %></td>
 <td><%= ts("Suspended") if user.suspended %></td>

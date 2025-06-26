@@ -43,7 +43,7 @@ div.admin + h3.landmark {
   margin: 0.643em;
 }
 
-.comment .ip {
+.comment .ip, .comment .email {
   margin: 1.929em 0.643em 0.643em;
   text-align: right;
 }

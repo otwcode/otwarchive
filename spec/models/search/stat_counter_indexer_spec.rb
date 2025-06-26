@@ -10,7 +10,7 @@ describe StatCounterIndexer, work_search: true do
       # something to change.
       run_all_indexing_jobs
 
-      stat_counter.update_attributes(
+      stat_counter.update!(
         kudos_count: 10,
         hit_count: 10,
         comments_count: 10,

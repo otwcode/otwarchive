@@ -62,6 +62,16 @@ Feature: Invite requests
       And I should not see "Sorry, you have no unsent invitations right now."
       And I should see "You have 2 open invitations and 0 that have been sent but not yet used."
 
+  Scenario: User can see an error after trying to invite an invalid email address
+
+    Given I am logged in as "user1"
+      And "user1" has "1" invitation
+      And I am on user1's manage invitations page
+    When I follow the link for "user1" first invite
+      And I fill in "Enter an email address" with "test@"
+      And I press "Update Invitation"
+    Then I should see "Invitee email should look like an email address"
+
   Scenario: User can send out invites they have been granted, and the recipient can sign up
 
     Given invitations are required
@@ -73,32 +83,35 @@ Feature: Invite requests
       And I fill in "Email address" with "test@archiveofourown.org"
       And I press "Send Invitation"
     Then 1 email should be delivered to test@archiveofourown.org
-      And the email should contain "has invited you to join our beta!"
+      And the email should contain "has invited you to join the Archive of Our Own!"
+      And the email should contain "If you do not receive this email after 48 hours"
+      And the email should contain "With an account, you can post fanworks"
 
     Given I am a visitor
-    When I click the first link in the email
+    When I follow "follow this link to sign up" in the email
       And I fill in the sign up form with valid data
       And I fill in the following:
         | user_registration_login                  | user2     |
         | user_registration_password               | password1 |
         | user_registration_password_confirmation  | password1 |
       And I press "Create Account"
-    Then I should see "You should soon receive a confirmation email at the address you gave us"
+    Then I should see "You should soon receive an activation email at the address you gave us"
       And I should see how long I have to activate my account
       And I should see "If you haven't received this email within 24 hours"
 
   Scenario: Banned users cannot access their invitations page
 
-    Given I am logged in as a banned user
-    When I go to my invitations page
-    Then I should be on my user page
-    And I should see "Your account has been banned."
+    Given the user "bad_user" is banned
+      And I am logged in as "bad_user"
+    When I go to bad_user's invitations page
+    Then I should be on bad_user's user page
+      And I should see "Your account has been banned."
 
   Scenario:  A user can manage their invitations
 
     Given I am logged in as "user1"
       And "user1" has "5" invitations
-    When I go to my user page
+    When I go to user1's user page
      And I follow "Invitations"
      And I follow "Manage Invitations"
     Then I should see "Unsent (5)"
@@ -113,15 +126,15 @@ Feature: Invite requests
   Scenario: An admin can get to a user's invitations page
     Given I am logged in as a "support" admin
       And the user "steven" exists and is activated
-    When I go to the abuse administration page for "steven"
-      And I follow "Add User Invitations"
+    When I go to the user administration page for "steven"
+      And I follow "Add Invitations"
     Then I should be on steven's invitations page
 
   Scenario: An admin can get to a user's manage invitations page
     Given I am logged in as a "support" admin
       And the user "steven" exists and is activated
-    When I go to the abuse administration page for "steven"
-      And I follow "Manage User Invitations"
+    When I go to the user administration page for "steven"
+      And I follow "Manage Invitations"
     Then I should be on steven's manage invitations page
 
   Scenario: An admin can create a user's invitations
@@ -139,8 +152,38 @@ Feature: Invite requests
       And I am logged in as a "support" admin
     When I follow "Invite New Users"
       And I fill in "invitation[user_name]" with "user1"
-      And I press "Go"
-    Then I should see "Token"
+      And I press "Search" within "form.invitation.simple.search"
+    Then I should see "Invite token"
     When I follow "Delete"
     Then I should see "Invitation successfully destroyed"
       And "user1" should have "4" invitations
+
+  Scenario: Translated email is sent when invitation request is declined by admin
+    Given a locale with translated emails
+      And invitations are required
+      And the user "user1" exists and is activated
+      And the user "notuser1" exists and is activated
+      And the user "user1" enables translated emails
+      And all emails have been delivered
+    When as "user1" I request some invites
+      And as "notuser1" I request some invites 
+      And I view requests as an admin
+      And I press "Decline All"
+    Then "user1" should be emailed
+      And the email should have "Additional invitation request declined" in the subject
+      And the email to "user1" should be translated
+    Then "notuser1" should be emailed
+      And the email should have "Additional invitation request declined" in the subject
+      And the email to "notuser1" should be non-translated
+
+  Scenario: Translated email is sent when new invitation is given to registered user
+    Given a locale with translated emails
+      And invitations are required
+      And the user "user1" exists and is activated
+      And the user "user1" enables translated emails
+      And all emails have been delivered
+    When as "user1" I request some invites
+      And an admin grants the request
+    Then "user1" should be emailed
+      And the email should have "New invitations" in the subject
+      And the email to "user1" should be translated

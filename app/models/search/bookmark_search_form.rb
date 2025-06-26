@@ -107,7 +107,7 @@ class BookmarkSearchForm
     if self.language_id.present?
       language = Language.find_by(short: self.language_id)
       if language.present?
-        summary << "Work language: #{language.name}"
+        summary << "Work language: <span lang=#{language.short}>#{language.name}</span>"
       end
     end
     if %w(1 true).include?(self.rec.to_s)
@@ -152,39 +152,6 @@ class BookmarkSearchForm
 
   def sort_direction(sort_column)
     'desc'
-  end
-
-  ###############
-  # COUNTING
-  ###############
-
-  def self.count_for_user(user)
-    show_private = User.current_user.is_a?(Admin) || user == User.current_user
-
-    Rails.cache.fetch(count_cache_key(user, show_private), count_cache_options) do
-      BookmarkQuery.new(user_ids: [user.id], show_private: show_private).count
-    end
-  end
-
-  def self.count_for_pseud(pseud)
-    show_private = User.current_user.is_a?(Admin) || pseud.user == User.current_user
-
-    Rails.cache.fetch(count_cache_key(pseud, show_private), count_cache_options) do
-      BookmarkQuery.new(pseud_ids: [pseud.id], show_private: show_private).count
-    end
-  end
-
-  def self.count_cache_key(owner, show_private)
-    status = User.current_user ? "logged_in" : "logged_out"
-    status << "_private" if show_private
-    "bookmark_count_#{owner.class.name.underscore}_#{owner.id}_#{status}"
-  end
-
-  def self.count_cache_options
-    {
-      expires_in: ArchiveConfig.SECONDS_UNTIL_DASHBOARD_COUNTS_EXPIRE.seconds,
-      race_condition_ttl: 10.seconds
-    }
   end
 
   private
