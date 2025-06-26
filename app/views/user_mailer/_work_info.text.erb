@@ -13,7 +13,7 @@
 <%= work_tag_metadata(work.tag_groups["Freeform"]) %>
 <% end %>
 <% unless work.series.count.zero? %>
-<%= metadata_label(Series.model_name.human(count: work.series.count)) %><%= raw to_plain_text(series_list(work, red_link: true)) %>
+<%= metadata_label(Series.model_name.human(count: work.series.count)) %><%= raw to_plain_text(series_position_description(work, email_styling: true)) %>
 <% end %>
 <% unless work.summary.blank? %>
 

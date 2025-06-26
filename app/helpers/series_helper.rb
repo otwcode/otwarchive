@@ -58,7 +58,7 @@ module SeriesHelper
     ts("Part <strong>%{position}</strong> of %{title}".html_safe, position: serial.position, title: link_to(series.title, series))
   end
 
-  def series_list(work, email_styling: false)
+  def series_position_description(work, email_styling: false)
     series = work.series
     return t("series_helper.none") if series.empty?
 
