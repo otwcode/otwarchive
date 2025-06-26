@@ -292,16 +292,16 @@ class TagsController < ApplicationController
       end
       # this makes sure params[:status] is safe
       status = params[:status]
-      if %w(unfilterable canonical synonymous unwrangleable).include?(status)
-        @tags = @tag.send(show).order(sort).send(status).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      elsif status == 'unwrangled'
-        @tags = @tag.unwrangled_tags(
-          params[:show].singularize.camelize,
-          params.permit!.slice(:sort_column, :sort_direction, :page)
-        )
-      else
-        @tags = @tag.send(show).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      end
+      @tags = if %w[unfilterable canonical synonymous unwrangleable].include?(status)
+                @tag.send(show).reorder(sort).send(status).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+              elsif status == "unwrangled"
+                @tag.unwrangled_tags(
+                  params[:show].singularize.camelize,
+                  params.permit!.slice(:sort_column, :sort_direction, :page)
+                )
+              else
+                @tag.send(show).reorder(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+              end
     end
   end
 
