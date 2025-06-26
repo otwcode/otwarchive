@@ -222,10 +222,10 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     date (3.4.1)
-    departure (6.7.0)
-      activerecord (>= 6.0.0, < 7.2.0, != 7.0.0)
+    departure (6.8.0)
+      activerecord (>= 6.0.0, < 7.3.0, != 7.0.0)
       mysql2 (>= 0.4.0, < 0.6.0)
-      railties (>= 6.0.0, < 7.2.0, != 7.0.0)
+      railties (>= 6.0.0, < 7.3.0, != 7.0.0)
     devise (4.9.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -690,7 +690,7 @@ DEPENDENCIES
   cucumber-timecop
   dalli
   database_cleaner
-  departure (~> 6.7)
+  departure (~> 6.8)
   devise
   devise-async
   ed25519 (>= 1.2, < 2.0)

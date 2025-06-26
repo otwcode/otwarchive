@@ -107,7 +107,7 @@ gem 'kgio', '2.10.0'
 gem "marcel", "1.0.2"
 
 # Library for helping run pt-online-schema-change commands:
-gem "departure", "~> 6.7"
+gem "departure", "~> 6.8"
 
 gem "rack-timeout"
 gem "puma_worker_killer"
