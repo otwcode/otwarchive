@@ -200,6 +200,7 @@ class User < ApplicationRecord
             not_forbidden_name: { if: :will_save_change_to_login? }
   validate :username_is_not_recently_changed, if: :will_save_change_to_login?
   validate :admin_username_generic, if: :will_save_change_to_login?
+  validate :username_must_be_different_from_current, on: :update
 
   # allow nil so can save existing users
   validates_length_of :password,
@@ -635,6 +636,12 @@ class User < ApplicationRecord
     return unless User.current_user.is_a?(Admin)
 
     errors.add(:login, :admin_must_use_default) unless login == "user#{id}"
+  end
+
+  def username_must_be_different_from_current
+    if login == login_was
+      errors.add(:login, :username_not_different)
+    end
   end
 
   # Extra callback to make sure readings are deleted in an order consistent
