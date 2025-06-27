@@ -73,4 +73,10 @@ shared_examples "denies access for work that isn't visible to user" do
 
     include_examples "denies access to random user"
   end
+
+  context "draft work" do
+    let(:work) { create(:draft, authors: [creator.default_pseud]) }
+
+    include_examples "denies access to random user"
+  end
 end
