@@ -639,6 +639,7 @@ class User < ApplicationRecord
   end
 
   def username_must_be_different_from_current
+    return if User.current_user != self
     if login == login_was
       errors.add(:login, :username_not_different)
     end
