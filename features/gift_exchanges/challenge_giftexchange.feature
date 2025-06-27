@@ -182,12 +182,23 @@ Feature: Gift Exchange Challenge
     Then I should see "You can't generate matches while sign-up is still open."
       And I should not see "Generate Potential Matches"
 
-  Scenario: Matches can be generated
+  Scenario: Matches can be generated and a translated email is sent
     Given the gift exchange "Awesome Gift Exchange" is ready for matching
-      And I close signups for "Awesome Gift Exchange"
-    When I follow "Matching"
+      And I have added a co-moderator "mod2" to collection "Awesome Gift Exchange"
+      And a locale with translated emails
+      And the user "mod1" enables translated emails
+    When I close signups for "Awesome Gift Exchange"
+      And I follow "Matching"
       And I follow "Generate Potential Matches"
     Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
+      And 1 email should be delivered to "mod1"
+      And the email to "mod1" should be translated
+      And the email should contain "finished generating potential assignments"
+      And the email should contain "you are an owner or moderator of the collection"
+      And 1 email should be delivered to "mod2"
+      And the email to "mod2" should be non-translated
+      And the email should contain "finished generating potential assignments"
+      And the email should contain "you are an owner or moderator of the collection"
     When I reload the page
     Then I should see "Reviewing Assignments"
       And I should see "Complete"

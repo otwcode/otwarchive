@@ -183,6 +183,19 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.recipient_notification(user.id, work.id, collection.id)
   end
 
+  def potential_match_generation_notification_collection_email
+    collection = create(:collection, email: "collection@example.com")
+    email = collection.collection_email
+    UserMailer.potential_match_generation_notification(collection.id, email)
+  end
+
+  def potential_match_generation_notification_maintainer
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection, owners: [user.default_pseud])
+    email = user.email
+    UserMailer.potential_match_generation_notification(collection.id, email)
+  end
+
   def invalid_signup_notification_collection_email
     signup_count = params[:signup_count] ? params[:signup_count].to_i : 1
     collection = create(:collection, email: "collection@example.com")
