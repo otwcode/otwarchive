@@ -19,6 +19,23 @@ Feature:
       And I press "Change Username"
     Then I should see "Your password was incorrect"
 
+  Scenario: The user should not be able to change their username to their current username
+    Given I am logged in as "testuser" with password "password"
+    When I visit the change username page for testuser
+      And I fill in "New username" with "testuser"
+      And I fill in "Password" with "password"
+      And I press "Change Username"
+    Then I should see "Your new username must be different from your current username"
+
+  Scenario: The user should be able to change only the capitalization of their username
+    Given I am logged in as "testy" with password "password"
+    When I visit the change username page for testy
+      And I fill in "New username" with "teSty"
+      And I fill in "Password" with "password"
+      And I press "Change Username"
+    Then I should get confirmation that I changed my username
+      And I should see "Hi, teSty!"
+
   Scenario: The user should not be able to change their username to another user's name
     Given I have no users
       And the following activated user exists

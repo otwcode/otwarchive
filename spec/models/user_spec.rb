@@ -243,6 +243,27 @@ describe User do
       end
     end
 
+    context "when changing the username" do
+      before do
+        User.current_user = existing_user
+      end
+
+      context "to the exact same username" do
+        it "does not save and adds a validation error" do
+          expect(existing_user.update(login: existing_user.login)).to be_falsey
+          expect(existing_user.errors[:login].first).to include("Your new username must be different from your current username")
+        end
+      end
+
+      context "to the same username but with different capitalization" do
+        it "saves successfully" do
+          user_for_cap_test = create(:user, login: "testy")
+          User.current_user = user_for_cap_test
+          expect(user_for_cap_test.update(login: "teSty")).to be_truthy
+        end
+      end
+    end
+
     context "when logged in as the user themselves" do
       before do
         User.current_user = existing_user
