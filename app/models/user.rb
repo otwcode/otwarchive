@@ -200,7 +200,7 @@ class User < ApplicationRecord
             not_forbidden_name: { if: :will_save_change_to_login? }
   validate :username_is_not_recently_changed, if: :will_save_change_to_login?
   validate :admin_username_generic, if: :will_save_change_to_login?
-  validate :username_must_be_different_from_current, on: :update
+  validate :username_must_be_different_from_current, on: :update, if: :username_change_attempt
 
   # allow nil so can save existing users
   validates_length_of :password,
@@ -215,6 +215,8 @@ class User < ApplicationRecord
 
   # Virtual attribute for age check, data processing agreement, and terms of service
   attr_accessor :age_over_13, :data_processing, :terms_of_service
+  
+  attr_accessor :username_change_attempt
 
   validates :data_processing, acceptance: { allow_nil: false, if: :first_save? }
   validates :age_over_13, acceptance: { allow_nil: false, if: :first_save? }
