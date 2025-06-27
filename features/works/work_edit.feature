@@ -70,6 +70,8 @@ Feature: Edit Works
       And I fill in "content" with "second chapter new content"
       And I press "Preview"
       And I press "Cancel"
+      And I view the work "First Work"
+      And I view the 2nd chapter
     Then I should see "second chapter content"
       And I should see "Words:7"
     # Test changing pseuds on a work
