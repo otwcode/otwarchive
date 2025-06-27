@@ -1002,5 +1002,22 @@ describe CommentsController do
 
       it_redirects_to_simple("/404")
     end
+
+    context "denies access for work that isn't visible to user" do
+      subject { get :index, params: { work_id: work } }
+      let(:success) { expect(response).to render_template("index") }
+      let(:success_admin) { success }
+
+      include_examples "denies access for work that isn't visible to user"
+    end
+
+    context "denies access for restricted work to guest" do
+      let(:work) { create(:work, restricted: true) }
+
+      it "redirects with an error" do
+        get :index, params: { work_id: work }
+        it_redirects_to(new_user_session_path(restricted_commenting: true))
+      end
+    end
   end
 end
