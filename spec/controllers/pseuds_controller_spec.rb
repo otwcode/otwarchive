@@ -57,19 +57,21 @@ describe PseudsController do
   let(:user) { create(:user) }
   let(:pseud) { user.pseuds.first }
 
-  describe "show" do
-    context "when user_id exists" do
-      context "when pseud_id does not exist" do
-        it "raises an error" do
-          expect do
-            get :show, params: { user_id: user, id: "nonexistent_pseud" }
-          end.to raise_error ActiveRecord::RecordNotFound
-        end
-      end
+  describe "GET #show" do
+    it "raises a NotFound error if user_id exists but pseud does not exist" do
+      expect do
+        get :show, params: { user_id: user, id: "nonexistent_pseud" }
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "raises a NotFound error if user_id does not exist" do
+      expect do
+        get :show, params: { user_id: "nonexistent_user", id: pseud }
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
-  describe "edit" do
+  describe "GET #edit" do
     subject { -> { get :edit, params: { user_id: user, id: pseud } } }
 
     context "when logged in as admin" do
@@ -112,7 +114,7 @@ describe PseudsController do
     end
   end
 
-  describe "update" do
+  describe "PUT #update" do
     shared_examples "an attribute that can be updated by an admin" do
       it "redirects to user_pseud_path with notice" do
         put :update, params: params
@@ -216,7 +218,7 @@ describe PseudsController do
     end
   end
 
-  describe "destroy" do
+  describe "DELETE #destroy" do
     subject { -> { post :destroy, params: { user_id: user, id: pseud } } }
 
     context "when logged in as admin" do
@@ -248,7 +250,7 @@ describe PseudsController do
     end
   end
 
-  describe "new" do
+  describe "GET #new" do
     subject { -> { get :new, params: { user_id: user } } }
 
     context "when logged in as admin" do
@@ -256,7 +258,7 @@ describe PseudsController do
     end
   end
 
-  describe "create" do
+  describe "POST #create" do
     subject { -> { post :create, params: { user_id: user } } }
 
     context "when logged in as admin" do
@@ -264,12 +266,11 @@ describe PseudsController do
     end
   end
 
-  describe "index" do # will change with AO3-6989
-    context "when user_id does not exist" do
-      it "redirects without an error" do
+  describe "GET #index" do
+    it "raises a NotFound error if user_id does not exist" do
+      expect do
         get :index, params: { user_id: "nonexistent_user" }
-        redirect_to(search_people_path)
-      end
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end
