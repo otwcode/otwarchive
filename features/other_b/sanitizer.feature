@@ -5,7 +5,7 @@ Feature: Sanitizing HTML
 
     When I am logged in as "newbie" with password "password"
     And I set up the draft "My Awesome Story"
-    And I fill in "content" with 
+    And I fill in "content" with
     """
     The quick brown fox jumps over the lazy dog.
     <!-- #exec cmd=\"/bin/echo \" -->
@@ -15,6 +15,22 @@ Feature: Sanitizing HTML
     Then I should see "Preview"
     And I should not see the text with tags '<!-- #exec cmd='
     And I should not see the text with tags '<script src=http://ha.ckers.org/xss.js></script>'
+
+
+  Scenario: Sanitizer should leave safe HTML alone
+
+    When I am logged in as "newbie" with password "password"
+    And I set up the draft "My Awesome Story"
+    And I fill in "content" with
+    """
+    1. Lorem ipsim
+
+    2. <a href="https://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog"><em>The quick brown fox jumps over the lazy dog</em></a>.
+    """
+    And I press "Preview"
+    Then I should see "Preview"
+    And I should see "The quick brown fox jumps over the lazy dog" within "p a em"
+    And I should see the text with tags '"https://en.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog"'
 
 
   Scenario: XSS hacks in works should be blocked by sanitizing
