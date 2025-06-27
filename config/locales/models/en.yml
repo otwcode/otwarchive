@@ -16,6 +16,8 @@ en:
         support: Support
         tag_wrangling: Tag Wrangling
         translation: Translation
+      challenge_signup/offers:
+        url: Offer URL
       challenge_signup/requests:
         url: Request URL
       chapters/creatorships:
@@ -37,6 +39,8 @@ en:
         meta_tag_id: Metatag
         sub_tag: Subtag
         sub_tag_id: Subtag
+      offer:
+        url: URL
       request:
         url: URL
       role:
