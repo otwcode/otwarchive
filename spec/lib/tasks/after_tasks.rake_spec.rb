@@ -566,6 +566,63 @@ describe "rake After:convert_official_kudos" do
   end
 end
 
+describe "rake After:convert_archivist_kudos" do
+  context "when there is no archivist role" do
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("No archivist users found\n").to_stdout
+    end
+  end
+
+  context "when there are no archivist users" do
+    let!(:role) { Role.find_or_create_by(name: "archivist") }
+
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("No archivist users found\n").to_stdout
+    end
+  end
+
+  context "when there are archivist users but none have left kudos" do
+    let!(:archivist_user) { create(:archivist) }
+
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("Finished converting kudos from archivist users to guest kudos\n").to_stdout
+    end
+  end
+
+  context "when an archivist user and a regular user both have kudos" do
+    let!(:archivist_user1) { create(:user) }
+    let!(:archivist_kudos1) { create(:kudo, user: archivist_user1) }
+    let!(:regular_user) { create(:user) }
+    let!(:regular_kudos) { create(:kudo, user: regular_user) }
+
+    before do
+      archivist_user1.roles = [Role.find_or_create_by(name: "archivist")]
+    end
+
+    it "removes the user_id from the archivist user's kudos and outputs completion message" do
+      expect do
+        subject.invoke
+      end.to change { archivist_kudos1.reload.user_id }
+        .from(archivist_user1.id)
+        .to(nil)
+        .and output("Updating 1 kudos from #{archivist_user1.login}\nFinished converting kudos from archivist users to guest kudos\n").to_stdout
+    end
+
+    it "leaves the user_id on the regular user's kudos and outputs completion message" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { regular_kudos.reload.user_id }
+        .and output("Updating 1 kudos from #{archivist_user1.login}\nFinished converting kudos from archivist users to guest kudos\n").to_stdout
+    end
+  end
+end
+
 describe "rake After:create_non_canonical_tagset_associations" do
   shared_examples "no TagSetAssociation is created" do
     it "does not create a TagSetAssociation" do
