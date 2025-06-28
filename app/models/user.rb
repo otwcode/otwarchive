@@ -213,9 +213,8 @@ class User < ApplicationRecord
 
   validates :email, email_format: true, uniqueness: true
 
-  # Virtual attribute for age check, data processing agreement, and terms of service
-  attr_accessor :age_over_13, :data_processing, :terms_of_service
-  attr_accessor :username_change_attempt
+  # Virtual attributes for sign-up checks and username change attempts
+  attr_accessor :age_over_13, :data_processing, :terms_of_service, :username_change_attempt
 
   validates :data_processing, acceptance: { allow_nil: false, if: :first_save? }
   validates :age_over_13, acceptance: { allow_nil: false, if: :first_save? }
