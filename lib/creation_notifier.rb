@@ -86,7 +86,8 @@ module CreationNotifier
   def notify_prompters
     return if self.challenge_claims.empty? || self.unrevealed?
 
-    user_ids = self.challenge_claims.map { |claim| claim.request_signup.pseud.user.id }.uniq
+    user_ids = self.challenge_claims.map { |claim| claim.request_signup.pseud.user.id }
+                                    .uniq
 
     user_ids.each do |user_id|
       user = User.find(user_id)
