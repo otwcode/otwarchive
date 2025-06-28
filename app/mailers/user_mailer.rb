@@ -316,7 +316,7 @@ class UserMailer < ApplicationMailer
     mail(
       to: @user.email,
       subject: t("user_mailer.prompter_notification.subject",
-                  app_name: ArchiveConfig.APP_SHORT_NAME)
+                 app_name: ArchiveConfig.APP_SHORT_NAME)
     )
   end
 

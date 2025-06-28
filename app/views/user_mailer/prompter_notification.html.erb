@@ -2,7 +2,7 @@
   <p>
     <% if @collection %>
       <%= t(".a_response_to_your_prompt.collection.html",
-              collection_link: style_link(@collection.title, collection_url(@collection))) %>
+            collection_link: style_link(@collection.title, collection_url(@collection))) %>
     <% else %>
       <%= t(".a_response_to_your_prompt.text") %>
     <% end %>

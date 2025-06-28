@@ -84,14 +84,14 @@ module CreationNotifier
 
   # notify prompters of response to their prompt
   def notify_prompters
-    return self.challenge_claims.empty? || self.unrevealed?
+    return if self.challenge_claims.empty? || self.unrevealed?
 
     self.challenge_claims.each do |claim|
       user = User.find(claim.request_signup.pseud.user.id)
 
       I18n.with_locale(user.locale_for_mails) do
         if self.collections.first.nil?
-          UserMailer.prompter_notification(user.id, self.id,).deliver_after_commit
+          UserMailer.prompter_notification(user.id, self.id).deliver_after_commit
         else
           UserMailer.prompter_notification(user.id, self.id, self.collections.first.id).deliver_after_commit
         end
