@@ -215,7 +215,6 @@ class User < ApplicationRecord
 
   # Virtual attribute for age check, data processing agreement, and terms of service
   attr_accessor :age_over_13, :data_processing, :terms_of_service
-  
   attr_accessor :username_change_attempt
 
   validates :data_processing, acceptance: { allow_nil: false, if: :first_save? }
@@ -642,9 +641,8 @@ class User < ApplicationRecord
 
   def username_must_be_different_from_current
     return if User.current_user != self
-    if login == login_was
-      errors.add(:login, :username_not_different)
-    end
+
+    errors.add(:login, :username_not_different) if login == login_was
   end
 
   # Extra callback to make sure readings are deleted in an order consistent
