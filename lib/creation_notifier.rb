@@ -89,7 +89,7 @@ module CreationNotifier
     self.challenge_claims.each do |claim|
       user = User.find(claim.request_signup.pseud.user.id)
 
-      I18n.with_locale(user.locale_for_mails) do
+      I18n.with_locale(user.preference.locale_for_mails) do
         if self.collections.first.nil?
           UserMailer.prompter_notification(user.id, self.id).deliver_after_commit
         else
