@@ -105,10 +105,10 @@ describe CollectionsController, collection_search: true do
         User.current_user = nil
         # reload the parent collection
         parent.reload
-  
+
         run_all_indexing_jobs
       end
-  
+
       it "filters all child collections of given collection" do
         get :index, params: { collection_id: parent.name }
         expect(response).to have_http_status(:success)
@@ -124,6 +124,15 @@ describe CollectionsController, collection_search: true do
       let(:success_admin) { success }
 
       include_examples "denies access for work that isn't visible to user"
+    end
+
+    context "denies access for restricted work to guest" do
+      let(:work) { create(:work, restricted: true) }
+
+      it "redirects with an error" do
+        get :index, params: { work_id: work }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
     end
 
     context "denies access for restricted work to guest" do
