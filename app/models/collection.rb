@@ -1,6 +1,7 @@
 class Collection < ApplicationRecord
   include Filterable
   include WorksOwner
+  include Searchable
 
   has_one_attached :icon do |attachable|
     attachable.variant(:standard, resize_to_limit: [100, 100], loader: { n: -1 })
@@ -58,7 +59,6 @@ class Collection < ApplicationRecord
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: "Bookmark"
   has_many :approved_bookmarks, through: :approved_collection_items, source: :item, source_type: "Bookmark"
-
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
 
