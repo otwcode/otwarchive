@@ -215,7 +215,7 @@ class UserMailerPreview < ApplicationMailerPreview
 
   def invited_to_collection_notification
     user = create(:user, :for_mailer_preview)
-    work = work = create(:work)
+    work = create(:work)
     collection = create(:collection)
     UserMailer.invited_to_collection_notification(user.id, work.id, collection.id)
   end
