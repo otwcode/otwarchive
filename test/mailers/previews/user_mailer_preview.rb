@@ -342,10 +342,8 @@ class UserMailerPreview < ApplicationMailerPreview
   end
 
   def prompter_notification_data(creator_count)
-    work = create(:work,
-             summary: Faker::Lorem.paragraph(sentence_count: 3),
-             authors: create_list(:user, creator_count).map(&:default_pseud)
-           )
-    work
+    create(:work,
+           summary: Faker::Lorem.paragraph(sentence_count: 3),
+           authors: create_list(:user, creator_count).map(&:default_pseud))
   end
 end
