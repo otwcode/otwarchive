@@ -20,7 +20,18 @@ class CollectionQuery < Query
 
   # Combine the available filters
   def filters
-    [signup_open_filter, closed_filter, challenge_type_filter, owner_filter, maintainer_filter, moderator_filter, parent_filter, moderated_filter, signup_closes_in_future_filter, filter_id_filter].compact
+    [
+      signup_open_filter,
+      closed_filter,
+      challenge_type_filter,
+      owner_filter,
+      maintainer_filter,
+      moderator_filter,
+      parent_filter,
+      moderated_filter,
+      signup_closes_in_future_filter,
+      filter_id_filter
+    ].flatten.compact
   end
 
   # Combine the available queries

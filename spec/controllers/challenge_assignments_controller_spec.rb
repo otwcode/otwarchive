@@ -280,7 +280,7 @@ describe ChallengeAssignmentsController do
                                       "Assignment updates complete!")
 
           collection_item.reload
-          expect(collection_item.collection_approval_status).to eq(CollectionItem::APPROVED)
+          expect(collection_item.collection_approval_status).to eq("approved")
         end
       end
 

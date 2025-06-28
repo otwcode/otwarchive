@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe CollectionsController do
+describe CollectionsController, collection_search: true do
   include LoginMacros
   include RedirectExpectationHelper
 
@@ -15,7 +15,7 @@ describe CollectionsController do
     let!(:participant) { create(:collection_participant, collection: prompt_meme_collection) }
     let!(:moderator) { create(:collection_participant, participant_role: CollectionParticipant::MODERATOR, collection: prompt_meme_collection) }
     let!(:item) do
-      create(:collection_item, user_approval_status: CollectionItem::APPROVED, collection_approval_status: CollectionItem::APPROVED, work: create(:work, restricted: false), collection: prompt_meme_collection)
+      create(:collection_item, user_approval_status: "approved", collection_approval_status: "approved", work: create(:work, restricted: false), collection: prompt_meme_collection)
     end
 
     before do
@@ -23,8 +23,8 @@ describe CollectionsController do
     end
 
     it "assigns subtitle with collection title and subcollections" do
-      get :index, params: { collection_id: gift_exchange.name }
-      expect(assigns[:page_subtitle]).to eq("#{gift_exchange.title} - Subcollections")
+      get :index, params: { collection_id: gift_exchange_collection.name }
+      expect(assigns[:page_subtitle]).to eq("#{gift_exchange_collection.title} - Subcollections")
     end
 
     context "collections index" do

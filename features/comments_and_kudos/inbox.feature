@@ -85,7 +85,7 @@ Feature: Get messages in the inbox
       And I post the comment "You should receive this in your inbox." on the work "The Fight"
       And I post the comment "A second message for your inbox!" on the work "The Fight"
     When I am logged in as "boxer"
-      And I go to my inbox page
+      And I go to boxer's inbox page
     Then I should see "cutman on The Fight"
       And I should see "You should receive this in your inbox."
       And I should see "A second message for your inbox!"

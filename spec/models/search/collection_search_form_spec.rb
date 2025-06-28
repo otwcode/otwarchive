@@ -117,10 +117,10 @@ describe CollectionSearchForm, collection_search: true do
     let!(:participant) { create(:collection_participant, collection: prompt_meme_collection) }
     let!(:moderator) { create(:collection_participant, participant_role: CollectionParticipant::MODERATOR, collection: prompt_meme_collection) }
     let!(:item) do
-      create(:collection_item, user_approval_status: CollectionItem::APPROVED, collection_approval_status: CollectionItem::APPROVED, work: create(:work, restricted: false), collection: prompt_meme_collection)
+      create(:collection_item, user_approval_status: "approved", collection_approval_status: "approved", work: create(:work, restricted: false), collection: prompt_meme_collection)
     end
     let!(:item2) do
-      create(:collection_item, user_approval_status: CollectionItem::APPROVED, collection_approval_status: CollectionItem::APPROVED, work: create(:work, restricted: true), collection: gift_exchange_collection)
+      create(:collection_item, user_approval_status: "approved", collection_approval_status: "approved", work: create(:work, restricted: true), collection: gift_exchange_collection)
     end
 
     before do
@@ -172,7 +172,7 @@ describe CollectionSearchForm, collection_search: true do
       expect(query.search_results).to include no_signup
     end
 
-    it "filters collections by owner_ids" do  
+    it "filters collections by owner_ids" do
       query = CollectionSearchForm.new(owner_ids: [participant.pseud.user_id])
 
       expect(query.search_results).to include prompt_meme_collection

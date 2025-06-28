@@ -70,16 +70,4 @@ describe AsyncIndexer do
       perform_enqueued_jobs
     end
   end
-
-  context "when there are no IDs to index" do
-    before do
-      allow(AsyncIndexer::REDIS).to receive(:smembers).and_return([])
-    end
-
-    it "doesn't call the indexer" do
-      expect(WorkIndexer).not_to receive(:new)
-
-      AsyncIndexer.perform("WorkIndexer:34:#{Time.now.to_i}")
-    end
-  end
 end

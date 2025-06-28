@@ -38,6 +38,7 @@ class CollectionsController < ApplicationController
     elsif params[:collection_id] && (@collection = Collection.find_by!(name: params[:collection_id]))
       @search = CollectionSearchForm.new({ parent_id: @collection.id }.merge(page: params[:page]))
       @collections = @search.search_results
+      @page_subtitle = t(".subcollections_page_title", collection_title: @collection.title)
     elsif params[:user_id] && (@user = User.find_by!(login: params[:user_id]))
       @search = CollectionSearchForm.new({ maintainer_id: @user.id }.merge(page: params[:page]))
       @collections = @search.search_results
