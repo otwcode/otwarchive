@@ -1141,7 +1141,7 @@ describe UserMailer do
 
   describe "prompter_notification" do
     context "when collection is present" do
-      subject(:email) { UserMailer.prompter_notification(work.id, collection.id) }
+      subject(:email) { UserMailer.prompter_notification(user, work.id, collection.id) }
 
       let(:collection) { create(:collection) }
       let(:claim) { create(:challenge_claim, request_signup: create(:prompt_meme_signup)) }
@@ -1175,7 +1175,7 @@ describe UserMailer do
     end
 
     context "when no collection is present" do
-      subject(:email) { UserMailer.prompter_notification(work.id) }
+      subject(:email) { UserMailer.prompter_notification(user, work.id) }
 
       let(:claim) { create(:challenge_claim, request_signup: create(:prompt_meme_signup)) }
       let(:work) { create(:work, challenge_claims: [claim]) }
