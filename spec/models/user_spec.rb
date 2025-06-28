@@ -250,6 +250,7 @@ describe User do
 
       context "to the exact same username" do
         it "does not save and adds a validation error" do
+          existing_user.username_change_attempt = true
           expect(existing_user.update(login: existing_user.login)).to be_falsey
           expect(existing_user.errors[:login].first).to include("Your new username must be different from your current username")
         end
