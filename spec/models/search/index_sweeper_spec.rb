@@ -137,7 +137,8 @@ describe IndexSweeper do
 
   it "doesn't trigger an error if the batch results are empty" do
     sweeper = IndexSweeper.new(nil, WorkIndexer)
-    expect { sweeper.process_batch }.not_to raise_exception
+    expect { sweeper.process_batch } \
+      .not_to raise_exception
   end
 
   private

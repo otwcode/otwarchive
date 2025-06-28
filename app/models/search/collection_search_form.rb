@@ -36,7 +36,7 @@ class CollectionSearchForm
     :freeform_names,
     :freeform_ids,
     :page
-  ]
+  ].freeze
 
   attr_accessor :options
 
@@ -44,14 +44,14 @@ class CollectionSearchForm
     define_method(filterable) { options[filterable] }
   end
 
-  def initialize(opts={})
+  def initialize(opts = {})
     @options = opts
     process_options
     @searcher = CollectionQuery.new(@options)
   end
 
   def process_options
-    @options.delete_if { |k, v| v == "0" || v.blank? }
+    @options.delete_if { |_k, v| v == "0" || v.blank? }
     set_sorting
   end
 
@@ -90,12 +90,13 @@ class CollectionSearchForm
   end
 
   def sort_values
-    sort_options.map{ |option| option.last }
+    sort_options.map(&:last)
   end
 
   # extract the pretty name
   def name_for_sort_column(sort_column)
-    Hash[SORT_OPTIONS.map { |v| [v[1], v[0]] }][sort_column]
+    SORT_OPTIONS.map { |v| [v[1], v[0]] }
+      .to_h[sort_column]
   end
 
   def default_sort_column

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe "checking fandoms for crossover" do
   let!(:meta) { create(:canonical_fandom) }

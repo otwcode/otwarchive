@@ -244,8 +244,8 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_collection_index, :update_tag_index, :touch_series, :touch_related_works
   after_destroy :expire_caches, :update_pseud_index, :update_collection_index
+  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_collection_index, :update_tag_index, :touch_series, :touch_related_works
 
   before_destroy :send_deleted_work_notification, prepend: true
   def send_deleted_work_notification
@@ -322,8 +322,8 @@ class Work < ApplicationRecord
   # Visibility has changed, which means we need to reindex
   # the work's associated collections to update their bookmark counts.
   def should_reindex_collections?
-    pertinent_attributes = %w(id posted restricted in_anon_collection
-                              in_unrevealed_collection hidden_by_admin)
+    pertinent_attributes = %w[id posted restricted in_anon_collection
+                              in_unrevealed_collection hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 

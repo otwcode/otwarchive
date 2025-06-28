@@ -1,5 +1,4 @@
 class CollectionDecorator < SimpleDelegator
-
   attr_reader :data
 
   # Collections need to be decorated with various stats from the "_source" when
@@ -14,7 +13,7 @@ class CollectionDecorator < SimpleDelegator
   def self.decorate_from_search(results, search_hits)
     search_data = search_hits.group_by { |doc| doc["_id"] }
     results.map do |result|
-      data = search_data[result.id.to_s].first&.dig('_source') || {}
+      data = search_data[result.id.to_s].first&.dig("_source") || {}
       new_with_data(result, data)
     end
   end

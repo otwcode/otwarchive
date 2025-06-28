@@ -66,8 +66,10 @@ namespace :search do
   end
 
   desc "Reindex all recently-modified items"
+  # rubocop:disable Lint/EmptyBlock
   task timed_all: %i[timed_collections timed_works timed_tags timed_pseud timed_bookmarks] do
   end
+  # rubocop:enable Lint/EmptyBlock
 
   desc "Reindex recent bookmarks"
   task timed_bookmarks: :environment do

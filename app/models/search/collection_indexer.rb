@@ -11,7 +11,7 @@ class CollectionIndexer < Indexer
           analyzer: "collection_title_analyzer",
           fields: {
             exact: {
-              type:     "text",
+              type: "text",
               analyzer: "exact_collection_analyzer"
             },
             keyword: {

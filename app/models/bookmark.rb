@@ -7,8 +7,8 @@ class Bookmark < ApplicationRecord
   belongs_to :bookmarkable, polymorphic: true, inverse_of: :bookmarks
   belongs_to :pseud, optional: false
 
-  validates_length_of :bookmarker_notes,
-                      maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
+  validates :bookmarker_notes,
+                      length: { maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX) }
 
   validate :not_already_bookmarked_by_user, on: :create
   def not_already_bookmarked_by_user
@@ -115,10 +115,10 @@ class Bookmark < ApplicationRecord
     elsif !user.is_a?(User)
       visible_to_all
     else
-      select("DISTINCT bookmarks.*").
-        visible_to_registered_user.
-        joins("JOIN pseuds as p1 ON p1.id = bookmarks.pseud_id JOIN users ON users.id = p1.user_id").
-        where("bookmarks.hidden_by_admin = 0 OR users.id = ?", user.id)
+      select("DISTINCT bookmarks.*")
+        .visible_to_registered_user
+        .joins("JOIN pseuds as p1 ON p1.id = bookmarks.pseud_id JOIN users ON users.id = p1.user_id")
+        .where("bookmarks.hidden_by_admin = 0 OR users.id = ?", user.id)
     end
   }
 

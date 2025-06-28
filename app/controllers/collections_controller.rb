@@ -30,7 +30,7 @@ class CollectionsController < ApplicationController
   end
 
   def index
-    if params[:work_id] && (@work = Work.find_by!(id: params[:work_id]))
+    if params[:work_id] && (@work = Work.find_by(id: params[:work_id]))
       @collections = @work.approved_collections
         .by_title
         .for_blurb
@@ -189,12 +189,10 @@ class CollectionsController < ApplicationController
   private
 
   def collection_filter_params
-    safe_list = %w(title challenge_type moderated closed tag sort_column sort_direction)
+    safe_list = %w[title challenge_type moderated closed tag sort_column sort_direction]
     search_params = params[:collection_search].present? ? params[:collection_search].to_unsafe_h : {}
-    collection_filters = search_params.select { |k, _| safe_list.include?(k) }
-    collection_filters = collection_filters.delete_if { |_, value| value.blank? }
-
-    collection_filters
+    search_params.select { |k, _| safe_list.include?(k) } \
+      .delete_if { |_, value| value.blank? }
   end
 
   def collection_params

@@ -75,12 +75,12 @@ class CollectionQuery < Query
   end
 
   def challenge_type_filter
-    if options[:challenge_type].present?
-      type_param = options[:challenge_type]
-      challenge_type = (type_param == "PromptMeme" || type_param == "GiftExchange") ? type_param : "NULL"
+    return if options[:challenge_type].blank?
 
-      match_filter(:challenge_type, challenge_type)
-    end
+    type_param = options[:challenge_type]
+    challenge_type = %w[PromptMeme GiftExchange].include?(type_param) ? type_param : "NULL"
+
+    match_filter(:challenge_type, challenge_type)
   end
 
   def parent_filter
@@ -102,13 +102,15 @@ class CollectionQuery < Query
     input = (options[:query] || options[:title] || "").dup
     query = escape_reserved_characters(input)
 
-    return {
+    return if query.blank?
+
+    {
       query_string: {
         query: query,
         fields: ["title^5", "name"],
         default_operator: "AND"
       }
-    } if query.present?
+    }
   end
 
   ####################
@@ -116,11 +118,11 @@ class CollectionQuery < Query
   ####################
 
   def sort_column
-    options[:sort_column].present? ? options[:sort_column] : "created_at"
+    options[:sort_column].presence || "created_at"
   end
 
   def sort
-    direction = options[:sort_direction].present? ? options[:sort_direction] : "desc"
+    direction = options[:sort_direction].presence || "desc"
     { sort_column => { order: direction } }
   end
 end
