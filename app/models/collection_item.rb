@@ -141,7 +141,9 @@ class CollectionItem < ApplicationRecord
         # so we send an email to all the works owners
         item.users.each do |email_author|
           unless email_author.preference.collection_emails_off
-            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
+            I18n.with_locale(email_author.preference.locale_for_mails) do
+              UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
+            end
           end
         end
       end
