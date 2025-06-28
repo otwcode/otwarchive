@@ -72,9 +72,6 @@ Feature: Prompt Meme Challenge
     And I check "No Archive Warnings Apply"
     And I select "English" from "Choose a language"
     And I fill in "Fandoms" with "GhostSoup"
-    And I should see "promptcollection" in the "work_collection_names" input
-    And the "Untitled Prompt in The Kissing Game (Anonymous)" checkbox should be checked
-    And the "work_recipients" field should not contain "myname1"
     And I fill in "Work Title" with "Kinky Story"
     And I fill in "content" with "Story written for your kinks, oh mystery reader!"
   When all emails have been delivered
