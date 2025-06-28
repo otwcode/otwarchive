@@ -85,6 +85,8 @@ class UsersController < ApplicationController
     @user.login = @new_login
     @user.ticket_number = params[:ticket_number]
 
+    @user.username_change_attempt = true
+
     if @user.save
       if logged_in_as_admin?
         flash[:notice] = t(".admin.successfully_updated")
