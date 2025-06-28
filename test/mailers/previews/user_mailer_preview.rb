@@ -272,6 +272,7 @@ class UserMailerPreview < ApplicationMailerPreview
     related_work = create(:related_work, parent_id: parent_work.id, work_id: child_work.id)
     UserMailer.related_work_notification(user.id, related_work.id)
   end
+
   private
 
   def creatorship_notification_data(creation_type)
