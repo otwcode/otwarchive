@@ -20,7 +20,8 @@ end
 Given "I am logged in as a(n) {string} admin" do |role|
   step "I start a new session"
   login = "testadmin-#{role}"
-  FactoryBot.create(:admin, login: login, roles: [role]) if Admin.find_by(login: login).nil?
+  email = "#{login}@example.org"
+  FactoryBot.create(:admin, login: login, email: email, roles: [role]) if Admin.find_by(login: login, email: email).nil?
   visit new_admin_session_path
   fill_in "Admin username", with: login
   fill_in "Admin password", with: "adminpassword"

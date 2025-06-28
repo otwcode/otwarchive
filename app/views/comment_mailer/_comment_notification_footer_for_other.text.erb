@@ -1,8 +1,9 @@
-<% if @comment.unreviewed? %><% if @owner %>
-Comments on this work are moderated and will not appear until you approve them.<% else %>
+<% if @comment.unreviewed? %><% if @owner && @comment.ultimate_parent.is_a?(Work) %>
+Comments on this work are moderated and will not appear until you approve them.<% elsif @comment.ultimate_parent.is_a?(AdminPost) %>
+Comments on this news post are moderated and will not appear until approved.<% else %>
 Comments on this work are moderated and will not appear until approved by the work creator.<% end %>
 <% end %><% if @comment.unreviewed? && @owner %>
-Review comments on "<%= @comment.ultimate_parent.commentable_name %>": <%= unreviewed_work_comments_url(@comment.ultimate_parent) %><% end %><% unless @noreply || @comment.unreviewed? %>
+Review comments on "<%= @comment.ultimate_parent.commentable_name %>": <%= polymorphic_url([:unreviewed, @comment.ultimate_parent, :comments]) %><% end %><% unless @noreply || @comment.unreviewed? %>
 Reply to this comment: <%= comment_url(@comment, :add_comment_reply_id => @comment.id, :only_path => false) %><% end %>
 Go to the thread starting from this comment: <%= comment_url(@comment, :only_path => false) %><% unless @comment.id == @comment.thread %>
 Go to the thread to which this comment belongs: <%= comment_url(:id => @comment.thread, :only_path => false) %><% end %>
