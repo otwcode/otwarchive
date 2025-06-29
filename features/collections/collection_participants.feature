@@ -45,7 +45,7 @@
   Given I have a moderated closed collection "Such a nice collection"
     And I am logged in as "sam"
   When I go to "Such a nice collection" collection's page
-    And I follow "Join"
+    And I press "Join"
   Then I should see "You have applied to join Such a nice collection"
 
   Scenario: A collection owner can preapprove a user to join a closed collection
@@ -63,7 +63,7 @@
     And I submit with the 4th button
   Then I should see "Updated sam."
   When I am in sam's browser
-    And I follow "Join"
+    And I press "Join"
   Then I should see "You are now a member of Such a nice collection"
   When I am in the default browser
 
