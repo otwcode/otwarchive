@@ -492,6 +492,15 @@ en:
         other: We regret to inform you that your request for %{count} new invitations cannot be fulfilled at this time.
       reason: 'Your request was:'
       subject: "[%{app_name}] Additional invitation request declined"
+    potential_match_generation_notification:
+      finished_generating:
+        html: We have finished generating potential assignments for your gift exchange %{collection_link}.
+        text: We have finished generating potential assignments for your gift exchange "%{collection_title}" (%{collection_url}).
+      matches_available:
+        html: The potential matches and set assignments are available on its %{matching_page_link}.
+        matching_page: Matching page
+        text: 'The potential matches and set assignments are available on its Matching page: %{matching_page_url}.'
+      subject: "[%{app_name}][%{collection_title}] Potential assignment generation complete"
     recipient_notification:
       collection:
         html: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
