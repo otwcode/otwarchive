@@ -136,13 +136,12 @@ class CollectionItem < ApplicationRecord
   before_save :send_work_invitation
   def send_work_invitation
     if !approved_by_user? && approved_by_collection? && self.new_record? && !User.current_user.is_author_of?(item)
-        # a maintainer is attempting to add this work to their collection
-        # so we send an email to all the works owners
-        item.users.each do |email_author|
-          unless email_author.preference.collection_emails_off
-            I18n.with_locale(email_author.preference.locale_for_mails) do
-              UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
-            end
+      # a maintainer is attempting to add this work to their collection
+      # so we send an email to all the works owners
+      item.users.each do |email_author|
+        unless email_author.preference.collection_emails_off
+          I18n.with_locale(email_author.preference.locale_for_mails) do
+            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
           end
         end
       end
