@@ -641,7 +641,7 @@ class User < ApplicationRecord
   def username_must_be_different_from_current
     return if User.current_user != self
 
-    errors.add(:login, :username_not_different) if login == login_was
+    errors.add(:login, :not_different) if login == login_was
   end
 
   # Extra callback to make sure readings are deleted in an order consistent
