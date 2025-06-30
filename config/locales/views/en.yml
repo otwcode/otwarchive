@@ -2182,6 +2182,8 @@ en:
       submit: Change Username
       submit_landmark: Submit
       username_requirements: "%{minimum} to %{maximum} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_)"
+      user:
+        not_different: Your new username must be different from your current username.
     confirm_change_email:
       are_you_sure_html: Are you sure you want to change your email address to %{unconfirmed_email}? A confirmation email will be sent to this address.
       cancel: Cancel

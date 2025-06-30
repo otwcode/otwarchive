@@ -192,7 +192,6 @@ en:
                 one: can only be changed once per day. You last changed your username on %{renamed_at}.
                 other: can only be changed once every %{count} days. You last changed your username on %{renamed_at}.
               invalid: must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).
-              not_different: "^Your new username must be different from your current username."
             password_confirmation:
               confirmation: doesn't match new password.
             terms_of_service:
