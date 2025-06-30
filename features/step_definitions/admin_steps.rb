@@ -349,6 +349,24 @@ When /^I hide the work "(.*?)"$/ do |title|
   step %{I follow "Hide Work"}
 end
 
+When "I unhide the work {string}" do |title|
+  work = Work.find_by(title: title)
+  visit work_path(work)
+  step %{I follow "Make Work Visible"}
+end
+
+When "I hide the series {string}" do |title|
+  work = Series.find_by(title: title)
+  visit series_path(work)
+  step %{I follow "Hide Series"}
+end
+
+When "I unhide the series {string}" do |title|
+  work = Series.find_by(title: title)
+  visit series_path(work)
+  step %{I follow "Make Series Visible"}
+end
+
 When "the search criteria contains the ID for {string}" do |login|
   user_id = User.find_by(login: login).id
   fill_in("user_id", with: user_id)
