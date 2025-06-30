@@ -113,7 +113,7 @@ class UserMailer < ApplicationMailer
       creation = creation_type.constantize.where(id: creation_id).first
       next unless creation && creation.try(:posted)
       next if creation.is_a?(Chapter) && !creation.work.try(:posted)
-      next if creation.try(:hidden_by_admin) || creation.is_a?(Chapter) && creation.work.try(:hidden_by_admin)
+      next if creation.try(:hidden_by_admin) || (creation.is_a?(Chapter) && creation.work.try(:hidden_by_admin))
       next if creation.pseuds.any? { |p| p.user == User.orphan_account } # no notifications for orphan works
 
       # TODO: allow subscriptions to orphan_account to receive notifications
