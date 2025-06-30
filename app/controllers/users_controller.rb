@@ -81,11 +81,14 @@ class UsersController < ApplicationController
       render(:change_username) && return
     end
 
+    if @new_login == @user.login
+      flash.now[:error] = t(".user.not_different") 
+      render :change_username and return
+    end
+
     old_login = @user.login
     @user.login = @new_login
     @user.ticket_number = params[:ticket_number]
-
-    @user.username_change_attempt = true
 
     if @user.save
       if logged_in_as_admin?
