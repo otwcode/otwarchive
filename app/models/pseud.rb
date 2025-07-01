@@ -157,8 +157,8 @@ class Pseud < ApplicationRecord
   end
 
   # Produces a byline that indicates the user's name if pseud is not unique
-  def byline
-    (name != user_name) ? "#{name} (#{user_name})" : name
+  def byline(username = user_login)
+    (name != username) ? "#{name} (#{username})" : name
   end
 
   # get the former byline

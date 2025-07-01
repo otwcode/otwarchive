@@ -91,11 +91,9 @@ module ApplicationHelper
   end
 
   def byline_text_cached(creation, only_path)
-    # Update Series#expire_byline_cache when changing cache keys here
-    Rails.cache.fetch("byline_text/#{creation.cache_key}_#{only_path}_#{I18n.locale}") do
-      creators = Rails.cache.fetch("byline_internal/#{creation.cache_key}") { byline_data(creation) }
-      byline_text_internal(creators, only_path)
-    end
+    # Update Series#expire_byline_cache when changing cache key here
+    creators = Rails.cache.fetch(["byline_internal", creation.cache_key]) { byline_data(creation) }
+    byline_text_internal(creators, only_path)
   end
 
   def byline_text_uncached(creation, only_path, text_only = false)
@@ -107,7 +105,7 @@ module ApplicationHelper
     return creators if creators.is_a?(String)
 
     safe_join(creators.map do |creator|
-      pseud_byline = text_only ? creator[:pseud].byline : pseud_link(creator[:pseud], only_path)
+      pseud_byline = text_only ? creator[:pseud].byline(creator[:user].login) : pseud_link(creator[:pseud], creator[:user], only_path)
       if creator[:archivists].empty?
         pseud_byline
       else
@@ -133,14 +131,14 @@ module ApplicationHelper
       end
     end
 
-    pseuds.map { |pseud| { pseud: pseud, archivists: archivists[pseud] } }
+    pseuds.map { |pseud| { pseud: pseud, user: pseud.user, archivists: archivists[pseud] } }
   end
 
-  def pseud_link(pseud, only_path = true)
+  def pseud_link(pseud, user, only_path = true)
     if only_path
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), rel: "author")
+      link_to(pseud.byline(user.login), user_pseud_path(user, pseud), rel: "author")
     else
-      link_to(pseud.byline, user_pseud_url(pseud.user, pseud), rel: "author")
+      link_to(pseud.byline(user.login), user_pseud_url(user, pseud), rel: "author")
     end
   end
 

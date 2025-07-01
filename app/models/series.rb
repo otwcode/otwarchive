@@ -152,12 +152,7 @@ class Series < ApplicationRecord
   end
 
   def expire_byline_cache
-    Rails.cache.delete("byline_internal/#{cache_key}")
-    keys = I18n.available_locales.map do |locale|
-      ["byline_text/#{cache_key}_true_#{locale}", "byline_text/#{cache_key}_false_#{locale}"]
-    end.flatten
-
-    Rails.cache.delete_multi(keys)
+    Rails.cache.delete(["byline_internal", cache_key])
   end
 
   # Change the positions of the serial works in the series
