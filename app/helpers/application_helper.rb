@@ -87,13 +87,13 @@ module ApplicationHelper
     # Skip cache in preview mode
     return byline_text_uncached(creation, only_path) if @preview_mode
 
-    byline_text_cached(creation, only_path)
+    byline_text(creation, only_path)
   end
 
-  def byline_text_cached(creation, only_path)
+  def byline_text(creation, only_path, text_only: false)
     # Update Series#expire_byline_cache when changing cache key here
     creators = Rails.cache.fetch(["byline_data", creation.cache_key]) { byline_data(creation) }
-    byline_text_internal(creators, only_path)
+    byline_text_internal(creators, only_path, text_only: text_only)
   end
 
   def byline_text_uncached(creation, only_path, text_only: false)
@@ -154,7 +154,7 @@ module ApplicationHelper
       anon_byline
     else
       only_path = false
-      byline_text_uncached(creation, only_path, text_only: true)
+      byline_text(creation, only_path, text_only: true)
     end
   end
 
