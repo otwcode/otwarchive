@@ -90,7 +90,10 @@ describe "n+1 queries in the WorksController" do
         end
       end
 
-      let!(:work_attributes) { archivist = create(:archivist); { authors: [archivist.default_pseud], external_creatorships: [create(:external_creatorship, archivist: archivist)] } }
+      let!(:work_attributes) do
+        archivist = create(:archivist)
+        { authors: [archivist.default_pseud], external_creatorships: [create(:external_creatorship, archivist: archivist)] }
+      end
 
       context "when logged in" do
         before { fake_login }
