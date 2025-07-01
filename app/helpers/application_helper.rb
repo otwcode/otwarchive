@@ -70,9 +70,9 @@ module ApplicationHelper
   # Byline helpers
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous").html_safe
+      anon_byline = t("application_helper.anonymous_byline")
       if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
-        anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
+        anon_byline = t("application_helper.anonymous_with_name_byline", pseud_byline: non_anonymous_byline(creation, options[:only_path]))
       end
       return anon_byline
     end
@@ -92,16 +92,16 @@ module ApplicationHelper
 
   def byline_text_cached(creation, only_path)
     # Update Series#expire_byline_cache when changing cache key here
-    creators = Rails.cache.fetch(["byline_internal", creation.cache_key]) { byline_data(creation) }
+    creators = Rails.cache.fetch(["byline_data", creation.cache_key]) { byline_data(creation) }
     byline_text_internal(creators, only_path)
   end
 
-  def byline_text_uncached(creation, only_path, text_only = false)
+  def byline_text_uncached(creation, only_path, text_only: false)
     creators = byline_data(creation)
-    byline_text_internal(creators, only_path, text_only)
+    byline_text_internal(creators, only_path, text_only: text_only)
   end
 
-  def byline_text_internal(creators, only_path, text_only = false)
+  def byline_text_internal(creators, only_path, text_only: false)
     return creators if creators.is_a?(String)
 
     safe_join(creators.map do |creator|
@@ -124,7 +124,7 @@ module ApplicationHelper
 
     archivists = Hash.new []
     if creation.is_a?(Work)
-      external_creatorships = creation.external_creatorships.select { |ec| !ec.claimed? }
+      external_creatorships = creation.external_creatorships.reject { |ec| ec.claimed? }
       external_creatorships.each do |ec|
         archivist_pseud = pseuds.find { |p| ec.archivist.pseuds.include?(p) }
         archivists[archivist_pseud] += [ec.author_name]
@@ -147,15 +147,14 @@ module ApplicationHelper
   # A plain text version of the byline, for when we don't want to deliver a linkified version.
   def text_byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous")
+      anon_byline = t("application_helper.anonymous_byline")
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
-        anon_byline += " [#{non_anonymous_byline(creation)}]".html_safe
+        anon_byline = t("application_helper.anonymous_with_name_byline", pseud_byline: non_anonymous_byline(creation))
       end
       anon_byline
     else
       only_path = false
-      text_only = true
-      byline_text_uncached(creation, only_path, text_only)
+      byline_text_uncached(creation, only_path, text_only: true)
     end
   end
 
