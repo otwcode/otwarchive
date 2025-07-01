@@ -72,7 +72,7 @@ module ApplicationHelper
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = t("application_helper.anonymous_byline")
       if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
-        anon_byline = t("application_helper.anonymous_with_name_byline", pseud_byline: non_anonymous_byline(creation, options[:only_path]))
+        anon_byline = t("application_helper.anonymous_with_name_byline_html", pseud_byline: non_anonymous_byline(creation, options[:only_path]))
       end
       return anon_byline
     end
@@ -149,7 +149,7 @@ module ApplicationHelper
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = t("application_helper.anonymous_byline")
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
-        anon_byline = t("application_helper.anonymous_with_name_byline", pseud_byline: non_anonymous_byline(creation))
+        anon_byline = t("application_helper.anonymous_with_name_byline_html", pseud_byline: non_anonymous_byline(creation))
       end
       anon_byline
     else
