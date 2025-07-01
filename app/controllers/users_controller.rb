@@ -82,7 +82,7 @@ class UsersController < ApplicationController
     end
 
     if @new_login == @user.login
-      flash.now[:error] = t(".user.not_different") 
+      flash.now[:error] = t(".new_username_must_be_different") 
       render :change_username and return
     end
 
