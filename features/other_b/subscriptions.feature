@@ -241,31 +241,37 @@
 
     Scenario: When new chapter for a hidden work is posted, no subscription notifications are sent
 
-      Given the work "TOS Violation" by "violator"
+      Given I am logged in as "violator"
+        And I post the work "TOS Violation" as part of a series "Dont Be So Series"
         And "author_subscriber" subscribes to author "violator"
         And "work_subscriber" subscribes to work "TOS Violation"
+        And "series_subscriber" subscribes to series "Dont Be So Series"
       When I am logged in as a "policy_and_abuse" admin
         And I hide the work "TOS Violation"
         And a chapter is added to "TOS Violation"
         And subscription notifications are sent
       Then "author_subscriber" should not be emailed
         And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
       When I am logged in as a "policy_and_abuse" admin
         And I unhide the work "TOS Violation"
         And subscription notifications are sent
       Then "author_subscriber" should not be emailed
         And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
       When a chapter is added to "TOS Violation"
         And subscription notifications are sent
       Then "author_subscriber" should be emailed
         And "work_subscriber" should be emailed
+        And "series_subscriber" should be emailed
 
     Scenario: When a hidden work is unrevealed, no subscription notifications are sent
 
       Given I am logged in as "violator"
-        And I post the work "TOS Violation"
+        And I post the work "TOS Violation" as part of a series "Dont Be So Series"
         And "author_subscriber" subscribes to author "violator"
         And "work_subscriber" subscribes to work "TOS Violation"
+        And "series_subscriber" subscribes to series "Dont Be So Series"
         And I have the hidden collection "Secret"
         And I am logged in as "violator"
         And I edit the work "TOS Violation" to be in the collection "Secret"
@@ -279,11 +285,13 @@
         And subscription notifications are sent
       Then "author_subscriber" should not be emailed
         And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
       When I am logged in as a "policy_and_abuse" admin
         And I unhide the work "TOS Violation"
         And subscription notifications are sent
       Then "author_subscriber" should not be emailed
         And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
 
   Scenario: subscribe to an individual work with an the & and < and > characters in the title
 
