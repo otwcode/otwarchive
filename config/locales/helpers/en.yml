@@ -1,6 +1,8 @@
 ---
 en:
   application_helper:
+    anonymous_byline: Anonymous
+    anonymous_with_name_byline: Anonymous [%{pseud_byline}]
     archivist_byline_html: "%{external_author} [archived by %{pseud_byline}]"
   collections_helper:
     collection_item_approval_options:
