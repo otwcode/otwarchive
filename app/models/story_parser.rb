@@ -629,14 +629,10 @@ class StoryParser
     work_params.merge!(scan_text_for_meta(storytext, detect_tags))
 
     date = @doc.css("time.b-singlepost-author-date")
-    unless date.empty?
-      work_params[:revised_at] = convert_revised_at(date.first.inner_text)
-    end
+    work_params[:revised_at] = convert_revised_at(date.first.inner_text) unless date.empty?
 
     date = @doc.css("p.aentry-head__date/time")
-    unless date.empty?
-      work_params[:revised_at] = convert_revised_at(date.first.inner_text)
-    end
+    work_params[:revised_at] = convert_revised_at(date.first.inner_text) unless date.empty?
 
     work_params
   end
