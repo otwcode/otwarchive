@@ -20,8 +20,8 @@ module Bookmarkable
   end
 
   def update_bookmarker_pseuds_index
-    return unless respond_to?(:should_reindex_pseuds?)
-    return unless should_reindex_pseuds?
+    return unless respond_to?(:should_update_pseuds_and_collections_indexes?)
+    return unless should_update_pseuds_and_collections_indexes?
 
     IndexQueue.enqueue_ids(Pseud, bookmarks.pluck(:pseud_id), :background)
   end
