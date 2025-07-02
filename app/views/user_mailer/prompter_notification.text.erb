@@ -12,9 +12,9 @@
 
 <%= t(".byline.text", work_creators: creator_text(@work)) %>
 
-<% if @work.fandom_string.present? %><%= t(".label.fandom") %> <%= @work.fandom_string %><% end %>
+<% if @work.fandom_string.present? %><%= work_tag_metadata(work.tag_groups["Fandom"]) %><% end %>
 
-<% if @work.summary.present? %><%= t(".label.summary") %>
+<% if @work.summary.present? %><%= metadata_label(Work.human_attribute_name("summary")) %>
 <%= to_plain_text(raw sanitize_field(@work, :summary)) %><% end %>
 
 <% if @collection && @collection.gift_notification.present? %><%= @collection.gift_notification %><% end %><% end %>
