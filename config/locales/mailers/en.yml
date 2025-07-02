@@ -501,9 +501,6 @@ en:
       byline:
         html: by %{work_creator_links}
         text: by %{work_creators}
-      label:
-        fandom: 'Fandom:'
-        summary: 'Summary:'
       subject: "[%{app_name}] A response to your prompt"
     recipient_notification:
       collection:

@@ -15,12 +15,12 @@
     <%= t(".byline.html", work_creator_links: creator_links(@work)) %>
     <br>
     <% if @work.fandom_string.present? %>
-      <%= style_bold(t(".label.fandom")) %> <%= @work.fandom_string %>
+      <%= style_work_tag_metadata(@work.tag_groups["Fandom"]) %>
     <% end %>
   </p>
 
   <% if @work.summary.present? %>
-    <%= style_bold(t(".label.summary")) %>
+    <%= style_metadata_label(Work.human_attribute_name("summary")) %>
     <%= style_quote(raw sanitize_field(@work, :summary)) %>
   <% end %>
 
