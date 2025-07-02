@@ -14,6 +14,6 @@ Feature: User rename
     Then I should see "Your username has been successfully updated."
     When I view the work "Title"
       And all indexing jobs have been run
-      And it is currently 1 second from now
+      And it is currently 3 seconds from now
       And I view the 3rd chapter
     Then I should see "Chapter by after"
