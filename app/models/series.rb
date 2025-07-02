@@ -149,7 +149,7 @@ class Series < ApplicationRecord
 
   # Visibility has changed, which means we need to reindex
   # the series' bookmarker collections, to update their bookmark counts.
-  def should_reindex_collections?  
+  def should_update_collection_index?
     should_reindex_pseuds?
   end
 

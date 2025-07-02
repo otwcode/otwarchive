@@ -571,7 +571,7 @@ namespace :After do
       batch.each do |collection|
         approved_taggables = collection.approved_works + collection.approved_bookmarks + collection.approved_bookmarks.map(&:bookmarkable)
         tags = approved_taggables.flat_map { |taggable| taggable.try(:fandoms) || [] }
-           .uniq
+          .uniq
 
         next if tags.empty?
 

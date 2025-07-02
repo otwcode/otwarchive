@@ -79,12 +79,12 @@ module ChallengeCore
   end
 
   # reindex collection after creation, deletion, and certain attribute updates
-  def should_reindex_collection? 
+  def should_update_collection_index?
     pertinent_attributes = %w[id signup_open signups_open_at signups_close_at assignments_due_at works_reveal_at authors_reveal_at]
     (self.saved_changes.keys & pertinent_attributes).present?
   end
 
-  def reindex_collection
+  def update_collection_index
     return if self.collection.blank?
 
     IndexQueue.enqueue_id(Collection, collection.id, :main)

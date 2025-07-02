@@ -27,8 +27,8 @@ module Bookmarkable
   end
 
   def update_bookmarker_collections_index
-    return unless respond_to?(:should_reindex_collections?)
-    return unless should_reindex_collections?
+    return unless respond_to?(:should_update_collection_index?)
+    return unless should_update_collection_index?
 
     bookmark_ids = bookmarks.pluck(:id)
     collection_ids = Collection.joins(:collection_items).where(collection_items: {

@@ -8,7 +8,7 @@ class Bookmark < ApplicationRecord
   belongs_to :pseud, optional: false
 
   validates :bookmarker_notes,
-                      length: { maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX) }
+            length: { maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX) }
 
   validate :not_already_bookmarked_by_user, on: :create
   def not_already_bookmarked_by_user

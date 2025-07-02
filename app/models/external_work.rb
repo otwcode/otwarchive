@@ -86,7 +86,7 @@ class ExternalWork < ApplicationRecord
 
   # Visibility has changed, which means we need to reindex
   # the external work's bookmarker collections, to update their bookmark counts.
-  alias should_reindex_collections? should_reindex_pseuds?
+  alias should_update_collection_index? should_reindex_pseuds?
 
   ######################
   # SEARCH
