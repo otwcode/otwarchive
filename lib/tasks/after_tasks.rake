@@ -561,5 +561,30 @@ namespace :After do
       end
     end
   end
+
+  desc "tags existing collections with the fandoms of the collected works and bookmarks"
+  task(add_collection_tags: :environment) do
+    collections = Collection.all
+    total_batches = (collections.count + 999) / 1000
+
+    collections.find_in_batches.with_index do |batch, index|
+      batch.each do |collection|
+        approved_taggables = collection.approved_works + collection.approved_bookmarks + collection.approved_bookmarks.map(&:bookmarkable)
+        tags = approved_taggables.flat_map { |taggable| taggable.try(:fandoms) || [] }
+           .uniq
+
+        next if tags.empty?
+
+        # check if collection is multifandom
+        crossover = FandomCrossover.new.check_for_crossover(tags)
+        collection.update(multifandom: crossover) if crossover == true
+        next if tags.length > ArchiveConfig.COLLECTION_TAGS_MAX
+
+        collection.tags << tags
+      end
+
+      puts "Collection batch #{index + 1} of #{total_batches} tagged"
+    end
+  end
   # This is the end that you have to put new tasks above.
 end

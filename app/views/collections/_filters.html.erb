@@ -8,13 +8,13 @@
         <%= f.label :sort_column, ts("Sort by") %>
       </dt>
       <dd class="sort">
-        <%= f.select :sort_column, options_for_select({ ts("Title") => "title.keyword", ts("Date Created") => "created_at" }) %>
+        <%= f.select :sort_column, options_for_select({ ts("Title") => "title.keyword", ts("Date Created") => "created_at" }, "created_at") %>
       </dd>
       <dt class="sort">
         <%= f.label :sort_direction, ts("Sort direction") %>
       </dt>
       <dd class="sort">
-        <%= f.select :sort_direction, options_for_select({ ts("Ascending") => "ASC", ts("Descending") => "DESC" }) %>
+        <%= f.select :sort_direction, options_for_select({ ts("Ascending") => "ASC", ts("Descending") => "DESC" }, "DESC") %>
       </dd>
 
       <dt class="autocomplete search">

@@ -1,6 +1,6 @@
 class CollectionPreference < ApplicationRecord
   belongs_to :collection
-  after_update :after_update, :reindex_collection
+  after_update :after_update, :update_collection_index
 
   def after_update
     if self.collection.valid? && self.valid?
@@ -13,7 +13,7 @@ class CollectionPreference < ApplicationRecord
     end
   end
 
-  def reindex_collection
+  def update_collection_index
     IndexQueue.enqueue_id(Collection, collection_id, :background)
   end
 end

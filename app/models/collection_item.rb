@@ -274,17 +274,17 @@ class CollectionItem < ApplicationRecord
   end
 
   # reindex collection after creation, deletion, and approval_status update
-  after_destroy :reindex_collection
-  after_commit :reindex_collection, if: :should_reindex_collection?
+  after_destroy :update_collection_index
+  after_commit :update_collection_index, if: :should_update_collection_index?
 
-  def reindex_collection
+  def update_collection_index
     ids = [collection_id]
     ids.push(collection.parent_id) if collection.parent.present?
     IndexQueue.enqueue_ids(Collection, ids, :background)
   end
 
   # reindex collection after creation, deletion, and certain attribute updates
-  def should_reindex_collection?
+  def should_update_collection_index?
     pertinent_attributes = %w[id collection_approval_status user_approval_status] 
     (self.saved_changes.keys & pertinent_attributes).present?
   end

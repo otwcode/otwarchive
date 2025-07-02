@@ -3,7 +3,7 @@ class CollectionParticipant < ApplicationRecord
   has_one :user, through: :pseud
   belongs_to :collection
 
-  after_commit :reindex_collection
+  after_commit :update_collection_index
 
   PARTICIPANT_ROLES = ["None", "Owner", "Moderator", "Member", "Invited"]
   NONE = PARTICIPANT_ROLES[0]
@@ -57,7 +57,7 @@ class CollectionParticipant < ApplicationRecord
     (role == MEMBER || role == NONE) ? self.collection.user_is_maintainer?(user) : self.collection.user_is_owner?(user)
   end
 
-  def reindex_collection
+  def update_collection_index
     return unless MAINTAINER_ROLES.include?(participant_role) || MAINTAINER_ROLES.include?(participant_role_before_last_save)
 
     ids = [collection_id]

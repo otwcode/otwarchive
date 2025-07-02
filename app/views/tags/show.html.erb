@@ -140,7 +140,7 @@
     <% end %>
 
     <% unless @collections.blank? %>
-      <div class="bookmark listbox group">
+      <div class="collection listbox group">
       <h3 class="heading"><%= ts('Collections which have used it as a tag') %>:</h3>
       <%= paginated_section @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
           <ul class="index group">

@@ -27,8 +27,6 @@ describe CollectionDecorator do
         "authors_reveal_at" => nil,
         "general_fandom_ids" => [],
         "public_fandom_ids" => [],
-        "general_fandoms_count" => 5,
-        "public_fandoms_count" => 10,
         "general_works_count" => 7,
         "public_works_count" => 10,
         "general_bookmarked_items_count" => 5,

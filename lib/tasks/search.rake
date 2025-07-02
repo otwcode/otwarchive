@@ -12,7 +12,7 @@ namespace :search do
 
   desc "Recreate collections index"
   task(index_collections: :environment) do
-    CollectionIndexer.all
+    CollectionIndexer.index_all
   end
 
   desc "Recreate tag index"
