@@ -36,7 +36,6 @@ form blockquote.userstuff {
 }
 
 #inner .filters,
-#footer,
 .filters dt,
 media .listbox,
 .bookmark .recent .index {
@@ -148,8 +147,7 @@ pre {
 
 #header .navigation,
 #header li a,
-#footer ul,
-#footer li a {
+#footer * {
   float: none;
 }
 
@@ -165,11 +163,6 @@ pre {
   position: static;
 }
 
-#footer {
-  float: left;
-  padding: 0;
-}
-
 #header,
 #header .open a,
 #header .primary .dropdown a:focus,
@@ -177,8 +170,10 @@ pre {
 #footer,
 .actions a:hover,
 .actions a:focus,
-#footer button:hover,
-#footer button:focus {
+input[type="submit"]:hover,
+input[type="submit"]:focus,
+.actions button:hover,
+.actions button:focus {
   background: #900;
   color: #eee;
 }
@@ -202,8 +197,16 @@ pre {
   color: #111;
 }
 
+#footer button {
+  cursor: pointer;
+  height: unset;
+  width: 100%;
+  white-space: normal;
+    box-sizing: border-box;
+}
+
 .bookmark div.user {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .bookmark .recent,
