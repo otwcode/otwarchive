@@ -495,8 +495,8 @@ en:
     prompter_notification:
       a_response_to_your_prompt:
         collection:
-          html: A response to your prompt has been posted in the %{collection_link} collection at the Archive of Our Own!
-          text: A response to your prompt has been posted in the "%{collection_title}" collection (%{collection_url}) at the Archive of Our Own!
+          html: A response to your prompt has been posted in the %{collection_link} collection on the Archive of Our Own!
+          text: A response to your prompt has been posted in the "%{collection_title}" collection (%{collection_url}) on the Archive of Our Own!
         text: A response to your prompt has been posted at the Archive of Our Own!
       byline:
         html: by %{work_creator_links}
