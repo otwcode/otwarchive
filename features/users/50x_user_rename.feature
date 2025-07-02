@@ -13,7 +13,6 @@ Feature: User rename
       And I press "Change Username"
     Then I should see "Your username has been successfully updated."
     When I view the work "Title"
-      And all indexing jobs have been run
       And it is currently 1 second from now
       And I view the 3rd chapter
     Then I should see "Chapter by after"
