@@ -70,6 +70,7 @@ describe ApplicationHelper do
 
         before do
           series.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+          series.pseuds.reload # load pseuds
         end
 
         it "returns array of strings with all users" do
@@ -128,6 +129,7 @@ describe ApplicationHelper do
 
         before do
           work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+          work.pseuds.reload # load pseuds
         end
 
         it "returns array of strings with all users" do
@@ -168,7 +170,10 @@ describe ApplicationHelper do
       end
 
       context "when work has no user" do
-        before { work.creatorships.delete_all }
+        before do
+          work.creatorships.delete_all
+          work.pseuds.reload
+        end
 
         it "returns empty array" do
           result = helper.creator_ids_for_css_classes(work)
@@ -209,6 +214,7 @@ describe ApplicationHelper do
 
             travel(1.day)
             series.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+
             expect(helper.css_classes_for_creation_blurb(series.reload)).to eq("#{default_classes} series-#{series.id} user-#{user1.id} user-#{user2.id}")
             expect(original_cache_key).not_to eq("#{series.cache_key_with_version}/blurb_css_classes-v2")
             travel_back
@@ -216,7 +222,10 @@ describe ApplicationHelper do
         end
 
         context "when user is removed from series" do
-          before { series.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id) }
+          before do
+            series.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+            series.pseuds.reload
+          end
 
           it "returns updated string" do
             original_cache_key = "#{series.cache_key_with_version}/blurb_css_classes-v2"
@@ -224,6 +233,7 @@ describe ApplicationHelper do
 
             travel(1.day)
             series.creatorships.find_by(pseud_id: user2.default_pseud_id).destroy
+
             expect(helper.css_classes_for_creation_blurb(series.reload)).to eq("#{default_classes} series-#{series.id} user-#{user1.id}")
             expect(original_cache_key).not_to eq("#{series.cache_key_with_version}/blurb_css_classes-v2")
             travel_back
@@ -314,6 +324,8 @@ describe ApplicationHelper do
 
           travel_back
           work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+          work.pseuds.reload
+
           expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id} user-#{user2.id}")
           expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes-v2")
         end
@@ -323,12 +335,15 @@ describe ApplicationHelper do
         it "returns updated string" do
           travel_to(1.day.ago)
           work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
+          work.pseuds.reload
+
           original_cache_key = "#{work.cache_key_with_version}/blurb_css_classes-v2"
           expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id} user-#{user2.id}")
 
           travel_back
           work.creatorships.find_by(pseud_id: user2.default_pseud_id).destroy
-          expect(helper.css_classes_for_creation_blurb(work)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
+
+          expect(helper.css_classes_for_creation_blurb(work.reload)).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
           expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes-v2")
         end
       end
