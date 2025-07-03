@@ -42,9 +42,9 @@ class InboxController < ApplicationController
       elsif params[:delete]
         @inbox_comments.each { |i| i.destroy }
       end
-      success_message = ts('Inbox successfully updated.')
+      success_message = t("inbox.update_success")
     rescue
-      flash[:caution] = ts("Please select something first.")
+      flash[:caution] = t("inbox.must_select_item")
     end
     respond_to do |format|
       format.html { redirect_to request.referer || user_inbox_path(@user, page: params[:page], filters: params[:filters]), notice: success_message }
