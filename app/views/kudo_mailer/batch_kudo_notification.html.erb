@@ -10,7 +10,7 @@
       # dup so we don't add "a guest" or "5 guests" to the original array. If
       # that happens, kudo_count ends up too high whenever both named and guest
       # kudos are present.
-      givers = names.dup
+      givers = names.map { |name| style_link(name, user_url(name)) }
       givers << t(".guest", count: guest_count) unless guest_count.zero?
       givers_list = to_sentence(givers.map { |k| style_bold(k) })
     %>
