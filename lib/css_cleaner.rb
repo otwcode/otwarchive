@@ -32,6 +32,11 @@ module CssCleaner
   DROP_SHADOW_VALUE_REGEX = Regexp.new("\\(\\s*(#{NUMBER_WITH_UNIT_REGEX}|#{COLOR_REGEX}\\s*)+\\s*\\)")
   DROP_SHADOW_FUNCTION_REGEX = Regexp.new("#{DROP_SHADOW_NAME_REGEX}#{DROP_SHADOW_VALUE_REGEX}")
 
+  # quotes can take up to 4 characters, wrapped in quotation marks and separated by spaces, including escaped tokens
+  SINGLE_ESCAPED_CHARACTER_REGEX = Regexp.new("['\"]\\\\[\\da-f]{2,6}['\"]", Regexp::IGNORECASE)
+  SINGLE_NONWORD_CHARACTER_REGEX = Regexp.new("['\"]\\W['\"]")
+  QUOTES_REGEX = Regexp.new("(?:#{SINGLE_ESCAPED_CHARACTER_REGEX}\s*|#{SINGLE_NONWORD_CHARACTER_REGEX}\s*){1,4}")
+
   # from the ICANN list at http://www.icann.org/en/registries/top-level-domains.htm
   TOP_LEVEL_DOMAINS = %w(ac ad ae aero af ag ai al am an ao aq ar arpa as asia at au aw ax az ba bb bd be bf bg bh bi biz bj bm bn bo br bs bt bv bw by bz ca cat cc cd cf cg ch ci ck cl cm cn co com coop cr cu cv cx cy cz de dj dk dm do dz ec edu ee eg er es et eu fi fj fk fm fo fr ga gb gd ge gf gg gh gi gl gm gn gov gp gq gr gs gt gu gw gy hk hm hn hr ht hu id ie il im in info int io iq ir is it je jm jo jobs jp ke kg kh ki km kn kp kr kw ky kz la lb lc li lk lr ls lt lu lv ly ma mc md me mg mh mil mk ml mm mn mo mobi mp mq mr ms mt mu museum mv mw mx my mz na name nc ne net nf ng ni nl no np nr nu nz om org pa pe pf pg ph pk pl pm pn pr pro ps pt pw py qa re ro rs ru rw sa sb sc sd se sg sh si sj sk sl sm sn so sr st su sv sy sz tc td tel tf tg th tj tk tl tm tn to tp tr travel tt tv tw tz ua ug uk us uy uz va vc ve vg vi vn vu wf ws xn xxx ye yt za zm zw)
   DOMAIN_REGEX = Regexp.new('https?://\w[\w\-\.]+\.(' + TOP_LEVEL_DOMAINS.join('|') + ')')
@@ -40,7 +45,7 @@ module CssCleaner
   URL_REGEX = Regexp.new(URI_REGEX.to_s + '|"' + URI_REGEX.to_s + '"|\'' + URI_REGEX.to_s + '\'')
   URL_FUNCTION_REGEX = Regexp.new('url\(\s*' + URL_REGEX.to_s + '\s*\)')
 
-  VALUE_REGEX = Regexp.new("#{TRANSFORM_FUNCTION_REGEX}|#{URL_FUNCTION_REGEX}|#{COLOR_STOP_FUNCTION_REGEX}|#{COLOR_REGEX}|#{NUMBER_WITH_UNIT_REGEX}|#{ALPHA_REGEX}|#{SHAPE_FUNCTION_REGEX}|#{FILTER_FUNCTION_REGEX}|#{DROP_SHADOW_FUNCTION_REGEX}")
+  VALUE_REGEX = Regexp.new("#{TRANSFORM_FUNCTION_REGEX}|#{URL_FUNCTION_REGEX}|#{COLOR_STOP_FUNCTION_REGEX}|#{COLOR_REGEX}|#{NUMBER_WITH_UNIT_REGEX}|#{ALPHA_REGEX}|#{SHAPE_FUNCTION_REGEX}|#{FILTER_FUNCTION_REGEX}|#{DROP_SHADOW_FUNCTION_REGEX}|#{QUOTES_REGEX}")
 
 
   # For use in ActiveRecord models
