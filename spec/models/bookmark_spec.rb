@@ -22,7 +22,7 @@ describe Bookmark do
   end
 
   it "can be tagged if has an id larger than int" do
-    bookmark = build(:bookmark, tag_string: "Huge", id: 2247740375)
+    bookmark = build(:bookmark, tag_string: "Huge", id: 2_247_740_375)
     expect(bookmark).to be_valid
     expect(bookmark.save).to be_truthy
     expect(bookmark.reload.taggings.last.tagger.name).to eq("Huge")
@@ -30,7 +30,7 @@ describe Bookmark do
 
   it "can be collected if has an id larger than int" do
     collection = create(:collection)
-    bookmark = build(:bookmark, collection_names: collection.name, id: 2247740375)
+    bookmark = build(:bookmark, collection_names: collection.name, id: 2_247_740_375)
     expect(bookmark).to be_valid
     expect(bookmark.save).to be_truthy
     expect(bookmark.collections).to include(collection)
@@ -38,7 +38,7 @@ describe Bookmark do
   end
 
   it "can be hidden if has an id larger than int" do
-    bookmark = create(:bookmark, id: 2247740375)
+    bookmark = create(:bookmark, id: 2_247_740_375)
     admin = create(:admin)
     activity = build(:admin_activity, admin: admin, target: bookmark)
 
