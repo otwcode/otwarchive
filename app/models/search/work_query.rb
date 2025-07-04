@@ -252,7 +252,8 @@ class WorkQuery < Query
       query_string: {
         query: query,
         fields: ["creators^5", "title^7", "endnotes", "notes", "summary", "tag", "series.title"],
-        default_operator: "AND"
+        default_operator: "AND",
+        type: "cross_fields"
       }
     } unless query.blank?
   end
