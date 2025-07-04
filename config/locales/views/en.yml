@@ -2496,6 +2496,6 @@ en:
       post: Post
       required_information: Required information
       rich_text: Rich Text
-      rich_text_notes_html: Type or paste formatted text %{help_link}
+      rich_text_notes_html: Type or paste formatted text.
       title: Title
       title_failure: Please enter a title
