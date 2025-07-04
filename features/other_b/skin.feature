@@ -334,8 +334,8 @@ Feature: Non-public site and work skins
 
   @javascript
   Scenario: User can add a parent skin using the Custom CSS form
-    Given I am logged in
-      And I create the skin "Dad"
+    Given the skin "Dad" by "skinner"
+      And I am logged in as "skinner"
     When I go to the new skin page
     Then I should see "Advanced"
     When I follow "Show ↓"
