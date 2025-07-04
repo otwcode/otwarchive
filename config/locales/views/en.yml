@@ -2490,12 +2490,12 @@ en:
       content_too_long: We salute your ambition! But sadly the content must be less than %{max} letters long.
       content_too_short: Brevity is the soul of wit, but your content does have to be at least %{min} letters long.
       guideline_text: Guideline text
-      html: HTML
+      html_editor: HTML
       landmark:
         post: Post
       post: Post
       required_information: Required information
-      rich_text: Rich Text
+      rich_text_editor: Rich Text
       rich_text_notes_html: Type or paste formatted text.
       title: Title
-      title_failure: Please enter a title
+      title_failure: Please enter a title.
