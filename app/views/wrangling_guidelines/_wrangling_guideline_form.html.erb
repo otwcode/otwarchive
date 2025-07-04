@@ -2,16 +2,16 @@
 
   <%= error_messages_for @wrangling_guideline %>
 
-  <p class="required notice"><%= t(".required_information") %></p>
+  <p class="required notice"><%= "* #{t('.required_information')}" %></p>
   <dl>
 
-    <dt class="required"><%= f.label :title, t(".title") %></dt>
+    <dt class="required"><%= f.label :title, "#{t('.title')}*" %></dt>
     <dd>
       <%= f.text_field :title %>
       <%= live_validation_for_field("wrangling_guideline_title", failureMessage: t(".title_failure")) %>
     </dd>
 
-    <dt class="required"><%= f.label :content, t(".guideline_text"), for: "content" %></dt>
+    <dt class="required"><%= f.label :content, "#{t('.guideline_text')}*", for: "content" %></dt>
     <dd class="required">
       <ul class="hidden rtf-html-switch actions" role="menu">
         <li><a class="rtf-link" href="#"><%= t(".rich_text") %></a></li>
