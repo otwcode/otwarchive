@@ -6,7 +6,7 @@ class AdminPost < ApplicationRecord
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, _suffix: :comments
+  }, _default: :disable_anon, _suffix: :comments
 
   belongs_to :language
   belongs_to :translated_post, class_name: "AdminPost"

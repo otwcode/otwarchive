@@ -13,7 +13,7 @@ FactoryBot.define do
     end
 
     trait :on_admin_post do
-      commentable { create(:admin_post) }
+      commentable { create(:admin_post, comment_permissions: :enable_all) }
     end
 
     trait :on_tag do
