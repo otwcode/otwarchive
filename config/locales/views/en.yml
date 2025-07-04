@@ -588,6 +588,8 @@ en:
           unreviewed_by_collection: Works and bookmarks listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection.
         page_heading: Items by %{username} in Collections
   collections:
+    collection_blurb:
+      collection_tags: 'Collection Tags:'
     form:
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
