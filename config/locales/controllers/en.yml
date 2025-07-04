@@ -217,6 +217,7 @@ en:
     changed_username:
       admin:
         successfully_updated: Username has been successfully updated.
+      new_username_must_be_different: Your new username must be different from your current username.
       user:
         incorrect_password: Your password was incorrect
         successfully_updated: Your username has been successfully updated.
