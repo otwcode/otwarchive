@@ -95,6 +95,36 @@ describe TagsController do
                                                    freeform2.name])
       end
     end
+
+    context "when showing canonical relationships for a character" do
+      let(:character1) { create(:canonical_character, name: "A") }
+      let(:relationship1) { create(:canonical_relationship, name: "A/B", taggings_count_cache: 1) }
+      let(:relationship2) { create(:canonical_relationship, name: "A/C", taggings_count_cache: 2) }
+      let(:relationship3) { create(:canonical_relationship, name: "A/D") }
+      let(:relationship4) { create(:canonical_relationship, name: "A/E") }
+
+      before do
+        relationship1.add_association(character1)
+        relationship2.add_association(character1)
+        relationship3.add_association(character1)
+        relationship4.add_association(character1)
+        run_all_indexing_jobs
+      end
+
+      it "sorts tags by taggings count" do
+        get :wrangle, params: { id: character1.name, show: "relationships", status: "canonical", sort_column: "taggings_count_cache", sort_direction: "DESC" }
+        expect(assigns(:tags).pluck(:name)).to eq([relationship2.name,
+                                                   relationship1.name,
+                                                   relationship3.name,
+                                                   relationship4.name])
+
+        get :wrangle, params: { id: character1.name, show: "relationships", status: "canonical", sort_column: "taggings_count_cache", sort_direction: "ASC" }
+        expect(assigns(:tags).pluck(:name)).to eq([relationship3.name,
+                                                   relationship4.name,
+                                                   relationship1.name,
+                                                   relationship2.name])
+      end
+    end
   
     context "when showing unwrangled relationships for a character" do
       let(:character1) { create(:character, canonical: true) }
@@ -677,6 +707,68 @@ describe TagsController do
     it "assigns subtitle with collection title and tags" do
       get :index, params: { collection_id: collection.name }
       expect(assigns[:page_subtitle]).to eq("#{collection.title} - Tags")
+    end
+
+    context "ArchiveConfig.FANDOM_NO_TAG_NAME exists and has tags" do
+      let!(:no_fandom) { create(:fandom, name: ArchiveConfig.FANDOM_NO_TAG_NAME, canonical: true) }
+      let!(:freeform1) { create(:freeform, canonical: true) }
+      let!(:freeform2) { create(:freeform, canonical: true) }
+
+      before do
+        CommonTagging.create!(filterable: no_fandom, common_tag: freeform1)
+        CommonTagging.create!(filterable: no_fandom, common_tag: freeform2)
+
+        FilterCount.create!(
+          filter: freeform1,
+          public_works_count: 1,
+          unhidden_works_count: 1
+        )
+        FilterCount.create!(
+          filter: freeform2,
+          public_works_count: 1,
+          unhidden_works_count: 1
+        )
+      end
+
+      it "assigns non-empty tags on /tags" do
+        get :index
+
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+        expect(assigns(:tags)).to include(freeform1, freeform2)
+      end
+
+      it "assigns non-empty tags on /tags?show=random" do
+        get :index, params: { show: :random }
+
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+        expect(assigns(:tags)).to include(freeform1, freeform2)
+      end
+    end
+
+    context "ArchiveConfig.FANDOM_NO_TAG_NAME doesn't exist" do
+      before do
+        if (fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME))
+          fandom.destroy!
+        end
+      end
+
+      it "does not 500 error on /tags" do
+        get :index
+
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+        expect(assigns(:tags)).to be_empty
+      end
+
+      it "does not 500 error on /tags?show=random" do
+        get :index, params: { show: :random }
+
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:index)
+        expect(assigns(:tags)).to be_empty
+      end
     end
   end
 end

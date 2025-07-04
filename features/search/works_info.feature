@@ -41,7 +41,7 @@ Feature: Search works by work info
     Then I should see "You searched for: word count: >15000 revised at: > 2 years ago"
       And I should see "No results found"
 
-  Scenario: Search with the header search field and then refine by author/artist
+  Scenario: Search with the header search field and then refine by creator
     Given I have the Battle set loaded
     When I fill in "site_search" with "testuser2"
       And I press "Search"
@@ -54,9 +54,9 @@ Feature: Search works by work info
     Then I should be on the search works page
       And the field labeled "Any Field" should contain "testuser2"
     When I fill in "Any Field" with ""
-      And I fill in "Author/Artist" with "testuser2"
+      And I fill in "Creator" with "testuser2"
       And I press "Search" within "#new_work_search"
-    Then I should see "You searched for: Author/Artist: testuser2"
+    Then I should see "You searched for: Creator: testuser2"
       And I should see "3 Found"
       And I should see "fourth"
       And I should see "fifth"

@@ -678,6 +678,10 @@ en:
       page_heading: Editing comment
       show: Show
       update: Update
+    show:
+      comment_on_html: Comment on %{commentable_link}
+    single_comment:
+      on_chapter_html: on %{commentable_link}
     unreviewed:
       approve_all: Approve All Unreviewed Comments
       no_unreviewed: No unreviewed comments.
@@ -2465,6 +2469,8 @@ en:
       label: Work Search
       submit: Search
       tooltip_label: 'tip:'
+    search_form:
+      creator: Creator
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
     show_multiple:
