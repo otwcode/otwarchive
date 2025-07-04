@@ -2487,8 +2487,12 @@ en:
       heading: Wrangling Guidelines
     wrangling_guideline_form:
       content_required: You need to post some content here.
-      content_too_long: We salute your ambition! But sadly the content must be less than %{max} letters long.
-      content_too_short: Brevity is the soul of wit, but your content does have to be at least %{min} letters long.
+      content_too_long:
+        one: We salute your ambition! But sadly the content must be less than %{count} letter long.
+        other: We salute your ambition! But sadly the content must be less than %{count} letters long.
+      content_too_short:
+        one: Brevity is the soul of wit, but your content does have to be at least %{count} letter long.
+        other: Brevity is the soul of wit, but your content does have to be at least %{count} letters long.
       guideline_text: Guideline text
       html_editor: HTML
       landmark:

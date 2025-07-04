@@ -27,8 +27,8 @@
         <%= live_validation_for_field("content",
               maximum_length: ArchiveConfig.CONTENT_MAX,
               minimum_length: ArchiveConfig.CONTENT_MIN,
-              tooLongMessage: t(".content_too_long", max: ArchiveConfig.CONTENT_MAX.to_s),
-              tooShortMessage: t(".content_too_short", min: ArchiveConfig.CONTENT_MIN.to_s),
+              tooLongMessage: t(".content_too_long", count: ArchiveConfig.CONTENT_MAX),
+              tooShortMessage: t(".content_too_short", count: ArchiveConfig.CONTENT_MIN),
               failureMessage: t(".content_required")) %>
         <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
       </div>
