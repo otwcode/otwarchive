@@ -167,10 +167,7 @@ Feature: Gift Exchange Challenge
    When I am logged in as "mod1"
      And I go to "Awesome Gift Exchange" collection's page
      And I follow "Sign-ups"
-   Then I should see "myname4" within "#main"
-     And I should see "myname3" within "#main"
-     And I should see "myname2" within "#main"
-     And I should see "myname1" within "#main"
+   Then I should see all the participants who have signed up
      And I should see "Something else weird"
      And I should see "Alternate Universe - Historical"
 
