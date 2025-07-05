@@ -232,6 +232,17 @@ When /^I start to sign up for "([^\"]*)" tagless gift exchange$/ do |title|
   step %{I should see "Sign-up was successfully created"}
 end
 
+Then "I should see participant number {int} with byline {string}" do |num, byline|
+  within(:xpath, ".//dt[@class=\"participant\"][#{num}]") { expect(page).to have_content(byline) }
+end
+
+Then "I should see all the participants who have signed up" do
+  step %{I should see participant number 1 with byline "myname1_pseud (myname1)"}
+  step %{I should see participant number 2 with byline "myname2"}
+  step %{I should see participant number 3 with byline "myname3"}
+  step %{I should see participant number 4 with byline "myname4"}
+end
+
 ## Matching
 
 Given /^the gift exchange "([^\"]*)" is ready for matching$/ do |title|
