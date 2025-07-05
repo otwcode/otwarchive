@@ -32,14 +32,18 @@ class TagsController < ApplicationController
       @page_subtitle = t(".collection_page_title", collection_title: @collection.title)
     else
       no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-      @tags = no_fandom.children.by_type('Freeform').first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
-      # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
-      # and then sort again at the very end to make it alphabetic
-      @tags = if params[:show] == 'random'
-                @tags.random.canonical.sort
-              else
-                @tags.popular.canonical.sort
-              end
+      if no_fandom
+        @tags = no_fandom.children.by_type("Freeform").first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
+        # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
+        # and then sort again at the very end to make it alphabetic
+        @tags = if params[:show] == "random"
+                  @tags.random.canonical.sort
+                else
+                  @tags.popular.canonical.sort
+                end
+      else
+        @tags = []
+      end
     end
   end
 
@@ -292,16 +296,16 @@ class TagsController < ApplicationController
       end
       # this makes sure params[:status] is safe
       status = params[:status]
-      if %w(unfilterable canonical synonymous unwrangleable).include?(status)
-        @tags = @tag.send(show).order(sort).send(status).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      elsif status == 'unwrangled'
-        @tags = @tag.unwrangled_tags(
-          params[:show].singularize.camelize,
-          params.permit!.slice(:sort_column, :sort_direction, :page)
-        )
-      else
-        @tags = @tag.send(show).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      end
+      @tags = if %w[unfilterable canonical synonymous unwrangleable].include?(status)
+                @tag.send(show).reorder(sort).send(status).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+              elsif status == "unwrangled"
+                @tag.unwrangled_tags(
+                  params[:show].singularize.camelize,
+                  params.permit!.slice(:sort_column, :sort_direction, :page)
+                )
+              else
+                @tag.send(show).reorder(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+              end
     end
   end
 
