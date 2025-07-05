@@ -703,24 +703,24 @@ en:
     download_chapter:
       chapter_byline_html: Chapter by %{byline_names_link}
       chapter_end_notes: Chapter End Notes
-      chapter_notes: Chapter Notes
-      chapter_summary: Chapter Summary
       chapter_end_notes_with_chapter_notes: more notes
       chapter_end_notes_without_chapter_notes: notes
+      chapter_notes: Chapter Notes
+      chapter_summary: Chapter Summary
       see_chapter_end_notes_html: See the end of the chapter for %{chapter_end_notes_link}
     download_preface:
       byline_html: by %{byline_names_link}
       chapters: 'Chapters: %{chapter_total_display}'
       collections: 'Collections: '
       completed: 'Completed: %{date}'
+      end_notes_with_work_notes: more notes
+      end_notes_without_work_notes: notes
       inspired_by:
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
       language: 'Language: '
-      end_notes_with_work_notes: more notes
       notes: Notes
-      end_notes_without_work_notes: notes
       originally_posted_html: Posted originally on the %{archive_link} at %{work_url}.
       preface: Preface
       published: 'Published: %{date}'
