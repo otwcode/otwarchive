@@ -656,8 +656,8 @@ class WorksController < ApplicationController
     @page_subtitle = ts("Edit Multiple Works")
     @user = current_user
 
-    @works = Work.joins(pseuds: :user).where('users.id = ?', @user.try(:id))
-    
+    @works = Work.joins(pseuds: :user).where(users: { id: @user.try(:id) })
+
     @works = @works.where(id: params[:work_ids]) if params[:work_ids]
 
     @works_by_fandom = @works.joins(:taggings)
