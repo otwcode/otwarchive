@@ -194,15 +194,3 @@ html.no-js p.narrow-hidden,
 html.no-js p.narrow-shown {
   display: block !important;
 }
-
-p.narrow-hidden a,
-p.narrow-shown a {
-  background:     #900;
-  color:          #eee;
-  padding:        0.75em 1em;
-  font-size:      1.4em;
-  text-decoration:none;
-  display:        inline-block;
-  margin:         1em auto;
-  text-align:     center;
-}
