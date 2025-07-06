@@ -273,13 +273,13 @@ describe InboxController do
       context "with no comments selected" do
         it "redirects to the user's inbox with a caution" do
           put :update, params: { user_id: user.login, read: "yeah" }
-          it_redirects_to_with_caution(user_inbox_path(user), "Please select something first.")
+          it_redirects_to_with_caution(user_inbox_path(user), "Please select at least one comment first.")
         end
 
         it "redirects to the previously viewed page if HTTP_REFERER is set, with a caution" do
           @request.env["HTTP_REFERER"] = root_path
           put :update, params: { user_id: user.login, read: "yeah" }
-          it_redirects_to_with_caution(root_path, "Please select something first.")
+          it_redirects_to_with_caution(root_path, "Please select at least one comment first.")
         end
       end
 
