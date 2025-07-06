@@ -134,7 +134,7 @@ en:
   inbox:
     must_select_item: Please select something first.
     page_title: "%{user} - Inbox"
-    update_success: Inbox successfully updated.
+    success: Inbox successfully updated.
   invite_requests:
     create:
       queue_disabled:

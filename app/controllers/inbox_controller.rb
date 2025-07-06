@@ -42,7 +42,7 @@ class InboxController < ApplicationController
       elsif params[:delete]
         @inbox_comments.each { |i| i.destroy }
       end
-      success_message = t("inbox.update_success")
+      success_message = t(".success")
     rescue
       flash[:caution] = t("inbox.must_select_item")
     end
