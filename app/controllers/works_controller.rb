@@ -313,7 +313,6 @@ class WorksController < ApplicationController
     @work.set_challenge_claim_info
     set_work_form_fields
 
-    # If Cancel is pressed, bail out and display relevant form
     if work_cannot_be_saved?
       render :new
     else
