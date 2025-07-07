@@ -52,7 +52,7 @@ gem 'resque', '>=1.14.0'
 gem 'resque-scheduler'
 gem 'after_commit_everywhere'
 #gem 'daemon-spawn', require: 'daemon_spawn'
-gem "elasticsearch", "7.17.1"
+gem "elasticsearch", "8.18.0"
 gem "aws-sdk-s3"
 gem 'css_parser'
 
@@ -109,7 +109,7 @@ gem 'kgio', '2.10.0'
 gem "marcel", "1.0.2"
 
 # Library for helping run pt-online-schema-change commands:
-gem "departure", "~> 6.7"
+gem "departure", "~> 6.8"
 
 gem "rack-timeout"
 gem "puma_worker_killer"

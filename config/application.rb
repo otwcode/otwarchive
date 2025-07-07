@@ -22,10 +22,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 7.0
-
-    # TODO: Remove in Rails 7.1, where it's false by default.
-    config.add_autoload_paths_to_load_path = false
+    config.load_defaults 7.1
 
     %w[
       app/models/challenge_models
@@ -80,6 +77,9 @@ module Otwarchive
 
     # Keeps updated_at in cache keys
     config.active_record.cache_versioning = false
+
+    # Setting this to true (the default) breaks series orphaning
+    config.active_record.before_committed_on_all_records = false
 
     # This class is not allowed by default when upgrading Rails to 6.0.5.1 patch
     config.active_record.yaml_column_permitted_classes = [

@@ -1,7 +1,7 @@
 class Admin < ApplicationRecord
   VALID_ROLES = %w[superadmin board board_assistants_team communications development_and_membership docs elections legal translation tag_wrangling support policy_and_abuse open_doors].freeze
 
-  serialize :roles, type: Array
+  serialize :roles, type: Array, coder: YAML, yaml: { permitted_classes: [String] }
 
   devise :lockable,
          :recoverable,
@@ -47,7 +47,7 @@ class Admin < ApplicationRecord
     login
   end
 
-  serialize :otp_backup_codes, type: Array
+  serialize :otp_backup_codes, type: Array, coder: YAML, yaml: { permitted_classes: [String] }
 
   attr_accessor :otp_plain_backup_codes
 

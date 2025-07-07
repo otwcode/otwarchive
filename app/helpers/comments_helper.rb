@@ -65,6 +65,10 @@ module CommentsHelper
     end
   end
 
+  def chapter_description_link(comment)
+    link_to t("comments_helper.chapter_link_html", position: comment.parent.position), work_chapter_path(comment.parent.work, comment.parent)
+  end
+
   def image_safety_mode_cache_key(comment)
     "image-safety-mode" if comment.use_image_safety_mode?
   end
