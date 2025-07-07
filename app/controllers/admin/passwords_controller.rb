@@ -8,6 +8,12 @@ class Admin::PasswordsController < Devise::PasswordsController
   before_action :check_if_totp_required, only: [:edit]
   before_action :verify_otp_code, only: [:update]
 
+  def edit
+  end
+
+  def update
+  end
+
   def check_if_totp_required
     admin = find_admin_by_reset_password_token(params[:reset_password_token])
 
