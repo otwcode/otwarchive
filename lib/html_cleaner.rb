@@ -124,7 +124,7 @@ module HtmlCleaner
 
   def add_paragraphs_to_text(text)
     # Adding paragraphs in place of linebreaks
-    doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
+    doc = Nokogiri::HTML5.fragment("<myroot>#{text}</myroot>")
     myroot = doc.children.first
     ParagraphMaker.process(myroot)
     myroot.children.to_html
