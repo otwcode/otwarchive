@@ -736,10 +736,10 @@ describe HtmlCleaner do
 
       result = add_paragraphs_to_text(html)
       doc = Nokogiri::HTML5.fragment(result)
-      expect(doc.xpath("./table//tr[1]/th[1]/node()").to_s.strip).to eq("A")
-      expect(doc.xpath("./table//tr[1]/th[2]/node()").to_s.strip).to eq("B")
-      expect(doc.xpath("./table//tr[2]/td[1]/node()").to_s.strip).to eq("C")
-      expect(doc.xpath("./table//tr[2]/td[2]/node()").to_s.strip).to eq("D")
+      expect(doc.xpath("./table/tbody/tr[1]/th[1]/node()").to_s.strip).to eq("A")
+      expect(doc.xpath("./table/tbody/tr[1]/th[2]/node()").to_s.strip).to eq("B")
+      expect(doc.xpath("./table/tbody/tr[2]/td[1]/node()").to_s.strip).to eq("C")
+      expect(doc.xpath("./table/tbody/tr[2]/td[2]/node()").to_s.strip).to eq("D")
       expect(doc.xpath(".//br")).to be_empty
     end
 
@@ -1104,10 +1104,10 @@ describe HtmlCleaner do
       doc = Nokogiri::HTML5.fragment(result)
       expect(doc.xpath("./table/colgroup[@align='left']/col[@width='20']").size).to eq(1)
       expect(doc.xpath("./table/colgroup[@align='right']").size).to eq(1)
-      expect(doc.xpath("./table//tr[1]/th[1]/node()").to_s.strip).to eq("A")
-      expect(doc.xpath("./table//tr[1]/th[2]/node()").to_s.strip).to eq("B")
-      expect(doc.xpath("./table//tr[2]/td[1]/node()").to_s.strip).to eq("C")
-      expect(doc.xpath("./table//tr[2]/td[2]/node()").to_s.strip).to eq("D")
+      expect(doc.xpath("./table/tbody/tr[1]/th[1]/node()").to_s.strip).to eq("A")
+      expect(doc.xpath("./table/tbody/tr[1]/th[2]/node()").to_s.strip).to eq("B")
+      expect(doc.xpath("./table/tbody/tr[2]/td[1]/node()").to_s.strip).to eq("C")
+      expect(doc.xpath("./table/tbody/tr[2]/td[2]/node()").to_s.strip).to eq("D")
     end
 
     it "doesn't break when an attribute includes a single quote" do
