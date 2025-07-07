@@ -1731,13 +1731,13 @@ en:
         update: Update Language
       support_available: Support available
     index:
+      language_code_abbr_title: language code
+      language_code_format: "(%{code})"
       navigation:
         add: Add a Language
         edit: Edit
         suggest: Suggest a Language
       page_heading: Work Languages
-      language_code_format: "(%{code})"
-      language_code_abbr_title: "language code"
       works_count:
         one: "%{formatted_count} work"
         other: "%{formatted_count} works"
