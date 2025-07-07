@@ -18,7 +18,7 @@
     <% works_count = estimate_number(@works_counts[language.short] || 0) %>
     <% if language == Language.default %>
       <dt>
-        <span lang="<%= language.short %>"><%= language.name %></span> 
+        <span lang="<%= language.short %>"><%= language.name %></span>
         <abbr title="<%= t(".language_code_abbr_title") %>"><%= t(".language_code_format", code: language.short) %></abbr>
       </dt>
       <dd>
