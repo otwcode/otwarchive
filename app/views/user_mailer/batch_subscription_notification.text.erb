@@ -24,7 +24,7 @@ Warnings: <%= this_work.archive_warning_string %>
 <% if this_work.relationship_string && !this_work.relationship_string.blank? then %>Relationships: <%= this_work.relationship_string %><% end %>
 <% if this_work.character_string && !this_work.character_string.blank? then %>Characters: <%= this_work.character_string %><% end %>
 <% if this_work.freeform_string && !this_work.freeform_string.blank? %>Additional Tags: <%= this_work.freeform_string %><% end %>
-<% if this_work.series.count > 0 %>Series: <%=raw to_plain_text(series_position_description(this_work, email_styling: true)) %><% end %>
+<% if this_work.series.count > 0 %>Series: <%=raw to_plain_text(series_list_with_work_position(this_work, email_styling: true)) %><% end %>
 <% end %><% @seen[this_work.id] = true %><% end %>
 
 <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
