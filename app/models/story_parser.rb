@@ -554,11 +554,13 @@ class StoryParser
     # Encode as HTML - the dummy "foo" tag will be stripped out by the sanitizer but forces Nokogiri to
     # preserve line breaks in plain text documents
     # Rescue all errors as Nokogiri complains about things the sanitizer will fix later
-    begin
-      @doc = Nokogiri::HTML.parse(story.prepend("<foo/>"), encoding: encoding)
-    rescue StandardError
-      @doc = ""
-    end
+    story.prepend("<foo></foo>")
+    @doc =
+      begin
+        Nokogiri::HTML5.parse(story, encoding: encoding)
+      rescue StandardError
+        Nokogiri::HTML5.parse("")
+      end
 
     # Try to convert all relative links to absolute
     base = @doc.at_css("base") ? @doc.css("base")[0]["href"] : location.split("?").first
@@ -711,7 +713,7 @@ class StoryParser
 
     # cleanup the notes
     notes.gsub!(%r{<br\s*\/?>}i, "\n") # replace the breaks with newlines
-    notes = clean_storytext(notes)
+    notes = clean_storytext(notes, "notes")
     work_params[:notes] = notes
 
     work_params.merge!(scan_text_for_meta(notes, detect_tags))
@@ -853,9 +855,9 @@ class StoryParser
   end
 
   # We clean the text as if it had been submitted as the content of a chapter
-  def clean_storytext(storytext)
+  def clean_storytext(storytext, field = "content")
     storytext = storytext.encode("UTF-8", invalid: :replace, undef: :replace, replace: "") unless storytext.encoding.name == "UTF-8"
-    sanitize_value("content", storytext)
+    sanitize_value(field, storytext)
   end
 
   # works conservatively -- doesn't split on
