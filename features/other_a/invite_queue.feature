@@ -69,7 +69,7 @@ Feature: Invite queue management
     When I check how long "" will have to wait in the invite request queue
     Then I should see "Invitation Request Status"
       And I should see "Please enter a valid email."
-      And I should not see "You are currently number"
+      And I should not see "Invitation Status for"
 
   Scenario: Can't add yourself to the queue when queue is off
 
