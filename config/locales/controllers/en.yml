@@ -146,6 +146,8 @@ en:
       not_found: Could not find an invitation associated with that email.
       not_yet: You cannot resend an invitation that was sent in the last %{count} hours.
       success: Invitation resent to %{email}.
+    show:
+      email_blank: Please enter a valid email address.
     status:
       browser_title: Invitation Request Status
   kudos:
