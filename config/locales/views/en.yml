@@ -711,7 +711,7 @@ en:
     download_preface:
       byline_html: by %{byline_names_link}
       chapters: 'Chapters: %{chapter_total_display}'
-      collections: 'Collections: '
+      collections: 'Collections:'
       completed: 'Completed: %{date}'
       end_notes_with_work_notes: more notes
       end_notes_without_work_notes: notes
@@ -719,17 +719,17 @@ en:
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
-      language: 'Language: '
+      language: 'Language:'
       notes: Notes
       originally_posted_html: Posted originally on the %{archive_link} at %{work_url}.
       preface: Preface
       published: 'Published: %{date}'
       see_end_notes_html: See the end of the work for %{end_notes_link}
-      series: 'Series: '
+      series: 'Series:'
       series_list_html: Part %{position} of %{series_link}
-      stats: 'Stats: '
+      stats: 'Stats:'
       summary: Summary
-      tag_type: "%{tag_type}: "
+      tag_type: "%{tag_type}:"
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
