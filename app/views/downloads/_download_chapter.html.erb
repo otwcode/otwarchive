@@ -33,7 +33,7 @@
 
 <% unless @chapter.endnotes.blank? %>
   <div class="meta" id="endnotes<%= @chapter.position %>">
-    <p><%= t(".chapter_end_notes") %></p>
+    <p><%= t(".section_chapter_end_notes") %></p>
     <blockquote class="userstuff"><%= raw sanitize_field(@chapter, :endnotes) %></blockquote>
   </div>
 <% end %>

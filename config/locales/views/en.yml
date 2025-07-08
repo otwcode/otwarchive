@@ -702,11 +702,11 @@ en:
       please_comment_html: Please %{comment_link} to let the creator know if you enjoyed their work!
     download_chapter:
       chapter_byline_html: Chapter by %{byline_names_link}
-      chapter_end_notes: Chapter End Notes
       chapter_end_notes_with_chapter_notes: more notes
       chapter_end_notes_without_chapter_notes: notes
       chapter_notes: Chapter Notes
       chapter_summary: Chapter Summary
+      section_chapter_end_notes: Chapter End Notes
       see_chapter_end_notes_html: See the end of the chapter for %{chapter_end_notes_link}
     download_preface:
       byline_html: by %{byline_names_link}
