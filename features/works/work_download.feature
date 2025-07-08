@@ -267,6 +267,24 @@ Feature: Download a work
       And I should not see "See the end of the chapter for "
       And I should not see "Chapter End Notes"
 
+  Scenario: Work and chapter with no notes and no end notes show without the link to end notes or empty sections.
+
+    Given I am logged in
+      And I set up the draft "got notes?"
+      And I fill in "content" with "Could be downloaded"
+      And I press "Post"
+      And I follow "Add Chapter"
+      And I fill in "content" with "Remember, remember the 5th of November"
+      And I press "Post"
+    When I view the work "got notes?"
+      And I follow "HTML"
+    Then I should not see "Notes"
+      And I should not see "See the end of the work for "
+      And I should not see "End Notes"
+      And I should not see "Chapter Notes"
+      And I should not see "See the end of the chapter for "
+      And I should not see "Chapter End Notes"
+
   Scenario: Download option is unavailable if work is unrevealed.
 
   Given there is a work "Blabla" in an unrevealed collection "Unrevealed"
