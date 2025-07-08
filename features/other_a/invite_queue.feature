@@ -64,6 +64,12 @@ Feature: Invite queue management
     When I check how long "test@archiveofourown.org" will have to wait in the invite request queue
     Then I should see "Invitation Status for test@archiveofourown.org"
       And I should see "You are currently number 1 on our waiting list! At our current rate, you should receive an invitation on or around"
+    
+    # check your place in the queue - blank email address
+    When I check how long "" will have to wait in the invite request queue
+    Then I should see "Invitation Request Status"
+      And I should see "Please enter a valid email."
+      And I should not see "You are currently number"
 
   Scenario: Can't add yourself to the queue when queue is off
 
