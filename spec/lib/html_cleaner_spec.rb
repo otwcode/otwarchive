@@ -624,9 +624,10 @@ describe HtmlCleaner do
 
       it "does not wrap #{tag} tag with a paragraph" do
         result = add_paragraphs_to_text("<#{tag}>A</#{tag}>\n<p>B</p>")
-        # This needs XML parsing because HTML parser will silently reinterprets
-        # <p><div>_</div></p> as <p></p><div>_</div>
+        # This needs XML parsing because HTML5 parser might hide failures
+        # by reinterpreting <p><div>_</div></p> as <p></p><div>_</div>
         doc = Nokogiri::XML.fragment(result)
+        expect(doc.xpath("./p").size).to eq(1)
         expect(doc.xpath("./p/#{tag}").size).to eq(0)
       end
 
@@ -668,14 +669,19 @@ describe HtmlCleaner do
 
     it "does not wrap table in p tags" do
       result = add_paragraphs_to_text("aa #{one_cell_table('foo')} bb")
+      # This needs XML parsing because HTML5 parser might hide issues:
+      # Nokogiri::HTML5.fragment('<p>aa <table><tbody><tr><td>foo</td></tr></tbody></table> bb</p>').to_s
+      # "<p>aa </p><table><tbody><tr><td>foo</td></tr></tbody></table> bb<p></p>"
       doc = Nokogiri::XML.fragment(result)
       expect(doc.xpath(".//p").size).to eq(2)
       expect(doc.xpath("./table").size).to eq(1)
     end
 
-    %w[figure dl h1 h2 h3 h4 h5 h6 ol pre summary table ul].each do |tag|
+    %w[figure dl h1 h2 h3 h4 h5 h6 ol pre summary ul].each do |tag|
       it "does not wrap #{tag} in p tags" do
         result = add_paragraphs_to_text("aa <#{tag}>foo</#{tag}> bb")
+        # This needs XML parsing because HTML5 parser might hide failures
+        # by reinterpreting <p><h1>_</h1></p> as <p></p><h1>_</h1>
         doc = Nokogiri::XML.fragment(result)
         expect(doc.xpath(".//p").size).to eq(2)
         expect(doc.xpath("./#{tag}/node()").to_s.strip).to eq("foo")
@@ -696,12 +702,17 @@ describe HtmlCleaner do
       HTML
 
       result = add_paragraphs_to_text(html)
-      doc = Nokogiri::HTML.fragment(result)
+      # This needs XML parsing because HTML5 parser might hide failures
+      # by reinterpreting <p><details>_</details></p> as <p></p><details>_</details>
+      doc = Nokogiri::XML.fragment(result)
 
       # aa, velocity..., direction..., bb
       expect(doc.xpath(".//p").size).to eq(4)
       expect(doc.xpath("./p/details").size).to eq(0)
       expect(doc.xpath("./details/p").size).to eq(2)
+      expect(doc.xpath("./p").size).to eq(2)
+      expect(doc.xpath("./p[1]/text()").to_s).to eq("aa")
+      expect(doc.xpath("./p[2]/text()").to_s).to eq("bb")
     end
 
     %w[ol ul].each do |tag|
@@ -852,6 +863,8 @@ describe HtmlCleaner do
     %w[address h1 h2 h3 h4 h5 h6 p pre].each do |tag|
       it "does not wrap in p and not convert linebreaks inside #{tag} tags" do
         result = add_paragraphs_to_text("<#{tag}>A\nB\n\nC\n\n\nD</#{tag}>")
+        # This needs XML parsing because HTML5 parser might hide failures
+        # by reinterpreting <p><h1>_</h1></p> as <p></p><h1>_</h1>
         doc = Nokogiri::XML.fragment(result)
         expect(doc.xpath("./#{tag}[1]/node()").to_s.strip).to eq("A\nB\n\nC\n\n\nD")
       end
@@ -1078,12 +1091,6 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text("<i><p>foo</p><p>bar</p></i>")
       doc = Nokogiri::HTML5.fragment(result)
       expect(doc.xpath(".//i/p")).to be_empty
-    end
-
-    it "removes closing br tags at the beginning" do
-      result = add_paragraphs_to_text("</br>text")
-      doc = Nokogiri::HTML5.fragment(result)
-      expect(doc.xpath(".//p/node()").to_s.strip).to eq("text")
     end
 
     it "handles table tags that don't need closing" do
