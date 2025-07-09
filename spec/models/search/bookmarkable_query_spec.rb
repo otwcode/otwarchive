@@ -111,11 +111,13 @@ describe BookmarkableQuery do
         expect(filter_string).to eq("tags_restricted:foo")
       end
 
-      it "converts the 'tags_public' field to 'tags_restricted'" do
-        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tags_public:foo")
-        q = bookmark_query.bookmarkable_query.generated_query
-        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
-        expect(filter_string).to eq("tags_restricted:foo")
+      %w[archive_warning category character fandom filter freeform rating relationship tags].each do |field|
+        it "converts the '#{field}_public' field to '#{field}_restricted'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "#{field}_public:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("#{field}_restricted:foo")
+        end
       end
     end
 
@@ -131,11 +133,13 @@ describe BookmarkableQuery do
         expect(filter_string).to eq("tags_restricted:foo")
       end
 
-      it "converts the 'tags_public' field to 'tags_restricted'" do
-        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tags_public:foo")
-        q = bookmark_query.bookmarkable_query.generated_query
-        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
-        expect(filter_string).to eq("tags_restricted:foo")
+      %w[archive_warning category character fandom filter freeform rating relationship tags].each do |field|
+        it "converts the '#{field}_public' field to '#{field}_restricted'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "#{field}_public:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("#{field}_restricted:foo")
+        end
       end
     end
 
@@ -147,11 +151,13 @@ describe BookmarkableQuery do
         expect(filter_string).to eq("tags_public:foo")
       end
 
-      it "converts the 'tags_restricted' field to 'tags_public'" do
-        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tags_restricted:foo")
-        q = bookmark_query.bookmarkable_query.generated_query
-        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
-        expect(filter_string).to eq("tags_public:foo")
+      %w[archive_warning category character fandom filter freeform rating relationship tags].each do |field|
+        it "converts the '#{field}_restricted' field to '#{field}_public'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "#{field}_restricted:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("#{field}_public:foo")
+        end
       end
     end
   end

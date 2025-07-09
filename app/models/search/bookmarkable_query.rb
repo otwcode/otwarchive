@@ -92,25 +92,28 @@ class BookmarkableQuery < Query
 
   def bookmarkable_query_text
     query_text = (options[:bookmarkable_query] || "").dup
-    escape_tags_field(escape_slashes(query_text.strip))
+    escape_restrictable_fields(escape_slashes(query_text.strip))
   end
 
-  # Internally, we use tags_(public|restricted) to denote which tags are visible to everyone
-  # (public) and which are only available to logged in users (restricted). We do not, however,
-  # want users to be able to query those fields directly. To avoid that, we replace tags_<visibility>
-  # with the "tag" query. Then, we replace "tag" with the appropriate visibility-based field.
+  # Internally, we use <fieldname>_(public|restricted) to denote certain fields which have visible to
+  # everyone (public) and only available to logged in users (restricted) variants. We do not, however,
+  # want users to be able to query those fields directly. To avoid that, we replace <fieldname>_<visibility>
+  # with the appropriate visibility based on what the application knows of the querier.
   #
   # Examples:
   # When searching as a guest,
   # escape_tags_field("tags_public:1234") => tags_public:1234
-  # escape_tags_field("tags_restricted:1234") => tags_public:1234
+  # escape_tags_field("fandom_ids_restricted:1234") => fandom_ids_public:1234
   # escape_tags_field("tag:1234") => tags_public:1234
   # When searching as a registered user,
   # escape_tags_field("tags_public:1234") => tags_restricted:1234
-  # escape_tags_field("tags_restricted:1234") => tags_restricted:1234
+  # escape_tags_field("character_ids_restricted:1234") => character_ids_restricted:1234
   # escape_tags_field("tag:1234") => tags_restricted:1234
-  def escape_tags_field(query)
-    query.gsub(/tags_\w+/, "tag").gsub("tag", restrictable_field_name(:tags).to_s)
+  def escape_restrictable_fields(query)
+    # Special-case for the "tag" convenience field name first, then sanitize visibility level.
+    query.gsub("tag:", "tags_public:").gsub(/([^\s]+)_(?:public|restricted)/) do
+      restrictable_field_name(Regexp.last_match(1)).to_s
+    end
   end
 
   ####################
