@@ -87,7 +87,7 @@ class ExternalWork < ApplicationRecord
 
   def bookmarkable_json
     methods = %i[creators posted restricted revised_at]
-    %w[restricted public].each do |visibility|
+    %w[general public].each do |visibility|
       methods << :"tags_#{visibility}"
 
       %w[archive_warning category character fandom filter freeform rating relationship].each do |tag_type|

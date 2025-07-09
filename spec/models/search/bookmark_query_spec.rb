@@ -132,7 +132,7 @@ describe BookmarkQuery do
         q = BookmarkQuery.new(parent: tag)
         parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
         expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
-          include({ term: { filter_ids_restricted: tag.id } })
+          include({ term: { filter_ids_general: tag.id } })
       end
     end
 
@@ -164,7 +164,7 @@ describe BookmarkQuery do
             include({ parent: { type: "bookmark" } })
 
           expect(aggregations.dig(:bookmarkable, :aggs, type.underscore)).to \
-            include({ terms: { field: "#{type.underscore}_ids_restricted" } })
+            include({ terms: { field: "#{type.underscore}_ids_general" } })
         end
       end
     end
@@ -180,7 +180,7 @@ describe BookmarkQuery do
             include({ parent: { type: "bookmark" } })
 
           expect(aggregations.dig(:bookmarkable, :aggs, type.underscore)).to \
-            include({ terms: { field: "#{type.underscore}_ids_restricted" } })
+            include({ terms: { field: "#{type.underscore}_ids_general" } })
         end
       end
     end

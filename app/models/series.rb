@@ -71,7 +71,7 @@ class Series < ApplicationRecord
 
   # Get the filters for the works in this series
 
-  def filters_restricted
+  def filters_general
     Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id
                JOIN works ON works.id = filter_taggings.filterable_id
                JOIN serial_works ON serial_works.work_id = works.id")
@@ -229,7 +229,7 @@ class Series < ApplicationRecord
 
   def bookmarkable_json
     methods = %i[creators posted revised_at word_count work_types]
-    %w[restricted public].each do |visibility|
+    %w[general public].each do |visibility|
       methods << :"tags_#{visibility}"
 
       %w[archive_warning category character fandom filter freeform rating relationship].each do |tag_type|
@@ -274,8 +274,8 @@ class Series < ApplicationRecord
   alias_method :posted?, :posted
 
   # Simple name to make it easier for people to use in full-text search
-  def tags_restricted
-    (unhidden_work_tags.pluck(:name) + filters_restricted.pluck(:name)).uniq
+  def tags_general
+    (unhidden_work_tags.pluck(:name) + filters_general.pluck(:name)).uniq
   end
 
   def tags_public
@@ -283,15 +283,15 @@ class Series < ApplicationRecord
   end
 
   # Index all the filters for pulling works
-  def filter_ids_restricted
-    (unhidden_work_tags.pluck(:id) + filters_restricted.pluck(:id)).uniq
+  def filter_ids_general
+    (unhidden_work_tags.pluck(:id) + filters_general.pluck(:id)).uniq
   end
 
   def filter_ids_public
     (unhidden_work_tags.where(works: { restricted: false }).pluck(:id) + filters_public.pluck(:id)).uniq
   end
 
-  %w[restricted public].each do |tag_visibility|
+  %w[general public].each do |tag_visibility|
     # Index only direct filters (non meta-tags) for facets
     define_method("direct_filters_#{tag_visibility}") do
       send("filters_#{tag_visibility}").where(filter_taggings: { inherited: false })

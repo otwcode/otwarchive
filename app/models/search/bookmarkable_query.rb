@@ -95,23 +95,23 @@ class BookmarkableQuery < Query
     escape_restrictable_fields(escape_slashes(query_text.strip))
   end
 
-  # Internally, we use <fieldname>_(public|restricted) to denote certain fields which have visible to
-  # everyone (public) and only available to logged in users (restricted) variants. We do not, however,
-  # want users to be able to query those fields directly. To avoid that, we replace <fieldname>_<visibility>
-  # with the appropriate visibility based on what the application knows of the querier.
+  # Internally, we use <fieldname>_(public|general) to denote certain fields with data from all works (general)
+  # versus fields with data only from works visible to guests (public). We do not, however,  want users to be able
+  # to query those fields directly. To avoid that, we replace <fieldname>_<visibility> with the appropriate visibility
+  # based on what the application knows of the querier.
   #
   # Examples:
   # When searching as a guest,
   # escape_tags_field("tags_public:1234") => tags_public:1234
-  # escape_tags_field("fandom_ids_restricted:1234") => fandom_ids_public:1234
+  # escape_tags_field("fandom_ids_general:1234") => fandom_ids_public:1234
   # escape_tags_field("tag:1234") => tags_public:1234
   # When searching as a registered user,
-  # escape_tags_field("tags_public:1234") => tags_restricted:1234
-  # escape_tags_field("character_ids_restricted:1234") => character_ids_restricted:1234
-  # escape_tags_field("tag:1234") => tags_restricted:1234
+  # escape_tags_field("tags_public:1234") => tags_general:1234
+  # escape_tags_field("character_ids_general:1234") => character_ids_general:1234
+  # escape_tags_field("tag:1234") => tags_general:1234
   def escape_restrictable_fields(query)
     # Special-case for the "tag" convenience field name first, then sanitize visibility level.
-    query.gsub("tag:", "tags_public:").gsub(/([^\s]+)_(?:public|restricted)/) do
+    query.gsub("tag:", "tags_public:").gsub(/([^\s]+)_(?:public|general)/) do
       restrictable_field_name(Regexp.last_match(1)).to_s
     end
   end
@@ -310,6 +310,6 @@ class BookmarkableQuery < Query
   private
 
   def restrictable_field_name(field_name)
-    :"#{field_name}_#{include_restricted? ? "restricted" : "public"}"
+    :"#{field_name}_#{include_restricted? ? "general" : "public"}"
   end
 end

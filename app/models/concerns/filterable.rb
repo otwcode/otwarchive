@@ -66,10 +66,11 @@ module Filterable
     (tags.pluck(:name) + filters.pluck(:name)).uniq
   end
 
-  # Restricted tags only really apply to series, as works are either fully
-  # restricted or fully public. We define the various visibility-based methods
-  # to be the same here, and they are overridden in the Series class.
-  %w[restricted public].each do |visibility|
+  # Restricted tags (which are in the general list but not the public one) only
+  # really apply to series, as works are either fully restricted or fully public.
+  # We define the various visibility-based methods to be the same here, and they are
+  # overridden in the Series class.
+  %w[general public].each do |visibility|
     alias_method :"tags_#{visibility}", :tag
 
     # Index all the filters for pulling works
@@ -93,9 +94,9 @@ module Filterable
     end
   end
 
-  # For filterables like Work, restricted tags are filtered out by virtue of the filterable having
+  # For filterables like Work, tags only on restricted works are filtered out by virtue of the filterable having
   # restricted set to true. Therefore, we just want a generic "<tag_type>_ids" method as well.
   %w[archive_warning category character fandom filter freeform rating relationship].each do |search_field|
-    alias_method :"#{search_field}_ids", :"#{search_field}_ids_restricted"
+    alias_method :"#{search_field}_ids", :"#{search_field}_ids_general"
   end
 end

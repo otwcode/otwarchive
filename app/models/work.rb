@@ -1183,7 +1183,7 @@ class Work < ApplicationRecord
 
   def bookmarkable_json
     methods = %i[collection_ids creators work_types]
-    %w[restricted public].each do |visibility|
+    %w[general public].each do |visibility|
       methods << :"tags_#{visibility}"
 
       %w[archive_warning category character fandom filter freeform rating relationship].each do |tag_type|
