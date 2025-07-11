@@ -178,3 +178,9 @@ Scenario: Can also browse work indexed by language
       Then I should see "1 Work in Deutsch"
     When I browse works in language "Persian"
       Then I should see "0 Works in Persian"
+
+Scenario: Work blurb includes correct data-updated-at attribute
+  Given it is currently 2025-04-12 17:00 UTC
+    And the work "Test"
+  When I go to the works page
+  Then I should see the data-updated-at attribute to be around 1744477200
