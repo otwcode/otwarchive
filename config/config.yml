@@ -394,6 +394,7 @@ SUPPORTED_CSS_PROPERTIES:
 - -replace
 - -use-link-source
 - accelerator
+- accent-color
 - align-content
 - align-items
 - align-self
