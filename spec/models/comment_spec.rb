@@ -195,7 +195,6 @@ describe Comment do
       context "when the comment is being edited" do
         it "sets recheck_reason to 'edit'" do
           subject.comment_content += " updated"
-          subject.save!
           
           expect(subject.akismet_attributes[:recheck_reason]).to eq("edit")
         end
