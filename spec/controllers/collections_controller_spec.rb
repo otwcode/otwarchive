@@ -41,7 +41,7 @@ describe CollectionsController do
       context "when work exists" do
         let(:work) { create(:work) }
 
-        it "raises an error" do
+        it "renders the index" do
           get :index, params: { work_id: work.id }
           expect(response).to render_template :index
         end
@@ -58,7 +58,7 @@ describe CollectionsController do
       context "when collection exists" do
         let(:collection) { create(:collection) }
 
-        it "raises an error" do
+        it "renders the index" do
           get :index, params: { collection_id: collection.name }
           expect(response).to render_template :index
         end
@@ -75,7 +75,7 @@ describe CollectionsController do
       context "when user exists" do
         let(:user) { create(:user) }
 
-        it "raises an error" do
+        it "renders the index" do
           get :index, params: { user_id: user.login }
           expect(response).to render_template :index
         end

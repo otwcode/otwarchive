@@ -31,7 +31,7 @@ class CollectionsController < ApplicationController
 
   def index
     if params[:work_id]
-      @work = Work.find_by!(id: params[:work_id])
+      @work = Work.find(params[:work_id])
       @collections = @work.approved_collections
         .by_title
         .for_blurb
