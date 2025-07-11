@@ -813,3 +813,8 @@ Then "I should not see {string} within the work blurb of {string}" do |content, 
   work = Work.find_by(title: work)
   step %{I should not see "#{content}" within "li#work_#{work.id}"}
 end
+
+Then "I should see the data-updated-at attribute to be around {int}" do |expected_updated_at|
+  data_updated_at = page.find("li.work.blurb")["data-updated-at"].to_i
+  expect(data_updated_at).to be_within(5).of(expected_updated_at)
+end
