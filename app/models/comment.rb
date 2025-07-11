@@ -116,7 +116,7 @@ class Comment < ApplicationRecord
       comment_author = user.login
     end
 
-    {
+    attributes = {
       comment_type: comment_type,
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
@@ -127,6 +127,10 @@ class Comment < ApplicationRecord
       comment_author_email: comment_owner_email,
       comment_content: comment_content
     }
+
+    attributes[:recheck_reason] = "edit" if edited_at_changed? && comment_content_changed?
+
+    attributes
   end
 
   after_create :expire_parent_comments_count
