@@ -187,8 +187,14 @@ describe Comment do
       end
 
       context "when the comment is being created" do
+        let(:new_comment) do
+          Comment.new(commentable: subject,
+                      pseud: create(:user).default_pseud,
+                      comment_content: "Hmm.")
+        end
+
         it "does not set recheck_reason" do
-          expect(subject.akismet_attributes[:recheck_reason]).to be_nil
+          expect(new_comment.akismet_attributes).not_to have_key(:recheck_reason)
         end
       end
 
