@@ -78,6 +78,18 @@ module ChallengeCore
     true
   end
 
+  # reindex collection after creation, deletion, and certain attribute updates
+  def should_update_collection_index?
+    pertinent_attributes = %w[id signup_open signups_open_at signups_close_at assignments_due_at works_reveal_at authors_reveal_at]
+    (self.saved_changes.keys & pertinent_attributes).present?
+  end
+
+  def update_collection_index
+    return if self.collection.blank?
+
+    IndexQueue.enqueue_id(Collection, collection.id, :main)
+  end
+
   module ClassMethods
     # override datetime setters so we can take strings
     def override_datetime_setters
