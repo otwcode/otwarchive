@@ -186,6 +186,21 @@ describe Comment do
         expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.pseud.user.email)
       end
 
+      context "when the comment is being created" do
+        it "does not set recheck_reason" do
+          expect(subject.akismet_attributes[:recheck_reason]).to be_nil
+        end
+      end
+
+      context "when the comment is being edited" do
+        it "sets recheck_reason to 'edit'" do
+          subject.comment_content += " updated"
+          subject.save!
+          
+          expect(subject.akismet_attributes[:recheck_reason]).to eq("edit")
+        end
+      end
+
       context "when the comment is from a guest" do
         subject { create(:comment, :by_guest) }
 

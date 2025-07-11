@@ -116,6 +116,8 @@ class Comment < ApplicationRecord
       comment_author = user.login
     end
 
+    recheck_reason = comment_content_changed? ? "edit" : nil
+
     {
       comment_type: comment_type,
       key: ArchiveConfig.AKISMET_KEY,
@@ -125,7 +127,8 @@ class Comment < ApplicationRecord
       user_role: user_role,
       comment_author: comment_author,
       comment_author_email: comment_owner_email,
-      comment_content: comment_content
+      comment_content: comment_content,
+      recheck_reason: recheck_reason
     }
   end
 
