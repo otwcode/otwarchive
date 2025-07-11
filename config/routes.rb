@@ -227,7 +227,15 @@ Rails.application.routes.draw do
     end
     resources :api
   end
-  resources :admins, only: [:index]
+  resources :admins, only: [:index] do
+    resource :preferences, controller: "admin/preferences", only: [:show] do
+      get :totp_setup
+      post :totp_setup_form
+      get :totp_setup_backup_codes
+      get :totp_disable
+      post :totp_disable_form
+    end
+  end
 
   post '/admin/api/new', to: 'admin/api#create'
 
