@@ -117,3 +117,12 @@ Scenario: Delete a user who has coauthored a work
       And a user account should not exist for "testuser"
     When I go to orphan_account's series page
     Then I should see "Epic"
+
+  Scenario: Can cancel deletion of a user with a work
+    Given I have an orphan account
+      And I am logged in as "testuser"
+      And I post a work "Masterpiece"
+    When I try to delete my account
+    Then I should see "What do you want to do with your works?"
+    When I press "Cancel"
+    Then I should see "Account deletion canceled."
