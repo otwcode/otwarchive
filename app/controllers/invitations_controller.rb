@@ -12,7 +12,7 @@ class InvitationsController < ApplicationController
 
   def check_permission
     @user = User.find_by(login: params[:user_id])
-    access_denied unless policy(User).can_manage_users? || @user.present? && @user == current_user
+    authorize Invitations if policy(User).can_manage_users? || @user.present? && @user == current_user
   end
 
   def index
@@ -58,17 +58,16 @@ class InvitationsController < ApplicationController
   def update
     @invitation.attributes = invitation_params
 
-    if @invitation.invitee_email_changed? && @invitation.update(invitation_params)
-      flash[:notice] = 'Invitation was successfully sent.'
-      if logged_in_as_admin?
-        redirect_to find_admin_invitations_path("invitation[token]" => @invitation.token)
-      else
-        redirect_to([@user, @invitation])
-      end
+    if @invitation.invitee_email.blank?
+      flash[:error] = "Please enter an email address."
     else
-      flash[:error] = "Please enter an email address." if @invitation.invitee_email.blank?
-      render action: "show"
+      if @invitation.update(invitation_params)
+        flash[:notice] = 'Invitation was successfully sent.'
+        logged_in_as_admin? ? redirect_to(find_admin_invitations_path("invitation[token]" => @invitation.token)) : redirect_to([@user, @invitation])
+        return
+      end
     end
+    render action: "show"
   end
 
   def destroy

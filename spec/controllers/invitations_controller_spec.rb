@@ -22,33 +22,22 @@ describe InvitationsController do
     it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
   end
 
-  shared_examples "an action only the invitation owner can access" do |owner:|
-    it "succeeds when logged in as the invitation owner" do
-      fake_login_known_user(owner)
-      subject
+  describe "GET #index" do
+    subject { get :index, params: { user_id: user.login } }
+    success { expect(response).to render_template("index") }
 
-      success
-    end
-
-    # "users can't access this" errors and "specific user can't access this" errors behave the same.
+    it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_roles|
+    it_behaves_like "an action guests cannot access"
     it_behaves_like "an action users cannot access"
   end
 
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-      end
-    end
+  describe "GET #manage" do
+    subject { get :manage, params: { user_id: user.login } }
+    success { expect(response).to render_template("manage") }
 
-    (Admin::VALID_ROLES - authorized_roles).each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
-        it "redirects with error" do
-          admin.update!(roles: [admin_role])
-          fake_login_admin(admin)
-          subject
-
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
-      end
-    end
+    it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_roles|
+    it_behaves_like "an action guests cannot access"
+    it_behaves_like "an action users cannot access"
   end
 
   describe "GET #show" do
