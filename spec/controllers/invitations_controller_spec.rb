@@ -7,7 +7,7 @@ describe InvitationsController do
   let(:admin) { create(:admin) }
   let(:user) { create(:user) }
 
-  authorized_roles = UserPolicy::MANAGE_ROLES
+  authorized_admin_roles = UserPolicy::MANAGE_ROLES
 
   shared_examples "an action guests cannot access" do
     subject
@@ -26,7 +26,8 @@ describe InvitationsController do
     subject { get :index, params: { user_id: user.login } }
     success { expect(response).to render_template("index") }
 
-    it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_roles|
+    it_behaves_like "an action only authorized admins can access" do |roles: authorized_admin_roles|
+    end
     it_behaves_like "an action guests cannot access"
     it_behaves_like "an action users cannot access"
   end
@@ -35,7 +36,8 @@ describe InvitationsController do
     subject { get :manage, params: { user_id: user.login } }
     success { expect(response).to render_template("manage") }
 
-    it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_roles|
+    it_behaves_like "an action only authorized admins can access" do |roles: authorized_admin_roles|
+    end
     it_behaves_like "an action guests cannot access"
     it_behaves_like "an action users cannot access"
   end
@@ -47,7 +49,8 @@ describe InvitationsController do
     context "with both user_id and [invitation] id parameters" do
       subject { get :show, params: { user_id: user.login, id: invitation.id } }
 
-      it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_roles|
+      it_behaves_like "an action only authorized admins can access" do |roles: authorized_admin_roles|
+      end
       it_behaves_like "an action users cannot access"
       it_behaves_like "an action guests cannot access"
 
@@ -67,7 +70,8 @@ describe InvitationsController do
 
       it_behaves_like "an action guests cannot access"
       it_behaves_like "an action users cannot access"
-      it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_roles|
+      it_behaves_like "an action only authorized admins can access" do |roles: authorized_admin_roles|
+      end
 
       context "when logged in as the invitation owner" do
         it "redirects with error" do
@@ -93,7 +97,8 @@ describe InvitationsController do
       expect(Invitation.find_by(id: owned_invitation.id)).not_to be_nil
     end
 
-    it_behaves_like "an action only authorized admins can access" do |authorized_roles|
+    it_behaves_like "an action only authorized admins can access" do |roles: authorized_admin_roles|
+    end
     it_behaves_like "an action guests cannot access"
     it_behaves_like "an action users cannot access" # a random user, as opposed to the invitation owner
 
@@ -151,7 +156,8 @@ describe InvitationsController do
       expect(Invitation.find_by(id: invitation.id)).not_to be_nil
     end
 
-    it_behaves_like "an action only authorized admins can access" do |authorized_roles|
+    it_behaves_like "an action only authorized admins can access" do |roles: authorized_admin_roles|
+    end
     it_behaves_like "an action guests cannot access"
     it_behaves_like "an action users cannot access"
   end
@@ -166,7 +172,8 @@ describe InvitationsController do
       expect(invitation.reload.invitee_email).to eq(new_email)
     end
 
-    it_behaves_like "an action authorized admins can access"
+    it_behaves_like "an action authorized admins can access" do |roles: authorized_admin_roles|
+    end
 
     context "when logged in as an authorized admin" do
       authorized_roles.each do |role|
@@ -267,7 +274,7 @@ describe InvitationsController do
     subject { delete :destroy, params: { id: invitation.id } }
 
     context "when logged in as an authorized admin" do
-      authorized_roles.each do |role|
+      authorized_admin_roles.each do |role|
         context "with role #{role}" do
           before do
             admin.update!(roles: [role])
@@ -297,7 +304,7 @@ describe InvitationsController do
               subject
 
               it_redirects_to_with_notice(admin_invitations_path(), "Invitation successfully destroyed")
-              expect(Invitation.find_by(id: owned_invitation.id)).to be_nil
+              expect(Invitation.find_by(id: invitation.id)).to be_nil
             end
 
             it "redirects to admin invitations path with error if invitation fails to destroy" do
@@ -319,7 +326,7 @@ describe InvitationsController do
           subject
 
           it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-          expect(Invitation.find_by(id: owned_invitation.id)).to be_nil
+          expect(Invitation.find_by(id: invitation.id)).to be_nil
         end
       end
 
@@ -331,7 +338,7 @@ describe InvitationsController do
             subject
 
             it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-            expect(Invitation.find_by(id: owned_invitation.id)).to be_nil
+            expect(Invitation.find_by(id: invitation.id)).to be_nil
           end
         end
       end
@@ -342,7 +349,7 @@ describe InvitationsController do
         subject
 
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        expect(Invitation.find_by(id: owned_invitation.id)).to be_nil
+        expect(Invitation.find_by(id: invitation.id)).to be_nil
       end
     end
 
@@ -352,7 +359,7 @@ describe InvitationsController do
         subject
 
         it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
-        expect(Invitation.find_by(id: owned_invitation.id)).to be_nil
+        expect(Invitation.find_by(id: invitation.id)).to be_nil
       end
     end
   end

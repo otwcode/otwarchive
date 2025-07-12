@@ -1,7 +1,7 @@
-shared_examples "an action authorized admins can access" do |authorized_roles:|
+shared_examples "an action authorized admins can access" do |roles:|
   before { fake_login_admin(admin) }
 
-  authorized_roles.each do |role|
+  roles.each do |role|
     context "with role #{role}" do
       let(:admin) { create(:admin, roles: [role]) }
 
@@ -14,7 +14,7 @@ shared_examples "an action authorized admins can access" do |authorized_roles:|
   end
 end
 
-shared_examples "an action unauthorized admins cannot access" do |authorized_roles:|
+shared_examples "an action unauthorized admins cannot access" do |roles_that_are_authorized:|
   before { fake_login_admin(admin) }
 
   context "with no role" do
@@ -27,7 +27,7 @@ shared_examples "an action unauthorized admins cannot access" do |authorized_rol
     end
   end
 
-  (Admin::VALID_ROLES - authorized_roles).each do |role|
+  (Admin::VALID_ROLES - roles_that_are_authorized).each do |role|
     context "with role #{role}" do
       let(:admin) { create(:admin, roles: [role]) }
 
@@ -41,8 +41,10 @@ shared_examples "an action unauthorized admins cannot access" do |authorized_rol
 end
 
 shared_examples "an action only authorized admins can access" do |authorized_roles:|
-  it_behaves_like "an action authorized admins can access" do |authorized_roles: authorized_roles|
-  it_behaves_like "an action unauthorized admins cannot access" do |authorized_roles: authorized_roles|
+  it_behaves_like "an action authorized admins can access" do |roles: authorized_roles|
+  end
+  it_behaves_like "an action unauthorized admins cannot access" do |roles_that_are_authorized: authorized_roles|
+  end
 end
 
 shared_examples "denies access for work that isn't visible to user" do
