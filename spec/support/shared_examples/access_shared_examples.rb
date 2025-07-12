@@ -1,4 +1,20 @@
-shared_examples "an action only authorized admins can access" do |authorized_roles:|
+shared_examples "an action authorized admins can access" do |authorized_roles:|
+  before { fake_login_admin(admin) }
+
+  authorized_roles.each do |role|
+    context "with role #{role}" do
+      let(:admin) { create(:admin, roles: [role]) }
+
+      it "succeeds" do
+        subject
+
+        success
+      end
+    end
+  end
+end
+
+shared_examples "an action unauthorized admins cannot access" do |authorized_roles:|
   before { fake_login_admin(admin) }
 
   context "with no role" do
@@ -6,6 +22,7 @@ shared_examples "an action only authorized admins can access" do |authorized_rol
 
     it "redirects with an error" do
       subject
+
       it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
     end
   end
@@ -16,21 +33,16 @@ shared_examples "an action only authorized admins can access" do |authorized_rol
 
       it "redirects with an error" do
         subject
+
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
   end
+end
 
-  authorized_roles.each do |role|
-    context "with role #{role}" do
-      let(:admin) { create(:admin, roles: [role]) }
-
-      it "succeeds" do
-        subject
-        success
-      end
-    end
-  end
+shared_examples "an action only authorized admins can access" do |authorized_roles:|
+  it_behaves_like "an action authorized admins can access" do |authorized_roles: authorized_roles|
+  it_behaves_like "an action unauthorized admins cannot access" do |authorized_roles: authorized_roles|
 end
 
 shared_examples "denies access for work that isn't visible to user" do
@@ -38,18 +50,21 @@ shared_examples "denies access for work that isn't visible to user" do
     it "allows access for work creator" do
       fake_login_known_user(creator)
       subject
+
       success
     end
 
     it "redirects other user" do
       fake_login
       subject
+
       it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach.")
     end
 
     it "allows access for admin" do
       fake_login_admin(create(:admin))
       subject
+
       success_admin
     end
   end
