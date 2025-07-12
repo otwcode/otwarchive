@@ -82,59 +82,63 @@ describe InvitationsController do
   end
 
   describe "POST #invite_friend" do
-    let(:invitation) { create(:invitation) }
-    subject { post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: user.email, number_of_invites: 1 } } }
-
-    authorized_roles = UserPolicy::MANAGE_ROLES
-
-    authorized_roles.each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
-        before do
-          admin.update!(roles:[admin_role])
-          fake_login_admin(admin)
-        end
-
-        it "sends invitation and redirects to invitation path" do
-          subject
-
-          it_redirects_to_with_notice(invitation_path(invitation), "Invitation was successfully sent.")
-        end
-
-        it "errors if email is missing" do
-          post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: nil, number_of_invites: 1 } }
-
-          expect(response).to render_template("show")
-          expect(flash[:error]).to match("Please enter an email address.")
-        end
-
-        it "renders #show if the invitation fails to save" do
-          allow_any_instance_of(Invitation).to receive(:save).and_return(false)
-          subject
-
-          expect(response).to render_template("show")
-        end
-      end
+    let(:invitation) { create(:invitation, creator: user) }
+    before do
+      owned_invitation = invitation
+      invitation_owner = invitation.creator
+    end
+    subject { post :invite_friend, params: { user_id: invitation_owner.id, id: owned_invitation.id, invitation: { invitee_email: "not_a_user@example.com" } } }
+    success do
+      it_redirects_to_with_notice(invitation_path(owned_invitation), "Invitation was successfully sent.")
+      expect(Invitation.find_by(id: owned_invitation.id)).not_to be_nil
     end
 
-    context "when logged in as an admin with no role" do
-      it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
+    it_behaves_like "an action only authorized admins can access" do |authorized_roles|
+    it_behaves_like "an action guests cannot access"
+    it_behaves_like "an action users cannot access" # a random user, as opposed to the invitation owner
+
+    context "when logged in as the invitation owner" do
+      it "succeeds" do
+        fake_login_known_user(invitation_owner)
         subject
 
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        success
+      end
+
+      it "errors if email is missing" do
+        fake_login_known_user(invitation_owner)
+        post :invite_friend, params: { user_id: invitation_owner.id, id: owned_invitation.id, invitation: { invitee_email: nil } }
+
+        expect(response).to render_template("show")
+        expect(flash[:error]).to match("Please enter an email address.")
+      end
+
+      it "renders #show without a notice if the invitation fails to save" do
+        allow_any_instance_of(Invitation).to receive(:save).and_return(false)
+        fake_login_known_user(invitation_owner)
+        subject
+
+        expect(response).to render_template("show")
+        expect(flash[:notice]).to be(nil)
       end
     end
 
-    (Admin::VALID_ROLES - authorized_roles).each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
-        it "redirects with error" do
-          admin.update!(roles: [admin_role])
-          fake_login_admin(admin)
-          subject
+    context "when logged in as an authorized admin" do
+      it "errors if email is missing" do
+        fake_login_admin("policy_and_abuse")
+        post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: nil } }
 
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
+        expect(response).to render_template("show")
+        expect(flash[:error]).to match("Please enter an email address.")
+      end
+
+      it "renders #show without a notice if the invitation fails to save" do
+        allow_any_instance_of(Invitation).to receive(:save).and_return(false)
+        fake_login_admin("policy_and_abuse")
+        subject
+
+        expect(response).to render_template("show")
+        expect(flash[:notice]).to be(nil)
       end
     end
   end
