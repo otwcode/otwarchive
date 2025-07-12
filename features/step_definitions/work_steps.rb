@@ -373,7 +373,7 @@ When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
 end
 
 # Posts a chapter for the current user
-When /^I post a chapter for the work "([^"]*)"(?: as "(.*?)")$/ do |work_title, pseud|
+When /^I post a chapter for the work "([^"]*)"(?: as "(.*?)")?$/ do |work_title, pseud|
   work = Work.find_by(title: work_title)
   visit work_url(work)
   step %{I follow "Add Chapter"}
