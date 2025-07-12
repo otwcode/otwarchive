@@ -41,99 +41,41 @@ describe InvitationsController do
   end
 
   describe "GET #show" do
-    let(:user) { create(:user) }
     let(:invitation) { create(:invitation, creator: user) }
+    success { expect(response).to render_template("show") }
 
-    context "with user and id parameters" do
-      context "when logged out" do
-        it "redirects with error" do
-          get :show, params: { user_id: user.login, id: invitation.id }
+    context "with both user_id and [invitation] id parameters" do
+      subject { get :show, params: { user_id: user.login, id: invitation.id } }
 
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
-      end
+      it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_roles|
+      it_behaves_like "an action users cannot access"
+      it_behaves_like "an action guests cannot access"
 
-      context "when logged in as user who owns invitation" do
-        it "renders show template" do
+      context "when logged in as the invitation owner" do
+        it "succeeds"
+          owned_invitation = invitation
           fake_login_known_user(user)
-          get :show, params: { user_id: user.login, id: invitation.id }
+          get :show, params: { user_id: user.login, id: owned_invitation.id }
 
-          expect(response).to render_template("show")
-        end
-      end
-
-      context "when logged in as user who does not own invitation" do
-        it "redirects with error" do
-          fake_login
-          get :show, params: { user_id: user.login, id: invitation.id }
-
-          it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
-        end
-      end
-
-      context "when logged in as admin without correct authorization" do
-        it "redirects with error" do
-          fake_login_admin(admin)
-          get :show, params: { user_id: user.login, id: invitation.id }
-
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
-      end
-
-      context "when logged in as admin with correct authorization" do
-        it "renders show template" do
-          admin.update!(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          get :show, params: { user_id: user.login, id: invitation.id }
-
-          expect(response).to render_template("show")
+          success
         end
       end
     end
 
-    context "with id parameters" do
-      context "when logged out" do
-        it "redirects with error" do
-          get :show, params: { id: invitation.id }
+    context "with [invitation] id parameter and no user_id parameter" do
+      subject { get :show, params: { id: invitation.id } }
 
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
-      end
+      it_behaves_like "an action guests cannot access"
+      it_behaves_like "an action users cannot access"
+      it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_roles|
 
-      context "when logged in as user who owns invitation" do
+      context "when logged in as the invitation owner" do
         it "redirects with error" do
+          owned_invitation = invitation
           fake_login_known_user(user)
-          get :show, params: { id: invitation.id }
+          get :show, params: { id: owned_invitation.id }
 
           it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
-        end
-      end
-
-      context "when logged in as user who does not own invitation" do
-        it "redirects with error" do
-          fake_login
-          get :show, params: { id: invitation.id }
-
-          it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
-        end
-      end
-
-      context "when admin does not have correct authorization" do
-        it "redirects with error" do
-          fake_login_admin(admin)
-          get :show, params: { id: invitation.id }
-
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
-      end
-
-      context "when admin has correct authorization" do
-        it "renders show template" do
-          admin.update!(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          get :show, params: { id: invitation.id }
-
-          expect(response).to render_template("show")
         end
       end
     end
