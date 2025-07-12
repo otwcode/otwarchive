@@ -373,11 +373,12 @@ When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
 end
 
 # Posts a chapter for the current user
-When /^I post a chapter for the work "([^"]*)"$/ do |work_title|
+When /^I post a chapter for the work "([^"]*)"(?: as "(.*?)")$/ do |work_title, pseud|
   work = Work.find_by(title: work_title)
   visit work_url(work)
   step %{I follow "Add Chapter"}
   step %{I fill in "content" with "la la la la la la la la la la la"}
+  select(pseud, from: "chapter_author_attributes_ids") if pseud.present?
   step %{I post the chapter}
 end
 
