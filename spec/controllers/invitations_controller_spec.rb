@@ -7,62 +7,32 @@ describe InvitationsController do
   let(:admin) { create(:admin) }
   let(:user) { create(:user) }
 
-  describe "GET #index" do
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-        get :index, params: { user_id: user.login }
+  authorized_roles = UserPolicy::MANAGE_ROLES
 
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-      end
-    end
+  shared_examples "an action guests cannot access" do
+    subject
 
-    context "when admin has correct authorization" do
-      it "renders index template" do
-        admin.update!(roles: ["policy_and_abuse"])
-        fake_login_admin(admin)
-        get :index, params: { user_id: user.login }
-
-        expect(response).to render_template("index")
-      end
-    end
+    it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
   end
 
-  describe "GET #manage" do
-    subject { get :manage, params: { user_id: user.login } }
+  shared_examples "an action users cannot access" do
+    fake_login
+    subject
 
-    authorized_roles = UserPolicy::MANAGE_ROLES
+    it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+  end
 
-    authorized_roles.each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
-        before do
-          admin.update!(roles: [admin_role])
-          fake_login_admin(admin)
-        end
+  shared_examples "an action only the invitation owner can access" do |owner:|
+    it "succeeds when logged in as the invitation owner" do
+      fake_login_known_user(owner)
+      subject
 
-        it "renders #manage" do
-          subject
-
-          expect(response).to render_template("manage")
-        end
-
-        %i[unsent unredeemed redeemed].each do |status|
-          it "includes invitation status when invitation is #{status}" do
-            get :manage, params: { user_id: user.login, status: status }
-
-            expect(response).to render_template("manage")
-            expect(user.invitations).to eq(user.invitations.send(status))
-          end
-        end
-      end
+      success
     end
 
-    context "when logged in as an admin with no role" do
-      it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-        subject
+    # "users can't access this" errors and "specific user can't access this" errors behave the same.
+    it_behaves_like "an action users cannot access"
+  end
 
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
