@@ -141,24 +141,15 @@ describe InvitationsController do
 
   describe "POST #create" do
     let(:invitee) { create(:user) }
-
-    it "does not allow non-admins to create" do
-      fake_login
-      post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email, number_of_invites: 1 } }
-
-      it_redirects_to_with_error(
-        user_path(controller.current_user),
-        "Sorry, you don't have permission to access the page you were trying to reach."
-      )
-    end
-
-    it "allows admins to create invitations" do
-      admin.update!(roles: ["policy_and_abuse"])
-      fake_login_admin(admin)
-      post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email, number_of_invites: 1 } }
-
+    subject { post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email } } }
+    success do
       it_redirects_to_with_notice(user_invitations_path(invitee), "Invitations were successfully created.")
+      expect(Invitation.find_by(id: invitation.id)).not_to be_nil
     end
+
+    it_behaves_like "an action only authorized admins can access" do |authorized_roles|
+    it_behaves_like "an action guests cannot access"
+    it_behaves_like "an action users cannot access"
   end
 
   describe "PUT #update" do
@@ -260,72 +251,76 @@ describe InvitationsController do
   end
 
   describe "DELETE #destroy" do
-    let(:invitation) { create(:invitation) }
+    let(:invitation) { create(:invitation, creator: user) }
     subject { delete :destroy, params: { id: invitation.id } }
 
-    authorized_roles = UserPolicy::MANAGE_ROLES
-
-    authorized_roles.each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
-        before do
-          admin.update!(roles: [admin_role])
-          fake_login_admin(admin)
-        end
-
-        context "when invitation creator is a user" do
-          it "deletes invitation and redirects to user invitations path" do
-            invitation_creator = create(:user)
-            invitation.creator = invitation_creator
-            subject
-
-            it_redirects_to_with_notice(user_invitations_path(invitation_creator), "Invitation successfully destroyed")
+    context "when logged in as an authorized admin" do
+      authorized_roles.each do |role|
+        context "with role #{role}" do
+          before do
+            admin.update!(roles: [role])
+            fake_login_admin(admin)
           end
-        end
 
-        context "when invitation creator is an admin" do
-          it "deletes invitation and redirects to admin invitations path" do
-            invitation_creator = create(:admin)
-            invitation.creator = invitation_creator
-            subject
+          context "when invitation creator is a user" do
+            it "deletes invitation and redirects to user invitations path with notice" do
+              subject
 
-            it_redirects_to_with_notice(admin_invitations_path(), "Invitation successfully destroyed")
+              it_redirects_to_with_notice(user_invitations_path(user), "Invitation successfully destroyed")
+              expect(Invitation.find_by(id: invitation.id)).to be_nil
+            end
+
+            it "redirects to user invitations path with error if invitation fails to destroy" do
+              allow_any_instance_of(Invitation).to receive(:destroy).and_return(false)
+              subject
+
+              it_redirects_to_with_error(user_invitations_path(user), "Invitation was not destroyed.")
+            end
           end
-        end
 
-        it "errors if invitation fails to destroy" do
-          allow_any_instance_of(Invitation).to receive(:destroy).and_return(false)
-          subject
+          context "when invitation creator is an admin" do
+            it "deletes invitation and redirects to admin invitations path with notice" do
+              invitation_creator = create(:admin)
+              invitation.creator = invitation_creator
+              subject
 
-          expect(flash[:error]).to match("Invitation was not destroyed.")
+              it_redirects_to_with_notice(admin_invitations_path(), "Invitation successfully destroyed")
+              expect(Invitation.find_by(id: owned_invitation.id)).to be_nil
+            end
+
+            it "redirects to admin invitations path with error if invitation fails to destroy" do
+              allow_any_instance_of(Invitation).to receive(:destroy).and_return(false)
+              subject
+
+              it_redirects_to_with_error(admin_invitations_path(), "Invitation was not destroyed.")
+            end
+          end
         end
       end
     end
 
-    context "when logged in as an admin with no role" do
-      before do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-      end
-
-      it "redirects with error and does not delete the invitation" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-        subject
-
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        expect(invitation).to exist
-      end
-    end
-
-    (Admin::VALID_ROLES - authorized_roles).each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
+    context "when logged in an unauthorized admin" do
+      context "with no role" do
         it "redirects with error and does not delete the invitation" do
-          admin.update!(roles: [admin_role])
+          admin.update!(roles: [])
           fake_login_admin(admin)
           subject
 
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-          expect(invitation).to exist
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+          expect(Invitation.find_by(id: owned_invitation.id)).to be_nil
+        end
+      end
+
+      (Admin::VALID_ROLES - authorized_roles).each do |role|
+        context "with role #{role}" do
+          it "redirects with error and does not delete the invitation" do
+            admin.update!(roles: [role])
+            fake_login_admin(admin)
+            subject
+
+            it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            expect(Invitation.find_by(id: owned_invitation.id)).to be_nil
+          end
         end
       end
     end
@@ -335,7 +330,7 @@ describe InvitationsController do
         subject
 
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        expect(invitation).to exist
+        expect(Invitation.find_by(id: owned_invitation.id)).to be_nil
       end
     end
 
@@ -345,7 +340,7 @@ describe InvitationsController do
         subject
 
         it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
-        expect(invitation).to exist
+        expect(Invitation.find_by(id: owned_invitation.id)).to be_nil
       end
     end
   end
