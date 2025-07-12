@@ -32,7 +32,7 @@ describe InvitationsController do
   describe "GET #manage" do
     subject { get :manage, params: { user_id: user.login } }
 
-    authorized_roles = InvitationPolicy::EXTRA_INFO_ROLES + %w[legal]
+    authorized_roles = UserPolicy::MANAGE_ROLES
 
     authorized_roles.each do |admin_role|
       context "when logged in as an admin with role #{admin_role}" do
@@ -184,7 +184,7 @@ describe InvitationsController do
     let(:invitation) { create(:invitation) }
     subject { post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: user.email, number_of_invites: 1 } } }
 
-    authorized_roles = InvitationPolicy::EXTRA_INFO_ROLES + %w[legal]
+    authorized_roles = UserPolicy::MANAGE_ROLES
 
     authorized_roles.each do |admin_role|
       context "when logged in as an admin with role #{admin_role}" do
@@ -265,7 +265,7 @@ describe InvitationsController do
     let(:invitation) { create(:invitation) }
     subject { put :update, params: { id: invitation.id, invitation: { invitee_email: invitee.email } } }
 
-    authorized_roles = InvitationPolicy::EXTRA_INFO_ROLES + %w[legal]
+    authorized_roles = UserPolicy::MANAGE_ROLES
 
     authorized_roles.each do |admin_role|
       context "when logged in as an admin with role #{admin_role}" do
@@ -362,7 +362,7 @@ describe InvitationsController do
     let(:invitation) { create(:invitation) }
     subject { delete :destroy, params: { id: invitation.id } }
 
-    authorized_roles = InvitationPolicy::EXTRA_INFO_ROLES + %w[legal]
+    authorized_roles = UserPolicy::MANAGE_ROLES
 
     authorized_roles.each do |admin_role|
       context "when logged in as an admin with role #{admin_role}" do
