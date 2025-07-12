@@ -159,86 +159,94 @@ describe InvitationsController do
   describe "PUT #update" do
     let(:invitee) { create(:user) }
     let(:invitation) { create(:invitation) }
-    subject { put :update, params: { id: invitation.id, invitation: { invitee_email: invitee.email } } }
+    new_email = "definitely_not_a_user@example.com"
+    subject { put :update, params: { id: invitation.id, invitation: { invitee_email: new_email } } }
+    success do
+      it_redirects_to_with_notice(find_admin_invitations_path("invitation[token]" => invitation.token), "Invitation was successfully sent.")
+      expect(invitation.reload.invitee_email).to eq(new_email)
+    end
 
-    authorized_roles = UserPolicy::MANAGE_ROLES
+    it_behaves_like "an action authorized admins can access"
 
-    authorized_roles.each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
-        before do
-          admin.update!(roles: [admin_role])
-          fake_login_admin(admin)
-        end
+    context "when logged in as an authorized admin" do
+      authorized_roles.each do |role|
+        context "with role #{role}" do
+          before do
+            admin.update!(roles: [role])
+            fake_login_admin(admin)
+          end
 
-        it "updates invitation and redirects to find admin invitations path" do
-          new_email = invitee.email
-          put :update, params: { id: invitation.id, invitation: { invitee_email: new_email } }
+          it "errors if email is missing" do
+            put :update, params: { id: invitation.id, invitation: { invitee_email: nil } }
 
-          it_redirects_to_with_notice(find_admin_invitations_path("invitation[token]" => invitation.token), "Invitation was successfully sent.")
-          expect(invitation.invitee_email).to eq(new_email)
-        end
+            expect(response).to render_template("show")
+            expect(flash[:error]).to match("Please enter an email address.")
+          end
 
-        it "errors if email is missing" do
-          allow_any_instance_of(Invitation).to receive(:update).and_return(false)
-          put :update, params: { id: invitation.id, invitation: { invitee_email: nil } }
+          it "renders #show without notice if the invitation fails to update" do
+            allow_any_instance_of(Invitation).to receive(:update).and_return(false)
+            subject
 
-          expect(response).to render_template("show")
-          expect(flash[:error]).to match("Please enter an email address.")
-        end
-
-        it "renders #show if the invitation fails to update" do
-          allow_any_instance_of(Invitation).to receive(:update).and_return(false)
-          subject
-
-          expect(response).to render_template("show")
-          expect(flash[:notice]).to be(nil)
-        end
-
-        it "renders #show if the update did not change invitee_email" do
-          put :update, params: { id: invitation.id, invitation: { invitee_email: invitation.invitee_email } }
-
-          expect(response).to render_template("show")
-          expect(flash[:notice]).to be(nil)
+            expect(response).to render_template("show")
+            expect(flash[:notice]).to be(nil)
+          end
         end
       end
+    end
+
+    context "when logged in as an unauthorized admin" do
+      context "with no role" do
+        it "redirects with error and does not update the invitation" do
+          admin.update!(roles: [])
+          fake_login_admin(admin)
+          old_email = invitation.invitee_email
+          subject
+
+          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+          expect(invitation.reload.invitee_email).to eq(old_email)
+        end
+      end
+
+      (Admin::VALID_ROLES - authorized_roles).each do |role|
+        context "with role #{role}" do
+          it "redirects with error and does not update the invitation" do
+            admin.update!(roles: [role])
+            fake_login_admin(admin)
+            old_email = invitee.email
+            invitation.invitee_email = old_email
+            subject
+
+            it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            expect(invitation.reload.invitee_email).to eq(old_email)
+          end
+        end
     end
 
     context "when logged in as a user" do
-      it "updates invitation and redirects to user path" do
+      before do
         fake_login
-        new_email = invitee.email
-        put :update, params: { id: invitation.id, invitation: { invitee_email: new_email } }
-
-        it_redirects_to_simple(user_path(controller.current_user))
-        expect(invitation.invitee_email).to eq(new_email)
       end
-    end
 
-    context "when logged in as an admin with no role" do
-      it "redirects with error and does not update the invitation" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-        old_email = invitee.email
-        invitation.invitee_email = old_email
+      it "succeeds" do
         subject
 
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        expect(invitation.invitee_email).to eq(old_email)
+        it_redirects_to_with_notice(user_path(controller.current_user), "Invitation was successfully sent.")
+        expect(invitation.reload.invitee_email).to eq(new_email)
       end
-    end
 
-    (Admin::VALID_ROLES - authorized_roles).each do |admin_role|
-      context "when logged in as an admin with role #{admin_role}" do
-        it "redirects with error and does not update the invitation" do
-          admin.update!(roles: [admin_role])
-          fake_login_admin(admin)
-          old_email = invitee.email
-          invitation.invitee_email = old_email
-          subject
+      it "errors if email is missing" do
+        put :update, params: { id: invitation.id, invitation: { invitee_email: nil } }
 
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-          expect(invitation.invitee_email).to eq(old_email)
-        end
+        expect(response).to render_template("show")
+        expect(flash[:error]).to match("Please enter an email address.")
+      end
+
+      it "renders #show without notice if the invitation fails to update" do
+        allow_any_instance_of(Invitation).to receive(:update).and_return(false)
+        subject
+
+        expect(response).to render_template("show")
+        expect(flash[:notice]).to be(nil)
       end
     end
 
@@ -249,7 +257,7 @@ describe InvitationsController do
         subject
 
         it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        expect(invitation.invitee_email).to eq(old_email)
+        expect(invitation.reload.invitee_email).to eq(old_email)
       end
     end
   end
