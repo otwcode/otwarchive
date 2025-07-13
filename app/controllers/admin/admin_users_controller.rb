@@ -28,12 +28,12 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def index
     authorize User
-    @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
-    @role = Role.find_by(name: params[:role]) if params[:role]
-    @users = User.search_by_role(
-      @role, params[:name], params[:email], params[:user_id],
-      inactive: params[:inactive], exact: params[:exact], page: params[:page]
-    )
+
+    # Values for the role dropdown:
+    @role_values = @roles.map { |role| [role.name.humanize.titlecase, role.id] }
+
+    @query = UserQuery.new(search_params)
+    @users = @query.search_results.scope(:with_includes_for_admin_index)
   end
 
   def bulk_search
@@ -215,6 +215,18 @@ class Admin::AdminUsersController < Admin::BaseController
   def creations
     authorize @user
     @page_subtitle = t(".page_title", login: @user.login)
+  end
+
+  private
+
+  def search_params
+    allowed_params = if policy(User).can_view_past?
+                       %i[name email role_id user_id inactive page commit search_past]
+                     else
+                       %i[name email role_id user_id inactive page commit]
+                     end
+
+    params.permit(*allowed_params)
   end
 
   def log_items
