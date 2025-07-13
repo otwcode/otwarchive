@@ -15,6 +15,7 @@ development)
   bundle exec rake search:index_works
   bundle exec rake search:index_pseuds
   bundle exec rake search:index_bookmarks
+  bundle exec rake search:index_admin_users
   ;;
 *)
   echo "Only supported in test and development (e.g. 'RAILS_ENV=test ./script/reset_database.sh')"

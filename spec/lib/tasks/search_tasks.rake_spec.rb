@@ -1,5 +1,23 @@
 require "spec_helper"
 
+describe "rake search:index_admin_users" do
+  it "deletes and recreates the admin user search index and populates it" do
+    user = create(:user)
+    expect(UserIndexer).to receive(:delete_index).and_call_original
+    expect(UserIndexer).to receive(:create_index).and_call_original
+    expect(UserIndexer).to receive(:new).with([user.id.to_s]).and_call_original
+    subject.invoke
+  end
+end
+
+describe "rake search:reindex_admin_users" do
+  it "reindexes users for the admin user search" do
+    user = create(:user)
+    expect(UserIndexer).to receive(:new).with([user.id.to_s]).and_call_original
+    subject.invoke
+  end
+end
+
 describe "rake search:run_world_index_queue" do
   it "reindexes works" do
     work = create(:work)
