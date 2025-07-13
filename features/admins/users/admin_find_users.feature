@@ -9,6 +9,7 @@ Feature: Admin Find Users page
         | userCB | cb@bo3.org |
       And the user "userB" exists and has the role "archivist"
       And I am logged in as a super admin
+      And all emails have been delivered
       And I go to the manage users page
 
   Scenario: The Find Users page performs a partial match on name with * wildcard
@@ -30,7 +31,7 @@ Feature: Admin Find Users page
   Scenario: The Find Users page searches past logins only if the option is selected
     When I am logged in as "userA"
       And I visit the change username page for userA
-      And I fill in "New user name" with "userD"
+      And I fill in "New username" with "userD"
       And I fill in "Password" with "password"
       And I press "Change"
     Then I should get confirmation that I changed my username
@@ -66,13 +67,8 @@ Feature: Admin Find Users page
 
   Scenario: The Find Users page searches past emails if the option is selected
     When I am logged in as "userA"
-      And I visit the change email page for userA
-      And I fill in "New Email" with "d@ao3.org"
-      And I fill in "Confirm New Email" with "d@ao3.org"
-      And I fill in "Password" with "password"
-      And I press "Change"
-    Then I should get confirmation that I changed my email
-    Given I am logged in as a "policy_and_abuse" admin
+      And I change my email to "d@ao3.org"
+      And I am logged in as a "policy_and_abuse" admin
       And I go to the manage users page
       And I fill in "Email" with "a@ao3.org"
       And I submit

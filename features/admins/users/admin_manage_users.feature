@@ -91,7 +91,8 @@ Feature: Admin Actions to manage users
       | cats  | d@fake.com |
       And I am logged in as "cats"
       And I want to edit my profile
-      And I change my email
+      And I change my email to "new@example.com"
+      And all emails have been delivered
       And I change my username to "new_user"
     When I am logged in as a super admin
       And I go to the user administration page for "new_user"

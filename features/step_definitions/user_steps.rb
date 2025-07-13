@@ -336,10 +336,6 @@ Then /^I should get confirmation that I changed my username$/ do
   step(%{the email should contain "The username for your .* has been changed to"})
 end
 
-Then "I should get confirmation that I changed my email" do
-  step(%{I should see "Your email has been successfully updated"})
-end
-
 Then /^the user "([^"]*)" should be activated$/ do |login|
   user = User.find_by(login: login)
   expect(user).to be_active
