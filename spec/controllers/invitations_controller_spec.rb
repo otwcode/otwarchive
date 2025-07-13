@@ -32,16 +32,15 @@ describe InvitationsController do
   end
 
   describe "GET #show" do
-    let(:invitation) { create(:invitation) }
+    let(:invitation) { create(:invitation, creator: user) }
     before do
-      invite = invitation
-      inviter = invite.creator
+      inviter = invitation.creator
     end
     let(:admin_success) { expect(response).to render_template("show") }
 
     context "with both user_id and [invitation] id parameters" do
 
-      subject { get :show, params: { user_id: inviter.login, id: invite.id } }
+      subject { get :show, params: { user_id: inviter.login, id: invitation.id } }
 
       it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_admin_roles|
       end
@@ -49,9 +48,8 @@ describe InvitationsController do
       it_behaves_like "an action users cannot access" # random users, as opposed to the invitation owner
 
       context "when logged in as the invitation owner" do
-        before { fake_login_known_user(inviter) }
-
         it "succeeds" do
+          fake_login_known_user(inviter)
           subject
 
           expect(response).to render_template("show")
@@ -61,7 +59,7 @@ describe InvitationsController do
 
     context "with [invitation] id parameter and no user_id parameter" do
 
-      subject { get :show, params: { id: invite.id } }
+      subject { get :show, params: { id: invitation.id } }
 
       it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_admin_roles|
       end
@@ -69,9 +67,8 @@ describe InvitationsController do
       it_behaves_like "an action users cannot access" # random users, as opposed to the invitation owner
 
       context "when logged in as the invitation owner" do
-        before { fake_login_known_user(inviter) }
-
         it "redirects with error" do
+          fake_login_known_user(inviter)
           subject
 
           it_redirects_to_with_error(user_path(inviter), "Sorry, you don't have permission to access the page you were trying to reach.")
@@ -81,17 +78,17 @@ describe InvitationsController do
   end
 
   describe "POST #invite_friend" do
-    let(:invitation) { create(:invitation) }
+    let(:invitation) { create(:invitation, creator: user) }
     before do
-      invite = invitation
-      inviter = invite.creator
+      inviter = invitation.creator
     end
-    let(:admin_success) do
-      it_redirects_to_with_notice(invitation_path(invite), "Invitation was successfully sent.")
-      expect(Invitation.find_by(id: invite.id)).not_to be_nil
+    let(:success) do
+      it_redirects_to_with_notice(invitation_path(invitation), "Invitation was successfully sent.")
+      expect(Invitation.find_by(id: invitation.id)).not_to be_nil
     end
+    let(:admin_success) { :success }
 
-    subject { post :invite_friend, params: { user_id: inviter.id, id: invite.id, invitation: { invitee_email: "not_a_user@example.com" } } }
+    subject { post :invite_friend, params: { user_id: inviter.id, id: invitation.id, invitation: { invitee_email: "not_a_user@example.com" } } }
 
     it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_admin_roles|
     end
@@ -108,7 +105,7 @@ describe InvitationsController do
 
       it "errors if email is missing" do
         fake_login_known_user(inviter)
-        post :invite_friend, params: { user_id: inviter.id, id: invite.id, invitation: { invitee_email: nil } }
+        post :invite_friend, params: { user_id: inviter.id, id: invitation.id, invitation: { invitee_email: nil } }
 
         expect(response).to render_template("show")
         expect(flash[:error]).to match("Please enter an email address.")
@@ -127,7 +124,7 @@ describe InvitationsController do
     context "when logged in as an authorized admin" do
       it "errors if email is missing" do
         fake_login_admin("policy_and_abuse")
-        post :invite_friend, params: { user_id: inviter.id, id: invite.id, invitation: { invitee_email: nil } }
+        post :invite_friend, params: { user_id: inviter.id, id: invitation.id, invitation: { invitee_email: nil } }
 
         expect(response).to render_template("show")
         expect(flash[:error]).to match("Please enter an email address.")
@@ -145,13 +142,12 @@ describe InvitationsController do
   end
 
   describe "POST #create" do
-    let(:invitee) { create(:user) }
     let(:admin_success) do
-      it_redirects_to_with_notice(user_invitations_path(invitee), "Invitations were successfully created.")
-      expect(Invitation.find_by(id: invite.id)).not_to be_nil
+      it_redirects_to_with_notice(user_invitations_path(user), "Invitations were successfully created.")
+      expect(Invitation.find_by(invitee_email: user.email)).not_to be_nil
     end
 
-    subject { post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email } } }
+    subject { post :create, params: { user_id: user.login, invitation: { invitee_email: user.email } } }
 
     it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_admin_roles|
     end
@@ -160,31 +156,30 @@ describe InvitationsController do
   end
 
   describe "PUT #update" do
-    let(:invitation) { create(:invitation) }
+    let(:invitation) { create(:invitation, creator: user) }
+    new_email = "not_a_user@example.com"
     before do
-      invite = invitation
-      inviter = invite.creator
-      old_email = invite.invitee_email
-      new_email = "definitely_not_a_user@example.com"
+      inviter = invitation.creator
+      old_email = invitation.invitee_email
     end
     let(:admin_success) do
-      it_redirects_to_with_notice(find_admin_invitations_path("invitation[token]" => invite.token), "Invitation was successfully sent.")
-      expect(invite.reload.invitee_email).to eq(new_email)
+      it_redirects_to_with_notice(find_admin_invitations_path("invitation[token]" => invitation.token), "Invitation was successfully sent.")
+      expect(invitation.reload.invitee_email).to eq(new_email)
     end
     let(:access_denied_admin) do
       it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-      expect(invite.reload.invitee_email).to eq(old_email)
+      expect(invitation.reload.invitee_email).to eq(old_email)
     end
     let(:access_denied_guest) do
       it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-      expect(invite.reload.invitee_email).to eq(old_email)
+      expect(invitation.reload.invitee_email).to eq(old_email)
     end
     let(:access_denied_user) do
       it_redirects_to_with_notice(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
-      expect(invite.reload.invitee_email).to eq(new_email)
+      expect(invitation.reload.invitee_email).to eq(new_email)
     end
 
-    subject { put :update, params: { id: invite.id, invitation: { invitee_email: new_email } } }
+    subject { put :update, params: { id: invitation.id, invitation: { invitee_email: new_email } } }
 
     it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_admin_roles|
     end
@@ -200,7 +195,7 @@ describe InvitationsController do
           end
 
           it "errors if email is missing" do
-            put :update, params: { id: invite.id, invitation: { invitee_email: nil } }
+            put :update, params: { id: invitation.id, invitation: { invitee_email: nil } }
 
             expect(response).to render_template("show")
             expect(flash[:error]).to match("Please enter an email address.")
@@ -208,7 +203,7 @@ describe InvitationsController do
 
           it "renders #show without notice if the invitation fails to update" do
             allow_any_instance_of(Invitation).to receive(:update).and_return(false)
-            subject
+            put :update, params: { id: invitation.id, invitation: { invitee_email: new_email } }
 
             expect(response).to render_template("show")
             expect(flash[:notice]).to be(nil)
@@ -221,7 +216,7 @@ describe InvitationsController do
       before { fake_login_known_user(inviter) }
 
       it "errors if email is missing" do
-        put :update, params: { id: invite.id, invitation: { invitee_email: nil } }
+        put :update, params: { id: invitation.id, invitation: { invitee_email: nil } }
 
         expect(response).to render_template("show")
         expect(flash[:error]).to match("Please enter an email address.")
@@ -229,7 +224,7 @@ describe InvitationsController do
 
       it "renders #show without notice if the invitation fails to update" do
         allow_any_instance_of(Invitation).to receive(:update).and_return(false)
-        subject
+        put :update, params: { id: invitation.id, invitation: { invitee_email: new_email } }
 
         expect(response).to render_template("show")
         expect(flash[:notice]).to be(nil)
@@ -264,14 +259,13 @@ describe InvitationsController do
 
           context "when invitation creator is a user" do
             before do
-              inviter = user
-              invitation = create(:invitation, creator: inviter)
+              invitation.creator = user
             end
 
             it "succeeds" do
               subject
 
-              it_redirects_to_with_notice(user_invitations_path(inviter), "Invitation successfully destroyed")
+              it_redirects_to_with_notice(user_invitations_path(user), "Invitation successfully destroyed")
               expect(Invitation.find_by(id: invitation.id)).to be_nil
             end
 
@@ -279,14 +273,13 @@ describe InvitationsController do
               allow_any_instance_of(Invitation).to receive(:destroy).and_return(false)
               subject
 
-              it_redirects_to_with_error(user_invitations_path(inviter), "Invitation was not destroyed.")
+              it_redirects_to_with_error(user_invitations_path(user), "Invitation was not destroyed.")
             end
           end
 
           context "when invitation creator is an admin" do
             before do
-              inviter = admin
-              invitation = create(:invitation, creator: inviter)
+              invitation.creator = admin
             end
 
             it "succeeds" do

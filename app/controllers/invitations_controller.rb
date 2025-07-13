@@ -12,7 +12,8 @@ class InvitationsController < ApplicationController
 
   def check_permission
     @user = User.find_by(login: params[:user_id])
-    authorize Invitations if policy(User).can_manage_users? || @user.present? && @user == current_user
+    authorize @invitations, :can_manage_users?, policy_class: UserPolicy if logged_in_as_admin?
+    access_denied unless @user.present? && @user == current_user
   end
 
   def index
