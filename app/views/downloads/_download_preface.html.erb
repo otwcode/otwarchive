@@ -1,12 +1,11 @@
 <div id="preface">
-  <h2 class="toc-heading"><%= ts("Preface") %></h2>
+  <h2 class="toc-heading"><%= t(".preface") %></h2>
 
   <p class="message">
     <b><%= @work.title %></b><br />
-    <%= ts("Posted originally on the %{archive_link} at %{work_url}.",
+    <%= t(".originally_posted_html",
           archive_link: link_to(ArchiveConfig.APP_NAME, root_url),
-          work_url: link_to(work_url(@work), work_url(@work))
-        ).html_safe %>
+          work_url: link_to(work_url(@work), work_url(@work))) %>
   </p>
 
   <div class="meta">
@@ -14,53 +13,50 @@
       <% Tag::VISIBLE.each do |type| %>
         <% tags = @work.tag_groups[type] %>
         <% unless tags.blank? %>
-          <dt><%= tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize(locale: :en) %>:</dt>
-          <dd><%= tags.map {|t| link_to(t.display_name, tag_url(t))}.join(", ").html_safe %></dd>
+          <dt><%= t(".tag_type", tag_type: tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize) %></dt>
+          <dd><%= safe_join(tags.map { |t| link_to(t.display_name, tag_url(t)) }, t("support.array.words_connector")) %></dd>
         <% end %>
       <% end %>
 
       <% unless @work.language.blank? %>
-        <dt><%= ts("Language") %>:</dt>
+        <dt><%= t(".language") %></dt>
         <dd><%= @work.language.name %></dd>
       <% end %>
 
-      <% series_list = @work.serial_works.reject{ |sw| sw.series.nil? } %>
+      <% series_list = @work.serial_works.reject { |sw| sw.series.nil? } %>
       <% unless series_list.blank? %>
-        <dt><%= ts("Series") %>:</dt>
-        <dd><%= series_list.map {|s| "#{ts('Part')} #{s.position} #{ts('of')}
-#{link_to(s.series.title, series_url(s.series))}"}.join(", ").html_safe %></dd>
+        <dt><%= t(".series") %></dt>
+        <dd><%= safe_join(series_list.map { |s| t(".series_list_html", position: s.position, series_link: link_to(s.series.title, series_url(s.series))) }, t("support.array.words_connector")) %></dd>
       <% end %>
       <% unless @work.approved_collections.empty? %>
-        <dt><%= ts("Collections") %>:</dt>
-        <dd><%= @work.approved_collections.map {|c| link_to c.title, collection_url(c)}.join(",
-").html_safe %></dd>
+        <dt><%= t(".collections") %></dt>
+        <dd><%= safe_join(@work.approved_collections.map { |c| link_to(c.title, collection_url(c)) }, t("support.array.words_connector")) %></dd>
       <% end %>
-      <dt><%= ts("Stats") %>:</dt>
+      <dt><%= t(".stats") %></dt>
       <dd>
-        <%= ts("Published") %>: <%= l(@work.first_chapter.published_at) %>
+        <%= t(".published", date: l(@work.first_chapter.published_at)) %>
         <% if @work.first_chapter.published_at < @work.revised_at.to_date %>
-          <%= @work.is_wip ? ts("Updated") : ts("Completed") %>: <%= l(@work.revised_at.to_date) %>
+          <%= @work.is_wip ? t(".updated", date: l(@work.revised_at.to_date)) : t(".completed", date: l(@work.revised_at.to_date)) %>
         <% end %>
-        <%= ts("Words") %>: <%= number_with_delimiter(@work.word_count) %>
-        <%= ts("Chapters") %>: <%= chapter_total_display(@work) %>
+        <%= t(".words", count_with_delimiters: number_with_delimiter(@work.word_count)) %>
+        <%= t(".chapters", chapter_total_display: chapter_total_display(@work)) %>
       </dd>
     </dl>
     <h1><%= @work.title %></h1>
-    <div class="byline"><%= ts("by") %> <%= byline(@work, visibility: 'public', only_path: false) %></div>
+    <div class="byline"><%= t(".byline_html", byline_names_link: byline(@work, visibility: "public", only_path: false)) %></div>
     <% unless @work.summary.blank? %>
-      <p><%= ts("Summary") %></p>
-      <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
+      <p><%= t(".summary") %></p>
+      <blockquote class="userstuff"><%= raw sanitize_field(@work, :summary) %></blockquote>
     <% end %>
 
     <% unless @work.notes.blank? && @work.endnotes.blank? %>
-      <p><%= ts("Notes") %></p>
+      <p><%= t(".notes") %></p>
       <% unless @work.notes.blank? %>
-        <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
+        <blockquote class="userstuff"><%= raw sanitize_field(@work, :notes) %></blockquote>
       <% end %>
       <% unless @work.endnotes.blank? %>
         <div class="endnote-link">
-          <%= ts("See the end of the work for") %> <% unless @work.notes.blank? %><%= ts("more") %><% end
-%> <%= link_to ts("notes"), "#endnotes" %>
+          <%= t(".see_end_notes_html", end_notes_link: link_to(@work.notes.present? ? t(".end_notes_with_work_notes") : t(".end_notes_without_work_notes"), "#endnotes")) %>
         </div>
       <% end %>
     <% end %>
