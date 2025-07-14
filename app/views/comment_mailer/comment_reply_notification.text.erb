@@ -4,13 +4,13 @@
 You wrote:
 <%= text_divider %>
 
-<%= to_plain_text(raw @your_comment.sanitized_content) %>
+<%= to_plain_text(raw(@your_comment.sanitized_mailer_content)) %>
 
 <%= text_divider %>
     
 <%= commenter_pseud_or_name_text(@comment) %> responded:
 <%= text_divider %>
 
-<%= to_plain_text(raw @comment.sanitized_content) %>
+<%= to_plain_text(raw(@comment.sanitized_mailer_content)) %>
 
 <%= render 'comment_notification_footer', formats: [:text] %><% end %>
