@@ -13,8 +13,11 @@
     </li>
 	<% end %>
 
-	<% if @user == current_user %>
+  <% if @user == current_user || policy(:preference).index? %>
     <li><%= span_if_current t(".choices.preferences"), user_preferences_path(@user) %></li>
+  <% end %>
+
+	<% if @user == current_user %>
     <li><%= span_if_current t(".choices.skins"), user_skins_path(@user) %></li>
   <% end %>
 </ul>

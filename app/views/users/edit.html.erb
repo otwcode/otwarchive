@@ -19,25 +19,27 @@
     <%= fields_for :profile_attributes, @user.profile do |p| %>
       <dt><%= p.label :title, t(".title") %></dt>
       <dd>
-        <%= p.text_field :title, class: "observe_textlength" %>
+        <%= p.text_field :title, class: "observe_textlength", disabled: logged_in_as_admin? && !policy(@user.profile).update? %>
         <%= live_validation_for_field("profile_attributes_title", presence: false, maximum_length: Profile::PROFILE_TITLE_MAX) %>
         <%= generate_countdown_html("profile_attributes_title", Profile::PROFILE_TITLE_MAX) %>
       </dd>
 
       <dt><%= p.label :location, t(".location") %></dt>
       <dd>
-        <%= p.text_field :location, class: "observe_textlength" %>
+        <%= p.text_field :location, class: "observe_textlength", disabled: logged_in_as_admin? && !policy(@user.profile).update? %>
         <%= live_validation_for_field("profile_attributes_location", presence: false, maximum_length: Profile::LOCATION_MAX) %>
         <%= generate_countdown_html("profile_attributes_location", Profile::LOCATION_MAX) %>
       </dd>
 
       <dt><%= p.label :date_of_birth, t(".date_of_birth") %></dt>
-      <dd class="datetime"><%= p.date_select :date_of_birth, start_year: 12.years.ago.year, end_year: 90.years.ago.year, include_blank: true %></dd>
+      <dd class="datetime">
+        <%= p.date_select :date_of_birth, start_year: 12.years.ago.year, end_year: 90.years.ago.year, include_blank: true, disabled: logged_in_as_admin? && !policy(@user.profile).update? %>
+      </dd>
 
       <dt><%= p.label :about_me, t(".about_me") %></dt>
       <dd class="description">
         <p><%= allowed_html_instructions %></p>
-        <%= p.text_area :about_me, class: "observe_textlength" %>
+        <%= p.text_area :about_me, class: "observe_textlength", disabled: logged_in_as_admin? && !policy(@user.profile).update? %>
         <%= live_validation_for_field("profile_attributes_about_me", presence: false, maximum_length: Profile::ABOUT_ME_MAX) %>
         <%= generate_countdown_html("profile_attributes_about_me", Profile::ABOUT_ME_MAX) %>
       </dd>
@@ -45,12 +47,14 @@
       <% if policy(@user.profile).can_edit_profile? %>
         <dt><%= p.label :ticket_number, class: "required" %></dt>
         <dd>
-          <%= p.text_field :ticket_number, class: "required" %>
+          <%= p.text_field :ticket_number, class: "required", disabled: logged_in_as_admin? && !policy(@user.profile).update? %>
         </dd>
       <% end %>
 
-      <dt class="landmark"><%= p.label :update, t(".update") %></dt>
-      <dd class="submit actions"><%= f.submit t(".update") %></dd>
+      <% if !logged_in_as_admin? or policy(@user.profile).update? %>
+        <dt class="landmark"><%= p.label :update, t(".update") %></dt>
+        <dd class="submit actions"><%= f.submit t(".update") %></dd>
+      <% end %>
     <% end %>
   </dl>
 <% end %>

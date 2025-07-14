@@ -1,6 +1,6 @@
 class PreferencesController < ApplicationController
   before_action :load_user
-  before_action :check_ownership
+  before_action :check_ownership_or_admin
   skip_before_action :store_location
 
   # Ensure that the current user is authorized to view and change this information
@@ -12,17 +12,36 @@ class PreferencesController < ApplicationController
   def index
     @user = User.find_by(login: params[:user_id])
     @preference = @user.preference
-    @available_skins = (current_user.skins.site_skins + Skin.approved_skins.site_skins).uniq
+    authorize @preference if logged_in_as_admin?
+    @available_skins = (@user.skins.site_skins + Skin.approved_skins.site_skins).uniq
     @available_locales = Locale.where(email_enabled: true)
   end
 
   def update
     @user = User.find_by(login: params[:user_id])
     @preference = @user.preference
-    @user.preference.attributes = preference_params
-    @available_skins = (current_user.skins.site_skins + Skin.approved_skins.site_skins).uniq
+    @available_skins = (@user.skins.site_skins + Skin.approved_skins.site_skins).uniq
     @available_locales = Locale.where(email_enabled: true)
 
+    if logged_in_as_admin?
+      authorize @preference
+      if @preference.update(permitted_attributes(@preference))
+        if @preference.ticket_url.present?
+          link = view_context.link_to("Ticket ##{@preference.ticket_number}", @preference.ticket_url)
+          summary = @preference.email_visible ? "Enable" : "Disable"
+          summary += " \"Show my email address to other people\" for #{link}"
+          AdminActivity.log_action(current_admin, @user, action: "edit preference", summary: summary)
+        end
+
+        flash[:notice] = ts('Your preferences were successfully updated.')
+        return redirect_to user_path(@user)
+      else
+        return render action: "index"
+      end
+    end
+
+    @user.preference.attributes = preference_params
+    
     if params[:preference][:skin_id].present?
       # unset session skin if user changed their skin
       session[:site_skin] = nil
@@ -68,7 +87,8 @@ class PreferencesController < ApplicationController
       :banner_seen,
       :allow_cocreator,
       :allow_gifts,
-      :guest_replies_off
+      :guest_replies_off,
+      :ticket_number
     )
   end
 end

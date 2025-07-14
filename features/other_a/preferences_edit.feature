@@ -337,3 +337,137 @@ Feature: Edit preferences
     When I follow "Show warnings"
     Then I should see "Sorry, you need to have JavaScript enabled for this."
       And I should see "Show warnings"
+
+  Scenario Outline: Authorized admins can see the user's preferences page
+    Given a user exists with login: "scott"
+      And I am logged in as a "<role>" admin
+    When I go to scott's user page
+      And I follow "Preferences"
+    Then I should see "Set My Preferences"
+  
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
+
+  Scenario Outline: Unauthorized admins cannot see the user's preferences page or the link to it
+    Given a user exists with login: "scott"
+      And I am logged in as a "<role>" admin
+    When I go to scott's user page
+    Then I should not see "Preferences"
+    When I go to scott's preferences page
+    Then I should see "Sorry, only an authorized admin can access the page you were trying to reach."
+  
+    Examples:
+      | role                       |
+      | board                      |
+      | board_assistants_team      |
+      | communications             |
+      | development_and_membership |
+      | docs                       |
+      | elections                  |
+      | legal                      |
+      | translation                |
+      | tag_wrangling              |
+      | open_doors                 |
+  
+  Scenario Outline: Authorized admins can modify the email_visible preference but not any others, and the activity should be logged
+    Given a user exists with login: "scott"
+      And I am logged in as a "<role>" admin
+      And an abuse ticket ID exists
+    When I go to scott's preferences page
+    Then I should see "Set My Preferences"
+    When I check "Show my email address to other people."
+      And I fill in "Ticket ID" with "#000000"
+      And I press "Update"
+    Then I should see "Your preferences were successfully updated"
+      And I go to scott's preferences page
+      And the "Show my email address to other people." checkbox should be checked
+      And the "Show my date of birth to other people." checkbox should be disabled
+    When I go to the admin-activities page
+    Then I should see 1 admin activity log entry
+      And I should see "edit preference"
+    
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+  
+  Scenario Outline: Unauthorized admins cannot modify anything
+    Given a user exists with login: "scott"
+      And I am logged in as a "<role>" admin
+    When I go to scott's preferences page
+    Then the "Show my email address to other people." checkbox should be disabled
+      And the "Show my date of birth to other people." checkbox should be disabled
+
+    Examples:
+      | role    |
+      | support |
+  
+  Scenario Outline: Admins can navigate to some pages but not others
+    Given a user exists with login: "scott"
+      And I am logged in as a "<role>" admin
+
+    When I go to scott's preferences page
+      And I follow "Edit My Profile"
+    Then I should see "Edit My Profile"
+      And I should not see "Sorry, only an authorized admin can access the page you were trying to reach."
+    
+    When I go to scott's preferences page
+      And I follow "Manage My Pseuds"
+    Then I should see "Pseuds for scott"
+      And I should not see "Sorry, only an authorized admin can access the page you were trying to reach."
+    
+    When I go to scott's preferences page
+      And I follow "Blocked Users"
+    Then I should see "Blocked Users"
+      And I should not see "Sorry, only an authorized admin can access the page you were trying to reach."
+    
+    When I go to scott's preferences page
+      And I follow "Muted Users"
+    Then I should see "Muted Users"
+      And I should not see "Sorry, only an authorized admin can access the page you were trying to reach."
+    
+    When I go to scott's preferences page
+      And I follow "Change Password"
+    Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
+      And I should not see "Change My Password"
+    
+    When I go to scott's preferences page
+      And I follow "Change Email"
+    Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
+      And I should not see "Change Email"
+    
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
+  
+  Scenario Outline: Admins can navigate to some pages but not others
+    Given a user exists with login: "scott"
+      And I am logged in as a "<role>" admin
+
+    When I go to scott's preferences page
+      And I follow "Change Username"
+    Then I should see "Change Username"
+      And I should not see "Sorry, only an authorized admin can access the page you were trying to reach."
+    
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+  
+  Scenario Outline: Admins can navigate to some pages but not others
+    Given a user exists with login: "scott"
+      And I am logged in as a "<role>" admin
+
+    When I go to scott's preferences page
+      And I follow "Change Username"
+    Then I should see "Sorry, only an authorized admin can access the page you were trying to reach."
+      And I should not see "Change Username"
+    
+    Examples:
+      | role    |
+      | support |

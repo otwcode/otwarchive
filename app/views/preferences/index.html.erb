@@ -24,23 +24,23 @@
     <h4 class="heading"><%= t(".privacy.heading") %> <%= link_to_help "privacy-preferences" %></h4>
     <ul>
       <li>
-        <%= f.check_box :email_visible %>
+        <%= f.check_box :email_visible, disabled: logged_in_as_admin? && !policy(@preference).update? %>
         <%= f.label :email_visible, t(".privacy.show_email_address") %>
       </li>
       <li>
-        <%= f.check_box :date_of_birth_visible %>
+        <%= f.check_box :date_of_birth_visible, disabled: logged_in_as_admin? %>
         <%= f.label :date_of_birth_visible, t(".privacy.show_date_of_birth") %>
       </li>
       <li>
-        <%= f.check_box :minimize_search_engines %>
+        <%= f.check_box :minimize_search_engines, disabled: logged_in_as_admin? %>
         <%= f.label :minimize_search_engines, t(".privacy.hide_work_from_search_engines") %>
       </li>
       <li>
-        <%= f.check_box :disable_share_links %>
+        <%= f.check_box :disable_share_links, disabled: logged_in_as_admin? %>
         <%= f.label :disable_share_links, t(".privacy.hide_share_buttons") %>
       </li>
       <li>
-        <%= f.check_box :allow_cocreator %>
+        <%= f.check_box :allow_cocreator, disabled: logged_in_as_admin? %>
         <%= f.label :allow_cocreator, t(".privacy.allow_co_creator_invite") %>
       </li>
     </ul>
@@ -50,23 +50,23 @@
     <h4 class="heading"><%= t(".display.heading") %> <%= link_to_help "display-preferences" %></h4>
     <ul>
       <li>
-        <%= f.check_box :adult %>
+        <%= f.check_box :adult, disabled: logged_in_as_admin? %>
         <%= f.label :adult, t(".display.show_adult_content") %>
       </li>
       <li>
-        <%= f.check_box :view_full_works %>
+        <%= f.check_box :view_full_works, disabled: logged_in_as_admin? %>
         <%= f.label :view_full_works, t(".display.show_whole_work_default") %>
       </li>
       <li>
-        <%= f.check_box :hide_warnings %>
+        <%= f.check_box :hide_warnings, disabled: logged_in_as_admin? %>
         <%= f.label :hide_warnings, t(".display.hide_warnings") %>
       </li>
       <li>
-        <%= f.check_box :hide_freeform %>
+        <%= f.check_box :hide_freeform, disabled: logged_in_as_admin? %>
         <%= f.label :hide_freeform, t(".display.hide_additional_tags") %>
       </li>
       <li>
-        <%= f.check_box :disable_work_skins %>
+        <%= f.check_box :disable_work_skins, disabled: logged_in_as_admin? %>
         <%= f.label :disable_work_skins, t(".display.hide_work_skins") %> <%= link_to_help "skins-basics" %>
       </li>
     </ul>
@@ -76,17 +76,17 @@
       <dt><%= f.label :skin_id, t(".your_site_skin") %> <%= link_to_help "skins-basics" %></dt>
       <dd>
         <span class="actions"><%= link_to t(".public_site_skins"), skins_path %></span>
-        <%= f.select :skin_id, (@available_skins.collect { |s| [s.title, s.id] }) %>
+        <%= f.select :skin_id, (@available_skins.collect { |s| [s.title, s.id] }), {}, disabled: logged_in_as_admin? %>
       </dd>
       <dt><%= f.label :time_zone, t(".your_time_zone") %></dt>
-      <dd><%= f.time_zone_select :time_zone, nil, default: Time.zone.name %></dd>
+      <dd><%= f.time_zone_select(:time_zone, nil, { default: Time.zone.name }, disabled: logged_in_as_admin?) %></dd>
       <% if $rollout.active?(:set_locale_preference, @user) %>
         <dt><%= f.label :preferred_locale, t(".your_locale") %> <%= link_to_help "locale-preferences" %></dt>
         <dd><%= f.select :preferred_locale, locale_options_for_select(@available_locales, "id"),
-                  default: @preference.preferred_locale %></dd>
+            { default: @preference.preferred_locale }, disabled: logged_in_as_admin? %></dd>
       <% end %>
       <dt><%= f.label :work_title_format, t(".browser_page_title_format") %> <%= link_to_help "work_title_format" %></dt>
-      <dd><%= f.text_field :work_title_format %></dd>
+      <dd><%= f.text_field :work_title_format, disabled: logged_in_as_admin? %></dd>
     </dl>
   </fieldset>
   <fieldset>
@@ -94,23 +94,23 @@
     <h4 class="heading"><%= t(".comments.heading") %> <%= link_to_help "comment-preferences" %></h4>
     <ul>
       <li>
-        <%= f.check_box :comment_emails_off %>
+        <%= f.check_box :comment_emails_off, disabled: logged_in_as_admin? %>
         <%= f.label :comment_emails_off, t(".comments.turn_off_emails") %>
       </li>
       <li>
-        <%= f.check_box :comment_inbox_off %>
+        <%= f.check_box :comment_inbox_off, disabled: logged_in_as_admin? %>
         <%= f.label :comment_inbox_off, t(".comments.turn_off_inbox") %>
       </li>
       <li>
-        <%= f.check_box :comment_copy_to_self_off %>
+        <%= f.check_box :comment_copy_to_self_off, disabled: logged_in_as_admin? %>
         <%= f.label :comment_copy_to_self_off, t(".comments.turn_off_copies_own_comments") %>
       </li>
       <li>
-        <%= f.check_box :kudos_emails_off %>
+        <%= f.check_box :kudos_emails_off, disabled: logged_in_as_admin? %>
         <%= f.label :kudos_emails_off, t(".comments.turn_off_kudos_emails") %>
       </li>
       <li>
-        <%= f.check_box :guest_replies_off %>
+        <%= f.check_box :guest_replies_off, disabled: logged_in_as_admin? %>
         <%= f.label :guest_replies_off, t(".comments.guest_replies_off") %>
       </li>
     </ul>
@@ -120,23 +120,23 @@
     <h4 class="heading"><%= t(".collections_challenges_gifts.heading") %> <%= link_to_help "collection-preferences" %></h4>
     <ul>
       <li>
-        <%= f.check_box :allow_collection_invitation %>
+        <%= f.check_box :allow_collection_invitation, disabled: logged_in_as_admin? %>
         <%= f.label :allow_collection_invitation, t(".collections_challenges_gifts.allow_collection_invitation") %>
       </li>
       <li>
-        <%= f.check_box :allow_gifts %>
+        <%= f.check_box :allow_gifts, disabled: logged_in_as_admin? %>
         <%= f.label :allow_gifts, t(".collections_challenges_gifts.allow_gifts") %>
       </li>
       <li>
-        <%= f.check_box :collection_emails_off %>
+        <%= f.check_box :collection_emails_off, disabled: logged_in_as_admin? %>
         <%= f.label :collection_emails_off, t(".collections_challenges_gifts.turn_off_collection_emails") %>
       </li>
       <li>
-        <%= f.check_box :collection_inbox_off %>
+        <%= f.check_box :collection_inbox_off, disabled: logged_in_as_admin? %>
         <%= f.label :collection_inbox_off, t(".collections_challenges_gifts.turn_off_collection_inbox") %>
       </li>
       <li>
-        <%= f.check_box :recipient_emails_off %>
+        <%= f.check_box :recipient_emails_off, disabled: logged_in_as_admin? %>
         <%= f.label :recipient_emails_off, t(".collections_challenges_gifts.turn_off_gift_emails") %>
       </li>
     </ul>
@@ -146,19 +146,31 @@
     <h4 class="heading"><%= t(".misc.heading") %> <%= link_to_help "misc-preferences" %></h4>
     <ul>
       <li>
-        <%= f.check_box :history_enabled %>
+        <%= f.check_box :history_enabled, disabled: logged_in_as_admin? %>
         <%= f.label :history_enabled, t(".misc.turn_on_history") %>
       </li>
       <li>
-        <%= f.check_box :first_login %>
+        <%= f.check_box :first_login, disabled: logged_in_as_admin? %>
         <%= f.label :first_login, t(".misc.turn_on_new_user_help") %>
       </li>
       <li>
-        <%= f.check_box :banner_seen %>
+        <%= f.check_box :banner_seen, disabled: logged_in_as_admin? %>
         <%= f.label :banner_seen, t(".misc.turn_off_banner_every_page") %>
       </li>
     </ul>
   </fieldset>
-  <%= submit_fieldset(f) %>
+
+  <% if policy(@preference).update? %>
+    <fieldset>
+      <dt><%= f.label :ticket_number, class: "required" %></dt>
+      <dd>
+        <%= f.text_field :ticket_number, class: "required" %>
+      </dd>
+    </fieldset>
+  <% end %>
+
+  <% if !logged_in_as_admin? or policy(@preference).update? %>
+    <%= submit_fieldset(f) %>
+  <% end %>
 <% end %>
 <!--/content-->
