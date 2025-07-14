@@ -11,6 +11,10 @@ Feature: Parsing HTML
     This is paragraph 1.
 
     This is paragraph 2.
+
+
+
+    This is paragraph 3.
     """
     And I press "Preview"
   Then I should see "Preview"
@@ -19,6 +23,8 @@ Feature: Parsing HTML
     """
     <p>This is paragraph 1.</p>
     <p>This is paragraph 2.</p>
+    <p> </p>
+    <p>This is paragraph 3.</p>
     """
   When I press "Post"
     And I follow "Edit"
@@ -28,6 +34,10 @@ Feature: Parsing HTML
     <p>This is paragraph 1.</p>
     
     <p>This is paragraph 2.</p>
+
+    <p> </p>
+
+    <p>This is paragraph 3.</p>
     """
   When I press "Post"
     And I follow "Edit"
@@ -36,6 +46,10 @@ Feature: Parsing HTML
     <p>This is paragraph 1.</p>
     
     <p>This is paragraph 2.</p>
+
+    <p> </p>
+
+    <p>This is paragraph 3.</p>
     """
 
   Scenario: HTML Parser should kick in
