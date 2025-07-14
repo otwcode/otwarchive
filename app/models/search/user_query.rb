@@ -7,6 +7,10 @@ class UserQuery < Query
     UserIndexer.index_name
   end
 
+  def document_type
+    UserIndexer.document_type
+  end
+
   def filters
     @filters ||= [
       id_filter,
