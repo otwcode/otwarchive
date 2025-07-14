@@ -179,8 +179,8 @@ Scenario: Can also browse work indexed by language
     When I browse works in language "Persian"
       Then I should see "0 Works in Persian"
 
-Scenario: Work blurb includes correct data-updated-at attribute
+Scenario: Work blurb includes an HTML comment containing the unix epoch of the updated time
   Given it is currently 2025-04-12 17:00 UTC
     And the work "Test"
   When I go to the works page
-  Then I should see the data-updated-at attribute to be around 1744477200
+  Then I should see an HTML comment containing a number around 1744477200 within "li.work.blurb"

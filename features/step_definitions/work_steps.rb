@@ -814,7 +814,10 @@ Then "I should not see {string} within the work blurb of {string}" do |content, 
   step %{I should not see "#{content}" within "li#work_#{work.id}"}
 end
 
-Then "I should see the data-updated-at attribute to be around {int}" do |expected_updated_at|
-  data_updated_at = page.find("li.work.blurb")["data-updated-at"].to_i
-  expect(data_updated_at).to be_within(5).of(expected_updated_at)
+Then "I should see an HTML comment containing a number around {int} within {string}" do |expected_number, selector|
+  html = page.find(selector).native.inner_html
+  comment_match = html.match(/.*<!--[^\d]*(\d+)[^\d]*-->.*/)
+  expect(comment_match).not_to be_nil
+  number = comment_match[1].to_i
+  expect(number).to be_within(5).of(expected_number)
 end
