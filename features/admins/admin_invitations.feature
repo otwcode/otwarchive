@@ -263,6 +263,15 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "An invitation was sent to fred@bedrock.com"
       And 1 email should be delivered
 
+  Scenario: An admin can't create an invite with invalid email
+    Given I am logged in as an admin
+      And all emails have been delivered
+    When I follow "Invite New Users"
+      And I fill in "invitation[invitee_email]" with "abcdefgh"
+      And I press "Invite user"
+    Then I should see "Invitee email should look like an email address. Please use a different address or leave blank."
+      And 0 email should be delivered
+
   Scenario: An admin can't create an invite without an email address.
     Given I am logged in as an admin
       And all emails have been delivered
