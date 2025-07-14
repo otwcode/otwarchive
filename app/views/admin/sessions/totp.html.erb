@@ -1,0 +1,17 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".page_heading") %></h2>
+<!--/descriptions-->
+
+<!--main content-->
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), method: :post) do |form| %>
+  <fieldset>
+  <dl>
+    <dt><%= label_tag "admin[otp_attempt]", t(".two_factor_authentication_code") %></dt>
+    <dd>
+      <%= form.text_field :otp_attempt, "aria-describedby": "otp-field-description" %>
+    </dd>
+  </dl>
+  <p class="submit actions"><%= submit_tag t("admin.sessions.new.submit") %></p>
+  </fieldset>
+<% end %>
+<!--/content-->
