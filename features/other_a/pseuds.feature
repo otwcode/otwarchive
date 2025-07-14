@@ -312,3 +312,19 @@ Scenario: Bookmarks reflect pseud changes immediately
     And I go to myself's bookmarks page
   Then I should see "Bookmarked by after (myself)"
     And I should not see "Bookmarked by before (myself)"
+
+Scenario: Chapter byline reflects pseud changes immediately
+
+  Given I am logged in as "myself"
+    And "myself" creates the pseud "before"
+    And I post the work "Title" using the pseud "before"
+    And I add the co-author "pikachu" to the work "Title"
+    And I post a chapter for the work "Title" as "before"
+  When I view the work "Title"
+    And I view the 2nd chapter
+  Then I should see "Chapter by before (myself)"
+  When it is currently 1 second from now
+    And "myself" changes the pseud "before" to "after"
+    And I view the work "Title"
+    And I view the 2nd chapter
+  Then I should see "Chapter by after (myself)"
