@@ -190,8 +190,8 @@ class Series < ApplicationRecord
   end
 
   # returns list of fandoms on this series
-  def allfandoms
-    works.collect(&:fandoms).flatten.compact.uniq.sort
+  def fandoms
+    tag_groups["Fandom"].sort
   end
 
   def author_tags
@@ -199,7 +199,10 @@ class Series < ApplicationRecord
   end
 
   def tag_groups
-    self.work_tags.group_by { |t| t.type.to_s }
+    tags = self.work_tags
+    tags = tags.where(works: { restricted: false }) unless User.current_user
+    tags = tags.where(works: { hidden_by_admin: false }) unless User.current_user.is_a?(Admin)
+    tags.group_by { |t| t.type.to_s }
   end
 
   # Grabs the earliest published_at date of the visible works in the series
