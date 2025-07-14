@@ -536,6 +536,24 @@ namespace :After do
     end
   end
 
+  desc "Convert user kudos from users with the archivist role to guest kudos"
+  task(convert_archivist_kudos: :environment) do
+    archivist_users = Role.find_by(name: "archivist")&.users
+    if archivist_users.blank?
+      puts "No archivist users found"
+    else
+      archivist_users.each do |user|
+        kudos = user.kudos
+        next if kudos.blank?
+
+        puts "Updating #{kudos.size} kudos from #{user.login}"
+        user.remove_user_from_kudos
+      end
+
+      puts "Finished converting kudos from archivist users to guest kudos"
+    end
+  end
+
   desc "Create TagSetAssociations for non-canonical tags belonging to canonical fandoms in TagSets"
   task(create_non_canonical_tagset_associations: :environment) do
     # We want to get all set taggings where the tag is not canonical, but has a parent fandom that _is_ canonical.
