@@ -1,6 +1,6 @@
 <% # expects "work" %>
 <li id="work_<%= work.id %>" class="<% if is_author_of?(work) %>own <% end %><% if work.unrevealed? %>mystery <% end %>work <%= css_classes_for_creation_blurb(work) %>" role="article">
-  <!-- updated_at=<%= work.updated_at.to_i.to_s %> --> 
+  <!-- updated_at=<%= work.updated_at.to_i.to_s %> -->
   <%= render "works/work_module", work: work %>
   <% if is_author_of?(work) %>
     <h6 class="landmark heading"><%= ts("Author Actions") %></h6>
