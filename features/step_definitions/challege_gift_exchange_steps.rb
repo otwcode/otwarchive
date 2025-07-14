@@ -138,6 +138,12 @@ When /^I sign up for "([^\"]*)" with combination A$/ do |title|
   click_button "Submit"
 end
 
+When "I sign up for {string} with combination A and my pseud {string}" do |title, pseud_name|
+  step %{I set up a signup for "#{title}" with combination A}
+  select pseud_name, from: "challenge_signup[pseud_id]"
+  click_button "Submit"
+end
+
 When /^I attempt to sign up for "([^\"]*)" with a pseud that is not mine$/ do |title|
   step %{the user "gooduser" exists and is activated}
   step %{I am logged in as "baduser"}
@@ -226,6 +232,17 @@ When /^I start to sign up for "([^\"]*)" tagless gift exchange$/ do |title|
   step %{I should see "Sign-up was successfully created"}
 end
 
+Then "I should see participant number {int} with byline {string}" do |num, byline|
+  within(:xpath, ".//dt[@class=\"participant\"][#{num}]") { expect(page).to have_content(byline) }
+end
+
+Then "I should see all the participants who have signed up" do
+  step %{I should see participant number 1 with byline "myname1_pseud (myname1)"}
+  step %{I should see participant number 2 with byline "myname2"}
+  step %{I should see participant number 3 with byline "myname3"}
+  step %{I should see participant number 4 with byline "myname4"}
+end
+
 ## Matching
 
 Given /^the gift exchange "([^\"]*)" is ready for matching$/ do |title|
@@ -266,13 +283,14 @@ end
 When /^I assign a pinch recipient$/ do
   name = page.all("td").select {|el| el['id'] && el['id'].match(/offer_signup_for/)}[0].text
   pseud = Pseud.find_by(name: name)
-  request_pseud = ChallengeSignup.where(pseud_id: pseud.id).first.offer_potential_matches.first.request_signup.pseud.name
+  request_pseud = ChallengeSignup.where(pseud_id: pseud.id).first.offer_potential_matches.first.request_signup.pseud.byline
   step %{I fill in the 1st field with id matching "request_signup_pseud" with "#{request_pseud}"}
 end
 
 Given /^everyone has signed up for the gift exchange "([^\"]*)"$/ do |challengename|
   step %{I am logged in as "myname1"}
-  step %{I sign up for "#{challengename}" with combination A}
+  pseud = User.find_by(login: "myname1").pseuds.find_or_create_by(name: "myname1_pseud")
+  step %{I sign up for "#{challengename}" with combination A and my pseud "#{pseud.name}"}
   step %{I am logged in as "myname2"}
   step %{I sign up for "#{challengename}" with combination B}
   step %{I am logged in as "myname3"}
