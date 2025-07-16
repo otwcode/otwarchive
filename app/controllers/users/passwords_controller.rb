@@ -7,9 +7,10 @@ class Users::PasswordsController < Devise::PasswordsController
   layout "session"
 
   def create
-    user = User.find_for_authentication(resource_params.permit(:login))
-    if user.nil? || user.new_record?
-      flash[:error] = t(".user_not_found")
+    user = User.find_for_authentication(resource_params.permit(:email))
+
+    if params[:user][:email].nil? || user.nil? || user.new_record?
+      flash[:error] = t(".user_not_found") # TODO replace with false success message
       redirect_to new_user_password_path and return
     end
 

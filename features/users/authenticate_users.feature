@@ -5,8 +5,8 @@ Feature: User Authentication
   Scenario: Forgot password
     Given I have no users
       And the following activated user exists
-      | login    | password |
-      | sam      | secret   |
+      | email       | login | password |
+      | sam@otw.org | sam   | secret   |
       And all emails have been delivered
     When I am on the home page
       And I fill in "Username or email:" with "sam"
@@ -15,8 +15,8 @@ Feature: User Authentication
     Then I should see "The password or username you entered doesn't match our records"
       And I should see "Forgot your password or username?"
     When I follow "Reset password"
-    Then I should see "Please tell us the username or email address you used when you signed up for your Archive account"
-    When I fill in "Email address or username" with "sam"
+    Then I should see "Please tell us the email address you used when you signed up for your Archive account"
+    When I fill in "Email address" with "sam@otw.org"
       And I press "Reset Password"
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
@@ -86,6 +86,20 @@ Feature: User Authentication
       And I press "Log In"
     Then I should not see "Hi, sam"
 
+  Scenario: Users should not be able to request password resets with their username
+    Given I have no users
+      And the following activated user exists
+      | email       | login | password |
+      | sam@otw.org | sam   | secret   |
+      And all emails have been delivered
+    When I request a password reset for "sam"
+    Then I should see "Please tell us the email address you used when you signed up for your Archive account"
+    When I fill in "Email address" with "sam"
+      And I press "Reset Password"
+    Then I should see "We couldn't find an account with that email address. Please try again."
+      And I should not see "Check your email for instructions on how to reset your password."
+      And 0 email should be delivered
+
   Scenario: Translated reset password email and password change email
     Given a locale with translated emails
       And the following activated users exist
@@ -136,10 +150,10 @@ Feature: User Authentication
   Scenario: Forgot password, with expired password token
     Given I have no users
       And the following activated user exists
-        | login | password |
-        | sam   | password |
+        | login | email           | password |
+        | sam   | sam@example.com | password |
       And all emails have been delivered
-    When I request a password reset for "sam"
+    When I request a password reset for "sam@example.com"
     Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
     When it is currently 2 weeks from now
@@ -160,20 +174,20 @@ Feature: User Authentication
   Scenario: Forgot password, with enough attempts to trigger password reset cooldown
     Given I have no users
       And the following activated user exists
-        | login | password |
-        | sam   | password |
+        | login | email           | password |
+        | sam   | sam@example.com | password |
       And all emails have been delivered
-    When I request a password reset for "sam"
-      And I request a password reset for "sam"
-      And I request a password reset for "sam"
+    When I request a password reset for "sam@example.com"
+      And I request a password reset for "sam@example.com"
+      And I request a password reset for "sam@example.com"
     Then I should see "Check your email for instructions on how to reset your password. You may reset your password 0 more times."
       And 3 emails should be delivered
     When all emails have been delivered
-      And I request a password reset for "sam"
+      And I request a password reset for "sam@example.com"
     Then I should see "You cannot reset your password at this time. Please try again after"
       And 0 emails should be delivered
     When it is currently 12 hours from now
-      And I request a password reset for "sam"
+      And I request a password reset for "sam@example.com"
     Then I should see "Check your email for instructions on how to reset your password. You may reset your password 2 more times."
       And 1 email should be delivered
 
@@ -301,13 +315,7 @@ Feature: User Authentication
       And the user "target" <role>
     When I am on the home page
       And I follow "Forgot password?"
-      And I fill in "Email address or username" with "target"
-      And I press "Reset Password"
-    Then I should be on the home page
-      And I should see "Password resets are disabled for that user."
-      And 0 emails should be delivered
-    When I follow "Forgot password?"
-      And I fill in "Email address or username" with "user@example.com"
+      And I fill in "Email address" with "user@example.com"
       And I press "Reset Password"
     Then I should be on the home page
       And I should see "Password resets are disabled for that user."
