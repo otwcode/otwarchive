@@ -25,19 +25,18 @@ class PreferencesController < ApplicationController
 
     if logged_in_as_admin?
       authorize @preference
-      if @preference.update(permitted_attributes(@preference))
-        if @preference.ticket_url.present?
-          link = view_context.link_to("Ticket ##{@preference.ticket_number}", @preference.ticket_url)
-          summary = @preference.email_visible ? "Enable" : "Disable"
-          summary += " \"Show my email address to other people\" for #{link}"
-          AdminActivity.log_action(current_admin, @user, action: "edit preference", summary: summary)
-        end
 
-        flash[:notice] = ts('Your preferences were successfully updated.')
-        return redirect_to user_path(@user)
-      else
-        return render action: "index"
+      return render action: "index" unless @preference.update(permitted_attributes(@preference))
+      
+      if @preference.ticket_url.present?
+        link = view_context.link_to("Ticket ##{@preference.ticket_number}", @preference.ticket_url)
+        summary = @preference.email_visible ? "Enable" : "Disable"
+        summary += " \"Show my email address to other people\" for #{link}"
+        AdminActivity.log_action(current_admin, @user, action: "edit preference", summary: summary)
       end
+
+      flash[:notice] = ts('Your preferences were successfully updated.')
+      return redirect_to user_path(@user)
     end
 
     @user.preference.attributes = preference_params
