@@ -3,7 +3,7 @@
 <% if work.unrevealed? && !is_author_of?(work) %>
   <%= render "works/mystery_blurb", item: work %>
 <% else %>
-
+  <!-- updated_at=<%= work.updated_at.to_i.to_s %> -->
   <!--title, author, fandom-->
   <div class="header module">
 
