@@ -127,7 +127,7 @@ describe PreferencesController do
       end
     end
 
-    context 'as admin' do
+    context "as admin" do
       edit_roles = %w[superadmin policy_and_abuse]
 
       before {

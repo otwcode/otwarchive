@@ -35,7 +35,7 @@ class PreferencesController < ApplicationController
         AdminActivity.log_action(current_admin, @user, action: "edit preference", summary: summary)
       end
 
-      flash[:notice] = ts('Your preferences were successfully updated.')
+      flash[:notice] = t(".success")
       return redirect_to user_path(@user)
     end
 
@@ -47,10 +47,10 @@ class PreferencesController < ApplicationController
     end
 
     if @user.preference.save
-      flash[:notice] = ts('Your preferences were successfully updated.')
+      flash[:notice] = t(".success")
       redirect_to user_path(@user)
     else
-      flash[:error] = ts('Sorry, something went wrong. Please try that again.')
+      flash[:error] = t(".error")
       render action: :index
     end
   end
