@@ -245,6 +245,47 @@ describe CommentMailer do
     end
   end
 
+  shared_examples "a notification with a link to the chapter" do
+    it "has the chapter in the subject line" do
+      expect(subject.subject).to include("Chapter #{comment.original_ultimate_parent.position} of #{comment.ultimate_parent.commentable_name}")
+    end
+
+    describe "HTML email" do
+      it "has a link to the chapter" do
+        expect(subject.html_part).to have_xpath(
+          "//a[@href=\"#{work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent)}\"]",
+          text: "Chapter #{comment.original_ultimate_parent.position}"
+        )
+      end
+
+      it "has a link to view all comments on the chapter" do
+        url = work_chapter_url(comment.original_ultimate_parent.work,
+                               comment.original_ultimate_parent,
+                               show_comments: true,
+                               anchor: :comments)
+
+        expect(subject.html_part).to have_xpath(
+          "//a[@href=\"#{url}\"]",
+          text: "Read all comments on Chapter #{comment.original_ultimate_parent.position} of #{comment.ultimate_parent.commentable_name}"
+        )
+      end
+    end
+
+    describe "text email" do
+      it "has a reference to the chapter" do
+        expect(subject).to have_text_part_content("comment on Chapter #{comment.original_ultimate_parent.position} of #{comment.ultimate_parent.commentable_name} (#{work_url(comment.ultimate_parent)})")
+      end
+
+      it "has a link to view all comments on the chapter" do
+        url = work_chapter_url(comment.original_ultimate_parent.work,
+                               comment.original_ultimate_parent,
+                               show_comments: true,
+                               anchor: :comments)
+        expect(subject).to have_text_part_content("Read all comments on Chapter #{comment.original_ultimate_parent.position} of \"#{comment.ultimate_parent.commentable_name}\": #{url}")
+      end
+    end
+  end
+
   shared_examples "a notification email to someone who can't review comments" do
     describe "HTML email" do
       it "has a note about the comment not appearing until it is approved" do
@@ -369,6 +410,13 @@ describe CommentMailer do
         it_behaves_like "a comment subject to image safety mode settings"
       end
     end
+
+    context "when the comment is on a chaptered work" do
+      let(:work) { create(:work, expected_number_of_chapters: 2) }
+      let(:comment) { create(:comment, commentable: work.first_chapter) }
+
+      it_behaves_like "a notification with a link to the chapter"
+    end
   end
 
   describe "#edited_comment_notification" do
@@ -443,6 +491,13 @@ describe CommentMailer do
         it_behaves_like "a notification email with the commenter's pseud and username"
         it_behaves_like "a comment subject to image safety mode settings"
       end
+    end
+
+    context "when the comment is on a chaptered work" do
+      let(:work) { create(:work, expected_number_of_chapters: 2) }
+      let(:comment) { create(:comment, commentable: work.first_chapter) }
+
+      it_behaves_like "a notification with a link to the chapter"
     end
   end
 
@@ -543,6 +598,13 @@ describe CommentMailer do
         end
       end
     end
+
+    context "when the comment is on a chaptered work" do
+      let(:work) { create(:work, expected_number_of_chapters: 2) }
+      let(:parent_comment) { create(:comment, commentable: work.first_chapter) }
+
+      it_behaves_like "a notification with a link to the chapter"
+    end
   end
 
   describe "#edited_comment_reply_notification" do
@@ -616,6 +678,13 @@ describe CommentMailer do
 
       it_behaves_like "an unsent email"
     end
+
+    context "when the comment is on a chaptered work" do
+      let(:work) { create(:work, expected_number_of_chapters: 2) }
+      let(:parent_comment) { create(:comment, commentable: work.first_chapter) }
+
+      it_behaves_like "a notification with a link to the chapter"
+    end
   end
 
   describe "#comment_sent_notification" do
@@ -650,6 +719,13 @@ describe CommentMailer do
 
       it_behaves_like "a notification email with a link to the comment"
       it_behaves_like "a comment subject to image safety mode settings"
+    end
+
+    context "when the comment is on a chaptered work" do
+      let(:work) { create(:work, expected_number_of_chapters: 2) }
+      let(:comment) { create(:comment, commentable: work.first_chapter) }
+
+      it_behaves_like "a notification with a link to the chapter"
     end
   end
 
@@ -706,6 +782,13 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username" # for parent comment
       it_behaves_like "a comment subject to image safety mode settings"
+    end
+
+    context "when the comment is on a chaptered work" do
+      let(:work) { create(:work, expected_number_of_chapters: 2) }
+      let(:parent_comment) { create(:comment, commentable: work.first_chapter) }
+
+      it_behaves_like "a notification with a link to the chapter"
     end
   end
 end

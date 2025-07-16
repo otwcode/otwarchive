@@ -9,7 +9,7 @@ class CommentMailer < ApplicationMailer
     I18n.with_locale(locale) do
       mail(
         to: email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on #{commentable_title(@comment)}"
       )
     end
   end
@@ -24,7 +24,7 @@ class CommentMailer < ApplicationMailer
     I18n.with_locale(locale) do
       mail(
         to: email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on #{commentable_title(@comment)}"
       )
     end
   end
@@ -39,7 +39,7 @@ class CommentMailer < ApplicationMailer
     @comment = comment
     mail(
       to: @your_comment.comment_owner_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply to your comment on #{commentable_title(@comment)}"
     )
   end
 
@@ -54,7 +54,7 @@ class CommentMailer < ApplicationMailer
     @comment = edited_comment
     mail(
       to: @your_comment.comment_owner_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited reply to your comment on #{commentable_title(@comment)}"
     )
   end
 
@@ -64,7 +64,7 @@ class CommentMailer < ApplicationMailer
     @noreply = true # don't give reply link to your own comment
     mail(
       to: @comment.comment_owner_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment you left on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment you left on #{commentable_title(@comment)}"
     )
   end
 
@@ -75,7 +75,19 @@ class CommentMailer < ApplicationMailer
     @noreply = true
     mail(
       to: @comment.comment_owner_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
+      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on #{commentable_title(@comment)}"
     )
+  end
+  
+  private
+
+  def commentable_title(comment)
+    if comment.ultimate_parent.is_a?(Tag)
+      "the tag #{comment.ultimate_parent.commentable_name.html_safe}"
+    elsif comment.original_ultimate_parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
+      "Chapter #{comment.original_ultimate_parent.position} of #{@comment.ultimate_parent.commentable_name.html_safe}"
+    else
+      comment.ultimate_parent.commentable_name.html_safe
+    end
   end
 end
