@@ -169,8 +169,8 @@ en:
       collection_page_title: "%{collection_title} - People"
   preferences:
     update:
-      error: "Sorry, something went wrong. Please try that again."
-      success: "Your preferences were successfully updated."
+      error: Sorry, something went wrong. Please try that again.
+      success: Your preferences were successfully updated.
   pseuds:
     create:
       already_have_pseud_with_name: You already have a pseud with that name.
