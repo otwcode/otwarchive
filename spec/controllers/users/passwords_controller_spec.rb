@@ -19,12 +19,12 @@ describe Users::PasswordsController do
           ActionMailer::Base.deliveries.count
         }.by(1)
 
-        it_redirects_to_with_notice(new_user_session_path, "Check your email for instructions on how to reset your password.")
+        it_redirects_to_with_notice(new_user_session_path, "If your email is in our records, you will receive instructions to reset your password there soon. You may only request a password reset a limited number of times per day.")
       end
     end
 
     context "when resetting password with a correct username" do
-      it "redirects with an error" do
+      it "raises an error" do
         expect do
           post :create, params: { user: { login: user.login } }
         end.to raise_error ActionController::UnpermittedParameters
@@ -39,7 +39,7 @@ describe Users::PasswordsController do
           ActionMailer::Base.deliveries.count
         }.by(0)
 
-        it_redirects_to_with_notice(new_user_session_path, "Check your email for instructions on how to reset your password.")
+        it_redirects_to_with_notice(new_user_session_path, "If your email is in our records, you will receive instructions to reset your password there soon. You may only request a password reset a limited number of times per day.")
       end
     end
   end

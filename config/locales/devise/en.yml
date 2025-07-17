@@ -40,7 +40,7 @@ en:
       success: Successfully authenticated from %{kind} account.
     passwords:
       no_token: You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided.
-      send_instructions: Check your email for instructions on how to reset your password.
+      send_instructions: If your email is in our records, you will receive instructions to reset your password there soon. You may only request a password reset a limited number of times per day.
       send_paranoid_instructions: If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.
       updated: Your password has been changed successfully. You are now signed in.
       updated_not_active: Your password has been changed successfully.
