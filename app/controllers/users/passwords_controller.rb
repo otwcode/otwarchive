@@ -28,6 +28,13 @@ class Users::PasswordsController < Devise::PasswordsController
 
   protected
 
+  def successfully_sent?(resource)
+    return super if Devise.paranoid
+    return unless resource.errors.empty?
+
+    flash[:notice] = t("users.passwords.create.send_instructions")
+  end
+
   def after_resetting_password_path_for(resource)
     resource.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_RESET)
     super
