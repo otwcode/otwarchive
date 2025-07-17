@@ -93,11 +93,18 @@ Feature: User Authentication
       | sam@otw.org | sam   | secret   |
       And all emails have been delivered
     When I request a password reset for "sam"
-    Then I should see "Please tell us the email address you used when you signed up for your Archive account"
-    When I fill in "Email address" with "sam"
-      And I press "Reset Password"
-    Then I should see "We couldn't find an account with that email address. Please try again."
+    Then I should see "You must enter your email address. Usernames are not allowed."
       And I should not see "Check your email for instructions on how to reset your password."
+      And 0 email should be delivered
+  
+  Scenario: Attackers should see a fake success message when requesting password resets with a non-existant email
+    Given I have no users
+      And the following activated user exists
+      | email       | login | password |
+      | sam@otw.org | sam   | secret   |
+      And all emails have been delivered
+    When I request a password reset for "1@otw.org"
+    Then I should see "Check your email for instructions on how to reset your password."
       And 0 email should be delivered
 
   Scenario: Translated reset password email and password change email

@@ -13,7 +13,8 @@ class User < ApplicationRecord
          :trackable,
          :validatable,
          :lockable,
-         :recoverable
+         :recoverable,
+         :reset_password_keys => [:email]
 
   # Must come after Devise modules in order to alias devise_valid_password?
   # properly

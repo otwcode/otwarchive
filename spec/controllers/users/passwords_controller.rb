@@ -17,7 +17,7 @@ describe Users::PasswordsController do
           post :create, params: { user: { email: user.email } }
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
-        it_redirects_to_with_notice(new_user_session_path, "Check your email for instructions on how to reset your password. You may reset your password 2 more times. After that, you will need to wait 12 hours before requesting another reset.")
+        it_redirects_to_with_notice(new_user_session_path, "Check your email for instructions on how to reset your password.")
       end
     end
 
@@ -30,12 +30,12 @@ describe Users::PasswordsController do
     end
 
     context "when resetting password with an incorrect email address" do
-      it "redirects with an error" do # TODO: change this to a fake success message
+      it "does not send reset instructions and redirects with a fake success message" do
         expect do
           post :create, params: { user: { email: "incorrect-email@example.com" } }
         end.to change { ActionMailer::Base.deliveries.count }.by(0)
 
-        it_redirects_to_with_error(new_user_password_path, "We couldn't find an account with that email address. Please try again.")
+        it_redirects_to_with_notice(new_user_session_path, "Check your email for instructions on how to reset your password.")
       end
     end
   end

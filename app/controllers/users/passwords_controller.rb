@@ -9,9 +9,14 @@ class Users::PasswordsController < Devise::PasswordsController
   def create
     user = User.find_for_authentication(resource_params.permit(:email))
 
-    if params[:user][:email].nil? || user.nil? || user.new_record?
-      flash[:error] = t(".user_not_found") # TODO replace with false success message
+    unless params[:user][:email].to_s.match?(/\A[^@]+@[^@]+\z/)
+      flash[:error] = t(".invalid_email")
       redirect_to new_user_password_path and return
+    end
+
+    if user.nil? || user.new_record?
+      flash[:notice] = t(".send_instructions")
+      redirect_to new_user_session_path and return
     end
 
     if user.prevent_password_resets?
@@ -33,20 +38,6 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   protected
-
-  # We need to include information about the user (the remaining reset attempts)
-  # in addition to the configured reset cooldown in the success  message.
-  # Otherwise, we would just override `devise_i18n_options` instead of this method.
-  def successfully_sent?(resource)
-    return super if Devise.paranoid
-    return unless resource.errors.empty?
-
-    flash[:notice] = t("users.passwords.create.send_instructions",
-                       send_times_remaining: t("users.passwords.create.send_times_remaining",
-                                               count: resource.password_resets_remaining),
-                       send_cooldown_period: t("users.passwords.create.send_cooldown_period",
-                                               count: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS))
-  end
 
   def after_resetting_password_path_for(resource)
     resource.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_RESET)
