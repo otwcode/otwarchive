@@ -187,15 +187,16 @@ Feature: User Authentication
     When I request a password reset for "sam@example.com"
       And I request a password reset for "sam@example.com"
       And I request a password reset for "sam@example.com"
-    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 0 more times."
+    Then I should see "Check your email for instructions on how to reset your password."
       And 3 emails should be delivered
     When all emails have been delivered
       And I request a password reset for "sam@example.com"
+    # TODO: Change this to a fake success message?
     Then I should see "You cannot reset your password at this time. Please try again after"
       And 0 emails should be delivered
     When it is currently 12 hours from now
       And I request a password reset for "sam@example.com"
-    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 2 more times."
+    Then I should see "Check your email for instructions on how to reset your password."
       And 1 email should be delivered
 
   Scenario: Resetting password adds admin log item
