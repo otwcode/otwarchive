@@ -15,7 +15,9 @@ describe Users::PasswordsController do
       it "sends reset instructions and redirects with a success message" do
         expect do
           post :create, params: { user: { email: user.email } }
-        end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end.to change { 
+          ActionMailer::Base.deliveries.count
+        }.by(1)
 
         it_redirects_to_with_notice(new_user_session_path, "Check your email for instructions on how to reset your password.")
       end
@@ -33,7 +35,9 @@ describe Users::PasswordsController do
       it "does not send reset instructions and redirects with a fake success message" do
         expect do
           post :create, params: { user: { email: "incorrect-email@example.com" } }
-        end.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end.to change {
+          ActionMailer::Base.deliveries.count
+        }.by(0)
 
         it_redirects_to_with_notice(new_user_session_path, "Check your email for instructions on how to reset your password.")
       end
