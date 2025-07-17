@@ -82,10 +82,10 @@
       <dd><%= f.time_zone_select(:time_zone, nil, { default: Time.zone.name }, disabled: logged_in_as_admin?) %></dd>
       <% if $rollout.active?(:set_locale_preference, @user) %>
         <dt><%= f.label :preferred_locale, t(".your_locale") %> <%= link_to_help "locale-preferences" %></dt>
-        <dd>
-          <%= f.select :preferred_locale, locale_options_for_select(@available_locales, "id"),
-            { default: @preference.preferred_locale }, disabled: logged_in_as_admin? %>
-        </dd>
+        <dd><%= 
+          f.select :preferred_locale, locale_options_for_select(@available_locales, "id"),
+            { default: @preference.preferred_locale }, disabled: logged_in_as_admin?
+        %></dd>
       <% end %>
       <dt><%= f.label :work_title_format, t(".browser_page_title_format") %> <%= link_to_help "work_title_format" %></dt>
       <dd><%= f.text_field :work_title_format, disabled: logged_in_as_admin? %></dd>

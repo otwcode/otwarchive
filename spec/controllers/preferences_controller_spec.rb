@@ -130,7 +130,7 @@ describe PreferencesController do
     context "as admin" do
       edit_roles = %w[superadmin policy_and_abuse]
 
-      before {
+      before do
         fake_login_admin(admin)
 
         ticket = {
@@ -139,7 +139,7 @@ describe PreferencesController do
           "webUrl" => Faker::Internet.url
         }
         allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
-      }
+      end
 
       context "with no role" do
         let(:admin) { create(:admin, roles: []) }
