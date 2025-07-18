@@ -105,23 +105,19 @@ class Api::V2::BookmarksController < Api::V2::BaseController
         if found_result[:bookmark_status] == :found
           found_result[:bookmark_status] = :already_imported
         else
-          bookmarkable = ExternalWork.new(external_work_attributes)
-          if bookmarkable.save
+          ActiveRecord::Base.transaction do
+            bookmarkable = ExternalWork.new(external_work_attributes)
+            bookmarkable.save!
+
             bookmark = bookmarkable.bookmarks.build(bookmark_attributes)
-            if bookmark.save
-              @bookmarks << bookmark
-              @some_success = true
-              @some_errors = false
-              bookmark_status = :created
-              bookmark_url = bookmark_url(bookmark)
-              bookmark_messages << "Successfully created bookmark for \"#{bookmarkable.title}\"."
-            else
-              bookmark_status = :unprocessable_entity
-              bookmark_messages << bookmark.errors.full_messages
-            end
-          else
-            bookmark_status = :unprocessable_entity
-            bookmark_messages << bookmarkable.errors.full_messages
+            bookmark.save!
+
+            @bookmarks << bookmark
+            @some_success = true
+            @some_errors = false
+            bookmark_status = :created
+            bookmark_url = bookmark_url(bookmark)
+            bookmark_messages << "Successfully created bookmark for \"#{bookmarkable.title}\"."
           end
         end
       rescue StandardError => exception
