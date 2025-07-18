@@ -114,7 +114,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
               @some_errors = false
               bookmark_status = :created
               bookmark_url = bookmark_url(bookmark)
-              bookmark_messages << "Successfully created bookmark for \"" + bookmarkable.title + "\"."
+              bookmark_messages << "Successfully created bookmark for \"#{bookmarkable.title}\"."
             else
               bookmark_status = :unprocessable_entity
               bookmark_messages << bookmark.errors.full_messages
