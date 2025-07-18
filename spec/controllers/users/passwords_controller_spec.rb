@@ -19,7 +19,7 @@ describe Users::PasswordsController do
           ActionMailer::Base.deliveries.count
         }.by(1)
 
-        it_redirects_to_with_notice(new_user_session_path, "If your email is in our records, you will receive instructions to reset your password there soon. You may only request a password reset a limited number of times per day.")
+        it_redirects_to_with_notice(new_user_session_path, "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password.")
       end
     end
 
@@ -39,7 +39,7 @@ describe Users::PasswordsController do
           ActionMailer::Base.deliveries.count
         }.by(0)
 
-        it_redirects_to_with_notice(new_user_session_path, "If your email is in our records, you will receive instructions to reset your password there soon. You may only request a password reset a limited number of times per day.")
+        it_redirects_to_with_notice(new_user_session_path, "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password.")
       end
     end
   end

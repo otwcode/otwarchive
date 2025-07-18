@@ -6,6 +6,12 @@ class Users::PasswordsController < Devise::PasswordsController
   skip_before_action :store_location
   layout "session"
 
+  def new
+    @page_title = t(".reset_password")
+    
+    super
+  end
+
   def create
     user = User.find_for_authentication(resource_params.permit(:email))
 

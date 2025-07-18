@@ -230,8 +230,8 @@ en:
     contact_abuse: contact our Policy & Abuse team
     passwords:
       create:
-        invalid_email: You must enter your email address. Usernames are not allowed.
-        send_instructions: If your email is in our records, you will receive instructions to reset your password there soon. You may only request a password reset a limited number of times per day.
+        invalid_email: You must enter your email address.
+        send_instructions: If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password.
     reconfirm_email:
       access_denied:
         logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.
