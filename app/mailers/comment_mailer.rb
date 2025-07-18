@@ -82,12 +82,13 @@ class CommentMailer < ApplicationMailer
   private
 
   def commentable_title(comment)
+    name = comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<").html_safe
     if comment.ultimate_parent.is_a?(Tag)
-      "the tag #{comment.ultimate_parent.commentable_name.html_safe}"
+      t("mailer.general.creation.tag_name_html", name: name)
     elsif comment.original_ultimate_parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
-      "Chapter #{comment.original_ultimate_parent.position} of #{@comment.ultimate_parent.commentable_name.html_safe}"
+      t("mailer.general.creation.title_with_chapter_number", position: comment.original_ultimate_parent.position, title: name)
     else
-      comment.ultimate_parent.commentable_name.html_safe
+      name
     end
   end
 end

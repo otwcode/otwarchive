@@ -192,21 +192,28 @@ module MailerHelper
 
   def commentable_title_link(comment)
     if comment.ultimate_parent.is_a?(Tag)
-      "the tag #{style_link(comment.ultimate_parent.commentable_name.html_safe, tag_url(comment.ultimate_parent))}".html_safe
+      t("mailer.general.creation.tag_name_html", name: style_link(comment.ultimate_parent.commentable_name, tag_url(comment.ultimate_parent)))
     elsif comment.original_ultimate_parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
-      "#{style_bold(style_link("Chapter #{comment.original_ultimate_parent.position}", work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent)))} of #{style_creation_link(comment.ultimate_parent.commentable_name.html_safe, work_url(comment.original_ultimate_parent.work))}".html_safe
+      t("mailer.general.creation.title_with_linked_chapter_number_html",
+        chapter_position: style_link(t("mailer.general.creation.chapter_position", position: comment.original_ultimate_parent.position), work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent)),
+        title: style_creation_link(comment.ultimate_parent.commentable_name, work_url(comment.original_ultimate_parent.work)))
     else
-      style_creation_link(comment.ultimate_parent.commentable_name.html_safe, polymorphic_url(comment.ultimate_parent, only_path: false)).html_safe
+      style_creation_link(comment.ultimate_parent.commentable_name, polymorphic_url(comment.ultimate_parent, only_path: false))
     end
   end
 
   def commentable_title_link_text(comment)
+    name = comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<").html_safe
     if comment.ultimate_parent.is_a?(Tag)
-      "the tag #{comment.ultimate_parent.commentable_name.html_safe}"
+      t("mailer.general.creation.tag_name_html", name: name)
     elsif comment.original_ultimate_parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
-      "Chapter #{comment.original_ultimate_parent.position} of #{comment.ultimate_parent.commentable_name.html_safe} (#{work_url(comment.original_ultimate_parent.work)})"
+      t("mailer.general.creation.title_with_url",
+        title: t("mailer.general.creation.title_with_chapter_number", 
+                 position: comment.original_ultimate_parent.position, 
+                 title: name),
+        creation_url: work_url(comment.original_ultimate_parent.work))
     else
-      "#{comment.ultimate_parent.commentable_name.html_safe} (#{polymorphic_url(comment.ultimate_parent, only_path: false)})"
+      t("mailer.general.creation.title_with_url", title: name, creation_url: polymorphic_url(comment.ultimate_parent, only_path: false))
     end
   end
 
