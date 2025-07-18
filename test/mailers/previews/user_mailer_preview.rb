@@ -226,6 +226,13 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.archivist_added_to_collection_notification(user.id, work.id, collection.id)
   end
 
+  def invited_to_collection_notification
+    user = create(:user, :for_mailer_preview)
+    work = create(:work)
+    collection = create(:collection)
+    UserMailer.invited_to_collection_notification(user.id, work.id, collection.id)
+  end
+
   def admin_spam_work_notification
     work = create(:work)
     user = create(:user, :for_mailer_preview)

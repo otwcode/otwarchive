@@ -31,7 +31,7 @@ class UserMailer < ApplicationMailer
     @collection = Collection.find(collection_id)
     mail(
       to: @user.email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
        )
   end
 

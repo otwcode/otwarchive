@@ -127,7 +127,7 @@ Given /^I have posted an admin post$/ do
 end
 
 Given "the admin post {string}" do |title|
-  FactoryBot.create(:admin_post, title: title)
+  FactoryBot.create(:admin_post, title: title, comment_permissions: :enable_all)
 end
 
 Given "the fannish next of kin {string} for the user {string}" do |kin, user|

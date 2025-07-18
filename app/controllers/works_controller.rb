@@ -117,7 +117,7 @@ class WorksController < ApplicationController
       flash_search_warnings(@works)
 
       @facets = @works.facets
-      if @search.options[:excluded_tag_ids].present?
+      if @search.options[:excluded_tag_ids].present? && @facets
         tags = Tag.where(id: @search.options[:excluded_tag_ids])
         tags.each do |tag|
           @facets[tag.class.to_s.underscore] ||= []

@@ -492,6 +492,15 @@ en:
         other: We regret to inform you that your request for %{count} new invitations cannot be fulfilled at this time.
       reason: 'Your request was:'
       subject: "[%{app_name}] Additional invitation request declined"
+    invited_to_collection_notification:
+      approve:
+        collection_items_page: Collection Items page
+        html: To approve or reject this request, please visit your %{collection_items_page_link}.
+        text: 'To approve or reject this request, please visit your Collection Items page: %{collection_items_page_url}.'
+      subject: "[%{app_name}][%{collection_title}] Request to include work in a collection"
+      would_like_to_include:
+        html: The collection maintainers of %{collection_link} would like to include your work %{work_link} in their collection!
+        text: The collection maintainers of "%{collection_title}" (%{collection_url}) would like to include your work "%{work_title}" (%{work_url}) in their collection!
     potential_match_generation_notification:
       finished_generating:
         html: We have finished generating potential assignments for your gift exchange %{collection_link}.

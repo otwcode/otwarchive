@@ -118,6 +118,9 @@ describe Skin do
         ".color_scheme_light { color-scheme: light; }
         .color_scheme_only_dark { color-scheme: only dark; }",
 
+      "allows accent-color property" =>
+        "input[type='radio'] { accent-color: #900; }",
+
       "allows filter properties" => 
         ".filter_blur { filter: blur(5px); }
         .filter_brightness { filter: brightness(0.4); }
@@ -152,11 +155,11 @@ describe Skin do
       "allows order property with negative value" =>
         "div { order: -1 }",
 
-        "saves box shadows with multiple shadows" =>
-          "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }",
+      "saves box shadows with multiple shadows" =>
+        "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }",
 
-        "saves very long CSS" =>
-          "#main { background: url(http://example.com/#{'a' * 70_000}.png); }"
+      "saves very long CSS" =>
+        "#main { background: url(http://example.com/#{'a' * 70_000}.png); }"
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
