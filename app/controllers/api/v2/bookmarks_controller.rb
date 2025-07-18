@@ -120,6 +120,9 @@ class Api::V2::BookmarksController < Api::V2::BaseController
             bookmark_messages << "Successfully created bookmark for \"#{bookmarkable.title}\"."
           end
         end
+      rescue ActiveRecord::RecordInvalid => e
+        bookmark_status = :unprocessable_entity
+        bookmark_messages << e.record.errors.full_messages
       rescue StandardError => exception
         bookmark_status = :unprocessable_entity
         bookmark_messages << exception.message
