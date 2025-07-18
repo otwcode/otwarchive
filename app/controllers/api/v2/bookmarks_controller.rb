@@ -106,17 +106,22 @@ class Api::V2::BookmarksController < Api::V2::BaseController
           found_result[:bookmark_status] = :already_imported
         else
           bookmarkable = ExternalWork.new(external_work_attributes)
-          bookmark = bookmarkable.bookmarks.build(bookmark_attributes)
-          if bookmarkable.save && bookmark.save
-            @bookmarks << bookmark
-            @some_success = true
-            @some_errors = false
-            bookmark_status = :created
-            bookmark_url = bookmark_url(bookmark)
-            bookmark_messages << "Successfully created bookmark for \"" + bookmarkable.title + "\"."
+          if bookmarkable.save
+            bookmark = bookmarkable.bookmarks.build(bookmark_attributes)
+            if bookmark.save
+              @bookmarks << bookmark
+              @some_success = true
+              @some_errors = false
+              bookmark_status = :created
+              bookmark_url = bookmark_url(bookmark)
+              bookmark_messages << "Successfully created bookmark for \"" + bookmarkable.title + "\"."
+            else
+              bookmark_status = :unprocessable_entity
+              bookmark_messages << bookmark.errors.full_messages
+            end
           else
             bookmark_status = :unprocessable_entity
-            bookmark_messages << bookmarkable.errors.full_messages + bookmark.errors.full_messages
+            bookmark_messages << bookmarkable.errors.full_messages
           end
         end
       rescue StandardError => exception
@@ -136,7 +141,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
   end
 
   # Error handling
-  
+
   # Set messages based on success and error flags
   def response_message(messages)
     messages << if @some_success && @some_errors
@@ -216,7 +221,7 @@ class Api::V2::BookmarksController < Api::V2::BaseController
       messages: messages
     }
   end
-  
+
   def find_bookmark_response(bookmarkable:, bookmark_status:, bookmark_message:, bookmark_url:)
     bookmark_status = :not_found unless [:found, :not_found].include?(bookmark_status)
     {
