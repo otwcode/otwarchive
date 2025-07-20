@@ -89,7 +89,7 @@ module HtmlCleaner
 
     # Temporary hack to evade conversions by strip_html_breaks() for textarea:
     # Accidentally or not, for a long time sanitization code gets nbsp unescaped,
-    # and this replacement ensured that behavior
+    # and this replacement keeps that behavior
     unfrozen_value.gsub!("&nbsp;", "\u00A0")
     unfrozen_value
   end
