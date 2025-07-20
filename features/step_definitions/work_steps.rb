@@ -814,10 +814,10 @@ Then "I should not see {string} within the work blurb of {string}" do |content, 
   step %{I should not see "#{content}" within "li#work_#{work.id}"}
 end
 
-Then "I should see an HTML comment containing a number around {int} within {string}" do |expected_number, selector|
+Then "I should see an HTML comment containing the number {int} within {string}" do |expected_number, selector|
   html = page.find(selector).native.inner_html
   comment_match = html.match(/.*<!--[^\d]*(\d+)[^\d]*-->.*/)
   expect(comment_match).not_to be_nil
   number = comment_match[1].to_i
-  expect(number).to be_within(5).of(expected_number)
+  expect(number).to eq(expected_number)
 end
