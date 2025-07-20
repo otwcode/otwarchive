@@ -324,7 +324,7 @@ Feature: User Authentication
       And I follow "Forgot password?"
       And I fill in "Email address" with "user@example.com"
       And I press "Reset Password"
-    Then I should be on the login page
+    Then I should be on the new user password page
       And I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 0 emails should be delivered
 

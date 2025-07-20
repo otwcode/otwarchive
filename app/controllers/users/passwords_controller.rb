@@ -13,7 +13,7 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def create
-    user = User.find_for_authentication(resource_params.permit(:email))
+    user = User.find_or_initialize_with_errors([:email], resource_params, :not_found)
 
     unless params[:user][:email].to_s.match?(/\A[^@]+@[^@]+\z/)
       flash[:error] = t(".invalid_email")
@@ -23,13 +23,17 @@ class Users::PasswordsController < Devise::PasswordsController
     if user.nil? || user.new_record? || user.prevent_password_resets? || user.password_resets_limit_reached?
       # Fake success message
       flash[:notice] = t(".send_instructions")
-      redirect_to new_user_session_path and return
+      redirect_to new_user_password_path and return
     end
 
     user.update_password_resets_requested
     user.save
 
     super
+  end
+
+  def after_sending_reset_password_instructions_path_for(resource_name)
+    new_user_password_path
   end
 
   protected
