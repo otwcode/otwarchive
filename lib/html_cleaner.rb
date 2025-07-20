@@ -87,8 +87,6 @@ module HtmlCleaner
     # Plain text fields can't contain &amp; entities:
     unfrozen_value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
 
-    # Temporary hack to evade conversions by strip_html_breaks() for textarea
-    unfrozen_value.gsub!("&nbsp;", "\u00A0")
     unfrozen_value
   end
 
@@ -127,7 +125,7 @@ module HtmlCleaner
 
   def add_paragraphs_to_text(text)
     # Adding paragraphs in place of linebreaks
-    doc = Nokogiri::HTML5.fragment("<myroot>#{text}</myroot>")
+    doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
     myroot = doc.children.first
     ParagraphMaker.process(myroot)
     myroot.children.to_html
