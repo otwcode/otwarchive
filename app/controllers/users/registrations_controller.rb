@@ -16,6 +16,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def create
+    @page_title = "Account Created"
     @hide_dashboard = true
     build_resource(sign_up_params)
 
