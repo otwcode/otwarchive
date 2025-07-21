@@ -397,6 +397,7 @@ class Pseud < ApplicationRecord
     if saved_change_to_name?
       works.touch_all
       series.each(&:expire_byline_cache)
+      chapters.each(&:expire_byline_cache)
     end
   end
 
