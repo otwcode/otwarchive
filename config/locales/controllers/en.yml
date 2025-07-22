@@ -186,6 +186,9 @@ en:
     clear:
       error: There were problems deleting your history. Please try again later.
       success: Your history is now cleared.
+  registrations:
+    page_title: Create Account
+    account_created_page_title: Account Created
   related_works:
     index:
       page_title: "%{login} - Related Works"

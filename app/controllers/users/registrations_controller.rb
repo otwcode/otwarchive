@@ -3,7 +3,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_permitted_parameters
 
   def new
-    @page_title = "Create Account" # Displays "New Registration" otherwise
+    @page_subtitle = t("registrations.page_title") # Displays "New Registration" otherwise
     super do |resource|
       if params[:invitation_token]
         @invitation = Invitation.find_by(token: params[:invitation_token])
@@ -16,7 +16,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def create
-    @page_title = "Account Created"
+    @page_subtitle = t("registrations.account_created_page_title")
     @hide_dashboard = true
     build_resource(sign_up_params)
 
