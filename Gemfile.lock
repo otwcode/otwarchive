@@ -620,7 +620,7 @@ GEM
       climate_control
     test-unit (3.6.2)
       power_assert
-    thor (1.3.2)
+    thor (1.4.0)
     tilt (2.3.0)
     timecop (0.9.8)
     timeliness (0.4.5)
