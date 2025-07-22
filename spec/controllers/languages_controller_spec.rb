@@ -10,6 +10,13 @@ describe LanguagesController do
         get :index
         expect(response).to render_template("index")
       end
+
+      it "displays language names and codes" do
+        create(:language, name: "Deutsch", short: "de")
+        get :index
+        expect(response.body).to include("Deutsch")
+        expect(response.body).to include("(de)")
+      end
     end
     
     Admin::VALID_ROLES.each do |role|
