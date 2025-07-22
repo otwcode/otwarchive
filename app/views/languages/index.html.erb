@@ -26,7 +26,8 @@
       </dd>
     <% else %>
       <dt>
-        <%= link_to language.name, language, lang: language.short %> <abbr title="<%= t(".language_code_abbr_title") %>"><%= t(".language_code_format", code: language.short) %></abbr>
+        <%= link_to language.name, language, lang: language.short %>
+        <%= t(".language_code_format_html", code: content_tag(:abbr, language.short, title: t(".language_code_abbr_title"))) %>
       </dt>
       <dd>
         <%= link_to t(".works_count", count: works_count, formatted_count: number_with_delimiter(works_count)), language_works_path(language) %>
