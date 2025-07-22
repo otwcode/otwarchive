@@ -270,7 +270,7 @@ Feature: Admin Actions to Manage Invitations
       And I fill in "invitation[invitee_email]" with "abcdefgh"
       And I press "Invite user"
     Then I should see "Invitee email should look like an email address. Please use a different address or leave blank."
-      And 0 email should be delivered
+      And 0 emails should be delivered
 
   Scenario: An admin can't create an invite without an email address.
     Given I am logged in as an admin
@@ -278,7 +278,7 @@ Feature: Admin Actions to Manage Invitations
     When I follow "Invite New Users"
       And I press "Invite user"
     Then I should see "Please enter an email address"
-      And 0 email should be delivered
+      And 0 emails should be delivered
 
   Scenario: An admin can send an invitation to all existing users
     Given the following activated users exist
