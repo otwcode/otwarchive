@@ -1731,8 +1731,6 @@ en:
         update: Update Language
       support_available: Support available
     index:
-      language_code_abbr_title: language code
-      language_code_format: "(%{code})"
       language_code_format_html: "(%{code})"
       navigation:
         add: Add a Language
