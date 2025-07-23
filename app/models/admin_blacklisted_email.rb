@@ -1,10 +1,15 @@
 class AdminBlacklistedEmail < ApplicationRecord
   before_validation :canonicalize_email
+  after_create_commit :remove_invite_requests
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }, email_format: true
 
   def canonicalize_email
     self.email = AdminBlacklistedEmail.canonical_email(self.email) if self.email
+  end
+
+  def remove_invite_requests
+    InviteRequest.where(email: self.email).destroy_all
   end
 
   # Produces a canonical version of a given email reduced to its simplest form

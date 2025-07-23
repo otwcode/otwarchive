@@ -1,8 +1,9 @@
 class InviteRequest < ApplicationRecord
   validates :email, presence: true, email_format: true
   validates :email, uniqueness: { message: "is already part of our queue." }
-  before_validation :compare_with_users, on: :create
   before_validation :set_simplified_email, on: :create
+  before_validation :check_admin_banned_list, on: :create
+  before_validation :compare_with_users, on: :create
   validate :simplified_email_uniqueness, on: :create
 
   # Borrow the blacklist cleaner but just strip out all the periods for all domains
@@ -30,15 +31,24 @@ class InviteRequest < ApplicationRecord
     InviteRequest.where("id <= ?", id).count
   end
 
-  #Ensure that invite request is for a new user
-  def compare_with_users
-    if User.find_by(email: self.email)
-      errors.add(:email, "is already being used by an account holder.")
-      throw :abort
-    end
+  # Ensure that email is not banned
+  def check_admin_banned_list
+    return unless AdminBlacklistedEmail.exists?(email: self.email)
+
+    errors.add(:email, "has been blocked at the owner's request. That means it can't be used for invitations. 
+    Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions.")
+    throw :abort
   end
 
-  #Turn a request into an invite and then remove it from the queue
+  # Ensure that invite request is for a new user
+  def compare_with_users
+    return unless User.exists?(email: self.email)
+
+    errors.add(:email, "is already being used by an account holder.")
+    throw :abort
+  end
+
+  # Turn a request into an invite and then remove it from the queue
   def invite_and_remove(creator=nil)
     invitation = creator ? creator.invitations.build(invitee_email: self.email, from_queue: true) :
                                        Invitation.new(invitee_email: self.email, from_queue: true)
