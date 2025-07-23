@@ -77,10 +77,10 @@ Feature: Sign Up for a new account
 
   Scenario: The user should be able to create a new account with a valid email and password
     When I fill in the sign up form with valid data
-    Then I should see the page title "Create Account | Example Archive"
-      And all emails have been delivered
+    Then I should see the page title "Create Account"
+    When all emails have been delivered
       And I press "Create Account"
-    Then I should see the page title "Account Created | Example Archive"
-    Then I should see "Almost Done!"
+    Then I should see the page title "Account Created"
+      And I should see "Almost Done!"
       And I should get a new user activation email
       And a new user account should exist
