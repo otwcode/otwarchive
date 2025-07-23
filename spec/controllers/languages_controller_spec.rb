@@ -240,7 +240,6 @@ describe LanguagesController do
       end
     end
 
-
     context "when logged in as an admin with policy_and_abuse role and I attempt to edit a non-abuse field" do
       let(:admin) { create(:admin, roles: ["policy_and_abuse"]) }
       before do
