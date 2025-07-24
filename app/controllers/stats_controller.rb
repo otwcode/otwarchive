@@ -1,4 +1,5 @@
 class StatsController < ApplicationController
+  include StatsHelper
 
   before_action :users_only
   before_action :load_user
@@ -12,6 +13,8 @@ class StatsController < ApplicationController
 
   # gather statistics for the user on all their works
   def index
+    puts "********* YAY #{stat_items}"
+
     user_works = Work.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
     user_chapters = Chapter.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
     work_query = user_works
@@ -53,18 +56,19 @@ class StatsController < ApplicationController
 
     # group by fandom or flat view
     if params[:flat_view]
-      @works = {ts("All Fandoms") => works.uniq}
+      @works = { ts("All Fandoms") => stat_items.uniq }
     else
-      @works = works.group_by(&:fandom)
+      @works = stat_items.group_by(&:fandom)
     end
 
     # gather totals for all works
+    # # TODO: redo this for stat_items
     @totals = {}
     (sort_options - ["date"]).each do |value|
       # the inject is used to collect the sum in the "result" variable as we iterate over all the works
       @totals[value.split(".")[0].to_sym] = works.uniq.inject(0) { |result, work| result + (stat_element(work, value) || 0) } # sum the works
     end
-    @totals[:user_subscriptions] = Subscription.where(subscribable_id: @user.id, subscribable_type: 'User').count
+    @totals[:user_subscriptions] = Subscription.where(subscribable_id: @user.id, subscribable_type: "User").count
 
     # graph top 5 works
     @chart_data = GoogleVisualr::DataTable.new
