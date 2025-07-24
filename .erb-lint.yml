@@ -27,6 +27,8 @@ linters:
         Enabled: false
       Layout/TrailingWhitespace:
         Enabled: false
+      Layout/CommentIndentation:
+        Enabled: false
       Naming/FileName:
         Enabled: false
       Style/FrozenStringLiteralComment:
