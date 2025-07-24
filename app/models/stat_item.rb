@@ -4,8 +4,7 @@ class StatItem
   attr_reader :type, :id, :title, :fandom, :fandom_string, :hits,
               :word_count, :date,
               :bookmarks_count, :subscriptions_count,
-              :kudos_count, :comment_thread_count
-
+              :kudos_count, :comment_thread_count, :work_count
 
   def initialize(record)
     @type = record["type"]
@@ -20,6 +19,7 @@ class StatItem
     @subscriptions_count = record["subscriptions_count"]&.to_i || 0
     @kudos_count = record["kudos_count"]&.to_i || 0
     @comment_thread_count = record["comment_thread_count"]&.to_i || 0
+    @work_count = record["work_count"]&.to_i || 0
   end
 
   def work?
@@ -32,10 +32,6 @@ class StatItem
 
   def item_path
     series? ? series_path(id: @id) : work_path(id: @id)
-  end
-
-  def display_type
-    series? ? "Series" : "Work"
   end
 
   # Uniqueness

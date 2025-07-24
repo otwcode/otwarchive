@@ -1,6 +1,12 @@
 module StatsHelper
   
-  def stat_items
+  def stat_items(user, sort_column, sort_direction, year)
+    year_clause = if year == "All Years"
+                    "TRUE"
+                  else
+                    "YEAR(chapters.published_at) = #{year}"
+                  end
+
     sql = <<-SQL
           (
       SELECT
@@ -15,9 +21,10 @@ module StatsHelper
         COUNT(DISTINCT b.id) AS bookmarks_count,
         COUNT(DISTINCT s.id) AS subscriptions_count,
         COUNT(DISTINCT k.id) AS kudos_count,
-        COUNT(DISTINCT c.id) AS comment_thread_count
+        COUNT(DISTINCT c.id) AS comment_thread_count,
+        NULL as work_count
       FROM works
-      -- Tag joins
+      -- Tags
       INNER JOIN taggings ON taggings.taggable_id = works.id AND taggings.taggable_type = 'Work'
       INNER JOIN tags ON taggings.tagger_id = tags.id AND tags.type = 'Fandom'
       -- Authorship
@@ -33,7 +40,9 @@ module StatsHelper
       LEFT JOIN chapters ON chapters.work_id = works.id
       LEFT JOIN comments c ON c.commentable_id = chapters.id AND c.commentable_type = 'Chapter' AND c.depth = 0
       -- Filters
-      WHERE users.id = #{ActiveRecord::Base.connection.quote(@user.id)} AND works.posted = TRUE
+      WHERE users.id = #{ActiveRecord::Base.connection.quote(user.id)} 
+      AND works.posted = TRUE
+      AND #{year_clause}
       GROUP BY works.id, works.title, works.word_count, works.revised_at
     )
     UNION ALL
@@ -50,11 +59,12 @@ module StatsHelper
         COUNT(DISTINCT b.id) AS bookmarks_count,
         COUNT(DISTINCT s.id) AS subscriptions_count,
         NULL AS kudos_count,
-        NULL AS comment_thread_count
+        NULL AS comment_thread_count,
+        COUNT(DISTINCT sw.id) as work_count
       FROM series
       -- Tags
-      INNER JOIN serial_works ON serial_works.series_id = series.id
-      INNER JOIN works ON works.id = serial_works.work_id
+      INNER JOIN serial_works sw ON sw.series_id = series.id
+      INNER JOIN works ON works.id = sw.work_id
       INNER JOIN taggings ON taggings.taggable_id = works.id AND taggings.taggable_type = 'Work'
       INNER JOIN tags ON taggings.tagger_id = tags.id AND tags.type = 'Fandom'
       -- Authorship
@@ -64,10 +74,14 @@ module StatsHelper
       -- Bookmarks/Subsriptions on series itself
       LEFT JOIN bookmarks b ON b.bookmarkable_id = series.id AND b.bookmarkable_type = 'Series'
       LEFT JOIN subscriptions s ON s.subscribable_id = series.id AND s.subscribable_type = 'Series'
+      -- Get chapters for dating
+      LEFT JOIN chapters on chapters.work_id = works.id
       -- Filters
-      WHERE users.id = #{ActiveRecord::Base.connection.quote(@user.id)}
+      WHERE users.id = #{ActiveRecord::Base.connection.quote(user.id)}
+      AND #{year_clause}
       GROUP BY series.id, series.title
     )
+    ORDER BY #{sort_column} #{sort_direction}
     SQL
 
     results = ActiveRecord::Base.connection.exec_query(sql)
