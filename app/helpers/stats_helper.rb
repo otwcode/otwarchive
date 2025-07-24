@@ -6,16 +6,29 @@ module StatsHelper
                   else
                     "YEAR(chapters.published_at) = #{year}"
                   end
+    
+    date_series = if year == "All Years"
+                    "MAX(chapters.published_at)"
+                  else
+                    "MAX(CASE WHEN YEAR(chapters.published_at) = #{year} THEN chapters.published_at END)"
+                  end
+    
+    date_works =  if year == "All Years"
+                    "works.revised_at"
+                  else
+                    "MAX(chapters.published_at)"
+                  end
 
     sql = <<-SQL
           (
       SELECT
         'WORK' AS type,
         works.id,
-        works.title,
+        works.title_to_sort_on as title,
         tags.name AS fandom,
         works.word_count,
-        works.revised_at AS date,
+        -- Sort by last revised work date if All Years, otherwise pull last published chapter
+        #{date_works} AS date,
         GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string,
         sc.hit_count as hits,
         COUNT(DISTINCT b.id) AS bookmarks_count,
@@ -43,7 +56,7 @@ module StatsHelper
       WHERE users.id = #{ActiveRecord::Base.connection.quote(user.id)} 
       AND works.posted = TRUE
       AND #{year_clause}
-      GROUP BY works.id, works.title, works.word_count, works.revised_at
+      GROUP BY works.id, title, works.word_count
     )
     UNION ALL
     (
@@ -53,7 +66,7 @@ module StatsHelper
         series.title,
         tags.name AS fandom,
         NULL AS word_count,
-        NULL AS date,
+        #{date_series} AS date,
         GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string,
         NULL as hits,
         COUNT(DISTINCT b.id) AS bookmarks_count,
@@ -81,7 +94,7 @@ module StatsHelper
       AND #{year_clause}
       GROUP BY series.id, series.title
     )
-    ORDER BY #{sort_column} #{sort_direction}
+    ORDER BY #{sort_column} #{sort_direction}, title
     SQL
 
     results = ActiveRecord::Base.connection.exec_query(sql)
