@@ -31,6 +31,7 @@ class StatsController < ApplicationController
     @current_year = @years.include?(params[:year]) ? params[:year] : "All Years"
 
     @stats = stat_items(@user, @sort, @dir, @current_year)
+    puts "**** #{@stats}"
 
     # user_works = Work.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
     # user_chapters = Chapter.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
@@ -142,22 +143,22 @@ class StatsController < ApplicationController
     items.sum { |i| i.public_send(field).to_i }
   end
 
-  def stat_element(work, element)
-    case element.downcase
-    when "date"
-      work.date
-    when "hits"
-      work.hits
-    when "kudos.count"
-      work.kudos.count
-    when "comment_thread_count"
-      work.comment_thread_count
-    when "bookmarks.count"
-      work.bookmarks.count
-    when "subscriptions.count"
-      work.subscriptions.count
-    when "word_count"
-      work.word_count
-    end
-  end
+  # def stat_element(work, element)
+  #   case element.downcase
+  #   when "date"
+  #     work.date
+  #   when "hits"
+  #     work.hits
+  #   when "kudos.count"
+  #     work.kudos.count
+  #   when "comment_thread_count"
+  #     work.comment_thread_count
+  #   when "bookmarks.count"
+  #     work.bookmarks.count
+  #   when "subscriptions.count"
+  #     work.subscriptions.count
+  #   when "word_count"
+  #     work.word_count
+  #   end
+  # end
 end

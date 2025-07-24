@@ -1,32 +1,42 @@
 module StatsHelper
   
   def stat_items(user, sort_column, sort_direction, year)
+    # Get works or series where a chapter was published in that year
     year_clause = if year == "All Years"
                     "TRUE"
                   else
                     "YEAR(chapters.published_at) = #{year}"
                   end
     
+    # Use max published chapter for series
     date_series = if year == "All Years"
                     "MAX(chapters.published_at)"
                   else
                     "MAX(CASE WHEN YEAR(chapters.published_at) = #{year} THEN chapters.published_at END)"
                   end
     
+    # Sort works by revised date for all years or last published chapter for specific year
     date_works =  if year == "All Years"
-                    "works.revised_at"
+                    "MAX(works.revised_at)"
                   else
                     "MAX(chapters.published_at)"
                   end
+
+    # Grab work word count for all years or sum all chapters published in that year
+    word_count = if year == "All Years"
+                    "works.word_count"
+                 else
+                    "SUM(CASE WHEN YEAR(chapters.published_at) = #{year} THEN chapters.word_count ELSE 0 END)"
+                 end
 
     sql = <<-SQL
           (
       SELECT
         'WORK' AS type,
         works.id,
-        works.title_to_sort_on as title,
+        works.title as title,
         tags.name AS fandom,
-        works.word_count,
+        #{word_count} AS word_count,
         -- Sort by last revised work date if All Years, otherwise pull last published chapter
         #{date_works} AS date,
         GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string,
@@ -56,7 +66,7 @@ module StatsHelper
       WHERE users.id = #{ActiveRecord::Base.connection.quote(user.id)} 
       AND works.posted = TRUE
       AND #{year_clause}
-      GROUP BY works.id, title, works.word_count
+      GROUP BY works.id, title, tags.name
     )
     UNION ALL
     (
@@ -92,7 +102,7 @@ module StatsHelper
       -- Filters
       WHERE users.id = #{ActiveRecord::Base.connection.quote(user.id)}
       AND #{year_clause}
-      GROUP BY series.id, series.title
+      GROUP BY series.id, series.title, tags.name
     )
     ORDER BY #{sort_column} #{sort_direction}, title
     SQL
