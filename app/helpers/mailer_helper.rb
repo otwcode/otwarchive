@@ -211,7 +211,7 @@ module MailerHelper
         title: t("mailer.general.creation.title_with_chapter_number", 
                  position: comment.original_ultimate_parent.position, 
                  title: name),
-        creation_url: work_url(comment.original_ultimate_parent.work))
+        creation_url: work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent))
     else
       t("mailer.general.creation.title_with_url", title: name, creation_url: polymorphic_url(comment.ultimate_parent, only_path: false))
     end

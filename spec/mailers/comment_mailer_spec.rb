@@ -273,7 +273,7 @@ describe CommentMailer do
 
     describe "text email" do
       it "has a reference to the chapter" do
-        expect(subject).to have_text_part_content("comment on Chapter #{comment.original_ultimate_parent.position} of #{comment.ultimate_parent.commentable_name} (#{work_url(comment.ultimate_parent)})")
+        expect(subject).to have_text_part_content("comment on Chapter #{comment.original_ultimate_parent.position} of #{comment.ultimate_parent.commentable_name} (#{work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent)})")
       end
 
       it "has a link to view all comments on the chapter" do
