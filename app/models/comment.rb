@@ -128,7 +128,7 @@ class Comment < ApplicationRecord
       comment_content: comment_content
     }
 
-    attributes[:recheck_reason] = "edit" if edited_at_changed? && comment_content_changed?
+    attributes[:recheck_reason] = "edit" if will_save_change_to_edited_at? && will_save_change_to_comment_content?
 
     attributes
   end
