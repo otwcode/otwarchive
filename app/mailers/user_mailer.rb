@@ -186,9 +186,10 @@ class UserMailer < ApplicationMailer
   # It is also sent when assignments are regenerated.
   def potential_match_generation_notification(collection_id, email)
     @collection = Collection.find(collection_id)
+    @is_collection_email = (email == @collection.collection_email)
     mail(
       to: email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential assignment generation complete"
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
     )
   end
 
