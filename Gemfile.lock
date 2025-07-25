@@ -627,7 +627,7 @@ GEM
     timeout (0.4.3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    unicode (0.4.4.4)
+    unicode (0.4.4.5)
     unicode-display_width (2.5.0)
     unicode_utils (1.4.0)
     unicorn (5.8.0)

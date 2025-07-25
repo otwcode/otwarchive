@@ -11,7 +11,7 @@ describe LanguagesController do
         expect(response).to render_template("index")
       end
     end
-    
+
     Admin::VALID_ROLES.each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
@@ -36,7 +36,7 @@ describe LanguagesController do
     (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
-        
+
         it "redirects with error" do
           fake_login_admin(admin)
           get :new
@@ -59,7 +59,7 @@ describe LanguagesController do
   end
 
   describe "POST create" do
-    let(:language_params) do 
+    let(:language_params) do
       {
         language: {
           name: "Suomi",
@@ -82,7 +82,7 @@ describe LanguagesController do
     (Admin::VALID_ROLES - %w[superadmin translation]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
-        
+
         it "redirects with error" do
           fake_login_admin(admin)
           post :create, params: language_params
@@ -95,7 +95,7 @@ describe LanguagesController do
     %w[translation superadmin].each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
-        
+
         before do
           fake_login_admin(admin)
           post :create, params: language_params
@@ -125,11 +125,11 @@ describe LanguagesController do
         it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
-    
+
     (Admin::VALID_ROLES - %w[superadmin translation support policy_and_abuse]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
-        
+
         it "redirects with error" do
           fake_login_admin(admin)
           get :edit, params: { id: "en" }
@@ -161,7 +161,7 @@ describe LanguagesController do
 
   describe "PUT update" do
     let(:finnish) { Language.create(name: "Suomi", short: "fi", support_available: "0", abuse_support_available: "1") }
-    let(:language_params) do 
+    let(:language_params) do
       {
         id: finnish.short,
         language: {
@@ -174,7 +174,7 @@ describe LanguagesController do
       }
     end
 
-    let(:language_params_support) do 
+    let(:language_params_support) do
       {
         id: finnish.short,
         language: {
@@ -186,7 +186,7 @@ describe LanguagesController do
       }
     end
 
-    let(:language_params_abuse) do 
+    let(:language_params_abuse) do
       {
         id: finnish.short,
         language: {
@@ -194,7 +194,7 @@ describe LanguagesController do
         }
       }
     end
-    
+
     context "when not logged in" do
       it "redirects with error" do
         put :update, params: language_params
@@ -206,7 +206,7 @@ describe LanguagesController do
     (Admin::VALID_ROLES - %w[superadmin translation support policy_and_abuse]).each do |role|
       context "when logged in as an admin with #{role} role" do
         let(:admin) { create(:admin, roles: [role]) }
-        
+
         it "redirects with error" do
           fake_login_admin(admin)
           put :update, params: language_params
@@ -240,24 +240,23 @@ describe LanguagesController do
       end
     end
 
-    
     context "when logged in as an admin with policy_and_abuse role and I attempt to edit a non-abuse field" do
       let(:admin) { create(:admin, roles: ["policy_and_abuse"]) }
       before do
         fake_login_admin(admin)
       end
       it "throws error and doesn't save changes to non-abuse field" do
-        expect do 
+        expect do
           put :update, params: language_params
         end.to raise_exception(ActionController::UnpermittedParameters)
         finnish.reload
         expect(finnish.support_available).to eq(false)
       end
-    end 
+    end
 
     context "when logged in as an admin with policy_and_abuse role and attempt to edit abuse_support_available field" do
       let(:admin) { create(:admin, roles: ["policy_and_abuse"]) }
-      
+
       before do
         fake_login_admin(admin)
         put :update, params: language_params_abuse
@@ -274,21 +273,21 @@ describe LanguagesController do
       it "redirects and returns success message" do
         it_redirects_to_with_notice(languages_path, "Language was successfully updated.")
       end
-    end 
-    
+    end
+
     context "when logged in as an admin with support role and attempt to edit abuse_support_available field" do
       let(:admin) { create(:admin, roles: ["support"]) }
       before do
         fake_login_admin(admin)
       end
       it "throws error and doesn't save changes to abuse_support_available field" do
-        expect do 
+        expect do
           put :update, params: language_params
         end.to raise_exception(ActionController::UnpermittedParameters)
         finnish.reload
         expect(finnish.abuse_support_available).to eq(true)
       end
-    end 
+    end
 
     context "when logged in as an admin with support role and attempt to edit non-abuse fields" do
       let(:admin) { create(:admin, roles: ["support"]) }
@@ -308,6 +307,6 @@ describe LanguagesController do
       it "redirects and returns success message" do
         it_redirects_to_with_notice(languages_path, "Language was successfully updated.")
       end
-    end 
+    end
   end
 end
