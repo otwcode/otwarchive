@@ -11,7 +11,7 @@ module StatsHelper
     end
 
     sql = <<-SQL
-      WITH work_stats AS (
+      work_stats AS (
         SELECT
           c.work_id,
           MAX(c.published_at) AS last_published_chapter_date,
@@ -48,6 +48,15 @@ module StatsHelper
 	        AND users.id = #{ActiveRecord::Base.connection.quote(user.id)}
           AND works.posted = TRUE
 	      GROUP BY series.id
+      ),
+      -- Get the concatenated fandom string
+      fandom_info AS (
+        SELECT taggings.taggable_id AS work_id,
+        GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string
+        FROM taggings
+        INNER JOIN tags ON taggings.tagger_id = tags.id
+        WHERE taggings.taggable_type = 'Work' AND tags.type = 'Fandom'
+        GROUP BY taggings.taggable_id
       )
       (
       SELECT
@@ -59,7 +68,7 @@ module StatsHelper
         -- This doesn't retain the prior way of sorting via last revised at for All Years
         work_stats.last_published_chapter_date AS date,
         -- Should probably separate this out into different query?
-        GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string,
+        fandom_info.fandom_string AS fandom_string,
         sc.hit_count as hits,
         -- Use stats_counter for bookmarks and kudos as well?
         sc.kudos_count AS kudos_count,
@@ -78,6 +87,8 @@ module StatsHelper
       -- Counts
       LEFT JOIN subscriptions s ON s.subscribable_id = works.id AND s.subscribable_type = 'Work'
       LEFT JOIN stat_counters sc ON sc.work_id = works.id
+      -- Fandom string
+      LEFT JOIN fandom_info ON fandom_info.work_id = works.id
       -- Work stats
       LEFT JOIN work_stats ON work_stats.work_id = works.id
       -- Filters
