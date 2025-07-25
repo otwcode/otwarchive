@@ -132,7 +132,11 @@ en:
     tos_faq:
       page_title: Terms of Service FAQ
   inbox:
-    page_title: "%{user} - Inbox"
+    show:
+      page_title: "%{user} - Inbox"
+    update:
+      must_select_item: Please select at least one comment first.
+      success: Inbox successfully updated.
   invite_requests:
     create:
       queue_disabled:
