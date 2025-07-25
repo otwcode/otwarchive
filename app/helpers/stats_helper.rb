@@ -11,6 +11,18 @@ module StatsHelper
     end
 
     sql = <<-SQL
+      -- prefilter works by specified user
+      WITH user_works AS (
+        SELECT 
+          users.id as user_id,
+          works.id as work_id,
+          works.posted as work_posted,
+          works.title as work_title
+        FROM works
+        INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+	      INNER JOIN pseuds ON pseuds.id = creatorships.pseud_id
+	      INNER JOIN users ON users.id = pseuds.user_id
+      ), 
       work_stats AS (
         SELECT
           c.work_id,
@@ -36,17 +48,13 @@ module StatsHelper
           COUNT(DISTINCT sw.id) as work_count
         FROM series
         INNER JOIN serial_works sw ON sw.series_id = series.id
-        INNER JOIN works ON works.id = sw.work_id
-        -- Authorship
-        INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-	      INNER JOIN pseuds ON pseuds.id = creatorships.pseud_id
-	      INNER JOIN users ON users.id = pseuds.user_id
+        INNER JOIN user_works uw ON uw.work_id = sw.work_id
         -- Join work stats to determine whether series contains a work with a chapter published in range
-        INNER JOIN work_stats ON work_stats.work_id = works.id
+        INNER JOIN work_stats ON work_stats.work_id = uw.work_id
         WHERE work_stats.published_in_range = TRUE
           -- Might want to move user_id into select? Maybe doesn't matter
-	        AND users.id = #{ActiveRecord::Base.connection.quote(user.id)}
-          AND works.posted = TRUE
+	        AND uw.user_id = #{ActiveRecord::Base.connection.quote(user.id)}
+          AND uw.work_posted = TRUE
 	      GROUP BY series.id
       ),
       -- Get the concatenated fandom string
@@ -61,8 +69,8 @@ module StatsHelper
       (
       SELECT
         'WORK' AS type,
-        works.id,
-        works.title as title,
+        uw.work_id as id,
+        uw.work_title as title,
         tags.name AS fandom,
         work_stats.word_count AS word_count,
         -- This doesn't retain the prior way of sorting via last revised at for All Years
@@ -76,28 +84,24 @@ module StatsHelper
         COUNT(DISTINCT s.id) AS subscriptions_count,
         work_stats.comment_thread_count AS comment_thread_count,
         NULL as work_count
-      FROM works
+      FROM user_works uw
       -- Tags
-      INNER JOIN taggings ON taggings.taggable_id = works.id AND taggings.taggable_type = 'Work'
+      INNER JOIN taggings ON taggings.taggable_id = uw.work_id AND taggings.taggable_type = 'Work'
       INNER JOIN tags ON taggings.tagger_id = tags.id AND tags.type = 'Fandom'
-      -- Authorship
-      INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-      INNER JOIN pseuds ON pseuds.id = creatorships.pseud_id
-      INNER JOIN users ON users.id = pseuds.user_id
       -- Counts
-      LEFT JOIN subscriptions s ON s.subscribable_id = works.id AND s.subscribable_type = 'Work'
-      LEFT JOIN stat_counters sc ON sc.work_id = works.id
+      LEFT JOIN subscriptions s ON s.subscribable_id = uw.work_id AND s.subscribable_type = 'Work'
+      LEFT JOIN stat_counters sc ON sc.work_id = uw.work_id
       -- Fandom string
-      LEFT JOIN fandom_info ON fandom_info.work_id = works.id
+      LEFT JOIN fandom_info ON fandom_info.work_id = uw.work_id
       -- Work stats
-      LEFT JOIN work_stats ON work_stats.work_id = works.id
+      LEFT JOIN work_stats ON work_stats.work_id = uw.work_id
       -- Filters
-      WHERE users.id = #{ActiveRecord::Base.connection.quote(user.id)} 
+      WHERE uw.user_id = #{ActiveRecord::Base.connection.quote(user.id)} 
       -- Only posted works
-      AND works.posted = TRUE
+      AND uw.work_posted = TRUE
       -- Only works within range
       AND work_stats.published_in_range = TRUE
-      GROUP BY works.id, title, tags.name
+      GROUP BY id, title, tags.name
     )
     UNION ALL
     (
@@ -121,21 +125,17 @@ module StatsHelper
       -- Series counts and info
       INNER JOIN series_counts ON series_counts.series_id = series.id
       INNER JOIN serial_works sw ON sw.series_id = series.id
-      INNER JOIN works ON works.id = sw.work_id
+      INNER JOIN user_works uw ON uw.work_id = sw.work_id
       -- Tags
-      INNER JOIN taggings ON taggings.taggable_id = works.id AND taggings.taggable_type = 'Work'
+      INNER JOIN taggings ON taggings.taggable_id = uw.work_id AND taggings.taggable_type = 'Work'
       INNER JOIN tags ON taggings.tagger_id = tags.id AND tags.type = 'Fandom'
-      -- Authorship
-      INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-      INNER JOIN pseuds ON pseuds.id = creatorships.pseud_id
-      INNER JOIN users ON users.id = pseuds.user_id
       -- Bookmarks/Subsriptions on series itself
       LEFT JOIN bookmarks b ON b.bookmarkable_id = series.id AND b.bookmarkable_type = 'Series'
       LEFT JOIN subscriptions s ON s.subscribable_id = series.id AND s.subscribable_type = 'Series'
       -- Used for published in range check
-      LEFT JOIN work_stats ON work_stats.work_id = works.id 
+      LEFT JOIN work_stats ON work_stats.work_id = uw.work_id 
       -- Filters
-      WHERE users.id = #{ActiveRecord::Base.connection.quote(user.id)}
+      WHERE uw.user_id = #{ActiveRecord::Base.connection.quote(user.id)}
       -- Only retrieve series info if work in series had a chapter published in range
       AND work_stats.published_in_range = TRUE
       GROUP BY series.id, series.title, tags.name
