@@ -20,6 +20,7 @@ class StatsController < ApplicationController
     params[:sort_direction] = @dir
 
     # Retrieve all year options from chapters
+    # TODO: Cache year values?
     @years = ["All Years"] + 
              Chapter.joins(pseuds: :user)
                .where(users: { id: @user.id })
@@ -67,12 +68,20 @@ class StatsController < ApplicationController
     # on the off-chance a new user decides to look at their stats and have no works
     render "no_stats" and return if @stats.blank?
 
+    @uniq_stats = @stats.uniq
+
     # group by fandom or flat view
-    if params[:flat_view]
-      @works = { ts("All Fandoms") => @stats.uniq }
-    else
-      @works = @stats.group_by(&:fandom)
-    end
+    view_type_opts = %w[fandom flat type]
+    @view_type = view_type_opts.include?(params[:view_type]) ? params[:view_type] : "fandom"
+    @works = case @view_type
+             when "type"
+                @uniq_stats.group_by(&:type_label)
+             when "flat"
+                { ts("All Fandoms") => @uniq_stats }
+             else
+                puts "SHOULD GET HERE!!!"
+                @stats.group_by(&:fandom)
+             end
 
     # gather totals for all works
     # @totals = {}
@@ -80,8 +89,9 @@ class StatsController < ApplicationController
     #   # the inject is used to collect the sum in the "result" variable as we iterate over all the works
     #   @totals[value.split(".")[0].to_sym] = works.uniq.inject(0) { |result, work| result + (stat_element(work, value) || 0) } # sum the works
     # end
-    work_items = @stats.select { |item| item.type == "WORK" }
-    series_items = @stats.select { |item| item.type == "SERIES" }
+    
+    work_items = @uniq_stats.select { |item| item.type == "WORK" }
+    series_items = @uniq_stats.select { |item| item.type == "SERIES" }
     @totals = {
       kudos: sum_field(work_items, :kudos_count),
       work_bookmarks: sum_field(work_items, :bookmarks_count),

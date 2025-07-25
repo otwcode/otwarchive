@@ -1,18 +1,23 @@
 module StatsHelper
   
   def stat_items(user, sort_column, sort_direction, year)
+    if year != "All Years"
+      start_date = Date.new(year.to_i, 1, 1)
+      end_date = start_date.end_of_year
+    end
+
     # Get works or series where a chapter was published in that year
     year_clause = if year == "All Years"
                     "TRUE"
                   else
-                    "YEAR(chapters.published_at) = #{year}"
+                    "chapters.published_at BETWEEN '#{start_date}' AND '#{end_date}'"
                   end
     
     # Use max published chapter for series
     date_series = if year == "All Years"
                     "MAX(chapters.published_at)"
                   else
-                    "MAX(CASE WHEN YEAR(chapters.published_at) = #{year} THEN chapters.published_at END)"
+                    "MAX(CASE WHEN chapters.published_at BETWEEN '#{start_date}' AND '#{end_date}' THEN chapters.published_at END)"
                   end
     
     # Sort works by revised date for all years or last published chapter for specific year
@@ -26,7 +31,7 @@ module StatsHelper
     word_count = if year == "All Years"
                     "works.word_count"
                  else
-                    "SUM(CASE WHEN YEAR(chapters.published_at) = #{year} THEN chapters.word_count ELSE 0 END)"
+                    "SUM(CASE WHEN chapters.published_at BETWEEN '#{start_date}' AND '#{end_date}' THEN chapters.word_count ELSE 0 END)"
                  end
 
     sql = <<-SQL
@@ -39,11 +44,13 @@ module StatsHelper
         #{word_count} AS word_count,
         -- Sort by last revised work date if All Years, otherwise pull last published chapter
         #{date_works} AS date,
+        -- Should probably separate this out into different query
         GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string,
         sc.hit_count as hits,
-        COUNT(DISTINCT b.id) AS bookmarks_count,
+        -- Use stats_counter for bookmarks and kudos as well?
+        sc.kudos_count AS kudos_count,
+        sc.bookmarks_count AS bookmarks_count,
         COUNT(DISTINCT s.id) AS subscriptions_count,
-        COUNT(DISTINCT k.id) AS kudos_count,
         COUNT(DISTINCT c.id) AS comment_thread_count,
         NULL as work_count
       FROM works
@@ -55,9 +62,7 @@ module StatsHelper
       INNER JOIN pseuds ON pseuds.id = creatorships.pseud_id
       INNER JOIN users ON users.id = pseuds.user_id
       -- Counts
-      LEFT JOIN bookmarks b ON b.bookmarkable_id = works.id AND b.bookmarkable_type = 'Work'
       LEFT JOIN subscriptions s ON s.subscribable_id = works.id AND s.subscribable_type = 'Work'
-      LEFT JOIN kudos k ON k.commentable_id = works.id AND k.commentable_type = 'Work'
       LEFT JOIN stat_counters sc ON sc.work_id = works.id
       -- Total comments on chapters
       LEFT JOIN chapters ON chapters.work_id = works.id
@@ -77,11 +82,12 @@ module StatsHelper
         tags.name AS fandom,
         NULL AS word_count,
         #{date_series} AS date,
+        -- Should probably separate this out into different query
         GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string,
         NULL as hits,
+        NULL AS kudos_count,
         COUNT(DISTINCT b.id) AS bookmarks_count,
         COUNT(DISTINCT s.id) AS subscriptions_count,
-        NULL AS kudos_count,
         NULL AS comment_thread_count,
         COUNT(DISTINCT sw.id) as work_count
       FROM series

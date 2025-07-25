@@ -59,8 +59,9 @@
   </ul>
 
   <ul class="view actions" role="menu">
-    <li><%= span_if_current ts("Fandoms View"), current_path_with(flat_view: nil), params[:flat_view].blank? %></li>
-    <li><%= span_if_current ts("Flat View"), current_path_with(flat_view: true) %></li>
+  <li><%= span_if_current ts("Fandoms View"), current_path_with(view_type: nil), @view_type == "fandom" %></li>
+  <li><%= span_if_current ts("Flat View"), current_path_with(view_type: "flat"), @view_type == "flat" %></li>
+  <li><%= span_if_current ts("Types View"), current_path_with(view_type: "type"), @view_type == "type" %></li>
   </ul>
 </div>
 
@@ -76,7 +77,7 @@
           <li>
             <dl>
               <dt>
-                <%= link_to work.title, work_path(:id => work.id) %> 
+                <%= link_to work.title, work.item_path %> 
                 <% if work.series? %>(Series)<% end %>
                 <% if params[:flat_view] %><span class="fandom">(<%= work.fandom_string %>)</span><% end %>
                 <% if work.work? %><span class="words">

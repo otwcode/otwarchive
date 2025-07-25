@@ -34,6 +34,14 @@ class StatItem
     series? ? series_path(id: @id) : work_path(id: @id)
   end
 
+  def type_label
+    case type
+    when "WORK" then "Works"
+    when "SERIES" then "Series"
+    else type.titleize
+    end
+  end
+
   # Uniqueness
   def ==(other)
     other.is_a?(StatItem) && id == other.id && type == other.type
