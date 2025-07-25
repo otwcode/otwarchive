@@ -1,57 +1,56 @@
 module StatsHelper
   
   def stat_items(user, sort_column, sort_direction, year)
-    if year != "All Years"
+    # Establish date ranges
+    if year == "All Years"
+      start_date = Date.new(1950, 1, 1)
+      end_date = Time.zone.today
+    else
       start_date = Date.new(year.to_i, 1, 1)
       end_date = start_date.end_of_year
     end
 
-    # Get works or series where a chapter was published in that year
-    year_clause = if year == "All Years"
-                    "TRUE"
-                  else
-                    "chapters.published_at BETWEEN '#{start_date}' AND '#{end_date}'"
-                  end
-    
-    # Use max published chapter for series
-    date_series = if year == "All Years"
-                    "MAX(chapters.published_at)"
-                  else
-                    "MAX(CASE WHEN chapters.published_at BETWEEN '#{start_date}' AND '#{end_date}' THEN chapters.published_at END)"
-                  end
-    
-    # Sort works by revised date for all years or last published chapter for specific year
-    date_works =  if year == "All Years"
-                    "MAX(works.revised_at)"
-                  else
-                    "MAX(chapters.published_at)"
-                  end
-
-    # Grab work word count for all years or sum all chapters published in that year
-    word_count = if year == "All Years"
-                    "works.word_count"
-                 else
-                    "SUM(CASE WHEN chapters.published_at BETWEEN '#{start_date}' AND '#{end_date}' THEN chapters.word_count ELSE 0 END)"
-                 end
+    work_cte = <<-SQL
+    -- Precompute statistics for Works
+      WITH work_stats AS (
+        SELECT
+          c.work_id,
+          MAX(c.published_at) AS last_published_chapter_date,
+          COUNT(DISTINCT com.id) as comment_thread_count,
+          -- Recomputing the whole work count when All Years is selected, unfortunately
+          SUM(c.word_count) as word_count,
+        -- Work contains a chapter that was published in date range
+        CASE 
+          WHEN MAX(c.published_at) IS NOT NULL THEN TRUE 
+          ELSE FALSE 
+        END AS published_in_year
+        FROM chapters c
+        LEFT JOIN comments com
+          ON com.commentable_id = c.id AND com.commentable_type = 'Chapter' AND com.depth = 0
+        WHERE c.published_at BETWEEN '#{start_date}' AND '#{end_date}'
+        GROUP BY c.work_id
+      )
+    SQL
 
     sql = <<-SQL
+      #{work_cte}
           (
       SELECT
         'WORK' AS type,
         works.id,
         works.title as title,
         tags.name AS fandom,
-        #{word_count} AS word_count,
-        -- Sort by last revised work date if All Years, otherwise pull last published chapter
-        #{date_works} AS date,
-        -- Should probably separate this out into different query
+        work_stats.word_count AS word_count,
+        -- This doesn't retain the prior way of sorting via last revised at for All Years
+        work_stats.last_published_chapter_date AS date,
+        -- Should probably separate this out into different query?
         GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string,
         sc.hit_count as hits,
         -- Use stats_counter for bookmarks and kudos as well?
         sc.kudos_count AS kudos_count,
         sc.bookmarks_count AS bookmarks_count,
         COUNT(DISTINCT s.id) AS subscriptions_count,
-        COUNT(DISTINCT c.id) AS comment_thread_count,
+        work_stats.comment_thread_count AS comment_thread_count,
         NULL as work_count
       FROM works
       -- Tags
@@ -64,13 +63,14 @@ module StatsHelper
       -- Counts
       LEFT JOIN subscriptions s ON s.subscribable_id = works.id AND s.subscribable_type = 'Work'
       LEFT JOIN stat_counters sc ON sc.work_id = works.id
-      -- Total comments on chapters
-      LEFT JOIN chapters ON chapters.work_id = works.id
-      LEFT JOIN comments c ON c.commentable_id = chapters.id AND c.commentable_type = 'Chapter' AND c.depth = 0
+      -- Work stats
+      LEFT JOIN work_stats ON work_stats.work_id = works.id
       -- Filters
       WHERE users.id = #{ActiveRecord::Base.connection.quote(user.id)} 
+      -- Only posted works
       AND works.posted = TRUE
-      AND #{year_clause}
+      -- Only works within range
+      AND work_stats.published_in_year = TRUE
       GROUP BY works.id, title, tags.name
     )
     UNION ALL
@@ -81,15 +81,16 @@ module StatsHelper
         series.title,
         tags.name AS fandom,
         NULL AS word_count,
-        #{date_series} AS date,
-        -- Should probably separate this out into different query
+        -- Most recent chapter update date for all works in series
+        MAX(work_stats.last_published_chapter_date) AS date,
+        -- Should probably separate this out into different query?
         GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string,
         NULL as hits,
         NULL AS kudos_count,
         COUNT(DISTINCT b.id) AS bookmarks_count,
         COUNT(DISTINCT s.id) AS subscriptions_count,
         NULL AS comment_thread_count,
-        COUNT(DISTINCT sw.id) as work_count
+        COUNT(DISTINCT works.id) AS work_count
       FROM series
       -- Tags
       INNER JOIN serial_works sw ON sw.series_id = series.id
@@ -103,11 +104,10 @@ module StatsHelper
       -- Bookmarks/Subsriptions on series itself
       LEFT JOIN bookmarks b ON b.bookmarkable_id = series.id AND b.bookmarkable_type = 'Series'
       LEFT JOIN subscriptions s ON s.subscribable_id = series.id AND s.subscribable_type = 'Series'
-      -- Get chapters for dating
-      LEFT JOIN chapters on chapters.work_id = works.id
+      -- Used for dating works inside series
+      LEFT JOIN work_stats ON work_stats.work_id = works.id AND work_stats.published_in_year = TRUE
       -- Filters
       WHERE users.id = #{ActiveRecord::Base.connection.quote(user.id)}
-      AND #{year_clause}
       GROUP BY series.id, series.title, tags.name
     )
     ORDER BY #{sort_column} #{sort_direction}, title
