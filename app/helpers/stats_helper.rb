@@ -11,7 +11,7 @@ module StatsHelper
     end
 
     sql = <<-SQL
-      -- prefilter works by specified user
+      -- Prefilter works by user
       WITH user_works AS (
         SELECT 
           users.id as user_id,
@@ -33,6 +33,7 @@ module StatsHelper
         INNER JOIN taggings ON taggings.taggable_id = uw.work_id AND taggings.taggable_type = 'Work'
         INNER JOIN tags ON taggings.tagger_id = tags.id AND tags.type = 'Fandom'
       ),
+      -- Gets whole work stats
       work_stats AS (
         SELECT
           c.work_id,
@@ -49,6 +50,7 @@ module StatsHelper
         LEFT JOIN comments com
           ON com.commentable_id = c.id AND com.commentable_type = 'Chapter' AND com.depth = 0
         WHERE c.published_at BETWEEN '#{start_date}' AND '#{end_date}'
+        -- Only account for posted chapters
         AND c.posted = TRUE
         GROUP BY c.work_id
       ),
@@ -63,8 +65,8 @@ module StatsHelper
         -- Join work stats to determine whether series contains a work with a chapter published in range
         INNER JOIN work_stats ON work_stats.work_id = uw.work_id
         WHERE work_stats.published_in_range = TRUE
-          -- Might want to move user_id into select? Maybe doesn't matter
 	        AND uw.user_id = #{ActiveRecord::Base.connection.quote(user.id)}
+          -- Only account for posted works
           AND uw.work_posted = TRUE
 	      GROUP BY series.id
       ),
@@ -88,14 +90,14 @@ module StatsHelper
         work_stats.last_published_chapter_date AS date,
         fs.fandom_string AS fandom_string,
         sc.hit_count as hits,
-        -- Use stats_counter for bookmarks and kudos as well?
+        -- Calculate kudos/bookmarks manually, or use stat_counters?
         sc.kudos_count AS kudos_count,
         sc.bookmarks_count AS bookmarks_count,
         COUNT(DISTINCT s.id) AS subscriptions_count,
         work_stats.comment_thread_count AS comment_thread_count,
         NULL as work_count
       FROM user_works uw
-      -- Tags
+      -- Fandom tags
       INNER JOIN fandom_tags ft ON ft.work_id = uw.work_id AND ft.user_id = uw.user_id
       -- Counts
       LEFT JOIN subscriptions s ON s.subscribable_id = uw.work_id AND s.subscribable_type = 'Work'
@@ -104,11 +106,11 @@ module StatsHelper
       LEFT JOIN fandom_string fs ON fs.work_id = uw.work_id
       -- Work stats
       LEFT JOIN work_stats ON work_stats.work_id = uw.work_id
-      -- Filters
+      -- Find for current user
       WHERE uw.user_id = #{ActiveRecord::Base.connection.quote(user.id)} 
       -- Only posted works
       AND uw.work_posted = TRUE
-      -- Only works within range
+      -- Only works with a chapter published within range
       AND work_stats.published_in_range = TRUE
       GROUP BY id, title, fandom
     )
@@ -134,16 +136,16 @@ module StatsHelper
       INNER JOIN series_counts ON series_counts.series_id = series.id
       INNER JOIN serial_works sw ON sw.series_id = series.id
       INNER JOIN user_works uw ON uw.work_id = sw.work_id
-      -- Tags
+      -- Fandom tags
       INNER JOIN fandom_tags ft ON ft.work_id = uw.work_id AND ft.user_id = uw.user_id
       -- Bookmarks/Subsriptions on series itself
       LEFT JOIN bookmarks b ON b.bookmarkable_id = series.id AND b.bookmarkable_type = 'Series'
       LEFT JOIN subscriptions s ON s.subscribable_id = series.id AND s.subscribable_type = 'Series'
       -- Fandom string
       LEFT JOIN fandom_string fs ON fs.work_id = uw.work_id
-      -- Used for published in range check
+      -- Used for published-in-range check
       LEFT JOIN work_stats ON work_stats.work_id = uw.work_id 
-      -- Filters
+      -- Find for current user
       WHERE uw.user_id = #{ActiveRecord::Base.connection.quote(user.id)}
       -- Only retrieve series info if work in series had a chapter published in range
       AND work_stats.published_in_range = TRUE
