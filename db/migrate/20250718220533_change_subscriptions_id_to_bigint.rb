@@ -6,6 +6,6 @@ class ChangeSubscriptionsIdToBigint < ActiveRecord::Migration[7.1]
   end
 
   def down
-    change_column :subscriptions, :id, "int NOT NULL AUTO_INCREMENT"
+    raise ActiveRecord::IrreversibleMigration, "This migration cannot be reverted because we can't safely migrate to a smaller id"
   end
 end
