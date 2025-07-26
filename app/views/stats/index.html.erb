@@ -79,7 +79,7 @@
               <dt>
                 <%= link_to work.title, work.item_path %> 
                 <% if work.series? %>(Series)<% end %>
-                <% if params[:view_type] != "fandom" %><span class="fandom">(<%= work.fandom_string %>)</span><% end %>
+                <% if (params[:view_type] != nil && params[:view_type] != "fandom") %><span class="fandom">(<%= work.fandom_string %>)</span><% end %>
                 <% if work.work? %><span class="words">
                   (<%= ts("%{wordcount} words", wordcount: number_with_delimiter(work.word_count)) %>)</span>
                 <% end%>
