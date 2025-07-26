@@ -71,7 +71,7 @@ class StatsController < ApplicationController
     @uniq_stats = @stats.uniq
 
     # group by fandom or flat view
-    view_type_opts = %w[fandom flat type]
+    view_type_opts = %w[fandom flat type].freeze
     @view_type = view_type_opts.include?(params[:view_type]) ? params[:view_type] : "fandom"
     @works = case @view_type
              when "type"

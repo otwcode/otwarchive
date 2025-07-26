@@ -79,15 +79,13 @@
               <dt>
                 <%= link_to work.title, work.item_path %> 
                 <% if work.series? %>(Series)<% end %>
-                <% if params[:flat_view] %><span class="fandom">(<%= work.fandom_string %>)</span><% end %>
+                <% if params[:view_type] != "fandom" %><span class="fandom">(<%= work.fandom_string %>)</span><% end %>
                 <% if work.work? %><span class="words">
                   (<%= ts("%{wordcount} words", wordcount: number_with_delimiter(work.word_count)) %>)</span>
                 <% end%>
               </dt>
               <dd>
                 <dl class="stats">
-                  <dt class="date"><%= ts("Date:") %></dt>
-                    <dd class="date"><%= work.date %> </dd>
                   <% if work.series? %>
                     <dt class="work_count"><%= ts("Work Count:") %></dt>
                     <dd class="work_count"><%= number_with_delimiter(work.work_count) %> </dd>

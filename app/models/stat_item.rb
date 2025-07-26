@@ -35,11 +35,7 @@ class StatItem
   end
 
   def type_label
-    case type
-    when "WORK" then "Works"
-    when "SERIES" then "Series"
-    else type.titleize
-    end
+    type == "WORK" ? "Works" : "Series"
   end
 
   # Uniqueness
