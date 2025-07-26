@@ -23,7 +23,7 @@
 <h3 class="heading"><%= ts("Totals") %></h3>
 <div class="wrapper">
   <dl class="statistics meta group" role="complementary">
-    <% { user_subscriptions: t(".user_subscriptions"), 
+    <% { user_subscriptions: t(".user_subscriptions"),
          kudos: t(".kudos"), 
          comment_thread_count: t(".comment_threads"),
          work_bookmarks: t(".work_bookmarks"), 
@@ -50,12 +50,12 @@
   <ul class="sorting actions" role="menu">
     <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
     <li><%= sort_link t(".date"), "date" %></li>
-    <li><%= sort_link t(".hits"), "hits", { :desc_default => true } %></li>
-    <li><%= sort_link t(".kudos"), "kudos_count", { :desc_default => true } %></li>
-    <li><%= sort_link t(".comment_threads"), "comment_thread_count", { :desc_default => true } %></li>
-    <li><%= sort_link t(".bookmarks"), "bookmarks_count", { :desc_default => true } %></li>
-    <li><%= sort_link t(".subscriptions"), "subscriptions_count", { :desc_default => true } %></li>
-    <li><%= sort_link t(".word_count"), "word_count", { :desc_default => true } %></li>
+    <li><%= sort_link t(".hits"), "hits", { desc_default: true } %></li>
+    <li><%= sort_link t(".kudos"), "kudos_count", { desc_default: true } %></li>
+    <li><%= sort_link t(".comment_threads"), "comment_thread_count", { desc_default: true } %></li>
+    <li><%= sort_link t(".bookmarks"), "bookmarks_count", { desc_default: true } %></li>
+    <li><%= sort_link t(".subscriptions"), "subscriptions_count", { desc_default: true } %></li>
+    <li><%= sort_link t(".word_count"), "word_count", { desc_default: true } %></li>
   </ul>
 
   <ul class="view actions" role="menu">
@@ -81,8 +81,8 @@
                 <% if work.series? %>(Series)<% end %>
                 <% if (params[:view_type] != nil && params[:view_type] != "fandom") %><span class="fandom">(<%= work.fandom_string %>)</span><% end %>
                 <% if work.work? %><span class="words">
-                  (<%= ts("%{wordcount} words", wordcount: number_with_delimiter(work.word_count)) %>)</span>
-                <% end%>
+                  (<%= t(".word_count_with_input", wordcount: number_with_delimiter(work.word_count)) %>)</span>
+                <% end %>
               </dt>
               <dd>
                 <dl class="stats">

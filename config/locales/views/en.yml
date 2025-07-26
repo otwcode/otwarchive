@@ -2052,6 +2052,7 @@ en:
       types_view: Types View
       user_subscriptions: User Subscriptions
       word_count: Word Count
+      word_count_with_input: "%{wordcount} words"
       work_bookmarks: Work Bookmarks
       work_count: Work Count
       work_subscriptions: Work Subscriptions
