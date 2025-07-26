@@ -60,7 +60,10 @@ module StatsHelper
         END AS published_in_range
         FROM chapters c
         LEFT JOIN comments com
-          ON com.commentable_id = c.id AND com.commentable_type = 'Chapter' AND com.depth = 0
+          ON com.commentable_id = c.id AND com.commentable_type = 'Chapter' 
+          AND com.depth = 0 
+          AND com.spam = FALSE
+          AND com.approved = TRUE
         WHERE c.published_at BETWEEN '#{start_date}' AND '#{end_date}'
         -- Only account for posted chapters
         AND c.posted = TRUE
