@@ -23,6 +23,16 @@ module StatsHelper
 	      INNER JOIN pseuds ON pseuds.id = creatorships.pseud_id
 	      INNER JOIN users ON users.id = pseuds.user_id
       ), 
+      -- Get fandom tags tied to works
+      fandom_tags AS (
+        SELECT 
+          uw.user_id,
+          uw.work_id,
+          tags.name AS fandom
+        FROM user_works uw
+        INNER JOIN taggings ON taggings.taggable_id = uw.work_id AND taggings.taggable_type = 'Work'
+        INNER JOIN tags ON taggings.tagger_id = tags.id AND tags.type = 'Fandom'
+      ),
       work_stats AS (
         SELECT
           c.work_id,
@@ -31,7 +41,7 @@ module StatsHelper
           -- Recomputing the whole Work count when All Years is selected, unfortunately
           SUM(c.word_count) as word_count,
         CASE 
-          -- Evaluate whether Work contains a chapter that was published in date range
+          -- Evaluate whether Work contains a chapter published in range
           WHEN MAX(c.published_at) IS NOT NULL THEN TRUE 
           ELSE FALSE 
         END AS published_in_range
@@ -39,6 +49,7 @@ module StatsHelper
         LEFT JOIN comments com
           ON com.commentable_id = c.id AND com.commentable_type = 'Chapter' AND com.depth = 0
         WHERE c.published_at BETWEEN '#{start_date}' AND '#{end_date}'
+        AND c.posted = TRUE
         GROUP BY c.work_id
       ),
       -- Gets the total posted works for a series in specified range
@@ -58,7 +69,7 @@ module StatsHelper
 	      GROUP BY series.id
       ),
       -- Get the concatenated fandom string
-      fandom_info AS (
+      fandom_string AS (
         SELECT taggings.taggable_id AS work_id,
         GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string
         FROM taggings
@@ -71,12 +82,11 @@ module StatsHelper
         'WORK' AS type,
         uw.work_id as id,
         uw.work_title as title,
-        tags.name AS fandom,
+        ft.fandom AS fandom,
         work_stats.word_count AS word_count,
         -- This doesn't retain the prior way of sorting via last revised at for All Years
         work_stats.last_published_chapter_date AS date,
-        -- Should probably separate this out into different query?
-        fandom_info.fandom_string AS fandom_string,
+        fs.fandom_string AS fandom_string,
         sc.hit_count as hits,
         -- Use stats_counter for bookmarks and kudos as well?
         sc.kudos_count AS kudos_count,
@@ -86,13 +96,12 @@ module StatsHelper
         NULL as work_count
       FROM user_works uw
       -- Tags
-      INNER JOIN taggings ON taggings.taggable_id = uw.work_id AND taggings.taggable_type = 'Work'
-      INNER JOIN tags ON taggings.tagger_id = tags.id AND tags.type = 'Fandom'
+      INNER JOIN fandom_tags ft ON ft.work_id = uw.work_id AND ft.user_id = uw.user_id
       -- Counts
       LEFT JOIN subscriptions s ON s.subscribable_id = uw.work_id AND s.subscribable_type = 'Work'
       LEFT JOIN stat_counters sc ON sc.work_id = uw.work_id
       -- Fandom string
-      LEFT JOIN fandom_info ON fandom_info.work_id = uw.work_id
+      LEFT JOIN fandom_string fs ON fs.work_id = uw.work_id
       -- Work stats
       LEFT JOIN work_stats ON work_stats.work_id = uw.work_id
       -- Filters
@@ -101,7 +110,7 @@ module StatsHelper
       AND uw.work_posted = TRUE
       -- Only works within range
       AND work_stats.published_in_range = TRUE
-      GROUP BY id, title, tags.name
+      GROUP BY id, title, fandom
     )
     UNION ALL
     (
@@ -109,12 +118,11 @@ module StatsHelper
         'SERIES' AS type,
         series.id,
         series.title,
-        tags.name AS fandom,
+        ft.fandom AS fandom,
         NULL AS word_count,
         -- Most recent chapter update date for all works in series
         MAX(work_stats.last_published_chapter_date) AS date,
-        -- Should probably separate this out into different query?
-        GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string,
+        fs.fandom_string AS fandom_string,
         NULL as hits,
         NULL AS kudos_count,
         COUNT(DISTINCT b.id) AS bookmarks_count,
@@ -127,11 +135,12 @@ module StatsHelper
       INNER JOIN serial_works sw ON sw.series_id = series.id
       INNER JOIN user_works uw ON uw.work_id = sw.work_id
       -- Tags
-      INNER JOIN taggings ON taggings.taggable_id = uw.work_id AND taggings.taggable_type = 'Work'
-      INNER JOIN tags ON taggings.tagger_id = tags.id AND tags.type = 'Fandom'
+      INNER JOIN fandom_tags ft ON ft.work_id = uw.work_id AND ft.user_id = uw.user_id
       -- Bookmarks/Subsriptions on series itself
       LEFT JOIN bookmarks b ON b.bookmarkable_id = series.id AND b.bookmarkable_type = 'Series'
       LEFT JOIN subscriptions s ON s.subscribable_id = series.id AND s.subscribable_type = 'Series'
+      -- Fandom string
+      LEFT JOIN fandom_string fs ON fs.work_id = uw.work_id
       -- Used for published in range check
       LEFT JOIN work_stats ON work_stats.work_id = uw.work_id 
       -- Filters
