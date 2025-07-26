@@ -7,22 +7,18 @@ FactoryBot.define do
     rating_string { ArchiveConfig.RATING_DEFAULT_TAG_NAME }
     archive_warning_string { ArchiveConfig.WARNING_NONE_TAG_NAME }
     language_id { Language.default.id }
-    # chapter_info = { content: "This is some chapter content for my work." }
+    chapter_info = { content: "This is some chapter content for my work." }
+    chapter_attributes { chapter_info }
     posted { true }
 
     transient do
       authors { [build(:pseud)] }
-      chapter_content { "This is some chapter content for my work." }
-      chapter_year { nil }
     end
 
     after(:build) do |work, evaluator|
       evaluator.authors.each do |pseud|
         work.creatorships.build(pseud: pseud)
       end
-
-      chapter = build(:chapter, work: work, content: evaluator.chapter_content, year: evaluator.chapter_year)
-      work.chapters << chapter
     end
 
     factory :no_authors do

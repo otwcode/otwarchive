@@ -110,12 +110,11 @@ class StatsController < ApplicationController
     # chart_col_title = chart_col.split(".")[0].titleize == "Comments" ? ts("Comment Threads") : chart_col.split(".")[0].titleize
     chart_col_title = chart_col.titleize
 
-    if @sort == "date"
-      chart_title = @dir == "ASC" ? t(".most_recent") : t(".oldest")
-    else
-      key = @dir == "ASC" ? ".bottom_five" : ".top_five"
-      chart_title = t(key, chart_col_title: chart_col_title)
-    end
+    chart_title = if @sort == "date"
+                    @dir == "ASC" ? t(".most_recent") : t(".oldest")
+                  else
+                    @dir == "ASC" ? t(".bottom_five", chart_col_title: chart_col_title) : t(".top_five", chart_col_title: chart_col_title)
+                  end
     @chart_data.new_column("number", chart_col_title)
 
     # Add Rows and Values

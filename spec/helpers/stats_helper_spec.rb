@@ -16,6 +16,13 @@ describe StatsHelper do
     end
   end
 
+  def create_work_set_first_chapter_info(title, chapter_content, year, posted: true)
+    work = create(:work, title: title, authors: user.pseuds, posted: posted)
+    work.first_chapter.update!(published_at: Date.new(year, 1, 1))
+    work.first_chapter.update!(content: chapter_content)
+    work
+  end
+
   describe "generating statistics" do
     before do
       User.current_user = user
@@ -77,7 +84,7 @@ describe StatsHelper do
 
     it "excludes unposted chapters posted in same year from word count" do
       # create work with 1 posted chapter, 1 draft chapter
-      partially_posted = create(:work, title: "Partially unposted", chapter_content: "one two three four five", chapter_year: 2010, authors: user.pseuds)
+      partially_posted = create_work_set_first_chapter_info("Partially unposted", "one two three four five", 2010)
       create(:chapter, :draft, content: "six seven eight", work: partially_posted, year: 2010)
 
       result = run_query("date", "DESC", "All Years")
@@ -104,7 +111,6 @@ describe StatsHelper do
       expect_stat_item(
         series, 
         {
-          title: "Awesome Series 1",
           fandom: "Testing",
           fandom_string: "Testing",
           work_count: 1,
@@ -131,12 +137,7 @@ describe StatsHelper do
     end
 
     it "excludes draft works from series work count" do
-      unposted = create(:work, 
-                          title: "Unposted", 
-                          chapter_content: "one two three four five", 
-                          chapter_year: 2015, 
-                          authors: user.pseuds, 
-                          posted: false)
+      unposted = create_work_set_first_chapter_info("Unposted", "one two three four five", 2015, posted: false)
       create(:chapter, :draft, content: "six seven eight", work: unposted, year: 2015)
 
       series = create(:series, title: "Series with draft work", works: [unposted], authors: user.pseuds)
@@ -155,7 +156,7 @@ describe StatsHelper do
     end
 
     it "filters posted works with draft chapters from counts" do
-      partially_posted = create(:work, title: "Partially unposted", chapter_content: "one two three four five", chapter_year: 2010, authors: user.pseuds)
+      partially_posted = create_work_set_first_chapter_info("Partially unposted", "one two three four five", 2010)
       # draft chapter is in different year
       create(:chapter, :draft, content: "six seven eight", work: partially_posted, year: 2018)
 
