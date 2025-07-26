@@ -1,6 +1,18 @@
 module StatsHelper
+  VALID_SORT_COLUMNS = %w[hits date kudos_count comment_thread_count bookmarks_count subscriptions_count word_count].freeze
+  VALID_SORT_DIRECTIONS = %w[ASC DESC].freeze
+
+  private
+
+  def sanitize_sort_params(column, direction)
+    column = "hits" unless VALID_SORT_COLUMNS.include?(column)
+    direction = "DESC" unless VALID_SORT_DIRECTIONS.include?(direction)
+    [column, direction]
+  end
   
   def stat_items(user, sort_column, sort_direction, year)
+    # Since we cannot bind sort column/direction, validate input
+    sort_column, sort_direction = sanitize_sort_params(sort_column, sort_direction)
     # Establish date ranges
     if year == "All Years"
       start_date = Date.new(1950, 1, 1)
@@ -10,7 +22,7 @@ module StatsHelper
       end_date = start_date.end_of_year
     end
 
-    sql = <<-SQL
+    sql_array = [<<-SQL, { user_id: user.id }] # rubocop:disable Rails/SquishedSQLHeredocs
       -- Prefilter works by user
       WITH user_works AS (
         SELECT 
@@ -65,7 +77,7 @@ module StatsHelper
         -- Join work stats to determine whether series contains a work with a chapter published in range
         INNER JOIN work_stats ON work_stats.work_id = uw.work_id
         WHERE work_stats.published_in_range = TRUE
-	        AND uw.user_id = #{ActiveRecord::Base.connection.quote(user.id)}
+	        AND uw.user_id = :user_id
           -- Only account for posted works
           AND uw.work_posted = TRUE
 	      GROUP BY series.id
@@ -107,7 +119,7 @@ module StatsHelper
       -- Work stats
       LEFT JOIN work_stats ON work_stats.work_id = uw.work_id
       -- Find for current user
-      WHERE uw.user_id = #{ActiveRecord::Base.connection.quote(user.id)} 
+      WHERE uw.user_id = :user_id 
       -- Only posted works
       AND uw.work_posted = TRUE
       -- Only works with a chapter published within range
@@ -146,15 +158,16 @@ module StatsHelper
       -- Used for published-in-range check
       LEFT JOIN work_stats ON work_stats.work_id = uw.work_id 
       -- Find for current user
-      WHERE uw.user_id = #{ActiveRecord::Base.connection.quote(user.id)}
+      WHERE uw.user_id = :user_id
       -- Only retrieve series info if work in series had a chapter published in range
       AND work_stats.published_in_range = TRUE
       GROUP BY series.id, series.title, fandom
     )
-    ORDER BY #{ActiveRecord::Base.connection.quote(sort_column)} #{ActiveRecord::Base.connection.quote(sort_direction)}, title
+    ORDER BY #{sort_column} #{sort_direction}, title
     SQL
 
-    results = ActiveRecord::Base.connection.exec_query(sql)
+    sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, sql_array)
+    results = ActiveRecord::Base.connection.exec_query(sanitized_sql)
     results.map { |row| StatItem.new(row) }
   end
 end

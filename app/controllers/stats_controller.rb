@@ -13,9 +13,10 @@ class StatsController < ApplicationController
 
   # gather statistics for the user on all their works
   def index
-    sort_options = %w[hits date kudos_count comment_thread_count bookmarks_count subscriptions_count word_count].freeze
-    @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
-    @dir = params[:sort_direction] == "ASC" ? "ASC" : "DESC"
+    # sort_options = %w[hits date kudos_count comment_thread_count bookmarks_count subscriptions_count word_count].freeze
+    # @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
+    # @dir = params[:sort_direction] == "ASC" ? "ASC" : "DESC"
+    @sort, @dir = sanitize_sort_params(params[:sort_column], params[:sort_direction])
     params[:sort_column] = @sort
     params[:sort_direction] = @dir
 
@@ -30,7 +31,6 @@ class StatsController < ApplicationController
                .sort.map(&:to_s)
     
     @current_year = @years.include?(params[:year]) ? params[:year] : "All Years"
-
     @stats = stat_items(@user, @sort, @dir, @current_year)
 
     # user_works = Work.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
@@ -121,7 +121,7 @@ class StatsController < ApplicationController
     @chart_data.new_column("number", chart_col_title)
 
     # Add Rows and Values
-    @chart_data.add_rows(work_items.uniq[0..4].map { |w| [w.title, w.public_send(chart_col)] })
+    @chart_data.add_rows(work_items.uniq[0..4].map { |w| [w.title, stat_element(w, chart_col)] })
 
     # image version of bar chart
     # opts from here: http://code.google.com/apis/chart/image/docs/gallery/bar_charts.html
@@ -151,22 +151,22 @@ class StatsController < ApplicationController
     items.sum { |i| i.public_send(field).to_i }
   end
 
-  # def stat_element(work, element)
-  #   case element.downcase
-  #   when "date"
-  #     work.date
-  #   when "hits"
-  #     work.hits
-  #   when "kudos.count"
-  #     work.kudos.count
-  #   when "comment_thread_count"
-  #     work.comment_thread_count
-  #   when "bookmarks.count"
-  #     work.bookmarks.count
-  #   when "subscriptions.count"
-  #     work.subscriptions.count
-  #   when "word_count"
-  #     work.word_count
-  #   end
-  # end
+  def stat_element(work, element)
+    case element.downcase
+    when "date"
+      work.date
+    when "hits"
+      work.hits
+    when "kudos_count"
+      work.kudos_count
+    when "comment_thread_count"
+      work.comment_thread_count
+    when "bookmarks_count"
+      work.bookmarks_count
+    when "subscriptions_count"
+      work.subscriptions_count
+    when "word_count"
+      work.word_count
+    end
+  end
 end
