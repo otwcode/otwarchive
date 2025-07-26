@@ -24,11 +24,11 @@
 <div class="wrapper">
   <dl class="statistics meta group" role="complementary">
     <% { user_subscriptions: t(".user_subscriptions"),
-         kudos: t(".kudos"), 
+         kudos: t(".kudos"),
          comment_thread_count: t(".comment_threads"),
-         work_bookmarks: t(".work_bookmarks"), 
-         work_subscriptions: t(".work_subscriptions"), 
-         series_bookmarks: t(".series_bookmarks"), 
+         work_bookmarks: t(".work_bookmarks"),
+         work_subscriptions: t(".work_subscriptions"),
+         series_bookmarks: t(".series_bookmarks"),
          series_subscriptions: t(".series_subscriptions"),
          word_count: t(".word_count") }.each do |stat, stat_text| %>
       <% stat == :word_count ? html_class = "words" : html_class = stat.to_s.humanize.downcase %>
@@ -77,7 +77,7 @@
           <li>
             <dl>
               <dt>
-                <%= link_to work.title, work.item_path %> 
+                <%= link_to work.title, work.item_path %>
                 <% if work.series? %>(Series)<% end %>
                 <% if (params[:view_type] != nil && params[:view_type] != "fandom") %><span class="fandom">(<%= work.fandom_string %>)</span><% end %>
                 <% if work.work? %><span class="words">
