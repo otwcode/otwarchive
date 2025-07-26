@@ -12,7 +12,7 @@ class StatItem
     @title = record["title"]
     @fandom = record["fandom"]
     @fandom_string = record["fandom_string"]
-    @hits = record["hits"]
+    @hits = record["hits"]&.to_i || 0
     @word_count = record["word_count"]&.to_i || 0
     @date = record["date"]
     @bookmarks_count = record["bookmarks_count"]&.to_i || 0
