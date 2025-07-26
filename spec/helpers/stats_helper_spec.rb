@@ -42,7 +42,6 @@ describe StatsHelper do
       create(:chapter, work: work, year: 2011)
 
       results = run_query("date", "DESC", 2010)
-      puts "#{results}"
       expect(results.length).to eq(1)
       expect(results.map(&:id)).to include(work.id)
     end
@@ -73,8 +72,6 @@ describe StatsHelper do
       # grouped by fandom, so there should be 3 results
       expect(results.length).to eq(3)
 
-      puts "#{results}"
-
       # Check fandom strings are the same
       results.each { |result| expect(result.fandom_string).to eq("doctor who, sherlock, supernatural") }
 
@@ -102,7 +99,6 @@ describe StatsHelper do
     it "displays series and work within series in stat count" do
       create(:series_with_a_work, authors: user.pseuds)
       results = run_query("date", "DESC", "All Years")
-      puts "#{results}"
 
       series = results.find { |item| item.type == "SERIES" }
       work = results.find { |item| item.type == "WORK" }

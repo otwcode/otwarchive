@@ -50,12 +50,12 @@
   <ul class="sorting actions" role="menu">
     <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
     <li><%= sort_link t(".date"), "date" %></li>
-    <li><%= sort_link t(".hits"), "hits", {:desc_default => true} %></li>
-    <li><%= sort_link t(".kudos"), "kudos_count", {:desc_default => true} %></li>
-    <li><%= sort_link t(".comment_threads"), "comment_thread_count", {:desc_default => true} %></li>
-    <li><%= sort_link t(".bookmarks"), "bookmarks_count", {:desc_default => true} %></li>
-    <li><%= sort_link t(".subscriptions"), "subscriptions_count", {:desc_default => true} %></li>
-    <li><%= sort_link t(".word_count"), "word_count", {:desc_default => true} %></li>
+    <li><%= sort_link t(".hits"), "hits", { :desc_default => true } %></li>
+    <li><%= sort_link t(".kudos"), "kudos_count", { :desc_default => true } %></li>
+    <li><%= sort_link t(".comment_threads"), "comment_thread_count", { :desc_default => true } %></li>
+    <li><%= sort_link t(".bookmarks"), "bookmarks_count", { :desc_default => true } %></li>
+    <li><%= sort_link t(".subscriptions"), "subscriptions_count", { :desc_default => true } %></li>
+    <li><%= sort_link t(".word_count"), "word_count", { :desc_default => true } %></li>
   </ul>
 
   <ul class="view actions" role="menu">
@@ -105,8 +105,8 @@
                     <dt class="comments"><%= t(".comment_threads") %>:</dt>
                     <dd class="comments"><%= number_with_delimiter(work.comment_thread_count) %></dd>
                   <% end %>
-                  <dt class="bookmarks"><%= t(".bookmarks") %>:</dt>
-                  <dd class="bookmarks"><%= number_with_delimiter(work.bookmarks_count) %></dd>
+                  <dt class="bookmark-count"><%= t(".bookmarks") %>:</dt>
+                  <dd class="bookmark-count"><%= number_with_delimiter(work.bookmarks_count) %></dd>
                 </dl>
               </dd>
             </dl>
