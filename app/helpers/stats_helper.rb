@@ -151,7 +151,7 @@ module StatsHelper
       AND work_stats.published_in_range = TRUE
       GROUP BY series.id, series.title, fandom
     )
-    ORDER BY #{sort_column} #{sort_direction}, title
+    ORDER BY #{ActiveRecord::Base.connection.quote(sort_column)} #{ActiveRecord::Base.connection.quote(sort_direction)}, title
     SQL
 
     results = ActiveRecord::Base.connection.exec_query(sql)

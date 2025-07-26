@@ -32,7 +32,6 @@ class StatsController < ApplicationController
     @current_year = @years.include?(params[:year]) ? params[:year] : "All Years"
 
     @stats = stat_items(@user, @sort, @dir, @current_year)
-    puts "**** #{@stats}"
 
     # user_works = Work.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
     # user_chapters = Chapter.joins(pseuds: :user).where(users: { id: @user.id }).where(posted: true)
@@ -79,7 +78,6 @@ class StatsController < ApplicationController
              when "flat"
                 { ts("All Fandoms") => @uniq_stats }
              else
-                puts "SHOULD GET HERE!!!"
                 @stats.group_by(&:fandom)
              end
 

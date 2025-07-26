@@ -90,17 +90,16 @@
                     <dt class="work_count"><%= ts("Work Count:") %></dt>
                     <dd class="work_count"><%= number_with_delimiter(work.work_count) %> </dd>
                   <% end %>
-                  <% # if (work_subscriber_count = Subscription.where(:subscribable_id => work.id, :subscribable_type => 'Work').count) > 0 %>
+                  <% if work.subscriptions_count > 0 %>
                     <dt class="subscriptions"><%= ts("Subscriptions:") %></dt>
                     <dd class="subscriptions">
-                      <%# <%= number_with_delimiter(work_subscriber_count) %>
                       <%= number_with_delimiter(work.subscriptions_count) %>
                       </dd>
-                  <% # end %>
+                  <% end %>
                   <% if work.work? %>
                     <dt class="hits"><%= ts("Hits:") %></dt>
                     <dd class="hits"><%= number_with_delimiter(work.hits) %> </dd>
-                    <% # dt ts("Downloads:") /dt dd work.downloads /dd %>
+                    <%# dt ts("Downloads:") /dt dd work.downloads /dd %>
                     <dt class="kudos"><%= ts("Kudos:") %></dt>
                     <dd class="kudos"><%= number_with_delimiter(work.kudos_count) %></dd>
                     <dt class="comments"><%= ts("Comment Threads:") %></dt>
