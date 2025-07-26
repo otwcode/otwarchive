@@ -199,6 +199,12 @@ en:
     show:
       anonymous: Anonymous
       unrevealed_series: Mystery Series
+  stats:
+    all_fandoms: All Fandoms
+    bottom_five: Bottom Five Works By %{chart_col_title}
+    most_recent: Most Recent
+    oldest: Oldest
+    top_five: Top Five Works By %{chart_col_title}
   subscriptions:
     delete_all:
       error: There were problems deleting your subscriptions.

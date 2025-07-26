@@ -23,19 +23,19 @@
 <h3 class="heading"><%= ts("Totals") %></h3>
 <div class="wrapper">
   <dl class="statistics meta group" role="complementary">
-    <% { user_subscriptions: ts("User Subscriptions:"), 
-         kudos: ts("Kudos:"), 
-         comment_thread_count: ts("Comment Threads:"),
-         work_bookmarks: ts("Work Bookmarks:"), 
-         work_subscriptions: ts("Work Subscriptions:"), 
-         series_bookmarks: ts("Series Bookmarks:"), 
-         series_subscriptions: ts("Series Subscriptions:"),
-         word_count: ts("Word Count:") }.each do |stat, stat_text| %>
+    <% { user_subscriptions: t(".user_subscriptions"), 
+         kudos: t(".kudos"), 
+         comment_thread_count: t(".comment_threads"),
+         work_bookmarks: t(".work_bookmarks"), 
+         work_subscriptions: t(".work_subscriptions"), 
+         series_bookmarks: t(".series_bookmarks"), 
+         series_subscriptions: t(".series_subscriptions"),
+         word_count: t(".word_count") }.each do |stat, stat_text| %>
       <% stat == :word_count ? html_class = "words" : html_class = stat.to_s.humanize.downcase %>
-      <dt class="<%= html_class %>"><%= stat_text %></dt>
+      <dt class="<%= html_class %>"><%= stat_text %>:</dt>
       <dd class="<%= html_class %>"><%= number_with_delimiter(@totals[stat]) %></dd>
     <% end %>
-    <dt class="hits"><%= ts("Hits:") %></dt>
+    <dt class="hits"><%= t(".hits") %>:</dt>
     <dd class="hits"><%= number_with_delimiter(@totals[:hits]) %></dd>
   </dl>
 </div>
@@ -46,26 +46,26 @@
 <%= render_chart(@chart, 'stat_chart') %>
 
 <div class="actions module">
-  <h3 class="landmark heading"><%= ts('View Sorting and Actions') %></h3>
+  <h3 class="landmark heading"><%= t(".landmark_heading") %></h3>
   <ul class="sorting actions" role="menu">
     <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
-    <li><%= sort_link ts("Date"), "date" %></li>
-    <li><%= sort_link ts('Hits'), "hits", {:desc_default => true} %></li>
-    <li><%= sort_link ts('Kudos'), "kudos_count", {:desc_default => true} %></li>
-    <li><%= sort_link ts('Comment Threads'), "comment_thread_count", {:desc_default => true} %></li>
-    <li><%= sort_link ts('Bookmarks'), "bookmarks_count", {:desc_default => true} %></li>
-    <li><%= sort_link ts('Subscriptions'), "subscriptions_count", {:desc_default => true} %></li>
-    <li><%= sort_link ts('Word Count'), "word_count", {:desc_default => true} %></li>
+    <li><%= sort_link t(".date"), "date" %></li>
+    <li><%= sort_link t(".hits"), "hits", {:desc_default => true} %></li>
+    <li><%= sort_link t(".kudos"), "kudos_count", {:desc_default => true} %></li>
+    <li><%= sort_link t(".comment_threads"), "comment_thread_count", {:desc_default => true} %></li>
+    <li><%= sort_link t(".bookmarks"), "bookmarks_count", {:desc_default => true} %></li>
+    <li><%= sort_link t(".subscriptions"), "subscriptions_count", {:desc_default => true} %></li>
+    <li><%= sort_link t(".word_count"), "word_count", {:desc_default => true} %></li>
   </ul>
 
   <ul class="view actions" role="menu">
-  <li><%= span_if_current ts("Fandoms View"), current_path_with(view_type: nil), @view_type == "fandom" %></li>
-  <li><%= span_if_current ts("Flat View"), current_path_with(view_type: "flat"), @view_type == "flat" %></li>
-  <li><%= span_if_current ts("Types View"), current_path_with(view_type: "type"), @view_type == "type" %></li>
+  <li><%= span_if_current t(".fandoms_view"), current_path_with(view_type: nil), @view_type == "fandom" %></li>
+  <li><%= span_if_current t(".flat_view"), current_path_with(view_type: "flat"), @view_type == "flat" %></li>
+  <li><%= span_if_current t(".types_view"), current_path_with(view_type: "type"), @view_type == "type" %></li>
   </ul>
 </div>
 
-<h3 class="landmark heading"><%= ts('Listing Statistics') %></h3>
+<h3 class="landmark heading"><%= t(".listing_statistics") %></h3>
 <ul class="statistics index group">
   <% @works.keys.sort.each do |fandom| %>
     <li class="fandom listbox group">
@@ -87,25 +87,25 @@
               <dd>
                 <dl class="stats">
                   <% if work.series? %>
-                    <dt class="work_count"><%= ts("Work Count:") %></dt>
+                    <dt class="work_count"><%= t(".work_count") %>:</dt>
                     <dd class="work_count"><%= number_with_delimiter(work.work_count) %> </dd>
                   <% end %>
                   <% if work.subscriptions_count > 0 %>
-                    <dt class="subscriptions"><%= ts("Subscriptions:") %></dt>
+                    <dt class="subscriptions"><%= t(".subscriptions") %>:</dt>
                     <dd class="subscriptions">
                       <%= number_with_delimiter(work.subscriptions_count) %>
                       </dd>
                   <% end %>
                   <% if work.work? %>
-                    <dt class="hits"><%= ts("Hits:") %></dt>
+                    <dt class="hits"><%= t(".hits") %>:</dt>
                     <dd class="hits"><%= number_with_delimiter(work.hits) %> </dd>
                     <%# dt ts("Downloads:") /dt dd work.downloads /dd %>
-                    <dt class="kudos"><%= ts("Kudos:") %></dt>
+                    <dt class="kudos"><%= t(".kudos") %>:</dt>
                     <dd class="kudos"><%= number_with_delimiter(work.kudos_count) %></dd>
-                    <dt class="comments"><%= ts("Comment Threads:") %></dt>
+                    <dt class="comments"><%= t(".comment_threads") %>:</dt>
                     <dd class="comments"><%= number_with_delimiter(work.comment_thread_count) %></dd>
                   <% end %>
-                  <dt class="bookmarks"><%= ts("Bookmarks:") %></dt>
+                  <dt class="bookmarks"><%= t(".bookmarks") %>:</dt>
                   <dd class="bookmarks"><%= number_with_delimiter(work.bookmarks_count) %></dd>
                 </dl>
               </dd>

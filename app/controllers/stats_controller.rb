@@ -74,11 +74,11 @@ class StatsController < ApplicationController
     @view_type = view_type_opts.include?(params[:view_type]) ? params[:view_type] : "fandom"
     @works = case @view_type
              when "type"
-                @uniq_stats.group_by(&:type_label)
+               @uniq_stats.group_by(&:type_label)
              when "flat"
-                { ts("All Fandoms") => @uniq_stats }
+               { t(".all_fandoms") => @uniq_stats }
              else
-                @stats.group_by(&:fandom)
+               @stats.group_by(&:fandom)
              end
 
     # gather totals for all works
@@ -108,15 +108,13 @@ class StatsController < ApplicationController
 
     chart_col = @sort == "date" ? "hits" : @sort
     # chart_col_title = chart_col.split(".")[0].titleize == "Comments" ? ts("Comment Threads") : chart_col.split(".")[0].titleize
-    chart_col_title = chart_col.split(".")[0].titleize
-    if @sort == "date" && @dir == "ASC"
-      chart_title = ts("Oldest")
-    elsif @sort == "date" && @dir == "DESC"
-      chart_title = ts("Most Recent")
-    elsif @dir == "ASC"
-      chart_title = ts("Bottom Five Works By #{chart_col_title}")
+    chart_col_title = chart_col.titleize
+
+    if @sort == "date"
+      chart_title = @dir == "ASC" ? t(".most_recent") : t(".oldest")
     else
-      chart_title = ts("Top Five Works By #{chart_col_title}")
+      key = @dir == "ASC" ? ".bottom_five" : ".top_five"
+      chart_title = t(key, chart_col_title: chart_col_title)
     end
     @chart_data.new_column("number", chart_col_title)
 
