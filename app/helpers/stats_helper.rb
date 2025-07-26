@@ -147,7 +147,7 @@ module StatsHelper
       WHERE uw.user_id = #{ActiveRecord::Base.connection.quote(user.id)}
       -- Only retrieve series info if work in series had a chapter published in range
       AND work_stats.published_in_range = TRUE
-      GROUP BY series.id, series.title, tags.name
+      GROUP BY series.id, series.title, fandom
     )
     ORDER BY #{sort_column} #{sort_direction}, title
     SQL
