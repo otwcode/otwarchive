@@ -142,7 +142,7 @@ Given /^I have posted an admin post$/ do
 end
 
 Given "the admin post {string}" do |title|
-  FactoryBot.create(:admin_post, title: title)
+  FactoryBot.create(:admin_post, title: title, comment_permissions: :enable_all)
 end
 
 Given "the fannish next of kin {string} for the user {string}" do |kin, user|
@@ -362,6 +362,12 @@ When /^I hide the work "(.*?)"$/ do |title|
   work = Work.find_by(title: title)
   visit work_path(work)
   step %{I follow "Hide Work"}
+end
+
+When "I unhide the work {string}" do |title|
+  work = Work.find_by(title: title)
+  visit work_path(work)
+  step %{I follow "Make Work Visible"}
 end
 
 When "the search criteria contains the ID for {string}" do |login|

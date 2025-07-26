@@ -84,14 +84,19 @@ Metrics/PerceivedComplexity:
 Migration/LargeTableSchemaUpdate:
   Tables:
     - abuse_reports
+    - active_storage_attachments
     - active_storage_blobs
+    - active_storage_variant_records
     - admin_activities
     - audits
+    - blocks
     - bookmarks
+    - chapters
     - comments
     - common_taggings
     - collection_items
     - collection_participants
+    - collection_preferences
     - collection_profiles
     - collections
     - creatorships
@@ -105,12 +110,14 @@ Migration/LargeTableSchemaUpdate:
     - invitations
     - kudos
     - log_items
+    - meta_taggings
     - mutes
     - preferences
     - profiles
     - prompts
     - pseuds
     - readings
+    - related_works
     - set_taggings
     - serial_works
     - series
@@ -119,8 +126,9 @@ Migration/LargeTableSchemaUpdate:
     - subscriptions
     - tag_nominations
     - tag_set_associations
-    - tags
+    - tag_sets
     - taggings
+    - tags
     - users
     - works
 

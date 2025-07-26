@@ -172,16 +172,20 @@ describe CommentMailer do
     end
 
     context "when image safety mode is not enabled for the parent type" do
-      it "embeds the image in the HTML email when image safety mode is completely disabled" do
+      it "strips the image from the email when image safety mode is completely disabled" do
         allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return([])
-        expect(email).to have_html_part_content(image_tag)
-        expect(email).not_to have_text_part_content(image_url)
+        expect(email).not_to have_html_part_content(image_tag)
+        expect(email).not_to have_text_part_content(image_tag)
+        expect(email).to have_html_part_content(image_url)
+        expect(email).to have_text_part_content(image_url)
       end
 
-      it "embeds the image in the HTML email when image safety mode is enabled for other parent types" do
+      it "strips the image from the HTML email when image safety mode is enabled for other parent types" do
         allow(ArchiveConfig).to receive(:PARENTS_WITH_IMAGE_SAFETY_MODE).and_return(all_parent_types - comment_parent_type)
-        expect(email).to have_html_part_content(image_tag)
-        expect(email).not_to have_text_part_content(image_url)
+        expect(email).not_to have_html_part_content(image_tag)
+        expect(email).not_to have_text_part_content(image_tag)
+        expect(email).to have_html_part_content(image_url)
+        expect(email).to have_text_part_content(image_url)
       end
     end
   end

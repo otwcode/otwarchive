@@ -149,7 +149,11 @@ en:
     tos_faq:
       page_title: Terms of Service FAQ
   inbox:
-    page_title: "%{user} - Inbox"
+    show:
+      page_title: "%{user} - Inbox"
+    update:
+      must_select_item: Please select at least one comment first.
+      success: Inbox successfully updated.
   invite_requests:
     create:
       queue_disabled:
@@ -193,8 +197,6 @@ en:
       cannot_delete_matching_username: You cannot delete the pseud matching your username, sorry!
       not_deleted: The pseud was not deleted.
       successfully_deleted: The pseud was successfully deleted.
-    show:
-      could_not_find_user: Couldn't find user "%{username}"
     update:
       successfully_updated: Pseud was successfully updated.
   questions:
@@ -234,6 +236,7 @@ en:
     changed_username:
       admin:
         successfully_updated: Username has been successfully updated.
+      new_username_must_be_different: Your new username must be different from your current username.
       user:
         incorrect_password: Your password was incorrect
         successfully_updated: Your username has been successfully updated.

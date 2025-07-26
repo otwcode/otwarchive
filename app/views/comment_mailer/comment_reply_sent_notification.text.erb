@@ -4,13 +4,13 @@ You replied to a comment on <% if @comment.ultimate_parent.is_a?(Tag) then %>the
 <%= commenter_pseud_or_name_text(@parent_comment) %> wrote:
 <%= text_divider %>
 
-<%= to_plain_text(raw @parent_comment.sanitized_content) %>
+<%= to_plain_text(raw(@parent_comment.sanitized_mailer_content)) %>
 
 <%= text_divider %>
 
 You responded:
 <%= text_divider %>
 
-<%= to_plain_text(raw @comment.sanitized_content) %>
+<%= to_plain_text(raw(@comment.sanitized_mailer_content)) %>
 
 <%= render 'comment_notification_footer', formats: [:text] %><% end %>

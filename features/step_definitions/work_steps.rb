@@ -373,11 +373,12 @@ When /^I delete chapter ([\d]+) of "([^"]*)"$/ do |chapter, title|
 end
 
 # Posts a chapter for the current user
-When /^I post a chapter for the work "([^"]*)"$/ do |work_title|
+When /^I post a chapter for the work "([^"]*)"(?: as "(.*?)")?$/ do |work_title, pseud|
   work = Work.find_by(title: work_title)
   visit work_url(work)
   step %{I follow "Add Chapter"}
   step %{I fill in "content" with "la la la la la la la la la la la"}
+  select(pseud, from: "chapter_author_attributes_ids") if pseud.present?
   step %{I post the chapter}
 end
 
@@ -812,4 +813,12 @@ end
 Then "I should not see {string} within the work blurb of {string}" do |content, work|
   work = Work.find_by(title: work)
   step %{I should not see "#{content}" within "li#work_#{work.id}"}
+end
+
+Then "I should see an HTML comment containing the number {int} within {string}" do |expected_number, selector|
+  html = page.find(selector).native.inner_html
+  comment_match = html.match(/.*<!--[^\d]*(\d+)[^\d]*-->.*/)
+  expect(comment_match).not_to be_nil
+  number = comment_match[1].to_i
+  expect(number).to eq(expected_number)
 end
