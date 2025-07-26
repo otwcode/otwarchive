@@ -9,7 +9,7 @@ class Admin < ApplicationRecord
          :two_factor_authenticatable,
          :two_factor_backupable,
          otp_backup_code_length: ArchiveConfig.ADMIN_TOTP_BACKUP_CODE_LENGTH,
-         otp_number_of_backup_codes: ArchiveConfig.ADMIN_TOTP_BACKUP_CODES,
+         otp_number_of_backup_codes: ArchiveConfig.ADMIN_TOTP_BACKUP_CODE_COUNT,
          password_length: ArchiveConfig.ADMIN_PASSWORD_LENGTH_MIN..ArchiveConfig.ADMIN_PASSWORD_LENGTH_MAX,
          reset_password_within: ArchiveConfig.DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES.days,
          lock_strategy: :none,

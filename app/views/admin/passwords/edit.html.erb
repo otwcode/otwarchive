@@ -21,7 +21,7 @@
     <dd><%= f.password_field :password_confirmation, id: :edit_password_confirmation %></dd>
     <% if @totp_required %>
       <dt><%= f.label :otp_attempt, t(".label.two_factor_authentication_code") %></dt>
-      <dd><%= f.text_field :otp_attempt, "aria-describedby": "otp-field-description" %></dd>
+      <dd><%= f.text_field :otp_attempt %></dd>
     <% end %>
     <dt class="landmark"><%= t(".landmark.submit") %></dt>
     <dd class="submit actions"><%= f.submit t(".submit") %></dd>

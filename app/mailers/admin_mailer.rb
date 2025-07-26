@@ -40,7 +40,7 @@ class AdminMailer < ApplicationMailer
     @codes = codes
 
     mail(
-      to: admin.email,
+      to: @admin.email,
       subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME) 
     )
   end
