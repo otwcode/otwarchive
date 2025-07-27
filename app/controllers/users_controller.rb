@@ -77,7 +77,7 @@ class UsersController < ApplicationController
     @new_login = params[:new_login]
 
     unless logged_in_as_admin? || @user.valid_password?(params[:password])
-      flash[:error] = t(".user.incorrect_password")
+      flash[:error] = t(".user.incorrect_password_html", contact_support_link: helpers.link_to(t("users.confirm_change_email.contact_support"), new_feedback_report_path))
       render(:change_username) && return
     end
 
@@ -300,7 +300,7 @@ class UsersController < ApplicationController
     else
       wrong_password!(params[:new_email],
                       t("users.confirm_change_email.wrong_password_html", contact_support_link: helpers.link_to(t("users.confirm_change_email.contact_support"), new_feedback_report_path)),
-                      t("users.changed_password.wrong_password"))
+                      t("users.changed_password.wrong_password_html", contact_support_link: helpers.link_to(t("users.confirm_change_email.contact_support"), new_feedback_report_path)))
     end
   end
 
