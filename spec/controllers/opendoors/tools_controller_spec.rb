@@ -11,7 +11,7 @@ describe Opendoors::ToolsController do
     it "denies access if not logged in with Open Doors privileges" do
       fake_logout
       get :index
-      it_redirects_to_user_login
+      it_redirects_to_user_login_with_error
 
       fake_login_known_user(user)
       get :index
@@ -40,7 +40,7 @@ describe Opendoors::ToolsController do
     it "denies access if not logged in with Open Doors privileges" do
       fake_logout
       post :url_update
-      it_redirects_to_user_login
+      it_redirects_to_user_login_with_error
 
       fake_login_known_user(user)
       post :url_update

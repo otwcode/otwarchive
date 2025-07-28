@@ -64,7 +64,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           get :show_comments, params: { tag_id: fandom.name }
-          it_redirects_to_user_login
+          it_redirects_to_user_login_with_error
         end
       end
     end

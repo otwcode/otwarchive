@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedirectExpectationHelper
-  def it_redirects_to_user_login(notice = "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+  def it_redirects_to_user_login_with_error(notice = "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
     it_redirects_to_with_error(new_user_session_path(return_to: request.fullpath), notice)
   end
 

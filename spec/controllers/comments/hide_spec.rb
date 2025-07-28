@@ -56,7 +56,7 @@ describe CommentsController do
             put :hide, params: { id: comment.id }
 
             expect(comment.reload.hidden_by_admin?).to be_falsey
-            it_redirects_to_user_login
+            it_redirects_to_user_login_with_error
           end
         end
 
@@ -226,7 +226,7 @@ describe CommentsController do
             put :hide, params: { id: comment.id }
 
             expect(comment.reload.hidden_by_admin?).to be_truthy
-            it_redirects_to_user_login
+            it_redirects_to_user_login_with_error
           end
         end
 
@@ -398,7 +398,7 @@ describe CommentsController do
             put :unhide, params: { id: comment.id }
 
             expect(comment.reload.hidden_by_admin?).to be_truthy
-            it_redirects_to_user_login
+            it_redirects_to_user_login_with_error
           end
         end
 
@@ -568,7 +568,7 @@ describe CommentsController do
             put :unhide, params: { id: comment.id }
 
             expect(comment.reload.hidden_by_admin?).to be_falsey
-            it_redirects_to_user_login
+            it_redirects_to_user_login_with_error
           end
         end
 

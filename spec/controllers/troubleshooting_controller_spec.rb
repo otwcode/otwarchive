@@ -15,7 +15,7 @@ describe TroubleshootingController do
     context "when logged out" do
       it "errors and redirects to the login page" do
         get :show, params: { tag_id: tag.to_param }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -69,7 +69,7 @@ describe TroubleshootingController do
     context "when logged out" do
       it "errors and redirects to the login page" do
         put :update, params: { tag_id: tag.to_param, actions: ["fix_counts"] }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 

@@ -12,7 +12,7 @@ describe CollectionParticipantsController do
     context "where user isn't logged in" do
       it "redirects to new user session with error" do
         get :join, params: { collection_id: collection.name }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -82,7 +82,7 @@ describe CollectionParticipantsController do
     context "user is not logged in" do
       it "redirects to the index and displays an access denied message" do
         get :index, params: { collection_id: collection.name }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 

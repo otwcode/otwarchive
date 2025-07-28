@@ -63,7 +63,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           get :new, params: { tag_id: fandom.name }
-          it_redirects_to_user_login
+          it_redirects_to_user_login_with_error
         end
       end
     end
@@ -302,7 +302,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
-          it_redirects_to_user_login
+          it_redirects_to_user_login_with_error
         end
       end
     end
@@ -770,7 +770,7 @@ describe CommentsController do
           it "doesn't destroy comment and redirects with error" do
             delete :destroy, params: { id: comment.id }
 
-            it_redirects_to_user_login
+            it_redirects_to_user_login_with_error
             expect { comment.reload }.not_to raise_exception
           end
         end
