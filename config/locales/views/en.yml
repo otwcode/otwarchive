@@ -2160,13 +2160,13 @@ en:
       resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
     change_password:
       browser_title: Change Password
-      page_heading: Change Password
-      old_password: Old password
-      new_password: New password
-      confirm_new_password: Confirm new password
-      submit: Submit
       change_password: Change Password
+      confirm_new_password: Confirm new password
+      new_password: New password
+      old_password: Old password
+      page_heading: Change Password
       password_length: "%{minimum} to %{maximum} characters"
+      submit: Submit
     change_username:
       account_faq: Account FAQ
       browser_title: Change Username
