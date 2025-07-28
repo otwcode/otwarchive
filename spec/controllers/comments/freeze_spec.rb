@@ -78,7 +78,7 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_falsey
-            it_redirects_to_user_login
+            it_redirects_to_user_login_with_error
           end
         end
 
@@ -351,7 +351,7 @@ describe CommentsController do
             put :freeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_truthy
-            it_redirects_to_user_login
+            it_redirects_to_user_login_with_error
           end
         end
 
@@ -605,7 +605,7 @@ describe CommentsController do
             put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_falsey
-            it_redirects_to_user_login
+            it_redirects_to_user_login_with_error
           end
         end
 
@@ -857,7 +857,7 @@ describe CommentsController do
             put :unfreeze, params: { id: comment.id }
 
             expect(comment.reload.iced).to be_truthy
-            it_redirects_to_user_login
+            it_redirects_to_user_login_with_error
           end
         end
 

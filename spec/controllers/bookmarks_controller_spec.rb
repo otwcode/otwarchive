@@ -8,7 +8,7 @@ describe BookmarksController do
     context "without javascript" do
       it "redirects logged out users" do
         get :new
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
       
       context "when logged in" do
@@ -31,7 +31,7 @@ describe BookmarksController do
     context "denies access for work that isn't visible to user" do
       subject { get :new, params: { work_id: work } }
       let(:success) { expect(response).to render_template("new") }
-      let(:success_admin) { it_redirects_to_user_login }
+      let(:success_admin) { it_redirects_to_user_login_with_error }
 
       include_examples "denies access for work that isn't visible to user"
     end
@@ -43,7 +43,7 @@ describe BookmarksController do
     context "when user is not logged in" do
       it "redirects to login" do
         post :create, params: { work_id: work.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 

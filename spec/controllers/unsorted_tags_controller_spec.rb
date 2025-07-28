@@ -13,7 +13,7 @@ describe UnsortedTagsController do
       end
 
       it "redirects with an error" do
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 

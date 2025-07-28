@@ -23,7 +23,7 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         get :index, params: { user_id: moderator.login, tag_set_id: owned_tag_set.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -411,7 +411,7 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         get :show, params: { id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -488,7 +488,7 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         get :new, params: { tag_set_id: owned_tag_set.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -597,7 +597,7 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         get :edit, params: { id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -759,7 +759,7 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         post :create, params: { tag_set_id: owned_tag_set.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -933,7 +933,7 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         put :update, params: { tag_set_id: owned_tag_set.id, id: tag_set_nomination.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -1185,7 +1185,7 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         delete :destroy, params: { id: tag_set_nomination.id, tag_set_id: owned_tag_set.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -1289,7 +1289,7 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         get :confirm_destroy_multiple, params: { tag_set_id: owned_tag_set.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -1325,7 +1325,7 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         delete :destroy_multiple, params: { tag_set_id: owned_tag_set.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -1364,7 +1364,7 @@ describe TagSetNominationsController do
     context 'user is not logged in' do
       it 'redirects and returns an error message' do
         put :update_multiple, params: { tag_set_id: owned_tag_set.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 

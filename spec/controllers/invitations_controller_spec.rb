@@ -14,7 +14,7 @@ describe InvitationsController do
         fake_login_admin(admin)
         get :index, params: { user_id: user.login }
 
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -36,7 +36,7 @@ describe InvitationsController do
         fake_login_admin(admin)
         get :manage, params: { user_id: user.login }
 
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -60,7 +60,7 @@ describe InvitationsController do
         it "redirects with error" do
           get :show, params: { user_id: user.login, id: invitation.id }
 
-          it_redirects_to_user_login
+          it_redirects_to_user_login_with_error
         end
       end
 
@@ -87,7 +87,7 @@ describe InvitationsController do
           fake_login_admin(admin)
           get :show, params: { user_id: user.login, id: invitation.id }
 
-          it_redirects_to_user_login
+          it_redirects_to_user_login_with_error
         end
       end
 
@@ -107,7 +107,7 @@ describe InvitationsController do
         it "redirects with error" do
           get :show, params: { id: invitation.id }
 
-          it_redirects_to_user_login
+          it_redirects_to_user_login_with_error
         end
       end
 
@@ -134,7 +134,7 @@ describe InvitationsController do
           fake_login_admin(admin)
           get :show, params: { id: invitation.id }
 
-          it_redirects_to_user_login
+          it_redirects_to_user_login_with_error
         end
       end
 

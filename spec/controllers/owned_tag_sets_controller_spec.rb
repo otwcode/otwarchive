@@ -183,7 +183,7 @@ describe OwnedTagSetsController do
     context "where user is not logged in" do
       it "shows the access denied path" do
         post :create
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
