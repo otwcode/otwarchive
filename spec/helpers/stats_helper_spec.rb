@@ -54,15 +54,65 @@ describe StatsHelper do
       expect(results.map(&:id)).not_to include(work.id)
     end
 
+    it "excludes series with posted works with published chapters outside date range" do
+      work = create(:work, authors: user.pseuds)
+      create(:chapter, work: work, year: 2010)
+
+      create(:series, works: [work], authors: user.pseuds)
+
+      results = run_query("date", "DESC", 2011)
+      expect(results).to be_empty
+    end
+
+    it "includes series with posted works with published chapters inside date range" do
+      work = create(:work, authors: user.pseuds)
+      create(:chapter, work: work, year: 2010)
+
+      create(:series, works: [work], authors: user.pseuds)
+
+      results = run_query("date", "DESC", 2010)
+      expect(results.size).to eq(2)
+      expect(results.map(&:type)).to contain_exactly("WORK", "SERIES")
+    end
+
     it "excludes unposted works" do
       draft = create(:work, posted: false, authors: user.pseuds)
       create(:chapter, work: draft, year: 2010)
 
       results = run_query("date", "DESC", 2010)
       expect(results.map(&:id)).not_to include(draft.id)
+
+      results = run_query("date", "DESC", "All Years")
+      expect(results.map(&:id)).not_to include(draft.id)
     end
 
-    it "returns stat items grouped by fandom" do
+    it "returns work stat items grouped by fandom" do
+      fandoms = Set.new(["supernatural", "doctor who", "sherlock"])
+      work = create(:work, authors: user.pseuds, fandom_string: fandoms.to_a.join(", "))
+      create(:chapter, work: work, year: 2010)
+      create(:series, works: [work], authors: user.pseuds)
+
+      results = run_query("date", "DESC", "All Years")
+      
+      # each fandom will have 1 work and 1 series entry -> 6
+      expect(results.length).to eq(6)
+
+      # verify work and series item appears for all fandoms
+      results_by_fandom = results.group_by(&:fandom)
+      results_by_fandom.each do |_, stat_items|
+        types = stat_items.map(&:type)
+        expect(types).to contain_exactly("WORK", "SERIES")
+        expect(types.size).to eq(2)
+      end
+      
+      # Check fandom strings are the same
+      results.each { |result| expect(result.fandom_string).to eq("doctor who, sherlock, supernatural") }
+
+      stat_fandoms = Set.new(results.map(&:fandom))
+      expect(stat_fandoms).to eq(fandoms)
+    end
+
+    it "returns series and work stat items grouped by fandom" do
       fandoms = Set.new(["supernatural", "doctor who", "sherlock"])
       work = create(:work, authors: user.pseuds, fandom_string: fandoms.to_a.join(", "))
       create(:chapter, work: work, year: 2010)
@@ -164,6 +214,17 @@ describe StatsHelper do
       create(:series, title: "Series", works: [partially_posted], authors: user.pseuds)
       results = run_query("date", "DESC", 2018)
       expect(results.length).to eq(0)
+    end
+
+    it "sanitizes invalid sort column, sort direction, and year" do
+      expect(sanitize_stat_params("invalid", "invalid", "invalid")).to eq(["hits", "DESC", Date.new(1950, 1, 1), Time.zone.today])
+
+      work = create(:work, authors: user.pseuds)
+      create(:chapter, work: work)
+
+      results = run_query("invalid", "invalid", "invalid")
+      # should return results
+      expect(results).not_to be_empty
     end
   end
 end

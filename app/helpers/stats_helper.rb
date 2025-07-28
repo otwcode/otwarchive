@@ -9,18 +9,26 @@ module StatsHelper
     direction = "DESC" unless VALID_SORT_DIRECTIONS.include?(direction)
     [column, direction]
   end
-  
-  def stat_items(user, sort_column, sort_direction, year)
+
+  def sanitize_stat_params(column, direction, year)
     # Since we cannot bind sort column/direction, validate input
-    sort_column, sort_direction = sanitize_sort_params(sort_column, sort_direction)
+    column, direction = sanitize_sort_params(column, direction)
     # Establish date ranges
-    if year == "All Years"
+    if year.to_s.match?(/\A\d{4}\z/)
+      parsed_year = year.to_i
+      start_date = Date.new(parsed_year, 1, 1)
+      end_date = start_date.end_of_year
+    else
+      # Default: All Years
       start_date = Date.new(1950, 1, 1)
       end_date = Time.zone.today
-    else
-      start_date = Date.new(year.to_i, 1, 1)
-      end_date = start_date.end_of_year
     end
+
+    [column, direction, start_date, end_date]
+  end
+  
+  def stat_items(user, sort_column, sort_direction, year)
+    sort_column, sort_direction, start_date, end_date = sanitize_stat_params(sort_column, sort_direction, year)
 
     sql_array = [<<-SQL, { user_id: user.id }] # rubocop:disable Rails/SquishedSQLHeredocs
       -- Prefilter works by user
