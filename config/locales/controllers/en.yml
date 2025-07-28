@@ -213,13 +213,11 @@ en:
   users:
     changed_password:
       blank_password: You must enter your old password.
-      wrong_password: Your old password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
       wrong_password_html: Your old password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
     changed_username:
       admin:
         successfully_updated: Username has been successfully updated.
       user:
-        incorrect_password: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
         incorrect_password_html: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
         successfully_updated: Your username has been successfully updated.
     confirm_change_email:
