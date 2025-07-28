@@ -1010,7 +1010,7 @@ describe CommentsController do
 
       it "redirects with an error" do
         get :index, params: { work_id: work }
-        it_redirects_to(new_user_session_path(restricted_commenting: true))
+        it_redirects_to(new_user_session_path(restricted_commenting: true, return_to: request.fullpath))
       end
     end
   end
