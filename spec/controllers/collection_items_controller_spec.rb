@@ -275,12 +275,7 @@ describe CollectionItemsController do
       subject { get :new, params: { work_id: work.id } }
       let(:work) { create(:work) }
       let(:success) { expect(response).to render_template("new") }
-      let(:redirects_to_login) do
-        it_redirects_to_with_error(
-          new_user_session_path,
-          "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
-        )
-      end
+      let(:redirects_to_login) { it_redirects_to_user_login }
       let(:success_admin) { redirects_to_login }
 
       include_examples "denies access for work that isn't visible to user"
