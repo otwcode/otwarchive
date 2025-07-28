@@ -168,6 +168,8 @@ pre {
 #header .primary .dropdown a:focus,
 #header .user .dropdown a:focus,
 #footer,
+#footer button:hover,
+#footer button:focus,
 .actions a:hover,
 .actions a:focus,
 input[type="submit"]:hover,
