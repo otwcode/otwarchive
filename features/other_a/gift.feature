@@ -25,6 +25,14 @@ Feature: Create Gifts
       And I go to the gifts page for the recipient giftee1
     Then I should see "GiftStory1 by gifter for giftee1"
 
+  Scenario: Work blurb includes an HTML comment containing the unix epoch of the updated time
+  
+    Given time is frozen at 2025-04-12 17:00 UTC
+    When I give the work to "giftee1"
+      And I press "Post"
+      And I go to the gifts page for the recipient giftee1
+    Then I should see an HTML comment containing the number 1744477200 within "li.work.blurb"
+
   Scenario: Gifts page for recipient when logged out should show recipient's gifts if visible to all
     When I give the work to "giftee1"
       And I press "Post"

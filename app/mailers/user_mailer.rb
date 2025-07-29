@@ -31,7 +31,7 @@ class UserMailer < ApplicationMailer
     @collection = Collection.find(collection_id)
     mail(
       to: @user.email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}]#{'[' + @collection.title + ']'} Request to include work in a collection"
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
        )
   end
 
@@ -113,6 +113,7 @@ class UserMailer < ApplicationMailer
       creation = creation_type.constantize.where(id: creation_id).first
       next unless creation && creation.try(:posted)
       next if creation.is_a?(Chapter) && !creation.work.try(:posted)
+      next if creation.try(:hidden_by_admin) || (creation.is_a?(Chapter) && creation.work.try(:hidden_by_admin))
       next if creation.pseuds.any? { |p| p.user == User.orphan_account } # no notifications for orphan works
 
       # TODO: allow subscriptions to orphan_account to receive notifications
@@ -185,9 +186,10 @@ class UserMailer < ApplicationMailer
   # It is also sent when assignments are regenerated.
   def potential_match_generation_notification(collection_id, email)
     @collection = Collection.find(collection_id)
+    @is_collection_email = (email == @collection.collection_email)
     mail(
       to: email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] Potential assignment generation complete"
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
     )
   end
 
