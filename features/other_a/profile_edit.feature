@@ -205,22 +205,6 @@ Scenario: Changing email address -- translated emails are sent when user enables
       And the email should have "Confirm your email change" in the subject
       And the email to email address "valid2@archiveofourown.org" should be translated
 
-Scenario: Date of birth - under age
-
-  When I enter a birthdate that shows I am under age
-  Then I should see "You must be over 13"
-
-Scenario: Entering date of birth and displaying
-
-  When I fill in my date of birth
-  Then I should see "Your profile has been successfully updated"
-  When I change my preferences to display my date of birth
-  Then I should see "My birthday: 1980-11-30"
-    And 0 emails should be delivered
-  When I log out
-    And I go to editname's profile page
-  Then I should see "My birthday: 1980-11-30"
-
 Scenario: Change password - mistake in typing old password
 
   When I make a mistake typing my old password

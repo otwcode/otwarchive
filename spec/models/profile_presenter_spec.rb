@@ -13,13 +13,13 @@ describe ProfilePresenter do
       end
     end
 
-    context "for a user whose preference allows showing the email" do
+    context "for a user whose preference allows showing the email (legacy)" do
       before do
         allow(preference).to receive(:email_visible).and_return(true)
       end
 
-      it "returns the email" do
-        expect(subject.email).to eq("example@example.com")
+      it "still returns nil" do
+        expect(subject.email).to be_nil
       end
     end
   end
@@ -45,20 +45,27 @@ describe ProfilePresenter do
       end
     end
 
-    context "for a user whose preference allows showing date of birth" do
+    context "for a user whose preference allows showing date of birth (legacy)" do
       before do
         allow(preference).to receive(:date_of_birth_visible).and_return(true)
       end
 
-      it "returns the date of birth if it's present" do
+      it "still returns nil" do
         profile.date_of_birth = date_of_birth
-        expect(subject.date_of_birth).to eq(date_of_birth)
+        expect(subject.date_of_birth).to be_nil
       end
 
-      it "returns nil if it's not present" do
+      it "still returns nil if it's not present" do
         profile.date_of_birth = nil
         expect(subject.date_of_birth).to be_nil
       end
+    end
+  end
+
+  describe "location" do
+    it "returns nil" do
+      profile.location = "Anywhere"
+      expect(subject.location).to be_nil
     end
   end
 end

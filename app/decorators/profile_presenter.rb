@@ -4,10 +4,14 @@ class ProfilePresenter < SimpleDelegator
   end
 
   def date_of_birth
-    super if user.preference.try(:date_of_birth_visible)
+    nil
   end
 
   def email
-    user.email if user.preference.try(:email_visible)
+    nil
+  end
+
+  def location
+    nil
   end
 end
