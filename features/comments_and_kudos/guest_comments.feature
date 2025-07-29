@@ -47,7 +47,6 @@ Scenario: Guest comments with embedded images are rendered as plain text
 Scenario: Guest sees warning footnote and required fields on comment form
   Given the work "Test Work" by "author" with guest comments enabled
   When I go to the work "Test Work"
-  And I follow "Comment"
   Then I should see "You will not be able to edit or delete your comment after it is posted."
   And I should see "Guest name (required)"
   And I should see "Guest email (required)"
@@ -57,7 +56,6 @@ Scenario: Logged-in user does not see guest-specific elements
   Given the work "Test Work" by "author" with guest comments enabled
   And I am logged in as "commenter"
   When I go to the work "Test Work"
-  And I follow "Comment"
   Then I should not see "You will not be able to edit or delete your comment after it is posted."
   And I should not see "Guest name (required)"
   And I should not see "Guest email (required)"
@@ -66,6 +64,5 @@ Scenario: Logged-in user does not see guest-specific elements
 Scenario: Guest comment validation messages appear correctly
   Given the work "Test Work" by "author" with guest comments enabled
   When I go to the work "Test Work"
-  And I follow "Comment"
   And I try to submit a comment without filling required fields
   Then I should see validation messages for guest name and email
