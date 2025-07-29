@@ -200,7 +200,6 @@ describe InvitationsController do
             fake_login_admin(admin)
           end
 
-          it "errors if email is missing" do
           it "succeeds" do
             subject
 
@@ -208,10 +207,12 @@ describe InvitationsController do
             expect(invitation.reload.invitee_email).to eq(new_email)
           end
 
+          it "errors if email is missing and does not update" do
             put :update, params: { id: invitation.id, invitation: { invitee_email: nil } }
 
             expect(response).to render_template("show")
             expect(flash[:error]).to match("Please enter an email address.")
+            expect(invitation.reload.invitee_email).to eq(old_email)
           end
 
           it "renders #show without notice if the invitation fails to update" do
