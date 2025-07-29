@@ -44,6 +44,7 @@ class SkinsController < ApplicationController
 
   # GET /skins/1
   def show
+    @page_subtitle = @skin.title.html_safe
   end
 
   # GET /skins/new

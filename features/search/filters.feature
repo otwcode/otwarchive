@@ -342,3 +342,13 @@ Feature: Filters
     Then I should see "2 Bookmarked Items in The Hobbit"
     When I follow "Fandoms"
     Then I should see "The Hobbit (2)"
+
+  Scenario: Filtering with an invalid query while excluding a tag
+    When I go to meatloaf's user page
+      And I follow "Works (3)"
+    When I check "Harry Potter (1)" within "#exclude_fandom_tags"
+      And I press "Sort and Filter"
+    Then I should see "Bilbo Does the Thing"
+    When I fill in "work_search_query" with "bad~query!!!"
+      And I press "Sort and Filter"
+    Then I should see "Your search failed because of a syntax error"
