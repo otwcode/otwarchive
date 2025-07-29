@@ -125,21 +125,31 @@ describe InvitationsController do
     end
 
     context "when logged in as an authorized admin" do
-      it "errors if email is missing" do
-        fake_login_admin("policy_and_abuse")
-        post :invite_friend, params: { user_id: inviter.id, id: invitation.id, invitation: { invitee_email: nil } }
+      authorized_admin_roles.each do |role|
+        context "with role #{role}" do
+          before do
+            admin.update!(roles: [role])
+            fake_login_admin(admin)
+          end
+          it "errors if email is missing" do
+            owner = user
+            invite = create(:invitation, creator: owner)
+            post :invite_friend, params: { user_id: owner.id, id: invite.id, invitation: { invitee_email: nil } }
 
-        expect(response).to render_template("show")
-        expect(flash[:error]).to match("Please enter an email address.")
-      end
+            expect(response).to render_template("show")
+            expect(flash[:error]).to match("Please enter an email address.")
+          end
 
-      it "renders #show without a notice if the invitation fails to save" do
-        allow_any_instance_of(Invitation).to receive(:save).and_return(false)
-        fake_login_admin("policy_and_abuse")
-        subject
+          it "renders #show without a notice if the invitation fails to save" do
+            owner = user
+            invite = create(:invitation, creator: owner)
+            allow_any_instance_of(Invitation).to receive(:save).and_return(false)
+            post :invite_friend, params: { user_id: owner.id, id: invite.id, invitation: { invitee_email: "not_a_user@example.com" } }
 
-        expect(response).to render_template("show")
-        expect(flash[:notice]).to be(nil)
+            expect(response).to render_template("show")
+            expect(flash[:notice]).to be(nil)
+          end
+        end
       end
     end
 
