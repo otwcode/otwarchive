@@ -33,7 +33,7 @@ describe InvitationsController do
     let(:invitation) { create(:invitation) }
     let(:success_admin) { expect(response).to render_template("show") }
 
-    context "with both user_id and [invitation] id parameters" do
+    context "with both user_id and invitation id parameters" do
 
       subject do
         owner = user
@@ -55,13 +55,13 @@ describe InvitationsController do
       it_behaves_like "an action users cannot access" # a user who is not the invitation owner
     end
 
+    context "with invitation id parameter and no user_id parameter" do
 
       subject do
         owner = user
         invite = create(:invitation, creator: owner)
         get :show, params: { id: invite.id }
       end
-    context "with [invitation] id parameter and no user_id parameter" do
 
       it "redirects with error when logged in as the invitation owner" do
         invitation_owner = user
