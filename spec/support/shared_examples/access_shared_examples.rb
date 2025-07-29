@@ -1,4 +1,5 @@
-shared_examples "an action authorized admins can access" do |roles_that_are_authorized: []|
+shared_examples "an action authorized admins can access" do |roles_that_are_authorized|
+  roles_that_are_authorized ||= []
   before { fake_login_admin(admin) }
 
   roles_that_are_authorized.each do |role|
@@ -14,7 +15,8 @@ shared_examples "an action authorized admins can access" do |roles_that_are_auth
   end
 end
 
-shared_examples "an action unauthorized admins cannot access" do |roles_that_are_authorized: []|
+shared_examples "an action unauthorized admins cannot access" do |roles_that_are_authorized|
+  roles_that_are_authorized ||= []
   before { fake_login_admin(admin) }
 
   context "with no role" do
@@ -40,12 +42,11 @@ shared_examples "an action unauthorized admins cannot access" do |roles_that_are
   end
 end
 
-shared_examples "an action only authorized admins can access" do |authorized_roles: []|
+shared_examples "an action only authorized admins can access" do |authorized_roles|
+  authorized_roles ||= []
   roles = authorized_roles
-  it_behaves_like "an action authorized admins can access" do |roles_that_are_authorized: roles|
-  end
-  it_behaves_like "an action unauthorized admins cannot access" do |roles_that_are_authorized: roles|
-  end
+  it_behaves_like "an action authorized admins can access", roles
+  it_behaves_like "an action unauthorized admins cannot access", roles
 end
 
 shared_examples "an action guests cannot access" do
