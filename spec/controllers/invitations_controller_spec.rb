@@ -34,7 +34,6 @@ describe InvitationsController do
     let(:success_admin) { expect(response).to render_template("show") }
 
     context "with both user_id and invitation id parameters" do
-
       subject do
         owner = user
         invite = create(:invitation, creator: owner)
@@ -56,7 +55,6 @@ describe InvitationsController do
     end
 
     context "with invitation id parameter and no user_id parameter" do
-
       subject do
         owner = user
         invite = create(:invitation, creator: owner)
@@ -257,8 +255,8 @@ describe InvitationsController do
       expect(Invitation.find_by(id: invitation.id)).not_to be_nil
     end
     let(:access_denied_guest) do
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        expect(Invitation.find_by(id: invitation.id)).not_to be_nil
+      it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      expect(Invitation.find_by(id: invitation.id)).not_to be_nil
     end
     let(:access_denied_user) do
       it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
@@ -299,7 +297,7 @@ describe InvitationsController do
             it "succeeds" do
               subject
 
-              it_redirects_to_with_notice(admin_invitations_path(), "Invitation successfully destroyed")
+              it_redirects_to_with_notice(admin_invitations_path, "Invitation successfully destroyed")
               expect(Invitation.find_by(id: invitation.id)).to be_nil
             end
 
@@ -307,7 +305,7 @@ describe InvitationsController do
               allow_any_instance_of(Invitation).to receive(:destroy).and_return(false)
               subject
 
-              it_redirects_to_with_error(admin_invitations_path(), "Invitation was not destroyed.")
+              it_redirects_to_with_error(admin_invitations_path, "Invitation was not destroyed.")
             end
           end
 
