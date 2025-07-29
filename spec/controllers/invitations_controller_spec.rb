@@ -45,7 +45,7 @@ describe InvitationsController do
       it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_admin_roles|
       end
       it_behaves_like "an action guests cannot access"
-      it_behaves_like "an action users cannot access" # random users, as opposed to the invitation owner
+      it_behaves_like "an action users cannot access" # a user who is not the invitation owner
 
       context "when logged in as the invitation owner" do
         it "succeeds" do
@@ -64,7 +64,7 @@ describe InvitationsController do
       it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_admin_roles|
       end
       it_behaves_like "an action guests cannot access"
-      it_behaves_like "an action users cannot access" # random users, as opposed to the invitation owner
+      it_behaves_like "an action users cannot access" # a user who is not the invitation owner
 
       context "when logged in as the invitation owner" do
         it "redirects with error" do
@@ -93,7 +93,7 @@ describe InvitationsController do
     it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_admin_roles|
     end
     it_behaves_like "an action guests cannot access"
-    it_behaves_like "an action users cannot access" # a random user, as opposed to the invitation owner
+    it_behaves_like "an action users cannot access" # a user who is not the invitation owner
 
     context "when logged in as the invitation owner" do
       it "succeeds" do
@@ -176,7 +176,7 @@ describe InvitationsController do
     end
     let(:access_denied_user) do
       it_redirects_to_with_notice(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
-      expect(invitation.reload.invitee_email).to eq(new_email)
+      expect(invitation.reload.invitee_email).to eq(old_email)
     end
 
     subject { put :update, params: { id: invitation.id, invitation: { invitee_email: new_email } } }
@@ -184,7 +184,7 @@ describe InvitationsController do
     it_behaves_like "an action only authorized admins can access" do |authorized_roles: authorized_admin_roles|
     end
     it_behaves_like "an action guests cannot access"
-    it_behaves_like "an action users cannot access" # random users, as opposed to invitation owner
+    it_behaves_like "an action users cannot access" # a user who is not the invitation owner
 
     context "when logged in as an authorized admin" do
       authorized_admin_roles.each do |role|
@@ -280,6 +280,26 @@ describe InvitationsController do
           context "when invitation creator is an admin" do
             before do
               invitation.creator = admin
+            end
+
+            it "succeeds" do
+              subject
+
+              it_redirects_to_with_notice(admin_invitations_path(), "Invitation successfully destroyed")
+              expect(Invitation.find_by(id: invitation.id)).to be_nil
+            end
+
+            it "redirects with error if invitation fails to destroy" do
+              allow_any_instance_of(Invitation).to receive(:destroy).and_return(false)
+              subject
+
+              it_redirects_to_with_error(admin_invitations_path(), "Invitation was not destroyed.")
+            end
+          end
+
+          context "when there is no invitation creator" do # invitation created by queue
+            before do
+              invitation.creator = :null
             end
 
             it "succeeds" do
