@@ -83,12 +83,13 @@ Scenario: User's email banned after joining invite queue should remove their ema
   Given I am a visitor
   When I am on the homepage
     And I follow "Get an Invitation"
-  When I fill in "invite_request_email" with "foo@bar.com"
+  When I fill in "Email" with "foo+bar@baz.com"
     And I press "Add me to the list"
   Then I should see "You've been added to our queue"
   Given I am logged in as a "policy_and_abuse" admin
   When I go to the manage invite queue page
-  Then I should see "foo@bar.com"
-  When I have banned the address "foo@bar.com"
-  When I go to the manage invite queue page
-  Then I should not see "foo@bar.com"
+  Then I should see "foo+bar@baz.com"
+    And I should not see "foo@baz.com"
+  When I have banned the address "foo+qux@baz.com"
+    And I go to the manage invite queue page
+  Then I should not see "foo+bar@baz.com"

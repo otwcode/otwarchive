@@ -1,6 +1,6 @@
 class InviteRequest < ApplicationRecord
   validates :email, presence: true, email_format: true
-  validates :email, uniqueness: { message: "is already part of our queue." }
+  validates :email, uniqueness: { message: :already_in_queue }
   before_validation :set_simplified_email, on: :create
   validate :check_admin_banned_list, on: :create
   validate :compare_with_users, on: :create
@@ -19,9 +19,7 @@ class InviteRequest < ApplicationRecord
     # Exit if raw email uniqueness error already exists
     return if errors.of_kind?(:email, :taken)
 
-    if InviteRequest.where(simplified_email: simplified_email).exists?
-      errors.add(:email, "is already part of our queue.")
-    end
+    errors.add(:email, :already_in_queue) if InviteRequest.exists?(simplified_email: simplified_email)
   end
 
   def proposed_fill_time
@@ -47,7 +45,7 @@ class InviteRequest < ApplicationRecord
   def compare_with_users
     return unless User.exists?(email: self.email)
 
-    errors.add(:email, "is already being used by an account holder.")
+    errors.add(:email, :email_in_use)
     throw :abort
   end
 
