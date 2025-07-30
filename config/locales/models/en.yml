@@ -124,7 +124,6 @@ en:
         invite_request:
           attributes:
             email:
-              already_in_queue: is already part of our queue.
               blocked_email: has been blocked at the owner's request. That means it can't be used for invitations. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions.
               email_in_use: is already being used by an account holder.
         kudo:
