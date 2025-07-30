@@ -501,6 +501,15 @@ Then "the address {string} should not be banned" do |email|
   step %{I should see "0 emails found"}
 end
 
+Then "I should not be able to add the email {string} to the invite queue" do |email|
+  step %{I am on the homepage}
+  click_link "Get an Invitation"
+  fill_in "Email", with: email
+  click_button "Add me to the list"
+  expect(page).to have_content("Sorry! We couldn't save this invite request because:")
+  expect(page).to have_content("Email has been blocked at the owner's request. That means it can't be used for invitations. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions.")
+end
+
 Then(/^I should not be able to comment with the address "([^"]*)"$/) do |email|
   step %{the work "New Work"}
   step %{I post the comment "I loved this" on the work "New Work" as a guest with email "#{email}"}

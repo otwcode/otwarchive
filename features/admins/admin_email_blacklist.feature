@@ -66,12 +66,18 @@ Scenario: Banning a user's email should prevent requesting invites
     And I log out
     And account creation requires an invitation
     And the invitation queue is enabled
-  When I am on the homepage
-    And I follow "Get an Invitation"
-  When I fill in "invite_request_email" with "foo@bar.com"
-    And I press "Add me to the list"
-  Then I should see "Sorry! We couldn't save this invite request because:"
-    And I should see "Email has been blocked at the owner's request. That means it can't be used for invitations. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions."
+  Then I should not be able to add the email "foo@bar.com" to the invite queue
+
+Scenario: Banning a user's email should prevent aliases requesting invites
+  Given I am logged in as a "policy_and_abuse" admin
+  When I have banned the address "foo+bar@gmail.com"
+    And I log out
+    And account creation requires an invitation
+    And the invitation queue is enabled
+  Then I should not be able to add the email "foo@gmail.com" to the invite queue
+    And I should not be able to add the email "fo.o@gmail.com" to the invite queue
+    And I should not be able to add the email "foo+baz@gmail.com" to the invite queue
+    And I should not be able to add the email "foo@googlemail.com" to the invite queue
 
 Scenario: User's email banned after joining invite queue should remove their email
   Given I am a visitor

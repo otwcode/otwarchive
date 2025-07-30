@@ -2,8 +2,8 @@ class InviteRequest < ApplicationRecord
   validates :email, presence: true, email_format: true
   validates :email, uniqueness: { message: "is already part of our queue." }
   before_validation :set_simplified_email, on: :create
-  before_validation :check_admin_banned_list, on: :create
-  before_validation :compare_with_users, on: :create
+  validate :check_admin_banned_list, on: :create
+  validate :compare_with_users, on: :create
   validate :simplified_email_uniqueness, on: :create
 
   # Borrow the blacklist cleaner but just strip out all the periods for all domains
@@ -33,10 +33,9 @@ class InviteRequest < ApplicationRecord
 
   # Ensure that email is not banned
   def check_admin_banned_list
-    return unless AdminBlacklistedEmail.exists?(email: self.email)
+    return unless AdminBlacklistedEmail.is_blacklisted?(self.email)
 
-    errors.add(:email, "has been blocked at the owner's request. That means it can't be used for invitations. 
-    Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions.")
+    errors.add(:email, :blocked_email)
     throw :abort
   end
 
