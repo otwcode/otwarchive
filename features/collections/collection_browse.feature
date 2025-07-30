@@ -137,3 +137,15 @@ Feature: Collection
     And I should see "It's a test collection" within "#faq"
     And I should see "Be nice to testers" within "#rules"
     And I should see "About Some Test Collection (sometest)"
+
+
+  Scenario: Work blurb includes an HTML comment containing the unix epoch of the updated time
+  
+    Given time is frozen at 2025-04-12 17:00 UTC
+      And I have the collection "Collection1"
+      And a fandom exists with name: "Steven's Universe", canonical: true
+      And I am logged in as a random user
+      And I post the work "Stronger than you" with fandom "Steven's Universe" in the collection "Collection1"
+    When I go to the collections page
+      And I follow "Collection1"
+    Then I should see an HTML comment containing the number 1744477200 within "li.work.blurb"

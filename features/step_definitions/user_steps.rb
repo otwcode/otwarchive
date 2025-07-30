@@ -236,6 +236,11 @@ When /^I visit the change username page for (.*)$/ do |login|
   visit change_username_user_path(user)
 end
 
+When "I visit the change email page for {word}" do |login|
+  user = User.find_by(login: login)
+  visit change_email_user_path(user)
+end
+
 When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
   # To make sure that we don't have caching issues with the byline:
   step %{I wait 1 second}

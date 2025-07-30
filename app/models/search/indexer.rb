@@ -7,6 +7,7 @@ class Indexer
     Pseud: %w[PseudIndexer],
     Series: %w[BookmarkedSeriesIndexer],
     ExternalWork: %w[BookmarkedExternalWorkIndexer],
+    User: %w[UserIndexer],
     Collection: %w[CollectionIndexer]
   }.freeze
 
@@ -33,6 +34,7 @@ class Indexer
       CollectionIndexer,
       PseudIndexer,
       TagIndexer,
+      UserIndexer,
       WorkIndexer,
       WorkCreatorIndexer
     ]

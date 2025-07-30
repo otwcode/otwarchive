@@ -3,6 +3,7 @@ class CollectionItemsController < ApplicationController
   before_action :load_user, only: [:update_multiple]
   before_action :load_collectible_item, only: [:new, :create]
   before_action :check_parent_visible, only: [:new]
+  before_action :users_only, only: [:new]
 
   cache_sweeper :collection_sweeper
 

@@ -206,6 +206,11 @@ en:
               action: Previous Login
               no_details: No previous login recorded
           summary: Shows what notable actions, such as creating an account, a user performed, and when they did them.
+      index:
+        role: Role
+        settings:
+          label: Search settings
+          past: Include past usernames and emails
       show:
         fnok:
           form:
@@ -219,6 +224,12 @@ en:
           invitation: 'Invitation:'
           no_invitation: Created without invitation
           no_role: No roles
+          past_emails:
+            one: 'Past email:'
+            other: 'Past emails:'
+          past_logins:
+            one: 'Past username:'
+            other: 'Past usernames:'
           role:
             one: 'Role:'
             other: 'Roles:'
@@ -693,18 +704,45 @@ en:
       page_heading_html: Unreviewed Comments on %{commentable_link}
   downloads:
     download_afterword:
+      afterword: Afterword
+      comment: drop by the Archive and comment
+      end_notes: End Notes
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link}"
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
-      please_comment_html: Please %{work_comment_link} to let the creator know if you enjoyed their work!
-      work_comment: drop by the Archive and comment
+      please_comment_html: Please %{comment_link} to let the creator know if you enjoyed their work!
+    download_chapter:
+      chapter_byline_html: Chapter by %{byline_names_link}
+      chapter_end_notes_with_chapter_notes: more notes
+      chapter_end_notes_without_chapter_notes: notes
+      chapter_notes: Chapter Notes
+      chapter_summary: Chapter Summary
+      section_chapter_end_notes: Chapter End Notes
+      see_chapter_end_notes_html: See the end of the chapter for %{chapter_end_notes_link}
     download_preface:
+      byline_html: by %{byline_names_link}
+      chapters: 'Chapters: %{chapter_total_display}'
+      collections: 'Collections:'
+      completed: 'Completed: %{date}'
+      end_notes_with_work_notes: more notes
+      end_notes_without_work_notes: notes
       inspired_by:
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
+      language: 'Language:'
+      notes: Notes
+      originally_posted_html: Posted originally on the %{archive_link} at %{work_url}.
+      preface: Preface
+      published: 'Published: %{date}'
+      see_end_notes_html: See the end of the work for %{end_notes_link}
+      series: 'Series:'
+      series_list_html: Part %{position} of %{series_link}
+      stats: 'Stats:'
+      summary: Summary
+      tag_type: "%{tag_type}:"
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
@@ -713,6 +751,8 @@ en:
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
+      updated: 'Updated: %{date}'
+      words: 'Words: %{count_with_delimiters}'
   errors:
     timeout_error:
       contact_support: contact Support
@@ -1733,6 +1773,7 @@ en:
         update: Update Language
       support_available: Support available
     index:
+      language_code_format_html: "(%{code})"
       navigation:
         add: Add a Language
         edit: Edit

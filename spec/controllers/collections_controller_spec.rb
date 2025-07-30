@@ -134,6 +134,59 @@ describe CollectionsController, collection_search: true do
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
+
+    context "when indexing collections for an object" do
+      context "when work does not exist" do
+        it "raises an error" do
+          expect do
+            get :index, params: { work_id: 0 }
+          end.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when work exists" do
+        let(:work) { create(:work) }
+
+        it "renders the index" do
+          get :index, params: { work_id: work.id }
+          expect(response).to render_template :index
+        end
+      end
+
+      context "when collection does not exist" do
+        it "raises an error" do
+          expect do
+            get :index, params: { collection_id: "not_here" }
+          end.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when collection exists" do
+        let(:collection) { create(:collection) }
+
+        it "renders the index" do
+          get :index, params: { collection_id: collection.name }
+          expect(response).to render_template :index
+        end
+      end
+
+      context "when user does not exist" do
+        it "raises an error" do
+          expect do
+            get :index, params: { user_id: "not_here" }
+          end.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when user exists" do
+        let(:user) { create(:user) }
+
+        it "renders the index" do
+          get :index, params: { user_id: user.login }
+          expect(response).to render_template :index
+        end
+      end
+    end
   end
 
   describe "challenges indexes" do

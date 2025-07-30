@@ -19,6 +19,23 @@ Feature:
       And I press "Change Username"
     Then I should see "Your password was incorrect"
 
+  Scenario: The user should not be able to change their username to their current username
+    Given I am logged in as "testuser" with password "password"
+    When I visit the change username page for testuser
+      And I fill in "New username" with "testuser"
+      And I fill in "Password" with "password"
+      And I press "Change Username"
+    Then I should see "Your new username must be different from your current username"
+
+  Scenario: The user should be able to change only the capitalization of their username
+    Given I am logged in as "testy" with password "password"
+    When I visit the change username page for testy
+      And I fill in "New username" with "teSty"
+      And I fill in "Password" with "password"
+      And I press "Change Username"
+    Then I should get confirmation that I changed my username
+      And I should see "Hi, teSty!"
+
   Scenario: The user should not be able to change their username to another user's name
     Given I have no users
       And the following activated user exists
@@ -208,6 +225,23 @@ Feature:
       And I should see "Hi, newusername"
     When I follow "Series"
     Then I should see "Best Series by newusername"
+
+  Scenario: Changing username updates chapter bylines
+    Given the work "Title" by "pikachu" with chapter two co-authored with "before"
+      And I am logged in as "before" with password "password"
+      And I post a chapter for the work "Title"
+    When I view the work "Title"
+      And I view the 3rd chapter
+    Then I should see "Chapter by before"
+    When I visit the change username page for before
+      And I fill in "New username" with "after"
+      And I fill in "Password" with "password"
+      And it is currently 1 second from now
+      And I press "Change Username"
+    Then I should see "Your username has been successfully updated."
+    When I view the work "Title"
+      And I view the 3rd chapter
+    Then I should see "Chapter by after"
 
     Scenario: Changing the username from a forbidden name to non-forbidden
       Given I have no users
