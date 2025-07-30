@@ -401,49 +401,6 @@ class Collection < ApplicationRecord
     approved_collection_items.each(&:notify_of_reveal)
   end
 
-  def self.sorted_and_filtered(sort, filters, page)
-    pagination_args = { page: page }
-
-    # build up the query with scopes based on the options the user specifies
-    query = Collection.top_level
-
-    if filters[:title].present?
-      # we get the matching collections out of autocomplete and use their ids
-      ids = Collection.autocomplete_lookup(search_param: filters[:title],
-                                           autocomplete_prefix: (if filters[:closed].blank?
-                                                                   "autocomplete_collection_all"
-                                                                 else
-                                                                   (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open")
-                                                                 end)).map { |result| Collection.id_from_autocomplete(result) }
-      query = query.where(collections: { id: ids })
-    elsif filters[:closed].present?
-      query = (filters[:closed] == "true" ? query.closed : query.not_closed)
-    end
-    query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if filters[:moderated].present?
-    if filters[:challenge_type].present?
-      case filters[:challenge_type]
-      when "gift_exchange"
-        query = query.gift_exchange
-      when "prompt_meme"
-        query = query.prompt_meme
-      when "no_challenge"
-        query = query.no_challenge
-      end
-    end
-    query = query.order(sort).for_blurb
-
-    if filters[:fandom].blank?
-      query.paginate(pagination_args)
-    else
-      fandom = Fandom.find_by_name(filters[:fandom])
-      if fandom
-        (fandom.approved_collections & query).paginate(pagination_args)
-      else
-        []
-      end
-    end
-  end
-
   # Delete current icon (thus reverting to archive default icon)
   def delete_icon=(value)
     @delete_icon = !value.to_i.zero?
