@@ -1,5 +1,11 @@
 <% content_for :message do %>
-We have finished generating potential assignments for your challenge collection "<%= @collection.title %>" (<%= collection_url(@collection) %>).
+<%= t(".finished_generating.text", collection_title: @collection.title, collection_url: collection_url(@collection)) %>
 
-You can see the potential matches and set assignments on the challenge's Matching page:
-<%= collection_potential_matches_url(@collection) %>.<% end %><% content_for :sent_at do %><%= l(Time.current) %><% end %>
+<%= t(".matches_available.text", matching_page_url: collection_potential_matches_url(@collection)) %>
+<% end %>
+
+<% content_for :footer_note do %>
+<%= collection_footer_note_text(@is_collection_email, @collection) -%>
+<% end %>
+
+<% content_for :sent_at do %><%= l(Time.current) %><% end %>
