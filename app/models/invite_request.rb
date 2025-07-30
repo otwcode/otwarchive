@@ -9,6 +9,7 @@ class InviteRequest < ApplicationRecord
   # Borrow the blacklist cleaner but just strip out all the periods for all domains
   def set_simplified_email
     return if email.blank?
+
     simplified = AdminBlacklistedEmail.canonical_email(email).split('@')
     self.simplified_email = simplified.first.delete(".").gsub(/\+.+$/, "") + "@#{simplified.last}"
   end
@@ -33,7 +34,7 @@ class InviteRequest < ApplicationRecord
 
   # Ensure that email is not banned
   def check_admin_banned_list
-    return unless AdminBlacklistedEmail.is_blacklisted?(self.email)
+    return unless email.present? && AdminBlacklistedEmail.is_blacklisted?(email)
 
     errors.add(:email, :blocked_email)
     throw :abort
