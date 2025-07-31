@@ -9,6 +9,15 @@ class CommentMailerPreview < ApplicationMailerPreview
     CommentMailer.comment_notification(user, comment)
   end
 
+  # Sent to a user when they get a comment on a chaptered work
+  def comment_notification_chaptered
+    user = create(:user)
+    work = create(:work, expected_number_of_chapters: 2)
+
+    comment = create(:comment, commentable: work.first_chapter)
+    CommentMailer.comment_notification(user, comment)
+  end
+
   # Sent to a user when they get a comment on a top-level creation by an official user
   def comment_notification_official
     user = create(:user)
@@ -36,6 +45,16 @@ class CommentMailerPreview < ApplicationMailerPreview
   # Sent to a user when they get a comment reply to their comment
   def comment_reply_notification
     comment = create(:comment)
+
+    replier = create(:user, :for_mailer_preview)
+    reply = create(:comment, commentable: comment, pseud: replier.default_pseud)
+    CommentMailer.comment_reply_notification(comment, reply)
+  end
+  
+  # Sent to a user when they get a comment reply to their comment on a chaptered work
+  def comment_reply_notification_chaptered
+    work = create(:work, expected_number_of_chapters: 2)
+    comment = create(:comment, commentable: work.first_chapter)
 
     replier = create(:user, :for_mailer_preview)
     reply = create(:comment, commentable: comment, pseud: replier.default_pseud)
