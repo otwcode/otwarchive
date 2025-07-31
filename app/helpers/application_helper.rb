@@ -91,7 +91,7 @@ module ApplicationHelper
   end
 
   def byline_text(creation, only_path, text_only: false)
-    # Update Series#expire_byline_cache when changing cache key here
+    # Update Series#expire_byline_cache and Chapter#expire_byline_cache when changing cache key here
     creators = Rails.cache.fetch(["byline_data", creation.cache_key]) { byline_data(creation) }
     byline_text_internal(creators, only_path, text_only: text_only)
   end
