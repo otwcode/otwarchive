@@ -2526,3 +2526,21 @@ en:
     show:
       edit: Edit
       heading: Wrangling Guidelines
+    wrangling_guideline_form:
+      content_required: You need to post some content here.
+      content_too_long:
+        one: We salute your ambition! But sadly the content must be less than %{count} letter long.
+        other: We salute your ambition! But sadly the content must be less than %{count} letters long.
+      content_too_short:
+        one: Brevity is the soul of wit, but your content does have to be at least %{count} letter long.
+        other: Brevity is the soul of wit, but your content does have to be at least %{count} letters long.
+      guideline_text: Guideline text
+      html_editor: HTML
+      landmark:
+        post: Post
+      post: Post
+      required_information: Required information
+      rich_text_editor: Rich Text
+      rich_text_notes_html: Type or paste formatted text.
+      title: Title
+      title_failure: Please enter a title.
