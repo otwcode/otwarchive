@@ -157,11 +157,13 @@ class Pseud < ApplicationRecord
   end
 
   # Produces a byline that indicates the user's name if pseud is not unique
-  def byline(username = user_login)
-    (name != username) ? "#{name} (#{username})" : name
+  # Do NOT internationalize this
+  def byline
+    (name != user_name) ? "#{name} (#{user_name})" : name
   end
 
   # get the former byline
+  # Do NOT internationalize this
   def byline_was
     past_name = name_was.blank? ? name : name_was
     # if we have a user and their login has changed get the old one
