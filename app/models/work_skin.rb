@@ -8,6 +8,10 @@ class WorkSkin < Skin
   def clean_css
     return if self.css.blank?
     check = lambda {|ruleset, property, value|
+      if property.match(/--(#{CssCleaner::ALPHA_REGEX})/) || value.match(/\A(#{CssCleaner::VAR_FUNCTION_REGEX})\z/)
+        errors.add(:base, "Variables are not allowed in work skins.")
+        return false
+      end
       if property == "position" && value == "fixed"
         errors.add(:base, ts("The %{property} property in %{selectors} cannot have the value %{value} in Work skins, sorry!", property: property, selectors: ruleset.selectors.join(", "), value: value))
         return false
