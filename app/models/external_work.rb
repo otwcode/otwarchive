@@ -79,7 +79,7 @@ class ExternalWork < ApplicationRecord
 
   # Visibility has changed, which means we need to reindex
   # the external work's bookmarker pseuds, to update their bookmark counts.
-  def should_reindex_pseuds?
+  def should_update_pseuds_and_collections_indexes?
     pertinent_attributes = %w[id hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
