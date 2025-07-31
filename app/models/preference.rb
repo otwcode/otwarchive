@@ -1,4 +1,6 @@
 class Preference < ApplicationRecord
+  include Justifiable
+  
   belongs_to :user
   belongs_to :skin
   belongs_to :locale, foreign_key: "preferred_locale"
