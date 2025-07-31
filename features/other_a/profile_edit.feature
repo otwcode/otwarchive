@@ -12,22 +12,19 @@ Background:
     And I want to edit my profile
 
 Scenario: Add details
-
   Then I should see the page title "Edit Profile"
   When I fill in the details of my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
-    And I should see "I live in"
+    And I should not see "I live in"
 
 Scenario: Change details
-
   When I change the details in my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
-    And I should see "I live in"
+    And I should not see "I live in"
 
 Scenario: Remove details
-
   When I remove details from my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
@@ -62,10 +59,9 @@ Scenario: Change details as an admin
   Then I should see 1 admin activity log entry
 
 Scenario: Changing email address shows a confirmation page and sends a confirmation mail
-
   When it is currently 2020-04-10 13:37
     And the email address change confirmation period is set to 4 days
-    And I change my preferences to display my email address
+    And I follow "Profile"
     And I follow "Edit My Profile"
     And I follow "Change Email"
     And I fill in "New email" with "valid2@archiveofourown.org"
@@ -90,7 +86,7 @@ Scenario: Changing email address shows a confirmation page and sends a confirmat
     And I follow "confirm your email change" in the email
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
   When I go to editname's profile page
-  Then I should see "My email address: bar@ao3.org"
+  Then I should not see "My email address: bar@ao3.org"
 
   When I am logged in as "editname"
     And I follow "confirm your email change" in the email
@@ -99,10 +95,10 @@ Scenario: Changing email address shows a confirmation page and sends a confirmat
     But I should not see "bar@ao3.org"
     But I should not see "You have requested to change your email address"
   When I go to editname's profile page
-  Then I should see "My email address: valid2@archiveofourown.org"
+  Then I should not see "My email address: valid2@archiveofourown.org"
   When I log out
     And I go to editname's profile page
-  Then I should see "My email address: valid2@archiveofourown.org"
+  Then I should not see "My email address: valid2@archiveofourown.org"
 
 Scenario: Changing email address -- canceling in confirmation step
 
