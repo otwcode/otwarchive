@@ -174,7 +174,7 @@ Scenario: Changing email address -- after requesting password reset
 
   When I am logged out
     And I follow "Forgot password?"
-    And I fill in "Email address or username" with "editname"
+    And I fill in "Email address" with "bar@ao3.org"
     And I press "Reset Password"
   Then 1 email should be delivered to "bar@ao3.org"
   When all emails have been delivered
