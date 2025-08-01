@@ -8,6 +8,7 @@ module ActionView
       class TextArea
         # added method to yank <p> and <br> tags and replace with newlines
         # this needs to reverse "add_paragraph_tags_to_text" from our html_cleaner library
+        # TODO: this is not fully working as of 2025 (probably for years)
         def strip_html_breaks(content, name="")
           return "" if content.blank?
           if name =~ /content/
