@@ -66,10 +66,10 @@ class InboxController < ApplicationController
   def check_blocked
     if blocked_by?(@commentable.ultimate_parent)
       flash[:error] = t("comments.check_blocked.parent")
-      redirect_back(fallback_location: user_inbox_path(@user))
+      redirect_to user_inbox_path(@user)
     elsif blocked_by_comment?(@commentable)
       flash[:error] = t("comments.check_blocked.reply")
-      redirect_back(fallback_location: user_inbox_path(@user))
+      redirect_to user_inbox_path(@user)
     end
   end
 end

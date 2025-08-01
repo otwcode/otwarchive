@@ -1,5 +1,4 @@
 class KudosController < ApplicationController
-  skip_before_action :store_location
   before_action :load_parent, only: [:index]
   before_action :check_parent_visible, only: [:index]
   before_action :admin_logout_required, only: [:create]

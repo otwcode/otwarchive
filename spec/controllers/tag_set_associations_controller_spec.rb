@@ -17,8 +17,7 @@ describe TagSetAssociationsController do
     context "when user is not logged in" do
       it "redirects and returns an error message" do
         put :update_multiple, params: { tag_set_id: owned_tag_set.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you " \
-          "were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
