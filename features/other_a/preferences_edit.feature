@@ -15,8 +15,8 @@ Feature: Edit preferences
     And I go to scott's user page
     And I follow "Preferences"
   Then I should see "Set My Preferences"
-    And I should see "Show my email address to other people."
-    And I should see "Show my date of birth to other people."
+    And I should not see "Show my email address to other people."
+    And I should not see "Show my date of birth to other people."
     And I should see "Hide my work from search engines when possible."
     And I should see "Hide the share buttons on my work."
     And I should see "Show me adult content without checking."
