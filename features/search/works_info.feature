@@ -100,7 +100,10 @@ Feature: Search works by work info
     Then the "Single Chapter" checkbox should be checked
 
   Scenario: Search and sort by title
-    Given I have loaded the fixtures
+    Given the work "First work"
+      And the work "second work (2 of 6)"
+      And the work "third work"
+      And all indexing jobs have been run
     When I am on the search works page
       And I fill in "Title" with "work"
       And I select "Title" from "Sort by"
@@ -126,7 +129,9 @@ Feature: Search works by work info
       And "Ascending" should be selected within "Sort direction"
 
   Scenario: Search by number in title
-    Given I have loaded the fixtures
+    Given the work "First work"
+      And the work "second work (2 of 6)"
+      And all indexing jobs have been run
     When I am on the search works page
       And I fill in "Title" with "work 2 6"
       And I press "Search" within "#new_work_search"
