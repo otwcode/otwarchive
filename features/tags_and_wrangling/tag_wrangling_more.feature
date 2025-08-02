@@ -8,7 +8,6 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       | login       | password      |
       | Enigel      | wrangulator   |
       | dizmo       | wrangulator   |
-      And I have loaded the "roles" fixture
 
     # accessing tag wrangling pages
     When I am logged in as "dizmo" with password "wrangulator"

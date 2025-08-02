@@ -324,9 +324,13 @@ When "I delete known issues" do
   step %{I follow "Delete"}
 end
 
-When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
-  role_name = role.parameterize.underscore
-  role_id = Role.find_by(name: role_name).id
+When "I check the {string} role checkbox" do |role|
+  role_id = Role.find_by(name: role).id
+  check("user_roles_#{role_id}")
+end
+
+When "I uncheck the {string} role checkbox" do |role|
+  role_id = Role.find_by(name: role).id
   uncheck("user_roles_#{role_id}")
 end
 
@@ -402,6 +406,16 @@ Then (/^I should not see a translated admin post$/) do
   step %{I should see "Deutsch Ankuendigung"}
   step %{I follow "Default Admin Post"}
   step %{I should not see "Translations: Deutsch"}
+end
+
+Then "the {string} role checkbox should be checked" do |role|
+  role_id = Role.find_by(name: role).id
+  assert has_checked_field?("user_roles_#{role_id}")
+end
+
+Then "the {string} role checkbox should not be checked" do |role|
+  role_id = Role.find_by(name: role).id
+  assert has_unchecked_field?("user_roles_#{role_id}")
 end
 
 Then /^the work "([^\"]*)" should be hidden$/ do |work|
