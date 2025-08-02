@@ -10,5 +10,4 @@ class Profile < ApplicationRecord
     too_long: ts("must be less than %{max} characters long.", max: PROFILE_TITLE_MAX)
   validates_length_of :about_me, allow_blank: true, maximum: ABOUT_ME_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ABOUT_ME_MAX)
-
 end
