@@ -10,29 +10,26 @@ Feature: Search works by work info
     Then I should see "Your search failed because of a syntax error"
 
   Scenario: Search by language
-    Given I have the Battle set loaded
+    Given a set of old multilanguage works for searching
     When I am on the search works page
       And I select "Deutsch" from "Language"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Language: Deutsch"
       And I should see "1 Found"
+      And I should see "My <strong>er German Work"
       And the 1st result should contain "Language: Deutsch"
     When I follow "Edit Your Search"
     Then "Deutsch" should be selected within "Language"
 
   Scenario: Search by date and then refine by word count
-    Given I have the Battle set loaded
+    Given a set of old multilanguage works for searching
     When I am on the search works page
       And I fill in "Date" with "> 2 years ago"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: revised at: > 2 years ago"
-      And I should see "6 Found"
-      And I should see "First work"
-      And I should see "second work"
-      And I should see "third work"
-      And I should see "fourth"
-      And I should see "fifth"
-      And I should see "I am <strong>er Than Yesterday & Other Lies"
+      And I should see "2 Found"
+      And I should see "My <strong>er German Work"
+      And I should see "unfinished"
     When I follow "Edit Your Search"
     Then I should be on the search works page
       And the field labeled "Date" should contain "> 2 years ago"
@@ -42,14 +39,13 @@ Feature: Search works by work info
       And I should see "No results found"
 
   Scenario: Search with the header search field and then refine by creator
-    Given I have the Battle set loaded
+    Given a set of old multilanguage works for searching
+      And I am logged in as "searcher"
     When I fill in "site_search" with "testuser2"
       And I press "Search"
     Then I should see "You searched for: testuser2"
-      And I should see "3 Found"
-      And I should see "I am <strong>er Than Yesterday & Other Lies"
-      And I should see "fourth"
-      And I should see "fifth"
+      And I should see "1 Found"
+      And I should see "My <strong>er German Work"
     When I follow "Edit Your Search"
     Then I should be on the search works page
       And the field labeled "Any Field" should contain "testuser2"
@@ -57,29 +53,23 @@ Feature: Search works by work info
       And I fill in "Creator" with "testuser2"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Creator: testuser2"
-      And I should see "3 Found"
-      And I should see "fourth"
-      And I should see "fifth"
-      And I should see "I am <strong>er Than Yesterday & Other Lies"
+      And I should see "1 Found"
+      And I should see "My <strong>er German Work"
 
   Scenario: Search by status
-    Given I have loaded the fixtures
+    Given a set of old multilanguage works for searching
     When I am on the search works page
       And I choose "Complete works only"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Complete"
-      And I should see "4 Found"
-      And I should see "First work"
-      And I should see "second work"
-      And I should see "third work"
-      And I should see "fourth"
+      And I should see "1 Found"
+      And I should see "My <strong>er German Work"
     When I am on the search works page
       And I choose "Works in progress only"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Incomplete"
-      And I should see "2 Found"
-      And I should see "fifth"
-      And I should see "I am <strong>er Than Yesterday & Other Lies"
+      And I should see "1 Found"
+      And I should see "unfinished"
 
   Scenario: Search by crossovers
     Given a set of crossover works for searching
@@ -99,16 +89,13 @@ Feature: Search works by work info
       And I should see "Third Work With Multiple Fandoms"
 
   Scenario: Search by single chapter
-    Given I have the Battle set loaded
+    Given a set of old multilanguage works for searching
     When I am on the search works page
       And I check "Single Chapter"
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Single Chapter"
-      And I should see "4 Found"
-      And I should see "First work"
-      And I should see "second work"
-      And I should see "fourth"
-      And I should see "Fulfilled Story-thing"
+      And I should see "1 Found"
+      And I should see "My <strong>er German Work"
     When I follow "Edit Your Search"
     Then the "Single Chapter" checkbox should be checked
 
