@@ -585,20 +585,30 @@ namespace :After do
     collections = Collection.all
     total_batches = (collections.count + 999) / 1000
 
+    def approved_taggables(collection)
+      collection.approved_works.visible_to_all + \
+        collection.approved_bookmarks.visible_to_all + \
+        collection.approved_bookmarks.visible_to_all.map(&:bookmarkable) + \
+        collection.children.flat_map { |subcollection| approved_taggables(subcollection) }
+    end
+
     collections.find_in_batches.with_index do |batch, index|
       batch.each do |collection|
-        approved_taggables = collection.approved_works + collection.approved_bookmarks + collection.approved_bookmarks.map(&:bookmarkable)
-        tags = approved_taggables.flat_map { |taggable| taggable.try(:fandoms) || [] }
+        tags = approved_taggables(collection)
+          .flat_map { |taggable| taggable.try(:fandoms) || [] }
           .uniq
 
         next if tags.empty?
 
         # check if collection is multifandom
-        crossover = FandomCrossover.new.check_for_crossover(tags)
+        crossover = FandomCrossover.check_for_crossover(tags)
         collection.update(multifandom: crossover) if crossover == true
-        next if tags.length > ArchiveConfig.COLLECTION_TAGS_MAX
 
-        collection.tags << tags
+        if tags.length > ArchiveConfig.COLLECTION_TAGS_MAX
+          collection.update(multifandom: crossover)
+        else
+          collection.tags << tags
+        end
       end
 
       puts "Collection batch #{index + 1} of #{total_batches} tagged"

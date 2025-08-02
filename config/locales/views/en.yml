@@ -2096,6 +2096,7 @@ en:
       unsorted_tags: Unsorted Tags (%{count})
       use_type:
         bookmarks: Bookmarks
+        collections: Collections
         drafts: Drafts
         external_works: External Works
         private_bookmarks: Private Bookmarks

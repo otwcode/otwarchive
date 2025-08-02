@@ -741,4 +741,25 @@ describe "rake After:add_collection_tags" do
       expect(collection.tags).to include(*bookmark.fandoms)
     end
   end
+
+  context "when a collection has a subcollection" do
+    let(:subcollection) { create(:collection) }
+    let(:fandom) { create(:canonical_fandom) }
+    let(:bookmark) { create(:series_bookmark, fandom_string: fandom.name) }
+
+    before do
+      subcollection.parent = collection
+      collection.save!(validate: false)
+      bookmark.collections << collection
+      bookmark.collection_items.update_all(
+        user_approval_status: "approved",
+        collection_approval_status: "approved"
+      )
+    end
+
+    it "includes tags from the items in the subcollection" do
+      subject.invoke
+      expect(collection.tags).to include(*bookmark.fandoms)
+    end
+  end
 end
