@@ -1234,7 +1234,7 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    FandomCrossover.new.check_for_crossover(fandoms)
+    FandomCrossover.check_for_crossover(fandoms)
   end
 
   # Does this work have only one relationship tag?

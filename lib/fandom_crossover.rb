@@ -4,7 +4,7 @@
 class FandomCrossover
   # An item with multiple fandoms which are not related
   # to one another can be considered a crossover
-  def check_for_crossover(fandoms)
+  def self.check_for_crossover(fandoms)
     # Short-circuit the check if there's only one fandom tag:
     return false if fandoms.size <= 1
 

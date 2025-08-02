@@ -9,11 +9,11 @@ describe "checking fandoms for crossover" do
   let(:fandom2) { create(:canonical_fandom) }
 
   it "Returns false with empty array of tags" do
-    expect(FandomCrossover.new.check_for_crossover([])).to eq(false)
+    expect(FandomCrossover.check_for_crossover([])).to eq(false)
   end
 
   it "Returns false with one tag" do
-    expect(FandomCrossover.new.check_for_crossover([fandom])).to eq(false)
+    expect(FandomCrossover.check_for_crossover([fandom])).to eq(false)
   end
 
   it "returns true if fandoms are unrelated" do
@@ -21,6 +21,6 @@ describe "checking fandoms for crossover" do
     fandom2.meta_tags << meta2
 
     fandoms = [fandom, fandom2]
-    expect(FandomCrossover.new.check_for_crossover(fandoms)).to eq(true)
+    expect(FandomCrossover.check_for_crossover(fandoms)).to eq(true)
   end
 end
