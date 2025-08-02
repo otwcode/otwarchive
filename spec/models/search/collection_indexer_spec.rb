@@ -13,8 +13,8 @@ describe CollectionIndexer do
 
       it "is not counted for logged in users or guests" do
         document = described_class.new([]).document(collection)
-        expect(document["general_bookmarked_items_count"]).to eq(0)
-        expect(document["public_bookmarked_items_count"]).to eq(0)
+        expect(document[:general_bookmarked_items_count]).to eq(0)
+        expect(document[:public_bookmarked_items_count]).to eq(0)
       end
     end
 
@@ -28,8 +28,8 @@ describe CollectionIndexer do
 
       it "is counted for logged in users only" do
         document = described_class.new([]).document(collection)
-        expect(document["general_bookmarked_items_count"]).to eq(1)
-        expect(document["public_bookmarked_items_count"]).to eq(0)
+        expect(document[:general_bookmarked_items_count]).to eq(1)
+        expect(document[:public_bookmarked_items_count]).to eq(0)
       end
     end
 
@@ -61,8 +61,8 @@ describe CollectionIndexer do
 
       it "counts items in the subcollection" do
         document = described_class.new([]).document(collection)
-        expect(document["general_bookmarked_items_count"]).to eq(1)
-        expect(document["public_bookmarked_items_count"]).to eq(1)
+        expect(document[:general_bookmarked_items_count]).to eq(1)
+        expect(document[:public_bookmarked_items_count]).to eq(1)
         expect(document["general_works_count"]).to eq(1)
         expect(document["public_works_count"]).to eq(1)
       end

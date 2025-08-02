@@ -86,7 +86,7 @@ class CollectionIndexer < Indexer
       only: [
         :id, :name, :title, :description, :parent_id, :challenge_type, :multifandom, :open_doors, :created_at
       ],
-      methods: %i[general_works_count public_works_count general_bookmarked_items_count public_bookmarked_items_count]
+      methods: %i[general_works_count public_works_count]
     ).merge(
       closed: object.closed?,
       unrevealed: object.unrevealed?,
@@ -101,8 +101,21 @@ class CollectionIndexer < Indexer
       assignments_due_at: object.challenge&.assignments_due_at,
       works_reveal_at: object.challenge&.works_reveal_at,
       authors_reveal_at: object.challenge&.authors_reveal_at,
+      general_bookmarked_items_count: get_bookmarked_items_count(object),
+      public_bookmarked_items_count: get_bookmarked_items_count(object, true),
       filter_ids: object.filter_ids,
-      tag: object.tag
+      tag: object.tag,
     )
+  end
+
+  private
+
+  def get_bookmarked_items_count(collection, is_public = false)
+    bookmarks = Bookmark.is_public.joins(:collection_items)
+                        .merge(CollectionItem.approved_by_collection)
+                        .where(collection_items: { collection_id: collection.children.ids + [collection.id] })
+    bookmarks = is_public ? bookmarks.visible_to_all : bookmarks.visible_to_registered_user
+
+    bookmarks.count
   end
 end
