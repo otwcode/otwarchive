@@ -22,7 +22,7 @@ class OrphansController < ApplicationController
       check_all_owned(@to_be_orphaned, current_user.works)
     elsif params[:series_id]
       @to_be_orphaned = Series.find(params[:series_id])
-      @return_to = edit_series_path(@to_be_orphaned)
+      @return_to = series_path(@to_be_orphaned)
       check_one_owned(@to_be_orphaned, current_user.series)
     elsif params[:pseud_id]
       @to_be_orphaned = Pseud.find(params[:pseud_id])
