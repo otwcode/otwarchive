@@ -299,15 +299,17 @@ class Work < ApplicationRecord
   end
 
   def update_pseud_and_collection_indexes
-    return unless should_update_pseuds_and_collections_indexes?
+    return unless should_update_pseud_and_collection_indexes?
 
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
     IndexQueue.enqueue_ids(Collection, collection_ids, :background)
   end
 
   # Visibility has changed, which means we need to reindex
-  # the work's associated collections to update their bookmark counts.
-  def should_update_pseuds_and_collections_indexes?
+  # * the work's pseuds, to update their work counts, as well as
+  # * the work's bookmarker pseuds, to update their bookmark counts
+  # * the work's associated collections to update their bookmark counts.
+  def should_update_pseud_and_collection_indexes?
     pertinent_attributes = %w[id posted restricted in_anon_collection
                               in_unrevealed_collection hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
@@ -889,7 +891,7 @@ class Work < ApplicationRecord
   # Note that because the two filter counts both include unrevealed works, we
   # don't need to check whether in_unrevealed_collection has changed -- it
   # won't change the counts either way.
-  # (Modelled on Work.should_update_pseuds_and_collections_indexes?)
+  # (Modelled on Work.should_update_pseud_and_collection_indexes?)
   def should_reset_filters?
     pertinent_attributes = %w(id posted restricted hidden_by_admin)
     (saved_changes.keys & pertinent_attributes).present?

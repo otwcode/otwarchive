@@ -20,8 +20,8 @@ module Bookmarkable
   end
 
   def update_bookmarker_pseuds_index
-    return unless respond_to?(:should_update_pseuds_and_collections_indexes?)
-    return unless should_update_pseuds_and_collections_indexes?
+    return unless respond_to?(:should_update_pseud_and_collection_indexes?)
+    return unless should_update_pseud_and_collection_indexes?
 
     IndexQueue.enqueue_ids(Pseud, bookmarks.pluck(:pseud_id), :background)
   end
