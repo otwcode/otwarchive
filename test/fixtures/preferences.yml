@@ -255,7 +255,6 @@ preference_78869998:
   view_full_works: false
   updated_at: 2008-11-09 01:26:01 Z
   first_login: true
-  email_visible: true
   adult: false
   id: 78869998
   user_id: 4
@@ -366,7 +365,6 @@ preference_78869999:
   view_full_works: true
   updated_at: 2009-03-14 22:16:33 Z
   first_login: true
-  email_visible: true
   adult: true
   id: 78869999
   user_id: 3
@@ -389,7 +387,6 @@ preference_484751107:
   view_full_works: false
   updated_at: 2009-12-22 11:27:28 Z
   first_login: false
-  email_visible: true
   adult: true
   id: 484751107
   user_id: 1
@@ -412,7 +409,6 @@ preference_78870000:
   view_full_works: false
   updated_at: 2008-11-09 01:26:01 Z
   first_login: true
-  email_visible: true
   adult: false
   id: 78870000
   user_id: 2
