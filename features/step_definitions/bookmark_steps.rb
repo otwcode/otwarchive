@@ -320,6 +320,14 @@ Given "{string} has a bookmark of a work titled {string}" do |user, title|
   step %{all indexing jobs have been run}
 end
 
+Given "pseud {string} has a bookmark of a work titled {string} by {string}" do |pseud, title, creator|
+  pseud = Pseud.find_by(name: pseud)
+  work = FactoryBot.create(:work, title: title, authors: [ensure_user(creator).default_pseud])
+  FactoryBot.create(:bookmark, bookmarkable: work, pseud: pseud)
+
+  step %{all indexing jobs have been run}
+end
+
 def submit_bookmark_form(pseud, note, tags)
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?

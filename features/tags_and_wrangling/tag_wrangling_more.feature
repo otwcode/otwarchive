@@ -3,7 +3,11 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
 
   Scenario: Log in as a tag wrangler and see wrangler pages.
         View new tags in your fandoms
-    Given I have loaded the fixtures
+    Given a media exists with name: "TV Shows", canonical: true
+      And a canonical fandom "first fandom"
+      And a canonical character "Person A"
+      And a canonical fandom "Ghost Soup"
+      And a non-canonical fandom "second fandom"
       And the following activated tag wranglers exist
       | login       | password      |
       | Enigel      | wrangulator   |
@@ -60,7 +64,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I press "Filter"
     Then I should see "Ghost Soup"
       And I should not see "first fandom"
-    When I select "dizmo" from "assignments_10_"
+    When I select "dizmo" from the "Ghost Soup" wrangling assigment dropdown
       And I press "Assign"
     Then I should see "Wranglers were successfully assigned"
 
