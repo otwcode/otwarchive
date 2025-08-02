@@ -62,6 +62,6 @@ class CollectionParticipant < ApplicationRecord
 
     ids = [collection_id]
     ids += collection.children.pluck(:id) if collection.present?
-    IndexQueue.enqueue_ids(Collection, ids, :background)
+    IndexQueue.enqueue_ids(Collection, ids.compact, :main)
   end
 end

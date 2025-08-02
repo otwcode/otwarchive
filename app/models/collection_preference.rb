@@ -14,6 +14,8 @@ class CollectionPreference < ApplicationRecord
   end
 
   def update_collection_index
-    IndexQueue.enqueue_id(Collection, collection_id, :background)
+    return unless collection_id
+
+    IndexQueue.enqueue_id(Collection, collection_id, :main)
   end
 end

@@ -274,7 +274,6 @@ class CollectionItem < ApplicationRecord
   end
 
   # reindex collection after creation, deletion, and approval_status update
-  after_destroy :update_collection_index
   after_commit :update_collection_index, if: :should_update_collection_index?
 
   def update_collection_index
@@ -285,7 +284,9 @@ class CollectionItem < ApplicationRecord
 
   # reindex collection after creation, deletion, and certain attribute updates
   def should_update_collection_index?
-    pertinent_attributes = %w[id collection_approval_status user_approval_status] 
+    return true if destroyed?
+
+    pertinent_attributes = %w[collection_approval_status user_approval_status]
     (self.saved_changes.keys & pertinent_attributes).present?
   end
 end

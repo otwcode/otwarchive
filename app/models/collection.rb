@@ -418,4 +418,20 @@ class Collection < ApplicationRecord
     self.icon_alt_text = nil
     self.icon_comment_text = nil
   end
+
+  def general_works_count
+    approved_works.visible_to_registered_user.count + children.map(&:general_works_count).sum
+  end
+
+  def public_works_count
+    approved_works.visible_to_all.count + children.map(&:public_works_count).sum
+  end
+
+  def general_bookmarked_items_count
+    approved_bookmarks.visible_to_registered_user.count + children.map(&:general_bookmarked_items_count).sum
+  end
+
+  def public_bookmarked_items_count
+    approved_bookmarks.visible_to_all.count + children.map(&:public_bookmarked_items_count).sum
+  end
 end

@@ -3,6 +3,27 @@ class CollectionIndexer < Indexer
     "Collection"
   end
 
+  def self.klass_with_includes
+    Collection.includes(
+      :approved_bookmarks,
+      :approved_bookmarks,
+      :challenge,
+      :children,
+      :owners,
+      :parent,
+      :tags
+    )
+  end
+
+  def self.index_all(**options)
+    unless options[:skip_delete]
+      delete_index
+      create_index(shards: ArchiveConfig.COLLECTION_SHARDS)
+    end
+    options[:skip_delete] = true
+    super(options)
+  end
+
   def self.mapping
     {
       properties: {
@@ -25,9 +46,7 @@ class CollectionIndexer < Indexer
           null_value: "NULL"
         },
         name: { type: "text", analyzer: "simple" },
-        description: { type: "text", analyzer: "simple" },
-        created_at: { type: "date" },
-        signups_close_at: { type: "date" }
+        description: { type: "text", analyzer: "standard" }
       }
     }
   end
@@ -66,7 +85,8 @@ class CollectionIndexer < Indexer
       root: false,
       only: [
         :id, :name, :title, :description, :parent_id, :challenge_type, :multifandom, :open_doors, :created_at
-      ]
+      ],
+      methods: %i[general_works_count public_works_count general_bookmarked_items_count public_bookmarked_items_count]
     ).merge(
       closed: object.closed?,
       unrevealed: object.unrevealed?,
@@ -81,10 +101,6 @@ class CollectionIndexer < Indexer
       assignments_due_at: object.challenge&.assignments_due_at,
       works_reveal_at: object.challenge&.works_reveal_at,
       authors_reveal_at: object.challenge&.authors_reveal_at,
-      general_works_count: object.approved_works.count,
-      public_works_count: object.approved_works.where(restricted: false).count,
-      general_bookmarked_items_count: object.approved_bookmarks,
-      public_bookmarked_items_count: object.approved_bookmarks,
       filter_ids: object.filter_ids,
       tag: object.tag
     )
