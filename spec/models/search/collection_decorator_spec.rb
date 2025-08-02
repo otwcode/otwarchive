@@ -25,12 +25,17 @@ describe CollectionDecorator do
         "assignments_due_at" => nil,
         "works_reveal_at" => nil,
         "authors_reveal_at" => nil,
-        "general_fandom_ids" => [],
-        "public_fandom_ids" => [],
-        "general_works_count" => 7,
-        "public_works_count" => 10,
-        "general_bookmarked_items_count" => 5,
-        "public_bookmarked_items_count" => 10
+        "general_works_count" => 10,
+        "public_works_count" => 7,
+        "general_bookmarked_items_count" => 10,
+        "public_bookmarked_items_count" => 5,
+        "challenge_type" => nil,
+        "multifandom" => true,
+        "open_doors" => false,
+        "moderated" => false,
+        "maintainer_ids" => collection.maintainers.pluck(:user_id),
+        "filter_ids" => [123, 456],
+        "tag" => ["foo", "bar"]
       }
     }]
   end
@@ -48,23 +53,23 @@ describe CollectionDecorator do
 
     describe "#works_count" do
       it "returns the public works count if there's no current user" do
-        expect(decorator.all_approved_works_count).to eq(10)
+        expect(decorator.all_approved_works_count).to eq(7)
       end
 
       it "returns the general works count if there is a current user" do
         User.current_user = User.new
-        expect(decorator.all_approved_works_count).to eq(7)
+        expect(decorator.all_approved_works_count).to eq(10)
       end
     end
 
     describe "#bookmarks_count" do
       it "returns the public count if there's no current user" do
-        expect(decorator.all_bookmarked_items_count).to eq(10)
+        expect(decorator.all_bookmarked_items_count).to eq(5)
       end
 
       it "returns the general count if there is a current user" do
         User.current_user = User.new
-        expect(decorator.all_bookmarked_items_count).to eq(5)
+        expect(decorator.all_bookmarked_items_count).to eq(10)
       end
     end
   end
