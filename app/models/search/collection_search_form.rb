@@ -3,39 +3,19 @@ class CollectionSearchForm
   include ActiveModel::Conversion
   include ActiveModel::Validations
 
-  ATTRIBUTES = [
-    :title,
-    :challenge_type,
-    :signup_open,
-    :unrevealed,
-    :anonymous,
-    :closed,
-    :moderated,
-    :owner_ids,
-    :parent_id,
-    :moderator_ids,
-    :maintainer_id,
-    :signups_open_at,
-    :signups_close_at,
-    :assignments_due_at,
-    :works_reveal_at,
-    :authors_reveal_at,
-    :sort_column,
-    :sort_direction,
-    :tag,
-    :filter_ids,
-    :fandom_names,
-    :fandom_ids,
-    :rating_ids,
-    :category_ids,
-    :archive_warning_ids,
-    :character_names,
-    :character_ids,
-    :relationship_names,
-    :relationship_ids,
-    :freeform_names,
-    :freeform_ids,
-    :page
+  ATTRIBUTES = %i[
+    challenge_type
+    closed
+    maintainer_id
+    moderated
+    page
+    parent_id
+    per_page
+    signup_open
+    sort_column
+    sort_direction
+    tag
+    title
   ].freeze
 
   attr_accessor :options
@@ -72,12 +52,7 @@ class CollectionSearchForm
   # SORTING
   ###############
 
-  SORT_OPTIONS = [
-    ["Date Created", "created_at"],
-    ["Title", "title.keyword"]
-  ].freeze
-
-  def sort_columns
+  def sort_column
     options[:sort_column] || default_sort_column
   end
 
@@ -86,17 +61,14 @@ class CollectionSearchForm
   end
 
   def sort_options
-    SORT_OPTIONS
+    [
+      ["Date Created", "created_at"],
+      ["Title", "title.keyword"]
+    ].freeze
   end
 
   def sort_values
     sort_options.map(&:last)
-  end
-
-  # extract the pretty name
-  def name_for_sort_column(sort_column)
-    SORT_OPTIONS.map { |v| [v[1], v[0]] }
-      .to_h[sort_column]
   end
 
   def default_sort_column
