@@ -14,8 +14,7 @@ class ExternalWorksController < ApplicationController
       begin
         url = Addressable::URI.heuristic_parse(params[:external_work_url]).to_str
         @external_work = ExternalWork.where(url: url).first
-      rescue Addressable::URI::InvalidURIError => e
-        Rails.logger.info("Invalid external_work_url: #{e.message}")
+      rescue Addressable::URI::InvalidURIError
       end
     end
     respond_to do |format|
