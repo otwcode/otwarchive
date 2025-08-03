@@ -111,7 +111,7 @@
         <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX) %>
       </dd>
 
-      <dt><%= collection_form.label :tag_list, ts("Collection Tags") %></dt>
+      <dt><%= collection_form.label :tag_string, ts("Collection Tags") %></dt>
       <dd>
         <%= collection_form.text_field :tag_string, autocomplete_options('tag') %>
         <p class="footnote">
