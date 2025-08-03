@@ -44,6 +44,13 @@ describe ExternalWorksController do
         expect(assigns(:external_work)).to be_nil
       end
     end
+
+    context "when the URL is invalid" do
+      it "does not set an external work" do
+        get :fetch, params: { external_work_url: "Invalid URL.", format: :json }
+        expect(assigns(:external_work)).to be_nil
+      end
+    end
   end
 
   describe "POST #update" do
