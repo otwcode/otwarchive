@@ -107,24 +107,22 @@ describe CollectionSearchForm, collection_search: true do
   end
 
   describe "filters collection by parent_id" do
-    before do
-      @parent = FactoryBot.create(:collection)
-      # Temporarily set User.current_user to get past the collection
-      # needing to be owned by same person as parent:
-      User.current_user = @parent.owners.first.user
-      @child = FactoryBot.create(:collection, parent_name: @parent.name)
-      User.current_user = nil
-      # reload the parent collection
-      @parent.reload
+    let!(:parent) { create(:collection) }
+    let!(:child) do
+      build(:collection, parent_name: parent.name).tap do |c|
+        c.save!(validate: false)
+      end
+    end
 
+    before do
       run_all_indexing_jobs
     end
 
     it "filters all child collection of parent" do
-      query = CollectionSearchForm.new(parent_id: @parent.id)
+      query = CollectionSearchForm.new(parent_id: parent.id)
 
-      expect(query.search_results).to include @child
-      expect(query.search_results).not_to include @parent
+      expect(query.search_results).to include(child)
+      expect(query.search_results).not_to include(parent)
     end
   end
 

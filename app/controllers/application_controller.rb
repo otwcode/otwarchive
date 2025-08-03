@@ -521,7 +521,6 @@ public
     allowed = {
       "work" => %w[author title date created_at word_count hit_count],
       "tag" => %w[name created_at taggings_count_cache uses],
-      "collection" => %w[title created_at],
       "prompt" => %w[fandom created_at prompter],
       "claim" => %w[created_at claimer]
     }[model.to_s.downcase]

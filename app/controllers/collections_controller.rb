@@ -40,11 +40,13 @@ class CollectionsController < ApplicationController
       @collection = Collection.find_by!(name: params[:collection_id])
       @search = CollectionSearchForm.new({ parent_id: @collection.id }.merge(page: params[:page]))
       @collections = @search.search_results
+      flash_search_warnings(@collections)
       @page_subtitle = t(".subcollections_page_title", collection_title: @collection.title)
     elsif params[:user_id]
       @user = User.find_by!(login: params[:user_id])
       @search = CollectionSearchForm.new({ maintainer_id: @user.id }.merge(page: params[:page]))
       @collections = @search.search_results
+      flash_search_warnings(@collections)
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       @sort_and_filter = true
@@ -192,10 +194,9 @@ class CollectionsController < ApplicationController
   private
 
   def collection_filter_params
-    safe_list = %w[title challenge_type moderated closed tag sort_column sort_direction]
-    search_params = params[:collection_search].present? ? params[:collection_search].to_unsafe_h : {}
-    search_params.select { |k, _| safe_list.include?(k) } \
-      .delete_if { |_, value| value.blank? }
+    params.permit(collection_search: [
+      :title, :challenge_type, :moderated, :closed, :tag, :sort_column, :sort_direction
+    ])[:collection_search] || {}
   end
 
   def collection_params

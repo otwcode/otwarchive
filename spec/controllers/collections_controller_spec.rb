@@ -103,24 +103,22 @@ describe CollectionsController, collection_search: true do
     end
 
     context "collections index for subcollections" do
-      let!(:parent) { FactoryBot.create(:collection) }
+      let!(:parent) { create(:collection) }
+      let!(:child) do
+        build(:collection, parent_name: parent.name).tap do |c|
+          c.save!(validate: false)
+        end
+      end
 
       before do
-        # Temporarily set User.current_user to get past the collection
-        # needing to be owned by same person as parent:
-        User.current_user = parent.owners.first.user
-        @child = FactoryBot.create(:collection, parent_name: parent.name)
-        User.current_user = nil
-        # reload the parent collection
         parent.reload
-
         run_all_indexing_jobs
       end
 
       it "filters all child collections of given collection" do
         get :index, params: { collection_id: parent.name }
         expect(response).to have_http_status(:success)
-        expect(assigns(:collections)).to include @child
+        expect(assigns(:collections)).to include(child)
 
         expect(assigns(:collections)).not_to include parent
       end
