@@ -211,7 +211,8 @@ public
   end
 
   def relative_uri(uri)
-    return uri if URI.parse(uri).relative? && uri.start_with?("/") && !uri.start_with?("//")
+    parsed = URI.parse(uri)
+    return uri if parsed.scheme.nil? && parsed.host.nil? && uri.start_with?("/") && !uri.start_with?("//")
   rescue URI::InvalidURIError
     nil
   end
