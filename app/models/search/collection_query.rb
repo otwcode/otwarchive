@@ -16,7 +16,14 @@ class CollectionQuery < Query
 
   def document_type
     CollectionIndexer.document_type
-  end 
+  end
+
+  def parsed_included_tags
+    @parsed_included_tags ||= parse_named_tags(
+      %i[fandom_names character_names relationship_names freeform_names
+         other_tag_names tag]
+    )
+  end
 
   # Combine the available filters
   def filters
