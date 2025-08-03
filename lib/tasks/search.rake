@@ -77,9 +77,17 @@ namespace :search do
 
   desc "Reindex all recently-modified items"
   # rubocop:disable Lint/EmptyBlock
-  task timed_all: %i[timed_collections timed_works timed_tags timed_pseud timed_bookmarks] do
+  task timed_all: %i[timed_admin_users timed_collections timed_works timed_tags timed_pseud timed_bookmarks] do
   end
   # rubocop:enable Lint/EmptyBlock
+
+  desc "Reindex recent users"
+  task timed_admin_users: :environment do
+    time = ENV["TIME_PERIOD"] || "NOW() - INTERVAL 1 DAY"
+    User.where("users.updated_at > #{time}").select(:id).find_in_batches(batch_size: BATCH_SIZE) do |group|
+      AsyncIndexer.new(UserIndexer, :world).enqueue_ids(group.map(&:id))
+    end
+  end
 
   desc "Reindex recent bookmarks"
   task timed_bookmarks: :environment do

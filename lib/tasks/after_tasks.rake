@@ -600,9 +600,8 @@ namespace :After do
 
         next if tags.empty?
 
-        # check if collection is multifandom
         crossover = FandomCrossover.check_for_crossover(tags)
-        collection.update(multifandom: crossover) if crossover == true
+        collection.update_attribute(:multifandom, crossover) if crossover
 
         if tags.length > ArchiveConfig.COLLECTION_TAGS_MAX
           collection.update(multifandom: crossover)

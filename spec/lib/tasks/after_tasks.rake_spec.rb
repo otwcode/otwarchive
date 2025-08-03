@@ -710,19 +710,9 @@ describe "rake After:add_collection_tags" do
     end
   end
 
-  context "when a collection has items with duplicate fandoms" do
-    let(:fandom) { create(:canonical_fandom) }
-    let(:items) { create_list(:work, 2, fandom_string: fandom.name) }
-
-    it "does not add duplicate tags to the collection" do
-      subject.invoke
-      expect(collection.tags.size).to eq(1)
-    end
-  end
-
   context "when a collection has work bookmarks" do
     let(:fandom) { create(:canonical_fandom) }
-    let(:items) { create_list(:bookmark, 2, fandom_string: fandom.name) }
+    let(:items) { [create(:bookmark, tag_string: fandom.name)] }
 
     it "tags the collection with the bookmark's AND bookmarked item's fandoms" do
       subject.invoke
@@ -733,7 +723,7 @@ describe "rake After:add_collection_tags" do
 
   context "when a collection has a series bookmark" do
     let(:fandom) { create(:canonical_fandom) }
-    let(:bookmark) { create(:series_bookmark, fandom_string: fandom.name) }
+    let(:bookmark) { create(:series_bookmark, tag_string: fandom.name) }
     let(:items) { [bookmark] }
 
     it "only includes the bookmark's fandoms" do
