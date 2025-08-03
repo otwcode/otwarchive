@@ -14,4 +14,3 @@ describe "rake db:fixtures:load" do
     end
   end
 end
-
