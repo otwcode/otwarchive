@@ -46,8 +46,10 @@ describe ExternalWorksController do
     end
 
     context "when the URL is invalid" do
-      it "does not set an external work" do
+      it "does not error and does not set an external work" do
         get :fetch, params: { external_work_url: "Invalid URL.", format: :json }
+
+        expect(response).to have_http_status(:found)
         expect(assigns(:external_work)).to be_nil
       end
     end
