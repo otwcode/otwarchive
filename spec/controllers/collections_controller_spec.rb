@@ -6,9 +6,17 @@ describe CollectionsController, collection_search: true do
 
   describe "GET #index" do
     let!(:gift_exchange) { create(:gift_exchange, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
-    let!(:gift_exchange_collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
+    let!(:gift_exchange_collection) do
+      travel_to(2.seconds.ago) do
+        create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange")
+      end
+    end
     let!(:prompt_meme) { create(:prompt_meme, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
-    let!(:prompt_meme_collection) { create(:collection, challenge: prompt_meme, challenge_type: "PromptMeme") }
+    let!(:prompt_meme_collection) do
+      travel_to(1.second.ago) do
+        create(:collection, challenge: prompt_meme, challenge_type: "PromptMeme")
+      end
+    end
 
     let!(:no_signup) { create(:collection, title: "no signup", collection_preference: create(:collection_preference, closed: true, moderated: true)) }
 
