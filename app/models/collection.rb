@@ -166,6 +166,7 @@ class Collection < ApplicationRecord
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
   scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).with_attached_icon }
+  scope :for_search, -> { includes(:parent, :children, :collection_preference, owners: [:user]).with_attached_icon }
 
   def cleanup_url
     self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url

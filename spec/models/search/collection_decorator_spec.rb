@@ -47,30 +47,4 @@ describe CollectionDecorator do
       expect(decs.first.title).to eq(collection.title)
     end
   end
-
-  context "with search data" do
-    let!(:decorator) { CollectionDecorator.decorate_from_search([collection], search_results).first }    
-
-    describe "#works_count" do
-      it "returns the public works count if there's no current user" do
-        expect(decorator.all_approved_works_count).to eq(7)
-      end
-
-      it "returns the general works count if there is a current user" do
-        User.current_user = User.new
-        expect(decorator.all_approved_works_count).to eq(10)
-      end
-    end
-
-    describe "#bookmarks_count" do
-      it "returns the public count if there's no current user" do
-        expect(decorator.all_bookmarked_items_count).to eq(5)
-      end
-
-      it "returns the general count if there is a current user" do
-        User.current_user = User.new
-        expect(decorator.all_bookmarked_items_count).to eq(10)
-      end
-    end
-  end
 end

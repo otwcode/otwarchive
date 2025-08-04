@@ -28,12 +28,27 @@ class CollectionDecorator < SimpleDelegator
     @data = HashWithIndifferentAccess.new(info)
   end
 
-  def all_approved_works_count
-    count = User.current_user.present? ? data[:general_works_count] : data[:public_works_count]
-    count || 0
+  def anonymous?
+    data[:anonymous]
   end
 
-  def all_bookmarked_items_count
-    User.current_user.present? ? data[:general_bookmarked_items_count] : data[:public_bookmarked_items_count]
+  def closed?
+    data[:closed]
+  end
+
+  def gift_exchange?
+    data[:challenge_type] == "GiftExchange"
+  end
+
+  def moderated?
+    data[:moderated]
+  end
+
+  def prompt_meme?
+    data[:challenge_type] == "PromptMeme"
+  end
+
+  def unrevealed?
+    data[:unrevealed]
   end
 end
