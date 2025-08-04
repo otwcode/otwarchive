@@ -190,30 +190,79 @@ module MailerHelper
     end
   end
 
-  def commentable_title_link(comment)
+  # i18n-tasks-use t("comment_mailer.comment_notification.content.chapter")
+  # i18n-tasks-use t("comment_mailer.comment_notification.content.tag")
+  # i18n-tasks-use t("comment_mailer.comment_notification.content.work")
+  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.chapter")
+  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.tag")
+  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.work")
+  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.chapter")
+  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.tag")
+  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.work")
+  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.chapter")
+  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.tag")
+  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.work")
+  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.chapter")
+  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.tag")
+  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.work")
+  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.chapter")
+  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.tag")
+  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.work")
+  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.chapter")
+  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.tag")
+  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.work")
+  def content_for_commentable_text(comment)
     if comment.ultimate_parent.is_a?(Tag)
-      t("mailer.general.creation.tag_name_html", name: style_link(comment.ultimate_parent.commentable_name, tag_url(comment.ultimate_parent)))
+      t(".content.tag",
+        pseud: commenter_pseud_or_name_text(comment),
+        tag: comment.ultimate_parent.commentable_name,
+        tag_url: tag_url(comment.ultimate_parent))
     elsif comment.original_ultimate_parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
-      t("mailer.general.creation.title_with_linked_chapter_number_html",
-        chapter_position: style_link(t("mailer.general.creation.chapter_position", position: comment.original_ultimate_parent.position), work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent)),
-        title: style_creation_link(comment.ultimate_parent.commentable_name, work_url(comment.original_ultimate_parent.work)))
+      t(".content.chapter",
+        pseud: commenter_pseud_or_name_text(comment),
+        chapter: t("mailer.general.creation.chapter_position", position: comment.original_ultimate_parent.position),
+        work: comment.ultimate_parent.commentable_name,
+        chapter_url: work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent))
     else
-      style_creation_link(comment.ultimate_parent.commentable_name, polymorphic_url(comment.ultimate_parent, only_path: false))
+      t(".content.work",
+        pseud: commenter_pseud_or_name_text(comment),
+        work: comment.ultimate_parent.commentable_name,
+        work_url: work_url(comment.ultimate_parent))
     end
   end
 
-  def commentable_title_link_text(comment)
-    name = comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<").html_safe
+  # i18n-tasks-use t("comment_mailer.comment_notification.content.chapter_html")
+  # i18n-tasks-use t("comment_mailer.comment_notification.content.tag_html")
+  # i18n-tasks-use t("comment_mailer.comment_notification.content.work_html")
+  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.chapter_html")
+  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.tag_html")
+  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.work_html")
+  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.chapter_html")
+  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.tag_html")
+  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.work_html")
+  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.chapter_html")
+  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.tag_html")
+  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.work_html")
+  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.chapter_html")
+  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.tag_html")
+  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.work_html")
+  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.chapter_html")
+  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.tag_html")
+  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.work_html")
+  def content_for_commentable_html(comment)
     if comment.ultimate_parent.is_a?(Tag)
-      t("mailer.general.creation.tag_name_html", name: name)
+      t(".content.tag_html",
+        pseud_link: commenter_pseud_or_name_link(comment),
+        tag_link: style_link(comment.ultimate_parent.commentable_name, tag_url(comment.ultimate_parent)))
     elsif comment.original_ultimate_parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
-      t("mailer.general.creation.title_with_url",
-        title: t("mailer.general.creation.title_with_chapter_number", 
-                 position: comment.original_ultimate_parent.position, 
-                 title: name),
-        creation_url: work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent))
+      t(".content.chapter_html",
+        pseud_link: commenter_pseud_or_name_link(comment),
+        chapter_link: style_link(t("mailer.general.creation.chapter_position", position: comment.original_ultimate_parent.position), work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent)),
+        work_link: style_creation_link(comment.ultimate_parent.commentable_name, work_url(comment.original_ultimate_parent.work)))
     else
-      t("mailer.general.creation.title_with_url", title: name, creation_url: polymorphic_url(comment.ultimate_parent, only_path: false))
+      t(".content.work_html",
+        pseud_link: commenter_pseud_or_name_link(comment), 
+        work_link: style_creation_link(comment.ultimate_parent.commentable_name, polymorphic_url(comment.ultimate_parent, only_path: false)))
     end
   end
 

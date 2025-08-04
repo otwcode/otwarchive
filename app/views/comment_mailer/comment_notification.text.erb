@@ -1,5 +1,5 @@
 <% content_for :message do %>
-<%= commenter_pseud_or_name_text(@comment) %> left the following comment on <%= commentable_title_link_text(@comment) %>:
+<%= content_for_commentable_text(@comment) %>
 <%= text_divider %>
 
 <%= to_plain_text(raw(@comment.sanitized_mailer_content))%>

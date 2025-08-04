@@ -1,6 +1,6 @@
 <% content_for :message do %>
 
-  You replied to a comment on <%= commentable_title_link(@comment) %>
+  <%= content_for_commentable_html(@comment) %>
 
   <p>
     <%= commenter_pseud_or_name_link(@parent_comment) %> wrote:

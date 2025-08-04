@@ -1,5 +1,5 @@
 <% content_for :message do %>
-You replied to a comment on <%= commentable_title_link_text(@comment) %>:
+<%= content_for_commentable_text(@comment) %>
 
 <%= commenter_pseud_or_name_text(@parent_comment) %> wrote:
 <%= text_divider %>

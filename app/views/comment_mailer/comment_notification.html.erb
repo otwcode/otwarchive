@@ -1,6 +1,6 @@
 <% content_for :message do %>
 
-  <%= commenter_pseud_or_name_link(@comment) %> left the following comment on <%= commentable_title_link(@comment) %>
+  <%= content_for_commentable_html(@comment) %>
 
   <%= style_quote(raw(@comment.sanitized_mailer_content)) %>
 

@@ -9,7 +9,7 @@ class CommentMailer < ApplicationMailer
     I18n.with_locale(locale) do
       mail(
         to: email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on #{commentable_title(@comment)}"
+        subject: subject_for_commentable(@comment)
       )
     end
   end
@@ -24,7 +24,7 @@ class CommentMailer < ApplicationMailer
     I18n.with_locale(locale) do
       mail(
         to: email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on #{commentable_title(@comment)}"
+        subject: subject_for_commentable(@comment)
       )
     end
   end
@@ -39,7 +39,7 @@ class CommentMailer < ApplicationMailer
     @comment = comment
     mail(
       to: @your_comment.comment_owner_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply to your comment on #{commentable_title(@comment)}"
+      subject: subject_for_commentable(@comment)
     )
   end
 
@@ -54,7 +54,7 @@ class CommentMailer < ApplicationMailer
     @comment = edited_comment
     mail(
       to: @your_comment.comment_owner_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Edited reply to your comment on #{commentable_title(@comment)}"
+      subject: subject_for_commentable(@comment)
     )
   end
 
@@ -64,7 +64,7 @@ class CommentMailer < ApplicationMailer
     @noreply = true # don't give reply link to your own comment
     mail(
       to: @comment.comment_owner_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Comment you left on #{commentable_title(@comment)}"
+      subject: subject_for_commentable(@comment)
     )
   end
 
@@ -75,20 +75,35 @@ class CommentMailer < ApplicationMailer
     @noreply = true
     mail(
       to: @comment.comment_owner_email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on #{commentable_title(@comment)}"
+      subject: subject_for_commentable(@comment)
     )
   end
-  
+
   private
 
-  def commentable_title(comment)
+  # i18n-tasks-use t("comment_mailer.comment_notification.subject.chapter")
+  # i18n-tasks-use t("comment_mailer.comment_notification.subject.tag")
+  # i18n-tasks-use t("comment_mailer.comment_notification.subject.work")
+  # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.chapter")
+  # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.tag")
+  # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.work")
+  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.chapter")
+  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.tag")
+  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.work")
+  # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.chapter")
+  # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.tag")
+  # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.work")
+  # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.chapter")
+  # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.tag")
+  # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.work")
+  def subject_for_commentable(comment)
     name = comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<").html_safe
     if comment.ultimate_parent.is_a?(Tag)
-      t("mailer.general.creation.tag_name_html", name: name)
+      t(".subject.tag", app_name: ArchiveConfig.APP_SHORT_NAME, name: name)
     elsif comment.original_ultimate_parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
-      t("mailer.general.creation.title_with_chapter_number", position: comment.original_ultimate_parent.position, title: name)
+      t(".subject.chapter", app_name: ArchiveConfig.APP_SHORT_NAME, position: comment.original_ultimate_parent.position, title: name)
     else
-      name
+      t(".subject.work", app_name: ArchiveConfig.APP_SHORT_NAME, title: name)
     end
   end
 end
