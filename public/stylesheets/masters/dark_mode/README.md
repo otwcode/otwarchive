@@ -28,6 +28,7 @@ screen sizes.
 * Use the CSS from dark_mode_site_screen_.css.
 * Expand the "Advanced" section.
 * Check "Parent Only."
+* For "Media," check the "screen" option.
 
 ## Dark Mode - Midsize
 
@@ -46,6 +47,7 @@ placeholder CSS because the CSS field cannot be blank.
 
 * Include the placeholder CSS `#unused-selector { content: none; }`.
 * Expand the "Advanced" section.
+* For "Media," check the "screen" option.
 * Press the "Add parent skin" button.
 * For Parent #1, enter "Dark Mode - Screen".
 * Press the "Add parent skin" button again.
