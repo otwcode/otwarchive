@@ -32,14 +32,14 @@ describe CssCleaner do
 
         it "strips custom property and returns error when value uses url() function" do
           skin = build(:skin, css: ":root { --art: url(\"https://example.com/img.png\"); }")
-          expect(skin.save).to be_falsy
+          expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
           expect(skin.errors[:base]).to include("--art in :root cannot have the value url(\"https://example.com/img.png\"), sorry!")
         end
 
         it "strips custom property and retruns error when value uses quotation marks" do
           skin = build(:skin, css: ":root { --serif: \"Times New Roman\" };")
-          expect(skin.save).to be_falsy
+          expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
           expect(skin.errors[:base]).to include("--serif in :root cannot have the value \"Times New Roman\", sorry!")
         end
@@ -52,28 +52,28 @@ describe CssCleaner do
 
         it "strips custom property and returns error when shorthand-style value includes url() function" do
           skin = build(:skin, css: ":root { --background: #900 url(\"https://example.com/img.png\"); }")
-          expect(skin.save).to be_falsy
+          expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
           expect(skin.errors[:base]).to include("--background in :root cannot have the value #900 url(\"https://example.com/img.png\"), sorry!")
         end
 
         it "strips custom property and returns error when shorthand-style value includes quotation marks" do
           skin = build(:skin, css: ":root { --heading: small-caps 1.125rem Georgia, \"Times New Roman\", serif; }")
-          expect(skin.save).to be_falsy
+          expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
           expect(skin.errors[:base]).to include("--heading in :root cannot have the value small-caps 1.125rem Georgia, \"Times New Roman\", serif, sorry!")
         end
 
         it "strips custom property with disallowed characters and returns error" do
           skin = build(:skin, css: "#footer, #header { --#hash: absolute; }")
-          expect(skin.save).to be_falsy
+          expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
           expect(skin.errors[:base]).to include("The --#hash custom property in #footer, #header has an invalid name. Names may contain only letters, numbers, dashes (-), and underscores (_).")
         end
 
         it "strips invalid property and returns error when property contains text resembling custom property name" do
           skin = build(:skin, css: ":root { color--heading: absolute; }")
-          expect(skin.save).to be_falsy
+          expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
           expect(skin.errors[:base]).to include("We don't currently allow the CSS property color--heading -- please notify support if you think this is an error.")
         end
@@ -101,28 +101,28 @@ describe CssCleaner do
 
         it "strips var() function from content property and returns error" do
           skin = build(:skin, css: "p:before { content: var(--text) }")
-          expect(skin.save).to be_falsy
+          expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
           expect(skin.errors[:base]).to include("content in p:before cannot have the value var(--text), sorry!")
         end
 
         it "strips var() function from font-family property and returns error" do
           skin = build(:skin, css: ".heading { font-family: var(--serif) }")
-          expect(skin.save).to be_falsy
+          expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
           expect(skin.errors[:base]).to include("font-family in .heading cannot have the value var(--serif), sorry!")
         end
 
         it "strips var() function with fallbacks and returns error" do
           skin = build(:skin, css: "p { color: var(--blue, #fff) }")
-          expect(skin.save).to be_falsy
+          expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
           expect(skin.errors[:base]).to include("color in p cannot have the value var(--blue, #fff), sorry!")
         end
 
         it "strips var() function with unclosed parentheses and returns error" do
           skin = build(:skin, css: "p { color: var(--blue }")
-          expect(skin.save).to be_falsy
+          expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
           expect(skin.errors[:base]).to include("There don't seem to be any rules for p")
         end
@@ -132,14 +132,14 @@ describe CssCleaner do
     context "when cleaning WorkSkin CSS" do
       it "strips custom properties and returns error" do
         skin = build(:work_skin, css: "#workskin { --background: #fff; }")
-        expect(skin.save).to be_falsy
+        expect(skin.save).to be_falsey
         expect(skin.css).to eq("")
         expect(skin.errors[:base]).to include("Variables are not allowed in work skins.")
       end
 
       it "strips variable functions and returns error" do
         skin = build(:work_skin, css: "p { color: var(--yellow) }")
-        expect(skin.save).to be_falsy
+        expect(skin.save).to be_falsey
         expect(skin.css).to eq("")
         expect(skin.errors[:base]).to include("Variables are not allowed in work skins.")
       end
@@ -147,7 +147,7 @@ describe CssCleaner do
       context "with position property" do
         it "strips value fixed" do
           skin = build(:work_skin, css: "div { position: fixed; }")
-          expect(skin.save).to be_falsy
+          expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
           expect(skin.errors[:base]).to include("The position property in div cannot have the value fixed in Work skins, sorry!")
         end
