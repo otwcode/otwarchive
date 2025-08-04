@@ -7,7 +7,7 @@ Because some of the elements that Snow turns pure white were changed to pale
 grey in the default skin, it is necessary to keep using Snow as a parent for
 Snow Blue.
 
-# Snow Structure
+# Snow Setup
 
 * Use the CSS from snow_site_screen_.css.
 * Expand the "Advanced" section.
