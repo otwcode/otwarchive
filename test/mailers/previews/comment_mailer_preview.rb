@@ -80,6 +80,34 @@ class CommentMailerPreview < ApplicationMailerPreview
     CommentMailer.comment_reply_sent_notification(reply)
   end
 
+  # Sent to a user when they get a comment on a tag
+  def tag_comment_notification
+    user = create(:user)
+
+    commenter = create(:user, :for_mailer_preview)
+    commenter_pseud = create(:pseud, user: commenter, name: "Custom pseud")
+    comment = create(:comment, :on_tag, pseud: commenter_pseud)
+    CommentMailer.comment_notification(user, comment)
+  end
+
+  # Sent to a user when they get a comment reply to their comment on a tag
+  def tag_comment_reply_notification
+    comment = create(:comment, :on_tag)
+
+    replier = create(:user, :for_mailer_preview)
+    reply = create(:comment, commentable: comment, pseud: replier.default_pseud)
+    CommentMailer.comment_reply_notification(comment, reply)
+  end
+
+  # Sent to a user when they make a reply to a comment on a tag, and they want to be notified of their own comments
+  def tag_comment_reply_sent_notification
+    commenter = create(:user, :for_mailer_preview)
+
+    comment = create(:comment, :on_tag, pseud: commenter.default_pseud)
+    reply = create(:comment, commentable: comment)
+    CommentMailer.comment_reply_sent_notification(reply)
+  end
+
   # Sent to a user when someone edits a comment
   def edited_comment_notification
     user = create(:user)
