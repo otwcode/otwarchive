@@ -4,6 +4,9 @@ class Profile < ApplicationRecord
   PROFILE_TITLE_MAX = 255
   ABOUT_ME_MAX = 2000
 
+  # Ignore the location and date_of_birth fields until they can be deleted:
+  self.ignored_columns = [:location, :date_of_birth]
+
   belongs_to :user
 
   validates_length_of :title, allow_blank: true, maximum: PROFILE_TITLE_MAX,

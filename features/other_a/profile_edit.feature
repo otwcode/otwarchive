@@ -16,19 +16,21 @@ Scenario: Add details
   When I fill in the details of my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
-    And I should not see "I live in"
+    And I should see "Test title thingy"
+    And I should see "This is some text about me."
 
 Scenario: Change details
   When I change the details in my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
-    And I should not see "I live in"
+    And I should see "Alternative title thingy"
+    And I should see "This is some different text about me."
 
 Scenario: Remove details
   When I remove details from my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
-    And I should not see "I live in"
+    And I should not see "Bio"
 
 Scenario: Change details as an admin
 
