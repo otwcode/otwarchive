@@ -505,6 +505,15 @@ en:
       would_like_to_include:
         html: The collection maintainers of %{collection_link} would like to include your work %{work_link} in their collection!
         text: The collection maintainers of "%{collection_title}" (%{collection_url}) would like to include your work "%{work_title}" (%{work_url}) in their collection!
+    potential_match_generation_notification:
+      finished_generating:
+        html: We have finished generating potential assignments for your gift exchange %{collection_link}.
+        text: We have finished generating potential assignments for your gift exchange "%{collection_title}" (%{collection_url}).
+      matches_available:
+        html: The potential matches and set assignments are available on its %{matching_page_link}.
+        matching_page: Matching page
+        text: 'The potential matches and set assignments are available on its Matching page: %{matching_page_url}.'
+      subject: "[%{app_name}][%{collection_title}] Potential assignment generation complete"
     recipient_notification:
       collection:
         html: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
