@@ -190,27 +190,6 @@ module MailerHelper
     end
   end
 
-  # i18n-tasks-use t("comment_mailer.comment_notification.content.chapter")
-  # i18n-tasks-use t("comment_mailer.comment_notification.content.tag")
-  # i18n-tasks-use t("comment_mailer.comment_notification.content.work")
-  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.chapter")
-  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.tag")
-  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.work")
-  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.chapter")
-  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.tag")
-  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.work")
-  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.chapter")
-  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.tag")
-  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.work")
-  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.chapter")
-  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.tag")
-  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.work")
-  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.chapter")
-  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.tag")
-  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.work")
-  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.chapter")
-  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.tag")
-  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.work")
   def content_for_commentable_text(comment)
     if comment.ultimate_parent.is_a?(Tag)
       t(".content.tag",
@@ -231,24 +210,6 @@ module MailerHelper
     end
   end
 
-  # i18n-tasks-use t("comment_mailer.comment_notification.content.chapter_html")
-  # i18n-tasks-use t("comment_mailer.comment_notification.content.tag_html")
-  # i18n-tasks-use t("comment_mailer.comment_notification.content.work_html")
-  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.chapter_html")
-  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.tag_html")
-  # i18n-tasks-use t("comment_mailer.comment_reply_notification.content.work_html")
-  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.chapter_html")
-  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.tag_html")
-  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.work_html")
-  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.chapter_html")
-  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.tag_html")
-  # i18n-tasks-use t("comment_mailer.comment_sent_notification.content.work_html")
-  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.chapter_html")
-  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.tag_html")
-  # i18n-tasks-use t("comment_mailer.edited_comment_notification.content.work_html")
-  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.chapter_html")
-  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.tag_html")
-  # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.work_html")
   def content_for_commentable_html(comment)
     if comment.ultimate_parent.is_a?(Tag)
       t(".content.tag_html",

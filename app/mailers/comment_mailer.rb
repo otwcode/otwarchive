@@ -9,6 +9,9 @@ class CommentMailer < ApplicationMailer
     I18n.with_locale(locale) do
       mail(
         to: email,
+        # i18n-tasks-use t("comment_mailer.comment_notification.subject.chapter")
+        # i18n-tasks-use t("comment_mailer.comment_notification.subject.tag")
+        # i18n-tasks-use t("comment_mailer.comment_notification.subject.work")
         subject: subject_for_commentable(@comment)
       )
     end
@@ -24,6 +27,9 @@ class CommentMailer < ApplicationMailer
     I18n.with_locale(locale) do
       mail(
         to: email,
+        # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.chapter")
+        # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.tag")
+        # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.work")
         subject: subject_for_commentable(@comment)
       )
     end
@@ -39,6 +45,9 @@ class CommentMailer < ApplicationMailer
     @comment = comment
     mail(
       to: @your_comment.comment_owner_email,
+      # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.chapter")
+      # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.tag")
+      # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.work")
       subject: subject_for_commentable(@comment)
     )
   end
@@ -54,6 +63,9 @@ class CommentMailer < ApplicationMailer
     @comment = edited_comment
     mail(
       to: @your_comment.comment_owner_email,
+      # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.chapter")
+      # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.tag")
+      # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.work")
       subject: subject_for_commentable(@comment)
     )
   end
@@ -64,6 +76,9 @@ class CommentMailer < ApplicationMailer
     @noreply = true # don't give reply link to your own comment
     mail(
       to: @comment.comment_owner_email,
+      # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.chapter")
+      # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.tag")
+      # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.work")
       subject: subject_for_commentable(@comment)
     )
   end
@@ -75,27 +90,15 @@ class CommentMailer < ApplicationMailer
     @noreply = true
     mail(
       to: @comment.comment_owner_email,
+      # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.chapter")
+      # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.tag")
+      # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.work")
       subject: subject_for_commentable(@comment)
     )
   end
 
   private
 
-  # i18n-tasks-use t("comment_mailer.comment_notification.subject.chapter")
-  # i18n-tasks-use t("comment_mailer.comment_notification.subject.tag")
-  # i18n-tasks-use t("comment_mailer.comment_notification.subject.work")
-  # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.chapter")
-  # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.tag")
-  # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.work")
-  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.chapter")
-  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.tag")
-  # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.work")
-  # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.chapter")
-  # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.tag")
-  # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.work")
-  # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.chapter")
-  # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.tag")
-  # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.work")
   def subject_for_commentable(comment)
     name = comment.ultimate_parent.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<").html_safe
     if comment.ultimate_parent.is_a?(Tag)
