@@ -64,6 +64,13 @@ describe CssCleaner do
           expect(skin.errors[:base]).to include("--heading in :root cannot have the value small-caps 1.125rem Georgia, \"Times New Roman\", serif, sorry!")
         end
 
+        it "strips custom property with disallowed characters and returns error" do
+          skin = build(:skin, css: "#footer, #header { --#hash: absolute; }")
+          expect(skin.save).to be_falsy
+          expect(skin.css).to eq("")
+          expect(skin.errors[:base]).to include("The --#hash custom property in #footer, #header has an invalid name. Names may contain only letters, numbers, dashes (-), and underscores (_).")
+        end
+
         it "strips invalid property and returns error when property contains text resembling custom property name" do
           skin = build(:skin, css: ":root { color--heading: absolute; }")
           expect(skin.save).to be_falsy

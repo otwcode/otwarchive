@@ -81,7 +81,8 @@ module CssCleaner
         if property.blank? || value.blank?
           errors.add(:base, ts("The code for %{selectors} doesn't seem to be a valid CSS rule.", selectors: rs.selectors.join(",")))
         elsif sanitize_css_property(property).blank?
-          if property.match(/\A(#{CUSTOM_PROPERTY_NAME_REGEXP})\z/)
+          # If it starts with --, assume the user was trying to define a custom property.
+          if property.match(/\A--/)
             errors.add(:base,
               ts("The %{property} custom property in %{selectors} has an invalid name. Names may contain only letters, numbers, dashes (-), and underscores (_).",
               property: property,
