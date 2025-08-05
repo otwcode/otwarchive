@@ -105,21 +105,21 @@ module CssCleaner
     return clean_css
   end
 
-  def is_legal_property(property)
+  def legal_property?(property)
     ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property) || 
       property.match(/-(#{PREFIX_REGEX})-(#{ArchiveConfig.SUPPORTED_CSS_PROPERTIES.join('|')})/)
   end
 
-  def is_legal_shorthand_property(property)
+  def legal_shorthand_property?(property)
     property.match(/#{ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
   end
 
-  def is_custom_property(property)
+  def custom_property?(property)
     property.match(/\A(#{CUSTOM_PROPERTY_NAME_REGEXP})\z/)
   end
 
   def sanitize_css_property(property)
-    return property if is_legal_property(property) || is_legal_shorthand_property(property) || is_custom_property(property)
+    return property if legal_property?(property) || legal_shorthand_property?(property) || custom_property?(property)
   end
 
   # A declaration must match the format:   property: value;
@@ -141,9 +141,9 @@ module CssCleaner
     elsif value.match(/\burl\b/) && (!ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?("url") || !%w(background background-image border border-image list-style list-style-image).include?(property))
       # check whether we can use urls in this property
       clean = ""
-    elsif is_legal_shorthand_property(property) || is_custom_property(property)
+    elsif legal_shorthand_property?(property) || custom_property?(property)
       clean = tokenize_and_sanitize_css_value(value)
-    elsif is_legal_property(property)
+    elsif legal_property?(property)
       clean = sanitize_css_value(value)
     end
     clean.strip
