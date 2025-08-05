@@ -87,8 +87,11 @@ Scenario: Changing email address shows a confirmation page and sends a confirmat
   When I am a visitor
     And I follow "confirm your email change" in the email
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
-  When I go to editname's profile page
-  Then I should not see "My email address: bar@ao3.org"
+  When I am logged in as "editname"
+    And I go to editname's profile page
+    And I follow "Edit My Profile"
+    And I follow "Change Email"
+  Then I should see "bar@ao3.org"
 
   When I am logged in as "editname"
     And I follow "confirm your email change" in the email
@@ -97,10 +100,9 @@ Scenario: Changing email address shows a confirmation page and sends a confirmat
     But I should not see "bar@ao3.org"
     But I should not see "You have requested to change your email address"
   When I go to editname's profile page
-  Then I should not see "My email address: valid2@archiveofourown.org"
-  When I log out
-    And I go to editname's profile page
-  Then I should not see "My email address: valid2@archiveofourown.org"
+    And I follow "Edit My Profile"
+    And I follow "Change Email"
+  Then I should see "valid2@archiveofourown.org"
 
 Scenario: Changing email address -- canceling in confirmation step
 
