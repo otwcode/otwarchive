@@ -113,4 +113,90 @@ describe Collection do
       end
     end
   end
+
+  describe "#general_works_count" do
+    let(:collection) { create(:collection) }
+
+    context "when the collection includes a restricted work" do
+      let(:work) { create(:work, restricted: true) }
+
+      before do
+        work.collections << collection
+      end
+
+      it "includes the work in the count" do
+        expect(collection.general_works_count).to eq(1)
+      end
+    end
+
+    context "when the collection includes a public work" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+      end
+
+      it "includes the work in the count" do
+        expect(collection.general_works_count).to eq(1)
+      end
+    end
+
+    context "when the collection includes a subcollection with a work" do
+      let(:subcollection) { create(:collection) }
+      let(:work) { create(:work) }
+
+      before do
+        subcollection.parent = collection
+        subcollection.save!(validate: false)
+        work.collections << subcollection
+      end
+
+      it "includes the subcollection's work in the count" do
+        expect(collection.general_works_count).to eq(1)
+      end
+    end
+  end
+
+  describe "#public_works_count" do
+    let(:collection) { create(:collection) }
+
+    context "when the collection includes a restricted work" do
+      let(:work) { create(:work, restricted: true) }
+
+      before do
+        work.collections << collection
+      end
+
+      it "does not include the work in the count" do
+        expect(collection.public_works_count).to eq(0)
+      end
+    end
+
+    context "when the collection includes a public work" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+      end
+
+      it "includes the work in the count" do
+        expect(collection.public_works_count).to eq(1)
+      end
+    end
+
+    context "when the collection includes a subcollection with a work" do
+      let(:subcollection) { create(:collection) }
+      let(:work) { create(:work) }
+
+      before do
+        subcollection.parent = collection
+        subcollection.save!(validate: false)
+        work.collections << subcollection
+      end
+
+      it "includes the subcollection's work in the count" do
+        expect(collection.public_works_count).to eq(1)
+      end
+    end
+  end
 end

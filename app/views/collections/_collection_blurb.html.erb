@@ -1,8 +1,7 @@
-<!-- this partial requires collection; @challenges_count, @works_count, @bookmarks_count must be set -->
 <li class="<% if collection.user_is_owner?(current_user) %>own <% end %>collection picture blurb group" role="article">
   <% logged_in = (logged_in_as_admin? || logged_in?) ? "logged-in" : "logged-out" %>
-  <% # remember to update collection_sweeper if you change this key %>
-  <% cache("collection-blurb-#{logged_in}-#{collection.id}-v4", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
+  <%# remember to update collection_sweeper if you change this key %>
+  <% cache("collection-blurb-#{logged_in}-#{collection.id}-v5", expires_in: ArchiveConfig.MINUTES_UNTIL_COLLECTION_BLURBS_EXPIRE.minutes, skip_digest: true) do %>
     <div class="header module group">
       <h4 class="heading">
         <%= link_to collection.title, collection_path(collection) %>
@@ -37,22 +36,27 @@
       (<%= collection.closed? ? ts("Closed") : ts("Open") %>, <%= collection.moderated? ? ts("Moderated") : ts("Unmoderated") %><%= collection.unrevealed? ? ts(", Unrevealed") : "" %><%= collection.anonymous? ? ts(", Anonymous") : "" %><%= collection.gift_exchange? ? ts(", Gift Exchange Challenge") : "" %><%= collection.prompt_meme? ? ts(", Prompt Meme Challenge") : "" %>)
     </p>
 
+    <% unless collection.tag_string.blank? %>
+      <h6 class="meta heading"><%= t(".collection_tags") %></h6>
+      <ul class="meta tags commas">
+        <% collection.tags.each do |tag| %>
+          <li><%= link_to(tag.name, link_to_tag_works(tag), class: "tag") %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
     <!--stats-->
     <dl class="stats">
       <% if (@challenges_count = collection.children.count) > 0 %>
         <dt><%= ts("Challenges/Subcollections:") %></dt>
         <dd><%= link_to(@challenges_count, collection_collections_path(collection)) %></dd>
       <% end %>
-      <% if (@works_count = SearchCounts.work_count_for_collection(collection)) > 0 %>
-        <dt><%= ts("Fandoms:") %></dt>
-        <dd><%= link_to(SearchCounts.fandom_count_for_collection(collection), collection_fandoms_path(collection)) %></dd>
-      <% end %>
       <% if collection.challenge? && collection.prompt_meme? %>
         <dt><%= ts("Prompts:") %></dt>
         <dd><%= link_to(collection.prompts.count.to_s, collection_requests_path(collection)) %></dd>
       <% end %>
       <dt><%= ts("Works:") %></dt>
-      <dd><%= link_to(@works_count, collection_works_path(collection)) %></dd>
+      <dd><%= link_to(SearchCounts.work_count_for_collection(collection), collection_works_path(collection)) %></dd>
       <% if (@bookmarks_count = SearchCounts.bookmarkable_count_for_collection(collection)) > 0 %>
         <dt><%= ts("Bookmarked Items:") %></dt>
         <dd><%= link_to(@bookmarks_count, collection_bookmarks_path(collection)) %></dd>
