@@ -27,16 +27,15 @@ module Bookmarkable
   end
 
   def update_bookmarker_collections_index
-    return unless respond_to?(:should_update_collection_index?)
-    return unless should_update_collection_index?
+    return unless respond_to?(:should_update_pseud_and_collection_indexes?)
+    return unless should_update_pseud_and_collection_indexes?
 
-    bookmark_ids = bookmarks.pluck(:id)
-    collection_ids = Collection.joins(:collection_items).where(collection_items: {
-                                                                 item_id: bookmark_ids,
-                                                                 item_type: "Bookmark",
-                                                                 user_approval_status: 1,
-                                                                 collection_approval_status: 1
-                                                               }).pluck(:id, :parent_id).flatten.uniq.compact
+    collection_ids = Collection.joins(collection_items: :bookmark).where(collection_items: {
+                                                                           bookmarks: { bookmarkable_id: id },
+                                                                           item_type: "Bookmark",
+                                                                           user_approval_status: 1,
+                                                                           collection_approval_status: 1
+                                                                         }).pluck(:id, :parent_id).flatten.uniq.compact
 
     IndexQueue.enqueue_ids(Collection, collection_ids, :background)
   end
