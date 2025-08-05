@@ -24,21 +24,20 @@ Feature: Kudos
     Then I should see "myname2 left kudos on this work!"
       # make sure no emails go out until notifications are sent
       And 0 emails should be delivered
+      And I should not see a button with text "Kudos ♥"
     When kudos are sent
     Then 1 email should be delivered to "myname1@foo.com"
       And the email should contain "myname2"
       And the email should contain "left kudos"
       And the email should contain "."
       And all emails have been delivered
-    When I press "Kudos ♥"
-    Then I should see "You have already left kudos here. :)"
-      And I should not see "myname2 and myname2 left kudos on this work!"
 
     When I am logged out
       And I view the work "Awesome Story"
       And I press "Kudos ♥"
     Then I should see "Thank you for leaving kudos!"
       And I should see "myname2 as well as 1 guest left kudos on this work!"
+      And I should see a button with text "Kudos ♥"
     When I press "Kudos ♥"
     Then I should see "You have already left kudos here. :)"
     When kudos are sent
@@ -51,9 +50,10 @@ Feature: Kudos
       And I view the work "Awesome Story"
       And I press "Kudos ♥"
     Then I should see "myname3 and myname2 as well as 1 guest left kudos on this work!"
+      And I should not see a button with text "Kudos ♥"
     When I am logged in as "myname1"
       And I view the work "Awesome Story"
-    Then I should not see "Kudos ♥"
+    Then I should not see a button with text "Kudos ♥"
 
     When I go to the work kudos page for "Awesome Story"
     Then I should see "2 Users Who Left Kudos on Awesome Story"
@@ -69,9 +69,7 @@ Feature: Kudos
       And I press "Kudos ♥"
     Then I should see "Thank you for leaving kudos!"
       And I should see "myname2 left kudos on this work!"
-    When I press "Kudos ♥"
-    Then I should see "You have already left kudos here. :)"
-      And I should not see "myname2 and myname2 left kudos on this work!"
+      And I should not see a button with text "Kudos ♥"
 
     # As another registered user
     When I am logged in as "myname3"
@@ -79,8 +77,7 @@ Feature: Kudos
       And I press "Kudos ♥"
     Then I should see "Thank you for leaving kudos!"
       And I should see "myname3 and myname2 left kudos on this work!"
-    When I press "Kudos ♥"
-    Then I should see "You have already left kudos here. :)"
+      And I should not see a button with text "Kudos ♥"
 
     # As a guest user
     When I am logged out

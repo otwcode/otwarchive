@@ -59,6 +59,7 @@ describe KudosController do
           it "redirects to referer with an error" do
             post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
             it_redirects_to_with_kudos_error(referer, "You have already left kudos here. :)")
+            expect(work.kudos.where(user: user).count).to eq(1)
           end
 
           context "when duplicate database inserts happen despite Rails validations" do
@@ -75,12 +76,14 @@ describe KudosController do
             it "redirects to referer with an error" do
               post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" } }
               it_redirects_to_with_kudos_error(referer, "You have already left kudos here. :)")
+              expect(work.kudos.where(user: user).count).to eq(1)
             end
 
             context "with format: :js" do
               it "returns an error in JSON format" do
                 post :create, params: { kudo: { commentable_id: work.id, commentable_type: "Work" }, format: :js }
                 expect(JSON.parse(response.body)["error_message"]).to eq("You have already left kudos here. :)")
+                expect(work.kudos.where(user: user).count).to eq(1)
               end
             end
           end
