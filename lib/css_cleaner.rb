@@ -84,7 +84,7 @@ module CssCleaner
           # If it starts with --, assume the user was trying to define a custom property.
           if property.match(/\A--/)
             errors.add(:base,
-              ts("The %{property} custom property in %{selectors} has an invalid name. Names may contain only letters, numbers, dashes (-), and underscores (_).",
+              ts("The %{property} custom property in %{selectors} has an invalid name. Names can only contain any combination of letters in the English alphabet in both uppercase (A-Z) and lowercase (a-z), numerals zero to nine (0-9), and underscores (_).",
               property: property,
               selectors: rs.selectors.join(", ")))
           else

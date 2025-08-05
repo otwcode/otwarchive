@@ -68,7 +68,7 @@ describe CssCleaner do
           skin = build(:skin, css: "#footer, #header { --#hash: absolute; }")
           expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
-          expect(skin.errors[:base]).to include("The --#hash custom property in #footer, #header has an invalid name. Names may contain only letters, numbers, dashes (-), and underscores (_).")
+          expect(skin.errors[:base]).to include("The --#hash custom property in #footer, #header has an invalid name. Names can only contain any combination of letters in the English alphabet in both uppercase (A-Z) and lowercase (a-z), numerals zero to nine (0-9), and underscores (_).")
         end
 
         it "strips invalid property and returns error when property contains text resembling custom property name" do
