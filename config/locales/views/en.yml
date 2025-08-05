@@ -2263,9 +2263,11 @@ en:
       new_work: Post New
     passwords:
       new:
+        browser_title: Reset Password
         email_html: Email address
         instructions: Please enter the email address associated with your AO3 account. You may only request a password reset a limited number of times per day.
         introductions: If you've forgotten your password, we can send you an email with instructions to reset your password.
+        page_heading: Reset Password
         reset_password: Reset Password
     registrations:
       legal:

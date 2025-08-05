@@ -6,7 +6,7 @@ Feature: User Authentication
     Given I have no users
       And the following activated user exists
       | email       | login | password |
-      | sam@otw.org | sam   | secret   |
+      | sam@example.com | sam   | secret   |
       And all emails have been delivered
     When I am on the home page
       And I fill in "Username or email:" with "sam"
@@ -16,7 +16,7 @@ Feature: User Authentication
       And I should see "Forgot your password or username?"
     When I follow "Reset password"
     Then I should see "If you've forgotten your password, we can send you an email with instructions to reset your password."
-    When I fill in "Email address" with "sam@otw.org"
+    When I fill in "Email address" with "sam@example.com"
       And I press "Reset Password"
     Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered
@@ -90,7 +90,7 @@ Feature: User Authentication
     Given I have no users
       And the following activated user exists
       | email       | login | password |
-      | sam@otw.org | sam   | secret   |
+      | sam@example.com | sam   | secret   |
       And all emails have been delivered
     When I request a password reset for "sam"
     Then I should see "You must enter your email address."
@@ -101,9 +101,9 @@ Feature: User Authentication
     Given I have no users
       And the following activated user exists
       | email       | login | password |
-      | sam@otw.org | sam   | secret   |
+      | sam@example.com | sam   | secret   |
       And all emails have been delivered
-    When I request a password reset for "1@otw.org"
+    When I request a password reset for "1@example.com"
     Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 0 email should be delivered
 
