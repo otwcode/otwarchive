@@ -72,7 +72,7 @@ module CssCleaner
           next
         end
         # remove whitespace and convert &gt; entities back to the > direct child selector
-        sel = selector.gsub(/\n/, '').gsub('&gt;', '>').strip
+        sel = selector.gsub(/\n/, "").gsub("&gt;", ">").strip
         (prefix.blank? || sel.start_with?(prefix)) ? sel : "#{prefix} #{sel}"
       end
       clean_declarations = ""
