@@ -6,7 +6,6 @@ module CssCleaner
 
   # constant regexps for css values
   ALPHA_REGEX = Regexp.new('[a-z\-]+')
-  ALPHANUMERIC_REGEX = Regexp.new("[0-9a-z]+")
   UNITS_REGEX = Regexp.new('deg|cm|em|ex|in|mm|pc|pt|px|s|%', Regexp::IGNORECASE)
   NUMBER_REGEX = Regexp.new('-?\.?\d{1,3}\.?\d{0,3}')
   NUMBER_WITH_UNIT_REGEX = Regexp.new("#{NUMBER_REGEX}\s*#{UNITS_REGEX}?\s*,?\s*")
