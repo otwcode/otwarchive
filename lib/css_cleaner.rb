@@ -89,7 +89,7 @@ module CssCleaner
           end
         elsif (cleanval = sanitize_css_declaration_value(property, value)).blank?
           errors.add(:base, :banned_value_for_property, property: property, selectors: rs.selectors.join(", "), value: value)
-        elsif (!caller_check || caller_check.call(rs, property, value))
+        elsif !caller_check || caller_check.call(rs, property, value)
           clean_declarations += "  #{property}: #{cleanval}#{is_important ? ' !important' : ''};\n"
         end
       end
