@@ -68,14 +68,14 @@ describe CssCleaner do
           skin = build(:skin, css: "#footer, #header { --#hash: absolute; }")
           expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
-          expect(skin.errors[:base]).to include("The --#hash custom property in #footer, #header has an invalid name. Names can only contain any combination of letters in the English alphabet in both uppercase (A-Z) and lowercase (a-z), numerals zero to nine (0-9), and underscores (_).")
+          expect(skin.errors[:base]).to include("The --#hash custom property in #footer, #header has an invalid name. Names can contain letters in the English alphabet in both uppercase (A-Z) and lowercase (a-z), numerals zero to nine (0-9), and underscores (_).")
         end
 
         it "strips invalid property and returns error when property contains text resembling custom property name" do
           skin = build(:skin, css: ":root { color--heading: absolute; }")
           expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
-          expect(skin.errors[:base]).to include("We don't currently allow the CSS property color--heading -- please notify support if you think this is an error.")
+          expect(skin.errors[:base]).to include("We don't currently allow the CSS property color--heading -- please notify Support if you think this is an error.")
         end
 
         # Using a property from SUPPORTED_CSS_SHORTHAND_PROPERTIES allows anything, e.g., font-salmon, awkwardpause, background_witches
@@ -124,24 +124,24 @@ describe CssCleaner do
           skin = build(:skin, css: "p { color: var(--blue }")
           expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
-          expect(skin.errors[:base]).to include("There don't seem to be any rules for p")
+          expect(skin.errors[:base]).to include("There don't seem to be any rules for p.")
         end
       end
     end
 
     context "when cleaning WorkSkin CSS" do
-      it "strips custom properties and returns error" do
+      it "strips valid custom properties and returns error" do
         skin = build(:work_skin, css: "#workskin { --background: #fff; }")
         expect(skin.save).to be_falsey
         expect(skin.css).to eq("")
-        expect(skin.errors[:base]).to include("Variables are not allowed in work skins.")
+        expect(skin.errors[:base]).to include("Custom properties are not allowed in work skins.")
       end
 
       it "strips variable functions and returns error" do
         skin = build(:work_skin, css: "p { color: var(--yellow) }")
         expect(skin.save).to be_falsey
         expect(skin.css).to eq("")
-        expect(skin.errors[:base]).to include("Variables are not allowed in work skins.")
+        expect(skin.errors[:base]).to include("The var() function is not allowed in work skins.")
       end
 
       context "with position property" do
@@ -149,7 +149,7 @@ describe CssCleaner do
           skin = build(:work_skin, css: "div { position: fixed; }")
           expect(skin.save).to be_falsey
           expect(skin.css).to eq("")
-          expect(skin.errors[:base]).to include("The position property in div cannot have the value fixed in Work skins, sorry!")
+          expect(skin.errors[:base]).to include("The position property in div cannot have the value fixed in work skins, sorry!")
         end
 
         it "allows other values" do

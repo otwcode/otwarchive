@@ -64,12 +64,12 @@ module CssCleaner
     prefix = options[:prefix] || ''
     caller_check = options[:caller_check]
 
-    errors.add(:base, ts("We couldn't find any valid CSS rules in that code.")) if parser.to_s.blank?
+    errors.add(:base, :no_valid_css) if parser.to_s.blank?
 
     parser.each_rule_set do |rs|
       selectors = rs.selectors.map do |selector|
         if selector.match(/@font-face/i)
-          errors.add(:base, ts("We don't allow the @font-face feature."))
+          errors.add(:base, :font_face)
           next
         end
         # remove whitespace and convert &gt; entities back to the > direct child selector
@@ -77,33 +77,25 @@ module CssCleaner
         (prefix.blank? || sel.start_with?(prefix)) ? sel : "#{prefix} #{sel}"
       end
       clean_declarations = ""
+      # Do not internationalize the , used as a join in these erorrs -- it's reflective of the comma used in the list of selectors, which does not change based on locale.
       rs.each_declaration do |property, value, is_important|
         if property.blank? || value.blank?
-          errors.add(:base, ts("The code for %{selectors} doesn't seem to be a valid CSS rule.", selectors: rs.selectors.join(",")))
+          errors.add(:base, :no_valid_css_for_selectors, selectors: rs.selectors.join(", "))
         elsif sanitize_css_property(property).blank?
           # If it starts with --, assume the user was trying to define a custom property.
           if property.match(/\A--/)
-            errors.add(:base,
-              ts("The %{property} custom property in %{selectors} has an invalid name. Names can only contain any combination of letters in the English alphabet in both uppercase (A-Z) and lowercase (a-z), numerals zero to nine (0-9), and underscores (_).",
-              property: property,
-              selectors: rs.selectors.join(", ")))
+            errors.add(:base, :invalid_custom_property_name, property: property, selectors: rs.selectors.join(", "))
           else
-            errors.add(:base,
-              ts("We don't currently allow the CSS property %{property} -- please notify support if you think this is an error.",
-              property: property))
+            errors.add(:base, :banned_property, property: property)
           end
         elsif (cleanval = sanitize_css_declaration_value(property, value)).blank?
-          errors.add(:base,
-            ts("%{property} in %{selectors} cannot have the value %{value}, sorry!",
-            property: property,
-            selectors: rs.selectors.join(", "),
-            value: value))
+          errors.add(:base, :banned_value_for_property, property: property, selectors: rs.selectors.join(", "), value: value)
         elsif (!caller_check || caller_check.call(rs, property, value))
           clean_declarations += "  #{property}: #{cleanval}#{is_important ? ' !important' : ''};\n"
         end
       end
       if clean_declarations.blank?
-        errors.add(:base, ts("There don't seem to be any rules for %{selectors}", selectors: rs.selectors.join(",")))
+        errors.add(:base, :no_rules_for_selectors, selectors: rs.selectors.join(", "))
       else
         # everything looks ok, add it to the css
         clean_css += "#{selectors.join(",\n")} {\n"
