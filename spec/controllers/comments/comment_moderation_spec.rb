@@ -483,13 +483,12 @@ describe CommentsController do
 
           it_behaves_like "a comment that can only be approved by an authorized admin"
         end
+      end
 
-        # TODO: Move out of this loop
-        context "when logged-in as admin with no role" do
-          before { fake_login_admin(create(:admin)) }
+      context "when logged-in as admin with no role" do
+        before { fake_login_admin(create(:admin)) }
 
-          it_behaves_like "a comment that can only be approved by an authorized admin"
-        end
+        it_behaves_like "a comment that can only be approved by an authorized admin"
       end
 
       context "when logged-in as the work's creator" do
