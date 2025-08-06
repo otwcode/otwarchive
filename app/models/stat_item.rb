@@ -1,20 +1,22 @@
 class StatItem
   include Rails.application.routes.url_helpers
 
-  attr_reader :type, :id, :title, :fandom, :fandom_string, :hits,
+  attr_reader :type, :id, :title, :fandom, :hits,
               :word_count, :date,
               :bookmarks_count, :subscriptions_count,
               :kudos_count, :comment_thread_count, :work_count
+
+  attr_accessor :fandom_string
 
   def initialize(record)
     @type = record["type"]
     @id = record["id"]
     @title = record["title"]
     @fandom = record["fandom"]
-    @fandom_string = record["fandom_string"]
+    # @fandom_string = record["fandom_string"]
     @hits = record["hits"]&.to_i || 0
     @word_count = record["word_count"]&.to_i || 0
-    @date = record["date"]
+    @date = record["date"]&.to_date
     @bookmarks_count = record["bookmarks_count"]&.to_i || 0
     @subscriptions_count = record["subscriptions_count"]&.to_i || 0
     @kudos_count = record["kudos_count"]&.to_i || 0

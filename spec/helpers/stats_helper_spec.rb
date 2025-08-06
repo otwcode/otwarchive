@@ -93,6 +93,7 @@ describe StatsHelper do
       create(:series, works: [work], authors: user.pseuds)
 
       results = run_query("date", "DESC", "All Years")
+      puts "#{results}"
       
       # each fandom will have 1 work and 1 series entry -> 6
       expect(results.length).to eq(6)
