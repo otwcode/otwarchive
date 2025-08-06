@@ -36,5 +36,5 @@
   <br />
 <% else %>
   <%= style_link("Read all comments on <i>#{@comment.ultimate_parent.commentable_name}</i>",
-        polymorphic_url(@comment.ultimate_parent, view_full_work: true, show_comments: true, anchor: :comments, only_path: false)) %>
+        polymorphic_url(@comment.ultimate_parent, view_full_work: true, show_comments: true, anchor: :comments)) %>
 <% end %>

@@ -287,7 +287,7 @@ describe CommentMailer do
   end
 
   shared_examples "a notification without a chapter reference" do
-    it "has the chapter in the subject line" do
+    it "has no chapter information in the subject line" do
       expect(subject.subject).to_not include("on Chapter")
     end
 
