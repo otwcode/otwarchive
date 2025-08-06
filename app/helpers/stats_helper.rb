@@ -47,11 +47,21 @@ module StatsHelper
         COUNT(DISTINCT c.id) AS comment_thread_count,
         COUNT(DISTINCT s.id) AS subscriptions_count,
         COUNT(DISTINCT b.id) AS bookmarks_count,
-        tags.name AS fandom
+        tags.name AS fandom,
+        (
+          SELECT GROUP_CONCAT(DISTINCT tags_inner.name ORDER BY tags_inner.name SEPARATOR ', ')
+          FROM taggings taggings_inner
+          JOIN tags tags_inner ON tags_inner.id = taggings_inner.tagger_id
+          WHERE taggings_inner.taggable_type = 'Work'
+            AND taggings_inner.taggable_id = works.id
+            AND tags_inner.type = 'Fandom'
+        ) AS fandom_string
       SQL
 
+    # end
     stats = work_stats.all.map { |work_stat| StatItem.new(work_stat) }
 
+    # series fandom_string will be incorrect unless only accounting for works with posted chapters and their tags 
     series_stats = Series
       .for_user(user)
       .with_stats
@@ -67,10 +77,17 @@ module StatsHelper
         COUNT(DISTINCT c.id) AS comment_thread_count,
         COUNT(DISTINCT s.id) AS subscriptions_count,
         COUNT(DISTINCT b.id) AS bookmarks_count,
-        tags.name as fandom
+        tags.name as fandom,
+        (
+          SELECT GROUP_CONCAT(DISTINCT tags_inner.name ORDER BY tags_inner.name SEPARATOR ', ')
+          FROM works w
+          JOIN taggings taggings_inner ON taggings_inner.taggable_type = 'Work' AND taggings_inner.taggable_id = w.id
+          JOIN tags tags_inner ON tags_inner.id = taggings_inner.tagger_id
+          JOIN serial_works sw ON sw.work_id = w.id
+          WHERE sw.series_id = series.id
+            AND tags_inner.type = 'Fandom'
+        ) AS fandom_string
       SQL
-
-      # GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name SEPARATOR ', ') AS fandom_string
 
     stats.concat(series_stats.all.map { |work_stat| StatItem.new(work_stat) })
 

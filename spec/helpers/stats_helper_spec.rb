@@ -16,8 +16,8 @@ describe StatsHelper do
     end
   end
 
-  def create_work_set_first_chapter_info(title, chapter_content, year, posted: true)
-    work = create(:work, title: title, authors: user.pseuds, posted: posted)
+  def create_work_set_first_chapter_info(title, chapter_content, year, posted: true, fandom_string: "fandom a")
+    work = create(:work, title: title, authors: user.pseuds, posted: posted, fandom_string: fandom_string)
     work.first_chapter.update!(published_at: Date.new(year, 1, 1))
     work.first_chapter.update!(content: chapter_content)
     work
@@ -119,7 +119,6 @@ describe StatsHelper do
       create(:series, works: [work], authors: user.pseuds)
 
       results = run_query("date", "DESC", "All Years")
-      puts "#{results}"
       
       # each fandom will have 1 work and 1 series entry -> 6
       expect(results.length).to eq(6)
@@ -209,8 +208,8 @@ describe StatsHelper do
       )
     end
 
-    it "excludes draft works from series work count" do
-      unposted = create_work_set_first_chapter_info("Unposted", "one two three four five", 2015, posted: false)
+    it "excludes draft works from series work count and fandom string" do
+      unposted = create_work_set_first_chapter_info("Unposted", "one two three four five", 2015, posted: false, fandom_string: "a")
       create(:chapter, :draft, content: "six seven eight", work: unposted, year: 2015)
 
       series = create(:series, title: "Series with draft work", works: [unposted], authors: user.pseuds)
@@ -219,12 +218,13 @@ describe StatsHelper do
       expect(results.length).to eq(0)
 
       # add posted work to series to verify draft still excluded
-      posted = create(:work, authors: user.pseuds)
+      posted = create(:work, authors: user.pseuds, fandom_string: "b")
       series.works << posted
       results = run_query("date", "DESC", "All Years")
       expect(results.length).to eq(2)
 
       series = results.find { |item| item.type == "SERIES" }
+      expect(series.fandom_string).to eq("a")
       expect_stat_item(series, { work_count: 1 })
     end
 
