@@ -46,6 +46,8 @@ class Work < ApplicationRecord
 
   has_many :original_creators, class_name: "WorkOriginalCreator", dependent: :destroy
 
+  has_many :fandom_tags, -> { where(type: "Fandom") }, through: :taggings, source: :tagger, source_type: "Tag"
+
   belongs_to :language
   belongs_to :work_skin
   validate :work_skin_allowed, on: :save
@@ -1038,10 +1040,9 @@ class Work < ApplicationRecord
 
   scope :with_stats, lambda {
     joins(:chapters)
+      .left_joins(chapters: :approved_root_comments)
+      .left_joins(:subscriptions, :bookmarks)
       .joins(:stat_counter)
-      .joins("LEFT JOIN comments c ON c.commentable_id = chapters.id AND c.commentable_type = 'Chapter' AND c.depth = 0 AND c.spam = false AND c.approved = true")
-      .joins("LEFT JOIN subscriptions s ON s.subscribable_id = works.id AND s.subscribable_type = 'Work'")
-      .joins("LEFT JOIN bookmarks b ON b.bookmarkable_id = works.id AND b.bookmarkable_type = 'Work'")
   }
 
   # a complicated dynamic scope here:

@@ -132,7 +132,7 @@ describe StatsHelper do
       end
       
       # Check fandom strings are the same
-      results.each { |result| expect(result.fandom_string).to eq("doctor who, sherlock, supernatural") }
+      results.each { |result| expect(Set.new(result.fandom_string.split(", "))).to eq(fandoms) }
 
       stat_fandoms = Set.new(results.map(&:fandom))
       expect(stat_fandoms).to eq(fandoms)
@@ -149,7 +149,7 @@ describe StatsHelper do
       expect(results.length).to eq(3)
 
       # Check fandom strings are the same
-      results.each { |result| expect(result.fandom_string).to eq("doctor who, sherlock, supernatural") }
+      results.each { |result| expect(Set.new(result.fandom_string.split(", "))).to eq(fandoms) }
 
       stat_fandoms = Set.new(results.map(&:fandom))
       expect(stat_fandoms).to eq(fandoms)
@@ -224,7 +224,7 @@ describe StatsHelper do
       expect(results.length).to eq(2)
 
       series = results.find { |item| item.type == "SERIES" }
-      expect(series.fandom_string).to eq("a")
+      expect(series.fandom_string).to eq("b")
       expect_stat_item(series, { work_count: 1 })
     end
 

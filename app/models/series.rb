@@ -62,9 +62,8 @@ class Series < ApplicationRecord
 
   scope :with_stats, lambda {
     joins(serial_works: { work: :chapters })
-      .joins("LEFT JOIN comments c ON c.commentable_id = chapters.id AND c.commentable_type = 'Chapter' AND c.depth = 0 AND c.spam = false AND c.approved = true")
-      .joins("LEFT JOIN subscriptions s ON s.subscribable_id = series.id AND s.subscribable_type = 'Series'")
-      .joins("LEFT JOIN bookmarks b ON b.bookmarkable_id = series.id AND b.bookmarkable_type = 'Series'")
+      .left_joins(serial_works: { work: { chapters: :approved_root_comments } }) 
+      .left_joins(:subscriptions, :bookmarks)
   }
 
   def posted_works

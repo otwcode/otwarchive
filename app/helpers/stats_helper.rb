@@ -36,6 +36,7 @@ module StatsHelper
       .with_stats
       .chapter_published_in_range(start_date, end_date)
       .group("works.id, fandom")
+      .includes(:fandom_tags)
       .select(Arel.sql(<<~SQL.squish))
         "WORK" as type,
         works.id,
@@ -44,18 +45,10 @@ module StatsHelper
         stat_counters.kudos_count,
         MAX(chapters.published_at) AS date,
         SUM(chapters.word_count) AS word_count,
-        COUNT(DISTINCT c.id) AS comment_thread_count,
-        COUNT(DISTINCT s.id) AS subscriptions_count,
-        COUNT(DISTINCT b.id) AS bookmarks_count,
-        tags.name AS fandom,
-        (
-          SELECT GROUP_CONCAT(DISTINCT tags_inner.name ORDER BY tags_inner.name SEPARATOR ', ')
-          FROM taggings taggings_inner
-          JOIN tags tags_inner ON tags_inner.id = taggings_inner.tagger_id
-          WHERE taggings_inner.taggable_type = 'Work'
-            AND taggings_inner.taggable_id = works.id
-            AND tags_inner.type = 'Fandom'
-        ) AS fandom_string
+        COUNT(DISTINCT comments.id) AS comment_thread_count,
+        COUNT(DISTINCT subscriptions.id) AS subscriptions_count,
+        COUNT(DISTINCT bookmarks.id) AS bookmarks_count,
+        tags.name AS fandom
       SQL
 
     # end
@@ -74,17 +67,20 @@ module StatsHelper
         series.title,
         MAX(chapters.published_at) AS date,
         COUNT(DISTINCT works.id) AS work_count,
-        COUNT(DISTINCT c.id) AS comment_thread_count,
-        COUNT(DISTINCT s.id) AS subscriptions_count,
-        COUNT(DISTINCT b.id) AS bookmarks_count,
+        COUNT(DISTINCT comments.id) AS comment_thread_count,
+        COUNT(DISTINCT subscriptions.id) AS subscriptions_count,
+        COUNT(DISTINCT bookmarks.id) AS bookmarks_count,
         tags.name as fandom,
         (
           SELECT GROUP_CONCAT(DISTINCT tags_inner.name ORDER BY tags_inner.name SEPARATOR ', ')
           FROM works w
+          JOIN chapters c ON c.work_id = w.id
+          JOIN serial_works sw ON sw.work_id = w.id
           JOIN taggings taggings_inner ON taggings_inner.taggable_type = 'Work' AND taggings_inner.taggable_id = w.id
           JOIN tags tags_inner ON tags_inner.id = taggings_inner.tagger_id
-          JOIN serial_works sw ON sw.work_id = w.id
           WHERE sw.series_id = series.id
+            AND c.posted = TRUE
+            AND c.published_at BETWEEN '#{start_date}' AND '#{end_date}'
             AND tags_inner.type = 'Fandom'
         ) AS fandom_string
       SQL
