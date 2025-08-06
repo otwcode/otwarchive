@@ -77,9 +77,35 @@ describe StatsHelper do
 
     it "excludes unposted works" do
       draft = create(:work, posted: false, authors: user.pseuds)
-      create(:chapter, work: draft, year: 2010)
 
+      results = run_query("date", "DESC", Time.zone.now.year)
+      expect(results.map(&:id)).not_to include(draft.id)
+
+      results = run_query("date", "DESC", "All Years")
+      expect(results.map(&:id)).not_to include(draft.id)
+    end
+
+    it "excludes unposted works from backdated year" do
+      draft = create(:work, posted: false, authors: user.pseuds)
+      create_work_set_first_chapter_info("Totally unposted", "one two three four five", 2010)
+      
       results = run_query("date", "DESC", 2010)
+      expect(results.map(&:id)).not_to include(draft.id)
+
+      results = run_query("date", "DESC", "All Years")
+      expect(results.map(&:id)).not_to include(draft.id)
+    end
+
+    it "excludes unposted works with multiple draft chapters from different years" do
+      draft = create(:work, posted: false, authors: user.pseuds)
+      create_work_set_first_chapter_info("Totally unposted", "one two three four five", 2015)
+
+      create(:chapter, work: draft, posted: false, year: 2018)
+      
+      results = run_query("date", "DESC", 2018)
+      expect(results.map(&:id)).not_to include(draft.id)
+      
+      results = run_query("date", "DESC", 2015)
       expect(results.map(&:id)).not_to include(draft.id)
 
       results = run_query("date", "DESC", "All Years")
