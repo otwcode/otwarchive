@@ -86,6 +86,8 @@
               </dt>
               <dd>
                 <dl class="stats">
+                  <dt class="date">Date:</dt>
+                    <dd class="date"><%= work.date %> </dd>
                   <% if work.series? %>
                     <dt class="work_count"><%= t(".work_count") %>:</dt>
                     <dd class="work_count"><%= number_with_delimiter(work.work_count) %> </dd>

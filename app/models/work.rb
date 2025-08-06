@@ -1024,6 +1024,25 @@ class Work < ApplicationRecord
                       revealed.
                       order("revised_at DESC").
                       limit(ArchiveConfig.ITEMS_PER_PAGE) }
+  scope :for_user, lambda { |user|
+    joins(approved_creatorships: :pseud).where(pseuds: { user: user })
+  }
+
+  scope :chapter_published_in_range, lambda { |start_date, end_date|
+    where(chapters: { posted: true, published_at: start_date..end_date })
+  }
+
+  scope :with_fandoms, lambda {
+    joins(:taggings).joins("INNER JOIN tags ON taggings.tagger_id = tags.id AND tags.type = 'Fandom'")
+  }
+
+  scope :with_stats, lambda {
+    joins(:chapters)
+      .joins(:stat_counter)
+      .joins("LEFT JOIN comments c ON c.commentable_id = chapters.id AND c.commentable_type = 'Chapter' AND c.depth = 0 AND c.spam = false AND c.approved = true")
+      .joins("LEFT JOIN subscriptions s ON s.subscribable_id = works.id AND s.subscribable_type = 'Work'")
+      .joins("LEFT JOIN bookmarks b ON b.bookmarkable_id = works.id AND b.bookmarkable_type = 'Work'")
+  }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
