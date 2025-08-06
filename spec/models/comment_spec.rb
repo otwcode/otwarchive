@@ -765,4 +765,36 @@ describe Comment do
       end
     end
   end
+
+  describe "#mark_as_spam!" do
+    let(:comment) { create(:comment, approved: 1, spam: 0) }
+
+    before do
+      # Guard clause; emails shouldn't send in test env, but including just to be safe
+      allow_any_instance_of(Comment).to receive(:submit_spam)
+    end
+
+    it "flags the comment as spam." do
+      comment.mark_as_spam!
+      comment.reload
+      expect(comment.approved).to be_falsey
+      expect(comment.spam).to be_truthy
+    end
+  end
+
+  describe "#mark_as_ham!" do
+    let(:comment) { create(:comment, approved: 0, spam: 1) }
+
+    before do
+      # Guard clause; emails shouldn't send in test env, but including just to be safe
+      allow_any_instance_of(Comment).to receive(:submit_ham)
+    end
+
+    it "flags the comment as legitimate." do
+      comment.mark_as_ham!
+      comment.reload
+      expect(comment.approved).to be_truthy
+      expect(comment.spam).to be_falsey
+    end
+  end
 end
