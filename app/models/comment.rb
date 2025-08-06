@@ -498,12 +498,16 @@ class Comment < ApplicationRecord
   end
 
   def mark_as_spam!
-    update_attribute(:approved, false)
+    self.approved = false
+    self.spam = true
+    save(validate: false)
     submit_spam
   end
 
   def mark_as_ham!
-    update_attribute(:approved, true)
+    self.approved = true
+    self.spam = false
+    save(validate: false)
     submit_ham
   end
 
