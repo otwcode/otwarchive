@@ -190,43 +190,6 @@ module MailerHelper
     end
   end
 
-  def content_for_commentable_text(comment)
-    if comment.ultimate_parent.is_a?(Tag)
-      t(".content.tag",
-        pseud: commenter_pseud_or_name_text(comment),
-        tag: comment.ultimate_parent.commentable_name,
-        tag_url: tag_url(comment.ultimate_parent))
-    elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
-      t(".content.chapter",
-        pseud: commenter_pseud_or_name_text(comment),
-        chapter: t("mailer.general.creation.chapter_position", position: comment.parent.position),
-        work: comment.ultimate_parent.commentable_name,
-        chapter_url: work_chapter_url(comment.parent.work, comment.parent))
-    else
-      t(".content.work",
-        pseud: commenter_pseud_or_name_text(comment),
-        work: comment.ultimate_parent.commentable_name,
-        work_url: work_url(comment.ultimate_parent))
-    end
-  end
-
-  def content_for_commentable_html(comment)
-    if comment.ultimate_parent.is_a?(Tag)
-      t(".content.tag_html",
-        pseud_link: commenter_pseud_or_name_link(comment),
-        tag_link: style_link(comment.ultimate_parent.commentable_name, tag_url(comment.ultimate_parent)))
-    elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
-      t(".content.chapter_html",
-        pseud_link: commenter_pseud_or_name_link(comment),
-        chapter_link: style_link(t("mailer.general.creation.chapter_position", position: comment.parent.position), work_chapter_url(comment.parent.work, comment.parent)),
-        work_link: style_creation_link(comment.ultimate_parent.commentable_name, work_url(comment.parent.work)))
-    else
-      t(".content.work_html",
-        pseud_link: commenter_pseud_or_name_link(comment), 
-        work_link: style_creation_link(comment.ultimate_parent.commentable_name, polymorphic_url(comment.ultimate_parent, only_path: false)))
-    end
-  end
-
   def commenter_pseud_or_name_text(comment)
     return t("roles.anonymous_creator") if comment.by_anonymous_creator?
 
@@ -235,6 +198,43 @@ module MailerHelper
     else
       role = comment.user.official ? t("roles.official_with_parens") : t("roles.registered_with_parens")
       t("roles.commenter_name.text", name: text_pseud(comment.pseud), role_with_parens: role)
+    end
+  end
+
+  def content_for_commentable_text(comment)
+    if comment.ultimate_parent.is_a?(Tag)
+      t(".content.tag.text",
+        pseud: commenter_pseud_or_name_text(comment),
+        tag: comment.ultimate_parent.commentable_name,
+        tag_url: tag_url(comment.ultimate_parent))
+    elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
+      t(".content.chapter.text",
+        pseud: commenter_pseud_or_name_text(comment),
+        chapter_position: comment.parent.position,
+        work: comment.ultimate_parent.commentable_name,
+        chapter_url: work_chapter_url(comment.parent.work, comment.parent))
+    else
+      t(".content.other.text",
+        pseud: commenter_pseud_or_name_text(comment),
+        title: comment.ultimate_parent.commentable_name,
+        commentable_url: polymorphic_url(comment.ultimate_parent))
+    end
+  end
+
+  def content_for_commentable_html(comment)
+    if comment.ultimate_parent.is_a?(Tag)
+      t(".content.tag.html",
+        pseud_link: commenter_pseud_or_name_link(comment),
+        tag_link: style_link(comment.ultimate_parent.commentable_name, tag_url(comment.ultimate_parent)))
+    elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
+      t(".content.chapter.html",
+        pseud_link: commenter_pseud_or_name_link(comment),
+        chapter_link: style_link(t("mailer.general.creation.chapter_position", position: comment.parent.position), work_chapter_url(comment.parent.work, comment.parent)),
+        work_link: style_creation_link(comment.ultimate_parent.commentable_name, work_url(comment.parent.work)))
+    else
+      t(".content.other.html",
+        pseud_link: commenter_pseud_or_name_link(comment),
+        commentable_link: style_creation_link(comment.ultimate_parent.commentable_name, polymorphic_url(comment.ultimate_parent)))
     end
   end
 

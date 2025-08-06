@@ -10,8 +10,8 @@ class CommentMailer < ApplicationMailer
       mail(
         to: email,
         # i18n-tasks-use t("comment_mailer.comment_notification.subject.chapter")
+        # i18n-tasks-use t("comment_mailer.comment_notification.subject.other")
         # i18n-tasks-use t("comment_mailer.comment_notification.subject.tag")
-        # i18n-tasks-use t("comment_mailer.comment_notification.subject.work")
         subject: subject_for_commentable(@comment)
       )
     end
@@ -28,8 +28,8 @@ class CommentMailer < ApplicationMailer
       mail(
         to: email,
         # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.chapter")
+        # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.other")
         # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.tag")
-        # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.work")
         subject: subject_for_commentable(@comment)
       )
     end
@@ -46,8 +46,8 @@ class CommentMailer < ApplicationMailer
     mail(
       to: @your_comment.comment_owner_email,
       # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.chapter")
+      # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.other")
       # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.tag")
-      # i18n-tasks-use t("comment_mailer.comment_reply_notification.subject.work")
       subject: subject_for_commentable(@comment)
     )
   end
@@ -64,8 +64,8 @@ class CommentMailer < ApplicationMailer
     mail(
       to: @your_comment.comment_owner_email,
       # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.chapter")
+      # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.other")
       # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.tag")
-      # i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.subject.work")
       subject: subject_for_commentable(@comment)
     )
   end
@@ -77,8 +77,8 @@ class CommentMailer < ApplicationMailer
     mail(
       to: @comment.comment_owner_email,
       # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.chapter")
+      # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.other")
       # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.tag")
-      # i18n-tasks-use t("comment_mailer.comment_sent_notification.subject.work")
       subject: subject_for_commentable(@comment)
     )
   end
@@ -91,8 +91,8 @@ class CommentMailer < ApplicationMailer
     mail(
       to: @comment.comment_owner_email,
       # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.chapter")
+      # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.other")
       # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.tag")
-      # i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.subject.work")
       subject: subject_for_commentable(@comment)
     )
   end
@@ -106,7 +106,7 @@ class CommentMailer < ApplicationMailer
     elsif comment.parent.is_a?(Chapter) && comment.parent.work.chaptered?
       t(".subject.chapter", app_name: ArchiveConfig.APP_SHORT_NAME, position: comment.parent.position, title: name)
     else
-      t(".subject.work", app_name: ArchiveConfig.APP_SHORT_NAME, title: name)
+      t(".subject.other", app_name: ArchiveConfig.APP_SHORT_NAME, title: name)
     end
   end
 end

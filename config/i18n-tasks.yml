@@ -116,6 +116,11 @@ search:
 
 ## Do not consider these keys missing:
 ignore_missing:
+  # File: app/helpers/mailer_helper.rb
+  - comment_mailer.subject_for_commentable.subject.{chapter,other,tag}
+  # File: app/mailers/comment_mailer.rb
+  - mailer_helper.content_for_commentable_html.content.{chapter,other,tag}.html
+  - mailer_helper.content_for_commentable_text.content.{chapter,other,tag}.text
   ## All of the following keys are using default values defined in the respective .rb files
   ## TODO: Move the default values to the .yml files
   # File: app/controllers/admin/admin_invitations_controller.rb
@@ -149,17 +154,6 @@ ignore_missing:
   - successfully_sent # should be feedbacks.create.successfully_sent
   # Files: app/controllers/languages_controller.rb and app/controllers/locales_controller.rb
   - successfully_added # should be languages.create.successfully_added and locales.create.successfully_added
-  # File: app/helpers/mailer_helper.rb
-  - comment_mailer.subject_for_commentable.subject.chapter
-  - comment_mailer.subject_for_commentable.subject.tag
-  - comment_mailer.subject_for_commentable.subject.work
-  # File: app/mailers/comment_mailer.rb
-  - mailer_helper.content_for_commentable_text.content.chapter
-  - mailer_helper.content_for_commentable_html.content.chapter_html
-  - mailer_helper.content_for_commentable_text.content.tag
-  - mailer_helper.content_for_commentable_html.content.tag_html
-  - mailer_helper.content_for_commentable_text.content.work
-  - mailer_helper.content_for_commentable_html.content.work_html
   # File: app/views/admin/admin_invitations/find.html.erb
   - admin.admin_invitations.find.find_email
   - admin.admin_invitations.find.find_token

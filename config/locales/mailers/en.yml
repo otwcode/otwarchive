@@ -42,76 +42,94 @@ en:
   comment_mailer:
     comment_notification:
       content:
-        chapter: "%{pseud} left the following comment on %{chapter} of %{work} (%{chapter_url}):"
-        chapter_html: "%{pseud_link} left the following comment on %{chapter_link} of %{work_link}"
-        tag: "%{pseud} left the following comment on the tag %{tag} (%{tag_url}):"
-        tag_html: "%{pseud_link} left the following comment on the tag %{tag_link}"
-        work: "%{pseud} left the following comment on %{work} (%{work_url}):"
-        work_html: "%{pseud_link} left the following comment on %{work_link}"
+        chapter:
+          html: "%{pseud_link} left the following comment on %{chapter_link} of %{work_link}:"
+          text: "%{pseud} left the following comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} left the following comment on %{work_link}:"
+          text: "%{pseud} left the following comment on %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} left the following comment on the tag %{tag_link}:"
+          text: "%{pseud} left the following comment on the tag %{tag} (%{tag_url}):"
       subject:
         chapter: "[%{app_name}] Comment on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Comment on %{title}"
         tag: "[%{app_name}] Comment on the tag %{name}"
-        work: "[%{app_name}] Comment on %{title}"
     comment_reply_notification:
       content:
-        chapter: "%{pseud} replied to your comment on %{chapter} of %{work} (%{chapter_url}):"
-        chapter_html: "%{pseud_link} replied to your comment on %{chapter_link} of %{work_link}"
-        tag: "%{pseud} replied to your comment on the tag %{tag} (%{tag_url}):"
-        tag_html: "%{pseud_link} replied to your comment on the tag %{tag_link}"
-        work: "%{pseud} replied to your comment on %{work} (%{work_url}):"
-        work_html: "%{pseud_link} replied to your comment on %{work_link}"
+        chapter:
+          html: "%{pseud_link} replied to your comment on %{chapter_link} of %{work_link}:"
+          text: "%{pseud} replied to your comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} replied to your comment on %{work_link}:"
+          text: "%{pseud} replied to your comment on %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} replied to your comment on the tag %{tag_link}:"
+          text: "%{pseud} replied to your comment on the tag %{tag} (%{tag_url}):"
       subject:
         chapter: "[%{app_name}] Reply to your comment on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Reply to your comment on %{title}"
         tag: "[%{app_name}] Reply to your comment on the tag %{name}"
-        work: "[%{app_name}] Reply to your comment on %{title}"
     comment_reply_sent_notification:
       content:
-        chapter: 'You replied to a comment on %{chapter} of %{work} (%{chapter_url}):'
-        chapter_html: You replied to a comment on %{chapter_link} of %{work_link}
-        tag: 'You replied to a comment on the tag %{tag} (%{tag_url}):'
-        tag_html: You replied to a comment on the tag %{tag_link}
-        work: 'You replied to a comment on %{work} (%{work_url}):'
-        work_html: You replied to a comment on %{work_link}
+        chapter:
+          html: 'You replied to a comment on %{chapter_link} of %{work_link}:'
+          text: 'You replied to a comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):'
+        other:
+          html: 'You replied to a comment on %{work_link}:'
+          text: 'You replied to a comment on %{title} (%{commentable_url}):'
+        tag:
+          html: 'You replied to a comment on the tag %{tag_link}:'
+          text: 'You replied to a comment on the tag %{tag} (%{tag_url}):'
       subject:
         chapter: "[%{app_name}] Reply you left to a comment on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Reply you left to a comment on %{title}"
         tag: "[%{app_name}] Reply you left to a comment on the tag %{name}"
-        work: "[%{app_name}] Reply you left to a comment on %{title}"
     comment_sent_notification:
       content:
-        chapter: 'You left the following comment on %{chapter} of %{work} (%{chapter_url}):'
-        chapter_html: You left the following comment on %{chapter_link} of %{work_link}
-        tag: 'You left the following comment on the tag %{tag} (%{tag_url}):'
-        tag_html: You left the following comment on the tag %{tag_link}
-        work: 'You left the following comment on %{work} (%{work_url}):'
-        work_html: You left the following comment on %{work_link}
+        chapter:
+          html: 'You left the following comment on %{chapter_link} of %{work_link}:'
+          text: 'You left the following comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):'
+        other:
+          html: 'You left the following comment on %{work_link}:'
+          text: 'You left the following comment on %{title} (%{commentable_url}):'
+        tag:
+          html: 'You left the following comment on the tag %{tag_link}:'
+          text: 'You left the following comment on the tag %{tag} (%{tag_url}):'
       subject:
         chapter: "[%{app_name}] Comment you left on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Comment you left on %{title}"
         tag: "[%{app_name}] Comment you left on the tag %{name}"
-        work: "[%{app_name}] Comment you left on %{title}"
     edited_comment_notification:
       content:
-        chapter: "%{pseud} edited the following comment on %{chapter} of %{work} (%{chapter_url}):"
-        chapter_html: "%{pseud_link} edited the following comment on %{chapter_link} of %{work_link}"
-        tag: "%{pseud} edited the following comment on the tag %{tag} (%{tag_url}):"
-        tag_html: "%{pseud_link} edited the following comment on the tag %{tag_link}"
-        work: "%{pseud} edited the following comment on %{work} (%{work_url}):"
-        work_html: "%{pseud_link} edited the following comment on %{work_link}"
+        chapter:
+          html: "%{pseud_link} edited the following comment on %{chapter_link} of %{work_link}:"
+          text: "%{pseud} edited the following comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} edited the following comment on %{work_link}:"
+          text: "%{pseud} edited the following comment on %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} edited the following comment on the tag %{tag_link}:"
+          text: "%{pseud} edited the following comment on the tag %{tag} (%{tag_url}):"
       subject:
         chapter: "[%{app_name}] Edited comment on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Edited comment on %{title}"
         tag: "[%{app_name}] Edited comment on the tag %{name}"
-        work: "[%{app_name}] Edited comment on %{title}"
     edited_comment_reply_notification:
       content:
-        chapter: "%{pseud} edited their reply to your comment on %{chapter} of %{work} (%{chapter_url}):"
-        chapter_html: "%{pseud_link} edited their reply to your comment on %{chapter_link} of %{work_link}"
-        tag: "%{pseud} edited their reply to your comment on the tag %{tag} (%{tag_url}):"
-        tag_html: "%{pseud_link} edited their reply to your comment on the tag %{tag_link}"
-        work: "%{pseud} edited their reply to your comment on %{work} (%{work_url}):"
-        work_html: "%{pseud_link} edited their reply to your comment on %{work_link}"
+        chapter:
+          html: "%{pseud_link} edited their reply to your comment on %{chapter_link} of %{work_link}:"
+          text: "%{pseud} edited their reply to your comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} edited their reply to your comment on %{work_link}:"
+          text: "%{pseud} edited their reply to your comment on %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} edited their reply to your comment on the tag %{tag_link}:"
+          text: "%{pseud} edited their reply to your comment on the tag %{tag} (%{tag_url}):"
       subject:
         chapter: "[%{app_name}] Edited reply to your comment on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Edited reply to your comment on %{title}"
         tag: "[%{app_name}] Edited reply to your comment on the tag %{name}"
-        work: "[%{app_name}] Edited reply to your comment on %{title}"
   kudo_mailer:
     batch_kudo_notification:
       guest:
