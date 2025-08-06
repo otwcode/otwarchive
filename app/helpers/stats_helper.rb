@@ -54,10 +54,10 @@ module StatsHelper
     # end
     stats = work_stats.all.map { |work_stat| StatItem.new(work_stat) }
 
-    # series fandom_string will be incorrect unless only accounting for works with posted chapters and their tags 
     series_stats = Series
       .for_user(user)
       .with_stats
+      .includes(posted_works: :tags)
       .merge(Work.with_fandoms)
       .merge(Work.chapter_published_in_range(start_date, end_date))
       .group("series.id, fandom")
@@ -70,19 +70,7 @@ module StatsHelper
         COUNT(DISTINCT comments.id) AS comment_thread_count,
         COUNT(DISTINCT subscriptions.id) AS subscriptions_count,
         COUNT(DISTINCT bookmarks.id) AS bookmarks_count,
-        tags.name as fandom,
-        (
-          SELECT GROUP_CONCAT(DISTINCT tags_inner.name ORDER BY tags_inner.name SEPARATOR ', ')
-          FROM works w
-          JOIN chapters c ON c.work_id = w.id
-          JOIN serial_works sw ON sw.work_id = w.id
-          JOIN taggings taggings_inner ON taggings_inner.taggable_type = 'Work' AND taggings_inner.taggable_id = w.id
-          JOIN tags tags_inner ON tags_inner.id = taggings_inner.tagger_id
-          WHERE sw.series_id = series.id
-            AND c.posted = TRUE
-            AND c.published_at BETWEEN '#{start_date}' AND '#{end_date}'
-            AND tags_inner.type = 'Fandom'
-        ) AS fandom_string
+        tags.name as fandom
       SQL
 
     stats.concat(series_stats.all.map { |work_stat| StatItem.new(work_stat) })

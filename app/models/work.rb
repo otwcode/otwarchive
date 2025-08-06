@@ -1035,7 +1035,7 @@ class Work < ApplicationRecord
   }
 
   scope :with_fandoms, lambda {
-    joins(:taggings).joins("INNER JOIN tags ON taggings.tagger_id = tags.id AND tags.type = 'Fandom'")
+    joins(:tags).where(tags: { type: "Fandom" })
   }
 
   scope :with_stats, lambda {
