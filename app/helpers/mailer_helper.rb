@@ -196,12 +196,12 @@ module MailerHelper
         pseud: commenter_pseud_or_name_text(comment),
         tag: comment.ultimate_parent.commentable_name,
         tag_url: tag_url(comment.ultimate_parent))
-    elsif comment.original_ultimate_parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
+    elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
       t(".content.chapter",
         pseud: commenter_pseud_or_name_text(comment),
-        chapter: t("mailer.general.creation.chapter_position", position: comment.original_ultimate_parent.position),
+        chapter: t("mailer.general.creation.chapter_position", position: comment.parent.position),
         work: comment.ultimate_parent.commentable_name,
-        chapter_url: work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent))
+        chapter_url: work_chapter_url(comment.parent.work, comment.parent))
     else
       t(".content.work",
         pseud: commenter_pseud_or_name_text(comment),
@@ -215,11 +215,11 @@ module MailerHelper
       t(".content.tag_html",
         pseud_link: commenter_pseud_or_name_link(comment),
         tag_link: style_link(comment.ultimate_parent.commentable_name, tag_url(comment.ultimate_parent)))
-    elsif comment.original_ultimate_parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
+    elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
       t(".content.chapter_html",
         pseud_link: commenter_pseud_or_name_link(comment),
-        chapter_link: style_link(t("mailer.general.creation.chapter_position", position: comment.original_ultimate_parent.position), work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent)),
-        work_link: style_creation_link(comment.ultimate_parent.commentable_name, work_url(comment.original_ultimate_parent.work)))
+        chapter_link: style_link(t("mailer.general.creation.chapter_position", position: comment.parent.position), work_chapter_url(comment.parent.work, comment.parent)),
+        work_link: style_creation_link(comment.ultimate_parent.commentable_name, work_url(comment.parent.work)))
     else
       t(".content.work_html",
         pseud_link: commenter_pseud_or_name_link(comment), 

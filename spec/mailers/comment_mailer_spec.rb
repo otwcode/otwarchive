@@ -247,41 +247,41 @@ describe CommentMailer do
 
   shared_examples "a notification with a link to the chapter" do
     it "has the chapter in the subject line" do
-      expect(subject.subject).to include("Chapter #{comment.original_ultimate_parent.position} of #{comment.ultimate_parent.commentable_name}")
+      expect(subject.subject).to include("Chapter #{comment.parent.position} of #{comment.ultimate_parent.commentable_name}")
     end
 
     describe "HTML email" do
       it "has a link to the chapter" do
         expect(subject.html_part).to have_xpath(
-          "//a[@href=\"#{work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent)}\"]",
-          text: "Chapter #{comment.original_ultimate_parent.position}"
+          "//a[@href=\"#{work_chapter_url(comment.parent.work, comment.parent)}\"]",
+          text: "Chapter #{comment.parent.position}"
         )
       end
 
       it "has a link to view all comments on the chapter" do
-        url = work_chapter_url(comment.original_ultimate_parent.work,
-                               comment.original_ultimate_parent,
+        url = work_chapter_url(comment.parent.work,
+                               comment.parent,
                                show_comments: true,
                                anchor: :comments)
 
         expect(subject.html_part).to have_xpath(
           "//a[@href=\"#{url}\"]",
-          text: "Read all comments on Chapter #{comment.original_ultimate_parent.position} of #{comment.ultimate_parent.commentable_name}"
+          text: "Read all comments on Chapter #{comment.parent.position} of #{comment.ultimate_parent.commentable_name}"
         )
       end
     end
 
     describe "text email" do
       it "has a reference to the chapter" do
-        expect(subject).to have_text_part_content("comment on Chapter #{comment.original_ultimate_parent.position} of #{comment.ultimate_parent.commentable_name} (#{work_chapter_url(comment.original_ultimate_parent.work, comment.original_ultimate_parent)})")
+        expect(subject).to have_text_part_content("comment on Chapter #{comment.parent.position} of #{comment.ultimate_parent.commentable_name} (#{work_chapter_url(comment.parent.work, comment.parent)})")
       end
 
       it "has a link to view all comments on the chapter" do
-        url = work_chapter_url(comment.original_ultimate_parent.work,
-                               comment.original_ultimate_parent,
+        url = work_chapter_url(comment.parent.work,
+                               comment.parent,
                                show_comments: true,
                                anchor: :comments)
-        expect(subject).to have_text_part_content("Read all comments on Chapter #{comment.original_ultimate_parent.position} of \"#{comment.ultimate_parent.commentable_name}\": #{url}")
+        expect(subject).to have_text_part_content("Read all comments on Chapter #{comment.parent.position} of \"#{comment.ultimate_parent.commentable_name}\": #{url}")
       end
     end
   end

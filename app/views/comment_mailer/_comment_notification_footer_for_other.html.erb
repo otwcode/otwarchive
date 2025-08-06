@@ -30,9 +30,9 @@
   <br />
 <% end %>
 
-<% if @comment.original_ultimate_parent.kind_of?(Chapter) && @comment.ultimate_parent.chaptered? %>
-  <%= style_link("Read all comments on Chapter #{@comment.original_ultimate_parent.position} of <i>#{@comment.ultimate_parent.commentable_name}</i>",
-        work_chapter_url(@comment.original_ultimate_parent.work, @comment.original_ultimate_parent, show_comments: true, anchor: :comments)) %>
+<% if @comment.parent.kind_of?(Chapter) && @comment.ultimate_parent.chaptered? %>
+  <%= style_link("Read all comments on Chapter #{@comment.parent.position} of <i>#{@comment.ultimate_parent.commentable_name}</i>",
+        work_chapter_url(@comment.parent.work, @comment.parent, show_comments: true, anchor: :comments)) %>
   <br />
 <% else %>
   <%= style_link("Read all comments on <i>#{@comment.ultimate_parent.commentable_name}</i>",
