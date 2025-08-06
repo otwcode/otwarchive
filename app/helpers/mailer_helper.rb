@@ -208,11 +208,20 @@ module MailerHelper
         tag: comment.ultimate_parent.commentable_name,
         tag_url: tag_url(comment.ultimate_parent))
     elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
-      t(".content.chapter.text",
-        pseud: commenter_pseud_or_name_text(comment),
-        chapter_position: comment.parent.position,
-        work: comment.ultimate_parent.commentable_name,
-        chapter_url: work_chapter_url(comment.parent.work, comment.parent))
+      if comment.parent.title.blank?
+        t(".content.chapter.untitled_text",
+          pseud: commenter_pseud_or_name_text(comment),
+          chapter_position: comment.parent.position,
+          work: comment.ultimate_parent.commentable_name,
+          chapter_url: work_chapter_url(comment.parent.work, comment.parent))
+      else
+        t(".content.chapter.titled_text",
+          pseud: commenter_pseud_or_name_text(comment),
+          chapter_position: comment.parent.position,
+          chapter_title: comment.parent.title,
+          work: comment.ultimate_parent.commentable_name,
+          chapter_url: work_chapter_url(comment.parent.work, comment.parent))
+      end
     else
       t(".content.other.text",
         pseud: commenter_pseud_or_name_text(comment),
@@ -229,7 +238,7 @@ module MailerHelper
     elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
       t(".content.chapter.html",
         pseud_link: commenter_pseud_or_name_link(comment),
-        chapter_link: style_link(t("mailer.general.creation.chapter_position", position: comment.parent.position), work_chapter_url(comment.parent.work, comment.parent)),
+        chapter_link: style_link(comment.parent.title.blank? ? t(".chapter_position.untitled", position: comment.parent.position) : t(".chapter_position.titled", position: comment.parent.position, title: comment.parent.title), work_chapter_url(comment.parent.work, comment.parent)),
         work_link: style_creation_link(comment.ultimate_parent.commentable_name, work_url(comment.parent.work)))
     else
       t(".content.other.html",
