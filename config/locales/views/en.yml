@@ -347,7 +347,9 @@ en:
     passwords:
       edit:
         describedby:
-          password_length: "%{minimum} to %{maximum} characters"
+          password_length:
+          one: "%{minimum} to %{maximum} character"
+          other: "%{minimum} to %{maximum} characters"
         label:
           confirmation: Confirm new password
           password: New password
@@ -2165,7 +2167,9 @@ en:
       new_password: New password
       old_password: Old password
       page_heading: Change Password
-      password_length: "%{minimum} to %{maximum} characters"
+      password_length:
+        one: "%{minimum} to %{maximum} character"
+        other: "%{minimum} to %{maximum} characters"
       submit: Submit
     change_username:
       account_faq: Account FAQ

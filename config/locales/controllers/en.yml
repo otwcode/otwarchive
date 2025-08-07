@@ -227,7 +227,7 @@ en:
       contact_support: contact Support
       nonmatching_email: The email addresses you entered do not match. Please try again.
       same_as_current: Your new email address must be different from your current email.
-      wrong_password_html: Your password was incorrect. Please try again or log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
+      wrong_password_html: Your old password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
     contact_abuse: contact our Policy & Abuse team
     passwords:
       create:
