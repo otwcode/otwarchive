@@ -20,10 +20,10 @@
   <h5 class="fandoms heading">
     <span class="landmark"><%= ts('Fandom') %>:</span>
     <%= series.posted_works_fandom_tags
-  .sort
-  .collect { |tag| link_to_tag_works(tag) }
-  .join(", ")
-  .html_safe %>
+          .sort
+          .collect { |tag| link_to_tag_works(tag) }
+          .join(", ")
+          .html_safe %>
   </h5>
   <%= get_symbols_for(series) %>
   <p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
