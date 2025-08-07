@@ -335,3 +335,73 @@ Feature: User Authentication
     When I go to the edit user password page
     Then I should be on the homepage
       And I should see "Please log out of your admin account first!"
+
+  Scenario: User is redirected back to restricted work after login
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+      And I am logged in as "test" with password "password"
+      And I post the locked work "Secret"
+      And I log out
+    When I view the work "Secret"
+    Then I should see "Sorry!"
+      And I should see "This work is only available to registered users of the Archive."
+    When I fill in "Username or email:" with "test" within "#main"
+      And I fill in "Password:" with "password" within "#main"
+      And I press "Log in" within "#main"
+    Then I should see "Secret"
+
+  Scenario: User is redirected to previous page after using the small login
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+      And I am logged in as "test" with password "password"
+      And I post the locked work "Secret"
+      And I log out
+    When I am on the works page
+    Then I should see "Recent Works"
+    When I fill in "Username or email:" with "test" within "#small_login"
+      And I fill in "Password:" with "password" within "#small_login"
+      And I press "Log In" within "#small_login"
+    Then I should see "Recent Works"
+
+  Scenario: User is redirected to previous page after using the main login
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+    When I am on the works page
+    Then I should see "Recent Works"
+    When I follow "Log In"
+      Then I should see "Log in"
+    When I fill in "Username or email:" with "test" within "#main"
+      And I fill in "Password:" with "password" within "#main"
+      And I press "Log in" within "#main"
+    Then I should see "Recent Works"
+
+  Scenario: User is redirected to previous page after inputting the wrong credentials in the small login
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+    When I am on the works page
+    Then I should see "Recent Works"
+    When I fill in "Username or email:" with "test" within "#small_login"
+      And I fill in "Password:" with "badpassword" within "#small_login"
+      And I press "Log In" within "#small_login"
+    Then I should see "The password or username you entered doesn't match our records."
+    When I fill in "Username or email:" with "test" within "#main"
+      And I fill in "Password:" with "password" within "#main"
+      And I press "Log in" within "#main"
+    Then I should see "Recent Works"
+
+  Scenario: User is redirected to previous page after using the small login on the main login page
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+    When I am on the works page
+    Then I should see "Recent Works"
+    When I follow "Log In"
+      Then I should see "Log in"
+    When I fill in "Username or email:" with "test" within "#small_login"
+      And I fill in "Password:" with "password" within "#small_login"
+      And I press "Log In" within "#small_login"
+    Then I should see "Recent Works"
