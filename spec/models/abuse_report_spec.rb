@@ -507,7 +507,7 @@ describe AbuseReport do
 
     context "for an orphaned work" do
       let!(:orphan_account) { create(:user, login: "orphan_account") }
-      let(:orphaneer) { create(:user, id: 20) }
+      let(:orphaneer) { create(:user, id: 40) }
       let(:work) { create(:work, authors: [orphaneer.default_pseud]) }
 
       context "recently orphaned" do
@@ -536,7 +536,7 @@ describe AbuseReport do
       end
 
       context "partially orphaned" do
-        let(:cocreator) { create(:user, id: 21) }
+        let(:cocreator) { create(:user, id: 41) }
         let(:work) { create(:work, authors: [cocreator.default_pseud, orphaneer.default_pseud]) }
 
         before do

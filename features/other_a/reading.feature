@@ -73,7 +73,11 @@ Feature: Reading count
 
   Scenario: Clear entire reading history
 
-    Given I have loaded the fixtures
+    Given the work "First work" by "testuser"
+      And the work "second work" by "testuser"
+      And the work "fourth" by "testuser2"
+      And I am logged in as "testuser2"
+      And I post the work "fifth" with rating "Mature"
     When I am logged in as "fandomer"
       And I am on testuser's works page
       And I follow "First work"
