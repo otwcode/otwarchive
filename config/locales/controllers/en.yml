@@ -220,6 +220,7 @@ en:
       user:
         incorrect_password_html: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
         successfully_updated: Your username has been successfully updated.
+        contact_support: contact Support
     confirm_change_email:
       blank_email: You must enter a new email address.
       blank_password: You must enter your password.
@@ -229,7 +230,6 @@ en:
       same_as_current: Your new email address must be different from your current email.
       wrong_password_html: Your old password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
     contact_abuse: contact our Policy & Abuse team
-    contact_support: contact Support
     passwords:
       create:
         contact_abuse: contact our Policy & Abuse team
