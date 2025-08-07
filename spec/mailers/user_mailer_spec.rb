@@ -1,6 +1,7 @@
 require "spec_helper"
 
 describe UserMailer do
+
   describe "#change_email" do
     let(:login) { "changer" }
     let(:new_email) { "new@example.com" }
@@ -87,6 +88,11 @@ describe UserMailer do
   end
 
   describe "creatorship_request" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
@@ -135,6 +141,11 @@ describe UserMailer do
   end
 
   describe "#creatorship_notification" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.creatorship_notification(chapter_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
@@ -183,6 +194,11 @@ describe UserMailer do
   end
 
   describe "creatorship_notification_archivist" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.creatorship_notification_archivist(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
