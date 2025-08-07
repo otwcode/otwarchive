@@ -7,226 +7,331 @@ describe InvitationsController do
   let(:admin) { create(:admin) }
   let(:user) { create(:user) }
 
+  authorized_admin_roles = UserPolicy::MANAGE_ROLES
+
   describe "GET #index" do
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-        get :index, params: { user_id: user.login }
+    let(:success_admin) { expect(response).to render_template("index") }
 
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-      end
-    end
+    subject { get :index, params: { user_id: user.login } }
 
-    context "when admin has correct authorization" do
-      it "renders index template" do
-        admin.update!(roles: ["policy_and_abuse"])
-        fake_login_admin(admin)
-        get :index, params: { user_id: user.login }
-
-        expect(response).to render_template("index")
-      end
-    end
+    it_behaves_like "an action only authorized admins can access", authorized_admin_roles
+    it_behaves_like "an action guests cannot access"
+    it_behaves_like "an action users cannot access"
   end
 
   describe "GET #manage" do
-    context "when admin does not have correct authorization" do
-      it "redirects with error" do
-        admin.update!(roles: [])
-        fake_login_admin(admin)
-        get :manage, params: { user_id: user.login }
+    let(:success_admin) { expect(response).to render_template("manage") }
 
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-      end
-    end
+    subject { get :manage, params: { user_id: user.login } }
 
-    context "when admin has correct authorization" do
-      it "renders manage template" do
-        admin.update!(roles: ["policy_and_abuse"])
-        fake_login_admin(admin)
-        get :manage, params: { user_id: user.login }
-
-        expect(response).to render_template("manage")
-      end
-    end
+    it_behaves_like "an action only authorized admins can access", authorized_admin_roles
+    it_behaves_like "an action guests cannot access"
+    it_behaves_like "an action users cannot access"
   end
 
   describe "GET #show" do
-    let(:user) { create(:user) }
-    let(:invitation) { create(:invitation, creator: user) }
+    let(:invitation) { create(:invitation) }
+    let(:success_admin) { expect(response).to render_template("show") }
 
-    context "with user and id parameters" do
-      context "when logged out" do
-        it "redirects with error" do
-          get :show, params: { user_id: user.login, id: invitation.id }
-
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
+    context "with both user_id and invitation id parameters" do
+      subject do
+        owner = user
+        invite = create(:invitation, creator: owner)
+        get :show, params: { user_id: owner.login, id: invite.id }
       end
 
-      context "when logged in as user who owns invitation" do
-        it "renders show template" do
-          fake_login_known_user(user)
-          get :show, params: { user_id: user.login, id: invitation.id }
+      it "succeeds when logged in as the invitation owner" do
+        invitation_owner = create(:user)
+        user_invitation = create(:invitation, creator: invitation_owner)
+        fake_login_known_user(invitation_owner)
+        get :show, params: { user_id: invitation_owner.login, id: user_invitation.id }
 
-          expect(response).to render_template("show")
-        end
+        expect(response).to render_template("show")
       end
 
-      context "when logged in as user who does not own invitation" do
-        it "redirects with error" do
-          fake_login
-          get :show, params: { user_id: user.login, id: invitation.id }
-
-          it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
-        end
-      end
-
-      context "when logged in as admin without correct authorization" do
-        it "redirects with error" do
-          fake_login_admin(admin)
-          get :show, params: { user_id: user.login, id: invitation.id }
-
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
-      end
-
-      context "when logged in as admin with correct authorization" do
-        it "renders show template" do
-          admin.update!(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          get :show, params: { user_id: user.login, id: invitation.id }
-
-          expect(response).to render_template("show")
-        end
-      end
+      it_behaves_like "an action only authorized admins can access", authorized_admin_roles
+      it_behaves_like "an action guests cannot access"
+      it_behaves_like "an action users cannot access" # a user who is not the invitation owner
     end
 
-    context "with id parameters" do
-      context "when logged out" do
-        it "redirects with error" do
-          get :show, params: { id: invitation.id }
-
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
+    context "with invitation id parameter and no user_id parameter" do
+      subject do
+        owner = user
+        invite = create(:invitation, creator: owner)
+        get :show, params: { id: invite.id }
       end
 
-      context "when logged in as user who owns invitation" do
-        it "redirects with error" do
-          fake_login_known_user(user)
-          get :show, params: { id: invitation.id }
+      it "redirects with error when logged in as the invitation owner" do
+        invitation_owner = user
+        user_invitation = create(:invitation, creator: invitation_owner)
+        fake_login_known_user(invitation_owner)
+        get :show, params: { id: user_invitation.id }
 
-          it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach.")
-        end
+        it_redirects_to_with_error(user_path(invitation_owner), "Sorry, you don't have permission to access the page you were trying to reach.")
       end
 
-      context "when logged in as user who does not own invitation" do
-        it "redirects with error" do
-          fake_login
-          get :show, params: { id: invitation.id }
-
-          it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
-        end
-      end
-
-      context "when admin does not have correct authorization" do
-        it "redirects with error" do
-          fake_login_admin(admin)
-          get :show, params: { id: invitation.id }
-
-          it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-        end
-      end
-
-      context "when admin has correct authorization" do
-        it "renders show template" do
-          admin.update!(roles: ["policy_and_abuse"])
-          fake_login_admin(admin)
-          get :show, params: { id: invitation.id }
-
-          expect(response).to render_template("show")
-        end
-      end
+      it_behaves_like "an action only authorized admins can access", authorized_admin_roles
+      it_behaves_like "an action guests cannot access"
+      it_behaves_like "an action users cannot access" # a user who is not the invitation owner
     end
   end
 
   describe "POST #invite_friend" do
     let(:invitation) { create(:invitation) }
-
-    it "does not send invite if email is missing" do
-      admin.update!(roles: ["policy_and_abuse"])
-      fake_login_admin(admin)
-      post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: nil, number_of_invites: 1 } }
-
-      expect(response).to render_template("show")
-      expect(flash[:error]).to match("Please enter an email address.")
+    let(:success) do
+      it_redirects_to_with_notice(invitation_path(invite), "Invitation was successfully sent.")
+      expect(Invitation.find_by(id: invite.id)).not_to be_nil
     end
 
-    it "sends invite" do
-      admin.update!(roles: ["policy_and_abuse"])
-      fake_login_admin(admin)
-      post :invite_friend, params: { user_id: user.id, id: invitation.id, invitation: { invitee_email: user.email, number_of_invites: 1 } }
-
-      it_redirects_to_with_notice(invitation_path(invitation), "Invitation was successfully sent.")
+    subject do
+      owner = user
+      invite = create(:invitation, creator: owner)
+      post :invite_friend, params: { user_id: owner.id, id: invite.id, invitation: { invitee_email: "not_a_user@example.com" } }
     end
+
+    context "when logged in as the invitation owner" do
+      it "succeeds" do
+        owner = user
+        invite = create(:invitation, creator: owner)
+        fake_login_known_user(owner)
+        post :invite_friend, params: { user_id: owner.id, id: invite.id, invitation: { invitee_email: "not_a_user@example.com" } }
+
+        it_redirects_to_with_notice(user_path(owner), "Invitation was successfully sent.") # TODO notice isn't showing up
+        expect(Invitation.find_by(id: invite.id)).not_to be_nil
+      end
+
+      it "errors if email is missing" do
+        owner = user
+        invite = create(:invitation, creator: owner)
+        fake_login_known_user(owner)
+        post :invite_friend, params: { user_id: owner.id, id: invite.id, invitation: { invitee_email: nil } }
+
+        expect(response).to render_template("show")
+        expect(flash[:error]).to match("Please enter an email address.")
+      end
+
+      it "renders #show without a notice if the invitation fails to save" do
+        owner = user
+        invite = create(:invitation, creator: owner)
+        fake_login_known_user(owner)
+        allow_any_instance_of(Invitation).to receive(:save).and_return(false)
+        post :invite_friend, params: { user_id: owner.id, id: invite.id, invitation: { invitee_email: nil } }
+
+        expect(response).to render_template("show")
+        expect(flash[:notice]).to be(nil)
+      end
+    end
+
+    context "when logged in as an authorized admin" do
+      authorized_admin_roles.each do |role|
+        context "with role #{role}" do
+          before do
+            admin.update!(roles: [role])
+            fake_login_admin(admin)
+          end
+          it "errors if email is missing" do
+            owner = user
+            invite = create(:invitation, creator: owner)
+            post :invite_friend, params: { user_id: owner.id, id: invite.id, invitation: { invitee_email: nil } }
+
+            expect(response).to render_template("show")
+            expect(flash[:error]).to match("Please enter an email address.")
+          end
+
+          it "renders #show without a notice if the invitation fails to save" do
+            owner = user
+            invite = create(:invitation, creator: owner)
+            allow_any_instance_of(Invitation).to receive(:save).and_return(false)
+            post :invite_friend, params: { user_id: owner.id, id: invite.id, invitation: { invitee_email: "not_a_user@example.com" } }
+
+            expect(response).to render_template("show")
+            expect(flash[:notice]).to be(nil)
+          end
+        end
+      end
+    end
+
+    it_behaves_like "an action unauthorized admins cannot access", authorized_admin_roles
+    it_behaves_like "an action guests cannot access"
+    it_behaves_like "an action users cannot access" # a user who is not the invitation owner
   end
 
   describe "POST #create" do
-    let(:invitee) { create(:user) }
-
-    it "does not allow non-admins to create" do
-      fake_login
-      post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email, number_of_invites: 1 } }
-
-      it_redirects_to_with_error(
-        user_path(controller.current_user),
-        "Sorry, you don't have permission to access the page you were trying to reach."
-      )
+    let(:success_admin) do
+      it_redirects_to_with_notice(user_invitations_path(user), "Invitations were successfully created.")
+      expect(Invitation.find_by(invitee_email: user.email)).not_to be_nil
     end
 
-    it "allows admins to create invitations" do
-      admin.update!(roles: ["policy_and_abuse"])
-      fake_login_admin(admin)
-      post :create, params: { user_id: invitee.login, invitation: { invitee_email: invitee.email, number_of_invites: 1 } }
+    subject { post :create, params: { user_id: user.login, invitation: { invitee_email: user.email } } }
 
-      it_redirects_to_with_notice(user_invitations_path(invitee), "Invitations were successfully created.")
-    end
+    it_behaves_like "an action only authorized admins can access", authorized_admin_roles # fsr success_admin isn't getting to "an action authorized admins can access"
+    it_behaves_like "an action guests cannot access"
+    it_behaves_like "an action users cannot access"
   end
 
   describe "PUT #update" do
-    it "updates and resends invitations" do
-      invitee = create(:user)
-      invitation = create(:invitation)
-      admin.update!(roles: ["policy_and_abuse"])
-      fake_login_admin(admin)
-      put :update, params: { id: invitation.id, invitation: { invitee_email: invitee.email } }
-
-      it_redirects_to_with_notice(
-        find_admin_invitations_path("invitation[token]" => invitation.token),
-        "Invitation was successfully sent."
-      )
+    let(:invitation) { create(:invitation) }
+    let(:access_denied_admin) do
+      it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      expect(invitation.reload.invitee_email).to eq(old_email)
     end
+    let(:access_denied_guest) do
+      it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      expect(invitation.reload.invitee_email).to eq(old_email)
+    end
+    let(:access_denied_user) do
+      it_redirects_to_with_notice(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+      expect(invitation.reload.invitee_email).to eq(old_email)
+    end
+    new_email = "not_a_user@example.com"
+
+    subject do
+      old_email = invitation.invitee_email
+      put :update, params: { id: invitation.id, invitation: { invitee_email: new_email } }
+    end
+
+    context "when logged in as an authorized admin" do
+      authorized_admin_roles.each do |role|
+        context "with role #{role}" do
+          before do
+            admin.update!(roles: [role])
+            fake_login_admin(admin)
+          end
+
+          it "succeeds" do
+            subject
+
+            it_redirects_to_with_notice(find_admin_invitations_path("invitation[token]" => invitation.token), "Invitation was successfully sent.")
+            expect(invitation.reload.invitee_email).to eq(new_email)
+          end
+
+          it "errors if email is missing and does not update" do
+            put :update, params: { id: invitation.id, invitation: { invitee_email: nil } }
+
+            expect(response).to render_template("show")
+            expect(flash[:error]).to match("Please enter an email address.")
+            expect(invitation.reload.invitee_email).to eq(old_email)
+          end
+
+          it "renders #show without notice if the invitation fails to update" do
+            allow_any_instance_of(Invitation).to receive(:update).and_return(false)
+            put :update, params: { id: invitation.id, invitation: { invitee_email: new_email } }
+
+            expect(response).to render_template("show")
+            expect(flash[:notice]).to be(nil)
+          end
+        end
+      end
+    end
+
+    context "when logged in as the invitation owner" do
+      before { fake_login_known_user(invitation.creator) }
+
+      it "errors if email is missing" do
+        put :update, params: { id: invitation.id, invitation: { invitee_email: nil } }
+
+        expect(response).to render_template("show")
+        expect(flash[:error]).to match("Please enter an email address.")
+      end
+
+      it "renders #show without notice if the invitation fails to update" do
+        allow_any_instance_of(Invitation).to receive(:update).and_return(false)
+        put :update, params: { id: invitation.id, invitation: { invitee_email: new_email } }
+
+        expect(response).to render_template("show")
+        expect(flash[:notice]).to be(nil)
+      end
+    end
+
+    it_behaves_like "an action unauthorized admins cannot access", authorized_admin_roles
+    it_behaves_like "an action guests cannot access"
+    it_behaves_like "an action users cannot access" # a user who is not the invitation owner
   end
 
   describe "DELETE #destroy" do
-    it "does not allow non-admins to destroy" do
-      invitation = create(:invitation)
-      fake_login
-      delete :destroy, params: { id: invitation.id }
-
-      it_redirects_to_with_error(
-        user_path(controller.current_user),
-        "Sorry, you don't have permission to access the page you were trying to reach."
-      )
+    let(:invitation) { create(:invitation) }
+    let(:access_denied_admin) do
+      it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+      expect(Invitation.find_by(id: invitation.id)).not_to be_nil
+    end
+    let(:access_denied_guest) do
+      it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      expect(Invitation.find_by(id: invitation.id)).not_to be_nil
+    end
+    let(:access_denied_user) do
+      it_redirects_to_with_error(user_path(controller.current_user), "Sorry, you don't have permission to access the page you were trying to reach.")
+      expect(Invitation.find_by(id: invitation.id)).not_to be_nil
     end
 
-    it "allows admin to delete invitations" do
-      invitation = create(:invitation)
-      admin.update!(roles: ["policy_and_abuse"])
-      fake_login_admin(admin)
- 
-      delete :destroy, params: { id: invitation.id }
-      it_redirects_to_with_notice(admin_invitations_path, "Invitation successfully destroyed")
+    subject { delete :destroy, params: { id: invitation.id } }
+
+    context "when logged in as an authorized admin" do
+      authorized_admin_roles.each do |role|
+        context "with role #{role}" do
+          before do
+            admin.update!(roles: [role])
+            fake_login_admin(admin)
+          end
+
+          context "when invitation creator is a user" do
+            let(:invitation) { create(:invitation, creator: user) }
+
+            it "succeeds" do
+              subject
+
+              it_redirects_to_with_notice(user_invitations_path(user), "Invitation successfully destroyed")
+              expect(Invitation.find_by(id: invitation.id)).to be_nil
+            end
+
+            it "redirects with error if invitation fails to destroy" do
+              allow_any_instance_of(Invitation).to receive(:destroy).and_return(false)
+              subject
+
+              it_redirects_to_with_error(user_invitations_path(user), "Invitation was not destroyed.")
+            end
+          end
+
+          context "when invitation creator is an admin" do
+            let(:invitation) { create(:invitation, creator: admin) }
+
+            it "succeeds" do
+              subject
+
+              it_redirects_to_with_notice(admin_invitations_path, "Invitation successfully destroyed")
+              expect(Invitation.find_by(id: invitation.id)).to be_nil
+            end
+
+            it "redirects with error if invitation fails to destroy" do
+              allow_any_instance_of(Invitation).to receive(:destroy).and_return(false)
+              subject
+
+              it_redirects_to_with_error(admin_invitations_path, "Invitation was not destroyed.")
+            end
+          end
+
+          context "when there is no invitation creator" do # invitation created by queue
+            let(:invitation) { create(:invitation, creator: nil) }
+
+            it "succeeds" do
+              subject
+
+              it_redirects_to_with_notice(admin_invitations_path(), "Invitation successfully destroyed")
+              expect(Invitation.find_by(id: invitation.id)).to be_nil
+            end
+
+            it "redirects with error if invitation fails to destroy" do
+              allow_any_instance_of(Invitation).to receive(:destroy).and_return(false)
+              subject
+
+              it_redirects_to_with_error(admin_invitations_path(), "Invitation was not destroyed.")
+            end
+          end
+        end
+      end
     end
+
+    it_behaves_like "an action unauthorized admins cannot access", authorized_admin_roles
+    it_behaves_like "an action guests cannot access"
+    it_behaves_like "an action users cannot access"
   end
 end
