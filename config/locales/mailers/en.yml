@@ -41,7 +41,7 @@ en:
       username: Admin username
   comment_mailer:
     comment_notification:
-      chapter_position:
+      chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
       content:
@@ -60,7 +60,7 @@ en:
         other: "[%{app_name}] Comment on %{title}"
         tag: "[%{app_name}] Comment on the tag %{name}"
     comment_reply_notification:
-      chapter_position:
+      chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
       content:
@@ -79,7 +79,7 @@ en:
         other: "[%{app_name}] Reply to your comment on %{title}"
         tag: "[%{app_name}] Reply to your comment on the tag %{name}"
     comment_reply_sent_notification:
-      chapter_position:
+      chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
       content:
@@ -98,7 +98,7 @@ en:
         other: "[%{app_name}] Reply you left to a comment on %{title}"
         tag: "[%{app_name}] Reply you left to a comment on the tag %{name}"
     comment_sent_notification:
-      chapter_position:
+      chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
       content:
@@ -117,7 +117,7 @@ en:
         other: "[%{app_name}] Comment you left on %{title}"
         tag: "[%{app_name}] Comment you left on the tag %{name}"
     edited_comment_notification:
-      chapter_position:
+      chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
       content:
@@ -136,7 +136,7 @@ en:
         other: "[%{app_name}] Edited comment on %{title}"
         tag: "[%{app_name}] Edited comment on the tag %{name}"
     edited_comment_reply_notification:
-      chapter_position:
+      chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
       content:

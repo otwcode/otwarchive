@@ -119,7 +119,7 @@ ignore_missing:
   # File: app/helpers/mailer_helper.rb
   - comment_mailer.subject_for_commentable.subject.{chapter,other,tag}
   # File: app/mailers/comment_mailer.rb
-  - mailer_helper.content_for_commentable_html.chapter_position.{titled,untitled}
+  - mailer_helper.content_for_commentable_html.chapter.{titled,untitled}
   - mailer_helper.content_for_commentable_html.content.{chapter,other,tag}.html
   - mailer_helper.content_for_commentable_text.content.{other,tag}.text
   - mailer_helper.content_for_commentable_text.content.chapter.{titled_text,untitled_text}

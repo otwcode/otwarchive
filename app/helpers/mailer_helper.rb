@@ -238,7 +238,7 @@ module MailerHelper
     elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
       t(".content.chapter.html",
         pseud_link: commenter_pseud_or_name_link(comment),
-        chapter_link: style_link(comment.parent.title.blank? ? t(".chapter_position.untitled", position: comment.parent.position) : t(".chapter_position.titled", position: comment.parent.position, title: comment.parent.title), work_chapter_url(comment.parent.work, comment.parent)),
+        chapter_link: style_link(comment.parent.title.blank? ? t(".chapter.untitled", position: comment.parent.position) : t(".chapter.titled", position: comment.parent.position, title: comment.parent.title), work_chapter_url(comment.parent.work, comment.parent)),
         work_link: style_creation_link(comment.ultimate_parent.commentable_name, work_url(comment.parent.work)))
     else
       t(".content.other.html",
