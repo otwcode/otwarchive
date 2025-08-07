@@ -20,7 +20,8 @@ end
 Given "I am logged in as a(n) {string} admin" do |role|
   step "I start a new session"
   login = "testadmin-#{role}"
-  FactoryBot.create(:admin, login: login, roles: [role]) if Admin.find_by(login: login).nil?
+  email = "#{login}@example.org"
+  FactoryBot.create(:admin, login: login, email: email, roles: [role]) if Admin.find_by(login: login, email: email).nil?
   visit new_admin_session_path
   fill_in "Admin username", with: login
   fill_in "Admin password", with: "adminpassword"
@@ -126,7 +127,7 @@ Given /^I have posted an admin post$/ do
 end
 
 Given "the admin post {string}" do |title|
-  FactoryBot.create(:admin_post, title: title)
+  FactoryBot.create(:admin_post, title: title, comment_permissions: :enable_all)
 end
 
 Given "the fannish next of kin {string} for the user {string}" do |kin, user|
@@ -348,6 +349,12 @@ When /^I hide the work "(.*?)"$/ do |title|
   step %{I follow "Hide Work"}
 end
 
+When "I unhide the work {string}" do |title|
+  work = Work.find_by(title: title)
+  visit work_path(work)
+  step %{I follow "Make Work Visible"}
+end
+
 When "the search criteria contains the ID for {string}" do |login|
   user_id = User.find_by(login: login).id
   fill_in("user_id", with: user_id)
@@ -498,6 +505,15 @@ Then "the address {string} should not be banned" do |email|
   fill_in("Email to find", with: email)
   click_button("Search Banned Emails")
   step %{I should see "0 emails found"}
+end
+
+Then "I should not be able to add the email {string} to the invite queue" do |email|
+  step %{I am on the homepage}
+  click_link "Get an Invitation"
+  fill_in "Email", with: email
+  click_button "Add me to the list"
+  expect(page).to have_content("Sorry! We couldn't save this invite request because:")
+  expect(page).to have_content("Email has been blocked at the owner's request. That means it can't be used for invitations. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions.")
 end
 
 Then(/^I should not be able to comment with the address "([^"]*)"$/) do |email|

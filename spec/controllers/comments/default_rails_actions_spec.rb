@@ -18,7 +18,7 @@ describe CommentsController do
     end
 
     it "renders the :new template if commentable is a valid admin post" do
-        admin_post = create(:admin_post)
+        admin_post = create(:admin_post, comment_permissions: :enable_all)
         get :new, params: { admin_post_id: admin_post.id }
         expect(response).to render_template("new")
         expect(assigns(:name)).to eq(admin_post.title)
@@ -1001,6 +1001,23 @@ describe CommentsController do
       get :index
 
       it_redirects_to_simple("/404")
+    end
+
+    context "denies access for work that isn't visible to user" do
+      subject { get :index, params: { work_id: work } }
+      let(:success) { expect(response).to render_template("index") }
+      let(:success_admin) { success }
+
+      include_examples "denies access for work that isn't visible to user"
+    end
+
+    context "denies access for restricted work to guest" do
+      let(:work) { create(:work, restricted: true) }
+
+      it "redirects with an error" do
+        get :index, params: { work_id: work }
+        it_redirects_to(new_user_session_path(restricted_commenting: true))
+      end
     end
   end
 end

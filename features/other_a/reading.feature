@@ -282,3 +282,13 @@ Feature: Reading count
     When I am logged in as "reader"
       And I go to reader's reading page
     Then I should see "(Update available.)"
+  
+  Scenario: Reading history blurb includes an HTML comment containing the unix epoch of the updated time
+  
+    Given time is frozen at 2025-04-12 17:00 UTC
+      And I am logged in as "ethel"
+      And the work "Test"
+      And I view the work "Test"
+      And the readings are saved to the database
+    When I go to ethel's reading page
+    Then I should see an HTML comment containing the number 1744477200 within "li.work.blurb"
