@@ -134,23 +134,23 @@ Given "a set of collections for searching" do
                     name: "othertest",
                     title: "Some Other Collection")
   FactoryBot.create(:collection,
+                    :closed,
                     name: "anothertest",
-                    title: "Another Plain Collection",
-                    collection_preference: CollectionPreference.create!(closed: true))
+                    title: "Another Plain Collection")
   FactoryBot.create(:collection,
+                    :moderated,
                     name: "surprisetest",
                     title: "Surprise Presents",
-                    challenge: FactoryBot.create(:gift_exchange),
-                    collection_preference: CollectionPreference.create!(moderated: true))
+                    challenge: FactoryBot.create(:gift_exchange))
   FactoryBot.create(:collection,
                     name: "swaptest",
                     title: "Another Gift Swap",
                     challenge: FactoryBot.create(:gift_exchange))
   FactoryBot.create(:collection,
+                    :closed,
                     name: "demandtest",
                     title: "On Demand",
-                    challenge: FactoryBot.create(:prompt_meme),
-                    collection_preference: CollectionPreference.create!(closed: true))
+                    challenge: FactoryBot.create(:prompt_meme))
 
   step %{all indexing jobs have been run}
 end
