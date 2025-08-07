@@ -9,13 +9,22 @@ class CommentMailerPreview < ApplicationMailerPreview
     CommentMailer.comment_notification(user, comment)
   end
 
-  # Sent to a user when they get a comment on a chaptered work
-  def comment_notification_chaptered
+  # Sent to a user when they get a comment on a titled chapter of a chaptered work
+  def comment_notification_titled_chapter
     user = create(:user)
     work = create(:work, expected_number_of_chapters: 2)
     chapter = create(:chapter, work: work, title: "Some Chapter")
 
     comment = create(:comment, commentable: chapter)
+    CommentMailer.comment_notification(user, comment)
+  end
+
+  # Sent to a user when they get a comment on an untitled chapter of a chaptered work
+  def comment_notification_untitled_chapter
+    user = create(:user)
+    work = create(:work, expected_number_of_chapters: 2)
+
+    comment = create(:comment, commentable: work.first_chapter)
     CommentMailer.comment_notification(user, comment)
   end
 
@@ -52,8 +61,8 @@ class CommentMailerPreview < ApplicationMailerPreview
     CommentMailer.comment_reply_notification(comment, reply)
   end
   
-  # Sent to a user when they get a comment reply to their comment on a chaptered work
-  def comment_reply_notification_chaptered
+  # Sent to a user when they get a comment reply to their comment on a titled chapter of a chaptered work
+  def comment_reply_notification_titled_chapter
     work = create(:work, expected_number_of_chapters: 2)
     chapter = create(:chapter, work: work, title: "Some Chapter")
     comment = create(:comment, commentable: chapter)
