@@ -2262,8 +2262,6 @@ en:
       invitations: Invitations
       new_work: Post New
     passwords:
-      edit:
-        page_heading: Change Password
       new:
         email_or_username_html: Email address %{or} username
         instructions: If you've forgotten your password, we can send instructions that will allow you to reset it. Please tell us the username or email address you used when you signed up for your Archive account.
@@ -2395,6 +2393,8 @@ en:
         co_creator_requests: Co-Creator Requests (%{count})
         related_works: Related Works (%{related_works_number})
         sign_ups: Sign-ups (%{signup_number})
+    user:
+      contact_support: contact Support
   works:
     adult:
       caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.

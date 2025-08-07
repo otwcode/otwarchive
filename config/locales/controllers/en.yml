@@ -218,14 +218,13 @@ en:
       admin:
         successfully_updated: Username has been successfully updated.
       user:
+        contact_support: contact Support
         incorrect_password_html: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
         successfully_updated: Your username has been successfully updated.
-        contact_support: contact Support
     confirm_change_email:
       blank_email: You must enter a new email address.
       blank_password: You must enter your password.
       browser_title: Confirm New Email
-      contact_support: contact Support
       nonmatching_email: The email addresses you entered do not match. Please try again.
       same_as_current: Your new email address must be different from your current email.
       wrong_password_html: Your old password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
@@ -243,6 +242,9 @@ en:
           one: You may reset your password %{count} more time.
           other: You may reset your password %{count} more times.
         user_not_found: We couldn't find an account with that email address or username. Please try again.
+    reauthenticate:
+      user:
+        contact_support: contact Support
     reconfirm_email:
       access_denied:
         logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.
