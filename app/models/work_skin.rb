@@ -18,7 +18,7 @@ class WorkSkin < Skin
         return false
       end
       if property == "position" && value == "fixed"
-        # Do not internationalize the , used as a join in this erorr -- it's reflective of the comma used in the list of selectors, which does not change based on locale.
+        # Do not internationalize the , used as a join in this error -- it's reflective of the comma used in the list of selectors, which does not change based on locale.
         errors.add(:base, :work_skin_banned_value_for_property, property: property, selectors: ruleset.selectors.join(", "), value: value)
         return false
       end

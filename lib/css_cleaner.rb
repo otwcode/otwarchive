@@ -76,7 +76,7 @@ module CssCleaner
         (prefix.blank? || sel.start_with?(prefix)) ? sel : "#{prefix} #{sel}"
       end
       clean_declarations = ""
-      # Do not internationalize the , used as a join in these erorrs -- it's reflective of the comma used in the list of selectors, which does not change based on locale.
+      # Do not internationalize the , used as a join in these errors -- it's reflective of the comma used in the list of selectors, which does not change based on locale.
       rs.each_declaration do |property, value, is_important|
         if property.blank? || value.blank?
           errors.add(:base, :no_valid_css_for_selectors, selectors: rs.selectors.join(", "))
