@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe UserMailer do
-
   describe "#change_email" do
     let(:login) { "changer" }
     let(:new_email) { "new@example.com" }
@@ -641,6 +640,11 @@ describe UserMailer do
   end
 
   describe "batch_subscription_notification" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.batch_subscription_notification(subscription.id, ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json) }
 
     let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
