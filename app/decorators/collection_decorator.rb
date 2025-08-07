@@ -51,4 +51,12 @@ class CollectionDecorator < SimpleDelegator
   def unrevealed?
     data[:unrevealed]
   end
+
+  def approved_works_count
+    User.current_user ? data[:general_works_count] : data[:public_works_count]
+  end
+
+  def approved_bookmarked_items_count
+    User.current_user ? data[:general_bookmarked_items_count] : data[:public_bookmarked_items_count]
+  end
 end

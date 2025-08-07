@@ -11,7 +11,7 @@ describe CollectionQuery do
 
   it "sorts by created_at by default" do
     q = CollectionQuery.new
-    expect(q.generated_query[:sort]).to eq({ "created_at" => { order: "asc" } })
+    expect(q.generated_query[:sort]).to eq({ "created_at" => { order: "desc" } })
   end
 
   it "sorts by title" do
@@ -102,6 +102,44 @@ describe CollectionQuery do
       expect(query.search_results).to include no_signup
       expect(query.search_results).not_to include prompt_meme_collection
       expect(query.search_results).not_to include gift_exchange_collection
+    end
+  end
+
+  describe "#sort" do
+    context "when no sort_direction is set" do
+      %w[title signups_close_at].each do |column|
+        context "when the sort column is set to #{column}" do
+          it "sorts asc" do
+            expect(CollectionQuery.new(sort_column: column).sort)
+              .to eq({ column => { order: "asc" } })
+          end
+        end
+      end
+
+      context "when the sort column is set to assignments_due_at" do
+        it "sorts desc" do
+          expect(CollectionQuery.new({ sort_column: "assignments_due_at" }).sort)
+            .to eq({ "assignments_due_at" => { order: "desc" } })
+        end
+      end
+    end
+
+    %w[asc desc].each do |sort_direction|
+      context "when sort_direction is set to #{sort_direction}" do
+        it "sorts #{sort_direction}" do
+          expect(CollectionQuery.new(sort_direction: sort_direction).sort)
+            .to eq({ "created_at" => { order: sort_direction } })
+        end
+
+        %w[assignments_due_at title signups_close_at].each do |column|
+          context "when the sort column is set to #{column}" do
+            it "returns #{sort_direction}" do
+              expect(CollectionQuery.new(sort_column: column, sort_direction: sort_direction).sort)
+                .to eq({ column => { order: sort_direction } })
+            end
+          end
+        end
+      end
     end
   end
 end

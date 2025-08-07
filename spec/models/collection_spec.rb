@@ -199,4 +199,18 @@ describe Collection do
       end
     end
   end
+
+  describe "#approved_works_count" do
+    it "delegates to SearchCounts" do
+      expect(SearchCounts).to receive(:work_count_for_collection).with(@collection).and_return(3)
+      expect(@collection.approved_works_count).to eq(3)
+    end
+  end
+
+  describe "#approved_bookmarked_items_count" do
+    it "delegates to SearchCounts" do
+      expect(SearchCounts).to receive(:bookmarkable_count_for_collection).with(@collection).and_return(5)
+      expect(@collection.approved_bookmarked_items_count).to eq(5)
+    end
+  end
 end

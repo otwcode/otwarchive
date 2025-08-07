@@ -76,7 +76,7 @@ class CollectionQuery < Query
     type_param = options[:challenge_type]
     challenge_type = %w[PromptMeme GiftExchange].include?(type_param) ? type_param : "NULL"
 
-    match_filter(:challenge_type, challenge_type)
+    term_filter(:challenge_type, challenge_type)
   end
 
   def parent_filter
@@ -124,7 +124,12 @@ class CollectionQuery < Query
   end
 
   def sort
-    direction = options[:sort_direction].presence || "asc"
+    direction = options[:sort_direction].presence
+    direction ||= if sort_column.include?("title") || sort_column.include?("signups_close_at")
+                    "asc"
+                  else
+                    "desc"
+                  end
     { sort_column => { order: direction } }
   end
 end

@@ -47,4 +47,44 @@ describe CollectionDecorator do
       expect(decs.first.title).to eq(collection.title)
     end
   end
+
+  describe "#approved_works_count" do
+    context "when logged in" do
+      before do
+        allow(User).to receive(:current_user).and_return(build(:user))
+      end
+
+      it "returns the general count" do
+        decorated = CollectionDecorator.decorate_from_search([collection], search_results).first
+        expect(decorated.approved_works_count).to eq(10)
+      end
+    end
+
+    context "when a guest" do
+      it "returns the public count" do
+        decorated = CollectionDecorator.decorate_from_search([collection], search_results).first
+        expect(decorated.approved_works_count).to eq(7)
+      end
+    end
+  end
+
+  describe "#approved_bookmarked_items_count" do
+    context "when logged in" do
+      before do
+        allow(User).to receive(:current_user).and_return(build(:user))
+      end
+
+      it "returns the general count" do
+        decorated = CollectionDecorator.decorate_from_search([collection], search_results).first
+        expect(decorated.approved_bookmarked_items_count).to eq(10)
+      end
+    end
+
+    context "when a guest" do
+      it "returns the public count" do
+        decorated = CollectionDecorator.decorate_from_search([collection], search_results).first
+        expect(decorated.approved_bookmarked_items_count).to eq(5)
+      end
+    end
+  end
 end

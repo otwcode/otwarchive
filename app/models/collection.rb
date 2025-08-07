@@ -420,11 +420,25 @@ class Collection < ApplicationRecord
     self.icon_comment_text = nil
   end
 
+  # Work counts for indexing; these come from the database.
+
   def general_works_count
     approved_works.visible_to_registered_user.count + children.map(&:general_works_count).sum
   end
 
   def public_works_count
     approved_works.visible_to_all.count + children.map(&:public_works_count).sum
+  end
+
+  # Work and bookmark counts; these come from Elasticsearch via the
+  # SearchCounts helper. It already checks for visibility, so nothing
+  # extra needs to be done here.
+
+  def approved_works_count
+    SearchCounts.work_count_for_collection(self)
+  end
+
+  def approved_bookmarked_items_count
+    SearchCounts.bookmarkable_count_for_collection(self)
   end
 end
