@@ -210,17 +210,11 @@ public
     @current_tos_version = 2024_11_19 # rubocop:disable Style/NumericLiterals
   end
 
-  def relative_uri(uri)
-    parsed = URI.parse(uri)
-    return uri if parsed.scheme.nil? && parsed.host.nil? && uri.start_with?("/") && !uri.start_with?("//")
-  rescue URI::InvalidURIError
-    nil
-  end
-
+  include PathCleaner
   def after_sign_in_path_for(resource)
     return admins_path if resource.is_a?(Admin)
 
-    relative_uri(params[:return_to]) || user_path(current_user)
+    relative_path(params[:return_to]) || user_path(current_user)
   end
 
   def authenticate_admin!
