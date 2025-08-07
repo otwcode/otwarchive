@@ -49,10 +49,14 @@ class Chapter < ApplicationRecord
 
   scope :in_order, -> { order(:position) }
   scope :posted, -> { where(posted: true) }
+  
+  # filtered subset, not intended for deletion
+  # rubocop:disable Rails/HasManyOrHasOneDependent, Rails/InverseOf
   has_many :approved_root_comments, lambda {
     where(commentable_type: "Chapter", depth: 0, spam: false, approved: true)
   }, class_name: "Comment", foreign_key: "commentable_id"
-
+  # rubocop:enable Rails/HasManyOrHasOneDependent, Rails/InverseOf
+  
   after_save :fix_positions
   def fix_positions
     if work&.persisted?
