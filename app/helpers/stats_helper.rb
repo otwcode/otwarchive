@@ -33,7 +33,7 @@ module StatsHelper
       .for_user(user)
       .joins(:chapters)
       .with_fandoms
-      .with_stats
+      .with_stat_joins
       .chapter_published_in_range(start_date, end_date)
       .group("works.id, fandom")
       .includes(:fandom_tags)
@@ -51,12 +51,11 @@ module StatsHelper
         tags.name AS fandom
       SQL
 
-    # end
     stats = work_stats.all.map { |work_stat| StatItem.new(work_stat) }
 
     series_stats = Series
       .for_user(user)
-      .with_stats
+      .with_stat_joins
       .includes(posted_works: :tags)
       .merge(Work.with_fandoms)
       .merge(Work.chapter_published_in_range(start_date, end_date))

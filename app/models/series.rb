@@ -70,7 +70,7 @@ class Series < ApplicationRecord
 
   scope :for_blurb, -> { includes(:work_tags, :pseuds) }
 
-  scope :with_stats, lambda {
+  scope :with_stat_joins, lambda {
     joins(serial_works: { work: :chapters })
       .left_joins(serial_works: { work: { chapters: :approved_root_comments } }) 
       .left_joins(:subscriptions, :bookmarks)

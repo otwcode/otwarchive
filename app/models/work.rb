@@ -1038,7 +1038,7 @@ class Work < ApplicationRecord
     joins(:tags).where(tags: { type: "Fandom" })
   }
 
-  scope :with_stats, lambda {
+  scope :with_stat_joins, lambda {
     joins(:chapters)
       .left_joins(chapters: :approved_root_comments)
       .left_joins(:subscriptions, :bookmarks)

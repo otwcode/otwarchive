@@ -1,12 +1,10 @@
 class StatItem
   include Rails.application.routes.url_helpers
 
-  attr_reader :type, :id, :title, :fandom, :hits,
+  attr_reader :type, :id, :title, :fandom, :fandom_string, :hits,
               :word_count, :date,
               :bookmarks_count, :subscriptions_count,
               :kudos_count, :comment_thread_count, :work_count
-
-  attr_accessor :fandom_string
 
   def initialize(record)
     @type = record["type"]
