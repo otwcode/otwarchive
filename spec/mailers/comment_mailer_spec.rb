@@ -277,7 +277,7 @@ describe CommentMailer do
 
   shared_examples "a notification with a titled chapter reference" do
     describe "HTML email" do
-      it "has a link to the chapter" do
+      it "has a link to the chapter including its title" do
         expect(subject.html_part).to have_xpath(
           "//a[@href=\"#{work_chapter_url(comment.parent.work, comment.parent)}\"]",
           text: "Chapter #{comment.parent.position}: #{comment.parent.title}"
@@ -286,7 +286,7 @@ describe CommentMailer do
     end
 
     describe "text email" do
-      it "has a reference to the chapter" do
+      it "has a reference to the chapter including its title" do
         expect(subject).to have_text_part_content("comment on Chapter #{comment.parent.position}: #{comment.parent.title} of #{comment.ultimate_parent.commentable_name} (#{work_chapter_url(comment.parent.work, comment.parent)})")
       end
     end
@@ -294,7 +294,7 @@ describe CommentMailer do
 
   shared_examples "a notification with an untitled chapter reference" do
     describe "HTML email" do
-      it "has a link to the chapter" do
+      it "has a link to the chapter without a title" do
         expect(subject.html_part).to have_xpath(
           "//a[@href=\"#{work_chapter_url(comment.parent.work, comment.parent)}\"]",
           text: "Chapter #{comment.parent.position}"
@@ -303,7 +303,7 @@ describe CommentMailer do
     end
 
     describe "text email" do
-      it "has a reference to the chapter" do
+      it "has a reference to the chapter without a title" do
         expect(subject).to have_text_part_content("comment on Chapter #{comment.parent.position} of #{comment.ultimate_parent.commentable_name} (#{work_chapter_url(comment.parent.work, comment.parent)})")
       end
     end
