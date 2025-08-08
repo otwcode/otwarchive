@@ -66,6 +66,7 @@ class Comment < ApplicationRecord
 
   def check_for_spam
     self.approved = skip_spamcheck? || !spam?
+    self.spam = !skip_spamcheck? && spam? # Logically equivalent to !(skip_spamcheck? || !spam?)
 
     errors.add(:base, :spam) unless approved
   end
