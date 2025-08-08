@@ -8,14 +8,15 @@ class ProfileController < ApplicationController
       @user.reload
     end
 
-    @profile = ProfilePresenter.new(@user.profile)
-    #code the same as the stuff in users_controller
+    @profile = @user.profile
+
+    # code the same as the stuff in users_controller
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @user.id,
-                                                       subscribable_type: 'User').first ||
+                                                       subscribable_type: "User").first ||
                       current_user.subscriptions.build(subscribable: @user)
     end
-    @page_subtitle = ts("%{username} - Profile", username: @user.login)
+    @page_subtitle = t(".page_title", username: @user.login)
   end
 
   def pseuds
