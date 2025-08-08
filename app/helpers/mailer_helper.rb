@@ -201,6 +201,52 @@ module MailerHelper
     end
   end
 
+  def content_for_commentable_text(comment)
+    if comment.ultimate_parent.is_a?(Tag)
+      t(".content.tag.text",
+        pseud: commenter_pseud_or_name_text(comment),
+        tag: comment.ultimate_parent.commentable_name,
+        tag_url: tag_url(comment.ultimate_parent))
+    elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
+      if comment.parent.title.blank?
+        t(".content.chapter.untitled_text",
+          pseud: commenter_pseud_or_name_text(comment),
+          chapter_position: comment.parent.position,
+          work: comment.ultimate_parent.commentable_name,
+          chapter_url: work_chapter_url(comment.parent.work, comment.parent))
+      else
+        t(".content.chapter.titled_text",
+          pseud: commenter_pseud_or_name_text(comment),
+          chapter_position: comment.parent.position,
+          chapter_title: comment.parent.title,
+          work: comment.ultimate_parent.commentable_name,
+          chapter_url: work_chapter_url(comment.parent.work, comment.parent))
+      end
+    else
+      t(".content.other.text",
+        pseud: commenter_pseud_or_name_text(comment),
+        title: comment.ultimate_parent.commentable_name,
+        commentable_url: polymorphic_url(comment.ultimate_parent))
+    end
+  end
+
+  def content_for_commentable_html(comment)
+    if comment.ultimate_parent.is_a?(Tag)
+      t(".content.tag.html",
+        pseud_link: commenter_pseud_or_name_link(comment),
+        tag_link: style_link(comment.ultimate_parent.commentable_name, tag_url(comment.ultimate_parent)))
+    elsif comment.parent.is_a?(Chapter) && comment.ultimate_parent.chaptered?
+      t(".content.chapter.html",
+        pseud_link: commenter_pseud_or_name_link(comment),
+        chapter_link: style_link(comment.parent.title.blank? ? t(".chapter.untitled", position: comment.parent.position) : t(".chapter.titled", position: comment.parent.position, title: comment.parent.title), work_chapter_url(comment.parent.work, comment.parent)),
+        work_link: style_creation_link(comment.ultimate_parent.commentable_name, work_url(comment.parent.work)))
+    else
+      t(".content.other.html",
+        pseud_link: commenter_pseud_or_name_link(comment),
+        commentable_link: style_creation_link(comment.ultimate_parent.commentable_name, polymorphic_url(comment.ultimate_parent)))
+    end
+  end
+
   def collection_footer_note_html(is_collection_email, collection)
     if is_collection_email
       t("mailer.collections.why_collection_email.html",
