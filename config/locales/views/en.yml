@@ -347,9 +347,9 @@ en:
     passwords:
       edit:
         describedby:
-          password_length:
           one: "%{minimum} to %{maximum} character"
           other: "%{minimum} to %{maximum} characters"
+          password_length:
         label:
           confirmation: Confirm new password
           password: New password
@@ -2171,8 +2171,6 @@ en:
         one: "%{minimum} to %{count} character"
         other: "%{minimum} to %{count} characters"
       submit: Submit
-      user:
-        contact_support: contact Support
     change_username:
       account_faq: Account FAQ
       browser_title: Change Username
@@ -2397,8 +2395,6 @@ en:
         co_creator_requests: Co-Creator Requests (%{count})
         related_works: Related Works (%{related_works_number})
         sign_ups: Sign-ups (%{signup_number})
-    user:
-      contact_support: contact Support
   works:
     adult:
       caution: This work could have adult content. If you continue, you have agreed that you are willing to see such content.
