@@ -2171,6 +2171,8 @@ en:
         one: "%{minimum} to %{count} character"
         other: "%{minimum} to %{count} characters"
       submit: Submit
+      user:
+        contact_support: contact Support
     change_username:
       account_faq: Account FAQ
       browser_title: Change Username
@@ -2202,6 +2204,8 @@ en:
       if_not_confirm:
         one: If you don't confirm your request within %{count} day, the link will expire and your email address will not be changed.
         other: If you don't confirm your request within %{count} days, the link will expire and your email address will not be changed.
+      user:
+        contact_support: contact Support
     confirmation:
       contact_support: contact Support
       go_back: Return to Archive front page
