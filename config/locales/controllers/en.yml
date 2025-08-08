@@ -171,6 +171,9 @@ en:
   people:
     index:
       collection_page_title: "%{collection_title} - People"
+  profile:
+    show:
+      page_title: "%{username} - Profile"
   pseuds:
     create:
       already_have_pseud_with_name: You already have a pseud with that name.

@@ -405,6 +405,11 @@ When /^I view the (canonical|synonymous|unfilterable|unwrangled|unwrangleable) (
   visit wrangle_tag_path(Tag.find_by(name: tag), show: type.pluralize, status: status)
 end
 
+When "I select {string} from the {string} wrangling assigment dropdown" do |login, tagname|
+  tag = Tag.find_by(name: tagname)
+  select(login, from: "assignments_#{tag.id}_")
+end
+
 ### THEN
 
 Then /^I should see the tag wrangler listed as an editor of the tag$/ do
