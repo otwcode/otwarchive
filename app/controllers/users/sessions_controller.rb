@@ -20,11 +20,12 @@ class Users::SessionsController < Devise::SessionsController
     redirect_to root_path unless user_signed_in?
   end
 
+  include PathCleaner
   # DELETE /users/logout
   def destroy
     signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
     set_flash_message! :notice, :signed_out if signed_out
 
-    redirect_back_or_to root_path
+    redirect_to relative_path(params[:return_to]) || root_path
   end
 end
