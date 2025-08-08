@@ -10,17 +10,20 @@ class InviteRequestsController < ApplicationController
 
   # GET /invite_requests/1
   def show
-    @invite_request = InviteRequest.find_by(email: params[:email])
-
-    if @invite_request.present?
-      @position_in_queue = @invite_request.position
+    if params[:email].blank?
+      @email_blank = true
     else
-      @invitation = Invitation.unredeemed.from_queue.find_by(invitee_email: params[:email])
-    end
+      @invite_request = InviteRequest.find_by(email: params[:email])
+      if @invite_request.present?
+        @position_in_queue = @invite_request.position
+      else
+        @invitation = Invitation.unredeemed.from_queue.find_by(invitee_email: params[:email])
+      end
 
-    respond_to do |format|
-      format.html
-      format.js
+      respond_to do |format|
+        format.html
+        format.js
+      end
     end
   end
 
