@@ -26,6 +26,8 @@ class Admin::AdminInvitationsController < Admin::BaseController
   end
 
   def grant_invites_to_users
+    authorize :admin_invitation
+
     if invitation_params[:user_group] == "All"
       Invitation.grant_all(invitation_params[:number_of_invites].to_i)
     else
