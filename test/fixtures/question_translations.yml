@@ -1,0 +1,17 @@
+---
+question_translation_00001:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  id: 1
+  question_id: 1
+  locale: en
+  question: First testing question
+  content: <p>Some testing faq answer</p>
+question_translation_00002:
+  created_at: 2025-04-12 17:00:00 Z
+  updated_at: 2025-04-12 17:00:00 Z
+  id: 2
+  question_id: 2
+  locale: en
+  question: Second testing question
+  content: <p>Another testing faq answer</p>

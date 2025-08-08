@@ -34,3 +34,6 @@ join_00001:
   updated_at: 2009-06-27 18:59:55
   role_id: "6"
   user_id: "1"
+testofficial_official:
+  role_id: 8
+  user_id: 24
