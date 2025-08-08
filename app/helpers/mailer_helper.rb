@@ -60,7 +60,7 @@ module MailerHelper
   end
 
   def opendoors_link(text)
-    style_link(text, "http://opendoors.transformativeworks.org/contact-open-doors/")
+    style_link(text, "https://opendoors.transformativeworks.org/contact-open-doors/")
   end
 
   def styled_divider
