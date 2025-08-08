@@ -102,7 +102,11 @@ select {
   width: 32.5%;
 }
 
-input[type="radio"], input[type="checkbox"], input[type="file"], input.number, p input, p select, .heading select, li select {
+input[type="checkbox"], input[type="radio"] {
+    box-shadow: none;
+}
+
+input[type="checkbox"], input[type="file"], input[type="radio"], input.number, p input, p select, .heading select, li select {
   width: auto;
   margin-right: 0.375em;
 }

@@ -12,7 +12,7 @@ user_00025:
   suspended_until: 
   login: badjuju
   out_of_invites: true
-  email: mjsunbound@gmail.com
+  email: badjuju@example.com
   banned: false
 user_00014: 
   password_salt: 9a5dd70dd81851f215947e1bd1ec3f37e2ecec6b
@@ -72,7 +72,7 @@ user_00015:
   suspended_until: 
   login: parenthetical
   out_of_invites: true
-  email: sarkymoocow@example.com
+  email: parenthetical@example.com
   banned: false
 user_00026: 
   password_salt: 631dcaa51dd023f4cdcdf2747a6322fc2e108ceb
@@ -87,7 +87,7 @@ user_00026:
   suspended_until: 
   login: DawningStar
   out_of_invites: true
-  email: dawn@ccaonline.com
+  email: dawn@example.com
   banned: false
 user_00027: 
   password_salt: 5a432a7543be536b62f1f51fee2255d0483c3b9d
@@ -102,7 +102,7 @@ user_00027:
   suspended_until: 
   login: yulechatismadeofawesome
   out_of_invites: true
-  email: attempt-unique@yahoo.com
+  email: attempt-unique@example.com
   banned: false
 user_00016: 
   password_salt: 47bfebbcd173627903284aced46fc6efea0c9eb4
@@ -147,7 +147,7 @@ user_00006:
   suspended_until: 
   login: orphan_account
   out_of_invites: true
-  email: 
+  email: orphan_account@example.com
   banned: false
 user_00017: 
   password_salt: 97730ef8bcd524fd18e4b9237fc05130a177c413
@@ -177,7 +177,7 @@ user_00028:
   suspended_until: 
   login: Shusu
   out_of_invites: true
-  email: boo@moog.com
+  email: shusu@example.com
   banned: false
 user_00029: 
   password_salt: 73c1309f8eafb8a949355857d46f682a36854cc3
@@ -192,7 +192,7 @@ user_00029:
   suspended_until: 
   login: whetherwoman
   out_of_invites: true
-  email: marina@nbtsc.org
+  email: whetherwoman@example.com
   banned: false
 user_00007: 
   password_salt: 2239939fc04c4d2a0d2b5ceedfc1727c3e527b63
@@ -222,7 +222,7 @@ user_00030:
   suspended_until: 
   login: Lizifer
   out_of_invites: true
-  email: elmiller00@gmail.com
+  email: lizifer@example.com
   banned: false
 user_00031: 
   password_salt: 570b4a55a931c7a1c5be1f5608ee825a88b51e37
@@ -237,7 +237,7 @@ user_00031:
   suspended_until: 
   login: tassos
   out_of_invites: true
-  email: savyln7@gmail.com
+  email: tassos@example.com
   banned: false
 user_00019: 
   password_salt: 
@@ -252,7 +252,7 @@ user_00019:
   suspended_until: 
   login: Zee
   out_of_invites: true
-  email: zooey.glass04@gmail.com
+  email: zee@example.com
   banned: false
 user_00008: 
   password_salt: 6e2ee018720464deaa10520d4b3f059710eb2b8d
@@ -282,7 +282,7 @@ user_00020:
   suspended_until: 
   login: hh_ook
   out_of_invites: true
-  email: hh-ook@gmail.com
+  email: hh@example.com
   banned: false
 user_00021: 
   password_salt: 56e1aeae2f94163b784b694f4d22f6452241d543
@@ -342,7 +342,7 @@ user_00032:
   suspended_until: 
   login: Enigel
   out_of_invites: true
-  email: enigel@gmail.com
+  email: enigel@example.com
   banned: false
 user_00033: 
   password_salt: feef278f6c8d201c0cb4c37253833f60f2090f8e
@@ -357,7 +357,7 @@ user_00033:
   suspended_until: 
   login: invitest
   out_of_invites: true
-  email: liminimail@googlemail.com
+  email: invitest@example.com
   banned: false
 user_00011: 
   password_salt: 21f8f1eb19a6dd5b649b451bb4386841506a387d
@@ -387,7 +387,7 @@ user_00022:
   suspended_until: 
   login: Jenn_Calaelen
   out_of_invites: true
-  email: jenn.calaelen@googlemail.com
+  email: jenn@example.com
   banned: false
 user_00023: 
   password_salt: b510f1f2ac546e9b85d0d17dec60f590992715ca
@@ -402,7 +402,7 @@ user_00023:
   suspended_until: 
   login: Llwyden
   out_of_invites: true
-  email: llwyden@trickster.org
+  email: llwyden@example.com
   banned: false
 user_00012: 
   password_salt: c5e416e746f06c3c68b542ed3223d89ce9be52cf

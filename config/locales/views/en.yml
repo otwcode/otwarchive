@@ -320,8 +320,9 @@ en:
           new: Ban email address
           search: Find banned emails
         notes:
-          canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is banned).
-          guest_comments: Banned email addresses cannot be used in guest comments.
+          canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@example.com will not be allowed if foo@example.com is banned).
+          guest_comments: Banned email addresses cannot be used in guest comments and cannot be added to the invitation queue.
+          unaffected_users: They will not affect users with that address or prevent invitations sent to that email address from being used.
         page_heading: Manage Banned Emails
     header:
       nav:
@@ -2535,3 +2536,21 @@ en:
     show:
       edit: Edit
       heading: Wrangling Guidelines
+    wrangling_guideline_form:
+      content_required: You need to post some content here.
+      content_too_long:
+        one: We salute your ambition! But sadly the content must be less than %{count} letter long.
+        other: We salute your ambition! But sadly the content must be less than %{count} letters long.
+      content_too_short:
+        one: Brevity is the soul of wit, but your content does have to be at least %{count} letter long.
+        other: Brevity is the soul of wit, but your content does have to be at least %{count} letters long.
+      guideline_text: Guideline text
+      html_editor: HTML
+      landmark:
+        post: Post
+      post: Post
+      required_information: Required information
+      rich_text_editor: Rich Text
+      rich_text_notes_html: Type or paste formatted text.
+      title: Title
+      title_failure: Please enter a title.

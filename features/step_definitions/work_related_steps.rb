@@ -3,7 +3,6 @@
 Given /^I have related works setup$/ do
   step "basic tags"
   step "all emails have been delivered"
-  step %{I have loaded the "languages" fixture}
 
   inspiration = FactoryBot.create(:user, login: "inspiration", confirmed_at: Time.now.utc)
   FactoryBot.create(:user, login: "translator", confirmed_at: Time.now.utc)
@@ -104,6 +103,8 @@ When /^I post a translation of my own work$/ do
 end
 
 When /^I draft a translation$/ do
+  FactoryBot.create(:language, name: "Deutsch", short: "de")
+
   step %{I go to the new work page}
     step %{I check "No Archive Warnings Apply"}
     step %{I fill in "Fandoms" with "Stargate"}

@@ -45,7 +45,7 @@ pseud_00039:
   created_at: 2009-12-12 23:45:44 Z
   delta: true
   updated_at: 2009-12-12 23:45:44 Z
-  is_default: false
+  is_default: true
   id: 39
   user_id: 32
   description: 

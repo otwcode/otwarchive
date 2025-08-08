@@ -107,4 +107,12 @@ describe Subscription do
       expect(subscription.valid?).to be_falsey
     end
   end
+
+  it "can have an id larger than unsigned int" do
+    subscription = build(:subscription, id: 5_294_967_295, subscribable: work)
+
+    expect(subscription).to be_valid
+    expect(subscription.save).to be_truthy
+    expect(subscription.name).to eq(work.title)
+  end
 end

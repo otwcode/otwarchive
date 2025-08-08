@@ -324,9 +324,13 @@ When "I delete known issues" do
   step %{I follow "Delete"}
 end
 
-When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
-  role_name = role.parameterize.underscore
-  role_id = Role.find_by(name: role_name).id
+When "I check the {string} role checkbox" do |role|
+  role_id = Role.find_by(name: role).id
+  check("user_roles_#{role_id}")
+end
+
+When "I uncheck the {string} role checkbox" do |role|
+  role_id = Role.find_by(name: role).id
   uncheck("user_roles_#{role_id}")
 end
 
@@ -402,6 +406,16 @@ Then (/^I should not see a translated admin post$/) do
   step %{I should see "Deutsch Ankuendigung"}
   step %{I follow "Default Admin Post"}
   step %{I should not see "Translations: Deutsch"}
+end
+
+Then "the {string} role checkbox should be checked" do |role|
+  role_id = Role.find_by(name: role).id
+  assert has_checked_field?("user_roles_#{role_id}")
+end
+
+Then "the {string} role checkbox should not be checked" do |role|
+  role_id = Role.find_by(name: role).id
+  assert has_unchecked_field?("user_roles_#{role_id}")
 end
 
 Then /^the work "([^\"]*)" should be hidden$/ do |work|
@@ -505,6 +519,15 @@ Then "the address {string} should not be banned" do |email|
   fill_in("Email to find", with: email)
   click_button("Search Banned Emails")
   step %{I should see "0 emails found"}
+end
+
+Then "I should not be able to add the email {string} to the invite queue" do |email|
+  step %{I am on the homepage}
+  click_link "Get an Invitation"
+  fill_in "Email", with: email
+  click_button "Add me to the list"
+  expect(page).to have_content("Sorry! We couldn't save this invite request because:")
+  expect(page).to have_content("Email has been blocked at the owner's request. That means it can't be used for invitations. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions.")
 end
 
 Then(/^I should not be able to comment with the address "([^"]*)"$/) do |email|
