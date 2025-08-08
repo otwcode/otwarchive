@@ -706,7 +706,7 @@ end
 When /^I mark the work "([^"]*)" for later$/ do |work|
   work = Work.find_by(title: work)
   visit work_url(work)
-  step %{I follow "Mark for Later"}
+  step %{I press "Mark for Later"}
   step "the readings are saved to the database"
 end
 
