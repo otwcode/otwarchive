@@ -213,6 +213,8 @@ en:
   users:
     changed_password:
       blank_password: You must enter your old password.
+      user:
+        contact_support: contact Support
       wrong_password_html: Your old password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
     changed_username:
       admin:
