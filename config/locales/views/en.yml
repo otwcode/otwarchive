@@ -2168,8 +2168,8 @@ en:
       old_password: Old password
       page_heading: Change Password
       password_length:
-        one: "%{minimum} to %{maximum} character"
-        other: "%{minimum} to %{maximum} characters"
+        one: "%{minimum} to %{count} character"
+        other: "%{minimum} to %{count} characters"
       submit: Submit
     change_username:
       account_faq: Account FAQ

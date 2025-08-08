@@ -299,8 +299,8 @@ class UsersController < ApplicationController
       true
     else
       wrong_password!(params[:new_email],
-                      t("users.confirm_change_email.wrong_password_html", contact_support_link: helpers.link_to(t(".user.contact_support"), new_feedback_report_path)),
-                      t("users.changed_password.wrong_password_html", contact_support_link: helpers.link_to(t(".user.contact_support"), new_feedback_report_path)))
+                      t("users.confirm_change_email.wrong_password_html", contact_support_link: helpers.link_to(t("users.confirm_change_email.user.contact_support"), new_feedback_report_path)),
+                      t("users.changed_password.wrong_password_html", contact_support_link: helpers.link_to(t("users.changed_password.user.contact_support"), new_feedback_report_path)))
     end
   end
 

@@ -39,7 +39,7 @@ Feature: User Authentication
     # link from the email should work
     When I log out
       And I follow "Change my password." in the email
-    Then I should see "Change Password"
+    Then I should see "Change My Password"
 
     # entering mismatched passwords should produce an error message
     When I fill in "New password" with "secret"

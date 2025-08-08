@@ -17,7 +17,7 @@ Feature:
       And I fill in "New username" with "anothertestuser"
       And I fill in "Password" with "wrongpwd"
       And I press "Change Username"
-    Then I should see "Your old password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, contact Support for help."
+    Then I should see "Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, contact Support for help."
 
   Scenario: The user should not be able to change their username to another user's name
     Given I have no users
