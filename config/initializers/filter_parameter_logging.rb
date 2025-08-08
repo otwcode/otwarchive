@@ -6,3 +6,7 @@
 Rails.application.config.filter_parameters += [
   :passw, :email, :secret, :token, :_key, :crypt, :salt, :certificate, :otp, :ssn
 ]
+
+# WARNING: Due to https://github.com/rails/rails/issues/48704, the filter parameters defined here do not get applied to
+# ActiveRecord::Base.filter_attributes. Set any important filter parameters that should be applied to active record
+# in application.rb instead.
