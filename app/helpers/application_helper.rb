@@ -108,7 +108,8 @@ module ApplicationHelper
       pseud_byline = if text_only
                        creator[:byline]
                      else
-                       link_to(creator[:byline], (only_path ? creator[:path] : creator[:url]), rel: "author")
+                       url_options = { controller: "pseuds", action: "show", user_id: creator[:user], id: creator[:pseud], only_path: only_path }
+                       link_to(creator[:byline], url_options, rel: "author")
                      end
 
       if creator[:archivists].empty?
@@ -139,8 +140,8 @@ module ApplicationHelper
     pseuds.map do |pseud|
       {
         byline: pseud.byline,
-        path: user_pseud_path(pseud.user, pseud),
-        url: user_pseud_url(pseud.user, pseud),
+        pseud: pseud.to_param,
+        user: pseud.user.to_param,
         archivists: archivists[pseud]
       }
     end
