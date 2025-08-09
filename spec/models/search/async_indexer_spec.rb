@@ -2,6 +2,9 @@ require "spec_helper"
 
 describe AsyncIndexer do
   include ActiveJob::TestHelper
+  def queue_adapter_for_test
+    ActiveJob::QueueAdapters::TestAdapter.new
+  end
 
   it "enqueues IDs" do
     freeze_time
