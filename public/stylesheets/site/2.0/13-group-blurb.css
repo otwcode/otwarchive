@@ -410,6 +410,7 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 
 .reading h4.viewed {
   background: #ddd;
+  padding: 0.25em;
 }
 
 .reading .deleted h4.viewed {
