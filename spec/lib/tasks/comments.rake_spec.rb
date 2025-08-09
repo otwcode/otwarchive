@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'spec_helper'
+
+require "spec_helper"
 
 describe "rake comment:sync_approved_to_spam" do
   let(:synced_ham_comment) { create(:comment) }
@@ -45,20 +46,17 @@ describe "rake comment:sync_approved_to_spam" do
       expect(synced_spam_comment.approved).to be_falsey
       expect(synced_spam_comment.spam).to be_truthy
     end
-
   end
 
   context "when limiting to a subset of Comment collection" do
     let(:limit) { 2 }
 
     it "only updates the specified limit of records" do
-      initial_unsynced_comment_count = Comment.where("(approved IS TRUE AND spam IS TRUE) OR (approved IS FALSE AND spam IS FALSE)")
-                                     .count
+      initial_unsynced_comment_count = Comment.where("(approved IS TRUE AND spam IS TRUE) OR (approved IS FALSE AND spam IS FALSE)").count
 
       subject.invoke(limit.to_s)
 
-      unsynced_comment_count = Comment.where("(approved IS TRUE AND spam IS TRUE) OR (approved IS FALSE AND spam IS FALSE)")
-                                      .count
+      unsynced_comment_count = Comment.where("(approved IS TRUE AND spam IS TRUE) OR (approved IS FALSE AND spam IS FALSE)").count
       expect(initial_unsynced_comment_count - unsynced_comment_count).to be limit
     end
   end
