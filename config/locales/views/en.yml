@@ -346,6 +346,8 @@ en:
         wrangling: Tag Wrangling
     passwords:
       edit:
+        describedby:
+          password_length: "%{minimum} to %{maximum} characters"
         label:
           confirmation: Confirm new password
           password: New password
