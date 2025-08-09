@@ -6,23 +6,31 @@ class Users::PasswordsController < Devise::PasswordsController
   skip_before_action :store_location
   layout "session"
 
+  def new
+    @page_title = t(".browser_title")
+    
+    super
+  end
+
   def create
-    user = User.find_for_authentication(resource_params.permit(:login))
-    if user.nil? || user.new_record?
-      flash[:error] = t(".user_not_found")
+    user = User.find_or_initialize_with_errors([:email], resource_params, :not_found)
+
+    email_regex ||= begin
+      email_name_regex = '[A-Z0-9_\.&%\+\-\']+'
+      domain_head_regex = "(?:[A-Z0-9\-]+\.)+"
+      domain_tld_regex = "(?:[A-Z]{2,25})"
+      /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
+    end
+
+    unless params[:user][:email].to_s.match?(email_regex)
+      flash[:error] = t(".invalid_email")
       redirect_to new_user_password_path and return
     end
 
-    if user.prevent_password_resets?
-      flash[:error] = t(".reset_blocked_html", contact_abuse_link: view_context.link_to(t(".contact_abuse"), new_abuse_report_path))
-      redirect_to root_path and return
-    elsif user.password_resets_limit_reached?
-      available_time = ApplicationController.helpers.time_in_zone(
-        user.password_resets_available_time, nil, user
-      )
-
-      flash[:error] = t(".reset_cooldown_html", reset_available_time: available_time)
-      redirect_to root_path and return
+    if user.nil? || user.new_record? || user.prevent_password_resets? || user.password_resets_limit_reached?
+      # Fake success message
+      flash[:notice] = t("devise.passwords.send_instructions")
+      redirect_to new_user_password_path and return
     end
 
     user.update_password_resets_requested
@@ -31,21 +39,11 @@ class Users::PasswordsController < Devise::PasswordsController
     super
   end
 
-  protected
-
-  # We need to include information about the user (the remaining reset attempts)
-  # in addition to the configured reset cooldown in the success  message.
-  # Otherwise, we would just override `devise_i18n_options` instead of this method.
-  def successfully_sent?(resource)
-    return super if Devise.paranoid
-    return unless resource.errors.empty?
-
-    flash[:notice] = t("users.passwords.create.send_instructions",
-                       send_times_remaining: t("users.passwords.create.send_times_remaining",
-                                               count: resource.password_resets_remaining),
-                       send_cooldown_period: t("users.passwords.create.send_cooldown_period",
-                                               count: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS))
+  def after_sending_reset_password_instructions_path_for(*)
+    new_user_password_path
   end
+
+  protected
 
   def after_resetting_password_path_for(resource)
     resource.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_RESET)
