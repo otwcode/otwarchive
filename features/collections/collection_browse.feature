@@ -121,6 +121,40 @@ Feature: Collection
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
 
+  Scenario: Filter collections index by collection title
+
+  Given a set of collections for searching
+  When I go to the collections page
+    And I fill in "collection_search_title" with "Another"
+    And I press "Sort and Filter"
+  Then I should see "Another Plain Collection"
+    And I should see "Another Gift Swap"
+    But I should not see "Some Test Collection"
+    And I should not see "Some Other Collection"
+    And I should not see "Surprise Presents"
+    And I should not see "On Demand"
+
+  Scenario: Filter collections index by collection tags
+
+  Given a set of collections for searching
+  When I go to the collections page
+    And I fill in "collection_search_tag" with "The Best Tag"
+    And I press "Sort and Filter"
+  Then I should see "Some Test Collection"
+    And I should see "Some Other Collection"
+    But I should not see "Another Plain Collection"
+    And I should not see "Surprise Presents"
+    And I should not see "Another Gift Swap"
+    And I should not see "On Demand"
+  When I fill in "collection_search_tag" with "The Best Tag,Another Tag"
+    And I press "Sort and Filter"
+  Then I should see "Some Test Collection"
+    But I should not see "Some Other Collection"
+    And I should not see "Another Plain Collection"
+    And I should not see "Surprise Presents"
+    And I should not see "Another Gift Swap"
+    And I should not see "On Demand"
+
   Scenario: Look at a collection, see the rules and intro and FAQ
 
   Given a set of collections for searching
@@ -149,3 +183,39 @@ Feature: Collection
     When I go to the collections page
       And I follow "Collection1"
     Then I should see an HTML comment containing the number 1744477200 within "li.work.blurb"
+
+  Scenario: Collection item counts show the correct amount for guests and registered users
+
+  Given I have a collection "Item Counts"
+  When I am logged in as the owner of "Item Counts"
+    And I post the work "Public 1" in the collection "Item Counts"
+    And I post the work "Private 1" in the collection "Item Counts"
+    And I lock the work "Private 1"
+    And I post the work "Private 2" in the collection "Item Counts"
+    And I lock the work "Private 2"
+    And I bookmark the work "Public 1" to the collection "Item Counts"
+    And I bookmark the work "Private 1" to the collection "Item Counts"
+    And I add the subcollection "Sub Count" to the parent collection named "Item_Counts"
+    And I go to the collections page
+  Then I should see the text with tags '<a href="/collections/Item_Counts/works">3</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">2</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/collections">1</a>'
+  When I log out
+    And I go to the collections page
+  Then I should see the text with tags '<a href="/collections/Item_Counts/works">1</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">1</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/collections">1</a>'
+  When I am logged in as the owner of "Item Counts"
+    And I post the work "Public 2" in the collection "Item Counts"
+    And I bookmark the work "Public 2" to the collection "Item Counts"
+    And the collection "Sub Count" is deleted
+    And the collection counts have expired
+    And I go to the collections page
+  Then I should see the text with tags '<a href="/collections/Item_Counts/works">4</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">3</a>'
+    And I should not see "Challenges/Subcollections:" within ".stats"
+  When I log out
+    And I go to the collections page
+    Then I should see the text with tags '<a href="/collections/Item_Counts/works">2</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">2</a>'
+    And I should not see "Challenges/Subcollections:" within ".stats"

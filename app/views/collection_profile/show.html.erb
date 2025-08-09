@@ -13,7 +13,7 @@
   <div class="wrapper">
     <dl class="meta group">
       <dt><%= ts('Active since:') %>
-      <dd class="datetime"><%= l(@collection.created_at.to_date) %>
+      <dd><%= l(@collection.created_at.to_date) %>
       <% unless @collection.tag_string.blank? %>
         <dt><%= t(".meta.collection_tags") %></dt>
         <dd>
