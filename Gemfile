@@ -63,7 +63,7 @@ gem 'fastimage'
 
 # Gems for authentication
 gem "devise"
-gem "devise-async"       # To mails through queues
+gem "devise-async" # To mails through queues
 gem "bcrypt"
 gem "devise-pwned_password"
 
