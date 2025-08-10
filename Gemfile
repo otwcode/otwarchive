@@ -62,9 +62,10 @@ gem "terrapin"
 gem 'fastimage'
 
 # Gems for authentication
-gem 'devise'
-gem 'devise-async'       # To mails through queues
-gem 'bcrypt'
+gem "devise"
+gem "devise-async"       # To mails through queues
+gem "bcrypt"
+gem "devise-pwned_password"
 
 # Needed for modern ssh
 gem "ed25519", ">= 1.2", "< 2.0"

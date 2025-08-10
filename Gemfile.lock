@@ -235,6 +235,9 @@ GEM
     devise-async (1.0.0)
       activejob (>= 5.0)
       devise (>= 4.0)
+    devise-pwned_password (0.1.12)
+      devise (~> 4)
+      pwned (~> 2.4)
     diff-lcs (1.6.2)
     docile (1.4.1)
     domain_name (0.6.20240107)
@@ -439,6 +442,7 @@ GEM
       puma (>= 2.7)
     pundit (2.3.1)
       activesupport (>= 3.0.0)
+    pwned (2.4.1)
     raabro (1.4.0)
     racc (1.8.1)
     rack (2.2.17)
@@ -699,6 +703,7 @@ DEPENDENCIES
   departure (~> 6.8)
   devise
   devise-async
+  devise-pwned_password
   ed25519 (>= 1.2, < 2.0)
   elasticsearch (= 8.18.0)
   email_spec (= 1.6.0)
