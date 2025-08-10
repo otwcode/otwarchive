@@ -320,9 +320,8 @@ en:
           new: Ban email address
           search: Find banned emails
         notes:
-          canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@example.com will not be allowed if foo@example.com is banned).
-          guest_comments: Banned email addresses cannot be used in guest comments and cannot be added to the invitation queue.
-          unaffected_users: They will not affect users with that address or prevent invitations sent to that email address from being used.
+          canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is banned).
+          guest_comments: Banned email addresses cannot be used in guest comments.
         page_heading: Manage Banned Emails
     header:
       nav:
@@ -2075,6 +2074,48 @@ en:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
       tags_wrangled_csv: Tags Wrangled (CSV)
   tag_wranglings:
+    index:
+      general_resources:
+        ao3_catch_and_release_html: "%{link1} - For more information, please see the %{link2}"
+        ao3_catch_and_release_link: AO3_Catch_and_Release
+        ao3_wrangling_faq_link: Tag Wrangling AO3 Project FAQ
+        current_wrangling_limitations_html: "%{link} - Details about current wrangling limitations and policies"
+        current_wrangling_limitations_link: Current Wrangling Limitations
+        fandom_and_megafandom_dir_html: "%{link} - All currently available fandom & megafandom wiki pages"
+        fandom_and_megafandom_dir_link: Directory of Fandom & Megafandom Wiki Pages
+        fandoms_in_need_html: "%{link} - Interested in helping out a fandom in need?"
+        fandoms_in_need_link: Fandoms in need of Cowranglers
+        otw_slack_chat_html: "%{link1} - For more information please see the %{link2}"
+        otw_slack_chat_link: OTW Slack Chat
+        tag_wrangler_training_html: "%{link} - New wranglers, start here!"
+        tag_wrangler_training_link: Tag Wrangling Training
+        tag_wranglers_mailing_list_html: "%{link} - Message Archive for the Tagwranglers Mailing List"
+        tag_wranglers_mailing_list_link: Tag Wranglers Mailing List Conversations
+        tag_wrangling_bugs_html: "%{link} - Having technical issues while wrangling? Check here for solutions!"
+        tag_wrangling_bugs_link: Tag Wrangling Bugs & Troubleshooting
+        tag_wrangling_committee_html: "%{link} - Full collection of wiki links & policies"
+        tag_wrangling_committee_link: Tag Wrangling Committee
+        tag_wrangling_communication_policy_html: "%{link} - Includes instructions for leaving tag comments and chat rules"
+        tag_wrangling_communication_policy_link: Tag Wrangling Communication Policy
+        tag_wrangling_faq_html: "%{link} - Check here to find answers to frequently asked questions"
+        tag_wrangling_faq_link: Tag Wrangling FAQ
+        tag_wrangling_moodle_html: "%{link} - Additional modular training and support for all wranglers"
+        tag_wrangling_moodle_link: Tag Wrangling Moodle
+        tag_wrangling_slack_tutorial_link: Tag Wrangling Slack Tutorial
+        unassigned_fandoms_html: "%{link} - A list of all current unassigned fandoms"
+        unassigned_fandoms_link: Unassigned Fandoms
+        vacations_and_retiring_html: "%{link} - Unable to wrangle for more than 2 weeks? Read about options for taking a break from wrangling!"
+        vacations_and_retiring_link: Vacation and Retiring from Wrangling
+      general_resources_heading: "General Wrangling Resources:"
+      heading: Tag Wrangling
+      notes:
+        chair_contact_html: For confidential issues (including difficulty reaching other wranglers), please email Chairs at %{email} or use the phrase <strong>"Question for a Chair!"</strong> in %{slack1}, %{slack2}, or in any training room and let them know you would like to chat via direct message.
+        landmark_heading: Notes
+        question_for_chair: '"Question for a Chair!"'
+        question_for_supervisor: '"Question for a Supervisor!"'
+        supervisor_contact_html: If you have questions, difficulty accessing the wiki, or need technical assistance, please email Tag Wranglers Supervisors or use the phrase <strong>"Question for a Chair!"</strong> to contact a Supervisor in %{slack1}, %{slack2}, or in any training room.
+        wrangle_guidelines_html: Wrangle tags in accordance with the %{link}.
+        wrangling_guidelines_link: wrangling guidelines
     wrangler_dashboard:
       characters_by_fandom: Characters by fandom (%{count})
       fandoms_by_media: Fandoms by media (%{count})
