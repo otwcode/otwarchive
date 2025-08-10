@@ -320,8 +320,9 @@ en:
           new: Ban email address
           search: Find banned emails
         notes:
-          canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is banned).
-          guest_comments: Banned email addresses cannot be used in guest comments.
+          canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@example.com will not be allowed if foo@example.com is banned).
+          guest_comments: Banned email addresses cannot be used in guest comments and cannot be added to the invitation queue.
+          unaffected_users: They will not affect users with that address or prevent invitations sent to that email address from being used.
         page_heading: Manage Banned Emails
     header:
       nav:
