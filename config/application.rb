@@ -64,9 +64,6 @@ module Otwarchive
 
     config.action_view.automatically_disable_submit_tag = false
 
-    # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:content, :passw, :terms_of_service_non_production, :email, :secret, :token, :_key, :crypt, :salt, :certificate, :otp]
-
     # Disable dumping schemas after migrations.
     # This can cause problems since we don't always update versions on merge.
     # Ideally this would be enabled in dev, but we're not quite ready for that.

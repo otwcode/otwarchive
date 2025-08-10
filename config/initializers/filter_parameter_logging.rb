@@ -4,9 +4,10 @@
 # Use this to limit dissemination of sensitive information.
 # See the ActiveSupport::ParameterFilter documentation for supported notations and behaviors.
 Rails.application.config.filter_parameters += [
-  :passw, :email, :secret, :token, :_key, :crypt, :salt, :certificate, :otp, :ssn
+  :content, :passw, :terms_of_service_non_production, :email, :secret, :token, :_key, :crypt, :salt, :certificate, :otp, :ssn
 ]
 
-# WARNING: Due to https://github.com/rails/rails/issues/48704, the filter parameters defined here do not get applied to
-# ActiveRecord::Base.filter_attributes. Set any important filter parameters that should be applied to active record
-# in application.rb instead.
+# IMPORTANT! Rails.application.config.filter_parameters must be set *above* in this file
+# Ensure filter_attributes is always set. Without this, it is brittle.
+# See https://github.com/rails/rails/issues/48704
+ActiveRecord::Base.filter_attributes += Rails.application.config.filter_parameters
