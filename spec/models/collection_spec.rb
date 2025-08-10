@@ -82,6 +82,22 @@ describe Collection do
       expect(collection.errors.full_messages).to \
         include /Sorry, a collection can only have 10 tags./
     end
+
+    it "disallows invalid header image urls" do
+      collection.header_image_url = "https://example.com/image.webp"
+      expect(collection.save).to be_falsey
+      expect(collection.errors.full_messages).to include("Header image URL can only point to a gif, jpg, jpeg, or png file.")
+    end
+
+    it "allows jpeg header image urls" do
+      collection.header_image_url = "https://example.com/image.jpeg"
+      expect(collection.save).to be_truthy
+    end
+
+    it "allows jpg header image urls" do
+      collection.header_image_url = "https://example.com/image.jpg"
+      expect(collection.save).to be_truthy
+    end
   end
 
   describe "#clear_icon" do
