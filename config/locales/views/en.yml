@@ -2106,13 +2106,11 @@ en:
         unassigned_fandoms_link: Unassigned Fandoms
         vacations_and_retiring_html: "%{link} - Unable to wrangle for more than 2 weeks? Read about options for taking a break from wrangling!"
         vacations_and_retiring_link: Vacation and Retiring from Wrangling
-      general_resources_heading: "General Wrangling Resources:"
+      general_resources_heading: 'General Wrangling Resources:'
       heading: Tag Wrangling
       notes:
         chair_contact_html: For confidential issues (including difficulty reaching other wranglers), please email Chairs at %{email} or use the phrase <strong>"Question for a Chair!"</strong> in %{slack1}, %{slack2}, or in any training room and let them know you would like to chat via direct message.
         landmark_heading: Notes
-        question_for_chair: '"Question for a Chair!"'
-        question_for_supervisor: '"Question for a Supervisor!"'
         supervisor_contact_html: If you have questions, difficulty accessing the wiki, or need technical assistance, please email Tag Wranglers Supervisors or use the phrase <strong>"Question for a Chair!"</strong> to contact a Supervisor in %{slack1}, %{slack2}, or in any training room.
         wrangle_guidelines_html: Wrangle tags in accordance with the %{link}.
         wrangling_guidelines_link: wrangling guidelines
