@@ -186,11 +186,10 @@ pre {
   border: none;
 }
 
-html.no-js form#work-filters {
-  display: block !important;
+body .narrow-shown {
+  display: block;
 }
 
-html.no-js p.narrow-hidden,
-html.no-js p.narrow-shown {
-  display: block !important;
+.actions li.narrow-shown {
+  display: inline;
 }
