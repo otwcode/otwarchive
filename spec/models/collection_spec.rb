@@ -85,18 +85,18 @@ describe Collection do
 
     it "disallows invalid header image urls" do
       collection.header_image_url = "https://example.com/image.webp"
-      expect(collection.save).to be_falsey
+      expect(collection).not_to be_valid
       expect(collection.errors.full_messages).to include("Header image URL can only point to a gif, jpg, jpeg, or png file.")
     end
 
     it "allows jpeg header image urls" do
       collection.header_image_url = "https://example.com/image.jpeg"
-      expect(collection.save).to be_truthy
+      expect(collection).to be_valid
     end
 
     it "allows jpg header image urls" do
       collection.header_image_url = "https://example.com/image.jpg"
-      expect(collection.save).to be_truthy
+      expect(collection).to be_valid
     end
   end
 
