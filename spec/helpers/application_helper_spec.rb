@@ -390,7 +390,7 @@ describe ApplicationHelper do
       I18n.backend.store_translations(:new, { support: { array: { words_connector: "，" } } })
     end
 
-    it "is locale independent" do
+    it "results in different bylines per locale despite caching" do
       I18n.with_locale(I18n.default_locale) do
         expect(helper.byline(work, visibility: "public")).to include("Beetle</a>, <a")
       end

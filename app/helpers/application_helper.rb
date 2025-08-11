@@ -139,9 +139,13 @@ module ApplicationHelper
 
     pseuds.map do |pseud|
       {
+        # Cache the plain-text pseud (username)
         byline: pseud.byline,
+        # Cache the parameters that we need for generating the pseud URL later
+        # We can't cache the record itself (for later URL generation) since it could change or be deleted
         pseud: pseud.to_param,
         user: pseud.user.to_param,
+        # Cache the array of plain-text names of the unclaimed external creators
         archivists: archivists[pseud]
       }
     end
