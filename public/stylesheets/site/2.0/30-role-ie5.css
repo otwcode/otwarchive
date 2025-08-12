@@ -242,7 +242,7 @@ ul.media, li.medium .index, .alphabet .listbox li {
   margin: auto !important;
 }
 
-/*f ont fallbacks for icons */
+/* font fallbacks for icons */
 
 span.replied. span.unreviewed, .actions a, .action, .symbol {
   font-family: 'Arial Unicode MS', 'Lucida Grande Unicode', Arial, sans-serif;

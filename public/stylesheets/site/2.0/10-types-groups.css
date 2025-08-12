@@ -93,7 +93,8 @@ a.cloud8 {
 }
 
 /* GROUPS: WRAPPER, MODULE, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)
-https://otwcode.github.io/docs/classes-taxonomy.html#grouping-and-spacing */
+https://otwcode.github.io/docs/classes-taxonomy.html#grouping-and-spacing
+*/
 
 .wrapper {
     box-shadow: 1px 1px 5px #aaa;

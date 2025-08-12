@@ -23,7 +23,8 @@ fieldset {
 
 /* Guideline: Forms are written by lots of people, and, this is beta, change a LOT.
 I've written a load of possible different nests to give a reasonably/broadly consistent view whatever goes in,
-but it's probably not complete. */
+but it's probably not complete.
+*/
 
 fieldset, form dl, fieldset dl dl, fieldset fieldset fieldset, fieldset fieldset dl dl, dd.hideme, form blockquote.userstuff {
   display: block;
@@ -157,7 +158,8 @@ form .footnote code {
 }
 
 /* when we display information that cannot be edited,
-like the current username on the change username form */
+like the current username on the change username form
+*/
 form dd p.informational {
   padding-top: 0;
 }
@@ -181,7 +183,8 @@ p.character_counter {
 }
 
 /* WIDGET: LIVE VALIDATION (todo: ARIA live region)
-We only use error messages for LiveValidation. Style spoofs the system error message. If we ever set a default success message, this will need updating. */
+We only use error messages for LiveValidation. Style spoofs the system error message. If we ever set a default success message, this will need updating.
+*/
 
 .LV_validation_message {
   font-weight: 900;
@@ -376,7 +379,9 @@ a.ui-datepicker-next {
 }
 
 /* WIDGET: TOOLTIP (todo, requires graceful degradation testing, can't see any reason for this jS)
-qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com */
+qTip2 Copyright 2009-2010 Craig Michael Thompson -
+http://craigsworks.com
+*/
 
 .qtip {
   position: absolute;
@@ -565,7 +570,8 @@ div.dynamic {
 
 /* MODE: VERBOSE for forms with more than three fieldsets
 TO DO: Make VERBOSE a class on FORM across the site; it is a surrounding DIV
-in some areas, hence .verbose form */
+in some areas, hence .verbose form
+*/
 
 form.verbose legend, .verbose form legend {
   height: auto;
