@@ -231,6 +231,8 @@ en:
     passwords:
       create:
         invalid_email: You must enter your email address.
+      new:
+        page_title: Reset Password
     reconfirm_email:
       access_denied:
         logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.

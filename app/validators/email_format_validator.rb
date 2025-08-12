@@ -5,15 +5,15 @@
 # https://github.com/binarylogic/authlogic/blob/v3.6.0/lib/authlogic/acts_as_authentic/email.rb#L90
 #
 class EmailFormatValidator < ActiveModel::EachValidator
-  def validate_each(record, attribute, value)
-    email_regex ||= begin
-      email_name_regex = '[A-Z0-9_\.&%\+\-\']+'
-      domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
-      domain_tld_regex = '(?:[A-Z]{2,25})'
-      /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
-    end
+  def self.email_regex
+    email_name_regex = '[A-Z0-9_\.&%\+\-\']+'
+    domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
+    domain_tld_regex = '(?:[A-Z]{2,25})'
+    /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
+  end
 
-    if (options[:allow_blank] && value.blank?) || (value.present? && value.match(email_regex))
+  def validate_each(record, attribute, value)
+    if (options[:allow_blank] && value.blank?) || (value.present? && value.match(EmailFormatValidator.email_regex))
       result = true
     else
       result = false

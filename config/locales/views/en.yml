@@ -2169,8 +2169,6 @@ en:
         other: You must use the link in the confirmation email in order to finish confirming your email change. If you don't confirm your request within %{count} days, the link will expire and your email address will not be changed.
       request_for_confirmation: Changing your email will send a request for confirmation to your new email address and a notification to your current email address.
       resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
-    change_password:
-      browser_title: Change Password
     change_username:
       account_faq: Account FAQ
       browser_title: Change Username

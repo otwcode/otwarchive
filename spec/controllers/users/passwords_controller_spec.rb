@@ -13,12 +13,11 @@ describe Users::PasswordsController do
 
     context "when resetting password with a correct email address" do
       it "sends reset instructions and shows a success message" do
-        expect do        
+        expect do
           post :create, params: { user: { email: user.email } }
         end.to send_email(
-          from: "do-not-reply@example.org",
           to: user.email,
-          subject: "[AO3] Reset your password"
+          subject: "[#{ArchiveConfig.APP_SHORT_NAME}] Reset your password"
         )
 
         it_redirects_to_with_notice(new_user_password_path, "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password.")
