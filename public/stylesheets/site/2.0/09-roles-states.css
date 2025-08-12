@@ -1,4 +1,4 @@
-/*==ROLES AND STATES
+/* == ROLES AND STATES
 https://otwcode.github.io/docs/classes-taxonomy.html#modifiers
 */
 
@@ -13,7 +13,7 @@ https://otwcode.github.io/docs/classes-taxonomy.html#modifiers
     border-radius: 0.5em;
 }
 
-/*(these states spoof the ".navigation .current" style)*/
+/* (these states spoof the ".navigation .current" style) */
 
 span.unread, .replied, span.claimed, .actions span.defaulted {
   background: #ccc;
@@ -75,7 +75,7 @@ span.offered.requested {
   content: " \2191";
 }
 
-/*This is a helper for Back End and can be overridden contextually anywhere*/
+/* This is a helper for Back End and can be overridden contextually anywhere */
 
 .commas li:after {
   content: ", ";
@@ -96,4 +96,4 @@ span.offered.requested {
     opacity: 1.0;
 }
 
-/*END== */
+/* END == */

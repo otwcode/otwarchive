@@ -1,6 +1,7 @@
-/*==REGION: HEADER is #1 of the 4 regions shown on every page
+/* == REGION: HEADER is #1 of the 4 regions shown on every page
 https://otwcode.github.io/docs/patterns/regions.html#header-region
-notice that CSS3 declarations sit are indented twice (four spaces) and always come last*/
+notice that CSS3 declarations sit are indented twice (four spaces) and always come last
+*/
 
 #header input, #header #search>*, #header #search .submit {
   display: inline;
@@ -13,7 +14,6 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   border: none;
 }
 
-/* check login and greeting; was a quick fix to remove bg */
 #header a, #header fieldset, #header form, #header p, #header li, #header h1, #small_login dl {
   background: transparent;
   font-size: 100%;
@@ -45,7 +45,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   background: #ddd;
 }
 
-/*BRANDING: logo and title */
+/* BRANDING: logo and title */
 
 #header .heading {
   float: left;
@@ -70,7 +70,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   height: 42px;
 }
 
-/*ACTION: dropdown*/
+/* ACTION: dropdown */
 
 #header .menu, #small_login {
   background: #ddd;
@@ -175,7 +175,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
     background-size: 100%;
 }
 
-/*FORM: login */
+/* FORM: login */
 
 #small_login {
   border: 2px solid #fff;
@@ -273,7 +273,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   margin: 0;
 }
 
-/*CONTEXT: collections*/
+/* CONTEXT: collections */
 
 #header h2 {
   border-top: 1px solid;
@@ -287,4 +287,4 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
     text-shadow: none;
 }
 
-/*END== */
+/* END == */
