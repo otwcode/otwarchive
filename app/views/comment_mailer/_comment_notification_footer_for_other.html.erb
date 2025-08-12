@@ -30,10 +30,11 @@
   <br />
 <% end %>
 
-<%= style_link("Read all comments on <i>" + @comment.ultimate_parent.commentable_name + "</i>", 
-  polymorphic_url(@comment.ultimate_parent, 
-    :view_full_work => true, 
-    :show_comments => true, 
-    :anchor => :comments, 
-    :only_path => false
-  )) %>
+<% if @comment.parent.kind_of?(Chapter) && @comment.ultimate_parent.chaptered? %>
+  <%= style_link("Read all comments on Chapter #{@comment.parent.position} of <i>#{@comment.ultimate_parent.commentable_name}</i>",
+        work_chapter_url(@comment.parent.work, @comment.parent, show_comments: true, anchor: :comments)) %>
+  <br />
+<% else %>
+  <%= style_link("Read all comments on <i>#{@comment.ultimate_parent.commentable_name}</i>",
+        polymorphic_url(@comment.ultimate_parent, view_full_work: true, show_comments: true, anchor: :comments)) %>
+<% end %>

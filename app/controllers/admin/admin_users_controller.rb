@@ -32,6 +32,8 @@ class Admin::AdminUsersController < Admin::BaseController
     # Values for the role dropdown:
     @role_values = @roles.map { |role| [role.name.humanize.titlecase, role.id] }
 
+    return if search_params.empty?
+
     @query = UserQuery.new(search_params)
     @users = @query.search_results.scope(:with_includes_for_admin_index)
   end

@@ -40,6 +40,41 @@ describe KudoMailer do
           end
         end
       end
+
+      context "with one user kudos" do
+        let(:reader) { create(:user) }
+
+        let(:kudos_json) do
+          hash = {}
+          hash["#{work.class.name}_#{work.id}"] = { guest_count: 0, names: [reader.login] }
+          hash.to_json
+        end
+
+        it_behaves_like "an email with a valid sender"
+
+        it "has the correct subject line" do
+          subject = "[#{ArchiveConfig.APP_SHORT_NAME}] You've got kudos!"
+          expect(email).to have_subject(subject)
+        end
+
+        # Test both body contents
+        it_behaves_like "a multipart email"
+
+        it_behaves_like "a translated email"
+
+        describe "HTML version" do
+          it "has the correct content" do
+            expect(email).to have_html_part_content("<a style=\"color:#990000\" href=\"#{user_url(reader)}\">#{reader.login}</a>")
+            expect(email).to have_html_part_content("left kudos on <")
+          end
+        end
+
+        describe "text version" do
+          it "has the correct content" do
+            expect(email).to have_text_part_content("#{reader.login} left kudos on \"#{work.title}\"")
+          end
+        end
+      end
     end
   end
 end

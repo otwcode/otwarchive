@@ -17,7 +17,7 @@ Feature: Collection
 
   Scenario: Filter collections index to only show prompt memes
 
-  Given I have loaded the fixtures
+  Given a set of collections for searching
   When I go to the collections page
     And I choose "Prompt Meme Challenge"
     And I press "Sort and Filter"
@@ -30,7 +30,7 @@ Feature: Collection
 
   Scenario: Filter collections index to only show gift exchanges
 
-  Given I have loaded the fixtures
+  Given a set of collections for searching
   When I go to the collections page
     And I choose "Gift Exchange Challenge"
     And I press "Sort and Filter"
@@ -43,7 +43,7 @@ Feature: Collection
 
   Scenario: Filter collections index to only show non-challenge collections
 
-  Given I have loaded the fixtures
+  Given a set of collections for searching
   When I go to the collections page
     And I choose "No Challenge"
     And I press "Sort and Filter"
@@ -56,7 +56,7 @@ Feature: Collection
 
   Scenario: Filter collections index to only show closed collections
 
-  Given I have loaded the fixtures
+  Given a set of collections for searching
   When I go to the collections page
     And I choose "collection_filters_closed_true"
     And I press "Sort and Filter"
@@ -69,7 +69,7 @@ Feature: Collection
 
   Scenario: Filter collections index to only show open collections
 
-  Given I have loaded the fixtures
+  Given a set of collections for searching
   When I go to the collections page
     And I choose "collection_filters_closed_false"
     And I press "Sort and Filter"
@@ -82,7 +82,7 @@ Feature: Collection
 
   Scenario: Filter collections index to only show moderated collections
 
-  Given I have loaded the fixtures
+  Given a set of collections for searching
   When I go to the collections page
     And I choose "collection_filters_moderated_true"
     And I press "Sort and Filter"
@@ -95,7 +95,7 @@ Feature: Collection
 
   Scenario: Filter collections index to only show unmoderated collections
 
-  Given I have loaded the fixtures
+  Given a set of collections for searching
   When I go to the collections page
     And I choose "collection_filters_moderated_false"
     And I press "Sort and Filter"
@@ -108,7 +108,7 @@ Feature: Collection
 
   Scenario: Filter collections index to show open, moderated gift exchanges
 
-  Given I have loaded the fixtures
+  Given a set of collections for searching
   When I go to the collections page
     And I choose "collection_filters_closed_false"
     And I choose "collection_filters_moderated_true"
@@ -136,7 +136,7 @@ Feature: Collection
 
   Scenario: Clear filters applied on collections
 
-  Given I have loaded the fixtures
+  Given a set of collections for searching
     And I am logged in as a random user
   When I go to the collections page
     And I choose "Gift Exchange Challenge"
@@ -153,7 +153,7 @@ Feature: Collection
 
   Scenario: Look at a collection, see the rules and intro and FAQ
 
-  Given I have loaded the fixtures
+  Given a set of collections for searching
     And I am logged in as "testuser" with password "testuser"
   When I go to the collections page
   Then I should see "Collections in the "
@@ -167,3 +167,15 @@ Feature: Collection
     And I should see "It's a test collection" within "#faq"
     And I should see "Be nice to testers" within "#rules"
     And I should see "About Some Test Collection (sometest)"
+
+
+  Scenario: Work blurb includes an HTML comment containing the unix epoch of the updated time
+  
+    Given time is frozen at 2025-04-12 17:00 UTC
+      And I have the collection "Collection1"
+      And a fandom exists with name: "Steven's Universe", canonical: true
+      And I am logged in as a random user
+      And I post the work "Stronger than you" with fandom "Steven's Universe" in the collection "Collection1"
+    When I go to the collections page
+      And I follow "Collection1"
+    Then I should see an HTML comment containing the number 1744477200 within "li.work.blurb"

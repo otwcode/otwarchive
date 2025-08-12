@@ -5,11 +5,13 @@ Feature: Edit Works
   I want to edit existing works
 
   Scenario: You can't edit a work unless you're logged in and it's your work
-    Given I have loaded the fixtures
+    Given the work "First work" by "testuser" with fandom "first fandom"
+      And "testuser" has the pseud "testy"
+      And the work "fourth" by "testuser2"
     # I'm not logged in
     When I view the work "First work"
     Then I should not see "Edit"
-    Given I am logged in as "testuser" with password "testuser"
+    Given I am logged in as "testuser"
       And all indexing jobs have been run
     # This isn't my work
     When I view the work "fourth"
@@ -30,8 +32,7 @@ Feature: Edit Works
       And I press "Preview"
     Then I should see "Preview"
       And I should see "Fandom: first fandom"
-      # line below fails with perform_caching: true because of issue 3461
-      # And I should see "Additional Tags: new tag"
+      And I should see "Additional Tags: new tag"
       And I should see "first chapter content"
       And I should see "Words:3"
     When I press "Update"

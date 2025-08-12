@@ -60,7 +60,6 @@ Feature: Authenticate Admin Users
     And the following admin exists
       | login | password      |
       | Zooey | adminpassword |
-    And I have loaded the "roles" fixture
   When I go to the admin login page
     And I fill in "Admin username" with "Zooey"
     And I fill in "Admin password" with "adminpassword"

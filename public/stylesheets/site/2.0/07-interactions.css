@@ -52,13 +52,17 @@ fieldset dd dl, form .meta dd, fieldset dl fieldset dl, dd fieldset {
 
 /*end nesting */
 
-legend, input[type="hidden"] {
+legend {
   height: 0;
   width: 0;
   font-size: 0;
   opacity: 0;
   padding: 0;
   margin: 0;
+}
+
+input[type="hidden"] {
+  display: none !important;
 }
 
 label {
@@ -98,7 +102,11 @@ select {
   width: 32.5%;
 }
 
-input[type="radio"], input[type="checkbox"], input[type="file"], input.number, p input, p select, .heading select, li select {
+input[type="checkbox"], input[type="radio"] {
+    box-shadow: none;
+}
+
+input[type="checkbox"], input[type="file"], input[type="radio"], input.number, p input, p select, .heading select, li select {
   width: auto;
   margin-right: 0.375em;
 }

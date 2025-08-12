@@ -57,8 +57,8 @@ Rails.application.configure do
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   # Make sure that we don't have a host mismatch:
-  config.action_controller.default_url_options = { host: "http://www.example.com", port: nil }
-  config.action_mailer.default_url_options = config.action_controller.default_url_options
+  config.action_controller.default_url_options = { host: "www.example.com", port: nil }
+  config.action_mailer.default_url_options = config.action_controller.default_url_options.merge(protocol: "https")
 
   # Raise exceptions for disallowed deprecations.
   config.active_support.disallowed_deprecation = :raise

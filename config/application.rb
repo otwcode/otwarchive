@@ -110,7 +110,7 @@ module Otwarchive
 
     config.active_model.i18n_customize_full_message = true
 
-    config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST }
+    config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST, protocol: "https" }
 
     # Use "mailer" instead of "mailers" as the Resque queue for emails:
     config.action_mailer.deliver_later_queue_name = :mailer

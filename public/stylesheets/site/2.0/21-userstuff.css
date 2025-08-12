@@ -182,6 +182,10 @@
 
 /* contexts */
 
+.comment .userstuff li {
+  list-style-position: inside;
+}
+
 .bookmark .user .userstuff {
   line-height: 1.5;
 }
