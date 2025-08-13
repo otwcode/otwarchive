@@ -8,7 +8,7 @@
     <% end %>
 
     <% if (logged_in? || logged_in_as_admin?) && skin.cached? %>
-      <li><%= link_to ts("Set For Session"), set_skin_path(skin) %></li>
+      <li><%= button_to ts("Set For Session"), set_skin_path(skin), method: :post %></li>
     <% end %>
 
     <% if skin.editable? && (policy(skin).update? || !logged_in_as_admin?) %>
