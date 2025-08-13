@@ -79,8 +79,6 @@ describe PreferencesController do
           user_id: user.login,
           id: user.preference.id,
           preference: {
-            email_visible: "0",
-            date_of_birth_visible: "0",
             minimize_search_engines: "0",
             disable_share_links: "0",
             allow_cocreator: "0",
@@ -114,81 +112,22 @@ describe PreferencesController do
       it "renders index on failed save" do
         allow_any_instance_of(Preference).to receive(:save).and_return(false)
         
-        put :update, params: { user_id: user.login, id: user.preference.id, preference: { email_visible: true } }
+        put :update, params: { user_id: user.login, id: user.preference.id, preference: { minimize_search_engines: true } }
         
         expect(response).to render_template(:index)
         expect(flash[:error]).to eq("Sorry, something went wrong. Please try that again.")
       end
-
-      it "disallows the ticket_number field" do
-        put :update, params: { user_id: user.login, id: user.preference.id, preference: { ticket_number: "#123456" } }
-        
-        expect_any_instance_of(ZohoResourceClient).not_to receive(:find_ticket)
-      end
     end
 
     context "as admin" do
-      edit_roles = %w[superadmin policy_and_abuse]
-
-      before do
-        fake_login_admin(admin)
-
-        ticket = {
-          "departmentId" => ArchiveConfig.ABUSE_ZOHO_DEPARTMENT_ID,
-          "status" => "Open",
-          "webUrl" => Faker::Internet.url
-        }
-        allow_any_instance_of(ZohoResourceClient).to receive(:find_ticket).and_return(ticket)
-      end
-
-      context "with no role" do
-        let(:admin) { create(:admin, roles: []) }
-
-        it "cannot edit email_visible" do
-          put :update, params: { user_id: user.login, id: user.preference.id, preference: { email_visible: true } }
-        
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-
-        it "cannot edit anything else" do
-          put :update, params: { user_id: user.login, id: user.preference.id, preference: { date_of_birth_visible: true } }
-        
-          it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-        end
-      end
-
-      edit_roles.each do |role|
-        context "with role #{role}" do
-          let(:admin) { create(:admin, roles: [role]) }
-          
-          it "can edit email_visible" do
-            patch :update, params: { user_id: user.login, id: user.preference.id, preference: { email_visible: "1", ticket_number: "#123456" } }
-
-            it_redirects_to_with_notice(user_path(user), "Your preferences were successfully updated.")
-          end
-
-          it "cannot edit anything else" do
-            expect do
-              patch :update, params: { user_id: user.login, id: user.preference.id, preference: { email_visible: "1", ticket_number: "#123456", minimize_search_engines: "1" } }
-            end.to raise_error ActionController::UnpermittedParameters
-          end
-        end
-      end
-
-      (Admin::VALID_ROLES - edit_roles).each do |role|
+      Admin::VALID_ROLES.each do |role|
         context "with role #{role}" do
           let(:admin) { create(:admin, roles: [role]) }
 
-          it "cannot edit email_visible" do
-            put :update, params: { user_id: user.login, id: user.preference.id, preference: { email_visible: true } }
+          it "cannot edit preferences" do
+            put :update, params: { user_id: user.login, id: user.preference.id, preference: { minimize_search_engines: true } }
           
-            it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
-          end
-
-          it "cannot edit anything else" do
-            put :update, params: { user_id: user.login, id: user.preference.id, preference: { date_of_birth_visible: true } }
-          
-            it_redirects_to_with_error(root_url, "Sorry, only an authorized admin can access the page you were trying to reach.")
+            it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
           end
         end
       end

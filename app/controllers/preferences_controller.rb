@@ -10,7 +10,6 @@ class PreferencesController < ApplicationController
   end
 
   def index
-    @user = User.find_by(login: params[:user_id])
     @preference = @user.preference
     authorize @preference if logged_in_as_admin?
     @available_skins = (@user.skins.site_skins + Skin.approved_skins.site_skins).uniq
@@ -18,26 +17,9 @@ class PreferencesController < ApplicationController
   end
 
   def update
-    @user = User.find_by(login: params[:user_id])
     @preference = @user.preference
     @available_skins = (@user.skins.site_skins + Skin.approved_skins.site_skins).uniq
     @available_locales = Locale.where(email_enabled: true)
-
-    if logged_in_as_admin?
-      authorize @preference
-
-      return render action: "index" unless @preference.update(permitted_attributes(@preference))
-      
-      if @preference.ticket_url.present?
-        link = view_context.link_to("Ticket ##{@preference.ticket_number}", @preference.ticket_url)
-        summary = @preference.email_visible ? "Enable" : "Disable"
-        summary += " \"Show my email address to other people\" for #{link}"
-        AdminActivity.log_action(current_admin, @user, action: "edit preference", summary: summary)
-      end
-
-      flash[:notice] = t(".success")
-      return redirect_to user_path(@user)
-    end
 
     @user.preference.attributes = preference_params
     
@@ -84,8 +66,7 @@ class PreferencesController < ApplicationController
       :banner_seen,
       :allow_cocreator,
       :allow_gifts,
-      :guest_replies_off,
-      :ticket_number
+      :guest_replies_off
     )
   end
 end

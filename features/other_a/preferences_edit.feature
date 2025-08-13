@@ -370,39 +370,6 @@ Feature: Edit preferences
       | tag_wrangling              |
       | open_doors                 |
   
-  Scenario Outline: Authorized admins can modify the email_visible preference but not any others, and the activity should be logged
-    Given a user exists with login: "scott"
-      And I am logged in as a "<role>" admin
-      And an abuse ticket ID exists
-    When I go to scott's preferences page
-    Then I should see "Set My Preferences"
-    When I check "Show my email address to other people."
-      And I fill in "Ticket ID" with "#000000"
-      And I press "Update"
-    Then I should see "Your preferences were successfully updated"
-      And I go to scott's preferences page
-      And the "Show my email address to other people." checkbox should be checked
-      And the "Show my date of birth to other people." checkbox should be disabled
-    When I go to the admin-activities page
-    Then I should see 1 admin activity log entry
-      And I should see "edit preference"
-    
-    Examples:
-      | role             |
-      | superadmin       |
-      | policy_and_abuse |
-  
-  Scenario Outline: Unauthorized admins cannot modify anything
-    Given a user exists with login: "scott"
-      And I am logged in as a "<role>" admin
-    When I go to scott's preferences page
-    Then the "Show my email address to other people." checkbox should be disabled
-      And the "Show my date of birth to other people." checkbox should be disabled
-
-    Examples:
-      | role    |
-      | support |
-  
   Scenario Outline: Admins can navigate to some pages but not others
     Given a user exists with login: "scott"
       And I am logged in as a "<role>" admin

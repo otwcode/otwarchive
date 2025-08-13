@@ -23,12 +23,12 @@ class UsersController < ApplicationController
 
     visible = visible_items(current_user)
 
-    @works = visible[:works].order('revised_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-    @series = visible[:series].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-    @bookmarks = visible[:bookmarks].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @works = visible[:works].order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @series = visible[:series].order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @bookmarks = visible[:bookmarks].order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(subscribable_id: @user.id,
-                                                       subscribable_type: 'User').first ||
+                                                       subscribable_type: "User").first ||
                       current_user.subscriptions.build(subscribable: @user)
     end
   end
@@ -53,9 +53,7 @@ class UsersController < ApplicationController
   end
 
   def changed_password
-    unless params[:password] && reauthenticate
-      render(:change_password) && return
-    end
+    render(:change_password) && return unless params[:password] && reauthenticate
 
     @user.password = params[:password]
     @user.password_confirmation = params[:password_confirmation]
@@ -110,7 +108,7 @@ class UsersController < ApplicationController
 
   def activate
     if params[:id].blank?
-      flash[:error] = ts('Your activation key is missing.')
+      flash[:error] = ts("Your activation key is missing.")
       redirect_to root_path
 
       return
@@ -163,7 +161,7 @@ class UsersController < ApplicationController
         link = view_context.link_to("Ticket ##{@user.profile.ticket_number}", @user.profile.ticket_url)
         AdminActivity.log_action(current_admin, @user, action: "edit profile", summary: link)
       end
-      flash[:notice] = ts('Your profile has been successfully updated')
+      flash[:notice] = ts("Your profile has been successfully updated")
       redirect_to user_profile_path(@user)
     else
       render :edit
@@ -252,14 +250,14 @@ class UsersController < ApplicationController
       @user.destroy_empty_series
 
       @user.destroy
-      flash[:notice] = ts('You have successfully deleted your account.')
+      flash[:notice] = ts("You have successfully deleted your account.")
 
       redirect_to(delete_confirmation_path)
     elsif params[:coauthor].blank? && params[:sole_author].blank?
       @sole_authored_works = @user.sole_authored_works
       @coauthored_works = @user.coauthored_works
 
-      render('delete_preview') && return
+      render("delete_preview") && return
     elsif params[:coauthor] || params[:sole_author]
       destroy_author
     end
@@ -281,7 +279,7 @@ class UsersController < ApplicationController
     @user.preference.update_attribute(:banner_seen, true)
 
     respond_to do |format|
-      format.html { redirect_to(request.env['HTTP_REFERER'] || root_path) && return }
+      format.html { redirect_to(request.env["HTTP_REFERER"] || root_path) && return }
       format.js
     end
   end
@@ -330,10 +328,10 @@ class UsersController < ApplicationController
     @fandoms = if @user == User.orphan_account
                  []
                else
-                 Fandom.select("tags.*, count(DISTINCT works.id) as work_count").
-                   joins(:filtered_works).group("tags.id").merge(visible_works).
-                   where(filter_taggings: { inherited: false }).
-                   order('work_count DESC').load
+                 Fandom.select("tags.*, count(DISTINCT works.id) as work_count")
+                   .joins(:filtered_works).group("tags.id").merge(visible_works)
+                   .where(filter_taggings: { inherited: false })
+                   .order("work_count DESC").load
                end
 
     {
@@ -348,24 +346,24 @@ class UsersController < ApplicationController
     @coauthored_works = @user.coauthored_works
 
     if params[:cancel_button]
-      flash[:notice] = ts('Account deletion canceled.')
+      flash[:notice] = ts("Account deletion canceled.")
       redirect_to user_profile_path(@user)
 
       return
     end
 
-    if params[:coauthor] == 'keep_pseud' || params[:coauthor] == 'orphan_pseud'
+    if params[:coauthor] == "keep_pseud" || params[:coauthor] == "orphan_pseud"
       # Orphans co-authored works.
 
       pseuds = @user.pseuds
       works = @coauthored_works
 
       # We change the pseud to the default orphan pseud if use_default is true.
-      use_default = params[:use_default] == 'true' || params[:coauthor] == 'orphan_pseud'
+      use_default = params[:use_default] == "true" || params[:coauthor] == "orphan_pseud"
 
       Creatorship.orphan(pseuds, works, use_default)
 
-    elsif params[:coauthor] == 'remove'
+    elsif params[:coauthor] == "remove"
       # Removes user as an author from co-authored works
 
       @coauthored_works.each do |w|
@@ -373,18 +371,18 @@ class UsersController < ApplicationController
       end
     end
 
-    if params[:sole_author] == 'keep_pseud' || params[:sole_author] == 'orphan_pseud'
+    if params[:sole_author] == "keep_pseud" || params[:sole_author] == "orphan_pseud"
       # Orphans works where user is the sole author.
 
       pseuds = @user.pseuds
       works = @sole_authored_works
 
       # We change the pseud to default orphan pseud if use_default is true.
-      use_default = params[:use_default] == 'true' || params[:sole_author] == 'orphan_pseud'
+      use_default = params[:use_default] == "true" || params[:sole_author] == "orphan_pseud"
 
       Creatorship.orphan(pseuds, works, use_default)
       Collection.orphan(pseuds, @sole_owned_collections, default: use_default)
-    elsif params[:sole_author] == 'delete'
+    elsif params[:sole_author] == "delete"
       # Deletes works where user is sole author
       @sole_authored_works.each(&:destroy)
 
@@ -400,15 +398,13 @@ class UsersController < ApplicationController
 
       @user.destroy
 
-      flash[:notice] = ts('You have successfully deleted your account.')
+      flash[:notice] = ts("You have successfully deleted your account.")
       redirect_to(delete_confirmation_path)
     else
-      flash[:error] = ts('Sorry, something went wrong! Please try again.')
+      flash[:error] = ts("Sorry, something went wrong! Please try again.")
       redirect_to(@user)
     end
   end
-
-  private
 
   def profile_params
     params.require(:profile_attributes).permit(
