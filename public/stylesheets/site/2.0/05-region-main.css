@@ -1,5 +1,5 @@
-/*==REGION: MAIN is #3 of the 4 regions shown on every page 
-http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
+/* == REGION: MAIN is #3 of the 4 regions shown on every page
+https://otwcode.github.io/docs/patterns/regions.html#main-region
 */
 
 #main {
@@ -54,4 +54,4 @@ http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
   margin-right: 325px;
 }
 
-/*END== */
+/* END == */
