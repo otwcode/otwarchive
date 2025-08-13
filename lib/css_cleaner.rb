@@ -1,5 +1,5 @@
 # Use css parser to break up style blocks
-require 'css_parser'
+require "css_parser"
 
 module CssCleaner
   include CssParser
@@ -35,7 +35,7 @@ module CssCleaner
   # Custom properties (variables) are declared using --name: value and accessed
   # using property: var(--name). The var() function can be more complex, e.g.,
   # var(--name, fallback value), but we're keeping our implementation simple.
-  CUSTOM_PROPERTY_NAME_REGEXP = Regexp.new("\\-\\-[0-9a-z\\-_]+")
+  CUSTOM_PROPERTY_NAME_REGEXP = Regexp.new("\\-\\-[0-9a-z\\-_]+", Regexp::IGNORECASE)
   PAREN_CUSTOM_PROPERTY_REGEX = Regexp.new("\\(\\s*#{CUSTOM_PROPERTY_NAME_REGEXP}\\s*\\)", Regexp::IGNORECASE)
   VAR_FUNCTION_REGEX = Regexp.new("var#{PAREN_CUSTOM_PROPERTY_REGEX}", Regexp::IGNORECASE)
 
@@ -59,7 +59,7 @@ module CssCleaner
     clean_css = ""
     parser = CssParser::Parser.new
     parser.add_block!(css_code)
-    
+
     prefix = options[:prefix] || ''
     caller_check = options[:caller_check]
 
@@ -106,7 +106,7 @@ module CssCleaner
   end
 
   def legal_property?(property)
-    ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property) || 
+    ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property) ||
       property.match(/-(#{PREFIX_REGEX})-(#{ArchiveConfig.SUPPORTED_CSS_PROPERTIES.join('|')})/)
   end
 
@@ -129,16 +129,13 @@ module CssCleaner
   #   empty property returned.
   def sanitize_css_declaration_value(property, value)
     clean = ""
-    property = property.downcase
     if property == "font-family"
-      if !sanitize_css_font(value).blank?
-        # preserve the original capitalization
-        clean = value
-      end
+      # preserve the original capitalization
+      clean = value if !sanitize_css_font(value).blank?
     elsif property == "content"
       # don't allow var() function
-      clean = value.match(/\bvar\b/) ? "" : sanitize_css_content(value)
-    elsif value.match(/\burl\b/) && (!ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?("url") || !%w(background background-image border border-image list-style list-style-image).include?(property))
+      clean = value.match(/\bvar\b/i) ? "" : sanitize_css_content(value)
+    elsif value.match(/\burl\b/i) && (!ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?("url") || !%w(background background-image border border-image list-style list-style-image).include?(property))
       # check whether we can use urls in this property
       clean = ""
     elsif legal_shorthand_property?(property) || custom_property?(property)
@@ -200,6 +197,8 @@ module CssCleaner
     cleantoken = ""
     if token.match(/gradient/)
       cleantoken = sanitize_css_gradient(token)
+    elsif token.match(/\bvar\b/i)
+      cleantoken = sanitize_css_value(token).downcase
     else
       cleantoken = sanitize_css_value(token)
     end
@@ -261,6 +260,4 @@ module CssCleaner
       return ""
     end
   end
-
-
 end
