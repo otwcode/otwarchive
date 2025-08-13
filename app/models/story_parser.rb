@@ -616,6 +616,7 @@ class StoryParser
     # inside the body.
     body = @doc.css("body")
     storytext = body.css("article.b-singlepost-body").inner_html
+    storytext = body.css("div.aentry-post__text").inner_html if storytext.empty?
     storytext = body.inner_html if storytext.empty?
 
     # cleanup the text
@@ -628,9 +629,8 @@ class StoryParser
     work_params.merge!(scan_text_for_meta(storytext, detect_tags))
 
     date = @doc.css("time.b-singlepost-author-date")
-    unless date.empty?
-      work_params[:revised_at] = convert_revised_at(date.first.inner_text)
-    end
+    date = @doc.css("p.aentry-head__date/time") if date.empty?
+    work_params[:revised_at] = convert_revised_at(date.first.inner_text) unless date.empty?
 
     work_params
   end

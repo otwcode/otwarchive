@@ -93,6 +93,10 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user.roles = [role]
 end
 
+Given "the role {string}" do |role|
+  FactoryBot.create(:role, name: role)
+end
+
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
   user = find_or_create_new_user(login, password)
   step("I start a new session")

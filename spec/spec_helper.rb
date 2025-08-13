@@ -169,6 +169,7 @@ RSpec.configure do |config|
 end
 
 RSpec::Matchers.define_negated_matcher :avoid_changing, :change
+RSpec::Matchers.define_negated_matcher :not_enqueue_mail, :enqueue_mail
 
 def clean_the_database
   # Now clear memcached

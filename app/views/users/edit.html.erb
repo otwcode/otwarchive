@@ -24,18 +24,6 @@
         <%= generate_countdown_html("profile_attributes_title", Profile::PROFILE_TITLE_MAX) %>
       </dd>
 
-      <dt><%= p.label :location, t(".location") %></dt>
-      <dd>
-        <%= p.text_field :location, class: "observe_textlength", disabled: logged_in_as_admin? && !policy(@user.profile).update? %>
-        <%= live_validation_for_field("profile_attributes_location", presence: false, maximum_length: Profile::LOCATION_MAX) %>
-        <%= generate_countdown_html("profile_attributes_location", Profile::LOCATION_MAX) %>
-      </dd>
-
-      <dt><%= p.label :date_of_birth, t(".date_of_birth") %></dt>
-      <dd class="datetime">
-        <%= p.date_select :date_of_birth, start_year: 12.years.ago.year, end_year: 90.years.ago.year, include_blank: true, disabled: logged_in_as_admin? && !policy(@user.profile).update? %>
-      </dd>
-
       <dt><%= p.label :about_me, t(".about_me") %></dt>
       <dd class="description">
         <p><%= allowed_html_instructions %></p>

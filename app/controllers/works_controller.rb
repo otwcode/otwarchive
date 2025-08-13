@@ -313,8 +313,7 @@ class WorksController < ApplicationController
     @work.set_challenge_claim_info
     set_work_form_fields
 
-    # If Edit or Cancel is pressed, bail out and display relevant form
-    if params[:edit_button] || work_cannot_be_saved?
+    if work_cannot_be_saved?
       render :new
     else
       @work.posted = @chapter.posted = true if params[:post_button]
@@ -656,11 +655,7 @@ class WorksController < ApplicationController
     @page_subtitle = ts("Edit Multiple Works")
     @user = current_user
 
-    if params[:pseud_id]
-      @works = Work.joins(:pseuds).where(pseud_id: params[:pseud_id])
-    else
-      @works = Work.joins(pseuds: :user).where('users.id = ?', @user.id)
-    end
+    @works = Work.joins(pseuds: :user).where(users: { id: @user.id })
 
     @works = @works.where(id: params[:work_ids]) if params[:work_ids]
 

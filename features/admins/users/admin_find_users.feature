@@ -1,8 +1,7 @@
 Feature: Admin Find Users page
 
   Background:
-    Given I have loaded the "roles" fixture
-      And the following activated users exist
+    Given the following activated users exist
         | login  | email      |
         | userA  | a@ao3.org  |
         | userB  | b@bo3.org  |
@@ -11,6 +10,16 @@ Feature: Admin Find Users page
       And I am logged in as a super admin
       And all emails have been delivered
       And I go to the manage users page
+
+  Scenario: The Find Users page shows no results before searching and all results with blank search
+    Then I should not see "userA"
+      And I should not see "userB"
+      And I should not see "userCB"
+      And I should not see "found"
+    When I submit
+    Then I should see "userA"
+      And I should see "userB"
+      And I should see "userCB"
 
   Scenario: The Find Users page performs a partial match on name with * wildcard
     When I fill in "Name" with "u*er*"

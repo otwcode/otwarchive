@@ -24,14 +24,6 @@
     <h4 class="heading"><%= t(".privacy.heading") %> <%= link_to_help "privacy-preferences" %></h4>
     <ul>
       <li>
-        <%= f.check_box :email_visible, disabled: logged_in_as_admin? && !policy(@preference).update? %>
-        <%= f.label :email_visible, t(".privacy.show_email_address") %>
-      </li>
-      <li>
-        <%= f.check_box :date_of_birth_visible, disabled: logged_in_as_admin? %>
-        <%= f.label :date_of_birth_visible, t(".privacy.show_date_of_birth") %>
-      </li>
-      <li>
         <%= f.check_box :minimize_search_engines, disabled: logged_in_as_admin? %>
         <%= f.label :minimize_search_engines, t(".privacy.hide_work_from_search_engines") %>
       </li>

@@ -14,6 +14,7 @@ class User < ApplicationRecord
          :validatable,
          :lockable,
          :recoverable
+  devise :pwned_password unless Rails.env.test?
 
   # Must come after Devise modules in order to alias devise_valid_password?
   # properly
@@ -164,6 +165,7 @@ class User < ApplicationRecord
   def expire_caches
     return unless saved_change_to_login?
     series.each(&:expire_byline_cache)
+    chapters.each(&:expire_byline_cache)
     self.works.each do |work|
       work.touch
       work.expire_caches

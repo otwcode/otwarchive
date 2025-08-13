@@ -1,13 +1,16 @@
 class Preference < ApplicationRecord
   include Justifiable
   
+  # Ignore the email_visible and date_of_birth_visible fields until they can be deleted:
+  self.ignored_columns = [:email_visible, :date_of_birth_visible]
+
   belongs_to :user
   belongs_to :skin
   belongs_to :locale, foreign_key: "preferred_locale"
 
   validates :work_title_format,
             format: {
-              with: /\A[a-zA-Z0-9_\-,\. ]+\z/,
+              with: /\A[a-zA-Z0-9_\-,. ]+\z/,
               message: ts("can only contain letters, numbers, spaces, and some limited punctuation (comma, period, dash, underscore).")
             }
 
