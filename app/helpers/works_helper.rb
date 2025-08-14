@@ -305,7 +305,7 @@ module WorksHelper
     elsif warning_tag_names == [ArchiveConfig.WARNING_DEFAULT_TAG_NAME]
       # only one tag and it says choose not to warn
       "choosenottowarn"
-    elsif warning_tag_names.sort == [ArchiveConfig.WARNING_DEFAULT_TAG_NAME, ArchiveConfig.WARNING_NONE_TAG_NAME]
+    elsif warning_tag_names.sort == [ArchiveConfig.WARNING_DEFAULT_TAG_NAME, ArchiveConfig.WARNING_NONE_TAG_NAME].sort
       # two tags and they are "choose not to warn" and "no archive warnings apply" in either order
       "choosenottowarn"
     else
