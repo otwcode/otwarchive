@@ -5,12 +5,13 @@ class CollectionIndexer < Indexer
 
   def self.klass_with_includes
     Collection.includes(
-      :approved_bookmarks,
-      :approved_bookmarks,
+      :collection_preference,
       :challenge,
       :children,
-      :owners,
       :parent,
+      :owners,
+      :moderators,
+      :filters,
       :tags
     )
   end
@@ -101,21 +102,10 @@ class CollectionIndexer < Indexer
       assignments_due_at: object.challenge&.assignments_due_at,
       works_reveal_at: object.challenge&.works_reveal_at,
       authors_reveal_at: object.challenge&.authors_reveal_at,
-      general_bookmarked_items_count: get_bookmarked_items_count(object),
-      public_bookmarked_items_count: get_bookmarked_items_count(object, true),
+      general_bookmarked_items_count: object.general_bookmarked_items_count,
+      public_bookmarked_items_count: object.public_bookmarked_items_count,
       filter_ids: object.filter_ids,
-      tag: object.tag,
+      tag: object.tag
     )
-  end
-
-  private
-
-  def get_bookmarked_items_count(collection, is_public = false)
-    bookmarks = Bookmark.is_public.joins(:collection_items)
-                        .merge(CollectionItem.approved_by_collection)
-                        .where(collection_items: { collection_id: collection.children.ids + [collection.id] })
-    bookmarks = is_public ? bookmarks.visible_to_all : bookmarks.visible_to_registered_user
-
-    bookmarks.count
   end
 end

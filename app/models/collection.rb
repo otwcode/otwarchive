@@ -166,7 +166,7 @@ class Collection < ApplicationRecord
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
   scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).with_attached_icon }
-  scope :for_search, -> { includes(:parent, :children, :collection_preference, owners: [:user]).with_attached_icon }
+  scope :for_search, -> { includes(:parent, :children, :tags, :challenge, moderators: [:user], owners: [:user]).with_attached_icon }
 
   def cleanup_url
     self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
@@ -420,14 +420,34 @@ class Collection < ApplicationRecord
     self.icon_comment_text = nil
   end
 
-  # Work counts for indexing; these come from the database.
+  # Work and bookmark counts for indexing; these come from the database.
 
   def general_works_count
-    approved_works.visible_to_registered_user.count + children.map(&:general_works_count).sum
+    Work.visible_to_registered_user.in_collection(self).count
   end
 
   def public_works_count
-    approved_works.visible_to_all.count + children.map(&:public_works_count).sum
+    Work.visible_to_all.in_collection(self).count
+  end
+
+  def general_bookmarked_items_count
+    bookmarks = Bookmark.is_public.in_collection(self)
+
+    [
+      Work.visible_to_registered_user,
+      Series.visible_to_registered_user,
+      ExternalWork.visible_to_registered_user
+    ].map do |relation|
+      relation.joins(:bookmarks).merge(bookmarks).distinct.count("bookmarks.bookmarkable_id")
+    end.sum
+  end
+
+  def public_bookmarked_items_count
+    bookmarks = Bookmark.is_public.in_collection(self)
+
+    [Work.visible_to_all, Series.visible_to_all, ExternalWork.visible_to_all].map do |relation|
+      relation.joins(:bookmarks).merge(bookmarks).distinct.count("bookmarks.bookmarkable_id")
+    end.sum
   end
 
   # Work and bookmark counts; these come from Elasticsearch via the

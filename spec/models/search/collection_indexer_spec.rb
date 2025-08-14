@@ -67,5 +67,34 @@ describe CollectionIndexer do
         expect(document["public_works_count"]).to eq(1)
       end
     end
+
+    context "when the collection contains two bookmarks of one item" do
+      let(:work) { create(:work) }
+      let(:bookmark) { create(:bookmark, bookmarkable: work) }
+      let(:bookmark2) { create(:bookmark, bookmarkable: work) }
+
+      before do
+        bookmark.collections << collection
+        bookmark2.collections << collection
+      end
+
+      it "is counts as one item" do
+        document = described_class.new([]).document(collection)
+        expect(document[:general_bookmarked_items_count]).to eq(1)
+        expect(document[:public_bookmarked_items_count]).to eq(1)
+      end
+    end
+  end
+
+  describe "#index_documents", collection_search: true do
+    context "with multiple collections in a batch", :n_plus_one do
+      populate { |n| create_list(:collection, n, challenge: create(:gift_exchange)) }
+
+      it "generates a constant number of database queries" do
+        expect do
+          CollectionIndexer.new(Collection.ids).index_documents
+        end.to perform_linear_number_of_queries(slope: 10) # The ten works/bookmarked items count queries which can't be eliminated with includes
+      end
+    end
   end
 end

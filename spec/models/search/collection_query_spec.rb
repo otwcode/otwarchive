@@ -20,10 +20,12 @@ describe CollectionQuery do
   end
 
   describe "filtering", collection_search: true do
-    let!(:gift_exchange) { create(:gift_exchange, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
+    let!(:gift_exchange) { create(:gift_exchange, signup_open: true, signups_open_at: Time.current - 2.days, signups_close_at: Time.current + 1.week) }
     let!(:gift_exchange_collection) { create(:collection, challenge: gift_exchange, challenge_type: "GiftExchange") }
-    let!(:prompt_meme) { create(:prompt_meme, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
+    let!(:prompt_meme) { create(:prompt_meme, signup_open: true, signups_open_at: Time.current - 2.days, signups_close_at: Time.current + 1.week) }
     let!(:prompt_meme_collection) { create(:collection, challenge: prompt_meme, challenge_type: "PromptMeme") }
+    let!(:signup_past_open) { create_invalid(:prompt_meme, signup_open: true, signups_open_at: Time.current - 2.days, signups_close_at: Time.current - 1.day) }
+    let!(:signup_past_open_collection) { create(:collection, challenge: signup_past_open, challenge_type: "PromptMeme") }
 
     let!(:fandom) { create(:canonical_fandom) }
     let!(:no_signup) { create(:collection, title: "no signup", collection_preference: create(:collection_preference, closed: true, moderated: true), tags: [fandom]) }
@@ -74,6 +76,7 @@ describe CollectionQuery do
       expect(query.search_results).to include prompt_meme_collection
       expect(query.search_results).to include gift_exchange_collection
       expect(query.search_results).not_to include no_signup
+      expect(query.search_results).not_to include signup_past_open_collection
     end
 
     it "filters collections by closed filter" do
@@ -107,7 +110,7 @@ describe CollectionQuery do
 
   describe "#sort" do
     context "when no sort_direction is set" do
-      %w[title signups_close_at].each do |column|
+      %w[title.keyword signups_close_at].each do |column|
         context "when the sort column is set to #{column}" do
           it "sorts asc" do
             expect(CollectionQuery.new(sort_column: column).sort)
@@ -118,8 +121,8 @@ describe CollectionQuery do
 
       context "when the sort column is set to assignments_due_at" do
         it "sorts desc" do
-          expect(CollectionQuery.new({ sort_column: "assignments_due_at" }).sort)
-            .to eq({ "assignments_due_at" => { order: "desc" } })
+          expect(CollectionQuery.new({ sort_column: "created_at" }).sort)
+            .to eq({ "created_at" => { order: "desc" } })
         end
       end
     end
@@ -131,7 +134,7 @@ describe CollectionQuery do
             .to eq({ "created_at" => { order: sort_direction } })
         end
 
-        %w[assignments_due_at title signups_close_at].each do |column|
+        %w[created_at title.keyword signups_close_at].each do |column|
           context "when the sort column is set to #{column}" do
             it "returns #{sort_direction}" do
               expect(CollectionQuery.new(sort_column: column, sort_direction: sort_direction).sort)

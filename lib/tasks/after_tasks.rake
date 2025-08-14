@@ -586,10 +586,9 @@ namespace :After do
     total_batches = (collections.count + 999) / 1000
 
     def approved_taggables(collection)
-      collection.approved_works.visible_to_all + \
-        collection.approved_bookmarks.visible_to_all + \
-        collection.approved_bookmarks.visible_to_all.map(&:bookmarkable) + \
-        collection.children.flat_map { |subcollection| approved_taggables(subcollection) }
+      Work.visible_to_all.in_collection(collection) + \
+        Bookmark.is_public.in_collection(collection) + \
+        Bookmark.is_public.in_collection(collection).map(&:bookmarkable)
     end
 
     collections.find_in_batches.with_index do |batch, index|

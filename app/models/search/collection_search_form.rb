@@ -67,10 +67,6 @@ class CollectionSearchForm
     ].freeze
   end
 
-  def sort_values
-    sort_options.map(&:last)
-  end
-
   def default_sort_column
     "created_at"
   end

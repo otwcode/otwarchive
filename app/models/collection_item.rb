@@ -274,6 +274,7 @@ class CollectionItem < ApplicationRecord
   end
 
   # reindex collection after creation, deletion, and approval_status update
+  # (we only index approved items, which is why changes there trigger the reindex-index)
   after_commit :update_collection_index, if: :should_update_collection_index?
 
   def update_collection_index

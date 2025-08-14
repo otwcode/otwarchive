@@ -30,20 +30,17 @@ describe CollectionSearchForm, collection_search: true do
   end
 
   describe "searching" do
-    let!(:collection) { FactoryBot.create(:collection, id: 1, title: "test collection") }
+    let!(:collection) { create(:collection, id: 1, title: "test collection") }
+    let!(:collection2) { create(:collection, id: 2, title: "not returned") }
 
     before(:each) do
       run_all_indexing_jobs
     end
 
-    it "finds works that match by title" do
+    it "finds collections that match by title" do
       query = CollectionSearchForm.new(title: "test")
       expect(query.search_results).to include collection
-    end
-
-    it "finds works that match by name" do
-      query = CollectionSearchForm.new(query: collection.name)
-      expect(query.search_results).to include collection
+      expect(query.search_results).not_to include collection2
     end
   end
 
@@ -136,7 +133,7 @@ describe CollectionSearchForm, collection_search: true do
     end
 
     describe "when searching by tag" do
-      it "should only return works in that collection" do
+      it "should only return collections in that collection" do
         search = CollectionSearchForm.new(tag: tag.name)
 
         expect(search.search_results).to include collection

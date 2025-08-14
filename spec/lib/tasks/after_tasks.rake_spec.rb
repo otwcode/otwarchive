@@ -739,8 +739,8 @@ describe "rake After:add_collection_tags" do
 
     before do
       subcollection.parent = collection
-      collection.save!(validate: false)
-      bookmark.collections << collection
+      subcollection.save!(validate: false)
+      bookmark.collections << subcollection
       bookmark.collection_items.update_all(
         user_approval_status: "approved",
         collection_approval_status: "approved"
@@ -749,7 +749,7 @@ describe "rake After:add_collection_tags" do
 
     it "includes tags from the items in the subcollection" do
       subject.invoke
-      expect(collection.tags).to include(*bookmark.fandoms)
+      expect(collection.reload.tags).to include(*bookmark.fandoms)
     end
   end
 end

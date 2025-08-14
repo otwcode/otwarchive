@@ -1,6 +1,7 @@
 class CollectionPreference < ApplicationRecord
   belongs_to :collection
-  after_update :after_update, :update_collection_index
+  after_update :after_update
+  after_commit :update_collection_index, unless: :destroyed?
 
   def after_update
     if self.collection.valid? && self.valid?

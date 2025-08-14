@@ -19,10 +19,7 @@ class CollectionQuery < Query
   end
 
   def parsed_included_tags
-    @parsed_included_tags ||= parse_named_tags(
-      %i[fandom_names character_names relationship_names freeform_names
-         other_tag_names tag]
-    )
+    @parsed_included_tags ||= parse_named_tags(%i[tag])
   end
 
   # Combine the available filters
@@ -109,7 +106,7 @@ class CollectionQuery < Query
     {
       query_string: {
         query: query,
-        fields: ["title^5"],
+        fields: ["title"],
         default_operator: "AND"
       }
     }

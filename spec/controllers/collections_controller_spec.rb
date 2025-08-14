@@ -104,14 +104,9 @@ describe CollectionsController, collection_search: true do
 
     context "collections index for subcollections" do
       let!(:parent) { create(:collection) }
-      let!(:child) do
-        build(:collection, parent_name: parent.name).tap do |c|
-          c.save!(validate: false)
-        end
-      end
+      let!(:child) { create_invalid(:collection, parent_name: parent.name) }
 
       before do
-        parent.reload
         run_all_indexing_jobs
       end
 
