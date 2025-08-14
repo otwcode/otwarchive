@@ -63,10 +63,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           get :new, params: { tag_id: fandom.name }
-          it_redirects_to_with_error(new_user_session_path,
-                                     "Sorry, you don't have permission to " \
-                                     "access the page you were trying to " \
-                                     "reach. Please log in.")
+          it_redirects_to_user_login_with_error
         end
       end
     end
@@ -305,10 +302,7 @@ describe CommentsController do
 
         it "shows an error and redirects" do
           post :create, params: { tag_id: fandom.name, comment: anon_comment_attributes }
-          it_redirects_to_with_error(new_user_session_path,
-                                     "Sorry, you don't have permission to " \
-                                     "access the page you were trying to " \
-                                     "reach. Please log in.")
+          it_redirects_to_user_login_with_error
         end
       end
     end
@@ -319,7 +313,7 @@ describe CommentsController do
 
         it "redirects to the login page" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          it_redirects_to(new_user_session_path(restricted_commenting: true))
+          it_redirects_to(new_user_session_path(restricted_commenting: true, return_to: request.fullpath))
         end
       end
 
@@ -776,7 +770,7 @@ describe CommentsController do
           it "doesn't destroy comment and redirects with error" do
             delete :destroy, params: { id: comment.id }
 
-            it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+            it_redirects_to_user_login_with_error
             expect { comment.reload }.not_to raise_exception
           end
         end
@@ -894,7 +888,7 @@ describe CommentsController do
 
               it "redirects to the login page" do
                 delete :destroy, params: { id: comment.id }
-                it_redirects_to(new_user_session_path(restricted_commenting: true))
+                it_redirects_to(new_user_session_path(restricted_commenting: true, return_to: request.fullpath))
               end
             end
           end
@@ -1016,7 +1010,7 @@ describe CommentsController do
 
       it "redirects with an error" do
         get :index, params: { work_id: work }
-        it_redirects_to(new_user_session_path(restricted_commenting: true))
+        it_redirects_to(new_user_session_path(restricted_commenting: true, return_to: request.fullpath))
       end
     end
   end
