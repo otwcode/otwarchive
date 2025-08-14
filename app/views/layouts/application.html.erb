@@ -9,7 +9,7 @@
     <meta name="title" content="<%= browser_page_title(@page_title, @page_subtitle) %>">
     <% item = @user || @work || @series %>
     <% is_existing_work = item.is_a?(Work) && item.persisted? %>
-    <% description = is_existing_work && item.summary.present? ? item.summary : "An Archive of Our Own, a project of the Organization for Transformative Works" %>
+    <% description = is_existing_work && item.summary.present? ? strip_tags(item.summary) : "An Archive of Our Own, a project of the Organization for Transformative Works" %>
     <meta name="description" content="<%= description %>" />
     <meta name="distribution" content="GLOBAL" />
     <meta name="classification" content="transformative works" />

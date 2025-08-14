@@ -191,7 +191,7 @@ module WorksHelper
 
   # Returns an Open Graph description for a work.
   def og_meta_description(work)
-    return work.summary if work.summary.present?
+    return strip_tags(work.summary) if work.summary.present?
 
     description = work.fandom_string
     description << ", #{work.relationship_string}" if work.relationship_string.present?
