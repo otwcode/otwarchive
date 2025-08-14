@@ -25,17 +25,17 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="<%= request.original_url %>" />
     <% if is_existing_work %>
-      <meta property="og:title" content="<%= og_title_description(item) %>" />
-      <meta property="og:description" content="<%= og_meta_description(item) %>" />
-      <meta property="og:image" content="<%= og_image_url(item) %>" />
+      <meta property="og:title" content="<%= og_title_meta(item) %>" />
+      <meta property="og:description" content="<%= og_description_meta(item) %>" />
+      <meta property="og:image" content="<%= og_image_url_meta(item) %>" />
     <% end %>
     <% # Twitter %>
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="<%= request.original_url %>" />
     <% if is_existing_work %>
-      <meta property="twitter:title" content="<%= og_title_description(item) %>" />
-      <meta property="twitter:description" content="<%= og_meta_description(item) %>" />
-      <meta property="twitter:image" content="<%= og_image_url(item) %>" />
+      <meta property="twitter:title" content="<%= og_title_meta(item) %>" />
+      <meta property="twitter:description" content="<%= og_description_meta(item) %>" />
+      <meta property="twitter:image" content="<%= og_image_url_meta(item) %>" />
     <% end %>
 
     <%= render partial: "layouts/includes" %>

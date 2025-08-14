@@ -178,7 +178,7 @@ module WorksHelper
   #
   # Twitter/X seems to have the lowest character limit, with 70 characters listed on
   # https://developer.x.com/en/docs/x-for-websites/cards/overview/markup.
-  def og_title_description(work)
+  def og_title_meta(work)
     full_byline = "#{work.title} by #{text_byline(work, visibility: "public")}"
 
     # Avoid truncation of creator names.
@@ -190,7 +190,7 @@ module WorksHelper
   end
 
   # Returns an Open Graph description for a work.
-  def og_meta_description(work)
+  def og_description_meta(work)
     return strip_tags(work.summary) if work.summary.present?
 
     description = work.fandom_string
@@ -203,7 +203,7 @@ module WorksHelper
   #
   # Only image/jpeg, image/gif or image/png are accepted by Facebook.
   # https://developers.facebook.com/docs/sharing/webmasters/#images
-  def og_image_url(work)
+  def og_image_url_meta(work)
     tag_groups = work.tag_groups
 
     symbol_block = []
