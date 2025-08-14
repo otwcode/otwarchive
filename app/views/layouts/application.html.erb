@@ -6,7 +6,7 @@
     <meta name="keywords" content="fanfiction, transformative works, otw, fair use, archive" />
     <meta name="language" content="en-US" />
     <meta name="subject" content="fandom" />
-    <meta name="title" content="<%= browser_page_title(@page_title, @page_subtitle) %>">
+    <meta name="title" content="<%= browser_page_title(@page_title, @page_subtitle) %>" />
     <% item = @user || @work || @series %>
     <% is_existing_work = item.is_a?(Work) && item.persisted? %>
     <% description = is_existing_work && item.summary.present? ? strip_tags(item.summary) : "An Archive of Our Own, a project of the Organization for Transformative Works" %>
@@ -21,7 +21,7 @@
   	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="chrome" content="nointentdetection" />
     <title><%= browser_page_title(@page_title, @page_subtitle) %></title>
-    <% # Open Graph/Facebook %>
+    <%# Open Graph/Facebook %>
     <meta property="og:type" content="website" />
     <meta property="og:url" content="<%= request.original_url %>" />
     <% if is_existing_work %>
@@ -29,7 +29,7 @@
       <meta property="og:description" content="<%= og_description_meta(item) %>" />
       <meta property="og:image" content="<%= og_image_url_meta(item) %>" />
     <% end %>
-    <% # Twitter %>
+    <%# Twitter %>
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="<%= request.original_url %>" />
     <% if is_existing_work %>

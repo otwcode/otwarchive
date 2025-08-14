@@ -179,14 +179,12 @@ module WorksHelper
   # Twitter/X seems to have the lowest character limit, with 70 characters listed on
   # https://developer.x.com/en/docs/x-for-websites/cards/overview/markup.
   def og_title_meta(work)
-    full_byline = "#{work.title} by #{text_byline(work, visibility: "public")}"
+    full_byline = "#{work.title} by #{text_byline(work, visibility: 'public')}"
 
     # Avoid truncation of creator names.
-    if full_byline.length <= 70
-      return full_byline
-    else
-      return "#{text_byline(work, visibility: "public")}: #{work.title}"
-    end
+    return full_byline if full_byline.length <= 70
+
+    "#{text_byline(work, visibility: 'public')}: #{work.title}"
   end
 
   # Returns an Open Graph description for a work.
@@ -217,7 +215,7 @@ module WorksHelper
     symbol_block << completion_status
 
     # TODO: Add remaining images
-    "#{root_url}images/work_symbols/#{symbol_block.join("-")}.png"
+    "#{root_url}images/work_symbols/#{symbol_block.join('-')}.png"
   end
 
   # Returns true or false to determine whether the work notes module should display
@@ -298,15 +296,16 @@ module WorksHelper
   end
 
   def get_warning_type(warning_tags = [])
-    if warning_tags.blank?
-      "choosenottowarn"
-    elsif warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_NONE_TAG_NAME
+    return "choosenottowarn" if warning_tags.blank?
+
+    warning_tag_names = warning_tags.map(&:name)
+    if warning_tag_names == [ArchiveConfig.WARNING_NONE_TAG_NAME]
       # only one tag and it says "no"
       "nowarning"
-    elsif warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME
+    elsif warning_tag_names == [ArchiveConfig.WARNING_DEFAULT_TAG_NAME]
       # only one tag and it says choose not to warn
       "choosenottowarn"
-    elsif warning_tags.size == 2 && ((warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME && warning_tags.second.name == ArchiveConfig.WARNING_NONE_TAG_NAME) || (warning_tags.first.name == ArchiveConfig.WARNING_NONE_TAG_NAME && warning_tags.second.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME))
+    elsif warning_tag_names.sort == [ArchiveConfig.WARNING_DEFAULT_TAG_NAME, ArchiveConfig.WARNING_NONE_TAG_NAME]
       # two tags and they are "choose not to warn" and "no archive warnings apply" in either order
       "choosenottowarn"
     else
@@ -315,9 +314,9 @@ module WorksHelper
   end
 
   def get_category_type(category_tags)
-    if category_tags.blank?
-      "nocategory"
-    elsif category_tags.length > 1
+    return "nocategory" if category_tags.blank?
+
+    if category_tags.length > 1
       "multi"
     else
       case category_tags.first.name

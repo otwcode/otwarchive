@@ -116,7 +116,7 @@ describe WorksHelper do
   end
 
   describe "#og_description_meta" do
-    let(:work) { create(:work, summary: "This is my first fic! I'm going to show the world!", fandom_string: "Fandom,Original Work", relationship_string: "abc/def", character_string: "abc,def,xyz" ) }
+    let(:work) { create(:work, summary: "This is my first fic! I'm going to show the world!", fandom_string: "Fandom,Original Work", relationship_string: "abc/def", character_string: "abc,def,xyz") }
 
     context "work summary is present" do
       it "returns the work summary" do
