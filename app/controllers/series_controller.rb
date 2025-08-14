@@ -48,7 +48,7 @@ class SeriesController < ApplicationController
     if @series.unrevealed?
       @page_subtitle = t(".unrevealed_series")
     else
-      @page_title = get_page_title(@series.allfandoms.collect(&:name).to_sentence, @series.anonymous? ? t(".anonymous") : @series.allpseuds.collect(&:byline).to_sentence, @series.title)
+      @page_title = get_page_title(@series.allfandoms.collect(&:name).join(t("support.array.words_connector")), @series.anonymous? ? t(".anonymous") : @series.allpseuds.collect(&:byline).join(t("support.array.words_connector")), @series.title)
     end
 
     if current_user.respond_to?(:subscriptions)
