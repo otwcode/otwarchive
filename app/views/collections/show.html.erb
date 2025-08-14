@@ -2,15 +2,6 @@
 
   <%= render "collections/header", :collection => @collection %>
 
-  <% unless @collection.tag_string.blank? %>
-    <h5 class="meta heading"><%= t(".collection_tags") %></h5>
-    <ul class="meta tags commas">
-      <% @collection.tags.each do |tag| %>
-        <li><%= link_to(tag.name, link_to_tag_works(tag), class: "tag") %></li>
-      <% end %>
-    </ul>
-  <% end %>
-
   <!--main content-->
   <% # expects @works, @bookmarks %>  
   <% unless @works.blank? %>
