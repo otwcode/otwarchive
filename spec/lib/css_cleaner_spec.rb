@@ -108,7 +108,7 @@ describe CssCleaner do
         end
       end
 
-      context "when using var() function as value" do
+      context "with var() function as value" do
         it "allows simple var() functions for regular property" do
           skin = build(:skin, css: "div { color: var(--black) }")
           expect(skin.save).to be_truthy
@@ -128,9 +128,9 @@ describe CssCleaner do
         end
 
         it "downcases var() functions" do
-          skin = build(:skin, css: "div { border: var(--THICK); margin: VAR(--Thin) }")
+          skin = build(:skin, css: "div { border: var(--THICK); margin: 0 VAR(--wide) }")
           expect(skin.save).to be_truthy
-          expect(skin.css).to eq("div {\n  border: var(--thick);\n  margin: var(--thin);\n}\n\n")
+          expect(skin.css).to eq("div {\n  border: var(--thick);\n  margin: 0 var(--wide);\n}\n\n")
         end
 
         %w[var VAR].each do |function_name|
@@ -173,11 +173,13 @@ describe CssCleaner do
         expect(skin.errors[:base]).to include("Custom properties are not allowed in work skins.")
       end
 
-      context "with var() function as a value" do
+      context "with var() function as value" do
         {
-          "strips lowercase function and returns error" => "p { color: var(--puce) ; }",
-          "strips uppercase Vfunction and returns error" => ".class { width: var(--narrow) }",
-          "strips function with uppercase letters in variable and returns error" => "span { border-color:var(--SOMEcolor) }"
+          "strips var() function and returns error" => "p { color: var(--puce) ; }",
+          "strips var() function with uppercase letters in variable and returns error" => "span { border-color:var(--SOMEcolor) }",
+          "strips var() function in shorthand value and returns error" => "#id { border: var(--border-width) var(--Border-Style) #000; }",
+          "strips VAR() function and returns error" => ".class { width: VAR(--narrow) }",
+          "strips VAR() function in shorthand value and returns error" => "p:not(.class) { border: VAR(--border-width) VAR(--Border-Style) #000; }"
         }.each_pair do |description, css|
           it description do
             skin = build(:work_skin, css: css)
