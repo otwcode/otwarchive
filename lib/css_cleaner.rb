@@ -131,11 +131,11 @@ module CssCleaner
     clean = ""
     if property == "font-family"
       # preserve the original capitalization
-      clean = value if !sanitize_css_font(value).blank?
+      clean = value if sanitize_css_font(value).present?
     elsif property == "content"
       # don't allow var() function
       clean = value.match(/\bvar\b/i) ? "" : sanitize_css_content(value)
-    elsif value.match(/\burl\b/i) && (!ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?("url") || !%w(background background-image border border-image list-style list-style-image).include?(property))
+    elsif value.match(/\burl\b/i) && (ArchiveConfig.SUPPORTED_CSS_KEYWORDS.exclude?("url") || %w[background background-image border border-image list-style list-style-image].exclude?(property))
       # check whether we can use urls in this property
       clean = ""
     elsif legal_shorthand_property?(property) || custom_property?(property)
@@ -194,15 +194,15 @@ module CssCleaner
   end
 
   def sanitize_css_token(token)
-    cleantoken = ""
-    if token.match(/gradient/)
-      cleantoken = sanitize_css_gradient(token)
-    elsif token.match(/\bvar\b/i)
-      cleantoken = sanitize_css_value(token).downcase
+    case token
+    when /gradient/
+      sanitize_css_gradient(token)
+    when /\bvar\b/i
+      # CSSParser downcases property names, so we need to downcase any custom properties used in var()
+      sanitize_css_value(token).downcase
     else
-      cleantoken = sanitize_css_value(token)
+      sanitize_css_value(token)
     end
-    return cleantoken
   end
 
   # sanitize a CSS gradient

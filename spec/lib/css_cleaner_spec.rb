@@ -37,7 +37,7 @@ describe CssCleaner do
           expect(skin.reload.css).to eq(":root {\n  --rainbow: #fff;\n}\n\n")
         end
 
-        ["url", "URL"].each do |function_name|
+        %w[url URL].each do |function_name|
           it "strips custom property and returns error when value uses #{function_name}() function" do
             skin = build(:skin, css: ":root { --art: #{function_name}(\"https://example.com/img.png\"); }")
             expect(skin.save).to be_falsey
@@ -133,7 +133,7 @@ describe CssCleaner do
           expect(skin.css).to eq("div {\n  border: var(--thick);\n  margin: var(--thin);\n}\n\n")
         end
 
-        ["var", "VAR"].each do |function_name|
+        %w[var VAR].each do |function_name|
           it "strips #{function_name}() function from content property and returns error" do
             skin = build(:skin, css: "p:before { content: #{function_name}(--text) }")
             expect(skin.save).to be_falsey
