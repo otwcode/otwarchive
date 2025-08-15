@@ -187,6 +187,9 @@ describe Tag do
 
         context "with asynchronous jobs run asynchronously" do
           include ActiveJob::TestHelper
+          def queue_adapter_for_test
+            ActiveJob::QueueAdapters::TestAdapter.new
+          end
 
           it "transfers the subtags to the new parent autocomplete" do
             child = create(:canonical_character)
@@ -535,6 +538,9 @@ describe Tag do
     # Disable immediate job processing. Jobs will only be processed when we
     # call "perform_enqueued_jobs", which simulates a delay in the queue.
     include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
 
     # https://otwarchive.atlassian.net/browse/AO3-4077
     it "deletes the inherited metatag when both direct ones are removed" do

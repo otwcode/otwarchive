@@ -2,11 +2,11 @@ class AdminPost < ApplicationRecord
   self.per_page = 8 # option for WillPaginate
 
   acts_as_commentable
-  enum comment_permissions: {
+  enum :comment_permissions, {
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, _default: :disable_anon, _suffix: :comments
+  }, default: :disable_anon, suffix: :comments
 
   belongs_to :language
   belongs_to :translated_post, class_name: "AdminPost"
