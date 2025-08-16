@@ -296,3 +296,19 @@ Feature: Reading count
       And the readings are saved to the database
     When I go to ethel's reading page
     Then I should see an HTML comment containing the number 1744477200 within "li.work.blurb"
+  
+  Scenario: History page contains the correct heading text
+
+    When I am logged in as "fandomer"
+      And I go to fandomer's reading page
+    Then I should see "History" within "h2.heading"
+  
+  Scenario: Marked for Later page contains the correct heading text
+
+    Given the work "Testy" by "writer"
+    When I am logged in as "fandomer"
+      And I view the work "Testy"
+      And I follow "Mark for Later"
+      And I go to fandomer's reading page
+      And I follow "Marked for Later"
+    Then I should see "Marked for Later" within "h2.heading"
