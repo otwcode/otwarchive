@@ -39,7 +39,7 @@
   </fieldset>
 <% end %>
 
-<% if policy(:admin_invitation).grant_invites_to_users? %>
+<% if policy(Invitation).grant_invites_to_users? %>
   <%= form_tag url_for(controller: "admin/admin_invitations", action: :grant_invites_to_users), class: "bulk invitation simple post", autocomplete: "off" do %>
     <fieldset>
       <h3 class="heading"><%= t(".grant_invites.heading") %></h3>
