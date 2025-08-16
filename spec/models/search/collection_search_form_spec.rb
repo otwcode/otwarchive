@@ -125,17 +125,39 @@ describe CollectionSearchForm, collection_search: true do
 
   describe "filter by tag" do
     let!(:collection) { create(:collection) }
-    let(:tag) { create(:freeform, canonical: true) }
+    let(:tag) { create(:canonical_freeform) }
 
     before do
       collection.tags.push(tag)
       run_all_indexing_jobs
     end
 
-    describe "when searching by tag" do
-      it "should only return collections in that collection" do
-        search = CollectionSearchForm.new(tag: tag.name)
+    it "should only return collections in that collection" do
+      search = CollectionSearchForm.new(tag: tag.name)
+      expect(search.search_results).to include collection
+    end
 
+    context "when filtering by the canonical synonym of the tag" do
+      let(:synonym) { create(:canonical_freeform) }
+      let(:tag) { create(:freeform, merger: synonym) }
+
+      it "returns collections with original tag" do
+        search = CollectionSearchForm.new(tag: synonym.name)
+        expect(search.search_results).to include collection
+      end
+    end
+
+    context "when filtering by the meta tag of the tag" do
+      let(:meta_tag) { create(:canonical_freeform) }
+      let(:tag) { create(:canonical_freeform) }
+
+      before do
+        create(:meta_tagging, meta_tag: meta_tag, sub_tag: tag)
+        run_all_indexing_jobs
+      end
+
+      it "returns collections with child tag" do
+        search = CollectionSearchForm.new(tag: meta_tag.name)
         expect(search.search_results).to include collection
       end
     end

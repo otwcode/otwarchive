@@ -11,12 +11,12 @@ describe CollectionQuery do
 
   it "sorts by created_at by default" do
     q = CollectionQuery.new
-    expect(q.generated_query[:sort]).to eq({ "created_at" => { order: "desc" } })
+    expect(q.generated_query[:sort]).to eq([{ "created_at" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
 
   it "sorts by title" do
     q = CollectionQuery.new(sort_column: "title.keyword", sort_direction: "desc")
-    expect(q.generated_query[:sort]).to eq({ "title.keyword" => { order: "desc" } })
+    expect(q.generated_query[:sort]).to eq([{ "title.keyword" => { order: "desc" } }, { "id" => { order: "desc" } }])
   end
 
   describe "filtering", collection_search: true do
@@ -114,7 +114,7 @@ describe CollectionQuery do
         context "when the sort column is set to #{column}" do
           it "sorts asc" do
             expect(CollectionQuery.new(sort_column: column).sort)
-              .to eq({ column => { order: "asc" } })
+              .to eq([{ column => { order: "asc" } }, { "id" => { order: "asc" } }])
           end
         end
       end
@@ -122,7 +122,7 @@ describe CollectionQuery do
       context "when the sort column is set to assignments_due_at" do
         it "sorts desc" do
           expect(CollectionQuery.new({ sort_column: "created_at" }).sort)
-            .to eq({ "created_at" => { order: "desc" } })
+            .to eq([{ "created_at" => { order: "desc" } }, { "id" => { order: "desc" } }])
         end
       end
     end
@@ -131,14 +131,14 @@ describe CollectionQuery do
       context "when sort_direction is set to #{sort_direction}" do
         it "sorts #{sort_direction}" do
           expect(CollectionQuery.new(sort_direction: sort_direction).sort)
-            .to eq({ "created_at" => { order: sort_direction } })
+            .to eq([{ "created_at" => { order: sort_direction } }, { "id" => { order: sort_direction } }])
         end
 
         %w[created_at title.keyword signups_close_at].each do |column|
           context "when the sort column is set to #{column}" do
             it "returns #{sort_direction}" do
               expect(CollectionQuery.new(sort_column: column, sort_direction: sort_direction).sort)
-                .to eq({ column => { order: sort_direction } })
+                .to eq([{ column => { order: sort_direction } }, { "id" => { order: sort_direction } }])
             end
           end
         end

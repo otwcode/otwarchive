@@ -127,6 +127,6 @@ class CollectionQuery < Query
                   else
                     "desc"
                   end
-    { sort_column => { order: direction } }
+    [{ sort_column => { order: direction } }, { "id" => { order: direction } }]
   end
 end

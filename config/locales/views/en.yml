@@ -615,8 +615,6 @@ en:
         collections_in_the: Collections in the %{archive}
         collections_including: Collections including %{work}
         users_collections: "%{user}'s Collections"
-    show:
-      collection_tags: 'Collection Tags:'
     sidebar:
       bookmarks: Bookmarked Items (%{count})
       challenge_settings: Challenge Settings
