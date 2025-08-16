@@ -78,6 +78,19 @@ module ChallengeCore
     true
   end
 
+  def should_update_collection_index?
+    return true if destroyed?
+
+    pertinent_attributes = %w[signup_open signups_open_at signups_close_at assignments_due_at works_reveal_at authors_reveal_at]
+    (self.saved_changes.keys & pertinent_attributes).present?
+  end
+
+  def update_collection_index
+    return if self.collection.blank?
+
+    IndexQueue.enqueue_id(Collection, collection.id, :main)
+  end
+
   module ClassMethods
     # override datetime setters so we can take strings
     def override_datetime_setters
@@ -96,6 +109,9 @@ module ChallengeCore
   end
   
   def self.included(base)
+    base.class_eval do
+      after_commit :update_collection_index, if: :should_update_collection_index?
+    end
     base.extend(ClassMethods)
   end
   

@@ -142,11 +142,10 @@ class Series < ApplicationRecord
 
   # Visibility has changed, which means we need to reindex
   # the series' bookmarker pseuds, to update their bookmark counts.
-  def should_reindex_pseuds?
+  def should_update_pseud_and_collection_indexes?
     pertinent_attributes = %w[id restricted hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
-
   def expire_caches
     self.works.touch_all
   end
