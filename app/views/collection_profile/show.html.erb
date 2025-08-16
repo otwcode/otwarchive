@@ -19,7 +19,7 @@
         <dd>
           <ul class="tags commas">
             <% @collection.tags.each do |tag| %>
-              <li><%= link_to(tag.name, link_to_tag_works(tag), class: "tag") %></li>
+              <li><%= link_to_tag_works(tag) %></li>
             <% end %>
           </ul>
         </dd>

@@ -134,7 +134,7 @@ Feature: Collection
     And I should not see "Surprise Presents"
     And I should not see "On Demand"
 
-  Scenario: Filter collections index by collection tags
+  Scenario: Filter collections by non-canonical and non-existent collection tags
 
   Given a set of collections for searching
   When I go to the collections page
@@ -146,12 +146,20 @@ Feature: Collection
     And I should not see "Surprise Presents"
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
-  When I fill in "collection_search_tag" with "The Best Tag,Another Tag"
+  When I fill in "collection_search_tag" with "The Best Tag,The Better Tag"
     And I press "Sort and Filter"
   Then I should see "Some Test Collection"
     But I should not see "Some Other Collection"
     And I should not see "Another Plain Collection"
     And I should not see "Surprise Presents"
+    And I should not see "Another Gift Swap"
+    And I should not see "On Demand"
+  When I fill in "collection_search_tag" with "The Tag"
+    And I press "Sort and Filter"
+  Then I should see "Some Test Collection"
+    And I should see "Some Other Collection"
+    And I should see "Another Plain Collection"
+    But I should not see "Surprise Presents"
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
 
@@ -209,7 +217,7 @@ Feature: Collection
     And I post the work "Public 2" in the collection "Item Counts"
     And I bookmark the work "Public 2" to the collection "Item Counts"
     And the collection "Sub Count" is deleted
-    And the collection counts have expired
+    And all indexing jobs have been run
     And I go to the collections page
   Then I should see the text with tags '<a href="/collections/Item_Counts/works">4</a>'
     And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">3</a>'
@@ -219,3 +227,24 @@ Feature: Collection
     Then I should see the text with tags '<a href="/collections/Item_Counts/works">2</a>'
     And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">2</a>'
     And I should not see "Challenges/Subcollections:" within ".stats"
+
+  Scenario: Collection tags are shown, but only for the top-level collection
+
+  Given a set of collections for searching
+  When I am logged in as the owner of "Some Test Collection"
+    And I set up the collection "Subcollection"
+    And I fill in "collection_parent_name" with "sometest"
+    And I fill in "collection_tag_string" with "Subcollection Only"
+    And I press "Submit"
+    And all indexing jobs have been run
+    And I go to the collections page
+    And I fill in "collection_search_title" with "Some Test Collection"
+    And I press "Sort and Filter"
+  Then I should see "The Best Tag" within ".tags"
+    And I should see "The Better Tag" within ".tags"
+    But I should not see "Subcollection Only"
+  When I follow "Some Test Collection"
+    And I follow "Profile"
+  Then I should see "The Best Tag" within ".tags"
+    And I should see "The Better Tag" within ".tags"
+    But I should not see "Subcollection Only"

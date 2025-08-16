@@ -129,7 +129,7 @@ Given "a set of collections for searching" do
   FactoryBot.create(:collection,
                     name: "sometest",
                     title: "Some Test Collection",
-                    tag_string: "The Best Tag, Another Tag",
+                    tag_string: "The Best Tag, The Better Tag",
                     collection_profile: profile)
   FactoryBot.create(:collection,
                     name: "othertest",
@@ -138,7 +138,7 @@ Given "a set of collections for searching" do
   FactoryBot.create(:collection,
                     :closed,
                     name: "anothertest",
-                    tag_string: "Another Tag",
+                    tag_string: "The Better Tag",
                     title: "Another Plain Collection")
   FactoryBot.create(:collection,
                     :moderated,
