@@ -557,7 +557,7 @@ module ApplicationHelper
     # series.
     return [] if creation.is_a?(Work) && creation.unrevealed?
 
-    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
+    creation.pseuds.pluck(:user_id).uniq.map { |id| "user-#{id}" }
   end
 
   def css_classes_for_creation_blurb(creation)

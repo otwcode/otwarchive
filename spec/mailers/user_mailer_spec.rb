@@ -1038,15 +1038,35 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("potential assignments for your challenge collection, <")
-        expect(email).to have_html_part_content("challenge's <")
+        expect(email).to have_html_part_content("potential assignments for your gift exchange <")
+        expect(email).to have_html_part_content("on its <")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("potential assignments for your challenge collection \"#{collection.title}\"")
-        expect(email).to have_text_part_content("challenge's Matching page:")
+        expect(email).to have_text_part_content("potential assignments for your gift exchange \"#{collection.title}\"")
+        expect(email).to have_text_part_content("on its Matching page:")
+      end
+    end
+  end
+
+  describe "potential_match_generation_notification_collection_email" do
+    subject(:email) { UserMailer.potential_match_generation_notification(collection.id, collection.collection_email) }
+
+    let(:collection) { create(:collection) }
+
+    it_behaves_like "an email with a valid sender"
+
+    describe "HTML version" do
+      it "has the correct footer content" do
+        expect(email).to have_html_part_content("your email address has been listed as the collection email")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct footer content" do
+        expect(email).to have_text_part_content("your email address has been listed as the collection email")
       end
     end
   end

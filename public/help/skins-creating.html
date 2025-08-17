@@ -20,14 +20,14 @@
   <dd>
     <p>
       <code>
-        -replace, -use-link-source, accelerator, align-content, align-items,
-        align-self, alignment-adjust, alignment-baseline, appearance, azimuth,
-        baseline-shift, behavior, binding, bookmark-label, bookmark-level,
-        bookmark-target, bottom, box-align, box-direction, box-flex,
-        box-flex-group, box-lines, box-orient, box-pack, box-shadow, box-sizing,
-        caption-side, clear, clip, color, color-profile, color-scheme, content,
-        counter-increment, counter-reset, crop, cue, cue-after, cue-before,
-        cursor, direction, display, dominant-baseline,
+        -replace, -use-link-source, accelerator, accent-color, align-content,
+        align-items, align-self, alignment-adjust, alignment-baseline,
+        appearance, azimuth, baseline-shift, behavior, binding, bookmark-label,
+        bookmark-level, bookmark-target, bottom, box-align, box-direction,
+        box-flex, box-flex-group, box-lines, box-orient, box-pack, box-shadow,
+        box-sizing, caption-side, clear, clip, color, color-profile,
+        color-scheme, content, counter-increment, counter-reset, crop, cue,
+        cue-after, cue-before, cursor, direction, display, dominant-baseline,
         drop-initial-after-adjust, drop-initial-after-align,
         drop-initial-before-adjust, drop-initial-before-align,
         drop-initial-size, drop-initial-value, elevation, empty-cells, filter,
@@ -52,7 +52,7 @@
         speak-numeral, speak-punctuation, speech-rate, stress, string-set,
         tab-side, table-layout, target, target-name, target-new,
         target-position, top, unicode-bibi, unicode-bidi, user-select,
-        vertical-align, visibility, voice-balance, voice-duration, oice-family,
+        vertical-align, visibility, voice-balance, voice-duration, voice-family,
         voice-pitch, voice-pitch-range, voice-rate, voice-stress, voice-volume,
         volume, white-space, white-space-collapse, widows, width, word-break,
         word-spacing, word-wrap, writing-mode, z-index
@@ -106,6 +106,19 @@
       We <strong>cannot</strong> allow the <code>@font-face</code> attribute. Sorry! If you have an uncommon font that you want to
       use in a skin you would like to share, we suggest adding a comment in the skin's "Description" field with a pointer to a place for users
       to download the font themselves, and using web-safe fonts as fallbacks.
+    </p>
+  </dd>
+
+  <dt>Custom Properties (Variables)</dt>
+  <dd>
+    <p>
+      Custom property names can contain any combination of lowercase letters (a-z) in the English alphabet, numerals zero to nine (0-9), dashes (-), and underscores (_). They can't contain single (') or double (") quotation marks, or URLs. Any uppercase letters (A-Z) will be converted to lowercase.
+    </p>
+    <p>
+      All properties except <code>font-family</code> and <code>content</code> accept the <code>var()</code> function as a value. We don't allow fallbacks.
+    </p>
+    <p>
+      Custom properties and the <code>var()</code> function are only available for site skins, and won't work on work skins.
     </p>
   </dd>
 

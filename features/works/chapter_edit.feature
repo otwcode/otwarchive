@@ -255,8 +255,9 @@ Feature: Edit chapters
 
   Scenario: Posting a new chapter without previewing should set the work's updated date to now
 
-    Given I have loaded the fixtures
-      And I am logged in as "testuser" with password "testuser"
+    Given the work "First work" by "testuser"
+      And it is currently 2 days from now
+      And I am logged in as "testuser"
     When I view the work "First work"
     Then I should not see Updated today
     When I follow "Add Chapter"

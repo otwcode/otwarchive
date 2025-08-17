@@ -81,6 +81,11 @@ class UsersController < ApplicationController
       render(:change_username) && return
     end
 
+    if @new_login == @user.login
+      flash.now[:error] = t(".new_username_must_be_different") 
+      render :change_username and return
+    end
+
     old_login = @user.login
     @user.login = @new_login
     @user.ticket_number = params[:ticket_number]
@@ -407,8 +412,7 @@ class UsersController < ApplicationController
 
   def profile_params
     params.require(:profile_attributes).permit(
-      :title, :location, :"date_of_birth(1i)", :"date_of_birth(2i)",
-      :"date_of_birth(3i)", :date_of_birth, :about_me, :ticket_number
+      :title, :about_me, :ticket_number
     )
   end
 end
