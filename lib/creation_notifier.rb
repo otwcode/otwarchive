@@ -90,7 +90,7 @@ module CreationNotifier
       user = claim.request_signup.pseud.user
 
       I18n.with_locale(user.preference.locale_for_mails) do
-        UserMailer.prompter_notification(user.id, self.id, self.collections&.first.id).deliver_after_commit
+        UserMailer.prompter_notification(user.id, self.id, self.collections&.first&.id).deliver_after_commit
       end
     end
   end
