@@ -128,9 +128,9 @@ describe CssCleaner do
         end
 
         it "downcases var() functions" do
-          skin = build(:skin, css: "div { border: var(--THICK); margin: 0 VAR(--wide) }")
+          skin = build(:skin, css: "div { border: var(--THICK); margin: 0 VAR(--wide); display: var(--RANDOMThing) }")
           expect(skin.save).to be_truthy
-          expect(skin.css).to eq("div {\n  border: var(--thick);\n  margin: 0 var(--wide);\n}\n\n")
+          expect(skin.css).to eq("div {\n  border: var(--thick);\n  margin: 0 var(--wide);\n  display: var(--randomthing);\n}\n\n")
         end
 
         %w[var VAR].each do |function_name|
