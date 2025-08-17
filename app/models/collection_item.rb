@@ -234,10 +234,9 @@ class CollectionItem < ApplicationRecord
       if item_type == "Work" && !item.challenge_claims.blank?
         self.item.challenge_claims.each do |claim|
           user = claim.request_signup.pseud.user
-          user_id = user.id
 
           I18n.with_locale(user.preference.locale_for_mails) do
-            UserMailer.prompter_notification(user_id, self.item.id, self.collection.id).deliver_after_commit
+            UserMailer.prompter_notification(user.id, self.item.id, self.collection.id).deliver_after_commit
           end
         end
       end
