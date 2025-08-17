@@ -1196,14 +1196,14 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
-          expect(email).to have_html_part_content("posted at the Archive")
+          expect(email).to have_html_part_content("posted on the Archive")
           expect(email).not_to have_html_part_content("collection")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email).to have_text_part_content("posted at the Archive")
+          expect(email).to have_text_part_content("posted on the Archive")
           expect(email).not_to have_text_part_content("collection")
         end
       end

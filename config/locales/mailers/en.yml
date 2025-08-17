@@ -497,7 +497,7 @@ en:
         collection:
           html: A response to your prompt has been posted in the %{collection_link} collection on the Archive of Our Own!
           text: A response to your prompt has been posted in the "%{collection_title}" collection (%{collection_url}) on the Archive of Our Own!
-        text: A response to your prompt has been posted at the Archive of Our Own!
+        text: A response to your prompt has been posted on the Archive of Our Own!
       byline:
         html: by %{work_creator_links}
         text: by %{work_creators}
