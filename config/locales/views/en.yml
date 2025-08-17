@@ -2028,7 +2028,9 @@ en:
   readings:
     index:
       history: History
+      history_landmark: List of History Items
       marked_for_later: Marked for Later
+      marked_for_later_landmark: List of Marked for Later Items
   related_works:
     index:
       page_heading: "%{login}'s Related Works"

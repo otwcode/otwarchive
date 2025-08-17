@@ -1,5 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= @page_subtitle %></h2>
+<h2 class="heading">
+  <% if params[:show] == "to-read" %>
+    <%= t(".marked_for_later") %>
+  <% else %>
+    <%= t(".history") %>
+  <% end %>
+</h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -19,7 +25,13 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark heading"><%= ts('List of History Items') %></h3>
+<h3 class="landmark heading">
+  <% if params[:show] == "to-read" %>
+    <%= t(".marked_for_later_landmark") %>
+  <% else %>
+    <%= t(".history_landmark") %>
+  <% end %>
+</h3>
 <% if logged_in? && @readings.present? %>
   <ol class="reading work index group">
     <% @readings.each do |reading| %>

@@ -297,13 +297,14 @@ Feature: Reading count
     When I go to ethel's reading page
     Then I should see an HTML comment containing the number 1744477200 within "li.work.blurb"
   
-  Scenario: History page contains the correct heading text
+  Scenario: History page contains the correct heading text and page title
 
     When I am logged in as "fandomer"
       And I go to fandomer's reading page
     Then I should see "History" within "h2.heading"
+    And I should see the page title "fandomer - History | Example Archive"
   
-  Scenario: Marked for Later page contains the correct heading text
+  Scenario: Marked for Later page contains the correct heading text and page title
 
     Given the work "Testy" by "writer"
     When I am logged in as "fandomer"
@@ -312,3 +313,4 @@ Feature: Reading count
       And I go to fandomer's reading page
       And I follow "Marked for Later"
     Then I should see "Marked for Later" within "h2.heading"
+    And I should see the page title "fandomer - Marked for Later | Example Archive"
