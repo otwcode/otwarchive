@@ -4,7 +4,7 @@
       <%= t(".a_response_to_your_prompt.collection.html",
             collection_link: style_link(@collection.title, collection_url(@collection))) %>
     <% else %>
-      <%= t(".a_response_to_your_prompt.text") %>
+      <%= t(".a_response_to_your_prompt.no_collection") %>
     <% end %>
   </p>
 
@@ -15,7 +15,7 @@
     <%= t(".byline.html", work_creator_links: creator_links(@work)) %>
     <br>
     <% if @work.fandom_string.present? %>
-      <%= style_work_tag_metadata(@work.tag_groups["Fandom"]) %>
+      <%= style_work_tag_metadata(@work.fandoms) %>
     <% end %>
   </p>
 

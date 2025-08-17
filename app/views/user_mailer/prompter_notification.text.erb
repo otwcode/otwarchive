@@ -4,7 +4,7 @@
         collection_title: @collection.title,
         collection_url: collection_url(@collection)) %>
 <% else %>
-<%= t(".a_response_to_your_prompt.text") %>
+<%= t(".a_response_to_your_prompt.no_collection") %>
 <% end %>
 
 <%= creation_title_with_word_count(@work) %>
@@ -12,7 +12,7 @@
 
 <%= t(".byline.text", work_creators: creator_text(@work)) %>
 
-<% if @work.fandom_string.present? %><%= work_tag_metadata(@work.tag_groups["Fandom"]) %><% end %>
+<% if @work.fandom_string.present? %><%= work_tag_metadata(@work.fandoms) %><% end %>
 
 <% if @work.summary.present? %><%= metadata_label(Work.human_attribute_name("summary")) %>
 <%= to_plain_text(raw sanitize_field(@work, :summary)) %><% end %>

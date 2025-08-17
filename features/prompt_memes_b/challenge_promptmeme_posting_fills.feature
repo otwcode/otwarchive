@@ -77,6 +77,7 @@ Feature: Prompt Meme Challenge
   When all emails have been delivered
     And I press "Post"
   Then 1 email should be delivered to "my1@e.org"
+    And the email should have "A response to your prompt" in the subject
     And the email to "myname1" should be translated
 
   Scenario: Fulfilling a claim ticks the right boxes automatically
