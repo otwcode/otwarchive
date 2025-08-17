@@ -119,9 +119,12 @@
         </p>
       </dd>
 
-      <dt><%= collection_form.check_box :multifandom %></dt>
+      <dt><%= collection_form.check_box :multifandom, "aria-describedby" => "multifandom-field-description" %></dt>
       <dd>
-        <%= collection_form.label :multifandom, ts("Use this if your collection is not fandom-specific.") %>
+        <%= collection_form.label :multifandom, t(".multifandom.label") %>
+        <p class="footnote" id="multifandom-field-description">
+          <%= t(".multifandom.footnote") %>
+        </p>
       </dd>
     </dl>
   </fieldset>

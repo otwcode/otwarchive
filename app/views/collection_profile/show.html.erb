@@ -13,7 +13,7 @@
   <div class="wrapper">
     <dl class="meta group">
       <dt><%= ts('Active since:') %>
-      <dd><%= l(@collection.created_at.to_date) %>
+      <dd><%= l(@collection.created_at.to_date) %></dd>
       <% unless @collection.tag_string.blank? %>
         <dt><%= t(".meta.collection_tags") %></dt>
         <dd>
@@ -24,10 +24,10 @@
           </ul>
         </dd>
       <% end %>
-      <dt><%= ts('Maintainers:') %></dt>
-      <dd>
-        <ul class="mods commas">
-          <%= (@collection.all_owners + @collection.all_moderators).map {|owner| content_tag(:li, link_to(owner.byline, owner.user))}.join("\n").html_safe %>
+      <dt class="maintainers"><%= ts('Maintainers:') %></dt>
+      <dd class="maintainers">
+        <ul class="commas">
+          <%= (@collection.all_owners + @collection.all_moderators).map { |maintainer| content_tag(:li, link_to(maintainer.byline, maintainer.user), class: @collection.user_is_owner?(maintainer.user) ? "owner" : "mod")}.join("\n").html_safe %>
         </ul>
       </dd>
       <% unless @collection.email.blank? %>
