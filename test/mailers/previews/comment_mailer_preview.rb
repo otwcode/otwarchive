@@ -123,7 +123,7 @@ class CommentMailerPreview < ApplicationMailerPreview
   def edited_comment_notification
     user = create(:user)
 
-    comment = create(:comment)
+    comment = create(:comment, edited_at: Time.current)
     CommentMailer.edited_comment_notification(user, comment)
   end
 
@@ -131,7 +131,7 @@ class CommentMailerPreview < ApplicationMailerPreview
   def edited_comment_notification_unreviewed
     user = create(:user)
 
-    comment = create(:comment, :unreviewed)
+    comment = create(:comment, :unreviewed, edited_at: Time.current)
     CommentMailer.edited_comment_notification(user, comment)
   end
 
@@ -156,7 +156,7 @@ class CommentMailerPreview < ApplicationMailerPreview
   def admin_edited_comment_notification
     admin = create(:admin)
 
-    comment = create(:comment, :on_admin_post)
+    comment = create(:comment, :on_admin_post, edited_at: Time.current)
     CommentMailer.edited_comment_notification(admin, comment)
   end
 
@@ -165,7 +165,7 @@ class CommentMailerPreview < ApplicationMailerPreview
     admin = create(:admin)
 
     commentable = create(:admin_post, moderated_commenting_enabled: true)
-    comment = create(:comment, commentable: commentable, unreviewed: true)
+    comment = create(:comment, commentable: commentable, edited_at: Time.current, unreviewed: true)
     CommentMailer.edited_comment_notification(admin, comment)
   end
 end
