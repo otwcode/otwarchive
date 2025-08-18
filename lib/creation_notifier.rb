@@ -86,8 +86,9 @@ module CreationNotifier
   def notify_prompters
     return if self.challenge_claims.empty? || self.unrevealed?
 
-    users = self.challenge_claims.map { |claim| claim.request_signup.pseud.user }.uniq
-    users do |user|
+    users = self.challenge_claims.map { |claim| claim.request_signup.pseud.user }
+                .uniq
+    users.each do |user|
       I18n.with_locale(user.preference.locale_for_mails) do
         UserMailer.prompter_notification(user.id, self.id, self.collections.first&.id).deliver_after_commit
       end
