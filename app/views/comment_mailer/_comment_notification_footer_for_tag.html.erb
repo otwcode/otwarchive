@@ -1,14 +1,14 @@
 <%= style_link(t(".read_all_comments.html", tag: @comment.ultimate_parent.commentable_name),
                tag_comments_url(@comment.ultimate_parent)) %>
-<br />
+<br>
 
 <% unless @noreply %>
   <%= style_link(t(".reply.html"), comment_url(@comment, add_comment_reply_id: @comment.id)) %>
-  <br />
+  <br>
 <% end %>
 
 <%= style_link(t(".comment_thread.html"), comment_url(@comment)) %>
-<br />
+<br>
 
 <% unless @comment.id == @comment.thread %>
   <%= style_link(t(".parent_thread.html"), comment_url(@comment.thread)) %>

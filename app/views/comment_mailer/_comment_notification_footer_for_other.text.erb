@@ -1,11 +1,10 @@
-
 <% if @comment.unreviewed? %>
   <% if @owner && @comment.ultimate_parent.is_a?(Work) %>
-<%= t(".unreviewed.work_owner")%>
+<%= t(".unreviewed.work_owner") %>
   <% elsif @comment.ultimate_parent.is_a?(AdminPost) %>
-<%= t(".unreviewed.admin_post")%>
+<%= t(".unreviewed.admin_post") %>
   <% else %>
-<%= t(".unreviewed.work")%>
+<%= t(".unreviewed.work") %>
   <% end %>
 
 <% end %>
@@ -19,10 +18,10 @@
 <% unless @comment.id == @comment.thread %>
 <%= t(".parent_thread.text", url: comment_url(:id => @comment.thread)) %>
 <% end %>
-<% if @comment.parent.kind_of?(Chapter) && @comment.parent.work.chaptered? -%>
+<% if @comment.parent.kind_of?(Chapter) && @comment.parent.work.chaptered? %>
 <%= t(".read_all.chapter.text", position: @comment.parent.position, title: @comment.ultimate_parent.commentable_name,
       url: work_chapter_url(@comment.parent.work, @comment.parent, show_comments: true, anchor: :comments)) %>
-<%- else -%>
+<% else %>
 <%= t(".read_all.other.text", title: @comment.ultimate_parent.commentable_name,
       url: polymorphic_url(@comment.ultimate_parent, view_full_work: true, show_comments: true, anchor: :comments)) %>
-<%- end %>
+<% end %>

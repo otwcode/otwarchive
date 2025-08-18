@@ -1,7 +1,7 @@
 <p>
   <%= t(".posted", datetime: @comment.created_at) %>
   <% unless @comment.edited_at.blank? %>
-    <br /><%= t(".last_edited", datetime: @comment.edited_at) %>
+    <br><%= t(".last_edited", datetime: @comment.edited_at) %>
   <% end %>
 </p>
 
