@@ -406,6 +406,8 @@ class UsersController < ApplicationController
     end
   end
 
+  private
+
   def profile_params
     params.require(:profile_attributes).permit(
       :title, :about_me, :ticket_number

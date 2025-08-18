@@ -68,7 +68,7 @@ describe PreferencesController do
     end
   end
 
-  describe "PUT #update" do
+  describe "POST #update" do
     context "as regular user" do
       before { fake_login_known_user(user) }
 

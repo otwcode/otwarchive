@@ -384,7 +384,7 @@ describe UsersController do
     end
   end
 
-  describe "PATCH #update" do
+  describe "POST #update" do
     let(:user) { create(:user) }
 
     context "as admin" do
