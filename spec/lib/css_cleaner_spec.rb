@@ -5,7 +5,7 @@ describe CssCleaner do
 
   describe ".clean_css_code" do
     context "when cleaning Skin CSS" do
-      context "when defining custom property" do
+      context "with custom property declaration" do
         it "allows custom property name with lowercase letters" do
           skin = build(:skin, css: ":root { --white: #fff; }")
           expect(skin.save).to be_truthy
@@ -108,29 +108,17 @@ describe CssCleaner do
         end
       end
 
-      context "with var() function as value" do
-        it "allows simple var() functions for regular property" do
+      context "with var() function" do
+        it "allows simple var() function" do
           skin = build(:skin, css: "div { color: var(--black) }")
           expect(skin.save).to be_truthy
           expect(skin.css).to eq("div {\n  color: var(--black);\n}\n\n")
         end
 
-        it "allows simple var() functions for shorthand property" do
-          skin = build(:skin, css: "div { font: var(--black) }")
+        it "downcases var() function" do
+          skin = build(:skin, css: "div { color: VAR(--PURPLE); display: var(--RANDOMThing); height: var(--SHORT); }")
           expect(skin.save).to be_truthy
-          expect(skin.css).to eq("div {\n  font: var(--black);\n}\n\n")
-        end
-
-        it "allows multiple simple var() functions for shorthand property" do
-          skin = build(:skin, css: "blockquote { border: var(--border-width) var(--Border-Style) var(--color) }")
-          expect(skin.save).to be_truthy
-          expect(skin.css).to eq("blockquote {\n  border: var(--border-width) var(--border-style) var(--color);\n}\n\n")
-        end
-
-        it "downcases var() functions" do
-          skin = build(:skin, css: "div { border: var(--THICK); margin: 0 VAR(--wide); display: var(--RANDOMThing) }")
-          expect(skin.save).to be_truthy
-          expect(skin.css).to eq("div {\n  border: var(--thick);\n  margin: 0 var(--wide);\n  display: var(--randomthing);\n}\n\n")
+          expect(skin.css).to eq("div {\n  color: var(--purple);\n  display: var(--randomthing);\n  height: var(--short);\n}\n\n")
         end
 
         %w[var VAR].each do |function_name|
@@ -162,6 +150,46 @@ describe CssCleaner do
             expect(skin.errors[:base]).to include("There don't seem to be any rules for p.")
           end
         end
+
+        context "when used in shorthand declaration" do
+          it "allows simple var() function" do
+            skin = build(:skin, css: "div { font: var(--black) }")
+            expect(skin.save).to be_truthy
+            expect(skin.css).to eq("div {\n  font: var(--black);\n}\n\n")
+          end
+
+          it "allows multiple simple var() functions" do
+            skin = build(:skin, css: "blockquote { border: var(--border-width) var(--Border-Style) var(--color) }")
+            expect(skin.save).to be_truthy
+            expect(skin.css).to eq("blockquote {\n  border: var(--border-width) var(--border-style) var(--color);\n}\n\n")
+          end
+
+          it "downcases var() function" do
+            skin = build(:skin, css: "div { border: var(--THICK) solid var(--BRIGHTblue); margin: 0 VAR(--wide) }")
+            expect(skin.save).to be_truthy
+            expect(skin.css).to eq("div {\n  border: var(--thick) solid var(--brightblue);\n  margin: 0 var(--wide);\n}\n\n")
+          end
+        end
+      end
+
+      context "with box-shadow property" do
+        it "allows single value" do
+          skin = build(:skin, css: "div { box-shadow:inset 1px 1px 2px #000; }")
+          expect(skin.save).to be_truthy
+          expect(skin.css).to eq("div {\n  box-shadow: inset 1px 1px 2px #000;\n}\n\n")
+        end
+
+        it "allows multiple values" do
+          skin = build(:skin, css: "div { box-shadow: 3px 3px rgba(0, 0, 0, 0.5) inset, -1em 0 0.4em olive }")
+          expect(skin.save).to be_truthy
+          expect(skin.css).to eq("div {\n  box-shadow: 3px 3px rgba(0, 0, 0, 0.5) inset, -1em 0 0.4em olive;\n}\n\n")
+        end
+      end
+
+      it "allows !important keyword" do
+        skin = build(:skin, css: "div { color: #ddd !important; }")
+        expect(skin.save).to be_truthy
+        expect(skin.css).to eq("div {\n  color: #ddd !important;\n}\n\n")
       end
     end
 
