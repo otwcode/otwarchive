@@ -384,10 +384,9 @@ Feature: Tag wrangling
 
   Scenario: Tags in mass wrangling bins should have a link to the comment page with the comment count.
 
-    Given I am logged in as a random user
+    Given I am logged in as a tag wrangler
       And I post the work "My Plan" with fandom "World Domination"
       And all indexing jobs have been run
-      And I am logged in as a tag wrangler
       And I go to the fandom mass bin
     Then I should see "World Domination"
       And I should see "Comments (0)"
@@ -398,10 +397,9 @@ Feature: Tag wrangling
 
   Scenario: Tags in fandom bins should have a link to the comment page with the comment count.
 
-    Given I am logged in as a random user
+    Given I am logged in as a tag wrangler
       And I post the work "My Plan" with fandom "World Domination" with character "New Person"
       And all indexing jobs have been run
-      And I am logged in as a tag wrangler
       And I view the unwrangled character bin for "World Domination"
     Then I should see "New Person"
       And I should see "Comments (0)"
