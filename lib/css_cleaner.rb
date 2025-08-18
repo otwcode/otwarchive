@@ -202,7 +202,7 @@ module CssCleaner
   end
 
   def sanitize_css_token(token)
-    if token.match(/gradient/)
+    if token.match?(/gradient/)
       sanitize_css_gradient(token)
     else
       sanitize_css_value(token)
@@ -237,7 +237,7 @@ module CssCleaner
     # If it's a comma-separated set of valid values, it's fine. However, we need
     # to downcase any var() functions to match the css_parser gem's downcasing
     # of property names.
-    if value_stripped.match?(/^(#{VALUE_REGEX}\,?\s*)+$/i)
+    if value_stripped.match?(/^(#{VALUE_REGEX},?\s*)+$/i)
       return value unless value.match?(/#{VAR_FUNCTION_REGEX}/)
 
       return value.gsub(/#{VAR_FUNCTION_REGEX}/, &:downcase)
