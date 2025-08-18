@@ -233,7 +233,7 @@ class CollectionItem < ApplicationRecord
       # also notify prompters of responses to their prompt
       if item_type == "Work" && !item.challenge_claims.blank?
         users = self.challenge_claims.map { |claim| claim.request_signup.pseud.user }
-                    .uniq
+          .uniq
         users.each do |user|
           I18n.with_locale(user.preference.locale_for_mails) do
             UserMailer.prompter_notification(user.id, self.item.id, self.collection.id).deliver_after_commit
