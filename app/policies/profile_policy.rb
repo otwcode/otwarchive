@@ -3,16 +3,16 @@ class ProfilePolicy < ApplicationPolicy
   READ_ROLES = %w[superadmin policy_and_abuse support].freeze
 
   # Roles that allow updating a user's profile.
-  EDIT_ROLES = %w[superadmin policy_and_abuse].freeze
+  UPDATE_ROLES = %w[superadmin policy_and_abuse].freeze
 
   def can_read_profile?
     user_has_roles?(READ_ROLES)
   end
 
-  def can_edit_profile?
-    user_has_roles?(EDIT_ROLES)
+  def can_update_profile?
+    user_has_roles?(UPDATE_ROLES)
   end
 
   alias edit? can_read_profile?
-  alias update? can_edit_profile?
+  alias update? can_update_profile?
 end
