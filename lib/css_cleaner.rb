@@ -240,7 +240,7 @@ module CssCleaner
     if value_stripped.match?(/^(#{VALUE_REGEX}\,?\s*)+$/i)
       return value unless value.match?(/#{VAR_FUNCTION_REGEX}/)
 
-      return value.gsub(/#{VAR_FUNCTION_REGEX}/) { |match| match.downcase }
+      return value.gsub(/#{VAR_FUNCTION_REGEX}/, &:downcase)
     end
 
     # If the value is explicitly in our list of supported keywords, it's fine.
