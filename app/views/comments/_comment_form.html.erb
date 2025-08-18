@@ -54,7 +54,7 @@
                           commentable_creator: commentable.by_anonymous_creator? ? t(".anonymous_creator") : get_commenter_pseud_or_name(commentable),
                           commentable_link: commentable_description_link(commentable)) %></span>
             <% end %>
-            (<%= allowed_html_instructions %>)
+            <%= allowed_html_instructions(strip_images: comment.hidden_by_admin || Comment.commentable_object(commentable).class.name.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE)) %>
           </h4>
         <% else %>
           <h4 class="heading"><%= t(".comment_as") %> <span class="byline"><%= current_user.default_pseud.name %></span>
@@ -65,7 +65,7 @@
                         commentable_link: commentable_description_link(commentable)) %></span>
             <% end %>
           </h4>
-          <p class="footnote">(<%= allowed_html_instructions %>)</p>
+          <p class="footnote"><%= allowed_html_instructions(strip_images: comment.hidden_by_admin || Comment.commentable_object(commentable).class.name.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE)) %></p>
         <% end %>
 
       <% else %>
@@ -83,7 +83,7 @@
             <%= live_validation_for_field("comment_email_for_#{commentable.id}", failureMessage: t(".guest_email_failure")) %>
           </dd>
         </dl>
-        <p class="footnote">(<%= allowed_html_instructions %>)</p>
+        <p class="footnote"><%= allowed_html_instructions(strip_images: true) %></p>
       <% end %>
 
       <p>

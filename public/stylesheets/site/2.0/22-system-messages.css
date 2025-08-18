@@ -17,6 +17,7 @@ System messages use the following colours:
 .footnote {
   font-size: 0.75em;
   float: right;
+  text-align: right;
 }
 
 .datetime {
