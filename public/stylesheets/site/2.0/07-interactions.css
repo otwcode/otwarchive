@@ -653,9 +653,8 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
 
 .toggled form p.footnote, .dynamic form p.footnote {
   float: none;
-  margin: auto;
+  margin: -0.25em auto;
   padding: 0;
-  line-height: 0.5;
 }
 
 .toggled form, .dynamic form {
