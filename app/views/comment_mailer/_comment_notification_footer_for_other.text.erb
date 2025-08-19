@@ -12,11 +12,11 @@
 <%= t(".review.text", title: @comment.ultimate_parent.commentable_name, url: polymorphic_url([:unreviewed, @comment.ultimate_parent, :comments])) %>
 <% end %>
 <% unless @noreply || @comment.unreviewed? %>
-<%= t(".reply.text", url: comment_url(@comment, :add_comment_reply_id => @comment.id)) %>
+<%= t(".reply.text", url: comment_url(@comment, add_comment_reply_id: @comment.id)) %>
 <% end %>
 <%= t(".comment_thread.text", url: comment_url(@comment)) %>
 <% unless @comment.id == @comment.thread %>
-<%= t(".parent_thread.text", url: comment_url(:id => @comment.thread)) %>
+<%= t(".parent_thread.text", url: comment_url(id: @comment.thread)) %>
 <% end %>
 <% if @comment.parent.kind_of?(Chapter) && @comment.parent.work.chaptered? %>
 <%= t(".read_all.chapter.text", position: @comment.parent.position, title: @comment.ultimate_parent.commentable_name,

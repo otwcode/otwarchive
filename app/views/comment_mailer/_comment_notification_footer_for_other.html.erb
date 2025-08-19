@@ -11,27 +11,27 @@
 <% if @comment.unreviewed? && @owner %>
   <%= style_link(t(".review.html", title: @comment.ultimate_parent.commentable_name),
         polymorphic_url([:unreviewed, @comment.ultimate_parent, :comments])) %>
-  <br>
+  <br />
 <% end %>
 
 <% unless @comment.unreviewed? || @noreply %>
-  <%= style_link(t(".reply.html"), comment_url(@comment, :add_comment_reply_id => @comment.id)) %>
-  <br>
+  <%= style_link(t(".reply.html"), comment_url(@comment, add_comment_reply_id: @comment.id)) %>
+  <br />
 <% end %>
 
 <%= style_link(t(".comment_thread.html"), comment_url(@comment)) %>
-<br>
+<br />
 
 <% unless @comment.id == @comment.thread %>
   <%= style_link(t(".parent_thread.html"),
-    comment_url(:id => @comment.thread)) %>
-  <br>
+        comment_url(id: @comment.thread)) %>
+  <br />
 <% end %>
 
 <% if @comment.parent.kind_of?(Chapter) && @comment.ultimate_parent.chaptered? %>
   <%= style_link(t(".read_all.chapter.html", position: @comment.parent.position, title: @comment.ultimate_parent.commentable_name),
         work_chapter_url(@comment.parent.work, @comment.parent, show_comments: true, anchor: :comments)) %>
-  <br>
+  <br />
 <% else %>
   <%= style_link(t(".read_all.other.html", title: @comment.ultimate_parent.commentable_name),
         polymorphic_url(@comment.ultimate_parent, view_full_work: true, show_comments: true, anchor: :comments)) %>
