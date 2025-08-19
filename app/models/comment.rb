@@ -202,16 +202,14 @@ class Comment < ApplicationRecord
         users = self.ultimate_parent.commentable_owners - users
       end
       users.each do |user|
-        unless user == self.comment_owner && !notify_user_of_own_comments?(user)
-          if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
-            I18n.with_locale(user.is_a?(User) ? user.preference.locale_for_mails : nil) do
-              CommentMailer.edited_comment_notification(user, self).deliver_after_commit
-            end
-          end
-          if user.is_a?(User) && notify_user_by_inbox?(user)
-            update_feedback_in_inbox(user)
+        next if user == self.comment_owner && !notify_user_of_own_comments?(user)
+
+        if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
+          I18n.with_locale(user.is_a?(User) ? user.preference.locale_for_mails : nil) do
+            CommentMailer.edited_comment_notification(user, self).deliver_after_commit
           end
         end
+        update_feedback_in_inbox(user) if user.is_a?(User) && notify_user_by_inbox?(user)
       end
     end
   end
