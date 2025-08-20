@@ -69,7 +69,7 @@ en:
       parent_thread:
         html: Go to the thread to which this comment belongs
         text: 'Go to the thread to which this comment belongs: %{url}'
-      read_all:
+      read_all_comments:
         chapter:
           html: Read all comments on Chapter %{position} of <i>%{title}</i>
           text: 'Read all comments on Chapter %{position} of "%{title}": %{url}'
