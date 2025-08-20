@@ -269,7 +269,7 @@ describe Collection do
   describe "#general_bookmarked_items_count" do
     let(:collection) { create(:collection) }
 
-    context "when the collection contains an private bookmark" do
+    context "when the collection contains a public bookmark" do
       let(:bookmark) { create(:bookmark) }
 
       before do

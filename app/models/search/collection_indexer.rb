@@ -87,7 +87,7 @@ class CollectionIndexer < Indexer
       only: [
         :id, :name, :title, :description, :parent_id, :challenge_type, :multifandom, :open_doors, :created_at
       ],
-      methods: %i[general_works_count public_works_count]
+      methods: %i[general_works_count public_works_count general_bookmarked_items_count public_bookmarked_items_count]
     ).merge(
       closed: object.closed?,
       unrevealed: object.unrevealed?,
@@ -102,8 +102,6 @@ class CollectionIndexer < Indexer
       assignments_due_at: object.challenge&.assignments_due_at,
       works_reveal_at: object.challenge&.works_reveal_at,
       authors_reveal_at: object.challenge&.authors_reveal_at,
-      general_bookmarked_items_count: object.general_bookmarked_items_count,
-      public_bookmarked_items_count: object.public_bookmarked_items_count,
       filter_ids: object.filter_ids,
       tag: object.tag
     )

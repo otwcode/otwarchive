@@ -22,7 +22,7 @@ describe "n+1 queries in the collections controller" do
       expect do
         subject.call
         expect(response.body.scan('<li class="collection ').size).to eq(current_scale.to_i)
-      end.to perform_linear_number_of_queries(slope: 2)
+      end.to perform_linear_number_of_queries(slope: 1) # The subcollections count query which can't be eliminated with includes
     end
   end
 end

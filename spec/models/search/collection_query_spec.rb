@@ -119,7 +119,7 @@ describe CollectionQuery do
         end
       end
 
-      context "when the sort column is set to assignments_due_at" do
+      context "when the sort column is set to created_at" do
         it "sorts desc" do
           expect(CollectionQuery.new({ sort_column: "created_at" }).sort)
             .to eq([{ "created_at" => { order: "desc" } }, { "id" => { order: "desc" } }])

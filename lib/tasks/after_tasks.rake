@@ -586,9 +586,9 @@ namespace :After do
     total_batches = (collections.count + 999) / 1000
 
     def approved_taggables(collection)
-      Work.visible_to_all.in_collection(collection) + \
-        Bookmark.is_public.in_collection(collection) + \
-        Bookmark.is_public.in_collection(collection).map(&:bookmarkable)
+      Work.visible_to_all.in_collection(collection).includes(:fandoms) + \
+        Bookmark.is_public.in_collection(collection).includes(:fandoms) + \
+        Bookmark.is_public.in_collection(collection).includes(bookmarkable: :fandoms).map(&:bookmarkable)
     end
 
     collections.find_in_batches.with_index do |batch, index|
