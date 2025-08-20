@@ -217,11 +217,11 @@ en:
       collection_page_title: "%{collection_title} - Tags"
   users:
     change_email:
-      browser_title: Change Email
+      page_title: Change Email
     change_password:
-      browser_title: Change Password
+      page_title: Change Password
     change_username:
-      browser_title: Change Username
+      page_title: Change Username
     changed_password:
       blank_password: You must enter your old password.
       wrong_password: Your old password was incorrect.
