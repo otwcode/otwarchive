@@ -13,8 +13,8 @@ describe CollectionIndexer do
 
       it "is not counted for logged in users or guests" do
         document = described_class.new([]).document(collection)
-        expect(document[:general_bookmarked_items_count]).to eq(0)
-        expect(document[:public_bookmarked_items_count]).to eq(0)
+        expect(document["general_bookmarked_items_count"]).to eq(0)
+        expect(document["public_bookmarked_items_count"]).to eq(0)
       end
     end
 
@@ -28,8 +28,8 @@ describe CollectionIndexer do
 
       it "is counted for logged in users only" do
         document = described_class.new([]).document(collection)
-        expect(document[:general_bookmarked_items_count]).to eq(1)
-        expect(document[:public_bookmarked_items_count]).to eq(0)
+        expect(document["general_bookmarked_items_count"]).to eq(1)
+        expect(document["public_bookmarked_items_count"]).to eq(0)
       end
     end
 
@@ -61,8 +61,8 @@ describe CollectionIndexer do
 
       it "counts items in the subcollection" do
         document = described_class.new([]).document(collection)
-        expect(document[:general_bookmarked_items_count]).to eq(1)
-        expect(document[:public_bookmarked_items_count]).to eq(1)
+        expect(document["general_bookmarked_items_count"]).to eq(1)
+        expect(document["public_bookmarked_items_count"]).to eq(1)
         expect(document["general_works_count"]).to eq(1)
         expect(document["public_works_count"]).to eq(1)
       end
@@ -80,8 +80,8 @@ describe CollectionIndexer do
 
       it "is counts as one item" do
         document = described_class.new([]).document(collection)
-        expect(document[:general_bookmarked_items_count]).to eq(1)
-        expect(document[:public_bookmarked_items_count]).to eq(1)
+        expect(document["general_bookmarked_items_count"]).to eq(1)
+        expect(document["public_bookmarked_items_count"]).to eq(1)
       end
     end
   end
@@ -93,7 +93,7 @@ describe CollectionIndexer do
       it "generates a constant number of database queries" do
         expect do
           CollectionIndexer.new(Collection.ids).index_documents
-        end.to perform_linear_number_of_queries(slope: 10) # The ten works/bookmarked items count queries which can't be eliminated with includes
+        end.to perform_linear_number_of_queries(slope: 8) # The eight works/bookmarked items count queries which can't be eliminated with includes
       end
     end
   end

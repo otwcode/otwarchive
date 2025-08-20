@@ -293,6 +293,18 @@ describe Collection do
       end
     end
 
+    context "when the collection contains a hidden bookmark" do
+      let(:bookmark) { create(:bookmark, hidden_by_admin: true) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(0)
+      end
+    end
+
     context "when the collection contains a bookmark of a hidden work" do
       let(:bookmark) { create(:bookmark, bookmarkable: create(:work, hidden_by_admin: true)) }
 

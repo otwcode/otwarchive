@@ -55,7 +55,7 @@ describe GiftExchange do
     end
 
     context "when gift exchange already exists" do
-      let!(:exchange) { GiftExchange.create!(collection: collection, signup_open: false) }
+      let!(:exchange) { create(:gift_exchange, collection: collection, signup_open: false) }
 
       context "when gift exchange signups are opened" do
         it "enqueues the collection for reindex" do
