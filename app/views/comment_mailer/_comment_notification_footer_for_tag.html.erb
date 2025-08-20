@@ -1,7 +1,3 @@
-<%= style_link(t(".read_all_comments.html", tag: @comment.ultimate_parent.commentable_name),
-      tag_comments_url(@comment.ultimate_parent)) %>
-<br />
-
 <% unless @noreply %>
   <%= style_link(t(".reply.html"), comment_url(@comment, add_comment_reply_id: @comment.id)) %>
   <br />
@@ -12,4 +8,8 @@
 
 <% unless @comment.id == @comment.thread %>
   <%= style_link(t(".parent_thread.html"), comment_url(@comment.thread)) %>
+  <br />
 <% end %>
+
+<%= style_link(t(".read_all_comments.html", tag: @comment.ultimate_parent.commentable_name),
+               tag_comments_url(@comment.ultimate_parent)) %>
