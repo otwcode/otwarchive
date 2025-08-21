@@ -194,8 +194,8 @@ en:
       error: There were problems deleting your history. Please try again later.
       success: Your history is now cleared.
     index:
-      history_page_title: "%{username} - History"
-      marked_for_later_page_title: "%{username} - Marked for Later"
+      history_page_title: "History"
+      marked_for_later_page_title: "Marked for Later"
   related_works:
     index:
       page_title: "%{login} - Related Works"

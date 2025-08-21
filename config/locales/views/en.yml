@@ -2027,10 +2027,12 @@ en:
       submit: Submit
   readings:
     index:
-      history: History
-      history_landmark: List of History Items
-      marked_for_later: Marked for Later
-      marked_for_later_landmark: List of Marked for Later Items
+      history:
+        page_heading: History
+        landmark: List of History Items
+      marked_for_later:
+        page_heading: Marked for Later
+        landmark: List of Marked for Later Items
   related_works:
     index:
       page_heading: "%{login}'s Related Works"

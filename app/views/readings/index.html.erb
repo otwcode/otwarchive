@@ -1,10 +1,8 @@
+<% mode = params[:show] == "to-read" ? "marked_for_later" : "history" %>
+
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
-  <% if params[:show] == "to-read" %>
-    <%= t(".marked_for_later") %>
-  <% else %>
-    <%= t(".history") %>
-  <% end %>
+  <%= t(".#{mode}.page_heading") %>
 </h2>
 <!--/descriptions-->
 
@@ -26,11 +24,7 @@
 
 <!--main content-->
 <h3 class="landmark heading">
-  <% if params[:show] == "to-read" %>
-    <%= t(".marked_for_later_landmark") %>
-  <% else %>
-    <%= t(".history_landmark") %>
-  <% end %>
+  <%= t(".#{mode}.landmark") %>
 </h3>
 <% if logged_in? && @readings.present? %>
   <ol class="reading work index group">
