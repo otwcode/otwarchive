@@ -1,6 +1,11 @@
 require "spec_helper"
 
 describe CommentMailer do
+  include ActiveJob::TestHelper
+  def queue_adapter_for_test
+    ActiveJob::QueueAdapters::TestAdapter.new
+  end
+
   let(:user) { create(:user) }
   let(:commenter) { create(:user, login: "Accumulator") }
   let(:commenter_pseud) { create(:pseud, user: commenter, name: "Blueprint") }
