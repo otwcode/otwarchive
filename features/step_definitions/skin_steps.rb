@@ -187,11 +187,6 @@ When /^I preview the skin "([^\"]*)"$/ do |skin_name|
   visit preview_skin_path(skin)
 end
 
-When /^I set the skin "([^\"]*)" for this session$/ do |skin_name|
-  skin = Skin.find_by(title: skin_name)
-  visit set_skin_path(skin)
-end
-
 ### THEN
 
 Then "I should see a parent skin text field" do
