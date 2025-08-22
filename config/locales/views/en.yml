@@ -630,11 +630,6 @@ en:
       tags: Tags
       works: Works (%{count})
   comments:
-    confirm_delete:
-      button: Yes, delete!
-      cancel: Cancel
-      delete: Delete
-      delete_confirmation: Are you sure you want to delete this comment?
     comment_form:
       anonymous_creator: Anonymous Creator
       anonymous_forewarning: While this work is anonymous, comments you post will also be listed anonymously.
@@ -690,6 +685,11 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+    confirm_delete:
+      button: Yes, delete!
+      cancel: Cancel
+      delete: Delete
+      delete_confirmation: Are you sure you want to delete this comment?
     edit:
       back: Back
       page_heading: Editing comment
