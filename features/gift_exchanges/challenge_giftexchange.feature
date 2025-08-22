@@ -336,8 +336,8 @@ Feature: Gift Exchange Challenge
       And everyone has their assignments for "Second Challenge"
     When I am logged in as "myname1"
       And I start to fulfill my assignment
-    Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
-      And the "Second Challenge (myname3)" checkbox should not be checked
+    Then the "Second Challenge (myname3)" checkbox should be checked
+      And the "Awesome Gift Exchange (myname3)" checkbox should not be checked
 
   Scenario: User has more than one pseud on signup form
     Given "myname1" has the pseud "othername"
@@ -382,15 +382,23 @@ Feature: Gift Exchange Challenge
       And I should see "Offers by myname1"
       But I should not see the image "alt" text "email myname1"
 
-  Scenario: User fulfills their assignment and it shows on their assigments page as fulfilled
+  Scenario: User fulfills their assignment and it shows on their assignments page as fulfilled
 
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
-      And I fulfill my assignment
-    When I go to myname1's user page
+      And I go to myname1's user page
       And I follow "Assignments"
     Then I should see "Awesome Gift Exchange"
-      And I should not see "Not yet posted"
+      And I should see "Status: Unposted"
+    When I follow "Completed Assignments"
+      Then I should not see "Awesome Gift Exchange"
+    When I fulfill my assignment
+      And I go to myname1's user page
+      And I follow "Assignments"
+    Then I should not see "Awesome Gift Exchange"
+    When I follow "Completed Assignments"
+      Then I should see "Awesome Gift Exchange"
+      And I should see "Status: Complete!"
       And I should see "Fulfilled Story"
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
@@ -716,3 +724,13 @@ Feature: Gift Exchange Challenge
       And I uncheck "exchange_collection (recip)"
       And I press "Post"
     Then I should see "For recip."
+
+  Scenario: User sidebar assignments count only includes unfulfilled assignments.
+    Given the user "recip" exists and is activated
+      And I am logged in as "gifter"
+      And "gifter" has an assignment for the user "recip" in the collection "exchange_collection"
+    When I go to the assignments page for "gifter"
+    Then I should see "Assignments (1)" within "#dashboard"
+    When I fulfill my assignment
+      And I go to the assignments page for "gifter"
+      Then I should see "Assignments (0)" within "#dashboard"
