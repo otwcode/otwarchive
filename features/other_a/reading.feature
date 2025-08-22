@@ -11,7 +11,7 @@ Feature: Reading count
   Then I should see "Sorry, you don't have permission"
     And I should not see "History" within "div#dashboard"
   When I go to second_reader's reading page
-  Then I should see the page title "History | Example Archive"
+  Then I should see the page title "History"
     And I should see "History" within "h2.heading"
     And I should see "History" within "div#dashboard"
 
