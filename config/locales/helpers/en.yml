@@ -1,5 +1,8 @@
 ---
 en:
+  application_helper:
+    strip_images: Embedded images (<img> tags) will be displayed as HTML, including the image's source link and any alt text.
+    text_limited_html: Plain text with limited HTML
   collections_helper:
     collection_item_approval_options:
       collection:
