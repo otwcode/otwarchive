@@ -206,6 +206,13 @@ describe ApplicationHelper do
         expect(result).to eq("#{default_classes} series-#{series.id} user-#{user1.id}")
       end
 
+      it "bypasses the cache as pseuds are loaded" do
+        helper.css_classes_for_creation_blurb(series)
+
+        expect(series.pseuds.loaded?).to be true
+        expect(Rails.cache.read("#{series.cache_key_with_version}/blurb_css_classes-v2")).to be_nil
+      end
+
       context "when series is updated" do
         context "when new user is added" do
           it "returns updated string" do
@@ -315,6 +322,13 @@ describe ApplicationHelper do
       it "returns string with default classes and creation and creator info" do
         result = helper.css_classes_for_creation_blurb(work)
         expect(result).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
+      end
+
+      it "bypasses the cache as pseuds are loaded" do
+        helper.css_classes_for_creation_blurb(work)
+
+        expect(work.pseuds.loaded?).to be true
+        expect(Rails.cache.read("#{work.cache_key_with_version}/blurb_css_classes-v2")).to be_nil
       end
 
       context "when new user is added" do
