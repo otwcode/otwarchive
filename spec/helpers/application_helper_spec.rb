@@ -7,7 +7,7 @@ describe ApplicationHelper do
     context "when creation is ExternalWork" do
       let(:external_work) { create(:external_work) }
 
-      it "returns string for exteral work" do
+      it "returns string for external work" do
         result = helper.creation_id_for_css_classes(external_work)
         expect(result).to eq("external-work-#{external_work.id}")
       end
@@ -36,7 +36,7 @@ describe ApplicationHelper do
     context "when creation is ExternalWork" do
       let(:external_work) { create(:external_work) }
 
-      it "returns empty array for exteral work" do
+      it "returns empty array for external work" do
         result = helper.creator_ids_for_css_classes(external_work)
         expect(result).to be_empty
       end
@@ -259,6 +259,7 @@ describe ApplicationHelper do
           before do
             work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
             series.reload # make sure the series has the right value for updated_at
+            series.pseuds.reload
           end
 
           # TODO: AO3-5739 Co-creators removed from all works in a series are not removed from series
