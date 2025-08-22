@@ -1,13 +1,26 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("My Assignments") %> <%= @collection ? ts("in %{collection_link}", :collection_link => link_to(@collection.title, @collection)).html_safe : "" %></h2>
+<h2 class="heading"><%= t(".page_heading") %> <%= @collection ? ts("in %{collection_link}", :collection_link => link_to(@collection.title, @collection)).html_safe : "" %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
+<h3 class="landmark heading"><%= t("a11y.navigation") %></h3>
+<ul class="navigation actions">
+  <li>
+    <%= span_if_current(t(".navigation.unposted"),
+                        user_assignments_path(@user),
+                        params[:posted] != "true") %>
+  </li>
+  <li>
+    <%= span_if_current(t(".navigation.completed"),
+                        user_assignments_path(@user, posted: true),
+                        params[:posted] == "true") %>
+  </li>
+</ul>
 <!--/subnav-->
 
 <!--main content-->
 <% unless @collection %>
-  <p class="note"><%= ts('Looking for prompts you claimed in a prompt meme? Try') %> <%= link_to ts("My Claims"), user_claims_path(@user) %></p>
+  <p class="notes"><%= t(".claims_note_html", claims_link: link_to(t(".claims_link"), user_claims_path(@user))) %></p>
 <% end %>
 
 <dl class="assignment index group">

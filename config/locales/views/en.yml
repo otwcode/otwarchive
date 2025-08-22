@@ -559,6 +559,14 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
+  challenge_assignments:
+    user_index:
+      page_heading: My Assignments
+      claims_note_html: Looking for prompts you claimed in a prompt meme? Try %{claims_link}.
+      claims_link: My Claims
+      navigation:
+        unposted: Unposted Assignments
+        completed: Completed Assignments
   challenge_signups:
     signup_form:
       notice:

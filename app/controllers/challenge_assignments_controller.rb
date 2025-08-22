@@ -74,11 +74,17 @@ class ChallengeAssignmentsController < ApplicationController
   def index
     if params[:user_id] && (@user = User.find_by(login: params[:user_id]))
       if current_user == @user
+        @challenge_assignments = @user.assignments.undefaulted
+
         if params[:collection_id] && (@collection = Collection.find_by(name: params[:collection_id]))
-          @challenge_assignments = @user.offer_assignments.in_collection(@collection).undefaulted + @user.pinch_hit_assignments.in_collection(@collection).undefaulted
-        else
-          @challenge_assignments = @user.offer_assignments.undefaulted + @user.pinch_hit_assignments.undefaulted
+          @challenge_assignments = @challenge_assignments.in_collection(@collection)
         end
+        if params[:posted] == "true"
+          @challenge_assignments = @challenge_assignments.posted
+        else
+          @challenge_assignments = @challenge_assignments.unposted
+        end
+        @challenge_assignments = @challenge_assignments.order(created_at: :desc)
       else
         flash[:error] = ts("You aren't allowed to see that user's assignments.")
         redirect_to '/' and return
