@@ -571,6 +571,10 @@ en:
       page_heading:
         all: My Assignments
         collection_html: My Assignments in %{collection_link}
+  challenge_claims:
+    user_index:
+      assignments_link: My Assignments
+      assignments_note_html: Looking for assignments you were given for a gift exchange? Try %{assignments_link}.
   challenge_signups:
     signup_form:
       notice:
