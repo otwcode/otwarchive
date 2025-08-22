@@ -86,8 +86,8 @@ class ChallengeAssignmentsController < ApplicationController
         end
         @challenge_assignments = @challenge_assignments.order(created_at: :desc).paginate(page: params[:page])
       else
-        flash[:error] = ts("You aren't allowed to see that user's assignments.")
-        redirect_to '/' and return
+        flash[:error] = t(".access_denied_user")
+        redirect_to root_path and return
       end
     else
       # do error-checking for the collection case

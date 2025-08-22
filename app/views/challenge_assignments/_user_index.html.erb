@@ -1,5 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t(".page_heading") %> <%= @collection ? ts("in %{collection_link}", :collection_link => link_to(@collection.title, @collection)).html_safe : "" %></h2>
+<h2 class="heading">
+  <% if @collection %>
+    <%= t(".page_heading.collection_html", collection_link: link_to(@collection.title, @collection)) %>
+  <% else %>
+    <%= t(".page_heading.all") %>
+  <% end %>
+</h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -7,13 +13,13 @@
 <ul class="navigation actions">
   <li>
     <%= span_if_current(t(".navigation.unposted"),
-                        user_assignments_path(@user),
-                        params[:posted] != "true") %>
+          user_assignments_path(@user, collection_id: params[:collection_id]),
+          params[:posted] != "true") %>
   </li>
   <li>
     <%= span_if_current(t(".navigation.completed"),
-                        user_assignments_path(@user, posted: true),
-                        params[:posted] == "true") %>
+          user_assignments_path(@user, collection_id: params[:collection_id], posted: true),
+          params[:posted] == "true") %>
   </li>
 </ul>
 <!--/subnav-->
@@ -27,7 +33,7 @@
 <dl class="assignment index group">
 
   <% @challenge_assignments.each do |assignment| %>
-    <%= render "assignment_blurb", :assignment => assignment %>
+    <%= render "assignment_blurb", assignment: assignment %>
   <% end %>
 
 </dl>
