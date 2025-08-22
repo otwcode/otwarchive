@@ -1,5 +1,6 @@
 /* ROLE: admin
-This shows the archive when logged in as admin, and overrides with admin styles, showing extra secret admin options on normal views*/
+This shows the archive when logged in as admin, and overrides with admin styles, showing extra secret admin options on normal views
+*/
 
 #main {
   margin: auto 3.5em;
@@ -46,4 +47,4 @@ table, thead td {
   color: #066;
 }
 
-/*END== */
+/* END== */
