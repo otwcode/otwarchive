@@ -2025,6 +2025,14 @@ en:
       make_default: Make this name default
       name: Name
       submit: Submit
+  readings:
+    index:
+      history:
+        landmark: List of History Items
+        page_heading: History
+      marked_for_later:
+        landmark: List of Marked for Later Items
+        page_heading: Marked for Later
   related_works:
     index:
       page_heading: "%{login}'s Related Works"
