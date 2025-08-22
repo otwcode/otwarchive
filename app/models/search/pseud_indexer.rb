@@ -1,7 +1,15 @@
 class PseudIndexer < Indexer
-
   def self.klass
     "Pseud"
+  end
+
+  def self.klass_with_includes
+    Pseud.includes(
+      :user,
+      :collections,
+      bookmarks: :bookmarkable,
+      works: [:tags]
+    )
   end
 
   def self.mapping
@@ -63,66 +71,49 @@ class PseudIndexer < Indexer
   # Produces an array of hashes with the format
   # [{id: 1, name: "Star Trek", count: 5}]
   def tag_info(pseud, tag_type)
-    info = []
-    info +=
-      pseud.direct_filters.where(works: countable_works_conditions)
-        .by_type(tag_type).group_by(&:id)
-        .map do |id, tags|
-        {
-          id: id,
-          name: tags.first.name,
-          count: tags.length
-        }
-      end
-    info +=
-      pseud.direct_filters.where(works: countable_works_conditions.merge(restricted: false))
-        .by_type(tag_type).group_by(&:id)
-        .map do |id, tags|
-        {
-          id_for_public: id,
-          name: tags.first.name,
-          count: tags.length
-        }
-      end
+    filters = pseud.works.flat_map(&:direct_filters).select { |f| f.type == tag_type }
+
+    general = filters.select { |f| f.works.any? { |w| countable_work?(w) } }
+    info = general.group_by(&:id).map do |id, tags|
+      { id: id, name: tags.first.name, count: tags.size }
+    end
+
+    public_filters = filters.select { |f| f.works.any? { |w| countable_work?(w) && !w.restricted } }
+    info += public_filters.group_by(&:id).map do |id, tags|
+      { id_for_public: id, name: tags.first.name, count: tags.size }
+    end
+
     info
   end
 
-  # The relation containing all bookmarks that should be included in the count
-  # for logged-in users (when restricted to a particular pseud).
-  def general_bookmarks
-    @general_bookmarks ||=
-      Bookmark.with_missing_bookmarkable
-        .or(Bookmark.with_bookmarkable_visible_to_registered_user)
-        .is_public
-  end
-
-  # The relation containing all bookmarks that should be included in the count
-  # for logged-out users (when restricted to a particular pseud).
-  def public_bookmarks
-    @public_bookmarks ||=
-      Bookmark.with_missing_bookmarkable
-        .or(Bookmark.with_bookmarkable_visible_to_all)
-        .is_public
-  end
-
   def general_bookmarks_count(pseud)
-    general_bookmarks.merge(pseud.bookmarks).count
+    pseud.bookmarks.select do |b|
+      b.is_public && b.bookmarkable_visible_to_registered_user?
+    end.size
   end
 
   def public_bookmarks_count(pseud)
-    public_bookmarks.merge(pseud.bookmarks).count
+    pseud.bookmarks.select do |b|
+      b.is_public && b.bookmarkable_visible_to_all?
+    end.size
   end
 
   def work_counts(pseud)
-    pseud.works.where(countable_works_conditions).group(:restricted).count
+    counts = { true => 0, false => 0 }
+
+    pseud.works.each do |work|
+      next unless countable_work?(work)
+
+      counts[work.restricted] += 1
+    end
+
+    counts
   end
 
-  def countable_works_conditions
-    {
-      posted: true,
-      hidden_by_admin: false,
-      in_anon_collection: false,
-      in_unrevealed_collection: false
-    }
+  def countable_work?(work)
+    work.posted &&
+      !work.hidden_by_admin &&
+      !work.in_anon_collection &&
+      !work.in_unrevealed_collection
   end
 end
