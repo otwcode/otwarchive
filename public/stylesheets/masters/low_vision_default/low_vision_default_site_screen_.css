@@ -185,3 +185,11 @@ pre {
 .bookmark .recent .index {
   border: none;
 }
+
+body .narrow-shown {
+  display: block;
+}
+
+.actions li.narrow-shown {
+  display: inline;
+}
