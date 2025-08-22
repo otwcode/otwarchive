@@ -23,6 +23,7 @@
   <p class="notes"><%= t(".claims_note_html", claims_link: link_to(t(".claims_link"), user_claims_path(@user))) %></p>
 <% end %>
 
+<%= will_paginate @challenge_assignments %>
 <dl class="assignment index group">
 
   <% @challenge_assignments.each do |assignment| %>
@@ -30,4 +31,5 @@
   <% end %>
 
 </dl>
+<%= will_paginate @challenge_assignments %>
 <!--/content-->

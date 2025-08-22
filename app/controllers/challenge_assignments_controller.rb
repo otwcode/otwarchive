@@ -84,7 +84,7 @@ class ChallengeAssignmentsController < ApplicationController
         else
           @challenge_assignments = @challenge_assignments.unposted
         end
-        @challenge_assignments = @challenge_assignments.order(created_at: :desc)
+        @challenge_assignments = @challenge_assignments.order(created_at: :desc).paginate(page: params[:page])
       else
         flash[:error] = ts("You aren't allowed to see that user's assignments.")
         redirect_to '/' and return
