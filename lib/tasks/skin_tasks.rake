@@ -1,21 +1,23 @@
 namespace :skins do
+  def user_skin_path
+    File.join(Skin.site_skins_dir, "user_skins_to_load")
+  end
+
+  def user_skin_preview_path
+    File.join(user_skin_path, "previews")
+  end
+
+  def parent_skin_path
+    File.join(user_skin_path, "parent_only")
+  end
+
+  def default_user_skin_preview
+    File.join(user_skin_preview_path, "default_preview.png")
+  end
 
   def ask(message)
     print message
-    STDIN.gets.chomp.strip
-  end
-
-  def replace_or_new(skin_content)
-    skin = Skin.new
-    if skin_content.match(/REPLACE:\s*(\d+)/)
-      id = $1.to_i
-      skin = Skin.where(:id => id).first
-      unless skin
-        puts "Couldn't find skin with id #{id} to replace"
-        return nil
-      end
-    end
-    skin
+    $stdin.gets.chomp.strip
   end
 
   def set_parents(skin, parent_names)
@@ -31,7 +33,7 @@ namespace :skins do
         puts "Empty parent name for #{skin.title}"
         next
       else
-        parent_skin = Skin.where(:title => parent_name).first
+        parent_skin = Skin.where(title: parent_name).first
       end
       unless parent_skin
         puts "Couldn't find parent #{parent_name} to add, skipping"
@@ -39,9 +41,13 @@ namespace :skins do
       end
       if (parent_skin.role == "site" || parent_skin.role == "override") && skin.role != "override"
         skin.role = "override"
-        skin.save or puts "Problem updating skin #{skin.title} to be replacement skin: #{skin.errors.full_messages.join(', ')}"
-        next
+
+        unless skin.save
+          puts "Problem updating skin #{skin.title} to be replacement skin: #{skin.errors.full_messages.join(', ')}"
+          next
+        end
       end
+
       p = skin.skin_parents.build(:parent_skin => parent_skin, :position => parent_position)
       if p.save
         parent_position += 1
@@ -51,99 +57,98 @@ namespace :skins do
     end
   end
 
-  def get_user_skins
-    dir = Skin.site_skins_dir + 'user_skins_to_load'
-    default_preview_filename = "#{dir}/previews/default_preview.png"
-    user_skin_files = Dir.entries(dir).select {|f| f.match(/css$/)}
-    skins = []
-    user_skin_files.each do |skin_file|
-      skins << File.read("#{dir}/#{skin_file}").split(/\/\*\s*END SKIN\s*\*\//)
+  def load_parent_user_skins(replace:)
+    Skin.skin_dir_entries(parent_skin_path, /^.*\.css/).each do |skin_file|
+      load_user_css(
+        filename: File.join(parent_skin_path, skin_file),
+        replace: replace,
+        parent_only: true
+      )
     end
-    skins.flatten!
   end
 
   desc "Purge user skins parents"
-  task(:purge_user_skins_parents => :environment) do
-    get_user_skins.each do |skin_content|
-      skin = replace_or_new(skin_content)
-      if skin.new_record? && skin_content.match(/SKIN:\s*(.*)\s*\*\//)
-        skin = Skin.find_by_title($1.strip)
-      end
-      skin.skin_parents.delete_all
-    end
-  end
+  task(purge_user_skins_parents: :environment) do
+    Skin.skin_dir_entries(user_skin_path, /^.*\.css/).each do |skin_file|
+      filename = File.join(user_skin_path, skin_file)
+      skin_content = File.read(filename)
 
-  desc "Load user skins"
-  task(:load_user_skins => :environment) do
-    replace = ask("Replace existing skins with same titles? (y/n) ") == "y"
-    Rake::Task['skins:purge_user_skins_parents'].invoke if replace
-
-    author = User.find_by_login("lim")
-    dir = Skin.site_skins_dir + 'user_skins_to_load'
-
-    skins = get_user_skins
-    skins.each do |skin_content|
-      next if skin_content.blank?
-
-      # Determine if we're replacing or creating new
-      next unless (skin = replace_or_new(skin_content))
-
-      # set the title and preview
-      if skin_content.match(/SKIN:\s*(.*)\s*\*\//)
-        title = $1.strip
-        if (oldskin = Skin.find_by_title(title)) && oldskin.id != skin.id
-          if replace
-            skin = oldskin
-          else
-            puts "Existing skin with title #{title} - did you mean to replace? Skipping."
-            next
-          end
-        end
-        skin.title = title
-        preview_filename = "#{dir}/previews/#{title.gsub(/[^\w\s]+/, '')}.png"
-        unless File.exists?(preview_filename)
-          puts "No preview filename #{preview_filename} found for #{title}"
-          preview_filename = "#{dir}/previews/default_preview.png"
-        end
-        File.open(preview_filename, 'rb') {|preview_file| skin.icon = preview_file}
-      else
+      unless skin_content.match(%r{SKIN:\s*(.*)\s*\*/})
         puts "No skin title found for skin #{skin_content}"
         next
       end
 
-      # set the css and make public
-      skin.css = skin_content
-      skin.public = true
-      skin.official = true
-      skin.author = author unless skin.author
+      skin = Skin.find_by(title: $1.strip)
+      skin&.skin_parents&.delete_all
+    end
+  end
 
-      if skin_content.match(/DESCRIPTION:\s*(.*?)\*\//m)
-        skin.description = "<pre>#{$1}</pre>"
-      end
-      if skin_content.match(/PARENT_ONLY/)
-        skin.unusable = true
-      end
+  desc "Load user skins"
+  task(load_user_skins: :environment) do
+    replace = ask("Replace existing skins with same titles? (y/n) ") == "y"
 
-      # make sure we have valid skin now
-      if skin.save
-        puts "Saved skin #{skin.title}"
-      else
-        puts "Problem with skin #{skin.title}: #{skin.errors.full_messages.join(', ')}"
-        next
-      end
+    Rake::Task["skins:purge_user_skins_parents"].invoke if replace
+    load_parent_user_skins(replace: replace)
 
-      # recache any cached skins
-      if skin.cached?
-        skin.cache!
-      end
+    Skin.skin_dir_entries(user_skin_path, /^.*\.css/).each do |skin_file|
+      load_user_css(
+        filename: File.join(user_skin_path, skin_file),
+        replace: replace,
+        preview_path: File.join(user_skin_preview_path, "#{skin_file}_preview.png")
+      )
+    end
+  end
 
-      # set parents
-      if skin_content.match(/PARENTS:\s*(.*)\s*\*\//)
+  def load_user_css(filename:, replace: false, parent_only: false, preview_path: default_user_skin_preview)
+    skin_content = File.read(filename)
+    return if skin_content.blank?
+
+    unless skin_content.match(%r{SKIN:\s*(.*)\s*\*/})
+      puts "No skin title found for skin #{skin_content}"
+      return
+    end
+    title = $1.strip
+
+    skin = Skin.find_by(title: title)
+    if skin && !replace
+      puts "Existing skin with title #{title} - did you mean to replace? Skipping."
+      return
+    end
+    skin ||= Skin.new
+
+    unless File.exist?(preview_path)
+      puts "No preview filename #{preview_path} found for #{title}"
+      preview_path = default_user_skin_preview
+    end
+
+    if skin_content.match(/MEDIA: (.*?) ENDMEDIA/)
+      skin.media = $1.split(/,\s?/)
+    elsif skin_content.match(/MEDIA: (\w+)/)
+      skin.media = [$1]
+    end
+
+    skin.title ||= title
+    skin.author ||= User.find_by(login: "lim")
+    skin.description = "<pre>#{$1}</pre>" if skin_content.match(%r{DESCRIPTION:\s*(.*?)\*/}m)
+    skin.filename = filename
+    skin.css = nil # get_css should load from filename
+    skin.public = true
+    skin.role = "user"
+    skin.unusable = parent_only
+    skin.official = true
+    skin.in_chooser = true unless parent_only
+    skin.icon.attach(io: File.open(preview_path, "rb"), content_type: "image/png", filename: "preview.png")
+    if skin.save
+      puts "Saved skin #{skin.title}"
+
+      skin.cache! if skin.cached?
+      if skin_content.match(%r{PARENTS:\s*(.*)\s*\*/})
         parent_string = $1
         set_parents(skin, parent_string)
       end
+    else
+      puts "Problem with skin #{skin.title}: #{skin.errors.full_messages.join(', ')}"
     end
-
   end
 
   desc "Load site skins"
@@ -189,5 +194,4 @@ namespace :skins do
     default_id = AdminSetting.default_skin_id
     Skin.where("id != ?", default_id).update_all(:official => false)
   end
-
 end
