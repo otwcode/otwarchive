@@ -405,7 +405,5 @@ Then /^no one should have an assignment for "([^\"]*)"$/ do |challenge_title|
 end
 
 When "there are {int} assignments per page" do |amount|
-  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
-  ArchiveConfig.ITEMS_PER_PAGE = amount.to_i
-  allow(ChallengeAssignment).to receive(:per_page).and_return(amount)
+  allow_any_instance_of(ApplicationController).to receive(:pagy_get_limit).and_return(amount)
 end
