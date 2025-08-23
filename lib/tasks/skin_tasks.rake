@@ -97,6 +97,9 @@ namespace :skins do
         preview_path: File.join(user_skin_preview_path, "#{skin_file}_preview.png")
       )
     end
+
+    # Create Basic Formatting as an official work skin
+    WorkSkin.basic_formatting
   end
 
   def load_user_css(filename:, replace: false, parent_only: false, preview_path: default_user_skin_preview)
