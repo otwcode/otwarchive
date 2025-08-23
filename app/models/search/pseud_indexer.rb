@@ -124,7 +124,10 @@ class PseudIndexer < Indexer
   end
 
   def work_counts(pseud)
-    pseud.works.where(countable_works_conditions).group(:restricted).count
+    pseud.works
+      .select { |w| countable_works_conditions.all? { |k, v| w.send(k) == v } }
+      .group_by(&:restricted)
+      .transform_values(&:size)
   end
 
   def countable_works_conditions
