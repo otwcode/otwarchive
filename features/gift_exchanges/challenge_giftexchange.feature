@@ -336,8 +336,8 @@ Feature: Gift Exchange Challenge
       And everyone has their assignments for "Second Challenge"
     When I am logged in as "myname1"
       And I start to fulfill my assignment
-    Then the "Second Challenge (myname3)" checkbox should be checked
-      And the "Awesome Gift Exchange (myname3)" checkbox should not be checked
+    Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
+      And the "Second Challenge (myname3)" checkbox should not be checked
 
   Scenario: User has more than one pseud on signup form
     Given "myname1" has the pseud "othername"
@@ -735,7 +735,7 @@ Feature: Gift Exchange Challenge
       And I go to the assignments page for "gifter"
       Then I should see "Assignments (0)" within "#dashboard"
 
-  Scenario: User sidebar assignments count only includes unfulfilled assignments.
+  Scenario: Many Assignments.
     Given the following activated users exist
       | login  |
       | recip1 |
@@ -754,11 +754,10 @@ Feature: Gift Exchange Challenge
       And "gifter" has an assignment for the user "recip4" in the collection "collection_4"
       And it is currently 1 second from now
       And "gifter" has an assignment for the user "recip5" in the collection "collection_5"
-    And it is currently 1 second from now
     When I go to the assignments page for "gifter"
-    Then I should see "recip5"
-      And I should see "recip4"
+    Then I should see "recip1"
+      And I should see "recip2"
       And I should see "recip3"
     When I follow "2" within ".pagination"
-    Then I should see "recip2"
-      And I should see "recip1"
+    Then I should see "recip4"
+      And I should see "recip5"
