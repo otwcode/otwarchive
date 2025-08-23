@@ -403,3 +403,9 @@ Then /^no one should have an assignment for "([^\"]*)"$/ do |challenge_title|
     user.pinch_hit_assignments.in_collection(collection).should be_empty
   end
 end
+
+When "there are {int} assignments per page" do |amount|
+  stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
+  ArchiveConfig.ITEMS_PER_PAGE = amount.to_i
+  allow(ChallengeAssignment).to receive(:per_page).and_return(amount)
+end

@@ -734,3 +734,31 @@ Feature: Gift Exchange Challenge
     When I fulfill my assignment
       And I go to the assignments page for "gifter"
       Then I should see "Assignments (0)" within "#dashboard"
+
+  Scenario: User sidebar assignments count only includes unfulfilled assignments.
+    Given the following activated users exist
+      | login  |
+      | recip1 |
+      | recip2 |
+      | recip3 |
+      | recip4 |
+      | recip5 |
+      And there are 3 assignments per page
+      And I am logged in as "gifter"
+      And "gifter" has an assignment for the user "recip1" in the collection "collection_1"
+      And it is currently 1 second from now
+      And "gifter" has an assignment for the user "recip2" in the collection "collection_2"
+      And it is currently 1 second from now
+      And "gifter" has an assignment for the user "recip3" in the collection "collection_3"
+      And it is currently 1 second from now
+      And "gifter" has an assignment for the user "recip4" in the collection "collection_4"
+      And it is currently 1 second from now
+      And "gifter" has an assignment for the user "recip5" in the collection "collection_5"
+    And it is currently 1 second from now
+    When I go to the assignments page for "gifter"
+    Then I should see "recip5"
+      And I should see "recip4"
+      And I should see "recip3"
+    When I follow "2" within ".pagination"
+    Then I should see "recip2"
+      And I should see "recip1"
