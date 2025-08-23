@@ -168,7 +168,10 @@ class Collection < ApplicationRecord
   scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).with_attached_icon }
 
   def cleanup_url
-    self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
+    begin
+      self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
+    rescue Addressable::URI::InvalidURIError
+    end
   end
 
   # Get only collections with running challenges
