@@ -13,17 +13,17 @@ class CollectionItem < ApplicationRecord
   validates_uniqueness_of :collection_id, scope: [:item_id, :item_type],
     message: ts("already contains this item.")
 
-  enum user_approval_status: {
+  enum :user_approval_status, {
     rejected: -1,
     unreviewed: 0,
     approved: 1
-  }, _suffix: :by_user
+  }, suffix: :by_user
 
-  enum collection_approval_status: {
+  enum :collection_approval_status, {
     rejected: -1,
     unreviewed: 0,
     approved: 1
-  }, _suffix: :by_collection
+  }, suffix: :by_collection
 
   validate :collection_is_open, on: :create
   def collection_is_open

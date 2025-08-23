@@ -157,7 +157,7 @@ describe AdminMailer do
       it "has the correct content" do
         expect(email).to have_html_part_content("username: </b>#{admin.login}")
         expect(email).to have_html_part_content("URL: </b><a")
-        expect(email).to have_html_part_content(">http://www.example.com/admin/login</a>")
+        expect(email).to have_html_part_content(">https://www.example.com/admin/login</a>")
         expect(email).to have_html_part_content("</a> so you can log in.")
         expect(email).to have_html_part_content(token)
       end
@@ -166,7 +166,7 @@ describe AdminMailer do
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("Admin username: #{admin.login}")
-        expect(email).to have_text_part_content("Admin login URL: http://www.example.com/admin/login")
+        expect(email).to have_text_part_content("Admin login URL: https://www.example.com/admin/login")
         expect(email).to have_text_part_content("so you can log in:")
         expect(email).to have_text_part_content(token)
       end
