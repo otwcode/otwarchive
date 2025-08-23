@@ -79,7 +79,7 @@ class ChallengeAssignmentsController < ApplicationController
                                  else
                                    @challenge_assignments.unposted
                                  end
-        @challenge_assignments = @challenge_assignments.order(created_at: :desc).paginate(page: params[:page])
+        @challenge_assignments = @challenge_assignments.order(sent_at: :desc).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
       else
         flash[:error] = t(".access_denied_user")
         redirect_to root_path and return
