@@ -169,6 +169,7 @@ class Collection < ApplicationRecord
 
   def cleanup_url
     self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
+  rescue Addressable::URI::InvalidURIError
   end
 
   # Get only collections with running challenges
