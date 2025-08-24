@@ -45,7 +45,7 @@
   <body class="<%= logged_in? ? "logged-in" : "logged-out" %>" <%= PhraseApp::InContextEditor.enabled? ? "data-no-turbolink" : "" %>>
     <div id="outer" class="wrapper">
       <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
-      <% # layouts/proxy_notice is rendered here by JavaScript found in layouts/javascripts. %>
+       <%# layouts/proxy_notice is rendered here by JavaScript found in layouts/javascripts. %>
       <%= render partial: "layouts/header" %>
       <div id="inner" class="wrapper">
         <!-- BEGIN sidebar -->
