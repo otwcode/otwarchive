@@ -85,7 +85,7 @@ describe Collection do
 
     it "does not raise an 500 error when header_image_url is not a valid URL" do
       collection.header_image_url = "This will error."
-      expect(collection.save).not_to raise_error
+      expect {collection.save }.not_to raise_error
     end
     
   end
