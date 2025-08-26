@@ -401,7 +401,7 @@ describe Skin do
     context "when there is a skin with the title Default" do
       let!(:skin) { create(:skin, title: "Default") }
 
-      context "with official: true, public: true, role: \"site\"," do
+      context "with official: true, public: true, role: \"site\"" do
         before do
           skin.update!(official: true, public: true, role: "site", css: ".test { display: none; }")
         end
@@ -417,8 +417,8 @@ describe Skin do
         end
       end
 
-      context "with a role other than \"site\"" do
-        it "updates the role to \"site\" and returns the skin" do
+      context "without a role" do
+        it "adds the \"site\" role and returns the skin" do
           expect do
             Skin.default
           end.to change { skin.reload.role }
@@ -427,7 +427,19 @@ describe Skin do
         end
       end
 
-      context "with official: false" do
+      context "with a role other than \"site\"" do
+        before { skin.update!(role: "user") }
+
+        it "updates the role to \"site\" and returns the skin" do
+          expect do
+            Skin.default
+          end.to change { skin.reload.role }
+            .from("user").to("site")
+          expect(Skin.default).to eq(skin)
+        end
+      end
+
+      context "with official set to false" do
         it "updates official to true and returns the skin" do
           expect do
             Skin.default
@@ -437,7 +449,7 @@ describe Skin do
         end
       end
 
-      context "with public: false" do
+      context "with public set to false" do
         it "updates public to true and returns the skin" do
           expect do
             Skin.default
