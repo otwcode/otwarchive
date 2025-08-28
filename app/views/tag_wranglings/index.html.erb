@@ -1,11 +1,11 @@
 <div class="tag wrangling home">
   <!--Descriptive page name, messages and instructions-->
-  <h2 class="heading"><%= t(".heading") %></h2>
+  <h2 class="heading"><%= t(".page_heading") %></h2>
   <% unless params[:show] %>
-    <h4 class="landmark heading"><%= t(".notes.landmark_heading") %></h4>
+    <h4 class="landmark heading"><%= t(".notes.landmark") %></h4>
     <ul class="notes">
       <li>
-        <%= t(".notes.wrangling_guidelines_html",
+        <%= t(".notes.wrangle_to_guidelines_html",
               wrangling_guidelines_link: link_to(t(".notes.wrangling_guidelines"), wrangling_guidelines_path)) %>
       </li>
       <li>
@@ -67,8 +67,8 @@
               tag_wrangling_slack_tutorial_link: link_to(t(".general_resources.tag_wrangling_slack_tutorial"), "https://wiki.transformativeworks.org/mediawiki/Tag_Wrangling_Slack_Tutorial")) %>
       </li>
       <li>
-        <%= t(".general_resources.fandoms_in_need_html",
-              fandoms_in_need_link: link_to(t(".general_resources.fandoms_in_need"), "https://wiki.transformativeworks.org/mediawiki/Fandoms_in_need_of_Cowranglers")) %>
+        <%= t(".general_resources.fandoms_in_need_of_cowranglers_html",
+              fandoms_in_need_of_cowranglers_link: link_to(t(".general_resources.fandoms_in_need_of_cowranglers"), "https://wiki.transformativeworks.org/mediawiki/Fandoms_in_need_of_Cowranglers")) %>
       </li>
       <li>
         <%= t(".general_resources.unassigned_fandoms_html",
@@ -77,11 +77,11 @@
       <li>
         <%= t(".general_resources.ao3_catch_and_release_html",
               ao3_catch_and_release_link: link_to(t(".general_resources.ao3_catch_and_release"), tag_wrangler_path("Ao3_Catch_and_Release")),
-              ao3_wrangling_faq_link: link_to(t(".general_resources.ao3_wrangling_faq"), "https://wiki.transformativeworks.org/mediawiki/AO3_Wrangling_Project_FAQ")) %>
+              ao3_wrangling_project_faq_link: link_to(t(".general_resources.ao3_wrangling_project_faq"), "https://wiki.transformativeworks.org/mediawiki/AO3_Wrangling_Project_FAQ")) %>
       </li>
       <li>
-        <%= t(".general_resources.fandom_and_megafandom_dir_html",
-              fandom_and_megafandom_dir_link: link_to(t(".general_resources.fandom_and_megafandom_dir"), "https://wiki.transformativeworks.org/mediawiki/Category:Fandoms_%26_Megafandoms")) %>
+        <%= t(".general_resources.fandom_and_megafandom_directory_html",
+              fandom_and_megafandom_directory_link: link_to(t(".general_resources.fandom_and_megafandom_directory"), "https://wiki.transformativeworks.org/mediawiki/Category:Fandoms_%26_Megafandoms")) %>
       </li>
     </ul>
   <% end %>

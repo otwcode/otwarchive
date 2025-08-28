@@ -2078,14 +2078,14 @@ en:
     index:
       general_resources:
         ao3_catch_and_release: AO3_Catch_and_Release
-        ao3_catch_and_release_html: "%{ao3_catch_and_release_link} - For more information, please see the %{ao3_wrangling_faq_link}"
-        ao3_wrangling_faq: Tag Wrangling AO3 Project FAQ
+        ao3_catch_and_release_html: "%{ao3_catch_and_release_link} - For more information, please see the %{ao3_wrangling_project_faq_link}"
+        ao3_wrangling_project_faq: Tag Wrangling AO3 Project FAQ
         current_wrangling_limitations: Current Wrangling Limitations
         current_wrangling_limitations_html: "%{current_wrangling_limitations_link} - Details about current wrangling limitations and policies"
-        fandom_and_megafandom_dir: Directory of Fandom & Megafandom Wiki Pages
-        fandom_and_megafandom_dir_html: "%{fandom_and_megafandom_dir_link} - All currently available fandom & megafandom wiki pages"
-        fandoms_in_need: Fandoms in need of Cowranglers
-        fandoms_in_need_html: "%{fandoms_in_need_link} - Interested in helping out a fandom in need?"
+        fandom_and_megafandom_directory: Directory of Fandom & Megafandom Wiki Pages
+        fandom_and_megafandom_directory_html: "%{fandom_and_megafandom_directory_link} - All currently available fandom & megafandom wiki pages"
+        fandoms_in_need_of_cowranglers: Fandoms in need of Cowranglers
+        fandoms_in_need_of_cowranglers_html: "%{fandoms_in_need_of_cowranglers_link} - Interested in helping out a fandom in need?"
         heading: 'General Wrangling Resources:'
         otw_slack_chat: OTW Slack Chat
         otw_slack_chat_html: "%{otw_slack_chat_link} - For more information please see the %{tag_wrangling_slack_tutorial_link}"
@@ -2108,17 +2108,17 @@ en:
         unassigned_fandoms_html: "%{unassigned_fandoms_link} - A list of all current unassigned fandoms"
         vacations_and_retiring: Vacation and Retiring from Wrangling
         vacations_and_retiring_html: "%{vacations_and_retiring_link} - Unable to wrangle for more than 2 weeks? Read about options for taking a break from wrangling!"
-      heading: Tag Wrangling
       notes:
         contact_chair_html: For confidential issues (including difficulty reaching other wranglers), please email Chairs at %{tag_wranglers_chair_email_link} or use the phrase "%{question_for_chair_bold}" in %{tw_wranglers_slack_link}, %{tw_wranglers_quietroom_slack_link}, or in any training room and let them know you would like to chat via direct message.
         contact_supervisor_html: If you have questions, difficulty accessing the wiki, or need technical assistance, please email Tag Wranglers Supervisors or use the phrase "%{question_for_supervisor_bold}" to contact a Supervisor in %{tw_wranglers_slack_link}, %{tw_wranglers_quietroom_slack_link}, or in any training room.
-        landmark_heading: Notes
+        landmark: Notes
         question_for_chair: Question for a Chair!
         question_for_supervisor: Question for a Supervisor!
         tw_wranglers_quietroom_slack: "#tw-wranglers-quietroom"
         tw_wranglers_slack: "#tw-wranglers"
+        wrangle_to_guidelines_html: Wrangle tags in accordance with the %{wrangling_guidelines_link}.
         wrangling_guidelines: wrangling guidelines
-        wrangling_guidelines_html: Wrangle tags in accordance with the %{wrangling_guidelines_link}.
+      page_heading: Tag Wrangling
     wrangler_dashboard:
       characters_by_fandom: Characters by fandom (%{count})
       fandoms_by_media: Fandoms by media (%{count})
