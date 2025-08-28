@@ -62,9 +62,10 @@ module ApplicationHelper
 
   # 1: default shows just the link to help
   # 2: show_text = true: shows "plain text with limited html" and link to help
-  def allowed_html_instructions(show_text = true)
-    (show_text ? h(ts("Plain text with limited HTML")) : "".html_safe) +
-      link_to_help("html-help")
+  def allowed_html_instructions(show_text: true, strip_images: false)
+    (show_text ? t("application_helper.text_limited_html") : "".html_safe) +
+      link_to_help("html-help") +
+      (strip_images ? "<br />".html_safe + t("application_helper.strip_images") : "".html_safe)
   end
 
   # Byline helpers
