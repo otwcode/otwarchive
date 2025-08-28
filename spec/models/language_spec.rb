@@ -25,6 +25,12 @@ describe Language do
         expect(korean).not_to be_valid
         expect(korean.errors[:short]).to include("is too long (maximum is 4 characters)")
       end
+
+      it "shows 'Abbreviation' in error messages" do
+        lang = Language.new(name: "Test Language", short: "toolong")
+        lang.validate
+        expect(lang.errors.full_messages).to include("Abbreviation is too long (maximum is 4 characters)")
+      end
     end
 
     context "for :name" do
