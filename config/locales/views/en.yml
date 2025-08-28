@@ -2034,6 +2034,27 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+  stats:
+    index:
+      bookmarks: Bookmarks
+      comment_threads: Comment Threads
+      date: Date
+      fandoms_view: Fandoms View
+      flat_view: Flat View
+      hits: Hits
+      kudos: Kudos
+      landmark_heading: View Sorting and Actions
+      listing_statistics: Listing Statistics
+      series_bookmarks: Series Bookmarks
+      series_subscriptions: Series Subscriptions
+      subscriptions: Subscriptions
+      types_view: Types View
+      user_subscriptions: User Subscriptions
+      word_count: Word Count
+      word_count_with_input: "%{wordcount} words"
+      work_bookmarks: Work Bookmarks
+      work_count: Work Count
+      work_subscriptions: Work Subscriptions
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
