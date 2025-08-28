@@ -1,7 +1,0 @@
-<ul class="navigation actions">
-  <li><%= span_if_current t(".edit_my_profile"), edit_user_path(@user) %></li>
-  <li><%= span_if_current t(".edit_default_pseud_and_icon"), [:edit, @user, @user.default_pseud] %></li>
-  <li><%= span_if_current t(".change_username"), change_username_user_path(@user) %></li>
-  <li><%= span_if_current t(".change_password"), change_password_user_path(@user) %></li>
-  <li><%= span_if_current t(".change_email"), change_email_user_path(@user) %></li>
-</ul>
