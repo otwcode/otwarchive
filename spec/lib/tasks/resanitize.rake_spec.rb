@@ -2,6 +2,9 @@ require "spec_helper"
 
 describe "rake resanitize:all" do
   include ActiveJob::TestHelper
+  def queue_adapter_for_test
+    ActiveJob::QueueAdapters::TestAdapter.new
+  end
 
   shared_examples "resanitizes" do |field|
     field_sanitizer_version = "#{field}_sanitizer_version"
