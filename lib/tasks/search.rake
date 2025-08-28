@@ -10,13 +10,18 @@ namespace :search do
     Indexer.all.group_by(&:index_name).values.map(&:first).map(&:create_mapping)
   end
 
+  desc "Recreate collections index"
+  task(index_collections: :environment) do
+    CollectionIndexer.index_all
+  end
+
   desc "Recreate tag index"
   task(index_tags: :environment) do
     if Rails.env.production? || Rails.env.test?
-      puts 'Running this task will temporarily empty some wrangling bins and affect tag search. 
+      puts 'Running this task will temporarily empty some wrangling bins and affect tag search.
       Have you warned the wrangling team this task is being run?
       Enter YES to continue:'
-  
+
       confirmation = $stdin.gets.chomp.strip.upcase
       unless confirmation == "YES"
         puts "Task aborted."
@@ -47,6 +52,11 @@ namespace :search do
     UserIndexer.index_all
   end
 
+  desc "Reindex all collections without recreating the index"
+  task(reindex_collections: :environment) do
+    CollectionIndexer.index_from_db
+  end
+
   desc "Reindex all works without recreating the index"
   task(reindex_works: :environment) do
     WorkIndexer.index_from_db
@@ -66,7 +76,17 @@ namespace :search do
   end
 
   desc "Reindex all recently-modified items"
-  task timed_all: %i[timed_works timed_tags timed_pseud timed_bookmarks] do
+  # rubocop:disable Lint/EmptyBlock
+  task timed_all: %i[timed_admin_users timed_collections timed_works timed_tags timed_pseud timed_bookmarks] do
+  end
+  # rubocop:enable Lint/EmptyBlock
+
+  desc "Reindex recent users"
+  task timed_admin_users: :environment do
+    time = ENV["TIME_PERIOD"] || "NOW() - INTERVAL 1 DAY"
+    User.where("users.updated_at > #{time}").select(:id).find_in_batches(batch_size: BATCH_SIZE) do |group|
+      AsyncIndexer.new(UserIndexer, :world).enqueue_ids(group.map(&:id))
+    end
   end
 
   desc "Reindex recent bookmarks"
@@ -83,6 +103,14 @@ namespace :search do
     end
     Bookmark.where("bookmarks.updated_at >  #{time}").select(:id).find_in_batches(batch_size: BATCH_SIZE) do |group|
       AsyncIndexer.new(BookmarkIndexer, :world).enqueue_ids(group.map(&:id))
+    end
+  end
+
+  desc "Reindex recent collections"
+  task timed_collections: :environment do
+    time = ENV["TIME_PERIOD"] || "NOW() - INTERVAL 1 DAY"
+    Collection.where("collections.updated_at >  #{time}").select(:id).find_in_batches(batch_size: BATCH_SIZE) do |group|
+      AsyncIndexer.new(CollectionIndexer, :world).enqueue_ids(group.map(&:id))
     end
   end
 

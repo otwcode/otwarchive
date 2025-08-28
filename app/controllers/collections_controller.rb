@@ -38,25 +38,21 @@ class CollectionsController < ApplicationController
         .paginate(page: params[:page])
     elsif params[:collection_id]
       @collection = Collection.find_by!(name: params[:collection_id])
-      @collections = @collection.children
-        .by_title
-        .for_blurb
-        .paginate(page: params[:page])
+      @search = CollectionSearchForm.new({ parent_id: @collection.id }.merge(page: params[:page]))
+      @collections = @search.search_results.scope(:for_search)
+      flash_search_warnings(@collections)
       @page_subtitle = t(".subcollections_page_title", collection_title: @collection.title)
     elsif params[:user_id]
       @user = User.find_by!(login: params[:user_id])
-      @collections = @user.maintained_collections
-        .by_title
-        .for_blurb
-        .paginate(page: params[:page])
+      @search = CollectionSearchForm.new({ maintainer_id: @user.id }.merge(page: params[:page]))
+      @collections = @search.search_results.scope(:for_search)
+      flash_search_warnings(@collections)
       @page_subtitle = ts("%{username} - Collections", username: @user.login)
     else
       @sort_and_filter = true
-      params[:collection_filters] ||= {}
-      params[:sort_column] = "collections.created_at" if !valid_sort_column(params[:sort_column], 'collection')
-      params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
-      sort = params[:sort_column] + " " + params[:sort_direction]
-      @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
+      @search = CollectionSearchForm.new(collection_filter_params.merge(page: params[:page]))
+      @collections = @search.search_results.scope(:for_search)
+      flash_search_warnings(@collections)
     end
   end
 
@@ -64,17 +60,19 @@ class CollectionsController < ApplicationController
   def list_challenges
     @page_subtitle = "Open Challenges"
     @hide_dashboard = true
-    @challenge_collections = (Collection.signup_open("GiftExchange").limit(15) + Collection.signup_open("PromptMeme").limit(15))
+
+    @challenge_collections = (CollectionSearchForm.new(challenge_type: "GiftExchange", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results.to_a +
+                             CollectionSearchForm.new(challenge_type: "PromptMeme", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results.to_a)
   end
 
   def list_ge_challenges
     @page_subtitle = "Open Gift Exchange Challenges"
-    @challenge_collections = Collection.signup_open("GiftExchange").limit(15)
+    @challenge_collections = CollectionSearchForm.new(challenge_type: "GiftExchange", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results
   end
 
   def list_pm_challenges
     @page_subtitle = "Open Prompt Meme Challenges"
-    @challenge_collections = Collection.signup_open("PromptMeme").limit(15)
+    @challenge_collections = CollectionSearchForm.new(challenge_type: "PromptMeme", signup_open: true, sort_column: "signups_close_at", page: 1, per_page: 15).search_results
   end
 
   def show
@@ -195,11 +193,17 @@ class CollectionsController < ApplicationController
 
   private
 
+  def collection_filter_params
+    params.permit(:commit, collection_search: [
+      :title, :challenge_type, :moderated, :closed, :tag, :sort_column, :sort_direction
+    ])[:collection_search] || {}
+  end
+
   def collection_params
     params.require(:collection).permit(
       :name, :title, :email, :header_image_url, :description,
       :parent_name, :challenge_type, :icon, :delete_icon,
-      :icon_alt_text, :icon_comment_text,
+      :icon_alt_text, :icon_comment_text, :tag_string, :multifandom,
       collection_profile_attributes: [
         :id, :intro, :faq, :rules,
         :gift_notification, :assignment_notification
@@ -210,5 +214,4 @@ class CollectionsController < ApplicationController
       ]
     )
   end
-
 end

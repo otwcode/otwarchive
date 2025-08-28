@@ -328,23 +328,28 @@ Given "pseud {string} has a bookmark of a work titled {string} by {string}" do |
   step %{all indexing jobs have been run}
 end
 
-def submit_bookmark_form(pseud, note, tags)
+def submit_bookmark_form(pseud, note, tags, collection)
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
   fill_in("Your tags", with: tags) unless tags.nil?
+  fill_in("bookmark_collection_names", with: collection.gsub(/[^\w]/, "_")) unless collection.nil?
   click_button("Create")
   step %{all indexing jobs have been run}
 end
 
-When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
+# rubocop:disable Cucumber/RegexStepName
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?(?: to the collection "(.*?)")?$/ do |title, pseud, note, tags, collection|
   step %{I start a new bookmark for "#{title}"}
-  submit_bookmark_form(pseud, note, tags)
+  submit_bookmark_form(pseud, note, tags, collection)
 end
+# rubocop:enable Cucumber/RegexStepName
 
-When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")? from new bookmark page$/ do |title, pseud, note, tags|
+# rubocop:disable Cucumber/RegexStepName
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?(?: to the collection "(.*?)")? from new bookmark page$/ do |title, pseud, note, tags, collection|
   step %{I go to the new bookmark page for work "#{title}"}
-  submit_bookmark_form(pseud, note, tags)
+  submit_bookmark_form(pseud, note, tags, collection)
 end
+# rubocop:enable Cucumber/RegexStepName
 
 When /^I bookmark the series "([^\"]*)"$/ do |series_title|
   series = Series.find_by(title: series_title)
