@@ -328,6 +328,13 @@ class User < ApplicationRecord
       destroy_all
   end
 
+  def assignments
+    offers = ChallengeAssignment.joins(offer_signup: :pseud).where(pseuds: { user_id: self.id })
+    pinch_hits = ChallengeAssignment.joins(:pinch_hitter).where(pseuds: { user_id: self.id })
+
+    ChallengeAssignment.from("(#{offers.to_sql} UNION #{pinch_hits.to_sql}) AS challenge_assignments").sent
+  end
+
   # Checks authorship of any sort of object
   def is_author_of?(item)
     if item.respond_to?(:pseud_id)
