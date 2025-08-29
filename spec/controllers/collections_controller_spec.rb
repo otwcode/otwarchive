@@ -6,6 +6,15 @@ describe CollectionsController do
 
   let(:collection) { create(:collection) }
 
+  describe "POST #create" do
+    context "when the header_image_url is invalid" do
+      it "does not error" do
+        post :create, params: {collection: attributes_for(:collection).merge(header_image_url: "This will error.")}
+        expect(response).to have_http_status(:found)
+      end
+    end
+  end
+
   describe "GET #index" do
     it "assigns subtitle with collection title and subcollections" do
       get :index, params: { collection_id: collection.name }

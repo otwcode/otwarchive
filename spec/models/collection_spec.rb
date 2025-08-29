@@ -81,13 +81,7 @@ describe Collection do
       expect(collection.save).to be_falsey
       expect(collection.errors.full_messages).to \
         include /Sorry, a collection can only have 10 tags./
-    end
-
-    it "does not raise an 500 error when header_image_url is not a valid URL" do
-      collection.header_image_url = "This will error."
-      expect {collection.save }.not_to raise_error
-    end
-    
+    end    
   end
 
   describe "#clear_icon" do
