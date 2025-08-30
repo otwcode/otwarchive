@@ -1,6 +1,14 @@
 require "spec_helper"
 
 describe "rake db:fixtures:load" do
+  before do
+    WebMock.stub_request(:any, /example/)
+  end
+
+  after do
+    WebMock.reset!
+  end
+
   it "should result in valid records" do
     subject.invoke
 
