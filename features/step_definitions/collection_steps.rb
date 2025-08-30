@@ -122,6 +122,39 @@ Given "I have joined the collection {string} as {string}" do |title, login|
   visit collections_path
 end
 
+Given "a set of collections for searching" do
+  profile = CollectionProfile.create!(faq: "<dl><dt>What is this test thing?</dt><dd>It's a test collection</dd></dl>",
+                                      intro: "Welcome to the test collection",
+                                      rules: "Be nice to testers")
+  FactoryBot.create(:collection,
+                    name: "sometest",
+                    title: "Some Test Collection",
+                    collection_profile: profile)
+  FactoryBot.create(:collection,
+                    name: "othertest",
+                    title: "Some Other Collection")
+  FactoryBot.create(:collection,
+                    :closed,
+                    name: "anothertest",
+                    title: "Another Plain Collection")
+  FactoryBot.create(:collection,
+                    :moderated,
+                    name: "surprisetest",
+                    title: "Surprise Presents",
+                    challenge: FactoryBot.create(:gift_exchange))
+  FactoryBot.create(:collection,
+                    name: "swaptest",
+                    title: "Another Gift Swap",
+                    challenge: FactoryBot.create(:gift_exchange))
+  FactoryBot.create(:collection,
+                    :closed,
+                    name: "demandtest",
+                    title: "On Demand",
+                    challenge: FactoryBot.create(:prompt_meme))
+
+  step %{all indexing jobs have been run}
+end
+
 ### WHEN
 
 When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|

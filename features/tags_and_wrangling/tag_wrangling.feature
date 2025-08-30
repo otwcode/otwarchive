@@ -3,7 +3,7 @@ Feature: Tag wrangling
 
   Scenario: Admin can create a tag wrangler using the interface
 
-    Given I have loaded the "roles" fixture
+    Given the role "tag_wrangler"
     When I am logged in as "dizmo"
     Then I should not see "Tag Wrangling" within "#header"
     When I am logged in as a "tag_wrangling" admin
@@ -12,7 +12,7 @@ Feature: Tag wrangling
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
     # admin making user tag wrangler
-    When I check "user_roles_1"
+    When I check the "tag_wrangler" role checkbox
       And I press "Update"
     Then I should see "User was successfully updated"
     # accessing wrangling pages

@@ -8,5 +8,6 @@ Snow Blue uses Snow as a parent to ensure certain elements are pure white.
 
 * Use the CSS from snow_blue_site_screen.css.
 * Expand the "Advanced" section.
+* For "Media," check the "screen" option.
 * Press the "Add parent skin" button.
 * For Parent #1, enter "Snow".

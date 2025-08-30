@@ -334,7 +334,7 @@ describe CommentsController do
 
         it "sets flash_is_set to bypass caching" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          expect(cookies[:flash_is_set]).to eq(1)
+          expect(cookies[:flash_is_set]).to eq("1")
         end
       end
 
@@ -349,7 +349,7 @@ describe CommentsController do
 
         it "sets flash_is_set to bypass caching" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          expect(cookies[:flash_is_set]).to eq(1)
+          expect(cookies[:flash_is_set]).to eq("1")
         end
       end
 

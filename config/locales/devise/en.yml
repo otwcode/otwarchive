@@ -70,3 +70,4 @@ en:
       not_saved:
         one: '1 error prohibited this %{resource} from being saved:'
         other: "%{count} errors prohibited this %{resource} from being saved:"
+      pwned_password: appears in data breaches from other sites and is no longer secure. For your protection, please select a stronger, unique password.

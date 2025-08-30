@@ -216,11 +216,11 @@ class Work < ApplicationRecord
     end
   end
 
-  enum comment_permissions: {
+  enum :comment_permissions, {
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, _suffix: :comments, _default: 1
+  }, suffix: :comments, default: 1
 
   ########################################################################
   # HOOKS

@@ -293,13 +293,11 @@ Given /^bookmarks of external works and series tagged with the (character|relati
 end
 
 Given /^"(.*?)" has bookmarks of works in various languages$/ do |user|
-  step %{I have loaded the "languages" fixture}
-
   step %{the user "#{user}" exists and is activated}
   user_pseud = User.find_by(login: user).default_pseud
 
-  lang_en = Language.find_by(name: "English")
-  lang_de = Language.find_by(name: "Deutsch")
+  lang_en = Language.find_or_create_by!(name: "English", short: "en")
+  lang_de = Language.find_or_create_by!(name: "Deutsch", short: "de")
 
   work1 = FactoryBot.create(:work, title: "english work", language_id: lang_en.id)
   work2 = FactoryBot.create(:work, title: "german work", language_id: lang_de.id)
@@ -318,6 +316,14 @@ Given "{string} has a bookmark of a work titled {string}" do |user, title|
   FactoryBot.create(:bookmark,
                     bookmarkable: work1,
                     pseud: user_pseud)
+
+  step %{all indexing jobs have been run}
+end
+
+Given "pseud {string} has a bookmark of a work titled {string} by {string}" do |pseud, title, creator|
+  pseud = Pseud.find_by(name: pseud)
+  work = FactoryBot.create(:work, title: title, authors: [ensure_user(creator).default_pseud])
+  FactoryBot.create(:bookmark, bookmarkable: work, pseud: pseud)
 
   step %{all indexing jobs have been run}
 end

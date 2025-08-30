@@ -6,7 +6,7 @@ gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 7.1"
+gem "rails", "~> 7.2"
 gem "rails-i18n"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
@@ -62,9 +62,10 @@ gem "terrapin"
 gem 'fastimage'
 
 # Gems for authentication
-gem 'devise'
-gem 'devise-async'       # To mails through queues
-gem 'bcrypt'
+gem "devise"
+gem "devise-async" # To mails through queues
+gem "bcrypt"
+gem "devise-pwned_password"
 
 # Needed for modern ssh
 gem "ed25519", ">= 1.2", "< 2.0"

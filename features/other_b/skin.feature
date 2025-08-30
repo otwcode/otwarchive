@@ -244,7 +244,7 @@ Feature: Non-public site and work skins
   When I set up the skin "Work Skin" with css ".selector {position: fixed; top: 0;}"
     And I select "Work Skin" from "Type"
     And I submit
-  Then I should see "The position property in .selector cannot have the value fixed in Work skins, sorry!"
+  Then I should see "The position property in .selector cannot have the value fixed in work skins, sorry!"
 
   Scenario: User should be able to access their site and work skins from an
   individual skin's show page
