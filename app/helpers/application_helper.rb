@@ -112,11 +112,11 @@ module ApplicationHelper
                        link_to(creator[:byline], url_options, rel: "author")
                      end
 
-      if creator[:archivists].empty?
+      if creator[:external_creators].empty?
         pseud_byline
       else
-        safe_join(creator[:archivists].map do |ext_author|
-          t("application_helper.archivist_byline_html", external_author: ext_author, pseud_byline: pseud_byline)
+        safe_join(creator[:external_creators].map do |ext_creator|
+          t("application_helper.archivist_byline_html", external_creator: ext_creator, pseud_byline: pseud_byline)
         end, t("support.array.words_connector"))
       end
     end, t("support.array.words_connector"))
@@ -128,12 +128,12 @@ module ApplicationHelper
     pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a # rubocop:disable Rails/HelperInstanceVariable
     pseuds = pseuds.flatten.uniq.sort
 
-    archivists = Hash.new []
+    external_creators = Hash.new []
     if creation.is_a?(Work)
       external_creatorships = creation.external_creatorships.reject(&:claimed?)
       external_creatorships.each do |ec|
         archivist_pseud = pseuds.find { |p| ec.archivist.pseuds.include?(p) }
-        archivists[archivist_pseud] += [ec.author_name]
+        external_creators[archivist_pseud] += [ec.author_name]
       end
     end
 
@@ -146,7 +146,7 @@ module ApplicationHelper
         pseud: pseud.to_param,
         user: pseud.user.to_param,
         # Cache the array of plain-text names of the unclaimed external creators
-        archivists: archivists[pseud]
+        external_creators: external_creators[pseud]
       }
     end
   end
