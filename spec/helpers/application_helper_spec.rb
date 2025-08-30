@@ -387,16 +387,16 @@ describe ApplicationHelper do
 
     before do
       create(:locale, iso: "new")
-      I18n.backend.store_translations(:new, { support: { array: { words_connector: "，" } } })
+      I18n.backend.store_translations(:new, { support: { array: { words_connector: "|" } } })
     end
 
-    it "results in different bylines per locale despite caching" do
+    it "results in different bylines per locale" do
       I18n.with_locale(I18n.default_locale) do
         expect(helper.byline(work, visibility: "public")).to include("Beetle</a>, <a")
       end
 
       I18n.with_locale(:new) do
-        expect(helper.byline(work, visibility: "public")).to include("Beetle</a>，<a")
+        expect(helper.byline(work, visibility: "public")).to include("Beetle</a>|<a")
       end
     end
   end
