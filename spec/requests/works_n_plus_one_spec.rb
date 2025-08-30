@@ -82,6 +82,29 @@ describe "n+1 queries in the WorksController" do
         it_behaves_like "displaying multiple works efficiently"
       end
     end
+
+    context "when viewing imported recent works" do
+      subject do
+        proc do
+          get works_path
+        end
+      end
+
+      let!(:work_attributes) do
+        archivist = create(:archivist)
+        { authors: [archivist.default_pseud], external_creatorships: [create(:external_creatorship, archivist: archivist)] }
+      end
+
+      context "when logged in" do
+        before { fake_login }
+
+        it_behaves_like "displaying multiple works efficiently"
+      end
+
+      context "when logged out" do
+        it_behaves_like "displaying multiple works efficiently"
+      end
+    end
   end
 
   describe "#collected" do
