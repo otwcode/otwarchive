@@ -171,7 +171,7 @@ class Collection < ApplicationRecord
     self.header_image_url = begin 
       Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
     rescue Addressable::URI::InvalidURIError
-      nil
+      self.header_image_url
     end
   end
 
