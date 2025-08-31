@@ -404,8 +404,8 @@ en:
     claim_notification:
       access:
         contact_support: contact AO3 Support
-        html: Depending on the archive, your works may have been imported as restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{contact_support_link}.
-        text: Depending on the archive, your works may have been imported as restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please contact AO3 Support at %{support_url}.
+        html: Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{contact_support_link}.
+        text: Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please contact AO3 Support at %{support_url}.
       email_tips: If you're contacting us, please add email addresses from @transformativeworks.org to your list of safe contacts and check your spam folders for our reply.
       introduction:
         ao3_name: Archive of Our Own
