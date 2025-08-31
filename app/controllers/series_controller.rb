@@ -23,7 +23,7 @@ class SeriesController < ApplicationController
     @user = User.find_by!(login: params[:user_id])
     @page_subtitle = t(".page_title", username: @user.login)
 
-    @series = if current_user.nil?
+    @series = if User.current_user.nil?
                 Series.visible_to_all
               else
                 Series.visible_to_registered_user
