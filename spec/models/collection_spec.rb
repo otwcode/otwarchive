@@ -81,7 +81,7 @@ describe Collection do
       expect(collection.save).to be_falsey
       expect(collection.errors.full_messages).to \
         include /Sorry, a collection can only have 10 tags./
-    end
+    end    
   end
 
   describe "#clear_icon" do
