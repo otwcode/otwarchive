@@ -38,6 +38,9 @@
   <%= style_link(t(".read_all_comments.chapter.html", position: @comment.parent.position, title: @comment.ultimate_parent.commentable_name),
         work_chapter_url(@comment.parent.work, @comment.parent, show_comments: true, anchor: :comments)) %>
   <br />
+<% elsif @comment.ultimate_parent.kind_of?(Tag) %>
+  <%= style_link(t(".read_all_comments.tag.html", tag: @comment.ultimate_parent.commentable_name),
+        tag_comments_url(@comment.ultimate_parent)) %>
 <% else %>
   <%= style_link(t(".read_all_comments.other.html", title: @comment.ultimate_parent.commentable_name),
         polymorphic_url(@comment.ultimate_parent, view_full_work: true, show_comments: true, anchor: :comments)) %>

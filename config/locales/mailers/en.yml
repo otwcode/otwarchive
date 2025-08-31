@@ -75,6 +75,9 @@ en:
         other:
           html: Read all comments on <i>%{title}</i>
           text: 'Read all comments on "%{title}": %{url}'
+        tag:
+          html: Read all comments on %{tag}
+          text: 'Read all comments on "%{tag}": %{url}'
       reply:
         html: Reply to this comment
         text: 'Reply to this comment: %{url}'

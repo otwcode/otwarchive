@@ -29,6 +29,9 @@
 <% if @comment.parent.kind_of?(Chapter) && @comment.parent.work.chaptered? %>
 <%= t(".read_all_comments.chapter.text", position: @comment.parent.position, title: @comment.ultimate_parent.commentable_name,
       url: work_chapter_url(@comment.parent.work, @comment.parent, show_comments: true, anchor: :comments)) %>
+<% elsif @comment.ultimate_parent.kind_of?(Tag) %>
+  <%= t(".read_all_comments.tag.text", tag: @comment.ultimate_parent.commentable_name,
+        url: tag_comments_url(@comment.ultimate_parent)) %>
 <% else %>
 <%= t(".read_all_comments.other.text", title: @comment.ultimate_parent.commentable_name,
       url: polymorphic_url(@comment.ultimate_parent, view_full_work: true, show_comments: true, anchor: :comments)) %>
