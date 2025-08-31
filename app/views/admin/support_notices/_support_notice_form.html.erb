@@ -1,0 +1,42 @@
+<%= form_for @support_notice, url: @support_notice.new_record? ? admin_support_notices_path : admin_support_notice_path(@support_notice), html: { class: "post" } do |f| %>
+  <%= error_messages_for @support_notice %>
+  <p class="required notice"><%= "* #{t('.required_information')}" %></p>
+  <fieldset>
+    <legend><%= t(".legend.content") %></legend>
+    <h3 class="landmark heading"><%= t(".landmark.content") %></h3>
+    <dl>
+      <dt class="required"><%= f.label :content, "#{t('.text')}*" %></dt>
+      <dd class="required">
+        <p><%= allowed_html_instructions %></p>
+        <%= f.text_area :content %>
+      </dd>
+      <dt class="required"><%= t(".type.label") %>*</dt>
+      <dd class="required">
+        <ul>
+          <li>
+            <%= f.radio_button :support_notice_type, "notice", checked: true %>
+            <%= f.label :support_notice_type_notice, t(".type.notice") %>
+          </li>
+          <li>
+            <%= f.radio_button :support_notice_type, "caution" %>
+            <%= f.label :support_notice_type_caution, t(".type.caution") %>
+          </li>
+          <li>
+            <%= f.radio_button :support_notice_type, "error" %>
+            <%= f.label :support_notice_type_error, t(".type.error") %>
+          </li>
+        </ul>
+      </dd>
+      <dt><%= f.check_box :active %></dt>
+      <dd><%= f.label :active, t(".active") %></dd>
+    </dl>
+  </fieldset>
+
+  <fieldset>
+    <legend><%= t(".legend.actions") %></legend>
+    <h3 class="landmark heading"><%= t(".landmark.actions") %></h3>
+    <p class="submit actions">
+      <%= f.submit @support_notice.new_record? ? t(".submit.create") : t(".submit.update") %>
+    </p>
+  </fieldset>
+<% end %>

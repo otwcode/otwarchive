@@ -12,6 +12,18 @@ class FeedbacksController < ApplicationController
       @feedback.email = current_user.email
       @feedback.username = current_user.login
     end
+
+    if Rails.env.development?
+      @support_notice = SupportNotice.where(active: true).last
+    else
+      # http://stackoverflow.com/questions/12891790/will-returning-a-nil-value-from-a-block-passed-to-rails-cache-fetch-clear-it
+      # Basically we need to store a nil separately.
+      @support_notice = Rails.cache.fetch("support_notice") do
+        support_notice = SupportNotice.where(active: true).last
+        support_notice.nil? ? "" : support_notice
+      end
+      @support_notice = nil if @support_notice == ""
+    end
   end
 
   def create
