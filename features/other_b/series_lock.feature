@@ -68,8 +68,9 @@ Feature: Locked and partially locked series
 
   Scenario: Admins can see locked series on user's series page
     Given I am logged in as "Accumulator"
-      And I post the work "Restricted work" as part of a series "So Restrictive"
-      And I lock the work "Restricted work"
+      And I set up the draft "Restricted work" as part of a series "So Restrictive"
+      And I lock the work
+      And I press "Post"
     When I go to Accumulator's user page
     Then I should see "Series (1)" within "#dashboard"
     When I am logged in as a super admin
