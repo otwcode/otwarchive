@@ -128,7 +128,7 @@ Feature: Edit Works
       And I post the work "Dialogue"
     When I follow "Edit"
       And I invite the co-author "coauthor"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Work was successfully updated"
       And I should not see "coauthor" within ".byline"
       But 1 email should be delivered to "coauthor"

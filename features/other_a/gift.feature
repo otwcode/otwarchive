@@ -96,7 +96,7 @@ Feature: Create Gifts
     Given I press "Post"
       And I follow "Edit"
       And I give the work to "giftee1"
-    When I press "Post"
+    When I press "Update"
     Then I should see "For giftee1"
       And "giftee1@example.com" should be notified by email about their gift "GiftStory1"
 
@@ -134,7 +134,7 @@ Feature: Create Gifts
       And all emails have been delivered
       And I follow "Edit"
       And I give the work to "giftee1, giftee2"
-    When I press "Post"
+    When I press "Update"
     Then I should see "For giftee1, giftee2"
       And 0 emails should be delivered to "giftee1@example.com"
       And "giftee2@example.com" should be notified by email about their gift "GiftStory1"
@@ -160,7 +160,7 @@ Feature: Create Gifts
       And all emails have been delivered
       And I follow "Edit"
       And I give the work to "giftee1"
-    When I press "Post"
+    When I press "Update"
     Then I should see "For giftee1"
       And I should not see "giftee2"
       And 0 emails should be delivered to "giftee1@example.com"
@@ -187,7 +187,7 @@ Feature: Create Gifts
       And all emails have been delivered
       And I follow "Edit"
       And I give the work to "giftee2"
-    When I press "Post"
+    When I press "Update"
     Then I should see "For giftee2"
       And I should not see "giftee1"
       And 0 emails should be delivered to "giftee1@example.com"
@@ -358,7 +358,7 @@ Feature: Create Gifts
       And I press "Post"
       And I follow "Edit"
       And I give the work to "giftee1"
-    When I press "Post"
+    When I press "Update"
     Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
 
   Scenario: Can't gift a work whose co-creator is blocked by recipient

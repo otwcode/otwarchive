@@ -57,7 +57,7 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
     step "I edit the work \"#{work_title}\""
     check("series-options-show")
     fill_in("work_series_attributes_title", with: series_title + i.to_s)
-    click_button("Post")
+    click_button("Update")
   end
 end
 

@@ -26,7 +26,7 @@ Feature: Edit tags on a work
     And I should not see "Save Draft"
   When I fill in "Fandoms" with "Stargate SG-1, Hana Yori Dango"
     And I fill in "Additional Tags" with "Alternate Universe"
-    And I press "Post"
+    And I press "Update"
   Then I should see "Stargate SG-1"
     And I should see "Hana Yori Dango"
     And I should see "Alternate Universe"
@@ -72,7 +72,7 @@ Feature: Edit tags on a work
     And I view the work "Work 1"
     And I follow "Edit Tags"
   When I fill in "Fandoms" with ""
-    And I press "Post"
+    And I press "Update"
   Then I should see "Sorry! We couldn't save this work because: Please fill in at least one fandom."
 
   Scenario: User can cancel editing a work's tags
@@ -86,7 +86,6 @@ Feature: Edit tags on a work
     Then I should see "Fandom: testing"
 
   Scenario: Preview edit tags
-
   Given I am logged in as "regularuser"
     And I post the work "Some Work"
     And I follow "Edit Tags"
