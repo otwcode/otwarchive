@@ -27,7 +27,12 @@ When /^I add the work "([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]*)")?
     select(pseud, from: "work_author_attributes_ids")
   end
   step %{I add the series "#{series_title}"}
-  click_button("Post")
+
+  if Work.where(title: work_title).exists?
+    click_button("Update")
+  else
+    click_button("Post")
+  end
 end
 
 When /^I add the draft "([^\"]*)" to series "([^\"]*)"$/ do |work_title, series_title|

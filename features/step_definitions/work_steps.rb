@@ -521,7 +521,7 @@ end
 When /^I lock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I lock the work}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I unlock the work$/ do
@@ -644,7 +644,7 @@ end
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
   step %{I edit the work "#{work}"}
   step %{I invite the co-author "#{coauthor}"}
-  step %{I post the work without preview}
+  step %{I update the work}
   step %{the user "#{coauthor}" accepts the creator invite for the work "#{work}"}
 end
 
