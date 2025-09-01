@@ -365,20 +365,12 @@ Feature: Collection
     Given I have the anonymous collection "Anonymous Collection"
       And I am logged in as "creator"
       And I post the work "My Work"
-
     When I edit the work "My Work"
       And I fill in "Post to Collections / Challenges" with "anonymous_collection"
       And I press "Preview"
-
     Then I should see "Anonymous Collection"
       And I should see "Anonymous [creator]"
-
-    When I press "Cancel"
-
-    Then I should see "The work was not updated."
-
-    When I view the work "My Work"
-
+    When I follow "Cancel"
     # This is not the desired behavior (AO3-5556), but we want to make sure it doesn't get broken worse
     Then I should see "Anonymous Collection"
       And I should see "Anonymous [creator]"

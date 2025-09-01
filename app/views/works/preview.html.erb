@@ -61,7 +61,7 @@
                            name: "post_button",
                            data: { disable_with: t("works_helper.actions.please_wait") } %></li>
       <% end %>
-      <li><%= submit_tag t("works_helper.actions.cancel"), name: "cancel_button" %></li>
+      <li><%= link_to t("works_helper.actions.cancel"), work_path(@work) %></li>
     </ul>
   </fieldset>
 

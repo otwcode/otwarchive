@@ -4,8 +4,8 @@ Feature: Work Drafts
   Scenario: Creating a work draft
   Given I am logged in as "Scott" with password "password"
   When the draft "scotts draft"
-    And I press "Cancel"
-  Then I should see "The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive."
+    And I follow "Cancel"
+  Then I should see "This work is a draft and has not been posted. The draft will be scheduled for deletion on"
 
   Scenario: Creating a work draft, editing it, and saving the changes without posting or previewing and then double check that it is saved and I didn't get the success message erroneously
   Given basic tags
@@ -37,7 +37,7 @@ Feature: Work Drafts
   Scenario: Creating an draft Chapter on a draft Work
   Given I am logged in as "Scott" with password "password"
     And the draft "scotts other draft"
-    And I press "Cancel"
+    And I follow "Cancel"
     And I edit the work "scotts other draft"
     And I follow "Add Chapter"
     And I fill in "content" with "this is second chapter content"

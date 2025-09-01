@@ -187,8 +187,7 @@ Feature: Edit Works
       And I fill in "Fandoms" with "foobar"
       And I press "Preview"
     Then I should see "Fandom: foobar"
-    When I press "Cancel"
-      And I view the work "Work 1"
+    When I follow "Cancel"
     Then I should see "Fandom: testing"
       And I should not see "Fandom: foobar"
 
@@ -208,8 +207,7 @@ Feature: Edit Works
       And I post the work "Work 1" with fandom "testing"
       And I edit the work "Work 1"
       And I fill in "Fandoms" with ""
-      And I press "Cancel"
-    When I view the work "Work 1"
+      And I follow "Cancel"
     Then I should see "Fandom: testing"
 
   Scenario: A work cannot be edited to remove its only warning

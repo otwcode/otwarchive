@@ -297,12 +297,6 @@ class WorksController < ApplicationController
 
   # POST /works
   def create
-    if params[:cancel_button]
-      flash[:notice] = ts('New work posting canceled.')
-      redirect_to current_user
-      return
-    end
-
     @work = Work.new(work_params)
 
     @chapter = @work.first_chapter
@@ -366,10 +360,6 @@ class WorksController < ApplicationController
 
   # PUT /works/1
   def update
-    if params[:cancel_button]
-      return cancel_posting_and_redirect
-    end
-
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_params
     @chapter.attributes = work_params[:chapter_attributes] if work_params[:chapter_attributes]
@@ -827,16 +817,6 @@ class WorksController < ApplicationController
       @own_works = @works.select do |work|
         (pseud_ids & work.pseuds.pluck(:id)).present?
       end
-    end
-  end
-
-  def cancel_posting_and_redirect
-    if @work && @work.posted
-      flash[:notice] = ts('The work was not updated.')
-      redirect_to user_works_path(current_user)
-    else
-      flash[:notice] = ts('The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive.')
-      redirect_to drafts_user_works_path(current_user)
     end
   end
 
