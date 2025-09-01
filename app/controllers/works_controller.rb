@@ -413,10 +413,6 @@ class WorksController < ApplicationController
   def update_tags
     authorize @work if logged_in_as_admin?
 
-    if params[:cancel_button]
-      return cancel_posting_and_redirect
-    end
-
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_tag_params
 

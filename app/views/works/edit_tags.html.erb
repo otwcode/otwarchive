@@ -39,7 +39,7 @@
       <% end %>
       <li><%= submit_tag t("works_helper.actions.preview"), name: "preview_button" %></li>
       <li><%= submit_tag @work.posted? ? t("works_helper.actions.update") : t("works_helper.actions.post"), name: "update_button" %></li>
-      <li><%= submit_tag t("works_helper.actions.cancel"), name: "cancel_button" %></li>
+      <li><%= link_to t("works_helper.actions.cancel"), work_path(@work) %></li>
     </ul>
   </fieldset>
 <% end %>

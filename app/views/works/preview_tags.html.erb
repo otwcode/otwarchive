@@ -40,7 +40,7 @@
         <%= submit_tag t("works_helper.actions.edit"), name: "edit_button" %>
         <%= submit_tag t("works_helper.actions.post"), name: "post_button" %>
       <% end %>
-      <%= submit_tag t("works_helper.actions.cancel"), name: "cancel_button" %>
+      <%= link_to t("works_helper.actions.cancel"), work_path(@work) %>
     </p>
   </fieldset>
 

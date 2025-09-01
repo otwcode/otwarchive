@@ -81,8 +81,8 @@ Feature: Edit tags on a work
     And I view the work "Work 1"
     And I follow "Edit Tags"
     And I fill in "Fandoms" with ""
-    And I press "Cancel"
-  When I view the work "Work 1"
+    And I follow "Cancel"
+  Then I should see the page title "Work 1 -"
     Then I should see "Fandom: testing"
 
   Scenario: Preview edit tags
