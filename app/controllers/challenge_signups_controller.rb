@@ -60,13 +60,6 @@ class ChallengeSignupsController < ApplicationController
 
   def load_signup_from_id
     @challenge_signup = ChallengeSignup.find(params[:id])
-    no_signup and return unless @challenge_signup
-  end
-
-  def no_signup
-    flash[:error] = ts("What sign-up did you want to work on?")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
   end
 
   def check_pseud_ownership
