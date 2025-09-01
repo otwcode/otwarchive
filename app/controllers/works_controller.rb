@@ -361,7 +361,7 @@ class WorksController < ApplicationController
   # GET /works/1/edit_tags
   def edit_tags
     authorize @work if logged_in_as_admin?
-    @page_subtitle = ts("Edit Work Tags")
+    @page_subtitle = t(".page_title")
   end
 
   # PUT /works/1
@@ -412,7 +412,8 @@ class WorksController < ApplicationController
   # PATCH /works/1/edit_tags
   def update_tags
     authorize @work if logged_in_as_admin?
-    @page_subtitle = ts("Preview Work Tags")
+    @page_subtitle = t(".page_title")
+
     if params[:cancel_button]
       return cancel_posting_and_redirect
     end

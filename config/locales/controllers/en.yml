@@ -262,11 +262,15 @@ en:
       ban_notice_html: Your account has been banned. You are not permitted to post or edit content on AO3. Please check your email or %{contact_abuse_link} for more information.
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You cannot post, edit, or delete content until your suspension has ended. Please check your email or %{contact_abuse_link} for more information.
   works:
+    edit_tags:
+      page_title: Edit Work Tags
     drafts:
       page_title: "%{username} - Drafts"
     show:
       page_title:
         unrevealed: Mystery Work
+    update_tags:
+      page_title: Preview Work Tags
   wrangling_guidelines:
     create: Wrangling Guideline was successfully created.
     delete: Wrangling Guideline was successfully deleted.

@@ -84,3 +84,12 @@ Feature: Edit tags on a work
     And I press "Cancel"
   When I view the work "Work 1"
     Then I should see "Fandom: testing"
+
+  Scenario: Preview edit tags
+
+  Given I am logged in as "regularuser"
+    And I post the work "Some Work"
+    And I follow "Edit Tags"
+    And I press "Preview"
+  Then I should see the page title "Preview Work Tags"
+
