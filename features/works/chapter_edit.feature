@@ -625,4 +625,4 @@ Feature: Edit chapters
       And a chapter is added to "Camp Friends"
     When I follow "Edit Chapter"
      And I follow "Cancel"
-    Then I should see the page title "Camp Friends - Chapter 1 - karma"
+    Then I should see the page title "Camp Friends - Chapter 2 - karma"

@@ -80,7 +80,7 @@ Feature: Edit Works
       And I unselect "testuser" from "work_author_attributes_ids"
       # Expire byline cache
       And it is currently 1 second from now
-      And I press "Post"
+      And I press "Update"
     Then I should see "testy"
       And I should not see "testuser,"
 
