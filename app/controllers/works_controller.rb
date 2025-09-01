@@ -319,19 +319,19 @@ class WorksController < ApplicationController
       @work.posted = @chapter.posted = true if params[:post_button]
       @work.set_revised_at_by_chapter(@chapter)
 
-      if @work.save
-        if params[:preview_button]
-          flash[:notice] = ts("Draft was successfully created. It will be <strong>scheduled for deletion</strong> on %{deletion_date}.", deletion_date: view_context.date_in_zone(@work.created_at + 29.days)).html_safe
-          in_moderated_collection
-          redirect_to preview_work_path(@work)
-        else
-          # We check here to see if we are attempting to post to moderated collection
-          flash[:notice] = ts("Work was successfully posted. It should appear in work listings within the next few minutes.")
-          in_moderated_collection
-          redirect_to work_path(@work)
-        end
+      unless @work.save
+        render :new and return
+      end
+
+      if @work.posted
+        # We check here to see if we are attempting to post to moderated collection
+        flash[:notice] = ts("Work was successfully posted. It should appear in work listings within the next few minutes.")
+        in_moderated_collection
+        redirect_to work_path(@work)
       else
-        render :new
+        flash[:notice] = ts("Draft was successfully created. It will be <strong>scheduled for deletion</strong> on %{deletion_date}.", deletion_date: view_context.date_in_zone(@work.created_at + 29.days)).html_safe
+        in_moderated_collection
+        redirect_to preview_work_path(@work)
       end
     end
   end

@@ -347,7 +347,7 @@
             tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
     </p>
     <ul class="actions">
-      <% unless @work.new_record? || @work.posted? %>
+      <% unless @work.posted? %>
         <li>
           <%= submit_tag ts("Save Draft"), name: "save_button" %>
         </li>

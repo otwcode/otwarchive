@@ -75,7 +75,7 @@
               tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
       </p>
       <ul class="actions">
-        <% unless @chapter.new_record? || @chapter.posted? %>
+        <% unless @chapter.posted? %>
           <li><%= submit_tag ts("Save Draft"), name: "save_button" %></li>
         <% end %>
         <li><%= submit_tag ts("Preview"), name: "preview_button" %></li>
