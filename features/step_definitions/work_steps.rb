@@ -531,7 +531,7 @@ end
 When /^I unlock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I unlock the work}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I list the work "([^"]*)" as inspiration$/ do |title|
@@ -693,14 +693,14 @@ When "I add the beginning notes {string} to the work {string}" do |notes, work|
   step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the beginning notes "#{notes}"}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When "I add the end notes {string} to the work {string}" do |notes, work|
   step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the end notes "#{notes}"}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I mark the work "([^"]*)" for later$/ do |work|

@@ -246,7 +246,7 @@ Feature: Collection
     When I edit the work "Cone of Silence"
       And I follow "2" within "div#main.works-edit.region"
       And I invite the co-author "Amos"
-      And I press "Post"
+      And I press "Update"
       And the user "Amos" accepts all co-creator requests
     Then the author of "Cone of Silence" should be visible to me on the work page
     When I am logged out
@@ -463,7 +463,7 @@ Feature: Collection
       And I fill in "Collections" with "Holidays,Fluffy"
       # Delay before posting to make sure the cache is expired
       And it is currently 1 second from now
-      And I press "Post"
+      And I press "Update"
       And I go to creator's works page
     Then I should see "Secret Work"
 

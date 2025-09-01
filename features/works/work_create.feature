@@ -381,7 +381,7 @@ Feature: Create Works
       And I post the chaptered work "Chaptered Work"
       And I edit the work "Chaptered Work"
       And I invite the co-author "barbaz"
-      And I press "Post"
+      And I press "Update"
     Then I should not see "barbaz"
       But 1 email should be delivered to "barbaz"
     When I am logged in as "barbaz"
