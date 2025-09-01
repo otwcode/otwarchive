@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
   <% if logged_in_as_admin? %>
-    <%= ts('Edit Work Tags and Language for %{title}', title: @work.title).html_safe %>
+    <%= t(".page_heading.edit_tags_and_language_html", title: @work.title) %>
   <% else %>
-    <%= ts('Edit Work Tags for %{title}', title: @work.title).html_safe %>
+    <%= t(".page_heading.edit_tags_html", title: @work.title) %>
   <% end %>
 </h2>
 
@@ -27,7 +27,7 @@
   <% end %>
 
   <fieldset>
-    <legend><%= ts('Post Work') %></legend>
+    <legend><%= t("works_helper.actions.post_work") %></legend>
       <p class="notice">
         <%= t(".post_notice_html",
               content_policy_link: link_to(t(".content_policy"), content_path),
@@ -35,11 +35,11 @@
       </p>
     <ul class="actions">
       <% unless @work.posted? %>
-        <li><%= submit_tag ts("Save Draft"), name: "save_button" %></li>
+        <li><%= submit_tag t("works_helper.actions.save_draft"), name: "save_button" %></li>
       <% end %>
-      <li><%= submit_tag ts("Preview"), name: "preview_button" %></li>
-      <li><%= submit_tag @work.posted? ? ts("Update") : ts("Post"), name: "update_button" %></li>
-      <li><%= submit_tag ts("Cancel"), name: "cancel_button" %></li>
+      <li><%= submit_tag t("works_helper.actions.preview"), name: "preview_button" %></li>
+      <li><%= submit_tag @work.posted? ? t("works_helper.actions.update") : t("works_helper.actions.post"), name: "update_button" %></li>
+      <li><%= submit_tag t("works_helper.actions.cancel"), name: "cancel_button" %></li>
     </ul>
   </fieldset>
 <% end %>

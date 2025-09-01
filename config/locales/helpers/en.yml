@@ -49,3 +49,14 @@ en:
       troubleshot: Account Troubleshot
       validated: Account Validated
       warn: Warned
+  works_helper:
+    actions:
+      cancel: Cancel
+      edit: Edit
+      please_wait: Please wait...
+      post: Post
+      post_chapter: Post Chapter
+      post_work: Post Work
+      preview: Preview
+      save_draft: Save Draft
+      update: Update

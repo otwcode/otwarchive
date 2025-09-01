@@ -68,7 +68,7 @@
     </fieldset>
 
     <fieldset>
-      <legend><%= ts("Post Chapter") %></legend>
+      <legend><%= t("works_helper.actions.post_chapter") %></legend>
       <p class="notice">
         <%= t(".post_notice_html",
               content_policy_link: link_to(t(".content_policy"), content_path),
@@ -76,14 +76,14 @@
       </p>
       <ul class="actions">
         <% if @chapter.posted? %>
-          <li><%= submit_tag ts("Preview"), name: "preview_button" %></li>
-          <li><%= submit_tag ts("Update"), name: "update_button" %></li>
+          <li><%= submit_tag t("works_helper.actions.preview"), name: "preview_button" %></li>
+          <li><%= submit_tag t("works_helper.actions.update"), name: "update_button" %></li>
         <% else %>
-          <li><%= submit_tag ts("Save Draft"), name: "save_button" %></li>
-          <li><%= submit_tag ts("Preview"), name: "preview_button" %></li>
-          <li><%= submit_tag ts("Post"), name: "post_without_preview_button", data: { disable_with: ts("Please wait...") } %></li>
+          <li><%= submit_tag t("works_helper.actions.save_draft"), name: "save_button" %></li>
+          <li><%= submit_tag t("works_helper.actions.preview"), name: "preview_button" %></li>
+          <li><%= submit_tag t("works_helper.actions.post"), name: "post_without_preview_button", data: { disable_with: t("works_helper.actions.please_wait") } %></li>
         <% end %>
-        <li><%= submit_tag ts("Cancel"), name: "cancel_button" %></li>
+        <li><%= submit_tag t("works_helper.actions.cancel"), name: "cancel_button" %></li>
       </ul>
     </fieldset>
 

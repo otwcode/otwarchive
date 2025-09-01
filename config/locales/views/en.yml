@@ -574,6 +574,7 @@ en:
       tos_faq: Terms of Service FAQ
     preview:
       content_policy: Content Policy
+      page_heading: Preview
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
   collection_items:
@@ -2438,6 +2439,9 @@ en:
       show_co-creator_options: Add co-creators?
     edit_tags:
       content_policy: Content Policy
+      page_heading:
+        edit_tags_and_language_html: Edit Work Tags and Language for %{title}
+        edit_tags_html: Edit Work Tags for %{title}
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
     import:
@@ -2471,8 +2475,13 @@ en:
       title: Preface
     preview:
       content_policy: Content Policy
+      page_heading: Preview
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
+    preview_tags:
+      page_heading:
+        preview_tags: Preview Tags
+        preview_tags_and_language: Preview Tags and Language
     search_box:
       a11y_label: Work
       label: Work Search
