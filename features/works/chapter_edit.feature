@@ -619,7 +619,7 @@ Feature: Edit chapters
     Then I should see "1/1"
       And I should not see "Next Chapter"
 
-  Scenario: Canceling edit chapter
+  Scenario: Canceling edit chapter redirects to work page
     Given I am logged in as "karma"
       And I post the work "Camp Friends"
       And a chapter is added to "Camp Friends"
