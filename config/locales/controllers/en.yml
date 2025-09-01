@@ -270,7 +270,8 @@ en:
       page_title:
         unrevealed: Mystery Work
     update_tags:
-      page_title: Preview Work Tags
+      page_title:
+        preview: Preview Work Tags
   wrangling_guidelines:
     create: Wrangling Guideline was successfully created.
     delete: Wrangling Guideline was successfully deleted.

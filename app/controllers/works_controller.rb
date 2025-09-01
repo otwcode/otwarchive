@@ -409,10 +409,9 @@ class WorksController < ApplicationController
     end
   end
 
-  # PATCH /works/1/edit_tags
+  # POST /works/1/edit_tags
   def update_tags
     authorize @work if logged_in_as_admin?
-    @page_subtitle = t(".page_title")
 
     if params[:cancel_button]
       return cancel_posting_and_redirect
@@ -425,6 +424,7 @@ class WorksController < ApplicationController
       render :edit_tags
     elsif params[:preview_button]
       @preview_mode = true
+      @page_subtitle = t(".page_title.preview")
       render :preview_tags
     elsif params[:save_button]
       @work.save
