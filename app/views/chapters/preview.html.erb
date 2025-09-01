@@ -29,6 +29,7 @@
     <ul class="actions">
       <% if @chapter.posted? %>
         <li><%= link_to t("works_helper.actions.edit"), edit_work_chapter_path(@work, @chapter) %></li>
+        <li><%= submit_tag t("works_helper.actions.update"), name: "update_button" %></li>
       <% else %>
         <li><%= submit_tag t("works_helper.actions.save_draft"), name: "save_button" %></li>
         <li><%= link_to t("works_helper.actions.edit"), edit_work_chapter_path(@work, @chapter) %></li>
