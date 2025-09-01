@@ -267,7 +267,7 @@ Feature: Edit chapters
     Then I should see Completed today
     When I follow "Edit"
       And I fill in "work_wip_length" with "?"
-      And I press "Post"
+      And I press "Update"
     Then I should see Updated today
     When I post the work "A Whole New Work"
       And I go to the works page
@@ -311,7 +311,7 @@ Feature: Edit chapters
       And I view the 2nd chapter
       And I follow "Edit Chapter"
       And I invite the co-author "amy"
-      And I post the chapter
+      And I press "Update"
     Then I should not see "amy, karma"
       And 1 email should be delivered to "amy"
       And the email should contain "The user karma has invited your pseud amy to be listed as a co-creator on the following chapter"
@@ -340,7 +340,7 @@ Feature: Edit chapters
     When I check "sabrina"
       # Expire cached byline
       And it is currently 1 second from now
-      And I post the chapter
+      And I press "Update"
     Then I should not see "Chapter by karma"
       And 1 email should be delivered to "sabrina"
       And the email should contain "The user karma has listed your pseud sabrina as a co-creator on the following chapter"
@@ -431,7 +431,7 @@ Feature: Edit chapters
     When I follow "Edit Chapter"
     Then I should not see "You're not allowed to use that pseud."
     When I fill in "content" with "opsfriend was here"
-      And I post the chapter
+      And I press "Update"
     Then I should see "opsfriend was here"
       And I should not see "Chapter by originalposter"
 
@@ -597,7 +597,7 @@ Feature: Edit chapters
       And I follow "Edit Chapter"
     When I check "Add co-creators?"
       And I fill in "pseud_byline" with "thegoodmom"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Chapter was successfully updated."
       And I follow "Chapter 2"
       And I follow "Edit Chapter"
@@ -625,4 +625,4 @@ Feature: Edit chapters
       And a chapter is added to "Camp Friends"
     When I follow "Edit Chapter"
      And I follow "Cancel"
-    Then I should see the page title "Camp Friends by karma - Chapter 1"
+    Then I should see the page title "Camp Friends - Chapter 1 - karma"
