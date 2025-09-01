@@ -162,7 +162,7 @@ class WorksController < ApplicationController
       redirect_to logged_in? ? user_path(current_user) : new_user_session_path
       return
     end
-    
+
     @page_subtitle = t(".page_title", username: @user.login)
 
     if params[:pseud_id]
@@ -384,7 +384,7 @@ class WorksController < ApplicationController
       render :edit
     elsif params[:preview_button]
       unless @work.posted?
-        flash[:notice] = ts("Your changes have not been saved. Please post your work or save as draft if you want to keep them.")
+        flash[:notice] = ts("Your changes have not been saved. Please post your work or save the draft if you want to keep them.")
       end
 
       in_moderated_collection
@@ -427,7 +427,7 @@ class WorksController < ApplicationController
       @work.save
       flash[:notice] = ts('Tags were successfully updated.')
       redirect_to(@work)
-    else # Save As Draft
+    else # Save Draft
       @work.posted = true
       @work.minor_version = @work.minor_version + 1
       @work.save

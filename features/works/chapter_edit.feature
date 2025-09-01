@@ -222,7 +222,7 @@ Feature: Edit chapters
     And I should see "And then they will request more features for it."
   When I press "Edit"
     And I fill in "content" with "And then they will request more features for it. Like the ability to save easily."
-    And I press "Save As Draft"
+    And I press "Save Draft"
   Then I should see "Chapter was successfully updated."
     And I should see "This chapter is a draft and hasn't been posted yet!"
     And I should see "Like the ability to save easily."
@@ -243,7 +243,7 @@ Feature: Edit chapters
       And I set the publication date to today
       And I press "Preview"
       And I should see "This is a draft"
-      And I press "Save As Draft"
+      And I press "Save Draft"
     Then I should not see Updated today
       And I should not see Completed today
       And I should not see "Updated" within ".work.meta .stats"
@@ -358,7 +358,7 @@ Feature: Edit chapters
 
 
   Scenario: Removing yourself as a co-creator from the chapter edit page when
-  you've co-created multiple chapters on the work removes you only from that 
+  you've co-created multiple chapters on the work removes you only from that
   specific chapter. Removing yourself as a co-creator from the chapter edit page
   of the last chapter you've co-created also removes you from the work.
 

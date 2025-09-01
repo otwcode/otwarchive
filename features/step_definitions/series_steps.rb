@@ -33,7 +33,7 @@ end
 When /^I add the draft "([^\"]*)" to series "([^\"]*)"$/ do |work_title, series_title|
   step %{I edit the work "#{work_title}"}
   step %{I add the series "#{series_title}"}
-  click_button("Save As Draft")
+  click_button("Save Draft")
 end
 
 When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, count, series_title|

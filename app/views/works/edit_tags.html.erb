@@ -35,7 +35,7 @@
       </p>
     <ul class="actions">
       <% unless @work.posted? %>
-        <li><%= submit_tag ts('Save As Draft'), name: 'save_button' %></li>
+        <li><%= submit_tag ts('Save Draft'), name: 'save_button' %></li>
       <% end %>
       <li><%= submit_tag ts('Preview'), name: 'preview_button' %></li>
       <li><%= submit_tag ts('Post'), name: 'update_button' %></li>

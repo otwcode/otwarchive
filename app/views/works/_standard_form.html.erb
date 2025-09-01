@@ -349,7 +349,7 @@
     <ul class="actions">
       <% unless @work.new_record? || @work.posted? %>
         <li>
-          <%= submit_tag ts("Save As Draft"), name: "save_button" %>
+          <%= submit_tag ts("Save Draft"), name: "save_button" %>
         </li>
       <% end %>
       <li>
