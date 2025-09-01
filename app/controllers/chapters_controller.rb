@@ -41,7 +41,7 @@ class ChaptersController < ApplicationController
       access_denied
       return
     end
- 
+
     chapter_position = @chapters.index(@chapter)
     if @chapters.length > 1
       @previous_chapter = @chapters[chapter_position - 1] unless chapter_position.zero?
@@ -191,19 +191,13 @@ class ChaptersController < ApplicationController
 
   # POST /chapters/1/post
   def post
-    if params[:cancel_button]
-      redirect_to @work
-    elsif params[:edit_button]
-      redirect_to [:edit, @work, @chapter]
+    @chapter.posted = true
+    @work.set_revised_at_by_chapter(@chapter)
+    if @chapter.save && @work.save
+      post_chapter
+      redirect_to(@work)
     else
-      @chapter.posted = true
-      @work.set_revised_at_by_chapter(@chapter)
-      if @chapter.save && @work.save
-        post_chapter
-        redirect_to(@work)
-      else
-        render :preview
-      end
+      render :preview
     end
   end
 
