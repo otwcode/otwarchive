@@ -35,11 +35,11 @@
       </p>
     <ul class="actions">
       <% unless @work.posted? %>
-        <li><%= submit_tag ts('Save Draft'), name: 'save_button' %></li>
+        <li><%= submit_tag ts("Save Draft"), name: "save_button" %></li>
       <% end %>
-      <li><%= submit_tag ts('Preview'), name: 'preview_button' %></li>
+      <li><%= submit_tag ts("Preview"), name: "preview_button" %></li>
       <li><%= submit_tag @work.posted? ? ts("Update") : ts("Post"), name: "update_button" %></li>
-      <li><%= submit_tag ts('Cancel'), name: 'cancel_button' %></li>
+      <li><%= submit_tag ts("Cancel"), name: "cancel_button" %></li>
     </ul>
   </fieldset>
 <% end %>
