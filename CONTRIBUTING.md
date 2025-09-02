@@ -43,14 +43,13 @@ Please check out our development wiki for more information on:
 ### Workflow
 
 1. If you're a new contributor, start with an [issue reserved for first timers](https://otwarchive.atlassian.net/issues/?filter=13119). Otherwise, or if you're up for a challenge, choose any [open and unassigned issue](https://otwarchive.atlassian.net/issues/?filter=10800) available. (If you're a new contributor, don't worry about claiming the issue for now. If you make a Jira account, you'll get permissions for claiming issues in step 5.)
-2. Write code to address the issue. If you have access to our Jira board, be sure to set the issue status to ["In Progress"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-Jira#status-guide).
+2. Write code to address the issue. If you already have Jira permissions, be sure to set the issue status to ["In Progress"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-Jira#status-guide).
 3. Optional: Create a Jira account if you'd like the ability to comment on, assign, and transition issues. Please make sure the Full Name on your Jira account either closely matches the name you'd like us to credit in the release notes or includes it in parentheses, e.g. "Nickname (CREDIT NAME)."
 4. Submit the code with a pull request following the checklist on [our template](https://github.com/otwcode/otwarchive/blob/master/.github/PULL_REQUEST_TEMPLATE.md).
 5. Once you've submitted a pull request, we'll review your code and give you permissions on Jira. (Please be patient with us! Due to our workload, it may take some time before we can review and eventually merge your pull request.)
-6. Check that the issue status has been updated to ["In Review"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-Jira#status-guide) on Jira.
-7. Once your pull request is merged, we will deploy it to our internal testing site and our QA team will check that everything is working as intended.
-8. If something is not working as intended, we may set the issue to ["Broken on Test"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-Jira#status-guide) and ask you to make further changes in new pull requests.
-9. If all is well, your contribution will be deployed to the [Archive of Our Own](https://archiveofourown.org) and you will be credited in the [release notes](https://archiveofourown.org/admin_posts?tag=1)!
+6. Once your pull request is merged, we will deploy it to our internal testing site and our QA team will check that everything is working as intended.
+7. If something is not working as intended, we may set the issue to ["Broken on Test"](https://github.com/otwcode/otwarchive/wiki/Issue-Tracking-with-Jira#status-guide) and ask you to make further changes in new pull requests.
+8. If all is well, your contribution will be deployed to the [Archive of Our Own](https://archiveofourown.org) and you will be credited in the [release notes](https://archiveofourown.org/admin_posts?tag=1)!
 
 
 ## Volunteering for the OTW
