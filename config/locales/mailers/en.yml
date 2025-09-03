@@ -433,8 +433,8 @@ en:
         text: For other inquiries, please contact AO3 Support at %{support_url}.
       redirects:
         html: If you've already uploaded a copy of these works and you did %{negation} use the import from URL feature, there will be two copies of the same work on AO3. Since duplicate works are not allowed on AO3, please delete one of the copies. It is up to you to decide which one to keep, though if you delete the copy imported by Open Doors, consider adding the remaining copy to the imported archive's collection. For questions about how to delete works or add them to collections, check out AO3's %{faq_link}
-        text: 'If you''ve already uploaded a copy of these works and you did NOT use the import from URL feature, there will be two copies of the same work on AO3. Since duplicate works are not allowed on AO3, please delete one of the copies. It is up to you to decide which one to keep, though if you delete the copy imported by Open Doors, consider adding the remaining copy to the imported archive''s collection. For questions about how to delete works or add them to collections, check out AO3''s FAQ: %{faq_url}'
         negation: NOT
+        text: 'If you''ve already uploaded a copy of these works and you did NOT use the import from URL feature, there will be two copies of the same work on AO3. Since duplicate works are not allowed on AO3, please delete one of the copies. It is up to you to decide which one to keep, though if you delete the copy imported by Open Doors, consider adding the remaining copy to the imported archive''s collection. For questions about how to delete works or add them to collections, check out AO3''s FAQ: %{faq_url}'
       subject: "[%{app_name}] Works uploaded"
       work_info:
         html: "%{work_link} (%{fandom})"
