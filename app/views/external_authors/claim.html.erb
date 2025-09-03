@@ -1,21 +1,15 @@
 <h2 class="heading"><%= ts("Claiming Your Imported Works") %></h2>
 
 <p class="message">
-  <%= ts("An archive including some of your work(s) has been moved to the Archive of Our Own. Please let us know what you'd
-   like us to do with them. If you do nothing, the work(s) will remain attached to the archivist account.") %>
+  <%= t(".archive_moved_to_ao3_message") %>
 </p>
 
 <p class="message">
-  <%= ts("If you would like to edit the work(s), or handle different work(s) separately, please claim them first.
-   You can then use the Edit Works feature on your personal archive home page to orphan, delete, or edit them either
-   in groups or one at a time. (You will be able to delete the account if you wish after editing.)") %>
+  <%= t(".claim_before_edit_message_html", dashboard_link: link_to(t(".dashboard"), archive_faq_path("glossary", anchor: "dashdef"))) %>
 </p>
 
 <p class="message">
-  <%= ts("If you want to take another look at your work(s) before you make your decision, but don’t have an Archive
-  account,") %>
-  <%= link_to ts("contact Open Doors"), "https://opendoors.transformativeworks.org/en/contact-open-doors/" %>
-  <%= ts("with your pseud and the titles of your work(s) and we will send you a copy.") %>
+  <%= t(".review_before_decision_html", contact_open_doors_link: link_to(t(".contact_open_doors"), "https://opendoors.transformativeworks.org/en/contact-open-doors/")) %>
 </p>
 
 <div class="claim module">
@@ -23,18 +17,15 @@
 
   <% if logged_in? %>
     <p class="message">
-      <%= ts("Claim your works with your logged-in account. If you would like to claim
-      these works under a different account (or create a new account to claim them with), log out and reload this
-      page first.") %>
+      <%= t(".claim_works_logged_in_html", current_user: current_user.login) %>
     </p>
-    <p class="actions"><%= button_to ts("Add these works to my currently-logged-in account"), complete_claim_path(invitation_token: @invitation.token) %></p>
+    <p class="actions"><%= button_to t(".add_works_to_account_button", current_user: current_user.login), complete_claim_path(invitation_token: @invitation.token) %></p>
   <% else %>
     <p class="message">
-      <%= ts("We invite you to join our beta and create an account! The works will automatically be added
-      to your account and you will have full control over them.") %>
+      <%= t(".invitation_to_create_account") %>
     </p>
     <p class="message">
-      <%= ts("If you already have an archive account, log in and reload this page, and we'll assign you the works.") %>
+      <%= t(".ao3_login_instructions") %>
       <%= button_to ts("Sign me up and give me my works!"), signup_path(invitation_token: @invitation.token), method: :get %>
     </p>
   <% end %>
@@ -49,7 +40,7 @@
   </ul>
   <p class="actions">
     <% if logged_in? %>
-      <%= button_to ts("Add these works to my currently-logged-in account"), complete_claim_path(invitation_token: @invitation.token) %>
+      <%= button_to(t(".add_works_to_account_button", current_user: current_user.login), complete_claim_path(invitation_token: @invitation.token)) %>
     <% else %>
       <%= button_to ts("Sign me up and give me my works!"), signup_path(invitation_token: @invitation.token), method: :get %>
     <% end %>
@@ -72,7 +63,7 @@
         <%= hidden_field_tag :invitation_token, @invitation.token %>
         <%= radio_button_tag "imported_stories", "orphan" %>
         <%= label_tag "imported_stories_orphan", ts("Orphan my works and take my email address off them, but keep my name.") %>
-        <%= link_to ts("View orphaning FAQ"), archive_faq_path("17") %>
+        <%= link_to(t(".refer_to_orphaning_faq"), archive_faq_path("glossary", anchor: "orphandef")) %>
         <ul>
           <li>
             <%= check_box_tag "remove_pseud" %>
@@ -82,7 +73,7 @@
       </li>
       <li>
         <%= radio_button_tag "imported_stories", "delete" %>
-        <%= label_tag "imported_stories_delete", ts("Please remove my works from the archive entirely.") %>
+        <%= label_tag "imported_stories_delete", t(".remove_works_entirely") %>
       </li>
       <li id="notimport">
         <%= f.check_box :do_not_import %>
@@ -115,7 +106,7 @@
       <li><%= ts("You can create an account and claim your works (if you already have an account, log in to claim them)") %></li>
     <% end %>
     <li><%= ts("You can also choose to delete or orphan your works.") %></li>
-    <li><%= ts("Orphaning keeps them in the archive so future fans can still enjoy them, but with your contact information and/or your name removed.") %></li>
+    <li><%= t(".orphaning_explanation") %></li>
     <li><%= ts("You can also tell us not to email you or import works with this email address in the future.") %></li>
   </ul>
 </div>
