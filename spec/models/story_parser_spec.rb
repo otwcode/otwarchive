@@ -284,7 +284,7 @@ describe StoryParser do
   def mock_external
     curly_quotes = "String with non-ASCII “Curly quotes” and apostrophes’"
 
-    body = <<~STUB
+    body = "
       Title: #{curly_quotes}
       Summary: #{curly_quotes}
       Fandom: #{curly_quotes}
@@ -296,16 +296,13 @@ describe StoryParser do
       Tags: #{curly_quotes}
       Author's notes: #{curly_quotes}
 
-      stubbed response
-    STUB
-
-    binary_body = body.clone.force_encoding("ASCII-8BIT")
+      stubbed response".gsub('      ', '')
 
     WebMock.allow_net_connect!
 
     WebMock.stub_request(:any, /ascii-8bit/).
       to_return(status: 200,
-                body: binary_body,
+                body: body.force_encoding("ASCII-8BIT"),
                 headers: {})
 
     WebMock.stub_request(:any, /utf-8/).
@@ -315,7 +312,7 @@ describe StoryParser do
 
     WebMock.stub_request(:any, /win-1252/).
       to_return(status: 200,
-                body: body.encode("Windows-1252"),
+                body: body.force_encoding("Windows-1252"),
                 headers: {})
 
     WebMock.stub_request(:any, /non-sgml-character-number-3/).
@@ -333,12 +330,12 @@ describe StoryParser do
       WebMock.reset!
     end
 
-    it "does not throw an exception with non-ASCII characters in metadata fields" do
-      urls = %w[http://ascii-8bit http://utf-8 http://win-1252]
+    it "should not throw an exception with non-ASCII characters in metadata fields" do
+      urls = %w(http://ascii-8bit http://utf-8 http://win-1252)
       urls.each do |url|
-        expect do
+        expect {
           @sp.download_and_parse_story(url, pseuds: [@user.default_pseud], do_not_set_current_author: false)
-        end.not_to raise_exception
+        }.to_not raise_exception
       end
     end
 

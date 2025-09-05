@@ -24,9 +24,9 @@ class WordCounter
     # languages, only characters in these languages would be counted as words,
     # words in other languages are counted as usual
     character_count_scripts = ArchiveConfig.CHARACTER_COUNT_SCRIPTS.map { |lang| "\\p{#{lang}}" }.join("|")
-    body = Nokogiri::HTML5.parse(@text).xpath("//body").first
+    body = Nokogiri::HTML(@text).xpath('//body').first
     body.traverse do |node|
-      if node.text?
+      if node.is_a? Nokogiri::XML::Text
         count += node.inner_text.gsub(/--/, "—").gsub(/['’‘-]/, "")
           .scan(/#{character_count_scripts}|((?!#{character_count_scripts})[[:word:]])+/).size
       end
