@@ -197,7 +197,7 @@ class ChallengeSignupsController < ApplicationController
 
   public
   def new
-    @page_subtitle = ts("New Challenge Sign-up")
+    @page_subtitle = t(".page_title")
     if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
       flash[:notice] = ts("You are already signed up for this challenge. You can edit your sign-up below.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)
