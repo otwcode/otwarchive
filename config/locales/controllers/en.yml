@@ -46,6 +46,9 @@ en:
   challenge_assignments:
     validation:
       not_owner: You aren't the owner of that assignment.
+  challenge_signups:
+    new:
+      page_title: New Challenge Sign-up
   chapters:
     destroy:
       only_chapter: You can't delete the only chapter in your work. If you want to delete the work, choose "Delete Work".
