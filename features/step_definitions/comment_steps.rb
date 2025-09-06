@@ -120,6 +120,14 @@ Then /^I should see Last Edited in the right timezone$/ do
   step %{I should see "Last Edited"}
 end
 
+Then "it should take me to the non-JavaScript delete page" do
+  expect(current_url).to include("?delete_comment_id")
+end
+
+Then "it should not take me to the non-JavaScript delete page" do
+  expect(current_url).not_to include("?delete_comment_id")
+end
+
 # WHEN
 
 When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|

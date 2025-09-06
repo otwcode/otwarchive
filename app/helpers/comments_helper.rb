@@ -315,7 +315,7 @@ module CommentsHelper
   # return html link to delete comments
   def delete_comment_link(comment)
     link_to(
-      t("comments.confirm_delete.delete"),
+      t("comments_helper.actions.delete"),
       url_for(controller: :comments,
               action: :delete_comment,
               id: comment,
@@ -323,10 +323,9 @@ module CommentsHelper
       remote: true)
   end
 
-  # return link to cancel new reply to a comment
   def cancel_delete_comment_link(comment)
     link_to(
-      t("comments.confirm_delete.cancel"),
+      t("comments_helper.actions.cancel"),
       url_for(controller: :comments,
               action: :cancel_comment_delete,
               id: comment,

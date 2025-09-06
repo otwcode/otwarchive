@@ -1,5 +1,6 @@
+<%# TODO: Make this an h5 %>
 <h3 class="heading"><%= t(".delete_confirmation") %></h3>
-<ul class="actions" role="menu">
-    <li><%= button_to t(".button"), comment, method: :delete %></li>
+<ul class="actions">
+    <li><%= button_to t(".confirm_button"), comment, method: :delete %></li>
 	<li><%= cancel_delete_comment_link(comment) %></li>
 </ul>
