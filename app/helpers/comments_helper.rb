@@ -284,7 +284,7 @@ module CommentsHelper
   end
 
   def do_cancel_delete_comment_link(comment)
-    if params[:delete_comment_id] && params[:delete_comment_id] == comment.id.to_s
+    if params[:delete_comment_id] == comment.id.to_s
       cancel_delete_comment_link(comment)
     else
       delete_comment_link(comment)
@@ -315,7 +315,7 @@ module CommentsHelper
   # return html link to delete comments
   def delete_comment_link(comment)
     link_to(
-      ts("Delete"),
+      t("comments_helper.actions.delete"),
       url_for(controller: :comments,
               action: :delete_comment,
               id: comment,
@@ -323,10 +323,9 @@ module CommentsHelper
       remote: true)
   end
 
-  # return link to cancel new reply to a comment
   def cancel_delete_comment_link(comment)
     link_to(
-      ts("Cancel"),
+      t("comments_helper.actions.cancel"),
       url_for(controller: :comments,
               action: :cancel_comment_delete,
               id: comment,

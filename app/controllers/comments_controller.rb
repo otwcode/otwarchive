@@ -607,7 +607,7 @@ class CommentsController < ApplicationController
         options = {}
         options[:show_comments] = params[:show_comments] if params[:show_comments]
         options[:delete_comment_id] = params[:id] if params[:id]
-        redirect_to_comment(@comment, options) # TO DO: deleting without javascript doesn't work and it never has!
+        redirect_to_comment(@comment, options)
       end
       format.js
     end
