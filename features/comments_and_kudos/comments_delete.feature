@@ -22,8 +22,8 @@ Feature: Delete a comment
   Scenario: User deletes a comment they added to a work with JavaScript
     When I am logged in as "author"
       And I post the work "Awesome story"
+      And a comment "Fail comment" by "commenter" on the work "Awesome story"
     When I am logged in as "commenter"
-      And I post the comment "Fail comment" on the work "Awesome story"
       And I view the work "Awesome story"
     Then I should not see "Fail comment"
     When I display comments
