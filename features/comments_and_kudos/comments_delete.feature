@@ -26,6 +26,7 @@ Feature: Delete a comment
       And I view the work "Awesome story"
     Then I should not see "Fail comment"
     When I follow "Comments (1)"
+      And I wait 1 second
     Then I should see "Fail comment"
     When I follow "Delete"
     Then it should not take me to the non-JavaScript delete page
