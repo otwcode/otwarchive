@@ -316,7 +316,7 @@ Scenario: Cannot reply to comments (no button) while logged as admin
       And I should see "Reply"
 
   Scenario: Translated comment notification email
-    Given the work "Generic Work" by "creator"
+    Given the work "Generic Work" by "creator" and "cocreator"
       And a locale with translated emails
       And the user "creator" enables translated emails
     When I am logged in as "commenter"
@@ -327,9 +327,12 @@ Scenario: Cannot reply to comments (no button) while logged as admin
       And the email to "creator" should contain "left the following comment on"
       And the email to "creator" should contain "Reply to this comment"
       And the email to "creator" should be translated
+      And 1 email should be delivered to "cocreator"
+      And the email to "cocreator" should contain "left the following comment on"
+      And the email to "cocreator" should be non-translated
 
   Scenario: Translated edited comment notification email
-    Given the work "Generic Work" by "creator"
+    Given the work "Generic Work" by "creator" and "cocreator"
       And a comment "Hello" by "commenter" on the work "Generic Work"
       And a locale with translated emails
       And the user "creator" enables translated emails
@@ -343,3 +346,6 @@ Scenario: Cannot reply to comments (no button) while logged as admin
       And the email to "creator" should contain "edited the following comment on"
       And the email to "creator" should contain "Go to the thread starting from this comment"
       And the email to "creator" should be translated
+      And 1 email should be delivered to "cocreator"
+      And the email to "cocreator" should contain "edited the following comment on"
+      And the email to "cocreator" should be non-translated
