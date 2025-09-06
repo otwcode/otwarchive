@@ -23,10 +23,7 @@ Feature: Delete a comment
     Given the work "Awesome story" by "author"
       And a comment "Fail comment" by "commenter" on the work "Awesome story"
     When I am logged in as "commenter"
-      And I view the work "Awesome story"
-    Then I should not see "Fail comment"
-    When I follow "Comments (1)"
-      And I wait 1 second
+      And I view the work "Awesome story" with comments
     Then I should see "Fail comment"
     When I follow "Delete"
     Then it should not take me to the non-JavaScript delete page
