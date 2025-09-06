@@ -71,33 +71,27 @@ describe Collection do
     end # challenges type loop
   end
 
-  describe "audit timestamps for collection preferences" do
+  describe "updated at timestamps for collection preferences" do
     let(:preference) { create(:collection_preference, collection: @collection, unrevealed: true, anonymous: true) }
 
-    it "sets unrevealed_updated_at and anonymous_updated_at to created_at on creation" do
-      expect(preference.unrevealed_updated_at).to eq(preference.created_at)
-      expect(preference.anonymous_updated_at).to eq(preference.created_at)
+    it "sets unrevealed_updated_at and anonymous_updated_at to nil on creation" do
+      expect(preference.unrevealed_updated_at).to eq(nil)
+      expect(preference.anonymous_updated_at).to eq(nil)
     end
 
     it "updates unrevealed_updated_at when unrevealed changes" do
-      old_time = preference.unrevealed_updated_at
-
       preference.update!(unrevealed: !preference.unrevealed)
 
       preference.reload
 
-      expect(preference.unrevealed_updated_at).to be >= old_time
       expect(preference.unrevealed_updated_at).to eq(preference.updated_at)
     end
 
     it "updates anonymous_updated_at when anonymous changes" do
-      old_time = preference.anonymous_updated_at
-
       preference.update!(anonymous: !preference.anonymous)
 
       preference.reload
 
-      expect(preference.anonymous_updated_at).to be >= old_time
       expect(preference.anonymous_updated_at).to eq(preference.updated_at)
     end
 
