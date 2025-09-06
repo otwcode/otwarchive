@@ -25,7 +25,7 @@ Feature: Delete a comment
     When I am logged in as "commenter"
       And I view the work "Awesome story"
     Then I should not see "Fail comment"
-    When I display comments
+    When I follow "Comments (1)"
     Then I should see "Fail comment"
     When I follow "Delete"
     Then it should not take me to the non-JavaScript delete page
