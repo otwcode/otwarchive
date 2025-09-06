@@ -398,7 +398,7 @@ When "I confirm I want to mark the comment as spam" do
 end
 
 When "I display comments" do
-  click_link("Comments")
+  click_link("Comments ")
 end
 
 When "I open the reply box" do
