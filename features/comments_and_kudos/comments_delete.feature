@@ -20,8 +20,7 @@ Feature: Delete a comment
 
   @javascript
   Scenario: User deletes a comment they added to a work with JavaScript
-    When I am logged in as "author"
-      And I post the work "Awesome story"
+    Given the work "Awesome story" by "author"
       And a comment "Fail comment" by "commenter" on the work "Awesome story"
     When I am logged in as "commenter"
       And I view the work "Awesome story"
