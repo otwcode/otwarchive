@@ -24,7 +24,7 @@ Feature: Delete a comment
       And I post the work "Awesome story"
     When I am logged in as "commenter"
       And I post the comment "Fail comment" on the work "Awesome story"
-    When I view the work "Awesome story"
+      And I view the work "Awesome story"
     Then I should not see "Fail comment"
     When I display comments
     Then I should see "Fail comment"
