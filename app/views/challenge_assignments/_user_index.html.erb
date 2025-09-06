@@ -26,7 +26,7 @@
 
 <!--main content-->
 <% unless @collection %>
-  <p class="notes"><%= t(".claims_note_html", claims_link: link_to(t(".claims_link"), user_claims_path(@user))) %></p>
+  <p class="notes"><%= t(".claims_note_html", claims_link: link_to(t(".claims"), user_claims_path(@user))) %></p>
 <% end %>
 
 <%== pagy_nav @pagy %>

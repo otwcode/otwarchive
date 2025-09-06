@@ -19,7 +19,7 @@
 
 <!--main content-->
 <% unless @collection %>
-  <p class="notes"><%= t(".assignments_note_html", assignments_link: link_to(t(".assignments_link"), user_assignments_path(@user))) %></p>
+  <p class="notes"><%= t(".assignments_note_html", assignments_link: link_to(t(".assignments"), user_assignments_path(@user))) %></p>
 <% end %>
 
 <ol class="prompt index group">

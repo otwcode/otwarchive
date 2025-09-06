@@ -563,7 +563,7 @@ en:
     index:
       access_denied_user: You aren't allowed to see that user's assignments.
     user_index:
-      claims_link: My Claims
+      claims: My Claims
       claims_note_html: Looking for prompts you claimed in a prompt meme? Try %{claims_link}.
       navigation:
         completed: Completed Assignments
@@ -573,7 +573,7 @@ en:
         collection_html: My Assignments in %{collection_link}
   challenge_claims:
     user_index:
-      assignments_link: My Assignments
+      assignments: My Assignments
       assignments_note_html: Looking for assignments you were given for a gift exchange? Try %{assignments_link}.
   challenge_signups:
     signup_form:
