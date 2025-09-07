@@ -219,6 +219,12 @@ en:
     index:
       collection_page_title: "%{collection_title} - Tags"
   users:
+    change_email:
+      page_title: Change Email
+    change_password:
+      page_title: Change Password
+    change_username:
+      page_title: Change Username
     changed_password:
       blank_password: You must enter your old password.
       wrong_password: Your old password was incorrect.
