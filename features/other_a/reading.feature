@@ -11,7 +11,9 @@ Feature: Reading count
   Then I should see "Sorry, you don't have permission"
     And I should not see "History" within "div#dashboard"
   When I go to second_reader's reading page
-  Then I should see "History" within "div#dashboard"
+  Then I should see the page title "History"
+    And I should see "History" within "h2.heading"
+    And I should see "History" within "div#dashboard"
 
   Scenario: A user can read a work several times, updating the count and date in their history
 
@@ -112,8 +114,11 @@ Feature: Reading count
   Then I should see "Mark for Later"
   When I follow "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
-    And I go to reader's reading page
-  Then I should see "Testy"
+  When I go to reader's reading page
+    And I follow "Marked for Later"
+  Then I should see the page title "Marked for Later"
+    And I should see "Marked for Later" within "h2.heading"
+    And I should see "Testy"
     And I should see "(Marked for Later.)"
   When I view the work "Testy"
   Then I should see "Mark as Read"
