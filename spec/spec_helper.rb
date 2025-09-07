@@ -69,7 +69,7 @@ RSpec.configure do |config|
     allow(Akismetor).to receive(:spam?).and_return(false)
 
     # Stub all requests to example.org, the default external work URL:
-    WebMock.stub_request(:any, "www.example.org")
+    WebMock.stub_request(:any, /example/)
   end
 
   config.after :each do
