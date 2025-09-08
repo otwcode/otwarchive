@@ -215,6 +215,8 @@ en:
             terms_of_service:
               accepted: Sorry, you need to accept the Terms of Service in order to sign up.
               format: "%{message}"
+            reset_password_token:
+              invalid: This password reset link is invalid or expired. Please request a new password reset instead.
         work:
           attributes:
             user_defined_tags_count:

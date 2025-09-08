@@ -58,11 +58,8 @@ Feature: User Authentication
     # password reset link should no longer work
     When I log out
       And I follow "Change my password." in the email
-      And I fill in "New password" with "override"
-      And I fill in "Confirm new password" with "override"
-      And I press "Change Password"
-    Then I should see "We couldn't save this user because:"
-      And I should see "Reset password token is invalid"
+    Then I should see "This password reset link is invalid or expired. Please check your email for the most recent password reset link."
+      And I should see "Forgotten your password?"
 
     # old password should no longer work
     When I am on the homepage

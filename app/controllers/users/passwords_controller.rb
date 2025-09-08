@@ -31,6 +31,20 @@ class Users::PasswordsController < Devise::PasswordsController
     super
   end
 
+  def edit
+    original_token = params[:reset_password_token]
+    reset_password_token = Devise.token_generator.digest(self, :reset_password_token, original_token)
+
+    user = User.find_for_authentication(reset_password_token: reset_password_token)
+
+    if user.nil? || user.new_record?
+      flash[:error] = t(".invalid_link") + helpers.tag.br + t(".request_again", count: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS)
+      redirect_to new_user_password_path and return
+    end
+
+    super
+  end
+
   protected
 
   # We need to include information about the user (the remaining reset attempts)
@@ -50,5 +64,12 @@ class Users::PasswordsController < Devise::PasswordsController
   def after_resetting_password_path_for(resource)
     resource.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_RESET)
     super
+  end
+
+  def assert_reset_token_passed
+    return if params[:reset_password_token].present?
+
+    set_flash_message(:error, :no_token)
+    redirect_to new_user_password_path
   end
 end

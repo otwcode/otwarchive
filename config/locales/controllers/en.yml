@@ -257,6 +257,11 @@ en:
           one: You may reset your password %{count} more time.
           other: You may reset your password %{count} more times.
         user_not_found: We couldn't find an account with that email address or username. Please try again.
+      edit:
+        invalid_link: This password reset link is invalid or expired. Please check your email for the most recent password reset link.
+        request_again:
+          one: If it has been more than %{count} hour, you can request a new password reset.
+          other: If it has been more than %{count} hours, you can request a new password reset.
     reconfirm_email:
       access_denied:
         logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.
