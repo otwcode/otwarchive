@@ -38,7 +38,7 @@ class Users::PasswordsController < Devise::PasswordsController
     user = User.find_for_authentication(reset_password_token: reset_password_token)
 
     if user.nil? || user.new_record?
-      flash[:error] = t(".invalid_link") + helpers.tag.br + t(".request_again", count: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS)
+      flash[:error] = t(".invalid_link", count: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS)
       redirect_to new_user_password_path and return
     end
 

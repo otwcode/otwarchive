@@ -31,7 +31,7 @@ describe Users::PasswordsController do
 
       it_redirects_to_with_error(
         new_user_password_path,
-        "This password reset link is invalid or expired. Please check your email for the most recent password reset link.<br>If it has been more than #{ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS} hours, you can request a new password reset."
+        "This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than #{ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS} hours, you can request a new password reset."
       )
     end
   end
