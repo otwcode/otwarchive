@@ -8,10 +8,20 @@ class Series < ApplicationRecord
   has_many :work_tags, -> { distinct }, through: :works, source: :tags
   has_many :work_pseuds, -> { distinct }, through: :works, source: :pseuds
 
+  has_many :posted_works, lambda {
+    joins(:chapters).where(chapters: { posted: true }).distinct
+  }, through: :serial_works, source: :work
+
+  has_many :posted_works_fandom_tags, -> { where(type: "Fandom").distinct }, through: :posted_works, source: :tags
+
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings, source: :tagger, source_type: 'Tag'
 
   has_many :subscriptions, as: :subscribable, dependent: :destroy
+
+  def fandom_string
+    posted_works_fandom_tags.pluck(:name).sort.join(", ")
+  end
 
   validates_presence_of :title
   validates_length_of :title,
@@ -59,6 +69,12 @@ class Series < ApplicationRecord
   }
 
   scope :for_blurb, -> { includes(:work_tags, :pseuds) }
+
+  scope :with_stat_joins, lambda {
+    joins(serial_works: { work: :chapters })
+      .left_joins(serial_works: { work: { chapters: :approved_root_comments } }) 
+      .left_joins(:subscriptions, :bookmarks)
+  }
 
   def posted_works
     self.works.posted
