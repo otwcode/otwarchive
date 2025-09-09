@@ -31,7 +31,7 @@ describe ArchiveDeviseMailer do
       describe "text version" do
         it "has the correct content" do
           expect(email).to have_text_part_content("Hi #{user.login},")
-          expect(email).not_to have_text_part_content("use this link to choose a new password")
+          expect(email).to have_text_part_content("use this link to choose a new password")
         end
       end
     end
