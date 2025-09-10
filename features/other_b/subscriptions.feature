@@ -295,10 +295,7 @@
 
   Scenario: subscribe to an individual work with an the & and < and > characters in the title
 
-  Given I have loaded the fixtures
-    And the following activated users exist
-    | login          | password   | email           |
-    | subscriber     | password   | subscriber@foo.com |
+  Given the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies" by "testuser2"
   When I am logged in as "subscriber" with password "password"
     And I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When I press "Subscribe"
@@ -307,7 +304,7 @@
     And a chapter is added to "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When subscription notifications are sent
-  Then 1 email should be delivered to "subscriber@foo.com"
+  Then 1 email should be delivered to "subscriber"
   When "The problem with ampersands and angle brackets in email bodies and subjects" is fixed
     #And the email should have "I am <strong>er Than Yesterday & Other Lies" in the subject
     #And the email should contain "I am <strong>er Than Yesterday & Other Lies"

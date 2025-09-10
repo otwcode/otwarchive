@@ -104,6 +104,10 @@ describe Skin do
         #main .rotatevert {transform: rotatey(180deg);}
         .rotatehoriz {transform: rotatex(50deg)}",
 
+      # TODO: Only one of the background properties is retained, but this test
+      # passes because we're only checking that the skin saves, not *what* is
+      # saved. AO3-7078 is for allowing multiple declarations using the same
+      # property within a given ruleset.
       "allows multiple valid values for a single property" =>
         "#outer .actions a:hover,symbol .question:hover,.actions input:hover,#outer input[type=\"submit\"]:hover,button:hover,.actions label:hover
         { background:#ddd;
@@ -185,7 +189,8 @@ describe Skin do
       "errors when saving dsf images" => "body {background: url(http://foo.com/bar.dsf)}",
       "errors when saving urls with invalid domain" => "body {background: url(http://foo.htc/bar.png)}",
       "errors when saving xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}",
-      "errors when saving url followed by something else" => 'a {content: url(/images/fakeimage.png) " (" attr(href) ")"}'
+      "errors when saving url followed by something else" => 'a {content: url(/images/fakeimage.png) " (" attr(href) ")"}',
+      "errors when saving custom property with url function" => ":root { --address: url(\"https://example.org/img.jpg\") }"
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css

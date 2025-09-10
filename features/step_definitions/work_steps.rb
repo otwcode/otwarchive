@@ -110,17 +110,6 @@ end
 
 ### GIVEN
 
-Given(/^I have the Battle set loaded$/) do
-  step %{I have loaded the fixtures}
-  step %{I have Battle 12 prompt meme fully set up}
-  step %{everyone has signed up for Battle 12}
-  step %{mod fulfills claim}
-  step %{I reveal the "Battle 12" challenge}
-  step %{I am logged in as "myname4"}
-  step %{the statistics for all works are updated}
-  step %{all indexing jobs have been run}
-end
-
 Given /^I have no works or comments$/ do
   Work.delete_all
   Comment.delete_all

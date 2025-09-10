@@ -14,6 +14,7 @@ class User < ApplicationRecord
          :validatable,
          :lockable,
          :recoverable
+  devise :pwned_password unless Rails.env.test?
 
   # Must come after Devise modules in order to alias devise_valid_password?
   # properly

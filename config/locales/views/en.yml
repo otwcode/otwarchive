@@ -1980,8 +1980,6 @@ en:
         hide_share_buttons: Hide the share buttons on my work.
         hide_work_from_search_engines: Hide my work from search engines when possible.
         legend: Privacy
-        show_date_of_birth: Show my date of birth to other people.
-        show_email_address: Show my email address to other people.
       public_site_skins: Public Site Skins
       your_locale: Your locale
       your_site_skin: Your site skin
@@ -2033,6 +2031,14 @@ en:
       make_default: Make this name default
       name: Name
       submit: Submit
+  readings:
+    index:
+      history:
+        landmark: List of History Items
+        page_heading: History
+      marked_for_later:
+        landmark: List of Marked for Later Items
+        page_heading: Marked for Later
   related_works:
     index:
       page_heading: "%{login}'s Related Works"
@@ -2187,7 +2193,6 @@ en:
       page_heading: Change Username
       ticket_id: Ticket ID
     change_email:
-      browser_title: Change Email
       caution:
         check_spam_html: "%{must_confirm_bold} Please check your spam folder or %{contact_support_link} if you do not receive the confirmation email."
         confirm_by: If you don't confirm your request by %{date}, your email address will not be changed.
@@ -2208,11 +2213,8 @@ en:
         other: You must use the link in the confirmation email in order to finish confirming your email change. If you don't confirm your request within %{count} days, the link will expire and your email address will not be changed.
       request_for_confirmation: Changing your email will send a request for confirmation to your new email address and a notification to your current email address.
       resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
-    change_password:
-      browser_title: Change Password
     change_username:
       account_faq: Account FAQ
-      browser_title: Change Username
       caution: Please use this feature with caution.
       change_window:
         one: You can change your username once per day.
@@ -2276,8 +2278,6 @@ en:
       about_me: About Me
       browser_title: Edit Profile
       change_profile_landmark: Change Profile
-      date_of_birth: Date of Birth
-      location: Location
       page_heading: Edit My Profile
       privacy_policy: Privacy Policy
       public_information_notice_html: Any personal information you post on your public AO3 profile, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites, will be accessible by the general public. To learn more about what data AO3 collects when you're on the site and how we use it, check out our %{privacy_policy_link}.

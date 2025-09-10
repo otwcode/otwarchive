@@ -21,7 +21,7 @@ Given "I am logged in as a(n) {string} admin" do |role|
   step "I start a new session"
   login = "testadmin-#{role}"
   email = "#{login}@example.org"
-  FactoryBot.create(:admin, login: login, email: email, roles: [role]) if Admin.find_by(login: login, email: email).nil?
+  FactoryBot.create(:admin, login: login, email: email, roles: [role], password: "adminpassword") if Admin.find_by(login: login, email: email).nil?
   visit new_admin_session_path
   fill_in "Admin username", with: login
   fill_in "Admin password", with: "adminpassword"
@@ -31,7 +31,7 @@ end
 
 Given "I am logged in as an admin" do
   step "I start a new session"
-  FactoryBot.create(:admin, login: "testadmin", email: "testadmin@example.org") if Admin.find_by(login: "testadmin").nil?
+  FactoryBot.create(:admin, login: "testadmin", email: "testadmin@example.org", password: "adminpassword") if Admin.find_by(login: "testadmin").nil?
   visit new_admin_session_path
   fill_in "Admin username", with: "testadmin"
   fill_in "Admin password", with: "adminpassword"
@@ -324,9 +324,13 @@ When "I delete known issues" do
   step %{I follow "Delete"}
 end
 
-When /^I uncheck the "([^\"]*)" role checkbox$/ do |role|
-  role_name = role.parameterize.underscore
-  role_id = Role.find_by(name: role_name).id
+When "I check the {string} role checkbox" do |role|
+  role_id = Role.find_by(name: role).id
+  check("user_roles_#{role_id}")
+end
+
+When "I uncheck the {string} role checkbox" do |role|
+  role_id = Role.find_by(name: role).id
   uncheck("user_roles_#{role_id}")
 end
 
@@ -402,6 +406,16 @@ Then (/^I should not see a translated admin post$/) do
   step %{I should see "Deutsch Ankuendigung"}
   step %{I follow "Default Admin Post"}
   step %{I should not see "Translations: Deutsch"}
+end
+
+Then "the {string} role checkbox should be checked" do |role|
+  role_id = Role.find_by(name: role).id
+  assert has_checked_field?("user_roles_#{role_id}")
+end
+
+Then "the {string} role checkbox should not be checked" do |role|
+  role_id = Role.find_by(name: role).id
+  assert has_unchecked_field?("user_roles_#{role_id}")
 end
 
 Then /^the work "([^\"]*)" should be hidden$/ do |work|

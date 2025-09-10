@@ -171,6 +171,9 @@ en:
   people:
     index:
       collection_page_title: "%{collection_title} - People"
+  profile:
+    show:
+      page_title: "%{username} - Profile"
   pseuds:
     create:
       already_have_pseud_with_name: You already have a pseud with that name.
@@ -190,6 +193,9 @@ en:
     clear:
       error: There were problems deleting your history. Please try again later.
       success: Your history is now cleared.
+    index:
+      history_page_title: History
+      marked_for_later_page_title: Marked for Later
   related_works:
     index:
       page_title: "%{login} - Related Works"
@@ -213,6 +219,12 @@ en:
     index:
       collection_page_title: "%{collection_title} - Tags"
   users:
+    change_email:
+      page_title: Change Email
+    change_password:
+      page_title: Change Password
+    change_username:
+      page_title: Change Username
     changed_password:
       blank_password: You must enter your old password.
       wrong_password: Your old password was incorrect.
