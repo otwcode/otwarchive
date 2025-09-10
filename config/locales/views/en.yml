@@ -559,6 +559,9 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
+    shared:
+      challenge_requests:
+        fandom: Fandom
   challenge_assignments:
     to_default:
       button: Default
