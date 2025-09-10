@@ -697,8 +697,8 @@ en:
         choose_new_password: use this link to choose a new password
         contact_policy_abuse: contact Policy & Abuse
         contact_policy_abuse_instructions:
-          html: If you have other reasons to believe that someone else currently has access to your AO3 account, please %{contact_policy_abuse_link} with all relevant information.
-          text: 'If you have other reasons to believe that someone else currently has access to your AO3 account, please contact Policy & Abuse with all relevant information: %{contact_policy_abuse_url}'
+          html: If you have other reasons to believe that someone else currently has access to your %{app_name} account, please %{contact_policy_abuse_link} with all relevant information.
+          text: 'If you have other reasons to believe that someone else currently has access to your %{app_name} account, please contact Policy & Abuse with all relevant information: %{contact_policy_abuse_url}'
         contact_support: contact Support
         ignore_if_not_requested:
           html: "%{safely_ignore_bold} Someone else may have entered your username or email address by mistake."
@@ -708,9 +708,9 @@ en:
           html: "%{intro_bold} If the link in this email has expired, you will need to %{new_password_reset_link}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, %{contact_support_link} for further assistance."
           intro: If you made this request, please %{choose_new_password_link} within %{count} days.
           text: 'If you made this request, please use this link to choose a new password within %{count} days: %{choose_new_password_url}. If the link in this email has expired, you will need to request a new password reset: %{new_password_reset_url}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, contact Support for further assistance: %{contact_support_url}.'
-        intro: Someone has made a request to reset the password for your AO3 account.
+        intro: Someone has made a request to reset the password for your %{app_name} account.
         new_password_reset: request a new password reset
         reset_emails_clarification:
-          html: Receiving password reset emails that you did not request does not necessarily mean that your AO3 account is at risk. As long as you are the only person with access to your email account, your AO3 account will not be affected and your password will not change simply because you received this password reset email. However, you can still %{choose_new_password_link} or log in and %{change_your_password_link}. Either option will log your account out of all sessions on all devices.
-          text: 'Receiving password reset emails that you did not request does not necessarily mean that your AO3 account is at risk. As long as you are the only person with access to your email account, your AO3 account will not be affected and your password will not change simply because you received this password reset email. However, you can still use this link to choose a new password (%{choose_new_password_url}) or log in and change your password: %{change_your_password_url}. Either option will log your account out of all sessions on all devices.'
+          html: Receiving password reset emails that you did not request does not necessarily mean that your %{app_name} account is at risk. As long as you are the only person with access to your email account, your %{app_name} account will not be affected and your password will not change simply because you received this password reset email. However, you can still %{choose_new_password_link} or log in and %{change_your_password_link}. Either option will log your account out of all sessions on all devices.
+          text: 'Receiving password reset emails that you did not request does not necessarily mean that your %{app_name} account is at risk. As long as you are the only person with access to your email account, your %{app_name} account will not be affected and your password will not change simply because you received this password reset email. However, you can still use this link to choose a new password (%{choose_new_password_url}) or log in and change your password: %{change_your_password_url}. Either option will log your account out of all sessions on all devices.'
         subject: "[%{app_name}] Reset your password"
