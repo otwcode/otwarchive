@@ -110,6 +110,22 @@
               presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
         <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX) %>
       </dd>
+
+      <dt><%= collection_form.label :tag_string, ts("Collection Tags") %></dt>
+      <dd>
+        <%= collection_form.text_field :tag_string, autocomplete_options("tag", "aria-describedby": "tag-string-field-description") %>
+        <p class="footnote" id="tag-string-field-description">
+          <%= ts("Enter up to %{max} tags to describe the content of your collection.", max: ArchiveConfig.COLLECTION_TAGS_MAX) %>
+        </p>
+      </dd>
+
+      <dt><%= collection_form.check_box :multifandom, "aria-describedby" => "multifandom-field-description" %></dt>
+      <dd>
+        <%= collection_form.label :multifandom, t(".multifandom.label") %>
+        <p class="footnote" id="multifandom-field-description">
+          <%= t(".multifandom.footnote") %>
+        </p>
+      </dd>
     </dl>
   </fieldset>
 

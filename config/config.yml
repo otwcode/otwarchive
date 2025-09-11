@@ -769,5 +769,6 @@ PERCONA_ARGS: >
 # How many shards to have in elastic indexes.
 # Production may have more than 5 for these
 BOOKMARKABLE_SHARDS: 5
+COLLECTION_SHARDS: 5
 WORKS_SHARDS: 5
 USER_SHARDS: 5
