@@ -7,7 +7,7 @@ describe ApplicationHelper do
     context "when creation is ExternalWork" do
       let(:external_work) { create(:external_work) }
 
-      it "returns string for exteral work" do
+      it "returns string for external work" do
         result = helper.creation_id_for_css_classes(external_work)
         expect(result).to eq("external-work-#{external_work.id}")
       end
@@ -36,7 +36,7 @@ describe ApplicationHelper do
     context "when creation is ExternalWork" do
       let(:external_work) { create(:external_work) }
 
-      it "returns empty array for exteral work" do
+      it "returns empty array for external work" do
         result = helper.creator_ids_for_css_classes(external_work)
         expect(result).to be_empty
       end
@@ -206,6 +206,13 @@ describe ApplicationHelper do
         expect(result).to eq("#{default_classes} series-#{series.id} user-#{user1.id}")
       end
 
+      it "bypasses the cache as pseuds are loaded" do
+        helper.css_classes_for_creation_blurb(series)
+
+        expect(series.pseuds.loaded?).to be true
+        expect(Rails.cache.read("#{series.cache_key_with_version}/blurb_css_classes-v2")).to be_nil
+      end
+
       context "when series is updated" do
         context "when new user is added" do
           it "returns updated string" do
@@ -259,6 +266,7 @@ describe ApplicationHelper do
           before do
             work.creatorships.find_or_create_by(pseud_id: user2.default_pseud_id)
             series.reload # make sure the series has the right value for updated_at
+            series.pseuds.reload
           end
 
           # TODO: AO3-5739 Co-creators removed from all works in a series are not removed from series
@@ -314,6 +322,13 @@ describe ApplicationHelper do
       it "returns string with default classes and creation and creator info" do
         result = helper.css_classes_for_creation_blurb(work)
         expect(result).to eq("#{default_classes} work-#{work.id} user-#{user1.id}")
+      end
+
+      it "bypasses the cache as pseuds are loaded" do
+        helper.css_classes_for_creation_blurb(work)
+
+        expect(work.pseuds.loaded?).to be true
+        expect(Rails.cache.read("#{work.cache_key_with_version}/blurb_css_classes-v2")).to be_nil
       end
 
       context "when new user is added" do
