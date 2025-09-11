@@ -162,7 +162,7 @@ class WorksController < ApplicationController
       redirect_to logged_in? ? user_path(current_user) : new_user_session_path
       return
     end
-    
+
     @page_subtitle = t(".page_title", username: @user.login)
 
     if params[:pseud_id]
@@ -344,9 +344,9 @@ class WorksController < ApplicationController
                                           include_drafts: true)
     end
     set_work_form_fields
+  end
 
-    return unless params['remove'] == 'me'
-
+  def remove_user_creatorship
     pseuds_with_author_removed = @work.pseuds - current_user.pseuds
 
     if pseuds_with_author_removed.empty?

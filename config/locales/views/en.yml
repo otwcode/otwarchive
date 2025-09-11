@@ -559,6 +559,12 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
+  challenge_assignments:
+    to_default:
+      button: Default
+      confirmation: Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone.
+    to_fulfill:
+      button: Fulfill
   challenge_signups:
     signup_form:
       notice:
@@ -2042,6 +2048,8 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+    revert_skin_form:
+      revert_to_default: Revert to Default Skin
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.

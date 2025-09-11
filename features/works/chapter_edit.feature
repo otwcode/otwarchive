@@ -358,7 +358,7 @@ Feature: Edit chapters
 
 
   Scenario: Removing yourself as a co-creator from the chapter edit page when
-  you've co-created multiple chapters on the work removes you only from that 
+  you've co-created multiple chapters on the work removes you only from that
   specific chapter. Removing yourself as a co-creator from the chapter edit page
   of the last chapter you've co-created also removes you from the work.
 
@@ -368,7 +368,7 @@ Feature: Edit chapters
     When I view the work "OP's Work"
       And I view the 3rd chapter
       And I follow "Edit Chapter"
-    When I follow "Remove Me As Chapter Co-Creator"
+    When I press "Remove Me As Chapter Co-Creator"
     Then I should see "You have been removed as a creator from the chapter."
       And I should see "Chapter 1"
     When I view the 3rd chapter
@@ -376,7 +376,7 @@ Feature: Edit chapters
       And I should see "Chapter by originalposter"
     When I follow "Previous Chapter"
       And I follow "Edit Chapter"
-      And I follow "Remove Me As Chapter Co-Creator"
+      And I press "Remove Me As Chapter Co-Creator"
     Then I should see "You have been removed as a creator from the work."
     When I view the work "OP's Work"
     Then I should not see "Edit Chapter"
