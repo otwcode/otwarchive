@@ -60,6 +60,41 @@ Scenario: Change details as an admin
   When I go to the admin-activities page
   Then I should see 1 admin activity log entry
 
+Scenario Outline: Some admins should be able to see the Edit Profile button and access the page
+  Given I am logged in as a "<role>" admin
+  When I go to editname's user page
+    And I follow "Profile"
+  Then I should see "Edit Profile"
+  When I follow "Edit Profile"
+  Then I should see "Edit My Profile"
+
+  Examples:
+    | role             |
+    | superadmin       |
+    | policy_and_abuse |
+    | support          |
+
+Scenario Outline: Other admins should not be able to see the Edit Profile button or access the page
+  Given I am logged in as a "<role>" admin
+  When I go to editname's user page
+    And I follow "Profile"
+  Then I should not see "Edit Profile"
+  When I go to editname's profile edit page
+  Then I should see "Sorry, only an authorized admin can access the page you were trying to reach."
+
+  Examples:
+    | role                       |
+    | board                      |
+    | board_assistants_team      |
+    | communications             |
+    | development_and_membership |
+    | docs                       |
+    | elections                  |
+    | legal                      |
+    | translation                |
+    | tag_wrangling              |
+    | open_doors                 |
+
 Scenario: Changing email address shows a confirmation page and sends a confirmation mail
   When it is currently 2020-04-10 13:37
     And the email address change confirmation period is set to 4 days
