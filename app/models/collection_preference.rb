@@ -1,6 +1,7 @@
 class CollectionPreference < ApplicationRecord
   belongs_to :collection
   after_update :after_update
+  after_update :set_updated_at_timestamps
 
   def after_update
     if self.collection.valid? && self.valid?
@@ -11,5 +12,13 @@ class CollectionPreference < ApplicationRecord
         collection.reveal_authors!
       end
     end
+  end
+
+  def set_updated_at_timestamps
+    updates = {}
+    updates[:unrevealed_updated_at] = updated_at if saved_change_to_unrevealed?
+    updates[:anonymous_updated_at]  = updated_at if saved_change_to_anonymous?
+
+    update_columns(updates) if updates.any?
   end
 end
