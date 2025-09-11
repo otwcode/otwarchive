@@ -212,6 +212,8 @@ en:
               invalid: must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).
             password_confirmation:
               confirmation: doesn't match new password.
+            reset_password_token:
+              invalid: This password reset link is invalid or expired. Please request a new password reset instead.
             terms_of_service:
               accepted: Sorry, you need to accept the Terms of Service in order to sign up.
               format: "%{message}"
