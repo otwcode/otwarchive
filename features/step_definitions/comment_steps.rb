@@ -120,6 +120,14 @@ Then /^I should see Last Edited in the right timezone$/ do
   step %{I should see "Last Edited"}
 end
 
+Then "it should take me to the non-JavaScript delete page" do
+  expect(current_url).to include("?delete_comment_id")
+end
+
+Then "it should not take me to the non-JavaScript delete page" do
+  expect(current_url).not_to include("?delete_comment_id")
+end
+
 # WHEN
 
 When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
@@ -257,14 +265,14 @@ When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|
   end
 end
 
-When /^I delete the comment$/ do
+When "I delete the comment" do
   step %{I follow "Delete" within ".odd"}
-  step %{I follow "Yes, delete!"}
+  step %{I press "Yes, delete!"}
 end
 
-When /^I delete the reply comment$/ do
+When "I delete the reply comment" do
   step %{I follow "Delete" within ".even"}
-  step %{I follow "Yes, delete!"}
+  step %{I press "Yes, delete!"}
 end
 
 When /^I view the latest comment$/ do
@@ -377,7 +385,7 @@ When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
     visit work_url(work, show_comments: true)
     break unless page.has_content? "Delete"
     click_link("Delete")
-    click_link("Yes, delete!") # TODO: Fix along with comment deletion.
+    click_button("Yes, delete!")
   end
 end
 
