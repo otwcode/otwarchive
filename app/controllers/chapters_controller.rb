@@ -116,10 +116,7 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
-    if params[:cancel_button]
-      redirect_back_or_default(root_path)
-      return
-    end
+    cancel_posting_and_redirect(@work) and return if params[:cancel_button]
 
     @chapter = @work.chapters.build(chapter_params)
     @work.wip_length = params[:chapter][:wip_length]
@@ -146,11 +143,7 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
   def update
-    if params[:cancel_button]
-      # Not quite working yet - should send the user back to wherever they were before they hit edit
-      redirect_back_or_default(root_path)
-      return
-    end
+    cancel_posting_and_redirect(@chapter) and return if params[:cancel_button]
 
     @chapter.attributes = chapter_params
     @work.wip_length = params[:chapter][:wip_length]
@@ -282,6 +275,17 @@ class ChaptersController < ApplicationController
   def post_chapter
     @work.update_attribute(:posted, true) unless @work.posted
     flash[:notice] = ts("Chapter has been posted!")
+  end
+
+  def cancel_posting_and_redirect(fallback)
+    case params[:from]
+    when "edit-work"
+      redirect_to edit_work_path(@work)
+    when "manage"
+      redirect_to manage_work_chapters_path(@work)
+    else
+      redirect_to fallback
+    end
   end
 
   private
