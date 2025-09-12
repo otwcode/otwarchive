@@ -28,7 +28,7 @@ https://otwcode.github.io/docs/patterns/regions.html#footer-region
   display: block;
 }
 
-#footer a {
+#footer a, #footer button {
   background: transparent;
   border: 0;
   font-weight: 400;
@@ -40,15 +40,22 @@ https://otwcode.github.io/docs/patterns/regions.html#footer-region
     border-radius: 0;
 }
 
-#footer a {
+#footer a, #footer button {
   color: #fff;
   display: inline;
-  border-bottom: 1px solid;
+  text-decoration: underline;
   line-height: 1.5;
   white-space: normal;
+    text-underline-position: under;
 }
 
-#footer a:focus {
+#footer button {
+  cursor: pointer;
+  text-align: start;
+  height: unset;
+}
+
+#footer a:focus, #footer button:focus {
   outline: 1px dotted;
 }
 

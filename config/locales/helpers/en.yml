@@ -49,3 +49,6 @@ en:
       troubleshot: Account Troubleshot
       validated: Account Validated
       warn: Warned
+  works_helper:
+    mark_as_read_button: Mark as Read
+    mark_for_later_button: Mark for Later

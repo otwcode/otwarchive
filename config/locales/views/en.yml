@@ -559,6 +559,12 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
+  challenge_assignments:
+    to_default:
+      button: Default
+      confirmation: Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone.
+    to_fulfill:
+      button: Fulfill
   challenge_signups:
     signup_form:
       notice:
@@ -2025,6 +2031,14 @@ en:
       make_default: Make this name default
       name: Name
       submit: Submit
+  readings:
+    index:
+      history:
+        landmark: List of History Items
+        page_heading: History
+      marked_for_later:
+        landmark: List of Marked for Later Items
+        page_heading: Marked for Later
   related_works:
     index:
       page_heading: "%{login}'s Related Works"
@@ -2034,6 +2048,8 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+    revert_skin_form:
+      revert_to_default: Revert to Default Skin
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
@@ -2177,7 +2193,6 @@ en:
       page_heading: Change Username
       ticket_id: Ticket ID
     change_email:
-      browser_title: Change Email
       caution:
         check_spam_html: "%{must_confirm_bold} Please check your spam folder or %{contact_support_link} if you do not receive the confirmation email."
         confirm_by: If you don't confirm your request by %{date}, your email address will not be changed.
@@ -2198,11 +2213,8 @@ en:
         other: You must use the link in the confirmation email in order to finish confirming your email change. If you don't confirm your request within %{count} days, the link will expire and your email address will not be changed.
       request_for_confirmation: Changing your email will send a request for confirmation to your new email address and a notification to your current email address.
       resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
-    change_password:
-      browser_title: Change Password
     change_username:
       account_faq: Account FAQ
-      browser_title: Change Username
       caution: Please use this feature with caution.
       change_window:
         one: You can change your username once per day.
