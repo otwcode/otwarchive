@@ -78,7 +78,7 @@ namespace :skins do
         next
       end
 
-      skin = Skin.find_by(title: $1.strip)
+      skin = Skin.find_by(title: Regexp.last_match(1).strip)
       skin&.skin_parents&.delete_all
     end
   end
@@ -110,7 +110,7 @@ namespace :skins do
       puts "No skin title found for skin #{skin_content}"
       return
     end
-    title = $1.strip
+    title = Regexp.last_match(1).strip
 
     skin = Skin.find_by(title: title)
     if skin && !replace
@@ -124,15 +124,16 @@ namespace :skins do
       preview_path = default_user_skin_preview
     end
 
-    if skin_content.match(/MEDIA: (.*?) ENDMEDIA/)
-      skin.media = $1.split(/,\s?/)
-    elsif skin_content.match(/MEDIA: (\w+)/)
-      skin.media = [$1]
+    case skin_content
+    when /MEDIA: (.*?) ENDMEDIA/
+      skin.media = Regexp.last_match(1).split(/,\s?/)
+    when /MEDIA: (\w+)/
+      skin.media = [Regexp.last_match(1)]
     end
 
     skin.title ||= title
     skin.author ||= User.find_by(login: "lim")
-    skin.description = "<pre>#{$1}</pre>" if skin_content.match(%r{DESCRIPTION:\s*(.*?)\*/}m)
+    skin.description = "<pre>#{Regexp.last_match(1)}</pre>" if skin_content.match(%r{DESCRIPTION:\s*(.*?)\*/}m)
     skin.filename = filename
     skin.css = nil # get_css should load from filename
     skin.public = true
@@ -146,7 +147,7 @@ namespace :skins do
 
       skin.cache! if skin.cached?
       if skin_content.match(%r{PARENTS:\s*(.*)\s*\*/})
-        parent_string = $1
+        parent_string = Regexp.last_match(1)
         set_parents(skin, parent_string)
       end
     else
