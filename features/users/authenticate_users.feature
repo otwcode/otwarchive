@@ -336,6 +336,16 @@ Feature: User Authentication
     Then I should be on the homepage
       And I should see "Please log out of your admin account first!"
 
+  @no-js-emulation
+  Scenario: Log out with javascript disabled redirects to page prior to log out
+    Given I am logged in
+      And I am on the works page
+    When I follow "Log Out"
+    Then I should see "Are you sure you want to log out?"
+    When I press "Yes, Log Out"
+    Then I should see "Successfully logged out."
+      And I should see "Recent Works"
+
   Scenario: User is redirected back to restricted work after login
     Given the following activated user exists
       | login | password |
