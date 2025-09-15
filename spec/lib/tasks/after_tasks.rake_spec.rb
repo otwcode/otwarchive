@@ -686,3 +686,93 @@ describe "rake After:create_non_canonical_tagset_associations" do
     end
   end
 end
+
+describe "rake After:update_collections_multifandom_and_open_doors" do
+  shared_examples "a collection that only needs multifandom changed" do
+    it "changes multifandom to false, does not change open_doors, adds to reindex queue, and outputs progress" do
+      expect do
+        subject.invoke
+      end.to change { collection.reload.multifandom }
+        .from(nil)
+        .to(false)
+        .and avoid_changing { collection.open_doors }
+        .and add_to_reindex_queue(collection, :main)
+        .and output("Updating 1 collections in 1 batches\nBatch 1 of 1 complete\n\n").to_stdout
+    end
+  end
+
+  shared_examples "a collection that only needs open_doors changed" do
+    it "changes open_doors to false, does not change multifandom, adds to reindex queue, and outputs progress" do
+      expect do
+        subject.invoke
+      end.to change { collection.reload.open_doors }
+        .from(nil)
+        .to(false)
+        .and avoid_changing { collection.multifandom }
+        .and add_to_reindex_queue(collection, :main)
+        .and output("Updating 1 collections in 1 batches\nBatch 1 of 1 complete\n\n").to_stdout
+    end
+  end
+
+  context "when no collections have multifandom: nil or open_doors: nil" do
+    let!(:collection1) { create(:collection, multifandom: true, open_doors: true) }
+    let!(:collection2) { create(:collection, multifandom: false, open_doors: false) }
+    let!(:collection3) { create(:collection, multifandom: false, open_doors: true) }
+    let!(:collection4) { create(:collection, multifandom: true, open_doors: false) }
+
+    it "makes no changes, does not add to reindex queue, and outputs progress" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { collection1.reload }
+        .and avoid_changing { collection2.reload }
+        .and avoid_changing { collection3.reload }
+        .and avoid_changing { collection4.reload }
+        .and not_add_to_reindex_queue(collection1, :main)
+        .and not_add_to_reindex_queue(collection2, :main)
+        .and not_add_to_reindex_queue(collection3, :main)
+        .and not_add_to_reindex_queue(collection4, :main)
+        .and output("Updating 0 collections in 0 batches\n\n").to_stdout
+    end
+  end
+
+  context "when a collection has multifandom: nil and open_doors: true" do
+    let!(:collection) { create(:collection, multifandom: nil, open_doors: true) }
+
+    it_behaves_like "a collection that only needs multifandom changed"
+  end
+
+  context "when a collection has multifandom: nil and open_doors: false" do
+    let!(:collection) { create(:collection, multifandom: nil, open_doors: false) }
+
+    it_behaves_like "a collection that only needs multifandom changed"
+  end
+
+  context "when a collection has multifandom: nil and open_doors: nil" do
+    let!(:collection) { create(:collection, multifandom: nil, open_doors: nil) }
+
+    it "changes multifandom and open_doors to false, adds to reindex queue, and outputs progress" do
+      expect do
+        subject.invoke
+      end.to change { collection.reload.multifandom }
+        .from(nil)
+        .to(false)
+        .and change { collection.open_doors }
+        .from(nil)
+        .to(false)
+        .and add_to_reindex_queue(collection, :main)
+        .and output("Updating 1 collections in 1 batches\nBatch 1 of 1 complete\n\n").to_stdout
+    end
+  end
+
+  context "when a collection has open_doors: nil and multifandom: true" do
+    let!(:collection) { create(:collection, open_doors: nil, multifandom: true) }
+
+    it_behaves_like "a collection that only needs open_doors changed"
+  end
+
+  context "when a collection open_doors: nil and multifandom: false" do
+    let!(:collection) { create(:collection, open_doors: nil, multifandom: false) }
+
+    it_behaves_like "a collection that only needs open_doors changed"
+  end
+end
