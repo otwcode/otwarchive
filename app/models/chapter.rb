@@ -5,11 +5,13 @@ class Chapter < ApplicationRecord
   include WorkChapterCountCaching
   include CreationNotifier
   include Creatable
+  include Responder
 
   belongs_to :work, inverse_of: :chapters
   # acts_as_list scope: 'work_id = #{work_id}'
 
   acts_as_commentable
+  has_many :comments, as: :commentable
 
   validates_length_of :title, allow_blank: true, maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
@@ -79,12 +81,21 @@ class Chapter < ApplicationRecord
   after_save :invalidate_chapter_count,
     if: Proc.new { |chapter| chapter.saved_change_to_posted? }
 
-  before_destroy :fix_positions_before_destroy, :invalidate_chapter_count
+  before_destroy :fix_positions_before_destroy, :invalidate_chapter_count, :delete_all_comments
+  after_destroy :update_work_stats
+
   def fix_positions_before_destroy
     if work&.persisted? && position
       chapters = work.chapters.where(["position > ?", position])
       chapters.each { |c| c.update_attribute(:position, c.position - 1) }
     end
+  end
+
+  def delete_all_comments
+    inbox_comments = InboxComment.where(feedback_comment_id: total_comments.pluck(:id))
+
+    total_comments.in_batches.delete_all
+    inbox_comments.in_batches.delete_all
   end
 
   after_commit :update_series_index
