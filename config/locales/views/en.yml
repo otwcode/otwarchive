@@ -611,7 +611,7 @@ en:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
       multifandom:
         footnote: Use this if your collection is not fandom-specific.
-        label: Multi-fandom
+        label: Multifandom
     index:
       page_heading:
         challenges_subcollections_in: Challenges/Subcollections in %{collection}
