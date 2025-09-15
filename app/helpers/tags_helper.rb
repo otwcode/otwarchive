@@ -242,9 +242,9 @@ module TagsHelper
     if tags && tags.size > 0
       # We don't use .to_sentence because these aren't links and we risk making any
       # connector word (e.g., "and") look like part of the final tag.
-      tags.pluck(:name).join(t("support.array.words_connector"))
+      tags.map(&:display_name).join(t("support.array.words_connector"))
     elsif tags.blank? && category_name.blank?
-     "Choose Not To Use Archive Warnings"
+      ArchiveConfig.WARNING_DEFAULT_TAG_DISPLAY_NAME
     else
       category_name.blank? ? "" : "No" + " " + category_name
     end
