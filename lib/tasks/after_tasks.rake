@@ -588,16 +588,16 @@ namespace :After do
 
     Collection.where("multifandom IS NULL OR open_doors IS NULL").find_in_batches.with_index do |batch, index|
       batch.each do |collection|
-        collection.multifandom = collection.multifandom?
-        collection.open_doors = collection.open_doors?
-        collection.save!
+        collection.update_columns(multifandom: collection.multifandom?, open_doors: collection.open_doors?)
       end
 
       batch_number = index + 1
       progress_msg = "Batch #{batch_number} of #{total_batches} complete"
-      puts(progress_msg) && STDOUT.flush
+      puts(progress_msg)
     end
-    puts && STDOUT.flush
+    puts "Finished updating collections"
+    puts "Run `rake search:reindex_collections` to reindex" unless total_collections.zero?
+    $stdout.flush
   end
   # This is the end that you have to put new tasks above.
 end
