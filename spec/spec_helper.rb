@@ -170,7 +170,6 @@ end
 
 RSpec::Matchers.define_negated_matcher :avoid_changing, :change
 RSpec::Matchers.define_negated_matcher :not_enqueue_mail, :enqueue_mail
-RSpec::Matchers.define_negated_matcher :not_add_to_reindex_queue, :add_to_reindex_queue
 
 def clean_the_database
   # Now clear memcached
