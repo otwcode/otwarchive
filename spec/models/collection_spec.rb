@@ -82,6 +82,16 @@ describe Collection do
       expect(collection.errors.full_messages).to \
         include /Sorry, a collection can only have 10 tags./
     end
+
+    it "raises error when multifandom is nil" do
+      expect { create(:collection, multifandom: nil) }
+        .to raise_error(ActiveRecord::NotNullViolation)
+    end
+
+    it "raises error when open_doors is nil" do
+      expect { create(:collection, open_doors: nil) }
+        .to raise_error(ActiveRecord::NotNullViolation)
+    end
   end
 
   describe "#clear_icon" do
