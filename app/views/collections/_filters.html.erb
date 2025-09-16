@@ -31,6 +31,29 @@
         <%= f.text_field "tag", autocomplete_options("tag", data: { autocomplete_token_limit: 5 }) %>
       </dd>
 
+     <dt><%= ts("Multifandom") %></dt>
+      <dd>
+        <ul>
+          <li>
+            <%= f.label "multifandom", value: true do %>
+              <%= f.radio_button "multifandom", true %>
+              <%= label_indicator_and_text(ts("Yes")) %>
+            <% end %>
+          </li>
+          <li>
+            <%= f.label "multifandom", value: false do %>
+              <%= f.radio_button "multifandom", false %>
+              <%= label_indicator_and_text(ts("No")) %>
+            <% end %>
+          </li>
+          <li>
+            <%= f.label "multifandom", value: "" do %>
+              <%= f.radio_button "multifandom", "" %>
+              <%= label_indicator_and_text(ts("Either")) %>
+            <% end %>
+          </li>
+        </ul>
+      </dd>
       <dt><%= ts("Closed") %></dt>
       <dd>
         <ul>

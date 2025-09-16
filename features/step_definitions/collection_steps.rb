@@ -148,6 +148,7 @@ Given "a set of collections for searching" do
   FactoryBot.create(:collection,
                     name: "swaptest",
                     title: "Another Gift Swap",
+                    multifandom: true,
                     challenge: FactoryBot.create(:gift_exchange))
   FactoryBot.create(:collection,
                     :closed,
