@@ -116,7 +116,12 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
-    cancel_posting_and_redirect(@work) and return if params[:cancel_button]
+    if params[:cancel_button]
+      cancel_posting_and_redirect(@work)
+      return
+    else
+      params[:from] = nil
+    end
 
     @chapter = @work.chapters.build(chapter_params)
     @work.wip_length = params[:chapter][:wip_length]
@@ -143,7 +148,12 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
   def update
-    cancel_posting_and_redirect(@chapter) and return if params[:cancel_button]
+    if params[:cancel_button]
+      cancel_posting_and_redirect(@chapter)
+      return
+    else
+      params[:from] = nil
+    end
 
     @chapter.attributes = chapter_params
     @work.wip_length = params[:chapter][:wip_length]

@@ -295,7 +295,12 @@ class WorksController < ApplicationController
 
   # POST /works
   def create
-    return cancel_posting_and_redirect if params[:cancel_button]
+    if params[:cancel_button]
+      cancel_posting_and_redirect
+      return
+    else
+      params[:from]
+    end
 
     @work = Work.new(work_params)
 
@@ -360,7 +365,12 @@ class WorksController < ApplicationController
 
   # PUT /works/1
   def update
-    return cancel_posting_and_redirect if params[:cancel_button]
+    if params[:cancel_button]
+      cancel_posting_and_redirect
+      return
+    else
+      params[:from] = nil
+    end
 
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_params
@@ -403,7 +413,12 @@ class WorksController < ApplicationController
 
   def update_tags
     authorize @work if logged_in_as_admin?
-    return cancel_posting_and_redirect if params[:cancel_button]
+    if params[:cancel_button]
+      cancel_posting_and_redirect
+      return
+    else
+      params[:from] = nil
+    end
 
     @work.preview_mode = !!(params[:preview_button] || params[:edit_button])
     @work.attributes = work_tag_params
