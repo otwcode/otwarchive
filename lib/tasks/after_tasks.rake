@@ -579,25 +579,5 @@ namespace :After do
       end
     end
   end
-
-  desc "Change nil to false for multifandom and open_doors collection columns"
-  task(update_collections_multifandom_and_open_doors: :environment) do
-    total_collections = Collection.where("multifandom IS NULL OR open_doors IS NULL").size
-    total_batches = (total_collections + 999) / 1000
-    puts "Updating #{total_collections} collections in #{total_batches} batches"
-
-    Collection.where("multifandom IS NULL OR open_doors IS NULL").find_in_batches.with_index do |batch, index|
-      batch.each do |collection|
-        collection.update_columns(multifandom: collection.multifandom?, open_doors: collection.open_doors?)
-      end
-
-      batch_number = index + 1
-      progress_msg = "Batch #{batch_number} of #{total_batches} complete"
-      puts(progress_msg)
-    end
-    puts "Finished updating collections"
-    puts "Run `rake search:reindex_collections` to reindex" unless total_collections.zero?
-    $stdout.flush
-  end
   # This is the end that you have to put new tasks above.
 end
