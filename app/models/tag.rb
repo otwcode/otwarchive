@@ -681,8 +681,10 @@ class Tag < ApplicationRecord
   def reindex_associated(reindex_pseuds = false)
     works.reindex_all
     external_works.reindex_all
+    collections.reindex_all
     bookmarks.reindex_all
 
+    filtered_collections.reindex_all
     filtered_works.reindex_all
     filtered_external_works.reindex_all
 

@@ -113,4 +113,356 @@ describe Collection do
       end
     end
   end
+
+  describe "#general_works_count" do
+    let(:collection) { create(:collection) }
+
+    shared_examples "does not count the work" do
+      it "does not include the work in the count" do
+        expect(collection.general_works_count).to eq(0)
+      end
+    end
+
+    context "when the collection includes a restricted work" do
+      let(:work) { create(:work, restricted: true) }
+
+      before do
+        work.collections << collection
+      end
+
+      it "includes the work in the count" do
+        expect(collection.general_works_count).to eq(1)
+      end
+    end
+
+    context "when the collection includes a hidden work" do
+      let(:work) { create(:work, hidden_by_admin: true) }
+
+      before do
+        work.collections << collection
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes a draft work" do
+      let(:work) { create(:work, posted: false) }
+
+      before do
+        work.collections << collection
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes a public work" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+      end
+
+      it "includes the work in the count" do
+        expect(collection.general_works_count).to eq(1)
+      end
+    end
+
+    context "when the collection includes a subcollection with a work" do
+      let(:subcollection) { create_invalid(:collection, parent: collection) }
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << subcollection
+      end
+
+      it "includes the subcollection's work in the count" do
+        expect(collection.general_works_count).to eq(1)
+      end
+
+      context "when the collection contains the same work as the subcollection" do
+        before do
+          work.collections << collection
+        end
+
+        it "does not double count the work" do
+          expect(collection.general_works_count).to eq(1)
+        end
+      end
+    end
+  end
+
+  describe "#public_works_count" do
+    let(:collection) { create(:collection) }
+
+    shared_examples "does not count the work" do
+      it "does not include the work in the count" do
+        expect(collection.public_works_count).to eq(0)
+      end
+    end
+
+    context "when the collection includes a restricted work" do
+      let(:work) { create(:work, restricted: true) }
+
+      before do
+        work.collections << collection
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes a public work" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+      end
+
+      it "includes the work in the count" do
+        expect(collection.public_works_count).to eq(1)
+      end
+    end
+
+    context "when the collection includes a hidden work" do
+      let(:work) { create(:work, hidden_by_admin: true) }
+
+      before do
+        work.collections << collection
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes a draft work" do
+      let(:work) { create(:work, posted: false) }
+
+      before do
+        work.collections << collection
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes a subcollection with a work" do
+      let(:subcollection) { create_invalid(:collection, parent: collection) }
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << subcollection
+      end
+
+      it "includes the subcollection's work in the count" do
+        expect(collection.public_works_count).to eq(1)
+      end
+
+      context "when the collection contains the same work as the subcollection" do
+        before do
+          work.collections << collection
+        end
+
+        it "does not double count the work" do
+          expect(collection.general_works_count).to eq(1)
+        end
+      end
+    end
+  end
+
+  describe "#general_bookmarked_items_count" do
+    let(:collection) { create(:collection) }
+
+    context "when the collection contains a public bookmark" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "counts the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(1)
+      end
+    end
+
+    context "when the collection contains a private bookmark" do
+      let(:bookmark) { create(:bookmark, private: true) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a hidden bookmark" do
+      let(:bookmark) { create(:bookmark, hidden_by_admin: true) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a bookmark of a hidden work" do
+      let(:bookmark) { create(:bookmark, bookmarkable: create(:work, hidden_by_admin: true)) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a bookmark of an unposted work" do
+      let(:bookmark) { create(:bookmark, bookmarkable: create(:work, posted: false)) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a bookmark of a restricted work" do
+      let(:bookmark) { create(:bookmark, bookmarkable: create(:work, restricted: true)) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "counts the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(1)
+      end
+    end
+
+    context "when the collection contains a subcollection with a bookmark" do
+      let(:subcollection) { create_invalid(:collection, parent: collection) }
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << subcollection
+      end
+
+      it "counts the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(1)
+      end
+
+      context "when the collection contains the same bookmark" do
+        before do
+          bookmark.collections << collection
+        end
+
+        it "does not double count the bookmark" do
+          expect(collection.general_bookmarked_items_count).to eq(1)
+        end
+      end
+    end
+  end
+
+  describe "#public_bookmarked_items_count" do
+    let(:collection) { create(:collection) }
+
+    context "when the collection contains an public bookmark" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "counts the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(1)
+      end
+    end
+
+    context "when the collection contains a private bookmark" do
+      let(:bookmark) { create(:bookmark, private: true) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a bookmark of a hidden work" do
+      let(:bookmark) { create(:bookmark, bookmarkable: create(:work, hidden_by_admin: true)) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a bookmark of an unposted work" do
+      let(:bookmark) { create(:bookmark, bookmarkable: create(:work, posted: false)) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a bookmark of a restricted work" do
+      let(:bookmark) { create(:bookmark, bookmarkable: create(:work, restricted: true)) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a subcollection with a bookmark" do
+      let(:subcollection) { create_invalid(:collection, parent: collection) }
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << subcollection
+      end
+
+      it "counts the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(1)
+      end
+
+      context "when the collection contains the same bookmark" do
+        before do
+          bookmark.collections << collection
+        end
+
+        it "does not double count the bookmark" do
+          expect(collection.public_bookmarked_items_count).to eq(1)
+        end
+      end
+    end
+  end
+
+  describe "#approved_works_count" do
+    it "delegates to SearchCounts" do
+      expect(SearchCounts).to receive(:work_count_for_collection).with(@collection).and_return(3)
+      expect(@collection.approved_works_count).to eq(3)
+    end
+  end
+
+  describe "#approved_bookmarked_items_count" do
+    it "delegates to SearchCounts" do
+      expect(SearchCounts).to receive(:bookmarkable_count_for_collection).with(@collection).and_return(5)
+      expect(@collection.approved_bookmarked_items_count).to eq(5)
+    end
+  end
 end
