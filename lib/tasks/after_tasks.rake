@@ -591,25 +591,27 @@ namespace :After do
         Bookmark.is_public.in_collection(collection).includes(bookmarkable: :fandoms).map(&:bookmarkable)
     end
 
-    collections.find_in_batches.with_index do |batch, index|
-      batch.each do |collection|
-        tags = approved_taggables(collection)
-          .flat_map { |taggable| taggable.try(:fandoms) || [] }
-          .uniq
+    Collection.no_touching do
+      collections.find_in_batches.with_index do |batch, index|
+        batch.each do |collection|
+          tags = approved_taggables(collection)
+            .flat_map { |taggable| taggable.try(:fandoms) || [] }
+            .uniq
 
-        next if tags.empty?
+          next if tags.empty?
 
-        crossover = FandomCrossover.check_for_crossover(tags)
-        collection.update_attribute(:multifandom, crossover) if crossover
+          crossover = FandomCrossover.check_for_crossover(tags)
+          collection.update_attribute(:multifandom, crossover) if crossover
 
-        if tags.length > ArchiveConfig.COLLECTION_TAGS_MAX
-          collection.update(multifandom: crossover)
-        else
-          collection.tags << tags
+          if tags.length > ArchiveConfig.COLLECTION_TAGS_MAX
+            collection.update(multifandom: crossover)
+          else
+            collection.tags << tags
+          end
         end
-      end
 
-      puts "Collection batch #{index + 1} of #{total_batches} tagged"
+        puts "Collection batch #{index + 1} of #{total_batches} tagged"
+      end
     end
   end
   # This is the end that you have to put new tasks above.
