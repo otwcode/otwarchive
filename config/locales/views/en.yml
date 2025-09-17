@@ -645,10 +645,10 @@ en:
       title: Filter by title
       type:
         any: Any
-        gift_exchange: Gift Exchange
+        gift_exchange: Gift Exchange Challenge
         label: Collection Type
         no_challenge: No Challenge
-        prompt_meme: Prompt Meme
+        prompt_meme: Prompt Meme Challenge
     form:
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
