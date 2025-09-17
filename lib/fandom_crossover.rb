@@ -10,12 +10,11 @@ class FandomCrossover
 
     # Replace fandoms with their mergers if possible,
     # as synonyms should have no meta tags themselves
-    all_without_syns = fandoms.map { |f| f.merger || f }
-      .uniq
+    all_without_syns = Fandom.select("IFNULL(merger_id, id) as id").where(id: fandoms).distinct
 
     # For each fandom, find the set of all meta tags for that fandom (including
     # the fandom itself).
-    meta_tag_groups = all_without_syns.map do |f|
+    meta_tag_groups = all_without_syns.includes(:meta_tags).map do |f|
       # TODO: This is more complicated than it has to be. Once the
       # meta_taggings table is fixed so that the inherited meta-tags are
       # correctly calculated, this can be simplified. Refer to AO3-5667.
