@@ -698,7 +698,7 @@ en:
         contact_policy_abuse: contact Policy & Abuse
         contact_policy_abuse_instructions:
           html: If you have other reasons to believe that someone else currently has access to your %{app_name} account, please %{contact_policy_abuse_link} with all relevant information.
-          text: 'If you have other reasons to believe that someone else currently has access to your %{app_name} account, please contact Policy & Abuse with all relevant information: %{contact_policy_abuse_url}'
+          text: 'If you have other reasons to believe that someone else currently has access to your %{app_name} account, please contact Policy & Abuse with all relevant information: %{contact_policy_abuse_url}.'
         contact_support: contact Support
         ignore_if_not_requested:
           html: "%{safely_ignore_bold} Someone else may have entered your username or email address by mistake."
