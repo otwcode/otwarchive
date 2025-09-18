@@ -63,7 +63,7 @@ Feature: Admin Actions to manage users
     Given the user "new_user" exists and is activated
       And I am logged in as a "support" admin
     When I go to the user administration page for "new_user"
-    Then I should see "Current Login No login recorded"
+    Then I should see "Most Recent Login No login recorded"
       And I should see "Previous Login No previous login recorded"
     When time is frozen at 1/1/2019
       And I am logged in as "new_user"
