@@ -567,7 +567,7 @@ module ApplicationHelper
     creator_ids = if creation.try(:pseuds)&.loaded?
                     creator_ids_for_css_classes(creation).join(" ")
                   else
-                    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes-v2") do
+                    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes-v3") do
                       creator_ids_for_css_classes(creation).join(" ")
                     end
                   end
