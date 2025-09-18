@@ -708,6 +708,37 @@ describe "rake After:add_collection_tags" do
       subject.invoke
       expect(collection.tags).to include(*items.flat_map(&:fandoms))
     end
+
+    shared_examples "does not tag the collection" do
+      it "does not tag the collection with the work's fandoms" do
+        subject.invoke
+        expect(collection.tags).not_to include(*items.flat_map(&:fandoms))
+      end
+    end
+
+    context "when the work is hidden" do
+      let(:items) { [create(:work, hidden_by_admin: true)] }
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the work is restricted" do
+      let(:items) { [create(:work, restricted: true)] }
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the work is unrevealed" do
+      let(:items) { [create(:work)] }
+
+      before do
+        items.each do |work|
+          work.update!(in_unrevealed_collection: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
   end
 
   context "when a collection has work bookmarks" do
@@ -719,6 +750,44 @@ describe "rake After:add_collection_tags" do
       expect(collection.tags).to include(*items.flat_map(&:fandoms))
       expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
     end
+
+    shared_examples "does not tag the collection" do
+      it "does not tag the collection with the bookmark's or bookmarked item's fandoms" do
+        subject.invoke
+        expect(collection.tags).not_to include(*items.flat_map(&:fandoms))
+        expect(collection.tags).not_to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
+      end
+    end
+
+    context "when the bookmarked item is a hidden work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.update!(hidden_by_admin: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the bookmarked item is a restricted work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.update!(restricted: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the bookmarked item is an unrevealed work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.update!(in_unrevealed_collection: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
   end
 
   context "when a collection has a series bookmark" do
@@ -726,9 +795,10 @@ describe "rake After:add_collection_tags" do
     let(:bookmark) { create(:series_bookmark, tag_string: fandom.name) }
     let(:items) { [bookmark] }
 
-    it "only includes the bookmark's fandoms" do
+    it "includes the bookmark's and series's fandoms" do
       subject.invoke
       expect(collection.tags).to include(*bookmark.fandoms)
+      expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map { |s| s.work_tags.where(type: "Fandom") })
     end
   end
 
