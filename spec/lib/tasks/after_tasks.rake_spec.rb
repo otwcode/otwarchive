@@ -705,9 +705,6 @@ describe "rake After:add_collection_tags" do
     let(:items) { create_list(:work, 2) }
 
     it "tags the collection with the work's fandoms" do
-      items.each do |work|
-        work.fandoms.update_all(canonical: true)
-      end
       subject.invoke
       expect(collection.tags).to include(*items.flat_map(&:fandoms))
     end
@@ -722,23 +719,11 @@ describe "rake After:add_collection_tags" do
     context "when the work is hidden" do
       let(:items) { [create(:work, hidden_by_admin: true)] }
 
-      before do
-        items.each do |work|
-          work.fandoms.update_all(canonical: true)
-        end
-      end
-
       it_behaves_like "does not tag the collection"
     end
 
     context "when the work is restricted" do
       let(:items) { [create(:work, restricted: true)] }
-
-      before do
-        items.each do |work|
-          work.fandoms.update_all(canonical: true)
-        end
-      end
 
       it_behaves_like "does not tag the collection"
     end
@@ -748,17 +733,9 @@ describe "rake After:add_collection_tags" do
 
       before do
         items.each do |work|
-          work.fandoms.update_all(canonical: true)
           work.update!(in_unrevealed_collection: true)
         end
       end
-
-      it_behaves_like "does not tag the collection"
-    end
-
-    context "when the work is tagged with non-canonical fandoms" do
-      let(:fandom) { create(:fandom) }
-      let(:items) { [create(:work, fandom_string: fandom.name)] }
 
       it_behaves_like "does not tag the collection"
     end
@@ -767,12 +744,6 @@ describe "rake After:add_collection_tags" do
   context "when a collection has work bookmarks" do
     let(:fandom) { create(:canonical_fandom) }
     let(:items) { [create(:bookmark, fandom_string: fandom.name)] }
-
-    before do
-      items.each do |bookmark|
-        bookmark.bookmarkable.fandoms.update_all(canonical: true)
-      end
-    end
 
     it "tags the collection with the bookmark's AND bookmarked item's fandoms" do
       subject.invoke
@@ -811,7 +782,6 @@ describe "rake After:add_collection_tags" do
     context "when the bookmarked item is an unrevealed work" do
       before do
         items.each do |bookmark|
-          bookmark.bookmarkable.fandoms.update_all(canonical: true)
           bookmark.bookmarkable.update!(in_unrevealed_collection: true)
         end
       end
@@ -824,12 +794,6 @@ describe "rake After:add_collection_tags" do
     let(:fandom) { create(:canonical_fandom) }
     let(:bookmark) { create(:series_bookmark, tag_string: fandom.name) }
     let(:items) { [bookmark] }
-
-    before do
-      bookmark.bookmarkable.works.flat_map(&:fandoms).each do |fandom|
-        fandom.update!(canonical: true)
-      end
-    end
 
     it "includes the bookmark's and serie's fandoms" do
       subject.invoke

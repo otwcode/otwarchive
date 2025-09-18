@@ -595,7 +595,7 @@ namespace :After do
       collections.find_in_batches.with_index do |batch, index|
         batch.each do |collection|
           tags = approved_taggables(collection)
-            .flat_map { |taggable| taggable.try(:fandoms)&.where(canonical: true) || taggable.try(&:work_tags).where(canonical: true, type: "Fandom") || [] }
+            .flat_map { |taggable| taggable.try(:fandoms) || taggable.try(&:work_tags)&.where(type: "Fandom") || [] }
             .uniq
 
           next if tags.empty?
