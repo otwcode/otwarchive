@@ -586,7 +586,7 @@ namespace :After do
     total_batches = (collections.count + 999) / 1000
 
     def approved_taggables(collection)
-      bookmark_visible_revealed = Bookmark.join_bookmarkable.where(
+      bookmark_visible_revealed = Bookmark.is_public.join_bookmarkable.where(
         "(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0 AND works.in_unrevealed_collection = 0) OR
         (series.restricted = 0 AND series.hidden_by_admin = 0) OR
         (external_works.hidden_by_admin = 0)"
