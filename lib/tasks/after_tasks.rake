@@ -586,16 +586,16 @@ namespace :After do
     total_batches = (collections.count + 999) / 1000
 
     def approved_taggables(collection)
-      Work.visible_to_all.in_collection(collection).includes(:fandoms) + \
-        Bookmark.is_public.in_collection(collection).includes(:fandoms) + \
-        Bookmark.is_public.in_collection(collection).includes(bookmarkable: :fandoms).map(&:bookmarkable)
+      Work.visible_to_all.revealed.in_collection(collection).includes(:fandoms) + \
+        Bookmark.visible_to_all.in_collection(collection).includes(:fandoms) + \
+        Bookmark.visible_to_all.in_collection(collection).includes(bookmarkable: :fandoms).filter_map { |bookmark| bookmark.bookmarkable unless bookmark.bookmarkable.unrevealed? }
     end
 
     Collection.no_touching do
       collections.find_in_batches.with_index do |batch, index|
         batch.each do |collection|
           tags = approved_taggables(collection)
-            .flat_map { |taggable| taggable.try(:fandoms) || [] }
+            .flat_map { |taggable| taggable.try(:fandoms)&.where(canonical: true) || taggable.try(&:work_tags).where(canonical: true, type: "Fandom") || [] }
             .uniq
 
           next if tags.empty?

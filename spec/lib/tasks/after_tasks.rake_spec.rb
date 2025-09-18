@@ -705,19 +705,118 @@ describe "rake After:add_collection_tags" do
     let(:items) { create_list(:work, 2) }
 
     it "tags the collection with the work's fandoms" do
+      items.each do |work|
+        work.fandoms.update_all(canonical: true)
+      end
       subject.invoke
       expect(collection.tags).to include(*items.flat_map(&:fandoms))
+    end
+
+    shared_examples "does not tag the collection" do
+      it "does not tag the collection with the work's fandoms" do
+        subject.invoke
+        expect(collection.tags).not_to include(*items.flat_map(&:fandoms))
+      end
+    end
+
+    context "when the work is hidden" do
+      let(:items) { [create(:work, hidden_by_admin: true)] }
+
+      before do
+        items.each do |work|
+          work.fandoms.update_all(canonical: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the work is restricted" do
+      let(:items) { [create(:work, restricted: true)] }
+
+      before do
+        items.each do |work|
+          work.fandoms.update_all(canonical: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the work is unrevealed" do
+      let(:items) { [create(:work)] }
+
+      before do
+        items.each do |work|
+          work.fandoms.update_all(canonical: true)
+          work.update!(in_unrevealed_collection: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the work is tagged with non-canonical fandoms" do
+      let(:fandom) { create(:fandom) }
+      let(:items) { [create(:work, fandom_string: fandom.name)] }
+
+      it_behaves_like "does not tag the collection"
     end
   end
 
   context "when a collection has work bookmarks" do
     let(:fandom) { create(:canonical_fandom) }
-    let(:items) { [create(:bookmark, tag_string: fandom.name)] }
+    let(:items) { [create(:bookmark, fandom_string: fandom.name)] }
+
+    before do
+      items.each do |bookmark|
+        bookmark.bookmarkable.fandoms.update_all(canonical: true)
+      end
+    end
 
     it "tags the collection with the bookmark's AND bookmarked item's fandoms" do
       subject.invoke
       expect(collection.tags).to include(*items.flat_map(&:fandoms))
       expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
+    end
+
+    shared_examples "does not tag the collection" do
+      it "does not tag the collection with the bookmark's or bookmarked item's fandoms" do
+        subject.invoke
+        expect(collection.tags).not_to include(*items.flat_map(&:fandoms))
+        expect(collection.tags).not_to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
+      end
+    end
+
+    context "when the bookmarked item is a hidden work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.update!(hidden_by_admin: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the bookmarked item is a restricted work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.update!(restricted: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the bookmarked item is an unrevealed work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.fandoms.update_all(canonical: true)
+          bookmark.bookmarkable.update!(in_unrevealed_collection: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
     end
   end
 
@@ -726,9 +825,16 @@ describe "rake After:add_collection_tags" do
     let(:bookmark) { create(:series_bookmark, tag_string: fandom.name) }
     let(:items) { [bookmark] }
 
-    it "only includes the bookmark's fandoms" do
+    before do
+      bookmark.bookmarkable.works.flat_map(&:fandoms).each do |fandom|
+        fandom.update!(canonical: true)
+      end
+    end
+
+    it "includes the bookmark's and serie's fandoms" do
       subject.invoke
       expect(collection.tags).to include(*bookmark.fandoms)
+      expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map { |s| s.work_tags.where(type: "Fandom") })
     end
   end
 

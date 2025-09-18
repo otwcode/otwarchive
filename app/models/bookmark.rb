@@ -83,7 +83,7 @@ class Bookmark < ApplicationRecord
   # users (regardless of the bookmark's hidden_by_admin/private status).
   scope :with_bookmarkable_visible_to_all, -> {
     join_bookmarkable.where(
-      "(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0) OR
+      "(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0 AND works.in_unrevealed_collection = 0) OR
       (series.restricted = 0 AND series.hidden_by_admin = 0) OR
       (external_works.hidden_by_admin = 0)"
     )
