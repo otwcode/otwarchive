@@ -517,20 +517,14 @@ public
 
   public
 
-  def valid_sort_column(param, model='work')
-    allowed = []
-    if model.to_s.downcase == 'work'
-      allowed = %w(author title date created_at word_count hit_count)
-    elsif model.to_s.downcase == 'tag'
-      allowed = %w[name created_at taggings_count_cache uses]
-    elsif model.to_s.downcase == 'collection'
-      allowed = %w(collections.title collections.created_at)
-    elsif model.to_s.downcase == 'prompt'
-      allowed = %w(fandom created_at prompter)
-    elsif model.to_s.downcase == 'claim'
-      allowed = %w(created_at claimer)
-    end
-    !param.blank? && allowed.include?(param.to_s.downcase)
+  def valid_sort_column(param, model = "work")
+    allowed = {
+      "work" => %w[author title date created_at word_count hit_count],
+      "tag" => %w[name created_at taggings_count_cache uses],
+      "prompt" => %w[fandom created_at prompter],
+      "claim" => %w[created_at claimer]
+    }[model.to_s.downcase]
+    param.present? && allowed.include?(param.to_s.downcase)
   end
 
   def set_sort_order

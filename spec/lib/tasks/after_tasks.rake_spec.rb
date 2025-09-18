@@ -686,3 +686,70 @@ describe "rake After:create_non_canonical_tagset_associations" do
     end
   end
 end
+
+describe "rake After:add_collection_tags" do
+  let(:collection) { create(:collection) }
+  let(:items) { [] }
+
+  before do
+    items.each do |item|
+      item.collections << collection
+      item.collection_items.update_all(
+        user_approval_status: "approved",
+        collection_approval_status: "approved"
+      )
+    end
+  end
+
+  context "when a collection has works" do
+    let(:items) { create_list(:work, 2) }
+
+    it "tags the collection with the work's fandoms" do
+      subject.invoke
+      expect(collection.tags).to include(*items.flat_map(&:fandoms))
+    end
+  end
+
+  context "when a collection has work bookmarks" do
+    let(:fandom) { create(:canonical_fandom) }
+    let(:items) { [create(:bookmark, tag_string: fandom.name)] }
+
+    it "tags the collection with the bookmark's AND bookmarked item's fandoms" do
+      subject.invoke
+      expect(collection.tags).to include(*items.flat_map(&:fandoms))
+      expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
+    end
+  end
+
+  context "when a collection has a series bookmark" do
+    let(:fandom) { create(:canonical_fandom) }
+    let(:bookmark) { create(:series_bookmark, tag_string: fandom.name) }
+    let(:items) { [bookmark] }
+
+    it "only includes the bookmark's fandoms" do
+      subject.invoke
+      expect(collection.tags).to include(*bookmark.fandoms)
+    end
+  end
+
+  context "when a collection has a subcollection" do
+    let(:subcollection) { create(:collection) }
+    let(:fandom) { create(:canonical_fandom) }
+    let(:bookmark) { create(:series_bookmark, fandom_string: fandom.name) }
+
+    before do
+      subcollection.parent = collection
+      subcollection.save!(validate: false)
+      bookmark.collections << subcollection
+      bookmark.collection_items.update_all(
+        user_approval_status: "approved",
+        collection_approval_status: "approved"
+      )
+    end
+
+    it "includes tags from the items in the subcollection" do
+      subject.invoke
+      expect(collection.reload.tags).to include(*bookmark.fandoms)
+    end
+  end
+end
