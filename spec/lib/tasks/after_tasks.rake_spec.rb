@@ -743,7 +743,7 @@ describe "rake After:add_collection_tags" do
 
   context "when a collection has work bookmarks" do
     let(:fandom) { create(:canonical_fandom) }
-    let(:items) { [create(:bookmark, fandom_string: fandom.name)] }
+    let(:items) { [create(:bookmark, tag_string: fandom.name)] }
 
     it "tags the collection with the bookmark's AND bookmarked item's fandoms" do
       subject.invoke
@@ -795,7 +795,7 @@ describe "rake After:add_collection_tags" do
     let(:bookmark) { create(:series_bookmark, tag_string: fandom.name) }
     let(:items) { [bookmark] }
 
-    it "includes the bookmark's and serie's fandoms" do
+    it "includes the bookmark's and series's fandoms" do
       subject.invoke
       expect(collection.tags).to include(*bookmark.fandoms)
       expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map { |s| s.work_tags.where(type: "Fandom") })
