@@ -1,18 +1,24 @@
 namespace :skins do
-  def user_skin_path
-    File.join(Skin.site_skins_dir, "user_skins_to_load")
+  def masters_dir
+    Rails.public_path.join("stylesheets/masters/")
   end
 
-  def user_skin_preview_path
-    File.join(user_skin_path, "previews")
+  def top_level_skins
+    dir = File.join(masters_dir, "top_level")
+    Dir["#{dir}/*/*.css"]
   end
 
-  def parent_skin_path
-    File.join(user_skin_path, "parent_only")
+  def skin_previews_path
+    File.join(masters_dir, "previews")
   end
 
-  def default_user_skin_preview
-    File.join(user_skin_preview_path, "default_preview.png")
+  def parent_only_skins
+    dir = File.join(masters_dir, "parent_only")
+    Dir["#{dir}/*/*.css"]
+  end
+
+  def default_skin_preview_path
+    File.join(skin_previews_path, "default_preview.png")
   end
 
   def ask(message)
@@ -58,9 +64,9 @@ namespace :skins do
   end
 
   def load_parent_user_skins(replace:)
-    Skin.skin_dir_entries(parent_skin_path, /^.*\.css/).each do |skin_file|
+    parent_only_skins.each do |skin_file|
       load_user_css(
-        filename: File.join(parent_skin_path, skin_file),
+        filename: skin_file,
         replace: replace,
         parent_only: true
       )
@@ -69,9 +75,8 @@ namespace :skins do
 
   desc "Purge user skins parents"
   task(purge_user_skins_parents: :environment) do
-    Skin.skin_dir_entries(user_skin_path, /^.*\.css/).each do |skin_file|
-      filename = File.join(user_skin_path, skin_file)
-      skin_content = File.read(filename)
+    top_level_skins.each do |skin_file|
+      skin_content = File.read(skin_file)
 
       unless skin_content.match(%r{SKIN:\s*(.*)\s*\*/})
         puts "No skin title found for skin #{skin_content}"
@@ -90,11 +95,11 @@ namespace :skins do
     Rake::Task["skins:purge_user_skins_parents"].invoke if replace
     load_parent_user_skins(replace: replace)
 
-    Skin.skin_dir_entries(user_skin_path, /^.*\.css/).each do |skin_file|
+    top_level_skins.each do |skin_file|
       load_user_css(
-        filename: File.join(user_skin_path, skin_file),
+        filename: skin_file,
         replace: replace,
-        preview_path: File.join(user_skin_preview_path, "#{skin_file}_preview.png")
+        preview_path: File.join(File.dirname(skin_file), "preview.png")
       )
     end
 
@@ -102,7 +107,7 @@ namespace :skins do
     WorkSkin.basic_formatting
   end
 
-  def load_user_css(filename:, replace: false, parent_only: false, preview_path: default_user_skin_preview)
+  def load_user_css(filename:, replace: false, parent_only: false, preview_path: default_skin_preview_path)
     skin_content = File.read(filename)
     return if skin_content.blank?
 
@@ -121,7 +126,7 @@ namespace :skins do
 
     unless File.exist?(preview_path)
       puts "No preview filename #{preview_path} found for #{title}"
-      preview_path = default_user_skin_preview
+      preview_path = default_skin_preview_path
     end
 
     case skin_content
