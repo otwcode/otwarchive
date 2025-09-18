@@ -21,5 +21,3 @@ process as all other code changes.
 Remember, though: changes to a skin's files in the masters directory will not
 affect the skin on production! An admin will still need to edit the skin via
 the admin interface and paste in the updated master version.
-
-**Note**: To keep development data in sync with the master copies, please ensure any skin changes are mirrored in `site/user_skins_to_load`.

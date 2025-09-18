@@ -1,15 +1,15 @@
 # Guide
 
 This folder contains CSS files for user skins that are loaded into the development database using the provided rake tasks. The skins can be organized into two categories:
-- **Top-Level Skins**: Skins that are added to the skin chooser and subsequently cached.
+- **Top-Level Skins**: Located in the `top_level/` subdirectory. Skins that are added to the skin chooser and subsequently cached.
   - Preview images for skins should be placed in the `previews/` subdirectory. If no preview is provided, the default preview image will be used.
-- **Parent-Only Skins**: Located in the `parent_only/` subdirectory, skins that are used as parent components for top-level skins.
+- **Parent-Only Skins**: Located in the `parent_only/` subdirectory. Skins that are used as parent components for top-level skins.
 
 ## Rake tasks
 
 ### Load user skins
 ```bash
-rake skins:load_user_skins
+rake skins:load_official_skins
 ```
 This task will:
 - Prompt you whether to replace existing skins (`y/n`).

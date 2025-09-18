@@ -11,7 +11,7 @@ development)
   bundle install
   bundle exec rake db:otwseed
   bundle exec rake skins:load_site_skins
-  echo "n" | bundle exec rake skins:load_user_skins
+  echo "n" | bundle exec rake skins:load_official_skins
   bundle exec rake skins:cache_chooser_skins
   bundle exec rake search:index_tags
   bundle exec rake search:index_works

@@ -63,9 +63,9 @@ namespace :skins do
     end
   end
 
-  def load_parent_user_skins(replace:)
+  def load_parent_only_skins(replace:)
     parent_only_skins.each do |skin_file|
-      load_user_css(
+      load_official_css(
         filename: skin_file,
         replace: replace,
         parent_only: true
@@ -73,8 +73,8 @@ namespace :skins do
     end
   end
 
-  desc "Purge user skins parents"
-  task(purge_user_skins_parents: :environment) do
+  desc "Purge parents of official skins"
+  task(purge_official_skin_parents: :environment) do
     top_level_skins.each do |skin_file|
       skin_content = File.read(skin_file)
 
@@ -88,15 +88,15 @@ namespace :skins do
     end
   end
 
-  desc "Load user skins"
-  task(load_user_skins: :environment) do
+  desc "Load official skins"
+  task(load_official_skins: :environment) do
     replace = ask("Replace existing skins with same titles? (y/n) ") == "y"
 
-    Rake::Task["skins:purge_user_skins_parents"].invoke if replace
-    load_parent_user_skins(replace: replace)
+    Rake::Task["skins:purge_official_skin_parents"].invoke if replace
+    load_parent_only_skins(replace: replace)
 
     top_level_skins.each do |skin_file|
-      load_user_css(
+      load_official_css(
         filename: skin_file,
         replace: replace,
         preview_path: File.join(File.dirname(skin_file), "preview.png")
@@ -107,7 +107,7 @@ namespace :skins do
     WorkSkin.basic_formatting
   end
 
-  def load_user_css(filename:, replace: false, parent_only: false, preview_path: default_skin_preview_path)
+  def load_official_css(filename:, replace: false, parent_only: false, preview_path: default_skin_preview_path)
     skin_content = File.read(filename)
     return if skin_content.blank?
 

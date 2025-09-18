@@ -34,7 +34,7 @@ describe "rake skins:cache_chooser_skins", default_skin: true do
   end
 end
 
-describe "rake skins:load_user_skins" do
+describe "rake skins:load_official_skins" do
   before do
     allow($stdin).to receive(:gets).and_return("n")
 
