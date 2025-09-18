@@ -37,15 +37,12 @@ end
 describe "rake skins:load_official_skins" do
   before do
     allow($stdin).to receive(:gets).and_return("n")
-
-    allow(Skin).to receive(:skin_dir_entries).with(user_skin_path, anything).and_return(["test_skin.css", "child_skin.css"])
-    allow(File).to receive(:read).with(/.*css/).and_return(
+    allow(File).to receive(:read).with(/.*css/).and_return("")
+    allow(File).to receive(:read).with(/top_level/).and_return(
       "/* SKIN: Test Skin */",
       "/* SKIN: Child */\n/* PARENTS: Parent */"
     )
-
-    allow(Skin).to receive(:skin_dir_entries).with(parent_skin_path, anything).and_return(["parent_skin.css"])
-    allow(File).to receive(:read).with(/.*parent_skin\.css/).and_return("/* SKIN: Parent */\n#unused-selector { content: none; },")
+    allow(File).to receive(:read).with(/parent_only/).and_return("/* SKIN: Parent */\n#unused-selector { content: none; }")
   end
 
   it "creates parent-only skins from the specified directory" do
@@ -57,7 +54,7 @@ describe "rake skins:load_official_skins" do
     expect(parent_skin.in_chooser).to be false
   end
 
-  it "creates user skins in the specified directory and adds them to skin chooser" do
+  it "creates official skins in the specified directory and adds them to skin chooser" do
     subject.invoke
 
     skin = Skin.find_by(title: "Test Skin")
