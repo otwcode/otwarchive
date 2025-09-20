@@ -337,6 +337,19 @@ describe Collection do
       end
     end
 
+    context "when the collection contains a rejected public bookmark" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(collection_approval_status: :rejected)
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(0)
+      end
+    end
+
     context "when the collection contains a bookmark of a hidden work" do
       let(:bookmark) { create(:bookmark, bookmarkable: create(:work, hidden_by_admin: true)) }
 
@@ -417,6 +430,31 @@ describe Collection do
 
       before do
         bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a hidden bookmark" do
+      let(:bookmark) { create(:bookmark, hidden_by_admin: true) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a rejected public bookmark" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(collection_approval_status: :rejected)
       end
 
       it "does not count the bookmark" do
