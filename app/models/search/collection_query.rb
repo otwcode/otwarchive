@@ -25,6 +25,7 @@ class CollectionQuery < Query
   # Combine the available filters
   def filters
     [
+      multifandom_filter,
       signup_open_filter,
       closed_filter,
       challenge_type_filter,
@@ -46,6 +47,10 @@ class CollectionQuery < Query
   ####################
   # FILTERS
   ####################
+
+  def multifandom_filter
+    term_filter(:multifandom, bool_value(options[:multifandom])) if options[:multifandom].present?
+  end
 
   def signup_open_filter
     term_filter(:signup_open, bool_value(options[:signup_open])) if options[:signup_open].present?

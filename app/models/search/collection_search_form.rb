@@ -8,6 +8,7 @@ class CollectionSearchForm
     closed
     maintainer_id
     moderated
+    multifandom
     page
     parent_id
     per_page

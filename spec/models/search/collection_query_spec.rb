@@ -26,6 +26,7 @@ describe CollectionQuery do
     let!(:prompt_meme_collection) { create(:collection, challenge: prompt_meme, challenge_type: "PromptMeme") }
     let!(:signup_past_open) { create_invalid(:prompt_meme, signup_open: true, signups_open_at: Time.current - 2.days, signups_close_at: Time.current - 1.day) }
     let!(:signup_past_open_collection) { create(:collection, challenge: signup_past_open, challenge_type: "PromptMeme") }
+    let!(:multifandom_collection) { create(:collection, multifandom: true) }
 
     let!(:fandom) { create(:canonical_fandom) }
     let!(:no_signup) { create(:collection, title: "no signup", collection_preference: create(:collection_preference, closed: true, moderated: true), tags: [fandom]) }
@@ -59,6 +60,7 @@ describe CollectionQuery do
       it "shows only collections without a challenge" do
         query = CollectionQuery.new(challenge_type: "no_challenge")
         expect(query.search_results).to include no_signup
+        expect(query.search_results).to include multifandom_collection
         expect(query.search_results).not_to include prompt_meme_collection
         expect(query.search_results).not_to include gift_exchange_collection
       end
@@ -69,6 +71,7 @@ describe CollectionQuery do
       expect(query.search_results).to include no_signup
       expect(query.search_results).not_to include prompt_meme_collection
       expect(query.search_results).not_to include gift_exchange_collection
+      expect(query.search_results).not_to include multifandom_collection
     end
 
     it "filters collections by signup_open filter" do
@@ -79,10 +82,19 @@ describe CollectionQuery do
       expect(query.search_results).not_to include signup_past_open_collection
     end
 
+    it "filters collections by multifandom filter" do
+      query = CollectionQuery.new(multifandom: true)
+      expect(query.search_results).not_to include prompt_meme_collection
+      expect(query.search_results).not_to include gift_exchange_collection
+      expect(query.search_results).not_to include no_signup
+      expect(query.search_results).to include multifandom_collection
+    end
+
     it "filters collections by closed filter" do
       query = CollectionQuery.new(closed: true)
       expect(query.search_results).not_to include prompt_meme_collection
       expect(query.search_results).not_to include gift_exchange_collection
+      expect(query.search_results).not_to include multifandom_collection
       expect(query.search_results).to include no_signup
     end
 
@@ -90,6 +102,7 @@ describe CollectionQuery do
       query = CollectionQuery.new(moderated: true)
       expect(query.search_results).not_to include prompt_meme_collection
       expect(query.search_results).not_to include gift_exchange_collection
+      expect(query.search_results).not_to include multifandom_collection
       expect(query.search_results).to include no_signup
     end
 
@@ -98,6 +111,7 @@ describe CollectionQuery do
       expect(query.search_results).to include prompt_meme_collection
       expect(query.search_results).not_to include gift_exchange_collection
       expect(query.search_results).not_to include no_signup
+      expect(query.search_results).not_to include multifandom_collection
     end
 
     it "filters collections by tags" do
@@ -105,6 +119,7 @@ describe CollectionQuery do
       expect(query.search_results).to include no_signup
       expect(query.search_results).not_to include prompt_meme_collection
       expect(query.search_results).not_to include gift_exchange_collection
+      expect(query.search_results).not_to include multifandom_collection
     end
   end
 

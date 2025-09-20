@@ -1,122 +1,145 @@
 <%= form_for @search, as: :collection_search, url: collections_path, html: { method: :get, class: "narrow-hidden filters", id: "collection-filters" } do |f| %>
-  <h3 class="landmark heading"><%= ts("Filters") %></h3>
-  <%= field_set_tag ts("Filter collections:") do %>
+  <h3 class="landmark heading"><%= t(".landmark") %></h3>
+  <%= field_set_tag t(".legend") do %>
     <dl>
-      <dt class="landmark"><%= ts("Sort and Filter") %></dt>
-      <dd class="submit actions"><%= submit_tag ts("Sort and Filter") %></dd>
+      <dt class="landmark"><%= t(".submit.landmark") %></dt>
+      <dd class="submit actions"><%= submit_tag t(".submit.button") %></dd>
       <dt class="sort">
-        <%= f.label :sort_column, ts("Sort by") %>
+        <%= f.label :sort_column, t(".sort.column") %>
       </dt>
       <dd class="sort">
         <%= f.select :sort_column, options_for_select(@search.sort_options, @search.sort_column) %>
       </dd>
       <dt class="sort">
-        <%= f.label :sort_direction, ts("Sort direction") %>
+        <%= f.label :sort_direction, t(".sort.direction.label") %>
       </dt>
       <dd class="sort">
-        <%= f.select :sort_direction, options_for_select({ ts("Ascending") => "asc", ts("Descending") => "desc" }, @search.sort_direction) %>
+        <%= f.select :sort_direction, options_for_select({ t(".sort.direction.ascending") => "asc", t(".sort.direction.descending") => "desc" }, @search.sort_direction) %>
       </dd>
 
       <dt class="autocomplete search">
-        <%= f.label "title", ts("Filter by title") %>
+        <%= f.label "title", t(".title") %>
       </dt>
       <dd class="autocomplete search">
         <%= f.text_field "title", autocomplete_options("collection_title", data: { autocomplete_token_limit: 1 }) %>
       </dd>
 
       <dt class="autocomplete search">
-        <%= f.label "tag", ts("Filter by tag") %>
+        <%= f.label "tag", t(".tag") %>
       </dt>
       <dd class="autocomplete search">
         <%= f.text_field "tag", autocomplete_options("tag", data: { autocomplete_token_limit: 5 }) %>
       </dd>
 
-      <dt><%= ts("Closed") %></dt>
+     <dt><%= t(".multifandom.label") %></dt>
+      <dd>
+        <ul>
+          <li>
+            <%= f.label "multifandom", value: true do %>
+              <%= f.radio_button "multifandom", true %>
+              <%= label_indicator_and_text(t(".multifandom.only")) %>
+            <% end %>
+          </li>
+          <li>
+            <%= f.label "multifandom", value: false do %>
+              <%= f.radio_button "multifandom", false %>
+              <%= label_indicator_and_text(t(".multifandom.exclude")) %>
+            <% end %>
+          </li>
+          <li>
+            <%= f.label "multifandom", value: "" do %>
+              <%= f.radio_button "multifandom", "" %>
+              <%= label_indicator_and_text(t(".multifandom.include")) %>
+            <% end %>
+          </li>
+        </ul>
+      </dd>
+      <dt><%= t(".closed.label") %></dt>
       <dd>
         <ul>
           <li>
             <%= f.label "closed", value: true do %>
               <%= f.radio_button "closed", true %>
-              <%= label_indicator_and_text(ts("Yes")) %>
+              <%= label_indicator_and_text(t(".closed.only")) %>
             <% end %>
           </li>
           <li>
             <%= f.label "closed", value: false do %>
               <%= f.radio_button "closed", false %>
-              <%= label_indicator_and_text(ts("No")) %>
+              <%= label_indicator_and_text(t(".closed.exclude")) %>
             <% end %>
           </li>
           <li>
             <%= f.label "closed", value: "" do %>
               <%= f.radio_button "closed", "" %>
-              <%= label_indicator_and_text(ts("Either")) %>
+              <%= label_indicator_and_text(t(".closed.include")) %>
             <% end %>
           </li>
         </ul>
       </dd>
-      <dt><%= ts("Moderated") %></dt>
+      <dt><%= t(".moderated.label") %></dt>
       <dd>
         <ul>
           <li>
             <%= f.label "moderated", value: true do %>
               <%= f.radio_button "moderated", true %>
-              <%= label_indicator_and_text(ts("Yes")) %>
+              <%= label_indicator_and_text(t(".moderated.only")) %>
             <% end %>
           </li>
           <li>
             <%= f.label "moderated", value: false do %>
               <%= f.radio_button "moderated", false %>
-              <%= label_indicator_and_text(ts("No")) %>
+              <%= label_indicator_and_text(t(".moderated.exclude")) %>
             <% end %>
           </li>
           <li>
             <%= f.label "moderated", value: "" do %>
               <%= f.radio_button "moderated", "" %>
-              <%= label_indicator_and_text(ts("Either")) %>
+              <%= label_indicator_and_text(t(".moderated.include")) %>
             <% end %>
           </li>
         </ul>
       </dd>
-      <dt><%= ts("Collection Type") %></dt>
+      <dt><%= t(".type.label") %></dt>
       <dd>
         <ul>
           <li>
             <%= f.label "challenge_type", value: "GiftExchange" do %>
               <%= f.radio_button "challenge_type", "GiftExchange" %>
-              <%= label_indicator_and_text(ts("Gift Exchange Challenge")) %>
+              <%= label_indicator_and_text(t(".type.gift_exchange")) %>
             <% end %>
           </li>
           <li>
             <%= f.label "challenge_type", value: "PromptMeme" do %>
               <%= f.radio_button "challenge_type", "PromptMeme" %>
-              <%= label_indicator_and_text(ts("Prompt Meme Challenge")) %>
+              <%= label_indicator_and_text(t(".type.prompt_meme")) %>
             <% end %>
           </li>
           <li>
             <%= f.label "challenge_type", value: "no_challenge" do %>
               <%= f.radio_button "challenge_type", "no_challenge" %>
-              <%= label_indicator_and_text(ts("No Challenge")) %>
+              <%= label_indicator_and_text(t(".type.no_challenge")) %>
             <% end %>
           </li>
           <li>
             <%= f.label "challenge_type", value: "" do %>
               <%= f.radio_button "challenge_type", "" %>
-              <%= label_indicator_and_text(ts("Any")) %>
+              <%= label_indicator_and_text(t(".type.any")) %>
             <% end %>
           </li>
         </ul>
       </dd>
-      <dt class="landmark"><%= ts("Submit") %></dt>
-      <dd class="submit actions"><%= submit_tag ts("Sort and Filter") %></dd>
+      <dt class="landmark"><%= t(".submit.landmark") %></dt>
+      <dd class="submit actions"><%= submit_tag t(".submit.button") %></dd>
     </dl>
     <p class="footnote">
-      <%= link_to ts("Clear Filters"), collections_path %>
+      <%= link_to t(".clear_filters"), collections_path %>
     </p>
   <% end %>
   <% # On narrow screens, link jumps to top of index when JavaScript is disabled and closes filters when JavaScript is enabled %>
   <p class="narrow-shown hidden">
     <a href="#main" id="leave_filters" class="close">
-      <%= ts("Top of Collection Index") %>
+      <%= t(".leave_filters") %>
     </a>
   </p>
 <% end %>
