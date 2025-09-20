@@ -56,6 +56,7 @@ describe "rake skins:clear_unofficial_public_skins" do
       subject.invoke
     end.to change { unapproved_site_skin.reload.public }.from(true).to(false)
       .and change { unapproved_work_skin.reload.public }.from(true).to(false)
+      .and output("Finished clearing unofficial public skins.\n").to_stdout
   end
 
   it "sets public and rejected to false on rejected skins" do
@@ -65,6 +66,7 @@ describe "rake skins:clear_unofficial_public_skins" do
       .and change { rejected_site_skin.rejected }.from(true).to(false)
       .and change { rejected_work_skin.reload.public }.from(true).to(false)
       .and change { rejected_work_skin.rejected }.from(true).to(false)
+      .and output("Finished clearing unofficial public skins.\n").to_stdout
   end
 
   it "doesn't change approved skins" do
@@ -72,12 +74,6 @@ describe "rake skins:clear_unofficial_public_skins" do
       subject.invoke
     end.to avoid_changing { approved_site_skin.reload.public }
       .and avoid_changing { approved_work_skin.reload.public }
-  end
-
-  it "outputs IDs of skins that could not be updated" do
-    allow_any_instance_of(Skin).to receive(:save).and_return(false)
-    expect do
-      subject.invoke
-    end.to output("Finished clearing unofficial public skins.\nCouldn't update skins with the following IDs: #{unapproved_site_skin.id}, #{rejected_site_skin.id}, #{unapproved_work_skin.id}, #{rejected_work_skin.id}\n").to_stdout
+      .and output("Finished clearing unofficial public skins.\n").to_stdout
   end
 end

@@ -156,7 +156,7 @@ class Skin < ApplicationRecord
     self.css = clean_css_code(self.css)
   end
 
-  # Only official users should be allowed to apply to make a skin public.
+  # If a user tries to make a skin public, verify they're an official user.
   validate :public_application, if: :will_save_change_to_public?
   def public_application
     return unless self.public && User.current_user.is_a?(User)

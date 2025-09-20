@@ -188,11 +188,6 @@ When /^I preview the skin "([^\"]*)"$/ do |skin_name|
   visit preview_skin_path(skin)
 end
 
-When /^I set the skin "([^\"]*)" for this session$/ do |skin_name|
-  skin = Skin.find_by(title: skin_name)
-  visit set_skin_path(skin)
-end
-
 When "I attach a preview for the skin" do
   attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
 end
