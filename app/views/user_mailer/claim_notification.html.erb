@@ -25,9 +25,7 @@
     <% end %>
   </ul>
 
-  <p><%= t(".redirects.html", negation: style_bold(t(".redirects.negation"))) %></p>
-
-  <p><%= t(".update_redirect.html", contact_open_doors_link: opendoors_link(t(".update_redirect.contact_open_doors"))) %></p>
+  <p><%= t(".redirects.html", negation: style_bold(t(".redirects.negation")), faq_link: style_link(t(".redirects.faq"), archive_faqs_url)) %></p>
 
   <p><%= t(".other_works.html", contact_open_doors_link: opendoors_link(t(".other_works.contact_open_doors"))) %></p>
 
