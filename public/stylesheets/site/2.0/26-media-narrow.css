@@ -13,7 +13,8 @@ h1, h2, h3 {
 }
 
 /* non-JavaScript states
-.narrow-shown: should be displayed when this stylesheet is in use  */
+.narrow-shown: should be displayed when this stylesheet is in use
+*/
 
 body .narrow-shown {
   display: block;
@@ -24,7 +25,8 @@ body .narrow-shown {
 }
 
 /* JavaScript states
-.javascript .narrow-hidden: should not be displayed when JS is enabled and this stylesheet is in use */
+.javascript .narrow-hidden: should not be displayed when JS is enabled and this stylesheet is in use
+*/
 
 .javascript .narrow-hidden {
   display: none;

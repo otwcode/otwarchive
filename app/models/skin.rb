@@ -34,7 +34,7 @@ class Skin < ApplicationRecord
   belongs_to :author, class_name: 'User'
   has_many :preferences
 
-  serialize :media, type: Array
+  serialize :media, type: Array, coder: YAML, yaml: { permitted_classes: [String] }
 
   # a skin can be both parent and child
   has_many :skin_parents, foreign_key: 'child_skin_id',

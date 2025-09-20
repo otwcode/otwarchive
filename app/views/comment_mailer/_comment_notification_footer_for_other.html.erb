@@ -1,6 +1,8 @@
 <% if @comment.unreviewed? %>
-  <% if @owner %>
+  <% if @owner && @comment.ultimate_parent.is_a?(Work) %>
     <p>Comments on this work are moderated and will not appear until you approve them.</p>
+  <% elsif @comment.ultimate_parent.is_a?(AdminPost) %>
+    <p>Comments on this news post are moderated and will not appear until approved.</p>
   <% else %>
     <p>Comments on this work are moderated and will not appear until approved by the work creator.</p>
   <% end %>
@@ -8,7 +10,7 @@
 
 <% if @comment.unreviewed? && @owner %>
   <%= style_link("Review comments on <i>"  + @comment.ultimate_parent.commentable_name + "</i>", 
-    unreviewed_work_comments_url(@comment.ultimate_parent)) %>
+    polymorphic_url([:unreviewed, @comment.ultimate_parent, :comments])) %>
     <br />
 <% end %>
 
@@ -28,10 +30,11 @@
   <br />
 <% end %>
 
-<%= style_link("Read all comments on <i>" + @comment.ultimate_parent.commentable_name + "</i>", 
-  polymorphic_url(@comment.ultimate_parent, 
-    :view_full_work => true, 
-    :show_comments => true, 
-    :anchor => :comments, 
-    :only_path => false
-  )) %>
+<% if @comment.parent.kind_of?(Chapter) && @comment.ultimate_parent.chaptered? %>
+  <%= style_link("Read all comments on Chapter #{@comment.parent.position} of <i>#{@comment.ultimate_parent.commentable_name}</i>",
+        work_chapter_url(@comment.parent.work, @comment.parent, show_comments: true, anchor: :comments)) %>
+  <br />
+<% else %>
+  <%= style_link("Read all comments on <i>#{@comment.ultimate_parent.commentable_name}</i>",
+        polymorphic_url(@comment.ultimate_parent, view_full_work: true, show_comments: true, anchor: :comments)) %>
+<% end %>

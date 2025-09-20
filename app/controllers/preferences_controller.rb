@@ -41,8 +41,6 @@ class PreferencesController < ApplicationController
 
   def preference_params
     params.require(:preference).permit(
-      :email_visible,
-      :date_of_birth_visible,
       :minimize_search_engines,
       :disable_share_links,
       :adult,

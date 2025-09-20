@@ -143,4 +143,62 @@ describe SkinsController do
       end
     end
   end
+
+  describe "POST #set" do
+    shared_examples "user cannot set it" do
+      it "redirects with an error about caching" do
+        post :set, params: { id: skin.id }
+        it_redirects_to_with_error(skin_path(skin), "Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like Uncached Public Skin to be added!")
+      end
+    end
+
+    shared_examples "user can set it" do
+      it "redirects with success notice" do
+        post :set, params: { id: skin.id }
+        it_redirects_to_with_notice(skin_path(skin), "The skin Cached Public Skin has been set. This will last for your current session.")
+      end
+    end
+
+    context "with an uncached site skin" do
+      let(:skin) { create(:skin, :public, title: "Uncached Public Skin") }
+
+      context "when logged in as a registered user" do
+        before { fake_login }
+        it_behaves_like "user cannot set it"
+      end
+
+      context "when admin has no role" do
+        it_behaves_like "user cannot set it"
+      end
+
+      Admin::VALID_ROLES.each do |role|
+        context "when admin has #{role} role" do
+          let(:admin) { create(:admin, roles: [role]) }
+
+          it_behaves_like "user cannot set it"
+        end
+      end
+    end
+
+    context "with a cached site skin" do
+      let(:skin) { create(:skin, :public, title: "Cached Public Skin", cached: true) }
+
+      context "when logged in as a registered user" do
+        before { fake_login }
+        it_behaves_like "user can set it"
+      end
+
+      context "when admin has no role" do
+        it_behaves_like "user can set it"
+      end
+
+      Admin::VALID_ROLES.each do |role|
+        context "when admin has #{role} role" do
+          let(:admin) { create(:admin, roles: [role]) }
+
+          it_behaves_like "user can set it"
+        end
+      end
+    end
+  end
 end
