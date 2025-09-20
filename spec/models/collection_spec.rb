@@ -165,6 +165,17 @@ describe Collection do
       it_behaves_like "does not count the work"
     end
 
+    context "when the collection includes a rejected public work" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(collection_approval_status: :rejected)
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
     context "when the collection includes a public work" do
       let(:work) { create(:work) }
 
@@ -215,6 +226,17 @@ describe Collection do
 
       before do
         work.collections << collection
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes a rejected public work" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(collection_approval_status: :rejected)
       end
 
       it_behaves_like "does not count the work"
