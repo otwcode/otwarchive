@@ -63,7 +63,7 @@ Feature: Admin Actions to manage users
     Given the user "new_user" exists and is activated
       And I am logged in as a "support" admin
     When I go to the user administration page for "new_user"
-    Then I should see "Current Login No login recorded"
+    Then I should see "Most Recent Login No login recorded"
       And I should see "Previous Login No previous login recorded"
     When time is frozen at 1/1/2019
       And I am logged in as "new_user"
@@ -72,7 +72,7 @@ Feature: Admin Actions to manage users
       And I am logged in as a "support" admin
       And I go to the user administration page for "new_user"
     Then I should not see "No login recorded"
-      And I should see "2019-01-01 12:00:00 UTC Current Login IP Address: 127.0.0.1"
+      And I should see "2019-01-01 12:00:00 UTC Most Recent Login IP Address: 127.0.0.1"
       And I should see "2019-01-01 12:00:00 UTC Previous Login IP Address: 127.0.0.1"
 
   Scenario: An admin can view a user's email address and invitation
