@@ -5,6 +5,7 @@ describe PathCleaner do
 
   describe "#relative_uri" do
     it "allows valid relative paths" do
+      expect(relative_path("/")).to_not eq(nil)
       expect(relative_path("/path")).to_not eq(nil)
       expect(relative_path("/foo/bar/")).to_not eq(nil)
       expect(relative_path("/path?query=true")).to_not eq(nil)

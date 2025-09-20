@@ -347,10 +347,7 @@ Feature: User Authentication
       And I should see "Recent Works"
 
   Scenario: User is redirected back to restricted work after login
-    Given the following activated user exists
-      | login | password |
-      | test  | password |
-      And I am logged in as "test" with password "password"
+    Given I am logged in as "test" with password "password"
       And I post the locked work "Secret"
       And I log out
     When I view the work "Secret"
@@ -362,10 +359,7 @@ Feature: User Authentication
     Then I should see "Secret"
 
   Scenario: User is redirected to previous page after using the small login
-    Given the following activated user exists
-      | login | password |
-      | test  | password |
-      And I am logged in as "test" with password "password"
+    Given I am logged in as "test" with password "password"
       And I post the locked work "Secret"
       And I log out
     When I am on the works page
