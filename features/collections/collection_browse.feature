@@ -134,6 +134,51 @@ Feature: Collection
     And I should not see "Surprise Presents"
     And I should not see "On Demand"
 
+  Scenario: Can't filter collections index by collection name
+
+    Given a set of collections for searching
+    When I go to the collections page
+      And I fill in "collection_search_title" with "demandtest"
+      And I press "Sort and Filter"
+    Then I should not see "Another Plain Collection"
+      And I should not see "Another Gift Swap"
+      And I should not see "Some Test Collection"
+      And I should not see "Some Other Collection"
+      And I should not see "Surprise Presents"
+      And I should not see "On Demand"
+
+  @javascript
+  Scenario: Filter collections index by collection name using autocomplete
+
+    Given a set of collections for searching
+    When I go to the collections page
+      And I enter "demandte" in the "Filter by title" autocomplete field
+    Then I should see "demandtest: On Demand" in the autocomplete
+    When I choose "demandtest: On Demand" from the "Filter by title" autocomplete
+      And I press "Sort and Filter"
+    Then I should see "On Demand"
+      But I should not see "Another Gift Swap"
+      And I should not see "Another Plain Collection"
+      And I should not see "Some Test Collection"
+      And I should not see "Some Other Collection"
+      And I should not see "Surprise Presents"
+
+  @javascript
+  Scenario: Filter collections index by collection title using autocomplete
+
+    Given a set of collections for searching
+    When I go to the collections page
+      And I enter "Gift" in the "Filter by title" autocomplete field
+    Then I should see "swaptest: Another Gift Swap" in the autocomplete
+    When I choose "swaptest: Another Gift Swap" from the "Filter by title" autocomplete
+    And I press "Sort and Filter"
+    Then I should see "Another Gift Swap"
+      But I should not see "On Demand"
+      And I should not see "Another Plain Collection"
+      And I should not see "Some Test Collection"
+      And I should not see "Some Other Collection"
+      And I should not see "Surprise Presents"
+
   Scenario: Filter collections by non-canonical and non-existent collection tags
 
   Given a set of collections for searching

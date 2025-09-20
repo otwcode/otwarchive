@@ -21,7 +21,7 @@
         <%= f.label "title", ts("Filter by title") %>
       </dt>
       <dd class="autocomplete search">
-        <%= f.text_field "title", autocomplete_options("collection_fullname", data: { autocomplete_token_limit: 1 }) %>
+        <%= f.text_field "title", autocomplete_options("collection_title", data: { autocomplete_token_limit: 1 }) %>
       </dd>
 
       <dt class="autocomplete search">
