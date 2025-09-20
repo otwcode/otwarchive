@@ -1,0 +1,28 @@
+name: Deploy AO3
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "The environment to deploy to"
+        required: true
+        default: staging
+        options:
+          - staging
+
+concurrency: one-deploy-at-a-time
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment || 'staging' }}
+
+    env:
+      COMMIT_ID: ${{ github.sha }}
+
+    steps:
+      - uses: appleboy/ssh-action@v3ca8a7c5359ac6ad91aa47f1946ece1c3b025004
+        with:
+          host: ${{ secrets.SSH_GATEWAY }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: ${{ env.DEPLOY_SCRIPT }}
