@@ -76,7 +76,7 @@ li.blurb:after, .blurb .blurb:after {
   line-height: 1.5;
 }
 
-.blurb .fandoms .landmark {
+.blurb h5 .landmark {
   position: absolute;
 }
 

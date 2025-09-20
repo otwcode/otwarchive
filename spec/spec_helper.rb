@@ -110,6 +110,14 @@ RSpec.configure do |config|
     PseudIndexer.delete_index
   end
 
+  config.before :each, collection_search: true do
+    CollectionIndexer.prepare_for_testing
+  end
+
+  config.after :each, collection_search: true do
+    CollectionIndexer.delete_index
+  end
+
   config.before :each, tag_search: true do
     TagIndexer.prepare_for_testing
   end

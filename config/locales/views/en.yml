@@ -559,6 +559,12 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
+  challenge_assignments:
+    to_default:
+      button: Default
+      confirmation: Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone.
+    to_fulfill:
+      button: Fulfill
   challenge_signups:
     signup_form:
       notice:
@@ -599,10 +605,19 @@ en:
         notice:
           unreviewed_by_collection: Works and bookmarks listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection.
         page_heading: Items by %{username} in Collections
+  collection_profile:
+    show:
+      meta:
+        collection_tags: 'Collection tags:'
   collections:
+    collection_blurb:
+      collection_tags: 'Collection Tags:'
     form:
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
+      multifandom:
+        footnote: Use this if your collection is not fandom-specific.
+        label: Multifandom
     index:
       page_heading:
         challenges_subcollections_in: Challenges/Subcollections in %{collection}
@@ -2042,6 +2057,8 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+    revert_skin_form:
+      revert_to_default: Revert to Default Skin
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
@@ -2101,6 +2118,7 @@ en:
       unsorted_tags: Unsorted Tags (%{count})
       use_type:
         bookmarks: Bookmarks
+        collections: Collections
         drafts: Drafts
         external_works: External Works
         private_bookmarks: Private Bookmarks
