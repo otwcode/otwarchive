@@ -290,7 +290,7 @@ class CommentsController < ApplicationController
   def new
     if @commentable.nil?
       flash[:error] = ts("What did you want to comment on?")
-      redirect_to root_path
+      redirect_back_or_to root_path
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
@@ -405,7 +405,7 @@ class CommentsController < ApplicationController
     elsif unreviewed
       # go back to the rest of the unreviewed comments
       flash[:notice] = ts("Comment deleted.")
-      redirect_back_or_to(unreviewed_work_comments_path(@comment.commentable))
+      redirect_back_or_to unreviewed_work_comments_path(@comment.commentable)
     elsif parent_comment
       flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
@@ -449,7 +449,7 @@ class CommentsController < ApplicationController
     authorize @commentable, policy_class: CommentPolicy if logged_in_as_admin?
     unless (@commentable && current_user_owns?(@commentable)) || (@commentable && logged_in_as_admin? && @commentable.is_a?(AdminPost))
       flash[:error] = ts("What did you want to review comments on?")
-      redirect_back_or_to(root_path)
+      redirect_back_or_to root_path
       return
     end
 

@@ -274,7 +274,7 @@ class BookmarksController < ApplicationController
     else
       # Avoid getting an unstyled page if JavaScript is disabled
       flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
-      redirect_back(fallback_location: root_path)
+      redirect_back_or_to root_path
     end
   end
 

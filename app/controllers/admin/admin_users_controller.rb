@@ -103,7 +103,7 @@ class Admin::AdminUsersController < Admin::BaseController
     else
       flash[:error] = ts("The user %{name} could not be updated: %{errors}", name: params[:id], errors: @user.errors.full_messages.join(" "))
     end
-    redirect_to request.referer || root_path
+    redirect_back_or_to root_path
   end
 
   def update_next_of_kin
