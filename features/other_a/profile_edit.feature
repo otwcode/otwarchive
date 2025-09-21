@@ -213,7 +213,7 @@ Scenario: Change password - mistake in typing old password
 Scenario: Change password - mistake in typing new password confirmation
 
   When I make a typing mistake confirming my new password
-  Then I should see "Password confirmation doesn't match new password."
+  Then I should see "The passwords you entered do not match. Please try again."
 
 Scenario: Change password
 

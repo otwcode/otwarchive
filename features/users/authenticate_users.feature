@@ -39,7 +39,7 @@ Feature: User Authentication
     # link from the email should work
     When I log out
       And I follow "Change my password." in the email
-    Then I should see "Change My Password"
+    Then I should see "Change Password"
 
     # entering mismatched passwords should produce an error message
     When I fill in "New password" with "secret"
@@ -111,7 +111,7 @@ Feature: User Authentication
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
       And 1 email should be delivered to "sam"
       And the email should have "Your password has been changed" in the subject
       And the email to "sam" should be translated
@@ -130,7 +130,7 @@ Feature: User Authentication
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
       And I should see "Hi, sam"
 
   Scenario: Forgot password, with expired password token
@@ -192,7 +192,7 @@ Feature: User Authentication
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
     When I am logged in as a super admin
       And I go to the user administration page for "sam"
     Then I should see "Password Reset" within "#user_history"
