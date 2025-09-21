@@ -77,7 +77,7 @@ describe SeriesController do
   describe 'update_positions' do
     it 'updates the position and redirects' do
       fake_login_known_user(user)
-      first_work = create(:serial_work, series: series)
+      first_work = series.serial_works.first
       second_work = create(:serial_work, series: series)
       expect(first_work.position).to eq(1)
       expect(second_work.position).to eq(2)
@@ -166,17 +166,17 @@ describe SeriesController do
 
     it "assigns page title for series" do
       work = create(:work, fandom_string: "Fandom", authors: [user.default_pseud])
-      create(:serial_work, work: work, series: series)
-      get :show, params: { id: series }
-      expect(assigns[:page_title]).to eq("#{series.title} - #{user.default_pseud.name} - Fandom [#{ArchiveConfig.APP_NAME}]")
+      seriesForWork = create(:series, works: [work])
+      get :show, params: { id: seriesForWork }
+      expect(assigns[:page_title]).to eq("#{seriesForWork.title} - #{user.default_pseud.name} - Fandom [#{ArchiveConfig.APP_NAME}]")
     end
 
     it "assigns page title for anonymous series" do
       anonymous_collection = create(:anonymous_collection)
       anonymous_work = create(:work, fandom_string: "Fandom", collections: [anonymous_collection])
-      create(:serial_work, work: anonymous_work, series: series)
-      get :show, params: { id: series }
-      expect(assigns[:page_title]).to eq("#{series.title} - Anonymous - Fandom [#{ArchiveConfig.APP_NAME}]")
+      seriesForWork = create(:series, works: [anonymous_work])
+      get :show, params: { id: seriesForWork }
+      expect(assigns[:page_title]).to eq("#{seriesForWork.title} - Anonymous - Fandom [#{ArchiveConfig.APP_NAME}]")
     end
 
     it "assigns page subtitle for unrevealed series" do

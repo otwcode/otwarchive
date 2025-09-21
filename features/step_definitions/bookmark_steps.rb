@@ -30,114 +30,111 @@ end
 
 Given /^I have bookmarks to search$/ do
   # set up a user
-  user1 = FactoryBot.create(:user, login: "testuser")
+  user1 = create(:user, login: "testuser")
 
   # set up the pseuds
-  pseud1 = FactoryBot.create(:pseud, name: "testy", user_id: user1.id)
-  pseud2 = FactoryBot.create(:pseud, name: "tester_pseud", user_id: user1.id)
+  pseud1 = create(:pseud, name: "testy", user_id: user1.id)
+  pseud2 = create(:pseud, name: "tester_pseud", user_id: user1.id)
 
   # set up a tag
-  freeform1 = FactoryBot.create(:freeform, name: "classic")
-  freeform2 = FactoryBot.create(:freeform, name: "rare")
+  freeform1 = create(:freeform, name: "classic")
+  freeform2 = create(:freeform, name: "rare")
 
   # set up some works
-  work1 = FactoryBot.create(:work, title: "First work", freeform_string: freeform2.name)
-  work2 = FactoryBot.create(:work, title: "second work")
-  work3 = FactoryBot.create(:work, title: "third work")
-  work4 = FactoryBot.create(:work, title: "fourth")
-  work5 = FactoryBot.create(:work, title: "fifth")
+  work1 = create(:work, title: "First work", freeform_string: freeform2.name)
+  work2 = create(:work, title: "second work")
+  work3 = create(:work, title: "third work")
+  work4 = create(:work, title: "fourth")
+  work5 = create(:work, title: "fifth")
 
   # set up an external work
-  external1 = FactoryBot.create(:external_work, title: "Skies Grown Darker")
+  external1 = create(:external_work, title: "Skies Grown Darker")
 
   # set up some series
-  series1 = FactoryBot.create(:series, title: "First Series")
-  series2 = FactoryBot.create(:series_with_a_work, title: "Second Series")
-
-  # add work1 to series1 to ensure the series has tags
-  FactoryBot.create(:serial_work, work_id: work1.id, series_id: series1.id)
+  series1 = create(:series, title: "First Series", works: [work1])
+  series2 = create(:series, title: "Second Series")
 
   # set up the bookmarks
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: work1.id,
-                     pseud_id: user1.default_pseud.id,
-                     rec: true)
+  create(:bookmark,
+                    bookmarkable_id: work1.id,
+                    pseud_id: user1.default_pseud.id,
+                    rec: true)
 
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: work2.id,
-                     pseud_id: user1.default_pseud.id,
-                     tag_string: freeform2.name)
+  create(:bookmark,
+                    bookmarkable_id: work2.id,
+                    pseud_id: user1.default_pseud.id,
+                    tag_string: freeform2.name)
 
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: work3.id,
-                     pseud_id: user1.default_pseud.id,
-                     tag_string: freeform1.name)
+  create(:bookmark,
+                    bookmarkable_id: work3.id,
+                    pseud_id: user1.default_pseud.id,
+                    tag_string: freeform1.name)
 
-  FactoryBot.create(:bookmark, bookmarkable_id: work4.id, pseud_id: pseud1.id)
+  create(:bookmark, bookmarkable_id: work4.id, pseud_id: pseud1.id)
 
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: work5.id,
-                     pseud_id: pseud2.id,
-                     bookmarker_notes: "Left me with a broken heart")
+  create(:bookmark,
+                    bookmarkable_id: work5.id,
+                    pseud_id: pseud2.id,
+                    bookmarker_notes: "Left me with a broken heart")
 
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: external1.id,
-                     bookmarkable_type: "ExternalWork",
-                     pseud_id: pseud2.id,
-                     bookmarker_notes: "I enjoyed this")
+  create(:bookmark,
+                    bookmarkable_id: external1.id,
+                    bookmarkable_type: "ExternalWork",
+                    pseud_id: pseud2.id,
+                    bookmarker_notes: "I enjoyed this")
 
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: series1.id,
-                     bookmarkable_type: "Series",
-                     pseud_id: user1.default_pseud.id,
-                     tag_string: freeform1.name)
+  create(:bookmark,
+                    bookmarkable_id: series1.id,
+                    bookmarkable_type: "Series",
+                    pseud_id: user1.default_pseud.id,
+                    tag_string: freeform1.name)
 
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: series2.id,
-                     bookmarkable_type: "Series",
-                     pseud_id: pseud2.id,
-                     rec: true,
-                     bookmarker_notes: "A new classic")
+  create(:bookmark,
+                    bookmarkable_id: series2.id,
+                    bookmarkable_type: "Series",
+                    pseud_id: pseud2.id,
+                    rec: true,
+                    bookmarker_notes: "A new classic")
 
   step %{all indexing jobs have been run}
 end
 
 Given /^I have bookmarks to search by any field$/ do
-  work1 = FactoryBot.create(:work,
-                             title: "Comfort",
-                             freeform_string: "hurt a little comfort but only so much")
-  work2 = FactoryBot.create(:work, title: "Hurt and that's it")
-  work3 = FactoryBot.create(:work, title: "Fluff")
+  work1 = create(:work,
+                            title: "Comfort",
+                            freeform_string: "hurt a little comfort but only so much")
+  work2 = create(:work, title: "Hurt and that's it")
+  work3 = create(:work, title: "Fluff")
 
-  external1 = FactoryBot.create(:external_work,
-                                 title: "External Whump",
-                                 author: "im hurt")
-  external2 = FactoryBot.create(:external_work, title: "External Fix-It")
+  external1 = create(:external_work,
+                                title: "External Whump",
+                                author: "im hurt")
+  external2 = create(:external_work, title: "External Fix-It")
 
-  series1 = FactoryBot.create(:series_with_a_work,
+  series1 = create(:series,
                               title: "H/C Series",
                               summary: "Hurt & comfort ficlets")
-  series2 = FactoryBot.create(:series_with_a_work, title: "Ouchless Series")
+  series2 = create(:series, title: "Ouchless Series")
 
-  FactoryBot.create(:bookmark, bookmarkable_id: work1.id, bookmarker_notes: "whatever")
-  FactoryBot.create(:bookmark, bookmarkable_id: work2.id, tag_string: "more please")
-  FactoryBot.create(:bookmark, bookmarkable_id: work3.id, bookmarker_notes: "more please")
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: external1.id,
-                     bookmarkable_type: "ExternalWork",
-                     bookmarker_notes: "please rec me more like this")
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: external2.id,
-                     bookmarkable_type: "ExternalWork",
-                     tag_string: "please no more pain")
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: series1.id,
-                     bookmarkable_type: "Series",
-                     bookmarker_notes: "needs more comfort please")
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: series2.id,
-                     bookmarkable_type: "Series",
-                     pseud_id: FactoryBot.create(:pseud, name: "more please").id)
+  create(:bookmark, bookmarkable_id: work1.id, bookmarker_notes: "whatever")
+  create(:bookmark, bookmarkable_id: work2.id, tag_string: "more please")
+  create(:bookmark, bookmarkable_id: work3.id, bookmarker_notes: "more please")
+  create(:bookmark,
+                    bookmarkable_id: external1.id,
+                    bookmarkable_type: "ExternalWork",
+                    bookmarker_notes: "please rec me more like this")
+  create(:bookmark,
+                    bookmarkable_id: external2.id,
+                    bookmarkable_type: "ExternalWork",
+                    tag_string: "please no more pain")
+  create(:bookmark,
+                    bookmarkable_id: series1.id,
+                    bookmarkable_type: "Series",
+                    bookmarker_notes: "needs more comfort please")
+  create(:bookmark,
+                    bookmarkable_id: series2.id,
+                    bookmarkable_type: "Series",
+                    pseud_id: create(:pseud, name: "more please").id)
 
   step %{all indexing jobs have been run}
 end
@@ -147,69 +144,69 @@ Given /^I have bookmarks to search by dates$/ do
   series1 = nil
   external1 = nil
   Timecop.freeze(901.days.ago) do
-    work1 = FactoryBot.create(:work, title: "Old work")
-    FactoryBot.create(:bookmark,
-                       bookmarkable_id: work1.id,
-                       bookmarker_notes: "Old bookmark of old work")
+    work1 = create(:work, title: "Old work")
+    create(:bookmark,
+                      bookmarkable_id: work1.id,
+                      bookmarker_notes: "Old bookmark of old work")
 
-    series1 = FactoryBot.create(:series_with_a_work, title: "Old series")
-    FactoryBot.create(:bookmark,
-                       bookmarkable_id: series1.id,
-                       bookmarkable_type: "Series",
-                       bookmarker_notes: "Old bookmark of old series")
+    series1 = create(:series, title: "Old series")
+    create(:bookmark,
+                      bookmarkable_id: series1.id,
+                      bookmarkable_type: "Series",
+                      bookmarker_notes: "Old bookmark of old series")
 
-    external1 = FactoryBot.create(:external_work, title: "Old external")
-    FactoryBot.create(:bookmark,
-                       bookmarkable_id: external1.id,
-                       bookmarkable_type: "ExternalWork",
-                       bookmarker_notes: "Old bookmark of old external work")
+    external1 = create(:external_work, title: "Old external")
+    create(:bookmark,
+                      bookmarkable_id: external1.id,
+                      bookmarkable_type: "ExternalWork",
+                      bookmarker_notes: "Old bookmark of old external work")
   end
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: work1.id,
-                     bookmarker_notes: "New bookmark of old work")
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: series1.id,
-                     bookmarkable_type: "Series",
-                     bookmarker_notes: "New bookmark of old series")
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: external1.id,
-                     bookmarkable_type: "ExternalWork",
-                     bookmarker_notes: "New bookmark of old external work")
+  create(:bookmark,
+                    bookmarkable_id: work1.id,
+                    bookmarker_notes: "New bookmark of old work")
+  create(:bookmark,
+                    bookmarkable_id: series1.id,
+                    bookmarkable_type: "Series",
+                    bookmarker_notes: "New bookmark of old series")
+  create(:bookmark,
+                    bookmarkable_id: external1.id,
+                    bookmarkable_type: "ExternalWork",
+                    bookmarker_notes: "New bookmark of old external work")
 
-  work2 = FactoryBot.create(:work, title: "New work")
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: work2.id,
-                     bookmarker_notes: "New bookmark of new work")
+  work2 = create(:work, title: "New work")
+  create(:bookmark,
+                    bookmarkable_id: work2.id,
+                    bookmarker_notes: "New bookmark of new work")
 
-  series2 = FactoryBot.create(:series_with_a_work, title: "New series")
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: series2.id,
-                     bookmarkable_type: "Series",
-                     bookmarker_notes: "New bookmark of new series")
+  series2 = create(:series, title: "New series")
+  create(:bookmark,
+                    bookmarkable_id: series2.id,
+                    bookmarkable_type: "Series",
+                    bookmarker_notes: "New bookmark of new series")
 
-  external2 = FactoryBot.create(:external_work, title: "New external")
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: external2.id,
-                     bookmarkable_type: "ExternalWork",
-                     bookmarker_notes: "New bookmark of new external work")
+  external2 = create(:external_work, title: "New external")
+  create(:bookmark,
+                    bookmarkable_id: external2.id,
+                    bookmarkable_type: "ExternalWork",
+                    bookmarker_notes: "New bookmark of new external work")
 
   step %{all indexing jobs have been run}
 end
 
 Given /^I have bookmarks of various completion statuses to search$/ do
-  complete_work = FactoryBot.create(:work, title: "Finished Work")
-  incomplete_work = FactoryBot.create(:work, title: "Incomplete Work", complete: false, expected_number_of_chapters: 2)
+  complete_work = create(:work, title: "Finished Work")
+  incomplete_work = create(:work, title: "Incomplete Work", complete: false, expected_number_of_chapters: 2)
 
-  complete_series = FactoryBot.create(:series_with_a_work, title: "Complete Series", complete: true)
-  incomplete_series = FactoryBot.create(:series_with_a_work, title: "Incomplete Series", complete: false)
+  complete_series = create(:series, title: "Complete Series", complete: true)
+  incomplete_series = create(:series, title: "Incomplete Series", complete: false)
 
-  external_work = FactoryBot.create(:external_work, title: "External Work")
+  external_work = create(:external_work, title: "External Work")
 
-  FactoryBot.create(:bookmark, bookmarkable_id: complete_work.id)
-  FactoryBot.create(:bookmark, bookmarkable_id: incomplete_work.id)
-  FactoryBot.create(:bookmark, bookmarkable_id: complete_series.id, bookmarkable_type: "Series")
-  FactoryBot.create(:bookmark, bookmarkable_id: incomplete_series.id, bookmarkable_type: "Series")
-  FactoryBot.create(:bookmark, bookmarkable_id: external_work.id, bookmarkable_type: "ExternalWork")
+  create(:bookmark, bookmarkable_id: complete_work.id)
+  create(:bookmark, bookmarkable_id: incomplete_work.id)
+  create(:bookmark, bookmarkable_id: complete_series.id, bookmarkable_type: "Series")
+  create(:bookmark, bookmarkable_id: incomplete_series.id, bookmarkable_type: "Series")
+  create(:bookmark, bookmarkable_id: external_work.id, bookmarkable_type: "ExternalWork")
 
   step %{all indexing jobs have been run}
 end
@@ -220,38 +217,38 @@ Given /^I have bookmarks of old series to search$/ do
   creator = User.find_by(login: "creator").default_pseud
 
   Timecop.freeze(30.days.ago) do
-    older_work = FactoryBot.create(:work, title: "WIP in a Series", authors: [creator])
-    older_series = FactoryBot.create(:series, title: "Older WIP Series", works: [older_work])
-    FactoryBot.create(:bookmark,
-                       bookmarkable_id: older_series.id,
-                       bookmarkable_type: "Series")
+    older_work = create(:work, title: "WIP in a Series", authors: [creator])
+    older_series = create(:series, title: "Older WIP Series", works: [older_work])
+    create(:bookmark,
+                      bookmarkable_id: older_series.id,
+                      bookmarkable_type: "Series")
   end
 
   Timecop.freeze(7.days.ago) do
-    newer_series = FactoryBot.create(:series_with_a_work, title: "Newer Complete Series")
-    FactoryBot.create(:bookmark,
-                       bookmarkable_id: newer_series.id,
-                       bookmarkable_type: "Series")
+    newer_series = create(:series, title: "Newer Complete Series")
+    create(:bookmark,
+                      bookmarkable_id: newer_series.id,
+                      bookmarkable_type: "Series")
   end
 end
 
 # Freeform is omitted because there is no freeform option on the bookmark external work form
 Given /^bookmarks of all types tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|
   work = if tag_type == "character"
-           FactoryBot.create(:work,
-                              title: "BookmarkedWork",
-                              character_string: tag)
+           create(:work,
+                             title: "BookmarkedWork",
+                             character_string: tag)
          elsif tag_type == "relationship"
-           FactoryBot.create(:work,
-                              title: "BoomarkedWork",
-                              relationship_string: tag)
+           create(:work,
+                             title: "BoomarkedWork",
+                             relationship_string: tag)
          elsif tag_type == "fandom"
-           FactoryBot.create(:work,
-                              title: "BookmarkedWork",
-                              fandom_string: tag)
+           create(:work,
+                             title: "BookmarkedWork",
+                             fandom_string: tag)
          end
 
-  FactoryBot.create(:bookmark, bookmarkable_id: work.id, bookmarkable_type: "Work")
+  create(:bookmark, bookmarkable_id: work.id, bookmarkable_type: "Work")
 
   step %{bookmarks of external works and series tagged with the #{tag_type} tag "#{tag}"}
 end
@@ -260,34 +257,34 @@ end
 Given /^bookmarks of external works and series tagged with the (character|relationship|fandom) tag "(.*?)"$/ do |tag_type, tag|
   # Series get their tags from works, so we have to create the work first
   work = if tag_type == "character"
-           FactoryBot.create(:work, character_string: tag)
+           create(:work, character_string: tag)
          elsif tag_type == "relationship"
-           FactoryBot.create(:work, relationship_string: tag)
+           create(:work, relationship_string: tag)
          elsif tag_type == "fandom"
-           FactoryBot.create(:work, fandom_string: tag)
+           create(:work, fandom_string: tag)
          end
 
   # We're going to need to use the series ID, so make the series
-  series = FactoryBot.create(:series, title: "BookmarkedSeries")
+  series = create(:series, title: "BookmarkedSeries")
 
   # Now add the work to the series
-  FactoryBot.create(:serial_work, work_id: work.id, series_id: series.id)
+  create(:serial_work, work_id: work.id, series_id: series.id)
 
   external_work = if tag_type == "character"
-                    FactoryBot.create(:external_work, title: "BookmarkedExternalWork", character_string: tag)
+                    create(:external_work, title: "BookmarkedExternalWork", character_string: tag)
                   elsif tag_type == "relationship"
-                    FactoryBot.create(:external_work, title: "BookmarkedExternalWork", relationship_string: tag)
+                    create(:external_work, title: "BookmarkedExternalWork", relationship_string: tag)
                   elsif tag_type == "fandom"
-                    FactoryBot.create(:external_work, title: "BookmarkedExternalWork", fandom_string: tag)
+                    create(:external_work, title: "BookmarkedExternalWork", fandom_string: tag)
                   end
 
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: series.id,
-                     bookmarkable_type: "Series")
+  create(:bookmark,
+                    bookmarkable_id: series.id,
+                    bookmarkable_type: "Series")
 
-  FactoryBot.create(:bookmark,
-                     bookmarkable_id: external_work.id,
-                     bookmarkable_type: "ExternalWork")
+  create(:bookmark,
+                    bookmarkable_id: external_work.id,
+                    bookmarkable_type: "ExternalWork")
 
   step %{all indexing jobs have been run}
 end
@@ -299,11 +296,11 @@ Given /^"(.*?)" has bookmarks of works in various languages$/ do |user|
   lang_en = Language.find_or_create_by!(name: "English", short: "en")
   lang_de = Language.find_or_create_by!(name: "Deutsch", short: "de")
 
-  work1 = FactoryBot.create(:work, title: "english work", language_id: lang_en.id)
-  work2 = FactoryBot.create(:work, title: "german work", language_id: lang_de.id)
+  work1 = create(:work, title: "english work", language_id: lang_en.id)
+  work2 = create(:work, title: "german work", language_id: lang_de.id)
 
-  FactoryBot.create(:bookmark, bookmarkable_id: work1.id, pseud_id: user_pseud.id)
-  FactoryBot.create(:bookmark, bookmarkable_id: work2.id, pseud_id: user_pseud.id)
+  create(:bookmark, bookmarkable_id: work1.id, pseud_id: user_pseud.id)
+  create(:bookmark, bookmarkable_id: work2.id, pseud_id: user_pseud.id)
 
   step %{all indexing jobs have been run}
 end
@@ -312,8 +309,8 @@ Given "{string} has a bookmark of a work titled {string}" do |user, title|
   step %{the user "#{user}" exists and is activated}
 
   user_pseud = User.find_by(login: user).default_pseud
-  work1 = FactoryBot.create(:work, title: title)
-  FactoryBot.create(:bookmark,
+  work1 = create(:work, title: title)
+  create(:bookmark,
                     bookmarkable: work1,
                     pseud: user_pseud)
 
@@ -322,8 +319,8 @@ end
 
 Given "pseud {string} has a bookmark of a work titled {string} by {string}" do |pseud, title, creator|
   pseud = Pseud.find_by(name: pseud)
-  work = FactoryBot.create(:work, title: title, authors: [ensure_user(creator).default_pseud])
-  FactoryBot.create(:bookmark, bookmarkable: work, pseud: pseud)
+  work = create(:work, title: title, authors: [ensure_user(creator).default_pseud])
+  create(:bookmark, bookmarkable: work, pseud: pseud)
 
   step %{all indexing jobs have been run}
 end
@@ -381,7 +378,7 @@ end
 
 When /^I open the bookmarkable work "([^\"]*)"$/ do |title|
   work = Work.find_by(title: title)
-  work ||= FactoryBot.create(:work, title: title)
+  work ||= create(:work, title: title)
   visit work_path(work)
 end
 
