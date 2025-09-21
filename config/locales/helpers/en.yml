@@ -21,6 +21,9 @@ en:
         bookmark: Bookmarker approval status
         work: Creator approval status
   comments_helper:
+    actions:
+      cancel: Cancel
+      delete: Delete
     chapter_link_html: Chapter %{position}
     comment_link_with_commentable_name:
       on_admin_post_html: Comment on the news post %{title}
