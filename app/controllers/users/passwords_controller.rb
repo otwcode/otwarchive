@@ -32,8 +32,11 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def edit
-    original_token = params[:reset_password_token]
-    reset_password_token = Devise.token_generator.digest(self, :reset_password_token, original_token)
+    # The token is part of the URL so it might be mangled or expired
+    # Check its validity before showing the new password form for improved UX by failing early
+    # The token is checked for validity again in #update when actually changing the password
+    token_from_url = params[:reset_password_token]
+    reset_password_token = Devise.token_generator.digest(self, :reset_password_token, token_from_url)
 
     user = User.find_for_authentication(reset_password_token: reset_password_token)
 
