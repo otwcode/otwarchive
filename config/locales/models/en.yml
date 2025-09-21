@@ -211,7 +211,7 @@ en:
                 other: can only be changed once every %{count} days. You last changed your username on %{renamed_at}.
               invalid: must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).
             password_confirmation:
-              confirmation: doesn't match new password.
+              confirmation: The passwords you entered do not match. Please try again.
             terms_of_service:
               accepted: Sorry, you need to accept the Terms of Service in order to sign up.
               format: "%{message}"
