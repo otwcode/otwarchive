@@ -217,7 +217,7 @@ describe BookmarksController do
 
       fake_login_known_user(bookmark.pseud.user)
       get :share, params: { id: bookmark.id }
-      it_redirects_to_with_error(root_path, "Sorry, you need to have JavaScript enabled for this.")
+      it_redirects_to_with_error(bookmark, "Sorry, you need to have JavaScript enabled for this.")
     end
   end
 
