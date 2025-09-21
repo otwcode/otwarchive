@@ -46,13 +46,13 @@ Feature: User Authentication
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
     Then I should see "We couldn't save this user because:"
-      And I should see "Password confirmation doesn't match new password."
+      And I should see "The passwords you entered do not match."
 
     # and I should be able to change the password
     When I fill in "New password" with "new<pass"
       And I fill in "Confirm new password" with "new<pass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully. You are now signed in."
+    Then I should see "Your password has been changed successfully. You are now logged in."
       And I should see "Hi, sam"
 
     # password reset link should no longer work
