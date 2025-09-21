@@ -412,7 +412,7 @@ describe Collection do
 
       before do
         bookmark.collections << collection
-        bookmark.collection_items.update!(collection_approval_status: :approved, user_approval_status: :unreviewed)
+        bookmark.collection_items.update!(collection_approval_status: :unreviewed, user_approval_status: :approved)
       end
 
       it "does not count the bookmark" do
@@ -550,7 +550,7 @@ describe Collection do
 
       before do
         bookmark.collections << collection
-        bookmark.collection_items.update!(collection_approval_status: :approved, user_approval_status: :unreviewed)
+        bookmark.collection_items.update!(collection_approval_status: :unreviewed, user_approval_status: :approved)
       end
 
       it "does not count the bookmark" do

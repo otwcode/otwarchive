@@ -78,7 +78,7 @@ describe CollectionIndexer do
         bookmark2.collections << collection
       end
 
-      it "is counts as one item" do
+      it "counts as one item" do
         document = described_class.new([]).document(collection)
         expect(document["general_bookmarked_items_count"]).to eq(1)
         expect(document["public_bookmarked_items_count"]).to eq(1)
@@ -95,7 +95,7 @@ describe CollectionIndexer do
         bookmark2.collections << collection
       end
 
-      it "is counts as one item" do
+      it "counts as one item" do
         document = described_class.new([]).document(collection)
         expect(document["general_bookmarked_items_count"]).to eq(1)
         expect(document["public_bookmarked_items_count"]).to eq(1)
