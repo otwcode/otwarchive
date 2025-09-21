@@ -1,0 +1,1 @@
+This directory contains the parents of the Dark Mode skin. Please refer to [`public/stylesheets/masters/top_level/dark_mode/README.md`](https://github.com/otwcode/otwarchive/tree/master/public/stylesheets/masters/top_level/dark_mode/README.md) for a full overview.
