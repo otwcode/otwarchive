@@ -106,9 +106,9 @@ describe CollectionItem, :ready do
     end
 
     context "when collection item already exists" do
-      let!(:item) { CollectionItem.create!(collection: collection, item: create(:work), collection_approval_status: :approved) }
+      let!(:item) { CollectionItem.create!(collection: collection, item: create(:work), collection_approval_status: :approved, user_approval_status: :approved) }
 
-      context "when collection item is rejected" do
+      context "when collection item is rejected by collection" do
         it "enqueues the collection for reindex" do
           expect do
             item.update!(collection_approval_status: :rejected)
@@ -117,12 +117,43 @@ describe CollectionItem, :ready do
         end
       end
 
-      context "when collection item is accepted" do
+      context "when collection item is rejected by user" do
+        it "enqueues the collection for reindex" do
+          expect do
+            item.update!(user_approval_status: :rejected)
+          end.to add_to_reindex_queue(collection, :background) &
+                 add_to_reindex_queue(parent_collection, :background)
+        end
+      end
+
+      context "when collection item is accepted by collection" do
         it "enqueues the collection for reindex" do
           item.update!(collection_approval_status: :rejected)
 
           expect do
             item.update!(collection_approval_status: :approved)
+          end.to add_to_reindex_queue(collection, :background) &
+                 add_to_reindex_queue(parent_collection, :background)
+        end
+      end
+
+      context "when collection item is accepted by user" do
+        it "enqueues the collection for reindex" do
+          item.update!(user_approval_status: :rejected)
+
+          expect do
+            item.update!(user_approval_status: :approved)
+          end.to add_to_reindex_queue(collection, :background) &
+                 add_to_reindex_queue(parent_collection, :background)
+        end
+      end
+
+      context "when invited collection item is accepted by user" do
+        it "enqueues the collection for reindex" do
+          item.update!(collection_approval_status: :approved, user_approval_status: :unreviewed)
+
+          expect do
+            item.update!(user_approval_status: :approved)
           end.to add_to_reindex_queue(collection, :background) &
                  add_to_reindex_queue(parent_collection, :background)
         end

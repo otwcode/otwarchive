@@ -164,7 +164,7 @@ describe Work do
         end
       end
 
-      context "work already exists in the collection" do
+      context "when work already exists in the collection" do
         let!(:work) { create(:work, collections: [collection]) }
 
         context "when work is hidden by an admin" do

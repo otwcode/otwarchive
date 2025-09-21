@@ -60,7 +60,7 @@ describe Bookmark do
       end
     end
 
-    context "bookmark already exists in the collection" do
+    context "when bookmark already exists in the collection" do
       let!(:bookmark) { create(:bookmark, collections: [collection]) }
 
       context "when bookmark is hidden by an admin" do

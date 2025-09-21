@@ -165,12 +165,34 @@ describe Collection do
       it_behaves_like "does not count the work"
     end
 
-    context "when the collection includes a rejected public work" do
+    context "when the collection includes a public work rejected by collection" do
       let(:work) { create(:work) }
 
       before do
         work.collections << collection
         work.collection_items.update!(collection_approval_status: :rejected)
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes a public work rejected by user" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(user_approval_status: :rejected)
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes an invited public work" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(collection_approval_status: :approved, user_approval_status: :unreviewed)
       end
 
       it_behaves_like "does not count the work"
@@ -231,12 +253,34 @@ describe Collection do
       it_behaves_like "does not count the work"
     end
 
-    context "when the collection includes a rejected public work" do
+    context "when the collection includes a public work rejected by collection" do
       let(:work) { create(:work) }
 
       before do
         work.collections << collection
         work.collection_items.update!(collection_approval_status: :rejected)
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes a public work rejected by user" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(user_approval_status: :rejected)
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes an invited public work" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(collection_approval_status: :approved, user_approval_status: :unreviewed)
       end
 
       it_behaves_like "does not count the work"
@@ -337,12 +381,38 @@ describe Collection do
       end
     end
 
-    context "when the collection contains a rejected public bookmark" do
+    context "when the collection contains a public bookmark rejected by collection" do
       let(:bookmark) { create(:bookmark) }
 
       before do
         bookmark.collections << collection
         bookmark.collection_items.update!(collection_approval_status: :rejected)
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a public bookmark rejected by user" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(user_approval_status: :rejected)
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains an invited public bookmark" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(collection_approval_status: :approved, user_approval_status: :unreviewed)
       end
 
       it "does not count the bookmark" do
@@ -449,12 +519,38 @@ describe Collection do
       end
     end
 
-    context "when the collection contains a rejected public bookmark" do
+    context "when the collection contains a public bookmark rejected by collection" do
       let(:bookmark) { create(:bookmark) }
 
       before do
         bookmark.collections << collection
         bookmark.collection_items.update!(collection_approval_status: :rejected)
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a public bookmark rejected by user" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(user_approval_status: :rejected)
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains an invited public bookmark" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(collection_approval_status: :approved, user_approval_status: :unreviewed)
       end
 
       it "does not count the bookmark" do
