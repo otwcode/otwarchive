@@ -15,7 +15,7 @@ class CommentsController < ApplicationController
                        :cancel_comment_reply, :cancel_comment_edit]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
-  before_action :check_permission_to_edit, only: [:edit, :update ]
+  before_action :check_permission_to_edit, only: [:edit, :update]
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
   before_action :check_guest_comment_admin_setting, only: [:new, :create, :add_comment_reply]
   before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
@@ -131,14 +131,14 @@ class CommentsController < ApplicationController
     return unless admin_settings.guest_comments_off? && guest?
 
     flash[:error] = t("comments.commentable.guest_comments_disabled")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to @commentable
   end
 
   def check_guest_replies_preference
     return unless guest? && @commentable.respond_to?(:guest_replies_disallowed?) && @commentable.guest_replies_disallowed?
 
     flash[:error] = t("comments.check_guest_replies_preference.error")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to @commentable
   end
 
   def check_unreviewed
@@ -152,21 +152,21 @@ class CommentsController < ApplicationController
     return unless @commentable.respond_to?(:iced?) && @commentable.iced?
 
     flash[:error] = t("comments.check_frozen.error")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to @commentable
   end
 
   def check_hidden_by_admin
     return unless @commentable.respond_to?(:hidden_by_admin?) && @commentable.hidden_by_admin?
 
     flash[:error] = t("comments.check_hidden_by_admin.error")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to root_path
   end
 
   def check_not_replying_to_spam
     return unless @commentable.respond_to?(:approved?) && !@commentable.approved?
 
     flash[:error] = t("comments.check_not_replying_to_spam.error")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to root_path
   end
 
   def check_permission_to_review
@@ -205,12 +205,12 @@ class CommentsController < ApplicationController
 
   # Comments cannot be edited after they've been replied to or if they are frozen.
   def check_permission_to_edit
-    if @comment&.iced?
+    if @comment.iced?
       flash[:error] = t("comments.check_permission_to_edit.error.frozen")
-      redirect_back(fallback_location: root_path)
-    elsif !@comment&.count_all_comments&.zero?
+      redirect_back_or_to @comment
+    elsif !@comment.count_all_comments.zero?
       flash[:error] = ts("Comments with replies cannot be edited")
-      redirect_back(fallback_location: root_path)
+      redirect_back_or_to @comment
     end
   end
 
@@ -225,7 +225,7 @@ class CommentsController < ApplicationController
     # i18n-tasks-use t('comments.freeze.permission_denied')
     # i18n-tasks-use t('comments.unfreeze.permission_denied')
     flash[:error] = t("comments.#{action_name}.permission_denied")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to @comment
   end
 
   def check_permission_to_modify_hidden_status
@@ -234,7 +234,7 @@ class CommentsController < ApplicationController
     # i18n-tasks-use t('comments.hide.permission_denied')
     # i18n-tasks-use t('comments.unhide.permission_denied')
     flash[:error] = t("comments.#{action_name}.permission_denied")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to @comment
   end
 
   # Get the thing the user is trying to comment on
