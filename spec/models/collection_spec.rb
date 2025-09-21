@@ -407,7 +407,7 @@ describe Collection do
       end
     end
 
-    context "when the collection contains an invited public bookmark" do
+    context "when the collection contains a public bookmark awaiting collection approval" do
       let(:bookmark) { create(:bookmark) }
 
       before do
@@ -545,7 +545,7 @@ describe Collection do
       end
     end
 
-    context "when the collection contains an invited public bookmark" do
+    context "when the collection contains a public bookmark awaiting collection approval" do
       let(:bookmark) { create(:bookmark) }
 
       before do
