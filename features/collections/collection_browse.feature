@@ -237,7 +237,7 @@ Feature: Collection
       And I follow "Collection1"
     Then I should see an HTML comment containing the number 1744477200 within "li.work.blurb"
 
-  Scenario: Collection item counts show the correct amount for guests and registered users
+  Scenario: Collection item counts show the correct amount for guests, registered users and admins
 
   Given I have a collection "Item Counts"
   When I am logged in as the owner of "Item Counts"
@@ -253,6 +253,11 @@ Feature: Collection
   Then I should see the text with tags '<a href="/collections/Item_Counts/works">3</a>'
     And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">2</a>'
     And I should see the text with tags '<a href="/collections/Item_Counts/collections">1</a>'
+  When I am logged in as a super admin
+    And I go to the collections page
+  Then I should see the text with tags '<a href="/collections/Item_Counts/works">3</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">2</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/collections">1</a>'
   When I log out
     And I go to the collections page
   Then I should see the text with tags '<a href="/collections/Item_Counts/works">1</a>'
@@ -263,6 +268,11 @@ Feature: Collection
     And I bookmark the work "Public 2" to the collection "Item Counts"
     And the collection "Sub Count" is deleted
     And all indexing jobs have been run
+    And I go to the collections page
+  Then I should see the text with tags '<a href="/collections/Item_Counts/works">4</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">3</a>'
+    And I should not see "Challenges/Subcollections:" within ".stats"
+  When I am logged in as a super admin
     And I go to the collections page
   Then I should see the text with tags '<a href="/collections/Item_Counts/works">4</a>'
     And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">3</a>'

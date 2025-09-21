@@ -19,6 +19,17 @@ describe Bookmarkable do
           end
         end
 
+        unless bookmarkable_type == :external_work
+          context "when #{bookmarkable_type} is restricted" do
+            it "enqueues its collection for reindex" do
+              expect do
+                bookmarkable.update!(restricted: !bookmarkable.restricted)
+              end.to add_to_reindex_queue(collection, :background) &
+                     add_to_reindex_queue(parent_collection, :background)
+            end
+          end
+        end
+
         context "when #{bookmarkable_type} is not significantly changed" do
           it "doesn't enqueue its collection for reindex" do
             expect do
