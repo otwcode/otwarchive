@@ -5,16 +5,13 @@ class CommentMailer < ApplicationMailer
     @comment = comment
     @owner = true
     email = user.is_a?(Admin) ? ArchiveConfig.ADMIN_ADDRESS : user.email
-    locale = user.try(:preference).try(:locale_for_mails) || I18n.default_locale.to_s
-    I18n.with_locale(locale) do
-      mail(
-        to: email,
-        # i18n-tasks-use t("comment_mailer.comment_notification.subject.chapter")
-        # i18n-tasks-use t("comment_mailer.comment_notification.subject.other")
-        # i18n-tasks-use t("comment_mailer.comment_notification.subject.tag")
-        subject: subject_for_commentable(@comment)
-      )
-    end
+    mail(
+      to: email,
+      # i18n-tasks-use t("comment_mailer.comment_notification.subject.chapter")
+      # i18n-tasks-use t("comment_mailer.comment_notification.subject.other")
+      # i18n-tasks-use t("comment_mailer.comment_notification.subject.tag")
+      subject: subject_for_commentable(@comment)
+    )
   end
 
   # Sends email to an owner of the top-level commentable when a comment is edited
@@ -23,16 +20,13 @@ class CommentMailer < ApplicationMailer
     @comment = comment
     @owner = true
     email = user.is_a?(Admin) ? ArchiveConfig.ADMIN_ADDRESS : user.email
-    locale = user.try(:preference).try(:locale_for_mails) || I18n.default_locale.to_s
-    I18n.with_locale(locale) do
-      mail(
-        to: email,
-        # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.chapter")
-        # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.other")
-        # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.tag")
-        subject: subject_for_commentable(@comment)
-      )
-    end
+    mail(
+      to: email,
+      # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.chapter")
+      # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.other")
+      # i18n-tasks-use t("comment_mailer.edited_comment_notification.subject.tag")
+      subject: subject_for_commentable(@comment)
+    )
   end
 
   # Sends email to commenter when a reply is posted to their comment
