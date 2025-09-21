@@ -72,12 +72,12 @@ class RelatedWorksController < ApplicationController
   def load_user
     if params[:user_id].blank?
       flash[:error] = ts("Whose related works were you looking for?")
-      redirect_to search_people_path
+      redirect_back_or_to search_people_path
     else
       @user = User.find_by(login: params[:user_id])
       if @user.blank?
         flash[:error] = ts("Sorry, we couldn't find that user")
-        redirect_to search_people_path
+        redirect_back_or_to search_people_path
       end
     end
   end
