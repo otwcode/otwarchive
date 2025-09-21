@@ -43,7 +43,7 @@ describe ApplicationHelper do
     end
 
     context "when creation is Series" do
-      let(:series) { create(:series_with_a_work) }
+      let(:series) { create(:series) }
       let(:user1) { series.users.first }
       let(:work) { series.works.first }
 
@@ -196,7 +196,7 @@ describe ApplicationHelper do
     end
 
     context "when creation is Series" do
-      let(:series) { create(:series_with_a_work) }
+      let(:series) { create(:series) }
       let(:work) { series.works.first }
       let(:user1) { series.users.first }
       let(:user2) { create(:user) }
