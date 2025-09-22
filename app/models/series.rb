@@ -195,7 +195,7 @@ class Series < ApplicationRecord
 
   # returns list of fandoms on this series
   def fandoms
-    tag_groups["Fandom"].sort
+    tag_groups["Fandom"]&.sort || []
   end
 
   def author_tags
@@ -204,8 +204,8 @@ class Series < ApplicationRecord
 
   def tag_groups
     self.work_tags
-        .where(works: { restricted: false, hidden_by_admin: false })
-        .group_by { |t| t.type.to_s }
+      .where(works: { restricted: false, hidden_by_admin: false })
+      .group_by { |t| t.type.to_s }
   end
 
   # Grabs the earliest published_at date of the visible works in the series
