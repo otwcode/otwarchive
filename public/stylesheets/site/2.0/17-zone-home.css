@@ -1,6 +1,7 @@
-/*==ZONE: HOME 
+/* == ZONE: HOME
 user home, collections and challenges home, tag home, admin comms home 
---this zone always shows a dashboard styled in region-dashboard and its parent is #main.dashboard */
+--this zone always shows a dashboard styled in region-dashboard and its parent is #main.dashboard
+*/
 
 .home p, .home .header {
   clear: right;
@@ -33,7 +34,7 @@ user home, collections and challenges home, tag home, admin comms home
   min-height: 100px;
 }
 
-/*primary header icons */
+/* primary header icons */
 
 .primary .icon {
   position: absolute;
@@ -56,13 +57,13 @@ user home, collections and challenges home, tag home, admin comms home
   background: none;
 }
 
-/*contexts*/
+/* contexts */
 
 .profile .primary {
   float: none;
 }
 
-/*(no filters)*/
+/* (no filters) */
 
 .dashboard.collections-index .index {
   width: 100%;
@@ -77,7 +78,7 @@ user home, collections and challenges home, tag home, admin comms home
   clear: both;
 }
 
-/*(with filters)*/
+/* (with filters) */
 
 /* wrap long text in Firefox (applied to inbox only to avoid weirdness on all forms in IE) */
 form.inbox {
@@ -96,4 +97,4 @@ form.inbox fieldset {
   clear: left;
 }
 
-/*END== */
+/* END== */

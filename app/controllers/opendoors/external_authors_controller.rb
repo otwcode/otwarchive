@@ -2,7 +2,7 @@ class Opendoors::ExternalAuthorsController < ApplicationController
 
   before_action :users_only
   before_action :opendoors_only
-  before_action :load_external_author, only: [:show, :edit, :update, :forward]
+  before_action :load_external_author, only: [:show, :forward]
 
   def load_external_author
     @external_author = ExternalAuthor.find(params[:id])

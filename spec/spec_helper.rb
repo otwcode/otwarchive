@@ -69,7 +69,7 @@ RSpec.configure do |config|
     allow(Akismetor).to receive(:spam?).and_return(false)
 
     # Stub all requests to example.org, the default external work URL:
-    WebMock.stub_request(:any, "www.example.org")
+    WebMock.stub_request(:any, /example/)
   end
 
   config.after :each do
@@ -94,12 +94,28 @@ RSpec.configure do |config|
     BookmarkIndexer.delete_index
   end
 
+  config.before :each, user_search: true do
+    UserIndexer.prepare_for_testing
+  end
+
+  config.after :each, user_search: true do
+    UserIndexer.delete_index
+  end
+
   config.before :each, pseud_search: true do
     PseudIndexer.prepare_for_testing
   end
 
   config.after :each, pseud_search: true do
     PseudIndexer.delete_index
+  end
+
+  config.before :each, collection_search: true do
+    CollectionIndexer.prepare_for_testing
+  end
+
+  config.after :each, collection_search: true do
+    CollectionIndexer.delete_index
   end
 
   config.before :each, tag_search: true do
@@ -140,7 +156,7 @@ RSpec.configure do |config|
   VALID_URLS = %w[http://rocksalt-recs.livejournal.com/196316.html https://rocksalt-recs.livejournal.com/196316.html].freeze
   INACTIVE_URLS = %w[https://www.iaminactive.com http://www.iaminactive.com https://iaminactive.com http://iaminactive.com].freeze
   BYPASSED_URLS = %w[fanfiction.net ficbook.net].freeze
-  
+
   # rspec-rails 3 will no longer automatically infer an example group's spec type
   # from the file location. You can explicitly opt-in to the feature using this
   # config option.
@@ -161,6 +177,7 @@ RSpec.configure do |config|
 end
 
 RSpec::Matchers.define_negated_matcher :avoid_changing, :change
+RSpec::Matchers.define_negated_matcher :not_enqueue_mail, :enqueue_mail
 
 def clean_the_database
   # Now clear memcached
@@ -179,14 +196,6 @@ def run_all_indexing_jobs
   %w[main background stats].each do |reindex_type|
     ScheduledReindexJob.perform(reindex_type)
   end
-
-  # In Rails pre-7.2, "config.active_job.queue_adapter" is respected by some
-  # test cases but not others. In request specs, the queue adapter will be
-  # overridden to ":test", so we need to call "perform_enqueued_jobs" to
-  # process jobs.
-  #
-  # Refer to https://github.com/rails/rails/pull/48585.
-  perform_enqueued_jobs if ActiveJob::Base.queue_adapter.instance_of? ActiveJob::QueueAdapters::TestAdapter
 
   Indexer.all.map(&:refresh_index)
 end

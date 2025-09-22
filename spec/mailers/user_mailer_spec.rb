@@ -87,6 +87,11 @@ describe UserMailer do
   end
 
   describe "creatorship_request" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
@@ -135,6 +140,11 @@ describe UserMailer do
   end
 
   describe "#creatorship_notification" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.creatorship_notification(chapter_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
@@ -183,6 +193,11 @@ describe UserMailer do
   end
 
   describe "creatorship_notification_archivist" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.creatorship_notification_archivist(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
@@ -625,6 +640,11 @@ describe UserMailer do
   end
 
   describe "batch_subscription_notification" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.batch_subscription_notification(subscription.id, ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json) }
 
     let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
@@ -1038,15 +1058,35 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("potential assignments for your challenge collection, <")
-        expect(email).to have_html_part_content("challenge's <")
+        expect(email).to have_html_part_content("potential assignments for your gift exchange <")
+        expect(email).to have_html_part_content("on its <")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("potential assignments for your challenge collection \"#{collection.title}\"")
-        expect(email).to have_text_part_content("challenge's Matching page:")
+        expect(email).to have_text_part_content("potential assignments for your gift exchange \"#{collection.title}\"")
+        expect(email).to have_text_part_content("on its Matching page:")
+      end
+    end
+  end
+
+  describe "potential_match_generation_notification_collection_email" do
+    subject(:email) { UserMailer.potential_match_generation_notification(collection.id, collection.collection_email) }
+
+    let(:collection) { create(:collection) }
+
+    it_behaves_like "an email with a valid sender"
+
+    describe "HTML version" do
+      it "has the correct footer content" do
+        expect(email).to have_html_part_content("your email address has been listed as the collection email")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct footer content" do
+        expect(email).to have_text_part_content("your email address has been listed as the collection email")
       end
     end
   end
@@ -1072,13 +1112,34 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("invalid sign-ups in your challenge <")
+        expect(email).to have_html_part_content("invalid sign-ups in your gift exchange <")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("invalid sign-ups in your challenge \"#{collection.title}\"")
+        expect(email).to have_text_part_content("invalid sign-ups in your gift exchange \"#{collection.title}\"")
+      end
+    end
+  end
+
+  describe "invalid_signup_notification_collection_email" do
+    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id], collection.collection_email) }
+
+    let(:collection) { create(:collection) }
+    let(:signup) { create(:challenge_signup) }
+
+    it_behaves_like "an email with a valid sender"
+
+    describe "HTML version" do
+      it "has the correct footer content" do
+        expect(email).to have_html_part_content("your email address has been listed as the collection email")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct footer content" do
+        expect(email).to have_text_part_content("your email address has been listed as the collection email")
       end
     end
   end

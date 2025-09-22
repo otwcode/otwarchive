@@ -142,11 +142,10 @@ class Series < ApplicationRecord
 
   # Visibility has changed, which means we need to reindex
   # the series' bookmarker pseuds, to update their bookmark counts.
-  def should_reindex_pseuds?
+  def should_update_pseud_and_collection_indexes?
     pertinent_attributes = %w[id restricted hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
-
   def expire_caches
     self.works.touch_all
   end
@@ -177,7 +176,12 @@ class Series < ApplicationRecord
   # make sure that we can handle tricky chapter creatorship cases.
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
-    raise Exception.new("Sorry, we can't remove all authors of a series.") if pseuds_with_author_removed.empty?
+
+    if pseuds_with_author_removed.empty?
+      errors.add(:base, ts("Sorry, we can't remove all creators of a series."))
+      raise ActiveRecord::RecordInvalid, self
+    end
+
     transaction do
       authored_works_in_series = self.works.merge(author_to_remove.works)
 

@@ -19,14 +19,5 @@ describe ProfileController do
 
       expect(user.profile).not_to be_nil
     end
-
-    it "uses the profile presenter for the profile" do
-      profile_presenter = instance_double(ProfilePresenter)
-      allow(ProfilePresenter).to receive(:new).and_return(profile_presenter)
-
-      get :show, params: { user_id: user }
-
-      expect(assigns(:profile)).to eq(profile_presenter)
-    end
   end
 end

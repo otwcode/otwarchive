@@ -255,8 +255,9 @@ Feature: Edit chapters
 
   Scenario: Posting a new chapter without previewing should set the work's updated date to now
 
-    Given I have loaded the fixtures
-      And I am logged in as "testuser" with password "testuser"
+    Given the work "First work" by "testuser"
+      And it is currently 2 days from now
+      And I am logged in as "testuser"
     When I view the work "First work"
     Then I should not see Updated today
     When I follow "Add Chapter"
@@ -357,7 +358,7 @@ Feature: Edit chapters
 
 
   Scenario: Removing yourself as a co-creator from the chapter edit page when
-  you've co-created multiple chapters on the work removes you only from that 
+  you've co-created multiple chapters on the work removes you only from that
   specific chapter. Removing yourself as a co-creator from the chapter edit page
   of the last chapter you've co-created also removes you from the work.
 
@@ -367,7 +368,7 @@ Feature: Edit chapters
     When I view the work "OP's Work"
       And I view the 3rd chapter
       And I follow "Edit Chapter"
-    When I follow "Remove Me As Chapter Co-Creator"
+    When I press "Remove Me As Chapter Co-Creator"
     Then I should see "You have been removed as a creator from the chapter."
       And I should see "Chapter 1"
     When I view the 3rd chapter
@@ -375,7 +376,7 @@ Feature: Edit chapters
       And I should see "Chapter by originalposter"
     When I follow "Previous Chapter"
       And I follow "Edit Chapter"
-      And I follow "Remove Me As Chapter Co-Creator"
+      And I press "Remove Me As Chapter Co-Creator"
     Then I should see "You have been removed as a creator from the work."
     When I view the work "OP's Work"
     Then I should not see "Edit Chapter"

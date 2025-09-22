@@ -17,6 +17,13 @@ Feature: Browse Bookmarks
     Then I should see "Bookmarked with Other Pseud"
       And I should not see "Bookmarked with Default Pseud"
 
+  Scenario: Bookmark blurb includes an HTML comment containing the unix epoch of the updated time
+    Given time is frozen at 2025-04-12 17:00 UTC
+      And I am logged in as "ethel"
+      And I bookmark the work "Test"
+    When I go to ethel's bookmarks page
+    Then I should see an HTML comment containing the number 1744477200 within "li.bookmark.blurb"
+
   Scenario: Bookmarked series' blurbs show tags on restricted works only to logged in users
     Given I am logged in as "bookmarker"
       And I post the work "Public Work" with fandom "FandomP" with character "Foobar" as part of a series "Mixed Access"

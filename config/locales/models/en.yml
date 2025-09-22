@@ -16,6 +16,10 @@ en:
         support: Support
         tag_wrangling: Tag Wrangling
         translation: Translation
+      challenge_signup/offers:
+        url: Offer URL
+      challenge_signup/requests:
+        url: Request URL
       chapters/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
@@ -30,11 +34,17 @@ en:
         offers_num_required: Number of offers required per sign-up
         requests_num_allowed: Number of requests allowed per sign-up
         requests_num_required: Number of requests required per sign-up
+      language:
+        short: Abbreviation
       meta_tagging:
         meta_tag: Metatag
         meta_tag_id: Metatag
         sub_tag: Subtag
         sub_tag_id: Subtag
+      offer:
+        url: URL
+      request:
+        url: URL
       role:
         archivist: Archivist
         no_resets: No Resets
@@ -113,6 +123,11 @@ en:
             base:
               format: "%{message}"
               notification_could_not_be_sent: 'Notification email could not be sent: %{error}'
+        invite_request:
+          attributes:
+            email:
+              blocked_email: has been blocked at the owner's request. That means it can't be used for invitations. Please check the address to make sure it's yours to use and contact AO3 Support if you have any questions.
+              email_in_use: is already being used by an account holder.
         kudo:
           attributes:
             commentable:
@@ -124,6 +139,7 @@ en:
             commentable_type:
               inclusion: What did you want to leave kudos on?
             user:
+              archivist: Please log out of your archivist account!
               blocked: Sorry, you have been blocked by one or more of this work's creators.
               official: Please log out of your official account!
           format: "%{message}"
@@ -152,8 +168,18 @@ en:
           attributes:
             title:
               taken: must be unique
+          banned_property: We don't currently allow the CSS property %{property} -- please notify Support if you think this is an error.
+          banned_value_for_property: "%{property} in %{selectors} cannot have the value %{value}, sorry!"
+          font_face: We don't allow the @font-face feature.
+          invalid_custom_property_name: The %{property} custom property in %{selectors} has an invalid name. Names can contain lowercase letters (a-z) in the English alphabet, numerals zero to nine (0-9), dashes (-), and underscores (_).
           invalid_media: We don't currently support the media type %{media}, sorry! If we should, please let Support know.
           no_public_preview: You need to upload a screencap if you want to share your skin.
+          no_rules_for_selectors: There don't seem to be any rules for %{selectors}.
+          no_valid_css: We couldn't find any valid CSS rules in that code.
+          no_valid_css_for_selectors: The code for %{selectors} doesn't seem to be a valid CSS rule.
+          work_skin_banned_value_for_property: The %{property} property in %{selectors} cannot have the value %{value} in work skins, sorry!
+          work_skin_custom_properties: Custom properties are not allowed in work skins.
+          work_skin_var: The var() function is not allowed in work skins.
         skin/skin_parents:
           attributes:
             base:
@@ -259,6 +285,8 @@ en:
         closed_ticket: must not be closed.
         invalid_department: must be in your department.
         required: must exist and not be spam.
+      url:
+        invalid: does not appear to be a valid URL.
   story_parser:
     on_archive: URL is for a work on the Archive. Please bookmark it directly instead.
   subscriptions:

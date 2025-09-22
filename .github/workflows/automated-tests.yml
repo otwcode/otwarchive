@@ -34,7 +34,7 @@ jobs:
           - 3306:3306
 
       elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.26
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.18.2
         ports:
           - 9200:9200
         options: >-
@@ -100,10 +100,10 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install redis
-        uses: awalsh128/cache-apt-pkgs-action@7ca5f46d061ad9aa95863cd9b214dd48edef361d
+        uses: awalsh128/cache-apt-pkgs-action@2c09a5e66da6c8016428a2172bd76e5e4f14bb17
         with:
           packages: redis-server
           version: "1.0"
@@ -113,7 +113,7 @@ jobs:
 
       - name: Install ebook converters
         if: ${{ matrix.tests.ebook }}
-        uses: awalsh128/cache-apt-pkgs-action@7ca5f46d061ad9aa95863cd9b214dd48edef361d
+        uses: awalsh128/cache-apt-pkgs-action@2c09a5e66da6c8016428a2172bd76e5e4f14bb17
         with:
           packages: calibre zip
           version: "1.0"
@@ -140,7 +140,7 @@ jobs:
 
       - name: Install libvips for image processing
         if: ${{ matrix.tests.libvips }}
-        uses: awalsh128/cache-apt-pkgs-action@7ca5f46d061ad9aa95863cd9b214dd48edef361d
+        uses: awalsh128/cache-apt-pkgs-action@2c09a5e66da6c8016428a2172bd76e5e4f14bb17
         with:
           packages: libvips-dev
           version: "1.0"

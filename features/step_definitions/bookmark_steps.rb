@@ -293,13 +293,11 @@ Given /^bookmarks of external works and series tagged with the (character|relati
 end
 
 Given /^"(.*?)" has bookmarks of works in various languages$/ do |user|
-  step %{I have loaded the "languages" fixture}
-
   step %{the user "#{user}" exists and is activated}
   user_pseud = User.find_by(login: user).default_pseud
 
-  lang_en = Language.find_by(name: "English")
-  lang_de = Language.find_by(name: "Deutsch")
+  lang_en = Language.find_or_create_by!(name: "English", short: "en")
+  lang_de = Language.find_or_create_by!(name: "Deutsch", short: "de")
 
   work1 = FactoryBot.create(:work, title: "english work", language_id: lang_en.id)
   work2 = FactoryBot.create(:work, title: "german work", language_id: lang_de.id)
@@ -322,23 +320,36 @@ Given "{string} has a bookmark of a work titled {string}" do |user, title|
   step %{all indexing jobs have been run}
 end
 
-def submit_bookmark_form(pseud, note, tags)
+Given "pseud {string} has a bookmark of a work titled {string} by {string}" do |pseud, title, creator|
+  pseud = Pseud.find_by(name: pseud)
+  work = FactoryBot.create(:work, title: title, authors: [ensure_user(creator).default_pseud])
+  FactoryBot.create(:bookmark, bookmarkable: work, pseud: pseud)
+
+  step %{all indexing jobs have been run}
+end
+
+def submit_bookmark_form(pseud, note, tags, collection)
   select(pseud, from: "bookmark_pseud_id") unless pseud.nil?
   fill_in("bookmark_notes", with: note) unless note.nil?
   fill_in("Your tags", with: tags) unless tags.nil?
+  fill_in("bookmark_collection_names", with: collection.gsub(/[^\w]/, "_")) unless collection.nil?
   click_button("Create")
   step %{all indexing jobs have been run}
 end
 
-When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?$/ do |title, pseud, note, tags|
+# rubocop:disable Cucumber/RegexStepName
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?(?: to the collection "(.*?)")?$/ do |title, pseud, note, tags, collection|
   step %{I start a new bookmark for "#{title}"}
-  submit_bookmark_form(pseud, note, tags)
+  submit_bookmark_form(pseud, note, tags, collection)
 end
+# rubocop:enable Cucumber/RegexStepName
 
-When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")? from new bookmark page$/ do |title, pseud, note, tags|
+# rubocop:disable Cucumber/RegexStepName
+When /^I bookmark the work "(.*?)"(?: as "(.*?)")?(?: with the note "(.*?)")?(?: with the tags "(.*?)")?(?: to the collection "(.*?)")? from new bookmark page$/ do |title, pseud, note, tags, collection|
   step %{I go to the new bookmark page for work "#{title}"}
-  submit_bookmark_form(pseud, note, tags)
+  submit_bookmark_form(pseud, note, tags, collection)
 end
+# rubocop:enable Cucumber/RegexStepName
 
 When /^I bookmark the series "([^\"]*)"$/ do |series_title|
   series = Series.find_by(title: series_title)

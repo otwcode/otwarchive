@@ -3,13 +3,19 @@ Feature: Search pseuds
   I want to use search to find other users
 
   Scenario: Search by name
-    Given I have loaded the fixtures
+    Given the following activated users exists
+      | login                   |
+      | testuser                |
+      | sad_user_with_no_pseuds |
+      And "testuser" has the pseud "testy"
+      And "testuser" has the pseud "tester_pseud"
+      And "testuser" has the pseud "testymctesty"
       And I am logged in as "testuser"
     When I go to the search people page
       And I fill in "Name" with "testuser"
       And I press "Search People"
     Then I should see "testy"
-      And I should not see "sad user"
+      And I should not see "sad_user_with_no_pseuds"
 
     When I fill in "Search all fields" with "test"
       And I press "Search People"
@@ -19,10 +25,14 @@ Feature: Search pseuds
       And I press "Search People"
     Then I should see "4 Found"
       And I should see "testy"
-      And I should not see "sad user"
+      And I should not see "sad_user_with_no_pseuds"
 
   Scenario: Search by fandom
-    Given I have loaded the fixtures
+    Given a canonical fandom "Ghost Soup"
+      And a canonical fandom "Bread"
+      And the work "soup" by "testuser2" with fandom "Ghost Soup"
+      And the work "toast" by "testy" with fandom "Bread"
+      And all indexing jobs have been run
       And I am logged in as "testuser"
     When I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
@@ -97,7 +107,7 @@ Feature: Search pseuds
       And I add the co-author "alice" to the work "Drabble Collection"
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
-      And I follow "Remove Me As Co-Creator"
+      And I press "Remove Me As Co-Creator"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"

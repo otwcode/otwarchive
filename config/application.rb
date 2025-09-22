@@ -22,10 +22,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 7.0
-
-    # TODO: Remove in Rails 7.1, where it's false by default.
-    config.add_autoload_paths_to_load_path = false
+    config.load_defaults 7.2
 
     %w[
       app/models/challenge_models
@@ -67,9 +64,6 @@ module Otwarchive
 
     config.action_view.automatically_disable_submit_tag = false
 
-    # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:content, :password, :terms_of_service_non_production]
-
     # Disable dumping schemas after migrations.
     # This can cause problems since we don't always update versions on merge.
     # Ideally this would be enabled in dev, but we're not quite ready for that.
@@ -80,6 +74,9 @@ module Otwarchive
 
     # Keeps updated_at in cache keys
     config.active_record.cache_versioning = false
+
+    # Setting this to true (the default) breaks series orphaning
+    config.active_record.before_committed_on_all_records = false
 
     # This class is not allowed by default when upgrading Rails to 6.0.5.1 patch
     config.active_record.yaml_column_permitted_classes = [
@@ -108,9 +105,12 @@ module Otwarchive
     # Use Resque to run ActiveJobs (including sending delayed mail):
     config.active_job.queue_adapter = :resque
 
+    # TODO: Remove with Rails 8.0 where this option will be deprecated
+    config.active_job.enqueue_after_transaction_commit = :always
+
     config.active_model.i18n_customize_full_message = true
 
-    config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST }
+    config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST, protocol: "https" }
 
     # Use "mailer" instead of "mailers" as the Resque queue for emails:
     config.action_mailer.deliver_later_queue_name = :mailer
@@ -141,6 +141,11 @@ module Otwarchive
     config.active_storage.queues.preview_image = :active_storage
     config.active_storage.queues.purge = :active_storage
     config.active_storage.queues.transform = :active_storage
+
+    config.active_storage.web_image_content_types = %w[image/png image/jpeg image/gif]
+
+    # Do not enable YJIT automatically once we upgrade to Ruby 3.3
+    config.yjit = false
 
     # Use secret from archive config
     config.secret_key_base = ArchiveConfig.SESSION_SECRET

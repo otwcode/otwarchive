@@ -343,7 +343,7 @@ FIELDS_ALLOWING_HTML: ["about_me", "bookmarker_notes", "comment", "comment_conte
 
 FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
 
-FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
+FIELDS_ALLOWING_MEDIA_EMBEDS: ["content"]
 
 FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 
@@ -394,6 +394,7 @@ SUPPORTED_CSS_PROPERTIES:
 - -replace
 - -use-link-source
 - accelerator
+- accent-color
 - align-content
 - align-items
 - align-self
@@ -569,9 +570,17 @@ SUPPORTED_CSS_PROPERTIES:
 - writing-mode
 - z-index
 
-# we allow through any string that is just a-z plus dashes (no spaces), so the
-# only keywords you need to specify would be ones that have something else or
-# url, if you want to allow url values
+# We allow the !important keyword as well as any string that is just a-z plus
+# dashes, as well as space- or comma-separated lists of such strings. The only
+# keywords you need to specify are keywords that contain other characters.
+#
+# We have the URL_FUNCTION_REGEX in lib/css_cleaner.rb, but including "url" here
+# is necessary to prevent the url() function from being stripped before any
+# value containing it is sanitized. Allowing images in skins should be moved to
+# its own config variable in the future.
+#
+# Do not add other functions here; they are not keywords and are controlled by
+# regular expressions in lib/css_cleaner.rb.
 SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 
 # if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this
@@ -758,6 +767,8 @@ PERCONA_ARGS: >
   --no-check-unique-key-change
 
 # How many shards to have in elastic indexes.
-# Production has more than 5 for these
+# Production may have more than 5 for these
 BOOKMARKABLE_SHARDS: 5
+COLLECTION_SHARDS: 5
 WORKS_SHARDS: 5
+USER_SHARDS: 5
