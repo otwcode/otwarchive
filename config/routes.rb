@@ -365,9 +365,12 @@ Rails.application.routes.draw do
     collection do
       post :import
       get :search
+      post :preview
     end
     member do
       get :preview
+      post :preview
+      patch :preview
       post :post
       put :post_draft
       get :navigate

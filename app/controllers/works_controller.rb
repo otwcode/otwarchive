@@ -436,9 +436,22 @@ class WorksController < ApplicationController
     end
   end
 
-  # GET /works/1/preview
+  # POST /works/preview       (new record)
+  # POST /works/:id/preview   (existing record)
+  # GET /works/:id/preview    (read-only preview of saved record)
   def preview
-    @preview_mode = true
+    if request.get?
+      @work = Work.find(params[:id])
+    else
+      if params[:id]
+        base = Work.find(params[:id])
+        @work = base.dup
+      else
+        @work = Work.new
+      end
+      @work.attributes = work_params if params[:work]
+    end
+    render :preview
   end
 
   def preview_tags

@@ -353,8 +353,10 @@
         </li>
       <% end %>
       <li>
-        <%= submit_tag ts("Preview"), name: "preview_button" %>
-      </li>
+        <%= button_tag ts("Preview"),
+            name: "preview_button",
+            formaction: @work.new_record? ? preview_works_path : preview_work_path(@work),
+            formmethod: :post %>
       <li>
         <%= submit_tag ts("Post"), name: "post_button",
               data: { disable_with: ts("Please wait...") } %>
