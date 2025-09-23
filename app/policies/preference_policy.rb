@@ -1,9 +1,9 @@
 class PreferencePolicy < ApplicationPolicy
-  READ_ROLES = %w[superadmin policy_and_abuse support].freeze
+  READ_ACCESS_ROLES = %w[superadmin policy_and_abuse support].freeze
 
-  def can_read_preferences?
-    user_has_roles?(READ_ROLES)
+  def read_access?
+    user_has_roles?(READ_ACCESS_ROLES)
   end
 
-  alias index? can_read_preferences?
+  alias index? read_access?
 end
