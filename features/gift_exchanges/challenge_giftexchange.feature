@@ -725,19 +725,14 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
 
   Scenario: When there are many assignments, they're paginated
-    Given the following activated users exist
-      | login  |
-      | recip1 |
-      | recip2 |
-      | recip3 |
-      And there are 2 assignments per page
+  and sorted by id if they're released at the same time
+    Given the user "recip" exists and is activated
+      And there are 1 assignments per page
       And I am logged in as "gifter"
       And time is frozen at 2025-09-22 17:00 UTC
-      And "gifter" has an assignment for the user "recip1" in the collection "collection_1"
-      And "gifter" has an assignment for the user "recip2" in the collection "collection_2"
-      And "gifter" has an assignment for the user "recip3" in the collection "collection_3"
+      And "gifter" has an assignment for the user "recip" in the collection "collection_1"
+      And "gifter" has an assignment for the user "recip" in the collection "collection_2"
     When I go to the assignments page for "gifter"
-    Then I should see "recip1"
-      And I should see "recip2"
+    Then I should see "collection_1"
     When I follow "2" within ".pagination"
-    Then I should see "recip3"
+    Then I should see "collection_2"
