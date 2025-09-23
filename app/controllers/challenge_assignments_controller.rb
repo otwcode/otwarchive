@@ -79,7 +79,7 @@ class ChallengeAssignmentsController < ApplicationController
                                  else
                                    @challenge_assignments.unposted
                                  end
-        @pagy, @challenge_assignments = pagy(@challenge_assignments.order(Arel.sql("COALESCE(sent_at, covered_at) ASC")))
+        @pagy, @challenge_assignments = pagy(@challenge_assignments.order(Arel.sql("COALESCE(sent_at, covered_at) ASC, id ASC")))
       else
         flash[:error] = t(".access_denied_user")
         redirect_to root_path and return

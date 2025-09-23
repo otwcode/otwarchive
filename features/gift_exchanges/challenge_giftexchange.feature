@@ -373,8 +373,7 @@ Feature: Gift Exchange Challenge
   Scenario: User can see their assignment, but no email links
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
-      And I go to myname1's user page
-      And I follow "Assignments"
+      And I go to the assignments page for "myname1"
     Then I should see "Awesome Gift Exchange"
     When I follow "Awesome Gift Exchange"
       Then I should see "Requests by myname3"
@@ -386,18 +385,18 @@ Feature: Gift Exchange Challenge
 
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
-      And I go to myname1's user page
-      And I follow "Assignments"
+      And I go to the assignments page for "myname1"
     Then I should see "Awesome Gift Exchange"
       And I should see "Status: Unposted"
+      And I should see "Assignments (1)" within "#dashboard"
     When I follow "Completed Assignments"
       Then I should not see "Awesome Gift Exchange"
     When I fulfill my assignment
-      And I go to myname1's user page
-      And I follow "Assignments"
+      And I go to the assignments page for "myname1"
     Then I should not see "Awesome Gift Exchange"
+      And I should see "Assignments (0)" within "#dashboard"
     When I follow "Completed Assignments"
-      Then I should see "Awesome Gift Exchange"
+    Then I should see "Awesome Gift Exchange"
       And I should see "Status: Complete!"
       And I should see "Fulfilled Story"
     When I am logged in as "mod1"
@@ -725,39 +724,20 @@ Feature: Gift Exchange Challenge
       And I press "Post"
     Then I should see "For recip."
 
-  Scenario: User sidebar assignments count only includes unfulfilled assignments.
-    Given the user "recip" exists and is activated
-      And I am logged in as "gifter"
-      And "gifter" has an assignment for the user "recip" in the collection "exchange_collection"
-    When I go to the assignments page for "gifter"
-    Then I should see "Assignments (1)" within "#dashboard"
-    When I fulfill my assignment
-      And I go to the assignments page for "gifter"
-      Then I should see "Assignments (0)" within "#dashboard"
-
-  Scenario: Many Assignments.
+  Scenario: When there are many assignments, they're paginated
     Given the following activated users exist
       | login  |
       | recip1 |
       | recip2 |
       | recip3 |
-      | recip4 |
-      | recip5 |
-      And there are 3 assignments per page
+      And there are 2 assignments per page
       And I am logged in as "gifter"
+      And time is frozen at 2025-09-22 17:00 UTC
       And "gifter" has an assignment for the user "recip1" in the collection "collection_1"
-      And it is currently 1 second from now
       And "gifter" has an assignment for the user "recip2" in the collection "collection_2"
-      And it is currently 1 second from now
       And "gifter" has an assignment for the user "recip3" in the collection "collection_3"
-      And it is currently 1 second from now
-      And "gifter" has an assignment for the user "recip4" in the collection "collection_4"
-      And it is currently 1 second from now
-      And "gifter" has an assignment for the user "recip5" in the collection "collection_5"
     When I go to the assignments page for "gifter"
     Then I should see "recip1"
       And I should see "recip2"
-      And I should see "recip3"
     When I follow "2" within ".pagination"
-    Then I should see "recip4"
-      And I should see "recip5"
+    Then I should see "recip3"

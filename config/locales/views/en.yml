@@ -560,8 +560,6 @@ en:
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
   challenge_assignments:
-    index:
-      access_denied_user: You aren't allowed to see that user's assignments.
     to_default:
       button: Default
       confirmation: Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone.

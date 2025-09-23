@@ -44,6 +44,8 @@ en:
       destroy:
         unblocked: You have unblocked the user %{name}.
   challenge_assignments:
+    index:
+      access_denied_user: You aren't allowed to see that user's assignments.
     validation:
       not_owner: You aren't the owner of that assignment.
   chapters:

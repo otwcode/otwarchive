@@ -329,10 +329,7 @@ class User < ApplicationRecord
   end
 
   def assignments
-    offers = ChallengeAssignment.joins(offer_signup: :pseud).where(pseuds: { user_id: self.id })
-    pinch_hits = ChallengeAssignment.joins(:pinch_hitter).where(pseuds: { user_id: self.id })
-
-    ChallengeAssignment.from("(#{offers.to_sql} UNION #{pinch_hits.to_sql}) AS challenge_assignments").sent
+    ChallengeAssignment.from("(#{self.offer_assignments.to_sql} UNION #{self.pinch_hit_assignments.to_sql}) AS challenge_assignments")
   end
 
   # Checks authorship of any sort of object
