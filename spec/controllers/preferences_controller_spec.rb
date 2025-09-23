@@ -4,7 +4,8 @@ describe PreferencesController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  let(:user) { create(:user) }
+  let(:user_skin) { create(:skin) }
+  let(:user) { user_skin.author }
   let(:other_user) { create(:user) }
 
   describe "GET #index" do
@@ -15,6 +16,7 @@ describe PreferencesController do
         get :index, params: { user_id: user.login }
         expect(assigns(:user)).to eq(user)
         expect(assigns(:preference)).to eq(user.preference)
+        expect(assigns(:available_skins)).to include(user_skin)
         expect(response).to be_successful
       end
 
@@ -25,12 +27,21 @@ describe PreferencesController do
       end
     end
 
+    context "as a guest" do
+      it "disallows accessing others' preferences" do
+        get :index, params: { user_id: user.login }
+
+        it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      end
+    end
+
     context "as admin" do
       subject { get :index, params: { user_id: user.login } }
 
       let(:success) do
         expect(assigns(:user)).to eq(user)
         expect(assigns(:preference)).to eq(user.preference)
+        expect(assigns(:available_skins)).to include(user_skin)
         expect(response).to be_successful     
       end
 
