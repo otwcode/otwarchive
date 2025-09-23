@@ -384,6 +384,9 @@ describe AbuseReport do
 
   describe "#attach_work_download" do
     include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
 
     let(:ticket_id) { "123" }
     let(:work) { create(:work) }
