@@ -67,6 +67,20 @@
   Then I should see "You are now a member of Such a nice collection"
   When I am in the default browser
 
+  Scenario: A subcollection profile and blurb does not show duplicates when a moderator is also an owner of the parent collection
+    Given a user exists with login: "sam"
+      And I have the collection "Such a nice collection" with name "Collection"
+      And I am logged in as the owner of "Such a nice collection"
+      And I have added the co-owner "sam" to collection "Such a nice collection"
+      And I add the subcollection "Such a nice subcollection" to the parent collection named "Collection"
+      And I have added the co-moderator "sam" to collection "Such a nice subcollection"
+    When I view the collection "Such a nice subcollection"
+      And I follow "Profile"
+    Then I should see "sam" exactly 1 time 
+    When I view the collection "Such a nice collection"
+      And I follow "Subcollections"
+    Then I should see "sam" exactly 1 time
+
 Scenario: Collection member should see correct button text
   Given I have the moderated collection "ModeratedCollection"
     And I have the moderated collection "ModeratedCollectionTheSequel"
