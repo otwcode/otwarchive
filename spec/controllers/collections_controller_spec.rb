@@ -105,7 +105,7 @@ describe CollectionsController, collection_search: true do
 
       context "with multiple maintained collections" do
         let!(:collection_a) { create(:collection, owner: moderator.pseud, title: "A collection", created_at: 2.minutes.ago) }
-        let!(:collection_c) { create(:collection, owner: moderator.pseud, title: "C collection", created_at: 1.minutes.ago) }
+        let!(:collection_c) { create(:collection, owner: moderator.pseud, title: "C collection", created_at: 1.minute.ago) }
         let!(:collection_b) { create(:collection, owner: moderator.pseud, title: "B collection") }
 
         before do
@@ -139,7 +139,7 @@ describe CollectionsController, collection_search: true do
 
       context "with multiple subcollections" do
         let!(:collection_a) { create_invalid(:collection, parent_name: parent.name, title: "A collection", created_at: 2.minutes.ago) }
-        let!(:collection_c) { create_invalid(:collection, parent_name: parent.name, title: "C collection", created_at: 1.minutes.ago) }
+        let!(:collection_c) { create_invalid(:collection, parent_name: parent.name, title: "C collection", created_at: 1.minute.ago) }
         let!(:collection_b) { create_invalid(:collection, parent_name: parent.name, title: "B collection") }
 
         before do
