@@ -399,6 +399,7 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    ostruct (0.6.3)
     pagy (9.3.3)
     parallel (1.25.1)
     parser (3.3.8.0)
@@ -722,6 +723,7 @@ DEPENDENCIES
   mysql2
   n_plus_one_control
   nokogiri (>= 1.8.5)
+  ostruct
   pagy (~> 9.3)
   permit_yo
   pickle
