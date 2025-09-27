@@ -1,4 +1,4 @@
-FROM ruby:3.2.7
+FROM ruby:3.4.6
 
 # Install additional packages
 RUN apt-get update             && \

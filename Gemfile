@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby "~> 3.2.7"
+ruby "~> 3.4.6"
 
 gem 'test-unit', '~> 3.2'
 
