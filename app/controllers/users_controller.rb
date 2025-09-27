@@ -1,10 +1,10 @@
 class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
-  before_action :check_user_status, only: [:edit, :update, :change_username, :changed_username]
+  before_action :check_user_status, only: [:change_username, :changed_username]
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
-  before_action :check_ownership, except: [:activate, :change_username, :changed_username, :delete_confirmation, :edit, :index, :show, :update]
-  before_action :check_ownership_or_admin, only: [:change_username, :changed_username, :edit, :update]
+  before_action :check_ownership, except: [:activate, :change_username, :changed_username, :delete_confirmation, :index, :show]
+  before_action :check_ownership_or_admin, only: [:change_username, :changed_username]
   skip_before_action :store_location, only: [:end_first_login]
 
   def load_user
@@ -31,12 +31,6 @@ class UsersController < ApplicationController
                                                        subscribable_type: 'User').first ||
                       current_user.subscriptions.build(subscribable: @user)
     end
-  end
-
-  # GET /users/1/edit
-  def edit
-    @page_subtitle = t(".browser_title")
-    authorize @user.profile if logged_in_as_admin?
   end
 
   def change_email
@@ -154,20 +148,6 @@ class UsersController < ApplicationController
     end
 
     redirect_to(new_user_session_path)
-  end
-
-  def update
-    authorize @user.profile if logged_in_as_admin?
-    if @user.profile.update(profile_params)
-      if logged_in_as_admin? && @user.profile.ticket_url.present?
-        link = view_context.link_to("Ticket ##{@user.profile.ticket_number}", @user.profile.ticket_url)
-        AdminActivity.log_action(current_admin, @user, action: "edit profile", summary: link)
-      end
-      flash[:notice] = ts('Your profile has been successfully updated')
-      redirect_to user_profile_path(@user)
-    else
-      render :edit
-    end
   end
 
   def confirm_change_email
@@ -406,13 +386,5 @@ class UsersController < ApplicationController
       flash[:error] = ts('Sorry, something went wrong! Please try again.')
       redirect_to(@user)
     end
-  end
-
-  private
-
-  def profile_params
-    params.require(:profile_attributes).permit(
-      :title, :about_me, :ticket_number
-    )
   end
 end

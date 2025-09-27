@@ -38,7 +38,7 @@
     <%= t(".editing_profile.html",
           your_dashboard_link: link_to(t(".editing_profile.your_dashboard"), user_path(current_user)),
           profile_link: link_to(t(".editing_profile.profile"), user_profile_path(current_user)),
-          edit_my_profile_link: link_to(t(".editing_profile.edit_my_profile"), edit_user_path(current_user)),
+          edit_my_profile_link: link_to(t(".editing_profile.edit_my_profile"), edit_user_profile_path(current_user)),
           profile_faq_link: link_to(t(".editing_profile.profile_faq"), archive_faq_path("profile"))) %>
   </p>
 
@@ -102,7 +102,7 @@
   <p>
     <%= t(".preferences.html",
           set_my_preferences_link: link_to(t(".preferences.set_my_preferences"), user_preferences_path(current_user)),
-          edit_my_profile_link: link_to(t(".preferences.edit_my_profile"), edit_user_path(current_user)),
+          edit_my_profile_link: link_to(t(".preferences.edit_my_profile"), edit_user_profile_path(current_user)),
           preferences_faq_link: link_to(t(".preferences.preferences_faq"), archive_faq_path("preferences"))) %>
   </p>
   <p>

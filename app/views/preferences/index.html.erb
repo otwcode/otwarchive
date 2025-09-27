@@ -6,8 +6,8 @@
 
 <!--subnav-->
 <h3 class="landmark heading"><%= t(".navigation.landmark") %></h3>
-<ul class="navigation actions" role="navigation">
-  <li><%= link_to t(".navigation.edit_my_profile"), edit_user_path(@user) %></li>
+<ul class="navigation actions">
+  <li><%= link_to t(".navigation.edit_my_profile"), edit_user_profile_path(@user) %></li>
   <li><%= link_to t(".navigation.manage_my_pseuds"), user_pseuds_path(@user) %></li>
   <li><%= link_to t(".navigation.blocked_users"), user_blocked_users_path %></li>
   <li><%= link_to t(".navigation.muted_users"), user_muted_users_path %></li>
