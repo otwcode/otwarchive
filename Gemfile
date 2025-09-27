@@ -91,6 +91,9 @@ gem "globalize", "~> 7.0"
 # Add a clean notifier that shows we are on dev or test
 gem 'rack-dev-mark', '>=0.7.8'
 
+#Phrase-app
+gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
+
 # For URL mangling
 gem 'addressable'
 gem 'audited', '~> 5.3'
