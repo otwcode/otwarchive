@@ -23,7 +23,7 @@ gem 'rack-attack'
 
 # Version of redis-rb gem
 # We are currently running Redis 3.2.1 (7/2018)
-gem "redis", "~> 3.3.5"
+gem "redis"
 gem 'redis-namespace'
 
 # Here are all our application-specific gems
@@ -42,7 +42,7 @@ gem 'acts_as_list', '~> 0.9.7'
 gem 'akismetor'
 
 gem 'httparty'
-gem 'csv', '~> 3.3.5'
+gem "csv", "~> 3.3.5"
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', require: false
 gem 'nokogiri', '>= 1.8.5'
@@ -90,9 +90,6 @@ gem "globalize", "~> 7.0"
 
 # Add a clean notifier that shows we are on dev or test
 gem 'rack-dev-mark', '>=0.7.8'
-
-#Phrase-app
-gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
 
 # For URL mangling
 gem 'addressable'
