@@ -1,6 +1,6 @@
 OTW-Archive
 =========
-[![Build Status](https://img.shields.io/github/actions/workflow/status/otwcode/otwarchive/automated-tests.yml?branch=master)](https://github.com/otwcode/otwarchive/actions/workflows/automated-tests.yml?query=branch%3Amaster) [![Coverage Status](https://img.shields.io/codecov/c/github/otwcode/otwarchive/master.svg)](https://app.codecov.io/gh/otwcode/otwarchive) [![Deploy AO3](https://github.com/otwcode/otwarchive/actions/workflows/deploy.yml/badge.svg)](https://github.com/otwcode/otwarchive/actions/workflows/deploy.yml)
+[![Automated Tests](https://github.com/otwcode/otwarchive/actions/workflows/automated-tests.yml/badge.svg)](https://github.com/otwcode/otwarchive/actions/workflows/automated-tests.yml) [![Deploy AO3](https://github.com/otwcode/otwarchive/actions/workflows/deploy.yml/badge.svg)](https://github.com/otwcode/otwarchive/deployments) [![Coverage Status](https://img.shields.io/codecov/c/github/otwcode/otwarchive/master.svg)](https://app.codecov.io/gh/otwcode/otwarchive)
 
 The OTW-Archive software is an open-source web application intended for hosting archives of fanworks, including fanfic, fanart, and fan vids.
 
