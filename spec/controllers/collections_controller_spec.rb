@@ -14,7 +14,7 @@ describe CollectionsController, collection_search: true do
     let!(:prompt_meme) { create(:prompt_meme, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
     let!(:prompt_meme_collection) do
       travel_to(1.second.ago) do
-        create(:collection, challenge: prompt_meme, challenge_type: "PromptMeme")
+        create(:collection, challenge: prompt_meme, challenge_type: "PromptMeme", title: "Prompts for everyone")
       end
     end
 
@@ -95,16 +95,35 @@ describe CollectionsController, collection_search: true do
       end
     end
 
-    it "collections index for user collections" do
-      get :index, params: { user_id: moderator.pseud.user.login }
+    context "collections index for user collections" do
+      it "includes only collections the user maintains" do
+        get :index, params: { user_id: moderator.pseud.user.login }
 
-      expect(assigns(:collections)).to include prompt_meme_collection
-      expect(assigns(:collections)).not_to include gift_exchange_collection
+        expect(assigns(:collections)).to include prompt_meme_collection
+        expect(assigns(:collections)).not_to include gift_exchange_collection
+      end
+
+      context "with multiple maintained collections" do
+        let!(:collection_a) { create(:collection, owner: moderator.pseud, title: "A collection", created_at: 2.minutes.ago) }
+        let!(:collection_c) { create(:collection, owner: moderator.pseud, title: "C collection", created_at: 1.minutes.ago) }
+        let!(:collection_b) { create(:collection, owner: moderator.pseud, title: "B collection") }
+
+        before do
+          run_all_indexing_jobs
+        end
+
+        it "sorts by title ascending" do
+          get :index, params: { user_id: moderator.pseud.user.login }
+
+          expect(response).to have_http_status(:success)
+          expect(assigns(:collections).map(&:title)).to eq ["A collection", "B collection", "C collection", "Prompts for everyone"]
+        end
+      end
     end
 
     context "collections index for subcollections" do
       let!(:parent) { create(:collection) }
-      let!(:child) { create_invalid(:collection, parent_name: parent.name) }
+      let!(:child) { create_invalid(:collection, parent_name: parent.name, title: "Subcollection") }
 
       before do
         run_all_indexing_jobs
@@ -116,6 +135,23 @@ describe CollectionsController, collection_search: true do
         expect(assigns(:collections)).to include(child)
 
         expect(assigns(:collections)).not_to include parent
+      end
+
+      context "with multiple subcollections" do
+        let!(:collection_a) { create_invalid(:collection, parent_name: parent.name, title: "A collection", created_at: 2.minutes.ago) }
+        let!(:collection_c) { create_invalid(:collection, parent_name: parent.name, title: "C collection", created_at: 1.minutes.ago) }
+        let!(:collection_b) { create_invalid(:collection, parent_name: parent.name, title: "B collection") }
+
+        before do
+          run_all_indexing_jobs
+        end
+
+        it "sorts by title ascending" do
+          get :index, params: { collection_id: parent.name }
+
+          expect(response).to have_http_status(:success)
+          expect(assigns(:collections).map(&:title)).to eq ["A collection", "B collection", "C collection", "Subcollection"]
+        end
       end
     end
 
