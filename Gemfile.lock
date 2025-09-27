@@ -61,7 +61,7 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    active_record_query_trace (1.8.2)
+    active_record_query_trace (1.8.3)
       activerecord (>= 6.0.0)
     activejob (7.2.2.2)
       activesupport (= 7.2.2.2)
@@ -175,6 +175,7 @@ GEM
     crass (1.0.6)
     css_parser (1.16.0)
       addressable
+    csv (3.3.5)
     cucumber (9.2.1)
       builder (~> 3.2)
       cucumber-ci-environment (> 9, < 11)
@@ -689,6 +690,7 @@ DEPENDENCIES
   capybara-screenshot
   connection_pool
   css_parser
+  csv (~> 3.3.5)
   cucumber
   cucumber-rails
   cucumber-timecop
@@ -778,4 +780,4 @@ RUBY VERSION
    ruby ruby 3.4.6p54
 
 BUNDLED WITH
-   2.6.3
+   2.6.9
