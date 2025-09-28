@@ -743,7 +743,7 @@ DEPENDENCIES
   rails-controller-testing
   rails-i18n
   rails-observers!
-  redis
+  redis (~> 3.3.5)
   redis-namespace
   resque (>= 1.14.0)
   resque-scheduler
