@@ -23,7 +23,7 @@ gem 'rack-attack'
 
 # Version of redis-rb gem
 # We are currently running Redis 3.2.1 (7/2018)
-gem "redis"
+gem "redis", "~> 3.3.5"
 gem 'redis-namespace'
 
 # Here are all our application-specific gems
