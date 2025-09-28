@@ -799,7 +799,7 @@ class StoryParser
   end
 
   def download_with_timeout(location, limit = 10)
-    story = ""
+    story = +""
     Timeout.timeout(STORY_DOWNLOAD_TIMEOUT) do
       begin
         # we do a little cleanup here in case the user hasn't included the 'http://'
