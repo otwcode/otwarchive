@@ -1,4 +1,8 @@
 tasks:
+  # See https://github.com/gitpod-io/gitpod/issues/7122
+  - name: Configure Git committer email
+    before: |
+      git config --global user.email "${GIT_COMMITTER_EMAIL:-$(git config user.email)}"
   - init: ./script/docker/init.sh
     command: docker compose up -d web
 

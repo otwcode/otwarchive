@@ -13,10 +13,21 @@ describe SeriesController do
     end
   end
 
-  describe 'edit' do
-    it 'redirects to orphan if there are no pseuds left' do
+  describe "PATCH #remove_user_creatorship" do
+    it "removes creatorship if there are non-user pseuds left" do
       fake_login_known_user(user)
-      get :edit, params: { remove: "me", id: series }
+      other_user_pseud = create(:user).default_pseud
+      series = create(:series, authors: [user.default_pseud, other_user_pseud])
+
+      patch :remove_user_creatorship, params: { id: series }
+
+      expect(series.pseuds.reload).to contain_exactly(other_user_pseud)
+      it_redirects_to_with_notice(series_path(series), "You have been removed as a creator from the series and its works.")
+    end
+
+    it "redirects to orphan if there are no pseuds left" do
+      fake_login_known_user(user)
+      patch :remove_user_creatorship, params: { id: series }
       it_redirects_to(new_orphan_path(series_id: series))
     end
   end
@@ -77,7 +88,7 @@ describe SeriesController do
   describe 'update_positions' do
     it 'updates the position and redirects' do
       fake_login_known_user(user)
-      first_work = create(:serial_work, series: series)
+      first_work = series.serial_works.first
       second_work = create(:serial_work, series: series)
       expect(first_work.position).to eq(1)
       expect(second_work.position).to eq(2)
@@ -166,17 +177,17 @@ describe SeriesController do
 
     it "assigns page title for series" do
       work = create(:work, fandom_string: "Fandom", authors: [user.default_pseud])
-      create(:serial_work, work: work, series: series)
-      get :show, params: { id: series }
-      expect(assigns[:page_title]).to eq("#{series.title} - #{user.default_pseud.name} - Fandom [#{ArchiveConfig.APP_NAME}]")
+      series_with_work = create(:series, works: [work])
+      get :show, params: { id: series_with_work }
+      expect(assigns[:page_title]).to eq("#{series_with_work.title} - #{user.default_pseud.name} - Fandom [#{ArchiveConfig.APP_NAME}]")
     end
 
     it "assigns page title for anonymous series" do
       anonymous_collection = create(:anonymous_collection)
       anonymous_work = create(:work, fandom_string: "Fandom", collections: [anonymous_collection])
-      create(:serial_work, work: anonymous_work, series: series)
-      get :show, params: { id: series }
-      expect(assigns[:page_title]).to eq("#{series.title} - Anonymous - Fandom [#{ArchiveConfig.APP_NAME}]")
+      series_with_work = create(:series, works: [anonymous_work])
+      get :show, params: { id: series_with_work }
+      expect(assigns[:page_title]).to eq("#{series_with_work.title} - Anonymous - Fandom [#{ArchiveConfig.APP_NAME}]")
     end
 
     it "assigns page subtitle for unrevealed series" do
