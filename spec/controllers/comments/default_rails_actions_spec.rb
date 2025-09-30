@@ -18,7 +18,7 @@ describe CommentsController do
     end
 
     it "renders the :new template if commentable is a valid admin post" do
-        admin_post = create(:admin_post)
+        admin_post = create(:admin_post, comment_permissions: :enable_all)
         get :new, params: { admin_post_id: admin_post.id }
         expect(response).to render_template("new")
         expect(assigns(:name)).to eq(admin_post.title)
@@ -334,7 +334,7 @@ describe CommentsController do
 
         it "sets flash_is_set to bypass caching" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          expect(cookies[:flash_is_set]).to eq(1)
+          expect(cookies[:flash_is_set]).to eq("1")
         end
       end
 
@@ -349,7 +349,7 @@ describe CommentsController do
 
         it "sets flash_is_set to bypass caching" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          expect(cookies[:flash_is_set]).to eq(1)
+          expect(cookies[:flash_is_set]).to eq("1")
         end
       end
 

@@ -61,7 +61,7 @@ Feature: Tag wrangling
     When I fill in "Name" with "tangler"
       And I press "Find"
     Then I should see "tangler" within "#admin_users_table"
-    When I uncheck the "Tag Wrangler" role checkbox
+    When I uncheck the "tag_wrangler" role checkbox
       And I press "Update"
     Then I should see "User was successfully updated."
       And "tangler" should not be a tag wrangler

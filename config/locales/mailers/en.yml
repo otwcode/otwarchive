@@ -39,6 +39,121 @@ en:
       subject: "[%{app_name}] Your AO3 admin account"
       url: Admin login URL
       username: Admin username
+  comment_mailer:
+    comment_notification:
+      chapter:
+        titled: 'Chapter %{position}: %{title}'
+        untitled: Chapter %{position}
+      content:
+        chapter:
+          html: "%{pseud_link} left the following comment on %{chapter_link} of %{work_link}:"
+          titled_text: "%{pseud} left the following comment on Chapter %{chapter_position}: %{chapter_title} of %{work} (%{chapter_url}):"
+          untitled_text: "%{pseud} left the following comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} left the following comment on %{commentable_link}:"
+          text: "%{pseud} left the following comment on %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} left the following comment on the tag %{tag_link}:"
+          text: "%{pseud} left the following comment on the tag %{tag} (%{tag_url}):"
+      subject:
+        chapter: "[%{app_name}] Comment on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Comment on %{title}"
+        tag: "[%{app_name}] Comment on the tag %{name}"
+    comment_reply_notification:
+      chapter:
+        titled: 'Chapter %{position}: %{title}'
+        untitled: Chapter %{position}
+      content:
+        chapter:
+          html: "%{pseud_link} replied to your comment on %{chapter_link} of %{work_link}:"
+          titled_text: "%{pseud} replied to your comment on Chapter %{chapter_position}: %{chapter_title} of %{work} (%{chapter_url}):"
+          untitled_text: "%{pseud} replied to your comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} replied to your comment on %{commentable_link}:"
+          text: "%{pseud} replied to your comment on %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} replied to your comment on the tag %{tag_link}:"
+          text: "%{pseud} replied to your comment on the tag %{tag} (%{tag_url}):"
+      subject:
+        chapter: "[%{app_name}] Reply to your comment on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Reply to your comment on %{title}"
+        tag: "[%{app_name}] Reply to your comment on the tag %{name}"
+    comment_reply_sent_notification:
+      chapter:
+        titled: 'Chapter %{position}: %{title}'
+        untitled: Chapter %{position}
+      content:
+        chapter:
+          html: 'You replied to a comment on %{chapter_link} of %{work_link}:'
+          titled_text: 'You replied to a comment on Chapter %{chapter_position}: %{chapter_title} of %{work} (%{chapter_url}):'
+          untitled_text: 'You replied to a comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):'
+        other:
+          html: 'You replied to a comment on %{commentable_link}:'
+          text: 'You replied to a comment on %{title} (%{commentable_url}):'
+        tag:
+          html: 'You replied to a comment on the tag %{tag_link}:'
+          text: 'You replied to a comment on the tag %{tag} (%{tag_url}):'
+      subject:
+        chapter: "[%{app_name}] Reply you left to a comment on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Reply you left to a comment on %{title}"
+        tag: "[%{app_name}] Reply you left to a comment on the tag %{name}"
+    comment_sent_notification:
+      chapter:
+        titled: 'Chapter %{position}: %{title}'
+        untitled: Chapter %{position}
+      content:
+        chapter:
+          html: 'You left the following comment on %{chapter_link} of %{work_link}:'
+          titled_text: 'You left the following comment on Chapter %{chapter_position}: %{chapter_title} of %{work} (%{chapter_url}):'
+          untitled_text: 'You left the following comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):'
+        other:
+          html: 'You left the following comment on %{commentable_link}:'
+          text: 'You left the following comment on %{title} (%{commentable_url}):'
+        tag:
+          html: 'You left the following comment on the tag %{tag_link}:'
+          text: 'You left the following comment on the tag %{tag} (%{tag_url}):'
+      subject:
+        chapter: "[%{app_name}] Comment you left on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Comment you left on %{title}"
+        tag: "[%{app_name}] Comment you left on the tag %{name}"
+    edited_comment_notification:
+      chapter:
+        titled: 'Chapter %{position}: %{title}'
+        untitled: Chapter %{position}
+      content:
+        chapter:
+          html: "%{pseud_link} edited the following comment on %{chapter_link} of %{work_link}:"
+          titled_text: "%{pseud} edited the following comment on Chapter %{chapter_position}: %{chapter_title} of %{work} (%{chapter_url}):"
+          untitled_text: "%{pseud} edited the following comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} edited the following comment on %{commentable_link}:"
+          text: "%{pseud} edited the following comment on %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} edited the following comment on the tag %{tag_link}:"
+          text: "%{pseud} edited the following comment on the tag %{tag} (%{tag_url}):"
+      subject:
+        chapter: "[%{app_name}] Edited comment on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Edited comment on %{title}"
+        tag: "[%{app_name}] Edited comment on the tag %{name}"
+    edited_comment_reply_notification:
+      chapter:
+        titled: 'Chapter %{position}: %{title}'
+        untitled: Chapter %{position}
+      content:
+        chapter:
+          html: "%{pseud_link} edited their reply to your comment on %{chapter_link} of %{work_link}:"
+          titled_text: "%{pseud} edited their reply to your comment on Chapter %{chapter_position}: %{chapter_title} of %{work} (%{chapter_url}):"
+          untitled_text: "%{pseud} edited their reply to your comment on Chapter %{chapter_position} of %{work} (%{chapter_url}):"
+        other:
+          html: "%{pseud_link} edited their reply to your comment on %{commentable_link}:"
+          text: "%{pseud} edited their reply to your comment on %{title} (%{commentable_url}):"
+        tag:
+          html: "%{pseud_link} edited their reply to your comment on the tag %{tag_link}:"
+          text: "%{pseud} edited their reply to your comment on the tag %{tag} (%{tag_url}):"
+      subject:
+        chapter: "[%{app_name}] Edited reply to your comment on Chapter %{position} of %{title}"
+        other: "[%{app_name}] Edited reply to your comment on %{title}"
+        tag: "[%{app_name}] Edited reply to your comment on the tag %{name}"
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -492,6 +607,24 @@ en:
         other: We regret to inform you that your request for %{count} new invitations cannot be fulfilled at this time.
       reason: 'Your request was:'
       subject: "[%{app_name}] Additional invitation request declined"
+    invited_to_collection_notification:
+      approve:
+        collection_items_page: Collection Items page
+        html: To approve or reject this request, please visit your %{collection_items_page_link}.
+        text: 'To approve or reject this request, please visit your Collection Items page: %{collection_items_page_url}.'
+      subject: "[%{app_name}][%{collection_title}] Request to include work in a collection"
+      would_like_to_include:
+        html: The collection maintainers of %{collection_link} would like to include your work %{work_link} in their collection!
+        text: The collection maintainers of "%{collection_title}" (%{collection_url}) would like to include your work "%{work_title}" (%{work_url}) in their collection!
+    potential_match_generation_notification:
+      finished_generating:
+        html: We have finished generating potential assignments for your gift exchange %{collection_link}.
+        text: We have finished generating potential assignments for your gift exchange "%{collection_title}" (%{collection_url}).
+      matches_available:
+        html: The potential matches and set assignments are available on its %{matching_page_link}.
+        matching_page: Matching page
+        text: 'The potential matches and set assignments are available on its Matching page: %{matching_page_url}.'
+      subject: "[%{app_name}][%{collection_title}] Potential assignment generation complete"
     recipient_notification:
       collection:
         html: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!

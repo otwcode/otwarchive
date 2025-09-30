@@ -30,10 +30,10 @@
                         collection_assignments_path(@collection, fulfilled: true) %>
   </li>
   <li>
-    <%= link_to ts("Default All Incomplete"),
+    <%= button_to ts("Default All Incomplete"),
                 default_all_collection_assignments_path(@collection),
                 data: { confirm: ts("Are you sure? This will mark all unposted or unapproved assignments in the challenge as defaulting.") },
-                role: "button" %>
+                method: :patch %>
   </li>
   <li>
     <%= link_to ts("Purge Assignments"),

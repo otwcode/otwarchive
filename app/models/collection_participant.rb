@@ -3,6 +3,8 @@ class CollectionParticipant < ApplicationRecord
   has_one :user, through: :pseud
   belongs_to :collection
 
+  after_commit :update_collection_index
+
   PARTICIPANT_ROLES = ["None", "Owner", "Moderator", "Member", "Invited"]
   NONE = PARTICIPANT_ROLES[0]
   OWNER = PARTICIPANT_ROLES[1]
@@ -53,5 +55,13 @@ class CollectionParticipant < ApplicationRecord
 
   def user_allowed_to_promote?(user, role)
     (role == MEMBER || role == NONE) ? self.collection.user_is_maintainer?(user) : self.collection.user_is_owner?(user)
+  end
+
+  def update_collection_index
+    return unless MAINTAINER_ROLES.include?(participant_role) || MAINTAINER_ROLES.include?(participant_role_before_last_save)
+
+    ids = [collection_id]
+    ids += collection.children.pluck(:id) if collection.present?
+    IndexQueue.enqueue_ids(Collection, ids.compact, :main)
   end
 end

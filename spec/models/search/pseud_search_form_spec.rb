@@ -115,7 +115,6 @@ describe PseudSearchForm, pseud_search: true do
 
     it "updates when bookmarked series changes restricted status" do
       series = create(:series)
-      serial_work = create(:serial_work, series: series)
       expect(series.restricted).to be_falsy
 
       bookmark = create(:bookmark, bookmarkable_id: series.id, bookmarkable_type: "Series", pseud: bookmarker)
@@ -130,7 +129,7 @@ describe PseudSearchForm, pseud_search: true do
       expect(result.bookmarks_count).to eq 1
 
       # Series becomes restricted
-      serial_work.work.update_attribute(:restricted, true)
+      series.works.first.update_attribute(:restricted, true)
       series.reload
       expect(series.restricted).to be_truthy
       run_all_indexing_jobs
@@ -146,7 +145,7 @@ describe PseudSearchForm, pseud_search: true do
 
     {
       Work: :work,
-      Series: :series_with_a_work,
+      Series: :series,
       ExternalWork: :external_work
     }.each_pair do |type, factory|
       it "updates when bookmarked #{type} changes hidden by admin status" do

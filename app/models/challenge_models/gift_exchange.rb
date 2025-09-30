@@ -4,7 +4,6 @@ class GiftExchange < ApplicationRecord
 
   override_datetime_setters
 
-  belongs_to :collection
   has_one :collection, as: :challenge
 
   # limits the kind of prompts users can submit

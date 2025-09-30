@@ -1,4 +1,95 @@
---- 
+---
+user_00001:
+  encrypted_password: <%= Devise::Encryptor.digest(User, "testuser") %>
+  created_at: 2008-11-09 01:26:02 Z
+  confirmed_at: 2008-11-09 01:26:02 Z
+  updated_at: 2010-08-11 21:37:42 Z
+  confirmation_token:
+  invitation_id:
+  id: 1
+  suspended: false
+  suspended_until:
+  login: testuser
+  out_of_invites: true
+  email: user1@example.com
+  banned: false
+user_00002:
+  encrypted_password: <%= Devise::Encryptor.digest(User, "testuser") %>
+  created_at: 2008-11-09 01:26:02 Z
+  confirmed_at: 2008-11-09 01:26:02 Z
+  updated_at: 2010-01-09 13:55:01 Z
+  confirmation_token:
+  invitation_id:
+  id: 2
+  suspended: false
+  suspended_until:
+  login: testuser2
+  out_of_invites: true
+  email: user2@example.com
+  banned: false
+user_00003:
+  encrypted_password: <%= Devise::Encryptor.digest(User, "testuser") %>
+  created_at: 2008-11-09 01:26:02 Z
+  confirmed_at: 2008-11-09 01:26:02 Z
+  updated_at: 2009-03-02 20:16:34 Z
+  confirmation_token:
+  invitation_id:
+  id: 3
+  suspended: false
+  suspended_until:
+  login: testuser3
+  out_of_invites: true
+  email: user3@example.com
+  banned: false
+user_00004:
+  encrypted_password: <%= Devise::Encryptor.digest(User, "testuser") %>
+  created_at: 2008-11-09 01:26:02 Z
+  confirmed_at: 2008-11-09 01:26:02 Z
+  updated_at: 2008-11-09 01:26:02 Z
+  confirmation_token:
+  invitation_id:
+  id: 4
+  suspended: false
+  suspended_until:
+  login: testuser4
+  out_of_invites: true
+  email: user4@example.com
+  banned: false
+user_00024:
+  encrypted_password: <%= Devise::Encryptor.digest(User, "testuser") %>
+  created_at: 2009-12-12 21:07:42 Z
+  confirmed_at: 2009-12-12 21:07:47 Z
+  updated_at: 2009-12-12 21:07:47 Z
+  id: 24
+  suspended: false
+  banned: false
+  login: testofficial
+  email: official@example.com
+user_00026:
+  encrypted_password: <%= Devise::Encryptor.digest(User, "testuser") %>
+  created_at: 2009-12-12 21:08:12 Z
+  confirmed_at: 2009-12-12 21:08:19 Z
+  updated_at: 2009-12-12 21:08:19 Z
+  confirmation_token:
+  invitation_id:
+  id: 26
+  suspended: false
+  banned: true
+  login: testbanned
+  email: banned@example.com
+user_00033:
+  encrypted_password: <%= Devise::Encryptor.digest(User, "testuser") %>
+  created_at: 2009-12-17 11:37:58 Z
+  confirmed_at: 2009-12-17 22:03:16 Z
+  updated_at: 2009-12-17 22:03:17 Z
+  confirmation_token:
+  invitation_id:
+  id: 33
+  suspended: true
+  suspended_until: 2125-04-12 17:00:00 Z
+  banned: false
+  login: testsuspended
+  email: suspended@example.com
 user_00025: 
   password_salt: 2aa64c10d3ea67188845a59d3d9d411d52301838
   created_at: 2009-12-12 21:07:52 Z
@@ -12,7 +103,7 @@ user_00025:
   suspended_until: 
   login: badjuju
   out_of_invites: true
-  email: mjsunbound@gmail.com
+  email: badjuju@example.com
   banned: false
 user_00014: 
   password_salt: 9a5dd70dd81851f215947e1bd1ec3f37e2ecec6b
@@ -29,36 +120,6 @@ user_00014:
   out_of_invites: true
   email: Uriel@example.com
   banned: false
-user_00003: 
-  password_salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  created_at: 2008-11-09 01:26:02 Z
-  confirmed_at: 2008-11-09 01:26:02 Z
-  encrypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
-  updated_at: 2009-03-02 20:16:34 Z
-  confirmation_token: 
-  invitation_id: 
-  id: 3
-  suspended: false
-  suspended_until: 
-  login: testuser3
-  out_of_invites: true
-  email: user3@example.com
-  banned: false
-user_00004: 
-  password_salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  created_at: 2008-11-09 01:26:02 Z
-  confirmed_at: 2008-11-09 01:26:02 Z
-  encrypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
-  updated_at: 2008-11-09 01:26:02 Z
-  confirmation_token: 
-  invitation_id: 
-  id: 4
-  suspended: false
-  suspended_until: 
-  login: testuser4
-  out_of_invites: true
-  email: user4@example.com
-  banned: false
 user_00015: 
   password_salt: 787e39d8cc37646fb25274a444a48abbafeebd7a
   created_at: 2009-07-17 22:44:23 Z
@@ -72,22 +133,7 @@ user_00015:
   suspended_until: 
   login: parenthetical
   out_of_invites: true
-  email: sarkymoocow@example.com
-  banned: false
-user_00026: 
-  password_salt: 631dcaa51dd023f4cdcdf2747a6322fc2e108ceb
-  created_at: 2009-12-12 21:08:12 Z
-  confirmed_at: 2009-12-12 21:08:19 Z
-  encrypted_password: c6d89e7b1d2ea8db07513f7c6cb1db4e9ad395c9
-  updated_at: 2009-12-12 21:08:19 Z
-  confirmation_token: 
-  invitation_id: 
-  id: 26
-  suspended: false
-  suspended_until: 
-  login: DawningStar
-  out_of_invites: true
-  email: dawn@ccaonline.com
+  email: parenthetical@example.com
   banned: false
 user_00027: 
   password_salt: 5a432a7543be536b62f1f51fee2255d0483c3b9d
@@ -102,7 +148,7 @@ user_00027:
   suspended_until: 
   login: yulechatismadeofawesome
   out_of_invites: true
-  email: attempt-unique@yahoo.com
+  email: attempt-unique@example.com
   banned: false
 user_00016: 
   password_salt: 47bfebbcd173627903284aced46fc6efea0c9eb4
@@ -147,7 +193,7 @@ user_00006:
   suspended_until: 
   login: orphan_account
   out_of_invites: true
-  email: 
+  email: orphan_account@example.com
   banned: false
 user_00017: 
   password_salt: 97730ef8bcd524fd18e4b9237fc05130a177c413
@@ -177,7 +223,7 @@ user_00028:
   suspended_until: 
   login: Shusu
   out_of_invites: true
-  email: boo@moog.com
+  email: shusu@example.com
   banned: false
 user_00029: 
   password_salt: 73c1309f8eafb8a949355857d46f682a36854cc3
@@ -192,7 +238,7 @@ user_00029:
   suspended_until: 
   login: whetherwoman
   out_of_invites: true
-  email: marina@nbtsc.org
+  email: whetherwoman@example.com
   banned: false
 user_00007: 
   password_salt: 2239939fc04c4d2a0d2b5ceedfc1727c3e527b63
@@ -222,7 +268,7 @@ user_00030:
   suspended_until: 
   login: Lizifer
   out_of_invites: true
-  email: elmiller00@gmail.com
+  email: lizifer@example.com
   banned: false
 user_00031: 
   password_salt: 570b4a55a931c7a1c5be1f5608ee825a88b51e37
@@ -237,7 +283,7 @@ user_00031:
   suspended_until: 
   login: tassos
   out_of_invites: true
-  email: savyln7@gmail.com
+  email: tassos@example.com
   banned: false
 user_00019: 
   password_salt: 
@@ -252,7 +298,7 @@ user_00019:
   suspended_until: 
   login: Zee
   out_of_invites: true
-  email: zooey.glass04@gmail.com
+  email: zee@example.com
   banned: false
 user_00008: 
   password_salt: 6e2ee018720464deaa10520d4b3f059710eb2b8d
@@ -282,7 +328,7 @@ user_00020:
   suspended_until: 
   login: hh_ook
   out_of_invites: true
-  email: hh-ook@gmail.com
+  email: hh@example.com
   banned: false
 user_00021: 
   password_salt: 56e1aeae2f94163b784b694f4d22f6452241d543
@@ -342,22 +388,7 @@ user_00032:
   suspended_until: 
   login: Enigel
   out_of_invites: true
-  email: enigel@gmail.com
-  banned: false
-user_00033: 
-  password_salt: feef278f6c8d201c0cb4c37253833f60f2090f8e
-  created_at: 2009-12-17 11:37:58 Z
-  confirmed_at: 2009-12-17 22:03:16 Z
-  encrypted_password: 1b719cd8460f4819cdf86576edccf8579b5efda7
-  updated_at: 2009-12-17 22:03:17 Z
-  confirmation_token: 
-  invitation_id: 
-  id: 33
-  suspended: false
-  suspended_until: 
-  login: invitest
-  out_of_invites: true
-  email: liminimail@googlemail.com
+  email: enigel@example.com
   banned: false
 user_00011: 
   password_salt: 21f8f1eb19a6dd5b649b451bb4386841506a387d
@@ -387,7 +418,7 @@ user_00022:
   suspended_until: 
   login: Jenn_Calaelen
   out_of_invites: true
-  email: jenn.calaelen@googlemail.com
+  email: jenn@example.com
   banned: false
 user_00023: 
   password_salt: b510f1f2ac546e9b85d0d17dec60f590992715ca
@@ -402,7 +433,7 @@ user_00023:
   suspended_until: 
   login: Llwyden
   out_of_invites: true
-  email: llwyden@trickster.org
+  email: llwyden@example.com
   banned: false
 user_00012: 
   password_salt: c5e416e746f06c3c68b542ed3223d89ce9be52cf
@@ -419,35 +450,6 @@ user_00012:
   out_of_invites: true
   email: zooey@example.com
   banned: false
-user_00001: 
-  encrypted_password: <%= Devise::Encryptor.digest(User, 'testuser') %>
-  created_at: 2008-11-09 01:26:02 Z
-  confirmed_at: 2008-11-09 01:26:02 Z
-  updated_at: 2010-08-11 21:37:42 Z
-  confirmation_token: 
-  invitation_id: 
-  id: 1
-  suspended: false
-  suspended_until: 
-  login: testuser
-  out_of_invites: true
-  email: user1@example.com
-  banned: false
-user_00002: 
-  password_salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  created_at: 2008-11-09 01:26:02 Z
-  confirmed_at: 2008-11-09 01:26:02 Z
-  encrypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1
-  updated_at: 2010-01-09 13:55:01 Z
-  confirmation_token: 
-  invitation_id: 
-  id: 2
-  suspended: false
-  suspended_until: 
-  login: testuser2
-  out_of_invites: true
-  email: user2@example.com
-  banned: false
 user_00013: 
   password_salt: 5860eac2a470dbee25aa5a4ba8a4e6b841c38c37
   created_at: 2008-12-06 23:29:42 Z
@@ -462,19 +464,4 @@ user_00013:
   login: Jessica
   out_of_invites: true
   email: Jessica@example.com
-  banned: false
-user_00024: 
-  password_salt: 943292d06d1761ac3c7e8585a5b728db1f82a930
-  created_at: 2009-12-12 21:07:42 Z
-  confirmed_at: 2009-12-12 21:07:47 Z
-  encrypted_password: 4cb86274abca59515b0060f727e57ec32ac2a878
-  updated_at: 2009-12-12 21:07:47 Z
-  confirmation_token: 
-  invitation_id: 
-  id: 24
-  suspended: false
-  suspended_until: 
-  login: moriann
-  out_of_invites: true
-  email: aaa@bbb.com
   banned: false

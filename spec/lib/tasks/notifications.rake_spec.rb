@@ -2,6 +2,9 @@ require "spec_helper"
 
 describe "rake notifications:send_tos_update" do
   include ActiveJob::TestHelper
+  def queue_adapter_for_test
+    ActiveJob::QueueAdapters::TestAdapter.new
+  end
 
   let(:admin_post) { create(:admin_post) }
 

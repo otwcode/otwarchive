@@ -1,5 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= t(".page_heading") %></h2>
+<%= error_messages_for @invitation %>
 <!--/descriptions-->
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
@@ -38,22 +39,25 @@
   </fieldset>
 <% end %>
 
-<%= form_tag url_for(controller: "admin/admin_invitations", action: :grant_invites_to_users), class: "bulk invitation simple post", autocomplete: "off" do %>
-  <fieldset>
-    <h3 class="heading"><%= t(".grant_invites.heading") %></h3>
-    <dl>
-      <dt><%= label_tag "invitation[number_of_invites]", t(".grant_invites.number_of_invitations") %></dt>
-      <dd><%= text_field_tag "invitation[number_of_invites]" %></dd>
-      <dt><%= label_tag "invitation[user_group]", t(".grant_invites.users") %></dt>
-      <dd>
-        <%= select_tag "invitation[user_group]",
-              options_for_select([[t(".grant_invites.all"), "All"],
-                                  [t(".grant_invites.with_no_unused"), "With no unused invitations"]],
-                "All") %>
-      </dd>
-      <dt class="landmark"><%= t(".grant_invites.landmark_submit") %></dt>
-      <dd class="submit actions"><%= submit_tag t(".grant_invites.generate_invitations") %></dd>
-  </fieldset>
+<% if policy(Invitation).grant_invites_to_users? %>
+  <%= form_tag url_for(controller: "admin/admin_invitations", action: :grant_invites_to_users), class: "bulk invitation simple post", autocomplete: "off" do %>
+    <fieldset>
+      <h3 class="heading"><%= t(".grant_invites.heading") %></h3>
+      <dl>
+        <dt><%= label_tag "invitation[number_of_invites]", t(".grant_invites.number_of_invitations") %></dt>
+        <dd><%= text_field_tag "invitation[number_of_invites]" %></dd>
+        <dt><%= label_tag "invitation[user_group]", t(".grant_invites.users") %></dt>
+        <dd>
+          <%= select_tag "invitation[user_group]",
+                options_for_select([[t(".grant_invites.all"), "All"],
+                                    [t(".grant_invites.with_no_unused"), "With no unused invitations"]],
+                  "All") %>
+        </dd>
+        <dt class="landmark"><%= t(".grant_invites.landmark_submit") %></dt>
+        <dd class="submit actions"><%= submit_tag t(".grant_invites.generate_invitations") %></dd>
+      </dl>
+    </fieldset>
+  <% end %>
 <% end %>
 
 <%= form_tag url_for(controller: "admin/admin_invitations", action: :find), class: "invitation simple search", autocomplete: "off", method: :get do %>

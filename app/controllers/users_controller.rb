@@ -35,21 +35,21 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    @page_subtitle = t(".browser_title") 
+    @page_subtitle = t(".browser_title")
     authorize @user.profile if logged_in_as_admin?
   end
 
   def change_email
-    @page_subtitle = t(".browser_title")
+    @page_subtitle = t(".page_title")
   end
 
   def change_password
-    @page_subtitle = t(".browser_title")
+    @page_subtitle = t(".page_title")
   end
 
   def change_username
     authorize @user if logged_in_as_admin?
-    @page_subtitle = t(".browser_title")
+    @page_subtitle = t(".page_title")
   end
 
   def changed_password
@@ -79,6 +79,11 @@ class UsersController < ApplicationController
     unless logged_in_as_admin? || @user.valid_password?(params[:password])
       flash[:error] = t(".user.incorrect_password_html", contact_support_link: helpers.link_to(t(".user.contact_support"), new_feedback_report_path))
       render(:change_username) && return
+    end
+
+    if @new_login == @user.login
+      flash.now[:error] = t(".new_username_must_be_different")
+      render :change_username and return
     end
 
     old_login = @user.login
@@ -407,8 +412,7 @@ class UsersController < ApplicationController
 
   def profile_params
     params.require(:profile_attributes).permit(
-      :title, :location, :"date_of_birth(1i)", :"date_of_birth(2i)",
-      :"date_of_birth(3i)", :date_of_birth, :about_me, :ticket_number
+      :title, :about_me, :ticket_number
     )
   end
 end
