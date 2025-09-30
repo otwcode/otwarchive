@@ -1,7 +1,7 @@
 <% @chapter = chapter if defined?(chapter) %>
 
 <div class="meta group">
-  <h2 class="heading"><%= @chapter.chapter_title.html_safe %></h2>
+  <h2 class="heading"><%= @chapter.full_chapter_title.html_safe %></h2>
   <% if (!@chapter.pseuds.blank? && (@chapter.pseuds != @work.pseuds) && (!@work.anonymous?)) %>
     <%# only display byline if different from the main byline %>
     <p class="byline"><%= t(".chapter_byline_html", byline_names_link: byline(@chapter, only_path: false)) %></p>
