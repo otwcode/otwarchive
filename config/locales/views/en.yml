@@ -2224,11 +2224,11 @@ en:
       request_for_confirmation: Changing your email will send a request for confirmation to your new email address and a notification to your current email address.
       resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
     change_password:
-      page_heading: Change Password
-      new_password: New Password
-      old_password: Old password
-      password_requirements: "%{minimum} to %{maximum} characters"
       confirm_password: Confirm new password
+      new_password: New password
+      old_password: Old password
+      page_heading: Change Password
+      password_requirements: "%{minimum} to %{maximum} characters"
       submit: Submit
     change_username:
       account_faq: Account FAQ
@@ -2319,10 +2319,10 @@ en:
       new_work: Post New
     passwords:
       edit:
-        page_heading: Change Password
-        new_password: New Password
-        password_requirements: "%{minimum} to %{maximum} characters"
         confirm_password: Confirm new password
+        new_password: New password
+        page_heading: Change Password
+        password_requirements: "%{minimum} to %{maximum} characters"
         submit: Submit
       new:
         email_or_username_html: Email address %{or} username
