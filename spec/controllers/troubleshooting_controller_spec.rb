@@ -174,8 +174,8 @@ describe TroubleshootingController do
 
       it "reindexes everything related to the tag and redirects" do
         bookmark = create(:bookmark, tags: [tag])
-        series = create(:series)
-        work = create(:work, fandoms: [tag], series: [series])
+        work = create(:work, fandoms: [tag])
+        series = create(:series, works: [work])
         external_work = create(:external_work, fandoms: [tag])
         pseud = work.pseuds.first
 
