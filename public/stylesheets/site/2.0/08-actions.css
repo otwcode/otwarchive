@@ -187,10 +187,6 @@ dl.stats + .landmark + .actions, .mystery .summary + .landmark + .actions {
   float: none;
 }
 
-.chapter .secondary, .download .secondary {
-  top: 3.5em;
-}
-
 .dashboard .landmark {
   clear: right;
 }
@@ -220,6 +216,62 @@ dd.any label.action {
 
 dl.index p.actions {
   margin: 0;
+}
+
+/* context: work navigation actions with secondary navigation */
+
+.download {
+  display: block;
+  padding: 0.375em 0 0.643em;
+  margin-top: 0;
+}
+
+.download .secondary {
+  position: static;
+}
+
+.download, .javascript .download .secondary {
+  background: #fff;
+  border: 2px solid #bbb;
+    box-shadow: 2px 2px 5px #bbb;
+}
+
+.download .secondary, .javascript .download {
+  background: none transparent;
+  border: none;
+    box-shadow: none;
+}
+
+.javascript .chapter, .javascript .download {
+  position: relative;
+}
+
+.javascript .download {
+  display: inline-block;
+  margin-bottom: 0;
+  padding: 0 0 0 0.25em;
+}
+
+.javascript .chapter .secondary, .javascript .download .secondary {
+  min-width: 100%;
+  position: absolute;
+  right: 0;
+    box-sizing: border-box;
+}
+
+/* button height of 1.286em + 0.5em total vertical padding + 0.125em for fun */
+.javascript .chapter .secondary {
+  top: 1.911em;
+  width: 150%;
+}
+
+/* button height of 1.286em + 0.5em total vertical padding + 0.643em top margin on menu + 0.125em for fun */
+.javascript .download .secondary {
+  top: 2.554em;
+}
+
+.javascript .download .secondary li, .javascript .download .secondary a {
+  display: block;
 }
 
 /* END== */

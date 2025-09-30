@@ -1,6 +1,6 @@
 <!-- BEGIN navigation -->
 <h3 class="landmark heading"><%= ts("Actions") %></h3>
-<ul class="work navigation actions" role="menu">
+<ul class="work navigation actions">
   <% if logged_in_as_admin? || permit?("tag_wrangler") %>
     <li class="reindex"><%= link_to ts("Troubleshoot"), work_troubleshooting_path(@work) %></li>
   <% end %>
@@ -24,11 +24,9 @@
       <li class="chapter next"><%= link_to h(ts("Next Chapter")) + ' &#8594;'.html_safe, [@work, @next_chapter, :anchor => "workskin"] %></li>
     <% end %>
 
-    <li class="chapter" aria-haspopup="true">
-      <noscript>
-        <%= link_to ts('Chapter Index'), navigate_work_path(@work) %>
-      </noscript>
-      <a class="hidden" href="#"><%= ts('Chapter Index') %></a>
+    <li class="chapter">
+      <noscript><%= link_to ts('Chapter Index'), navigate_work_path(@work) %></noscript>
+      <button class="hidden"><%= ts('Chapter Index') %></button>
       <ul id="chapter_index" class="expandable secondary hidden">
         <li>
           <%= form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do %>
@@ -109,8 +107,9 @@
   <% end %>
 
   <% if downloadable? && AdminSetting.current.downloads_enabled? %>
-    <li class="download" aria-haspopup="true">
-      <a href="#"><%= ts("Download") %></a>
+    <li class="download">
+      <noscript><h4 class="heading">Download</h4></noscript>
+      <button class="hidden"><%= ts("Download") %></button>
       <ul class="expandable secondary">
         <% ArchiveConfig.DOWNLOAD_FORMATS.each do |format| %>
           <li><%= link_to ts(format.upcase), download_url_for_work(@work, format) %></li>
