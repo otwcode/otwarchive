@@ -2260,6 +2260,13 @@ en:
         other: You must use the link in the confirmation email in order to finish confirming your email change. If you don't confirm your request within %{count} days, the link will expire and your email address will not be changed.
       request_for_confirmation: Changing your email will send a request for confirmation to your new email address and a notification to your current email address.
       resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
+    change_password:
+      confirm_password: Confirm new password
+      new_password: New password
+      old_password: Old password
+      page_heading: Change Password
+      password_requirements: "%{minimum} to %{maximum} characters"
+      submit: Submit
     change_username:
       account_faq: Account FAQ
       caution: Please use this feature with caution.
@@ -2348,6 +2355,12 @@ en:
       invitations: Invitations
       new_work: Post New
     passwords:
+      edit:
+        confirm_password: Confirm new password
+        new_password: New password
+        page_heading: Change Password
+        password_requirements: "%{minimum} to %{maximum} characters"
+        submit: Submit
       new:
         email_or_username_html: Email address %{or} username
         instructions: If you've forgotten your password, we can send instructions that will allow you to reset it. Please tell us the username or email address you used when you signed up for your Archive account.
