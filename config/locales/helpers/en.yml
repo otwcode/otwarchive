@@ -2,7 +2,7 @@
 en:
   application_helper:
     text_limited_html: Plain text with limited HTML %{help_link}
-    text_limited_html_strip_images_html: Plain text with limited HTML %{help_link} Embedded images (&lt;img&gt; tags) will be displayed as HTML, including the image&#39;s source link and any alt text.
+    text_limited_html_strip_images_html: Plain text with limited HTML %{help_link} Embedded images (&lt;img&gt; tags) will be displayed as HTML, including the image's source link and any alt text.
   collections_helper:
     collection_item_approval_options:
       collection:
