@@ -287,7 +287,7 @@ Feature: Admin Actions to Manage Invitations
       | odo   | mybucket9  |
       And "dax" has "0" invitations
       And "odo" has "3" invitations
-      And I am logged in as an admin
+      And I am logged in as a super admin
     When I follow "Invite New Users"
       And I fill in "Number of invitations" with "2"
       And I select "All" from "Users"
@@ -302,7 +302,7 @@ Feature: Admin Actions to Manage Invitations
       | bashir | heytheredoc |
       And "dax" has "5" invitations
       And "bashir" has "0" invitations
-      And I am logged in as an admin
+      And I am logged in as a super admin
     When I follow "Invite New Users"
       And I fill in "Number of invitations" with "2"
       And I select "With no unused invitations" from "Users"
