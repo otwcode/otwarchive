@@ -21,9 +21,10 @@
 <% else %>
   <h3 class="heading"><%= t(".heading.instructions") %></h3>
   <div class="userstuff">
-    <% unless ArchiveConfig.STATUS_PAGE_URL.blank? %>
-      <p><%= t(".status.current_html", status_page_link: link_to(t(".status.status_page"), ArchiveConfig.STATUS_PAGE_URL)) %></p>
-    <% end %>
+    <p><%= t(".status.current_html",
+      status_page_link: link_to(t(".status.status_page"), "https://www.otwstatus.org"),
+      bluesky_link: link_to(t(".status.bluesky"), "https://bsky.app/profile/status.archiveofourown.org"),
+      tumblr_link: link_to(t(".status.tumblr"), "https://ao3org.tumblr.com")) %></p>
     <p><%= t(".abuse.reports_html", contact_link: link_to(t(".abuse.contact"), new_abuse_report_path)) %></p>
     <p><%= t(".reportable.intro") %></p>
     <ul>

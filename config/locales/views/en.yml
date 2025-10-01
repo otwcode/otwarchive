@@ -764,8 +764,10 @@ en:
         tag_changes: Requests to canonize or change tags
         work_problems: Works labeled with the wrong language or duplicate works
       status:
-        current_html: For current updates on Archive performance or downtime, please check our %{status_page_link}.
+        bluesky: '@status.archiveofourown.org'
+        current_html: For current updates on Archive performance or downtime, please check our %{status_page_link} and follow %{bluesky_link} on Bluesky or %{tumblr_link} on Tumblr.
         status_page: status page
+        tumblr: ao3org
   home:
     about:
       ao3:

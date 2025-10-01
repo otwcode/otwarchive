@@ -67,8 +67,6 @@ ALT_LOGO: 'Archive of Our Own'
 OTWLOGO: 'OTWLogo.png'
 OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes our creative engagement with media: participating and not just consuming.'
 
-STATUS_PAGE_URL: 'https://www.example.org/status'
-
 REVISION: ''
 ES_URL: 'http://127.0.0.1:9400'
 MEMCACHED_SERVERS: '127.0.0.1:11211'
