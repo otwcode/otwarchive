@@ -13,7 +13,7 @@ describe HtmlCleaner do
       context "#{field} is configured to allow media embeds" do
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com 
            vidders.net criticalcommons.org google.com podfic.com archive.org
-           open.spotify.com spotify.com 8tracks.com w.soundcloud.com soundcloud.com viddertube.com
+           open.spotify.com spotify.com w.soundcloud.com soundcloud.com viddertube.com
            bilibili.com player.bilibili.com 4shared.com/web/embed audio.com/embed/audio].each do |source|
 
           it "keeps embeds from #{source}" do
@@ -24,7 +24,7 @@ describe HtmlCleaner do
         end
 
         %w[youtube.com youtube-nocookie.com vimeo.com player.vimeo.com
-           archive.org 8tracks.com podfic.com
+           archive.org podfic.com
            open.spotify.com spotify.com w.soundcloud.com soundcloud.com vidders.net viddertube.com
            bilibili.com player.bilibili.com 4shared.com/web/embed audio.com/embed/audio].each do |source|
 

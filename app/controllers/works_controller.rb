@@ -338,9 +338,9 @@ class WorksController < ApplicationController
                                           include_drafts: true)
     end
     set_work_form_fields
+  end
 
-    return unless params['remove'] == 'me'
-
+  def remove_user_creatorship
     pseuds_with_author_removed = @work.pseuds - current_user.pseuds
 
     if pseuds_with_author_removed.empty?

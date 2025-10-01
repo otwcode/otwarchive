@@ -21,6 +21,9 @@ en:
         bookmark: Bookmarker approval status
         work: Creator approval status
   comments_helper:
+    actions:
+      cancel: Cancel
+      delete: Delete
     chapter_link_html: Chapter %{position}
     comment_link_with_commentable_name:
       on_admin_post_html: Comment on the news post %{title}
@@ -60,3 +63,5 @@ en:
       preview: Preview
       save_draft: Save Draft
       update: Update
+    mark_as_read_button: Mark as Read
+    mark_for_later_button: Mark for Later

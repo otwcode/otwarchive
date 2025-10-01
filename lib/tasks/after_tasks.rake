@@ -579,5 +579,45 @@ namespace :After do
       end
     end
   end
+
+  desc "tags existing collections with the fandoms of the collected works and bookmarks"
+  task(add_collection_tags: :environment) do
+    collections = Collection.all
+    total_batches = (collections.count + 999) / 1000
+
+    def approved_taggables(collection)
+      bookmark_visible_revealed = Bookmark.is_public.join_bookmarkable.where(
+        "(works.posted = 1 AND works.restricted = 0 AND works.hidden_by_admin = 0 AND works.in_unrevealed_collection = 0) OR
+        (series.restricted = 0 AND series.hidden_by_admin = 0) OR
+        (external_works.hidden_by_admin = 0)"
+      )
+      Work.visible_to_all.revealed.in_collection(collection).includes(:fandoms) + \
+        bookmark_visible_revealed.in_collection(collection).includes(:fandoms) + \
+        bookmark_visible_revealed.in_collection(collection).includes(bookmarkable: :fandoms).filter_map { |bookmark| bookmark.bookmarkable unless bookmark.bookmarkable.respond_to?(:unrevealed?) && bookmark.bookmarkable.unrevealed? }
+    end
+
+    Collection.no_touching do
+      collections.find_in_batches.with_index do |batch, index|
+        batch.each do |collection|
+          tags = approved_taggables(collection)
+            .flat_map { |taggable| taggable.try(:fandoms) || taggable.try(:work_tags)&.where(type: "Fandom") || [] }
+            .uniq
+
+          next if tags.empty?
+
+          crossover = FandomCrossover.check_for_crossover(tags)
+          collection.update_attribute(:multifandom, crossover) if crossover
+
+          if tags.length > ArchiveConfig.COLLECTION_TAGS_MAX
+            collection.update(multifandom: crossover)
+          else
+            collection.tags << tags
+          end
+        end
+
+        puts "Collection batch #{index + 1} of #{total_batches} tagged"
+      end
+    end
+  end
   # This is the end that you have to put new tasks above.
 end
