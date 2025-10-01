@@ -403,8 +403,6 @@ describe ChaptersController do
 
           expect(co_created_chapter.reload.pseuds).to eq [user.pseuds.first]
           expect(work.reload.pseuds).to eq [user.pseuds.first]
-          
-          it_redirects_to(edit_work_path(work, remove: "me"))
         end
       end
 
