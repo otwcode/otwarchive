@@ -281,8 +281,8 @@ en:
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You cannot post, edit, or delete content until your suspension has ended. Please check your email or %{contact_abuse_link} for more information.
   works:
     create:
-      posted_notice: Work was successfully posted. It should appear in work listings within the next few minutes.
       draft_notice_html: Draft was successfully created. It will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+      posted_notice: Work was successfully posted. It should appear in work listings within the next few minutes.
     drafts:
       page_title: "%{username} - Drafts"
     edit_tags:
