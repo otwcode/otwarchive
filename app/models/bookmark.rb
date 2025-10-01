@@ -7,8 +7,8 @@ class Bookmark < ApplicationRecord
   belongs_to :bookmarkable, polymorphic: true, inverse_of: :bookmarks
   belongs_to :pseud, optional: false
 
-  validates_length_of :bookmarker_notes,
-    maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
+  validates :bookmarker_notes,
+            length: { maximum: ArchiveConfig.NOTES_MAX, too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX) }
 
   validate :not_already_bookmarked_by_user, on: :create
   def not_already_bookmarked_by_user
@@ -42,17 +42,17 @@ class Bookmark < ApplicationRecord
 
   scope :join_work, -> {
     joins("LEFT JOIN works ON (bookmarks.bookmarkable_id = works.id AND bookmarks.bookmarkable_type = 'Work')").
-    merge(Work.visible_to_all)
+      merge(Work.visible_to_all)
   }
 
   scope :join_series, -> {
     joins("LEFT JOIN series ON (bookmarks.bookmarkable_id = series.id AND bookmarks.bookmarkable_type = 'Series')").
-    merge(Series.visible_to_all)
+      merge(Series.visible_to_all)
   }
 
   scope :join_external_works, -> {
     joins("LEFT JOIN external_works ON (bookmarks.bookmarkable_id = external_works.id AND bookmarks.bookmarkable_type = 'ExternalWork')").
-    merge(ExternalWork.visible_to_all)
+      merge(ExternalWork.visible_to_all)
   }
 
   scope :join_bookmarkable, -> {
@@ -115,10 +115,10 @@ class Bookmark < ApplicationRecord
     elsif !user.is_a?(User)
       visible_to_all
     else
-      select("DISTINCT bookmarks.*").
-      visible_to_registered_user.
-      joins("JOIN pseuds as p1 ON p1.id = bookmarks.pseud_id JOIN users ON users.id = p1.user_id").
-      where("bookmarks.hidden_by_admin = 0 OR users.id = ?", user.id)
+      select("DISTINCT bookmarks.*")
+        .visible_to_registered_user
+        .joins("JOIN pseuds as p1 ON p1.id = bookmarks.pseud_id JOIN users ON users.id = p1.user_id")
+        .where("bookmarks.hidden_by_admin = 0 OR users.id = ?", user.id)
     end
   }
 
@@ -126,10 +126,10 @@ class Bookmark < ApplicationRecord
   scope :visible, -> { visible_to_user(User.current_user) }
 
   before_destroy :invalidate_bookmark_count
-  after_save :invalidate_bookmark_count, :update_pseud_index
+  after_save :invalidate_bookmark_count, :update_pseud_and_collection_index
 
   after_create :update_work_stats
-  after_destroy :update_work_stats, :update_pseud_index
+  after_destroy :update_work_stats, :update_pseud_and_collection_index
 
   def invalidate_bookmark_count
     work = Work.where(id: self.bookmarkable_id)
@@ -138,10 +138,11 @@ class Bookmark < ApplicationRecord
     end
   end
 
-  # We index the bookmark count, so if it should change, update the pseud
-  def update_pseud_index
+  # We index the bookmark count for pseuds and collections, so update those if they should change
+  def update_pseud_and_collection_index
     return unless destroyed? || saved_change_to_id? || saved_change_to_private? || saved_change_to_hidden_by_admin?
     IndexQueue.enqueue_id(Pseud, pseud_id, :background)
+    IndexQueue.enqueue_ids(Collection, collection_ids, :background)
   end
 
   def visible?(current_user=User.current_user)

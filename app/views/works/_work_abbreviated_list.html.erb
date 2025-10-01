@@ -4,7 +4,7 @@
 <dl class="work index group">
   <% works.each do |work| tag_groups = work.tag_groups %>
     <dt>
-      <%= link_to work.title.html_safe, work %>
+      <%= link_to work.title, work %>
       (<%= tag_groups["Fandom"].collect {|tag| link_to_tag_works(tag) }.join(', ').html_safe %>)
     </dt>
     <dd>

@@ -8,10 +8,10 @@ module OtwSanitize
   class EmbedSanitizer
     ALLOWLIST_REGEXES = {
       "4shared": %r{^4shared\.com/web/embed},
+      audiocom: %r{^audio\.com/embed/audio/},
       archiveorg: %r{^archive\.org/embed/},
       bilibili: %r{^(player\.)?bilibili\.com/},
       criticalcommons: %r{^criticalcommons\.org/},
-      eighttracks: %r{^8tracks\.com/},
       google: %r{^google\.com/},
       podfic: %r{^podfic\.com/},
       soundcloud: %r{^(w\.)?soundcloud\.com/},
@@ -28,7 +28,7 @@ module OtwSanitize
     ].freeze
 
     SUPPORTS_HTTPS = %i[
-      4shared
+      4shared audiocom
       archiveorg bilibili eighttracks podfic
       soundcloud spotify viddersnet viddertube vimeo youtube
     ].freeze

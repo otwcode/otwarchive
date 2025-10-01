@@ -64,7 +64,7 @@ Scenario: Inbox has the expected browser page title
 
   When I am logged in as "boxer"
     And I go to boxer's inbox page
-  Then I should see the page title "Show Inbox | Example Archive"
+  Then I should see the page title "boxer - Inbox | Example Archive"
 
 Scenario: New tag set page has the expected browser page title
 

@@ -11,6 +11,7 @@ describe Admin::AdminUsersController do
 
   manage_roles = %w[superadmin legal open_doors policy_and_abuse support tag_wrangling].freeze
   search_roles = %w[superadmin legal open_doors policy_and_abuse support tag_wrangling].freeze
+  search_past_roles = %w[superadmin open_doors policy_and_abuse support tag_wrangling].freeze
 
   shared_examples "an action unauthorized admins can't access" do |authorized_roles:|
     before { fake_login_admin(admin) }
@@ -75,6 +76,50 @@ describe Admin::AdminUsersController do
 
       it_behaves_like "an action authorized admins can access",
                       authorized_roles: search_roles
+    end
+
+    context "when passing search_past", user_search: true do
+      subject { -> { get :index, params: { name: "old", search_past: "1" } } }
+      let(:user) { create(:user, login: "old") }
+
+      before do
+        user.update!(login: "new")
+        run_all_indexing_jobs
+      end
+
+      shared_examples "a search unauthorized admins can't perform" do |authorized_roles:|
+        (Admin::VALID_ROLES - authorized_roles).each do |role|
+          context "with role #{role}" do
+            let(:admin) { create(:admin, roles: [role]) }
+
+            it "does not find the user" do
+              subject.call
+              expect(assigns(:users)).to be_nil
+            end
+          end
+        end
+      end
+
+      shared_examples "a search authorized admins can perform" do |authorized_roles:|
+        before { fake_login_admin(admin) }
+
+        authorized_roles.each do |role|
+          context "with role #{role}" do
+            let(:admin) { create(:admin, roles: [role]) }
+
+            it "finds the user" do
+              subject.call
+              expect(assigns(:users)).to include(user)
+            end
+          end
+        end
+      end
+
+      it_behaves_like "a search unauthorized admins can't perform",
+                      authorized_roles: search_past_roles
+
+      it_behaves_like "a search authorized admins can perform",
+                      authorized_roles: search_past_roles
     end
   end
 
@@ -187,10 +232,35 @@ describe Admin::AdminUsersController do
         end
 
         it "allows updating roles" do
+          role_no_resets = create(:role, name: "no_resets")
+          expect do
+            put :update, params: { id: user.login, user: { roles: [role.id.to_s, role_no_resets.id.to_s] } }
+          end.to change { user.reload.roles.pluck(:name) }
+            .from([old_role.name])
+            .to([role.name, role_no_resets.name])
+            .and avoid_changing { user.reload.email }
+
+          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+        end
+      end
+
+      context "with role support" do
+        before do
+          admin.update!(roles: ["support"])
+          user.update!(roles: [])
+          role.update!(name: "no_resets")
+        end
+
+        it "allows updating email" do
+          put :update, params: { id: user.login, user: { email: "updated@example.com" } }
+          expect(user.reload.email).to eq("updated@example.com")
+        end
+
+        it "allows updating roles" do
           expect do
             put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
           end.to change { user.reload.roles.pluck(:name) }
-            .from([old_role.name])
+            .from([])
             .to([role.name])
             .and avoid_changing { user.reload.email }
 
@@ -221,31 +291,6 @@ describe Admin::AdminUsersController do
             .and avoid_changing { user.reload.email }
 
           it_redirects_to_with_notice(root_path, "User was successfully updated.")
-        end
-      end
-
-      # Keep the array in case we need to add another role like this.
-      %w[support].each do |admin_role|
-        context "with role #{admin_role}" do
-          before { admin.update!(roles: [admin_role]) }
-
-          it "does not allow updating roles" do
-            expect do
-              put :update, params: { id: user.login, user: { roles: [role.id.to_s] } }
-            end.to raise_exception(ActionController::UnpermittedParameters)
-            expect(user.reload.roles).not_to include(role)
-          end
-
-          it "allows updating email" do
-            expect do
-              put :update, params: { id: user.login, user: { email: "updated@example.com" } }
-            end.to change { user.reload.email }
-              .from("user@example.com")
-              .to("updated@example.com")
-              .and avoid_changing { user.reload.roles.pluck(:name) }
-
-            it_redirects_to_with_notice(root_path, "User was successfully updated.")
-          end
         end
       end
 

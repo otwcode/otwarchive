@@ -255,14 +255,6 @@ tagging_1067725740:
   taggable_id: 107
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725055: 
-  tagger_id: 1063753741
-  created_at: 2009-03-11 22:18:40 Z
-  updated_at: 2009-03-11 22:18:40 Z
-  id: 1067725055
-  taggable_id: 31
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725187: 
   tagger_id: 1063753905
   created_at: 2009-03-20 23:14:14 Z
@@ -277,14 +269,6 @@ tagging_1067725741:
   updated_at: 2010-07-28 13:10:16 Z
   id: 1067725741
   taggable_id: 107
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725056: 
-  tagger_id: 885489802
-  created_at: 2009-03-11 22:20:35 Z
-  updated_at: 2009-03-11 22:20:35 Z
-  id: 1067725056
-  taggable_id: 31
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725188: 
@@ -311,14 +295,6 @@ tagging_1067725742:
   taggable_id: 107
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725057: 
-  tagger_id: 569823665
-  created_at: 2009-03-11 22:20:36 Z
-  updated_at: 2009-03-11 22:20:36 Z
-  id: 1067725057
-  taggable_id: 31
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725189: 
   tagger_id: 992891255
   created_at: 2009-03-20 23:17:43 Z
@@ -333,14 +309,6 @@ tagging_1067725743:
   updated_at: 2010-07-28 13:10:16 Z
   id: 1067725743
   taggable_id: 107
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725058: 
-  tagger_id: 1063753732
-  created_at: 2009-03-11 22:21:05 Z
-  updated_at: 2009-03-11 22:21:05 Z
-  id: 1067725058
-  taggable_id: 31
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725611: 
@@ -525,14 +493,6 @@ tagging_1067725195:
   updated_at: 2009-03-20 23:20:17 Z
   id: 1067725195
   taggable_id: 50
-  tagger_type: Tag
-  taggable_type: Work
-tagging_312493864: 
-  tagger_id: 714102448
-  created_at: 2008-11-09 01:26:02 Z
-  updated_at: 2008-11-09 01:26:02 Z
-  id: 312493864
-  taggable_id: 3
   tagger_type: Tag
   taggable_type: Work
 tagging_35934741: 
@@ -1191,28 +1151,12 @@ tagging_1067725519:
   taggable_id: 87
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725097: 
-  tagger_id: 611729728
-  created_at: 2009-03-12 00:34:06 Z
-  updated_at: 2009-03-12 00:34:06 Z
-  id: 1067725097
-  taggable_id: 37
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725650: 
   tagger_id: 1063753905
   created_at: 2009-12-12 23:52:01 Z
   updated_at: 2009-12-12 23:52:01 Z
   id: 1067725650
   taggable_id: 102
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725098: 
-  tagger_id: 992891255
-  created_at: 2009-03-12 00:34:06 Z
-  updated_at: 2009-03-12 00:34:06 Z
-  id: 1067725098
-  taggable_id: 37
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725651: 
@@ -1237,22 +1181,6 @@ tagging_1067725520:
   updated_at: 2009-12-12 21:28:21 Z
   id: 1067725520
   taggable_id: 87
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725652: 
-  tagger_id: 1063754080
-  created_at: 2009-12-12 23:52:01 Z
-  updated_at: 2009-12-12 23:52:01 Z
-  id: 1067725652
-  taggable_id: 102
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725099: 
-  tagger_id: 569823665
-  created_at: 2009-03-12 00:34:06 Z
-  updated_at: 2009-03-12 00:34:06 Z
-  id: 1067725099
-  taggable_id: 37
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725521: 
@@ -1477,14 +1405,6 @@ tagging_1067725665:
   updated_at: 2009-12-13 16:36:12 Z
   id: 1067725665
   taggable_id: 103
-  tagger_type: Tag
-  taggable_type: Work
-tagging_678331033: 
-  tagger_id: 404615116
-  created_at: 2008-11-09 01:26:02 Z
-  updated_at: 2008-11-09 01:26:02 Z
-  id: 678331033
-  taggable_id: 3
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725402: 
@@ -3928,7 +3848,7 @@ tagging_1067725485:
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725222: 
-  tagger_id: 1063753846
+  tagger_id: 1063754002
   created_at: 2009-04-20 01:09:58 Z
   updated_at: 2009-04-20 01:09:58 Z
   id: 1067725222
@@ -4271,14 +4191,6 @@ tagging_1067725496:
   taggable_id: 86
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725100: 
-  tagger_id: 1063754002
-  created_at: 2009-03-12 00:34:06 Z
-  updated_at: 2009-03-12 00:34:06 Z
-  id: 1067725100
-  taggable_id: 37
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725232: 
   tagger_id: 1063753774
   created_at: 2009-05-10 13:57:48 Z
@@ -4309,14 +4221,6 @@ tagging_1067724975:
   updated_at: 2008-12-07 20:52:14 Z
   id: 1067724975
   taggable_id: 14
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725233: 
-  tagger_id: 112726825
-  created_at: 2009-06-07 17:24:44 Z
-  updated_at: 2009-06-07 17:24:44 Z
-  id: 1067725233
-  taggable_id: 55
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725366: 
@@ -4351,14 +4255,6 @@ tagging_1067725102:
   taggable_id: 38
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725234: 
-  tagger_id: 1063753737
-  created_at: 2009-06-07 17:24:45 Z
-  updated_at: 2009-06-07 17:24:45 Z
-  id: 1067725234
-  taggable_id: 55
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725367: 
   tagger_id: 1063753979
   created_at: 2009-07-18 00:18:29 Z
@@ -4383,14 +4279,6 @@ tagging_1067725103:
   taggable_id: 38
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725235: 
-  tagger_id: 1063753741
-  created_at: 2009-06-07 17:24:45 Z
-  updated_at: 2009-06-07 17:24:45 Z
-  id: 1067725235
-  taggable_id: 55
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725368: 
   tagger_id: 1063753980
   created_at: 2009-07-18 00:21:37 Z
@@ -4405,22 +4293,6 @@ tagging_1067724978:
   updated_at: 2008-12-07 20:52:15 Z
   id: 1067724978
   taggable_id: 14
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725104: 
-  tagger_id: 1063753868
-  created_at: 2009-03-12 00:50:20 Z
-  updated_at: 2009-03-12 00:50:20 Z
-  id: 1067725104
-  taggable_id: 38
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725236: 
-  tagger_id: 741440589
-  created_at: 2009-06-07 17:24:45 Z
-  updated_at: 2009-06-07 17:24:45 Z
-  id: 1067725236
-  taggable_id: 55
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725369: 
@@ -4863,14 +4735,6 @@ tagging_1067725383:
   taggable_id: 28
   tagger_type: Tag
   taggable_type: Bookmark
-tagging_1067724992: 
-  tagger_id: 992891255
-  created_at: 2009-03-07 20:48:06 Z
-  updated_at: 2009-03-07 20:48:06 Z
-  id: 1067724992
-  taggable_id: 18
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725252: 
   tagger_id: 1063753736
   created_at: 2009-07-17 22:55:32 Z
@@ -4887,22 +4751,6 @@ tagging_1067725384:
   taggable_id: 29
   tagger_type: Tag
   taggable_type: Bookmark
-tagging_1067724993: 
-  tagger_id: 1063753735
-  created_at: 2009-03-07 20:48:07 Z
-  updated_at: 2009-03-07 20:48:07 Z
-  id: 1067724993
-  taggable_id: 18
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067724994: 
-  tagger_id: 1063754009
-  created_at: 2009-03-07 20:48:07 Z
-  updated_at: 2009-03-07 20:48:07 Z
-  id: 1067724994
-  taggable_id: 18
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725121: 
   tagger_id: 1063753741
   created_at: 2009-03-12 01:43:37 Z
@@ -4927,14 +4775,6 @@ tagging_1067725385:
   taggable_id: 29
   tagger_type: Tag
   taggable_type: Bookmark
-tagging_1067724995: 
-  tagger_id: 1063753824
-  created_at: 2009-03-07 20:48:07 Z
-  updated_at: 2009-03-07 20:48:07 Z
-  id: 1067724995
-  taggable_id: 18
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725122: 
   tagger_id: 569823665
   created_at: 2009-03-12 01:43:37 Z
@@ -4959,14 +4799,6 @@ tagging_1067725386:
   taggable_id: 30
   tagger_type: Tag
   taggable_type: Bookmark
-tagging_1067724996: 
-  tagger_id: 1063753826
-  created_at: 2009-03-07 20:48:07 Z
-  updated_at: 2009-03-07 20:48:07 Z
-  id: 1067724996
-  taggable_id: 18
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725123: 
   tagger_id: 1063753877
   created_at: 2009-03-12 01:43:37 Z
@@ -4991,14 +4823,6 @@ tagging_1067725387:
   taggable_id: 30
   tagger_type: Tag
   taggable_type: Bookmark
-tagging_1067724997: 
-  tagger_id: 1063753827
-  created_at: 2009-03-07 20:48:07 Z
-  updated_at: 2009-03-07 20:48:07 Z
-  id: 1067724997
-  taggable_id: 18
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725256: 
   tagger_id: 26796919
   created_at: 2009-07-17 22:55:33 Z
@@ -5015,14 +4839,6 @@ tagging_1067725388:
   taggable_id: 31
   tagger_type: Tag
   taggable_type: Bookmark
-tagging_1067724998: 
-  tagger_id: 1063753828
-  created_at: 2009-03-07 20:48:07 Z
-  updated_at: 2009-03-07 20:48:07 Z
-  id: 1067724998
-  taggable_id: 18
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725125: 
   tagger_id: 1063753876
   created_at: 2009-03-12 01:43:37 Z
@@ -5431,14 +5247,6 @@ tagging_1067725270:
   taggable_id: 58
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725007: 
-  tagger_id: 611729728
-  created_at: 2009-03-09 16:42:34 Z
-  updated_at: 2009-03-09 16:42:34 Z
-  id: 1067725007
-  taggable_id: 21
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725139: 
   tagger_id: 992891255
   created_at: 2009-03-12 02:02:52 Z
@@ -5463,28 +5271,12 @@ tagging_1067724880:
   taggable_id: 5
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725008: 
-  tagger_id: 112726825
-  created_at: 2009-03-09 16:42:34 Z
-  updated_at: 2009-03-09 16:42:34 Z
-  id: 1067725008
-  taggable_id: 21
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725272: 
   tagger_id: 1063753737
   created_at: 2009-07-17 23:08:06 Z
   updated_at: 2009-07-17 23:08:06 Z
   id: 1067725272
   taggable_id: 59
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725009: 
-  tagger_id: 1063753824
-  created_at: 2009-03-09 16:42:34 Z
-  updated_at: 2009-03-09 16:42:34 Z
-  id: 1067725009
-  taggable_id: 21
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725141: 
@@ -5503,14 +5295,6 @@ tagging_1067725273:
   taggable_id: 59
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725010: 
-  tagger_id: 1063754009
-  created_at: 2009-03-09 16:42:35 Z
-  updated_at: 2009-03-09 16:42:35 Z
-  id: 1067725010
-  taggable_id: 21
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725274: 
   tagger_id: 1063753937
   created_at: 2009-07-17 23:08:06 Z
@@ -5527,14 +5311,6 @@ tagging_1067724883:
   taggable_id: 5
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725011: 
-  tagger_id: 885489802
-  created_at: 2009-03-09 17:04:57 Z
-  updated_at: 2009-03-09 17:04:57 Z
-  id: 1067725011
-  taggable_id: 22
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725275: 
   tagger_id: 1063753936
   created_at: 2009-07-17 23:08:06 Z
@@ -5549,14 +5325,6 @@ tagging_1067724885:
   updated_at: 2008-11-22 05:45:15 Z
   id: 1067724885
   taggable_id: 5
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725012: 
-  tagger_id: 1063753736
-  created_at: 2009-03-09 17:04:57 Z
-  updated_at: 2009-03-09 17:04:57 Z
-  id: 1067725012
-  taggable_id: 22
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725144: 
@@ -5613,14 +5381,6 @@ tagging_1067724887:
   updated_at: 2008-11-22 05:49:40 Z
   id: 1067724887
   taggable_id: 5
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725014: 
-  tagger_id: 1063753829
-  created_at: 2009-03-09 17:04:57 Z
-  updated_at: 2009-03-09 17:04:57 Z
-  id: 1067725014
-  taggable_id: 22
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725146: 
@@ -5687,14 +5447,6 @@ tagging_1067725700:
   taggable_id: 104
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725016: 
-  tagger_id: 1063753741
-  created_at: 2009-03-09 17:15:29 Z
-  updated_at: 2009-03-09 17:15:29 Z
-  id: 1067725016
-  taggable_id: 22
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725148: 
   tagger_id: 426547448
   created_at: 2009-03-18 04:08:37 Z
@@ -5709,14 +5461,6 @@ tagging_1067725701:
   updated_at: 2009-12-18 17:56:46 Z
   id: 1067725701
   taggable_id: 104
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725017: 
-  tagger_id: 885489802
-  created_at: 2009-03-09 17:20:58 Z
-  updated_at: 2009-03-09 17:20:58 Z
-  id: 1067725017
-  taggable_id: 23
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725149: 
@@ -5751,14 +5495,6 @@ tagging_1067724890:
   taggable_id: 6
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725018: 
-  tagger_id: 1063753736
-  created_at: 2009-03-09 17:20:58 Z
-  updated_at: 2009-03-09 17:20:58 Z
-  id: 1067725018
-  taggable_id: 23
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725703: 
   tagger_id: 1063753905
   created_at: 2009-12-18 18:25:31 Z
@@ -5781,14 +5517,6 @@ tagging_1067724891:
   updated_at: 2008-12-05 13:59:14 Z
   id: 1067724891
   taggable_id: 6
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725019: 
-  tagger_id: 1063753741
-  created_at: 2009-03-09 17:20:58 Z
-  updated_at: 2009-03-09 17:20:58 Z
-  id: 1067725019
-  taggable_id: 23
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725704: 
@@ -6015,14 +5743,6 @@ tagging_59736118:
   taggable_id: 1
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725024: 
-  tagger_id: 885489802
-  created_at: 2009-03-09 23:22:34 Z
-  updated_at: 2009-03-09 23:22:34 Z
-  id: 1067725024
-  taggable_id: 27
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725156: 
   tagger_id: 1063753886
   created_at: 2009-03-18 20:15:26 Z
@@ -6053,14 +5773,6 @@ tagging_1067725710:
   updated_at: 2010-07-28 09:36:25 Z
   id: 1067725710
   taggable_id: 105
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725025: 
-  tagger_id: 611729728
-  created_at: 2009-03-09 23:22:34 Z
-  updated_at: 2009-03-09 23:22:34 Z
-  id: 1067725025
-  taggable_id: 27
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725157: 
@@ -6095,14 +5807,6 @@ tagging_1067725711:
   taggable_id: 105
   tagger_type: Tag
   taggable_type: Work
-tagging_1067725026: 
-  tagger_id: 1063753741
-  created_at: 2009-03-09 23:22:34 Z
-  updated_at: 2009-03-09 23:22:34 Z
-  id: 1067725026
-  taggable_id: 27
-  tagger_type: Tag
-  taggable_type: Work
 tagging_1067725158: 
   tagger_id: 1063753888
   created_at: 2009-03-18 20:15:26 Z
@@ -6125,14 +5829,6 @@ tagging_1067725290:
   updated_at: 2009-07-17 23:21:53 Z
   id: 1067725290
   taggable_id: 61
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725027: 
-  tagger_id: 1063753824
-  created_at: 2009-03-09 23:22:34 Z
-  updated_at: 2009-03-09 23:22:34 Z
-  id: 1067725027
-  taggable_id: 27
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725159: 
@@ -6405,14 +6101,6 @@ tagging_1067725723:
   updated_at: 2010-07-28 13:10:04 Z
   id: 1067725723
   taggable_id: 106
-  tagger_type: Tag
-  taggable_type: Work
-tagging_1067725038: 
-  tagger_id: 1063753831
-  created_at: 2009-03-10 00:28:25 Z
-  updated_at: 2009-03-10 00:28:25 Z
-  id: 1067725038
-  taggable_id: 29
   tagger_type: Tag
   taggable_type: Work
 tagging_1067725724: 

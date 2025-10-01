@@ -37,6 +37,13 @@ describe InviteRequest do
         expect(dup_request.valid?).to be_falsey
         expect(dup_request.errors[:email]).to include("is already part of our queue.")
       end
+
+      it "should not return error for duplicate simplified email if duplicate raw email error already present" do
+        dup_request = build(:invite_request, email: "the.god.thor+marvel@gmail.com")
+        dup_request.valid?
+        expect(dup_request.errors[:email].count).to eq(1)
+        expect(dup_request.errors[:email]).to include("is already part of our queue.")
+      end
     end
   end
 

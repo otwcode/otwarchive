@@ -94,7 +94,8 @@ Feature: Admin Abuse actions
     Then I should see "User has been permanently suspended."
       And I should see "Suspended Permanently"
       And I should see "To the New Zealand penal colony with you."
-    When I follow "Manage Users"
+    When all indexing jobs have been run
+      And I follow "Manage Users"
       And I fill in "Name" with "mrparis"
       And I press "Find"
     Then I should see "1 user found"
