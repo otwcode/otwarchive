@@ -313,17 +313,15 @@ class WorksController < ApplicationController
       @work.posted = @chapter.posted = true if params[:post_button]
       @work.set_revised_at_by_chapter(@chapter)
 
-      unless @work.save
-        render :new and return
-      end
+      render :new and return unless @work.save
 
       if @work.posted
         # We check here to see if we are attempting to post to moderated collection
-        flash[:notice] = ts("Work was successfully posted. It should appear in work listings within the next few minutes.")
+        flash[:notice] = t(".posted_notice")
         in_moderated_collection
         redirect_to work_path(@work)
       else
-        flash[:notice] = ts("Draft was successfully created. It will be <strong>scheduled for deletion</strong> on %{deletion_date}.", deletion_date: view_context.date_in_zone(@work.created_at + 29.days)).html_safe
+        flash[:notice] = t(".draft_notice_html", deletion_date: view_context.date_in_zone(@work.created_at + 29.days))
         in_moderated_collection
         redirect_to preview_work_path(@work)
       end
@@ -373,9 +371,7 @@ class WorksController < ApplicationController
     if params[:edit_button] || work_cannot_be_saved?
       render :edit
     elsif params[:preview_button]
-      unless @work.posted?
-        flash[:notice] = ts("Your changes have not been saved. Please post your work or save the draft if you want to keep them.")
-      end
+      flash[:notice] = t(".unposted_notice") unless @work.posted?
 
       in_moderated_collection
       @preview_mode = true

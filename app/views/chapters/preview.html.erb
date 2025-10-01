@@ -34,8 +34,8 @@
         <li><%= submit_tag t("works_helper.actions.save_draft"), name: "save_button" %></li>
         <li><%= link_to t("works_helper.actions.edit"), edit_work_chapter_path(@work, @chapter) %></li>
         <li><%= submit_tag t("works_helper.actions.post"),
-                           name: "post_button",
-                           data: { disable_with: t("works_helper.actions.please_wait") } %></li>
+                  name: "post_button",
+                  data: { disable_with: t("works_helper.actions.please_wait") } %></li>
       <% end %>
       <li><%= link_to t("works_helper.actions.cancel"), work_chapter_path(@work, @chapter) %></li>
     </ul>
