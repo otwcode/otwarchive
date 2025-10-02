@@ -701,9 +701,9 @@ en:
           text: 'If you have other reasons to believe that someone else currently has access to your %{app_name} account, please contact Policy & Abuse with all relevant information: %{contact_policy_abuse_url}.'
         contact_support: contact Support
         ignore_if_not_requested:
-          html: "%{safely_ignore_bold} Someone else may have entered your username or email address by mistake."
+          html: "%{safely_ignore_bold} Someone else may have entered your email address by mistake."
           safely_ignore: If you did not make this request, you can safely ignore and delete this email.
-          text: If you did not make this request, you can safely ignore and delete this email. Someone else may have entered your username or email address by mistake.
+          text: If you did not make this request, you can safely ignore and delete this email. Someone else may have entered your email address by mistake.
         instructions:
           html: "%{intro_bold} If the link in this email has expired, you will need to %{new_password_reset_link}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, %{contact_support_link} for further assistance."
           intro: If you made this request, please %{choose_new_password_link} within %{count} days.
