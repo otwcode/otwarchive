@@ -979,16 +979,6 @@ describe ChaptersController do
         fake_login_known_user(user)
       end
 
-      it "redirects to work when cancel button is clicked" do
-        post :post, params: { work_id: work.id, id: @chapter_to_post.id, cancel_button: true }
-        it_redirects_to(work)
-      end
-
-      it "redirects to edit when edit button is clicked" do
-        post :post, params: { work_id: work.id, id: @chapter_to_post.id, edit_button: true }
-        it_redirects_to(edit_work_chapter_path(work_id: work.id, id: @chapter_to_post.id))
-      end
-
       context "when the chapter and work are valid" do
         it "posts the chapter and redirects to work" do
           post :post, params: { work_id: work.id, id: @chapter_to_post.id }

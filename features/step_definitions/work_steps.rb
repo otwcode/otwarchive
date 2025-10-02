@@ -521,7 +521,7 @@ end
 When /^I lock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I lock the work}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I unlock the work$/ do
@@ -531,7 +531,7 @@ end
 When /^I unlock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I unlock the work}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I list the work "([^"]*)" as inspiration$/ do |title|
@@ -644,7 +644,7 @@ end
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
   step %{I edit the work "#{work}"}
   step %{I invite the co-author "#{coauthor}"}
-  step %{I post the work without preview}
+  step %{I update the work}
   step %{the user "#{coauthor}" accepts the creator invite for the work "#{work}"}
 end
 
@@ -693,14 +693,14 @@ When "I add the beginning notes {string} to the work {string}" do |notes, work|
   step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the beginning notes "#{notes}"}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When "I add the end notes {string} to the work {string}" do |notes, work|
   step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the end notes "#{notes}"}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I mark the work "([^"]*)" for later$/ do |work|

@@ -26,7 +26,7 @@ Feature: Create Gifts
     Then I should see "GiftStory1 by gifter for giftee1"
 
   Scenario: Work blurb includes an HTML comment containing the unix epoch of the updated time
-  
+
     Given time is frozen at 2025-04-12 17:00 UTC
     When I give the work to "giftee1"
       And I press "Post"
@@ -96,7 +96,7 @@ Feature: Create Gifts
     Given I press "Post"
       And I follow "Edit"
       And I give the work to "giftee1"
-    When I press "Post"
+    When I press "Update"
     Then I should see "For giftee1"
       And "giftee1@example.com" should be notified by email about their gift "GiftStory1"
 
@@ -134,7 +134,7 @@ Feature: Create Gifts
       And all emails have been delivered
       And I follow "Edit"
       And I give the work to "giftee1, giftee2"
-    When I press "Post"
+    When I press "Update"
     Then I should see "For giftee1, giftee2"
       And 0 emails should be delivered to "giftee1@example.com"
       And "giftee2@example.com" should be notified by email about their gift "GiftStory1"
@@ -160,7 +160,7 @@ Feature: Create Gifts
       And all emails have been delivered
       And I follow "Edit"
       And I give the work to "giftee1"
-    When I press "Post"
+    When I press "Update"
     Then I should see "For giftee1"
       And I should not see "giftee2"
       And 0 emails should be delivered to "giftee1@example.com"
@@ -187,7 +187,7 @@ Feature: Create Gifts
       And all emails have been delivered
       And I follow "Edit"
       And I give the work to "giftee2"
-    When I press "Post"
+    When I press "Update"
     Then I should see "For giftee2"
       And I should not see "giftee1"
       And 0 emails should be delivered to "giftee1@example.com"
@@ -239,7 +239,7 @@ Feature: Create Gifts
     When all emails have been delivered
       And I edit the work "Yuck"
       And I give the work to "associate, associate2 (associate)"
-      And I post the work without preview
+      And I update the work
     Then I should see "You seem to already have given this work to that user."
       And I should not see "For associate, associate2"
       And 0 emails should be delivered to "associate@example.com"
@@ -358,7 +358,7 @@ Feature: Create Gifts
       And I press "Post"
       And I follow "Edit"
       And I give the work to "giftee1"
-    When I press "Post"
+    When I press "Update"
     Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts from you."
 
   Scenario: Can't gift a work whose co-creator is blocked by recipient
@@ -366,7 +366,7 @@ Feature: Create Gifts
       And the user "giftee1" has blocked the user "gifter2"
       And I edit the work "Collateral"
       And I give the work to "giftee1"
-    When I press "Post"
+    When I press "Update"
     Then I should see "Sorry! We couldn't save this work because: giftee1 does not accept gifts."
 
   Scenario: Only see one error message is shown if gifts are disabled and user is blocked*

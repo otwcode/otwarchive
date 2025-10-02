@@ -119,7 +119,7 @@ Feature: Muting
       And I am logged in as "pest"
       And I edit the work "Annoying Work"
       And I add the series "Annoying Series"
-      And I press "Post"
+      And I press "Update"
     When I am logged in as "muter"
       And I go to pest's series page
     Then I should not see "Annoying Series"
