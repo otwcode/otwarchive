@@ -3,8 +3,8 @@
 require "spec_helper"
 
 describe Series do
-  let(:unrestricted_work) { create(:work, restricted: false) }
-  let(:restricted_work) { create(:work, restricted: true) }
+  let(:unrestricted_work) { create(:work, restricted: false, freeform_string: "MyFreeform") }
+  let(:restricted_work) { create(:work, restricted: true, freeform_string: "MyFreeform2") }
   let(:series) { create(:series) }
 
   describe "#restricted" do
@@ -131,13 +131,32 @@ describe Series do
   describe "#fandoms" do
     let(:restricted_work) { create(:work, restricted: true, fandom_string: "Testing2") }
     let(:hidden_work) { create(:work, hidden_by_admin: true, fandom_string: "Testing3") }
+    let(:draft_work) { create(:draft, fandom_string: "Testing4") }
 
     before do
-      series.works = [unrestricted_work, restricted_work, hidden_work]
+      series.works = [unrestricted_work, restricted_work, hidden_work, draft_work]
       series.reload
     end
 
-    shared_examples "only returns fandoms on unrestricted, unhidden works" do
+    shared_examples "only returns fandoms on unrestricted and restricted works" do
+      it "returns fandoms on unrestricted, unhidden works" do
+        expect(series.fandoms).to include(*unrestricted_work.fandoms)
+      end
+
+      it "returns fandoms on restricted works" do
+        expect(series.fandoms).to include(*restricted_work.fandoms)
+      end
+
+      it "does not return fandoms on hidden works" do
+        expect(series.fandoms).not_to include(*hidden_work.fandoms)
+      end
+
+      it "does not return fandoms on draft works" do
+        expect(series.fandoms).not_to include(*draft_work.fandoms)
+      end
+    end
+
+    context "when logged out" do
       it "returns fandoms on unrestricted, unhidden works" do
         expect(series.fandoms).to include(*unrestricted_work.fandoms)
       end
@@ -149,10 +168,10 @@ describe Series do
       it "does not return fandoms on hidden works" do
         expect(series.fandoms).not_to include(*hidden_work.fandoms)
       end
-    end
 
-    context "when no user is logged in" do
-      it_behaves_like "only returns fandoms on unrestricted, unhidden works"
+      it "does not return fandoms on draft works" do
+        expect(series.fandoms).not_to include(*draft_work.fandoms)
+      end
     end
 
     context "when logged in as a regular user" do
@@ -160,7 +179,7 @@ describe Series do
         User.current_user = create(:user)
       end
 
-      it_behaves_like "only returns fandoms on unrestricted, unhidden works"
+      it_behaves_like "only returns fandoms on unrestricted and restricted works"
     end
 
     context "when loggged in as an admin" do
@@ -168,35 +187,54 @@ describe Series do
         User.current_user = create(:admin)
       end
 
-      it_behaves_like "only returns fandoms on unrestricted, unhidden works"
+      it_behaves_like "only returns fandoms on unrestricted and restricted works"
     end
   end
 
   describe "#tag_groups" do
-    let(:restricted_work) { create(:work, restricted: true, fandom_string: "Testing2") }
-    let(:hidden_work) { create(:work, hidden_by_admin: true, fandom_string: "Testing3") }
+    let(:restricted_work) { create(:work, restricted: true, freeform_string: "Testing2") }
+    let(:hidden_work) { create(:work, hidden_by_admin: true, freeform_string: "Testing3") }
+    let(:draft_work) { create(:draft, freeform_string: "Testing4") }
 
     before do
-      series.works = [unrestricted_work, restricted_work, hidden_work]
+      series.works = [unrestricted_work, restricted_work, hidden_work, draft_work]
       series.reload
     end
 
-    shared_examples "only includes tags on unrestricted, unhidden works" do
+    shared_examples "only includes tags on unrestricted and restricted works" do
       it "returns tags on unrestricted, unhidden works" do
-        expect(series.tag_groups["Fandom"]).to include(*unrestricted_work.fandoms)
+        expect(series.tag_groups["Freeform"]).to include(*unrestricted_work.freeforms)
       end
 
-      it "does not return tags on restricted works" do
-        expect(series.tag_groups["Fandom"]).not_to include(*restricted_work.fandoms)
+      it "returns tags on restricted works" do
+        expect(series.tag_groups["Freeform"]).to include(*restricted_work.freeforms)
       end
 
       it "does not return tags on hidden words" do
-        expect(series.tag_groups["Fandom"]).not_to include(*hidden_work.fandoms)
+        expect(series.tag_groups["Freeform"]).not_to include(*hidden_work.freeforms)
+      end
+
+      it "does not return tags on draft words" do
+        expect(series.tag_groups["Freeform"]).not_to include(*draft_work.freeforms)
       end
     end
 
     context "when no user is logged in" do
-      it_behaves_like "only includes tags on unrestricted, unhidden works"
+      it "returns tags on unrestricted, unhidden works" do
+        expect(series.tag_groups["Freeform"]).to include(*unrestricted_work.freeforms)
+      end
+
+      it "does not return tags on restricted works" do
+        expect(series.tag_groups["Freeform"]).not_to include(*restricted_work.freeforms)
+      end
+
+      it "does not return tags on hidden words" do
+        expect(series.tag_groups["Freeform"]).not_to include(*hidden_work.freeforms)
+      end
+
+      it "does not return tags on draft words" do
+        expect(series.tag_groups["Freeform"]).not_to include(*draft_work.freeforms)
+      end
     end
 
     context "when logged in as a regular user" do
@@ -204,7 +242,7 @@ describe Series do
         User.current_user = create(:user)
       end
 
-      it_behaves_like "only includes tags on unrestricted, unhidden works"
+      it_behaves_like "only includes tags on unrestricted and restricted works"
     end
 
     context "when loggged in as an admin" do
@@ -212,7 +250,7 @@ describe Series do
         User.current_user = create(:admin)
       end
 
-      it_behaves_like "only includes tags on unrestricted, unhidden works"
+      it_behaves_like "only includes tags on unrestricted and restricted works"
     end
   end
 end
