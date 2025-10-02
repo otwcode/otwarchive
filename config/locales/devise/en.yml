@@ -42,7 +42,6 @@ en:
       admin:
         send_instructions: Check your email for instructions on how to reset your password.
       no_token: This password reset link is invalid or incomplete. Please check your email for the correct link or request a new password reset.
-      send_instructions: Check your email for instructions on how to reset your password.
       send_paranoid_instructions: If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.
       updated: Your password has been changed successfully. You are now signed in.
       updated_not_active: Your password has been changed successfully.

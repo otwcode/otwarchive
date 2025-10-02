@@ -44,6 +44,7 @@ describe Users::PasswordsController do
       end
     end
   end
+  
   describe "GET #edit" do
     it "redirects with an error when not providing a token" do
       get :edit
