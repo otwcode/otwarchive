@@ -220,58 +220,72 @@ dl.index p.actions {
 
 /* context: work navigation actions with secondary navigation */
 
-.download {
+.work.navigation .download {
   display: block;
+  margin-block-start: 0;
   padding: 0.375em 0 0.643em;
-  margin-top: 0;
 }
 
-.download .secondary {
+.work.navigation .download .secondary {
   position: static;
 }
 
-.download, .javascript .download .secondary {
+/* The next two rule sets move the default .secondary style to the secondary's
+parent when JavaScript is disabled and put it back when it's enabled. */
+.work.navigation .download, .javascript .work.navigation .download .secondary {
   background: #fff;
   border: 2px solid #bbb;
     box-shadow: 2px 2px 5px #bbb;
 }
 
-.download .secondary, .javascript .download {
-  background: none transparent;
+.work.navigation .download .secondary, .javascript .work.navigation .download {
+  background: transparent;
   border: none;
     box-shadow: none;
 }
 
-.javascript .chapter, .javascript .download {
+/* TODO: Update to .javascript .work.navigation :has(.secondary) once support
+for :has() increases to 95% according to caniuse.com. */
+.javascript .work.navigation .chapter, .javascript .work.navigation .download {
   position: relative;
 }
 
-.javascript .download {
-  display: inline-block;
-  margin-bottom: 0;
+.javascript .work.navigation .download {
+  display: inline;
   padding: 0 0 0 0.25em;
 }
 
-.javascript .chapter .secondary, .javascript .download .secondary {
-  min-width: 100%;
+.javascript .work.navigation .secondary {
+  align-items: center;
+  gap: 0 0.643em;
+  justify-content: space-evenly;
   position: absolute;
   right: 0;
-    box-sizing: border-box;
 }
 
-/* button height of 1.286em + 0.5em total vertical padding + 0.125em for fun */
-.javascript .chapter .secondary {
-  top: 1.911em;
-  width: 150%;
+/* If we use display without the .expanded qualifier, it will override .hidden's
+display: none and secondary will always be open. */
+.javascript .work.navigation .expanded + .secondary {
+  display: flex;
 }
 
-/* button height of 1.286em + 0.5em total vertical padding + 0.643em top margin on menu + 0.125em for fun */
-.javascript .download .secondary {
-  top: 2.554em;
+.javascript .work.navigation .download .secondary {
+  gap: 0.25em;
 }
 
-.javascript .download .secondary li, .javascript .download .secondary a {
-  display: block;
+.javascript .work.navigation .secondary li {
+  margin-block: 0;
+}
+
+.javascript .work.navigation .secondary p {
+  align-items: center;
+  display: flex;
+  gap: 0 0.25em;
+  padding: 0;
+}
+
+.javascript .work.navigation .secondary .actions {
+  padding: 0;
 }
 
 /* END== */

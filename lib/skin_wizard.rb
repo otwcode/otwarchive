@@ -115,8 +115,8 @@ module SkinWizard
         form.verbose legend,
         .verbose form legend,
         #modal,
-        .download,
-        .javascript .download .secondary,
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
         .own,
         .draft,
         .draft .wrapper,
@@ -152,8 +152,8 @@ module SkinWizard
         .toggled form,
         .dynamic form,
         .secondary,
-        .download,
-        .javascript .download .secondary,
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
         .wrapper {
           box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5)
         }
@@ -307,8 +307,8 @@ module SkinWizard
         form.verbose legend,
         .verbose form legend,
         .secondary,
-        .download,
-        .javascript .download .secondary,
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
         dl.meta,
         .bookmark .user,
         div.comment,
