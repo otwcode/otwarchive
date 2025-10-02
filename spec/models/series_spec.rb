@@ -172,6 +172,17 @@ describe Series do
       it "does not return fandoms on draft works" do
         expect(series.fandoms).not_to include(*draft_work.fandoms)
       end
+
+      context "when the series has no unrestricted works" do
+        before do
+          series.works -= [unrestricted_work]
+          series.reload
+        end
+
+        it "returns an empty list" do
+          expect(series.fandoms).to eq([])
+        end
+      end
     end
 
     context "when logged in as a regular user" do

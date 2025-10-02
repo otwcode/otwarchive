@@ -195,7 +195,7 @@ class Series < ApplicationRecord
 
   # returns list of fandoms on this series
   def fandoms
-    tag_groups["Fandom"].sort
+    tag_groups["Fandom"]&.sort || []
   end
 
   def author_tags
