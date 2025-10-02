@@ -42,6 +42,8 @@ describe Users::PasswordsController do
 
         it_redirects_to_with_notice(new_user_password_path, "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password.")
       end
+    end
+  end
   describe "GET #edit" do
     it "redirects with an error when not providing a token" do
       get :edit

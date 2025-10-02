@@ -252,23 +252,12 @@ en:
     passwords:
       create:
         invalid_email: You must enter your email address.
-      new:
-        page_title: Reset Password
-        contact_abuse: contact our Policy & Abuse team
-        reset_blocked_html: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
-        reset_cooldown_html: You cannot reset your password at this time. Please try again after %{reset_available_time}.
-        send_cooldown_period:
-          one: After that, you will need to wait %{count} hour before requesting another reset.
-          other: After that, you will need to wait %{count} hours before requesting another reset.
-        send_instructions: Check your email for instructions on how to reset your password. %{send_times_remaining} %{send_cooldown_period}
-        send_times_remaining:
-          one: You may reset your password %{count} more time.
-          other: You may reset your password %{count} more times.
-        user_not_found: We couldn't find an account with that email address or username. Please try again.
       edit:
         invalid_link:
           one: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hour, you can request a new password reset.
           other: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hours, you can request a new password reset.
+      new:
+        page_title: Reset Password
     reconfirm_email:
       access_denied:
         logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.
