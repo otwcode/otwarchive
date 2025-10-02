@@ -11,9 +11,7 @@
   <% if can_reply_to_comment?(comment) %>
     <li id="add_comment_reply_link_<%= comment.id %>"><%= add_comment_reply_link comment %></li>
   <% end %>
-  <% unless comment.unreviewed? %>
     <li><%= link_to ts("Thread"), comment %></li>
-  <% end %>
   <% if comment.depth > 0 %>
     <li><%= link_to ts("Parent Thread"), comment_path(id: comment.thread) %></li>
   <% end %>
