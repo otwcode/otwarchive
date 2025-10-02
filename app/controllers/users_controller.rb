@@ -380,7 +380,7 @@ class UsersController < ApplicationController
       works = @sole_authored_works
 
       # We change the pseud to default orphan pseud if use_default is true.
-      use_default = params[:use_default] == "true" || params[:sole_author] == "orphan_pseud"
+      use_default = params[:use_default] == 'true' || params[:sole_author] == 'orphan_pseud'
 
       Creatorship.orphan(pseuds, works, use_default)
       Collection.orphan(pseuds, @sole_owned_collections, default: use_default)
