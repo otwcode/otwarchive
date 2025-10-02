@@ -1,5 +1,5 @@
-/*==ACTIONS: buttons!
-http://otwcode.github.com/docs/front_end_coding/patterns/actions
+/* == ACTIONS: buttons!
+https://otwcode.github.io/docs/patterns/actions.html
 subtypes:
 .action, .navigation, .sorting, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
 input[type="submit"], button
@@ -73,8 +73,8 @@ p.submit, input.submit, dd.submit {
    margin: 0;
  }
 
-/*subtypes and modes
-test note: this pagination clear needs to be kept an eye on*/
+/* subtypes and modes
+test note: this pagination clear needs to be kept an eye on */
 
 ol.pagination, div.pagination, ol.year {
   text-align: center;
@@ -222,4 +222,4 @@ dl.index p.actions {
   margin: 0;
 }
 
-/*END== */
+/* END== */

@@ -21,7 +21,7 @@ Feature: User Authentication
     Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered
       And the email should contain "sam"
-      And the email should contain "Someone has requested a password reset for your account"
+      And the email should contain "Someone has made a request to reset the password for your AO3 account."
       And the email should not contain "translation missing"
 
     # existing password should still work
@@ -32,13 +32,13 @@ Feature: User Authentication
     Then I should see "Hi, sam"
 
     # link from the email should not work when logged in
-    When I follow "Change my password." in the email
+    When I follow "use this link to choose a new password" in the email
     Then I should see "You are already signed in."
       And I should not see "Change My Password"
 
     # link from the email should work
     When I log out
-      And I follow "Change my password." in the email
+      And I follow "use this link to choose a new password" in the email
     Then I should see "Change My Password"
 
     # entering mismatched passwords should produce an error message
@@ -57,12 +57,9 @@ Feature: User Authentication
 
     # password reset link should no longer work
     When I log out
-      And I follow "Change my password." in the email
-      And I fill in "New password" with "override"
-      And I fill in "Confirm new password" with "override"
-      And I press "Change Password"
-    Then I should see "We couldn't save this user because:"
-      And I should see "Reset password token is invalid"
+      And I follow "use this link to choose a new password" in the email
+    Then I should see "This password reset link is invalid or expired. Please check your email for the most recent password reset link."
+      And I should be on the forgot password page
 
     # old password should no longer work
     When I am on the homepage
@@ -127,7 +124,7 @@ Feature: User Authentication
       And the email should have "Reset your password" in the subject
       And the email to "notsam" should be non-translated
       And 1 email should be delivered to "sam@example.com"
-    When I follow "Change my password." in the email
+    When I follow "use this link to choose a new password" in the email
       And all emails have been delivered
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
@@ -147,7 +144,7 @@ Feature: User Authentication
     Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered
     When I start a new session
-      And I follow "Change my password." in the email
+      And I follow "use this link to choose a new password" in the email
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
@@ -165,7 +162,7 @@ Feature: User Authentication
       And 1 email should be delivered
     When it is currently 2 weeks from now
       And I start a new session
-      And I follow "Change my password." in the email
+      And I follow "use this link to choose a new password" in the email
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
@@ -209,7 +206,7 @@ Feature: User Authentication
       And I go to the user administration page for "sam"
     Then I should not see "Password Reset" within "#user_history"
     When I start a new session
-      And I follow "Change my password." in the email
+      And I follow "use this link to choose a new password" in the email
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
@@ -344,7 +341,7 @@ Feature: User Authentication
     Then I should not see "Successfully logged in"
       And I should see "The password or username you entered doesn't match our records."
     When I am logged in as an admin
-      And I go to the new user password page
+      And I go to the forgot password page
     Then I should be on the homepage
       And I should see "Please log out of your admin account first!"
     When I go to the edit user password page

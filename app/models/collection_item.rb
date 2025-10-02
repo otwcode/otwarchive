@@ -13,17 +13,17 @@ class CollectionItem < ApplicationRecord
   validates_uniqueness_of :collection_id, scope: [:item_id, :item_type],
     message: ts("already contains this item.")
 
-  enum user_approval_status: {
+  enum :user_approval_status, {
     rejected: -1,
     unreviewed: 0,
     approved: 1
-  }, _suffix: :by_user
+  }, suffix: :by_user
 
-  enum collection_approval_status: {
+  enum :collection_approval_status, {
     rejected: -1,
     unreviewed: 0,
     approved: 1
-  }, _suffix: :by_collection
+  }, suffix: :by_collection
 
   validate :collection_is_open, on: :create
   def collection_is_open
@@ -271,5 +271,23 @@ class CollectionItem < ApplicationRecord
         ).deliver_after_commit
       end
     end
+  end
+
+  # reindex collection after creation, deletion, and approval_status update
+  # (we only index approved items, which is why changes there trigger the reindex-index)
+  after_commit :update_collection_index, if: :should_update_collection_index?
+
+  def update_collection_index
+    ids = [collection_id]
+    ids.push(collection.parent_id) if collection.parent.present?
+    IndexQueue.enqueue_ids(Collection, ids, :background)
+  end
+
+  # reindex collection after creation, deletion, and certain attribute updates
+  def should_update_collection_index?
+    return true if destroyed?
+
+    pertinent_attributes = %w[collection_approval_status user_approval_status]
+    (self.saved_changes.keys & pertinent_attributes).present?
   end
 end
