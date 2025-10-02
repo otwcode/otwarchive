@@ -243,7 +243,7 @@ Scenario: Changing email address -- translated emails are sent when user enables
 Scenario: Change password - mistake in typing old password
 
   When I make a mistake typing my old password
-  Then I should see "Your old password was incorrect"
+  Then I should see "Your old password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, contact Support for help."
 
 Scenario: Change password - mistake in typing new password confirmation
 

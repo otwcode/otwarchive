@@ -60,12 +60,11 @@ describe "rake work:purge_old_drafts" do
   end
 
   context "when the draft is the last work in a series" do
-    let(:series) { create(:series) }
-
     it "deletes the draft" do
       draft = travel_to(32.days.ago) do
-        create(:draft, series: [series])
+        create(:draft)
       end
+      series = create(:series, works: [draft])
 
       subject.invoke
 

@@ -43,7 +43,7 @@ describe ApplicationHelper do
     end
 
     context "when creation is Series" do
-      let(:series) { create(:series_with_a_work) }
+      let(:series) { create(:series) }
       let(:user1) { series.users.first }
       let(:work) { series.works.first }
 
@@ -196,7 +196,7 @@ describe ApplicationHelper do
     end
 
     context "when creation is Series" do
-      let(:series) { create(:series_with_a_work) }
+      let(:series) { create(:series) }
       let(:work) { series.works.first }
       let(:user1) { series.users.first }
       let(:user2) { create(:user) }
@@ -377,6 +377,12 @@ describe ApplicationHelper do
           expect(original_cache_key).not_to eq("#{work.cache_key_with_version}/blurb_css_classes-v2")
         end
       end
+    end
+  end
+
+  describe "#first_paragraph" do
+    it "extracts first paragraph" do
+      expect(first_paragraph("<p>first</p><p>second</p>")).to eq("<p>first</p>")
     end
   end
 end

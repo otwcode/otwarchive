@@ -13,7 +13,7 @@ class WorkSkin < Skin
         errors.add(:base, :work_skin_custom_properties)
         return false
       end
-      if value.match(/\A(#{CssCleaner::VAR_FUNCTION_REGEX})\z/)
+      if value.match(/\bvar\b/i)
         errors.add(:base, :work_skin_var)
         return false
       end
