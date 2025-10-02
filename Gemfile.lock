@@ -631,7 +631,6 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode (0.4.4.5)
     unicode-display_width (2.6.0)
-    unicode_utils (1.4.0)
     unicorn (5.8.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
@@ -765,7 +764,6 @@ DEPENDENCIES
   timecop
   timeliness
   unicode
-  unicode_utils (>= 1.4.0)
   unicorn (~> 5.5)
   unidecoder
   vcr (~> 6.2)
