@@ -65,6 +65,10 @@ module CommentsHelper
     end
   end
 
+  def chapter_description_link(comment)
+    link_to t("comments_helper.chapter_link_html", position: comment.parent.position), work_chapter_path(comment.parent.work, comment.parent)
+  end
+
   def image_safety_mode_cache_key(comment)
     "image-safety-mode" if comment.use_image_safety_mode?
   end
@@ -210,6 +214,10 @@ module CommentsHelper
     is_author_of?(comment.ultimate_parent) || policy(comment).can_review_comment?
   end
 
+  def can_review_all_comments?(commentable)
+    commentable.is_a?(AdminPost) || is_author_of?(commentable)
+  end
+
   #### HELPERS FOR REPLYING TO COMMENTS #####
 
   # return link to add new reply to a comment
@@ -276,7 +284,7 @@ module CommentsHelper
   end
 
   def do_cancel_delete_comment_link(comment)
-    if params[:delete_comment_id] && params[:delete_comment_id] == comment.id.to_s
+    if params[:delete_comment_id] == comment.id.to_s
       cancel_delete_comment_link(comment)
     else
       delete_comment_link(comment)
@@ -307,7 +315,7 @@ module CommentsHelper
   # return html link to delete comments
   def delete_comment_link(comment)
     link_to(
-      ts("Delete"),
+      t("comments_helper.actions.delete"),
       url_for(controller: :comments,
               action: :delete_comment,
               id: comment,
@@ -315,10 +323,9 @@ module CommentsHelper
       remote: true)
   end
 
-  # return link to cancel new reply to a comment
   def cancel_delete_comment_link(comment)
     link_to(
-      ts("Cancel"),
+      t("comments_helper.actions.cancel"),
       url_for(controller: :comments,
               action: :cancel_comment_delete,
               id: comment,

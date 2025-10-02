@@ -33,6 +33,32 @@ Scenario: When logged in I can comment on a work
     When "AO3-4214" is fixed
     # Then I should see "commenter on Chapter 1" within "h4.heading.byline"
 
+Scenario: When commenting on a multi-chapter work, there should be a link to the chapter on the comment
+
+  Given the work "The One Where Neal is Awesome"
+    And a chapter is added to "The One Where Neal is Awesome"
+    And I am logged in as "commenter"
+    And I post the comment "I loved this! 😍🤩" on the work "The One Where Neal is Awesome"
+  Then I should see "commenter on Chapter 1"
+    And I should see a link "Chapter 1" within ".comment h4.heading.byline"
+    And I should see a page link to the 1st chapter of the work "The One Where Neal is Awesome" within ".comment h4.heading.byline"
+  When I follow "Thread"
+  Then I should see a link "Chapter 1" within ".comment h4.heading.byline"
+    And I should see a page link to the 1st chapter of the work "The One Where Neal is Awesome" within ".comment h4.heading.byline"
+
+Scenario: When commenting on a single-chapter work, there should not be a link to the chapter on the comment
+
+  Given the work "The One Where Neal is Awesome"
+    And I am logged in as "commenter"
+    And I post the comment "I loved this! 😍🤩" on the work "The One Where Neal is Awesome"
+  Then I should see "commenter"
+    And I should not see "commenter on Chapter 1"
+    And I should not see a link "Chapter 1" within ".comment h4.heading.byline"
+    And I should not see a page link to the 1st chapter of the work "The One Where Neal is Awesome" within ".comment h4.heading.byline"
+  When I follow "Thread"
+  Then I should not see a link "Chapter 1" within ".comment h4.heading.byline"
+    And I should not see a page link to the 1st chapter of the work "The One Where Neal is Awesome" within ".comment h4.heading.byline"
+
 Scenario: I cannot comment with a pseud that I don't own
 
   Given the work "Random Work"
@@ -211,7 +237,7 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, with 
 Scenario: Users with different time zone preferences should see the time in their own timezone
   Given the work "Generic Work"
     And I am logged in as "commenter"
-    And I set my time zone to "UTC"
+    And the user "commenter" sets the time zone to "UTC"
     And I post the comment "Something" on the work "Generic Work"
     And it is currently 1 second from now
     And I follow "Edit"
@@ -220,7 +246,7 @@ Scenario: Users with different time zone preferences should see the time in thei
   Then I should see "UTC" within ".posted.datetime"
     And I should see "UTC" within ".edited.datetime"
   When I am logged in as "reader"
-    And I set my time zone to "Brisbane"
+    And the user "reader" sets the time zone to "Brisbane"
     And I view the work "Generic Work" with comments
   Then I should see "AEST" within ".posted.datetime"
     And I should see "AEST" within ".edited.datetime"

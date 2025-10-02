@@ -16,6 +16,9 @@
       <%= button_to t(".navigation.activate"), { action: "activate", id: @user }, disabled: @user.active? %>
     </li>
     <li>
+      <%= link_to t(".navigation.rename"), change_username_user_path(@user) %>
+    </li>
+    <li>
       <%= link_to t(".navigation.roles"), { action: "index", user_id: @user.id } %>
     </li>
     <% if policy(User).can_access_creation_summary? %>
@@ -37,6 +40,22 @@
       <dd><%= @user.invitation ? link_to(@user.invitation.id, invitation_path(@user.invitation.id)) : t(".info.no_invitation") %></dd>
       <dt><%= t(".info.role", count: @user.roles.size) %></dt>
       <dd><%= @user.roles.any? ? @user.roles.map { |role| t("activerecord.attributes.role.#{role.name}") }.to_sentence : t(".info.no_role") %></dd>
+      <% if policy(User).can_view_past? %>
+        <% past_logins = @user.historic_values("login") %>
+        <% if past_logins.present? %>
+          <dt><%= t(".info.past_logins", count: past_logins.size) %></dt>
+          <dd>
+            <%= past_logins.to_sentence %>
+          </dd>
+        <% end %>
+        <% past_emails = @user.historic_values("email") %>
+        <% if past_emails.present? %>
+          <dt><%= t(".info.past_emails", count: past_emails.size) %></dt>
+          <dd>
+            <%= past_emails.to_sentence %>
+          </dd>
+        <% end %>
+      <% end %>
     </dl>
   </div>
 

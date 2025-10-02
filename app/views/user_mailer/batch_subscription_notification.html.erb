@@ -15,7 +15,7 @@
     </p>
 
     <% if creation.summary.present? && creation.is_a?(Chapter) %>
-      <p><%= style_work_metadata_label(t(".chapter_summary")) %></p>
+      <p><%= style_metadata_label(t(".chapter_summary")) %></p>
       <%= style_quote(raw sanitize_field(creation, :summary)) %>
     <% end %>
 
@@ -28,7 +28,7 @@
     <% end %>
 
     <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
-      <p><%= style_work_metadata_label(Work.human_attribute_name("summary")) %></p>
+      <p><%= style_metadata_label(Work.human_attribute_name("summary")) %></p>
       <%= style_quote(raw sanitize_field(this_work, :summary)) %>
       <% @seen_summary[this_work.id] = true %>
     <% end %>

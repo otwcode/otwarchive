@@ -1,5 +1,5 @@
-/*==GROUP: BLURB
-http://otwcode.github.com/docs/front_end_coding/patterns/blurb
+/* == GROUP: BLURB
+https://otwcode.github.io/docs/patterns/blurb.html
 The blurb class is used wherever we show a list of works, collections, bookmarks, etc; each list item is a blurb
 it shows all the tags, stats and other associations we hold on that object, and sometimes it shows short user notes too, like a summary, bookmark notes, or collection description.
 
@@ -59,7 +59,7 @@ li.blurb:after, .blurb .blurb:after {
   vertical-align: bottom;
 }
 
-.blurb .header p.notice, .blurb ul.series {
+.blurb ul.series {
   margin: 1.25em 0 0;
 }
 
@@ -76,7 +76,7 @@ li.blurb:after, .blurb .blurb:after {
   line-height: 1.5;
 }
 
-.blurb .fandoms .landmark {
+.blurb h5 .landmark {
   position: absolute;
 }
 
@@ -84,7 +84,7 @@ li.blurb:after, .blurb .blurb:after {
   display: inline;
 }
 
-/* ==START icon block rules*/
+/* == START icon block rules */
 
 .blurb ul.required-tags {
   position: absolute;
@@ -135,7 +135,7 @@ li.blurb:after, .blurb .blurb:after {
   background-repeat: no-repeat;
 }
 
-/*icon image replacement*/
+/* icon image replacement */
 
 .required-tags .rating-general-audience {
   background: url("/images/imageset.png") -50px -25px;
@@ -217,7 +217,7 @@ li.blurb:after, .blurb .blurb:after {
   background: url("/images/imageset.png") -100px -50px;
 }
 
-/*==END icon block rules==*/
+/* == END icon block rules == */
 
 .blurb .datetime {
   position: absolute;
@@ -236,7 +236,7 @@ li.blurb:after, .blurb .blurb:after {
   text-align: justify;
 }
 
-/*modification: PICTURE
+/* modification: PICTURE
 use this along with "index" and "blurb" for indices where we have icon pictures,
 eg collections, users, skins, instead of the 4-icon list
 */
@@ -265,7 +265,7 @@ eg collections, users, skins, instead of the 4-icon list
   background-repeat: no-repeat;
 }
 
-/*various little mods*/
+/* various little mods */
 
 /* mod: ITEM
 blurbs on the manage collection items pages, mostly reseting styles inherited from interactions (forms)
@@ -331,7 +331,7 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 	top: 28px;
 }
 
-.bookmark div.user {
+.bookmark div.user, .bookmark div.recent {
   clear: right;
   box-sizing: border-box;
 }
@@ -397,6 +397,11 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
 	position: static;
 }
 
+.bookmark .recent .index {
+  float: none;
+  width: 100%;
+}
+
 /* mod: READING */
 
 .reading .user {
@@ -430,4 +435,4 @@ blurbs on the manage collection items pages, mostly reseting styles inherited fr
   display: inline;
 }
 
-/*END== */
+/* END== */

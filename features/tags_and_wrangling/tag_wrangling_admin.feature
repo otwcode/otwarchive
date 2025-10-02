@@ -8,8 +8,8 @@ Feature: Tag wrangling
       And I bookmark the work "Renoir's Boating Party" with the tags "Amelie"
       And I post the work "Luncheon" with fandom "Amelie"
       # Visit the relevant pages to make sure the data gets cached.
-      And I go to my bookmarks page
-      And I go to my works page
+      And I go to audrey's bookmarks page
+      And I go to audrey's works page
       And I go to the work "Luncheon"
     When I am logged in as a "tag_wrangling" admin
       And I edit the tag "Amelie"
@@ -61,7 +61,7 @@ Feature: Tag wrangling
     When I fill in "Name" with "tangler"
       And I press "Find"
     Then I should see "tangler" within "#admin_users_table"
-    When I uncheck the "Tag Wrangler" role checkbox
+    When I uncheck the "tag_wrangler" role checkbox
       And I press "Update"
     Then I should see "User was successfully updated."
       And "tangler" should not be a tag wrangler

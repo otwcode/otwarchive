@@ -1,5 +1,5 @@
-/*==ACTIONS: buttons!
-http://otwcode.github.com/docs/front_end_coding/patterns/actions
+/* == ACTIONS: buttons!
+https://otwcode.github.io/docs/patterns/actions.html
 subtypes:
 .action, .navigation, .sorting, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
 input[type="submit"], button
@@ -20,7 +20,7 @@ ul.actions {
   padding-top: 0;
 }
 
-.actions a, .actions a:link, .action, .action:link, .actions input, input[type="submit"], button, .current, .actions label {
+.actions a, .actions a:link, .action, .action:link, .actions button, .actions input, input[type="submit"], button, .current, .actions label {
   background: #eee;
   color: #444;
   width: auto;
@@ -63,7 +63,6 @@ p.submit, input.submit, dd.submit {
   text-align: right;
 }
 
-
 .actions input[type="checkbox"] {
   background: transparent;
   border: none;
@@ -74,8 +73,8 @@ p.submit, input.submit, dd.submit {
    margin: 0;
  }
 
-/*subtypes and modes
-test note: this pagination clear needs to be kept an eye on*/
+/* subtypes and modes
+test note: this pagination clear needs to be kept an eye on */
 
 ol.pagination, div.pagination, ol.year {
   text-align: center;
@@ -87,7 +86,7 @@ ol.pagination, div.pagination, ol.year {
   color: #111;
 }
 
-.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
+.actions a:hover, .actions button:hover, .actions input:hover, .actions a:focus, .actions button:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
   color: #900;
   border-top: 1px solid #999;
   border-left: 1px solid #999;
@@ -111,7 +110,7 @@ ol.pagination, div.pagination, ol.year {
    border-color: #aaa;
  }
 
-.actions li a, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
+.actions li a, .actions li button, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
   margin: 0.375em auto;
 }
 
@@ -169,6 +168,11 @@ legend .action:link {
   padding: 0.15em 0.375em;
 }
 
+.heading .actions button {
+  padding: 0.25em 0.75em;
+  margin-left: 0.25em;
+}
+
 th .actions, td .actions {
   float: none;
 }
@@ -218,4 +222,4 @@ dl.index p.actions {
   margin: 0;
 }
 
-/*END== */
+/* END== */

@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include ActiveStorage::SetCurrent
   include Pundit::Authorization
   protect_from_forgery with: :exception, prepend: true
   rescue_from ActionController::InvalidAuthenticityToken, with: :display_auth_error
@@ -13,7 +14,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
-  rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
+  rescue_from Elastic::Transport::Transport::Errors::ServiceUnavailable do
     # Non-standard code to distinguish Elasticsearch errors from standard 503s.
     # We can't use 444 because nginx will close connections without sending
     # response headers.
@@ -22,6 +23,12 @@ class ApplicationController < ActionController::Base
 
   def raise_not_found
     redirect_to '/404'
+  end
+
+  rescue_from Rack::Timeout::RequestTimeoutException, with: :raise_timeout
+  
+  def raise_timeout
+    redirect_to timeout_error_path
   end
 
   helper :all # include all helpers, all the time
@@ -41,6 +48,30 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  include Pagy::Backend
+  def pagy(collection, **vars)
+    pagy_overflow_handler do
+      super
+    end
+  end
+
+  def pagy_query_result(query_result, **vars)
+    pagy_overflow_handler do
+      Pagy.new(
+        count: query_result.total_entries,
+        page: query_result.current_page,
+        limit: query_result.per_page,
+        **vars
+      )
+    end
+  end
+
+  def pagy_overflow_handler(*)
+    yield
+  rescue Pagy::OverflowError
+    nil
+  end
+
   def display_auth_error
     respond_to do |format|
       format.html do
@@ -49,7 +80,7 @@ class ApplicationController < ActionController::Base
       format.any(:js, :json) do
         render json: {
           errors: {
-            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='http://kb.iu.edu/data/ahic.html'>clearing your cache</a> if you continue to experience problems.".html_safe
+            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='https://en.wikipedia.org/wiki/Wikipedia:Bypass_your_cache'>clearing your cache</a> if you continue to experience problems.".html_safe
           }
         }, status: :unprocessable_entity
       end
@@ -256,7 +287,8 @@ public
     store_location
     if logged_in?
       destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
-      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach."
+      # i18n-tasks-use t('users.reconfirm_email.access_denied.logged_in')
+      flash[:error] = t(".access_denied.logged_in", default: t("application.access_denied.access_denied.logged_in")) # rubocop:disable I18n/DefaultTranslation
       redirect_to destination
     else
       destination = options[:redirect].blank? ? new_user_session_path : options[:redirect]
@@ -309,7 +341,7 @@ public
 
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
-  before_action :set_current_user
+  around_action :set_current_user
   def set_current_user
     User.current_user = logged_in_as_admin? ? current_admin : current_user
     @current_user = current_user
@@ -319,6 +351,11 @@ public
                                expires_in: 2.hours,
                                race_condition_ttl: 5) { "#{current_user.subscriptions.count}, #{current_user.visible_work_count}, #{current_user.bookmarks.count}, #{current_user.owned_collections.count}, #{current_user.challenge_signups.count}, #{current_user.offer_assignments.undefaulted.count + current_user.pinch_hit_assignments.undefaulted.count}, #{current_user.unposted_works.size}" }.split(",").map(&:to_i)
     end
+
+    yield
+
+    User.current_user = nil
+    @current_user = nil
   end
 
   def load_collection
@@ -393,11 +430,20 @@ public
   # Prevents banned and suspended users from adding/editing content
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
-      flash[:error] = if current_user.suspended?
-                        t("users.status.suspension_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path), suspended_until: localize(current_user.suspended_until))
-                      else
-                        t("users.status.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path))
-                      end
+      if current_user.suspended?
+        suspension_end = current_user.suspended_until
+
+        # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+        unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
+
+        # If the stated suspension end date is after the unban threshold we need to advance a day 
+        suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
+        localized_suspension_end = view_context.date_in_zone(suspension_end)
+        flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+        
+      else
+        flash[:error] = t("users.status.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+      end
       redirect_to current_user
     end
   end
@@ -405,8 +451,18 @@ public
   # Prevents temporarily suspended users from deleting content
   def check_user_not_suspended
     return unless current_user.is_a?(User) && current_user.suspended?
+
+    suspension_end = current_user.suspended_until
+
+    # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+    unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
+
+    # If the stated suspension end date is after the unban threshold we need to advance a day 
+    suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
+    localized_suspension_end = view_context.date_in_zone(suspension_end)
     
-    flash[:error] = t("users.status.suspension_notice_html", contact_abuse_link: view_context.link_to(t("users.status.contact_abuse"), new_abuse_report_path), suspended_until: localize(current_user.suspended_until))
+    flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+
     redirect_to current_user
   end
 
@@ -451,22 +507,24 @@ public
     end
   end
 
+  # Checks if user is allowed to see related page if parent item is hidden or in unrevealed collection
+  # Checks if user is logged in if parent item is restricted
+  def check_visibility_for(parent)
+    return if logged_in_as_admin? || current_user_owns?(parent) # Admins and the owner can see all related pages
+
+    access_denied(redirect: root_path) if parent.try(:hidden_by_admin) || parent.try(:in_unrevealed_collection) || (parent.respond_to?(:visible?) && !parent.visible?)
+  end
+
   public
 
-  def valid_sort_column(param, model='work')
-    allowed = []
-    if model.to_s.downcase == 'work'
-      allowed = %w(author title date created_at word_count hit_count)
-    elsif model.to_s.downcase == 'tag'
-      allowed = %w[name created_at taggings_count_cache uses]
-    elsif model.to_s.downcase == 'collection'
-      allowed = %w(collections.title collections.created_at)
-    elsif model.to_s.downcase == 'prompt'
-      allowed = %w(fandom created_at prompter)
-    elsif model.to_s.downcase == 'claim'
-      allowed = %w(created_at claimer)
-    end
-    !param.blank? && allowed.include?(param.to_s.downcase)
+  def valid_sort_column(param, model = "work")
+    allowed = {
+      "work" => %w[author title date created_at word_count hit_count],
+      "tag" => %w[name created_at taggings_count_cache uses],
+      "prompt" => %w[fandom created_at prompter],
+      "claim" => %w[created_at claimer]
+    }[model.to_s.downcase]
+    param.present? && allowed.include?(param.to_s.downcase)
   end
 
   def set_sort_order

@@ -270,23 +270,43 @@ describe CollectionItemsController do
     end
   end
 
-  describe "GET #create" do
-    context "creation" do
-      let(:collection) { FactoryBot.create(:collection) }
-
-      it "fails if collection names missing" do
-        get :create, params: { collection_id: collection.id }
-        it_redirects_to_with_error(root_path, "What collections did you want to add?")
+  describe "GET #new" do
+    context "denies access for work that isn't visible to user" do
+      subject { get :new, params: { work_id: work.id } }
+      let(:work) { create(:work) }
+      let(:success) { expect(response).to render_template("new") }
+      let(:redirects_to_login) do
+        it_redirects_to_with_error(
+          new_user_session_path,
+          "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
+        )
       end
+      let(:success_admin) { redirects_to_login }
 
-      it "fails if items missing" do
-        get :create, params: { collection_names: collection.name, collection_id: collection.id }
-        it_redirects_to_with_error(root_path, "What did you want to add to a collection?")
+      include_examples "denies access for work that isn't visible to user"
+
+      it "redirects to login if logged out" do
+        subject
+        redirects_to_login
       end
     end
   end
 
   describe "POST #create" do
+    context "creation" do
+      let(:collection) { FactoryBot.create(:collection) }
+
+      it "fails if collection names missing" do
+        post :create, params: { collection_id: collection.id }
+        it_redirects_to_with_error(root_path, "What collections did you want to add?")
+      end
+
+      it "fails if items missing" do
+        post :create, params: { collection_names: collection.name, collection_id: collection.id }
+        it_redirects_to_with_error(root_path, "What did you want to add to a collection?")
+      end
+    end
+
     context "when logged in as the collection maintainer" do
       before { fake_login_known_user(collection.owners.first.user) }
 
@@ -327,10 +347,7 @@ describe CollectionItemsController do
       let(:work) { create(:work) }
 
       let(:collection) do
-        # NB: the `collection_participant` factory actually creates a
-        # collection owner.
-        owner = create(:collection_participant, pseud: archivist.default_pseud)
-        create(:collection, collection_participants: [owner])
+        create(:collection, owner: archivist.default_pseud)
       end
 
       let(:params) do

@@ -1,4 +1,4 @@
-/* ==USERSTUFF: displaying content inputted by a user into a textarea.*/
+/* == USERSTUFF: displaying content inputted by a user into a textarea. */
 
 .userstuff {
     word-wrap: break-word;
@@ -10,7 +10,7 @@
   padding: 0;
 }
 
-/*lists */
+/* lists */
 
 .userstuff dl {
   margin: 1.5em 0;
@@ -117,13 +117,13 @@
   text-decoration: none;
 }
 
-/*tables */
+/* tables */
 
 .userstuff caption {
   font-size: 1em;
   height: auto;
-  opacity: 1.0;
   width: auto;
+    opacity: 1;
 }
 
 .userstuff table, .userstuff td, .userstuff col, .userstuff tr, .userstuff thead, .userstuff tfoot, .userstuff tbody, .userstuff th, .userstuff thead td, .userstuff th a, .userstuff th a:link {
@@ -162,7 +162,7 @@
   max-width: 100%;
 }
 
-/*expected behaviours, exceptioning*/
+/* expected behaviours, exceptioning */
 
 /* WORK MARGINS */
 
@@ -182,12 +182,26 @@
 
 /* contexts */
 
+.comment .userstuff li {
+  list-style-position: inside;
+}
+
 .bookmark .user .userstuff {
-	line-height: 1.5;
+  line-height: 1.5;
 }
 
 .bookmark .user .userstuff blockquote {
-	margin-bottom: 1.286em;
+  margin-bottom: 1.286em;
 }
 
-/*END== */
+.faq .userstuff dd {
+  margin-block-start: 0.75em;
+  margin-block-end: 0.75em;
+  margin-inline-start: 1.75em;
+}
+
+.faq .userstuff dl {
+  margin: 0.75em 0;
+}
+
+/* END == */

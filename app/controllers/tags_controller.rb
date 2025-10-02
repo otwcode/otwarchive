@@ -29,16 +29,21 @@ class TagsController < ApplicationController
   def index
     if @collection
       @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
+      @page_subtitle = t(".collection_page_title", collection_title: @collection.title)
     else
       no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
-      @tags = no_fandom.children.by_type('Freeform').first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
-      # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
-      # and then sort again at the very end to make it alphabetic
-      @tags = if params[:show] == 'random'
-                @tags.random.canonical.sort
-              else
-                @tags.popular.canonical.sort
-              end
+      if no_fandom
+        @tags = no_fandom.children.by_type("Freeform").first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
+        # have to put canonical at the end so that it doesn't overwrite sort order for random and popular
+        # and then sort again at the very end to make it alphabetic
+        @tags = if params[:show] == "random"
+                  @tags.random.canonical.sort
+                else
+                  @tags.popular.canonical.sort
+                end
+      else
+        @tags = []
+      end
     end
   end
 
@@ -56,29 +61,23 @@ class TagsController < ApplicationController
     flash_search_warnings(@tags)
   end
 
-  # if user is admin with view access or Tag Wrangler, show them details about the tag
-  # if user is not logged in or a regular user, show them
-  #   1. the works, if the tag had been wrangled and we can redirect them to works using it or its canonical merger
-  #   2. the tag, the works and the bookmarks using it, if the tag is unwrangled (because we can't redirect them
-  #       to the works controller)
   def show
-    authorize :wrangling, :read_access? if logged_in_as_admin?
-
     @page_subtitle = @tag.name
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-      flash[:error] = ts('Please log in as admin')
+      flash[:error] = t("admin.access.not_admin_denied")
       redirect_to(tag_wranglings_path) && return
     end
-    # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
+    # if tag is NOT wrangled, prepare to show works, collections, and bookmarks that are using it
     if !@tag.canonical && !@tag.merger
-      if logged_in? # current_user.is_a?User
-        @works = @tag.works.visible_to_registered_user.paginate(page: params[:page])
-      elsif logged_in_as_admin?
-        @works = @tag.works.visible_to_owner.paginate(page: params[:page])
-      else
-        @works = @tag.works.visible_to_all.paginate(page: params[:page])
-      end
+      @works = if logged_in? # current_user.is_a?User
+                 @tag.works.visible_to_registered_user.paginate(page: params[:page])
+               elsif logged_in_as_admin?
+                 @tag.works.visible_to_admin.paginate(page: params[:page])
+               else
+                 @tag.works.visible_to_all.paginate(page: params[:page])
+               end
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
+      @collections = @tag.collections.paginate(page: params[:page])
     end
     # cache the children, since it's a possibly massive query
     @tag_children = Rails.cache.fetch "views/tags/#{@tag.cache_key}/children" do
@@ -224,12 +223,13 @@ class TagsController < ApplicationController
     end
 
     @counts = {}
-    @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works', 'Taggings Count']
+    @uses = ["Works", "Drafts", "Bookmarks", "Private Bookmarks", "External Works", "Collections", "Taggings Count"]
     @counts['Works'] = @tag.visible_works_count
     @counts['Drafts'] = @tag.works.unposted.count
     @counts['Bookmarks'] = @tag.visible_bookmarks_count
     @counts['Private Bookmarks'] = @tag.bookmarks.not_public.count
     @counts['External Works'] = @tag.visible_external_works_count
+    @counts["Collections"] = @tag.collections.count
     @counts['Taggings Count'] = @tag.taggings_count
 
     @parents = @tag.parents.order(:name).group_by { |tag| tag[:type] }
@@ -255,9 +255,8 @@ class TagsController < ApplicationController
     new_tag_type = params[:tag].delete(:type)
 
     # Limiting the conditions under which you can update the tag type
-    if @tag.can_change_type? && %w(Fandom Character Relationship Freeform UnsortedTag).include?(new_tag_type)
-      @tag = @tag.recategorize(new_tag_type)
-    end
+    types = logged_in_as_admin? ? (Tag::USER_DEFINED + %w[Media]) : Tag::USER_DEFINED
+    @tag = @tag.recategorize(new_tag_type) if @tag.can_change_type? && (types + %w[UnsortedTag]).include?(new_tag_type)
 
     unless params[:tag].empty?
       @tag.attributes = tag_params
@@ -299,16 +298,16 @@ class TagsController < ApplicationController
       end
       # this makes sure params[:status] is safe
       status = params[:status]
-      if %w(unfilterable canonical synonymous unwrangleable).include?(status)
-        @tags = @tag.send(show).order(sort).send(status).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      elsif status == 'unwrangled'
-        @tags = @tag.unwrangled_tags(
-          params[:show].singularize.camelize,
-          params.permit!.slice(:sort_column, :sort_direction, :page)
-        )
-      else
-        @tags = @tag.send(show).order(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
-      end
+      @tags = if %w[unfilterable canonical synonymous unwrangleable].include?(status)
+                @tag.send(show).reorder(sort).send(status).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+              elsif status == "unwrangled"
+                @tag.unwrangled_tags(
+                  params[:show].singularize.camelize,
+                  params.permit!.slice(:sort_column, :sort_direction, :page)
+                )
+              else
+                @tag.send(show).reorder(sort).paginate(page: params[:page], per_page: ArchiveConfig.ITEMS_PER_PAGE)
+              end
     end
   end
 
@@ -420,6 +419,7 @@ class TagsController < ApplicationController
       :fandoms,
       :type,
       :canonical,
+      :wrangling_status,
       :created_at,
       :uses,
       :sort_column,

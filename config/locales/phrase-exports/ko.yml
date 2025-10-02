@@ -150,22 +150,22 @@ ko:
     anonymous_or_unrevealed_notification:
       anonymous_info: 익명 작품들은 태그 목록에 포함되지만 회원님의 작품 페이지에는 포함되지 않습니다. 작품 페이지에서 회원님의
         이름이 "Anonymous" (익명)으로 대체됩니다.
-      anonymous_unrevealed_info: 추후 관리자가 회원님의 작품을 익명 작품으로서 공개할 수도 있습니다. 회원님을 구독하고
+      anonymous_unrevealed_info: 추후 관리자가 회원님의 작품을 익명 작품으로써 공개할 수도 있습니다. 회원님을 구독하고
         있는 사용자들에게는 해당 변경사항이 알려지지 않습니다. 공개 시에는 회원님의 작품이 태그 목록에 포함되나 회원님의 작품 페이지에는 나타나지
-        않습니다. 작품 상에서는 회원님의 유저 이름이 "Anonymous" (익명)로 표기됩니다.
+        않습니다. 작품상에서는 회원님의 유저 이름이 "Anonymous" (익명)로 표기됩니다.
       changed_status:
         anonymous:
           html: "%{collection_link} 컬렉션 관리자가 회원님의 작품 %{work_link}을(를) 익명 작품으로 전환했습니다."
-          text: '"%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
-            (%{work_url}) 를/을 익명 저자로 처리했습니다.'
+          text: '"%{collection_title}" (%{collection_url}) 콜렉션 관리자가 회원님의 작품 "%{work_title}"
+            (%{work_url}) 를/을 익명으로 처리했습니다.'
         anonymous_unrevealed:
           html: "%{collection_link} 컬렉션 관리자가 회원님의 작품을 %{work_link} 을(를) 익명 및 비공개로
             전환했습니다."
-          text: '"%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
-            (%{work_url}) 를/을 익명 저자이자 비공개 등록으로 처리했습니다.'
+          text: '"%{collection_title}" (%{collection_url}) 콜렉션 관리자가 회원님의 작품 "%{work_title}"
+            (%{work_url}) 를/을 익명이자 비공개 등록으로 처리했습니다.'
         unrevealed:
           html: "%{collection_link} 컬렉션 관리자가 회원님의 작품 %{work_link}을(를) 비공개로 전환했습니다."
-          text: '"%{collection_title}" (%{collection_url}) 콜렉션 관리자들이 회원님의 작품 "%{work_title}"
+          text: '"%{collection_title}" (%{collection_url}) 콜렉션 관리자가 회원님의 작품 "%{work_title}"
             (%{work_url}) 를/을 비공개 등록으로 처리했습니다.'
       collection_items_link_text: Approved Collection Items (등록된 컬렉션 작품 목록) 페이지
       do_not_want:
@@ -191,7 +191,7 @@ ko:
       subject:
         anonymous: "[%{app_name}] 회원님의 작품이 익명 처리되었습니다."
         anonymous_unrevealed: "[%{app_name}] 회원님의 작품이 익명 및 비공개 처리되었습니다."
-        unrevealed: "[%{app_name}] 회원님의 작품이 비공개 처리 되었습니다"
+        unrevealed: "[%{app_name}] 회원님의 작품이 비공개 처리되었습니다"
       unrevealed_info: 비공개 작품은 태그 목록 및 회원님의 작품 페이지에 나타나지 않습니다. 해당 작품 링크로 접속하는 모든 이용자에게는
         작품이 비공개임을 알리는 공지가 뜨며 작품 내용을 조회할 수 없습니다.
     archivist_added_to_collection_notification:
@@ -210,30 +210,29 @@ ko:
         text: '"%{collection_title}" (%{collection_url}) 컬렉션 관리자가 회원님의 "%{work_title}"
           (%{work_url}) 작품을 컬렉션에 추가했습니다!'
     challenge_assignment_notification:
-      any: 기타 자유
+      any: "'모든' 태그 포함"
       assignment:
-        html: 회원님께서는 Archive of Our Own – AO3(우리만의 아카이브) %{link} 챌린지에서 다음과 같은 리퀘를
-          맡게 되셨습니다!
+        html: 회원님께서는 AO3 %{link} 챌린지에서 다음과 같은 리퀘를 맡게 되셨습니다!
       description: '설명:'
       due: '이 챌린지 과제의 마감일:'
       html:
-        footer: "%{title} 챌린지에 등록하셨기에 이 이메일을 받으셨습니다. 이 도전에 대한 자세한 내용과 진행자의 연락처는 %{footer_link}를
-          통해 찾으실 수 있습니다."
-        footer_link: 챌린지 프로파일 페이지
-        look_up: 이 챌린지 과제는 %{link}에서 찾으실 수 있습니다.
+        footer: "%{title} 챌린지에 등록했기 때문에 이 이메일을 받으셨습니다. 이 챌린지에 대한 자세한 내용과 진행자의 연락처는
+          %{footer_link}에서 확인할 수 있습니다."
+        footer_link: 챌린지 프로필 페이지
+        look_up: 이 챌린지 과제는 %{link}에서 확인할 수 있습니다.
         look_up_link: 회원님의 Assignments (챌린지 과제) 페이지
-      optional_tags: '선택 태그:'
+      optional_tags: '선택적 태그:'
       prompts: '소재:'
       prompt_url: '소재 URL:'
       recipient: '받는 사람:'
       recipient_missing: '없음: 관리자에게 도움을 요청하세요!'
       subject: "[%{app_name}][%{collection_title}] 회원님의 챌린지 과제입니다!"
       text:
-        assignment: 다음은 회원님이 맡게 되신 Archive of Our Own – AO3 (우리만의 아카이브) "%{collection_title}"
-          챌린지 (%{collection_url}) 리퀘입니다!
-        footer: "%{title} 챌린지(%{url})에 등록하셨기에 이 이메일을 받으셨습니다. 이 챌린지에 대한 자세한 내용과 진행자의
-          연락처는 %{profile_url}를 통해 찾으실 수 있습니다."
-        look_up: 이 챌린지 과제는 회원님의 Assignments (챌린지 과제) 페이지 링크%{link} 에서 찾아보실 수 있습니다.
+        assignment: 다음은 회원님이 맡게 되신 AO3 "%{collection_title}" 챌린지 (%{collection_url})
+          리퀘입니다!
+        footer: "%{title} 챌린지(%{url})에 등록했기 때문에 이 이메일을 받으셨습니다. 이 챌린지에 대한 자세한 내용과 진행자의
+          연락처는 %{profile_url}에서 확인할 수 있습니다."
+        look_up: 이 챌린지 과제는 회원님의 Assignments (챌린지 과제) 페이지 링크 %{link}에서 확인할 수 있습니다.
     change_email:
       changed:
         html: "%{login}님, 회원님의 계정과 연계된 이메일 주소가 %{email}으로 변경되었습니다."
@@ -243,8 +242,8 @@ ko:
       access:
         contact_support: AO3 지원 위원회에 문의
         html: 아카이브에 따라서는 통합 이전 시 회원님의 작품이 (구글 검색을 방지하기 위해) 등록된 회원에게만 보이도록 설정되는 경우가
-          있습니다. 이 때는 전체 공개로 설정을 변경하지 않으면 작품은 로그인을 한 회원들만 조회할 수 있습니다. 작품을 전체 공개하거나,
-          버리기, 또는 삭제하는 데 도움이 필요하시면 %{contact_support_link}해 주시기 바랍니다.
+          있습니다. 이때는 전체 공개로 설정을 변경하지 않으면 작품은 로그인한 회원들만 조회할 수 있습니다. 작품을 전체 공개하거나, 버리기,
+          또는 삭제하는 데 도움이 필요하시면 %{contact_support_link}해 주시기 바랍니다.
         text: '아카이브에 따라서는 통합 이전 시 회원님의 작품이 (구글 검색을 방지하기 위해) 등록된 회원에게만 보이도록 설정되는 경우가
           있습니다. 이 때는 전체 공개로 설정을 변경하지 않으면 작품은 로그인을 한 회원들만 조회할 수 있습니다. 작품을 전체 공개하거나,
           버리기, 또는 삭제하는 데 도움이 필요하시면 다음 링크를 통해 AO3 지원 위원해에 문의해 주시기 바랍니다: %{support_url}'
@@ -262,7 +261,7 @@ ko:
           자동으로 회원님의 AO3 계정에 추가되었습니다.'
       mistake:
         contact_open_doors: 오픈 도어 프로젝트에 문의
-        html: 이 작품들이 회원님의 작품이 아니라면 해당 작품을 삭제하지 말아주세요! %{contact_open_doors_link}해서
+        html: 이 작품이 회원님의 작품이 아니라면 해당 작품을 삭제하지 말아 주세요! %{contact_open_doors_link}해서
           알려 주시면 저희가 해결해 드리겠습니다.
         text: 만약 이 작품들이 귀하의 작품이 아니라면, 해당 작품을 삭제하지 말아주세요! 오픈 도어 위원회(%{open_doors_url})에
           문의해서 알려 주시면 저희가 해결해 드리겠습니다.
@@ -270,20 +269,20 @@ ko:
         ao3_news: AO3 소식
         contact_support: AO3 지원 위원회에 문의
         faq_page: FAQ 페이지
-        html: 최신 아카이브 이전에 대한 소식은 %{ao3_news_link}에서, 오픈 도어 프로젝트에 대한 추가 정보는 %{faq_page_link}
-          또는 %{tutorial_page_link}에서 확인하실 수 있습니다. FAQ, 튜토리얼, 이메일 등으로 해결되지 못한 못한 질문은
-          %{contact_support_link}해 주시기 바랍니다.
-        text: '최신 아카이브 이전에 대한 정보는 AO3 뉴스 (%{news_url})에서, 오픈 도어 프로젝트에 대한 추가 정보는 오픈
+        html: 최근 아카이브 이전에 대한 소식은 %{ao3_news_link}에서, 오픈 도어 프로젝트에 대한 추가 정보는 %{faq_page_link}
+          또는 %{tutorial_page_link}에서 확인하실 수 있습니다. FAQ, 튜토리얼, 이메일 등으로 해결되지 못한 질문은 %{contact_support_link}해
+          주시기 바랍니다.
+        text: '최근 아카이브 이전에 대한 정보는 AO3 뉴스 (%{news_url})에서, 오픈 도어 프로젝트에 대한 추가 정보는 오픈
           도어 FAQ 페이지 (%{open_doors_faq_url}) 또는 튜토리얼 페이지(%{open_doors_tutorial_url})에서
           확인하실 수 있습니다. FAQ, 튜토리얼, 이메일 등으로 해결하지 못한 질문은 다음 링크를 통해 지원 위원회에 문의해 주시기 바랍니다:
           %{support_url}'
         tutorial_page: 튜토리얼 페이지
       other_works:
         contact_open_doors: 오픈도어 프로젝트에 문의
-        html: 이전해온 아카이브의 다른 작품들이 회원님이 현 시점 사용할 수 없는 이메일 주소 아래로 들어 있는 경우 무엇이든 회원님의
-          신원을 확인할 수 있는 정보를 넣어 %{contact_open_doors_link}해 주시기 바랍니다.
-        text: 이전해온 아카이브의 다른 작품들이 회원님이 현 시점 사용할 수 없는 이메일 주소 아래로 들어 있는 경우 무엇이든 회원님의
-          신원을 확인할 수 있는 정보를 넣어 오픈 도어 위원회에 문의해 주시기 바랍니다.
+        html: 이전해 온 아카이브의 다른 작품들이 회원님이 현시점 사용할 수 없는 이메일 주소로 등록되어 있는 경우 무엇이든 회원님의 신원을
+          확인할 수 있는 정보를 넣어 %{contact_open_doors_link}해 주시기 바랍니다.
+        text: 이전해온 아카이브의 다른 작품들이 회원님이 현 시점 사용할 수 없는 이메일 주소로 등록되어 있는 경우 무엇이든 회원님의 신원을
+          확인할 수 있는 정보를 넣어 오픈 도어 위원회에 문의해 주시기 바랍니다.
       questions:
         contact_support: AO3 지원 위원회에 문의
         html: 그 의 질문은 %{contact_support_link}해 주세요.
@@ -297,12 +296,12 @@ ko:
         contact_open_doors: 오픈 도어 프로젝트에 문의
         html: 리디렉팅 주소가 회원님의 기존 작품으로 이어지도록 오픈 도어 위원회에서 업데이트를 진행하기를 원하신다면 이전해 온 사본을
           삭제한 뒤 AO3 계정 이름, 이전한 아카이브 내 계정 이름, 리디렉팅으로 이동하게 될 팬작품의 제목과 URL을 담아 %{contact_open_doors_link}해
-          주시기 바랍니다. (여러 작품의 라디렉팅 주소를 변경하기 원하시면 한 통의 이메일 내 모두 담으셔도 됩니다.)
+          주시기 바랍니다. (여러 작품의 라디렉팅 주소를 변경하기를 원하시면 한 통의 이메일 안에 모두 담으셔도 됩니다.)
         text: 리디렉팅 주소가 회원님의 기존 작품으로 이어지도록 오픈 도어 위원회에서 업데이트를 진행하기를 원하신다면 이전해 온 사본을
           삭제한 뒤 AO3 계정 이름, 이전한 아카이브 내 계정 이름, 리디렉팅으로 이동하게 될 팬작품의 제목과 URL을 담아 %{open_doors_url}를
-          통해 오픈 도어 위원회에 문의해 주시기 바랍니다. (여러 작품의 라디렉팅 주소를 변경하기 원하시면 한 통의 이메일 내 모두 담으셔도
+          통해 오픈 도어 위원회에 문의해 주시기 바랍니다. (여러 작품의 라디렉팅 주소를 변경하기 원하시면 한 통의 이메일 안에 모두 담으셔도
           됩니다.)
-      works_by: '해당 작품은 다음 이메일 아래에 작성되었습니다: %{email}'
+      works_by: '해당 작품은 다음 이메일 주소로 작성되었습니다: %{email}'
       work_info:
         html: "%{work_link} (%{fandom})"
         text:

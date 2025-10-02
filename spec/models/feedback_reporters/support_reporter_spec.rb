@@ -7,14 +7,17 @@ describe SupportReporter do
 
   let(:support_report_attributes) do
     {
-      title: "This is a tragesy",
+      title: "This is a tragedy",
       description: "Nothing more to say",
       language: "English",
       email: "walrus@example.org",
       username: "Walrus",
       user_agent: "HTTParty",
       site_revision: "eternal_beta",
-      rollout: "rollout_value"
+      rollout: "rollout_value",
+      ip_address: "127.0.0.1",
+      referer: "https://example.com/works/1",
+      site_skin: build(:skin, title: "Reversi", public: true)
     }
   end
 
@@ -23,14 +26,17 @@ describe SupportReporter do
       "departmentId" => "support_dep_id",
       "email" => "walrus@example.org",
       "contactId" => "1",
-      "subject" => "[AO3] Support - This is a tragesy",
+      "subject" => "[AO3] Support - This is a tragedy",
       "description" => "Nothing more to say",
       "cf" => {
         "cf_language" => "English",
         "cf_name" => "Walrus",
         "cf_archive_version" => "eternal_beta",
         "cf_rollout" => "rollout_value",
-        "cf_user_agent" => "HTTParty"
+        "cf_user_agent" => "HTTParty",
+        "cf_ip" => "127.0.0.1",
+        "cf_ticket_url" => "https://example.com/works/1",
+        "cf_site_skin" => "Reversi"
       }
     }
   end
@@ -91,10 +97,60 @@ describe SupportReporter do
     end
 
     context "if the report has an image in description" do
-      it "strips all img tags but leaves the src URLs" do
+      it "strips all img tags but leaves the HTML attributes" do
         allow(subject).to receive(:description).and_return('Hi!<img src="http://example.com/Camera-icon.svg">Bye!')
 
-        expect(subject.report_attributes.fetch("description")).to eq("Hi!http://example.com/Camera-icon.svgBye!")
+        expect(subject.report_attributes.fetch("description")).to eq('Hi!img src="http://example.com/Camera-icon.svg"Bye!')
+      end
+    end
+
+    context "if the report has an empty IP address" do
+      before do
+        allow(subject).to receive(:ip_address).and_return("")
+      end
+
+      it "returns a hash containing 'Unknown' for IP address" do
+        expect(subject.report_attributes.dig("cf", "cf_ip")).to eq("Unknown IP")
+      end
+    end
+
+    context "if the report has an empty referer" do
+      before do
+        allow(subject).to receive(:referer).and_return("")
+      end
+
+      it "returns a hash containing a blank string for referer" do
+        expect(subject.report_attributes.dig("cf", "cf_ticket_url")).to eq("")
+      end
+    end
+
+    context "if the reporter has a very long referer" do
+      before do
+        allow(subject).to receive(:referer).and_return("a" * 2081)
+      end
+
+      it "truncates the referer to 2080 characters" do
+        expect(subject.report_attributes.dig("cf", "cf_ticket_url").length).to eq(2080)
+      end
+    end
+
+    context "if the report has an empty skin" do
+      before do
+        allow(subject).to receive(:site_skin).and_return(nil)
+      end
+
+      it "returns a hash containing the custom skin placeholder" do
+        expect(subject.report_attributes.dig("cf", "cf_site_skin")).to eq("Custom skin")
+      end
+    end
+
+    context "if the report has a private skin" do
+      before do
+        allow(subject).to receive(:site_skin).and_return(build(:skin, public: false))
+      end
+
+      it "returns a hash containing the custom skin placeholder" do
+        expect(subject.report_attributes.dig("cf", "cf_site_skin")).to eq("Custom skin")
       end
     end
   end

@@ -1,6 +1,6 @@
 OTW-Archive
 =========
-[![Build Status](https://img.shields.io/github/actions/workflow/status/otwcode/otwarchive/automated-tests.yml?branch=master)](https://github.com/otwcode/otwarchive/actions/workflows/automated-tests.yml?query=branch%3Amaster) [![Codeship Status](https://img.shields.io/codeship/1f7468f0-7e15-0131-c059-7a8d26daf885/master.svg?label=codeship)](https://www.codeship.io/projects/14476) [![Coverage Status](https://img.shields.io/codecov/c/github/otwcode/otwarchive/master.svg)](https://app.codecov.io/gh/otwcode/otwarchive)
+[![Automated Tests](https://github.com/otwcode/otwarchive/actions/workflows/automated-tests.yml/badge.svg)](https://github.com/otwcode/otwarchive/actions/workflows/automated-tests.yml) [![Deploy AO3](https://github.com/otwcode/otwarchive/actions/workflows/deploy.yml/badge.svg)](https://github.com/otwcode/otwarchive/deployments) [![Coverage Status](https://img.shields.io/codecov/c/github/otwcode/otwarchive/master.svg)](https://app.codecov.io/gh/otwcode/otwarchive)
 
 The OTW-Archive software is an open-source web application intended for hosting archives of fanworks, including fanfic, fanart, and fan vids.
 
@@ -23,6 +23,8 @@ We welcome pull requests for bugs described in our issue tracker. Please see our
 * [Commit Policy](https://github.com/otwcode/otwarchive/wiki/Commit-policy)
 
 We do not have a public chat, but you are welcome to contact us at otw-coders@transformativeworks.org if you have any questions.
+
+We grant your Jira account permissions for commenting on, assigning, and transitioning issues [after you create your first pull request](https://github.com/otwcode/otwarchive/blob/master/CONTRIBUTING.md#workflow).
 
 API
 ----------

@@ -1,5 +1,9 @@
+<% mode = params[:show] == "to-read" ? "marked_for_later" : "history" %>
+
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts('History') %></h2>
+<h2 class="heading">
+  <%= t(".#{mode}.page_heading") %>
+</h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -19,7 +23,9 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark heading"><%= ts('List of History Items') %></h3>
+<h3 class="landmark heading">
+  <%= t(".#{mode}.landmark") %>
+</h3>
 <% if logged_in? && @readings.present? %>
   <ol class="reading work index group">
     <% @readings.each do |reading| %>
@@ -30,5 +36,5 @@
 <!--/content-->
 
 <!--subnav-->
-<%= will_paginate @readings %>
+<%== pagy_nav @pagy %>
 <!--/subnav-->

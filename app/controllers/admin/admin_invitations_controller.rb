@@ -26,6 +26,8 @@ class Admin::AdminInvitationsController < Admin::BaseController
   end
 
   def grant_invites_to_users
+    authorize Invitation
+
     if invitation_params[:user_group] == "All"
       Invitation.grant_all(invitation_params[:number_of_invites].to_i)
     else
@@ -42,13 +44,12 @@ class Admin::AdminInvitationsController < Admin::BaseController
       @invitations = @user.invitations if @user
     end
     if !invitation_params[:token].blank?
-      @invitation = Invitation.find_by(token: invitation_params[:token])
+      @invitations = Invitation.where(token: invitation_params[:token])
     elsif invitation_params[:invitee_email].present?
       @invitations = Invitation.where("invitee_email LIKE ?", "%#{invitation_params[:invitee_email]}%")
-      @invitation = @invitations.first if @invitations.length == 1
     end
 
-    return if @user || @invitation || @invitations.present?
+    return if @user || @invitations.present?
 
     flash.now[:error] = t(".user_not_found")
   end

@@ -1,15 +1,15 @@
-/* ==SYSTEM MESSAGES
+/* == SYSTEM MESSAGES
 System messages use the following colours:
-* notice => blue: success, messages, additional information, no action needed, can proceed
-* caution => yellow: user may wish to change their mind, action optional, can proceed
-* error => red: mistake, go back and fix this problem, action needed before you can proceed
+  - notice => blue: success, messages, additional information, no action needed, can proceed
+  - caution => yellow: user may wish to change their mind, action optional, can proceed
+  - error => red: mistake, go back and fix this problem, action needed before you can proceed
 */
 
 .important {
   font-weight: 900;
 }
 
-/* We don't generally chain class selectors, but Devise's non-customizable alert class conflicts with ours, making it necessary here */
+/* We don't generally chain class selectors, but Devise's non-customizable .alert class conflicts with ours, making it necessary here */
 .required, .error, .alert.flash {
   color: #900;
 }
@@ -76,7 +76,7 @@ ul.notes li, .error ul li, .notice ul li, .caution ul li, .alert.flash ul li {
   padding-left: 1.5em;
 }
 
-dt span.error, dd span.error {
+p span.error, dt span.error, dd span.error {
   display: block;
 }
 
@@ -92,9 +92,9 @@ dd.complex span.error {
 
 /* ADMIN ANNOUNCEMENT BANNERS
 Set by an admin, these banners appear on every page until the user dismisses them or the admin deletes it
-default (no additional class) => blue like other notice messages
-event => red gradient with white text for fundraising, celebrations, other happy Org events
-alert => yellow-orange to alert users of problems or planned downtime
+  - default (no additional class) => blue like other notice messages
+  - event => red gradient with white text for fundraising, celebrations, other happy Org events
+  - alert => yellow-orange to alert users of problems or planned downtime
 */
 
 .announcement {
@@ -116,17 +116,17 @@ alert => yellow-orange to alert users of problems or planned downtime
 }
 
 .announcement p.submit {
-  bottom: -0.25em;
+  bottom: -1em;
   margin: 0;
   padding: 0;
   position: absolute;
   right: 1em;
+  z-index: 1;
 }
 
-.announcement input[type="submit"], .announcement .action {
+.announcement .action {
   background: #fff none;
   border: 1px solid #bbb;
-  font-size: 0.875em;
   padding: 0.25em 0.5em;
     border-radius: 2em;
 }
@@ -160,7 +160,8 @@ alert => yellow-orange to alert users of problems or planned downtime
 }
 
 /* thermometer JavaScript widget for fundraising drives
-progress indicator colors are set in application.js */
+progress indicator colors are set in application.js
+*/
 
 .announcement .thermometer-content {
   height: 2.6em;
@@ -211,7 +212,8 @@ progress indicator colors are set in application.js */
 }
 
 /* SYMBOLS (mostly help button, arguably an action but hey ho);
-IN REVIEW: this block is very old (2008), a bit wonky and has an unexpected effect on blurb that needs detangling so it might change a lot*/
+IN REVIEW: this block is very old (2008), a bit wonky and has an unexpected effect on blurb that needs detangling so it might change a lot
+*/
 
 span.symbol {
   color: #2a547c;
@@ -252,7 +254,7 @@ a.question {
   font-size: 0.75em;
 }
 
-/*SYMBOLS KEY (help content) */
+/* SYMBOLS KEY (help content) */
 
 dl#symbols-key dt {
   width: 100px;
@@ -277,4 +279,4 @@ dl#symbols-key dd {
   margin: -25px auto 20px 35px;
 }
 
-/*END== */
+/* END == */

@@ -8,8 +8,18 @@ class WorkSkin < Skin
   def clean_css
     return if self.css.blank?
     check = lambda {|ruleset, property, value|
+      # If it starts with --, assume the user was trying to define a custom property.
+      if property.match(/\A--/)
+        errors.add(:base, :work_skin_custom_properties)
+        return false
+      end
+      if value.match(/\bvar\b/i)
+        errors.add(:base, :work_skin_var)
+        return false
+      end
       if property == "position" && value == "fixed"
-        errors.add(:base, ts("The %{property} property in %{selectors} cannot have the value %{value} in Work skins, sorry!", property: property, selectors: ruleset.selectors.join(", "), value: value))
+        # Do not internationalize the , used as a join in this error -- it's reflective of the comma used in the list of selectors, which does not change based on locale.
+        errors.add(:base, :work_skin_banned_value_for_property, property: property, selectors: ruleset.selectors.join(", "), value: value)
         return false
       end
       return true
@@ -30,7 +40,11 @@ class WorkSkin < Skin
   def self.import_basic_formatting
     css = File.read(File.join(Rails.public_path, "/stylesheets/work_skins/basic_formatting.css"))
     skin = WorkSkin.find_or_create_by(title: "Basic Formatting", css: css, role: "user", public: true, official: true)
-    File.open(File.join(Rails.public_path, '/images/skins/previews/basic_formatting.png'), 'rb') {|preview_file| skin.icon = preview_file}
+    skin.icon.attach(
+      io: File.open(File.join(Rails.public_path, "/images/skins/previews/basic_formatting.png"), "rb"),
+      filename: "basic_formatting.png",
+      content_type: "image/png"
+    )
     skin.official = true
     skin.save!
     skin

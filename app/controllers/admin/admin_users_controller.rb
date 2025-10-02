@@ -28,12 +28,14 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def index
     authorize User
-    @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
-    @role = Role.find_by(name: params[:role]) if params[:role]
-    @users = User.search_by_role(
-      @role, params[:name], params[:email], params[:user_id],
-      inactive: params[:inactive], exact: params[:exact], page: params[:page]
-    )
+
+    # Values for the role dropdown:
+    @role_values = @roles.map { |role| [role.name.humanize.titlecase, role.id] }
+
+    return if search_params.empty?
+
+    @query = UserQuery.new(search_params)
+    @users = @query.search_results.scope(:with_includes_for_admin_index)
   end
 
   def bulk_search
@@ -74,8 +76,27 @@ class Admin::AdminUsersController < Admin::BaseController
     authorize @user
 
     attributes = permitted_attributes(@user)
-    @user.email = attributes[:email] if attributes[:email].present?
-    @user.roles = Role.where(id: attributes[:roles]) if attributes[:roles].present?
+    if attributes[:email].present?
+      @user.skip_reconfirmation!
+      @user.email = attributes[:email]
+    end
+    if attributes[:roles].present?
+      # Roles that the current admin can add or remove
+      allowed_roles = UserPolicy::ALLOWED_USER_ROLES_BY_ADMIN_ROLES
+        .values_at(*current_admin.roles)
+        .compact
+        .flatten
+
+      # Other roles the current user has
+      out_of_scope_roles = @user.roles.to_a.reject { |role| allowed_roles.include?(role.name) }
+
+      request_roles = Role.where(
+        id: attributes[:roles],
+        name: [allowed_roles]
+      )
+
+      @user.roles = out_of_scope_roles + request_roles
+    end
 
     if @user.save
       flash[:notice] = ts("User was successfully updated.")
@@ -143,6 +164,7 @@ class Admin::AdminUsersController < Admin::BaseController
     @bookmarks = @user.bookmarks
     @collections = @user.sole_owned_collections
     @series = @user.series
+    @page_subtitle = t(".page_title", login: @user.login)
   end
 
   def destroy_user_creations
@@ -156,9 +178,9 @@ class Admin::AdminUsersController < Admin::BaseController
     end
 
     # comments are special and needs to be handled separately
-    @user.comments.each do |comment|
+    @user.comments.not_deleted.each do |comment|
       AdminActivity.log_action(current_admin, comment, action: "destroy spam", summary: comment.inspect)
-      # Akismet spam procedures are skipped, since logged-in comments aren't spam-checked anyways
+      comment.submit_spam
       comment.destroy_or_mark_deleted # comments with replies cannot be destroyed, mark deleted instead
     end
 
@@ -195,6 +217,18 @@ class Admin::AdminUsersController < Admin::BaseController
   def creations
     authorize @user
     @page_subtitle = t(".page_title", login: @user.login)
+  end
+
+  private
+
+  def search_params
+    allowed_params = if policy(User).can_view_past?
+                       %i[name email role_id user_id inactive page commit search_past]
+                     else
+                       %i[name email role_id user_id inactive page commit]
+                     end
+
+    params.permit(*allowed_params)
   end
 
   def log_items

@@ -5,11 +5,13 @@ Feature: Edit Works
   I want to edit existing works
 
   Scenario: You can't edit a work unless you're logged in and it's your work
-    Given I have loaded the fixtures
+    Given the work "First work" by "testuser" with fandom "first fandom"
+      And "testuser" has the pseud "testy"
+      And the work "fourth" by "testuser2"
     # I'm not logged in
     When I view the work "First work"
     Then I should not see "Edit"
-    Given I am logged in as "testuser" with password "testuser"
+    Given I am logged in as "testuser"
       And all indexing jobs have been run
     # This isn't my work
     When I view the work "fourth"
@@ -30,8 +32,7 @@ Feature: Edit Works
       And I press "Preview"
     Then I should see "Preview"
       And I should see "Fandom: first fandom"
-      # line below fails with perform_caching: true because of issue 3461
-      # And I should see "Additional Tags: new tag"
+      And I should see "Additional Tags: new tag"
       And I should see "first chapter content"
       And I should see "Words:3"
     When I press "Update"
@@ -157,7 +158,7 @@ Feature: Edit Works
     Then I should see "coolperson, ex_friend" within ".byline"
     When I edit the work "Shared"
       And I wait 1 second
-      And I follow "Remove Me As Co-Creator"
+      And I press "Remove Me As Co-Creator"
     Then I should see "You have been removed as a creator from the work."
       And "ex_friend" should be the creator on the work "Shared"
       And "coolperson" should not be a creator on the work "Shared"
@@ -230,7 +231,8 @@ Feature: Edit Works
     Then I should not see "F/F"
 
   Scenario: When editing a work, the title field should not escape HTML
-    Given I have a work "What a title! :< :& :>"
+    Given the work "What a title! :< :& :>" by "author"
+      And I am logged in as "author"
       And I go to the works page
       And I follow "What a title! :< :& :>"
       And I follow "Edit"

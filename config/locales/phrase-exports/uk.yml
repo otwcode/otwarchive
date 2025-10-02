@@ -108,22 +108,23 @@ uk:
           many: "%{count} слів"
           one: "%{count} слово"
       footer:
-        general:
-          about:
-            html: АО3 – це керований та забезпечуваний фанатами архів, який залежить
-              від %{donate_link}.
-            text: 'АО3 – це керований та забезпечуваний фанатами архів, який залежить
-              від Ваших пожертв: %{donate_url}.'
-          html:
-            donate_link_text: Ваших пожертв
-            support_link_text: зв'яжіться з Підтримкою
-          unwanted_email:
-            html: Якщо Ви отримали це повідомлення помилково, будь ласка, %{support_link}.
-            text: Якщо Ви отримали це повідомлення помилково, будь ласка, зв'яжіться
-              з Підтримкою %{support_url}.
+        about:
+          html: АО3 – це керований та забезпечуваний фанатами архів, який залежить від %{your_donations_link}.
+          text: 'АО3 – це керований та забезпечуваний фанатами архів, який залежить від Ваших пожертв: %{your_donations_url}.'
+          your_donations: Ваших пожертв
         sent_at: Відправлено %{sent_at}.
+        why_policy_abuse:
+          contact_policy_abuse: 'зв''яжіться з Політикою та Зловживаннями'
+          html: Якщо Ви не розумієте, чому Ви отримали це повідомлення, будь ласка, %{contact_policy_abuse_link}.
+          text: 'Якщо Ви не розумієте, чому Ви отримали це повідомлення, будь ласка, зв''яжіться з Політикою та Зловживаннями: %{contact_policy_abuse_url}.'
+        why_support:
+          contact_support: 'зв''яжіться з Підтримкою'
+          html: Якщо Ви не розумієте, чому Ви отримали це повідомлення, будь ласка, %{contact_support_link}.
+          text: 'Якщо Ви не розумієте, чому Ви отримали це повідомлення, будь ласка, зв''яжіться з Підтримкою: %{contact_support_url}.'
       greeting:
-        formal_html: Вітаємо, %{name},
+        formal:
+          addressed_html: Вітаємо, %{name},
+          unaddressed: Вітаємо,
         informal:
           addressed_html: Привіт, %{name}!
           unaddressed: Привіт!
@@ -133,8 +134,7 @@ uk:
         abuse_team: Команда Політики та зловживань AO3
         app_short_name: AO3
         open_doors: Команда Open Doors (Відкритих Дверей)
-        parent_org: Organization for Transformative Works – OTW (Організація Перетворчих
-          Робіт)
+        parent_org: Organization for Transformative Works – OTW (Організація Перетворчих Робіт)
         support: Команда Підтримки АО3
   users:
     mailer:
@@ -262,6 +262,26 @@ uk:
         на Вашій сторінці робіт. Кожен, хто перейде за посиланням на Вашу роботу,
         отримає повідомлення, що вона є закритою, і вони не зможуть переглянути її
         вміст.
+    archivist_added_to_collection_notification:
+      approved_collection_items_page: сторінки Approved Collection Items (Деталі затвердженої
+        колекції)
+      archivist_notice: Оскільки розпорядники колекції виступають у ролі архіваріусів
+        Open Doors (Відкритих Дверей), їм дозволено додати Вашу роботу до цієї колекції,
+        навіть якщо у Вас вимкнено опцію запрошення до колекції. Архіваріуси додадуть
+        роботу до колекції, лише якщо вона розміщена в імпортованому архіві.
+      removal_instructions:
+        html: Якщо Ви хочете прибрати свою роботу з цієї колекції, будь ласка, перейдіть
+          до Вашої %{approved_items_link}.
+        text: 'Якщо Ви хочете прибрати свою роботу з цієї колекції, будь ласка, перейдіть
+          до Вашої сторінки Approved Collection Items (Деталі затвердженої колекції):
+          %{approved_items_url}.'
+      subject: "[%{app_name}][%{collection_title}] Архіваріус Open Doors (Відкритих
+        Дверей) додав Вашу роботу до колекції"
+      work_added:
+        html: Розпорядники колекції %{collection_link} додали Вашу роботу %{work_link}
+          до їхньої колекції!
+        text: Розпорядники колекції "%{collection_title}" (%{collection_url}) додали
+          Вашу роботу "%{work_title}" (%{work_url}) до їхньої колекції!
     challenge_assignment_notification:
       any: Будь-які
       assignment:

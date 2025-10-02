@@ -3,7 +3,7 @@ class AbuseReport < ApplicationRecord
   validates_presence_of :language
   validates_presence_of :summary
   validates_presence_of :comment
-  validates_presence_of :url
+  validates :url, presence: true, length: { maximum: 2080 }
   validate :url_is_not_over_reported
   validate :email_is_not_over_reporting
   validates_length_of :summary, maximum: ArchiveConfig.FEEDBACK_SUMMARY_MAX,
@@ -11,8 +11,16 @@ class AbuseReport < ApplicationRecord
                                              characters long.',
                                 max: ArchiveConfig.FEEDBACK_SUMMARY_MAX_DISPLAYED)
 
+  before_validation :truncate_url, if: :will_save_change_to_url?
+
   # It doesn't have the type set properly in the database, so override it here:
   attribute :summary_sanitizer_version, :integer, default: 0
+
+  # Truncates the user-provided URL to the maximum we can store in the database. We don't want to reject reports with very long URLs, but we need to do
+  # something to avoid a 500 error for long URLs.
+  def truncate_url
+    self.url = url[0..2079]
+  end
 
   validate :check_for_spam
   def check_for_spam
@@ -21,16 +29,20 @@ class AbuseReport < ApplicationRecord
   end
 
   def logged_in_with_matching_email?
-    User.current_user.present? && User.current_user.email == email
+    User.current_user.present? && User.current_user.email.downcase == email.downcase
   end
 
   def akismet_attributes
     name = username ? username : ""
+    # If the user is logged in and we're sending info to Akismet, we can assume
+    # the email does not match.
+    role = User.current_user.present? ? "user-with-nonmatching-email" : "guest"
     {
       comment_type: "contact-form",
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
       user_ip: ip_address,
+      user_role: role,
       comment_author: name,
       comment_author_email: email,
       comment_content: comment
@@ -106,7 +118,8 @@ class AbuseReport < ApplicationRecord
   end
 
   def send_report
-    return unless %w(staging production).include?(Rails.env)
+    return unless zoho_enabled?
+
     reporter = AbuseReporter.new(
       title: summary,
       description: comment,
@@ -114,7 +127,8 @@ class AbuseReport < ApplicationRecord
       email: email,
       username: username,
       ip_address: ip_address,
-      url: url
+      url: url,
+      creator_ids: creator_ids
     )
     response = reporter.send_report!
     ticket_id = response["id"]
@@ -123,8 +137,26 @@ class AbuseReport < ApplicationRecord
     attach_work_download(ticket_id)
   end
 
+  def creator_ids
+    work_id = reported_work_id
+    return unless work_id
+
+    work = Work.find_by(id: work_id)
+    return "deletedwork" unless work
+
+    ids = work.pseuds.pluck(:user_id).push(*work.original_creators.pluck(:user_id)).uniq.sort
+    ids.prepend("orphanedwork") if ids.delete(User.orphan_account.id)
+    ids.join(", ")
+  end
+
+  # ID of the reported work, unless the report is about comment(s) on the work
+  def reported_work_id
+    comments = url[%r{/comments/}, 0]
+    url[%r{/works/(\d+)}, 1] if comments.nil?
+  end
+
   def attach_work_download(ticket_id)
-    work_id = url[%r{/works/(\d+)}, 1]
+    work_id = reported_work_id
     return unless work_id
 
     work = Work.find_by(id: work_id)
@@ -172,5 +204,11 @@ class AbuseReport < ApplicationRecord
                           volunteers from being overwhelmed, please do not seek
                           out violations to report, but only report violations you
                           encounter during your normal browsing."))
+  end
+
+  private
+
+  def zoho_enabled?
+    %w[staging production].include?(Rails.env)
   end
 end

@@ -68,10 +68,10 @@ if (input.livequery) {
 
 // expand, contract, shuffle
 jQuery(function($){
-  $('.expand').each(function(){
+  $(".expand").each(function(){
     // start by hiding the list in the page
-    list = $($(this).attr('action_target'));
-    if (!list.attr('force_expand') || list.children().size() > 25 || list.attr('force_contract')) {
+    list = $($(this).data("action-target"));
+    if (!list.data("force-expand") || list.children().size() > 25 || list.data("force-contract")) {
       list.hide();
       $(this).show();
     } else {
@@ -82,58 +82,50 @@ jQuery(function($){
 
     // set up click event to expand the list
     $(this).click(function(event){
-      list = $($(this).attr('action_target'));
+      list = $($(this).data("action-target"));
       list.show();
 
       // show the contract & shuffle buttons and hide us
       $(this).next(".contract").show();
       $(this).nextAll(".shuffle").show();
       $(this).hide();
-
-      event.preventDefault(); // don't want to actually click the link
     });
   });
 
-  $('.contract').each(function(){
+  $(".contract").each(function(){
     $(this).click(function(event){
       // hide the list when clicked
-      list = $($(this).attr('action_target'));
+      list = $($(this).data("action-target"));
       list.hide();
 
       // show the expand and shuffle buttons and hide us
       $(this).prev(".expand").show();
       $(this).nextAll(".shuffle").hide();
       $(this).hide();
-
-      event.preventDefault(); // don't want to actually click the link
     });
   });
 
-  $('.shuffle').each(function(){
+  $(".shuffle").each(function(){
     // shuffle the list's children when clicked
     $(this).click(function(event){
-      list = $($(this).attr('action_target'));
+      list = $($(this).data("action-target"));
       list.children().shuffle();
-      event.preventDefault(); // don't want to actually click the link
     });
   });
 
-  $('.expand_all').each(function(){
-      target = "." + $(this).attr('target_class');
-     $(this).click(function(event) {
+  $(".expand_all").each(function(){
+      target = "." + $(this).data("target-class");
+      $(this).click(function(event) {
         $(this).closest(target).find(".expand").click();
-        event.preventDefault();
      });
   });
 
-  $('.contract_all').each(function(){
-     target = "." + $(this).attr('target_class');
+  $(".contract_all").each(function(){
+     target = "." + $(this).data("target-class");
      $(this).click(function(event) {
         $(this).closest(target).find(".contract").click();
-        event.preventDefault();
      });
   });
-
 });
 
 // check all or none within the parent fieldset, optionally with a string to match on the id attribute of the checkboxes
@@ -405,6 +397,12 @@ function prepareDeleteLinks() {
   $j('a[href$="/confirm_delete"][data-confirm]').each(function(){
     this.href = this.href.replace(/\/confirm_delete$/, "");
     $j(this).attr("data-method", "delete");
+  });
+
+  // Removing non-default orphan_account pseuds from works
+  $j('a[href$="/confirm_remove_pseud"][data-confirm]').each(function() {
+    this.href = this.href.replace(/\/confirm_remove_pseud$/, "/remove_pseud");
+    $j(this).attr("data-method", "put");
   });
 
   // For purging assignments in gift exchanges. This is only on one page and easy to

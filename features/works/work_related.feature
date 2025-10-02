@@ -15,7 +15,7 @@ Scenario: Remixer can see their remix / related work on their related works page
 
   Given I have related works setup
   When I post a related work as remixer
-  When I go to my user page
+  When I go to remixer's user page
   Then I should see "Related Works (1)"
   When I follow "Related Works"
   Then I should see "Works that inspired remixer"
@@ -41,7 +41,7 @@ Scenario: Translator can see their translation on their related works page
 
   Given I have related works setup
   When I post a translation as translator
-  When I go to my user page
+  When I go to translator's user page
   Then I should see "Related Works (1)"
   When I follow "Related Works"
   Then I should see "Works translated by translator"
@@ -236,7 +236,7 @@ Scenario: Draft works should not show up on related works
     And I am logged in as "translator"
     And I draft a translation
   When I am logged in as "inspiration"
-    And I go to my user page
+    And I go to inspiration's user page
   Then I should not see "Related Works (1)"
   When I view my related works
   Then I should not see "Worldbuilding Translated"
@@ -351,13 +351,13 @@ Scenario: Anonymous works listed as inspiration should have links to the authors
     And I view the work "Worldbuilding"
   Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
   When I follow "remixer" within ".afterword .children"
-  Then I should be on my "remixer" pseud page
+  Then I should be on the dashboard page for user "remixer" with pseud "remixer"
 
   When I am logged in as an admin
     And I view the work "Worldbuilding"
   Then I should see "Works inspired by this one: Followup by Anonymous [remixer]"
   When I follow "remixer" within ".afterword .children"
-  Then I should be on remixer's "remixer" pseud page
+  Then I should be on the dashboard page for user "remixer" with pseud "remixer"
 
   When I am logged out
     And I view the work "Worldbuilding"
@@ -388,6 +388,17 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/inspired/pseuds/inspired&quot;"
     And the email should link to misterdeejay's user url
     And the email should not contain "&lt;a href=&quot;http://archiveofourown.org/users/misterdeejay/pseuds/misterdeejay&quot;"
+
+  Scenario: When using an invalid URL
+    Given I am logged in
+      And I set up a draft "Naughty"
+    When I check "parent-options-show"
+      And I fill in "URL" with "not valid."
+      And I fill in "Title" with "Breaking rules"
+      And I fill in "Author" with "human"
+      And I press "Post"
+    Then I should see a save error message
+      And I should see "Parent work URL does not appear to be a valid URL."
 
   Scenario: When using a URL on the site to cite a parent work, the URL can't be
   for something that isn't a work
@@ -729,3 +740,47 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   Then I should see the inspiring parent work in the beginning notes
     And I should see the translation listed on the original work
     And I should see the related work listed on the original work
+
+Scenario: Notification emails for related works are translated
+
+  Given a locale with translated emails
+    And I have related works setup
+    And the user "inspiration" enables translated emails
+    And the user "encouragement" allows co-creators
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+    And I invite the co-author "encouragement"
+    And I press "Post"
+  Then 1 email should be delivered to "encouragement"
+    And the email should contain "The user inspiration has invited your pseud encouragement to be listed as a co-creator on the following work"
+  When the user "encouragement" accepts all co-creator requests
+    And a related work has been posted
+  Then 3 emails should be delivered
+    And "inspiration" should receive 1 email
+    And the email to "inspiration" should be translated
+    And the email should have "Related work notification" in the subject
+    And "encouragement" should receive 2 emails
+    And the last email to "encouragement" should be non-translated
+    And the last email should have "Related work notification" in the subject
+
+Scenario: Notification emails for translations are translated
+
+  Given a locale with translated emails
+    And I have related works setup
+    And the user "inspiration" enables translated emails
+    And the user "encouragement" allows co-creators
+  When I am logged in as "inspiration"
+    And I edit the work "Worldbuilding"
+    And I invite the co-author "encouragement"
+    And I press "Post"
+  Then 1 email should be delivered to "encouragement"
+    And the email should contain "The user inspiration has invited your pseud encouragement to be listed as a co-creator on the following work"
+  When the user "encouragement" accepts all co-creator requests
+    And a translation has been posted
+  Then 3 emails should be delivered
+    And "inspiration" should receive 1 email
+    And the email to "inspiration" should be translated
+    And the email should have "Related work notification" in the subject
+    And "encouragement" should receive 2 emails
+    And the last email to "encouragement" should be non-translated
+    And the last email should have "Related work notification" in the subject

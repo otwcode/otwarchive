@@ -104,6 +104,10 @@ describe Skin do
         #main .rotatevert {transform: rotatey(180deg);}
         .rotatehoriz {transform: rotatex(50deg)}",
 
+      # TODO: Only one of the background properties is retained, but this test
+      # passes because we're only checking that the skin saves, not *what* is
+      # saved. AO3-7078 is for allowing multiple declarations using the same
+      # property within a given ruleset.
       "allows multiple valid values for a single property" =>
         "#outer .actions a:hover,symbol .question:hover,.actions input:hover,#outer input[type=\"submit\"]:hover,button:hover,.actions label:hover
         { background:#ddd;
@@ -113,6 +117,13 @@ describe Skin do
         background:-o-linear-gradient(top,#fafafa,#ddd);
         background:linear-gradient(top,#fafafa,#ddd);
         color:#555 }",
+
+      "allows color-scheme property and values" => 
+        ".color_scheme_light { color-scheme: light; }
+        .color_scheme_only_dark { color-scheme: only dark; }",
+
+      "allows accent-color property" =>
+        "input[type='radio'] { accent-color: #900; }",
 
       "allows filter properties" => 
         ".filter_blur { filter: blur(5px); }
@@ -148,11 +159,11 @@ describe Skin do
       "allows order property with negative value" =>
         "div { order: -1 }",
 
-        "saves box shadows with multiple shadows" =>
-          "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }",
+      "saves box shadows with multiple shadows" =>
+        "li { box-shadow: 5px 5px 5px black, inset 0 0 0 1px #dadada; }",
 
-        "saves very long CSS" =>
-          "#main { background: url(http://example.com/#{'a' * 70_000}.png); }"
+      "saves very long CSS" =>
+        "#main { background: url(http://example.com/#{'a' * 70_000}.png); }"
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
@@ -177,7 +188,9 @@ describe Skin do
       "errors when saving gradient with xss" => "div {background: -webkit-linear-gradient(url(xss.htc))}",
       "errors when saving dsf images" => "body {background: url(http://foo.com/bar.dsf)}",
       "errors when saving urls with invalid domain" => "body {background: url(http://foo.htc/bar.png)}",
-      "errors when saving xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}"
+      "errors when saving xss interrupted with comments" => "div {xss:expr/*XSS*/ession(alert('XSS'))}",
+      "errors when saving url followed by something else" => 'a {content: url(/images/fakeimage.png) " (" attr(href) ")"}',
+      "errors when saving custom property with url function" => ":root { --address: url(\"https://example.org/img.jpg\") }"
     }.each_pair do |condition, css|
       it condition do
         @skin.css = css
@@ -195,6 +208,13 @@ describe Skin do
     it "has a unique title" do
       expect(@skin.save).to be_truthy
       skin2 = Skin.new(title: "Test Skin")
+      expect(skin2.save).not_to be_truthy
+      expect(skin2.errors[:title]).not_to be_empty
+    end
+
+    it "has a unique title ignoring case" do
+      expect(@skin.save).to be_truthy
+      skin2 = Skin.new(title: "test skin")
       expect(skin2.save).not_to be_truthy
       expect(skin2.errors[:title]).not_to be_empty
     end

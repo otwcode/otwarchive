@@ -1,17 +1,18 @@
 class Collection < ApplicationRecord
   include Filterable
   include WorksOwner
+  include Searchable
 
-  has_attached_file :icon,
-                    styles: { standard: "100x100>" },
-                    url: "/system/:class/:attachment/:id/:style/:basename.:extension",
-                    path: %w[staging production].include?(Rails.env) ? ":class/:attachment/:id/:style.:extension" : ":rails_root/public:url",
-                    storage: %w[staging production].include?(Rails.env) ? :s3 : :filesystem,
-                    s3_protocol: "https",
-                    default_url: "/images/skins/iconsets/default/icon_collection.png"
+  has_one_attached :icon do |attachable|
+    attachable.variant(:standard, resize_to_limit: [100, 100], loader: { n: -1 })
+  end
 
-  validates_attachment_content_type :icon, content_type: %r{image/\S+}, allow_nil: true
-  validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
+  # i18n-tasks-use t("errors.attributes.icon.invalid_format")
+  # i18n-tasks-use t("errors.attributes.icon.too_large")
+  validates :icon, attachment: {
+    allowed_formats: %r{image/\S+},
+    maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
+  }
 
   belongs_to :parent, class_name: "Collection", inverse_of: :children
   has_many :children, class_name: "Collection", foreign_key: "parent_id", inverse_of: :parent
@@ -58,7 +59,6 @@ class Collection < ApplicationRecord
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: "Bookmark"
   has_many :approved_bookmarks, through: :approved_collection_items, source: :item, source_type: "Bookmark"
-
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
 
@@ -165,6 +165,8 @@ class Collection < ApplicationRecord
   scope :prompt_meme, -> { where(challenge_type: "PromptMeme") }
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
+  scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).with_attached_icon }
+  scope :for_search, -> { includes(:parent, :children, :tags, :challenge, moderators: [user: :pseuds], owners: [user: :pseuds]).with_attached_icon }
 
   def cleanup_url
     self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
@@ -339,7 +341,7 @@ class Collection < ApplicationRecord
 
   def collection_email
     return self.email if self.email.present?
-    return parent.email if parent && parent.email.present? 
+    return parent.email if parent && parent.email.present?
   end
 
   def notify_maintainers_assignments_sent
@@ -350,7 +352,7 @@ class Collection < ApplicationRecord
     else
       # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
       self.maintainers_list.each do |user|
-        I18n.with_locale(user.preference.locale.iso) do
+        I18n.with_locale(user.preference.locale_for_mails) do
           translated_subject = I18n.t("user_mailer.collection_notification.assignments_sent.subject")
           translated_message = I18n.t("user_mailer.collection_notification.assignments_sent.complete")
           UserMailer.collection_notification(self.id, translated_subject, translated_message, user.email).deliver_later
@@ -367,7 +369,7 @@ class Collection < ApplicationRecord
     else
       # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
       self.maintainers_list.each do |user|
-        I18n.with_locale(user.preference.locale.iso) do
+        I18n.with_locale(user.preference.locale_for_mails) do
           translated_subject = I18n.t("user_mailer.collection_notification.challenge_default.subject", offer_byline: challenge_assignment.offer_byline)
           translated_message = I18n.t("user_mailer.collection_notification.challenge_default.complete", offer_byline: challenge_assignment.offer_byline, request_byline: challenge_assignment.request_byline, assignments_page_url: assignments_page_url)
           UserMailer.collection_notification(self.id, translated_subject, translated_message, user.email).deliver_later
@@ -400,49 +402,6 @@ class Collection < ApplicationRecord
     approved_collection_items.each(&:notify_of_reveal)
   end
 
-  def self.sorted_and_filtered(sort, filters, page)
-    pagination_args = { page: page }
-
-    # build up the query with scopes based on the options the user specifies
-    query = Collection.top_level
-
-    if filters[:title].present?
-      # we get the matching collections out of autocomplete and use their ids
-      ids = Collection.autocomplete_lookup(search_param: filters[:title],
-                                           autocomplete_prefix: (if filters[:closed].blank?
-                                                                   "autocomplete_collection_all"
-                                                                 else
-                                                                   (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open")
-                                                                 end)).map { |result| Collection.id_from_autocomplete(result) }
-      query = query.where(collections: { id: ids })
-    elsif filters[:closed].present?
-      query = (filters[:closed] == "true" ? query.closed : query.not_closed)
-    end
-    query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if filters[:moderated].present?
-    if filters[:challenge_type].present?
-      case filters[:challenge_type]
-      when "gift_exchange"
-        query = query.gift_exchange
-      when "prompt_meme"
-        query = query.prompt_meme
-      when "no_challenge"
-        query = query.no_challenge
-      end
-    end
-    query = query.order(sort)
-
-    if filters[:fandom].blank?
-      query.paginate(pagination_args)
-    else
-      fandom = Fandom.find_by_name(filters[:fandom])
-      if fandom
-        (fandom.approved_collections & query).paginate(pagination_args)
-      else
-        []
-      end
-    end
-  end
-
   # Delete current icon (thus reverting to archive default icon)
   def delete_icon=(value)
     @delete_icon = !value.to_i.zero?
@@ -454,6 +413,52 @@ class Collection < ApplicationRecord
   alias delete_icon? delete_icon
 
   def clear_icon
-    self.icon = nil if delete_icon? && !icon.dirty?
+    return unless delete_icon?
+
+    self.icon.purge
+    self.icon_alt_text = nil
+    self.icon_comment_text = nil
+  end
+
+  # Work and bookmark counts for indexing; these come from the database.
+
+  def general_works_count
+    Work.visible_to_registered_user.in_collection(self).count
+  end
+
+  def public_works_count
+    Work.visible_to_all.in_collection(self).count
+  end
+
+  def general_bookmarked_items_count
+    bookmarks = Bookmark.is_public.in_collection(self)
+
+    [
+      Work.visible_to_registered_user,
+      Series.visible_to_registered_user,
+      ExternalWork.visible_to_registered_user
+    ].map do |relation|
+      relation.joins(:bookmarks).merge(bookmarks).distinct.count("bookmarks.bookmarkable_id")
+    end.sum
+  end
+
+  def public_bookmarked_items_count
+    bookmarks = Bookmark.is_public.in_collection(self)
+
+    [Work.visible_to_all, Series.visible_to_all, ExternalWork.visible_to_all].map do |relation|
+      relation.joins(:bookmarks).merge(bookmarks).distinct.count("bookmarks.bookmarkable_id")
+    end.sum
+  end
+
+  # Work and bookmark counts; these come from Elasticsearch via the
+  # SearchCounts helper. It already checks for visibility, so nothing
+  # extra needs to be done here.
+
+  def approved_works_count
+    SearchCounts.work_count_for_collection(self)
+  end
+
+  def approved_bookmarked_items_count
+    SearchCounts.bookmarkable_count_for_collection(self)
   end
 end

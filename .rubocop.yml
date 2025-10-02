@@ -45,6 +45,7 @@ Lint/AmbiguousBlockAssociation:
   Exclude:
     # Exception for specs where we use change matchers:
     # https://github.com/rubocop-hq/rubocop/issues/4222
+    - 'features/step_definitions/**/*.rb'
     - 'spec/**/*.rb'
 
 Lint/AmbiguousRegexpLiteral:
@@ -83,13 +84,19 @@ Metrics/PerceivedComplexity:
 Migration/LargeTableSchemaUpdate:
   Tables:
     - abuse_reports
+    - active_storage_attachments
+    - active_storage_blobs
+    - active_storage_variant_records
     - admin_activities
     - audits
+    - blocks
     - bookmarks
+    - chapters
     - comments
     - common_taggings
     - collection_items
     - collection_participants
+    - collection_preferences
     - collection_profiles
     - collections
     - creatorships
@@ -103,12 +110,14 @@ Migration/LargeTableSchemaUpdate:
     - invitations
     - kudos
     - log_items
+    - meta_taggings
     - mutes
     - preferences
     - profiles
     - prompts
     - pseuds
     - readings
+    - related_works
     - set_taggings
     - serial_works
     - series
@@ -117,8 +126,9 @@ Migration/LargeTableSchemaUpdate:
     - subscriptions
     - tag_nominations
     - tag_set_associations
-    - tags
+    - tag_sets
     - taggings
+    - tags
     - users
     - works
 
@@ -132,8 +142,9 @@ Rails/DefaultScope:
 
 Rails/DynamicFindBy:
   AllowedMethods:
-    # Exception for Tag.find_by_name
+    # Exceptions for Tag.find_by_name and Tag.find_by_name!
     - find_by_name
+    - find_by_name!
     # Exception for Tagging.find_by_tag
     - find_by_tag
     # Exceptions for Work.find_by_*
@@ -154,6 +165,8 @@ Rails/OutputSafety:
 
 Rails/Output:
   Exclude:
+    # Allow patches to print warnings to console:
+    - 'config/initializers/monkeypatches/*.rb'
     # Allow migrations to print pt-osc comments to console:
     - 'db/migrate/*.rb'
 

@@ -41,6 +41,7 @@ class Subscription < ApplicationRecord
   # Emails should only contain works or chapters.
   # Emails should only contain posted works or chapters.
   # Emails should never contain chapters of draft works.
+  # Emails should never contain hidden works or chapters of hidden works.
   # Emails should never contain orphaned works or chapters.
   # TODO: AO3-3620 & AO3-5696: Allow subscriptions to orphan_account to receive
   # notifications.
@@ -52,6 +53,7 @@ class Subscription < ApplicationRecord
     return false unless creation.is_a?(Chapter) || creation.is_a?(Work)
     return false unless creation.try(:posted)
     return false if creation.is_a?(Chapter) && !creation.work.try(:posted)
+    return false if creation.try(:hidden_by_admin) || (creation.is_a?(Chapter) && creation.work.try(:hidden_by_admin))
     return false if creation.pseuds.any? { |p| p.user == User.orphan_account }
     return false if subscribable_type == "User" && creation.anonymous?
     return false if subscribable_type == "Work" && !creation.is_a?(Chapter)

@@ -120,11 +120,35 @@ Feature: Gift Exchange Challenge
       And I submit
     Then I should see "URL: https://example.com/url_for_prompt"
 
+  Scenario: Invalid URL is disallowed when editing a request in a signup
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I edit settings for "Awesome Gift Exchange" challenge
+      And I check "gift_exchange[request_restriction_attributes][url_allowed]"
+      And I submit
+    When I am logged in as "myname1"
+      And I sign up for "Awesome Gift Exchange" with combination A
+      And I follow "Edit Sign-up"
+      And I fill in "Prompt URL:" with "i am broken."
+      And I submit
+    Then I should see "Request URL does not appear to be a valid URL."
+
+  Scenario: Invalid URL is disallowed when editing an offer in a signup
+    Given the gift exchange "Awesome Gift Exchange" is ready for signups
+      And I edit settings for "Awesome Gift Exchange" challenge
+      And I check "gift_exchange[offer_restriction_attributes][url_allowed]"
+      And I submit
+    When I am logged in as "myname1"
+      And I sign up for "Awesome Gift Exchange" with combination A
+      And I follow "Edit Sign-up"
+      And I fill in "Prompt URL:" with "i hereby offer you a bug."
+      And I submit
+    Then I should see "Offer URL does not appear to be a valid URL."
+
   Scenario: Sign-ups can be seen in the dashboard
     Given the gift exchange "Awesome Gift Exchange" is ready for signups
     When I am logged in as "myname1"
       And I sign up for "Awesome Gift Exchange" with combination A
-    When I am on my user page
+    When I am on myname1's user page
     Then I should see "Sign-ups (1)"
     When I follow "Sign-ups (1)"
     Then I should see "Awesome Gift Exchange"
@@ -143,10 +167,7 @@ Feature: Gift Exchange Challenge
    When I am logged in as "mod1"
      And I go to "Awesome Gift Exchange" collection's page
      And I follow "Sign-ups"
-   Then I should see "myname4" within "#main"
-     And I should see "myname3" within "#main"
-     And I should see "myname2" within "#main"
-     And I should see "myname1" within "#main"
+   Then I should see all the participants who have signed up
      And I should see "Something else weird"
      And I should see "Alternate Universe - Historical"
 
@@ -157,7 +178,7 @@ Feature: Gift Exchange Challenge
      And I go to "Awesome Gift Exchange" collection's page
      And I follow "Sign-ups"
      And I fill in "query" with "3"
-     And I press "Search By Pseud"
+     And I press "Search by Pseud"
    Then I should see "myname3" within "#main"
      And I should not see "myname4" within "#main"
 
@@ -170,24 +191,44 @@ Feature: Gift Exchange Challenge
     Then I should see "You can't generate matches while sign-up is still open."
       And I should not see "Generate Potential Matches"
 
-  Scenario: Matches can be generated
+  Scenario: Matches can be generated and a translated email is sent
     Given the gift exchange "Awesome Gift Exchange" is ready for matching
-      And I close signups for "Awesome Gift Exchange"
-    When I follow "Matching"
-      And I follow "Generate Potential Matches"
+      And I have added a co-moderator "mod2" to collection "Awesome Gift Exchange"
+      And a locale with translated emails
+      And the user "mod1" enables translated emails
+    When I close signups for "Awesome Gift Exchange"
+      And I follow "Matching"
+      And I press "Generate Potential Matches"
     Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
+      And 1 email should be delivered to "mod1"
+      And the email to "mod1" should be translated
+      And the email should contain "finished generating potential assignments"
+      And the email should contain "you are an owner or moderator of the collection"
+      And 1 email should be delivered to "mod2"
+      And the email to "mod2" should be non-translated
+      And the email should contain "finished generating potential assignments"
+      And the email should contain "you are an owner or moderator of the collection"
     When I reload the page
     Then I should see "Reviewing Assignments"
       And I should see "Complete"
 
-  Scenario: Invalid signups are caught before generation
+  Scenario: Invalid signups are caught before generation and a translated email is sent
     Given the gift exchange "Awesome Gift Exchange" is ready for matching
       And I create an invalid signup in the gift exchange "Awesome Gift Exchange"
+      And I have added a co-moderator "mod2" to collection "Awesome Gift Exchange"
+      And a locale with translated emails
+      And the user "mod1" enables translated emails
     When I close signups for "Awesome Gift Exchange"
       And I follow "Matching"
-      And I follow "Generate Potential Matches"
+      And I press "Generate Potential Matches"
     Then 1 email should be delivered to "mod1"
+      And the email to "mod1" should be translated
       And the email should contain "invalid sign-up"
+      And the email should contain "you are an owner or moderator of the collection"
+      And 1 email should be delivered to "mod2"
+      And the email to "mod2" should be non-translated
+      And the email should contain "invalid sign-up"
+      And the email should contain "you are an owner or moderator of the collection"
     When I go to "Awesome Gift Exchange" gift exchange matching page
     Then I should see "Generate Potential Matches"
       And I should see "invalid sign-ups"
@@ -200,7 +241,7 @@ Feature: Gift Exchange Challenge
     Then I should see "Assignments updated"
       And I should see "No Recipient"
       And I should see "No Giver"
-    When I follow "Send Assignments"
+    When I press "Send Assignments"
     Then I should see "aren't assigned"
     When I follow "No Giver"
       And I assign a pinch hitter
@@ -211,7 +252,7 @@ Feature: Gift Exchange Challenge
       And I assign a pinch recipient
       And I press "Save Assignment Changes"
       And I should not see "No Recipient"
-    When I follow "Send Assignments"
+    When I press "Send Assignments"
     Then I should see "Assignments are now being sent out"
 
   Scenario: Issues with assignments
@@ -226,7 +267,7 @@ Feature: Gift Exchange Challenge
     Then I should see "Regenerate Assignments"
       And I should see "Regenerate All Potential Matches"
       And I should see "try regenerating assignments"
-    When I follow "Regenerate Assignments"
+    When I press "Regenerate Assignments"
       And I reload the page
     Then I should see "Reviewing Assignments"
       And I should see "Complete"
@@ -249,12 +290,12 @@ Feature: Gift Exchange Challenge
       And I submit
       And I follow "Matching"
       And I follow "No Potential Recipients"
-      And I follow "Regenerate Matches For Mismatch"
+      And I press "Regenerate Matches For Mismatch"
     Then I should see "Matches are being regenerated for Mismatch"
     When I reload the page
     Then I should not see "No Potential Givers"
       And I should not see "No Potential Recipients"
-    When I follow "Regenerate Assignments"
+    When I press "Regenerate Assignments"
       And I reload the page
     Then I should not see "No Potential Givers"
       And I should not see "No Potential Recipients"
@@ -263,7 +304,7 @@ Feature: Gift Exchange Challenge
   Scenario: Assignments can be sent
     Given the gift exchange "Awesome Gift Exchange" is ready for matching
       And I have generated matches for "Awesome Gift Exchange"
-    When I follow "Send Assignments"
+    When I press "Send Assignments"
     Then I should see "Assignments are now being sent out"
     When I reload the page
     Then I should not see "Assignments are now being sent out"
@@ -332,7 +373,7 @@ Feature: Gift Exchange Challenge
   Scenario: User can see their assignment, but no email links
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
-      And I go to my user page
+      And I go to myname1's user page
       And I follow "Assignments"
     Then I should see "Awesome Gift Exchange"
     When I follow "Awesome Gift Exchange"
@@ -346,7 +387,7 @@ Feature: Gift Exchange Challenge
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I fulfill my assignment
-    When I go to my user page
+    When I go to myname1's user page
       And I follow "Assignments"
     Then I should see "Awesome Gift Exchange"
       And I should not see "Not yet posted"
@@ -364,7 +405,7 @@ Feature: Gift Exchange Challenge
       And I fulfill my assignment
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
-      And I follow "Default All Incomplete"
+      And I press "Default All Incomplete"
     Then I should see "All unfulfilled assignments marked as defaulting."
       And I should see "Undefault myname2"
       And I should see "Undefault myname3"
@@ -375,8 +416,8 @@ Feature: Gift Exchange Challenge
 
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
-      And I go to my assignments page
-      And I follow "Default"
+      And I go to the assignments page for "myname1"
+      And I press "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
@@ -385,15 +426,15 @@ Feature: Gift Exchange Challenge
     Then I should see "Assignment updates complete!"
       And I should not see "Undefault"
     When I am logged in as "myname1"
-      And I go to my assignments page
+      And I go to the assignments page for "myname1"
       And I should see "Default"
 
   Scenario: User can default and a mod can assign a pinch hitter
 
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
-      And I go to my assignments page
-      And I follow "Default"
+      And I go to the assignments page for "myname1"
+      And I press "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
@@ -556,7 +597,7 @@ Feature: Gift Exchange Challenge
       And everyone has signed up for the gift exchange "Bad Gift Exchange"
       And the challenge "Bad Gift Exchange" is deleted
     When I am logged in as "myname1"
-      And I go to my signups page
+      And I go to myname1's signups page
     Then I should see "Challenge Sign-ups"
       And I should not see "Bad Gift Exchange"
 
@@ -565,7 +606,7 @@ Feature: Gift Exchange Challenge
     Given everyone has their assignments for "Bad Gift Exchange"
       And the challenge "Bad Gift Exchange" is deleted
     When I am logged in as "myname1"
-      And I go to my assignments page
+      And I go to the assignments page for "myname1"
     Then I should see "My Assignments"
       And I should not see "Bad Gift Exchange"
 
@@ -574,7 +615,7 @@ Feature: Gift Exchange Challenge
     Given an assignment has been fulfilled in a gift exchange
       And the challenge "Awesome Gift Exchange" is deleted
     When I am logged in as "myname1"
-      And I go to my assignments page
+      And I go to the assignments page for "myname1"
     Then I should see "My Assignments"
       And I should not see "Awesome Gift Exchange"
 
@@ -617,7 +658,7 @@ Feature: Gift Exchange Challenge
       And the user "recip" exists and is activated
       And the user "recip" disallows gifts
       And I am logged in as "gifter"
-      And I have an assignment for the user "recip" in the collection "exchange_collection"
+      And "gifter" has an assignment for the user "recip" in the collection "exchange_collection"
     When I fulfill my assignment
     Then I should see "For recip."
     When I follow "Edit"
@@ -632,7 +673,7 @@ Feature: Gift Exchange Challenge
       And the user "recip" exists and is activated
       And the user "recip" disallows gifts
       And I am logged in as "gifter"
-      And I have an assignment for the user "recip" in the collection "exchange_collection"
+      And "gifter" has an assignment for the user "recip" in the collection "exchange_collection"
     When I start to fulfill my assignment
       And I fill in "Gift this work to" with "recip"
       And I press "Post"
@@ -650,7 +691,7 @@ Feature: Gift Exchange Challenge
       And the user "recip" allows gifts
       And the user "recip" has blocked the user "gifter"
       And I am logged in as "gifter"
-      And I have an assignment for the user "recip" in the collection "exchange_collection"
+      And "gifter" has an assignment for the user "recip" in the collection "exchange_collection"
     When I fulfill my assignment
     Then I should see "For recip."
     When I follow "Edit"
@@ -666,7 +707,7 @@ Feature: Gift Exchange Challenge
       And the user "recip" allows gifts
       And the user "recip" has blocked the user "gifter"
       And I am logged in as "gifter"
-      And I have an assignment for the user "recip" in the collection "exchange_collection"
+      And "gifter" has an assignment for the user "recip" in the collection "exchange_collection"
     When I start to fulfill my assignment
       And I fill in "Gift this work to" with "recip"
       And I press "Post"

@@ -74,14 +74,12 @@ Given /^mod1 lives in Alaska$/ do
 end
 
 Given /^(?:I have )?(?:a|an|the) (hidden)?(?: )?(anonymous)?(?: )?(moderated)?(?: )?(closed)?(?: )?collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |hidden, anon, moderated, closed, title, name|
-  step %{I am logged in as "moderator"}
-  step %{I set up the collection "#{title}" with name "#{name}"}
-  check("This collection is unrevealed") unless hidden.blank?
-  check("This collection is anonymous") unless anon.blank?
-  check("This collection is moderated") unless moderated.blank?
-  check("This collection is closed") unless closed.blank?
-  step %{I submit}
-  step %{I am logged out}
+  mod = ensure_user("moderator")
+  collection = FactoryBot.create(:collection, title: title, name: (name.presence || title.gsub(/[^\w]/, "_")), owner: mod.default_pseud)
+  collection.collection_preference.update_attribute(:anonymous, true) if anon.present?
+  collection.collection_preference.update_attribute(:unrevealed, true) if hidden.present?
+  collection.collection_preference.update_attribute(:moderated, true) if moderated.present?
+  collection.collection_preference.update_attribute(:closed, true) if closed.present?
 end
 
 Given /^I open the collection with the title "([^\"]*)"$/ do |title|
@@ -122,6 +120,43 @@ Given "I have joined the collection {string} as {string}" do |title, login|
   user = User.find_by(login: login)
   FactoryBot.create(:collection_participant, pseud: user.default_pseud, collection: collection, participant_role: "Member")
   visit collections_path
+end
+
+Given "a set of collections for searching" do
+  profile = CollectionProfile.create!(faq: "<dl><dt>What is this test thing?</dt><dd>It's a test collection</dd></dl>",
+                                      intro: "Welcome to the test collection",
+                                      rules: "Be nice to testers")
+  FactoryBot.create(:collection,
+                    name: "sometest",
+                    title: "Some Test Collection",
+                    tag_string: "The Best Tag, The Better Tag",
+                    collection_profile: profile)
+  FactoryBot.create(:collection,
+                    name: "othertest",
+                    tag_string: "The Best Tag",
+                    title: "Some Other Collection")
+  FactoryBot.create(:collection,
+                    :closed,
+                    name: "anothertest",
+                    tag_string: "The Better Tag",
+                    title: "Another Plain Collection")
+  FactoryBot.create(:collection,
+                    :moderated,
+                    name: "surprisetest",
+                    title: "Surprise Presents",
+                    challenge: FactoryBot.create(:gift_exchange))
+  FactoryBot.create(:collection,
+                    name: "swaptest",
+                    title: "Another Gift Swap",
+                    multifandom: true,
+                    challenge: FactoryBot.create(:gift_exchange))
+  FactoryBot.create(:collection,
+                    :closed,
+                    name: "demandtest",
+                    title: "On Demand",
+                    challenge: FactoryBot.create(:prompt_meme))
+
+  step %{all indexing jobs have been run}
 end
 
 ### WHEN
@@ -181,10 +216,10 @@ When /^I check all the collection settings checkboxes$/ do
   check("collection_collection_preference_attributes_email_notify")
 end
 
-When /^I accept the invitation for my work in the collection "([^\"]*)"$/ do |collection|
+When "{string} accepts the invitation for their work in the collection {string}" do |username, collection|
   the_collection = Collection.find_by(title: collection)
   collection_item_id = the_collection.collection_items.first.id
-  visit user_collection_items_path(User.current_user)
+  visit user_collection_items_path(User.find_by(login: username))
   step %{I select "Approved" from "collection_items_#{collection_item_id}_user_approval_status"}
 end
 

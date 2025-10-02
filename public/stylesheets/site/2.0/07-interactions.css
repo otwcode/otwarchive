@@ -1,5 +1,5 @@
-/*==INTERACTIONS: global form rules
-http://otwcode.github.com/docs/front_end_coding/patterns/interactions
+/* == INTERACTIONS: global form rules
+https://otwcode.github.io/docs/patterns/interactions.html
 (submit button styling is in actions.css with the other buttons)
 General rules for all form elements, and nearly ALL our forms use just these.
 Forms are normally in definition lists <dt label: dd input>
@@ -21,9 +21,10 @@ fieldset {
   min-width: 0;
 }
 
-/*Guideline: Forms are written by lots of people, and, this is beta, change a LOT.
+/* Guideline: Forms are written by lots of people, and, this is beta, change a LOT.
 I've written a load of possible different nests to give a reasonably/broadly consistent view whatever goes in,
-but it's probably not complete. */
+but it's probably not complete.
+*/
 
 fieldset, form dl, fieldset dl dl, fieldset fieldset fieldset, fieldset fieldset dl dl, dd.hideme, form blockquote.userstuff {
   display: block;
@@ -50,15 +51,19 @@ fieldset dd dl, form .meta dd, fieldset dl fieldset dl, dd fieldset {
   margin: 0.643em 0;
 }
 
-/*end nesting */
+/* end nesting */
 
-legend, input[type="hidden"] {
+legend {
   height: 0;
   width: 0;
   font-size: 0;
   opacity: 0;
   padding: 0;
   margin: 0;
+}
+
+input[type="hidden"] {
+  display: none !important;
 }
 
 label {
@@ -98,7 +103,11 @@ select {
   width: 32.5%;
 }
 
-input[type="radio"], input[type="checkbox"], input[type="file"], input.number, p input, p select, .heading select, li select {
+input[type="checkbox"], input[type="radio"] {
+    box-shadow: none;
+}
+
+input[type="checkbox"], input[type="file"], input[type="radio"], input.number, p input, p select, .heading select, li select {
   width: auto;
   margin-right: 0.375em;
 }
@@ -149,19 +158,20 @@ form .footnote code {
 }
 
 /* when we display information that cannot be edited,
-like the current username on the change username form */
+like the current username on the change username form
+*/
 form dd p.informational {
   padding-top: 0;
 }
 
-/*END FORM RULES*/
+/* END FORM RULES */
 
 /* WIDGET: DEPENDENT OPTIONS */
 .toggle_formfield ~ ul.dependent {
   margin-left: 2.625em;
 }
 
-/* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE)*/
+/* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE) */
 
 p.character_counter {
   font-size: 87.5%;
@@ -173,7 +183,8 @@ p.character_counter {
 }
 
 /* WIDGET: LIVE VALIDATION (todo: ARIA live region)
-We only use error messages for LiveValidation. Style spoofs the system error message. If we ever set a default success message, this will need updating. */
+We only use error messages for LiveValidation. Style spoofs the system error message. If we ever set a default success message, this will need updating.
+*/
 
 .LV_validation_message {
   font-weight: 900;
@@ -254,7 +265,7 @@ form li ul.autocomplete li.input {
   display: inline-block;
 }
 
-/* WIDGET: SORTABLE LIST (note: hope to merge with .sortable and .draggable etc)*/
+/* WIDGET: SORTABLE LIST (note: hope to merge with .sortable and .draggable etc) */
 
 .ui-sortable li {
   background: #eee;
@@ -367,9 +378,10 @@ a.ui-datepicker-next {
   height: 1.45em;
 }
 
-
-/*WIDGET: TOOLTIP (todo, requires graceful degradation testing, can't see any reason for this jS)
-qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
+/* WIDGET: TOOLTIP (todo, requires graceful degradation testing, can't see any reason for this jS)
+qTip2 Copyright 2009-2010 Craig Michael Thompson -
+http://craigsworks.com
+*/
 
 .qtip {
   position: absolute;
@@ -548,7 +560,7 @@ a.modal.help {
   margin-top: 0.5em;
 }
 
-/*MODE: DYNAMIC is in early dev and so currently sharing styles with toggled */
+/* MODE: DYNAMIC is in early dev and so currently sharing styles with toggled */
 
 div.dynamic {
   background: #fff;
@@ -556,9 +568,10 @@ div.dynamic {
   z-index: 500;
 }
 
-/*MODE: VERBOSE for forms with more than three fieldsets
+/* MODE: VERBOSE for forms with more than three fieldsets
 TO DO: Make VERBOSE a class on FORM across the site; it is a surrounding DIV
-in some areas, hence .verbose form */
+in some areas, hence .verbose form
+*/
 
 form.verbose legend, .verbose form legend {
   height: auto;
@@ -571,7 +584,7 @@ form.verbose legend, .verbose form legend {
     opacity: 1;
 }
 
-/*MODE: SIMPLE for forms with three or fewer fieldsets (default) */
+/* MODE: SIMPLE for forms with three or fewer fieldsets (default) */
 
 form.simple span.actions {
   float: none;
@@ -664,9 +677,7 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
   padding-bottom: 0.643em;
 }
 
-/*INTERACTION: LOGIN SIGNUP*/
-
-/*INTERACTION: POST (work, chapter, comment, news, feedback, challenge etc) */
+/* INTERACTION: POST (work, chapter, comment, news, feedback, challenge etc) */
 
 .post .required .warnings, dd.required {
   font-weight: normal;
@@ -677,7 +688,7 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
   clear: right;
 }
 
-/* CONTEXT: dashboard*/
+/* CONTEXT: dashboard */
 
 .dashboard > form {
   float: left;
@@ -693,4 +704,4 @@ form.single .autocomplete + input + span.submit input[type="submit"] {
   clear: both;
 }
 
-/*END== */
+/* END == */

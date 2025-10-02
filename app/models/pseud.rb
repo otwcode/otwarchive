@@ -2,25 +2,18 @@ class Pseud < ApplicationRecord
   include Searchable
   include WorksOwner
   include Justifiable
+  include AfterCommitEverywhere
 
-  has_attached_file :icon,
-    styles: { standard: "100x100>" },
-    path: if Rails.env.production?
-            ":attachment/:id/:style.:extension"
-          elsif Rails.env.staging?
-            ":rails_env/:attachment/:id/:style.:extension"
-          else
-            ":rails_root/public/system/:rails_env/:class/:attachment/:id_partition/:style/:filename"
-          end,
-    storage: %w(staging production).include?(Rails.env) ? :s3 : :filesystem,
-    s3_protocol: "https",
-    default_url: "/images/skins/iconsets/default/icon_user.png"
+  has_one_attached :icon do |attachable|
+    attachable.variant(:standard, resize_to_limit: [100, 100], loader: { n: -1 })
+  end
 
-  validates_attachment_content_type :icon,
-                                    content_type: %w[image/gif image/jpeg image/png],
-                                    allow_nil: true
-
-  validates_attachment_size :icon, less_than: 500.kilobytes, allow_nil: true
+  # i18n-tasks-use t("errors.attributes.icon.invalid_format")
+  # i18n-tasks-use t("errors.attributes.icon.too_large")
+  validates :icon, attachment: {
+    allowed_formats: %w[image/gif image/jpeg image/png],
+    maximum_size: ArchiveConfig.ICON_SIZE_KB_MAX.kilobytes
+  }
 
   NAME_LENGTH_MIN = 1
   NAME_LENGTH_MAX = 40
@@ -81,13 +74,17 @@ class Pseud < ApplicationRecord
   validates_length_of :icon_comment_text, allow_blank: true, maximum: ArchiveConfig.ICON_COMMENT_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.ICON_COMMENT_MAX)
 
+  after_create :reindex_user
   after_update :check_default_pseud
   after_update :expire_caches
+  after_update :reindex_user, if: :name_changed?
+  after_destroy :reindex_user
   after_commit :reindex_creations, :touch_comments
 
   scope :alphabetical, -> { order(:name) }
   scope :default_alphabetical, -> { order(is_default: :desc).alphabetical }
   scope :abbreviated_list, -> { default_alphabetical.limit(ArchiveConfig.ITEMS_PER_PAGE) }
+  scope :for_search, -> { includes(:user).with_attached_icon }
 
   def self.not_orphaned
     where("user_id != ?", User.orphan_account)
@@ -192,7 +189,7 @@ class Pseud < ApplicationRecord
 
   # Parse a string of the "pseud.name (user.login)" format into a list of
   # pseuds. Usually this will be just one pseud, but if the byline is of the
-  # form "pseud.name" with no parenthesized user name, it'll look for any pseud
+  # form "pseud.name" with no parenthesized username, it'll look for any pseud
   # with that name.
   def self.parse_byline_ambiguous(byline)
     pseud_name, login = split_byline(byline)
@@ -400,6 +397,7 @@ class Pseud < ApplicationRecord
     if saved_change_to_name?
       works.touch_all
       series.each(&:expire_byline_cache)
+      chapters.each(&:expire_byline_cache)
     end
   end
 
@@ -419,9 +417,10 @@ class Pseud < ApplicationRecord
 
   def clear_icon
     return unless delete_icon?
-    
-    self.icon = nil unless icon.dirty?
+
+    self.icon.purge
     self.icon_alt_text = nil
+    self.icon_comment_text = nil
   end
 
   #################################
@@ -448,5 +447,9 @@ class Pseud < ApplicationRecord
     IndexQueue.enqueue_ids(Work, works.pluck(:id), :main)
     IndexQueue.enqueue_ids(Bookmark, bookmarks.pluck(:id), :main)
     IndexQueue.enqueue_ids(Series, series.pluck(:id), :main)
+  end
+
+  def reindex_user
+    after_commit { user.enqueue_to_index }
   end
 end

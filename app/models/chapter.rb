@@ -202,4 +202,10 @@ class Chapter < ApplicationRecord
     super
     work&.expire_comments_count
   end
+
+  def expire_byline_cache
+    [true, false].each do |only_path|
+      Rails.cache.delete("#{cache_key}/byline-nonanon/#{only_path}")
+    end
+  end
 end

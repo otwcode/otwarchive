@@ -97,7 +97,6 @@ describe "n+1 queries in the CommentsController" do
       before { fake_login_known_user(work.users.first) }
 
       populate do |n|
-        User.current_user = nil # log out to prevent commenting as work creator
         create_list(:comment, n, commentable: work.first_chapter)
       end
 

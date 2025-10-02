@@ -174,85 +174,6 @@ describe "rake After:fix_tags_with_extra_spaces" do
   end
 end
 
-describe "rake After:fix_invalid_pseud_icon_data" do
-  let(:valid_pseud) { create(:user).default_pseud }
-  let(:invalid_pseud) { create(:user).default_pseud }
-
-  before do
-    stub_const("ArchiveConfig", OpenStruct.new(ArchiveConfig))
-    ArchiveConfig.ICON_ALT_MAX = 5
-    ArchiveConfig.ICON_COMMENT_MAX = 5
-  end
-
-  it "removes invalid icon" do
-    valid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
-    valid_pseud.save
-    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
-    invalid_pseud.save
-    invalid_pseud.update_column(:icon_content_type, "not/valid")
-
-    subject.invoke
-
-    invalid_pseud.reload
-    valid_pseud.reload
-    expect(invalid_pseud.icon.exists?).to be_falsey
-    expect(invalid_pseud.icon_content_type).to be_nil
-    expect(valid_pseud.icon.exists?).to be_truthy
-    expect(valid_pseud.icon_content_type).to eq("image/gif")
-  end
-
-  it "removes invalid icon_alt_text" do
-    invalid_pseud.update_column(:icon_alt_text, "not valid")
-    valid_pseud.update_attribute(:icon_alt_text, "valid")
-
-    subject.invoke
-
-    invalid_pseud.reload
-    valid_pseud.reload
-    expect(invalid_pseud.icon_alt_text).to be_empty
-    expect(valid_pseud.icon_alt_text).to eq("valid")
-  end
-
-  it "removes invalid icon_comment_text" do
-    invalid_pseud.update_column(:icon_comment_text, "not valid")
-    valid_pseud.update_attribute(:icon_comment_text, "valid")
-
-    subject.invoke
-
-    invalid_pseud.reload
-    valid_pseud.reload
-    expect(invalid_pseud.icon_comment_text).to be_empty
-    expect(valid_pseud.icon_comment_text).to eq("valid")
-  end
-
-  it "updates icon_content_type from jpg to jpeg" do
-    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.jpg"))
-    invalid_pseud.save
-    invalid_pseud.update_column(:icon_content_type, "image/jpg")
-
-    subject.invoke
-
-    invalid_pseud.reload
-    expect(invalid_pseud.icon.exists?).to be_truthy
-    expect(invalid_pseud.icon_content_type).to eq("image/jpeg")
-  end
-
-  it "updates multiple invalid fields on the same pseud" do
-    invalid_pseud.icon = File.new(Rails.root.join("features/fixtures/icon.gif"))
-    invalid_pseud.save
-    invalid_pseud.update_columns(icon_content_type: "not/valid",
-                                 icon_alt_text: "not valid",
-                                 icon_comment_text: "not valid")
-    subject.invoke
-
-    invalid_pseud.reload
-    expect(invalid_pseud.icon.exists?).to be_falsey
-    expect(invalid_pseud.icon_content_type).to be_nil
-    expect(invalid_pseud.icon_alt_text).to be_empty
-    expect(invalid_pseud.icon_comment_text).to be_empty
-  end
-end
-
 describe "rake After:fix_2009_comment_threads" do
   before { Comment.delete_all }
 
@@ -500,6 +421,405 @@ describe "rake After:rename_underage_warning" do
         subject.invoke
       end.to avoid_changing { tag.reload.name }
         .and output("#{prompt}Failed to rename Underage warning tag to Underage Sex.\n").to_stdout
+    end
+  end
+end
+
+describe "rake After:migrate_pinch_request_signup" do
+  context "for an assignment with a request_signup_id" do
+    let(:assignment) { create(:challenge_assignment) }
+
+    it "does nothing" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { assignment.reload.request_signup_id }
+        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
+    end
+  end
+
+  context "for an assignment with a request_signup_id and a pinch_request_signup_id" do
+    let(:collection) { create(:collection) }
+    let(:assignment) do
+      create(:challenge_assignment,
+             collection: collection,
+             pinch_request_signup_id: create(:challenge_signup, collection: collection).id)
+    end
+
+    it "does nothing" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { assignment.reload.request_signup_id }
+        .and output("Migrated pinch_request_signup for 0 challenge assignments.\n").to_stdout
+    end
+  end
+
+  context "for an assignment with a pinch_request_signup_id but no request_signup_id" do
+    let(:collection) { create(:collection) }
+    let(:signup) { create(:challenge_signup, collection: collection) }
+    let(:assignment) do
+      assignment = create(:challenge_assignment, collection: collection)
+      assignment.update_columns(request_signup_id: nil, pinch_request_signup_id: signup.id)
+      assignment
+    end
+
+    it "sets the request_signup_id to the pinch_request_signup_id" do
+      expect do
+        subject.invoke
+      end.to change { assignment.reload.request_signup_id }
+        .from(nil)
+        .to(signup.id)
+        .and output("Migrated pinch_request_signup for 1 challenge assignments.\n").to_stdout
+    end
+  end
+end
+
+describe "rake After:reindex_hidden_unrevealed_tags" do
+  context "with a posted work" do
+    let!(:work) { create(:work) }
+
+    it "does not reindex the work's tags" do
+      expect do
+        subject.invoke
+      end.not_to add_to_reindex_queue(work.tags.first, :main)
+    end
+  end
+
+  context "with a hidden work" do
+    let!(:work) { create(:work, hidden_by_admin: true) }
+
+    it "reindexes the work's tags" do
+      expect do
+        subject.invoke
+      end.to add_to_reindex_queue(work.tags.first, :main)
+    end
+  end
+
+  context "with an unrevealed work" do
+    let(:work) { create(:work) }
+
+    before do
+      work.update!(in_unrevealed_collection: true)
+    end
+
+    it "reindexes the work's tags" do
+      expect do
+        subject.invoke
+      end.to add_to_reindex_queue(work.tags.first, :main)
+    end
+  end
+end
+
+describe "rake After:convert_official_kudos" do
+  context "when there is no official role" do
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("No official users found\n").to_stdout
+    end
+  end
+
+  context "when there are no official users" do
+    let!(:role) { Role.find_or_create_by(name: "official") }
+
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("No official users found\n").to_stdout
+    end
+  end
+
+  context "when there are official users but none have left kudos" do
+    let!(:official_user) { create(:official_user) }
+
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("Finished converting kudos from official users to guest kudos\n").to_stdout
+    end
+  end
+
+  context "when an official user and a regular user both have kudos" do
+    let!(:official_user1) { create(:user) }
+    let!(:official_kudos1) { create(:kudo, user: official_user1) }
+    let!(:regular_user) { create(:user) }
+    let!(:regular_kudos) { create(:kudo, user: regular_user) }
+
+    before do
+      official_user1.roles = [Role.find_or_create_by(name: "official")]
+    end
+
+    it "removes the user_id from the official user's kudos and outputs completion message" do
+      expect do
+        subject.invoke
+      end.to change { official_kudos1.reload.user_id }
+        .from(official_user1.id)
+        .to(nil)
+        .and output("Updating 1 kudos from #{official_user1.login}\nFinished converting kudos from official users to guest kudos\n").to_stdout
+    end
+
+    it "leaves the user_id on the regular user's kudos and outputs completion message" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { regular_kudos.reload.user_id }
+        .and output("Updating 1 kudos from #{official_user1.login}\nFinished converting kudos from official users to guest kudos\n").to_stdout
+    end
+  end
+end
+
+describe "rake After:convert_archivist_kudos" do
+  context "when there is no archivist role" do
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("No archivist users found\n").to_stdout
+    end
+  end
+
+  context "when there are no archivist users" do
+    let!(:role) { Role.find_or_create_by(name: "archivist") }
+
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("No archivist users found\n").to_stdout
+    end
+  end
+
+  context "when there are archivist users but none have left kudos" do
+    let!(:archivist_user) { create(:archivist) }
+
+    it "outputs completion message" do
+      expect do
+        subject.invoke
+      end.to output("Finished converting kudos from archivist users to guest kudos\n").to_stdout
+    end
+  end
+
+  context "when an archivist user and a regular user both have kudos" do
+    let!(:archivist_user1) { create(:user) }
+    let!(:archivist_kudos1) { create(:kudo, user: archivist_user1) }
+    let!(:regular_user) { create(:user) }
+    let!(:regular_kudos) { create(:kudo, user: regular_user) }
+
+    before do
+      archivist_user1.roles = [Role.find_or_create_by(name: "archivist")]
+    end
+
+    it "removes the user_id from the archivist user's kudos and outputs completion message" do
+      expect do
+        subject.invoke
+      end.to change { archivist_kudos1.reload.user_id }
+        .from(archivist_user1.id)
+        .to(nil)
+        .and output("Updating 1 kudos from #{archivist_user1.login}\nFinished converting kudos from archivist users to guest kudos\n").to_stdout
+    end
+
+    it "leaves the user_id on the regular user's kudos and outputs completion message" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { regular_kudos.reload.user_id }
+        .and output("Updating 1 kudos from #{archivist_user1.login}\nFinished converting kudos from archivist users to guest kudos\n").to_stdout
+    end
+  end
+end
+
+describe "rake After:create_non_canonical_tagset_associations" do
+  shared_examples "no TagSetAssociation is created" do
+    it "does not create a TagSetAssociation" do
+      expect do
+        subject.invoke
+      end.to avoid_changing { TagSetAssociation.count }
+    end
+  end
+
+  context "when a tag is already canonical" do
+    let!(:character) { create(:canonical_character) }
+    let!(:relationship) { create(:canonical_relationship) }
+    let!(:owned_tag_set) { create(:owned_tag_set, tags: [character, relationship]) }
+
+    it_behaves_like "no TagSetAssociation is created"
+  end
+
+  context "when a canonical tag belongs to a canonical fandom" do
+    let!(:character) { create(:common_tagging, common_tag: create(:canonical_character)).common_tag }
+    let!(:relationship) { create(:common_tagging, common_tag: create(:canonical_relationship)).common_tag }
+    let!(:owned_tag_set) { create(:owned_tag_set, tags: [character, relationship]) }
+
+    it_behaves_like "no TagSetAssociation is created"
+  end
+
+  context "when a non-canonical tag belongs to a canonical fandom" do
+    let!(:character) { create(:common_tagging, common_tag: create(:character)).common_tag }
+    let!(:relationship) { create(:common_tagging).common_tag }
+
+    context "when the fandom does not belong to the TagSet" do
+      let!(:owned_tag_set) { create(:owned_tag_set, tags: [character, relationship]) }
+
+      it_behaves_like "no TagSetAssociation is created"
+    end
+
+    context "when the fandom belongs to the TagSet" do
+      let!(:owned_tag_set) do
+        create(:owned_tag_set, tags: [character, character.fandoms, relationship, relationship.fandoms].flatten)
+      end
+
+      it "creates a TagSetAssociation for each tag" do
+        subject.invoke
+        expect(TagSetAssociation.where(tag: character, owned_tag_set: owned_tag_set)).to exist
+        expect(TagSetAssociation.where(tag: relationship, owned_tag_set: owned_tag_set)).to exist
+      end
+    end
+
+    context "when a TagSetAssociation already exists for the fandom and tag" do
+      let!(:owned_tag_set) do
+        create(:owned_tag_set, tags: [character, character.fandoms, relationship, relationship.fandoms].flatten)
+      end
+
+      before do
+        create(:tag_set_association,
+               owned_tag_set: owned_tag_set, tag: character, parent_tag: character.fandoms.first)
+        create(:tag_set_association,
+               owned_tag_set: owned_tag_set, tag: relationship, parent_tag: relationship.fandoms.first)
+      end
+
+      it_behaves_like "no TagSetAssociation is created"
+    end
+  end
+end
+
+describe "rake After:add_collection_tags" do
+  let(:collection) { create(:collection) }
+  let(:items) { [] }
+
+  before do
+    items.each do |item|
+      item.collections << collection
+      item.collection_items.update_all(
+        user_approval_status: "approved",
+        collection_approval_status: "approved"
+      )
+    end
+  end
+
+  context "when a collection has works" do
+    let(:items) { create_list(:work, 2) }
+
+    it "tags the collection with the work's fandoms" do
+      subject.invoke
+      expect(collection.tags).to include(*items.flat_map(&:fandoms))
+    end
+
+    shared_examples "does not tag the collection" do
+      it "does not tag the collection with the work's fandoms" do
+        subject.invoke
+        expect(collection.tags).not_to include(*items.flat_map(&:fandoms))
+      end
+    end
+
+    context "when the work is hidden" do
+      let(:items) { [create(:work, hidden_by_admin: true)] }
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the work is restricted" do
+      let(:items) { [create(:work, restricted: true)] }
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the work is unrevealed" do
+      let(:items) { [create(:work)] }
+
+      before do
+        items.each do |work|
+          work.update!(in_unrevealed_collection: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+  end
+
+  context "when a collection has work bookmarks" do
+    let(:fandom) { create(:canonical_fandom) }
+    let(:items) { [create(:bookmark, tag_string: fandom.name)] }
+
+    it "tags the collection with the bookmark's AND bookmarked item's fandoms" do
+      subject.invoke
+      expect(collection.tags).to include(*items.flat_map(&:fandoms))
+      expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
+    end
+
+    shared_examples "does not tag the collection" do
+      it "does not tag the collection with the bookmark's or bookmarked item's fandoms" do
+        subject.invoke
+        expect(collection.tags).not_to include(*items.flat_map(&:fandoms))
+        expect(collection.tags).not_to include(*items.flat_map(&:bookmarkable).flat_map(&:fandoms))
+      end
+    end
+
+    context "when the bookmarked item is a hidden work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.update!(hidden_by_admin: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the bookmarked item is a restricted work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.update!(restricted: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+
+    context "when the bookmarked item is an unrevealed work" do
+      before do
+        items.each do |bookmark|
+          bookmark.bookmarkable.update!(in_unrevealed_collection: true)
+        end
+      end
+
+      it_behaves_like "does not tag the collection"
+    end
+  end
+
+  context "when a collection has a series bookmark" do
+    let(:fandom) { create(:canonical_fandom) }
+    let(:bookmark) { create(:series_bookmark, tag_string: fandom.name) }
+    let(:items) { [bookmark] }
+
+    it "includes the bookmark's and series's fandoms" do
+      subject.invoke
+      expect(collection.tags).to include(*bookmark.fandoms)
+      expect(collection.tags).to include(*items.flat_map(&:bookmarkable).flat_map { |s| s.work_tags.where(type: "Fandom") })
+    end
+  end
+
+  context "when a collection has a subcollection" do
+    let(:subcollection) { create(:collection) }
+    let(:fandom) { create(:canonical_fandom) }
+    let(:bookmark) { create(:series_bookmark, fandom_string: fandom.name) }
+
+    before do
+      subcollection.parent = collection
+      subcollection.save!(validate: false)
+      bookmark.collections << subcollection
+      bookmark.collection_items.update_all(
+        user_approval_status: "approved",
+        collection_approval_status: "approved"
+      )
+    end
+
+    it "includes tags from the items in the subcollection" do
+      subject.invoke
+      expect(collection.reload.tags).to include(*bookmark.fandoms)
     end
   end
 end

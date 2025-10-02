@@ -12,7 +12,7 @@
 <%= creation_attribution_text(this_work) %><% end %>
 
 <% if !creation.summary.blank? && creation.is_a?(Chapter) %>
-<%= work_metadata_label(t(".chapter_summary")) %><%= raw to_plain_text(sanitize_field(creation, :summary)) %>
+<%= metadata_label(t(".chapter_summary")) %><%= raw to_plain_text(sanitize_field(creation, :summary)) %>
 <% end %>
 
 <% unless @seen[this_work.id] %>
@@ -21,7 +21,7 @@
 <% end %><% @seen[this_work.id] = true %><% end %>
 
 <% unless @seen_summary[this_work.id] || this_work.summary.blank? %>
-<%= work_metadata_label(Work.human_attribute_name("summary")) %>
+<%= metadata_label(Work.human_attribute_name("summary")) %>
     <%= raw to_plain_text(sanitize_field(this_work, :summary)) %><% @seen_summary[this_work.id] = true %><% end %><% if (index < @creations.length-1) %>
 
 <%= text_divider %>

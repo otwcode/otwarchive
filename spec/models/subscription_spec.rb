@@ -108,7 +108,7 @@ describe Subscription do
     end
   end
 
-  describe "#valid_notification_entry?" do
+  describe "#valid_notification_entry?" do # TODO Bilka update for hidden by admin AO3-5609
     let(:subscription) { build(:subscription) }
     let(:series) { build(:series) }
     let(:work) { build(:work) }
@@ -234,5 +234,13 @@ describe Subscription do
         end
       end
     end
+  end
+
+  it "can have an id larger than unsigned int" do
+    subscription = build(:subscription, id: 5_294_967_295, subscribable: work)
+
+    expect(subscription).to be_valid
+    expect(subscription.save).to be_truthy
+    expect(subscription.name).to eq(work.title)
   end
 end

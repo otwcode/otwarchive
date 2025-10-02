@@ -10,7 +10,7 @@ class CommentsController < ApplicationController
   before_action :check_visibility, only: [:show]
   before_action :check_if_restricted
   before_action :check_tag_wrangler_access
-  before_action :check_parent
+  before_action :check_parent_visible
   before_action :check_modify_parent,
                 only: [:new, :create, :edit, :update, :add_comment_reply,
                        :cancel_comment_reply, :cancel_comment_edit]
@@ -66,16 +66,8 @@ class CommentsController < ApplicationController
     @check_visibility_of = @comment
   end
 
-  def check_parent
-    parent = find_parent
-    # Only admins and the owner can see comments on something hidden by an admin.
-    if parent.respond_to?(:hidden_by_admin) && parent.hidden_by_admin
-      logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path)
-    end
-    # Only admins and the owner can see comments on unrevealed works.
-    if parent.respond_to?(:in_unrevealed_collection) && parent.in_unrevealed_collection
-      logged_in_as_admin? || current_user_owns?(parent) || access_denied(redirect: root_path)
-    end
+  def check_parent_visible
+    check_visibility_for(find_parent)
   end
 
   def check_modify_parent
@@ -137,7 +129,7 @@ class CommentsController < ApplicationController
     admin_settings = AdminSetting.current
 
     return unless admin_settings.guest_comments_off? && guest?
-    
+
     flash[:error] = t("comments.commentable.guest_comments_disabled")
     redirect_back(fallback_location: root_path)
   end
@@ -337,7 +329,7 @@ class CommentsController < ApplicationController
     else
       @comment = Comment.new(comment_params)
       @comment.ip_address = request.remote_ip
-      @comment.user_agent = request.env["HTTP_USER_AGENT"]
+      @comment.user_agent = request.env["HTTP_USER_AGENT"]&.to(499)
       @comment.commentable = Comment.commentable_object(@commentable)
       @controller_name = params[:controller_name]
 
@@ -482,26 +474,36 @@ class CommentsController < ApplicationController
   # PUT /comments/1/freeze
   def freeze
     # TODO: When AO3-5939 is fixed, we can use
-    # @comment.full_set.each(&:mark_frozen!)
-    if !@comment.iced? && @comment.save
-      @comment.set_to_freeze_or_unfreeze.each(&:mark_frozen!)
-      flash[:comment_notice] = t(".success")
-    else
+    # comments = @comment.full_set
+    if @comment.iced?
       flash[:comment_error] = t(".error")
+    else
+      comments = @comment.set_to_freeze_or_unfreeze
+      Comment.mark_all_frozen!(comments)
+      flash[:comment_notice] = t(".success")
     end
+
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+  rescue StandardError
+    flash[:comment_error] = t(".error")
     redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
   # PUT /comments/1/unfreeze
   def unfreeze
     # TODO: When AO3-5939 is fixed, we can use
-    # @comment.full_set.each(&:mark_unfrozen!)
-    if @comment.iced? && @comment.save
-      @comment.set_to_freeze_or_unfreeze.each(&:mark_unfrozen!)
+    # comments = @comment.full_set
+    if @comment.iced?
+      comments = @comment.set_to_freeze_or_unfreeze
+      Comment.mark_all_unfrozen!(comments)
       flash[:comment_notice] = t(".success")
     else
       flash[:comment_error] = t(".error")
     end
+
+    redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
+  rescue StandardError
+    flash[:comment_error] = t(".error")
     redirect_to_all_comments(@comment.ultimate_parent, show_comments: true)
   end
 
@@ -605,7 +607,7 @@ class CommentsController < ApplicationController
         options = {}
         options[:show_comments] = params[:show_comments] if params[:show_comments]
         options[:delete_comment_id] = params[:id] if params[:id]
-        redirect_to_comment(@comment, options) # TO DO: deleting without javascript doesn't work and it never has!
+        redirect_to_comment(@comment, options)
       end
       format.js
     end

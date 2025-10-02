@@ -29,7 +29,7 @@
           filter_works_link: link_to(t(".filter_works"), tag_works_path(@tag)),
           filter_bookmarks_link: link_to(t(".filter_bookmarks"), tag_bookmarks_path(@tag))) %>
     <% if @tag.is_a?(Fandom) %>
-      <%= t(".list_fandom_tags_html", fandom_relationship_tags_link: link_to(t(".fandom_relationship_tags"), fandom_path(@tag.name))) %>
+      <%= t(".list_fandom_tags_html", fandom_relationship_tags_link: link_to(t(".fandom_relationship_tags"), fandom_path(@tag))) %>
     <% end %>
   <% end %>
   </p>
@@ -83,7 +83,7 @@
   <% unless @tag.direct_sub_tags.blank? %>
   <div class="sub listbox group">
     <h3 class="heading"><%= ts('Subtags') %>:</h3>
-    <% cache "tag-#{@tag.cache_key}-subtags-v2", expires_in: 24.hours, skip_digest: true do %>
+    <% cache "tag-#{@tag.cache_key}-subtags-v3", expires_in: 24.hours, skip_digest: true do %>
       <%= sub_tag_tree(@tag) %>
     <% end %>
   </div>
@@ -138,6 +138,20 @@
       <% end %>
     </div>
     <% end %>
+
+    <% unless @collections.blank? %>
+      <div class="collection listbox group">
+      <h3 class="heading"><%= ts('Collections which have used it as a tag') %>:</h3>
+      <%= paginated_section @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
+          <ul class="index group">
+            <% for collection in @collections %>
+              <%= render 'collections/collection_blurb', :collection => collection %>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    <% end %>
+
   <% end %>
 </div>
 <!--/content-->

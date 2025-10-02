@@ -3,6 +3,11 @@
 require "spec_helper"
 
 describe Comment do
+  include ActiveJob::TestHelper
+  def queue_adapter_for_test
+    ActiveJob::QueueAdapters::TestAdapter.new
+  end
+
   describe "validations" do
     context "with a forbidden guest name" do
       subject { build(:comment, email: Faker::Internet.email) }
@@ -28,6 +33,233 @@ describe Comment do
           .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
+
+    shared_examples "disallows editing the comment if it's changed significantly" do
+      it "prevents editing the comment if it's changed significantly" do
+        subject.edited_at = Time.current
+        subject.comment_content = "Spam content" * 12
+        expect(subject.save).to be_falsey
+        expect(subject.errors[:base]).to include("This comment looks like spam to our system, sorry! Please try again.")
+      end
+
+      it "allows editing the comment if it's not changed significantly" do
+        subject.edited_at = Time.current
+        subject.comment_content += "a"
+        expect(subject.save).to be_truthy
+      end
+
+      it "allows modifying the comment besides content" do
+        subject.hidden_by_admin = true
+        expect(subject.save).to be_truthy
+      end
+    end
+
+    shared_examples "always allows changing the comment" do
+      it "allows editing the comment if it's changed significantly" do
+        subject.edited_at = Time.current
+        subject.comment_content = "Spam content" * 12
+        expect(subject.save).to be_truthy
+      end
+
+      it "allows editing the comment if it's not changed significantly" do
+        subject.edited_at = Time.current
+        subject.comment_content += "a"
+        expect(subject.save).to be_truthy
+      end
+    end
+
+    context "when any comment is considered spam" do
+      subject { build(:comment, pseud: user.default_pseud) }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+
+      before do
+        subject.save!
+        allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
+      end
+
+      context "when account_age_threshold_for_comment_spam_check is set" do
+        before do
+          admin_setting.update_attribute(:account_age_threshold_for_comment_spam_check, 10)
+        end
+
+        context "for a new user" do
+          let(:user) { create(:user, created_at: Time.current) }
+
+          it_behaves_like "disallows editing the comment if it's changed significantly"
+
+          context "on the commenters own work" do
+            subject { build(:comment, pseud: user.default_pseud, commentable: work) }
+            let(:work) { create(:work, authors: [user.default_pseud]) }
+
+            it_behaves_like "always allows changing the comment"
+
+            context "comment is a reply" do
+              subject { build(:comment, pseud: user.default_pseud, commentable: comment) }
+              let(:comment) { build(:comment, commentable: work) }
+
+              it_behaves_like "always allows changing the comment"
+            end
+          end
+
+          context "on a tag" do
+            subject { build(:comment, :on_tag, pseud: user.default_pseud) }
+
+            it_behaves_like "always allows changing the comment"
+          end
+
+          context "on an admin post" do
+            subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+            it_behaves_like "disallows editing the comment if it's changed significantly"
+          end
+        end
+
+        context "for an old user" do
+          let(:user) { create(:user, created_at: 12.days.ago) }
+
+          it_behaves_like "always allows changing the comment"
+
+          context "on the commenters own work" do
+            subject { build(:comment, pseud: user.default_pseud, commentable: work) }
+            let(:work) { create(:work, authors: [user.default_pseud]) }
+
+            it_behaves_like "always allows changing the comment"
+          end
+
+          context "on a tag" do
+            subject { build(:comment, :on_tag, pseud: user.default_pseud) }
+
+            it_behaves_like "always allows changing the comment"
+          end
+
+          context "on an admin post" do
+            subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+            it_behaves_like "always allows changing the comment"
+          end
+
+          context "when they change their email address" do
+            before do
+              user.update!(confirmed_at: Time.current)
+            end
+
+            subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+            it_behaves_like "always allows changing the comment"
+          end
+        end
+      end
+
+      context "when account_age_threshold_for_comment_spam_check is unset" do
+        before do
+          admin_setting.update_attribute(:account_age_threshold_for_comment_spam_check, 0)
+        end
+
+        context "for a new user" do
+          let(:user) { create(:user, created_at: Time.current) }
+
+          it_behaves_like "always allows changing the comment"
+
+          context "on the commenters own work" do
+            subject { build(:comment, pseud: user.default_pseud, commentable: work) }
+            let(:work) { create(:work, authors: [user.default_pseud]) }
+
+            it_behaves_like "always allows changing the comment"
+          end
+
+          context "on an admin post" do
+            subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+            it_behaves_like "always allows changing the comment"
+          end
+        end
+      end
+    end
+
+    context "when submitting comment to Akismet" do
+      subject { create(:comment) }
+
+      it "has user_role \"user\"" do
+        expect(subject.akismet_attributes[:user_role]).to eq("user")
+      end
+
+      it "has comment_author as the user's username" do
+        expect(subject.akismet_attributes[:comment_author]).to eq(subject.pseud.user.login)
+      end
+
+      it "has comment_author_email as the user's email" do
+        expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.pseud.user.email)
+      end
+
+      context "when the comment is being created" do
+        let(:new_comment) do
+          Comment.new(commentable: subject,
+                      pseud: create(:user).default_pseud,
+                      comment_content: "Hmm.")
+        end
+
+        it "does not set recheck_reason" do
+          expect(new_comment.akismet_attributes).not_to have_key(:recheck_reason)
+        end
+      end
+
+      context "when the comment is being edited" do
+        it "sets recheck_reason to 'edit'" do
+          subject.edited_at = Time.current
+          subject.comment_content += " updated"
+          
+          expect(subject.akismet_attributes[:recheck_reason]).to eq("edit")
+        end
+      end
+
+      context "when the comment is from a guest" do
+        subject { create(:comment, :by_guest) }
+
+        it "has user_role \"guest\"" do
+          expect(subject.akismet_attributes[:user_role]).to eq("guest")
+        end
+
+        it "has comment_author as the commenter's name" do
+          expect(subject.akismet_attributes[:comment_author]).to eq(subject.name)
+        end
+
+        it "has comment_author_email as the commenter's email" do
+          expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.email)
+        end
+      end
+
+      context "when the commentable is a chapter" do
+        it "has comment_type \"fanwork-comment\"" do
+          expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
+        end
+      end
+
+      context "when the commentable is an admin post" do
+        subject { create(:comment, :on_admin_post) }
+
+        it "has comment_type \"comment\"" do
+          expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+        end
+      end
+
+      context "when the commentable is a comment" do
+        context "when the comment is on a chapter" do
+          subject { create(:comment, commentable: create(:comment)) }
+
+          it "has comment_type \"fanwork-comment\"" do
+            expect(subject.akismet_attributes[:comment_type]).to eq("fanwork-comment")
+          end
+        end
+
+        context "when the comment is on an admin post" do
+          subject { create(:comment, commentable: create(:comment, :on_admin_post)) }
+
+          it "has comment_type \"comment\"" do
+            expect(subject.akismet_attributes[:comment_type]).to eq("comment")
+          end
+        end
+      end
+    end
   end
 
   context "with an existing comment from the same user" do
@@ -41,6 +273,7 @@ describe Comment do
     it "should be invalid if exactly duplicated" do
       expect(second_comment.valid?).to be_falsy
       expect(second_comment.errors.attribute_names).to include(:comment_content)
+      expect(second_comment.errors.full_messages.first).to include("You've already")
     end
 
     it "should not be invalid if in the process of being deleted" do
@@ -293,17 +526,38 @@ describe Comment do
       end
 
       context "direct parent is a tag" do
-        before { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
+        let!(:comment) { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
 
         include_examples "updates last wrangling activity"
       end
 
       context "ultimate parent is indirectly a tag" do
-        let(:parent_comment) { create(:comment, :on_tag) }
+        let(:parent_comment) { create(:comment, :on_tag, pseud: parent_comment_owner.default_pseud) }
+        let(:parent_comment_owner) { create(:tag_wrangler) }
 
         before { create(:comment, commentable: parent_comment, pseud: tag_wrangler.default_pseud) }
 
         include_examples "updates last wrangling activity"
+
+        context "when parent comment is owned by a wrangler" do
+          it "notifies the wrangler" do
+            expect do
+              create(:comment, commentable: parent_comment, pseud: tag_wrangler.default_pseud)
+            end.to change { parent_comment_owner.inbox_comments.count }
+              .and enqueue_mail(CommentMailer, :comment_reply_notification)
+          end
+        end
+
+        context "when parent comment is owned by a user who is no longer a wrangler" do
+          before { parent_comment_owner.update!(roles: []) }
+
+          it "does not notify the user" do
+            expect do
+              create(:comment, commentable: parent_comment, pseud: tag_wrangler.default_pseud)
+            end.to avoid_changing { parent_comment_owner.inbox_comments.count }
+              .and not_enqueue_mail(CommentMailer, :comment_reply_notification)
+          end
+        end
       end
 
       shared_examples "does not update last wrangling activity" do
@@ -359,6 +613,44 @@ describe Comment do
           expect do
             comment.update!(comment_content: Faker::Lorem.sentence(word_count: 25))
           end.not_to change { tag_wrangler.reload.last_wrangling_activity.updated_at }
+        end
+      end
+
+      context "parent is indirectly a tag" do
+        let(:parent_comment) { create(:comment, :on_tag, pseud: parent_comment_owner.default_pseud) }
+        let(:parent_comment_owner) { create(:tag_wrangler) }
+        let(:reply_comment) { create(:comment, commentable: parent_comment, pseud: tag_wrangler.default_pseud) }
+        let(:inbox_comment) { parent_comment_owner.inbox_comments.find_by(feedback_comment_id: reply_comment.id) }
+
+        context "when parent comment is owned by a wrangler" do
+          before { inbox_comment.update!(read: true) }
+
+          it "notifies the wrangler by email and marks inbox comment unread" do
+            expect do
+              reply_comment.update!(
+                comment_content: "#{reply_comment.comment_content}!",
+                edited_at: Time.current
+              )
+            end.to change { inbox_comment.reload.read }
+              .and enqueue_mail(CommentMailer, :edited_comment_reply_notification)
+          end
+        end
+
+        context "when parent comment is owned by a user who is no longer a wrangler" do
+          before do
+            inbox_comment.update!(read: true)
+            parent_comment_owner.update!(roles: [])
+          end
+
+          it "does not notify the user by email or mark the inbox comment unread" do
+            expect do
+              reply_comment.update!(
+                comment_content: "#{reply_comment.comment_content}!",
+                edited_at: Time.current
+              )
+            end.to avoid_changing { inbox_comment.reload.read }
+              .and not_enqueue_mail(CommentMailer, :edited_comment_reply_notification)
+          end
         end
       end
     end
@@ -465,6 +757,14 @@ describe Comment do
 
         expect(chapter_comment.use_image_safety_mode?).to be_falsey
         expect(chapter_reply.use_image_safety_mode?).to be_falsey
+      end
+    end
+
+    context "when the comment is from a guest" do
+      let(:comment) { create(:comment, :by_guest) }
+
+      it "returns true" do
+        expect(comment.use_image_safety_mode?).to be_truthy
       end
     end
   end

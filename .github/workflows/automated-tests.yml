@@ -34,7 +34,7 @@ jobs:
           - 3306:3306
 
       elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.18.2
         ports:
           - 9200:9200
         options: >-
@@ -54,22 +54,19 @@ jobs:
             arguments: db:otwseed
           - command: rspec
             arguments: spec/controllers
-            imagemagick: true
           - command: rspec
             arguments: spec/models
-            imagemagick: true
           - command: rspec
             arguments: --exclude-pattern 'spec/{controllers,models}/**/*.rb'
-            imagemagick: true
+            libvips: true
           - command: cucumber
             arguments: features/admins
-            imagemagick: true
+            libvips: true
           - command: cucumber
             arguments: features/bookmarks
-            imagemagick: true
           - command: cucumber
             arguments: features/collections
-            imagemagick: true
+            libvips: true
           - command: cucumber
             arguments: features/comments_and_kudos
           - command: cucumber
@@ -79,10 +76,10 @@ jobs:
             vcr: true
           - command: cucumber
             arguments: features/other_a
-            imagemagick: true
+            libvips: true
           - command: cucumber
             arguments: features/other_b
-            imagemagick: true
+            libvips: true
           - command: cucumber
             arguments: features/prompt_memes_a
           - command: cucumber
@@ -100,23 +97,26 @@ jobs:
           - command: cucumber
             arguments: features/works
             ebook: true
-            imagemagick: true
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Run apt-get update
-        run: sudo apt-get update
+      - name: Install redis
+        uses: awalsh128/cache-apt-pkgs-action@2c09a5e66da6c8016428a2172bd76e5e4f14bb17
+        with:
+          packages: redis-server
+          version: "1.0"
 
-      - name: Install and start up redis servers
-        run: |
-          sudo apt-get install -y redis-server
-          ./script/gh-actions/multiple_redis.sh
+      - name: Start up redis servers
+        run: ./script/gh-actions/multiple_redis.sh
 
       - name: Install ebook converters
         if: ${{ matrix.tests.ebook }}
-        run: ./script/gh-actions/ebook_converters.sh
+        uses: awalsh128/cache-apt-pkgs-action@2c09a5e66da6c8016428a2172bd76e5e4f14bb17
+        with:
+          packages: calibre zip
+          version: "1.0"
 
       - name: Cache VCR cassettes
         if: ${{ matrix.tests.vcr }}
@@ -138,9 +138,12 @@ jobs:
           restore-keys: |
             cassette-library-${{ hashFiles(matrix.tests.arguments) }}-
 
-      - name: Install imagemagick for image processing
-        if: ${{ matrix.tests.imagemagick }}
-        run: sudo apt-get install -y imagemagick
+      - name: Install libvips for image processing
+        if: ${{ matrix.tests.libvips }}
+        uses: awalsh128/cache-apt-pkgs-action@2c09a5e66da6c8016428a2172bd76e5e4f14bb17
+        with:
+          packages: libvips-dev
+          version: "1.0"
 
       - name: Set up Ruby and run bundle install
         uses: ruby/setup-ruby@v1
