@@ -1,7 +1,6 @@
 class PreferencesController < ApplicationController
   before_action :load_user
-  before_action :check_ownership, only: [:update]
-  before_action :check_ownership_or_admin, except: [:update]
+  before_action :check_ownership_or_admin
   skip_before_action :store_location
 
   # Ensure that the current user is authorized to view and change this information
@@ -19,6 +18,7 @@ class PreferencesController < ApplicationController
 
   def update
     @preference = @user.preference
+    authorize @preference if logged_in_as_admin?
     @available_skins = (@user.skins.site_skins + Skin.approved_skins.site_skins).uniq
     @available_locales = Locale.where(email_enabled: true)
 
