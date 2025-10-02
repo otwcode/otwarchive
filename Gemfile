@@ -31,7 +31,6 @@ gem 'redis-namespace'
 # Used to convert strings to ascii
 gem 'unicode'
 gem 'unidecoder'
-gem 'unicode_utils', '>=1.4.0'
 
 # Lograge is opinionated, very opinionated.
 gem "lograge" # https://github.com/roidrage/lograge
