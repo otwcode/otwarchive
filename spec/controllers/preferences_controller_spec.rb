@@ -129,17 +129,9 @@ describe PreferencesController do
     end
 
     context "as admin" do
-      Admin::VALID_ROLES.each do |role|
-        context "with role #{role}" do
-          let(:admin) { create(:admin, roles: [role]) }
-
-          it "cannot edit preferences" do
-            put :update, params: { user_id: user.login, id: user.preference.id, preference: { minimize_search_engines: true } }
-          
-            it_redirects_to_with_error(user_path(user), "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
-          end
-        end
-      end
+      subject { put :update, params: { user_id: user.login, id: user.preference.id, preference: preference_params } }
+      
+      it_behaves_like "an action only authorized admins can access", authorized_roles: []
     end
   end
 end
