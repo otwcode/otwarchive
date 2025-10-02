@@ -1,7 +1,8 @@
-<% # expects work %>
-<p>
-  <%= style_metadata_label(Work.human_attribute_name("chapter_total_display")) %><%= chapter_total_display(work) %>
-  <br><%= style_work_tag_metadata(work.tag_groups["Fandom"]) %>
+<%# expects work %>
+<p><%# TODO Bilka overall goal: cache locale independent for expensive stuff, for stuff directly on work cache per locale - two layers of cache %>
+  <%# TODO Bilka inner cache can be reused by txt and html %>
+  <%= style_metadata_label(Work.human_attribute_name("chapter_total_display")) %><%= chapter_total_display(work) %> <%# TODO Bilka all directly on work %>
+  <br><%= style_work_tag_metadata(work.tag_groups["Fandom"]) %> <%# TODO Bilka cache tag groups intelligently - style_work_tag_metadata is used only here so i can change parameter type %>
   <br><%= style_work_tag_metadata(work.tag_groups["Rating"]) %>
   <br><%= style_work_tag_metadata(work.tag_groups["ArchiveWarning"]) %>
   <% unless work.tag_groups["Relationship"].empty? %>
@@ -14,11 +15,11 @@
     <br><%= style_work_tag_metadata(work.tag_groups["Freeform"]) %>
   <% end %>
   <% unless work.series.count.zero? %>
-    <br /><%= style_metadata_label(Series.model_name.human(count: work.series.count)) %><%= series_list_for_feeds(work).html_safe %>
+    <br /><%= style_metadata_label(Series.model_name.human(count: work.series.count)) %><%= series_list_for_feeds(work).html_safe %>  <%# TODO Bilka evaluate. warning for overlap with pr#5231 %>
   <% end %>
 </p>
 
 <% unless work.summary.blank? || local_assigns[:suppress_summary] %>
   <p><%= style_metadata_label(Work.human_attribute_name("summary")) %></p>
-  <%= style_quote(raw sanitize_field(work, :summary)) %>
+  <%= style_quote(raw sanitize_field(work, :summary)) %>  <%# TODO Bilka all directly on work %>
 <% end %>
