@@ -133,7 +133,7 @@ class SkinsController < ApplicationController
     else
       flash[:error] = ts("Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{title} to be added!", title: @skin.title)
     end
-    redirect_to(request.referer || @skin)
+    redirect_back_or_to @skin
   end
 
   def unset
@@ -143,7 +143,7 @@ class SkinsController < ApplicationController
       current_user.preference.save
     end
     flash[:notice] = ts("You are now using the default Archive skin again!")
-    redirect_to(request.referer || root_path)
+    redirect_back_or_to root_path
   end
 
   # GET /skins/1/confirm_delete
