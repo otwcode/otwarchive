@@ -33,3 +33,41 @@ describe "rake skins:cache_chooser_skins", default_skin: true do
     end.to output("\nCouldn't cache #{default_skin.title},#{chooser_skin.title}\n").to_stdout
   end
 end
+
+describe "rake skins:load_official_skins" do
+  before do
+    allow($stdin).to receive(:gets).and_return("n")
+    allow(File).to receive(:read).with(/.*css/).and_return("")
+    allow(File).to receive(:read).with(/top_level/).and_return(
+      "/* SKIN: Test Skin */",
+      "/* SKIN: Child */\n/* PARENTS: Parent */"
+    )
+    allow(File).to receive(:read).with(/parent_only/).and_return("/* SKIN: Parent */\n#unused-selector { content: none; }")
+  end
+
+  it "creates parent-only skins from the specified directory" do
+    subject.invoke
+
+    parent_skin = Skin.find_by(title: "Parent")
+    expect(parent_skin).not_to be nil
+    expect(parent_skin.unusable).to be true
+    expect(parent_skin.in_chooser).to be false
+  end
+
+  it "creates official skins in the specified directory and adds them to skin chooser" do
+    subject.invoke
+
+    skin = Skin.find_by(title: "Test Skin")
+    child_skin = Skin.find_by(title: "Child")
+
+    expect(skin).not_to be nil
+    expect(skin.unusable).to be false
+    expect(skin.in_chooser).to be true
+
+    expect(child_skin).not_to be nil
+    expect(child_skin.unusable).to be false
+    expect(child_skin.in_chooser).to be true
+    expect(child_skin.skin_parents.length).to eq(1)
+    expect(child_skin.skin_parents.first.parent_skin.title).to eq("Parent")
+  end
+end
