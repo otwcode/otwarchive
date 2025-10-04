@@ -314,3 +314,38 @@ Scenario: Cannot reply to comments (no button) while logged as admin
       And I follow "Comments (1)"
     Then I should see "Woohoo"
       And I should see "Reply"
+
+  Scenario: Translated comment notification email
+    Given the work "Generic Work" by "creator" and "cocreator"
+      And a locale with translated emails
+      And the user "creator" enables translated emails
+    When I am logged in as "commenter"
+      And I view the work "Generic Work"
+      And I post a comment "Wow"
+    Then 1 email should be delivered to "creator"
+      And the email should have "Comment on Generic Work" in the subject
+      And the email to "creator" should contain "left the following comment on"
+      And the email to "creator" should contain "Reply to this comment"
+      And the email to "creator" should be translated
+      And 1 email should be delivered to "cocreator"
+      And the email to "cocreator" should contain "left the following comment on"
+      And the email to "cocreator" should be non-translated
+
+  Scenario: Translated edited comment notification email
+    Given the work "Generic Work" by "creator" and "cocreator"
+      And a comment "Hello" by "commenter" on the work "Generic Work"
+      And a locale with translated emails
+      And the user "creator" enables translated emails
+      And all emails have been delivered
+    When I am logged in as "commenter"
+      And I view the work "Generic Work"
+      And I follow "Comments"
+      And I edit a comment
+    Then 1 email should be delivered to "creator"
+      And the email should have "Edited comment on Generic Work" in the subject
+      And the email to "creator" should contain "edited the following comment on"
+      And the email to "creator" should contain "Go to the thread starting from this comment"
+      And the email to "creator" should be translated
+      And 1 email should be delivered to "cocreator"
+      And the email to "cocreator" should contain "edited the following comment on"
+      And the email to "cocreator" should be non-translated
