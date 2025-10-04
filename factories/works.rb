@@ -58,6 +58,7 @@ FactoryBot.define do
 
   factory :external_author_name do |f|
     f.association :external_author
+    name { Faker::Name.first_name }
   end
 
   factory :external_creatorship do |f|
