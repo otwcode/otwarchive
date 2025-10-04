@@ -2576,6 +2576,15 @@ en:
         restricted_html: A translation of [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
+    work_header_navigation:
+      chapter_index:
+        button: Chapter Index
+        full_page: Full Page Index
+        link: 'Chapter Index'
+        submit: Go
+      download:
+        button: 'Download'
+        header: Download
     work_module:
       draft_deletion_notice_html: This draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
   wrangling_guidelines:
