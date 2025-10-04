@@ -4,6 +4,20 @@ describe CollectionsController, collection_search: true do
   include LoginMacros
   include RedirectExpectationHelper
 
+  describe "POST #create" do
+    context "when the header_image_url is invalid" do
+      it "fails validation but does not result in error 500" do
+        fake_login
+        post :create, params: { collection: attributes_for(:collection).merge(header_image_url: "This will error.") }
+        # check that validation fails
+        collection = assigns(:collection)
+        expect(collection).not_to be_valid
+        # but does not result in error 500
+        expect(response.status).not_to be >= 500
+      end
+    end
+  end
+
   describe "GET #index" do
     let!(:gift_exchange) { create(:gift_exchange, signup_open: true, signups_open_at: Time.zone.now - 2.days, signups_close_at: Time.zone.now + 1.week) }
     let!(:gift_exchange_collection) do
