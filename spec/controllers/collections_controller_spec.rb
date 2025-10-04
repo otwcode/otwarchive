@@ -12,6 +12,8 @@ describe CollectionsController, collection_search: true do
         # check that validation fails
         collection = assigns(:collection)
         expect(collection).not_to be_valid
+        # check for the specific validation message
+        expect(collection.errors[:header_image_url]).to include("is not a valid URL.")
         # but does not result in error 500
         expect(response.status).not_to be >= 500
       end
