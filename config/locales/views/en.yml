@@ -561,7 +561,7 @@ en:
         requests_html: Requests &#8595;
     shared:
       challenge_requests:
-        fandom: Fandom
+        fandom: Fandom %{allowed_fandom_count}
   challenge_assignments:
     to_default:
       button: Default

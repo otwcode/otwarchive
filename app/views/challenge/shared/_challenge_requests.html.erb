@@ -12,7 +12,7 @@
   <% end %>
   <li><%= ts("Sort By") %></li>
   <% if @show_request_fandom_tags && @collection.prompts.joins(:tags).where(tags: { type: "Fandom" }).exists? %>
-    <li><%= sort_link t(".fandom"), :fandom %></li>
+    <li><%= sort_link t(".fandom", allowed_fandom_count: @collection.challenge.request_restriction.allowed("fandom")), :fandom %></li>
   <% end %>
   <% unless @collection.prompts.where(:anonymous => true).exists? %>
     <li><%= sort_link ts("Prompter"), :prompter %></li>
