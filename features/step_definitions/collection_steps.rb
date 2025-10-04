@@ -103,13 +103,28 @@ end
 Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
   # create the user
   step %{I am logged in as "#{name}"}
-  step %{I am logged in as "mod1"}
+  step %{I am logged in as the owner of "#{title}"}
   visit collection_path(Collection.find_by(title: title))
   click_link("Membership")
   step %{I fill in "participants_to_invite" with "#{name}"}
     step %{I press "Submit"}
 
   step %{I select "Moderator" from "#{name}_role"}
+  # TODO: fix the form, it is malformed right now
+  click_button("#{name}_submit")
+  step %{I should see "Updated #{name}"}
+end
+
+Given /^I have added (?:a|the) co\-owner "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
+  # create the user
+  step %{I am logged in as "#{name}"}
+  step %{I am logged in as the owner of "#{title}"}
+  visit collection_path(Collection.find_by(title: title))
+  click_link("Membership")
+  step %{I fill in "participants_to_invite" with "#{name}"}
+    step %{I press "Submit"}
+
+  step %{I select "Owner" from "#{name}_role"}
   # TODO: fix the form, it is malformed right now
   click_button("#{name}_submit")
   step %{I should see "Updated #{name}"}
