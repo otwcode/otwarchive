@@ -49,7 +49,7 @@
   <% if current_user.is_a?(User) %>
     <% @bookmark ||= bookmark_if_exists(@work) %>
     <li class="bookmark">
-      <%= link_to (@bookmark ? t("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>
+      <%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>
       <%= link_to ts("Cancel Bookmark"), "#", :class => "hidden bookmark_form_placement_close" %>
     </li>
 
@@ -108,7 +108,7 @@
 
   <% if downloadable? && AdminSetting.current.downloads_enabled? %>
     <li class="download">
-      <noscript><h4 class="heading"><%= t(".download.header") %></h4></noscript>
+      <noscript><h4 class="heading"><%= t(".download.heading") %></h4></noscript>
       <button class="hidden"><%= t(".download.button") %></button>
       <ul class="expandable secondary">
         <% ArchiveConfig.DOWNLOAD_FORMATS.each do |format| %>
