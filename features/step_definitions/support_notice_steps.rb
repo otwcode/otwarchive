@@ -82,4 +82,3 @@ Then "I should see the new support notice" do
   step %{I should see "This is new support notice text"}
   step %{I should not see "This is some support notice text"}
 end
-

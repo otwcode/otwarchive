@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe SupportNotice do
   it "can be created" do

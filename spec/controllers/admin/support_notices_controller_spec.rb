@@ -96,7 +96,8 @@ describe Admin::SupportNoticesController do
     subject { put :update, params: { id: support_notice, support_notice: support_notice_params } }
 
     let(:success) do
-      expect { support_notice.reload }.to change { support_notice.content }
+      expect { support_notice.reload }
+        .to change { support_notice.content }
       it_redirects_to_with_notice(support_notice, "Support Notice successfully updated.")
     end
 
@@ -117,7 +118,8 @@ describe Admin::SupportNoticesController do
     subject { delete :destroy, params: { id: support_notice } }
 
     let(:success) do
-      expect { support_notice.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+      expect { support_notice.reload }
+        .to raise_exception(ActiveRecord::RecordNotFound)
       it_redirects_to_with_notice(admin_support_notices_path, "Support Notice successfully deleted.")
     end
 
