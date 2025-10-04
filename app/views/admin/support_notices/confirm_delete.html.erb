@@ -1,0 +1,16 @@
+<div class="admin">
+  <!--Descriptive page name, messages and instructions-->
+  <h2 class="heading"><%= t(".delete") %></h2>
+  <!--/descriptions-->
+
+  <!--main content-->
+  <%= form_for @support_notice, url: admin_support_notice_path(@support_notice), method: :delete, html: { class: "simple destroy" } do |f| %>
+    <p class="caution notice">
+      <%= t(".warning_html") %>
+    </p>
+    <p class="actions">
+      <%= f.submit t(".submit") %>
+    </p>
+  <% end %>
+  <!--/content-->
+</div>

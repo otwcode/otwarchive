@@ -38,6 +38,12 @@
     </ul>
     <p><%= t(".do_not_spam_html") %></p>
     <p><%= t(".languages_html", list: @support_languages.map { |language| tag.span(language.name, lang: language.short) }.to_sentence.html_safe) %></p>
+
+    <% if @support_notice %>
+      <div class="notice <%= @support_notice.notice_class %>">
+        <%= raw sanitize_field(@support_notice, :content, image_safety_mode: true) %>
+      </div>
+    <% end %>
   </div>
   <%= form_for(@feedback, html: {class: "post feedback"}) do |f| %>
     <fieldset>
