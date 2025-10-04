@@ -178,7 +178,7 @@ describe UsersController do
         put :confirm_change_email, params: { id: user, new_email: "new@example.com", email_confirmation: "new@example.com", password_check: "wrong" }
 
         expect(response).to render_template(:change_email)
-        expect(flash[:error]).to include("Your password was incorrect. Please try again or log out and reset your password via the link on")
+        expect(flash[:error]).to include("Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, <a")
       end
 
       it "disallows blank email address" do

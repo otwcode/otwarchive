@@ -51,11 +51,8 @@ Given /^I have bookmarks to search$/ do
   external1 = FactoryBot.create(:external_work, title: "Skies Grown Darker")
 
   # set up some series
-  series1 = FactoryBot.create(:series, title: "First Series")
-  series2 = FactoryBot.create(:series_with_a_work, title: "Second Series")
-
-  # add work1 to series1 to ensure the series has tags
-  FactoryBot.create(:serial_work, work_id: work1.id, series_id: series1.id)
+  series1 = FactoryBot.create(:series, title: "First Series", works: [work1])
+  series2 = FactoryBot.create(:series, title: "Second Series")
 
   # set up the bookmarks
   FactoryBot.create(:bookmark,
@@ -114,10 +111,10 @@ Given /^I have bookmarks to search by any field$/ do
                                  author: "im hurt")
   external2 = FactoryBot.create(:external_work, title: "External Fix-It")
 
-  series1 = FactoryBot.create(:series_with_a_work,
+  series1 = FactoryBot.create(:series,
                               title: "H/C Series",
                               summary: "Hurt & comfort ficlets")
-  series2 = FactoryBot.create(:series_with_a_work, title: "Ouchless Series")
+  series2 = FactoryBot.create(:series, title: "Ouchless Series")
 
   FactoryBot.create(:bookmark, bookmarkable_id: work1.id, bookmarker_notes: "whatever")
   FactoryBot.create(:bookmark, bookmarkable_id: work2.id, tag_string: "more please")
@@ -152,7 +149,7 @@ Given /^I have bookmarks to search by dates$/ do
                        bookmarkable_id: work1.id,
                        bookmarker_notes: "Old bookmark of old work")
 
-    series1 = FactoryBot.create(:series_with_a_work, title: "Old series")
+    series1 = FactoryBot.create(:series, title: "Old series")
     FactoryBot.create(:bookmark,
                        bookmarkable_id: series1.id,
                        bookmarkable_type: "Series",
@@ -181,7 +178,7 @@ Given /^I have bookmarks to search by dates$/ do
                      bookmarkable_id: work2.id,
                      bookmarker_notes: "New bookmark of new work")
 
-  series2 = FactoryBot.create(:series_with_a_work, title: "New series")
+  series2 = FactoryBot.create(:series, title: "New series")
   FactoryBot.create(:bookmark,
                      bookmarkable_id: series2.id,
                      bookmarkable_type: "Series",
@@ -200,8 +197,8 @@ Given /^I have bookmarks of various completion statuses to search$/ do
   complete_work = FactoryBot.create(:work, title: "Finished Work")
   incomplete_work = FactoryBot.create(:work, title: "Incomplete Work", complete: false, expected_number_of_chapters: 2)
 
-  complete_series = FactoryBot.create(:series_with_a_work, title: "Complete Series", complete: true)
-  incomplete_series = FactoryBot.create(:series_with_a_work, title: "Incomplete Series", complete: false)
+  complete_series = FactoryBot.create(:series, title: "Complete Series", complete: true)
+  incomplete_series = FactoryBot.create(:series, title: "Incomplete Series", complete: false)
 
   external_work = FactoryBot.create(:external_work, title: "External Work")
 
@@ -228,7 +225,7 @@ Given /^I have bookmarks of old series to search$/ do
   end
 
   Timecop.freeze(7.days.ago) do
-    newer_series = FactoryBot.create(:series_with_a_work, title: "Newer Complete Series")
+    newer_series = FactoryBot.create(:series, title: "Newer Complete Series")
     FactoryBot.create(:bookmark,
                        bookmarkable_id: newer_series.id,
                        bookmarkable_type: "Series")
@@ -268,10 +265,7 @@ Given /^bookmarks of external works and series tagged with the (character|relati
          end
 
   # We're going to need to use the series ID, so make the series
-  series = FactoryBot.create(:series, title: "BookmarkedSeries")
-
-  # Now add the work to the series
-  FactoryBot.create(:serial_work, work_id: work.id, series_id: series.id)
+  series = FactoryBot.create(:series, title: "BookmarkedSeries", works: [work])
 
   external_work = if tag_type == "character"
                     FactoryBot.create(:external_work, title: "BookmarkedExternalWork", character_string: tag)
