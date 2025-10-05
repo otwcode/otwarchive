@@ -33,7 +33,7 @@
             <p>
               <% options = @chapters.map{|c| [c.abbreviated_display_title.html_safe, c.id] } %>
               <%= select_tag :selected_id, options_for_select(options, params[:id].to_i) %>
-              <span class="submit actions"><%= submit_tag t('.chapter_index.submit') %></span>
+              <span class="submit actions"><%= submit_tag t(".chapter_index.submit") %></span>
             </p>
           <% end %>
         </li>
