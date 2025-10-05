@@ -299,7 +299,7 @@ describe BookmarkSearchForm, bookmark_search: true do
 
     {
       Work: :work,
-      Series: :series_with_a_work,
+      Series: :series,
       ExternalWork: :external_work
     }.each_pair do |type, factory|
       it "returns the correct bookmarked #{type.to_s.pluralize} when bookmarker changes username" do
@@ -330,7 +330,7 @@ describe BookmarkSearchForm, bookmark_search: true do
 
     {
       Work: :work,
-      Series: :series_with_a_work
+      Series: :series
     }.each_pair do |type, factory|
       it "returns the correct bookmarked #{type.to_s.pluralize} when author changes username" do
         bookmarkable = create(factory, authors: [author.default_pseud])

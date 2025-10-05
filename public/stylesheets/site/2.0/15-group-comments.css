@@ -92,6 +92,11 @@ fieldset.comments, .comment .userstuff {
   padding: 0.643em;
 }
 
+.comment .actions {
+  float: none;
+  text-align: right;
+}
+
 /* mods */
 
 .abbreviated .icon {

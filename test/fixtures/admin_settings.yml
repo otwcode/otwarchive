@@ -1,6 +1,6 @@
 admin_setting_3:
   id: 3
-  account_creation_enabled: false
+  account_creation_enabled: true
   invite_from_queue_enabled: true
   invite_from_queue_number: 10
   invite_from_queue_frequency: 7

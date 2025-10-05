@@ -120,9 +120,11 @@ class AutocompleteController < ApplicationController
 
   # look up collections ranked by number of items they contain
 
-  def collection_fullname
-    results = Collection.autocomplete_lookup(search_param: params[:term], autocomplete_prefix: "autocomplete_collection_all").map {|res| Collection.fullname_from_autocomplete(res)}
-    render_output(results)
+  def collection_title
+    results = Collection.autocomplete_lookup(search_param: params[:term], autocomplete_prefix: "autocomplete_collection_all").map do |res|
+      { id: Collection.title_from_autocomplete(res), name: Collection.fullname_from_autocomplete(res) }
+    end
+    respond_with(results)
   end
 
   # return collection names

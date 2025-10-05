@@ -302,13 +302,13 @@ end
 Given /^I have generated matches for "([^\"]*)"$/ do |challengename|
   step %{I close signups for "#{challengename}"}
   step %{I follow "Matching"}
-  step %{I follow "Generate Potential Matches"}
+  step %{I press "Generate Potential Matches"}
   step %{I reload the page}
   step %{all emails have been delivered}
 end
 
 Given /^I have sent assignments for "([^\"]*)"$/ do |challengename|
-  step %{I follow "Send Assignments"}
+  step %{I press "Send Assignments"}
   step %{I reload the page}
   step %{I should not see "Assignments are now being sent out"}
 end
@@ -402,4 +402,8 @@ Then /^no one should have an assignment for "([^\"]*)"$/ do |challenge_title|
     user.offer_assignments.in_collection(collection).should be_empty
     user.pinch_hit_assignments.in_collection(collection).should be_empty
   end
+end
+
+When "there are {int} assignments per page" do |amount|
+  allow_any_instance_of(ApplicationController).to receive(:pagy_get_limit).and_return(amount)
 end
