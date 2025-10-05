@@ -653,6 +653,16 @@ en:
         matching_page: Matching page
         text: 'The potential matches and set assignments are available on its Matching page: %{matching_page_url}.'
       subject: "[%{app_name}][%{collection_title}] Potential assignment generation complete"
+    prompter_notification:
+      a_response_to_your_prompt:
+        collection:
+          html: A response to your prompt has been posted in the %{collection_link} collection on the Archive of Our Own!
+          text: A response to your prompt has been posted in the "%{collection_title}" collection (%{collection_url}) on the Archive of Our Own!
+        no_collection: A response to your prompt has been posted on the Archive of Our Own!
+      byline:
+        html: by %{work_creator_links}
+        text: by %{work_creators}
+      subject: "[%{app_name}] A response to your prompt"
     recipient_notification:
       collection:
         html: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!
