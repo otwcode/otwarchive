@@ -2584,7 +2584,7 @@ en:
     work_header_navigation:
       chapter_index:
         button: Chapter Index
-        full_page: Full Page Index
+        full_page: Full-Page Index
         link: Chapter Index
         submit: Go
       download:
