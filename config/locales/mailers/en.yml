@@ -59,6 +59,35 @@ en:
         chapter: "[%{app_name}] Comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Comment on %{title}"
         tag: "[%{app_name}] Comment on the tag %{name}"
+    comment_notification_footer:
+      comment_thread:
+        html: Go to the thread starting from this comment
+        text: 'Go to the thread starting from this comment: %{url}'
+      last_edited: 'Last edited: %{datetime}'
+      parent_thread:
+        html: Go to the thread to which this comment belongs
+        text: 'Go to the thread to which this comment belongs: %{url}'
+      posted: 'Posted: %{datetime}'
+      read_all_comments:
+        chapter:
+          html: Read all comments on Chapter %{position} of <i>%{title}</i>
+          text: 'Read all comments on Chapter %{position} of "%{title}": %{url}'
+        other:
+          html: Read all comments on <i>%{title}</i>
+          text: 'Read all comments on "%{title}": %{url}'
+        tag:
+          html: Read all comments on %{tag}
+          text: 'Read all comments on "%{tag}": %{url}'
+      reply:
+        html: Reply to this comment
+        text: 'Reply to this comment: %{url}'
+      review:
+        html: Review comments on <i>%{title}</i>
+        text: 'Review comments on "%{title}": %{url}'
+      unreviewed:
+        admin_post: Comments on this news post are moderated and will not appear until approved.
+        work: Comments on this work are moderated and will not appear until approved by the work creator.
+        work_owner: Comments on this work are moderated and will not appear until you approve them.
     comment_reply_notification:
       chapter:
         titled: 'Chapter %{position}: %{title}'
