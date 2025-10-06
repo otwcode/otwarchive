@@ -6,7 +6,7 @@
 </p>
 
 <p class="message">
-  <%= t(".claim_before_edit_message_html", 
+  <%= t(".claim_before_edit_message_html",
         dashboard_link: link_to(t(".dashboard"), archive_faq_path("glossary", anchor: "dashdef")),
         count: works_count) %>
 </p>
@@ -75,9 +75,9 @@
         <ul>
           <li>
             <%= check_box_tag "remove_pseud" %>
-            <%= label_tag "remove_pseud", 
-                t(".actions.assign_to_orphan_account", 
-                  work: t(".work", count: works_count), app_name: ArchiveConfig.APP_SHORT_NAME) %>
+            <%= label_tag "remove_pseud",
+                  t(".actions.assign_to_orphan_account",
+                    work: t(".work", count: works_count), app_name: ArchiveConfig.APP_SHORT_NAME) %>
           </li>
         </ul>
       </li>
