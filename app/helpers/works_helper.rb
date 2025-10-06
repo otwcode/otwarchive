@@ -82,23 +82,21 @@ module WorksHelper
     reading && reading.toread?
   end
 
-  def mark_as_read_link(work)
-    link_to ts("Mark as Read"), mark_as_read_work_path(work)
+  def mark_as_read_button(work)
+    button_to t("works_helper.mark_as_read_button"), mark_as_read_work_path(work), method: :patch
   end
 
-  def mark_for_later_link(work)
-    link_to ts("Mark for Later"), mark_for_later_work_path(work)
+  def mark_for_later_button(work)
+    button_to t("works_helper.mark_for_later_button"), mark_for_later_work_path(work), method: :patch
   end
 
-  def get_endnotes_link
-    if current_page?({ controller: "chapters", action: "show" })
-      if @work.posted?
-        chapter_path(@work.last_posted_chapter.id, anchor: 'work_endnotes')
-      else
-        chapter_path(@work.last_chapter.id, anchor: 'work_endnotes')
-      end
+  def get_endnotes_link(work)
+    return "#work_endnotes" unless current_page?({ controller: "chapters", action: "show" })
+
+    if work.posted? && work.last_posted_chapter
+      chapter_path(work.last_posted_chapter.id, anchor: "work_endnotes")
     else
-      "#work_endnotes"
+      chapter_path(work.last_chapter.id, anchor: "work_endnotes")
     end
   end
 

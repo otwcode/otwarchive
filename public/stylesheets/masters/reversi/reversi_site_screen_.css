@@ -80,7 +80,6 @@ th,
 .javascript,
 .statistics .index li:nth-of-type(even),
 #tos_prompt,
-.announcement input[type="submit"],
 .nomination dt {
   background: #333;
 }
@@ -159,6 +158,8 @@ fieldset fieldset.listbox,
 
 #footer a:hover,
 #footer a:focus,
+#footer button:hover,
+#footer button:focus,
 .autocomplete .dropdown ul li:hover,
 .autocomplete .dropdown li.selected,
 a.tag:hover,
@@ -364,6 +365,16 @@ form dd.required {
 .event.announcement .userstuff a,
 .filters .expander {
   color: #eee;
+}
+
+.announcement .action {
+  background: #333;
+}
+
+.announcement .action:hover,
+.announcement .action:focus {
+  color: #fff;
+  box-shadow: inset 2px 2px 2px #000;
 }
 
 .caution {

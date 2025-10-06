@@ -12,26 +12,25 @@ Background:
     And I want to edit my profile
 
 Scenario: Add details
-
   Then I should see the page title "Edit Profile"
   When I fill in the details of my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
-    And I should see "I live in"
+    And I should see "Test title thingy"
+    And I should see "This is some text about me."
 
 Scenario: Change details
-
   When I change the details in my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
-    And I should see "I live in"
+    And I should see "Alternative title thingy"
+    And I should see "This is some different text about me."
 
 Scenario: Remove details
-
   When I remove details from my profile
   Then I should see "Your profile has been successfully updated"
     And 0 emails should be delivered
-    And I should not see "I live in"
+    And I should not see "Bio"
 
 Scenario: Change details as an admin
 
@@ -62,10 +61,9 @@ Scenario: Change details as an admin
   Then I should see 1 admin activity log entry
 
 Scenario: Changing email address shows a confirmation page and sends a confirmation mail
-
   When it is currently 2020-04-10 13:37
     And the email address change confirmation period is set to 4 days
-    And I change my preferences to display my email address
+    And I follow "Profile"
     And I follow "Edit My Profile"
     And I follow "Change Email"
     And I fill in "New email" with "valid2@archiveofourown.org"
@@ -89,8 +87,11 @@ Scenario: Changing email address shows a confirmation page and sends a confirmat
   When I am a visitor
     And I follow "confirm your email change" in the email
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
-  When I go to editname's profile page
-  Then I should see "My email address: bar@ao3.org"
+  When I am logged in as "editname"
+    And I go to editname's profile page
+    And I follow "Edit My Profile"
+    And I follow "Change Email"
+  Then I should see "bar@ao3.org"
 
   When I am logged in as "editname"
     And I follow "confirm your email change" in the email
@@ -99,10 +100,9 @@ Scenario: Changing email address shows a confirmation page and sends a confirmat
     But I should not see "bar@ao3.org"
     But I should not see "You have requested to change your email address"
   When I go to editname's profile page
-  Then I should see "My email address: valid2@archiveofourown.org"
-  When I log out
-    And I go to editname's profile page
-  Then I should see "My email address: valid2@archiveofourown.org"
+    And I follow "Edit My Profile"
+    And I follow "Change Email"
+  Then I should see "valid2@archiveofourown.org"
 
 Scenario: Changing email address -- canceling in confirmation step
 
@@ -205,26 +205,10 @@ Scenario: Changing email address -- translated emails are sent when user enables
       And the email should have "Confirm your email change" in the subject
       And the email to email address "valid2@archiveofourown.org" should be translated
 
-Scenario: Date of birth - under age
-
-  When I enter a birthdate that shows I am under age
-  Then I should see "You must be over 13"
-
-Scenario: Entering date of birth and displaying
-
-  When I fill in my date of birth
-  Then I should see "Your profile has been successfully updated"
-  When I change my preferences to display my date of birth
-  Then I should see "My birthday: 1980-11-30"
-    And 0 emails should be delivered
-  When I log out
-    And I go to editname's profile page
-  Then I should see "My birthday: 1980-11-30"
-
 Scenario: Change password - mistake in typing old password
 
   When I make a mistake typing my old password
-  Then I should see "Your old password was incorrect"
+  Then I should see "Your old password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, contact Support for help."
 
 Scenario: Change password - mistake in typing new password confirmation
 
@@ -233,9 +217,12 @@ Scenario: Change password - mistake in typing new password confirmation
 
 Scenario: Change password
 
-  When I change my password
+  When it is currently 2025-04-12 17:00 UTC
+    And I change my password
   Then I should see "Your password has been changed. To protect your account, you have been logged out of all active sessions. Please log in with your new password."
-    And 0 emails should be delivered
+    And 1 email should be delivered to "editname"
+    And the email should have "Your password has been changed" in the subject
+    And the email should contain "The password for your AO3 account was changed on Sat, 12 Apr 2025 17:00:\d+ \+0000"
   When I am logged in as a super admin
     And I go to the user administration page for "editname"
   Then I should see "Password Changed" within "#user_history"

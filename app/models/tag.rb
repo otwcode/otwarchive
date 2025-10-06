@@ -1,5 +1,3 @@
-require "unicode_utils/casefold"
-
 class Tag < ApplicationRecord
   include Searchable
   include StringCleaner
@@ -681,8 +679,10 @@ class Tag < ApplicationRecord
   def reindex_associated(reindex_pseuds = false)
     works.reindex_all
     external_works.reindex_all
+    collections.reindex_all
     bookmarks.reindex_all
 
+    filtered_collections.reindex_all
     filtered_works.reindex_all
     filtered_external_works.reindex_all
 
@@ -1206,17 +1206,19 @@ class Tag < ApplicationRecord
       exists: true
     )
 
-    # Calculate the fandoms associated with this tag, because we'll set any
-    # TagNominations with a matching parent_tagname to have parented: true.
-    parent_names = parents.where(type: "Fandom").pluck(:name)
+    if canonical?
+      # Calculate the fandoms associated with this tag, because we'll set any
+      # TagNominations with a matching parent_tagname to have parented: true.
+      parent_names = parents.where(type: "Fandom").pluck(:name)
 
-    # If this tag has any fandoms at all, we also want to count it as parented
-    # for nominations with a blank parent_tagname. See the set_parented
-    # function in TagNominations for the calculation that we're trying to mimic
-    # here.
-    parent_names << "" if parent_names.present?
+      # If this tag has any fandoms at all, we also want to count it as parented
+      # for nominations with a blank parent_tagname. See the set_parented
+      # function in TagNominations for the calculation that we're trying to mimic
+      # here.
+      parent_names << "" if parent_names.present?
 
-    TagNomination.where(tagname: name, parent_tagname: parent_names).update_all(parented: true)
+      TagNomination.where(tagname: name, parent_tagname: parent_names).update_all(parented: true)
+    end
 
     return unless saved_change_to_name? && name_before_last_save.present?
 
@@ -1247,6 +1249,6 @@ class Tag < ApplicationRecord
   end
 
   def normalize_for_tag_comparison(string)
-    UnicodeUtils.casefold(string).mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/u, "")
+    string.downcase(:fold).mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/u, "")
   end
 end

@@ -2,12 +2,12 @@ class ChaptersController < ApplicationController
   # only registered users and NOT admin should be able to create new chapters
   before_action :users_only, except: [:index, :show, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :update, :update_positions]
-  before_action :check_user_not_suspended, only: [:edit, :confirm_delete, :destroy]
+  before_action :check_user_not_suspended, only: [:edit, :remove_user_creatorship, :confirm_delete, :destroy]
   before_action :load_work
   # only authors of a work should be able to edit its chapters
   before_action :check_ownership, except: [:index, :show]
   before_action :check_visibility, only: [:show]
-  before_action :load_chapter, only: [:show, :edit, :update, :preview, :post, :confirm_delete, :destroy]
+  before_action :load_chapter, only: [:show, :edit, :remove_user_creatorship, :update, :preview, :post, :confirm_delete, :destroy]
 
   cache_sweeper :feed_sweeper
 
@@ -41,7 +41,7 @@ class ChaptersController < ApplicationController
       access_denied
       return
     end
- 
+
     chapter_position = @chapters.index(@chapter)
     if @chapters.length > 1
       @previous_chapter = @chapters[chapter_position - 1] unless chapter_position.zero?
@@ -88,14 +88,24 @@ class ChaptersController < ApplicationController
 
   # GET /work/:work_id/chapters/1/edit
   def edit
-    return unless params["remove"] == "me"
+  end
 
+  def remove_user_creatorship
     @chapter.creatorships.for_user(current_user).destroy_all
     if @work.chapters.any? { |c| current_user.is_author_of?(c) }
       flash[:notice] = ts("You have been removed as a creator from the chapter.")
-      redirect_to @work
-    else # remove from work if no longer co-creator on any chapter
-      redirect_to edit_work_path(@work, remove: "me")
+      redirect_to @work and return
+    end
+
+    # remove from work if no longer co-creator on any chapter
+    pseuds_with_author_removed = @work.pseuds - current_user.pseuds
+
+    if pseuds_with_author_removed.empty?
+      redirect_to controller: "orphans", action: "new", work_id: @work.id
+    else
+      @work.remove_author(current_user)
+      flash[:notice] = ts("You have been removed as a creator from the work.")
+      redirect_to current_user
     end
   end
 
@@ -117,7 +127,6 @@ class ChaptersController < ApplicationController
     if params[:edit_button] || chapter_cannot_be_saved?
       render :new
     else # :post_without_preview or :preview
-      @work.major_version = @work.major_version + 1
       @chapter.posted = true if params[:post_without_preview_button]
       @work.set_revised_at_by_chapter(@chapter)
       if @chapter.save && @work.save
@@ -157,7 +166,6 @@ class ChaptersController < ApplicationController
       end
       render :preview
     else
-      @work.minor_version = @work.minor_version + 1
       @chapter.posted = true if params[:post_button] || params[:post_without_preview_button]
       posted_changed = @chapter.posted_changed?
       @work.set_revised_at_by_chapter(@chapter)
@@ -224,7 +232,7 @@ class ChaptersController < ApplicationController
 
     was_draft = !@chapter.posted?
     if @chapter.destroy
-      @work.minor_version = @work.minor_version + 1
+      @work.minor_version = @work.minor_version + 1 unless was_draft
       @work.set_revised_at
       @work.save
       flash[:notice] = ts("The chapter #{was_draft ? 'draft ' : ''}was successfully deleted.")

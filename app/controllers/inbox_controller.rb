@@ -14,6 +14,7 @@ class InboxController < ApplicationController
 
   def show
     authorize InboxComment if logged_in_as_admin?
+    @page_subtitle = t(".page_title", user: @user.login)
     @inbox_total = @user.inbox_comments.with_bad_comments_removed.count
     @unread = @user.inbox_comments.with_bad_comments_removed.count_unread
     @filters = filter_params[:filters] || {}
@@ -41,10 +42,10 @@ class InboxController < ApplicationController
       elsif params[:delete]
         @inbox_comments.each { |i| i.destroy }
       end
+      success_message = t(".success")
     rescue
-      flash[:caution] = ts("Please select something first")
+      flash[:caution] = t(".must_select_item")
     end
-    success_message = ts('Inbox successfully updated.')
     respond_to do |format|
       format.html { redirect_to request.referer || user_inbox_path(@user, page: params[:page], filters: params[:filters]), notice: success_message }
       format.json { render json: { item_success_message: success_message }, status: :ok }

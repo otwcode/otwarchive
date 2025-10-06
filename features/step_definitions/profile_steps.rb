@@ -4,26 +4,20 @@ Given /^I want to edit my profile$/ do
   step %{I should see "Edit My Profile"}
 end
 
-
 When /^I fill in the details of my profile$/ do
   fill_in("Title", with: "Test title thingy")
-  fill_in("Location", with: "Alpha Centauri")
   fill_in("About Me", with: "This is some text about me.")
   click_button("Update")
 end
 
-
 When /^I change the details in my profile$/ do
   fill_in("Title", with: "Alternative title thingy")
-  fill_in("Location", with: "Beta Centauri")
   fill_in("About Me", with: "This is some different text about me.")
   click_button("Update")
 end
 
-
 When /^I remove details from my profile$/ do
   fill_in("Title", with: "")
-  fill_in("Location", with: "")
   fill_in("About Me", with: "")
   click_button("Update")
 end
@@ -49,47 +43,20 @@ When "I request to change my email to {string}" do |email|
   step %{I confirm my email change request to "#{email}"}
 end
 
+When "I change my email to {string}" do |email|
+  step %{I follow "My Preferences"}
+  step %{I follow "Change Email"}
+  step %{I request to change my email to "#{email}"}
+  step %{1 email should be delivered to "#{email}"}
+  step %{I follow "confirm your email change" in the email}
+  step %{I should see "Your email has been successfully updated."}
+end
 
 When /^I view my profile$/ do
   step %{I follow "My Dashboard"}
   step %{I should see "Dashboard"}
   click_link("Profile")
 end
-
-When /^I enter a birthdate that shows I am under age$/ do
-  date = 13.years.ago + 1.day
-  select(date.year, from: "profile_attributes[date_of_birth(1i)]")
-  select(date.strftime("%B"), from: "profile_attributes[date_of_birth(2i)]")
-  select(date.day, from: "profile_attributes[date_of_birth(3i)]")
-  click_button("Update")
-end
-
-
-When /^I change my preferences to display my date of birth$/ do
-  click_link("Preferences")
-  check ("Show my date of birth to other people.")
-  click_button("Update")
-  step %{I follow "My Dashboard"}
-  click_link("Profile")
-end
-
-
-When /^I change my preferences to display my email address$/ do
-  click_link("Preferences")
-  check ("Show my email address to other people.")
-  click_button("Update")
-  step %{I follow "My Dashboard"}
-  click_link("Profile")
-end
-
-
-When /^I fill in my date of birth$/ do
-  select("1980", from: "profile_attributes[date_of_birth(1i)]")
-  select("November", from: "profile_attributes[date_of_birth(2i)]")
-  select("30", from: "profile_attributes[date_of_birth(3i)]")
-  click_button("Update")
-end
-
 
 When /^I make a mistake typing my old password$/ do
   click_link("Password")

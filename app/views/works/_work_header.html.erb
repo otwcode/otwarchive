@@ -26,7 +26,7 @@
                                      title: ts("Hidden by Administrator"),
                                      skip_pipeline: true) %>
       <% end %>
-      <%= @work.title.html_safe %>
+      <%= @work.title %>
     </h2>
     <h3 class="byline heading">
       <%= byline(@work).html_safe %>

@@ -115,8 +115,8 @@ class Comment < ApplicationRecord
       user_role = "user"
       comment_author = user.login
     end
-    
-    {
+
+    attributes = {
       comment_type: comment_type,
       key: ArchiveConfig.AKISMET_KEY,
       blog: ArchiveConfig.AKISMET_NAME,
@@ -127,6 +127,10 @@ class Comment < ApplicationRecord
       comment_author_email: comment_owner_email,
       comment_content: comment_content
     }
+
+    attributes[:recheck_reason] = "edit" if will_save_change_to_edited_at? && will_save_change_to_comment_content?
+
+    attributes
   end
 
   after_create :expire_parent_comments_count
@@ -167,7 +171,6 @@ class Comment < ApplicationRecord
   after_update :after_update
   def after_update
     users = []
-    admins = []
 
     if self.saved_change_to_edited_at? || (self.saved_change_to_unreviewed? && !self.unreviewed?)
       # Reply to owner of parent comment if this is a reply comment
@@ -191,28 +194,23 @@ class Comment < ApplicationRecord
       end
 
       # send notification to the owner(s) of the ultimate parent, who can be users or admins
-      if self.ultimate_parent.is_a?(AdminPost)
-        AdminMailer.edited_comment_notification(self.id).deliver_after_commit
+      # at this point, users contains those who've already been notified
+      if users.empty?
+        users = self.ultimate_parent.commentable_owners
       else
-        # at this point, users contains those who've already been notified
-        if users.empty?
-          users = self.ultimate_parent.commentable_owners
-        else
-          # replace with the owners of the commentable who haven't already been notified
-          users = self.ultimate_parent.commentable_owners - users
-        end
-        users.each do |user|
-          unless user == self.comment_owner && !notify_user_of_own_comments?(user)
-            if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
-              CommentMailer.edited_comment_notification(user, self).deliver_after_commit
-            end
-            if notify_user_by_inbox?(user)
-              update_feedback_in_inbox(user)
-            end
+        # replace with the owners of the commentable who haven't already been notified
+        users = self.ultimate_parent.commentable_owners - users
+      end
+      users.each do |user|
+        next if user == self.comment_owner && !notify_user_of_own_comments?(user)
+
+        if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
+          I18n.with_locale(user.is_a?(User) ? user.preference.locale_for_mails : nil) do
+            CommentMailer.edited_comment_notification(user, self).deliver_after_commit
           end
         end
+        update_feedback_in_inbox(user) if user.is_a?(User) && notify_user_by_inbox?(user)
       end
-
     end
   end
 
@@ -222,7 +220,6 @@ class Comment < ApplicationRecord
     # eventually we will set the locale to the user's stored language of choice
     #Locale.set ArchiveConfig.SUPPORTED_LOCALES[ArchiveConfig.DEFAULT_LOCALE]
     users = []
-    admins = []
 
     # notify the commenter
     if self.comment_owner && notify_user_of_own_comments?(self.comment_owner)
@@ -242,24 +239,22 @@ class Comment < ApplicationRecord
     end
 
     # send notification to the owner(s) of the ultimate parent, who can be users or admins
-    if self.ultimate_parent.is_a?(AdminPost)
-      AdminMailer.comment_notification(self.id).deliver_after_commit
+    # at this point, users contains those who've already been notified
+    if users.empty?
+      users = self.ultimate_parent.commentable_owners
     else
-      # at this point, users contains those who've already been notified
-      if users.empty?
-        users = self.ultimate_parent.commentable_owners
-      else
-        # replace with the owners of the commentable who haven't already been notified
-        users = self.ultimate_parent.commentable_owners - users
-      end
-      users.each do |user|
-        unless user == self.comment_owner && !notify_user_of_own_comments?(user)
-          if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
+      # replace with the owners of the commentable who haven't already been notified
+      users = self.ultimate_parent.commentable_owners - users
+    end
+    users.each do |user|
+      unless user == self.comment_owner && !notify_user_of_own_comments?(user)
+        if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
+          I18n.with_locale(user.is_a?(User) ? user.preference.locale_for_mails : nil) do
             CommentMailer.comment_notification(user, self).deliver_after_commit
           end
-          if notify_user_by_inbox?(user)
-            add_feedback_to_inbox(user)
-          end
+        end
+        if user.is_a?(User) && notify_user_by_inbox?(user)
+          add_feedback_to_inbox(user)
         end
       end
     end
@@ -272,127 +267,127 @@ class Comment < ApplicationRecord
 
   protected
 
-    def notify_user_of_own_comments?(user)
-      if user.nil? || user == User.orphan_account
-        false
-      elsif user.is_a?(Admin)
-        true
+  def notify_user_of_own_comments?(user)
+    if user.nil? || user == User.orphan_account
+      false
+    elsif user.is_a?(Admin)
+      true
+    else
+      !user.preference.comment_copy_to_self_off?
+    end
+  end
+
+  def notify_user_by_inbox?(user)
+    if user.nil? || user == User.orphan_account
+      false
+    elsif user.is_a?(Admin)
+      true
+    else
+      !user.preference.comment_inbox_off?
+    end
+  end
+
+  def notify_user_by_email?(user)
+    if user.nil? || user == User.orphan_account
+      false
+    elsif user.is_a?(Admin)
+      true
+    else
+      !user.preference.comment_emails_off?
+    end
+  end
+
+  def update_feedback_in_inbox(user)
+    if (edited_feedback = user.inbox_comments.find_by(feedback_comment_id: self.id))
+      edited_feedback.update_attribute(:read, false)
+    else # original inbox comment was deleted
+      add_feedback_to_inbox(user)
+    end
+  end
+
+  def add_feedback_to_inbox(user)
+    new_feedback = user.inbox_comments.build
+    new_feedback.feedback_comment_id = self.id
+    new_feedback.save
+  end
+
+  def content_too_different?(new_content, old_content, threshold)
+    # we added more than the threshold # of chars, just return
+    return true if new_content.length > (old_content.length + threshold)
+
+    # quick and dirty iteration to compare the two strings
+    cost = 0
+    new_i = 0
+    old_i = 0
+    while new_i < new_content.length && old_i < old_content.length
+      if new_content[new_i] == old_content[old_i]
+        new_i += 1
+        old_i += 1
+        next
+      end
+
+      cost += 1
+      # interrupt as soon as we have changed > threshold chars
+      return true if cost > threshold
+
+      # peek ahead to see if we can catch up on either side eg if a letter has been inserted/deleted
+      if new_content[new_i + 1] == old_content[old_i]
+        new_i += 1
+      elsif new_content[new_i] == old_content[old_i + 1]
+        old_i += 1
       else
-        !user.preference.comment_copy_to_self_off?
+        # just keep going
+        new_i += 1
+        old_i += 1
       end
     end
 
-    def notify_user_by_inbox?(user)
-      if user.nil? || user == User.orphan_account
-        false
-      elsif user.is_a?(Admin)
-        true
+    cost > threshold
+  end
+
+  def not_user_commenter?(parent_comment)
+    (!parent_comment.comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name)
+  end
+
+  def different_owner?(parent_comment)
+    not_user_commenter?(parent_comment) || (parent_comment.comment_owner != self.comment_owner)
+  end
+
+  def notify_parent_comment_owner
+    return unless self.reply_comment? && !self.unreviewed?
+
+    parent_comment = self.commentable
+    parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
+
+    # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
+    if self.comment_owner && (inbox_comment = self.comment_owner.inbox_comments.find_by(feedback_comment_id: parent_comment.id))
+      inbox_comment.update(replied_to: true, read: true)
+    end
+
+    return unless different_owner?(parent_comment)
+
+    # Never notify people who are not tag wranglers (any more) about comments on tags
+    return if self.ultimate_parent.is_a?(Tag) && !parent_comment_owner&.is_tag_wrangler?
+
+    # send notification to the owner of the original comment if they're not the same as the commenter
+    if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
+      if self.saved_change_to_edited_at?
+        CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver_after_commit
       else
-        !user.preference.comment_inbox_off?
+        CommentMailer.comment_reply_notification(parent_comment, self).deliver_after_commit
       end
     end
 
-    def notify_user_by_email?(user)
-      if user.nil? || user == User.orphan_account
-        false
-      elsif user.is_a?(Admin)
-        true
+    if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
+      if self.saved_change_to_edited_at?
+        update_feedback_in_inbox(parent_comment_owner)
       else
-        !user.preference.comment_emails_off?
+        add_feedback_to_inbox(parent_comment_owner)
       end
     end
 
-    def update_feedback_in_inbox(user)
-      if (edited_feedback = user.inbox_comments.find_by(feedback_comment_id: self.id))
-        edited_feedback.update_attribute(:read, false)
-      else # original inbox comment was deleted
-        add_feedback_to_inbox(user)
-      end
-    end
-
-    def add_feedback_to_inbox(user)
-      new_feedback = user.inbox_comments.build
-      new_feedback.feedback_comment_id = self.id
-      new_feedback.save
-    end
-
-    def content_too_different?(new_content, old_content, threshold)
-      # we added more than the threshold # of chars, just return
-      return true if new_content.length > (old_content.length + threshold)
-
-      # quick and dirty iteration to compare the two strings
-      cost = 0
-      new_i = 0
-      old_i = 0
-      while new_i < new_content.length && old_i < old_content.length
-        if new_content[new_i] == old_content[old_i]
-          new_i += 1
-          old_i += 1
-          next
-        end
-
-        cost += 1
-        # interrupt as soon as we have changed > threshold chars
-        return true if cost > threshold
-
-        # peek ahead to see if we can catch up on either side eg if a letter has been inserted/deleted
-        if new_content[new_i + 1] == old_content[old_i]
-          new_i += 1
-        elsif new_content[new_i] == old_content[old_i + 1]
-          old_i += 1
-        else
-          # just keep going
-          new_i += 1
-          old_i += 1
-        end
-      end
-
-      cost > threshold
-    end
-
-    def not_user_commenter?(parent_comment)
-      (!parent_comment.comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name)
-    end
-
-    def have_different_owner?(parent_comment)
-      return not_user_commenter?(parent_comment) || (parent_comment.comment_owner != self.comment_owner)
-    end
-
-    def notify_parent_comment_owner
-      if self.reply_comment? && !self.unreviewed?
-        parent_comment = self.commentable
-        parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
-
-        # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
-        if self.comment_owner
-          if (inbox_comment = self.comment_owner.inbox_comments.find_by(feedback_comment_id: parent_comment.id))
-            inbox_comment.update(replied_to: true, read: true)
-          end
-        end
-
-        # send notification to the owner of the original comment if they're not the same as the commenter
-        if (have_different_owner?(parent_comment))
-          if !parent_comment_owner || notify_user_by_email?(parent_comment_owner) || self.ultimate_parent.is_a?(Tag)
-            if self.saved_change_to_edited_at?
-              CommentMailer.edited_comment_reply_notification(parent_comment, self).deliver_after_commit
-            else
-              CommentMailer.comment_reply_notification(parent_comment, self).deliver_after_commit
-            end
-          end
-          if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
-            if self.saved_change_to_edited_at?
-              update_feedback_in_inbox(parent_comment_owner)
-            else
-              add_feedback_to_inbox(parent_comment_owner)
-            end
-          end
-          if parent_comment_owner
-            return parent_comment_owner
-          end
-        end
-        return nil
-      end
-    end
+    parent_comment_owner
+  end
 
   public
 
@@ -519,9 +514,23 @@ class Comment < ApplicationRecord
     update_attribute(:iced, true)
   end
 
+  # Freeze all comments.
+  def self.mark_all_frozen!(comments)
+    transaction do
+      comments.each(&:mark_frozen!)
+    end
+  end
+
   # Unfreeze single comment.
   def mark_unfrozen!
     update_attribute(:iced, false)
+  end
+
+  # Unfreeze all comments.
+  def self.mark_all_unfrozen!(comments)
+    transaction do
+      comments.each(&:mark_unfrozen!)
+    end
   end
 
   def mark_hidden!
@@ -536,8 +545,13 @@ class Comment < ApplicationRecord
     sanitize_field(self, :comment_content, image_safety_mode: use_image_safety_mode?)
   end
 
-  def use_image_safety_mode?
-    parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE) || hidden_by_admin
+  def sanitized_mailer_content
+    sanitize_field(self, :comment_content, image_safety_mode: true)
   end
+
+  def use_image_safety_mode?
+    pseud_id.nil? || hidden_by_admin || parent_type.in?(ArchiveConfig.PARENTS_WITH_IMAGE_SAFETY_MODE)
+  end
+
   include Responder
 end

@@ -28,12 +28,14 @@ class Admin::AdminUsersController < Admin::BaseController
 
   def index
     authorize User
-    @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
-    @role = Role.find_by(name: params[:role]) if params[:role]
-    @users = User.search_by_role(
-      @role, params[:name], params[:email], params[:user_id],
-      inactive: params[:inactive], exact: params[:exact], page: params[:page]
-    )
+
+    # Values for the role dropdown:
+    @role_values = @roles.map { |role| [role.name.humanize.titlecase, role.id] }
+
+    return if search_params.empty?
+
+    @query = UserQuery.new(search_params)
+    @users = @query.search_results.scope(:with_includes_for_admin_index)
   end
 
   def bulk_search
@@ -78,7 +80,23 @@ class Admin::AdminUsersController < Admin::BaseController
       @user.skip_reconfirmation!
       @user.email = attributes[:email]
     end
-    @user.roles = Role.where(id: attributes[:roles]) if attributes[:roles].present?
+    if attributes[:roles].present?
+      # Roles that the current admin can add or remove
+      allowed_roles = UserPolicy::ALLOWED_USER_ROLES_BY_ADMIN_ROLES
+        .values_at(*current_admin.roles)
+        .compact
+        .flatten
+
+      # Other roles the current user has
+      out_of_scope_roles = @user.roles.to_a.reject { |role| allowed_roles.include?(role.name) }
+
+      request_roles = Role.where(
+        id: attributes[:roles],
+        name: [allowed_roles]
+      )
+
+      @user.roles = out_of_scope_roles + request_roles
+    end
 
     if @user.save
       flash[:notice] = ts("User was successfully updated.")
@@ -199,6 +217,18 @@ class Admin::AdminUsersController < Admin::BaseController
   def creations
     authorize @user
     @page_subtitle = t(".page_title", login: @user.login)
+  end
+
+  private
+
+  def search_params
+    allowed_params = if policy(User).can_view_past?
+                       %i[name email role_id user_id inactive page commit search_past]
+                     else
+                       %i[name email role_id user_id inactive page commit]
+                     end
+
+    params.permit(*allowed_params)
   end
 
   def log_items

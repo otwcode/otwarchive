@@ -199,13 +199,18 @@ en:
             details: Details
           sign_in:
             current:
-              action: Current Login
+              action: Most Recent Login
               no_details: No login recorded
             details: 'IP Address: %{ip}'
             last:
               action: Previous Login
               no_details: No previous login recorded
           summary: Shows what notable actions, such as creating an account, a user performed, and when they did them.
+      index:
+        role: Role
+        settings:
+          label: Search settings
+          past: Include past usernames and emails
       show:
         fnok:
           form:
@@ -219,6 +224,12 @@ en:
           invitation: 'Invitation:'
           no_invitation: Created without invitation
           no_role: No roles
+          past_emails:
+            one: 'Past email:'
+            other: 'Past emails:'
+          past_logins:
+            one: 'Past username:'
+            other: 'Past usernames:'
           role:
             one: 'Role:'
             other: 'Roles:'
@@ -309,8 +320,9 @@ en:
           new: Ban email address
           search: Find banned emails
         notes:
-          canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@bar.com will not be allowed if foo@bar.com is banned).
-          guest_comments: Banned email addresses cannot be used in guest comments.
+          canonical_format: All emails are stored in a single canonical format and common variants of the same address are not allowed (for instance, foo+whatever@example.com will not be allowed if foo@example.com is banned).
+          guest_comments: Banned email addresses cannot be used in guest comments and cannot be added to the invitation queue.
+          unaffected_users: They will not affect users with that address or prevent invitations sent to that email address from being used.
         page_heading: Manage Banned Emails
     header:
       nav:
@@ -392,7 +404,7 @@ en:
           suspend_filter_counts: Suspend some filter tracking due to high posting volume
           tag_wrangling_off: Turn off tag wrangling for non-admins
         heading: Archive Settings
-        last_updated_by_admin: Last updated on %{updated_at} by %{admin_name}.
+        last_updated_by_admin: Settings last updated on %{updated_at} by %{admin_name}.
         legend:
           account_and_invitations: Accounts and Invitations
           actions: Actions
@@ -547,6 +559,25 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
+  challenge_assignments:
+    to_default:
+      button: Default
+      confirmation: Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone.
+    to_fulfill:
+      button: Fulfill
+    user_index:
+      claims: My Claims
+      claims_note_html: Looking for prompts you claimed in a prompt meme? Try %{claims_link}.
+      navigation:
+        completed: Completed Assignments
+        unposted: Unposted Assignments
+      page_heading:
+        all: My Assignments
+        collection_html: My Assignments in %{collection_link}
+  challenge_claims:
+    user_index:
+      assignments: My Assignments
+      assignments_note_html: Looking for assignments you were given for a gift exchange? Try %{assignments_link}.
   challenge_signups:
     signup_form:
       notice:
@@ -587,10 +618,62 @@ en:
         notice:
           unreviewed_by_collection: Works and bookmarks listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection.
         page_heading: Items by %{username} in Collections
+  collection_profile:
+    show:
+      meta:
+        collection_tags: 'Collection tags:'
   collections:
+    collection_blurb:
+      collection_tags: 'Collection Tags:'
+    filters:
+      clear_filters: Clear Filters
+      closed:
+        exclude: 'No'
+        include: Either
+        label: Closed
+        only: 'Yes'
+      landmark: Filters
+      leave_filters: Top of Collections Index
+      legend: 'Filter collections:'
+      moderated:
+        exclude: 'No'
+        include: Either
+        label: Moderated
+        only: 'Yes'
+      multifandom:
+        exclude: 'No'
+        include: Either
+        label: Multifandom
+        only: 'Yes'
+      sort:
+        column: Sort by
+        direction:
+          ascending: Ascending
+          descending: Descending
+          label: Sort direction
+      submit:
+        button: Sort and Filter
+        landmark: Sort and Filter
+      tag: Filter by tag
+      title: Filter by title
+      type:
+        any: Any
+        gift_exchange: Gift Exchange Challenge
+        label: Collection Type
+        no_challenge: No Challenge
+        prompt_meme: Prompt Meme Challenge
     form:
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
+      multifandom:
+        footnote: Use this if your collection is not fandom-specific.
+        label: Multifandom
+    index:
+      page_heading:
+        challenges_subcollections_in: Challenges/Subcollections in %{collection}
+        collections_in_the: Collections in the %{archive}
+        collections_including: Collections including %{work}
+        users_collections: "%{user}'s Collections"
     sidebar:
       bookmarks: Bookmarked Items (%{count})
       challenge_settings: Challenge Settings
@@ -667,11 +750,18 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+    confirm_delete:
+      confirm_button: Yes, delete!
+      delete_confirmation: Are you sure you want to delete this comment?
     edit:
       back: Back
       page_heading: Editing comment
       show: Show
       update: Update
+    show:
+      comment_on_html: Comment on %{commentable_link}
+    single_comment:
+      on_chapter_html: on %{commentable_link}
     unreviewed:
       approve_all: Approve All Unreviewed Comments
       no_unreviewed: No unreviewed comments.
@@ -681,18 +771,45 @@ en:
       page_heading_html: Unreviewed Comments on %{commentable_link}
   downloads:
     download_afterword:
+      afterword: Afterword
+      comment: drop by the Archive and comment
+      end_notes: End Notes
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link}"
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
-      please_comment_html: Please %{work_comment_link} to let the creator know if you enjoyed their work!
-      work_comment: drop by the Archive and comment
+      please_comment_html: Please %{comment_link} to let the creator know if you enjoyed their work!
+    download_chapter:
+      chapter_byline_html: Chapter by %{byline_names_link}
+      chapter_end_notes_with_chapter_notes: more notes
+      chapter_end_notes_without_chapter_notes: notes
+      chapter_notes: Chapter Notes
+      chapter_summary: Chapter Summary
+      section_chapter_end_notes: Chapter End Notes
+      see_chapter_end_notes_html: See the end of the chapter for %{chapter_end_notes_link}
     download_preface:
+      byline_html: by %{byline_names_link}
+      chapters: 'Chapters: %{chapter_total_display}'
+      collections: 'Collections:'
+      completed: 'Completed: %{date}'
+      end_notes_with_work_notes: more notes
+      end_notes_without_work_notes: notes
       inspired_by:
         restricted_html: Inspired by [Restricted Work] by %{creator_link}
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
+      language: 'Language:'
+      notes: Notes
+      originally_posted_html: Posted originally on the %{archive_link} at %{work_url}.
+      preface: Preface
+      published: 'Published: %{date}'
+      see_end_notes_html: See the end of the work for %{end_notes_link}
+      series: 'Series:'
+      series_list_html: Part %{position} of %{series_link}
+      stats: 'Stats:'
+      summary: Summary
+      tag_type: "%{tag_type}:"
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link}'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
@@ -701,6 +818,8 @@ en:
         restricted_html: A translation of [Restricted Work] by %{creator_link}
         revealed_html: A translation of %{work_link} by %{creator_link}
         unrevealed: A translation of a work in an unrevealed collection
+      updated: 'Updated: %{date}'
+      words: 'Words: %{count_with_delimiters}'
   errors:
     timeout_error:
       contact_support: contact Support
@@ -1721,6 +1840,7 @@ en:
         update: Update Language
       support_available: Support available
     index:
+      language_code_format_html: "(%{code})"
       navigation:
         add: Add a Language
         edit: Edit
@@ -1730,6 +1850,8 @@ en:
         one: "%{formatted_count} work"
         other: "%{formatted_count} works"
   layouts:
+    banner:
+      hide: hide banner
     footer:
       about:
         content_policy: Content Policy
@@ -1920,8 +2042,6 @@ en:
         hide_share_buttons: Hide the share buttons on my work.
         hide_work_from_search_engines: Hide my work from search engines when possible.
         legend: Privacy
-        show_date_of_birth: Show my date of birth to other people.
-        show_email_address: Show my email address to other people.
       public_site_skins: Public Site Skins
       your_locale: Your locale
       your_site_skin: Your site skin
@@ -1973,12 +2093,25 @@ en:
       make_default: Make this name default
       name: Name
       submit: Submit
+  readings:
+    index:
+      history:
+        landmark: List of History Items
+        page_heading: History
+      marked_for_later:
+        landmark: List of Marked for Later Items
+        page_heading: Marked for Later
   related_works:
     index:
       page_heading: "%{login}'s Related Works"
+  series:
+    series_order:
+      draft_work_title: "%{title} (DRAFT)"
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+    revert_skin_form:
+      revert_to_default: Revert to Default Skin
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
@@ -2020,6 +2153,55 @@ en:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
       tags_wrangled_csv: Tags Wrangled (CSV)
   tag_wranglings:
+    index:
+      general_resources:
+        ao3_catch_and_release: AO3_Catch_and_Release
+        ao3_catch_and_release_html: "%{ao3_catch_and_release_link} - For more information, please see the %{ao3_wrangling_project_faq_link}"
+        ao3_wrangling_project_faq: Tag Wrangling AO3 Project FAQ
+        current_wrangling_limitations: Current Wrangling Limitations
+        current_wrangling_limitations_html: "%{current_wrangling_limitations_link} - Details about current wrangling limitations and policies"
+        fandom_and_megafandom_directory: Directory of Fandom & Megafandom Wiki Pages
+        fandom_and_megafandom_directory_html: "%{fandom_and_megafandom_directory_link} - All currently available fandom & megafandom wiki pages"
+        fandoms_in_need_of_cowranglers: Fandoms in need of Cowranglers
+        fandoms_in_need_of_cowranglers_html: "%{fandoms_in_need_of_cowranglers_link} - Interested in helping out a fandom in need?"
+        heading: 'General Wrangling Resources:'
+        otw_slack_chat: OTW Slack Chat
+        otw_slack_chat_html: "%{otw_slack_chat_link} - For more information please see the %{tag_wrangling_slack_tutorial_link}"
+        tag_wranglers_mailing_list: Tag Wranglers Mailing List Conversations
+        tag_wranglers_mailing_list_html: "%{tag_wranglers_mailing_list_link} - Message Archive for the Tagwranglers Mailing List"
+        tag_wrangling_bugs: Tag Wrangling Bugs & Troubleshooting
+        tag_wrangling_bugs_html: "%{tag_wrangling_bugs_link} - Having technical issues while wrangling? Check here for solutions!"
+        tag_wrangling_committee: Tag Wrangling Committee
+        tag_wrangling_committee_html: "%{tag_wrangling_committee_link} - Full collection of wiki links & policies"
+        tag_wrangling_communication_policy: Tag Wrangling Communication Policy
+        tag_wrangling_communication_policy_html: "%{tag_wrangling_communication_policy_link} - Includes instructions for leaving tag comments and chat rules"
+        tag_wrangling_faq: Tag Wrangling FAQ
+        tag_wrangling_faq_html: "%{tag_wrangling_faq_link} - Check here to find answers to frequently asked questions"
+        tag_wrangling_moodle: Tag Wrangling Moodle
+        tag_wrangling_moodle_html: "%{tag_wrangling_moodle_link} - Additional modular training and support for all wranglers"
+        tag_wrangling_slack_tutorial: Tag Wrangling Slack Tutorial
+        tag_wrangling_training: Tag Wrangling Training
+        tag_wrangling_training_html: "%{tag_wrangling_training_link} - New wranglers, start here!"
+        unassigned_fandoms: Unassigned Fandoms
+        unassigned_fandoms_html: "%{unassigned_fandoms_link} - A list of all current unassigned fandoms"
+        vacations_and_retiring: Vacation and Retiring from Wrangling
+        vacations_and_retiring_html: "%{vacations_and_retiring_link} - Unable to wrangle for more than 2 weeks? Read about options for taking a break from wrangling!"
+      manage:
+        comments: Comments (%{count})
+        edit: Edit
+        works: Works
+        wrangle: Wrangle
+      notes:
+        contact_chair_html: For confidential issues (including difficulty reaching other wranglers), please email Chairs at %{tag_wranglers_chair_email_link} or use the phrase "%{question_for_chair_bold}" in %{tw_wranglers_slack_link}, %{tw_wranglers_quietroom_slack_link}, or in any training room and let them know you would like to chat via direct message.
+        contact_supervisor_html: If you have questions, difficulty accessing the wiki, or need technical assistance, please email Tag Wranglers Supervisors or use the phrase "%{question_for_supervisor_bold}" to contact a Supervisor in %{tw_wranglers_slack_link}, %{tw_wranglers_quietroom_slack_link}, or in any training room.
+        landmark: Notes
+        question_for_chair: Question for a Chair!
+        question_for_supervisor: Question for a Supervisor!
+        tw_wranglers_quietroom_slack: "#tw-wranglers-quietroom"
+        tw_wranglers_slack: "#tw-wranglers"
+        wrangle_to_guidelines_html: Wrangle tags in accordance with the %{wrangling_guidelines_link}.
+        wrangling_guidelines: wrangling guidelines
+      page_heading: Tag Wrangling
     wrangler_dashboard:
       characters_by_fandom: Characters by fandom (%{count})
       fandoms_by_media: Fandoms by media (%{count})
@@ -2038,6 +2220,7 @@ en:
       unsorted_tags: Unsorted Tags (%{count})
       use_type:
         bookmarks: Bookmarks
+        collections: Collections
         drafts: Drafts
         external_works: External Works
         private_bookmarks: Private Bookmarks
@@ -2048,6 +2231,9 @@ en:
       wrangling_home: Wrangling Home
       wrangling_tools: Wrangling Tools
   tags:
+    edit:
+      save_changes: Save changes
+      submit_legend: Submit
     index:
       about:
         popular: These are some of the most popular tags used on the Archive. To find more tags, %{search_tags_link}.
@@ -2078,6 +2264,12 @@ en:
       filter_bookmarks: filter bookmarks
       filter_works: filter works
       list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
+    wrangle:
+      manage:
+        comments: Comments (%{count})
+        edit: Edit
+        works: Works
+        wrangle: Wrangle
   time:
     formats:
       date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
@@ -2119,7 +2311,6 @@ en:
       page_heading: Change Username
       ticket_id: Ticket ID
     change_email:
-      browser_title: Change Email
       caution:
         check_spam_html: "%{must_confirm_bold} Please check your spam folder or %{contact_support_link} if you do not receive the confirmation email."
         confirm_by: If you don't confirm your request by %{date}, your email address will not be changed.
@@ -2141,10 +2332,17 @@ en:
       request_for_confirmation: Changing your email will send a request for confirmation to your new email address and a notification to your current email address.
       resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
     change_password:
-      browser_title: Change Password
+      change_password: Change Password
+      confirm_new_password: Confirm new password
+      new_password: New password
+      old_password: Old password
+      page_heading: Change Password
+      password_length:
+        one: "%{minimum} to %{count} character"
+        other: "%{minimum} to %{count} characters"
+      submit: Submit
     change_username:
       account_faq: Account FAQ
-      browser_title: Change Username
       caution: Please use this feature with caution.
       change_window:
         one: You can change your username once per day.
@@ -2159,7 +2357,7 @@ en:
       more_info_html: For information on how changing your username will affect your account, please check out the %{account_faq_link}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old username on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
       new_pseud_instead_html: If that is not what you want, you can %{create_a_new_pseud_link} instead.
       new_username: New username
-      page_heading: Change My Username
+      page_heading: Change Username
       password: Password
       submit: Change Username
       submit_landmark: Submit
@@ -2208,8 +2406,6 @@ en:
       about_me: About Me
       browser_title: Edit Profile
       change_profile_landmark: Change Profile
-      date_of_birth: Date of Birth
-      location: Location
       page_heading: Edit My Profile
       privacy_policy: Privacy Policy
       public_information_notice_html: Any personal information you post on your public AO3 profile, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites, will be accessible by the general public. To learn more about what data AO3 collects when you're on the site and how we use it, check out our %{privacy_policy_link}.
@@ -2384,6 +2580,10 @@ en:
       content_policy: Content Policy
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
+    import:
+      draft_work_title_html: "%{work_link} (Draft)"
+      page_heading: Imported Works
+      success: We were able to successfully upload the following works.
     index:
       advanced_search: try our advanced search
       choose_fandom: choose a fandom
@@ -2392,6 +2592,8 @@ en:
       original_creators:
         one: 'Original Creator ID:'
         other: 'Original Creator IDs:'
+    navigate:
+      page_heading_html: Chapter Index for %{work_link} by %{creators}
     new_import:
       content_policy: Content Policy
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
@@ -2416,8 +2618,13 @@ en:
       label: Work Search
       submit: Search
       tooltip_label: 'tip:'
+    search_form:
+      creator: Creator
     show:
       unposted_deletion_notice_html: This work is a draft and has not been posted. The draft will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+    show_multiple:
+      draft: " (Draft)"
+      no_works: You have no works or drafts to edit.
     skin:
       select: Select work skin
     standard_form:
@@ -2432,9 +2639,16 @@ en:
         unrevealed: A work in an unrevealed collection
     work_header_notes:
       inspired_by:
+        other_works_inspired_by_this_one: other works inspired by this one
         restricted_html: Inspired by [Restricted Work] by %{creator_link} (Log in to access.)
         revealed_html: Inspired by %{work_link} by %{creator_link}
         unrevealed: Inspired by a work in an unrevealed collection
+      jump:
+        endnotes_and_related_works_html: "(See the end of the work for %{endnotes_link} and %{related_works_link}.)"
+        endnotes_html: "(See the end of the work for %{endnotes_link}.)"
+        more_notes: more notes
+        notes: notes
+        related_works_html: "(See the end of the work for %{related_works_link}.)"
       translated_to:
         restricted_html: 'Translation into %{language} available: [Restricted Work] by %{creator_link} (Log in to access.)'
         revealed_html: 'Translation into %{language} available: %{work_link} by %{creator_link}'
@@ -2449,3 +2663,21 @@ en:
     show:
       edit: Edit
       heading: Wrangling Guidelines
+    wrangling_guideline_form:
+      content_required: You need to post some content here.
+      content_too_long:
+        one: We salute your ambition! But sadly the content must be less than %{count} letter long.
+        other: We salute your ambition! But sadly the content must be less than %{count} letters long.
+      content_too_short:
+        one: Brevity is the soul of wit, but your content does have to be at least %{count} letter long.
+        other: Brevity is the soul of wit, but your content does have to be at least %{count} letters long.
+      guideline_text: Guideline text
+      html_editor: HTML
+      landmark:
+        post: Post
+      post: Post
+      required_information: Required information
+      rich_text_editor: Rich Text
+      rich_text_notes_html: Type or paste formatted text.
+      title: Title
+      title_failure: Please enter a title.

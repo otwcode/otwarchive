@@ -87,6 +87,11 @@ describe UserMailer do
   end
 
   describe "creatorship_request" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.creatorship_request(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
@@ -135,6 +140,11 @@ describe UserMailer do
   end
 
   describe "#creatorship_notification" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.creatorship_notification(chapter_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
@@ -183,6 +193,11 @@ describe UserMailer do
   end
 
   describe "creatorship_notification_archivist" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.creatorship_notification_archivist(work_creatorship.id, author.id) }
 
     let(:author) { create(:user) }
@@ -285,7 +300,7 @@ describe UserMailer do
       end
 
       it "lists the second imported work with a leading hyphen" do
-        expect(email).to have_text_part_content("- #{title2}")
+        expect(email).to have_text_part_content("- \"#{title2}\"")
       end
 
       it "displays titles with non-ASCII characters" do
@@ -377,7 +392,7 @@ describe UserMailer do
       end
 
       it "lists the second imported work with a leading hyphen" do
-        expect(email).to have_text_part_content("- #{title2}")
+        expect(email).to have_text_part_content("- \"#{title2}\"")
       end
     end
   end
@@ -625,6 +640,11 @@ describe UserMailer do
   end
 
   describe "batch_subscription_notification" do
+    include ActiveJob::TestHelper
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
+
     subject(:email) { UserMailer.batch_subscription_notification(subscription.id, ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json) }
 
     let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
@@ -688,7 +708,7 @@ describe UserMailer do
   end
 
   describe "admin_hidden_work_notification" do
-    subject(:email) { UserMailer.admin_hidden_work_notification(work.id, user.id) }
+    subject(:email) { UserMailer.admin_hidden_work_notification([work.id], user.id) }
 
     let(:user) { create(:user) }
     let(:work) { create(:work, authors: [user.pseuds.first]) }
@@ -697,7 +717,7 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Policy & Abuse team"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Your work has been hidden by the Policy & Abuse committee"
       expect(email.subject).to eq(subject)
     end
 
@@ -768,7 +788,7 @@ describe UserMailer do
             expect(email).to have_html_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
             expect(email).to have_text_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
           end
-        end 
+        end
       end
     end
   end
@@ -1038,15 +1058,35 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("potential assignments for your challenge collection, <")
-        expect(email).to have_html_part_content("challenge's <")
+        expect(email).to have_html_part_content("potential assignments for your gift exchange <")
+        expect(email).to have_html_part_content("on its <")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("potential assignments for your challenge collection \"#{collection.title}\"")
-        expect(email).to have_text_part_content("challenge's Matching page:")
+        expect(email).to have_text_part_content("potential assignments for your gift exchange \"#{collection.title}\"")
+        expect(email).to have_text_part_content("on its Matching page:")
+      end
+    end
+  end
+
+  describe "potential_match_generation_notification_collection_email" do
+    subject(:email) { UserMailer.potential_match_generation_notification(collection.id, collection.collection_email) }
+
+    let(:collection) { create(:collection) }
+
+    it_behaves_like "an email with a valid sender"
+
+    describe "HTML version" do
+      it "has the correct footer content" do
+        expect(email).to have_html_part_content("your email address has been listed as the collection email")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct footer content" do
+        expect(email).to have_text_part_content("your email address has been listed as the collection email")
       end
     end
   end
@@ -1072,13 +1112,34 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("invalid sign-ups in your challenge <")
+        expect(email).to have_html_part_content("invalid sign-ups in your gift exchange <")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("invalid sign-ups in your challenge \"#{collection.title}\"")
+        expect(email).to have_text_part_content("invalid sign-ups in your gift exchange \"#{collection.title}\"")
+      end
+    end
+  end
+
+  describe "invalid_signup_notification_collection_email" do
+    subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id], collection.collection_email) }
+
+    let(:collection) { create(:collection) }
+    let(:signup) { create(:challenge_signup) }
+
+    it_behaves_like "an email with a valid sender"
+
+    describe "HTML version" do
+      it "has the correct footer content" do
+        expect(email).to have_html_part_content("your email address has been listed as the collection email")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct footer content" do
+        expect(email).to have_text_part_content("your email address has been listed as the collection email")
       end
     end
   end
@@ -1119,8 +1180,10 @@ describe UserMailer do
   end
 
   describe "prompter_notification" do
+    let(:user) { create(:user) }
+
     context "when collection is present" do
-      subject(:email) { UserMailer.prompter_notification(work.id, collection.id) }
+      subject(:email) { UserMailer.prompter_notification(user.id, work.id, collection.id) }
 
       let(:collection) { create(:collection) }
       let(:claim) { create(:challenge_claim, request_signup: create(:prompt_meme_signup)) }
@@ -1128,6 +1191,7 @@ describe UserMailer do
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
+      it_behaves_like "a translated email"
 
       it "has the correct subject line" do
         subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
@@ -1153,13 +1217,14 @@ describe UserMailer do
     end
 
     context "when no collection is present" do
-      subject(:email) { UserMailer.prompter_notification(work.id) }
+      subject(:email) { UserMailer.prompter_notification(user.id, work.id) }
 
       let(:claim) { create(:challenge_claim, request_signup: create(:prompt_meme_signup)) }
       let(:work) { create(:work, challenge_claims: [claim]) }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
+      it_behaves_like "a translated email"
 
       it "has the correct subject line" do
         subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
@@ -1171,14 +1236,14 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
-          expect(email).to have_html_part_content("posted at the Archive")
+          expect(email).to have_html_part_content("posted on the Archive")
           expect(email).not_to have_html_part_content("collection")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email).to have_text_part_content("posted at the Archive")
+          expect(email).to have_text_part_content("posted on the Archive")
           expect(email).not_to have_text_part_content("collection")
         end
       end

@@ -95,7 +95,7 @@ describe WorksController, work_search: true do
           { query: "sort by: word count", expected: "word_count" },
           { query: "sort by: words", expected: "word_count" },
           { query: "sort by: word", expected: "word_count" },
-          { query: "sort by: author", expected: "authors_to_sort_on" },
+          { query: "sort by: creator", expected: "authors_to_sort_on" },
           { query: "sort by: title", expected: "title_to_sort_on" },
           { query: "sort by: date", expected: "created_at" },
           { query: "sort by: date posted", expected: "created_at" },
@@ -312,6 +312,21 @@ describe WorksController, work_search: true do
       get :show, params: { id: work_no_fandoms.id }
 
       expect(assigns(:page_title)).to include "No fandom specified"
+    end
+
+    it "assigns @page_subtitle with unrevealed work and not @page_title" do
+      work.update!(in_unrevealed_collection: true)
+      get :show, params: { id: work.id }
+      expect(assigns[:page_subtitle]).to eq("Mystery Work")
+      expect(assigns[:page_title]).to be_nil
+    end
+
+    context "when work does not exist" do
+      it "raises an error" do
+        expect do
+          get :show, params: { id: "999999999" }
+        end.to raise_error ActiveRecord::RecordNotFound
+      end
     end
   end
 

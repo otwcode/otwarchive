@@ -57,7 +57,21 @@ describe PseudsController do
   let(:user) { create(:user) }
   let(:pseud) { user.pseuds.first }
 
-  describe "edit" do
+  describe "GET #show" do
+    it "raises a NotFound error if user_id exists but pseud does not exist" do
+      expect do
+        get :show, params: { user_id: user, id: "nonexistent_pseud" }
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "raises a NotFound error if user_id does not exist" do
+      expect do
+        get :show, params: { user_id: "nonexistent_user", id: pseud }
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe "GET #edit" do
     subject { -> { get :edit, params: { user_id: user, id: pseud } } }
 
     context "when logged in as admin" do
@@ -100,7 +114,7 @@ describe PseudsController do
     end
   end
 
-  describe "update" do
+  describe "PUT #update" do
     shared_examples "an attribute that can be updated by an admin" do
       it "redirects to user_pseud_path with notice" do
         put :update, params: params
@@ -204,7 +218,7 @@ describe PseudsController do
     end
   end
 
-  describe "destroy" do
+  describe "DELETE #destroy" do
     subject { -> { post :destroy, params: { user_id: user, id: pseud } } }
 
     context "when logged in as admin" do
@@ -236,7 +250,7 @@ describe PseudsController do
     end
   end
 
-  describe "new" do
+  describe "GET #new" do
     subject { -> { get :new, params: { user_id: user } } }
 
     context "when logged in as admin" do
@@ -244,11 +258,19 @@ describe PseudsController do
     end
   end
 
-  describe "create" do
+  describe "POST #create" do
     subject { -> { post :create, params: { user_id: user } } }
 
     context "when logged in as admin" do
       it_behaves_like "an action admins can't access"
+    end
+  end
+
+  describe "GET #index" do
+    it "raises a NotFound error if user_id does not exist" do
+      expect do
+        get :index, params: { user_id: "nonexistent_user" }
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end

@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionController::UnknownFormat, with: :raise_not_found
-  rescue_from Elasticsearch::Transport::Transport::Errors::ServiceUnavailable do
+  rescue_from Elastic::Transport::Transport::Errors::ServiceUnavailable do
     # Non-standard code to distinguish Elasticsearch errors from standard 503s.
     # We can't use 444 because nginx will close connections without sending
     # response headers.
@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
       format.any(:js, :json) do
         render json: {
           errors: {
-            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='http://kb.iu.edu/data/ahic.html'>clearing your cache</a> if you continue to experience problems.".html_safe
+            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='https://en.wikipedia.org/wiki/Wikipedia:Bypass_your_cache'>clearing your cache</a> if you continue to experience problems.".html_safe
           }
         }, status: :unprocessable_entity
       end
@@ -507,22 +507,24 @@ public
     end
   end
 
+  # Checks if user is allowed to see related page if parent item is hidden or in unrevealed collection
+  # Checks if user is logged in if parent item is restricted
+  def check_visibility_for(parent)
+    return if logged_in_as_admin? || current_user_owns?(parent) # Admins and the owner can see all related pages
+
+    access_denied(redirect: root_path) if parent.try(:hidden_by_admin) || parent.try(:in_unrevealed_collection) || (parent.respond_to?(:visible?) && !parent.visible?)
+  end
+
   public
 
-  def valid_sort_column(param, model='work')
-    allowed = []
-    if model.to_s.downcase == 'work'
-      allowed = %w(author title date created_at word_count hit_count)
-    elsif model.to_s.downcase == 'tag'
-      allowed = %w[name created_at taggings_count_cache uses]
-    elsif model.to_s.downcase == 'collection'
-      allowed = %w(collections.title collections.created_at)
-    elsif model.to_s.downcase == 'prompt'
-      allowed = %w(fandom created_at prompter)
-    elsif model.to_s.downcase == 'claim'
-      allowed = %w(created_at claimer)
-    end
-    !param.blank? && allowed.include?(param.to_s.downcase)
+  def valid_sort_column(param, model = "work")
+    allowed = {
+      "work" => %w[author title date created_at word_count hit_count],
+      "tag" => %w[name created_at taggings_count_cache uses],
+      "prompt" => %w[fandom created_at prompter],
+      "claim" => %w[created_at claimer]
+    }[model.to_s.downcase]
+    param.present? && allowed.include?(param.to_s.downcase)
   end
 
   def set_sort_order

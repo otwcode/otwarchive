@@ -55,7 +55,6 @@ class Work < ApplicationRecord
     end
   end
   # statistics
-  has_many :work_links, dependent: :destroy
   has_one :stat_counter, dependent: :destroy
   after_create :create_stat_counter
   def create_stat_counter
@@ -217,11 +216,11 @@ class Work < ApplicationRecord
     end
   end
 
-  enum comment_permissions: {
+  enum :comment_permissions, {
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, _suffix: :comments, _default: 1
+  }, suffix: :comments, default: 1
 
   ########################################################################
   # HOOKS
@@ -245,8 +244,8 @@ class Work < ApplicationRecord
   after_save :moderate_spam
   after_save :notify_of_hiding
 
-  after_save :notify_recipients, :expire_caches, :update_pseud_index, :update_tag_index, :touch_series, :touch_related_works
-  after_destroy :expire_caches, :update_pseud_index
+  after_destroy :expire_caches, :update_pseud_and_collection_indexes
+  after_save :notify_recipients, :expire_caches, :update_pseud_and_collection_indexes, :update_tag_index, :touch_series, :touch_related_works
 
   before_destroy :send_deleted_work_notification, prepend: true
   def send_deleted_work_notification
@@ -299,17 +298,20 @@ class Work < ApplicationRecord
     Work.flush_find_by_url_cache unless imported_from_url.blank?
   end
 
-  def update_pseud_index
-    return unless should_reindex_pseuds?
+  def update_pseud_and_collection_indexes
+    return unless should_update_pseud_and_collection_indexes?
+
     IndexQueue.enqueue_ids(Pseud, pseud_ids, :background)
+    IndexQueue.enqueue_ids(Collection, collection_ids, :background)
   end
 
   # Visibility has changed, which means we need to reindex
-  # the work's pseuds, to update their work counts, as well as
-  # the work's bookmarker pseuds, to update their bookmark counts.
-  def should_reindex_pseuds?
-    pertinent_attributes = %w(id posted restricted in_anon_collection
-                              in_unrevealed_collection hidden_by_admin)
+  # * the work's pseuds, to update their work counts, as well as
+  # * the work's bookmarker pseuds, to update their bookmark counts
+  # * the work's associated collections to update their bookmark counts.
+  def should_update_pseud_and_collection_indexes?
+    pertinent_attributes = %w[id posted restricted in_anon_collection
+                              in_unrevealed_collection hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
 
@@ -438,7 +440,11 @@ class Work < ApplicationRecord
   # need to update the chapter to add the other creators on the work.
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
-    raise Exception.new("Sorry, we can't remove all creators of a work.") if pseuds_with_author_removed.empty?
+
+    if pseuds_with_author_removed.empty?
+      errors.add(:base, ts("Sorry, we can't remove all creators of a work."))
+      raise ActiveRecord::RecordInvalid, self
+    end
 
     transaction do
       chapters.each do |chapter|
@@ -610,6 +616,14 @@ class Work < ApplicationRecord
     # Invalidate chapter count cache
     self.invalidate_work_chapter_count(self)
     return if self.posted? && !chapter.posted?
+
+    unless self.posted_changed?
+      if chapter.posted_changed?
+        self.major_version = self.major_version + 1
+      else
+        self.minor_version = self.minor_version + 1
+      end
+    end
 
     if (self.new_record? || chapter.posted_changed?) && chapter.published_at == Date.current
       self.set_revised_at(Time.current) # a new chapter is being posted, so most recent update is now
@@ -881,7 +895,7 @@ class Work < ApplicationRecord
   # Note that because the two filter counts both include unrevealed works, we
   # don't need to check whether in_unrevealed_collection has changed -- it
   # won't change the counts either way.
-  # (Modelled on Work.should_reindex_pseuds?)
+  # (Modelled on Work.should_update_pseud_and_collection_indexes?)
   def should_reset_filters?
     pertinent_attributes = %w(id posted restricted hidden_by_admin)
     (saved_changes.keys & pertinent_attributes).present?
@@ -1157,7 +1171,7 @@ class Work < ApplicationRecord
 
     users.each do |user|
       I18n.with_locale(user.preference.locale_for_mails) do
-        UserMailer.admin_hidden_work_notification(id, user.id).deliver_after_commit
+        UserMailer.admin_hidden_work_notification([id], user.id).deliver_after_commit
       end
     end
   end
@@ -1231,38 +1245,7 @@ class Work < ApplicationRecord
   # A work with multiple fandoms which are not related
   # to one another can be considered a crossover
   def crossover
-    # Short-circuit the check if there's only one fandom tag:
-    return false if fandoms.size == 1
-
-    # Replace fandoms with their mergers if possible,
-    # as synonyms should have no meta tags themselves
-    all_without_syns = fandoms.map { |f| f.merger || f }.uniq
-
-    # For each fandom, find the set of all meta tags for that fandom (including
-    # the fandom itself).
-    meta_tag_groups = all_without_syns.map do |f|
-      # TODO: This is more complicated than it has to be. Once the
-      # meta_taggings table is fixed so that the inherited meta-tags are
-      # correctly calculated, this can be simplified.
-      boundary = [f] + f.meta_tags
-      all_meta_tags = []
-
-      until boundary.empty?
-        all_meta_tags.concat(boundary)
-        boundary = boundary.flat_map(&:meta_tags).uniq - all_meta_tags
-      end
-
-      all_meta_tags.uniq
-    end
-
-    # Two fandoms are "related" if they share at least one meta tag. A work is
-    # considered a crossover if there is no single fandom on the work that all
-    # the other fandoms on the work are "related" to.
-    meta_tag_groups.none? do |meta_tags1|
-      meta_tag_groups.all? do |meta_tags2|
-        (meta_tags1 & meta_tags2).any?
-      end
-    end
+    FandomCrossover.check_for_crossover(fandoms)
   end
 
   # Does this work have only one relationship tag?

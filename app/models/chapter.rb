@@ -200,4 +200,8 @@ class Chapter < ApplicationRecord
     super
     work&.expire_comments_count
   end
+
+  def expire_byline_cache
+    Rails.cache.delete(["byline_data", cache_key])
+  end
 end

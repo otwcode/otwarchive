@@ -235,12 +235,16 @@ When "Akismet will flag any comment containing {string}" do |spam_text|
   end
 end
 
-When /^I post a guest comment$/ do
+When "I post a guest comment {string}" do |comment_content|
   fill_in("comment[name]", with: "guest")
   fill_in("comment[email]", with: "guest@example.org")
-  fill_in("comment[comment_content]", with: "This was really lovely!")
+  fill_in("comment[comment_content]", with: comment_content)
   click_button("Comment")
   step %{I should see "Comment created!"}
+end
+
+When "I post a guest comment" do
+  step "I post a guest comment \"This was really lovely!\""
 end
 
 When /^all comments by "([^"]*)" are marked as spam$/ do |name|
@@ -253,14 +257,14 @@ When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|
   end
 end
 
-When /^I delete the comment$/ do
+When "I delete the comment" do
   step %{I follow "Delete" within ".odd"}
-  step %{I follow "Yes, delete!"}
+  step %{I press "Yes, delete!"}
 end
 
-When /^I delete the reply comment$/ do
+When "I delete the reply comment" do
   step %{I follow "Delete" within ".even"}
-  step %{I follow "Yes, delete!"}
+  step %{I press "Yes, delete!"}
 end
 
 When /^I view the latest comment$/ do
@@ -373,7 +377,7 @@ When /^I delete all visible comments on "([^\"]*?)"$/ do |work|
     visit work_url(work, show_comments: true)
     break unless page.has_content? "Delete"
     click_link("Delete")
-    click_link("Yes, delete!") # TODO: Fix along with comment deletion.
+    click_button("Yes, delete!")
   end
 end
 

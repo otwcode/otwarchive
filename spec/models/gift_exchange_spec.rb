@@ -42,4 +42,44 @@ describe GiftExchange do
       end
     end
   end
+
+  describe "reindexing" do
+    let!(:collection) { create(:collection) }
+
+    context "when gift exchange is created" do
+      it "enqueues the collection for reindex" do
+        expect do
+          GiftExchange.create!(collection: collection)
+        end.to add_to_reindex_queue(collection, :main)
+      end
+    end
+
+    context "when gift exchange already exists" do
+      let!(:exchange) { create(:gift_exchange, collection: collection, signup_open: false) }
+
+      context "when gift exchange signups are opened" do
+        it "enqueues the collection for reindex" do
+          expect do
+            exchange.update!(signup_open: true)
+          end.to add_to_reindex_queue(collection, :main)
+        end
+      end
+
+      context "when gift exchange is not significantly changed" do
+        it "doesn't enqueue the collection for reindex" do
+          expect do
+            exchange.update!(signup_instructions_general: "Changed text")
+          end.to not_add_to_reindex_queue(collection, :main)
+        end
+      end
+
+      context "when gift exchange is destroyed" do
+        it "enqueues the collection for reindex" do
+          expect do
+            exchange.destroy!
+          end.to add_to_reindex_queue(collection, :main)
+        end
+      end
+    end
+  end
 end

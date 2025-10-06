@@ -93,12 +93,51 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.challenge_assignment_notification(assignment.collection.id, assignment.offering_user.id, assignment.id)
   end
 
+  def prompter_notification
+    creator_count = params[:creator_count] ? params[:creator_count].to_i : 1
+
+    user = create(:user, :for_mailer_preview)
+    work = prompter_notification_data(creator_count)
+    UserMailer.prompter_notification(user.id, work.id)
+  end
+
+  def prompter_notification_collection
+    creator_count = params[:creator_count] ? params[:creator_count].to_i : 1
+
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection)
+    work = prompter_notification_data(creator_count)
+    UserMailer.prompter_notification(user.id, work.id, collection.id)
+  end
+
+  def prompter_notification_collection_anon
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection)
+    work = create(:work, summary: Faker::Lorem.paragraph(sentence_count: 3), collections: [create(:anonymous_collection)])
+    UserMailer.prompter_notification(user.id, work.id, collection.id)
+  end
+
   def claim_notification
     work = create(:work)
     creator_id = work.pseuds.first.user.id
     UserMailer.claim_notification(creator_id, [work.id])
   end
-  
+
+  def invitation_to_claim
+    archivist = create(:user, :for_mailer_preview)
+    external_author = create(:external_author)
+    external_author_name = create(:external_author_name, external_author: external_author, name: "Pluto")
+    invitation = create(:invitation, external_author: external_author)
+    create(:external_creatorship,
+           creation: create(:work, title: Faker::Book.title),
+           external_author_name: external_author_name)
+    create(:external_creatorship,
+           creation: create(:work, title: Faker::Book.title),
+           external_author_name: external_author_name)
+
+    UserMailer.invitation_to_claim(invitation.id, archivist.login)
+  end
+
   def invite_request_declined
     user = create(:user, :for_mailer_preview)
     total = params[:total] ? params[:total].to_i : 1
@@ -156,16 +195,46 @@ class UserMailerPreview < ApplicationMailerPreview
   # Send notification for a regular gift work
   def recipient_notification_status_regular
     count = params[:count].to_i || 1
-    user, work = recipient_notification_data(count)   
+    user, work = recipient_notification_data(count)
     UserMailer.recipient_notification(user.id, work.id)
   end
-  
+
   # Send notification for a gift work in a collection
   def recipient_notification_status_collection
     count = params[:count].to_i || 1
     user, work = recipient_notification_data(count)
     collection = create(:collection)
     UserMailer.recipient_notification(user.id, work.id, collection.id)
+  end
+
+  def potential_match_generation_notification_collection_email
+    collection = create(:collection, email: "collection@example.com")
+    email = collection.collection_email
+    UserMailer.potential_match_generation_notification(collection.id, email)
+  end
+
+  def potential_match_generation_notification_maintainer
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection, owners: [user.default_pseud])
+    email = user.email
+    UserMailer.potential_match_generation_notification(collection.id, email)
+  end
+
+  def invalid_signup_notification_collection_email
+    signup_count = params[:signup_count] ? params[:signup_count].to_i : 1
+    collection = create(:collection, email: "collection@example.com")
+    invalid_signup_ids = create_list(:challenge_signup, signup_count).map(&:id)
+    email = collection.collection_email
+    UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, email)
+  end
+
+  def invalid_signup_notification_maintainer
+    signup_count = params[:signup_count] ? params[:signup_count].to_i : 1
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection, owners: [user.default_pseud])
+    invalid_signup_ids = create_list(:challenge_signup, signup_count).map(&:id)
+    email = user.email
+    UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, email)
   end
 
   def invite_increase_notification
@@ -181,6 +250,13 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.archivist_added_to_collection_notification(user.id, work.id, collection.id)
   end
 
+  def invited_to_collection_notification
+    user = create(:user, :for_mailer_preview)
+    work = create(:work)
+    collection = create(:collection)
+    UserMailer.invited_to_collection_notification(user.id, work.id, collection.id)
+  end
+
   def admin_spam_work_notification
     work = create(:work)
     user = create(:user, :for_mailer_preview)
@@ -188,9 +264,13 @@ class UserMailerPreview < ApplicationMailerPreview
   end
 
   def admin_hidden_work_notification
-    work = create(:work)
+    count = params[:count] ? params[:count].to_i : 1
+    works = create_list(:work, count) do |work|
+      work.title = Faker::Book.title
+      work.save!
+    end
     user = create(:user, :for_mailer_preview)
-    UserMailer.admin_hidden_work_notification(work, user.id)
+    UserMailer.admin_hidden_work_notification(works.map(&:id), user.id)
   end
 
   def admin_deleted_work_notification
@@ -210,6 +290,24 @@ class UserMailerPreview < ApplicationMailerPreview
     second_creator = create(:user, :for_mailer_preview)
     work = create(:work, authors: [first_creator.default_pseud, second_creator.default_pseud])
     UserMailer.delete_work_notification(first_creator, work, second_creator)
+  end
+
+  def related_work_notification
+    creator_count = params[:creator_count] ? params[:creator_count].to_i : 1
+    user = create(:user, :for_mailer_preview)
+    parent_work = create(:work, authors: [user.default_pseud], title: "Inspiration")
+    child_work_pseuds = create_list(:user, creator_count).map(&:default_pseud)
+    child_work = create(:work, authors: child_work_pseuds)
+    related_work = create(:related_work, parent_id: parent_work.id, work_id: child_work.id)
+    UserMailer.related_work_notification(user.id, related_work.id)
+  end
+
+  def related_work_notification_anon
+    user = create(:user, :for_mailer_preview)
+    parent_work = create(:work, authors: [user.default_pseud], title: "Inspiration")
+    child_work = create(:work, collections: [create(:anonymous_collection)])
+    related_work = create(:related_work, parent_id: parent_work.id, work_id: child_work.id)
+    UserMailer.related_work_notification(user.id, related_work.id)
   end
 
   private
@@ -234,9 +332,9 @@ class UserMailerPreview < ApplicationMailerPreview
     characters = []
     tags = []
     series_list = []
-    
+
     count = 1 if count < 1
-    (1..count).each do |n| 
+    (1..count).each do |n|
       fandoms.append("fandom_#{n}")
       relationships.append("relationship_#{n}")
       characters.append("character_#{n}")
@@ -247,19 +345,25 @@ class UserMailerPreview < ApplicationMailerPreview
 
     user = create(:user, :for_mailer_preview)
     work = create(
-      :work, 
-      authors: [user.default_pseud], 
-      expected_number_of_chapters: count, 
+      :work,
+      authors: [user.default_pseud],
+      expected_number_of_chapters: count,
       rating_string: ArchiveConfig.RATING_DEFAULT_TAG_NAME,
-      fandom_string: fandoms, 
-      relationship_string: relationships,  
+      fandom_string: fandoms,
+      relationship_string: relationships,
       character_string: characters,
-      freeform_string: tags, 
+      freeform_string: tags,
       archive_warning_strings: warnings,
       summary: Faker::Lorem.paragraph(sentence_count: count),
       chapter_attributes: { content: count.times.map { Faker::Lorem.characters(number: 11) } },
       series: series_list
     )
     [user, work]
+  end
+
+  def prompter_notification_data(creator_count)
+    create(:work,
+           summary: Faker::Lorem.paragraph(sentence_count: 3),
+           authors: create_list(:user, creator_count).map(&:default_pseud))
   end
 end

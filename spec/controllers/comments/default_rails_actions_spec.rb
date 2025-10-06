@@ -18,7 +18,7 @@ describe CommentsController do
     end
 
     it "renders the :new template if commentable is a valid admin post" do
-        admin_post = create(:admin_post)
+        admin_post = create(:admin_post, comment_permissions: :enable_all)
         get :new, params: { admin_post_id: admin_post.id }
         expect(response).to render_template("new")
         expect(assigns(:name)).to eq(admin_post.title)
@@ -334,7 +334,7 @@ describe CommentsController do
 
         it "sets flash_is_set to bypass caching" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          expect(cookies[:flash_is_set]).to eq(1)
+          expect(cookies[:flash_is_set]).to eq("1")
         end
       end
 
@@ -349,7 +349,7 @@ describe CommentsController do
 
         it "sets flash_is_set to bypass caching" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          expect(cookies[:flash_is_set]).to eq(1)
+          expect(cookies[:flash_is_set]).to eq("1")
         end
       end
 
@@ -613,6 +613,47 @@ describe CommentsController do
         let(:comment) { create(:comment, pseud: user.default_pseud, commentable: work.first_chapter) }
 
         it_behaves_like "guest can reply to a user with guest replies disabled on user's work"
+      end
+    end
+
+    context "with unusual user agents" do
+      let(:work) { create(:work) }
+      let(:user) { create(:user) }
+
+      context "when the user agent is very long" do
+        before do
+          request.env["HTTP_USER_AGENT"] = "Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0" * 10
+        end
+
+        it "creates the comment with a truncated user agent" do
+          comment_attributes = {
+            pseud_id: user.default_pseud_id,
+            comment_content: "I love this!"
+          }
+          fake_login_known_user(user)
+          post :create, params: { work_id: work.id, comment: comment_attributes }
+          comment = assigns[:comment]
+          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
+          expect(comment.user_agent.length).to eq(500)
+        end
+      end
+
+      context "when no user agent is set" do
+        before do
+          request.env["HTTP_USER_AGENT"] = nil
+        end
+
+        it "creates the comment with no user agent" do
+          comment_attributes = {
+            pseud_id: user.default_pseud_id,
+            comment_content: "I love this!"
+          }
+          fake_login_known_user(user)
+          post :create, params: { work_id: work.id, comment: comment_attributes }
+          comment = assigns[:comment]
+          it_redirects_to_with_comment_notice(chapter_path(comment.commentable, show_comments: true, view_full_work: false, anchor: "comment_#{comment.id}"), "Comment created!")
+          expect(comment.user_agent).to be_nil
+        end
       end
     end
   end
@@ -960,6 +1001,23 @@ describe CommentsController do
       get :index
 
       it_redirects_to_simple("/404")
+    end
+
+    context "denies access for work that isn't visible to user" do
+      subject { get :index, params: { work_id: work } }
+      let(:success) { expect(response).to render_template("index") }
+      let(:success_admin) { success }
+
+      include_examples "denies access for work that isn't visible to user"
+    end
+
+    context "denies access for restricted work to guest" do
+      let(:work) { create(:work, restricted: true) }
+
+      it "redirects with an error" do
+        get :index, params: { work_id: work }
+        it_redirects_to(new_user_session_path(restricted_commenting: true))
+      end
     end
   end
 end

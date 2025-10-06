@@ -1,4 +1,5 @@
-require 'faker'
+require "faker"
+
 FactoryBot.define do
   sequence(:tag_title) do |n|
     "Owned Tag Set #{n}"
@@ -56,13 +57,13 @@ FactoryBot.define do
   end
 
   factory :tag_nomination do
-    type { 'FandomNomination' }
+    type { "FandomNomination" }
 
     canonical { true }
     association :owned_tag_set
 
     after(:build) do |nomination|
-      nomination.tagname = Fandom.last.name
+      nomination.tagname ||= Fandom.last.name
     end
   end
 
@@ -138,5 +139,10 @@ FactoryBot.define do
   factory :archive_warning do |f|
     f.sequence(:name) { |n| "Archive Warning #{n}" }
     canonical { true }
+  end
+
+  factory :filter_tagging do
+    association :filter, factory: :canonical_fandom
+    association :filterable, factory: :work
   end
 end

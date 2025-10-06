@@ -263,13 +263,22 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "An invitation was sent to fred@bedrock.com"
       And 1 email should be delivered
 
+  Scenario: An admin can't create an invite with invalid email
+    Given I am logged in as an admin
+      And all emails have been delivered
+    When I follow "Invite New Users"
+      And I fill in "invitation[invitee_email]" with "abcdefgh"
+      And I press "Invite user"
+    Then I should see "Invitee email should look like an email address. Please use a different address or leave blank."
+      And 0 emails should be delivered
+
   Scenario: An admin can't create an invite without an email address.
     Given I am logged in as an admin
       And all emails have been delivered
     When I follow "Invite New Users"
       And I press "Invite user"
     Then I should see "Please enter an email address"
-      And 0 email should be delivered
+      And 0 emails should be delivered
 
   Scenario: An admin can send an invitation to all existing users
     Given the following activated users exist
@@ -278,7 +287,7 @@ Feature: Admin Actions to Manage Invitations
       | odo   | mybucket9  |
       And "dax" has "0" invitations
       And "odo" has "3" invitations
-      And I am logged in as an admin
+      And I am logged in as a super admin
     When I follow "Invite New Users"
       And I fill in "Number of invitations" with "2"
       And I select "All" from "Users"
@@ -293,7 +302,7 @@ Feature: Admin Actions to Manage Invitations
       | bashir | heytheredoc |
       And "dax" has "5" invitations
       And "bashir" has "0" invitations
-      And I am logged in as an admin
+      And I am logged in as a super admin
     When I follow "Invite New Users"
       And I fill in "Number of invitations" with "2"
       And I select "With no unused invitations" from "Users"

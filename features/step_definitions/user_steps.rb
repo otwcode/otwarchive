@@ -93,6 +93,10 @@ Given /^the user "([^"]*)" exists and has the role "([^"]*)"/ do |login, role|
   user.roles = [role]
 end
 
+Given "the role {string}" do |role|
+  FactoryBot.create(:role, name: role)
+end
+
 Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/ do |login, password|
   user = find_or_create_new_user(login, password)
   step("I start a new session")
@@ -234,6 +238,11 @@ end
 When /^I visit the change username page for (.*)$/ do |login|
   user = User.find_by(login: login)
   visit change_username_user_path(user)
+end
+
+When "I visit the change email page for {word}" do |login|
+  user = User.find_by(login: login)
+  visit change_email_user_path(user)
 end
 
 When /^the user "(.*?)" accepts all co-creator requests$/ do |login|
