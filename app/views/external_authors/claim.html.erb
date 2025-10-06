@@ -1,4 +1,4 @@
-<% works_count = 2 %>
+<% works_count = @external_author.works.size %>
 <h2 class="heading"><%= t(".page_heading", count: works_count) %></h2>
 
 <p class="message">
@@ -99,7 +99,7 @@
 
     </ul>
     <p class="important message">
-      <%= ts("Important: If you tick \"Do not email me in future\" but do not tick \"Do not import works\", works may be imported without you being told. If that's not what you want, turn off importing as well as emails.") %>
+      <%= t(".important_message") %>
     </p>
     <%= submit_fieldset(f) %>
   </fieldset>
@@ -109,7 +109,7 @@
 <div class="notes module">
   <h3><%= t(".notes.go_over_again") %></h3>
   <ul class="notes">
-    <li><%= t(".notes.do_nothing", count: works_count) %></li>
+    <li><%= t(".notes.do_nothing", work: t(".work", count: works_count)) %></li>
     <% if logged_in? %>
       <li><%= t(".notes.claim", work: t(".work", count: works_count)) %></li>
     <% else %>
