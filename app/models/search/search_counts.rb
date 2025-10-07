@@ -72,6 +72,20 @@ module SearchCounts
   end
 
   ######################################################################
+  # COLLECTION COUNTS FOR USER/PSEUD DASHBOARD
+  ######################################################################
+
+  def collection_count_for_user(user)
+    Rails.cache.fetch(["user", user.id, "collections_count"], dashboard_cache_options) do
+      CollectionSearchForm.new(maintainer_id: user.id, sort_column: "title.keyword").search_results.scope(:for_search).total_entries
+    end
+  end
+
+  def collections_cache_key(owner)
+    "collections_count_#{owner.model_name.cache_key}_#{owner.id}_#{logged_in}"
+  end
+
+  ######################################################################
   # BOOKMARK COUNTS FOR USER/PSEUD DASHBOARD
   ######################################################################
 

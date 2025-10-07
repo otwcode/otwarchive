@@ -46,6 +46,12 @@ module UsersHelper
     user.coauthors.collect(&:name).join(', ')
   end
 
+  # Prints link to collections page with user-appropriate number of collections
+  def collections_link(user)
+    total = SearchCounts.collection_count_for_user(user)
+    span_if_current t(".pitch.collections", coll_number: total.to_s), user_collections_path(@user)
+  end
+
   # Prints link to bookmarks page with user-appropriate number of bookmarks
   # (The total should reflect the number of bookmarks the user can actually see.)
   def bookmarks_link(user, pseud = nil)
