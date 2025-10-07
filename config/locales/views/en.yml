@@ -587,7 +587,7 @@ en:
           prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
           refuse_link_text: refuse a gift
   chapters:
-    post_fields:
+    posting_fieldset:
       actions:
         cancel: Cancel
         edit: Edit
@@ -2614,7 +2614,7 @@ en:
         multiple_works_restricted: Only show to registered users
         restricted: Only show your work to registered users
         unrestricted: Show to all
-    post_fields:
+    posting_fieldset:
       actions:
         cancel: Cancel
         edit: Edit
