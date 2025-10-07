@@ -15,11 +15,11 @@ describe SupportNotice do
   end
 
   context "missing content" do
-    let(:support_notice_missing_content) { build(:support_notice, content: "") }
+    let(:support_notice_missing_content) { build(:support_notice, notice: "") }
 
     it "is invalid if the notice has no content" do
       expect(support_notice_missing_content.save).to be_falsey
-      expect(support_notice_missing_content.errors[:content]).not_to be_empty
+      expect(support_notice_missing_content.errors[:notice]).not_to be_empty
     end
   end
 end
