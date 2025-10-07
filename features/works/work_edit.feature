@@ -207,8 +207,9 @@ Feature: Edit Works
       And I post the work "Work 1" with fandom "testing"
       And I edit the work "Work 1"
       And I fill in "Fandoms" with ""
-      And I follow "Cancel"
-    Then I should see "Fandom: testing"
+    When I follow "Cancel"
+    Then I should see the page title "Work 1 -"
+      And I should see "Fandom: testing"
 
   Scenario: A work cannot be edited to remove its only warning
     Given I am logged in as a random user

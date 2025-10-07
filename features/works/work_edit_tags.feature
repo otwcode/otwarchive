@@ -83,7 +83,7 @@ Feature: Edit tags on a work
     And I fill in "Fandoms" with ""
     And I follow "Cancel"
   Then I should see the page title "Work 1 -"
-    Then I should see "Fandom: testing"
+    And I should see "Fandom: testing"
 
   Scenario: Preview edit tags
   Given I am logged in as "regularuser"

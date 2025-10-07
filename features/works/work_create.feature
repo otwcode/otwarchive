@@ -27,6 +27,13 @@ Feature: Create Works
     When I go to the works page
     Then I should see "All Hell Breaks Loose 🤬💩"
 
+  Scenario: Canceling a new work redirects to the user's works page
+    Given I am logged in as "newbie"
+    When I set up the draft "All Hell Breaks Loose"
+      And I fill in "content" with "Bad things happen, etc."
+      And I follow "Cancel"
+    Then I should see the page title "newbie - Works"
+
   Scenario: Creating a new minimally valid work and posting without preview
     Given I am logged in as "newbie"
     When I set up the draft "All Hell Breaks Loose"

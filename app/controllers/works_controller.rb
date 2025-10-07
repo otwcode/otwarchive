@@ -395,7 +395,7 @@ class WorksController < ApplicationController
     end
   end
 
-  # POST /works/1/edit_tags
+  # PATCH /works/1/edit_tags
   def update_tags
     authorize @work if logged_in_as_admin?
 
