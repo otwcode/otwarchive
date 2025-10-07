@@ -29,19 +29,6 @@
     <%= form.hidden_field :language_id, value: "#{@work.language.id}" %>
   <% end %>
 
-  <fieldset>
-    <legend><%= t("works_helper.actions.post_work") %></legend>
-    <p class="submit cancel edit actions">
-      <% if @work.posted? %>
-        <%= submit_tag t("works_helper.actions.edit"), name: "edit_button" %>
-        <%= submit_tag t("works_helper.actions.update"), name: "update_button" %>
-      <% else %>
-        <%= submit_tag t("works_helper.actions.save_draft"), name: "save_button" %>
-        <%= submit_tag t("works_helper.actions.edit"), name: "edit_button" %>
-        <%= submit_tag t("works_helper.actions.post"), name: "post_button" %>
-      <% end %>
-      <%= link_to t("works_helper.actions.cancel"), work_path(@work) %>
-    </p>
-  </fieldset>
+  <%= render "post_fields" %>
 
 <% end %>
