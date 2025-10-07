@@ -1,4 +1,6 @@
 class BookmarkableQuery < Query
+  RESTRICABLE_FIELDS = Regexp.union(Tag::FILTERS.map(&:underscore) + %w[filter tags])
+
   include TaggableQuery
 
   attr_accessor :bookmark_query
@@ -310,6 +312,8 @@ class BookmarkableQuery < Query
   private
 
   def restrictable_field_name(field_name)
+    return field_name.to_sym unless field_name.match?(RESTRICABLE_FIELDS)
+
     :"#{include_restricted? ? "general" : "public"}_#{field_name}"
   end
 end
