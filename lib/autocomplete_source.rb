@@ -13,7 +13,7 @@ module AutocompleteSource
 
   def transliterate(input)
     input = input.to_s.mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/, "")
-    result = ""
+    result = +""
     input.each_char do |char|
       tl = ActiveSupport::Inflector.transliterate(char)
       # If transliterate returns "?", the original character is either unsupported 

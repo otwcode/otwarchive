@@ -229,7 +229,7 @@ class Query
   end
 
   def split_query_text_phrases(fieldname, text)
-    str = ""
+    str = +""
     return str if text.blank?
     text.split(",").map(&:squish).each do |phrase|
       str << " #{fieldname}:\"#{phrase}\""
@@ -238,7 +238,7 @@ class Query
   end
 
   def split_query_text_words(fieldname, text)
-    str = ""
+    str = +""
     return str if text.blank?
     text.split(" ").each do |word|
       if word.length >= 2 && word[0] == "-"
