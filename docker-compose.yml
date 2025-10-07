@@ -90,18 +90,6 @@ services:
     # Make `docker compose attach web` work for debugging
     stdin_open: true
     tty: true
-  workers:
-    profiles:
-      - dev
-    build:
-      context: .
-      dockerfile: ./config/docker/Dockerfile
-    command: bundle exec rake environment resque:work
-    volumes:
-      - .:/otwa
-    environment:
-      - RAILS_ENV=development
-      - QUEUE=*
   chrome:
     profiles:
       - test
