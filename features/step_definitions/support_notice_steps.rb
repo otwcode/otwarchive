@@ -9,7 +9,7 @@ end
 When /^an admin creates an?( active)?(?: "([^"]*)")? support notice$/ do |active, notice_type| # rubocop:disable Cucumber/RegexStepName
   step %{I am logged in as a "support" admin}
   visit(new_admin_support_notice_path)
-  fill_in("support_notice_content", with: "This is some support notice text")
+  fill_in("support_notice_notice", with: "This is some support notice text")
   case notice_type
   when "caution"
     choose("support_notice_support_notice_type_caution")
@@ -36,7 +36,7 @@ When "an admin edits the active support notice" do
   step %{I am logged in as a "support" admin}
   visit(admin_support_notices_path)
   step %{I follow "Edit"}
-  fill_in("support_notice_content", with: "This is some edited support notice text")
+  fill_in("support_notice_notice", with: "This is some edited support notice text")
   click_button("Update Support Notice")
   step %{I should see "Support Notice successfully updated."}
 end
@@ -44,7 +44,7 @@ end
 When "an admin creates a newer active support notice" do
   step %{I am logged in as a "support" admin}
   visit(new_admin_support_notice_path)
-  fill_in("support_notice_content", with: "This is new support notice text")
+  fill_in("support_notice_notice", with: "This is new support notice text")
   check("support_notice_active")
   click_button("Create Support Notice")
   step %{I should see "Support Notice successfully created."}

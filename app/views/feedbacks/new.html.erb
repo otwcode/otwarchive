@@ -41,7 +41,7 @@
 
     <% if @support_notice %>
       <div class="notice <%= @support_notice.notice_class %>">
-        <%= raw sanitize_field(@support_notice, :content, image_safety_mode: true) %>
+        <%= raw sanitize_field(@support_notice, :notice, image_safety_mode: true) %>
       </div>
     <% end %>
   </div>

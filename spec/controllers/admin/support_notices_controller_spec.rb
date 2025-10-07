@@ -76,7 +76,7 @@ describe Admin::SupportNoticesController do
     subject { post :create, params: { support_notice: support_notice_params } }
 
     let(:success) do
-      it_redirects_to_with_notice(assigns[:support_notice], "Support Notice successfully created.")
+      it_redirects_to_with_notice(admin_support_notice_url(assigns[:support_notice]), "Support Notice successfully created.")
     end
 
     it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
@@ -97,8 +97,8 @@ describe Admin::SupportNoticesController do
 
     let(:success) do
       expect { support_notice.reload }
-        .to change { support_notice.content }
-      it_redirects_to_with_notice(support_notice, "Support Notice successfully updated.")
+        .to change { support_notice.notice }
+      it_redirects_to_with_notice(admin_support_notice_url(support_notice), "Support Notice successfully updated.")
     end
 
     it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
