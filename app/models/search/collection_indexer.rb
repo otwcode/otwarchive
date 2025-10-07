@@ -103,7 +103,7 @@ class CollectionIndexer < Indexer
       works_reveal_at: object.challenge&.works_reveal_at,
       authors_reveal_at: object.challenge&.authors_reveal_at,
       filter_ids: object.filter_ids,
-      tag: object.tag
+      tag: object.general_tags
     )
   end
 end
