@@ -119,8 +119,28 @@ describe BookmarkQuery do
         q = BookmarkQuery.new(parent: tag)
         parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
         expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
-          include({ term: { filter_ids_public: tag.id } })
+          include({ term: { public_filter_ids: tag.id } })
       end
+    end
+
+    context "when querying as a admin" do
+      before do
+        User.current_user = create(:admin)
+      end
+
+      it "allows filtering by restricted bookmarkable tags" do
+        q = BookmarkQuery.new(parent: tag)
+        parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
+        expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
+          include({ term: { general_filter_ids: tag.id } })
+      end
+    end
+
+    it "allows you to filter by bookmarkable language" do
+      q = BookmarkQuery.new(language_id: "ig")
+      parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
+      expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
+        include({ term: { "language_id.keyword": "ig" } })
     end
 
     context "when querying as a registered user" do
@@ -132,7 +152,7 @@ describe BookmarkQuery do
         q = BookmarkQuery.new(parent: tag)
         parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
         expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
-          include({ term: { filter_ids_general: tag.id } })
+          include({ term: { general_filter_ids: tag.id } })
       end
     end
 
@@ -164,7 +184,7 @@ describe BookmarkQuery do
             include({ parent: { type: "bookmark" } })
 
           expect(aggregations.dig(:bookmarkable, :aggs, type.underscore)).to \
-            include({ terms: { field: "#{type.underscore}_ids_general" } })
+            include({ terms: { field: "general_#{type.underscore}_ids" } })
         end
       end
     end
@@ -180,7 +200,7 @@ describe BookmarkQuery do
             include({ parent: { type: "bookmark" } })
 
           expect(aggregations.dig(:bookmarkable, :aggs, type.underscore)).to \
-            include({ terms: { field: "#{type.underscore}_ids_general" } })
+            include({ terms: { field: "general_#{type.underscore}_ids" } })
         end
       end
     end
@@ -192,7 +212,7 @@ describe BookmarkQuery do
             include({ parent: { type: "bookmark" } })
 
           expect(aggregations.dig(:bookmarkable, :aggs, type.underscore)).to \
-            include({ terms: { field: "#{type.underscore}_ids_public" } })
+            include({ terms: { field: "public_#{type.underscore}_ids" } })
         end
       end
     end

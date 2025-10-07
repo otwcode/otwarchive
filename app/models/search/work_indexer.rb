@@ -84,15 +84,6 @@ class WorkIndexer < Indexer
       ],
       methods: [
         :authors_to_sort_on,
-        :rating_ids,
-        :archive_warning_ids,
-        :category_ids,
-        :fandom_ids,
-        :character_ids,
-        :relationship_ids,
-        :freeform_ids,
-        :filter_ids,
-        :tag,
         :collection_ids,
         :hits,
         :comments_count,
@@ -105,8 +96,17 @@ class WorkIndexer < Indexer
         :nonfiction
       ]
     ).merge(
+      rating_ids: object.general_rating_ids,
+      archive_warning_ids: object.general_archive_warning_ids,
+      category_ids: object.general_category_ids,
+      fandom_ids: object.general_fandom_ids,
+      character_ids: object.general_character_ids,
+      relationship_ids: object.general_relationship_ids,
+      freeform_ids: object.general_freeform_ids,
+      filter_ids: object.general_filter_ids,
       language_id: object.language&.short,
       series: series_data(object),
+      tag: object.general_tags,
       creator_join: { name: :work }
     ).merge(creator_data(object))
   end

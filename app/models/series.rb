@@ -6,7 +6,6 @@ class Series < ApplicationRecord
   has_many :serial_works, dependent: :destroy
   has_many :works, through: :serial_works
   has_many :work_tags, -> { distinct }, through: :works, source: :tags
-  has_many :unhidden_work_tags, -> { where(works: { hidden_by_admin: false }) }, through: :works, source: :tags
   has_many :work_pseuds, -> { distinct }, through: :works, source: :pseuds
 
   has_many :taggings, as: :taggable, dependent: :destroy
@@ -71,7 +70,7 @@ class Series < ApplicationRecord
 
   # Get the filters for the works in this series
 
-  def filters_general
+  def general_filters
     Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id
                JOIN works ON works.id = filter_taggings.filterable_id
                JOIN serial_works ON serial_works.work_id = works.id")
@@ -81,7 +80,7 @@ class Series < ApplicationRecord
       .group("tags.id")
   end
 
-  def filters_public
+  def public_filters
     Tag.joins("JOIN filter_taggings ON tags.id = filter_taggings.filter_id
                JOIN works ON works.id = filter_taggings.filterable_id
                JOIN serial_works ON serial_works.work_id = works.id")
@@ -232,10 +231,11 @@ class Series < ApplicationRecord
   def bookmarkable_json
     methods = %i[creators posted revised_at word_count work_types]
     %w[general public].each do |visibility|
-      methods << :"tags_#{visibility}"
+      methods << :"#{visibility}_tags"
+      methods << :"#{visibility}_filter_ids"
 
-      %w[archive_warning category character fandom filter freeform rating relationship].each do |tag_type|
-        methods << :"#{tag_type}_ids_#{visibility}"
+      Tag::FILTERS.map(&:underscore).each do |tag_type|
+        methods << :"#{visibility}_#{tag_type}_ids"
       end
     end
 
@@ -275,40 +275,43 @@ class Series < ApplicationRecord
   end
   alias_method :posted?, :posted
 
-  # Simple name to make it easier for people to use in full-text search
-  def tags_general
-    (unhidden_work_tags.pluck(:name) + filters_general.pluck(:name)).uniq
+  def tags_visible_to_registered_user
+    work_tags.where(works: { hidden_by_admin: false })
   end
 
-  def tags_public
-    (unhidden_work_tags.where(works: { restricted: false }).pluck(:name) + filters_public.pluck(:name)).uniq
+  def general_tags
+    (tags_visible_to_registered_user.pluck(:name) + general_filters.pluck(:name)).uniq
+  end
+
+  def public_tags
+    (tags_visible_to_registered_user.where(works: { restricted: false }).pluck(:name) + public_filters.pluck(:name)).uniq
   end
 
   # Index all the filters for pulling works
-  def filter_ids_general
-    (unhidden_work_tags.pluck(:id) + filters_general.pluck(:id)).uniq
+  def general_filter_ids
+    (tags_visible_to_registered_user.pluck(:id) + general_filters.pluck(:id)).uniq
   end
 
-  def filter_ids_public
-    (unhidden_work_tags.where(works: { restricted: false }).pluck(:id) + filters_public.pluck(:id)).uniq
+  def public_filter_ids
+    (tags_visible_to_registered_user.where(works: { restricted: false }).pluck(:id) + public_filters.pluck(:id)).uniq
   end
 
   %w[general public].each do |tag_visibility|
     # Index only direct filters (non meta-tags) for facets
-    define_method("direct_filters_#{tag_visibility}") do
-      send("filters_#{tag_visibility}").where(filter_taggings: { inherited: false })
+    define_method("#{tag_visibility}_direct_filters") do
+      send("#{tag_visibility}_filters").where(filter_taggings: { inherited: false })
     end
 
-    define_method("filters_for_facets_#{tag_visibility}") do
-      cache_variable = "@filters_for_facets_#{tag_visibility}"
-      instance_variable_set(cache_variable, send("direct_filters_#{tag_visibility}")) unless instance_variable_defined?(cache_variable)
+    define_method("#{tag_visibility}_filters_for_facets") do
+      cache_variable = "@#{tag_visibility}_filters_for_facets"
+      instance_variable_set(cache_variable, send("#{tag_visibility}_direct_filters")) unless instance_variable_defined?(cache_variable)
       instance_variable_get(cache_variable)
     end
 
-    %w[archive_warning category character fandom freeform rating relationship].each do |tag_type|
-      define_method("#{tag_type}_ids_#{tag_visibility}") do
-        send("filters_for_facets_#{tag_visibility}").select { |tag| tag.type.to_s == tag_type.camelcase }
-          .map(&:id)
+    Tag::FILTERS.each do |tag_type|
+      define_method("#{tag_visibility}_#{tag_type.underscore}_ids") do
+        send("#{tag_visibility}_filters_for_facets").select { |tag| tag.type.to_s == tag_type }
+          .pluck(:id)
       end
     end
   end

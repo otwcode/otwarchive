@@ -3,8 +3,10 @@
 require 'spec_helper'
 
 describe Series do
-  let(:unrestricted_work) { create(:work, restricted: false) }
-  let(:restricted_work) { create(:work, restricted: true) }
+  let(:unrestricted_character) { create(:canonical_character) }
+  let(:restricted_character) { create(:canonical_character) }
+  let(:unrestricted_work) { create(:work, restricted: false, character_string: unrestricted_character.name) }
+  let(:restricted_work) { create(:work, restricted: true, character_string: restricted_character.name) }
   let(:series) { create(:series) }
 
   it "should be unrestricted when it has unrestricted works" do
@@ -80,45 +82,45 @@ describe Series do
     end
   end
 
-  describe "#filters_general" do
+  describe "#general_filters" do
     it "includes tags on unrestricted works" do
       series.works = [unrestricted_work]
       series.reload
-      expect(series.filters_general).to include(*unrestricted_work.tags.canonical)
+      expect(series.general_filters).to include(*unrestricted_work.tags.canonical)
     end
 
     it "includes tags on restricted works" do
       series.works = [restricted_work]
       series.reload
-      expect(series.filters_general).to include(*restricted_work.tags.canonical)
+      expect(series.general_filters).to include(*restricted_work.tags.canonical)
     end
 
     it "does not include tags on works hidden by an admin" do
       hidden_work = create(:work, hidden_by_admin: true)
       series.works = [hidden_work]
       series.reload
-      expect(series.filters_general).to be_empty
+      expect(series.general_filters).to be_empty
     end
   end
 
-  describe "#filters_public" do
+  describe "#public_filters" do
     it "includes tags on unrestricted works" do
       series.works = [unrestricted_work]
       series.reload
-      expect(series.filters_public).to include(*unrestricted_work.tags.canonical)
+      expect(series.public_filters).to include(*unrestricted_work.tags.canonical)
     end
 
     it "does not include tags on restricted works" do
       series.works = [restricted_work]
       series.reload
-      expect(series.filters_public).to be_empty
+      expect(series.public_filters).to be_empty
     end
 
     it "does not include tags on works hidden by an admin" do
       hidden_work = create(:work, hidden_by_admin: true)
       series.works = [hidden_work]
       series.reload
-      expect(series.filters_public).to be_empty
+      expect(series.public_filters).to be_empty
     end
   end
 
@@ -153,45 +155,146 @@ describe Series do
     end
   end
 
-  describe "#tags_general" do
+  describe "#general_tags" do
     it "includes tags on unrestricted works" do
       series.works = [unrestricted_work]
       series.reload
-      expect(series.tags_general).to include(*unrestricted_work.tags.pluck(:name))
+      expect(series.general_tags).to include(*unrestricted_work.tags.pluck(:name))
     end
 
     it "includes tags on restricted works" do
       series.works = [restricted_work]
       series.reload
-      expect(series.tags_general).to include(*unrestricted_work.tags.pluck(:name))
+      expect(series.general_tags).to include(*restricted_work.tags.pluck(:name))
     end
 
     it "does not include tags on works hidden by an admin" do
       hidden_work = create(:work, hidden_by_admin: true)
       series.works = [hidden_work]
       series.reload
-      expect(series.tags_general).to be_empty
+      expect(series.general_tags).to be_empty
     end
   end
 
-  describe "#tags_public" do
+  describe "#public_tags" do
     it "includes tags on unrestricted works" do
       series.works = [unrestricted_work]
       series.reload
-      expect(series.tags_public).to include(*unrestricted_work.tags.pluck(:name))
+      expect(series.public_tags).to include(*unrestricted_work.tags.pluck(:name))
     end
 
     it "does not include tags on restricted works" do
       series.works = [restricted_work]
       series.reload
-      expect(series.tags_public).to be_empty
+      expect(series.public_tags).to be_empty
     end
 
     it "does not include tags on works hidden by an admin" do
       hidden_work = create(:work, hidden_by_admin: true)
       series.works = [hidden_work]
       series.reload
-      expect(series.tags_public).to be_empty
+      expect(series.public_tags).to be_empty
+    end
+  end
+
+  describe "#general_filter_ids" do
+    it "includes tags on unrestricted works" do
+      series.works = [unrestricted_work]
+      series.reload
+      expect(series.general_filter_ids).to include(*unrestricted_work.tags.canonical.pluck(:id))
+    end
+
+    it "includes tags on restricted works" do
+      series.works = [restricted_work]
+      series.reload
+      expect(series.general_filter_ids).to include(*restricted_work.tags.canonical.pluck(:id))
+    end
+
+    it "does not include tags on works hidden by an admin" do
+      hidden_work = create(:work, hidden_by_admin: true)
+      series.works = [hidden_work]
+      series.reload
+      expect(series.general_filter_ids).to be_empty
+    end
+  end
+
+  describe "#public_filter_ids" do
+    it "includes tags on unrestricted works" do
+      series.works = [unrestricted_work]
+      series.reload
+      expect(series.public_filter_ids).to include(*unrestricted_work.tags.canonical.pluck(:id))
+    end
+
+    it "does not include tags on restricted works" do
+      series.works = [restricted_work]
+      series.reload
+      expect(series.public_filter_ids).to be_empty
+    end
+
+    it "does not include tags on works hidden by an admin" do
+      hidden_work = create(:work, hidden_by_admin: true)
+      series.works = [hidden_work]
+      series.reload
+      expect(series.public_filter_ids).to be_empty
+    end
+  end
+
+  describe "#general_direct_filters" do
+    let(:meta) { create(:canonical_character) }
+
+    before do
+      unrestricted_character.meta_tags << meta
+      restricted_character.meta_tags << meta
+    end
+
+    it "includes direct tags on unrestricted works" do
+      series.works = [unrestricted_work]
+      series.reload
+      expect(series.general_direct_filters).to include(*unrestricted_work.tags.canonical)
+      expect(series.general_direct_filters).not_to include(meta)
+    end
+
+    it "includes direct tags on restricted works" do
+      series.works = [restricted_work]
+      series.reload
+      expect(series.general_direct_filters).to include(*restricted_work.tags.canonical)
+      expect(series.general_direct_filters).not_to include(meta)
+    end
+
+    it "does not include tags on works hidden by an admin" do
+      hidden_work = create(:work, hidden_by_admin: true)
+      series.works = [hidden_work]
+      series.reload
+      expect(series.general_direct_filters).to be_empty
+    end
+  end
+
+  describe "#public_direct_filters" do
+    let(:meta) { create(:canonical_character) }
+
+    before do
+      unrestricted_character.meta_tags << meta
+      restricted_character.meta_tags << meta
+    end
+
+    it "includes direct tags on unrestricted works" do
+      series.works = [unrestricted_work]
+      series.reload
+      expect(series.public_direct_filters).to include(*unrestricted_work.tags.canonical)
+      expect(series.general_direct_filters).not_to include(meta)
+    end
+
+    it "does not include tags on restricted works" do
+      series.works = [restricted_work]
+      series.reload
+      expect(series.public_direct_filters).to be_empty
+    end
+
+    it "does not include tags on works hidden by an admin" do
+      hidden_work = create(:work, hidden_by_admin: true)
+      series.works = [hidden_work]
+      series.reload
+      expect(series.public_direct_filters).to be_empty
     end
   end
 end

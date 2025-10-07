@@ -61,42 +61,33 @@ module Filterable
   # SEARCH
   ################
 
-  # Simple name to make it easier for people to use in full-text search
-  def tag
-    (tags.pluck(:name) + filters.pluck(:name)).uniq
-  end
-
   # Restricted tags (which are in the general list but not the public one) only
   # really apply to series, as works are either fully restricted or fully public.
   # We define the various visibility-based methods to be the same here, and they are
-  # overridden in the Series class.
+  # overridden in the Series class to account for tags on restricted works in the series.
   %w[general public].each do |visibility|
-    alias_method :"tags_#{visibility}", :tag
+    define_method("#{visibility}_tags") do
+      (tags.pluck(:name) + filters.pluck(:name)).uniq
+    end
 
     # Index all the filters for pulling works
-    define_method("filter_ids_#{visibility}") do
+    define_method("#{visibility}_filter_ids") do
       (tags.pluck(:id) + filters.pluck(:id)).uniq
     end
 
     # Index only direct filters (non meta-tags) for facets
-    define_method("filters_for_facets_#{visibility}") do
+    define_method("#{visibility}_filters_for_facets") do
       cache_variable = "@filters_for_facets_#{visibility}"
       instance_variable_set(cache_variable, direct_filters.to_a) unless instance_variable_defined?(cache_variable)
       instance_variable_get(cache_variable)
     end
 
-    %w[archive_warning category character fandom freeform rating relationship].each do |tag_type|
-      define_method("#{tag_type}_ids_#{visibility}") do
-        send("filters_for_facets_#{visibility}")
-          .select { |tag| tag.type.to_s == tag_type.camelcase }
+    Tag::FILTERS.each do |tag_type|
+      define_method("#{visibility}_#{tag_type.underscore}_ids") do
+        send("#{visibility}_filters_for_facets")
+          .select { |tag| tag.type.to_s == tag_type }
           .map(&:id)
       end
     end
-  end
-
-  # For filterables like Work, tags only on restricted works are filtered out by virtue of the filterable having
-  # restricted set to true. Therefore, we just want a generic "<tag_type>_ids" method as well.
-  %w[archive_warning category character fandom filter freeform rating relationship].each do |search_field|
-    alias_method :"#{search_field}_ids", :"#{search_field}_ids_general"
   end
 end

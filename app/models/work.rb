@@ -1198,10 +1198,11 @@ class Work < ApplicationRecord
   def bookmarkable_json
     methods = %i[collection_ids creators work_types]
     %w[general public].each do |visibility|
-      methods << :"tags_#{visibility}"
+      methods << :"#{visibility}_tags"
+      methods << :"#{visibility}_filter_ids"
 
-      %w[archive_warning category character fandom filter freeform rating relationship].each do |tag_type|
-        methods << :"#{tag_type}_ids_#{visibility}"
+      Tag::FILTERS.each do |tag_type|
+        methods << :"#{visibility}_#{tag_type.underscore}_ids"
       end
     end
 

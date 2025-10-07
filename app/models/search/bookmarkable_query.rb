@@ -95,24 +95,24 @@ class BookmarkableQuery < Query
     escape_restrictable_fields(escape_slashes(query_text.strip))
   end
 
-  # Internally, we use <fieldname>_(public|general) to denote certain fields with data from all works (general)
-  # versus fields with data only from works visible to guests (public). We do not, however,  want users to be able
+  # Internally, we use (public|general)_<fieldname> to denote certain fields with data from all works (general)
+  # versus fields with data only from works visible to guests (public). We do not, however, want users to be able
   # to query those fields directly. To avoid that, we replace <fieldname>_<visibility> with the appropriate visibility
   # based on what the application knows of the querier.
   #
   # Examples:
   # When searching as a guest,
-  # escape_tags_field("tags_public:1234") => tags_public:1234
-  # escape_tags_field("fandom_ids_general:1234") => fandom_ids_public:1234
-  # escape_tags_field("tag:1234") => tags_public:1234
+  # escape_tags_field("public_tags:1234") => public_tags:1234
+  # escape_tags_field("general_fandom_ids:1234") => public_fandom_ids:1234
+  # escape_tags_field("tag:1234") => public_tags:1234
   # When searching as a registered user,
-  # escape_tags_field("tags_public:1234") => tags_general:1234
-  # escape_tags_field("character_ids_general:1234") => character_ids_general:1234
-  # escape_tags_field("tag:1234") => tags_general:1234
+  # escape_tags_field("public_tags:1234") => general_tags:1234
+  # escape_tags_field("general_character_ids:1234") => general_character_ids:1234
+  # escape_tags_field("tag:1234") => general_tags:1234
   def escape_restrictable_fields(query)
     # Special-case for the "tag" convenience field name first, then sanitize visibility level.
-    query.gsub("tag:", "tags_public:").gsub(/([^\s]+)_(?:public|general)/) do
-      restrictable_field_name(Regexp.last_match(1)).to_s
+    query.gsub("tag:", "public_tags:").gsub(/(?:(?:public|general)_)?([^\s]+):/) do
+      "#{restrictable_field_name(Regexp.last_match(1))}:"
     end
   end
 
@@ -268,7 +268,7 @@ class BookmarkableQuery < Query
   end
 
   # This filter is used to restrict our results to only include bookmarkables
-  # whose "tags_(restricted|public)" text matches all of the tag names in included_tag_names.
+  # whose "(general|public)_tags" text matches all of the tag names in included_tag_names.
   # This is useful when the user enters a non-existent tag, which would be discarded
   # by the TaggableQuery.filter_ids function.
   def named_tag_inclusion_filter
@@ -278,7 +278,7 @@ class BookmarkableQuery < Query
   end
 
   # This set of filters is used to prevent us from matching any bookmarkables
-  # whose "tags_(restricted|public)" text matches one of the passed-in tag names.
+  # whose "(general|public)_tags" text matches one of the passed-in tag names.
   # This is useful when the user enters a non-existent tag, which would be discarded
   # by the TaggableQuery.exclusion_ids function.
   #
@@ -310,6 +310,6 @@ class BookmarkableQuery < Query
   private
 
   def restrictable_field_name(field_name)
-    :"#{field_name}_#{include_restricted? ? "general" : "public"}"
+    :"#{include_restricted? ? "general" : "public"}_#{field_name}"
   end
 end
