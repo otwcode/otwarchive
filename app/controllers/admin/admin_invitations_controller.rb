@@ -38,6 +38,8 @@ class Admin::AdminInvitationsController < Admin::BaseController
   end
 
   def find
+    authorize Invitation
+
     unless invitation_params[:user_name].blank?
       @user = User.find_by(login: invitation_params[:user_name])
       @hide_dashboard = true
