@@ -1196,24 +1196,30 @@ class Work < ApplicationRecord
   end
 
   def bookmarkable_json
+    methods = %i[collection_ids creators work_types]
+    %w[general public].each do |visibility|
+      methods << :"#{visibility}_tags"
+      methods << :"#{visibility}_filter_ids"
+
+      Tag::FILTERS.each do |tag_type|
+        methods << :"#{visibility}_#{tag_type.underscore}_ids"
+      end
+    end
+
     as_json(
       root: false,
       only: [
         :title, :summary, :hidden_by_admin, :restricted, :posted,
         :created_at, :revised_at, :word_count, :complete
       ],
-      methods: [
-        :tag, :filter_ids, :rating_ids, :archive_warning_ids, :category_ids,
-        :fandom_ids, :character_ids, :relationship_ids, :freeform_ids,
-        :creators, :collection_ids, :work_types
-      ]
+      methods: methods
     ).merge(
       language_id: language&.short,
       anonymous: anonymous?,
       unrevealed: unrevealed?,
       pseud_ids: anonymous? || unrevealed? ? nil : pseud_ids,
       user_ids: anonymous? || unrevealed? ? nil : user_ids,
-      bookmarkable_type: 'Work',
+      bookmarkable_type: "Work",
       bookmarkable_join: { name: "bookmarkable" }
     )
   end
