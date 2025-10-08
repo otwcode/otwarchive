@@ -4,6 +4,9 @@ require "spec_helper"
 
 describe Comment do
   include ActiveJob::TestHelper
+  def queue_adapter_for_test
+    ActiveJob::QueueAdapters::TestAdapter.new
+  end
 
   describe "validations" do
     context "with a forbidden guest name" do

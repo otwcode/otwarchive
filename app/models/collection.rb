@@ -1,6 +1,7 @@
 class Collection < ApplicationRecord
   include Filterable
   include WorksOwner
+  include Searchable
 
   has_one_attached :icon do |attachable|
     attachable.variant(:standard, resize_to_limit: [100, 100], loader: { n: -1 })
@@ -58,7 +59,6 @@ class Collection < ApplicationRecord
 
   has_many :bookmarks, through: :collection_items, source: :item, source_type: "Bookmark"
   has_many :approved_bookmarks, through: :approved_collection_items, source: :item, source_type: "Bookmark"
-
   has_many :collection_participants, dependent: :destroy
   accepts_nested_attributes_for :collection_participants, allow_destroy: true
 
@@ -166,6 +166,7 @@ class Collection < ApplicationRecord
   scope :name_only, -> { select("collections.name") }
   scope :by_title, -> { order(:title) }
   scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).with_attached_icon }
+  scope :for_search, -> { includes(:parent, :children, :tags, :challenge, moderators: [user: :pseuds], owners: [user: :pseuds]).with_attached_icon }
 
   def cleanup_url
     self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
@@ -401,49 +402,6 @@ class Collection < ApplicationRecord
     approved_collection_items.each(&:notify_of_reveal)
   end
 
-  def self.sorted_and_filtered(sort, filters, page)
-    pagination_args = { page: page }
-
-    # build up the query with scopes based on the options the user specifies
-    query = Collection.top_level
-
-    if filters[:title].present?
-      # we get the matching collections out of autocomplete and use their ids
-      ids = Collection.autocomplete_lookup(search_param: filters[:title],
-                                           autocomplete_prefix: (if filters[:closed].blank?
-                                                                   "autocomplete_collection_all"
-                                                                 else
-                                                                   (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open")
-                                                                 end)).map { |result| Collection.id_from_autocomplete(result) }
-      query = query.where(collections: { id: ids })
-    elsif filters[:closed].present?
-      query = (filters[:closed] == "true" ? query.closed : query.not_closed)
-    end
-    query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if filters[:moderated].present?
-    if filters[:challenge_type].present?
-      case filters[:challenge_type]
-      when "gift_exchange"
-        query = query.gift_exchange
-      when "prompt_meme"
-        query = query.prompt_meme
-      when "no_challenge"
-        query = query.no_challenge
-      end
-    end
-    query = query.order(sort).for_blurb
-
-    if filters[:fandom].blank?
-      query.paginate(pagination_args)
-    else
-      fandom = Fandom.find_by_name(filters[:fandom])
-      if fandom
-        (fandom.approved_collections & query).paginate(pagination_args)
-      else
-        []
-      end
-    end
-  end
-
   # Delete current icon (thus reverting to archive default icon)
   def delete_icon=(value)
     @delete_icon = !value.to_i.zero?
@@ -460,5 +418,47 @@ class Collection < ApplicationRecord
     self.icon.purge
     self.icon_alt_text = nil
     self.icon_comment_text = nil
+  end
+
+  # Work and bookmark counts for indexing; these come from the database.
+
+  def general_works_count
+    Work.visible_to_registered_user.in_collection(self).count
+  end
+
+  def public_works_count
+    Work.visible_to_all.in_collection(self).count
+  end
+
+  def general_bookmarked_items_count
+    bookmarks = Bookmark.is_public.in_collection(self)
+
+    [
+      Work.visible_to_registered_user,
+      Series.visible_to_registered_user,
+      ExternalWork.visible_to_registered_user
+    ].map do |relation|
+      relation.joins(:bookmarks).merge(bookmarks).distinct.count("bookmarks.bookmarkable_id")
+    end.sum
+  end
+
+  def public_bookmarked_items_count
+    bookmarks = Bookmark.is_public.in_collection(self)
+
+    [Work.visible_to_all, Series.visible_to_all, ExternalWork.visible_to_all].map do |relation|
+      relation.joins(:bookmarks).merge(bookmarks).distinct.count("bookmarks.bookmarkable_id")
+    end.sum
+  end
+
+  # Work and bookmark counts; these come from Elasticsearch via the
+  # SearchCounts helper. It already checks for visibility, so nothing
+  # extra needs to be done here.
+
+  def approved_works_count
+    SearchCounts.work_count_for_collection(self)
+  end
+
+  def approved_bookmarked_items_count
+    SearchCounts.bookmarkable_count_for_collection(self)
   end
 end

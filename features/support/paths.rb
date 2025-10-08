@@ -21,6 +21,9 @@ module NavigationHelpers
     when /^the search works page$/i
       step %{all indexing jobs have been run}
       search_works_path
+    when /^the collections page$/i
+      step %{all indexing jobs have been run}
+      collections_path
     when /^the search people page$/i
       step %{all indexing jobs have been run}
       search_people_path
@@ -254,7 +257,7 @@ module NavigationHelpers
       external_works_path
     when /^the external works page with only duplicates$/i
       external_works_path(show: :duplicates)
-    when /^the new user password page$/i
+    when /^the forgot password page$/i
       new_user_password_path
     when /^the edit user password page$/i
       edit_user_password_path
