@@ -34,146 +34,144 @@ describe Comment do
       end
     end
 
+    shared_examples "disallows editing the comment if it's changed significantly" do
+      it "prevents editing the comment if it's changed significantly" do
+        subject.edited_at = Time.current
+        subject.comment_content = "Spam content" * 12
+        expect(subject.save).to be_falsey
+        expect(subject.errors[:base]).to include("This comment looks like spam to our system, sorry! Please try again.")
+      end
+
+      it "allows editing the comment if it's not changed significantly" do
+        subject.edited_at = Time.current
+        subject.comment_content += "a"
+        expect(subject.save).to be_truthy
+      end
+
+      it "allows modifying the comment besides content" do
+        subject.hidden_by_admin = true
+        expect(subject.save).to be_truthy
+      end
+    end
+
+    shared_examples "always allows changing the comment" do
+      it "allows editing the comment if it's changed significantly" do
+        subject.edited_at = Time.current
+        subject.comment_content = "Spam content" * 12
+        expect(subject.save).to be_truthy
+      end
+
+      it "allows editing the comment if it's not changed significantly" do
+        subject.edited_at = Time.current
+        subject.comment_content += "a"
+        expect(subject.save).to be_truthy
+      end
+    end
+
     context "when any comment is considered spam" do
       subject { build(:comment, pseud: user.default_pseud) }
 
-      context "account_age_threshold_for_comment_spam_check" do
-        let(:admin_setting) { AdminSetting.first || AdminSetting.create }
+      let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
-        shared_examples "disallows editing the comment if it's changed significantly" do
-          it "prevents editing the comment if it's changed significantly" do
-            subject.edited_at = Time.current
-            subject.comment_content = "Spam content" * 12
-            expect(subject.save).to be_falsey
-            expect(subject.errors[:base]).to include("This comment looks like spam to our system, sorry! Please try again.")
-          end
+      before do
+        subject.save!
+        allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
+      end
 
-          it "allows editing the comment if it's not changed significantly" do
-            subject.edited_at = Time.current
-            subject.comment_content += "a"
-            expect(subject.save).to be_truthy
-          end
-
-          it "allows modifying the comment besides content" do
-            subject.hidden_by_admin = true
-            expect(subject.save).to be_truthy
-          end
-        end
-
-        shared_examples "always allows changing the comment" do
-          it "allows editing the comment if it's changed significantly" do
-            subject.edited_at = Time.current
-            subject.comment_content = "Spam content" * 12
-            expect(subject.save).to be_truthy
-          end
-
-          it "allows editing the comment if it's not changed significantly" do
-            subject.edited_at = Time.current
-            subject.comment_content += "a"
-            expect(subject.save).to be_truthy
-          end
-        end
-
+      context "when account_age_threshold_for_comment_spam_check is set" do
         before do
-          subject.save!
-          allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
+          admin_setting.update_attribute(:account_age_threshold_for_comment_spam_check, 10)
         end
 
-        context "when account_age_threshold_for_comment_spam_check is set" do
-          before do
-            admin_setting.update_attribute(:account_age_threshold_for_comment_spam_check, 10)
+        context "for a new user" do
+          let(:user) { create(:user, created_at: Time.current) }
+
+          it_behaves_like "disallows editing the comment if it's changed significantly"
+
+          context "on the commenters own work" do
+            subject { build(:comment, pseud: user.default_pseud, commentable: work) }
+            let(:work) { create(:work, authors: [user.default_pseud]) }
+
+            it_behaves_like "always allows changing the comment"
+
+            context "comment is a reply" do
+              subject { build(:comment, pseud: user.default_pseud, commentable: comment) }
+              let(:comment) { build(:comment, commentable: work) }
+
+              it_behaves_like "always allows changing the comment"
+            end
           end
 
-          context "for a new user" do
-            let(:user) { create(:user, created_at: Time.current) }
+          context "on a tag" do
+            subject { build(:comment, :on_tag, pseud: user.default_pseud) }
+
+            it_behaves_like "always allows changing the comment"
+          end
+
+          context "on an admin post" do
+            subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
 
             it_behaves_like "disallows editing the comment if it's changed significantly"
-
-            context "on the commenters own work" do
-              subject { build(:comment, pseud: user.default_pseud, commentable: work) }
-              let(:work) { create(:work, authors: [user.default_pseud]) }
-
-              it_behaves_like "always allows changing the comment"
-
-              context "comment is a reply" do
-                subject { build(:comment, pseud: user.default_pseud, commentable: comment) }
-                let(:comment) { build(:comment, commentable: work) }
-
-                it_behaves_like "always allows changing the comment"
-              end
-            end
-
-            context "on a tag" do
-              subject { build(:comment, :on_tag, pseud: user.default_pseud) }
-
-              it_behaves_like "always allows changing the comment"
-            end
-
-            context "on an admin post" do
-              subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
-
-              it_behaves_like "disallows editing the comment if it's changed significantly"
-            end
-          end
-
-          context "for an old user" do
-            let(:user) { create(:user, created_at: 12.days.ago) }
-
-            it_behaves_like "always allows changing the comment"
-
-            context "on the commenters own work" do
-              subject { build(:comment, pseud: user.default_pseud, commentable: work) }
-              let(:work) { create(:work, authors: [user.default_pseud]) }
-
-              it_behaves_like "always allows changing the comment"
-            end
-
-            context "on a tag" do
-              subject { build(:comment, :on_tag, pseud: user.default_pseud) }
-
-              it_behaves_like "always allows changing the comment"
-            end
-
-            context "on an admin post" do
-              subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
-
-              it_behaves_like "always allows changing the comment"
-            end
-
-            context "when they change their email address" do
-              before do
-                user.update!(confirmed_at: Time.current)
-              end
-
-              subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
-
-              it_behaves_like "always allows changing the comment"
-            end
           end
         end
 
-        context "when account_age_threshold_for_comment_spam_check is unset" do
-          before do
-            admin_setting.update_attribute(:account_age_threshold_for_comment_spam_check, 0)
-          end
+        context "for an old user" do
+          let(:user) { create(:user, created_at: 12.days.ago) }
 
-          context "for a new user" do
-            let(:user) { create(:user, created_at: Time.current) }
+          it_behaves_like "always allows changing the comment"
+
+          context "on the commenters own work" do
+            subject { build(:comment, pseud: user.default_pseud, commentable: work) }
+            let(:work) { create(:work, authors: [user.default_pseud]) }
 
             it_behaves_like "always allows changing the comment"
+          end
 
-            context "on the commenters own work" do
-              subject { build(:comment, pseud: user.default_pseud, commentable: work) }
-              let(:work) { create(:work, authors: [user.default_pseud]) }
+          context "on a tag" do
+            subject { build(:comment, :on_tag, pseud: user.default_pseud) }
 
-              it_behaves_like "always allows changing the comment"
+            it_behaves_like "always allows changing the comment"
+          end
+
+          context "on an admin post" do
+            subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+            it_behaves_like "always allows changing the comment"
+          end
+
+          context "when they change their email address" do
+            before do
+              user.update!(confirmed_at: Time.current)
             end
 
-            context "on an admin post" do
-              subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
+            subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
 
-              it_behaves_like "always allows changing the comment"
-            end
+            it_behaves_like "always allows changing the comment"
+          end
+        end
+      end
+
+      context "when account_age_threshold_for_comment_spam_check is unset" do
+        before do
+          admin_setting.update_attribute(:account_age_threshold_for_comment_spam_check, 0)
+        end
+
+        context "for a new user" do
+          let(:user) { create(:user, created_at: Time.current) }
+
+          it_behaves_like "always allows changing the comment"
+
+          context "on the commenters own work" do
+            subject { build(:comment, pseud: user.default_pseud, commentable: work) }
+            let(:work) { create(:work, authors: [user.default_pseud]) }
+
+            it_behaves_like "always allows changing the comment"
+          end
+
+          context "on an admin post" do
+            subject { build(:comment, :on_admin_post, pseud: user.default_pseud) }
+
+            it_behaves_like "always allows changing the comment"
           end
         end
       end
