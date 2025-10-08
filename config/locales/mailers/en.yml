@@ -438,9 +438,9 @@ en:
       email_tips: If you're contacting us, please add email addresses from @transformativeworks.org to your list of safe contacts and check your spam folders for our reply.
       introduction:
         ao3_name: Archive of Our Own
-        html: You're receiving this e-mail because you had works in a fanworks archive that has been imported by %{open_doors_name_link} into the %{app_link} (AO3). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.
+        html: You're receiving this email because you had works in a fanworks archive that has been imported by %{open_doors_name_link} into the %{app_link} (AO3). Because this email address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.
         open_doors_name: Open Doors
-        text: You're receiving this e-mail because you had works in a fanworks archive that has been imported by Open Doors (%{open_doors_url}) into the Archive of Our Own (AO3 - %{app_url}). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.
+        text: You're receiving this email because you had works in a fanworks archive that has been imported by Open Doors (%{open_doors_url}) into the Archive of Our Own (AO3 - %{app_url}). Because this email address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.
       mistake:
         contact_open_doors: contact Open Doors
         html: If this is a mistake and these are not your works, please don't delete them! Please just %{contact_open_doors_link} and we will sort it out.
@@ -449,13 +449,13 @@ en:
         ao3_news: AO3 News
         contact_support: contact AO3 Support
         faq_page: FAQ page
-        html: You can read announcements about recent archive moves at %{ao3_news_link}, and find additional information on Open Doors' %{faq_page_link} or %{tutorial_page_link}. For any questions not answered in the FAQ, tutorials, or this e-mail, please %{contact_support_link}.
-        text: You can read announcements about recent archive moves at AO3 News (%{news_url}), and find additional information on Open Doors' FAQ page (%{open_doors_faq_url}) or tutorials page (%{open_doors_tutorial_url}). For any questions not answered in the FAQ, tutorials, or this e-mail, please contact Support at %{support_url}.
+        html: You can read announcements about recent archive moves at %{ao3_news_link}, and find additional information on Open Doors' %{faq_page_link} or %{tutorial_page_link}. For any questions not answered in the FAQ, tutorials, or this email, please %{contact_support_link}.
+        text: You can read announcements about recent archive moves at AO3 News (%{news_url}), and find additional information on Open Doors' FAQ page (%{open_doors_faq_url}) or tutorials page (%{open_doors_tutorial_url}). For any questions not answered in the FAQ, tutorials, or this email, please contact Support at %{support_url}.
         tutorial_page: tutorial page
       other_works:
         contact_open_doors: contact Open Doors
-        html: If you had other works on the imported archive under an e-mail address you can no longer access, please %{contact_open_doors_link} with any information that can help verify your identity.
-        text: If you had other works on the imported archive under an e-mail address you can no longer access, please contact Open Doors with any information that can help verify your identity.
+        html: If you had other works on the imported archive under an email address you can no longer access, please %{contact_open_doors_link} with any information that can help verify your identity.
+        text: If you had other works on the imported archive under an email address you can no longer access, please contact Open Doors with any information that can help verify your identity.
       questions:
         contact_support: contact AO3 Support
         html: For other inquiries, please %{contact_support_link}.
@@ -471,7 +471,7 @@ en:
         text:
           no_fandom: '- "%{work_title}" (%{work_url})'
           with_fandom: '- "%{work_title}" (%{work_url}) (%{fandom})'
-      works_by: 'These works were written under the e-mail: %{email}'
+      works_by: 'These works were written under the email: %{email}'
     collection_notification:
       assignments_sent:
         complete: All assignments have now been sent out.
@@ -593,17 +593,17 @@ en:
         open_doors_name: Open Doors
         tutorial_page: tutorial page
       introduction:
-        html: You're receiving this e-mail because an archive has recently been imported by %{open_doors_name_link} into the %{app_link} (%{app_short_name}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different e-mail, we'd like to invite you aboard!
-        text: You're receiving this e-mail because an archive has recently been imported by Open Doors (%{open_doors_link}) into the %{app_name} (%{app_short_name} - %{app_url}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different e-mail, we'd like to invite you aboard!
+        html: You're receiving this email because an archive has recently been imported by %{open_doors_name_link} into the %{app_link} (%{app_short_name}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different email, we'd like to invite you aboard!
+        text: You're receiving this email because an archive has recently been imported by Open Doors (%{open_doors_link}) into the %{app_name} (%{app_short_name} - %{app_url}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different email, we'd like to invite you aboard!
       mistake:
         html: If this is a mistake and these are not your works, please don't delete them! Please just %{contact_open_doors_link} and we will sort it out.
         text: If this is a mistake and these are not your works, please don't delete them! Please just contact Open Doors (%{open_doors_link}) and we will sort it out.
       more_info:
-        html: You can read announcements about recent archive moves at %{ao3_news_link}, and find additional information on Open Doors' %{faq_page_link} or %{tutorial_page_link}. For any questions not answered in the FAQ, tutorials, or this e-mail, please %{contact_support_link}.
-        text: You can read announcements about recent archive moves at AO3 News (%{news_link}), and find additional information on Open Doors' FAQ page (%{open_doors_faq_link}) or tutorials page (%{open_doors_tutorial_link}). For any questions not answered in the FAQ, tutorials, or this e-mail, please contact Support at %{support_link}.
+        html: You can read announcements about recent archive moves at %{ao3_news_link}, and find additional information on Open Doors' %{faq_page_link} or %{tutorial_page_link}. For any questions not answered in the FAQ, tutorials, or this email, please %{contact_support_link}.
+        text: You can read announcements about recent archive moves at AO3 News (%{news_link}), and find additional information on Open Doors' FAQ page (%{open_doors_faq_link}) or tutorials page (%{open_doors_tutorial_link}). For any questions not answered in the FAQ, tutorials, or this email, please contact Support at %{support_link}.
       other_works:
-        html: If you had other works on the imported archive under an e-mail address you can no longer access, please %{contact_open_doors_link} with any information that can help verify your identity.
-        text: If you had other works on the imported archive under an e-mail address you can no longer access, please contact Open Doors with any information that can help verify your identity.
+        html: If you had other works on the imported archive under an email address you can no longer access, please %{contact_open_doors_link} with any information that can help verify your identity.
+        text: If you had other works on the imported archive under an email address you can no longer access, please contact Open Doors with any information that can help verify your identity.
       questions:
         html: For other inquiries, please %{contact_support_link}.
         text: For other inquiries, please contact AO3 Support at %{support_link}.
