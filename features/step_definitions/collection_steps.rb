@@ -100,7 +100,7 @@ Given /^I close the collection with the title "([^\"]*)"$/ do |title|
   step %{I am logged out}
 end
 
-Given "I have added (a)(the) co-moderator {string} to collection {string}" do |name, title|
+Given "I have added a/the co-moderator {string} to collection {string}" do |name, title|
   # create the user
   step %{I am logged in as "#{name}"}
   step %{I am logged in as the owner of "#{title}"}
@@ -115,7 +115,7 @@ Given "I have added (a)(the) co-moderator {string} to collection {string}" do |n
   step %{I should see "Updated #{name}"}
 end
 
-Given "I have added (a)(the) co-owner {string} to collection {string}" do |name, title|
+Given "I have added a/the co-owner {string} to collection {string}" do |name, title|
   # create the user
   step %{I am logged in as "#{name}"}
   step %{I am logged in as the owner of "#{title}"}
