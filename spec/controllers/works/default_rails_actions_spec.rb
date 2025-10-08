@@ -918,7 +918,7 @@ describe WorksController, work_search: true do
         first_chapter = work.first_chapter
         second_chapter = create(:chapter, work: work, position: 2)
 
-        comment = create(:comment, commentable: first_chapter, parent: first_chapter)
+        create(:comment, commentable: first_chapter, parent: first_chapter)
         create(:comment, commentable: second_chapter, parent: second_chapter)
         fake_login_known_user(work.users.first)
       end
@@ -927,7 +927,8 @@ describe WorksController, work_search: true do
         delete :destroy, params: { id: work.id }
 
         it_redirects_to_with_notice(user_works_path(controller.current_user), "Your work #{work_title} was deleted.")
-        expect { work.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect { work.reload }
+          .to raise_exception(ActiveRecord::RecordNotFound)
         expect(Comment.count).to eq(0)
         expect(InboxComment.count).to eq(0)
       end
