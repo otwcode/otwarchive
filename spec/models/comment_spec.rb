@@ -37,67 +37,6 @@ describe Comment do
     context "when any comment is considered spam" do
       subject { build(:comment, pseud: user.default_pseud) }
 
-      context "spam flagging on creation" do
-        let(:user) { create(:user) }
-
-        context "when spamcheck is skipped and comment is spammy" do
-          before do
-            allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(true)
-            allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
-          end
-
-          it "is flagged as ham" do
-            subject.save!
-            subject.reload
-            expect(subject.approved).to be_truthy
-            expect(subject.spam).to be_falsey
-          end
-        end
-
-        context "when spamcheck is skipped and comment is not spammy" do
-          before do
-            allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(true)
-            allow_any_instance_of(Comment).to receive(:spam?).and_return(false)
-          end
-
-          it "is flagged as ham" do
-            subject.save!
-            subject.reload
-            expect(subject.approved).to be_truthy
-            expect(subject.spam).to be_falsey
-          end
-        end
-
-        context "when spamcheck is not skipped and content is spammy" do
-          before do
-            allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(false)
-            allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
-          end
-
-          it "is flagged as spam" do
-            expect { subject.save! }
-              .to raise_error(ActiveRecord::RecordInvalid)
-            expect(subject.errors[:base][0]).to include "spam"
-            expect(subject.approved).to be_falsey
-            expect(subject.spam).to be_truthy
-          end
-        end
-
-        context "when spamcheck is not skipped and content is spammy" do
-          before do
-            allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(false)
-            allow_any_instance_of(Comment).to receive(:spam?).and_return(false)
-          end
-
-          it "is flagged as ham" do
-            subject.save!
-            subject.reload
-            expect(subject.approved).to be_truthy
-            expect(subject.spam).to be_falsey
-          end
-        end
-      end
-
       context "account_age_threshold_for_comment_spam_check" do
         let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
@@ -236,6 +175,67 @@ describe Comment do
               it_behaves_like "always allows changing the comment"
             end
           end
+        end
+      end
+    end
+
+    context "spam flagging on creation" do
+      subject { build(:comment, pseud: user.default_pseud) }
+      let(:user) { create(:user) }
+
+      context "when spamcheck is skipped and comment is spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(true)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
+        end
+      end
+
+      context "when spamcheck is skipped and comment is not spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(true)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(false)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
+        end
+      end
+
+      context "when spamcheck is not skipped and content is spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(false)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
+        end
+
+        it "is flagged as spam" do
+          expect(subject.save).to be_falsey
+          expect(subject.errors[:base].first).to include "spam"
+          expect(subject.approved).to be_falsey
+          expect(subject.spam).to be_truthy
+        end
+      end
+
+      context "when spamcheck is not skipped and content is not spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(false)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(false)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
         end
       end
     end
@@ -836,11 +836,6 @@ describe Comment do
   describe "#mark_as_spam!" do
     let(:comment) { create(:comment, approved: 1, spam: 0) }
 
-    before do
-      # Guard clause; emails shouldn't send in test env, but including just to be safe
-      allow_any_instance_of(Comment).to receive(:submit_spam)
-    end
-
     it "flags the comment as spam." do
       comment.mark_as_spam!
       comment.reload
@@ -851,11 +846,6 @@ describe Comment do
 
   describe "#mark_as_ham!" do
     let(:comment) { create(:comment, approved: 0, spam: 1) }
-
-    before do
-      # Guard clause; emails shouldn't send in test env, but including just to be safe
-      allow_any_instance_of(Comment).to receive(:submit_ham)
-    end
 
     it "flags the comment as legitimate." do
       comment.mark_as_ham!
