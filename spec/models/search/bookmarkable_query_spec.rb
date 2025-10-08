@@ -23,11 +23,11 @@ describe BookmarkableQuery do
           expect(query.escape_restrictable_fields("general_#{tag_type}_ids:foo")).to eq("general_#{tag_type}_ids:foo")
         end
 
-        it "replaces 'public_#{tag_type}_ids' with 'general_#{tag_type}'" do
+        it "replaces 'public_#{tag_type}_ids' with 'general_#{tag_type}_ids'" do
           expect(query.escape_restrictable_fields("public_#{tag_type}_ids:foo")).to eq("general_#{tag_type}_ids:foo")
         end
 
-        it "replaces '#{tag_type}_ids' with 'general_#{tag_type}'" do
+        it "replaces '#{tag_type}_ids' with 'general_#{tag_type}_ids'" do
           expect(query.escape_restrictable_fields("#{tag_type}_ids:foo")).to eq("general_#{tag_type}_ids:foo")
         end
       end
@@ -54,11 +54,11 @@ describe BookmarkableQuery do
           expect(query.escape_restrictable_fields("public_#{tag_type}_ids:foo")).to eq("public_#{tag_type}_ids:foo")
         end
 
-        it "replaces 'general_#{tag_type}_ids' with 'public_#{tag_type}'" do
+        it "replaces 'general_#{tag_type}_ids' with 'public_#{tag_type}_ids'" do
           expect(query.escape_restrictable_fields("general_#{tag_type}_ids:foo")).to eq("public_#{tag_type}_ids:foo")
         end
 
-        it "replaces '#{tag_type}_ids' with 'public_#{tag_type}'" do
+        it "replaces '#{tag_type}_ids' with 'public_#{tag_type}_ids'" do
           expect(query.escape_restrictable_fields("#{tag_type}_ids:foo")).to eq("public_#{tag_type}_ids:foo")
         end
       end
@@ -175,12 +175,40 @@ describe BookmarkableQuery do
         expect(filter_string).to eq("general_tags:foo")
       end
 
+      it "converts the 'tags' field to 'general_tags'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tags:foo")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("general_tags:foo")
+      end
+
       %w[archive_warning category character fandom filter freeform rating relationship tags].each do |field|
+        it "converts the '#{field}' field to 'general_#{field}'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "#{field}:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("general_#{field}:foo")
+        end
+
         it "converts the 'public_#{field}' field to 'general_#{field}'" do
           bookmark_query = BookmarkQuery.new(bookmarkable_query: "public_#{field}:foo")
           q = bookmark_query.bookmarkable_query.generated_query
           filter_string = q[:query][:bool][:filter][0][:query_string][:query]
           expect(filter_string).to eq("general_#{field}:foo")
+        end
+
+        it "converts the '#{field}_ids' field to 'general_#{field}_ids'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "#{field}_ids:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("general_#{field}_ids:foo")
+        end
+
+        it "converts the 'public_#{field}_ids' field to 'general_#{field}_ids'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "public_#{field}_ids:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("general_#{field}_ids:foo")
         end
       end
     end
@@ -197,12 +225,40 @@ describe BookmarkableQuery do
         expect(filter_string).to eq("general_tags:foo")
       end
 
+      it "converts the 'tags' field to 'general_tags'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tags:foo")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("general_tags:foo")
+      end
+
       %w[archive_warning category character fandom filter freeform rating relationship tags].each do |field|
+        it "converts the '#{field}' field to 'general_#{field}'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "#{field}:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("general_#{field}:foo")
+        end
+
         it "converts the 'public_#{field}' field to 'general_#{field}'" do
           bookmark_query = BookmarkQuery.new(bookmarkable_query: "public_#{field}:foo")
           q = bookmark_query.bookmarkable_query.generated_query
           filter_string = q[:query][:bool][:filter][0][:query_string][:query]
           expect(filter_string).to eq("general_#{field}:foo")
+        end
+
+        it "converts the '#{field}_ids' field to 'general_#{field}_ids'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "#{field}_ids:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("general_#{field}_ids:foo")
+        end
+
+        it "converts the 'public_#{field}_ids' field to 'general_#{field}_ids'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "public_#{field}_ids:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("general_#{field}_ids:foo")
         end
       end
     end
@@ -215,12 +271,40 @@ describe BookmarkableQuery do
         expect(filter_string).to eq("public_tags:foo")
       end
 
+      it "converts the 'tags' field to 'public_tags'" do
+        bookmark_query = BookmarkQuery.new(bookmarkable_query: "tags:foo")
+        q = bookmark_query.bookmarkable_query.generated_query
+        filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+        expect(filter_string).to eq("public_tags:foo")
+      end
+
       %w[archive_warning category character fandom filter freeform rating relationship tags].each do |field|
+        it "converts the '#{field}' field to 'public_#{field}'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "#{field}:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("public_#{field}:foo")
+        end
+
         it "converts the 'general_#{field}' field to 'public_#{field}'" do
           bookmark_query = BookmarkQuery.new(bookmarkable_query: "general_#{field}:foo")
           q = bookmark_query.bookmarkable_query.generated_query
           filter_string = q[:query][:bool][:filter][0][:query_string][:query]
           expect(filter_string).to eq("public_#{field}:foo")
+        end
+
+        it "converts the '#{field}_ids' field to 'public_#{field}_ids'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "#{field}_ids:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("public_#{field}_ids:foo")
+        end
+
+        it "converts the 'general_#{field}_ids' field to 'public_#{field}_ids'" do
+          bookmark_query = BookmarkQuery.new(bookmarkable_query: "general_#{field}_ids:foo")
+          q = bookmark_query.bookmarkable_query.generated_query
+          filter_string = q[:query][:bool][:filter][0][:query_string][:query]
+          expect(filter_string).to eq("public_#{field}_ids:foo")
         end
       end
     end

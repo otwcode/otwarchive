@@ -1,5 +1,5 @@
 class BookmarkableQuery < Query
-  RESTRICABLE_FIELDS = Regexp.union(Tag::FILTERS.map(&:underscore) + %w[filter tags])
+  RESTRICTABLE_FIELDS = Regexp.union(Tag::FILTERS.map(&:underscore) + %w[filter tags]).source
 
   include TaggableQuery
 
@@ -99,7 +99,7 @@ class BookmarkableQuery < Query
 
   # Internally, we use (public|general)_<fieldname> to denote certain fields with data from all works (general)
   # versus fields with data only from works visible to guests (public). We do not, however, want users to be able
-  # to query those fields directly. To avoid that, we replace <fieldname>_<visibility> with the appropriate visibility
+  # to query those fields directly. To avoid that, we replace <visibility>_<fieldname> with the appropriate visibility
   # based on what the application knows of the querier.
   #
   # Examples:
@@ -113,7 +113,7 @@ class BookmarkableQuery < Query
   # escape_tags_field("tag:1234") => general_tags:1234
   def escape_restrictable_fields(query)
     # Special-case for the "tag" convenience field name first, then sanitize visibility level.
-    query.gsub("tag:", "public_tags:").gsub(/(?:(?:public|general)_)?([^\s]+):/) do
+    query.gsub("tag:", "public_tags:").gsub(/(?:(?:public|general)_)?((?:#{RESTRICTABLE_FIELDS})(?:_ids)?):/) do
       "#{restrictable_field_name(Regexp.last_match(1))}:"
     end
   end
@@ -312,8 +312,6 @@ class BookmarkableQuery < Query
   private
 
   def restrictable_field_name(field_name)
-    return field_name.to_sym unless field_name.match?(RESTRICABLE_FIELDS)
-
     :"#{include_restricted? ? "general" : "public"}_#{field_name}"
   end
 end

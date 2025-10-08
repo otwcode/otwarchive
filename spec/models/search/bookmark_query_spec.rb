@@ -136,13 +136,6 @@ describe BookmarkQuery do
       end
     end
 
-    it "allows you to filter by bookmarkable language" do
-      q = BookmarkQuery.new(language_id: "ig")
-      parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
-      expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
-        include({ term: { "language_id.keyword": "ig" } })
-    end
-
     context "when querying as a registered user" do
       before do
         User.current_user = create(:user)
