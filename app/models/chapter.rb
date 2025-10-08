@@ -56,8 +56,7 @@ class Chapter < ApplicationRecord
   after_destroy :update_work_stats
 
   after_save :fix_positions
-  after_save :invalidate_chapter_count,
-    if: Proc.new { |chapter| chapter.saved_change_to_posted? }
+  after_save :invalidate_chapter_count, if: proc { |chapter| chapter.saved_change_to_posted? }
   after_commit :update_series_index
 
   def fix_positions
