@@ -11,7 +11,7 @@ class Chapter < ApplicationRecord
   # acts_as_list scope: 'work_id = #{work_id}'
 
   acts_as_commentable
-  has_many :comments, as: :commentable, dependent: :nil # Handled in #delete_all_comments
+  has_many :comments, as: :commentable # Handled in #delete_all_comments
 
   validates_length_of :title, allow_blank: true, maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.TITLE_MAX)
