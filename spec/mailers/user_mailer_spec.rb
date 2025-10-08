@@ -258,7 +258,7 @@ describe UserMailer do
     # Shared content tests for both email types
     shared_examples_for "a claim notification" do
       it "contains the text for a claim email" do
-        expect(part).to include("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
+        expect(part).to include("You're receiving this email because you had works in a fanworks archive that has been imported")
         expect(part).to include("The Open Doors team")
       end
     end
@@ -346,7 +346,7 @@ describe UserMailer do
     # Shared content tests for both email types
     shared_examples_for "an invitation to claim content" do
       it "contains the text for an invitation claim email" do
-        expect(part).to include("You're receiving this e-mail because an archive has recently been imported by")
+        expect(part).to include("You're receiving this email because an archive has recently been imported by")
         expect(part).to include("The Open Doors team")
       end
     end
