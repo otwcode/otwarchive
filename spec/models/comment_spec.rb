@@ -70,7 +70,6 @@ describe Comment do
 
     context "when any comment is considered spam" do
       subject { build(:comment, pseud: user.default_pseud) }
-
       let(:admin_setting) { AdminSetting.first || AdminSetting.create }
 
       before do
