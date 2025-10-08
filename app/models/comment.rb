@@ -65,8 +65,8 @@ class Comment < ApplicationRecord
   validate :check_for_spam, on: :create
 
   def check_for_spam
-    self.approved = skip_spamcheck? || !spam?
-    self.spam = !skip_spamcheck? && spam? # Logically equivalent to !(skip_spamcheck? || !spam?)
+    self.spam = !skip_spamcheck? && spam?
+    self.approved = !self.spam
 
     errors.add(:base, :spam) unless approved
   end
@@ -501,16 +501,14 @@ class Comment < ApplicationRecord
   end
 
   def mark_as_spam!
-    self.approved = false
-    self.spam = true
-    save(validate: false)
+    update_attribute(:approved, false)
+    update_attribute(:spam, true)
     submit_spam
   end
 
   def mark_as_ham!
-    self.approved = true
-    self.spam = false
-    save(validate: false)
+    update_attribute(:approved, true)
+    update_attribute(:spam, false)
     submit_ham
   end
 
