@@ -69,15 +69,15 @@
 
   Scenario: A subcollection profile and blurb does not show duplicates when a moderator is also an owner of the parent collection
     Given a user exists with login: "sam"
-      And I have the collection "Such a nice collection" with name "Collection"
-      And I am logged in as the owner of "Such a nice collection"
-      And I have added the co-owner "sam" to collection "Such a nice collection"
-      And I add the subcollection "Such a nice subcollection" to the parent collection named "Collection"
-      And I have added the co-moderator "sam" to collection "Such a nice subcollection"
-    When I view the collection "Such a nice subcollection"
+      And I have the collection "Collection"
+      And I am logged in as the owner of "Collection"
+      And I have added the co-owner "sam" to collection "Collection"
+      And I add the subcollection "Subcollection" to the parent collection named "Collection"
+      And I have added the co-moderator "sam" to collection "Subcollection"
+    When I go to "Subcollection" collection's page
       And I follow "Profile"
     Then I should see "sam" exactly 1 time 
-    When I view the collection "Such a nice collection"
+    When I go to "Collection" collection's page
       And I follow "Subcollections"
     Then I should see "sam" exactly 1 time
 
