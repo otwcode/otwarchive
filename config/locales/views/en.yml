@@ -2552,7 +2552,6 @@ en:
         pitch: Pitch
         switch: Switch
       pitch:
-        collections: Collections (%{coll_number})
         drafts: Drafts (%{drafts_number})
       switch:
         assignments: Assignments (%{assignment_number})

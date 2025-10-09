@@ -23,6 +23,23 @@
   When I click the 2nd button
   Then I should see "Removed sam from collection."
 
+  Scenario: Owner can invite own pseud to the collection
+  Given I have the collection "Such a nice collection"
+    And I have the collection "Woah another collection"
+    And I am logged in as the owner of "Such a nice collection"
+    And "moderator" creates the pseud "moderator_pseud"
+  When the dashboard counts have expired
+    And I follow "My Dashboard"
+  Then I should see "Collections (2)"
+  When I am on the "Such a nice collection" participants page
+    And I fill in "participants_to_invite" with "moderator_pseud (moderator)"
+    And I select "Owner" from "moderator_role"
+    And I press "Submit"
+  Then I should see "New members invited: moderator_pseud (moderator)"
+  When the dashboard counts have expired
+    And I follow "My Dashboard"
+  Then I should see "Collections (2)"
+
   Scenario: Owner can't invite a nonexistent user to the collection
   Given I have the collection "Such a nice collection"
     And I am logged in as the owner of "Such a nice collection"
