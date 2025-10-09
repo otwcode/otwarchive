@@ -49,7 +49,7 @@ module UsersHelper
   # Prints link to collections page with user-appropriate number of collections
   def collections_link(user)
     total = SearchCounts.collection_count_for_user(user)
-    span_if_current t(".pitch.collections", coll_number: total.to_s), user_collections_path(user)
+    span_if_current t("users_helper.collections_link.pitch.collections", coll_number: total.to_s), user_collections_path(user)
   end
 
   # Prints link to bookmarks page with user-appropriate number of bookmarks
