@@ -67,7 +67,7 @@
   Then I should see "You are now a member of Such a nice collection"
   When I am in the default browser
 
-  Scenario: A subcollection profile and blurb does not show duplicates when a moderator is also an owner of the parent collection
+  Scenario: A subcollection profile and blurb do not show duplicates when a moderator is also an owner of the parent collection
     Given a user exists with login: "sam"
       And I have the collection "Collection"
       And I am logged in as the owner of "Collection"
