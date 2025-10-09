@@ -27,7 +27,7 @@
       <dt class="maintainers"><%= ts('Maintainers:') %></dt>
       <dd class="maintainers">
         <ul class="commas">
-          <%= safe_join(@collection.maintainers.map { |maintainer| content_tag(:li, link_to(maintainer.byline, maintainer.user), class: @collection.user_is_owner?(maintainer.user) ? "owner" : "mod") }, "\n") %>
+          <%= safe_join(@collection.maintainers.uniq.map { |maintainer| content_tag(:li, link_to(maintainer.byline, maintainer.user), class: @collection.user_is_owner?(maintainer.user) ? "owner" : "mod") }, "\n") %>
         </ul>
       </dd>
       <% unless @collection.email.blank? %>
