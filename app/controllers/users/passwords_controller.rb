@@ -30,6 +30,23 @@ class Users::PasswordsController < Devise::PasswordsController
     super
   end
 
+  def edit
+    # The token is part of the URL so it might be mangled or expired
+    # Check its validity before showing the new password form for improved UX by failing early
+    # The token is checked for validity again in #update when actually changing the password
+    token_from_url = params[:reset_password_token]
+    reset_password_token = Devise.token_generator.digest(self, :reset_password_token, token_from_url)
+
+    user = User.find_for_authentication(reset_password_token: reset_password_token)
+
+    if user.nil? || user.new_record?
+      flash[:error] = t(".invalid_link", count: ArchiveConfig.PASSWORD_RESET_COOLDOWN_HOURS)
+      redirect_to new_user_password_path and return
+    end
+
+    super
+  end
+
   protected
 
   # We need to include information about the user (the remaining reset attempts)
@@ -49,5 +66,12 @@ class Users::PasswordsController < Devise::PasswordsController
   def after_resetting_password_path_for(resource)
     resource.create_log_item(action: ArchiveConfig.ACTION_PASSWORD_RESET)
     super
+  end
+
+  def assert_reset_token_passed
+    return if params[:reset_password_token].present?
+
+    set_flash_message(:error, :no_token)
+    redirect_to new_user_password_path
   end
 end

@@ -199,7 +199,7 @@ en:
             details: Details
           sign_in:
             current:
-              action: Current Login
+              action: Most Recent Login
               no_details: No login recorded
             details: 'IP Address: %{ip}'
             last:
@@ -605,10 +605,56 @@ en:
         notice:
           unreviewed_by_collection: Works and bookmarks listed here have been added to a collection but need approval from a collection moderator before they are listed in the collection.
         page_heading: Items by %{username} in Collections
+  collection_profile:
+    show:
+      meta:
+        collection_tags: 'Collection tags:'
   collections:
+    collection_blurb:
+      collection_tags: 'Collection Tags:'
+    filters:
+      clear_filters: Clear Filters
+      closed:
+        exclude: 'No'
+        include: Either
+        label: Closed
+        only: 'Yes'
+      landmark: Filters
+      leave_filters: Top of Collections Index
+      legend: 'Filter collections:'
+      moderated:
+        exclude: 'No'
+        include: Either
+        label: Moderated
+        only: 'Yes'
+      multifandom:
+        exclude: 'No'
+        include: Either
+        label: Multifandom
+        only: 'Yes'
+      sort:
+        column: Sort by
+        direction:
+          ascending: Ascending
+          descending: Descending
+          label: Sort direction
+      submit:
+        button: Sort and Filter
+        landmark: Sort and Filter
+      tag: Filter by tag
+      title: Filter by title
+      type:
+        any: Any
+        gift_exchange: Gift Exchange Challenge
+        label: Collection Type
+        no_challenge: No Challenge
+        prompt_meme: Prompt Meme Challenge
     form:
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
+      multifandom:
+        footnote: Use this if your collection is not fandom-specific.
+        label: Multifandom
     index:
       page_heading:
         challenges_subcollections_in: Challenges/Subcollections in %{collection}
@@ -691,6 +737,9 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+    confirm_delete:
+      confirm_button: Yes, delete!
+      delete_confirmation: Are you sure you want to delete this comment?
     edit:
       back: Back
       page_heading: Editing comment
@@ -2091,6 +2140,12 @@ en:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
       tags_wrangled_csv: Tags Wrangled (CSV)
   tag_wranglings:
+    index:
+      manage:
+        comments: Comments (%{count})
+        edit: Edit
+        works: Works
+        wrangle: Wrangle
     wrangler_dashboard:
       characters_by_fandom: Characters by fandom (%{count})
       fandoms_by_media: Fandoms by media (%{count})
@@ -2109,6 +2164,7 @@ en:
       unsorted_tags: Unsorted Tags (%{count})
       use_type:
         bookmarks: Bookmarks
+        collections: Collections
         drafts: Drafts
         external_works: External Works
         private_bookmarks: Private Bookmarks
@@ -2152,6 +2208,12 @@ en:
       filter_bookmarks: filter bookmarks
       filter_works: filter works
       list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
+    wrangle:
+      manage:
+        comments: Comments (%{count})
+        edit: Edit
+        works: Works
+        wrangle: Wrangle
   time:
     formats:
       date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
@@ -2213,6 +2275,16 @@ en:
         other: You must use the link in the confirmation email in order to finish confirming your email change. If you don't confirm your request within %{count} days, the link will expire and your email address will not be changed.
       request_for_confirmation: Changing your email will send a request for confirmation to your new email address and a notification to your current email address.
       resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
+    change_password:
+      change_password: Change Password
+      confirm_new_password: Confirm new password
+      new_password: New password
+      old_password: Old password
+      page_heading: Change Password
+      password_length:
+        one: "%{minimum} to %{count} character"
+        other: "%{minimum} to %{count} characters"
+      submit: Submit
     change_username:
       account_faq: Account FAQ
       caution: Please use this feature with caution.
@@ -2229,7 +2301,7 @@ en:
       more_info_html: For information on how changing your username will affect your account, please check out the %{account_faq_link}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old username on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
       new_pseud_instead_html: If that is not what you want, you can %{create_a_new_pseud_link} instead.
       new_username: New username
-      page_heading: Change My Username
+      page_heading: Change Username
       password: Password
       submit: Change Username
       submit_landmark: Submit

@@ -42,7 +42,7 @@ class ArchiveFaqsController < ApplicationController
   protected
 
   def build_questions
-    notice = ""
+    notice = +""
     num_to_build = params["num_questions"] ? params["num_questions"].to_i : @archive_faq.questions.count
     if num_to_build < @archive_faq.questions.count
       notice += ts("There are currently %{num} questions. You can only submit a number equal to or greater than %{num}. ", num: @archive_faq.questions.count)

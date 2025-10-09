@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
       format.any(:js, :json) do
         render json: {
           errors: {
-            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='http://kb.iu.edu/data/ahic.html'>clearing your cache</a> if you continue to experience problems.".html_safe
+            auth_error: "Your current session has expired and we can't authenticate your request. Try logging in again, refreshing the page, or <a href='https://en.wikipedia.org/wiki/Wikipedia:Bypass_your_cache'>clearing your cache</a> if you continue to experience problems.".html_safe
           }
         }, status: :unprocessable_entity
       end
@@ -483,20 +483,14 @@ public
 
   public
 
-  def valid_sort_column(param, model='work')
-    allowed = []
-    if model.to_s.downcase == 'work'
-      allowed = %w(author title date created_at word_count hit_count)
-    elsif model.to_s.downcase == 'tag'
-      allowed = %w[name created_at taggings_count_cache uses]
-    elsif model.to_s.downcase == 'collection'
-      allowed = %w(collections.title collections.created_at)
-    elsif model.to_s.downcase == 'prompt'
-      allowed = %w(fandom created_at prompter)
-    elsif model.to_s.downcase == 'claim'
-      allowed = %w(created_at claimer)
-    end
-    !param.blank? && allowed.include?(param.to_s.downcase)
+  def valid_sort_column(param, model = "work")
+    allowed = {
+      "work" => %w[author title date created_at word_count hit_count],
+      "tag" => %w[name created_at taggings_count_cache uses],
+      "prompt" => %w[fandom created_at prompter],
+      "claim" => %w[created_at claimer]
+    }[model.to_s.downcase]
+    param.present? && allowed.include?(param.to_s.downcase)
   end
 
   def set_sort_order

@@ -694,7 +694,7 @@ Rails.application.routes.draw do
     tags_in_sets
     associated_tags
     noncanonical_tag
-    collection_fullname
+    collection_title
     open_collection_names
     collection_parent_name
     external_work
