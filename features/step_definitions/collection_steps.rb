@@ -1,10 +1,5 @@
 ### GIVEN
 
-Given "I debug collection count" do
-  user = User.find_by(login: "moderator")
-  puts "Collection count: #{SearchCounts.collection_count_for_user(user)}, user id #{user.id}"
-end
-
 Given /^I have no collections$/ do
   Collection.delete_all
 end
