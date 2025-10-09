@@ -12,6 +12,8 @@ class FeedbacksController < ApplicationController
       @feedback.email = current_user.email
       @feedback.username = current_user.login
     end
+
+    @support_notice = SupportNotice.where(active: true).order(updated_at: :desc).first
   end
 
   def create
