@@ -9,7 +9,7 @@
     <p><%= batch_subscription_html_preface(creation) %></p>
 
     <p>
-      <%= creation_link_with_word_count(creation, creation_url) %><% unless @seen[this_work.id] %><br><%= creation_attribution_links(this_work) %><% end %>
+      <%= creation_link_with_word_count(creation, creation_url) %><% if creation.is_a?(Work) || (creation.pseuds.sort != this_work.pseuds.sort) %><br><%= creation_attribution_links(creation) %><% end %>
     </p>
 
     <% if creation.summary.present? && creation.is_a?(Chapter) %>

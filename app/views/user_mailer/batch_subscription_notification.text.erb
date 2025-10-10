@@ -6,8 +6,8 @@
 <%= batch_subscription_text_preface(creation) %>
 <%= creation.is_a?(Work) ? work_url(this_work) : work_chapter_url(this_work, creation) %>
 
-<%= creation_title_with_word_count(creation) %><% unless @seen[this_work.id] %>
-<%= creation_attribution_text(this_work) %><% end %>
+<%= creation_title_with_word_count(creation) %><% if creation.is_a?(Work) || (creation.pseuds.sort != this_work.pseuds.sort) %>
+<%= creation_attribution_text(creation) %><% end %>
 
 <% if !creation.summary.blank? && creation.is_a?(Chapter) %>
 <%= metadata_label(t(".chapter_summary")) %><%= raw to_plain_text(sanitize_field(creation, :summary)) %>
