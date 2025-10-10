@@ -723,7 +723,6 @@ en:
       guest_comments_disabled: Sorry, the Archive doesn't allow guests to comment right now.
       invite_to_collections_link: Invite To Collections
       logged_as_admin: Please log out of your admin account to comment.
-      previous_chapter: Previous Chapter
       permissions:
         admin_post:
           alt_action: You can however %{support_link} with any feedback or questions.
@@ -751,6 +750,7 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+      previous_chapter: Previous Chapter
     confirm_delete:
       confirm_button: Yes, delete!
       delete_confirmation: Are you sure you want to delete this comment?
