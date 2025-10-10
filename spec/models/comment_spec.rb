@@ -177,8 +177,7 @@ describe Comment do
     end
 
     context "spam flagging on creation" do
-      subject { build(:comment, pseud: user.default_pseud) }
-      let(:user) { create(:user) }
+      subject { build(:comment) }
 
       context "when spamcheck is skipped and comment is spammy" do
         before do
@@ -831,7 +830,7 @@ describe Comment do
   end
 
   describe "#mark_as_spam!" do
-    let(:comment) { create(:comment, approved: 1, spam: 0) }
+    let(:comment) { create(:comment, approved: true, spam: false) }
 
     it "flags the comment as spam." do
       comment.mark_as_spam!
@@ -842,7 +841,7 @@ describe Comment do
   end
 
   describe "#mark_as_ham!" do
-    let(:comment) { create(:comment, approved: 0, spam: 1) }
+    let(:comment) { create(:comment, approved: false, spam: true) }
 
     it "flags the comment as legitimate." do
       comment.mark_as_ham!
