@@ -229,7 +229,7 @@ module MailerHelper
 
     unless creation.anonymous?
       creator_list = creation.pseuds.map(&:byline).to_sentence
-      # For pluralization: creator publico, creator y creator2 publicaron.
+      # For pluralization: creator publicó, creator y creator2 publicaron.
       creators_count = creation.pseuds.size
     end
     chapter_position = creation.position if creation_type == :chapter
@@ -255,12 +255,12 @@ module MailerHelper
     interpolations = {}
     unless creation.anonymous?
       interpolations[:creators] = creator_text(work)
-      # For pluralization: creator publico, creator y creator2 publicaron.
+      # For pluralization: creator publicó, creator y creator2 publicaron.
       interpolations[:count] = work.pseuds.size
     end
     interpolations[:work_title_with_word_count] = creation_title_with_word_count(work) if creation.is_a?(Chapter)
 
-    t(batch_subscription_preface_key(creation, email_format: "text"), **interpolations)
+    t(batch_subscription_preface_key(creation, email_format: :text), **interpolations)
   end
 
   def batch_subscription_html_preface(creation)
@@ -269,12 +269,12 @@ module MailerHelper
     interpolations = {}
     unless creation.anonymous?
       interpolations[:creator_links] = creator_links(work)
-      # For pluralization: creator publico, creator y creator2 publicaron.
+      # For pluralization: creator publicó, creator y creator2 publicaron.
       interpolations[:count] = work.pseuds.size
     end
     interpolations[:work_link_with_word_count] = creation_link_with_word_count(work, work_url(work)) if creation.is_a?(Chapter)
 
-    t(batch_subscription_preface_key(creation, email_format: "html"), **interpolations)
+    t(batch_subscription_preface_key(creation, email_format: :html), **interpolations)
   end
 
   def commenter_pseud_or_name_link(comment)
@@ -409,14 +409,12 @@ module MailerHelper
   end
 
   def batch_subscription_preface_key(creation, email_format:)
-    base_key = "user_mailer.batch_subscription_notification.preface"
-    creator_key = creation.anonymous? ? "anon" : "named"
-    creation_key = creation.model_name.i18n_key
-    dating_key = creation.backdate ? ".backdated" : ".new" if creation.is_a?(Work)
-    format_key = ".#{email_format}" unless creation.is_a?(Work) && creation.anonymous?
+    translation_keys = %i[user_mailer batch_subscription_notification preface]
+    translation_keys << (creation.anonymous? ? :anon : :named)
+    translation_keys << creation.model_name.i18n_key
+    translation_keys << (creation.backdate ? :backdated : :new) if creation.is_a?(Work)
+    translation_keys << email_format unless creation.is_a?(Work) && creation.anonymous?
 
-    # Note the lack of . before dating and format keys, which are not always
-    # included.
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.chapter.html")
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.chapter.text")
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.anon.work.backdated")
@@ -427,6 +425,6 @@ module MailerHelper
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.backdated.text")
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.new.html")
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.preface.named.work.new.text")
-    "#{base_key}.#{creator_key}.#{creation_key}#{dating_key}#{format_key}"
+    translation_keys.join(".")
   end
-end # end of MailerHelper
+end

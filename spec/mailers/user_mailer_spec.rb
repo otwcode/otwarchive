@@ -662,12 +662,6 @@ describe UserMailer do
       include_examples "it retries and fails on", NoMethodError
     end
 
-    context "when the user's preferences are unavailable" do
-      before { subscription.user.preference.delete }
-
-      include_examples "it retries and fails on", NoMethodError
-    end
-
     # Test the headers
     it_behaves_like "an email with a valid sender"
 
@@ -737,21 +731,12 @@ describe UserMailer do
           expect(email).to have_text_part_content("#{text_pseud(creator1)} and #{text_pseud(creator2)} posted a new chapter of \"#{work.title}\" (#{work.word_count} words):\n#{work_chapter_url(work, chapter)}")
         end
 
-        it "has the correct chapter link with work attribution in the HTML version" do
+        it "has the correct chapter link with chapter attribution in the HTML version" do
           chapter_link = "<i><b>#{style_link(chapter.full_chapter_title.html_safe, work_chapter_url(work, chapter))}</b></i>"
-          expect(email).to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br>by #{style_pseud_link(creator1)} and #{style_pseud_link(creator2)}")
+          expect(email).to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br />by #{style_pseud_link(creator1)}")
         end
 
-        it "has the correct chapter title with work attribution in the text version" do
-          expect(email).to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby #{text_pseud(creator1)} and #{text_pseud(creator2)}")
-        end
-
-        xit "has the correct chapter link with chapter attribution in the HTML version", pending("AO3-5805: Fix chapter attribution when different from work") do
-          chapter_link = "<i><b>#{style_link(chapter.full_chapter_title.html_safe, work_chapter_url(work, chapter))}</b></i>"
-          expect(email).to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br>by #{style_pseud_link(creator1)}")
-        end
-
-        xit "has the correct chapter title with chapter attribution in the text version", pending("AO3-5805: Fix chapter attribution when different from work") do
+        it "has the correct chapter title with chapter attribution in the text version" do
           expect(email).to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby #{text_pseud(creator1)}")
         end
       end

@@ -1,17 +1,17 @@
 <%# expects work %>
 <p>
   <%= style_metadata_label(Work.human_attribute_name("chapter_total_display")) %><%= chapter_total_display(work) %>
-  <br><%= style_work_tag_metadata(work.tag_groups["Fandom"]) %>
-  <br><%= style_work_tag_metadata(work.tag_groups["Rating"]) %>
-  <br><%= style_work_tag_metadata(work.tag_groups["ArchiveWarning"]) %>
+  <br /><%= style_work_tag_metadata(work.tag_groups["Fandom"]) %>
+  <br /><%= style_work_tag_metadata(work.tag_groups["Rating"]) %>
+  <br /><%= style_work_tag_metadata(work.tag_groups["ArchiveWarning"]) %>
   <% unless work.tag_groups["Relationship"].empty? %>
-    <br><%= style_work_tag_metadata(work.tag_groups["Relationship"]) %>
+    <br /><%= style_work_tag_metadata(work.tag_groups["Relationship"]) %>
   <% end %>
   <% unless work.tag_groups["Character"].empty? %>
-    <br><%= style_work_tag_metadata(work.tag_groups["Character"]) %>
+    <br /><%= style_work_tag_metadata(work.tag_groups["Character"]) %>
   <% end %>
   <% unless work.tag_groups["Freeform"].empty? %>
-    <br><%= style_work_tag_metadata(work.tag_groups["Freeform"]) %>
+    <br /><%= style_work_tag_metadata(work.tag_groups["Freeform"]) %>
   <% end %>
   <% series_count = work.series.count %>
   <% unless series_count.zero? %>
