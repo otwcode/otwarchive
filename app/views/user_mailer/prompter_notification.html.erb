@@ -12,7 +12,7 @@
     <% url = @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
     <%= creation_link_with_word_count(@work, url) %>
     <br>
-    <%= t(".byline.html", work_creator_links: creator_links(@work)) %>
+    <%= creation_attribution_links(@work) %>
     <br>
     <% if @work.fandom_string.present? %>
       <%= style_work_tag_metadata(@work.fandoms) %>
