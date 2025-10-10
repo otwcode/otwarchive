@@ -260,7 +260,7 @@ module MailerHelper
     end
     interpolations[:work_title_with_word_count] = creation_title_with_word_count(work) if creation.is_a?(Chapter)
 
-    t(batch_subscription_preface_key(creation, email_fogirmat: "text"), **interpolations)
+    t(batch_subscription_preface_key(creation, email_format: "text"), **interpolations)
   end
 
   def batch_subscription_html_preface(creation)

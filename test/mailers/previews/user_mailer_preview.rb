@@ -152,13 +152,13 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.change_email(user.id, old_email, new_email)
   end
 
-  # /rails/mailers/user_mailer/work_subscription?work_id=123
+  # /rails/mailers/user_mailer/batch_subscription_notification_work?work_id=123
   # Preview a subscription notifictation for a work. Replace 123 with the id of
   # any work on your environment. This will generate a subscription notification
   # for all but the first chapter of the work, e.g., a 3-chapter work will have
   # 2 chapters listed in the email. For 1-chapter works, it will use the sole
   # chapter.
-  def work_subscription
+  def batch_subscription_notification_work
     work = params[:work_id].present? ? Work.find_by(id: params[:work_id]) : create(:work)
     subscription = create(:subscription, subscribable: work)
     chapter_ids = work.chapter_ids.drop(1).size.zero? ? work.chapter_ids : work.chapter_ids.drop(1)
@@ -168,11 +168,11 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.batch_subscription_notification(subscription.id, entries.to_json)
   end
 
-  # /rails/mailers/user_mailer/user_subscription?user=NAME&work_ids[]=2&work_ids[]=3&chapter_ids[]=8
+  # /rails/mailers/user_mailer/batch_subscription_notification_user?user=NAME&work_ids[]=2&work_ids[]=3&chapter_ids[]=8
   # Preview a subscription notification for a user, which can contain chapters
   # and/or works. You can specify the user and the works and/or chapters or
   # we'll make a user, two works, and two chapters.
-  def user_subscription
+  def batch_subscription_notification_user
     if params[:user] && (params[:work_ids] || params[:chapter_ids])
       user = User.find_by(login: params[:user])
       work_ids = params[:work_ids] || []
