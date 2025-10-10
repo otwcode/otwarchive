@@ -14,7 +14,7 @@
 <% end %>
 
 <% unless @seen[this_work.id] %>
-<% cache "/subscription-email-txt-meta-#{creation.cache_key}" do %>
+<% cache(["subscription-email-meta-txt", I18n.locale.to_s, this_work]) do %>
 <%= render "work_info", work: this_work, suppress_summary: true %>
 <% end %><% @seen[this_work.id] = true %><% end %>
 

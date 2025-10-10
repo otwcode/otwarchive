@@ -126,15 +126,13 @@ class UserMailer < ApplicationMailer
 
     additional_creations_count = @creations.count - 1
 
-    I18n.with_locale(@subscription.user.preference.locale_for_mails) do
-      mail(
-        to: @subscription.user.email,
-        subject: batch_subscription_subject(
-          @subscription,
-          @creations.first, additional_creations_count
-        )
+    mail(
+      to: @subscription.user.email,
+      subject: batch_subscription_subject(
+        @subscription,
+        @creations.first, additional_creations_count
       )
-    end
+    )
   end
 
   # Emails a user to say they have been given more invitations for their friends

@@ -651,7 +651,7 @@ describe UserMailer do
     subject(:email) { UserMailer.batch_subscription_notification(subscription.id, entries) }
 
     let(:creator) { create(:pseud) }
-    let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>", authors: [creator]) }
+    let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>", authors: [creator], character_string: "A,B") }
     let(:chapter) { create(:chapter, work: work, summary: "<p><b>Another</b> HTML summary.</p>", authors: [creator]) }
     let(:subscription) { create(:subscription, subscribable: creator.user) }
     let(:entries) { ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json }
@@ -753,6 +753,27 @@ describe UserMailer do
 
         xit "has the correct chapter title with chapter attribution in the text version", pending("AO3-5805: Fix chapter attribution when different from work") do
           expect(email).to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby #{text_pseud(creator1)}")
+        end
+      end
+    end
+
+    context "when using translations" do
+      before do
+        create(:locale, iso: "new")
+        I18n.backend.store_translations(:new, { support: { array: { words_connector: "|" } }, activerecord: { models: { character: { other: "People" } } } })
+      end
+
+      it "results in different work info per locale" do
+        I18n.with_locale(I18n.default_locale) do
+          en_email = UserMailer.batch_subscription_notification(subscription.id, entries)
+          expect(en_email).to have_html_part_content("Characters: </b>A, B")
+          expect(en_email).to have_text_part_content("Characters: A, B")
+        end
+
+        I18n.with_locale(:new) do
+          translated_email = UserMailer.batch_subscription_notification(subscription.id, entries)
+          expect(translated_email).to have_html_part_content("People: </b>A|B")
+          expect(translated_email).to have_text_part_content("People: A|B")
         end
       end
     end
