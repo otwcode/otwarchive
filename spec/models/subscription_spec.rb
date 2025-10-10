@@ -108,7 +108,7 @@ describe Subscription do
     end
   end
 
-  describe "#valid_notification_entry?" do # TODO Bilka update for hidden by admin AO3-5609
+  describe "#valid_notification_entry?" do
     let(:subscription) { build(:subscription) }
     let(:series) { build(:series) }
     let(:work) { build(:work) }
@@ -145,6 +145,14 @@ describe Subscription do
 
     it "returns false when chapter is by orphan_account" do
       expect(subscription.valid_notification_entry?(create(:chapter, authors: [orphan_pseud]))).to be_falsey
+    end
+
+    it "returns false when work is hidden_by_admin" do
+      expect(subscription.valid_notification_entry?(build(:work, hidden_by_admin: true))).to be_falsey
+    end
+
+    it "returns false when chapter is on a hidden work" do
+      expect(subscription.valid_notification_entry?(build(:chapter, work: build(:work, hidden_by_admin: true)))).to be_falsey
     end
 
     context "when subscribable is a series" do
