@@ -40,6 +40,8 @@ class Chapter < ApplicationRecord
     end
   end
 
+  delegate :anonymous?, to: :work
+
   before_save :strip_title
   before_save :set_word_count
   before_save :validate_published_at
@@ -116,7 +118,7 @@ class Chapter < ApplicationRecord
   end
 
   def chapter_header
-    "#{ts("Chapter")} #{position}"
+    I18n.t("activerecord.attributes.chapters.chapter_header", position: position)
   end
 
   def chapter_title

@@ -10,7 +10,7 @@
 <%= creation_title_with_word_count(@work) %>
 <%= @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
 
-<%= t(".byline.text", work_creators: creator_text(@work)) %>
+<%= creation_attribution_text(@work) %>
 
 <% if @work.fandom_string.present? %><%= work_tag_metadata(@work.fandoms) %><% end %>
 
