@@ -59,6 +59,35 @@ en:
         chapter: "[%{app_name}] Comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Comment on %{title}"
         tag: "[%{app_name}] Comment on the tag %{name}"
+    comment_notification_footer:
+      comment_thread:
+        html: Go to the thread starting from this comment
+        text: 'Go to the thread starting from this comment: %{url}'
+      last_edited: 'Last edited: %{datetime}'
+      parent_thread:
+        html: Go to the thread to which this comment belongs
+        text: 'Go to the thread to which this comment belongs: %{url}'
+      posted: 'Posted: %{datetime}'
+      read_all_comments:
+        chapter:
+          html: Read all comments on Chapter %{position} of <i>%{title}</i>
+          text: 'Read all comments on Chapter %{position} of "%{title}": %{url}'
+        other:
+          html: Read all comments on <i>%{title}</i>
+          text: 'Read all comments on "%{title}": %{url}'
+        tag:
+          html: Read all comments on %{tag}
+          text: 'Read all comments on "%{tag}": %{url}'
+      reply:
+        html: Reply to this comment
+        text: 'Reply to this comment: %{url}'
+      review:
+        html: Review comments on <i>%{title}</i>
+        text: 'Review comments on "%{title}": %{url}'
+      unreviewed:
+        admin_post: Comments on this news post are moderated and will not appear until approved.
+        work: Comments on this work are moderated and will not appear until approved by the work creator.
+        work_owner: Comments on this work are moderated and will not appear until you approve them.
     comment_reply_notification:
       chapter:
         titled: 'Chapter %{position}: %{title}'
@@ -490,14 +519,14 @@ en:
     claim_notification:
       access:
         contact_support: contact AO3 Support
-        html: Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{contact_support_link}.
-        text: Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please contact AO3 Support at %{support_url}.
+        html: Depending on the archive, your works may have been imported as restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{contact_support_link}.
+        text: Depending on the archive, your works may have been imported as restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please contact AO3 Support at %{support_url}.
       email_tips: If you're contacting us, please add email addresses from @transformativeworks.org to your list of safe contacts and check your spam folders for our reply.
       introduction:
         ao3_name: Archive of Our Own
-        html: You're receiving this e-mail because you had works in a fanworks archive that has been imported by %{open_doors_name_link} into the %{app_link} (AO3). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.
+        html: You're receiving this email because you had works in a fanworks archive that has been imported by %{open_doors_name_link} into the %{app_link} (AO3). Because this email address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.
         open_doors_name: Open Doors
-        text: You're receiving this e-mail because you had works in a fanworks archive that has been imported by Open Doors (%{open_doors_url}) into the Archive of Our Own (AO3 - %{app_url}). Because this e-mail address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.
+        text: You're receiving this email because you had works in a fanworks archive that has been imported by Open Doors (%{open_doors_url}) into the Archive of Our Own (AO3 - %{app_url}). Because this email address is connected to one registered on the imported archive, the associated fanworks (listed below) have been automatically added to your AO3 account.
       mistake:
         contact_open_doors: contact Open Doors
         html: If this is a mistake and these are not your works, please don't delete them! Please just %{contact_open_doors_link} and we will sort it out.
@@ -506,31 +535,29 @@ en:
         ao3_news: AO3 News
         contact_support: contact AO3 Support
         faq_page: FAQ page
-        html: You can read announcements about recent archive moves at %{ao3_news_link}, and find additional information on Open Doors' %{faq_page_link} or %{tutorial_page_link}. For any questions not answered in the FAQ, tutorials, or this e-mail, please %{contact_support_link}.
-        text: You can read announcements about recent archive moves at AO3 News (%{news_url}), and find additional information on Open Doors' FAQ page (%{open_doors_faq_url}) or tutorials page (%{open_doors_tutorial_url}). For any questions not answered in the FAQ, tutorials, or this e-mail, please contact Support at %{support_url}.
+        html: You can read announcements about recent archive moves at %{ao3_news_link}, and find additional information on Open Doors' %{faq_page_link} or %{tutorial_page_link}. For any questions not answered in the FAQ, tutorials, or this email, please %{contact_support_link}.
+        text: You can read announcements about recent archive moves at AO3 News (%{news_url}), and find additional information on Open Doors' FAQ page (%{open_doors_faq_url}) or tutorials page (%{open_doors_tutorial_url}). For any questions not answered in the FAQ, tutorials, or this email, please contact Support at %{support_url}.
         tutorial_page: tutorial page
       other_works:
         contact_open_doors: contact Open Doors
-        html: If you had other works on the imported archive under an e-mail address you can no longer access, please %{contact_open_doors_link} with any information that can help verify your identity.
-        text: If you had other works on the imported archive under an e-mail address you can no longer access, please contact Open Doors with any information that can help verify your identity.
+        html: If you had other works on the imported archive under an email address you can no longer access, please %{contact_open_doors_link} with any information that can help verify your identity.
+        text: If you had other works on the imported archive under an email address you can no longer access, please contact Open Doors with any information that can help verify your identity.
       questions:
         contact_support: contact AO3 Support
         html: For other inquiries, please %{contact_support_link}.
         text: For other inquiries, please contact AO3 Support at %{support_url}.
       redirects:
-        html: To preserve rec lists and bookmarks, the imported archive's web addresses may redirect to the imported copy of these works for a limited time (check the announcement post for your archive to be sure). If you've already uploaded a copy of these works and you did %{negation} use the import from URL feature, there will be two copies of the same work on the AO3.
+        faq: FAQ
+        html: If you've already uploaded a copy of these works and you did %{negation} use the import from URL feature, there will be two copies of the same work on AO3. Since duplicate works are not allowed on AO3, please delete one of the copies. It is up to you to decide which one to keep, though if you delete the copy imported by Open Doors, consider adding the remaining copy to the imported archive's collection. For questions about how to delete works or add them to collections, check out AO3's %{faq_link}.
         negation: NOT
+        text: 'If you''ve already uploaded a copy of these works and you did NOT use the import from URL feature, there will be two copies of the same work on AO3. Since duplicate works are not allowed on AO3, please delete one of the copies. It is up to you to decide which one to keep, though if you delete the copy imported by Open Doors, consider adding the remaining copy to the imported archive''s collection. For questions about how to delete works or add them to collections, check out AO3''s FAQ: %{faq_url}.'
       subject: "[%{app_name}] Works uploaded"
-      update_redirect:
-        contact_open_doors: contact Open Doors
-        html: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and %{contact_open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
-        text: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and contact Open Doors at %{open_doors_url} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
       work_info:
         html: "%{work_link} (%{fandom})"
         text:
           no_fandom: '- "%{work_title}" (%{work_url})'
           with_fandom: '- "%{work_title}" (%{work_url}) (%{fandom})'
-      works_by: 'These works were written under the e-mail: %{email}'
+      works_by: 'These works were written under the email: %{email}'
     collection_notification:
       assignments_sent:
         complete: All assignments have now been sent out.
@@ -637,8 +664,8 @@ en:
         join: 'If you''d like to join us, please follow this link to sign up: %{invitation_url}.'
     invitation_to_claim:
       access:
-        html: Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{contact_support_link}.
-        text: Depending on the archive, your works may have been imported restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please contact AO3 Support.
+        html: Depending on the archive, your works may have been imported as restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please %{contact_support_link}.
+        text: Depending on the archive, your works may have been imported as restricted to registered users only (to keep them out of Google searches). If this is the case, the works will only be accessible by logged-in users unless you choose to make them fully visible. For help unlocking, orphaning, or deleting your works, please contact AO3 Support.
       claim_or_remove:
         html: Claim or remove your works here.
         text: 'Claim or remove your works here: %{claim_url}'
@@ -647,32 +674,33 @@ en:
         ao3_news: AO3 News
         contact_open_doors: contact Open Doors
         contact_support: contact AO3 Support
+        faq: FAQ
         faq_page: FAQ page
         open_doors_name: Open Doors
         tutorial_page: tutorial page
       introduction:
-        html: You're receiving this e-mail because an archive has recently been imported by %{open_doors_name_link} into the %{app_link} (%{app_short_name}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different e-mail, we'd like to invite you aboard!
-        text: You're receiving this e-mail because an archive has recently been imported by Open Doors (%{open_doors_link}) into the %{app_name} (%{app_short_name} - %{app_url}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different e-mail, we'd like to invite you aboard!
+        html: You're receiving this email because an archive has recently been imported by %{open_doors_name_link} into the %{app_link} (%{app_short_name}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different email, we'd like to invite you aboard!
+        text: You're receiving this email because an archive has recently been imported by Open Doors (%{open_doors_link}) into the %{app_name} (%{app_short_name} - %{app_url}), and we believe that the following fanworks belong to you. We'd like to give you a chance to claim (or delete/orphan) these works if you want to. And if you don't already have an account under a different email, we'd like to invite you aboard!
       mistake:
         html: If this is a mistake and these are not your works, please don't delete them! Please just %{contact_open_doors_link} and we will sort it out.
         text: If this is a mistake and these are not your works, please don't delete them! Please just contact Open Doors (%{open_doors_link}) and we will sort it out.
       more_info:
-        html: You can read announcements about recent archive moves at %{ao3_news_link}, and find additional information on Open Doors' %{faq_page_link} or %{tutorial_page_link}. For any questions not answered in the FAQ, tutorials, or this e-mail, please %{contact_support_link}.
-        text: You can read announcements about recent archive moves at AO3 News (%{news_link}), and find additional information on Open Doors' FAQ page (%{open_doors_faq_link}) or tutorials page (%{open_doors_tutorial_link}). For any questions not answered in the FAQ, tutorials, or this e-mail, please contact Support at %{support_link}.
+        html: You can read announcements about recent archive moves at %{ao3_news_link}, and find additional information on Open Doors' %{faq_page_link} or %{tutorial_page_link}. For any questions not answered in the FAQ, tutorials, or this email, please %{contact_support_link}.
+        text: You can read announcements about recent archive moves at AO3 News (%{news_link}), and find additional information on Open Doors' FAQ page (%{open_doors_faq_link}) or tutorials page (%{open_doors_tutorial_link}). For any questions not answered in the FAQ, tutorials, or this email, please contact Support at %{support_link}.
       other_works:
-        html: If you had other works on the imported archive under an e-mail address you can no longer access, please %{contact_open_doors_link} with any information that can help verify your identity.
-        text: If you had other works on the imported archive under an e-mail address you can no longer access, please contact Open Doors with any information that can help verify your identity.
+        html: If you had other works on the imported archive under an email address you can no longer access, please %{contact_open_doors_link} with any information that can help verify your identity.
+        text: If you had other works on the imported archive under an email address you can no longer access, please contact Open Doors with any information that can help verify your identity.
       questions:
         html: For other inquiries, please %{contact_support_link}.
         text: For other inquiries, please contact AO3 Support at %{support_link}.
-      redirects: To preserve rec lists and bookmarks, the imported archive's web addresses may redirect to the imported copy of these works for a limited time (check the announcement post for your archive to be sure). If you've already uploaded a copy of these works and you did NOT use the import from URL feature, there will be two copies of the same work on the archive.
+      redirects:
+        html: If you've already uploaded a copy of these works and you did %{negation} use the import from URL feature, there will be two copies of the same work on AO3. Since duplicate works are not allowed on AO3, please delete one of the copies. It is up to you to decide which one to keep, though if you delete the copy imported by Open Doors, consider adding the remaining copy to the imported archive's collection. For questions about how to delete works or add them to collections, check out AO3's %{faq_link}.
+        negation: NOT
+        text: 'If you''ve already uploaded a copy of these works and you did NOT use the import from URL feature, there will be two copies of the same work on AO3. Since duplicate works are not allowed on AO3, please delete one of the copies. It is up to you to decide which one to keep, though if you delete the copy imported by Open Doors, consider adding the remaining copy to the imported archive''s collection. For questions about how to delete works or add them to collections, check out AO3''s FAQ: %{faq_url}.'
       subject: "[%{app_name}] Invitation to claim works"
       unwanted:
-        html: If these works do belong to you, but you don't want them, you can orphan (so that they remain on the AO3, but with your name removed) or delete them (so that they are entirely removed from the AO3). You do not need to add these works to any account in order to orphan or delete them--you can do this directly from the claim link above. (For assistance, please %{contact_support_link}.)
-        text: If these works do belong to you, but you don't want them, you can orphan (so that they remain on the AO3, but with your name removed) or delete them (so that they are entirely removed from the AO3). You do not need to add these works to any account in order to orphan or delete them--you can do this directly from the claim link above. (For assistance, please contact Support at %{support_link}.)
-      update_redirect:
-        html: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and %{contact_open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
-        text: If you would like Open Doors to update the redirect to point to your pre-existing work, please delete the imported copy, and contact Open Doors at %{open_doors_link} with your AO3 account name, your account name on the imported archive, and the title and URL of the fanwork you would like the redirect to point to. (If you have multiple works you would like to change the redirects for, you can list these in one email.)
+        html: If these works do belong to you, but you don't want them, you can orphan (so that they remain on AO3, but with your name removed) or delete them (so that they are entirely removed from AO3). You do not need to add these works to any account in order to orphan or delete them--you can do this directly from the claim link above. (For assistance, please %{contact_support_link}.)
+        text: If these works do belong to you, but you don't want them, you can orphan (so that they remain on AO3, but with your name removed) or delete them (so that they are entirely removed from AO3). You do not need to add these works to any account in order to orphan or delete them--you can do this directly from the claim link above. (For assistance, please contact Support at %{support_url}.)
       uploaded_list: 'The works uploaded include:'
       work_info:
         no_fandom: '- "%{work_title}" (%{work_url})'
@@ -711,6 +739,16 @@ en:
         matching_page: Matching page
         text: 'The potential matches and set assignments are available on its Matching page: %{matching_page_url}.'
       subject: "[%{app_name}][%{collection_title}] Potential assignment generation complete"
+    prompter_notification:
+      a_response_to_your_prompt:
+        collection:
+          html: A response to your prompt has been posted in the %{collection_link} collection on the Archive of Our Own!
+          text: A response to your prompt has been posted in the "%{collection_title}" collection (%{collection_url}) on the Archive of Our Own!
+        no_collection: A response to your prompt has been posted on the Archive of Our Own!
+      byline:
+        html: by %{work_creator_links}
+        text: by %{work_creators}
+      subject: "[%{app_name}] A response to your prompt"
     recipient_notification:
       collection:
         html: A gift work has been posted for you in the %{collection_link} collection at the Archive of Our Own!

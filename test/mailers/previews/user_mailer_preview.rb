@@ -93,6 +93,30 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.challenge_assignment_notification(assignment.collection.id, assignment.offering_user.id, assignment.id)
   end
 
+  def prompter_notification
+    creator_count = params[:creator_count] ? params[:creator_count].to_i : 1
+
+    user = create(:user, :for_mailer_preview)
+    work = prompter_notification_data(creator_count)
+    UserMailer.prompter_notification(user.id, work.id)
+  end
+
+  def prompter_notification_collection
+    creator_count = params[:creator_count] ? params[:creator_count].to_i : 1
+
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection)
+    work = prompter_notification_data(creator_count)
+    UserMailer.prompter_notification(user.id, work.id, collection.id)
+  end
+
+  def prompter_notification_collection_anon
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection)
+    work = create(:work, summary: Faker::Lorem.paragraph(sentence_count: 3), collections: [create(:anonymous_collection)])
+    UserMailer.prompter_notification(user.id, work.id, collection.id)
+  end
+
   def claim_notification
     work = create(:work)
     creator_id = work.pseuds.first.user.id
@@ -113,7 +137,7 @@ class UserMailerPreview < ApplicationMailerPreview
 
     UserMailer.invitation_to_claim(invitation.id, archivist.login)
   end
-  
+
   def invite_request_declined
     user = create(:user, :for_mailer_preview)
     total = params[:total] ? params[:total].to_i : 1
@@ -215,10 +239,10 @@ class UserMailerPreview < ApplicationMailerPreview
   # Send notification for a regular gift work
   def recipient_notification_status_regular
     count = params[:count].to_i || 1
-    user, work = recipient_notification_data(count)   
+    user, work = recipient_notification_data(count)
     UserMailer.recipient_notification(user.id, work.id)
   end
-  
+
   # Send notification for a gift work in a collection
   def recipient_notification_status_collection
     count = params[:count].to_i || 1
@@ -352,9 +376,9 @@ class UserMailerPreview < ApplicationMailerPreview
     characters = []
     tags = []
     series_list = []
-    
+
     count = 1 if count < 1
-    (1..count).each do |n| 
+    (1..count).each do |n|
       fandoms.append("fandom_#{n}")
       relationships.append("relationship_#{n}")
       characters.append("character_#{n}")
@@ -365,19 +389,25 @@ class UserMailerPreview < ApplicationMailerPreview
 
     user = create(:user, :for_mailer_preview)
     work = create(
-      :work, 
-      authors: [user.default_pseud], 
-      expected_number_of_chapters: count, 
+      :work,
+      authors: [user.default_pseud],
+      expected_number_of_chapters: count,
       rating_string: ArchiveConfig.RATING_DEFAULT_TAG_NAME,
-      fandom_string: fandoms, 
-      relationship_string: relationships,  
+      fandom_string: fandoms,
+      relationship_string: relationships,
       character_string: characters,
-      freeform_string: tags, 
+      freeform_string: tags,
       archive_warning_strings: warnings,
       summary: Faker::Lorem.paragraph(sentence_count: count),
       chapter_attributes: { content: count.times.map { Faker::Lorem.characters(number: 11) } },
       series: series_list
     )
     [user, work]
+  end
+
+  def prompter_notification_data(creator_count)
+    create(:work,
+           summary: Faker::Lorem.paragraph(sentence_count: 3),
+           authors: create_list(:user, creator_count).map(&:default_pseud))
   end
 end
