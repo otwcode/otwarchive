@@ -230,7 +230,7 @@ module MailerHelper
     creator_list = creation.pseuds.map(&:byline).to_sentence unless creation.anonymous?
     # For pluralization: creator publico, creator y creator2 publicaron.
     creators_count = creation.pseuds.size unless creation.anonymous?
-    chapter_header = creation.chapter_header if creation_type == :chapter
+    chapter_position = creation.position if creation_type == :chapter
     # "and X more," translated separately so we can pluralize "more" based on X.
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.more")
     more_translation = t("#{base_key}.more", count: additional_creations_count) unless additional_creations_count.zero?
@@ -239,7 +239,7 @@ module MailerHelper
     interpolations[:app_name] = ArchiveConfig.APP_SHORT_NAME
     interpolations[:creators] = creator_list
     interpolations[:count] = creators_count
-    interpolations[:chapter_header] = chapter_header
+    interpolations[:chapter_position] = chapter_position
     interpolations[:work_title] = work.title
     interpolations[:series_title] = series&.title
     interpolations[:more] = more_translation

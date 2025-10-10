@@ -173,7 +173,7 @@ describe MailerHelper do
     let(:cocreator) { create(:user, login: "cocreator").default_pseud }
     let(:creator_byline) { creation.pseuds.first.byline }
     let(:cocreator_byline) { creation.pseuds.last.byline }
-    let(:chapter_header) { creation.chapter_header }
+    let(:chapter_position) { creation.position }
     let(:app_nick) { "[#{ArchiveConfig.APP_SHORT_NAME}]" }
 
     [0, 1, 2].each do |number|
@@ -198,7 +198,7 @@ describe MailerHelper do
           context "when main creation is a chapter" do
             let(:creation) { create(:chapter, work: work) }
 
-            it { is_expected.to eq("#{app_nick} #{creator_byline} posted #{chapter_header} of #{work.title} in the #{series.title} series#{more}") }
+            it { is_expected.to eq("#{app_nick} #{creator_byline} posted Chapter #{chapter_position} of #{work.title} in the #{series.title} series#{more}") }
 
             context "when chapter is co-created" do
               let(:creation) do
@@ -209,7 +209,7 @@ describe MailerHelper do
                 )
               end
 
-              it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted #{chapter_header} of #{work.title} in the #{series.title} series#{more}") }
+              it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted Chapter #{chapter_position} of #{work.title} in the #{series.title} series#{more}") }
             end
 
             context "when work is anonymous" do
@@ -223,7 +223,7 @@ describe MailerHelper do
                 )
               end
 
-              it { is_expected.to eq("#{app_nick} Anonymous posted #{chapter_header} of #{work.title} in the #{series.title} series#{more}") }
+              it { is_expected.to eq("#{app_nick} Anonymous posted Chapter #{chapter_position} of #{work.title} in the #{series.title} series#{more}") }
             end
           end
 
@@ -284,14 +284,14 @@ describe MailerHelper do
           context "when main creation is a chapter" do
             let(:creation) { create(:chapter, authors: [creator], work: work) }
 
-            it { is_expected.to eq("#{app_nick} #{creator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+            it { is_expected.to eq("#{app_nick} #{creator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
 
             context "when chapter is co-created" do
               let(:creation) do
                 create(:chapter, authors: [creator, cocreator], work: work)
               end
 
-              it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+              it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
             end
 
             context "when work is co-created but chapter is not" do
@@ -304,7 +304,7 @@ describe MailerHelper do
                 create(:chapter, work: work, authors: [creator])
               end
 
-              it { is_expected.to eq("#{app_nick} #{creator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+              it { is_expected.to eq("#{app_nick} #{creator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
             end
           end
 
@@ -332,14 +332,14 @@ describe MailerHelper do
           let(:creation) { create(:chapter, authors: [creator], work: work) }
           let(:subscription) { create(:subscription, subscribable: work) }
 
-          it { is_expected.to eq("#{app_nick} #{creator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+          it { is_expected.to eq("#{app_nick} #{creator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
 
           context "when work is anonymous" do
             let(:work) do
               create(:work, collections: [create(:anonymous_collection)])
             end
 
-            it { is_expected.to eq("#{app_nick} Anonymous posted #{chapter_header} of #{work.title}#{more}") }
+            it { is_expected.to eq("#{app_nick} Anonymous posted Chapter #{chapter_position} of #{work.title}#{more}") }
           end
 
           context "when chapter is co-created" do
@@ -347,7 +347,7 @@ describe MailerHelper do
               create(:chapter, work: work, authors: [creator, cocreator])
             end
 
-            it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+            it { is_expected.to eq("#{app_nick} #{creator_byline} and #{cocreator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
           end
 
           context "when work is co-created but chapter is not" do
@@ -356,7 +356,7 @@ describe MailerHelper do
             end
             let(:creation) { create(:chapter, authors: [creator], work: work) }
 
-            it { is_expected.to eq("#{app_nick} #{creator_byline} posted #{chapter_header} of #{work.title}#{more}") }
+            it { is_expected.to eq("#{app_nick} #{creator_byline} posted Chapter #{chapter_position} of #{work.title}#{more}") }
           end
         end
       end

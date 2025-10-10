@@ -417,12 +417,12 @@ en:
       subject:
         anon:
           chapter:
-            multiple_entries: "[%{app_name}] Anonymous posted %{chapter_header} of %{work_title} %{more}"
-            one_entry: "[%{app_name}] Anonymous posted %{chapter_header} of %{work_title}"
+            multiple_entries: "[%{app_name}] Anonymous posted Chapter %{chapter_position} of %{work_title} %{more}"
+            one_entry: "[%{app_name}] Anonymous posted Chapter %{chapter_position} of %{work_title}"
           series:
             chapter:
-              multiple_entries: "[%{app_name}] Anonymous posted %{chapter_header} of %{work_title} in the %{series_title} series %{more}"
-              one_entry: "[%{app_name}] Anonymous posted %{chapter_header} of %{work_title} in the %{series_title} series"
+              multiple_entries: "[%{app_name}] Anonymous posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series %{more}"
+              one_entry: "[%{app_name}] Anonymous posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series"
             work:
               multiple_entries: "[%{app_name}] Anonymous posted %{work_title} in the %{series_title} series %{more}"
               one_entry: "[%{app_name}] Anonymous posted %{work_title} in the %{series_title} series"
@@ -432,19 +432,19 @@ en:
         named:
           chapter:
             multiple_entries:
-              one: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} %{more}"
-              other: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} %{more}"
+              one: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} %{more}"
+              other: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} %{more}"
             one_entry:
-              one: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title}"
-              other: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title}"
+              one: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title}"
+              other: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title}"
           series:
             chapter:
               multiple_entries:
-                one: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} in the %{series_title} series %{more}"
-                other: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} in the %{series_title} series %{more}"
+                one: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series %{more}"
+                other: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series %{more}"
               one_entry:
-                one: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} in the %{series_title} series"
-                other: "[%{app_name}] %{creators} posted %{chapter_header} of %{work_title} in the %{series_title} series"
+                one: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series"
+                other: "[%{app_name}] %{creators} posted Chapter %{chapter_position} of %{work_title} in the %{series_title} series"
             work:
               multiple_entries:
                 one: "[%{app_name}] %{creators} posted %{work_title} in the %{series_title} series %{more}"
