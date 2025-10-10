@@ -227,9 +227,11 @@ module MailerHelper
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.work.one_entry")
     computed_key = "#{base_key}.#{creator_key}.#{creation_key}.#{entries_key}"
 
-    creator_list = creation.pseuds.map(&:byline).to_sentence unless creation.anonymous?
-    # For pluralization: creator publico, creator y creator2 publicaron.
-    creators_count = creation.pseuds.size unless creation.anonymous?
+    unless creation.anonymous?
+      creator_list = creation.pseuds.map(&:byline).to_sentence
+      # For pluralization: creator publico, creator y creator2 publicaron.
+      creators_count = creation.pseuds.size
+    end
     chapter_position = creation.position if creation_type == :chapter
     # "and X more," translated separately so we can pluralize "more" based on X.
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.more")
@@ -251,20 +253,26 @@ module MailerHelper
     work = creation.is_a?(Chapter) ? creation.work : creation
 
     interpolations = {}
-    interpolations[:creators] = creator_text(work) unless creation.anonymous?
-    interpolations[:work_title_with_word_count] = creation_title_with_word_count(creation.work) unless creation.is_a?(Work)
-    interpolations[:count] = creation.pseuds.size unless creation.anonymous?
+    unless creation.anonymous?
+      interpolations[:creators] = creator_text(work)
+      # For pluralization: creator publico, creator y creator2 publicaron.
+      interpolations[:count] = work.pseuds.size
+    end
+    interpolations[:work_title_with_word_count] = creation_title_with_word_count(work) if creation.is_a?(Chapter)
 
-    t(batch_subscription_preface_key(creation, email_format: "text"), **interpolations)
+    t(batch_subscription_preface_key(creation, email_fogirmat: "text"), **interpolations)
   end
 
   def batch_subscription_html_preface(creation)
     work = creation.is_a?(Chapter) ? creation.work : creation
 
     interpolations = {}
-    interpolations[:creator_links] = creator_links(work) unless creation.anonymous?
-    interpolations[:work_link_with_word_count] = creation_link_with_word_count(creation.work, work_url(creation.work)) unless creation.is_a?(Work)
-    interpolations[:count] = creation.pseuds.size unless creation.anonymous?
+    unless creation.anonymous?
+      interpolations[:creator_links] = creator_links(work)
+      # For pluralization: creator publico, creator y creator2 publicaron.
+      interpolations[:count] = work.pseuds.size
+    end
+    interpolations[:work_link_with_word_count] = creation_link_with_word_count(work, work_url(work)) if creation.is_a?(Chapter)
 
     t(batch_subscription_preface_key(creation, email_format: "html"), **interpolations)
   end
