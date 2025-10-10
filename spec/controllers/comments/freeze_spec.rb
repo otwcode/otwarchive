@@ -273,7 +273,10 @@ describe CommentsController do
           context "when comment is spam" do
             let(:comment) { create(:comment) }
 
-            before { comment.update_columns(approved: false, spam: true) }
+            before do
+              comment.update_attribute(:approved, false)
+              comment.update_attribute(:spam, true)
+            end
 
             it_behaves_like "comment is successfully frozen"
 
@@ -1035,7 +1038,10 @@ describe CommentsController do
 
           context "when comment is spam" do
             let(:comment) { create(:comment, iced: true) }
-            before { comment.update_columns(approved: false, spam: true) }
+            before do
+              comment.update_attribute(:approved, false)
+              comment.update_attribute(:spam, true)
+            end
 
             it_behaves_like "comment is successfully unfrozen"
 
