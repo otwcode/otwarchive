@@ -723,6 +723,7 @@ en:
       guest_comments_disabled: Sorry, the Archive doesn't allow guests to comment right now.
       invite_to_collections_link: Invite To Collections
       logged_as_admin: Please log out of your admin account to comment.
+      previous_chapter: Previous Chapter
       permissions:
         admin_post:
           alt_action: You can however %{support_link} with any feedback or questions.
