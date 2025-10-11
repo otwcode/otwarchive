@@ -111,7 +111,7 @@ Feature: Admin Settings Page
       And a guest comment on the work "Generic Work"
       And I edit the work "Generic Work"
       And I choose "No one can comment"
-      And I press "Post"
+      And I press "Update"
     When I am logged out
       And I view the work "Generic Work" with comments
     Then I should see "Sorry, the Archive doesn't allow guests to comment right now."

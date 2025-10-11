@@ -27,6 +27,12 @@ Feature: Create Works
     When I go to the works page
     Then I should see "All Hell Breaks Loose 🤬💩"
 
+  Scenario: Canceling a new work redirects to the user's works page
+    Given I am logged in as "newbie"
+    When I set up the draft "All Hell Breaks Loose"
+      And I follow "Cancel"
+    Then I should see the page title "newbie - Works"
+
   Scenario: Creating a new minimally valid work and posting without preview
     Given I am logged in as "newbie"
     When I set up the draft "All Hell Breaks Loose"
@@ -381,7 +387,7 @@ Feature: Create Works
       And I post the chaptered work "Chaptered Work"
       And I edit the work "Chaptered Work"
       And I invite the co-author "barbaz"
-      And I press "Post"
+      And I press "Update"
     Then I should not see "barbaz"
       But 1 email should be delivered to "barbaz"
     When I am logged in as "barbaz"

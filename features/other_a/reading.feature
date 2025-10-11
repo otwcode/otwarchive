@@ -248,7 +248,7 @@ Feature: Reading count
   When I am logged in as "editor" with password "password"
     And I edit the work "Some Work V1"
     And I fill in "Work Title" with "Some Work V2"
-    And I press "Post"
+    And I press "Update"
     And I am logged out
   When I am logged in as "reader" with password "password"
     And I go to the homepage
@@ -291,9 +291,9 @@ Feature: Reading count
     When I am logged in as "reader"
       And I go to reader's reading page
     Then I should see "(Update available.)"
-  
+
   Scenario: Reading history blurb includes an HTML comment containing the unix epoch of the updated time
-  
+
     Given time is frozen at 2025-04-12 17:00 UTC
       And I am logged in as "ethel"
       And the work "Test"

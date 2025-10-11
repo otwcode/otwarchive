@@ -30,13 +30,13 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And the email to "regular_user" should be translated
       And the email to "Another" should contain "you will be required to take action to correct the violation"
       And the email to "Another" should be non-translated
-    
+
     Examples:
       | role             |
       | superadmin       |
       | legal            |
       | policy_and_abuse |
-  
+
     Scenario Outline: Can hide works already marked as spam
     Given the work "ToS Violation + Spam" by "regular_user"
       And the work "ToS Violation + Spam" is marked as spam
@@ -50,7 +50,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And "regular_user" should see their work "ToS Violation + Spam" is hidden
       And 1 email should be delivered
       And the email should contain "you will be required to take action to correct the violation"
-    
+
     Examples:
       | role             |
       | superadmin       |
@@ -189,7 +189,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I fill in "Additional Tags" with "Admin-Added Freeform"
       And I uncheck "M/M"
       And I check "Other"
-    When I press "Post"
+    When I press "Update"
     Then I should not see "User-Added Fandom"
       And I should see "Admin-Added Fandom"
       And I should not see "User-Added Freeform"
@@ -378,7 +378,7 @@ Feature: Admin Actions for Works, Comments, Series, Bookmarks
       And I follow "Edit Tags and Language"
     Then I should see "Edit Work Tags and Language for "
     When I select "Deutsch" from "Choose a language"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Deutsch"
       And I should not see "English"
 

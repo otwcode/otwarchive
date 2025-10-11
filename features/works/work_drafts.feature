@@ -4,8 +4,8 @@ Feature: Work Drafts
   Scenario: Creating a work draft
   Given I am logged in as "Scott" with password "password"
   When the draft "scotts draft"
-    And I press "Cancel"
-  Then I should see "The work was not posted. It will be saved here in your drafts for one month, then deleted from the Archive."
+    And I follow "Cancel"
+  Then I should see "This work is a draft and has not been posted. The draft will be scheduled for deletion on"
 
   Scenario: Creating a work draft, editing it, and saving the changes without posting or previewing and then double check that it is saved and I didn't get the success message erroneously
   Given basic tags
@@ -23,7 +23,7 @@ Feature: Work Drafts
   When I press "Edit"
   Then I should see "Edit Work"
     And I fill in "content" with "Klinger, in Uncle Gus's Aunt Gussie dress, lay under his porch."
-    And I press "Save As Draft"
+    And I press "Save Draft"
   Then I should see "This work is a draft and has not been posted."
     And I should see "Klinger, in Uncle Gus's Aunt Gussie dress, lay under his porch."
   When I am on persnickety's works page
@@ -37,7 +37,7 @@ Feature: Work Drafts
   Scenario: Creating an draft Chapter on a draft Work
   Given I am logged in as "Scott" with password "password"
     And the draft "scotts other draft"
-    And I press "Cancel"
+    And I follow "Cancel"
     And I edit the work "scotts other draft"
     And I follow "Add Chapter"
     And I fill in "content" with "this is second chapter content"
@@ -103,7 +103,7 @@ Feature: Work Drafts
     When I follow "Edit"
       Then I should see "Edit Work"
     When I fill in "content" with "My draft has changed!"
-      And I press "Save As Draft"
+      And I press "Save Draft"
     Then I should see "This work is a draft and has not been posted"
       And I should see "My draft has changed!"
     When I am on drafty's works page
@@ -118,7 +118,7 @@ Feature: Work Drafts
       And the draft "Walking Into Mordor"
     When I edit the draft "Walking Into Mordor"
       And I press "Preview"
-    Then I should see "Please post your work or save as draft if you want to keep them."
+    Then I should see "Please post your work or save the draft if you want to keep them."
 
   Scenario: A chaptered draft should be able to have beginning and end notes, and it should display them.
     Given I am logged in as "composer"
@@ -126,7 +126,7 @@ Feature: Work Drafts
     When I edit the draft "Epic in Progress"
       And I add the beginning notes "Some beginning notes."
       And I add the end notes "Some end notes."
-      And I press "Save As Draft"
+      And I press "Save Draft"
     Then I should see "Some beginning notes."
       And I should see "See the end of the work for more notes."
     When I follow "more notes"
@@ -145,7 +145,7 @@ Feature: Work Drafts
         And I set up the draft "Unicorns are everywhere"
         And I fill in "content" with "Help there are unicorns everywhere"
         And I press "Preview"
-        And I press "Save As Draft"
+        And I press "Save Draft"
       When I follow "My Dashboard"
         And I follow "Drafts ("
         And I follow "Post Draft"
@@ -157,14 +157,14 @@ Feature: Work Drafts
         And I set up the draft "Unicorns are everywhere"
         And I fill in "content" with "Help there are unicorns everywhere"
         And I press "Preview"
-        And I press "Save As Draft"
+        And I press "Save Draft"
       When a chapter is set up for "Unicorns are everywhere"
         And I press "Preview"
-        And I press "Save As Draft"
+        And I press "Save Draft"
       Then I should see "Words:16"
       When a chapter is set up for "Unicorns are everywhere"
         And I press "Preview"
-      When I press "Save As Draft"
+      When I press "Save Draft"
       Then I should see "Words:27"
 
       Scenario: When posting chapter(s) in unpublished multichapter work, word count should equal posted chapter(s) word count
@@ -172,14 +172,14 @@ Feature: Work Drafts
         And I set up the draft "Unicorns are everywhere"
         And I fill in "content" with "Help there are unicorns everywhere"
         And I press "Preview"
-        And I press "Save As Draft"
+        And I press "Save Draft"
       When a chapter is set up for "Unicorns are everywhere"
         And I press "Preview"
-        And I press "Save As Draft"
+        And I press "Save Draft"
       Then I should see "Words:16"
       When a chapter is set up for "Unicorns are everywhere"
         And I press "Preview"
-        And I press "Save As Draft"
+        And I press "Save Draft"
       Then I should see "Words:27"
       When I view the work "Unicorns are everywhere"
         And I press "Post Chapter"

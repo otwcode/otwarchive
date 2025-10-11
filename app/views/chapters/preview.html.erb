@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Preview") %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
 <%= error_messages_for :chapter %>
 <!--/descriptions-->
 
@@ -19,29 +19,6 @@
 
   <%= render "hidden_fields", form: f %>
 
-  <fieldset>
-    <legend><%= ts("Post Chapter") %></legend>
-    <p class="notice">
-      <%= t(".post_notice_html",
-            content_policy_link: link_to(t(".content_policy"), content_path),
-            tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
-    </p>
-    <ul class="actions">
-      <% if @chapter.posted? %>
-        <li><%= submit_tag ts("Update"), name: "update_button" %></li>
-      <% else %>
-        <li>
-          <%= submit_tag ts("Post"),
-                         name: "post_button",
-                         data: { disable_with: ts("Please wait...") } %>
-        </li>
-        <li>
-          <%= submit_tag ts("Save As Draft"), name: "save_button" %>
-        </li>
-      <% end %>
-      <li><%= submit_tag ts("Edit"), name: "edit_button" %></li>
-      <li><%= submit_tag ts("Cancel"), name: "cancel_button" %></li>
-    </ul>
-  </fieldset>
+  <%= render "posting_fieldset" %>
 
 <% end %>

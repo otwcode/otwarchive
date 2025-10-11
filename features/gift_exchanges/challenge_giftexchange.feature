@@ -670,7 +670,7 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
 
   Scenario: A user can explicitly give a gift to a user who disallows gifts if
@@ -687,7 +687,7 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
 
   Scenario: If a work is connected to an assignment for a user who blocked the gifter,
@@ -703,7 +703,7 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
 
   Scenario: A user can explicitly give a gift to a user who blocked the gifter if
@@ -721,7 +721,7 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
 
   Scenario: When there are many assignments, they're paginated

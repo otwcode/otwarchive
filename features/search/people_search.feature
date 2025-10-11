@@ -57,7 +57,7 @@ Feature: Search pseuds
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I fill in "Fandom" with "MCU, Ghost Soup"
-      And I press "Post"
+      And I press "Update"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
@@ -71,7 +71,7 @@ Feature: Search pseuds
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I fill in "Fandom" with "MCU"
-      And I press "Post"
+      And I press "Update"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"
@@ -85,7 +85,7 @@ Feature: Search pseuds
       And all indexing jobs have been run
     When I edit the work "Drabble Collection"
       And I invite the co-author "alice"
-      And I press "Post"
+      And I press "Update"
       And all indexing jobs have been run
       And I go to the search people page
       And I fill in "Fandom" with "Ghost Soup"

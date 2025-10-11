@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading">
   <% if logged_in_as_admin? %>
-    <%= ts('Edit Work Tags and Language for %{title}', title: @work.title).html_safe %>
+    <%= t(".page_heading.edit_tags_and_language_html", title: @work.title) %>
   <% else %>
-    <%= ts('Edit Work Tags for %{title}', title: @work.title).html_safe %>
+    <%= t(".page_heading.edit_tags_html", title: @work.title) %>
   <% end %>
 </h2>
 
@@ -26,21 +26,7 @@
     </fieldset>
   <% end %>
 
-  <fieldset>
-    <legend><%= ts('Post Work') %></legend>
-      <p class="notice">
-        <%= t(".post_notice_html",
-              content_policy_link: link_to(t(".content_policy"), content_path),
-              tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
-      </p>
-    <ul class="actions">
-      <% unless @work.posted? %>
-        <li><%= submit_tag ts('Save As Draft'), name: 'save_button' %></li>
-      <% end %>
-      <li><%= submit_tag ts('Preview'), name: 'preview_button' %></li>
-      <li><%= submit_tag ts('Post'), name: 'update_button' %></li>
-      <li><%= submit_tag ts('Cancel'), name: 'cancel_button' %></li>
-    </ul>
-  </fieldset>
+  <%= render "posting_fieldset" %>
+
 <% end %>
 <!--/content-->
