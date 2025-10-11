@@ -14,6 +14,7 @@ class User < ApplicationRecord
          :validatable,
          :lockable,
          :recoverable
+  devise :pwned_password unless Rails.env.test?
 
   # Must come after Devise modules in order to alias devise_valid_password?
   # properly
@@ -325,6 +326,10 @@ class User < ApplicationRecord
   def destroy_empty_series
     series.left_joins(:serial_works).where(serial_works: { id: nil }).
       destroy_all
+  end
+
+  def assignments
+    ChallengeAssignment.from("(#{self.offer_assignments.to_sql} UNION #{self.pinch_hit_assignments.to_sql}) AS challenge_assignments")
   end
 
   # Checks authorship of any sort of object

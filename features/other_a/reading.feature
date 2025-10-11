@@ -11,7 +11,9 @@ Feature: Reading count
   Then I should see "Sorry, you don't have permission"
     And I should not see "History" within "div#dashboard"
   When I go to second_reader's reading page
-  Then I should see "History" within "div#dashboard"
+  Then I should see the page title "History"
+    And I should see "History" within "h2.heading"
+    And I should see "History" within "div#dashboard"
 
   Scenario: A user can read a work several times, updating the count and date in their history
 
@@ -110,14 +112,17 @@ Feature: Reading count
     And I am logged in as "reader"
     And I view the work "Testy"
   Then I should see "Mark for Later"
-  When I follow "Mark for Later"
+  When I press "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
-    And I go to reader's reading page
-  Then I should see "Testy"
+  When I go to reader's reading page
+    And I follow "Marked for Later"
+  Then I should see the page title "Marked for Later"
+    And I should see "Marked for Later" within "h2.heading"
+    And I should see "Testy"
     And I should see "(Marked for Later.)"
   When I view the work "Testy"
   Then I should see "Mark as Read"
-  When I follow "Mark as Read"
+  When I press "Mark as Read"
   Then I should see "This work was removed from your Marked for Later list."
     And I go to reader's reading page
   Then I should see "Testy"
@@ -164,7 +169,7 @@ Feature: Reading count
     And I should see "Visited 3 times"
   When I view the work "multichapter work"
     And I follow "Next Chapter"
-  When I follow "Mark for Later"
+  When I press "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
     And the readings are saved to the database
     And I go to fandomer's reading page
@@ -243,7 +248,7 @@ Feature: Reading count
   When I am logged in as "editor" with password "password"
     And I edit the work "Some Work V1"
     And I fill in "Work Title" with "Some Work V2"
-    And I press "Post"
+    And I press "Update"
     And I am logged out
   When I am logged in as "reader" with password "password"
     And I go to the homepage
@@ -258,7 +263,7 @@ Feature: Reading count
   When I am logged in as "reader"
     And I view the work "Testy"
   Then I should see "Mark for Later"
-  When I follow "Mark for Later"
+  When I press "Mark for Later"
   Then I should see "This work was added to your Marked for Later list."
   When I am logged in as a "policy_and_abuse" admin
     And I view the work "Testy"
@@ -286,9 +291,9 @@ Feature: Reading count
     When I am logged in as "reader"
       And I go to reader's reading page
     Then I should see "(Update available.)"
-  
+
   Scenario: Reading history blurb includes an HTML comment containing the unix epoch of the updated time
-  
+
     Given time is frozen at 2025-04-12 17:00 UTC
       And I am logged in as "ethel"
       And the work "Test"

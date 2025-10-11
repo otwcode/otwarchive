@@ -35,21 +35,21 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    @page_subtitle = t(".browser_title") 
+    @page_subtitle = t(".browser_title")
     authorize @user.profile if logged_in_as_admin?
   end
 
   def change_email
-    @page_subtitle = t(".browser_title")
+    @page_subtitle = t(".page_title")
   end
 
   def change_password
-    @page_subtitle = t(".browser_title")
+    @page_subtitle = t(".page_title")
   end
 
   def change_username
     authorize @user if logged_in_as_admin?
-    @page_subtitle = t(".browser_title")
+    @page_subtitle = t(".page_title")
   end
 
   def changed_password
@@ -77,12 +77,12 @@ class UsersController < ApplicationController
     @new_login = params[:new_login]
 
     unless logged_in_as_admin? || @user.valid_password?(params[:password])
-      flash[:error] = t(".user.incorrect_password")
+      flash[:error] = t(".user.incorrect_password_html", contact_support_link: helpers.link_to(t(".user.contact_support"), new_feedback_report_path))
       render(:change_username) && return
     end
 
     if @new_login == @user.login
-      flash.now[:error] = t(".new_username_must_be_different") 
+      flash.now[:error] = t(".new_username_must_be_different")
       render :change_username and return
     end
 
@@ -305,7 +305,7 @@ class UsersController < ApplicationController
     else
       wrong_password!(params[:new_email],
                       t("users.confirm_change_email.wrong_password_html", contact_support_link: helpers.link_to(t("users.confirm_change_email.contact_support"), new_feedback_report_path)),
-                      t("users.changed_password.wrong_password"))
+                      t("users.changed_password.wrong_password_html", contact_support_link: helpers.link_to(t("users.changed_password.contact_support"), new_feedback_report_path)))
     end
   end
 

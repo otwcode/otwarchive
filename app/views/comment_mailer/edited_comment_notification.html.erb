@@ -7,10 +7,8 @@
   <%# i18n-tasks-use t("comment_mailer.edited_comment_notification.content.tag.html") %>
   <%= content_for_commentable_html(@comment) %>
 
-  <p>
-    <%= style_quote(raw(@comment.sanitized_mailer_content)) %>
-  </p>
+  <%= style_quote(raw(@comment.sanitized_mailer_content)) %>
 
-  <%= render 'comment_notification_footer' %>
+  <%= render "comment_notification_footer" %>
 
 <% end %>

@@ -334,7 +334,7 @@ describe CommentsController do
 
         it "sets flash_is_set to bypass caching" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          expect(cookies[:flash_is_set]).to eq(1)
+          expect(cookies[:flash_is_set]).to eq("1")
         end
       end
 
@@ -349,7 +349,7 @@ describe CommentsController do
 
         it "sets flash_is_set to bypass caching" do
           post :create, params: { work_id: work.id, comment: anon_comment_attributes }
-          expect(cookies[:flash_is_set]).to eq(1)
+          expect(cookies[:flash_is_set]).to eq("1")
         end
       end
 
@@ -460,7 +460,10 @@ describe CommentsController do
         context "when the commentable is spam" do
           let(:spam_comment) { create(:comment, commentable: work_with_guest_comment_on) }
 
-          before { spam_comment.update_attribute(:approved, false) }
+          before do
+            spam_comment.update_attribute(:approved, false)
+            spam_comment.update_attribute(:spam, true)
+          end
 
           it "shows an error and redirects if commentable is a comment marked as spam" do
             post :create, params: { comment_id: spam_comment.id, comment: anon_comment_attributes }
