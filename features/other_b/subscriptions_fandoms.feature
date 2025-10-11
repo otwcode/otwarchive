@@ -13,7 +13,7 @@ Feature: Subscriptions
   When I follow "RSS Feed"
   Then I should not see "My Work Title"
     And I should not see "Stargate SG-1"
-    
+
   Scenario: Subscribe to a test fandom when there are works in it
 
   When I am logged in as "author"
@@ -43,7 +43,7 @@ Feature: Subscriptions
     And I edit the work "Old Snippet"
     And I fill in "Post to Collections / Challenges" with "hidden_treasury"
     And I check "F/F"
-    And I press "Post"
+    And I press "Update"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
   When I am logged in as "author"
     And I post a work "My Work Title" with category "F/F"
@@ -63,7 +63,7 @@ Feature: Subscriptions
     And I edit the work "Old Snippet"
     And I fill in "Post to Collections / Challenges" with "hidden_treasury"
     And I check "F/F"
-    And I press "Post"
+    And I press "Update"
     And all indexing jobs have been run
   Then I should see "Anonymous"
     And I should see "Collections: Hidden Treasury"
