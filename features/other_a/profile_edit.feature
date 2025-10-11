@@ -59,4 +59,3 @@ Scenario: Change details as an admin
   Then I should see "Your profile has been successfully updated"
   When I go to the admin-activities page
   Then I should see 1 admin activity log entry
-

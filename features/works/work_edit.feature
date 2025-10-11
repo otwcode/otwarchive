@@ -70,7 +70,7 @@ Feature: Edit Works
       And I follow "2"
       And I fill in "content" with "second chapter new content"
       And I press "Preview"
-      And I press "Cancel"
+      And I follow "Cancel"
     Then I should see "second chapter content"
       And I should see "Words:7"
     # Test changing pseuds on a work
@@ -80,7 +80,7 @@ Feature: Edit Works
       And I unselect "testuser" from "work_author_attributes_ids"
       # Expire byline cache
       And it is currently 1 second from now
-      And I press "Post"
+      And I press "Update"
     Then I should see "testy"
       And I should not see "testuser,"
 
@@ -110,7 +110,7 @@ Feature: Edit Works
     Then I should see "Collection was successfully updated"
     When I am logged in as "Scott"
       And I edit the work "Murder by Numbers"
-      And I press "Post"
+      And I press "Update"
       And I should see "Work was successfully updated"
     Then I should not see "You have submitted your work to the moderated collection 'Digital Hoarders 2013'. It will not become a part of the collection until it has been approved by a moderator."
 
@@ -128,7 +128,7 @@ Feature: Edit Works
       And I post the work "Dialogue"
     When I follow "Edit"
       And I invite the co-author "coauthor"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Work was successfully updated"
       And I should not see "coauthor" within ".byline"
       But 1 email should be delivered to "coauthor"
@@ -177,7 +177,7 @@ Feature: Edit Works
       And I should see "Coauthor's Work Skin" within "#work_work_skin_id"
       And I should not see "Random User's Work Skin" within "#work_work_skin_id"
     When I select "Coauthor's Work Skin" from "Select work skin"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Work was successfully updated"
 
   Scenario: Previewing shows changes to tags, but cancelling afterwards doesn't save those changes
@@ -187,8 +187,7 @@ Feature: Edit Works
       And I fill in "Fandoms" with "foobar"
       And I press "Preview"
     Then I should see "Fandom: foobar"
-    When I press "Cancel"
-      And I view the work "Work 1"
+    When I follow "Cancel"
     Then I should see "Fandom: testing"
       And I should not see "Fandom: foobar"
 
@@ -198,7 +197,7 @@ Feature: Edit Works
       And I post the work "Work 1" with fandom "testing"
     When I edit the work "Work 1"
       And I fill in "Fandoms" with ""
-      And I press "Post"
+      And I press "Update"
     Then I should see "Sorry! We couldn't save this work because: Please fill in at least one fandom."
     When I view the work "Work 1"
     Then I should see "Fandom: testing"
@@ -208,16 +207,16 @@ Feature: Edit Works
       And I post the work "Work 1" with fandom "testing"
       And I edit the work "Work 1"
       And I fill in "Fandoms" with ""
-      And I press "Cancel"
-    When I view the work "Work 1"
-    Then I should see "Fandom: testing"
+    When I follow "Cancel"
+    Then I should see the page title "Work 1 -"
+      And I should see "Fandom: testing"
 
   Scenario: A work cannot be edited to remove its only warning
     Given I am logged in as a random user
       And I post the work "Work 1"
     When I edit the work "Work 1"
       And I uncheck "No Archive Warnings Apply"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Sorry! We couldn't save this work because: Please select at least one warning."
     When I view the work "Work 1"
     Then I should see "Archive Warning: No Archive Warnings Apply"
@@ -227,7 +226,7 @@ Feature: Edit Works
       And I post the work "Work 1" with category "F/F"
     When I edit the work "Work 1"
       And I uncheck "F/F"
-      And I press "Post"
+      And I press "Update"
     Then I should not see "F/F"
 
   Scenario: When editing a work, the title field should not escape HTML
@@ -258,7 +257,7 @@ Feature: Edit Works
     When the user "Burnham" disallows co-creators
       And I edit the work "Thats not my Spock"
       And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Thats not my Spock, it has too much beard"
       And I should see "Michael (Burnham), testuser"
 
@@ -281,12 +280,12 @@ Feature: Edit Works
     When the user "Burnham" disallows co-creators
       And I edit the work "Thats not my Spock"
       And I fill in "Work Title" with "Thats not my Spock, it has too much beard"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Thats not my Spock, it has too much beard"
       And I should see "Michael (Burnham), testuser"
     When I edit the work "Thats not my Spock, it has too much beard"
       And I invite the co-author "Georgiou"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Work was successfully updated"
       And I should see "Michael (Burnham), testuser"
       But I should not see "Georgiou"
@@ -303,7 +302,7 @@ Feature: Edit Works
       And I fill in "Characters" with "Character 1, Character 2"
       And I fill in "Relationships" with "Relationship 1, Relationship 2"
       And I fill in "Additional Tags" with "Additional Tag 1, Additional Tag 2"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Fandom, relationship, character, and additional tags must not add up to more than 7. Your work has 8 of these tags, so you must remove 1 of them."
 
   Scenario: If a work has too many tags, you cannot update it without removing tags
@@ -316,5 +315,5 @@ Feature: Edit Works
       And I am logged in as the author of "Over the Limit"
     When I edit the work "Over the Limit"
       And I fill in "Title" with "Over the Limit Redux"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Fandom, relationship, character, and additional tags must not add up to more than 7. Your work has 8 of these tags, so you must remove 1 of them."

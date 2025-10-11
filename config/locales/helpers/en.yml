@@ -1,5 +1,9 @@
 ---
 en:
+  application_helper:
+    anonymous_byline: Anonymous
+    anonymous_with_name_byline_html: Anonymous [%{pseud_byline}]
+    archivist_byline_html: "%{external_creator} [archived by %{pseud_byline}]"
   collections_helper:
     collection_item_approval_options:
       collection:
@@ -21,6 +25,9 @@ en:
         bookmark: Bookmarker approval status
         work: Creator approval status
   comments_helper:
+    actions:
+      cancel: Cancel
+      delete: Delete
     chapter_link_html: Chapter %{position}
     comment_link_with_commentable_name:
       on_admin_post_html: Comment on the news post %{title}

@@ -208,6 +208,27 @@ Feature: Collection
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
 
+  Scenario: Filter collections by multifandom
+
+  Given a set of collections for searching
+  When I go to the collections page
+    And I choose "collection_search_multifandom_true"
+    And I press "Sort and Filter"
+  Then I should see "Another Gift Swap"
+    But I should not see "Some Test Collection"
+    And I should not see "Some Other Collection"
+    And I should not see "Another Plain Collection"
+    And I should not see "On Demand"
+    And I should not see "Surprise Presents"
+  When I choose "collection_search_multifandom_false"
+    And I press "Sort and Filter"
+  Then I should see "Some Test Collection"
+    And I should see "Some Other Collection"
+    And I should see "Another Plain Collection"
+    And I should see "On Demand"
+    And I should see "Surprise Presents"
+    But I should not see "Another Gift Swap"
+
   Scenario: Look at a collection, see the rules and intro and FAQ
 
   Given a set of collections for searching
@@ -224,7 +245,6 @@ Feature: Collection
     And I should see "It's a test collection" within "#faq"
     And I should see "Be nice to testers" within "#rules"
     And I should see "About Some Test Collection (sometest)"
-
 
   Scenario: Work blurb includes an HTML comment containing the unix epoch of the updated time
   

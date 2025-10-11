@@ -146,7 +146,7 @@ class Collection < ApplicationRecord
                       maximum: ArchiveConfig.SUMMARY_MAX,
                       too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX) }
 
-  validates :header_image_url, format: { allow_blank: true, with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: ts("is not a valid URL.") }
+  validates :header_image_url, url_format: { allow_blank: true, message: ts("is not a valid URL.") }
   validates :header_image_url, format: { allow_blank: true, with: /\A\S+\.(png|gif|jpg)\z/, message: ts("can only point to a gif, jpg, or png file.") }
 
   validates :tags_after_saving,
@@ -168,8 +168,12 @@ class Collection < ApplicationRecord
   scope :for_blurb, -> { includes(:parent, :moderators, :children, :collection_preference, owners: [:user]).with_attached_icon }
   scope :for_search, -> { includes(:parent, :children, :tags, :challenge, moderators: [user: :pseuds], owners: [user: :pseuds]).with_attached_icon }
 
-  def cleanup_url
-    self.header_image_url = Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
+  def cleanup_url   
+    self.header_image_url = begin 
+      Addressable::URI.heuristic_parse(self.header_image_url) if self.header_image_url
+    rescue Addressable::URI::InvalidURIError
+      self.header_image_url
+    end
   end
 
   # Get only collections with running challenges

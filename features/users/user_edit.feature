@@ -17,7 +17,7 @@ Feature:
       And I fill in "New username" with "anothertestuser"
       And I fill in "Password" with "wrongpwd"
       And I press "Change Username"
-    Then I should see "Your password was incorrect"
+    Then I should see "Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, contact Support for help."
 
   Scenario: The user should not be able to change their username to their current username
     Given I am logged in as "testuser" with password "password"
@@ -460,7 +460,7 @@ Feature:
     Given I am logged in as "testuser" with password "password"
     When I visit the change password page for testuser
       And I make a mistake typing my old password
-    Then I should see "Your old password was incorrect"
+    Then I should see "Your old password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, contact Support for help."
 
   Scenario: Change password - mistake in typing new password confirmation
 
