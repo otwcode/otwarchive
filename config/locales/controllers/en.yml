@@ -179,6 +179,8 @@ en:
   profile:
     show:
       page_title: "%{username} - Profile"
+    update:
+      success: Your profile has been successfully updated
   pseuds:
     create:
       already_have_pseud_with_name: You already have a pseud with that name.
