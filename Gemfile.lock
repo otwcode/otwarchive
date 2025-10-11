@@ -440,7 +440,7 @@ GEM
     pwned (2.4.1)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (2.2.18)
+    rack (2.2.20)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
     rack-dev-mark (0.8.0)
