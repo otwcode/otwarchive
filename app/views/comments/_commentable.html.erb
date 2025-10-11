@@ -10,7 +10,7 @@
 
     <% if @work && @previous_chapter %>
       <li>
-        <%= link_to t(".previous_chapter_html", back_arrow_html: '<span aria-hidden="true">&#8592</span>'.html_safe), [@work, @previous_chapter, { anchor: "workskin" }] %>
+        <%= link_to t(".previous_chapter_html", back_arrow_html: "&#8592;".html_safe), [@work, @previous_chapter, { anchor: "workskin" }] %>
       </li>
     <% end %>
 
