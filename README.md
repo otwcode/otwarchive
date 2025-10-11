@@ -37,7 +37,6 @@ The Archive code is licensed under [GPL-2.0-or-later](https://www.gnu.org/licens
 We benefit from software and services that are free to use for Open Source projects, including:
 
 * [RubyMine IDE](https://www.jetbrains.com/ruby/) by JetBrains
-* [Codeship](https://codeship.com/)
 * [Hound](https://houndci.com/) by [thoughtbot](https://thoughtbot.com/)
 * [BrowserStack](https://www.browserstack.com)
 * [Sentry](https://sentry.io)
