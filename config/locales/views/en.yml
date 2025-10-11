@@ -793,6 +793,8 @@ en:
       chapter_end_notes_without_chapter_notes: notes
       chapter_notes: Chapter Notes
       chapter_summary: Chapter Summary
+      full_chapter_title_with_title: 'Chapter %{chapter_number}: %{title}'
+      full_chapter_title_without_title: Chapter %{chapter_number}
       section_chapter_end_notes: Chapter End Notes
       see_chapter_end_notes_html: See the end of the chapter for %{chapter_end_notes_link}
     download_preface:
