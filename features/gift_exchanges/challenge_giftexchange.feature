@@ -198,7 +198,7 @@ Feature: Gift Exchange Challenge
       And the user "mod1" enables translated emails
     When I close signups for "Awesome Gift Exchange"
       And I follow "Matching"
-      And I follow "Generate Potential Matches"
+      And I press "Generate Potential Matches"
     Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
       And 1 email should be delivered to "mod1"
       And the email to "mod1" should be translated
@@ -220,7 +220,7 @@ Feature: Gift Exchange Challenge
       And the user "mod1" enables translated emails
     When I close signups for "Awesome Gift Exchange"
       And I follow "Matching"
-      And I follow "Generate Potential Matches"
+      And I press "Generate Potential Matches"
     Then 1 email should be delivered to "mod1"
       And the email to "mod1" should be translated
       And the email should contain "invalid sign-up"
@@ -241,7 +241,7 @@ Feature: Gift Exchange Challenge
     Then I should see "Assignments updated"
       And I should see "No Recipient"
       And I should see "No Giver"
-    When I follow "Send Assignments"
+    When I press "Send Assignments"
     Then I should see "aren't assigned"
     When I follow "No Giver"
       And I assign a pinch hitter
@@ -252,7 +252,7 @@ Feature: Gift Exchange Challenge
       And I assign a pinch recipient
       And I press "Save Assignment Changes"
       And I should not see "No Recipient"
-    When I follow "Send Assignments"
+    When I press "Send Assignments"
     Then I should see "Assignments are now being sent out"
 
   Scenario: Issues with assignments
@@ -267,7 +267,7 @@ Feature: Gift Exchange Challenge
     Then I should see "Regenerate Assignments"
       And I should see "Regenerate All Potential Matches"
       And I should see "try regenerating assignments"
-    When I follow "Regenerate Assignments"
+    When I press "Regenerate Assignments"
       And I reload the page
     Then I should see "Reviewing Assignments"
       And I should see "Complete"
@@ -290,12 +290,12 @@ Feature: Gift Exchange Challenge
       And I submit
       And I follow "Matching"
       And I follow "No Potential Recipients"
-      And I follow "Regenerate Matches For Mismatch"
+      And I press "Regenerate Matches For Mismatch"
     Then I should see "Matches are being regenerated for Mismatch"
     When I reload the page
     Then I should not see "No Potential Givers"
       And I should not see "No Potential Recipients"
-    When I follow "Regenerate Assignments"
+    When I press "Regenerate Assignments"
       And I reload the page
     Then I should not see "No Potential Givers"
       And I should not see "No Potential Recipients"
@@ -304,7 +304,7 @@ Feature: Gift Exchange Challenge
   Scenario: Assignments can be sent
     Given the gift exchange "Awesome Gift Exchange" is ready for matching
       And I have generated matches for "Awesome Gift Exchange"
-    When I follow "Send Assignments"
+    When I press "Send Assignments"
     Then I should see "Assignments are now being sent out"
     When I reload the page
     Then I should not see "Assignments are now being sent out"
@@ -373,8 +373,7 @@ Feature: Gift Exchange Challenge
   Scenario: User can see their assignment, but no email links
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
-      And I go to myname1's user page
-      And I follow "Assignments"
+      And I go to the assignments page for "myname1"
     Then I should see "Awesome Gift Exchange"
     When I follow "Awesome Gift Exchange"
       Then I should see "Requests by myname3"
@@ -382,15 +381,23 @@ Feature: Gift Exchange Challenge
       And I should see "Offers by myname1"
       But I should not see the image "alt" text "email myname1"
 
-  Scenario: User fulfills their assignment and it shows on their assigments page as fulfilled
+  Scenario: User fulfills their assignment and it shows on their assignments page as fulfilled
 
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
-      And I fulfill my assignment
-    When I go to myname1's user page
-      And I follow "Assignments"
+      And I go to the assignments page for "myname1"
     Then I should see "Awesome Gift Exchange"
-      And I should not see "Not yet posted"
+      And I should see "Status: Unposted"
+      And I should see "Assignments (1)" within "#dashboard"
+    When I follow "Completed Assignments"
+      Then I should not see "Awesome Gift Exchange"
+    When I fulfill my assignment
+      And I go to the assignments page for "myname1"
+    Then I should not see "Awesome Gift Exchange"
+      And I should see "Assignments (0)" within "#dashboard"
+    When I follow "Completed Assignments"
+    Then I should see "Awesome Gift Exchange"
+      And I should see "Status: Complete!"
       And I should see "Fulfilled Story"
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
@@ -405,7 +412,7 @@ Feature: Gift Exchange Challenge
       And I fulfill my assignment
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
-      And I follow "Default All Incomplete"
+      And I press "Default All Incomplete"
     Then I should see "All unfulfilled assignments marked as defaulting."
       And I should see "Undefault myname2"
       And I should see "Undefault myname3"
@@ -417,7 +424,7 @@ Feature: Gift Exchange Challenge
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I go to the assignments page for "myname1"
-      And I follow "Default"
+      And I press "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
@@ -434,7 +441,7 @@ Feature: Gift Exchange Challenge
     Given everyone has their assignments for "Awesome Gift Exchange"
     When I am logged in as "myname1"
       And I go to the assignments page for "myname1"
-      And I follow "Default"
+      And I press "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
@@ -663,7 +670,7 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
 
   Scenario: A user can explicitly give a gift to a user who disallows gifts if
@@ -680,7 +687,7 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
 
   Scenario: If a work is connected to an assignment for a user who blocked the gifter,
@@ -696,7 +703,7 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
 
   Scenario: A user can explicitly give a gift to a user who blocked the gifter if
@@ -714,5 +721,18 @@ Feature: Gift Exchange Challenge
     Then I should see "For recip."
     When I follow "Edit"
       And I uncheck "exchange_collection (recip)"
-      And I press "Post"
+      And I press "Update"
     Then I should see "For recip."
+
+  Scenario: When there are many assignments, they're paginated
+  and sorted by id if they're released at the same time
+    Given the user "recip" exists and is activated
+      And there are 1 assignments per page
+      And I am logged in as "gifter"
+      And time is frozen at 2025-09-22 17:00 UTC
+      And "gifter" has an assignment for the user "recip" in the collection "collection_1"
+      And "gifter" has an assignment for the user "recip" in the collection "collection_2"
+    When I go to the assignments page for "gifter"
+    Then I should see "collection_1"
+    When I follow "2" within ".pagination"
+    Then I should see "collection_2"

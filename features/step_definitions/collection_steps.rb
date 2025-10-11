@@ -39,7 +39,7 @@ end
 When "I edit the work {string} to be in the collection(s) {string}" do |work, collection|
   step %{I edit the work "#{work}"}
   fill_in("Post to Collections / Challenges", with: collection)
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I view the ([^"]*) collection items page for "(.*?)"$/ do |item_status, collection|
@@ -129,13 +129,16 @@ Given "a set of collections for searching" do
   FactoryBot.create(:collection,
                     name: "sometest",
                     title: "Some Test Collection",
+                    tag_string: "The Best Tag, The Better Tag",
                     collection_profile: profile)
   FactoryBot.create(:collection,
                     name: "othertest",
+                    tag_string: "The Best Tag",
                     title: "Some Other Collection")
   FactoryBot.create(:collection,
                     :closed,
                     name: "anothertest",
+                    tag_string: "The Better Tag",
                     title: "Another Plain Collection")
   FactoryBot.create(:collection,
                     :moderated,
@@ -145,6 +148,7 @@ Given "a set of collections for searching" do
   FactoryBot.create(:collection,
                     name: "swaptest",
                     title: "Another Gift Swap",
+                    multifandom: true,
                     challenge: FactoryBot.create(:gift_exchange))
   FactoryBot.create(:collection,
                     :closed,

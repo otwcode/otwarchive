@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby "~> 3.2.7"
+ruby "~> 3.4.6"
 
 gem 'test-unit', '~> 3.2'
 
 gem 'bundler'
 
-gem "rails", "~> 7.1"
+gem "rails", "~> 7.2"
 gem "rails-i18n"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
@@ -31,7 +31,6 @@ gem 'redis-namespace'
 # Used to convert strings to ascii
 gem 'unicode'
 gem 'unidecoder'
-gem 'unicode_utils', '>=1.4.0'
 
 # Lograge is opinionated, very opinionated.
 gem "lograge" # https://github.com/roidrage/lograge
@@ -42,6 +41,7 @@ gem 'acts_as_list', '~> 0.9.7'
 gem 'akismetor'
 
 gem 'httparty'
+gem "csv", "~> 3.3.5"
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', require: false
 gem 'nokogiri', '>= 1.8.5'
@@ -184,3 +184,4 @@ group :staging, :production do
 end
 
 gem "image_processing", "~> 1.12"
+gem "ostruct"

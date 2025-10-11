@@ -1,6 +1,11 @@
 require "spec_helper"
 
 describe CommentMailer do
+  include ActiveJob::TestHelper
+  def queue_adapter_for_test
+    ActiveJob::QueueAdapters::TestAdapter.new
+  end
+
   let(:user) { create(:user) }
   let(:commenter) { create(:user, login: "Accumulator") }
   let(:commenter_pseud) { create(:pseud, user: commenter, name: "Blueprint") }
@@ -401,6 +406,7 @@ describe CommentMailer do
 
     it_behaves_like "an email with a valid sender"
     it_behaves_like "a multipart email"
+    it_behaves_like "a translated email"
     it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
@@ -434,6 +440,11 @@ describe CommentMailer do
       it_behaves_like "a notification email for admins"
       it_behaves_like "a comment subject to image safety mode settings"
 
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
+
       context "when the comment is unreviewed" do
         before { comment.update!(unreviewed: true) }
 
@@ -465,6 +476,11 @@ describe CommentMailer do
       it_behaves_like "a notification email with the commenter's pseud and username"
       it_behaves_like "a comment subject to image safety mode settings"
 
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on the tag #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
+
       context "when the comment is a reply to another comment" do
         let(:comment) { create(:comment, commentable: create(:comment, :on_tag), pseud: commenter_pseud) }
 
@@ -480,6 +496,11 @@ describe CommentMailer do
       let(:work) { create(:work, expected_number_of_chapters: 1) }
       let(:comment) { create(:comment, commentable: work.first_chapter) }
 
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
+
       it_behaves_like "a notification without a chapter reference"
     end
 
@@ -489,6 +510,11 @@ describe CommentMailer do
 
       it_behaves_like "a notification concerning a chapter"
       it_behaves_like "a notification with an untitled chapter reference"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on Chapter #{comment.parent.position} of #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
     end
     
     context "when the comment is on a titled chapter" do
@@ -498,6 +524,11 @@ describe CommentMailer do
 
       it_behaves_like "a notification concerning a chapter"
       it_behaves_like "a notification with a titled chapter reference"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Comment on Chapter #{comment.parent.position} of #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
     end
   end
 
@@ -506,6 +537,7 @@ describe CommentMailer do
 
     it_behaves_like "an email with a valid sender"
     it_behaves_like "a multipart email"
+    it_behaves_like "a translated email"
     it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to reply to the comment"
@@ -533,6 +565,11 @@ describe CommentMailer do
       it_behaves_like "a notification email for admins"
       it_behaves_like "a comment subject to image safety mode settings"
 
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
+
       context "when the comment is unreviewed" do
         before { comment.update!(unreviewed: true) }
 
@@ -564,6 +601,11 @@ describe CommentMailer do
       it_behaves_like "a notification email with the commenter's pseud and username"
       it_behaves_like "a comment subject to image safety mode settings"
 
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on the tag #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
+
       context "when the comment is a reply to another comment" do
         let(:comment) { create(:comment, commentable: create(:comment, :on_tag), pseud: commenter_pseud) }
 
@@ -579,12 +621,22 @@ describe CommentMailer do
       let(:work) { create(:work, expected_number_of_chapters: 1) }
       let(:comment) { create(:comment, commentable: work.first_chapter) }
 
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
+
       it_behaves_like "a notification without a chapter reference"
     end
 
     context "when the comment is on an untitled chapter" do
       let(:work) { create(:work, expected_number_of_chapters: 2) }
       let(:comment) { create(:comment, commentable: work.first_chapter) }
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on Chapter #{comment.parent.position} of #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
 
       it_behaves_like "a notification concerning a chapter"
       it_behaves_like "a notification with an untitled chapter reference"
@@ -594,6 +646,11 @@ describe CommentMailer do
       let(:work) { create(:work, expected_number_of_chapters: 2) }
       let(:chapter) { create(:chapter, work: work, title: "Some Chapter") }
       let(:comment) { create(:comment, commentable: chapter) }
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Edited comment on Chapter #{comment.parent.position} of #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
 
       it_behaves_like "a notification concerning a chapter"
       it_behaves_like "a notification with a titled chapter reference"

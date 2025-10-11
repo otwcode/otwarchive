@@ -248,7 +248,7 @@ Feature: Comment Moderation
     When I am logged in as "author"
       And I edit the work "Moderation"
       And I uncheck "Enable comment moderation"
-      And I post the work without preview
+      And I update the work
     Then comment moderation should not be enabled on "Moderation"
     When I view the work "Moderation"
     Then I should see "Unreviewed Comments"
