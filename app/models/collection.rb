@@ -147,7 +147,7 @@ class Collection < ApplicationRecord
                       too_long: ts("must be less than %{max} characters long.", max: ArchiveConfig.SUMMARY_MAX) }
 
   validates :header_image_url, url_format: { allow_blank: true, message: ts("is not a valid URL.") }
-  validates :header_image_url, format: { allow_blank: true, with: /\A\S+\.(png|gif|jpg)\z/, message: ts("can only point to a gif, jpg, or png file.") }
+  validates :header_image_url, format: { allow_blank: true, with: /\A\S+\.(png|gif|jpe?g)\z/, message: :file_format }
 
   validates :tags_after_saving,
             length: { maximum: ArchiveConfig.COLLECTION_TAGS_MAX,

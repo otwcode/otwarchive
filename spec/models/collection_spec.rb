@@ -146,6 +146,22 @@ describe Collection do
         include /Sorry, a collection can only have 10 tags./
     end
 
+    it "disallows invalid header image urls" do
+      collection.header_image_url = "https://example.com/image.webp"
+      expect(collection).not_to be_valid
+      expect(collection.errors.full_messages).to include("Header image URL can only point to a gif, jpg, jpeg, or png file.")
+    end
+
+    it "allows jpeg header image urls" do
+      collection.header_image_url = "https://example.com/image.jpeg"
+      expect(collection).to be_valid
+    end
+
+    it "allows jpg header image urls" do
+      collection.header_image_url = "https://example.com/image.jpg"
+      expect(collection).to be_valid
+    end
+    
     it "raises error when multifandom is nil" do
       expect { create(:collection, multifandom: nil) }
         .to raise_error(ActiveRecord::NotNullViolation)
