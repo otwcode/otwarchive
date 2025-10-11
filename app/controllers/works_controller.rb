@@ -315,13 +315,14 @@ class WorksController < ApplicationController
 
       render :new and return unless @work.save
 
-      in_moderated_collection
       if @work.posted
         # We check here to see if we are attempting to post to moderated collection
         flash[:notice] = t(".posted_notice")
+        in_moderated_collection
         redirect_to work_path(@work)
       else
         flash[:notice] = t(".draft_notice_html", scheduled_for_deletion_bold: helpers.tag.strong(t(".scheduled_for_deletion")), deletion_date: view_context.date_in_zone(@work.created_at + 29.days))
+        in_moderated_collection
         redirect_to preview_work_path(@work)
       end
     end
