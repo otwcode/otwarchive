@@ -8,7 +8,7 @@ class AbuseReportsController < ApplicationController
       @abuse_report.email = reporter.email
       @abuse_report.username = reporter.login
     end
-    @abuse_report.url = params[:url] || request.env["HTTP_REFERER"]
+    @abuse_report.url = params[:url] || request.referer
   end
 
   def create

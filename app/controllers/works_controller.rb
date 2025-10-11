@@ -236,12 +236,7 @@ class WorksController < ApplicationController
     else
       # Avoid getting an unstyled page if JavaScript is disabled
       flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
-      if request.env["HTTP_REFERER"]
-        redirect_to(request.env["HTTP_REFERER"] || root_path)
-      else
-        # else branch needed to deal with bots, which don't have a referer
-        redirect_to root_path
-      end
+      redirect_back_or_to root_path
     end
   end
 
@@ -737,7 +732,7 @@ class WorksController < ApplicationController
     if @work.marked_for_later?(current_user)
       flash[:notice] = ts("This work was added to your #{view_context.link_to('Marked for Later list', read_later_path)}.").html_safe
     end
-    redirect_to(request.env['HTTP_REFERER'] || root_path)
+    redirect_back_or_to root_path
   end
 
   def mark_as_read
@@ -747,7 +742,7 @@ class WorksController < ApplicationController
     unless @work.marked_for_later?(current_user)
       flash[:notice] = ts("This work was removed from your #{view_context.link_to('Marked for Later list', read_later_path)}.").html_safe
     end
-    redirect_to(request.env['HTTP_REFERER'] || root_path)
+    redirect_back_or_to root_path
   end
 
   protected

@@ -197,7 +197,7 @@ class Admin::AdminUsersController < Admin::BaseController
     @user.update_works_index_timestamp!
     @user.create_log_item(options = { action: ArchiveConfig.ACTION_TROUBLESHOOT, admin_id: current_admin.id })
     flash[:notice] = ts("User account troubleshooting complete.")
-    redirect_to(request.env["HTTP_REFERER"] || root_path) && return
+    redirect_back_or_to admin_user_path(@user)
   end
 
   def activate

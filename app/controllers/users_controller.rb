@@ -281,7 +281,7 @@ class UsersController < ApplicationController
     @user.preference.update_attribute(:banner_seen, true)
 
     respond_to do |format|
-      format.html { redirect_to(request.env['HTTP_REFERER'] || root_path) && return }
+      format.html { redirect_back_or_to root_path and return }
       format.js
     end
   end
