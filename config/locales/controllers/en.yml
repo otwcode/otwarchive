@@ -283,8 +283,9 @@ en:
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You cannot post, edit, or delete content until your suspension has ended. Please check your email or %{contact_abuse_link} for more information.
   works:
     create:
-      draft_notice_html: Draft was successfully created. It will be <strong>scheduled for deletion</strong> on %{deletion_date}.
+      draft_notice_html: Draft was successfully created. It will be %{scheduled_for_deletion_bold} on %{deletion_date}.
       posted_notice: Work was successfully posted. It should appear in work listings within the next few minutes.
+      scheduled_for_deletion: scheduled for deletion
     drafts:
       page_title: "%{username} - Drafts"
     edit_tags:
@@ -295,8 +296,7 @@ en:
     update:
       unposted_notice: Your changes have not been saved. Please post your work or save the draft if you want to keep them.
     update_tags:
-      page_title:
-        preview: Preview Work Tags
+      page_title: Preview Work Tags
   wrangling_guidelines:
     create: Wrangling Guideline was successfully created.
     delete: Wrangling Guideline was successfully deleted.

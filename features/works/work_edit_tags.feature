@@ -89,6 +89,7 @@ Feature: Edit tags on a work
   Given I am logged in as "regularuser"
     And I post the work "Some Work"
     And I follow "Edit Tags"
+    And I fill in "Fandoms" with "exclusive fandom"
     And I press "Preview"
   Then I should see the page title "Preview Work Tags"
-
+    And I should see "Fandom: exclusive fandom"
