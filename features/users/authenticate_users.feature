@@ -356,7 +356,10 @@ Feature: User Authentication
     Then I should see "Secret"
 
   Scenario: User is redirected to previous page after using the small login
-    Given I am on the works page
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+      And I am on the works page
     When I fill in "Username or email:" with "test" within "#small_login"
       And I fill in "Password:" with "password" within "#small_login"
       And I press "Log In" within "#small_login"
