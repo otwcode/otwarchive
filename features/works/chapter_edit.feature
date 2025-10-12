@@ -254,7 +254,8 @@ Feature: Edit chapters
     Then I should see "this is my edited second chapter"
     When I press "Edit"
     Then I should see "this is my edited second chapter"
-    When I press "Post"
+    When I wait 1 second
+      And I press "Post"
     Then I should see Completed today
       And I should see "this is my edited second chapter"
 
