@@ -222,7 +222,7 @@ Feature: Edit chapters
     And I should see "And then they will request more features for it."
   When I press "Edit"
     And I fill in "content" with "And then they will request more features for it. Like the ability to save easily."
-    And I press "Save As Draft"
+    And I press "Save Draft"
   Then I should see "Chapter was successfully updated."
     And I should see "This chapter is a draft and hasn't been posted yet!"
     And I should see "Like the ability to save easily."
@@ -236,21 +236,28 @@ Feature: Edit chapters
       And I select "1" from "work_chapter_attributes_published_at_3i"
       And I select "January" from "work_chapter_attributes_published_at_2i"
       And I select "1990" from "work_chapter_attributes_published_at_1i"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Published:1990-01-01"
     When I follow "Add Chapter"
       And I fill in "content" with "this is my second chapter"
       And I set the publication date to today
       And I press "Preview"
       And I should see "This is a draft"
-      And I press "Save As Draft"
+      And I press "Save Draft"
     Then I should not see Updated today
       And I should not see Completed today
       And I should not see "Updated" within ".work.meta .stats"
       And I should not see "Completed" within ".work.meta .stats"
     When I follow "Edit Chapter"
+      And I fill in "content" with "this is my edited second chapter"
+      And I press "Preview"
+    Then I should see "this is my edited second chapter"
+    When I press "Edit"
+    Then I should see "this is my edited second chapter"
+    When I wait 1 second
       And I press "Post"
-      Then I should see Completed today
+    Then I should see Completed today
+      And I should see "this is my edited second chapter"
 
 
   Scenario: Posting a new chapter without previewing should set the work's updated date to now
@@ -267,7 +274,7 @@ Feature: Edit chapters
     Then I should see Completed today
     When I follow "Edit"
       And I fill in "work_wip_length" with "?"
-      And I press "Post"
+      And I press "Update"
     Then I should see Updated today
     When I post the work "A Whole New Work"
       And I go to the works page
@@ -311,7 +318,7 @@ Feature: Edit chapters
       And I view the 2nd chapter
       And I follow "Edit Chapter"
       And I invite the co-author "amy"
-      And I post the chapter
+      And I press "Update"
     Then I should not see "amy, karma"
       And 1 email should be delivered to "amy"
       And the email should contain "The user karma has invited your pseud amy to be listed as a co-creator on the following chapter"
@@ -340,7 +347,7 @@ Feature: Edit chapters
     When I check "sabrina"
       # Expire cached byline
       And it is currently 1 second from now
-      And I post the chapter
+      And I press "Update"
     Then I should not see "Chapter by karma"
       And 1 email should be delivered to "sabrina"
       And the email should contain "The user karma has listed your pseud sabrina as a co-creator on the following chapter"
@@ -431,7 +438,7 @@ Feature: Edit chapters
     When I follow "Edit Chapter"
     Then I should not see "You're not allowed to use that pseud."
     When I fill in "content" with "opsfriend was here"
-      And I post the chapter
+      And I press "Update"
     Then I should see "opsfriend was here"
       And I should not see "Chapter by originalposter"
 
@@ -597,7 +604,7 @@ Feature: Edit chapters
       And I follow "Edit Chapter"
     When I check "Add co-creators?"
       And I fill in "pseud_byline" with "thegoodmom"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Chapter was successfully updated."
       And I follow "Chapter 2"
       And I follow "Edit Chapter"
@@ -618,3 +625,18 @@ Feature: Edit chapters
     When I view the work "Over the Limit"
     Then I should see "1/1"
       And I should not see "Next Chapter"
+
+  Scenario: Canceling edit new chapter redirects to the work page
+    Given I am logged in as "karma"
+      And I post the work "Camp Friends"
+    When I follow "Add Chapter"
+     And I follow "Cancel"
+    Then I should see the page title "Camp Friends - karma"
+
+  Scenario: Canceling edit chapter redirects to the chapter
+    Given I am logged in as "karma"
+      And I post the work "Camp Friends"
+      And a chapter is added to "Camp Friends"
+    When I follow "Edit Chapter"
+     And I follow "Cancel"
+    Then I should see the page title "Camp Friends - Chapter 2 - karma"

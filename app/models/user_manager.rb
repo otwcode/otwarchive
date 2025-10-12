@@ -57,7 +57,7 @@ class UserManager
   end
 
   def validate_admin_note
-    if admin_action == "spamban"
+    if admin_action == "spamban" && admin_note.blank?
       @admin_note = "Banned for spam"
     elsif admin_action.blank?
       errors << "You must choose an action to perform."
