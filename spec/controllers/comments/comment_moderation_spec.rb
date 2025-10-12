@@ -249,7 +249,9 @@ describe CommentsController do
     shared_examples "a comment that can only be rejected by an authorized admin" do
       it "doesn't mark the comment as spam and redirects with an error" do
         put :reject, params: { id: comment.id }
-        expect(comment.reload.approved).to be_truthy
+        comment.reload
+        expect(comment.approved).to be_truthy
+        expect(comment.spam).to be_falsey
         it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
@@ -257,7 +259,9 @@ describe CommentsController do
     shared_examples "a comment the logged-in user can't reject" do
       it "doesn't mark the comment as spam and redirects with an error" do
         put :reject, params: { id: comment.id }
-        expect(comment.reload.approved).to be_truthy
+        comment.reload
+        expect(comment.approved).to be_truthy
+        expect(comment.spam).to be_falsey
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to moderate that comment.")
       end
     end
@@ -285,7 +289,9 @@ describe CommentsController do
               expect(response).to redirect_to(admin_post_path(comment.ultimate_parent,
                                                               show_comments: true,
                                                               anchor: "comments"))
-              expect(comment.reload.approved).to be_falsey
+              comment.reload
+              expect(comment.approved).to be_falsey
+              expect(comment.spam).to be_truthy
             end
           end
         end
@@ -320,7 +326,9 @@ describe CommentsController do
                 expect(response).to redirect_to(work_path(comment.ultimate_parent,
                                                           show_comments: true,
                                                           anchor: "comments"))
-                expect(comment.reload.approved).to be_falsey
+                comment.reload
+                expect(comment.approved).to be_falsey
+                expect(comment.spam).to be_truthy
               end
             end
           end
@@ -349,7 +357,9 @@ describe CommentsController do
             expect(response).to redirect_to(work_path(comment.ultimate_parent,
                                                       show_comments: true,
                                                       anchor: "comments"))
-            expect(comment.reload.approved).to be_falsey
+            comment.reload
+            expect(comment.approved).to be_falsey
+            expect(comment.spam).to be_truthy
           end
         end
       end
@@ -371,7 +381,9 @@ describe CommentsController do
 
         it "doesn't mark the comment as spam and redirects with an error" do
           put :reject, params: { id: comment.id }
-          expect(comment.reload.approved).to be_truthy
+          comment.reload
+          expect(comment.approved).to be_truthy
+          expect(comment.spam).to be_falsey
           it_redirects_to_with_error(
             new_user_session_path(return_to: comment_path(comment)),
             "Sorry, you don't have permission to moderate that comment."
@@ -390,12 +402,14 @@ describe CommentsController do
   end
 
   describe "PUT #approve" do
-    before { comment.update_column(:approved, false) }
+    before { comment.update_columns(approved: false, spam: true) }
 
     shared_examples "a comment that can only be approved by an authorized admin" do
       it "leaves the comment marked as spam and redirects with an error" do
         put :approve, params: { id: comment.id }
-        expect(comment.reload.approved).to be_falsey
+        comment.reload
+        expect(comment.approved).to be_falsey
+        expect(comment.spam).to be_truthy
         it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
       end
     end
@@ -403,7 +417,9 @@ describe CommentsController do
     shared_examples "a comment the logged-in user can't approve" do
       it "doesn't mark the comment as spam and redirects with an error" do
         put :approve, params: { id: comment.id }
-        expect(comment.reload.approved).to be_falsey
+        comment.reload
+        expect(comment.approved).to be_falsey
+        expect(comment.spam).to be_truthy
         it_redirects_to_with_error(root_path, "Sorry, you don't have permission to moderate that comment.")
       end
     end
@@ -423,7 +439,9 @@ describe CommentsController do
             expect(response).to redirect_to(admin_post_path(comment.ultimate_parent,
                                                             show_comments: true,
                                                             anchor: "comments"))
-            expect(comment.reload.approved).to be_truthy
+            comment.reload
+            expect(comment.approved).to be_truthy
+            expect(comment.spam).to be_falsey
           end
         end
       end
@@ -452,7 +470,9 @@ describe CommentsController do
             expect(response).to redirect_to(work_path(comment.ultimate_parent,
                                                       show_comments: true,
                                                       anchor: "comments"))
-            expect(comment.reload.approved).to be_truthy
+            comment.reload
+            expect(comment.approved).to be_truthy
+            expect(comment.spam).to be_falsey
           end
         end
       end
@@ -463,12 +483,12 @@ describe CommentsController do
 
           it_behaves_like "a comment that can only be approved by an authorized admin"
         end
+      end
 
-        context "when logged-in as admin with no role" do
-          before { fake_login_admin(create(:admin)) }
+      context "when logged-in as admin with no role" do
+        before { fake_login_admin(create(:admin)) }
 
-          it_behaves_like "a comment that can only be approved by an authorized admin"
-        end
+        it_behaves_like "a comment that can only be approved by an authorized admin"
       end
 
       context "when logged-in as the work's creator" do
@@ -495,7 +515,9 @@ describe CommentsController do
 
       it "leaves the comment marked as spam and redirects with an error" do
         put :approve, params: { id: comment.id }
-        expect(comment.reload.approved).to be_falsey
+        comment.reload
+        expect(comment.approved).to be_falsey
+        expect(comment.spam).to be_truthy
         it_redirects_to_with_error(
           new_user_session_path(return_to: comment_path(comment)),
           "Sorry, you don't have permission to moderate that comment."

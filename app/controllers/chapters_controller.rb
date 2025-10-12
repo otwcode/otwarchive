@@ -116,13 +116,6 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
-    if params[:cancel_button]
-      cancel_posting_and_redirect(@work)
-      return
-    else
-      params[:from] = nil
-    end
-
     @chapter = @work.chapters.build(chapter_params)
     @work.wip_length = params[:chapter][:wip_length]
 
@@ -148,13 +141,6 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
   def update
-    if params[:cancel_button]
-      cancel_posting_and_redirect(@chapter)
-      return
-    else
-      params[:from] = nil
-    end
-
     @chapter.attributes = chapter_params
     @work.wip_length = params[:chapter][:wip_length]
 
@@ -203,20 +189,15 @@ class ChaptersController < ApplicationController
   end
 
   # POST /chapters/1/post
+  # This is used only for "Post Chapter" in the chapter_management partial.
   def post
-    if params[:cancel_button]
-      redirect_to @work
-    elsif params[:edit_button]
-      redirect_to [:edit, @work, @chapter]
+    @chapter.posted = true
+    @work.set_revised_at_by_chapter(@chapter)
+    if @chapter.save && @work.save
+      post_chapter
+      redirect_to(@work)
     else
-      @chapter.posted = true
-      @work.set_revised_at_by_chapter(@chapter)
-      if @chapter.save && @work.save
-        post_chapter
-        redirect_to(@work)
-      else
-        render :preview
-      end
+      render :preview
     end
   end
 
@@ -285,17 +266,6 @@ class ChaptersController < ApplicationController
   def post_chapter
     @work.update_attribute(:posted, true) unless @work.posted
     flash[:notice] = ts("Chapter has been posted!")
-  end
-
-  def cancel_posting_and_redirect(fallback)
-    case params[:from]
-    when "edit-work"
-      redirect_to edit_work_path(@work)
-    when "manage"
-      redirect_to manage_work_chapters_path(@work)
-    else
-      redirect_to fallback
-    end
   end
 
   private

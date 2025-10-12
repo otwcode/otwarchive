@@ -273,13 +273,18 @@ describe CommentsController do
           context "when comment is spam" do
             let(:comment) { create(:comment) }
 
-            before { comment.update_attribute(:approved, false) }
+            before do
+              comment.update_attribute(:approved, false)
+              comment.update_attribute(:spam, true)
+            end
 
             it_behaves_like "comment is successfully frozen"
 
             it "does not change the approved status" do
               put :freeze, params: { id: comment.id }
-              expect(comment.reload.approved).to be false
+              comment.reload
+              expect(comment.approved).to be_falsey
+              expect(comment.spam).to be_truthy
             end
           end
 
@@ -1033,13 +1038,18 @@ describe CommentsController do
 
           context "when comment is spam" do
             let(:comment) { create(:comment, iced: true) }
-            before { comment.update_attribute(:approved, false) }
+            before do
+              comment.update_attribute(:approved, false)
+              comment.update_attribute(:spam, true)
+            end
 
             it_behaves_like "comment is successfully unfrozen"
 
             it "does not change the approved status" do
               put :unfreeze, params: { id: comment.id }
-              expect(comment.reload.approved).to be false
+              comment.reload
+              expect(comment.approved).to be_falsey
+              expect(comment.spam).to be_truthy
             end
           end
 

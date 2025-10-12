@@ -23,6 +23,8 @@ en:
       chapters/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
+      collection:
+        header_image_url: Header image URL
       creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
@@ -98,6 +100,10 @@ en:
           attributes:
             pseud:
               required: can't be blank
+        collection:
+          attributes:
+            header_image_url:
+              file_format: can only point to a gif, jpg, jpeg, or png file.
         comment:
           attributes:
             comment_content:

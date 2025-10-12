@@ -6,6 +6,7 @@
 <%= content_for_commentable_text(@comment) %>
 <%= text_divider %>
 
-<%= to_plain_text(raw(@comment.sanitized_mailer_content))%>
+<%= to_plain_text(raw(@comment.sanitized_mailer_content)) %>
 
-<%= render 'comment_notification_footer', formats: [:text] %><% end %>
+<%= render "comment_notification_footer", formats: [:text] -%>
+<% end %>

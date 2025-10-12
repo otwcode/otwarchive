@@ -32,19 +32,19 @@ Feature: Parsing HTML
   Then I should see in the "content" input
     """
     <p>This is paragraph 1.</p>
-    
+
     <p>This is paragraph 2.</p>
 
     <p> </p>
 
     <p>This is paragraph 3.</p>
     """
-  When I press "Post"
+  When I press "Update"
     And I follow "Edit"
   Then I should see in the "content" input
     """
     <p>This is paragraph 1.</p>
-    
+
     <p>This is paragraph 2.</p>
 
     <p> </p>
