@@ -14,7 +14,7 @@
 
     <%# In preview mode, replace Preview option with Edit. %>
     <% if @preview_mode %>
-      <li><%= link_to t(".actions.edit"), edit_work_chapter_path(@work, @chapter) %></li>
+      <li><%= submit_tag t(".actions.edit"), name: "edit_button" %></li>
     <% else %>
       <li><%= submit_tag t(".actions.preview"), name: "preview_button" %></li>
     <% end %>

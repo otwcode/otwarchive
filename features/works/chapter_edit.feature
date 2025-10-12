@@ -178,7 +178,7 @@ Feature: Edit chapters
     And I fill in "content" with "Even more awesomely epic context"
     And I press "Preview"
   Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
-  When I follow "Edit"
+  When I press "Edit"
     And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
     And I press "Post"
     Then I should see "Chapter was successfully posted."
@@ -192,7 +192,7 @@ Feature: Edit chapters
     And I fill in "content" with "Even more awesomely epic context"
     And I press "Preview"
   Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
-  When I follow "Edit"
+  When I press "Edit"
     And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
     And I press "Preview"
   Then I should see "Even more awesomely epic context. Plus bonus epicness"
@@ -220,7 +220,7 @@ Feature: Edit chapters
     And I press "Preview"
   Then I should see "This is a draft chapter in a posted work. It will be kept unless the work is deleted."
     And I should see "And then they will request more features for it."
-  When I follow "Edit"
+  When I press "Edit"
     And I fill in "content" with "And then they will request more features for it. Like the ability to save easily."
     And I press "Save Draft"
   Then I should see "Chapter was successfully updated."
@@ -249,8 +249,15 @@ Feature: Edit chapters
       And I should not see "Updated" within ".work.meta .stats"
       And I should not see "Completed" within ".work.meta .stats"
     When I follow "Edit Chapter"
+      And I fill in "content" with "this is my edited second chapter"
+      And I press "Preview"
+    Then I should see "this is my edited second chapter"
+    When I press "Edit"
+    Then I should see "this is my edited second chapter"
+    When I wait 1 second
       And I press "Post"
-      Then I should see Completed today
+    Then I should see Completed today
+      And I should see "this is my edited second chapter"
 
 
   Scenario: Posting a new chapter without previewing should set the work's updated date to now

@@ -189,6 +189,7 @@ class ChaptersController < ApplicationController
   end
 
   # POST /chapters/1/post
+  # This is used only for "Post Chapter" in the chapter_management partial.
   def post
     @chapter.posted = true
     @work.set_revised_at_by_chapter(@chapter)
