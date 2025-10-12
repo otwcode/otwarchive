@@ -280,15 +280,26 @@ class UserMailerPreview < ApplicationMailerPreview
   end
 
   def delete_work_notification_self
-    user = create(:user, :for_mailer_preview)
-    work = create(:work, authors: [user.default_pseud])
+    if params[:work]
+      work = Work.find_by_id(params[:work])
+      user = work.users[0]
+    else
+      user = create(:user, :for_mailer_preview)
+      work = create(:work, authors: [user.default_pseud])
+    end
     UserMailer.delete_work_notification(user, work, user)
   end
 
   def delete_work_notification_co_creator
-    first_creator = create(:user, :for_mailer_preview)
-    second_creator = create(:user, :for_mailer_preview)
-    work = create(:work, authors: [first_creator.default_pseud, second_creator.default_pseud])
+    if params[:work]
+      work = Work.find_by_id(params[:work])
+      first_creator = work.users[0]
+      second_creator = work.users[1]
+    else
+      first_creator = create(:user, :for_mailer_preview)
+      second_creator = create(:user, :for_mailer_preview)
+      work = create(:work, authors: [first_creator.default_pseud, second_creator.default_pseud])
+    end
     UserMailer.delete_work_notification(first_creator, work, second_creator)
   end
 
