@@ -190,6 +190,8 @@ class ChaptersController < ApplicationController
 
   # POST /chapters/1/post
   def post
+    redirect_to [:edit, @work, @chapter] and return if params[:edit_button]
+
     @chapter.posted = true
     @work.set_revised_at_by_chapter(@chapter)
     if @chapter.save && @work.save

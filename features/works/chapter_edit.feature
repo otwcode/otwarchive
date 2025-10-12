@@ -249,8 +249,14 @@ Feature: Edit chapters
       And I should not see "Updated" within ".work.meta .stats"
       And I should not see "Completed" within ".work.meta .stats"
     When I follow "Edit Chapter"
-      And I press "Post"
-      Then I should see Completed today
+      And I fill in "content" with "this is my edited second chapter"
+      And I press "Preview"
+    Then I should see "this is my edited second chapter"
+    When I press "Edit"
+    Then I should see "this is my edited second chapter"
+    When I press "Post"
+    Then I should see Completed today
+      And I should see "this is my edited second chapter"
 
 
   Scenario: Posting a new chapter without previewing should set the work's updated date to now
