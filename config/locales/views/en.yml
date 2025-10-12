@@ -670,6 +670,9 @@ en:
         no_challenge: No Challenge
         prompt_meme: Prompt Meme Challenge
     form:
+      header_image_url:
+        footnote: PNG, JPEG, GIF
+        label: Custom header URL
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
       multifandom:
