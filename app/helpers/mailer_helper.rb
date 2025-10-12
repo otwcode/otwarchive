@@ -233,7 +233,7 @@ module MailerHelper
       # For pluralization: creator publicó, creator y creator2 publicaron.
       creators_count = creation.pseuds.size
     end
-    chapter_position = creation.position if creation.class.name == "Chapter"
+    chapter_position = creation.position if instance_of?(Chapter)
     unless additional_creations_count.zero?
       # "and X more," translated separately so we can pluralize "more" based on X.
       # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.more")
@@ -247,7 +247,7 @@ module MailerHelper
       chapter_position: chapter_position,
       work_title: work.title,
       series_title: series&.title,
-      more: more_translation,
+      more: more_translation
     }
 
     t(computed_key, **interpolations)
