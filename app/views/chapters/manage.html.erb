@@ -27,7 +27,7 @@
         <% if !chapter.posted %>(Draft)<% end %>
 
         <ul class="chapter-control actions">
-          <li><%= link_to ts("Edit"), edit_work_chapter_path(@work, chapter, from: "manage") %></li>
+          <li><%= link_to ts("Edit"), edit_work_chapter_path(@work, chapter) %></li>
           <% if @work.chapters.count > 1 %>
             <li>
               <%= link_to ts("Delete"), [@work, chapter],

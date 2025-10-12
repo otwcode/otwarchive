@@ -40,8 +40,6 @@
 <div class="clear"><!--presentational--></div>
 
 <%= form_for(@work) do |f| %>
-  <%= f.hidden_field(:from, name: "from", value: params[:from]) if params[:from] %>
-
   <%= render "hidden_fields", form: f %>
 
   <%= render "posting_fieldset" %>
