@@ -25,7 +25,7 @@ class FeedbacksController < ApplicationController
       @feedback.email_and_send
       flash[:notice] = t("successfully_sent",
         default: "Your message was sent to the Archive team - thank you!")
-      redirect_to(@feedback.referer || root_path)
+      redirect_to(url_from(@feedback.referer) || root_path)
     else
       flash[:error] = t("failure_send",
         default: "Sorry, your message could not be saved - please try again!")

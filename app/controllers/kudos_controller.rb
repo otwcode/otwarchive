@@ -41,7 +41,7 @@ class KudosController < ApplicationController
       respond_to do |format|
         format.html do
           flash[:kudos_notice] = t(".success")
-          redirect_back_or_to @kudo.commentable || root_path and return
+          redirect_back_or_to @kudo.commentable and return
         end
 
         format.js do

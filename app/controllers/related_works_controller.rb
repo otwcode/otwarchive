@@ -34,7 +34,7 @@ class RelatedWorksController < ApplicationController
         redirect_to user_related_works_path(current_user)
       else
         flash[:error] = ts("Sorry, but you don't have permission to do that.")
-        redirect_to related_work_path(@related_work)
+        redirect_to root_path
       end
       return
     end
@@ -59,7 +59,7 @@ class RelatedWorksController < ApplicationController
         redirect_to related_work_path(@related_work)
       else
         flash[:error] = ts("Sorry, but you don't have permission to do that.")
-        redirect_back_or_to root_path
+        redirect_to root_path
       end
       return
     end
@@ -72,12 +72,12 @@ class RelatedWorksController < ApplicationController
   def load_user
     if params[:user_id].blank?
       flash[:error] = ts("Whose related works were you looking for?")
-      redirect_back_or_to search_people_path
+      redirect_to search_people_path
     else
       @user = User.find_by(login: params[:user_id])
       if @user.blank?
         flash[:error] = ts("Sorry, we couldn't find that user")
-        redirect_back_or_to search_people_path
+        redirect_to search_people_path
       end
     end
   end

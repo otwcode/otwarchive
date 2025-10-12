@@ -18,7 +18,7 @@ class OrphansController < ApplicationController
       check_one_owned(@to_be_orphaned, current_user.works)
     elsif params[:work_ids]
       @to_be_orphaned = Work.where(id: params[:work_ids]).to_a
-      @return_to = show_multiple_user_works_path(current_user)
+      @return_to = show_multiple_user_works_path(current_user, work_ids: params[:work_ids])
       check_all_owned(@to_be_orphaned, current_user.works)
     elsif params[:series_id]
       @to_be_orphaned = Series.find(params[:series_id])

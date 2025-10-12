@@ -131,49 +131,49 @@ class CommentsController < ApplicationController
     return unless admin_settings.guest_comments_off? && guest?
 
     flash[:error] = t("comments.commentable.guest_comments_disabled")
-    redirect_back_or_to @commentable
+    redirect_back_or_to find_parent
   end
 
   def check_guest_replies_preference
     return unless guest? && @commentable.respond_to?(:guest_replies_disallowed?) && @commentable.guest_replies_disallowed?
 
     flash[:error] = t("comments.check_guest_replies_preference.error")
-    redirect_back_or_to @commentable
+    redirect_back_or_to find_parent
   end
 
   def check_unreviewed
     return unless @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
 
     flash[:error] = ts("Sorry, you cannot reply to an unapproved comment.")
-    redirect_to logged_in? ? root_path : new_user_session_path
+    redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
 
   def check_frozen
     return unless @commentable.respond_to?(:iced?) && @commentable.iced?
 
     flash[:error] = t("comments.check_frozen.error")
-    redirect_back_or_to @commentable
+    redirect_back_or_to find_parent
   end
 
   def check_hidden_by_admin
     return unless @commentable.respond_to?(:hidden_by_admin?) && @commentable.hidden_by_admin?
 
     flash[:error] = t("comments.check_hidden_by_admin.error")
-    redirect_back_or_to root_path
+    redirect_back_or_to find_parent
   end
 
   def check_not_replying_to_spam
     return unless @commentable.respond_to?(:approved?) && !@commentable.approved?
 
     flash[:error] = t("comments.check_not_replying_to_spam.error")
-    redirect_back_or_to root_path
+    redirect_back_or_to find_parent
   end
 
   def check_permission_to_review
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent)
     flash[:error] = ts("Sorry, you don't have permission to see those unreviewed comments.")
-    redirect_to logged_in? ? root_path : new_user_session_path
+    redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
 
   def check_permission_to_access_single_unreviewed
@@ -181,15 +181,14 @@ class CommentsController < ApplicationController
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
     flash[:error] = ts("Sorry, that comment is currently in moderation.")
-    redirect_to logged_in? ? root_path : new_user_session_path
+    redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
 
   def check_permission_to_moderate
-    parent = find_parent
-    unless logged_in_as_admin? || current_user_owns?(parent)
-      flash[:error] = ts("Sorry, you don't have permission to moderate that comment.")
-      redirect_to(logged_in? ? root_path : new_user_session_path)
-    end
+    return if logged_in_as_admin? || current_user_owns?(find_parent)
+
+    flash[:error] = ts("Sorry, you don't have permission to moderate that comment.")
+    redirect_to(logged_in? ? root_path : new_user_session_path(return_to: comment_path(@comment)))
   end
 
   def check_tag_wrangler_access

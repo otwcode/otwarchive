@@ -275,14 +275,13 @@ describe CollectionItemsController do
       subject { get :new, params: { work_id: work.id } }
       let(:work) { create(:work) }
       let(:success) { expect(response).to render_template("new") }
-      let(:redirects_to_login) { it_redirects_to_user_login_with_error }
-      let(:success_admin) { redirects_to_login }
+      let(:success_admin) { it_redirects_to_user_login_with_error }
 
       include_examples "denies access for work that isn't visible to user"
 
       it "redirects to login if logged out" do
         subject
-        redirects_to_login
+        it_redirects_to_user_login_with_error
       end
     end
   end

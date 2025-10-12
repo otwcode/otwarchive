@@ -157,7 +157,7 @@ class WorksController < ApplicationController
 
     unless current_user == @user || logged_in_as_admin?
       flash[:error] = ts('You can only see your own drafts, sorry!')
-      redirect_to logged_in? ? user_path(current_user) : new_user_session_path
+      redirect_to logged_in? ? user_path(current_user) : new_user_session_path(return_to: request.fullpath)
       return
     end
 
@@ -236,7 +236,7 @@ class WorksController < ApplicationController
     else
       # Avoid getting an unstyled page if JavaScript is disabled
       flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
-      redirect_back_or_to root_path
+      redirect_back_or_to @work
     end
   end
 
