@@ -281,7 +281,7 @@ class UserMailerPreview < ApplicationMailerPreview
 
   def delete_work_notification_self
     if params[:work]
-      work = Work.find_by_id(params[:work])
+      work = Work.find_by(id: params[:work])
       user = work.users[0]
     else
       user = create(:user, :for_mailer_preview)
@@ -292,7 +292,7 @@ class UserMailerPreview < ApplicationMailerPreview
 
   def delete_work_notification_co_creator
     if params[:work]
-      work = Work.find_by_id(params[:work])
+      work = Work.find_by(id: params[:work])
       first_creator = work.users[0]
       second_creator = work.users[1]
     else
