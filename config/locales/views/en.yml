@@ -2441,6 +2441,15 @@ en:
       invitations: Invitations
       new_work: Post New
     passwords:
+      edit:
+        change_password: Change Password
+        confirm_new_password: Confirm new password
+        new_password: New password
+        page_heading: Change Password
+        password_length:
+          one: "%{minimum} to %{count} character"
+          other: "%{minimum} to %{count} characters"
+        submit: Submit
       new:
         email_or_username_html: Email address %{or} username
         instructions: If you've forgotten your password, we can send instructions that will allow you to reset it. Please tell us the username or email address you used when you signed up for your Archive account.
