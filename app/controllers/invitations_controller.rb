@@ -12,7 +12,11 @@ class InvitationsController < ApplicationController
 
   def check_permission
     @user = User.find_by(login: params[:user_id])
-    access_denied unless policy(User).can_manage_users? || @user.present? && @user == current_user
+    if logged_in_as_admin?
+      authorize @invitations, :can_manage_users?, policy_class: UserPolicy
+    else
+      access_denied unless @user&.equal?(current_user)
+    end
   end
 
   def index
@@ -34,7 +38,7 @@ class InvitationsController < ApplicationController
     if !invitation_params[:invitee_email].blank?
       @invitation.invitee_email = invitation_params[:invitee_email]
       if @invitation.save
-        flash[:notice] = 'Invitation was successfully sent.'
+        flash[:notice] = "Invitation was successfully sent."
         redirect_to([@user, @invitation])
       else
         render action: "show"
@@ -58,15 +62,13 @@ class InvitationsController < ApplicationController
   def update
     @invitation.attributes = invitation_params
 
-    if @invitation.invitee_email_changed? && @invitation.update(invitation_params)
-      flash[:notice] = 'Invitation was successfully sent.'
-      if logged_in_as_admin?
-        redirect_to find_admin_invitations_path("invitation[token]" => @invitation.token)
-      else
-        redirect_to([@user, @invitation])
-      end
+    if @invitation.invitee_email.blank?
+      flash[:error] = "Please enter an email address."
+      render action: "show"
+    elsif @invitation.update(invitation_params)
+      flash[:notice] = "Invitation was successfully sent."
+      logged_in_as_admin? ? redirect_to(find_admin_invitations_path("invitation[token]" => @invitation.token)) : redirect_to([@user, @invitation])
     else
-      flash[:error] = "Please enter an email address." if @invitation.invitee_email.blank?
       render action: "show"
     end
   end
