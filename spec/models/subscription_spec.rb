@@ -127,34 +127,41 @@ describe Subscription do
       expect(subscription.valid_notification_entry?(series)).to be_falsey
     end
 
-    it "returns false when creations is an unposted work" do
-      expect(subscription.valid_notification_entry?(draft)).to be_falsey
+    context "when creation is a work" do
+      it "returns false when creation is unposted" do
+        expect(subscription.valid_notification_entry?(draft)).to be_falsey
+      end
+
+      # TODO: AO3-3620 & AO3-5696: Allow subscriptions to orphan_account to receive notifications
+      it "returns false when creation is by orphan_account" do
+        expect(subscription.valid_notification_entry?(create(:work, authors: [orphan_pseud]))).to be_falsey
+      end
+
+      it "returns false when creation is hidden_by_admin" do
+        expect(subscription.valid_notification_entry?(build(:work, hidden_by_admin: true))).to be_falsey
+      end
     end
 
-    it "returns false when chapter is an unposted chapter" do
-      expect(subscription.valid_notification_entry?(build(:chapter, :draft))).to be_falsey
+    context "when creation is a chapter" do
+      it "returns false when creation is unposted" do
+        expect(subscription.valid_notification_entry?(build(:chapter, :draft))).to be_falsey
+      end
+
+      it "returns false when chapter is on an unposted work" do
+        expect(subscription.valid_notification_entry?(build(:chapter, work: draft))).to be_falsey
+      end
+
+      # TODO: AO3-3620 & AO3-5696: Allow subscriptions to orphan_account to receive notifications
+      it "returns false when creation is by orphan_account" do
+        expect(subscription.valid_notification_entry?(create(:chapter, authors: [orphan_pseud]))).to be_falsey
+      end
+
+      it "returns false when chapter is on a hidden work" do
+        expect(subscription.valid_notification_entry?(build(:chapter, work: build(:work, hidden_by_admin: true)))).to be_falsey
+      end
     end
 
-    it "returns false when chapter is on an unposted work" do
-      expect(subscription.valid_notification_entry?(build(:chapter, work: draft))).to be_falsey
-    end
-
-    it "returns false when work is by orphan_account" do
-      expect(subscription.valid_notification_entry?(create(:work, authors: [orphan_pseud]))).to be_falsey
-    end
-
-    it "returns false when chapter is by orphan_account" do
-      expect(subscription.valid_notification_entry?(create(:chapter, authors: [orphan_pseud]))).to be_falsey
-    end
-
-    it "returns false when work is hidden_by_admin" do
-      expect(subscription.valid_notification_entry?(build(:work, hidden_by_admin: true))).to be_falsey
-    end
-
-    it "returns false when chapter is on a hidden work" do
-      expect(subscription.valid_notification_entry?(build(:chapter, work: build(:work, hidden_by_admin: true)))).to be_falsey
-    end
-
+    # TODO: AO3-1250: Anon series subscription improvements
     context "when subscribable is a series" do
       context "when series is not anonymous" do
         let(:subscription) { build(:subscription, subscribable: series) }
@@ -167,24 +174,24 @@ describe Subscription do
           expect(subscription.valid_notification_entry?(chapter)).to be_truthy
         end
 
-        it "returns false for an anonymous work" do
-          expect(subscription.valid_notification_entry?(anon_work)).to be_falsey
+        it "returns true for an anonymous work" do
+          expect(subscription.valid_notification_entry?(anon_work)).to be_truthy
         end
 
-        it "returns false for an anonymous chapter" do
-          expect(subscription.valid_notification_entry?(anon_chapter)).to be_falsey
+        it "returns true for an anonymous chapter" do
+          expect(subscription.valid_notification_entry?(anon_chapter)).to be_truthy
         end
       end
 
       context "when series is anonymous" do
         let(:subscription) { build(:subscription, subscribable: anon_series) }
 
-        it "returns false for a non-anonymous work" do
-          expect(subscription.valid_notification_entry?(work)).to be_falsey
+        it "returns true for a non-anonymous work" do
+          expect(subscription.valid_notification_entry?(work)).to be_truthy
         end
 
-        it "returns false for a non-anoymous chapter" do
-          expect(subscription.valid_notification_entry?(chapter)).to be_falsey
+        it "returns true for a non-anoymous chapter" do
+          expect(subscription.valid_notification_entry?(chapter)).to be_truthy
         end
 
         it "returns true for an anonymous work" do
@@ -221,22 +228,16 @@ describe Subscription do
       context "when work is not anonymous" do
         let(:subscription) { build(:subscription, subscribable: work) }
 
+        # an non-anon work can only have non-anon chapters
         it "returns true for a non-anonymous chapter" do
           expect(subscription.valid_notification_entry?(chapter)).to be_truthy
-        end
-
-        it "returns false for an anonymous chapter" do
-          expect(subscription.valid_notification_entry?(anon_chapter)).to be_falsey
         end
       end
 
       context "when work is anonymous" do
         let(:subscription) { build(:subscription, subscribable: anon_work) }
 
-        it "returns false for a non-anonymous chapter" do
-          expect(subscription.valid_notification_entry?(chapter)).to be_falsey
-        end
-
+        # an anon work can only have anon chapters
         it "returns true for an anonymous chapter" do
           expect(subscription.valid_notification_entry?(anon_chapter)).to be_truthy
         end

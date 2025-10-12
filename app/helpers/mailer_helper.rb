@@ -205,11 +205,12 @@ module MailerHelper
     work = creation.is_a?(Chapter) ? creation.work : creation
     series = subscription.subscribable if subscription.subscribable_type == "Series"
 
-    base_key = "user_mailer.batch_subscription_notification.subject"
-    creator_key = creation.anonymous? ? "anon" : "named"
-    creation_type = creation.model_name.i18n_key
-    creation_key = series ? "series.#{creation_type}" : creation_type
-    entries_key = additional_creations_count.zero? ? "one_entry" : "multiple_entries"
+    base_key = %i[user_mailer batch_subscription_notification subject]
+    translation_keys = base_key.dup
+    translation_keys << (creation.anonymous? ? :anon : :named)
+    translation_keys << :series if series
+    translation_keys << creation.model_name.i18n_key
+    translation_keys << (additional_creations_count.zero? ? :one_entry : :multiple_entries)
 
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.chapter.multiple_entries")
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.anon.chapter.one_entry")
@@ -225,26 +226,29 @@ module MailerHelper
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.series.work.one_entry")
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.work.multiple_entries")
     # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.named.work.one_entry")
-    computed_key = "#{base_key}.#{creator_key}.#{creation_key}.#{entries_key}"
+    computed_key = translation_keys.join(".")
 
     unless creation.anonymous?
       creator_list = creation.pseuds.map(&:byline).to_sentence
       # For pluralization: creator publicó, creator y creator2 publicaron.
       creators_count = creation.pseuds.size
     end
-    chapter_position = creation.position if creation_type == :chapter
-    # "and X more," translated separately so we can pluralize "more" based on X.
-    # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.more")
-    more_translation = t("#{base_key}.more", count: additional_creations_count) unless additional_creations_count.zero?
+    chapter_position = creation.position if creation.class.name == "Chapter"
+    unless additional_creations_count.zero?
+      # "and X more," translated separately so we can pluralize "more" based on X.
+      # i18n-tasks-use t("user_mailer.batch_subscription_notification.subject.more")
+      more_translation = t(base_key.dup.push(:more).join("."), count: additional_creations_count)
+    end
 
-    interpolations = {}
-    interpolations[:app_name] = ArchiveConfig.APP_SHORT_NAME
-    interpolations[:creators] = creator_list
-    interpolations[:count] = creators_count
-    interpolations[:chapter_position] = chapter_position
-    interpolations[:work_title] = work.title
-    interpolations[:series_title] = series&.title
-    interpolations[:more] = more_translation
+    interpolations = {
+      app_name: ArchiveConfig.APP_SHORT_NAME,
+      creators: creator_list,
+      count: creators_count,
+      chapter_position: chapter_position,
+      work_title: work.title,
+      series_title: series&.title,
+      more: more_translation,
+    }
 
     t(computed_key, **interpolations)
   end

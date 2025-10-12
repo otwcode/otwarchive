@@ -15,7 +15,7 @@ describe "n+1 queries in the batch_subscription_notification" do
       expect(email).to have_html_part_content("posted a new chapter")
     end
 
-    it "performs a constant number of queries" do
+    it "generates about 10 database queries per mail" do
       expect do
         Subscription.ids.each do |id|
           email = UserMailer.batch_subscription_notification(id, entries)
