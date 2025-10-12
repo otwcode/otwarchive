@@ -690,6 +690,13 @@ describe UserMailer do
       it "includes HTML from the chapter summary" do
         expect(email).to have_html_part_content("<p><b>Another</b> HTML summary.</p>")
       end
+
+      # AO3-5804 Only show chapter byline if it differs from work byline
+      it "has the correct chapter link without attribution" do
+        chapter_link = "<i><b>#{style_link(chapter.full_chapter_title.html_safe, work_chapter_url(work, chapter))}</b></i>"
+        expect(email).to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)")
+        expect(email).not_to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br />by")
+      end
     end
 
     describe "text version" do
@@ -705,6 +712,12 @@ describe UserMailer do
 
       it "reformats HTML from the chapter summary" do
         expect(email).to have_text_part_content("*Another* HTML summary.")
+      end
+
+      # AO3-5804 Only show chapter byline if it differs from work byline
+      it "has the correct chapter link without attribution" do
+        expect(email).to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)")
+        expect(email).not_to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby")
       end
     end
 
@@ -731,13 +744,17 @@ describe UserMailer do
           expect(email).to have_text_part_content("#{text_pseud(creator1)} and #{text_pseud(creator2)} posted a new chapter of \"#{work.title}\" (#{work.word_count} words):\n#{work_chapter_url(work, chapter)}")
         end
 
+        # AO3-5805 Show chapter byline on chapter, not work byline
         it "has the correct chapter link with chapter attribution in the HTML version" do
           chapter_link = "<i><b>#{style_link(chapter.full_chapter_title.html_safe, work_chapter_url(work, chapter))}</b></i>"
           expect(email).to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br />by #{style_pseud_link(creator1)}")
+          expect(email).not_to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br />by #{style_pseud_link(creator1)} and #{style_pseud_link(creator2)}")
         end
 
+        # AO3-5805 Show chapter byline on chapter, not work byline
         it "has the correct chapter title with chapter attribution in the text version" do
           expect(email).to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby #{text_pseud(creator1)}")
+          expect(email).not_to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby #{text_pseud(creator1)} and #{text_pseud(creator2)}")
         end
       end
     end
