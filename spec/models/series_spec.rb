@@ -117,7 +117,7 @@ describe Series do
     end
 
     it "does not include tags on works hidden by an admin" do
-      hidden_work = create(:work, hidden_by_admin: true)
+      hidden_work = create(:work, hidden_by_admin: true, character_string: create(:canonical_character).name)
       series.works = [hidden_work]
       series.reload
       expect(series.public_filters).to be_empty
@@ -232,7 +232,7 @@ describe Series do
     end
 
     it "does not include tags on works hidden by an admin" do
-      hidden_work = create(:work, hidden_by_admin: true)
+      hidden_work = create(:work, hidden_by_admin: true, character_string: create(:canonical_character).name)
       series.works = [hidden_work]
       series.reload
       expect(series.public_filter_ids).to be_empty

@@ -1,6 +1,4 @@
 class BookmarkableQuery < Query
-  RESTRICTABLE_FIELDS = Regexp.union(Tag::FILTERS.map(&:underscore) + %w[filter tags]).source
-
   include TaggableQuery
 
   attr_accessor :bookmark_query
@@ -113,7 +111,8 @@ class BookmarkableQuery < Query
   # escape_tags_field("tag:1234") => general_tags:1234
   def escape_restrictable_fields(query)
     # Special-case for the "tag" convenience field name first, then sanitize visibility level.
-    query.gsub("tag:", "public_tags:").gsub(/(?:(?:public|general)_)?((?:#{RESTRICTABLE_FIELDS})(?:_ids)?):/) do
+    field_names = "rating_ids|archive_warning_ids|category_ids|fandom_ids|relationship_ids|character_ids|freeform_ids|filter_ids|tags"
+    query.gsub("tag:", "public_tags:").gsub(/(?:(?:public|general)_)?(#{field_names}):/) do
       "#{restrictable_field_name(Regexp.last_match(1))}:"
     end
   end
