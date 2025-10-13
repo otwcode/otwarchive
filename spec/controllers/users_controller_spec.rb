@@ -308,7 +308,7 @@ describe UsersController do
     context "as admin" do
       before { fake_login_admin(admin) }
 
-      read_roles = %w[superadmin policy_and_abuse support]
+      read_roles = %w[superadmin policy_and_abuse]
 
       context "with no role" do
         let(:admin) { create(:admin, roles: []) }
