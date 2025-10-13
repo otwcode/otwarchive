@@ -215,7 +215,7 @@ describe AbuseReport do
       end
     end
 
-    context "when reporting work URLs that cross the reporting period tiemframe" do
+    context "when reporting work URLs that cross the reporting period timeframe" do
       let(:work) { create(:work, posted: true) }
       let(:work_url) { "https://archiveofourown.org/works/#{work.id}" }
 
