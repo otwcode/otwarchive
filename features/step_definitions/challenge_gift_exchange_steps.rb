@@ -403,3 +403,7 @@ Then /^no one should have an assignment for "([^\"]*)"$/ do |challenge_title|
     user.pinch_hit_assignments.in_collection(collection).should be_empty
   end
 end
+
+When "there are {int} assignments per page" do |amount|
+  allow_any_instance_of(ApplicationController).to receive(:pagy_get_limit).and_return(amount)
+end

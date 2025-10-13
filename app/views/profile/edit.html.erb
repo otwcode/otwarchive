@@ -5,7 +5,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<%= render "edit_header_navigation" %>
+<%= render "users/edit_header_navigation" %>
 <!--/subnav-->
 
 <!--main content-->
@@ -14,34 +14,32 @@
 </p>
 
 <h3 class="landmark heading"><%= t(".change_profile_landmark") %></h3>
-<%= form_for(@user) do |f| %>
+<%= form_with(model: @user.profile, url: user_profile_path(@user)) do |f| %>
   <dl>
-    <%= fields_for :profile_attributes, @user.profile do |p| %>
-      <dt><%= p.label :title, t(".title") %></dt>
+      <dt><%= f.label :title, t(".title") %></dt>
       <dd>
-        <%= p.text_field :title, class: "observe_textlength" %>
+        <%= f.text_field :title, class: "observe_textlength" %>
         <%= live_validation_for_field("profile_attributes_title", presence: false, maximum_length: Profile::PROFILE_TITLE_MAX) %>
         <%= generate_countdown_html("profile_attributes_title", Profile::PROFILE_TITLE_MAX) %>
       </dd>
 
-      <dt><%= p.label :about_me, t(".about_me") %></dt>
+      <dt><%= f.label :about_me, t(".about_me") %></dt>
       <dd class="description">
         <p><%= allowed_html_instructions %></p>
-        <%= p.text_area :about_me, class: "observe_textlength" %>
+        <%= f.text_area :about_me, class: "observe_textlength" %>
         <%= live_validation_for_field("profile_attributes_about_me", presence: false, maximum_length: Profile::ABOUT_ME_MAX) %>
         <%= generate_countdown_html("profile_attributes_about_me", Profile::ABOUT_ME_MAX) %>
       </dd>
 
       <% if policy(@user.profile).update? %>
-        <dt><%= p.label :ticket_number, class: "required" %></dt>
+        <dt><%= f.label :ticket_number, class: "required" %></dt>
         <dd>
-          <%= p.text_field :ticket_number, class: "required" %>
+          <%= f.text_field :ticket_number, class: "required" %>
         </dd>
       <% end %>
 
-      <dt class="landmark"><%= p.label :update, t(".update") %></dt>
+      <dt class="landmark"><%= f.label :update, t(".update") %></dt>
       <dd class="submit actions"><%= f.submit t(".update") %></dd>
-    <% end %>
   </dl>
 <% end %>
 

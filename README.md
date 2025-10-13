@@ -10,7 +10,7 @@ Release Status
 ---------
 Development of the OTW-Archive software is an ongoing labor of love. You can see it in action on the [Archive of Our Own](https://archiveofourown.org/), aka AO3, a multifandom archive also run by the OTW.
 
-You can find more information about the [history and future of the AO3 project on the OTW website](https://www.transformativeworks.org/archive_of_our_own/).
+You can find more information about the [history and future of the AO3 project on the OTW website](https://www.transformativeworks.org/our-projects/archive-of-our-own/).
 
 If you wish to use this software, SquidgeWorld has generously provided [setup notes](https://squidgeworld.org/works/34491).
 
@@ -37,7 +37,6 @@ The Archive code is licensed under [GPL-2.0-or-later](https://www.gnu.org/licens
 We benefit from software and services that are free to use for Open Source projects, including:
 
 * [RubyMine IDE](https://www.jetbrains.com/ruby/) by JetBrains
-* [Codeship](https://codeship.com/)
 * [Hound](https://houndci.com/) by [thoughtbot](https://thoughtbot.com/)
 * [BrowserStack](https://www.browserstack.com)
 * [Sentry](https://sentry.io)

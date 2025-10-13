@@ -420,3 +420,21 @@ Feature: Download a work
     And I view the work "Worldbuilding"
     And I follow "HTML"
   Then I should see "[Restricted Work] by translator"
+
+  Scenario: Download multi-chapter work with mixed chapter titles (one without, one with)
+  
+  Given I am logged in as "myname"
+    And I set up the draft "Multi-Chapter Download"
+    And I fill in "Work Title" with "Multi-Chapter Download"
+    And I fill in "content" with "Content for chapter one."
+    And I press "Post"
+    And I follow "Add Chapter"
+    And I fill in "content" with "Content for chapter two."
+    And I fill in "Chapter Title" with "Chapter Two Title"
+    And I press "Post"
+  When I view the work "Multi-Chapter Download"
+    And I follow "HTML"
+  Then I should receive a file of type "html"
+    And I should see "Chapter 1"
+    And I should see "Chapter 2: Chapter Two Title"
+

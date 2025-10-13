@@ -619,5 +619,21 @@ namespace :After do
       end
     end
   end
+
+  desc "Syncs the Comments.approved column to the new Comments.spam column"
+  task(sync_approved_to_spam: :environment) do
+    # Due to the size of the Comment table, this task doesn't print the typical
+    # "Updating <total> in <total_batches> batches", as getting the total Comment count
+    # could kill the db.
+    Comment.find_in_batches.with_index do |batch, index|
+      batch.each do |comment|
+        comment.update_attribute(:spam, !comment.approved)
+      end
+
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    puts "Job complete."
+  end
   # This is the end that you have to put new tasks above.
 end
