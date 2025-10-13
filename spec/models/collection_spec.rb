@@ -1,14 +1,13 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Collection do
-
   before do
     @collection = FactoryBot.create(:collection)
   end
 
   describe "collections with challenges" do
     [GiftExchange, PromptMeme].each do |challenge_klass|
-      ["true","false"].each do |moderated_status|
+      %w[true false].each do |moderated_status|
         describe "of type #{challenge_klass.name}" do
           before do
             @collection.challenge = challenge_klass.new
@@ -54,7 +53,6 @@ describe Collection do
               it "should not be listed as open" do
                 expect(Collection.signup_open(@challenge.class.name)).not_to include(@collection)
               end
-
             end
           end
 
@@ -73,6 +71,71 @@ describe Collection do
     end # challenges type loop
   end
 
+  describe "updated at timestamps for collection preferences" do
+    let(:preference) { create(:collection_preference, collection: @collection, unrevealed: true, anonymous: true) }
+
+    it "sets unrevealed_updated_at and anonymous_updated_at to nil on creation" do
+      expect(preference.unrevealed_updated_at).to eq(nil)
+      expect(preference.anonymous_updated_at).to eq(nil)
+    end
+
+    it "updates unrevealed_updated_at when unrevealed changes" do
+      preference.update!(unrevealed: !preference.unrevealed)
+
+      preference.reload
+
+      expect(preference.unrevealed_updated_at).to eq(preference.updated_at)
+    end
+
+    it "updates anonymous_updated_at when anonymous changes" do
+      preference.update!(anonymous: !preference.anonymous)
+
+      preference.reload
+
+      expect(preference.anonymous_updated_at).to eq(preference.updated_at)
+    end
+
+    it "does not update timestamps when other attributes change" do
+      old_unrevealed = preference.unrevealed_updated_at
+      old_anonymous  = preference.anonymous_updated_at
+
+      preference.update!(moderated: !preference.moderated)
+
+      preference.reload
+
+      expect(preference.unrevealed_updated_at).to eq(old_unrevealed)
+      expect(preference.anonymous_updated_at).to eq(old_anonymous)
+    end
+
+    it "calls reveal! when unrevealed is changed to false" do
+      collection_spy = preference.collection
+      allow(collection_spy).to receive(:reveal!)
+
+      preference.update!(unrevealed: false)
+
+      expect(collection_spy).to have_received(:reveal!)
+    end
+
+    it "calls reveal_authors! when anonymous is changed to false" do
+      collection_spy = preference.collection
+      allow(collection_spy).to receive(:reveal_authors!)
+
+      preference.update!(anonymous: false)
+
+      expect(collection_spy).to have_received(:reveal_authors!)
+    end
+
+    it "does not call reveal methods when flags are unchanged" do
+      allow(preference.collection).to receive(:reveal!)
+      allow(preference.collection).to receive(:reveal_authors!)
+
+      preference.update!(moderated: true)
+
+      expect(preference.collection).not_to have_received(:reveal!)
+      expect(preference.collection).not_to have_received(:reveal_authors!)
+    end
+  end
+
   describe "save" do
     let(:collection) { create(:collection) }
 
@@ -83,6 +146,22 @@ describe Collection do
         include /Sorry, a collection can only have 10 tags./
     end
 
+    it "disallows invalid header image urls" do
+      collection.header_image_url = "https://example.com/image.webp"
+      expect(collection).not_to be_valid
+      expect(collection.errors.full_messages).to include("Header image URL can only point to a gif, jpg, jpeg, or png file.")
+    end
+
+    it "allows jpeg header image urls" do
+      collection.header_image_url = "https://example.com/image.jpeg"
+      expect(collection).to be_valid
+    end
+
+    it "allows jpg header image urls" do
+      collection.header_image_url = "https://example.com/image.jpg"
+      expect(collection).to be_valid
+    end
+    
     it "raises error when multifandom is nil" do
       expect { create(:collection, multifandom: nil) }
         .to raise_error(ActiveRecord::NotNullViolation)
@@ -165,6 +244,39 @@ describe Collection do
       it_behaves_like "does not count the work"
     end
 
+    context "when the collection includes a public work rejected by collection" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(collection_approval_status: :rejected)
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes a public work rejected by user" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(user_approval_status: :rejected)
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes an invited public work" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(collection_approval_status: :approved, user_approval_status: :unreviewed)
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
     context "when the collection includes a public work" do
       let(:work) { create(:work) }
 
@@ -215,6 +327,39 @@ describe Collection do
 
       before do
         work.collections << collection
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes a public work rejected by collection" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(collection_approval_status: :rejected)
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes a public work rejected by user" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(user_approval_status: :rejected)
+      end
+
+      it_behaves_like "does not count the work"
+    end
+
+    context "when the collection includes an invited public work" do
+      let(:work) { create(:work) }
+
+      before do
+        work.collections << collection
+        work.collection_items.update!(collection_approval_status: :approved, user_approval_status: :unreviewed)
       end
 
       it_behaves_like "does not count the work"
@@ -315,6 +460,45 @@ describe Collection do
       end
     end
 
+    context "when the collection contains a public bookmark rejected by collection" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(collection_approval_status: :rejected)
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a public bookmark rejected by user" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(user_approval_status: :rejected)
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a public bookmark awaiting collection approval" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(collection_approval_status: :unreviewed, user_approval_status: :approved)
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.general_bookmarked_items_count).to eq(0)
+      end
+    end
+
     context "when the collection contains a bookmark of a hidden work" do
       let(:bookmark) { create(:bookmark, bookmarkable: create(:work, hidden_by_admin: true)) }
 
@@ -395,6 +579,57 @@ describe Collection do
 
       before do
         bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a hidden bookmark" do
+      let(:bookmark) { create(:bookmark, hidden_by_admin: true) }
+
+      before do
+        bookmark.collections << collection
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a public bookmark rejected by collection" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(collection_approval_status: :rejected)
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a public bookmark rejected by user" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(user_approval_status: :rejected)
+      end
+
+      it "does not count the bookmark" do
+        expect(collection.public_bookmarked_items_count).to eq(0)
+      end
+    end
+
+    context "when the collection contains a public bookmark awaiting collection approval" do
+      let(:bookmark) { create(:bookmark) }
+
+      before do
+        bookmark.collections << collection
+        bookmark.collection_items.update!(collection_approval_status: :unreviewed, user_approval_status: :approved)
       end
 
       it "does not count the bookmark" do

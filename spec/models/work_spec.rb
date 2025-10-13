@@ -125,27 +125,83 @@ describe Work do
   describe "reindexing" do
     let!(:work) { create(:work) }
 
-    context "when draft status is changed" do
-      it "enqueues tags for reindex" do
-        expect do
-          work.update!(posted: false)
-        end.to add_to_reindex_queue(work.fandoms.last, :main)
+    context "tags" do
+      context "when draft status is changed" do
+        it "enqueues tags for reindex" do
+          expect do
+            work.update!(posted: false)
+          end.to add_to_reindex_queue(work.fandoms.last, :main)
+        end
+      end
+
+      context "when hidden by an admin" do
+        it "enqueues tags for reindex" do
+          expect do
+            work.update!(hidden_by_admin: true)
+          end.to add_to_reindex_queue(work.fandoms.last, :main)
+        end
+      end
+
+      context "when put in an unrevealed collection" do
+        it "enqueues tags for reindex" do
+          expect do
+            work.update!(in_unrevealed_collection: true)
+          end.to add_to_reindex_queue(work.fandoms.last, :main)
+        end
       end
     end
 
-    context "when hidden by an admin" do
-      it "enqueues tags for reindex" do
-        expect do
-          work.update!(hidden_by_admin: true)
-        end.to add_to_reindex_queue(work.fandoms.last, :main)
-      end
-    end
+    context "collections" do
+      let!(:parent_collection) { create(:collection) }
+      let!(:collection) { create_invalid(:collection, parent: parent_collection) }
 
-    context "when put in an unrevealed collection" do
-      it "enqueues tags for reindex" do
-        expect do
-          work.update!(in_unrevealed_collection: true)
-        end.to add_to_reindex_queue(work.fandoms.last, :main)
+      context "when work is created in collection" do
+        it "enqueues the collection for reindex" do
+          expect do
+            create(:work, collections: [collection])
+          end.to add_to_reindex_queue(collection, :background) &
+                 add_to_reindex_queue(parent_collection, :background)
+        end
+      end
+
+      context "when work already exists in the collection" do
+        let!(:work) { create(:work, collections: [collection]) }
+
+        context "when work is hidden by an admin" do
+          it "enqueues its collection for reindex" do
+            expect do
+              work.update!(hidden_by_admin: true)
+            end.to add_to_reindex_queue(collection, :background) &
+                   add_to_reindex_queue(parent_collection, :background)
+          end
+        end
+
+        context "when work is restricted" do
+          it "enqueues its collection for reindex" do
+            expect do
+              work.update!(restricted: true)
+            end.to add_to_reindex_queue(collection, :background) &
+                   add_to_reindex_queue(parent_collection, :background)
+          end
+        end
+
+        context "when work is not significantly changed" do
+          it "doesn't enqueue its collection for reindex" do
+            expect do
+              work.touch
+            end.to not_add_to_reindex_queue(collection, :background) &
+                   not_add_to_reindex_queue(parent_collection, :background)
+          end
+        end
+
+        context "when work is destroyed" do
+          it "enqueues its collection for reindex" do
+            expect do
+              work.destroy!
+            end.to add_to_reindex_queue(collection, :background) &
+                   add_to_reindex_queue(parent_collection, :background)
+          end
+        end
       end
     end
   end

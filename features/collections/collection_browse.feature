@@ -208,6 +208,27 @@ Feature: Collection
     And I should not see "Another Gift Swap"
     And I should not see "On Demand"
 
+  Scenario: Filter collections by multifandom
+
+  Given a set of collections for searching
+  When I go to the collections page
+    And I choose "collection_search_multifandom_true"
+    And I press "Sort and Filter"
+  Then I should see "Another Gift Swap"
+    But I should not see "Some Test Collection"
+    And I should not see "Some Other Collection"
+    And I should not see "Another Plain Collection"
+    And I should not see "On Demand"
+    And I should not see "Surprise Presents"
+  When I choose "collection_search_multifandom_false"
+    And I press "Sort and Filter"
+  Then I should see "Some Test Collection"
+    And I should see "Some Other Collection"
+    And I should see "Another Plain Collection"
+    And I should see "On Demand"
+    And I should see "Surprise Presents"
+    But I should not see "Another Gift Swap"
+
   Scenario: Look at a collection, see the rules and intro and FAQ
 
   Given a set of collections for searching
@@ -225,7 +246,6 @@ Feature: Collection
     And I should see "Be nice to testers" within "#rules"
     And I should see "About Some Test Collection (sometest)"
 
-
   Scenario: Work blurb includes an HTML comment containing the unix epoch of the updated time
   
     Given time is frozen at 2025-04-12 17:00 UTC
@@ -237,7 +257,7 @@ Feature: Collection
       And I follow "Collection1"
     Then I should see an HTML comment containing the number 1744477200 within "li.work.blurb"
 
-  Scenario: Collection item counts show the correct amount for guests and registered users
+  Scenario: Collection item counts show the correct amount for guests, registered users and admins
 
   Given I have a collection "Item Counts"
   When I am logged in as the owner of "Item Counts"
@@ -253,6 +273,11 @@ Feature: Collection
   Then I should see the text with tags '<a href="/collections/Item_Counts/works">3</a>'
     And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">2</a>'
     And I should see the text with tags '<a href="/collections/Item_Counts/collections">1</a>'
+  When I am logged in as a super admin
+    And I go to the collections page
+  Then I should see the text with tags '<a href="/collections/Item_Counts/works">3</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">2</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/collections">1</a>'
   When I log out
     And I go to the collections page
   Then I should see the text with tags '<a href="/collections/Item_Counts/works">1</a>'
@@ -263,6 +288,11 @@ Feature: Collection
     And I bookmark the work "Public 2" to the collection "Item Counts"
     And the collection "Sub Count" is deleted
     And all indexing jobs have been run
+    And I go to the collections page
+  Then I should see the text with tags '<a href="/collections/Item_Counts/works">4</a>'
+    And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">3</a>'
+    And I should not see "Challenges/Subcollections:" within ".stats"
+  When I am logged in as a super admin
     And I go to the collections page
   Then I should see the text with tags '<a href="/collections/Item_Counts/works">4</a>'
     And I should see the text with tags '<a href="/collections/Item_Counts/bookmarks">3</a>'

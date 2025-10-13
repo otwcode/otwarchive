@@ -61,7 +61,7 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    active_record_query_trace (1.8.2)
+    active_record_query_trace (1.8.3)
       activerecord (>= 6.0.0)
     activejob (7.2.2.2)
       activesupport (= 7.2.2.2)
@@ -175,6 +175,7 @@ GEM
     crass (1.0.6)
     css_parser (1.16.0)
       addressable
+    csv (3.3.5)
     cucumber (9.2.1)
       builder (~> 3.2)
       cucumber-ci-environment (> 9, < 11)
@@ -398,6 +399,7 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    ostruct (0.6.3)
     pagy (9.3.3)
     parallel (1.25.1)
     parser (3.3.8.0)
@@ -438,7 +440,7 @@ GEM
     pwned (2.4.1)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (2.2.17)
+    rack (2.2.20)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
     rack-dev-mark (0.8.0)
@@ -522,7 +524,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rexml (3.4.1)
+    rexml (3.4.4)
     rollout (2.4.3)
     rspec-core (3.13.5)
       rspec-support (~> 3.13.0)
@@ -597,7 +599,7 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
-    simplecov-cobertura (3.0.0)
+    simplecov-cobertura (3.1.0)
       rexml
       simplecov (~> 0.19)
     simplecov-html (0.13.2)
@@ -631,7 +633,6 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode (0.4.4.5)
     unicode-display_width (2.6.0)
-    unicode_utils (1.4.0)
     unicorn (5.8.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
@@ -689,6 +690,7 @@ DEPENDENCIES
   capybara-screenshot
   connection_pool
   css_parser
+  csv (~> 3.3.5)
   cucumber
   cucumber-rails
   cucumber-timecop
@@ -723,6 +725,7 @@ DEPENDENCIES
   mysql2
   n_plus_one_control
   nokogiri (>= 1.8.5)
+  ostruct
   pagy (~> 9.3)
   permit_yo
   phraseapp-in-context-editor-ruby (>= 1.0.6)
@@ -765,7 +768,6 @@ DEPENDENCIES
   timecop
   timeliness
   unicode
-  unicode_utils (>= 1.4.0)
   unicorn (~> 5.5)
   unidecoder
   vcr (~> 6.2)
@@ -775,7 +777,7 @@ DEPENDENCIES
   will_paginate (>= 3.0.2)
 
 RUBY VERSION
-   ruby 3.2.7p253
+   ruby 3.4.6p54
 
 BUNDLED WITH
-   2.6.3
+   2.6.9

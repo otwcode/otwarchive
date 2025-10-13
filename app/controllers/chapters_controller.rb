@@ -116,11 +116,6 @@ class ChaptersController < ApplicationController
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
-    if params[:cancel_button]
-      redirect_back_or_default(root_path)
-      return
-    end
-
     @chapter = @work.chapters.build(chapter_params)
     @work.wip_length = params[:chapter][:wip_length]
 
@@ -146,12 +141,6 @@ class ChaptersController < ApplicationController
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
   def update
-    if params[:cancel_button]
-      # Not quite working yet - should send the user back to wherever they were before they hit edit
-      redirect_back_or_default(root_path)
-      return
-    end
-
     @chapter.attributes = chapter_params
     @work.wip_length = params[:chapter][:wip_length]
 
@@ -200,20 +189,15 @@ class ChaptersController < ApplicationController
   end
 
   # POST /chapters/1/post
+  # This is used only for "Post Chapter" in the chapter_management partial.
   def post
-    if params[:cancel_button]
-      redirect_to @work
-    elsif params[:edit_button]
-      redirect_to [:edit, @work, @chapter]
+    @chapter.posted = true
+    @work.set_revised_at_by_chapter(@chapter)
+    if @chapter.save && @work.save
+      post_chapter
+      redirect_to(@work)
     else
-      @chapter.posted = true
-      @work.set_revised_at_by_chapter(@chapter)
-      if @chapter.save && @work.save
-        post_chapter
-        redirect_to(@work)
-      else
-        render :preview
-      end
+      render :preview
     end
   end
 

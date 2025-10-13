@@ -78,7 +78,24 @@ describe CollectionIndexer do
         bookmark2.collections << collection
       end
 
-      it "is counts as one item" do
+      it "counts as one item" do
+        document = described_class.new([]).document(collection)
+        expect(document["general_bookmarked_items_count"]).to eq(1)
+        expect(document["public_bookmarked_items_count"]).to eq(1)
+      end
+    end
+
+    context "when the collection contains one private and one public bookmark of one item" do
+      let(:work) { create(:work) }
+      let(:bookmark) { create(:bookmark, bookmarkable: work) }
+      let(:bookmark2) { create(:bookmark, bookmarkable: work, private: true) }
+
+      before do
+        bookmark.collections << collection
+        bookmark2.collections << collection
+      end
+
+      it "counts as one item" do
         document = described_class.new([]).document(collection)
         expect(document["general_bookmarked_items_count"]).to eq(1)
         expect(document["public_bookmarked_items_count"]).to eq(1)

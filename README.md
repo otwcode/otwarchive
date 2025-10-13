@@ -1,6 +1,6 @@
 OTW-Archive
 =========
-[![Build Status](https://img.shields.io/github/actions/workflow/status/otwcode/otwarchive/automated-tests.yml?branch=master)](https://github.com/otwcode/otwarchive/actions/workflows/automated-tests.yml?query=branch%3Amaster) [![Codeship Status](https://img.shields.io/codeship/1f7468f0-7e15-0131-c059-7a8d26daf885/master.svg?label=codeship)](https://www.codeship.io/projects/14476) [![Coverage Status](https://img.shields.io/codecov/c/github/otwcode/otwarchive/master.svg)](https://app.codecov.io/gh/otwcode/otwarchive)
+[![Automated Tests](https://github.com/otwcode/otwarchive/actions/workflows/automated-tests.yml/badge.svg)](https://github.com/otwcode/otwarchive/actions/workflows/automated-tests.yml) [![Deploy AO3](https://github.com/otwcode/otwarchive/actions/workflows/deploy.yml/badge.svg)](https://github.com/otwcode/otwarchive/deployments) [![Coverage Status](https://img.shields.io/codecov/c/github/otwcode/otwarchive/master.svg)](https://app.codecov.io/gh/otwcode/otwarchive)
 
 The OTW-Archive software is an open-source web application intended for hosting archives of fanworks, including fanfic, fanart, and fan vids.
 
@@ -10,7 +10,7 @@ Release Status
 ---------
 Development of the OTW-Archive software is an ongoing labor of love. You can see it in action on the [Archive of Our Own](https://archiveofourown.org/), aka AO3, a multifandom archive also run by the OTW.
 
-You can find more information about the [history and future of the AO3 project on the OTW website](https://www.transformativeworks.org/archive_of_our_own/).
+You can find more information about the [history and future of the AO3 project on the OTW website](https://www.transformativeworks.org/our-projects/archive-of-our-own/).
 
 If you wish to use this software, SquidgeWorld has generously provided [setup notes](https://squidgeworld.org/works/34491).
 
@@ -37,7 +37,6 @@ The Archive code is licensed under [GPL-2.0-or-later](https://www.gnu.org/licens
 We benefit from software and services that are free to use for Open Source projects, including:
 
 * [RubyMine IDE](https://www.jetbrains.com/ruby/) by JetBrains
-* [Codeship](https://codeship.com/)
 * [Hound](https://houndci.com/) by [thoughtbot](https://thoughtbot.com/)
 * [BrowserStack](https://www.browserstack.com)
 * [Sentry](https://sentry.io)

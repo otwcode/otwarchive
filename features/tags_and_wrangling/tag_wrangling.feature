@@ -381,3 +381,29 @@ Feature: Tag wrangling
     When I view the tag "Angst"
     Then "Angsta" should appear before "Angstb"
       And "Angstb" should appear before "Angstc"
+
+  Scenario: Tags in mass wrangling bins should have a link to the comment page with the comment count.
+
+    Given I am logged in as a tag wrangler
+      And I post the work "My Plan" with fandom "World Domination"
+      And all indexing jobs have been run
+      And I go to the fandom mass bin
+    Then I should see "World Domination"
+      And I should see "Comments (0)"
+    When I post the comment "Anyone have a plan?" on the tag "World Domination"
+      And I go to the fandom mass bin
+    Then I should see "World Domination"
+      And I should see "Comments (1)"
+
+  Scenario: Tags in fandom bins should have a link to the comment page with the comment count.
+
+    Given I am logged in as a tag wrangler
+      And I post the work "My Plan" with fandom "World Domination" with character "New Person"
+      And all indexing jobs have been run
+      And I view the unwrangled character bin for "World Domination"
+    Then I should see "New Person"
+      And I should see "Comments (0)"
+    When I post the comment "Who's this?" on the tag "New Person"
+      And I view the unwrangled character bin for "World Domination"
+    Then I should see "World Domination"
+      And I should see "Comments (1)"

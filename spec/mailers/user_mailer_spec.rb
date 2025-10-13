@@ -258,7 +258,7 @@ describe UserMailer do
     # Shared content tests for both email types
     shared_examples_for "a claim notification" do
       it "contains the text for a claim email" do
-        expect(part).to include("You're receiving this e-mail because you had works in a fanworks archive that has been imported")
+        expect(part).to include("You're receiving this email because you had works in a fanworks archive that has been imported")
         expect(part).to include("The Open Doors team")
       end
     end
@@ -346,7 +346,7 @@ describe UserMailer do
     # Shared content tests for both email types
     shared_examples_for "an invitation to claim content" do
       it "contains the text for an invitation claim email" do
-        expect(part).to include("You're receiving this e-mail because an archive has recently been imported by")
+        expect(part).to include("You're receiving this email because an archive has recently been imported by")
         expect(part).to include("The Open Doors team")
       end
     end
@@ -788,7 +788,7 @@ describe UserMailer do
             expect(email).to have_html_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
             expect(email).to have_text_part_content("Envoyé le 14 mars 2022 13h 27min 09s.")
           end
-        end 
+        end
       end
     end
   end
@@ -1180,8 +1180,10 @@ describe UserMailer do
   end
 
   describe "prompter_notification" do
+    let(:user) { create(:user) }
+
     context "when collection is present" do
-      subject(:email) { UserMailer.prompter_notification(work.id, collection.id) }
+      subject(:email) { UserMailer.prompter_notification(user.id, work.id, collection.id) }
 
       let(:collection) { create(:collection) }
       let(:claim) { create(:challenge_claim, request_signup: create(:prompt_meme_signup)) }
@@ -1189,6 +1191,7 @@ describe UserMailer do
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
+      it_behaves_like "a translated email"
 
       it "has the correct subject line" do
         subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
@@ -1214,13 +1217,14 @@ describe UserMailer do
     end
 
     context "when no collection is present" do
-      subject(:email) { UserMailer.prompter_notification(work.id) }
+      subject(:email) { UserMailer.prompter_notification(user.id, work.id) }
 
       let(:claim) { create(:challenge_claim, request_signup: create(:prompt_meme_signup)) }
       let(:work) { create(:work, challenge_claims: [claim]) }
 
       # Test the headers
       it_behaves_like "an email with a valid sender"
+      it_behaves_like "a translated email"
 
       it "has the correct subject line" do
         subject = "[#{ArchiveConfig.APP_SHORT_NAME}] A response to your prompt"
@@ -1232,14 +1236,14 @@ describe UserMailer do
 
       describe "HTML version" do
         it "has the correct content" do
-          expect(email).to have_html_part_content("posted at the Archive")
+          expect(email).to have_html_part_content("posted on the Archive")
           expect(email).not_to have_html_part_content("collection")
         end
       end
 
       describe "text version" do
         it "has the correct content" do
-          expect(email).to have_text_part_content("posted at the Archive")
+          expect(email).to have_text_part_content("posted on the Archive")
           expect(email).not_to have_text_part_content("collection")
         end
       end

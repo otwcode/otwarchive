@@ -52,12 +52,12 @@
       <dd><%= collection_form.text_field :email, size: 40 %></dd>
 
       <dt>
-        <%= collection_form.label :header_image_url, ts("Custom header URL") %>
+        <%= collection_form.label :header_image_url, t(".header_image_url.label") %>
       </dt>
       <dd>
         <%= collection_form.text_field :header_image_url, "aria-describedby" => "header-image-field-description" %>
         <p class="footnote" id="header-image-field-description">
-          <%= ts("JPG, GIF, PNG") %>
+          <%= t(".header_image_url.footnote") %>
         </p>
       </dd>
 

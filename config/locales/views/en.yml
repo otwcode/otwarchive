@@ -199,7 +199,7 @@ en:
             details: Details
           sign_in:
             current:
-              action: Current Login
+              action: Most Recent Login
               no_details: No login recorded
             details: 'IP Address: %{ip}'
             last:
@@ -565,6 +565,19 @@ en:
       confirmation: Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone.
     to_fulfill:
       button: Fulfill
+    user_index:
+      claims: My Claims
+      claims_note_html: Looking for prompts you claimed in a prompt meme? Try %{claims_link}.
+      navigation:
+        completed: Completed Assignments
+        unposted: Unposted Assignments
+      page_heading:
+        all: My Assignments
+        collection_html: My Assignments in %{collection_link}
+  challenge_claims:
+    user_index:
+      assignments: My Assignments
+      assignments_note_html: Looking for assignments you were given for a gift exchange? Try %{assignments_link}.
   challenge_signups:
     signup_form:
       notice:
@@ -574,14 +587,21 @@ en:
           prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
           refuse_link_text: refuse a gift
   chapters:
-    chapter_form:
+    posting_fieldset:
+      actions:
+        cancel: Cancel
+        edit: Edit
+        please_wait: Please wait...
+        post: Post
+        preview: Preview
+        save_draft: Save Draft
+        update: Update
       content_policy: Content Policy
+      legend: Post Chapter
       post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
       tos_faq: Terms of Service FAQ
     preview:
-      content_policy: Content Policy
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
-      tos_faq: Terms of Service FAQ
+      page_heading: Preview
   collection_items:
     collection_item_form:
       add: Add
@@ -612,7 +632,47 @@ en:
   collections:
     collection_blurb:
       collection_tags: 'Collection Tags:'
+    filters:
+      clear_filters: Clear Filters
+      closed:
+        exclude: 'No'
+        include: Either
+        label: Closed
+        only: 'Yes'
+      landmark: Filters
+      leave_filters: Top of Collections Index
+      legend: 'Filter collections:'
+      moderated:
+        exclude: 'No'
+        include: Either
+        label: Moderated
+        only: 'Yes'
+      multifandom:
+        exclude: 'No'
+        include: Either
+        label: Multifandom
+        only: 'Yes'
+      sort:
+        column: Sort by
+        direction:
+          ascending: Ascending
+          descending: Descending
+          label: Sort direction
+      submit:
+        button: Sort and Filter
+        landmark: Sort and Filter
+      tag: Filter by tag
+      title: Filter by title
+      type:
+        any: Any
+        gift_exchange: Gift Exchange Challenge
+        label: Collection Type
+        no_challenge: No Challenge
+        prompt_meme: Prompt Meme Challenge
     form:
+      header_image_url:
+        footnote: PNG, JPEG, GIF
+        label: Custom header URL
       icon:
         delete: Delete collection icon and revert to our default. This will also remove the icon alt text and comment text.
       multifandom:
@@ -700,6 +760,9 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+    confirm_delete:
+      confirm_button: Yes, delete!
+      delete_confirmation: Are you sure you want to delete this comment?
     edit:
       back: Back
       page_heading: Editing comment
@@ -733,6 +796,8 @@ en:
       chapter_end_notes_without_chapter_notes: notes
       chapter_notes: Chapter Notes
       chapter_summary: Chapter Summary
+      full_chapter_title_with_title: 'Chapter %{chapter_number}: %{title}'
+      full_chapter_title_without_title: Chapter %{chapter_number}
       section_chapter_end_notes: Chapter End Notes
       see_chapter_end_notes_html: See the end of the chapter for %{chapter_end_notes_link}
     download_preface:
@@ -1994,10 +2059,27 @@ en:
       your_site_skin: Your site skin
       your_time_zone: Your time zone
   profile:
+    edit:
+      about_me: About Me
+      browser_title: Edit Profile
+      change_profile_landmark: Change Profile
+      page_heading: Edit My Profile
+      privacy_policy: Privacy Policy
+      public_information_notice_html: Any personal information you post on your public AO3 profile, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites, will be accessible by the general public. To learn more about what data AO3 collects when you're on the site and how we use it, check out our %{privacy_policy_link}.
+      title: Title
+      update: Update
     pseud_list:
       more_pseuds:
         one: "%{count} more pseud"
         other: "%{count} more pseuds"
+    show:
+      delete_account_confirmation: This will permanently delete your account and cannot be undone. Are you sure?
+      delete_my_account: Delete My Account
+      edit_my_preferences: Set My Preferences
+      edit_my_profile: Edit My Profile
+      edit_my_pseuds: Manage My Pseuds
+      edit_my_works: Edit My Works
+      edit_profile: Edit Profile
   pseuds:
     delete_preview:
       cancel: Cancel
@@ -2100,6 +2182,55 @@ en:
       last_wrangled_html: "%{wrangler_login} last wrangled at %{time}."
       tags_wrangled_csv: Tags Wrangled (CSV)
   tag_wranglings:
+    index:
+      general_resources:
+        ao3_catch_and_release: AO3_Catch_and_Release
+        ao3_catch_and_release_html: "%{ao3_catch_and_release_link} - For more information, please see the %{ao3_wrangling_project_faq_link}"
+        ao3_wrangling_project_faq: Tag Wrangling AO3 Project FAQ
+        current_wrangling_limitations: Current Wrangling Limitations
+        current_wrangling_limitations_html: "%{current_wrangling_limitations_link} - Details about current wrangling limitations and policies"
+        fandom_and_megafandom_directory: Directory of Fandom & Megafandom Wiki Pages
+        fandom_and_megafandom_directory_html: "%{fandom_and_megafandom_directory_link} - All currently available fandom & megafandom wiki pages"
+        fandoms_in_need_of_cowranglers: Fandoms in need of Cowranglers
+        fandoms_in_need_of_cowranglers_html: "%{fandoms_in_need_of_cowranglers_link} - Interested in helping out a fandom in need?"
+        heading: 'General Wrangling Resources:'
+        otw_slack_chat: OTW Slack Chat
+        otw_slack_chat_html: "%{otw_slack_chat_link} - For more information please see the %{tag_wrangling_slack_tutorial_link}"
+        tag_wranglers_mailing_list: Tag Wranglers Mailing List Conversations
+        tag_wranglers_mailing_list_html: "%{tag_wranglers_mailing_list_link} - Message Archive for the Tagwranglers Mailing List"
+        tag_wrangling_bugs: Tag Wrangling Bugs & Troubleshooting
+        tag_wrangling_bugs_html: "%{tag_wrangling_bugs_link} - Having technical issues while wrangling? Check here for solutions!"
+        tag_wrangling_committee: Tag Wrangling Committee
+        tag_wrangling_committee_html: "%{tag_wrangling_committee_link} - Full collection of wiki links & policies"
+        tag_wrangling_communication_policy: Tag Wrangling Communication Policy
+        tag_wrangling_communication_policy_html: "%{tag_wrangling_communication_policy_link} - Includes instructions for leaving tag comments and chat rules"
+        tag_wrangling_faq: Tag Wrangling FAQ
+        tag_wrangling_faq_html: "%{tag_wrangling_faq_link} - Check here to find answers to frequently asked questions"
+        tag_wrangling_moodle: Tag Wrangling Moodle
+        tag_wrangling_moodle_html: "%{tag_wrangling_moodle_link} - Additional modular training and support for all wranglers"
+        tag_wrangling_slack_tutorial: Tag Wrangling Slack Tutorial
+        tag_wrangling_training: Tag Wrangling Training
+        tag_wrangling_training_html: "%{tag_wrangling_training_link} - New wranglers, start here!"
+        unassigned_fandoms: Unassigned Fandoms
+        unassigned_fandoms_html: "%{unassigned_fandoms_link} - A list of all current unassigned fandoms"
+        vacations_and_retiring: Vacation and Retiring from Wrangling
+        vacations_and_retiring_html: "%{vacations_and_retiring_link} - Unable to wrangle for more than 2 weeks? Read about options for taking a break from wrangling!"
+      manage:
+        comments: Comments (%{count})
+        edit: Edit
+        works: Works
+        wrangle: Wrangle
+      notes:
+        contact_chair_html: For confidential issues (including difficulty reaching other wranglers), please email Chairs at %{tag_wranglers_chair_email_link} or use the phrase "%{question_for_chair_bold}" in %{tw_wranglers_slack_link}, %{tw_wranglers_quietroom_slack_link}, or in any training room and let them know you would like to chat via direct message.
+        contact_supervisor_html: If you have questions, difficulty accessing the wiki, or need technical assistance, please email Tag Wranglers Supervisors or use the phrase "%{question_for_supervisor_bold}" to contact a Supervisor in %{tw_wranglers_slack_link}, %{tw_wranglers_quietroom_slack_link}, or in any training room.
+        landmark: Notes
+        question_for_chair: Question for a Chair!
+        question_for_supervisor: Question for a Supervisor!
+        tw_wranglers_quietroom_slack: "#tw-wranglers-quietroom"
+        tw_wranglers_slack: "#tw-wranglers"
+        wrangle_to_guidelines_html: Wrangle tags in accordance with the %{wrangling_guidelines_link}.
+        wrangling_guidelines: wrangling guidelines
+      page_heading: Tag Wrangling
     wrangler_dashboard:
       characters_by_fandom: Characters by fandom (%{count})
       fandoms_by_media: Fandoms by media (%{count})
@@ -2162,6 +2293,12 @@ en:
       filter_bookmarks: filter bookmarks
       filter_works: filter works
       list_fandom_tags_html: You can also access a list of %{fandom_relationship_tags_link}.
+    wrangle:
+      manage:
+        comments: Comments (%{count})
+        edit: Edit
+        works: Works
+        wrangle: Wrangle
   time:
     formats:
       date_short_html: <abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span>
@@ -2223,6 +2360,16 @@ en:
         other: You must use the link in the confirmation email in order to finish confirming your email change. If you don't confirm your request within %{count} days, the link will expire and your email address will not be changed.
       request_for_confirmation: Changing your email will send a request for confirmation to your new email address and a notification to your current email address.
       resubmission_html: Resubmitting this form with a new email address will %{invalidate_bold}.
+    change_password:
+      change_password: Change Password
+      confirm_new_password: Confirm new password
+      new_password: New password
+      old_password: Old password
+      page_heading: Change Password
+      password_length:
+        one: "%{minimum} to %{count} character"
+        other: "%{minimum} to %{count} characters"
+      submit: Submit
     change_username:
       account_faq: Account FAQ
       caution: Please use this feature with caution.
@@ -2239,7 +2386,7 @@ en:
       more_info_html: For information on how changing your username will affect your account, please check out the %{account_faq_link}. Note that changes to your username may take several days or longer to appear. If you are still seeing your old username on your works, bookmarks, series, or collections after a week, please %{contact_support_link}.
       new_pseud_instead_html: If that is not what you want, you can %{create_a_new_pseud_link} instead.
       new_username: New username
-      page_heading: Change My Username
+      page_heading: Change Username
       password: Password
       submit: Change Username
       submit_landmark: Submit
@@ -2284,27 +2431,13 @@ en:
         options_info: You can delete them, but please consider %{orphaning_link} them instead!
         works_summary: 'You have %{work_count} work(s) under the following pseuds: %{pseuds}.'
       submit: Save
-    edit:
-      about_me: About Me
-      browser_title: Edit Profile
-      change_profile_landmark: Change Profile
-      page_heading: Edit My Profile
-      privacy_policy: Privacy Policy
-      public_information_notice_html: Any personal information you post on your public AO3 profile, including but not limited to your name, email, age, location, personal relationships, gender or sexual identity, racial or ethnic background, religious or political views, and/or account usernames for other sites, will be accessible by the general public. To learn more about what data AO3 collects when you're on the site and how we use it, check out our %{privacy_policy_link}.
-      title: Title
-      update: Update
     edit_header_navigation:
       change_email: Change Email
       change_password: Change Password
       change_username: Change Username
       edit_default_pseud_and_icon: Edit Default Pseud and Icon
-      edit_profile: Edit Profile
-    edit_user_navigation:
-      change_email: Change Email
-      change_password: Change Password
-      change_username: Change Username
-      edit_default_pseud_and_icon: Edit Default Pseud and Icon
       edit_my_profile: Edit My Profile
+      edit_profile: Edit Profile
     header_navigation:
       admin_user: User Administration
       edit_multiple: Edit Works
@@ -2459,9 +2592,9 @@ en:
       add_co-creators: Add co-creators
       show_co-creator_options: Add co-creators?
     edit_tags:
-      content_policy: Content Policy
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
-      tos_faq: Terms of Service FAQ
+      page_heading:
+        edit_tags_and_language_html: Edit Work Tags and Language for %{title}
+        edit_tags_html: Edit Work Tags for %{title}
     import:
       draft_work_title_html: "%{work_link} (Draft)"
       page_heading: Imported Works
@@ -2489,12 +2622,27 @@ en:
         multiple_works_restricted: Only show to registered users
         restricted: Only show your work to registered users
         unrestricted: Show to all
+    posting_fieldset:
+      actions:
+        cancel: Cancel
+        edit: Edit
+        please_wait: Please wait...
+        post: Post
+        preview: Preview
+        save_draft: Save Draft
+        update: Update
+      content_policy: Content Policy
+      legend: Post Work
+      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
+      tos_faq: Terms of Service FAQ
     preface:
       title: Preface
     preview:
-      content_policy: Content Policy
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
-      tos_faq: Terms of Service FAQ
+      page_heading: Preview
+    preview_tags:
+      page_heading:
+        preview_tags: Preview Tags
+        preview_tags_and_language: Preview Tags and Language
     search_box:
       a11y_label: Work
       label: Work Search
@@ -2509,10 +2657,6 @@ en:
       no_works: You have no works or drafts to edit.
     skin:
       select: Select work skin
-    standard_form:
-      content_policy: Content Policy
-      post_notice_html: All works you post on AO3 must comply with our %{content_policy_link}. For more information, please refer to our %{tos_faq_link}.
-      tos_faq: Terms of Service FAQ
     work_approved_children:
       inspired_by:
         restricted_html: "[Restricted Work] by %{creator_link} (Log in to access.)"

@@ -11,8 +11,12 @@ class ExternalWorksController < ApplicationController
   # Used with bookmark form to get an existing external work and return it via ajax
   def fetch
     if params[:external_work_url]
-      url = Addressable::URI.heuristic_parse(params[:external_work_url]).to_str
-      @external_work = ExternalWork.where(url: url).first
+      url = begin
+        Addressable::URI.heuristic_parse(params[:external_work_url]).to_str
+      rescue Addressable::URI::InvalidURIError
+        nil
+      end
+      @external_work = ExternalWork.where(url: url).first if url
     end
     respond_to do |format|
       format.js
