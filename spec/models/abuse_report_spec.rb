@@ -215,6 +215,36 @@ describe AbuseReport do
       end
     end
 
+    context "when reporting work URLs that cross the reporting period tiemframe" do
+      let(:work) { create(:work, posted: true) }
+      let(:work_url) { "https://archiveofourown.org/works/#{work.id}" }
+
+      it "allows reporting a work when old reports are outside the configured period" do
+        Timecop.freeze(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.months.ago - 1.day) do
+          ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
+            create(:abuse_report, url: work_url)
+          end
+        end
+
+        report = build(:abuse_report, url: work_url)
+        expect(report).to be_truthy
+      end
+
+      it "counts only reports within the configured period" do
+        # Create reports outside the configured period
+        Timecop.freeze(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.months.ago - 1.day) do
+          2.times { create(:abuse_report, url: work_url) }
+        end
+        # Create reports within the configured period (one less than max)
+        (ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX - 1).times do
+          create(:abuse_report, url: work_url)
+        end
+        # Should be valid because old reports outside configured time period don't count
+        report = build(:abuse_report, url: work_url)
+        expect(report).to be_truthy
+      end
+    end
+
     context "for a user profile reported the maximum number of times" do
       user_url = "http://archiveofourown.org/users/someone"
 
@@ -263,6 +293,34 @@ describe AbuseReport do
         before { travel(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.months) }
 
         it_behaves_like "alright", user_url
+      end
+    end
+    context "when reporting user URLs that cross the reporting period timeframe" do
+      let(:user) { create(:user) }
+      let(:user_url) { "https://archiveofourown.org/users/#{user.login}" }
+
+      it "allows reporting a user URL when old reports are outside the configured period" do
+        Timecop.freeze(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.months.ago - 1.day) do
+          ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX.times do
+            create(:abuse_report, url: user_url)
+          end
+        end
+
+        report = build(:abuse_report, url: user_url)
+        expect(report).to be_truthy
+      end
+      it "counts only reports within the configured period" do
+        # Create reports outside the period
+        Timecop.freeze(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.months.ago - 1.day) do
+          2.times { create(:abuse_report, url: user_url) }
+        end
+        # Create reports within the configured period (one less than max)
+        (ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX - 1).times do
+          create(:abuse_report, url: user_url)
+        end
+        # Should be valid because old reports don't count
+        report = build(:abuse_report, url: user_url)
+        expect(report).to be_truthy
       end
     end
 
