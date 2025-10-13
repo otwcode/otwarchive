@@ -233,7 +233,9 @@ describe AbuseReport do
       it "counts only reports within the configured period" do
         # Create reports outside the configured period
         Timecop.freeze(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.months.ago - 1.day) do
-          2.times { create :abuse_report, url: work_url }
+          create_list(:abuse_report, 2) do |abuse_report, n|
+            abuse_report.url = work_url
+          end
         end
         # Create reports within the configured period (one less than max)
         (ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX - 1).times do
@@ -312,7 +314,9 @@ describe AbuseReport do
       it "counts only reports within the configured period" do
         # Create reports outside the period
         Timecop.freeze(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.months.ago - 1.day) do
-          2.times { create :abuse_report, url: user_url }
+          create_list(:abuse_report,2) do |abuse_report, n|
+            abuse_report.url = user_url
+          end
         end
         # Create reports within the configured period (one less than max)
         (ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX - 1).times do
