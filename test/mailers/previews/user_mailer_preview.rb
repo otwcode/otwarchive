@@ -212,6 +212,34 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.batch_subscription_notification(subscription.id, entries.to_json)
   end
 
+  # URL: /rails/mailers/user_mailer/batch_subscription_notification_series?series_id=NAME&work_ids[]=2&work_ids[]=3&chapter_ids[]=8
+  # Preview a subscription notification for a series, which can contain chapters
+  # and/or works. You can specify the series and the works and/or chapters or
+  # we'll make a series, two works, and one chapters.
+  def batch_subscription_notification_series
+    if params[:series_id] && (params[:work_ids] || params[:chapter_ids])
+      series = Series.find_by(id: params[:series_id])
+      work_ids = params[:work_ids] || []
+      chapter_ids = params[:chapter_ids] || []
+    else
+      user = create(:user, :for_mailer_preview)
+      first_work = create(:work, authors: [user.default_pseud], title: "First New Work")
+      second_work = create(:work, authors: [user.default_pseud], title: "Second New Work",  expected_number_of_chapters: nil, backdate: true)
+      third_work = create(:work, authors: [user.default_pseud], title: "Existing Work",  expected_number_of_chapters: 9) #, create(:user, :for_mailer_preview).default_pseud
+      series = create(:series, authors: [user.default_pseud], works: [first_work, second_work, third_work])
+      first_chapter = create(:chapter, work: third_work, authors: [user.default_pseud], position: 2)
+      work_ids = [first_work.id, second_work.id]
+      chapter_ids = [first_chapter.id]
+    end
+
+    subscription = create(:subscription, subscribable: series)
+
+    entries = []
+    work_ids.each { |id| entries << "Work_#{id}" }
+    chapter_ids.each { |id| entries << "Chapter_#{id}" }
+    UserMailer.batch_subscription_notification(subscription.id, entries.to_json)
+  end
+
   # URL: /rails/mailers/user_mailer/change_username
   def change_username
     user = create(:user, :for_mailer_preview)
