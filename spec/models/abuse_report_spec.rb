@@ -242,7 +242,7 @@ describe AbuseReport do
         end
         # Should be valid because old reports outside configured time period don't count
         report = build(:abuse_report, url: work_url)
-        expect(report).to be_truthy
+        expect(report.save).to be_truthy
       end
     end
 
@@ -308,7 +308,7 @@ describe AbuseReport do
         end
 
         report = build(:abuse_report, url: user_url)
-        expect(report).to be_truthy
+        expect(report.save).to be_truthy
       end
 
       it "counts only reports within the configured period" do
