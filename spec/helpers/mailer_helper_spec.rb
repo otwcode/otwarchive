@@ -12,19 +12,19 @@ describe MailerHelper do
   end
 
   describe "#creation_title" do
-    context "when creation is a series" do
+    context "when the creation is a series" do
       it "returns the series title" do
         expect(creation_title(series)).to eq(series.title)
       end
     end
 
-    context "when creation is a work" do
+    context "when the creation is a work" do
       it "returns the work title" do
         expect(creation_title(work)).to eq(work.title)
       end
     end
 
-    context "when creation is a chapter" do
+    context "when the creation is a chapter" do
       it "returns the work title with the chapter number" do
         expect(creation_title(chapter)).to eq("Chapter #{chapter.position} of #{work.title}")
       end
@@ -32,19 +32,19 @@ describe MailerHelper do
   end
 
   describe "#creation_link_with_word_count" do
-    context "when creation is a chapter" do
+    context "when the creation is a chapter" do
       it "returns hyperlinked full_chapter_title and parenthetical word count" do
         expect(creation_link_with_word_count(chapter, chapter_url(chapter))).to eq("<i><b><a style=\"color:#990000\" href=\"#{chapter_url(chapter)}\">#{chapter.full_chapter_title}</a></b></i> (#{chapter.word_count} words)")
       end
     end
 
-    context "when creation is a series" do
+    context "when the creation is a series" do
       it "returns hyperlinked series title and parenthetical word count" do
         expect(creation_link_with_word_count(series, series_url(series))).to eq("<i><b><a style=\"color:#990000\" href=\"#{series_url(series)}\">#{series.title}</a></b></i> (#{series.word_count} words)")
       end
     end
 
-    context "when creation is a work" do
+    context "when the creation is a work" do
       it "returns hyperlinked work title and parenthetical word count" do
         expect(creation_link_with_word_count(work, work_url(work))).to eq("<i><b><a style=\"color:#990000\" href=\"#{work_url(work)}\">#{work.title}</a></b></i> (#{work.word_count} words)")
       end
@@ -52,19 +52,19 @@ describe MailerHelper do
   end
 
   describe "#creation_title_with_word_count" do
-    context "when creation is a chapter" do
+    context "when the creation is a chapter" do
       it "returns full_chapter_title and parenthetical word count" do
         expect(creation_title_with_word_count(chapter)).to eq("\"#{chapter.full_chapter_title}\" (#{chapter.word_count} words)")
       end
     end
 
-    context "when creation is a series" do
+    context "when the creation is a series" do
       it "returns series title and parenthetical word count" do
         expect(creation_title_with_word_count(series)).to eq("\"#{series.title}\" (#{series.word_count} words)")
       end
     end
 
-    context "when creation is a work" do
+    context "when the creation is a work" do
       it "returns work title and parenthetical word count" do
         expect(creation_title_with_word_count(work)).to eq("\"#{work.title}\" (#{work.word_count} words)")
       end
@@ -375,7 +375,7 @@ describe MailerHelper do
       create(:work, authors: [create(:pseud), create(:pseud)])
     end
 
-    context "when creation is a chapter" do
+    context "when the creation is a chapter" do
       let(:work_title) { "\"#{creation.work.title}\"" }
       let(:work_word_count) { creation.work.word_count }
       let(:work_creators) { creator_text(creation.work) }
@@ -403,7 +403,7 @@ describe MailerHelper do
       end
     end
 
-    context "when creation is a work" do
+    context "when the creation is a work" do
       let(:work_creators) { creator_text(creation) }
 
       context "when work is new" do
@@ -472,7 +472,7 @@ describe MailerHelper do
       create(:work, authors: [create(:pseud), create(:pseud)])
     end
 
-    context "when creation is a chapter" do
+    context "when the creation is a chapter" do
       let(:work_link) do
         style_creation_link(creation.work.title, work_url(creation.work))
       end
@@ -504,7 +504,7 @@ describe MailerHelper do
       end
     end
 
-    context "when creation is a work" do
+    context "when the creation is a work" do
       let(:work_creator_links) { creator_links(creation) }
 
       context "when work is new" do

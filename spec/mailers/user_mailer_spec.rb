@@ -721,7 +721,7 @@ describe UserMailer do
       end
     end
 
-    context "when creation is a chapter" do
+    context "when the creation is a chapter" do
       let(:entries) { ["Chapter_#{chapter.id}"].to_json }
 
       context "with different creators than the work" do

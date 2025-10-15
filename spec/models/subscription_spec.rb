@@ -119,44 +119,44 @@ describe Subscription do
     let(:anon_chapter) { build(:chapter, work: anon_work) }
     let(:orphan_pseud) { create(:user, login: "orphan_account").default_pseud }
 
-    it "returns false when creation is nil" do
+    it "returns false when the creation is nil" do
       expect(subscription.valid_notification_entry?(nil)).to be_falsey
     end
 
-    it "returns false when creation is not a work or chapter" do
+    it "returns false when the creation is not a work or chapter" do
       expect(subscription.valid_notification_entry?(series)).to be_falsey
     end
 
-    context "when creation is a work" do
-      it "returns false when creation is unposted" do
+    context "when the creation is a work" do
+      it "returns false when the creation is unposted" do
         expect(subscription.valid_notification_entry?(draft)).to be_falsey
       end
 
       # TODO: AO3-3620 & AO3-5696: Allow subscriptions to orphan_account to receive notifications
-      it "returns false when creation is by orphan_account" do
+      it "returns false when the creation is by orphan_account" do
         expect(subscription.valid_notification_entry?(create(:work, authors: [orphan_pseud]))).to be_falsey
       end
 
-      it "returns false when creation is hidden_by_admin" do
+      it "returns false when the creation is hidden_by_admin" do
         expect(subscription.valid_notification_entry?(build(:work, hidden_by_admin: true))).to be_falsey
       end
     end
 
-    context "when creation is a chapter" do
-      it "returns false when creation is unposted" do
+    context "when the creation is a chapter" do
+      it "returns false when the creation is unposted" do
         expect(subscription.valid_notification_entry?(build(:chapter, :draft))).to be_falsey
       end
 
-      it "returns false when chapter is on an unposted work" do
+      it "returns false when the chapter is on an unposted work" do
         expect(subscription.valid_notification_entry?(build(:chapter, work: draft))).to be_falsey
       end
 
       # TODO: AO3-3620 & AO3-5696: Allow subscriptions to orphan_account to receive notifications
-      it "returns false when creation is by orphan_account" do
+      it "returns false when the creation is by orphan_account" do
         expect(subscription.valid_notification_entry?(create(:chapter, authors: [orphan_pseud]))).to be_falsey
       end
 
-      it "returns false when chapter is on a hidden work" do
+      it "returns false when the chapter is on a hidden work" do
         expect(subscription.valid_notification_entry?(build(:chapter, work: build(:work, hidden_by_admin: true)))).to be_falsey
       end
     end
