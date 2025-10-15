@@ -174,7 +174,7 @@ class AbuseReport < ApplicationRecord
     if url =~ /\/works\/\d+/
       # use "/works/123/" to avoid matching chapter or external work ids
       work_params_only = url.match(/\/works\/\d+\//).to_s
-      work_report_period = ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.months.ago
+      work_report_period = ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
                                                  work_report_period,
@@ -184,7 +184,7 @@ class AbuseReport < ApplicationRecord
       end
     elsif url =~ /\/users\/\w+/
       user_params_only = url.match(/\/users\/\w+\//).to_s
-      user_report_period = ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.months.ago
+      user_report_period = ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
                                                  user_report_period,

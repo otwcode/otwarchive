@@ -216,23 +216,22 @@ describe AbuseReport do
     end
 
     context "when reporting work URLs that cross the reporting period timeframe" do
-      let(:work) { create(:work, posted: true) }
-      let(:work_url) { "https://archiveofourown.org/works/#{work.id}" }
+      work_url = "http://archiveofourown.org/works/790"
 
       it "allows reporting a work when old reports are outside the configured period" do
-        Timecop.freeze(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.months.ago - 1.day) do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago - 1.day) do
           ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
             create(:abuse_report, url: work_url)
           end
         end
 
         report = build(:abuse_report, url: work_url)
-        expect(report).to be_truthy
+        expect(report.save).to be_truthy
       end
 
       it "counts only reports within the configured period" do
         # Create reports outside the configured period
-        Timecop.freeze(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.months.ago - 1.day) do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago - 1.day) do
           create_list(:abuse_report, 2) do |abuse_report|
             abuse_report.url = work_url
           end
@@ -292,17 +291,17 @@ describe AbuseReport do
       it_behaves_like "alright", "http://archiveofourown.org/works/789"
 
       context "a month later" do
-        before { travel(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.months) }
+        before { travel(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days) }
 
         it_behaves_like "alright", user_url
       end
     end
+
     context "when reporting user URLs that cross the reporting period timeframe" do
-      let(:user) { create(:user) }
-      let(:user_url) { "https://archiveofourown.org/users/#{user.login}" }
+      user_url = "http://archiveofourown.org/users/someone2"
 
       it "allows reporting a user URL when old reports are outside the configured period" do
-        Timecop.freeze(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.months.ago - 1.day) do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago - 1.day) do
           ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX.times do
             create(:abuse_report, url: user_url)
           end
@@ -311,9 +310,10 @@ describe AbuseReport do
         report = build(:abuse_report, url: user_url)
         expect(report).to be_truthy
       end
+
       it "counts only reports within the configured period" do
         # Create reports outside the period
-        Timecop.freeze(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.months.ago - 1.day) do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago - 1.day) do
           create_list(:abuse_report, 2) do |abuse_report|
             abuse_report.url = user_url
           end
@@ -324,7 +324,7 @@ describe AbuseReport do
         end
         # Should be valid because old reports don't count
         report = build(:abuse_report, url: user_url)
-        expect(report).to be_truthy
+        expect(report.save).to be_truthy
       end
     end
 
