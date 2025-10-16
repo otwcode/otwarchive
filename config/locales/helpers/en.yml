@@ -37,9 +37,7 @@ en:
   inbox_helper:
     comment_link_with_chapter_number: Chapter %{position} of %{title}
   users_helper:
-    collections_link:
-      pitch:
-        collections: Collections (%{coll_number})
+    collections_link: Collections (%{coll_number})
     log:
       ban: Suspended Permanently
       email_change: Email Changed
