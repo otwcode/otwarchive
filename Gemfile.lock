@@ -498,7 +498,7 @@ GEM
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
-    redis (3.3.5)
+    redis (4.4.0)
     redis-namespace (1.8.2)
       redis (>= 3.0.4)
     regexp_parser (2.10.0)
@@ -742,7 +742,7 @@ DEPENDENCIES
   rails-controller-testing
   rails-i18n
   rails-observers!
-  redis (~> 3.3.5)
+  redis (~> 4.4.0)
   redis-namespace
   resque (>= 1.14.0)
   resque-scheduler

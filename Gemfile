@@ -16,14 +16,13 @@ gem 'actionpack-page_caching'
 gem 'rails-controller-testing'
 
 # Database
-# gem 'sqlite3-ruby', require: 'sqlite3'
 gem "mysql2"
 
 gem 'rack-attack'
 
 # Version of redis-rb gem
-# We are currently running Redis 3.2.1 (7/2018)
-gem "redis", "~> 3.3.5"
+# We are currently running Redis 7.0.15 (10/2025)
+gem "redis", "~> 4.4.0"
 gem 'redis-namespace'
 
 # Here are all our application-specific gems
