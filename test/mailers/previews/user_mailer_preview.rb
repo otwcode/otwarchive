@@ -224,7 +224,7 @@ class UserMailerPreview < ApplicationMailerPreview
     else
       user = create(:user, :for_mailer_preview)
       first_work = create(:work, authors: [user.default_pseud], title: "First New Work")
-      second_work = create(:work, authors: [user.default_pseud], title: "Second New Work",  expected_number_of_chapters: nil, backdate: true)
+      second_work = create(:work, authors: [user.default_pseud], title: "Second New Work", expected_number_of_chapters: nil, backdate: true)
       third_work = create(:work, authors: [user.default_pseud, create(:user, :for_mailer_preview).default_pseud], title: "Existing Work",  expected_number_of_chapters: 9)
       series = create(:series, authors: [user.default_pseud], works: [first_work, second_work, third_work])
       first_chapter = create(:chapter, work: third_work, authors: [user.default_pseud], position: 2)
