@@ -130,7 +130,7 @@ module AutocompleteSource
       options.reverse_merge!({search_param: "", autocomplete_prefix: "", sort: "down"})
       search_param = options[:search_param]
       autocomplete_prefix = options[:autocomplete_prefix]
-      if REDIS_AUTOCOMPLETE.exists(autocomplete_cache_key(autocomplete_prefix, search_param))
+      if REDIS_AUTOCOMPLETE.exists?(autocomplete_cache_key(autocomplete_prefix, search_param))
         return REDIS_AUTOCOMPLETE.zrange(autocomplete_cache_key(autocomplete_prefix, search_param), 0, -1)
       end
 
