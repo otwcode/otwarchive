@@ -20,8 +20,8 @@ gem "mysql2"
 
 gem 'rack-attack'
 
-# Version of redis-rb gem
-# We are currently running Redis 7.0.15 (10/2025)
+# We are currently running Redis server 7.0.15 (10/2025)
+# Version of redis-rb gem (Redis client)
 gem "redis", "< 5.0"
 gem 'redis-namespace'
 
