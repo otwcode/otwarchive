@@ -169,7 +169,7 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.change_email(user.id, old_email, new_email)
   end
 
-  # URL: /rails/mailers/user_mailer/batch_subscription_notification_work?work_id=123
+  # URL: /rails/mailers/user_mailer/batch_subscription_notification_work?work_id=2
   # Preview a subscription notification for a work. Replace 123 with the id of
   # any work on your environment. This will generate a subscription notification
   # for all but the first chapter of the work, e.g., a 3-chapter work will have
@@ -196,8 +196,8 @@ class UserMailerPreview < ApplicationMailerPreview
     else
       user = create(:user, :for_mailer_preview)
       first_work = create(:work, authors: [user.default_pseud], title: "First New Work")
-      second_work = create(:work, authors: [user.default_pseud], title: "Second New Work",  expected_number_of_chapters: nil, backdate: true)
-      third_work = create(:work, authors: [user.default_pseud], title: "Existing Work",  expected_number_of_chapters: 9)
+      second_work = create(:work, authors: [user.default_pseud], title: "Second New Work", expected_number_of_chapters: nil, backdate: true)
+      third_work = create(:work, authors: [user.default_pseud], title: "Existing Work", expected_number_of_chapters: 9)
       first_chapter = create(:chapter, work: second_work, authors: [user.default_pseud], position: 2, summary: "great summary")
       second_chapter = create(:chapter, work: third_work, authors: [user.default_pseud], position: 2)
       work_ids = [first_work.id, second_work.id]
@@ -225,7 +225,7 @@ class UserMailerPreview < ApplicationMailerPreview
       user = create(:user, :for_mailer_preview)
       first_work = create(:work, authors: [user.default_pseud], title: "First New Work")
       second_work = create(:work, authors: [user.default_pseud], title: "Second New Work", expected_number_of_chapters: nil, backdate: true)
-      third_work = create(:work, authors: [user.default_pseud, create(:user, :for_mailer_preview).default_pseud], title: "Existing Work",  expected_number_of_chapters: 9)
+      third_work = create(:work, authors: [user.default_pseud, create(:user, :for_mailer_preview).default_pseud], title: "Existing Work", expected_number_of_chapters: 9)
       series = create(:series, authors: [user.default_pseud], works: [first_work, second_work, third_work])
       first_chapter = create(:chapter, work: third_work, authors: [user.default_pseud], position: 2)
       work_ids = [first_work.id, second_work.id]
