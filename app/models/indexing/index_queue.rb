@@ -51,7 +51,7 @@ class IndexQueue
   end
 
   def add_ids(ids)
-    REDIS.sadd?(name, ids) unless ids.blank?
+    REDIS.sadd?(name, ids) if ids.present?
   end
 
   def run
