@@ -153,6 +153,8 @@ module NavigationHelpers
       user_profile_path(user_id: $1)
     when /^(.*)'s skins page/
       user_skins_path(user_id: $1)
+    when /^(.*)'s edit multiple works page/
+      show_multiple_user_works_path(user_id: $1)
     when /^"(.*)" skin page/
       skin_path(Skin.find_by(title: $1))
     when /^the new skin page/
