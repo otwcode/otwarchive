@@ -209,7 +209,7 @@ describe AbuseReport do
       it_behaves_like "alright", "http://archiveofourown.org/users/someone"
 
       context "a month later" do
-        before { travel(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.months) }
+        before { travel(32.days) }
 
         it_behaves_like "alright", work_url
       end
