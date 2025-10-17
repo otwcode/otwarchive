@@ -237,6 +237,38 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, email)
   end
 
+  def assignments_sent_notification_collection_email
+    collection = create(:collection, email: "collection@example.com")
+    email = collection.collection_email
+    UserMailer.assignments_sent_notification(collection.id, email)
+  end
+
+  def assignments_sent_notification_maintainer
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection, owners: [user.default_pseud])
+    email = user.email
+    UserMailer.assignments_sent_notification(collection.id, email)
+  end
+
+  def assignment_default_notification_collection_email
+    collection = create(:collection, email: "collection@example.com")
+    email = collection.collection_email
+    challenge_assignment = create(:challenge_assignment)
+    offer_byline = challenge_assignment.offer_byline
+    request_byline = challenge_assignment.request_byline
+    UserMailer.assignment_default_notification(collection.id, offer_byline, request_byline, email)
+  end
+
+  def assignment_default_notification_maintainer
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection, owners: [user.default_pseud])
+    email = user.email
+    challenge_assignment = create(:challenge_assignment)
+    offer_byline = challenge_assignment.offer_byline
+    request_byline = challenge_assignment.request_byline
+    UserMailer.assignment_default_notification(collection.id, offer_byline, request_byline, email)
+  end
+
   def invite_increase_notification
     user = create(:user, :for_mailer_preview)
     total = params[:total] || 1

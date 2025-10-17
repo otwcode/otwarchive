@@ -172,6 +172,26 @@ class UserMailer < ApplicationMailer
     )
   end
 
+  def assignments_sent_notification(collection_id, email)
+    @collection = Collection.find(collection_id)
+    @is_collection_email = (email == @collection.collection_email)
+    mail(
+      to: email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title)
+    )
+  end
+
+  def assignment_default_notification(collection_id, offer_byline, request_byline, email)
+    @collection = Collection.find(collection_id)
+    @offer_byline = offer_byline
+    @request_byline = request_byline
+    @is_collection_email = (email == @collection.collection_email)
+    mail(
+      to: email,
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title, offer_byline: @offer_byline)
+    )
+  end
+
   def invalid_signup_notification(collection_id, invalid_signup_ids, email)
     @collection = Collection.find(collection_id)
     @invalid_signups = invalid_signup_ids

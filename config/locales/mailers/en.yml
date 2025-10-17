@@ -472,17 +472,20 @@ en:
           no_fandom: '- "%{work_title}" (%{work_url})'
           with_fandom: '- "%{work_title}" (%{work_url}) (%{fandom})'
       works_by: 'These works were written under the email: %{email}'
-    collection_notification:
-      assignments_sent:
-        complete: All assignments have now been sent out.
-        subject: Assignments sent
-      challenge_default:
-        complete: 'Signed-up participant %{offer_byline} has defaulted on their assignment for %{request_byline}. You may want to assign a pinch hitter on the collection assignments page: %{assignments_page_url}'
-        subject: Challenge default by %{offer_byline}
-      html:
-        received_message: 'You have received a message about your collection %{collection_link}:'
-      text:
-        received_message: 'You have received a message about your collection "%{collection_title}" (%{collection_url}):'
+    assignments_sent_notification:
+      all_sent_out:
+        html: All assignments have now been sent out for your gift exchange %{collection_link}.
+        text: All assignments have now been sent out for your gift exchange "%{collection_title}" (%{collection_url}).
+      subject: "[%{app_name}][%{collection_title}] Assignments sent"
+    assignment_default_notification:
+      defaulted_on_assignment:
+        html: '%{offer_byline} has defaulted on their assignment for %{request_byline} in your gift exchange %{collection_link}.'
+        text: '%{offer_byline} (%{offer_byline}) has defaulted on their assignment for %{request_byline} (%{request_byline}) in your gift exchange "%{collection_title}" (%{collection_url}).'
+      assign_pinch_hitter:
+        html: You can assign a pinch hitter on the %{collection_assignments_page_link}.
+        text: 'You can assign a pinch hitter on the collection assignments page: %{collection_assignments_page_url}.'
+        collection_assignments_page: collection assignments page
+      subject: "[%{app_name}][%{collection_title}] Assignment default by %{offer_byline}"
     creatorship_notification:
       explanation: When you're a co-creator on a work, you can be added to new chapters regardless of your co-creation settings. You will also be added to any series the work is added to.
       html:
