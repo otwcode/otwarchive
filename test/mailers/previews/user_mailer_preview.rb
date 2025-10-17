@@ -279,10 +279,12 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.admin_deleted_work_notification(user, work)
   end
 
+  # Sent to a user when they delete a work
+  # URL: /rails/mailers/user_mailer/delete_work_notification_self?work_id=WORK_ID
   def delete_work_notification_self
-    if params[:work]
-      work = Work.find_by(id: params[:work])
-      user = work.users[0]
+    if params[:work_id]
+      work = Work.find_by(id: params[:work_id])
+      user = work.users.first
     else
       user = create(:user, :for_mailer_preview)
       work = create(:work, authors: [user.default_pseud])
@@ -290,11 +292,17 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.delete_work_notification(user, work, user)
   end
 
+  # Sent to a user when their co-creator deletes a work
+  # URL: /rails/mailers/user_mailer/delete_work_notification_self?work_id=WORK_ID
   def delete_work_notification_co_creator
-    if params[:work]
-      work = Work.find_by(id: params[:work])
-      first_creator = work.users[0]
-      second_creator = work.users[1]
+    if params[:work_id]
+      work = Work.find_by(id: params[:work_id])
+      first_creator = work.users.first
+      second_creator = if work.users.count > 1
+                         work.users.second
+                       else
+                         create(:user, login: "PlaceholderCoCreator#{Faker::Alphanumeric.alpha(number: 8)}")
+                       end
     else
       first_creator = create(:user, :for_mailer_preview)
       second_creator = create(:user, :for_mailer_preview)
