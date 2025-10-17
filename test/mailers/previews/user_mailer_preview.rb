@@ -280,7 +280,7 @@ class UserMailerPreview < ApplicationMailerPreview
   end
 
   # Sent to a user when they delete a work
-  # URL: /rails/mailers/user_mailer/delete_work_notification_self?work_id=WORK_ID
+  # URL: /rails/mailers/user_mailer/delete_work_notification_self?work_id=2
   def delete_work_notification_self
     if params[:work_id]
       work = Work.find_by(id: params[:work_id])
@@ -293,7 +293,7 @@ class UserMailerPreview < ApplicationMailerPreview
   end
 
   # Sent to a user when their co-creator deletes a work
-  # URL: /rails/mailers/user_mailer/delete_work_notification_self?work_id=WORK_ID
+  # URL: /rails/mailers/user_mailer/delete_work_notification_co_creator?work_id=2
   def delete_work_notification_co_creator
     if params[:work_id]
       work = Work.find_by(id: params[:work_id])
