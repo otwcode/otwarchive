@@ -147,16 +147,24 @@ class AbuseReport < ApplicationRecord
       ids.join(", ")
     elsif (comment_id = reported_comment_id)
       comment = Comment.find_by(id: comment_id)
+
       return "deletedcomment" unless comment
 
-      return "guestcomment" if comment.pseud_id.nil?
+      prefix = if comment.is_deleted
+                 "deletedcomment, "
+               else
+                 ""
+               end
+
+      return "#{prefix}guestcomment" if comment.pseud_id.nil?
       
-      return "deletedaccount" if comment.pseud.nil? 
+      return "#{prefix}deletedaccount" if comment.pseud.nil? 
 
       id = comment.user.id
-      return "orphanedcomment" if id == User.orphan_account.id
 
-      id.to_s
+      return "#{prefix}orphanedcomment" if id == User.orphan_account.id
+
+      prefix + id.to_s
     end
   end
 

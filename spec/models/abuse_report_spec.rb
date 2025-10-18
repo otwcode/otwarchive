@@ -564,10 +564,23 @@ describe AbuseReport do
       context "for a logged-in comment" do
         let(:comment) { create(:comment) }
 
-        it "returns a single creator id" do
+        it "returns the commenter's user ID" do
           allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
 
           expect(subject.creator_ids).to eq(comment.user.id.to_s)
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, \" + the commenter's user ID" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, #{comment.user.id}")
+          end
         end
       end
 
@@ -579,18 +592,46 @@ describe AbuseReport do
 
           expect(subject.creator_ids).to eq("guestcomment")
         end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, guestcomment\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, guestcomment")
+          end
+        end
       end
 
       context "for a comment from a deleted account" do
         let(:user) { create(:user) }
         let(:comment) { create(:comment, pseud: user.default_pseud) }
-
+          
         it "returns deletedaccount" do
           allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
 
           user.destroy
 
           expect(subject.creator_ids).to eq("deletedaccount")
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, deletedaccount\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            user.destroy
+
+            expect(subject.creator_ids).to eq("deletedcomment, deletedaccount")
+          end
         end
       end
 
@@ -602,6 +643,19 @@ describe AbuseReport do
           allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
 
           expect(subject.creator_ids).to eq("orphanedcomment")
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, orphanedcomment\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, orphanedcomment")
+          end
         end
       end
     end
