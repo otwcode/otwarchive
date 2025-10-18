@@ -133,8 +133,13 @@ Feature: Public skins
     And I submit
   Then I should see "Skin was successfully created"
 
-  Scenario: An admin doesn't have an option to change the skin's public status
+  Scenario: Changing a skin's public status silently fails for an admin
   Given the approved public skin "Usable Skin"
     And I am logged in as a "superadmin" admin
   When I edit the skin "Usable Skin"
-  Then I should not see "Apply to make public"
+  Then the "Apply to make public" checkbox should be checked
+  When I uncheck "Apply to make public"
+    And I submit
+  Then I should see "Skin was successfully updated."
+  When I edit the skin "Usable Skin"
+  Then the "Apply to make public" checkbox should be checked

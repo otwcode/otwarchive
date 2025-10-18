@@ -23,7 +23,7 @@
     <dt><%= f.label :icon, ts('Upload a preview (png, jpeg or gif)') %></dt>
     <dd><%= f.file_field :icon %></dd>
 
-    <% if @current_user&.official %>
+    <% if @current_user&.official || User.current_user.is_a?(Admin) %>
       <dt><%= f.label :public, ts('Apply to make public') %></dt>
       <dd><%= f.check_box :public %></dd>
     <% end %>
