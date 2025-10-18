@@ -34,7 +34,7 @@ Scenario: Random user should not see unapproved related work on original work Cr
 
   Given I have related works setup
     And a related work has been posted
-  When I am logged in as "RandomUser"
+  When I am logged in as "remixer"
     And I go to inspiration's related works page
   Then I should not see "Works inspired by inspiration"
     And I should not see "Followup by remixer"
