@@ -1,7 +1,6 @@
 class PreferencesController < ApplicationController
   before_action :load_user
   before_action :check_ownership_or_admin
-  skip_before_action :store_location
 
   # Ensure that the current user is authorized to view and change this information
   def load_user

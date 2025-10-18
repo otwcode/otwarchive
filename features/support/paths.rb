@@ -269,6 +269,8 @@ module NavigationHelpers
       tags_path
     when /^the orphan all works page$/i
       new_orphan_path
+    when /^the activation page for "(.*)"$/i
+      activate_path(id: User.find_by(login: Regexp.last_match(1)).confirmation_token)
 
     # Admin Pages
     when /^the admin-posts page$/i
