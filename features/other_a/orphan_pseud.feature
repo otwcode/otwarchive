@@ -102,3 +102,13 @@ Feature: Orphan pseud
     Then I should see "To Be Kept (halfandhalf)" within ".byline"
       And I should see "orphan_account" within ".byline"
       But I should not see "To Be Orphaned (halfandhalf)" within ".byline"
+
+  Scenario: Cancelling pseud orphan redirects to pseuds page
+    Given I have an orphan account
+      And the work "Trash" by "orphaneer"
+      And I am logged in as "orphaneer"
+      And I am on orphaneer's pseuds page
+    When I follow "Orphan Works"
+    Then I should see "Orphan All Works by orphaneer"
+    When I follow "Cancel"
+    Then I should be on orphaneer's pseuds page

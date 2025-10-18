@@ -119,6 +119,17 @@ Feature: Public skins
   When I follow "Return To Skin To Use"
   Then I should be on "Usable Skin" skin page
 
+  Scenario: Setting a skin from the footer maintains the same page
+    Given basic skins
+      And the approved public skin "unique skin"
+      And the skin "unique skin" is cached
+      And the skin "unique skin" is in the chooser
+      And I am logged in
+    When I go to the works page
+      And I press "unique skin"
+    Then the page should have the cached skin "unique skin"
+      And I should be on the works page
+
   Scenario: A regular user can't apply to make a skin public
   Given I am logged in
   When I go to the new skin page
@@ -143,3 +154,14 @@ Feature: Public skins
   Then I should see "Skin was successfully updated."
   When I edit the skin "Usable Skin"
   Then the "Apply to make public" checkbox should be checked
+
+  Scenario: Setting a skin from the footer maintains the same page
+    Given basic skins
+      And the approved public skin "unique skin"
+      And the skin "unique skin" is cached
+      And the skin "unique skin" is in the chooser
+      And I am logged in
+    When I go to the works page
+      And I press "unique skin"
+    Then the page should have the cached skin "unique skin"
+      And I should be on the works page
