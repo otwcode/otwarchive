@@ -15,10 +15,10 @@ class RelatedWorksController < ApplicationController
 
     # Extra constraints on what we display if someone else is viewing @user's
     # related works page:
-    @translations_of_user = @translations_of_user.merge(Work.revealed.non_anon).where(reciprocal:true)
-    @remixes_of_user = @remixes_of_user.merge(Work.revealed.non_anon).where(reciprocal:true)
-    @translations_by_user = @translations_by_user.merge(Work.revealed.non_anon).where(reciprocal:true)
-    @remixes_by_user = @remixes_by_user.merge(Work.revealed.non_anon).where(reciprocal:true)
+    @translations_of_user = @translations_of_user.merge(Work.revealed.non_anon).where(reciprocal: true)
+    @remixes_of_user = @remixes_of_user.merge(Work.revealed.non_anon).where(reciprocal: true)
+    @translations_by_user = @translations_by_user.merge(Work.revealed.non_anon).where(reciprocal: true)
+    @remixes_by_user = @remixes_by_user.merge(Work.revealed.non_anon).where(reciprocal: true)
   end
 
   # GET /related_works/1
