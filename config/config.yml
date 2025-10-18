@@ -167,8 +167,12 @@ IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 
 # max number of abuse reports to accept for a given user profile URL
 ABUSE_REPORTS_PER_USER_MAX: 5
+# time period, in days, used to total number of reports for a given user URL
+ABUSE_REPORTS_PER_USER_PERIOD: 31
 # max number of abuse reports to accept for a given work URL
 ABUSE_REPORTS_PER_WORK_MAX: 5
+# time period, in days, used to total number of reports for a given work URL
+ABUSE_REPORTS_PER_WORK_PERIOD: 31
 # max number of abuse reports to accept from a given email
 ABUSE_REPORTS_PER_EMAIL_MAX: 5
 

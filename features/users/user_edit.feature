@@ -467,7 +467,7 @@ Feature:
     Given I am logged in as "testuser" with password "password"
     When I visit the change password page for testuser
       And I make a typing mistake confirming my new password
-    Then I should see "Password confirmation doesn't match new password."
+    Then I should see "The passwords you entered do not match. Please try again."
 
   Scenario: Change password
 
