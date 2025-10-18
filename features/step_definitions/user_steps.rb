@@ -195,6 +195,11 @@ Given "the user {string} has the no resets role" do |login|
   user.roles = [Role.find_or_create_by(name: "no_resets")]
 end
 
+Given "the user {string} has the official role" do |login|
+  user = User.find_by(login: login)
+  user.roles = [Role.find_or_create_by(name: "official")]
+end
+
 Given "the user {string} with the email {string} exists" do |login, email|
   FactoryBot.create(:user, login: login, email: email)
 end
