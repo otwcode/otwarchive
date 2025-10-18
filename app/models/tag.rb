@@ -58,7 +58,7 @@ class Tag < ApplicationRecord
 
     # If we've reached here, then the value has changed, and we need to make
     # sure that the new value is written to the database.
-    REDIS_GENERAL.sadd("tag_update", id)
+    REDIS_GENERAL.sadd?("tag_update", id)
     value
   end
 
