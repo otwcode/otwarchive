@@ -118,3 +118,14 @@ Feature: Public skins
     And I should see "Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above."
   When I follow "Return To Skin To Use"
   Then I should be on "Usable Skin" skin page
+
+  Scenario: Setting a skin from the footer maintains the same page
+    Given basic skins
+      And the approved public skin "unique skin"
+      And the skin "unique skin" is cached
+      And the skin "unique skin" is in the chooser
+      And I am logged in
+    When I go to the works page
+      And I press "unique skin"
+    Then the page should have the cached skin "unique skin"
+      And I should be on the works page

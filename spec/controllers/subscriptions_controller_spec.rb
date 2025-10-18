@@ -16,8 +16,7 @@ describe SubscriptionsController do
 
     it "redirects to login when not logged in" do
       get :index, params: { user_id: user.login }
-      it_redirects_to_with_error(new_user_session_path,
-                                 "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+      it_redirects_to_user_login_with_error
     end
 
     context "when logged in" do
