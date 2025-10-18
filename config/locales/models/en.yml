@@ -20,6 +20,8 @@ en:
         url: Offer URL
       challenge_signup/requests:
         url: Request URL
+      chapters:
+        chapter_header: Chapter %{position}
       chapters/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud

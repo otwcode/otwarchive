@@ -1,6 +1,9 @@
 require "spec_helper"
 
 describe UserMailer do
+  include ActionView::Helpers::UrlHelper
+  include MailerHelper
+
   describe "#change_email" do
     let(:login) { "changer" }
     let(:new_email) { "new@example.com" }
@@ -645,20 +648,16 @@ describe UserMailer do
       ActiveJob::QueueAdapters::TestAdapter.new
     end
 
-    subject(:email) { UserMailer.batch_subscription_notification(subscription.id, ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json) }
+    subject(:email) { UserMailer.batch_subscription_notification(subscription.id, entries) }
 
-    let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>") }
-    let(:chapter) { create(:chapter, work: work, summary: "<p><b>Another</b> HTML summary.</p>") }
-    let(:subscription) { create(:subscription, subscribable: work) }
+    let(:creator) { create(:pseud) }
+    let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>", authors: [creator], character_string: "A,B") }
+    let(:chapter) { create(:chapter, work: work, summary: "<p><b>Another</b> HTML summary.</p>", authors: [creator]) }
+    let(:subscription) { create(:subscription, subscribable: creator.user) }
+    let(:entries) { ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json }
 
     context "when the user is unavailable" do
       before { subscription.user.delete }
-
-      include_examples "it retries and fails on", NoMethodError
-    end
-
-    context "when the user's preferences are unavailable" do
-      before { subscription.user.preference.delete }
 
       include_examples "it retries and fails on", NoMethodError
     end
@@ -667,17 +666,20 @@ describe UserMailer do
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{subscription.subject_text(work)} and 1 more"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{creator.byline} posted #{work.title} and 1 more"
       expect(email).to have_subject(subject)
     end
 
     # Test both body contents
     it_behaves_like "a multipart email"
 
+    it_behaves_like "a translated email"
+
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("new work")
-        expect(email).to have_html_part_content("new chapter of")
+        work_link = "<i><b>#{style_link(work.title, work_url(work))}</b></i>"
+        expect(email).to have_html_part_content("#{creator_links(work)} posted a new work:")
+        expect(email).to have_html_part_content("#{creator_links(work)} posted a new chapter of #{work_link} (#{work.word_count} words):")
       end
 
       it "includes HTML from the work summary" do
@@ -688,12 +690,19 @@ describe UserMailer do
       it "includes HTML from the chapter summary" do
         expect(email).to have_html_part_content("<p><b>Another</b> HTML summary.</p>")
       end
+
+      # AO3-5804 Only show chapter byline if it differs from work byline
+      it "has the correct chapter link without attribution" do
+        chapter_link = "<i><b>#{style_link(chapter.full_chapter_title.html_safe, work_chapter_url(work, chapter))}</b></i>"
+        expect(email).to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)")
+        expect(email).not_to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br />by")
+      end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("new work")
-        expect(email).to have_text_part_content("new chapter of #{work.title}")
+        expect(email).to have_text_part_content("#{creator_text(work)} posted a new work:")
+        expect(email).to have_text_part_content("#{creator_text(work)} posted a new chapter of \"#{work.title}\"")
       end
 
       it "reformats HTML from the work summary" do
@@ -703,6 +712,71 @@ describe UserMailer do
 
       it "reformats HTML from the chapter summary" do
         expect(email).to have_text_part_content("*Another* HTML summary.")
+      end
+
+      # AO3-5804 Only show chapter byline if it differs from work byline
+      it "has the correct chapter link without attribution" do
+        expect(email).to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)")
+        expect(email).not_to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby")
+      end
+    end
+
+    context "when the creation is a chapter" do
+      let(:entries) { ["Chapter_#{chapter.id}"].to_json }
+
+      context "with different creators than the work" do
+        let(:creator1) { create(:user).default_pseud }
+        let(:creator2) { create(:user).default_pseud }
+        let(:work) { create(:work, authors: [creator1, creator2]) }
+        let(:chapter) { create(:chapter, work: work, authors: [creator1]) }
+
+        it "has the correct subject line" do
+          subject = "[#{ArchiveConfig.APP_SHORT_NAME}] #{creator1.byline} posted #{chapter.chapter_header} of #{work.title}"
+          expect(email).to have_subject(subject)
+        end
+
+        it "has the correct preface in the HTML version" do
+          work_link = "<i><b>#{style_link(work.title, work_url(work))}</b></i>"
+          expect(email).to have_html_part_content("#{style_pseud_link(creator1)} and #{style_pseud_link(creator2)} posted a new chapter of #{work_link} (#{work.word_count} words):")
+        end
+
+        it "has the correct preface in the text version" do
+          expect(email).to have_text_part_content("#{text_pseud(creator1)} and #{text_pseud(creator2)} posted a new chapter of \"#{work.title}\" (#{work.word_count} words):\n#{work_chapter_url(work, chapter)}")
+        end
+
+        # AO3-5805 Show chapter byline on chapter, not work byline
+        it "has the correct chapter link with chapter attribution in the HTML version" do
+          chapter_link = "<i><b>#{style_link(chapter.full_chapter_title.html_safe, work_chapter_url(work, chapter))}</b></i>"
+          expect(email).to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br />by #{style_pseud_link(creator1)}")
+          expect(email).not_to have_html_part_content("#{chapter_link} (#{chapter.word_count} words)<br />by #{style_pseud_link(creator1)} and #{style_pseud_link(creator2)}")
+        end
+
+        # AO3-5805 Show chapter byline on chapter, not work byline
+        it "has the correct chapter title with chapter attribution in the text version" do
+          expect(email).to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby #{text_pseud(creator1)}")
+          expect(email).not_to have_text_part_content("\"#{chapter.full_chapter_title.html_safe}\" (#{chapter.word_count} words)\nby #{text_pseud(creator1)} and #{text_pseud(creator2)}")
+        end
+      end
+    end
+
+    context "when using translations" do
+      before do
+        create(:locale, iso: "new")
+        I18n.backend.store_translations(:new, { support: { array: { words_connector: "|" } }, activerecord: { models: { character: { other: "People" } } } })
+      end
+
+      it "results in different work info per locale" do
+        I18n.with_locale(I18n.default_locale) do
+          en_email = UserMailer.batch_subscription_notification(subscription.id, entries)
+          expect(en_email).to have_html_part_content("Characters: </b>A, B")
+          expect(en_email).to have_text_part_content("Characters: A, B")
+        end
+
+        I18n.with_locale(:new) do
+          translated_email = UserMailer.batch_subscription_notification(subscription.id, entries)
+          expect(translated_email).to have_html_part_content("People: </b>A|B")
+          expect(translated_email).to have_text_part_content("People: A|B")
+        end
       end
     end
   end

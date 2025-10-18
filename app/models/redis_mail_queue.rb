@@ -73,7 +73,12 @@ class RedisMailQueue
       end
       begin
         # don't die if we hit one deleted subscription
-        UserMailer.batch_subscription_notification(subscription_id, entries.to_json).deliver_later
+        subscription = Subscription.find_by(id: subscription_id)
+        next unless subscription
+
+        I18n.with_locale(subscription.user.preference.locale_for_mails) do
+          UserMailer.batch_subscription_notification(subscription_id, entries.to_json).deliver_later
+        end
       rescue ActiveRecord::RecordNotFound
         # never rescue all errors
       end
