@@ -65,9 +65,9 @@ class SkinsController < ApplicationController
     end
     loaded = load_archive_parents unless params[:skin_type] && params[:skin_type] == 'WorkSkin'
     if params[:skin_type] == "WorkSkin"
-      @skin = WorkSkin.new(permitted_attributes)
+      @skin = WorkSkin.new(skin_params)
     else
-      @skin = Skin.new(permitted_attributes)
+      @skin = Skin.new(skin_params)
     end
     @skin.author = current_user
     if @skin.save
@@ -96,7 +96,7 @@ class SkinsController < ApplicationController
     authorize @skin if logged_in_as_admin?
 
     loaded = load_archive_parents
-    if @skin.update(permitted_attributes)
+    if @skin.update(skin_params)
       @skin.cache! if @skin.cached?
       @skin.recache_children!
       flash[:notice] = ts("Skin was successfully updated.")
@@ -169,7 +169,7 @@ class SkinsController < ApplicationController
 
   private
 
-  def permitted_attributes
+  def skin_params
     allowed_attributes = [:title, :description, :css, :role, :ie_condition,
       :unusable,
       :font, :base_em, :margin, :paragraph_margin, :background_color,
@@ -180,10 +180,8 @@ class SkinsController < ApplicationController
       ]]
 
     allowed_attributes += [:public] if current_user.is_a?(User) && current_user.official
-  end
 
-  def skin_params
-    params.require(:skin).permit(*permitted_attributes)
+    params.require(:skin).permit(allowed_attributes)
   end
 
   def load_skin
