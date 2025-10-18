@@ -47,16 +47,15 @@ class InboxController < ApplicationController
       flash[:caution] = t(".must_select_item")
     end
     respond_to do |format|
-      format.html { redirect_back_or_to(user_inbox_path(@user, page: params[:page], filters: params[:filters]), notice: success_message) }
+      format.html { redirect_back_or_to(user_inbox_path(@user, page: params[:page], filters: filter_params[:filters]), notice: success_message) }
       format.json { render json: { item_success_message: success_message }, status: :ok }
     end
   end
 
   private
 
-  # Allow flexible params through, since we're not posting any data
   def filter_params
-    params.permit!
+    params.slice(:filters).permit(filters: [:date, :read, :replied_to])
   end
 
   def load_commentable
