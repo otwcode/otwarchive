@@ -284,6 +284,7 @@ describe Skin do
     end
   end
 
+
   describe "use", default_skin: true do
     before do
       Skin.load_site_css
