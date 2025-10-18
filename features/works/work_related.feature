@@ -30,6 +30,15 @@ Scenario: Creator of original work can see a remix on their related works page
   Then I should see "Works inspired by inspiration"
     And I should see "Followup by remixer"
 
+Scenario: Random user should not see unapproved related work on original work Creator's related works page
+
+  Given I have related works setup
+    And a related work has been posted
+  When I am logged in as "RandomUser"
+    And I go to inspiration's related works page
+  Then I should not see "Works inspired by inspiration"
+    And I should not see "Followup by remixer"
+
 Scenario: Posting a translation emails the creator of the original work and lists the parent work in the proper location on the translation
 
   Given I have related works setup
@@ -500,7 +509,9 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
       And I go to remixer's related works page
     Then I should see "Works that inspired remixer"
       And I should see "Worldbuilding by inspiration"
-    When I go to inspiration's related works page
+    When I approve a related work
+    Then I am logged in as "remixer"
+      And I go to inspiration's related works page
     Then I should see "Works inspired by inspiration"
       And I should see "Followup by Anonymous [remixer]"
     When I am logged in as "inspiration"
@@ -516,6 +527,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given a hidden collection "Hidden"
       And I have related works setup
       And I post a related work as remixer
+      And I approve a related work
     When I am logged in as "remixer"
       And I edit the work "Followup" to be in the collection "Hidden"
       And I go to remixer's related works page
@@ -538,6 +550,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given an anonymous collection "Anonymous"
       And I have related works setup
       And I post a related work as remixer
+      And I approve a related work
     When I am logged in as "inspiration"
       And I edit the work "Worldbuilding" to be in the collection "Anonymous"
       And I go to remixer's related works page
@@ -559,6 +572,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given a hidden collection "Hidden"
       And I have related works setup
       And I post a related work as remixer
+      And I approve a related work
     When I am logged in as "inspiration"
       And I edit the work "Worldbuilding" to be in the collection "Hidden"
       And I go to remixer's related works page
@@ -581,6 +595,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given an anonymous collection "Anonymous"
       And I have related works setup
       And I post a translation as translator
+      And I approve a related work
     When I am logged in as "translator"
       And I edit the work "Worldbuilding Translated" to be in the collection "Anonymous"
       And I go to translator's related works page
@@ -606,6 +621,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given a hidden collection "Hidden"
       And I have related works setup
       And I post a translation as translator
+      And I approve a related work
     When I am logged in as "translator"
       And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
       And I go to translator's related works page
@@ -629,6 +645,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given an anonymous collection "Anonymous"
       And I have related works setup
       And I post a translation as translator
+      And I approve a related work
     When I am logged in as "inspiration"
       And I edit the work "Worldbuilding" to be in the collection "Anonymous"
       And I go to translator's related works page
@@ -654,6 +671,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Given a hidden collection "Hidden"
       And I have related works setup
       And I post a translation as translator
+      And I approve a related work
     When I am logged in as "inspiration"
       And I edit the work "Worldbuilding" to be in the collection "Hidden"
       And I go to translator's related works page
