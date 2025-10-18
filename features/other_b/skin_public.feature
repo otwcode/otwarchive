@@ -130,17 +130,6 @@ Feature: Public skins
     Then the page should have the cached skin "unique skin"
       And I should be on the works page
 
-  Scenario: Setting a skin from the footer maintains the same page
-    Given basic skins
-      And the approved public skin "unique skin"
-      And the skin "unique skin" is cached
-      And the skin "unique skin" is in the chooser
-      And I am logged in
-    When I go to the works page
-      And I press "unique skin"
-    Then the page should have the cached skin "unique skin"
-      And I should be on the works page
-
   Scenario: A regular user can't apply to make a skin public
   Given I am logged in
   When I go to the new skin page
