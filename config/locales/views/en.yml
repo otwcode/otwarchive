@@ -829,18 +829,18 @@ en:
   external_authors:
     claim:
       actions:
-        assign_to_orphan_account: 
+        assign_to_orphan_account:
           one: Assign my work to the %{app_name} orphan_account, removing both my name and email address.
           other: Assign my works to the %{app_name} orphan_account, removing both my name and email address.
         do_not_import: From now on, do not import works with this email address.
         label: Actions
-        leave_with_archivist: 
+        leave_with_archivist:
           one: Leave my work in the care of the archivist.
           other: Leave my works in the care of the archivist.
         orphan_keep_name:
           one: Orphan my work and take my email address off it, but keep my name.
           other: Orphan my works and take my email address off them, but keep my name.
-        remove_works_entirely: 
+        remove_works_entirely:
           one: Please remove my work from %{app_name} entirely.
           other: Please remove my works from %{app_name} entirely.
       add_works_to_account_button:
@@ -871,17 +871,17 @@ en:
         one: My Imported Work
         other: My Imported Works
       notes:
-        claim: 
+        claim:
           one: You can claim your work.
-          other:  You can claim your works.
+          other: You can claim your works.
         create_account:
           one: You can create an account and claim your work (if you already have an account, log in to claim it)
           other: You can create an account and claim your works (if you already have an account, log in to claim them).
-        delete_or_orphan: 
+        delete_or_orphan:
           one: You can also choose to delete or orphan your work.
           other: You can also choose to delete or orphan your works.
         do_not_email: You can also tell us not to email you or import works with this email address in the future.
-        do_nothing: 
+        do_nothing:
           one: If you do nothing, the work will remain attached to the archivist account.
           other: If you do nothing, the works will remain attached to the archivist account.
         go_over_again: Wait, wait, go over this again?
@@ -899,7 +899,7 @@ en:
       review_before_decision_html:
         one: If you want to review your work before you make your decision, but don't have an %{app_name} account, %{contact_open_doors_link} with your pseud and the title of your work and we will send you a copy.
         other: If you want to review your works before you make your decision, but don't have an %{app_name} account, %{contact_open_doors_link} with your pseud and the titles of your works and we will send you a copy.
-      sign_up_button: 
+      sign_up_button:
         one: Sign me up and give me my work!
         other: Sign me up and give me my works!
   external_works:
