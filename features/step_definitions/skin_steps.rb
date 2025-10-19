@@ -55,7 +55,6 @@ Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name,
   step "it is currently 1 second from now"
 
   step %{I am logged in as "skinner"}
-  step %{the user "skinner" has the official role}
   step %{I set up the skin "#{skin_name}" with css "#{css}"}
   attach_file("skin_icon", "features/fixtures/skin_test_preview.png")
   check("skin_public")
