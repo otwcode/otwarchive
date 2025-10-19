@@ -68,9 +68,16 @@ describe BookmarkSearchForm, bookmark_search: true do
         end
 
         context "with external bookmark too" do
-          let(:external_work_bookmark) { create(:external_work_bookmark, fandom_string: tag.name, title: "External bookmark") }
+          let(:external_work_bookmark) { create(:external_work_bookmark) }
 
-          it "places external bookmark(s) last" do
+          before do
+            external_work_bookmark.bookmarkable.title = "External bookmark"
+            external_work_bookmark.bookmarkable.fandom_string = tag.name
+            external_work_bookmark.bookmarkable.save
+            run_all_indexing_jobs
+          end
+
+          it "places external bookmark last" do
             User.current_user = nil
             results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
             # "Ten": 10, "Series to be bookmarked": 5, "External bookmark": N/A
