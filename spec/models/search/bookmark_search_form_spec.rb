@@ -22,10 +22,7 @@ describe BookmarkSearchForm, bookmark_search: true do
         # work "Ten" has word_count 10
         let!(:work_bookmark) { create(:bookmark, bookmarkable: work10) }
 
-        let!(:series) { create(:series, title: "Series to be bookmarked") }
-        let!(:serial_work1) { create(:serial_work, series: series, work: work5) }
-        let!(:serial_work2) { create(:serial_work, series: series, work: work10r) }
-        # series "Series to be bookmarked" word_count is 5 or 15
+        let!(:series) { create(:series, title: "Series to be bookmarked", works: [work5, work10r]) }
         let!(:series_bookmark) { create(:bookmark, bookmarkable: series) }
 
         before do
