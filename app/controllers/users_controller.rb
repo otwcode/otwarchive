@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     @works = visible[:works].order('revised_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible[:series].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible[:bookmarks].order('updated_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-    if current_user.respond_to?(:subscriptions)
+    if current_user.respond_to?(:subscriptions) && @user != User.orphan_account
       @subscription = current_user.subscriptions.where(subscribable_id: @user.id,
                                                        subscribable_type: 'User').first ||
                       current_user.subscriptions.build(subscribable: @user)
