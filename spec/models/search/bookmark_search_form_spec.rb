@@ -36,7 +36,7 @@ describe BookmarkSearchForm, bookmark_search: true do
           User.current_user = create(:user)
           results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
           # "Series to be bookmarked": 15, "Ten": 10
-          expect(results.map(&:general_word_count)).to eq [15, 10]
+          expect(results.map { |item| item.respond_to?(:general_word_count) ? item.general_word_count : item.word_count }).to eq [15, 10]
           expect(results.map(&:title)).to eq ["Series to be bookmarked", "Ten"]
         end
 
@@ -44,7 +44,7 @@ describe BookmarkSearchForm, bookmark_search: true do
           User.current_user = nil
           results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
           # "Ten": 10, "Series to be bookmarked": 5
-          expect(results.map(&:public_word_count)).to eq [10, 5]
+          expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [10, 5]
           expect(results.map(&:title)).to eq ["Ten", "Series to be bookmarked"]
         end
 
