@@ -70,5 +70,41 @@ describe BookmarkableQuery do
       expect(child_filter.dig(:has_child, :query, :bool, :filter)).to include(term: { user_id: 5 })
       expect(child_filter.dig(:has_child, :query, :bool, :must_not)).to include(terms: { tag_ids: [666] })
     end
+
+    context "when querying as a user" do
+      before do
+        User.current_user = create(:user)
+      end
+
+      it "sorts by full word count" do
+        q = BookmarkQuery.new(sort_column: "word_count").bookmarkable_query
+        # Sort by general_word_count
+        expect(q.generated_query[:sort])
+          .to eq([{ general_word_count: { order: "desc" } }, { sort_id: { order: "desc" } }])
+      end
+
+      it "filters by total word count" do
+        q = BookmarkQuery.new(word_count: "10").bookmarkable_query
+        expect(q.generated_query.dig(:query, :bool, :filter))
+          .to include({ range: { general_word_count: { gte: 10, lte: 10 } } })
+      end
+    end
+
+    context "when querying as a guest" do
+      it "sorts by word count" do
+        User.current_user = nil
+        q = BookmarkQuery.new(sort_column: "word_count").bookmarkable_query
+        # Sort by public_word_count
+        expect(q.generated_query[:sort])
+          .to eq([{ public_word_count: { order: "desc" } }, { sort_id: { order: "desc" } }])
+      end
+
+      it "filters by word count" do
+        User.current_user = nil
+        q = BookmarkQuery.new(word_count: "10").bookmarkable_query
+        expect(q.generated_query.dig(:query, :bool, :filter))
+          .to include({ range: { public_word_count: { gte: 10, lte: 10 } } })
+      end
+    end
   end
 end

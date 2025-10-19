@@ -13,6 +13,45 @@ describe BookmarkSearchForm, bookmark_search: true do
 
   describe "bookmarkable_search_results" do
     describe "sorting" do
+      context "by word count" do
+        let(:tag) { create(:canonical_fandom) }
+
+        let!(:work5) { create(:work, fandom_string: tag.name, chapter_attributes: { content: "one two three four five" }) }
+        let!(:work10r) { create(:work, fandom_string: tag.name, restricted: true, chapter_attributes: { content: "one two three four five six seven eight nine ten" }) }
+        let!(:work10) { create(:work, fandom_string: tag.name, title: "Ten", chapter_attributes: { content: "one two three four five six seven eight nine ten" }) }
+        # work "Ten" has word_count 10
+        let!(:work_bookmark) { create(:bookmark, bookmarkable: work10) }
+
+        let!(:series) { create(:series, title: "Series to be bookmarked") }
+        let!(:serial_work1) { create(:serial_work, series: series, work: work5) }
+        let!(:serial_work2) { create(:serial_work, series: series, work: work10r) }
+        # series "Series to be bookmarked" word_count is 5 or 15
+        let!(:series_bookmark) { create(:bookmark, bookmarkable: series) }
+
+        before do
+          run_all_indexing_jobs
+        end
+
+        it "sorts bookmarkables correctly when logged in" do
+          User.current_user = create(:user)
+          results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
+          # "Series to be bookmarked": 15, "Ten": 10
+          expect(results.map(&:title)).to eq ["Series to be bookmarked", "Ten"]
+        end
+
+        it "sorts bookmarkables correctly when not logged in" do
+          User.current_user = nil
+          results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
+          # "Ten": 10, "Series to be bookmarked": 5
+          expect(results.map(&:title)).to eq ["Ten", "Series to be bookmarked"]
+        end
+
+        # FIXME: looks like having a test like this might make sense?
+        it "changes when the work wordcount changes" do
+          # TODO: add this test case
+        end
+      end
+
       context "when everything is created at a different time" do
         let(:tag) { create(:canonical_fandom) }
 

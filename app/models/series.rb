@@ -113,14 +113,7 @@ class Series < ApplicationRecord
   end
 
   def visible_word_count
-    if User.current_user.nil?
-      # visible_works_wordcount = self.works.posted.unrestricted.sum(:word_count)
-      visible_works_wordcount = self.works.posted.unrestricted.pluck(:word_count).compact.sum
-    else
-      # visible_works_wordcount = self.works.posted.sum(:word_count)
-      visible_works_wordcount = self.works.posted.pluck(:word_count).compact.sum
-    end
-    visible_works_wordcount
+    User.current_user.nil? ? self.public_word_count : self.general_word_count
   end
 
   def anonymous?
@@ -253,6 +246,14 @@ class Series < ApplicationRecord
   end
 
   def word_count
+    self.works.posted.pluck(:word_count).compact.sum
+  end
+
+  def public_word_count
+    self.works.posted.unrestricted.pluck(:word_count).compact.sum
+  end
+
+  def general_word_count
     self.works.posted.pluck(:word_count).compact.sum
   end
 

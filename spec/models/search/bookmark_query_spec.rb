@@ -107,6 +107,21 @@ describe BookmarkQuery do
   end
 
   context "when filtering on properties of the bookmarkable" do
+    it "allows public word count filtering for guests" do
+      q = BookmarkQuery.new(word_count: ">10")
+      parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
+      expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
+        include({ range: { public_word_count: { gt: 10 } } })
+    end
+
+    it "allows general word count filtering for registered users" do
+      User.current_user = create(:user)
+      q = BookmarkQuery.new(word_count: "<10")
+      parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
+      expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
+        include({ range: { general_word_count: { lt: 10 } } })
+    end
+
     it "allows you to filter for complete works" do
       q = BookmarkQuery.new(complete: true)
       parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
@@ -126,6 +141,34 @@ describe BookmarkQuery do
       parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
       expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
         include({ term: { "language_id.keyword": "ig" } })
+    end
+  end
+
+  context "when sorting by properties of the bookmarkable" do
+    it "allows sorting by public word count" do
+      q = BookmarkQuery.new(sort_column: "word_count")
+      # Sets sorting by score
+      expect(q.generated_query[:sort]).to eq([{ _score: { order: "desc" } }, { id: { order: "desc" } }])
+      # Computes score by public word count
+      parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
+      expect(parent.dig(:has_parent, :query, :function_score, :field_value_factor, :field)).to \
+        eq("public_word_count")
+    end
+
+    it "allows sorting by general word count when logged in" do
+      User.current_user = create(:user)
+      q = BookmarkQuery.new(sort_column: "word_count")
+      # Sets sorting by score
+      expect(q.generated_query[:sort]).to eq([{ _score: { order: "desc" } }, { id: { order: "desc" } }])
+      # Computes score by general word count
+      parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
+      expect(parent.dig(:has_parent, :query, :function_score, :field_value_factor, :field)).to \
+        eq("general_word_count")
+    end
+
+    it "allows sorting by bookmarkable date" do
+      q = BookmarkQuery.new(sort_column: "bookmarkable_date")
+      expect(q.generated_query[:sort]).to eq([{ "bookmarkable_date" => { order: "desc", unmapped_type: "date" } }, { id: { order: "desc" } }])
     end
   end
 

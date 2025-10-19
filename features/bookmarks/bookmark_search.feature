@@ -65,6 +65,18 @@ Feature: Search Bookmarks
       And I should see "New bookmark of old external work"
       And I should see "New bookmark of new external work"
 
+  Scenario: Search bookmarks by word count
+    Given I have bookmarks with various word counts to search
+    When I fill in "Word count" with "<15"
+      And I press "Search Bookmarks"
+    Then I should see the page title "Search Bookmarks"
+      And I should see "You searched for: Word count: <15"
+      And I should see "2 Found"
+      And I should see "Five"
+      And I should see "Ten"
+    When I follow "Edit Your Search"
+    Then the field labeled "Word count" should contain "<15"
+
   Scenario: Search bookmarks by date updated
     Given I have bookmarks to search by dates
     When I fill in "Date updated" with "> 900 days ago"
@@ -161,7 +173,7 @@ Feature: Search Bookmarks
       And I should see "2 Found"
 
   Scenario: Search for bookmarks with notes, and then edit search to narrow
-  results by the note content
+    results by the note content
     Given I have bookmarks to search
     When I check "With notes"
       And I press "Search Bookmarks"
@@ -184,7 +196,7 @@ Feature: Search Bookmarks
       And the "With notes" checkbox should be checked
 
   Scenario: If testuser has the pseud tester_pseud, searching for bookmarks by
-  the bookmarker testuser returns all of tester_pseud's bookmarks
+    the bookmarker testuser returns all of tester_pseud's bookmarks
     Given I have bookmarks to search
     When I fill in "Bookmarker" with "testuser"
       And I press "Search Bookmarks"

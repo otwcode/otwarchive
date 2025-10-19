@@ -17,3 +17,52 @@ Feature: Filter bookmarks
     Then I should see "2 Bookmarks by recengine"
       And I should see "english work"
       And I should see "german work"
+
+  Scenario: Filtering series bookmarks by word count with restricted works
+    Given I am logged in as "awesome_posterrr"
+      And I post the work "Public" as part of a series "Mixed Visibility"
+      And I post the work "Restricted" as part of a series "Mixed Visibility"
+      And I lock the work "Restricted"
+      And I bookmark the series "Mixed Visibility"
+    When I go to awesome_posterrr's bookmarks page
+    Then I should see "Words: 12"
+    When I press "Word count"
+      And I fill in "To" with "10"
+      And I press "Sort and Filter"
+    Then I should not see "Mixed Visibility"
+    When I fill in "To" with "20"
+      And I fill in "From" with "5"
+      And I press "Sort and Filter"
+    Then I should see "Mixed Visibility"
+    When I am logged out
+      And I go to awesome_posterrr's bookmarks page
+    Then I should see "Words: 6"
+    When I fill in "To" with "10"
+      And I press "Sort and Filter"
+    Then I should see "Mixed Visibility"
+
+  Scenario: Sorting series bookmarks by word count with restricted works
+    Given I am logged in as "poster_child"
+      And I post the 2 chapter work "In between"
+      And I post the 1 chapter work "Public" as part of a series "Mixed Visibility"
+      And I post the 3 chapter work "Restricted" as part of a series "Mixed Visibility"
+      And I lock the work "Restricted"
+      And I bookmark the series "Mixed Visibility"
+      And I bookmark the work "In between"
+      # FIXME: is this necessary?
+      And all indexing jobs have been run
+    When I go to poster_child's bookmarks page
+      And I select "Word Count" from "Sort by"
+      And I press "Sort and Filter"
+    Then the 1st bookmark result should contain "Mixed Visibility"
+      And the 1st bookmark result should contain "Words: 18"
+      And the 2nd bookmark result should contain "In between"
+      And the 2nd bookmark result should contain "Words: 9"
+    When I am logged out
+      And I go to poster_child's bookmarks page
+      And I select "Word Count" from "Sort by"
+      And I press "Sort and Filter"
+    Then the 1st bookmark result should contain "In between"
+      And the 1st bookmark result should contain "Words: 9"
+      And the 2nd bookmark result should contain "Mixed Visibility"
+      And the 2nd bookmark result should contain "Words: 6"
