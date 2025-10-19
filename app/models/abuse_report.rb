@@ -147,24 +147,29 @@ class AbuseReport < ApplicationRecord
       ids.join(", ")
     elsif (comment_id = reported_comment_id)
       comment = Comment.find_by(id: comment_id)
-
       return "deletedcomment" unless comment
 
-      prefix = if comment.is_deleted
-                 "deletedcomment, "
-               else
-                 ""
-               end
+      ids = []
+      ids.prepend("deletedcomment") if comment.is_deleted
+      ids.push("guestcomment") if comment.pseud_id.nil?
+      ids.push("deletedaccount") if comment.pseud.nil? && !comment.pseud_id.nil?
 
-      return "#{prefix}guestcomment" if comment.pseud_id.nil?
-      
-      return "#{prefix}deletedaccount" if comment.pseud.nil? 
+      if (id = comment.user&.id)
+        if id == User.orphan_account.id
+          ids.push("orphanedcomment")
+        else
+          ids.push(id)
+        end
+      end
 
-      id = comment.user.id
+      ids.join(", ")
+    elsif (series_id = reported_series_id)
+      series = Series.find_by(id: series_id)
+      return "deletedseries" unless series
 
-      return "#{prefix}orphanedcomment" if id == User.orphan_account.id
-
-      prefix + id.to_s
+      ids = series.pseuds.pluck(:user_id).uniq.sort
+      ids.prepend("orphanedseries") if ids.delete(User.orphan_account.id)
+      ids.join(", ")
     end
   end
 
@@ -177,6 +182,11 @@ class AbuseReport < ApplicationRecord
   # ID of the reported comment
   def reported_comment_id
     url[%r{/comments/(\d+)}, 1]
+  end
+
+  # ID of the reported series
+  def reported_series_id
+    url[%r{/series/(\d+)}, 1]
   end
 
   def attach_work_download(ticket_id)
