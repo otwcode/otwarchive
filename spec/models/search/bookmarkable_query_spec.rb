@@ -115,7 +115,7 @@ describe BookmarkableQuery do
       it "filters by word count using words_to" do
         q = BookmarkQuery.new(words_to: "10").bookmarkable_query
         expect(q.generated_query.dig(:query, :bool, :filter))
-          .to include({ range: { general_word_count: { lte: 10 } } })
+          .to include({ range: { public_word_count: { lte: 10 } } })
       end
     end
   end

@@ -112,6 +112,7 @@ class Series < ApplicationRecord
     end
   end
 
+  # Show same word count as is used for sorting
   def visible_word_count
     User.current_user.nil? ? self.public_word_count : self.general_word_count
   end
@@ -250,12 +251,16 @@ class Series < ApplicationRecord
     self.works.posted.pluck(:word_count).compact.sum
   end
 
+  # Word count as seen by guests
   def public_word_count
-    self.works.posted.unrestricted.pluck(:word_count).compact.sum
+    # Exclude restricted works and those hidden by admin from the word count
+    self.works.posted.unrestricted.unhidden.pluck(:word_count).compact.sum
   end
 
+  # Word count as seen by registered users
   def general_word_count
-    self.works.posted.pluck(:word_count).compact.sum
+    # Exclude works hidden by admin from the word count
+    self.works.posted.unhidden.pluck(:word_count).compact.sum
   end
 
   # FIXME: should series have their own language?

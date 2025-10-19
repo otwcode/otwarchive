@@ -57,6 +57,7 @@ describe BookmarkSearchForm, bookmark_search: true do
           work5.save
           run_all_indexing_jobs
 
+          # Search after the change
           User.current_user = nil
           results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
           # "Series to be bookmarked": 15, "Ten": 10
