@@ -33,8 +33,8 @@
       <%= t(".invitation_to_create_account", count: works_count, app_name: ArchiveConfig.APP_SHORT_NAME) %>
     </p>
     <p class="message">
-      <%= t(".login_instructions", work: t(".work", count: works_count), app_name: ArchiveConfig.APP_SHORT_NAME) %>
-      <%= button_to t(".sign_up_button", work: t(".work", count: works_count)), signup_path(invitation_token: @invitation.token), method: :get %>
+      <%= t(".login_instructions", count: works_count, app_name: ArchiveConfig.APP_SHORT_NAME) %>
+      <%= button_to t(".sign_up_button", count: works_count), signup_path(invitation_token: @invitation.token), method: :get %>
     </p>
   <% end %>
 </div>
@@ -50,7 +50,7 @@
     <% if logged_in? %>
       <%= button_to t(".add_works_to_account_button", current_user: current_user.login, count: works_count), complete_claim_path(invitation_token: @invitation.token) %>
     <% else %>
-      <%= button_to t(".sign_up_button", work: t(".work", count: works_count)), signup_path(invitation_token: @invitation.token), method: :get %>
+      <%= button_to t(".sign_up_button", count: works_count), signup_path(invitation_token: @invitation.token), method: :get %>
     <% end %>
   </p>
 </div>
@@ -63,7 +63,7 @@
     <ul>
       <li>
         <%= radio_button_tag "imported_stories", "nothing" %>
-        <%= label_tag "imported_stories_nothing", t(".actions.leave_with_archivist", work: t(".work", count: works_count)) %>
+        <%= label_tag "imported_stories_nothing", t(".actions.leave_with_archivist", count: works_count) %>
       </li>
     </ul>
     <ul>
@@ -77,13 +77,13 @@
             <%= check_box_tag "remove_pseud" %>
             <%= label_tag "remove_pseud",
                   t(".actions.assign_to_orphan_account",
-                    work: t(".work", count: works_count), app_name: ArchiveConfig.APP_SHORT_NAME) %>
+                    count: works_count, app_name: ArchiveConfig.APP_SHORT_NAME) %>
           </li>
         </ul>
       </li>
       <li>
         <%= radio_button_tag "imported_stories", "delete" %>
-        <%= label_tag "imported_stories_delete", t(".actions.remove_works_entirely", work: t(".work", count: works_count), app_name: ArchiveConfig.APP_SHORT_NAME) %>
+        <%= label_tag "imported_stories_delete", t(".actions.remove_works_entirely", count: works_count, app_name: ArchiveConfig.APP_SHORT_NAME) %>
       </li>
       <li id="notimport">
         <%= f.check_box :do_not_import %>
@@ -109,13 +109,13 @@
 <div class="notes module">
   <h3><%= t(".notes.go_over_again") %></h3>
   <ul class="notes">
-    <li><%= t(".notes.do_nothing", work: t(".work", count: works_count)) %></li>
+    <li><%= t(".notes.do_nothing", count: works_count) %></li>
     <% if logged_in? %>
-      <li><%= t(".notes.claim", work: t(".work", count: works_count)) %></li>
+      <li><%= t(".notes.claim", count: works_count) %></li>
     <% else %>
       <li><%= t(".notes.create_account", count: works_count) %></li>
     <% end %>
-    <li><%= t(".notes.delete_or_orphan", work: t(".work", count: works_count)) %></li>
+    <li><%= t(".notes.delete_or_orphan", count: works_count) %></li>
     <li><%= t(".notes.orphaning_explanation", count: works_count, app_name: ArchiveConfig.APP_SHORT_NAME) %></li>
     <li><%= t(".notes.do_not_email") %></li>
   </ul>
