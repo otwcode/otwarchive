@@ -5,7 +5,7 @@
     <li><%= span_if_current t(".edit_multiple"), (path = show_multiple_user_works_path(@user)),
               current_page?(path) && params[:work_ids].blank? %></li>      
   <% end %>
-  <% if current_user && @subscription %>
+  <% if current_user && @subscription && @user != User.orphan_account %>
     <li>
       <%= render :partial => 'subscriptions/form', :locals => { :subscription => @subscription } %>
     </li>

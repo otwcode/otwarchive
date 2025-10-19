@@ -11,7 +11,7 @@ class Subscription < ApplicationRecord
   # if there's an invalid subscribable type
   validates :subscribable, presence: true,
                            if: proc { |s| VALID_SUBSCRIBABLES.include?(s.subscribable_type) }
-
+  validate :subscribable_not_orphan_account
   # Get the subscriptions associated with this work
   # currently: users subscribed to work, users subscribed to creator of work
   scope :for_work, lambda {|work|
@@ -57,5 +57,11 @@ class Subscription < ApplicationRecord
     return false if subscribable_type == "Work" && !creation.is_a?(Chapter)
 
     true
+  end
+
+  def subscribable_not_orphan_account
+    if subscribable_type == "User" && subscribable == User.orphan_account
+      errors.add(:subscribable, "Sorry! You cannot subscribe to the orphan account.")
+    end
   end
 end

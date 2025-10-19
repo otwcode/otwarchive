@@ -35,6 +35,8 @@ class Chapter < ApplicationRecord
   def inherit_creatorships
     if work && creatorships.empty? && current_user_pseuds.blank?
       work.pseuds_after_saving.each do |pseud|
+        # Prevent automatic inheritance of orphan_account as a chapter creator
+        next if pseud.user == User.orphan_account
         creatorships.build(pseud: pseud)
       end
     end
