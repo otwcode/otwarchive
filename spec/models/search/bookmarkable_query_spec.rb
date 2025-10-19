@@ -88,6 +88,12 @@ describe BookmarkableQuery do
         expect(q.generated_query.dig(:query, :bool, :filter))
           .to include({ range: { general_word_count: { gte: 10, lte: 10 } } })
       end
+
+      it "filters by total word count using words_from" do
+        q = BookmarkQuery.new(words_from: "10").bookmarkable_query
+        expect(q.generated_query.dig(:query, :bool, :filter))
+          .to include({ range: { general_word_count: { gte: 10 } } })
+      end
     end
 
     context "when querying as a guest" do
@@ -104,6 +110,12 @@ describe BookmarkableQuery do
         q = BookmarkQuery.new(word_count: "10").bookmarkable_query
         expect(q.generated_query.dig(:query, :bool, :filter))
           .to include({ range: { public_word_count: { gte: 10, lte: 10 } } })
+      end
+
+      it "filters by word count using words_to" do
+        q = BookmarkQuery.new(words_to: "10").bookmarkable_query
+        expect(q.generated_query.dig(:query, :bool, :filter))
+          .to include({ range: { general_word_count: { lte: 10 } } })
       end
     end
   end

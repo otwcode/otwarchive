@@ -107,19 +107,34 @@ describe BookmarkQuery do
   end
 
   context "when filtering on properties of the bookmarkable" do
-    it "allows public word count filtering for guests" do
+    it "allows public word count filtering for guests by word_count" do
       q = BookmarkQuery.new(word_count: ">10")
       parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
       expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
         include({ range: { public_word_count: { gt: 10 } } })
     end
 
-    it "allows general word count filtering for registered users" do
+    it "allows public word count filtering for guests by words_from/to" do
+      q = BookmarkQuery.new(words_from: "10", words_to:"15")
+      parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
+      expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
+        include({ range: { public_word_count: { gte: 10, lte: 15 } } })
+    end
+
+    it "allows general word count filtering for registered users by word_count" do
       User.current_user = create(:user)
       q = BookmarkQuery.new(word_count: "<10")
       parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
       expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
         include({ range: { general_word_count: { lt: 10 } } })
+    end
+
+    it "allows general word count filtering for registered users by words_from/to" do
+      User.current_user = create(:user)
+      q = BookmarkQuery.new(words_from: "100", words_to: "450")
+      parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
+      expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
+        include({ range: { general_word_count: { gte: 100, lte: 450 } } })
     end
 
     it "allows you to filter for complete works" do

@@ -19,10 +19,12 @@ describe BookmarkSearchForm, bookmark_search: true do
         let!(:work5) { create(:work, fandom_string: tag.name, chapter_attributes: { content: "one two three four five" }) }
         let!(:work10r) { create(:work, fandom_string: tag.name, restricted: true, chapter_attributes: { content: "one two three four five six seven eight nine ten" }) }
         let!(:work10) { create(:work, fandom_string: tag.name, title: "Ten", chapter_attributes: { content: "one two three four five six seven eight nine ten" }) }
-        # work "Ten" has word_count 10
+        # bookmark of public work "Ten" has word_count 10
         let!(:work_bookmark) { create(:bookmark, bookmarkable: work10) }
 
         let!(:series) { create(:series, title: "Series to be bookmarked", works: [work5, work10r]) }
+        # bookmark of series "Series to be bookmarked" has word_count 5 or 15
+        # depending on whether work10r (a restricted work) is visible
         let!(:series_bookmark) { create(:bookmark, bookmarkable: series) }
 
         before do
@@ -33,7 +35,9 @@ describe BookmarkSearchForm, bookmark_search: true do
           User.current_user = create(:user)
           results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
           # "Series to be bookmarked": 15, "Ten": 10
+          # Check word count of returned results
           expect(results.map { |item| item.respond_to?(:general_word_count) ? item.general_word_count : item.word_count }).to eq [15, 10]
+          # Check titles of returned results
           expect(results.map(&:title)).to eq ["Series to be bookmarked", "Ten"]
         end
 
@@ -41,13 +45,37 @@ describe BookmarkSearchForm, bookmark_search: true do
           User.current_user = nil
           results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
           # "Ten": 10, "Series to be bookmarked": 5
+          # Check word count of returned results
           expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [10, 5]
+          # Check titles of returned results
           expect(results.map(&:title)).to eq ["Ten", "Series to be bookmarked"]
         end
 
-        # FIXME: looks like having a test like this might make sense?
         it "changes when the work wordcount changes" do
-          # TODO: add this test case
+          # Update the one public work in the series to have 15 words instead of 5
+          work5.chapters.first.update(content: "This is a work with a word count of fifteen which is more than ten.")
+          work5.save
+          run_all_indexing_jobs
+
+          User.current_user = nil
+          results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
+          # "Series to be bookmarked": 15, "Ten": 10
+          # Check word count of returned results
+          expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [15, 10]
+          # Check titles of returned results
+          expect(results.map(&:title)).to eq ["Series to be bookmarked", "Ten"]
+        end
+
+        context "with external bookmark too" do
+          let(:external_work_bookmark) { create(:external_work_bookmark, fandom_string: tag.name, title: "External bookmark") }
+
+          it "places external bookmark(s) last" do
+            User.current_user = nil
+            results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
+            # "Ten": 10, "Series to be bookmarked": 5, "External bookmark": N/A
+            # Check titles of returned results
+            expect(results.map(&:title)).to eq ["Ten", "Series to be bookmarked", "External bookmark"]
+          end
         end
       end
 
