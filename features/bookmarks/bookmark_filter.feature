@@ -25,6 +25,7 @@ Feature: Filter bookmarks
       And I lock the work "Restricted"
       And I bookmark the series "Mixed Visibility"
     When I go to awesome_posterrr's bookmarks page
+    # Verify the starting visible word count
     Then I should see "1 Bookmark by awesome_posterrr"
       And I should see "Words: 12"
     When I fill in "To" with "10" within "#work_words"
@@ -38,7 +39,8 @@ Feature: Filter bookmarks
       And I should see "Mixed Visibility"
     When I am logged out
       And I go to awesome_posterrr's bookmarks page
-    Then I should see "Words: 6"
+    Then I should see "1 Bookmark by awesome_posterrr"
+      And I should see "Words: 6"
     When I fill in "To" with "10" within "#work_words"
       And I press "Sort and Filter"
     Then I should see "1 Bookmark by awesome_posterrr"
