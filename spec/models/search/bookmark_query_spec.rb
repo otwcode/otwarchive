@@ -115,7 +115,7 @@ describe BookmarkQuery do
     end
 
     it "allows public word count filtering for guests by words_from/to" do
-      q = BookmarkQuery.new(words_from: "10", words_to:"15")
+      q = BookmarkQuery.new(words_from: "10", words_to: "15")
       parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
       expect(parent.dig(:has_parent, :query, :bool, :filter)).to \
         include({ range: { public_word_count: { gte: 10, lte: 15 } } })
