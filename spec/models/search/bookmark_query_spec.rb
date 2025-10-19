@@ -150,8 +150,7 @@ describe BookmarkQuery do
       # Sets sorting by score
       expect(q.generated_query[:sort]).to eq([{ _score: { order: "desc" } }, { id: { order: "desc" } }])
       # Computes score by public word count
-      parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
-      expect(parent.dig(:has_parent, :query, :function_score, :field_value_factor, :field)).to \
+      expect(q.generated_query.dig(:query, :bool, :must, :has_parent, :query, :function_score, :field_value_factor, :field)).to \
         eq("public_word_count")
     end
 
@@ -161,8 +160,7 @@ describe BookmarkQuery do
       # Sets sorting by score
       expect(q.generated_query[:sort]).to eq([{ _score: { order: "desc" } }, { id: { order: "desc" } }])
       # Computes score by general word count
-      parent = find_parent_filter(q.generated_query.dig(:query, :bool, :must))
-      expect(parent.dig(:has_parent, :query, :function_score, :field_value_factor, :field)).to \
+      expect(q.generated_query.dig(:query, :bool, :must, :has_parent, :query, :function_score, :field_value_factor, :field)).to \
         eq("general_word_count")
     end
 
