@@ -17,7 +17,7 @@ class InboxController < ApplicationController
     @page_subtitle = t(".page_title", user: @user.login)
     @inbox_total = @user.inbox_comments.with_bad_comments_removed.count
     @unread = @user.inbox_comments.with_bad_comments_removed.count_unread
-    @filters = filter_params[:filters] || {}
+    @filters = filter_params || {}
     @inbox_comments = @user.inbox_comments.with_bad_comments_removed.find_by_filters(@filters).page(params[:page])
   end
 
@@ -47,7 +47,7 @@ class InboxController < ApplicationController
       flash[:caution] = t(".must_select_item")
     end
     respond_to do |format|
-      format.html { redirect_back_or_to(user_inbox_path(@user, page: params[:page], filters: filter_params[:filters]), notice: success_message) }
+      format.html { redirect_back_or_to(user_inbox_path(@user, page: params[:page], filters: filter_params), notice: success_message) }
       format.json { render json: { item_success_message: success_message }, status: :ok }
     end
   end
@@ -55,7 +55,7 @@ class InboxController < ApplicationController
   private
 
   def filter_params
-    params.slice(:filters).permit(filters: [:date, :read, :replied_to])
+    params.slice(:filters).permit(filters: [:date, :read, :replied_to])[:filters]
   end
 
   def load_commentable

@@ -166,7 +166,7 @@ Feature: Get messages in the inbox
     Then I should see "sewwiththeflo on Cat Thor's Bizarre Adventure"
       And I should see "Thank you! Please go to bed."
 
-  Scenario: A user can update their filtered inbox while a valid referer
+  Scenario: A user can update their inbox while filtering without a valid referer
     Given the work "Cat Thor's Bizarre Adventure" by "sewwiththeflo"
       And I am logged in as "unbeatablesg"
       And I post the comment "dude this is super great!!" on the work "Cat Thor's Bizarre Adventure"
