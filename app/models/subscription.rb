@@ -64,9 +64,7 @@ class Subscription < ApplicationRecord
   def subscribable_not_orphan
     case subscribable_type
     when "User"
-      if subscribable == User.orphan_account
-        errors.add(:subscribable, "Sorry! You cannot subscribe to the orphan account.")
-      end
+      errors.add(:subscribable, "Sorry! You cannot subscribe to the orphan account.") if subscribable == User.orphan_account
     when "Work", "Series"
       if subscribable.respond_to?(:users)
         # Get all non-orphan users on this work/series
