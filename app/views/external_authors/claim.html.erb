@@ -71,7 +71,7 @@
         <%= hidden_field_tag :invitation_token, @invitation.token %>
         <%= radio_button_tag "imported_stories", "orphan" %>
         <%= label_tag "imported_stories_orphan", t(".actions.orphan_keep_name", count: works_count) %>
-        <%= link_to(t(".refer_to_orphaning_faq"), archive_faq_path("glossary", anchor: "orphandef")) %>
+        <%= link_to(t(".refer_to_orphaning_faq"), archive_faq_path("orphaning")) %>
         <ul>
           <li>
             <%= check_box_tag "remove_pseud" %>
