@@ -177,11 +177,6 @@ class AbuseReport < ApplicationRecord
     url[%r{/comments/(\d+)}, 1]
   end
 
-  # ID of the reported series
-  def reported_series_id
-    url[%r{/series/(\d+)}, 1]
-  end
-
   def attach_work_download(ticket_id)
     work_id = reported_work_id
     return unless work_id
