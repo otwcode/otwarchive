@@ -178,12 +178,8 @@
    the non-orphaned co-author's subscribers
 
     Given I have an orphan account
-      And I have an archivist "fourth_user"
     Then "third_user" subscribes to author "first_user"
-      And I am logged in as "fourth_user"
-      And "fourth_user" subscribes to author "orphan_account"
-
-    Then I am logged in as "first_user"
+    When I am logged in as "first_user"
       And I post the work "Half-Orphaned"
       And I add the co-author "second_user" to the work "Half-Orphaned"
       And I post a chapter for the work "Half-Orphaned"

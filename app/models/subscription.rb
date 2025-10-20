@@ -60,10 +60,8 @@ class Subscription < ApplicationRecord
     true
   end
 
-
-  # Prevent subscriptions to the orphan_account creations with only orphan_account as creator
+  # Prevent subscriptions to the orphan_account and creations with orphan_account as the only creator
   def subscribable_not_orphan
-    return if user&.is_archivist?
     case subscribable_type
     when "User"
       if subscribable == User.orphan_account

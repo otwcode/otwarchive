@@ -60,6 +60,9 @@ class Creatorship < ApplicationRecord
                          name: pseud.byline))
   end
 
+  # There are two instances where the orphan_account could get added to a creation. First, when users attempt to add
+  # the orphan_account to a work/chapter manually, and second when we're adding it automatically as part of the
+  # orphaning process. We only want to allow the second instance, so we check for that here.
   def check_orphan_account
     return if pseud.nil?
     return unless pseud.user == User.orphan_account
