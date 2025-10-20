@@ -55,10 +55,10 @@
   </p>
 </div>
 
-<h3 class="heading" id="other-options"><%= t(".other_options") %></h3>
+<h3 class="heading" id="other-options"><%= t(".other_options.heading") %></h3>
 <%= form_for @external_author do |f| %>
   <fieldset>
-    <legend><%= t(".other_options") %></legend>
+    <legend><%= t(".other_options.legend") %></legend>
     <h4><%= t(".actions.label") %></h4>
     <ul>
       <li>
@@ -99,7 +99,7 @@
 
     </ul>
     <p class="important message">
-      <%= t(".important_message") %>
+      <%= t(".import_without_email") %>
     </p>
     <%= submit_fieldset(f) %>
   </fieldset>

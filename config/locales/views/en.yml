@@ -860,7 +860,7 @@ en:
         other: Claim your works as %{current_user}. If you would like to claim these works under a different account (or create a new account to claim them with), log out and reload this page first.
       contact_open_doors: contact Open Doors
       dashboard: dashboard
-      important_message: 'Important: If you tick "Do not email me in future" but do not tick "Do not import works", works may be imported without you being told. If that''s not what you want, turn off importing as well as emails.'
+      import_without_email: 'Important: If you tick "Do not email me in future" but do not tick "Do not import works", works may be imported without you being told. If that''s not what you want, turn off importing as well as emails.'
       invitation_to_create_account:
         one: We invite you to create an account on %{app_name}! The work will automatically be added to your account and you will have full control over it.
         other: We invite you to create an account on %{app_name}! The works will automatically be added to your account and you will have full control over them.
@@ -875,7 +875,7 @@ en:
           one: You can claim your work.
           other: You can claim your works.
         create_account:
-          one: You can create an account and claim your work (if you already have an account, log in to claim it)
+          one: You can create an account and claim your work (if you already have an account, log in to claim it).
           other: You can create an account and claim your works (if you already have an account, log in to claim them).
         delete_or_orphan:
           one: You can also choose to delete or orphan your work.
@@ -891,7 +891,9 @@ en:
       notifications:
         do_not_email: Do not email me in the future when works are imported with this email address.
         label: Notifications
-      other_options: Other Options
+      other_options:
+        heading: Other Options
+        legend: Other Options
       page_heading:
         one: Claiming Your Imported Work
         other: Claiming Your Imported Works
