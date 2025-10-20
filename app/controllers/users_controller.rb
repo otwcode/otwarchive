@@ -30,7 +30,7 @@ class UsersController < ApplicationController
       @subscription = current_user.subscriptions.where(subscribable_id: @user.id,
                                                        subscribable_type: 'User').first ||
                       current_user.subscriptions.build(subscribable: @user)
-end
+  end
 
   def change_email
     @page_subtitle = t(".page_title")
