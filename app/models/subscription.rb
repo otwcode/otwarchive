@@ -53,7 +53,7 @@ class Subscription < ApplicationRecord
     return false unless creation.try(:posted)
     return false if creation.is_a?(Chapter) && !creation.work.try(:posted)
     return false if creation.try(:hidden_by_admin) || (creation.is_a?(Chapter) && creation.work.try(:hidden_by_admin))
-    return false if creation.pseuds.any? { |p| p.user == User.orphan_account }
+    return false if creation.pseuds.all? { |p| p.user == User.orphan_account }
     return false if subscribable_type == "User" && creation.anonymous?
     return false if subscribable_type == "Work" && !creation.is_a?(Chapter)
 
