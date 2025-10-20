@@ -161,7 +161,13 @@ class AbuseReport < ApplicationRecord
           ids.push(id)
         end
       end
+      ids.join(", ")
+    elsif (series_id = reported_series_id)
+      series = Series.find_by(id: series_id)
+      return "deletedseries" unless series
 
+      ids = series.pseuds.pluck(:user_id).uniq.sort
+      ids.prepend("orphanedseries") if ids.delete(User.orphan_account.id)
       ids.join(", ")
     end
   end

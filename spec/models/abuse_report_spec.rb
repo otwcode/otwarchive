@@ -659,5 +659,125 @@ describe AbuseReport do
         end
       end
     end
+
+    context "for series URLs" do
+      context "for a deleted series" do
+        it "returns \"deletedseries\"" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/000/")
+
+          expect(subject.creator_ids).to eq("deletedseries")
+        end
+      end
+
+      context "for a regular series" do
+        it "returns the user ID of the creator" do
+          series = create(:series)
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+          expect(subject.creator_ids).to eq(series.pseuds.first.user_id.to_s)
+        end
+      end
+
+      context "for a series created by two separate creators" do
+        let(:first_pseud) { create(:pseud) }
+        let(:second_pseud) { create(:pseud) }
+        let(:series) { create(:series, authors: [first_pseud, second_pseud]) }
+
+        before { allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/") }
+
+        it "returns both user ID of the creators" do
+          expect(subject.creator_ids).to eq("#{first_pseud.user_id}, #{second_pseud.user_id}")
+        end
+
+        context "when the series is empty" do
+          it "returns both user ID of the creators" do
+            series.works = []
+            series.save
+          
+            expect(subject.creator_ids).to eq("#{first_pseud.user_id}, #{second_pseud.user_id}")
+          end
+        end
+      end
+
+      context "for a series created by two pseuds of the same user" do
+        it "returns the user ID of the creator" do
+          user = create(:user)
+          first_pseud = create(:pseud, user: user)
+          second_pseud = create(:pseud, user: user)
+          series = create(:series, authors: [first_pseud, second_pseud])
+
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+          expect(subject.creator_ids).to eq(user.id.to_s)
+        end
+      end
+
+      context "for an empty series" do
+        it "returns the user ID of the creator" do
+          series = create(:series)
+          series.works = []
+          series.save
+
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+          expect(subject.creator_ids).to eq(series.pseuds.first.user_id.to_s)
+        end
+      end
+
+      context "for an anonymous series (contains anonymous works)" do
+        it "returns the user ID of the creator" do
+          pseud = create(:pseud)
+          anonymous_collection = create(:anonymous_collection)
+          anonymous_work = create(:work, authors: [pseud], collections: [anonymous_collection])
+          series = create(:series, authors: [pseud], works: [anonymous_work])
+
+          expect(series.anonymous?).to be_truthy
+
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+          expect(subject.creator_ids).to eq(series.pseuds.first.user_id.to_s)
+        end
+      end
+
+      context "for an unrevealed series (contains anonymous works)" do
+        it "returns the user ID of the creator" do
+          pseud = create(:pseud)
+          unrevealed_collection = create(:unrevealed_collection)
+          unrevealed_work = create(:work, authors: [pseud], collections: [unrevealed_collection])
+          series = create(:series, authors: [pseud], works: [unrevealed_work])
+
+          expect(series.unrevealed?).to be_truthy
+
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+          expect(subject.creator_ids).to eq(series.pseuds.first.user_id.to_s)
+        end
+      end
+
+      context "for an orphaned series" do
+        let!(:orphan_account) { create(:user, login: "orphan_account") }
+
+        context "where orphan_account is the only creator" do
+          it "returns \"orphanedseries\"" do
+            series = create(:series, authors: [orphan_account.default_pseud])
+            
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+          
+            expect(subject.creator_ids).to eq("orphanedseries")
+          end
+        end
+
+        context "where there are other normal creators" do
+          it "returns \"orphanedseries, \" + the creators' user IDs" do
+            pseud = create(:pseud)
+            series = create(:series, authors: [pseud, orphan_account.default_pseud])
+            
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/series/#{series.id}/")
+            
+            expect(subject.creator_ids).to eq("orphanedseries, #{pseud.user_id}")
+          end
+        end
+      end
+    end
   end
 end
