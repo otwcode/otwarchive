@@ -122,6 +122,7 @@ en:
           attributes:
             pseud_id:
               taken: is already listed as a creator.
+          orphan_account_not_co_creator: The orphan account cannot be added as a co-creator.
         external_work:
           attributes:
             user_defined_tags_count:
