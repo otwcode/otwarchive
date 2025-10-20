@@ -343,7 +343,11 @@ class Pseud < ApplicationRecord
       if creation.is_a?(Work)
         creation.series.each do |series|
           if series.work_pseuds.where(id: id).exists?
-            series.creatorships.find_or_create_by(pseud: pseud)
+            # Add the new pseud to the series with orphan_account validation skipped
+            new_series_creatorship = series.creatorships.find_or_initialize_by(pseud: pseud)
+            new_series_creatorship.approved = true
+            new_series_creatorship.skip_orphan_check = true # Skip the validation during orphaning
+            new_series_creatorship.save!
           else
             change_ownership(series, pseud, options.merge(skip_children: true))
           end
