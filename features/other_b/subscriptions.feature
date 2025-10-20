@@ -174,6 +174,34 @@
   When I press "Subscribe"
   Then the page title should include "Chapter 2"
 
+ Scenario: Posting a new chapter to a co-authored orphaned work should result in a subscription notification to
+   the non-orphaned co-author's subscribers
+
+    Given I have an orphan account
+      And I have an archivist "fourth_user"
+    Then "third_user" subscribes to author "first_user"
+      And I am logged in as "fourth_user"
+      And "fourth_user" subscribes to author "orphan_account"
+
+    Then I am logged in as "first_user"
+      And I post the work "Half-Orphaned"
+      And I add the co-author "second_user" to the work "Half-Orphaned"
+      And I post a chapter for the work "Half-Orphaned"
+    # Verify that the authorship has been set up properly
+    Then "second_user" should be a co-creator of Chapter 1 of "Half-Orphaned"
+      But "second_user" should not be a co-creator of Chapter 2 of "Half-Orphaned"
+    When I am logged in as "second_user"
+      And I orphan the work "Half-Orphaned"
+    Then "orphan_account" should be a co-creator of Chapter 1 of "Half-Orphaned"
+      But "orphan_account" should not be a co-creator of Chapter 2 of "Half-Orphaned"
+    Given I am logged in as "first_user"
+      And I post a chapter for the work "Half-Orphaned"
+    Then "second_user" should not be a co-creator of Chapter 3 of "Half-Orphaned"
+    When subscription notifications are sent
+      And 1 email should be delivered to "third_user@foo.com"
+      And the text only email to "third_user" should contain "You're receiving this email because you've subscribed to first_user"
+      And the html email to "third_user" should contain "subscribed to <a style=\"color:#FFFFFF\" href=\"https://www.example.com/users/first_user\">first_user</a>"
+
   # There are tests in collections/collection_anonymity.feature that ensure
   # a creator's subscribers are not notified when the creator posts a new
   # anonymous work.

@@ -63,7 +63,9 @@ class Creatorship < ApplicationRecord
   def check_orphan_account
     return if pseud.nil?
     return unless pseud.user == User.orphan_account
-    # Allow when User.current_user is nil (orphaning process uses this)
+    # Allow when skip_orphan_check flag is set (used during orphaning process)
+    return if skip_orphan_check
+    # Allow when User.current_user is nil
     return if User.current_user.nil?
     # Allow archivists to add orphan_account
     return if User.current_user.try(:is_archivist?)
@@ -154,6 +156,9 @@ class Creatorship < ApplicationRecord
 
   # Only enable notifications for new creatorships when explicitly enabled.
   attr_accessor :enable_notifications
+
+  # Allow the orphan_account creatorships during the orphaning process
+  attr_accessor :skip_orphan_check
 
   # Notify the pseud of their new creatorship.
   def notify_creator

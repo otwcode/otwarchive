@@ -11,9 +11,10 @@ class Subscription < ApplicationRecord
   # if there's an invalid subscribable type
   validates :subscribable, presence: true,
                            if: proc { |s| VALID_SUBSCRIBABLES.include?(s.subscribable_type) }
-  validate :subscribable_not_orphan_account
+  validate :subscribable_not_orphan
   # Get the subscriptions associated with this work
   # currently: users subscribed to work, users subscribed to creator of work
+  # excludes: subscriptions to the orphan_account
   scope :for_work, lambda {|work|
     where(["(subscribable_id = ? AND subscribable_type = 'Work')
             OR (subscribable_id IN (?) AND subscribable_type = 'User')
@@ -59,9 +60,25 @@ class Subscription < ApplicationRecord
     true
   end
 
-  def subscribable_not_orphan_account
-    if subscribable_type == "User" && subscribable == User.orphan_account
-      errors.add(:subscribable, "Sorry! You cannot subscribe to the orphan account.")
+
+  # Prevent subscriptions to the orphan_account creations with only orphan_account as creator
+  def subscribable_not_orphan
+    return if user&.is_archivist?
+    case subscribable_type
+    when "User"
+      if subscribable == User.orphan_account
+        errors.add(:subscribable, "Sorry! You cannot subscribe to the orphan account.")
+      end
+    when "Work", "Series"
+      if subscribable.respond_to?(:users)
+        # Get all non-orphan users on this work/series
+        non_orphan_users = subscribable.users.where.not(id: User.orphan_account.id)
+
+        if non_orphan_users.empty?
+          type_name = subscribable_type.downcase
+          errors.add(:subscribable, "Sorry! You cannot subscribe to a #{type_name} which is owned only by the orphan account.")
+        end
+      end
     end
   end
 end

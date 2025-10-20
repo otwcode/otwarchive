@@ -330,7 +330,11 @@ class Pseud < ApplicationRecord
 
       # Should only add new creatorships if we're an approved co-creator.
       if creation.creatorships.approved.where(pseud: self).exists?
-        creation.creatorships.find_or_create_by(pseud: pseud)
+        new_creatorship = creation.creatorships.find_or_initialize_by(pseud: pseud)
+        new_creatorship.approved = true
+        new_creatorship.skip_orphan_check = true # Skip validation during orphaning
+        # Save and persist before deleting old creatorship to prevent "can't remove all creators" error
+        new_creatorship.save!
       end
 
       # But we should delete all creatorships, even invited ones:
