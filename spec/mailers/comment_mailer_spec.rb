@@ -944,6 +944,7 @@ describe CommentMailer do
 
     it_behaves_like "an email with a valid sender"
     it_behaves_like "a multipart email"
+    it_behaves_like "a translated email"
     it_behaves_like "it retries when the comment doesn't exist"
     it_behaves_like "a notification email with a link to the comment"
     it_behaves_like "a notification email with a link to the comment's thread"

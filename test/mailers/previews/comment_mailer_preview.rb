@@ -16,6 +16,16 @@ class CommentMailerPreview < ApplicationMailerPreview
       CommentMailer.edited_comment_notification(recipient, comment)
     end
 
+    # Sent to a user when they make a reply to a comment, and they want to be notified of their own comments
+    define_method :"comment_reply_sent_notification_#{creation_type}" do
+      _, commentable = create_commentable_data(creation_type)
+      pseud = create(:user, :for_mailer_preview).default_pseud
+      comment = create(:comment, commentable: commentable)
+      reply = create(:comment, pseud: pseud, commentable: comment)
+
+      CommentMailer.comment_reply_sent_notification(reply)
+    end
+
     # Tags don't have comment moderation, chapters use the same logic as unchaptered works
     next if [:tag, :titled_chapter, :untitled_chapter].include?(creation_type)
 
@@ -94,15 +104,6 @@ class CommentMailerPreview < ApplicationMailerPreview
     CommentMailer.comment_reply_notification(comment, reply)
   end
 
-  # Sent to a user when they make a reply to a comment and they want to be notified of their own comments
-  def comment_reply_sent_notification
-    commenter = create(:user, :for_mailer_preview)
-
-    comment = create(:comment, pseud: commenter.default_pseud)
-    reply = create(:comment, commentable: comment)
-    CommentMailer.comment_reply_sent_notification(reply)
-  end
-
   # Sent to a user when they get a comment reply to their comment on a tag
   def comment_reply_notification_tag
     comment = create(:comment, :on_tag)
@@ -110,15 +111,6 @@ class CommentMailerPreview < ApplicationMailerPreview
     replier = create(:user, :for_mailer_preview)
     reply = create(:comment, commentable: comment, pseud: replier.default_pseud)
     CommentMailer.comment_reply_notification(comment, reply)
-  end
-
-  # Sent to a user when they make a reply to a comment on a tag, and they want to be notified of their own comments
-  def comment_reply_sent_notification_tag
-    commenter = create(:user, :for_mailer_preview)
-
-    comment = create(:comment, :on_tag, pseud: commenter.default_pseud)
-    reply = create(:comment, commentable: comment)
-    CommentMailer.comment_reply_sent_notification(reply)
   end
 
   private

@@ -111,6 +111,9 @@ en:
       chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
+      commenter_wrote:
+        html: "%{commenter_link} wrote:"
+        text: "%{commenter} wrote:"
       content:
         chapter:
           html: 'You replied to a comment on %{chapter_link} of %{work_link}:'
@@ -126,6 +129,7 @@ en:
         chapter: "[%{app_name}] Reply you left to a comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Reply you left to a comment on %{title}"
         tag: "[%{app_name}] Reply you left to a comment on the tag %{name}"
+      you_responded: 'You responded:'
     comment_sent_notification:
       chapter:
         titled: 'Chapter %{position}: %{title}'
