@@ -25,12 +25,14 @@ describe AbuseReporter do
       "contactId" => "1",
       "subject" => "[AO3] Abuse - This is a tragedy",
       "description" => "Nothing more to say",
+      "channel" => "Abuse Form",
       "cf" => {
         "cf_language" => "English",
         "cf_name" => "Walrus",
         "cf_ip" => "127.0.0.1",
         "cf_ticket_url" => "https://example.com/works/1",
-        "cf_user_id" => "3, 4"
+        "cf_user_id" => "3, 4",
+        "cf_user_agent" => "Unknown user agent"
       }
     }
   end
