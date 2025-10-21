@@ -256,21 +256,21 @@ for :has() increases to 95% according to caniuse.com. */
 }
 
 .javascript .work.navigation .secondary {
-  align-items: center;
-  gap: 0 0.643em;
-  justify-content: space-evenly;
   position: absolute;
   right: 0;
+    align-items: center;
+    gap: 0 0.643em;
+    justify-content: space-evenly;
 }
 
 /* If we use display without the .expanded qualifier, it will override .hidden's
 display: none and secondary will always be open. */
 .javascript .work.navigation .expanded + .secondary {
-  display: flex;
+    display: flex;
 }
 
 .javascript .work.navigation .download .secondary {
-  gap: 0.25em;
+    gap: 0.25em;
 }
 
 .javascript .work.navigation .secondary li {
@@ -278,10 +278,10 @@ display: none and secondary will always be open. */
 }
 
 .javascript .work.navigation .secondary p {
-  align-items: center;
-  display: flex;
-  gap: 0 0.25em;
   padding: 0;
+    align-items: center;
+    display: flex;
+    gap: 0 0.25em;
 }
 
 .javascript .work.navigation .secondary .actions {

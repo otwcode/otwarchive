@@ -86,13 +86,13 @@ form.single .autocomplete li.input {
 /* 08 actions */
 
 .javascript .work.navigation .chapter .secondary {
-  flex-wrap: wrap;
   padding-block-start: 0.375em;
+    flex-wrap: wrap;
 }
 
 .javascript .work.navigation .secondary p {
-  flex-wrap: wrap;
-  justify-content: center;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .javascript .work.navigation .secondary input {
