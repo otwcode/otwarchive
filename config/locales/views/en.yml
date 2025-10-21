@@ -871,7 +871,7 @@ en:
         work_problems: Works labeled with the wrong language or duplicate works
       status:
         bluesky: "@status.archiveofourown.org"
-        current_html: For current updates on Archive performance or downtime, please check our %{status_page_link} and follow %{bluesky_link} on Bluesky or %{tumblr_link} on Tumblr.
+        current_html: For current updates on AO3 performance or downtime, please check our %{status_page_link} and follow %{bluesky_link} on Bluesky or %{tumblr_link} on Tumblr.
         status_page: status page
         tumblr: ao3org
   home:
@@ -1306,7 +1306,7 @@ en:
       social:
         bluesky: "@status.archiveofourown.org on Bluesky"
         heading: Follow us
-        note_html: Follow the Archive on Bluesky or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
+        note_html: Follow AO3 on Bluesky or Tumblr for status updates, and don't forget to check out the %{other_outlets_link} for updates on our other projects!
         other_outlets: Organization for Transformative Works' news outlets
         tumblr: ao3org on Tumblr
     privacy:
