@@ -5,7 +5,6 @@ class UsersController < ApplicationController
   before_action :load_user, except: [:activate, :delete_confirmation, :index]
   before_action :check_ownership, except: [:activate, :change_username, :changed_username, :delete_confirmation, :index, :show]
   before_action :check_ownership_or_admin, only: [:change_username, :changed_username]
-  skip_before_action :store_location, only: [:end_first_login]
 
   def load_user
     @user = User.find_by!(login: params[:id])
@@ -246,6 +245,7 @@ class UsersController < ApplicationController
   end
 
   def delete_confirmation
+    redirect_to user_path(current_user) if logged_in?
   end
 
   def end_first_login
@@ -261,7 +261,7 @@ class UsersController < ApplicationController
     @user.preference.update_attribute(:banner_seen, true)
 
     respond_to do |format|
-      format.html { redirect_to(request.env['HTTP_REFERER'] || root_path) && return }
+      format.html { redirect_back_or_to root_path and return }
       format.js
     end
   end

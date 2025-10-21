@@ -11,6 +11,7 @@ class UserMailer < ApplicationMailer
   helper :date
   helper :series
   include HtmlCleaner
+  include MailerHelper
 
   # Send an email letting a creator know that their work has been added to a collection by an archivist
   def archivist_added_to_collection_notification(user_id, work_id, collection_id)
@@ -111,18 +112,9 @@ class UserMailer < ApplicationMailer
     creation_entries.each do |creation_info|
       creation_type, creation_id = creation_info.split("_")
       creation = creation_type.constantize.where(id: creation_id).first
-      next unless creation && creation.try(:posted)
-      next if creation.is_a?(Chapter) && !creation.work.try(:posted)
-      next if creation.try(:hidden_by_admin) || (creation.is_a?(Chapter) && creation.work.try(:hidden_by_admin))
-      next if creation.pseuds.any? { |p| p.user == User.orphan_account } # no notifications for orphan works
 
-      # TODO: allow subscriptions to orphan_account to receive notifications
-
-      # If the subscription notification is for a user subscription, we don't
-      # want to send updates about works that have recently become anonymous.
-      if @subscription.subscribable_type == "User"
-        next if Subscription.anonymous_creation?(creation)
-      end
+      # Guard against scenarios that may break anonymity or other things.
+      next unless @subscription.valid_notification_entry?(creation)
 
       @creations << creation
     end
@@ -132,14 +124,16 @@ class UserMailer < ApplicationMailer
     # make sure we only notify once per creation
     @creations.uniq!
 
-    subject = @subscription.subject_text(@creations.first)
-    subject += " and #{@creations.count - 1} more" if @creations.count > 1
-    I18n.with_locale(@subscription.user.preference.locale_for_mails) do
-      mail(
-        to: @subscription.user.email,
-        subject: "[#{ArchiveConfig.APP_SHORT_NAME}] #{subject}"
+    additional_creations_count = @creations.count - 1
+
+    mail(
+      to: @subscription.user.email,
+      subject: batch_subscription_subject(
+        @subscription,
+        @creations.first,
+        additional_creations_count
       )
-    end
+    )
   end
 
   # Emails a user to say they have been given more invitations for their friends

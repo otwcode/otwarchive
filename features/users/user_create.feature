@@ -21,7 +21,7 @@ Feature: Sign Up for a new account
       | user_registration_login                 | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | Username is too long (maximum is 40 characters)    |
       | user_registration_password              | pass           | Password is too short (minimum is 6 characters) |
       | user_registration_password              | 87151d8ae964d55515cb986d40394f79ca5c8329c07a8e59f2f783cbfbe401f69a780f27277275b7b2 | Password is too long (maximum is 40 characters)    |
-      | user_registration_password_confirmation | password2      | Password confirmation doesn't match             |
+      | user_registration_password_confirmation | password2      | The passwords you entered do not match. Please try again.|
       | user_registration_email                 |                | Email should look like an email address         |
       | user_registration_email                 | fake@fake@fake | Email should look like an email address         |
 
@@ -75,7 +75,7 @@ Feature: Sign Up for a new account
     Then I should see "Username has already been taken"
       And I should not see "Almost Done!"
 
-  Scenario: The user should be able to create a new account with a valid email and password
+  Scenario: The user should be able to create and activate a new account with a valid email and password
     When I fill in the sign up form with valid data
     Then I should see the page title "Create Account"
     When all emails have been delivered
@@ -84,3 +84,10 @@ Feature: Sign Up for a new account
       And I should see "Almost Done!"
       And I should get a new user activation email
       And a new user account should exist
+    When I go to the activation page for "newuser"
+    Then I should see "Account activation complete! Please log in."
+    When I fill in "Username or email:" with "newuser" within "#main"
+      And I fill in "Password:" with "password1" within "#main"
+      And I press "Log in" within "#main"
+    Then I should be on newuser's user page
+      And I should not see "Your account has already been activated."

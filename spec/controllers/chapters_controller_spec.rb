@@ -49,7 +49,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :manage, params: { work_id: work.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -100,7 +100,7 @@ describe ChaptersController do
       it "errors and redirects to login when work is restricted" do
         restricted_work = create(:work, restricted: true)
         get :show, params: { work_id: restricted_work.id, id: restricted_work.chapters.first }
-        it_redirects_to(new_user_session_path(restricted: true))
+        it_redirects_to(new_user_session_path(restricted: true, return_to: request.fullpath))
       end
 
       it "assigns @chapters to only posted chapters" do
@@ -112,7 +112,7 @@ describe ChaptersController do
       it "errors and redirects to login when trying to view unposted chapter" do
         chapter = create(:chapter, :draft, work: work)
         get :show, params: { work_id: work.id, id: chapter.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -289,7 +289,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :new, params: { work_id: work.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -334,7 +334,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :edit, params: { work_id: work.id, id: work.chapters.first.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -443,7 +443,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         post :create, params: { work_id: work.id, chapter: chapter_attributes }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -654,7 +654,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         put :update, params: { work_id: work.id, id: work.chapters.first.id, chapter: chapter_attributes }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -850,7 +850,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         post :update_positions, params: { work_id: work.id, chapter: [chapter1, chapter3, chapter2, chapter4] }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -928,7 +928,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         get :preview, params: { work_id: work.id, id: work.chapters.first.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -970,7 +970,7 @@ describe ChaptersController do
     context "when user is logged out" do
       it "errors and redirects to login" do
         post :post, params: { work_id: work.id, id: @chapter_to_post.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -1082,7 +1082,7 @@ describe ChaptersController do
       it "errors and redirects to login" do
         pending "clean up chapter filters"
         delete :destroy, params: { work_id: work.id, id: work.chapters.first.id }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 

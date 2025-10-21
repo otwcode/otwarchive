@@ -58,7 +58,7 @@ class AsyncIndexer
 
   def enqueue_ids(ids)
     name = "#{indexer}:#{ids.first}:#{Time.now.to_i}"
-    REDIS.sadd(name, ids)
+    REDIS.sadd?(name, ids)
     AsyncIndexerJob.set(queue: queue).perform_later(name)
   end
 
