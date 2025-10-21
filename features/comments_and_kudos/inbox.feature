@@ -165,3 +165,17 @@ Feature: Get messages in the inbox
       And I go to the homepage
     Then I should see "sewwiththeflo on Cat Thor's Bizarre Adventure"
       And I should see "Thank you! Please go to bed."
+
+  Scenario: A user can update their inbox while filtering without a valid referer
+    Given the work "Cat Thor's Bizarre Adventure" by "sewwiththeflo"
+      And I am logged in as "unbeatablesg"
+      And I post the comment "dude this is super great!!" on the work "Cat Thor's Bizarre Adventure"
+    When I am logged in as "sewwiththeflo"
+      And I go to sewwiththeflo's inbox page
+      And I choose "Show unread"
+      And I press "Filter"
+      And I check "Select" within "li.comment:first-child"
+      And I press "Mark Read"
+    Then I should be on sewwiththeflo's inbox page
+      And the "Show unread" checkbox should be checked
+      And I should not see "dude this is super great!!"

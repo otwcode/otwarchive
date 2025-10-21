@@ -1,14 +1,20 @@
 <% content_for :message do %>
-A response to your prompt has been posted<% if @collection %> in the "<%= @collection.title %>" collection (<%= collection_url(@collection) %>)<% end %> at the Archive of Our Own!
+<% if @collection %>
+<%= t(".a_response_to_your_prompt.collection.text",
+        collection_title: @collection.title,
+        collection_url: collection_url(@collection)) %>
+<% else %>
+<%= t(".a_response_to_your_prompt.no_collection") %>
+<% end %>
 
-"<%= @work.title %>" (<%= @work.word_count %> words)
+<%= creation_title_with_word_count(@work) %>
 <%= @collection ? collection_work_url(@collection, @work) : work_url(@work) %>
 
-by <%= @work.anonymous? ? "an anonymous responder" : (@work.pseuds.map{|p| text_pseud(p)}.to_sentence) %>
+<%= creation_attribution_text(@work) %>
 
-<% unless @work.fandom_string.blank? %>Fandom: <%= @work.fandom_string %><% end %>
+<% if @work.fandom_string.present? %><%= work_tag_metadata(@work.fandoms) %><% end %>
 
-<% unless @work.summary.blank? %>Summary:
+<% if @work.summary.present? %><%= metadata_label(Work.human_attribute_name("summary")) %>
 <%= to_plain_text(raw sanitize_field(@work, :summary)) %><% end %>
 
-<% if @collection && !@collection.gift_notification.blank? %><%= @collection.gift_notification %><% end %><% end %>
+<% if @collection && @collection.gift_notification.present? %><%= @collection.gift_notification %><% end %><% end %>

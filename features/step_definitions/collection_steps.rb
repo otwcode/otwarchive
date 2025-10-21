@@ -39,7 +39,7 @@ end
 When "I edit the work {string} to be in the collection(s) {string}" do |work, collection|
   step %{I edit the work "#{work}"}
   fill_in("Post to Collections / Challenges", with: collection)
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I view the ([^"]*) collection items page for "(.*?)"$/ do |item_status, collection|
@@ -100,16 +100,31 @@ Given /^I close the collection with the title "([^\"]*)"$/ do |title|
   step %{I am logged out}
 end
 
-Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
+Given "I have added a/the co-moderator {string} to collection {string}" do |name, title|
   # create the user
   step %{I am logged in as "#{name}"}
-  step %{I am logged in as "mod1"}
+  step %{I am logged in as the owner of "#{title}"}
   visit collection_path(Collection.find_by(title: title))
   click_link("Membership")
   step %{I fill in "participants_to_invite" with "#{name}"}
     step %{I press "Submit"}
 
   step %{I select "Moderator" from "#{name}_role"}
+  # TODO: fix the form, it is malformed right now
+  click_button("#{name}_submit")
+  step %{I should see "Updated #{name}"}
+end
+
+Given "I have added a/the co-owner {string} to collection {string}" do |name, title|
+  # create the user
+  step %{I am logged in as "#{name}"}
+  step %{I am logged in as the owner of "#{title}"}
+  visit collection_path(Collection.find_by(title: title))
+  click_link("Membership")
+  step %{I fill in "participants_to_invite" with "#{name}"}
+  step %{I press "Submit"}
+
+  step %{I select "Owner" from "#{name}_role"}
   # TODO: fix the form, it is malformed right now
   click_button("#{name}_submit")
   step %{I should see "Updated #{name}"}

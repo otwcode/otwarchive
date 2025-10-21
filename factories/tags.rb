@@ -140,4 +140,9 @@ FactoryBot.define do
     f.sequence(:name) { |n| "Archive Warning #{n}" }
     canonical { true }
   end
+
+  factory :filter_tagging do
+    association :filter, factory: :canonical_fandom
+    association :filterable, factory: :work
+  end
 end

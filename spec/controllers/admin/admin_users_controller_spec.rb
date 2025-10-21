@@ -212,7 +212,7 @@ describe Admin::AdminUsersController do
               .from("user@example.com")
               .to("updated@example.com")
 
-            it_redirects_to_with_notice(root_path, "User was successfully updated.")
+            it_redirects_to_with_notice(admin_users_path(user_id: user.id), "User was successfully updated.")
           end
         end
       end
@@ -240,7 +240,7 @@ describe Admin::AdminUsersController do
             .to([role.name, role_no_resets.name])
             .and avoid_changing { user.reload.email }
 
-          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+          it_redirects_to_with_notice(admin_users_path(user_id: user.id), "User was successfully updated.")
         end
       end
 
@@ -264,7 +264,7 @@ describe Admin::AdminUsersController do
             .to([role.name])
             .and avoid_changing { user.reload.email }
 
-          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+          it_redirects_to_with_notice(admin_users_path(user_id: user.id), "User was successfully updated.")
         end
       end
 
@@ -290,7 +290,7 @@ describe Admin::AdminUsersController do
             .to([role.name])
             .and avoid_changing { user.reload.email }
 
-          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+          it_redirects_to_with_notice(admin_users_path(user_id: user.id), "User was successfully updated.")
         end
       end
 
@@ -330,7 +330,7 @@ describe Admin::AdminUsersController do
               roles: [opendoors_role.id.to_s, tag_wrangler_role.id.to_s]
             }
           }
-          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+          it_redirects_to_with_notice(admin_users_path(user_id: user.id), "User was successfully updated.")
           expect(user.reload.roles).to eq([opendoors_role])
         end
 
@@ -343,7 +343,7 @@ describe Admin::AdminUsersController do
               roles: [opendoors_role.id.to_s]
             }
           }
-          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+          it_redirects_to_with_notice(admin_users_path(user_id: user.id), "User was successfully updated.")
           expect(user.reload.roles).to eq([opendoors_role, tag_wrangler_role])
         end
 
@@ -356,7 +356,7 @@ describe Admin::AdminUsersController do
               roles: [""]
             }
           }
-          it_redirects_to_with_notice(root_path, "User was successfully updated.")
+          it_redirects_to_with_notice(admin_users_path(user_id: user.id), "User was successfully updated.")
           expect(user.reload.roles).to eq([tag_wrangler_role])
         end
       end
@@ -707,7 +707,7 @@ describe Admin::AdminUsersController do
           it "troubleshoots account and redirects with notice" do
             fake_login_admin(admin)
             subject.call
-            it_redirects_to_with_notice(root_path, "User account troubleshooting complete.")
+            it_redirects_to_with_notice(admin_user_path(user), "User account troubleshooting complete.")
           end
         end
       end
