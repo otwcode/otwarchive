@@ -310,4 +310,3 @@ class Creatorship < ApplicationRecord
     end
   end
 end
-
