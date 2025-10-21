@@ -6,7 +6,8 @@ class AbuseReporter < FeedbackReporter
       "departmentId" => department_id,
       "subject" => subject,
       "description" => ticket_description,
-      "cf" => custom_zoho_fields
+      "cf" => custom_zoho_fields,
+      "channel" => channel
     )
   end
 
@@ -38,5 +39,9 @@ class AbuseReporter < FeedbackReporter
     return "No comment submitted." if description.blank?
 
     strip_images(description.html_safe, keep_src: true)
+  end
+
+  def channel
+    "Abuse Form"
   end
 end

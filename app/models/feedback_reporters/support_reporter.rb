@@ -6,7 +6,7 @@ class SupportReporter < FeedbackReporter
       "departmentId" => department_id,
       "subject" => subject,
       "description" => ticket_description,
-      "cf" => custom_zoho_fields
+      "cf" => custom_zoho_fields,
     )
   end
 
@@ -41,5 +41,9 @@ class SupportReporter < FeedbackReporter
     return "No description submitted." if description.blank?
 
     strip_images(description.html_safe, keep_src: true)
+  end
+
+  def channel
+    "Support Form"
   end
 end
