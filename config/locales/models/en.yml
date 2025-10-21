@@ -203,6 +203,8 @@ en:
             subscribable:
               blank: The item you tried to subscribe to does not exist. It may have been deleted.
               format: "%{message}"
+              only_orphan_creators: "Sorry! You cannot subscribe to a %{type} which is owned only by the orphan account."
+              orphan_user: Sorry! You cannot subscribe to the orphan account.
         user:
           attributes:
             age_over_13:
@@ -303,3 +305,4 @@ en:
     on_archive: URL is for a work on the Archive. Please bookmark it directly instead.
   subscriptions:
     deleted: Deleted item
+

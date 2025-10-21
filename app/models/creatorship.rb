@@ -74,7 +74,7 @@ class Creatorship < ApplicationRecord
     return if User.current_user.try(:is_archivist?)
 
     # Block all other manual additions
-    errors.add(:base, ts("activerecord.errors.models.creatorship.orphan_account_not_co_creator"))
+    errors.add(:base, :orphan_account_not_co_creator)
     throw :abort
   end
   # Make sure that we're not trying to set approved to false, since that could
@@ -310,3 +310,4 @@ class Creatorship < ApplicationRecord
     end
   end
 end
+

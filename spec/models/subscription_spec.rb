@@ -146,7 +146,6 @@ describe Subscription do
         expect(subscription.valid_notification_entry?(build(:chapter, work: draft))).to be_falsey
       end
 
-      # TODO: AO3-3620 & AO3-5696: Allow subscriptions to orphan_account to receive notifications
       it "returns false when the creation is by orphan_account" do
         expect(subscription.valid_notification_entry?(create(:chapter, authors: [orphan_pseud]))).to be_falsey
       end
