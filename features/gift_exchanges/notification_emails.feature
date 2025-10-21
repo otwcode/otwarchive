@@ -55,7 +55,9 @@ Feature: Gift Exchange Notification Emails
       And I have sent assignments for "Holiday Swap"
     Then 3 emails should be delivered
       And 1 email should be delivered to test@archiveofourown.org
-      And the email should contain "You have received a message about your collection"
+      And the email should have "Assignments sent" in the subject
+      And the email should contain "All assignments have now been sent out"
+      And the email should contain "your email address has been listed as the collection email"
 
   Scenario: Default notification emails should be sent to two owners in their respective locales when a user defaults on an assignment
 
