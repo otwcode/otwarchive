@@ -1145,7 +1145,7 @@ describe UserMailer do
     end
   end
 
-  describe "#potential_match_generation_notification_collection_email" do
+  describe "#potential_match_generation_notification sent to collection_email" do
     subject(:email) { UserMailer.potential_match_generation_notification(collection.id, collection.collection_email) }
 
     let(:collection) { create(:collection) }
