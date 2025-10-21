@@ -28,6 +28,7 @@ module ShareHelper
 
   # JavaScript-less share buttons from https://sharingbuttons.io/
   # We use medium, solid, rectangular buttons.
+  # We replace the svgs from with Font Awesome.
   def sharing_button(site, address, text, target: nil)
     return unless %w[bluesky tumblr twitter].include?(site)
 
@@ -59,7 +60,8 @@ module ShareHelper
     html.delete("\n")
   end
 
-  # We have replaced the svgs from https://sharingbuttons.io/ with Font Awesome
+  # While we use the JavaScript-less share buttons from
+  # https://sharingbuttons.io/ we replace the svgs with Font Awesome.
   def sharing_svg(site)
     return unless %w[bluesky tumblr twitter].include?(site)
 
