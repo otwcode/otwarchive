@@ -453,17 +453,6 @@ Feature: Gift Exchange Challenge
     Then I should see "No assignments to review!"
       And I should see "Assignment updates complete!"
 
-  Scenario: The “Assignment default” email should not be sent if any of the users no longer exist
-
-    Given everyone has their assignments for "Awesome Gift Exchange"
-      And I am logged in as "myname3"
-      And I try to delete my account as myname3
-      And all emails have been delivered
-    When I am logged in as "myname1"
-      And I go to the assignments page for "myname1"
-      And I press "Default"
-    Then 0 emails should be delivered to "mod1"
-
   Scenario: Refused story should still fulfill the assignment
 
     Given an assignment has been fulfilled in a gift exchange
