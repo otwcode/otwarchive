@@ -1,8 +1,8 @@
 <% content_for :message do %>
   <p><%= t(".defaulted_on_assignment.html",
-  offer_byline: style_bold(@assignment.offer_byline),
-  request_byline: style_bold(@assignment.request_byline),
-  collection_link: style_link(@collection.title, collection_url(@collection))) %></p>
+           offer_byline: style_bold(@assignment.offer_byline),
+           request_byline: style_bold(@assignment.request_byline),
+           collection_link: style_link(@collection.title, collection_url(@collection))) %></p>
 
   <p><%= t(".assign_pinch_hitter.html", collection_assignments_page_link: style_link(t(".assign_pinch_hitter.collection_assignments_page"), collection_assignments_url(@collection))) %></p>
 <% end %>

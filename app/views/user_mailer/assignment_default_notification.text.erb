@@ -1,9 +1,9 @@
 <% content_for :message do %>
 <%= t(".defaulted_on_assignment.text",
-offer_byline: @assignment.offer_byline,
-request_byline: @assignment.request_byline,
-collection_title: @collection.title,
-collection_url: collection_url(@collection)) %>
+      offer_byline: @assignment.offer_byline,
+      request_byline: @assignment.request_byline,
+      collection_title: @collection.title,
+      collection_url: collection_url(@collection)) %>
 
 <%= t(".assign_pinch_hitter.text", collection_assignments_page_url: collection_assignments_url(@collection)) %>
 <% end %>

@@ -25,10 +25,14 @@ Feature: Gift Exchange Notification Emails
     Then 4 emails should be delivered
       And "mod1" should receive 1 email
       And the email to "mod1" should be translated
-      And the email should contain "You have received a message about your collection"
+      And the email should have "Assignments sent" in the subject
+      And the email should contain "All assignments have now been sent out"
+      And the email should contain "you are an owner or moderator of the collection"
       And "mod2" should receive 1 email
       And the email to "mod2" should be non-translated
-      And the email should contain "You have received a message about your collection"
+      And the email should have "Assignments sent" in the subject
+      And the email should contain "All assignments have now been sent out"
+      And the email should contain "you are an owner or moderator of the collection"
       And "participant1" should receive 1 email
       And "participant2" should receive 1 email
 
@@ -59,18 +63,21 @@ Feature: Gift Exchange Notification Emails
       And I have added a co-moderator "mod2" to collection "Holiday Swap"
       And a locale with translated emails
       And the user "mod1" enables translated emails
-
+      And all emails have been delivered 
     When I am logged in as "myname1"
       And I go to the assignments page for "myname1"
       And I press "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
-      And 7 emails should be delivered
-      And "mod1" should receive 2 emails
-      And the last email to "mod1" should be translated
-      And the last email should contain "defaulted on their assignment"
+      And "mod1" should receive 1 email
+      And the email to "mod1" should be translated
+      And the email should have "Assignment default" in the subject
+      And the email should contain "You can assign a pinch hitter"
+      And the email should contain "you are an owner or moderator of the collection"
       And "mod2" should receive 1 email
       And the email to "mod2" should be non-translated
-      And the email should contain "defaulted on their assignment"
+      And the email should have "Assignment default" in the subject
+      And the email should contain "You can assign a pinch hitter"
+      And the email should contain "you are an owner or moderator of the collection"
 
   Scenario: Assignment notifications with linebreaks.
     Given I have created the tagless gift exchange "Holiday Swap"
