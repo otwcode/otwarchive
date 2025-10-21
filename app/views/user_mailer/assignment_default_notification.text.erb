@@ -1,7 +1,7 @@
 <% content_for :message do %>
 <%= t(".defaulted_on_assignment.text",
-offer_byline: @offer_byline,
-request_byline: @request_byline,
+offer_byline: @assignment.offer_byline,
+request_byline: @assignment.request_byline,
 collection_title: @collection.title,
 collection_url: collection_url(@collection)) %>
 

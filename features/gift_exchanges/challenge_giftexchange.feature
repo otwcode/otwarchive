@@ -301,18 +301,27 @@ Feature: Gift Exchange Challenge
       And I should not see "No Potential Recipients"
       And I should see "Complete"
 
-  Scenario: Assignments can be sent
+  Scenario: Assignments can be sent and the emails are translated
     Given the gift exchange "Awesome Gift Exchange" is ready for matching
+      And I have added a co-moderator "mod2" to collection "Awesome Gift Exchange"
+      And a locale with translated emails
+      And the user "mod1" enables translated emails
       And I have generated matches for "Awesome Gift Exchange"
     When I press "Send Assignments"
     Then I should see "Assignments are now being sent out"
     When I reload the page
     Then I should not see "Assignments are now being sent out"
-    # 4 users and the mod should get emails :)
+    # 4 users and 2 mods should get emails :)
       And 1 email should be delivered to "mod1"
+      And the email to "mod1" should be translated
       And the email should have "Assignments sent" in the subject
-      And the email should contain "You have received a message about your collection"
-      And the email should not contain "translation missing"
+      And the email should contain "All assignments have now been sent out"
+      And the email should contain "you are an owner or moderator of the collection"
+      And 1 email should be delivered to "mod2"
+      And the email to "mod2" should be non-translated
+      And the email should have "Assignments sent" in the subject
+      And the email should contain "All assignments have now been sent out"
+      And the email should contain "you are an owner or moderator of the collection"
       And 1 email should be delivered to "myname1"
       And the email should contain "You have been assigned the following request"
       And the email should contain "Fandom:"
@@ -436,13 +445,27 @@ Feature: Gift Exchange Challenge
       And I go to the assignments page for "myname1"
       And I should see "Default"
 
-  Scenario: User can default and a mod can assign a pinch hitter
+  Scenario: User can default and mods get translated emails and can assign a pinch hitter
 
     Given everyone has their assignments for "Awesome Gift Exchange"
+      And I have added a co-moderator "mod2" to collection "Awesome Gift Exchange"
+      And a locale with translated emails
+      And the user "mod1" enables translated emails
+      And all emails have been delivered
     When I am logged in as "myname1"
       And I go to the assignments page for "myname1"
       And I press "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
+      And 1 email should be delivered to "mod1"
+      And the email to "mod1" should be translated
+      And the email should have "Assignment default" in the subject
+      And the email should contain "You can assign a pinch hitter"
+      And the email should contain "you are an owner or moderator of the collection"
+      And 1 email should be delivered to "mod2"
+      And the email to "mod2" should be non-translated
+      And the email should have "Assignment default" in the subject
+      And the email should contain "You can assign a pinch hitter"
+      And the email should contain "you are an owner or moderator of the collection"
     When I am logged in as "mod1"
       And I go to the "Awesome Gift Exchange" assignments page
       And I fill in "Pinch Hitter:" with "nonexistent"

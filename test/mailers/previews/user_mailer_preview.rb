@@ -254,9 +254,7 @@ class UserMailerPreview < ApplicationMailerPreview
     collection = create(:collection, email: "collection@example.com")
     email = collection.collection_email
     challenge_assignment = create(:challenge_assignment)
-    offer_byline = challenge_assignment.offer_byline
-    request_byline = challenge_assignment.request_byline
-    UserMailer.assignment_default_notification(collection.id, offer_byline, request_byline, email)
+    UserMailer.assignment_default_notification(collection.id, challenge_assignment.id, email)
   end
 
   def assignment_default_notification_maintainer
@@ -264,9 +262,7 @@ class UserMailerPreview < ApplicationMailerPreview
     collection = create(:collection, owners: [user.default_pseud])
     email = user.email
     challenge_assignment = create(:challenge_assignment)
-    offer_byline = challenge_assignment.offer_byline
-    request_byline = challenge_assignment.request_byline
-    UserMailer.assignment_default_notification(collection.id, offer_byline, request_byline, email)
+    UserMailer.assignment_default_notification(collection.id, challenge_assignment.id, email)
   end
 
   def invite_increase_notification

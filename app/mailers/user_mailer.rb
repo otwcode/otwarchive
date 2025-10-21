@@ -163,15 +163,6 @@ class UserMailer < ApplicationMailer
     )
   end
 
-  def collection_notification(collection_id, subject, message, email)
-    @message = message
-    @collection = Collection.find(collection_id)
-    mail(
-      to: email,
-      subject: "[#{ArchiveConfig.APP_SHORT_NAME}][#{@collection.title}] #{subject}"
-    )
-  end
-
   def assignments_sent_notification(collection_id, email)
     @collection = Collection.find(collection_id)
     @is_collection_email = (email == @collection.collection_email)
@@ -181,14 +172,13 @@ class UserMailer < ApplicationMailer
     )
   end
 
-  def assignment_default_notification(collection_id, offer_byline, request_byline, email)
+  def assignment_default_notification(collection_id, assignment_id, email)
     @collection = Collection.find(collection_id)
-    @offer_byline = offer_byline
-    @request_byline = request_byline
+    @assignment = ChallengeAssignment.find(assignment_id)
     @is_collection_email = (email == @collection.collection_email)
     mail(
       to: email,
-      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title, offer_byline: @offer_byline)
+      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title, offer_byline: @assignment.offer_byline)
     )
   end
 

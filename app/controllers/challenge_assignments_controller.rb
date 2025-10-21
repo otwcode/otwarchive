@@ -221,7 +221,7 @@ class ChallengeAssignmentsController < ApplicationController
     @challenge_assignment.defaulted_at = Time.now
     @challenge_assignment.save
 
-    @challenge_assignment.collection.notify_maintainers_challenge_default(@challenge_assignment)
+    @challenge_assignment.collection.notify_maintainers_assignment_default(@challenge_assignment)
 
     flash[:notice] = "We have notified the collection maintainers that you had to default on your assignment."
     redirect_to user_assignments_path(current_user)

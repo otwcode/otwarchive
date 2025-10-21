@@ -362,15 +362,13 @@ class Collection < ApplicationRecord
   end
 
   def notify_maintainers_assignment_default(challenge_assignment)
-    offer_byline = challenge_assignment.offer_byline
-    request_byline = challenge_assignment.request_byline
     if self.collection_email.present?
-      UserMailer.assignment_default_notification(self.id, offer_byline, request_byline, self.collection_email).deliver_later
+      UserMailer.assignment_default_notification(self.id, challenge_assignment.id, self.collection_email).deliver_later
     else
       # if collection email is not set and collection parent email is not set, loop through maintainers and send each a notice via email
       self.maintainers_list.each do |user|
         I18n.with_locale(user.preference.locale_for_mails) do
-          UserMailer.assignment_default_notification(self.id, offer_byline, request_byline, user.email).deliver_later
+          UserMailer.assignment_default_notification(self.id, challenge_assignment.id, user.email).deliver_later
         end
       end
     end

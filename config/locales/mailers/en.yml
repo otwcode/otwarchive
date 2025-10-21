@@ -480,7 +480,7 @@ en:
     assignment_default_notification:
       defaulted_on_assignment:
         html: '%{offer_byline} has defaulted on their assignment for %{request_byline} in your gift exchange %{collection_link}.'
-        text: '%{offer_byline} (%{offer_byline}) has defaulted on their assignment for %{request_byline} (%{request_byline}) in your gift exchange "%{collection_title}" (%{collection_url}).'
+        text: '%{offer_byline} has defaulted on their assignment for %{request_byline} in your gift exchange "%{collection_title}" (%{collection_url}).'
       assign_pinch_hitter:
         html: You can assign a pinch hitter on the %{collection_assignments_page_link}.
         text: 'You can assign a pinch hitter on the collection assignments page: %{collection_assignments_page_url}.'
