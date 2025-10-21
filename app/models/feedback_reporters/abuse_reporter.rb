@@ -1,5 +1,5 @@
 class AbuseReporter < FeedbackReporter
-  attr_accessor :creator_ids
+  attr_accessor :creator_ids, :user_agent
 
   def report_attributes
     super.deep_merge(
@@ -21,7 +21,8 @@ class AbuseReporter < FeedbackReporter
     {
       "cf_ip" => ip_address.presence || "Unknown IP",
       "cf_ticket_url" => truncated_referer,
-      "cf_user_id" => creator_ids.presence || ""
+      "cf_user_id" => creator_ids.presence || "",
+      "cf_user_agent" => user_agent || "Unknown user agent"
     }
   end
 

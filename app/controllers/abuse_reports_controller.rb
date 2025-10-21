@@ -14,6 +14,7 @@ class AbuseReportsController < ApplicationController
   def create
     @abuse_report = AbuseReport.new(abuse_report_params)
     @abuse_report.ip_address = request.remote_ip
+    @abuse_report.user_agent = request.env["HTTP_USER_AGENT"].presence
     if @abuse_report.save
       @abuse_report.email_and_send
       flash[:notice] = ts("Your report was submitted to the Policy & Abuse team. A confirmation message has been sent to the email address you provided.")
