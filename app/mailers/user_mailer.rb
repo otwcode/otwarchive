@@ -167,8 +167,11 @@ class UserMailer < ApplicationMailer
   end
 
   def assignment_default_notification(collection_id, assignment_id, email)
-    @collection = Collection.find(collection_id)
     @assignment = ChallengeAssignment.find(assignment_id)
+
+    return unless @assignment.offer_signup && @assignment.request_signup
+
+    @collection = Collection.find(collection_id)
     @is_collection_email = (email == @collection.collection_email)
     mail(
       to: email,

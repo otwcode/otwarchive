@@ -81,6 +81,17 @@ Feature: Gift Exchange Notification Emails
       And the email should contain "You can assign a pinch hitter"
       And the email should contain "you are an owner or moderator of the collection"
 
+  Scenario: The “Assignment default” email should not be sent if any of the users no longer exist
+
+    Given everyone has their assignments for "Holiday Swap"
+      And I am logged in as "myname3"
+      And I try to delete my account as myname3
+      And all emails have been delivered
+    When I am logged in as "myname1"
+      And I go to the assignments page for "myname1"
+      And I press "Default"
+    Then 0 emails should be delivered to "mod1"
+
   Scenario: Assignment notifications with linebreaks.
     Given I have created the tagless gift exchange "Holiday Swap"
       And I open signups for "Holiday Swap"
