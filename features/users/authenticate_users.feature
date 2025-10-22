@@ -34,25 +34,25 @@ Feature: User Authentication
     # link from the email should not work when logged in
     When I follow "use this link to choose a new password" in the email
     Then I should see "You are already signed in."
-      And I should not see "Change My Password"
+      And I should not see "Change Password"
 
     # link from the email should work
     When I log out
       And I follow "use this link to choose a new password" in the email
-    Then I should see "Change My Password"
+    Then I should see "Change Password"
 
     # entering mismatched passwords should produce an error message
     When I fill in "New password" with "secret"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
     Then I should see "We couldn't save this user because:"
-      And I should see "Password confirmation doesn't match new password."
+      And I should see "The passwords you entered do not match. Please try again."
 
     # and I should be able to change the password
     When I fill in "New password" with "new<pass"
       And I fill in "Confirm new password" with "new<pass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully. You are now signed in."
+    Then I should see "Your password has been changed. You are now logged in."
       And I should see "Hi, sam"
 
     # password reset link should no longer work
@@ -108,7 +108,7 @@ Feature: User Authentication
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
       And 1 email should be delivered to "sam"
       And the email should have "Your password has been changed" in the subject
       And the email to "sam" should be translated
@@ -127,7 +127,7 @@ Feature: User Authentication
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
       And I should see "Hi, sam"
 
   Scenario: Forgot password, with expired password token
@@ -189,7 +189,7 @@ Feature: User Authentication
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
     When I am logged in as a super admin
       And I go to the user administration page for "sam"
     Then I should see "Password Reset" within "#user_history"

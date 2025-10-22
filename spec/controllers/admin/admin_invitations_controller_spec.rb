@@ -79,10 +79,17 @@ describe Admin::AdminInvitationsController do
     end
   end
 
+  find_roles = %w[superadmin policy_and_abuse support].freeze
+
   describe "GET #find" do
-    let(:admin) { create(:admin) }
+    subject { get :find, params: { invitation: { token: invitation.token } } }
+    let(:admin) { create(:superadmin) }
     let(:user) { create(:user) }
     let(:invitation) { create(:invitation) }
+    let(:success) do
+      expect(response).to render_template("find")
+      expect(assigns(:invitations)).to include(invitation)
+    end
 
     it "does not allow non-admins to search" do
       fake_login
@@ -100,13 +107,8 @@ describe Admin::AdminInvitationsController do
       expect(assigns(:invitations)).to include(invitation)
     end
 
-    it "allows admins to search by token" do
-      fake_login_admin(admin)
-      get :find, params: { invitation: { token: invitation.token } }
-
-      expect(response).to render_template("find")
-      expect(assigns(:invitations)).to include(invitation)
-    end
+    # by token
+    it_behaves_like "an action only authorized admins can access", authorized_roles: find_roles
 
     it "allows admins to search by invitee_email" do
       invitation.update!(invitee_email: user.email)

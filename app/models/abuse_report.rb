@@ -207,18 +207,20 @@ class AbuseReport < ApplicationRecord
     if url =~ /\/works\/\d+/
       # use "/works/123/" to avoid matching chapter or external work ids
       work_params_only = url.match(/\/works\/\d+\//).to_s
+      work_report_period = ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
-                                                 1.month.ago,
+                                                 work_report_period,
                                                  "%#{work_params_only}%").count
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX
         errors.add(:base, message)
       end
     elsif url =~ /\/users\/\w+/
       user_params_only = url.match(/\/users\/\w+\//).to_s
+      user_report_period = ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago
       existing_reports_total = AbuseReport.where('created_at > ? AND
                                                  url LIKE ?',
-                                                 1.month.ago,
+                                                 user_report_period,
                                                  "%#{user_params_only}%").count
       if existing_reports_total >= ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX
         errors.add(:base, message)

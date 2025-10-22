@@ -7,8 +7,7 @@
         <%= link_to collection.title, collection_path(collection) %>
         <span class="name">(<%= collection.name %>)</span>
         <%= ts('by') %>
-        <%= safe_join(
-          collection.maintainers.map { |maintainer| link_to(maintainer.byline, maintainer.user, class: collection.user_is_owner?(maintainer.user) ? "owner" : "mod")}, t("support.array.words_connector")) %>
+        <%= safe_join(collection.maintainers.uniq.map { |maintainer| link_to(maintainer.byline, maintainer.user, class: collection.user_is_owner?(maintainer.user) ? "owner" : "mod") }, t("support.array.words_connector")) %>
       </h4>
       <!--collections header iconised header image-->
       <div class="icon">

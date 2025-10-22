@@ -215,6 +215,37 @@ describe AbuseReport do
       end
     end
 
+    context "when reporting work URLs that cross the reporting period timeframe" do
+      work_url = "http://archiveofourown.org/works/790"
+
+      it "allows reporting a work when old reports are outside the configured period" do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago - 1.day) do
+          ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
+            create(:abuse_report, url: work_url)
+          end
+        end
+
+        report = build(:abuse_report, url: work_url)
+        expect(report.save).to be_truthy
+      end
+
+      it "counts only reports within the configured period" do
+        # Create reports outside the configured period
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago - 1.day) do
+          create_list(:abuse_report, 2) do |abuse_report|
+            abuse_report.url = work_url
+          end
+        end
+        # Create reports within the configured period (one less than max)
+        (ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX - 1).times do
+          create(:abuse_report, url: work_url)
+        end
+        # Should be valid because old reports outside configured time period don't count
+        report = build(:abuse_report, url: work_url)
+        expect(report.save).to be_truthy
+      end
+    end
+
     context "for a user profile reported the maximum number of times" do
       user_url = "http://archiveofourown.org/users/someone"
 
@@ -263,6 +294,37 @@ describe AbuseReport do
         before { travel(32.days) }
 
         it_behaves_like "alright", user_url
+      end
+    end
+
+    context "when reporting user URLs that cross the reporting period timeframe" do
+      user_url = "http://archiveofourown.org/users/someone2"
+
+      it "allows reporting a user URL when old reports are outside the configured period" do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago - 1.day) do
+          ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX.times do
+            create(:abuse_report, url: user_url)
+          end
+        end
+
+        report = build(:abuse_report, url: user_url)
+        expect(report.save).to be_truthy
+      end
+
+      it "counts only reports within the configured period" do
+        # Create reports outside the period
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago - 1.day) do
+          create_list(:abuse_report, 2) do |abuse_report|
+            abuse_report.url = user_url
+          end
+        end
+        # Create reports within the configured period (one less than max)
+        (ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX - 1).times do
+          create(:abuse_report, url: user_url)
+        end
+        # Should be valid because old reports don't count
+        report = build(:abuse_report, url: user_url)
+        expect(report.save).to be_truthy
       end
     end
 
