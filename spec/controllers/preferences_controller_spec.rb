@@ -51,7 +51,7 @@ describe PreferencesController do
     end
   end
 
-  describe "POST #update" do
+  describe "PUT #update" do
     let(:skin) { create(:skin, :public) }
 
     let(:preference_params) do
