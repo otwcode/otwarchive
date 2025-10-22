@@ -839,6 +839,84 @@ en:
       html: If you still get this error after a few tries, you can %{contact_support_link}.
       page_heading: Timeout Error
       subtitle: The page was responding too slowly. Please try again after a few minutes.
+  external_authors:
+    claim:
+      actions:
+        assign_to_orphan_account:
+          one: Assign my work to the %{app_name} orphan_account, removing both my name and email address.
+          other: Assign my works to the %{app_name} orphan_account, removing both my name and email address.
+        do_not_import: From now on, do not import works with this email address.
+        label: Actions
+        leave_with_archivist:
+          one: Leave my work in the care of the archivist.
+          other: Leave my works in the care of the archivist.
+        orphan_keep_name:
+          one: Orphan my work and take my email address off it, but keep my name.
+          other: Orphan my works and take my email address off them, but keep my name.
+        remove_works_entirely:
+          one: Please remove my work from %{app_name} entirely.
+          other: Please remove my works from %{app_name} entirely.
+      add_works_to_account_button:
+        one: Add this work to %{current_user}'s account
+        other: Add these works to %{current_user}'s account
+      archive_moved_message:
+        one: An archive including one of your works has been moved to the %{app_full_name} (%{app_name}). Please let us know what you'd like us to do with it. If you do nothing, the work will remain attached to the archivist account.
+        other: An archive including some of your works has been moved to the %{app_full_name} (%{app_name}). Please let us know what you'd like us to do with them. If you do nothing, the works will remain attached to the archivist account.
+      claim_all:
+        one: Claim Work
+        other: Claim All Works
+      claim_before_edit_message_html:
+        one: If you would like to edit the work please claim it first. You can then use the Edit Works feature on your %{dashboard_link} to orphan, delete, or edit it. (You will be able to delete the account if you wish after editing.)
+        other: If you would like to edit the works, or handle different works separately, please claim them first. You can then use the Edit Works feature on your %{dashboard_link} to orphan, delete, or edit them either in groups or one at a time. (You will be able to delete the account if you wish after editing.)
+      claim_works_logged_in_html:
+        one: Claim your work as %{current_user}. If you would like to claim this work under a different account (or create a new account to claim it with), log out and reload this page first.
+        other: Claim your works as %{current_user}. If you would like to claim these works under a different account (or create a new account to claim them with), log out and reload this page first.
+      contact_open_doors: contact Open Doors
+      dashboard: dashboard
+      import_without_email: 'Important: If you tick "Do not email me in future" but do not tick "Do not import works", works may be imported without you being told. If that''s not what you want, turn off importing as well as emails.'
+      invitation_to_create_account:
+        one: We invite you to create an account on %{app_name}! The work will automatically be added to your account and you will have full control over it.
+        other: We invite you to create an account on %{app_name}! The works will automatically be added to your account and you will have full control over them.
+      login_instructions:
+        one: If you already have an %{app_name} account, log in and reload this page, and the work will be added to that account.
+        other: If you already have an %{app_name} account, log in and reload this page, and the works will be added to that account.
+      my_imported:
+        one: My Imported Work
+        other: My Imported Works
+      notes:
+        claim:
+          one: You can claim your work.
+          other: You can claim your works.
+        create_account:
+          one: You can create an account and claim your work (if you already have an account, log in to claim it).
+          other: You can create an account and claim your works (if you already have an account, log in to claim them).
+        delete_or_orphan:
+          one: You can also choose to delete or orphan your work.
+          other: You can also choose to delete or orphan your works.
+        do_not_email: You can also tell us not to email you or import works with this email address in the future.
+        do_nothing:
+          one: If you do nothing, the work will remain attached to the archivist account.
+          other: If you do nothing, the works will remain attached to the archivist account.
+        go_over_again: Wait, wait, go over this again?
+        orphaning_explanation:
+          one: Orphaning keeps it on %{app_name} so future fans can still enjoy it, but with your contact information and/or your name removed.
+          other: Orphaning keeps them on %{app_name} so future fans can still enjoy them, but with your contact information and/or your name removed.
+      notifications:
+        do_not_email: Do not email me in the future when works are imported with this email address.
+        label: Notifications
+      other_options:
+        heading: Other Options
+        legend: Other Options
+      page_heading:
+        one: Claiming Your Imported Work
+        other: Claiming Your Imported Works
+      refer_to_orphaning_faq: Refer to the Orphaning FAQ.
+      review_before_decision_html:
+        one: If you want to review your work before you make your decision, but don't have an %{app_name} account, %{contact_open_doors_link} with your pseud and the title of your work and we will send you a copy.
+        other: If you want to review your works before you make your decision, but don't have an %{app_name} account, %{contact_open_doors_link} with your pseud and the titles of your works and we will send you a copy.
+      sign_up_button:
+        one: Sign me up and give me my work!
+        other: Sign me up and give me my works!
   external_works:
     notice: This work isn't hosted on the Archive so this blurb might not be complete or accurate.
   fandoms:
