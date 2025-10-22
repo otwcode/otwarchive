@@ -138,21 +138,43 @@ class AbuseReport < ApplicationRecord
   end
 
   def creator_ids
-    work_id = reported_work_id
-    return unless work_id
+    if (work_id = reported_work_id)
+      work = Work.find_by(id: work_id)
+      return "deletedwork" unless work
 
-    work = Work.find_by(id: work_id)
-    return "deletedwork" unless work
+      ids = work.pseuds.pluck(:user_id).push(*work.original_creators.pluck(:user_id)).uniq.sort
+      ids.prepend("orphanedwork") if ids.delete(User.orphan_account.id)
+      ids.join(", ")
+    elsif (comment_id = reported_comment_id)
+      comment = Comment.find_by(id: comment_id)
+      return "deletedcomment" unless comment
 
-    ids = work.pseuds.pluck(:user_id).push(*work.original_creators.pluck(:user_id)).uniq.sort
-    ids.prepend("orphanedwork") if ids.delete(User.orphan_account.id)
-    ids.join(", ")
+      ids = []
+      ids.prepend("deletedcomment") if comment.is_deleted
+      ids.push("guestcomment") if comment.pseud_id.nil?
+      ids.push("deletedaccount") if comment.pseud.nil? && !comment.pseud_id.nil?
+
+      if (id = comment.user&.id)
+        if id == User.orphan_account.id
+          ids.push("orphanedcomment")
+        else
+          ids.push(id)
+        end
+      end
+
+      ids.join(", ")
+    end
   end
 
   # ID of the reported work, unless the report is about comment(s) on the work
   def reported_work_id
     comments = url[%r{/comments/}, 0]
     url[%r{/works/(\d+)}, 1] if comments.nil?
+  end
+
+  # ID of the reported comment
+  def reported_comment_id
+    url[%r{/comments/(\d+)}, 1]
   end
 
   def attach_work_download(ticket_id)

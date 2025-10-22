@@ -615,5 +615,111 @@ describe AbuseReport do
         end
       end
     end
+
+    context "for comment URLs" do
+      it "returns deletedcomment for a comment that doesn't exist" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/000/")
+
+        expect(subject.creator_ids).to eq("deletedcomment")
+      end
+
+      context "for a logged-in comment" do
+        let(:comment) { create(:comment) }
+
+        it "returns the commenter's user ID" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          expect(subject.creator_ids).to eq(comment.user.id.to_s)
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, \" + the commenter's user ID" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, #{comment.user.id}")
+          end
+        end
+      end
+
+      context "for a guest comment" do
+        let(:comment) { create(:comment, :by_guest) }
+
+        it "returns guestcomment" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          expect(subject.creator_ids).to eq("guestcomment")
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, guestcomment\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, guestcomment")
+          end
+        end
+      end
+
+      context "for a comment from a deleted account" do
+        let(:user) { create(:user) }
+        let(:comment) { create(:comment, pseud: user.default_pseud) }
+          
+        it "returns deletedaccount" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          user.destroy
+
+          expect(subject.creator_ids).to eq("deletedaccount")
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, deletedaccount\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            user.destroy
+
+            expect(subject.creator_ids).to eq("deletedcomment, deletedaccount")
+          end
+        end
+      end
+
+      context "for a comment from orphan_account" do
+        let!(:orphan_account) { create(:user, login: "orphan_account") }
+        let(:comment) { create(:comment, pseud: orphan_account.default_pseud) }
+        
+        it "returns orphanedcomment" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          expect(subject.creator_ids).to eq("orphanedcomment")
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, orphanedcomment\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, orphanedcomment")
+          end
+        end
+      end
+    end
   end
 end
