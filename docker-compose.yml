@@ -40,7 +40,7 @@ services:
     volumes:
       - my-datavolume:/var/lib/mysql:rw
   redis:
-    image: redis:5
+    image: redis:7
     ports:
       - "6379:6379"
     volumes:
@@ -87,9 +87,22 @@ services:
       - redis
       - es
       - mc
+      - workers
     # Make `docker compose attach web` work for debugging
     stdin_open: true
     tty: true
+  workers:
+    profiles:
+      - dev
+    build:
+      context: .
+      dockerfile: ./config/docker/Dockerfile
+    command: bundle exec rake environment resque:work
+    volumes:
+      - .:/otwa
+    environment:
+      - RAILS_ENV=development
+      - QUEUE=*
   chrome:
     profiles:
       - test

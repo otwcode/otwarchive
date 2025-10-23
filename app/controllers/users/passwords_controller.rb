@@ -3,7 +3,6 @@
 # Use for resetting lost passwords
 class Users::PasswordsController < Devise::PasswordsController
   before_action :admin_logout_required
-  skip_before_action :store_location
   layout "session"
 
   def create
@@ -45,6 +44,7 @@ class Users::PasswordsController < Devise::PasswordsController
       redirect_to new_user_password_path and return
     end
 
+    @page_subtitle = t(".page_title")
     super
   end
 

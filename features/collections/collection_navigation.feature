@@ -65,7 +65,7 @@ Feature: Basic collection navigation
     And I post the work "Sesame Street" in the collection "My ABCs"
     And I edit the work "Sesame Street"
     And I fill in "Fandoms" with "A League of Their Own, Merlin, Teen Wolf, The Borgias"
-    And I press "Post"
+    And I press "Update"
     And the collection counts have expired
     And I go to "My ABCs" collection's page
     And I follow "Fandoms ("

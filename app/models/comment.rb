@@ -65,7 +65,8 @@ class Comment < ApplicationRecord
   validate :check_for_spam, on: :create
 
   def check_for_spam
-    self.approved = skip_spamcheck? || !spam?
+    self.spam = !skip_spamcheck? && spam?
+    self.approved = !self.spam
 
     errors.add(:base, :spam) unless approved
   end
@@ -501,11 +502,13 @@ class Comment < ApplicationRecord
 
   def mark_as_spam!
     update_attribute(:approved, false)
+    update_attribute(:spam, true)
     submit_spam
   end
 
   def mark_as_ham!
     update_attribute(:approved, true)
+    update_attribute(:spam, false)
     submit_ham
   end
 

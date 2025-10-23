@@ -3,13 +3,15 @@
 
   <h3 class="landmark heading"><%= ts("Actions") %></h3>
 
-  <ul class="actions" role="navigation">
+  <ul class="actions">
     <% if @work || @admin_post %>
       <li><%= link_to '&#8593; '.html_safe + ts('Top'), "#main" %></li>
     <% end %>
 
     <% if @work && @previous_chapter %>
-      <li><%= link_to '&#8592;'.html_safe + ts('Previous Chapter'), [@work, @previous_chapter, :anchor => "workskin"] %></li>
+      <li>
+        <%= link_to t(".previous_chapter_html", back_arrow_html: "&#8592;".html_safe), [@work, @previous_chapter, { anchor: "workskin" }] %>
+      </li>
     <% end %>
 
     <% if @work && @next_chapter %>

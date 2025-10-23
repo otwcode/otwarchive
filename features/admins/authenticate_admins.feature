@@ -39,7 +39,7 @@ Feature: Authenticate Admin Users
   When I fill in "New password" with "newpassword"
     And I fill in "Confirm new password" with "newpassword"
     And I press "Set Admin Password"
-  Then I should see "Your password has been changed successfully. You are now signed in."
+  Then I should see "Your password has been changed. You are now logged in."
     And I should see "Hi, admin!"
 
   Scenario: Set password link expires.
@@ -105,7 +105,7 @@ Feature: Authenticate Admin Users
   When I fill in "New password" with "newpassword"
     And I fill in "Confirm new password" with "newpassword"
     And I press "Set Admin Password"
-  Then I should see "Your password has been changed successfully. You are now signed in."
+  Then I should see "Your password has been changed. You are now logged in."
     And I should see "Hi, admin!"
     And 1 emails should be delivered to "admin@example.com"
     And the email should have "Your admin password has been changed" in the subject

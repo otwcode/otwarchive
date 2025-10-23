@@ -1,5 +1,4 @@
 class AbuseReportsController < ApplicationController
-  skip_before_action :store_location
   before_action :load_abuse_languages
 
   def new
@@ -9,7 +8,7 @@ class AbuseReportsController < ApplicationController
       @abuse_report.email = reporter.email
       @abuse_report.username = reporter.login
     end
-    @abuse_report.url = params[:url] || request.env["HTTP_REFERER"]
+    @abuse_report.url = params[:url] || request.referer
   end
 
   def create

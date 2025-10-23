@@ -66,5 +66,23 @@ describe UserManager do
       expect(manager.save).to be_truthy
       expect(manager.successes).to eq ["Suspension has been lifted."]
     end
+
+    it "fills empty adminnote for spambanning user" do
+      manager = UserManager.new(admin, user, admin_action: "spamban")
+      expect(manager.save).to be_truthy
+      expect(manager.successes).to eq ["User has been permanently suspended."]
+      log_item = user.reload.log_items.last
+      expect(log_item.action).to eq(ArchiveConfig.ACTION_BAN)
+      expect(log_item.note).to eq("Banned for spam")
+    end
+
+    it "keeps custom adminnote for spambanning user" do
+      manager = UserManager.new(admin, user, admin_action: "spamban", admin_note: "User violated community guidelines")
+      expect(manager.save).to be_truthy
+      expect(manager.successes).to eq ["User has been permanently suspended."]
+      log_item = user.reload.log_items.last
+      expect(log_item.action).to eq(ArchiveConfig.ACTION_BAN)
+      expect(log_item.note).to eq("User violated community guidelines")
+    end
   end
 end

@@ -154,12 +154,7 @@ class TagsController < ApplicationController
       format.html do
         # This is just a quick fix to avoid script barf if JavaScript is disabled
         flash[:error] = ts('Sorry, you need to have JavaScript enabled for this.')
-        if request.env['HTTP_REFERER']
-          redirect_to(request.env['HTTP_REFERER'] || root_path)
-        else
-          # else branch needed to deal with bots, which don't have a referer
-          redirect_to '/'
-        end
+        redirect_back_or_to root_path
       end
       format.js
     end
