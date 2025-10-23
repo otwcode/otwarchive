@@ -87,7 +87,7 @@ module UsersHelper
   end
 
   def pseud_series_link(pseud)
-    total = if current_user.nil?
+    total = if User.current_user.nil?
               Series.visible_to_all.exclude_anonymous.for_pseud(pseud).count.size
             else
               Series.visible_to_registered_user.exclude_anonymous.for_pseud(pseud).count.size
