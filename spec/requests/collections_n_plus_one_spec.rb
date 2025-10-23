@@ -18,7 +18,7 @@ describe "n+1 queries in the collections controller" do
 
     warmup { subject.call }
 
-    it "performs a constant number of queries" do
+    it "performs about 1 query per collection" do
       expect do
         subject.call
         expect(response.body.scan('<li class="collection ').size).to eq(current_scale.to_i)

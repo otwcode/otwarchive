@@ -215,6 +215,37 @@ describe AbuseReport do
       end
     end
 
+    context "when reporting work URLs that cross the reporting period timeframe" do
+      work_url = "http://archiveofourown.org/works/790"
+
+      it "allows reporting a work when old reports are outside the configured period" do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago - 1.day) do
+          ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX.times do
+            create(:abuse_report, url: work_url)
+          end
+        end
+
+        report = build(:abuse_report, url: work_url)
+        expect(report.save).to be_truthy
+      end
+
+      it "counts only reports within the configured period" do
+        # Create reports outside the configured period
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_WORK_PERIOD.days.ago - 1.day) do
+          create_list(:abuse_report, 2) do |abuse_report|
+            abuse_report.url = work_url
+          end
+        end
+        # Create reports within the configured period (one less than max)
+        (ArchiveConfig.ABUSE_REPORTS_PER_WORK_MAX - 1).times do
+          create(:abuse_report, url: work_url)
+        end
+        # Should be valid because old reports outside configured time period don't count
+        report = build(:abuse_report, url: work_url)
+        expect(report.save).to be_truthy
+      end
+    end
+
     context "for a user profile reported the maximum number of times" do
       user_url = "http://archiveofourown.org/users/someone"
 
@@ -263,6 +294,37 @@ describe AbuseReport do
         before { travel(32.days) }
 
         it_behaves_like "alright", user_url
+      end
+    end
+
+    context "when reporting user URLs that cross the reporting period timeframe" do
+      user_url = "http://archiveofourown.org/users/someone2"
+
+      it "allows reporting a user URL when old reports are outside the configured period" do
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago - 1.day) do
+          ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX.times do
+            create(:abuse_report, url: user_url)
+          end
+        end
+
+        report = build(:abuse_report, url: user_url)
+        expect(report.save).to be_truthy
+      end
+
+      it "counts only reports within the configured period" do
+        # Create reports outside the period
+        travel_to(ArchiveConfig.ABUSE_REPORTS_PER_USER_PERIOD.days.ago - 1.day) do
+          create_list(:abuse_report, 2) do |abuse_report|
+            abuse_report.url = user_url
+          end
+        end
+        # Create reports within the configured period (one less than max)
+        (ArchiveConfig.ABUSE_REPORTS_PER_USER_MAX - 1).times do
+          create(:abuse_report, url: user_url)
+        end
+        # Should be valid because old reports don't count
+        report = build(:abuse_report, url: user_url)
+        expect(report.save).to be_truthy
       end
     end
 
@@ -550,6 +612,112 @@ describe AbuseReport do
           allow(subject).to receive(:url).and_return("http://archiveofourown.org/works/#{work.id}/")
 
           expect(subject.creator_ids).to eq("orphanedwork, #{orphaneer.id}, #{cocreator.id}")
+        end
+      end
+    end
+
+    context "for comment URLs" do
+      it "returns deletedcomment for a comment that doesn't exist" do
+        allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/000/")
+
+        expect(subject.creator_ids).to eq("deletedcomment")
+      end
+
+      context "for a logged-in comment" do
+        let(:comment) { create(:comment) }
+
+        it "returns the commenter's user ID" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          expect(subject.creator_ids).to eq(comment.user.id.to_s)
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, \" + the commenter's user ID" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, #{comment.user.id}")
+          end
+        end
+      end
+
+      context "for a guest comment" do
+        let(:comment) { create(:comment, :by_guest) }
+
+        it "returns guestcomment" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          expect(subject.creator_ids).to eq("guestcomment")
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, guestcomment\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, guestcomment")
+          end
+        end
+      end
+
+      context "for a comment from a deleted account" do
+        let(:user) { create(:user) }
+        let(:comment) { create(:comment, pseud: user.default_pseud) }
+          
+        it "returns deletedaccount" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          user.destroy
+
+          expect(subject.creator_ids).to eq("deletedaccount")
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, deletedaccount\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            user.destroy
+
+            expect(subject.creator_ids).to eq("deletedcomment, deletedaccount")
+          end
+        end
+      end
+
+      context "for a comment from orphan_account" do
+        let!(:orphan_account) { create(:user, login: "orphan_account") }
+        let(:comment) { create(:comment, pseud: orphan_account.default_pseud) }
+        
+        it "returns orphanedcomment" do
+          allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+          expect(subject.creator_ids).to eq("orphanedcomment")
+        end
+
+        context "if the comment is marked as deleted" do
+          before do
+            comment.is_deleted = true
+            comment.save
+          end
+
+          it "returns \"deletedcomment, orphanedcomment\"" do
+            allow(subject).to receive(:url).and_return("http://archiveofourown.org/comments/#{comment.id}/")
+
+            expect(subject.creator_ids).to eq("deletedcomment, orphanedcomment")
+          end
         end
       end
     end

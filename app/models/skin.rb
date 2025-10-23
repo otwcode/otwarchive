@@ -554,7 +554,7 @@ class Skin < ApplicationRecord
   end
 
   def self.default
-    Skin.find_by(title: "Default", official: true) || Skin.create_default
+    Skin.find_by(title: "Default", official: true, public: true, role: "site") || Skin.create_default
   end
 
   def self.create_default

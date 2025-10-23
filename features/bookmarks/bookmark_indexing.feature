@@ -46,13 +46,13 @@ Feature: Bookmark Indexing
       And I bookmark the series "Series"
     When I edit the work "Work"
       And I fill in "Additional Tags" with "New Tag"
-      And I press "Post"
+      And I press "Update"
       And all indexing jobs have been run
       And I go to the bookmarks tagged "New Tag"
     Then the 1st bookmark result should contain "Series"
     When I edit the work "Work"
       And I fill in "Additional Tags" with ""
-      And I press "Post"
+      And I press "Update"
       And all indexing jobs have been run
       And I go to the bookmarks tagged "New Tag"
     Then I should not see "Series"

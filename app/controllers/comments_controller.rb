@@ -1,5 +1,4 @@
 class CommentsController < ApplicationController
-  skip_before_action :store_location, except: [:show, :index, :new]
   before_action :load_commentable,
                 only: [:index, :new, :create, :edit, :update, :show_comments,
                        :hide_comments, :add_comment_reply,
@@ -16,7 +15,7 @@ class CommentsController < ApplicationController
                        :cancel_comment_reply, :cancel_comment_edit]
   before_action :check_pseud_ownership, only: [:create, :update]
   before_action :check_ownership, only: [:edit, :update, :cancel_comment_edit]
-  before_action :check_permission_to_edit, only: [:edit, :update ]
+  before_action :check_permission_to_edit, only: [:edit, :update]
   before_action :check_permission_to_delete, only: [:delete_comment, :destroy]
   before_action :check_guest_comment_admin_setting, only: [:new, :create, :add_comment_reply]
   before_action :check_parent_comment_permissions, only: [:new, :create, :add_comment_reply]
@@ -101,7 +100,8 @@ class CommentsController < ApplicationController
     parent = find_parent
 
     return unless parent.respond_to?(:restricted) && parent.restricted? && !(logged_in? || logged_in_as_admin?)
-    redirect_to new_user_session_path(restricted_commenting: true)
+
+    redirect_to new_user_session_path(restricted_commenting: true, return_to: request.fullpath)
   end
 
   # Check to see if the ultimate_parent is a Work or AdminPost, and if so, if it allows
@@ -131,49 +131,49 @@ class CommentsController < ApplicationController
     return unless admin_settings.guest_comments_off? && guest?
 
     flash[:error] = t("comments.commentable.guest_comments_disabled")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to find_parent
   end
 
   def check_guest_replies_preference
     return unless guest? && @commentable.respond_to?(:guest_replies_disallowed?) && @commentable.guest_replies_disallowed?
 
     flash[:error] = t("comments.check_guest_replies_preference.error")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to find_parent
   end
 
   def check_unreviewed
     return unless @commentable.respond_to?(:unreviewed?) && @commentable.unreviewed?
 
     flash[:error] = ts("Sorry, you cannot reply to an unapproved comment.")
-    redirect_to logged_in? ? root_path : new_user_session_path
+    redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
 
   def check_frozen
     return unless @commentable.respond_to?(:iced?) && @commentable.iced?
 
     flash[:error] = t("comments.check_frozen.error")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to find_parent
   end
 
   def check_hidden_by_admin
     return unless @commentable.respond_to?(:hidden_by_admin?) && @commentable.hidden_by_admin?
 
     flash[:error] = t("comments.check_hidden_by_admin.error")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to find_parent
   end
 
   def check_not_replying_to_spam
     return unless @commentable.respond_to?(:approved?) && !@commentable.approved?
 
     flash[:error] = t("comments.check_not_replying_to_spam.error")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to find_parent
   end
 
   def check_permission_to_review
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent)
     flash[:error] = ts("Sorry, you don't have permission to see those unreviewed comments.")
-    redirect_to logged_in? ? root_path : new_user_session_path
+    redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
 
   def check_permission_to_access_single_unreviewed
@@ -181,15 +181,14 @@ class CommentsController < ApplicationController
     parent = find_parent
     return if logged_in_as_admin? || current_user_owns?(parent) || current_user_owns?(@comment)
     flash[:error] = ts("Sorry, that comment is currently in moderation.")
-    redirect_to logged_in? ? root_path : new_user_session_path
+    redirect_to logged_in? ? root_path : new_user_session_path(return_to: request.fullpath)
   end
 
   def check_permission_to_moderate
-    parent = find_parent
-    unless logged_in_as_admin? || current_user_owns?(parent)
-      flash[:error] = ts("Sorry, you don't have permission to moderate that comment.")
-      redirect_to(logged_in? ? root_path : new_user_session_path)
-    end
+    return if logged_in_as_admin? || current_user_owns?(find_parent)
+
+    flash[:error] = ts("Sorry, you don't have permission to moderate that comment.")
+    redirect_to(logged_in? ? root_path : new_user_session_path(return_to: comment_path(@comment)))
   end
 
   def check_tag_wrangler_access
@@ -205,12 +204,12 @@ class CommentsController < ApplicationController
 
   # Comments cannot be edited after they've been replied to or if they are frozen.
   def check_permission_to_edit
-    if @comment&.iced?
+    if @comment.iced?
       flash[:error] = t("comments.check_permission_to_edit.error.frozen")
-      redirect_back(fallback_location: root_path)
-    elsif !@comment&.count_all_comments&.zero?
+      redirect_back_or_to @comment
+    elsif !@comment.count_all_comments.zero?
       flash[:error] = ts("Comments with replies cannot be edited")
-      redirect_back(fallback_location: root_path)
+      redirect_back_or_to @comment
     end
   end
 
@@ -225,7 +224,7 @@ class CommentsController < ApplicationController
     # i18n-tasks-use t('comments.freeze.permission_denied')
     # i18n-tasks-use t('comments.unfreeze.permission_denied')
     flash[:error] = t("comments.#{action_name}.permission_denied")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to @comment
   end
 
   def check_permission_to_modify_hidden_status
@@ -234,7 +233,7 @@ class CommentsController < ApplicationController
     # i18n-tasks-use t('comments.hide.permission_denied')
     # i18n-tasks-use t('comments.unhide.permission_denied')
     flash[:error] = t("comments.#{action_name}.permission_denied")
-    redirect_back(fallback_location: root_path)
+    redirect_back_or_to @comment
   end
 
   # Get the thing the user is trying to comment on
@@ -290,7 +289,7 @@ class CommentsController < ApplicationController
   def new
     if @commentable.nil?
       flash[:error] = ts("What did you want to comment on?")
-      redirect_back_or_default(root_path)
+      redirect_back_or_to root_path
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
@@ -325,7 +324,7 @@ class CommentsController < ApplicationController
   def create
     if @commentable.nil?
       flash[:error] = ts("What did you want to comment on?")
-      redirect_back_or_default(root_path)
+      redirect_back_or_to root_path
     else
       @comment = Comment.new(comment_params)
       @comment.ip_address = request.remote_ip
@@ -405,7 +404,7 @@ class CommentsController < ApplicationController
     elsif unreviewed
       # go back to the rest of the unreviewed comments
       flash[:notice] = ts("Comment deleted.")
-      redirect_back(fallback_location: unreviewed_work_comments_path(@comment.commentable))
+      redirect_back_or_to unreviewed_work_comments_path(@comment.commentable)
     elsif parent_comment
       flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
@@ -449,7 +448,7 @@ class CommentsController < ApplicationController
     authorize @commentable, policy_class: CommentPolicy if logged_in_as_admin?
     unless (@commentable && current_user_owns?(@commentable)) || (@commentable && logged_in_as_admin? && @commentable.is_a?(AdminPost))
       flash[:error] = ts("What did you want to review comments on?")
-      redirect_back_or_default(root_path)
+      redirect_back_or_to root_path
       return
     end
 
