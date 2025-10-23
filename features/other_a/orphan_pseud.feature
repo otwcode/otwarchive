@@ -112,3 +112,13 @@ Feature: Orphan pseud
     Then I should see "Orphan All Works by orphaneer"
     When I follow "Cancel"
     Then I should be on orphaneer's pseuds page
+
+  Scenario: Only pseuds with posted works display the orphan button
+    Given I have an orphan account
+      And I am logged in as "orphaneer"
+      And the draft "Trash"
+    When I am on orphaneer's pseuds page
+    Then I should not see "Orphan Works"
+    When I post the work "Trash"
+      And I am on orphaneer's pseuds page
+    Then I should see "Orphan Works"
