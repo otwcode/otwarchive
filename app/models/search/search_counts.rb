@@ -81,10 +81,6 @@ module SearchCounts
     end
   end
 
-  def collections_cache_key(owner)
-    "collections_count_#{owner.model_name.cache_key}_#{owner.id}_#{logged_in}"
-  end
-
   ######################################################################
   # BOOKMARK COUNTS FOR USER/PSEUD DASHBOARD
   ######################################################################

@@ -17,9 +17,11 @@
     And I fill in "participants_to_invite" with "sam"
     And I press "Submit"
   Then I should see "New members invited: sam"
+    And "sam" has the "Member" role in the collection "Such a nice collection"
   When I select "Owner" from "sam_role"
      And I submit with the 4th button
   Then I should see "Updated sam."
+    And "sam" has the "Owner" role in the collection "Such a nice collection"
   When I click the 2nd button
   Then I should see "Removed sam from collection."
 
@@ -33,9 +35,11 @@
   Then I should see "Collections (2)"
   When I am on the "Such a nice collection" participants page
     And I fill in "participants_to_invite" with "moderator_pseud (moderator)"
-    And I select "Owner" from "moderator_role"
     And I press "Submit"
   Then I should see "New members invited: moderator_pseud (moderator)"
+  When I give "moderator_pseud (moderator)" the "Owner" role in the collection "Such a nice collection"
+  Then I should see "Updated moderator_pseud."
+    And "moderator_pseud (moderator)" has the "Owner" role in the collection "Such a nice collection"
   When the dashboard counts have expired
     And I follow "My Dashboard"
   Then I should see "Collections (2)"
