@@ -339,6 +339,6 @@ Then "{string} has the {string} role in the collection {string}" do |byline, rol
   participant_id = CollectionParticipant.find_by(pseud: pseud, collection: collection).id
   selector = "#participant_#{participant_id}"
   within(selector) do
-    expect(page).to have_select("#{pseud.name}_role", selected: role)
+    expect(page).to have_select("#{pseud.user.login}_role", selected: role)
   end
 end
