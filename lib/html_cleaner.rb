@@ -76,14 +76,9 @@ module HtmlCleaner
         unfrozen_value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(unfrozen_value)),
                                         Sanitize::Config::ARCHIVE.merge(transformers: transformers))
       end
-      doc = Nokogiri::HTML::Document.new
+      doc = Nokogiri::HTML5::Document.new
       doc.encoding = "UTF-8"
-      unfrozen_value = doc.fragment(unfrozen_value).to_xhtml
-
-      # Hack! the herald angels sing
-      # TODO: AO3-5801 Switch to an HTML5 serializer that doesn't add invalid closing tags
-      # to track and source elements.
-      unfrozen_value.gsub!(%r{</(source|track)>}, "")
+      unfrozen_value = doc.fragment(unfrozen_value).to_html
     else
       # clean out all tags
       unfrozen_value = Sanitize.clean(fix_bad_characters(unfrozen_value))
@@ -91,6 +86,11 @@ module HtmlCleaner
 
     # Plain text fields can't contain &amp; entities:
     unfrozen_value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
+
+    # Temporary hack to evade conversions by strip_html_breaks() for textarea:
+    # Accidentally or not, for a long time sanitization code gets nbsp unescaped,
+    # and this replacement keeps that behavior
+    unfrozen_value.gsub!("&nbsp;", "\u00A0")
     unfrozen_value
   end
 
@@ -129,12 +129,11 @@ module HtmlCleaner
 
   def add_paragraphs_to_text(text)
     # Adding paragraphs in place of linebreaks
-    doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
+    doc = Nokogiri::HTML5.fragment("<myroot>#{text}</myroot>")
     myroot = doc.children.first
     ParagraphMaker.process(myroot)
-    myroot.children.to_xhtml
+    myroot.children.to_html
   end
-
 
   ### STRIPPING FOR DISPLAY ONLY
   # Regexps for stripping particular tags and attributes for display.

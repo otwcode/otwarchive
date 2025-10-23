@@ -44,8 +44,13 @@ en:
       destroy:
         unblocked: You have unblocked the user %{name}.
   challenge_assignments:
+    index:
+      access_denied_user: You aren't allowed to see that user's assignments.
     validation:
       not_owner: You aren't the owner of that assignment.
+  challenge_signups:
+    new:
+      page_title: New Challenge Sign-up
   chapters:
     destroy:
       only_chapter: You can't delete the only chapter in your work. If you want to delete the work, choose "Delete Work".
@@ -174,6 +179,8 @@ en:
   profile:
     show:
       page_title: "%{username} - Profile"
+    update:
+      success: Your profile has been successfully updated
   pseuds:
     create:
       already_have_pseud_with_name: You already have a pseud with that name.
@@ -193,6 +200,9 @@ en:
     clear:
       error: There were problems deleting your history. Please try again later.
       success: Your history is now cleared.
+    index:
+      history_page_title: History
+      marked_for_later_page_title: Marked for Later
   related_works:
     index:
       page_title: "%{login} - Related Works"
@@ -216,15 +226,23 @@ en:
     index:
       collection_page_title: "%{collection_title} - Tags"
   users:
+    change_email:
+      page_title: Change Email
+    change_password:
+      page_title: Change Password
+    change_username:
+      page_title: Change Username
     changed_password:
       blank_password: You must enter your old password.
-      wrong_password: Your old password was incorrect.
+      contact_support: contact Support
+      wrong_password_html: Your old password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
     changed_username:
       admin:
         successfully_updated: Username has been successfully updated.
       new_username_must_be_different: Your new username must be different from your current username.
       user:
-        incorrect_password: Your password was incorrect
+        contact_support: contact Support
+        incorrect_password_html: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
         successfully_updated: Your username has been successfully updated.
     confirm_change_email:
       blank_email: You must enter a new email address.
@@ -233,7 +251,7 @@ en:
       contact_support: contact Support
       nonmatching_email: The email addresses you entered do not match. Please try again.
       same_as_current: Your new email address must be different from your current email.
-      wrong_password_html: Your password was incorrect. Please try again or log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
+      wrong_password_html: Your password was incorrect. Please try again or, if you've forgotten your password, log out and reset your password via the link on the login form. If you are still having trouble, %{contact_support_link} for help.
     contact_abuse: contact our Policy & Abuse team
     passwords:
       create:
@@ -248,6 +266,11 @@ en:
           one: You may reset your password %{count} more time.
           other: You may reset your password %{count} more times.
         user_not_found: We couldn't find an account with that email address or username. Please try again.
+      edit:
+        invalid_link:
+          one: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hour, you can request a new password reset.
+          other: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hours, you can request a new password reset.
+        page_title: Change Password
     reconfirm_email:
       access_denied:
         logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.
@@ -262,11 +285,21 @@ en:
       ban_notice_html: Your account has been banned. You are not permitted to post or edit content on AO3. Please check your email or %{contact_abuse_link} for more information.
       suspension_notice_html: Your account has been suspended until %{suspended_until}. You cannot post, edit, or delete content until your suspension has ended. Please check your email or %{contact_abuse_link} for more information.
   works:
+    create:
+      draft_notice_html: Draft was successfully created. It will be %{scheduled_for_deletion_bold} on %{deletion_date}.
+      posted_notice: Work was successfully posted. It should appear in work listings within the next few minutes.
+      scheduled_for_deletion: scheduled for deletion
     drafts:
       page_title: "%{username} - Drafts"
+    edit_tags:
+      page_title: Edit Work Tags
     show:
       page_title:
         unrevealed: Mystery Work
+    update:
+      unposted_notice: Your changes have not been saved. Please post your work or save the draft if you want to keep them.
+    update_tags:
+      page_title: Preview Work Tags
   wrangling_guidelines:
     create: Wrangling Guideline was successfully created.
     delete: Wrangling Guideline was successfully deleted.

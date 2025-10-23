@@ -13,7 +13,7 @@ module AutocompleteSource
 
   def transliterate(input)
     input = input.to_s.mb_chars.unicode_normalize(:nfkd).gsub(/[\u0300-\u036F]/, "")
-    result = ""
+    result = +""
     input.each_char do |char|
       tl = ActiveSupport::Inflector.transliterate(char)
       # If transliterate returns "?", the original character is either unsupported 
@@ -130,7 +130,7 @@ module AutocompleteSource
       options.reverse_merge!({search_param: "", autocomplete_prefix: "", sort: "down"})
       search_param = options[:search_param]
       autocomplete_prefix = options[:autocomplete_prefix]
-      if REDIS_AUTOCOMPLETE.exists(autocomplete_cache_key(autocomplete_prefix, search_param))
+      if REDIS_AUTOCOMPLETE.exists?(autocomplete_cache_key(autocomplete_prefix, search_param)) # rubocop:disable Style/IfUnlessModifier
         return REDIS_AUTOCOMPLETE.zrange(autocomplete_cache_key(autocomplete_prefix, search_param), 0, -1)
       end
 

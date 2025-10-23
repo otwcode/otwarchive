@@ -65,7 +65,8 @@ class Comment < ApplicationRecord
   validate :check_for_spam, on: :create
 
   def check_for_spam
-    self.approved = skip_spamcheck? || !spam?
+    self.spam = !skip_spamcheck? && spam?
+    self.approved = !self.spam
 
     errors.add(:base, :spam) unless approved
   end
@@ -202,14 +203,14 @@ class Comment < ApplicationRecord
         users = self.ultimate_parent.commentable_owners - users
       end
       users.each do |user|
-        unless user == self.comment_owner && !notify_user_of_own_comments?(user)
-          if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
+        next if user == self.comment_owner && !notify_user_of_own_comments?(user)
+
+        if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
+          I18n.with_locale(user.is_a?(User) ? user.preference.locale_for_mails : nil) do
             CommentMailer.edited_comment_notification(user, self).deliver_after_commit
           end
-          if user.is_a?(User) && notify_user_by_inbox?(user)
-            update_feedback_in_inbox(user)
-          end
         end
+        update_feedback_in_inbox(user) if user.is_a?(User) && notify_user_by_inbox?(user)
       end
     end
   end
@@ -249,7 +250,9 @@ class Comment < ApplicationRecord
     users.each do |user|
       unless user == self.comment_owner && !notify_user_of_own_comments?(user)
         if notify_user_by_email?(user) || self.ultimate_parent.is_a?(Tag)
-          CommentMailer.comment_notification(user, self).deliver_after_commit
+          I18n.with_locale(user.is_a?(User) ? user.preference.locale_for_mails : nil) do
+            CommentMailer.comment_notification(user, self).deliver_after_commit
+          end
         end
         if user.is_a?(User) && notify_user_by_inbox?(user)
           add_feedback_to_inbox(user)
@@ -499,11 +502,13 @@ class Comment < ApplicationRecord
 
   def mark_as_spam!
     update_attribute(:approved, false)
+    update_attribute(:spam, true)
     submit_spam
   end
 
   def mark_as_ham!
     update_attribute(:approved, true)
+    update_attribute(:spam, false)
     submit_ham
   end
 

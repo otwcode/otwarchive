@@ -1,7 +1,6 @@
 class HomeController < ApplicationController
 
   before_action :users_only, only: [:first_login_help]
-  skip_before_action :store_location, only: [:first_login_help, :token_dispenser]
 
   # unicorn_test
   def unicorn_test

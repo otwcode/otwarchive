@@ -117,3 +117,15 @@ Scenario: Delete a user who has coauthored a work
       And a user account should not exist for "testuser"
     When I go to orphan_account's series page
     Then I should see "Epic"
+
+  Scenario: Login after deleting a user does not return to the delete confirmation page
+    Given the following activated users exist
+      | login     | password |
+      | otheruser | password |
+      And I am logged in as "testuser"
+    When I try to delete my account
+    Then I should see "You have successfully deleted your account."
+    When I fill in "Username or email:" with "otheruser" within "#small_login"
+      And I fill in "Password:" with "password" within "#small_login"
+      And I press "Log In" within "#small_login"
+    Then I should not see "You have successfully deleted your account"

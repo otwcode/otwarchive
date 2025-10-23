@@ -20,9 +20,13 @@ en:
         url: Offer URL
       challenge_signup/requests:
         url: Request URL
+      chapters:
+        chapter_header: Chapter %{position}
       chapters/creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
+      collection:
+        header_image_url: Header image URL
       creatorships:
         base: 'Invalid creator:'
         pseud_id: Pseud
@@ -34,6 +38,8 @@ en:
         offers_num_required: Number of offers required per sign-up
         requests_num_allowed: Number of requests allowed per sign-up
         requests_num_required: Number of requests required per sign-up
+      language:
+        short: Abbreviation
       meta_tagging:
         meta_tag: Metatag
         meta_tag_id: Metatag
@@ -96,6 +102,10 @@ en:
           attributes:
             pseud:
               required: can't be blank
+        collection:
+          attributes:
+            header_image_url:
+              file_format: can only point to a gif, jpg, jpeg, or png file.
         comment:
           attributes:
             comment_content:
@@ -209,7 +219,10 @@ en:
                 other: can only be changed once every %{count} days. You last changed your username on %{renamed_at}.
               invalid: must be %{min_login} to %{max_login} characters (A-Z, a-z, _, 0-9 only), no spaces, cannot begin or end with underscore (_).
             password_confirmation:
-              confirmation: doesn't match new password.
+              confirmation: The passwords you entered do not match. Please try again.
+              format: "%{message}"
+            reset_password_token:
+              invalid: This password reset link is invalid or expired. Please request a new password reset instead.
             terms_of_service:
               accepted: Sorry, you need to accept the Terms of Service in order to sign up.
               format: "%{message}"

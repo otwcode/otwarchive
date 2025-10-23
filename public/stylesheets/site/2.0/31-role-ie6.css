@@ -1,6 +1,4 @@
-/*  IE_CONDITION: IE6 */
-
-/*http://otwcode.github.com/docs/front_end_coding/debugging-ie*/
+/* IE_CONDITION: IE6 */
 
 #header {
   z-index: 200;
@@ -43,13 +41,13 @@
   z-index: 198;
 }
 
-/*emphasis */
+/* emphasis */
 
 h1, h2, h3, h4, h5, h6, #header .navigation a {
   font-weight: bold;
 }
 
-/*ie6 links not buttons */
+/* ie6 links not buttons */
 
 .actions a:hover {
   background: #eee;
@@ -76,7 +74,7 @@ form.filters {
   z-index: 20;
 }
 
-/*inheritance */
+/* inheritance */
 
 form dl.meta {
   width: 100%;
@@ -96,7 +94,7 @@ form .meta dd {
   width: 72.5%;
 }
 
-/*margin/padding quirks */
+/* margin/padding quirks */
 
 span.question {
   font-size: 90%;
@@ -104,7 +102,7 @@ span.question {
   vertical-align: baseline;
 }
 
-/*hL*/
+/* hasLayout */
 
 form.filters {
   position: relative;
@@ -114,14 +112,13 @@ form.filters {
   zoom: 1;
 }
 
-/*transparency */
+/* transparency */
 
 p.kudos {
   background: url("/images/legacy/kudos-legacy.png") top left no-repeat;
 }
 
-/*NOTE: at some point please swap this image into the a so it's clickable */
-
+/* NOTE: at some point please swap this image into the a so it's clickable */
 
 #outer .landmark {
   color: #900;
@@ -131,7 +128,7 @@ p.kudos {
   color: #fff;
 }
 
-/*min-height */
+/* min-height */
 
 .home .primary {
   height: 120px;
@@ -157,13 +154,13 @@ textarea {
   height: 17.5em;
 }
 
-/*baseline*/
+/* baseline */
 
 input, select, option, textarea, legend, label {
   vertical-align: middle;
 }
 
-/*explicit widths */
+/* explicit widths */
 
 input {
   width: auto!important;
@@ -177,7 +174,7 @@ input.text, textarea, select, .filters dt {
   width: auto!important;
 }
 
-/*float/clear */
+/* float/clear */
 
 form .preface {
   overflow: hidden;
@@ -191,7 +188,7 @@ form .preface dd {
   display: inline;
 }
 
-/*linearise dashboard */
+/* linearise dashboard */
 
 #dashboard {
   width: auto;
@@ -221,13 +218,13 @@ form .preface dd {
   margin: auto !important;
 }
 
-/*javascript patch for slow-hiding secondary*/
+/* javascript patch for slow-hiding secondary */
 
 .works-show .secondary {
   top: 3em;
 }
 
-/*calc*/
+/* calc */
 
 .index .listbox .index {
   position: static;
@@ -245,15 +242,16 @@ ul.media, li.medium .index, .alphabet .listbox li {
   margin: auto !important;
 }
 
-/*font fallbacks for icons*/
+/* font fallbacks for icons */
 
 span.replied. span.unreviewed, .actions a, .action, .symbol {
   font-family: 'Arial Unicode MS', 'Lucida Grande Unicode', Arial, sans-serif;
 }
 
-/*hL clearfixes
-                test note: these were put in last minute so might need redoing
-                http://www.stuffandnonsense.co.uk/archives/clearing_floats_without_structural_markup_in_ie7.html*/
+/* hasLayout clearfixes
+test note: these were put in last minute so might need redoing
+http://www.stuffandnonsense.co.uk/archives/clearing_floats_without_structural_markup_in_ie7.html
+*/
 
 .group {
   zoom: 1;

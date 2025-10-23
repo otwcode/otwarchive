@@ -60,13 +60,6 @@ class ChallengeSignupsController < ApplicationController
 
   def load_signup_from_id
     @challenge_signup = ChallengeSignup.find(params[:id])
-    no_signup and return unless @challenge_signup
-  end
-
-  def no_signup
-    flash[:error] = ts("What sign-up did you want to work on?")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
   end
 
   def check_pseud_ownership
@@ -197,6 +190,7 @@ class ChallengeSignupsController < ApplicationController
 
   public
   def new
+    @page_subtitle = t(".page_title")
     if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
       flash[:notice] = ts("You are already signed up for this challenge. You can edit your sign-up below.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)

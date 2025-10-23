@@ -125,7 +125,7 @@ describe Tag do
         # Blank values will cause errors if assigned earlier due to division
         # in taggings_count_expiry.
         REDIS_GENERAL.set("tag_update_#{tag.id}_value", "")
-        REDIS_GENERAL.sadd("tag_update", tag.id)
+        REDIS_GENERAL.sadd?("tag_update", tag.id)
 
         RedisJobSpawner.perform_now("TagCountUpdateJob")
 

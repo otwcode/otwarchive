@@ -287,7 +287,7 @@ Feature: Admin Actions to Manage Invitations
       | odo   | mybucket9  |
       And "dax" has "0" invitations
       And "odo" has "3" invitations
-      And I am logged in as an admin
+      And I am logged in as a super admin
     When I follow "Invite New Users"
       And I fill in "Number of invitations" with "2"
       And I select "All" from "Users"
@@ -302,7 +302,7 @@ Feature: Admin Actions to Manage Invitations
       | bashir | heytheredoc |
       And "dax" has "5" invitations
       And "bashir" has "0" invitations
-      And I am logged in as an admin
+      And I am logged in as a super admin
     When I follow "Invite New Users"
       And I fill in "Number of invitations" with "2"
       And I select "With no unused invitations" from "Users"
@@ -313,7 +313,7 @@ Feature: Admin Actions to Manage Invitations
   Scenario: An admin can see the invitation of an existing user via name or token
     Given the user "dax" exists and is activated
       And "dax" has "2" invitations
-      And I am logged in as an admin
+      And I am logged in as a super admin
     When I follow "Invite New Users"
       And I fill in "Username" with "dax"
       And I press "Search" within "form.invitation.simple.search"
@@ -322,12 +322,9 @@ Feature: Admin Actions to Manage Invitations
     When I follow "Invite New Users"
       And I fill in "Invite token" with "dax's" invite code
       And I press "Search" within "form.invitation.simple.search"
-    # Only certain admin roles have access to this page; other admins will see the following error message
-    When I follow the first invitation token url
-    Then I should see "Please log out of your admin account first!"
 
   Scenario: An admin can find all invitations via email partial match
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And an invitation request for "fred@bedrock.com"
       And an invitation request for "barney@bedrock.com"
       And all emails have been delivered
@@ -342,7 +339,7 @@ Feature: Admin Actions to Manage Invitations
       And I should see "barney@bedrock.com"
 
   Scenario: An admin can't find a invitation for a nonexistent user
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And I follow "Invite New Users"
     When I fill in "Username" with "dax"
       And I press "Search" within "form.invitation.simple.search"

@@ -26,6 +26,8 @@ class Admin::AdminInvitationsController < Admin::BaseController
   end
 
   def grant_invites_to_users
+    authorize Invitation
+
     if invitation_params[:user_group] == "All"
       Invitation.grant_all(invitation_params[:number_of_invites].to_i)
     else
@@ -36,6 +38,8 @@ class Admin::AdminInvitationsController < Admin::BaseController
   end
 
   def find
+    authorize Invitation
+
     unless invitation_params[:user_name].blank?
       @user = User.find_by(login: invitation_params[:user_name])
       @hide_dashboard = true

@@ -34,7 +34,7 @@ Feature: Create and Edit Series
     Then I should not see "Rainbow Dash"
     When I edit the work "Rainbow Dash"
       And I select "Ponies" from "Choose one of your existing series:"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Part 2 of Ponies" within "div#series"
       And I should see "Part 2 of Ponies" within "dd.series"
     When I view the series "Ponies"
@@ -131,7 +131,7 @@ Feature: Create and Edit Series
     Then I should not see "Rainbow Dash"
     When I edit the work "Rainbow Dash"
       And I select "Ponies" from "Choose one of your existing series:"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Part 2 of Ponies" within "div#series"
       And I should see "Part 2 of Ponies" within "dd.series"
     When I view the series "Ponies"
@@ -186,7 +186,7 @@ Feature: Create and Edit Series
     Then I should see "penguins30"
     When I follow "Next"
     Then I should see "penguins0"
-	
+
   Scenario: Series show page with many works
     Given I am logged in as "author"
       And I post the work "Caesar" as part of a series "Salads"
@@ -216,7 +216,7 @@ Feature: Create and Edit Series
     When the user "moon" accepts all co-creator requests
     Then "moon" should be a creator of the series "Ponies"
     When I view the series "Ponies"
-      And I follow "Remove Me As Co-Creator"
+      And I press "Remove Me As Co-Creator"
     Then I should see "Sorry, we can't remove all creators of a work."
 
   Scenario: Removing self as co-creator from co-created series
@@ -226,13 +226,13 @@ Feature: Create and Edit Series
       And I coauthored the work "Sweetie Bell" as "moon" with "son"
       And I edit the work "Sweetie Bell"
       And I fill in "work_series_attributes_title" with "Ponies"
-      And I post the work
+      And I update the work
     Then I should see "Work was successfully updated."
       And "moon" should be a creator of the series "Ponies"
       And "son" should be a creator on the series "Ponies"
       # Delay to make sure the cache is expired
       And it is currently 1 second from now
-    When I follow "Remove Me As Co-Creator"
+    When I press "Remove Me As Co-Creator"
     Then I should see "You have been removed as a creator from the series and its works."
       And "moon" should not be the creator of the series "Ponies"
       And "son" should be a creator on the series "Ponies"
