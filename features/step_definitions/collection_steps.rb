@@ -333,7 +333,7 @@ Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
   expect(page).not_to have_content(title)
 end
 
-Then "{string} has the {string} role in the collection {string}" do |byline, role, collection|
+Then "{string} should have the {string} role in the collection {string}" do |byline, role, collection|
   pseud = Pseud.parse_byline(byline)
   collection = Collection.find_by(title: collection)
   participant_id = CollectionParticipant.find_by(pseud: pseud, collection: collection).id

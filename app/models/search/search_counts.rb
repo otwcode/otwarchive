@@ -77,7 +77,7 @@ module SearchCounts
 
   def collection_count_for_user(user)
     Rails.cache.fetch(["user", user.id, "collections_count"], dashboard_cache_options) do
-      CollectionSearchForm.new(maintainer_id: user.id, sort_column: "title.keyword").search_results.scope(:for_search).total_entries
+      CollectionQuery.new(maintainer_id: user.id).count
     end
   end
 
