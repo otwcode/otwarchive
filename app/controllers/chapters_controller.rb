@@ -1,4 +1,6 @@
 class ChaptersController < ApplicationController
+  include WorksHelper
+
   # only registered users and NOT admin should be able to create new chapters
   before_action :users_only, except: [:index, :show, :destroy, :confirm_delete]
   before_action :check_user_status, only: [:new, :create, :update, :update_positions]
@@ -27,8 +29,6 @@ class ChaptersController < ApplicationController
   # GET /work/:work_id/chapters/:id
   # GET /work/:work_id/chapters/:id.xml
   def show
-    @tag_groups = @work.tag_groups
-
     redirect_to url_for(controller: :chapters, action: :show, work_id: @work.id, id: params[:selected_id]) and return if params[:selected_id]
 
     @chapters = @work.chapters_in_order(
@@ -51,11 +51,7 @@ class ChaptersController < ApplicationController
     if @work.unrevealed?
       @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
     else
-      fandoms = @tag_groups["Fandom"]
-      fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms[0].name
-      title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
-      author = @work.anonymous? ? t(".anonymous") : @work.pseuds.sort.collect(&:byline).join(", ")
-      @page_title = get_page_title(title_fandom, author, @work.title + t(".chapter_position", position: @chapter.position.to_s))
+      @page_title = work_page_title(@work, @work.title + t(".chapter_position", position: @chapter.position.to_s))
     end
 
     if params[:view_adult]

@@ -59,3 +59,7 @@ en:
   works_helper:
     mark_as_read_button: Mark as Read
     mark_for_later_button: Mark for Later
+    work_page_title:
+      anonymous: Anonymous
+      multifandom: Multifandom
+      unspecified_fandom: No fandom specified
