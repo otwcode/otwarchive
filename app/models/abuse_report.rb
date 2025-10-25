@@ -183,7 +183,7 @@ class AbuseReport < ApplicationRecord
 
   # Username (aka. login) of the reported user
   def reported_user_login
-    url[%r{/users/([^/]+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|\&)user_id=([^\&]*)}, 5]
+    url[%r{/users/([^/]+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
   end
 
   def attach_work_download(ticket_id)
