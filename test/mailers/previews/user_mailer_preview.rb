@@ -335,12 +335,14 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, email)
   end
 
+  # URL: /rails/mailers/user_mailer/assignments_sent_notification_collection_email
   def assignments_sent_notification_collection_email
     collection = create(:collection, email: "collection@example.com")
     email = collection.collection_email
     UserMailer.assignments_sent_notification(collection.id, email)
   end
 
+  # URL: /rails/mailers/user_mailer/assignments_sent_notification_maintainer
   def assignments_sent_notification_maintainer
     user = create(:user, :for_mailer_preview)
     collection = create(:collection, owners: [user.default_pseud])
@@ -348,6 +350,7 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.assignments_sent_notification(collection.id, email)
   end
 
+  # URL: /rails/mailers/user_mailer/assignment_default_notification_collection_email
   def assignment_default_notification_collection_email
     collection = create(:collection, email: "collection@example.com")
     email = collection.collection_email
@@ -355,6 +358,7 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.assignment_default_notification(collection.id, challenge_assignment.id, email)
   end
 
+  # URL: /rails/mailers/user_mailer/assignment_default_notification_maintainer
   def assignment_default_notification_maintainer
     user = create(:user, :for_mailer_preview)
     collection = create(:collection, owners: [user.default_pseud])

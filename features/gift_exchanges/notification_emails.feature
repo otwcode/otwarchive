@@ -81,7 +81,7 @@ Feature: Gift Exchange Notification Emails
       And the email should contain "You can assign a pinch hitter"
       And the email should contain "you are an owner or moderator of the collection"
 
-  Scenario: The “Assignment default” email should not be sent if any of the users no longer exist
+  Scenario: The "Assignment default" email should not be sent if any of the users no longer exist
 
     Given everyone has their assignments for "Holiday Swap"
       And I am logged in as "myname3"

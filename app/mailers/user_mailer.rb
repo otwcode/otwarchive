@@ -175,7 +175,11 @@ class UserMailer < ApplicationMailer
     @is_collection_email = (email == @collection.collection_email)
     mail(
       to: email,
-      subject: default_i18n_subject(app_name: ArchiveConfig.APP_SHORT_NAME, collection_title: @collection.title, offer_byline: @assignment.offer_byline)
+      subject: default_i18n_subject(
+        app_name: ArchiveConfig.APP_SHORT_NAME, 
+        collection_title: @collection.title,
+        offer_byline: @assignment.offer_signup.pseud.byline
+      )
     )
   end
 
