@@ -116,7 +116,7 @@ class Pseud < ApplicationRecord
       ).group('pseuds.id')
   }
 
-  scope :has_works, -> (pseud_ids) {
+  scope :has_works, lambda { |pseud_ids|
     joins(:works)
       .where(pseuds: { id: pseud_ids })
       .distinct
