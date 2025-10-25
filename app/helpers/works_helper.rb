@@ -32,9 +32,9 @@ module WorksHelper
 
   def work_page_title(work, title, options = {})
     fandoms = work.fandoms
-    fandom = fandoms.empty? ? t(".unspecified_fandom") : fandoms.first.name
-    title_fandom = fandoms.size > 3 ? t(".multifandom") : fandom
-    author = work.anonymous? ? t(".anonymous") : work.pseuds.sort.collect(&:byline).join(t("support.array.words_connector"))
+    fandom = fandoms.empty? ? t("works_helper.work_page_title.unspecified_fandom") : fandoms.first.name
+    title_fandom = fandoms.size > 3 ? t("works_helper.work_page_title.multifandom") : fandom
+    author = work.anonymous? ? t("works_helper.work_page_title.anonymous") : work.pseuds.sort.collect(&:byline).join(t("support.array.words_connector"))
 
     get_page_title(title_fandom, author, title, options)
   end
