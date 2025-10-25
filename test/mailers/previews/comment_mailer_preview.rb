@@ -3,7 +3,7 @@ class CommentMailerPreview < ApplicationMailerPreview
     # Sent to a user when they get a comment on a top-level creation
     define_method :"comment_notification_#{creation_type}" do
       recipient, commentable = create_commentable_data(creation_type)
-      comment = create(:comment, commentable: commentable)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable)
 
       CommentMailer.comment_notification(recipient, comment)
     end
@@ -11,7 +11,7 @@ class CommentMailerPreview < ApplicationMailerPreview
     # Sent to a user when someone edits a comment on a top-level creation
     define_method :"edited_comment_notification_#{creation_type}" do
       recipient, commentable = create_commentable_data(creation_type)
-      comment = create(:comment, commentable: commentable, edited_at: Time.current)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable, edited_at: Time.current)
 
       CommentMailer.edited_comment_notification(recipient, comment)
     end
@@ -19,9 +19,8 @@ class CommentMailerPreview < ApplicationMailerPreview
     # Sent to a user when they make a reply to a comment, and they want to be notified of their own comments
     define_method :"comment_reply_sent_notification_#{creation_type}" do
       _, commentable = create_commentable_data(creation_type)
-      pseud = create(:user, :for_mailer_preview).default_pseud
-      comment = create(:comment, commentable: commentable)
-      reply = create(:comment, pseud: pseud, commentable: comment)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable)
+      reply = create(:comment, commentable: comment)
 
       CommentMailer.comment_reply_sent_notification(reply)
     end
@@ -32,7 +31,7 @@ class CommentMailerPreview < ApplicationMailerPreview
     # Sent to a user when they get a comment on a top-level creation with comment moderation enabled
     define_method :"comment_notification_#{creation_type}_unreviewed" do
       recipient, commentable = create_commentable_data(creation_type, moderated_commenting_enabled: true)
-      comment = create(:comment, commentable: commentable, unreviewed: true)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable, unreviewed: true)
 
       CommentMailer.comment_notification(recipient, comment)
     end
