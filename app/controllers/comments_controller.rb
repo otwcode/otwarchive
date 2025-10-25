@@ -272,6 +272,10 @@ class CommentsController < ApplicationController
              parent.commentable_name
            end
 
+    # i18n-tasks-use t("comments.index.page_title")
+    # i18n-tasks-use t("comments.new.page_title")
+    # i18n-tasks-use t("comments.show.page_title")
+    # i18n-tasks-use t("comments.unreviewed.page_title")
     @page_subtitle = t(".page_title", name: name, comment_id: @comment&.id)
   end
 
