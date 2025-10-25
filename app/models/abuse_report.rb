@@ -166,7 +166,7 @@ class AbuseReport < ApplicationRecord
     elsif (user_login = reported_user_login)
       user = User.find_by(login: user_login)
 
-      user&.id.to_s
+      user&.id&.to_s
     end
   end
 
