@@ -951,6 +951,11 @@ describe CommentMailer do
     it_behaves_like "a notification email with the commenter's pseud and username"
     it_behaves_like "a comment subject to image safety mode settings"
 
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on #{comment.ultimate_parent.commentable_name}"
+      expect(email).to have_subject(subject)
+    end
+
     context "when the comment is on an admin post" do
       let(:parent_comment) { create(:comment, :on_admin_post) }
 
