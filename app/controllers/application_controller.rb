@@ -355,7 +355,7 @@ public
       page_title.gsub!(/AUTHOR/, author)
       page_title.gsub!(/TITLE/, title)
     else
-      page_title = title + " - " + author + " - " + fandom
+      page_title = "#{title} - #{author} - #{fandom}"
     end
 
     page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]

@@ -267,7 +267,7 @@ class CommentsController < ApplicationController
     return unless parent
 
     name = if parent.is_a?(Work)
-             work_page_title(parent, parent.title, {omit_archive_name: true})
+             work_page_title(parent, parent.title, { omit_archive_name: true })
            else
              parent.commentable_name
            end

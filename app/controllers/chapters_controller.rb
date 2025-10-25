@@ -49,7 +49,7 @@ class ChaptersController < ApplicationController
     end
 
     if @work.unrevealed?
-      @page_title = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
+      @page_subtitle = t(".unrevealed") + t(".chapter_position", position: @chapter.position.to_s)
     else
       @page_title = work_page_title(@work, @work.title + t(".chapter_position", position: @chapter.position.to_s))
     end
