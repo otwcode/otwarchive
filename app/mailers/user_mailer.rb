@@ -178,7 +178,7 @@ class UserMailer < ApplicationMailer
       subject: default_i18n_subject(
         app_name: ArchiveConfig.APP_SHORT_NAME,
         collection_title: @collection.title,
-        offer_byline: @assignment.offer_signup.pseud.byline
+        offer_byline: @assignment.offering_pseud.byline
       )
     )
   end
