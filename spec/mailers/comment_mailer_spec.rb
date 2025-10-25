@@ -956,6 +956,11 @@ describe CommentMailer do
 
       it_behaves_like "a comment subject to image safety mode settings"
 
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
+
       context "when the comment is unreviewed" do
         before { comment.update!(unreviewed: true) }
 
@@ -990,6 +995,11 @@ describe CommentMailer do
       it_behaves_like "a notification email with a link to the comment's thread"
       it_behaves_like "a notification email with the commenter's pseud and username" # for parent comment
       it_behaves_like "a comment subject to image safety mode settings"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on the tag #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
     end
 
     context "when the comment is on a single-chapter work" do
@@ -1005,6 +1015,11 @@ describe CommentMailer do
 
       it_behaves_like "a notification concerning a chapter"
       it_behaves_like "a notification with an untitled chapter reference"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on Chapter #{comment.parent.position} of #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
     end
 
     context "when the comment is on a titled chapter" do
@@ -1014,6 +1029,11 @@ describe CommentMailer do
 
       it_behaves_like "a notification concerning a chapter"
       it_behaves_like "a notification with a titled chapter reference"
+
+      it "has the correct subject line" do
+        subject = "[#{ArchiveConfig.APP_SHORT_NAME}] Reply you left to a comment on Chapter #{comment.parent.position} of #{comment.ultimate_parent.commentable_name}"
+        expect(email).to have_subject(subject)
+      end
     end
   end
 end
