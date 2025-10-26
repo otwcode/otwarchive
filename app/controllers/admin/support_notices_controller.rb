@@ -25,8 +25,10 @@ class Admin::SupportNoticesController < Admin::BaseController
   # POST /admin/notices/support
   def create
     @support_notice = authorize SupportNotice.new(support_notice_params)
-    
+
     if @support_notice.save
+      AdminActivity.log_action(current_admin, @support_notice, action: "create", summary: @support_notice.notice)
+
       flash[:notice] = t(".created")
       redirect_to admin_support_notice_path(@support_notice)
     else
@@ -37,6 +39,8 @@ class Admin::SupportNoticesController < Admin::BaseController
   # PUT /admin/notices/support/1
   def update
     if @support_notice.update(support_notice_params)
+      AdminActivity.log_action(current_admin, @support_notice, action: "update", summary: @support_notice.notice)
+
       flash[:notice] = t(".updated")
       redirect_to admin_support_notice_path(@support_notice)
     else
@@ -50,6 +54,7 @@ class Admin::SupportNoticesController < Admin::BaseController
 
   # DELETE /admin/notices/support/1
   def destroy
+    AdminActivity.log_action(current_admin, @support_notice, action: "destroy", summary: @support_notice.notice)
     @support_notice.destroy
 
     flash[:notice] = t(".successfully_deleted")
