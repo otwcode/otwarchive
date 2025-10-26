@@ -5,6 +5,7 @@ class Admin::TotpController < Admin::BaseController
 
   def new
     current_admin.generate_otp_secret_if_missing!
+    @page_subtitle = t(".page_title")
   end
 
   def create
@@ -35,11 +36,13 @@ class Admin::TotpController < Admin::BaseController
       return redirect_to admins_path
     end
 
+    @page_subtitle = t(".page_title")
     @backup_codes = current_admin.generate_otp_backup_codes!
     current_admin.save!
   end
 
   def confirm_disable
+    @page_subtitle = t(".page_title")
   end
 
   def disable_totp

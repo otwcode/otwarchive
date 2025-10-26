@@ -382,35 +382,6 @@ en:
         set_my_preferences: Set My Preferences
         totp: 'Time-based One-Time Password (TOTP): %{status}'
         two_factor_authentication: Two-Factor Authentication
-    totp:
-      confirm_disable:
-        account_password: Admin password
-        disable: Disable
-        heading: Disable Two-Factor Authentication
-        landmark:
-          submit: Submit
-        two_factor_authentication_code: Two-Factor Authentication Code
-      new:
-        confirm_and_enable: Confirm and Enable
-        landmark:
-          submit: Submit
-        step_1:
-          heading: 'Step 1: Set up your authenticator app'
-          manually_enter_code: 'If you cannot scan the QR code, you can also enter the following setup code manually:'
-          scan_code: Please scan the QR code below using an OTP-compatible authenticator app (such as 1Password, Google Authenticator, or Authy).
-        step_2:
-          account_password: Account password
-          heading: 'Step 2: Confirm OTP code'
-          instructions: Please confirm that your authentication application is working by entering a generated code below.
-          otp_code: OTP code
-        two_factor_authentication_set_up: Two-Factor Authentication Setup
-      show_backup_codes:
-        finish: Finish
-        heading: Two-Factor Authentication Backup Codes
-        step_3:
-          heading: 'Step 3: Save your backup codes'
-          write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
-          you_wont_see_them_again: For security reasons, you will not be able to see these codes again after you leave this page.
     sessions:
       new:
         label:
@@ -460,6 +431,38 @@ en:
         update: Update
       update:
         success: Archive settings were successfully updated.
+    totp:
+      confirm_disable:
+        account_password: Admin password
+        disable: Disable
+        heading: Disable Two-Factor Authentication
+        landmark:
+          submit: Submit
+        page_title: Disable TOTP
+        two_factor_authentication_code: Two-Factor Authentication Code
+      new:
+        confirm_and_enable: Confirm and Enable
+        landmark:
+          submit: Submit
+        page_title: Enable TOTP
+        step_1:
+          heading: 'Step 1: Set up your authenticator app'
+          manually_enter_code: 'If you cannot scan the QR code, you can also enter the following setup code manually:'
+          scan_code: Please scan the QR code below using an OTP-compatible authenticator app (such as 1Password, Google Authenticator, or Authy).
+        step_2:
+          account_password: Account password
+          heading: 'Step 2: Confirm OTP code'
+          instructions: Please confirm that your authentication application is working by entering a generated code below.
+          otp_code: OTP code
+        two_factor_authentication_set_up: Two-Factor Authentication Setup
+      show_backup_codes:
+        finish: Finish
+        heading: Two-Factor Authentication Backup Codes
+        page_title: TOTP Backup Codes
+        step_3:
+          heading: 'Step 3: Save your backup codes'
+          write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'
+          you_wont_see_them_again: For security reasons, you will not be able to see these codes again after you leave this page.
     user_creations:
       confirm_remove_pseud:
         caution: Are you sure you want to remove the creator's pseud from this work?
