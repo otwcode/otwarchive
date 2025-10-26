@@ -443,6 +443,10 @@ en:
         delete: Delete
         edit: Edit
       support_notice_form:
+        actions:
+          cancel: Cancel
+          create: Create Support Notice
+          update: Update Support Notice
         active: Active
         landmark:
           actions: Actions
@@ -451,9 +455,6 @@ en:
           actions: Actions
           content: Support Notice
         required_information: Required Information
-        submit:
-          create: Create Support Notice
-          update: Update Support Notice
         text: Support Notice Text
         type:
           caution: Caution

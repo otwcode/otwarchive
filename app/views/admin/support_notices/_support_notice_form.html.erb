@@ -35,8 +35,9 @@
   <fieldset>
     <legend><%= t(".legend.actions") %></legend>
     <h3 class="landmark heading"><%= t(".landmark.actions") %></h3>
-    <p class="submit actions">
-      <%= f.submit @support_notice.new_record? ? t(".submit.create") : t(".submit.update") %>
+    <p class="submit cancel actions">
+      <%= f.submit @support_notice.new_record? ? t(".actions.create") : t(".actions.update") %>
+      <%= link_to t(".actions.cancel"), @support_notice.new_record? ? admin_support_notices_path : admin_support_notice_path(@support_notice) %>
     </p>
   </fieldset>
 <% end %>
