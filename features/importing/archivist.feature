@@ -52,58 +52,48 @@ Feature: Archivist bulk imports
       And 1 email should be delivered to "rebecca2525@livejournal.com"
       And the email should contain invitation warnings from "archivist" for work "Importing Test" in fandom "Lewis"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Import a work for multiple authors without accounts should display all in the byline
-    When I go to the import page
-      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
-    Then I should see "Story"
-      And I should see "name1 [archived by archivist]"
-      And I should see "name2 [archived by archivist]"
+    When I set up mock websites for importing
+      And I import the work "http://example.com/second-import-site-with-tags" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
+    Then I should see "Huddling"
+      And I should see "name1 [archived by archivist]" within ".byline"
+      And I should see "name2 [archived by archivist]" within ".byline"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Import a work for multiple authors without accounts should send emails to all authors
-    When I go to the import page
-      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
+    When I set up mock websites for importing
+      And I import the work "http://example.com/second-import-site-with-tags" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
     Then 1 email should be delivered to "a@ao3.org"
       And 1 email should be delivered to "b@ao3.org"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Import a work for multiple authors with and without accounts should display all in the byline
     Given the following activated users exist
       | login | email |
       | user1 | a@ao3.org |
-    When I go to the import page
-      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
-    Then I should see "Story"
-      And I should see "user1"
-      And I should see "name2 [archived by archivist]"
+      And I set up mock websites for importing
+    When I import the work "http://example.com/second-import-site-with-tags" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
+    Then I should see "Huddling"
+      And I should see "user1" within ".byline"
+      And I should see "name2 [archived by archivist]" within ".byline"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Import a work for multiple authors with and without accounts should send emails to all authors
     Given the following activated users exist
       | login | email |
       | user1 | a@ao3.org |
-    When I go to the import page
-      And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
+      And I set up mock websites for importing
+    When I import the work "http://example.com/second-import-site-with-tags" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
     Then 1 email should be delivered to "a@ao3.org"
       And 1 email should be delivered to "b@ao3.org"
 
-  # TODO: Enable after AO3-6353.
-  @wip
   Scenario: Import a work for multiple authors with accounts should not display the archivist
     Given the following activated users exist
       | login | email |
       | user1 | a@ao3.org |
       | user2 | b@ao3.org |
-    When I go to the import page
-    And I import the work "http://ao3testing.dreamwidth.org/593.html" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
-    Then I should see "Story"
-      And I should see "user1"
-      And I should see "user2"
+      And I set up mock websites for importing
+    When I import the work "http://example.com/second-import-site-with-tags" by "name1" with email "a@ao3.org" and by "name2" with email "b@ao3.org"
+    Then I should see "Huddling"
+      And I should see "user1" within ".byline"
+      And I should see "user2" within ".byline"
       But I should not see "archivist" within ".byline"
 
   # TODO: Enable after AO3-6353.

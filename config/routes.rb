@@ -76,7 +76,11 @@ Rails.application.routes.draw do
   #### INVITATIONS ####
 
   resources :invitations
-  resources :user_invite_requests
+  resources :user_invite_requests do
+    collection do
+      patch :update
+    end
+  end
   resources :invite_requests, only: [:index, :create, :destroy] do
     collection do
       get :manage
@@ -248,7 +252,7 @@ Rails.application.routes.draw do
   end
 
   # When adding new nested resources, please keep them in alphabetical order
-  resources :users, except: [:new, :create] do
+  resources :users, except: [:new, :create, :edit, :update] do
     member do
       get :change_email
       put :confirm_change_email
@@ -299,7 +303,7 @@ Rails.application.routes.draw do
     end
     resources :nominations, controller: "tag_set_nominations", only: [:index]
     resources :preferences, only: [:index, :update]
-    resource :profile, only: [:show], controller: "profile" do
+    resource :profile, only: [:show, :edit, :update], controller: "profile" do
       collection do
         get :pseuds
       end
@@ -375,11 +379,12 @@ Rails.application.routes.draw do
       post :post
       put :post_draft
       get :navigate
+      patch :remove_user_creatorship
       get :edit_tags
       get :preview_tags
       patch :update_tags
-      get :mark_for_later
-      get :mark_as_read
+      patch :mark_for_later
+      patch :mark_as_read
       get :confirm_delete
       get :share
     end
@@ -417,6 +422,7 @@ Rails.application.routes.draw do
     member do
       get :preview
       post :post
+      patch :remove_user_creatorship
     end
     resources :comments
   end
@@ -436,6 +442,7 @@ Rails.application.routes.draw do
       get :confirm_delete
       get :manage
       post :update_positions
+      patch :remove_user_creatorship
     end
     resources :bookmarks
   end
@@ -471,8 +478,8 @@ Rails.application.routes.draw do
     end
     resources :participants, controller: "collection_participants", only: [:index, :update, :destroy] do
       collection do
-        get :add
-        get :join
+        post :add
+        post :join
       end
     end
     resources :items, controller: "collection_items" do
@@ -491,15 +498,15 @@ Rails.application.routes.draw do
     resources :assignments, controller: "challenge_assignments", only: [:index, :show] do
       collection do
         get :confirm_purge
-        get :generate
+        post :generate
         put :set
         post :purge
-        get :send_out
+        post :send_out
         put :update_multiple
-        get :default_all
+        patch :default_all
       end
       member do
-        get :default
+        patch :default
       end
     end
     resources :claims, controller: "challenge_claims" do
@@ -510,9 +517,9 @@ Rails.application.routes.draw do
     end
     resources :potential_matches do
       collection do
-        get :generate
-        get :cancel_generate
-        get :regenerate_for_signup
+        post :generate
+        post :cancel_generate
+        post :regenerate_for_signup
       end
     end
     resources :requests, controller: "challenge_requests"
@@ -589,11 +596,11 @@ Rails.application.routes.draw do
   resources :skins do
     member do
       get :preview
-      get :set
+      post :set
       get :confirm_delete
     end
     collection do
-      get :unset
+      post :unset
     end
   end
   resources :known_issues
@@ -676,7 +683,6 @@ Rails.application.routes.draw do
   #
   # Note written on August 1, 2017 during upgrade to Rails 5.1.
   get '/invite_requests/show' => 'invite_requests#show', as: :show_invite_request
-  get '/user_invite_requests/update' => 'user_invite_requests#update'
 
   patch '/admin/skins/update' => 'admin_skins#update', as: :update_admin_skin
 
@@ -696,7 +702,7 @@ Rails.application.routes.draw do
     tags_in_sets
     associated_tags
     noncanonical_tag
-    collection_fullname
+    collection_title
     open_collection_names
     collection_parent_name
     external_work

@@ -107,7 +107,7 @@ Scenario: Translation, related work, and parent work links appear in the right p
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding"
     And I list the work "Parent Work" as inspiration
-    And I press "Post"
+    And I press "Update"
     And a chapter is added to "Worldbuilding"
     And a draft chapter is added to "Worldbuilding"
   When I view the work "Worldbuilding"
@@ -429,7 +429,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     And I am logged in as "remixer"
     And I edit the work "Followup"
     And I fill in "Fandoms" with "I forgot about the witches"
-    And I press "Post"
+    And I press "Update"
   Then I should see "Work was successfully updated."
     And I should see "Inspired by Worldbuilding by inspiration"
 
@@ -719,7 +719,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding"
     And I list the work "Parent Work" as inspiration
-    And I press "Post"
+    And I press "Update"
     And I am logged in as "translator"
     And I edit the work "Worldbuilding Translated" to be in the collection "Hidden"
     And I am logged in as "remixer"
@@ -750,7 +750,7 @@ Scenario: Notification emails for related works are translated
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding"
     And I invite the co-author "encouragement"
-    And I press "Post"
+    And I press "Update"
   Then 1 email should be delivered to "encouragement"
     And the email should contain "The user inspiration has invited your pseud encouragement to be listed as a co-creator on the following work"
   When the user "encouragement" accepts all co-creator requests
@@ -772,7 +772,7 @@ Scenario: Notification emails for translations are translated
   When I am logged in as "inspiration"
     And I edit the work "Worldbuilding"
     And I invite the co-author "encouragement"
-    And I press "Post"
+    And I press "Update"
   Then 1 email should be delivered to "encouragement"
     And the email should contain "The user inspiration has invited your pseud encouragement to be listed as a co-creator on the following work"
   When the user "encouragement" accepts all co-creator requests

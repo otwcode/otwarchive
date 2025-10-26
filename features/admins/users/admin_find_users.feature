@@ -1,8 +1,7 @@
 Feature: Admin Find Users page
 
   Background:
-    Given I have loaded the "roles" fixture
-      And the following activated users exist
+    Given the following activated users exist
         | login  | email      |
         | userA  | a@ao3.org  |
         | userB  | b@bo3.org  |

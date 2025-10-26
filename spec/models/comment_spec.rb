@@ -4,6 +4,9 @@ require "spec_helper"
 
 describe Comment do
   include ActiveJob::TestHelper
+  def queue_adapter_for_test
+    ActiveJob::QueueAdapters::TestAdapter.new
+  end
 
   describe "validations" do
     context "with a forbidden guest name" do
@@ -173,6 +176,66 @@ describe Comment do
       end
     end
 
+    context "spam flagging on creation" do
+      subject { build(:comment) }
+
+      context "when spamcheck is skipped and comment is spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(true)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
+        end
+      end
+
+      context "when spamcheck is skipped and comment is not spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(true)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(false)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
+        end
+      end
+
+      context "when spamcheck is not skipped and content is spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(false)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
+        end
+
+        it "is flagged as spam" do
+          expect(subject.save).to be_falsey
+          expect(subject.errors[:base].first).to include "spam"
+          expect(subject.approved).to be_falsey
+          expect(subject.spam).to be_truthy
+        end
+      end
+
+      context "when spamcheck is not skipped and content is not spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(false)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(false)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
+        end
+      end
+    end
+
     context "when submitting comment to Akismet" do
       subject { create(:comment) }
 
@@ -186,6 +249,27 @@ describe Comment do
 
       it "has comment_author_email as the user's email" do
         expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.pseud.user.email)
+      end
+
+      context "when the comment is being created" do
+        let(:new_comment) do
+          Comment.new(commentable: subject,
+                      pseud: create(:user).default_pseud,
+                      comment_content: "Hmm.")
+        end
+
+        it "does not set recheck_reason" do
+          expect(new_comment.akismet_attributes).not_to have_key(:recheck_reason)
+        end
+      end
+
+      context "when the comment is being edited" do
+        it "sets recheck_reason to 'edit'" do
+          subject.edited_at = Time.current
+          subject.comment_content += " updated"
+          
+          expect(subject.akismet_attributes[:recheck_reason]).to eq("edit")
+        end
       end
 
       context "when the comment is from a guest" do
@@ -742,6 +826,28 @@ describe Comment do
       it "returns true" do
         expect(comment.use_image_safety_mode?).to be_truthy
       end
+    end
+  end
+
+  describe "#mark_as_spam!" do
+    let(:comment) { create(:comment, approved: true, spam: false) }
+
+    it "flags the comment as spam." do
+      comment.mark_as_spam!
+      comment.reload
+      expect(comment.approved).to be_falsey
+      expect(comment.spam).to be_truthy
+    end
+  end
+
+  describe "#mark_as_ham!" do
+    let(:comment) { create(:comment, approved: false, spam: true) }
+
+    it "flags the comment as legitimate." do
+      comment.mark_as_ham!
+      comment.reload
+      expect(comment.approved).to be_truthy
+      expect(comment.spam).to be_falsey
     end
   end
 end

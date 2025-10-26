@@ -41,7 +41,7 @@ class CollectionParticipantsController < ApplicationController
   def join
     unless @collection
       flash[:error] = t('no_collection', default: "Which collection did you want to join?")
-      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+      redirect_back_or_to root_path and return
     end
     participants = CollectionParticipant.in_collection(@collection).for_user(current_user) unless current_user.nil?
     if participants.empty?
@@ -57,14 +57,14 @@ class CollectionParticipantsController < ApplicationController
         if participant.is_invited?
           participant.approve_membership!
           flash[:notice] = t('collection_participants.accepted_invite', default: "You are now a member of %{collection}.", collection: @collection.title)
-          redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+          redirect_back_or_to root_path and return
         end
       end
 
       flash[:notice] = t('collection_participants.no_invitation', default: "You have already joined (or applied to) this collection.")
     end
 
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
+    redirect_back_or_to root_path
   end
 
   def index
@@ -83,7 +83,7 @@ class CollectionParticipantsController < ApplicationController
   def destroy
     @participant.destroy
     flash[:notice] = t('collection_participants.destroy', default: "Removed %{participant} from collection.", participant: @participant.pseud.name)
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
+    redirect_back_or_to root_path
   end
 
   def add

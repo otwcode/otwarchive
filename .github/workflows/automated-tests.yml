@@ -103,10 +103,10 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install redis
-        uses: awalsh128/cache-apt-pkgs-action@4c82c3ccdc1344ee11e9775dbdbdf43aa8a5614e
+        uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05
         with:
           packages: redis-server
           version: "1.0"
@@ -116,7 +116,7 @@ jobs:
 
       - name: Install ebook converters
         if: ${{ matrix.tests.ebook }}
-        uses: awalsh128/cache-apt-pkgs-action@4c82c3ccdc1344ee11e9775dbdbdf43aa8a5614e
+        uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05
         with:
           packages: calibre zip
           version: "1.0"
@@ -143,7 +143,7 @@ jobs:
 
       - name: Install libvips for image processing
         if: ${{ matrix.tests.libvips }}
-        uses: awalsh128/cache-apt-pkgs-action@4c82c3ccdc1344ee11e9775dbdbdf43aa8a5614e
+        uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05
         with:
           packages: libvips-dev
           version: "1.0"

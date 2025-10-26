@@ -6,7 +6,7 @@ end
 
 Given /^I have pre-archivist setup for "([^\"]*)"$/ do |name|
   step(%{I am logged in as "#{name}"})
-  step(%{I have loaded the "roles" fixture})
+  step(%{the role "archivist"})
 end
 
 Given /^I have an Open Doors committee member "([^\"]*)"$/ do |name|
@@ -20,7 +20,7 @@ When /^I make "([^\"]*)" an archivist$/ do |name|
   step(%{I go to the manage users page})
   step(%{I fill in "Name" with "#{name}"})
   step(%{I press "Find"})
-  step(%{I check "user_roles_4"})
+  step(%{I check the "archivist" role checkbox})
   step(%{I press "Update"})
 end
 

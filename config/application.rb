@@ -22,7 +22,7 @@ module Otwarchive
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
 
-    config.load_defaults 7.1
+    config.load_defaults 7.2
 
     %w[
       app/models/challenge_models
@@ -63,9 +63,6 @@ module Otwarchive
     config.encoding = "utf-8"
 
     config.action_view.automatically_disable_submit_tag = false
-
-    # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:content, :password, :terms_of_service_non_production]
 
     # Disable dumping schemas after migrations.
     # This can cause problems since we don't always update versions on merge.
@@ -113,9 +110,12 @@ module Otwarchive
     # Use Resque to run ActiveJobs (including sending delayed mail):
     config.active_job.queue_adapter = :resque
 
+    # TODO: Remove with Rails 8.0 where this option will be deprecated
+    config.active_job.enqueue_after_transaction_commit = :always
+
     config.active_model.i18n_customize_full_message = true
 
-    config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST }
+    config.action_mailer.default_url_options = { host: ArchiveConfig.APP_HOST, protocol: "https" }
 
     # Use "mailer" instead of "mailers" as the Resque queue for emails:
     config.action_mailer.deliver_later_queue_name = :mailer
@@ -146,6 +146,11 @@ module Otwarchive
     config.active_storage.queues.preview_image = :active_storage
     config.active_storage.queues.purge = :active_storage
     config.active_storage.queues.transform = :active_storage
+
+    config.active_storage.web_image_content_types = %w[image/png image/jpeg image/gif]
+
+    # Do not enable YJIT automatically once we upgrade to Ruby 3.3
+    config.yjit = false
 
     # Use secret from archive config
     config.secret_key_base = ArchiveConfig.SESSION_SECRET

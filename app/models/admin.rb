@@ -14,6 +14,7 @@ class Admin < ApplicationRecord
          reset_password_within: ArchiveConfig.DAYS_UNTIL_ADMIN_RESET_PASSWORD_LINK_EXPIRES.days,
          lock_strategy: :none,
          unlock_strategy: :none
+  devise :pwned_password unless Rails.env.test?
 
   include BackwardsCompatiblePasswordDecryptor
 

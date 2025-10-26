@@ -110,17 +110,6 @@ end
 
 ### GIVEN
 
-Given(/^I have the Battle set loaded$/) do
-  step %{I have loaded the fixtures}
-  step %{I have Battle 12 prompt meme fully set up}
-  step %{everyone has signed up for Battle 12}
-  step %{mod fulfills claim}
-  step %{I reveal the "Battle 12" challenge}
-  step %{I am logged in as "myname4"}
-  step %{the statistics for all works are updated}
-  step %{all indexing jobs have been run}
-end
-
 Given /^I have no works or comments$/ do
   Work.delete_all
   Comment.delete_all
@@ -532,7 +521,7 @@ end
 When /^I lock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I lock the work}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I unlock the work$/ do
@@ -542,7 +531,7 @@ end
 When /^I unlock the work "([^"]*)"$/ do |work|
   step %{I edit the work "#{work}"}
   step %{I unlock the work}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I list the work "([^"]*)" as inspiration$/ do |title|
@@ -655,7 +644,7 @@ end
 When /^I add the co-author "([^"]*)" to the work "([^"]*)"$/ do |coauthor, work|
   step %{I edit the work "#{work}"}
   step %{I invite the co-author "#{coauthor}"}
-  step %{I post the work without preview}
+  step %{I update the work}
   step %{the user "#{coauthor}" accepts the creator invite for the work "#{work}"}
 end
 
@@ -704,20 +693,20 @@ When "I add the beginning notes {string} to the work {string}" do |notes, work|
   step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the beginning notes "#{notes}"}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When "I add the end notes {string} to the work {string}" do |notes, work|
   step %{I am logged in as the author of "#{work}"}
   step %{I edit the work "#{work}"}
   step %{I add the end notes "#{notes}"}
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I mark the work "([^"]*)" for later$/ do |work|
   work = Work.find_by(title: work)
   visit work_url(work)
-  step %{I follow "Mark for Later"}
+  step %{I press "Mark for Later"}
   step "the readings are saved to the database"
 end
 

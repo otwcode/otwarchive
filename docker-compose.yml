@@ -40,7 +40,7 @@ services:
     volumes:
       - my-datavolume:/var/lib/mysql:rw
   redis:
-    image: redis:5
+    image: redis:7
     ports:
       - "6379:6379"
     volumes:
@@ -73,6 +73,7 @@ services:
       dockerfile: ./config/docker/Dockerfile
     environment:
       - RAILS_ENV=development
+      # Disable rack-timeout
       - RACK_TIMEOUT_SERVICE_TIMEOUT=0
       - GITPOD_WORKSPACE_ID=${GITPOD_WORKSPACE_ID:-}
       - GITPOD_WORKSPACE_CLUSTER_HOST=${GITPOD_WORKSPACE_CLUSTER_HOST:-}
@@ -89,9 +90,22 @@ services:
       - redis
       - es
       - mc
+      - workers
     # Make `docker compose attach web` work for debugging
     stdin_open: true
     tty: true
+  workers:
+    profiles:
+      - dev
+    build:
+      context: .
+      dockerfile: ./config/docker/Dockerfile
+    command: bundle exec rake environment resque:work
+    volumes:
+      - .:/otwa
+    environment:
+      - RAILS_ENV=development
+      - QUEUE=*
   chrome:
     profiles:
       - test
@@ -113,6 +127,8 @@ services:
       - DOCKER=true
       - CAPYBARA_PORT=5100
       - CUCUMBER_PUBLISH_QUIET=true
+      # Silence ebook-convert warning about running as root
+      - QTWEBENGINE_CHROMIUM_FLAGS=--no-sandbox
     command: bundle exec cucumber
     volumes:
       - .:/otwa

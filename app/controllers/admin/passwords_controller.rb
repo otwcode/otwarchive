@@ -2,7 +2,6 @@
 
 class Admin::PasswordsController < Devise::PasswordsController
   before_action :user_logout_required
-  skip_before_action :store_location
   layout "session"
 
   before_action :check_if_totp_required, only: [:edit]

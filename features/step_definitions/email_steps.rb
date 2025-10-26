@@ -81,13 +81,15 @@ Then(/^#{capture_email} should not contain "(.*)"$/) do |email_ref, text|
 end
 
 Then(/^#{capture_email} should link to (.+)$/) do |email_ref, page|
+  expected_url = Regexp.escape(path_to(page)).sub(/^http:/, "https:")
   if email(email_ref).multipart?
-    email(email_ref).text_part.body.should =~ /#{path_to(page)}/
-    email(email_ref).html_part.body.should =~ /#{path_to(page)}/
+    email(email_ref).text_part.body.should =~ /#{expected_url}/
+    email(email_ref).html_part.body.should =~ /#{expected_url}/
   else
-    email(email_ref).body.should =~ /#{path_to(page)}/
+    email(email_ref).body.should =~ /#{expected_url}/
   end
 end
+
 Then (/^#{capture_email} html body should link to (.+)$/) do |email_ref, page|
   email(email_ref).html_part.body.should =~ /#{path_to(page)}/
 end

@@ -4,7 +4,7 @@ Feature: Gift Exchange Notification Emails
   Scenario: Assignment sent notification emails should be sent to two owners in their respective locales when assignments are generated
     Given I have created the tagless gift exchange "Holiday Swap"
       And I open signups for "Holiday Swap"
-    
+
     When I am logged in as "participant1"
       And I start signing up for "Holiday Swap"
       And I press "Submit"
@@ -54,7 +54,7 @@ Feature: Gift Exchange Notification Emails
       And the email should contain "You have received a message about your collection"
 
   Scenario: Default notification emails should be sent to two owners in their respective locales when a user defaults on an assignment
-    
+
     Given everyone has their assignments for "Holiday Swap"
       And I have added a co-moderator "mod2" to collection "Holiday Swap"
       And a locale with translated emails
@@ -62,7 +62,7 @@ Feature: Gift Exchange Notification Emails
 
     When I am logged in as "myname1"
       And I go to the assignments page for "myname1"
-      And I follow "Default"
+      And I press "Default"
     Then I should see "We have notified the collection maintainers that you had to default on your assignment."
       And 7 emails should be delivered
       And "mod1" should receive 2 emails

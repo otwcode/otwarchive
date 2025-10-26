@@ -26,7 +26,7 @@ class Admin::UserCreationsController < Admin::BaseController
                         ts("Item has been hidden.") :
                         ts("Item is no longer hidden.")
     if @creation_class == ExternalWork || @creation_class == Bookmark
-      redirect_to(request.env["HTTP_REFERER"] || root_path)
+      redirect_back_or_to root_path
     else
       redirect_to polymorphic_path(@creation)
     end

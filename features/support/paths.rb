@@ -21,6 +21,9 @@ module NavigationHelpers
     when /^the search works page$/i
       step %{all indexing jobs have been run}
       search_works_path
+    when /^the collections page$/i
+      step %{all indexing jobs have been run}
+      collections_path
     when /^the search people page$/i
       step %{all indexing jobs have been run}
       search_people_path
@@ -150,6 +153,8 @@ module NavigationHelpers
       user_profile_path(user_id: $1)
     when /^(.*)'s skins page/
       user_skins_path(user_id: $1)
+    when /^(.*)'s edit multiple works page/
+      show_multiple_user_works_path(user_id: Regexp.last_match(1))
     when /^"(.*)" skin page/
       skin_path(Skin.find_by(title: $1))
     when /^the new skin page/
@@ -254,7 +259,7 @@ module NavigationHelpers
       external_works_path
     when /^the external works page with only duplicates$/i
       external_works_path(show: :duplicates)
-    when /^the new user password page$/i
+    when /^the forgot password page$/i
       new_user_password_path
     when /^the edit user password page$/i
       edit_user_password_path
@@ -264,6 +269,8 @@ module NavigationHelpers
       tags_path
     when /^the orphan all works page$/i
       new_orphan_path
+    when /^the activation page for "(.*)"$/i
+      activate_path(id: User.find_by(login: Regexp.last_match(1)).confirmation_token)
 
     # Admin Pages
     when /^the admin-posts page$/i
