@@ -232,12 +232,11 @@ Rails.application.routes.draw do
     resources :api
   end
   resources :admins, only: [:index] do
-    resource :preferences, controller: "admin/preferences", only: [:show] do
-      get :totp_setup
-      post :totp_setup_form
-      get :totp_setup_backup_codes
-      get :totp_disable
-      post :totp_disable_form
+    resource :preferences, controller: "admin/preferences", only: [:show]
+    resource :totp, controller: "admin/totp", only: [:create, :new] do
+      get :show_backup_codes
+      get :confirm_disable
+      post :disable_totp
     end
   end
 

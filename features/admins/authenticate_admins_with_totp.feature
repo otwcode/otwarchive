@@ -188,7 +188,7 @@ Feature: Authenticate Admin Users With TOTP 2FA
       And I fill in "Confirm new password" with "newpassword"
       And I fill in a valid TOTP recovery code for admin "admin"
       And I press "Set Admin Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed. You are now logged in."
   
   Scenario: Admins with TOTP 2FA enabled cannot reset their password if they provide a wrong code
     Given the following admin exists

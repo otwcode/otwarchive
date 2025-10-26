@@ -5,6 +5,7 @@ en:
       action_access_denied: Sorry, only an authorized admin can do that.
       not_admin_denied: Please log in as admin
       page_access_denied: Sorry, only an authorized admin can access the page you were trying to reach.
+      permission_denied_generic: Sorry, you don't have permission to access the page you were trying to reach.
     admin_invitations:
       find:
         user_not_found: No results were found. Try another search.
@@ -17,25 +18,21 @@ en:
         page_title: "%{login} - Confirm Deletion of User Creations"
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
-    preferences:
-      check_ownership:
-        page_access_denied: You may only update preferences for your own admin account.
-      check_totp_disabled:
-        already_enabled: TOTP two-factor authentication is already enabled.
-      check_totp_enabled:
-        already_disabled: TOTP two-factor authentication is already disabled.
-      totp_disable_form:
+    sessions:
+      invalid_totp: Incorrect two-factor authentication code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
+    totp:
+      already_disabled: TOTP two-factor authentication is already disabled.
+      already_enabled: TOTP two-factor authentication is already enabled.
+      create:
+        incorrect_code: Incorrect authentication code. Your code may have expired, or you may need to set up your authenticator app again.
+        success: Successfully enabled two-factor authentication; please make note of your backup codes.
+      disable_totp:
         failure: Could not disable two-factor authentication.
         incorrect_code: Incorrect authentication code. Your code may have expired.
         success: Successfully disabled two-factor authentication.
-      totp_setup_backup_codes:
+      show_backup_codes:
         already_seen: You have already seen your backup codes. For security reasons, they cannot be seen again.
         not_enabled: Please enable two-factor authentication first.
-      totp_setup_form:
-        incorrect_code: Incorrect authentication code. Your code may have expired, or you may need to set up your authenticator app again.
-        success: Successfully enabled two-factor authentication; please make note of your backup codes.
-    sessions:
-      invalid_totp: Incorrect two-factor authentication code. If you no longer have access to your authenticator app, you can enter one of your backup codes instead.
     user_creations:
       confirm_remove_pseud:
         must_have_orphan_pseuds: Sorry, this action is only available for works by orphan_account pseuds.
