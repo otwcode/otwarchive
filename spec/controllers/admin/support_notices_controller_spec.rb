@@ -41,6 +41,16 @@ describe Admin::SupportNoticesController do
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
   end
+  
+  shared_examples "only inactive notices can be deleted" do
+    let(:support_notice) { create(:support_notice, :active) }
+
+    it "redirects with an error" do
+      fake_login_admin(create(:admin, roles: ["superadmin"]))
+      subject
+      it_redirects_to_with_error(admin_support_notice_path(support_notice), "Active support notices cannot be deleted.")
+    end
+  end
 
   describe "GET #index" do
     subject { get :index }
@@ -112,6 +122,7 @@ describe Admin::SupportNoticesController do
     end
 
     it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
+    it_behaves_like "only inactive notices can be deleted"
   end
 
   describe "DELETE #destroy" do
@@ -124,5 +135,6 @@ describe Admin::SupportNoticesController do
     end
 
     it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
+    it_behaves_like "only inactive notices can be deleted"
   end
 end

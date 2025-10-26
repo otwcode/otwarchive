@@ -25,7 +25,7 @@ end
 
 When "an admin deactivates the support notice" do
   step %{I am logged in as a "support" admin}
-  visit(admin_support_notices_path)
+  step %{I am on the support notices page}
   step %{I follow "Edit"}
   uncheck("support_notice_active")
   click_button("Update Support Notice")
@@ -34,7 +34,7 @@ end
 
 When "an admin edits the active support notice" do
   step %{I am logged in as a "support" admin}
-  visit(admin_support_notices_path)
+  step %{I am on the support notices page}
   step %{I follow "Edit"}
   fill_in("support_notice_notice", with: "This is some edited support notice text")
   click_button("Update Support Notice")
@@ -56,7 +56,7 @@ Then /^I should see the(?: "([^"]*)")? support notice$/ do |notice_type| # ruboc
   visit(feedbacks_path)
   case notice_type
   when "notice"
-    page.should have_xpath("//div[@class='userstuff' and .//div[@class='notice ']]")
+    page.should have_xpath("//div[@class='userstuff' and .//div[@class='notice']]")
   when "caution"
     page.should have_xpath("//div[@class='userstuff' and .//div[@class='notice caution']]")
   when "error"
@@ -74,7 +74,7 @@ end
 
 Then "I should not see a support notice" do
   visit(feedbacks_path)
-  page.should_not have_xpath("//div[@class='userstuff' and .//div[@class='notice']]")
+  page.should_not have_xpath("//div[@class='userstuff' and .//div[contains(@class, 'notice')]]")
 end
 
 Then "I should see the new support notice" do

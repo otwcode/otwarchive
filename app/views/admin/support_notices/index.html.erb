@@ -12,24 +12,7 @@
   <!--main content-->
   <ul class="support-notices index group">
     <% @support_notices.each { |support_notice| %>
-    <li class="blurb">
       <%= render "support_notice", support_notice: support_notice %>
-      <ul class="actions">
-        <% if support_notice.active? %>
-        <li>
-          <span class="active current"><%= t(".actions.active") %></span>
-        </li>
-        <% end %>
-        <li>
-          <%= link_to t(".actions.edit"), edit_admin_support_notice_path(support_notice) %>
-        </li>
-        <% if policy(SupportNotice).destroy? %>
-        <li>
-          <%= link_to t(".actions.delete"), confirm_delete_admin_support_notice_path(support_notice), data: { confirm: t(".actions.confirm_delete") } %>
-        </li>
-        <% end %>
-      </ul>
-    </li>
     <% } %>
   </ul>
   <!--/content-->

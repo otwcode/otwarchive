@@ -22,4 +22,17 @@ describe SupportNotice do
       expect(support_notice_missing_content.errors[:notice]).not_to be_empty
     end
   end
+
+  context "multiple notices" do
+    let(:first_support_notice) { create(:support_notice, :active) }
+    let(:second_support_notice) { build(:support_notice, :active) }
+
+    it "deactivates other notices upon activation" do
+      expect(first_support_notice.active).to be_truthy
+      expect(second_support_notice.save).to be_truthy
+
+      expect(second_support_notice.active).to be_truthy
+      expect(first_support_notice.reload.active).to be_falsy
+    end
+  end
 end

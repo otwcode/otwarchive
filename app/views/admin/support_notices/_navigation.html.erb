@@ -3,10 +3,4 @@
   <% if policy(SupportNotice).new? %>
     <li><%= span_if_current t(".new"), new_admin_support_notice_path %></li>
   <% end %>
-  <% if params[:id] %>
-    <li><%= span_if_current t(".edit"), edit_admin_support_notice_path(@support_notice) %></li>
-    <% if policy(SupportNotice).destroy? %>
-      <li><%= link_to t(".delete"), confirm_delete_admin_support_notice_path(@support_notice), data: { confirm: t(".confirm_delete") } %></li>
-    <% end %>
-  <% end %>
 </ul>

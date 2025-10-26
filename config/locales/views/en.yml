@@ -426,29 +426,22 @@ en:
         delete: Delete Support Notice
         submit: Yes, Delete Support Notice
         warning_html: Are you sure you want to <strong><em>delete</em></strong> this support notice?
-      create:
-        created: Support Notice successfully created.
-      destroy:
-        deleted: Support Notice successfully deleted.
       edit:
         page_heading: Edit Support Notice
       index:
-        actions:
-          active: Active
-          confirm_delete: Are you sure you want to delete this support notice?
-          delete: Delete
-          edit: Edit
         page_heading: Support Notices
       navigation:
-        confirm_delete: Are you sure you want to delete this support notice?
-        delete: Delete Support Notice
-        edit: Edit Support Notice
         index: Support Notices
         new: New Support Notice
       new:
         page_heading: New Support Notice
       show:
         page_heading: Support Notice
+      support_notice:
+        active: Active
+        confirm_delete: Are you sure you want to delete this support notice?
+        delete: Delete
+        edit: Edit
       support_notice_form:
         active: Active
         landmark:
@@ -465,10 +458,8 @@ en:
         type:
           caution: Caution
           error: Error
-          label: Support Notice Type'
+          label: Support Notice Type
           notice: Notice
-      update:
-        updated: Support Notice successfully updated.
     user_creations:
       confirm_remove_pseud:
         caution: Are you sure you want to remove the creator's pseud from this work?
