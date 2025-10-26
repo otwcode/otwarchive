@@ -4,8 +4,9 @@ describe Admin::SupportNoticesController do
   include LoginMacros
   include RedirectExpectationHelper
 
+  let(:admin) { create(:admin, roles: ["superadmin"]) }
   let(:support_notice) { create(:support_notice) }
-  let(:support_notice_params) { attributes_for(:support_notice) }
+  let(:support_notice_params) { attributes_for(:support_notice, notice: "New notice content") }
 
   shared_examples "only authorized admins are allowed" do |authorized_roles:|
     authorized_roles.each do |role|
@@ -31,6 +32,7 @@ describe Admin::SupportNoticesController do
     end
 
     it "redirects logged out users to root with notice" do
+      fake_logout
       subject
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
     end
@@ -46,7 +48,7 @@ describe Admin::SupportNoticesController do
     let(:support_notice) { create(:support_notice, :active) }
 
     it "redirects with an error" do
-      fake_login_admin(create(:admin, roles: ["superadmin"]))
+      fake_login_admin(admin)
       subject
       it_redirects_to_with_error(admin_support_notice_path(support_notice), "Active support notices cannot be deleted.")
     end
@@ -90,13 +92,12 @@ describe Admin::SupportNoticesController do
     end
 
     it "creates admin activity" do
-      admin = create(:admin, roles: ["superadmin"])
       fake_login_admin(admin)
-      expect do
-        subject
-      end.to change { AdminActivity.count }
+      expect { subject }
+        .to change { AdminActivity.count }
         .by(1)
       expect(AdminActivity.last.target).to eq(SupportNotice.last)
+      expect(AdminActivity.last.action).to eq("create")
       expect(AdminActivity.last.admin).to eq(admin)
       expect(AdminActivity.last.summary).to include(support_notice_params[:notice])
     end
@@ -115,7 +116,6 @@ describe Admin::SupportNoticesController do
   end
 
   describe "PUT #update" do
-    let(:support_notice_params) { attributes_for(:support_notice, notice: "New notice content") }
     subject { put :update, params: { id: support_notice, support_notice: support_notice_params } }
 
     let(:success) do
@@ -125,15 +125,14 @@ describe Admin::SupportNoticesController do
     end
 
     it "creates admin activity" do
-      admin = create(:admin, roles: ["superadmin"])
       fake_login_admin(admin)
-      expect do
-        subject
-      end.to change { AdminActivity.count }
+      expect { subject }
+        .to change { AdminActivity.count }
         .by(1)
       expect(AdminActivity.last.target).to eq(support_notice)
+      expect(AdminActivity.last.action).to eq("update")
       expect(AdminActivity.last.admin).to eq(admin)
-      expect(AdminActivity.last.summary).to include("New notice content")
+      expect(AdminActivity.last.summary).to include(support_notice_params[:notice])
     end
 
     it_behaves_like "only authorized admins are allowed", authorized_roles: %w[superadmin support]
@@ -160,14 +159,13 @@ describe Admin::SupportNoticesController do
     end
 
     it "creates admin activity" do
-      admin = create(:admin, roles: ["superadmin"])
       fake_login_admin(admin)
-      expect do
-        subject
-      end.to change { AdminActivity.count }
+      expect { subject }
+        .to change { AdminActivity.count }
         .by(1)
       expect(AdminActivity.last.target_id).to eq(support_notice.id)
       expect(AdminActivity.last.admin).to eq(admin)
+      expect(AdminActivity.last.action).to eq("destroy")
       expect(AdminActivity.last.summary).to include(support_notice.notice)
     end
 
