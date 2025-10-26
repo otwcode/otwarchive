@@ -3,17 +3,15 @@
 <!--/descriptions-->
 
 <!--main content-->
-<fieldset>
-  <h4 class="heading"><%= t(".two_factor_authentication") %></h4>
-  <dt>
-    <%= t(".totp", status: @totp_enabled ? t(".enabled") : t(".disabled")) %>
-  </dt>
-  <dd class="submit actions">
-    <% if @totp_enabled %>
-      <%= link_to t(".disable_totp"), confirm_disable_admin_totp_path  %>
-    <% else %>
-      <%= link_to t(".enable_totp"), new_admin_totp_path %>
-    <% end %>
-  </dd>
-</fieldset>
+<h4 class="heading"><%= t(".two_factor_authentication") %></h4>
+<dt>
+  <%= t(".totp", status: @totp_enabled ? t(".enabled") : t(".disabled")) %>
+</dt>
+<dd class="submit actions">
+  <% if @totp_enabled %>
+    <%= link_to t(".disable_totp"), confirm_disable_admin_totp_path %>
+  <% else %>
+    <%= link_to t(".enable_totp"), new_admin_totp_path %>
+  <% end %>
+</dd>
 <!--/content-->
