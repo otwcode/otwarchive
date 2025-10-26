@@ -73,7 +73,7 @@ describe Admin::PasswordsController do
       end
 
       it "changes the password" do
-        it_redirects_to_with_notice(admins_path, "Your password has been changed successfully. You are now signed in.")
+        it_redirects_to_with_notice(admins_path, "Your password has been changed. You are now logged in.")
       end
     end
 
@@ -92,7 +92,7 @@ describe Admin::PasswordsController do
       end
 
       it "changes the password" do
-        it_redirects_to_with_notice(admins_path, "Your password has been changed successfully. You are now signed in.")
+        it_redirects_to_with_notice(admins_path, "Your password has been changed. You are now logged in.")
       end
     end
   end
