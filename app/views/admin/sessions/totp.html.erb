@@ -3,15 +3,13 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_for(resource, as: resource_name, url: session_path(resource_name), method: :post) do |form| %>
-  <fieldset>
+<%= form_with(model: resource, as: resource_name, url: session_path(resource_name), method: :post) do |form| %>
   <dl>
     <dt><%= label_tag "admin[otp_attempt]", t(".two_factor_authentication_code") %></dt>
     <dd>
-      <%= form.text_field :otp_attempt, "aria-describedby": "otp-field-description" %>
+      <%= form.text_field :otp_attempt %>
     </dd>
   </dl>
   <p class="submit actions"><%= submit_tag t("admin.sessions.new.submit") %></p>
-  </fieldset>
 <% end %>
 <!--/content-->

@@ -29,7 +29,7 @@ describe Admin::PreferencesController do
       it "denies access to other's pages" do
         fake_login_admin(admin)
         get :show, params: { admin_id: other_admin.login }
-        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        it_redirects_to_with_error(root_path, "You may only update preferences for your own admin account.")
       end
     end
   end
@@ -65,7 +65,7 @@ describe Admin::PreferencesController do
       it "denies access to other's pages" do
         fake_login_admin(admin)
         get :totp_setup, params: { admin_id: other_admin.login }
-        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        it_redirects_to_with_error(root_path, "You may only update preferences for your own admin account.")
       end
     end
   end
@@ -120,7 +120,7 @@ describe Admin::PreferencesController do
       it "denies access to other's pages" do
         fake_login_admin(admin)
         post :totp_setup_form, params: { admin_id: other_admin.login }
-        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        it_redirects_to_with_error(root_path, "You may only update preferences for your own admin account.")
       end
     end
   end
@@ -163,7 +163,7 @@ describe Admin::PreferencesController do
       it "denies access to other's pages" do
         fake_login_admin(admin)
         get :totp_setup_backup_codes, params: { admin_id: other_admin.login }
-        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        it_redirects_to_with_error(root_path, "You may only update preferences for your own admin account.")
       end
 
       it "denies access when TOTP is disabled" do
@@ -211,7 +211,7 @@ describe Admin::PreferencesController do
       it "denies access to other's pages" do
         fake_login_admin(admin)
         get :totp_disable, params: { admin_id: other_admin.login }
-        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        it_redirects_to_with_error(root_path, "You may only update preferences for your own admin account.")
       end
     end
   end
@@ -268,7 +268,7 @@ describe Admin::PreferencesController do
       it "denies access to other's pages" do
         fake_login_admin(admin)
         post :totp_disable_form, params: { admin_id: other_admin.login }
-        it_redirects_to_with_error(root_path, "Sorry, only an authorized admin can access the page you were trying to reach.")
+        it_redirects_to_with_error(root_path, "You may only update preferences for your own admin account.")
       end
     end
   end

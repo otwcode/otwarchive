@@ -385,10 +385,13 @@ en:
         account_password: Admin password
         disable: Disable
         heading: Disable Two-Factor Authentication
-        submit: Submit
+        landmark:
+          submit: Submit
         two_factor_authentication_code: Two-Factor Authentication Code
       totp_setup:
         confirm_and_enable: Confirm and Enable
+        landmark:
+          submit: Submit
         step_1:
           heading: 'Step 1: Set up your authenticator app'
           manually_enter_code: 'If you cannot scan the QR code, you can also enter the following setup code manually:'
@@ -398,10 +401,10 @@ en:
           heading: 'Step 2: Confirm OTP code'
           instructions: Please confirm that your authentication application is working by entering a generated code below.
           otp_code: OTP code
-        submit: Submit
         two_factor_authentication_set_up: Two-Factor Authentication Setup
       totp_setup_backup_codes:
         finish: Finish
+        heading: Two-Factor Authentication Backup Codes
         step_3:
           heading: 'Step 3: Save your backup codes'
           write_codes_down: 'Keep these backup codes in a safe and secure place in case you lose access to your authenticator app:'

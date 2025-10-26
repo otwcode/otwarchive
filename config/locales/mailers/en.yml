@@ -41,7 +41,7 @@ en:
       username: Admin username
     totp_2fa_backup_codes:
       created: A set of new backup codes has been requested for your account. Please use one of the following to log in, and then set up two-factor authentication again.
-      subject: "[%{app_name}] Your admin account recovery codes"
+      subject: "[%{app_name}] Your admin account backup codes"
   kudo_mailer:
     batch_kudo_notification:
       guest:

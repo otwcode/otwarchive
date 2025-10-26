@@ -18,6 +18,8 @@ en:
       destroy_user_creations:
         success: All creations by user %{login} have been deleted.
     preferences:
+      check_ownership:
+        page_access_denied: You may only update preferences for your own admin account.
       check_totp_disabled:
         already_enabled: TOTP two-factor authentication is already enabled.
       check_totp_enabled:

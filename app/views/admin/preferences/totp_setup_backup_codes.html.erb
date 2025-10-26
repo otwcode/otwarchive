@@ -1,18 +1,16 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t("admin.preferences.totp_setup.two_factor_authentication_set_up") %></h2>
+<h2 class="heading"><%= t(".heading") %></h2>
 <!--/descriptions-->
 
 <!--main content-->
-<fieldset>
-  <h3 class="heading"><%= t(".step_3.heading") %></h3>
-  <p><%= t(".step_3.write_codes_down") %></p>
-  <% @backup_codes.each do |code| %>
-    <div>
-      <code class="big"><%= code %></code>
-    </div>
-  <% end %>
-  <p><%= t(".step_3.you_wont_see_them_again") %></p>
-</fieldset>
+<h3 class="heading"><%= t(".step_3.heading") %></h3>
+<p><%= t(".step_3.write_codes_down") %></p>
+<% @backup_codes.each do |code| %>
+  <div>
+    <code class="big"><%= code %></code>
+  </div>
+<% end %>
+<p><%= t(".step_3.you_wont_see_them_again") %></p>
 
 <dt class="landmark"><%= t(".finish") %></dt>
 <dd class="submit actions">

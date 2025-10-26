@@ -3,10 +3,6 @@ class Admin::PreferencesController < Admin::BaseController
   before_action :check_totp_disabled, only: [:totp_setup, :totp_setup_form]
   before_action :check_totp_enabled, only: [:totp_disable, :totp_disable_form]
 
-  def check_ownership
-    admin_only_access_denied unless params[:admin_id] == current_admin.login
-  end
-
   def check_totp_disabled
     return unless current_admin.otp_required_for_login
 
@@ -85,6 +81,17 @@ class Admin::PreferencesController < Admin::BaseController
   end
 
   private
+
+  def check_ownership
+    return if params[:admin_id] == current_admin.login
+
+    respond_to do |format|
+      format.html do
+        flash[:error] = t("admin.preferences.check_ownership.page_access_denied")
+        redirect_to root_path
+      end
+    end
+  end
 
   def enable_2fa_params
     params.require(:admin).permit(:otp_attempt, :password)

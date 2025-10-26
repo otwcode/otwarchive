@@ -16,17 +16,17 @@
 <fieldset>
   <h3 class="heading"><%= t(".step_2.heading") %></h3>
   <p><%= t(".step_2.instructions") %></p>
-  <%= form_for(current_admin, url: totp_setup_form_admin_preferences_path, method: :post) do |form| %>
+  <%= form_with(model: current_admin, url: totp_setup_form_admin_preferences_path, method: :post) do |form| %>
     <dl>
       <dt><%= form.label :password, t(".step_2.account_password") %></dt>
       <dd><%= form.password_field :password %></dd>
       <dt><%= form.label :otp_attempt, t(".step_2.otp_code") %></dt>
       <dd><%= form.text_field :otp_attempt %></dd>
     </dl>
-    
-    <dt class="landmark"><%= label_tag :submit, t(".submit") %></dt>
+
+    <dt class="landmark"><%= label_tag :submit, t(".landmark.submit") %></dt>
     <dd class="submit actions">
-      <%= submit_tag t(".confirm_and_enable") %>
+      <%= form.submit t(".confirm_and_enable") %>
     </dd>
   <% end %>
 </fieldset>

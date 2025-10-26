@@ -3,19 +3,17 @@
 <!--/descriptions-->
 
 <!--main content-->
-<fieldset>
-  <%= form_for(current_admin, url: totp_disable_form_admin_preferences_path, method: :post) do |form| %>
-    <dl>
-      <dt><%= form.label :password, t(".account_password") %></dt>
-      <dd><%= form.password_field :password %></dd>
-      <dt><%= form.label :otp_attempt, t(".two_factor_authentication_code") %></dt>
-      <dd><%= form.text_field :otp_attempt, "aria-describedby": "otp-field-description" %></dd>
-    </dl>
-    
-    <dt class="landmark"><%= label_tag :submit, t(".submit") %></dt>
-    <dd class="submit actions">
-      <%= submit_tag t(".disable") %>
-    </dd>
-  <% end %>
-</fieldset>
+<%= form_with(model: current_admin, url: totp_disable_form_admin_preferences_path, method: :post) do |form| %>
+  <dl>
+    <dt><%= form.label :password, t(".account_password") %></dt>
+    <dd><%= form.password_field :password %></dd>
+    <dt><%= form.label :otp_attempt, t(".two_factor_authentication_code") %></dt>
+    <dd><%= form.text_field :otp_attempt %></dd>
+  </dl>
+
+  <dt class="landmark"><%= t(".landmark.submit") %></dt>
+  <dd class="submit actions">
+    <%= form.submit t(".disable") %>
+  </dd>
+<% end %>
 <!--/content-->
