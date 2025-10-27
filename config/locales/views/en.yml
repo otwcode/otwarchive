@@ -2616,6 +2616,8 @@ en:
     sessions:
       greeting:
         nav:
+          admin:
+            preferences: Preferences
           assignments: My Assignments
           bookmarks: My Bookmarks
           collections: My Collections
