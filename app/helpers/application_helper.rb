@@ -168,10 +168,12 @@ module ApplicationHelper
   end
 
   def link_to_modal(content = "", options = {})
+    options[:class] ||= ""
     options[:for] ||= ""
     options[:title] ||= options[:for]
 
-    link_to content, options[:for], class: "modal", title: options[:title]
+    html_options = { class: "#{options[:class]} modal", title: options[:title] }
+    link_to content, options[:for], html_options
   end
 
   # Currently, help files are static. We may eventually want to make these dynamic?
