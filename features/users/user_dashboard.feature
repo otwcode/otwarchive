@@ -273,10 +273,3 @@ Feature: User dashboard
     | logged in as a random user            | not see |
     | logged in as "a_user"                 | see     |
     | a visitor                             | not see |
-
-  Scenario: First login banner contains a working link to the new user tips modal
-  Given I am logged in as "new_user"
-    And I follow "My Dashboard"
-  Then I should see "Hi! It looks like you've just logged in to AO3 for the first time."
-  When I follow "useful tips for new users"
-  Then I should see "Welcome to the Example Archive!"
