@@ -7,7 +7,7 @@ class SupportReporter < FeedbackReporter
       "subject" => subject,
       "description" => ticket_description,
       "cf" => custom_zoho_fields,
-      "channel" => "Support Form"
+      "channel" => channel
     )
   end
 

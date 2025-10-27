@@ -111,5 +111,16 @@ describe AbuseReporter do
         expect(subject.report_attributes.fetch("cf").fetch("cf_user_id")).to eq("")
       end
     end
+
+    context "if an user agent is set" do
+      let(:user_agent) { "Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0" * 10 }
+      before do
+        allow(subject).to receive(:user_agent).and_return(user_agent)
+      end
+
+      it "returns a hash containing the user agent" do
+        expect(subject.report_attributes.fetch("cf").fetch("cf_user_agent")).to eq(user_agent)
+      end
+    end
   end
 end
