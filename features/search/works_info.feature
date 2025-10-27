@@ -143,3 +143,19 @@ Feature: Search works by work info
       And I press "Search" within "#new_work_search"
     Then I should see "You searched for: Title: work 1"
       And I should see "No results found"
+  
+  Scenario: Search by author name and fandom in site search
+    Given a canonical fandom "Ghost Soup"
+      And the work "same work name" by "testuser2" with fandom "Ghost Soup"
+      And the work "same work name" by "testy" with fandom "Ghost Soup"
+      And all indexing jobs have been run
+      And I am logged in as "testuser"
+     When I fill in "site_search" with "same work name"
+      And I press "Search"
+    Then I should see "2 Found"
+      And I should see "same work name by testuser2"
+      And I should see "same work name by testy"
+    When I fill in "site_search" with "same work name testuser2"
+      And I press "Search"
+    Then I should see "1 Found"
+      And I should not see "testy"

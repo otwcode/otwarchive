@@ -248,16 +248,18 @@ class WorkQuery < Query
     input = (options[:q] || options[:query] || "").dup
     query = generate_search_text(input)
 
-    return {
-      query_string: {
+    return if query.blank?
+
+    {
+      simple_query_string: {
         query: query,
         fields: ["creators^5", "title^7", "endnotes", "notes", "summary", "tag", "series.title"],
         default_operator: "AND"
       }
-    } unless query.blank?
+    }
   end
 
-  def generate_search_text(query = '')
+  def generate_search_text(query = "")
     search_text = query
     %i[title creators].each do |field|
       search_text << split_query_text_words(field, options[field])
