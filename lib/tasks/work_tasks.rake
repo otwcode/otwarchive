@@ -52,4 +52,31 @@ namespace :work do
     end
     puts && STDOUT.flush
   end
+
+  # Usage: rake work:reset_word_counts_before_date[YYYY-MM-DD]
+  desc "Reset word counts for all works created before December 25, 2018"
+  task(:reset_word_counts_before_date, [:date] => :environment) do |_t, args|
+
+    if args.date.nil?
+      puts "Please enter a date. Use format YYYY-MM-DD."
+      exit 1
+    end
+
+    cutoff_date = Date.parse(args.date)
+    works = Work.where('works.created_at < ?', cutoff_date)
+
+    print "Resetting word count for #{works.count} works created before #{cutoff_date}: "
+
+    works.find_in_batches do |batch|
+      batch.each do |work|
+        work.chapters.each do |chapter|
+          chapter.content_will_change!
+          chapter.save
+        end
+        work.save
+      end
+      print(".") && STDOUT.flush
+    end
+    puts && STDOUT.flush
+  end
 end
