@@ -54,7 +54,7 @@ namespace :work do
   end
 
   # Usage: rake work:reset_word_counts_before_date[YYYY-MM-DD]
-  desc "Reset word counts for all works created before December 25, 2018"
+  desc "Reset word counts for all works created before specified date"
   task(:reset_word_counts_before_date, [:date] => :environment) do |_t, args|
 
     if args.date.nil?
