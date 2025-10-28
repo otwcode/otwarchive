@@ -811,3 +811,31 @@ Then "I should see an HTML comment containing the number {int} within {string}" 
   number = comment_match[1].to_i
   expect(number).to eq(expected_number)
 end
+
+Then "I should see the work header navigation" do
+  expect(page).to have_css("ul.work.navigation.actions")
+end
+
+Then "I should not see the work header navigation" do
+  expect(page).not_to have_css("ul.work.navigation.actions")
+end
+
+Then "I should see the work meta" do
+  expect(page).to have_css("dl.work.meta.group")
+end
+
+Then "I should not see the work meta" do
+  expect(page).not_to have_css("dl.work.meta.group")
+end
+
+Then "I should see the work styles" do
+  expect(page).to have_css("#main style[type=\"text/css\"]")
+end
+
+Then "I should see the work preface" do
+  expect(page).to have_css("div.preface.group h2.title.heading")
+end
+
+Then "I should not see the work preface" do
+  expect(page).not_to have_css("div.preface.group h2.title.heading")
+end
