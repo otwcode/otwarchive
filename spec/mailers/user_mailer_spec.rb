@@ -689,9 +689,9 @@ describe UserMailer do
       end
 
       it "includes the series link" do
-        label = "<b style=\"color:#990000\">Series:</b>"
+        label = "<b style=\"color:#990000\">Series: </b>"
         link = "Part 1 of <a style=\"color:#990000\" href=\"#{series_url(series)}\">#{series.title}</a>"
-        expect(email).to have_html_part_content("#{label} #{link}")
+        expect(email).to have_html_part_content("#{label}#{link}")
       end
 
       it "includes HTML from the chapter summary" do
