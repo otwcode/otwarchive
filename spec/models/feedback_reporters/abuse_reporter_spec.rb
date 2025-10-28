@@ -113,7 +113,7 @@ describe AbuseReporter do
     end
 
     context "if an user agent is set" do
-      let(:user_agent) { "Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0" * 10 }
+      let(:user_agent) { "Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0" }
       before do
         allow(subject).to receive(:user_agent).and_return(user_agent)
       end

@@ -40,10 +40,10 @@ describe AbuseReportsController do
         request.env["HTTP_USER_AGENT"] = user_agent
       end
 
-      it "sets the untruncated user agent in the Zoho ticket" do
+      it "sets the truncated user agent in the Zoho ticket" do
         expect(mock_zoho).to receive(:create_ticket).with(ticket_attributes: include(
           "cf" => include(
-            "cf_user_agent" => user_agent
+            "cf_user_agent" => user_agent.to(499)
           )
         )).and_return({})
         post :create, params: default_parameters
