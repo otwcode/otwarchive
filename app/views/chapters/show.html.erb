@@ -19,10 +19,10 @@
 <% if !@work.unrevealed? || logged_in_as_admin? || can_access_unrevealed_work(@work, current_user) %>
   <!-- BEGIN work -->
   <div class="work"><p class="landmark"><a name="top">&nbsp;</a></p>
-    <%= render :partial => 'works/work_header' %>
+    <%= render "works/work_header" %>
 
     <div id="chapters">
-      <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
+      <%= render "chapters/chapter", chapter: @chapter %>
     </div>
 
     <% inspired_by = get_inspired_by(@work) %>
@@ -31,13 +31,13 @@
       <!--afterword-->
       <div class="afterword preface group">
         <% if !@work.endnotes.blank? %>
-          <%= render :partial => 'works/work_endnotes' %>
+          <%= render "works/work_endnotes" %>
         <% end %>
         <% unless @preview_mode || @work.series.blank? %>
-          <%= render :partial => 'works/work_series_links' %>
+          <%= render "works/work_series_links" %>
         <% end %>
         <% unless inspired_by.empty? %>
-          <%= render :partial => 'works/work_approved_children', :locals => {:inspired_by => inspired_by} %>
+          <%= render "works/work_approved_children", inspired_by: inspired_by %>
         <% end %>
       </div>
       <!--/afterword-->
@@ -49,7 +49,7 @@
   <!-- END work -->
 
   <!-- BEGIN comment section -->
-  <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
+  <%= render "comments/commentable", commentable: @chapter %>
   <!-- END comment section -->
 
   <% if @next_chapter %>
