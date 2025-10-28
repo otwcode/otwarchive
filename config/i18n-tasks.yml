@@ -116,6 +116,13 @@ search:
 
 ## Do not consider these keys missing:
 ignore_missing:
+  # File: app/helpers/mailer_helper.rb
+  - comment_mailer.subject_for_commentable.subject.{chapter,other,tag}
+  # File: app/mailers/comment_mailer.rb
+  - mailer_helper.content_for_commentable_html.chapter.{titled,untitled}
+  - mailer_helper.content_for_commentable_html.content.{chapter,other,tag}.html
+  - mailer_helper.content_for_commentable_text.content.{other,tag}.text
+  - mailer_helper.content_for_commentable_text.content.chapter.{titled_text,untitled_text}
   ## All of the following keys are using default values defined in the respective .rb files
   ## TODO: Move the default values to the .yml files
   # File: app/controllers/admin/admin_invitations_controller.rb

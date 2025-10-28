@@ -1,25 +1,34 @@
 <% @chapter = chapter if defined?(chapter) %>
 
 <div class="meta group">
-  <h2 class="heading"><%= @chapter.chapter_title.html_safe %></h2>
+  <h2 class="heading">
+    <% if @chapter.title.present? %>
+      <%= t(".full_chapter_title_with_title",
+            chapter_number: @chapter.position,
+            title: @chapter.title) %>
+    <% else %>
+      <%= t(".full_chapter_title_without_title",
+            chapter_number: @chapter.position) %>
+    <% end %>
+  </h2>
   <% if (!@chapter.pseuds.blank? && (@chapter.pseuds != @work.pseuds) && (!@work.anonymous?)) %>
     <%# only display byline if different from the main byline %>
-    <p class="byline"><%= ts('Chapter by') %> <%= byline(@chapter, only_path: false) %></p>
+    <p class="byline"><%= t(".chapter_byline_html", byline_names_link: byline(@chapter, only_path: false)) %></p>
   <% end %>
 
   <% unless @chapter.summary.blank? %>
-    <p><%= ts('Chapter Summary') %></p>
-    <blockquote class="userstuff"><%=raw sanitize_field(@chapter, :summary) %></blockquote>
+    <p><%= t(".chapter_summary") %></p>
+    <blockquote class="userstuff"><%= raw sanitize_field(@chapter, :summary) %></blockquote>
   <% end %>
 
   <% unless @chapter.notes.blank? && @chapter.endnotes.blank? %>
-    <p><%= ts('Chapter Notes') %></p>
+    <p><%= t(".chapter_notes") %></p>
     <% unless @chapter.notes.blank? %>
-      <blockquote class="userstuff"><%=raw sanitize_field(@chapter, :notes) %></blockquote>
+      <blockquote class="userstuff"><%= raw sanitize_field(@chapter, :notes) %></blockquote>
     <% end %>
     <% unless @chapter.endnotes.blank? %>
       <div class="endnote-link">
-        <%= ts("See the end of the chapter for") %> <% unless @chapter.notes.blank? %><%= ts("more") %><% end %> <%= link_to ts("notes"), "#endnotes#{@chapter.position}" %>
+        <%= t(".see_chapter_end_notes_html", chapter_end_notes_link: link_to(@chapter.notes.present? ? t(".chapter_end_notes_with_chapter_notes") : t(".chapter_end_notes_without_chapter_notes"), "#endnotes#{@chapter.position}")) %>
       </div>
     <% end %>
   <% end %>
@@ -27,13 +36,13 @@
 
 <!--chapter content-->
 <div class="userstuff">
-  <%=raw (defined?(@content) ? @content : sanitize_field(@chapter, :content)) %>
+  <%= raw defined?(@content) ? @content : sanitize_field(@chapter, :content) %>
 </div>
 <!--/chapter content-->
 
 <% unless @chapter.endnotes.blank? %>
   <div class="meta" id="endnotes<%= @chapter.position %>">
-    <p><%= ts('Chapter End Notes') %></p>
+    <p><%= t(".section_chapter_end_notes") %></p>
     <blockquote class="userstuff"><%= raw sanitize_field(@chapter, :endnotes) %></blockquote>
   </div>
 <% end %>

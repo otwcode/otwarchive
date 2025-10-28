@@ -132,6 +132,10 @@ Then /^I should see "([^"]*)" in the "([^"]*)" input/ do |content, labeltext|
   find_field("#{labeltext}").value.should == content
 end
 
+Then "I should see in the {string} input" do |labeltext, content|
+  find_field(labeltext).value.should == content
+end
+
 Then /^I should see a button with text "(.*?)"(?: within "(.*?)")?$/ do |text, selector|
   assure_xpath_present("input", "value", text, selector)
 end
@@ -247,12 +251,11 @@ When /^I submit$/ do
   page.all("p.submit input[type='submit']")[0].click
 end
 
-# we want greedy matching for this one so we can handle tags that have attributes in them
-Then /^I should see the text with tags "(.*)"$/ do |text|
+Then "I should see the text with tags {string}" do |text|
   page.body.should =~ /#{Regexp.escape(text)}/m
 end
 
-Then /^I should see the text with tags '(.*)'$/ do |text|
+Then "I should see the text with tags" do |text|
   page.body.should =~ /#{Regexp.escape(text)}/m
 end
 

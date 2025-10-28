@@ -3,6 +3,11 @@
 require "spec_helper"
 
 describe Comment do
+  include ActiveJob::TestHelper
+  def queue_adapter_for_test
+    ActiveJob::QueueAdapters::TestAdapter.new
+  end
+
   describe "validations" do
     context "with a forbidden guest name" do
       subject { build(:comment, email: Faker::Internet.email) }
@@ -171,6 +176,66 @@ describe Comment do
       end
     end
 
+    context "spam flagging on creation" do
+      subject { build(:comment) }
+
+      context "when spamcheck is skipped and comment is spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(true)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
+        end
+      end
+
+      context "when spamcheck is skipped and comment is not spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(true)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(false)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
+        end
+      end
+
+      context "when spamcheck is not skipped and content is spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(false)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(true)
+        end
+
+        it "is flagged as spam" do
+          expect(subject.save).to be_falsey
+          expect(subject.errors[:base].first).to include "spam"
+          expect(subject.approved).to be_falsey
+          expect(subject.spam).to be_truthy
+        end
+      end
+
+      context "when spamcheck is not skipped and content is not spammy" do
+        before do
+          allow_any_instance_of(Comment).to receive(:skip_spamcheck?).and_return(false)
+          allow_any_instance_of(Comment).to receive(:spam?).and_return(false)
+        end
+
+        it "is flagged as ham" do
+          subject.save!
+          subject.reload
+          expect(subject.approved).to be_truthy
+          expect(subject.spam).to be_falsey
+        end
+      end
+    end
+
     context "when submitting comment to Akismet" do
       subject { create(:comment) }
 
@@ -186,6 +251,27 @@ describe Comment do
         expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.pseud.user.email)
       end
 
+      context "when the comment is being created" do
+        let(:new_comment) do
+          Comment.new(commentable: subject,
+                      pseud: create(:user).default_pseud,
+                      comment_content: "Hmm.")
+        end
+
+        it "does not set recheck_reason" do
+          expect(new_comment.akismet_attributes).not_to have_key(:recheck_reason)
+        end
+      end
+
+      context "when the comment is being edited" do
+        it "sets recheck_reason to 'edit'" do
+          subject.edited_at = Time.current
+          subject.comment_content += " updated"
+          
+          expect(subject.akismet_attributes[:recheck_reason]).to eq("edit")
+        end
+      end
+
       context "when the comment is from a guest" do
         subject { create(:comment, :by_guest) }
 
@@ -196,7 +282,7 @@ describe Comment do
         it "has comment_author as the commenter's name" do
           expect(subject.akismet_attributes[:comment_author]).to eq(subject.name)
         end
-  
+
         it "has comment_author_email as the commenter's email" do
           expect(subject.akismet_attributes[:comment_author_email]).to eq(subject.email)
         end
@@ -236,7 +322,7 @@ describe Comment do
     end
   end
 
-  context "with an existing comment from the same user" do 
+  context "with an existing comment from the same user" do
     let(:first_comment) { create(:comment) }
 
     let(:second_comment) do
@@ -244,7 +330,7 @@ describe Comment do
       Comment.new(first_comment.attributes.slice(*attributes))
     end
 
-    it "should be invalid if exactly duplicated" do 
+    it "should be invalid if exactly duplicated" do
       expect(second_comment.valid?).to be_falsy
       expect(second_comment.errors.attribute_names).to include(:comment_content)
       expect(second_comment.errors.full_messages.first).to include("You've already")
@@ -500,17 +586,38 @@ describe Comment do
       end
 
       context "direct parent is a tag" do
-        before { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
+        let!(:comment) { create(:comment, :on_tag, pseud: tag_wrangler.default_pseud) }
 
         include_examples "updates last wrangling activity"
       end
 
       context "ultimate parent is indirectly a tag" do
-        let(:parent_comment) { create(:comment, :on_tag) }
+        let(:parent_comment) { create(:comment, :on_tag, pseud: parent_comment_owner.default_pseud) }
+        let(:parent_comment_owner) { create(:tag_wrangler) }
 
         before { create(:comment, commentable: parent_comment, pseud: tag_wrangler.default_pseud) }
 
         include_examples "updates last wrangling activity"
+
+        context "when parent comment is owned by a wrangler" do
+          it "notifies the wrangler" do
+            expect do
+              create(:comment, commentable: parent_comment, pseud: tag_wrangler.default_pseud)
+            end.to change { parent_comment_owner.inbox_comments.count }
+              .and enqueue_mail(CommentMailer, :comment_reply_notification)
+          end
+        end
+
+        context "when parent comment is owned by a user who is no longer a wrangler" do
+          before { parent_comment_owner.update!(roles: []) }
+
+          it "does not notify the user" do
+            expect do
+              create(:comment, commentable: parent_comment, pseud: tag_wrangler.default_pseud)
+            end.to avoid_changing { parent_comment_owner.inbox_comments.count }
+              .and not_enqueue_mail(CommentMailer, :comment_reply_notification)
+          end
+        end
       end
 
       shared_examples "does not update last wrangling activity" do
@@ -566,6 +673,44 @@ describe Comment do
           expect do
             comment.update!(comment_content: Faker::Lorem.sentence(word_count: 25))
           end.not_to change { tag_wrangler.reload.last_wrangling_activity.updated_at }
+        end
+      end
+
+      context "parent is indirectly a tag" do
+        let(:parent_comment) { create(:comment, :on_tag, pseud: parent_comment_owner.default_pseud) }
+        let(:parent_comment_owner) { create(:tag_wrangler) }
+        let(:reply_comment) { create(:comment, commentable: parent_comment, pseud: tag_wrangler.default_pseud) }
+        let(:inbox_comment) { parent_comment_owner.inbox_comments.find_by(feedback_comment_id: reply_comment.id) }
+
+        context "when parent comment is owned by a wrangler" do
+          before { inbox_comment.update!(read: true) }
+
+          it "notifies the wrangler by email and marks inbox comment unread" do
+            expect do
+              reply_comment.update!(
+                comment_content: "#{reply_comment.comment_content}!",
+                edited_at: Time.current
+              )
+            end.to change { inbox_comment.reload.read }
+              .and enqueue_mail(CommentMailer, :edited_comment_reply_notification)
+          end
+        end
+
+        context "when parent comment is owned by a user who is no longer a wrangler" do
+          before do
+            inbox_comment.update!(read: true)
+            parent_comment_owner.update!(roles: [])
+          end
+
+          it "does not notify the user by email or mark the inbox comment unread" do
+            expect do
+              reply_comment.update!(
+                comment_content: "#{reply_comment.comment_content}!",
+                edited_at: Time.current
+              )
+            end.to avoid_changing { inbox_comment.reload.read }
+              .and not_enqueue_mail(CommentMailer, :edited_comment_reply_notification)
+          end
         end
       end
     end
@@ -681,6 +826,28 @@ describe Comment do
       it "returns true" do
         expect(comment.use_image_safety_mode?).to be_truthy
       end
+    end
+  end
+
+  describe "#mark_as_spam!" do
+    let(:comment) { create(:comment, approved: true, spam: false) }
+
+    it "flags the comment as spam." do
+      comment.mark_as_spam!
+      comment.reload
+      expect(comment.approved).to be_falsey
+      expect(comment.spam).to be_truthy
+    end
+  end
+
+  describe "#mark_as_ham!" do
+    let(:comment) { create(:comment, approved: false, spam: true) }
+
+    it "flags the comment as legitimate." do
+      comment.mark_as_ham!
+      comment.reload
+      expect(comment.approved).to be_truthy
+      expect(comment.spam).to be_falsey
     end
   end
 end

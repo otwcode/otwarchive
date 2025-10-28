@@ -13,17 +13,17 @@ class CollectionItem < ApplicationRecord
   validates_uniqueness_of :collection_id, scope: [:item_id, :item_type],
     message: ts("already contains this item.")
 
-  enum user_approval_status: {
+  enum :user_approval_status, {
     rejected: -1,
     unreviewed: 0,
     approved: 1
-  }, _suffix: :by_user
+  }, suffix: :by_user
 
-  enum collection_approval_status: {
+  enum :collection_approval_status, {
     rejected: -1,
     unreviewed: 0,
     approved: 1
-  }, _suffix: :by_collection
+  }, suffix: :by_collection
 
   validate :collection_is_open, on: :create
   def collection_is_open
@@ -135,15 +135,15 @@ class CollectionItem < ApplicationRecord
 
   before_save :send_work_invitation
   def send_work_invitation
-    if !approved_by_user? && approved_by_collection? && self.new_record?
-      if !User.current_user.is_author_of?(item)
-        # a maintainer is attempting to add this work to their collection
-        # so we send an email to all the works owners
-        item.users.each do |email_author|
-          unless email_author.preference.collection_emails_off
-            UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
-          end
-        end
+    return if approved_by_user? || !approved_by_collection? || !self.new_record? || User.current_user.is_author_of?(item)
+
+    # a maintainer is attempting to add this work to their collection
+    # so we send an email to all the works owners
+    item.users.each do |email_author|
+      next if email_author.preference.collection_emails_off
+
+      I18n.with_locale(email_author.preference.locale_for_mails) do
+        UserMailer.invited_to_collection_notification(email_author.id, item.id, collection.id).deliver_now
       end
     end
   end
@@ -232,7 +232,13 @@ class CollectionItem < ApplicationRecord
 
       # also notify prompters of responses to their prompt
       if item_type == "Work" && !item.challenge_claims.blank?
-        UserMailer.prompter_notification(self.item.id, self.collection.id).deliver_after_commit
+        users = item.challenge_claims.map { |claim| claim.request_signup.pseud.user }
+          .uniq
+        users.each do |user|
+          I18n.with_locale(user.preference.locale_for_mails) do
+            UserMailer.prompter_notification(user.id, self.item.id, self.collection.id).deliver_after_commit
+          end
+        end
       end
 
       # also notify the owners of any parent/inspired-by works
@@ -271,5 +277,23 @@ class CollectionItem < ApplicationRecord
         ).deliver_after_commit
       end
     end
+  end
+
+  # reindex collection after creation, deletion, and approval_status update
+  # (we only index approved items, which is why changes there trigger the reindex-index)
+  after_commit :update_collection_index, if: :should_update_collection_index?
+
+  def update_collection_index
+    ids = [collection_id]
+    ids.push(collection.parent_id) if collection.parent.present?
+    IndexQueue.enqueue_ids(Collection, ids, :background)
+  end
+
+  # reindex collection after creation, deletion, and certain attribute updates
+  def should_update_collection_index?
+    return true if destroyed?
+
+    pertinent_attributes = %w[collection_approval_status user_approval_status]
+    (self.saved_changes.keys & pertinent_attributes).present?
   end
 end

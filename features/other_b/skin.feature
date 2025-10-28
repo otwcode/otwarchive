@@ -3,12 +3,13 @@ Feature: Non-public site and work skins
 
   Scenario: A user should be able to create a skin with CSS
   Given I am logged in as "skinner"
+    And the app name is "Example Archive"
   When I am on the new skin page
-    And I fill in "Title" with "my blinking skin"
+    And I fill in "Title" with "my blinking & skin"
     And I fill in "CSS" with "#title { text-decoration: blink;}"
     And I submit
   Then I should see "Skin was successfully created"
-    And I should see "my blinking skin skin by skinner"
+    And I should see "my blinking & skin skin by skinner"
     And I should see "text-decoration: blink;"
     And I should see "(No Description Provided)"
     And I should see "by skinner"
@@ -18,6 +19,7 @@ Feature: Non-public site and work skins
     And I should not see "Stop Using"
     And I should not see "(Approved)"
     And I should not see "(Not yet reviewed)"
+    And I should see the page title "my blinking & skin | Example Archive"
 
   Scenario: A logged-out user should not be able to create skins.
   Given I am a visitor
@@ -242,7 +244,7 @@ Feature: Non-public site and work skins
   When I set up the skin "Work Skin" with css ".selector {position: fixed; top: 0;}"
     And I select "Work Skin" from "Type"
     And I submit
-  Then I should see "The position property in .selector cannot have the value fixed in Work skins, sorry!"
+  Then I should see "The position property in .selector cannot have the value fixed in work skins, sorry!"
 
   Scenario: User should be able to access their site and work skins from an
   individual skin's show page
@@ -334,8 +336,8 @@ Feature: Non-public site and work skins
 
   @javascript
   Scenario: User can add a parent skin using the Custom CSS form
-    Given I am logged in
-      And I create the skin "Dad"
+    Given the skin "Dad" by "skinner"
+      And I am logged in as "skinner"
     When I go to the new skin page
     Then I should see "Advanced"
     When I follow "Show ↓"

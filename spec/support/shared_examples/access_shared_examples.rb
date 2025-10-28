@@ -67,4 +67,16 @@ shared_examples "denies access for work that isn't visible to user" do
 
     include_examples "denies access to random user"
   end
+
+  context "hidden and unrevealed work" do
+    let(:work) { create(:work, authors: [creator.default_pseud], collections: [create(:unrevealed_collection)], hidden_by_admin: true) }
+
+    include_examples "denies access to random user"
+  end
+
+  context "draft work" do
+    let(:work) { create(:draft, authors: [creator.default_pseud]) }
+
+    include_examples "denies access to random user"
+  end
 end

@@ -12,7 +12,7 @@ class RedisHitCounter
       visit = "#{work_id}:#{ip_address}"
 
       # Add the (work ID, IP address) pair to the set for this date.
-      added_visit = redis.sadd(key, visit)
+      added_visit = redis.sadd?(key, visit)
 
       # If trying to add the (work ID, IP address) pair resulted in sadd
       # returning true, we know that the user hasn't visited this work
@@ -61,7 +61,7 @@ class RedisHitCounter
     # Scan through the given set and delete it batch-by-batch.
     def remove_set(key)
       scan_set_in_batches(redis, key, batch_size: batch_size) do |batch|
-        redis.srem(key, batch)
+        redis.srem?(key, batch)
       end
     end
 

@@ -185,6 +185,105 @@ Feature: Download a work
       And I follow "HTML"
     Then I should see the external inspiring work link
 
+  Scenario: Work and chapter with notes and end notes show with "more" in the link to end notes.
+
+    Given I am logged in
+      And I set up the draft "got notes?"
+      And I check "at the beginning"
+      And I fill in "Notes" with "READ THE TAGS FIRST"
+      And I check "at the end"
+      And I fill in "End Notes" with "That's all, folks!"
+      And I fill in "content" with "Could be downloaded"
+      And I press "Post"
+      And I follow "Add Chapter"
+      And I fill in "content" with "Remember, remember the 5th of November"
+      And I check "at the beginning"
+      And I fill in "Notes" with "hey guys its been a while 🙃"
+      And I check "at the end"
+      And I fill in "End Notes" with "Next update soon!!!"
+      And I press "Post"
+    When I view the work "got notes?"
+      And I follow "HTML"
+    Then I should see "Notes"
+      And I should see "READ THE TAGS FIRST"
+      And I should see "See the end of the work for more notes"
+      And I should not see "See the end of the work for notes"
+      And I should see "End Notes"
+      And I should see "That's all, folks!"
+      And I should see "Chapter Notes"
+      And I should see "hey guys its been a while 🙃"
+      And I should see "See the end of the chapter for more notes"
+      And I should not see "See the end of the chapter for notes"
+      And I should see "Chapter End Notes"
+      And I should see "Next update soon!!!"
+
+  Scenario: Work and chapter with only end notes show without "more" in the link to end notes.
+
+    Given I am logged in
+      And I set up the draft "got notes?"
+      And I check "at the end"
+      And I fill in "End Notes" with "That's all, folks!"
+      And I fill in "content" with "Could be downloaded"
+      And I press "Post"
+      And I follow "Add Chapter"
+      And I fill in "content" with "Remember, remember the 5th of November"
+      And I check "at the end"
+      And I fill in "End Notes" with "Next update soon!!!"
+      And I press "Post"
+    When I view the work "got notes?"
+      And I follow "HTML"
+    Then I should see "Notes"
+      And I should not see "See the end of the work for more notes"
+      And I should see "See the end of the work for notes"
+      And I should see "End Notes"
+      And I should see "That's all, folks!"
+      And I should see "Chapter Notes"
+      And I should not see "See the end of the chapter for more notes"
+      And I should see "See the end of the chapter for notes"
+      And I should see "Chapter End Notes"
+      And I should see "Next update soon!!!"
+
+  Scenario: Work and chapter with only notes show without the link to end notes.
+
+    Given I am logged in
+      And I set up the draft "got notes?"
+      And I check "at the beginning"
+      And I fill in "Notes" with "READ THE TAGS FIRST"
+      And I fill in "content" with "Could be downloaded"
+      And I press "Post"
+      And I follow "Add Chapter"
+      And I fill in "content" with "Remember, remember the 5th of November"
+      And I check "at the beginning"
+      And I fill in "Notes" with "hey guys its been a while 🙃"
+      And I press "Post"
+    When I view the work "got notes?"
+      And I follow "HTML"
+    Then I should see "Notes"
+      And I should see "READ THE TAGS FIRST"
+      And I should not see "See the end of the work for "
+      And I should not see "End Notes"
+      And I should see "Chapter Notes"
+      And I should see "hey guys its been a while 🙃"
+      And I should not see "See the end of the chapter for "
+      And I should not see "Chapter End Notes"
+
+  Scenario: Work and chapter with no notes and no end notes show without the link to end notes or empty sections.
+
+    Given I am logged in
+      And I set up the draft "got notes?"
+      And I fill in "content" with "Could be downloaded"
+      And I press "Post"
+      And I follow "Add Chapter"
+      And I fill in "content" with "Remember, remember the 5th of November"
+      And I press "Post"
+    When I view the work "got notes?"
+      And I follow "HTML"
+    Then I should not see "Notes"
+      And I should not see "See the end of the work for "
+      And I should not see "End Notes"
+      And I should not see "Chapter Notes"
+      And I should not see "See the end of the chapter for "
+      And I should not see "Chapter End Notes"
 
   Scenario: Download option is unavailable if work is unrevealed.
 
@@ -321,3 +420,21 @@ Feature: Download a work
     And I view the work "Worldbuilding"
     And I follow "HTML"
   Then I should see "[Restricted Work] by translator"
+
+  Scenario: Download multi-chapter work with mixed chapter titles (one without, one with)
+  
+  Given I am logged in as "myname"
+    And I set up the draft "Multi-Chapter Download"
+    And I fill in "Work Title" with "Multi-Chapter Download"
+    And I fill in "content" with "Content for chapter one."
+    And I press "Post"
+    And I follow "Add Chapter"
+    And I fill in "content" with "Content for chapter two."
+    And I fill in "Chapter Title" with "Chapter Two Title"
+    And I press "Post"
+  When I view the work "Multi-Chapter Download"
+    And I follow "HTML"
+  Then I should receive a file of type "html"
+    And I should see "Chapter 1"
+    And I should see "Chapter 2: Chapter Two Title"
+
