@@ -274,6 +274,7 @@ Feature: User dashboard
     | logged in as "a_user"                 | see     |
     | a visitor                             | not see |
 
+  # We need to load the site skin to make the new user tips modal work properly:
   @javascript @load-default-skin
   Scenario: First login banner contains a working link to the new user tips modal
   Given I am logged in as "new_user"
