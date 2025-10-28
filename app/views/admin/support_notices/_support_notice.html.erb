@@ -6,9 +6,11 @@
   </div>
 
   <ul class="actions">
-    <li>
-      <%= link_to t(".edit"), edit_admin_support_notice_path(support_notice) %>
-    </li>
+    <% if policy(SupportNotice).edit? %>
+      <li>
+        <%= link_to t(".edit"), edit_admin_support_notice_path(support_notice) %>
+      </li>
+    <% end %>
     <% if support_notice.active? %>
       <li>
         <span class="active current"><%= t(".active") %></span>
