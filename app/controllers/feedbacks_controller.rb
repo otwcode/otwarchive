@@ -12,7 +12,7 @@ class FeedbacksController < ApplicationController
       @feedback.username = current_user.login
     end
 
-    @support_notice = SupportNotice.where(active: true).order(updated_at: :desc).first
+    @support_notice = SupportNotice.where(active: true).first
   end
 
   def create
