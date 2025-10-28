@@ -510,7 +510,7 @@ Scenario: When a user is notified that a co-authored work has been inspired by a
     Then I should see "Works that inspired remixer"
       And I should see "Worldbuilding by inspiration"
     When I approve a related work
-    Then I am logged in as "remixer"
+      And I am logged in as "remixer"
       And I go to inspiration's related works page
     Then I should see "Works inspired by inspiration"
       And I should see "Followup by Anonymous [remixer]"
