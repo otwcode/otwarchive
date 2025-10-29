@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Preview") %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
@@ -20,7 +20,7 @@
     <% inspired_by = get_inspired_by(@work) %>
     <% if !@work.endnotes.blank? || !@work.serial_works.blank? || !inspired_by.empty? %>
     <!--afterword-->
-    <div class="afterword preface group" role="complementary">
+    <div class="afterword preface group">
       <% unless @work.endnotes.blank? %>
         <%= render "works/work_endnotes" %>
       <% end %>
@@ -40,28 +40,9 @@
 <div class="clear"><!--presentational--></div>
 
 <%= form_for(@work) do |f| %>
-
   <%= render "hidden_fields", form: f %>
 
-  <fieldset>
-    <legend><%= ts("Post Work") %></legend>
-    <ul class="actions">
-      <% if @work.posted? %>
-        <li><%= submit_tag ts("Update"), name: "update_button" %></li>
-      <% else %>
-        <li>
-          <%= submit_tag ts("Post"),
-                         name: "post_button",
-                         data: { disable_with: ts("Please wait...") } %>
-        </li>
-        <li>
-          <%= submit_tag ts("Save As Draft"), name: "save_button" %>
-        </li>
-      <% end %>
-      <li><%= submit_tag ts("Edit"), name: "edit_button" %></li>
-      <li><%= submit_tag ts("Cancel"), name: "cancel_button" %></li>
-    </ul>
-  </fieldset>
+  <%= render "posting_fieldset" %>
 
 <% end %>
 </div>

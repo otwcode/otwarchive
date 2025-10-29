@@ -1,0 +1,46 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".page_heading") %></h2>
+<%= error_messages_for :user %>
+<%= error_messages_for @user.profile %>
+<!--/descriptions-->
+
+<!--subnav-->
+<%= render "users/edit_header_navigation" %>
+<!--/subnav-->
+
+<!--main content-->
+<p class="notice">
+  <%= t(".public_information_notice_html", privacy_policy_link: link_to(t(".privacy_policy"), privacy_path)) %>
+</p>
+
+<h3 class="landmark heading"><%= t(".change_profile_landmark") %></h3>
+<%= form_with(model: @user.profile, url: user_profile_path(@user)) do |f| %>
+  <dl>
+      <dt><%= f.label :title, t(".title") %></dt>
+      <dd>
+        <%= f.text_field :title, class: "observe_textlength" %>
+        <%= live_validation_for_field("profile_title", presence: false, maximum_length: Profile::PROFILE_TITLE_MAX) %>
+        <%= generate_countdown_html("profile_title", Profile::PROFILE_TITLE_MAX) %>
+      </dd>
+
+      <dt><%= f.label :about_me, t(".about_me") %></dt>
+      <dd class="description">
+        <p><%= allowed_html_instructions %></p>
+        <%= f.text_area :about_me, class: "observe_textlength" %>
+        <%= live_validation_for_field("profile_about_me", presence: false, maximum_length: Profile::ABOUT_ME_MAX) %>
+        <%= generate_countdown_html("profile_about_me", Profile::ABOUT_ME_MAX) %>
+      </dd>
+
+      <% if policy(@user.profile).update? %>
+        <dt><%= f.label :ticket_number, class: "required" %></dt>
+        <dd>
+          <%= f.text_field :ticket_number, class: "required" %>
+        </dd>
+      <% end %>
+
+      <dt class="landmark"><%= f.label :update, t(".update") %></dt>
+      <dd class="submit actions"><%= f.submit t(".update") %></dd>
+  </dl>
+<% end %>
+
+<!--/content-->

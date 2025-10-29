@@ -133,7 +133,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I am on my user page
+  When I am on myname1's user page
   Then I should see "Sign-ups (1)"
   
   Scenario: View signups in the dashboard
@@ -141,7 +141,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I am on my signups page
+  When I am on myname1's signups page
   Then I should see "Battle 12"
 
   Scenario: Prompt count shows on profile
@@ -168,7 +168,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I am on my signups page
+  When I am on myname1's signups page
   Then I should see "Edit"
     And I should see "Delete"
   
@@ -350,7 +350,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I am on my user page
+  When I am on myname1's user page
   When I follow "Sign-ups"
   Then I should not see "Remove prompt"
   
@@ -458,7 +458,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
-  When I am on my user page
+  When I follow "My Dashboard"
     And I follow "Claims"
   Then I should see "Drop Claim"
   When I follow "Drop Claim"

@@ -49,14 +49,6 @@ describe ChallengeSignupsController do
   end
 
   describe "show" do
-    # TODO: AO3-5552
-    xit "redirects and errors if there is no sign-up with that id" do
-      fake_login
-      get :show, params: { id: 0, collection_id: closed_collection.name }
-      it_redirects_to_with_error(collection_path(closed_collection),
-                                 "What sign-up did you want to work on?")
-    end
-
     it "redirects and errors if the user does not own the sign-up or the collection" do
       fake_login
       get :show, params: { id: closed_signup, collection_id: closed_collection.name }
@@ -196,8 +188,8 @@ describe ChallengeSignupsController do
 
     before do
       challenge = collection.challenge
-      challenge.offer_restriction.update(title_allowed: true)
-      challenge.request_restriction.update(title_allowed: true)
+      challenge.offer_restriction.update!(title_allowed: true)
+      challenge.request_restriction.update!(title_allowed: true)
 
       signup_offer = signup.offers.first
       signup_offer.description = ""
@@ -244,7 +236,7 @@ describe ChallengeSignupsController do
 
     context "when title is allowed" do
       before do
-        challenge.request_restriction.update(title_allowed: true)
+        challenge.request_restriction.update!(title_allowed: true)
       end
 
       it "includes title in CSV" do
@@ -257,7 +249,7 @@ describe ChallengeSignupsController do
 
     context "when description is not allowed" do
       before do
-        challenge.request_restriction.update(description_allowed: false)
+        challenge.request_restriction.update!(description_allowed: false)
       end
 
       it "omits description from CSV" do
@@ -270,7 +262,7 @@ describe ChallengeSignupsController do
 
     context "when prompt is anonymous" do
       before do
-        prompt.update(anonymous: true)
+        prompt.update!(anonymous: true)
       end
 
       it "omits the anonymous prompt's pseud and sign-up URL from CSV" do

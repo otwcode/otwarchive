@@ -105,7 +105,7 @@ Feature: Create bookmarks of external works
     Given a fandom exists with name: "Testing BEW Button", canonical: true
       And I am logged in as "markie" with password "theunicorn"
       And I create the collection "Testing BEW Collection"
-    When I go to my bookmarks page
+    When I go to markie's bookmarks page
     Then I should see "Bookmark External Work"
     When I go to the bookmarks page
     Then I should see "Bookmark External Work"
@@ -199,3 +199,14 @@ Feature: Create bookmarks of external works
       And I press "Create"
     Then I should see "Bookmark was successfully created."
       And the work info for my new bookmark should match the original
+
+  Scenario: Bookmark of external work with HTTPS URL is saved as HTTPS
+    Given I am logged in as "bookmarker1"
+      And all pages on the host "https://example.com" return status 200
+      And I set up an external work
+      And I fill in "URL" with "https://example.com/external_work"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+    When I follow "A Work Not Posted To The AO3"
+    Then I should see "This work isn't hosted on the Archive"
+      And I should see a link to "https://example.com/external_work" within "h4"

@@ -1,8 +1,8 @@
 /* IE_CONDITION: IE8_or_lower
 Put any IE-specific overrides into this file -- it will be loaded last and conditionally, only if the browser is IE 8 or below. 
 
-http://otwcode.github.com/docs/front_end_coding/debugging-ie
-test note: these files could certainly be reduced but I have no IE to test with*/
+test note: these files could certainly be reduced but I have no IE to test with
+*/
 
 /* emphasis */
 
@@ -18,7 +18,7 @@ a.tag {
   padding-left: 0.25em;
 }
 
-/* pathing and inheritance*/
+/* pathing and inheritance */
 
 .blurb .stats dd, #comment_form p {
   position: static;
@@ -28,7 +28,7 @@ a.tag {
   border: 0;
 }
 
-/*float/clear */
+/* float/clear */
 
 #header #search .submit, .stats dd, .stats dt {
   float: none;
@@ -49,13 +49,13 @@ form dd.notes dl {
   float: left;
 }
 
-/*stacking*/
+/* stacking */
 
 #new_comment .module, #footer {
   position: static;
 }
 
-/*explicit widths*/
+/* explicit widths */
 
 .blurb .header, .bookmark .header {
   width: auto;
@@ -71,7 +71,7 @@ form dd.notes dl {
   float: left !important;
 }
 
-/*margin and padding quirks*/
+/* margin and padding quirks */
 
 .bookmark ul.required-tags, .comment div.icon, #main .bookmark .required-tags li, p.character_counter {
   margin: 0;
@@ -95,7 +95,7 @@ span.symbol, span.symbol span {
   top: 16px;
 }
 
-/*incomplete display support */
+/* incomplete display support */
 
 span.error {
   display: block;
@@ -105,7 +105,7 @@ dl.index dd p, dl.index dd .heading {
   display: inline;
 }
 
-/*line-height and baseline */
+/* line-height and baseline */
 
 .heading h3, .heading h4 {
   font-weight: bold;
@@ -116,19 +116,19 @@ input, select, option, textarea, legend, label, .actions a {
   vertical-align: baseline;
 }
 
-/*hasLayout */
+/* hasLayout */
 
 #header, #main, div.home, textarea, li.pseud, .listbox .index {
   zoom: 1;
 }
 
-/*and zoom resets */
+/* and zoom resets */
 
 .stats a, .preface a, .meta .series {
   zoom: normal;
 }
 
-/*transparency*/
+/* transparency */
 
 .blurb ul.required-tags li span.text {
   display: none;
@@ -142,13 +142,7 @@ input, select, option, textarea, legend, label, .actions a {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#26ffffff', endColorstr='#26ffffff',GradientType=0);
 }
 
-/* commas */
-
-.commas li.last:after {
-  content: none;
-}
-
-/*DIAGNOSIS*/
+/* DIAGNOSIS */
 
 /* WIDGET: MODAL DIALOGS (called by help links) */
 

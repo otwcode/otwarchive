@@ -38,8 +38,7 @@ class Series < ApplicationRecord
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.NOTES_MAX)
 
   after_save :adjust_restricted
-  after_update :expire_caches
-  after_update_commit :update_work_index
+  after_update_commit :expire_caches, :update_work_index
 
   scope :visible_to_registered_user, -> { where(hidden_by_admin: false).order('series.updated_at DESC') }
   scope :visible_to_all, -> { where(hidden_by_admin: false, restricted: false).order('series.updated_at DESC') }
@@ -51,9 +50,12 @@ class Series < ApplicationRecord
     having("MAX(works.in_anon_collection) = 0 AND MAX(works.in_unrevealed_collection) = 0")
   }
 
-  scope :for_pseuds, lambda {|pseuds|
-    joins(:approved_creatorships).
-    where("creatorships.pseud_id IN (?)", pseuds.collect(&:id))
+  scope :for_pseud, lambda { |pseud|
+    joins(:approved_creatorships).where(creatorships: { pseud: pseud })
+  }
+
+  scope :for_user, lambda { |user|
+    joins(approved_creatorships: :pseud).where(pseuds: { user: user })
   }
 
   scope :for_blurb, -> { includes(:work_tags, :pseuds) }
@@ -140,14 +142,16 @@ class Series < ApplicationRecord
 
   # Visibility has changed, which means we need to reindex
   # the series' bookmarker pseuds, to update their bookmark counts.
-  def should_reindex_pseuds?
+  def should_update_pseud_and_collection_indexes?
     pertinent_attributes = %w[id restricted hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end
-
   def expire_caches
-    # Expire cached work blurbs and metas if series title changes
-    self.works.each(&:touch) if saved_change_to_title?
+    self.works.touch_all
+  end
+
+  def expire_byline_cache
+    Rails.cache.delete(["byline_data", cache_key])
   end
 
   # Change the positions of the serial works in the series
@@ -170,7 +174,12 @@ class Series < ApplicationRecord
   # make sure that we can handle tricky chapter creatorship cases.
   def remove_author(author_to_remove)
     pseuds_with_author_removed = pseuds.where.not(user_id: author_to_remove.id)
-    raise Exception.new("Sorry, we can't remove all authors of a series.") if pseuds_with_author_removed.empty?
+
+    if pseuds_with_author_removed.empty?
+      errors.add(:base, ts("Sorry, we can't remove all creators of a series."))
+      raise ActiveRecord::RecordInvalid, self
+    end
+
     transaction do
       authored_works_in_series = self.works.merge(author_to_remove.works)
 

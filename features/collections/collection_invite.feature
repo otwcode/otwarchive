@@ -17,11 +17,11 @@ Feature: Collection
   When I go to "scotts collection" collection's page
   Then I should see "Works (0)"
   When I follow "Manage Items"
-    And I follow "Invited"
+    And I follow "Awaiting User Approval"
   Then I should see "Murder in Milan"
-    And I should see "Works listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to 'Approved'."
+    And I should see /Works and bookmarks listed here have been invited to this collection. Once a work's creator has approved inclusion in this collection, the work will be moved to "Approved\."/
   When I am logged in as "Scott" with password "password"
-    And I accept the invitation for my work in the collection "scotts collection"
+    And "Scott" accepts the invitation for their work in the collection "scotts collection"
     And I press "Submit"
   Then I should not see "Murder in Milan"
   When I follow "Approved"
@@ -32,6 +32,25 @@ Feature: Collection
   Then I should not see "Murder in Milan"
   When I follow "Approved"
   Then I should see "Murder in Milan"
+
+  Scenario: Collection invitation emails are translated
+  Given I am logged in as "Scott"
+    And I set my preferences to allow collection invitations
+    And a locale with translated emails
+    And the user "Scott" enables translated emails
+    And the user "Friend" allows co-creators
+  When I coauthored the work "Murder in Milan" as "Scott" with "Friend"
+    And the user "Friend" accepts all co-creator requests
+    And all emails have been delivered
+  When I have the collection "scotts collection" with name "scotts_collection"
+    And I am logged in as "moderator"
+    And I invite the work "Murder in Milan" to the collection "scotts collection"
+  Then 1 email should be delivered to "Scott"
+    And the email to "Scott" should be translated
+    And the email should have "Request to include work in a collection" in the subject
+    And 1 email should be delivered to "Friend"
+    And the email to "Friend" should be non-translated
+    And the email should have "Request to include work in a collection" in the subject
 
   Scenario: Invite another's work to a anonymous collection should not be allowed.
   Given I am logged in
@@ -72,15 +91,15 @@ Feature: Collection
   Scenario: A work with too many tags can be invited to a collection, and the user can accept the invitation
     Given the user-defined tag limit is 2
       And the collection "Favorites"
-      And the work "Over the Limit"
+      And the work "Over the Limit" by "sky"
       And the work "Over the Limit" has 3 fandom tags
-      And I am logged in as the author of "Over the Limit"
+      And I am logged in as "sky"
       And I set my preferences to allow collection invitations
     When I am logged in as "moderator"
       And I invite the work "Over the Limit" to the collection "Favorites"
     Then I should see "This work has been invited to your collection (Favorites)."
-    When I am logged in as the author of "Over the Limit"
-      And I accept the invitation for my work in the collection "Favorites"
+    When I am logged in as "sky"
+      And "sky" accepts the invitation for their work in the collection "Favorites"
       And I submit
     Then I should see "Collection status updated!"
       And I should not see "Over the Limit"

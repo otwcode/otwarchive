@@ -29,7 +29,7 @@ class Mute < ApplicationRecord
   end
 
   def muted_byline=(byline)
-    pseuds = Pseud.parse_byline(byline, assume_matching_login: true)
-    self.muted = pseuds.first.user unless pseuds.empty?
+    pseud = Pseud.parse_byline(byline)
+    self.muted = pseud.user unless pseud.nil?
   end
 end

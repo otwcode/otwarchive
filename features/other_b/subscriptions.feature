@@ -57,10 +57,10 @@
   When I am logged in as "second_user"
     And I go to first_user's user page
     And I press "Subscribe"
-  When I go to my subscriptions page
+  When I go to the subscriptions page for "second_user"
     And I press "Unsubscribe from first_user"
   Then I should see "successfully unsubscribed"
-    And I should be on my subscriptions page
+    And I should be on the subscriptions page for "second_user"
 
   Scenario: subscribe button on profile page
 
@@ -138,11 +138,13 @@
     And "second_user" subscribes to author "third_user"
     And "second_user" subscribes to work "Awesome Story"
     And "second_user" subscribes to series "Awesome Series"
-  When I am on my subscriptions page
+  When I go to the subscriptions page for "second_user"
   Then I should see "My Subscriptions"
     And I should see "Awesome Series (Series)"
+    And I should see a link "series_author"
     And I should see "third_user"
     And I should see "Awesome Story (Work)"
+    And I should see a link "wip_author"
   When I follow "Series Subscriptions"
   Then I should see "My Series Subscriptions"
     And I should see "Awesome Series"
@@ -237,12 +239,84 @@
     And the email should contain "Anonymous"
     And the email should not contain "creator"
 
+    Scenario: When new chapter for a hidden work is posted, no subscription notifications are sent
+
+      Given I am logged in as "violator"
+        And I post the work "TOS Violation" as part of a series "Dont Be So Series"
+        And "author_subscriber" subscribes to author "violator"
+        And "work_subscriber" subscribes to work "TOS Violation"
+        And "series_subscriber" subscribes to series "Dont Be So Series"
+      When I am logged in as a "policy_and_abuse" admin
+        And I hide the work "TOS Violation"
+        And a chapter is added to "TOS Violation"
+        And subscription notifications are sent
+      Then "author_subscriber" should not be emailed
+        And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
+      When I am logged in as a "policy_and_abuse" admin
+        And I unhide the work "TOS Violation"
+        And subscription notifications are sent
+      Then "author_subscriber" should not be emailed
+        And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
+      When a chapter is added to "TOS Violation"
+        And subscription notifications are sent
+      Then "author_subscriber" should be emailed
+        And "work_subscriber" should be emailed
+        And "series_subscriber" should be emailed
+
+    Scenario: When a hidden work is unrevealed, no subscription notifications are sent
+
+      Given I am logged in as "violator"
+        And I post the work "TOS Violation" as part of a series "Dont Be So Series"
+        And "author_subscriber" subscribes to author "violator"
+        And "work_subscriber" subscribes to work "TOS Violation"
+        And "series_subscriber" subscribes to series "Dont Be So Series"
+        And I have the hidden collection "Secret"
+        And I am logged in as "violator"
+        And I edit the work "TOS Violation" to be in the collection "Secret"
+        And I am logged in as a "policy_and_abuse" admin
+        And I hide the work "TOS Violation"
+      When I am logged in as "moderator"
+        And I go to "Secret" collection's page
+        And I follow "Collection Settings"
+        And I uncheck "This collection is unrevealed"
+        And I press "Update"
+        And subscription notifications are sent
+      Then "author_subscriber" should not be emailed
+        And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
+      When I am logged in as a "policy_and_abuse" admin
+        And I unhide the work "TOS Violation"
+        And subscription notifications are sent
+      Then "author_subscriber" should not be emailed
+        And "work_subscriber" should not be emailed
+        And "series_subscriber" should not be emailed
+
+    Scenario: Translated subscription email
+
+      Given a locale with translated emails
+        And the user "anna" exists and is activated
+        And the user "anna" enables translated emails
+        And "anna" subscribes to author "creator"
+        And "arthur" subscribes to author "creator"
+      When I am logged in as "creator"
+        And I post the work "great thing"
+        And subscription notifications are sent
+      Then 1 email should be delivered to "anna"
+        And the email should have "creator posted great thing" in the subject
+        And the email to "anna" should be translated
+        And the email to "anna" should contain "Fändom"
+        And the email to "anna" should not contain "Fandom"
+        And 1 email should be delivered to "arthur"
+        And the email should have "creator posted great thing" in the subject
+        And the email to "arthur" should be non-translated
+        And the email to "arthur" should not contain "Fändom"
+        And the email to "arthur" should contain "Fandom"
+
   Scenario: subscribe to an individual work with an the & and < and > characters in the title
 
-  Given I have loaded the fixtures
-    And the following activated users exist
-    | login          | password   | email           |
-    | subscriber     | password   | subscriber@foo.com |
+  Given the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies" by "testuser2"
   When I am logged in as "subscriber" with password "password"
     And I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When I press "Subscribe"
@@ -251,11 +325,67 @@
     And a chapter is added to "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When subscription notifications are sent
-  Then 1 email should be delivered to "subscriber@foo.com"
+  Then 1 email should be delivered to "subscriber"
   When "The problem with ampersands and angle brackets in email bodies and subjects" is fixed
     #And the email should have "I am <strong>er Than Yesterday & Other Lies" in the subject
     #And the email should contain "I am <strong>er Than Yesterday & Other Lies"
   When I am logged in as "subscriber" with password "password"
-    And I go to my subscriptions page
+    And I go to the subscriptions page for "subscriber"
     And I press "Unsubscribe from I am <strong>er Than Yesterday & Other Lies"
   Then I should see "You have successfully unsubscribed from I am <strong>er Than Yesterday & Other Lies"
+
+Scenario: delete all subscriptions
+
+  When I am logged in as "second_user"
+    And "second_user" subscribes to author "third_user"
+    And "second_user" subscribes to work "Awesome Story"
+    And "second_user" subscribes to series "Awesome Series"
+  When I go to the subscriptions page for "second_user"
+  Then I should see "My Subscriptions"
+    And I should see "Awesome Series (Series)"
+    And I should see "third_user"
+    And I should see "Awesome Story (Work)"
+  When I follow "Delete All Subscriptions"
+  Then I should see "Are you sure you want to delete"
+  When I press "Yes, Delete All Subscriptions"
+  Then I should see "My Subscriptions"
+    And I should see "Your subscriptions have been deleted"
+    And I should not see "Awesome Series (Series)"
+    And I should not see "third_user"
+    And I should not see "Awesome Story (Work)"
+
+Scenario: delete all subscriptions of a specific type
+
+  When I am logged in as "second_user"
+    And "second_user" subscribes to author "third_user"
+    And "second_user" subscribes to work "Awesome Story"
+    And "second_user" subscribes to series "Awesome Series"
+  When I go to the subscriptions page for "second_user"
+  Then I should see "My Subscriptions"
+    And I should see "Awesome Series (Series)"
+    And I should see "third_user"
+    And I should see "Awesome Story (Work)"
+  When I follow "Work Subscriptions"
+  Then I should see "My Work Subscriptions"
+  When I follow "Delete All Work Subscriptions"
+  Then I should see "Delete All Work Subscriptions"
+    And I should see "Are you sure you want to delete"
+  When I press "Yes, Delete All Work Subscriptions"
+  Then I should see "Your subscriptions have been deleted"
+  When I go to the subscriptions page for "second_user"
+  Then I should see "Awesome Series (Series)"
+    And I should see "third_user"
+    But I should not see "Awesome Story (Work)"
+
+Scenario: subscriptions are not deleted without confirmation
+
+  When I am logged in as "second_user"
+    And "second_user" subscribes to work "Awesome Story"
+  When I go to the subscriptions page for "second_user"
+  Then I should see "My Subscriptions"
+    And I should see "Awesome Story (Work)"
+  When I follow "Delete All Subscriptions"
+  Then I should see "Are you sure you want to delete"
+  When I go to the subscriptions page for "second_user"
+  Then I should see "My Subscriptions"
+    And I should see "Awesome Story (Work)"

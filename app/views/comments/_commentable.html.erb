@@ -1,15 +1,17 @@
 <!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
-<div id="feedback" class="feedback" role="complementary">
+<div id="feedback" class="feedback">
 
   <h3 class="landmark heading"><%= ts("Actions") %></h3>
 
-  <ul class="actions" role="navigation">
+  <ul class="actions">
     <% if @work || @admin_post %>
       <li><%= link_to '&#8593; '.html_safe + ts('Top'), "#main" %></li>
     <% end %>
 
     <% if @work && @previous_chapter %>
-      <li><%= link_to '&#8592;'.html_safe + ts('Previous Chapter'), [@work, @previous_chapter, :anchor => "workskin"] %></li>
+      <li>
+        <%= link_to t(".previous_chapter_html", back_arrow_html: "&#8592;".html_safe), [@work, @previous_chapter, { anchor: "workskin" }] %>
+      </li>
     <% end %>
 
     <% if @work && @next_chapter %>
@@ -28,7 +30,7 @@
       <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
     <% end %>
 
-    <% if @work && !is_author_of?(@work) %>
+    <% if @work && !is_author_of?(@work) && !blocked_by?(@work) && !logged_in_as_admin? %>
       <li>
         <%= form_for(:kudo, url: kudos_path, html: { method: 'post', id: 'new_kudo' }) do |kudo_form| %>
           <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
@@ -37,9 +39,13 @@
         <% end %>
       </li>
     <% end %>
-    <% if @work && is_maintainer? && @work.allow_collection_invitation? %>
+    <% if @work && is_maintainer? %>
       <li>
-        <%= link_to t(".invite_to_collections_link"), "#collection-form", :class => "collection_item_form_placement_open" %>
+        <% if current_user.archivist %>
+          <%= link_to t(".add_to_collections_link"), "#collection-form", class: "collection_item_form_placement_open" %>
+        <% elsif @work.allow_collection_invitation? %>
+          <%= link_to t(".invite_to_collections_link"), "#collection-form", class: "collection_item_form_placement_open" %>
+        <% end %>
       </li>
     <% end %>
 
@@ -53,7 +59,7 @@
 
     <% if logged_in? && @work && marked_for_later?(@work) %>
       <li>
-        <%= mark_as_read_link(@work) %>
+        <%= mark_as_read_button(@work) %>
       </li>
     <% end %>
 
@@ -75,7 +81,11 @@
   <%= flash_div :comment_error, :comment_notice %>
 
   <% commentable_parent = find_parent(commentable) %>
-  <% if commentable_parent.is_a?(AdminPost) && commentable_parent.disable_all_comments? %>
+  <% if AdminSetting.current.guest_comments_off? && guest? %>
+    <p class="notice">
+      <%= t(".guest_comments_disabled") %>
+    </p>
+  <% elsif commentable_parent.is_a?(AdminPost) && commentable_parent.disable_all_comments? %>
     <p class="notice">
       <%= t(".permissions.admin_post.disable_all") %>
     </p>
@@ -105,6 +115,10 @@
     <p class="notice">
       <%= t(".blocked") %>
     </p>
+  <% elsif logged_in_as_admin? %>
+    <p class="notice">
+      <%= t(".logged_as_admin") %>
+    </p>
   <% else %>
     <div id="add_comment_placeholder" title="top level comment">
       <div id="add_comment">
@@ -126,7 +140,7 @@
   </div>
 
   <% if logged_in? && @work %>
-    <% if is_maintainer? && @work.allow_collection_invitation? %>
+    <% if is_maintainer? && (@work.allow_collection_invitation? || current_user.archivist) %>
       <div id="collection_item_form_placement" class="wrapper toggled">
         <%= render "collection_items/collection_item_form", :item => @work, :in_page => true %>
       </div>

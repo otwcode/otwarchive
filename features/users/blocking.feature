@@ -2,7 +2,7 @@ Feature: Blocking
   Scenario: Users can block from my blocked users page
     Given the user "pest" exists and is activated
       And I am logged in as "blocker"
-    When I go to my blocked users page
+    When I go to the blocked users page for "blocker"
       And I fill in "blocked_id" with "pest"
       And I press "Block"
       And I press "Yes, Block User"
@@ -17,6 +17,7 @@ Feature: Blocking
       And I press "Yes, Block User"
     Then I should see "You have blocked the user pest."
       And the user "blocker" should have a block for "pest"
+      And the blurb should not say when "blocker" blocked "pest"
 
     Examples:
       | page                                                 |
@@ -47,7 +48,7 @@ Feature: Blocking
       And I am logged in as "pest"
     When I go to pest's user page
     Then I should not see a link "Block"
-    When I go to my blocked users page
+    When I go to the blocked users page for "pest"
       And I fill in "blocked_id" with "pest"
       And I press "Block"
     Then I should see "Sorry, you can't block yourself."
@@ -56,7 +57,7 @@ Feature: Blocking
   Scenario: Users can unblock from the blocked users page
     Given the user "unblocker" has blocked the user "improving"
       And I am logged in as "unblocker"
-    When I go to my blocked users page
+    When I go to the blocked users page for "unblocker"
       And I follow "Unblock"
       And I press "Yes, Unblock User"
     Then I should see "You have unblocked the user improving."
@@ -95,7 +96,7 @@ Feature: Blocking
       And the user "blocker" has blocked the user "pest3"
       And the user "blocker" has blocked the user "pest4"
     When I am logged in as "blocker"
-      And I go to my blocked users page
+      And I go to the blocked users page for "blocker"
     Then I should see "pest4" within "ul.pseud li:nth-child(1)"
       And I should see "pest3" within "ul.pseud li:nth-child(2)"
       And I should not see "pest2"
@@ -109,6 +110,7 @@ Feature: Blocking
     When I am logged in as a "<role>" admin
       And I go to the blocked users page for "blocker"
     Then I should see "pest"
+      And the blurb should say when "blocker" blocked "pest"
       And I should see a link "Unblock"
     When I follow "Unblock"
     Then I should see "Sorry, you don't have permission to access the page you were trying to reach."
@@ -119,3 +121,17 @@ Feature: Blocking
       | superadmin       |
       | policy_and_abuse |
       | support          |
+
+  Scenario: Users are told about blocking effects on gift-giving
+    Given the user "pest" exists and is activated
+      And I am logged in as "blocker"
+    When I go to the blocked users page for "blocker"
+    Then I should see "giving you gift works"
+    Given the user "unblocker" has blocked the user "improving"
+      And I am logged in as "unblocker"
+    When I go to the blocked users page for "unblocker"
+    Then I should see "improving"
+      And I should see "giving you gift works"
+    When I follow "Unblock"
+    Then I should see a "Yes, Unblock User" button
+      And I should see "giving you gift works"

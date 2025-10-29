@@ -1,11 +1,11 @@
 <% content_for :message do %>
-<%= t("mailer.general.greeting.formal", name: @user.login) %>
+<%= t("mailer.general.greeting.formal.addressed_html", name: @user.login) %>
 
-<%= t('.text.part1', title: @work.title) %>
+<%= t(".deleted.text", title: @work.title) %>
 
-<%= t('.text.part2', opendoors_link: 'http://opendoors.transformativeworks.org/contact-open-doors/') %>
+<%= t(".import_project.text", opendoors_link: "https://opendoors.transformativeworks.org/contact-open-doors/") %>
 
-<%= t(".text.tos_violation", contact_abuse_url: new_abuse_report_url) %>
+<%= t(".tos_violation.text", contact_abuse_url: new_abuse_report_url) %>
 
-<%= t '.bye' %>
+<%= t(".bye") %>
 <% end %>

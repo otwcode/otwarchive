@@ -1,5 +1,4 @@
 class ExternalWork < ApplicationRecord
-  include UrlHelpers
   include Bookmarkable
   include Filterable
   include Searchable
@@ -40,9 +39,12 @@ class ExternalWork < ApplicationRecord
   #validates_presence_of :fandoms
 
   before_validation :cleanup_url
+  # i18n-tasks-use t("errors.attributes.url.invalid")
   validates :url, presence: true, url_format: true, url_active: true
   def cleanup_url
-    self.url = reformat_url(self.url) if self.url
+    self.url = Addressable::URI.heuristic_parse(self.url) if self.url
+  rescue Addressable::URI::InvalidURIError
+    # url_format validation creates the error message
   end
 
   # Allow encoded characters to display correctly in titles
@@ -77,7 +79,7 @@ class ExternalWork < ApplicationRecord
 
   # Visibility has changed, which means we need to reindex
   # the external work's bookmarker pseuds, to update their bookmark counts.
-  def should_reindex_pseuds?
+  def should_update_pseud_and_collection_indexes?
     pertinent_attributes = %w[id hidden_by_admin]
     destroyed? || (saved_changes.keys & pertinent_attributes).present?
   end

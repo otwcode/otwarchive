@@ -1,5 +1,5 @@
-/*==ACTIONS: buttons!
-http://otwcode.github.com/docs/front_end_coding/patterns/actions
+/* == ACTIONS: buttons!
+https://otwcode.github.io/docs/patterns/actions.html
 subtypes:
 .action, .navigation, .sorting, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
 input[type="submit"], button
@@ -20,10 +20,11 @@ ul.actions {
   padding-top: 0;
 }
 
-.actions a, .actions a:link, .action, .action:link, .actions input, input[type="submit"], button, .current, .actions label {
+.actions a, .actions a:link, .action, .action:link, .actions button, .actions input, input[type="submit"], button, .current, .actions label {
   background: #eee;
   color: #444;
   width: auto;
+  font-weight: 400;
   font-size: 100%;
   line-height: 1.286;
   height: 1.286em;
@@ -46,7 +47,7 @@ ul.actions {
 }
 
 button {
-  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
   box-sizing: content-box;
 }
 
@@ -63,15 +64,18 @@ p.submit, input.submit, dd.submit {
   text-align: right;
 }
 
-
 .actions input[type="checkbox"] {
   background: transparent;
   border: none;
   padding: 0;
 }
 
-/*subtypes and modes
-test note: this pagination clear needs to be kept an eye on*/
+.actions li select, .actions li label input[type="checkbox"] {
+   margin: 0;
+ }
+
+/* subtypes and modes
+test note: this pagination clear needs to be kept an eye on */
 
 ol.pagination, div.pagination, ol.year {
   text-align: center;
@@ -83,7 +87,7 @@ ol.pagination, div.pagination, ol.year {
   color: #111;
 }
 
-.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
+.actions a:hover, .actions button:hover, .actions input:hover, .actions a:focus, .actions button:focus, .actions input:focus, label.action:hover, .action:hover, .action:focus {
   color: #900;
   border-top: 1px solid #999;
   border-left: 1px solid #999;
@@ -101,7 +105,13 @@ ol.pagination, div.pagination, ol.year {
   background: #ccc;
 }
 
-.actions li a, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
+.actions .disabled select {
+   background: transparent;
+   color: #111;
+   border-color: #aaa;
+ }
+
+.actions li a, .actions li button, .actions li input, .actions li input[type="submit"], .actions li .current, .actions li label {
   margin: 0.375em auto;
 }
 
@@ -130,6 +140,10 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
     opacity: 0;
 }
 
+h2.landmark {
+  display: block;
+}
+
 .secondary {
   background: #fff;
   position: absolute;
@@ -151,15 +165,20 @@ legend .action:link {
 
 .heading .actions, .heading .action, .heading span.actions {
   height: auto;
-  font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
   padding: 0.15em 0.375em;
+}
+
+.heading .actions button {
+  padding: 0.25em 0.75em;
+  margin-left: 0.25em;
 }
 
 th .actions, td .actions {
   float: none;
 }
 
-dl.stats + .landmark + .actions {
+dl.stats + .landmark + .actions, .mystery .summary + .landmark + .actions {
   clear: none;
   float: left;
   margin: 0 auto;
@@ -167,10 +186,6 @@ dl.stats + .landmark + .actions {
 
 .actions .secondary .submit, .nomination .actions {
   float: none;
-}
-
-.chapter .secondary, .download .secondary {
-  top: 3.5em;
 }
 
 .dashboard .landmark {
@@ -204,4 +219,74 @@ dl.index p.actions {
   margin: 0;
 }
 
-/*END== */
+/* context: work navigation actions with secondary navigation */
+
+.work.navigation .download {
+  display: block;
+  margin-block-start: 0;
+  padding: 0.375em 0 0.643em;
+}
+
+.work.navigation .download .secondary {
+  position: static;
+}
+
+/* The next two rule sets move the default .secondary style to the secondary's
+parent when JavaScript is disabled and put it back when it's enabled. */
+.work.navigation .download, .javascript .work.navigation .download .secondary {
+  background: #fff;
+  border: 2px solid #bbb;
+    box-shadow: 2px 2px 5px #bbb;
+}
+
+.work.navigation .download .secondary, .javascript .work.navigation .download {
+  background: transparent;
+  border: none;
+    box-shadow: none;
+}
+
+/* TODO: Update to .javascript .work.navigation :has(.secondary) once support
+for :has() increases to 95% according to caniuse.com. */
+.javascript .work.navigation .chapter, .javascript .work.navigation .download {
+  position: relative;
+}
+
+.javascript .work.navigation .download {
+  display: inline;
+  padding: 0 0 0 0.25em;
+}
+
+.javascript .work.navigation .secondary {
+  position: absolute;
+  right: 0;
+    align-items: center;
+    gap: 0 0.643em;
+    justify-content: space-evenly;
+}
+
+/* If we use display without the .expanded qualifier, it will override .hidden's
+display: none and secondary will always be open. */
+.javascript .work.navigation .expanded + .secondary {
+    display: flex;
+}
+
+.javascript .work.navigation .download .secondary {
+    gap: 0.25em;
+}
+
+.javascript .work.navigation .secondary li {
+  margin-block: 0;
+}
+
+.javascript .work.navigation .secondary p {
+  padding: 0;
+    align-items: center;
+    display: flex;
+    gap: 0 0.25em;
+}
+
+.javascript .work.navigation .secondary .actions {
+  padding: 0;
+}
+
+/* END== */

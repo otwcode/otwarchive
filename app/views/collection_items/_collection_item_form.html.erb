@@ -3,7 +3,13 @@
 <% in_page ||= false %>
 <div id="collection-form">
   <% if item.is_a?(Work) %>
-    <h3 class="heading"><%= t(".invite_header_html", title: item.title) %></h3>
+    <h3 class="heading">
+      <% if current_user.archivist %>
+        <%= t(".add_work_header_html", title: item.title) %>
+      <% else %>
+        <%= t(".invite_header_html", title: item.title) %>
+      <% end %>
+    </h3>
   <% else %>
     <h3 class="heading"><%= t(".add_bookmark_header") %></h3>
   <% end %>
@@ -20,7 +26,7 @@
     </dd>
     <dt class="landmark"><%= ts("Submit") %></dt>
     <dd class="submit actions">
-      <% if item.is_a?(Work) %>
+      <% if item.is_a?(Work) && !current_user.archivist %>
         <%= form.submit(t(".invite")) %>
       <% else %>
         <%= form.submit(t(".add")) %>

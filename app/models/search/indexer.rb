@@ -6,7 +6,9 @@ class Indexer
     Tag: %w[TagIndexer],
     Pseud: %w[PseudIndexer],
     Series: %w[BookmarkedSeriesIndexer],
-    ExternalWork: %w[BookmarkedExternalWorkIndexer]
+    ExternalWork: %w[BookmarkedExternalWorkIndexer],
+    User: %w[UserIndexer],
+    Collection: %w[CollectionIndexer]
   }.freeze
 
   delegate :klass, :klass_with_includes, :index_name, :document_type, to: :class
@@ -29,8 +31,10 @@ class Indexer
       BookmarkedSeriesIndexer,
       BookmarkedWorkIndexer,
       BookmarkIndexer,
+      CollectionIndexer,
       PseudIndexer,
       TagIndexer,
+      UserIndexer,
       WorkIndexer,
       WorkCreatorIndexer
     ]
@@ -131,7 +135,6 @@ class Indexer
 
   # Add conditions here
   def self.indexables
-    Rails.logger.info "Blueshirt: Logging use of constantize class self.indexables #{klass}"
     klass.constantize
   end
 

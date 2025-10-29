@@ -29,10 +29,16 @@ namespace :work do
   desc "Reset word counts for works in the specified language"
   task(:reset_word_counts, [:lang] => :environment) do |_t, args|
     language = Language.find_by(short: args.lang)
-    raise "Invalid language: '#{args.lang}'" if language.nil?
 
-    works = Work.where(language: language)
-    print "Resetting word count for #{works.count} '#{language.short}' works: "
+    updated_works = "ALL"
+    if language.nil?
+      works = Work.all
+    else
+      works = Work.where(language: language)
+      updated_works = language.short
+    end
+
+    print "Resetting word count for #{works.count} '#{updated_works}' works: "
 
     works.find_in_batches do |batch|
       batch.each do |work|
@@ -42,8 +48,34 @@ namespace :work do
         end
         work.save
       end
-      print(".") && STDOUT.flush
+      print(".") && $stdout.flush
     end
-    puts && STDOUT.flush
+    puts && $stdout.flush
+  end
+
+  # Usage: rake work:reset_word_counts_before_date[YYYY-MM-DD]
+  desc "Reset word counts for all works created before specified date"
+  task(:reset_word_counts_before_date, [:date] => :environment) do |_t, args|
+    if args.date.nil?
+      puts "Please enter a date. Use format YYYY-MM-DD."
+      exit 1
+    end
+
+    cutoff_date = Date.parse(args.date)
+    works = Work.where("created_at < ?", cutoff_date)
+
+    print "Resetting word count for #{works.count} works created before #{cutoff_date}: "
+
+    works.find_in_batches do |batch|
+      batch.each do |work|
+        work.chapters.each do |chapter|
+          chapter.content_will_change!
+          chapter.save
+        end
+        work.save
+      end
+      print(".") && $stdout.flush
+    end
+    puts && $stdout.flush
   end
 end

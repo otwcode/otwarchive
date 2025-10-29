@@ -1,0 +1,20 @@
+<!--Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= t(".page_heading") %></h2>
+<!--/descriptions-->
+
+<!--subnav-->
+<h3 class="landmark heading"><%= t("a11y.navigation") %></h3>
+<%= render "tos_navigation" %>
+<!--/subnav-->
+
+<!--main content-->
+<h3 class="landmark heading"><%= t(".page_content_landmark") %></h3>
+<div id="content" class="userstuff">
+  <%= render "content" %>
+</div>
+<!--/content-->
+
+<!--subnav-->
+<h3 class="landmark heading"><%= t("a11y.navigation") %></h3>
+<%= render "tos_navigation", top_link: true %>
+<!--/subnav-->

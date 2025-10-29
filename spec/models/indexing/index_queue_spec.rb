@@ -29,7 +29,7 @@ describe IndexQueue do
     iq.add_id(1)
     iq.run
 
-    expect(IndexQueue::REDIS.exists("index:work:main")).to be_falsey
+    expect(IndexQueue::REDIS.exists?("index:work:main")).to be_falsey
   end
 
   describe "#run" do
@@ -67,7 +67,7 @@ describe IndexQueue do
 
     it "should call the stat counter indexer" do
       stats = create(:work).stat_counter
-      stats.update(hit_count: 10_000)
+      stats.update!(hit_count: 10_000)
       expect(StatCounterIndexer).to receive(:new).with(
         array_including(stats.id.to_s)
       ).at_least(:once).and_call_original

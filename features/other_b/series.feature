@@ -34,7 +34,7 @@ Feature: Create and Edit Series
     Then I should not see "Rainbow Dash"
     When I edit the work "Rainbow Dash"
       And I select "Ponies" from "Choose one of your existing series:"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Part 2 of Ponies" within "div#series"
       And I should see "Part 2 of Ponies" within "dd.series"
     When I view the series "Ponies"
@@ -44,14 +44,21 @@ Feature: Create and Edit Series
   Scenario: Works in a series have series navigation
     Given I am logged in as "author"
       And I post the work "Sweetie Belle" as part of a series "Ponies"
+      And it is currently 1 second from now
       And I post the work "Starsong" as part of a series "Ponies"
+      And it is currently 1 second from now
       And I post the work "Rainbow Dash" as part of a series "Ponies"
     When I view the series "Ponies"
       And I follow "Rainbow Dash"
     Then I should see "Part 3 of Ponies"
+      And I should not see "Next Work →"
     When I follow "← Previous Work"
     Then I should see "Starsong"
+      And I should see "Next Work →" within ".work.meta .next"
+      And I should see "Next Work →" within ".afterword .next"
     When I follow "← Previous Work"
+      And I should see "Next Work →" within ".work.meta .next"
+      And I should see "Next Work →" within ".afterword .next"
     Then I should see "Sweetie Belle"
     When I follow "Next Work →"
     Then I should see "Starsong"
@@ -93,7 +100,7 @@ Feature: Create and Edit Series
 
   Scenario: Creator with multiple pseuds adds a work to a new series when the work is first posted
     Given I am logged in as "author"
-      And I add the pseud "Pointless Pseud"
+      And "author" creates the pseud "Pointless Pseud"
       And I set up the draft "Sweetie Belle" using the pseud "Pointless Pseud"
     When I fill in "Or create and use a new one:" with "Ponies"
       And I press "Post"
@@ -105,7 +112,7 @@ Feature: Create and Edit Series
 
   Scenario: Creator with multiple pseuds adds a work to an existing series when the work is first posted
     Given I am logged in as "author"
-      And I add the pseud "Pointless Pseud"
+      And "author" creates the pseud "Pointless Pseud"
       And I post the work "Sweetie Belle" as part of a series "Ponies" using the pseud "Pointless Pseud"
     When I set up the draft "Starsong" as part of a series "Ponies" using the pseud "Pointless Pseud"
       And I press "Post"
@@ -117,14 +124,14 @@ Feature: Create and Edit Series
 
   Scenario: Creator with multiple pseuds adds a work to an existing series by editing the work
     Given I am logged in as "author"
-      And I add the pseud "Pointless Pseud"
+      And "author" creates the pseud "Pointless Pseud"
       And I post the work "Sweetie Belle" as part of a series "Ponies" using the pseud "Pointless Pseud"
       And I post the work "Rainbow Dash" using the pseud "Pointless Pseud"
     When I view the series "Ponies"
     Then I should not see "Rainbow Dash"
     When I edit the work "Rainbow Dash"
       And I select "Ponies" from "Choose one of your existing series:"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Part 2 of Ponies" within "div#series"
       And I should see "Part 2 of Ponies" within "dd.series"
     When I view the series "Ponies"
@@ -133,11 +140,11 @@ Feature: Create and Edit Series
 
   Scenario: A pseud's series page contains the pseud in the page title
     Given I am logged in as "author"
-      And I add the pseud "Pointless Pseud"
+      And "author" creates the pseud "Pointless Pseud"
       And I post the work "Sweetie Belle" as part of a series "Ponies" using the pseud "Pointless Pseud"
     When I follow "Pointless Pseud"
       And I follow "Series (1)"
-    Then the page title should include "by Pointless Pseud"
+    Then the page title should include "Pointless Pseud - Series"
 
   Scenario: Rename a series
     Given I am logged in as a random user
@@ -152,7 +159,7 @@ Feature: Create and Edit Series
     Then I should see "Series was successfully updated."
       And I should see "Many a Robot"
     # Work blurbs should be updated.
-    When I go to my user page
+    When I follow "My Dashboard"
     Then I should see "Part 1 of Many a Robot" within "#user-works"
     # Work metas should be updated.
     When I view the work "WALL-E"
@@ -180,6 +187,22 @@ Feature: Create and Edit Series
     When I follow "Next"
     Then I should see "penguins0"
 
+  Scenario: Series show page with many works
+    Given I am logged in as "author"
+      And I post the work "Caesar" as part of a series "Salads"
+      And I post the work "Chicken" as part of a series "Salads"
+      And I post the work "Pasta" as part of a series "Salads"
+      And I post the work "Spring" as part of a series "Salads"
+      And I post the work "Chef" as part of a series "Salads"
+      And there are 3 works per series page
+    When I view the series "Salads"
+    Then I should see "Caesar"
+      And I should see "Chicken"
+      And I should see "Pasta"
+    When I follow "Next"
+    Then I should see "Spring"
+      And I should see "Chef"
+
   Scenario: Removing self as co-creator from co-created series when you are the only creator of a work in the series.
     Given I am logged in as "sun"
       And the user "moon" allows co-creators
@@ -193,7 +216,7 @@ Feature: Create and Edit Series
     When the user "moon" accepts all co-creator requests
     Then "moon" should be a creator of the series "Ponies"
     When I view the series "Ponies"
-      And I follow "Remove Me As Co-Creator"
+      And I press "Remove Me As Co-Creator"
     Then I should see "Sorry, we can't remove all creators of a work."
 
   Scenario: Removing self as co-creator from co-created series
@@ -203,15 +226,17 @@ Feature: Create and Edit Series
       And I coauthored the work "Sweetie Bell" as "moon" with "son"
       And I edit the work "Sweetie Bell"
       And I fill in "work_series_attributes_title" with "Ponies"
-      And I post the work
+      And I update the work
     Then I should see "Work was successfully updated."
       And "moon" should be a creator of the series "Ponies"
       And "son" should be a creator on the series "Ponies"
-    When I follow "Remove Me As Co-Creator"
+      # Delay to make sure the cache is expired
+      And it is currently 1 second from now
+    When I press "Remove Me As Co-Creator"
     Then I should see "You have been removed as a creator from the series and its works."
       And "moon" should not be the creator of the series "Ponies"
       And "son" should be a creator on the series "Ponies"
-    When I go to my works page
+    When I go to moon's works page
     Then I should not see "Sweetie Bell"
 
   Scenario: Delete a series
@@ -224,7 +249,7 @@ Feature: Create and Edit Series
 
   Scenario: A work's series information is visible and up to date when previewing the work while posting or editing
     Given I am logged in as "author"
-      And I add the pseud "Pointless Pseud"
+      And "author" creates the pseud "Pointless Pseud"
       And I set up the draft "Sweetie Belle" as part of a series "Ponies"
     When I press "Preview"
     Then I should see "Part 1 of Ponies"

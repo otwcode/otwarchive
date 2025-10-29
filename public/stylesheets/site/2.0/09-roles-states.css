@@ -1,5 +1,5 @@
-/*==ROLES AND STATES
-http://otwcode.github.com/docs/front_end_coding/patterns/modifiers
+/* == ROLES AND STATES
+https://otwcode.github.io/docs/classes-taxonomy.html#modifiers
 */
 
 .own, .draft, .draft .wrapper, .unread, .child, .unwrangled, .unreviewed {
@@ -13,13 +13,13 @@ http://otwcode.github.com/docs/front_end_coding/patterns/modifiers
     border-radius: 0.5em;
 }
 
-/*(these states spoof the ".navigation .current" style)*/
+/* (these states spoof the ".navigation .current" style) */
 
 span.unread, .replied, span.claimed, .actions span.defaulted {
   background: #ccc;
   color: #900;
   width: auto;
-  font: 100 100%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  font: 100 100%/1.286 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
   height: 1.286em;
   vertical-align: middle;
   display: inline-block;
@@ -75,7 +75,7 @@ span.offered.requested {
   content: " \2191";
 }
 
-/*This is a helper for Back End and can be overridden contextually anywhere*/
+/* This is a helper for Back End and can be overridden contextually anywhere */
 
 .commas li:after {
   content: ", ";
@@ -96,4 +96,4 @@ span.offered.requested {
     opacity: 1.0;
 }
 
-/*END== */
+/* END == */

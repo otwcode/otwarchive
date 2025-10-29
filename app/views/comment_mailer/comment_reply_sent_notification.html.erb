@@ -1,0 +1,18 @@
+<% content_for :message do %>
+
+  <%# i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.chapter.titled") %>
+  <%# i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.chapter.untitled") %>
+  <%# i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.chapter.html") %>
+  <%# i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.other.html") %>
+  <%# i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.tag.html") %>
+  <%= content_for_commentable_html(@comment) %>
+
+  <p><%= t(".commenter_wrote.html", commenter_link: commenter_pseud_or_name_link(@parent_comment)) %></p>
+  <%= style_quote(raw(@parent_comment.sanitized_mailer_content)) %>
+
+  <p><%= t(".you_responded") %></p>
+  <%= style_quote(raw(@comment.sanitized_mailer_content)) %>
+
+  <%= render 'comment_notification_footer' %>
+
+<% end %>

@@ -15,8 +15,6 @@ Feature: Edit preferences
     And I go to scott's user page
     And I follow "Preferences"
   Then I should see "Set My Preferences"
-    And I should see "Show my email address to other people."
-    And I should see "Show my date of birth to other people."
     And I should see "Hide my work from search engines when possible."
     And I should see "Hide the share buttons on my work."
     And I should see "Show me adult content without checking."
@@ -31,6 +29,7 @@ Feature: Edit preferences
     And I should see "Turn off messages to your inbox about comments."
     And I should see "Turn off copies of your own comments."
     And I should see "Turn off emails about kudos."
+    And I should see "Do not allow guests to reply to my comments on news posts or other users' works (you can still control the comment settings for your works separately)."
     And I should see "Allow others to invite my works to collections."
     And I should see "Turn off emails from collections."
     And I should see "Turn off inbox messages from collections."
@@ -40,7 +39,7 @@ Feature: Edit preferences
     And I should see "Turn off the banner showing on every page."
 
 
-  Scenario: View and edit preferences for history, personal details, view entire work
+  Scenario: View and edit preferences for history, view entire work
 
   Given the following activated user exists
     | login         | password   |
@@ -50,16 +49,10 @@ Feature: Edit preferences
   Then I should not see "My email address"
     And I should not see "My birthday"
   When I am logged in as "editname" with password "password"
-  Then I should see "Hi, editname!"
-    And I should see "Log Out"
-  When I post the work "This has two chapters"
-  And I follow "Add Chapter"
-    And I fill in "content" with "Secondy chapter"
-    And I press "Preview"
-    And I press "Post"
-  Then I should see "Secondy chapter"
+    And I post the 2 chapter work "This has two chapters"
+  Then I should be on the 2nd chapter of the work "This has two chapters"
     And I follow "Previous Chapter"
-  Then I should not see "Secondy chapter"
+  Then I should be on the 1st chapter of the work "This has two chapters"
   When I follow "editname"
   Then I should see "Dashboard" within "div#dashboard"
     And I should see "History" within "div#dashboard"
@@ -67,7 +60,6 @@ Feature: Edit preferences
     And I should see "Profile" within "div#dashboard"
   When I follow "Preferences" within "div#dashboard"
   Then I should see "Set My Preferences"
-    And I should see "Orphan My Works"
   When I follow "Edit My Profile"
   Then I should see "Password"
   # TODO: figure out why pseud switcher doesn't show up in cukes
@@ -79,29 +71,18 @@ Feature: Edit preferences
   Then I should see "Edit My Profile"
   When I uncheck "Turn on History"
     And I check "Show the whole work by default."
-    And I check "Show my email address to other people."
-    And I check "Show my date of birth to other people."
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
   And I should not see "History" within "div#dashboard"
   When I go to the works page
     And I follow "This has two chapters"
-  Then I should see "Secondy chapter"
-  When I log out
-    And I go to editname's user page
-    And I follow "Profile"
-  Then I should see "My email address"
-    And I should see "My birthday"
-  When I go to the works page
-    And I follow "This has two chapters"
-  Then I should not see "Secondy chapter"
+  Then I should not see "Next Chapter"
 
   @javascript
   Scenario: User can hide warning and freeform tags and reveal them on a case-
   by-case basis.
 
-  Given I limit myself to the Archive
-    And a canonical freeform "Scary tag"
+  Given a canonical freeform "Scary tag"
     And I am logged in as "someone_else"
     And I post the work "Someone Else's Work" as part of a series "A Series"
     And I am logged in as "tester"
@@ -140,7 +121,7 @@ Feature: Edit preferences
   Then I should see "No Archive Warnings Apply" within "li.warnings"
   When I follow "No Archive Warnings Apply" within "li.warnings"
   Then I should be on the works tagged "No Archive Warnings Apply"
-  When I go to my works page
+  When I go to tester's works page
   Then I should see "My Work"
     And I should see "No Archive Warnings Apply" within "li.warnings"
     And I should not see "Show warnings"
@@ -162,7 +143,7 @@ Feature: Edit preferences
   # Warnings are hidden in bookmark blurbs.
   # This is slightly excessive -- bookmarks use the work blurb -- but we'll
   # check in case that ever changes.
-  When I go to my bookmarks page
+  When I go to tester's bookmarks page
   Then I should see "Someone Else's Work"
     And I should not see "No Archive Warnings Apply" within "li.warnings"
     And I should see "Show warnings"
@@ -174,7 +155,7 @@ Feature: Edit preferences
   Then I should be on the works tagged "No Archive Warnings Apply"
 
   # Change tester's preferences to hide freeforms as well as warnings.
-  When I go to my preferences page
+  When I follow "My Preferences"
     And I check "Hide additional tags"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
@@ -209,7 +190,7 @@ Feature: Edit preferences
     And I should not see "Scary tag" within "li.freeforms"
   When I follow "Show additional tags"
   Then I should see "Scary tag" within "li.freeforms"
-  When I go to my works page
+  When I go to tester's works page
   Then I should see "My Work"
     And I should see "No Archive Warnings Apply" within "li.warnings"
     And I should not see "Show warnings"
@@ -230,7 +211,7 @@ Feature: Edit preferences
   Then I should see "Scary tag" within "li.freeforms"
 
   # Freeforms and warnings are hidden in bookmark blurbs.
-  When I go to my bookmarks page
+  When I go to tester's bookmarks page
   Then I should see "Someone Else's Work"
     And I should not see "No Archive Warnings Apply" within "li.warnings"
     And I should see "Show warnings"
@@ -243,7 +224,7 @@ Feature: Edit preferences
   Then I should see "Scary tag" within "li.freeforms"
 
   # Change tester's preferences to show warnings but keep freeforms hidden.
-  When I go to my preferences page
+  When I follow "My Preferences"
     And I uncheck "Hide warnings"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
@@ -275,7 +256,7 @@ Feature: Edit preferences
   Then I should see "Scary tag" within "li.freeforms"
   When I follow "Scary tag" within "li.freeforms"
   Then I should be on the works tagged "Scary tag"
-  When I go to my works page
+  When I go to tester's works page
   Then I should see "My Work"
     And I should see "No Archive Warnings Apply" within "li.warnings"
     And I should not see "Show warnings"
@@ -295,7 +276,7 @@ Feature: Edit preferences
   Then I should be on the works tagged "Scary tag"
 
   # Freeforms are hidden in bookmark blurbs.
-  When I go to my bookmarks page
+  When I go to tester's bookmarks page
   Then I should see "Someone Else's Work"
     And I should see "No Archive Warnings Apply" within "li.warnings"
     And I should not see "Show warnings"
@@ -354,3 +335,37 @@ Feature: Edit preferences
     When I follow "Show warnings"
     Then I should see "Sorry, you need to have JavaScript enabled for this."
       And I should see "Show warnings"
+
+  Scenario Outline: Authorized admins can see the user's preferences page
+    Given a user exists with login: "scott"
+      And I am logged in as a "<role>" admin
+    When I go to scott's user page
+      And I follow "Preferences"
+    Then I should see "Set My Preferences"
+  
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
+
+  Scenario Outline: Unauthorized admins cannot see the user's preferences page or the link to it
+    Given a user exists with login: "scott"
+      And I am logged in as a "<role>" admin
+    When I go to scott's user page
+    Then I should not see "Preferences"
+    When I go to scott's preferences page
+    Then I should see "Sorry, only an authorized admin can access the page you were trying to reach."
+  
+    Examples:
+      | role                       |
+      | board                      |
+      | board_assistants_team      |
+      | communications             |
+      | development_and_membership |
+      | docs                       |
+      | elections                  |
+      | legal                      |
+      | translation                |
+      | tag_wrangling              |
+      | open_doors                 |

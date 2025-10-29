@@ -2,11 +2,11 @@ class AdminPost < ApplicationRecord
   self.per_page = 8 # option for WillPaginate
 
   acts_as_commentable
-  enum comment_permissions: {
+  enum :comment_permissions, {
     enable_all: 0,
     disable_anon: 1,
     disable_all: 2
-  }, _suffix: :comments
+  }, default: :disable_anon, suffix: :comments
 
   belongs_to :language
   belongs_to :translated_post, class_name: "AdminPost"
@@ -77,6 +77,23 @@ class AdminPost < ApplicationRecord
     return unless translated_post.language == language
           
     errors.add(:translated_post_id, "cannot be same language as original post")
+  end
+
+  ####################
+  # DELAYED JOBS
+  ####################
+
+  include AsyncWithResque
+  @queue = :utilities
+
+  # Turns off comments for all posts that are older than the configured time period.
+  # If the configured period is nil or less than 1 day, no action is taken.
+  def self.disable_old_post_comments
+    return unless ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS&.positive?
+
+    where.not(comment_permissions: :disable_all)
+      .where(created_at: ..ArchiveConfig.ADMIN_POST_COMMENTING_EXPIRATION_DAYS.days.ago)
+      .update_all(comment_permissions: :disable_all)
   end
 
   private

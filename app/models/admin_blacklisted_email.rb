@@ -1,10 +1,15 @@
 class AdminBlacklistedEmail < ApplicationRecord
   before_validation :canonicalize_email
+  after_create :remove_invite_requests
 
-  validates :email, presence: true, uniqueness: true, email_veracity: true
+  validates :email, presence: true, uniqueness: { case_sensitive: false }, email_format: true
 
   def canonicalize_email
     self.email = AdminBlacklistedEmail.canonical_email(self.email) if self.email
+  end
+
+  def remove_invite_requests
+    InviteRequest.where(simplified_email: self.email).destroy_all
   end
 
   # Produces a canonical version of a given email reduced to its simplest form
@@ -28,6 +33,6 @@ class AdminBlacklistedEmail < ApplicationRecord
 
   # Check if an email is
   def self.is_blacklisted?(email_to_check)
-    AdminBlacklistedEmail.where(email: AdminBlacklistedEmail.canonical_email(email_to_check)).exists?
+    AdminBlacklistedEmail.exists?(email: AdminBlacklistedEmail.canonical_email(email_to_check))
   end
 end

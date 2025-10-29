@@ -1,9 +1,9 @@
 <% content_for :message do %>
-  <p><%= t("mailer.general.greeting.formal", name: style_bold(@user.login)).html_safe %></p>
+  <p><%= t("mailer.general.greeting.formal.addressed_html", name: style_bold(@user.login)) %></p>
 
   <p><%= t(".changed_status.#{@status}.html",
            collection_link: style_link(@collection.title, collection_url(@collection)),
-           work_link: style_creation_link(@work.title, work_url(@work))).html_safe %></p>
+           work_link: style_creation_link(@work.title, work_url(@work))) %></p>
 
   <% if @becoming_anonymous && @becoming_unrevealed %>
     <p><%= t(".unrevealed_info") %></p>
@@ -17,7 +17,7 @@
 
   <p><%= t(".do_not_want.#{@status}.html",
            collection_items_link: style_link(t(".collection_items_link_text"),
-                                             user_collection_items_url(@user, approved: true))) %></p>
+                                             user_collection_items_url(@user, status: "approved"))) %></p>
 
   <p><%= t(".more_info.html",
            faq_link: style_link(t(".faq_link_text"),

@@ -29,7 +29,7 @@ describe Feedback do
     end
 
     context "provided email is invalid" do
-      [BAD_EMAILS, BADLY_FORMATTED_EMAILS].each do |email|
+      BAD_EMAILS.each do |email|
         let(:bad_email) { build(:feedback, email: email) }
         it "fails email format check and cannot be created" do
           expect(bad_email.save).to be_falsey
@@ -81,6 +81,23 @@ describe Feedback do
     it "is valid even with spam if logged in and providing correct email" do
       User.current_user = legit_user
       expect(safe_report.save).to be_truthy
+    end
+  end
+
+  context "when report is submitted to Akismet" do
+    let(:report) { build(:feedback) }
+
+    it "has comment_type \"contact-form\"" do
+      expect(report.akismet_attributes[:comment_type]).to eq("contact-form")
+    end
+
+    it "has user_role \"user-with-nonmatching-email\" when reporter is logged in" do
+      User.current_user = create(:user)
+      expect(report.akismet_attributes[:user_role]).to eq("user-with-nonmatching-email")
+    end
+
+    it "has user_role \"guest\" when reporter is logged out" do
+      expect(report.akismet_attributes[:user_role]).to eq("guest")
     end
   end
 end

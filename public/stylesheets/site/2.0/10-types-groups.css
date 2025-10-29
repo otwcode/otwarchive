@@ -1,8 +1,9 @@
-/*==TYPES OF DATA, GROUPS OF DATA 
-http://otwcode.github.com/docs/front_end_coding/patterns/supertypes
+/* == TYPES OF DATA, GROUPS OF DATA
+https://otwcode.github.io/docs/stylesheets-views.html#types
+https://otwcode.github.io/docs/classes-taxonomy.html#types
 */
 
-/*TYPE: TAGS */
+/* TYPE: TAGS */
 
 a.tag {
   color: #111;
@@ -23,11 +24,19 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
   padding-right: 0.25em;
 }
 
-.filters .tags li, .review .tags {
+/* context: filters, tag sets */
+
+.filters .tags li, .review .tags, .tagset .listbox .tags li {
   display: block;
 }
 
-/*GROUP CLOUD */
+.tagset .listbox .tags li {
+  padding-right: 0;
+}
+
+/* GROUP CLOUD
+https://otwcode.github.io/docs/classes-taxonomy.html#travellers
+*/
 
 ul.cloud {
   margin: 2em auto;
@@ -83,7 +92,9 @@ a.cloud8 {
   font-weight: 800;
 }
 
-/* GROUPS: WRAPPER, MODULE, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)*/
+/* GROUPS: WRAPPER, MODULE, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)
+https://otwcode.github.io/docs/classes-taxonomy.html#grouping-and-spacing
+*/
 
 .wrapper {
     box-shadow: 1px 1px 5px #aaa;
@@ -108,7 +119,9 @@ a.cloud8 {
   width: 100%;
 }
 
-/*http://otwcode.github.com/docs/front_end_coding/patterns/pattern-index*/
+/*
+https://otwcode.github.io/docs/patterns/indexes.html
+*/
 
 dl.index {
   margin: 0.643em 0;
@@ -145,7 +158,7 @@ dl.index dd .userstuff p {
   display: block;
 }
 
-/*TYPES*/
+/* TYPES */
 
 a.rss span {
   background: url("/images/imageset.png") no-repeat -150px -275px;
@@ -190,10 +203,11 @@ span.series .position + .divider:after {
 }
 
 p.kudos {
-  background: url("/images/imageset.png") no-repeat -110px -580px;
+  background: url("/images/imageset.png") no-repeat -111px -580px;
   padding: 0.5em 0.5em 0.5em 60px;
   margin: 2em 0;
   min-height: 50px;
+    word-wrap: break-word;
 }
 
 .icon {
@@ -243,4 +257,4 @@ dl.stats dd {
   margin-right: 1.5em
 }
 
-/*END== */
+/* END == */

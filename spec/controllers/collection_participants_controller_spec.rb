@@ -12,9 +12,7 @@ describe CollectionParticipantsController do
     context "where user isn't logged in" do
       it "redirects to new user session with error" do
         get :join, params: { collection_id: collection.name }
-        it_redirects_to_with_error(new_user_session_path,
-                                   "Sorry, you don't have permission to access the page"\
-                                   " you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -84,7 +82,7 @@ describe CollectionParticipantsController do
     context "user is not logged in" do
       it "redirects to the index and displays an access denied message" do
         get :index, params: { collection_id: collection.name }
-        it_redirects_to_with_error(new_user_session_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -423,7 +421,7 @@ describe CollectionParticipantsController do
         it "doesn't approve the member, displays an error and redirects" do
           get :add, params: params
           it_redirects_to_with_error(collection_participants_path(collection),
-                                     "#{users.map(&:default_pseud).map(&:byline).to_sentence} is currently banned and cannot participate in challenges.")
+                                     "#{users.map(&:default_pseud).map(&:byline).to_sentence} cannot participate in challenges.")
           users.each do |user|
             expect(CollectionParticipant.where(pseud_id: user.default_pseud.id)).to be_empty
           end

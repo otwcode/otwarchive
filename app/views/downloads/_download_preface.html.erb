@@ -1,12 +1,11 @@
 <div id="preface">
-  <h2 class="toc-heading"><%= ts("Preface") %></h2>
+  <h2 class="toc-heading"><%= t(".preface") %></h2>
 
   <p class="message">
-    <b><%= @work.title.html_safe %></b><br/>
-    <%= ts("Posted originally on the %{archive_link} at %{work_url}.",
+    <b><%= @work.title %></b><br />
+    <%= t(".originally_posted_html",
           archive_link: link_to(ArchiveConfig.APP_NAME, root_url),
-          work_url: link_to(work_url(@work), work_url(@work))
-        ).html_safe %>
+          work_url: link_to(work_url(@work), work_url(@work))) %>
   </p>
 
   <div class="meta">
@@ -14,72 +13,76 @@
       <% Tag::VISIBLE.each do |type| %>
         <% tags = @work.tag_groups[type] %>
         <% unless tags.blank? %>
-          <dt><%= type.constantize::NAME %>:</dt>
-          <dd><%= tags.map {|t| link_to(t.name, tag_url(t))}.join(", ").html_safe %></dd>
+          <dt><%= t(".tag_type", tag_type: tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize) %></dt>
+          <dd><%= safe_join(tags.map { |t| link_to(t.display_name, tag_url(t)) }, t("support.array.words_connector")) %></dd>
         <% end %>
       <% end %>
 
       <% unless @work.language.blank? %>
-        <dt><%= ts("Language") %>:</dt>
+        <dt><%= t(".language") %></dt>
         <dd><%= @work.language.name %></dd>
       <% end %>
 
-      <% series_list = @work.serial_works.reject{ |sw| sw.series.nil? } %>
+      <% series_list = @work.serial_works.reject { |sw| sw.series.nil? } %>
       <% unless series_list.blank? %>
-        <dt><%= ts("Series") %>:</dt>
-        <dd><%= series_list.map {|s| "#{ts('Part')} #{s.position} #{ts('of')}
-#{link_to(s.series.title, series_url(s.series))}"}.join(", ").html_safe %></dd>
+        <dt><%= t(".series") %></dt>
+        <dd><%= safe_join(series_list.map { |s| t(".series_list_html", position: s.position, series_link: link_to(s.series.title, series_url(s.series))) }, t("support.array.words_connector")) %></dd>
       <% end %>
       <% unless @work.approved_collections.empty? %>
-        <dt><%= ts("Collections") %>:</dt>
-        <dd><%= @work.approved_collections.map {|c| link_to c.title, collection_url(c)}.join(",
-").html_safe %></dd>
+        <dt><%= t(".collections") %></dt>
+        <dd><%= safe_join(@work.approved_collections.map { |c| link_to(c.title, collection_url(c)) }, t("support.array.words_connector")) %></dd>
       <% end %>
-      <dt><%= ts("Stats") %>:</dt>
+      <dt><%= t(".stats") %></dt>
       <dd>
-        <%= ts("Published") %>: <%= l(@work.first_chapter.published_at) %>
+        <%= t(".published", date: l(@work.first_chapter.published_at)) %>
         <% if @work.first_chapter.published_at < @work.revised_at.to_date %>
-          <%= @work.is_wip ? ts("Updated") : ts("Completed") %>: <%= l(@work.revised_at.to_date) %>
+          <%= @work.is_wip ? t(".updated", date: l(@work.revised_at.to_date)) : t(".completed", date: l(@work.revised_at.to_date)) %>
         <% end %>
-        <% if @work.chaptered? %>
-          <%= ts("Chapters") %>: <%= @work.chapter_total_display %>
-        <% end %>
-        <%= ts("Words") %>: <%= @work.word_count %>
+        <%= t(".words", count_with_delimiters: number_with_delimiter(@work.word_count)) %>
+        <%= t(".chapters", chapter_total_display: chapter_total_display(@work)) %>
       </dd>
     </dl>
-    <h1><%= @work.title.html_safe %></h1>
-    <div class="byline"><%= ts("by") %> <%= byline(@work, visibility: 'public', only_path: false) %></div>
+    <h1><%= @work.title %></h1>
+    <div class="byline"><%= t(".byline_html", byline_names_link: byline(@work, visibility: "public", only_path: false)) %></div>
     <% unless @work.summary.blank? %>
-      <p><%= ts("Summary") %></p>
-      <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
+      <p><%= t(".summary") %></p>
+      <blockquote class="userstuff"><%= raw sanitize_field(@work, :summary) %></blockquote>
     <% end %>
 
     <% unless @work.notes.blank? && @work.endnotes.blank? %>
-      <p><%= ts("Notes") %></p>
+      <p><%= t(".notes") %></p>
       <% unless @work.notes.blank? %>
-        <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
+        <blockquote class="userstuff"><%= raw sanitize_field(@work, :notes) %></blockquote>
       <% end %>
       <% unless @work.endnotes.blank? %>
         <div class="endnote-link">
-          <%= ts("See the end of the work for") %> <% unless @work.notes.blank? %><%= ts("more") %><% end
-%> <%= link_to ts("notes"), "#endnotes" %>
+          <%= t(".see_end_notes_html", end_notes_link: link_to(@work.notes.present? ? t(".end_notes_with_work_notes") : t(".end_notes_without_work_notes"), "#endnotes")) %>
         </div>
       <% end %>
     <% end %>
 
+    <%# i18n-tasks-use t("downloads.download_preface.translated_to.restricted_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translated_to.revealed_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translated_to.unrevealed_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.inspired_by.restricted_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.inspired_by.revealed_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.inspired_by.unrevealed") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translation_of.restricted_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translation_of.revealed_html") %>
+    <%# i18n-tasks-use t("downloads.download_preface.translation_of.unrevealed") %>
+    <% translations = @work.approved_related_works.where(translation: true) %>
     <% related_works = @work.parent_work_relationships.reject { |wr| !wr.parent } %>
-    <% if related_works.length > 0 %>
+    <% if translations.any? || related_works.any? %>
       <ul>
+        <% translations.each do |related_work| %>
+          <li>
+            <%= related_work_note(related_work.work, "translated_to", download: true) %>
+          </li>
+        <% end %>
         <% related_works.each do |work| %>
           <li>
-            <% relation_text = work.translation ?
-              "A translation of %{work_link} by %{author_link}" :
-              "Inspired by %{work_link} by %{author_link}"
-            %>
-            <% work_link = link_to work.parent.title.html_safe, polymorphic_url(work.parent) %>
-            <% author_link = byline(work.parent, visibility: 'public', only_path: false) %>
-
-            <%= ts(relation_text, work_link: work_link, author_link: author_link).html_safe %>
+            <% relation = work.translation ? "translation_of" : "inspired_by" %>
+            <%= related_work_note(work.parent, relation, download: true) %>
           </li>
         <% end %>
       </ul>

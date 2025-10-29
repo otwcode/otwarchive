@@ -1,31 +1,20 @@
 <% content_for :message do %>
 
-  <% responder = @comment.comment_owner ? 
-      (
-        @comment.by_anonymous_creator? ?
-        "Anonymous Creator" : 
-        style_link(@comment.comment_owner_name, 
-          polymorphic_url(@comment.comment_owner, :only_path => false))
-      ) :
-      @comment.comment_owner_name %>
-  
-  <%= style_bold(responder) %> replied to your comment on 
-  
-  <% if @comment.ultimate_parent.is_a?(Tag) %>
-    the tag 
-    <%= style_link(@comment.ultimate_parent.commentable_name, {:controller => :tags, :action => :show, :id => @comment.ultimate_parent.to_param, :only_path => false}) %>:
-  <% else %>    
-    <i><b><%= style_link(@comment.ultimate_parent.commentable_name.html_safe, polymorphic_url(@comment.ultimate_parent, :only_path => false)) %></b></i>:
-  <% end %>
-  
+  <%# i18n-tasks-use t("comment_mailer.comment_reply_notification.chapter.titled") %>
+  <%# i18n-tasks-use t("comment_mailer.comment_reply_notification.chapter.untitled") %>
+  <%# i18n-tasks-use t("comment_mailer.comment_reply_notification.content.chapter.html") %>
+  <%# i18n-tasks-use t("comment_mailer.comment_reply_notification.content.other.html") %>
+  <%# i18n-tasks-use t("comment_mailer.comment_reply_notification.content.tag.html") %>
+  <%= content_for_commentable_html(@comment) %>
+
   <p>
     You wrote:
-    <%= style_quote(raw @your_comment.sanitized_content) %>
+    <%= style_quote(raw(@your_comment.sanitized_mailer_content)) %>
   </p>
-    
+
   <p>
-    <%= style_bold(responder) %> responded:
-    <%= style_quote(raw @comment.sanitized_content) %>  
+    <%= commenter_pseud_or_name_link(@comment) %> responded:
+    <%= style_quote(raw(@comment.sanitized_mailer_content)) %>
   </p>
 
   <%= render 'comment_notification_footer' %>

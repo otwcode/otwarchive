@@ -22,24 +22,23 @@ module ApplicationHelper
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " dashboard" if show_sidebar
 
-    if page_has_filters?
-      class_names += " filtered"
-    end
+    class_names += " filtered" if page_has_filters?
 
-    if %w(abuse_reports feedbacks known_issues).include?(controller.controller_name)
-      class_names = "system support " + controller.controller_name + ' ' + controller.action_name
-    end
-    if controller.controller_name == "archive_faqs"
-      class_names = "system docs support faq " + controller.action_name
-    end
-    if controller.controller_name == "wrangling_guidelines"
-      class_names = "system docs guideline " + controller.action_name
-    end
-    if controller.controller_name == "home"
-      class_names = "system docs " + controller.action_name
-    end
-    if controller.controller_name == "errors"
-      class_names = "system " + controller.controller_name + " error-" + controller.action_name
+    case controller.controller_name
+    when "abuse_reports", "feedbacks", "known_issues"
+      class_names = "system support #{controller.controller_name} #{controller.action_name}"
+    when "archive_faqs"
+      class_names = "system docs support faq #{controller.action_name}"
+    when "wrangling_guidelines"
+      class_names = "system docs guideline #{controller.action_name}"
+    when "home"
+      class_names = if %w(content privacy).include?(controller.action_name)
+                      "system docs tos tos-#{controller.action_name}"
+                    else
+                      "system docs #{controller.action_name}"
+                    end
+    when "errors"
+      class_names = "system #{controller.controller_name} error-#{controller.action_name}"
     end
 
     class_names
@@ -71,77 +70,100 @@ module ApplicationHelper
   # Byline helpers
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous").html_safe
+      anon_byline = t("application_helper.anonymous_byline")
       if options[:visibility] != "public" && (logged_in_as_admin? || is_author_of?(creation))
-        anon_byline += " [#{non_anonymous_byline(creation, options[:only_path])}]".html_safe
+        anon_byline = t("application_helper.anonymous_with_name_byline_html", pseud_byline: non_anonymous_byline(creation, options[:only_path]))
       end
       return anon_byline
     end
     non_anonymous_byline(creation, options[:only_path])
   end
 
+  private
+
   def non_anonymous_byline(creation, url_path = nil)
     only_path = url_path.nil? ? true : url_path
 
-    if @preview_mode
-      # Skip cache in preview mode
-      return byline_text(creation, only_path)
-    end
+    # Skip cache in preview mode
+    return byline_text_uncached(creation, only_path) if @preview_mode # rubocop:disable Rails/HelperInstanceVariable
 
-    Rails.cache.fetch("#{creation.cache_key}/byline-nonanon/#{only_path.to_s}") do
-      byline_text(creation, only_path)
-    end
+    byline_text(creation, only_path)
   end
 
-  def byline_text(creation, only_path, text_only = false)
-    if creation.respond_to?(:author)
-      creation.author
-    else
-      pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a
-      pseuds = pseuds.flatten.uniq.sort
+  def byline_text(creation, only_path, text_only: false)
+    # Update Series#expire_byline_cache and Chapter#expire_byline_cache when changing cache key here
+    creators = Rails.cache.fetch(["byline_data", creation.cache_key]) { byline_data(creation) }
+    byline_text_internal(creators, only_path, text_only)
+  end
 
-      archivists = Hash.new []
-      if creation.is_a?(Work)
-        external_creatorships = creation.external_creatorships.select { |ec| !ec.claimed? }
-        external_creatorships.each do |ec|
-          archivist_pseud = pseuds.select { |p| ec.archivist.pseuds.include?(p) }.first
-          archivists[archivist_pseud] += [ec.author_name]
-        end
+  def byline_text_uncached(creation, only_path, text_only: false)
+    creators = byline_data(creation)
+    byline_text_internal(creators, only_path, text_only)
+  end
+
+  def byline_text_internal(creators, only_path, text_only)
+    return creators if creators.is_a?(String)
+
+    safe_join(creators.map do |creator|
+      pseud_byline = if text_only
+                       creator[:byline]
+                     else
+                       url_options = { controller: "pseuds", action: "show", user_id: creator[:user], id: creator[:pseud], only_path: only_path }
+                       link_to(creator[:byline], url_options, rel: "author")
+                     end
+
+      if creator[:external_creators].empty?
+        pseud_byline
+      else
+        safe_join(creator[:external_creators].map do |ext_creator|
+          t("application_helper.archivist_byline_html", external_creator: ext_creator, pseud_byline: pseud_byline)
+        end, t("support.array.words_connector"))
       end
+    end, t("support.array.words_connector"))
+  end
 
-      pseuds.map { |pseud|
-        pseud_byline = text_only ? pseud.byline : pseud_link(pseud, only_path)
-        if archivists[pseud].empty?
-          pseud_byline
-        else
-          archivists[pseud].map { |ext_author|
-            ts("%{ext_author} [archived by %{name}]", ext_author: ext_author, name: pseud_byline)
-          }.join(', ')
-        end
-      }.join(', ').html_safe
+  def byline_data(creation)
+    return creation.author if creation.respond_to?(:author)
+
+    pseuds = @preview_mode ? creation.pseuds_after_saving : creation.pseuds.to_a # rubocop:disable Rails/HelperInstanceVariable
+    pseuds = pseuds.flatten.uniq.sort
+
+    external_creators = Hash.new []
+    if creation.is_a?(Work)
+      external_creatorships = creation.external_creatorships.reject(&:claimed?)
+      external_creatorships.each do |ec|
+        archivist_pseud = pseuds.find { |p| ec.archivist.pseuds.include?(p) }
+        external_creators[archivist_pseud] += [ec.author_name]
+      end
+    end
+
+    pseuds.map do |pseud|
+      {
+        # Cache the plain-text pseud (username)
+        byline: pseud.byline,
+        # Cache the parameters that we need for generating the pseud URL later
+        # We can't cache the record itself (for later URL generation) since it could change or be deleted
+        pseud: pseud.to_param,
+        user: pseud.user.to_param,
+        # Cache the array of plain-text names of the unclaimed external creators
+        external_creators: external_creators[pseud]
+      }
     end
   end
 
-  def pseud_link(pseud, only_path = true)
-    if only_path
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), rel: "author")
-    else
-      link_to(pseud.byline, user_pseud_url(pseud.user, pseud), rel: "author")
-    end
-  end
+  public
 
   # A plain text version of the byline, for when we don't want to deliver a linkified version.
   def text_byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = ts("Anonymous")
+      anon_byline = t("application_helper.anonymous_byline")
       if (logged_in_as_admin? || is_author_of?(creation)) && options[:visibility] != 'public'
-        anon_byline += " [#{non_anonymous_byline(creation)}]".html_safe
+        anon_byline = t("application_helper.anonymous_with_name_byline_html", pseud_byline: non_anonymous_byline(creation))
       end
       anon_byline
     else
       only_path = false
-      text_only = true
-      byline_text(creation, only_path, text_only)
+      byline_text(creation, only_path, text_only: true)
     end
   end
 
@@ -150,7 +172,7 @@ module ApplicationHelper
     options[:for] ||= ""
     options[:title] ||= options[:for]
 
-    html_options = { "class" => options[:class] + " modal", "title" => options[:title], "aria-controls" => "#modal" }
+    html_options = { class: "#{options[:class]} modal", title: options[:title] }
     link_to content, options[:for], html_options
   end
 
@@ -191,9 +213,14 @@ module ApplicationHelper
     keys.collect { |key|
       if flash[key]
         if flash[key].is_a?(Array)
-          content_tag(:div, content_tag(:ul, flash[key].map { |flash_item| content_tag(:li, h(flash_item)) }.join("\n").html_safe), class: "flash #{key}")
+          content_tag(:div,
+            content_tag(:ul,
+              safe_join(flash[key].map do |flash_item|
+                content_tag(:li, sanitize(flash_item))
+              end), "\n"),
+            class: "flash #{key}")
         else
-          content_tag(:div, h(flash[key]), class: "flash #{key}")
+          content_tag(:div, sanitize(flash[key]), class: "flash #{key}")
         end
       end
     }.join.html_safe
@@ -243,25 +270,29 @@ module ApplicationHelper
   # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
   def generate_countdown_html(field_id, max)
     max = max.to_s
-    span = content_tag(:span, max, id: "#{field_id}_counter", class: "value", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => field_id)
-    content_tag(:p, span + ts(' characters left'), class: "character_counter")
+    span = content_tag(:span, max, id: "#{field_id}_counter", class: "value", "data-maxlength" => max)
+    content_tag(:p, span + ts(' characters left'), class: "character_counter", "tabindex" => 0)
   end
 
   # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc)
-  def expand_contract_all(target="index")
-    expand_all = content_tag(:a, ts("Expand All"), href: "#", class: "expand_all", "target_class" => target, role: "button")
-    contract_all = content_tag(:a, ts("Contract All"), href: "#", class: "contract_all", "target_class" => target, role: "button")
-    content_tag(:span, expand_all + "\n".html_safe + contract_all, class: "actions hidden showme", role: "menu")
+  def expand_contract_all(target = "listbox")
+    expand_all = button_tag(ts("Expand All"), class: "expand_all", data: { target_class: target })
+    contract_all = button_tag(ts("Contract All"), class: "contract_all", data: { target_class: target })
+
+    expand_all + contract_all
   end
 
   # Sets up expand/contract/shuffle buttons for any list whose id is passed in
   # See the jquery code in application.js
   # Note that these start hidden because if javascript is not available, we
   # don't want to show the user the buttons at all.
-  def expand_contract_shuffle(list_id, shuffle=true)
-    ('<span class="action expand hidden" title="expand" action_target="#' + list_id + '"><a href="#" role="button">&#8595;</a></span>
-    <span class="action contract hidden" title="contract" action_target="#' + list_id + '"><a href="#" role="button">&#8593;</a></span>').html_safe +
-    (shuffle ? ('<span class="action shuffle hidden" title="shuffle" action_target="#' + list_id + '"><a href="#" role="button">&#8646;</a></span>') : '').html_safe
+  def expand_contract_shuffle(list_id, shuffle: true)
+    target = "##{list_id}"
+    expander = button_tag("&#8595;".html_safe, class: "expand hidden", title: "expand", data: { action_target: target })
+    contractor = button_tag("&#8593;".html_safe, class: "contract hidden", title: "contract", data: { action_target: target })
+    shuffler = button_tag("&#8646;".html_safe, class: "shuffle hidden", title: "shuffle", data: { action_target: target }) if shuffle
+
+    expander + contractor + shuffler
   end
 
   # returns the default autocomplete attributes, all of which can be overridden
@@ -296,6 +327,8 @@ module ApplicationHelper
     link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", class: "hidden showme")
   end
 
+  # show time in the time zone specified by the first argument
+  # add the user's time when specified in preferences
   def time_in_zone(time, zone = nil, user = User.current_user)
     return ts("(no time specified)") if time.blank?
 
@@ -336,12 +369,27 @@ module ApplicationHelper
     name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
   end
 
-  def field_id(form, attribute)
-    name_to_id(field_name(form, attribute))
+  def field_id(form_or_object_name, attribute, index: nil, **_kwargs)
+    name_to_id(field_name(form_or_object_name, attribute, index: index))
   end
 
-  def field_name(form, attribute)
-    "#{form.object_name}[#{field_attribute(attribute)}]"
+  # This is a partial re-implementation of ActionView::Helpers::FormTagHelper#field_name.
+  # The method contract changed in Rails 7.0, but we can't use the default because it sometimes
+  # includes other information that -- at a minimum -- wreaks havoc on the Cucumber feature tests.
+  # It is used in when constructing forms, like in app/views/tags/new.html.erb.
+  def field_name(form_or_object_name, attribute, *_method_names, multiple: false, index: nil)
+    object_name = if form_or_object_name.respond_to?(:object_name)
+                    form_or_object_name.object_name
+                  else
+                    form_or_object_name
+                  end
+    if object_name.blank?
+      "#{field_attribute(attribute)}#{multiple ? '[]' : ''}"
+    elsif index
+      "#{object_name}[#{index}][#{field_attribute(attribute)}]#{multiple ? '[]' : ''}"
+    else
+      "#{object_name}[#{field_attribute(attribute)}]#{multiple ? '[]' : ''}"
+    end
   end
 
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
@@ -493,7 +541,7 @@ module ApplicationHelper
 
   def first_paragraph(full_text, placeholder_text = 'No preview available.')
     # is there a paragraph that does not have a child image?
-    paragraph = Nokogiri::HTML.parse(full_text).at_xpath('//p[not(img)]')
+    paragraph = Nokogiri::HTML5.parse(full_text).at_xpath("//p[not(img)]")
     if paragraph.present?
       # if so, get its text and put it in a fresh p tag
       paragraph_text = paragraph.text
@@ -502,18 +550,6 @@ module ApplicationHelper
       # if not, put the placeholder text in a p tag with the placeholder class
       return content_tag(:p, ts(placeholder_text), class: 'placeholder')
     end
-  end
-
-  # change the default link renderer for will_paginate
-  def will_paginate(collection_or_options = nil, options = {})
-    if collection_or_options.is_a? Hash
-      options = collection_or_options
-      collection_or_options = nil
-    end
-    unless options[:renderer]
-      options = options.merge renderer: PaginationListLinkRenderer
-    end
-    super(*[collection_or_options, options].compact)
   end
 
   # spans for nesting a checkbox or radio button inside its label to make custom
@@ -553,17 +589,22 @@ module ApplicationHelper
     # series.
     return [] if creation.is_a?(Work) && creation.unrevealed?
 
-    creation.users.pluck(:id).uniq.map { |id| "user-#{id}" }
+    creation.pseuds.pluck(:user_id).uniq.map { |id| "user-#{id}" }
   end
 
   def css_classes_for_creation_blurb(creation)
     return if creation.nil?
 
-    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes-v2") do
-      creation_id = creation_id_for_css_classes(creation)
-      creator_ids = creator_ids_for_css_classes(creation).join(" ")
-      "blurb group #{creation_id} #{creator_ids}".strip
-    end
+    creation_id = creation_id_for_css_classes(creation)
+    creator_ids = if creation.try(:pseuds)&.loaded?
+                    creator_ids_for_css_classes(creation).join(" ")
+                  else
+                    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes-v3") do
+                      creator_ids_for_css_classes(creation).join(" ")
+                    end
+                  end
+
+    "blurb group #{creation_id} #{creator_ids}".strip
   end
 
   # Returns the current path, with some modified parameters. Modeled after
@@ -618,4 +659,33 @@ module ApplicationHelper
       item.users.all? { |u| u&.preference&.minimize_search_engines? }
     end
   end
-end # end of ApplicationHelper
+
+  # Determines if the page (controller and action combination) does not need
+  # to show the ToS (Terms of Service) popup.
+  def tos_exempt_page?
+    case params[:controller]
+    when "home"
+      %w[index content dmca privacy tos tos_faq].include?(params[:action])
+    when "abuse_reports", "feedbacks", "users/sessions"
+      %w[new create].include?(params[:action])
+    when "archive_faqs"
+      %w[index show].include?(params[:action])
+    end
+  end
+
+  def browser_page_title(page_title, page_subtitle)
+    return page_title if page_title
+
+    page = if page_subtitle
+             page_subtitle
+           elsif controller.action_name == "index"
+             process_title(controller.controller_name)
+           else
+             "#{process_title(controller.action_name)} #{process_title(controller.controller_name.singularize)}"
+           end
+    # page_subtitle sometimes contains user (including admin) content, so let's
+    # not html_safe the entire string. Let's require html_safe be called when
+    # we set @page_subtitle, so we're conscious of what we're doing.
+    page + " | #{ArchiveConfig.APP_NAME}"
+  end
+end

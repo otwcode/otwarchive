@@ -52,12 +52,12 @@
       <dd><%= collection_form.text_field :email, size: 40 %></dd>
 
       <dt>
-        <%= collection_form.label :header_image_url, ts("Custom header URL") %>
+        <%= collection_form.label :header_image_url, t(".header_image_url.label") %>
       </dt>
       <dd>
         <%= collection_form.text_field :header_image_url, "aria-describedby" => "header-image-field-description" %>
         <p class="footnote" id="header-image-field-description">
-          <%= ts("JPG, GIF, PNG") %>
+          <%= t(".header_image_url.footnote") %>
         </p>
       </dd>
 
@@ -66,7 +66,7 @@
         <ul class="notes">
           <% unless @collection.new_record? %>
             <li>
-              <%= image_tag(@collection.icon.url(:standard), size: "100x100", alt: @collection.icon_alt_text, skip_pipeline: true) %>
+              <%= collection_icon_display(@collection) %>
               <%= ts("This is the collection's icon.") %>
             </li>
           <% end %>
@@ -74,9 +74,9 @@
           <li><%= ts("Icons can be in png, jpeg or gif form") %></li>
           <li><%= ts("Icons should be sized 100x100 pixels for best results") %></li>
         </ul>
-        <% if @collection.icon_file_name %>
+        <% if @collection.icon.attached? %>
           <%= collection_form.check_box :delete_icon, {:checked => false} %>
-          <%= collection_form.label :delete_icon, ts("Delete collection icon and revert to our default") %>
+          <%= collection_form.label :delete_icon, t(".icon.delete") %>
         <% end %>
       </dd>
 
@@ -109,6 +109,22 @@
         <%= live_validation_for_field('collection_description',
               presence: false, maximum_length: ArchiveConfig.SUMMARY_MAX) %>
         <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX) %>
+      </dd>
+
+      <dt><%= collection_form.label :tag_string, ts("Collection Tags") %></dt>
+      <dd>
+        <%= collection_form.text_field :tag_string, autocomplete_options("tag", "aria-describedby": "tag-string-field-description") %>
+        <p class="footnote" id="tag-string-field-description">
+          <%= ts("Enter up to %{max} tags to describe the content of your collection.", max: ArchiveConfig.COLLECTION_TAGS_MAX) %>
+        </p>
+      </dd>
+
+      <dt><%= collection_form.check_box :multifandom, "aria-describedby" => "multifandom-field-description" %></dt>
+      <dd>
+        <%= collection_form.label :multifandom, t(".multifandom.label") %>
+        <p class="footnote" id="multifandom-field-description">
+          <%= t(".multifandom.footnote") %>
+        </p>
       </dd>
     </dl>
   </fieldset>

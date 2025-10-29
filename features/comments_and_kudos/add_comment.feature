@@ -33,6 +33,32 @@ Scenario: When logged in I can comment on a work
     When "AO3-4214" is fixed
     # Then I should see "commenter on Chapter 1" within "h4.heading.byline"
 
+Scenario: When commenting on a multi-chapter work, there should be a link to the chapter on the comment
+
+  Given the work "The One Where Neal is Awesome"
+    And a chapter is added to "The One Where Neal is Awesome"
+    And I am logged in as "commenter"
+    And I post the comment "I loved this! 😍🤩" on the work "The One Where Neal is Awesome"
+  Then I should see "commenter on Chapter 1"
+    And I should see a link "Chapter 1" within ".comment h4.heading.byline"
+    And I should see a page link to the 1st chapter of the work "The One Where Neal is Awesome" within ".comment h4.heading.byline"
+  When I follow "Thread"
+  Then I should see a link "Chapter 1" within ".comment h4.heading.byline"
+    And I should see a page link to the 1st chapter of the work "The One Where Neal is Awesome" within ".comment h4.heading.byline"
+
+Scenario: When commenting on a single-chapter work, there should not be a link to the chapter on the comment
+
+  Given the work "The One Where Neal is Awesome"
+    And I am logged in as "commenter"
+    And I post the comment "I loved this! 😍🤩" on the work "The One Where Neal is Awesome"
+  Then I should see "commenter"
+    And I should not see "commenter on Chapter 1"
+    And I should not see a link "Chapter 1" within ".comment h4.heading.byline"
+    And I should not see a page link to the 1st chapter of the work "The One Where Neal is Awesome" within ".comment h4.heading.byline"
+  When I follow "Thread"
+  Then I should not see a link "Chapter 1" within ".comment h4.heading.byline"
+    And I should not see a page link to the 1st chapter of the work "The One Where Neal is Awesome" within ".comment h4.heading.byline"
+
 Scenario: I cannot comment with a pseud that I don't own
 
   Given the work "Random Work"
@@ -133,7 +159,7 @@ Scenario: Comment threading, comment editing
       And I fill in "Comment" with "B's improved comment (edited)"
       And I press "Update"
     Then 0 emails should be delivered to "User_A"
-  
+
   Scenario: Try to post an invalid comment
 
     When I am logged in as "author"
@@ -194,7 +220,7 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, witho
       And I press "Comment"
     Then I should see "Comment created!"
 
-Scenario: Try to post a comment with a < angle bracket before a linebreak, with a space before the bracket 
+Scenario: Try to post a comment with a < angle bracket before a linebreak, with a space before the bracket
 
     Given the work "Generic Work"
       And I am logged in as "commenter"
@@ -207,3 +233,136 @@ Scenario: Try to post a comment with a < angle bracket before a linebreak, with 
       """
       And I press "Comment"
     Then I should see "Comment created!"
+
+Scenario: Users with different time zone preferences should see the time in their own timezone
+  Given the work "Generic Work"
+    And I am logged in as "commenter"
+    And the user "commenter" sets the time zone to "UTC"
+    And I post the comment "Something" on the work "Generic Work"
+    And it is currently 1 second from now
+    And I follow "Edit"
+    And I fill in "Comment" with "Something else"
+    And I press "Update"
+  Then I should see "UTC" within ".posted.datetime"
+    And I should see "UTC" within ".edited.datetime"
+  When I am logged in as "reader"
+    And the user "reader" sets the time zone to "Brisbane"
+    And I view the work "Generic Work" with comments
+  Then I should see "AEST" within ".posted.datetime"
+    And I should see "AEST" within ".edited.datetime"
+
+Scenario: It hides comment actions when a reply form is open
+  Given the work "The One Where Neal is Awesome"
+    And I am logged in as "commenter"
+    And I post the comment "I loved this!" on the work "The One Where Neal is Awesome"
+  When I follow "Reply"
+  Then I should see "Comment as commenter"
+    And I should not see "Thread"
+
+@javascript
+Scenario: It shows and hides cancel buttons properly
+  Given the work "Aftermath" by "creator" with guest comments enabled
+    And a comment "Ugh." by "pest" on the work "Aftermath"
+  When I view the work "Aftermath"
+    And I display comments
+  Then I should see "Ugh."
+  When I open the reply box
+  Then I should see "Cancel"
+    But I should not see "Reply"
+  When I cancel the reply box
+  Then I should not see "Cancel"
+    But I should see "Reply"
+
+@javascript
+Scenario: It shows and hides cancel buttons properly even on a new page
+Given the work "Aftermath" by "creator" with guest comments enabled
+    And a comment "Ugh." by "pest" on the work "Aftermath"
+  When I view the work "Aftermath"
+    And I display comments
+  Then I should see "Ugh."
+  # Go to /chapters/XX?add_comment_reply_id=YY&show_comments=true#comment_YY"; akin to a Ctrl+Click on "Reply"
+  When I reply on a new page
+  Then I should see "Cancel"
+    But I should not see "Reply"
+  When I cancel the reply box
+  Then I should not see "Cancel"
+    But I should see "Reply"
+
+Scenario: Cannot comment (no form) while logged as admin
+
+    Given the work "Generic Work" by "creator" with guest comments enabled
+      And I am logged in as an admin
+      And I view the work "Generic Work"
+    Then I should see "Generic Work"
+      And I should not see "Post Comment"
+      And I should not see a "Comment" button
+      And I should see "Please log out of your admin account to comment."
+
+Scenario: Cannot reply to comments (no button) while logged as admin
+
+    Given the work "Generic Work" by "creator" with guest comments enabled
+    When I am logged in as "commenter"
+      And I view the work "Generic Work"
+      And I post a comment "Woohoo"
+    When I am logged in as an admin
+      And I view the work "Generic Work"
+      And I follow "Comments (1)"
+    Then I should see "Woohoo"
+      And I should not see "Reply"
+    When I am logged out
+      And I view the work "Generic Work"
+      And I follow "Comments (1)"
+    Then I should see "Woohoo"
+      And I should see "Reply"
+
+  Scenario: Translated comment notification email
+    Given the work "Generic Work" by "creator" and "cocreator"
+      And a locale with translated emails
+      And the user "creator" enables translated emails
+    When I am logged in as "commenter"
+      And I view the work "Generic Work"
+      And I post a comment "Wow"
+    Then 1 email should be delivered to "creator"
+      And the email should have "Comment on Generic Work" in the subject
+      And the email to "creator" should contain "left the following comment on"
+      And the email to "creator" should contain "Reply to this comment"
+      And the email to "creator" should be translated
+      And 1 email should be delivered to "cocreator"
+      And the email to "cocreator" should contain "left the following comment on"
+      And the email to "cocreator" should be non-translated
+
+  Scenario: Translated edited comment notification email
+    Given the work "Generic Work" by "creator" and "cocreator"
+      And a comment "Hello" by "commenter" on the work "Generic Work"
+      And a locale with translated emails
+      And the user "creator" enables translated emails
+      And all emails have been delivered
+    When I am logged in as "commenter"
+      And I view the work "Generic Work"
+      And I follow "Comments"
+      And I edit a comment
+    Then 1 email should be delivered to "creator"
+      And the email should have "Edited comment on Generic Work" in the subject
+      And the email to "creator" should contain "edited the following comment on"
+      And the email to "creator" should contain "Go to the thread starting from this comment"
+      And the email to "creator" should be translated
+      And 1 email should be delivered to "cocreator"
+      And the email to "cocreator" should contain "edited the following comment on"
+      And the email to "cocreator" should be non-translated
+
+  Scenario: Translated comment reply sent notification email
+    Given the work "Generic Work" by "creator"
+      And a comment "Hello" by "commenter" on the work "Generic Work"
+      And a locale with translated emails
+      And the user "creator" enables translated emails
+      And all emails have been delivered
+    When I am logged in as "creator"
+      And I set my preferences to turn on copies of my own comments
+      And I view the work "Generic Work"
+      And I follow "Comments"
+      And I reply to a comment with "Hi!"
+    Then 1 email should be delivered to "creator"
+      And the email should have "Reply you left to a comment on Generic Work" in the subject
+      And the email to "creator" should contain "replied to a comment on"
+      And the email to "creator" should contain "Go to the thread starting from this comment"
+      And the email to "creator" should be translated

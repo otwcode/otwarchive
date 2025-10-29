@@ -1,5 +1,4 @@
 class Prompt < ApplicationRecord
-  include UrlHelpers
   include TagTypeHelper
 
   # -1 represents all matching
@@ -61,11 +60,14 @@ class Prompt < ApplicationRecord
     maximum: ArchiveConfig.TITLE_MAX,
     too_long: ts("must be less than %{max} letters long.", max: ArchiveConfig.TITLE_MAX)
 
+  # i18n-tasks-use t("errors.attributes.url.invalid")
   validates :url, url_format: {allow_blank: true} # we validate the presence above, conditionally
 
   before_validation :cleanup_url
   def cleanup_url
-    self.url = reformat_url(self.url) if self.url
+    self.url = Addressable::URI.heuristic_parse(self.url) if self.url
+  rescue Addressable::URI::InvalidURIError
+    # url_format validation creates the error message
   end
 
   validate :correct_number_of_tags
@@ -116,28 +118,44 @@ class Prompt < ApplicationRecord
   validate :allowed_tags
   def allowed_tags
     restriction = prompt_restriction
-    if restriction && tag_set
-      TagSet::TAG_TYPES.each do |tag_type|
-        # if we have a specified set of tags of this type, make sure that all the
-        # tags in the prompt are in the set.
-        if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom")
-          # skip the check, these will be tested in restricted_tags below
-        elsif restriction.has_tags?(tag_type)
-          disallowed_taglist = tag_set.send("#{tag_type}_taglist") - restriction.tags(tag_type)
-          unless disallowed_taglist.empty?
-            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
+
+    return unless restriction && tag_set
+
+    TagSet::TAG_TYPES.each do |tag_type|
+      # if we have a specified set of tags of this type, make sure that all the
+      # tags in the prompt are in the set.
+
+      # skip the check, these will be tested in restricted_tags below
+      next if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom")
+
+      taglist = tag_set.send("#{tag_type}_taglist")
+      next if taglist.empty?
+
+      if restriction.has_tags?(tag_type)
+        disallowed_taglist = taglist - restriction.tags(tag_type)
+        unless disallowed_taglist.empty?
+          errors.add(
+            :base,
+            ts(
+              "^These %{tag_label} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
               tag_label: tag_type_label_name(tag_type).downcase,
               prompt_type: self.class.name.downcase,
-              taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
-          end
-        else
-          noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
-          unless noncanonical_taglist.empty?
-            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
+              taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+            )
+          )
+        end
+      else
+        noncanonical_taglist = taglist.reject(&:canonical)
+        unless noncanonical_taglist.empty?
+          errors.add(
+            :base,
+            ts(
+              "^These %{tag_label} tags in your %{prompt_type} are not canonical and cannot be used in this challenge: %{taglist}. To fix this, please ask your challenge moderator to set up a tag set for the challenge. New tags can be added to the tag set manually by the moderator or through open nominations.",
               tag_label: tag_type_label_name(tag_type).downcase,
               prompt_type: self.class.name.downcase,
-              taglist: noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
-          end
+              taglist: noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+            )
+          )
         end
       end
     end
@@ -148,22 +166,28 @@ class Prompt < ApplicationRecord
   validate :restricted_tags
   def restricted_tags
     restriction = prompt_restriction
-    if restriction
-      TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
-        if restriction.send("#{tag_type}_restrict_to_fandom")
-          # tag_type is one of a set set so we know it is safe for constantize
-          allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
-          disallowed_taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") - allowed_tags : []
-          # check for tag set associations
-          disallowed_taglist.reject! {|tag| TagSetAssociation.where(tag_id: tag.id, parent_tag_id: tag_set.fandom_taglist).exists?}
-          unless disallowed_taglist.empty?
-            errors.add(:base, ts("^These %{tag_label} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)",
-                              prompt_type: self.class.name.downcase,
-                              tag_label: tag_type_label_name(tag_type).downcase, fandom: tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
-                              taglist: disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
-          end
-        end
-      end
+    return unless restriction
+
+    tag_set_associations = TagSetAssociation.where(owned_tag_set_id: restriction.owned_tag_sets.pluck(:id))
+
+    TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
+      next unless restriction.send("#{tag_type}_restrict_to_fandom")
+
+      # tag_type is one of a set set so we know it is safe for constantize
+      allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
+      disallowed_taglist = tag_set ? tag_set.send("#{tag_type}_taglist") - allowed_tags : []
+
+      # check for tag set associations
+      disallowed_taglist -= tag_set_associations
+        .where(tag: disallowed_taglist, parent_tag_id: tag_set.fandom_taglist)
+        .includes(:tag)
+        .map(&:tag)
+      next if disallowed_taglist.empty?
+
+      errors.add(:base, :tags_not_in_fandom,
+                 prompt_type: self.class.name.downcase,
+                 tag_label: tag_type_label_name(tag_type).downcase, fandom: tag_set.fandom_taglist.pluck(:name).join(I18n.t("support.array.words_connector")),
+                 taglist: disallowed_taglist.pluck(:name).join(I18n.t("support.array.words_connector")))
     end
   end
 

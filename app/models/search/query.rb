@@ -14,7 +14,7 @@ class Query
         body: generated_query,
         track_total_hits: true
       )
-    rescue Elasticsearch::Transport::Transport::Errors::BadRequest
+    rescue Elastic::Transport::Transport::Errors::BadRequest
       { error: "Your search failed because of a syntax error. Please try again." }
     end
   end
@@ -113,19 +113,20 @@ class Query
       from: pagination_offset,
       sort: sort
     }
-    if aggregations.present?
-      q.merge!(aggregations)
+    if (aggs = aggregations).present?
+      q.merge!(aggs)
     end
     q
   end
 
-  # Combine the filters and queries
+  # Combine the filters and queries, with a fallback in case there are no
+  # filters or queries:
   def filtered_query
     make_bool(
       must: queries, # required, score calculated
       filter: filters, # required, score ignored
       must_not: exclusion_filters # disallowed, score ignored
-    )
+    ) || { match_all: {} }
   end
 
   # Define specifics in subclasses
@@ -142,6 +143,10 @@ class Query
     { terms: options.merge(field => value) }
   end
 
+  def exists_filter(field)
+    { exists: { field: field } }
+  end
+
   # A filter used to match all words in a particular field, most frequently
   # used for matching non-existent tags. The match query doesn't allow
   # negation/or/and/wildcards, so it should only be used on fields where the
@@ -150,16 +155,18 @@ class Query
     { match: { field => { query: value, operator: "and" }.merge(options) } }
   end
 
-  # Set the score equal to the value of a field. The optional value "missing"
-  # determines what score value should be used if the specified field is
-  # missing from a document.
-  def field_value_score(field, missing: 0)
+  # Replaces the existing scores for a query with the value of a field. The
+  # optional value "missing" determines what score value should be used if the
+  # specified field is missing from a document.
+  def field_value_score(field, query, missing: 0)
     {
       function_score: {
+        query: query,
         field_value_factor: {
           field: field,
           missing: missing
-        }
+        },
+        boost_mode: :replace
       }
     }
   end
@@ -222,7 +229,7 @@ class Query
   end
 
   def split_query_text_phrases(fieldname, text)
-    str = ""
+    str = +""
     return str if text.blank?
     text.split(",").map(&:squish).each do |phrase|
       str << " #{fieldname}:\"#{phrase}\""
@@ -231,10 +238,10 @@ class Query
   end
 
   def split_query_text_words(fieldname, text)
-    str = ""
+    str = +""
     return str if text.blank?
     text.split(" ").each do |word|
-      if word[0] == "-"
+      if word.length >= 2 && word[0] == "-"
         str << " NOT"
         word.slice!(0)
       end
@@ -248,12 +255,18 @@ class Query
     query.reject! { |_, value| value.blank? }
     query[:minimum_should_match] = 1 if query[:should].present?
 
-    if query.values.flatten.size == 1 && (query[:must] || query[:should])
+    if query.empty?
+      nil
+    elsif query.values.flatten.size == 1 && (query[:must] || query[:should])
       # There's only one clause in our boolean, so we might as well skip the
       # bool and just require it.
       query.values.flatten.first
     else
       { bool: query }
     end
+  end
+
+  def make_list(*args)
+    args.flatten.compact
   end
 end

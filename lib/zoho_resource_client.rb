@@ -36,6 +36,17 @@ class ZohoResourceClient
     ).parsed_response
   end
 
+  def create_ticket_attachment(ticket_id:, attachment_attributes:)
+    response = HTTParty.post(
+      ticket_attachment_create_endpoint(ticket_id),
+      headers: headers,
+      body: attachment_attributes
+    ).parsed_response
+    raise response["message"] if response["errorCode"]
+
+    response
+  end
+
   def find_contact
     response = HTTParty.get(
       CONTACT_SEARCH_ENDPOINT,
@@ -75,5 +86,11 @@ class ZohoResourceClient
       "lastName" => @email,
       "email" => @email
     }
+  end
+
+  private
+
+  def ticket_attachment_create_endpoint(ticket_id)
+    "#{ArchiveConfig.ZOHO_URL}/api/v1/tickets/#{ticket_id}/attachments"
   end
 end

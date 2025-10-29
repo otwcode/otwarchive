@@ -10,13 +10,17 @@ class ExternalWorksController < ApplicationController
 
   # Used with bookmark form to get an existing external work and return it via ajax
   def fetch
-   if params[:external_work_url]
-     url = ExternalWork.new.reformat_url(params[:external_work_url])
-     @external_work = ExternalWork.where(url: url).first
-   end
-   respond_to do |format|
-    format.json { render 'fetch.js.erb' }
-   end
+    if params[:external_work_url]
+      url = begin
+        Addressable::URI.heuristic_parse(params[:external_work_url]).to_str
+      rescue Addressable::URI::InvalidURIError
+        nil
+      end
+      @external_work = ExternalWork.where(url: url).first if url
+    end
+    respond_to do |format|
+      format.js
+    end
   end
 
   def index
@@ -45,7 +49,7 @@ class ExternalWorksController < ApplicationController
     @external_work = authorize ExternalWork.find(params[:id])
     @external_work.attributes = work_params
     if @external_work.update(external_work_params)
-      flash[:notice] = t('successfully_updated', default: 'External work was successfully updated.')
+      flash[:notice] = t(".successfully_updated")
       redirect_to(@external_work)
     else
       render action: "edit"

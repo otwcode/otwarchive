@@ -379,7 +379,7 @@ end
 ### WHEN fulfilling claims
 
 When /^I start to fulfill my claim with "([^\"]*)"$/ do |title|
-  step %{I am on my user page}
+  step %{I follow "My Dashboard"}
   step %{I follow "Claims ("}
   step %{I follow "Fulfill"}
     step %{I fill in "Work Title" with "#{title}"}
@@ -402,7 +402,7 @@ When /^I fulfill my claim$/ do
 end
 
 When /^I fulfill my claim again$/ do
-  step %{I am on my user page}
+  step %{I follow "My Dashboard"}
   step %{I follow "Claims ("}
   step %{I follow "Fulfilled Claims"}
   step %{I follow "Fulfill"}
@@ -462,7 +462,7 @@ Then /^I should see a prompt is claimed$/ do
     step %{I should see "Drop Claim"}
 
   # Claims in the user page are just the prompts that have been claimed
-  step "I am on my user page"
+  step %{I follow "My Dashboard"}
     step %{I follow "Claims"}
   step %{I should see "Fulfill"}
     step %{I should see "by Anonymous"}

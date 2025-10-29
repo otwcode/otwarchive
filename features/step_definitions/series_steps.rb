@@ -1,5 +1,9 @@
 When /^I view the series "([^\"]*)"$/ do |series|
-  visit series_url(Series.find_by(title: series))
+  visit series_path(Series.find_by(title: series))
+end
+
+Given "there are {int} works per series page" do |amount|
+  allow(WillPaginate).to receive(:per_page).and_return(amount)
 end
 
 When /^I add the series "([^\"]*)"$/ do |series_title|
@@ -12,11 +16,7 @@ When /^I add the series "([^\"]*)"$/ do |series_title|
 end
 
 When /^I add the work "([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]*)")?$/ do |work_title, series_title, pseud|
-  unless pseud.blank? && Pseud.where(name: pseud).exists?
-    step %{I add the pseud "#{pseud}"}
-  end
-
-  if Work.where(title: work_title).exists?
+  if Work.exists?(title: work_title)
     # an existing work
     step %{I edit the work "#{work_title}"}
   else
@@ -27,13 +27,18 @@ When /^I add the work "([^\"]*)" to (?:the )?series "([^\"]*)"(?: as "([^"]*)")?
     select(pseud, from: "work_author_attributes_ids")
   end
   step %{I add the series "#{series_title}"}
-  click_button("Post")
+
+  if Work.exists?(title: work_title)
+    click_button("Update")
+  else
+    click_button("Post")
+  end
 end
 
 When /^I add the draft "([^\"]*)" to series "([^\"]*)"$/ do |work_title, series_title|
   step %{I edit the work "#{work_title}"}
   step %{I add the series "#{series_title}"}
-  click_button("Save As Draft")
+  click_button("Save Draft")
 end
 
 When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, count, series_title|
@@ -41,7 +46,7 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
   if work.blank?
     step "the draft \"#{work_title}\""
     work = Work.find_by(title: work_title)
-    visit preview_work_url(work)
+    visit preview_work_path(work)
     click_button("Post")
     step "I should see \"Work was successfully posted.\""
     step %{all indexing jobs have been run}
@@ -52,8 +57,26 @@ When /^I add the work "([^\"]*)" to "(\d+)" series "([^\"]*)"$/ do |work_title, 
     step "I edit the work \"#{work_title}\""
     check("series-options-show")
     fill_in("work_series_attributes_title", with: series_title + i.to_s)
-    click_button("Post")
+    click_button("Update")
   end
+end
+
+When /^I reorder the (\d+)(?:st|nd|rd|th) work to be below the (\d+)(?:st|nd|rd|th) work in the series$/ do |n1, n2|
+  # Step only accounts for downward changes through a downward offset.
+  assert n1 < n2
+
+  draggable = find(".serial-position-list:nth-child(#{n1})")
+  droppable = find(".serial-position-list:nth-child(#{n2})")
+
+  # Capybara's drag_to method doesn't work well with this jQuery sortable list that has a default tolerance of "intersect".
+  # Using another way to simulate dragging. Credit to https://stackoverflow.com/questions/72369314/
+  webdriver = page.driver.browser
+  webdriver.action.click_and_hold(draggable.native).perform
+  step "I wait 1 second" # a delay is necessary.
+  # Add downward offset to make the rearrangement register.
+  webdriver.action.move_to(droppable.native, 0, 10).release.perform
+
+  step "all AJAX requests are complete"
 end
 
 When /^I delete the series "([^"]*)"$/ do |series|

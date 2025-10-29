@@ -7,6 +7,8 @@ class LogItem < ApplicationRecord
 
   belongs_to :role
 
+  belongs_to :fnok_user, class_name: "User"
+
   validates_presence_of :note
   validates_presence_of :action
 

@@ -165,11 +165,11 @@ Feature: Collection
     And I should see "Offer: Your Offer must include between 2 and 3 character tags, but you have included 4 character tags in your current Offer"
     And I should see a not-in-fandom error message for "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat" in "Care Bears"
     And I should see "You have submitted more than one offer with the same fandom tags. This challenge requires them all to be unique."
-  
-  
+
+
   # now fill in correctly
   # We have six participants who sign up as follows:
-  
+
   # myname1 requests: SGA (JS, TE), Tiny fandom (Obscure person)
   #         offers: Tiny fandom (Obscure person, JS), Hippos (Any)
   # (is the only person who can write for myname2 and should therefore be assigned to them)
@@ -203,7 +203,7 @@ Feature: Collection
 
   # myname2 requests: Unoffered (no chars), Hippos (no chars)
   #         offers: S&H (JS, TE), SGA (JS, TE)
-  # can only get from myname1 
+  # can only get from myname1
   When I follow "Sign Up"
     And I check the 1st checkbox with value "Unoffered"
     And I check the 2nd checkbox with value "Yuletide Hippos RPF"
@@ -220,7 +220,7 @@ Feature: Collection
   Then I should see "Sign-up was successfully created"
 
   # and a third person signs up
-  # myname3 requests: S&H (JS), Tiny fandom; 
+  # myname3 requests: S&H (JS), Tiny fandom;
   #           offers: SGA (JS, TE), S&H (JS, TE, Foo)
   When I log out
     And I am logged in as "myname3"
@@ -353,10 +353,8 @@ Feature: Collection
     And I should see "Generate Potential Matches"
     And I should see "No potential matches yet"
   When all emails have been delivered
-  When I follow "Generate Potential Matches"
+  When I press "Generate Potential Matches"
   Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
-  Given the system processes jobs
-    And I wait 3 seconds
   When I reload the page
   Then I should see "Reviewing Assignments"
     And I should see "Complete"
@@ -369,10 +367,8 @@ Feature: Collection
 
   # mod regenerates the assignments
   When all emails have been delivered
-  When I follow "Regenerate Assignments"
+  When I press "Regenerate Assignments"
   Then I should see "Beginning regeneration of assignments. This may take some time, especially if your challenge is large."
-  Given the system processes jobs
-    And I wait 3 seconds
   When I reload the page
   Then I should see "Complete"
     And I should not see "No Recipient"
@@ -381,7 +377,7 @@ Feature: Collection
 
   # mod sends assignments out
   When all emails have been delivered
-    And I follow "Send Assignments"
+    And I press "Send Assignments"
   Then I should see "Assignments are now being sent out"
     And I should see "No assignments to review"
     And I should see "Defaulted"
@@ -390,8 +386,6 @@ Feature: Collection
     And I should see "Complete"
     And I should see "Purge Assignments"
     And I should see "Default All Incomplete"
-    Given the system processes jobs
-      And I wait 3 seconds
     When I reload the page
     Then I should not see "Assignments are now being sent out"
       # 6 users and the mod should get emails :)
@@ -404,7 +398,7 @@ Feature: Collection
   #         offers: Tiny fandom (Obscure person, JS), Hippos (Any)
   # myname2 requests: Unoffered (no chars), Hippos (no chars)
   #         offers: S&H (JS, TE), SGA (JS, TE)
-  # myname3 requests: S&H (JS), Tiny fandom; 
+  # myname3 requests: S&H (JS), Tiny fandom;
   #           offers: SGA (JS, TE), S&H (JS, TE, Foo)
   # myname4 requests SGA, S&H (JS, TE)
   #     offers Tiny (Obscure, JS), S&H (Foo, JS)
@@ -415,7 +409,7 @@ Feature: Collection
   #
   # so myname1 is the only person who can write for myname2 and therefore myname2 should be their assignment
   #
-  
+
   # first user starts posting
   When I log out
     And I am logged in as "myname1"
@@ -534,7 +528,7 @@ Feature: Collection
     And I should see "myname3" within "dl.index.group"
     And I should see "myname4" within "dl.index.group"
     And I should see "Fulfilling Story"
-  When I follow "Default All Incomplete"
+  When I press "Default All Incomplete"
   Then I should see "All unfulfilled assignments marked as defaulting."
   And I should not see "No assignments to review!"
   When I fill in the 1st field with id matching "cover" with "pinchhitter"
@@ -542,7 +536,7 @@ Feature: Collection
   Then 1 email should be delivered
     And the email should contain "You have been assigned the following request"
     And I should see "Assignment updates complete!"
-    And all emails have been delivered    
+    And all emails have been delivered
   When I follow "Pinch Hits"
   Then I should see "pinchhitter"
 
@@ -566,8 +560,6 @@ Feature: Collection
     And I uncheck "This collection is unrevealed"
     And I press "Update"
   Then I should see "Collection was successfully updated"
-  Given the system processes jobs
-    And I wait 3 seconds
   When I reload the page
   # 5 gift notification emails are delivered for the 5 stories that have been posted so far (4 standard, 1 pinch-hit, 1 still a draft)
   Then 5 emails should be delivered
@@ -622,7 +614,6 @@ Feature: Collection
   # someone can now see their writer
   When I log out
     And I am logged in as "myname1"
-    And the system processes jobs
     And I go to myname1's user page
     #'
   Then I should see "Fulfilling Story 1"

@@ -24,8 +24,7 @@
 #
 # Several tasks run automatically based on behind-the-scenes magic
 #
-require './config/boot'
-require 'new_relic/recipes'
+require "./config/boot"
 require "active_support/core_ext/hash/keys"
 
 # takes care of the bundle install tasks
@@ -86,7 +85,7 @@ namespace :deploy do
   end
 
   desc "Get the config files"
-  task :update_configs, roles: [:app, :web, :workers] do
+  task :update_configs, roles: [:app, :web, :workers, :schedulers] do
     run "/home/ao3app/bin/create_links_on_install"
   end
 
@@ -139,4 +138,3 @@ after "deploy:restart", "deploy:update_cron_web"
 after "deploy:restart", "deploy:restart_workers"
 after "deploy:restart", "deploy:restart_schedulers"
 after "deploy:symlink", "deploy:update_configs"
-after "deploy:update", "newrelic:notice_deployment"

@@ -1,0 +1,20 @@
+<% content_for :message do %>
+<%# i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.chapter.titled_text") %>
+<%# i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.chapter.untitled_text") %>
+<%# i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.other.text") %>
+<%# i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.tag.text") %>
+<%= content_for_commentable_text(@comment) %>
+
+<%= t(".commenter_wrote.text", commenter: commenter_pseud_or_name_text(@parent_comment)) %>
+<%= text_divider %>
+
+<%= to_plain_text(raw(@parent_comment.sanitized_mailer_content)) %>
+
+<%= text_divider %>
+
+<%= t(".you_responded") %>
+<%= text_divider %>
+
+<%= to_plain_text(raw(@comment.sanitized_mailer_content)) %>
+
+<%= render 'comment_notification_footer', formats: [:text] %><% end %>

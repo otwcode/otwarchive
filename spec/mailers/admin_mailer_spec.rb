@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe AdminMailer do
-  describe "send_spam_alert" do
+  describe "#send_spam_alert" do
     let(:spam_user) { create(:user) }
 
     let(:spam1) do
@@ -130,7 +130,7 @@ describe AdminMailer do
     end
   end
 
-  describe "set_password_notification" do
+  describe "#set_password_notification" do
     subject(:email) { AdminMailer.set_password_notification(admin, token) }
 
     let(:admin) { create(:admin) }
@@ -157,7 +157,7 @@ describe AdminMailer do
       it "has the correct content" do
         expect(email).to have_html_part_content("username: </b>#{admin.login}")
         expect(email).to have_html_part_content("URL: </b><a")
-        expect(email).to have_html_part_content(">http://www.example.com/admin/login</a>")
+        expect(email).to have_html_part_content(">https://www.example.com/admin/login</a>")
         expect(email).to have_html_part_content("</a> so you can log in.")
         expect(email).to have_html_part_content(token)
       end
@@ -166,7 +166,7 @@ describe AdminMailer do
     describe "text version" do
       it "has the correct content" do
         expect(email).to have_text_part_content("Admin username: #{admin.login}")
-        expect(email).to have_text_part_content("Admin login URL: http://www.example.com/admin/login")
+        expect(email).to have_text_part_content("Admin login URL: https://www.example.com/admin/login")
         expect(email).to have_text_part_content("so you can log in:")
         expect(email).to have_text_part_content(token)
       end

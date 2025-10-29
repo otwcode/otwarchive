@@ -83,6 +83,22 @@ form.single .autocomplete li.input {
   margin-right: 0;
 }
 
+/* 08 actions */
+
+.javascript .work.navigation .chapter .secondary {
+  padding-block-start: 0.375em;
+    flex-wrap: wrap;
+}
+
+.javascript .work.navigation .secondary p {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.javascript .work.navigation .secondary input {
+  margin-block-end: 0;
+}
+
 /* 16 zone system */
 
 .logged-in .splash > .module {

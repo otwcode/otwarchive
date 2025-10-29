@@ -4,19 +4,11 @@ describe BookmarksController do
   include LoginMacros
   include RedirectExpectationHelper
 
-  def it_redirects_to_user_login
-    it_redirects_to_simple new_user_session_path
-  end
-
   describe "new" do
     context "without javascript" do
-      let(:chaptered_work) { create(:work) }
-      let(:chapter2) { create(:chapter, work: chaptered_work) }
-      let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
-
       it "redirects logged out users" do
         get :new
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
       
       context "when logged in" do
@@ -29,16 +21,19 @@ describe BookmarksController do
     end
 
     context "with javascript when logged in" do
-      let(:chaptered_work) { create(:work) }
-      let(:chapter2) { create(:chapter, work: chaptered_work) }
-      let(:bookmark) { create(:bookmark, bookmarkable_id: chaptered_work.id) }
-
       it "renders the bookmark_form_dynamic form" do
         fake_login
         get :new, params: { format: :js }, xhr: true
         expect(response).to render_template("bookmark_form_dynamic")
       end
+    end
 
+    context "denies access for work that isn't visible to user" do
+      subject { get :new, params: { work_id: work } }
+      let(:success) { expect(response).to render_template("new") }
+      let(:success_admin) { it_redirects_to_user_login_with_error }
+
+      include_examples "denies access for work that isn't visible to user"
     end
   end
 
@@ -48,7 +43,7 @@ describe BookmarksController do
     context "when user is not logged in" do
       it "redirects to login" do
         post :create, params: { work_id: work.id }
-        it_redirects_to_user_login
+        it_redirects_to_user_login_with_error
       end
     end
 
@@ -222,7 +217,7 @@ describe BookmarksController do
 
       fake_login_known_user(bookmark.pseud.user)
       get :share, params: { id: bookmark.id }
-      it_redirects_to_with_error(root_path, "Sorry, you need to have JavaScript enabled for this.")
+      it_redirects_to_with_error(bookmark, "Sorry, you need to have JavaScript enabled for this.")
     end
   end
 
@@ -360,6 +355,23 @@ describe BookmarksController do
         expect(assigns(:bookmarks)).to include(series_bookmark)
         expect(assigns(:bookmarks)).to include(work_bookmark)
         expect(assigns(:bookmarks)).not_to include(work_bookmark2)
+      end
+    end
+
+    context "denies access for work that isn't visible to user" do
+      subject { get :index, params: { work_id: work } }
+      let(:success) { expect(response).to render_template("index") }
+      let(:success_admin) { success }
+
+      include_examples "denies access for work that isn't visible to user"
+    end
+
+    context "denies access for restricted work to guest" do
+      let(:work) { create(:work, restricted: true) }
+
+      it "redirects with an error" do
+        get :index, params: { work_id: work }
+        it_redirects_to_with_error(root_path, "Sorry, you don't have permission to access the page you were trying to reach. Please log in.")
       end
     end
   end

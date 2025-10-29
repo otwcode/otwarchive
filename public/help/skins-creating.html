@@ -10,9 +10,9 @@
   <dd>
     <p>
       <code>
-        background, border, column, cue, font, layer-background, layout-grid,
-        list-style, margin, marker, outline, overflow, padding, page-break, pause,
-        scrollbar, text, transform, transition
+        background, border, column, cue, flex, font, layer-background,
+        layout-grid, list-style, margin, marker, outline, overflow, padding,
+        page-break, pause, scrollbar, text, transform, transition
       </code>
     </p>
   </dd>
@@ -20,39 +20,42 @@
   <dd>
     <p>
       <code>
-        -replace, -use-link-source, accelerator, alignment-adjust,
-        alignment-baseline, appearance, azimuth, baseline-shift, behavior,
-        binding, bookmark-label, bookmark-level, bookmark-target, bottom,
-        box-align, box-direction, box-flex, box-flex-group, box-lines, box-orient,
-        box-pack, box-shadow, box-sizing, caption-side, clear, clip, color,
-        color-profile, content, counter-increment, counter-reset, crop, cue,
+        -replace, -use-link-source, accelerator, accent-color, align-content,
+        align-items, align-self, alignment-adjust, alignment-baseline,
+        appearance, azimuth, baseline-shift, behavior, binding, bookmark-label,
+        bookmark-level, bookmark-target, bottom, box-align, box-direction,
+        box-flex, box-flex-group, box-lines, box-orient, box-pack, box-shadow,
+        box-sizing, caption-side, clear, clip, color, color-profile,
+        color-scheme, content, counter-increment, counter-reset, crop, cue,
         cue-after, cue-before, cursor, direction, display, dominant-baseline,
         drop-initial-after-adjust, drop-initial-after-align,
-        drop-initial-before-adjust, drop-initial-before-align, drop-initial-size,
-        drop-initial-value, elevation, empty-cells, filter, fit, fit-position,
-        float, float-offset, font, font-effect, font-emphasize,
-        font-emphasize-position, font-emphasize-style, font-family, font-size,
-        font-size-adjust, font-smooth, font-stretch, font-style, font-variant,
-        font-weight, grid-columns, grid-rows, hanging-punctuation, height,
-        hyphenate-after, hyphenate-before, hyphenate-character, hyphenate-lines,
-        hyphenate-resource, hyphens, icon, image-orientation, image-resolution,
-        ime-mode, include-source, inline-box-align, layout-flow, left,
-        letter-spacing, line-break, line-height, line-stacking,
-        line-stacking-ruby, line-stacking-shift, line-stacking-strategy, mark,
-        mark-after, mark-before, marks, marquee-direction, marquee-play-count,
+        drop-initial-before-adjust, drop-initial-before-align,
+        drop-initial-size, drop-initial-value, elevation, empty-cells, filter,
+        fit, fit-position, float, float-offset, font, font-effect,
+        font-emphasize, font-emphasize-position, font-emphasize-style,
+        font-family, font-size, font-size-adjust, font-smooth, font-stretch,
+        font-style, font-variant, font-weight, grid-columns, grid-rows,
+        hanging-punctuation, height, hyphenate-after, hyphenate-before,
+        hyphenate-character, hyphenate-lines, hyphenate-resource, hyphens, icon,
+        image-orientation, image-resolution, ime-mode, include-source,
+        inline-box-align, justify-content, layout-flow, left, letter-spacing,
+        line-break, line-height, line-stacking, line-stacking-ruby,
+        line-stacking-shift, line-stacking-strategy, mark, mark-after,
+        mark-before, marks, marquee-direction, marquee-play-count,
         marquee-speed, marquee-style, max-height, max-width, min-height,
         min-width, move-to, nav-down, nav-index, nav-left, nav-right, nav-up,
-        opacity, orphans, page, page-policy, phonemes, pitch, pitch-range,
-        play-during, position, presentation-level, punctuation-trim, quotes,
-        rendering-intent, resize, rest, rest-after, rest-before, richness, right,
-        rotation, rotation-point, ruby-align, ruby-overhang, ruby-position,
-        ruby-span, size, speak, speak-header, speak-numeral, speak-punctuation,
-        speech-rate, stress, string-set, tab-side, table-layout, target,
-        target-name, target-new, target-position, top, unicode-bibi, unicode-bidi,
-        user-select, vertical-align, visibility, voice-balance, voice-duration,
-        voice-family, voice-pitch, voice-pitch-range, voice-rate, voice-stress,
-        voice-volume, volume, white-space, white-space-collapse, widows, width,
-        word-break, word-spacing, word-wrap, writing-mode, z-index
+        opacity, order, orphans, page, page-policy, phonemes, pitch,
+        pitch-range, play-during, position, presentation-level,
+        punctuation-trim, quotes, rendering-intent, resize, rest, rest-after,
+        rest-before, richness, right, rotation, rotation-point, ruby-align,
+        ruby-overhang, ruby-position, ruby-span, size, speak, speak-header,
+        speak-numeral, speak-punctuation, speech-rate, stress, string-set,
+        tab-side, table-layout, target, target-name, target-new,
+        target-position, top, unicode-bibi, unicode-bidi, user-select,
+        vertical-align, visibility, voice-balance, voice-duration, voice-family,
+        voice-pitch, voice-pitch-range, voice-rate, voice-stress, voice-volume,
+        volume, white-space, white-space-collapse, widows, width, word-break,
+        word-spacing, word-wrap, writing-mode, z-index
       </code>
     </p>
   </dd>
@@ -106,10 +109,23 @@
     </p>
   </dd>
 
+  <dt>Custom Properties (Variables)</dt>
+  <dd>
+    <p>
+      Custom property names can contain any combination of lowercase letters (a-z) in the English alphabet, numerals zero to nine (0-9), dashes (-), and underscores (_). They can't contain single (') or double (") quotation marks, or URLs. Any uppercase letters (A-Z) will be converted to lowercase.
+    </p>
+    <p>
+      All properties except <code>font-family</code> and <code>content</code> accept the <code>var()</code> function as a value. We don't allow fallbacks.
+    </p>
+    <p>
+      Custom properties and the <code>var()</code> function are only available for site skins, and won't work on work skins.
+    </p>
+  </dd>
+
   <dt>URLs</dt>
   <dd>
     <p>
-      We allow external image URLs (specified as <code>url('http://somesite.com/my_awesome_image.jpg')</code>) in JPG, GIF, and PNG formats.
+      We allow external image URLs (specified as <code>url('https://example.com/my_awesome_image.jpg')</code>) in JPG, GIF, and PNG formats.
       Please note, however, that skins using external images will not be approved for public use.
     </p>
   </dd>
@@ -179,7 +195,7 @@
     <p>
       Some useful CSS tutorials for more information:
       <ul>
-        <li><a href="http://www.cssbasics.com/">CSS Basics tutorial</a></li>
+        <li><a href="https://www.w3schools.com/css/css_intro.asp">CSS introduction tutorial</a></li>
         <li><a href="http://developer.mozilla.org/docs/CSS/Getting_Started">Getting Started (CSS Tutorial) from MDN</a></li>
       </ul>
     </p>

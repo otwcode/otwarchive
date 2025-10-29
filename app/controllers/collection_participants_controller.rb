@@ -10,7 +10,7 @@ class CollectionParticipantsController < ApplicationController
   cache_sweeper :collection_sweeper
 
   def owners_required
-    flash[:error] = t('collection_participants.owners_required', default: "You can't remove the only owner!")
+    flash[:error] = t("collection_participants.validation.owners_required")
     redirect_to collection_participants_path(@collection)
     false
   end
@@ -41,7 +41,7 @@ class CollectionParticipantsController < ApplicationController
   def join
     unless @collection
       flash[:error] = t('no_collection', default: "Which collection did you want to join?")
-      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+      redirect_back_or_to root_path and return
     end
     participants = CollectionParticipant.in_collection(@collection).for_user(current_user) unless current_user.nil?
     if participants.empty?
@@ -57,14 +57,14 @@ class CollectionParticipantsController < ApplicationController
         if participant.is_invited?
           participant.approve_membership!
           flash[:notice] = t('collection_participants.accepted_invite', default: "You are now a member of %{collection}.", collection: @collection.title)
-          redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+          redirect_back_or_to root_path and return
         end
       end
 
       flash[:notice] = t('collection_participants.no_invitation', default: "You have already joined (or applied to) this collection.")
     end
 
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
+    redirect_back_or_to root_path
   end
 
   def index
@@ -75,7 +75,7 @@ class CollectionParticipantsController < ApplicationController
     if @participant.update(collection_participant_params)
       flash[:notice] = t('collection_participants.update_success', default: "Updated %{participant}.", participant: @participant.pseud.name)
     else
-      flash[:error] = t('collection_participants.update_failure', default: "Couldn't update %{participant}.", participant: @participant.pseud.name)
+      flash[:error] = t(".failure", participant: @participant.pseud.name)
     end
     redirect_to collection_participants_path(@collection)
   end
@@ -83,13 +83,13 @@ class CollectionParticipantsController < ApplicationController
   def destroy
     @participant.destroy
     flash[:notice] = t('collection_participants.destroy', default: "Removed %{participant} from collection.", participant: @participant.pseud.name)
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
+    redirect_back_or_to root_path
   end
 
   def add
     @participants_added = []
     @participants_invited = []
-    pseud_results = Pseud.parse_bylines(params[:participants_to_invite], assume_matching_login: true)
+    pseud_results = Pseud.parse_bylines(params[:participants_to_invite])
     pseud_results[:pseuds].each do |pseud|
       if @collection.participants.include?(pseud)
         participant = CollectionParticipant.where(collection_id: @collection.id, pseud_id: pseud.id).first
@@ -104,8 +104,7 @@ class CollectionParticipantsController < ApplicationController
 
     if @participants_invited.empty? && @participants_added.empty?
       if pseud_results[:banned_pseuds].present?
-        flash[:error] =
-            ts("%{name} is currently banned and cannot participate in challenges.",
+        flash[:error] = ts("%{name} cannot participate in challenges.",
                name: pseud_results[:banned_pseuds].to_sentence
         )
       else

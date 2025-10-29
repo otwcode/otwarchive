@@ -40,6 +40,8 @@ class Chapter < ApplicationRecord
     end
   end
 
+  delegate :anonymous?, to: :work
+
   before_save :strip_title
   before_save :set_word_count
   before_save :validate_published_at
@@ -116,7 +118,7 @@ class Chapter < ApplicationRecord
   end
 
   def chapter_header
-    "#{ts("Chapter")} #{position}"
+    I18n.t("activerecord.attributes.chapters.chapter_header", position: position)
   end
 
   def chapter_title
@@ -147,6 +149,10 @@ class Chapter < ApplicationRecord
   # check if this chapter is the only chapter of its work
   def is_only_chapter?
     self.work.chapters.count == 1
+  end
+
+  def only_non_draft_chapter?
+    self.posted? && self.work.chapters.posted.count == 1
   end
 
   # Virtual attribute for work wip_length
@@ -195,5 +201,9 @@ class Chapter < ApplicationRecord
   def expire_comments_count
     super
     work&.expire_comments_count
+  end
+
+  def expire_byline_cache
+    Rails.cache.delete(["byline_data", cache_key])
   end
 end

@@ -27,6 +27,12 @@ Feature: Create Works
     When I go to the works page
     Then I should see "All Hell Breaks Loose 🤬💩"
 
+  Scenario: Canceling a new work redirects to the user's works page
+    Given I am logged in as "newbie"
+    When I set up the draft "All Hell Breaks Loose"
+      And I follow "Cancel"
+    Then I should see the page title "newbie - Works"
+
   Scenario: Creating a new minimally valid work and posting without preview
     Given I am logged in as "newbie"
     When I set up the draft "All Hell Breaks Loose"
@@ -64,9 +70,9 @@ Feature: Create Works
       And the user "recipient" allows gifts
       And I have a collection "Collection 1" with name "collection1"
       And I have a collection "Collection 2" with name "collection2"
+      And "thorough" has the pseud "Pseud2"
+      And "thorough" has the pseud "Pseud3"
       And I am logged in as "thorough"
-      And "thorough" creates the pseud "Pseud2"
-      And "thorough" creates the pseud "Pseud3"
       And all emails have been delivered
     When I go to the new work page
       And I select "Not Rated" from "Rating"
@@ -200,11 +206,11 @@ Feature: Create Works
     When I fill in "work_collection_names" with ""
       And I fill in "pseud_byline" with "badcoauthor"
       And I press "Preview"
-    Then I should see "badcoauthor is currently banned"
+    Then I should see "badcoauthor cannot be listed as a co-creator"
     When I fill in "pseud_byline" with "coauthor"
-      And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
+      And I fill in "Additional Tags" with "this is a very long tag more than one hundred fifty characters in length how would this normally even be created plus some extra words to pad this out 1"
       And I press "Preview"
-    Then I should see "try using less than 100 characters or using commas to separate your tags"
+    Then I should see "try using less than 150 characters or using commas to separate your tags"
     When I fill in "Additional Tags" with "this is a shorter tag"
       And I press "Preview"
     Then I should see "Draft was successfully created"
@@ -381,7 +387,7 @@ Feature: Create Works
       And I post the chaptered work "Chaptered Work"
       And I edit the work "Chaptered Work"
       And I invite the co-author "barbaz"
-      And I press "Post"
+      And I press "Update"
     Then I should not see "barbaz"
       But 1 email should be delivered to "barbaz"
     When I am logged in as "barbaz"

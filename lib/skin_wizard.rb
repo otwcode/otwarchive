@@ -20,8 +20,10 @@ module SkinWizard
         #header .user a:focus,
         #dashboard a:hover,
         .actions a:hover,
+        .actions button:hover,
         .actions input:hover,
         .actions a:focus,
+        .actions button:focus,
         .actions input:focus,
         label.action:hover,
         .action:hover,
@@ -113,6 +115,8 @@ module SkinWizard
         form.verbose legend,
         .verbose form legend,
         #modal,
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
         .own,
         .draft,
         .draft .wrapper,
@@ -148,6 +152,8 @@ module SkinWizard
         .toggled form,
         .dynamic form,
         .secondary,
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
         .wrapper {
           box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5)
         }
@@ -301,6 +307,8 @@ module SkinWizard
         form.verbose legend,
         .verbose form legend,
         .secondary,
+        .work.navigation .download,
+        .javascript .work.navigation .download .secondary,
         dl.meta,
         .bookmark .user,
         div.comment,
