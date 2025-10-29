@@ -1,12 +1,12 @@
 Then /^I should see the inspiring parent work link$/ do
   parent = Work.find_by(title: "Worldbuilding")
-  inspired_link = "<a href=\"#{work_url(parent)}\">#{parent.title}</a>"
+  inspired_link = "<a href=\"#{UrlFormatter.new(work_url(parent)).with_https}\">#{parent.title}</a>"
   page.body.should =~ /Inspired by #{Regexp.escape(inspired_link)}/m
 end
 
 Then /^I should see the external inspiring work link$/ do
   parent = ExternalWork.find_by(title: "Example External")
-  inspired_link = "<a href=\"#{external_work_url(parent)}\">#{parent.title}</a>"
+  inspired_link = "<a href=\"#{UrlFormatter.new(external_work_url(parent)).with_https}\">#{parent.title}</a>"
   page.body.should =~ /Inspired by #{Regexp.escape(inspired_link)}/m
 end
 
