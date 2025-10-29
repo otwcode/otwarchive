@@ -44,6 +44,7 @@ class Users::PasswordsController < Devise::PasswordsController
       redirect_to new_user_password_path and return
     end
 
+    @page_subtitle = t(".page_title")
     super
   end
 
