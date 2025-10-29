@@ -29,7 +29,7 @@ jobs:
 
       - name: Upload list of English keys that should be removed from Phrase
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: en-keys-to-remove
           path: en-keys-to-remove.txt
@@ -54,7 +54,7 @@ jobs:
 
       - name: Upload list of unused locale keys
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: unused-keys
           path: unused-keys.txt
@@ -78,7 +78,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload yaml of inconsistent interpolations
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: inconsistent-interpolations
           path: inconsistent-interpolations.yml

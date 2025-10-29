@@ -16,6 +16,8 @@ class AbuseReport < ApplicationRecord
   # It doesn't have the type set properly in the database, so override it here:
   attribute :summary_sanitizer_version, :integer, default: 0
 
+  attr_accessor :user_agent
+
   # Truncates the user-provided URL to the maximum we can store in the database. We don't want to reject reports with very long URLs, but we need to do
   # something to avoid a 500 error for long URLs.
   def truncate_url
@@ -127,6 +129,7 @@ class AbuseReport < ApplicationRecord
       email: email,
       username: username,
       ip_address: ip_address,
+      user_agent: user_agent,
       url: url,
       creator_ids: creator_ids
     )
@@ -169,6 +172,10 @@ class AbuseReport < ApplicationRecord
       ids = series.pseuds.pluck(:user_id).uniq.sort
       ids.prepend("orphanedseries") if ids.delete(User.orphan_account.id)
       ids.join(", ")
+    elsif (user_login = reported_user_login)
+      user = User.find_by(login: user_login)
+
+      user&.id&.to_s
     end
   end
 
@@ -186,6 +193,11 @@ class AbuseReport < ApplicationRecord
   # ID of the reported series
   def reported_series_id
     url[%r{/series/(\d+)}, 1]
+  end
+  
+  # Username (aka. login) of the reported user
+  def reported_user_login
+    url[%r{/users/([^/]+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
   end
 
   def attach_work_download(ticket_id)

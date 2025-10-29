@@ -28,6 +28,7 @@ describe SupportReporter do
       "contactId" => "1",
       "subject" => "[AO3] Support - This is a tragedy",
       "description" => "Nothing more to say",
+      "channel" => "Support Form",
       "cf" => {
         "cf_language" => "English",
         "cf_name" => "Walrus",
