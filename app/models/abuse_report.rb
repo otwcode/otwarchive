@@ -163,6 +163,10 @@ class AbuseReport < ApplicationRecord
       end
 
       ids.join(", ")
+    elsif (user_login = reported_user_login)
+      user = User.find_by(login: user_login)
+
+      user&.id&.to_s
     end
   end
 
@@ -175,6 +179,11 @@ class AbuseReport < ApplicationRecord
   # ID of the reported comment
   def reported_comment_id
     url[%r{/comments/(\d+)}, 1]
+  end
+
+  # Username (aka. login) of the reported user
+  def reported_user_login
+    url[%r{/users/([^/]+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
   end
 
   def attach_work_download(ticket_id)
