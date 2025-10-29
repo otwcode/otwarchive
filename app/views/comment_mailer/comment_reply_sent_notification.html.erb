@@ -7,15 +7,11 @@
   <%# i18n-tasks-use t("comment_mailer.comment_reply_sent_notification.content.tag.html") %>
   <%= content_for_commentable_html(@comment) %>
 
-  <p>
-    <%= commenter_pseud_or_name_link(@parent_comment) %> wrote:
-    <%= style_quote(raw(@parent_comment.sanitized_mailer_content)) %>
-  </p>
+  <p><%= t(".commenter_wrote.html", commenter_link: commenter_pseud_or_name_link(@parent_comment)) %></p>
+  <%= style_quote(raw(@parent_comment.sanitized_mailer_content)) %>
 
-  <p>
-    You responded:
-    <%= style_quote(raw(@comment.sanitized_mailer_content)) %>
-  </p>
+  <p><%= t(".you_responded") %></p>
+  <%= style_quote(raw(@comment.sanitized_mailer_content)) %>
 
   <%= render 'comment_notification_footer' %>
 
