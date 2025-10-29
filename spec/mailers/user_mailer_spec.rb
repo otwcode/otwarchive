@@ -1112,7 +1112,7 @@ describe UserMailer do
     end
   end
 
-  describe "potential_match_generation_notification" do
+  describe "#potential_match_generation_notification" do
     subject(:email) { UserMailer.potential_match_generation_notification(collection.id, "test@example.com") }
 
     let(:collection) { create(:collection) }
@@ -1145,7 +1145,7 @@ describe UserMailer do
     end
   end
 
-  describe "potential_match_generation_notification_collection_email" do
+  describe "#potential_match_generation_notification sent to collection_email" do
     subject(:email) { UserMailer.potential_match_generation_notification(collection.id, collection.collection_email) }
 
     let(:collection) { create(:collection) }
@@ -1165,7 +1165,7 @@ describe UserMailer do
     end
   end
 
-  describe "invalid_signup_notification" do
+  describe "#invalid_signup_notification" do
     subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id], "test@example.com") }
 
     let(:collection) { create(:collection) }
@@ -1197,7 +1197,7 @@ describe UserMailer do
     end
   end
 
-  describe "invalid_signup_notification_collection_email" do
+  describe "#invalid_signup_notification sent to collection_email" do
     subject(:email) { UserMailer.invalid_signup_notification(collection.id, [signup.id], collection.collection_email) }
 
     let(:collection) { create(:collection) }
@@ -1218,18 +1218,16 @@ describe UserMailer do
     end
   end
 
-  describe "collection_notification" do
-    subject(:email) { UserMailer.collection_notification(collection.id, subject_text, message_text, "test@example.com") }
+  describe "#assignments_sent_notification" do
+    subject(:email) { UserMailer.assignments_sent_notification(collection.id, "test@example.com") }
 
     let(:collection) { create(:collection) }
-    let(:subject_text) { Faker::Hipster.sentence }
-    let(:message_text) { Faker::Hipster.paragraph }
 
     # Test the headers
     it_behaves_like "an email with a valid sender"
 
     it "has the correct subject line" do
-      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] #{subject_text}"
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Assignments sent"
       expect(email.subject).to eq(subject)
     end
 
@@ -1240,15 +1238,89 @@ describe UserMailer do
 
     describe "HTML version" do
       it "has the correct content" do
-        expect(email).to have_html_part_content("your collection <")
-        expect(email).to have_html_part_content("#{message_text}</blockquote>")
+        expect(email).to have_html_part_content("sent out for your gift exchange <")
       end
     end
 
     describe "text version" do
       it "has the correct content" do
-        expect(email).to have_text_part_content("your collection \"#{collection.title}\"")
-        expect(email).to have_text_part_content(message_text)
+        expect(email).to have_text_part_content("sent out for your gift exchange \"#{collection.title}\"")
+      end
+    end
+  end
+
+  describe "#assignments_sent_notification sent to collection_email" do
+    subject(:email) { UserMailer.assignments_sent_notification(collection.id, collection.collection_email) }
+
+    let(:collection) { create(:collection) }
+    let(:signup) { create(:challenge_signup) }
+
+    it_behaves_like "an email with a valid sender"
+
+    describe "HTML version" do
+      it "has the correct footer content" do
+        expect(email).to have_html_part_content("your email address has been listed as the collection email")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct footer content" do
+        expect(email).to have_text_part_content("your email address has been listed as the collection email")
+      end
+    end
+  end
+
+  describe "#assignment_default_notification" do
+    subject(:email) { UserMailer.assignment_default_notification(collection.id, challenge_assignment.id, "test@example.com") }
+
+    let(:collection) { create(:collection) }
+    let(:challenge_assignment) { create(:challenge_assignment) }
+
+    # Test the headers
+    it_behaves_like "an email with a valid sender"
+
+    it "has the correct subject line" do
+      subject = "[#{ArchiveConfig.APP_SHORT_NAME}][#{collection.title}] Assignment default by #{challenge_assignment.offer_byline}"
+      expect(email.subject).to eq(subject)
+    end
+
+    # Test both body contents
+    it_behaves_like "a multipart email"
+
+    it_behaves_like "a translated email"
+
+    describe "HTML version" do
+      it "has the correct content" do
+        expect(email).to have_html_part_content("> has defaulted on their assignment for <")
+        expect(email).to have_html_part_content("assign a pinch hitter on the <")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct content" do
+        expect(email).to have_text_part_content("has defaulted on their assignment for")
+        expect(email).to have_text_part_content("assign a pinch hitter on the collection assignments page")
+      end
+    end
+  end
+
+  describe "#assignment_default_notification sent to collection_email" do
+    subject(:email) { UserMailer.assignment_default_notification(collection.id, challenge_assignment.id, collection.collection_email) }
+
+    let(:collection) { create(:collection) }
+    let(:challenge_assignment) { create(:challenge_assignment) }
+
+    it_behaves_like "an email with a valid sender"
+
+    describe "HTML version" do
+      it "has the correct footer content" do
+        expect(email).to have_html_part_content("your email address has been listed as the collection email")
+      end
+    end
+
+    describe "text version" do
+      it "has the correct footer content" do
+        expect(email).to have_text_part_content("your email address has been listed as the collection email")
       end
     end
   end

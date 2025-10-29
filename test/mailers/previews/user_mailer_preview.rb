@@ -335,6 +335,38 @@ class UserMailerPreview < ApplicationMailerPreview
     UserMailer.invalid_signup_notification(collection.id, invalid_signup_ids, email)
   end
 
+  # URL: /rails/mailers/user_mailer/assignments_sent_notification_collection_email
+  def assignments_sent_notification_collection_email
+    collection = create(:collection, email: "collection@example.com")
+    email = collection.collection_email
+    UserMailer.assignments_sent_notification(collection.id, email)
+  end
+
+  # URL: /rails/mailers/user_mailer/assignments_sent_notification_maintainer
+  def assignments_sent_notification_maintainer
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection, owners: [user.default_pseud])
+    email = user.email
+    UserMailer.assignments_sent_notification(collection.id, email)
+  end
+
+  # URL: /rails/mailers/user_mailer/assignment_default_notification_collection_email
+  def assignment_default_notification_collection_email
+    collection = create(:collection, email: "collection@example.com")
+    email = collection.collection_email
+    challenge_assignment = create(:challenge_assignment)
+    UserMailer.assignment_default_notification(collection.id, challenge_assignment.id, email)
+  end
+
+  # URL: /rails/mailers/user_mailer/assignment_default_notification_maintainer
+  def assignment_default_notification_maintainer
+    user = create(:user, :for_mailer_preview)
+    collection = create(:collection, owners: [user.default_pseud])
+    email = user.email
+    challenge_assignment = create(:challenge_assignment)
+    UserMailer.assignment_default_notification(collection.id, challenge_assignment.id, email)
+  end
+
   # URL: /rails/mailers/user_mailer/invite_increase_notification?total=2
   def invite_increase_notification
     user = create(:user, :for_mailer_preview)
