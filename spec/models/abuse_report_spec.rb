@@ -739,7 +739,7 @@ describe AbuseReport do
         end
       end
 
-      context "for an unrevealed series (contains anonymous works)" do
+      context "for an unrevealed series (contains unrevealed works)" do
         it "returns the user ID of the creator" do
           pseud = create(:pseud)
           unrevealed_collection = create(:unrevealed_collection)
@@ -768,7 +768,7 @@ describe AbuseReport do
         end
 
         context "where there are other normal creators" do
-          it "returns \"orphanedseries, \" + the creators' user IDs" do
+          it "returns \"orphanedseries, \" followed by the other creators' user IDs" do
             pseud = create(:pseud)
             series = create(:series, authors: [pseud, orphan_account.default_pseud])
             
