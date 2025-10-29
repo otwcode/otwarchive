@@ -62,7 +62,7 @@ namespace :work do
     end
 
     cutoff_date = Date.parse(args.date)
-    works = Work.where("works.created_at < ?", cutoff_date)
+    works = Work.where("created_at < ?", cutoff_date)
 
     print "Resetting word count for #{works.count} works created before #{cutoff_date}: "
 

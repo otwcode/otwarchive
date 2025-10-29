@@ -166,7 +166,7 @@ end
 
 describe "rake work:reset_word_counts_before_date" do
   let(:en) { Language.find_by(short: "en") }
-  let(:zh) { Language.find_or_create_by!(short: "zh", name: "Chinese") }
+  #  let(:zh) { Language.find_or_create_by!(short: "zh", name: "Chinese") }
   let(:cutoff_date) { Date.new(2018, 12, 23) }
 
   context "when there are works before and after the cutoff date" do
@@ -229,6 +229,7 @@ describe "rake work:reset_word_counts_before_date" do
   end
 
   context "when works are in different languages" do
+    let(:zh) { Language.find_or_create_by!(short: "zh", name: "Chinese") }
     let(:th) { create(:language, short: "th") }
 
     let(:old_th_work) do
