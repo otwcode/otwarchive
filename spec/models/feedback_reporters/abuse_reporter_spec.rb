@@ -25,12 +25,14 @@ describe AbuseReporter do
       "contactId" => "1",
       "subject" => "[AO3] Abuse - This is a tragedy",
       "description" => "Nothing more to say",
+      "channel" => "Abuse Form",
       "cf" => {
         "cf_language" => "English",
         "cf_name" => "Walrus",
         "cf_ip" => "127.0.0.1",
         "cf_ticket_url" => "https://example.com/works/1",
-        "cf_user_id" => "3, 4"
+        "cf_user_id" => "3, 4",
+        "cf_user_agent" => "Unknown user agent"
       }
     }
   end
@@ -107,6 +109,17 @@ describe AbuseReporter do
         allow(subject).to receive(:creator_ids).and_return(nil)
 
         expect(subject.report_attributes.fetch("cf").fetch("cf_user_id")).to eq("")
+      end
+    end
+
+    context "if an user agent is set" do
+      let(:user_agent) { "Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0" }
+      before do
+        allow(subject).to receive(:user_agent).and_return(user_agent)
+      end
+
+      it "returns a hash containing the user agent" do
+        expect(subject.report_attributes.fetch("cf").fetch("cf_user_agent")).to eq(user_agent)
       end
     end
   end
