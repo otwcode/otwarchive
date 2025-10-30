@@ -132,7 +132,13 @@ blockquote p:last-child {
 
 kbd, tt, code, var, pre, samp {
   font: normal 0.857em 'Monaco', 'Consolas', Courier, monospace;
+  font-variant-ligatures: none;
   margin: auto;
+}
+
+code.big {
+  font-size: 1.75em;
+  font-weight: bold
 }
 
 pre {
