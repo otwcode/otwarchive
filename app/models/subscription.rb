@@ -11,9 +11,10 @@ class Subscription < ApplicationRecord
   # if there's an invalid subscribable type
   validates :subscribable, presence: true,
                            if: proc { |s| VALID_SUBSCRIBABLES.include?(s.subscribable_type) }
-
+  validate :subscribable_not_orphan
   # Get the subscriptions associated with this work
   # currently: users subscribed to work, users subscribed to creator of work
+  # excludes: subscriptions to the orphan_account
   scope :for_work, lambda {|work|
     where(["(subscribable_id = ? AND subscribable_type = 'Work')
             OR (subscribable_id IN (?) AND subscribable_type = 'User')
@@ -52,10 +53,28 @@ class Subscription < ApplicationRecord
     return false unless creation.try(:posted)
     return false if creation.is_a?(Chapter) && !creation.work.try(:posted)
     return false if creation.try(:hidden_by_admin) || (creation.is_a?(Chapter) && creation.work.try(:hidden_by_admin))
-    return false if creation.pseuds.any? { |p| p.user == User.orphan_account }
+    return false if creation.pseuds.present? && creation.pseuds.all? { |p| p.user == User.orphan_account }
     return false if subscribable_type == "User" && creation.anonymous?
     return false if subscribable_type == "Work" && !creation.is_a?(Chapter)
 
     true
+  end
+
+  # Prevent subscriptions to the orphan_account and creations with orphan_account as the only creator
+  def subscribable_not_orphan
+    case subscribable_type
+    when "User"
+      errors.add(:subscribable, :orphan_user) if subscribable == User.orphan_account
+    when "Work", "Series"
+      if subscribable.respond_to?(:users)
+        # Get all non-orphan users on this work/series
+        non_orphan_users = subscribable.users.where.not(id: User.orphan_account.id)
+
+        if non_orphan_users.empty?
+          type_name = subscribable_type.downcase
+          errors.add(:subscribable, :only_orphan_creators, type: type_name)
+        end
+      end
+    end
   end
 end

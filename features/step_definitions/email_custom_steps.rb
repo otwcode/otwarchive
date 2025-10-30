@@ -81,6 +81,26 @@ Then "the email to {string} should contain {string}" do |user, text|
   end
 end
 
+Then "the text only email to {string} should contain {string}" do |user, text|
+  @user = User.find_by(login: user)
+  email = emails("to: \"#{email_for(@user.email)}\"").first
+  if email.multipart?
+    expect(email.text_part.body).to match(text)
+  else
+    expect(email.body).to match(text)
+  end
+end
+
+Then "the html email to {string} should contain {string}" do |user, text|
+  @user = User.find_by(login: user)
+  email = emails("to: \"#{email_for(@user.email)}\"").first
+  if email.multipart?
+    expect(email.html_part.body).to match(text)
+  else
+    expect(email.body).to match(text)
+  end
+end
+
 Then "the email to email address {string} should contain {string}" do |email_address, text|
   email = emails("to: \"#{email_for(email_address)}\"").first
   if email.multipart?

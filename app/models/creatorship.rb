@@ -18,6 +18,7 @@ class Creatorship < ApplicationRecord
 
   validate :check_invalid, on: :create
   validate :check_banned, on: :create
+  validate :check_orphan_account, on: :create
   validate :check_disallowed, on: :create
   validate :check_approved_becoming_false, on: :update
 
@@ -59,6 +60,23 @@ class Creatorship < ApplicationRecord
                          name: pseud.byline))
   end
 
+  # There are two instances where the orphan_account could get added to a creation. First, when users attempt to add
+  # the orphan_account to a work/chapter manually, and second when we're adding it automatically as part of the
+  # orphaning process. We only want to allow the second instance, so we check for that here.
+  def check_orphan_account
+    return if pseud.nil?
+    return unless pseud.user == User.orphan_account
+    # Allow when skip_orphan_check flag is set (used during orphaning process)
+    return if skip_orphan_check
+    # Allow when User.current_user is nil
+    return if User.current_user.nil?
+    # Allow archivists to add orphan_account
+    return if User.current_user.try(:is_archivist?)
+
+    # Block all other manual additions
+    errors.add(:base, :orphan_account_not_co_creator)
+    throw :abort
+  end
   # Make sure that we're not trying to set approved to false, since that could
   # potentially violate some rules about co-creators. (e.g. Having a user
   # listed as a chapter co-creator, but not a work co-creator.)
@@ -142,6 +160,9 @@ class Creatorship < ApplicationRecord
 
   # Only enable notifications for new creatorships when explicitly enabled.
   attr_accessor :enable_notifications
+
+  # Allow the orphan_account creatorships during the orphaning process
+  attr_accessor :skip_orphan_check
 
   # Notify the pseud of their new creatorship.
   def notify_creator
@@ -265,7 +286,6 @@ class Creatorship < ApplicationRecord
     # permissions:
     return true if User.current_user.nil? ||
                    pseud&.user == User.current_user ||
-                   pseud&.user == User.orphan_account ||
                    User.current_user.try(:is_archivist?)
 
     # Approve if the creation is a chapter and the pseud is already listed on

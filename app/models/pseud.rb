@@ -330,7 +330,11 @@ class Pseud < ApplicationRecord
 
       # Should only add new creatorships if we're an approved co-creator.
       if creation.creatorships.approved.where(pseud: self).exists?
-        creation.creatorships.find_or_create_by(pseud: pseud)
+        new_creatorship = creation.creatorships.find_or_initialize_by(pseud: pseud)
+        new_creatorship.approved = true
+        new_creatorship.skip_orphan_check = true # Skip validation during orphaning
+        # Save and persist before deleting old creatorship to prevent "can't remove all creators" error
+        new_creatorship.save!
       end
 
       # But we should delete all creatorships, even invited ones:
@@ -339,7 +343,11 @@ class Pseud < ApplicationRecord
       if creation.is_a?(Work)
         creation.series.each do |series|
           if series.work_pseuds.where(id: id).exists?
-            series.creatorships.find_or_create_by(pseud: pseud)
+            # Add the new pseud to the series with orphan_account validation skipped
+            new_series_creatorship = series.creatorships.find_or_initialize_by(pseud: pseud)
+            new_series_creatorship.approved = true
+            new_series_creatorship.skip_orphan_check = true # Skip the validation during orphaning
+            new_series_creatorship.save!
           else
             change_ownership(series, pseud, options.merge(skip_children: true))
           end
