@@ -258,6 +258,7 @@ for :has() increases to 95% according to caniuse.com. */
 
 .javascript .work.navigation .secondary {
   position: absolute;
+  top: 1.911em; /* 0.375em * 2 for top and bottom padding + 1.286em for height + .25em to compensate for borders which are set in pixels */
   right: 0;
     align-items: center;
     gap: 0 0.643em;
