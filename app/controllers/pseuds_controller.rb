@@ -17,7 +17,7 @@ class PseudsController < ApplicationController
     @pseuds = @user.pseuds.with_attached_icon.alphabetical.paginate(page: params[:page])
     @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
     @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
-    @has_works = Pseud.has_works(@pseuds.collect(&:id)) if @user == current_user
+    @pseuds_with_works = Pseud.has_works_for(@pseuds.collect(&:id)) if @user == current_user
     @page_subtitle = @user.login
   end
 

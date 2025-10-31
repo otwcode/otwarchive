@@ -17,7 +17,7 @@
                 edit_user_pseud_path(@user, pseud),
                 id: "edit_#{pseud.name.downcase.gsub(' ', '_')}"
               ) %></li>
-      <% if current_user == pseud.user && @has_works.include?(pseud.id) %>
+      <% if current_user == pseud.user && @pseuds_with_works.include?(pseud.id) %>
         <li><%= link_to(
                   t(".orphan_html",
                     landmark_span: content_tag(:span,
