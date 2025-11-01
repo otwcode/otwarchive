@@ -1,7 +1,7 @@
 <%= form_for([@user, @pseud], html: { multipart: true }) do |f| %>
 <dl>
-  <dt><%= f.label :name, t(".name") %></dt>
-  <dd>
+  <dt class="required"><%= f.label :name, t(".name") %></dt>
+  <dd class="required">
     <% if @pseud&.name == @user.login %>
       <p class="important informational"><%= @pseud.name %></p>
       <p class="footnote"><%= t(".cannot_change_matching_pseud_html", change_username_link: link_to(t(".change_username"), change_username_user_path(@user))) %></p>

@@ -18,7 +18,7 @@ Scenario: pseud creation and playing with the default pseud
     And I fill in "Name" with "Me"
     And I check "Make this name default"
     And I fill in "Description" with "Something's cute"
-    And I press "Create"
+    And I press "Create Pseud"
   Then I should see "Pseud was successfully created."
     And I should be on the dashboard page for user "myself" with pseud "Me"
 
@@ -76,7 +76,7 @@ Scenario: Manage pseuds - add, edit
   When I follow "New Pseud"
     And I fill in "Name" with "My new name"
     And I fill in "Description" with "I wanted to add another name"
-    And I press "Create"
+    And I press "Create Pseud"
   Then I should be on the dashboard page for user "editpseuds" with pseud "My new name"
     And I should see "Pseud was successfully created."
     And I should see "My new name"
@@ -91,9 +91,9 @@ Scenario: Manage pseuds - add, edit
 
   # Try to create another pseud with the same name you already used.
   When I follow "New Pseud"
-  Then I should see "New pseud"
+  Then I should see "New Pseud"
   When I fill in "Name" with "My new name"
-    And I press "Create"
+    And I press "Create Pseud"
   Then I should see "You already have a pseud with that name."
 
   # Recheck various links.
