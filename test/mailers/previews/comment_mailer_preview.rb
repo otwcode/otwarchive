@@ -16,6 +16,14 @@ class CommentMailerPreview < ApplicationMailerPreview
       CommentMailer.edited_comment_notification(recipient, comment)
     end
 
+    # Sent to a user when they make a top-level comment, and they want to be notified of their own comments
+    define_method :"comment_sent_notification_#{creation_type}" do
+      _, commentable = create_commentable_data(creation_type)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable)
+
+      CommentMailer.comment_sent_notification(comment)
+    end
+
     # Sent to a user when they make a reply to a comment, and they want to be notified of their own comments
     define_method :"comment_reply_sent_notification_#{creation_type}" do
       _, commentable = create_commentable_data(creation_type)
