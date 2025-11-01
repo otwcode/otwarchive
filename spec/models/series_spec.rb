@@ -1,11 +1,30 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Series do
-  let(:unrestricted_work) { create(:work, restricted: false) }
-  let(:restricted_work) { create(:work, restricted: true) }
+  let(:user1) do
+    u = create(:user)
+    u.preference.update!(allow_cocreator: true)
+    u
+  end
+  let(:user2) do
+    u = create(:user)
+    u.preference.update!(allow_cocreator: true)
+    u
+  end
+  let(:unrestricted_work) do
+    puts user1.default_pseud
+    create(:work, authors: [user1.default_pseud], restricted: false)
+  end
+  let(:restricted_work) { create(:work, authors: [user2.default_pseud], restricted: true) }
   let(:series) { create(:series) }
+
+  # Avoid co-creator checks when adding works to the series
+  # before do
+  #   user1.preference.update!(allow_cocreator: true)
+  #   user2.preference.update!(allow_cocreator: true)
+  # end
 
   it "should be unrestricted when it has unrestricted works" do
     series.works = [unrestricted_work]
@@ -35,7 +54,13 @@ describe Series do
   end
 
   describe "#visible_word_count" do
-    let(:hidden_work) { create(:work, hidden_by_admin: true) }
+    let(:user3) { create(:user) }
+    let(:hidden_work) { create(:work, hidden_by_admin: true, authors: user3.pseuds) }
+
+    # Avoid co-creator checks when adding works to the series
+    before do
+      user3.preference.update!(allow_cocreator: true)
+    end
 
     context "when not logged in" do
       it "counts public work words" do
@@ -45,7 +70,7 @@ describe Series do
       end
 
       it "excludes restricted work words" do
-        series.works = [unrestricted_work, restrictd_work]
+        series.works = [unrestricted_work, restricted_work]
         series.reload
         expect(series.visible_word_count).to eq(unrestricted_work.word_count)
       end
@@ -63,20 +88,17 @@ describe Series do
       end
 
       it "counts public work words" do
-        series.works = [unrestricted_work]
-        series.reload
+        series = create(:series, works: [unrestricted_work])
         expect(series.visible_word_count).to eq(unrestricted_work.word_count)
       end
 
       it "includes restricted work words too" do
-        series.works = [unrestricted_work, restrictd_work]
-        series.reload
-        expect(series.visible_word_count).to eq(unrestricted_work.word_count + restrictd_work.word_count)
+        series = create(:series, works: [unrestricted_work, restricted_work])
+        expect(series.visible_word_count).to eq(unrestricted_work.word_count + restricted_work.word_count)
       end
 
       it "excludes hidden-by-admin work words" do
-        series.works = [unrestricted_work, hidden_work]
-        series.reload
+        series = create(:series, works: [unrestricted_work, hidden_work])
         expect(series.visible_word_count).to eq(unrestricted_work.word_count)
       end
     end
