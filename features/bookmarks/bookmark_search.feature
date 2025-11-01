@@ -66,7 +66,7 @@ Feature: Search Bookmarks
       And I should see "New bookmark of new external work"
 
   Scenario: Search bookmarks by word count
-    Given I have bookmarks with various word counts to search
+    Given bookmarks with various word counts in fandom "Totally a fandom" to search
     When I fill in "Word count" with "<15"
       And I press "Search Bookmarks"
     Then I should see the page title "Search Bookmarks"
@@ -76,6 +76,8 @@ Feature: Search Bookmarks
       And I should see "Ten"
     When I follow "Edit Your Search"
     Then the field labeled "Word count" should contain "<15"
+
+  # FIXME: add sort test?
 
   Scenario: Search bookmarks by date updated
     Given I have bookmarks to search by dates
