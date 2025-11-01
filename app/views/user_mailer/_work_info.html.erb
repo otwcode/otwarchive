@@ -15,7 +15,7 @@
   <% end %>
   <% series_count = work.series.count %>
   <% unless series_count.zero? %>
-    <br /><%= style_metadata_label(Series.model_name.human(count: series_count)) %><%= series_list_with_work_position(work, email_styling: true).html_safe %>
+    <br /><%= style_metadata_label(Series.model_name.human(count: series_count)) %><%= series_list_with_work_position(work, email_styling: true) %>
   <% end %>
 </p>
 

@@ -717,6 +717,10 @@ describe UserMailer do
         expect(email).to have_text_part_content("Paragraph 2.")
       end
 
+      it "includes the series list" do
+        expect(email).to have_text_part_content("Series: Part 1 of #{series.title}")
+      end
+
       it "reformats HTML from the chapter summary" do
         expect(email).to have_text_part_content("*Another* HTML summary.")
       end

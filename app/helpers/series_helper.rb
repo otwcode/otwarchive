@@ -59,13 +59,12 @@ module SeriesHelper
   end
 
   def series_list_with_work_position(work, email_styling: false)
-    series = work.series
-    return t("series_helper.none") if series.empty?
-
-    list = series.map do |s|
-      t("series_helper.series_description_html", index: s.serial_works.where(work_id: work.id).select(:position).first.position, series_link: email_styling ? style_link(s.title, series_url(s)) : link_to(s.title, series_url(s)))
-    end
-    list.join(t("support.array.words_connector"))
+    safe_join(work.series.map do |s|
+                t("series_helper.series_description_html",
+                  index: s.serial_works.where(work_id: work.id).pick(:position),
+                  series_link: email_styling ? style_link(s.title, series_url(s)) : link_to(s.title, series_url(s)))
+              end,
+              t("support.array.words_connector"))
   end
 
   # Generates confirmation message for "Remove Me As Co-Creator"
