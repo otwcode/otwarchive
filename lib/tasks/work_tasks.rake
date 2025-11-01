@@ -70,7 +70,7 @@ namespace :work do
     puts "Enqueuing #{work_ids.count} works in #{batches.count} batches (#{batch_size} works per batch)..."
 
     batches.each_with_index do |batch, index|
-      ResetWorkWordCountBatchJob.perform_later(batch, index +1, batches.count)
+      ResetWorkWordCountBatchJob.perform_later(batch, index + 1, batches.count)
     end
 
     puts "#{batches.count} jobs enqueued."
