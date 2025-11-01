@@ -115,6 +115,9 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
+  creatorships:
+    update:
+      must_select_request: Please select at least one co-creator request first.
   errors:
     auth_error:
       browser_title: Auth Error
