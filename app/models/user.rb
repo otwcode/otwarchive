@@ -90,6 +90,8 @@ class User < ApplicationRecord
   before_create :create_default_associateds
   before_destroy :remove_user_from_kudos
 
+  before_validation :canonicalize_email, if: :saved_change_to_email?
+
   before_update :add_renamed_at, if: :will_save_change_to_login?
   after_update :update_pseud_name
   after_update :send_wrangler_username_change_notification, if: :is_tag_wrangler?
@@ -161,8 +163,6 @@ class User < ApplicationRecord
   validates_associated :log_items
 
   after_update :expire_caches
-
-  before_validation :canonicalize_email, if: :saved_change_to_email?
 
   def canonicalize_email
     self.canonical_email = AdminBlacklistedEmail.canonical_email(self.email) if self.email
