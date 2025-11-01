@@ -87,8 +87,8 @@ class User < ApplicationRecord
   has_many :skins, foreign_key: "author_id", dependent: :nullify
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
 
-  before_create :create_default_associateds
   before_validation :canonicalize_email
+  before_create :create_default_associateds
   before_destroy :remove_user_from_kudos
 
   before_update :add_renamed_at, if: :will_save_change_to_login?
