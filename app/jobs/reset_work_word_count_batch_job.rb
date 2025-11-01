@@ -1,5 +1,4 @@
 class ResetWorkWordCountBatchJob < ApplicationJob
-  queue_as :low_priority
 
   def perform(batch, batch_number = nil, total_batches = nil)
     if batch_number && total_batches
