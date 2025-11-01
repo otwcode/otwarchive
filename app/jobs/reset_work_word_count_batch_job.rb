@@ -1,10 +1,9 @@
 class ResetWorkWordCountBatchJob < ApplicationJob
-
   def perform(batch, batch_number = nil, total_batches = nil)
     if batch_number && total_batches
-      puts "Starting batch #{batch_number} of #{total_batches} (#{batch.size} works)"
+      Rails.logger.info "Starting batch #{batch_number} of #{total_batches} (#{batch.size} works)"
     else
-      puts "Starting batch (#{batch.size} works)"
+      Rails.logger.info "Starting batch (#{batch.size} works)"
     end
 
     Work.where(id: batch).find_each do |work|
@@ -16,9 +15,9 @@ class ResetWorkWordCountBatchJob < ApplicationJob
     end
 
     if batch_number && total_batches
-      puts "Finished batch #{batch_number}/#{total_batches}"
+      Rails.logger.info "Finished batch #{batch_number}/#{total_batches}"
     else
-      puts "Finished batch (#{batch.size} works)"
+      Rails.logger.info "Finished batch (#{batch.size} works)"
     end
   end
 end
