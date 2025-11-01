@@ -164,7 +164,13 @@ class AbuseReport < ApplicationRecord
           ids.push(id)
         end
       end
+      ids.join(", ")
+    elsif (series_id = reported_series_id)
+      series = Series.find_by(id: series_id)
+      return "deletedseries" unless series
 
+      ids = series.pseuds.pluck(:user_id).uniq.sort
+      ids.prepend("orphanedseries") if ids.delete(User.orphan_account.id)
       ids.join(", ")
     elsif (user_login = reported_user_login)
       user = User.find_by(login: user_login)
@@ -184,6 +190,11 @@ class AbuseReport < ApplicationRecord
     url[%r{/comments/(\d+)}, 1]
   end
 
+  # ID of the reported series
+  def reported_series_id
+    url[%r{/series/(\d+)}, 1]
+  end
+  
   # Username (aka. login) of the reported user
   def reported_user_login
     url[%r{/users/([^/]+)}, 1] || url[%r{/((works)|(bookmarks)).*(\?|&)user_id=([^&]*)}, 5]
