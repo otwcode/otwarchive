@@ -93,6 +93,8 @@ en:
     check_permission_to_edit:
       error:
         frozen: Frozen comments cannot be edited.
+    check_guest_email_is_from_suspended_or_banned_user:
+      error: Sorry, you have been blocked from commenting.
     create:
       success:
         moderated:

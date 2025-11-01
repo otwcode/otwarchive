@@ -635,5 +635,19 @@ namespace :After do
     end
     puts "Job complete."
   end
+
+  desc "Backfill canonical_email for existing users"
+  task(add_canonical_email: :environment) do
+    User.find_in_batches.with_index do |batch, index|
+      batch.each do |user|
+        user.update_attribute(:canonical_email, AdminBlacklistedEmail.canonical_email(user.email)) if user.email
+      end
+
+      batch_number = index + 1
+      puts "Batch #{batch_number} complete."
+    end
+    puts "Job complete."
+  end
+
   # This is the end that you have to put new tasks above.
 end

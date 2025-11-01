@@ -162,6 +162,12 @@ class User < ApplicationRecord
 
   after_update :expire_caches
 
+  before_validation :canonicalize_email, if: :saved_change_to_email?
+
+  def canonicalize_email
+    self.canonical_email = AdminBlacklistedEmail.canonical_email(self.email) if self.email
+  end
+
   def expire_caches
     return unless saved_change_to_login?
     series.each(&:expire_byline_cache)
