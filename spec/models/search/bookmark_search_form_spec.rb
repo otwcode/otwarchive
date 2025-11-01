@@ -51,11 +51,10 @@ describe BookmarkSearchForm, bookmark_search: true do
           expect(results.map(&:title)).to eq ["Ten", "Series to be bookmarked"]
         end
 
-        it "changes when the work wordcount changes" do
+        it "reindexes when the work wordcount changes" do
           # Update the one public work in the series to have 15 words instead of 5
           work5.chapters.first.update(content: "This is a work with a word count of fifteen which is more than ten.")
           work5.save
-          series.save
           run_all_indexing_jobs
 
           # Search after the change
@@ -66,6 +65,52 @@ describe BookmarkSearchForm, bookmark_search: true do
           expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [15, 10]
           # Check titles of returned results
           expect(results.map(&:title)).to eq ["Series to be bookmarked", "Ten"]
+        end
+
+        it "reindexes when a work is unrestricted" do
+          # Update the restricted work in the series to be public
+          work10r.update(restricted: false)
+          work10r.save
+          run_all_indexing_jobs
+
+          # Search after the change
+          User.current_user = nil
+          results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
+          # "Series to be bookmarked": 15, "Ten": 10
+          # Check word count of returned results
+          expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [15, 10]
+          # Check titles of returned results
+          expect(results.map(&:title)).to eq ["Series to be bookmarked", "Ten"]
+        end
+
+        it "reindexes when a work is deleted" do
+          # Destroy one of the works in the series
+          work10r.destroy
+          run_all_indexing_jobs
+
+          # Search after the change
+          User.current_user = create(:user)
+          results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
+          # "Series to be bookmarked": 5, "Ten": 10
+          # Check word count of returned results
+          expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [10, 5]
+          # Check titles of returned results
+          expect(results.map(&:title)).to eq ["Ten", "Series to be bookmarked"]
+        end
+
+        it "reindexes when a work is hidden by admin" do
+          # Hide one of the works in the series
+          work10r.update(hidden_by_admin: true)
+          run_all_indexing_jobs
+
+          # Search after the change
+          User.current_user = create(:user)
+          results = BookmarkSearchForm.new(parent: tag, sort_column: "word_count").bookmarkable_search_results
+          # "Series to be bookmarked": 5, "Ten": 10
+          # Check word count of returned results
+          expect(results.map { |item| item.respond_to?(:public_word_count) ? item.public_word_count : item.word_count }).to eq [10, 5]
+          # Check titles of returned results
+          expect(results.map(&:title)).to eq ["Ten", "Series to be bookmarked"]
         end
 
         context "with external bookmark too" do
