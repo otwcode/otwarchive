@@ -62,7 +62,7 @@ namespace :work do
     end
 
     cutoff_date = Date.parse(args.date)
-    batch_size = (args.batch_size || 2).to_i  # Process set number of works works per job
+    batch_size = (args.batch_size || 100).to_i  # Process set number of works per job
     work_ids = Work.where("created_at < ?", cutoff_date).pluck(:id)
 
     batches = work_ids.each_slice(batch_size).to_a
