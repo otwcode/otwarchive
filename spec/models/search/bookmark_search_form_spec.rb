@@ -55,6 +55,7 @@ describe BookmarkSearchForm, bookmark_search: true do
           # Update the one public work in the series to have 15 words instead of 5
           work5.chapters.first.update(content: "This is a work with a word count of fifteen which is more than ten.")
           work5.save
+          series.save
           run_all_indexing_jobs
 
           # Search after the change
