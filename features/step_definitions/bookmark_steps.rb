@@ -28,6 +28,20 @@ Given /^I have a bookmark of a deleted work$/ do
   step %{all indexing jobs have been run}
 end
 
+Given "a bookmark by {string} of a mixed visibility series with fandom {string}" do |bookmarker, fandom|
+  step %{a canonical fandom "#{fandom}"}
+  step %{the user "#{bookmarker}" exists and is activated}
+  creator = User.find_by(login: bookmarker).default_pseud
+  restricted = FactoryBot.create(:work, title: "Restricted Work", fandom_string: fandom, authors: [creator], restricted: true)
+  unrestricted = FactoryBot.create(:work, title: "Unrestricted Work", fandom_string: fandom, authors: [creator], restricted: false)
+  series = FactoryBot.create(:series, title: "Mixed Visibility", works: [restricted, unrestricted], authors: [creator])
+
+  FactoryBot.create(:bookmark,
+                    bookmarkable: series,
+                    bookmarkable_type: "Series",
+                    pseud_id: creator.id)
+end
+
 Given "bookmarks with various word counts in fandom {string} to search" do |fandom|
   step %{a canonical fandom "#{fandom}"}
   # set up some works

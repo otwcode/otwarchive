@@ -18,16 +18,20 @@ Feature: Filter bookmarks
       And I should see "english work"
       And I should see "german work"
 
+  # FIXME: currently failing
   Scenario: Filtering series bookmarks by word count with restricted works
-    Given I am logged in as "awesome_posterrr"
-      And I post the work "Public" as part of a series "Mixed Visibility"
-      And I post the work "Restricted" as part of a series "Mixed Visibility"
-      And I lock the work "Restricted"
-      And I bookmark the series "Mixed Visibility"
-    When I go to awesome_posterrr's bookmarks page
+    Given a bookmark by "awesome_posterrr" of a mixed visibility series with fandom "What a fandom"
+    # Given I am logged in as "awesome_posterrr"
+    #   And I post the work "Public" as part of a series "Mixed Visibility"
+    #   And I post the work "Restricted" as part of a series "Mixed Visibility"
+    #   And I lock the work "Restricted"
+    #   And I bookmark the series "Mixed Visibility"
+    # Logged-in behavior
+    When I am logged in as "awesome_posterr"
+      And I go to awesome_posterrr's bookmarks page
     # Verify the starting visible word count
     Then I should see "1 Bookmark by awesome_posterrr"
-      And I should see "Words: 12"
+      And I should see "Words: 16"
     When I fill in "To" with "10" within "#work_words"
       And I press "Sort and Filter"
     Then I should see "0 Bookmarks by awesome_posterrr"
@@ -37,15 +41,17 @@ Feature: Filter bookmarks
       And I press "Sort and Filter"
     Then I should see "1 Bookmark by awesome_posterrr"
       And I should see "Mixed Visibility"
+    # Logged out behavior
     When I am logged out
       And I go to awesome_posterrr's bookmarks page
     Then I should see "1 Bookmark by awesome_posterrr"
-      And I should see "Words: 6"
+      And I should see "Words: 8"
     When I fill in "To" with "10" within "#work_words"
       And I press "Sort and Filter"
     Then I should see "1 Bookmark by awesome_posterrr"
       And I should see "Mixed Visibility"
 
+  # FIXME: currently failing
   Scenario: Sorting series bookmarks by word count with restricted works
     Given I am logged in as "poster_child"
       And I post the 2 chapter work "In between"
