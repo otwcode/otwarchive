@@ -77,7 +77,18 @@ Feature: Search Bookmarks
     When I follow "Edit Your Search"
     Then the field labeled "Word count" should contain "<15"
 
-  # FIXME: add sort test?
+  Scenario: Sort bookmarks by word count
+    Given bookmarks with various word counts in fandom "Totally a fandom" to search
+    When I select "Word Count" from "Sort by"
+      And I fill in "Work tags" with "Totally a fandom"
+      And I press "Search Bookmarks"
+    Then I should see the page title "Search Bookmarks"
+      And I should see "4 Found"
+      And "Twenty" should appear before "Fifteen"
+      And "Fifteen" should appear before "Ten"
+      And "Ten" should appear before "Five"
+    When I follow "Edit Your Search"
+    Then "Word Count" should be selected within "Sort by"
 
   Scenario: Search bookmarks by date updated
     Given I have bookmarks to search by dates
