@@ -25,6 +25,13 @@ describe FeedbacksController do
       allow_any_instance_of(FeedbackReporter).to receive(:zoho_resource_client).and_return(mock_zoho)
     end
 
+    it "specifies a channel" do
+      expect(mock_zoho).to receive(:create_ticket).with(ticket_attributes: include(
+        "channel" => "Support Form"
+      ))
+      post :create, params: default_parameters
+    end
+
     context "when accessed by a logged-in user" do
       let(:user) { create(:user) }
 
