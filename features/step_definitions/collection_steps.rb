@@ -246,6 +246,15 @@ When "I approve the work {string} in the collection {string}" do |work, collecti
   step %{I select "Approved" from "collection_items_#{item_id}_collection_approval_status"}
 end
 
+When "I give {string} the {string} role in the collection {string}" do |byline, role, collection|
+  pseud = Pseud.parse_byline(byline)
+  collection = Collection.find_by(title: collection)
+  participant_id = CollectionParticipant.find_by(pseud: pseud, collection: collection).id
+  selector = "#participant_#{participant_id}"
+  step %{I select "#{role}" from "#{pseud.user.login}_role" within "#{selector}"}
+  step %{I press "Update" within "#{selector}"}
+end
+
 ### THEN
 
 Then /^"([^"]*)" collection exists$/ do |title|
@@ -322,4 +331,14 @@ Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
   expect(page).to have_content("#{title} by Anonymous")
   visit user_path(work.users.first)
   expect(page).not_to have_content(title)
+end
+
+Then "{string} should have the {string} role in the collection {string}" do |byline, role, collection|
+  pseud = Pseud.parse_byline(byline)
+  collection = Collection.find_by(title: collection)
+  participant_id = CollectionParticipant.find_by(pseud: pseud, collection: collection).id
+  selector = "#participant_#{participant_id}"
+  within(selector) do
+    expect(page).to have_select("#{pseud.user.login}_role", selected: role)
+  end
 end
