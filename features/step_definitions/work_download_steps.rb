@@ -1,15 +1,15 @@
 Then "I should see the inspiring parent work link" do
   parent = Work.find_by(title: "Worldbuilding")
-  expected_url = Regexp.escape(work_url(parent)).sub(/^http:/, "https:")
+  expected_url = work_url(parent).sub(/^http:/, "https:")
   inspired_link = "<a href=\"#{expected_url}\">#{parent.title}</a>"
-  page.body.should =~ /Inspired by #{inspired_link}/m
+  page.body.should =~ /Inspired by #{Regexp.escape(inspired_link)}/m
 end
 
 Then "I should see the external inspiring work link" do
   parent = ExternalWork.find_by(title: "Example External")
-  expected_url = Regexp.escape(external_work_url(parent)).sub(/^http:/, "https:")
+  expected_url = external_work_url(parent).sub(/^http:/, "https:")
   inspired_link = "<a href=\"#{expected_url}\">#{parent.title}</a>"
-  page.body.should =~ /Inspired by #{inspired_link}/m
+  page.body.should =~ /Inspired by #{Regexp.escape(inspired_link)}/m
 end
 
 Then /^I should receive a file of type "(.*?)"$/ do |filetype|
