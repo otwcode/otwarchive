@@ -2203,6 +2203,10 @@ en:
       make_default: Make this name default
       name: Name (required)
       submit: Submit
+    new:
+      new_pseud: New Pseud
+      back_to_pseuds: Back To Pseuds
+      create_pseud: Create Pseud
   readings:
     index:
       history:
