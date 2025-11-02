@@ -181,6 +181,10 @@ en:
   people:
     index:
       collection_page_title: "%{collection_title} - People"
+  preferences:
+    update:
+      error: Sorry, something went wrong. Please try that again.
+      success: Your preferences were successfully updated.
   profile:
     show:
       page_title: "%{username} - Profile"
