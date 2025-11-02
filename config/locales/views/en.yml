@@ -2176,6 +2176,10 @@ en:
       transfer:
         one: Transfer this bookmark to the default pseud
         other: Transfer these bookmarks to the default pseud
+    new:
+      back_to_pseuds: Back To Pseuds
+      create_pseud: Create Pseud
+      new_pseud: New Pseud
     pseud_blurb:
       confirm_delete: Are you sure?
       default_pseud: Default Pseud
@@ -2203,10 +2207,6 @@ en:
       make_default: Make this name default
       name: Name (required)
       submit: Submit
-    new:
-      new_pseud: New Pseud
-      back_to_pseuds: Back To Pseuds
-      create_pseud: Create Pseud
   readings:
     index:
       history:
