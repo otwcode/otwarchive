@@ -23,6 +23,8 @@ class User < ApplicationRecord
   # Allows other models to get the current user with User.current_user
   thread_cattr_accessor :current_user
 
+  before_validation :canonicalize_email, if: :will_save_change_to_email?
+
   # Authorization plugin
   acts_as_authorized_user
   acts_as_authorizable
@@ -87,7 +89,6 @@ class User < ApplicationRecord
   has_many :skins, foreign_key: "author_id", dependent: :nullify
   has_many :work_skins, foreign_key: "author_id", dependent: :nullify
 
-  before_validation :canonicalize_email
   before_create :create_default_associateds
   before_destroy :remove_user_from_kudos
 
