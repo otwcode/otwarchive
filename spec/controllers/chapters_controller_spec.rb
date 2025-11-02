@@ -165,6 +165,18 @@ describe ChaptersController do
       expect(assigns[:chapters]).to eq([work.chapters.first, chapter])
     end
 
+    it "assigns @first_chapter when not on first chapter" do
+      chapter = create(:chapter, work: work, position: 2)
+      get :show, params: { work_id: work.id, id: chapter.id }
+      expect(assigns[:first_chapter]).to eq(work.chapters.first)
+    end
+
+    it "does not assign @first_chapter when on first chapter" do
+      create(:chapter, work: work, position: 2)
+      get :show, params: { work_id: work.id, id: work.chapters.first.id }
+      expect(assigns[:first_chapter]).to be_nil
+    end
+
     it "assigns @previous_chapter when not on first chapter" do
       chapter = create(:chapter, work: work, position: 2)
       get :show, params: { work_id: work.id, id: chapter.id }
@@ -187,6 +199,18 @@ describe ChaptersController do
       chapter = create(:chapter, work: work, position: 2)
       get :show, params: { work_id: work.id, id: chapter.id }
       expect(assigns[:next_chapter]).to be_nil
+    end
+
+    it "assigns @last_chapter when not on last chapter" do
+      chapter = create(:chapter, work: work, position: 2)
+      get :show, params: { work_id: work.id, id: work.chapters.first.id }
+      expect(assigns[:last_chapter]).to eq(chapter)
+    end
+
+    it "does not assign @last_chapter when on last chapter" do
+      chapter = create(:chapter, work: work, position: 2)
+      get :show, params: { work_id: work.id, id: chapter.id }
+      expect(assigns[:last_chapter]).to be_nil
     end
 
     it "assigns @page_title with fandom, author name, work title, and chapter" do

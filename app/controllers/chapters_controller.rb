@@ -44,8 +44,10 @@ class ChaptersController < ApplicationController
 
     chapter_position = @chapters.index(@chapter)
     if @chapters.length > 1
+      @first_chapter = @chapters.first unless @chapter == @chapters.first
       @previous_chapter = @chapters[chapter_position - 1] unless chapter_position.zero?
       @next_chapter = @chapters[chapter_position + 1]
+      @last_chapter = @chapters.last unless @chapter == @chapters.last
     end
 
     if @work.unrevealed?
