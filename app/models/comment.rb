@@ -188,7 +188,9 @@ class Comment < ApplicationRecord
       end
       if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
         if self.reply_comment?
-          CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+          I18n.with_locale(self.comment_owner.preference.locale_for_mails) do
+            CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+          end
         else
           CommentMailer.comment_sent_notification(self).deliver_after_commit
         end
@@ -228,7 +230,9 @@ class Comment < ApplicationRecord
     end
     if notify_user_by_email?(self.comment_owner) && notify_user_of_own_comments?(self.comment_owner)
       if self.reply_comment?
-        CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+        I18n.with_locale(self.comment_owner.preference.locale_for_mails) do
+          CommentMailer.comment_reply_sent_notification(self).deliver_after_commit
+        end
       else
         CommentMailer.comment_sent_notification(self).deliver_after_commit
       end

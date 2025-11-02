@@ -2657,7 +2657,6 @@ en:
         pitch: Pitch
         switch: Switch
       pitch:
-        collections: Collections (%{coll_number})
         drafts: Drafts (%{drafts_number})
       switch:
         assignments: Assignments (%{assignment_number})
@@ -2753,6 +2752,15 @@ en:
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
+    work_header_navigation:
+      chapter_index:
+        button: Chapter Index
+        full_page: Full-Page Index
+        link: Chapter Index
+        submit: Go
+      download:
+        button: Download
+        heading: Download
     work_header_notes:
       inspired_by:
         other_works_inspired_by_this_one: other works inspired by this one
