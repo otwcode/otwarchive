@@ -640,7 +640,7 @@ namespace :After do
   task(add_canonical_email: :environment) do
     User.find_in_batches.with_index do |batch, index|
       batch.each do |user|
-        user.update_attribute(:canonical_email, AdminBlacklistedEmail.canonical_email(user.email)) if user.email
+        user.update_attribute(:canonical_email, EmailCanonicalizer.canonicalize(user.email)) if user.email
       end
 
       batch_number = index + 1

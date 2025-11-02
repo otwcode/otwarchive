@@ -165,7 +165,7 @@ class User < ApplicationRecord
   after_update :expire_caches
 
   def canonicalize_email
-    self.canonical_email = AdminBlacklistedEmail.canonical_email(self.email) if self.email
+    self.canonical_email = EmailCanonicalizer.canonicalize(self.email) if self.email
   end
 
   def expire_caches

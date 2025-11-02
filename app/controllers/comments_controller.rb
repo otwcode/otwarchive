@@ -240,7 +240,7 @@ class CommentsController < ApplicationController
   def check_guest_email_is_from_suspended_or_banned_user
     return unless guest?
 
-    canonical_email = AdminBlacklistedEmail.canonical_email(params[:comment][:email])
+    canonical_email = EmailCanonicalizer.canonicalize(params[:comment][:email])
 
     user = User.find_by(canonical_email: canonical_email)
 
