@@ -61,7 +61,7 @@ class Chapter < ApplicationRecord
     return if chapters.empty?
 
     chapters.delete(self)
-    insert_at = [self.position.to_i - 1, 0].max
+    insert_at = [[self.position.to_i - 1, 0].max, chapters.length].min
     chapters.insert(insert_at, self)
 
     positions_changed = false
