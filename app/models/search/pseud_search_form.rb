@@ -9,7 +9,7 @@ class PseudSearchForm
     :name,
     :collection_id,
     :fandom
-  ]
+  ].freeze
 
   attr_accessor :options
 
