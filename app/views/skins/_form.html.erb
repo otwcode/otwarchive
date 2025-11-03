@@ -14,8 +14,11 @@
       <% end %>
     </dd>
   
-    <dt class="required"><%= f.label :title, ts('Title') + "*" %></dt>
-    <dd class="required"><%= f.text_field :title %></dd>
+    <dt class="required"><%= f.label :title, ts('Title') + "*"%></dt>
+    <dd class="required">
+      <%= f.text_field :title, id: 'title'%>
+      <%= live_validation_for_field('title', maximum_length: ArchiveConfig.TITLE_MAX) %>
+    </dd>
 
     <dt><%= f.label :description, ts('Description') %></dt>
     <dd><%= f.text_field :description %></dd>
