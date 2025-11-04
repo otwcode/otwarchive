@@ -74,7 +74,7 @@ class Skin < ApplicationRecord
   end
 
   validates :icon_alt_text, length: { maximum: ArchiveConfig.ICON_ALT_MAX }
-  
+
   validates :description, length: { maximum: ArchiveConfig.SUMMARY_MAX }
 
   validates :css, length: { maximum: ArchiveConfig.CONTENT_MAX }
@@ -108,8 +108,9 @@ class Skin < ApplicationRecord
     errors.add(:base, :no_public_preview)
   end
 
-  validates :title, presence: true, uniqueness: { case_sensitive: false },
-    length: { maximum: ArchiveConfig.TITLE_MAX }
+  validates :title, presence: true, uniqueness: { case_sensitive: false }, length: { 
+    maximum: ArchiveConfig.TITLE_MAX 
+  }
   validate :allowed_title
   def allowed_title
     return true unless self.title.match(/archive/i)
