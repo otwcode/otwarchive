@@ -71,6 +71,10 @@ Then /^I should see Posted now$/ do
   step "I should see \"Posted #{now}\""
 end
 
+When /^I fill in "([^\"]*)" with "([^\"]*)" repeated (\d+) times$/ do |field, str, count|
+  fill_in(field, with: (str * count))
+end
+
 When /^I fill in "([^\"]*)" with$/ do |field, value|
   fill_in(field, with: value)
 end

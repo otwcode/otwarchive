@@ -212,6 +212,13 @@ describe Skin do
       expect(skin2.errors[:title]).not_to be_empty
     end
 
+    it "title has fewer characters than the maximum title length" do
+      expect(@skin.save).to be_truthy
+      skin2 = Skin.new(title: "a" * (ArchiveConfig.TITLE_MAX + 1))
+      expect(skin2.save).not_to be_truthy
+      expect(skin2.errors[:title]).not_to be_empty
+    end
+
     it "has a unique title ignoring case" do
       expect(@skin.save).to be_truthy
       skin2 = Skin.new(title: "test skin")
