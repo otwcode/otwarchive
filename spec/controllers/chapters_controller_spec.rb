@@ -212,7 +212,7 @@ describe ChaptersController do
         allow_any_instance_of(Work).to receive(:pseuds).and_return(authors)
         get :show, params: { work_id: work.id, id: work.chapters.first.id }
         expect(response).to have_http_status(:ok)
-        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{authors.sort.map(&:byline).join(", ")} - #{work.fandoms.first.name} [")
+        expect(assigns[:page_title]).to start_with("#{work.title} - Chapter 1 - #{authors.sort.map(&:byline).join(', ')} - #{work.fandoms.first.name} [")
       end
     end
 
