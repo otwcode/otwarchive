@@ -81,6 +81,7 @@ en:
         url: Parent work URL
     errors:
       messages:
+        too_long: "must be less than %{count} characters long."
         forbidden: "%{value} is not allowed"
         numeric_with_optional_hash: 'may begin with an # and otherwise contain only numbers.'
       models:
