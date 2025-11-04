@@ -63,6 +63,7 @@ Then(/^#{capture_email} should have "(.*?)" in the subject$/) do |email_ref, tex
 end
 
 Then(/^#{capture_email} should contain "(.*)"$/) do |email_ref, text|
+  text = Regexp.escape(text)
   if email(email_ref).multipart?
     email(email_ref).text_part.body.should =~ /#{text}/
     email(email_ref).html_part.body.should =~ /#{text}/

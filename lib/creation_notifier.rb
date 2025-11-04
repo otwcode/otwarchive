@@ -16,11 +16,12 @@ module CreationNotifier
 
   # send the appropriate notifications
   def do_notify
-    if self.is_a?(Work)
+    case self
+    when Work
       notify_parents
       notify_subscribers
       notify_prompters
-    elsif self.is_a?(Chapter) && self.position != 1
+    when Chapter
       notify_subscribers
     end
   end
