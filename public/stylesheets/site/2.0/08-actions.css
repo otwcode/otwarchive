@@ -256,6 +256,8 @@ for :has() increases to 95% according to caniuse.com. */
   padding: 0 0 0 0.25em;
 }
 
+/* The top position is part of a workaround for the behavior described here:
+https://otwarchive.atlassian.net/browse/AO3-4629?focusedCommentId=372231 */
 .javascript .work.navigation .secondary {
   position: absolute;
   top: 1.911em; /* 0.375em * 2 for top and bottom padding + 1.286em for height + .25em to compensate for borders which are set in pixels */
