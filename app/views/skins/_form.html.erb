@@ -14,10 +14,11 @@
       <% end %>
     </dd>
   
-    <dt class="required"><%= f.label :title, ts('Title') + "*"%></dt>
+    <dt class="required"><%= f.label :title, ts("Title") %></dt>
     <dd class="required">
-      <%= f.text_field :title %>
+      <%= f.text_field :title, class: "observe_textlength" %>
       <%= live_validation_for_field("skin_title", maximum_length: ArchiveConfig.TITLE_MAX) %>
+      <%= generate_countdown_html("skin_title", ArchiveConfig.TITLE_MAX) %>
     </dd>
 
     <dt><%= f.label :description, ts('Description') %></dt>
