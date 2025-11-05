@@ -67,10 +67,12 @@
   <!-- END work skin -->
 <!-- END work -->
 
-<!-- BEGIN comment section -->
-<%= render 'comments/commentable', :commentable => @work %>
-<!-- END comment section -->
+<% if @work.posted %>
+  <!-- BEGIN comment section -->
+  <%= render 'comments/commentable', :commentable => @work %>
+  <!-- END comment section -->
+  <% end %>
+  <!-- END revealed -->
 <% end %>
-<!-- END revealed -->
 
 <%= render "hit_count/include" %>

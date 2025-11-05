@@ -187,3 +187,47 @@ Feature: Work Drafts
       When I follow "Next Chapter"
         And I press "Post Chapter"
       Then I should see "Words:16"
+
+  Scenario: A work draft should not have comments
+  Given I am logged in as "Scott" with password "password"
+    And the draft "scotts commentless draft"
+  When I am on scott's works page
+    Then I should see "Drafts (1)"
+  When I follow "Drafts (1)"
+    Then I should see "scotts commentless draft"
+      And I should not see "Comments"
+      And I should not see "Comment as Scott"
+      And I should not see "Comment"
+
+  Scenario: An unposted chapter from a work (published or draft) should not have comments
+  Given I am logged in as "Scott" with password "password"
+    And the draft "scotts chaptered draft"
+    And I follow "Cancel"
+    And I edit the work "scotts chaptered draft"
+    And I follow "Add Chapter"
+    And I fill in "content" with "this is chapter content"
+    And I press "Preview"
+  Then I should see "This is a draft chapter in an unposted work. The work will be scheduled for deletion on"
+  When I am on scott's works page
+    Then I should see "Drafts (1)"
+  When I follow "Drafts (1)"
+    Then I should see "scotts chaptered draft"
+      And I should not see "Comments"
+      And I should not see "Comment as Scott"
+      And I should not see "Comment"
+
+  Scenario: An unposted chapter from a published work should not have comments
+  Given I am logged in as "Scott" with password "password"
+    When I set up the draft "multiChap"
+      And I check "This work has multiple chapters"
+      And I fill in "Chapter Title" with "cool chapter title"
+      And I fill in "Chapter 1 of" with "?"
+      And I press "Post"
+  When I follow "Add Chapter"
+    And I fill in "content" with "this is chapter 2 content"
+    And I press "Save Draft"
+    And I press "Save Draft"
+  Then I should see "This chapter is a draft and hasn't been posted yet!"
+    And I should not see "Comments"
+    And I should not see "Comment as Scott"
+    And I should not see "Comment"

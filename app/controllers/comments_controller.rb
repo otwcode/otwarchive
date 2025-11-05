@@ -322,6 +322,12 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.xml
   def create
+    # If the commentable is a story or chapter, and it is not posted, then redirect with flash error
+    if @commentable.respond_to?(:posted?) && !@commentable.posted?
+      flash[:error] = ts("You cannot comment on an unposted work.")
+      redirect_back_or_to root_path and return
+    end
+
     if @commentable.nil?
       flash[:error] = ts("What did you want to comment on?")
       redirect_back_or_to root_path

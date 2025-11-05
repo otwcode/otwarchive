@@ -48,9 +48,11 @@
   </div>
   <!-- END work -->
 
-  <!-- BEGIN comment section -->
-  <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
-  <!-- END comment section -->
+  <% if @work.posted && @chapter.posted %>
+    <!-- BEGIN comment section -->
+    <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
+    <!-- END comment section -->
+  <% end %>
 
   <% if @next_chapter %>
     <script type="speculationrules">
