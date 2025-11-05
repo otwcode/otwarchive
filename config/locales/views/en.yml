@@ -2220,8 +2220,17 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+    form:
+      description: Description
+      icon: Upload a preview (png, jpeg or gif)
+      public: Apply to make public
+      skin_type: Skin Type
+      title: Title
     revert_skin_form:
       revert_to_default: Revert to Default Skin
+    wizard_form:
+      description: Description
+      title: Title
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
