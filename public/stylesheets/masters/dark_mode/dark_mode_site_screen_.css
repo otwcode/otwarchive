@@ -407,7 +407,8 @@ span.delete {
 
 /* context: work navigation actions with secondary navigation */
 
-.download, .javascript .download .secondary {
+.work.navigation .download,
+.javascript .work.navigation .download .secondary {
   background: #2a2a2a;
   border-color: #555;
     box-shadow: 1px 1px 3px #000;
