@@ -226,7 +226,7 @@ describe ChaptersController do
     end
 
     context "when work has two fandoms" do
-      it "assigns @page_title with both fandoms" do
+      it "assigns @page_title with the first fandom" do
         first = create(:fandom, name: "The First")
         second = create(:fandom, name: "The Second")
         allow_any_instance_of(Work).to receive(:fandoms).and_return([first, second])
