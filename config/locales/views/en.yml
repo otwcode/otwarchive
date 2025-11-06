@@ -586,6 +586,10 @@ en:
           preferences_link_text: update your preferences
           prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
           refuse_link_text: refuse a gift
+    summary:
+      being_generated: The summary is being generated. Please try again in a few minutes.
+      no_tags: Tags were not used in this Challenge, so there is no summary to display here.
+      title: Sign-up Summary for %{collection}
   chapters:
     posting_fieldset:
       actions:
