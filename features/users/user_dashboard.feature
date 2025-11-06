@@ -281,5 +281,5 @@ Feature: User dashboard
   When I am on new_user's user page
   Then I should see "Hi! It looks like you've just logged in to AO3 for the first time."
   When I follow "useful tips for new users"
-  Then I should see "Welcome to the Example Archive!" within "#modal"
+  Then I should see "Here are some tips to help you get started" within "#modal"
     And I should see "Close" within "#modal"
