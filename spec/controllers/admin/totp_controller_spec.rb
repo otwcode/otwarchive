@@ -215,13 +215,6 @@ describe Admin::TotpController do
         it_redirects_to_with_notice(admin_preferences_path, "Successfully disabled two-factor authentication.")
       end
 
-      it "denies access when TOTP code is wrong" do
-        fake_login_admin(admin)
-        post :disable_totp, params: { admin_id: admin.login, admin: { otp_attempt: "000000", password: "correct_password" } }
-        expect(admin.reload.otp_required_for_login).to be_truthy
-        it_redirects_to_with_error(confirm_disable_admin_totp_path, "Incorrect authentication code. Your code may have expired.")
-      end
-
       it "denies access when password is wrong" do
         fake_login_admin(admin)
         post :disable_totp, params: { admin_id: admin.login, admin: { otp_attempt: admin.current_otp, password: "wrong_password" } }

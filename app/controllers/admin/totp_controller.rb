@@ -51,11 +51,6 @@ class Admin::TotpController < Admin::BaseController
       return redirect_to confirm_disable_admin_totp_path
     end
 
-    unless current_admin.validate_and_consume_otp!(enable_2fa_params[:otp_attempt])
-      flash[:error] = t(".incorrect_code")
-      return redirect_to confirm_disable_admin_totp_path
-    end
-
     if current_admin.disable_otp!
       flash[:notice] = t(".success")
     else

@@ -58,7 +58,6 @@ Feature: Authenticate Admin Users With TOTP 2FA
       And I follow "Disable TOTP" 
     Then I should see "Disable Two-Factor Authentication"
     When I fill in "password" with "testpassword"
-      And I fill in a valid TOTP token for admin "admin"
       And I press "Disable"
     Then I should see "Successfully disabled two-factor authentication."
 
@@ -73,25 +72,8 @@ Feature: Authenticate Admin Users With TOTP 2FA
       And I follow "Disable TOTP" 
     Then I should see "Disable Two-Factor Authentication"
     When I fill in "password" with "wrongpassword"
-      And I fill in a valid TOTP token for admin "admin"
       And I press "Disable"
     Then I should see "The password or admin username you entered doesn't match our records."
-      And I should not see "Successfully disabled two-factor authentication."
-
-  Scenario: Admins cannot disable TOTP 2FA if they provide a wrong code
-    Given the following admin exists
-      | login | password     | email             |
-      | admin | testpassword | admin@example.com |
-      And I am logged in as admin "admin" with password "testpassword"
-      And admin "admin" has TOTP 2FA enabled
-    When I go to the home page
-      And I follow "My Preferences"
-      And I follow "Disable TOTP" 
-    Then I should see "Disable Two-Factor Authentication"
-    When I fill in "password" with "testpassword"
-      And I fill in "Two-Factor Authentication Code" with "000000"
-      And I press "Disable"
-    Then I should see "Incorrect authentication code. Your code may have expired."
       And I should not see "Successfully disabled two-factor authentication."
 
   Scenario: Admins with TOTP 2FA enabled can log in after providing their code
