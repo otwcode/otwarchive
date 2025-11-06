@@ -28,7 +28,6 @@ en:
         success: Successfully enabled two-factor authentication; please make note of your backup codes.
       disable_totp:
         failure: Could not disable two-factor authentication.
-        incorrect_code: Incorrect authentication code. Your code may have expired.
         success: Successfully disabled two-factor authentication.
       show_backup_codes:
         already_seen: You have already seen your backup codes. For security reasons, they cannot be seen again.

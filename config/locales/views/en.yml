@@ -439,7 +439,6 @@ en:
         landmark:
           submit: Submit
         page_title: Disable TOTP
-        two_factor_authentication_code: Two-Factor Authentication Code
       new:
         confirm_and_enable: Confirm and Enable
         landmark:
