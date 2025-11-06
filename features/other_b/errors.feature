@@ -8,9 +8,8 @@ Feature: Error messages
       And I follow "Edit Tags"
     When I fill in "Fandoms" with "^"
       And I press "Update"
-    Then I should see "Tag name '^' cannot include the following restricted characters"
-
-
+    Then I should see "Sorry! We couldn't save this work because: Tag name '^' cannot include the following restricted characters: , ^ * < > { } = ` ， 、 \ %"
+    
   Scenario: Error messages should display the entire user input when containing '^'
     Given I am logged in as "skinner"
       And I am on the skins page
