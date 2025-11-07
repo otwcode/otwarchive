@@ -367,7 +367,7 @@ Scenario: Cannot reply to comments (no button) while logged as admin
       And the email to "creator" should contain "Go to the thread starting from this comment"
       And the email to "creator" should be translated
 
-  Scenario: Translated comment reply notification email
+  Scenario: Translated comment sent notification email
     Given the work "Generic Work"
       And I am logged in as "commenter"
       And I set my preferences to turn on copies of my own comments
