@@ -2601,7 +2601,7 @@ en:
           log_in: Log in
           no_account: Don't have an account? %{join_link}.
           request_invite: Request an invitation to join
-          reset_password: Reset password
+          reset_password: Reset your password
         restricted:
           account_exists: If you already have an Archive of Our Own account, log in now.
           commenting_unavailable: Commenting on this work is only available to registered users of the Archive.
