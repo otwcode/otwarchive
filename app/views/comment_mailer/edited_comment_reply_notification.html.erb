@@ -7,15 +7,11 @@
   <%# i18n-tasks-use t("comment_mailer.edited_comment_reply_notification.content.tag.html") %>
   <%= content_for_commentable_html(@comment) %>
 
-  <p>
-    You wrote:
-    <%= style_quote(raw(@your_comment.sanitized_mailer_content)) %>
-  </p>
+  <p><%= t(".you_wrote") %></p>
+  <%= style_quote(raw(@your_comment.sanitized_mailer_content)) %>
 
-  <p>
-    <%= commenter_pseud_or_name_link(@comment) %> edited their response to:
-    <%= style_quote(raw(@comment.sanitized_mailer_content)) %>
-  </p>
+  <p><%= t(".commenter_edited_response.html", commenter_link: commenter_pseud_or_name_link(@comment)) %></p>
+  <%= style_quote(raw(@comment.sanitized_mailer_content)) %>
 
   <%= render 'comment_notification_footer' %>
 

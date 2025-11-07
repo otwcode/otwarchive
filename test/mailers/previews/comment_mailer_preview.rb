@@ -33,6 +33,24 @@ class CommentMailerPreview < ApplicationMailerPreview
       CommentMailer.comment_reply_sent_notification(reply)
     end
 
+    # Sent to a user when they receive a reply to their comment
+    define_method :"comment_reply_notification_#{creation_type}" do
+      _, commentable = create_commentable_data(creation_type)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable)
+      reply = create(:comment, :for_mailer_preview, commentable: comment)
+
+      CommentMailer.comment_reply_notification(comment, reply)
+    end
+
+    # Sent to a user when someone edits their reply to their comment
+    define_method :"edited_comment_reply_notification_#{creation_type}" do
+      _, commentable = create_commentable_data(creation_type)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable)
+      reply = create(:comment, :for_mailer_preview, commentable: comment, edited_at: Time.current)
+
+      CommentMailer.edited_comment_reply_notification(comment, reply)
+    end
+    
     # Tags don't have comment moderation, chapters use the same logic as unchaptered works
     next if [:tag, :titled_chapter, :untitled_chapter].include?(creation_type)
 
@@ -71,51 +89,12 @@ class CommentMailerPreview < ApplicationMailerPreview
     CommentMailer.comment_notification(user, comment)
   end
 
-  # Sent to a user when they get a comment reply to their comment
-  def comment_reply_notification
-    comment = create(:comment)
-
-    replier = create(:user, :for_mailer_preview)
-    reply = create(:comment, commentable: comment, pseud: replier.default_pseud)
-    CommentMailer.comment_reply_notification(comment, reply)
-  end
-
-  # Sent to a user when they get a comment reply to their comment on a titled chapter of a chaptered work
-  def comment_reply_notification_titled_chapter
-    work = create(:work, expected_number_of_chapters: 2)
-    chapter = create(:chapter, work: work, title: "Some Chapter")
-    comment = create(:comment, commentable: chapter)
-
-    replier = create(:user, :for_mailer_preview)
-    reply = create(:comment, commentable: comment, pseud: replier.default_pseud)
-    CommentMailer.comment_reply_notification(comment, reply)
-  end
-
-  # Sent to a user when they get a comment reply to their comment on an untitled chapter of a chaptered work
-  def comment_reply_notification_untitled_chapter
-    work = create(:work, expected_number_of_chapters: 2)
-    comment = create(:comment, commentable: work.first_chapter)
-
-    replier = create(:user, :for_mailer_preview)
-    reply = create(:comment, commentable: comment, pseud: replier.default_pseud)
-    CommentMailer.comment_reply_notification(comment, reply)
-  end
-
   # Sent to a user when they get a reply to their comment by an anonymous creator
   def comment_reply_notification_anon
     replier = create(:user)
     work = create(:work, authors: [replier.default_pseud], collections: [create(:anonymous_collection)])
 
     comment = create(:comment, commentable: work)
-    reply = create(:comment, commentable: comment, pseud: replier.default_pseud)
-    CommentMailer.comment_reply_notification(comment, reply)
-  end
-
-  # Sent to a user when they get a comment reply to their comment on a tag
-  def comment_reply_notification_tag
-    comment = create(:comment, :on_tag)
-
-    replier = create(:user, :for_mailer_preview)
     reply = create(:comment, commentable: comment, pseud: replier.default_pseud)
     CommentMailer.comment_reply_notification(comment, reply)
   end
