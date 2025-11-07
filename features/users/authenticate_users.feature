@@ -14,7 +14,7 @@ Feature: User Authentication
       And I press "Log In"
     Then I should see "The password or username you entered doesn't match our records"
       And I should see "Forgot your password or username?"
-    When I follow "Reset password"
+    When I follow "Reset your password"
     Then I should see "Please tell us the username or email address you used when you signed up for your Archive account"
     When I fill in "Email address or username" with "sam"
       And I press "Reset Password"
