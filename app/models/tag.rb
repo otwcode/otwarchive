@@ -1100,6 +1100,36 @@ class Tag < ApplicationRecord
     end
   end
 
+  def child_data(child_type)
+    return {} unless self.child_types.include?(child_type)
+    
+    tags = TagQuery.new(type: child_type,
+                        "#{self.class.name.downcase}_ids": [self.id],
+                        sort_column: "uses",
+                        page: 1,
+                        per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
+    
+    {
+      tags: tags.to_a,
+      total: tags.total_entries
+    }
+  end
+
+  def child_merger_data
+    return {} if self.merger_id.present?
+
+    tags = TagQuery.new(type: self.type,
+                        merger_id: self.id,
+                        sort_column: "uses",
+                        page: 1,
+                        per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
+
+    {
+      tags: tags.to_a,
+      total: tags.total_entries
+    }
+  end
+
   def suggested_parent_tags(parent_type, options = {})
     limit = options[:limit] || 50
     work_ids = works.limit(limit).pluck(:id)
@@ -1171,7 +1201,6 @@ class Tag < ApplicationRecord
     if tag.saved_change_to_type?
       tag.parents.each do |parent_tag|
         ActionController::Base.new.expire_fragment("tag-#{parent_tag.cache_key}-children-v4")
-        Rails.cache.delete(["tag-children-v4", @tag])
       end
     end
 

@@ -67,33 +67,6 @@ class TagsController < ApplicationController
       @bookmarks = @tag.bookmarks.visible.paginate(page: params[:page])
       @collections = @tag.collections.paginate(page: params[:page])
     end
-
-    # cache the children, since it's a possibly massive query
-    @tag_children = Rails.cache.fetch ["tag-children-v4", @tag] do
-      children = {}
-      (@tag.child_types - %w[SubTag]).each do |child_type|
-        options = {
-          sort_column: "uses",
-          page: 1,
-          per_page: ArchiveConfig.TAG_LIST_LIMIT
-        }
-
-        if child_type == "Merger"
-          options[:type] = @tag.type
-          options[:merger_id] = @tag.id
-        else
-          options[:type] = child_type
-          options[:"#{@tag.class.name.downcase}_ids"] = [@tag.id]
-        end
-
-        tags = TagQuery.new(options).search_results
-        if tags.present?
-          children[child_type] = tags.to_a
-          children["#{child_type}Total"] = tags.total_entries
-        end
-      end
-      children
-    end
   end
 
   def feed
