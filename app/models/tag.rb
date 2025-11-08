@@ -1170,7 +1170,8 @@ class Tag < ApplicationRecord
     # if type has changed, expire the tag's parents' children cache (it stores the children's type)
     if tag.saved_change_to_type?
       tag.parents.each do |parent_tag|
-        ActionController::Base.new.expire_fragment("views/tags/#{parent_tag.id}/children")
+        ActionController::Base.new.expire_fragment("tag-#{parent_tag.cache_key}-children-v4")
+        Rails.cache.delete(["tag-children-v4", @tag])
       end
     end
 

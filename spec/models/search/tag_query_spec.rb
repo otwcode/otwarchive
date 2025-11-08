@@ -182,6 +182,11 @@ describe TagQuery do
       expect(q.generated_query.dig(:query, :bool, :filter)).to include({ term: { fandom_ids: 6 } }, { term: { fandom_ids: 7 } })
     end
 
+    it "filters tags by merger id" do
+      q = TagQuery.new(merger_id: 8)
+      expect(q.generated_query.dig(:query, :bool, :filter)).to eq([{ term: { merger_id: 8 } }])
+    end
+
     it "allows you to sort by Date Created" do
       q = TagQuery.new(sort_column: "created_at")
       expect(q.generated_query[:sort]).to eq([{ "created_at" => { order: "desc", unmapped_type: "date" } }, { id: { order: "desc" } }])
