@@ -33,7 +33,7 @@ Feature: User Authentication
 
     # link from the email should not work when logged in
     When I follow "use this link to choose a new password" in the email
-    Then I should see "You are already signed in."
+    Then I should see "You are already logged in to an account. Please log out and try again."
       And I should not see "Change Password"
 
     # link from the email should work
