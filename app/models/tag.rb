@@ -704,6 +704,20 @@ class Tag < ApplicationRecord
     end
   end
 
+  def self.successful_reindex(ids)
+    Tag.select(:id, :updated_at).distinct
+      .joins("INNER JOIN common_taggings ON tags.id = common_taggings.filterable_id AND common_taggings.filterable_type = 'Tag'")
+      .where(common_taggings: { common_tag_id: ids }).each do
+      ActionController::Base.new.expire_fragment("tag-#{it.cache_key}-children-v4")
+    end
+
+    Tag.select(:id, :updated_at).distinct
+      .joins("INNER JOIN tags AS syn_tags ON syn_tags.merger_id = tags.id")
+      .where(syn_tags: { id: ids }).each do
+      ActionController::Base.new.expire_fragment("tag-#{it.cache_key}-mergers-v1")
+    end
+  end
+
   # The version of the tag that should be used for filtering, if any
   def filter
     self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)
@@ -1195,13 +1209,6 @@ class Tag < ApplicationRecord
         tag.merger.update_works_index_timestamp!
       end
       async_after_commit(:queue_child_tags_for_reindex)
-    end
-
-    # if type has changed, expire the tag's parents' children cache (it stores the children's type)
-    if tag.saved_change_to_type?
-      tag.parents.each do |parent_tag|
-        ActionController::Base.new.expire_fragment("tag-#{parent_tag.cache_key}-children-v4")
-      end
     end
 
     # Reindex immediately to update the unwrangled bin.

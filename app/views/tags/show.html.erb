@@ -64,7 +64,7 @@
   </div>
   <% end %>
 
-  <% cache("tag-#{@tag.cache_key}-mergers-v4", skip_digest: true) do %>
+  <% cache("tag-#{@tag.cache_key}-mergers-v1", skip_digest: true) do %>
     <% mergers = @tag.child_merger_data %>
     <% if mergers[:total]&.positive? %>
       <div class="synonym listbox group">
