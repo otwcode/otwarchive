@@ -22,7 +22,7 @@ module CreationNotifier
       notify_subscribers
       notify_prompters
     when Chapter
-      notify_subscribers
+      notify_subscribers if work.chapters.posted.count > 1
     end
   end
 
