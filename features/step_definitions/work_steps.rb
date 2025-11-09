@@ -36,15 +36,15 @@ end
 #
 # If you add to this regexp, you probably want to update all the
 # similar regexps in the I post/Given the draft/the work steps below.
-When /^I set up (?:a|the) draft "([^"]*)"(?: with chapter title "([^"]*)")?(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, chapter_title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud|
+When /^I set up (?:a|the) draft "([^"]*)"(?: with chapter title "([^"]*)")?(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, chapter_title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud| # rubocop:disable Cucumber/RegexStepName,Style/RedundantRegexpEscape,Metrics/ParameterLists
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
-  fill_in("Chapter Title", with: chapter_title)
+  fill_in("Chapter Title", with: chapter_title) if has_field?("Chapter Title", visible: true, disabled: false)
   select(rating.presence || DEFAULT_RATING, from: "Rating")
   check(category.presence || DEFAULT_CATEGORY)
   fill_in("Fandoms", with: (fandom.presence || DEFAULT_FANDOM))
-  fill_in("Additional Tags", with: (freeform.presence || DEFAULT_FREEFORM)+(freeform2.blank? ? "" : ",#{freeform2}"))
+  fill_in("Additional Tags", with: (freeform.presence || DEFAULT_FREEFORM) + (freeform2.blank? ? "" : ",#{freeform2}"))
   if character.present?
     fill_in("work[character_string]", with: character + (character2.blank? ? "" : ",#{character2}"))
   end
@@ -65,7 +65,7 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with chapter title "([^"]*)")?(?: w
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with chapter title "([^"]*)")?(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |number_of_chapters, title, chapter_title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud|
+When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with chapter title "([^"]*)")?(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |number_of_chapters, title, chapter_title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud| # rubocop:disable Cucumber/RegexStepName,Style/RedundantRegexpEscape,Metrics/ParameterLists
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by(title: title)
   if work
