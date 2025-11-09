@@ -56,8 +56,7 @@ class Chapter < ApplicationRecord
   def fix_positions
     return unless work&.persisted?
 
-    # force reload chapters and grab snapshot of data
-    chapters = work.chapters.reload.order(:position).to_a
+    chapters = work.chapters.order(:position).to_a
     return if chapters.empty?
 
     chapters.delete(self)
@@ -76,7 +75,7 @@ class Chapter < ApplicationRecord
    
     return unless positions_changed
 
-    # Clear ActiveRecord cache for when work.chapters is queried next positions are correct
+    # Clear ActiveRecord cache so when work.chapters is queried next, the positions are correct
     work.association(:chapters).reset
     # We're caching the chapter positions in the comment blurbs and the last
     # chapter link in the work blurbs so we need to expire the blurbs and the
