@@ -660,7 +660,7 @@ Feature: Edit chapters
     Then I should see "Chapter 2: My First Chapter"
     When subscription notifications are sent
     Then 1 email should be delivered to "second_user@example.com"
-      And the email should contain "Chapter 1: My New Actual For Real First Chapter"
+      And the email should contain escaped "Chapter 1: My New Actual For Real First Chapter"
       
   Scenario: Setting chapter position to 1 on new chapter correctly adjusts positions when previewing, 
   then posting
@@ -701,7 +701,7 @@ Feature: Edit chapters
       And I should see "That could be an amusing crossover."
     When subscription notifications are sent
     Then 1 email should be delivered to "second_user@example.com"
-      And the email should contain "Chapter 2: Second Chapter (Not Third)"
+      And the email should contain escaped "Chapter 2: Second Chapter (Not Third)"
 
   Scenario: Setting a new chapter's position outside of total chapter range should append the chapter to the end or beginning
     Given I am logged in as "karma"
