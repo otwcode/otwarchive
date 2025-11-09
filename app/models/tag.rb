@@ -468,11 +468,14 @@ class Tag < ApplicationRecord
     all.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
 
+  def self.to_param(string)
+    string.gsub("/", "*s*").gsub("&", "*a*").gsub(".", "*d*").gsub("?", "*q*").gsub("#", "*h*")
+  end
+
   # Use the tag name in urls and escape url-unfriendly characters
   def to_param
     # can't find a tag with a name that hasn't been saved yet
-    saved_name = self.name_changed? ? self.name_was : self.name
-    saved_name.gsub('/', '*s*').gsub('&', '*a*').gsub('.', '*d*').gsub('?', '*q*').gsub('#', '*h*')
+    Tag.to_param(self.name_changed? ? self.name_was : self.name)
   end
 
   def display_name
@@ -1100,19 +1103,16 @@ class Tag < ApplicationRecord
     end
   end
 
-  def child_data(child_type)
-    return {} unless self.child_types.include?(child_type)
-    
-    tags = TagQuery.new(type: child_type,
-                        "#{self.class.name.downcase}_ids": [self.id],
-                        sort_column: "uses",
-                        page: 1,
-                        per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
-    
-    {
-      tags: tags.to_a,
-      total: tags.total_entries
-    }
+  def child_data(child_types)
+    child_types.filter_map do |child_type|
+      tags = TagQuery.new(type: child_type,
+                          "#{self.class.name.downcase}_ids": [self.id],
+                          sort_column: "uses",
+                          page: 1,
+                          per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
+
+      [child_type, { tags: tags.scope(:es_only).to_a, total: tags.total_entries }] if tags.total_entries.positive?
+    end.to_h
   end
 
   def child_merger_data
@@ -1125,7 +1125,7 @@ class Tag < ApplicationRecord
                         per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
 
     {
-      tags: tags.to_a,
+      tags: tags.scope(:es_only).to_a,
       total: tags.total_entries
     }
   end

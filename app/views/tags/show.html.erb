@@ -96,23 +96,25 @@
   <% if child_types.any? %>
     <!-- caching -->
     <% cache("tag-#{@tag.cache_key}-children-v4", skip_digest: true) do %>
-      <div class="child listbox group">
-        <h3 class="heading"><%= ts('Child tags (displaying the first %{count} of each type)', :count => ArchiveConfig.TAG_LIST_LIMIT) %>:</h3>
-        <% child_types.each do |type| %>
-          <% children = @tag.child_data(type) %>
-          <% if children[:total]&.positive? %>
-            <div class="<%= type.to_s.pluralize.downcase %> listbox group">
-              <h4 class="heading"><%= type.constantize::NAME.pluralize %>:</h4>
-              <ul class="tags commas index group">
-                <%= tag_link_list(children[:tags].sort) %>
-                <% if children[:total] > ArchiveConfig.TAG_LIST_LIMIT %>
-                  <li><%= ts("and more") %></li>
-                <% end %>
-              </ul>
-            </div>
+      <% children = @tag.child_data(child_types) %>
+      <% unless children.empty? %>
+        <div class="child listbox group">
+          <h3 class="heading"><%= ts('Child tags (displaying the first %{count} of each type)', :count => ArchiveConfig.TAG_LIST_LIMIT) %>:</h3>
+          <% children.each do |type, tags| %>
+            <% if tags[:total]&.positive? %>
+              <div class="<%= type.to_s.pluralize.downcase %> listbox group">
+                <h4 class="heading"><%= type.constantize::NAME.pluralize %>:</h4>
+                <ul class="tags commas index group">
+                  <%= tag_link_list(tags[:tags].sort) %>
+                  <% if tags[:total] > ArchiveConfig.TAG_LIST_LIMIT %>
+                    <li><%= ts("and more") %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
           <% end %>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
 

@@ -1,7 +1,7 @@
 class TagQuery < Query
 
   def klass
-    "Tag"
+    "TagDecorator"
   end
 
   def index_name

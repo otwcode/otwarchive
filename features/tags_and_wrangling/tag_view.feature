@@ -53,3 +53,9 @@ Feature: View Tags
     Then "a/b" should appear before "E/F"
       And I should not see "C/D"
       And I should see "and more"
+
+  Scenario: Child tags link to the proper page urls with escaped symbols
+    Given a canonical relationship "#&A/B.?" in fandom "Canonical Fandom"
+      And all indexing jobs have been run
+    When I view the tag "Canonical Fandom"
+    Then I should see a page link to the "#&A/B.?" tag page within "//div[@class='child listbox group']"
