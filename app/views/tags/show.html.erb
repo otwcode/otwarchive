@@ -68,7 +68,7 @@
     <% mergers = @tag.child_merger_data %>
     <% if mergers[:total]&.positive? %>
       <div class="synonym listbox group">
-        <h3 class="heading"><%= ts('Tags with the same meaning') %>:</h3>
+        <h3 class="heading"><%= t(".synonyms") %></h3>
         <ul class="tags commas index group"><%= tag_link_list(mergers[:tags].sort) %></ul>
       </div>
     <% end %>
@@ -99,15 +99,15 @@
       <% children = @tag.child_data(child_types) %>
       <% unless children.empty? %>
         <div class="child listbox group">
-          <h3 class="heading"><%= ts('Child tags (displaying the first %{count} of each type)', :count => ArchiveConfig.TAG_LIST_LIMIT) %>:</h3>
+          <h3 class="heading"><%= t(".children.heading", count: ArchiveConfig.TAG_LIST_LIMIT) %></h3>
           <% children.each do |type, tags| %>
             <% if tags[:total]&.positive? %>
-              <div class="<%= type.to_s.pluralize.downcase %> listbox group">
-                <h4 class="heading"><%= type.constantize::NAME.pluralize %>:</h4>
+              <div class="<%= type.pluralize.downcase %> listbox group">
+                <h4 class="heading"><%= t(".children.#{type.downcase.pluralize}") %></h4>
                 <ul class="tags commas index group">
                   <%= tag_link_list(tags[:tags].sort) %>
                   <% if tags[:total] > ArchiveConfig.TAG_LIST_LIMIT %>
-                    <li><%= ts("and more") %></li>
+                    <li><%= t(".children.more") %></li>
                   <% end %>
                 </ul>
               </div>
