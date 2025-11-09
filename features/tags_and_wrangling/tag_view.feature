@@ -47,6 +47,7 @@ Feature: View Tags
       And I am logged in
       And I post the work "Cool Work" with fandom "Canonical Fandom" with relationship "E/F"
       And I post the work "Cooler Work" with fandom "Canonical Fandom" with relationship "a/b"
+      And I post the work "Coolest Work" with fandom "Canonical Fandom" with relationship "E/F"
       And the tag list limit is 2
       And all indexing jobs have been run
     When I view the tag "Canonical Fandom"
