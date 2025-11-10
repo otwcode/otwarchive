@@ -711,9 +711,7 @@ class Tag < ApplicationRecord
       ActionController::Base.new.expire_fragment("tag-#{it.cache_key}-children-v4")
     end
 
-    Tag.select(:id, :updated_at).distinct
-      .joins("INNER JOIN tags AS syn_tags ON syn_tags.merger_id = tags.id")
-      .where(syn_tags: { id: ids }).each do
+    Tag.select(:id, :updated_at).distinct.joins(:mergers).where(mergers: { id: ids }).each do
       ActionController::Base.new.expire_fragment("tag-#{it.cache_key}-mergers-v1")
     end
   end
