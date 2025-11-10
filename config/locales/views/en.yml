@@ -2224,7 +2224,7 @@ en:
       description: Description
       icon: Upload a preview (png, jpeg or gif)
       public: Apply to make public
-      skin_type: Skin Type
+      skin_type: Type
       title: Title
     revert_skin_form:
       revert_to_default: Revert to Default Skin
