@@ -341,6 +341,10 @@ class User < ApplicationRecord
       .destroy_all
   end
 
+  def assignments
+    ChallengeAssignment.from("(#{self.offer_assignments.to_sql} UNION #{self.pinch_hit_assignments.to_sql}) AS challenge_assignments")
+  end
+
   # Checks authorship of any sort of object
   def is_author_of?(item)
     if item.respond_to?(:pseud_id)

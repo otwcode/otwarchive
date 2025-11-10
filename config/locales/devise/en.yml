@@ -43,7 +43,7 @@ en:
         send_instructions: Check your email for instructions on how to reset your password.
       no_token: This password reset link is invalid or incomplete. Please check your email for the correct link or request a new password reset.
       send_paranoid_instructions: If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.
-      updated: Your password has been changed successfully. You are now signed in.
+      updated: Your password has been changed. You are now logged in.
       updated_not_active: Your password has been changed successfully.
       user:
         send_instructions: If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password.

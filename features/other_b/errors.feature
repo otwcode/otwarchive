@@ -7,5 +7,5 @@ Feature: Error messages
       And I view the work "Work 1"
       And I follow "Edit Tags"
     When I fill in "Fandoms" with "^"
-      And I press "Post"
+      And I press "Update"
     Then I should see "Sorry! We couldn't save this work because: Tag name '^' cannot include the following restricted characters: , ^ * < > { } = ` ， 、 \ %"

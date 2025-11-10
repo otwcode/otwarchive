@@ -1,6 +1,6 @@
 <!-- BEGIN navigation -->
 <h3 class="landmark heading"><%= ts("Actions") %></h3>
-<ul class="work navigation actions" role="menu">
+<ul class="work navigation actions">
   <% if logged_in_as_admin? || permit?("tag_wrangler") %>
     <li class="reindex"><%= link_to ts("Troubleshoot"), work_troubleshooting_path(@work) %></li>
   <% end %>
@@ -24,22 +24,19 @@
       <li class="chapter next"><%= link_to h(ts("Next Chapter")) + ' &#8594;'.html_safe, [@work, @next_chapter, :anchor => "workskin"] %></li>
     <% end %>
 
-    <li class="chapter" aria-haspopup="true">
-      <noscript>
-        <%= link_to ts('Chapter Index'), navigate_work_path(@work) %>
-      </noscript>
-      <a class="hidden" href="#"><%= ts('Chapter Index') %></a>
+    <%# The li, noscript, and button tags MUST be on the same line here to avoid the behavior described in https://otwarchive.atlassian.net/browse/AO3-4629?focusedCommentId=372231 %>
+    <li class="chapter"><noscript><%= link_to t(".chapter_index.link"), navigate_work_path(@work) %></noscript><button class="hidden"><%= t(".chapter_index.button") %></button>
       <ul id="chapter_index" class="expandable secondary hidden">
         <li>
           <%= form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do %>
             <p>
               <% options = @chapters.map{|c| [c.abbreviated_display_title.html_safe, c.id] } %>
               <%= select_tag :selected_id, options_for_select(options, params[:id].to_i) %>
-              <span class="submit actions"><%= submit_tag ts("Go") %></span>
+              <span class="submit actions"><%= submit_tag t(".chapter_index.submit") %></span>
             </p>
           <% end %>
         </li>
-        <li><%= link_to ts("Full-page index"), navigate_work_path(@work) %></li>
+        <li><%= link_to t(".chapter_index.full_page"), navigate_work_path(@work) %></li>
       </ul>
     </li>
   <% elsif @chapters && @chapters.length > 1 %>
@@ -108,9 +105,9 @@
     </li>
   <% end %>
 
+  <%# The li, noscript, and button tags MUST be on the same line here to avoid the behavior described in https://otwarchive.atlassian.net/browse/AO3-4629?focusedCommentId=372231 %>
   <% if downloadable? && AdminSetting.current.downloads_enabled? %>
-    <li class="download" aria-haspopup="true">
-      <a href="#"><%= ts("Download") %></a>
+    <li class="download"><noscript><h4 class="heading"><%= t(".download.heading") %></h4></noscript><button class="hidden"><%= t(".download.button") %></button>
       <ul class="expandable secondary">
         <% ArchiveConfig.DOWNLOAD_FORMATS.each do |format| %>
           <li><%= link_to ts(format.upcase), download_url_for_work(@work, format) %></li>

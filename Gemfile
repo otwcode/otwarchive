@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby "~> 3.2.7"
+ruby "~> 3.4.6"
 
 gem 'test-unit', '~> 3.2'
 
@@ -16,14 +16,13 @@ gem 'actionpack-page_caching'
 gem 'rails-controller-testing'
 
 # Database
-# gem 'sqlite3-ruby', require: 'sqlite3'
 gem "mysql2"
 
 gem 'rack-attack'
 
-# Version of redis-rb gem
-# We are currently running Redis 3.2.1 (7/2018)
-gem "redis", "~> 3.3.5"
+# We are currently running Redis server 7.0.15 (10/2025)
+# Version of redis-rb gem (Redis client)
+gem "redis", "< 5.0"
 gem 'redis-namespace'
 
 # Here are all our application-specific gems
@@ -31,7 +30,6 @@ gem 'redis-namespace'
 # Used to convert strings to ascii
 gem 'unicode'
 gem 'unidecoder'
-gem 'unicode_utils', '>=1.4.0'
 
 # Lograge is opinionated, very opinionated.
 gem "lograge" # https://github.com/roidrage/lograge
@@ -42,6 +40,7 @@ gem 'acts_as_list', '~> 0.9.7'
 gem 'akismetor'
 
 gem 'httparty'
+gem "csv", "~> 3.3.5"
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', require: false
 gem 'nokogiri', '>= 1.8.5'
@@ -184,3 +183,4 @@ group :staging, :production do
 end
 
 gem "image_processing", "~> 1.12"
+gem "ostruct"

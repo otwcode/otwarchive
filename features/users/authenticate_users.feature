@@ -34,25 +34,25 @@ Feature: User Authentication
     # link from the email should not work when logged in
     When I follow "use this link to choose a new password" in the email
     Then I should see "You are already signed in."
-      And I should not see "Change My Password"
+      And I should not see "Change Password"
 
     # link from the email should work
     When I log out
       And I follow "use this link to choose a new password" in the email
-    Then I should see "Change My Password"
+    Then I should see "Change Password"
 
     # entering mismatched passwords should produce an error message
     When I fill in "New password" with "secret"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
     Then I should see "We couldn't save this user because:"
-      And I should see "Password confirmation doesn't match new password."
+      And I should see "The passwords you entered do not match. Please try again."
 
     # and I should be able to change the password
     When I fill in "New password" with "new<pass"
       And I fill in "Confirm new password" with "new<pass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully. You are now signed in."
+    Then I should see "Your password has been changed. You are now logged in."
       And I should see "Hi, sam"
 
     # password reset link should no longer work
@@ -129,7 +129,7 @@ Feature: User Authentication
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
       And 1 email should be delivered to "sam"
       And the email should have "Your password has been changed" in the subject
       And the email to "sam" should be translated
@@ -148,7 +148,7 @@ Feature: User Authentication
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
       And I should see "Hi, sam"
 
   Scenario: Forgot password, with expired password token
@@ -210,7 +210,7 @@ Feature: User Authentication
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
     When I am logged in as a super admin
       And I go to the user administration page for "sam"
     Then I should see "Password Reset" within "#user_history"
@@ -347,3 +347,73 @@ Feature: User Authentication
     When I go to the edit user password page
     Then I should be on the homepage
       And I should see "Please log out of your admin account first!"
+
+  @no-js-emulation
+  Scenario: Log out with javascript disabled redirects to page prior to log out
+    Given I am logged in
+      And I am on the works page
+    When I follow "Log Out"
+    Then I should see "Are you sure you want to log out?"
+    When I press "Yes, Log Out"
+    Then I should see "Successfully logged out."
+      And I should be on the works page
+
+  Scenario: User is redirected back to restricted work after login
+    Given I am logged in as "test" with password "password"
+      And I post the locked work "Secret"
+      And I log out
+    When I view the work "Secret"
+    Then I should see "Sorry!"
+      And I should see "This work is only available to registered users of the Archive."
+    When I fill in "Username or email:" with "test" within "#main"
+      And I fill in "Password:" with "password" within "#main"
+      And I press "Log in" within "#main"
+    Then I should see "Secret"
+
+  Scenario: User is redirected to previous page after using the small login
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+      And I am on the works page
+    When I fill in "Username or email:" with "test" within "#small_login"
+      And I fill in "Password:" with "password" within "#small_login"
+      And I press "Log In" within "#small_login"
+    Then I should be on the works page
+
+  Scenario: User is redirected to previous page after using the main login
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+      And I am on the works page
+    When I follow "Log In"
+    Then I should see "Log in" within "#main"
+    When I fill in "Username or email:" with "test" within "#main"
+      And I fill in "Password:" with "password" within "#main"
+      And I press "Log in" within "#main"
+    Then I should be on the works page
+
+  Scenario: User is redirected to previous page after inputting the wrong credentials in the small login
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+      And I am on the works page
+    When I fill in "Username or email:" with "test" within "#small_login"
+      And I fill in "Password:" with "badpassword" within "#small_login"
+      And I press "Log In" within "#small_login"
+    Then I should see "The password or username you entered doesn't match our records."
+    When I fill in "Username or email:" with "test" within "#main"
+      And I fill in "Password:" with "password" within "#main"
+      And I press "Log in" within "#main"
+    Then I should be on the works page
+
+  Scenario: User is redirected to previous page after using the small login on the main login page
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+      And I am on the works page
+    When I follow "Log In"
+    Then I should see "Log in" within "#main"
+    When I fill in "Username or email:" with "test" within "#small_login"
+      And I fill in "Password:" with "password" within "#small_login"
+      And I press "Log In" within "#small_login"
+    Then I should be on the works page
