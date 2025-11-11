@@ -264,6 +264,7 @@ en:
         invalid_link:
           one: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hour, you can request a new password reset.
           other: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hours, you can request a new password reset.
+        page_title: Change Password
       new:
         page_title: Change Password
     reconfirm_email:
