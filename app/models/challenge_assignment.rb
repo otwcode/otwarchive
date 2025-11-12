@@ -6,7 +6,6 @@ class ChallengeAssignment < ApplicationRecord
   belongs_to :offer_signup, class_name: "ChallengeSignup"
   belongs_to :request_signup, class_name: "ChallengeSignup"
   belongs_to :pinch_hitter, class_name: "Pseud"
-  belongs_to :pinch_request_signup, class_name: "ChallengeSignup" # TODO: AO3-6851 Remove pinch_request_signup association from the challenge_assignments table
   belongs_to :creation, polymorphic: true
 
   # Make sure that the signups are an actual match if we're in the process of assigning
