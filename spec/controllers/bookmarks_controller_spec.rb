@@ -70,7 +70,7 @@ describe BookmarksController do
             post :create, params: { work_id: work.id, bookmark: { pseud_id: pseud.id } }
 
             bookmark = assigns(:bookmark)
-            success_msg = t("bookmarks.create.success")
+            success_msg = I18n.t("bookmarks.create.success")
             it_redirects_to_with_notice(bookmark_path(bookmark), success_msg)
             expect(bookmark.bookmarkable_id).to eq(work.id)
             expect(bookmark.bookmarkable_type).to eq("Work")
