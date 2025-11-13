@@ -70,7 +70,7 @@ describe BookmarksController do
             post :create, params: { work_id: work.id, bookmark: { pseud_id: pseud.id } }
 
             bookmark = assigns(:bookmark)
-            success_msg = "Bookmark was successfully created. It should appear in bookmark listings within the next few minutes."
+            success_msg = "Bookmark was successfully created. It should appear in bookmark listings within the next few minutes. Please note: private bookmarks are not listed in collections."
             it_redirects_to_with_notice(bookmark_path(bookmark), success_msg)
             expect(bookmark.bookmarkable_id).to eq(work.id)
             expect(bookmark.bookmarkable_type).to eq("Work")

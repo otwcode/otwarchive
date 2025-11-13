@@ -197,7 +197,7 @@ class BookmarksController < ApplicationController
     @bookmarkable ||= ExternalWork.new(external_work_params)
     @bookmark = Bookmark.new(bookmark_params.merge(bookmarkable: @bookmarkable))
     if @bookmark.errors.empty? && @bookmark.save
-      flash[:notice] = ts("Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.")
+      flash[:notice] = ts("Bookmark was successfully created. It should appear in bookmark listings within the next few minutes. Please note: private bookmarks are not listed in collections.")
       redirect_to(bookmark_path(@bookmark))
     else
       render :new
