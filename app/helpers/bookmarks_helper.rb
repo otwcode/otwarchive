@@ -71,9 +71,14 @@ module BookmarksHelper
 
   def get_count_for_bookmark_blurb(bookmarkable)
     count = bookmarkable.public_bookmark_count
-    link = link_to (count < 100 ? count.to_s : "*"),
-              polymorphic_path([bookmarkable, Bookmark])
-    content_tag(:span, link, class: "count")
+    # show unlinked count for viewers if unrevealed and not author
+    if bookmarkable.unrevealed? && !is_author_of?(bookmarkable) && !logged_in_as_admin?
+      content_tag(:span, count, class: "count")
+    else
+      link = link_to (count < 100 ? count.to_s : "*"),
+                polymorphic_path([bookmarkable, Bookmark])
+      content_tag(:span, link, class: "count")
+    end
   end
 
   # Bookmark blurbs contain a single bookmark from a single user.
