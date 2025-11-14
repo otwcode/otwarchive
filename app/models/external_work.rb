@@ -123,4 +123,9 @@ class ExternalWork < ApplicationRecord
   def revised_at
     created_at
   end
+
+  def unrevealed?
+  false
+  end
+
 end
