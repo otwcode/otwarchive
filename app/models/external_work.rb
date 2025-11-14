@@ -124,7 +124,4 @@ class ExternalWork < ApplicationRecord
     created_at
   end
 
-  def unrevealed?
-    false
-  end
 end
