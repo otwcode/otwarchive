@@ -588,8 +588,8 @@ en:
           refuse_link_text: refuse a gift
     summary:
       being_generated: The summary is being generated. Please try again in a few minutes.
+      heading: Sign-up Summary for %{collection}
       no_tags: Tags were not used in this Challenge, so there is no summary to display here.
-      title: Sign-up Summary for %{collection}
   chapters:
     posting_fieldset:
       actions:

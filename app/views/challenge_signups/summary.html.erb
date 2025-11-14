@@ -10,7 +10,7 @@
   <% elsif (cached_summary = @summary.cached_contents).present? %>
     <%= raw cached_summary %>
   <% else %>
-    <h2 class="heading"><%= t(".title", collection: @collection.title) %></h2>
+    <h2 class="heading"><%= t(".heading", collection: @collection.title) %></h2>
 
     <p>
       <%= t(".being_generated") %>
