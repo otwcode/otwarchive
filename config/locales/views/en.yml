@@ -2631,6 +2631,7 @@ en:
         content_policy: Content Policy
         dismiss: Dismiss permanently
         help_html: If you need technical support, %{contact_support_link}. If you experience harassment or have questions about our %{tos_link} (including the %{content_policy_link} and %{privacy_policy_link}), %{contact_abuse_link}.
+        help_title: First login help
         hide: Hide first login help banner
         new_user_tips: useful tips for new users
         our_faqs: our FAQs
