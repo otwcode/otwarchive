@@ -123,13 +123,14 @@ ignore_missing:
   - mailer_helper.content_for_commentable_html.content.{chapter,other,tag}.html
   - mailer_helper.content_for_commentable_text.content.{other,tag}.text
   - mailer_helper.content_for_commentable_text.content.chapter.{titled_text,untitled_text}
+  # File: app/controllers/comments_controller.rb
+  - comments.set_page_subtitle.page_title
   ## All of the following keys are using default values defined in the respective .rb files
   ## TODO: Move the default values to the .yml files
   # File: app/controllers/admin/admin_invitations_controller.rb
   - invites_created # should be admin.admin_invitations.grant_invites_to_users.invites_created
   - no_email # should be admin.admin_invitations.create.no_email
   - sent # should be admin.admin_invitations.create.sent
-  - user_not_found # should be admin.admin_invitations.find.user_not_found
   # File: app/controllers/challenge_assignments_controller.rb
   - challenge_assignments.assignments_not_sent
   - challenge_assignments.assignments_sent
@@ -149,17 +150,11 @@ ignore_missing:
   - collection_participants.update_success
   # File: app/controllers/external_authors_controller.rb
   - external_author_claimed # should be external_authors.complete_claim.external_author_claimed
-  # Files: app/controllers/external_works_controller.rb and app/controllers/languages_controller.rb
-  - successfully_updated # should be languages.update.successfully_updated
   # File: app/controllers/feedbacks_controller.rb
   - failure_send # should be feedbacks.create.failure_send
   - successfully_sent # should be feedbacks.create.successfully_sent
-  # Files: app/controllers/languages_controller.rb and app/controllers/locales_controller.rb
-  - successfully_added # should be languages.create.successfully_added and locales.create.successfully_added
-  # File: app/views/admin/admin_invitations/find.html.erb
-  - admin.admin_invitations.find.find_email
-  - admin.admin_invitations.find.find_token
-  - admin.admin_invitations.find.find_user_name
+  # Files: app/controllers/locales_controller.rb
+  - successfully_added # should be locales.create.successfully_added
   # File: app/views/admin/admin_invitations/new.html.erb
   - admin.admin_invitations.new.email_address
   - admin.admin_invitations.new.invite_user
@@ -182,21 +177,10 @@ ignore_missing:
   - invitations.index.choose_invite
   - invitations.index.email address # should be invitations.index.email_address
   - invitations.index.submit_invite
-  # File: app/views/languages/_form.html.erb
-  - languages.form.abuse_support_available
-  - languages.form.create
-  - languages.form.name
-  - languages.form.required_notice
-  - languages.form.short
-  - languages.form.sortable_name
-  - languages.form.support_available
-  - languages.form.update
   # File: app/views/languages/edit.html.erb
   - languages.edit.edit_language
   # File: app/views/languages/new.html.erb
   - languages.new.new_language
-  # File: app/views/languages/show.html.erb
-  - languages.show.work_count
   # File: app/views/locales/_locale_form.html.erb
   - locales.locale_form.actions_heading
   - locales.locale_form.actions_legend

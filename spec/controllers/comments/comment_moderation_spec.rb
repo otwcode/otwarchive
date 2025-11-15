@@ -38,6 +38,12 @@ describe CommentsController do
         get :unreviewed, params: { work_id: work.id }
         expect(response).to render_template("unreviewed")
       end
+
+      it "assigns page subtitle using work title format" do
+        fake_login_known_user(user)
+        get :unreviewed, params: { work_id: work.id }
+        expect(assigns[:page_subtitle]).to eq("Unreviewed Comments on #{work.title} - #{work.pseuds.first.byline} - #{work.fandoms.first.name}")
+      end
     end
 
     context "when the commentable is an admin post" do
@@ -58,6 +64,12 @@ describe CommentsController do
         fake_login_admin(create(:admin))
         get :unreviewed, params: { admin_post_id: admin_post.id }
         expect(response).to render_template("unreviewed")
+      end
+
+      it "assigns page subtitle using admin post title" do
+        fake_login_admin(create(:admin))
+        get :unreviewed, params: { admin_post_id: admin_post.id }
+        expect(assigns[:page_subtitle]).to eq("Unreviewed Comments on #{admin_post.title}")
       end
     end
   end

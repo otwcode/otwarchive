@@ -30,7 +30,9 @@ class CommentsController < ApplicationController
   before_action :check_permission_to_modify_frozen_status, only: [:freeze, :unfreeze]
   before_action :check_permission_to_modify_hidden_status, only: [:hide, :unhide]
   before_action :admin_logout_required, only: [:new, :create, :add_comment_reply]
+  before_action :set_page_subtitle, only: [:index, :new, :show, :unreviewed]
 
+  include WorksHelper
   include BlockHelper
 
   before_action :check_blocked, only: [:new, :create, :add_comment_reply, :edit, :update]
@@ -258,6 +260,23 @@ class CommentsController < ApplicationController
       @commentable = Tag.find_by_name(params[:tag_id])
       @page_subtitle = @commentable.try(:name)
     end
+  end
+
+  def set_page_subtitle
+    parent = find_parent
+    return unless parent
+
+    name = if parent.is_a?(Work)
+             work_page_title(parent, parent.title, { omit_archive_name: true })
+           else
+             parent.commentable_name
+           end
+
+    # i18n-tasks-use t("comments.index.page_title")
+    # i18n-tasks-use t("comments.new.page_title")
+    # i18n-tasks-use t("comments.show.page_title")
+    # i18n-tasks-use t("comments.unreviewed.page_title")
+    @page_subtitle = t(".page_title", name: name, comment_id: @comment&.id)
   end
 
   def index
