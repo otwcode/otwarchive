@@ -491,12 +491,6 @@ namespace :After do
     end
   end
 
-  desc "Migrate pinch_request_signup to request_signup"
-  task(migrate_pinch_request_signup: :environment) do
-    count = ChallengeAssignment.where("pinch_request_signup_id IS NOT NULL AND request_signup_id IS NULL").update_all("request_signup_id = pinch_request_signup_id")
-    puts("Migrated pinch_request_signup for #{count} challenge assignments.")
-  end
-
   desc "Reindex tags associated with works that are hidden or unrevealed"
   task(reindex_hidden_unrevealed_tags: :environment) do
     hidden_count = Work.hidden.count
