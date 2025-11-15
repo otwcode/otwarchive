@@ -198,7 +198,7 @@ class BookmarksController < ApplicationController
     @bookmark = Bookmark.new(bookmark_params.merge(bookmarkable: @bookmarkable))
     if @bookmark.errors.empty? && @bookmark.save
       flash[:notice] = t("bookmarks.create.success")
-      flash[:notice] += " " + t("bookmarks.create.warnings.private_bookmark_added_to_collection") if bookmark_params[:collection_names].present?
+      flash[:notice] += " #{t('bookmarks.create.warnings.private_bookmark_added_to_collection')}" if bookmark_params[:collection_names].present?
       redirect_to(bookmark_path(@bookmark))
     else
       render :new
@@ -256,7 +256,7 @@ class BookmarksController < ApplicationController
     if @bookmark.update(bookmark_params) && errors.empty?
       flash[:notice] = flash[:notice] ? " " + flash[:notice] : ""
       flash[:notice] = ts("Bookmark was successfully updated.").html_safe + flash[:notice]
-      flash[:notice] += " " + t("bookmarks.create.warnings.private_bookmark_added_to_collection") if new_collections.any? || unapproved_collections.any?
+      flash[:notice] += " #{t('bookmarks.create.warnings.private_bookmark_added_to_collection')}" if new_collections.any? || unapproved_collections.any?
       flash[:notice] = flash[:notice].html_safe
       redirect_to(@bookmark)
     else
