@@ -2176,6 +2176,10 @@ en:
       transfer:
         one: Transfer this bookmark to the default pseud
         other: Transfer these bookmarks to the default pseud
+    new:
+      back_to_pseuds: Back To Pseuds
+      create_pseud: Create Pseud
+      new_pseud: New Pseud
     pseud_blurb:
       confirm_delete: Are you sure?
       default_pseud: Default Pseud
@@ -2201,7 +2205,7 @@ en:
         size: Icons should be sized 100x100 pixels for best results.
       icon_upload: Upload a new icon
       make_default: Make this name default
-      name: Name
+      name: Name (required)
       submit: Submit
   readings:
     index:
