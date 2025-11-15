@@ -5,7 +5,7 @@ Feature: User Authentication
   Scenario: Forgot password
     Given I have no users
       And the following activated user exists
-      | email       | login | password |
+      | email           | login | password |
       | sam@example.com | sam   | secret   |
       And all emails have been delivered
     When I am on the home page
@@ -86,7 +86,7 @@ Feature: User Authentication
   Scenario: Users should not be able to request password resets with their username
     Given I have no users
       And the following activated user exists
-      | email       | login | password |
+      | email           | login | password |
       | sam@example.com | sam   | secret   |
       And all emails have been delivered
     When I request a password reset for "sam"
@@ -97,7 +97,7 @@ Feature: User Authentication
   Scenario: Attackers should see a fake success message when requesting password resets with a non-existant email
     Given I have no users
       And the following activated user exists
-      | email       | login | password |
+      | email           | login | password |
       | sam@example.com | sam   | secret   |
       And all emails have been delivered
     When I request a password reset for "1@example.com"
@@ -281,7 +281,7 @@ Feature: User Authentication
 
   Scenario: Login case (in)sensitivity
     Given the following activated user exists
-      | login      | password |
+      | login      | password  |
       | TheMadUser | password1 |
     When I am on the home page
       And I fill in "Username or email:" with "themaduser"
