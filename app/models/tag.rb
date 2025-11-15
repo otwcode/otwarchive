@@ -468,11 +468,14 @@ class Tag < ApplicationRecord
     all.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
 
+  def self.to_param(string)
+    string.gsub("/", "*s*").gsub("&", "*a*").gsub(".", "*d*").gsub("?", "*q*").gsub("#", "*h*")
+  end
+
   # Use the tag name in urls and escape url-unfriendly characters
   def to_param
     # can't find a tag with a name that hasn't been saved yet
-    saved_name = self.name_changed? ? self.name_was : self.name
-    saved_name.gsub('/', '*s*').gsub('&', '*a*').gsub('.', '*d*').gsub('?', '*q*').gsub('#', '*h*')
+    Tag.to_param(self.name_changed? ? self.name_was : self.name)
   end
 
   def display_name
@@ -698,6 +701,18 @@ class Tag < ApplicationRecord
     if reindex_pseuds
       Pseud.joins(works: :filter_taggings)
         .merge(self.direct_filter_taggings).reindex_all
+    end
+  end
+
+  def self.successful_reindex(ids)
+    Tag.select(:id, :updated_at).distinct
+      .joins("INNER JOIN common_taggings ON tags.id = common_taggings.filterable_id AND common_taggings.filterable_type = 'Tag'")
+      .where(common_taggings: { common_tag_id: ids }).each do
+      ActionController::Base.new.expire_fragment("tag-#{it.cache_key}-children-v4")
+    end
+
+    Tag.select(:id, :updated_at).distinct.joins(:mergers).where(mergers: { id: ids }).each do
+      ActionController::Base.new.expire_fragment("tag-#{it.cache_key}-mergers-v1")
     end
   end
 
@@ -1100,6 +1115,33 @@ class Tag < ApplicationRecord
     end
   end
 
+  def child_data(child_types)
+    child_types.filter_map do |child_type|
+      tags = TagQuery.new(type: child_type,
+                          "#{self.class.name.downcase}_ids": [self.id],
+                          sort_column: "uses",
+                          page: 1,
+                          per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
+
+      [child_type, { tags: tags.scope(:es_only).to_a, total: tags.total_entries }] if tags.total_entries.positive?
+    end.to_h
+  end
+
+  def child_merger_data
+    return {} if self.merger_id.present?
+
+    tags = TagQuery.new(type: self.type,
+                        merger_id: self.id,
+                        sort_column: "uses",
+                        page: 1,
+                        per_page: ArchiveConfig.TAG_LIST_LIMIT).search_results
+
+    {
+      tags: tags.scope(:es_only).to_a,
+      total: tags.total_entries
+    }
+  end
+
   def suggested_parent_tags(parent_type, options = {})
     limit = options[:limit] || 50
     work_ids = works.limit(limit).pluck(:id)
@@ -1165,13 +1207,6 @@ class Tag < ApplicationRecord
         tag.merger.update_works_index_timestamp!
       end
       async_after_commit(:queue_child_tags_for_reindex)
-    end
-
-    # if type has changed, expire the tag's parents' children cache (it stores the children's type)
-    if tag.saved_change_to_type?
-      tag.parents.each do |parent_tag|
-        ActionController::Base.new.expire_fragment("views/tags/#{parent_tag.id}/children")
-      end
     end
 
     # Reindex immediately to update the unwrangled bin.
