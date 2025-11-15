@@ -71,6 +71,17 @@ Then(/^#{capture_email} should contain "(.*)"$/) do |email_ref, text|
   end
 end
 
+Then(/^#{capture_email} should contain escaped "(.*)"$/) do |email_ref, text| # rubocop:disable Cucumber/RegexStepName
+  escaped_text = Regexp.escape(text)
+
+  if email(email_ref).multipart?
+    email(email_ref).text_part.body.should =~ /#{escaped_text}/
+    email(email_ref).html_part.body.should =~ /#{escaped_text}/
+  else
+    email(email_ref).body.should =~ /#{escaped_text}/
+  end
+end
+
 Then(/^#{capture_email} should not contain "(.*)"$/) do |email_ref, text|
   if email(email_ref).multipart?
     email(email_ref).text_part.body.should_not =~ /#{text}/
