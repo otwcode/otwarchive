@@ -203,6 +203,25 @@ describe BookmarksController do
         expect(assigns(:bookmark).pseud_id).to eq(other_pseud.id)
       end
     end
+
+    context "when user updates a bookmark to add it to a collection" do
+      let(:user) { create(:user) }
+      let(:pseud) { user.default_pseud }
+      let(:bookmark) { create(:bookmark, pseud: pseud) }
+      let(:collection) { create(:collection) }
+    
+      before do
+        fake_login_known_user(user)
+      end
+    
+      it "shows the collection warning message" do
+        put :update, params: { id: bookmark.id, bookmark: { collection_names: collection.name } }
+    
+        expect(flash[:notice]).to include("Added to collection(s): #{collection.title}")
+        expect(flash[:notice]).to include("Please note: private bookmarks are not listed in collections")
+        expect(response).to redirect_to(bookmark_path(bookmark))
+      end
+    end
   end
 
   describe "share" do
