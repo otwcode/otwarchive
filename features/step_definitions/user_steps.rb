@@ -291,7 +291,7 @@ end
 
 When "I request a password reset for {string}" do |login|
   step(%{I am on the login page})
-  step(%{I follow "Reset password"})
+  step(%{I follow "Reset your password"})
   step(%{I fill in "Email address or username" with "#{login}"})
   step(%{I press "Reset Password"})
 end
