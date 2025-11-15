@@ -1,0 +1,6 @@
+<ul class="navigation actions">
+  <li><%= span_if_current t(".index"), admin_support_notices_path %></li>
+  <% if policy(SupportNotice).new? %>
+    <li><%= span_if_current t(".new"), new_admin_support_notice_path %></li>
+  <% end %>
+</ul>
