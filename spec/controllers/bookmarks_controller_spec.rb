@@ -70,7 +70,7 @@ describe BookmarksController do
             post :create, params: { work_id: work.id, bookmark: { pseud_id: pseud.id } }
 
             bookmark = assigns(:bookmark)
-            success_msg = I18n.t("bookmarks.create.success")
+            success_msg = "Bookmark was successfully created. It should appear in bookmark listings within the next few minutes."
             it_redirects_to_with_notice(bookmark_path(bookmark), success_msg)
             expect(bookmark.bookmarkable_id).to eq(work.id)
             expect(bookmark.bookmarkable_type).to eq("Work")
@@ -102,6 +102,23 @@ describe BookmarksController do
           let!(:series_bookmark) { create(:bookmark, bookmarkable: series_with_same_id, pseud: pseud) }
 
           it_behaves_like "all is correct"
+        end
+      end
+
+      context "when user creates a bookmark to add to a collection" do
+        let(:collection) { create(:collection) }
+      
+        it "shows the collection warning message" do
+          bookmark_params = {
+            pseud_id: pseud.id,
+            collection_names: collection.name
+          }
+          post :create, params: { work_id: work.id, bookmark: bookmark_params }
+      
+          bookmark = assigns(:bookmark)
+          success_msg = "Bookmark was successfully created. It should appear in bookmark listings within the next few minutes. Please note: private bookmarks are not listed in collections."
+          
+          it_redirects_to_with_notice(bookmark_path(bookmark), success_msg)
         end
       end
 
@@ -174,14 +191,14 @@ describe BookmarksController do
 
       it "first created bookmark can be updated" do
         put :update, params: { bookmark: { bookmarker_notes: "Updated first bookmark", pseud_id: other_pseud.id }, id: bookmark.id }
-        it_redirects_to_with_notice(bookmark_path(bookmark), "Bookmark was successfully updated.")
+        it_redirects_to_with_notice(bookmark_path(bookmark), "Bookmark was successfully updated. Please note: private bookmarks are not listed in collections.")
         expect(assigns(:bookmark).bookmarker_notes).to include("Updated first bookmark")
         expect(assigns(:bookmark).pseud_id).to eq(other_pseud.id)
       end
 
       it "second created bookmark can be updated" do
         put :update, params: { bookmark: { bookmarker_notes: "Updated second bookmark", pseud_id: other_pseud.id }, id: bookmark2.id }
-        it_redirects_to_with_notice(bookmark_path(bookmark2), "Bookmark was successfully updated.")
+        it_redirects_to_with_notice(bookmark_path(bookmark2), "Bookmark was successfully updated. Please note: private bookmarks are not listed in collections.")
         expect(assigns(:bookmark).bookmarker_notes).to include("Updated second bookmark")
         expect(assigns(:bookmark).pseud_id).to eq(other_pseud.id)
       end
