@@ -24,9 +24,8 @@
       <li class="chapter next"><%= link_to h(ts("Next Chapter")) + ' &#8594;'.html_safe, [@work, @next_chapter, :anchor => "workskin"] %></li>
     <% end %>
 
-    <li class="chapter">
-      <noscript><%= link_to t(".chapter_index.link"), navigate_work_path(@work) %></noscript>
-      <button class="hidden"><%= t(".chapter_index.button") %></button>
+    <%# The li, noscript, and button tags MUST be on the same line here to avoid the behavior described in https://otwarchive.atlassian.net/browse/AO3-4629?focusedCommentId=372231 %>
+    <li class="chapter"><noscript><%= link_to t(".chapter_index.link"), navigate_work_path(@work) %></noscript><button class="hidden"><%= t(".chapter_index.button") %></button>
       <ul id="chapter_index" class="expandable secondary hidden">
         <li>
           <%= form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do %>
@@ -106,10 +105,9 @@
     </li>
   <% end %>
 
+  <%# The li, noscript, and button tags MUST be on the same line here to avoid the behavior described in https://otwarchive.atlassian.net/browse/AO3-4629?focusedCommentId=372231 %>
   <% if downloadable? && AdminSetting.current.downloads_enabled? %>
-    <li class="download">
-      <noscript><h4 class="heading"><%= t(".download.heading") %></h4></noscript>
-      <button class="hidden"><%= t(".download.button") %></button>
+    <li class="download"><noscript><h4 class="heading"><%= t(".download.heading") %></h4></noscript><button class="hidden"><%= t(".download.button") %></button>
       <ul class="expandable secondary">
         <% ArchiveConfig.DOWNLOAD_FORMATS.each do |format| %>
           <li><%= link_to ts(format.upcase), download_url_for_work(@work, format) %></li>

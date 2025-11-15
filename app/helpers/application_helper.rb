@@ -586,16 +586,11 @@ module ApplicationHelper
   def css_classes_for_creation_blurb(creation)
     return if creation.nil?
 
-    creation_id = creation_id_for_css_classes(creation)
-    creator_ids = if creation.try(:pseuds)&.loaded?
-                    creator_ids_for_css_classes(creation).join(" ")
-                  else
-                    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes-v3") do
-                      creator_ids_for_css_classes(creation).join(" ")
-                    end
-                  end
-
-    "blurb group #{creation_id} #{creator_ids}".strip
+    Rails.cache.fetch("#{creation.cache_key_with_version}/blurb_css_classes-v2") do
+      creation_id = creation_id_for_css_classes(creation)
+      creator_ids = creator_ids_for_css_classes(creation).join(" ")
+      "blurb group #{creation_id} #{creator_ids}".strip
+    end
   end
 
   # Returns the current path, with some modified parameters. Modeled after

@@ -14,7 +14,7 @@
 <% end %>
 <% series_count = work.series.count %>
 <% unless series_count.zero? %>
-<%= metadata_label(Series.model_name.human(count: series_count)) %><%= raw to_plain_text(series_list_for_feeds(work)) %>
+<%= metadata_label(Series.model_name.human(count: series_count)) %><%= raw to_plain_text(series_list_with_work_position(work, email_styling: true)) %>
 <% end %>
 <% unless work.summary.blank? || local_assigns[:suppress_summary] %>
 

@@ -5,8 +5,8 @@ Feature: User Authentication
   Scenario: Forgot password
     Given I have no users
       And the following activated user exists
-      | login    | password |
-      | sam      | secret   |
+      | email           | login | password |
+      | sam@example.com | sam   | secret   |
       And all emails have been delivered
     When I am on the home page
       And I fill in "Username or email:" with "sam"
@@ -15,10 +15,10 @@ Feature: User Authentication
     Then I should see "The password or username you entered doesn't match our records"
       And I should see "Forgot your password or username?"
     When I follow "Reset password"
-    Then I should see "Please tell us the username or email address you used when you signed up for your Archive account"
-    When I fill in "Email address or username" with "sam"
+    Then I should see "If you've forgotten your password, we can send you an email with instructions to reset your password."
+    When I fill in "Email address" with "sam@example.com"
       And I press "Reset Password"
-    Then I should see "Check your email for instructions on how to reset your password."
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered
       And the email should contain "sam"
       And the email should contain "Someone has made a request to reset the password for your AO3 account."
@@ -33,7 +33,7 @@ Feature: User Authentication
 
     # link from the email should not work when logged in
     When I follow "use this link to choose a new password" in the email
-    Then I should see "You are already signed in."
+    Then I should see "You are already logged in to an account. Please log out and try again."
       And I should not see "Change Password"
 
     # link from the email should work
@@ -83,6 +83,27 @@ Feature: User Authentication
       And I press "Log In"
     Then I should not see "Hi, sam"
 
+  Scenario: Users should not be able to request password resets with their username
+    Given I have no users
+      And the following activated user exists
+      | email           | login | password |
+      | sam@example.com | sam   | secret   |
+      And all emails have been delivered
+    When I request a password reset for "sam"
+    Then I should see "You must enter your email address."
+      And I should not see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
+      And 0 email should be delivered
+  
+  Scenario: Attackers should see a fake success message when requesting password resets with a non-existant email
+    Given I have no users
+      And the following activated user exists
+      | email           | login | password |
+      | sam@example.com | sam   | secret   |
+      And all emails have been delivered
+    When I request a password reset for "1@example.com"
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
+      And 0 email should be delivered
+
   Scenario: Translated reset password email and password change email
     Given a locale with translated emails
       And the following activated users exist
@@ -92,13 +113,13 @@ Feature: User Authentication
       And the user "sam" enables translated emails
       And all emails have been delivered
     When I request a password reset for "sam@example.com"
-    Then I should see "Check your email for instructions on how to reset your password."
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered to "sam@example.com"
       And the email should have "Translated subject" in the subject
       And the email to "sam" should be translated
     # notsam didn't enable translated emails
     When I request a password reset for "notsam@example.com"
-    Then I should see "Check your email for instructions on how to reset your password."
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered to "notsam@example.com"
       And the email should have "Reset your password" in the subject
       And the email to "notsam" should be non-translated
@@ -120,7 +141,7 @@ Feature: User Authentication
         | sam   | sam@example.com | password |
       And all emails have been delivered
     When I request a password reset for "sam@example.com"
-    Then I should see "Check your email for instructions on how to reset your password."
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered
     When I start a new session
       And I follow "use this link to choose a new password" in the email
@@ -133,11 +154,11 @@ Feature: User Authentication
   Scenario: Forgot password, with expired password token
     Given I have no users
       And the following activated user exists
-        | login | password |
-        | sam   | password |
+        | login | email           | password |
+        | sam   | sam@example.com | password |
       And all emails have been delivered
-    When I request a password reset for "sam"
-    Then I should see "Check your email for instructions on how to reset your password."
+    When I request a password reset for "sam@example.com"
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered
     When it is currently 2 weeks from now
       And I start a new session
@@ -157,21 +178,21 @@ Feature: User Authentication
   Scenario: Forgot password, with enough attempts to trigger password reset cooldown
     Given I have no users
       And the following activated user exists
-        | login | password |
-        | sam   | password |
+        | login | email           | password |
+        | sam   | sam@example.com | password |
       And all emails have been delivered
-    When I request a password reset for "sam"
-      And I request a password reset for "sam"
-      And I request a password reset for "sam"
-    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 0 more times."
+    When I request a password reset for "sam@example.com"
+      And I request a password reset for "sam@example.com"
+      And I request a password reset for "sam@example.com"
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 3 emails should be delivered
     When all emails have been delivered
-      And I request a password reset for "sam"
-    Then I should see "You cannot reset your password at this time. Please try again after"
+      And I request a password reset for "sam@example.com"
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 0 emails should be delivered
     When it is currently 12 hours from now
-      And I request a password reset for "sam"
-    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 2 more times."
+      And I request a password reset for "sam@example.com"
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered
 
   Scenario: Resetting password adds admin log item
@@ -260,7 +281,7 @@ Feature: User Authentication
 
   Scenario: Login case (in)sensitivity
     Given the following activated user exists
-      | login      | password |
+      | login      | password  |
       | TheMadUser | password1 |
     When I am on the home page
       And I fill in "Username or email:" with "themaduser"
@@ -298,16 +319,10 @@ Feature: User Authentication
       And the user "target" <role>
     When I am on the home page
       And I follow "Forgot password?"
-      And I fill in "Email address or username" with "target"
+      And I fill in "Email address" with "user@example.com"
       And I press "Reset Password"
-    Then I should be on the home page
-      And I should see "Password resets are disabled for that user."
-      And 0 emails should be delivered
-    When I follow "Forgot password?"
-      And I fill in "Email address or username" with "user@example.com"
-      And I press "Reset Password"
-    Then I should be on the home page
-      And I should see "Password resets are disabled for that user."
+    Then I should be on the new user password page
+      And I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 0 emails should be delivered
 
     Examples:
