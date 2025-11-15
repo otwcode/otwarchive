@@ -2535,10 +2535,10 @@ en:
           other: "%{minimum} to %{count} characters"
         submit: Submit
       new:
-        email_or_username_html: Email address %{or} username
-        instructions: If you've forgotten your password, we can send instructions that will allow you to reset it. Please tell us the username or email address you used when you signed up for your Archive account.
-        or: or
-        page_heading: Forgotten your password?
+        email_html: Email address
+        instructions: Please enter the email address associated with your AO3 account. You may only request a password reset a limited number of times per day.
+        introductions: If you've forgotten your password, we can send you an email with instructions to reset your password.
+        page_heading: Reset Password
         reset_password: Reset Password
     registrations:
       legal:

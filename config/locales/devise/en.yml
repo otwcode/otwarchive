@@ -39,11 +39,14 @@ en:
       failure: Could not authenticate you from %{kind} because "%{reason}".
       success: Successfully authenticated from %{kind} account.
     passwords:
+      admin:
+        send_instructions: Check your email for instructions on how to reset your password.
       no_token: This password reset link is invalid or incomplete. Please check your email for the correct link or request a new password reset.
-      send_instructions: Check your email for instructions on how to reset your password.
       send_paranoid_instructions: If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.
       updated: Your password has been changed. You are now logged in.
       updated_not_active: Your password has been changed successfully.
+      user:
+        send_instructions: If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password.
     registrations:
       destroyed: Bye! Your account has been successfully cancelled. We hope to see you again soon.
       signed_up: Welcome! You have signed up successfully.
