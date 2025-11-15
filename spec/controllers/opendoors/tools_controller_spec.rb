@@ -91,6 +91,7 @@ describe Opendoors::ToolsController do
           it_redirects_to_with_notice(opendoors_tools_path(imported_from_url: url), "Updated imported-from url for #{work.title} to #{url}")
           work.reload
           expect(work.imported_from_url).to eq(url)
+          expect(work.work_url.original).to eq(url)
         end
 
         it "updates work if imported-from URL has non-ASCII characters" do
@@ -100,6 +101,7 @@ describe Opendoors::ToolsController do
           it_redirects_to_with_notice(opendoors_tools_path(imported_from_url: encoded_url), "Updated imported-from url for #{work.title} to #{encoded_url}")
           work.reload
           expect(work.imported_from_url).to eq(encoded_url)
+          expect(work.work_url.original).to eq(encoded_url)
         end
       end
     end
