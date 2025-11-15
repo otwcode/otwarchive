@@ -6,14 +6,10 @@ Feature: Gift Exchange Notification Emails
       And I open signups for "Holiday Swap"
 
     When I am logged in as "participant1"
-      And I start signing up for "Holiday Swap"
-      And I press "Submit"
-    Then I should see "Sign-up was successfully created."
+      And I start to sign up for "Holiday Swap" tagless gift exchange
 
     When I am logged in as "participant2"
-      And I start signing up for "Holiday Swap"
-      And I press "Submit"
-    Then I should see "Sign-up was successfully created."
+      And I start to sign up for "Holiday Swap" tagless gift exchange
 
     When I have added a co-moderator "mod2" to collection "Holiday Swap"
       And a locale with translated emails
@@ -40,11 +36,9 @@ Feature: Gift Exchange Notification Emails
     Given I have created the tagless gift exchange "Holiday Swap"
       And I open signups for "Holiday Swap"
       And I am logged in as "participant1"
-      And I start signing up for "Holiday Swap"
-      And I press "Submit"
+      And I start to sign up for "Holiday Swap" tagless gift exchange
       And I am logged in as "participant2"
-      And I start signing up for "Holiday Swap"
-      And I press "Submit"
+      And I start to sign up for "Holiday Swap" tagless gift exchange
       And I have added a co-moderator "mod2" to collection "Holiday Swap"
       And I go to "Holiday Swap" collection's page
       And I follow "Collection Settings"
@@ -98,14 +92,10 @@ Feature: Gift Exchange Notification Emails
       And I create an assignment notification message with linebreaks for "Holiday Swap"
 
     When I am logged in as "participant1"
-      And I start signing up for "Holiday Swap"
-      And I press "Submit"
-    Then I should see "Sign-up was successfully created."
+      And I start to sign up for "Holiday Swap" tagless gift exchange
 
     When I am logged in as "participant2"
-      And I start signing up for "Holiday Swap"
-      And I press "Submit"
-    Then I should see "Sign-up was successfully created."
+      And I start to sign up for "Holiday Swap" tagless gift exchange
 
     When I close signups for "Holiday Swap"
       And I have generated matches for "Holiday Swap"
@@ -124,14 +114,10 @@ Feature: Gift Exchange Notification Emails
       And I create an assignment notification message with an ampersand for "Holiday Swap"
 
     When I am logged in as "participant1"
-      And I start signing up for "Holiday Swap"
-      And I press "Submit"
-    Then I should see "Sign-up was successfully created."
+      And I start to sign up for "Holiday Swap" tagless gift exchange
 
     When I am logged in as "participant2"
-      And I start signing up for "Holiday Swap"
-      And I press "Submit"
-    Then I should see "Sign-up was successfully created."
+      And I start to sign up for "Holiday Swap" tagless gift exchange
 
     When I close signups for "Holiday Swap"
       And I have generated matches for "Holiday Swap"
