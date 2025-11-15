@@ -105,5 +105,13 @@ describe CreatorshipsController do
         expect(pending_work.pseuds.reload).not_to include(user.default_pseud)
       end
     end
+
+    context "without selecting any requests" do
+      it "displays a caution" do
+        fake_login_known_user(user)
+        put :update, params: { user_id: user.login }
+        it_redirects_to_with_caution(user_creatorships_path(user), "Please select at least one co-creator request first.")
+      end
+    end
   end
 end
