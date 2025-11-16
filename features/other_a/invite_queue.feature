@@ -102,7 +102,7 @@ Feature: Invite queue management
       And I should see "If you can't find it, please check your email spam folder as your spam filters may have placed it there."
 
     # invite can be used
-    When I am logged in as an admin
+    When I am logged in as a super admin
       And I follow "Invitations"
       And I fill in "track_invitation_invitee_email" with "test@archiveofourown.org"
       And I press "Search" within "form.invitation.simple.search"

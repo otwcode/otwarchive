@@ -6,15 +6,15 @@
 
 <!--subnav-->
 <ul class="navigation actions" role="menu">
-	<li><%= link_to ts('Add Chapter'), new_work_chapter_path(@work) %></li>
+  <li><%= link_to ts("Add Chapter"), new_work_chapter_path(@work) %></li>
   <% if @chapters %>
     <li><%= ts('Edit Chapter:') %>
       <% for chapter in @chapters %>
         <% if chapter.posted? %>
-          <%= link_to h(chapter.position), [:edit, @work, chapter] %>
+          <%= link_to h(chapter.position), edit_work_chapter_path(@work, chapter) %>
         <% else %>
-            <%= link_to h(chapter.position) + ts(" (Draft)"), [:edit, @work, chapter] %>
-	<% end %>
+          <%= link_to h(chapter.position) + ts(" (Draft)"), edit_work_chapter_path(@work, chapter) %>
+        <% end %>
       <% end %></li>
     <li><%= link_to ts('Manage Chapters'), manage_work_chapters_path(@work) %></li>
   <% end %>

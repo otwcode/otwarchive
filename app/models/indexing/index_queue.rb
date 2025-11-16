@@ -47,11 +47,11 @@ class IndexQueue
   end
 
   def add_id(id)
-    REDIS.sadd(name, id)
+    REDIS.sadd?(name, id)
   end
 
   def add_ids(ids)
-    REDIS.sadd(name, ids) unless ids.blank?
+    REDIS.sadd?(name, ids) if ids.present?
   end
 
   def run
@@ -68,7 +68,7 @@ class IndexQueue
   private
 
   def exists?
-    REDIS.exists(name)
+    REDIS.exists?(name)
   end
 
   def rename

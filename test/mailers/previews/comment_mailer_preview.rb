@@ -3,7 +3,7 @@ class CommentMailerPreview < ApplicationMailerPreview
     # Sent to a user when they get a comment on a top-level creation
     define_method :"comment_notification_#{creation_type}" do
       recipient, commentable = create_commentable_data(creation_type)
-      comment = create(:comment, commentable: commentable)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable)
 
       CommentMailer.comment_notification(recipient, comment)
     end
@@ -11,9 +11,26 @@ class CommentMailerPreview < ApplicationMailerPreview
     # Sent to a user when someone edits a comment on a top-level creation
     define_method :"edited_comment_notification_#{creation_type}" do
       recipient, commentable = create_commentable_data(creation_type)
-      comment = create(:comment, commentable: commentable, edited_at: Time.current)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable, edited_at: Time.current)
 
       CommentMailer.edited_comment_notification(recipient, comment)
+    end
+
+    # Sent to a user when they make a top-level comment, and they want to be notified of their own comments
+    define_method :"comment_sent_notification_#{creation_type}" do
+      _, commentable = create_commentable_data(creation_type)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable)
+
+      CommentMailer.comment_sent_notification(comment)
+    end
+
+    # Sent to a user when they make a reply to a comment, and they want to be notified of their own comments
+    define_method :"comment_reply_sent_notification_#{creation_type}" do
+      _, commentable = create_commentable_data(creation_type)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable)
+      reply = create(:comment, commentable: comment)
+
+      CommentMailer.comment_reply_sent_notification(reply)
     end
 
     # Tags don't have comment moderation, chapters use the same logic as unchaptered works
@@ -22,7 +39,7 @@ class CommentMailerPreview < ApplicationMailerPreview
     # Sent to a user when they get a comment on a top-level creation with comment moderation enabled
     define_method :"comment_notification_#{creation_type}_unreviewed" do
       recipient, commentable = create_commentable_data(creation_type, moderated_commenting_enabled: true)
-      comment = create(:comment, commentable: commentable, unreviewed: true)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable, unreviewed: true)
 
       CommentMailer.comment_notification(recipient, comment)
     end
@@ -94,15 +111,6 @@ class CommentMailerPreview < ApplicationMailerPreview
     CommentMailer.comment_reply_notification(comment, reply)
   end
 
-  # Sent to a user when they make a reply to a comment and they want to be notified of their own comments
-  def comment_reply_sent_notification
-    commenter = create(:user, :for_mailer_preview)
-
-    comment = create(:comment, pseud: commenter.default_pseud)
-    reply = create(:comment, commentable: comment)
-    CommentMailer.comment_reply_sent_notification(reply)
-  end
-
   # Sent to a user when they get a comment reply to their comment on a tag
   def comment_reply_notification_tag
     comment = create(:comment, :on_tag)
@@ -110,15 +118,6 @@ class CommentMailerPreview < ApplicationMailerPreview
     replier = create(:user, :for_mailer_preview)
     reply = create(:comment, commentable: comment, pseud: replier.default_pseud)
     CommentMailer.comment_reply_notification(comment, reply)
-  end
-
-  # Sent to a user when they make a reply to a comment on a tag, and they want to be notified of their own comments
-  def comment_reply_sent_notification_tag
-    commenter = create(:user, :for_mailer_preview)
-
-    comment = create(:comment, :on_tag, pseud: commenter.default_pseud)
-    reply = create(:comment, commentable: comment)
-    CommentMailer.comment_reply_sent_notification(reply)
   end
 
   private
