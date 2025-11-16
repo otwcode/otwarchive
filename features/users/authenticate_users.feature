@@ -16,6 +16,7 @@ Feature: User Authentication
       And I should see "Forgot your password or username?"
     When I follow "Reset password"
     Then I should see "If you've forgotten your password, we can send you an email with instructions to reset your password."
+      And I should see the page title "Reset Password"
     When I fill in "Email address" with "sam@example.com"
       And I press "Reset Password"
     Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
