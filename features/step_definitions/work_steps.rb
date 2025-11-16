@@ -36,11 +36,10 @@ end
 #
 # If you add to this regexp, you probably want to update all the
 # similar regexps in the I post/Given the draft/the work steps below.
-When /^I set up (?:a|the) draft "([^"]*)"(?: with chapter title "([^"]*)")?(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, chapter_title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud| # rubocop:disable Cucumber/RegexStepName,Style/RedundantRegexpEscape,Metrics/ParameterLists
+When /^I set up (?:a|the) draft "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud|
   step %{basic tags}
   visit new_work_path
   step %{I fill in the basic work information for "#{title}"}
-  fill_in("Chapter Title", with: chapter_title) if has_field?("Chapter Title", visible: true, disabled: false)
   select(rating.presence || DEFAULT_RATING, from: "Rating")
   check(category.presence || DEFAULT_CATEGORY)
   fill_in("Fandoms", with: (fandom.presence || DEFAULT_FANDOM))
@@ -65,17 +64,16 @@ When /^I set up (?:a|the) draft "([^"]*)"(?: with chapter title "([^"]*)")?(?: w
 end
 
 # This is the same regexp as above
-When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with chapter title "([^"]*)")?(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |number_of_chapters, title, chapter_title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud| # rubocop:disable Cucumber/RegexStepName,Style/RedundantRegexpEscape,Metrics/ParameterLists
+When /^I post (?:a|the) (?:(\d+) chapter )?work "([^"]*)"(?: with fandom "([^"]*)")?(?: with character "([^"]*)")?(?: with second character "([^"]*)")?(?: with freeform "([^"]*)")?(?: with second freeform "([^"]*)")?(?: with category "([^"]*)")?(?: with rating "([^\"]*)")?(?: (?:in|to) (?:the )?collection "([^"]*)")?(?: as a gift (?:for|to) "([^"]*)")?(?: as part of a series "([^"]*)")?(?: with relationship "([^"]*)")?(?: using the pseud "([^"]*)")?$/ do |number_of_chapters, title, fandom, character, character2, freeform, freeform2, category, rating, collection, recipient, series, relationship, pseud|
   # If the work is already a draft then visit the preview page and post it
   work = Work.find_by(title: title)
   if work
     visit preview_work_path(work)
   else
     # NOTE: this will match the above regexp and work just fine even if all the options are blank!
-    step %{I set up the draft "#{title}" with chapter title "#{chapter_title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" with rating "#{rating}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
+    step %{I set up the draft "#{title}" with fandom "#{fandom}" with character "#{character}" with second character "#{character2}" with freeform "#{freeform}" with second freeform "#{freeform2}" with category "#{category}" with rating "#{rating}" in collection "#{collection}" as a gift to "#{recipient}" as part of a series "#{series}" with relationship "#{relationship}" using the pseud "#{pseud}"}
   end
   click_button("Post")
-
   # Now add the chapters
   if number_of_chapters.present? && number_of_chapters.to_i > 1
     work = Work.find_by(title: title)

@@ -645,11 +645,10 @@ Feature: Edit chapters
     Given I am logged in as "karma"
       And the user "second_user" with the email "second_user@example.com" exists
       And all emails have been delivered
-      And I post the work "You and I" with chapter title "My First Chapter"
+      And I post the work "You and I"
       And "second_user" subscribes to work "You and I"
-    When I am logged in as the author of "You and I"
-      And I follow "My Dashboard"
-      And I follow "You and I"
+    When I am logged in as "karma"
+      And I go to the "You and I" work page
       And I follow "Add Chapter"
       And I fill in "chapter_position" with "1"
       And I fill in "chapter_title" with "My New Actual For Real First Chapter"
@@ -657,15 +656,16 @@ Feature: Edit chapters
       And I press "Post"
     Then I should see "Chapter 1: My New Actual For Real First Chapter"
     When I follow "Next Chapter"
-    Then I should see "Chapter 2: My First Chapter"
+    Then I should see "Chapter 2"
+      And I should see "That could be an amusing crossover."
     When subscription notifications are sent
     Then 1 email should be delivered to "second_user@example.com"
-      And the email should contain escaped "Chapter 1: My New Actual For Real First Chapter"
+      And the email should contain exactly "Chapter 1: My New Actual For Real First Chapter"
       
   Scenario: Setting chapter position to 1 on new chapter correctly adjusts positions when previewing, 
   then posting
     Given I am logged in as "karma"
-      And I post the work "You and I" with chapter title "My First Chapter"
+      And I post the work "You and I"
     When I follow "Add Chapter"
       And I fill in "chapter_position" with "1"
       And I fill in "chapter_title" with "My New Actual For Real First Chapter"
@@ -674,7 +674,8 @@ Feature: Edit chapters
       And I press "Post"
     Then I should see "Chapter 1: My New Actual For Real First Chapter"
     When I follow "Next Chapter"
-    Then I should see "Chapter 2: My First Chapter"
+    Then I should see "Chapter 2"
+      And I should see "That could be an amusing crossover."
   
   Scenario: Setting new chapter position in multi-chaptered work to middle position correctly adjusts the other chapters' positions
   and properly sends out subscription email
@@ -683,9 +684,8 @@ Feature: Edit chapters
       And all emails have been delivered
       And I post the chaptered work "Three Chaptered Work"
       And "second_user" subscribes to work "Three Chaptered Work"
-    When I am logged in as the author of "Three Chaptered Work"
-      And I follow "My Dashboard"
-      And I follow "Three Chaptered Work"
+    When I am logged in as "karma"
+      And I go to the "Three Chaptered Work" work page
       And I follow "Add Chapter"
       And I fill in "chapter_position" with "2"
       And I fill in "chapter_title" with "Second Chapter (Not Third)"
@@ -701,7 +701,7 @@ Feature: Edit chapters
       And I should see "That could be an amusing crossover."
     When subscription notifications are sent
     Then 1 email should be delivered to "second_user@example.com"
-      And the email should contain escaped "Chapter 2: Second Chapter (Not Third)"
+      And the email should contain exactly "Chapter 2: Second Chapter (Not Third)"
 
   Scenario: Setting a new chapter's position outside of total chapter range should append the chapter to the end or beginning
     Given I am logged in as "karma"
@@ -718,9 +718,9 @@ Feature: Edit chapters
       And I fill in "content" with "this should be added to the beginning"
       And I press "Post"
     Then I should see "Chapter 1: Way Out of Range (Negative)"
-   When I follow "Add Chapter"
+    When I follow "Add Chapter"
       And I fill in "chapter_position" with "NaN"
       And I fill in "chapter_title" with "Not even a number!"
       And I fill in "content" with "this should be added to the beginning since str.to_i = 0"
       And I press "Post"
-   Then I should see "Chapter 1: Not even a number!"
+    Then I should see "Chapter 1: Not even a number!"
