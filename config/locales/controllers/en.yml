@@ -269,7 +269,7 @@ en:
           other: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hours, you can request a new password reset.
         page_title: Change Password
       new:
-        page_title: Change Password
+        page_title: Reset Password
     reconfirm_email:
       access_denied:
         logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.
