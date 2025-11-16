@@ -6,7 +6,7 @@ class Users::PasswordsController < Devise::PasswordsController
   layout "session"
 
   def new
-    @page_title = t(".page_title")
+    @page_subtitle = t(".page_title")
     
     super
   end
