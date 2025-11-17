@@ -373,15 +373,6 @@ en:
         page_heading: Forgotten your admin password?
         reset_login_html: Admin username
         submit: Reset Admin Password
-    preferences:
-      show:
-        disable_totp: Disable TOTP
-        disabled: Disabled
-        enable_totp: Enable TOTP
-        enabled: Enabled
-        set_my_preferences: Set My Preferences
-        totp: 'Time-based One-Time Password (TOTP): %{status}'
-        two_factor_authentication: Two-Factor Authentication
     sessions:
       new:
         label:
@@ -498,13 +489,20 @@ en:
       page_heading: AO3 News
   admins:
     index:
+      account:
+        heading: Account Settings
+        roles:
+          label: Admin roles
+          none: You currently have no admin roles assigned to you.
+        totp:
+          disable_totp: Disable two-step verification
+          disabled: Disabled
+          enable_totp: Set up two-step verification with an authenticator app
+          enabled: Enabled
+          label: Two-step verification
       confidentiality_reminder: You are now logged in as an admin. That means you will probably encounter information that is personal or confidential (e.g. usernames, email and IP addresses, creator names on anonymous works, etc). Please do not use this information in ways unrelated to your OTW role. If you have questions about what you can or cannot do with information you see here, contact your committee chair(s).
       log_out_reminder: Please remember to log out before resuming your normal site activity!
       page_title: Hi, %{login}!
-      responsibility: With great power comes great responsibility.
-      roles:
-        heading: 'Your admin roles:'
-        none: You currently have no admin roles assigned to you.
   archive_faqs:
     admin_index:
       confirm_delete: Are you sure you want to delete this FAQ category?
@@ -2616,8 +2614,6 @@ en:
     sessions:
       greeting:
         nav:
-          admin:
-            preferences: Preferences
           assignments: My Assignments
           bookmarks: My Bookmarks
           collections: My Collections
