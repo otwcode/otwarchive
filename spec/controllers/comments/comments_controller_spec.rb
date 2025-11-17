@@ -491,4 +491,15 @@ describe CommentsController do
       before { work.update!(collection_names: create(:unrevealed_collection).name) }
     end
   end
+
+  describe "POST #create" do
+    context "when commentable has posted that is falsy" do
+      it "does not allow comment creation" do
+        work = create(:work, posted: false)
+        fake_login_known_user(work.users.first)
+        post :create, params: { work_id: work.id, comment: { comment_content: "Test comment" } }
+        expect(flash[:error]).to eq("You cannot comment on an unposted work.")
+      end
+    end
+  end
 end
