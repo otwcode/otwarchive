@@ -47,7 +47,8 @@ Feature: Authenticate Admin Users With TOTP 2FA
       | admin | testpassword | admin@example.com |
       And I am logged in as admin "admin" with password "testpassword"
       And admin "admin" has TOTP 2FA enabled
-    When I follow "Disable two-step verification"
+    When I follow "Hi, admin!"
+      And I follow "Disable two-step verification"
     Then I should see "Disable Two-Factor Authentication"
     When I fill in "password" with "testpassword"
       And I fill in a valid TOTP token for admin "admin"
@@ -60,7 +61,8 @@ Feature: Authenticate Admin Users With TOTP 2FA
       | admin | testpassword | admin@example.com |
       And I am logged in as admin "admin" with password "testpassword"
       And admin "admin" has TOTP 2FA enabled
-    When I follow "Disable two-step verification"
+    When I follow "Hi, admin!"
+      And I follow "Disable two-step verification"
     Then I should see "Disable Two-Factor Authentication"
     When I fill in "password" with "wrongpassword"
       And I fill in a valid TOTP token for admin "admin"
@@ -74,7 +76,8 @@ Feature: Authenticate Admin Users With TOTP 2FA
       | admin | testpassword | admin@example.com |
       And I am logged in as admin "admin" with password "testpassword"
       And admin "admin" has TOTP 2FA enabled
-    When I follow "Disable two-step verification"
+    When I follow "Hi, admin!"
+      And I follow "Disable two-step verification"
     Then I should see "Disable Two-Factor Authentication"
     When I fill in "password" with "testpassword"
       And I fill in "Two-Factor Authentication Code" with "000000"
