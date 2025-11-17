@@ -217,7 +217,9 @@ describe BookmarksController do
       it "shows the collection warning message" do
         put :update, params: { id: bookmark.id, bookmark: { collection_names: collection.name } }
 
-        success_msg = "Bookmark was successfully updated. Added to collection(s): Basic Collection 56. Please note: private bookmarks are not listed in collections."
+        success_msg = "Bookmark was successfully updated. " \
+                      "Added to collection(s): #{collection.title}. " \
+                      "Please note: private bookmarks are not listed in collections."
         it_redirects_to_with_notice(bookmark_path(bookmark), success_msg)
       end
     end
