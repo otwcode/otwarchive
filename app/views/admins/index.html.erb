@@ -38,7 +38,7 @@
       <% if current_admin.otp_required_for_login %>
         <dd>
           <p><%= t(".account.totp.enabled") %></p>
-          <p><%= link_to t(".account.totp.disable_totp"), confirm_disable_admin_totp_path(current_admin) %>
+          <p><%= link_to t(".account.totp.disable_totp"), confirm_disable_admin_totp_path(current_admin) %></p>
         </dd>
       <% else %>
         <dd>
