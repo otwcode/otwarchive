@@ -217,9 +217,7 @@ describe BookmarksController do
       it "shows the collection warning message" do
         put :update, params: { id: bookmark.id, bookmark: { collection_names: collection.name } }
     
-        expect(flash[:notice]).to include("Added to collection(s): #{collection.title}")
-        expect(flash[:notice]).to include("Please note: private bookmarks are not listed in collections")
-        expect(response).to redirect_to(bookmark_path(bookmark))
+        it_redirects_to_with_notice(bookmark_path(bookmark), "Bookmark was successfully updated. Please note: private bookmarks are not listed in collections.")
       end
     end
   end
