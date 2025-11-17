@@ -62,7 +62,7 @@ class Admin::TotpController < Admin::BaseController
       flash[:error] = t(".failure")
     end
 
-    redirect_to admin_preferences_path
+    redirect_to admins_path
   end
 
   private
