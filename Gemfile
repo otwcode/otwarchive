@@ -90,7 +90,7 @@ gem "globalize", "~> 7.0"
 gem 'rack-dev-mark', '>=0.7.8'
 
 #Phrase-app
-gem 'phraseapp-in-context-editor-ruby', '>=1.0.6'
+gem 'phraseapp-in-context-editor-ruby', '~> 1.4.0'
 
 # For URL mangling
 gem 'addressable'
