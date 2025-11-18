@@ -7,7 +7,7 @@ gem 'test-unit', '~> 3.2'
 gem 'bundler'
 
 gem "rails", "~> 7.2"
-gem "rails-i18n"
+gem "rails-i18n", "7.0.9"
 gem "rack", "~> 2.2"
 gem "sprockets", "< 4"
 
