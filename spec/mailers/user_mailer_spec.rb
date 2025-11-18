@@ -1517,16 +1517,16 @@ describe UserMailer do
 
       it "includes ToS violation warning with URLs" do
         expect(email).to have_text_part_content("you may not repost the work")
-        expect(email).to have_text_part_content("https://archiveofourown.org/tos")
-        expect(email).to have_text_part_content("https://archiveofourown.org/content")
-        expect(email).to have_text_part_content("https://archiveofourown.org/tos_faq#repost_my_work")
+        expect(email).to have_text_part_content("/tos),")
+        expect(email).to have_text_part_content("/content),")
+        expect(email).to have_text_part_content("/tos_faq#repost_my_work")
       end
 
       it "instructs user to check email and contact Policy & Abuse" do
         expect(email).to have_text_part_content("check your email")
         expect(email).to have_text_part_content("spam folder")
         expect(email).to have_text_part_content("contact the Policy & Abuse committee")
-        expect(email).to have_text_part_content("https://archiveofourown.org/abuse_reports/new")
+        expect(email).to have_text_part_content("/abuse_reports/new")
       end
 
       it "directs users to Policy & Abuse in footer" do

@@ -415,7 +415,7 @@ class UserMailerPreview < ApplicationMailerPreview
     user = create(:user, :for_mailer_preview)
     if params[:work_id]
       work = Work.find_by(id: params[:work_id])
-      if work && work.users.exists?
+      if work&.users&.exists?
         user = work.users.first
       end
     end
