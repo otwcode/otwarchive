@@ -1,4 +1,6 @@
 class ChallengeAssignment < ApplicationRecord
+  self.ignored_columns = [:pinch_request_signup_id]
+
   # We use "-1" to represent all the requested items matching
   ALL = -1
 
