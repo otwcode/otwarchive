@@ -64,6 +64,14 @@ class CommentMailerPreview < ApplicationMailerPreview
 
       CommentMailer.comment_notification(recipient, comment)
     end
+
+    # Sent to a user when they make a top-level comment on a creation with comment moderation enabled, and they want to be notified of their own comments
+    define_method :"comment_sent_notification_#{creation_type}_unreviewed" do
+      commentable = create_commentable_data(creation_type, moderated_commenting_enabled: true)
+      comment = create(:comment, :for_mailer_preview, commentable: commentable, unreviewed: true)
+
+      CommentMailer.comment_sent_notification(comment)
+    end
   end
 
   # Sent to a user when they get a comment on a top-level creation by a user with a custom pseud
