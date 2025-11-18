@@ -653,6 +653,7 @@ describe UserMailer do
     let(:creator) { create(:pseud) }
     let(:work) { create(:work, summary: "<p>Paragraph <u>one</u>.</p><p>Paragraph 2.</p>", authors: [creator], character_string: "A,B") }
     let(:chapter) { create(:chapter, work: work, summary: "<p><b>Another</b> HTML summary.</p>", authors: [creator]) }
+    let(:series) { create(:series, works: [work]) }
     let(:subscription) { create(:subscription, subscribable: creator.user) }
     let(:entries) { ["Work_#{work.id}", "Chapter_#{chapter.id}"].to_json }
 
@@ -687,6 +688,12 @@ describe UserMailer do
         expect(email).to have_html_part_content("<p>Paragraph 2.</p>")
       end
 
+      it "includes the series link" do
+        label = "<b style=\"color:#990000\">Series: </b>"
+        link = "Part 1 of <a style=\"color:#990000\" href=\"#{series_url(series)}\">#{series.title}</a>"
+        expect(email).to have_html_part_content("#{label}#{link}")
+      end
+
       it "includes HTML from the chapter summary" do
         expect(email).to have_html_part_content("<p><b>Another</b> HTML summary.</p>")
       end
@@ -708,6 +715,10 @@ describe UserMailer do
       it "reformats HTML from the work summary" do
         expect(email).to have_text_part_content("Paragraph _one_.")
         expect(email).to have_text_part_content("Paragraph 2.")
+      end
+
+      it "includes the series list" do
+        expect(email).to have_text_part_content("Series: Part 1 of #{series.title}")
       end
 
       it "reformats HTML from the chapter summary" do
