@@ -62,13 +62,12 @@ Then(/^#{capture_email} should have "(.*?)" in the subject$/) do |email_ref, tex
   email(email_ref).subject.should =~ /#{text}/
 end
 
-Then(/^#{capture_email} should contain "(.*)"$/) do |email_ref, text|
+Then(/^#{capture_email} should contain "(.*)"$/) do |email_ref, text| # rubocop:disable Cucumber/RegexStepName
   mail = email(email_ref)
 
   if mail.multipart?
-    [mail.text_part.body, mail.html_part.body].each do |part|
-      expect(part).to match(/#{text}/)
-    end
+    expect(mail.text_part.body).to match(/#{text}/)
+    expect(mail.html_part.body).to match(/#{text}/)
   else
     expect(mail.body).to match(/#{text}/)
   end
@@ -78,9 +77,8 @@ Then(/^#{capture_email} should contain exactly "(.*)"$/) do |email_ref, text| # 
   mail = email(email_ref)
 
   if mail.multipart?
-    [mail.text_part.body, mail.html_part.body].each do |part|
-      expect(part).to include(text)
-    end
+    expect(mail.text_part.body).to include(text)
+    expect(mail.html_part.body).to include(text)
   else
     expect(mail.body).to include(text)
   end
