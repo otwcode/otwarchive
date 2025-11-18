@@ -2,14 +2,18 @@
 <h2 class="heading"><%= t(".page_heading") %></h2>
 <%= error_messages_for @invitation %>
 <!--/descriptions-->
-<!--subnav-->
-<ul class="navigation actions" role="navigation">
-  <li><%= link_to t(".navigation.requests"), user_invite_requests_path %></li>
-  <% if policy(InviteRequest).can_manage? %>
-    <li><%= link_to t(".navigation.queue"), manage_invite_requests_path %></li>
-  <% end %>
-</ul>
-<!--/subnav-->
+<% if policy(UserInviteRequest).index? || policy(InviteRequest).can_manage? %>
+  <!--subnav-->
+  <ul class="navigation actions">
+    <% if policy(UserInviteRequest).index? %>
+      <li><%= link_to t(".navigation.requests"), user_invite_requests_path %></li>
+    <% end %>
+    <% if policy(InviteRequest).can_manage? %>
+      <li><%= link_to t(".navigation.queue"), manage_invite_requests_path %></li>
+    <% end %>
+  </ul>
+  <!--/subnav-->
+<% end %>
 <!--main content-->
 <% if policy(Invitation).find? %>
   <%= form_tag url_for(controller: "admin/admin_invitations", action: :find), class: "invitation simple search", autocomplete: "off", method: :get do %>

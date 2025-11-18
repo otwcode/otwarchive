@@ -32,8 +32,7 @@ end
 
 Given /^invitations are required$/ do
   steps %{
-    Given I have no users
-      And account creation requires an invitation
+    Given account creation requires an invitation
       And users can request invitations
   }
 end
@@ -101,6 +100,11 @@ Given "an invitation created by {string} and used by {string}" do |creator, invi
   FactoryBot.create(:invitation, creator: creator, invitee: invitee)
 end
 
+Given "one user invite request" do
+  user = ensure_user("user1")
+  UserInviteRequest.create!(user: user, quantity: 3, reason: "I want them for a friend")
+end
+
 ### WHEN
 
 When /^I use an invitation to sign up$/ do
@@ -145,7 +149,7 @@ When "as {string} I request some invites" do |user|
 end
 
 When /^I view requests as an admin$/ do
-  step %{I am logged in as an admin}
+  step %{I am logged in as a "policy_and_abuse" admin}
   step %{I follow "Invitations"}
   step %{I follow "Manage Requests"}
 end
