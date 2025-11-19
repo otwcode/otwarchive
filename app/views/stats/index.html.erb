@@ -1,9 +1,10 @@
+<%# rubocop:disable DeprecatedClasses %>
 <!--Descriptive page names, messages and instructions-->
-<h2 class="heading"><%= ts("Statistics") %></h2>
+<h2 class="heading"><%= t(".page_heading") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<h3 class="landmark heading"><%= ts('Navigation and Sorting') %></h3>
+<h3 class="landmark heading"><%= t(".landmark.navigation_and_sorting") %></h3>
 <%= render "stats/navigation" %>
 <!--subnav-->
 
@@ -20,22 +21,22 @@
   <% end %>
 </ol>
 
-<h3 class="heading"><%= ts("Totals") %></h3>
+<h3 class="heading"><%= t(".totals_heading") %></h3>
 <div class="wrapper">
   <dl class="statistics meta group" role="complementary">
-    <% { user_subscriptions: t(".user_subscriptions"),
-         kudos: t(".kudos"),
-         comment_thread_count: t(".comment_threads"),
-         work_bookmarks: t(".work_bookmarks"),
-         work_subscriptions: t(".work_subscriptions"),
-         series_bookmarks: t(".series_bookmarks"),
-         series_subscriptions: t(".series_subscriptions"),
-         word_count: t(".word_count") }.each do |stat, stat_text| %>
+    <% { user_subscriptions: t(".user_subscriptions_label"),
+         kudos: t(".kudos_label"),
+         comment_thread_count: t(".comment_threads_label"),
+         work_bookmarks: t(".work_bookmarks_label"),
+         work_subscriptions: t(".work_subscriptions_label"),
+         series_bookmarks: t(".series_bookmarks_label"),
+         series_subscriptions: t(".series_subscriptions_label"),
+         word_count: t(".word_count_label") }.each do |stat, stat_text| %>
       <% stat == :word_count ? html_class = "words" : html_class = stat.to_s.humanize.downcase %>
-      <dt class="<%= html_class %>"><%= stat_text %>:</dt>
+      <dt class="<%= html_class %>"><%= stat_text %></dt>
       <dd class="<%= html_class %>"><%= number_with_delimiter(@totals[stat]) %></dd>
     <% end %>
-    <dt class="hits"><%= t(".hits") %>:</dt>
+    <dt class="hits"><%= t(".hits_label") %></dt>
     <dd class="hits"><%= number_with_delimiter(@totals[:hits]) %></dd>
   </dl>
 </div>
@@ -46,9 +47,9 @@
 <%= render_chart(@chart, 'stat_chart') %>
 
 <div class="actions module">
-  <h3 class="landmark heading"><%= t(".landmark_heading") %></h3>
+  <h3 class="landmark heading"><%= t(".landmark.actions") %></h3>
   <ul class="sorting actions" role="menu">
-    <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
+    <li><h4 class="heading"><%= t(".sort_by") %></h4></li>
     <li><%= sort_link t(".date"), "date" %></li>
     <li><%= sort_link t(".hits"), "hits", { desc_default: true } %></li>
     <li><%= sort_link t(".kudos"), "kudos_count", { desc_default: true } %></li>
@@ -65,7 +66,7 @@
   </ul>
 </div>
 
-<h3 class="landmark heading"><%= t(".listing_statistics") %></h3>
+<h3 class="landmark heading"><%= t(".landmark.listing_statistics") %></h3>
 <ul class="statistics index group">
   <% @works.keys.sort.each do |fandom| %>
     <li class="fandom listbox group">
@@ -78,35 +79,39 @@
             <dl>
               <dt>
                 <%= link_to work.title, work.item_path %>
-                <% if work.series? %>(Series)<% end %>
-                <% if (params[:view_type] != nil && params[:view_type] != "fandom") %><span class="fandom">(<%= work.fandom_string %>)</span><% end %>
-                <% if work.work? %><span class="words">
-                  (<%= t(".word_count_with_input", wordcount: number_with_delimiter(work.word_count)) %>)</span>
+                <% if work.series? %><%= t(".series_parenthetical") %><% end %>
+                <% if (params[:view_type] != nil && params[:view_type] != "fandom") %>
+                  <span class="fandom">
+                    <%= t(".fandom_string_parenthetical", fandom_string: work.fandom_string) %>
+                  </span>
+                <% end %>
+                <% if work.work? %>
+                  <span class="words">
+                  <%= t(".word_count_with_input", count: number_with_delimiter(work.word_count)) %>
+                  </span>
                 <% end %>
               </dt>
               <dd>
                 <dl class="stats">
                   <% if work.series? %>
-                    <dt class="work_count"><%= t(".work_count") %>:</dt>
-                    <dd class="work_count"><%= number_with_delimiter(work.work_count) %> </dd>
+                    <dt class="works"><%= t(".work_count_label") %></dt>
+                    <dd class="works"><%= number_with_delimiter(work.work_count) %></dd>
                   <% end %>
                   <% if work.subscriptions_count > 0 %>
-                    <dt class="subscriptions"><%= t(".subscriptions") %>:</dt>
-                    <dd class="subscriptions">
-                      <%= number_with_delimiter(work.subscriptions_count) %>
-                      </dd>
+                    <dt class="subscriptions"><%= t(".subscriptions_label") %></dt>
+                    <dd class="subscriptions"><%= number_with_delimiter(work.subscriptions_count) %></dd>
                   <% end %>
                   <% if work.work? %>
-                    <dt class="hits"><%= t(".hits") %>:</dt>
+                    <dt class="hits"><%= t(".hits_label") %></dt>
                     <dd class="hits"><%= number_with_delimiter(work.hits) %> </dd>
                     <%# dt ts("Downloads:") /dt dd work.downloads /dd %>
-                    <dt class="kudos"><%= t(".kudos") %>:</dt>
+                    <dt class="kudos"><%= t(".kudos_label") %></dt>
                     <dd class="kudos"><%= number_with_delimiter(work.kudos_count) %></dd>
-                    <dt class="comments"><%= t(".comment_threads") %>:</dt>
+                    <dt class="comments"><%= t(".comment_threads_label") %></dt>
                     <dd class="comments"><%= number_with_delimiter(work.comment_thread_count) %></dd>
                   <% end %>
-                  <dt class="bookmark-count"><%= t(".bookmarks") %>:</dt>
-                  <dd class="bookmark-count"><%= number_with_delimiter(work.bookmarks_count) %></dd>
+                  <dt class="bookmarks"><%= t(".bookmarks_label") %></dt>
+                  <dd class="bookmarks"><%= number_with_delimiter(work.bookmarks_count) %></dd>
                 </dl>
               </dd>
             </dl>
