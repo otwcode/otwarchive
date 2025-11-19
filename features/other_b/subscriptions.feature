@@ -406,6 +406,6 @@ Scenario: subscriptions are not deleted without confirmation
       And I press "Post"
       And subscription notifications are sent
     Then 1 email should be delivered to "second_user@example.com"
-      And the email should have "first_user posted Chapter 2 of Half and Half and 1 more" in the subject
+      And the email should have "first_user posted Half and Half and 1 more" in the subject
       And the email should contain "posted a new work"
-      And the email should contain "Chapter 2: 2nd chapter"
+      And the email should contain "Chapter 1"

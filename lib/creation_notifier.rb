@@ -22,7 +22,7 @@ module CreationNotifier
       notify_subscribers
       notify_prompters
     when Chapter
-      notify_subscribers if self.position != 1 || !self.work.saved_change_to_posted?
+      notify_subscribers if work.chapters.posted.count > 1
     end
   end
 
