@@ -97,7 +97,6 @@ describe "rake creatorships:remove_orphaned_empty_series" do
 
   context "when the series has a work but no pseuds" do
     before do
-      create(:work, authors: series.pseuds, series: [series])
       series.creatorships.delete_all
     end
 
@@ -108,6 +107,10 @@ describe "rake creatorships:remove_orphaned_empty_series" do
   end
 
   context "when the series has a pseud but no works" do
+    before do
+      series.works.delete_all
+    end
+
     it "doesn't delete the series" do
       subject.invoke
       expect { series.reload }.not_to raise_exception
@@ -116,6 +119,7 @@ describe "rake creatorships:remove_orphaned_empty_series" do
 
   context "when the series has no works and no pseuds" do
     before do
+      series.works.delete_all
       series.creatorships.delete_all
     end
 

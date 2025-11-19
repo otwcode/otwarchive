@@ -1,5 +1,5 @@
-/*==GROUP: META 
-http://otwcode.github.com/docs/front_end_coding/patterns/meta 
+/* == GROUP: META
+https://otwcode.github.io/docs/patterns/meta.html
 */
 
 dl.meta {
@@ -98,4 +98,4 @@ dl.meta dd ul li, .meta .stats dl, .meta .stats dl dt, .meta .stats dl dd {
   content: none;
 }
 
-/*END== */
+/* END == */

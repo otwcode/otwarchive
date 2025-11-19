@@ -115,6 +115,8 @@ class PseudDecorator < SimpleDelegator
     end
   end
 
+  # Do NOT internationalize this because
+  # This is also used as an input format that cannot be localised
   def constructed_byline
     name == user_login ? name : "#{name} (#{user_login})"
   end

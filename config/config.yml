@@ -167,8 +167,12 @@ IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 
 # max number of abuse reports to accept for a given user profile URL
 ABUSE_REPORTS_PER_USER_MAX: 5
+# time period, in days, used to total number of reports for a given user URL
+ABUSE_REPORTS_PER_USER_PERIOD: 31
 # max number of abuse reports to accept for a given work URL
 ABUSE_REPORTS_PER_WORK_MAX: 5
+# time period, in days, used to total number of reports for a given work URL
+ABUSE_REPORTS_PER_WORK_PERIOD: 31
 # max number of abuse reports to accept from a given email
 ABUSE_REPORTS_PER_EMAIL_MAX: 5
 
@@ -570,9 +574,17 @@ SUPPORTED_CSS_PROPERTIES:
 - writing-mode
 - z-index
 
-# we allow through any string that is just a-z plus dashes (no spaces), so the
-# only keywords you need to specify would be ones that have something else or
-# url, if you want to allow url values
+# We allow the !important keyword as well as any string that is just a-z plus
+# dashes, as well as space- or comma-separated lists of such strings. The only
+# keywords you need to specify are keywords that contain other characters.
+#
+# We have the URL_FUNCTION_REGEX in lib/css_cleaner.rb, but including "url" here
+# is necessary to prevent the url() function from being stripped before any
+# value containing it is sanitized. Allowing images in skins should be moved to
+# its own config variable in the future.
+#
+# Do not add other functions here; they are not keywords and are controlled by
+# regular expressions in lib/css_cleaner.rb.
 SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 
 # if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this
@@ -761,5 +773,6 @@ PERCONA_ARGS: >
 # How many shards to have in elastic indexes.
 # Production may have more than 5 for these
 BOOKMARKABLE_SHARDS: 5
+COLLECTION_SHARDS: 5
 WORKS_SHARDS: 5
 USER_SHARDS: 5

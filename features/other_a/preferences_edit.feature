@@ -15,8 +15,6 @@ Feature: Edit preferences
     And I go to scott's user page
     And I follow "Preferences"
   Then I should see "Set My Preferences"
-    And I should see "Show my email address to other people."
-    And I should see "Show my date of birth to other people."
     And I should see "Hide my work from search engines when possible."
     And I should see "Hide the share buttons on my work."
     And I should see "Show me adult content without checking."
@@ -337,3 +335,37 @@ Feature: Edit preferences
     When I follow "Show warnings"
     Then I should see "Sorry, you need to have JavaScript enabled for this."
       And I should see "Show warnings"
+
+  Scenario Outline: Authorized admins can see the user's preferences page
+    Given a user exists with login: "scott"
+      And I am logged in as a "<role>" admin
+    When I go to scott's user page
+      And I follow "Preferences"
+    Then I should see "Set My Preferences"
+  
+    Examples:
+      | role             |
+      | superadmin       |
+      | policy_and_abuse |
+      | support          |
+
+  Scenario Outline: Unauthorized admins cannot see the user's preferences page or the link to it
+    Given a user exists with login: "scott"
+      And I am logged in as a "<role>" admin
+    When I go to scott's user page
+    Then I should not see "Preferences"
+    When I go to scott's preferences page
+    Then I should see "Sorry, only an authorized admin can access the page you were trying to reach."
+  
+    Examples:
+      | role                       |
+      | board                      |
+      | board_assistants_team      |
+      | communications             |
+      | development_and_membership |
+      | docs                       |
+      | elections                  |
+      | legal                      |
+      | translation                |
+      | tag_wrangling              |
+      | open_doors                 |

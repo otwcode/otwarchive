@@ -293,12 +293,30 @@
         And "work_subscriber" should not be emailed
         And "series_subscriber" should not be emailed
 
+    Scenario: Translated subscription email
+
+      Given a locale with translated emails
+        And the user "anna" exists and is activated
+        And the user "anna" enables translated emails
+        And "anna" subscribes to author "creator"
+        And "arthur" subscribes to author "creator"
+      When I am logged in as "creator"
+        And I post the work "great thing"
+        And subscription notifications are sent
+      Then 1 email should be delivered to "anna"
+        And the email should have "creator posted great thing" in the subject
+        And the email to "anna" should be translated
+        And the email to "anna" should contain "Fändom"
+        And the email to "anna" should not contain "Fandom"
+        And 1 email should be delivered to "arthur"
+        And the email should have "creator posted great thing" in the subject
+        And the email to "arthur" should be non-translated
+        And the email to "arthur" should not contain "Fändom"
+        And the email to "arthur" should contain "Fandom"
+
   Scenario: subscribe to an individual work with an the & and < and > characters in the title
 
-  Given I have loaded the fixtures
-    And the following activated users exist
-    | login          | password   | email           |
-    | subscriber     | password   | subscriber@foo.com |
+  Given the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies" by "testuser2"
   When I am logged in as "subscriber" with password "password"
     And I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When I press "Subscribe"
@@ -307,7 +325,7 @@
     And a chapter is added to "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When I view the work "I am &lt;strong&gt;er Than Yesterday &amp; Other Lies"
   When subscription notifications are sent
-  Then 1 email should be delivered to "subscriber@foo.com"
+  Then 1 email should be delivered to "subscriber"
   When "The problem with ampersands and angle brackets in email bodies and subjects" is fixed
     #And the email should have "I am <strong>er Than Yesterday & Other Lies" in the subject
     #And the email should contain "I am <strong>er Than Yesterday & Other Lies"

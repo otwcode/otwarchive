@@ -39,7 +39,7 @@ end
 When "I edit the work {string} to be in the collection(s) {string}" do |work, collection|
   step %{I edit the work "#{work}"}
   fill_in("Post to Collections / Challenges", with: collection)
-  step %{I post the work}
+  step %{I update the work}
 end
 
 When /^I view the ([^"]*) collection items page for "(.*?)"$/ do |item_status, collection|
@@ -100,10 +100,10 @@ Given /^I close the collection with the title "([^\"]*)"$/ do |title|
   step %{I am logged out}
 end
 
-Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
+Given "I have added a/the co-moderator {string} to collection {string}" do |name, title|
   # create the user
   step %{I am logged in as "#{name}"}
-  step %{I am logged in as "mod1"}
+  step %{I am logged in as the owner of "#{title}"}
   visit collection_path(Collection.find_by(title: title))
   click_link("Membership")
   step %{I fill in "participants_to_invite" with "#{name}"}
@@ -115,11 +115,63 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
   step %{I should see "Updated #{name}"}
 end
 
+Given "I have added a/the co-owner {string} to collection {string}" do |name, title|
+  # create the user
+  step %{I am logged in as "#{name}"}
+  step %{I am logged in as the owner of "#{title}"}
+  visit collection_path(Collection.find_by(title: title))
+  click_link("Membership")
+  step %{I fill in "participants_to_invite" with "#{name}"}
+  step %{I press "Submit"}
+
+  step %{I select "Owner" from "#{name}_role"}
+  # TODO: fix the form, it is malformed right now
+  click_button("#{name}_submit")
+  step %{I should see "Updated #{name}"}
+end
+
 Given "I have joined the collection {string} as {string}" do |title, login|
   collection = Collection.find_by(title: title)
   user = User.find_by(login: login)
   FactoryBot.create(:collection_participant, pseud: user.default_pseud, collection: collection, participant_role: "Member")
   visit collections_path
+end
+
+Given "a set of collections for searching" do
+  profile = CollectionProfile.create!(faq: "<dl><dt>What is this test thing?</dt><dd>It's a test collection</dd></dl>",
+                                      intro: "Welcome to the test collection",
+                                      rules: "Be nice to testers")
+  FactoryBot.create(:collection,
+                    name: "sometest",
+                    title: "Some Test Collection",
+                    tag_string: "The Best Tag, The Better Tag",
+                    collection_profile: profile)
+  FactoryBot.create(:collection,
+                    name: "othertest",
+                    tag_string: "The Best Tag",
+                    title: "Some Other Collection")
+  FactoryBot.create(:collection,
+                    :closed,
+                    name: "anothertest",
+                    tag_string: "The Better Tag",
+                    title: "Another Plain Collection")
+  FactoryBot.create(:collection,
+                    :moderated,
+                    name: "surprisetest",
+                    title: "Surprise Presents",
+                    challenge: FactoryBot.create(:gift_exchange))
+  FactoryBot.create(:collection,
+                    name: "swaptest",
+                    title: "Another Gift Swap",
+                    multifandom: true,
+                    challenge: FactoryBot.create(:gift_exchange))
+  FactoryBot.create(:collection,
+                    :closed,
+                    name: "demandtest",
+                    title: "On Demand",
+                    challenge: FactoryBot.create(:prompt_meme))
+
+  step %{all indexing jobs have been run}
 end
 
 ### WHEN
@@ -192,6 +244,15 @@ When "I approve the work {string} in the collection {string}" do |work, collecti
   item_id = CollectionItem.find_by(item: work, collection: collection).id
   visit collection_items_path(collection)
   step %{I select "Approved" from "collection_items_#{item_id}_collection_approval_status"}
+end
+
+When "I give {string} the {string} role in the collection {string}" do |byline, role, collection|
+  pseud = Pseud.parse_byline(byline)
+  collection = Collection.find_by(title: collection)
+  participant_id = CollectionParticipant.find_by(pseud: pseud, collection: collection).id
+  selector = "#participant_#{participant_id}"
+  step %{I select "#{role}" from "#{pseud.user.login}_role" within "#{selector}"}
+  step %{I press "Update" within "#{selector}"}
 end
 
 ### THEN
@@ -270,4 +331,14 @@ Then /^the author of "([^\"]*)" should be hidden from me$/ do |title|
   expect(page).to have_content("#{title} by Anonymous")
   visit user_path(work.users.first)
   expect(page).not_to have_content(title)
+end
+
+Then "{string} should have the {string} role in the collection {string}" do |byline, role, collection|
+  pseud = Pseud.parse_byline(byline)
+  collection = Collection.find_by(title: collection)
+  participant_id = CollectionParticipant.find_by(pseud: pseud, collection: collection).id
+  selector = "#participant_#{participant_id}"
+  within(selector) do
+    expect(page).to have_select("#{pseud.user.login}_role", selected: role)
+  end
 end

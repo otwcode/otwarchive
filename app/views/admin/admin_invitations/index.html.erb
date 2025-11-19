@@ -11,6 +11,24 @@
 </ul>
 <!--/subnav-->
 <!--main content-->
+<% if policy(Invitation).find? %>
+  <%= form_tag url_for(controller: "admin/admin_invitations", action: :find), class: "invitation simple search", autocomplete: "off", method: :get do %>
+    <fieldset>
+      <h3 class="heading"><%= t(".find.heading") %></h3>
+      <dl>
+        <dt><%= label_tag "invitation[user_name]", t(".find.username") %></dt>
+        <dd><%= text_field_tag "invitation[user_name]" %></dd>
+        <dt><%= label_tag "invitation[token]", t(".find.invite_token") %></dt>
+        <dd><%= text_field_tag "invitation[token]" %></dd>
+        <dt><%= label_tag "track_invitation_invitee_email", t(".find.email") %></dt>
+        <dd><%= text_field_tag "invitation[invitee_email]", nil, id: "track_invitation_invitee_email" %></dd>
+        <dt class="landmark"><%= t(".find.landmark_submit") %></dt>
+        <dd class="submit actions"><%= submit_tag t(".find.search") %></dd>
+      </dl>
+    </fieldset>
+  <% end %>
+<% end %>
+
 <%= form_tag url_for(controller: "admin/admin_invitations", action: :create), class: "invitation simple post", autocomplete: "off" do %>
   <fieldset class="simple">
     <h3 class="heading"><%= t(".send_to_email.heading") %></h3>
@@ -24,53 +42,41 @@
   </fieldset>
 <% end %>
 
-<%= form_tag url_for(controller: "admin/admin_invitations", action: :invite_from_queue), class: "queue invitation simple post", autocomplete: "off" do %>
-  <fieldset class="simple">
-    <h3 class="heading">
-      <%= t(".invite_from_queue.heading_html",
-            invitations_queue_link: link_to(t(".invite_from_queue.invitations_queue"), invite_requests_path)) %>
-    </h3>
-    <p><%= t(".invite_from_queue.requests_in_queue", count: InviteRequest.count) %></p>
-    <p>
-      <%= label_tag "invitation[invite_from_queue]", t(".invite_from_queue.number_to_invite") %>
-      <%= text_field_tag "invitation[invite_from_queue]" %>
-      <span class="submit actions"><%= submit_tag t(".invite_from_queue.invite_from_queue") %></span>
-    </p>
-  </fieldset>
+<% if policy(Invitation).invite_from_queue? %>
+  <%= form_tag url_for(controller: "admin/admin_invitations", action: :invite_from_queue), class: "queue invitation simple post", autocomplete: "off" do %>
+    <fieldset class="simple">
+      <h3 class="heading">
+        <%= t(".invite_from_queue.heading_html",
+              invitations_queue_link: link_to(t(".invite_from_queue.invitations_queue"), invite_requests_path)) %>
+      </h3>
+      <p><%= t(".invite_from_queue.requests_in_queue", count: InviteRequest.count) %></p>
+      <p>
+        <%= label_tag "invitation[invite_from_queue]", t(".invite_from_queue.number_to_invite") %>
+        <%= text_field_tag "invitation[invite_from_queue]" %>
+        <span class="submit actions"><%= submit_tag t(".invite_from_queue.invite_from_queue") %></span>
+      </p>
+    </fieldset>
+  <% end %>
 <% end %>
 
-<%= form_tag url_for(controller: "admin/admin_invitations", action: :grant_invites_to_users), class: "bulk invitation simple post", autocomplete: "off" do %>
-  <fieldset>
-    <h3 class="heading"><%= t(".grant_invites.heading") %></h3>
-    <dl>
-      <dt><%= label_tag "invitation[number_of_invites]", t(".grant_invites.number_of_invitations") %></dt>
-      <dd><%= text_field_tag "invitation[number_of_invites]" %></dd>
-      <dt><%= label_tag "invitation[user_group]", t(".grant_invites.users") %></dt>
-      <dd>
-        <%= select_tag "invitation[user_group]",
-              options_for_select([[t(".grant_invites.all"), "All"],
-                                  [t(".grant_invites.with_no_unused"), "With no unused invitations"]],
-                "All") %>
-      </dd>
-      <dt class="landmark"><%= t(".grant_invites.landmark_submit") %></dt>
-      <dd class="submit actions"><%= submit_tag t(".grant_invites.generate_invitations") %></dd>
-    </dl>
-  </fieldset>
-<% end %>
-
-<%= form_tag url_for(controller: "admin/admin_invitations", action: :find), class: "invitation simple search", autocomplete: "off", method: :get do %>
-  <fieldset>
-    <h3 class="heading"><%= t(".find.heading") %></h3>
-    <dl>
-      <dt><%= label_tag "invitation[user_name]", t(".find.username") %></dt>
-      <dd><%= text_field_tag "invitation[user_name]" %></dd>
-      <dt><%= label_tag "invitation[token]", t(".find.invite_token") %></dt>
-      <dd><%= text_field_tag "invitation[token]" %></dd>
-      <dt><%= label_tag "track_invitation_invitee_email", t(".find.email") %></dt>
-      <dd><%= text_field_tag "invitation[invitee_email]", nil, id: "track_invitation_invitee_email" %></dd>
-      <dt class="landmark"><%= t(".find.landmark_submit") %></dt>
-      <dd class="submit actions"><%= submit_tag t(".find.search") %></dd>
-    </dl>
-  </fieldset>
+<% if policy(Invitation).grant_invites_to_users? %>
+  <%= form_tag url_for(controller: "admin/admin_invitations", action: :grant_invites_to_users), class: "bulk invitation simple post", autocomplete: "off" do %>
+    <fieldset>
+      <h3 class="heading"><%= t(".grant_invites.heading") %></h3>
+      <dl>
+        <dt><%= label_tag "invitation[number_of_invites]", t(".grant_invites.number_of_invitations") %></dt>
+        <dd><%= text_field_tag "invitation[number_of_invites]" %></dd>
+        <dt><%= label_tag "invitation[user_group]", t(".grant_invites.users") %></dt>
+        <dd>
+          <%= select_tag "invitation[user_group]",
+                options_for_select([[t(".grant_invites.all"), "All"],
+                                    [t(".grant_invites.with_no_unused"), "With no unused invitations"]],
+                  "All") %>
+        </dd>
+        <dt class="landmark"><%= t(".grant_invites.landmark_submit") %></dt>
+        <dd class="submit actions"><%= submit_tag t(".grant_invites.generate_invitations") %></dd>
+      </dl>
+    </fieldset>
+  <% end %>
 <% end %>
 <!--/content-->

@@ -40,6 +40,8 @@ class Chapter < ApplicationRecord
     end
   end
 
+  delegate :anonymous?, to: :work
+
   before_save :strip_title
   before_save :set_word_count
   before_save :validate_published_at
@@ -123,7 +125,7 @@ class Chapter < ApplicationRecord
   end
 
   def chapter_header
-    "#{ts("Chapter")} #{position}"
+    I18n.t("activerecord.attributes.chapters.chapter_header", position: position)
   end
 
   def chapter_title
@@ -209,8 +211,6 @@ class Chapter < ApplicationRecord
   end
 
   def expire_byline_cache
-    [true, false].each do |only_path|
-      Rails.cache.delete("#{cache_key}/byline-nonanon/#{only_path}")
-    end
+    Rails.cache.delete(["byline_data", cache_key])
   end
 end

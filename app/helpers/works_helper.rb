@@ -82,12 +82,12 @@ module WorksHelper
     reading && reading.toread?
   end
 
-  def mark_as_read_link(work)
-    link_to ts("Mark as Read"), mark_as_read_work_path(work)
+  def mark_as_read_button(work)
+    button_to t("works_helper.mark_as_read_button"), mark_as_read_work_path(work), method: :patch
   end
 
-  def mark_for_later_link(work)
-    link_to ts("Mark for Later"), mark_for_later_work_path(work)
+  def mark_for_later_button(work)
+    button_to t("works_helper.mark_for_later_button"), mark_for_later_work_path(work), method: :patch
   end
 
   def get_endnotes_link(work)
@@ -157,12 +157,10 @@ module WorksHelper
   # Generates a list of a work's tags and details for use in feeds
   def feed_summary(work)
     tags = work.tags.group_by(&:type)
-    text = "<p>by #{byline(work, { visibility: 'public', full_path: true })}</p>"
+    text = +"<p>by #{byline(work, { visibility: 'public', full_path: true })}</p>"
     text << work.summary if work.summary
     text << "<p>Words: #{work.word_count}, Chapters: #{chapter_total_display(work)}, Language: #{work.language ? work.language.name : 'English'}</p>"
-    unless work.series.count == 0
-      text << "<p>Series: #{series_list_for_feeds(work)}</p>"
-    end
+    text << "<p>Series: #{series_list_with_work_position(work)}</p>" unless work.series.count.zero?
     # Create list of tags
     text << "<ul>"
     %w(Fandom Rating ArchiveWarning Category Character Relationship Freeform).each do |type|

@@ -67,3 +67,12 @@ Given I have an orphan account
   When I view the work "Shenanigans - the early years"
   Then I should see "orphaneer (orphan_account)"
     And I should not see "orphaneer" within ".userstuff"
+
+Scenario: Cancelling user orphan redirects to edit multiple works page
+  Given I have an orphan account
+    And the work "Work" by "orphaneer"
+    And I am logged in as "orphaneer"
+  When I go to the orphan all works page
+  Then I should see "Orphan All Works"
+  When I follow "Cancel"
+  Then I should be on orphaneer's edit multiple works page

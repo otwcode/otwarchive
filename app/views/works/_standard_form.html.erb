@@ -1,6 +1,5 @@
 <!--REVIEW: trying out articles on these fieldsets to see if that's a better chunker, but may revert after testing. Have also tossed in landmark headings on top level groups-->
 <%= form_for(@work, html: { id: "work-form", class: "verbose post work" }) do |f| %>
-
   <p class="required notice">* <%= ts("Required information") %></p>
 
   <%= render "work_form_tags", include_blank: false %>
@@ -339,31 +338,8 @@
 
   <% end %><!-- end of fields for chapters -->
 
-  <fieldset class="create">
-    <legend><%= ts("Post") %></legend>
-    <p class="notice">
-      <%= t(".post_notice_html",
-            content_policy_link: link_to(t(".content_policy"), content_path),
-            tos_faq_link: link_to(t(".tos_faq"), tos_faq_path(anchor: "content_faq"))) %>
-    </p>
-    <ul class="actions">
-      <% unless @work.new_record? || @work.posted? %>
-        <li>
-          <%= submit_tag ts("Save As Draft"), name: "save_button" %>
-        </li>
-      <% end %>
-      <li>
-        <%= submit_tag ts("Preview"), name: "preview_button" %>
-      </li>
-      <li>
-        <%= submit_tag ts("Post"), name: "post_button",
-              data: { disable_with: ts("Please wait...") } %>
-      </li>
-      <li>
-        <%= submit_tag ts("Cancel"), name: "cancel_button" %>
-      </li>
-    </ul>
-  </fieldset>
+  <%= render "posting_fieldset" %>
+
 <% end %> <!-- end of form_for -->
 
 <%= content_for :footer_js do %>

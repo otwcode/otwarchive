@@ -5,8 +5,8 @@ Feature: User Authentication
   Scenario: Forgot password
     Given I have no users
       And the following activated user exists
-      | login    | password |
-      | sam      | secret   |
+      | email           | login | password |
+      | sam@example.com | sam   | secret   |
       And all emails have been delivered
     When I am on the home page
       And I fill in "Username or email:" with "sam"
@@ -15,13 +15,13 @@ Feature: User Authentication
     Then I should see "The password or username you entered doesn't match our records"
       And I should see "Forgot your password or username?"
     When I follow "Reset password"
-    Then I should see "Please tell us the username or email address you used when you signed up for your Archive account"
-    When I fill in "Email address or username" with "sam"
+    Then I should see "If you've forgotten your password, we can send you an email with instructions to reset your password."
+    When I fill in "Email address" with "sam@example.com"
       And I press "Reset Password"
-    Then I should see "Check your email for instructions on how to reset your password."
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered
       And the email should contain "sam"
-      And the email should contain "Someone has requested a password reset for your account"
+      And the email should contain "Someone has made a request to reset the password for your AO3 account."
       And the email should not contain "translation missing"
 
     # existing password should still work
@@ -32,37 +32,34 @@ Feature: User Authentication
     Then I should see "Hi, sam"
 
     # link from the email should not work when logged in
-    When I follow "Change my password." in the email
-    Then I should see "You are already signed in."
-      And I should not see "Change My Password"
+    When I follow "use this link to choose a new password" in the email
+    Then I should see "You are already logged in to an account. Please log out and try again."
+      And I should not see "Change Password"
 
     # link from the email should work
     When I log out
-      And I follow "Change my password." in the email
-    Then I should see "Change My Password"
+      And I follow "use this link to choose a new password" in the email
+    Then I should see "Change Password"
 
     # entering mismatched passwords should produce an error message
     When I fill in "New password" with "secret"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
     Then I should see "We couldn't save this user because:"
-      And I should see "Password confirmation doesn't match new password."
+      And I should see "The passwords you entered do not match. Please try again."
 
     # and I should be able to change the password
     When I fill in "New password" with "new<pass"
       And I fill in "Confirm new password" with "new<pass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully. You are now signed in."
+    Then I should see "Your password has been changed. You are now logged in."
       And I should see "Hi, sam"
 
     # password reset link should no longer work
     When I log out
-      And I follow "Change my password." in the email
-      And I fill in "New password" with "override"
-      And I fill in "Confirm new password" with "override"
-      And I press "Change Password"
-    Then I should see "We couldn't save this user because:"
-      And I should see "Reset password token is invalid"
+      And I follow "use this link to choose a new password" in the email
+    Then I should see "This password reset link is invalid or expired. Please check your email for the most recent password reset link."
+      And I should be on the forgot password page
 
     # old password should no longer work
     When I am on the homepage
@@ -86,6 +83,27 @@ Feature: User Authentication
       And I press "Log In"
     Then I should not see "Hi, sam"
 
+  Scenario: Users should not be able to request password resets with their username
+    Given I have no users
+      And the following activated user exists
+      | email           | login | password |
+      | sam@example.com | sam   | secret   |
+      And all emails have been delivered
+    When I request a password reset for "sam"
+    Then I should see "You must enter your email address."
+      And I should not see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
+      And 0 email should be delivered
+  
+  Scenario: Attackers should see a fake success message when requesting password resets with a non-existant email
+    Given I have no users
+      And the following activated user exists
+      | email           | login | password |
+      | sam@example.com | sam   | secret   |
+      And all emails have been delivered
+    When I request a password reset for "1@example.com"
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
+      And 0 email should be delivered
+
   Scenario: Translated reset password email and password change email
     Given a locale with translated emails
       And the following activated users exist
@@ -95,23 +113,23 @@ Feature: User Authentication
       And the user "sam" enables translated emails
       And all emails have been delivered
     When I request a password reset for "sam@example.com"
-    Then I should see "Check your email for instructions on how to reset your password."
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered to "sam@example.com"
       And the email should have "Translated subject" in the subject
       And the email to "sam" should be translated
     # notsam didn't enable translated emails
     When I request a password reset for "notsam@example.com"
-    Then I should see "Check your email for instructions on how to reset your password."
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered to "notsam@example.com"
       And the email should have "Reset your password" in the subject
       And the email to "notsam" should be non-translated
       And 1 email should be delivered to "sam@example.com"
-    When I follow "Change my password." in the email
+    When I follow "use this link to choose a new password" in the email
       And all emails have been delivered
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
       And 1 email should be delivered to "sam"
       And the email should have "Your password has been changed" in the subject
       And the email to "sam" should be translated
@@ -123,28 +141,28 @@ Feature: User Authentication
         | sam   | sam@example.com | password |
       And all emails have been delivered
     When I request a password reset for "sam@example.com"
-    Then I should see "Check your email for instructions on how to reset your password."
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered
     When I start a new session
-      And I follow "Change my password." in the email
+      And I follow "use this link to choose a new password" in the email
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
       And I should see "Hi, sam"
 
   Scenario: Forgot password, with expired password token
     Given I have no users
       And the following activated user exists
-        | login | password |
-        | sam   | password |
+        | login | email           | password |
+        | sam   | sam@example.com | password |
       And all emails have been delivered
-    When I request a password reset for "sam"
-    Then I should see "Check your email for instructions on how to reset your password."
+    When I request a password reset for "sam@example.com"
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered
     When it is currently 2 weeks from now
       And I start a new session
-      And I follow "Change my password." in the email
+      And I follow "use this link to choose a new password" in the email
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
@@ -160,21 +178,21 @@ Feature: User Authentication
   Scenario: Forgot password, with enough attempts to trigger password reset cooldown
     Given I have no users
       And the following activated user exists
-        | login | password |
-        | sam   | password |
+        | login | email           | password |
+        | sam   | sam@example.com | password |
       And all emails have been delivered
-    When I request a password reset for "sam"
-      And I request a password reset for "sam"
-      And I request a password reset for "sam"
-    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 0 more times."
+    When I request a password reset for "sam@example.com"
+      And I request a password reset for "sam@example.com"
+      And I request a password reset for "sam@example.com"
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 3 emails should be delivered
     When all emails have been delivered
-      And I request a password reset for "sam"
-    Then I should see "You cannot reset your password at this time. Please try again after"
+      And I request a password reset for "sam@example.com"
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 0 emails should be delivered
     When it is currently 12 hours from now
-      And I request a password reset for "sam"
-    Then I should see "Check your email for instructions on how to reset your password. You may reset your password 2 more times."
+      And I request a password reset for "sam@example.com"
+    Then I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 1 email should be delivered
 
   Scenario: Resetting password adds admin log item
@@ -188,11 +206,11 @@ Feature: User Authentication
       And I go to the user administration page for "sam"
     Then I should not see "Password Reset" within "#user_history"
     When I start a new session
-      And I follow "Change my password." in the email
+      And I follow "use this link to choose a new password" in the email
       And I fill in "New password" with "newpass"
       And I fill in "Confirm new password" with "newpass"
       And I press "Change Password"
-    Then I should see "Your password has been changed successfully."
+    Then I should see "Your password has been changed."
     When I am logged in as a super admin
       And I go to the user administration page for "sam"
     Then I should see "Password Reset" within "#user_history"
@@ -263,7 +281,7 @@ Feature: User Authentication
 
   Scenario: Login case (in)sensitivity
     Given the following activated user exists
-      | login      | password |
+      | login      | password  |
       | TheMadUser | password1 |
     When I am on the home page
       And I fill in "Username or email:" with "themaduser"
@@ -301,16 +319,10 @@ Feature: User Authentication
       And the user "target" <role>
     When I am on the home page
       And I follow "Forgot password?"
-      And I fill in "Email address or username" with "target"
+      And I fill in "Email address" with "user@example.com"
       And I press "Reset Password"
-    Then I should be on the home page
-      And I should see "Password resets are disabled for that user."
-      And 0 emails should be delivered
-    When I follow "Forgot password?"
-      And I fill in "Email address or username" with "user@example.com"
-      And I press "Reset Password"
-    Then I should be on the home page
-      And I should see "Password resets are disabled for that user."
+    Then I should be on the new user password page
+      And I should see "If the email address you entered is currently associated with an AO3 account, you should receive an email with instructions to reset your password."
       And 0 emails should be delivered
 
     Examples:
@@ -329,9 +341,79 @@ Feature: User Authentication
     Then I should not see "Successfully logged in"
       And I should see "The password or username you entered doesn't match our records."
     When I am logged in as an admin
-      And I go to the new user password page
+      And I go to the forgot password page
     Then I should be on the homepage
       And I should see "Please log out of your admin account first!"
     When I go to the edit user password page
     Then I should be on the homepage
       And I should see "Please log out of your admin account first!"
+
+  @no-js-emulation
+  Scenario: Log out with javascript disabled redirects to page prior to log out
+    Given I am logged in
+      And I am on the works page
+    When I follow "Log Out"
+    Then I should see "Are you sure you want to log out?"
+    When I press "Yes, Log Out"
+    Then I should see "Successfully logged out."
+      And I should be on the works page
+
+  Scenario: User is redirected back to restricted work after login
+    Given I am logged in as "test" with password "password"
+      And I post the locked work "Secret"
+      And I log out
+    When I view the work "Secret"
+    Then I should see "Sorry!"
+      And I should see "This work is only available to registered users of the Archive."
+    When I fill in "Username or email:" with "test" within "#main"
+      And I fill in "Password:" with "password" within "#main"
+      And I press "Log in" within "#main"
+    Then I should see "Secret"
+
+  Scenario: User is redirected to previous page after using the small login
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+      And I am on the works page
+    When I fill in "Username or email:" with "test" within "#small_login"
+      And I fill in "Password:" with "password" within "#small_login"
+      And I press "Log In" within "#small_login"
+    Then I should be on the works page
+
+  Scenario: User is redirected to previous page after using the main login
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+      And I am on the works page
+    When I follow "Log In"
+    Then I should see "Log in" within "#main"
+    When I fill in "Username or email:" with "test" within "#main"
+      And I fill in "Password:" with "password" within "#main"
+      And I press "Log in" within "#main"
+    Then I should be on the works page
+
+  Scenario: User is redirected to previous page after inputting the wrong credentials in the small login
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+      And I am on the works page
+    When I fill in "Username or email:" with "test" within "#small_login"
+      And I fill in "Password:" with "badpassword" within "#small_login"
+      And I press "Log In" within "#small_login"
+    Then I should see "The password or username you entered doesn't match our records."
+    When I fill in "Username or email:" with "test" within "#main"
+      And I fill in "Password:" with "password" within "#main"
+      And I press "Log in" within "#main"
+    Then I should be on the works page
+
+  Scenario: User is redirected to previous page after using the small login on the main login page
+    Given the following activated user exists
+      | login | password |
+      | test  | password |
+      And I am on the works page
+    When I follow "Log In"
+    Then I should see "Log in" within "#main"
+    When I fill in "Username or email:" with "test" within "#small_login"
+      And I fill in "Password:" with "password" within "#small_login"
+      And I press "Log In" within "#small_login"
+    Then I should be on the works page
