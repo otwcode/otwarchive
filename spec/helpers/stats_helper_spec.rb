@@ -173,7 +173,7 @@ describe StatsHelper do
     end
 
     it "displays series and work within series in stat count" do
-      create(:series_with_a_work, authors: user.pseuds)
+      create(:series, authors: user.pseuds)
       results = run_query("date", "DESC", "All Years")
 
       series = results.find { |item| item.type == "SERIES" }
