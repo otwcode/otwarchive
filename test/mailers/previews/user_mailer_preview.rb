@@ -415,9 +415,7 @@ class UserMailerPreview < ApplicationMailerPreview
     user = create(:user, :for_mailer_preview)
     if params[:work_id]
       work = Work.find_by(id: params[:work_id])
-      if work&.users&.exists?
-        user = work.users.first
-      end
+      user = work.users.first if work&.users&.exists?
     end
     UserMailer.admin_deleted_work_notification(user, work)
   end

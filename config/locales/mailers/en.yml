@@ -235,7 +235,7 @@ en:
           your_donations: your donations
         sent_at: Sent at %{sent_at}.
         why_policy_abuse:
-          contact_policy_abuse: contact Policy & Abuse
+          contact_policy_abuse: contact Policy &amp; Abuse
           html: If you don't understand why you received this email, please %{contact_policy_abuse_link}.
           text: 'If you don''t understand why you received this email, please contact Policy & Abuse: %{contact_policy_abuse_url}.'
         why_support:
@@ -287,7 +287,7 @@ en:
       check_email:
         html: If you don't know why your work was deleted, and you have not received a separate email explaining why, please check your email (including your spam folder) or %{contact_abuse_link} directly.
         text: If you don't know why your work was deleted, and you have not received a separate email explaining why, please check your email (including your spam folder) or contact the Policy & Abuse committee directly (%{contact_abuse_url}).
-      contact_abuse: contact the Policy & Abuse committee
+      contact_abuse: contact the Policy &amp; Abuse committee
       content_policy: Content Policy
       deleted:
         html: Your work %{title} was deleted by an AO3 administrator.
@@ -305,7 +305,7 @@ en:
       check_email:
         one: Please check your email, including your spam folder, as the Policy & Abuse committee may have already contacted you to explain why your work was hidden.
         other: Please check your email, including your spam folder, as the Policy & Abuse committee may have already contacted you to explain why your works were hidden.
-      contact_abuse: contact the Policy & Abuse committee
+      contact_abuse: contact the Policy &amp; Abuse committee
       content_policy: Content Policy
       help:
         html:
