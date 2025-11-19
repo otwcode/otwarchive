@@ -80,7 +80,7 @@ class WorkIndexer < Indexer
         :title, :summary, :notes, :word_count, :hidden_by_admin, :revised_at,
         :title_to_sort_on, :backdate, :endnotes,
         :imported_from_url, :complete, :work_skin_id, :in_anon_collection,
-        :in_unrevealed_collection,
+        :in_unrevealed_collection
       ],
       methods: [
         :authors_to_sort_on,
@@ -98,7 +98,7 @@ class WorkIndexer < Indexer
         :comments_count,
         :kudos_count,
         :bookmarks_count,
-        :creators,
+        :indexed_creators,
         :crossover,
         :otp,
         :work_types,
