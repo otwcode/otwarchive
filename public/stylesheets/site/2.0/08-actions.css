@@ -147,7 +147,7 @@ h2.landmark {
 .secondary {
   background: #fff;
   position: absolute;
-  z-index: 99;
+  z-index: 54; /* lower than the z-index of #header .menu */
   border: 2px solid #bbb;
   margin: auto;
   padding: 0 0.375em;
@@ -277,6 +277,7 @@ display: none and secondary will always be open. */
 }
 
 .javascript .work.navigation .download .secondary {
+  z-index: 53;
     gap: 0.25em;
 }
 
