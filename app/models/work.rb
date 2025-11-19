@@ -1229,7 +1229,7 @@ class Work < ApplicationRecord
     stat_counter&.hit_count
   end
 
-  def creators
+  def indexed_creators
     if anonymous?
       ["Anonymous"]
     else
