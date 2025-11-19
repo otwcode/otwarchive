@@ -251,17 +251,18 @@ class WorkQuery < Query
     return {
       query_string: {
         query: query,
-        fields: ["creators^5", "title^7", "endnotes", "notes", "summary", "tag", "series.title"],
+        fields: ["indexed_creators^5", "title^7", "endnotes", "notes", "summary", "tag", "series.title"],
         default_operator: "AND"
       }
     } unless query.blank?
   end
 
   def generate_search_text(query = '')
-    search_text = query
-    %i[title creators].each do |field|
-      search_text << split_query_text_words(field, options[field])
-    end
+    # We replace creators with indexed_creators here instead of earlier since both the search bar and the search form pass through here
+    search_text = query.gsub('creators:', 'indexed_creators:')
+
+    search_text << split_query_text_words("title", options[:title])
+    search_text << split_query_text_words("indexed_creators", options[:creators])
 
     if options[:series_titles].present?
       search_text << split_query_text_words("series.title", options[:series_titles])

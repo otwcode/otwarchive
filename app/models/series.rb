@@ -235,7 +235,7 @@ class Series < ApplicationRecord
       methods: [
         :revised_at, :posted, :tag, :filter_ids, :rating_ids,
         :archive_warning_ids, :category_ids, :fandom_ids, :character_ids,
-        :relationship_ids, :freeform_ids, :creators,
+        :relationship_ids, :freeform_ids, :indexed_creators,
         :word_count, :work_types]
     ).merge(
       language_id: language&.short,
@@ -302,7 +302,7 @@ class Series < ApplicationRecord
     filters_for_facets.select{ |t| t.type.to_s == 'Freeform' }.map{ |t| t.id }
   end
 
-  def creators
+  def indexed_creators
     anonymous? ? ['Anonymous'] : pseuds.map(&:byline)
   end
 

@@ -40,7 +40,7 @@ class WorkIndexer < Indexer
           type: "text",
           analyzer: "standard"
         },
-        creators: {
+        indexed_creators: {
           type: "text"
         },
         tag: {
@@ -98,7 +98,7 @@ class WorkIndexer < Indexer
         :comments_count,
         :kudos_count,
         :bookmarks_count,
-        :creators,
+        :indexed_creators,
         :crossover,
         :otp,
         :work_types,
