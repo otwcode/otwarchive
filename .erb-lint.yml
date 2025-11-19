@@ -10,6 +10,8 @@ linters:
     rule_set:
       - deprecated: ["bookmarks", "collections", "readings", "works"]
         suggestion: "Avoid the plural form of these classes."
+    exclude:
+      - 'app/views/stats/index.html.erb'
   RequireInputAutocomplete:
     enabled: false
   Rubocop:

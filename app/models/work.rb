@@ -46,6 +46,8 @@ class Work < ApplicationRecord
 
   has_many :original_creators, class_name: "WorkOriginalCreator", dependent: :destroy
 
+  has_many :fandom_tags, -> { where(type: "Fandom") }, through: :taggings, source: :tagger, source_type: "Tag"
+
   belongs_to :language
   belongs_to :work_skin
   validate :work_skin_allowed, on: :save
@@ -1031,6 +1033,24 @@ class Work < ApplicationRecord
                       revealed.
                       order("revised_at DESC").
                       limit(ArchiveConfig.ITEMS_PER_PAGE) }
+  scope :for_user, lambda { |user|
+    joins(approved_creatorships: :pseud).where(pseuds: { user: user })
+  }
+
+  scope :chapter_published_in_range, lambda { |start_date, end_date|
+    where(chapters: { posted: true, published_at: start_date..end_date })
+  }
+
+  scope :with_fandoms, lambda {
+    joins(:tags).where(tags: { type: "Fandom" })
+  }
+
+  scope :with_stat_joins, lambda {
+    joins(:chapters)
+      .left_joins(chapters: :approved_root_comments)
+      .left_joins(:subscriptions, :bookmarks)
+      .joins(:stat_counter)
+  }
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope

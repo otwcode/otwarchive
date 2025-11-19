@@ -2226,6 +2226,40 @@ en:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
     revert_skin_form:
       revert_to_default: Revert to Default Skin
+  stats:
+    index:
+      bookmarks: Bookmarks
+      bookmarks_label: 'Bookmarks:'
+      comment_threads: Comment Threads
+      comment_threads_label: 'Comment Threads:'
+      date: Date
+      fandom_string_parenthetical: "(%{fandom_string})"
+      fandoms_view: Fandoms View
+      flat_view: Flat View
+      hits: Hits
+      hits_label: 'Hits:'
+      kudos: Kudos
+      kudos_label: 'Kudos:'
+      landmark:
+        actions: View Sorting and Actions
+        listing_statistics: Listing Statistics
+        navigation_and_sorting: Navigation and Sorting
+      page_heading: Statistics
+      series_bookmarks_label: 'Series Bookmarks:'
+      series_parenthetical: "(Series)"
+      series_subscriptions_label: 'Series Subscriptions:'
+      sort_by: Sort By
+      subscriptions: Subscriptions
+      subscriptions_label: 'Subscriptions:'
+      totals_heading: Totals
+      types_view: Types View
+      user_subscriptions_label: 'User Subscriptions:'
+      word_count: Word Count
+      word_count_label: 'Word Count:'
+      word_count_with_input: "(%{count} words)"
+      work_bookmarks_label: 'Work Bookmarks:'
+      work_count_label: 'Work Count:'
+      work_subscriptions_label: 'Work Subscriptions:'
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
