@@ -1,4 +1,3 @@
-<%# rubocop:disable DeprecatedClasses %>
 <!--Descriptive page names, messages and instructions-->
 <h2 class="heading"><%= t(".page_heading") %></h2>
 <!--/descriptions-->
@@ -32,7 +31,7 @@
          series_bookmarks: t(".series_bookmarks_label"),
          series_subscriptions: t(".series_subscriptions_label"),
          word_count: t(".word_count_label") }.each do |stat, stat_text| %>
-      <% stat == :word_count ? html_class = "words" : html_class = stat.to_s.humanize.downcase %>
+      <% html_class = stat == :word_count ? "words" : stat.to_s.humanize.downcase %>
       <dt class="<%= html_class %>"><%= stat_text %></dt>
       <dd class="<%= html_class %>"><%= number_with_delimiter(@totals[stat]) %></dd>
     <% end %>
@@ -41,10 +40,10 @@
   </dl>
 </div>
 
-<noscript><img src="<%= @image_chart %>" class="statistics chart"></noscript>
+<noscript><img src="<%= @image_chart %>" class="statistics chart" /></noscript>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <div id="stat_chart" class="statistics chart"></div>
-<%= render_chart(@chart, 'stat_chart') %>
+<%= render_chart(@chart, "stat_chart") %>
 
 <div class="actions module">
   <h3 class="landmark heading"><%= t(".landmark.actions") %></h3>
