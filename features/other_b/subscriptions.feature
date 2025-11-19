@@ -6,9 +6,9 @@
   Background:
   Given the following activated users exist
     | login          | password   | email           |
-    | first_user     | password   | first_user@foo.com |
-    | second_user    | password   | second_user@foo.com |
-    | third_user     | password   | third_user@foo.com |
+    | first_user     | password   | first_user@example.com |
+    | second_user    | password   | second_user@example.com |
+    | third_user     | password   | third_user@example.com |
   And all emails have been delivered
 
   Scenario: subscribe to an author
@@ -19,20 +19,20 @@
   # make sure no emails go out until notifications are sent
   Then 0 emails should be delivered
   When subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     And the email should contain "first_user"
     And the email should contain "Awesome"
   When all emails have been delivered
     And I post the work "Yet Another Awesome Story" without preview
     And subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
   When all emails have been delivered
     And a draft chapter is added to "Yet Another Awesome Story"
   Then 0 emails should be delivered
   When I post the draft chapter
   Then 0 emails should be delivered
   When subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     # This feels hackish to me (scott s), but I'm going with it for now. I'll investigate reworking our email steps for multipart emails once all our gems are up to date.
     And the email should contain "first_user"
     And the email should contain "posted"
@@ -79,7 +79,7 @@
   When I post the draft chapter
   Then 0 emails should be delivered
   When subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     And the email should contain "wip_author"
     And the email should contain "posted"
     And the email should contain "Chapter 2"
@@ -94,7 +94,7 @@
     And I fill in "content" with "meltiiiinnngg"
     And I press "Post"
     And subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     And the email should contain "wip_author"
     And the email should contain "posted"
     And the email should not contain "Chapter ICE CREAM CAKE"
@@ -110,7 +110,7 @@
     And I press "Post"
   Then 0 emails should be delivered
   When subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     And the email should contain "posted a"
     And the email should contain "new work"
 
@@ -126,7 +126,7 @@
     And I post the work "A FOURTH Awesome Story"
   Then 0 emails should be delivered
   When subscription notifications are sent
-  Then 1 email should be delivered to "second_user@foo.com"
+  Then 1 email should be delivered to "second_user@example.com"
     And the email should contain "The First"
     And the email should contain "Another"
     And the email should contain "A Third"
@@ -389,3 +389,23 @@ Scenario: subscriptions are not deleted without confirmation
   When I go to the subscriptions page for "second_user"
   Then I should see "My Subscriptions"
     And I should see "Awesome Story (Work)"
+
+  # NOTE: currently, posting a second chapter to a draft work will post both chapters
+  Scenario: Posting a second chapter to a draft work should notify subscribers about the work being posted and chapter 2
+    Given I am logged in as "first_user"
+      And "second_user" subscribes to author "first_user"
+      And all emails have been delivered
+    When I am logged in as "first_user"
+      And I set up the draft "Half and Half"
+      And I press "Save Draft"
+      And I follow "My Dashboard"
+      And I follow "Drafts ("
+      And I follow "Add Chapter"
+      And I fill in "chapter_title" with "2nd chapter"
+      And I fill in "content" with "to be posted!"
+      And I press "Post"
+      And subscription notifications are sent
+    Then 1 email should be delivered to "second_user@example.com"
+      And the email should have "first_user posted Chapter 2 of Half and Half and 1 more" in the subject
+      And the email should contain "posted a new work"
+      And the email should contain "Chapter 2: 2nd chapter"
