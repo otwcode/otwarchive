@@ -92,6 +92,9 @@ en:
       chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
+      commenter_responded:
+        html: "%{commenter_link} responded:"
+        text: "%{commenter} responded:"
       content:
         chapter:
           html: "%{pseud_link} replied to your comment on %{chapter_link} of %{work_link}:"
@@ -107,6 +110,7 @@ en:
         chapter: "[%{app_name}] Reply to your comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Reply to your comment on %{title}"
         tag: "[%{app_name}] Reply to your comment on the tag %{name}"
+      you_wrote: 'You wrote:'
     comment_reply_sent_notification:
       chapter:
         titled: 'Chapter %{position}: %{title}'
@@ -172,6 +176,9 @@ en:
       chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
+      commenter_edited_response:
+        html: "%{commenter_link} edited their response to:"
+        text: "%{commenter} edited their response to:"
       content:
         chapter:
           html: "%{pseud_link} edited their reply to your comment on %{chapter_link} of %{work_link}:"
@@ -187,6 +194,7 @@ en:
         chapter: "[%{app_name}] Edited reply to your comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Edited reply to your comment on %{title}"
         tag: "[%{app_name}] Edited reply to your comment on the tag %{name}"
+      you_wrote: 'You wrote:'
   kudo_mailer:
     batch_kudo_notification:
       guest:
