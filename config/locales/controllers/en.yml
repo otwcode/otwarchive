@@ -43,6 +43,11 @@ en:
         blocked: You have blocked the user %{name}.
       destroy:
         unblocked: You have unblocked the user %{name}.
+  bookmarks:
+    create:
+      success: Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.
+      warnings:
+        private_bookmark_added_to_collection: " Please note: private bookmarks are not listed in collections."
   challenge_assignments:
     index:
       access_denied_user: You aren't allowed to see that user's assignments.
