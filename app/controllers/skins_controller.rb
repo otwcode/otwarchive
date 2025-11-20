@@ -86,6 +86,15 @@ class SkinsController < ApplicationController
         render :new
       end
     end
+  rescue ActiveRecord::RecordNotUnique
+    # If we pass Rails validations but get rejected by database unique indices, use the usual duplicate error message.
+    @skin.errors.add(:title, :taken)
+
+    if params[:wizard]
+      render :new_wizard
+    else
+      render :new
+    end
   end
 
   # GET /skins/1/edit
