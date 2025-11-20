@@ -42,22 +42,21 @@ describe Admin::AdminInvitationsController do
     end
   end
 
+  invite_from_queue_roles = %w[superadmin policy_and_abuse].freeze
+
   describe "POST #invite_from_queue" do
-    let(:admin) { create(:admin) }
-    let(:invite_request) { create(:invite_request) }
+    subject { post :invite_from_queue, params: { invitation: { invite_from_queue: "1" } } }
+    let(:success) do
+      it_redirects_to_with_notice(admin_invitations_path, "1 person from the invite queue is being invited.")
+    end
+
+    it_behaves_like "an action only authorized admins can access", authorized_roles: invite_from_queue_roles
 
     it "does not allow non-admins to invite from queue" do
       fake_login
-      post :invite_from_queue, params: { invitation: { invite_from_queue: "1" } }
+      subject
 
       it_redirects_to_with_notice(root_path, "I'm sorry, only an admin can look at that area")
-    end
-
-    it "allows admins to invite from queue" do
-      fake_login_admin(admin)
-      post :invite_from_queue, params: { invitation: { invite_from_queue: "1" } }
-
-      it_redirects_to_with_notice(admin_invitations_path, "1 person from the invite queue is being invited.")
     end
   end
 

@@ -366,3 +366,51 @@ Scenario: Cannot reply to comments (no button) while logged as admin
       And the email to "creator" should contain "replied to a comment on"
       And the email to "creator" should contain "Go to the thread starting from this comment"
       And the email to "creator" should be translated
+
+  Scenario: Translated comment sent notification email
+    Given the work "Generic Work"
+      And I am logged in as "commenter"
+      And I set my preferences to turn on copies of my own comments
+      And a locale with translated emails
+      And the user "commenter" enables translated emails
+      And all emails have been delivered
+    When I post the comment "Hello!" on the work "Generic Work"
+    Then 1 email should be delivered to "commenter"
+      And the email should have "Comment you left on Generic Work" in the subject
+      And the email to "commenter" should contain "left the following comment on"
+      And the email to "commenter" should contain "Go to the thread starting from this comment"
+      And the email to "commenter" should be translated
+
+  Scenario: Translated comment reply notification email
+    Given the work "Generic Work" by "creator"
+      And a comment "Hello" by "creator" on the work "Generic Work"
+      And a locale with translated emails
+      And the user "creator" enables translated emails
+      And all emails have been delivered
+    When I am logged in as "commenter"
+      And I view the work "Generic Work"
+      And I follow "Comments"
+      And I reply to a comment with "Hi!"
+    Then 1 email should be delivered to "creator"
+      And the email should have "Reply to your comment on Generic Work" in the subject
+      And the email to "creator" should contain "replied to your comment on"
+      And the email to "creator" should contain "Go to the thread starting from this comment"
+      And the email to "creator" should be translated
+
+  Scenario: Translated edited comment reply notification email
+    Given the work "Generic Work" by "creator"
+      And a comment "Hello" by "creator" on the work "Generic Work"
+      And a locale with translated emails
+      And the user "creator" enables translated emails
+      And all emails have been delivered
+    When I am logged in as "commenter"
+      And I view the work "Generic Work"
+      And I follow "Comments"
+      And I reply to a comment with "Hi!"
+      And all emails have been delivered
+      And I edit a comment
+    Then 1 email should be delivered to "creator"
+      And the email should have "Edited reply to your comment on Generic Work" in the subject
+      And the email to "creator" should contain "edited their reply to your comment on"
+      And the email to "creator" should contain "Go to the thread starting from this comment"
+      And the email to "creator" should be translated
