@@ -43,6 +43,11 @@ en:
         blocked: You have blocked the user %{name}.
       destroy:
         unblocked: You have unblocked the user %{name}.
+  bookmarks:
+    create:
+      success: Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.
+      warnings:
+        private_bookmark_added_to_collection: " Please note: private bookmarks are not listed in collections."
   challenge_assignments:
     index:
       access_denied_user: You aren't allowed to see that user's assignments.
@@ -120,6 +125,9 @@ en:
       success: Comment successfully unhidden!
     unreviewed:
       page_title: Unreviewed Comments on %{name}
+  creatorships:
+    update:
+      must_select_request: Please select at least one co-creator request first.
   errors:
     auth_error:
       browser_title: Auth Error
@@ -264,22 +272,14 @@ en:
     contact_abuse: contact our Policy & Abuse team
     passwords:
       create:
-        contact_abuse: contact our Policy & Abuse team
-        reset_blocked_html: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
-        reset_cooldown_html: You cannot reset your password at this time. Please try again after %{reset_available_time}.
-        send_cooldown_period:
-          one: After that, you will need to wait %{count} hour before requesting another reset.
-          other: After that, you will need to wait %{count} hours before requesting another reset.
-        send_instructions: Check your email for instructions on how to reset your password. %{send_times_remaining} %{send_cooldown_period}
-        send_times_remaining:
-          one: You may reset your password %{count} more time.
-          other: You may reset your password %{count} more times.
-        user_not_found: We couldn't find an account with that email address or username. Please try again.
+        invalid_email: You must enter your email address.
       edit:
         invalid_link:
           one: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hour, you can request a new password reset.
           other: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hours, you can request a new password reset.
         page_title: Change Password
+      new:
+        page_title: Reset Password
     reconfirm_email:
       access_denied:
         logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.

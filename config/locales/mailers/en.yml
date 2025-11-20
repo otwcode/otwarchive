@@ -92,6 +92,9 @@ en:
       chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
+      commenter_responded:
+        html: "%{commenter_link} responded:"
+        text: "%{commenter} responded:"
       content:
         chapter:
           html: "%{pseud_link} replied to your comment on %{chapter_link} of %{work_link}:"
@@ -107,6 +110,7 @@ en:
         chapter: "[%{app_name}] Reply to your comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Reply to your comment on %{title}"
         tag: "[%{app_name}] Reply to your comment on the tag %{name}"
+      you_wrote: 'You wrote:'
     comment_reply_sent_notification:
       chapter:
         titled: 'Chapter %{position}: %{title}'
@@ -172,6 +176,9 @@ en:
       chapter:
         titled: 'Chapter %{position}: %{title}'
         untitled: Chapter %{position}
+      commenter_edited_response:
+        html: "%{commenter_link} edited their response to:"
+        text: "%{commenter} edited their response to:"
       content:
         chapter:
           html: "%{pseud_link} edited their reply to your comment on %{chapter_link} of %{work_link}:"
@@ -187,6 +194,7 @@ en:
         chapter: "[%{app_name}] Edited reply to your comment on Chapter %{position} of %{title}"
         other: "[%{app_name}] Edited reply to your comment on %{title}"
         tag: "[%{app_name}] Edited reply to your comment on the tag %{name}"
+      you_wrote: 'You wrote:'
   kudo_mailer:
     batch_kudo_notification:
       guest:
@@ -829,9 +837,9 @@ en:
           text: 'If you have other reasons to believe that someone else currently has access to your %{app_name} account, please contact Policy & Abuse with all relevant information: %{contact_policy_abuse_url}.'
         contact_support: contact Support
         ignore_if_not_requested:
-          html: "%{safely_ignore_bold} Someone else may have entered your username or email address by mistake."
+          html: "%{safely_ignore_bold} Someone else may have entered your email address by mistake."
           safely_ignore: If you did not make this request, you can safely ignore and delete this email.
-          text: If you did not make this request, you can safely ignore and delete this email. Someone else may have entered your username or email address by mistake.
+          text: If you did not make this request, you can safely ignore and delete this email. Someone else may have entered your email address by mistake.
         instructions:
           html: "%{intro_bold} If the link in this email has expired, you will need to %{new_password_reset_link}. If you experience technical issues, please wait a few hours and try again. If it has been more than a day, %{contact_support_link} for further assistance."
           intro: If you made this request, please %{choose_new_password_link} within %{count} days.

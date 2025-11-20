@@ -147,7 +147,7 @@ h2.landmark {
 .secondary {
   background: #fff;
   position: absolute;
-  z-index: 99;
+  z-index: 54; /* lower than the z-index of #header .menu */
   border: 2px solid #bbb;
   margin: auto;
   padding: 0 0.375em;
@@ -245,20 +245,26 @@ parent when JavaScript is disabled and put it back when it's enabled. */
     box-shadow: none;
 }
 
-/* TODO: Update to .javascript .work.navigation :has(.secondary) once support
-for :has() increases to 95% according to caniuse.com. */
-.javascript .work.navigation .chapter, .javascript .work.navigation .download {
+.javascript .work.navigation li {
+  display: inline-block;
+  margin-block: 0;
   position: relative;
 }
 
 .javascript .work.navigation .download {
-  display: inline;
   padding: 0 0 0 0.25em;
 }
 
+/* The top position is part of a workaround for the behavior described here:
+https://otwarchive.atlassian.net/browse/AO3-4629?focusedCommentId=372231
+  0.375em for top margin
++ 1.286em for height
++ 0.25em * 2 for top and bottom padding (buttons use content-box)
++ 0.25em to compensate for borders */
 .javascript .work.navigation .secondary {
   position: absolute;
   right: 0;
+  top: 2.411em;
     align-items: center;
     gap: 0 0.643em;
     justify-content: space-evenly;
@@ -271,11 +277,8 @@ display: none and secondary will always be open. */
 }
 
 .javascript .work.navigation .download .secondary {
+  z-index: 53;
     gap: 0.25em;
-}
-
-.javascript .work.navigation .secondary li {
-  margin-block: 0;
 }
 
 .javascript .work.navigation .secondary p {

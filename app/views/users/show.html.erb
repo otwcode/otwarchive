@@ -3,7 +3,7 @@
   <div class="flash notice" id="first-login-help-banner">
     <p>
       <%= t(".login_banner.welcome_html",
-            new_user_tips_link: link_to(t(".login_banner.new_user_tips"), first_login_help_path),
+            new_user_tips_link: link_to_modal(t(".login_banner.new_user_tips"), for: first_login_help_path, title: t(".login_banner.help_title")),
             our_faqs_link: link_to(t(".login_banner.our_faqs"), archive_faqs_path)) %>
     </p>
     <p>

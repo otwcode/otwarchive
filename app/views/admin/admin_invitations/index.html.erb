@@ -42,19 +42,21 @@
   </fieldset>
 <% end %>
 
-<%= form_tag url_for(controller: "admin/admin_invitations", action: :invite_from_queue), class: "queue invitation simple post", autocomplete: "off" do %>
-  <fieldset class="simple">
-    <h3 class="heading">
-      <%= t(".invite_from_queue.heading_html",
-            invitations_queue_link: link_to(t(".invite_from_queue.invitations_queue"), invite_requests_path)) %>
-    </h3>
-    <p><%= t(".invite_from_queue.requests_in_queue", count: InviteRequest.count) %></p>
-    <p>
-      <%= label_tag "invitation[invite_from_queue]", t(".invite_from_queue.number_to_invite") %>
-      <%= text_field_tag "invitation[invite_from_queue]" %>
-      <span class="submit actions"><%= submit_tag t(".invite_from_queue.invite_from_queue") %></span>
-    </p>
-  </fieldset>
+<% if policy(Invitation).invite_from_queue? %>
+  <%= form_tag url_for(controller: "admin/admin_invitations", action: :invite_from_queue), class: "queue invitation simple post", autocomplete: "off" do %>
+    <fieldset class="simple">
+      <h3 class="heading">
+        <%= t(".invite_from_queue.heading_html",
+              invitations_queue_link: link_to(t(".invite_from_queue.invitations_queue"), invite_requests_path)) %>
+      </h3>
+      <p><%= t(".invite_from_queue.requests_in_queue", count: InviteRequest.count) %></p>
+      <p>
+        <%= label_tag "invitation[invite_from_queue]", t(".invite_from_queue.number_to_invite") %>
+        <%= text_field_tag "invitation[invite_from_queue]" %>
+        <span class="submit actions"><%= submit_tag t(".invite_from_queue.invite_from_queue") %></span>
+      </p>
+    </fieldset>
+  <% end %>
 <% end %>
 
 <% if policy(Invitation).grant_invites_to_users? %>

@@ -128,6 +128,8 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def summary
+    return if @collection.challenge.topmost_tag_type.blank?
+
     @summary = ChallengeSignupSummary.new(@collection)
 
     if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
