@@ -391,15 +391,14 @@ Scenario: subscriptions are not deleted without confirmation
     And I should see "Awesome Story (Work)"
 
   # NOTE: currently, posting a second chapter to a draft work will post both chapters
-  Scenario: Posting a second chapter to a draft work should notify subscribers about the work being posted and chapter 2
+  Scenario: Posting a second chapter to a draft work should notify subscribers about both the work being posted and chapter 1
     Given I am logged in as "first_user"
       And "second_user" subscribes to author "first_user"
       And all emails have been delivered
     When I am logged in as "first_user"
       And I set up the draft "Half and Half"
       And I press "Save Draft"
-      And I follow "My Dashboard"
-      And I follow "Drafts ("
+      And I view the work "Half and Half"
       And I follow "Add Chapter"
       And I fill in "chapter_title" with "2nd chapter"
       And I fill in "content" with "to be posted!"
