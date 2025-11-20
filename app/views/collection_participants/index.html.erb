@@ -5,6 +5,6 @@
 <%= render partial: "add_participants_form" %>
 
 <h3 class="landmark heading"><%= ts("Listing Collection Members") %></h3>
-<ul class="member index group">
+<ul class="participant index group">
   <%= render partial: "participant_form", collection: @collection_participants, as: :participant %>
 </ul>
