@@ -20,4 +20,9 @@
   <% if policy(User).can_manage_users? %>
     <li><%= link_to t(".admin_user"), admin_user_path(@user) %></li>
   <% end %>
+  <% if policy(User).can_access_creation_summary? %>
+    <li>
+      <%= link_to t("admin.admin_users.show.navigation.creations"), creations_admin_user_path(@user) %>
+    </li>
+  <% end %>
 </ul>
