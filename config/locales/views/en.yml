@@ -760,6 +760,9 @@ en:
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
+          unposted: Sorry, you can't add or edit comments on an unposted work.
+        chapter:
+          unposted: Sorry, you can't add or edit comments on an unposted chapter.
       previous_chapter_html: "%{back_arrow_html} Previous Chapter"
     confirm_delete:
       confirm_button: Yes, delete!

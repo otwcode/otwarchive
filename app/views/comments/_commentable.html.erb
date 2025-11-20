@@ -111,6 +111,14 @@
     <p class="notice">
       <%= t(".permissions.work.unrevealed") %>
     </p>
+  <% elsif commentable.is_a?(Work) && !commentable.posted %>
+    <p class="notice">
+      <%= t(".permissions.work.unposted") %>
+    </p>
+  <% elsif commentable.is_a?(Chapter) && !commentable.posted %>
+    <p class="notice">
+      <%= t(".permissions.chapter.unposted") %>
+    </p>
   <% elsif commentable_parent.is_a?(Work) && blocked_by?(commentable_parent) %>
     <p class="notice">
       <%= t(".blocked") %>

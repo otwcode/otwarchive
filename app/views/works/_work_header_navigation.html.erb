@@ -63,17 +63,15 @@
     <% end %>
   <% end %>
 
-  <% if @work.posted && @chapter.posted %>
-    <li class="comments" id="show_comments_link_top">
-      <% # If in single chapter view, show comments for the chapter; otherwise, show the comments for the entire work %>
-      <% @previous_chapter || @next_chapter ? commentable = @chapter : commentable = @work %>
-      <% if commentable.count_visible_comments > 0 %>
-        <%= show_hide_comments_link(commentable) %>
-      <% else %>
-        <%= link_to ts("Comments"), "#comments" %>
-      <% end %>
-    </li>
-  <% end %>
+  <li class="comments" id="show_comments_link_top">
+    <% # If in single chapter view, show comments for the chapter; otherwise, show the comments for the entire work %>
+    <% @previous_chapter || @next_chapter ? commentable = @chapter : commentable = @work %>
+    <% if commentable.count_visible_comments > 0 %>
+      <%= show_hide_comments_link(commentable) %>
+    <% else %>
+      <%= link_to ts("Comments"), "#comments" %>
+    <% end %>
+  </li>
 
   <% # for author or admin, review comments if moderating them %>
   <% if (logged_in_as_admin? || (current_user && current_user.is_author_of?(@work))) && @work.find_all_comments.unreviewed_only.exists? %>

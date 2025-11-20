@@ -338,6 +338,11 @@ pt-BR:
             oculta.
           unrevealed: Desculpe, você não pode adicionar ou editar comentários numa
             obra não revelada.
+          unposted: Desculpe, você não pode adicionar ou editar comentários numa obra que
+            ainda não foi postada.
+        chapter:
+          unposted: Desculpe, você não pode adicionar ou editar comentários num capítulo
+            que ainda não foi postado.
     freeze:
       permission_denied: Desculpe, sua conta não tem as permissões necessárias para
         congelar esses comentários.

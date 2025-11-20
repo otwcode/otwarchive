@@ -498,7 +498,7 @@ describe CommentsController do
         work = create(:work, posted: false)
         fake_login_known_user(work.users.first)
         post :create, params: { work_id: work.id, comment: { comment_content: "Test comment" } }
-        expect(flash[:error]).to eq("You cannot comment on an unposted work.")
+        expect(flash[:error]).to eq("Sorry, you can't add or edit comments on an unpublished work.")
       end
     end
   end
