@@ -88,14 +88,14 @@ en:
       error: Sorry, this user doesn't allow non-Archive users to reply to their comments.
     check_hidden_by_admin:
       error: Sorry, you cannot reply to a hidden comment.
+    check_modify_parent:
+      error:
+        unpublished: Sorry, you can't add or edit comments on an unpublished work.
     check_not_replying_to_spam:
       error: Sorry, you can't reply to a comment that has been marked as spam.
     check_permission_to_edit:
       error:
         frozen: Frozen comments cannot be edited.
-    check_modify_parent:
-      error:
-        unpublished: Sorry, you can't add or edit comments on an unpublished work.
     create:
       success:
         moderated:
