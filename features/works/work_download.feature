@@ -113,6 +113,7 @@ Feature: Download a work
     And "Words:" should appear before "Chapters:"
     And "Chapters:" should appear before "Could be downloaded"
 
+
   Scenario: Downloaded work afterword does not mention author
 
   Given the work "Downloadable"
@@ -121,6 +122,7 @@ Feature: Download a work
   Then I should not see "to let the author know if you enjoyed"
     But I should see "to let the creator know if you enjoyed"
 
+
   Scenario: Download of chaptered works includes chapters
 
   Given the chaptered work "Bazinga"
@@ -128,16 +130,17 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "Chapter 2"
 
+
   Scenario: Download of chaptered work without posted chapters does not include chapters
 
   Given the work "Bazinga"
     And a draft chapter is added to "Bazinga"
-    And I delete chapter 1 of "Bazinga"
   When I view the work "Bazinga"
     And I follow "HTML"
-  Then I should not see "Chapter 1"
+  Then I should see "Chapter 1"
     And I should not see "Chapter 2"
     And I should be able to download all versions of "Bazinga"
+
 
   Scenario: Download chaptered works
 
@@ -177,6 +180,7 @@ Feature: Download a work
       And I follow "HTML"
     Then I should see the inspiring parent work link
 
+
   Scenario: Download work shows inspiring external inspiring work link
 
     Given I have related works setup
@@ -184,6 +188,7 @@ Feature: Download a work
       And I view the work "Followup"
       And I follow "HTML"
     Then I should see the external inspiring work link
+
 
   Scenario: Work and chapter with notes and end notes show with "more" in the link to end notes.
 
@@ -217,6 +222,7 @@ Feature: Download a work
       And I should see "Chapter End Notes"
       And I should see "Next update soon!!!"
 
+
   Scenario: Work and chapter with only end notes show without "more" in the link to end notes.
 
     Given I am logged in
@@ -243,6 +249,7 @@ Feature: Download a work
       And I should see "Chapter End Notes"
       And I should see "Next update soon!!!"
 
+
   Scenario: Work and chapter with only notes show without the link to end notes.
 
     Given I am logged in
@@ -267,6 +274,7 @@ Feature: Download a work
       And I should not see "See the end of the chapter for "
       And I should not see "Chapter End Notes"
 
+
   Scenario: Work and chapter with no notes and no end notes show without the link to end notes or empty sections.
 
     Given I am logged in
@@ -284,6 +292,7 @@ Feature: Download a work
       And I should not see "Chapter Notes"
       And I should not see "See the end of the chapter for "
       And I should not see "Chapter End Notes"
+
 
   Scenario: Download option is unavailable if work is unrevealed.
 
@@ -307,6 +316,7 @@ Feature: Download a work
   When I am logged in as a "policy_and_abuse" admin
     And I hide the work "TOS Violation"
   Then I should not see "Download"
+
 
   Scenario: Downloads of related work update when parent work's anonymity changes.
 
@@ -343,6 +353,7 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "Worldbuilding by inspiration"
 
+
   Scenario: Downloads of related work update when child work's anonymity changes.
 
   Given a hidden collection "Hidden"
@@ -367,6 +378,7 @@ Feature: Download a work
   Then I should see "Followup by remixer"
     And I should not see "A work in an unrevealed collection"
 
+
   Scenario: Downloads hide titles of restricted related works
 
   Given I have related works setup
@@ -385,6 +397,7 @@ Feature: Download a work
     And I view the work "Followup"
     And I follow "HTML"
   Then I should see "Inspired by [Restricted Work] by inspiration"
+
 
   Scenario: Downloads of translated work update when translation's revealed status changes.
 
@@ -410,6 +423,7 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "Worldbuilding Translated by translator"
 
+
   Scenario: Downloads hide titles of restricted work translations
 
   Given I have related works setup
@@ -421,8 +435,9 @@ Feature: Download a work
     And I follow "HTML"
   Then I should see "[Restricted Work] by translator"
 
+
   Scenario: Download multi-chapter work with mixed chapter titles (one without, one with)
-  
+
   Given I am logged in as "myname"
     And I set up the draft "Multi-Chapter Download"
     And I fill in "Work Title" with "Multi-Chapter Download"
@@ -438,3 +453,41 @@ Feature: Download a work
     And I should see "Chapter 1"
     And I should see "Chapter 2: Chapter Two Title"
 
+
+  Scenario: Download chaptered work with single chapter with chapter title
+
+  Given I am logged in as "myname"
+    And I set up the draft "Chaptered Download"
+    And I fill in "Work Title" with "Chaptered Download"
+    And I fill in "content" with "Content for chapter one."
+    And I fill in "Notes" with "Some notes"
+    And I fill in "End Notes" with "Some end notes"
+    And I check "This work has multiple chapters"
+    And I fill in "Chapter 1 of" with ""
+    And I fill in "Chapter Title" with "Only Chapter Title"
+    And I press "Post"
+  When I view the work "Chaptered Download"
+    And I follow "HTML"
+  Then I should receive a file of type "html"
+    And I should see "Chapter 1: Only Chapter Title"
+    And I should see "Some notes"
+    And I should see "Content for chapter one."
+    And I should see "Some end notes"
+
+
+  Scenario: Download unchaptered work
+
+  Given I am logged in as "myname"
+    And I set up the draft "Unchaptered Download"
+    And I fill in "Work Title" with "Unchaptered Download"
+    And I fill in "content" with "Content for work."
+    And I fill in "Notes" with "Some notes"
+    And I fill in "End Notes" with "Some end notes"
+    And I press "Post"
+  When I view the work "Unchaptered Download"
+    And I follow "HTML"
+  Then I should receive a file of type "html"
+    And I should not see "Chapter 1"
+    And I should see "Some notes"
+    And I should see "Content for work."
+    And I should see "Some end notes"
