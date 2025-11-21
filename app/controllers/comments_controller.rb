@@ -87,7 +87,7 @@ class CommentsController < ApplicationController
     # No one can create or update comments on unpublished (A.K.A. unposted) works.
     return unless parent.respond_to?(:posted) && !parent.posted
 
-    flash[:error] = t("comments.check_modify_parent.error")
+    flash[:error] = t("comments.check_modify_parent.error.unpublished")
     redirect_to work_path(parent)
   end
 

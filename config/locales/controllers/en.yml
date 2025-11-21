@@ -93,6 +93,9 @@ en:
     check_permission_to_edit:
       error:
         frozen: Frozen comments cannot be edited.
+    check_modify_parent:
+      error:
+        unpublished: Sorry, you can't add or edit comments on an unpublished work.
     create:
       success:
         moderated:

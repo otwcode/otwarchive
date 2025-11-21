@@ -315,6 +315,9 @@ pt-BR:
   comments:
     check_blocked:
       reply: Desculpe, essa pessoa bloqueou sua conta.
+    check_modify_parent:
+      error:
+        unpublished: Desculpe, você não pode modificar comentários em obras não postadas.
     commentable:
       blocked: Desculpe, não é possível deixar comentários, pois sua conta foi bloqueada
         por alguém na lista de artistas que criaram essa obra.
