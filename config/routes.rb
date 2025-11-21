@@ -633,6 +633,13 @@ Rails.application.routes.draw do
   end
   resources :orphans, only: [:index, :new, :create]
 
+  %w[
+    first_login
+    preferences_locale
+  ].each do |action|
+    get "/help/#{action}" => "help##{action}"
+  end
+
   get 'search' => 'works#search'
   post 'support' => 'feedbacks#create', as: 'feedbacks'
   get 'support' => 'feedbacks#new', as: 'new_feedback_report'
@@ -645,7 +652,6 @@ Rails.application.routes.draw do
   get 'diversity' => 'home#diversity'
   get 'site_map' => 'home#site_map'
   get 'site_pages' => 'home#site_pages'
-  get 'first_login_help' => 'home#first_login_help'
   get 'token_dispenser' => 'home#token_dispenser'
   get 'delete_confirmation' => 'users#delete_confirmation'
   get 'activate/:id' => 'users#activate', as: 'activate'
