@@ -89,8 +89,7 @@ en:
     check_hidden_by_admin:
       error: Sorry, you cannot reply to a hidden comment.
     check_modify_parent:
-      error:
-        unpublished: Sorry, you can't add or edit comments on an unpublished work.
+      draft: Sorry, you can't comment on a draft.
     check_not_replying_to_spam:
       error: Sorry, you can't reply to a comment that has been marked as spam.
     check_permission_to_edit:

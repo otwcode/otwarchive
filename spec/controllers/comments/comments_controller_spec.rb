@@ -492,14 +492,12 @@ describe CommentsController do
     end
   end
 
-  describe "POST #create" do
-    context "when commentable has posted that is falsy" do
-      it "does not allow comment creation" do
-        work = create(:work, posted: false)
-        fake_login_known_user(work.users.first)
-        post :create, params: { work_id: work.id, comment: { comment_content: "Test comment" } }
-        expect(flash[:error]).to eq("Sorry, you can't add or edit comments on an unpublished work.")
-      end
+  context "on a draft work" do
+    it_behaves_like "no one can add or edit comments" do
+      work = create(:work, posted: false)
+      fake_login_known_user(work.users.first)
+      post :create, params: { work_id: work.id, comment: { comment_content: "Test comment" } }
+      expect(flash[:error]).to eq("Sorry, you can't comment on a draft.")
     end
   end
 end

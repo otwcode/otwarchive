@@ -740,7 +740,7 @@ en:
           disable_anon: Sorry, this news post doesn't allow non-Archive users to comment.
           support_link: contact Support
         chapter:
-          unposted: Sorry, you can't add or edit comments on an unposted chapter.
+          draft: Sorry, you can't comment on a draft.
         moderated_commenting:
           disable: Disable comment moderation
           enable: Enable comment moderation
@@ -761,7 +761,7 @@ en:
           disable_all: Sorry, this work doesn't allow comments.
           disable_anon: Sorry, this work doesn't allow non-Archive users to comment.
           hidden: Sorry, you can't add or edit comments on a hidden work.
-          unposted: Sorry, you can't add or edit comments on an unposted work.
+          draft: Sorry, you can't comment on a draft.
           unrevealed: Sorry, you can't add or edit comments on an unrevealed work.
       previous_chapter_html: "%{back_arrow_html} Previous Chapter"
     confirm_delete:

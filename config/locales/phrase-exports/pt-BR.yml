@@ -315,9 +315,6 @@ pt-BR:
   comments:
     check_blocked:
       reply: Desculpe, essa pessoa bloqueou sua conta.
-    check_modify_parent:
-      error:
-        unpublished: Desculpe, você não pode modificar comentários em obras não postadas.
     commentable:
       blocked: Desculpe, não é possível deixar comentários, pois sua conta foi bloqueada
         por alguém na lista de artistas que criaram essa obra.
@@ -341,11 +338,6 @@ pt-BR:
             oculta.
           unrevealed: Desculpe, você não pode adicionar ou editar comentários numa
             obra não revelada.
-          unposted: Desculpe, você não pode adicionar ou editar comentários numa obra que
-            ainda não foi postada.
-        chapter:
-          unposted: Desculpe, você não pode adicionar ou editar comentários num capítulo
-            que ainda não foi postado.
     freeze:
       permission_denied: Desculpe, sua conta não tem as permissões necessárias para
         congelar esses comentários.
