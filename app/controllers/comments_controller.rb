@@ -83,6 +83,12 @@ class CommentsController < ApplicationController
       flash[:error] = ts("Sorry, you can't add or edit comments on an unrevealed work.")
       redirect_to work_path(parent)
     end
+
+    # No one can create or update comments on unpublished (A.K.A. unposted) works.
+    return unless parent.respond_to?(:posted) && !parent.posted
+
+    flash[:error] = t("comments.check_modify_parent.draft")
+    redirect_to work_path(parent)
   end
 
   def find_parent
