@@ -103,6 +103,21 @@ services:
     environment:
       - RAILS_ENV=development
       - QUEUE=*
+  scheduler:
+    profiles:   
+      - dev
+    build:
+      context: .
+      dockerfile: ./config/docker/Dockerfile
+    command: bundle exec rake environment resque:scheduler
+    volumes:
+      - .:/otwa
+    environment:
+      - RAILS_ENV=development
+      - QUEUE=*
+    depends_on:
+      - db
+      - redis
   chrome:
     profiles:
       - test
