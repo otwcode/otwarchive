@@ -192,7 +192,7 @@ Feature: Work Drafts
   Given I am logged in as "Scott" with password "password"
     And the draft "scotts commentless draft"
   When I view the work "scotts commentless draft"
-  Then  I should see "Sorry, you can't add or edit comments on an unposted work."
+  Then I should see "Sorry, you can't add or edit comments on an unposted work."
 
   Scenario: A user should not be able to comment on an unposted chapter
   Given I am logged in as "Scott" with password "password"
