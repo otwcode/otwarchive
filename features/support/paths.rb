@@ -271,6 +271,8 @@ module NavigationHelpers
       new_orphan_path
     when /^the activation page for "(.*)"$/i
       activate_path(id: User.find_by(login: Regexp.last_match(1)).confirmation_token)
+    when /^the first login help page$/i
+      help_first_login_path
 
     # Admin Pages
     when /^the admin-posts page$/i

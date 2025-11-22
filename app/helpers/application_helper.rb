@@ -176,7 +176,7 @@ module ApplicationHelper
     link_to content, options[:for], html_options
   end
 
-  # Currently, help files are static. We may eventually want to make these dynamic?
+  # TODO: AO3-7208 Make help modals dynamic and translatable and use link_to_help_modal instead of this method
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
     help_file = ""
     #if Locale.active && Locale.active.language
@@ -188,6 +188,11 @@ module ApplicationHelper
     end
 
     " ".html_safe + link_to_modal(link, for: help_file, title: help_entry.split('-').join(' ').capitalize, class: "help symbol question").html_safe
+  end
+
+  def link_to_help_modal(help_path, title)
+    link = tag.span(tag.span(t("application_helper.help_modal.question_mark")), class: %w[symbol question])
+    " ".html_safe + link_to_modal(link, for: help_path, title: title, class: "help symbol question")
   end
 
   # Inserts the flash alert messages for flash[:key] wherever
