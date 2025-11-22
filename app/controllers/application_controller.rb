@@ -391,22 +391,35 @@ public
 
   protected
 
+  # Calculates the effective suspension end date for display to users.
+  def effective_suspension_end_date(user)
+    suspension_end = user.suspended_until
+
+    # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
+    unban_threshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00")
+
+    # If the stated suspension end date is after the unban threshold, we need to advance a day
+    suspension_end = suspension_end.next_day(1) if suspension_end > unban_threshold
+    view_context.date_in_zone(suspension_end)
+  end
+
   # Prevents banned and suspended users from adding/editing content
   def check_user_status
     if current_user.is_a?(User) && (current_user.suspended? || current_user.banned?)
       if current_user.suspended?
-        suspension_end = current_user.suspended_until
-
-        # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
-        unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
-
-        # If the stated suspension end date is after the unban threshold we need to advance a day 
-        suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
-        localized_suspension_end = view_context.date_in_zone(suspension_end)
-        flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
-        
+        suspension_end = effective_suspension_end_date(current_user)
+        flash[:error] = t("users.status.suspension_notice_html",
+                         suspended_until: suspension_end,
+                         contact_abuse_link: view_context.link_to(
+                           t("users.contact_abuse"),
+                           new_abuse_report_path
+                         ))
       else
-        flash[:error] = t("users.status.ban_notice_html", contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+        flash[:error] = t("users.status.ban_notice_html",
+                         contact_abuse_link: view_context.link_to(
+                           t("users.contact_abuse"),
+                           new_abuse_report_path
+                         ))
       end
       redirect_to current_user
     end
@@ -416,16 +429,13 @@ public
   def check_user_not_suspended
     return unless current_user.is_a?(User) && current_user.suspended?
 
-    suspension_end = current_user.suspended_until
-
-    # Unban threshold is 6:51pm, 12 hours after the unsuspend_users rake task located in schedule.rb is run at 6:51am
-    unban_theshold = DateTime.new(suspension_end.year, suspension_end.month, suspension_end.day, 18, 51, 0, "+00:00") 
-
-    # If the stated suspension end date is after the unban threshold we need to advance a day 
-    suspension_end = suspension_end.next_day(1) if suspension_end > unban_theshold
-    localized_suspension_end = view_context.date_in_zone(suspension_end)
-    
-    flash[:error] = t("users.status.suspension_notice_html", suspended_until: localized_suspension_end, contact_abuse_link: view_context.link_to(t("users.contact_abuse"), new_abuse_report_path))
+    suspension_end = effective_suspension_end_date(current_user)
+    flash[:error] = t("users.status.suspension_notice_html",
+                     suspended_until: suspension_end,
+                     contact_abuse_link: view_context.link_to(
+                       t("users.contact_abuse"),
+                       new_abuse_report_path
+                     ))
 
     redirect_to current_user
   end

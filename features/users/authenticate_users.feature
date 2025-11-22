@@ -418,3 +418,23 @@ Feature: User Authentication
       And I fill in "Password:" with "password" within "#small_login"
       And I press "Log In" within "#small_login"
     Then I should be on the works page
+
+  Scenario: Banned user sees ban notice on login
+    Given the user "banned_user" is banned
+    When I am on the home page
+      And I fill in "Username or email:" with "banned_user"
+      And I fill in "Password:" with "password"
+      And I press "Log In"
+    Then I should see "Successfully logged in."
+      And I should see "Your account has been banned."
+      And I should see "You are not permitted to post or edit content on AO3."
+
+  Scenario: Suspended user sees suspension notice on login
+    Given the user "suspended_user" is suspended
+    When I am on the home page
+      And I fill in "Username or email:" with "suspended_user"
+      And I fill in "Password:" with "password"
+      And I press "Log In"
+    Then I should see "Successfully logged in."
+      And I should see "Your account has been suspended until"
+      And I should see "You cannot post, edit, or delete content"

@@ -11,6 +11,24 @@ class Users::SessionsController < Devise::SessionsController
       end
       flash[:notice] += message unless message.nil?
       flash[:notice] = flash[:notice].html_safe
+
+      if resource.suspended? || resource.banned?
+        if resource.suspended?
+          suspension_end = effective_suspension_end_date(resource)
+          flash[:error] = t("users.status.suspension_notice_html",
+                           suspended_until: suspension_end,
+                           contact_abuse_link: view_context.link_to(
+                             t("users.contact_abuse"),
+                             new_abuse_report_path
+                           ))
+        else
+          flash[:error] = t("users.status.ban_notice_html",
+                           contact_abuse_link: view_context.link_to(
+                             t("users.contact_abuse"),
+                             new_abuse_report_path
+                           ))
+        end
+      end
     end
   end
 
