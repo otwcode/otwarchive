@@ -358,7 +358,7 @@ describe CollectionItemsController do
       context "when the item's creator does not allow collection invitations" do
         it "adds the item anyway" do
           post :create, params: params
-          it_redirects_to_with_notice(work, "Added to collection(s): #{collection.title}.")
+          it_redirects_to_with_notice(work, "Added to collection(s): #{collection.title}. Please note: private bookmarks are not listed in collections.")
           expect(work.reload.collections).to include(collection)
         end
       end
@@ -366,7 +366,7 @@ describe CollectionItemsController do
       context "when the item's creator allows collection invitations" do
         it "adds the item" do
           post :create, params: params
-          it_redirects_to_with_notice(work, "Added to collection(s): #{collection.title}.")
+          it_redirects_to_with_notice(work, "Added to collection(s): #{collection.title}. Please note: private bookmarks are not listed in collections.")
           expect(work.reload.collections).to include(collection)
         end
       end
