@@ -1011,6 +1011,8 @@ class Tag < ApplicationRecord
   # NOTE for potential confusion
   # "merger" is the canonical tag of which this one will be a synonym
   # "mergers" are the tags which are (currently) synonyms of THIS one
+  attribute :new_merger, default: nil
+
   def syn_string=(tag_string)
     # If the tag_string is blank, our tag should be given no merger
     if tag_string.blank?
@@ -1037,9 +1039,13 @@ class Tag < ApplicationRecord
       self.errors.add(:base, new_merger.name + " is a #{new_merger.type.to_s.downcase}. Synonyms must belong to the same category.")
     elsif !new_merger
       new_merger = self.class.new(name: tag_string, canonical: true)
-      unless new_merger.save
-        self.errors.add(:base, tag_string + " could not be saved. Please make sure that it's a valid tag name.")
+      # This new merger tag will be saved in save_new_merger just before the current tag is saved.
+      if new_merger.invalid?
+        new_merger.errors.full_messages.each do |message|
+          self.errors.add(:base, tag_string + " could not be saved. " + message)
+        end
       end
+      self.new_merger = new_merger
     end
 
     # If we don't have any errors, update the tag to add the new merger
@@ -1047,6 +1053,15 @@ class Tag < ApplicationRecord
       self.canonical = false
       self.merger_id = new_merger.id
     end
+  end
+
+  before_save :save_new_merger
+  def save_new_merger
+    # If there is a newly created merger tag, save it to database
+    return unless self.new_merger&.save
+    
+    # And set up its relationship with the current tag
+    self.merger_id = self.new_merger.id
   end
 
   def merger_string=(tag_string)
