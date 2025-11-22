@@ -2544,6 +2544,7 @@ en:
       edit_multiple: Edit Works
       invitations: Invitations
       new_work: Post New
+      admin_creations: Creations
     passwords:
       edit:
         change_password: Change Password

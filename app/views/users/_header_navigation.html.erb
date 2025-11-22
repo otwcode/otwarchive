@@ -22,7 +22,7 @@
   <% end %>
   <% if policy(User).can_access_creation_summary? %>
     <li>
-      <%= link_to t("admin.admin_users.show.navigation.creations"), creations_admin_user_path(@user) %>
+      <%= link_to t(".admin_creations"), creations_admin_user_path(@user) %>
     </li>
   <% end %>
 </ul>
