@@ -58,6 +58,11 @@ en:
         blocked: You have blocked the user %{name}.
       destroy:
         unblocked: You have unblocked the user %{name}.
+  bookmarks:
+    create:
+      success: Bookmark was successfully created. It should appear in bookmark listings within the next few minutes.
+      warnings:
+        private_bookmark_added_to_collection: " Please note: private bookmarks are not listed in collections."
   challenge_assignments:
     index:
       access_denied_user: You aren't allowed to see that user's assignments.
@@ -73,11 +78,8 @@ en:
       posted_work: This is a draft chapter in a posted work. It will be kept unless the work is deleted.
       unposted_work_html: This is a draft chapter in an unposted work. The work will be <strong>scheduled for deletion</strong> on %{deletion_date}.
     show:
-      anonymous: Anonymous
       chapter_position: " - Chapter %{position}"
-      multifandom: Multifandom
       unrevealed: Mystery Work
-      unspecified_fandom: No fandom specified
   collection_items:
     create:
       invited: invited
@@ -122,6 +124,12 @@ en:
       error: Sorry, that comment could not be hidden.
       permission_denied: Sorry, you don't have permission to hide that comment.
       success: Comment successfully hidden!
+    index:
+      page_title: Comments on %{name}
+    new:
+      page_title: New Comment on %{name}
+    show:
+      page_title: Comment %{comment_id} on %{name}
     unfreeze:
       error: Sorry, that comment thread could not be unfrozen.
       permission_denied: Sorry, you don't have permission to unfreeze that comment thread.
@@ -130,6 +138,11 @@ en:
       error: Sorry, that comment could not be unhidden.
       permission_denied: Sorry, you don't have permission to unhide that comment.
       success: Comment successfully unhidden!
+    unreviewed:
+      page_title: Unreviewed Comments on %{name}
+  creatorships:
+    update:
+      must_select_request: Please select at least one co-creator request first.
   errors:
     auth_error:
       browser_title: Auth Error
@@ -191,6 +204,10 @@ en:
   people:
     index:
       collection_page_title: "%{collection_title} - People"
+  preferences:
+    update:
+      error: Sorry, something went wrong. Please try that again.
+      success: Your preferences were successfully updated.
   profile:
     show:
       page_title: "%{username} - Profile"
@@ -270,22 +287,14 @@ en:
     contact_abuse: contact our Policy & Abuse team
     passwords:
       create:
-        contact_abuse: contact our Policy & Abuse team
-        reset_blocked_html: Password resets are disabled for that user. For more information, please %{contact_abuse_link}.
-        reset_cooldown_html: You cannot reset your password at this time. Please try again after %{reset_available_time}.
-        send_cooldown_period:
-          one: After that, you will need to wait %{count} hour before requesting another reset.
-          other: After that, you will need to wait %{count} hours before requesting another reset.
-        send_instructions: Check your email for instructions on how to reset your password. %{send_times_remaining} %{send_cooldown_period}
-        send_times_remaining:
-          one: You may reset your password %{count} more time.
-          other: You may reset your password %{count} more times.
-        user_not_found: We couldn't find an account with that email address or username. Please try again.
+        invalid_email: You must enter your email address.
       edit:
         invalid_link:
           one: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hour, you can request a new password reset.
           other: This password reset link is invalid or expired. Please check your email for the most recent password reset link. If it has been more than %{count} hours, you can request a new password reset.
         page_title: Change Password
+      new:
+        page_title: Reset Password
     reconfirm_email:
       access_denied:
         logged_in: You are not logged in to the account whose email you are trying to change. Please log out and try again.

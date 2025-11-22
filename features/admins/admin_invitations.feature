@@ -350,7 +350,7 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "No results were found. Try another search"
 
   Scenario: An admin can invite people from the queue
-    Given I am logged in as an admin
+    Given I am logged in as a super admin
       And an invitation request for "fred@bedrock.com"
       And an invitation request for "barney@bedrock.com"
       And all emails have been delivered
@@ -363,7 +363,7 @@ Feature: Admin Actions to Manage Invitations
       And 1 email should be delivered to "fred@bedrock.com"
 
   Scenario: When an admin invites from the queue, the invite is marked as being from the admin
-    Given I am logged in as a "support" admin
+    Given I am logged in as a "policy_and_abuse" admin
       And an invitation request for "test@example.com"
       And I follow "Invite New Users"
     When I fill in "Number of people to invite" with "1"
@@ -375,7 +375,7 @@ Feature: Admin Actions to Manage Invitations
     Then I should see "Copy and use"
       And I should see "Delete"
     When I follow the first invitation token url
-    Then I should see "Sender testadmin-support"
+    Then I should see "Sender testadmin-policy_and_abuse"
 
   Scenario: An admin can edit an invitation
     Given the user "dax" exists and is activated

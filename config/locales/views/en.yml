@@ -603,6 +603,9 @@ en:
         no_sign_ups_yet: No sign-ups yet!
         offers_html: Offers &#8595;
         requests_html: Requests &#8595;
+    shared:
+      challenge_requests:
+        fandom: Fandom %{allowed_fandom_count}
   challenge_assignments:
     to_default:
       button: Default
@@ -630,6 +633,10 @@ en:
           preferences_link_text: update your preferences
           prompt_meme: Signing up for this challenge will allow any user who claims your prompt to gift you a work in response to your prompt regardless of your preference settings. If you wish to receive additional gifts from users who have not claimed your prompts, please %{preferences_link} to allow gifts from anyone. You can always %{refuse_link}.
           refuse_link_text: refuse a gift
+    summary:
+      being_generated: The summary is being generated. Please try again in a few minutes.
+      heading: Sign-up Summary for %{collection}
+      no_tags: Tags were not used in this Challenge, so there is no summary to display here.
   chapters:
     posting_fieldset:
       actions:
@@ -2220,6 +2227,10 @@ en:
       transfer:
         one: Transfer this bookmark to the default pseud
         other: Transfer these bookmarks to the default pseud
+    new:
+      back_to_pseuds: Back To Pseuds
+      create_pseud: Create Pseud
+      new_pseud: New Pseud
     pseud_blurb:
       confirm_delete: Are you sure?
       default_pseud: Default Pseud
@@ -2245,7 +2256,7 @@ en:
         size: Icons should be sized 100x100 pixels for best results.
       icon_upload: Upload a new icon
       make_default: Make this name default
-      name: Name
+      name: Name (required)
       submit: Submit
   readings:
     index:
@@ -2264,8 +2275,17 @@ en:
   skins:
     confirm_delete:
       confirm_html: Are you sure you want to <strong><em>delete</em></strong> the skin "%{skin_title}"?
+    form:
+      description: Description
+      icon: Upload a preview (png, jpeg or gif)
+      public: Apply to make public
+      skin_type: Type
+      title: Title
     revert_skin_form:
       revert_to_default: Revert to Default Skin
+    wizard_form:
+      description: Description
+      title: Title
   subscriptions:
     confirm_delete_all:
       caution_html: Are you sure you want to <strong><em>delete</em></strong> all your subscriptions? This <strong>cannot be undone</strong>.
@@ -2579,10 +2599,10 @@ en:
           other: "%{minimum} to %{count} characters"
         submit: Submit
       new:
-        email_or_username_html: Email address %{or} username
-        instructions: If you've forgotten your password, we can send instructions that will allow you to reset it. Please tell us the username or email address you used when you signed up for your Archive account.
-        or: or
-        page_heading: Forgotten your password?
+        email_html: Email address
+        instructions: Please enter the email address associated with your AO3 account. You may only request a password reset a limited number of times per day.
+        introductions: If you've forgotten your password, we can send you an email with instructions to reset your password.
+        page_heading: Reset Password
         reset_password: Reset Password
     registrations:
       legal:
@@ -2645,7 +2665,7 @@ en:
           log_in: Log in
           no_account: Don't have an account? %{join_link}.
           request_invite: Request an invitation to join
-          reset_password: Reset password
+          reset_password: Reset your password
         restricted:
           account_exists: If you already have an Archive of Our Own account, log in now.
           commenting_unavailable: Commenting on this work is only available to registered users of the Archive.
@@ -2675,6 +2695,7 @@ en:
         content_policy: Content Policy
         dismiss: Dismiss permanently
         help_html: If you need technical support, %{contact_support_link}. If you experience harassment or have questions about our %{tos_link} (including the %{content_policy_link} and %{privacy_policy_link}), %{contact_abuse_link}.
+        help_title: First login help
         hide: Hide first login help banner
         new_user_tips: useful tips for new users
         our_faqs: our FAQs
@@ -2701,7 +2722,6 @@ en:
         pitch: Pitch
         switch: Switch
       pitch:
-        collections: Collections (%{coll_number})
         drafts: Drafts (%{drafts_number})
       switch:
         assignments: Assignments (%{assignment_number})
@@ -2797,6 +2817,15 @@ en:
         revealed_html: "%{work_link} by %{creator_link}"
         title: Works inspired by this one
         unrevealed: A work in an unrevealed collection
+    work_header_navigation:
+      chapter_index:
+        button: Chapter Index
+        full_page: Full-Page Index
+        link: Chapter Index
+        submit: Go
+      download:
+        button: Download
+        heading: Download
     work_header_notes:
       inspired_by:
         other_works_inspired_by_this_one: other works inspired by this one

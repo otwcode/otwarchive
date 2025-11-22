@@ -105,6 +105,23 @@ describe BookmarksController do
         end
       end
 
+      context "when user creates a bookmark to add to a collection" do
+        let(:collection) { create(:collection) }
+      
+        it "shows the collection warning message" do
+          bookmark_params = {
+            pseud_id: pseud.id,
+            collection_names: collection.name
+          }
+          post :create, params: { work_id: work.id, bookmark: bookmark_params }
+      
+          bookmark = assigns(:bookmark)
+          success_msg = "Bookmark was successfully created. It should appear in bookmark listings within the next few minutes. Please note: private bookmarks are not listed in collections."
+          
+          it_redirects_to_with_notice(bookmark_path(bookmark), success_msg)
+        end
+      end
+
       context "when user bookmarked the work before" do
         shared_examples "work is already bookmarked by the user" do
           it "fails to bookmark the work" do
@@ -184,6 +201,26 @@ describe BookmarksController do
         it_redirects_to_with_notice(bookmark_path(bookmark2), "Bookmark was successfully updated.")
         expect(assigns(:bookmark).bookmarker_notes).to include("Updated second bookmark")
         expect(assigns(:bookmark).pseud_id).to eq(other_pseud.id)
+      end
+    end
+
+    context "when user updates a bookmark to add it to a collection" do
+      let(:user) { create(:user) }
+      let(:pseud) { user.default_pseud }
+      let(:bookmark) { create(:bookmark, pseud: pseud) }
+      let(:collection) { create(:collection) }
+    
+      before do
+        fake_login_known_user(user)
+      end
+    
+      it "shows the collection warning message" do
+        put :update, params: { id: bookmark.id, bookmark: { collection_names: collection.name } }
+
+        success_msg = "Bookmark was successfully updated. " \
+                      "Added to collection(s): #{collection.title}. " \
+                      "Please note: private bookmarks are not listed in collections."
+        it_redirects_to_with_notice(bookmark_path(bookmark), success_msg)
       end
     end
   end
