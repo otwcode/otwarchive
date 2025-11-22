@@ -286,7 +286,7 @@ en:
       attachment: A copy of your work is attached to this email.
       check_email:
         html: If you don't know why your work was deleted, and you have not received a separate email explaining why, please check your email (including your spam folder) or %{contact_abuse_link} directly.
-        text: If you don't know why your work was deleted, and you have not received a separate email explaining why, please check your email (including your spam folder) or contact the Policy & Abuse committee directly (%{contact_abuse_url}).
+        text: 'If you don''t know why your work was deleted, and you have not received a separate email explaining why, please check your email (including your spam folder) or contact the Policy & Abuse committee directly: %{contact_abuse_url}.'
       contact_abuse: contact the Policy &amp; Abuse committee
       content_policy: Content Policy
       deleted:
