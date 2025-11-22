@@ -138,6 +138,7 @@ class CollectionItemsController < ApplicationController
     unless new_collections.empty?
       flash[:notice] = ts("Added to collection(s): %{collections}.",
                             collections: new_collections.collect(&:title).join(", "))
+      flash[:notice] += t("bookmarks.create.warnings.private_bookmark_added_to_collection")
     end
     unless invited_collections.empty?
       invited_collections.each do |needs_user_approval|
