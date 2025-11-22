@@ -297,7 +297,7 @@ en:
       tos_faq: Terms of Service FAQ
       tos_violation:
         html: If your work was deleted due to being in violation of the %{tos_link} (including the %{content_policy_link}), <strong>you may not repost the work without taking action to correct the violation</strong>. For more information, please refer to the %{tos_faq_link}.
-        text: If your work was deleted due to being in violation of the AO3 Terms of Service (%{tos_url}), including the Content Policy (%{content_policy_url}), you may not repost the work without taking action to correct the violation. For more information, please refer to the Terms of Service FAQ (%{tos_faq_url}).
+        text: 'If your work was deleted due to being in violation of the AO3 Terms of Service (%{tos_url}), including the Content Policy (%{content_policy_url}), you may not repost the work without taking action to correct the violation. For more information, please refer to the Terms of Service FAQ: %{tos_faq_url}.'
     admin_hidden_work_notification:
       access:
         one: While your work is hidden, you will still be able to access it through the link provided above, but it won't be available to other users or listed on your works page.
