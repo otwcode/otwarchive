@@ -739,8 +739,6 @@ en:
           disable_all: Sorry, this news post doesn't allow comments.
           disable_anon: Sorry, this news post doesn't allow non-Archive users to comment.
           support_link: contact Support
-        chapter:
-          draft: Sorry, you can't comment on a draft.
         moderated_commenting:
           disable: Disable comment moderation
           enable: Enable comment moderation
